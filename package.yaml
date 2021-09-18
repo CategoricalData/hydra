@@ -13,6 +13,7 @@ extra-source-files:
 
 dependencies:
   - base
+  - containers
 
 library:
   source-dirs:
