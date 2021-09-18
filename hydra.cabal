@@ -1,0 +1,36 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 0a40c9cd07cc8a3966cb188d78eb9e7e81f72b31bf20d663a451be6d2dcd533d
+
+name:           hydra
+version:        0.0.1
+synopsis:       An experimental framework for data integration
+category:       Data
+homepage:       https://github.com/joshsh/hydra#readme
+bug-reports:    https://github.com/joshsh/hydra/issues
+maintainer:     josh@fortytwo.net
+license:        Apache-2.0
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    LICENSE
+    README.md
+    stack.yaml
+
+source-repository head
+  type: git
+  location: https://github.com/joshsh/hydra
+
+library
+  other-modules:
+      Paths_hydra
+  hs-source-dirs:
+      src/main/haskell
+      src/main-gen/haskell
+  build-depends:
+      base
+  default-language: Haskell2010
