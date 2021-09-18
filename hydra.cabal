@@ -1,13 +1,13 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0a40c9cd07cc8a3966cb188d78eb9e7e81f72b31bf20d663a451be6d2dcd533d
+-- hash: ccd2f92ce144f93b09185427d2e9df14d631b5eb57f33308b54da66ef1dd70ed
 
 name:           hydra
-version:        0.0.1
+version:        0.1.0
 synopsis:       An experimental framework for data integration
 category:       Data
 homepage:       https://github.com/joshsh/hydra#readme
