@@ -1,0 +1,21 @@
+name:       hydra
+version:    0.0.1
+maintainer: josh@fortytwo.net
+license:    Apache-2.0
+category:   Data
+synopsis:   An experimental framework for data integration
+github:     joshsh/hydra
+
+extra-source-files:
+  - LICENSE
+  - README.md
+  - stack.yaml
+
+dependencies:
+  - base
+
+library:
+  source-dirs:
+    - src/main/haskell
+    - src/main-gen/haskell
+#  exposed-modules:
