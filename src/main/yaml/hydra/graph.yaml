@@ -1,0 +1,37 @@
+includes:
+  - core
+
+definitions:
+
+  - name: Element
+    description: "A graph element, having a name, data term (value), and schema term (type)"
+    type:
+      record:
+        - name: name
+          type: core.Name
+
+        - name: data
+          type: core.Term
+
+        - name: schema
+          type: core.Term
+
+  - name: Graph
+    description: >
+      A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,
+      called the schema graph
+    type:
+      record:
+        - name: elements
+          type:
+            list: Element
+
+        - name: dataTerms
+          type:
+            function:
+              from:
+                - core.Term
+              to: boolean
+
+        - name: schemaGraph
+          type: Graph
