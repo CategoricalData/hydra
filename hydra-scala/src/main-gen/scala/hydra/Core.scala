@@ -87,6 +87,14 @@ object Core{
     )
     
     /**
+     * An equality judgement: less than, equal to, or greater than
+     */
+    sealed trait Comparison
+    case object Comparison_lessThan extends Comparison
+    case object Comparison_equalTo extends Comparison
+    case object Comparison_greaterThan extends Comparison
+    
+    /**
      * A labeled term
      */
     case class Field(
@@ -265,6 +273,12 @@ object Core{
      */
     final case class Term_cases(value: CaseStatement) extends Term
     /**
+     * Compares a term with a given term of the same type, producing a Comparison
+     * 
+     * @type hydra/core.Term
+     */
+    final case class Term_compareTo(value: Term) extends Term
+    /**
      * Hydra's delta function, which maps an element to its data term
      */
     final case class Term_data() extends Term
@@ -317,6 +331,21 @@ object Core{
      */
     final case class Term_variable(value: Variable) extends Term
     
+    sealed trait TermVariant
+    case object TermVariant_application extends TermVariant
+    case object TermVariant_atomic extends TermVariant
+    case object TermVariant_cases extends TermVariant
+    case object TermVariant_compareTo extends TermVariant
+    case object TermVariant_data extends TermVariant
+    case object TermVariant_element extends TermVariant
+    case object TermVariant_function extends TermVariant
+    case object TermVariant_lambda extends TermVariant
+    case object TermVariant_list extends TermVariant
+    case object TermVariant_projection extends TermVariant
+    case object TermVariant_record extends TermVariant
+    case object TermVariant_union extends TermVariant
+    case object TermVariant_variable extends TermVariant
+    
     sealed trait Type
     /**
      * @type hydra/core.AtomicType
@@ -346,6 +375,15 @@ object Core{
      * @type list: hydra/core.FieldType
      */
     final case class Type_union(value: Seq[FieldType]) extends Type
+    
+    sealed trait TypeVariant
+    case object TypeVariant_atomic extends TypeVariant
+    case object TypeVariant_element extends TypeVariant
+    case object TypeVariant_function extends TypeVariant
+    case object TypeVariant_list extends TypeVariant
+    case object TypeVariant_nominal extends TypeVariant
+    case object TypeVariant_record extends TypeVariant
+    case object TypeVariant_union extends TypeVariant
     
     /**
      * A symbol which stands in for a term
