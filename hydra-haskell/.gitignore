@@ -1,0 +1,8 @@
+# Haskell / Stack
+.stack-work
+stack.yaml.lock
+*.cabal
+
+# IntelliJ
+.idea
+*.iml

@@ -1,10 +1,11 @@
 # Hydra
 
-Prepare to be transformed.
+This is a new, open-source project along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale), currently in an early design and prototyping stage.
+You can find a design document [here](https://bit.ly/hydra-design-doc), and a Slack channel [here](https://bit.ly/hydra-slack).
 
 ## Project structure
 
-This repository currently combines Scala, Haskell, and YAML sources in a single directory. However, the Scala and Haskell projects build separately.
+This repository currently contains `hydra-scala` and a `hydra-haskell` directory with language-specific builds, as well as a `common` directory with YAML-based sources.
 
 ### Scala build
 
