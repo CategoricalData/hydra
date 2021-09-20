@@ -4,11 +4,11 @@ maintainer: josh@fortytwo.net
 license:    Apache-2.0
 category:   Data
 synopsis:   An experimental framework for data integration
-github:     joshsh/hydra
+github:     CategoricalData/hydra
 
 extra-source-files:
-  - LICENSE
-  - README.md
+  - ../LICENSE  # TODO: need separate LICENSE and README in this directory
+  - ../README.md
   - stack.yaml
 
 dependencies:
