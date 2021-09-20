@@ -69,6 +69,14 @@ definitions:
             The result is a term which does not otherwise depend on the variant value.
           type: Term
 
+  - name: Comparison
+    description: "An equality judgement: less than, equal to, or greater than"
+    type:
+      enum:
+        - lessThan
+        - equalTo
+        - greaterThan
+
   - name: Field
     description: "A labeled term"
     type:
@@ -238,6 +246,10 @@ definitions:
           description: "A case statement applied to a variant record"
           type: CaseStatement
 
+        - name: compareTo
+          description: "Compares a term with a given term of the same type, producing a Comparison"
+          type: Term
+
         - name: data
           description: "Hydra's delta function, which maps an element to its data term"
 
@@ -277,6 +289,23 @@ definitions:
           description: "A variable reference"
           type: Variable
 
+  - name: TermVariant
+    type:
+      enum:
+        - application
+        - atomic
+        - cases
+        - compareTo
+        - data
+        - element
+        - function
+        - lambda
+        - list
+        - projection
+        - record
+        - union
+        - variable
+
   - name: Type
     type:
       union:
@@ -302,6 +331,17 @@ definitions:
         - name: union
           type:
             list: FieldType
+
+  - name: TypeVariant
+    type:
+      enum:
+        - atomic
+        - element
+        - function
+        - list
+        - nominal
+        - record
+        - union
 
   - name: Variable
     description: "A symbol which stands in for a term"

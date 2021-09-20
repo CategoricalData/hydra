@@ -6,6 +6,7 @@ module Hydra.Core
   , AtomicValue(..)
   , BooleanValue(..)
   , CaseStatement(..)
+  , Comparison(..)
   , Field(..)
   , FieldName
   , FieldType(..)
@@ -17,7 +18,9 @@ module Hydra.Core
   , Lambda(..)
   , Name
   , Term(..)
+  , TermVariant(..)
   , Type(..)
+  , TypeVariant(..)
   , Variable
   ) where
 
@@ -78,6 +81,12 @@ data CaseStatement
         
         @type hydra/core.Term -}
     , caseStatementDefaultEsc :: Term } deriving (Eq, Generic, Ord, Read, Show)
+
+-- | An equality judgement: less than, equal to, or greater than
+data Comparison
+  = ComparisonLessThan
+  | ComparisonEqualTo
+  | ComparisonGreaterThan deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A labeled term
 data Field
@@ -197,6 +206,10 @@ data Term
       
       @type hydra/core.CaseStatement -}
   | TermCases CaseStatement
+  {-| Compares a term with a given term of the same type, producing a Comparison
+      
+      @type hydra/core.Term -}
+  | TermCompareTo Term
   -- | Hydra's delta function, which maps an element to its data term
   | TermData
   {-| An element reference
@@ -232,6 +245,21 @@ data Term
       @type hydra/core.Variable -}
   | TermVariable Variable deriving (Eq, Generic, Ord, Read, Show)
 
+data TermVariant
+  = TermVariantApplication
+  | TermVariantAtomic
+  | TermVariantCases
+  | TermVariantCompareTo
+  | TermVariantData
+  | TermVariantElement
+  | TermVariantFunction
+  | TermVariantLambda
+  | TermVariantList
+  | TermVariantProjection
+  | TermVariantRecord
+  | TermVariantUnion
+  | TermVariantVariable deriving (Eq, Generic, Ord, Read, Show)
+
 data Type
   -- | @type hydra/core.AtomicType
   = TypeAtomic AtomicType
@@ -247,6 +275,15 @@ data Type
   | TypeRecord [FieldType]
   -- | @type list: hydra/core.FieldType
   | TypeUnion [FieldType] deriving (Eq, Generic, Ord, Read, Show)
+
+data TypeVariant
+  = TypeVariantAtomic
+  | TypeVariantElement
+  | TypeVariantFunction
+  | TypeVariantList
+  | TypeVariantNominal
+  | TypeVariantRecord
+  | TypeVariantUnion deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A symbol which stands in for a term
     
