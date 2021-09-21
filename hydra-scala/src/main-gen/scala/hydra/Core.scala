@@ -66,15 +66,15 @@ object Core{
     final case class AtomicValue_string(value: String) extends AtomicValue
     
     sealed trait AtomicVariant
-    case object AtomicVariant_binary extends AtomicVariant
-    case object AtomicVariant_boolean extends AtomicVariant
-    case object AtomicVariant_float extends AtomicVariant
-    case object AtomicVariant_integer extends AtomicVariant
-    case object AtomicVariant_string extends AtomicVariant
+    final case class AtomicVariant_binary() extends AtomicVariant
+    final case class AtomicVariant_boolean() extends AtomicVariant
+    final case class AtomicVariant_float() extends AtomicVariant
+    final case class AtomicVariant_integer() extends AtomicVariant
+    final case class AtomicVariant_string() extends AtomicVariant
     
     sealed trait BooleanValue
-    case object BooleanValue_false extends BooleanValue
-    case object BooleanValue_true extends BooleanValue
+    final case class BooleanValue_`false`() extends BooleanValue
+    final case class BooleanValue_`true`() extends BooleanValue
     
     case class CaseStatement(
         /**
@@ -97,9 +97,9 @@ object Core{
      * An equality judgement: less than, equal to, or greater than
      */
     sealed trait Comparison
-    case object Comparison_lessThan extends Comparison
-    case object Comparison_equalTo extends Comparison
-    case object Comparison_greaterThan extends Comparison
+    final case class Comparison_lessThan() extends Comparison
+    final case class Comparison_equalTo() extends Comparison
+    final case class Comparison_greaterThan() extends Comparison
     
     /**
      * A labeled term
@@ -134,9 +134,9 @@ object Core{
     )
     
     sealed trait FloatType
-    case object FloatType_bigfloat extends FloatType
-    case object FloatType_float32 extends FloatType
-    case object FloatType_float64 extends FloatType
+    final case class FloatType_bigfloat() extends FloatType
+    final case class FloatType_float32() extends FloatType
+    final case class FloatType_float64() extends FloatType
     
     sealed trait FloatValue
     /**
@@ -156,9 +156,9 @@ object Core{
     final case class FloatValue_float64(value: Double) extends FloatValue
     
     sealed trait FloatVariant
-    case object FloatVariant_bigfloat extends FloatVariant
-    case object FloatVariant_float32 extends FloatVariant
-    case object FloatVariant_float64 extends FloatVariant
+    final case class FloatVariant_bigfloat() extends FloatVariant
+    final case class FloatVariant_float32() extends FloatVariant
+    final case class FloatVariant_float64() extends FloatVariant
     
     /**
      * A function type, also known as an arrow type
@@ -176,15 +176,15 @@ object Core{
     )
     
     sealed trait IntegerType
-    case object IntegerType_bigint extends IntegerType
-    case object IntegerType_int8 extends IntegerType
-    case object IntegerType_int16 extends IntegerType
-    case object IntegerType_int32 extends IntegerType
-    case object IntegerType_int64 extends IntegerType
-    case object IntegerType_uint8 extends IntegerType
-    case object IntegerType_uint16 extends IntegerType
-    case object IntegerType_uint32 extends IntegerType
-    case object IntegerType_uint64 extends IntegerType
+    final case class IntegerType_bigint() extends IntegerType
+    final case class IntegerType_int8() extends IntegerType
+    final case class IntegerType_int16() extends IntegerType
+    final case class IntegerType_int32() extends IntegerType
+    final case class IntegerType_int64() extends IntegerType
+    final case class IntegerType_uint8() extends IntegerType
+    final case class IntegerType_uint16() extends IntegerType
+    final case class IntegerType_uint32() extends IntegerType
+    final case class IntegerType_uint64() extends IntegerType
     
     sealed trait IntegerValue
     /**
@@ -242,15 +242,15 @@ object Core{
     final case class IntegerValue_uint64(value: Long) extends IntegerValue
     
     sealed trait IntegerVariant
-    case object IntegerVariant_bigint extends IntegerVariant
-    case object IntegerVariant_int8 extends IntegerVariant
-    case object IntegerVariant_int16 extends IntegerVariant
-    case object IntegerVariant_int32 extends IntegerVariant
-    case object IntegerVariant_int64 extends IntegerVariant
-    case object IntegerVariant_uint8 extends IntegerVariant
-    case object IntegerVariant_uint16 extends IntegerVariant
-    case object IntegerVariant_uint32 extends IntegerVariant
-    case object IntegerVariant_uint64 extends IntegerVariant
+    final case class IntegerVariant_bigint() extends IntegerVariant
+    final case class IntegerVariant_int8() extends IntegerVariant
+    final case class IntegerVariant_int16() extends IntegerVariant
+    final case class IntegerVariant_int32() extends IntegerVariant
+    final case class IntegerVariant_int64() extends IntegerVariant
+    final case class IntegerVariant_uint8() extends IntegerVariant
+    final case class IntegerVariant_uint16() extends IntegerVariant
+    final case class IntegerVariant_uint32() extends IntegerVariant
+    final case class IntegerVariant_uint64() extends IntegerVariant
     
     /**
      * A function abstraction (lambda)
@@ -355,19 +355,19 @@ object Core{
     final case class Term_variable(value: Variable) extends Term
     
     sealed trait TermVariant
-    case object TermVariant_application extends TermVariant
-    case object TermVariant_atomic extends TermVariant
-    case object TermVariant_cases extends TermVariant
-    case object TermVariant_compareTo extends TermVariant
-    case object TermVariant_data extends TermVariant
-    case object TermVariant_element extends TermVariant
-    case object TermVariant_function extends TermVariant
-    case object TermVariant_lambda extends TermVariant
-    case object TermVariant_list extends TermVariant
-    case object TermVariant_projection extends TermVariant
-    case object TermVariant_record extends TermVariant
-    case object TermVariant_union extends TermVariant
-    case object TermVariant_variable extends TermVariant
+    final case class TermVariant_application() extends TermVariant
+    final case class TermVariant_atomic() extends TermVariant
+    final case class TermVariant_cases() extends TermVariant
+    final case class TermVariant_compareTo() extends TermVariant
+    final case class TermVariant_data() extends TermVariant
+    final case class TermVariant_element() extends TermVariant
+    final case class TermVariant_function() extends TermVariant
+    final case class TermVariant_lambda() extends TermVariant
+    final case class TermVariant_list() extends TermVariant
+    final case class TermVariant_projection() extends TermVariant
+    final case class TermVariant_record() extends TermVariant
+    final case class TermVariant_union() extends TermVariant
+    final case class TermVariant_variable() extends TermVariant
     
     sealed trait Type
     /**
@@ -400,13 +400,13 @@ object Core{
     final case class Type_union(value: Seq[FieldType]) extends Type
     
     sealed trait TypeVariant
-    case object TypeVariant_atomic extends TypeVariant
-    case object TypeVariant_element extends TypeVariant
-    case object TypeVariant_function extends TypeVariant
-    case object TypeVariant_list extends TypeVariant
-    case object TypeVariant_nominal extends TypeVariant
-    case object TypeVariant_record extends TypeVariant
-    case object TypeVariant_union extends TypeVariant
+    final case class TypeVariant_atomic() extends TypeVariant
+    final case class TypeVariant_element() extends TypeVariant
+    final case class TypeVariant_function() extends TypeVariant
+    final case class TypeVariant_list() extends TypeVariant
+    final case class TypeVariant_nominal() extends TypeVariant
+    final case class TypeVariant_record() extends TypeVariant
+    final case class TypeVariant_union() extends TypeVariant
     
     /**
      * A symbol which stands in for a term
