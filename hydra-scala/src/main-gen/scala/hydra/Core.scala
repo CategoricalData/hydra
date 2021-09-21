@@ -65,6 +65,13 @@ object Core{
      */
     final case class AtomicValue_string(value: String) extends AtomicValue
     
+    sealed trait AtomicVariant
+    case object AtomicVariant_binary extends AtomicVariant
+    case object AtomicVariant_boolean extends AtomicVariant
+    case object AtomicVariant_float extends AtomicVariant
+    case object AtomicVariant_integer extends AtomicVariant
+    case object AtomicVariant_string extends AtomicVariant
+    
     sealed trait BooleanValue
     case object BooleanValue_false extends BooleanValue
     case object BooleanValue_true extends BooleanValue
@@ -148,6 +155,11 @@ object Core{
      */
     final case class FloatValue_float64(value: Double) extends FloatValue
     
+    sealed trait FloatVariant
+    case object FloatVariant_bigfloat extends FloatVariant
+    case object FloatVariant_float32 extends FloatVariant
+    case object FloatVariant_float64 extends FloatVariant
+    
     /**
      * A function type, also known as an arrow type
      */
@@ -228,6 +240,17 @@ object Core{
      *         signed: false
      */
     final case class IntegerValue_uint64(value: Long) extends IntegerValue
+    
+    sealed trait IntegerVariant
+    case object IntegerVariant_bigint extends IntegerVariant
+    case object IntegerVariant_int8 extends IntegerVariant
+    case object IntegerVariant_int16 extends IntegerVariant
+    case object IntegerVariant_int32 extends IntegerVariant
+    case object IntegerVariant_int64 extends IntegerVariant
+    case object IntegerVariant_uint8 extends IntegerVariant
+    case object IntegerVariant_uint16 extends IntegerVariant
+    case object IntegerVariant_uint32 extends IntegerVariant
+    case object IntegerVariant_uint64 extends IntegerVariant
     
     /**
      * A function abstraction (lambda)

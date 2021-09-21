@@ -1,5 +1,11 @@
 module Hydra.Prototyping (
+    atomicTypeVariant,
+    atomicValueVariant,
+    floatTypeVariant,
+    floatValueVariant,
     freeVariables,
+    integerTypeVariant,
+    integerValueVariant,
     termVariant,
     typeAsTerm,
     typeVariant,
@@ -15,6 +21,34 @@ import qualified Data.List as L
 import qualified Data.Map  as M
 import qualified Data.Set  as S
 
+
+atomicTypeVariant :: AtomicType -> AtomicVariant
+atomicTypeVariant at = case at of
+  AtomicTypeBinary -> AtomicVariantBinary
+  AtomicTypeBoolean -> AtomicVariantBoolean
+  AtomicTypeFloat _ -> AtomicVariantFloat
+  AtomicTypeInteger _ -> AtomicVariantInteger
+  AtomicTypeString -> AtomicVariantString
+
+atomicValueVariant :: AtomicValue -> AtomicVariant
+atomicValueVariant av = case av of
+  AtomicValueBinary _ -> AtomicVariantBinary
+  AtomicValueBoolean _ -> AtomicVariantBoolean
+  AtomicValueFloat _ -> AtomicVariantFloat
+  AtomicValueInteger _ -> AtomicVariantInteger
+  AtomicValueString _ -> AtomicVariantString
+
+floatTypeVariant :: FloatType -> FloatVariant
+floatTypeVariant ft = case ft of
+  FloatTypeBigfloat -> FloatVariantBigfloat
+  FloatTypeFloat32 -> FloatVariantFloat32
+  FloatTypeFloat64 -> FloatVariantFloat64
+
+floatValueVariant :: FloatValue -> FloatVariant
+floatValueVariant fv = case fv of
+  FloatValueBigfloat _ -> FloatVariantBigfloat
+  FloatValueFloat32 _ -> FloatVariantFloat32
+  FloatValueFloat64 _ -> FloatVariantFloat64
 
 freeVariables :: Term -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term
@@ -33,6 +67,30 @@ freeVariables term = S.fromList $ free S.empty term
       TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
       TermUnion field -> free bound $ fieldTerm field
       TermVariable v -> if S.member v bound then [] else [v]
+
+integerTypeVariant :: IntegerType -> IntegerVariant
+integerTypeVariant it = case it of
+  IntegerTypeBigint -> IntegerVariantBigint
+  IntegerTypeInt8 -> IntegerVariantInt8
+  IntegerTypeInt16 -> IntegerVariantInt16
+  IntegerTypeInt32 -> IntegerVariantInt32
+  IntegerTypeInt64 -> IntegerVariantInt64
+  IntegerTypeUint8 -> IntegerVariantUint8
+  IntegerTypeUint16 -> IntegerVariantUint16
+  IntegerTypeUint32 -> IntegerVariantUint32
+  IntegerTypeUint64 -> IntegerVariantUint64
+
+integerValueVariant :: IntegerValue -> IntegerVariant
+integerValueVariant iv = case iv of
+  IntegerValueBigint _ -> IntegerVariantBigint
+  IntegerValueInt8 _ -> IntegerVariantInt8
+  IntegerValueInt16 _ -> IntegerVariantInt16
+  IntegerValueInt32 _ -> IntegerVariantInt32
+  IntegerValueInt64 _ -> IntegerVariantInt64
+  IntegerValueUint8 _ -> IntegerVariantUint8
+  IntegerValueUint16 _ -> IntegerVariantUint16
+  IntegerValueUint32 _ -> IntegerVariantUint32
+  IntegerValueUint64 _ -> IntegerVariantUint64
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of
