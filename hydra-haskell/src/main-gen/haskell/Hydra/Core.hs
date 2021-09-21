@@ -4,6 +4,7 @@ module Hydra.Core
   ( Application(..)
   , AtomicType(..)
   , AtomicValue(..)
+  , AtomicVariant(..)
   , BooleanValue(..)
   , CaseStatement(..)
   , Comparison(..)
@@ -12,9 +13,11 @@ module Hydra.Core
   , FieldType(..)
   , FloatType(..)
   , FloatValue(..)
+  , FloatVariant(..)
   , FunctionType(..)
   , IntegerType(..)
   , IntegerValue(..)
+  , IntegerVariant(..)
   , Lambda(..)
   , Name
   , Term(..)
@@ -63,6 +66,13 @@ data AtomicValue
   | AtomicValueInteger IntegerValue
   -- | @type string
   | AtomicValueString String deriving (Eq, Generic, Ord, Read, Show)
+
+data AtomicVariant
+  = AtomicVariantBinary
+  | AtomicVariantBoolean
+  | AtomicVariantFloat
+  | AtomicVariantInteger
+  | AtomicVariantString deriving (Eq, Generic, Ord, Read, Show)
 
 data BooleanValue
   = BooleanValueFalse
@@ -122,6 +132,11 @@ data FloatValue
                 bits: 64 -}
   | FloatValueFloat64 Double deriving (Eq, Generic, Ord, Read, Show)
 
+data FloatVariant
+  = FloatVariantBigfloat
+  | FloatVariantFloat32
+  | FloatVariantFloat64 deriving (Eq, Generic, Ord, Read, Show)
+
 -- | A function type, also known as an arrow type
 data FunctionType
   = FunctionType
@@ -177,6 +192,17 @@ data IntegerValue
                 bits: 64
               signed: false -}
   | IntegerValueUint64 Int64 deriving (Eq, Generic, Ord, Read, Show)
+
+data IntegerVariant
+  = IntegerVariantBigint
+  | IntegerVariantInt8
+  | IntegerVariantInt16
+  | IntegerVariantInt32
+  | IntegerVariantInt64
+  | IntegerVariantUint8
+  | IntegerVariantUint16
+  | IntegerVariantUint32
+  | IntegerVariantUint64 deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A function abstraction (lambda)
 data Lambda
