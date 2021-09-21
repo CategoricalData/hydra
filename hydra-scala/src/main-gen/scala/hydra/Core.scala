@@ -73,8 +73,8 @@ object Core{
     final case class AtomicVariant_string() extends AtomicVariant
     
     sealed trait BooleanValue
-    final case class BooleanValue_`false`() extends BooleanValue
-    final case class BooleanValue_`true`() extends BooleanValue
+    final case class BooleanValue_false() extends BooleanValue
+    final case class BooleanValue_true() extends BooleanValue
     
     case class CaseStatement(
         /**
