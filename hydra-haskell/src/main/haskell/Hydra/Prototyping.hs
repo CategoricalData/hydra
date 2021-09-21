@@ -1,9 +1,14 @@
 module Hydra.Prototyping (
+    atomicTypeAsTerm,
     atomicTypeVariant,
     atomicValueVariant,
+    fieldTypeAsTerm,
+    floatTypeAsTerm,
     floatTypeVariant,
     floatValueVariant,
     freeVariables,
+    functionTypeAsTerm,
+    integerTypeAsTerm,
     integerTypeVariant,
     integerValueVariant,
     termIsClosed,
@@ -23,6 +28,14 @@ import qualified Data.Map  as M
 import qualified Data.Set  as S
 
 
+atomicTypeAsTerm :: AtomicType -> Term
+atomicTypeAsTerm at = case at of
+  AtomicTypeBinary -> unitVariant "binary"
+  AtomicTypeBoolean -> unitVariant "boolean"
+  AtomicTypeFloat ft -> variant "float" $ floatTypeAsTerm ft
+  AtomicTypeInteger it -> variant "integer" $ integerTypeAsTerm it
+  AtomicTypeString -> unitVariant "string"
+
 atomicTypeVariant :: AtomicType -> AtomicVariant
 atomicTypeVariant at = case at of
   AtomicTypeBinary -> AtomicVariantBinary
@@ -38,6 +51,17 @@ atomicValueVariant av = case av of
   AtomicValueFloat _ -> AtomicVariantFloat
   AtomicValueInteger _ -> AtomicVariantInteger
   AtomicValueString _ -> AtomicVariantString
+
+fieldTypeAsTerm :: FieldType -> Term
+fieldTypeAsTerm (FieldType fname t) = TermRecord [
+  Field "name" $ string fname,
+  Field "type" $ typeAsTerm t]
+
+floatTypeAsTerm :: FloatType -> Term
+floatTypeAsTerm ft = unitVariant $ case ft of
+  FloatTypeBigfloat -> "bigfloat"
+  FloatTypeFloat32 -> "float32"
+  FloatTypeFloat64 -> "float64"
 
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
@@ -69,6 +93,23 @@ freeVariables term = S.fromList $ free S.empty term
       TermUnion field -> free bound $ fieldTerm field
       TermVariable v -> if S.member v bound then [] else [v]
 
+functionTypeAsTerm :: FunctionType -> Term
+functionTypeAsTerm (FunctionType dom cod) = TermRecord [
+  Field "domain" $ typeAsTerm dom,
+  Field "codomain" $ typeAsTerm cod]
+
+integerTypeAsTerm :: IntegerType -> Term
+integerTypeAsTerm it = unitVariant $ case it of
+  IntegerTypeBigint -> "bigint"
+  IntegerTypeInt8 -> "int8"
+  IntegerTypeInt16 -> "int16"
+  IntegerTypeInt32 -> "int32"
+  IntegerTypeInt64 -> "int64"
+  IntegerTypeUint8 -> "uint8"
+  IntegerTypeUint16 -> "uint16"
+  IntegerTypeUint32 -> "uint32"
+  IntegerTypeUint64 -> "uint64"
+
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
   IntegerTypeBigint -> IntegerVariantBigint
@@ -92,6 +133,8 @@ integerValueVariant iv = case iv of
   IntegerValueUint16 _ -> IntegerVariantUint16
   IntegerValueUint32 _ -> IntegerVariantUint32
   IntegerValueUint64 _ -> IntegerVariantUint64
+
+string = TermAtomic . AtomicValueString
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
@@ -120,46 +163,8 @@ typeAsTerm typ = case typ of
     TypeFunction ft -> variant "function" $ functionTypeAsTerm ft
     TypeList t -> variant "list" $ typeAsTerm t
     TypeNominal name -> variant "nominal" $ string name
-    TypeRecord fields -> variant "record" $ TermList $ fmap fieldAsTerm fields
-    TypeUnion fields -> variant "union" $ TermList $ fmap fieldAsTerm fields
-
-  where
-    atomicTypeAsTerm at = case at of
-      AtomicTypeBinary -> unitVariant "binary"
-      AtomicTypeBoolean -> unitVariant "boolean"
-      AtomicTypeFloat ft -> variant "float" $ floatTypeAsTerm ft
-      AtomicTypeInteger it -> variant "integer" $ integerTypeAsTerm it
-      AtomicTypeString -> unitVariant "string"
-
-    fieldAsTerm (FieldType fname t) = TermRecord [
-      Field "name" $ string fname,
-      Field "type" $ typeAsTerm t]
-
-    floatTypeAsTerm ft = unitVariant $ case ft of
-      FloatTypeBigfloat -> "bigfloat"
-      FloatTypeFloat32 -> "float32"
-      FloatTypeFloat64 -> "float64"
-
-    functionTypeAsTerm (FunctionType dom cod) = TermRecord [
-      Field "domain" $ typeAsTerm dom,
-      Field "codomain" $ typeAsTerm cod]
-
-    integerTypeAsTerm it = unitVariant $ case it of
-      IntegerTypeBigint -> "bigint"
-      IntegerTypeInt8 -> "int8"
-      IntegerTypeInt16 -> "int16"
-      IntegerTypeInt32 -> "int32"
-      IntegerTypeInt64 -> "int64"
-      IntegerTypeUint8 -> "uint8"
-      IntegerTypeUint16 -> "uint16"
-      IntegerTypeUint32 -> "uint32"
-      IntegerTypeUint64 -> "uint64"
-
-    string = TermAtomic . AtomicValueString
-
-    unitVariant fname = variant fname unitTerm
-
-    variant fname term = TermUnion (Field fname term)
+    TypeRecord fields -> variant "record" $ TermList $ fmap fieldTypeAsTerm fields
+    TypeUnion fields -> variant "union" $ TermList $ fmap fieldTypeAsTerm fields
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
@@ -173,3 +178,7 @@ typeVariant typ = case typ of
 
 unitTerm :: Term
 unitTerm = TermRecord []
+
+unitVariant fname = variant fname unitTerm
+
+variant fname term = TermUnion (Field fname term)
