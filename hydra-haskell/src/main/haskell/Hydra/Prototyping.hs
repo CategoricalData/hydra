@@ -6,6 +6,7 @@ module Hydra.Prototyping (
     freeVariables,
     integerTypeVariant,
     integerValueVariant,
+    termIsClosed,
     termVariant,
     typeAsTerm,
     typeVariant,
@@ -91,6 +92,10 @@ integerValueVariant iv = case iv of
   IntegerValueUint16 _ -> IntegerVariantUint16
   IntegerValueUint32 _ -> IntegerVariantUint32
   IntegerValueUint64 _ -> IntegerVariantUint64
+
+-- | Whether a term is closed, i.e. represents a complete program
+termIsClosed :: Term -> Bool
+termIsClosed = S.null . freeVariables
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of
