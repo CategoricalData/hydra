@@ -2,7 +2,7 @@
  * The Hydra Core model (in progress)
  */
 
-package org.example.hydra
+package hydra
 
 
 

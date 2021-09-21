@@ -1,8 +1,8 @@
 
-package org.example.hydra
+package hydra
 
-import org.example.hydra.Core.Name
-import org.example.hydra.Core.Term
+import hydra.Core.Name
+import hydra.Core.Term
 
 object Graph{
     /**
