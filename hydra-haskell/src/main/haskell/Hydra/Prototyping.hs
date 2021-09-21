@@ -14,7 +14,7 @@ module Hydra.Prototyping (
   ) where
 
 import Hydra.Core
-import Hydra.Graph
+--import Hydra.Graph
 --import Hydra.Evaluation
 
 import qualified Data.Char as C
