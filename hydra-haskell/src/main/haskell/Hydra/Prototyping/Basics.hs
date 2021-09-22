@@ -1,15 +1,18 @@
 module Hydra.Prototyping.Basics (
     atomicTypeAsTerm,
     atomicTypeVariant,
+    atomicValueType,
     atomicValueVariant,
     fieldTypeAsTerm,
     floatTypeAsTerm,
     floatTypeVariant,
+    floatValueType,
     floatValueVariant,
     freeVariables,
     functionTypeAsTerm,
     integerTypeAsTerm,
     integerTypeVariant,
+    integerValueType,
     integerValueVariant,
     termIsClosed,
     termVariant,
@@ -44,6 +47,14 @@ atomicTypeVariant at = case at of
   AtomicTypeInteger _ -> AtomicVariantInteger
   AtomicTypeString -> AtomicVariantString
 
+atomicValueType :: AtomicValue -> AtomicType
+atomicValueType v = case v of
+  AtomicValueBinary _ -> AtomicTypeBinary
+  AtomicValueBoolean _ -> AtomicTypeBoolean
+  AtomicValueFloat fv -> AtomicTypeFloat $ floatValueType fv
+  AtomicValueInteger iv -> AtomicTypeInteger $ integerValueType iv
+  AtomicValueString _ -> AtomicTypeString
+
 atomicValueVariant :: AtomicValue -> AtomicVariant
 atomicValueVariant av = case av of
   AtomicValueBinary _ -> AtomicVariantBinary
@@ -68,6 +79,12 @@ floatTypeVariant ft = case ft of
   FloatTypeBigfloat -> FloatVariantBigfloat
   FloatTypeFloat32 -> FloatVariantFloat32
   FloatTypeFloat64 -> FloatVariantFloat64
+
+floatValueType :: FloatValue -> FloatType
+floatValueType fv = case fv of
+  FloatValueBigfloat _ -> FloatTypeBigfloat
+  FloatValueFloat32 _ -> FloatTypeFloat32
+  FloatValueFloat64 _ -> FloatTypeFloat64
 
 floatValueVariant :: FloatValue -> FloatVariant
 floatValueVariant fv = case fv of
@@ -121,6 +138,18 @@ integerTypeVariant it = case it of
   IntegerTypeUint16 -> IntegerVariantUint16
   IntegerTypeUint32 -> IntegerVariantUint32
   IntegerTypeUint64 -> IntegerVariantUint64
+
+integerValueType :: IntegerValue -> IntegerType
+integerValueType iv = case iv of
+  IntegerValueBigint _ -> IntegerTypeBigint
+  IntegerValueInt8 _ -> IntegerTypeInt8
+  IntegerValueInt16 _ -> IntegerTypeInt16
+  IntegerValueInt32 _ -> IntegerTypeInt32
+  IntegerValueInt64 _ -> IntegerTypeInt64
+  IntegerValueUint8 _ -> IntegerTypeUint8
+  IntegerValueUint16 _ -> IntegerTypeUint16
+  IntegerValueUint32 _ -> IntegerTypeUint32
+  IntegerValueUint64 _ -> IntegerTypeUint64
 
 integerValueVariant :: IntegerValue -> IntegerVariant
 integerValueVariant iv = case iv of

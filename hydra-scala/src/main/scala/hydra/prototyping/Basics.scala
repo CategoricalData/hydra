@@ -17,6 +17,13 @@ def atomicTypeVariant(at: AtomicType): AtomicVariant = at match
   case AtomicType.integer(_) => AtomicVariant.integer()
   case AtomicType.string() => AtomicVariant.string()
 
+def atomicValueType(av: AtomicValue): AtomicType = av match
+  case AtomicValue.binary(_) => AtomicType.binary()
+  case AtomicValue.boolean(_) => AtomicType.boolean()
+  case AtomicValue.float(fv) => AtomicType.float(floatValueType(fv))
+  case AtomicValue.integer(iv) => AtomicType.integer(integerValueType(iv))
+  case AtomicValue.string(_) => AtomicType.string()
+
 def atomicValueVariant(av: AtomicValue): AtomicVariant = av match
   case AtomicValue.binary(_) => AtomicVariant.binary()
   case AtomicValue.boolean(_) => AtomicVariant.boolean()
@@ -37,6 +44,11 @@ def floatTypeVariant(ft: FloatType): FloatVariant = ft match
   case FloatType.bigfloat() => FloatVariant.bigfloat()
   case FloatType.float32() => FloatVariant.float32()
   case FloatType.float64() => FloatVariant.float64()
+
+def floatValueType(fv: FloatValue): FloatType = fv match
+  case FloatValue.bigfloat(_) => FloatType.bigfloat()
+  case FloatValue.float32(_) => FloatType.float32()
+  case FloatValue.float64(_) => FloatType.float64()
 
 def floatValueVariant(fv: FloatValue): FloatVariant = fv match
   case FloatValue.bigfloat(_) => FloatVariant.bigfloat()
@@ -88,6 +100,17 @@ def integerTypeVariant(it: IntegerType): IntegerVariant = it match
   case IntegerType.uint16() => IntegerVariant.uint16()
   case IntegerType.uint32() => IntegerVariant.uint32()
   case IntegerType.uint64() => IntegerVariant.uint64()
+
+def integerValueType(iv: IntegerValue): IntegerType = iv match
+  case IntegerValue.bigint(_) => IntegerType.bigint()
+  case IntegerValue.int8(_) => IntegerType.int8()
+  case IntegerValue.int16(_) => IntegerType.int16()
+  case IntegerValue.int32(_) => IntegerType.int32()
+  case IntegerValue.int64(_) => IntegerType.int64()
+  case IntegerValue.uint8(_) => IntegerType.uint8()
+  case IntegerValue.uint16(_) => IntegerType.uint16()
+  case IntegerValue.uint32(_) => IntegerType.uint32()
+  case IntegerValue.uint64(_) => IntegerType.uint64()
 
 def integerValueVariant(it: IntegerValue): IntegerVariant = it match
   case IntegerValue.bigint(_) => IntegerVariant.bigint()
