@@ -1,7 +1,6 @@
 package hydra
 
 import hydra.core.*;
-import hydra.core.Variable
 
 
 def atomicTypeAsTerm(at: AtomicType): Term = at match
@@ -25,7 +24,7 @@ def atomicValueVariant(av: AtomicValue): AtomicVariant = av match
   case AtomicValue.integer(_) => AtomicVariant.integer()
   case AtomicValue.string(_) => AtomicVariant.string()
 
-def fieldTypeAsTerm(ft : FieldType): Term = Term.record(Seq(
+def fieldTypeAsTerm(ft: FieldType): Term = Term.record(Seq(
   Field("name", string(ft.name)),
   Field("type", typeAsTerm(ft.`type`))))
 
@@ -106,7 +105,7 @@ def string(s: String): Term = Term.atomic(AtomicValue.string(s))
 /**
  * Whether a term is closed, i.e. represents a complete program
  */
-def termIsClosed(term : Term) : Boolean = freeVariables(term).isEmpty
+def termIsClosed(term: Term) : Boolean = freeVariables(term).isEmpty
 
 def termVariant(term: Term): TermVariant = term match
   case Term.application(_) => TermVariant.application()

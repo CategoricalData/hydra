@@ -1,4 +1,4 @@
-module Hydra.Prototyping (
+module Hydra.Prototyping.Basics (
     atomicTypeAsTerm,
     atomicTypeVariant,
     atomicValueVariant,
