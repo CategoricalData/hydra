@@ -27,54 +27,54 @@ object Core{
      * 
      * @comments The so-called term constants, or valid values, of each atomic type are unspecified
      */
-    sealed trait AtomicType
-    final case class AtomicType_binary() extends AtomicType
-    final case class AtomicType_boolean() extends AtomicType
-    /**
-     * @type hydra/core.FloatType
-     */
-    final case class AtomicType_float(value: FloatType) extends AtomicType
-    /**
-     * @type hydra/core.IntegerType
-     */
-    final case class AtomicType_integer(value: IntegerType) extends AtomicType
-    final case class AtomicType_string() extends AtomicType
+    enum AtomicType:
+        case binary() extends AtomicType
+        case boolean() extends AtomicType
+        /**
+         * @type hydra/core.FloatType
+         */
+        case float(value: FloatType) extends AtomicType
+        /**
+         * @type hydra/core.IntegerType
+         */
+        case integer(value: IntegerType) extends AtomicType
+        case string() extends AtomicType
     
     /**
      * A term constant; an instance of an atomic type
      */
-    sealed trait AtomicValue
-    /**
-     * @type binary
-     */
-    final case class AtomicValue_binary(value: String) extends AtomicValue
-    /**
-     * @type hydra/core.BooleanValue
-     */
-    final case class AtomicValue_boolean(value: BooleanValue) extends AtomicValue
-    /**
-     * @type hydra/core.FloatValue
-     */
-    final case class AtomicValue_float(value: FloatValue) extends AtomicValue
-    /**
-     * @type hydra/core.IntegerValue
-     */
-    final case class AtomicValue_integer(value: IntegerValue) extends AtomicValue
-    /**
-     * @type string
-     */
-    final case class AtomicValue_string(value: String) extends AtomicValue
+    enum AtomicValue:
+        /**
+         * @type binary
+         */
+        case binary(value: String) extends AtomicValue
+        /**
+         * @type hydra/core.BooleanValue
+         */
+        case boolean(value: BooleanValue) extends AtomicValue
+        /**
+         * @type hydra/core.FloatValue
+         */
+        case float(value: FloatValue) extends AtomicValue
+        /**
+         * @type hydra/core.IntegerValue
+         */
+        case integer(value: IntegerValue) extends AtomicValue
+        /**
+         * @type string
+         */
+        case string(value: String) extends AtomicValue
     
-    sealed trait AtomicVariant
-    final case class AtomicVariant_binary() extends AtomicVariant
-    final case class AtomicVariant_boolean() extends AtomicVariant
-    final case class AtomicVariant_float() extends AtomicVariant
-    final case class AtomicVariant_integer() extends AtomicVariant
-    final case class AtomicVariant_string() extends AtomicVariant
+    enum AtomicVariant:
+        case binary() extends AtomicVariant
+        case boolean() extends AtomicVariant
+        case float() extends AtomicVariant
+        case integer() extends AtomicVariant
+        case string() extends AtomicVariant
     
-    sealed trait BooleanValue
-    final case class BooleanValue_false() extends BooleanValue
-    final case class BooleanValue_true() extends BooleanValue
+    enum BooleanValue:
+        case `false`() extends BooleanValue
+        case `true`() extends BooleanValue
     
     case class CaseStatement(
         /**
@@ -96,10 +96,10 @@ object Core{
     /**
      * An equality judgement: less than, equal to, or greater than
      */
-    sealed trait Comparison
-    final case class Comparison_lessThan() extends Comparison
-    final case class Comparison_equalTo() extends Comparison
-    final case class Comparison_greaterThan() extends Comparison
+    enum Comparison:
+        case lessThan() extends Comparison
+        case equalTo() extends Comparison
+        case greaterThan() extends Comparison
     
     /**
      * A labeled term
@@ -133,32 +133,32 @@ object Core{
         `type`: Type
     )
     
-    sealed trait FloatType
-    final case class FloatType_bigfloat() extends FloatType
-    final case class FloatType_float32() extends FloatType
-    final case class FloatType_float64() extends FloatType
+    enum FloatType:
+        case bigfloat() extends FloatType
+        case float32() extends FloatType
+        case float64() extends FloatType
     
-    sealed trait FloatValue
-    /**
-     * @type float:
-     *         precision: arbitrary
-     */
-    final case class FloatValue_bigfloat(value: Double) extends FloatValue
-    /**
-     * @type float
-     */
-    final case class FloatValue_float32(value: Float) extends FloatValue
-    /**
-     * @type float:
-     *         precision:
-     *           bits: 64
-     */
-    final case class FloatValue_float64(value: Double) extends FloatValue
+    enum FloatValue:
+        /**
+         * @type float:
+         *         precision: arbitrary
+         */
+        case bigfloat(value: Double) extends FloatValue
+        /**
+         * @type float
+         */
+        case float32(value: Float) extends FloatValue
+        /**
+         * @type float:
+         *         precision:
+         *           bits: 64
+         */
+        case float64(value: Double) extends FloatValue
     
-    sealed trait FloatVariant
-    final case class FloatVariant_bigfloat() extends FloatVariant
-    final case class FloatVariant_float32() extends FloatVariant
-    final case class FloatVariant_float64() extends FloatVariant
+    enum FloatVariant:
+        case bigfloat() extends FloatVariant
+        case float32() extends FloatVariant
+        case float64() extends FloatVariant
     
     /**
      * A function type, also known as an arrow type
@@ -175,82 +175,82 @@ object Core{
         codomain: Type
     )
     
-    sealed trait IntegerType
-    final case class IntegerType_bigint() extends IntegerType
-    final case class IntegerType_int8() extends IntegerType
-    final case class IntegerType_int16() extends IntegerType
-    final case class IntegerType_int32() extends IntegerType
-    final case class IntegerType_int64() extends IntegerType
-    final case class IntegerType_uint8() extends IntegerType
-    final case class IntegerType_uint16() extends IntegerType
-    final case class IntegerType_uint32() extends IntegerType
-    final case class IntegerType_uint64() extends IntegerType
+    enum IntegerType:
+        case bigint() extends IntegerType
+        case int8() extends IntegerType
+        case int16() extends IntegerType
+        case int32() extends IntegerType
+        case int64() extends IntegerType
+        case uint8() extends IntegerType
+        case uint16() extends IntegerType
+        case uint32() extends IntegerType
+        case uint64() extends IntegerType
     
-    sealed trait IntegerValue
-    /**
-     * @type integer:
-     *         precision: arbitrary
-     */
-    final case class IntegerValue_bigint(value: Long) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 8
-     */
-    final case class IntegerValue_int8(value: Byte) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 16
-     */
-    final case class IntegerValue_int16(value: Short) extends IntegerValue
-    /**
-     * @type integer
-     */
-    final case class IntegerValue_int32(value: Int) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 64
-     */
-    final case class IntegerValue_int64(value: Long) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 8
-     *         signed: false
-     */
-    final case class IntegerValue_uint8(value: Byte) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 16
-     *         signed: false
-     */
-    final case class IntegerValue_uint16(value: Short) extends IntegerValue
-    /**
-     * @type integer:
-     *         signed: false
-     */
-    final case class IntegerValue_uint32(value: Int) extends IntegerValue
-    /**
-     * @type integer:
-     *         precision:
-     *           bits: 64
-     *         signed: false
-     */
-    final case class IntegerValue_uint64(value: Long) extends IntegerValue
+    enum IntegerValue:
+        /**
+         * @type integer:
+         *         precision: arbitrary
+         */
+        case bigint(value: Long) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 8
+         */
+        case int8(value: Byte) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 16
+         */
+        case int16(value: Short) extends IntegerValue
+        /**
+         * @type integer
+         */
+        case int32(value: Int) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 64
+         */
+        case int64(value: Long) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 8
+         *         signed: false
+         */
+        case uint8(value: Byte) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 16
+         *         signed: false
+         */
+        case uint16(value: Short) extends IntegerValue
+        /**
+         * @type integer:
+         *         signed: false
+         */
+        case uint32(value: Int) extends IntegerValue
+        /**
+         * @type integer:
+         *         precision:
+         *           bits: 64
+         *         signed: false
+         */
+        case uint64(value: Long) extends IntegerValue
     
-    sealed trait IntegerVariant
-    final case class IntegerVariant_bigint() extends IntegerVariant
-    final case class IntegerVariant_int8() extends IntegerVariant
-    final case class IntegerVariant_int16() extends IntegerVariant
-    final case class IntegerVariant_int32() extends IntegerVariant
-    final case class IntegerVariant_int64() extends IntegerVariant
-    final case class IntegerVariant_uint8() extends IntegerVariant
-    final case class IntegerVariant_uint16() extends IntegerVariant
-    final case class IntegerVariant_uint32() extends IntegerVariant
-    final case class IntegerVariant_uint64() extends IntegerVariant
+    enum IntegerVariant:
+        case bigint() extends IntegerVariant
+        case int8() extends IntegerVariant
+        case int16() extends IntegerVariant
+        case int32() extends IntegerVariant
+        case int64() extends IntegerVariant
+        case uint8() extends IntegerVariant
+        case uint16() extends IntegerVariant
+        case uint32() extends IntegerVariant
+        case uint64() extends IntegerVariant
     
     /**
      * A function abstraction (lambda)
@@ -276,137 +276,137 @@ object Core{
      */
     type Name = String
     
-    sealed trait Term
-    /**
-     * A function application
-     * 
-     * @type hydra/core.Application
-     */
-    final case class Term_application(value: Application) extends Term
-    /**
-     * An atomic value
-     * 
-     * @type hydra/core.AtomicValue
-     */
-    final case class Term_atomic(value: AtomicValue) extends Term
-    /**
-     * A case statement applied to a variant record
-     * 
-     * @type hydra/core.CaseStatement
-     */
-    final case class Term_cases(value: CaseStatement) extends Term
-    /**
-     * Compares a term with a given term of the same type, producing a Comparison
-     * 
-     * @type hydra/core.Term
-     */
-    final case class Term_compareTo(value: Term) extends Term
-    /**
-     * Hydra's delta function, which maps an element to its data term
-     */
-    final case class Term_data() extends Term
-    /**
-     * An element reference
-     * 
-     * @type hydra/core.Name
-     */
-    final case class Term_element(value: Name) extends Term
-    /**
-     * A reference to a built-in function
-     * 
-     * @type hydra/core.Name
-     */
-    final case class Term_function(value: Name) extends Term
-    /**
-     * A function abstraction (lambda)
-     * 
-     * @type hydra/core.Lambda
-     */
-    final case class Term_lambda(value: Lambda) extends Term
-    /**
-     * A list
-     * 
-     * @type list: hydra/core.Term
-     */
-    final case class Term_list(value: Seq[Term]) extends Term
-    /**
-     * A projection of a field from a record
-     * 
-     * @type hydra/core.FieldName
-     */
-    final case class Term_projection(value: FieldName) extends Term
-    /**
-     * A record, or labeled tuple
-     * 
-     * @type list: hydra/core.Field
-     */
-    final case class Term_record(value: Seq[Field]) extends Term
-    /**
-     * A union term, i.e. a generalization of inl() or inr()
-     * 
-     * @type hydra/core.Field
-     */
-    final case class Term_union(value: Field) extends Term
-    /**
-     * A variable reference
-     * 
-     * @type hydra/core.Variable
-     */
-    final case class Term_variable(value: Variable) extends Term
+    enum Term:
+        /**
+         * A function application
+         * 
+         * @type hydra/core.Application
+         */
+        case application(value: Application) extends Term
+        /**
+         * An atomic value
+         * 
+         * @type hydra/core.AtomicValue
+         */
+        case atomic(value: AtomicValue) extends Term
+        /**
+         * A case statement applied to a variant record
+         * 
+         * @type hydra/core.CaseStatement
+         */
+        case cases(value: CaseStatement) extends Term
+        /**
+         * Compares a term with a given term of the same type, producing a Comparison
+         * 
+         * @type hydra/core.Term
+         */
+        case compareTo(value: Term) extends Term
+        /**
+         * Hydra's delta function, which maps an element to its data term
+         */
+        case data() extends Term
+        /**
+         * An element reference
+         * 
+         * @type hydra/core.Name
+         */
+        case element(value: Name) extends Term
+        /**
+         * A reference to a built-in function
+         * 
+         * @type hydra/core.Name
+         */
+        case function(value: Name) extends Term
+        /**
+         * A function abstraction (lambda)
+         * 
+         * @type hydra/core.Lambda
+         */
+        case lambda(value: Lambda) extends Term
+        /**
+         * A list
+         * 
+         * @type list: hydra/core.Term
+         */
+        case list(value: Seq[Term]) extends Term
+        /**
+         * A projection of a field from a record
+         * 
+         * @type hydra/core.FieldName
+         */
+        case projection(value: FieldName) extends Term
+        /**
+         * A record, or labeled tuple
+         * 
+         * @type list: hydra/core.Field
+         */
+        case record(value: Seq[Field]) extends Term
+        /**
+         * A union term, i.e. a generalization of inl() or inr()
+         * 
+         * @type hydra/core.Field
+         */
+        case union(value: Field) extends Term
+        /**
+         * A variable reference
+         * 
+         * @type hydra/core.Variable
+         */
+        case variable(value: Variable) extends Term
     
-    sealed trait TermVariant
-    final case class TermVariant_application() extends TermVariant
-    final case class TermVariant_atomic() extends TermVariant
-    final case class TermVariant_cases() extends TermVariant
-    final case class TermVariant_compareTo() extends TermVariant
-    final case class TermVariant_data() extends TermVariant
-    final case class TermVariant_element() extends TermVariant
-    final case class TermVariant_function() extends TermVariant
-    final case class TermVariant_lambda() extends TermVariant
-    final case class TermVariant_list() extends TermVariant
-    final case class TermVariant_projection() extends TermVariant
-    final case class TermVariant_record() extends TermVariant
-    final case class TermVariant_union() extends TermVariant
-    final case class TermVariant_variable() extends TermVariant
+    enum TermVariant:
+        case application() extends TermVariant
+        case atomic() extends TermVariant
+        case cases() extends TermVariant
+        case compareTo() extends TermVariant
+        case data() extends TermVariant
+        case element() extends TermVariant
+        case function() extends TermVariant
+        case lambda() extends TermVariant
+        case list() extends TermVariant
+        case projection() extends TermVariant
+        case record() extends TermVariant
+        case union() extends TermVariant
+        case variable() extends TermVariant
     
-    sealed trait Type
-    /**
-     * @type hydra/core.AtomicType
-     */
-    final case class Type_atomic(value: AtomicType) extends Type
-    /**
-     * @type hydra/core.Type
-     */
-    final case class Type_element(value: Type) extends Type
-    /**
-     * @type hydra/core.FunctionType
-     */
-    final case class Type_function(value: FunctionType) extends Type
-    /**
-     * @type hydra/core.Type
-     */
-    final case class Type_list(value: Type) extends Type
-    /**
-     * @type hydra/core.Name
-     */
-    final case class Type_nominal(value: Name) extends Type
-    /**
-     * @type list: hydra/core.FieldType
-     */
-    final case class Type_record(value: Seq[FieldType]) extends Type
-    /**
-     * @type list: hydra/core.FieldType
-     */
-    final case class Type_union(value: Seq[FieldType]) extends Type
+    enum Type:
+        /**
+         * @type hydra/core.AtomicType
+         */
+        case atomic(value: AtomicType) extends Type
+        /**
+         * @type hydra/core.Type
+         */
+        case element(value: Type) extends Type
+        /**
+         * @type hydra/core.FunctionType
+         */
+        case function(value: FunctionType) extends Type
+        /**
+         * @type hydra/core.Type
+         */
+        case list(value: Type) extends Type
+        /**
+         * @type hydra/core.Name
+         */
+        case nominal(value: Name) extends Type
+        /**
+         * @type list: hydra/core.FieldType
+         */
+        case record(value: Seq[FieldType]) extends Type
+        /**
+         * @type list: hydra/core.FieldType
+         */
+        case union(value: Seq[FieldType]) extends Type
     
-    sealed trait TypeVariant
-    final case class TypeVariant_atomic() extends TypeVariant
-    final case class TypeVariant_element() extends TypeVariant
-    final case class TypeVariant_function() extends TypeVariant
-    final case class TypeVariant_list() extends TypeVariant
-    final case class TypeVariant_nominal() extends TypeVariant
-    final case class TypeVariant_record() extends TypeVariant
-    final case class TypeVariant_union() extends TypeVariant
+    enum TypeVariant:
+        case atomic() extends TypeVariant
+        case element() extends TypeVariant
+        case function() extends TypeVariant
+        case list() extends TypeVariant
+        case nominal() extends TypeVariant
+        case record() extends TypeVariant
+        case union() extends TypeVariant
     
     /**
      * A symbol which stands in for a term
