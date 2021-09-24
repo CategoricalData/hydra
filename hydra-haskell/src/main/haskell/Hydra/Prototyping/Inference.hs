@@ -1,6 +1,5 @@
 module Hydra.Prototyping.Inference (
-  checkType,
-
+    checkType,
   ) where
 
 import Hydra.Core

@@ -4,11 +4,11 @@ import hydra.core.*;
 
 
 def atomicTypeAsTerm(at: AtomicType): Term = at match
-  case AtomicType.binary() => unitVariant("binary")
-  case AtomicType.boolean() => unitVariant("boolean")
-  case AtomicType.float(ft) => variant("float", floatTypeAsTerm(ft))
-  case AtomicType.integer(it) => variant("integer", integerTypeAsTerm(it))
-  case AtomicType.string() => unitVariant("string")
+  case AtomicType.binary() => unitVariant(_AtomicType_binary)
+  case AtomicType.boolean() => unitVariant(_AtomicType_boolean)
+  case AtomicType.float(ft) => variant(_AtomicType_float, floatTypeAsTerm(ft))
+  case AtomicType.integer(it) => variant(_AtomicType_integer, integerTypeAsTerm(it))
+  case AtomicType.string() => unitVariant(_AtomicType_string)
 
 def atomicTypeVariant(at: AtomicType): AtomicVariant = at match
   case AtomicType.binary() => AtomicVariant.boolean()

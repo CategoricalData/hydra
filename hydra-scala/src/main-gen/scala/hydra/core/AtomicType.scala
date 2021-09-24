@@ -22,3 +22,10 @@ enum AtomicType:
      */
     case integer(value: IntegerType) extends AtomicType
     case string() extends AtomicType
+
+val _AtomicType: Name = "hydra/core.AtomicType"
+val _AtomicType_binary: FieldName = "binary"
+val _AtomicType_boolean: FieldName = "boolean"
+val _AtomicType_float: FieldName = "float"
+val _AtomicType_integer: FieldName = "integer"
+val _AtomicType_string: FieldName = "string"

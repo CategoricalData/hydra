@@ -24,12 +24,19 @@ module Hydra.Core
   , Type(..)
   , TypeVariant(..)
   , Variable
+  , _AtomicType
+  , _AtomicType_binary
+  , _AtomicType_boolean
+  , _AtomicType_float
+  , _AtomicType_integer
+  , _AtomicType_string
   ) where
 
 import GHC.Generics (Generic)
 import Data.Int
 import Data.Map
 import Data.Set
+
 
 -- | A term which applies a function to an argument
 data Application
@@ -301,3 +308,10 @@ data TypeVariant
     
     @type string -}
 type Variable = String
+
+_AtomicType = "hydra/core.AtomicType" :: Name
+_AtomicType_binary = "binary" :: FieldName
+_AtomicType_boolean = "boolean" :: FieldName
+_AtomicType_float = "float" :: FieldName
+_AtomicType_integer = "integer" :: FieldName
+_AtomicType_string = "string" :: FieldName
