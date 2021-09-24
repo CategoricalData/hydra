@@ -24,9 +24,9 @@ data Element
     -- | @type hydra/core.Name
     { elementName :: Name
     -- | @type hydra/core.Term
-    , elementData :: Term
+    , elementSchema :: Term
     -- | @type hydra/core.Term
-    , elementSchema :: Term } deriving (Eq, Generic, Ord, Read, Show)
+    , elementData :: Term } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A graph, or set of legal terms combined with a set of elements over those
     terms, as well as another graph, called the

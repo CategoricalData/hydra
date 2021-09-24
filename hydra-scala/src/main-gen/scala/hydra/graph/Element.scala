@@ -18,12 +18,12 @@ case class Element(
     /**
      * @type hydra/core.Term
      */
-    data: Term,
+    schema: Term,
     
     /**
      * @type hydra/core.Term
      */
-    schema: Term
+    data: Term
 )
 
 val _Element: String = "hydra/graph.Element"
