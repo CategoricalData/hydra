@@ -25,3 +25,8 @@ case class Element(
      */
     schema: Term
 )
+
+val _Element: String = "hydra/graph.Element"
+val _Element_data: String = "data"
+val _Element_name: String = "name"
+val _Element_schema: String = "schema"

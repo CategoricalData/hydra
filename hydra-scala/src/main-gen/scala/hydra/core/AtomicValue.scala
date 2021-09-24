@@ -27,3 +27,10 @@ enum AtomicValue:
      * @type string
      */
     case string(value: String) extends AtomicValue
+
+val _AtomicValue: String = "hydra/core.AtomicValue"
+val _AtomicValue_binary: String = "binary"
+val _AtomicValue_boolean: String = "boolean"
+val _AtomicValue_float: String = "float"
+val _AtomicValue_integer: String = "integer"
+val _AtomicValue_string: String = "string"

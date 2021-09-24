@@ -17,3 +17,7 @@ case class Field(
      */
     term: Term
 )
+
+val _Field: String = "hydra/core.Field"
+val _Field_name: String = "name"
+val _Field_term: String = "term"

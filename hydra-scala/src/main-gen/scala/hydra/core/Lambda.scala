@@ -21,3 +21,7 @@ case class Lambda(
      */
     body: Term
 )
+
+val _Lambda: String = "hydra/core.Lambda"
+val _Lambda_body: String = "body"
+val _Lambda_parameter: String = "parameter"

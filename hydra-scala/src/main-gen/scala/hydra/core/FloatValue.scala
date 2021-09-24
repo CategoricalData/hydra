@@ -16,3 +16,8 @@ enum FloatValue:
      *           bits: 64
      */
     case float64(value: Double) extends FloatValue
+
+val _FloatValue: String = "hydra/core.FloatValue"
+val _FloatValue_bigfloat: String = "bigfloat"
+val _FloatValue_float32: String = "float32"
+val _FloatValue_float64: String = "float64"

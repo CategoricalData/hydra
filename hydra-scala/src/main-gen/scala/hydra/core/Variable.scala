@@ -11,3 +11,5 @@ package hydra.core
  * @type string
  */
 type Variable = String
+
+val _Variable: String = "hydra/core.Variable"

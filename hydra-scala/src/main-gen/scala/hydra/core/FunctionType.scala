@@ -17,3 +17,7 @@ case class FunctionType(
      */
     codomain: Type
 )
+
+val _FunctionType: String = "hydra/core.FunctionType"
+val _FunctionType_codomain: String = "codomain"
+val _FunctionType_domain: String = "domain"

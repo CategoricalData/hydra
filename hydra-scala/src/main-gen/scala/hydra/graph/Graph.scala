@@ -29,3 +29,8 @@ case class Graph(
      */
     schemaGraph: Graph
 )
+
+val _Graph: String = "hydra/graph.Graph"
+val _Graph_dataTerms: String = "dataTerms"
+val _Graph_elements: String = "elements"
+val _Graph_schemaGraph: String = "schemaGraph"

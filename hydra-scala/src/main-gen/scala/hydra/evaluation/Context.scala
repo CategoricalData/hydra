@@ -23,3 +23,8 @@ case class Context(
      */
     reductionStyle: ReductionStyle
 )
+
+val _Context: String = "hydra/evaluation.Context"
+val _Context_elements: String = "elements"
+val _Context_functions: String = "functions"
+val _Context_reductionStyle: String = "reductionStyle"

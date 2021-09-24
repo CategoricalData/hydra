@@ -54,3 +54,14 @@ enum IntegerValue:
      *         signed: false
      */
     case uint64(value: Long) extends IntegerValue
+
+val _IntegerValue: String = "hydra/core.IntegerValue"
+val _IntegerValue_bigint: String = "bigint"
+val _IntegerValue_int16: String = "int16"
+val _IntegerValue_int32: String = "int32"
+val _IntegerValue_int64: String = "int64"
+val _IntegerValue_int8: String = "int8"
+val _IntegerValue_uint16: String = "uint16"
+val _IntegerValue_uint32: String = "uint32"
+val _IntegerValue_uint64: String = "uint64"
+val _IntegerValue_uint8: String = "uint8"
