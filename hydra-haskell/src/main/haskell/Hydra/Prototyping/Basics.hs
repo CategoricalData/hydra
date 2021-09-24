@@ -19,11 +19,10 @@ module Hydra.Prototyping.Basics (
     typeAsTerm,
     typeVariant,
     unitTerm,
+    unitVariant,
   ) where
 
 import Hydra.Core
---import Hydra.Graph
---import Hydra.Evaluation
 
 import qualified Data.Char as C
 import qualified Data.List as L
@@ -33,11 +32,11 @@ import qualified Data.Set  as S
 
 atomicTypeAsTerm :: AtomicType -> Term
 atomicTypeAsTerm at = case at of
-  AtomicTypeBinary -> unitVariant "binary"
-  AtomicTypeBoolean -> unitVariant "boolean"
-  AtomicTypeFloat ft -> variant "float" $ floatTypeAsTerm ft
-  AtomicTypeInteger it -> variant "integer" $ integerTypeAsTerm it
-  AtomicTypeString -> unitVariant "string"
+  AtomicTypeBinary -> unitVariant _AtomicType_binary
+  AtomicTypeBoolean -> unitVariant _AtomicType_boolean
+  AtomicTypeFloat ft -> variant _AtomicType_float $ floatTypeAsTerm ft
+  AtomicTypeInteger it -> variant _AtomicType_integer $ integerTypeAsTerm it
+  AtomicTypeString -> unitVariant _AtomicType_string
 
 atomicTypeVariant :: AtomicType -> AtomicVariant
 atomicTypeVariant at = case at of
@@ -208,6 +207,8 @@ typeVariant typ = case typ of
 unitTerm :: Term
 unitTerm = TermRecord []
 
+unitVariant :: FieldName -> Term
 unitVariant fname = variant fname unitTerm
 
+variant :: FieldName -> Term -> Term
 variant fname term = TermUnion (Field fname term)
