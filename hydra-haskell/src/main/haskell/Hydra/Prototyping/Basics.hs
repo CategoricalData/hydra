@@ -63,14 +63,14 @@ atomicValueVariant av = case av of
 
 fieldTypeAsTerm :: FieldType -> Term
 fieldTypeAsTerm (FieldType fname t) = TermRecord [
-  Field "name" $ stringTerm fname,
-  Field "type" $ typeAsTerm t]
+  Field _FieldType_name $ stringTerm fname,
+  Field _FieldType_type $ typeAsTerm t]
 
 floatTypeAsTerm :: FloatType -> Term
 floatTypeAsTerm ft = unitVariant $ case ft of
-  FloatTypeBigfloat -> "bigfloat"
-  FloatTypeFloat32 -> "float32"
-  FloatTypeFloat64 -> "float64"
+  FloatTypeBigfloat -> _FloatType_bigfloat
+  FloatTypeFloat32 -> _FloatType_float32
+  FloatTypeFloat64 -> _FloatType_float64
 
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
@@ -110,20 +110,20 @@ freeVariables term = S.fromList $ free S.empty term
 
 functionTypeAsTerm :: FunctionType -> Term
 functionTypeAsTerm (FunctionType dom cod) = TermRecord [
-  Field "domain" $ typeAsTerm dom,
-  Field "codomain" $ typeAsTerm cod]
+  Field _FunctionType_domain $ typeAsTerm dom,
+  Field _FunctionType_codomain $ typeAsTerm cod]
 
 integerTypeAsTerm :: IntegerType -> Term
 integerTypeAsTerm it = unitVariant $ case it of
-  IntegerTypeBigint -> "bigint"
-  IntegerTypeInt8 -> "int8"
-  IntegerTypeInt16 -> "int16"
-  IntegerTypeInt32 -> "int32"
-  IntegerTypeInt64 -> "int64"
-  IntegerTypeUint8 -> "uint8"
-  IntegerTypeUint16 -> "uint16"
-  IntegerTypeUint32 -> "uint32"
-  IntegerTypeUint64 -> "uint64"
+  IntegerTypeBigint -> _IntegerType_bigint
+  IntegerTypeInt8 -> _IntegerType_int8
+  IntegerTypeInt16 -> _IntegerType_int16
+  IntegerTypeInt32 -> _IntegerType_int32
+  IntegerTypeInt64 -> _IntegerType_int64
+  IntegerTypeUint8 -> _IntegerType_uint8
+  IntegerTypeUint16 -> _IntegerType_uint16
+  IntegerTypeUint32 -> _IntegerType_uint32
+  IntegerTypeUint64 -> _IntegerType_uint64
 
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
@@ -183,13 +183,13 @@ termVariant term = case term of
 
 typeAsTerm :: Type -> Term
 typeAsTerm typ = case typ of
-    TypeAtomic at -> variant "atomic" $ atomicTypeAsTerm at
-    TypeElement t -> variant "element" $ typeAsTerm t
-    TypeFunction ft -> variant "function" $ functionTypeAsTerm ft
-    TypeList t -> variant "list" $ typeAsTerm t
-    TypeNominal name -> variant "nominal" $ stringTerm name
-    TypeRecord fields -> variant "record" $ TermList $ fmap fieldTypeAsTerm fields
-    TypeUnion fields -> variant "union" $ TermList $ fmap fieldTypeAsTerm fields
+    TypeAtomic at -> variant _Type_atomic $ atomicTypeAsTerm at
+    TypeElement t -> variant _Type_element $ typeAsTerm t
+    TypeFunction ft -> variant _Type_function $ functionTypeAsTerm ft
+    TypeList t -> variant _Type_list $ typeAsTerm t
+    TypeNominal name -> variant _Type_nominal $ stringTerm name
+    TypeRecord fields -> variant _Type_record $ TermList $ fmap fieldTypeAsTerm fields
+    TypeUnion fields -> variant _Type_union $ TermList $ fmap fieldTypeAsTerm fields
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
