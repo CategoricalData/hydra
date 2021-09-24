@@ -7,8 +7,8 @@ import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
+import Hydra.Prototyping.TermEncoding
 
-import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Map  as M
 import qualified Data.Set  as S
