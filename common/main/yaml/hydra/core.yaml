@@ -64,20 +64,6 @@ definitions:
         - name: "false"
         - name: "true"
 
-  - name: CaseStatement
-    type:
-      record:
-        - name: cases
-          description: "A handler for each alternative in a union type. The term of each case must be function-typed."
-          type:
-            list: Field
-            
-        - name: default
-          description: >
-            A convenience which allows certain "don't care" cases to be omitted.
-            The result is a term which does not otherwise depend on the variant value.
-          type: Term
-
   - name: Comparison
     description: "An equality judgement: less than, equal to, or greater than"
     type:
@@ -272,8 +258,9 @@ definitions:
           type: AtomicValue
 
         - name: cases
-          description: "A case statement applied to a variant record"
-          type: CaseStatement
+          description: "A case statement applied to a variant record, consisting of a function term for each alternative in the union"
+          type:
+            list: Field
 
         - name: compareTo
           description: "Compares a term with a given term of the same type, producing a Comparison"

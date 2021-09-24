@@ -59,8 +59,7 @@ def freeVariables(term: Term): Set[Variable] = {
   def free(bound: Set[Variable], t: Term): List[Variable] = term match
     case Term.application(Application(t1, t2)) => free(bound, t1) ++ free(bound, t2)
     case Term.atomic(_) => List()
-    case Term.cases(CaseStatement(cases, dflt)) =>
-      free(bound, dflt) ++ cases.flatMap(f => free(bound, f.term)).toList
+    case Term.cases(cases) => cases.flatMap(f => free(bound, f.term)).toList
     case Term.compareTo(t) => free(bound, t)
     case Term.data() => List()
     case Term.element(_) => List()

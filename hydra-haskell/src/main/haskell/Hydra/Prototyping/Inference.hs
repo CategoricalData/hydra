@@ -49,10 +49,9 @@ checkType context typ term = check M.empty typ term
         TypeAtomic at -> at == atomicValueType v
         _ -> False
 
-      TermCases (CaseStatement cases def) -> case typ of
+      TermCases cases -> case typ of
         TypeFunction (FunctionType dom cod) -> case dom of
-          TypeUnion fields -> check bindings cod def
-              && (L.foldl (&&) True $ fmap checkCase cases)
+          TypeUnion fields -> L.foldl (&&) True $ fmap checkCase cases
             where
               checkCase (Field fn term) = case matchingField fn fields of
                 Nothing -> False

@@ -98,7 +98,7 @@ freeVariables term = S.fromList $ free S.empty term
     free bound term = case term of
       TermApplication (Application t1 t2) -> free bound t1 ++ free bound t2
       TermAtomic _ -> []
-      TermCases (CaseStatement cases def) -> free bound def ++ L.concatMap (free bound . fieldTerm) cases
+      TermCases cases -> L.concatMap (free bound . fieldTerm) cases
       TermCompareTo term -> free bound term
       TermData -> []
       TermElement _ -> []

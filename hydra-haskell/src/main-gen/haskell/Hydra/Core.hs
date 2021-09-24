@@ -6,7 +6,6 @@ module Hydra.Core
   , AtomicValue(..)
   , AtomicVariant(..)
   , BooleanValue(..)
-  , CaseStatement(..)
   , Comparison(..)
   , Field(..)
   , FieldName
@@ -77,20 +76,6 @@ data AtomicVariant
 data BooleanValue
   = BooleanValueFalse
   | BooleanValueTrue deriving (Eq, Generic, Ord, Read, Show)
-
-data CaseStatement
-  = CaseStatement
-    {-| A handler for each alternative in a union type. The term of each case
-        must be function-typed.
-        
-        @type list: hydra/core.Field -}
-    { caseStatementCases :: [Field]
-    {-| A convenience which allows certain "don't care" cases to be omitted. The
-        result is a term which does not otherwise
-        depend on the variant value.
-        
-        @type hydra/core.Term -}
-    , caseStatementDefaultEsc :: Term } deriving (Eq, Generic, Ord, Read, Show)
 
 -- | An equality judgement: less than, equal to, or greater than
 data Comparison
@@ -228,10 +213,11 @@ data Term
       
       @type hydra/core.AtomicValue -}
   | TermAtomic AtomicValue
-  {-| A case statement applied to a variant record
+  {-| A case statement applied to a variant record, consisting of a function term
+      for each alternative in the union
       
-      @type hydra/core.CaseStatement -}
-  | TermCases CaseStatement
+      @type list: hydra/core.Field -}
+  | TermCases [Field]
   {-| Compares a term with a given term of the same type, producing a Comparison
       
       @type hydra/core.Term -}
