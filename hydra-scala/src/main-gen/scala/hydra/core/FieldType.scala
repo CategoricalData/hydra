@@ -11,3 +11,7 @@ case class FieldType(
      */
     `type`: Type
 )
+
+val _FieldType: String = "hydra/core.FieldType"
+val _FieldType_name: String = "name"
+val _FieldType_type: String = "type"

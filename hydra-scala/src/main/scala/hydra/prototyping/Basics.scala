@@ -32,13 +32,13 @@ def atomicValueVariant(av: AtomicValue): AtomicVariant = av match
   case AtomicValue.string(_) => AtomicVariant.string()
 
 def fieldTypeAsTerm(ft: FieldType): Term = Term.record(Seq(
-  Field("name", stringTerm(ft.name)),
-  Field("type", typeAsTerm(ft.`type`))))
+  Field(_FieldType_name, stringTerm(ft.name)),
+  Field(_FieldType_type, typeAsTerm(ft.`type`))))
 
 def floatTypeAsTerm(ft: FloatType): Term = unitVariant(ft match
-    case FloatType.bigfloat() => "bigfloat"
-    case FloatType.float32() => "float32"
-    case FloatType.float64() => "float64")
+    case FloatType.bigfloat() => _FloatType_bigfloat
+    case FloatType.float32() => _FloatType_float32
+    case FloatType.float64() => _FloatType_float64)
 
 def floatTypeVariant(ft: FloatType): FloatVariant = ft match
   case FloatType.bigfloat() => FloatVariant.bigfloat()
@@ -75,19 +75,19 @@ def freeVariables(term: Term): Set[Variable] = {
 }
 
 def functionTypeAsTerm(ft: FunctionType): Term = Term.record(Seq(
-  Field("domain", typeAsTerm(ft.domain)),
-  Field("codomain", typeAsTerm(ft.codomain))))
+  Field(_FunctionType_domain, typeAsTerm(ft.domain)),
+  Field(_FunctionType_codomain, typeAsTerm(ft.codomain))))
 
 def integerTypeAsTerm(it: IntegerType): Term = unitVariant(it match
-  case IntegerType.bigint() => "bigint"
-  case IntegerType.int8() => "int8"
-  case IntegerType.int16() => "int16"
-  case IntegerType.int32() => "int32"
-  case IntegerType.int64() => "int64"
-  case IntegerType.uint8() => "uint8"
-  case IntegerType.uint16() => "uint16"
-  case IntegerType.uint32() => "uint32"
-  case IntegerType.uint64() => "uint64")
+  case IntegerType.bigint() => _IntegerType_bigint
+  case IntegerType.int8() => _IntegerType_int8
+  case IntegerType.int16() => _IntegerType_int16
+  case IntegerType.int32() => _IntegerType_int32
+  case IntegerType.int64() => _IntegerType_int64
+  case IntegerType.uint8() => _IntegerType_uint8
+  case IntegerType.uint16() => _IntegerType_uint16
+  case IntegerType.uint32() => _IntegerType_uint32
+  case IntegerType.uint64() => _IntegerType_uint64)
 
 def integerTypeVariant(it: IntegerType): IntegerVariant = it match
   case IntegerType.bigint() => IntegerVariant.bigint()
@@ -143,13 +143,13 @@ def termVariant(term: Term): TermVariant = term match
   case Term.variable(_) => TermVariant.variable()
 
 def typeAsTerm(typ: Type): Term = typ match
-  case Type.atomic(at) => variant("atomic", atomicTypeAsTerm(at))
-  case Type.element(t) => variant("element", typeAsTerm(t))
-  case Type.function(ft) => variant("function", functionTypeAsTerm(ft))
-  case Type.list(t) => variant("list", typeAsTerm(t))
-  case Type.nominal(name) => variant("nominal", stringTerm(name))
-  case Type.record(fields) => variant("record", Term.list(fields.map(fieldTypeAsTerm)))
-  case Type.union(fields) => variant("union", Term.list(fields.map(fieldTypeAsTerm)))
+  case Type.atomic(at) => variant(_Type_atomic, atomicTypeAsTerm(at))
+  case Type.element(t) => variant(_Type_element, typeAsTerm(t))
+  case Type.function(ft) => variant(_Type_function, functionTypeAsTerm(ft))
+  case Type.list(t) => variant(_Type_list, typeAsTerm(t))
+  case Type.nominal(name) => variant(_Type_nominal, stringTerm(name))
+  case Type.record(fields) => variant(_Type_record, Term.list(fields.map(fieldTypeAsTerm)))
+  case Type.union(fields) => variant(_Type_union, Term.list(fields.map(fieldTypeAsTerm)))
 
 def typeVariant(typ: Type): TypeVariant = typ match
   case Type.atomic(_) => TypeVariant.atomic()

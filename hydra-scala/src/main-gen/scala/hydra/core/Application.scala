@@ -17,3 +17,7 @@ case class Application(
      */
     argument: Term
 )
+
+val _Application: String = "hydra/core.Application"
+val _Application_argument: String = "argument"
+val _Application_function: String = "function"

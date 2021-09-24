@@ -17,3 +17,7 @@ case class PrimitiveFunction(
      */
     `type`: FunctionType
 )
+
+val _PrimitiveFunction: String = "hydra/evaluation.PrimitiveFunction"
+val _PrimitiveFunction_implementation: String = "implementation"
+val _PrimitiveFunction_type: String = "type"

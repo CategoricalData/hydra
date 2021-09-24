@@ -77,3 +77,18 @@ enum Term:
      * @type hydra/core.Variable
      */
     case variable(value: Variable) extends Term
+
+val _Term: String = "hydra/core.Term"
+val _Term_application: String = "application"
+val _Term_atomic: String = "atomic"
+val _Term_cases: String = "cases"
+val _Term_compareTo: String = "compareTo"
+val _Term_data: String = "data"
+val _Term_element: String = "element"
+val _Term_function: String = "function"
+val _Term_lambda: String = "lambda"
+val _Term_list: String = "list"
+val _Term_projection: String = "projection"
+val _Term_record: String = "record"
+val _Term_union: String = "union"
+val _Term_variable: String = "variable"

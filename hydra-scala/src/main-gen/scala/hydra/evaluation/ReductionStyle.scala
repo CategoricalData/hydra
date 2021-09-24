@@ -36,3 +36,10 @@ case class ReductionStyle(
      */
     caseStatements: Boolean
 )
+
+val _ReductionStyle: String = "hydra/evaluation.ReductionStyle"
+val _ReductionStyle_caseStatements: String = "caseStatements"
+val _ReductionStyle_elements: String = "elements"
+val _ReductionStyle_lambdas: String = "lambdas"
+val _ReductionStyle_records: String = "records"
+val _ReductionStyle_unions: String = "unions"
