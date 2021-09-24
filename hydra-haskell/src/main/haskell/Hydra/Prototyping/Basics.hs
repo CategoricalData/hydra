@@ -18,11 +18,10 @@ module Hydra.Prototyping.Basics (
     termVariant,
     typeAsTerm,
     typeVariant,
-    unitTerm,
-    unitVariant,
   ) where
 
 import Hydra.Core
+import Hydra.Prototyping.Helpers
 
 import qualified Data.Char as C
 import qualified Data.List as L
@@ -64,7 +63,7 @@ atomicValueVariant av = case av of
 
 fieldTypeAsTerm :: FieldType -> Term
 fieldTypeAsTerm (FieldType fname t) = TermRecord [
-  Field "name" $ string fname,
+  Field "name" $ stringTerm fname,
   Field "type" $ typeAsTerm t]
 
 floatTypeAsTerm :: FloatType -> Term
@@ -162,8 +161,6 @@ integerValueVariant iv = case iv of
   IntegerValueUint32 _ -> IntegerVariantUint32
   IntegerValueUint64 _ -> IntegerVariantUint64
 
-string = TermAtomic . AtomicValueString
-
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
 termIsClosed = S.null . freeVariables
@@ -190,7 +187,7 @@ typeAsTerm typ = case typ of
     TypeElement t -> variant "element" $ typeAsTerm t
     TypeFunction ft -> variant "function" $ functionTypeAsTerm ft
     TypeList t -> variant "list" $ typeAsTerm t
-    TypeNominal name -> variant "nominal" $ string name
+    TypeNominal name -> variant "nominal" $ stringTerm name
     TypeRecord fields -> variant "record" $ TermList $ fmap fieldTypeAsTerm fields
     TypeUnion fields -> variant "union" $ TermList $ fmap fieldTypeAsTerm fields
 
@@ -203,12 +200,3 @@ typeVariant typ = case typ of
   TypeNominal _ -> TypeVariantNominal
   TypeRecord _ -> TypeVariantRecord
   TypeUnion _ -> TypeVariantUnion
-
-unitTerm :: Term
-unitTerm = TermRecord []
-
-unitVariant :: FieldName -> Term
-unitVariant fname = variant fname unitTerm
-
-variant :: FieldName -> Term -> Term
-variant fname term = TermUnion (Field fname term)
