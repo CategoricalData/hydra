@@ -38,12 +38,7 @@ atomicValueType v = case v of
   AtomicValueString _ -> AtomicTypeString
 
 atomicValueVariant :: AtomicValue -> AtomicVariant
-atomicValueVariant av = case av of
-  AtomicValueBinary _ -> AtomicVariantBinary
-  AtomicValueBoolean _ -> AtomicVariantBoolean
-  AtomicValueFloat _ -> AtomicVariantFloat
-  AtomicValueInteger _ -> AtomicVariantInteger
-  AtomicValueString _ -> AtomicVariantString
+atomicValueVariant = atomicTypeVariant . atomicValueType
 
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
@@ -58,10 +53,7 @@ floatValueType fv = case fv of
   FloatValueFloat64 _ -> FloatTypeFloat64
 
 floatValueVariant :: FloatValue -> FloatVariant
-floatValueVariant fv = case fv of
-  FloatValueBigfloat _ -> FloatVariantBigfloat
-  FloatValueFloat32 _ -> FloatVariantFloat32
-  FloatValueFloat64 _ -> FloatVariantFloat64
+floatValueVariant = floatTypeVariant . floatValueType
 
 freeVariables :: Term -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term
@@ -106,16 +98,7 @@ integerValueType iv = case iv of
   IntegerValueUint64 _ -> IntegerTypeUint64
 
 integerValueVariant :: IntegerValue -> IntegerVariant
-integerValueVariant iv = case iv of
-  IntegerValueBigint _ -> IntegerVariantBigint
-  IntegerValueInt8 _ -> IntegerVariantInt8
-  IntegerValueInt16 _ -> IntegerVariantInt16
-  IntegerValueInt32 _ -> IntegerVariantInt32
-  IntegerValueInt64 _ -> IntegerVariantInt64
-  IntegerValueUint8 _ -> IntegerVariantUint8
-  IntegerValueUint16 _ -> IntegerVariantUint16
-  IntegerValueUint32 _ -> IntegerVariantUint32
-  IntegerValueUint64 _ -> IntegerVariantUint64
+integerValueVariant = integerTypeVariant . integerValueType
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
