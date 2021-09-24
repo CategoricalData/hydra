@@ -14,11 +14,11 @@ enum Term:
      */
     case atomic(value: AtomicValue) extends Term
     /**
-     * A case statement applied to a variant record
+     * A case statement applied to a variant record, consisting of a function term for each alternative in the union
      * 
-     * @type hydra/core.CaseStatement
+     * @type list: hydra/core.Field
      */
-    case cases(value: CaseStatement) extends Term
+    case cases(value: Seq[Field]) extends Term
     /**
      * Compares a term with a given term of the same type, producing a Comparison
      * 
