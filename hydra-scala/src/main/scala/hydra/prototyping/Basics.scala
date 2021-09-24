@@ -17,12 +17,7 @@ def atomicValueType(av: AtomicValue): AtomicType = av match
   case AtomicValue.integer(iv) => AtomicType.integer(integerValueType(iv))
   case AtomicValue.string(_) => AtomicType.string()
 
-def atomicValueVariant(av: AtomicValue): AtomicVariant = av match
-  case AtomicValue.binary(_) => AtomicVariant.binary()
-  case AtomicValue.boolean(_) => AtomicVariant.boolean()
-  case AtomicValue.float(_) => AtomicVariant.float()
-  case AtomicValue.integer(_) => AtomicVariant.integer()
-  case AtomicValue.string(_) => AtomicVariant.string()
+def atomicValueVariant(av: AtomicValue): AtomicVariant = atomicTypeVariant(atomicValueType(av))
 
 def floatTypeVariant(ft: FloatType): FloatVariant = ft match
   case FloatType.bigfloat() => FloatVariant.bigfloat()
@@ -34,10 +29,7 @@ def floatValueType(fv: FloatValue): FloatType = fv match
   case FloatValue.float32(_) => FloatType.float32()
   case FloatValue.float64(_) => FloatType.float64()
 
-def floatValueVariant(fv: FloatValue): FloatVariant = fv match
-  case FloatValue.bigfloat(_) => FloatVariant.bigfloat()
-  case FloatValue.float32(_) => FloatVariant.float32()
-  case FloatValue.float64(_) => FloatVariant.float64()
+def floatValueVariant(fv: FloatValue): FloatVariant = floatTypeVariant(floatValueType(fv))
 
 def freeVariables(term: Term): Set[Variable] = {
   def free(bound: Set[Variable], t: Term): List[Variable] = term match
@@ -80,16 +72,7 @@ def integerValueType(iv: IntegerValue): IntegerType = iv match
   case IntegerValue.uint32(_) => IntegerType.uint32()
   case IntegerValue.uint64(_) => IntegerType.uint64()
 
-def integerValueVariant(it: IntegerValue): IntegerVariant = it match
-  case IntegerValue.bigint(_) => IntegerVariant.bigint()
-  case IntegerValue.int8(_) => IntegerVariant.int8()
-  case IntegerValue.int16(_) => IntegerVariant.int16()
-  case IntegerValue.int32(_) => IntegerVariant.int32()
-  case IntegerValue.int64(_) => IntegerVariant.int64()
-  case IntegerValue.uint8(_) => IntegerVariant.uint8()
-  case IntegerValue.uint16(_) => IntegerVariant.uint16()
-  case IntegerValue.uint32(_) => IntegerVariant.uint32()
-  case IntegerValue.uint64(_) => IntegerVariant.uint64()
+def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(integerValueType(it))
 
 /**
  * Whether a term is closed, i.e. represents a complete program
