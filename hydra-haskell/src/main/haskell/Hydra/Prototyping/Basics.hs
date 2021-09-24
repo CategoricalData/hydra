@@ -1,41 +1,25 @@
 module Hydra.Prototyping.Basics (
-    atomicTypeAsTerm,
     atomicTypeVariant,
     atomicValueType,
     atomicValueVariant,
-    fieldTypeAsTerm,
-    floatTypeAsTerm,
     floatTypeVariant,
     floatValueType,
     floatValueVariant,
     freeVariables,
-    functionTypeAsTerm,
-    integerTypeAsTerm,
     integerTypeVariant,
     integerValueType,
     integerValueVariant,
     termIsClosed,
     termVariant,
-    typeAsTerm,
     typeVariant,
   ) where
 
 import Hydra.Core
 import Hydra.Prototyping.Helpers
 
-import qualified Data.Char as C
 import qualified Data.List as L
-import qualified Data.Map  as M
 import qualified Data.Set  as S
 
-
-atomicTypeAsTerm :: AtomicType -> Term
-atomicTypeAsTerm at = case at of
-  AtomicTypeBinary -> unitVariant _AtomicType_binary
-  AtomicTypeBoolean -> unitVariant _AtomicType_boolean
-  AtomicTypeFloat ft -> variant _AtomicType_float $ floatTypeAsTerm ft
-  AtomicTypeInteger it -> variant _AtomicType_integer $ integerTypeAsTerm it
-  AtomicTypeString -> unitVariant _AtomicType_string
 
 atomicTypeVariant :: AtomicType -> AtomicVariant
 atomicTypeVariant at = case at of
@@ -60,17 +44,6 @@ atomicValueVariant av = case av of
   AtomicValueFloat _ -> AtomicVariantFloat
   AtomicValueInteger _ -> AtomicVariantInteger
   AtomicValueString _ -> AtomicVariantString
-
-fieldTypeAsTerm :: FieldType -> Term
-fieldTypeAsTerm (FieldType fname t) = TermRecord [
-  Field _FieldType_name $ stringTerm fname,
-  Field _FieldType_type $ typeAsTerm t]
-
-floatTypeAsTerm :: FloatType -> Term
-floatTypeAsTerm ft = unitVariant $ case ft of
-  FloatTypeBigfloat -> _FloatType_bigfloat
-  FloatTypeFloat32 -> _FloatType_float32
-  FloatTypeFloat64 -> _FloatType_float64
 
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
@@ -107,23 +80,6 @@ freeVariables term = S.fromList $ free S.empty term
       TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
       TermUnion field -> free bound $ fieldTerm field
       TermVariable v -> if S.member v bound then [] else [v]
-
-functionTypeAsTerm :: FunctionType -> Term
-functionTypeAsTerm (FunctionType dom cod) = TermRecord [
-  Field _FunctionType_domain $ typeAsTerm dom,
-  Field _FunctionType_codomain $ typeAsTerm cod]
-
-integerTypeAsTerm :: IntegerType -> Term
-integerTypeAsTerm it = unitVariant $ case it of
-  IntegerTypeBigint -> _IntegerType_bigint
-  IntegerTypeInt8 -> _IntegerType_int8
-  IntegerTypeInt16 -> _IntegerType_int16
-  IntegerTypeInt32 -> _IntegerType_int32
-  IntegerTypeInt64 -> _IntegerType_int64
-  IntegerTypeUint8 -> _IntegerType_uint8
-  IntegerTypeUint16 -> _IntegerType_uint16
-  IntegerTypeUint32 -> _IntegerType_uint32
-  IntegerTypeUint64 -> _IntegerType_uint64
 
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
@@ -180,16 +136,6 @@ termVariant term = case term of
   TermRecord _ -> TermVariantRecord
   TermUnion _ -> TermVariantUnion
   TermVariable _ -> TermVariantVariable
-
-typeAsTerm :: Type -> Term
-typeAsTerm typ = case typ of
-    TypeAtomic at -> variant _Type_atomic $ atomicTypeAsTerm at
-    TypeElement t -> variant _Type_element $ typeAsTerm t
-    TypeFunction ft -> variant _Type_function $ functionTypeAsTerm ft
-    TypeList t -> variant _Type_list $ typeAsTerm t
-    TypeNominal name -> variant _Type_nominal $ stringTerm name
-    TypeRecord fields -> variant _Type_record $ TermList $ fmap fieldTypeAsTerm fields
-    TypeUnion fields -> variant _Type_union $ TermList $ fmap fieldTypeAsTerm fields
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
