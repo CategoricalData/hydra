@@ -24,19 +24,141 @@ module Hydra.Core
   , Type(..)
   , TypeVariant(..)
   , Variable
+  , _Application
+  , _Application_argument
+  , _Application_function
   , _AtomicType
   , _AtomicType_binary
   , _AtomicType_boolean
   , _AtomicType_float
   , _AtomicType_integer
   , _AtomicType_string
+  , _AtomicValue
+  , _AtomicValue_binary
+  , _AtomicValue_boolean
+  , _AtomicValue_float
+  , _AtomicValue_integer
+  , _AtomicValue_string
+  , _AtomicVariant
+  , _AtomicVariant_binary
+  , _AtomicVariant_boolean
+  , _AtomicVariant_float
+  , _AtomicVariant_integer
+  , _AtomicVariant_string
+  , _BooleanValue
+  , _BooleanValue_false
+  , _BooleanValue_true
+  , _Comparison
+  , _Comparison_equalTo
+  , _Comparison_greaterThan
+  , _Comparison_lessThan
+  , _Field
+  , _FieldName
+  , _FieldType
+  , _FieldType_name
+  , _FieldType_type
+  , _Field_name
+  , _Field_term
+  , _FloatType
+  , _FloatType_bigfloat
+  , _FloatType_float32
+  , _FloatType_float64
+  , _FloatValue
+  , _FloatValue_bigfloat
+  , _FloatValue_float32
+  , _FloatValue_float64
+  , _FloatVariant
+  , _FloatVariant_bigfloat
+  , _FloatVariant_float32
+  , _FloatVariant_float64
+  , _FunctionType
+  , _FunctionType_codomain
+  , _FunctionType_domain
+  , _IntegerType
+  , _IntegerType_bigint
+  , _IntegerType_int16
+  , _IntegerType_int32
+  , _IntegerType_int64
+  , _IntegerType_int8
+  , _IntegerType_uint16
+  , _IntegerType_uint32
+  , _IntegerType_uint64
+  , _IntegerType_uint8
+  , _IntegerValue
+  , _IntegerValue_bigint
+  , _IntegerValue_int16
+  , _IntegerValue_int32
+  , _IntegerValue_int64
+  , _IntegerValue_int8
+  , _IntegerValue_uint16
+  , _IntegerValue_uint32
+  , _IntegerValue_uint64
+  , _IntegerValue_uint8
+  , _IntegerVariant
+  , _IntegerVariant_bigint
+  , _IntegerVariant_int16
+  , _IntegerVariant_int32
+  , _IntegerVariant_int64
+  , _IntegerVariant_int8
+  , _IntegerVariant_uint16
+  , _IntegerVariant_uint32
+  , _IntegerVariant_uint64
+  , _IntegerVariant_uint8
+  , _Lambda
+  , _Lambda_body
+  , _Lambda_parameter
+  , _Name
+  , _Term
+  , _TermVariant
+  , _TermVariant_application
+  , _TermVariant_atomic
+  , _TermVariant_cases
+  , _TermVariant_compareTo
+  , _TermVariant_data
+  , _TermVariant_element
+  , _TermVariant_function
+  , _TermVariant_lambda
+  , _TermVariant_list
+  , _TermVariant_projection
+  , _TermVariant_record
+  , _TermVariant_union
+  , _TermVariant_variable
+  , _Term_application
+  , _Term_atomic
+  , _Term_cases
+  , _Term_compareTo
+  , _Term_data
+  , _Term_element
+  , _Term_function
+  , _Term_lambda
+  , _Term_list
+  , _Term_projection
+  , _Term_record
+  , _Term_union
+  , _Term_variable
+  , _Type
+  , _TypeVariant
+  , _TypeVariant_atomic
+  , _TypeVariant_element
+  , _TypeVariant_function
+  , _TypeVariant_list
+  , _TypeVariant_nominal
+  , _TypeVariant_record
+  , _TypeVariant_union
+  , _Type_atomic
+  , _Type_element
+  , _Type_function
+  , _Type_list
+  , _Type_nominal
+  , _Type_record
+  , _Type_union
+  , _Variable
   ) where
 
 import GHC.Generics (Generic)
 import Data.Int
 import Data.Map
 import Data.Set
-
 
 -- | A term which applies a function to an argument
 data Application
@@ -309,9 +431,260 @@ data TypeVariant
     @type string -}
 type Variable = String
 
-_AtomicType = "hydra/core.AtomicType" :: Name
-_AtomicType_binary = "binary" :: FieldName
-_AtomicType_boolean = "boolean" :: FieldName
-_AtomicType_float = "float" :: FieldName
-_AtomicType_integer = "integer" :: FieldName
-_AtomicType_string = "string" :: FieldName
+_Application = "hydra/core.Application" :: String
+
+_Application_argument = "argument" :: String
+
+_Application_function = "function" :: String
+
+_AtomicType = "hydra/core.AtomicType" :: String
+
+_AtomicType_binary = "binary" :: String
+
+_AtomicType_boolean = "boolean" :: String
+
+_AtomicType_float = "float" :: String
+
+_AtomicType_integer = "integer" :: String
+
+_AtomicType_string = "string" :: String
+
+_AtomicValue = "hydra/core.AtomicValue" :: String
+
+_AtomicValue_binary = "binary" :: String
+
+_AtomicValue_boolean = "boolean" :: String
+
+_AtomicValue_float = "float" :: String
+
+_AtomicValue_integer = "integer" :: String
+
+_AtomicValue_string = "string" :: String
+
+_AtomicVariant = "hydra/core.AtomicVariant" :: String
+
+_AtomicVariant_binary = "binary" :: String
+
+_AtomicVariant_boolean = "boolean" :: String
+
+_AtomicVariant_float = "float" :: String
+
+_AtomicVariant_integer = "integer" :: String
+
+_AtomicVariant_string = "string" :: String
+
+_BooleanValue = "hydra/core.BooleanValue" :: String
+
+_BooleanValue_false = "false" :: String
+
+_BooleanValue_true = "true" :: String
+
+_Comparison = "hydra/core.Comparison" :: String
+
+_Comparison_equalTo = "equalTo" :: String
+
+_Comparison_greaterThan = "greaterThan" :: String
+
+_Comparison_lessThan = "lessThan" :: String
+
+_Field = "hydra/core.Field" :: String
+
+_FieldName = "hydra/core.FieldName" :: String
+
+_FieldType = "hydra/core.FieldType" :: String
+
+_FieldType_name = "name" :: String
+
+_FieldType_type = "type" :: String
+
+_Field_name = "name" :: String
+
+_Field_term = "term" :: String
+
+_FloatType = "hydra/core.FloatType" :: String
+
+_FloatType_bigfloat = "bigfloat" :: String
+
+_FloatType_float32 = "float32" :: String
+
+_FloatType_float64 = "float64" :: String
+
+_FloatValue = "hydra/core.FloatValue" :: String
+
+_FloatValue_bigfloat = "bigfloat" :: String
+
+_FloatValue_float32 = "float32" :: String
+
+_FloatValue_float64 = "float64" :: String
+
+_FloatVariant = "hydra/core.FloatVariant" :: String
+
+_FloatVariant_bigfloat = "bigfloat" :: String
+
+_FloatVariant_float32 = "float32" :: String
+
+_FloatVariant_float64 = "float64" :: String
+
+_FunctionType = "hydra/core.FunctionType" :: String
+
+_FunctionType_codomain = "codomain" :: String
+
+_FunctionType_domain = "domain" :: String
+
+_IntegerType = "hydra/core.IntegerType" :: String
+
+_IntegerType_bigint = "bigint" :: String
+
+_IntegerType_int16 = "int16" :: String
+
+_IntegerType_int32 = "int32" :: String
+
+_IntegerType_int64 = "int64" :: String
+
+_IntegerType_int8 = "int8" :: String
+
+_IntegerType_uint16 = "uint16" :: String
+
+_IntegerType_uint32 = "uint32" :: String
+
+_IntegerType_uint64 = "uint64" :: String
+
+_IntegerType_uint8 = "uint8" :: String
+
+_IntegerValue = "hydra/core.IntegerValue" :: String
+
+_IntegerValue_bigint = "bigint" :: String
+
+_IntegerValue_int16 = "int16" :: String
+
+_IntegerValue_int32 = "int32" :: String
+
+_IntegerValue_int64 = "int64" :: String
+
+_IntegerValue_int8 = "int8" :: String
+
+_IntegerValue_uint16 = "uint16" :: String
+
+_IntegerValue_uint32 = "uint32" :: String
+
+_IntegerValue_uint64 = "uint64" :: String
+
+_IntegerValue_uint8 = "uint8" :: String
+
+_IntegerVariant = "hydra/core.IntegerVariant" :: String
+
+_IntegerVariant_bigint = "bigint" :: String
+
+_IntegerVariant_int16 = "int16" :: String
+
+_IntegerVariant_int32 = "int32" :: String
+
+_IntegerVariant_int64 = "int64" :: String
+
+_IntegerVariant_int8 = "int8" :: String
+
+_IntegerVariant_uint16 = "uint16" :: String
+
+_IntegerVariant_uint32 = "uint32" :: String
+
+_IntegerVariant_uint64 = "uint64" :: String
+
+_IntegerVariant_uint8 = "uint8" :: String
+
+_Lambda = "hydra/core.Lambda" :: String
+
+_Lambda_body = "body" :: String
+
+_Lambda_parameter = "parameter" :: String
+
+_Name = "hydra/core.Name" :: String
+
+_Term = "hydra/core.Term" :: String
+
+_TermVariant = "hydra/core.TermVariant" :: String
+
+_TermVariant_application = "application" :: String
+
+_TermVariant_atomic = "atomic" :: String
+
+_TermVariant_cases = "cases" :: String
+
+_TermVariant_compareTo = "compareTo" :: String
+
+_TermVariant_data = "data" :: String
+
+_TermVariant_element = "element" :: String
+
+_TermVariant_function = "function" :: String
+
+_TermVariant_lambda = "lambda" :: String
+
+_TermVariant_list = "list" :: String
+
+_TermVariant_projection = "projection" :: String
+
+_TermVariant_record = "record" :: String
+
+_TermVariant_union = "union" :: String
+
+_TermVariant_variable = "variable" :: String
+
+_Term_application = "application" :: String
+
+_Term_atomic = "atomic" :: String
+
+_Term_cases = "cases" :: String
+
+_Term_compareTo = "compareTo" :: String
+
+_Term_data = "data" :: String
+
+_Term_element = "element" :: String
+
+_Term_function = "function" :: String
+
+_Term_lambda = "lambda" :: String
+
+_Term_list = "list" :: String
+
+_Term_projection = "projection" :: String
+
+_Term_record = "record" :: String
+
+_Term_union = "union" :: String
+
+_Term_variable = "variable" :: String
+
+_Type = "hydra/core.Type" :: String
+
+_TypeVariant = "hydra/core.TypeVariant" :: String
+
+_TypeVariant_atomic = "atomic" :: String
+
+_TypeVariant_element = "element" :: String
+
+_TypeVariant_function = "function" :: String
+
+_TypeVariant_list = "list" :: String
+
+_TypeVariant_nominal = "nominal" :: String
+
+_TypeVariant_record = "record" :: String
+
+_TypeVariant_union = "union" :: String
+
+_Type_atomic = "atomic" :: String
+
+_Type_element = "element" :: String
+
+_Type_function = "function" :: String
+
+_Type_list = "list" :: String
+
+_Type_nominal = "nominal" :: String
+
+_Type_record = "record" :: String
+
+_Type_union = "union" :: String
+
+_Variable = "hydra/core.Variable" :: String

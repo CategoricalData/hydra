@@ -2,6 +2,14 @@
 module Hydra.Graph
   ( Element(..)
   , Graph(..)
+  , _Element
+  , _Element_data
+  , _Element_name
+  , _Element_schema
+  , _Graph
+  , _Graph_dataTerms
+  , _Graph_elements
+  , _Graph_schemaGraph
   ) where
 
 import GHC.Generics (Generic)
@@ -34,3 +42,19 @@ data Graph
     , graphDataTerms :: Term -> Bool
     -- | @type hydra/graph.Graph
     , graphSchemaGraph :: Graph }
+
+_Element = "hydra/graph.Element" :: String
+
+_Element_data = "data" :: String
+
+_Element_name = "name" :: String
+
+_Element_schema = "schema" :: String
+
+_Graph = "hydra/graph.Graph" :: String
+
+_Graph_dataTerms = "dataTerms" :: String
+
+_Graph_elements = "elements" :: String
+
+_Graph_schemaGraph = "schemaGraph" :: String
