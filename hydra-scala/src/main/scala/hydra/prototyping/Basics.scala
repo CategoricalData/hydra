@@ -1,4 +1,4 @@
-package hydra
+package hydra.prototyping
 
 import hydra.core.*;
 
@@ -32,7 +32,7 @@ def atomicValueVariant(av: AtomicValue): AtomicVariant = av match
   case AtomicValue.string(_) => AtomicVariant.string()
 
 def fieldTypeAsTerm(ft: FieldType): Term = Term.record(Seq(
-  Field("name", string(ft.name)),
+  Field("name", stringTerm(ft.name)),
   Field("type", typeAsTerm(ft.`type`))))
 
 def floatTypeAsTerm(ft: FloatType): Term = unitVariant(ft match
@@ -122,8 +122,6 @@ def integerValueVariant(it: IntegerValue): IntegerVariant = it match
   case IntegerValue.uint32(_) => IntegerVariant.uint32()
   case IntegerValue.uint64(_) => IntegerVariant.uint64()
 
-def string(s: String): Term = Term.atomic(AtomicValue.string(s))
-
 /**
  * Whether a term is closed, i.e. represents a complete program
  */
@@ -149,7 +147,7 @@ def typeAsTerm(typ: Type): Term = typ match
   case Type.element(t) => variant("element", typeAsTerm(t))
   case Type.function(ft) => variant("function", functionTypeAsTerm(ft))
   case Type.list(t) => variant("list", typeAsTerm(t))
-  case Type.nominal(name) => variant("nominal", string(name))
+  case Type.nominal(name) => variant("nominal", stringTerm(name))
   case Type.record(fields) => variant("record", Term.list(fields.map(fieldTypeAsTerm)))
   case Type.union(fields) => variant("union", Term.list(fields.map(fieldTypeAsTerm)))
 
@@ -161,9 +159,3 @@ def typeVariant(typ: Type): TypeVariant = typ match
   case Type.nominal(_) => TypeVariant.nominal()
   case Type.record(_) => TypeVariant.record()
   case Type.union(_) => TypeVariant.union()
-
-val unitTerm: Term = Term.record(Seq())
-
-def unitVariant(fname: FieldName): Term = variant(fname, unitTerm)
-
-def variant(fname: FieldName, term: Term): Term = Term.union(Field(fname, term))
