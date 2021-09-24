@@ -10,10 +10,10 @@ definitions:
         - name: name
           type: core.Name
 
-        - name: data
+        - name: schema
           type: core.Term
 
-        - name: schema
+        - name: data
           type: core.Term
 
   - name: Graph
