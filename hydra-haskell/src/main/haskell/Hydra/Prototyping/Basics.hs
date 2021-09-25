@@ -10,15 +10,19 @@ module Hydra.Prototyping.Basics (
     integerValueType,
     integerValueVariant,
     termIsClosed,
+    termIsValue,
     termVariant,
     typeVariant,
   ) where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Prototyping.Helpers
 
-import qualified Data.List as L
-import qualified Data.Set  as S
+import qualified Data.List  as L
+import qualified Data.Map   as M
+import qualified Data.Set   as S
+import qualified Data.Maybe as Y
 
 
 atomicTypeVariant :: AtomicType -> AtomicVariant
@@ -103,6 +107,29 @@ integerValueVariant = integerTypeVariant . integerValueType
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
 termIsClosed = S.null . freeVariables
+
+-- | Whether a term has been fully reduced to a "value"
+termIsValue :: EvaluationStrategy -> Term -> Bool
+termIsValue strategy term = if isOpaque
+    then True
+    else case term of
+      TermApplication _ -> False
+      TermAtomic _ -> True
+      TermCases cases -> checkFields cases
+      TermCompareTo other -> termIsValue strategy other
+      TermData -> True
+      TermElement _ -> True
+      TermFunction _ -> True
+      TermLambda (Lambda _ body) -> termIsValue strategy body
+      TermList els -> L.foldl (\b t -> b && termIsValue strategy t) True els
+      TermProjection _ -> True
+      TermRecord fields -> checkFields fields
+      TermUnion field -> checkField field
+      TermVariable _ -> False
+  where
+    isOpaque = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
+    checkField = termIsValue strategy . fieldTerm
+    checkFields = L.foldl (\b f -> b && checkField f) True
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of

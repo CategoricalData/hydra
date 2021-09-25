@@ -20,37 +20,19 @@ definitions:
               values: PrimitiveFunction
 
         - name: reductionStyle
-          type: ReductionStyle
+          type: EvaluationStrategy
 
-  - name: ReductionStyle
+  - name: EvaluationStrategy
     type:
       record:
-        - name: lambdas
-          description: "Whether all lambda terms are considered to be fully reduced"
-          type: boolean
-
-        - name: records
-          description: "Whether all record terms are considered to be fully reduced"
-          type: boolean
-
-        - name: unions
-          description: "Whether all union terms are considered to be fully reduced"
-          type: boolean
-
-        - name: elements
-          description: "Whether all element reference terms are considered to be fully reduced"
-          type: boolean
-
-        - name: caseStatements
-          description: "Whether all case statement terms are considered to be fully reduced"
-          type: boolean
+        - name: opaqueTermVariants
+          description: "Whether a term of a given variant is considered to be fully reduced, without further inspection"
+          type:
+            set: core.TermVariant
 
   - name: PrimitiveFunction
     type:
       record:
-#        - name: name
-#          type: core.Name
-
         - name: implementation
           type:
             function:
