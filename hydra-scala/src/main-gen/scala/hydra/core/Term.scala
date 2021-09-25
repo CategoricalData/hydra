@@ -54,6 +54,14 @@ enum Term:
      */
     case list(value: Seq[Term]) extends Term
     /**
+     * A map of key terms to value terms
+     * 
+     * @type map:
+     *         keys: hydra/core.Term
+     *         values: hydra/core.Term
+     */
+    case map(value: Map[Term, Term]) extends Term
+    /**
      * A projection of a field from a record
      * 
      * @type hydra/core.FieldName
@@ -65,6 +73,12 @@ enum Term:
      * @type list: hydra/core.Field
      */
     case record(value: Seq[Field]) extends Term
+    /**
+     * A set of terms
+     * 
+     * @type set: hydra/core.Term
+     */
+    case set(value: Set[Term]) extends Term
     /**
      * A union term, i.e. a generalization of inl() or inr()
      * 
@@ -88,7 +102,9 @@ val _Term_element: String = "element"
 val _Term_function: String = "function"
 val _Term_lambda: String = "lambda"
 val _Term_list: String = "list"
+val _Term_map: String = "map"
 val _Term_projection: String = "projection"
 val _Term_record: String = "record"
+val _Term_set: String = "set"
 val _Term_union: String = "union"
 val _Term_variable: String = "variable"

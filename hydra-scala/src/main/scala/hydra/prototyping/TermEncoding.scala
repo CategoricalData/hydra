@@ -34,12 +34,17 @@ def integerTypeAsTerm(it: IntegerType): Term = unitVariant(it match
   case IntegerType.uint32() => _IntegerType_uint32
   case IntegerType.uint64() => _IntegerType_uint64)
 
+def mapTypeAsTerm(mt: MapType): Term = Term.record(Seq(
+  Field(_MapType_keys, typeAsTerm(mt.keys)),
+  Field(_MapType_values, typeAsTerm(mt.values))))
+
 def typeAsTerm(typ: Type): Term = typ match
   case Type.atomic(at) => variant(_Type_atomic, atomicTypeAsTerm(at))
   case Type.element(t) => variant(_Type_element, typeAsTerm(t))
   case Type.function(ft) => variant(_Type_function, functionTypeAsTerm(ft))
   case Type.list(t) => variant(_Type_list, typeAsTerm(t))
+  case Type.map(mt) => variant(_Type_map, mapTypeAsTerm(mt)) 
   case Type.nominal(name) => variant(_Type_nominal, stringTerm(name))
   case Type.record(fields) => variant(_Type_record, Term.list(fields.map(fieldTypeAsTerm)))
+  case Type.set(t) => variant(_Type_set, typeAsTerm(t))
   case Type.union(fields) => variant(_Type_union, Term.list(fields.map(fieldTypeAsTerm)))
-

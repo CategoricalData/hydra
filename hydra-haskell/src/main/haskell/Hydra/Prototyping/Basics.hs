@@ -72,8 +72,10 @@ freeVariables term = S.fromList $ free S.empty term
       TermFunction _ -> []
       TermLambda (Lambda v t) -> free (S.insert v bound) t
       TermList terms -> L.concatMap (free bound) terms
+      TermMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
       TermProjection _ -> []
       TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
+      TermSet terms -> L.concatMap (free bound) terms
       TermUnion field -> free bound $ fieldTerm field
       TermVariable v -> if S.member v bound then [] else [v]
 
@@ -121,12 +123,17 @@ termIsValue strategy term = if isOpaque
       TermElement _ -> True
       TermFunction _ -> True
       TermLambda (Lambda _ body) -> termIsValue strategy body
-      TermList els -> L.foldl (\b t -> b && termIsValue strategy t) True els
+      TermList els -> forList els
+      TermMap map -> L.foldl
+        (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
+        True $ M.toList map
       TermProjection _ -> True
       TermRecord fields -> checkFields fields
+      TermSet els -> forList $ S.toList els
       TermUnion field -> checkField field
       TermVariable _ -> False
   where
+    forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
     isOpaque = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
     checkField = termIsValue strategy . fieldTerm
     checkFields = L.foldl (\b f -> b && checkField f) True
@@ -142,8 +149,10 @@ termVariant term = case term of
   TermFunction _ -> TermVariantFunction
   TermLambda _ -> TermVariantLambda
   TermList _ -> TermVariantList
+  TermMap _ -> TermVariantMap
   TermProjection _ -> TermVariantProjection
   TermRecord _ -> TermVariantRecord
+  TermSet _ -> TermVariantSet
   TermUnion _ -> TermVariantUnion
   TermVariable _ -> TermVariantVariable
 
@@ -153,6 +162,8 @@ typeVariant typ = case typ of
   TypeElement _ -> TypeVariantElement
   TypeFunction _ -> TypeVariantFunction
   TypeList _ -> TypeVariantList
+  TypeMap _ -> TypeVariantMap
   TypeNominal _ -> TypeVariantNominal
   TypeRecord _ -> TypeVariantRecord
+  TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
