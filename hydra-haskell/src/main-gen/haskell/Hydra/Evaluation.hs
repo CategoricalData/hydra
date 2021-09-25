@@ -72,27 +72,15 @@ data ReductionStyle
     , reductionStyleCaseStatements :: Bool } deriving (Eq, Generic, Ord, Read, Show)
 
 _Context = "hydra/evaluation.Context" :: String
-
 _Context_elements = "elements" :: String
-
 _Context_functions = "functions" :: String
-
 _Context_reductionStyle = "reductionStyle" :: String
-
 _PrimitiveFunction = "hydra/evaluation.PrimitiveFunction" :: String
-
 _PrimitiveFunction_implementation = "implementation" :: String
-
 _PrimitiveFunction_type = "type" :: String
-
 _ReductionStyle = "hydra/evaluation.ReductionStyle" :: String
-
 _ReductionStyle_caseStatements = "caseStatements" :: String
-
 _ReductionStyle_elements = "elements" :: String
-
 _ReductionStyle_lambdas = "lambdas" :: String
-
 _ReductionStyle_records = "records" :: String
-
 _ReductionStyle_unions = "unions" :: String
