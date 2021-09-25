@@ -19,9 +19,9 @@ case class Context(
     functions: Map[Name, PrimitiveFunction],
     
     /**
-     * @type hydra/evaluation.ReductionStyle
+     * @type hydra/evaluation.EvaluationStrategy
      */
-    reductionStyle: ReductionStyle
+    reductionStyle: EvaluationStrategy
 )
 
 val _Context: String = "hydra/evaluation.Context"

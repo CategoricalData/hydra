@@ -42,8 +42,10 @@ def freeVariables(term: Term): Set[Variable] = {
     case Term.function(_) => List()
     case Term.lambda(Lambda(v, t)) => free(bound + v, t)
     case Term.list(els) => els.flatMap(t => free(bound, t)).toList
+    case Term.map(m) => (m map {case (k, v) => free(bound, k) ++ free(bound, v)}).toList.flatten
     case Term.projection(_) => List()
     case Term.record(fields) => fields.flatMap(f => free(bound, f.term)).toList
+    case Term.set(els) => els.flatMap(t => free(bound, t)).toList
     case Term.union(f) => free(bound, f.term)
     case Term.variable(v) => if bound.contains(v) then List() else List(v)
 
@@ -89,8 +91,10 @@ def termVariant(term: Term): TermVariant = term match
   case Term.function(_) => TermVariant.function()
   case Term.lambda(_) => TermVariant.lambda()
   case Term.list(_) => TermVariant.list()
+  case Term.map(_) => TermVariant.map()
   case Term.projection(_) => TermVariant.projection()
   case Term.record(_) => TermVariant.record()
+  case Term.set(_) => TermVariant.set()
   case Term.union(_) => TermVariant.union()
   case Term.variable(_) => TermVariant.variable()
 
@@ -99,6 +103,8 @@ def typeVariant(typ: Type): TypeVariant = typ match
   case Type.element(_) => TypeVariant.element()
   case Type.function(_) => TypeVariant.function()
   case Type.list(_) => TypeVariant.list()
+  case Type.map(_) => TypeVariant.map()
   case Type.nominal(_) => TypeVariant.nominal()
   case Type.record(_) => TypeVariant.record()
+  case Type.set(_) => TypeVariant.set()
   case Type.union(_) => TypeVariant.union()

@@ -47,12 +47,19 @@ integerTypeAsTerm it = unitVariant $ case it of
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
 
+mapTypeAsTerm :: MapType -> Term
+mapTypeAsTerm (MapType kt vt) = TermRecord [
+  Field _MapType_keys $ typeAsTerm kt,
+  Field _MapType_values $ typeAsTerm vt]
+
 typeAsTerm :: Type -> Term
 typeAsTerm typ = case typ of
   TypeAtomic at -> variant _Type_atomic $ atomicTypeAsTerm at
   TypeElement t -> variant _Type_element $ typeAsTerm t
   TypeFunction ft -> variant _Type_function $ functionTypeAsTerm ft
   TypeList t -> variant _Type_list $ typeAsTerm t
+  TypeMap mt -> variant _Type_map $ mapTypeAsTerm mt
   TypeNominal name -> variant _Type_nominal $ stringTerm name
   TypeRecord fields -> variant _Type_record $ TermList $ fmap fieldTypeAsTerm fields
+  TypeSet t -> variant _Type_set $ typeAsTerm t
   TypeUnion fields -> variant _Type_union $ TermList $ fmap fieldTypeAsTerm fields

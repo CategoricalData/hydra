@@ -18,6 +18,7 @@ module Hydra.Core
   , IntegerValue(..)
   , IntegerVariant(..)
   , Lambda(..)
+  , MapType(..)
   , Name
   , Term(..)
   , TermVariant(..)
@@ -107,6 +108,9 @@ module Hydra.Core
   , _Lambda
   , _Lambda_body
   , _Lambda_parameter
+  , _MapType
+  , _MapType_keys
+  , _MapType_values
   , _Name
   , _Term
   , _TermVariant
@@ -119,8 +123,10 @@ module Hydra.Core
   , _TermVariant_function
   , _TermVariant_lambda
   , _TermVariant_list
+  , _TermVariant_map
   , _TermVariant_projection
   , _TermVariant_record
+  , _TermVariant_set
   , _TermVariant_union
   , _TermVariant_variable
   , _Term_application
@@ -132,8 +138,10 @@ module Hydra.Core
   , _Term_function
   , _Term_lambda
   , _Term_list
+  , _Term_map
   , _Term_projection
   , _Term_record
+  , _Term_set
   , _Term_union
   , _Term_variable
   , _Type
@@ -142,15 +150,19 @@ module Hydra.Core
   , _TypeVariant_element
   , _TypeVariant_function
   , _TypeVariant_list
+  , _TypeVariant_map
   , _TypeVariant_nominal
   , _TypeVariant_record
+  , _TypeVariant_set
   , _TypeVariant_union
   , _Type_atomic
   , _Type_element
   , _Type_function
   , _Type_list
+  , _Type_map
   , _Type_nominal
   , _Type_record
+  , _Type_set
   , _Type_union
   , _Variable
   ) where
@@ -330,6 +342,13 @@ data Lambda
         @type hydra/core.Term -}
     , lambdaBody :: Term } deriving (Eq, Generic, Ord, Read, Show)
 
+data MapType
+  = MapType
+    -- | @type hydra/core.Type
+    { mapTypeKeys :: Type
+    -- | @type hydra/core.Type
+    , mapTypeValues :: Type } deriving (Eq, Generic, Ord, Read, Show)
+
 -- | @type string
 type Name = String
 
@@ -369,6 +388,12 @@ data Term
       
       @type list: hydra/core.Term -}
   | TermList [Term]
+  {-| A map of key terms to value terms
+      
+      @type map:
+              keys: hydra/core.Term
+              values: hydra/core.Term -}
+  | TermMap (Map Term Term)
   {-| A projection of a field from a record
       
       @type hydra/core.FieldName -}
@@ -377,6 +402,10 @@ data Term
       
       @type list: hydra/core.Field -}
   | TermRecord [Field]
+  {-| A set of terms
+      
+      @type set: hydra/core.Term -}
+  | TermSet (Set Term)
   {-| A union term, i.e. a generalization of inl() or inr()
       
       @type hydra/core.Field -}
@@ -396,8 +425,10 @@ data TermVariant
   | TermVariantFunction
   | TermVariantLambda
   | TermVariantList
+  | TermVariantMap
   | TermVariantProjection
   | TermVariantRecord
+  | TermVariantSet
   | TermVariantUnion
   | TermVariantVariable deriving (Eq, Generic, Ord, Read, Show)
 
@@ -410,10 +441,14 @@ data Type
   | TypeFunction FunctionType
   -- | @type hydra/core.Type
   | TypeList Type
+  -- | @type hydra/core.MapType
+  | TypeMap MapType
   -- | @type hydra/core.Name
   | TypeNominal Name
   -- | @type list: hydra/core.FieldType
   | TypeRecord [FieldType]
+  -- | @type hydra/core.Type
+  | TypeSet Type
   -- | @type list: hydra/core.FieldType
   | TypeUnion [FieldType] deriving (Eq, Generic, Ord, Read, Show)
 
@@ -422,8 +457,10 @@ data TypeVariant
   | TypeVariantElement
   | TypeVariantFunction
   | TypeVariantList
+  | TypeVariantMap
   | TypeVariantNominal
   | TypeVariantRecord
+  | TypeVariantSet
   | TypeVariantUnion deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A symbol which stands in for a term
@@ -514,6 +551,9 @@ _IntegerVariant_uint8 = "uint8" :: String
 _Lambda = "hydra/core.Lambda" :: String
 _Lambda_body = "body" :: String
 _Lambda_parameter = "parameter" :: String
+_MapType = "hydra/core.MapType" :: String
+_MapType_keys = "keys" :: String
+_MapType_values = "values" :: String
 _Name = "hydra/core.Name" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
@@ -526,8 +566,10 @@ _TermVariant_element = "element" :: String
 _TermVariant_function = "function" :: String
 _TermVariant_lambda = "lambda" :: String
 _TermVariant_list = "list" :: String
+_TermVariant_map = "map" :: String
 _TermVariant_projection = "projection" :: String
 _TermVariant_record = "record" :: String
+_TermVariant_set = "set" :: String
 _TermVariant_union = "union" :: String
 _TermVariant_variable = "variable" :: String
 _Term_application = "application" :: String
@@ -539,8 +581,10 @@ _Term_element = "element" :: String
 _Term_function = "function" :: String
 _Term_lambda = "lambda" :: String
 _Term_list = "list" :: String
+_Term_map = "map" :: String
 _Term_projection = "projection" :: String
 _Term_record = "record" :: String
+_Term_set = "set" :: String
 _Term_union = "union" :: String
 _Term_variable = "variable" :: String
 _Type = "hydra/core.Type" :: String
@@ -549,14 +593,18 @@ _TypeVariant_atomic = "atomic" :: String
 _TypeVariant_element = "element" :: String
 _TypeVariant_function = "function" :: String
 _TypeVariant_list = "list" :: String
+_TypeVariant_map = "map" :: String
 _TypeVariant_nominal = "nominal" :: String
 _TypeVariant_record = "record" :: String
+_TypeVariant_set = "set" :: String
 _TypeVariant_union = "union" :: String
 _Type_atomic = "atomic" :: String
 _Type_element = "element" :: String
 _Type_function = "function" :: String
 _Type_list = "list" :: String
+_Type_map = "map" :: String
 _Type_nominal = "nominal" :: String
 _Type_record = "record" :: String
+_Type_set = "set" :: String
 _Type_union = "union" :: String
 _Variable = "hydra/core.Variable" :: String

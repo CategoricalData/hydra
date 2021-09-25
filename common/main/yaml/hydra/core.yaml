@@ -236,15 +236,17 @@ definitions:
           description: "The body of the lambda"
           type: Term
 
+  - name: MapType
+    type:
+      record:
+        - name: keys
+          type: Type
+
+        - name: values
+          type: Type
+
   - name: Name
     type: string
-
-#  - name: Name
-#    type:
-#      list: NamePart
-#
-#  - name: NamePart
-#    type: string
 
   - name: Term
     type:
@@ -288,6 +290,13 @@ definitions:
 
         # TODO: list elimination
 
+        - name: map
+          description: "A map of key terms to value terms"
+          type:
+            map:
+              keys: Term
+              values: Term
+
         - name: projection
           description: "A projection of a field from a record"
           type: FieldName
@@ -296,6 +305,11 @@ definitions:
           description: "A record, or labeled tuple"
           type:
             list: Field
+
+        - name: set
+          description: "A set of terms"
+          type:
+            set: Term
 
         - name: union
           description: "A union term, i.e. a generalization of inl() or inr()"
@@ -317,8 +331,10 @@ definitions:
         - function
         - lambda
         - list
+        - map
         - projection
         - record
+        - set
         - union
         - variable
 
@@ -337,12 +353,18 @@ definitions:
         - name: list
           type: Type
 
+        - name: map
+          type: MapType
+
         - name: nominal
           type: Name
 
         - name: record
           type:
             list: FieldType
+
+        - name: set
+          type: Type
 
         - name: union
           type:
@@ -355,8 +377,10 @@ definitions:
         - element
         - function
         - list
+        - map
         - nominal
         - record
+        - set
         - union
 
   - name: Variable
