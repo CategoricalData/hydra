@@ -44,17 +44,10 @@ data Graph
     , graphSchemaGraph :: Graph }
 
 _Element = "hydra/graph.Element" :: String
-
 _Element_data = "data" :: String
-
 _Element_name = "name" :: String
-
 _Element_schema = "schema" :: String
-
 _Graph = "hydra/graph.Graph" :: String
-
 _Graph_dataTerms = "dataTerms" :: String
-
 _Graph_elements = "elements" :: String
-
 _Graph_schemaGraph = "schemaGraph" :: String
