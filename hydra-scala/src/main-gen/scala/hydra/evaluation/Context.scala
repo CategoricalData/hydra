@@ -21,10 +21,10 @@ case class Context(
     /**
      * @type hydra/evaluation.EvaluationStrategy
      */
-    reductionStyle: EvaluationStrategy
+    strategy: EvaluationStrategy
 )
 
 val _Context: String = "hydra/evaluation.Context"
 val _Context_elements: String = "elements"
 val _Context_functions: String = "functions"
-val _Context_reductionStyle: String = "reductionStyle"
+val _Context_strategy: String = "strategy"

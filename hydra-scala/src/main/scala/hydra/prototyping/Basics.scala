@@ -42,7 +42,7 @@ def freeVariables(term: Term): Set[Variable] = {
     case Term.function(_) => List()
     case Term.lambda(Lambda(v, t)) => free(bound + v, t)
     case Term.list(els) => els.flatMap(t => free(bound, t)).toList
-    case Term.map(m) => (m map {case (k, v) => free(bound, k) ++ free(bound, v)}).toList.flatten
+    case Term.map(m) => (m map { case (k, v) => free(bound, k) ++ free(bound, v) }).toList.flatten
     case Term.projection(_) => List()
     case Term.record(fields) => fields.flatMap(f => free(bound, f.term)).toList
     case Term.set(els) => els.flatMap(t => free(bound, t)).toList
@@ -79,7 +79,7 @@ def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(i
 /**
  * Whether a term is closed, i.e. represents a complete program
  */
-def termIsClosed(term: Term) : Boolean = freeVariables(term).isEmpty
+def termIsClosed(term: Term): Boolean = freeVariables(term).isEmpty
 
 def termVariant(term: Term): TermVariant = term match
   case Term.application(_) => TermVariant.application()

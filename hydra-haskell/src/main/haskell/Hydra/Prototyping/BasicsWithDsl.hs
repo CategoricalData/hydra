@@ -32,6 +32,7 @@ basicsGraph = Graph elements dataTerms schemaGraph
         integerValueType,
         integerValueVariant,
         -- TODO: termIsClosed
+        -- TODO: termIsOpaque
         -- TODO: termIsValue
         termVariant,
         typeVariant]
