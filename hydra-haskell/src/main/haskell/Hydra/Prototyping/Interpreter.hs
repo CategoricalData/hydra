@@ -27,6 +27,11 @@ import qualified Data.Maybe as Y
 evaluate :: Context -> Term -> Either String Term
 evaluate context term = reduce M.empty term
   where
+    dereferenceElement :: Name -> Either String Term
+    dereferenceElement en = case M.lookup en (contextElements context) of
+      Nothing -> Left $ "referenced element does not exist in graph: " ++ en
+      Just e -> Right $ elementData e
+
     reduce :: (M.Map Variable Term) -> Term -> Either String Term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then Right term
@@ -61,6 +66,25 @@ evaluate context term = reduce M.empty term
       TermApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
 
+      TermCases cases -> do
+        arg <- reduce bindings $ L.head args
+        case arg of
+          TermUnion (Field fname t) -> if L.null matching
+              then Left $ "no case for field named " ++ fname
+              else reduce bindings (fieldTerm $ L.head matching)
+                >>= reduceApplication bindings (t:(L.tail args))
+            where
+              matching = L.filter (\c -> fieldName c == fname) cases
+          _ -> Left $ "tried to apply a case statement to a non- union term: " ++ show arg
+          
+      TermData -> do
+          arg <- reduce bindings $ L.head args
+          case arg of
+            TermElement name -> dereferenceElement name
+              >>= reduce bindings
+              >>= reduceApplication bindings (L.tail args)
+            _ -> Left $ "tried to apply data (delta) to a non- element reference"
+
       TermFunction name -> case lookupPrimitiveFunction context name of
         Nothing -> Left $ "no such primitive function: " ++ name
         Just prim -> if L.length args >= arity
@@ -74,7 +98,7 @@ evaluate context term = reduce M.empty term
 
       TermLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
         >>= reduceApplication bindings (L.tail args)
-
+  
       _ -> Left $ "tried to apply a non-function: " ++ show (termVariant f)
 
 freeVariables :: Term -> S.Set Variable

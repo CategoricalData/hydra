@@ -3,6 +3,7 @@ module Hydra.Prototyping.Helpers (
   cases,
   compose,
   constFunction,
+  deref,
   funcRef,
   function,
   functionType,
@@ -36,6 +37,9 @@ compose f2 f1 = lambda var $ apply f2 $ (apply f1 (variable var))
 constFunction :: Term -> Term
 constFunction term = lambda "_" term
 
+deref :: Name -> Term
+deref name = apply TermData $ TermElement name
+ 
 funcRef :: Element -> Term
 funcRef el = apply TermData $ TermElement $ elementName el
 
