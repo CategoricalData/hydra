@@ -20,3 +20,14 @@ library:
     - src/main/haskell
     - src/main-gen/haskell
 #  exposed-modules:
+
+tests:
+  hydra-test:
+    main:       Spec.hs
+    source-dirs: src/test/haskell
+    dependencies:
+      - hydra
+      - hspec
+      - hspec-discover
+      - HUnit
+      - QuickCheck

@@ -1,7 +1,6 @@
 module Hydra.Prototyping.Interpreter (
   evaluate,
   freeVariables,
-  primitiveFunctionArity,
   termIsClosed,
   termIsOpaque,
   termIsValue,
@@ -97,13 +96,6 @@ freeVariables term = S.fromList $ free S.empty term
       TermSet terms -> L.concatMap (free bound) terms
       TermUnion field -> free bound $ fieldTerm field
       TermVariable v -> if S.member v bound then [] else [v]
-
-primitiveFunctionArity :: PrimitiveFunction -> Int
-primitiveFunctionArity = arity . primitiveFunctionType
-  where
-    arity (FunctionType dom cod) = 1 + case cod of
-      TypeFunction ft -> arity ft
-      _ -> 0
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
