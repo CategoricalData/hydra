@@ -27,13 +27,9 @@ basicsGraph = Graph elements dataTerms schemaGraph
         floatTypeVariant,
         floatValueType,
         floatValueVariant,
-        -- TODO: freeVariables
         integerTypeVariant,
         integerValueType,
         integerValueVariant,
-        -- TODO: termIsClosed
-        -- TODO: termIsOpaque
-        -- TODO: termIsValue
         termVariant,
         typeVariant]
 
