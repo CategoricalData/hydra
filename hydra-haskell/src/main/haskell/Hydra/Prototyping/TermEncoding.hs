@@ -1,5 +1,6 @@
 module Hydra.Prototyping.TermEncoding (
     atomicTypeAsTerm,
+    atomicVariantAsTerm,
     fieldTypeAsTerm,
     floatTypeAsTerm,
     functionTypeAsTerm,
@@ -18,6 +19,14 @@ atomicTypeAsTerm at = case at of
   AtomicTypeFloat ft -> variant _AtomicType_float $ floatTypeAsTerm ft
   AtomicTypeInteger it -> variant _AtomicType_integer $ integerTypeAsTerm it
   AtomicTypeString -> unitVariant _AtomicType_string
+
+atomicVariantAsTerm :: AtomicVariant -> Term
+atomicVariantAsTerm av = unitVariant $ case av of
+  AtomicVariantBinary -> _AtomicVariant_binary
+  AtomicVariantBoolean -> _AtomicVariant_boolean
+  AtomicVariantFloat -> _AtomicVariant_float
+  AtomicVariantInteger -> _AtomicVariant_integer
+  AtomicVariantString -> _AtomicVariant_string
 
 fieldTypeAsTerm :: FieldType -> Term
 fieldTypeAsTerm (FieldType fname t) = TermRecord [

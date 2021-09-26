@@ -1,4 +1,5 @@
 module Hydra.TestGraph (
+  graphElementsForContext,
   testContext,
   testGraph,
   testStrategy,
@@ -17,12 +18,15 @@ import qualified Data.Map  as M
 import qualified Data.Set  as S
 
 
+graphElementsForContext :: Graph -> M.Map Name Element
+graphElementsForContext g = M.fromList $ fmap toPair $ graphElements g
+  where
+    toPair e = (elementName e, e)
+
 testContext :: Context
 testContext = Context elements functions strategy
   where
-    elements = M.fromList $ fmap toPair $ graphElements testGraph
-      where
-        toPair e = (elementName e, e)
+    elements = graphElementsForContext testGraph
     strategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantAtomic,
