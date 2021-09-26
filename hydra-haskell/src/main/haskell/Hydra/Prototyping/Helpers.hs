@@ -4,6 +4,7 @@ module Hydra.Prototyping.Helpers (
   compose,
   constFunction,
   funcRef,
+  function,
   functionType,
   lambda,
   match,
@@ -37,6 +38,9 @@ constFunction term = lambda "_" term
 
 funcRef :: Element -> Term
 funcRef el = apply TermData $ TermElement $ elementName el
+
+function :: Name -> Term
+function = TermFunction
 
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
@@ -81,5 +85,3 @@ withFunction name el = lambda var $ variant name $ apply (funcRef el) (variable 
 
 withVariant :: FieldName -> Term
 withVariant name = constFunction $ unitVariant name
-
-
