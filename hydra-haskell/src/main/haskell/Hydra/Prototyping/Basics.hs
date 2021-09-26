@@ -10,6 +10,7 @@ module Hydra.Prototyping.Basics (
     integerValueType,
     integerValueVariant,
     termIsClosed,
+    termIsOpaque,
     termIsValue,
     termVariant,
     typeVariant,
@@ -110,9 +111,13 @@ integerValueVariant = integerTypeVariant . integerValueType
 termIsClosed :: Term -> Bool
 termIsClosed = S.null . freeVariables
 
+-- | Whether a term is opaque to reduction, i.e. need not be reduced
+termIsOpaque :: EvaluationStrategy -> Term -> Bool
+termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
+
 -- | Whether a term has been fully reduced to a "value"
 termIsValue :: EvaluationStrategy -> Term -> Bool
-termIsValue strategy term = if isOpaque
+termIsValue strategy term = if termIsOpaque strategy term
     then True
     else case term of
       TermApplication _ -> False
@@ -134,7 +139,6 @@ termIsValue strategy term = if isOpaque
       TermVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
-    isOpaque = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
     checkField = termIsValue strategy . fieldTerm
     checkFields = L.foldl (\b f -> b && checkField f) True
 

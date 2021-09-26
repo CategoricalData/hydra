@@ -10,6 +10,7 @@ module Hydra.Prototyping.Helpers (
   matchWithVariants,
   nominalType,
   stringTerm,
+  stringType,
   unitTerm,
   unitVariant,
   variable,
@@ -56,7 +57,11 @@ matchWithVariants = cases . fmap toField
 nominalType :: Name -> Type
 nominalType = TypeNominal
 
+stringTerm :: String -> Term
 stringTerm = TermAtomic . AtomicValueString
+
+stringType :: Type
+stringType = TypeAtomic AtomicTypeString
 
 unitTerm :: Term
 unitTerm = TermRecord []
