@@ -5,13 +5,9 @@ module Hydra.Prototyping.Basics (
     floatTypeVariant,
     floatValueType,
     floatValueVariant,
-    freeVariables,
     integerTypeVariant,
     integerValueType,
     integerValueVariant,
-    termIsClosed,
-    termIsOpaque,
-    termIsValue,
     termVariant,
     typeVariant,
   ) where
@@ -60,26 +56,6 @@ floatValueType fv = case fv of
 floatValueVariant :: FloatValue -> FloatVariant
 floatValueVariant = floatTypeVariant . floatValueType
 
-freeVariables :: Term -> S.Set Variable
-freeVariables term = S.fromList $ free S.empty term
-  where
-    free bound term = case term of
-      TermApplication (Application t1 t2) -> free bound t1 ++ free bound t2
-      TermAtomic _ -> []
-      TermCases cases -> L.concatMap (free bound . fieldTerm) cases
-      TermCompareTo term -> free bound term
-      TermData -> []
-      TermElement _ -> []
-      TermFunction _ -> []
-      TermLambda (Lambda v t) -> free (S.insert v bound) t
-      TermList terms -> L.concatMap (free bound) terms
-      TermMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
-      TermProjection _ -> []
-      TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
-      TermSet terms -> L.concatMap (free bound) terms
-      TermUnion field -> free bound $ fieldTerm field
-      TermVariable v -> if S.member v bound then [] else [v]
-
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
   IntegerTypeBigint -> IntegerVariantBigint
@@ -106,41 +82,6 @@ integerValueType iv = case iv of
 
 integerValueVariant :: IntegerValue -> IntegerVariant
 integerValueVariant = integerTypeVariant . integerValueType
-
--- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term -> Bool
-termIsClosed = S.null . freeVariables
-
--- | Whether a term is opaque to reduction, i.e. need not be reduced
-termIsOpaque :: EvaluationStrategy -> Term -> Bool
-termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
-
--- | Whether a term has been fully reduced to a "value"
-termIsValue :: EvaluationStrategy -> Term -> Bool
-termIsValue strategy term = if termIsOpaque strategy term
-    then True
-    else case term of
-      TermApplication _ -> False
-      TermAtomic _ -> True
-      TermCases cases -> checkFields cases
-      TermCompareTo other -> termIsValue strategy other
-      TermData -> True
-      TermElement _ -> True
-      TermFunction _ -> True
-      TermLambda (Lambda _ body) -> termIsValue strategy body
-      TermList els -> forList els
-      TermMap map -> L.foldl
-        (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
-        True $ M.toList map
-      TermProjection _ -> True
-      TermRecord fields -> checkFields fields
-      TermSet els -> forList $ S.toList els
-      TermUnion field -> checkField field
-      TermVariable _ -> False
-  where
-    forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
-    checkField = termIsValue strategy . fieldTerm
-    checkFields = L.foldl (\b f -> b && checkField f) True
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of
