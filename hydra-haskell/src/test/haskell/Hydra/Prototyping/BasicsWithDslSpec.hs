@@ -24,6 +24,21 @@ import qualified Test.QuickCheck as QC
 testEvaluate :: Term -> Either String Term
 testEvaluate = evaluate $ testContext { contextElements = graphElementsForContext basicsGraph }
 
+testsForTermTypeFunctions = do
+  H.describe "Tests for DSL-defined term-to-type functions" $ do
+    return ()
+--    atomicValueType,
+--    floatValueType,
+--    integerValueType,
+
+testsForTermVariantFunctions = do
+  H.describe "Tests for DSL-defined term-to-variant functions" $ do
+    return ()
+--    atomicValueVariant,
+--    floatValueVariant,
+--    integerValueVariant,
+--    termVariant
+
 testsForTypeVariantFunctions = do
   H.describe "Tests for DSL-defined type-to-variant functions" $ do
     
@@ -47,17 +62,8 @@ testsForTypeVariantFunctions = do
         (testEvaluate (apply (deref "hydra/basics.typeVariant") (typeAsTerm t)))
         == (Right $ typeVariantAsTerm $ typeVariant t)
 
-{- TODO: also test:
-        atomicValueType,
-        atomicValueVariant,
-        floatValueType,
-        floatValueVariant,
-        integerValueType,
-        integerValueVariant,
-        termVariant,
-        ]
--}
-
 spec :: H.Spec
 spec = do
+  testsForTermTypeFunctions
+  testsForTermVariantFunctions
   testsForTypeVariantFunctions
