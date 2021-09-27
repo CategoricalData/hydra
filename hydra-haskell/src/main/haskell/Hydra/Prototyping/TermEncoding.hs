@@ -3,9 +3,12 @@ module Hydra.Prototyping.TermEncoding (
     atomicVariantAsTerm,
     fieldTypeAsTerm,
     floatTypeAsTerm,
+    floatVariantAsTerm,
     functionTypeAsTerm,
     integerTypeAsTerm,
+    integerVariantAsTerm,
     typeAsTerm,
+    typeVariantAsTerm,
   ) where
 
 import Hydra.Core
@@ -39,6 +42,12 @@ floatTypeAsTerm ft = unitVariant $ case ft of
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
+floatVariantAsTerm :: FloatVariant -> Term
+floatVariantAsTerm fv = unitVariant $ case fv of
+  FloatVariantBigfloat -> _FloatVariant_bigfloat
+  FloatVariantFloat32 -> _FloatVariant_float32
+  FloatVariantFloat64 -> _FloatVariant_float64
+
 functionTypeAsTerm :: FunctionType -> Term
 functionTypeAsTerm (FunctionType dom cod) = TermRecord [
   Field _FunctionType_domain $ typeAsTerm dom,
@@ -56,6 +65,18 @@ integerTypeAsTerm it = unitVariant $ case it of
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
 
+integerVariantAsTerm :: IntegerVariant -> Term
+integerVariantAsTerm iv = unitVariant $ case iv of
+  IntegerVariantBigint -> _IntegerType_bigint
+  IntegerVariantInt8 -> _IntegerType_int8
+  IntegerVariantInt16 -> _IntegerType_int16
+  IntegerVariantInt32 -> _IntegerType_int32
+  IntegerVariantInt64 -> _IntegerType_int64
+  IntegerVariantUint8 -> _IntegerType_uint8
+  IntegerVariantUint16 -> _IntegerType_uint16
+  IntegerVariantUint32 -> _IntegerType_uint32
+  IntegerVariantUint64 -> _IntegerType_uint64
+
 mapTypeAsTerm :: MapType -> Term
 mapTypeAsTerm (MapType kt vt) = TermRecord [
   Field _MapType_keys $ typeAsTerm kt,
@@ -72,3 +93,15 @@ typeAsTerm typ = case typ of
   TypeRecord fields -> variant _Type_record $ TermList $ fmap fieldTypeAsTerm fields
   TypeSet t -> variant _Type_set $ typeAsTerm t
   TypeUnion fields -> variant _Type_union $ TermList $ fmap fieldTypeAsTerm fields
+
+typeVariantAsTerm :: TypeVariant -> Term
+typeVariantAsTerm tv = unitVariant $ case tv of
+  TypeVariantAtomic -> _TypeVariant_atomic
+  TypeVariantElement -> _TypeVariant_element
+  TypeVariantFunction -> _TypeVariant_function
+  TypeVariantList -> _TypeVariant_list
+  TypeVariantMap -> _TypeVariant_map
+  TypeVariantNominal -> _TypeVariant_nominal
+  TypeVariantRecord -> _TypeVariant_record
+  TypeVariantSet -> _TypeVariant_set
+  TypeVariantUnion -> _TypeVariant_union
