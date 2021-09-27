@@ -2,14 +2,10 @@ module Hydra.ArbitraryCore where
 
 import Hydra.Core
 
+import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
 
-
--- Note: this will generally be a "bad" application
-instance QC.Arbitrary Application
-  where
-    arbitrary = Application <$> QC.arbitrary <*> QC.arbitrary
-    
 instance QC.Arbitrary AtomicType
   where
     arbitrary = QC.oneof [
@@ -31,11 +27,6 @@ instance QC.Arbitrary AtomicValue
 instance QC.Arbitrary BooleanValue
   where
     arbitrary = QC.oneof $ pure <$> [ BooleanValueFalse, BooleanValueTrue ]
-
--- Note: this will generally be a "bad" field
-instance QC.Arbitrary Field
-  where
-    arbitrary = Field <$> QC.arbitrary <*> QC.arbitrary
 
 instance QC.Arbitrary FloatType
   where
@@ -77,59 +68,58 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
--- Note: this will generally be a "bad" lambda
-instance QC.Arbitrary Lambda
-  where
-    arbitrary = Lambda <$> QC.arbitrary <*> QC.arbitrary
+-- Note: this will generally be a "bad" term, as the type system is not taken into account,
+--       and we are not generating a full graph (so element references will not be valid).
+instance QC.Arbitrary Term where
+  arbitrary = QC.sized arbitraryTerm
 
--- Note: this will generally be a "bad" term
-instance QC.Arbitrary Term
-  where
-    arbitrary = QC.oneof [
-      TermApplication <$> QC.arbitrary,
-      TermAtomic <$> QC.arbitrary,
-      TermCases <$> QC.arbitrary,
-      TermCompareTo <$> QC.arbitrary,
-      pure TermData,
---      -- TermElement requires a graph
---      -- TermFunction requires a context
-      TermLambda <$> QC.arbitrary,
-      TermList <$> QC.arbitrary,
-      TermMap <$> QC.arbitrary,
-      TermProjection <$> QC.arbitrary,
-      TermRecord <$> QC.arbitrary,
-      TermSet <$> QC.arbitrary,
-      TermUnion <$> QC.arbitrary,
-      TermVariable <$> QC.arbitrary]
-    
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
 
-arbitraryFieldList :: Int -> QC.Gen [FieldType]
-arbitraryFieldList n = do
-  l <- QC.choose (0, div n 2)
-  QC.vectorOf l (arbitraryFieldType (div n l))
+arbitraryField :: Int -> QC.Gen Field
+arbitraryField n = Field <$> QC.arbitrary <*> arbitraryTerm n
 
 arbitraryFieldType :: Int -> QC.Gen FieldType
 arbitraryFieldType n = FieldType <$> QC.arbitrary <*> arbitraryType n
 
-arbitraryFunctionType :: Int -> QC.Gen FunctionType
-arbitraryFunctionType n = FunctionType <$> arbitraryType n' <*> arbitraryType n'
+arbitraryList :: (Int -> QC.Gen a) -> Int -> QC.Gen [a]
+arbitraryList g n = do
+  l <- QC.choose (0, div n 2)
+  QC.vectorOf l (g (div n l)) 
+
+arbitraryPair :: (a -> a -> b) -> (Int -> QC.Gen a) -> Int -> QC.Gen b
+arbitraryPair c g n = c <$> g n' <*> g n'
   where n' = div n 2
 
-arbitraryMapType :: Int -> QC.Gen MapType
-arbitraryMapType n = MapType <$> arbitraryType n' <*> arbitraryType n'
-  where n' = div n 2
+arbitraryTerm :: Int -> QC.Gen Term
+arbitraryTerm n = QC.oneof [
+    TermApplication <$> arbitraryPair Application arbitraryTerm n',
+    TermAtomic <$> QC.arbitrary,
+    TermCases <$> arbitraryList arbitraryField n',
+    TermCompareTo <$> arbitraryTerm n',
+    pure TermData,
+    TermElement <$> QC.arbitrary,
+    -- TermFunction requires a context
+    TermLambda <$> (Lambda <$> QC.arbitrary <*> arbitraryTerm n'),
+    TermList <$> arbitraryList arbitraryTerm n',
+    TermMap <$> (M.fromList <$>
+      arbitraryList (\m -> arbitraryPair (\x y -> (x, y)) arbitraryTerm m) n'),
+    TermProjection <$> QC.arbitrary,
+    TermRecord <$> arbitraryList arbitraryField n',
+    TermSet <$> (S.fromList <$> arbitraryList arbitraryTerm n'),
+    TermUnion <$> arbitraryField n',
+    TermVariable <$> QC.arbitrary]
+  where n' = n-1
 
 arbitraryType :: Int -> QC.Gen Type
 arbitraryType n = QC.oneof [
     TypeAtomic <$> QC.arbitrary,
     TypeElement <$> arbitraryType n',
-    TypeFunction <$> arbitraryFunctionType n',
+    TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
     TypeList <$> arbitraryType n',
-    TypeMap <$> arbitraryMapType n',
+    TypeMap <$> arbitraryPair MapType arbitraryType n',
     TypeNominal <$> QC.arbitrary, -- note: this will generally be a "bad" nominal type
-    TypeRecord <$> arbitraryFieldList n',
+    TypeRecord <$> arbitraryList arbitraryFieldType n',
     TypeSet <$> arbitraryType n',
-    TypeUnion <$> arbitraryFieldList n']   
+    TypeUnion <$> arbitraryList arbitraryFieldType n']   
   where n' = n-1
