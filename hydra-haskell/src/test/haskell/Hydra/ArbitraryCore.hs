@@ -81,7 +81,7 @@ instance QC.Arbitrary IntegerValue
 instance QC.Arbitrary Lambda
   where
     arbitrary = Lambda <$> QC.arbitrary <*> QC.arbitrary
-    
+
 -- Note: this will generally be a "bad" term
 instance QC.Arbitrary Term
   where
@@ -101,3 +101,35 @@ instance QC.Arbitrary Term
       TermSet <$> QC.arbitrary,
       TermUnion <$> QC.arbitrary,
       TermVariable <$> QC.arbitrary]
+    
+instance QC.Arbitrary Type where
+  arbitrary = QC.sized arbitraryType
+
+arbitraryFieldList :: Int -> QC.Gen [FieldType]
+arbitraryFieldList n = do
+  l <- QC.choose (0, div n 2)
+  QC.vectorOf l (arbitraryFieldType (div n l))
+
+arbitraryFieldType :: Int -> QC.Gen FieldType
+arbitraryFieldType n = FieldType <$> QC.arbitrary <*> arbitraryType n
+
+arbitraryFunctionType :: Int -> QC.Gen FunctionType
+arbitraryFunctionType n = FunctionType <$> arbitraryType n' <*> arbitraryType n'
+  where n' = div n 2
+
+arbitraryMapType :: Int -> QC.Gen MapType
+arbitraryMapType n = MapType <$> arbitraryType n' <*> arbitraryType n'
+  where n' = div n 2
+
+arbitraryType :: Int -> QC.Gen Type
+arbitraryType n = QC.oneof [
+    TypeAtomic <$> QC.arbitrary,
+    TypeElement <$> arbitraryType n',
+    TypeFunction <$> arbitraryFunctionType n',
+    TypeList <$> arbitraryType n',
+    TypeMap <$> arbitraryMapType n',
+    TypeNominal <$> QC.arbitrary, -- note: this will generally be a "bad" nominal type
+    TypeRecord <$> arbitraryFieldList n',
+    TypeSet <$> arbitraryType n',
+    TypeUnion <$> arbitraryFieldList n']   
+  where n' = n-1
