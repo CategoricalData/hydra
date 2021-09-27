@@ -8,7 +8,7 @@ import Hydra.Prototyping.BasicsWithDsl
 import Hydra.Prototyping.Helpers
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.TermEncoding
+import Hydra.Prototyping.CoreEncoding
 
 import Hydra.ArbitraryCore
 import Hydra.TestGraph

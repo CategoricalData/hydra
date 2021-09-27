@@ -1,4 +1,4 @@
-module Hydra.Prototyping.TermEncoding (
+module Hydra.Prototyping.CoreEncoding (
     atomicTypeAsTerm,
     atomicVariantAsTerm,
     fieldTypeAsTerm,

@@ -4,7 +4,7 @@ module Hydra.Prototyping.BasicsWithDsl (
 
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Prototyping.TermEncoding
+import Hydra.Prototyping.CoreEncoding
 import Hydra.Prototyping.Helpers
 
 
