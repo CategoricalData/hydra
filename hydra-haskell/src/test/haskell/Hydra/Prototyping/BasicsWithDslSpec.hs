@@ -13,38 +13,51 @@ import Hydra.Prototyping.TermEncoding
 import Hydra.ArbitraryCore
 import Hydra.TestGraph
 
-import Test.Hspec
 import qualified Data.Char as C
 import qualified Data.Either as E
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term -> Either String Term
 testEvaluate = evaluate $ testContext { contextElements = graphElementsForContext basicsGraph }
 
-testsForBasicFunctions = do
-  describe "Tests for basic DSL-defined functions" $ do
+testsForTypeVariantFunctions = do
+  H.describe "Tests for DSL-defined type-to-variant functions" $ do
     
-    it "Test atomicTypeVariant function element" $
+    H.it "Test atomicTypeVariant function element" $
       QC.property $ \at ->
         (testEvaluate (apply (deref "hydra/basics.atomicTypeVariant") (atomicTypeAsTerm at)))
         == (Right $ atomicVariantAsTerm $ atomicTypeVariant at)
 
+    H.it "Test floatTypeVariant function element" $
+      QC.property $ \ft ->
+        (testEvaluate (apply (deref "hydra/basics.floatTypeVariant") (floatTypeAsTerm ft)))
+        == (Right $ floatVariantAsTerm $ floatTypeVariant ft)
+
+    H.it "Test integerTypeVariant function element" $
+      QC.property $ \at ->
+        (testEvaluate (apply (deref "hydra/basics.integerTypeVariant") (integerTypeAsTerm at)))
+        == (Right $ integerVariantAsTerm $ integerTypeVariant at)
+
+    H.it "Test typeVariant function element" $
+      QC.property $ \t ->
+        (testEvaluate (apply (deref "hydra/basics.typeVariant") (typeAsTerm t)))
+        == (Right $ typeVariantAsTerm $ typeVariant t)
+
 {- TODO: also test:
         atomicValueType,
         atomicValueVariant,
-        floatTypeVariant,
         floatValueType,
         floatValueVariant,
-        integerTypeVariant,
         integerValueType,
         integerValueVariant,
         termVariant,
-        typeVariant]
+        ]
 -}
 
-spec :: Spec
+spec :: H.Spec
 spec = do
-  testsForBasicFunctions
+  testsForTypeVariantFunctions
