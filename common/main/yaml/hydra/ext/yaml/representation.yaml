@@ -1,0 +1,71 @@
+description: "A basic YAML representation model"
+comments:
+  - "Based on https://yaml.org/spec/1.2/spec.html"
+  - >
+    The Serialization and Presentation properties of YAML,
+    including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.
+    In addition, tags are omitted from this model, and non-standard scalars are unsupported.
+
+definitions:
+
+  - name: Node
+    comments:
+      - "Every YAML node has an optional scalar tag or non-specific tag (omitted from this model)"
+    type:
+      union:
+        - name: mapping
+          comments:
+            - "Failsafe schema: tag:yaml.org,2002:map"
+          type:
+            map:
+              keys: Node
+              values: Node
+
+        - name: scalar
+          type: Scalar
+
+        - name: sequence
+          comments:
+            - "Failsafe schema: tag:yaml.org,2002:seq"
+          type:
+            list: Node
+
+  - name: Scalar
+    description: "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"
+    type:
+      union:
+        - name: bool
+          description: "Represents a true/false value"
+          comments:
+            - "JSON schema: tag:yaml.org,2002:bool"
+          type: boolean
+
+        - name: float
+          description: "Represents an approximation to real numbers"
+          comments:
+            - "JSON schema: tag:yaml.org,2002:float"
+            - >
+              In addition to arbitrary-precision floating-point numbers in scientific notation,
+              YAML allows for three special values, which are not supported here:
+              positive and negative infinity (.inf and -.inf), and "not a number (.nan)
+          type:
+            float:
+              precision: arbitrary
+
+        - name: int
+          description: "Represents arbitrary sized finite mathematical integers"
+          comments:
+            - "JSON schema: tag:yaml.org,2002:int"
+          type:
+            integer:
+              precision: arbitrary
+
+        - name: "null"
+          description: "Represents the lack of a value"
+          comments:
+            - "JSON schema: tag:yaml.org,2002:null"
+
+        - name: str
+          comments:
+            - "Failsafe schema: tag:yaml.org,2002:str"
+          type: string
