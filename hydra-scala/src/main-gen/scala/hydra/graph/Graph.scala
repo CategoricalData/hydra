@@ -25,9 +25,11 @@ case class Graph(
     dataTerms: Term => Boolean,
     
     /**
-     * @type hydra/graph.Graph
+     * A reference to this graph's schema graph within the provided graph set
+     * 
+     * @type hydra/graph.GraphName
      */
-    schemaGraph: Graph
+    schemaGraph: GraphName
 )
 
 val _Graph: String = "hydra/graph.Graph"
