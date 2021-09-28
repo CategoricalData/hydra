@@ -1,4 +1,12 @@
 module Hydra.Prototyping.CoreDecoding (
+  decodeAtomicType,
+  decodeFieldType,
+  decodeFieldTypes,
+  decodeFloatType,
+  decodeFunctionType,
+  decodeIntegerType,
+  decodeMapType,
+  decodeString,
   decodeType,
   ) where
 

@@ -1,19 +1,35 @@
 module Hydra.Prototyping.Helpers (
   apply,
+  bigfloatType,
+  bigintType,
   cases,
   compose,
   constFunction,
   deref,
+  float32Type,
+  float64Type,
+  floatType,
   funcRef,
   function,
   functionType,
+  int16Type,
+  int32Type,
+  int64Type,
+  int8Type,
+  integerType,
   lambda,
   match,
   matchWithVariants,
   nominalType,
   stringTerm,
   stringType,
+  stringValue,
+  uint16Type,
+  uint32Type,
+  uint64Type,
+  uint8Type,
   unitTerm,
+  unitType,
   unitVariant,
   variable,
   variant,
@@ -27,6 +43,9 @@ import Hydra.Graph
 
 apply func arg = TermApplication $ Application func arg
 
+bigfloatType = floatType FloatTypeBigfloat
+bigintType = integerType IntegerTypeBigint
+
 cases :: [Field] -> Term
 cases = TermCases
 
@@ -39,7 +58,11 @@ constFunction term = lambda "_" term
 
 deref :: Name -> Term
 deref name = apply TermData $ TermElement name
- 
+
+float32Type = floatType FloatTypeFloat32
+float64Type = floatType FloatTypeFloat64
+floatType = TypeAtomic . AtomicTypeFloat
+
 funcRef :: Element -> Term
 funcRef el = apply TermData $ TermElement $ elementName el
 
@@ -48,6 +71,12 @@ function = TermFunction
 
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
+
+int8Type = integerType IntegerTypeInt8
+int16Type = integerType IntegerTypeInt16
+int32Type = integerType IntegerTypeInt32
+int64Type = integerType IntegerTypeInt64
+integerType = TypeAtomic . AtomicTypeInteger
 
 lambda :: Variable -> Term -> Term
 lambda param body = TermLambda $ Lambda param body
@@ -71,8 +100,19 @@ stringTerm = TermAtomic . AtomicValueString
 stringType :: Type
 stringType = TypeAtomic AtomicTypeString
 
+stringValue :: String -> Term
+stringValue = TermAtomic . AtomicValueString
+
+uint16Type = integerType IntegerTypeUint16
+uint32Type = integerType IntegerTypeUint32
+uint64Type = integerType IntegerTypeUint64
+uint8Type = integerType IntegerTypeUint8
+
 unitTerm :: Term
 unitTerm = TermRecord []
+
+unitType :: Type
+unitType = TypeRecord []
 
 unitVariant :: FieldName -> Term
 unitVariant fname = variant fname unitTerm
