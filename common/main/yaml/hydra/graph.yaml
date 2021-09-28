@@ -34,4 +34,25 @@ definitions:
               to: boolean
 
         - name: schemaGraph
-          type: Graph
+          description: "A reference to this graph's schema graph within the provided graph set"
+          type: GraphName
+
+  - name: GraphName
+    description: "A unique identifier for a graph within a graph set"
+    type: string
+
+  - name: GraphSet
+    description: "A collection of graphs with a distinguished root graph"
+    type:
+      record:
+        - name: graphs
+          type:
+            map:
+              keys: GraphName
+              values: Graph
+
+        - name: root
+          description: >
+            The focal graph of this set; 'the' graph.
+            This root graph's schema graph, the second-degree schema graph, etc. are also provided as non-root graphs.
+          type: GraphName

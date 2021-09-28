@@ -19,7 +19,7 @@ basicsFunction name dom cod dat = basicsElement name typ dat
 basicsGraph = Graph elements dataTerms schemaGraph
   where
     dataTerms = \t -> True -- TODO
-    schemaGraph = Graph [] dataTerms schemaGraph -- TODO
+    schemaGraph = "none" -- TODO
     elements = [
         atomicTypeVariant,
         atomicValueType,
