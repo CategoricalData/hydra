@@ -44,23 +44,23 @@ testsForTypeVariantFunctions = do
     
     H.it "Test atomicTypeVariant function element" $
       QC.property $ \at ->
-        (testEvaluate (apply (deref "hydra/basics.atomicTypeVariant") (atomicTypeAsTerm at)))
-        == (Right $ atomicVariantAsTerm $ atomicTypeVariant at)
+        (testEvaluate (apply (deref "hydra/basics.atomicTypeVariant") (encodeAtomicType at)))
+        == (Right $ encodeAtomicVariant $ atomicTypeVariant at)
 
     H.it "Test floatTypeVariant function element" $
       QC.property $ \ft ->
-        (testEvaluate (apply (deref "hydra/basics.floatTypeVariant") (floatTypeAsTerm ft)))
-        == (Right $ floatVariantAsTerm $ floatTypeVariant ft)
+        (testEvaluate (apply (deref "hydra/basics.floatTypeVariant") (encodeFloatType ft)))
+        == (Right $ encodeFloatVariant $ floatTypeVariant ft)
 
     H.it "Test integerTypeVariant function element" $
       QC.property $ \at ->
-        (testEvaluate (apply (deref "hydra/basics.integerTypeVariant") (integerTypeAsTerm at)))
-        == (Right $ integerVariantAsTerm $ integerTypeVariant at)
+        (testEvaluate (apply (deref "hydra/basics.integerTypeVariant") (encodeIntegerType at)))
+        == (Right $ encodeIntegerVariant $ integerTypeVariant at)
 
     H.it "Test typeVariant function element" $
       QC.property $ \t ->
-        (testEvaluate (apply (deref "hydra/basics.typeVariant") (typeAsTerm t)))
-        == (Right $ typeVariantAsTerm $ typeVariant t)
+        (testEvaluate (apply (deref "hydra/basics.typeVariant") (encodeType t)))
+        == (Right $ encodeTypeVariant $ typeVariant t)
 
 spec :: H.Spec
 spec = do
