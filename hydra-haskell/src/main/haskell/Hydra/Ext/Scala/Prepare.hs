@@ -11,16 +11,16 @@ import qualified Data.Set as S
 
 prepareAtomicType :: AtomicType -> (AtomicType, AtomicValue -> AtomicValue, S.Set String)
 prepareAtomicType at = case at of
-    AtomicTypeBinary -> subst AtomicTypeString
-      "binary strings" "character strings"
-      $ \(AtomicValueBinary v) -> AtomicValueString v
-    AtomicTypeFloat ft -> (AtomicTypeFloat rtyp, \(AtomicValueFloat v) -> AtomicValueFloat $ rep v, msgs)
-      where
-        (rtyp, rep, msgs) = prepareFloatType ft
-    AtomicTypeInteger it -> (AtomicTypeInteger rtyp, \(AtomicValueInteger v) -> AtomicValueInteger $ rep v, msgs)
-      where
-        (rtyp, rep, msgs) = prepareIntegerType it
-    _ -> same at
+  AtomicTypeBinary -> subst AtomicTypeString
+    "binary strings" "character strings"
+    $ \(AtomicValueBinary v) -> AtomicValueString v
+  AtomicTypeFloat ft -> (AtomicTypeFloat rtyp, \(AtomicValueFloat v) -> AtomicValueFloat $ rep v, msgs)
+    where
+      (rtyp, rep, msgs) = prepareFloatType ft
+  AtomicTypeInteger it -> (AtomicTypeInteger rtyp, \(AtomicValueInteger v) -> AtomicValueInteger $ rep v, msgs)
+    where
+      (rtyp, rep, msgs) = prepareIntegerType it
+  _ -> same at
 
 prepareFloatType :: FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String)
 prepareFloatType ft = case ft of
