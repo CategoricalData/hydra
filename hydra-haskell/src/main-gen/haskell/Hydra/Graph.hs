@@ -46,7 +46,7 @@ data Graph
                 - hydra/core.Term
                 to: boolean -}
     , graphDataTerms :: Term -> Bool
-    {-| A reference to this graph's schema graph within the graph set
+    {-| A reference to this graph's schema graph within the provided graph set
         
         @type hydra/graph.GraphName -}
     , graphSchemaGraph :: GraphName }
