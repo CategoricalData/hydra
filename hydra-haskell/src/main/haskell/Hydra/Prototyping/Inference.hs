@@ -71,7 +71,7 @@ checkType context typ term = check M.empty typ term
       TermElement en -> case typ of
         TypeElement et -> case M.lookup en (contextElements context) of
           Nothing -> False -- TODO: this is not a term/type failure, but a data integrity failure
-          Just e -> typeAsTerm et == elementSchema e
+          Just e -> encodeType et == elementSchema e
         _ -> False
 
       TermFunction fn -> case lookupPrimitiveFunction context fn of

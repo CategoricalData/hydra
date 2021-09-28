@@ -9,7 +9,7 @@ import Hydra.Prototyping.Helpers
 
 
 basicsElement :: String -> Type -> Term -> Element
-basicsElement name typ dat = Element ("hydra/basics." ++ name) (typeAsTerm typ) dat
+basicsElement name typ dat = Element ("hydra/basics." ++ name) (encodeType typ) dat
 
 basicsFunction :: String -> Name -> Name -> Term -> Element
 basicsFunction name dom cod dat = basicsElement name typ dat
