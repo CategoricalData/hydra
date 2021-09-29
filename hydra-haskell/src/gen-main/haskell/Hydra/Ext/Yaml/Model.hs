@@ -6,7 +6,7 @@
     directives, comments, anchors, style, formatting, and aliases, are not
     supported by this model. In addition, tags are omitted from this model, and
     non-standard scalars are unsupported. -}
-module Hydra.Ext.Yaml.Representation
+module Hydra.Ext.Yaml.Model
   ( Node(..)
   , Scalar(..)
   , _Node
@@ -31,13 +31,13 @@ import Data.Set
 data Node
   {-| @comments Failsafe schema: tag:yaml.org,2002:map
       @type map:
-              keys: hydra/ext/yaml/representation.Node
-              values: hydra/ext/yaml/representation.Node -}
+              keys: hydra/ext/yaml/model.Node
+              values: hydra/ext/yaml/model.Node -}
   = NodeMapping (Map Node Node)
-  -- | @type hydra/ext/yaml/representation.Scalar
+  -- | @type hydra/ext/yaml/model.Scalar
   | NodeScalar Scalar
   {-| @comments Failsafe schema: tag:yaml.org,2002:seq
-      @type list: hydra/ext/yaml/representation.Node -}
+      @type list: hydra/ext/yaml/model.Node -}
   | NodeSequence [Node] deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A union of scalars supported in the YAML failsafe and JSON schemas. Other
@@ -72,11 +72,11 @@ data Scalar
       @type string -}
   | ScalarStr String deriving (Eq, Generic, Ord, Read, Show)
 
-_Node = "hydra/ext/yaml/representation.Node" :: String
+_Node = "hydra/ext/yaml/model.Node" :: String
 _Node_mapping = "mapping" :: String
 _Node_scalar = "scalar" :: String
 _Node_sequence = "sequence" :: String
-_Scalar = "hydra/ext/yaml/representation.Scalar" :: String
+_Scalar = "hydra/ext/yaml/model.Scalar" :: String
 _Scalar_bool = "bool" :: String
 _Scalar_float = "float" :: String
 _Scalar_int = "int" :: String

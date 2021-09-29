@@ -1,7 +1,7 @@
 /**
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
-package hydra.ext.yaml.representation
+package hydra.ext.yaml.model
 
 /**
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
@@ -45,7 +45,7 @@ enum Scalar:
      */
     case str(value: String) extends Scalar
 
-val _Scalar: String = "hydra/ext/yaml/representation.Scalar"
+val _Scalar: String = "hydra/ext/yaml/model.Scalar"
 val _Scalar_bool: String = "bool"
 val _Scalar_float: String = "float"
 val _Scalar_int: String = "int"
