@@ -17,8 +17,40 @@ definitions:
 #import scala.meta.prettyprinters._
 #import scala.meta.internal.trees._
 #import scala.meta.internal.trees.Metadata.binaryCompatField
-#@root trait Tree extends InternalTree {
-  - name: Tree # TODO
+#@root trait Tree extends InternalTree { #@
+  - name: Tree # Note: ignoring fields of Tree and InternalTree for now
+    type:
+      union:
+        - name: ref
+          type: Ref #@
+        - name: stat
+          type: Stat #@
+        - name: type
+          type: Type #@
+        - name: bounds
+          type: Type.Bounds #@
+        - name: pat
+          type: Pat #@
+        - name: member
+          type: Member #@
+        - name: ctor
+          type: Ctor #@
+        - name: template
+          type: Template #@
+        - name: mod
+          type: Mod #@
+        - name: enumerator
+          type: Enumerator #@
+        - name: importer
+          type: Importer #@
+        - name: importee
+          type: Importee #@
+        - name: caseTree
+          type: CaseTree #@
+        - name: source
+          type: Source #@
+        - name: quasi
+          type: Quasi #@
 #  def parent: Option[Tree]
 #  def children: List[Tree]
 #
@@ -31,7 +63,7 @@ definitions:
 #  final override def toString = scala.meta.internal.prettyprinters.TreeToString(this)
 #}
 #
-#object Tree extends InternalTreeXtensions {
+#object Tree extends InternalTreeXtensions { #@
 #  implicit def classifiable[T <: Tree]: Classifiable[T] = null
 #  implicit def showStructure[T <: Tree]: Structure[T] =
 #    scala.meta.internal.prettyprinters.TreeStructure.apply[T]
@@ -39,200 +71,208 @@ definitions:
 #    scala.meta.internal.prettyprinters.TreeSyntax.apply[T](dialect)
 #}
 #
-#@branch trait Ref extends Tree
-  - name: Ref # TODO
-#@branch trait Stat extends Tree
+#@branch trait Ref extends Tree #@
+  - name: Ref
+    type:
+      union:
+        - name: name
+          type: Name #@
+        - name: init
+          type: Init #@
+#@branch trait Stat extends Tree #@
   - name: Stat
     type:
       union:
         - name: term
-          type: Term
+          type: Term #@
         - name: decl
-          type: Decl
+          type: Decl #@
         - name: defn
-          type: Defn
+          type: Defn #@
         - name: importExportStat
-          type: ImportExportStat
+          type: ImportExportStat #@
 #
-#@branch trait Name extends Ref { def value: String }
+#@branch trait Name extends Ref { def value: String } #@
   - name: Name
     type:
       record:
         - name: value
           type: string
+        - name: anonymous
+        - name: indeterminate
+          type: PredefString
 #object Name {
+    innerTypes:
 #  def apply(value: String): Name = if (value == "") Name.Anonymous() else Name.Indeterminate(value)
 #  def unapply(name: Name): Option[String] = Some(name.value)
-#  @ast class Anonymous() extends Name {
+#  @ast class Anonymous() extends Name { #@
 #    def value = ""
 #    checkParent(ParentChecks.NameAnonymous)
 #  }
-#  @ast class Indeterminate(value: Predef.String @nonEmpty) extends Name
+#  @ast class Indeterminate(value: Predef.String @nonEmpty) extends Name #@
 #}
 #
-#@branch trait Lit extends Term with Pat with Type {
-#  def value: Any
-#}
-#object Lit {
+#@branch trait Lit extends Term with Pat with Type { #@
   - name: Lit
     type:
       union:
+#  def value: Any
+#}
+#object Lit {
 #  def unapply(arg: Lit): Option[Any] = Some(arg.value)
-#  @ast class Null() extends Lit { def value: Any = null }
+#  @ast class Null() extends Lit { def value: Any = null } #@
         - name: "null"
-#  @ast class Int(value: scala.Int) extends Lit
+#  @ast class Int(value: scala.Int) extends Lit #@
         - name: int
           type: integer
 #  // NOTE: Lit.Double/Float are strings to work the same across JS/JVM. Example:
 #  // 1.4f.toString == "1.399999976158142" // in JS
 #  // 1.4f.toString == "1.4"               // in JVM
 #  // See https://www.scala-js.org/doc/semantics.html#tostring-of-float-double-and-unit
-#  @ast class Double(format: scala.Predef.String) extends Lit { val value = format.toDouble }
+#  @ast class Double(format: scala.Predef.String) extends Lit { val value = format.toDouble } #@
         - name: double
           type:
             float:
               precision:
                 bits: 64
 #  object Double { def apply(double: scala.Double): Double = Lit.Double(double.toString) }
-#  @ast class Float(format: scala.Predef.String) extends Lit { val value = format.toFloat }
+#  @ast class Float(format: scala.Predef.String) extends Lit { val value = format.toFloat } #@
         - name: float
           type: float
 #  object Float { def apply(float: scala.Float): Float = Lit.Float(float.toString) }
-#  @ast class Byte(value: scala.Byte) extends Lit
+#  @ast class Byte(value: scala.Byte) extends Lit #@
         - name: byte
           type:
             integer:
               precision:
                 bits: 8
-#  @ast class Short(value: scala.Short) extends Lit
+#  @ast class Short(value: scala.Short) extends Lit #@
         - name: short
           type:
             integer:
               precision:
                 bits: 16
-#  @ast class Char(value: scala.Char) extends Lit
+#  @ast class Char(value: scala.Char) extends Lit #@
         - name: char
           type:
             integer:
               signed: false
               precision:
                 bits: 16
-#  @ast class Long(value: scala.Long) extends Lit
+#  @ast class Long(value: scala.Long) extends Lit #@
         - name: long
           type:
             integer:
               precision:
                 bits: 64
-#  @ast class Boolean(value: scala.Boolean) extends Lit
+#  @ast class Boolean(value: scala.Boolean) extends Lit #@
         - name: boolean
           type: boolean
-#  @ast class Unit() extends Lit { def value: Any = () }
+#  @ast class Unit() extends Lit { def value: Any = () } #@
         - name: unit
-#  @ast class String(value: scala.Predef.String) extends Lit
+#  @ast class String(value: scala.Predef.String) extends Lit #@
         - name: string
           type: string
-#  @ast class Symbol(value: scala.Symbol) extends Lit
+#  @ast class Symbol(value: scala.Symbol) extends Lit #@
         - name: symbol
           type: ScalaSymbol
 #}
 #
-#@branch trait Term extends Stat
+#@branch trait Term extends Stat #@
   - name: Term
     type:
       union:
+        - name: lit
+          type: Lit #@
         - name: ref
-          type: Term.Ref
-        - name: this
-          type: Term.This
-        - name: super
-          type: Term.Super
-        - name: name
-          type: Term.Name
-        - name: anonymous
-          type: Term.Anonymous
-        - name: select
-          type: Term.Select
+          type: Term.Ref #@
         - name: interpolate
-          type: Term.Interpolate
+          type: Term.Interpolate #@
         - name: xml
-          type: Term.Xml
+          type: Term.Xml #@
         - name: apply
-          type: Term.Apply
+          type: Term.Apply #@
         - name: applyUsing
-          type: Term.ApplyUsing
+          type: Term.ApplyUsing #@
         - name: applyType
-          type: Term.ApplyType
+          type: Term.ApplyType #@
         - name: applyInfix
-          type: Term.ApplyInfix
-        - name: applyUnary
-          type: Term.ApplyUnary
+          type: Term.ApplyInfix #@
         - name: assign
-          type: Term.Assign
+          type: Term.Assign #@
         - name: return
-          type: Term.Return
+          type: Term.Return #@
         - name: throw
-          type: Term.Throw
+          type: Term.Throw #@
         - name: ascribe
-          type: Term.Ascribe
+          type: Term.Ascribe #@
         - name: annotate
-          type: Term.Annotate
+          type: Term.Annotate #@
         - name: tuple
-          type: Term.Tuple
+          type: Term.Tuple #@
         - name: block
-          type: Term.Block
+          type: Term.Block #@
         - name: endMarker
-          type: Term.EndMarker
-        - name: ifCond
-          type: Term.IfCond
+          type: Term.EndMarker #@
+        - name: if
+          type: Term.If #@
         - name: quotedMacroExpr
-          type: Term.QuotedMacroExpr
+          type: Term.QuotedMacroExpr #@
         - name: quotedMacroType
-          type: Term.QuotedMacroType
+          type: Term.QuotedMacroType #@
         - name: splicedMacroExpr
-          type: Term.SplicedMacroExpr
+          type: Term.SplicedMacroExpr #@
         - name: match
-          type: Term.Match
+          type: Term.Match #@
         - name: try
-          type: Term.Try
+          type: Term.Try #@
         - name: tryWithHandler
-          type: Term.TryWithHandler
+          type: Term.TryWithHandler #@
         - name: functionTerm
-          type: Term.FunctionTerm
-        - name: contextFunction
-          type: Term.ContextFunction
-        - name: Function
-          type: Term.Function
+          type: Term.FunctionTerm #@
         - name: polyFunction
-          type: Term.PolyFunction
+          type: Term.PolyFunction #@
         - name: partialFunction
-          type: Term.PartialFunction
+          type: Term.PartialFunction #@
         - name: while
-          type: Term.While
+          type: Term.While #@
         - name: do
-          type: Term.Do
+          type: Term.Do #@
         - name: for
-          type: Term.For
+          type: Term.For #@
         - name: forYield
-          type: Term.ForYield
+          type: Term.ForYield #@
         - name: new
-          type: Term.New
+          type: Term.New #@
         - name: newAnonymous
-          type: Term.NewAnonymous
+          type: Term.NewAnonymous #@
         - name: placeholder
-          type: Term.Placeholder
+          type: Term.Placeholder #@
         - name: eta
-          type: Term.Eta
+          type: Term.Eta #@
         - name: repeated
-          type: Term.Repeated
-        - name: param
-          type: Term.Param
+          type: Term.Repeated #@
 #object Term {
     innerTypes:
-#  @branch trait Ref extends Term with scala.meta.Ref
+#  @branch trait Ref extends Term with scala.meta.Ref #@
       - name: Ref
-#  @ast class This(qual: scala.meta.Name) extends Term.Ref
+        type:
+          union:
+          - name: this
+            type: Term.This #@
+          - name: super
+            type: Term.Super #@
+          - name: name
+            type: Term.Name #@
+          - name: anonymous
+            type: Term.Anonymous #@
+          - name: select
+            type: Term.Select #@
+          - name: applyUnary
+            type: Term.ApplyUnary #@
+#  @ast class This(qual: scala.meta.Name) extends Term.Ref #@
       - name: This
-#  @ast class Super(thisp: scala.meta.Name, superp: scala.meta.Name) extends Term.Ref
+#  @ast class Super(thisp: scala.meta.Name, superp: scala.meta.Name) extends Term.Ref #@
       - name: Super
         type:
           record:
@@ -240,18 +280,18 @@ definitions:
               type: Name
             - name: superp
               type: Name
-#  @ast class Name(value: Predef.String @nonEmpty) extends scala.meta.Name with Term.Ref with Pat
+#  @ast class Name(value: Predef.String @nonEmpty) extends scala.meta.Name with Term.Ref with Pat #@
       - name: Name
         type:
           record:
             - name: value
               type: PredefString
-#  @ast class Anonymous() extends scala.meta.Name with Term.Ref {
+#  @ast class Anonymous() extends scala.meta.Name with Term.Ref { #@
       - name: Anonymous
 #    def value = ""
 #    checkParent(ParentChecks.AnonymousImport)
 #  }
-#  @ast class Select(qual: Term, name: Term.Name) extends Term.Ref with Pat
+#  @ast class Select(qual: Term, name: Term.Name) extends Term.Ref with Pat #@
       - name: Select
         type:
           record:
@@ -259,7 +299,7 @@ definitions:
               type: Term
             - name: name
               type: Term.Name
-#  @ast class Interpolate(prefix: Name, parts: List[Lit] @nonEmpty, args: List[Term]) extends Term {
+#  @ast class Interpolate(prefix: Name, parts: List[Lit] @nonEmpty, args: List[Term]) extends Term { #@
       - name: Interpolate
         type:
           record:
@@ -273,7 +313,7 @@ definitions:
                 list: Term
 #    checkFields(parts.length == args.length + 1)
 #  }
-#  @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Term]) extends Term {
+#  @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Term]) extends Term { #@
       - name: Xml
         type:
           record:
@@ -285,7 +325,7 @@ definitions:
                 list: Term
 #    checkFields(parts.length == args.length + 1)
 #  }
-#  @ast class Apply(fun: Term, args: List[Term]) extends Term
+#  @ast class Apply(fun: Term, args: List[Term]) extends Term #@
       - name: Apply
         type:
           record:
@@ -294,7 +334,7 @@ definitions:
             - name: args
               type:
                 list: Term
-#  @ast class ApplyUsing(fun: Term, args: List[Term]) extends Term
+#  @ast class ApplyUsing(fun: Term, args: List[Term]) extends Term #@
       - name: ApplyUsing
         type:
           record:
@@ -303,7 +343,7 @@ definitions:
             - name: targs
               type:
                 list: Type
-#  @ast class ApplyType(fun: Term, targs: List[Type] @nonEmpty) extends Term
+#  @ast class ApplyType(fun: Term, targs: List[Type] @nonEmpty) extends Term #@
       - name: ApplyType
         type:
           record:
@@ -317,7 +357,7 @@ definitions:
             - name: args
               type:
                 list: Term
-#  @ast class ApplyInfix(lhs: Term, op: Name, targs: List[Type], args: List[Term]) extends Term
+#  @ast class ApplyInfix(lhs: Term, op: Name, targs: List[Type], args: List[Term]) extends Term #@
       - name: ApplyInfix
         type:
           record:
@@ -331,7 +371,7 @@ definitions:
             - name: args
               type:
                 list: Term
-#  @ast class ApplyUnary(op: Name, arg: Term) extends Term.Ref {
+#  @ast class ApplyUnary(op: Name, arg: Term) extends Term.Ref { #@
       - name: ApplyUnary
         type:
           record:
@@ -341,7 +381,7 @@ definitions:
               type: Term
 #    checkFields(op.isUnaryOp)
 #  }
-#  @ast class Assign(lhs: Term, rhs: Term) extends Term {
+#  @ast class Assign(lhs: Term, rhs: Term) extends Term { #@
       - name: Assign
         type:
           record:
@@ -352,19 +392,19 @@ definitions:
 #    checkFields(lhs.is[Term.Quasi] || lhs.is[Term.Ref] || lhs.is[Term.Apply])
 #    checkParent(ParentChecks.TermAssign)
 #  }
-#  @ast class Return(expr: Term) extends Term
+#  @ast class Return(expr: Term) extends Term #@
       - name: Return
         type:
           record:
             - name: expr
               type: Term
-#  @ast class Throw(expr: Term) extends Term
+#  @ast class Throw(expr: Term) extends Term #@
       - name: Throw
         type:
           record:
             - name: expr
               type: Term
-#  @ast class Ascribe(expr: Term, tpe: Type) extends Term
+#  @ast class Ascribe(expr: Term, tpe: Type) extends Term #@
       - name: Ascribe
         type:
           record:
@@ -372,7 +412,7 @@ definitions:
               type: Term
             - name: tpe
               type: Type
-#  @ast class Annotate(expr: Term, annots: List[Mod.Annot] @nonEmpty) extends Term
+#  @ast class Annotate(expr: Term, annots: List[Mod.Annot] @nonEmpty) extends Term #@
       - name: Annotate
         type:
           record:
@@ -381,7 +421,7 @@ definitions:
             - name: annots
               type:
                 list: Mod.Annot
-#  @ast class Tuple(args: List[Term] @nonEmpty) extends Term {
+#  @ast class Tuple(args: List[Term] @nonEmpty) extends Term { #@
       - name: Tuple
         type:
           record:
@@ -392,7 +432,7 @@ definitions:
 #    // however, this element may be Quasi with "hidden" list of elements inside
 #    checkFields(args.length > 1 || (args.length == 1 && args.head.is[Term.Quasi]))
 #  }
-#  @ast class Block(stats: List[Stat]) extends Term {
+#  @ast class Block(stats: List[Stat]) extends Term { #@
       - name: Block
         type:
           record:
@@ -402,14 +442,14 @@ definitions:
 #    // extension group block can have declarations without body too
 #    checkFields(stats.forall(st => st.isBlockStat || st.is[Decl]))
 #  }
-#  @ast class EndMarker(name: Term.Name) extends Term
+#  @ast class EndMarker(name: Term.Name) extends Term #@
       - name: EndMarker
         type:
           record:
             - name: name
               type: Term.Name
-#  @ast class If(cond: Term, thenp: Term, elsep: Term) extends Term {
-      - name: IfCond
+#  @ast class If(cond: Term, thenp: Term, elsep: Term) extends Term { #@
+      - name: If
         type:
           record:
             - name: cond
@@ -421,25 +461,25 @@ definitions:
 #    @binaryCompatField(since = "4.4.0")
 #    private var _mods: List[Mod] = Nil
 #  }
-#  @ast class QuotedMacroExpr(body: Term) extends Term
+#  @ast class QuotedMacroExpr(body: Term) extends Term #@
       - name: QuotedMacroExpr
         type:
           record:
             - name: body
               type: Term
-#  @ast class QuotedMacroType(tpe: Type) extends Term
+#  @ast class QuotedMacroType(tpe: Type) extends Term #@
       - name: QuotedMacroType
         type:
           record:
             - name: tpe
               type: Type
-#  @ast class SplicedMacroExpr(body: Term) extends Term
+#  @ast class SplicedMacroExpr(body: Term) extends Term #@
       - name: SplicedMacroExpr
         type:
           record:
             - name: body
               type: Term
-#  @ast class Match(expr: Term, cases: List[Case] @nonEmpty) extends Term {
+#  @ast class Match(expr: Term, cases: List[Case] @nonEmpty) extends Term { #@
       - name: Match
         type:
           record:
@@ -451,7 +491,7 @@ definitions:
 #    @binaryCompatField(since = "4.4.5")
 #    private var _mods: List[Mod] = Nil
 #  }
-#  @ast class Try(expr: Term, catchp: List[Case], finallyp: Option[Term]) extends Term
+#  @ast class Try(expr: Term, catchp: List[Case], finallyp: Option[Term]) extends Term #@
       - name: Try
         type:
           record:
@@ -463,7 +503,7 @@ definitions:
             - name: finallyp
               type:
                 optional: Term
-#  @ast class TryWithHandler(expr: Term, catchp: Term, finallyp: Option[Term]) extends Term
+#  @ast class TryWithHandler(expr: Term, catchp: Term, finallyp: Option[Term]) extends Term #@
       - name: TryWithHandler
         type:
           record:
@@ -475,19 +515,18 @@ definitions:
               type:
                 optional: Term
 #
-#  @branch trait FunctionTerm extends Term {
+#  @branch trait FunctionTerm extends Term { #@
       - name: FunctionTerm
         type:
-          record:
+          union:
+            - name: contextFunction
+              type: Term.ContextFunction #@
+            - name: Function
+              type: Term.Function #@
 #    def params: List[Term.Param]
-            - name: params
-              type:
-                list: Term.Param
 #    def body: Term
-            - name: body
-              type: Term
 #  }
-#  @ast class ContextFunction(params: List[Term.Param], body: Term) extends FunctionTerm {
+#  @ast class ContextFunction(params: List[Term.Param], body: Term) extends FunctionTerm { #@
       - name: ContextFunction
         type:
           record:
@@ -503,7 +542,7 @@ definitions:
 #      )
 #    )
 #  }
-#  @ast class Function(params: List[Term.Param], body: Term) extends FunctionTerm {
+#  @ast class Function(params: List[Term.Param], body: Term) extends FunctionTerm { #@
       - name: Function
         type:
           record:
@@ -523,7 +562,7 @@ definitions:
 #        params.exists(_.mods.exists(_.is[Mod.Implicit])) ==> (params.length == 1)
 #    )
 #  }
-#  @ast class PolyFunction(tparams: List[Type.Param], body: Term) extends Term
+#  @ast class PolyFunction(tparams: List[Type.Param], body: Term) extends Term #@
       - name: PolyFunction
         type:
           record:
@@ -532,14 +571,14 @@ definitions:
                 list: Type.Param
             - name: body
               type: Term
-#  @ast class PartialFunction(cases: List[Case] @nonEmpty) extends Term
+#  @ast class PartialFunction(cases: List[Case] @nonEmpty) extends Term #@
       - name: PartialFunction
         type:
           record:
             - name: cases
               type:
                 list: Case
-#  @ast class While(expr: Term, body: Term) extends Term
+#  @ast class While(expr: Term, body: Term) extends Term #@
       - name: While
         type:
           record:
@@ -547,7 +586,7 @@ definitions:
               type: Term
             - name: body
               type: Term
-#  @ast class Do(body: Term, expr: Term) extends Term
+#  @ast class Do(body: Term, expr: Term) extends Term #@
       - name: Do
         type:
           record:
@@ -555,7 +594,7 @@ definitions:
               type: Term
             - name: expr
               type: Term
-#  @ast class For(enums: List[Enumerator] @nonEmpty, body: Term) extends Term {
+#  @ast class For(enums: List[Enumerator] @nonEmpty, body: Term) extends Term { #@
       - name: For
         type:
           record:
@@ -567,34 +606,34 @@ definitions:
 #        .is[Enumerator.Quasi]
 #    )
 #  }
-#  @ast class ForYield(enums: List[Enumerator] @nonEmpty, body: Term) extends Term
+#  @ast class ForYield(enums: List[Enumerator] @nonEmpty, body: Term) extends Term #@
       - name: ForYield
         type:
           record:
             - name: enums
               type:
                 list: Enumerator
-#  @ast class New(init: Init) extends Term
+#  @ast class New(init: Init) extends Term #@
       - name: New
         type:
           record:
             - name: init
               type: Init
-#  @ast class NewAnonymous(templ: Template) extends Term
+#  @ast class NewAnonymous(templ: Template) extends Term #@
       - name: NewAnonymous
         type:
           record:
             - name: templ
               type: Template
-#  @ast class Placeholder() extends Term
+#  @ast class Placeholder() extends Term #@
       - name: Placeholder
-#  @ast class Eta(expr: Term) extends Term
+#  @ast class Eta(expr: Term) extends Term #@
       - name: Eta
         type:
           record:
             - name: expr
               type: Term
-#  @ast class Repeated(expr: Term) extends Term {
+#  @ast class Repeated(expr: Term) extends Term { #@
       - name: Repeated
         type:
           record:
@@ -603,7 +642,7 @@ definitions:
 #    checkParent(ParentChecks.TermRepeated)
 #  }
 #  @ast class Param(mods: List[Mod], name: meta.Name, decltpe: Option[Type], default: Option[Term])
-#      extends Member
+#      extends Member #@
       - name: Param
         type:
           record:
@@ -616,85 +655,79 @@ definitions:
 #  def fresh(prefix: String): Term.Name = Term.Name(prefix + Fresh.nextId())
 #}
 #
-#@branch trait Type extends Tree
+#@branch trait Type extends Tree #@
   - name: Type
     type:
       union:
         - name: ref
-          type: Type.Ref
-        - name: name
-          type: Type.Name
+          type: Type.Ref #@
         - name: anonymousName
-          type: Type.AnonymousName
-        - name: select
-          type: Type.Select
-        - name: project
-          type: Type.Project
-        - name: singleton
-          type: Type.Singleton
+          type: Type.AnonymousName #@
         - name: apply
-          type: Type.Apply
+          type: Type.Apply #@
         - name: applyInfix
-          type: Type.ApplyInfix
+          type: Type.ApplyInfix #@
         - name: functionType
-          type: Type.FunctionType
-        - name: function
-          type: Type.Function
+          type: Type.FunctionType #@
         - name: polyFunction
-          type: Type.PolyFunction
-        - name: contextFunction
-          type: Type.ContextFunction
+          type: Type.PolyFunction #@
         - name: implicitFunction
-          type: Type.ImplicitFunction
+          type: Type.ImplicitFunction #@
         - name: tuple
-          type: Type.Tuple
+          type: Type.Tuple #@
         - name: with
-          type: Type.With
+          type: Type.With #@
         - name: and
-          type: Type.And
+          type: Type.And #@
         - name: or
-          type: Type.Or
+          type: Type.Or #@
         - name: refine
-          type: Type.Refine
+          type: Type.Refine #@
         - name: existential
-          type: Type.Existential
+          type: Type.Existential #@
         - name: annotate
-          type: Type.Annotate
+          type: Type.Annotate #@
         - name: lambda
-          type: Type.Lambda
+          type: Type.Lambda #@
         - name: macro
-          type: Type.Macro
+          type: Type.Macro #@
         - name: method
-          type: Type.Method
+          type: Type.Method #@
         - name: placeholder
-          type: Type.Placeholder
-        - name: bounds
-          type: Type.Bounds
+          type: Type.Placeholder #@
         - name: byName
-          type: Type.ByName
+          type: Type.ByName #@
         - name: repeated
-          type: Type.Repeated
+          type: Type.Repeated #@
         - name: var
-          type: Type.Var
+          type: Type.Var #@
         - name: typedParam
-          type: Type.TypedParam
-        - name: param
-          type: Type.Param
+          type: Type.TypedParam #@
         - name: match
-          type: Type.Match
+          type: Type.Match #@
 #object Type {
     innerTypes:
-#  @branch trait Ref extends Type with scala.meta.Ref
+#  @branch trait Ref extends Type with scala.meta.Ref #@
       - name: Ref
-#  @ast class Name(value: String @nonEmpty) extends scala.meta.Name with Type.Ref
+        type:
+          union:
+          - name: name
+            type: Type.Name #@
+          - name: select
+            type: Type.Select #@
+          - name: project
+            type: Type.Project #@
+          - name: singleton
+            type: Type.Singleton #@
+#  @ast class Name(value: String @nonEmpty) extends scala.meta.Name with Type.Ref #@
       - name: Name
         type:
           record:
             - name: value
               type: string
-#  @ast class AnonymousName() extends Type
+#  @ast class AnonymousName() extends Type #@
       - name: AnonymousName
-#  @ast class Select(qual: Term.Ref, name: Type.Name) extends Type.Ref {
+#  @ast class Select(qual: Term.Ref, name: Type.Name) extends Type.Ref { #@
       - name: Select
         type:
           record:
@@ -704,7 +737,7 @@ definitions:
               type: Type.Name
 #    checkFields(qual.isPath || qual.is[Term.Super] || qual.is[Term.Ref.Quasi])
 #  }
-#  @ast class Project(qual: Type, name: Type.Name) extends Type.Ref
+#  @ast class Project(qual: Type, name: Type.Name) extends Type.Ref #@
       - name: Project
         type:
           record:
@@ -712,7 +745,7 @@ definitions:
               type: Type
             - name: name
               type: Type.Name
-#  @ast class Singleton(ref: Term.Ref) extends Type.Ref {
+#  @ast class Singleton(ref: Term.Ref) extends Type.Ref { #@
       - name: Singleton
         type:
           record:
@@ -720,7 +753,7 @@ definitions:
               type: Term.Ref
 #    checkFields(ref.isPath || ref.is[Term.Super])
 #  }
-#  @ast class Apply(tpe: Type, args: List[Type] @nonEmpty) extends Type
+#  @ast class Apply(tpe: Type, args: List[Type] @nonEmpty) extends Type #@
       - name: Apply
         type:
           record:
@@ -729,7 +762,7 @@ definitions:
             - name: args
               type:
                 list: Type
-#  @ast class ApplyInfix(lhs: Type, op: Name, rhs: Type) extends Type
+#  @ast class ApplyInfix(lhs: Type, op: Name, rhs: Type) extends Type #@
       - name: ApplyInfix
         type:
           record:
@@ -739,19 +772,18 @@ definitions:
               type: Type.Name
             - name: rhs
               type: Type
-#  @branch trait FunctionType extends Type {
+#  @branch trait FunctionType extends Type { #@
       - name: FunctionType
         type:
-          record:
+          union:
+          - name: function
+            type: Type.Function #@
+          - name: contextFunction
+            type: Type.ContextFunction #@
 #    def params: List[Type]
-            - name: params
-              type:
-                list: Type
 #    def res: Type
-            - name: res
-              type: Type
 #  }
-#  @ast class Function(params: List[Type], res: Type) extends FunctionType
+#  @ast class Function(params: List[Type], res: Type) extends FunctionType #@
       - name: Function
         type:
           record:
@@ -760,7 +792,7 @@ definitions:
                 list: Type
             - name: res
               type: Type
-#  @ast class PolyFunction(tparams: List[Type.Param], tpe: Type) extends Type
+#  @ast class PolyFunction(tparams: List[Type.Param], tpe: Type) extends Type #@
       - name: PolyFunction
         type:
           record:
@@ -769,7 +801,7 @@ definitions:
                 list: Type.Param
             - name: tpe
               type: Type
-#  @ast class ContextFunction(params: List[Type], res: Type) extends FunctionType
+#  @ast class ContextFunction(params: List[Type], res: Type) extends FunctionType #@
       - name: ContextFunction
         type:
           record:
@@ -790,8 +822,8 @@ definitions:
 #      res: Type
             - name: res
               type: Type
-#  ) extends Type
-#  @ast class Tuple(args: List[Type] @nonEmpty) extends Type {
+#  ) extends Type #@
+#  @ast class Tuple(args: List[Type] @nonEmpty) extends Type { #@
       - name: Tuple
         type:
           record:
@@ -800,7 +832,7 @@ definitions:
                 list: Type
 #    checkFields(args.length > 1 || (args.length == 1 && args.head.is[Type.Quasi]))
 #  }
-#  @ast class With(lhs: Type, rhs: Type) extends Type
+#  @ast class With(lhs: Type, rhs: Type) extends Type #@
       - name: With
         type:
           record:
@@ -808,7 +840,7 @@ definitions:
               type: Type
             - name: rhs
               type: Type
-#  @ast class And(lhs: Type, rhs: Type) extends Type
+#  @ast class And(lhs: Type, rhs: Type) extends Type #@
       - name: And
         type:
           record:
@@ -816,7 +848,7 @@ definitions:
               type: Type
             - name: rhs
               type: Type
-#  @ast class Or(lhs: Type, rhs: Type) extends Type
+#  @ast class Or(lhs: Type, rhs: Type) extends Type #@
       - name: Or
         type:
           record:
@@ -824,7 +856,7 @@ definitions:
               type: Type
             - name: rhs
               type: Type
-#  @ast class Refine(tpe: Option[Type], stats: List[Stat]) extends Type {
+#  @ast class Refine(tpe: Option[Type], stats: List[Stat]) extends Type { #@
       - name: Refine
         type:
           record:
@@ -836,7 +868,7 @@ definitions:
                 list: Stat
 #    checkFields(stats.forall(_.isRefineStat))
 #  }
-#  @ast class Existential(tpe: Type, stats: List[Stat] @nonEmpty) extends Type {
+#  @ast class Existential(tpe: Type, stats: List[Stat] @nonEmpty) extends Type { #@
       - name: Existential
         type:
           record:
@@ -847,7 +879,7 @@ definitions:
                 list: Stat
 #    checkFields(stats.forall(_.isExistentialStat))
 #  }
-#  @ast class Annotate(tpe: Type, annots: List[Mod.Annot] @nonEmpty) extends Type
+#  @ast class Annotate(tpe: Type, annots: List[Mod.Annot] @nonEmpty) extends Type #@
       - name: Annotate
         type:
           record:
@@ -856,7 +888,7 @@ definitions:
             - name: annots
               type:
                 list: Mod.Annot
-#  @ast class Lambda(tparams: List[Type.Param], tpe: Type) extends Type {
+#  @ast class Lambda(tparams: List[Type.Param], tpe: Type) extends Type { #@
       - name: Lambda
         type:
           record:
@@ -867,14 +899,14 @@ definitions:
               type: Type
 #    checkParent(ParentChecks.TypeLambda)
 #  }
-#  @ast class Macro(body: Term) extends Type
+#  @ast class Macro(body: Term) extends Type #@
       - name: Macro
         type:
           record:
             - name: body
               type: Term
 #  @deprecated("Method type syntax is no longer supported in any dialect", "4.4.3")
-#  @ast class Method(paramss: List[List[Term.Param]], tpe: Type) extends Type {
+#  @ast class Method(paramss: List[List[Term.Param]], tpe: Type) extends Type { #@
       - name: Method
         type:
           record:
@@ -886,13 +918,13 @@ definitions:
               type: Type
 #    checkParent(ParentChecks.TypeMethod)
 #  }
-#  @ast class Placeholder(bounds: Bounds) extends Type
+#  @ast class Placeholder(bounds: Bounds) extends Type #@
       - name: Placeholder
         type:
           record:
             - name: bounds
               type: Type.Bounds
-#  @ast class Bounds(lo: Option[Type], hi: Option[Type]) extends Tree
+#  @ast class Bounds(lo: Option[Type], hi: Option[Type]) extends Tree #@
       - name: Bounds
         type:
           record:
@@ -902,14 +934,14 @@ definitions:
             - name: hi
               type:
                 optional: Type
-#  @ast class ByName(tpe: Type) extends Type {
+#  @ast class ByName(tpe: Type) extends Type { #@
       - name: ByName
         type:
           - name: tpe
             type: Type
 #    checkParent(ParentChecks.TypeByName)
 #  }
-#  @ast class Repeated(tpe: Type) extends Type {
+#  @ast class Repeated(tpe: Type) extends Type { #@
       - name: Repeated
         type:
           record:
@@ -917,7 +949,7 @@ definitions:
               type: Type
 #    checkParent(ParentChecks.TypeRepeated)
 #  }
-#  @ast class Var(name: Name) extends Type with Member.Type {
+#  @ast class Var(name: Name) extends Type with Member.Type { #@
       - name: Var
         type:
           record:
@@ -927,7 +959,7 @@ definitions:
 #    checkParent(ParentChecks.TypeVar)
 #  }
 #
-#  @ast class TypedParam(name: Name, typ: Type) extends Type with Member.Type
+#  @ast class TypedParam(name: Name, typ: Type) extends Type with Member.Type #@
       - name: TypedParam
         type:
           record:
@@ -962,9 +994,9 @@ definitions:
             - name: cbounds
               type:
                 list: Type
-#  ) extends Member
+#  ) extends Member #@
 #
-#  @ast class Match(tpe: Type, cases: List[TypeCase] @nonEmpty) extends Type
+#  @ast class Match(tpe: Type, cases: List[TypeCase] @nonEmpty) extends Type #@
       - name: Match
         type:
           record:
@@ -977,39 +1009,39 @@ definitions:
 #  def fresh(prefix: String): Type.Name = Type.Name(prefix + Fresh.nextId())
 #}
 #
-#@branch trait Pat extends Tree
+#@branch trait Pat extends Tree #@
   - name: Pat
     type:
       union:
         - name: var
-          type: Pat.Var
+          type: Pat.Var #@
         - name: wildcard
         - name: seqWildcard
         - name: bind
-          type: Pat.Bind
+          type: Pat.Bind #@
         - name: alternative
-          type: Pat.Alternative
+          type: Pat.Alternative #@
         - name: tuple
-          type: Pat.Tuple
+          type: Pat.Tuple #@
         - name: repeated
-          type: Pat.Repeated
+          type: Pat.Repeated #@
         - name: extract
-          type: Pat.Extract
+          type: Pat.Extract #@
         - name: extractInfix
-          type: Pat.ExtractInfix
+          type: Pat.ExtractInfix #@
         - name: interpolate
-          type: Pat.Interpolate
+          type: Pat.Interpolate #@
         - name: xml
-          type: Pat.Xml
+          type: Pat.Xml #@
         - name: typed
-          type: Pat.Typed
+          type: Pat.Typed #@
         - name: macro
-          type: Pat.Macro
+          type: Pat.Macro #@
         - name: given
-          type: Pat.Given
+          type: Pat.Given #@
 #object Pat {
     innerTypes:
-#  @ast class Var(name: scala.meta.Term.Name) extends Pat with Member.Term {
+#  @ast class Var(name: scala.meta.Term.Name) extends Pat with Member.Term { #@@
       - name: Var
         type:
           record:
@@ -1019,11 +1051,11 @@ definitions:
 #    // checkFields(name.value(0).isLower)
 #    checkParent(ParentChecks.PatVar)
 #  }
-#  @ast class Wildcard() extends Pat
-#  @ast class SeqWildcard() extends Pat {
+#  @ast class Wildcard() extends Pat #@
+#  @ast class SeqWildcard() extends Pat { #@
 #    checkParent(ParentChecks.PatSeqWildcard)
 #  }
-#  @ast class Bind(lhs: Pat, rhs: Pat) extends Pat {
+#  @ast class Bind(lhs: Pat, rhs: Pat) extends Pat { #@
       - name: Bind
         type:
           record:
@@ -1033,7 +1065,7 @@ definitions:
               type: Pat
 #    checkFields(lhs.is[Pat.Var] || lhs.is[Pat.Quasi])
 #  }
-#  @ast class Alternative(lhs: Pat, rhs: Pat) extends Pat
+#  @ast class Alternative(lhs: Pat, rhs: Pat) extends Pat #@
       - name: Alternative
         type:
           record:
@@ -1041,7 +1073,7 @@ definitions:
               type: Pat
             - name: rhs
               type: Pat
-#  @ast class Tuple(args: List[Pat] @nonEmpty) extends Pat {
+#  @ast class Tuple(args: List[Pat] @nonEmpty) extends Pat { #@
       - name: Tuple
         type:
           record:
@@ -1050,13 +1082,13 @@ definitions:
                 list: Pat
 #    checkFields(args.length > 1 || (args.length == 1 && args.head.is[Pat.Quasi]))
 #  }
-#  @ast class Repeated(name: scala.meta.Term.Name) extends Pat
+#  @ast class Repeated(name: scala.meta.Term.Name) extends Pat #@
       - name: Repeated
         type:
           record:
             - name: name
               type: Term.Name
-#  @ast class Extract(fun: Term, args: List[Pat]) extends Pat {
+#  @ast class Extract(fun: Term, args: List[Pat]) extends Pat { #@
       - name: Extract
         type:
           record:
@@ -1067,7 +1099,7 @@ definitions:
                 list: Pat
 #    checkFields(fun.isExtractor)
 #  }
-#  @ast class ExtractInfix(lhs: Pat, op: Term.Name, rhs: List[Pat]) extends Pat
+#  @ast class ExtractInfix(lhs: Pat, op: Term.Name, rhs: List[Pat]) extends Pat #@
       - name: ExtractInfix
         type:
           record:
@@ -1087,10 +1119,10 @@ definitions:
             - name: parts
               type:
                 list: Lit
-#      extends Pat {
+#      extends Pat { #@
 #    checkFields(parts.length == args.length + 1)
 #  }
-#  @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Pat]) extends Pat {
+#  @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Pat]) extends Pat { #@
       - name: Xml
         type:
           record:
@@ -1102,7 +1134,7 @@ definitions:
                 list: Pat
 #    checkFields(parts.length == args.length + 1)
 #  }
-#  @ast class Typed(lhs: Pat, rhs: Type) extends Pat {
+#  @ast class Typed(lhs: Pat, rhs: Type) extends Pat { #@
       - name: Typed
         type:
           record:
@@ -1112,7 +1144,7 @@ definitions:
               type: Type
 #    checkFields(!rhs.is[Type.Var] && !rhs.is[Type.Placeholder])
 #  }
-#  @ast class Macro(body: Term) extends Pat {
+#  @ast class Macro(body: Term) extends Pat { #@
       - name: Macro
         type:
           record:
@@ -1120,7 +1152,7 @@ definitions:
               type: Term
 #    checkFields(body.is[Term.QuotedMacroExpr] || body.is[Term.QuotedMacroType])
 #  }
-#  @ast class Given(tpe: Type) extends Pat
+#  @ast class Given(tpe: Type) extends Pat #@
       - name: Given
         type:
           record:
@@ -1130,35 +1162,61 @@ definitions:
 #  def fresh(prefix: String): Pat.Var = Pat.Var(Term.fresh(prefix))
 #}
 #
-#@branch trait Member extends Tree {
+#@branch trait Member extends Tree { #@
+  - name: Member
+    type:
+      union:
+        - name: term
+          type: Member.Term #@
+        - name: type
+          type: Member.Type #@
+        - name: termParam
+          type: Term.Param #@
+        - name: typeParam
+          type: Type.Param #@
+        - name: self
+          type: Self #@
 #  def name: Name
 #}
 #object Member {
-#  @branch trait Term extends Member {
+    innerTypes:
+#  @branch trait Term extends Member { #@
+      - name: Term
+        type:
+          union:
+            - name: pkg
+              type: Pkg #@@
+            - name: object
+              type: Pkg.Object #@@
 #    def name: scala.meta.Term.Name
 #  }
-#  @branch trait Type extends Member {
+#  @branch trait Type extends Member { #@
+      - name: Type
+        type:
+          record:
 #    def name: scala.meta.Type.Name
+            - name: name
+              type: Type.Name
 #  }
 #}
 #
-#@branch trait Decl extends Stat
+#@branch trait Decl extends Stat #@
   - name: Decl
     type:
       union:
         - name: val
-          type: Decl.Val
+          type: Decl.Val #@
         - name: var
-          type: Decl.Var
+          type: Decl.Var #@
         - name: def
-          type: Decl.Def
+          type: Decl.Def #@
         - name: type
-          type: Decl.Type
+          type: Decl.Type #@
         - name: given
-          type: Decl.Given
+          type: Decl.Given #@
 #object Decl {
     innerTypes:
-#  @ast class Val(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
+#  @ast class Val(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl #@
       - name: Val
         type:
           record:
@@ -1170,7 +1228,7 @@ definitions:
                 list: Pat
             - name: decltpe
               type: Type
-#  @ast class Var(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
+#  @ast class Var(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl #@
       - name: Var
         type:
           record:
@@ -1205,7 +1263,7 @@ definitions:
 #      decltpe: scala.meta.Type
             - name: decltpe
               type: Type
-#  ) extends Decl with Member.Term
+#  ) extends Decl with Member.Term #@@
       #  @ast class Type(
       - name: Type
         type:
@@ -1224,7 +1282,7 @@ definitions:
 #      bounds: scala.meta.Type.Bounds
             - name: bounds
               type: Type.Bounds
-#  ) extends Decl with Member.Type
+#  ) extends Decl with Member.Type #@
 #  @ast class Given(
       - name: Given
         type:
@@ -1248,41 +1306,41 @@ definitions:
 #      decltpe: scala.meta.Type
             - name: decltpe
               type: Type
-#  ) extends Decl with Member.Term
+#  ) extends Decl with Member.Term #@@
 #}
 #
-#@branch trait Defn extends Stat
+#@branch trait Defn extends Stat #@
   - name: Defn
     type:
       union:
         - name: val
-          type: Defn.Val
+          type: Defn.Val #@
         - name: var
-          type: Defn.Var
+          type: Defn.Var #@
         - name: given
-          type: Defn.Given
+          type: Defn.Given #@
         - name: enum
-          type: Defn.Enum
+          type: Defn.Enum #@
         - name: enumCase
-          type: Defn.EnumCase
+          type: Defn.EnumCase #@
         - name: repeatedEnumCase
-          type: Defn.RepeatedEnumCase
+          type: Defn.RepeatedEnumCase #@
         - name: givenAlias
-          type: Defn.GivenAlias
+          type: Defn.GivenAlias #@
         - name: extensionGroup
-          type: Defn.ExtensionGroup
+          type: Defn.ExtensionGroup #@
         - name: def
-          type: Defn.Def
+          type: Defn.Def #@
         - name: macro
-          type: Defn.Macro
+          type: Defn.Macro #@
         - name: type
-          type: Defn.Type
+          type: Defn.Type #@
         - name: class
-          type: Defn.Class
+          type: Defn.Class #@
         - name: trait
-          type: Defn.Trait
+          type: Defn.Trait #@
         - name: object
-          type: Defn.Object
+          type: Defn.Object #@
 #object Defn {
     innerTypes:
 #  @ast class Val(
@@ -1304,7 +1362,7 @@ definitions:
 #      rhs: Term
             - name: rhs
               type: Term
-#  ) extends Defn {
+#  ) extends Defn { #@
 #    checkFields(pats.forall(!_.is[Term.Name]))
 #  }
 #  @ast class Var(
@@ -1326,7 +1384,7 @@ definitions:
             - name: rhs
               type:
                 optional: Term
-#  ) extends Defn {
+#  ) extends Defn { #@
 #    checkFields(pats.forall(!_.is[Term.Name]))
 #    checkFields(decltpe.nonEmpty || rhs.nonEmpty)
 #    checkFields(rhs.isEmpty ==> pats.forall(_.is[Pat.Var]))
@@ -1355,7 +1413,7 @@ definitions:
 #      templ: Template
             - name: templ
               type: Template
-#  ) extends Defn
+#  ) extends Defn #@
 #  @ast class Enum(
       - name: Enum
         type:
@@ -1377,7 +1435,7 @@ definitions:
 #      templ: Template
             - name: template
               type: Template
-#  ) extends Defn with Member.Type
+#  ) extends Defn with Member.Type #@
 #  @ast class EnumCase(
       - name: EnumCase
         type:
@@ -1400,7 +1458,7 @@ definitions:
             - name: inits
               type:
                 list: Init
-#  ) extends Defn with Member.Term {
+#  ) extends Defn with Member.Term { #@@
 #    checkParent(ParentChecks.EnumCase)
 #  }
 #  @ast class RepeatedEnumCase(
@@ -1415,7 +1473,7 @@ definitions:
             - name: cases
               type:
                 list: Term.Name
-#  ) extends Defn {
+#  ) extends Defn { #@
 #    checkParent(ParentChecks.EnumCase)
 #  }
 #  @ast class GivenAlias(
@@ -1445,7 +1503,7 @@ definitions:
 #      body: Term
             - name: body
               type: Term
-#  ) extends Defn
+#  ) extends Defn #@
 #  @ast class ExtensionGroup(
       - name: ExtensionGroup
         type:
@@ -1462,7 +1520,7 @@ definitions:
 #      body: Stat
             - name: body
               type: Stat
-#  ) extends Defn
+#  ) extends Defn #@
 #  @ast class Def(
       - name: Def
         type:
@@ -1490,7 +1548,7 @@ definitions:
 #      body: Term
             - name: body
               type: Term
-#  ) extends Defn with Member.Term {
+#  ) extends Defn with Member.Term { #@@
 #    checkFields(paramss.forall(onlyLastParamCanBeRepeated))
 #  }
 #  @ast class Macro(
@@ -1520,7 +1578,7 @@ definitions:
 #      body: Term
             - name: body
               type: Term
-#  ) extends Defn with Member.Term
+#  ) extends Defn with Member.Term #@@
 #  @ast class Type(
       - name: Type
         type:
@@ -1539,7 +1597,7 @@ definitions:
 #      body: scala.meta.Type
             - name: body
               type: Type
-#  ) extends Defn with Member.Type {
+#  ) extends Defn with Member.Type { #@
 #    @binaryCompatField("4.4.0")
 #    private var _bounds: scala.meta.Type.Bounds = scala.meta.Type.Bounds(None, None)
 #  }
@@ -1564,7 +1622,7 @@ definitions:
 #      templ: Template
             - name: template
               type: Template
-#  ) extends Defn with Member.Type
+#  ) extends Defn with Member.Type #@
 #  @ast class Trait(
       - name: Trait
         type:
@@ -1586,20 +1644,26 @@ definitions:
 #      templ: Template
             - name: template
               type: Template
-#  ) extends Defn with Member.Type {
+#  ) extends Defn with Member.Type { #@
 #    checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
 #  }
 #  @ast class Object(mods: List[Mod], name: Term.Name, templ: Template)
       - name: Object
-#      extends Defn with Member.Term {
+        type:
+          record:
+            - name: name # from Member.Term
+              type: Term.Name
+#      extends Defn with Member.Term { #@@
 #    checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
 #  }
 #}
 #
-#@ast class Pkg(ref: Term.Ref, stats: List[Stat]) extends Member.Term with Stat {
+#@ast class Pkg(ref: Term.Ref, stats: List[Stat]) extends Member.Term with Stat { #@@
   - name: Pkg
     type:
       record:
+        - name: name # from Member.Term
+          type: Term.Name
         - name: ref
           type: Term.Ref
         - name: stats
@@ -1614,7 +1678,7 @@ definitions:
 #object Pkg {
     innerTypes:
 #  @ast class Object(mods: List[Mod], name: Term.Name, templ: Template)
-#      extends Member.Term with Stat {
+#      extends Member.Term with Stat { #@@
       - name: Object
         type:
           record:
@@ -1632,17 +1696,17 @@ definitions:
 #// NOTE: The names of Ctor.Primary and Ctor.Secondary here is always Name.Anonymous.
 #// While seemingly useless, this name is crucial to one of the key principles behind the semantic API:
 #// "every definition and every reference should carry a name".
-#@branch trait Ctor extends Tree with Member
+#@branch trait Ctor extends Tree with Member #@
   - name: Ctor
     type:
       union:
         - name: primary
-          type: Ctor.Primary
+          type: Ctor.Primary #@
         - name: secondary
-          type: Ctor.Secondary
+          type: Ctor.Secondary #@
 #object Ctor {
     innerTypes:
-#  @ast class Primary(mods: List[Mod], name: Name, paramss: List[List[Term.Param]]) extends Ctor
+#  @ast class Primary(mods: List[Mod], name: Name, paramss: List[List[Term.Param]]) extends Ctor #@
       - name: Primary
         type:
           record:
@@ -1678,14 +1742,14 @@ definitions:
             - name: stats
               type:
                 list: Stat
-#  ) extends Ctor with Stat {
+#  ) extends Ctor with Stat { #@
 #    checkFields(stats.forall(_.isBlockStat))
 #  }
 #}
 #
 #// NOTE: The name here is always Name.Anonymous.
 #// See comments to Ctor.Primary and Ctor.Secondary for justification.
-#@ast class Init(tpe: Type, name: Name, argss: List[List[Term]]) extends Ref {
+#@ast class Init(tpe: Type, name: Name, argss: List[List[Term]]) extends Ref { #@
   - name: Init
     type:
       record:
@@ -1701,8 +1765,8 @@ definitions:
 #  checkParent(ParentChecks.Init)
 #}
 #
-#@ast class Self(name: Name, decltpe: Option[Type]) extends Member
-  - name: Self # TODO
+#@ast class Self(name: Name, decltpe: Option[Type]) extends Member #@
+  - name: Self
 #
 #@ast class Template(
   - name: Template
@@ -1723,23 +1787,23 @@ definitions:
         - name: stats
           type:
             list: Stat
-#) extends Tree {
+#) extends Tree { #@
 #  @binaryCompatField("4.4.0")
 #  private var _derives: List[Type] = Nil
 #  checkFields(early.forall(_.isEarlyStat && inits.nonEmpty))
 #  checkFields(stats.forall(_.isTemplateStat))
 #}
 #
-#@branch trait Mod extends Tree
+#@branch trait Mod extends Tree #@
   - name: Mod
     type:
       union:
         - name: annot
-          type: Mod.Annot
+          type: Mod.Annot #@
         - name: private
-          type: Mod.Private
+          type: Mod.Private #@
         - name: protected
-          type: Mod.Protected
+          type: Mod.Protected #@
         - name: implicit
         - name: final
         - name: sealed
@@ -1760,7 +1824,7 @@ definitions:
         - name: transparent
 #object Mod {
     innerTypes:
-#  @ast class Annot(init: Init) extends Mod {
+#  @ast class Annot(init: Init) extends Mod { #@
       - name: Annot
         type:
           record:
@@ -1769,7 +1833,7 @@ definitions:
 #    @deprecated("Use init instead", "1.9.0")
 #    def body = init
 #  }
-#  @ast class Private(within: Ref) extends Mod {
+#  @ast class Private(within: Ref) extends Mod { #@
       - name: Private
         type:
           record:
@@ -1777,7 +1841,7 @@ definitions:
               type: Ref
 #    checkFields(within.isWithin)
 #  }
-#  @ast class Protected(within: Ref) extends Mod {
+#  @ast class Protected(within: Ref) extends Mod { #@
       - name: Protected
         type:
           record:
@@ -1785,42 +1849,42 @@ definitions:
               type: Ref
 #    checkFields(within.isWithin)
 #  }
-#  @ast class Implicit() extends Mod
-#  @ast class Final() extends Mod
-#  @ast class Sealed() extends Mod
-#  @ast class Open() extends Mod
+#  @ast class Implicit() extends Mod #@
+#  @ast class Final() extends Mod #@
+#  @ast class Sealed() extends Mod #@
+#  @ast class Open() extends Mod #@
 #  @deprecated("Super traits introduced in dotty, but later removed.")
-#  @ast class Super() extends Mod
-#  @ast class Override() extends Mod
-#  @ast class Case() extends Mod
-#  @ast class Abstract() extends Mod
-#  @ast class Covariant() extends Mod
-#  @ast class Contravariant() extends Mod
-#  @ast class Lazy() extends Mod
-#  @ast class ValParam() extends Mod
-#  @ast class VarParam() extends Mod
-#  @ast class Infix() extends Mod
-#  @ast class Inline() extends Mod
-#  @ast class Using() extends Mod
-#  @ast class Opaque() extends Mod
-#  @ast class Transparent() extends Mod
+#  @ast class Super() extends Mod #@
+#  @ast class Override() extends Mod #@
+#  @ast class Case() extends Mod #@
+#  @ast class Abstract() extends Mod #@
+#  @ast class Covariant() extends Mod #@
+#  @ast class Contravariant() extends Mod #@
+#  @ast class Lazy() extends Mod #@
+#  @ast class ValParam() extends Mod #@
+#  @ast class VarParam() extends Mod #@
+#  @ast class Infix() extends Mod #@
+#  @ast class Inline() extends Mod #@
+#  @ast class Using() extends Mod #@
+#  @ast class Opaque() extends Mod #@
+#  @ast class Transparent() extends Mod #@
 #}
 #
-#@branch trait Enumerator extends Tree
+#@branch trait Enumerator extends Tree #@
   - name: Enumerator
     type:
       union:
         - name: generator
-          type: Enumerator.Generator
+          type: Enumerator.Generator #@
         - name: caseGenerator
-          type: Enumerator.CaseGenerator
+          type: Enumerator.CaseGenerator #@
         - name: val
-          type: Enumerator.Val
+          type: Enumerator.Val #@
         - name: guard
-          type: Enumerator.Guard
+          type: Enumerator.Guard #@
 #object Enumerator {
     innerTypes:
-#  @ast class Generator(pat: Pat, rhs: Term) extends Enumerator
+#  @ast class Generator(pat: Pat, rhs: Term) extends Enumerator #@
       - name: Generator
         type:
           record:
@@ -1828,7 +1892,7 @@ definitions:
               type: Pat
             - name: rhs
               type: Term
-#  @ast class CaseGenerator(pat: Pat, rhs: Term) extends Enumerator
+#  @ast class CaseGenerator(pat: Pat, rhs: Term) extends Enumerator #@
       - name: CaseGenerator
         type:
           record:
@@ -1836,7 +1900,7 @@ definitions:
               type: Pat
             - name: rhs
               type: Term
-#  @ast class Val(pat: Pat, rhs: Term) extends Enumerator
+#  @ast class Val(pat: Pat, rhs: Term) extends Enumerator #@
       - name: Val
         type:
           record:
@@ -1844,7 +1908,7 @@ definitions:
               type: Pat
             - name: rhs
               type: Term
-#  @ast class Guard(cond: Term) extends Enumerator
+#  @ast class Guard(cond: Term) extends Enumerator #@
       - name: Guard
         type:
           record:
@@ -1852,24 +1916,24 @@ definitions:
               type: Term
 #}
 #
-#@branch trait ImportExportStat extends Stat {
+#@branch trait ImportExportStat extends Stat { #@
   - name: ImportExportStat
     type:
       union:
         - name: import
-          type: Import
+          type: Import #@
         - name: export
-          type: Export
+          type: Export #@
 #  def importers: List[Importer]
 #}
-#@ast class Import(importers: List[Importer] @nonEmpty) extends ImportExportStat
+#@ast class Import(importers: List[Importer] @nonEmpty) extends ImportExportStat #@
   - name: Import
     type:
       record:
         - name: importers
           type:
             list: Importer
-#@ast class Export(importers: List[Importer] @nonEmpty) extends ImportExportStat
+#@ast class Export(importers: List[Importer] @nonEmpty) extends ImportExportStat #@
   - name: Export
     type:
       record:
@@ -1877,7 +1941,7 @@ definitions:
           type:
             list: Importer
 #
-#@ast class Importer(ref: Term.Ref, importees: List[Importee] @nonEmpty) extends Tree {
+#@ast class Importer(ref: Term.Ref, importees: List[Importee] @nonEmpty) extends Tree { #@
   - name: Importer
     type:
       record:
@@ -1889,31 +1953,31 @@ definitions:
 #  checkFields(ref.isStableId)
 #}
 #
-#@branch trait Importee extends Tree with Ref
+#@branch trait Importee extends Tree with Ref #@
   - name: Importee
     type:
       union:
         - name: wildcard
         - name: given
-          type: Importee.Given
+          type: Importee.Given #@
         - name: givenAll
         - name: name
-          type: Importee.Name
+          type: Importee.Name #@
         - name: rename
-          type: Importee.Rename
+          type: Importee.Rename #@
         - name: unimport
-          type: Importee.Unimport
+          type: Importee.Unimport #@
 #object Importee {
     innerTypes:
-#  @ast class Wildcard() extends Importee
-#  @ast class Given(tpe: Type) extends Importee
+#  @ast class Wildcard() extends Importee #@
+#  @ast class Given(tpe: Type) extends Importee #@
       - name: Given
         type:
           record:
             - name: tpe
               type: Type
 #  @ast class GivenAll() extends Importee
-#  @ast class Name(name: scala.meta.Name) extends Importee {
+#  @ast class Name(name: scala.meta.Name) extends Importee { #@
       - name: Name
         type:
           record:
@@ -1921,7 +1985,7 @@ definitions:
               type: Name
 #    checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 #  }
-#  @ast class Rename(name: scala.meta.Name, rename: scala.meta.Name) extends Importee {
+#  @ast class Rename(name: scala.meta.Name, rename: scala.meta.Name) extends Importee { #@
       - name: Rename
         type:
           record:
@@ -1932,7 +1996,7 @@ definitions:
 #    checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 #    checkFields(rename.is[scala.meta.Name.Quasi] || rename.is[scala.meta.Name.Indeterminate])
 #  }
-#  @ast class Unimport(name: scala.meta.Name) extends Importee {
+#  @ast class Unimport(name: scala.meta.Name) extends Importee { #@
       - name: Unimport
         type:
           record:
@@ -1942,11 +2006,18 @@ definitions:
 #  }
 #}
 #
-#@branch trait CaseTree extends Tree {
+#@branch trait CaseTree extends Tree { #@
+  - name: CaseTree
+    type:
+      union:
+        - name: case
+          type: Case #@
+        - name: typeCase
+          type: TypeCase #@
 #  def pat: Tree
 #  def body: Tree
 #}
-#@ast class Case(pat: Pat, cond: Option[Term], body: Term) extends CaseTree
+#@ast class Case(pat: Pat, cond: Option[Term], body: Term) extends CaseTree #@
   - name: Case
     type:
       record:
@@ -1957,7 +2028,7 @@ definitions:
             optional: Term
         - name: body
           type: Term
-#@ast class TypeCase(pat: Type, body: Type) extends CaseTree
+#@ast class TypeCase(pat: Type, body: Type) extends CaseTree #@
   - name: TypeCase
     type:
       record:
@@ -1966,7 +2037,7 @@ definitions:
         - name: body
           type: Type
 #
-#@ast class Source(stats: List[Stat]) extends Tree {
+#@ast class Source(stats: List[Stat]) extends Tree { #@
   - name: Source
     type:
       record:
@@ -1989,7 +2060,8 @@ definitions:
 #  //   * ..$xs => XXX.Quasi(1, XXX.Quasi(0, XXX.Name("xs"))
 #  //   * ...$xss => XXX.Quasi(2, XXX.Quasi(0, XXX.Name("xss"))
 #  //   * ..{$fs($args)} => Complex ellipses aren't supported yet
-#  @branch trait Quasi extends Tree {
+#  @branch trait Quasi extends Tree { #@
+  - name: Quasi # TODO
 #    def rank: Int
 #    def tree: Tree
 #    def pt: Class[_]
