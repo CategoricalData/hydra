@@ -18,7 +18,7 @@ dependencies:
 library:
   source-dirs:
     - src/main/haskell
-    - src/main-gen/haskell
+    - src/gen-main/haskell
 #  exposed-modules:
 
 tests:
