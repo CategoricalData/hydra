@@ -1,3 +1,13 @@
+definitions:
+  - name: PredefString # See scala/Predef.scala
+    type: string
+  - name: ScalaSymbol # See scala/Symbol.scala
+    type:
+      record:
+        - name: name
+          type: string
+
+### scala/meta/Trees.scala source below this line. Hydra type definitions inline ###
 #package scala.meta
 #
 #import org.scalameta.invariants._
@@ -7,16 +17,6 @@
 #import scala.meta.prettyprinters._
 #import scala.meta.internal.trees._
 #import scala.meta.internal.trees.Metadata.binaryCompatField
-definitions:
-  - name: MetaName # TODO
-  - name: PredefString # TODO
-  - name: ScalaSymbol # TODO
-  - name: ScalaMetaName # TODO
-  - name: ScalaMetaTermName # TODO
-  - name: ScalaMetaType # TODO
-  - name: ScalaMetaTypeBounds # TODO
-  - name: ScalaMetaTypeParam # TODO
-  - name: ScalaMetaTypeName # TODO
 #@root trait Tree extends InternalTree {
   - name: Tree # TODO
 #  def parent: Option[Tree]
@@ -237,9 +237,9 @@ definitions:
         type:
           record:
             - name: thisp
-              type: ScalaMetaName
+              type: Name
             - name: superp
-              type: ScalaMetaName
+              type: Name
 #  @ast class Name(value: Predef.String @nonEmpty) extends scala.meta.Name with Term.Ref with Pat
       - name: Name
         type:
@@ -611,7 +611,7 @@ definitions:
               type:
                 list: Mod
             - name: name
-              type: MetaName
+              type: Name
 #  def fresh(): Term.Name = fresh("fresh")
 #  def fresh(prefix: String): Term.Name = Term.Name(prefix + Fresh.nextId())
 #}
@@ -945,7 +945,7 @@ definitions:
                 list: Mod
 #      name: meta.Name,
             - name: name
-              type: MetaName
+              type: Name
 #      tparams: List[Type.Param],
             - name: tparams
               type:
@@ -1014,7 +1014,7 @@ definitions:
         type:
           record:
             - name: name
-              type: ScalaMetaTermName
+              type: Term.Name
 #    // NOTE: can't do this check here because of things like `val X = 2`
 #    // checkFields(name.value(0).isLower)
 #    checkParent(ParentChecks.PatVar)
@@ -1055,7 +1055,7 @@ definitions:
         type:
           record:
             - name: name
-              type: ScalaMetaTermName
+              type: Term.Name
 #  @ast class Extract(fun: Term, args: List[Pat]) extends Pat {
       - name: Extract
         type:
@@ -1169,7 +1169,7 @@ definitions:
               type:
                 list: Pat
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #  @ast class Var(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
       - name: Var
         type:
@@ -1181,7 +1181,7 @@ definitions:
               type:
                 list: Pat
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #  @ast class Def(
       - name: Def
         type:
@@ -1196,7 +1196,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      paramss: List[List[Term.Param]],
             - name: paramss
               type:
@@ -1204,7 +1204,7 @@ definitions:
                   list: Term.Param
 #      decltpe: scala.meta.Type
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #  ) extends Decl with Member.Term
       #  @ast class Type(
       - name: Type
@@ -1216,14 +1216,14 @@ definitions:
                 list: Mod
 #      name: scala.meta.Type.Name,
             - name: name
-              type: ScalaMetaTypeName
+              type: Type.Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      bounds: scala.meta.Type.Bounds
             - name: bounds
-              type: ScalaMetaTypeBounds
+              type: Type.Bounds
 #  ) extends Decl with Member.Type
 #  @ast class Given(
       - name: Given
@@ -1239,7 +1239,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      sparams: List[List[Term.Param]],
             - name: sparams
               type:
@@ -1247,7 +1247,7 @@ definitions:
                   list: Term.Param
 #      decltpe: scala.meta.Type
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #  ) extends Decl with Member.Term
 #}
 #
@@ -1300,7 +1300,7 @@ definitions:
 #      decltpe: Option[scala.meta.Type],
             - name: decltpe
               type:
-                optional: ScalaMetaType
+                optional: Type
 #      rhs: Term
             - name: rhs
               type: Term
@@ -1321,7 +1321,7 @@ definitions:
                 list: Pat
 #      decltpe: Option[scala.meta.Type],
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #      rhs: Option[Term]
             - name: rhs
               type:
@@ -1341,12 +1341,12 @@ definitions:
                 list: Mod
 #      name: scala.meta.Name,
             - name: name
-              type: ScalaMetaName
+              type: Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
                 list:
-                  list: ScalaMetaTypeParam
+                  list: Type.Param
 #      sparams: List[List[Term.Param]],
             - name: sparams
               type:
@@ -1366,11 +1366,11 @@ definitions:
                 list: Mod
 #      name: scala.meta.Type.Name,
             - name: name
-              type: ScalaMetaTypeName
+              type: Type.Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      ctor: Ctor.Primary,
             - name: ctor
               type: Ctor.Primary
@@ -1392,7 +1392,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      ctor: Ctor.Primary,
             - name: ctor
               type: Ctor.Primary
@@ -1428,12 +1428,12 @@ definitions:
                 list: Mod
 #      name: scala.meta.Name,
             - name: name
-              type: ScalaMetaName
+              type: Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
                 list:
-                  list: ScalaMetaTypeParam
+                  list: Type.Param
 #      sparams: List[List[Term.Param]],
             - name: sparams
               type:
@@ -1441,7 +1441,7 @@ definitions:
                   list: Term.Param
 #      decltpe: scala.meta.Type,
             - name: decltpe
-              type: ScalaMetaType
+              type: Type
 #      body: Term
             - name: body
               type: Term
@@ -1453,7 +1453,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      paramss: List[List[Term.Param]],
             - name: paramss
               type:
@@ -1477,7 +1477,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      paramss: List[List[Term.Param]],
             - name: paramss
               type:
@@ -1486,7 +1486,7 @@ definitions:
 #      decltpe: Option[scala.meta.Type],
             - name: decltpe
               type:
-                option: ScalaMetaType
+                option: Type
 #      body: Term
             - name: body
               type: Term
@@ -1507,7 +1507,7 @@ definitions:
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      paramss: List[List[Term.Param]],
             - name: paramss
               type:
@@ -1516,7 +1516,7 @@ definitions:
 #      decltpe: Option[scala.meta.Type],
             - name: decltpe
               type:
-                optional: ScalaMetaType
+                optional: Type
 #      body: Term
             - name: body
               type: Term
@@ -1531,14 +1531,14 @@ definitions:
                 list: Mod
 #      name: scala.meta.Type.Name,
             - name: name
-              type: ScalaMetaTypeName
+              type: Type.Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      body: scala.meta.Type
             - name: body
-              type: ScalaMetaType
+              type: Type
 #  ) extends Defn with Member.Type {
 #    @binaryCompatField("4.4.0")
 #    private var _bounds: scala.meta.Type.Bounds = scala.meta.Type.Bounds(None, None)
@@ -1553,11 +1553,11 @@ definitions:
                 list: Mod
 #      name: scala.meta.Type.Name,
             - name: name
-              type: ScalaMetaTypeName
+              type: Type.Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      ctor: Ctor.Primary,
             - name: ctor
               type: Ctor.Primary
@@ -1575,11 +1575,11 @@ definitions:
                 list: Mod
 #      name: scala.meta.Type.Name,
             - name: name
-              type: ScalaMetaTypeName
+              type: Type.Name
 #      tparams: List[scala.meta.Type.Param],
             - name: tparams
               type:
-                list: ScalaMetaTypeParam
+                list: Type.Param
 #      ctor: Ctor.Primary,
             - name: ctor
               type: Ctor.Primary
@@ -1918,7 +1918,7 @@ definitions:
         type:
           record:
             - name: name
-              type: ScalaMetaName
+              type: Name
 #    checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 #  }
 #  @ast class Rename(name: scala.meta.Name, rename: scala.meta.Name) extends Importee {
@@ -1926,9 +1926,9 @@ definitions:
         type:
           record:
             - name: name
-              type: ScalaMetaName
+              type: Name
             - name: rename
-              type: ScalaMetaName
+              type: Name
 #    checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 #    checkFields(rename.is[scala.meta.Name.Quasi] || rename.is[scala.meta.Name.Indeterminate])
 #  }
@@ -1937,7 +1937,7 @@ definitions:
         type:
           record:
             - name: name
-              type: ScalaMetaName
+              type: Name
 #    checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 #  }
 #}
