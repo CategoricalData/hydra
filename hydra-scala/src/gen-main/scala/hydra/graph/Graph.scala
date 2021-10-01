@@ -12,6 +12,11 @@ import hydra.core.Term
  */
 case class Graph(
     /**
+     * @type hydra/graph.GraphName
+     */
+    name: GraphName,
+    
+    /**
      * @type list: hydra/graph.Element
      */
     elements: Seq[Element],
@@ -35,4 +40,5 @@ case class Graph(
 val _Graph: String = "hydra/graph.Graph"
 val _Graph_dataTerms: String = "dataTerms"
 val _Graph_elements: String = "elements"
+val _Graph_name: String = "name"
 val _Graph_schemaGraph: String = "schemaGraph"
