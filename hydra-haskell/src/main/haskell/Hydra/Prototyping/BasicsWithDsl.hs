@@ -16,7 +16,7 @@ basicsFunction name dom cod dat = basicsElement name typ dat
   where
     typ = functionType (nominalType dom) (nominalType cod)
 
-basicsGraph = Graph elements dataTerms schemaGraph
+basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
   where
     dataTerms = \t -> True -- TODO
     schemaGraph = "none" -- TODO
