@@ -26,6 +26,7 @@ checkType context typ term = check M.empty typ term
 --        TermApplication ... ->
         TermAtomic _ -> False
 --        TermCases ... ->
+--        TermCompareTo other -> 
         TermData -> check bindings (TypeElement typ) arg
         TermElement _ -> False
         TermFunction fn -> case lookupPrimitiveFunction context fn of
@@ -35,8 +36,10 @@ checkType context typ term = check M.empty typ term
               FunctionType dom cod = primitiveFunctionType prim
 --        TermLambda ... ->
         TermList _ -> False
+        TermMap _ -> False
 --        TermProjection fn ->
         TermRecord _ -> False
+        TermSet _ -> False
         TermUnion _ -> False
         TermVariable v -> case M.lookup v bindings of
           Nothing -> False
