@@ -31,6 +31,7 @@ concatType = functionType stringType $ functionType stringType stringType
 compareStringsType = functionType stringType stringType
 exampleProjectionType = functionType latLonType int64Type
 latLonType = TypeRecord [FieldType "lat" $ int64Type, FieldType "lon" $ int64Type]
+listOfSetOfStringsType = TypeList $ TypeSet stringType
 listOfStringsType = TypeList stringType
 latlonRecord lat lon = TermRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
 makeMap keyvals = TermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
@@ -98,30 +99,64 @@ unsupportedConstructorsAreModified = do
 
     H.it "Projections become variant terms" $ do
       QC.property $ \fname
-        -> adapt exampleProjectionType stepOut (TermProjection fname)-- Note: the field name is not dereferenced
+        -> adapt exampleProjectionType stepOut (TermProjection fname) -- Note: the field name is not dereferenced
         == Right (TermUnion $ Field "projection" $ stringValue fname)  
 
 nominalTypesPassThrough = do
   H.describe "Verify that nominal types behave like the types they reference" $ do
 
-    H.it "A term typed by StringTypeAlias just behaves like a string" $ do
-      adapt stringAliasType stepOut (stringValue "Arthur Dent")
-        `H.shouldBe` Right (stringValue "Arthur Dent")  
+    H.it "A term typed by StringTypeAlias just behaves like a string" $
+      QC.property $ \s
+        -> adapt stringAliasType stepOut (stringValue s)
+        == Right (stringValue s)
 
 termsAreAdaptedRecursively = do
   H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
-    
+
     H.it "A list of sets of strings becomes a list of lists of strings" $ do
-      H.it "Projections become variant terms" $ do
-        QC.property $ \fname
-          -> adapt exampleProjectionType stepOut (TermProjection fname)-- Note: the field name is not dereferenced
-          == Right (TermUnion $ Field "projection" $ stringValue fname)  
-              
--- adapterIsInformationPreserving
+      QC.property $ \lists
+        -> adapt listOfSetOfStringsType stepOut (TermList $ (\l -> TermSet $ S.fromList $ stringValue <$> l) <$> lists)
+        == Right (TermList $ (\l -> TermList $ stringValue <$> (S.toList $ S.fromList l)) <$> lists)
+
+adapterIsInformationPreserving = do
+  H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
+
+    H.it "Check strings (pass-through)" $
+      QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
+          
+    H.it "Check lists (pass-through)" $
+      QC.property $ \strings -> roundTripIsNoop listOfStringsType (TermList $ stringValue <$> strings)
+
+    H.it "Check sets (which map to lists)" $
+      QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
+
+    H.it "Check element references (which map to strings)" $
+      QC.property $ \name -> roundTripIsNoop booleanElementType (TermElement name)
+
+    H.it "Check compareTo terms (which map to variants)" $
+      QC.property $ \s -> roundTripIsNoop compareStringsType (TermCompareTo $ stringValue s)
+
+    H.it "Check data terms (which map to variants)" $
+      roundTripIsNoop booleanElementDataType TermData `H.shouldBe` True
+
+    H.it "Check primitive function references (which map to variants)" $
+      QC.property $ \name -> roundTripIsNoop concatType (TermFunction name)
+
+    H.it "Check projection terms (which map to variants)" $
+      QC.property $ \fname -> roundTripIsNoop exampleProjectionType (TermProjection fname)
+
+    H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
+      QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
+
+  where
+    roundTripIsNoop typ term = (adapter stepOut term >>= adapter stepIn) == Right term
+      where
+        adapter = adapt typ
 
 spec :: H.Spec
 spec = do
   supportedConstructorsAreUnchanged
   unsupportedConstructorsAreModified
   nominalTypesPassThrough
-  
+  termsAreAdaptedRecursively
+  adapterIsInformationPreserving
