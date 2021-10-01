@@ -2,6 +2,8 @@ module Hydra.Prototyping.Helpers (
   apply,
   bigfloatType,
   bigintType,
+  booleanTerm,
+  booleanType,
   cases,
   compose,
   constFunction,
@@ -14,10 +16,13 @@ module Hydra.Prototyping.Helpers (
   functionType,
   int16Type,
   int32Type,
+  int32Value,
   int64Type,
+  int64Value,
   int8Type,
   integerType,
   lambda,
+  mapType,
   match,
   matchWithVariants,
   nominalType,
@@ -45,6 +50,12 @@ apply func arg = TermApplication $ Application func arg
 
 bigfloatType = floatType FloatTypeBigfloat
 bigintType = integerType IntegerTypeBigint
+
+booleanTerm :: Bool -> Term
+booleanTerm b = TermAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+
+booleanType :: Type
+booleanType = TypeAtomic AtomicTypeBoolean
 
 cases :: [Field] -> Term
 cases = TermCases
@@ -75,11 +86,16 @@ functionType dom cod = TypeFunction $ FunctionType dom cod
 int8Type = integerType IntegerTypeInt8
 int16Type = integerType IntegerTypeInt16
 int32Type = integerType IntegerTypeInt32
+int32Value = TermAtomic . AtomicValueInteger . IntegerValueInt32
 int64Type = integerType IntegerTypeInt64
+int64Value = TermAtomic . AtomicValueInteger . IntegerValueInt64
 integerType = TypeAtomic . AtomicTypeInteger
 
 lambda :: Variable -> Term -> Term
 lambda param body = TermLambda $ Lambda param body
+
+mapType :: Type -> Type -> Type
+mapType kt vt = TypeMap $ MapType kt vt
 
 match :: [(FieldName, Term)] -> Term
 match = cases . fmap toField
