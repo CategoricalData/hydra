@@ -50,16 +50,12 @@ requireField fields fname = Y.maybe error Right $ M.lookup fname fields
   where
     error = Left $ "no such field: " ++ fname
 
-
 --  TODO:
 --    term constructors
 --      - application
 --      - cases
 --      - lambda
 --      - variable
---    
---    type constructors:
---      - nominal
 
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.

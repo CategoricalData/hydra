@@ -2,8 +2,14 @@ package hydra.evaluation
 
 import hydra.core.Name
 import hydra.graph.Element
+import hydra.graph.GraphSet
 
 case class Context(
+    /**
+     * @type hydra/graph.GraphSet
+     */
+    graphs: GraphSet,
+    
     /**
      * @type map:
      *         keys: hydra/core.Name
@@ -27,4 +33,5 @@ case class Context(
 val _Context: String = "hydra/evaluation.Context"
 val _Context_elements: String = "elements"
 val _Context_functions: String = "functions"
+val _Context_graphs: String = "graphs"
 val _Context_strategy: String = "strategy"
