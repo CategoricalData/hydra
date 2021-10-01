@@ -2,12 +2,18 @@ module Hydra.Prototyping.Basics (
     atomicTypeVariant,
     atomicValueType,
     atomicValueVariant,
+    atomicVariants,
     floatTypeVariant,
     floatValueType,
     floatValueVariant,
+    floatVariantPrecision,
+    floatVariants,
     integerTypeVariant,
     integerValueType,
     integerValueVariant,
+    integerVariantIsSigned,
+    integerVariantPrecision,
+    integerVariants,
     termVariant,
     typeVariant,
   ) where
@@ -41,6 +47,10 @@ atomicValueType v = case v of
 atomicValueVariant :: AtomicValue -> AtomicVariant
 atomicValueVariant = atomicTypeVariant . atomicValueType
 
+atomicVariants :: [AtomicVariant]
+atomicVariants =
+  [AtomicVariantBinary, AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
+
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
   FloatTypeBigfloat -> FloatVariantBigfloat
@@ -55,6 +65,15 @@ floatValueType fv = case fv of
 
 floatValueVariant :: FloatValue -> FloatVariant
 floatValueVariant = floatTypeVariant . floatValueType
+
+floatVariantPrecision :: FloatVariant -> Precision
+floatVariantPrecision v = case v of
+  FloatVariantBigfloat -> PrecisionArbitrary
+  FloatVariantFloat32 -> PrecisionBits 32
+  FloatVariantFloat64 -> PrecisionBits 64
+
+floatVariants :: [FloatVariant]
+floatVariants = [FloatVariantFloat32, FloatVariantFloat64, FloatVariantBigfloat]
 
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
@@ -82,6 +101,32 @@ integerValueType iv = case iv of
 
 integerValueVariant :: IntegerValue -> IntegerVariant
 integerValueVariant = integerTypeVariant . integerValueType
+
+integerVariantIsSigned :: IntegerVariant -> Bool
+integerVariantIsSigned v = case v of
+  IntegerVariantUint8 -> False
+  IntegerVariantUint16 -> False
+  IntegerVariantUint32 -> False
+  IntegerVariantUint64 -> False
+  _ -> True
+
+integerVariantPrecision :: IntegerVariant -> Precision
+integerVariantPrecision v = case v of
+  IntegerVariantBigint -> PrecisionArbitrary
+  IntegerVariantInt8 -> PrecisionBits 8
+  IntegerVariantInt16 -> PrecisionBits 16
+  IntegerVariantInt32 -> PrecisionBits 32
+  IntegerVariantInt64 -> PrecisionBits 64
+  IntegerVariantUint8 -> PrecisionBits 8
+  IntegerVariantUint16 -> PrecisionBits 16
+  IntegerVariantUint32 -> PrecisionBits 32
+  IntegerVariantUint64 -> PrecisionBits 64
+  
+integerVariants :: [IntegerVariant]
+integerVariants = [
+  IntegerVariantInt8, IntegerVariantInt16, IntegerVariantInt32, IntegerVariantInt64,
+  IntegerVariantUint8, IntegerVariantUint16, IntegerVariantUint32, IntegerVariantUint64,
+  IntegerVariantBigint]
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of
