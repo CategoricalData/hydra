@@ -248,6 +248,13 @@ definitions:
   - name: Name
     type: string
 
+  - name: Precision
+    type:
+      union:
+        - name: arbitrary
+        - name: bits
+          type: integer
+
   - name: Term
     type:
       union:
