@@ -101,7 +101,8 @@ matchUnion pairs term = case term of
     TermUnion (Field fname val) -> case M.lookup fname mapping of
       Nothing -> Left $ "no matching case for field " ++ show fname
       Just f -> f val
-    _ -> Left "expected a union"
+    _ -> Left $ "expected a union with one of {" ++ (L.concat $ L.intersperse ", " $ fst <$> pairs) ++ "}"
+      ++ ". Got: " ++ show term
   where
     mapping = M.fromList pairs
 

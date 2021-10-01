@@ -1,12 +1,17 @@
 module Hydra.Prototyping.CoreEncoding (
+    encodeApplication,
     encodeAtomicType,
+    encodeAtomicValue,
     encodeAtomicVariant,
+    encodeField,
     encodeFieldType,
     encodeFloatType,
     encodeFloatVariant,
     encodeFunctionType,
     encodeIntegerType,
     encodeIntegerVariant,
+    encodeLambda,
+    encodeTerm,
     encodeType,
     encodeTypeVariant,
   ) where
@@ -14,6 +19,14 @@ module Hydra.Prototyping.CoreEncoding (
 import Hydra.Core
 import Hydra.Prototyping.Helpers
 
+import qualified Data.Map as M
+import qualified Data.Set as S
+
+
+encodeApplication :: Application -> Term
+encodeApplication (Application f a) = TermRecord [
+  Field _Application_function $ encodeTerm f,
+  Field _Application_argument $ encodeTerm f]
 
 encodeAtomicType :: AtomicType -> Term
 encodeAtomicType at = case at of
@@ -23,6 +36,9 @@ encodeAtomicType at = case at of
   AtomicTypeInteger it -> variant _AtomicType_integer $ encodeIntegerType it
   AtomicTypeString -> unitVariant _AtomicType_string
 
+encodeAtomicValue :: AtomicValue -> Term
+encodeAtomicValue av = TermAtomic av
+
 encodeAtomicVariant :: AtomicVariant -> Term
 encodeAtomicVariant av = unitVariant $ case av of
   AtomicVariantBinary -> _AtomicVariant_binary
@@ -30,6 +46,11 @@ encodeAtomicVariant av = unitVariant $ case av of
   AtomicVariantFloat -> _AtomicVariant_float
   AtomicVariantInteger -> _AtomicVariant_integer
   AtomicVariantString -> _AtomicVariant_string
+
+encodeField :: Field -> Term
+encodeField (Field name term) = TermRecord [
+  Field _Field_name $ stringValue name,
+  Field _Field_term $ encodeTerm term]
 
 encodeFieldType :: FieldType -> Term
 encodeFieldType (FieldType fname t) = TermRecord [
@@ -77,10 +98,34 @@ encodeIntegerVariant iv = unitVariant $ case iv of
   IntegerVariantUint32 -> _IntegerType_uint32
   IntegerVariantUint64 -> _IntegerType_uint64
 
+encodeLambda :: Lambda -> Term
+encodeLambda (Lambda v b) = TermRecord [
+  Field _Lambda_parameter $ stringValue v,
+  Field _Lambda_body $ encodeTerm b]
+
 encodeMapType :: MapType -> Term
 encodeMapType (MapType kt vt) = TermRecord [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
+
+encodeTerm :: Term -> Term
+encodeTerm term = case term of
+  TermApplication a -> variant _Term_application $ encodeApplication a
+  TermAtomic av -> variant _Term_atomic $ encodeAtomicValue av
+  TermCases cases -> variant _Term_cases $ TermList $ encodeField <$> cases
+  TermCompareTo other -> variant _Term_compareTo $ encodeTerm other
+  TermData -> unitVariant _Term_data
+  TermElement name -> variant _Term_element $ stringValue name
+  TermFunction name -> variant _Term_function $ stringValue name
+  TermLambda l -> variant _Term_lambda $ encodeLambda l
+  TermList terms -> variant _Term_list $ TermList $ encodeTerm <$> terms
+  TermMap map -> variant _Term_map $ TermMap $ M.fromList $ encodePair <$> M.toList map
+    where encodePair (k, v) = (encodeTerm k, encodeTerm v)
+  TermProjection fname -> variant _Term_projection $ stringValue fname
+  TermRecord fields -> variant _Term_record $ TermList $ encodeField <$> fields
+  TermSet terms -> variant _Term_set $ TermSet $ S.fromList $ encodeTerm <$> S.toList terms
+  TermUnion field -> variant _Term_union $ encodeField field
+  TermVariable var -> variant _Term_variable $ stringValue var
 
 encodeType :: Type -> Term
 encodeType typ = case typ of
