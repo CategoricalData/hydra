@@ -7,6 +7,9 @@ definitions:
   - name: Context
     type:
       record:
+        - name: graphs
+          type: graph.GraphSet
+
         - name: elements
           type:
             map:
