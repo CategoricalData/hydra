@@ -15,6 +15,7 @@ module Hydra.Graph
   , _GraphSet_root
   , _Graph_dataTerms
   , _Graph_elements
+  , _Graph_name
   , _Graph_schemaGraph
   ) where
 
@@ -39,8 +40,10 @@ data Element
     schema graph -}
 data Graph
   = Graph
+    -- | @type hydra/graph.GraphName
+    { graphName :: GraphName
     -- | @type list: hydra/graph.Element
-    { graphElements :: [Element]
+    , graphElements :: [Element]
     {-| @type function:
                 from:
                 - hydra/core.Term
@@ -81,4 +84,5 @@ _GraphSet_graphs = "graphs" :: String
 _GraphSet_root = "root" :: String
 _Graph_dataTerms = "dataTerms" :: String
 _Graph_elements = "elements" :: String
+_Graph_name = "name" :: String
 _Graph_schemaGraph = "schemaGraph" :: String
