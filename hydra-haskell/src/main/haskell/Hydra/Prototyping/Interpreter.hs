@@ -85,16 +85,16 @@ evaluate context term = reduce M.empty term
               >>= reduceApplication bindings (L.tail args)
             _ -> Left $ "tried to apply data (delta) to a non- element reference"
 
-      TermFunction name -> case lookupPrimitiveFunction context name of
-        Nothing -> Left $ "no such primitive function: " ++ name
-        Just prim -> if L.length args >= arity
-            then (mapM (reduce bindings) $ L.take arity args)
-              >>= (\args -> reduce bindings $ primitiveFunctionImplementation prim args)
-              >>= (reduceApplication bindings (L.drop arity args))
-            else unwind
-          where
-            arity = primitiveFunctionArity prim
-            unwind = Right $ L.foldl apply f args
+      TermFunction name -> do
+           prim <- requirePrimitiveFunction context name
+           let arity = primitiveFunctionArity prim
+           if L.length args >= arity
+             then (mapM (reduce bindings) $ L.take arity args)
+               >>= (\args -> reduce bindings $ primitiveFunctionImplementation prim args)
+               >>= (reduceApplication bindings (L.drop arity args))
+             else unwind
+         where
+           unwind = Right $ L.foldl apply f args
 
       TermLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
         >>= reduceApplication bindings (L.tail args)
