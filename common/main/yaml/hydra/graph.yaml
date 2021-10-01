@@ -22,6 +22,9 @@ definitions:
       called the schema graph
     type:
       record:
+        - name: name
+          type: GraphName
+
         - name: elements
           type:
             list: Element
