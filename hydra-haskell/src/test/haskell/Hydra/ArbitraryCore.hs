@@ -6,6 +6,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
 
+
 instance QC.Arbitrary AtomicType
   where
     arbitrary = QC.oneof [

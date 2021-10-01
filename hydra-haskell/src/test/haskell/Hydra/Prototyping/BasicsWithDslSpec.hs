@@ -22,7 +22,7 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term -> Either String Term
-testEvaluate = evaluate $ testContext { contextElements = graphElementsForContext basicsGraph }
+testEvaluate = evaluate $ testContext { contextElements = graphElementsMap basicsGraph }
 
 testsForTermTypeFunctions = do
   H.describe "Tests for DSL-defined term-to-type functions" $ do
