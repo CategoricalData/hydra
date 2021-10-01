@@ -20,6 +20,7 @@ module Hydra.Core
   , Lambda(..)
   , MapType(..)
   , Name
+  , Precision(..)
   , Term(..)
   , TermVariant(..)
   , Type(..)
@@ -112,6 +113,9 @@ module Hydra.Core
   , _MapType_keys
   , _MapType_values
   , _Name
+  , _Precision
+  , _Precision_arbitrary
+  , _Precision_bits
   , _Term
   , _TermVariant
   , _TermVariant_application
@@ -352,6 +356,11 @@ data MapType
 -- | @type string
 type Name = String
 
+data Precision
+  = PrecisionArbitrary
+  -- | @type integer
+  | PrecisionBits Int deriving (Eq, Generic, Ord, Read, Show)
+
 data Term
   {-| A function application
       
@@ -555,6 +564,9 @@ _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
 _Name = "hydra/core.Name" :: String
+_Precision = "hydra/core.Precision" :: String
+_Precision_arbitrary = "arbitrary" :: String
+_Precision_bits = "bits" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String

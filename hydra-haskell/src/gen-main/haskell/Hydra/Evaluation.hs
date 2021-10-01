@@ -7,6 +7,7 @@ module Hydra.Evaluation
   , _Context
   , _Context_elements
   , _Context_functions
+  , _Context_graphs
   , _Context_strategy
   , _EvaluationStrategy
   , _EvaluationStrategy_opaqueTermVariants
@@ -36,10 +37,12 @@ import Hydra.Graph
 
 data Context
   = Context
+    -- | @type hydra/graph.GraphSet
+    { contextGraphs :: GraphSet
     {-| @type map:
                 keys: hydra/core.Name
                 values: hydra/graph.Element -}
-    { contextElements :: (Map Name Element)
+    , contextElements :: (Map Name Element)
     {-| @type map:
                 keys: hydra/core.Name
                 values: hydra/evaluation.PrimitiveFunction -}
@@ -87,6 +90,7 @@ data TermStep
 _Context = "hydra/evaluation.Context" :: String
 _Context_elements = "elements" :: String
 _Context_functions = "functions" :: String
+_Context_graphs = "graphs" :: String
 _Context_strategy = "strategy" :: String
 _EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
 _EvaluationStrategy_opaqueTermVariants = "opaqueTermVariants" :: String
