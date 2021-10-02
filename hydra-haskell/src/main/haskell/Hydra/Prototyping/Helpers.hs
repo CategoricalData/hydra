@@ -1,4 +1,6 @@
 module Hydra.Prototyping.Helpers (
+  DataError,
+  SchemaError,
   apply,
   bigfloatType,
   bigintType,
@@ -8,6 +10,11 @@ module Hydra.Prototyping.Helpers (
   compose,
   constFunction,
   deref,
+  expectRecordTerm,
+  expectStringTerm,
+  expectUnionTerm,
+  fieldsToMap,
+  fieldTypesToMap,
   float32Type,
   float64Type,
   floatType,
@@ -26,6 +33,7 @@ module Hydra.Prototyping.Helpers (
   match,
   matchWithVariants,
   nominalType,
+  requireField,
   stringTerm,
   stringType,
   stringValue,
@@ -44,6 +52,12 @@ module Hydra.Prototyping.Helpers (
 
 import Hydra.Core
 import Hydra.Graph
+import qualified Data.Map as M
+import qualified Data.Maybe as Y
+
+
+type DataError = String
+type SchemaError = String
 
 
 apply func arg = TermApplication $ Application func arg
@@ -69,6 +83,27 @@ constFunction term = lambda "_" term
 
 deref :: Name -> Term
 deref name = apply TermData $ TermElement name
+
+expectRecordTerm :: Term -> Either String [Field]
+expectRecordTerm term = case term of
+  TermRecord fields -> pure fields
+  _ -> Left $ "expected a record, got " ++ show term
+
+expectStringTerm :: Term -> Either String String
+expectStringTerm term = case term of
+  TermAtomic (AtomicValueString s) -> pure s
+  _ -> Left $ "expected a string, got " ++ show term
+
+expectUnionTerm :: Term -> Either String Field
+expectUnionTerm term = case term of
+  TermUnion field -> pure field
+  _ -> Left $ "expected a union, got " ++ show term
+
+fieldsToMap :: [Field] -> M.Map FieldName Term
+fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
+
+fieldTypesToMap :: [FieldType] -> M.Map FieldName Type
+fieldTypesToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
 
 float32Type = floatType FloatTypeFloat32
 float64Type = floatType FloatTypeFloat64
@@ -109,6 +144,11 @@ matchWithVariants = cases . fmap toField
 
 nominalType :: Name -> Type
 nominalType = TypeNominal
+
+requireField :: M.Map FieldName Term -> FieldName -> Either String Term
+requireField fields fname = Y.maybe error Right $ M.lookup fname fields
+  where
+    error = Left $ "no such field: " ++ fname
 
 stringTerm :: String -> Term
 stringTerm = TermAtomic . AtomicValueString
