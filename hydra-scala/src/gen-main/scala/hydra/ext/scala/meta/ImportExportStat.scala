@@ -8,7 +8,7 @@ enum ImportExportStat:
     /**
      * @type hydra/ext/scala/meta.Export
      */
-    case export(value: Export) extends ImportExportStat
+    case `export`(value: Export) extends ImportExportStat
 
 val _ImportExportStat: String = "hydra/ext/scala/meta.ImportExportStat"
 val _ImportExportStat_export: String = "export"
