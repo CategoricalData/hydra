@@ -22,7 +22,7 @@ case class Defn_Def(
      */
     paramss: Seq[Seq[Term_Param]],
     
-    decltpe: UNKNOWN[ScalaTypeVoid],
+    decltpe: Void,
     
     /**
      * @type hydra/ext/scala/meta.Term

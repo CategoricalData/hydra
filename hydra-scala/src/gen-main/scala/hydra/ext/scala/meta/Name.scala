@@ -6,7 +6,7 @@ case class Name(
      */
     value: String,
     
-    anonymous: UNKNOWN[ScalaTypeVoid],
+    anonymous: Void,
     
     /**
      * @type hydra/ext/scala/meta.PredefString
