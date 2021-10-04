@@ -1,4 +1,4 @@
-package hydra.evaluation
+package hydra.traversal
 
 import hydra.core.FieldName
 
@@ -33,7 +33,7 @@ enum TermStep:
     case set(value: Int) extends TermStep
     case union() extends TermStep
 
-val _TermStep: String = "hydra/evaluation.TermStep"
+val _TermStep: String = "hydra/traversal.TermStep"
 val _TermStep_applicationArgument: String = "applicationArgument"
 val _TermStep_applicationFunction: String = "applicationFunction"
 val _TermStep_case: String = "case"

@@ -18,11 +18,33 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-bidirectional :: ((Step a a -> a -> Either String a) -> b -> Either String b) -> Step b b
-bidirectional step = Step (step stepOut) (step stepIn)
+data AdapterPlan = AdapterPlan {
+  adapterPlanContext :: Context,
+  adapterPlanPipelines :: M.Map TypeVariant (AdapterPlan -> Type -> Either String (Step Term Term)) }
+
+bidirectional :: (StepDirection -> b -> Either String b) -> Step b b
+bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
 
 atomicTypePassThrough :: Context -> Type -> Either String (Step Term Term)
-atomicTypePassThrough _ _ = pure $ Step (pure . id) (pure . id)
+atomicTypePassThrough _ _ = pure idStep
+
+--createAdapterPlan :: S.Set TypeVariant -> S.Set TypeVariant -> Context -> AdapterPlan
+--createAdapterPlan sourceSupports targetSupports context =
+--  where
+--    passThroughs :: M.Map TypeVariant (AdapterPlan -> Type -> Either String (Step Term Term))
+--    passThroughs = M.fromList [
+--      (TypeVariantAtomic, atomicTypePassThrough),
+--      (TypeVariantElement, elementTypePassThrough),
+--      (TypeVariantFunction, functionTypePassThrough),
+--      (TypeVariantList, listTypePassThrough),
+--      (TypeVariantMap, mapTypePassThrough),
+--      (TypeVariantNominal, nominalTypePassThrough),
+--      (TypeVariantRecord, recordTypePassThrough),
+--      (TypeVariantSet, setTypePassThrough),
+--      (TypeVariantUnion, unionTypePassThrough)]
+
+elementTypePassThrough :: Context -> Type -> Either String (Step Term Term)
+elementTypePassThrough context (TypeElement et) = pure idStep
 
 elementTypeToStringType :: Context -> Type -> Either String (Step Term Term)
 elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
@@ -33,7 +55,23 @@ elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
 fieldAdapter :: Context -> FieldType -> Either String (Step Field Field) 
 fieldAdapter context ftyp = do
   adapter <- termAdapter context $ fieldTypeType ftyp
-  return $ bidirectional $ \dir (Field name term) -> Field <$> pure name <*> dir adapter term
+  return $ bidirectional $ \dir (Field name term) -> Field <$> pure name <*> stepEither dir adapter term
+
+functionTypePassThrough :: Context -> Type -> Either String (Step Term Term)
+functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
+    codomainStep <- termAdapter context cod
+    caseSteps <- case dom of
+      TypeUnion sfields -> (M.fromList . L.zip (fieldTypeName <$> sfields)) <$> CM.mapM (fieldAdapter context) sfields
+      _ -> pure M.empty
+    return $ bidirectional $ \dir term -> case term of
+      TermCases cases -> TermCases <$> (CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases)
+        where
+          -- Note: this causes unrecognized cases to simply be passed through;
+          --       it is not the job of this adapter to catch validation issues.
+          getStep fname = Y.fromMaybe idStep $ M.lookup fname caseSteps
+      TermCompareTo other -> TermCompareTo <$> stepEither dir codomainStep other
+      TermLambda (Lambda var body) -> TermLambda <$> (Lambda <$> pure var <*> stepEither dir codomainStep body)
+      _ -> pure term
 
 functionTypeToUnionType :: Context -> Type -> Either String (Step Term Term)
 functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
@@ -78,14 +116,14 @@ functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
 listTypePassThrough :: Context -> Type -> Either String (Step Term Term)
 listTypePassThrough context (TypeList lt) = do
   adapter <- termAdapter context lt
-  return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (dir adapter) terms
+  return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepEither dir adapter) terms
         
 mapTypePassThrough :: Context -> Type -> Either String (Step Term Term)
 mapTypePassThrough context (TypeMap (MapType kt vt)) = do
   kadapter <- termAdapter context kt
   vadapter <- termAdapter context vt
   return $ bidirectional $ \dir (TermMap m)
-    -> (TermMap . M.fromList) <$> (CM.mapM (\(k, v) -> (,) <$> dir kadapter k <*> dir vadapter v) $ M.toList m)
+    -> (TermMap . M.fromList) <$> (CM.mapM (\(k, v) -> (,) <$> stepEither dir kadapter k <*> stepEither dir vadapter v) $ M.toList m)
 
 nominalTypePassThrough :: Context -> Type -> Either String (Step Term Term)
 nominalTypePassThrough context (TypeNominal name) = do
@@ -93,12 +131,17 @@ nominalTypePassThrough context (TypeNominal name) = do
   scontext <- schemaContext context
   -- Note: we just assume the schema term is a reference to hydra/core.Type
   adapter <- requireElement scontext name >>= decodeType . elementData >>= termAdapter context
-  return $ bidirectional $ \dir -> dir adapter
+  return $ bidirectional $ \dir -> stepEither dir adapter
 
 recordTypePassThrough :: Context -> Type -> Either String (Step Term Term)
 recordTypePassThrough context (TypeRecord sfields) = do
   adapters <- CM.mapM (fieldAdapter context) sfields
-  return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord <$> (CM.mapM id $ L.zipWith dir adapters dfields)
+  return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord <$> (CM.mapM id $ L.zipWith (stepEither dir) adapters dfields)
+
+setTypePassThrough :: Context -> Type -> Either String (Step Term Term)
+setTypePassThrough context (TypeSet st) = do
+  adapter <- termAdapter context st
+  return $ bidirectional $ \dir (TermSet terms) -> (TermSet . S.fromList) <$> (CM.mapM (stepEither dir adapter) $ S.toList terms)
 
 setTypeToListType :: Context -> Type -> Either String (Step Term Term)
 setTypeToListType context (TypeSet st) = do
@@ -134,6 +177,6 @@ unionTypePassThrough context (TypeUnion sfields) = do
     adapters <- M.fromList <$> (CM.mapM (\f -> (,) <$> pure (fieldTypeName f) <*> fieldAdapter context f) sfields)
     return $ bidirectional $ \dir (TermUnion dfield) -> do
       adapter <- getMutator adapters dfield
-      TermUnion <$> dir adapter dfield
+      TermUnion <$> (stepEither dir) adapter dfield
   where
     getMutator adapters f = Y.maybe (Left $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
