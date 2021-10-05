@@ -8,7 +8,7 @@ module Hydra.Ext.Yaml.Coder (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Translation
-import qualified Hydra.Ext.Yaml.Adapter as YA
+import Hydra.Prototyping.Adapters
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Helpers
@@ -188,14 +188,14 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
 
 toYaml :: Context -> Type -> Term -> Either String YM.Node
 toYaml context typ term = do
-    adapter <- YA.termAdapter adapterContext typ -- note: mixing error types
+    adapter <- termAdapter adapterContext typ -- note: mixing error types
     stepOut adapter term >>= encodeTermForYaml typ
   where
     adapterContext = TranslationContext context hydraCoreLanguage yamlLanguage
 
 {-
 import qualified Data.Set as S
-adapter = YA.termAdapter (TypeRecord [FieldType "foo" stringType, FieldType "bar" (TypeSet stringType)])
+adapter = termAdapter (TypeRecord [FieldType "foo" stringType, FieldType "bar" (TypeSet stringType)])
 term = TermRecord [Field "foo" $ stringValue "FOOO"]
 term = TermRecord [Field "foo" $ stringValue "FOOO", Field "bar" (TermSet (S.fromList [stringValue "one", stringValue "two"]))]
 Right term
