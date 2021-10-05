@@ -8,6 +8,7 @@ module Hydra.Prototyping.Basics (
     floatValueVariant,
     floatVariantPrecision,
     floatVariants,
+    hydraCoreLanguage,
     integerTypeVariant,
     integerValueType,
     integerValueVariant,
@@ -15,12 +16,15 @@ module Hydra.Prototyping.Basics (
     integerVariantPrecision,
     integerVariants,
     termVariant,
+    termVariants,
     typeVariant,
+    typeVariants,
   ) where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Prototyping.Helpers
+import Hydra.Translation
 
 import qualified Data.List  as L
 import qualified Data.Map   as M
@@ -48,8 +52,8 @@ atomicValueVariant :: AtomicValue -> AtomicVariant
 atomicValueVariant = atomicTypeVariant . atomicValueType
 
 atomicVariants :: [AtomicVariant]
-atomicVariants =
-  [AtomicVariantBinary, AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
+atomicVariants = [
+  AtomicVariantBinary, AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
 
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
@@ -74,6 +78,11 @@ floatVariantPrecision v = case v of
 
 floatVariants :: [FloatVariant]
 floatVariants = [FloatVariantFloat32, FloatVariantFloat64, FloatVariantBigfloat]
+
+hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
+  languageConstraintsAtomicVariants = S.fromList atomicVariants,
+  languageConstraintsTermVariants = S.fromList termVariants,
+  languageConstraintsTypeVariants = S.fromList typeVariants }
 
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
@@ -146,6 +155,24 @@ termVariant term = case term of
   TermUnion _ -> TermVariantUnion
   TermVariable _ -> TermVariantVariable
 
+termVariants :: [TermVariant]
+termVariants = [
+  TermVariantApplication,
+  TermVariantAtomic,
+  TermVariantCases,
+  TermVariantCompareTo,
+  TermVariantData,
+  TermVariantElement,
+  TermVariantFunction,
+  TermVariantLambda,
+  TermVariantList,
+  TermVariantMap,
+  TermVariantProjection,
+  TermVariantRecord,
+  TermVariantSet,
+  TermVariantUnion,
+  TermVariantVariable]
+
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
   TypeAtomic _ -> TypeVariantAtomic
@@ -157,3 +184,15 @@ typeVariant typ = case typ of
   TypeRecord _ -> TypeVariantRecord
   TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
+
+typeVariants :: [TypeVariant]
+typeVariants = [
+  TypeVariantAtomic,
+  TypeVariantElement,
+  TypeVariantFunction,
+  TypeVariantList,
+  TypeVariantMap,
+  TypeVariantNominal,
+  TypeVariantRecord,
+  TypeVariantSet,
+  TypeVariantUnion]
