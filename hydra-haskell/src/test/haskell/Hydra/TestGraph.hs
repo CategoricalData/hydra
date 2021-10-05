@@ -9,7 +9,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
 

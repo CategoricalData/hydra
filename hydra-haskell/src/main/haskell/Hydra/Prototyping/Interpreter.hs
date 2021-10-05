@@ -10,7 +10,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Primitives
 
 import qualified Control.Monad as CM

@@ -1,7 +1,7 @@
 module Hydra.Prototyping.MutatorsSpec where
 
 import Hydra.Core
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Mutators
 
 import Hydra.ArbitraryCore

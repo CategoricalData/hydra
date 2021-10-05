@@ -2,7 +2,7 @@ module Hydra.Prototyping.InterpreterSpec where
 
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 

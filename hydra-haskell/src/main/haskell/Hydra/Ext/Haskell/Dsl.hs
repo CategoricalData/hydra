@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Helpers (
+module Hydra.Ext.Haskell.Dsl (
   DataError,
   SchemaError,
   apply,
