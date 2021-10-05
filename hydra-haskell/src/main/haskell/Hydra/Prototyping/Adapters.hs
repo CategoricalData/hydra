@@ -1,4 +1,4 @@
-module Hydra.Ext.Yaml.Adapter (
+module Hydra.Prototyping.Adapters (
   termAdapter,
 ) where
 
