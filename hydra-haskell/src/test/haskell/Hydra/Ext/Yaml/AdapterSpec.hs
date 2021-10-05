@@ -3,10 +3,13 @@ module Hydra.Ext.Yaml.AdapterSpec where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
+import Hydra.Translation
+import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Helpers
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 import qualified Hydra.Ext.Yaml.Adapter as YA
+import qualified Hydra.Ext.Yaml.Coder as YC
 
 import Hydra.ArbitraryCore
 import Hydra.TestGraph
@@ -19,10 +22,12 @@ import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
 
 
+yamlTestContext = TranslationContext testContext hydraCoreLanguage YC.yamlLanguage
+  
 -- Note: in a real application, you wouldn't create the adapter just to use it once;
 --       it should be created once, then applied to many terms.
 adapt typ dir term = do
-  adapter <- YA.termAdapter testContext typ
+  adapter <- YA.termAdapter yamlTestContext typ
   dir adapter term
 
 booleanElementType = TypeElement $ TypeAtomic AtomicTypeBoolean
