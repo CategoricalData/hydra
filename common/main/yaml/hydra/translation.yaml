@@ -1,0 +1,45 @@
+includes:
+  - core
+  - evaluation
+
+definitions:
+
+  - name: Language
+    type:
+      record:
+        - name: name
+          type: Language.Name
+
+        - name: constraints
+          type: Language.Constraints
+
+    innerTypes:
+      - name: Constraints
+        type:
+          record:
+            - name: atomicVariants
+              type:
+                set: core.AtomicVariant
+
+            - name: termVariants
+              type:
+                set: core.TermVariant
+
+            - name: typeVariants
+              type:
+                set: core.TypeVariant
+
+      - name: Name
+        type: string
+
+  - name: TranslationContext
+    type:
+      record:
+        - name: evaluation
+          type: evaluation.Context
+
+        - name: source
+          type: Language
+
+        - name: target
+          type: Language
