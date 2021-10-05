@@ -11,7 +11,7 @@ module Hydra.Prototyping.CoreDecoding (
   ) where
 
 import Hydra.Core
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

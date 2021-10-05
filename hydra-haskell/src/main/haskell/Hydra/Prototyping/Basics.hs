@@ -23,7 +23,7 @@ module Hydra.Prototyping.Basics (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Translation
 
 import qualified Data.List  as L

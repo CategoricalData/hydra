@@ -6,7 +6,7 @@ import Hydra.Graph
 import Hydra.Translation
 import Hydra.Prototyping.Adapters
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 

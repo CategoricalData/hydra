@@ -17,7 +17,7 @@ module Hydra.Prototyping.CoreEncoding (
   ) where
 
 import Hydra.Core
-import Hydra.Prototyping.Helpers
+import Hydra.Ext.Haskell.Dsl
 
 import qualified Data.Map as M
 import qualified Data.Set as S
