@@ -82,7 +82,7 @@ integerMutators = mutators integerVariants subst descriptions buildMap
         signedOrdered = L.filter
           (\v -> integerVariantIsSigned v && integerVariantPrecision v /= PrecisionArbitrary) integerVariants
         unsignedOrdered = L.filter
-          (\v -> (not $ integerVariantIsSigned v) && integerVariantPrecision v /= PrecisionArbitrary) integerVariants
+          (\v -> not (integerVariantIsSigned v) && integerVariantPrecision v /= PrecisionArbitrary) integerVariants
     descriptions = M.fromList $ describe <$> integerVariants
       where
         describe v = (v, precision v ++ " integers")
@@ -128,18 +128,17 @@ mutator :: (Ord v, Show v) =>
   -> S.Set v
   -> v
   -> Either String (Mutator a)
-mutator variants subst descriptions buildMap supported source = if S.member source supported
-    then Right $ Mutator id S.empty
-    else if L.null candidates
-    then Left $ "no acceptable substitute for " ++ show source
-    else do
+mutator variants subst descriptions buildMap supported source
+  | S.member source supported = Right $ Mutator id S.empty
+  | L.null candidates = Left $ "no acceptable substitute for " ++ show source
+  | otherwise = do
       mapping <- buildMap source target
       let warnings = S.fromList ["replace " ++ describe source ++ " with " ++ describe target]
       return $ Mutator mapping warnings
-  where 
-    target = L.head candidates
-    candidates = L.filter (\v -> S.member v supported) $ subst source
-    describe var = Y.fromMaybe "unknown" $ M.lookup var descriptions
+  where
+      target = L.head candidates
+      candidates = L.filter (`S.member` supported) $ subst source
+      describe var = Y.fromMaybe "unknown" $ M.lookup var descriptions
 
 mutators :: (Ord v, Show v) =>
      [v]

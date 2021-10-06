@@ -37,7 +37,7 @@ elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
 fieldAdapter :: TranslationContext -> FieldType -> Either String (Step Field Field) 
 fieldAdapter context ftyp = do
   adapter <- termAdapter context $ fieldTypeType ftyp
-  return $ bidirectional $ \dir (Field name term) -> Field <$> pure name <*> stepEither dir adapter term
+  return $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir adapter term
 
 functionTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
@@ -76,7 +76,7 @@ functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
       TermProjection fname -> variant _Term_projection $ stringValue fname
       TermVariable var -> variant _Term_lambda $ stringValue var -- TODO
     decode adapter term = do
-        (Field fname fterm) <- (stepIn adapter term >>= expectUnionTerm)
+        (Field fname fterm) <- stepIn adapter term >>= expectUnionTerm
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Term_cases, forCases fterm),
           (_Term_compareTo, forCompareTo fterm),
@@ -105,7 +105,7 @@ mapTypePassThrough context (TypeMap (MapType kt vt)) = do
   kadapter <- termAdapter context kt
   vadapter <- termAdapter context vt
   return $ bidirectional $ \dir (TermMap m)
-    -> (TermMap . M.fromList) <$> (CM.mapM (\(k, v) -> (,) <$> stepEither dir kadapter k <*> stepEither dir vadapter v) $ M.toList m)
+    -> TermMap . M.fromList <$> (CM.mapM (\(k, v) -> (,) <$> stepEither dir kadapter k <*> stepEither dir vadapter v) $ M.toList m)
 
 nominalTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 nominalTypePassThrough context (TypeNominal name) = do
@@ -123,7 +123,7 @@ recordTypePassThrough context (TypeRecord sfields) = do
 setTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 setTypePassThrough context (TypeSet st) = do
   adapter <- termAdapter context st
-  return $ bidirectional $ \dir (TermSet terms) -> (TermSet . S.fromList) <$> (CM.mapM (stepEither dir adapter) $ S.toList terms)
+  return $ bidirectional $ \dir (TermSet terms) -> TermSet . S.fromList <$> (CM.mapM (stepEither dir adapter) $ S.toList terms)
 
 setTypeToListType :: TranslationContext -> Type -> Either String (Step Term Term)
 setTypeToListType context (TypeSet st) = do
@@ -179,6 +179,6 @@ unionTypePassThrough context (TypeUnion sfields) = do
     adapters <- M.fromList <$> (CM.mapM (\f -> (,) <$> pure (fieldTypeName f) <*> fieldAdapter context f) sfields)
     return $ bidirectional $ \dir (TermUnion dfield) -> do
       adapter <- getMutator adapters dfield
-      TermUnion <$> (stepEither dir) adapter dfield
+      TermUnion <$> stepEither dir adapter dfield
   where
     getMutator adapters f = Y.maybe (Left $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters

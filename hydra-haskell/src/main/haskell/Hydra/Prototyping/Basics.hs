@@ -22,14 +22,9 @@ module Hydra.Prototyping.Basics (
   ) where
 
 import Hydra.Core
-import Hydra.Evaluation
-import Hydra.Ext.Haskell.Dsl
 import Hydra.Translation
 
-import qualified Data.List  as L
-import qualified Data.Map   as M
 import qualified Data.Set   as S
-import qualified Data.Maybe as Y
 
 
 atomicTypeVariant :: AtomicType -> AtomicVariant

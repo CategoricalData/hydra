@@ -5,7 +5,6 @@ module Hydra.Ext.Scala.Prepare (
 
 import Hydra.Core
 
-import qualified Data.List as L
 import qualified Data.Set as S
 
 
@@ -59,6 +58,8 @@ prepareType typ = case typ of
 --  TypeSet st ->
 --  TypeUnion fields ->
 
+same :: a -> (a, b -> b, S.Set c)
 same x = (x, id, S.empty)
 
+subst :: a -> [Char] -> [Char] -> b -> (a, b, S.Set [Char])
 subst t from to r = (t, r, S.fromList ["replace " ++ from ++ " with " ++ to])

@@ -11,7 +11,6 @@ import Hydra.Prototyping.CoreEncoding
 
 import qualified Data.List as L
 import qualified Data.Map  as M
-import qualified Data.Set  as S
 
 
 -- Check whether a term conforms to a type
@@ -53,7 +52,7 @@ checkType context typ term = check M.empty typ term
 
       TermCases cases -> case typ of
         TypeFunction (FunctionType dom cod) -> case dom of
-          TypeUnion fields -> L.foldl (&&) True $ fmap checkCase cases
+          TypeUnion fields -> and $ fmap checkCase cases
             where
               checkCase (Field fn term) = case matchingField fn fields of
                 Nothing -> False
@@ -61,12 +60,10 @@ checkType context typ term = check M.empty typ term
         _ -> False
 
       TermCompareTo other -> case typ of
-        TypeFunction (FunctionType dom cod) -> if dom /= cod
-          then False
-          else check bindings dom other
+        TypeFunction (FunctionType dom cod) -> dom == cod && check bindings dom other
 
       TermData -> case typ of
-        TypeFunction (FunctionType dom cod) -> case dom of
+        TypeFunction (FunctionType dom _) -> case dom of
           TypeElement t -> t == dom
           _ -> False
         _ -> False
@@ -79,7 +76,7 @@ checkType context typ term = check M.empty typ term
 
       TermFunction fn -> case lookupPrimitiveFunction context fn of
           Nothing -> False
-          Just prim -> typ == (TypeFunction $ primitiveFunctionType prim)
+          Just prim -> typ == TypeFunction (primitiveFunctionType prim)
 
       TermLambda (Lambda v b) -> case typ of
         TypeFunction (FunctionType dom cod) -> check bindings' cod b
@@ -88,7 +85,7 @@ checkType context typ term = check M.empty typ term
         _ -> False
 
       TermList list -> case typ of
-        TypeList lt -> L.foldl (&&) True $ fmap (check bindings lt) list
+        TypeList lt -> and $ fmap (check bindings lt) list
         _ -> False
 
       TermProjection fn -> case typ of
@@ -118,11 +115,6 @@ checkType context typ term = check M.empty typ term
         Just t -> t == typ
 
     sameLength l1 l2 = L.length l1 == L.length l2
-
-    matchingDataField :: FieldName -> [Field] -> Maybe Field
-    matchingDataField fn fields = if L.null matches then Nothing else Just (L.head matches)
-      where
-        matches = L.filter (\f -> fieldName f == fn) fields
 
     matchingField :: FieldName -> [FieldType] -> Maybe FieldType
     matchingField fn fields = if L.null matches then Nothing else Just (L.head matches)

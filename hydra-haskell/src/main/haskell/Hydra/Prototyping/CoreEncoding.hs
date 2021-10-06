@@ -37,7 +37,7 @@ encodeAtomicType at = case at of
   AtomicTypeString -> unitVariant _AtomicType_string
 
 encodeAtomicValue :: AtomicValue -> Term
-encodeAtomicValue av = TermAtomic av
+encodeAtomicValue = TermAtomic
 
 encodeAtomicVariant :: AtomicVariant -> Term
 encodeAtomicVariant av = unitVariant $ case av of

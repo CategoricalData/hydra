@@ -40,7 +40,7 @@ booleanElementDataType = functionType booleanElementType booleanType
 concatType = functionType stringType $ functionType stringType stringType
 compareStringsType = functionType stringType stringType
 exampleProjectionType = functionType latLonType int64Type
-latLonType = TypeRecord [FieldType "lat" $ int64Type, FieldType "lon" $ int64Type]
+latLonType = TypeRecord [FieldType "lat" int64Type, FieldType "lon" int64Type]
 listOfSetOfStringsType = TypeList $ TypeSet stringType
 listOfStringsType = TypeList stringType
 latlonRecord lat lon = TermRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
@@ -50,7 +50,7 @@ setOfStringsType = TypeSet stringType
 stringAliasType = TypeNominal "StringTypeAlias"
 stringList strings = TermList $ stringValue <$> strings
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
-stringSet strings = TermSet $ S.fromList $ stringValue <$> (S.toList strings)
+stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
 
 supportedConstructorsAreUnchanged = do
   H.describe "Verify that supported term constructors are unchanged" $ do
