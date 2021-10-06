@@ -16,6 +16,7 @@ basicsFunction name dom cod dat = basicsElement name typ dat
   where
     typ = functionType (nominalType dom) (nominalType cod)
 
+basicsGraph :: Graph
 basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
   where
     dataTerms = \t -> True -- TODO
@@ -34,6 +35,7 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
         typeVariant]
 
 
+atomicTypeVariant :: Element
 atomicTypeVariant = basicsFunction "atomicTypeVariant" _AtomicType _AtomicVariant $
   matchWithVariants [
     (_AtomicType_binary,  _AtomicVariant_binary),
@@ -42,6 +44,7 @@ atomicTypeVariant = basicsFunction "atomicTypeVariant" _AtomicType _AtomicVarian
     (_AtomicType_integer, _AtomicVariant_integer),
     (_AtomicType_string,  _AtomicVariant_string)]
 
+atomicValueType :: Element
 atomicValueType = basicsFunction "atomicValueType" _AtomicValue _AtomicType $
   match [
     (_AtomicValue_binary,  withVariant  _AtomicType_binary),
@@ -50,24 +53,29 @@ atomicValueType = basicsFunction "atomicValueType" _AtomicValue _AtomicType $
     (_AtomicValue_integer, withFunction _AtomicType_integer integerValueType),
     (_AtomicValue_string,  withVariant  _AtomicType_string)]
 
+atomicValueVariant :: Element
 atomicValueVariant = basicsFunction "atomicValueVariant" _AtomicValue _AtomicVariant $
   compose (funcRef atomicTypeVariant) (funcRef atomicValueType)
 
+floatTypeVariant :: Element
 floatTypeVariant = basicsFunction "floatTypeVariant" _FloatType _FloatVariant $
   matchWithVariants [
     (_FloatType_bigfloat, _FloatVariant_bigfloat),
     (_FloatType_float32,  _FloatVariant_float32),
     (_FloatType_float64,  _FloatVariant_float64)]
 
+floatValueType :: Element
 floatValueType = basicsFunction "floatValueType" _FloatValue _FloatType $
   matchWithVariants [
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
 
+floatValueVariant :: Element
 floatValueVariant = basicsFunction "floatValueVariant" _FloatValue _FloatVariant $
   compose (funcRef floatTypeVariant) (funcRef floatValueType)
 
+integerTypeVariant :: Element
 integerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _IntegerVariant $
   matchWithVariants [
     (_IntegerType_bigint, _IntegerVariant_bigint),
@@ -80,6 +88,7 @@ integerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _IntegerVa
     (_IntegerType_uint32, _IntegerVariant_uint32),
     (_IntegerType_uint64, _IntegerVariant_uint64)]
 
+integerValueType :: Element
 integerValueType = basicsFunction "integerValueType"_IntegerValue _IntegerType $
   matchWithVariants [
     (_IntegerValue_bigint, _IntegerValue_bigint),
@@ -92,9 +101,11 @@ integerValueType = basicsFunction "integerValueType"_IntegerValue _IntegerType $
     (_IntegerValue_uint32, _IntegerValue_uint32),
     (_IntegerValue_uint64, _IntegerValue_uint64)]
 
+integerValueVariant :: Element
 integerValueVariant = basicsFunction "integerValueVariant" _IntegerValue _IntegerVariant $
   compose (funcRef integerTypeVariant) (funcRef integerValueType)
 
+termVariant :: Element
 termVariant = basicsFunction "termVariant" _Term _TermVariant $
   matchWithVariants [
     (_Term_atomic,     _TermVariant_atomic),
@@ -112,6 +123,7 @@ termVariant = basicsFunction "termVariant" _Term _TermVariant $
     (_Term_union,      _TermVariant_union),
     (_Term_variable,   _TermVariant_variable)]
 
+typeVariant :: Element
 typeVariant = basicsFunction "typeVariant" _Type _TypeVariant $
   matchWithVariants [
     (_Type_atomic,   _TypeVariant_atomic),

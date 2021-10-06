@@ -13,7 +13,7 @@ data Step a b = Step {
   stepIn :: b -> Either String a }
 
 idStep :: Step a a
-idStep = Step (pure . id) (pure . id)
+idStep = Step pure pure
 
 stepEither :: StepDirection -> Step a a -> a -> Either String a
 stepEither dir = case dir of

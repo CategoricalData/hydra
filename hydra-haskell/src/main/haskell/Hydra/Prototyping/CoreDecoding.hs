@@ -11,7 +11,6 @@ module Hydra.Prototyping.CoreDecoding (
   ) where
 
 import Hydra.Core
-import Hydra.Ext.Haskell.Dsl
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -22,8 +21,8 @@ decodeAtomicType :: Term -> Either String AtomicType
 decodeAtomicType = matchUnion [
   matchUnitField _AtomicType_binary AtomicTypeBinary,
   matchUnitField _AtomicType_boolean AtomicTypeBoolean,
-  (_AtomicType_float, \t -> AtomicTypeFloat <$> decodeFloatType t),
-  (_AtomicType_integer, \t -> AtomicTypeInteger <$> decodeIntegerType t),
+  (_AtomicType_float, fmap AtomicTypeFloat . decodeFloatType),
+  (_AtomicType_integer, fmap AtomicTypeInteger . decodeIntegerType),
   matchUnitField _AtomicType_string AtomicTypeString]
 
 decodeFieldType :: Term -> Either String FieldType
@@ -34,7 +33,7 @@ decodeFieldType = matchRecord $ \m -> FieldType
 decodeFieldTypes :: Term -> Either String [FieldType]
 decodeFieldTypes term = case term of
   TermList els -> CM.mapM decodeFieldType els
-  _ -> Left $ "expected a list"
+  _ -> Left "expected a list"
 
 decodeFloatType :: Term -> Either String FloatType
 decodeFloatType = matchEnum [
@@ -68,20 +67,20 @@ decodeString :: Term -> Either String String
 decodeString term = case term of
   TermAtomic av -> case av of
     AtomicValueString s -> pure s
-    _ -> Left $ "expected a string value"
-  _ -> Left $ "expected an atomic value"
+    _ -> Left "expected a string value"
+  _ -> Left "expected an atomic value"
 
 decodeType :: Term -> Either String Type
 decodeType = matchUnion [
-    (_Type_atomic, \t -> TypeAtomic <$> decodeAtomicType t),
-    (_Type_element, \t -> TypeElement <$> decodeType t),
-    (_Type_function, \t -> TypeFunction <$> decodeFunctionType t),
-    (_Type_list, \t -> TypeList <$> decodeType t),
-    (_Type_map, \t -> TypeMap <$> decodeMapType t), 
-    (_Type_nominal, \t -> TypeNominal <$> decodeString t), 
-    (_Type_record, \t -> TypeRecord <$> decodeFieldTypes t),
-    (_Type_set, \t -> TypeSet <$> decodeType t),
-    (_Type_union, \t -> TypeUnion <$> decodeFieldTypes t)]
+    (_Type_atomic, fmap TypeAtomic . decodeAtomicType),
+    (_Type_element, fmap TypeElement . decodeType),
+    (_Type_function, fmap TypeFunction . decodeFunctionType),
+    (_Type_list, fmap TypeList . decodeType),
+    (_Type_map, fmap TypeMap . decodeMapType), 
+    (_Type_nominal, fmap TypeNominal . decodeString), 
+    (_Type_record, fmap TypeRecord . decodeFieldTypes),
+    (_Type_set, fmap TypeSet . decodeType),
+    (_Type_union, fmap TypeUnion . decodeFieldTypes)]
 
 getField :: M.Map FieldName Term -> FieldName -> (Term -> Either String a) -> Either String a
 getField m fname decode = case M.lookup fname m of
@@ -89,7 +88,7 @@ getField m fname decode = case M.lookup fname m of
   Just val -> decode val
 
 matchEnum :: [(FieldName, a)] -> Term -> Either String a
-matchEnum = matchUnion . fmap (\(n, v) -> matchUnitField n v)
+matchEnum = matchUnion . fmap (uncurry matchUnitField)
 
 matchRecord :: (M.Map FieldName Term -> Either String a) -> Term -> Either String a
 matchRecord decode term = case term of
@@ -101,13 +100,10 @@ matchUnion pairs term = case term of
     TermUnion (Field fname val) -> case M.lookup fname mapping of
       Nothing -> Left $ "no matching case for field " ++ show fname
       Just f -> f val
-    _ -> Left $ "expected a union with one of {" ++ (L.concat $ L.intersperse ", " $ fst <$> pairs) ++ "}"
+    _ -> Left $ "expected a union with one of {" ++ L.intercalate ", " (fst <$> pairs) ++ "}"
       ++ ". Got: " ++ show term
   where
     mapping = M.fromList pairs
 
 matchUnitField :: FieldName -> b -> (FieldName, a -> Either String b)
 matchUnitField fname x = (fname, \_ -> pure x)
-
-matchVariant :: FieldName -> (Term -> Either String a) -> Term -> Either String a
-matchVariant fname decode = matchUnion [(fname, decode)]

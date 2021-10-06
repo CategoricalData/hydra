@@ -20,10 +20,10 @@ individualEncoderTestCases = do
   H.describe "Individual encoder test cases" $ do
     
     H.it "string atomic type" $ do
-      (encodeAtomicType $ AtomicTypeString) `H.shouldBe` (unitVariant _AtomicType_string)
+      (encodeAtomicType AtomicTypeString) `H.shouldBe` unitVariant _AtomicType_string
 
     H.it "string type" $ do
-      (encodeType stringType) `H.shouldBe` (variant _Term_atomic $ unitVariant _AtomicType_string)
+      encodeType stringType `H.shouldBe` variant _Term_atomic (unitVariant _AtomicType_string)
 
     H.it "int32 type" $ do
       (encodeType int32Type) `H.shouldBe`
@@ -47,8 +47,8 @@ individualDecoderTestCases = do
         (Right $ AtomicTypeFloat $ FloatTypeFloat32)
 
     H.it "float32 type" $ do
-      (decodeType $ variant _Type_atomic $ variant _AtomicType_float $ unitVariant _FloatType_float32) `H.shouldBe`
-        (Right float32Type)
+      (decodeType (variant _Type_atomic $ variant _AtomicType_float $ unitVariant _FloatType_float32))
+        `H.shouldBe` (Right float32Type)
         
     H.it "union type" $ do
       (decodeType $ variant _Type_union $ TermList [

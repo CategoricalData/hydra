@@ -11,13 +11,11 @@ import Hydra.Translation
 import Hydra.Prototyping.Adapters
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Prototyping.Basics
-import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Steps
 import qualified Hydra.Prototyping.CoreEncoding as CE
 
 import qualified Control.Monad as CM
 import Data.Function ((&))
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -33,18 +31,22 @@ atomicCoders :: [Varcoder AtomicVariant AtomicValue YM.Node]
 atomicCoders = [
   Varcoder AtomicVariantBinary "binary" notImplemented notImplemented,
   Varcoder AtomicVariantBoolean "boolean"
-    (\av -> case av of AtomicValueBoolean b -> encodeBooleanValue b)
-    (\n -> AtomicValueBoolean <$> decodeBooleanValue n),
+    (\(AtomicValueBoolean b) -> encodeBooleanValue b)
+    (fmap AtomicValueBoolean . decodeBooleanValue),
   Varcoder AtomicVariantFloat "float"
-    (\av -> case av of AtomicValueFloat fv -> encodeFloatValue fv)
-    (\n -> AtomicValueFloat <$> decodeFloatValue n),
+    (\(AtomicValueFloat fv) -> encodeFloatValue fv)
+    (fmap AtomicValueFloat . decodeFloatValue),
   Varcoder AtomicVariantInteger "integer"
-    (\av -> case av of AtomicValueInteger iv -> encodeIntegerValue iv)
-    (\n -> AtomicValueInteger <$> decodeIntegerValue n),
+    (\(AtomicValueInteger iv) -> encodeIntegerValue iv)
+    (fmap AtomicValueInteger . decodeIntegerValue),
   Varcoder AtomicVariantString "string"
-    (\av -> case av of AtomicValueString s -> encodeStringValue s)
-    (\n -> AtomicValueString <$> decodeStringValue n)]
+    (\(AtomicValueString s) -> encodeStringValue s)
+    (fmap AtomicValueString . decodeStringValue)]
+
+atomicCodersByName :: M.Map String (Varcoder AtomicVariant AtomicValue YM.Node)
 atomicCodersByName = codersByName atomicCoders
+
+atomicCodersByVariant :: M.Map AtomicVariant (Varcoder AtomicVariant AtomicValue YM.Node)
 atomicCodersByVariant = codersByVariant atomicCoders
 
 codersByName :: [Varcoder v t1 t2] -> M.Map String (Varcoder v t1 t2)
@@ -55,7 +57,7 @@ codersByVariant coders = M.fromList $ (\c -> (coderVariant c, c)) <$> coders
 
 decodeAtomicValue :: AtomicVariant -> YM.Node -> Either String AtomicValue
 decodeAtomicValue var n = do
-  (coderDecode <$> lookupCoderByVariant atomicCodersByVariant var)
+  coderDecode <$> lookupCoderByVariant atomicCodersByVariant var
   >>= (n &)
 
 decodeBooleanValue :: YM.Node -> Either String BooleanValue
@@ -72,8 +74,7 @@ decodeStringValue n = expectScalar n >>= expectString
 
 encodeAtomicValue :: AtomicValue -> Either String YM.Node
 encodeAtomicValue av =
-  (coderEncode <$> lookupCoderByVariant atomicCodersByVariant (atomicValueVariant av))
-  >>= (av &)
+  lookupCoderByVariant atomicCodersByVariant (atomicValueVariant av) >>= (av &) . coderEncode
 
 encodeBooleanValue :: BooleanValue -> Either String YM.Node
 encodeBooleanValue = Right . YM.NodeScalar . YM.ScalarBool . toBool
@@ -131,7 +132,11 @@ floatCoders = [
   Varcoder FloatVariantBigfloat "bigfloat" notImplemented notImplemented,
   Varcoder FloatVariantFloat32 "float32" notImplemented notImplemented,
   Varcoder FloatVariantFloat64 "float64" notImplemented notImplemented]
+
+floatCodersByName :: M.Map String (Varcoder FloatVariant FloatValue YM.Node)
 floatCodersByName = codersByName floatCoders
+
+floatCodersByVariant :: M.Map FloatVariant (Varcoder FloatVariant FloatValue YM.Node)
 floatCodersByVariant = codersByVariant floatCoders
 
 integerCoders :: [Varcoder IntegerVariant IntegerValue YM.Node]
@@ -145,7 +150,11 @@ integerCoders = [
   Varcoder IntegerVariantUint16 "uint16" notImplemented notImplemented,
   Varcoder IntegerVariantUint32 "uint32" notImplemented notImplemented,
   Varcoder IntegerVariantUint64 "uint64" notImplemented notImplemented]
+
+integerCodersByName :: M.Map String (Varcoder IntegerVariant IntegerValue YM.Node)
 integerCodersByName = codersByName integerCoders
+
+integerCodersByVariant :: M.Map IntegerVariant (Varcoder IntegerVariant IntegerValue YM.Node)
 integerCodersByVariant = codersByVariant integerCoders
 
 lookupCoderByName :: M.Map String a -> String -> Either String a
@@ -159,7 +168,7 @@ notImplemented _ = Left "not yet implemented"
 termCoders :: [Varcoder TermVariant Term YM.Node]
 termCoders = [
   Varcoder TermVariantAtomic "atomic"
-    (\t -> case t of TermAtomic av -> encodeAtomicValue av)
+    (\(TermAtomic av) -> encodeAtomicValue av)
 --    (\n -> TermAtomic <$> decodeAtomicValue n),
     notImplemented,
   Varcoder TermVariantList "list" notImplemented notImplemented,
@@ -167,10 +176,17 @@ termCoders = [
   Varcoder TermVariantRecord "record" notImplemented notImplemented,
   Varcoder TermVariantSet "set" notImplemented notImplemented,
   Varcoder TermVariantUnion "union" notImplemented notImplemented]
+
+termCodersByName :: M.Map String (Varcoder TermVariant Term YM.Node)
 termCodersByName = codersByName termCoders
+
+termCodersByVariant :: M.Map TermVariant (Varcoder TermVariant Term YM.Node)
 termCodersByVariant = codersByVariant termCoders
 
+unknownVariant :: [Char] -> Either [Char] b
 unknownVariant name = Left $ "Unknown variant: " ++ name
+
+unsupportedVariant :: Show a => a -> Either [Char] b
 unsupportedVariant v = Left $ "Unsupported variant: " ++ show v
 
 stringNode :: String -> YM.Node
@@ -206,7 +222,7 @@ stepOut adapter term >>= stepIn adapter
 encodeTermForYaml :: Type -> Term -> Either String YM.Node
 encodeTermForYaml typ term = case term of
     TermAtomic av -> pure $ YM.NodeScalar $ YM.ScalarStr $ show av
-    TermRecord fields -> (YM.NodeMapping . M.fromList) <$> CM.mapM toPair fields
+    TermRecord fields -> YM.NodeMapping . M.fromList <$> CM.mapM toPair fields
       where
         toPair (Field name term) = do
           term' <- encodeTermForYaml typ term

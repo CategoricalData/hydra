@@ -104,7 +104,7 @@ arbitraryTerm n = QC.oneof [
     TermLambda <$> (Lambda <$> QC.arbitrary <*> arbitraryTerm n'),
     TermList <$> arbitraryList arbitraryTerm n',
     TermMap <$> (M.fromList <$>
-      arbitraryList (\m -> arbitraryPair (\x y -> (x, y)) arbitraryTerm m) n'),
+      arbitraryList (arbitraryPair (,) arbitraryTerm) n'),
     TermProjection <$> QC.arbitrary,
     TermRecord <$> arbitraryList arbitraryField n',
     TermSet <$> (S.fromList <$> arbitraryList arbitraryTerm n'),

@@ -11,10 +11,8 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 
-import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-import qualified Data.Set as S
 
 
 getGraph :: GraphSet -> GraphName -> Either String Graph
@@ -31,7 +29,7 @@ lookupPrimitiveFunction context fn = M.lookup fn $ contextFunctions context
 primitiveFunctionArity :: PrimitiveFunction -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
   where
-    arity (FunctionType dom cod) = 1 + case cod of
+    arity (FunctionType _ cod) = 1 + case cod of
       TypeFunction ft -> arity ft
       _ -> 0
 

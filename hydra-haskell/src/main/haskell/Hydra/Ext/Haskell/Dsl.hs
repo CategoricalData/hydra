@@ -54,15 +54,20 @@ import Hydra.Core
 import Hydra.Graph
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
+import Data.Int
 
 
 type DataError = String
 type SchemaError = String
 
 
+apply :: Term -> Term -> Term
 apply func arg = TermApplication $ Application func arg
 
+bigfloatType :: Type
 bigfloatType = floatType FloatTypeBigfloat
+
+bigintType :: Type
 bigintType = integerType IntegerTypeBigint
 
 booleanTerm :: Bool -> Term
@@ -75,11 +80,11 @@ cases :: [Field] -> Term
 cases = TermCases
 
 compose :: Term -> Term -> Term
-compose f2 f1 = lambda var $ apply f2 $ (apply f1 (variable var))
+compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
   where var = "x"
 
 constFunction :: Term -> Term
-constFunction term = lambda "_" term
+constFunction = lambda "_"
 
 deref :: Name -> Term
 deref name = apply TermData $ TermElement name
@@ -105,8 +110,13 @@ fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> field
 fieldTypesToMap :: [FieldType] -> M.Map FieldName Type
 fieldTypesToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
 
+float32Type :: Type
 float32Type = floatType FloatTypeFloat32
+
+float64Type :: Type
 float64Type = floatType FloatTypeFloat64
+
+floatType :: FloatType -> Type
 floatType = TypeAtomic . AtomicTypeFloat
 
 funcRef :: Element -> Term
@@ -118,12 +128,25 @@ function = TermFunction
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
 
+int8Type :: Type
 int8Type = integerType IntegerTypeInt8
+
+int16Type :: Type
 int16Type = integerType IntegerTypeInt16
+
+int32Type :: Type
 int32Type = integerType IntegerTypeInt32
+
+int32Value :: Int -> Term
 int32Value = TermAtomic . AtomicValueInteger . IntegerValueInt32
+
+int64Type :: Type
 int64Type = integerType IntegerTypeInt64
+
+int64Value :: Int64 -> Term
 int64Value = TermAtomic . AtomicValueInteger . IntegerValueInt64
+
+integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger
 
 lambda :: Variable -> Term -> Term
@@ -159,9 +182,16 @@ stringType = TypeAtomic AtomicTypeString
 stringValue :: String -> Term
 stringValue = TermAtomic . AtomicValueString
 
+uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16
+
+uint32Type :: Type
 uint32Type = integerType IntegerTypeUint32
+
+uint64Type :: Type
 uint64Type = integerType IntegerTypeUint64
+
+uint8Type :: Type
 uint8Type = integerType IntegerTypeUint8
 
 unitTerm :: Term

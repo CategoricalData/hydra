@@ -17,7 +17,6 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-import qualified Data.Maybe as Y
 
 
 -- | A beta reduction function which is designed for safety, not speed.
@@ -32,7 +31,7 @@ evaluate context term = reduce M.empty term
       Nothing -> Left $ "referenced element does not exist in graph: " ++ en
       Just e -> Right $ elementData e
 
-    reduce :: (M.Map Variable Term) -> Term -> Either String Term
+    reduce :: M.Map Variable Term -> Term -> Either String Term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then Right term
       else case term of
@@ -43,7 +42,7 @@ evaluate context term = reduce M.empty term
         TermData -> done
         TermElement _ -> done
         TermFunction _ -> done
-        TermLambda (Lambda v body) -> (TermLambda . Lambda v) <$> reduceb body
+        TermLambda (Lambda v body) -> TermLambda . Lambda v <$> reduceb body
         TermList terms -> TermList <$> CM.mapM reduceb terms
         TermMap map -> TermMap <$> (fmap M.fromList $ CM.mapM reducePair $ M.toList map)
           where
@@ -61,7 +60,7 @@ evaluate context term = reduce M.empty term
         reduceField (Field n t) = Field n <$> reduceb t
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
-    reduceApplication :: (M.Map Variable Term) -> [Term] -> Term -> Either String Term
+    reduceApplication :: M.Map Variable Term -> [Term] -> Term -> Either String Term
     reduceApplication bindings args f = if L.null args then pure f else case f of
       TermApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
@@ -76,29 +75,29 @@ evaluate context term = reduce M.empty term
             where
               matching = L.filter (\c -> fieldName c == fname) cases
           _ -> Left $ "tried to apply a case statement to a non- union term: " ++ show arg
-          
+
       TermData -> do
           arg <- reduce bindings $ L.head args
           case arg of
             TermElement name -> dereferenceElement name
               >>= reduce bindings
               >>= reduceApplication bindings (L.tail args)
-            _ -> Left $ "tried to apply data (delta) to a non- element reference"
+            _ -> Left "tried to apply data (delta) to a non- element reference"
 
       TermFunction name -> do
            prim <- requirePrimitiveFunction context name
            let arity = primitiveFunctionArity prim
            if L.length args >= arity
              then (mapM (reduce bindings) $ L.take arity args)
-               >>= (\args -> reduce bindings $ primitiveFunctionImplementation prim args)
-               >>= (reduceApplication bindings (L.drop arity args))
+               >>= (reduce bindings . primitiveFunctionImplementation prim)
+               >>= reduceApplication bindings (L.drop arity args)
              else unwind
          where
            unwind = Right $ L.foldl apply f args
 
       TermLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
         >>= reduceApplication bindings (L.tail args)
-  
+
       _ -> Left $ "tried to apply a non-function: " ++ show (termVariant f)
 
 freeVariables :: Term -> S.Set Variable
@@ -119,7 +118,7 @@ freeVariables term = S.fromList $ free S.empty term
       TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
       TermSet terms -> L.concatMap (free bound) terms
       TermUnion field -> free bound $ fieldTerm field
-      TermVariable v -> if S.member v bound then [] else [v]
+      TermVariable v -> [v | not (S.member v bound)]
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term -> Bool
