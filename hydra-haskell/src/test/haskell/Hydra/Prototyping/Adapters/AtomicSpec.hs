@@ -1,13 +1,14 @@
 module Hydra.Prototyping.Adapters.AtomicSpec where
 
 import Hydra.Core
+import Hydra.Errors
 import Hydra.Prototyping.Adapters.Atomic
 
-import qualified Data.Either as E
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
+import qualified Data.Maybe as Y
 
 
 testFloatMutators :: H.SpecWith ()
@@ -26,7 +27,7 @@ testFloatMutators = do
     H.it "bigfloat is supported and remains unchanged" $
       QC.property $ \d -> mutateFloatValue m2 (FloatValueBigfloat d) == FloatValueBigfloat d
   where
-    muts = E.fromRight M.empty . floatMutators . S.fromList
+    muts = Y.fromMaybe M.empty . qualifiedValue . floatMutators . S.fromList
     m1 = muts [FloatVariantFloat32, FloatVariantFloat64]
     m2 = muts [FloatVariantFloat32, FloatVariantBigfloat]
     m3 = muts [FloatVariantBigfloat]
@@ -51,7 +52,7 @@ testIntegerMutators = do
     H.it "downgrade bigint to int32, not uint32" $
       QC.property $ \i -> mutateIntegerValue m4 (IntegerValueBigint i) == IntegerValueInt32 (fromIntegral i)
   where
-    muts = E.fromRight M.empty . integerMutators . S.fromList
+    muts = Y.fromMaybe M.empty . qualifiedValue . integerMutators . S.fromList
     m1 = muts [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantBigint]
     m2 = muts [IntegerVariantInt16, IntegerVariantInt32, IntegerVariantBigint]
     m3 = muts [IntegerVariantUint16, IntegerVariantInt32]
@@ -62,4 +63,3 @@ spec = do
   testFloatMutators
   testIntegerMutators
 --  testAtomicMutators
---  testTermMutators
