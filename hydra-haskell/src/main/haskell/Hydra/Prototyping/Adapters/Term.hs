@@ -22,24 +22,24 @@ import qualified Data.Maybe as Y
 bidirectional :: (StepDirection -> b -> Either String b) -> Step b b
 bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
 
-atomicTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+atomicTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 atomicTypePassThrough _ _ = pure idStep
 
-elementTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+elementTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 elementTypePassThrough context (TypeElement et) = pure idStep
 
-elementTypeToStringType :: TranslationContext -> Type -> Qualified (Step Term Term)
+elementTypeToStringType :: AdapterContext -> Type -> Qualified (Step Term Term)
 elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
   where
     encode (TermElement name) = pure $ stringValue name
     decode (TermAtomic (AtomicValueString name)) = pure $ TermElement name
 
-fieldAdapter :: TranslationContext -> FieldType -> Qualified (Step Field Field)
+fieldAdapter :: AdapterContext -> FieldType -> Qualified (Step Field Field)
 fieldAdapter context ftyp = do
   adapter <- termAdapter context $ fieldTypeType ftyp
   return $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir adapter term
 
-functionTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+functionTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
     codomainStep <- termAdapter context cod
     caseSteps <- case dom of
@@ -55,7 +55,7 @@ functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
       TermLambda (Lambda var body) -> TermLambda <$> (Lambda <$> pure var <*> stepEither dir codomainStep body)
       _ -> pure term
 
-functionTypeToUnionType :: TranslationContext -> Type -> Qualified (Step Term Term)
+functionTypeToUnionType :: AdapterContext -> Type -> Qualified (Step Term Term)
 functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
     adapter <- termAdapter context $ TypeUnion [
       FieldType _Term_cases stringType, -- TODO (TypeRecord cases)
@@ -95,12 +95,12 @@ functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
         forProjection fterm = TermProjection <$> expectStringTerm fterm
         forVariable fterm = TermVariable <$> expectStringTerm fterm -- TODO
 
-listTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+listTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 listTypePassThrough context (TypeList lt) = do
   adapter <- termAdapter context lt
   return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepEither dir adapter) terms
 
-mapTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+mapTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 mapTypePassThrough context (TypeMap (MapType kt vt)) = do
   kadapter <- termAdapter context kt
   vadapter <- termAdapter context vt
@@ -109,29 +109,29 @@ mapTypePassThrough context (TypeMap (MapType kt vt)) = do
       <$> CM.mapM (\(k, v) -> (,) <$> stepEither dir kadapter k <*> stepEither dir vadapter v)
         (M.toList m)
 
-nominalTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+nominalTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 nominalTypePassThrough context (TypeNominal name) = do
     typ <- eitherToQualified $ do
       -- TODO: precompute the schema graph; don't construct it anew for each adapter
-      scontext <- schemaContext $ translationContextEvaluation context
+      scontext <- schemaContext $ adapterContextEvaluation context
       -- Note: we just assume the schema term is a reference to hydra/core.Type
       requireElement scontext name >>= decodeType . elementData
     adapter <- termAdapter context typ
     return $ bidirectional $ \dir -> stepEither dir adapter
 
-recordTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+recordTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 recordTypePassThrough context (TypeRecord sfields) = do
   adapters <- CM.mapM (fieldAdapter context) sfields
   return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord
     <$> CM.zipWithM (stepEither dir) adapters dfields
 
-setTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+setTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 setTypePassThrough context (TypeSet st) = do
   adapter <- termAdapter context st
   return $ bidirectional $ \dir (TermSet terms) -> TermSet . S.fromList
     <$> CM.mapM (stepEither dir adapter) (S.toList terms)
 
-setTypeToListType :: TranslationContext -> Type -> Qualified (Step Term Term)
+setTypeToListType :: AdapterContext -> Type -> Qualified (Step Term Term)
 setTypeToListType context (TypeSet st) = do
     adapter <- termAdapter context $ TypeList st
     return $ Step (encode adapter) (decode adapter)
@@ -148,7 +148,7 @@ setTypeToListType context (TypeSet st) = do
 --
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
-termAdapter :: TranslationContext -> Type -> Qualified (Step Term Term)
+termAdapter :: AdapterContext -> Type -> Qualified (Step Term Term)
 termAdapter context typ = if (not $ isRelevant var)
     then pure idStep
     else if isSupported var
@@ -157,13 +157,13 @@ termAdapter context typ = if (not $ isRelevant var)
     then Qualified Nothing ["no adapter could be constructed for " ++ show var]
     else snd (L.head alts) context typ
   where
-    source = translationContextSource context
-    target = translationContextTarget context
+    source = adapterContextSource context
+    target = adapterContextTarget context
     var = typeVariant typ
     isSupported var = S.member var $ languageConstraintsTypeVariants $ languageConstraints target
     isRelevant var = S.member var $ languageConstraintsTypeVariants $ languageConstraints source
     alts = L.filter (\p -> isSupported $ fst p) $ Y.fromMaybe [] $ M.lookup var mutators
-    passThroughs :: M.Map TypeVariant (TranslationContext -> Type -> Qualified (Step Term Term))
+    passThroughs :: M.Map TypeVariant (AdapterContext -> Type -> Qualified (Step Term Term))
     passThroughs = M.fromList [
       (TypeVariantAtomic, atomicTypePassThrough),
       (TypeVariantElement, elementTypePassThrough),
@@ -174,13 +174,13 @@ termAdapter context typ = if (not $ isRelevant var)
       (TypeVariantRecord, recordTypePassThrough),
       (TypeVariantSet, setTypePassThrough),
       (TypeVariantUnion, unionTypePassThrough)]
-    mutators :: M.Map TypeVariant [(TypeVariant, TranslationContext -> Type -> Qualified (Step Term Term))]
+    mutators :: M.Map TypeVariant [(TypeVariant, AdapterContext -> Type -> Qualified (Step Term Term))]
     mutators = M.fromList [
       (TypeVariantElement, [(TypeVariantAtomic, elementTypeToStringType)]),
       (TypeVariantFunction, [(TypeVariantUnion, functionTypeToUnionType)]),
       (TypeVariantSet, [(TypeVariantList, setTypeToListType)])]
 
-unionTypePassThrough :: TranslationContext -> Type -> Qualified (Step Term Term)
+unionTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 unionTypePassThrough context (TypeUnion sfields) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter context f) sfields
     return $ bidirectional $ \dir (TermUnion dfield) -> do

@@ -4,6 +4,18 @@ includes:
 
 definitions:
 
+  - name: AdapterContext
+    type:
+      record:
+        - name: evaluation
+          type: evaluation.Context
+
+        - name: source
+          type: Language
+
+        - name: target
+          type: Language
+
   - name: Language
     type:
       record:
@@ -40,14 +52,3 @@ definitions:
       - name: Name
         type: string
 
-  - name: TranslationContext
-    type:
-      record:
-        - name: evaluation
-          type: evaluation.Context
-
-        - name: source
-          type: Language
-
-        - name: target
-          type: Language

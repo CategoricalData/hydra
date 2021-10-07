@@ -10,6 +10,7 @@ module Hydra.Prototyping.Adapters.Atomic (
 import Hydra.Core
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Extras
+import Hydra.Translation
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -19,12 +20,13 @@ import qualified Data.Set as S
 
 
 atomicAdapter = ()
---atomicAdapter :: TranslationContext -> AtomicType -> Either String (Step AtomicValue AtomicValue)
+--atomicAdapter :: AdapterContext -> AtomicType -> Qualified (Step AtomicValue AtomicValue)
 --atomicAdapter context at = ...
+--  where
+--    variants = languageConstraintAtomicVariants $ languageConstraints $ adapterContextTarget context
 
-
-atomicAdapters :: S.Set AtomicVariant -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
-atomicAdapters = mutators atomicVariants subst descriptions buildMap
+atomicAdapters :: AdapterContext -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
+atomicAdapters context = mutators atomicVariants subst descriptions buildMap variants
   where
     subst _ = [] -- no substitution across atomic variants (for now)
     descriptions = M.fromList [
@@ -35,9 +37,10 @@ atomicAdapters = mutators atomicVariants subst descriptions buildMap
       (AtomicVariantString, "strings")]
     buildMap :: AtomicVariant -> AtomicVariant -> Qualified (AtomicValue -> AtomicValue)
     buildMap source target = pure id
+    variants = languageConstraintsAtomicVariants $ languageConstraints $ adapterContextTarget context
 
-floatAdapters :: S.Set FloatVariant -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
-floatAdapters = mutators floatVariants subst descriptions buildMap
+floatAdapters :: AdapterContext -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
+floatAdapters context = mutators floatVariants subst descriptions buildMap variants
   where
     subst v = case v of
        FloatVariantBigfloat -> [FloatVariantFloat64, FloatVariantFloat32]
@@ -60,9 +63,10 @@ floatAdapters = mutators floatVariants subst descriptions buildMap
           FloatVariantBigfloat -> FloatValueBigfloat d
           FloatVariantFloat32 -> FloatValueFloat32 $ realToFrac d
           FloatVariantFloat64 -> FloatValueFloat64 d
+    variants = languageConstraintsFloatVariants $ languageConstraints $ adapterContextTarget context
 
-integerAdapters :: S.Set IntegerVariant -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
-integerAdapters = mutators integerVariants subst descriptions buildMap
+integerAdapters :: AdapterContext -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
+integerAdapters context = mutators integerVariants subst descriptions buildMap variants
   where
     subst v = case v of
         IntegerVariantBigint -> L.reverse unsignedPref
@@ -117,6 +121,7 @@ integerAdapters = mutators integerVariants subst descriptions buildMap
           IntegerVariantUint16 -> IntegerValueUint16 $ fromIntegral d
           IntegerVariantUint32 -> IntegerValueUint32 $ fromIntegral d
           IntegerVariantUint64 -> IntegerValueUint64 $ fromIntegral d
+    variants = languageConstraintsIntegerVariants $ languageConstraints $ adapterContextTarget context
 
 mutateFloatValue :: M.Map FloatVariant (FloatValue -> FloatValue) -> FloatValue -> FloatValue
 mutateFloatValue muts fv = Y.fromMaybe id (M.lookup (floatValueVariant fv) muts) fv
