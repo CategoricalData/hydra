@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Mutators (
+module Hydra.Prototyping.Adapters.Atomic (
   Mutator(..),
   atomicMutators,
   floatMutators,
@@ -25,7 +25,7 @@ data Mutator v = Mutator {
 atomicMutators :: S.Set AtomicVariant -> Either String (M.Map AtomicVariant (Mutator AtomicValue))
 atomicMutators = mutators atomicVariants subst descriptions buildMap
   where
-    subst _ = [] -- no substitution across atomic variants (for now) 
+    subst _ = [] -- no substitution across atomic variants (for now)
     descriptions = M.fromList [
       (AtomicVariantBinary, "binary strings"),
       (AtomicVariantBoolean, "boolean values"),
@@ -52,7 +52,7 @@ floatMutators = mutators floatVariants subst descriptions buildMap
         decoder fv = case fv of
           FloatValueBigfloat d -> d
           FloatValueFloat32 f -> realToFrac f
-          FloatValueFloat64 d -> d 
+          FloatValueFloat64 d -> d
         encoder d = case target of
           FloatVariantBigfloat -> FloatValueBigfloat d
           FloatVariantFloat32 -> FloatValueFloat32 $ realToFrac d

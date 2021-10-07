@@ -21,6 +21,14 @@ definitions:
               type:
                 set: core.AtomicVariant
 
+            - name: floatVariants
+              type:
+                set: core.FloatVariant
+
+            - name: integerVariants
+              type:
+                set: core.IntegerVariant
+
             - name: termVariants
               type:
                 set: core.TermVariant

@@ -1,12 +1,8 @@
-module Hydra.Prototyping.MutatorsSpec where
+module Hydra.Prototyping.Adapters.AtomicSpec where
 
 import Hydra.Core
-import Hydra.Ext.Haskell.Dsl
-import Hydra.Prototyping.Mutators
+import Hydra.Prototyping.Adapters.Atomic
 
-import Hydra.ArbitraryCore
-
-import qualified Data.Char as C
 import qualified Data.Either as E
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -14,10 +10,11 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 
 
+testFloatMutators :: H.SpecWith ()
 testFloatMutators = do
   H.describe "Test floating-point mutators" $ do
 
-    H.it "upgrade float32 to bigfloat, since there float32 and float64 are unsupported" $
+    H.it "upgrade float32 to bigfloat, since float32 and float64 are unsupported" $
       QC.property $ \f -> mutateFloatValue m3 (FloatValueFloat32 f) == FloatValueBigfloat (realToFrac f)
 
     H.it "downgrade bigfloat to float64" $
@@ -35,6 +32,7 @@ testFloatMutators = do
     m3 = muts [FloatVariantBigfloat]
     m4 = muts [FloatVariantFloat32]
 
+testIntegerMutators :: H.SpecWith ()
 testIntegerMutators = do
   H.describe "Test integer mutators" $ do
 
@@ -65,4 +63,3 @@ spec = do
   testIntegerMutators
 --  testAtomicMutators
 --  testTermMutators
-

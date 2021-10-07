@@ -7,6 +7,8 @@ module Hydra.Translation
   , _Language
   , _Language_Constraints
   , _Language_Constraints_atomicVariants
+  , _Language_Constraints_floatVariants
+  , _Language_Constraints_integerVariants
   , _Language_Constraints_termVariants
   , _Language_Constraints_typeVariants
   , _Language_Name
@@ -29,6 +31,10 @@ data Language_Constraints
   = Language_Constraints
     -- | @type set: hydra/core.AtomicVariant
     { languageConstraintsAtomicVariants :: (Set AtomicVariant)
+    -- | @type set: hydra/core.FloatVariant
+    , languageConstraintsFloatVariants :: (Set FloatVariant)
+    -- | @type set: hydra/core.IntegerVariant
+    , languageConstraintsIntegerVariants :: (Set IntegerVariant)
     -- | @type set: hydra/core.TermVariant
     , languageConstraintsTermVariants :: (Set TermVariant)
     -- | @type set: hydra/core.TypeVariant
@@ -56,6 +62,8 @@ data TranslationContext
 _Language = "hydra/translation.Language" :: String
 _Language_Constraints = "hydra/translation.Language_Constraints" :: String
 _Language_Constraints_atomicVariants = "atomicVariants" :: String
+_Language_Constraints_floatVariants = "floatVariants" :: String
+_Language_Constraints_integerVariants = "integerVariants" :: String
 _Language_Constraints_termVariants = "termVariants" :: String
 _Language_Constraints_typeVariants = "typeVariants" :: String
 _Language_Name = "hydra/translation.Language_Name" :: String

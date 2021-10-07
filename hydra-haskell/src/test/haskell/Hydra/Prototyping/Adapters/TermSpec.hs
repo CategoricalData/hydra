@@ -1,36 +1,32 @@
-module Hydra.Prototyping.AdaptersSpec where
+module Hydra.Prototyping.Adapters.TermSpec where
 
 import Hydra.Core
-import Hydra.Evaluation
-import Hydra.Graph
 import Hydra.Translation
-import Hydra.Prototyping.Adapters
+import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Ext.Haskell.Dsl
-import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
+import Hydra.Ext.Yaml.Coder
 
-import Hydra.ArbitraryCore
 import Hydra.TestGraph
+import Hydra.ArbitraryCore
 
 import qualified Test.Hspec as H
-import qualified Data.Char as C
-import qualified Data.Either as E
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
 
 
--- Translation context for a YAML-like language
-testLanguage = Language "TestLang" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList atomicVariants,
-  languageConstraintsTermVariants = S.fromList termVariants,
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantNominal, TypeVariantRecord, TypeVariantUnion] }
+-- Use YAML as the target language
+testLanguage :: Language
+testLanguage = yamlLanguage
+
+transContext :: TranslationContext
 transContext = TranslationContext testContext hydraCoreLanguage testLanguage
   
 -- Note: in a real application, you wouldn't create the adapter just to use it once;
 --       it should be created once, then applied to many terms.
+adapt :: Type -> (Step Term Term -> t -> Either String b) -> t -> Either String b
 adapt typ dir term = do
   adapter <- termAdapter transContext typ
   dir adapter term
@@ -52,6 +48,7 @@ stringList strings = TermList $ stringValue <$> strings
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
 stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
 
+supportedConstructorsAreUnchanged :: H.SpecWith ()
 supportedConstructorsAreUnchanged = do
   H.describe "Verify that supported term constructors are unchanged" $ do
     
@@ -80,6 +77,7 @@ supportedConstructorsAreUnchanged = do
         -> adapt stringOrIntType stepOut (variant "right" int)
         == Right (variant "right" int)
         
+unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = do
   H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
@@ -112,6 +110,7 @@ unsupportedConstructorsAreModified = do
         -> adapt exampleProjectionType stepOut (TermProjection fname) -- Note: the field name is not dereferenced
         == Right (TermUnion $ Field "projection" $ stringValue fname)  
 
+nominalTypesPassThrough :: H.SpecWith ()
 nominalTypesPassThrough = do
   H.describe "Verify that nominal types behave like the types they reference" $ do
 
@@ -120,14 +119,16 @@ nominalTypesPassThrough = do
         -> adapt stringAliasType stepOut (stringValue s)
         == Right (stringValue s)
 
+termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = do
   H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
 
     H.it "A list of sets of strings becomes a list of lists of strings" $ do
       QC.property $ \lists
         -> adapt listOfSetOfStringsType stepOut (TermList $ (\l -> TermSet $ S.fromList $ stringValue <$> l) <$> lists)
-        == Right (TermList $ (\l -> TermList $ stringValue <$> (S.toList $ S.fromList l)) <$> lists)
+        == Right (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
 
+adapterIsInformationPreserving :: H.SpecWith ()
 adapterIsInformationPreserving = do
   H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
 

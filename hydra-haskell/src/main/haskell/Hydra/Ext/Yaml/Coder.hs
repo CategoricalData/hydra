@@ -8,7 +8,7 @@ module Hydra.Ext.Yaml.Coder (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Translation
-import Hydra.Prototyping.Adapters
+import Hydra.Prototyping.Adapters.Term
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
@@ -163,6 +163,7 @@ lookupCoderByName m key = Y.maybe (unknownVariant key) Right $ M.lookup key m
 lookupCoderByVariant :: (Ord v, Show v) => M.Map v a -> v -> Either String a
 lookupCoderByVariant m v = Y.maybe (unsupportedVariant v) Right $ M.lookup v m
 
+notImplemented :: a -> Either [Char] b
 notImplemented _ = Left "not yet implemented"
 
 termCoders :: [Varcoder TermVariant Term YM.Node]
@@ -196,8 +197,12 @@ stringNode = YM.NodeScalar . YM.ScalarStr
 --atomicValueToYaml av = case av of
 --  AtomicValueBoolean
 
+yamlLanguage :: Language
 yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList atomicVariants,
+  languageConstraintsAtomicVariants = S.fromList [
+    AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+  languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+  languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantNominal, TypeVariantRecord, TypeVariantUnion] }
