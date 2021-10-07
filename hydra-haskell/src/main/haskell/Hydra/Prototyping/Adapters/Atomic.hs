@@ -1,5 +1,6 @@
 module Hydra.Prototyping.Adapters.Atomic (
   Mutator(..),
+  atomicAdapter,
   atomicMutators,
   floatMutators,
   integerMutators,
@@ -21,6 +22,12 @@ import qualified Data.Set as S
 data Mutator v = Mutator {
   mutatorMapping :: v -> v,
   mutatorWarnings :: S.Set String }
+
+
+atomicAdapter = ()
+--atomicAdapter :: TranslationContext -> AtomicType -> Either String (Step AtomicValue AtomicValue)
+--atomicAdapter context at = ...
+
 
 atomicMutators :: S.Set AtomicVariant -> Either String (M.Map AtomicVariant (Mutator AtomicValue))
 atomicMutators = mutators atomicVariants subst descriptions buildMap

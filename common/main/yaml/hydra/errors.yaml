@@ -1,0 +1,13 @@
+definitions:
+
+  - name: Qualified
+    type:
+      record:
+        - name: value
+          type:
+            optional:
+              variable: a
+
+        - name: warnings
+          type:
+            list: string
