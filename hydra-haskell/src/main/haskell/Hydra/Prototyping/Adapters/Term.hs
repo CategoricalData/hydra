@@ -1,10 +1,9 @@
-module Hydra.Prototyping.Adapters (
+module Hydra.Prototyping.Adapters.Term (
   termAdapter,
 ) where
 
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Evaluation
 import Hydra.Translation
 import Hydra.Prototyping.Basics
 import Hydra.Ext.Haskell.Dsl
@@ -33,8 +32,8 @@ elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
   where
     encode (TermElement name) = pure $ stringValue name
     decode (TermAtomic (AtomicValueString name)) = pure $ TermElement name
-                                                             
-fieldAdapter :: TranslationContext -> FieldType -> Either String (Step Field Field) 
+
+fieldAdapter :: TranslationContext -> FieldType -> Either String (Step Field Field)
 fieldAdapter context ftyp = do
   adapter <- termAdapter context $ fieldTypeType ftyp
   return $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir adapter term
@@ -99,7 +98,7 @@ listTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Te
 listTypePassThrough context (TypeList lt) = do
   adapter <- termAdapter context lt
   return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepEither dir adapter) terms
-        
+
 mapTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 mapTypePassThrough context (TypeMap (MapType kt vt)) = do
   kadapter <- termAdapter context kt
@@ -118,12 +117,14 @@ nominalTypePassThrough context (TypeNominal name) = do
 recordTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 recordTypePassThrough context (TypeRecord sfields) = do
   adapters <- CM.mapM (fieldAdapter context) sfields
-  return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord <$> (CM.mapM id $ L.zipWith (stepEither dir) adapters dfields)
+  return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord
+    <$> CM.zipWithM (stepEither dir) adapters dfields
 
 setTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 setTypePassThrough context (TypeSet st) = do
   adapter <- termAdapter context st
-  return $ bidirectional $ \dir (TermSet terms) -> TermSet . S.fromList <$> (CM.mapM (stepEither dir adapter) $ S.toList terms)
+  return $ bidirectional $ \dir (TermSet terms) -> TermSet . S.fromList
+    <$> (CM.mapM (stepEither dir adapter) $ S.toList terms)
 
 setTypeToListType :: TranslationContext -> Type -> Either String (Step Term Term)
 setTypeToListType context (TypeSet st) = do
@@ -131,7 +132,7 @@ setTypeToListType context (TypeSet st) = do
     return $ Step (encode adapter) (decode adapter)
   where
     encode adapter (TermSet s) = stepOut adapter $ TermList $ S.toList s
-    decode adapter term = (TermSet . S.fromList . (\(TermList l') -> l')) <$> stepIn adapter term
+    decode adapter term = TermSet . S.fromList . (\(TermList l') -> l') <$> stepIn adapter term
 
 --  TODO:
 --    term constructors
@@ -139,7 +140,7 @@ setTypeToListType context (TypeSet st) = do
 --      - cases
 --      - lambda
 --      - variable
--- 
+--
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: TranslationContext -> Type -> Either String (Step Term Term)
@@ -173,7 +174,7 @@ termAdapter context typ = if (not $ isRelevant var)
       (TypeVariantElement, [(TypeVariantAtomic, elementTypeToStringType)]),
       (TypeVariantFunction, [(TypeVariantUnion, functionTypeToUnionType)]),
       (TypeVariantSet, [(TypeVariantList, setTypeToListType)])]
-      
+
 unionTypePassThrough :: TranslationContext -> Type -> Either String (Step Term Term)
 unionTypePassThrough context (TypeUnion sfields) = do
     adapters <- M.fromList <$> (CM.mapM (\f -> (,) <$> pure (fieldTypeName f) <*> fieldAdapter context f) sfields)

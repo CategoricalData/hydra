@@ -74,8 +74,11 @@ floatVariantPrecision v = case v of
 floatVariants :: [FloatVariant]
 floatVariants = [FloatVariantFloat32, FloatVariantFloat64, FloatVariantBigfloat]
 
+hydraCoreLanguage :: Language
 hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsAtomicVariants = S.fromList atomicVariants,
+  languageConstraintsFloatVariants = S.fromList floatVariants,
+  languageConstraintsIntegerVariants = S.fromList integerVariants,
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList typeVariants }
 
