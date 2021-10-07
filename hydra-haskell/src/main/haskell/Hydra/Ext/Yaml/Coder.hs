@@ -7,7 +7,7 @@ module Hydra.Ext.Yaml.Coder (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Translation
+import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Prototyping.Basics

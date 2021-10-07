@@ -22,7 +22,7 @@ module Hydra.Prototyping.Basics (
   ) where
 
 import Hydra.Core
-import Hydra.Translation
+import Hydra.Adapter
 
 import qualified Data.Set   as S
 

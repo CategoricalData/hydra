@@ -2,7 +2,7 @@ module Hydra.Prototyping.Adapters.AtomicSpec where
 
 import Hydra.Core
 import Hydra.Errors
-import Hydra.Translation
+import Hydra.Adapter
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Adapters.Atomic
 

@@ -11,7 +11,7 @@ module Hydra.Prototyping.Adapters.Atomic (
 import Hydra.Core
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Extras
-import Hydra.Translation
+import Hydra.Adapter
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
