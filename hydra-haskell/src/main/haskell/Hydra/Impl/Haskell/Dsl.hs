@@ -1,4 +1,4 @@
-module Hydra.Ext.Haskell.Dsl (
+module Hydra.Impl.Haskell.Dsl (
   DataError,
   SchemaError,
   apply,

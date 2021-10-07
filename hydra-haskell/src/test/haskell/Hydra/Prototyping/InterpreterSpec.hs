@@ -1,7 +1,7 @@
 module Hydra.Prototyping.InterpreterSpec where
 
 import Hydra.Core
-import Hydra.Ext.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps

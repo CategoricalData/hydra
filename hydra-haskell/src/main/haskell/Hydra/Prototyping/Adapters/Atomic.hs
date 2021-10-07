@@ -10,7 +10,7 @@ module Hydra.Prototyping.Adapters.Atomic (
 
 import Hydra.Core
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Extras
+import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
 
 import qualified Control.Monad as CM

@@ -6,8 +6,8 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Adapter
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Extras
-import Hydra.Ext.Haskell.Dsl
+import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding

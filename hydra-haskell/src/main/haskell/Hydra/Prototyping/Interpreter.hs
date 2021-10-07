@@ -10,7 +10,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Prototyping.Basics
-import Hydra.Ext.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 
