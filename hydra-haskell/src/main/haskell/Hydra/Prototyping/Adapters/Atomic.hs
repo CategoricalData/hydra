@@ -3,6 +3,7 @@ module Hydra.Prototyping.Adapters.Atomic (
   atomicAdapters,
   floatAdapters,
   integerAdapters,
+  mutateAtomicValue,
   mutateFloatValue,
   mutateIntegerValue,
 ) where
@@ -28,7 +29,7 @@ atomicAdapter = ()
 atomicAdapters :: AdapterContext -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
 atomicAdapters context = mutators atomicVariants subst descriptions buildMap variants
   where
-    subst _ = [] -- no substitution across atomic variants (for now)
+    subst _ = [AtomicVariantString]
     descriptions = M.fromList [
       (AtomicVariantBinary, "binary strings"),
       (AtomicVariantBoolean, "boolean values"),
@@ -36,8 +37,32 @@ atomicAdapters context = mutators atomicVariants subst descriptions buildMap var
       (AtomicVariantInteger, "integers"),
       (AtomicVariantString, "strings")]
     buildMap :: AtomicVariant -> AtomicVariant -> Qualified (AtomicValue -> AtomicValue)
-    buildMap source target = pure id
+    buildMap source target = case (source, target) of
+      (_, AtomicVariantString) -> pure $ \av -> AtomicValueString $ case av of
+        AtomicValueBinary v -> writeBinary v
+        AtomicValueBoolean v -> writeBoolean v
+        AtomicValueFloat v -> writeFloat v
+        AtomicValueInteger v -> writeInteger v
+        AtomicValueString v -> v
     variants = languageConstraintsAtomicVariants $ languageConstraints $ adapterContextTarget context
+    writeBinary s = s
+    writeBoolean b = case b of
+       BooleanValueFalse -> "false"
+       BooleanValueTrue -> "true"
+    writeFloat fv = case fv of
+      FloatValueBigfloat v -> show v
+      FloatValueFloat32 v -> show v
+      FloatValueFloat64 v -> show v
+    writeInteger iv = case iv of
+      IntegerValueBigint v -> show v
+      IntegerValueInt8 v -> show v 
+      IntegerValueInt16 v -> show v 
+      IntegerValueInt32 v -> show v 
+      IntegerValueInt64 v -> show v 
+      IntegerValueUint8 v -> show v 
+      IntegerValueUint16 v -> show v 
+      IntegerValueUint32 v -> show v 
+      IntegerValueUint64 v -> show v 
 
 floatAdapters :: AdapterContext -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
 floatAdapters context = mutators floatVariants subst descriptions buildMap variants
@@ -122,6 +147,9 @@ integerAdapters context = mutators integerVariants subst descriptions buildMap v
           IntegerVariantUint32 -> IntegerValueUint32 $ fromIntegral d
           IntegerVariantUint64 -> IntegerValueUint64 $ fromIntegral d
     variants = languageConstraintsIntegerVariants $ languageConstraints $ adapterContextTarget context
+
+mutateAtomicValue :: M.Map AtomicVariant (AtomicValue -> AtomicValue) -> AtomicValue -> AtomicValue
+mutateAtomicValue muts av = Y.fromMaybe id (M.lookup (atomicValueVariant av) muts) av
 
 mutateFloatValue :: M.Map FloatVariant (FloatValue -> FloatValue) -> FloatValue -> FloatValue
 mutateFloatValue muts fv = Y.fromMaybe id (M.lookup (floatValueVariant fv) muts) fv
