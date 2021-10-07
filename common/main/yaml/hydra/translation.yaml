@@ -4,6 +4,32 @@ includes:
 
 definitions:
 
+  - name: Adapter
+    type:
+      record:
+        - name: source
+          type:
+            variable: t
+
+        - name: target
+          type:
+            variable: t
+
+        - name: mapping
+          type:
+            function:
+              from:
+                - variable: v
+              to:
+                variable: v
+
+        - name: isLossy
+          type: boolean
+
+        - name: notes
+          type:
+            list: string
+
   - name: AdapterContext
     type:
       record:

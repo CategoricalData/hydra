@@ -3,6 +3,45 @@ includes:
 
 definitions:
 
+  - name: Result
+    type:
+      union:
+        - name: success
+          type:
+            variable: a
+
+        - name: failure
+          type: string
+
+  - name: Step
+    type:
+      record:
+        - name: out
+          type:
+            function:
+              from:
+                - variable: a
+              to:
+                parameterized:
+                  genericType: Result
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: b
+
+        - name: in
+          type:
+            function:
+              from:
+                - variable: b
+              to:
+                parameterized:
+                  genericType: Result
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: a
+
   - name: StepDirection
     type:
       union:

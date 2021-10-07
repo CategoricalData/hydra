@@ -52,6 +52,7 @@ module Hydra.Ext.Haskell.Dsl (
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Prototyping.Steps
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 import Data.Int
@@ -89,20 +90,20 @@ constFunction = lambda "_"
 deref :: Name -> Term
 deref name = apply TermData $ TermElement name
 
-expectRecordTerm :: Term -> Either String [Field]
+expectRecordTerm :: Term -> Result [Field]
 expectRecordTerm term = case term of
   TermRecord fields -> pure fields
-  _ -> Left $ "expected a record, got " ++ show term
+  _ -> fail $ "expected a record, got " ++ show term
 
-expectStringTerm :: Term -> Either String String
+expectStringTerm :: Term -> Result String
 expectStringTerm term = case term of
   TermAtomic (AtomicValueString s) -> pure s
-  _ -> Left $ "expected a string, got " ++ show term
+  _ -> fail $ "expected a string, got " ++ show term
 
-expectUnionTerm :: Term -> Either String Field
+expectUnionTerm :: Term -> Result Field
 expectUnionTerm term = case term of
   TermUnion field -> pure field
-  _ -> Left $ "expected a union, got " ++ show term
+  _ -> fail $ "expected a union, got " ++ show term
 
 fieldsToMap :: [Field] -> M.Map FieldName Term
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
@@ -168,10 +169,10 @@ matchWithVariants = cases . fmap toField
 nominalType :: Name -> Type
 nominalType = TypeNominal
 
-requireField :: M.Map FieldName Term -> FieldName -> Either String Term
-requireField fields fname = Y.maybe error Right $ M.lookup fname fields
+requireField :: M.Map FieldName Term -> FieldName -> Result Term
+requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
-    error = Left $ "no such field: " ++ fname
+    error = fail $ "no such field: " ++ fname
 
 stringTerm :: String -> Term
 stringTerm = TermAtomic . AtomicValueString

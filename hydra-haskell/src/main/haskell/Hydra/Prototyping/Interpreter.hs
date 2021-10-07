@@ -12,6 +12,7 @@ import Hydra.Graph
 import Hydra.Prototyping.Basics
 import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Primitives
+import Hydra.Prototyping.Steps
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -23,17 +24,17 @@ import qualified Data.Set as S
 --   This function does not assume that term to be evaluated is in a normal form,
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
-evaluate :: Context -> Term -> Either String Term
+evaluate :: Context -> Term -> Result Term
 evaluate context term = reduce M.empty term
   where
-    dereferenceElement :: Name -> Either String Term
+    dereferenceElement :: Name -> Result Term
     dereferenceElement en = case M.lookup en (contextElements context) of
-      Nothing -> Left $ "referenced element does not exist in graph: " ++ en
-      Just e -> Right $ elementData e
+      Nothing -> fail $ "referenced element does not exist in graph: " ++ en
+      Just e -> pure $ elementData e
 
-    reduce :: M.Map Variable Term -> Term -> Either String Term
+    reduce :: M.Map Variable Term -> Term -> Result Term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
-      then Right term
+      then pure term
       else case term of
         TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
         TermAtomic _ -> done
@@ -44,7 +45,7 @@ evaluate context term = reduce M.empty term
         TermFunction _ -> done
         TermLambda (Lambda v body) -> TermLambda . Lambda v <$> reduceb body
         TermList terms -> TermList <$> CM.mapM reduceb terms
-        TermMap map -> TermMap <$> (fmap M.fromList $ CM.mapM reducePair $ M.toList map)
+        TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
         TermProjection _ -> done
@@ -52,15 +53,15 @@ evaluate context term = reduce M.empty term
         TermSet terms -> TermSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
         TermUnion f -> TermUnion <$> reduceField f
         TermVariable v -> case M.lookup v bindings of
-          Nothing -> Left $ "cannot reduce free variable " ++ v
+          Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
       where
-        done = Right term
+        done = pure term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
-    reduceApplication :: M.Map Variable Term -> [Term] -> Term -> Either String Term
+    reduceApplication :: M.Map Variable Term -> [Term] -> Term -> Result Term
     reduceApplication bindings args f = if L.null args then pure f else case f of
       TermApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
@@ -69,12 +70,12 @@ evaluate context term = reduce M.empty term
         arg <- reduce bindings $ L.head args
         case arg of
           TermUnion (Field fname t) -> if L.null matching
-              then Left $ "no case for field named " ++ fname
+              then fail $ "no case for field named " ++ fname
               else reduce bindings (fieldTerm $ L.head matching)
                 >>= reduceApplication bindings (t:(L.tail args))
             where
               matching = L.filter (\c -> fieldName c == fname) cases
-          _ -> Left $ "tried to apply a case statement to a non- union term: " ++ show arg
+          _ -> fail $ "tried to apply a case statement to a non- union term: " ++ show arg
 
       TermData -> do
           arg <- reduce bindings $ L.head args
@@ -82,7 +83,7 @@ evaluate context term = reduce M.empty term
             TermElement name -> dereferenceElement name
               >>= reduce bindings
               >>= reduceApplication bindings (L.tail args)
-            _ -> Left "tried to apply data (delta) to a non- element reference"
+            _ -> fail "tried to apply data (delta) to a non- element reference"
 
       TermFunction name -> do
            prim <- requirePrimitiveFunction context name
@@ -93,12 +94,12 @@ evaluate context term = reduce M.empty term
                >>= reduceApplication bindings (L.drop arity args)
              else unwind
          where
-           unwind = Right $ L.foldl apply f args
+           unwind = pure $ L.foldl apply f args
 
       TermLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
         >>= reduceApplication bindings (L.tail args)
 
-      _ -> Left $ "tried to apply a non-function: " ++ show (termVariant f)
+      _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 
 freeVariables :: Term -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term

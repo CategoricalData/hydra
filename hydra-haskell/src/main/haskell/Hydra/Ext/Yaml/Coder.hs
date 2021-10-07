@@ -25,8 +25,8 @@ import qualified Data.Maybe as Y
 data Varcoder v t1 t2 = Varcoder {
   coderVariant :: v,
   coderName :: String,
-  coderEncode :: t1 -> Either String t2,
-  coderDecode :: t2 -> Either String t1 }
+  coderEncode :: t1 -> Result t2,
+  coderDecode :: t2 -> Result t1 }
 
 atomicCoders :: [Varcoder AtomicVariant AtomicValue YM.Node]
 atomicCoders = [
@@ -56,77 +56,77 @@ codersByName coders = M.fromList $ (\c -> (coderName c, c)) <$> coders
 codersByVariant :: Ord v => [Varcoder v t1 t2] -> M.Map v (Varcoder v t1 t2)
 codersByVariant coders = M.fromList $ (\c -> (coderVariant c, c)) <$> coders
 
-decodeAtomicValue :: AtomicVariant -> YM.Node -> Either String AtomicValue
+decodeAtomicValue :: AtomicVariant -> YM.Node -> Result AtomicValue
 decodeAtomicValue var n = do
   coderDecode <$> lookupCoderByVariant atomicCodersByVariant var
   >>= (n &)
 
-decodeBooleanValue :: YM.Node -> Either String BooleanValue
+decodeBooleanValue :: YM.Node -> Result BooleanValue
 decodeBooleanValue n = expectScalar n >>= expectBoolean
 
-decodeFloatValue :: YM.Node -> Either String FloatValue
+decodeFloatValue :: YM.Node -> Result FloatValue
 decodeFloatValue n = FloatValueBigfloat <$> (expectScalar n >>= expectFloat)
 
-decodeIntegerValue :: YM.Node -> Either String IntegerValue
+decodeIntegerValue :: YM.Node -> Result IntegerValue
 decodeIntegerValue n = IntegerValueBigint <$> (expectScalar n >>= expectInteger)
 
-decodeStringValue :: YM.Node -> Either String String
+decodeStringValue :: YM.Node -> Result String
 decodeStringValue n = expectScalar n >>= expectString
 
-encodeAtomicValue :: AtomicValue -> Either String YM.Node
+encodeAtomicValue :: AtomicValue -> Result YM.Node
 encodeAtomicValue av =
   lookupCoderByVariant atomicCodersByVariant (atomicValueVariant av) >>= (av &) . coderEncode
 
-encodeBooleanValue :: BooleanValue -> Either String YM.Node
-encodeBooleanValue = Right . YM.NodeScalar . YM.ScalarBool . toBool
+encodeBooleanValue :: BooleanValue -> Result YM.Node
+encodeBooleanValue = pure . YM.NodeScalar . YM.ScalarBool . toBool
   where
     toBool bv = case bv of
       BooleanValueFalse -> False
       BooleanValueTrue -> True
 
-encodeFloatValue :: FloatValue -> Either String YM.Node
+encodeFloatValue :: FloatValue -> Result YM.Node
 encodeFloatValue fv =
   (coderEncode <$> lookupCoderByVariant floatCodersByVariant (floatValueVariant fv))
   >>= (fv &)
 
-encodeIntegerValue :: IntegerValue -> Either String YM.Node
+encodeIntegerValue :: IntegerValue -> Result YM.Node
 encodeIntegerValue iv =
   (coderEncode <$> lookupCoderByVariant integerCodersByVariant (integerValueVariant iv))
   >>= (iv &)
 
-encodeStringValue :: String -> Either String YM.Node
-encodeStringValue = Right . YM.NodeScalar . YM.ScalarStr
+encodeStringValue :: String -> Result YM.Node
+encodeStringValue = pure . YM.NodeScalar . YM.ScalarStr
 
-encodeTerm :: Term -> Either String YM.Node
+encodeTerm :: Term -> Result YM.Node
 encodeTerm term = do
   let term' = CE.encodeTerm term
   (coderEncode <$> lookupCoderByVariant termCodersByVariant (termVariant term'))
     >>= (term' &)
 
-expectBoolean :: YM.Scalar -> Either String BooleanValue
+expectBoolean :: YM.Scalar -> Result BooleanValue
 expectBoolean s = case s of
-  YM.ScalarBool b -> Right $ if b then BooleanValueTrue else BooleanValueFalse
-  _ -> Left $ "expected a boolean scalar, found " ++ show s
+  YM.ScalarBool b -> pure $ if b then BooleanValueTrue else BooleanValueFalse
+  _ -> fail $ "expected a boolean scalar, found " ++ show s
 
-expectFloat :: YM.Scalar -> Either String Double
+expectFloat :: YM.Scalar -> Result Double
 expectFloat s = case s of
-  YM.ScalarFloat f -> Right f
-  _ -> Left $ "expected a float, found " ++ show s
+  YM.ScalarFloat f -> pure f
+  _ -> fail $ "expected a float, found " ++ show s
 
-expectInteger :: YM.Scalar -> Either String Integer
+expectInteger :: YM.Scalar -> Result Integer
 expectInteger s = case s of
-  YM.ScalarInt i -> Right i
-  _ -> Left $ "expected an int, found " ++ show s
+  YM.ScalarInt i -> pure i
+  _ -> fail $ "expected an int, found " ++ show s
 
-expectScalar :: YM.Node -> Either String YM.Scalar
+expectScalar :: YM.Node -> Result YM.Scalar
 expectScalar node = case node of
-  YM.NodeScalar s -> Right s
-  _ -> Left $ "expected a scalar node, found " ++ show node
+  YM.NodeScalar s -> pure s
+  _ -> fail $ "expected a scalar node, found " ++ show node
 
-expectString :: YM.Scalar -> Either String String
+expectString :: YM.Scalar -> Result String
 expectString s = case s of
-  YM.ScalarStr v -> Right v
-  _ -> Left $ "expected a string scalar, found " ++ show s
+  YM.ScalarStr v -> pure v
+  _ -> fail $ "expected a string scalar, found " ++ show s
 
 floatCoders :: [Varcoder FloatVariant FloatValue YM.Node]
 floatCoders = [
@@ -158,14 +158,14 @@ integerCodersByName = codersByName integerCoders
 integerCodersByVariant :: M.Map IntegerVariant (Varcoder IntegerVariant IntegerValue YM.Node)
 integerCodersByVariant = codersByVariant integerCoders
 
-lookupCoderByName :: M.Map String a -> String -> Either String a
-lookupCoderByName m key = Y.maybe (unknownVariant key) Right $ M.lookup key m
+lookupCoderByName :: M.Map String a -> String -> Result a
+lookupCoderByName m key = Y.maybe (unknownVariant key) pure $ M.lookup key m
 
-lookupCoderByVariant :: (Ord v, Show v) => M.Map v a -> v -> Either String a
-lookupCoderByVariant m v = Y.maybe (unsupportedVariant v) Right $ M.lookup v m
+lookupCoderByVariant :: (Ord v, Show v) => M.Map v a -> v -> Result a
+lookupCoderByVariant m v = Y.maybe (unsupportedVariant v) pure $ M.lookup v m
 
-notImplemented :: a -> Either [Char] b
-notImplemented _ = Left "not yet implemented"
+notImplemented :: a -> Result b
+notImplemented _ = fail "not yet implemented"
 
 termCoders :: [Varcoder TermVariant Term YM.Node]
 termCoders = [
@@ -185,11 +185,11 @@ termCodersByName = codersByName termCoders
 termCodersByVariant :: M.Map TermVariant (Varcoder TermVariant Term YM.Node)
 termCodersByVariant = codersByVariant termCoders
 
-unknownVariant :: [Char] -> Either [Char] b
-unknownVariant name = Left $ "Unknown variant: " ++ name
+unknownVariant :: [Char] -> Result b
+unknownVariant name = fail $ "Unknown variant: " ++ name
 
-unsupportedVariant :: Show a => a -> Either [Char] b
-unsupportedVariant v = Left $ "Unsupported variant: " ++ show v
+unsupportedVariant :: Show a => a -> Result b
+unsupportedVariant v = fail $ "Unsupported variant: " ++ show v
 
 stringNode :: String -> YM.Node
 stringNode = YM.NodeScalar . YM.ScalarStr
@@ -208,9 +208,9 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantNominal, TypeVariantRecord, TypeVariantUnion] }
 
-toYaml :: Context -> Type -> Term -> Either String YM.Node
+toYaml :: Context -> Type -> Term -> Result YM.Node
 toYaml context typ term = do
-    adapter <- qualifiedToEither $ termAdapter adapterContext typ -- note: mixing error types
+    adapter <- qualifiedToResult $ termAdapter adapterContext typ -- note: mixing error types
     stepOut adapter term >>= encodeTermForYaml typ
   where
     adapterContext = AdapterContext context hydraCoreLanguage yamlLanguage
@@ -220,12 +220,12 @@ import qualified Data.Set as S
 adapter = termAdapter (TypeRecord [FieldType "foo" stringType, FieldType "bar" (TypeSet stringType)])
 term = TermRecord [Field "foo" $ stringValue "FOOO"]
 term = TermRecord [Field "foo" $ stringValue "FOOO", Field "bar" (TermSet (S.fromList [stringValue "one", stringValue "two"]))]
-Right term
+pure term
 stepOut adapter term
 stepOut adapter term >>= stepIn adapter
 -}
 
-encodeTermForYaml :: Type -> Term -> Either String YM.Node
+encodeTermForYaml :: Type -> Term -> Result YM.Node
 encodeTermForYaml typ term = case term of
     TermAtomic av -> pure $ YM.NodeScalar $ YM.ScalarStr $ show av
     TermRecord fields -> YM.NodeMapping . M.fromList <$> CM.mapM toPair fields

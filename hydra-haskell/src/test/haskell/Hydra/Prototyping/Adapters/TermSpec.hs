@@ -9,8 +9,7 @@ import Hydra.Prototyping.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Translation
 
-import Hydra.TestGraph
-import Hydra.ArbitraryCore
+import Hydra.TestUtils
 
 import qualified Test.Hspec as H
 import qualified Data.Map as M
@@ -27,9 +26,9 @@ transContext = AdapterContext testContext hydraCoreLanguage testLanguage
   
 -- Note: in a real application, you wouldn't create the adapter just to use it once;
 --       it should be created once, then applied to many terms.
-adapt :: Type -> (Step Term Term -> t -> Either String b) -> t -> Either String b
+adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
 adapt typ dir term = do
-  adapter <- qualifiedToEither $ termAdapter transContext typ
+  adapter <- qualifiedToResult $ termAdapter transContext typ
   dir adapter term
 
 booleanElementType = TypeElement $ TypeAtomic AtomicTypeBoolean
@@ -56,27 +55,27 @@ supportedConstructorsAreUnchanged = do
     H.it "Strings (and other supported atomic values) pass through without change" $
       QC.property $ \s
         -> adapt stringType stepOut (stringValue s)
-        == Right (stringValue s)  
+        == pure (stringValue s)  
 
     H.it "Lists pass through without change" $
       QC.property $ \strings
         -> adapt listOfStringsType stepOut (TermList $ stringValue <$> strings)
-        == Right (TermList $ stringValue <$> strings)  
+        == pure (TermList $ stringValue <$> strings)  
         
     H.it "Maps pass through without change" $
       QC.property $ \keyvals
         -> adapt mapOfStringsToIntsType stepOut (makeMap keyvals)
-        == Right (makeMap keyvals)  
+        == pure (makeMap keyvals)  
         
     H.it "Records pass through without change" $
       QC.property $ \(lat, lon)
         -> adapt latLonType stepOut (latlonRecord lat lon)
-        == Right (latlonRecord lat lon)
+        == pure (latlonRecord lat lon)
 
     H.it "Unions pass through without change" $
       QC.property $ \int
         -> adapt stringOrIntType stepOut (variant "right" int)
-        == Right (variant "right" int)
+        == pure (variant "right" int)
         
 unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = do
@@ -85,31 +84,31 @@ unsupportedConstructorsAreModified = do
     H.it "Sets become lists" $
       QC.property $ \strings
         -> adapt setOfStringsType stepOut (stringSet strings)
-        == Right (stringList $ S.toList strings)  
+        == pure (stringList $ S.toList strings)  
 
     H.it "Element references become strings" $
       QC.property $ \name
         -> adapt booleanElementType stepOut (TermElement name) -- Note: the element name is not dereferenced
-        == Right (stringValue name)  
+        == pure (stringValue name)  
 
     H.it "CompareTo terms become variant terms" $
       QC.property $ \s
         -> adapt compareStringsType stepOut (TermCompareTo $ stringValue s)
-        == Right (TermUnion $ Field "compareTo" $ stringValue s)  
+        == pure (TermUnion $ Field "compareTo" $ stringValue s)  
 
     H.it "Data terms become variant terms" $ do
       adapt booleanElementDataType stepOut TermData
-      `H.shouldBe` Right (TermUnion $ Field "data" unitTerm)  
+      `H.shouldBe` pure (TermUnion $ Field "data" unitTerm)  
 
     H.it "Primitive function references become variant terms" $
       QC.property $ \name
         -> adapt concatType stepOut (TermFunction name)  -- Note: the function name is not dereferenced
-        == Right (TermUnion $ Field "function" $ stringValue name)  
+        == pure (TermUnion $ Field "function" $ stringValue name)  
 
     H.it "Projections become variant terms" $ do
       QC.property $ \fname
         -> adapt exampleProjectionType stepOut (TermProjection fname) -- Note: the field name is not dereferenced
-        == Right (TermUnion $ Field "projection" $ stringValue fname)  
+        == pure (TermUnion $ Field "projection" $ stringValue fname)  
 
 nominalTypesPassThrough :: H.SpecWith ()
 nominalTypesPassThrough = do
@@ -118,7 +117,7 @@ nominalTypesPassThrough = do
     H.it "A term typed by StringTypeAlias just behaves like a string" $
       QC.property $ \s
         -> adapt stringAliasType stepOut (stringValue s)
-        == Right (stringValue s)
+        == pure (stringValue s)
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = do
@@ -127,7 +126,7 @@ termsAreAdaptedRecursively = do
     H.it "A list of sets of strings becomes a list of lists of strings" $ do
       QC.property $ \lists
         -> adapt listOfSetOfStringsType stepOut (TermList $ (\l -> TermSet $ S.fromList $ stringValue <$> l) <$> lists)
-        == Right (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
+        == pure (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
 
 adapterIsInformationPreserving :: H.SpecWith ()
 adapterIsInformationPreserving = do
@@ -161,7 +160,7 @@ adapterIsInformationPreserving = do
       QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
 
   where
-    roundTripIsNoop typ term = (adapter stepOut term >>= adapter stepIn) == Right term
+    roundTripIsNoop typ term = (adapter stepOut term >>= adapter stepIn) == pure term
       where
         adapter = adapt typ
 

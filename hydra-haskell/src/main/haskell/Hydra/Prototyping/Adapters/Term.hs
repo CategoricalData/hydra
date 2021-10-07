@@ -19,7 +19,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-bidirectional :: (StepDirection -> b -> Either String b) -> Step b b
+bidirectional :: (StepDirection -> b -> Result b) -> Step b b
 bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
 
 atomicTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
@@ -37,7 +37,7 @@ elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
 fieldAdapter :: AdapterContext -> FieldType -> Qualified (Step Field Field)
 fieldAdapter context ftyp = do
   adapter <- termAdapter context $ fieldTypeType ftyp
-  return $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir adapter term
+  return $ bidirectional $ \dir (Field name term) -> Field name <$> stepBoth dir adapter term
 
 functionTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
@@ -46,13 +46,13 @@ functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
       TypeUnion sfields -> (M.fromList . L.zip (fieldTypeName <$> sfields)) <$> CM.mapM (fieldAdapter context) sfields
       _ -> pure M.empty
     return $ bidirectional $ \dir term -> case term of
-      TermCases cases -> TermCases <$> (CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases)
+      TermCases cases -> TermCases <$> (CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases)
         where
           -- Note: this causes unrecognized cases to simply be passed through;
           --       it is not the job of this adapter to catch validation issues.
           getStep fname = Y.fromMaybe idStep $ M.lookup fname caseSteps
-      TermCompareTo other -> TermCompareTo <$> stepEither dir codomainStep other
-      TermLambda (Lambda var body) -> TermLambda <$> (Lambda <$> pure var <*> stepEither dir codomainStep body)
+      TermCompareTo other -> TermCompareTo <$> stepBoth dir codomainStep other
+      TermLambda (Lambda var body) -> TermLambda <$> (Lambda <$> pure var <*> stepBoth dir codomainStep body)
       _ -> pure term
 
 functionTypeToUnionType :: AdapterContext -> Type -> Qualified (Step Term Term)
@@ -86,7 +86,7 @@ functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
           (_Term_projection, forProjection fterm),
           (_Term_variable, forVariable fterm)]
       where
-        notFound fname = Left $ "unexpected field: " ++ fname
+        notFound fname = fail $ "unexpected field: " ++ fname
         forCases fterm = TermCases <$> (read <$> expectStringTerm fterm) -- TODO
         forCompareTo fterm = pure $ TermCompareTo fterm
         forData _ = pure TermData
@@ -98,7 +98,7 @@ functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
 listTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 listTypePassThrough context (TypeList lt) = do
   adapter <- termAdapter context lt
-  return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepEither dir adapter) terms
+  return $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepBoth dir adapter) terms
 
 mapTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 mapTypePassThrough context (TypeMap (MapType kt vt)) = do
@@ -106,7 +106,7 @@ mapTypePassThrough context (TypeMap (MapType kt vt)) = do
   vadapter <- termAdapter context vt
   return $ bidirectional $ \dir (TermMap m)
     -> TermMap . M.fromList
-      <$> CM.mapM (\(k, v) -> (,) <$> stepEither dir kadapter k <*> stepEither dir vadapter v)
+      <$> CM.mapM (\(k, v) -> (,) <$> stepBoth dir kadapter k <*> stepBoth dir vadapter v)
         (M.toList m)
 
 nominalTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
@@ -117,19 +117,19 @@ nominalTypePassThrough context (TypeNominal name) = do
       -- Note: we just assume the schema term is a reference to hydra/core.Type
       requireElement scontext name >>= decodeType . elementData
     adapter <- termAdapter context typ
-    return $ bidirectional $ \dir -> stepEither dir adapter
+    return $ bidirectional $ \dir -> stepBoth dir adapter
 
 recordTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 recordTypePassThrough context (TypeRecord sfields) = do
   adapters <- CM.mapM (fieldAdapter context) sfields
   return $ bidirectional $ \dir (TermRecord dfields) -> TermRecord
-    <$> CM.zipWithM (stepEither dir) adapters dfields
+    <$> CM.zipWithM (stepBoth dir) adapters dfields
 
 setTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 setTypePassThrough context (TypeSet st) = do
   adapter <- termAdapter context st
   return $ bidirectional $ \dir (TermSet terms) -> TermSet . S.fromList
-    <$> CM.mapM (stepEither dir adapter) (S.toList terms)
+    <$> CM.mapM (stepBoth dir adapter) (S.toList terms)
 
 setTypeToListType :: AdapterContext -> Type -> Qualified (Step Term Term)
 setTypeToListType context (TypeSet st) = do
@@ -185,6 +185,6 @@ unionTypePassThrough context (TypeUnion sfields) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter context f) sfields
     return $ bidirectional $ \dir (TermUnion dfield) -> do
       adapter <- getAdapter adapters dfield
-      TermUnion <$> stepEither dir adapter dfield
+      TermUnion <$> stepBoth dir adapter dfield
   where
-    getAdapter adapters f = Y.maybe (Left $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
+    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
