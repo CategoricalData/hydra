@@ -213,7 +213,7 @@ toYaml context typ term = do
     adapter <- qualifiedToEither $ termAdapter adapterContext typ -- note: mixing error types
     stepOut adapter term >>= encodeTermForYaml typ
   where
-    adapterContext = TranslationContext context hydraCoreLanguage yamlLanguage
+    adapterContext = AdapterContext context hydraCoreLanguage yamlLanguage
 
 {-
 import qualified Data.Set as S

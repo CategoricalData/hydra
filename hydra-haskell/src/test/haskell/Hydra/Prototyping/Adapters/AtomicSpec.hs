@@ -2,7 +2,11 @@ module Hydra.Prototyping.Adapters.AtomicSpec where
 
 import Hydra.Core
 import Hydra.Errors
+import Hydra.Translation
+import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Adapters.Atomic
+
+import Hydra.TestGraph
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -10,6 +14,15 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 import qualified Data.Maybe as Y
 
+
+baseLanguage :: Language
+baseLanguage = hydraCoreLanguage
+
+baseContext :: AdapterContext
+baseContext = AdapterContext testContext baseLanguage baseLanguage
+
+withConstraints :: Language_Constraints -> AdapterContext
+withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
 
 testFloatMutators :: H.SpecWith ()
 testFloatMutators = do
@@ -27,7 +40,9 @@ testFloatMutators = do
     H.it "bigfloat is supported and remains unchanged" $
       QC.property $ \d -> mutateFloatValue m2 (FloatValueBigfloat d) == FloatValueBigfloat d
   where
-    muts = Y.fromMaybe M.empty . qualifiedValue . floatAdapters . S.fromList
+    muts variants = Y.fromMaybe M.empty $ qualifiedValue $ floatAdapters
+      $ withConstraints $ (languageConstraints baseLanguage) {
+        languageConstraintsFloatVariants = S.fromList variants }
     m1 = muts [FloatVariantFloat32, FloatVariantFloat64]
     m2 = muts [FloatVariantFloat32, FloatVariantBigfloat]
     m3 = muts [FloatVariantBigfloat]
@@ -52,7 +67,9 @@ testIntegerMutators = do
     H.it "downgrade bigint to int32, not uint32" $
       QC.property $ \i -> mutateIntegerValue m4 (IntegerValueBigint i) == IntegerValueInt32 (fromIntegral i)
   where
-    muts = Y.fromMaybe M.empty . qualifiedValue . integerAdapters . S.fromList
+    muts variants = Y.fromMaybe M.empty $ qualifiedValue $ integerAdapters
+      $ withConstraints $ (languageConstraints baseLanguage) {
+        languageConstraintsIntegerVariants = S.fromList variants }
     m1 = muts [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantBigint]
     m2 = muts [IntegerVariantInt16, IntegerVariantInt32, IntegerVariantBigint]
     m3 = muts [IntegerVariantUint16, IntegerVariantInt32]

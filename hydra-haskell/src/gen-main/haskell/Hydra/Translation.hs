@@ -1,9 +1,13 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Hydra.Translation
-  ( Language_Constraints(..)
+  ( AdapterContext(..)
+  , Language_Constraints(..)
   , Language_Name
   , Language(..)
-  , TranslationContext(..)
+  , _AdapterContext
+  , _AdapterContext_evaluation
+  , _AdapterContext_source
+  , _AdapterContext_target
   , _Language
   , _Language_Constraints
   , _Language_Constraints_atomicVariants
@@ -14,10 +18,6 @@ module Hydra.Translation
   , _Language_Name
   , _Language_constraints
   , _Language_name
-  , _TranslationContext
-  , _TranslationContext_evaluation
-  , _TranslationContext_source
-  , _TranslationContext_target
   ) where
 
 import GHC.Generics (Generic)
@@ -26,6 +26,15 @@ import Data.Map
 import Data.Set
 import Hydra.Core
 import Hydra.Evaluation
+
+data AdapterContext
+  = AdapterContext
+    -- | @type hydra/evaluation.Context
+    { adapterContextEvaluation :: Context
+    -- | @type hydra/translation.Language
+    , adapterContextSource :: Language
+    -- | @type hydra/translation.Language
+    , adapterContextTarget :: Language }
 
 data Language_Constraints
   = Language_Constraints
@@ -50,15 +59,10 @@ data Language
     -- | @type hydra/translation.Language.Constraints
     , languageConstraints :: Language_Constraints } deriving (Eq, Generic, Ord, Read, Show)
 
-data TranslationContext
-  = TranslationContext
-    -- | @type hydra/evaluation.Context
-    { translationContextEvaluation :: Context
-    -- | @type hydra/translation.Language
-    , translationContextSource :: Language
-    -- | @type hydra/translation.Language
-    , translationContextTarget :: Language }
-
+_AdapterContext = "hydra/translation.AdapterContext" :: String
+_AdapterContext_evaluation = "evaluation" :: String
+_AdapterContext_source = "source" :: String
+_AdapterContext_target = "target" :: String
 _Language = "hydra/translation.Language" :: String
 _Language_Constraints = "hydra/translation.Language_Constraints" :: String
 _Language_Constraints_atomicVariants = "atomicVariants" :: String
@@ -69,7 +73,3 @@ _Language_Constraints_typeVariants = "typeVariants" :: String
 _Language_Name = "hydra/translation.Language_Name" :: String
 _Language_constraints = "constraints" :: String
 _Language_name = "name" :: String
-_TranslationContext = "hydra/translation.TranslationContext" :: String
-_TranslationContext_evaluation = "evaluation" :: String
-_TranslationContext_source = "source" :: String
-_TranslationContext_target = "target" :: String

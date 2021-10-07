@@ -22,8 +22,8 @@ import qualified Test.QuickCheck as QC
 testLanguage :: Language
 testLanguage = yamlLanguage
 
-transContext :: TranslationContext
-transContext = TranslationContext testContext hydraCoreLanguage testLanguage
+transContext :: AdapterContext
+transContext = AdapterContext testContext hydraCoreLanguage testLanguage
   
 -- Note: in a real application, you wouldn't create the adapter just to use it once;
 --       it should be created once, then applied to many terms.
