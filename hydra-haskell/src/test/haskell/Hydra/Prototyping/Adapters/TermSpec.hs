@@ -28,7 +28,7 @@ transContext = TranslationContext testContext hydraCoreLanguage testLanguage
 --       it should be created once, then applied to many terms.
 adapt :: Type -> (Step Term Term -> t -> Either String b) -> t -> Either String b
 adapt typ dir term = do
-  adapter <- termAdapter transContext typ
+  adapter <- qualifiedToEither $ termAdapter transContext typ
   dir adapter term
 
 booleanElementType = TypeElement $ TypeAtomic AtomicTypeBoolean

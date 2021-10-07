@@ -209,7 +209,7 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
 
 toYaml :: Context -> Type -> Term -> Either String YM.Node
 toYaml context typ term = do
-    adapter <- termAdapter adapterContext typ -- note: mixing error types
+    adapter <- qualifiedToEither $ termAdapter adapterContext typ -- note: mixing error types
     stepOut adapter term >>= encodeTermForYaml typ
   where
     adapterContext = TranslationContext context hydraCoreLanguage yamlLanguage
