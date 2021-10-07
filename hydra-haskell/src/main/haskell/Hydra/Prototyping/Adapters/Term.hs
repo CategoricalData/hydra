@@ -4,7 +4,7 @@ module Hydra.Prototyping.Adapters.Term (
 
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Translation
+import Hydra.Adapter
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Extras
 import Hydra.Ext.Haskell.Dsl

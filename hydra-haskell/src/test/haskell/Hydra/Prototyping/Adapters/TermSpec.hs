@@ -7,7 +7,7 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Extras
 import Hydra.Prototyping.Steps
-import Hydra.Translation
+import Hydra.Adapter
 
 import Hydra.TestUtils
 
