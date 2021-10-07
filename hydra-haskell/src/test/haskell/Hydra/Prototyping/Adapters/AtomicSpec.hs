@@ -27,7 +27,7 @@ testFloatMutators = do
     H.it "bigfloat is supported and remains unchanged" $
       QC.property $ \d -> mutateFloatValue m2 (FloatValueBigfloat d) == FloatValueBigfloat d
   where
-    muts = Y.fromMaybe M.empty . qualifiedValue . floatMutators . S.fromList
+    muts = Y.fromMaybe M.empty . qualifiedValue . floatAdapters . S.fromList
     m1 = muts [FloatVariantFloat32, FloatVariantFloat64]
     m2 = muts [FloatVariantFloat32, FloatVariantBigfloat]
     m3 = muts [FloatVariantBigfloat]
@@ -52,7 +52,7 @@ testIntegerMutators = do
     H.it "downgrade bigint to int32, not uint32" $
       QC.property $ \i -> mutateIntegerValue m4 (IntegerValueBigint i) == IntegerValueInt32 (fromIntegral i)
   where
-    muts = Y.fromMaybe M.empty . qualifiedValue . integerMutators . S.fromList
+    muts = Y.fromMaybe M.empty . qualifiedValue . integerAdapters . S.fromList
     m1 = muts [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantBigint]
     m2 = muts [IntegerVariantInt16, IntegerVariantInt32, IntegerVariantBigint]
     m3 = muts [IntegerVariantUint16, IntegerVariantInt32]

@@ -1,9 +1,8 @@
 module Hydra.Prototyping.Adapters.Atomic (
-  Mutator(..),
   atomicAdapter,
-  atomicMutators,
-  floatMutators,
-  integerMutators,
+  atomicAdapters,
+  floatAdapters,
+  integerAdapters,
   mutateFloatValue,
   mutateIntegerValue,
 ) where
@@ -19,15 +18,13 @@ import qualified Data.Maybe as Y
 import qualified Data.Set as S
 
 
-type Mutator v = Qualified (v -> v)
-
 atomicAdapter = ()
 --atomicAdapter :: TranslationContext -> AtomicType -> Either String (Step AtomicValue AtomicValue)
 --atomicAdapter context at = ...
 
 
-atomicMutators :: S.Set AtomicVariant -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
-atomicMutators = mutators atomicVariants subst descriptions buildMap
+atomicAdapters :: S.Set AtomicVariant -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
+atomicAdapters = mutators atomicVariants subst descriptions buildMap
   where
     subst _ = [] -- no substitution across atomic variants (for now)
     descriptions = M.fromList [
@@ -39,8 +36,8 @@ atomicMutators = mutators atomicVariants subst descriptions buildMap
     buildMap :: AtomicVariant -> AtomicVariant -> Qualified (AtomicValue -> AtomicValue)
     buildMap source target = pure id
 
-floatMutators :: S.Set FloatVariant -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
-floatMutators = mutators floatVariants subst descriptions buildMap
+floatAdapters :: S.Set FloatVariant -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
+floatAdapters = mutators floatVariants subst descriptions buildMap
   where
     subst v = case v of
        FloatVariantBigfloat -> [FloatVariantFloat64, FloatVariantFloat32]
@@ -64,8 +61,8 @@ floatMutators = mutators floatVariants subst descriptions buildMap
           FloatVariantFloat32 -> FloatValueFloat32 $ realToFrac d
           FloatVariantFloat64 -> FloatValueFloat64 d
 
-integerMutators :: S.Set IntegerVariant -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
-integerMutators = mutators integerVariants subst descriptions buildMap
+integerAdapters :: S.Set IntegerVariant -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
+integerAdapters = mutators integerVariants subst descriptions buildMap
   where
     subst v = case v of
         IntegerVariantBigint -> L.reverse unsignedPref
