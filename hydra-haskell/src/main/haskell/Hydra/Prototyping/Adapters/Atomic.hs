@@ -6,11 +6,11 @@ module Hydra.Prototyping.Adapters.Atomic (
   integerMutators,
   mutateFloatValue,
   mutateIntegerValue,
-  --termMutators,
 ) where
 
 import Hydra.Core
 import Hydra.Prototyping.Basics
+import Hydra.Prototyping.Extras
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -19,17 +19,14 @@ import qualified Data.Maybe as Y
 import qualified Data.Set as S
 
 
-data Mutator v = Mutator {
-  mutatorMapping :: v -> v,
-  mutatorWarnings :: S.Set String }
-
+type Mutator v = Qualified (v -> v)
 
 atomicAdapter = ()
 --atomicAdapter :: TranslationContext -> AtomicType -> Either String (Step AtomicValue AtomicValue)
 --atomicAdapter context at = ...
 
 
-atomicMutators :: S.Set AtomicVariant -> Either String (M.Map AtomicVariant (Mutator AtomicValue))
+atomicMutators :: S.Set AtomicVariant -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
 atomicMutators = mutators atomicVariants subst descriptions buildMap
   where
     subst _ = [] -- no substitution across atomic variants (for now)
@@ -39,9 +36,10 @@ atomicMutators = mutators atomicVariants subst descriptions buildMap
       (AtomicVariantFloat, "floating-point numbers"),
       (AtomicVariantInteger, "integers"),
       (AtomicVariantString, "strings")]
-    buildMap source target = Right id
+    buildMap :: AtomicVariant -> AtomicVariant -> Qualified (AtomicValue -> AtomicValue)
+    buildMap source target = pure id
 
-floatMutators :: S.Set FloatVariant -> Either String (M.Map FloatVariant (Mutator FloatValue))
+floatMutators :: S.Set FloatVariant -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
 floatMutators = mutators floatVariants subst descriptions buildMap
   where
     subst v = case v of
@@ -54,7 +52,8 @@ floatMutators = mutators floatVariants subst descriptions buildMap
         precision v = case floatVariantPrecision v of
           PrecisionArbitrary -> "arbitrary-precision"
           PrecisionBits bits -> show bits ++ "-bit"
-    buildMap _ target = Right $ encoder . decoder
+    buildMap :: FloatVariant -> FloatVariant -> Qualified (FloatValue -> FloatValue)
+    buildMap _ target = pure $ encoder . decoder
       where
         decoder fv = case fv of
           FloatValueBigfloat d -> d
@@ -65,7 +64,7 @@ floatMutators = mutators floatVariants subst descriptions buildMap
           FloatVariantFloat32 -> FloatValueFloat32 $ realToFrac d
           FloatVariantFloat64 -> FloatValueFloat64 d
 
-integerMutators :: S.Set IntegerVariant -> Either String (M.Map IntegerVariant (Mutator IntegerValue))
+integerMutators :: S.Set IntegerVariant -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
 integerMutators = mutators integerVariants subst descriptions buildMap
   where
     subst v = case v of
@@ -96,7 +95,8 @@ integerMutators = mutators integerVariants subst descriptions buildMap
         precision v = case integerVariantPrecision v of
           PrecisionArbitrary -> "arbitrary-precision"
           PrecisionBits bits -> show bits ++ "-bit"
-    buildMap _ target = Right $ encoder . decoder
+    buildMap :: IntegerVariant -> IntegerVariant -> Qualified (IntegerValue -> IntegerValue)
+    buildMap _ target = pure $ encoder . decoder
       where
         decoder :: IntegerValue -> Integer
         decoder iv = case iv of
@@ -121,27 +121,25 @@ integerMutators = mutators integerVariants subst descriptions buildMap
           IntegerVariantUint32 -> IntegerValueUint32 $ fromIntegral d
           IntegerVariantUint64 -> IntegerValueUint64 $ fromIntegral d
 
-mutateFloatValue :: M.Map FloatVariant (Mutator FloatValue) -> FloatValue -> FloatValue
-mutateFloatValue muts fv = (Y.maybe id mutatorMapping $ M.lookup (floatValueVariant fv) muts) fv
+mutateFloatValue :: M.Map FloatVariant (FloatValue -> FloatValue) -> FloatValue -> FloatValue
+mutateFloatValue muts fv = Y.fromMaybe id (M.lookup (floatValueVariant fv) muts) fv
 
-mutateIntegerValue :: M.Map IntegerVariant (Mutator IntegerValue) -> IntegerValue -> IntegerValue
-mutateIntegerValue muts fv = (Y.maybe id mutatorMapping $ M.lookup (integerValueVariant fv) muts) fv
+mutateIntegerValue :: M.Map IntegerVariant (IntegerValue -> IntegerValue) -> IntegerValue -> IntegerValue
+mutateIntegerValue muts iv = Y.fromMaybe id (M.lookup (integerValueVariant iv) muts) iv
 
 mutator :: (Ord v, Show v) =>
-     [v]
-  -> (v -> [v])
+     (v -> [v])
   -> M.Map v String
-  -> (v -> v -> Either String (a -> a))
+  -> (v -> v -> Qualified (a -> a))
   -> S.Set v
   -> v
-  -> Either String (Mutator a)
-mutator variants subst descriptions buildMap supported source
-  | S.member source supported = Right $ Mutator id S.empty
-  | L.null candidates = Left $ "no acceptable substitute for " ++ show source
+  -> Qualified (a -> a)
+mutator subst descriptions buildMap supported source
+  | S.member source supported = pure id
+  | L.null candidates = fail $ "no acceptable substitute for " ++ show source
   | otherwise = do
       mapping <- buildMap source target
-      let warnings = S.fromList ["replace " ++ describe source ++ " with " ++ describe target]
-      return $ Mutator mapping warnings
+      Qualified (Just mapping) ["replace " ++ describe source ++ " with " ++ describe target]
   where
       target = L.head candidates
       candidates = L.filter (`S.member` supported) $ subst source
@@ -151,11 +149,11 @@ mutators :: (Ord v, Show v) =>
      [v]
   -> (v -> [v])
   -> M.Map v String
-  -> (v -> v -> Either String (a -> a))
+  -> (v -> v -> Qualified (a -> a))
   -> S.Set v
-  -> Either String (M.Map v (Mutator a))
-mutators variants subst descriptions buildMap supported = M.fromList <$> (CM.mapM toPair variants)
+  -> Qualified (M.Map v (a -> a))
+mutators variants subst descriptions buildMap supported = M.fromList <$> CM.mapM toPair variants
   where
     toPair v = do
-      m <- mutator variants subst descriptions buildMap supported v
+      m <- mutator subst descriptions buildMap supported v
       return (v, m)

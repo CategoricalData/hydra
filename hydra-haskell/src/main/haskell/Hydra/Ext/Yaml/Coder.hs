@@ -11,6 +11,7 @@ import Hydra.Translation
 import Hydra.Prototyping.Adapters.Term
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Prototyping.Basics
+import Hydra.Prototyping.Extras
 import Hydra.Prototyping.Steps
 import qualified Hydra.Prototyping.CoreEncoding as CE
 

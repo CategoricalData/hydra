@@ -1,17 +1,12 @@
 module Hydra.Prototyping.Adapters.Term (
-  eitherToQualified,
-  qualifiedToEither,
-  
-  termAdapter,
-  
-  module Hydra.Errors,
+  termAdapter,  
 ) where
 
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Graph
 import Hydra.Translation
 import Hydra.Prototyping.Basics
+import Hydra.Prototyping.Extras
 import Hydra.Ext.Haskell.Dsl
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
@@ -23,29 +18,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
--- TODO: move --------------------------
-instance Functor Qualified where
-  fmap f (Qualified x msgs) = Qualified (fmap f x) msgs
-instance Applicative Qualified where
-  pure x = Qualified (Just x) []
-  Qualified f mf <*> Qualified x mx = Qualified (f <*> x) $ mf <> mx
-instance Monad Qualified where
-  Qualified x m >>= f = case x of
-    Nothing -> Qualified Nothing m
-    Just x' -> Qualified fx $ m2 <> m
-      where Qualified fx m2 = f x'
-
-eitherToQualified :: Either String a -> Qualified a
-eitherToQualified e = case e of
-  Left msg -> Qualified Nothing [msg]
-  Right x -> Qualified (Just x) []
-
-qualifiedToEither :: Qualified a -> Either String a
-qualifiedToEither (Qualified x m) = case x of
-  Nothing -> Left $ L.head m
-  Just x' -> Right x'
-----------------------------------------
 
 bidirectional :: (StepDirection -> b -> Either String b) -> Step b b
 bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
