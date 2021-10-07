@@ -1,11 +1,11 @@
 module Hydra.Prototyping.Adapters.TermSpec where
 
 import Hydra.Core
-import Hydra.Ext.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl
 import Hydra.Ext.Yaml.Coder
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Extras
+import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Adapter
 

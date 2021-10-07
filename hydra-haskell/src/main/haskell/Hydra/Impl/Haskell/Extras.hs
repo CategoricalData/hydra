@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Extras (
+module Hydra.Impl.Haskell.Extras (
   eitherToQualified,
   qualifiedToResult,
   module Hydra.Errors
