@@ -10,15 +10,16 @@ module Hydra.Prototyping.Primitives (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
+import Hydra.Prototyping.Steps
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-getGraph :: GraphSet -> GraphName -> Either String Graph
-getGraph graphs name = Y.maybe error Right $ M.lookup name (graphSetGraphs graphs)
+getGraph :: GraphSet -> GraphName -> Result Graph
+getGraph graphs name = Y.maybe error pure $ M.lookup name (graphSetGraphs graphs)
   where
-    error = Left $ "no such graph: " ++ name
+    error = fail $ "no such graph: " ++ name
 
 graphElementsMap :: Graph -> M.Map Name Element
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
@@ -33,17 +34,17 @@ primitiveFunctionArity = arity . primitiveFunctionType
       TypeFunction ft -> arity ft
       _ -> 0
 
-requireElement :: Context -> Name -> Either String Element
-requireElement context name = Y.maybe error Right $ M.lookup name $ contextElements context
+requireElement :: Context -> Name -> Result Element
+requireElement context name = Y.maybe error pure $ M.lookup name $ contextElements context
   where
-    error = Left $ "no such element: " ++ name
+    error = fail $ "no such element: " ++ name
 
-requirePrimitiveFunction :: Context -> Name -> Either String PrimitiveFunction
-requirePrimitiveFunction context fn = Y.maybe error Right $ lookupPrimitiveFunction context fn
+requirePrimitiveFunction :: Context -> Name -> Result PrimitiveFunction
+requirePrimitiveFunction context fn = Y.maybe error pure $ lookupPrimitiveFunction context fn
   where
-    error = Left $ "no such primitive function: " ++ fn
+    error = fail $ "no such primitive function: " ++ fn
 
-schemaContext :: Context -> Either String Context
+schemaContext :: Context -> Result Context
 schemaContext context = do
     dgraph <- getGraph graphs $ graphSetRoot graphs
     sgraph <- getGraph graphs $ graphSchemaGraph dgraph

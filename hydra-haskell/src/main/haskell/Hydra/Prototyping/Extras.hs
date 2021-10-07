@@ -1,10 +1,11 @@
 module Hydra.Prototyping.Extras (
   eitherToQualified,
-  qualifiedToEither,
+  qualifiedToResult,
   module Hydra.Errors
   ) where
 
 import Hydra.Errors
+import Hydra.Prototyping.Steps
 
 import qualified Data.List as L
 
@@ -22,12 +23,12 @@ instance Monad Qualified where
 instance MonadFail Qualified where
   fail msg = Qualified Nothing [msg]
 
-eitherToQualified :: Either String a -> Qualified a
+eitherToQualified :: Result a -> Qualified a
 eitherToQualified e = case e of
-  Left msg -> Qualified Nothing [msg]
-  Right x -> Qualified (Just x) []
+  ResultFailure msg -> Qualified Nothing [msg]
+  ResultSuccess x -> Qualified (Just x) []
 
-qualifiedToEither :: Qualified a -> Either String a
-qualifiedToEither (Qualified x m) = case x of
-  Nothing -> Left $ L.head m
-  Just x' -> Right x'
+qualifiedToResult :: Qualified a -> Result a
+qualifiedToResult (Qualified x m) = case x of
+  Nothing -> fail $ L.head m
+  Just x' -> pure x'
