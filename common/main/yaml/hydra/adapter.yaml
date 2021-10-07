@@ -1,6 +1,7 @@
 includes:
   - core
   - evaluation
+  - traversal
 
 definitions:
 
@@ -17,11 +18,15 @@ definitions:
 
         - name: mapping
           type:
-            function:
-              from:
-                - variable: v
-              to:
-                variable: v
+            parameterized:
+              genericType: traversal.Step
+              parameters:
+                - variable: a
+                  type:
+                    variable: v
+                - variable: b
+                  type:
+                    variable: v
 
         - name: isLossy
           type: boolean
