@@ -27,7 +27,7 @@ stringsCat = PrimitiveFunction {
     primitiveFunctionType = FunctionType stringType (TypeFunction $ FunctionType stringType stringType),
     primitiveFunctionImplementation = \[x, y] -> case (x, y) of
       (TermAtomic (AtomicValueString x'), TermAtomic (AtomicValueString y'))
-        -> stringValue $ x' ++ y'
+        -> pure $ stringValue $ x' ++ y'
   }
 
 stringsLength :: PrimitiveFunction
@@ -36,7 +36,7 @@ stringsLength = PrimitiveFunction {
   primitiveFunctionType = FunctionType stringType int32Type,
   primitiveFunctionImplementation = \[x] -> case x of
     TermAtomic (AtomicValueString s)
-      -> int32Value $ L.length s
+      -> pure $ int32Value $ L.length s
   }
 
 stringsToLower :: PrimitiveFunction
@@ -45,7 +45,7 @@ stringsToLower = PrimitiveFunction {
   primitiveFunctionType = FunctionType stringType stringType,
   primitiveFunctionImplementation = \[x] -> case x of
     TermAtomic (AtomicValueString s)
-      -> stringValue $ fmap C.toLower s
+      -> pure $ stringValue $ fmap C.toLower s
   }
 
 stringsToUpper :: PrimitiveFunction
@@ -54,5 +54,5 @@ stringsToUpper = PrimitiveFunction {
   primitiveFunctionType = FunctionType stringType stringType,
   primitiveFunctionImplementation = \[x] -> case x of
     TermAtomic (AtomicValueString s)
-      -> stringValue $ fmap C.toUpper s
+      -> pure $ stringValue $ fmap C.toUpper s
   }

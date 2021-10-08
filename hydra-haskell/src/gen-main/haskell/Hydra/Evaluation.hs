@@ -67,8 +67,13 @@ data PrimitiveFunction
     {-| @type function:
                 from:
                 - list: hydra/core.Term
-                to: hydra/core.Term -}
-    , primitiveFunctionImplementation :: [Term] -> Term }
+                to:
+                  parameterized:
+                    genericType: hydra/evaluation.Result
+                    parameters:
+                    - type: hydra/core.Term
+                      variable: a -}
+    , primitiveFunctionImplementation :: [Term] -> (Result Term) }
 
 data Result a
   -- | @type variable: a

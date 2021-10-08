@@ -90,7 +90,8 @@ evaluate context term = reduce M.empty term
            let arity = primitiveFunctionArity prim
            if L.length args >= arity
              then (mapM (reduce bindings) $ L.take arity args)
-               >>= (reduce bindings . primitiveFunctionImplementation prim)
+               >>= primitiveFunctionImplementation prim
+               >>= reduce bindings
                >>= reduceApplication bindings (L.drop arity args)
              else unwind
          where
