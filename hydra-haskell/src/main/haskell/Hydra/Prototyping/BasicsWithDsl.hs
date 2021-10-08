@@ -9,17 +9,17 @@ import Hydra.Impl.Haskell.Dsl
 
 
 basicsElement :: String -> Type -> Term -> Element
-basicsElement name typ dat = Element ("hydra/basics." ++ name) (encodeType typ) dat
+basicsElement name typ = Element ("hydra/basics." ++ name) (encodeType typ)
 
 basicsFunction :: String -> Name -> Name -> Term -> Element
-basicsFunction name dom cod dat = basicsElement name typ dat
+basicsFunction name dom cod = basicsElement name typ
   where
     typ = functionType (nominalType dom) (nominalType cod)
 
 basicsGraph :: Graph
 basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
   where
-    dataTerms = \t -> True -- TODO
+    dataTerms = const True -- TODO
     schemaGraph = "none" -- TODO
     elements = [
         atomicTypeVariant,
