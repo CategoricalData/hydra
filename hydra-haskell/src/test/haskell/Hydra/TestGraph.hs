@@ -1,5 +1,6 @@
 module Hydra.TestGraph (
   graphElementsMap,
+  stringsFunc,
   testContext,
   testGraph,
   testStrategy,
@@ -8,13 +9,11 @@ module Hydra.TestGraph (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
 
 import qualified Data.Char as C
-import qualified Data.List as L
 import qualified Data.Map  as M
 import qualified Data.Set  as S
 
@@ -28,10 +27,10 @@ testContext = Context {
         ("hydra/core", hydraCorePlaceholder)],
       graphSetRoot = "testGraph"},
     contextElements = graphElementsMap testGraph,
-    contextFunctions = M.fromList [
-      ("concat", PrimitiveFunction concatFunction (FunctionType stringType (TypeFunction $ FunctionType stringType stringType))),
-      ("toLower", PrimitiveFunction toLowerFunction (FunctionType stringType stringType)),
-      ("toUpper", PrimitiveFunction toUpperFunction (FunctionType stringType stringType))],
+    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) [
+      stringsConcat,
+      stringsToLower,
+      stringsToUpper],
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantAtomic,
@@ -42,20 +41,35 @@ testContext = Context {
         TermVariantLambda,
         TermVariantProjection]}}
 
-concatFunction :: [Term] -> Term
-concatFunction [x, y] = case (x, y) of
-  (TermAtomic (AtomicValueString x'), TermAtomic (AtomicValueString y'))
-    -> TermAtomic $ AtomicValueString $ x' ++ y'
+stringsFunc :: String -> Name
+stringsFunc local = "hydra/lib/strings." ++ local
 
-toLowerFunction :: [Term] -> Term
-toLowerFunction [x] = case x of
-  TermAtomic (AtomicValueString s)
-    -> TermAtomic $ AtomicValueString $ fmap C.toLower s
+stringsConcat :: PrimitiveFunction
+stringsConcat = PrimitiveFunction {
+    primitiveFunctionName = stringsFunc "concat",
+    primitiveFunctionType = FunctionType stringType (TypeFunction $ FunctionType stringType stringType),
+    primitiveFunctionImplementation = \[x, y] -> case (x, y) of
+      (TermAtomic (AtomicValueString x'), TermAtomic (AtomicValueString y'))
+        -> TermAtomic $ AtomicValueString $ x' ++ y'
+  }
 
-toUpperFunction :: [Term] -> Term
-toUpperFunction [x] = case x of
-  TermAtomic (AtomicValueString s)
-    -> TermAtomic $ AtomicValueString $ fmap C.toUpper s
+stringsToLower :: PrimitiveFunction
+stringsToLower = PrimitiveFunction {
+  primitiveFunctionName = stringsFunc "toLower",
+  primitiveFunctionType = FunctionType stringType stringType,
+  primitiveFunctionImplementation = \[x] -> case x of
+    TermAtomic (AtomicValueString s)
+      -> TermAtomic $ AtomicValueString $ fmap C.toLower s
+  }
+   
+stringsToUpper :: PrimitiveFunction
+stringsToUpper = PrimitiveFunction {
+  primitiveFunctionName = stringsFunc "toUpper",
+  primitiveFunctionType = FunctionType stringType stringType,
+  primitiveFunctionImplementation = \[x] -> case x of
+    TermAtomic (AtomicValueString s)
+      -> TermAtomic $ AtomicValueString $ fmap C.toUpper s
+  }
 
 testGraph :: Graph
 testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"

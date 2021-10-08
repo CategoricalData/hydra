@@ -36,12 +36,15 @@ definitions:
   - name: PrimitiveFunction
     type:
       record:
+        - name: name
+          type: core.Name
+
+        - name: type
+          type: core.FunctionType
+
         - name: implementation
           type:
             function:
               from:
                 - list: core.Term
               to: core.Term
-
-        - name: type
-          type: core.FunctionType

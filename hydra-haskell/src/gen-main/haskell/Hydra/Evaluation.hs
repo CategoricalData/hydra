@@ -12,6 +12,7 @@ module Hydra.Evaluation
   , _EvaluationStrategy_opaqueTermVariants
   , _PrimitiveFunction
   , _PrimitiveFunction_implementation
+  , _PrimitiveFunction_name
   , _PrimitiveFunction_type
   ) where
 
@@ -47,13 +48,15 @@ data EvaluationStrategy
 
 data PrimitiveFunction
   = PrimitiveFunction
+    -- | @type hydra/core.Name
+    { primitiveFunctionName :: Name
+    -- | @type hydra/core.FunctionType
+    , primitiveFunctionType :: FunctionType
     {-| @type function:
                 from:
                 - list: hydra/core.Term
                 to: hydra/core.Term -}
-    { primitiveFunctionImplementation :: [Term] -> Term
-    -- | @type hydra/core.FunctionType
-    , primitiveFunctionType :: FunctionType }
+    , primitiveFunctionImplementation :: [Term] -> Term }
 
 _Context = "hydra/evaluation.Context" :: String
 _Context_elements = "elements" :: String
@@ -64,4 +67,5 @@ _EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
 _EvaluationStrategy_opaqueTermVariants = "opaqueTermVariants" :: String
 _PrimitiveFunction = "hydra/evaluation.PrimitiveFunction" :: String
 _PrimitiveFunction_implementation = "implementation" :: String
+_PrimitiveFunction_name = "name" :: String
 _PrimitiveFunction_type = "type" :: String
