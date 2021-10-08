@@ -25,34 +25,36 @@ stringsCat :: PrimitiveFunction
 stringsCat = PrimitiveFunction {
     primitiveFunctionName = stringsFunc "cat",
     primitiveFunctionType = FunctionType stringType (TypeFunction $ FunctionType stringType stringType),
-    primitiveFunctionImplementation = \[x, y] -> case (x, y) of
-      (TermAtomic (AtomicValueString x'), TermAtomic (AtomicValueString y'))
-        -> pure $ stringValue $ x' ++ y'
+    primitiveFunctionImplementation = withTwoStrings $ \x y -> stringTerm $ x ++ y
   }
 
 stringsLength :: PrimitiveFunction
 stringsLength = PrimitiveFunction {
-  primitiveFunctionName = stringsFunc "length",
-  primitiveFunctionType = FunctionType stringType int32Type,
-  primitiveFunctionImplementation = \[x] -> case x of
-    TermAtomic (AtomicValueString s)
-      -> pure $ int32Value $ L.length s
+    primitiveFunctionName = stringsFunc "length",
+    primitiveFunctionType = FunctionType stringType int32Type,
+    primitiveFunctionImplementation = withString $ int32Value . L.length
   }
 
 stringsToLower :: PrimitiveFunction
 stringsToLower = PrimitiveFunction {
-  primitiveFunctionName = stringsFunc "toLower",
-  primitiveFunctionType = FunctionType stringType stringType,
-  primitiveFunctionImplementation = \[x] -> case x of
-    TermAtomic (AtomicValueString s)
-      -> pure $ stringValue $ fmap C.toLower s
+    primitiveFunctionName = stringsFunc "toLower",
+    primitiveFunctionType = FunctionType stringType stringType,
+    primitiveFunctionImplementation = withString $ stringValue . fmap C.toLower
   }
 
 stringsToUpper :: PrimitiveFunction
 stringsToUpper = PrimitiveFunction {
-  primitiveFunctionName = stringsFunc "toUpper",
-  primitiveFunctionType = FunctionType stringType stringType,
-  primitiveFunctionImplementation = \[x] -> case x of
-    TermAtomic (AtomicValueString s)
-      -> pure $ stringValue $ fmap C.toUpper s
+    primitiveFunctionName = stringsFunc "toUpper",
+    primitiveFunctionType = FunctionType stringType stringType,
+    primitiveFunctionImplementation = withString $  stringValue . fmap C.toUpper
   }
+
+withString :: (String -> Term) -> [Term] -> Result Term
+withString func args = do
+  expectNArgs 1 args
+  func <$> expectStringTerm (L.head args)
+
+withTwoStrings :: (String -> String -> Term) -> [Term] -> Result Term
+withTwoStrings func args = do
+  expectNArgs 2 args
+  func <$> expectStringTerm (L.head args) <*> expectStringTerm (args !! 1)
