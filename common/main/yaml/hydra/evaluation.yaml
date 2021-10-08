@@ -47,7 +47,12 @@ definitions:
             function:
               from:
                 - list: core.Term
-              to: core.Term
+              to:
+                parameterized:
+                  genericType: Result
+                  parameters:
+                    - variable: a
+                      type: core.Term
 
   - name: Result
     type:
