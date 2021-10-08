@@ -1,5 +1,5 @@
 module Hydra.Prototyping.Adapters.Term (
-  termAdapter,  
+  termAdapter,
 ) where
 
 import Hydra.Core
@@ -26,10 +26,10 @@ atomicTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 atomicTypePassThrough _ _ = pure idStep
 
 elementTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
-elementTypePassThrough context (TypeElement et) = pure idStep
+elementTypePassThrough _ (TypeElement _) = pure idStep
 
 elementTypeToStringType :: AdapterContext -> Type -> Qualified (Step Term Term)
-elementTypeToStringType context (TypeElement et) = pure $ Step encode decode
+elementTypeToStringType _ (TypeElement _) = pure $ Step encode decode
   where
     encode (TermElement name) = pure $ stringValue name
     decode (TermAtomic (AtomicValueString name)) = pure $ TermElement name
@@ -43,20 +43,21 @@ functionTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 functionTypePassThrough context (TypeFunction (FunctionType dom cod)) = do
     codomainStep <- termAdapter context cod
     caseSteps <- case dom of
-      TypeUnion sfields -> (M.fromList . L.zip (fieldTypeName <$> sfields)) <$> CM.mapM (fieldAdapter context) sfields
+      TypeUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
+        <$> CM.mapM (fieldAdapter context) sfields
       _ -> pure M.empty
     return $ bidirectional $ \dir term -> case term of
-      TermCases cases -> TermCases <$> (CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases)
+      TermCases cases -> TermCases <$> CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases
         where
           -- Note: this causes unrecognized cases to simply be passed through;
           --       it is not the job of this adapter to catch validation issues.
           getStep fname = Y.fromMaybe idStep $ M.lookup fname caseSteps
       TermCompareTo other -> TermCompareTo <$> stepBoth dir codomainStep other
-      TermLambda (Lambda var body) -> TermLambda <$> (Lambda <$> pure var <*> stepBoth dir codomainStep body)
+      TermLambda (Lambda var body) -> TermLambda <$> (Lambda var <$> stepBoth dir codomainStep body)
       _ -> pure term
 
 functionTypeToUnionType :: AdapterContext -> Type -> Qualified (Step Term Term)
-functionTypeToUnionType context (TypeFunction (FunctionType dom cod)) = do
+functionTypeToUnionType context (TypeFunction (FunctionType dom _)) = do
     adapter <- termAdapter context $ TypeUnion [
       FieldType _Term_cases stringType, -- TODO (TypeRecord cases)
       FieldType _Term_compareTo dom,
@@ -149,36 +150,41 @@ setTypeToListType context (TypeSet st) = do
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: AdapterContext -> Type -> Qualified (Step Term Term)
-termAdapter context typ = if (not $ isRelevant var)
-    then pure idStep
-    else if isSupported var
-    then Y.maybe (pure idStep) (\a -> a context typ) $ M.lookup var passThroughs
-    else if L.null alts
-    then Qualified Nothing ["no adapter could be constructed for " ++ show var]
-    else snd (L.head alts) context typ
+termAdapter context typ
+  | not $ isRelevant var = pure idStep
+  | isSupported var = Y.maybe (pure idStep) (\a -> a context typ) $ M.lookup var passThroughs
+  | L.null alts = Qualified Nothing ["no adapter could be constructed for " ++ show var]
+  | otherwise = snd (L.head alts) context typ
   where
-    source = adapterContextSource context
-    target = adapterContextTarget context
-    var = typeVariant typ
-    isSupported var = S.member var $ languageConstraintsTypeVariants $ languageConstraints target
-    isRelevant var = S.member var $ languageConstraintsTypeVariants $ languageConstraints source
-    alts = L.filter (\p -> isSupported $ fst p) $ Y.fromMaybe [] $ M.lookup var mutators
-    passThroughs :: M.Map TypeVariant (AdapterContext -> Type -> Qualified (Step Term Term))
-    passThroughs = M.fromList [
-      (TypeVariantAtomic, atomicTypePassThrough),
-      (TypeVariantElement, elementTypePassThrough),
-      (TypeVariantFunction, functionTypePassThrough),
-      (TypeVariantList, listTypePassThrough),
-      (TypeVariantMap, mapTypePassThrough),
-      (TypeVariantNominal, nominalTypePassThrough),
-      (TypeVariantRecord, recordTypePassThrough),
-      (TypeVariantSet, setTypePassThrough),
-      (TypeVariantUnion, unionTypePassThrough)]
-    mutators :: M.Map TypeVariant [(TypeVariant, AdapterContext -> Type -> Qualified (Step Term Term))]
-    mutators = M.fromList [
-      (TypeVariantElement, [(TypeVariantAtomic, elementTypeToStringType)]),
-      (TypeVariantFunction, [(TypeVariantUnion, functionTypeToUnionType)]),
-      (TypeVariantSet, [(TypeVariantList, setTypeToListType)])]
+      source = adapterContextSource context
+      target = adapterContextTarget context
+      var = typeVariant typ
+      isSupported var = S.member var
+            $ languageConstraintsTypeVariants $ languageConstraints target
+      isRelevant var = S.member var
+            $ languageConstraintsTypeVariants $ languageConstraints source
+      alts = L.filter (isSupported . fst)
+            $ Y.fromMaybe [] $ M.lookup var mutators
+
+      passThroughs
+        = M.fromList
+            [(TypeVariantAtomic, atomicTypePassThrough),
+             (TypeVariantElement, elementTypePassThrough),
+             (TypeVariantFunction, functionTypePassThrough),
+             (TypeVariantList, listTypePassThrough),
+             (TypeVariantMap, mapTypePassThrough),
+             (TypeVariantNominal, nominalTypePassThrough),
+             (TypeVariantRecord, recordTypePassThrough),
+             (TypeVariantSet, setTypePassThrough),
+             (TypeVariantUnion, unionTypePassThrough)]
+
+      mutators
+        = M.fromList
+            [(TypeVariantElement, 
+              [(TypeVariantAtomic, elementTypeToStringType)]),
+             (TypeVariantFunction, 
+              [(TypeVariantUnion, functionTypeToUnionType)]),
+             (TypeVariantSet, [(TypeVariantList, setTypeToListType)])]
 
 unionTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 unionTypePassThrough context (TypeUnion sfields) = do

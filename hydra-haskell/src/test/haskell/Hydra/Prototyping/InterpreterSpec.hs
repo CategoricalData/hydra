@@ -39,7 +39,7 @@ testsForPrimitiveFunctions = do
     H.it "Example primitives have the expected arity" $ do
       (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "toUpper"))
         `H.shouldBe` Just 1
-      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "concat"))
+      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "cat"))
         `H.shouldBe` Just 2
     
     H.it "Simple applications of a unary function succeed" $
@@ -49,13 +49,13 @@ testsForPrimitiveFunctions = do
         
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \s1 s2 ->
-        testEvaluate (apply (apply (func "concat") $ stringTerm s1) $ stringTerm s2)
+        testEvaluate (apply (apply (func "cat") $ stringTerm s1) $ stringTerm s2)
         == pure (stringTerm $ s1 ++ s2)
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $ 
       QC.property $ \s1 ->
-        testEvaluate (apply (func "concat") $ stringTerm s1)
-        == pure (apply (func "concat") $ stringTerm s1)
+        testEvaluate (apply (func "cat") $ stringTerm s1)
+        == pure (apply (func "cat") $ stringTerm s1)
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->
