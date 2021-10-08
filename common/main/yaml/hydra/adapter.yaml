@@ -1,7 +1,6 @@
 includes:
   - core
   - evaluation
-  - traversal
 
 definitions:
 
@@ -19,7 +18,7 @@ definitions:
         - name: mapping
           type:
             parameterized:
-              genericType: traversal.Step
+              genericType: evaluation.Step
               parameters:
                 - variable: a
                   type:

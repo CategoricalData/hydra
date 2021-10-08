@@ -33,7 +33,6 @@ import Data.Map
 import Data.Set
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Traversal
 
 data Adapter t v
   = Adapter
@@ -42,7 +41,7 @@ data Adapter t v
     -- | @type variable: t
     , adapterTarget :: t
     {-| @type parameterized:
-                genericType: hydra/traversal.Step
+                genericType: hydra/evaluation.Step
                 parameters:
                 - type:
                     variable: v

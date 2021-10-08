@@ -2,10 +2,10 @@ module Hydra.Prototyping.Steps (
   Step(..),
   idStep,
   stepBoth,
-  module Hydra.Traversal
+  module Hydra.Evaluation
 ) where
 
-import Hydra.Traversal
+import Hydra.Evaluation
 
 
 instance Functor Result where
