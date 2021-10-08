@@ -10,6 +10,7 @@ module Hydra.Impl.Haskell.Dsl (
   compose,
   constFunction,
   deref,
+  expectNArgs,
   expectRecordTerm,
   expectStringTerm,
   expectUnionTerm,
@@ -53,6 +54,7 @@ module Hydra.Impl.Haskell.Dsl (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Prototyping.Steps
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 import Data.Int
@@ -89,6 +91,11 @@ constFunction = lambda "_"
 
 deref :: Name -> Term
 deref name = apply TermData $ TermElement name
+
+expectNArgs :: Int -> [Term] -> Result ()
+expectNArgs n args = if L.length args /= n
+  then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
+  else pure ()
 
 expectRecordTerm :: Term -> Result [Field]
 expectRecordTerm term = case term of
