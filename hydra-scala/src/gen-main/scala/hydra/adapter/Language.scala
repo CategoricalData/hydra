@@ -1,17 +1,17 @@
-package hydra.translation
+package hydra.adapter
 
 case class Language(
     /**
-     * @type hydra/translation.Language.Name
+     * @type hydra/adapter.Language.Name
      */
     name: Language_Name,
     
     /**
-     * @type hydra/translation.Language.Constraints
+     * @type hydra/adapter.Language.Constraints
      */
     constraints: Language_Constraints
 )
 
-val _Language: String = "hydra/translation.Language"
+val _Language: String = "hydra/adapter.Language"
 val _Language_constraints: String = "constraints"
 val _Language_name: String = "name"
