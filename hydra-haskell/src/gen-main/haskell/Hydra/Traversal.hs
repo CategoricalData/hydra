@@ -1,18 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Hydra.Traversal
-  ( Result(..)
-  , Step(..)
-  , StepDirection(..)
-  , TermStep(..)
-  , _Result
-  , _Result_failure
-  , _Result_success
-  , _Step
-  , _StepDirection
-  , _StepDirection_in
-  , _StepDirection_out
-  , _Step_in
-  , _Step_out
+  ( TermStep(..)
   , _TermStep
   , _TermStep_applicationArgument
   , _TermStep_applicationFunction
@@ -33,41 +21,6 @@ import Data.Map
 import Data.Set
 import Hydra.Core
 
-data Result a
-  -- | @type variable: a
-  = ResultSuccess a
-  -- | @type string
-  | ResultFailure String
-
-data Step a b
-  = Step
-    {-| @type function:
-                from:
-                - variable: a
-                to:
-                  parameterized:
-                    genericType: hydra/traversal.Result
-                    parameters:
-                    - type:
-                        variable: b
-                      variable: a -}
-    { stepOut :: a -> (Result b)
-    {-| @type function:
-                from:
-                - variable: b
-                to:
-                  parameterized:
-                    genericType: hydra/traversal.Result
-                    parameters:
-                    - type:
-                        variable: a
-                      variable: a -}
-    , stepIn :: b -> (Result a) }
-
-data StepDirection
-  = StepDirectionOut
-  | StepDirectionIn deriving (Eq, Generic, Ord, Read, Show)
-
 data TermStep
   = TermStepApplicationFunction
   | TermStepApplicationArgument
@@ -87,15 +40,6 @@ data TermStep
   | TermStepSet Int
   | TermStepUnion deriving (Eq, Generic, Ord, Read, Show)
 
-_Result = "hydra/traversal.Result" :: String
-_Result_failure = "failure" :: String
-_Result_success = "success" :: String
-_Step = "hydra/traversal.Step" :: String
-_StepDirection = "hydra/traversal.StepDirection" :: String
-_StepDirection_in = "in" :: String
-_StepDirection_out = "out" :: String
-_Step_in = "in" :: String
-_Step_out = "out" :: String
 _TermStep = "hydra/traversal.TermStep" :: String
 _TermStep_applicationArgument = "applicationArgument" :: String
 _TermStep_applicationFunction = "applicationFunction" :: String
