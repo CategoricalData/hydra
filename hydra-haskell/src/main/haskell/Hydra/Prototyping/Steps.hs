@@ -1,5 +1,6 @@
 module Hydra.Prototyping.Steps (
   Step(..),
+  bidirectional,
   idStep,
   stepBoth,
   module Hydra.Evaluation
@@ -33,6 +34,9 @@ instance Show a => Show (Result a) where
   show r = case r of
     ResultFailure msg -> "ResultFailure " ++ show msg
     ResultSuccess x -> "ResultSuccess " ++ show x
+
+bidirectional :: (StepDirection -> b -> Result b) -> Step b b
+bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
 
 idStep :: Step a a
 idStep = Step pure pure

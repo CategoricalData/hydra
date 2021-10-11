@@ -19,9 +19,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-bidirectional :: (StepDirection -> b -> Result b) -> Step b b
-bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
-
 atomicTypePassThrough :: AdapterContext -> Type -> Qualified (Step Term Term)
 atomicTypePassThrough _ _ = pure idStep
 

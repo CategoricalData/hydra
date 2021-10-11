@@ -1,189 +1,173 @@
 module Hydra.Prototyping.Adapters.Atomic (
   atomicAdapter,
-  atomicAdapters,
-  floatAdapters,
-  integerAdapters,
-  mutateAtomicValue,
-  mutateFloatValue,
-  mutateIntegerValue,
+  floatAdapter,
+  integerAdapter,
 ) where
 
 import Hydra.Core
 import Hydra.Prototyping.Basics
+import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
 
-import qualified Control.Monad as CM
 import qualified Data.List as L
-import qualified Data.Map as M
-import qualified Data.Maybe as Y
 import qualified Data.Set as S
 
 
-atomicAdapter = ()
---atomicAdapter :: AdapterContext -> AtomicType -> Qualified (Step AtomicValue AtomicValue)
---atomicAdapter context at = ...
---  where
---    variants = languageConstraintAtomicVariants $ languageConstraints $ adapterContextTarget context
-
-atomicAdapters :: AdapterContext -> Qualified (M.Map AtomicVariant (AtomicValue -> AtomicValue))
-atomicAdapters context = mutators atomicVariants subst descriptions buildMap variants
+atomicAdapter :: AdapterContext -> AtomicType -> Qualified (Adapter AtomicType AtomicValue)
+atomicAdapter context = chooseAdapter alts supported describeAtomicType
   where
-    subst _ = [AtomicVariantString]
-    descriptions = M.fromList [
-      (AtomicVariantBinary, "binary strings"),
-      (AtomicVariantBoolean, "boolean values"),
-      (AtomicVariantFloat, "floating-point numbers"),
-      (AtomicVariantInteger, "integers"),
-      (AtomicVariantString, "strings")]
-    buildMap :: AtomicVariant -> AtomicVariant -> Qualified (AtomicValue -> AtomicValue)
-    buildMap source target = case (source, target) of
-      (_, AtomicVariantString) -> pure $ \av -> AtomicValueString $ case av of
-        AtomicValueBinary v -> writeBinary v
-        AtomicValueBoolean v -> writeBoolean v
-        AtomicValueFloat v -> writeFloat v
-        AtomicValueInteger v -> writeInteger v
-        AtomicValueString v -> v
-    variants = languageConstraintsAtomicVariants $ languageConstraints $ adapterContextTarget context
-    writeBinary s = s
-    writeBoolean b = case b of
-       BooleanValueFalse -> "false"
-       BooleanValueTrue -> "true"
-    writeFloat fv = case fv of
-      FloatValueBigfloat v -> show v
-      FloatValueFloat32 v -> show v
-      FloatValueFloat64 v -> show v
-    writeInteger iv = case iv of
-      IntegerValueBigint v -> show v
-      IntegerValueInt8 v -> show v 
-      IntegerValueInt16 v -> show v 
-      IntegerValueInt32 v -> show v 
-      IntegerValueInt64 v -> show v 
-      IntegerValueUint8 v -> show v 
-      IntegerValueUint16 v -> show v 
-      IntegerValueUint32 v -> show v 
-      IntegerValueUint64 v -> show v 
+    alts t = case t of
+        AtomicTypeBinary -> [fallbackAdapter t]
+        AtomicTypeBoolean -> if noIntegerVars
+            then [fallbackAdapter t]
+            else [do
+              adapter <- integerAdapter context IntegerTypeUint8
+              let step' = adapterMapping adapter
+              let step = Step encode decode
+                    where
+                      encode (AtomicValueBoolean bv) = AtomicValueInteger <$> stepOut step' (toInt bv)
+                        where
+                          toInt bv = IntegerValueUint8 $ if bv == BooleanValueFalse then 0 else 1
+                      decode (AtomicValueInteger iv) = AtomicValueBoolean <$> do
+                        (IntegerValueUint8 v) <- stepIn step' iv
+                        return $ if v == 0 then BooleanValueFalse else BooleanValueTrue
+              return $ Adapter False t (AtomicTypeInteger $ adapterTarget adapter) step]
+        AtomicTypeFloat ft -> if noFloatVars
+          then [fallbackAdapter t]
+          else [do
+            adapter <- floatAdapter context ft
+            let step = bidirectional
+                  $ \dir (AtomicValueFloat fv) -> AtomicValueFloat
+                    <$> stepBoth dir (adapterMapping adapter) fv
+            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeFloat $ adapterTarget adapter) step]
+        AtomicTypeInteger it -> if noIntegerVars
+          then [fallbackAdapter t]
+          else [do
+            adapter <- integerAdapter context it
+            let step = bidirectional
+                  $ \dir (AtomicValueInteger iv) -> AtomicValueInteger
+                    <$> stepBoth dir (adapterMapping adapter) iv
+            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeInteger $ adapterTarget adapter) step]
+        AtomicTypeString -> [
+          fail "no substitute for the atomic string type"]
+    supported t = (S.member (atomicTypeVariant t) $ languageConstraintsAtomicVariants constraints)
+      && case t of
+        AtomicTypeFloat ft -> S.member (floatTypeVariant ft) $ languageConstraintsFloatVariants constraints
+        AtomicTypeInteger it -> S.member (integerTypeVariant it) $ languageConstraintsIntegerVariants constraints
+        _ -> True
+    constraints = languageConstraints $ adapterContextTarget context
+    noFloatVars = not (S.member AtomicVariantFloat $ languageConstraintsAtomicVariants constraints)
+      || S.null (languageConstraintsFloatVariants constraints)
+    noIntegerVars = not (S.member AtomicVariantInteger $ languageConstraintsAtomicVariants constraints)
+      || S.null (languageConstraintsIntegerVariants constraints)
+    noStrings = not $ supported AtomicTypeString
+    fallbackAdapter t = if noStrings
+        then fail $ "cannot serialize unsupported type; strings are unsupported"
+        else qualify msg $ Adapter False t AtomicTypeString step
+      where
+        msg = disclaimer False (describeAtomicType t) (describeAtomicType AtomicTypeString)
+        step = Step encode decode
+          where
+            -- TODO: this format is tied to Haskell
+            encode av = pure $ AtomicValueString $ case av of
+              AtomicValueBinary s -> s
+              AtomicValueBoolean b -> if b == BooleanValueTrue then "true" else "false"
+              _ -> show av
+            decode (AtomicValueString s) = pure $ case t of
+              AtomicTypeBinary -> AtomicValueBinary s
+              AtomicTypeBoolean -> AtomicValueBoolean $ if s == "true" then BooleanValueTrue else BooleanValueFalse
+              _ -> read s
 
-floatAdapters :: AdapterContext -> Qualified (M.Map FloatVariant (FloatValue -> FloatValue))
-floatAdapters context = mutators floatVariants subst descriptions buildMap variants
-  where
-    subst v = case v of
-       FloatVariantBigfloat -> [FloatVariantFloat64, FloatVariantFloat32]
-       FloatVariantFloat32 -> [FloatVariantFloat64, FloatVariantBigfloat]
-       FloatVariantFloat64 -> [FloatVariantBigfloat, FloatVariantFloat32]
-    descriptions = M.fromList $ describe <$> floatVariants
-      where
-        describe v = (v, precision v ++ " floating-point numbers")
-        precision v = case floatVariantPrecision v of
-          PrecisionArbitrary -> "arbitrary-precision"
-          PrecisionBits bits -> show bits ++ "-bit"
-    buildMap :: FloatVariant -> FloatVariant -> Qualified (FloatValue -> FloatValue)
-    buildMap _ target = pure $ encoder . decoder
-      where
-        decoder fv = case fv of
-          FloatValueBigfloat d -> d
-          FloatValueFloat32 f -> realToFrac f
-          FloatValueFloat64 d -> d
-        encoder d = case target of
-          FloatVariantBigfloat -> FloatValueBigfloat d
-          FloatVariantFloat32 -> FloatValueFloat32 $ realToFrac d
-          FloatVariantFloat64 -> FloatValueFloat64 d
-    variants = languageConstraintsFloatVariants $ languageConstraints $ adapterContextTarget context
+chooseAdapter ::
+    (t -> [Qualified (Adapter t v)])
+ -> (t -> Bool)
+ -> (t -> String)
+ -> t
+ -> Qualified (Adapter t v)
+chooseAdapter alts supported describe typ = if supported typ
+    then pure $ Adapter False typ typ idStep
+    else do
+      candidates <- L.filter (supported . adapterTarget) <$> sequence (alts typ)
+      if L.null candidates
+        then fail $ "no adapters found for " ++ describe typ
+        else return $ L.head candidates
 
-integerAdapters :: AdapterContext -> Qualified (M.Map IntegerVariant (IntegerValue -> IntegerValue))
-integerAdapters context = mutators integerVariants subst descriptions buildMap variants
+describeAtomicType :: AtomicType -> String
+describeAtomicType t = case t of
+  AtomicTypeBinary -> "binary strings"
+  AtomicTypeBoolean -> "boolean values"
+  AtomicTypeFloat ft -> describeFloatType ft
+  AtomicTypeInteger it -> describeIntegerType it
+  AtomicTypeString -> "character strings"
+
+describeFloatType :: FloatType -> String
+describeFloatType t = precision ++ " floating-point numbers"
   where
-    subst v = case v of
-        IntegerVariantBigint -> L.reverse unsignedPref
-        IntegerVariantInt8 -> signed 1
-        IntegerVariantInt16 -> signed 2
-        IntegerVariantInt32 -> signed 3
-        IntegerVariantInt64 -> signed 4
-        IntegerVariantUint8 -> unsigned 1
-        IntegerVariantUint16 -> unsigned 2
-        IntegerVariantUint32 -> unsigned 3
-        IntegerVariantUint64 -> unsigned 4
+    precision = case floatTypePrecision t of
+      PrecisionArbitrary -> "arbitrary-precision"
+      PrecisionBits bits -> show bits ++ "-bit"      
+
+describeIntegerType :: IntegerType -> String
+describeIntegerType t = precision ++ " integers"
+  where
+    precision = case integerTypePrecision t of
+      PrecisionArbitrary -> "arbitrary-precision"
+      PrecisionBits bits -> show bits ++ "-bit"
+
+disclaimer :: Bool -> String -> String -> String
+disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
+  ++ if lossy then " (lossy)" else ""
+
+floatAdapter :: AdapterContext -> FloatType -> Qualified (Adapter FloatType FloatValue)
+floatAdapter context = chooseAdapter alts supported describeFloatType
+  where
+    alts t = makeAdapter t <$> case t of
+        FloatTypeBigfloat -> [FloatTypeFloat64, FloatTypeFloat32]
+        FloatTypeFloat32 -> [FloatTypeFloat64, FloatTypeBigfloat]
+        FloatTypeFloat64 -> [FloatTypeBigfloat, FloatTypeFloat32]
       where
-        signed i = L.drop (i*2) signedPref ++ [IntegerVariantBigint] ++ L.drop (8-(i*2)+1) signedNonPref
-        unsigned i = L.drop (i*2) unsignedPref ++ [IntegerVariantBigint] ++ L.drop (8-(i*2)+1) unsignedNonPref
+        makeAdapter source target = qualify msg $ Adapter lossy source target step
+          where
+            lossy = comparePrecision (floatTypePrecision source) (floatTypePrecision target) == GT
+            step = Step (pure . convertFloatValue target) (pure . convertFloatValue source)
+            msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
+
+    supported t = S.member (floatTypeVariant t)
+      $ languageConstraintsFloatVariants $ languageConstraints $ adapterContextTarget context
+
+integerAdapter :: AdapterContext -> IntegerType -> Qualified (Adapter IntegerType IntegerValue)
+integerAdapter context = chooseAdapter alts supported describeIntegerType
+  where
+    alts t = makeAdapter t <$> case t of
+        IntegerTypeBigint -> L.reverse unsignedPref
+        IntegerTypeInt8 -> signed 1
+        IntegerTypeInt16 -> signed 2
+        IntegerTypeInt32 -> signed 3
+        IntegerTypeInt64 -> signed 4
+        IntegerTypeUint8 -> unsigned 1
+        IntegerTypeUint16 -> unsigned 2
+        IntegerTypeUint32 -> unsigned 3
+        IntegerTypeUint64 -> unsigned 4
+      where
+        signed i = L.drop (i*2) signedPref ++ [IntegerTypeBigint] ++ L.drop (8-(i*2)+1) signedNonPref
+        unsigned i = L.drop (i*2) unsignedPref ++ [IntegerTypeBigint] ++ L.drop (8-(i*2)+1) unsignedNonPref
         signedPref = interleave signedOrdered unsignedOrdered
         unsignedPref = interleave unsignedOrdered signedOrdered
         signedNonPref = L.reverse unsignedPref
         unsignedNonPref = L.reverse signedPref
         interleave xs ys = L.concat (L.transpose [xs, ys])
         signedOrdered = L.filter
-          (\v -> integerVariantIsSigned v && integerVariantPrecision v /= PrecisionArbitrary) integerVariants
+          (\v -> integerTypeIsSigned v && integerTypePrecision v /= PrecisionArbitrary) integerTypes
         unsignedOrdered = L.filter
-          (\v -> not (integerVariantIsSigned v) && integerVariantPrecision v /= PrecisionArbitrary) integerVariants
-    descriptions = M.fromList $ describe <$> integerVariants
-      where
-        describe v = (v, precision v ++ " integers")
-        precision v = case integerVariantPrecision v of
-          PrecisionArbitrary -> "arbitrary-precision"
-          PrecisionBits bits -> show bits ++ "-bit"
-    buildMap :: IntegerVariant -> IntegerVariant -> Qualified (IntegerValue -> IntegerValue)
-    buildMap _ target = pure $ encoder . decoder
-      where
-        decoder :: IntegerValue -> Integer
-        decoder iv = case iv of
-          IntegerValueBigint v -> v
-          IntegerValueInt8 v -> fromIntegral v
-          IntegerValueInt16 v -> fromIntegral v
-          IntegerValueInt32 v -> fromIntegral v
-          IntegerValueInt64 v -> fromIntegral v
-          IntegerValueUint8 v -> fromIntegral v
-          IntegerValueUint16 v -> fromIntegral v
-          IntegerValueUint32 v -> fromIntegral v
-          IntegerValueUint64 v -> fromIntegral v
-        encoder :: Integer -> IntegerValue
-        encoder d = case target of
-          IntegerVariantBigint -> IntegerValueBigint d
-          IntegerVariantInt8 -> IntegerValueInt8 $ fromIntegral d
-          IntegerVariantInt16 -> IntegerValueInt16 $ fromIntegral d
-          IntegerVariantInt32 -> IntegerValueInt32 $ fromIntegral d
-          IntegerVariantInt64 -> IntegerValueInt64 $ fromIntegral d
-          IntegerVariantUint8 -> IntegerValueUint8 $ fromIntegral d
-          IntegerVariantUint16 -> IntegerValueUint16 $ fromIntegral d
-          IntegerVariantUint32 -> IntegerValueUint32 $ fromIntegral d
-          IntegerVariantUint64 -> IntegerValueUint64 $ fromIntegral d
-    variants = languageConstraintsIntegerVariants $ languageConstraints $ adapterContextTarget context
+          (\v -> not (integerTypeIsSigned v) && integerTypePrecision v /= PrecisionArbitrary) integerTypes
+        makeAdapter source target = qualify msg $ Adapter lossy source target step
+          where
+            lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
+            step = Step (pure . convertIntegerValue target) (pure . convertIntegerValue source)
+            msg = disclaimer lossy (describeIntegerType source) (describeIntegerType target)
+    supported t = S.member (integerTypeVariant t)
+      $ languageConstraintsIntegerVariants $ languageConstraints $ adapterContextTarget context
 
-mutateAtomicValue :: M.Map AtomicVariant (AtomicValue -> AtomicValue) -> AtomicValue -> AtomicValue
-mutateAtomicValue muts av = Y.fromMaybe id (M.lookup (atomicValueVariant av) muts) av
-
-mutateFloatValue :: M.Map FloatVariant (FloatValue -> FloatValue) -> FloatValue -> FloatValue
-mutateFloatValue muts fv = Y.fromMaybe id (M.lookup (floatValueVariant fv) muts) fv
-
-mutateIntegerValue :: M.Map IntegerVariant (IntegerValue -> IntegerValue) -> IntegerValue -> IntegerValue
-mutateIntegerValue muts iv = Y.fromMaybe id (M.lookup (integerValueVariant iv) muts) iv
-
-mutator :: (Ord v, Show v) =>
-     (v -> [v])
-  -> M.Map v String
-  -> (v -> v -> Qualified (a -> a))
-  -> S.Set v
-  -> v
-  -> Qualified (a -> a)
-mutator subst descriptions buildMap supported source
-  | S.member source supported = pure id
-  | L.null candidates = fail $ "no acceptable substitute for " ++ show source
-  | otherwise = do
-      mapping <- buildMap source target
-      Qualified (Just mapping) ["replace " ++ describe source ++ " with " ++ describe target]
-  where
-      target = L.head candidates
-      candidates = L.filter (`S.member` supported) $ subst source
-      describe var = Y.fromMaybe "unknown" $ M.lookup var descriptions
-
-mutators :: (Ord v, Show v) =>
-     [v]
-  -> (v -> [v])
-  -> M.Map v String
-  -> (v -> v -> Qualified (a -> a))
-  -> S.Set v
-  -> Qualified (M.Map v (a -> a))
-mutators variants subst descriptions buildMap supported = M.fromList <$> CM.mapM toPair variants
-  where
-    toPair v = do
-      m <- mutator subst descriptions buildMap supported v
-      return (v, m)
+qualify :: String -> a -> Qualified a
+qualify msg x = Qualified (Just x) [msg]
