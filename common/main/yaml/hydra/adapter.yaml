@@ -7,6 +7,9 @@ definitions:
   - name: Adapter
     type:
       record:
+        - name: isLossy
+          type: boolean
+
         - name: source
           type:
             variable: t
@@ -26,13 +29,6 @@ definitions:
                 - variable: b
                   type:
                     variable: v
-
-        - name: isLossy
-          type: boolean
-
-        - name: notes
-          type:
-            list: string
 
   - name: AdapterContext
     type:

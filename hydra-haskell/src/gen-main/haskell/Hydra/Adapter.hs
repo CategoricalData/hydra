@@ -12,7 +12,6 @@ module Hydra.Adapter
   , _AdapterContext_target
   , _Adapter_isLossy
   , _Adapter_mapping
-  , _Adapter_notes
   , _Adapter_source
   , _Adapter_target
   , _Language
@@ -36,8 +35,10 @@ import Hydra.Evaluation
 
 data Adapter t v
   = Adapter
+    -- | @type boolean
+    { adapterIsLossy :: Bool
     -- | @type variable: t
-    { adapterSource :: t
+    , adapterSource :: t
     -- | @type variable: t
     , adapterTarget :: t
     {-| @type parameterized:
@@ -49,11 +50,7 @@ data Adapter t v
                 - type:
                     variable: v
                   variable: b -}
-    , adapterMapping :: Step v v
-    -- | @type boolean
-    , adapterIsLossy :: Bool
-    -- | @type list: string
-    , adapterNotes :: [String] }
+    , adapterMapping :: Step v v }
 
 data AdapterContext
   = AdapterContext
@@ -94,7 +91,6 @@ _AdapterContext_source = "source" :: String
 _AdapterContext_target = "target" :: String
 _Adapter_isLossy = "isLossy" :: String
 _Adapter_mapping = "mapping" :: String
-_Adapter_notes = "notes" :: String
 _Adapter_source = "source" :: String
 _Adapter_target = "target" :: String
 _Language = "hydra/adapter.Language" :: String

@@ -3,13 +3,18 @@ module Hydra.Prototyping.Basics (
     atomicValueType,
     atomicValueVariant,
     atomicVariants,
+    comparePrecision,
+    floatTypePrecision,
     floatTypeVariant,
     floatValueType,
     floatValueVariant,
     floatVariantPrecision,
     floatVariants,
     hydraCoreLanguage,
+    integerTypeIsSigned,
+    integerTypePrecision,
     integerTypeVariant,
+    integerTypes,
     integerValueType,
     integerValueVariant,
     integerVariantIsSigned,
@@ -50,6 +55,15 @@ atomicVariants :: [AtomicVariant]
 atomicVariants = [
   AtomicVariantBinary, AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
 
+comparePrecision :: Precision -> Precision -> Ordering
+comparePrecision p1 p2 = if p1 == p2 then EQ else case (p1, p2) of
+  (PrecisionArbitrary, _) -> GT
+  (_, PrecisionArbitrary) -> LT
+  (PrecisionBits b1, PrecisionBits b2) -> compare b1 b2
+
+floatTypePrecision :: FloatType -> Precision
+floatTypePrecision = floatVariantPrecision . floatTypeVariant
+
 floatTypeVariant :: FloatType -> FloatVariant
 floatTypeVariant ft = case ft of
   FloatTypeBigfloat -> FloatVariantBigfloat
@@ -81,6 +95,12 @@ hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsIntegerVariants = S.fromList integerVariants,
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList typeVariants }
+
+integerTypeIsSigned :: IntegerType -> Bool
+integerTypeIsSigned = integerVariantIsSigned . integerTypeVariant
+
+integerTypePrecision :: IntegerType -> Precision
+integerTypePrecision = integerVariantPrecision . integerTypeVariant
 
 integerTypeVariant :: IntegerType -> IntegerVariant
 integerTypeVariant it = case it of
@@ -128,12 +148,15 @@ integerVariantPrecision v = case v of
   IntegerVariantUint16 -> PrecisionBits 16
   IntegerVariantUint32 -> PrecisionBits 32
   IntegerVariantUint64 -> PrecisionBits 64
+
+integerTypes :: [IntegerType]
+integerTypes = [
+  IntegerTypeInt8, IntegerTypeInt16, IntegerTypeInt32, IntegerTypeInt64,
+  IntegerTypeUint8, IntegerTypeUint16, IntegerTypeUint32, IntegerTypeUint64,
+  IntegerTypeBigint]
   
 integerVariants :: [IntegerVariant]
-integerVariants = [
-  IntegerVariantInt8, IntegerVariantInt16, IntegerVariantInt32, IntegerVariantInt64,
-  IntegerVariantUint8, IntegerVariantUint16, IntegerVariantUint32, IntegerVariantUint64,
-  IntegerVariantBigint]
+integerVariants = integerTypeVariant <$> integerTypes
 
 termVariant :: Term -> TermVariant
 termVariant term = case term of
