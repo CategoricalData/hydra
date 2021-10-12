@@ -35,11 +35,11 @@ checkAdapter mkAdapter context variants source target lossy vs vt =
     && if lossy then True else (stepOut step vs >>= stepIn step) == ResultSuccess vs
   where
     Qualified (Just adapter) _ = mkAdapter (context variants) source
-    step = adapterMapping adapter
+    step = adapterStep adapter
 
-testFloatAdapters :: H.SpecWith ()
-testFloatAdapters = do
-    H.describe "Test floating-point mutators" $ do
+testFloatAdapter :: H.SpecWith ()
+testFloatAdapter = do
+    H.describe "Test floating-point adapter" $ do
   
       H.it "upgrade float32 to bigfloat, since float32 and float64 are unsupported" $
         QC.property $ \f -> checkFloatAdapter
@@ -69,9 +69,9 @@ testFloatAdapters = do
       languageConstraintsFloatVariants = S.fromList variants }
     checkFloatAdapter = checkAdapter floatAdapter context
 
-testIntegerAdapters :: H.SpecWith ()
-testIntegerAdapters = do
-    H.describe "Test integer mutators" $ do
+testIntegerAdapter :: H.SpecWith ()
+testIntegerAdapter = do
+    H.describe "Test integer adapter" $ do
   
       H.it "upgrade uint8 to uint16, not int16" $
         QC.property $ \b -> checkIntegerAdapter
@@ -109,7 +109,7 @@ testIntegerAdapters = do
 
 testAtomicAdapter :: H.SpecWith ()
 testAtomicAdapter = do
-    H.describe "Test atomic mutators" $ do
+    H.describe "Test atomic adapter" $ do
       
       H.it "encode binary data as strings" $
        QC.property $ \b -> checkAtomicAdapter
@@ -129,13 +129,13 @@ testAtomicAdapter = do
           AtomicTypeBoolean (AtomicTypeInteger IntegerTypeInt16) False
           (AtomicValueBoolean b) (AtomicValueInteger $ IntegerValueInt16 $ if b == BooleanValueTrue then 1 else 0)
 
-      H.it "floating point encoding is delegating to the float adapter" $
+      H.it "floating-point encoding is delegated to the float adapter" $
         QC.property $ \f -> checkAtomicAdapter
           [AtomicVariantFloat]
           (AtomicTypeFloat FloatTypeBigfloat) (AtomicTypeFloat FloatTypeFloat32) True
           (AtomicValueFloat $ FloatValueBigfloat f) (AtomicValueFloat $ FloatValueFloat32 $ realToFrac f)
 
-      H.it "integer encoding is delegating to the integer adapter" $
+      H.it "integer encoding is delegated to the integer adapter" $
         QC.property $ \i -> checkAtomicAdapter
           [AtomicVariantInteger]
           (AtomicTypeInteger IntegerTypeBigint) (AtomicTypeInteger IntegerTypeInt32) True
@@ -158,6 +158,6 @@ testAtomicAdapter = do
 
 spec :: H.Spec
 spec = do
-  testFloatAdapters
-  testIntegerAdapters
+  testFloatAdapter
+  testIntegerAdapter
   testAtomicAdapter

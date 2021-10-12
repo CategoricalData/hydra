@@ -11,8 +11,8 @@ module Hydra.Adapter
   , _AdapterContext_source
   , _AdapterContext_target
   , _Adapter_isLossy
-  , _Adapter_mapping
   , _Adapter_source
+  , _Adapter_step
   , _Adapter_target
   , _Language
   , _Language_Constraints
@@ -50,7 +50,7 @@ data Adapter t v
                 - type:
                     variable: v
                   variable: b -}
-    , adapterMapping :: Step v v }
+    , adapterStep :: Step v v }
 
 data AdapterContext
   = AdapterContext
@@ -90,8 +90,8 @@ _AdapterContext_evaluation = "evaluation" :: String
 _AdapterContext_source = "source" :: String
 _AdapterContext_target = "target" :: String
 _Adapter_isLossy = "isLossy" :: String
-_Adapter_mapping = "mapping" :: String
 _Adapter_source = "source" :: String
+_Adapter_step = "step" :: String
 _Adapter_target = "target" :: String
 _Language = "hydra/adapter.Language" :: String
 _Language_Constraints = "hydra/adapter.Language_Constraints" :: String

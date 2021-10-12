@@ -23,7 +23,7 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
             then [fallbackAdapter t]
             else [do
               adapter <- integerAdapter context IntegerTypeUint8
-              let step' = adapterMapping adapter
+              let step' = adapterStep adapter
               let step = Step encode decode
                     where
                       encode (AtomicValueBoolean bv) = AtomicValueInteger <$> stepOut step' (toInt bv)
@@ -39,7 +39,7 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
             adapter <- floatAdapter context ft
             let step = bidirectional
                   $ \dir (AtomicValueFloat fv) -> AtomicValueFloat
-                    <$> stepBoth dir (adapterMapping adapter) fv
+                    <$> stepBoth dir (adapterStep adapter) fv
             return $ Adapter (adapterIsLossy adapter) t (AtomicTypeFloat $ adapterTarget adapter) step]
         AtomicTypeInteger it -> if noIntegerVars
           then [fallbackAdapter t]
@@ -47,7 +47,7 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
             adapter <- integerAdapter context it
             let step = bidirectional
                   $ \dir (AtomicValueInteger iv) -> AtomicValueInteger
-                    <$> stepBoth dir (adapterMapping adapter) iv
+                    <$> stepBoth dir (adapterStep adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (AtomicTypeInteger $ adapterTarget adapter) step]
         AtomicTypeString -> [
           fail "no substitute for the atomic string type"]
@@ -102,18 +102,15 @@ describeAtomicType t = case t of
   AtomicTypeString -> "character strings"
 
 describeFloatType :: FloatType -> String
-describeFloatType t = precision ++ " floating-point numbers"
-  where
-    precision = case floatTypePrecision t of
-      PrecisionArbitrary -> "arbitrary-precision"
-      PrecisionBits bits -> show bits ++ "-bit"      
+describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers" 
 
 describeIntegerType :: IntegerType -> String
-describeIntegerType t = precision ++ " integers"
-  where
-    precision = case integerTypePrecision t of
-      PrecisionArbitrary -> "arbitrary-precision"
-      PrecisionBits bits -> show bits ++ "-bit"
+describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"
+
+describePrecision :: Precision -> String
+describePrecision p = case p of
+  PrecisionArbitrary -> "arbitrary-precision"
+  PrecisionBits bits -> show bits ++ "-bit"
 
 disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
