@@ -9,6 +9,7 @@ import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
+import Hydra.Prototyping.Adapters.Utils
 
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -18,10 +19,10 @@ atomicAdapter :: AdapterContext -> AtomicType -> Qualified (Adapter AtomicType A
 atomicAdapter context = chooseAdapter alts supported describeAtomicType
   where
     alts t = case t of
-        AtomicTypeBinary -> [fallbackAdapter t]
-        AtomicTypeBoolean -> if noIntegerVars
-            then [fallbackAdapter t]
-            else [do
+        AtomicTypeBinary -> pure $ fallbackAdapter t
+        AtomicTypeBoolean -> pure $ if noIntegerVars
+            then fallbackAdapter t
+            else do
               adapter <- integerAdapter context IntegerTypeUint8
               let step' = adapterStep adapter
               let step = Step encode decode
@@ -32,30 +33,25 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
                       decode (AtomicValueInteger iv) = AtomicValueBoolean <$> do
                         (IntegerValueUint8 v) <- stepIn step' iv
                         return $ if v == 0 then BooleanValueFalse else BooleanValueTrue
-              return $ Adapter False t (AtomicTypeInteger $ adapterTarget adapter) step]
-        AtomicTypeFloat ft -> if noFloatVars
-          then [fallbackAdapter t]
-          else [do
+              return $ Adapter False t (AtomicTypeInteger $ adapterTarget adapter) step
+        AtomicTypeFloat ft -> pure $ if noFloatVars
+          then fallbackAdapter t
+          else do
             adapter <- floatAdapter context ft
             let step = bidirectional
                   $ \dir (AtomicValueFloat fv) -> AtomicValueFloat
                     <$> stepBoth dir (adapterStep adapter) fv
-            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeFloat $ adapterTarget adapter) step]
-        AtomicTypeInteger it -> if noIntegerVars
-          then [fallbackAdapter t]
-          else [do
+            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeFloat $ adapterTarget adapter) step
+        AtomicTypeInteger it -> pure $ if noIntegerVars
+          then fallbackAdapter t
+          else do
             adapter <- integerAdapter context it
             let step = bidirectional
                   $ \dir (AtomicValueInteger iv) -> AtomicValueInteger
                     <$> stepBoth dir (adapterStep adapter) iv
-            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeInteger $ adapterTarget adapter) step]
-        AtomicTypeString -> [
-          fail "no substitute for the atomic string type"]
-    supported t = (S.member (atomicTypeVariant t) $ languageConstraintsAtomicVariants constraints)
-      && case t of
-        AtomicTypeFloat ft -> S.member (floatTypeVariant ft) $ languageConstraintsFloatVariants constraints
-        AtomicTypeInteger it -> S.member (integerTypeVariant it) $ languageConstraintsIntegerVariants constraints
-        _ -> True
+            return $ Adapter (adapterIsLossy adapter) t (AtomicTypeInteger $ adapterTarget adapter) step
+        AtomicTypeString -> pure $ fail "no substitute for the atomic string type"
+    supported = atomicTypeIsSupported constraints
     constraints = languageConstraints $ adapterContextTarget context
     noFloatVars = not (S.member AtomicVariantFloat $ languageConstraintsAtomicVariants constraints)
       || S.null (languageConstraintsFloatVariants constraints)
@@ -63,7 +59,7 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
       || S.null (languageConstraintsIntegerVariants constraints)
     noStrings = not $ supported AtomicTypeString
     fallbackAdapter t = if noStrings
-        then fail $ "cannot serialize unsupported type; strings are unsupported"
+        then fail "cannot serialize unsupported type; strings are unsupported"
         else qualify msg $ Adapter False t AtomicTypeString step
       where
         msg = disclaimer False (describeAtomicType t) (describeAtomicType AtomicTypeString)
@@ -78,39 +74,6 @@ atomicAdapter context = chooseAdapter alts supported describeAtomicType
               AtomicTypeBinary -> AtomicValueBinary s
               AtomicTypeBoolean -> AtomicValueBoolean $ if s == "true" then BooleanValueTrue else BooleanValueFalse
               _ -> read s
-
-chooseAdapter ::
-    (t -> [Qualified (Adapter t v)])
- -> (t -> Bool)
- -> (t -> String)
- -> t
- -> Qualified (Adapter t v)
-chooseAdapter alts supported describe typ = if supported typ
-    then pure $ Adapter False typ typ idStep
-    else do
-      candidates <- L.filter (supported . adapterTarget) <$> sequence (alts typ)
-      if L.null candidates
-        then fail $ "no adapters found for " ++ describe typ
-        else return $ L.head candidates
-
-describeAtomicType :: AtomicType -> String
-describeAtomicType t = case t of
-  AtomicTypeBinary -> "binary strings"
-  AtomicTypeBoolean -> "boolean values"
-  AtomicTypeFloat ft -> describeFloatType ft
-  AtomicTypeInteger it -> describeIntegerType it
-  AtomicTypeString -> "character strings"
-
-describeFloatType :: FloatType -> String
-describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers" 
-
-describeIntegerType :: IntegerType -> String
-describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"
-
-describePrecision :: Precision -> String
-describePrecision p = case p of
-  PrecisionArbitrary -> "arbitrary-precision"
-  PrecisionBits bits -> show bits ++ "-bit"
 
 disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
@@ -130,8 +93,7 @@ floatAdapter context = chooseAdapter alts supported describeFloatType
             step = Step (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
-    supported t = S.member (floatTypeVariant t)
-      $ languageConstraintsFloatVariants $ languageConstraints $ adapterContextTarget context
+    supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget context
 
 integerAdapter :: AdapterContext -> IntegerType -> Qualified (Adapter IntegerType IntegerValue)
 integerAdapter context = chooseAdapter alts supported describeIntegerType
@@ -163,8 +125,5 @@ integerAdapter context = chooseAdapter alts supported describeIntegerType
             lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
             step = Step (pure . convertIntegerValue target) (pure . convertIntegerValue source)
             msg = disclaimer lossy (describeIntegerType source) (describeIntegerType target)
-    supported t = S.member (integerTypeVariant t)
-      $ languageConstraintsIntegerVariants $ languageConstraints $ adapterContextTarget context
 
-qualify :: String -> a -> Qualified a
-qualify msg x = Qualified (Just x) [msg]
+    supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget context

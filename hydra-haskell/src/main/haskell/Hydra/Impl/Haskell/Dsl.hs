@@ -23,11 +23,13 @@ module Hydra.Impl.Haskell.Dsl (
   function,
   functionType,
   int16Type,
+  int16Value,
   int32Type,
   int32Value,
   int64Type,
   int64Value,
   int8Type,
+  int8Value,
   integerType,
   lambda,
   mapType,
@@ -136,11 +138,11 @@ function = TermFunction
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
 
-int8Type :: Type
-int8Type = integerType IntegerTypeInt8
-
 int16Type :: Type
 int16Type = integerType IntegerTypeInt16
+
+int16Value :: Int -> Term
+int16Value = TermAtomic . AtomicValueInteger . IntegerValueInt16 . fromIntegral
 
 int32Type :: Type
 int32Type = integerType IntegerTypeInt32
@@ -153,6 +155,12 @@ int64Type = integerType IntegerTypeInt64
 
 int64Value :: Int64 -> Term
 int64Value = TermAtomic . AtomicValueInteger . IntegerValueInt64
+
+int8Type :: Type
+int8Type = integerType IntegerTypeInt8
+
+int8Value :: Int -> Term
+int8Value = TermAtomic . AtomicValueInteger . IntegerValueInt8 . fromIntegral
 
 integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger

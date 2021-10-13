@@ -4,6 +4,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Ext.Yaml.Coder
 import Hydra.Prototyping.Adapters.Term
+import Hydra.Prototyping.Adapters.Utils
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
@@ -15,6 +16,7 @@ import qualified Test.Hspec as H
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
+import qualified Data.Maybe as Y
 
 
 -- Use YAML as the target language
@@ -28,146 +30,284 @@ transContext = AdapterContext testContext hydraCoreLanguage testLanguage
 --       it should be created once, then applied to many terms.
 adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
 adapt typ dir term = do
-  adapter <- qualifiedToResult $ termAdapter transContext typ
-  dir adapter term
+  ad <- qualifiedToResult $ termAdapter transContext typ
+  dir (adapterStep ad) term
 
-booleanElementType = TypeElement $ TypeAtomic AtomicTypeBoolean
-booleanElementDataType = functionType booleanElementType booleanType
+concatType :: Type
 concatType = functionType stringType $ functionType stringType stringType
+
+compareStringsType :: Type
 compareStringsType = functionType stringType stringType
-exampleProjectionType = functionType latLonType int64Type
-latLonType = TypeRecord [FieldType "lat" int64Type, FieldType "lon" int64Type]
+
+exampleProjectionType :: Type
+exampleProjectionType = functionType latLonType int32Type
+
+int32ElementType :: Type
+int32ElementType = TypeElement int32Type
+
+int32ElementDataType :: Type
+int32ElementDataType = functionType int32ElementType int32Type
+
+latLonType :: Type
+latLonType = TypeRecord [FieldType "lat" int32Type, FieldType "lon" int32Type]
+
+listOfInt8sType :: Type
+listOfInt8sType = TypeList int8Type
+
+listOfInt16sType :: Type
+listOfInt16sType = TypeList int16Type
+
+listOfListsOfStringsType :: Type
+listOfListsOfStringsType = TypeList $ TypeList stringType
+
+listOfSetOfInt32ElementReferencesType :: Type
+listOfSetOfInt32ElementReferencesType = TypeList $ TypeSet $ TypeElement int32Type
+
+listOfSetOfStringsType :: Type
 listOfSetOfStringsType = TypeList $ TypeSet stringType
+
+listOfStringsType :: Type
 listOfStringsType = TypeList stringType
+
+latlonRecord :: Int -> Int -> Term
 latlonRecord lat lon = TermRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
+
+makeMap :: [(String, Int)] -> Term
 makeMap keyvals = TermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+
+mapOfStringsToIntsType :: Type
 mapOfStringsToIntsType = mapType stringType int32Type
+
+setOfStringsType :: Type
 setOfStringsType = TypeSet stringType
+
+stringAliasType :: Type
 stringAliasType = TypeNominal "StringTypeAlias"
+
+stringList :: [String] -> Term
 stringList strings = TermList $ stringValue <$> strings
+
+stringOrIntType :: Type
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
+
+stringSet :: S.Set String -> Term
 stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
 
+unionTypeForFunctions :: Type -> Type
+unionTypeForFunctions dom = TypeUnion [
+  FieldType _Term_cases stringType, -- TODO (TypeRecord cases)
+  FieldType _Term_compareTo dom,
+  FieldType _Term_data unitType,
+  FieldType _Term_function stringType,
+  FieldType _Term_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
+  FieldType _Term_projection stringType,
+  FieldType _Term_variable stringType] -- TODO
+
 supportedConstructorsAreUnchanged :: H.SpecWith ()
-supportedConstructorsAreUnchanged = do
-  H.describe "Verify that supported term constructors are unchanged" $ do
-    
-    H.it "Strings (and other supported atomic values) pass through without change" $
-      QC.property $ \s
-        -> adapt stringType stepOut (stringValue s)
-        == pure (stringValue s)  
+supportedConstructorsAreUnchanged = H.describe "Verify that supported term constructors are unchanged" $ do
 
-    H.it "Lists pass through without change" $
-      QC.property $ \strings
-        -> adapt listOfStringsType stepOut (TermList $ stringValue <$> strings)
-        == pure (TermList $ stringValue <$> strings)  
-        
-    H.it "Maps pass through without change" $
-      QC.property $ \keyvals
-        -> adapt mapOfStringsToIntsType stepOut (makeMap keyvals)
-        == pure (makeMap keyvals)  
-        
-    H.it "Records pass through without change" $
-      QC.property $ \(lat, lon)
-        -> adapt latLonType stepOut (latlonRecord lat lon)
-        == pure (latlonRecord lat lon)
+  H.it "Strings (and other supported atomic values) pass through without change" $
+    QC.property $ \b -> checkTermAdapter
+      [TypeVariantAtomic]
+      stringType stringType False
+      (stringValue b) (stringValue b)
 
-    H.it "Unions pass through without change" $
-      QC.property $ \int
-        -> adapt stringOrIntType stepOut (variant "right" int)
-        == pure (variant "right" int)
-        
+  H.it "Lists (when supported) pass through without change" $
+    QC.property $ \strings -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantList]
+      listOfStringsType listOfStringsType False
+      (TermList $ stringValue <$> strings) (TermList $ stringValue <$> strings)
+
+  H.it "Maps (when supported) pass through without change" $
+    QC.property $ \keyvals -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantMap]
+      mapOfStringsToIntsType mapOfStringsToIntsType False
+      (makeMap keyvals) (makeMap keyvals)
+
+  H.it "Records (when supported) pass through without change" $
+    QC.property $ \lat lon -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantRecord]
+      latLonType latLonType False
+      (latlonRecord lat lon) (latlonRecord lat lon)
+      
+  H.it "Unions (when supported) pass through without change" $
+    QC.property $ \int -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion]
+      stringOrIntType stringOrIntType False
+      (variant "right" int) (variant "right" int)
+
+  H.it "Sets (when supported) pass through without change" $
+    QC.property $ \strings -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantSet]
+      setOfStringsType setOfStringsType False
+      (stringSet strings) (stringSet strings)
+      
+  H.it "Element references (when supported) pass through without change" $
+    QC.property $ \name -> checkTermAdapter
+      [TypeVariantElement]
+      int32ElementType int32ElementType False
+      (TermElement name) (TermElement name)
+      
+  H.it "CompareTo terms (when supported) pass through without change" $
+    QC.property $ \s -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantFunction]
+      compareStringsType compareStringsType False
+      (TermCompareTo $ stringValue s) (TermCompareTo $ stringValue s)
+
+  H.it "Data terms (when supported) pass through without change" $
+    QC.property $ \() -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantFunction, TypeVariantElement]
+      int32ElementDataType int32ElementDataType False
+      TermData TermData
+
+  H.it "Primitive function references (when supported) pass through without change" $
+    QC.property $ \name -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantFunction]
+      concatType concatType False
+      (TermFunction name) (TermFunction name)
+
+  H.it "Projections (when supported) pass through without change" $
+    QC.property $ \fname -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantFunction, TypeVariantRecord]
+      exampleProjectionType exampleProjectionType False
+      (TermProjection fname) (TermProjection fname)
+ 
+  H.it "Nominal types (when supported) pass through without change" $
+    QC.property $ \s -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantNominal]
+      stringAliasType stringAliasType False
+      (stringValue s) (stringValue s)
+       
+-- where
+--   context variants = withConstraints $ (languageConstraints baseLanguage) {
+--       languageConstraintsTypeVariants = S.fromList variants,
+--       languageConstraintsAtomicVariants = atomicVars,
+--       languageConstraintsFloatVariants = floatVars,
+--       languageConstraintsIntegerVariants = integerVars }
+--     where
+--       atomicVars = S.fromList [AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
+--       floatVars = S.fromList [FloatVariantFloat32]
+--       integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
+--
+--       withConstraints :: Language_Constraints -> AdapterContext
+--       withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
+--
+--       baseLanguage :: Language
+--       baseLanguage = hydraCoreLanguage
+--
+--       baseContext :: AdapterContext
+--       baseContext = AdapterContext testContext baseLanguage baseLanguage
+
+--  H.it ("Sets become lists: " ++ show (qualifiedWarnings $ termAdapter (context [TypeVariantAtomic, TypeVariantList]) setOfStringsType)) $
+--  H.it ("Data terms (when supported) pass through without change: " ++ show (adapterTarget $ unqualify $ termAdapter (context [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]) int32ElementDataType)) $
+
 unsupportedConstructorsAreModified :: H.SpecWith ()
-unsupportedConstructorsAreModified = do
-  H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
+unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
-    H.it "Sets become lists" $
-      QC.property $ \strings
-        -> adapt setOfStringsType stepOut (stringSet strings)
-        == pure (stringList $ S.toList strings)  
+  H.it "Sets (when unsupported) become lists" $
+    QC.property $ \strings -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantList]
+      setOfStringsType listOfStringsType False
+      (stringSet strings) (stringList $ S.toList strings)
 
-    H.it "Element references become strings" $
-      QC.property $ \name
-        -> adapt booleanElementType stepOut (TermElement name) -- Note: the element name is not dereferenced
-        == pure (stringValue name)  
+  H.it "Element references (when unsupported) become strings" $
+    QC.property $ \name -> checkTermAdapter
+      [TypeVariantAtomic]
+      int32ElementType stringType False
+      (TermElement name) (stringValue name) -- Note: the element name is not dereferenced
 
-    H.it "CompareTo terms become variant terms" $
-      QC.property $ \s
-        -> adapt compareStringsType stepOut (TermCompareTo $ stringValue s)
-        == pure (TermUnion $ Field "compareTo" $ stringValue s)  
+  H.it "CompareTo terms (when unsupported) become variant terms" $
+    QC.property $ \s -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      compareStringsType (unionTypeForFunctions stringType) False
+      (TermCompareTo $ stringValue s) (TermUnion $ Field "compareTo" $ stringValue s)
 
-    H.it "Data terms become variant terms" $ do
-      adapt booleanElementDataType stepOut TermData
-      `H.shouldBe` pure (TermUnion $ Field "data" unitTerm)  
+  H.it "Data terms (when unsupported) become variant terms" $
+    QC.property $ \() -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      int32ElementDataType (unionTypeForFunctions stringType) False
+      TermData (TermUnion $ Field "data" unitTerm)
 
-    H.it "Primitive function references become variant terms" $
-      QC.property $ \name
-        -> adapt concatType stepOut (TermFunction name)  -- Note: the function name is not dereferenced
-        == pure (TermUnion $ Field "function" $ stringValue name)  
+  H.it "Primitive function references (when unsupported) become variant terms" $
+    QC.property $ \name -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      concatType (unionTypeForFunctions stringType) False
+      (TermFunction name) (TermUnion $ Field "function" $ stringValue name) -- Note: the function name is not dereferenced
 
-    H.it "Projections become variant terms" $ do
-      QC.property $ \fname
-        -> adapt exampleProjectionType stepOut (TermProjection fname) -- Note: the field name is not dereferenced
-        == pure (TermUnion $ Field "projection" $ stringValue fname)  
+  H.it "Projections (when unsupported) become variant terms" $
+    QC.property $ \fname -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      exampleProjectionType (unionTypeForFunctions latLonType) False
+      (TermProjection fname) (TermUnion $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
-nominalTypesPassThrough :: H.SpecWith ()
-nominalTypesPassThrough = do
-  H.describe "Verify that nominal types behave like the types they reference" $ do
-
-    H.it "A term typed by StringTypeAlias just behaves like a string" $
-      QC.property $ \s
-        -> adapt stringAliasType stepOut (stringValue s)
-        == pure (stringValue s)
-
+  H.it "Nominal types (when unsupported) are dereferenced" $
+    QC.property $ \s -> checkTermAdapter
+      [TypeVariantAtomic]
+      stringAliasType stringType False
+      (stringValue s) (stringValue s)
+      
 termsAreAdaptedRecursively :: H.SpecWith ()
-termsAreAdaptedRecursively = do
-  H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
+termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
 
-    H.it "A list of sets of strings becomes a list of lists of strings" $ do
-      QC.property $ \lists
-        -> adapt listOfSetOfStringsType stepOut (TermList $ (\l -> TermSet $ S.fromList $ stringValue <$> l) <$> lists)
-        == pure (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
+  H.it "A list of int8's becomes a list of int32's" $
+    QC.property $ \ints -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantList]
+      listOfInt8sType listOfInt16sType False
+      (TermList $ int8Value <$> ints)
+      (TermList $ int16Value <$> ints)
+
+  H.it "A list of sets of strings becomes a list of lists of strings" $
+    QC.property $ \lists -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantList]
+      listOfSetOfStringsType listOfListsOfStringsType False
+      (TermList $ (\l -> TermSet $ S.fromList $ stringValue <$> l) <$> lists)
+      (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
+
+  H.it "A list of sets of element references becomes a list of lists of strings" $
+    QC.property $ \names -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantList]
+      listOfSetOfInt32ElementReferencesType listOfListsOfStringsType False
+      (TermList $ (\l -> TermSet $ S.fromList $ TermElement <$> l) <$> names)
+      (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> names)
 
 adapterIsInformationPreserving :: H.SpecWith ()
-adapterIsInformationPreserving = do
-  H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
+adapterIsInformationPreserving = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
 
-    H.it "Check strings (pass-through)" $
-      QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
-          
-    H.it "Check lists (pass-through)" $
-      QC.property $ \strings -> roundTripIsNoop listOfStringsType (TermList $ stringValue <$> strings)
+  H.it "Check strings (pass-through)" $
+    QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
+        
+  H.it "Check lists (pass-through)" $
+    QC.property $ \strings -> roundTripIsNoop listOfStringsType (TermList $ stringValue <$> strings)
 
-    H.it "Check sets (which map to lists)" $
-      QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
+  H.it "Check sets (which map to lists)" $
+    QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
 
-    H.it "Check element references (which map to strings)" $
-      QC.property $ \name -> roundTripIsNoop booleanElementType (TermElement name)
+  H.it "Check element references (which map to strings)" $
+    QC.property $ \name -> roundTripIsNoop int32ElementType (TermElement name)
 
-    H.it "Check compareTo terms (which map to variants)" $
-      QC.property $ \s -> roundTripIsNoop compareStringsType (TermCompareTo $ stringValue s)
+  H.it "Check compareTo terms (which map to variants)" $
+    QC.property $ \s -> roundTripIsNoop compareStringsType (TermCompareTo $ stringValue s)
 
-    H.it "Check data terms (which map to variants)" $
-      roundTripIsNoop booleanElementDataType TermData `H.shouldBe` True
+  H.it "Check data terms (which map to variants)" $
+    roundTripIsNoop int32ElementDataType TermData `H.shouldBe` True
 
-    H.it "Check primitive function references (which map to variants)" $
-      QC.property $ \name -> roundTripIsNoop concatType (TermFunction name)
+  H.it "Check primitive function references (which map to variants)" $
+    QC.property $ \name -> roundTripIsNoop concatType (TermFunction name)
 
-    H.it "Check projection terms (which map to variants)" $
-      QC.property $ \fname -> roundTripIsNoop exampleProjectionType (TermProjection fname)
+  H.it "Check projection terms (which map to variants)" $
+    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (TermProjection fname)
 
-    H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
-      QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
+  H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
+    QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
 
+roundTripIsNoop :: Type -> Term -> Bool
+roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
-    roundTripIsNoop typ term = (adapter stepOut term >>= adapter stepIn) == pure term
-      where
-        adapter = adapt typ
+    step = adapt typ
 
 spec :: H.Spec
 spec = do
   supportedConstructorsAreUnchanged
   unsupportedConstructorsAreModified
-  nominalTypesPassThrough
   termsAreAdaptedRecursively
   adapterIsInformationPreserving

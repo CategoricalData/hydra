@@ -210,8 +210,8 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
 
 toYaml :: Context -> Type -> Term -> Result YM.Node
 toYaml context typ term = do
-    adapter <- qualifiedToResult $ termAdapter adapterContext typ -- note: mixing error types
-    stepOut adapter term >>= encodeTermForYaml typ
+    ad <- qualifiedToResult $ termAdapter adapterContext typ -- note: mixing error types
+    stepOut (adapterStep ad) term >>= encodeTermForYaml typ
   where
     adapterContext = AdapterContext context hydraCoreLanguage yamlLanguage
 
