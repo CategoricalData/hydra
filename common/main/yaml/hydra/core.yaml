@@ -143,13 +143,13 @@ definitions:
         - name: data
           description: "Hydra's delta function, which maps an element to its data term"
 
-        - name: primitive
-          description: "A reference to a built-in (primitive) function"
-          type: Name
-
         - name: lambda
           description: "A function abstraction (lambda)"
           type: Lambda
+
+        - name: primitive
+          description: "A reference to a built-in (primitive) function"
+          type: Name
 
         - name: projection
           description: "A projection of a field from a record"
@@ -171,8 +171,8 @@ definitions:
         - cases
         - compareTo
         - data
-        - primitive
         - lambda
+        - primitive
         - projection
 
   - name: IntegerType
