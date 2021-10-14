@@ -128,6 +128,33 @@ definitions:
         - float32
         - float64
 
+  - name: Function
+    type:
+      union:
+        - name: cases
+          description: "A case statement applied to a variant record, consisting of a function term for each alternative in the union"
+          type:
+            list: Field
+
+        - name: compareTo
+          description: "Compares a term with a given term of the same type, producing a Comparison"
+          type: Term
+
+        - name: data
+          description: "Hydra's delta function, which maps an element to its data term"
+
+        - name: primitive
+          description: "A reference to a built-in (primitive) function"
+          type: Name
+
+        - name: lambda
+          description: "A function abstraction (lambda)"
+          type: Lambda
+
+        - name: projection
+          description: "A projection of a field from a record"
+          type: FieldName
+
   - name: FunctionType
     description: "A function type, also known as an arrow type"
     type:
@@ -137,6 +164,16 @@ definitions:
 
         - name: codomain
           type: Type
+
+  - name: FunctionVariant
+    type:
+      enum:
+        - cases
+        - compareTo
+        - data
+        - primitive
+        - lambda
+        - projection
 
   - name: IntegerType
     type:
@@ -266,29 +303,13 @@ definitions:
           description: "An atomic value"
           type: AtomicValue
 
-        - name: cases
-          description: "A case statement applied to a variant record, consisting of a function term for each alternative in the union"
-          type:
-            list: Field
-
-        - name: compareTo
-          description: "Compares a term with a given term of the same type, producing a Comparison"
-          type: Term
-
-        - name: data
-          description: "Hydra's delta function, which maps an element to its data term"
-
         - name: element
           description: "An element reference"
           type: Name
 
         - name: function
-          description: "A reference to a built-in function"
-          type: Name
-
-        - name: lambda
-          description: "A function abstraction (lambda)"
-          type: Lambda
+          description: "A function term"
+          type: Function
 
         - name: list
           description: "A list"
@@ -303,10 +324,6 @@ definitions:
             map:
               keys: Term
               values: Term
-
-        - name: projection
-          description: "A projection of a field from a record"
-          type: FieldName
 
         - name: record
           description: "A record, or labeled tuple"
@@ -331,15 +348,10 @@ definitions:
       enum:
         - application
         - atomic
-        - cases
-        - compareTo
-        - data
         - element
         - function
-        - lambda
         - list
         - map
-        - projection
         - record
         - set
         - union

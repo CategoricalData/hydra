@@ -10,6 +10,8 @@ module Hydra.Prototyping.Basics (
     floatValueVariant,
     floatVariantPrecision,
     floatVariants,
+    functionVariant,
+    functionVariants,
     hydraCoreLanguage,
     integerTypeIsSigned,
     integerTypePrecision,
@@ -88,6 +90,23 @@ floatVariantPrecision v = case v of
 floatVariants :: [FloatVariant]
 floatVariants = [FloatVariantFloat32, FloatVariantFloat64, FloatVariantBigfloat]
 
+functionVariant :: Function -> FunctionVariant
+functionVariant f = case f of
+  FunctionCases _ -> FunctionVariantCases
+  FunctionCompareTo _ -> FunctionVariantCompareTo
+  FunctionData -> FunctionVariantData
+  FunctionPrimitive _ -> FunctionVariantPrimitive
+  FunctionProjection _ -> FunctionVariantProjection
+
+functionVariants :: [FunctionVariant]
+functionVariants = [
+  FunctionVariantCases,
+  FunctionVariantCompareTo,
+  FunctionVariantData,
+  FunctionVariantPrimitive,
+  FunctionVariantLambda,
+  FunctionVariantProjection]
+  
 hydraCoreLanguage :: Language
 hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsAtomicVariants = S.fromList atomicVariants,
@@ -162,15 +181,10 @@ termVariant :: Term -> TermVariant
 termVariant term = case term of
   TermApplication _ -> TermVariantApplication
   TermAtomic _ -> TermVariantAtomic
-  TermCases _ -> TermVariantCases
-  TermCompareTo _ -> TermVariantCompareTo
-  TermData -> TermVariantData
   TermElement _ -> TermVariantElement
   TermFunction _ -> TermVariantFunction
-  TermLambda _ -> TermVariantLambda
   TermList _ -> TermVariantList
   TermMap _ -> TermVariantMap
-  TermProjection _ -> TermVariantProjection
   TermRecord _ -> TermVariantRecord
   TermSet _ -> TermVariantSet
   TermUnion _ -> TermVariantUnion
@@ -180,15 +194,10 @@ termVariants :: [TermVariant]
 termVariants = [
   TermVariantApplication,
   TermVariantAtomic,
-  TermVariantCases,
-  TermVariantCompareTo,
-  TermVariantData,
   TermVariantElement,
   TermVariantFunction,
-  TermVariantLambda,
   TermVariantList,
   TermVariantMap,
-  TermVariantProjection,
   TermVariantRecord,
   TermVariantSet,
   TermVariantUnion,

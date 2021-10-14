@@ -4,6 +4,11 @@ import hydra.evaluation.Step
 
 case class Adapter[t, v](
     /**
+     * @type boolean
+     */
+    isLossy: Boolean,
+    
+    /**
      * @type variable: t
      */
     source: t,
@@ -24,22 +29,11 @@ case class Adapter[t, v](
      *             variable: v
      *           variable: b
      */
-    mapping: Step[v,v],
-    
-    /**
-     * @type boolean
-     */
-    isLossy: Boolean,
-    
-    /**
-     * @type list: string
-     */
-    notes: Seq[String]
+    step: Step[v,v]
 )
 
 val _Adapter: String = "hydra/adapter.Adapter"
 val _Adapter_isLossy: String = "isLossy"
-val _Adapter_mapping: String = "mapping"
-val _Adapter_notes: String = "notes"
 val _Adapter_source: String = "source"
+val _Adapter_step: String = "step"
 val _Adapter_target: String = "target"

@@ -13,7 +13,9 @@ module Hydra.Core
   , FloatType(..)
   , FloatValue(..)
   , FloatVariant(..)
+  , Function(..)
   , FunctionType(..)
+  , FunctionVariant(..)
   , IntegerType(..)
   , IntegerValue(..)
   , IntegerVariant(..)
@@ -73,9 +75,23 @@ module Hydra.Core
   , _FloatVariant_bigfloat
   , _FloatVariant_float32
   , _FloatVariant_float64
+  , _Function
   , _FunctionType
   , _FunctionType_codomain
   , _FunctionType_domain
+  , _FunctionVariant
+  , _FunctionVariant_cases
+  , _FunctionVariant_compareTo
+  , _FunctionVariant_data
+  , _FunctionVariant_lambda
+  , _FunctionVariant_primitive
+  , _FunctionVariant_projection
+  , _Function_cases
+  , _Function_compareTo
+  , _Function_data
+  , _Function_lambda
+  , _Function_primitive
+  , _Function_projection
   , _IntegerType
   , _IntegerType_bigint
   , _IntegerType_int16
@@ -120,30 +136,20 @@ module Hydra.Core
   , _TermVariant
   , _TermVariant_application
   , _TermVariant_atomic
-  , _TermVariant_cases
-  , _TermVariant_compareTo
-  , _TermVariant_data
   , _TermVariant_element
   , _TermVariant_function
-  , _TermVariant_lambda
   , _TermVariant_list
   , _TermVariant_map
-  , _TermVariant_projection
   , _TermVariant_record
   , _TermVariant_set
   , _TermVariant_union
   , _TermVariant_variable
   , _Term_application
   , _Term_atomic
-  , _Term_cases
-  , _Term_compareTo
-  , _Term_data
   , _Term_element
   , _Term_function
-  , _Term_lambda
   , _Term_list
   , _Term_map
-  , _Term_projection
   , _Term_record
   , _Term_set
   , _Term_union
@@ -267,6 +273,31 @@ data FloatVariant
   | FloatVariantFloat32
   | FloatVariantFloat64 deriving (Eq, Generic, Ord, Read, Show)
 
+data Function
+  {-| A case statement applied to a variant record, consisting of a function term
+      for each alternative in the union
+      
+      @type list: hydra/core.Field -}
+  = FunctionCases [Field]
+  {-| Compares a term with a given term of the same type, producing a Comparison
+      
+      @type hydra/core.Term -}
+  | FunctionCompareTo Term
+  -- | Hydra's delta function, which maps an element to its data term
+  | FunctionData
+  {-| A reference to a built-in (primitive) function
+      
+      @type hydra/core.Name -}
+  | FunctionPrimitive Name
+  {-| A function abstraction (lambda)
+      
+      @type hydra/core.Lambda -}
+  | FunctionLambda Lambda
+  {-| A projection of a field from a record
+      
+      @type hydra/core.FieldName -}
+  | FunctionProjection FieldName deriving (Eq, Generic, Ord, Read, Show)
+
 -- | A function type, also known as an arrow type
 data FunctionType
   = FunctionType
@@ -274,6 +305,14 @@ data FunctionType
     { functionTypeDomain :: Type
     -- | @type hydra/core.Type
     , functionTypeCodomain :: Type } deriving (Eq, Generic, Ord, Read, Show)
+
+data FunctionVariant
+  = FunctionVariantCases
+  | FunctionVariantCompareTo
+  | FunctionVariantData
+  | FunctionVariantPrimitive
+  | FunctionVariantLambda
+  | FunctionVariantProjection deriving (Eq, Generic, Ord, Read, Show)
 
 data IntegerType
   = IntegerTypeBigint
@@ -370,29 +409,14 @@ data Term
       
       @type hydra/core.AtomicValue -}
   | TermAtomic AtomicValue
-  {-| A case statement applied to a variant record, consisting of a function term
-      for each alternative in the union
-      
-      @type list: hydra/core.Field -}
-  | TermCases [Field]
-  {-| Compares a term with a given term of the same type, producing a Comparison
-      
-      @type hydra/core.Term -}
-  | TermCompareTo Term
-  -- | Hydra's delta function, which maps an element to its data term
-  | TermData
   {-| An element reference
       
       @type hydra/core.Name -}
   | TermElement Name
-  {-| A reference to a built-in function
+  {-| A function term
       
-      @type hydra/core.Name -}
-  | TermFunction Name
-  {-| A function abstraction (lambda)
-      
-      @type hydra/core.Lambda -}
-  | TermLambda Lambda
+      @type hydra/core.Function -}
+  | TermFunction Function
   {-| A list
       
       @type list: hydra/core.Term -}
@@ -403,10 +427,6 @@ data Term
               keys: hydra/core.Term
               values: hydra/core.Term -}
   | TermMap (Map Term Term)
-  {-| A projection of a field from a record
-      
-      @type hydra/core.FieldName -}
-  | TermProjection FieldName
   {-| A record, or labeled tuple
       
       @type list: hydra/core.Field -}
@@ -427,15 +447,10 @@ data Term
 data TermVariant
   = TermVariantApplication
   | TermVariantAtomic
-  | TermVariantCases
-  | TermVariantCompareTo
-  | TermVariantData
   | TermVariantElement
   | TermVariantFunction
-  | TermVariantLambda
   | TermVariantList
   | TermVariantMap
-  | TermVariantProjection
   | TermVariantRecord
   | TermVariantSet
   | TermVariantUnion
@@ -524,9 +539,23 @@ _FloatVariant = "hydra/core.FloatVariant" :: String
 _FloatVariant_bigfloat = "bigfloat" :: String
 _FloatVariant_float32 = "float32" :: String
 _FloatVariant_float64 = "float64" :: String
+_Function = "hydra/core.Function" :: String
 _FunctionType = "hydra/core.FunctionType" :: String
 _FunctionType_codomain = "codomain" :: String
 _FunctionType_domain = "domain" :: String
+_FunctionVariant = "hydra/core.FunctionVariant" :: String
+_FunctionVariant_cases = "cases" :: String
+_FunctionVariant_compareTo = "compareTo" :: String
+_FunctionVariant_data = "data" :: String
+_FunctionVariant_lambda = "lambda" :: String
+_FunctionVariant_primitive = "primitive" :: String
+_FunctionVariant_projection = "projection" :: String
+_Function_cases = "cases" :: String
+_Function_compareTo = "compareTo" :: String
+_Function_data = "data" :: String
+_Function_lambda = "lambda" :: String
+_Function_primitive = "primitive" :: String
+_Function_projection = "projection" :: String
 _IntegerType = "hydra/core.IntegerType" :: String
 _IntegerType_bigint = "bigint" :: String
 _IntegerType_int16 = "int16" :: String
@@ -571,30 +600,20 @@ _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String
 _TermVariant_atomic = "atomic" :: String
-_TermVariant_cases = "cases" :: String
-_TermVariant_compareTo = "compareTo" :: String
-_TermVariant_data = "data" :: String
 _TermVariant_element = "element" :: String
 _TermVariant_function = "function" :: String
-_TermVariant_lambda = "lambda" :: String
 _TermVariant_list = "list" :: String
 _TermVariant_map = "map" :: String
-_TermVariant_projection = "projection" :: String
 _TermVariant_record = "record" :: String
 _TermVariant_set = "set" :: String
 _TermVariant_union = "union" :: String
 _TermVariant_variable = "variable" :: String
 _Term_application = "application" :: String
 _Term_atomic = "atomic" :: String
-_Term_cases = "cases" :: String
-_Term_compareTo = "compareTo" :: String
-_Term_data = "data" :: String
 _Term_element = "element" :: String
 _Term_function = "function" :: String
-_Term_lambda = "lambda" :: String
 _Term_list = "list" :: String
 _Term_map = "map" :: String
-_Term_projection = "projection" :: String
 _Term_record = "record" :: String
 _Term_set = "set" :: String
 _Term_union = "union" :: String

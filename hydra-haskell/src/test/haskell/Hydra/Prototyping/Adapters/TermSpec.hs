@@ -4,7 +4,6 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Ext.Yaml.Coder
 import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.Adapters.Utils
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
@@ -16,7 +15,6 @@ import qualified Test.Hspec as H
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
-import qualified Data.Maybe as Y
 
 
 -- Use YAML as the target language
@@ -95,12 +93,12 @@ stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
 
 unionTypeForFunctions :: Type -> Type
 unionTypeForFunctions dom = TypeUnion [
-  FieldType _Term_cases stringType, -- TODO (TypeRecord cases)
-  FieldType _Term_compareTo dom,
-  FieldType _Term_data unitType,
-  FieldType _Term_function stringType,
-  FieldType _Term_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
-  FieldType _Term_projection stringType,
+  FieldType _Function_cases stringType, -- TODO (TypeRecord cases)
+  FieldType _Function_compareTo dom,
+  FieldType _Function_data unitType,
+  FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
+  FieldType _Function_primitive stringType,
+  FieldType _Function_projection stringType,
   FieldType _Term_variable stringType] -- TODO
 
 supportedConstructorsAreUnchanged :: H.SpecWith ()
@@ -152,25 +150,25 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
     QC.property $ \s -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantFunction]
       compareStringsType compareStringsType False
-      (TermCompareTo $ stringValue s) (TermCompareTo $ stringValue s)
+      (compareTo $ stringValue s) (compareTo $ stringValue s)
 
   H.it "Data terms (when supported) pass through without change" $
     QC.property $ \() -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantFunction, TypeVariantElement]
       int32ElementDataType int32ElementDataType False
-      TermData TermData
+      dataTerm dataTerm
 
   H.it "Primitive function references (when supported) pass through without change" $
     QC.property $ \name -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantFunction]
       concatType concatType False
-      (TermFunction name) (TermFunction name)
+      (primitive name) (primitive name)
 
   H.it "Projections (when supported) pass through without change" $
     QC.property $ \fname -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantFunction, TypeVariantRecord]
       exampleProjectionType exampleProjectionType False
-      (TermProjection fname) (TermProjection fname)
+      (projection fname) (projection fname)
  
   H.it "Nominal types (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
@@ -178,29 +176,6 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       stringAliasType stringAliasType False
       (stringValue s) (stringValue s)
        
--- where
---   context variants = withConstraints $ (languageConstraints baseLanguage) {
---       languageConstraintsTypeVariants = S.fromList variants,
---       languageConstraintsAtomicVariants = atomicVars,
---       languageConstraintsFloatVariants = floatVars,
---       languageConstraintsIntegerVariants = integerVars }
---     where
---       atomicVars = S.fromList [AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
---       floatVars = S.fromList [FloatVariantFloat32]
---       integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
---
---       withConstraints :: Language_Constraints -> AdapterContext
---       withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
---
---       baseLanguage :: Language
---       baseLanguage = hydraCoreLanguage
---
---       baseContext :: AdapterContext
---       baseContext = AdapterContext testContext baseLanguage baseLanguage
-
---  H.it ("Sets become lists: " ++ show (qualifiedWarnings $ termAdapter (context [TypeVariantAtomic, TypeVariantList]) setOfStringsType)) $
---  H.it ("Data terms (when supported) pass through without change: " ++ show (adapterTarget $ unqualify $ termAdapter (context [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]) int32ElementDataType)) $
-
 unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
@@ -220,25 +195,25 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       compareStringsType (unionTypeForFunctions stringType) False
-      (TermCompareTo $ stringValue s) (TermUnion $ Field "compareTo" $ stringValue s)
+      (compareTo $ stringValue s) (TermUnion $ Field "compareTo" $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType (unionTypeForFunctions stringType) False
-      TermData (TermUnion $ Field "data" unitTerm)
+      dataTerm (TermUnion $ Field "data" unitTerm)
 
   H.it "Primitive function references (when unsupported) become variant terms" $
     QC.property $ \name -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       concatType (unionTypeForFunctions stringType) False
-      (TermFunction name) (TermUnion $ Field "function" $ stringValue name) -- Note: the function name is not dereferenced
+      (primitive name) (TermUnion $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType (unionTypeForFunctions latLonType) False
-      (TermProjection fname) (TermUnion $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
+      (projection fname) (TermUnion $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter
@@ -286,16 +261,16 @@ adapterIsInformationPreserving = H.describe "Verify that the adapter is informat
     QC.property $ \name -> roundTripIsNoop int32ElementType (TermElement name)
 
   H.it "Check compareTo terms (which map to variants)" $
-    QC.property $ \s -> roundTripIsNoop compareStringsType (TermCompareTo $ stringValue s)
+    QC.property $ \s -> roundTripIsNoop compareStringsType (compareTo $ stringValue s)
 
   H.it "Check data terms (which map to variants)" $
-    roundTripIsNoop int32ElementDataType TermData `H.shouldBe` True
+    roundTripIsNoop int32ElementDataType dataTerm `H.shouldBe` True
 
   H.it "Check primitive function references (which map to variants)" $
-    QC.property $ \name -> roundTripIsNoop concatType (TermFunction name)
+    QC.property $ \name -> roundTripIsNoop concatType (primitive name)
 
   H.it "Check projection terms (which map to variants)" $
-    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (TermProjection fname)
+    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (projection fname)
 
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)

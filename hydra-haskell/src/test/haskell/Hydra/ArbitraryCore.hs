@@ -92,20 +92,25 @@ arbitraryPair :: (a -> a -> b) -> (Int -> QC.Gen a) -> Int -> QC.Gen b
 arbitraryPair c g n = c <$> g n' <*> g n'
   where n' = div n 2
 
+arbitraryFunction :: Int -> QC.Gen Function
+arbitraryFunction n = QC.oneof [
+    FunctionCases <$> arbitraryList arbitraryField n',
+    FunctionCompareTo <$> arbitraryTerm n',
+    FunctionLambda <$> (Lambda <$> QC.arbitrary <*> arbitraryTerm n'),
+    pure FunctionData,
+    -- FunctionPrimitive requires a context
+    FunctionProjection <$> QC.arbitrary]
+  where n' = n-1
+
 arbitraryTerm :: Int -> QC.Gen Term
 arbitraryTerm n = QC.oneof [
     TermApplication <$> arbitraryPair Application arbitraryTerm n',
     TermAtomic <$> QC.arbitrary,
-    TermCases <$> arbitraryList arbitraryField n',
-    TermCompareTo <$> arbitraryTerm n',
-    pure TermData,
     TermElement <$> QC.arbitrary,
-    -- TermFunction requires a context
-    TermLambda <$> (Lambda <$> QC.arbitrary <*> arbitraryTerm n'),
+    TermFunction <$> arbitraryFunction n',
     TermList <$> arbitraryList arbitraryTerm n',
     TermMap <$> (M.fromList <$>
       arbitraryList (arbitraryPair (,) arbitraryTerm) n'),
-    TermProjection <$> QC.arbitrary,
     TermRecord <$> arbitraryList arbitraryField n',
     TermSet <$> (S.fromList <$> arbitraryList arbitraryTerm n'),
     TermUnion <$> arbitraryField n',
