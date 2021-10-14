@@ -31,6 +31,14 @@ def floatValueType(fv: FloatValue): FloatType = fv match
 
 def floatValueVariant(fv: FloatValue): FloatVariant = floatTypeVariant(floatValueType(fv))
 
+def functionVariant(fun: Function): FunctionVariant = fun match
+  case Function.cases(_) => FunctionVariant.cases()
+  case Function.compareTo(_) => FunctionVariant.compareTo()
+  case Function.data() => FunctionVariant.data()
+  case Function.lambda(_) => FunctionVariant.lambda()
+  case Function.primitive(_) => FunctionVariant.primitive()
+  case Function.projection(_) => FunctionVariant.projection()
+
 def integerTypeVariant(it: IntegerType): IntegerVariant = it match
   case IntegerType.bigint() => IntegerVariant.bigint()
   case IntegerType.int8() => IntegerVariant.int8()
@@ -58,15 +66,10 @@ def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(i
 def termVariant(term: Term): TermVariant = term match
   case Term.application(_) => TermVariant.application()
   case Term.atomic(_) => TermVariant.atomic()
-  case Term.cases(_) => TermVariant.cases()
-  case Term.compareTo(_) => TermVariant.compareTo()
-  case Term.data() => TermVariant.data()
   case Term.element(_) => TermVariant.element()
   case Term.function(_) => TermVariant.function()
-  case Term.lambda(_) => TermVariant.lambda()
   case Term.list(_) => TermVariant.list()
   case Term.map(_) => TermVariant.map()
-  case Term.projection(_) => TermVariant.projection()
   case Term.record(_) => TermVariant.record()
   case Term.set(_) => TermVariant.set()
   case Term.union(_) => TermVariant.union()

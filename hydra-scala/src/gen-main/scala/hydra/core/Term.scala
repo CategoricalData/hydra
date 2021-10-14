@@ -14,39 +14,17 @@ enum Term:
      */
     case atomic(value: AtomicValue) extends Term
     /**
-     * A case statement applied to a variant record, consisting of a function term for each alternative in the union
-     * 
-     * @type list: hydra/core.Field
-     */
-    case cases(value: Seq[Field]) extends Term
-    /**
-     * Compares a term with a given term of the same type, producing a Comparison
-     * 
-     * @type hydra/core.Term
-     */
-    case compareTo(value: Term) extends Term
-    /**
-     * Hydra's delta function, which maps an element to its data term
-     */
-    case data() extends Term
-    /**
      * An element reference
      * 
      * @type hydra/core.Name
      */
     case element(value: Name) extends Term
     /**
-     * A reference to a built-in function
+     * A function term
      * 
-     * @type hydra/core.Name
+     * @type hydra/core.Function
      */
-    case function(value: Name) extends Term
-    /**
-     * A function abstraction (lambda)
-     * 
-     * @type hydra/core.Lambda
-     */
-    case lambda(value: Lambda) extends Term
+    case function(value: Function) extends Term
     /**
      * A list
      * 
@@ -61,12 +39,6 @@ enum Term:
      *         values: hydra/core.Term
      */
     case map(value: Map[Term, Term]) extends Term
-    /**
-     * A projection of a field from a record
-     * 
-     * @type hydra/core.FieldName
-     */
-    case projection(value: FieldName) extends Term
     /**
      * A record, or labeled tuple
      * 
@@ -95,15 +67,10 @@ enum Term:
 val _Term: String = "hydra/core.Term"
 val _Term_application: String = "application"
 val _Term_atomic: String = "atomic"
-val _Term_cases: String = "cases"
-val _Term_compareTo: String = "compareTo"
-val _Term_data: String = "data"
 val _Term_element: String = "element"
 val _Term_function: String = "function"
-val _Term_lambda: String = "lambda"
 val _Term_list: String = "list"
 val _Term_map: String = "map"
-val _Term_projection: String = "projection"
 val _Term_record: String = "record"
 val _Term_set: String = "set"
 val _Term_union: String = "union"
