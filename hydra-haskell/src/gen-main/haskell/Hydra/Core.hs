@@ -285,14 +285,14 @@ data Function
   | FunctionCompareTo Term
   -- | Hydra's delta function, which maps an element to its data term
   | FunctionData
-  {-| A reference to a built-in (primitive) function
-      
-      @type hydra/core.Name -}
-  | FunctionPrimitive Name
   {-| A function abstraction (lambda)
       
       @type hydra/core.Lambda -}
   | FunctionLambda Lambda
+  {-| A reference to a built-in (primitive) function
+      
+      @type hydra/core.Name -}
+  | FunctionPrimitive Name
   {-| A projection of a field from a record
       
       @type hydra/core.FieldName -}
@@ -310,8 +310,8 @@ data FunctionVariant
   = FunctionVariantCases
   | FunctionVariantCompareTo
   | FunctionVariantData
-  | FunctionVariantPrimitive
   | FunctionVariantLambda
+  | FunctionVariantPrimitive
   | FunctionVariantProjection deriving (Eq, Generic, Ord, Read, Show)
 
 data IntegerType

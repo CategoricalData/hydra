@@ -18,17 +18,17 @@ enum Function:
      */
     case data() extends Function
     /**
-     * A reference to a built-in (primitive) function
-     * 
-     * @type hydra/core.Name
-     */
-    case primitive(value: Name) extends Function
-    /**
      * A function abstraction (lambda)
      * 
      * @type hydra/core.Lambda
      */
     case lambda(value: Lambda) extends Function
+    /**
+     * A reference to a built-in (primitive) function
+     * 
+     * @type hydra/core.Name
+     */
+    case primitive(value: Name) extends Function
     /**
      * A projection of a field from a record
      * 

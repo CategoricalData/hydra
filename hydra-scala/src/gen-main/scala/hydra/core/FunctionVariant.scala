@@ -4,8 +4,8 @@ enum FunctionVariant:
     case cases() extends FunctionVariant
     case compareTo() extends FunctionVariant
     case data() extends FunctionVariant
-    case primitive() extends FunctionVariant
     case lambda() extends FunctionVariant
+    case primitive() extends FunctionVariant
     case projection() extends FunctionVariant
 
 val _FunctionVariant: String = "hydra/core.FunctionVariant"
