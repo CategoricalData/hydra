@@ -28,12 +28,12 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
         floatTypeVariant,
         floatValueType,
         floatValueVariant,
+        functionVariant,
         integerTypeVariant,
         integerValueType,
         integerValueVariant,
         termVariant,
         typeVariant]
-
 
 atomicTypeVariant :: Element
 atomicTypeVariant = basicsFunction "atomicTypeVariant" _AtomicType _AtomicVariant $
@@ -105,19 +105,24 @@ integerValueVariant :: Element
 integerValueVariant = basicsFunction "integerValueVariant" _IntegerValue _IntegerVariant $
   compose (funcRef integerTypeVariant) (funcRef integerValueType)
 
+functionVariant :: Element
+functionVariant = basicsFunction "functionVariant" _Function _FunctionVariant $
+  matchWithVariants [
+    (_Function_cases,      _FunctionVariant_cases),
+    (_Function_compareTo,  _FunctionVariant_compareTo),
+    (_Function_data,       _FunctionVariant_data),
+    (_Function_lambda,     _FunctionVariant_lambda),
+    (_Function_primitive,  _FunctionVariant_primitive),
+    (_Function_projection, _FunctionVariant_projection)]
+    
 termVariant :: Element
 termVariant = basicsFunction "termVariant" _Term _TermVariant $
   matchWithVariants [
     (_Term_atomic,     _TermVariant_atomic),
-    (_Term_cases,      _TermVariant_cases),
-    (_Term_compareTo,  _TermVariant_compareTo),
-    (_Term_data,       _TermVariant_data),
     (_Term_element,    _TermVariant_element),
     (_Term_function,   _TermVariant_function),
-    (_Term_lambda,     _TermVariant_lambda),
     (_Term_map,        _TermVariant_map),
     (_Term_list,       _TermVariant_list),
-    (_Term_projection, _TermVariant_projection),
     (_Term_record,     _TermVariant_record),
     (_Term_set,        _TermVariant_set),
     (_Term_union,      _TermVariant_union),

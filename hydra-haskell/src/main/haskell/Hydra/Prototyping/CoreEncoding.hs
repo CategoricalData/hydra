@@ -7,6 +7,7 @@ module Hydra.Prototyping.CoreEncoding (
     encodeFieldType,
     encodeFloatType,
     encodeFloatVariant,
+    encodeFunction,
     encodeFunctionType,
     encodeIntegerType,
     encodeIntegerVariant,
@@ -69,6 +70,15 @@ encodeFloatVariant fv = unitVariant $ case fv of
   FloatVariantFloat32 -> _FloatVariant_float32
   FloatVariantFloat64 -> _FloatVariant_float64
 
+encodeFunction :: Function -> Term
+encodeFunction f = case f of
+  FunctionCases cases -> variant _Function_cases $ TermList $ encodeField <$> cases
+  FunctionCompareTo other -> variant _Function_compareTo $ encodeTerm other
+  FunctionData -> unitVariant _Function_data
+  FunctionLambda l -> variant _Function_lambda $ encodeLambda l
+  FunctionPrimitive name -> variant _Function_primitive $ stringValue name
+  FunctionProjection fname -> variant _Function_projection $ stringValue fname
+
 encodeFunctionType :: FunctionType -> Term
 encodeFunctionType (FunctionType dom cod) = TermRecord [
   Field _FunctionType_domain $ encodeType dom,
@@ -112,16 +122,11 @@ encodeTerm :: Term -> Term
 encodeTerm term = case term of
   TermApplication a -> variant _Term_application $ encodeApplication a
   TermAtomic av -> variant _Term_atomic $ encodeAtomicValue av
-  TermCases cases -> variant _Term_cases $ TermList $ encodeField <$> cases
-  TermCompareTo other -> variant _Term_compareTo $ encodeTerm other
-  TermData -> unitVariant _Term_data
   TermElement name -> variant _Term_element $ stringValue name
-  TermFunction name -> variant _Term_function $ stringValue name
-  TermLambda l -> variant _Term_lambda $ encodeLambda l
+  TermFunction f -> variant _Term_function $ encodeFunction f
   TermList terms -> variant _Term_list $ TermList $ encodeTerm <$> terms
   TermMap map -> variant _Term_map $ TermMap $ M.fromList $ encodePair <$> M.toList map
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
-  TermProjection fname -> variant _Term_projection $ stringValue fname
   TermRecord fields -> variant _Term_record $ TermList $ encodeField <$> fields
   TermSet terms -> variant _Term_set $ TermSet $ S.fromList $ encodeTerm <$> S.toList terms
   TermUnion field -> variant _Term_union $ encodeField field

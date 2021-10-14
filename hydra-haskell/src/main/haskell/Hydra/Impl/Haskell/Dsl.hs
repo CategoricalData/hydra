@@ -7,8 +7,10 @@ module Hydra.Impl.Haskell.Dsl (
   booleanTerm,
   booleanType,
   cases,
+  compareTo,
   compose,
   constFunction,
+  dataTerm,
   deref,
   expectNArgs,
   expectRecordTerm,
@@ -36,6 +38,8 @@ module Hydra.Impl.Haskell.Dsl (
   match,
   matchWithVariants,
   nominalType,
+  primitive,
+  projection,
   requireField,
   stringTerm,
   stringType,
@@ -82,8 +86,11 @@ booleanType :: Type
 booleanType = TypeAtomic AtomicTypeBoolean
 
 cases :: [Field] -> Term
-cases = TermCases
+cases = TermFunction . FunctionCases
 
+compareTo :: Term -> Term
+compareTo = TermFunction . FunctionCompareTo
+ 
 compose :: Term -> Term -> Term
 compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
   where var = "x"
@@ -91,8 +98,11 @@ compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
 constFunction :: Term -> Term
 constFunction = lambda "_"
 
+dataTerm :: Term
+dataTerm = TermFunction FunctionData
+
 deref :: Name -> Term
-deref name = apply TermData $ TermElement name
+deref name = apply dataTerm $ TermElement name
 
 expectNArgs :: Int -> [Term] -> Result ()
 expectNArgs n args = if L.length args /= n
@@ -130,10 +140,10 @@ floatType :: FloatType -> Type
 floatType = TypeAtomic . AtomicTypeFloat
 
 funcRef :: Element -> Term
-funcRef el = apply TermData $ TermElement $ elementName el
+funcRef el = apply (TermFunction FunctionData) $ TermElement $ elementName el
 
 function :: Name -> Term
-function = TermFunction
+function = TermFunction . FunctionPrimitive
 
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
@@ -166,7 +176,7 @@ integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger
 
 lambda :: Variable -> Term -> Term
-lambda param body = TermLambda $ Lambda param body
+lambda param body = TermFunction $ FunctionLambda $ Lambda param body
 
 mapType :: Type -> Type -> Type
 mapType kt vt = TypeMap $ MapType kt vt
@@ -183,6 +193,12 @@ matchWithVariants = cases . fmap toField
 
 nominalType :: Name -> Type
 nominalType = TypeNominal
+
+primitive :: Name -> Term
+primitive = TermFunction . FunctionPrimitive
+
+projection :: Name -> Term
+projection = TermFunction . FunctionProjection
 
 requireField :: M.Map FieldName Term -> FieldName -> Result Term
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields

@@ -24,19 +24,20 @@ checkType context typ term = check M.empty typ term
       TermApplication (Application f arg) -> case f of
 --        TermApplication ... ->
         TermAtomic _ -> False
---        TermCases ... ->
---        TermCompareTo other -> 
-        TermData -> check bindings (TypeElement typ) arg
         TermElement _ -> False
-        TermFunction fn -> case lookupPrimitiveFunction context fn of
-          Nothing -> False
-          Just prim -> cod == typ && check bindings dom arg
-            where
-              FunctionType dom cod = primitiveFunctionType prim
---        TermLambda ... ->
+        TermFunction f -> case f of
+--          FunctionCases ... ->
+--          FunctionCompareTo other ->
+          FunctionData -> check bindings (TypeElement typ) arg
+--          FunctionLambda ... ->
+          FunctionPrimitive fn -> case lookupPrimitiveFunction context fn of
+            Nothing -> False
+            Just prim -> cod == typ && check bindings dom arg
+              where
+                FunctionType dom cod = primitiveFunctionType prim
+--          FunctionProjection fn ->
         TermList _ -> False
         TermMap _ -> False
---        TermProjection fn ->
         TermRecord _ -> False
         TermSet _ -> False
         TermUnion _ -> False
@@ -45,27 +46,9 @@ checkType context typ term = check M.empty typ term
           Just t -> case t of
             TypeFunction (FunctionType dom cod) -> cod == typ && check bindings dom arg
             _ -> False
-
+                  
       TermAtomic v -> case typ of
         TypeAtomic at -> at == atomicValueType v
-        _ -> False
-
-      TermCases cases -> case typ of
-        TypeFunction (FunctionType dom cod) -> case dom of
-          TypeUnion fields -> and $ fmap checkCase cases
-            where
-              checkCase (Field fn term) = case matchingField fn fields of
-                Nothing -> False
-                Just (FieldType _ ft) -> check bindings (TypeFunction $ FunctionType ft cod) term
-        _ -> False
-
-      TermCompareTo other -> case typ of
-        TypeFunction (FunctionType dom cod) -> dom == cod && check bindings dom other
-
-      TermData -> case typ of
-        TypeFunction (FunctionType dom _) -> case dom of
-          TypeElement t -> t == dom
-          _ -> False
         _ -> False
 
       TermElement en -> case typ of
@@ -74,26 +57,8 @@ checkType context typ term = check M.empty typ term
           Just e -> encodeType et == elementSchema e
         _ -> False
 
-      TermFunction fn -> case lookupPrimitiveFunction context fn of
-          Nothing -> False
-          Just prim -> typ == TypeFunction (primitiveFunctionType prim)
-
-      TermLambda (Lambda v b) -> case typ of
-        TypeFunction (FunctionType dom cod) -> check bindings' cod b
-          where
-            bindings' = M.insert v dom bindings
-        _ -> False
-
       TermList list -> case typ of
         TypeList lt -> and $ fmap (check bindings lt) list
-        _ -> False
-
-      TermProjection fn -> case typ of
-        TypeFunction (FunctionType dom cod) -> case dom of
-          TypeRecord tfields -> case matchingField fn tfields of
-            Nothing -> False
-            Just f -> cod == fieldTypeType f
-          _ -> False
         _ -> False
 
       TermRecord fields -> case typ of
@@ -113,6 +78,43 @@ checkType context typ term = check M.empty typ term
       TermVariable v -> case M.lookup v bindings of
         Nothing -> False
         Just t -> t == typ
+
+      TermFunction f -> case f of
+        FunctionCases cases -> case typ of
+          TypeFunction (FunctionType dom cod) -> case dom of
+            TypeUnion fields -> and $ fmap checkCase cases
+              where
+                checkCase (Field fn term) = case matchingField fn fields of
+                  Nothing -> False
+                  Just (FieldType _ ft) -> check bindings (TypeFunction $ FunctionType ft cod) term
+          _ -> False
+
+        FunctionCompareTo other -> case typ of
+          TypeFunction (FunctionType dom cod) -> dom == cod && check bindings dom other
+
+        FunctionData -> case typ of
+          TypeFunction (FunctionType dom _) -> case dom of
+            TypeElement t -> t == dom
+            _ -> False
+          _ -> False
+
+        FunctionLambda (Lambda v b) -> case typ of
+          TypeFunction (FunctionType dom cod) -> check bindings' cod b
+            where
+              bindings' = M.insert v dom bindings
+          _ -> False
+
+        FunctionPrimitive fn -> case lookupPrimitiveFunction context fn of
+            Nothing -> False
+            Just prim -> typ == TypeFunction (primitiveFunctionType prim)
+
+        FunctionProjection fn -> case typ of
+          TypeFunction (FunctionType dom cod) -> case dom of
+            TypeRecord tfields -> case matchingField fn tfields of
+              Nothing -> False
+              Just f -> cod == fieldTypeType f
+            _ -> False
+          _ -> False
 
     sameLength l1 l2 = L.length l1 == L.length l2
 

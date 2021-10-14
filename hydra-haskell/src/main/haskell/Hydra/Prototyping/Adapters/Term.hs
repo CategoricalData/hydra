@@ -51,42 +51,43 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
       $ Step (encode ad) (decode ad)
   where
     encode ad term = stepOut (adapterStep ad) $ case term of
-      TermCases _ -> variant _Term_cases $ stringValue $ show term -- TODO TermRecord cases
-      TermCompareTo other -> variant _Term_compareTo other
-      TermData -> unitVariant _Term_data
-      TermFunction name -> variant _Term_function $ stringValue name
-      TermLambda _ -> variant _Term_lambda $ stringValue $ show term -- TODO
-      TermProjection fname -> variant _Term_projection $ stringValue fname
-      TermVariable var -> variant _Term_lambda $ stringValue var -- TODO
+      TermFunction f -> case f of
+        FunctionCases _ -> variant _Function_cases $ stringValue $ show term -- TODO TermRecord cases
+        FunctionCompareTo other -> variant _Function_compareTo other
+        FunctionData -> unitVariant _Function_data
+        FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
+        FunctionPrimitive name -> variant _Function_primitive $ stringValue name
+        FunctionProjection fname -> variant _Function_projection $ stringValue fname
+      TermVariable var -> variant _Term_variable $ stringValue var -- TODO
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
-          (_Term_cases, forCases fterm),
-          (_Term_compareTo, forCompareTo fterm),
-          (_Term_data, forData fterm),
-          (_Term_function, forFunction fterm),
-          (_Term_lambda, forLambda fterm),
-          (_Term_projection, forProjection fterm),
+          (_Function_cases, forCases fterm),
+          (_Function_compareTo, forCompareTo fterm),
+          (_Function_data, forData fterm),
+          (_Function_lambda, forLambda fterm),
+          (_Function_primitive, forPrimitive fterm),
+          (_Function_projection, forProjection fterm),
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ fname
-        forCases fterm = TermCases <$> (read <$> expectStringTerm fterm) -- TODO
-        forCompareTo fterm = pure $ TermCompareTo fterm
-        forData _ = pure TermData
-        forFunction fterm = TermFunction <$> expectStringTerm fterm
-        forLambda fterm = TermLambda <$> (read <$> expectStringTerm fterm) -- TODO
-        forProjection fterm = TermProjection <$> expectStringTerm fterm
-        forVariable fterm = TermVariable <$> expectStringTerm fterm -- TODO
+        forCases fterm = cases <$> (read <$> expectStringTerm fterm) -- TODO
+        forCompareTo fterm = pure $ compareTo fterm
+        forData _ = pure dataTerm
+        forPrimitive fterm = primitive <$> expectStringTerm fterm
+        forLambda fterm = TermFunction . FunctionLambda <$> (read <$> expectStringTerm fterm) -- TODO
+        forProjection fterm = projection <$> expectStringTerm fterm
+        forVariable fterm = variable <$> expectStringTerm fterm -- TODO
 
     unionType = do
       domAd <- termAdapter context dom
       return $ TypeUnion [
-        FieldType _Term_cases stringType, -- TODO (TypeRecord cases)
-        FieldType _Term_compareTo (adapterTarget domAd),
-        FieldType _Term_data unitType,
-        FieldType _Term_function stringType,
-        FieldType _Term_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
-        FieldType _Term_projection stringType,
+        FieldType _Function_cases stringType, -- TODO (TypeRecord cases)
+        FieldType _Function_compareTo (adapterTarget domAd),
+        FieldType _Function_data unitType,
+        FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
+        FieldType _Function_primitive stringType,
+        FieldType _Function_projection stringType,
         FieldType _Term_variable stringType] -- TODO
 
 listToSet :: AdapterContext -> Type -> Qualified (Adapter Type Term)
@@ -116,22 +117,22 @@ passFunction context t@(TypeFunction (FunctionType dom cod)) = do
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd
     return $ Adapter lossy t (TypeFunction (FunctionType dom' cod'))
-      $ bidirectional $ \dir term -> case term of
-        TermCases cases -> TermCases <$> CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases
+      $ bidirectional $ \dir (TermFunction f) -> TermFunction <$> case f of
+        FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases
           where
             -- Note: this causes unrecognized cases to simply be passed through;
             --       it is not the job of this adapter to catch validation issues.
             getStep fname = Y.maybe idStep adapterStep $ M.lookup fname caseAds
-        TermCompareTo other -> TermCompareTo <$> stepBoth dir (adapterStep codAd) other
-        TermLambda (Lambda var body) -> TermLambda <$> (Lambda var <$> stepBoth dir (adapterStep codAd) body)
-        _ -> pure term
+        FunctionCompareTo other -> FunctionCompareTo <$> stepBoth dir (adapterStep codAd) other
+        FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepBoth dir (adapterStep codAd) body)
+        _ -> pure f
 
 passList :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 passList context t@(TypeList lt) = do
   ad <- termAdapter context lt
   return $ Adapter (adapterIsLossy ad) t (TypeList $ adapterTarget ad)
     $ bidirectional $ \dir (TermList terms) -> TermList <$> CM.mapM (stepBoth dir $ adapterStep ad) terms
-            
+
 passMap :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 passMap context t@(TypeMap (MapType kt vt)) = do
   kad <- termAdapter context kt
@@ -141,7 +142,7 @@ passMap context t@(TypeMap (MapType kt vt)) = do
     $ bidirectional $ \dir (TermMap m) -> TermMap . M.fromList
       <$> CM.mapM (\(k, v) -> (,) <$> stepBoth dir (adapterStep kad) k <*> stepBoth dir (adapterStep vad) v)
         (M.toList m)
-            
+
 passRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 passRecord context t@(TypeRecord sfields) = do
   adapters <- CM.mapM (fieldAdapter context) sfields

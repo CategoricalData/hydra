@@ -31,12 +31,8 @@ testContext = Context {
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantAtomic,
-        TermVariantCases,
-        TermVariantData,
         TermVariantElement,
-        TermVariantFunction,
-        TermVariantLambda,
-        TermVariantProjection]}}
+        TermVariantFunction]}}
 
 testGraph :: Graph
 testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
