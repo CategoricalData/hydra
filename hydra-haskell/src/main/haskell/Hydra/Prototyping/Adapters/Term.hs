@@ -202,3 +202,10 @@ termAdapter context = chooseAdapter alts supported describeType
     constraints = languageConstraints $ adapterContextTarget context
     supported = typeIsSupported constraints
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
+
+--unionToRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
+--unionToRecord context t@(TypeUnion sfields) = pure $ Adapter False t (TypeRecord sfields) $ Step encode decode
+--  where
+--    encode (TermUnion field) = pure $ stringValue name
+--    decode (TermRecord fields) = pure $ TermElement name
+--    target = TypeRecord $ (foo <$> sfields)

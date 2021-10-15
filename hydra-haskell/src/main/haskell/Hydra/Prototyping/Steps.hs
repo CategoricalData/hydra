@@ -1,12 +1,14 @@
 module Hydra.Prototyping.Steps (
   Step(..),
   bidirectional,
+  composeSteps,
   idStep,
   stepBoth,
   module Hydra.Evaluation
 ) where
 
 import Hydra.Evaluation
+import Control.Monad
 
 
 instance Functor Result where
@@ -34,6 +36,11 @@ instance Show a => Show (Result a) where
   show r = case r of
     ResultFailure msg -> "ResultFailure " ++ show msg
     ResultSuccess x -> "ResultSuccess " ++ show x
+
+composeSteps :: Step a b -> Step b c -> Step a c
+composeSteps s1 s2 = Step {
+  stepOut = stepOut s1 >=> stepOut s2,
+  stepIn = stepIn s2 >=> stepIn s1}
 
 bidirectional :: (StepDirection -> b -> Result b) -> Step b b
 bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)

@@ -12,6 +12,7 @@ module Hydra.Impl.Haskell.Dsl (
   constFunction,
   dataTerm,
   deref,
+  expectAtomicValue,
   expectNArgs,
   expectRecordTerm,
   expectStringTerm,
@@ -103,6 +104,11 @@ dataTerm = TermFunction FunctionData
 
 deref :: Name -> Term
 deref name = apply dataTerm $ TermElement name
+
+expectAtomicValue :: Term -> Result AtomicValue
+expectAtomicValue term = case term of
+  TermAtomic av -> pure av
+  _ -> fail $ "expected an atomic value, got " ++ show term
 
 expectNArgs :: Int -> [Term] -> Result ()
 expectNArgs n args = if L.length args /= n
