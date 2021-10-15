@@ -121,8 +121,9 @@ termVariant = basicsFunction "termVariant" _Term _TermVariant $
     (_Term_atomic,     _TermVariant_atomic),
     (_Term_element,    _TermVariant_element),
     (_Term_function,   _TermVariant_function),
-    (_Term_map,        _TermVariant_map),
     (_Term_list,       _TermVariant_list),
+    (_Term_map,        _TermVariant_map),
+    (_Term_optional,   _TermVariant_optional),
     (_Term_record,     _TermVariant_record),
     (_Term_set,        _TermVariant_set),
     (_Term_union,      _TermVariant_union),
@@ -137,6 +138,7 @@ typeVariant = basicsFunction "typeVariant" _Type _TypeVariant $
     (_Type_list,     _TypeVariant_list),
     (_Type_map,      _TypeVariant_map),
     (_Type_nominal,  _TypeVariant_nominal),
+    (_Type_optional, _TypeVariant_optional),
     (_Type_record,   _TypeVariant_record),
     (_Type_set,      _TypeVariant_set),
     (_Type_union,    _TypeVariant_union)]

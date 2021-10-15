@@ -44,6 +44,7 @@ evaluate context term = reduce M.empty term
         TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
+        TermOptional m -> TermOptional <$> CM.mapM reduceb m
         TermRecord fields -> TermRecord <$> CM.mapM reduceField fields
         TermSet terms -> TermSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
         TermUnion f -> TermUnion <$> reduceField f
@@ -119,6 +120,9 @@ freeVariables term = S.fromList $ free S.empty term
         TermFunction f -> freeInFunction f
         TermList terms -> L.concatMap (free bound) terms
         TermMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
+        TermOptional m -> case m of
+          Nothing -> []
+          Just term -> free bound term
         TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
         TermSet terms -> L.concatMap (free bound) terms
         TermUnion field -> free bound $ fieldTerm field
@@ -153,6 +157,9 @@ termIsValue strategy term = if termIsOpaque strategy term
       TermMap map -> L.foldl
         (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
         True $ M.toList map
+      TermOptional m -> case m of
+        Nothing -> True
+        Just term -> termIsValue strategy term
       TermRecord fields -> checkFields fields
       TermSet els -> forList $ S.toList els
       TermUnion field -> checkField field

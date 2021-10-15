@@ -140,6 +140,7 @@ module Hydra.Core
   , _TermVariant_function
   , _TermVariant_list
   , _TermVariant_map
+  , _TermVariant_optional
   , _TermVariant_record
   , _TermVariant_set
   , _TermVariant_union
@@ -150,6 +151,7 @@ module Hydra.Core
   , _Term_function
   , _Term_list
   , _Term_map
+  , _Term_optional
   , _Term_record
   , _Term_set
   , _Term_union
@@ -162,6 +164,7 @@ module Hydra.Core
   , _TypeVariant_list
   , _TypeVariant_map
   , _TypeVariant_nominal
+  , _TypeVariant_optional
   , _TypeVariant_record
   , _TypeVariant_set
   , _TypeVariant_union
@@ -171,6 +174,7 @@ module Hydra.Core
   , _Type_list
   , _Type_map
   , _Type_nominal
+  , _Type_optional
   , _Type_record
   , _Type_set
   , _Type_union
@@ -427,6 +431,10 @@ data Term
               keys: hydra/core.Term
               values: hydra/core.Term -}
   | TermMap (Map Term Term)
+  {-| An optional value
+      
+      @type optional: hydra/core.Term -}
+  | TermOptional (Maybe Term)
   {-| A record, or labeled tuple
       
       @type list: hydra/core.Field -}
@@ -451,6 +459,7 @@ data TermVariant
   | TermVariantFunction
   | TermVariantList
   | TermVariantMap
+  | TermVariantOptional
   | TermVariantRecord
   | TermVariantSet
   | TermVariantUnion
@@ -469,6 +478,8 @@ data Type
   | TypeMap MapType
   -- | @type hydra/core.Name
   | TypeNominal Name
+  -- | @type hydra/core.Type
+  | TypeOptional Type
   -- | @type list: hydra/core.FieldType
   | TypeRecord [FieldType]
   -- | @type hydra/core.Type
@@ -483,6 +494,7 @@ data TypeVariant
   | TypeVariantList
   | TypeVariantMap
   | TypeVariantNominal
+  | TypeVariantOptional
   | TypeVariantRecord
   | TypeVariantSet
   | TypeVariantUnion deriving (Eq, Generic, Ord, Read, Show)
@@ -604,6 +616,7 @@ _TermVariant_element = "element" :: String
 _TermVariant_function = "function" :: String
 _TermVariant_list = "list" :: String
 _TermVariant_map = "map" :: String
+_TermVariant_optional = "optional" :: String
 _TermVariant_record = "record" :: String
 _TermVariant_set = "set" :: String
 _TermVariant_union = "union" :: String
@@ -614,6 +627,7 @@ _Term_element = "element" :: String
 _Term_function = "function" :: String
 _Term_list = "list" :: String
 _Term_map = "map" :: String
+_Term_optional = "optional" :: String
 _Term_record = "record" :: String
 _Term_set = "set" :: String
 _Term_union = "union" :: String
@@ -626,6 +640,7 @@ _TypeVariant_function = "function" :: String
 _TypeVariant_list = "list" :: String
 _TypeVariant_map = "map" :: String
 _TypeVariant_nominal = "nominal" :: String
+_TypeVariant_optional = "optional" :: String
 _TypeVariant_record = "record" :: String
 _TypeVariant_set = "set" :: String
 _TypeVariant_union = "union" :: String
@@ -635,6 +650,7 @@ _Type_function = "function" :: String
 _Type_list = "list" :: String
 _Type_map = "map" :: String
 _Type_nominal = "nominal" :: String
+_Type_optional = "optional" :: String
 _Type_record = "record" :: String
 _Type_set = "set" :: String
 _Type_union = "union" :: String

@@ -95,6 +95,13 @@ termCoder typ = case typ of
       stepIn = \n -> case n of
         YM.NodeSequence nodes -> TermList <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected n "sequence"}
+  TypeOptional ot -> do
+    oc <- termCoder ot
+    return Step {
+      stepOut = \(TermOptional el) -> Y.maybe (pure yamlNull) (stepOut oc) el,
+      stepIn = \n -> case n of
+        YM.NodeScalar YM.ScalarNull -> pure $ TermOptional Nothing
+        _ -> TermOptional . Just <$> stepIn oc n}
   TypeMap (MapType kt vt) -> do
     kc <- termCoder kt
     vc <- termCoder vt
@@ -109,6 +116,9 @@ termCoder typ = case typ of
 
 unexpected :: Show v => v -> String -> Result a
 unexpected x desc = fail $ "expected " ++ desc ++ ", found: " ++ show x
+
+yamlNull :: YM.Node
+yamlNull = YM.NodeScalar YM.ScalarNull
 
 yamlString :: String -> YM.Node
 yamlString = YM.NodeScalar . YM.ScalarStr
@@ -302,7 +312,7 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
   languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord] }
+    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord] }
 
 toYaml :: Context -> Type -> Term -> Result YM.Node
 toYaml context typ term = do

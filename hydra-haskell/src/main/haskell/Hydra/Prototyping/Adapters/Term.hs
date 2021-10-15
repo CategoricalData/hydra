@@ -99,6 +99,22 @@ listToSet context t@(TypeSet st) = do
     encode ad (TermSet s) = stepOut (adapterStep ad) $ TermList $ S.toList s
     decode ad term = TermSet . S.fromList . (\(TermList l') -> l') <$> stepIn (adapterStep ad) term
 
+optionalToUnion :: AdapterContext -> Type -> Qualified (Adapter Type Term)
+optionalToUnion context t@(TypeOptional ot) = do
+    ad <- termAdapter context ot
+    let t' = TypeUnion [FieldType "nothing" unitType, FieldType "just" (adapterTarget ad)]
+    return $ Adapter (adapterIsLossy ad) t t' $ Step {
+      stepOut = \(TermOptional m) -> case m of
+        Nothing -> pure $ TermUnion $ Field "nothing" unitTerm
+        Just term -> do
+          term' <- stepOut (adapterStep ad) term
+          return $ TermUnion $ Field "just" term',
+      stepIn = \(TermUnion (Field fn term)) -> if fn == "nothing"
+        then pure $ TermOptional Nothing
+        else do
+          term' <- stepIn (adapterStep ad) term
+          return $ TermOptional $ Just term'}
+
 passAtomic :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 passAtomic context (TypeAtomic at) = do
   ad <- atomicAdapter context at
@@ -142,6 +158,14 @@ passMap context t@(TypeMap (MapType kt vt)) = do
     $ bidirectional $ \dir (TermMap m) -> TermMap . M.fromList
       <$> CM.mapM (\(k, v) -> (,) <$> stepBoth dir (adapterStep kad) k <*> stepBoth dir (adapterStep vad) v)
         (M.toList m)
+
+passOptional :: AdapterContext -> Type -> Qualified (Adapter Type Term)
+passOptional context t@(TypeOptional ot) = do
+  ad <- termAdapter context ot
+  return $ Adapter (adapterIsLossy ad) t (TypeOptional $ adapterTarget ad) $
+    bidirectional $ \dir (TermOptional m) -> TermOptional <$> case m of
+      Nothing -> pure Nothing
+      Just term -> Just <$> stepBoth dir (adapterStep ad) term
 
 passRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 passRecord context t@(TypeRecord sfields) = do
@@ -188,6 +212,7 @@ termAdapter context = chooseAdapter alts supported describeType
         TypeVariantFunction ->  pure passFunction
         TypeVariantList -> pure passList
         TypeVariantMap -> pure passMap
+        TypeVariantOptional -> pure passOptional
         TypeVariantRecord -> pure passRecord
         TypeVariantSet -> pure passSet
         TypeVariantUnion -> pure passUnion
@@ -196,6 +221,7 @@ termAdapter context = chooseAdapter alts supported describeType
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
         TypeVariantNominal -> [dereferenceNominal]
+        TypeVariantOptional -> [optionalToUnion]
         TypeVariantSet ->  [listToSet]
         _ -> []
 

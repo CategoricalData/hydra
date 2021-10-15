@@ -102,6 +102,11 @@ arbitraryFunction n = QC.oneof [
     FunctionProjection <$> QC.arbitrary]
   where n' = n-1
 
+arbitraryOptional :: (Int -> QC.Gen a) -> Int -> QC.Gen (Maybe a)
+arbitraryOptional gen n = do
+  b <- QC.arbitrary
+  if b then pure Nothing else Just <$> gen n
+
 arbitraryTerm :: Int -> QC.Gen Term
 arbitraryTerm n = QC.oneof [
     TermApplication <$> arbitraryPair Application arbitraryTerm n',
@@ -111,12 +116,13 @@ arbitraryTerm n = QC.oneof [
     TermList <$> arbitraryList arbitraryTerm n',
     TermMap <$> (M.fromList <$>
       arbitraryList (arbitraryPair (,) arbitraryTerm) n'),
+    TermOptional <$> arbitraryOptional arbitraryTerm n',
     TermRecord <$> arbitraryList arbitraryField n',
     TermSet <$> (S.fromList <$> arbitraryList arbitraryTerm n'),
     TermUnion <$> arbitraryField n',
     TermVariable <$> QC.arbitrary]
   where n' = n-1
-
+  
 arbitraryType :: Int -> QC.Gen Type
 arbitraryType n = QC.oneof [
     TypeAtomic <$> QC.arbitrary,
@@ -125,6 +131,7 @@ arbitraryType n = QC.oneof [
     TypeList <$> arbitraryType n',
     TypeMap <$> arbitraryPair MapType arbitraryType n',
     TypeNominal <$> QC.arbitrary, -- note: this will generally be a "bad" nominal type
+    TypeOptional <$> arbitraryType n',
     TypeRecord <$> arbitraryList arbitraryFieldType n',
     TypeSet <$> arbitraryType n',
     TypeUnion <$> arbitraryList arbitraryFieldType n']   

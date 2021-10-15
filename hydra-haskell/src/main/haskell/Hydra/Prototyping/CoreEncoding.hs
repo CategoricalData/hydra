@@ -127,6 +127,7 @@ encodeTerm term = case term of
   TermList terms -> variant _Term_list $ TermList $ encodeTerm <$> terms
   TermMap map -> variant _Term_map $ TermMap $ M.fromList $ encodePair <$> M.toList map
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
+  TermOptional m -> variant _Term_optional $ TermOptional $ encodeTerm <$> m
   TermRecord fields -> variant _Term_record $ TermList $ encodeField <$> fields
   TermSet terms -> variant _Term_set $ TermSet $ S.fromList $ encodeTerm <$> S.toList terms
   TermUnion field -> variant _Term_union $ encodeField field
@@ -140,6 +141,7 @@ encodeType typ = case typ of
   TypeList t -> variant _Type_list $ encodeType t
   TypeMap mt -> variant _Type_map $ encodeMapType mt
   TypeNominal name -> variant _Type_nominal $ stringTerm name
+  TypeOptional t -> variant _Type_optional $ encodeType t
   TypeRecord fields -> variant _Type_record $ TermList $ fmap encodeFieldType fields
   TypeSet t -> variant _Type_set $ encodeType t
   TypeUnion fields -> variant _Type_union $ TermList $ fmap encodeFieldType fields
@@ -152,6 +154,7 @@ encodeTypeVariant tv = unitVariant $ case tv of
   TypeVariantList -> _TypeVariant_list
   TypeVariantMap -> _TypeVariant_map
   TypeVariantNominal -> _TypeVariant_nominal
+  TypeVariantOptional -> _TypeVariant_optional
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
   TypeVariantUnion -> _TypeVariant_union

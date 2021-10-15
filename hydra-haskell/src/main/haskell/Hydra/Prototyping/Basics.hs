@@ -106,7 +106,7 @@ functionVariants = [
   FunctionVariantPrimitive,
   FunctionVariantLambda,
   FunctionVariantProjection]
-  
+
 hydraCoreLanguage :: Language
 hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsAtomicVariants = S.fromList atomicVariants,
@@ -173,7 +173,7 @@ integerTypes = [
   IntegerTypeInt8, IntegerTypeInt16, IntegerTypeInt32, IntegerTypeInt64,
   IntegerTypeUint8, IntegerTypeUint16, IntegerTypeUint32, IntegerTypeUint64,
   IntegerTypeBigint]
-  
+
 integerVariants :: [IntegerVariant]
 integerVariants = integerTypeVariant <$> integerTypes
 
@@ -185,6 +185,7 @@ termVariant term = case term of
   TermFunction _ -> TermVariantFunction
   TermList _ -> TermVariantList
   TermMap _ -> TermVariantMap
+  TermOptional _ -> TermVariantOptional
   TermRecord _ -> TermVariantRecord
   TermSet _ -> TermVariantSet
   TermUnion _ -> TermVariantUnion
@@ -198,6 +199,7 @@ termVariants = [
   TermVariantFunction,
   TermVariantList,
   TermVariantMap,
+  TermVariantOptional,
   TermVariantRecord,
   TermVariantSet,
   TermVariantUnion,
@@ -211,6 +213,7 @@ typeVariant typ = case typ of
   TypeList _ -> TypeVariantList
   TypeMap _ -> TypeVariantMap
   TypeNominal _ -> TypeVariantNominal
+  TypeOptional _ -> TypeVariantOptional
   TypeRecord _ -> TypeVariantRecord
   TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
@@ -223,6 +226,7 @@ typeVariants = [
   TypeVariantList,
   TypeVariantMap,
   TypeVariantNominal,
+  TypeVariantOptional,
   TypeVariantRecord,
   TypeVariantSet,
   TypeVariantUnion]
