@@ -17,9 +17,16 @@ import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
 
 
--- Use YAML as the target language
+-- Use a YAML-like language (but supporting unions) as the default target language
 testLanguage :: Language
-testLanguage = yamlLanguage
+testLanguage = Language "hydra/test" $ Language_Constraints {
+  languageConstraintsAtomicVariants = S.fromList [
+    AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+  languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+  languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
+  languageConstraintsTermVariants = S.fromList termVariants,
+  languageConstraintsTypeVariants = S.fromList [
+    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion] }
 
 transContext :: AdapterContext
 transContext = AdapterContext testContext hydraCoreLanguage testLanguage
@@ -220,7 +227,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       [TypeVariantAtomic]
       stringAliasType stringType False
       (stringValue s) (stringValue s)
-      
+
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
 
@@ -250,7 +257,7 @@ adapterIsInformationPreserving = H.describe "Verify that the adapter is informat
 
   H.it "Check strings (pass-through)" $
     QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
-        
+
   H.it "Check lists (pass-through)" $
     QC.property $ \strings -> roundTripIsNoop listOfStringsType (TermList $ stringValue <$> strings)
 
