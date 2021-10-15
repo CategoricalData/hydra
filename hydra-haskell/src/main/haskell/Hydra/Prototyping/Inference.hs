@@ -61,6 +61,12 @@ checkType context typ term = check M.empty typ term
         TypeList lt -> and $ fmap (check bindings lt) list
         _ -> False
 
+      TermOptional m -> case typ of
+        TypeOptional ot -> case m of
+          Nothing -> True
+          Just term -> check bindings ot term
+        _ -> False
+        
       TermRecord fields -> case typ of
         TypeRecord tfields -> sameLength tfields fields
             && (L.foldl (&&) True $ L.zipWith matches tfields fields)

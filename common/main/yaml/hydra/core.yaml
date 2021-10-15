@@ -325,6 +325,11 @@ definitions:
               keys: Term
               values: Term
 
+        - name: optional
+          description: "An optional value"
+          type:
+            optional: Term
+
         - name: record
           description: "A record, or labeled tuple"
           type:
@@ -352,6 +357,7 @@ definitions:
         - function
         - list
         - map
+        - optional
         - record
         - set
         - union
@@ -378,6 +384,9 @@ definitions:
         - name: nominal
           type: Name
 
+        - name: optional
+          type: Type
+
         - name: record
           type:
             list: FieldType
@@ -398,6 +407,7 @@ definitions:
         - list
         - map
         - nominal
+        - optional
         - record
         - set
         - union

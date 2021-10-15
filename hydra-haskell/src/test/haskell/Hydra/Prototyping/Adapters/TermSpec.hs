@@ -12,8 +12,9 @@ import Hydra.TestUtils
 
 import qualified Test.Hspec as H
 import qualified Data.Map as M
-import qualified Data.Set as S
 import qualified Test.QuickCheck as QC
+import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 -- Use a YAML-like language (but supporting unions) as the default target language
@@ -82,6 +83,9 @@ makeMap keyvals = TermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value
 mapOfStringsToIntsType :: Type
 mapOfStringsToIntsType = mapType stringType int32Type
 
+optionalStringType :: Type
+optionalStringType = TypeOptional stringType
+
 setOfStringsType :: Type
 setOfStringsType = TypeSet stringType
 
@@ -127,6 +131,12 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       [TypeVariantAtomic, TypeVariantMap]
       mapOfStringsToIntsType mapOfStringsToIntsType False
       (makeMap keyvals) (makeMap keyvals)
+
+  H.it "Optionals (when supported) pass through without change" $
+    QC.property $ \ms -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantOptional]
+      optionalStringType optionalStringType False
+      (TermOptional $ stringValue <$> ms) (TermOptional $ stringValue <$> ms)
 
   H.it "Records (when supported) pass through without change" $
     QC.property $ \lat lon -> checkTermAdapter
@@ -208,6 +218,13 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType (unionTypeForFunctions stringType) False
       dataTerm (TermUnion $ Field "data" unitTerm)
+
+  H.it "Optionals (when unsupported) become unions" $
+    QC.property $ \ms -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantUnion]
+      optionalStringType (TypeUnion [FieldType "nothing" unitType, FieldType "just" stringType]) False
+      (TermOptional $ stringValue <$> ms)
+      (TermUnion $ Y.maybe (Field "nothing" unitTerm) (Field "just" . stringTerm) ms)
 
   H.it "Primitive function references (when unsupported) become variant terms" $
     QC.property $ \name -> checkTermAdapter

@@ -1,6 +1,4 @@
-module Hydra.Ext.Yaml.CoderSpec (
-
-) where
+module Hydra.Ext.Yaml.CoderSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl

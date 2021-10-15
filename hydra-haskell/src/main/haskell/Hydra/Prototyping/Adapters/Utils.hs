@@ -66,6 +66,7 @@ describeType t = case t of
   TypeList t -> "lists of " ++ describeType t
   TypeMap (MapType kt vt) -> "maps from " ++ describeType kt ++ " to " ++ describeType vt
   TypeNominal name -> "alias for " ++ name
+  TypeOptional t -> "optional " ++ describeType t
   TypeRecord _ -> "records of a particular set of fields"
   TypeSet t -> "sets of " ++ describeType t
   TypeUnion _ -> "unions of a particular set of fields"
@@ -94,6 +95,7 @@ typeIsSupported constraints t = S.member (typeVariant t) (languageConstraintsTyp
     TypeList lt -> typeIsSupported constraints lt
     TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
     TypeNominal _ -> True -- TODO: dereference the type
+    TypeOptional t -> typeIsSupported constraints t
     TypeRecord sfields -> or $ typeIsSupported constraints . fieldTypeType <$> sfields
     TypeSet st -> typeIsSupported constraints st
     TypeUnion sfields -> or $ typeIsSupported constraints . fieldTypeType <$> sfields
