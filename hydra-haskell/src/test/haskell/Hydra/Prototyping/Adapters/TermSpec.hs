@@ -2,7 +2,6 @@ module Hydra.Prototyping.Adapters.TermSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
-import Hydra.Ext.Yaml.Coder
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
@@ -30,7 +29,7 @@ testLanguage = Language "hydra/test" $ Language_Constraints {
 
 transContext :: AdapterContext
 transContext = AdapterContext testContext hydraCoreLanguage testLanguage
-  
+
 -- Note: in a real application, you wouldn't create the adapter just to use it once;
 --       it should be created once, then applied to many terms.
 adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
@@ -134,7 +133,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       [TypeVariantAtomic, TypeVariantRecord]
       latLonType latLonType False
       (latlonRecord lat lon) (latlonRecord lat lon)
-      
+
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion]
@@ -146,13 +145,13 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       [TypeVariantAtomic, TypeVariantSet]
       setOfStringsType setOfStringsType False
       (stringSet strings) (stringSet strings)
-      
+
   H.it "Element references (when supported) pass through without change" $
     QC.property $ \name -> checkTermAdapter
       [TypeVariantElement]
       int32ElementType int32ElementType False
       (TermElement name) (TermElement name)
-      
+
   H.it "CompareTo terms (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantFunction]
@@ -176,13 +175,13 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       [TypeVariantAtomic, TypeVariantFunction, TypeVariantRecord]
       exampleProjectionType exampleProjectionType False
       (projection fname) (projection fname)
- 
+
   H.it "Nominal types (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantNominal]
       stringAliasType stringAliasType False
       (stringValue s) (stringValue s)
-       
+
 unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
