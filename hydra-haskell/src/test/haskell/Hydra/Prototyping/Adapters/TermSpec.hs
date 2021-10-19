@@ -44,6 +44,9 @@ concatType = functionType stringType $ functionType stringType stringType
 compareStringsType :: Type
 compareStringsType = functionType stringType stringType
 
+eitherStringOrInt32Type :: Type
+eitherStringOrInt32Type = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
+
 exampleProjectionType :: Type
 exampleProjectionType = functionType latLonType int32Type
 
@@ -243,6 +246,18 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       [TypeVariantAtomic]
       stringAliasType stringType False
       (stringValue s) (stringValue s)
+
+  H.it "Unions (when unsupported) become records" $
+    QC.property $ \i -> checkTermAdapter
+      [TypeVariantAtomic, TypeVariantOptional, TypeVariantRecord]
+      eitherStringOrInt32Type
+      (TypeRecord [
+        FieldType "left" $ TypeOptional stringType,
+        FieldType "right" $ TypeOptional int32Type]) False
+      (TermUnion $ Field "right" $ int32Value i)
+      (TermRecord [
+        Field "left" $ TermOptional Nothing,
+        Field "right" $ TermOptional $ Just $ int32Value i])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do

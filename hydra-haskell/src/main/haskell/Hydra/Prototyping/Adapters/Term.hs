@@ -223,15 +223,28 @@ termAdapter context = chooseAdapter alts supported describeType
         TypeVariantNominal -> [dereferenceNominal]
         TypeVariantOptional -> [optionalToUnion]
         TypeVariantSet ->  [listToSet]
+        TypeVariantUnion -> [unionToRecord]
         _ -> []
 
     constraints = languageConstraints $ adapterContextTarget context
     supported = typeIsSupported constraints
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
 
---unionToRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
---unionToRecord context t@(TypeUnion sfields) = pure $ Adapter False t (TypeRecord sfields) $ Step encode decode
---  where
---    encode (TermUnion field) = pure $ stringValue name
---    decode (TermRecord fields) = pure $ TermElement name
---    target = TypeRecord $ (foo <$> sfields)
+---- Caution: possibility of an infinite loop if neither unions nor optionals are supported
+unionToRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
+unionToRecord context t@(TypeUnion sfields) = do
+  let target = TypeRecord (makeOptional <$> sfields)
+  ad <- termAdapter context target
+  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
+    stepOut = \(TermUnion (Field fn term)) -> stepOut (adapterStep ad)
+      $ TermRecord (toRecordField term fn <$> sfields),
+    stepIn = \term -> do
+      (TermRecord fields) <- stepIn (adapterStep ad) term
+      return $ TermUnion $ fromRecordFields fields}
+  where
+    makeOptional (FieldType fn t) = FieldType fn $ TypeOptional t
+    toRecordField term fn (FieldType fn' _) = Field fn' $ TermOptional $ if fn' == fn then Just term else Nothing
+    fromRecordFields fields = L.head matches
+      where
+        matches :: [Field]
+        matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
