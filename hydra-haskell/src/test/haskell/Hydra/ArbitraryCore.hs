@@ -15,7 +15,7 @@ instance QC.Arbitrary AtomicType
       AtomicTypeFloat <$> QC.arbitrary,
       AtomicTypeInteger <$> QC.arbitrary,
       pure AtomicTypeString]
-      
+
 instance QC.Arbitrary AtomicValue
   where
     arbitrary = QC.oneof [
