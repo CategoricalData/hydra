@@ -10,6 +10,7 @@ def freeVariables(term: Term): Set[Variable] = {
     case Term.function(fun) => functionFree(bound, fun)
     case Term.list(els) => els.flatMap(t => free(bound, t)).toList
     case Term.map(m) => (m map { case (k, v) => free(bound, k) ++ free(bound, v) }).toList.flatten
+    case Term.optional(m) => (m map {t => free(bound, t)}) getOrElse List()
     case Term.record(fields) => fields.flatMap(f => free(bound, f.term)).toList
     case Term.set(els) => els.flatMap(t => free(bound, t)).toList
     case Term.union(f) => free(bound, f.term)

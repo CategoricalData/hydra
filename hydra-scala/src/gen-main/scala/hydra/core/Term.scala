@@ -40,6 +40,12 @@ enum Term:
      */
     case map(value: Map[Term, Term]) extends Term
     /**
+     * An optional value
+     * 
+     * @type optional: hydra/core.Term
+     */
+    case optional(value: Option[Term]) extends Term
+    /**
      * A record, or labeled tuple
      * 
      * @type list: hydra/core.Field
@@ -71,6 +77,7 @@ val _Term_element: String = "element"
 val _Term_function: String = "function"
 val _Term_list: String = "list"
 val _Term_map: String = "map"
+val _Term_optional: String = "optional"
 val _Term_record: String = "record"
 val _Term_set: String = "set"
 val _Term_union: String = "union"

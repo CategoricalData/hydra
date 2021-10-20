@@ -7,6 +7,7 @@ enum TermVariant:
     case function() extends TermVariant
     case list() extends TermVariant
     case map() extends TermVariant
+    case optional() extends TermVariant
     case record() extends TermVariant
     case set() extends TermVariant
     case union() extends TermVariant
@@ -19,6 +20,7 @@ val _TermVariant_element: String = "element"
 val _TermVariant_function: String = "function"
 val _TermVariant_list: String = "list"
 val _TermVariant_map: String = "map"
+val _TermVariant_optional: String = "optional"
 val _TermVariant_record: String = "record"
 val _TermVariant_set: String = "set"
 val _TermVariant_union: String = "union"
