@@ -19,14 +19,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-yamlCoder :: Context -> Type -> Qualified (Step Term YM.Node)
-yamlCoder context typ = do
-    adapter <- termAdapter adContext typ
-    coder <- termCoder $ adapterTarget adapter
-    return $ composeSteps (adapterStep adapter) coder
-  where
-    adContext = AdapterContext context hydraCoreLanguage yamlLanguage
-
 atomicCoder :: AtomicType -> Qualified (Step AtomicValue YM.Scalar)
 atomicCoder at = pure $ case at of
   AtomicTypeBoolean -> Step {
@@ -42,10 +34,7 @@ atomicCoder at = pure $ case at of
       YM.ScalarFloat f -> pure $ AtomicValueFloat $ FloatValueBigfloat f
       _ -> unexpected s "floating-point value"}
   AtomicTypeInteger _ -> Step {
---    stepOut = \(AtomicValueInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
-    stepOut = \v -> case v of
-      AtomicValueInteger (IntegerValueBigint i) -> pure $ YM.ScalarInt i
-      _ -> fail $ "unexpected: " ++ show v,
+    stepOut = \(AtomicValueInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
     stepIn = \s -> case s of
       YM.ScalarInt i -> pure $ AtomicValueInteger $ IntegerValueBigint i
       _ -> unexpected s "integer"}
@@ -114,6 +103,14 @@ termCoder typ = case typ of
 
 unexpected :: Show v => v -> String -> Result a
 unexpected x desc = fail $ "expected " ++ desc ++ ", found: " ++ show x
+
+yamlCoder :: Context -> Type -> Qualified (Step Term YM.Node)
+yamlCoder context typ = do
+    adapter <- termAdapter adContext typ
+    coder <- termCoder $ adapterTarget adapter
+    return $ composeSteps (adapterStep adapter) coder
+  where
+    adContext = AdapterContext context hydraCoreLanguage yamlLanguage
 
 yamlLanguage :: Language
 yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
