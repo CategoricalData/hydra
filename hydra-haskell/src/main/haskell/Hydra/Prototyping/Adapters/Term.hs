@@ -1,4 +1,5 @@
 module Hydra.Prototyping.Adapters.Term (
+  fieldAdapter,
   termAdapter,
 ) where
 
@@ -41,7 +42,7 @@ fieldAdapter :: AdapterContext -> FieldType -> Qualified (Adapter FieldType Fiel
 fieldAdapter context ftyp = do
   ad <- termAdapter context $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
-   $ bidirectional $ \dir (Field name term) -> Field name <$> stepBoth dir (adapterStep ad) term
+    $ bidirectional $ \dir (Field name term) -> Field name <$> stepBoth dir (adapterStep ad) term
 
 functionToUnion :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
@@ -233,7 +234,7 @@ termAdapter context = chooseAdapter alts supported describeType
 ---- Caution: possibility of an infinite loop if neither unions nor optionals are supported
 unionToRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 unionToRecord context t@(TypeUnion sfields) = do
-  let target = TypeRecord (makeOptional <$> sfields)
+  let target = TypeRecord $ makeOptional <$> sfields
   ad <- termAdapter context target
   return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
     stepOut = \(TermUnion (Field fn term)) -> stepOut (adapterStep ad)

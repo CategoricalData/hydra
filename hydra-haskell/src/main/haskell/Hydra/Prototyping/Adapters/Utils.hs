@@ -30,14 +30,14 @@ chooseAdapter :: Show t =>
  -> t
  -> Qualified (Adapter t v)
 chooseAdapter alts supported describe typ = if supported typ
-    then pure $ Adapter False typ typ idStep
-    else do
-      raw <- sequence (alts typ)
-      let candidates = L.filter (supported . adapterTarget) raw
-      if L.null candidates
-        then fail $ "no adapters found for " ++ describe typ
-          ++ if L.null raw then "" else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")"
-        else return $ L.head candidates
+  then pure $ Adapter False typ typ idStep
+  else do
+    raw <- sequence (alts typ)
+    let candidates = L.filter (supported . adapterTarget) raw
+    if L.null candidates
+      then fail $ "no adapters found for " ++ describe typ
+        ++ if L.null raw then "" else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")"
+      else return $ L.head candidates
 
 describeAtomicType :: AtomicType -> String
 describeAtomicType t = case t of
@@ -80,7 +80,7 @@ atomicTypeIsSupported constraints at = S.member (atomicTypeVariant at) (language
     AtomicTypeFloat ft -> floatTypeIsSupported constraints ft
     AtomicTypeInteger it -> integerTypeIsSupported constraints it
     _ -> True
-    
+
 floatTypeIsSupported :: Language_Constraints -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member (floatTypeVariant ft) $ languageConstraintsFloatVariants constraints
 
@@ -96,9 +96,9 @@ typeIsSupported constraints t = S.member (typeVariant t) (languageConstraintsTyp
     TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
     TypeNominal _ -> True -- TODO: dereference the type
     TypeOptional t -> typeIsSupported constraints t
-    TypeRecord sfields -> or $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     TypeSet st -> typeIsSupported constraints st
-    TypeUnion sfields -> or $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     _ -> True
 
 unqualify :: Qualified a -> a
