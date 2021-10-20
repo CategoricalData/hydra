@@ -3,7 +3,9 @@ module Hydra.Impl.Haskell.Dsl (
   SchemaError,
   apply,
   bigfloatType,
+  bigfloatValue,
   bigintType,
+  bigintValue,
   booleanTerm,
   booleanType,
   cases,
@@ -20,8 +22,11 @@ module Hydra.Impl.Haskell.Dsl (
   fieldsToMap,
   fieldTypesToMap,
   float32Type,
+  float32Value,
   float64Type,
+  float64Value,
   floatType,
+  floatValue,
   funcRef,
   function,
   functionType,
@@ -34,6 +39,7 @@ module Hydra.Impl.Haskell.Dsl (
   int8Type,
   int8Value,
   integerType,
+  integerValue,
   lambda,
   mapType,
   match,
@@ -46,9 +52,13 @@ module Hydra.Impl.Haskell.Dsl (
   stringType,
   stringValue,
   uint16Type,
+  uint16Value,
   uint32Type,
+  uint32Value,
   uint64Type,
+  uint64Value,
   uint8Type,
+  uint8Value,
   unitTerm,
   unitType,
   unitVariant,
@@ -77,8 +87,14 @@ apply func arg = TermApplication $ Application func arg
 bigfloatType :: Type
 bigfloatType = floatType FloatTypeBigfloat
 
+bigfloatValue :: Double -> Term
+bigfloatValue = floatValue . FloatValueBigfloat
+
 bigintType :: Type
 bigintType = integerType IntegerTypeBigint
+
+bigintValue :: Integer -> Term
+bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
 booleanTerm :: Bool -> Term
 booleanTerm b = TermAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
@@ -139,11 +155,20 @@ fieldTypesToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$>
 float32Type :: Type
 float32Type = floatType FloatTypeFloat32
 
+float32Value :: Float -> Term
+float32Value = floatValue . FloatValueFloat32
+
 float64Type :: Type
 float64Type = floatType FloatTypeFloat64
 
+float64Value :: Double -> Term
+float64Value = floatValue . FloatValueFloat64
+
 floatType :: FloatType -> Type
 floatType = TypeAtomic . AtomicTypeFloat
+
+floatValue :: FloatValue -> Term
+floatValue = TermAtomic . AtomicValueFloat
 
 funcRef :: Element -> Term
 funcRef el = apply (TermFunction FunctionData) $ TermElement $ elementName el
@@ -158,28 +183,31 @@ int16Type :: Type
 int16Type = integerType IntegerTypeInt16
 
 int16Value :: Int -> Term
-int16Value = TermAtomic . AtomicValueInteger . IntegerValueInt16 . fromIntegral
+int16Value = integerValue . IntegerValueInt16 . fromIntegral
 
 int32Type :: Type
 int32Type = integerType IntegerTypeInt32
 
 int32Value :: Int -> Term
-int32Value = TermAtomic . AtomicValueInteger . IntegerValueInt32
+int32Value = integerValue . IntegerValueInt32
 
 int64Type :: Type
 int64Type = integerType IntegerTypeInt64
 
 int64Value :: Int64 -> Term
-int64Value = TermAtomic . AtomicValueInteger . IntegerValueInt64
+int64Value = integerValue . IntegerValueInt64
 
 int8Type :: Type
 int8Type = integerType IntegerTypeInt8
 
 int8Value :: Int -> Term
-int8Value = TermAtomic . AtomicValueInteger . IntegerValueInt8 . fromIntegral
+int8Value = integerValue . IntegerValueInt8 . fromIntegral
 
 integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger
+
+integerValue :: IntegerValue -> Term
+integerValue = TermAtomic . AtomicValueInteger
 
 lambda :: Variable -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda param body
@@ -223,14 +251,26 @@ stringValue = TermAtomic . AtomicValueString
 uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16
 
+uint16Value :: Integer -> Term
+uint16Value = integerValue . IntegerValueUint16 . fromIntegral
+
 uint32Type :: Type
 uint32Type = integerType IntegerTypeUint32
+
+uint32Value :: Integer -> Term
+uint32Value = integerValue . IntegerValueUint32 . fromIntegral
 
 uint64Type :: Type
 uint64Type = integerType IntegerTypeUint64
 
+uint64Value :: Integer -> Term
+uint64Value = integerValue . IntegerValueUint64 . fromIntegral
+
 uint8Type :: Type
 uint8Type = integerType IntegerTypeUint8
+
+uint8Value :: Integer -> Term
+uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
 unitTerm :: Term
 unitTerm = TermRecord []
