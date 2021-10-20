@@ -1,5 +1,6 @@
 module Hydra.TestUtils (
   checkAtomicAdapter,
+  checkFieldAdapter,
   checkFloatAdapter,
   checkIntegerAdapter,
   checkTermAdapter,
@@ -58,6 +59,9 @@ checkAtomicAdapter = checkAdapter atomicAdapter context
       where
         floatVars = S.fromList [FloatVariantFloat32]
         integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
+
+checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field -> Field -> H.Expectation
+checkFieldAdapter = checkAdapter fieldAdapter termTestContext
 
 checkFloatAdapter :: [FloatVariant] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
 checkFloatAdapter = checkAdapter floatAdapter context

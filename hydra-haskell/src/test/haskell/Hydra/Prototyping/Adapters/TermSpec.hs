@@ -3,116 +3,51 @@ module Hydra.Prototyping.Adapters.TermSpec where
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Adapters.Term
+import Hydra.Prototyping.Adapters.Utils
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Adapter
 
+import Hydra.TestData
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H
-import qualified Data.Map as M
 import qualified Test.QuickCheck as QC
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
--- Use a YAML-like language (but supporting unions) as the default target language
-testLanguage :: Language
-testLanguage = Language "hydra/test" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList [
-    AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
-  languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
-  languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
-  languageConstraintsTermVariants = S.fromList termVariants,
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion] }
+constraintsAreAsExpected :: H.SpecWith ()
+constraintsAreAsExpected = H.describe "Verify that the language constraints include/exclude the appropriate types" $ do
 
-transContext :: AdapterContext
-transContext = AdapterContext testContext hydraCoreLanguage testLanguage
+    H.it "int16 and int32 are supported in the test context" $ do
+      typeIsSupported (context [TypeVariantAtomic]) int16Type `H.shouldBe` True
+      typeIsSupported (context [TypeVariantAtomic]) int32Type `H.shouldBe` True
+      
+    H.it "int8 and bigint are unsupported in the test context" $ do
+      typeIsSupported (context [TypeVariantAtomic]) int8Type `H.shouldBe` False
+      typeIsSupported (context [TypeVariantAtomic]) bigintType `H.shouldBe` False
+      
+    H.it "Records are supported, but unions are not" $ do
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord]) latLonType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord]) stringOrIntType `H.shouldBe` False
 
--- Note: in a real application, you wouldn't create the adapter just to use it once;
---       it should be created once, then applied to many terms.
-adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
-adapt typ dir term = do
-  ad <- qualifiedToResult $ termAdapter transContext typ
-  dir (adapterStep ad) term
+    H.it "Records are supported if and only if each of their fields are supported" $ do
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord])
+        (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
+        `H.shouldBe` True
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord])
+        (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
+        `H.shouldBe` False
 
-concatType :: Type
-concatType = functionType stringType $ functionType stringType stringType
+    H.it "Lists are supported if the list element type is supported" $ do
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfStringsType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfListsOfStringsType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfSetOfStringsType `H.shouldBe` False
 
-compareStringsType :: Type
-compareStringsType = functionType stringType stringType
-
-eitherStringOrInt32Type :: Type
-eitherStringOrInt32Type = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
-
-exampleProjectionType :: Type
-exampleProjectionType = functionType latLonType int32Type
-
-int32ElementType :: Type
-int32ElementType = TypeElement int32Type
-
-int32ElementDataType :: Type
-int32ElementDataType = functionType int32ElementType int32Type
-
-latLonType :: Type
-latLonType = TypeRecord [FieldType "lat" int32Type, FieldType "lon" int32Type]
-
-listOfInt8sType :: Type
-listOfInt8sType = TypeList int8Type
-
-listOfInt16sType :: Type
-listOfInt16sType = TypeList int16Type
-
-listOfListsOfStringsType :: Type
-listOfListsOfStringsType = TypeList $ TypeList stringType
-
-listOfSetOfInt32ElementReferencesType :: Type
-listOfSetOfInt32ElementReferencesType = TypeList $ TypeSet $ TypeElement int32Type
-
-listOfSetOfStringsType :: Type
-listOfSetOfStringsType = TypeList $ TypeSet stringType
-
-listOfStringsType :: Type
-listOfStringsType = TypeList stringType
-
-latlonRecord :: Int -> Int -> Term
-latlonRecord lat lon = TermRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
-
-makeMap :: [(String, Int)] -> Term
-makeMap keyvals = TermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
-
-mapOfStringsToIntsType :: Type
-mapOfStringsToIntsType = mapType stringType int32Type
-
-optionalStringType :: Type
-optionalStringType = TypeOptional stringType
-
-setOfStringsType :: Type
-setOfStringsType = TypeSet stringType
-
-stringAliasType :: Type
-stringAliasType = TypeNominal "StringTypeAlias"
-
-stringList :: [String] -> Term
-stringList strings = TermList $ stringValue <$> strings
-
-stringOrIntType :: Type
-stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
-
-stringSet :: S.Set String -> Term
-stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
-
-unionTypeForFunctions :: Type -> Type
-unionTypeForFunctions dom = TypeUnion [
-  FieldType _Function_cases stringType, -- TODO (TypeRecord cases)
-  FieldType _Function_compareTo dom,
-  FieldType _Function_data unitType,
-  FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
-  FieldType _Function_primitive stringType,
-  FieldType _Function_projection stringType,
-  FieldType _Term_variable stringType] -- TODO
+  where
+    context = languageConstraints . adapterContextTarget . termTestContext
 
 supportedConstructorsAreUnchanged :: H.SpecWith ()
 supportedConstructorsAreUnchanged = H.describe "Verify that supported term constructors are unchanged" $ do
@@ -136,16 +71,19 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (makeMap keyvals) (makeMap keyvals)
 
   H.it "Optionals (when supported) pass through without change" $
-    QC.property $ \ms -> checkTermAdapter
+    QC.property $ \mi -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantOptional]
-      optionalStringType optionalStringType False
-      (TermOptional $ stringValue <$> ms) (TermOptional $ stringValue <$> ms)
+      optionalInt8Type optionalInt16Type False
+      (TermOptional $ int8Value <$> mi) (TermOptional $ int16Value <$> mi)
 
   H.it "Records (when supported) pass through without change" $
-    QC.property $ \lat lon -> checkTermAdapter
+    QC.property $ \a1 a2 -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantRecord]
-      latLonType latLonType False
-      (latlonRecord lat lon) (latlonRecord lat lon)
+      (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
+      (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
+      False
+      (TermRecord [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
+      (TermRecord [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkTermAdapter
@@ -224,7 +162,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
 
   H.it "Optionals (when unsupported) become unions" $
     QC.property $ \ms -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion]
+      [TypeVariantAtomic, TypeVariantRecord, TypeVariantUnion]
       optionalStringType (TypeUnion [FieldType "nothing" unitType, FieldType "just" stringType]) False
       (TermOptional $ stringValue <$> ms)
       (TermUnion $ Y.maybe (Field "nothing" unitTerm) (Field "just" . stringTerm) ms)
@@ -250,14 +188,14 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
   H.it "Unions (when unsupported) become records" $
     QC.property $ \i -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantOptional, TypeVariantRecord]
-      eitherStringOrInt32Type
+      eitherStringOrInt8Type
       (TypeRecord [
         FieldType "left" $ TypeOptional stringType,
-        FieldType "right" $ TypeOptional int32Type]) False
-      (TermUnion $ Field "right" $ int32Value i)
+        FieldType "right" $ TypeOptional int16Type]) False
+      (TermUnion $ Field "right" $ int8Value i)
       (TermRecord [
         Field "left" $ TermOptional Nothing,
-        Field "right" $ TermOptional $ Just $ int32Value i])
+        Field "right" $ TermOptional $ Just $ int16Value i])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
@@ -313,14 +251,49 @@ adapterIsInformationPreserving = H.describe "Verify that the adapter is informat
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
 
+fieldAdaptersAreAsExpected :: H.SpecWith ()
+fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do
+
+  H.it "An int8 field becomes an int16 field" $
+    QC.property $ \i -> checkFieldAdapter
+      [TypeVariantAtomic, TypeVariantRecord]
+      (FieldType "second" int8Type)
+      (FieldType "second" int16Type)
+      False
+      (Field "second" $ int8Value i)
+      (Field "second" $ int16Value i)
+      
 roundTripIsNoop :: Type -> Term -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
     step = adapt typ
 
+    -- Use a YAML-like language (but supporting unions) as the default target language
+    testLanguage :: Language
+    testLanguage = Language "hydra/test" $ Language_Constraints {
+      languageConstraintsAtomicVariants = S.fromList [
+        AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+      languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+      languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
+      languageConstraintsTermVariants = S.fromList termVariants,
+      languageConstraintsTypeVariants = S.fromList [
+        TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion] }
+    
+    transContext :: AdapterContext
+    transContext = AdapterContext testContext hydraCoreLanguage testLanguage
+    
+    -- Note: in a real application, you wouldn't create the adapter just to use it once;
+    --       it should be created once, then applied to many terms.
+    adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
+    adapt typ dir term = do
+      ad <- qualifiedToResult $ termAdapter transContext typ
+      dir (adapterStep ad) term
+
 spec :: H.Spec
 spec = do
+  constraintsAreAsExpected
   supportedConstructorsAreUnchanged
   unsupportedConstructorsAreModified
   termsAreAdaptedRecursively
   adapterIsInformationPreserving
+  fieldAdaptersAreAsExpected
