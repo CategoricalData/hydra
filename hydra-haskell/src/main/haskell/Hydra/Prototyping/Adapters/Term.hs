@@ -59,7 +59,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
         FunctionPrimitive name -> variant _Function_primitive $ stringValue name
         FunctionProjection fname -> variant _Function_projection $ stringValue fname
-      TermVariable var -> variant _Term_variable $ stringValue var -- TODO
+      TermVariable var -> variant _Term_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -72,13 +72,13 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ fname
-        forCases fterm = cases <$> (read <$> expectStringTerm fterm) -- TODO
+        forCases fterm = read <$> expectStringTerm fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure dataTerm
         forPrimitive fterm = primitive <$> expectStringTerm fterm
-        forLambda fterm = TermFunction . FunctionLambda <$> (read <$> expectStringTerm fterm) -- TODO
+        forLambda fterm = read <$> expectStringTerm fterm -- TODO
         forProjection fterm = projection <$> expectStringTerm fterm
-        forVariable fterm = variable <$> expectStringTerm fterm -- TODO
+        forVariable fterm = variable <$> expectStringTerm fterm
 
     unionType = do
       domAd <- termAdapter context dom
@@ -89,7 +89,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
         FieldType _Function_primitive stringType,
         FieldType _Function_projection stringType,
-        FieldType _Term_variable stringType] -- TODO
+        FieldType _Term_variable stringType]
 
 listToSet :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 listToSet context t@(TypeSet st) = do

@@ -10,8 +10,7 @@ module Hydra.TestUtils (
   module Hydra.Prototyping.Steps,
 ) where
 
--- Do not remove.
-import Hydra.ArbitraryCore
+import Hydra.ArbitraryCore()
 
 import Hydra.Core
 import Hydra.Adapter
