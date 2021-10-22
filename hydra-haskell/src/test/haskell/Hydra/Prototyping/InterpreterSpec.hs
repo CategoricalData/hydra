@@ -30,7 +30,7 @@ testsForAtomicValues = do
       QC.property $ \av -> testEvaluate (TermAtomic av) == pure (TermAtomic av)
 
     H.it "Atomic terms cannot be applied" $
-      QC.property $ \av term -> isFailure (testEvaluate $ apply (TermAtomic av) term)
+      QC.property $ \av (TypedTerm _ term) -> isFailure (testEvaluate $ apply (TermAtomic av) term)
 
 testsForPrimitiveFunctions :: H.SpecWith ()
 testsForPrimitiveFunctions = do

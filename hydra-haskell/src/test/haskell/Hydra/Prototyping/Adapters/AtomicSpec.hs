@@ -1,15 +1,9 @@
 module Hydra.Prototyping.Adapters.AtomicSpec where
 
 import Hydra.Core
-import Hydra.Errors
-import Hydra.Adapter
-import Hydra.Prototyping.Basics
-import Hydra.Prototyping.Steps
-import Hydra.Prototyping.Adapters.Atomic
 
 import Hydra.TestUtils
 
-import qualified Data.Set as S
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 

@@ -89,7 +89,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
     QC.property $ \int -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion]
       stringOrIntType stringOrIntType False
-      (variant "right" int) (variant "right" int)
+      (variant "right" $ int32Value int) (variant "right" $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
@@ -221,8 +221,8 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       (TermList $ (\l -> TermSet $ S.fromList $ TermElement <$> l) <$> names)
       (TermList $ (\l -> TermList $ stringValue <$> S.toList (S.fromList l)) <$> names)
 
-adapterIsInformationPreserving :: H.SpecWith ()
-adapterIsInformationPreserving = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
+roundTripsPreserveSelectedTypes :: H.SpecWith ()
+roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
 
   H.it "Check strings (pass-through)" $
     QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
@@ -251,6 +251,18 @@ adapterIsInformationPreserving = H.describe "Verify that the adapter is informat
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop stringAliasType (stringValue s)
 
+roundTripsPreserveArbitraryTypes :: H.SpecWith ()
+roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do
+
+  H.it "Check arbitrary type/term pairs" $
+--    roundTripIsNoop typ term `H.shouldBe` True
+    QC.property $ \(TypedTerm typ term) -> roundTripIsNoop typ term
+-- where
+--   typ = TypeFunction (FunctionType stringType stringType)
+--   term = TermFunction (FunctionLambda (Lambda "x" (stringValue "foo")))
+----  typ = stringType
+----  term = stringValue "foo"
+      
 fieldAdaptersAreAsExpected :: H.SpecWith ()
 fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do
 
@@ -295,5 +307,6 @@ spec = do
   supportedConstructorsAreUnchanged
   unsupportedConstructorsAreModified
   termsAreAdaptedRecursively
-  adapterIsInformationPreserving
+  roundTripsPreserveSelectedTypes
+  roundTripsPreserveArbitraryTypes
   fieldAdaptersAreAsExpected
