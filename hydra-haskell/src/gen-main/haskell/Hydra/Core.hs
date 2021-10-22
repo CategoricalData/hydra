@@ -27,6 +27,7 @@ module Hydra.Core
   , TermVariant(..)
   , Type(..)
   , TypeVariant(..)
+  , TypedTerm(..)
   , Variable
   , _Application
   , _Application_argument
@@ -178,6 +179,9 @@ module Hydra.Core
   , _Type_record
   , _Type_set
   , _Type_union
+  , _TypedTerm
+  , _TypedTerm_term
+  , _TypedTerm_type
   , _Variable
   ) where
 
@@ -499,6 +503,13 @@ data TypeVariant
   | TypeVariantSet
   | TypeVariantUnion deriving (Eq, Generic, Ord, Read, Show)
 
+data TypedTerm
+  = TypedTerm
+    -- | @type hydra/core.Type
+    { typedTermType :: Type
+    -- | @type hydra/core.Term
+    , typedTermTerm :: Term } deriving (Eq, Generic, Ord, Read, Show)
+
 {-| A symbol which stands in for a term
     
     @type string -}
@@ -654,4 +665,7 @@ _Type_optional = "optional" :: String
 _Type_record = "record" :: String
 _Type_set = "set" :: String
 _Type_union = "union" :: String
+_TypedTerm = "hydra/core.TypedTerm" :: String
+_TypedTerm_term = "term" :: String
+_TypedTerm_type = "type" :: String
 _Variable = "hydra/core.Variable" :: String

@@ -412,6 +412,15 @@ definitions:
         - set
         - union
 
+  - name: TypedTerm
+    type:
+      record:
+        - name: type
+          type: Type
+
+        - name: term
+          type: Term
+
   - name: Variable
     description: "A symbol which stands in for a term"
     type: string
