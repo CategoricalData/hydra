@@ -6,8 +6,10 @@ module Hydra.Impl.Haskell.Dsl (
   bigfloatValue,
   bigintType,
   bigintValue,
-  booleanTerm,
+  binaryTerm,
+  binaryType,
   booleanType,
+  booleanValue,
   cases,
   compareTo,
   compose,
@@ -96,11 +98,17 @@ bigintType = integerType IntegerTypeBigint
 bigintValue :: Integer -> Term
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
-booleanTerm :: Bool -> Term
-booleanTerm b = TermAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+binaryTerm :: String -> Term
+binaryTerm = TermAtomic . AtomicValueBinary
+
+binaryType :: Type
+binaryType = TypeAtomic AtomicTypeBinary
 
 booleanType :: Type
 booleanType = TypeAtomic AtomicTypeBoolean
+
+booleanValue :: Bool -> Term
+booleanValue b = TermAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 cases :: [Field] -> Term
 cases = TermFunction . FunctionCases
