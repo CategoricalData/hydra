@@ -7,6 +7,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 import qualified Test.QuickCheck as QC
 
 
@@ -74,10 +75,17 @@ instance QC.Arbitrary IntegerValue
 
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
-
+  shrink typ = case typ of
+    TypeAtomic at -> TypeAtomic <$> case at of
+      AtomicTypeInteger _ -> [AtomicTypeBoolean]
+      AtomicTypeFloat _ -> [AtomicTypeBoolean]
+      _ -> []
+    _ -> [] -- TODO
+    
 instance QC.Arbitrary TypedTerm where
   arbitrary = QC.sized arbitraryTypedTerm
-     
+  shrink (TypedTerm typ term) = L.concat ((\(t, m) -> TypedTerm t <$> m term) <$> shrinkers typ)
+
 arbitraryAtomicValue :: AtomicType -> QC.Gen AtomicValue
 arbitraryAtomicValue at = case at of
   AtomicTypeBinary -> AtomicValueBinary <$> QC.arbitrary
@@ -99,7 +107,6 @@ arbitraryFloatValue ft = case ft of
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
---       Lambda terms are not yet generated, either.
 arbitraryFunction :: FunctionType -> Int -> QC.Gen Function
 arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++ domainSpecific
   where
@@ -188,9 +195,9 @@ arbitraryType n = if n == 0 then pure unitType else QC.oneof [
     TypeList <$> arbitraryType n',
     TypeMap <$> arbitraryPair MapType arbitraryType n',
     TypeOptional <$> arbitraryType n',
-    TypeRecord <$> arbitraryList False arbitraryFieldType n',
+    TypeRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
     TypeSet <$> arbitraryType n',
-    TypeUnion <$> arbitraryList True arbitraryFieldType n']   
+    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
 arbitraryTypedTerm :: Int -> QC.Gen TypedTerm
@@ -203,3 +210,76 @@ arbitraryTypedTerm n = do
 
 decr :: Int -> Int
 decr n = max 0 (n-1)
+
+shrinkers :: Type -> [(Type, Term -> [Term])]
+shrinkers typ = trivialShrinker ++ case typ of
+    TypeAtomic at -> case at of
+      AtomicTypeBinary -> [(binaryType, \(TermAtomic (AtomicValueBinary s)) -> binaryTerm <$> QC.shrink s)]
+      AtomicTypeBoolean -> []
+      AtomicTypeFloat ft -> []
+      AtomicTypeInteger it -> []
+      AtomicTypeString -> [(stringType, \(TermAtomic (AtomicValueString s)) -> stringTerm <$> QC.shrink s)]
+  --  TypeElement et ->
+  --  TypeFunction ft ->
+    TypeList lt -> dropElements : promoteType : shrinkType
+      where
+        dropElements = (TypeList lt, \(TermList els) -> TermList <$> dropAny els)
+        promoteType = (lt, \(TermList els) -> els)
+        shrinkType = (\(t, m) -> (TypeList t, \(TermList els) -> TermList <$> CM.mapM m els)) <$> shrinkers lt
+    TypeMap mt@(MapType kt vt) -> shrinkKeys ++ shrinkValues ++ dropPairs
+      where
+        shrinkKeys = (\(t, m) -> (TypeMap (MapType t vt),
+            \(TermMap mp) -> TermMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers kt
+          where
+            shrinkPair m (km, vm) = (\km' -> (km', vm)) <$> m km
+        shrinkValues = (\(t, m) -> (TypeMap (MapType kt t),
+            \(TermMap mp) -> TermMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers vt
+          where
+            shrinkPair m (km, vm) = (\vm' -> (km, vm')) <$> m vm
+        dropPairs = [(TypeMap mt, \(TermMap m) -> TermMap . M.fromList <$> dropAny (M.toList m))]
+  --  TypeNominal name ->
+    TypeOptional ot -> toNothing : promoteType : shrinkType
+      where
+        toNothing = (TypeOptional ot, \(TermOptional m) -> TermOptional <$> Y.maybe [] (const [Nothing]) m)
+        promoteType = (ot, \(TermOptional m) -> Y.maybeToList m)
+        shrinkType = (\(t, m) -> (TypeOptional t,
+          \(TermOptional mb) -> Y.maybe [] (fmap (TermOptional . Just) . m) mb)) <$> shrinkers ot
+    TypeRecord sfields -> dropFields
+        ++ shrinkFieldNames TypeRecord TermRecord (\(TermRecord dfields) -> dfields) sfields
+        ++ promoteTypes ++ shrinkTypes
+      where
+        dropFields = dropField <$> indices
+          where
+            dropField i = (TypeRecord $ dropIth i sfields, \(TermRecord dfields) -> [TermRecord $ dropIth i dfields])
+        promoteTypes = promoteField <$> indices
+          where
+            promoteField i = (fieldTypeType $ sfields !! i, \(TermRecord dfields) -> [fieldTerm $ dfields !! i])
+        shrinkTypes = [] -- TODO
+        indices = [0..(L.length sfields - 1)]
+    TypeSet st -> dropElements : promoteType : shrinkType
+      where
+        dropElements = (TypeSet st, \(TermSet els) -> TermSet . S.fromList <$> dropAny (S.toList els))
+        promoteType = (st, \(TermSet els) -> S.toList els)
+        shrinkType = (\(t, m) -> (TypeSet t, \(TermSet els) -> TermSet . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
+    TypeUnion sfields -> dropFields
+        ++ shrinkFieldNames TypeUnion (TermUnion . L.head) (\(TermUnion f) -> [f]) sfields
+        ++ promoteTypes ++ shrinkTypes
+      where
+        dropFields = [] -- TODO
+        promoteTypes = [] -- TODO
+        shrinkTypes = [] -- TODO
+    _ -> []
+  where
+    dropAny l = case l of
+      [] -> []
+      (h:r) -> [r] ++ ((h :) <$> dropAny r)
+    dropIth i l = L.take i l ++ L.drop (i+1) l
+    nodupes l = L.length (L.nub l) == L.length l
+    trivialShrinker = [(unitType, const [unitTerm]) | typ /= unitType]
+    shrinkFieldNames toType toTerm fromTerm sfields = forNames <$> altNames
+      where
+        forNames names = (toType $ withFieldTypeNames names sfields,
+           \term -> [toTerm $ withFieldNames names $ fromTerm term])
+        altNames = L.filter nodupes $ CM.mapM QC.shrink (fieldTypeName <$> sfields)
+        withFieldTypeNames = L.zipWith (\n f -> FieldType n $ fieldTypeType f)
+        withFieldNames = L.zipWith (\n f -> Field n $ fieldTerm f)
