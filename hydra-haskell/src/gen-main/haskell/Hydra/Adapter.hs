@@ -21,6 +21,7 @@ module Hydra.Adapter
   , _Language_Constraints_integerVariants
   , _Language_Constraints_termVariants
   , _Language_Constraints_typeVariants
+  , _Language_Constraints_types
   , _Language_Name
   , _Language_constraints
   , _Language_name
@@ -72,7 +73,12 @@ data Language_Constraints
     -- | @type set: hydra/core.TermVariant
     , languageConstraintsTermVariants :: (Set TermVariant)
     -- | @type set: hydra/core.TypeVariant
-    , languageConstraintsTypeVariants :: (Set TypeVariant) } deriving (Eq, Generic, Ord, Read, Show)
+    , languageConstraintsTypeVariants :: (Set TypeVariant)
+    {-| @type function:
+                from:
+                - hydra/core.Type
+                to: boolean -}
+    , languageConstraintsTypes :: Type -> Bool }
 
 -- | @type string
 type Language_Name = String
@@ -82,7 +88,7 @@ data Language
     -- | @type hydra/adapter.Language.Name
     { languageName :: Language_Name
     -- | @type hydra/adapter.Language.Constraints
-    , languageConstraints :: Language_Constraints } deriving (Eq, Generic, Ord, Read, Show)
+    , languageConstraints :: Language_Constraints }
 
 _Adapter = "hydra/adapter.Adapter" :: String
 _AdapterContext = "hydra/adapter.AdapterContext" :: String
@@ -100,6 +106,7 @@ _Language_Constraints_floatVariants = "floatVariants" :: String
 _Language_Constraints_integerVariants = "integerVariants" :: String
 _Language_Constraints_termVariants = "termVariants" :: String
 _Language_Constraints_typeVariants = "typeVariants" :: String
+_Language_Constraints_types = "types" :: String
 _Language_Name = "hydra/adapter.Language_Name" :: String
 _Language_constraints = "constraints" :: String
 _Language_name = "name" :: String
