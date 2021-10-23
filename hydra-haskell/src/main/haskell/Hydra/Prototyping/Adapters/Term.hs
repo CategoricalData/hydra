@@ -100,6 +100,17 @@ listToSet context t@(TypeSet st) = do
     encode ad (TermSet s) = stepOut (adapterStep ad) $ TermList $ S.toList s
     decode ad term = TermSet . S.fromList . (\(TermList l') -> l') <$> stepIn (adapterStep ad) term
 
+optionalToList :: AdapterContext -> Type -> Qualified (Adapter Type Term)
+optionalToList context t@(TypeOptional ot) = do
+  ad <- termAdapter context ot
+  return $ Adapter False t (TypeList $ adapterTarget ad) $ Step {
+    stepOut = \(TermOptional m) -> Y.maybe
+      (pure $ TermList [])
+      (fmap (\ r -> TermList [r]) . stepOut (adapterStep ad)) m,
+    stepIn = \(TermList l) -> TermOptional <$> if L.null l then
+      pure Nothing
+      else Just <$> stepIn (adapterStep ad) (L.head l)}
+    
 optionalToUnion :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 optionalToUnion context t@(TypeOptional ot) = do
     ad <- termAdapter context ot
@@ -213,7 +224,7 @@ termAdapter context = chooseAdapter alts supported describeType
         TypeVariantFunction ->  pure passFunction
         TypeVariantList -> pure passList
         TypeVariantMap -> pure passMap
-        TypeVariantOptional -> pure passOptional
+        TypeVariantOptional -> [passOptional, optionalToList]
         TypeVariantRecord -> pure passRecord
         TypeVariantSet -> pure passSet
         TypeVariantUnion -> pure passUnion
@@ -222,7 +233,7 @@ termAdapter context = chooseAdapter alts supported describeType
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
         TypeVariantNominal -> [dereferenceNominal]
-        TypeVariantOptional -> [optionalToUnion]
+        TypeVariantOptional -> [optionalToList, optionalToUnion]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]
         _ -> []
@@ -231,21 +242,24 @@ termAdapter context = chooseAdapter alts supported describeType
     supported = typeIsSupported constraints
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
 
----- Caution: possibility of an infinite loop if neither unions nor optionals are supported
+---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 unionToRecord context t@(TypeUnion sfields) = do
-  let target = TypeRecord $ makeOptional <$> sfields
-  ad <- termAdapter context target
-  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
-    stepOut = \(TermUnion (Field fn term)) -> stepOut (adapterStep ad)
-      $ TermRecord (toRecordField term fn <$> sfields),
-    stepIn = \term -> do
-      (TermRecord fields) <- stepIn (adapterStep ad) term
-      return $ TermUnion $ fromRecordFields fields}
+    let target = TypeRecord $ makeOptional <$> sfields
+    ad <- termAdapter context target
+    return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
+      stepOut = \(TermUnion (Field fn term)) -> stepOut (adapterStep ad)
+        $ TermRecord (toRecordField term fn <$> sfields),
+      stepIn = \term -> do
+        (TermRecord fields) <- stepIn (adapterStep ad) term
+        TermUnion <$> fromRecordFields term (TermRecord fields) (adapterTarget ad) fields}
   where
     makeOptional (FieldType fn t) = FieldType fn $ TypeOptional t
     toRecordField term fn (FieldType fn' _) = Field fn' $ TermOptional $ if fn' == fn then Just term else Nothing
-    fromRecordFields fields = L.head matches
+    fromRecordFields term term' t' fields = if L.null matches
+        then fail $ "cannot convert term back to union: " ++ show term ++ " -- becomes " ++ show term'
+          ++ " where type = " ++ show t ++ "    and target type = " ++ show t'
+        else pure $ L.head matches
       where
         matches :: [Field]
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields

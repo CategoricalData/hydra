@@ -88,7 +88,8 @@ integerTypeIsSupported :: Language_Constraints -> IntegerType -> Bool
 integerTypeIsSupported constraints it = S.member (integerTypeVariant it) $ languageConstraintsIntegerVariants constraints
 
 typeIsSupported :: Language_Constraints -> Type -> Bool
-typeIsSupported constraints t = S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
+typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
+  && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
   && case t of
     TypeAtomic at -> atomicTypeIsSupported constraints at
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
