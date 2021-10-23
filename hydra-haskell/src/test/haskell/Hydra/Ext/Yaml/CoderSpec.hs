@@ -24,7 +24,7 @@ atomicTypeConstraintsAreRespected = H.describe "Verify that YAML's atomic type c
   -- TODO: binary data
 
   H.it "Check booleans" $
-    QC.property $ \b -> checkYamlCoder booleanType (booleanTerm b) (yamlBool b)
+    QC.property $ \b -> checkYamlCoder booleanType (booleanValue b) (yamlBool b)
 
   H.it "Check 32-bit floats" $
     QC.property $ \f -> checkYamlCoder float32Type (float32Value f) (yamlFloat $ realToFrac f)
@@ -87,9 +87,8 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
   H.it "Unions become YAML mappings (as records)" $
     QC.property $ \int -> checkYamlCoder stringOrIntType
       (variant "right" $ int32Value int) (yamlMap [
-        (yamlStr "left", yamlNull),
         (yamlStr "right", yamlInt int)])
-  
+
 spec :: H.Spec
 spec = do
   atomicTypeConstraintsAreRespected
