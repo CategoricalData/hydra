@@ -113,7 +113,8 @@ hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsFloatVariants = S.fromList floatVariants,
   languageConstraintsIntegerVariants = S.fromList integerVariants,
   languageConstraintsTermVariants = S.fromList termVariants,
-  languageConstraintsTypeVariants = S.fromList typeVariants }
+  languageConstraintsTypeVariants = S.fromList typeVariants,
+  languageConstraintsTypes = const True }
 
 integerTypeIsSigned :: IntegerType -> Bool
 integerTypeIsSigned = integerVariantIsSigned . integerTypeVariant

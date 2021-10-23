@@ -255,14 +255,8 @@ roundTripsPreserveArbitraryTypes :: H.SpecWith ()
 roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do
 
   H.it "Check arbitrary type/term pairs" $
---    roundTripIsNoop typ term `H.shouldBe` True
     QC.property $ \(TypedTerm typ term) -> roundTripIsNoop typ term
--- where
---   typ = TypeFunction (FunctionType stringType stringType)
---   term = TermFunction (FunctionLambda (Lambda "x" (stringValue "foo")))
-----  typ = stringType
-----  term = stringValue "foo"
-      
+
 fieldAdaptersAreAsExpected :: H.SpecWith ()
 fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do
 
@@ -274,7 +268,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       False
       (Field "second" $ int8Value i)
       (Field "second" $ int16Value i)
-      
+
 roundTripIsNoop :: Type -> Term -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
@@ -289,8 +283,11 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
-        TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion] }
-    
+        TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
+      languageConstraintsTypes = \typ -> case typ of
+        TypeOptional (TypeOptional _) -> False
+        _ -> True }
+
     transContext :: AdapterContext
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage
     
