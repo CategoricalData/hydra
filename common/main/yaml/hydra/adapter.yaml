@@ -75,6 +75,13 @@ definitions:
               type:
                 set: core.TypeVariant
 
+            - name: types
+              type:
+                function:
+                  from:
+                    - core.Type
+                  to: boolean
+
       - name: Name
         type: string
 

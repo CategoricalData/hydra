@@ -4,6 +4,7 @@ import hydra.core.AtomicVariant
 import hydra.core.FloatVariant
 import hydra.core.IntegerVariant
 import hydra.core.TermVariant
+import hydra.core.Type
 import hydra.core.TypeVariant
 
 case class Language_Constraints(
@@ -30,7 +31,15 @@ case class Language_Constraints(
     /**
      * @type set: hydra/core.TypeVariant
      */
-    typeVariants: Set[TypeVariant]
+    typeVariants: Set[TypeVariant],
+    
+    /**
+     * @type function:
+     *         from:
+     *         - hydra/core.Type
+     *         to: boolean
+     */
+    types: Type => Boolean
 )
 
 val _Language_Constraints: String = "hydra/adapter.Language_Constraints"
@@ -39,3 +48,4 @@ val _Language_Constraints_floatVariants: String = "floatVariants"
 val _Language_Constraints_integerVariants: String = "integerVariants"
 val _Language_Constraints_termVariants: String = "termVariants"
 val _Language_Constraints_typeVariants: String = "typeVariants"
+val _Language_Constraints_types: String = "types"
