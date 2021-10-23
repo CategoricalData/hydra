@@ -15,6 +15,11 @@ dependencies:
   - base
   - containers
 
+  # ext dependencies
+  - HsYAML
+  - bytestring
+  - text
+
 library:
   source-dirs:
     - src/main/haskell
@@ -23,7 +28,7 @@ library:
 
 tests:
   hydra-test:
-    main:       Spec.hs
+    main: Spec.hs
     source-dirs: src/test/haskell
     dependencies:
       - hydra
