@@ -1,10 +1,10 @@
 package hydra.ext.scala.meta
 
-case class Source(
+case class Source (
     /**
      * @type list: hydra/ext/scala/meta.Stat
      */
-    stats: Seq[Stat]
+    stats: Seq[hydra.ext.scala.meta.Stat]
 )
 
 val _Source: String = "hydra/ext/scala/meta.Source"

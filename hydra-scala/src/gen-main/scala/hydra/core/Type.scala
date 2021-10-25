@@ -4,43 +4,43 @@ enum Type:
     /**
      * @type hydra/core.AtomicType
      */
-    case atomic(value: AtomicType) extends Type
+    case atomic(value: hydra.core.AtomicType) extends Type
     /**
      * @type hydra/core.Type
      */
-    case element(value: Type) extends Type
+    case element(value: hydra.core.Type) extends Type
     /**
      * @type hydra/core.FunctionType
      */
-    case function(value: FunctionType) extends Type
+    case function(value: hydra.core.FunctionType) extends Type
     /**
      * @type hydra/core.Type
      */
-    case list(value: Type) extends Type
+    case list(value: hydra.core.Type) extends Type
     /**
      * @type hydra/core.MapType
      */
-    case map(value: MapType) extends Type
+    case map(value: hydra.core.MapType) extends Type
     /**
      * @type hydra/core.Name
      */
-    case nominal(value: Name) extends Type
+    case nominal(value: hydra.core.Name) extends Type
     /**
      * @type hydra/core.Type
      */
-    case optional(value: Type) extends Type
+    case optional(value: hydra.core.Type) extends Type
     /**
      * @type list: hydra/core.FieldType
      */
-    case record(value: Seq[FieldType]) extends Type
+    case record(value: Seq[hydra.core.FieldType]) extends Type
     /**
      * @type hydra/core.Type
      */
-    case set(value: Type) extends Type
+    case set(value: hydra.core.Type) extends Type
     /**
      * @type list: hydra/core.FieldType
      */
-    case union(value: Seq[FieldType]) extends Type
+    case union(value: Seq[hydra.core.FieldType]) extends Type
 
 val _Type: String = "hydra/core.Type"
 val _Type_atomic: String = "atomic"

@@ -1,20 +1,20 @@
 package hydra.ext.scala.meta
 
-case class Case(
+case class Case (
     /**
      * @type hydra/ext/scala/meta.Pat
      */
-    pat: Pat,
+    pat: hydra.ext.scala.meta.Pat,
     
     /**
      * @type optional: hydra/ext/scala/meta.Term
      */
-    cond: Option[Term],
+    cond: Option[hydra.ext.scala.meta.Term],
     
     /**
      * @type hydra/ext/scala/meta.Term
      */
-    body: Term
+    body: hydra.ext.scala.meta.Term
 )
 
 val _Case: String = "hydra/ext/scala/meta.Case"

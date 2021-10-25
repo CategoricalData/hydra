@@ -6,13 +6,13 @@ package hydra.graph
 /**
  * A collection of graphs with a distinguished root graph
  */
-case class GraphSet(
+case class GraphSet (
     /**
      * @type map:
      *         keys: hydra/graph.GraphName
      *         values: hydra/graph.Graph
      */
-    graphs: Map[GraphName, Graph],
+    graphs: Map[hydra.graph.GraphName, hydra.graph.Graph],
     
     /**
      * The focal graph of this set; 'the' graph. This root graph's schema graph, the second-degree schema graph, etc. are
@@ -20,7 +20,7 @@ case class GraphSet(
      * 
      * @type hydra/graph.GraphName
      */
-    root: GraphName
+    root: hydra.graph.GraphName
 )
 
 val _GraphSet: String = "hydra/graph.GraphSet"

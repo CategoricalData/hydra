@@ -1,6 +1,6 @@
 package hydra.ext.scala.meta
 
-case class Name(
+case class Name (
     /**
      * @type string
      */
@@ -11,7 +11,7 @@ case class Name(
     /**
      * @type hydra/ext/scala/meta.PredefString
      */
-    indeterminate: PredefString
+    indeterminate: hydra.ext.scala.meta.PredefString
 )
 
 val _Name: String = "hydra/ext/scala/meta.Name"

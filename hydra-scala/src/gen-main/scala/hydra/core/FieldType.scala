@@ -1,15 +1,15 @@
 package hydra.core
 
-case class FieldType(
+case class FieldType (
     /**
      * @type hydra/core.FieldName
      */
-    name: FieldName,
+    name: hydra.core.FieldName,
     
     /**
      * @type hydra/core.Type
      */
-    `type`: Type
+    `type`: hydra.core.Type
 )
 
 val _FieldType: String = "hydra/core.FieldType"

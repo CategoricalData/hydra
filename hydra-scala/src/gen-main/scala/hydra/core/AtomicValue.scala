@@ -14,15 +14,15 @@ enum AtomicValue:
     /**
      * @type hydra/core.BooleanValue
      */
-    case boolean(value: BooleanValue) extends AtomicValue
+    case boolean(value: hydra.core.BooleanValue) extends AtomicValue
     /**
      * @type hydra/core.FloatValue
      */
-    case float(value: FloatValue) extends AtomicValue
+    case float(value: hydra.core.FloatValue) extends AtomicValue
     /**
      * @type hydra/core.IntegerValue
      */
-    case integer(value: IntegerValue) extends AtomicValue
+    case integer(value: hydra.core.IntegerValue) extends AtomicValue
     /**
      * @type string
      */

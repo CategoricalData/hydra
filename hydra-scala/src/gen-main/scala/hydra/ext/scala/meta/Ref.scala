@@ -4,11 +4,11 @@ enum Ref:
     /**
      * @type hydra/ext/scala/meta.Name
      */
-    case name(value: Name) extends Ref
+    case name(value: hydra.ext.scala.meta.Name) extends Ref
     /**
      * @type hydra/ext/scala/meta.Init
      */
-    case init(value: Init) extends Ref
+    case init(value: hydra.ext.scala.meta.Init) extends Ref
 
 val _Ref: String = "hydra/ext/scala/meta.Ref"
 val _Ref_init: String = "init"

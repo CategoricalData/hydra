@@ -1,6 +1,6 @@
 package hydra.errors
 
-case class Qualified[a](
+case class Qualified[a] (
     /**
      * @type optional:
      *         variable: a

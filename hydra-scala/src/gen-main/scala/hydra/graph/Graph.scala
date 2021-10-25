@@ -4,22 +4,20 @@
  */
 package hydra.graph
 
-import hydra.core.Term
-
 /**
  * A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph, called the
  * schema graph
  */
-case class Graph(
+case class Graph (
     /**
      * @type hydra/graph.GraphName
      */
-    name: GraphName,
+    name: hydra.graph.GraphName,
     
     /**
      * @type list: hydra/graph.Element
      */
-    elements: Seq[Element],
+    elements: Seq[hydra.graph.Element],
     
     /**
      * @type function:
@@ -27,14 +25,14 @@ case class Graph(
      *         - hydra/core.Term
      *         to: boolean
      */
-    dataTerms: Term => Boolean,
+    dataTerms: hydra.core.Term => Boolean,
     
     /**
      * A reference to this graph's schema graph within the provided graph set
      * 
      * @type hydra/graph.GraphName
      */
-    schemaGraph: GraphName
+    schemaGraph: hydra.graph.GraphName
 )
 
 val _Graph: String = "hydra/graph.Graph"

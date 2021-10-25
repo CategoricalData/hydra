@@ -4,15 +4,15 @@ enum Mod:
     /**
      * @type hydra/ext/scala/meta.Mod.Annot
      */
-    case annot(value: Mod_Annot) extends Mod
+    case annot(value: hydra.ext.scala.meta.Mod.Annot) extends Mod
     /**
      * @type hydra/ext/scala/meta.Mod.Private
      */
-    case `private`(value: Mod_Private) extends Mod
+    case `private`(value: hydra.ext.scala.meta.Mod.Private) extends Mod
     /**
      * @type hydra/ext/scala/meta.Mod.Protected
      */
-    case `protected`(value: Mod_Protected) extends Mod
+    case `protected`(value: hydra.ext.scala.meta.Mod.Protected) extends Mod
     case `implicit`() extends Mod
     case `final`() extends Mod
     case `sealed`() extends Mod
@@ -31,8 +31,42 @@ enum Mod:
     case using() extends Mod
     case opaque() extends Mod
     case transparent() extends Mod
+object Mod {
+    case class Annot (
+        /**
+         * @type hydra/ext/scala/meta.Init
+         * 
+         * @type hydra/ext/scala/meta.Init
+         */
+        init: hydra.ext.scala.meta.Init
+    )
+    
+    case class Private (
+        /**
+         * @type hydra/ext/scala/meta.Ref
+         * 
+         * @type hydra/ext/scala/meta.Ref
+         */
+        within: hydra.ext.scala.meta.Ref
+    )
+    
+    case class Protected (
+        /**
+         * @type hydra/ext/scala/meta.Ref
+         * 
+         * @type hydra/ext/scala/meta.Ref
+         */
+        within: hydra.ext.scala.meta.Ref
+    )
+}
 
 val _Mod: String = "hydra/ext/scala/meta.Mod"
+val _Mod_Annot: String = "hydra/ext/scala/meta.Mod.Annot"
+val _Mod_Annot_init: String = "init"
+val _Mod_Private: String = "hydra/ext/scala/meta.Mod.Private"
+val _Mod_Private_within: String = "within"
+val _Mod_Protected: String = "hydra/ext/scala/meta.Mod.Protected"
+val _Mod_Protected_within: String = "within"
 val _Mod_abstract: String = "abstract"
 val _Mod_annot: String = "annot"
 val _Mod_case: String = "case"

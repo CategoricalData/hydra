@@ -6,16 +6,16 @@ package hydra.core
 /**
  * A function type, also known as an arrow type
  */
-case class FunctionType(
+case class FunctionType (
     /**
      * @type hydra/core.Type
      */
-    domain: Type,
+    domain: hydra.core.Type,
     
     /**
      * @type hydra/core.Type
      */
-    codomain: Type
+    codomain: hydra.core.Type
 )
 
 val _FunctionType: String = "hydra/core.FunctionType"

@@ -1,6 +1,6 @@
 package hydra.ext.scala.meta
 
-case class ScalaSymbol(
+case class ScalaSymbol (
     /**
      * @type string
      */

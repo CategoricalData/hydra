@@ -1,8 +1,6 @@
 package hydra.adapter
 
-import hydra.evaluation.Step
-
-case class Adapter[t, v](
+case class Adapter[t, v] (
     /**
      * @type boolean
      */
@@ -29,7 +27,7 @@ case class Adapter[t, v](
      *             variable: v
      *           variable: b
      */
-    step: Step[v,v]
+    step: hydra.evaluation.Step[v, v]
 )
 
 val _Adapter: String = "hydra/adapter.Adapter"

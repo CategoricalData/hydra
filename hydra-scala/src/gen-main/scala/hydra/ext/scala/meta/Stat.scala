@@ -4,19 +4,19 @@ enum Stat:
     /**
      * @type hydra/ext/scala/meta.Term
      */
-    case term(value: Term) extends Stat
+    case term(value: hydra.ext.scala.meta.Term) extends Stat
     /**
      * @type hydra/ext/scala/meta.Decl
      */
-    case decl(value: Decl) extends Stat
+    case decl(value: hydra.ext.scala.meta.Decl) extends Stat
     /**
      * @type hydra/ext/scala/meta.Defn
      */
-    case defn(value: Defn) extends Stat
+    case defn(value: hydra.ext.scala.meta.Defn) extends Stat
     /**
      * @type hydra/ext/scala/meta.ImportExportStat
      */
-    case importExportStat(value: ImportExportStat) extends Stat
+    case importExportStat(value: hydra.ext.scala.meta.ImportExportStat) extends Stat
 
 val _Stat: String = "hydra/ext/scala/meta.Stat"
 val _Stat_decl: String = "decl"

@@ -6,13 +6,13 @@ enum Function:
      * 
      * @type list: hydra/core.Field
      */
-    case cases(value: Seq[Field]) extends Function
+    case cases(value: Seq[hydra.core.Field]) extends Function
     /**
      * Compares a term with a given term of the same type, producing a Comparison
      * 
      * @type hydra/core.Term
      */
-    case compareTo(value: Term) extends Function
+    case compareTo(value: hydra.core.Term) extends Function
     /**
      * Hydra's delta function, which maps an element to its data term
      */
@@ -22,19 +22,19 @@ enum Function:
      * 
      * @type hydra/core.Lambda
      */
-    case lambda(value: Lambda) extends Function
+    case lambda(value: hydra.core.Lambda) extends Function
     /**
      * A reference to a built-in (primitive) function
      * 
      * @type hydra/core.Name
      */
-    case primitive(value: Name) extends Function
+    case primitive(value: hydra.core.Name) extends Function
     /**
      * A projection of a field from a record
      * 
      * @type hydra/core.FieldName
      */
-    case projection(value: FieldName) extends Function
+    case projection(value: hydra.core.FieldName) extends Function
 
 val _Function: String = "hydra/core.Function"
 val _Function_cases: String = "cases"

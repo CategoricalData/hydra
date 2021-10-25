@@ -53,7 +53,7 @@ enum Lit:
     /**
      * @type hydra/ext/scala/meta.ScalaSymbol
      */
-    case symbol(value: ScalaSymbol) extends Lit
+    case symbol(value: hydra.ext.scala.meta.ScalaSymbol) extends Lit
 
 val _Lit: String = "hydra/ext/scala/meta.Lit"
 val _Lit_boolean: String = "boolean"

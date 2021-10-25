@@ -1,15 +1,15 @@
 package hydra.ext.scala.meta
 
-case class Importer(
+case class Importer (
     /**
      * @type hydra/ext/scala/meta.Term.Ref
      */
-    ref: Term_Ref,
+    ref: hydra.ext.scala.meta.Term.Ref,
     
     /**
      * @type list: hydra/ext/scala/meta.Importee
      */
-    importees: Seq[Importee]
+    importees: Seq[hydra.ext.scala.meta.Importee]
 )
 
 val _Importer: String = "hydra/ext/scala/meta.Importer"

@@ -4,63 +4,63 @@ enum Tree:
     /**
      * @type hydra/ext/scala/meta.Ref
      */
-    case ref(value: Ref) extends Tree
+    case ref(value: hydra.ext.scala.meta.Ref) extends Tree
     /**
      * @type hydra/ext/scala/meta.Stat
      */
-    case stat(value: Stat) extends Tree
+    case stat(value: hydra.ext.scala.meta.Stat) extends Tree
     /**
      * @type hydra/ext/scala/meta.Type
      */
-    case `type`(value: Type) extends Tree
+    case `type`(value: hydra.ext.scala.meta.Type) extends Tree
     /**
      * @type hydra/ext/scala/meta.Type.Bounds
      */
-    case bounds(value: Type_Bounds) extends Tree
+    case bounds(value: hydra.ext.scala.meta.Type.Bounds) extends Tree
     /**
      * @type hydra/ext/scala/meta.Pat
      */
-    case pat(value: Pat) extends Tree
+    case pat(value: hydra.ext.scala.meta.Pat) extends Tree
     /**
      * @type hydra/ext/scala/meta.Member
      */
-    case member(value: Member) extends Tree
+    case member(value: hydra.ext.scala.meta.Member) extends Tree
     /**
      * @type hydra/ext/scala/meta.Ctor
      */
-    case ctor(value: Ctor) extends Tree
+    case ctor(value: hydra.ext.scala.meta.Ctor) extends Tree
     /**
      * @type hydra/ext/scala/meta.Template
      */
-    case template(value: Template) extends Tree
+    case template(value: hydra.ext.scala.meta.Template) extends Tree
     /**
      * @type hydra/ext/scala/meta.Mod
      */
-    case mod(value: Mod) extends Tree
+    case mod(value: hydra.ext.scala.meta.Mod) extends Tree
     /**
      * @type hydra/ext/scala/meta.Enumerator
      */
-    case enumerator(value: Enumerator) extends Tree
+    case enumerator(value: hydra.ext.scala.meta.Enumerator) extends Tree
     /**
      * @type hydra/ext/scala/meta.Importer
      */
-    case importer(value: Importer) extends Tree
+    case importer(value: hydra.ext.scala.meta.Importer) extends Tree
     /**
      * @type hydra/ext/scala/meta.Importee
      */
-    case importee(value: Importee) extends Tree
+    case importee(value: hydra.ext.scala.meta.Importee) extends Tree
     /**
      * @type hydra/ext/scala/meta.CaseTree
      */
-    case caseTree(value: CaseTree) extends Tree
+    case caseTree(value: hydra.ext.scala.meta.CaseTree) extends Tree
     /**
      * @type hydra/ext/scala/meta.Source
      */
-    case source(value: Source) extends Tree
+    case source(value: hydra.ext.scala.meta.Source) extends Tree
     /**
      * @type hydra/ext/scala/meta.Quasi
      */
-    case quasi(value: Quasi) extends Tree
+    case quasi(value: hydra.ext.scala.meta.Quasi) extends Tree
 
 val _Tree: String = "hydra/ext/scala/meta.Tree"
 val _Tree_bounds: String = "bounds"

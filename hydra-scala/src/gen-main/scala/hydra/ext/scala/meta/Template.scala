@@ -1,25 +1,25 @@
 package hydra.ext.scala.meta
 
-case class Template(
+case class Template (
     /**
      * @type list: hydra/ext/scala/meta.Stat
      */
-    early: Seq[Stat],
+    early: Seq[hydra.ext.scala.meta.Stat],
     
     /**
      * @type list: hydra/ext/scala/meta.Init
      */
-    inits: Seq[Init],
+    inits: Seq[hydra.ext.scala.meta.Init],
     
     /**
      * @type hydra/ext/scala/meta.Self
      */
-    self: Self,
+    self: hydra.ext.scala.meta.Self,
     
     /**
      * @type list: hydra/ext/scala/meta.Stat
      */
-    stats: Seq[Stat]
+    stats: Seq[hydra.ext.scala.meta.Stat]
 )
 
 val _Template: String = "hydra/ext/scala/meta.Template"

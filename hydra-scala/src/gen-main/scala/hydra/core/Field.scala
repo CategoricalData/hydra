@@ -6,16 +6,16 @@ package hydra.core
 /**
  * A labeled term
  */
-case class Field(
+case class Field (
     /**
      * @type hydra/core.FieldName
      */
-    name: FieldName,
+    name: hydra.core.FieldName,
     
     /**
      * @type hydra/core.Term
      */
-    term: Term
+    term: hydra.core.Term
 )
 
 val _Field: String = "hydra/core.Field"
