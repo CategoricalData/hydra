@@ -1,14 +1,12 @@
 package hydra.traversal
 
-import hydra.core.FieldName
-
 enum TermStep:
     case applicationFunction() extends TermStep
     case applicationArgument() extends TermStep
     /**
      * @type hydra/core.FieldName
      */
-    case `case`(value: FieldName) extends TermStep
+    case `case`(value: hydra.core.FieldName) extends TermStep
     case compareTo() extends TermStep
     case lambdaBody() extends TermStep
     /**
@@ -26,7 +24,7 @@ enum TermStep:
     /**
      * @type hydra/core.FieldName
      */
-    case record(value: FieldName) extends TermStep
+    case record(value: hydra.core.FieldName) extends TermStep
     /**
      * @type integer
      */

@@ -1,10 +1,10 @@
 package hydra.ext.scala.meta
 
-case class Export(
+case class Export (
     /**
      * @type list: hydra/ext/scala/meta.Importer
      */
-    importers: Seq[Importer]
+    importers: Seq[hydra.ext.scala.meta.Importer]
 )
 
 val _Export: String = "hydra/ext/scala/meta.Export"

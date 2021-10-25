@@ -1,33 +1,29 @@
 package hydra.evaluation
 
-import hydra.core.Name
-import hydra.graph.Element
-import hydra.graph.GraphSet
-
-case class Context(
+case class Context (
     /**
      * @type hydra/graph.GraphSet
      */
-    graphs: GraphSet,
+    graphs: hydra.graph.GraphSet,
     
     /**
      * @type map:
      *         keys: hydra/core.Name
      *         values: hydra/graph.Element
      */
-    elements: Map[Name, Element],
+    elements: Map[hydra.core.Name, hydra.graph.Element],
     
     /**
      * @type map:
      *         keys: hydra/core.Name
      *         values: hydra/evaluation.PrimitiveFunction
      */
-    functions: Map[Name, PrimitiveFunction],
+    functions: Map[hydra.core.Name, hydra.evaluation.PrimitiveFunction],
     
     /**
      * @type hydra/evaluation.EvaluationStrategy
      */
-    strategy: EvaluationStrategy
+    strategy: hydra.evaluation.EvaluationStrategy
 )
 
 val _Context: String = "hydra/evaluation.Context"

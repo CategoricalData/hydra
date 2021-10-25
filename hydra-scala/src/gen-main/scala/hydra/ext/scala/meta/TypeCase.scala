@@ -1,15 +1,15 @@
 package hydra.ext.scala.meta
 
-case class TypeCase(
+case class TypeCase (
     /**
      * @type hydra/ext/scala/meta.Type
      */
-    pat: Type,
+    pat: hydra.ext.scala.meta.Type,
     
     /**
      * @type hydra/ext/scala/meta.Type
      */
-    body: Type
+    body: hydra.ext.scala.meta.Type
 )
 
 val _TypeCase: String = "hydra/ext/scala/meta.TypeCase"

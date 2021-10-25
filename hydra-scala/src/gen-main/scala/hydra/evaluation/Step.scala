@@ -1,6 +1,6 @@
 package hydra.evaluation
 
-case class Step[a, b](
+case class Step[a, b] (
     /**
      * @type function:
      *         from:
@@ -13,7 +13,7 @@ case class Step[a, b](
      *                 variable: b
      *               variable: a
      */
-    out: a => Result[b],
+    out: a => hydra.evaluation.Result[b],
     
     /**
      * @type function:
@@ -27,7 +27,7 @@ case class Step[a, b](
      *                 variable: a
      *               variable: a
      */
-    in: b => Result[a]
+    in: b => hydra.evaluation.Result[a]
 )
 
 val _Step: String = "hydra/evaluation.Step"

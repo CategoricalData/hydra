@@ -1,21 +1,21 @@
 package hydra.ext.scala.meta
 
-case class Init(
+case class Init (
     /**
      * @type hydra/ext/scala/meta.Type
      */
-    tpe: Type,
+    tpe: hydra.ext.scala.meta.Type,
     
     /**
      * @type hydra/ext/scala/meta.Name
      */
-    name: Name,
+    name: hydra.ext.scala.meta.Name,
     
     /**
      * @type list:
      *         list: hydra/ext/scala/meta.Term
      */
-    argss: Seq[Seq[Term]]
+    argss: Seq[Seq[hydra.ext.scala.meta.Term]]
 )
 
 val _Init: String = "hydra/ext/scala/meta.Init"

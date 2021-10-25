@@ -3,27 +3,24 @@
  */
 package hydra.graph
 
-import hydra.core.Name
-import hydra.core.Term
-
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
-case class Element(
+case class Element (
     /**
      * @type hydra/core.Name
      */
-    name: Name,
+    name: hydra.core.Name,
     
     /**
      * @type hydra/core.Term
      */
-    schema: Term,
+    schema: hydra.core.Term,
     
     /**
      * @type hydra/core.Term
      */
-    data: Term
+    data: hydra.core.Term
 )
 
 val _Element: String = "hydra/graph.Element"

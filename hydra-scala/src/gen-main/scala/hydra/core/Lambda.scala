@@ -6,20 +6,20 @@ package hydra.core
 /**
  * A function abstraction (lambda)
  */
-case class Lambda(
+case class Lambda (
     /**
      * The parameter of the lambda
      * 
      * @type hydra/core.Variable
      */
-    parameter: Variable,
+    parameter: hydra.core.Variable,
     
     /**
      * The body of the lambda
      * 
      * @type hydra/core.Term
      */
-    body: Term
+    body: hydra.core.Term
 )
 
 val _Lambda: String = "hydra/core.Lambda"

@@ -16,11 +16,11 @@ enum AtomicType:
     /**
      * @type hydra/core.FloatType
      */
-    case float(value: FloatType) extends AtomicType
+    case float(value: hydra.core.FloatType) extends AtomicType
     /**
      * @type hydra/core.IntegerType
      */
-    case integer(value: IntegerType) extends AtomicType
+    case integer(value: hydra.core.IntegerType) extends AtomicType
     case string() extends AtomicType
 
 val _AtomicType: String = "hydra/core.AtomicType"
