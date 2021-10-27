@@ -4,14 +4,8 @@ package hydra.core;
  * A function type, also known as an arrow type
  */
 public class FunctionType {
-  /**
-   * @type hydra/core.Type
-   */
   public final Type domain;
   
-  /**
-   * @type hydra/core.Type
-   */
   public final Type codomain;
   
   /**

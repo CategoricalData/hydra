@@ -2,8 +2,6 @@ package hydra.core;
 
 /**
  * A symbol which stands in for a term
- * 
- * @type string
  */
 public class Variable {
   public final String value;

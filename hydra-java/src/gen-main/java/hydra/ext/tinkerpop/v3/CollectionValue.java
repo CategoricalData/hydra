@@ -48,9 +48,6 @@ public abstract class CollectionValue {
     }
   }
   
-  /**
-   * @type list: hydra/ext/tinkerpop/v3.Value
-   */
   public static final class List extends CollectionValue {
     public final java.util.List<Value> list;
     
@@ -81,11 +78,6 @@ public abstract class CollectionValue {
     }
   }
   
-  /**
-   * @type map:
-   *         keys: string
-   *         values: hydra/ext/tinkerpop/v3.Value
-   */
   public static final class Map extends CollectionValue {
     public final java.util.Map<String, Value> map;
     
@@ -116,9 +108,6 @@ public abstract class CollectionValue {
     }
   }
   
-  /**
-   * @type optional: hydra/ext/tinkerpop/v3.Value
-   */
   public static final class Optional extends CollectionValue {
     public final java.util.Optional<Value> optional;
     
@@ -149,9 +138,6 @@ public abstract class CollectionValue {
     }
   }
   
-  /**
-   * @type set: hydra/ext/tinkerpop/v3.Value
-   */
   public static final class Set extends CollectionValue {
     public final java.util.Set<Value> set;
     

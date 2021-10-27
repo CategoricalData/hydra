@@ -41,10 +41,6 @@ public abstract class FloatValue {
     }
   }
   
-  /**
-   * @type float:
-   *         precision: arbitrary
-   */
   public static final class Bigfloat extends FloatValue {
     public final Double bigfloat;
     
@@ -75,9 +71,6 @@ public abstract class FloatValue {
     }
   }
   
-  /**
-   * @type float
-   */
   public static final class Float32 extends FloatValue {
     public final Float float32;
     
@@ -108,11 +101,6 @@ public abstract class FloatValue {
     }
   }
   
-  /**
-   * @type float:
-   *         precision:
-   *           bits: 64
-   */
   public static final class Float64 extends FloatValue {
     public final Double float64;
     

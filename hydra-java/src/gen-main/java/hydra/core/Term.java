@@ -99,8 +99,6 @@ public abstract class Term {
   
   /**
    * A function application
-   * 
-   * @type hydra/core.Application
    */
   public static final class Application extends Term {
     public final Application application;
@@ -134,8 +132,6 @@ public abstract class Term {
   
   /**
    * An atomic value
-   * 
-   * @type hydra/core.AtomicValue
    */
   public static final class Atomic extends Term {
     public final AtomicValue atomic;
@@ -169,8 +165,6 @@ public abstract class Term {
   
   /**
    * An element reference
-   * 
-   * @type hydra/core.Name
    */
   public static final class Element extends Term {
     public final Name element;
@@ -204,8 +198,6 @@ public abstract class Term {
   
   /**
    * A function term
-   * 
-   * @type hydra/core.Function
    */
   public static final class Function extends Term {
     public final Function function;
@@ -239,8 +231,6 @@ public abstract class Term {
   
   /**
    * A list
-   * 
-   * @type list: hydra/core.Term
    */
   public static final class List extends Term {
     public final java.util.List<Term> list;
@@ -274,10 +264,6 @@ public abstract class Term {
   
   /**
    * A map of key terms to value terms
-   * 
-   * @type map:
-   *         keys: hydra/core.Term
-   *         values: hydra/core.Term
    */
   public static final class Map extends Term {
     public final java.util.Map<Term, Term> map;
@@ -311,8 +297,6 @@ public abstract class Term {
   
   /**
    * An optional value
-   * 
-   * @type optional: hydra/core.Term
    */
   public static final class Optional extends Term {
     public final java.util.Optional<Term> optional;
@@ -346,8 +330,6 @@ public abstract class Term {
   
   /**
    * A record, or labeled tuple
-   * 
-   * @type list: hydra/core.Field
    */
   public static final class Record extends Term {
     public final java.util.List<Field> recordEsc;
@@ -381,8 +363,6 @@ public abstract class Term {
   
   /**
    * A set of terms
-   * 
-   * @type set: hydra/core.Term
    */
   public static final class Set extends Term {
     public final java.util.Set<Term> set;
@@ -416,8 +396,6 @@ public abstract class Term {
   
   /**
    * A union term, i.e. a generalization of inl() or inr()
-   * 
-   * @type hydra/core.Field
    */
   public static final class Union extends Term {
     public final Field union;
@@ -451,8 +429,6 @@ public abstract class Term {
   
   /**
    * A variable reference
-   * 
-   * @type hydra/core.Variable
    */
   public static final class Variable extends Term {
     public final Variable variable;

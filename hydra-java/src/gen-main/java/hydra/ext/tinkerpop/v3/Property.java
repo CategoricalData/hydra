@@ -1,14 +1,8 @@
 package hydra.ext.tinkerpop.v3;
 
 public class Property {
-  /**
-   * @type hydra/ext/tinkerpop/v3.PropertyKey
-   */
   public final PropertyKey key;
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.Value
-   */
   public final Value value;
   
   /**

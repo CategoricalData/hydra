@@ -151,9 +151,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type hydra/core.FieldName
-   */
   public static final class Case extends TermStep {
     public final FieldName caseEsc;
     
@@ -236,9 +233,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class List extends TermStep {
     public final Integer list;
     
@@ -269,9 +263,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class MapKey extends TermStep {
     public final Integer mapKey;
     
@@ -302,9 +293,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class MapValue extends TermStep {
     public final Integer mapValue;
     
@@ -335,9 +323,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type hydra/core.FieldName
-   */
   public static final class Record extends TermStep {
     public final FieldName recordEsc;
     
@@ -368,9 +353,6 @@ public abstract class TermStep {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class Set extends TermStep {
     public final Integer set;
     

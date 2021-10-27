@@ -1,8 +1,5 @@
 package hydra.ext.tinkerpop.v3;
 
-/**
- * @type hydra/ext/tinkerpop/v3.Value
- */
 public class EdgeId {
   public final Value value;
   

@@ -2,8 +2,6 @@ package hydra.graph;
 
 /**
  * A unique identifier for a graph within a graph set
- * 
- * @type string
  */
 public class GraphName {
   public final String value;

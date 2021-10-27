@@ -1,8 +1,5 @@
 package hydra.core;
 
-/**
- * @type string
- */
 public class FieldName {
   public final String value;
   

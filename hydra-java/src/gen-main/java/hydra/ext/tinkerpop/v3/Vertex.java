@@ -1,14 +1,8 @@
 package hydra.ext.tinkerpop.v3;
 
 public class Vertex {
-  /**
-   * @type hydra/ext/tinkerpop/v3.Value
-   */
   public final Value id;
   
-  /**
-   * @type list: hydra/ext/tinkerpop/v3.Property
-   */
   public final java.util.List<Property> properties;
   
   /**

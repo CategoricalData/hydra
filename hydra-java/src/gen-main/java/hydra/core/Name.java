@@ -1,8 +1,5 @@
 package hydra.core;
 
-/**
- * @type string
- */
 public class Name {
   public final String value;
   

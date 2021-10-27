@@ -1,14 +1,8 @@
 package hydra.core;
 
 public class FieldType {
-  /**
-   * @type hydra/core.FieldName
-   */
   public final FieldName name;
   
-  /**
-   * @type hydra/core.Type
-   */
   public final Type type;
   
   /**

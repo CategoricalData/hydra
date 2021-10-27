@@ -4,14 +4,8 @@ package hydra.core;
  * A term which applies a function to an argument
  */
 public class Application {
-  /**
-   * @type hydra/core.Term
-   */
   public final Term function;
   
-  /**
-   * @type hydra/core.Term
-   */
   public final Term argument;
   
   /**

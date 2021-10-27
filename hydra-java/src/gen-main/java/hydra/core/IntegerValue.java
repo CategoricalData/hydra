@@ -83,10 +83,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision: arbitrary
-   */
   public static final class Bigint extends IntegerValue {
     public final Long bigint;
     
@@ -117,11 +113,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 8
-   */
   public static final class Int8 extends IntegerValue {
     public final Byte int8;
     
@@ -152,11 +143,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 16
-   */
   public static final class Int16 extends IntegerValue {
     public final Short int16;
     
@@ -187,9 +173,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class Int32 extends IntegerValue {
     public final Integer int32;
     
@@ -220,11 +203,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 64
-   */
   public static final class Int64 extends IntegerValue {
     public final Long int64;
     
@@ -255,12 +233,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 8
-   *         signed: false
-   */
   public static final class Uint8 extends IntegerValue {
     public final Byte uint8;
     
@@ -291,12 +263,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 16
-   *         signed: false
-   */
   public static final class Uint16 extends IntegerValue {
     public final Short uint16;
     
@@ -327,10 +293,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         signed: false
-   */
   public static final class Uint32 extends IntegerValue {
     public final Integer uint32;
     
@@ -361,12 +323,6 @@ public abstract class IntegerValue {
     }
   }
   
-  /**
-   * @type integer:
-   *         precision:
-   *           bits: 64
-   *         signed: false
-   */
   public static final class Uint64 extends IntegerValue {
     public final Long uint64;
     

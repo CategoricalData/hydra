@@ -1,15 +1,8 @@
 package hydra.errors;
 
 public class Qualified<A> {
-  /**
-   * @type optional:
-   *         variable: a
-   */
   public final java.util.Optional<A> value;
   
-  /**
-   * @type list: string
-   */
   public final java.util.List<String> warnings;
   
   /**

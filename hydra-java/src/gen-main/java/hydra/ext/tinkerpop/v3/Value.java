@@ -43,9 +43,6 @@ public abstract class Value {
     }
   }
   
-  /**
-   * @type hydra/core.AtomicValue
-   */
   public static final class Atomic extends Value {
     public final AtomicValue atomic;
     
@@ -76,9 +73,6 @@ public abstract class Value {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.CollectionValue
-   */
   public static final class Collection extends Value {
     public final CollectionValue collection;
     
@@ -109,9 +103,6 @@ public abstract class Value {
     }
   }
   
-  /**
-   * @type list: hydra/ext/tinkerpop/v3.Property
-   */
   public static final class Record extends Value {
     public final java.util.List<Property> recordEsc;
     

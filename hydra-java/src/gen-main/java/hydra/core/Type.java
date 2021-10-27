@@ -90,9 +90,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.AtomicType
-   */
   public static final class Atomic extends Type {
     public final AtomicType atomic;
     
@@ -123,9 +120,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.Type
-   */
   public static final class Element extends Type {
     public final Type element;
     
@@ -156,9 +150,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.FunctionType
-   */
   public static final class Function extends Type {
     public final FunctionType function;
     
@@ -189,9 +180,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.Type
-   */
   public static final class List extends Type {
     public final Type list;
     
@@ -222,9 +210,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.MapType
-   */
   public static final class Map extends Type {
     public final MapType map;
     
@@ -255,9 +240,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.Name
-   */
   public static final class Nominal extends Type {
     public final Name nominal;
     
@@ -288,9 +270,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.Type
-   */
   public static final class Optional extends Type {
     public final Type optional;
     
@@ -321,9 +300,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type list: hydra/core.FieldType
-   */
   public static final class Record extends Type {
     public final java.util.List<FieldType> recordEsc;
     
@@ -354,9 +330,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.Type
-   */
   public static final class Set extends Type {
     public final Type set;
     
@@ -387,9 +360,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type list: hydra/core.FieldType
-   */
   public static final class Union extends Type {
     public final java.util.List<FieldType> union;
     
