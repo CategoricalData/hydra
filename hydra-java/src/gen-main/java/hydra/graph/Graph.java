@@ -7,21 +7,21 @@ import hydra.core.Term;
  * schema graph
  */
 public class Graph {
-  public final GraphName name;
+  public final hydra.graph.GraphName name;
   
-  public final java.util.List<Element> elements;
+  public final java.util.List<hydra.graph.Element> elements;
   
-  public final java.util.function.Function<Term, Boolean> dataTerms;
+  public final java.util.function.Function<hydra.core.Term, Boolean> dataTerms;
   
   /**
    * A reference to this graph's schema graph within the provided graph set
    */
-  public final GraphName schemaGraph;
+  public final hydra.graph.GraphName schemaGraph;
   
   /**
    * Constructs an immutable Graph object
    */
-  public Graph(GraphName name, java.util.List<Element> elements, java.util.function.Function<Term, Boolean> dataTerms, GraphName schemaGraph) {
+  public Graph(hydra.graph.GraphName name, java.util.List<hydra.graph.Element> elements, java.util.function.Function<hydra.core.Term, Boolean> dataTerms, hydra.graph.GraphName schemaGraph) {
     this.name = name;
     this.elements = elements;
     this.dataTerms = dataTerms;
@@ -51,28 +51,28 @@ public class Graph {
   /**
    * Construct a new immutable Graph object in which name is overridden
    */
-  public Graph withName(GraphName name) {
+  public Graph withName(hydra.graph.GraphName name) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
   
   /**
    * Construct a new immutable Graph object in which elements is overridden
    */
-  public Graph withElements(java.util.List<Element> elements) {
+  public Graph withElements(java.util.List<hydra.graph.Element> elements) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
   
   /**
    * Construct a new immutable Graph object in which dataTerms is overridden
    */
-  public Graph withDataTerms(java.util.function.Function<Term, Boolean> dataTerms) {
+  public Graph withDataTerms(java.util.function.Function<hydra.core.Term, Boolean> dataTerms) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
   
   /**
    * Construct a new immutable Graph object in which schemaGraph is overridden
    */
-  public Graph withSchemaGraph(GraphName schemaGraph) {
+  public Graph withSchemaGraph(hydra.graph.GraphName schemaGraph) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
 }

@@ -44,12 +44,12 @@ public abstract class Type {
   }
   
   public static final class Atomic extends Type {
-    public final AtomicType atomic;
+    public final hydra.core.AtomicType atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(AtomicType atomic) {
+    public Atomic(hydra.core.AtomicType atomic) {
       this.atomic = atomic;
     }
     
@@ -74,12 +74,12 @@ public abstract class Type {
   }
   
   public static final class Collection extends Type {
-    public final CollectionType collection;
+    public final hydra.ext.tinkerpop.v3.CollectionType collection;
     
     /**
      * Constructs an immutable Collection object
      */
-    public Collection(CollectionType collection) {
+    public Collection(hydra.ext.tinkerpop.v3.CollectionType collection) {
       this.collection = collection;
     }
     
@@ -104,12 +104,12 @@ public abstract class Type {
   }
   
   public static final class Record extends Type {
-    public final java.util.List<PropertyType> recordEsc;
+    public final java.util.List<hydra.ext.tinkerpop.v3.PropertyType> recordEsc;
     
     /**
      * Constructs an immutable Record object
      */
-    public Record(java.util.List<PropertyType> recordEsc) {
+    public Record(java.util.List<hydra.ext.tinkerpop.v3.PropertyType> recordEsc) {
       this.recordEsc = recordEsc;
     }
     

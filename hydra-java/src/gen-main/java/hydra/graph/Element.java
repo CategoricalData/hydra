@@ -7,16 +7,16 @@ import hydra.core.Term;
  * A graph element, having a name, data term (value), and schema term (type)
  */
 public class Element {
-  public final Name name;
+  public final hydra.core.Name name;
   
-  public final Term schema;
+  public final hydra.core.Term schema;
   
-  public final Term data;
+  public final hydra.core.Term data;
   
   /**
    * Constructs an immutable Element object
    */
-  public Element(Name name, Term schema, Term data) {
+  public Element(hydra.core.Name name, hydra.core.Term schema, hydra.core.Term data) {
     this.name = name;
     this.schema = schema;
     this.data = data;
@@ -43,21 +43,21 @@ public class Element {
   /**
    * Construct a new immutable Element object in which name is overridden
    */
-  public Element withName(Name name) {
+  public Element withName(hydra.core.Name name) {
     return new Element(name, schema, data);
   }
   
   /**
    * Construct a new immutable Element object in which schema is overridden
    */
-  public Element withSchema(Term schema) {
+  public Element withSchema(hydra.core.Term schema) {
     return new Element(name, schema, data);
   }
   
   /**
    * Construct a new immutable Element object in which data is overridden
    */
-  public Element withData(Term data) {
+  public Element withData(hydra.core.Term data) {
     return new Element(name, schema, data);
   }
 }

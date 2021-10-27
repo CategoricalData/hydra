@@ -49,12 +49,12 @@ public abstract class CollectionType {
   }
   
   public static final class List extends CollectionType {
-    public final Type list;
+    public final hydra.ext.tinkerpop.v3.Type list;
     
     /**
      * Constructs an immutable List object
      */
-    public List(Type list) {
+    public List(hydra.ext.tinkerpop.v3.Type list) {
       this.list = list;
     }
     
@@ -79,12 +79,12 @@ public abstract class CollectionType {
   }
   
   public static final class Map extends CollectionType {
-    public final Type map;
+    public final hydra.ext.tinkerpop.v3.Type map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(Type map) {
+    public Map(hydra.ext.tinkerpop.v3.Type map) {
       this.map = map;
     }
     
@@ -109,12 +109,12 @@ public abstract class CollectionType {
   }
   
   public static final class Optional extends CollectionType {
-    public final Type optional;
+    public final hydra.ext.tinkerpop.v3.Type optional;
     
     /**
      * Constructs an immutable Optional object
      */
-    public Optional(Type optional) {
+    public Optional(hydra.ext.tinkerpop.v3.Type optional) {
       this.optional = optional;
     }
     
@@ -139,12 +139,12 @@ public abstract class CollectionType {
   }
   
   public static final class Set extends CollectionType {
-    public final Type set;
+    public final hydra.ext.tinkerpop.v3.Type set;
     
     /**
      * Constructs an immutable Set object
      */
-    public Set(Type set) {
+    public Set(hydra.ext.tinkerpop.v3.Type set) {
       this.set = set;
     }
     

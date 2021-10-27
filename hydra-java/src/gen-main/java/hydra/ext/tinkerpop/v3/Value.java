@@ -44,12 +44,12 @@ public abstract class Value {
   }
   
   public static final class Atomic extends Value {
-    public final AtomicValue atomic;
+    public final hydra.core.AtomicValue atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(AtomicValue atomic) {
+    public Atomic(hydra.core.AtomicValue atomic) {
       this.atomic = atomic;
     }
     
@@ -74,12 +74,12 @@ public abstract class Value {
   }
   
   public static final class Collection extends Value {
-    public final CollectionValue collection;
+    public final hydra.ext.tinkerpop.v3.CollectionValue collection;
     
     /**
      * Constructs an immutable Collection object
      */
-    public Collection(CollectionValue collection) {
+    public Collection(hydra.ext.tinkerpop.v3.CollectionValue collection) {
       this.collection = collection;
     }
     
@@ -104,12 +104,12 @@ public abstract class Value {
   }
   
   public static final class Record extends Value {
-    public final java.util.List<Property> recordEsc;
+    public final java.util.List<hydra.ext.tinkerpop.v3.Property> recordEsc;
     
     /**
      * Constructs an immutable Record object
      */
-    public Record(java.util.List<Property> recordEsc) {
+    public Record(java.util.List<hydra.ext.tinkerpop.v3.Property> recordEsc) {
       this.recordEsc = recordEsc;
     }
     

@@ -1,14 +1,14 @@
 package hydra.ext.tinkerpop.v3;
 
 public class Vertex {
-  public final Value id;
+  public final hydra.ext.tinkerpop.v3.Value id;
   
-  public final java.util.List<Property> properties;
+  public final java.util.List<hydra.ext.tinkerpop.v3.Property> properties;
   
   /**
    * Constructs an immutable Vertex object
    */
-  public Vertex(Value id, java.util.List<Property> properties) {
+  public Vertex(hydra.ext.tinkerpop.v3.Value id, java.util.List<hydra.ext.tinkerpop.v3.Property> properties) {
     this.id = id;
     this.properties = properties;
   }
@@ -32,14 +32,14 @@ public class Vertex {
   /**
    * Construct a new immutable Vertex object in which id is overridden
    */
-  public Vertex withId(Value id) {
+  public Vertex withId(hydra.ext.tinkerpop.v3.Value id) {
     return new Vertex(id, properties);
   }
   
   /**
    * Construct a new immutable Vertex object in which properties is overridden
    */
-  public Vertex withProperties(java.util.List<Property> properties) {
+  public Vertex withProperties(java.util.List<hydra.ext.tinkerpop.v3.Property> properties) {
     return new Vertex(id, properties);
   }
 }

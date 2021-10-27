@@ -4,18 +4,18 @@ package hydra.graph;
  * A collection of graphs with a distinguished root graph
  */
 public class GraphSet {
-  public final java.util.Map<GraphName, Graph> graphs;
+  public final java.util.Map<hydra.graph.GraphName, hydra.graph.Graph> graphs;
   
   /**
    * The focal graph of this set; 'the' graph. This root graph's schema graph, the second-degree schema graph, etc. are
    * also provided as non-root graphs.
    */
-  public final GraphName root;
+  public final hydra.graph.GraphName root;
   
   /**
    * Constructs an immutable GraphSet object
    */
-  public GraphSet(java.util.Map<GraphName, Graph> graphs, GraphName root) {
+  public GraphSet(java.util.Map<hydra.graph.GraphName, hydra.graph.Graph> graphs, hydra.graph.GraphName root) {
     this.graphs = graphs;
     this.root = root;
   }
@@ -39,14 +39,14 @@ public class GraphSet {
   /**
    * Construct a new immutable GraphSet object in which graphs is overridden
    */
-  public GraphSet withGraphs(java.util.Map<GraphName, Graph> graphs) {
+  public GraphSet withGraphs(java.util.Map<hydra.graph.GraphName, hydra.graph.Graph> graphs) {
     return new GraphSet(graphs, root);
   }
   
   /**
    * Construct a new immutable GraphSet object in which root is overridden
    */
-  public GraphSet withRoot(GraphName root) {
+  public GraphSet withRoot(hydra.graph.GraphName root) {
     return new GraphSet(graphs, root);
   }
 }

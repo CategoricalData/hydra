@@ -1,14 +1,14 @@
 package hydra.core;
 
 public class MapType {
-  public final Type keys;
+  public final hydra.core.Type keys;
   
-  public final Type values;
+  public final hydra.core.Type values;
   
   /**
    * Constructs an immutable MapType object
    */
-  public MapType(Type keys, Type values) {
+  public MapType(hydra.core.Type keys, hydra.core.Type values) {
     this.keys = keys;
     this.values = values;
   }
@@ -32,14 +32,14 @@ public class MapType {
   /**
    * Construct a new immutable MapType object in which keys is overridden
    */
-  public MapType withKeys(Type keys) {
+  public MapType withKeys(hydra.core.Type keys) {
     return new MapType(keys, values);
   }
   
   /**
    * Construct a new immutable MapType object in which values is overridden
    */
-  public MapType withValues(Type values) {
+  public MapType withValues(hydra.core.Type values) {
     return new MapType(keys, values);
   }
 }
