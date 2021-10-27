@@ -3,24 +3,24 @@ package hydra.ext.tinkerpop.v3;
 import hydra.core.AtomicValue;
 
 /**
- * An atomic value representing an edge id
+ * An atomic value representing a vertex id
  */
-public class EdgeId {
+public class VertexId {
   public final hydra.core.AtomicValue atomicValue;
   
   /**
-   * Constructs an immutable EdgeId object
+   * Constructs an immutable VertexId object
    */
-  public EdgeId(hydra.core.AtomicValue atomicValue) {
+  public VertexId(hydra.core.AtomicValue atomicValue) {
     this.atomicValue = atomicValue;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof EdgeId)) {
+    if (!(other instanceof VertexId)) {
         return false;
     }
-    EdgeId o = (EdgeId) other;
+    VertexId o = (VertexId) other;
     return atomicValue.equals(o.atomicValue);
   }
   

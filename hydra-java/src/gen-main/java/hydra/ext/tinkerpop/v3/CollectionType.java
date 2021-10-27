@@ -1,5 +1,8 @@
 package hydra.ext.tinkerpop.v3;
 
+/**
+ * The type of a collection, such as a list of strings or an optional integer value
+ */
 public abstract class CollectionType {
   private CollectionType() {}
   

@@ -2,6 +2,9 @@ package hydra.ext.tinkerpop.v3;
 
 import hydra.core.AtomicValue;
 
+/**
+ * A concrete value such as a number or string, a collection of other values, or an element reference
+ */
 public abstract class Value {
   private Value() {}
   
@@ -15,7 +18,7 @@ public abstract class Value {
     
     R visit(Collection instance) ;
     
-    R visit(Record instance) ;
+    R visit(Element instance) ;
   }
   
   /**
@@ -38,7 +41,7 @@ public abstract class Value {
     }
     
     @Override
-    default R visit(Record instance) {
+    default R visit(Element instance) {
       return otherwise(instance);
     }
   }
@@ -103,14 +106,14 @@ public abstract class Value {
     }
   }
   
-  public static final class Record extends Value {
-    public final java.util.List<hydra.ext.tinkerpop.v3.Property> recordEsc;
+  public static final class Element extends Value {
+    public final hydra.ext.tinkerpop.v3.IdType element;
     
     /**
-     * Constructs an immutable Record object
+     * Constructs an immutable Element object
      */
-    public Record(java.util.List<hydra.ext.tinkerpop.v3.Property> recordEsc) {
-      this.recordEsc = recordEsc;
+    public Element(hydra.ext.tinkerpop.v3.IdType element) {
+      this.element = element;
     }
     
     @Override
@@ -120,16 +123,16 @@ public abstract class Value {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Record)) {
+      if (!(other instanceof Element)) {
           return false;
       }
-      Record o = (Record) other;
-      return recordEsc.equals(o.recordEsc);
+      Element o = (Element) other;
+      return element.equals(o.element);
     }
     
     @Override
     public int hashCode() {
-      return 2 * recordEsc.hashCode();
+      return 2 * element.hashCode();
     }
   }
 }

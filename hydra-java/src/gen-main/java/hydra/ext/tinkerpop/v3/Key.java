@@ -1,21 +1,24 @@
 package hydra.ext.tinkerpop.v3;
 
-public class PropertyKey {
+/**
+ * A property key or map key
+ */
+public class Key {
   public final String value;
   
   /**
-   * Constructs an immutable PropertyKey object
+   * Constructs an immutable Key object
    */
-  public PropertyKey(String value) {
+  public Key(String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof PropertyKey)) {
+    if (!(other instanceof Key)) {
         return false;
     }
-    PropertyKey o = (PropertyKey) other;
+    Key o = (Key) other;
     return value.equals(o.value);
   }
   
