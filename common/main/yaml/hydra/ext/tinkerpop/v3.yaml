@@ -1,0 +1,142 @@
+includes:
+  - ../../core
+
+definitions:
+
+  - name: CollectionType
+    type:
+      union:
+        - name: list
+          type: Type
+
+        - name: map
+          type: Type
+
+        - name: optional
+          type: Type
+
+        - name: set
+          type: Type
+
+  - name: CollectionValue
+    type:
+      union:
+        - name: list
+          type:
+             list: Value
+
+        - name: map
+          type:
+            map:
+              keys: string
+              values: Value
+
+        - name: optional
+          type:
+            optional: Value
+
+        - name: set
+          type:
+            set: Value
+
+  - name: Edge
+    type:
+      record:
+        - name: id
+          type: Value
+
+        - name: out
+          type: Vertex
+
+        - name: in
+          type: Vertex
+
+        - name: properties
+          type:
+            list: Property
+
+  - name: EdgeId
+    type: Value
+
+  - name: EdgeType
+    type:
+      record:
+        - name: id
+          type: Type
+
+        - name: out
+          type: VertexType
+
+        - name: in
+          type: VertexType
+
+        - name: properties
+          type:
+            list: PropertyType
+
+  - name: Property
+    type:
+      record:
+        - name: key
+          type: PropertyKey
+
+        - name: value
+          type: Value
+
+  - name: PropertyKey
+    type: string
+
+  - name: PropertyType
+    type:
+      record:
+        - name: key
+          type: PropertyKey
+
+        - name: value
+          type: Type
+
+  - name: Type
+    type:
+      union:
+        - name: atomic
+          type: core.AtomicType
+
+        - name: collection
+          type: CollectionType
+
+        - name: record
+          type:
+            list: PropertyType
+
+  - name: Value
+    type:
+      union:
+        - name: atomic
+          type: core.AtomicValue
+
+        - name: collection
+          type: CollectionValue
+
+        - name: record
+          type:
+            list: Property
+
+  - name: Vertex
+    type:
+      record:
+        - name: id
+          type: Value
+
+        - name: properties
+          type:
+            list: Property
+
+  - name: VertexType
+    type:
+      record:
+        - name: id
+          type: Value
+
+        - name: properties
+          type:
+            list: PropertyType
