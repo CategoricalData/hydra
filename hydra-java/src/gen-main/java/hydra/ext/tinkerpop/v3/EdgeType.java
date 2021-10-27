@@ -1,24 +1,12 @@
 package hydra.ext.tinkerpop.v3;
 
 public class EdgeType {
-  /**
-   * @type hydra/ext/tinkerpop/v3.Type
-   */
   public final Type id;
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.VertexType
-   */
   public final VertexType out;
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.VertexType
-   */
   public final VertexType in;
   
-  /**
-   * @type list: hydra/ext/tinkerpop/v3.PropertyType
-   */
   public final java.util.List<PropertyType> properties;
   
   /**

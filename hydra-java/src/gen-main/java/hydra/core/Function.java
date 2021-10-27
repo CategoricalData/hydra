@@ -64,8 +64,6 @@ public abstract class Function {
   
   /**
    * A case statement applied to a variant record, consisting of a function term for each alternative in the union
-   * 
-   * @type list: hydra/core.Field
    */
   public static final class Cases extends Function {
     public final java.util.List<Field> cases;
@@ -99,8 +97,6 @@ public abstract class Function {
   
   /**
    * Compares a term with a given term of the same type, producing a Comparison
-   * 
-   * @type hydra/core.Term
    */
   public static final class CompareTo extends Function {
     public final Term compareTo;
@@ -163,8 +159,6 @@ public abstract class Function {
   
   /**
    * A function abstraction (lambda)
-   * 
-   * @type hydra/core.Lambda
    */
   public static final class Lambda extends Function {
     public final Lambda lambda;
@@ -198,8 +192,6 @@ public abstract class Function {
   
   /**
    * A reference to a built-in (primitive) function
-   * 
-   * @type hydra/core.Name
    */
   public static final class Primitive extends Function {
     public final Name primitive;
@@ -233,8 +225,6 @@ public abstract class Function {
   
   /**
    * A projection of a field from a record
-   * 
-   * @type hydra/core.FieldName
    */
   public static final class Projection extends Function {
     public final FieldName projection;

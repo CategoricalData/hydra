@@ -58,9 +58,6 @@ public abstract class AtomicValue {
     }
   }
   
-  /**
-   * @type binary
-   */
   public static final class Binary extends AtomicValue {
     public final String binary;
     
@@ -91,9 +88,6 @@ public abstract class AtomicValue {
     }
   }
   
-  /**
-   * @type hydra/core.BooleanValue
-   */
   public static final class BooleanEsc extends AtomicValue {
     public final BooleanValue booleanEsc;
     
@@ -124,9 +118,6 @@ public abstract class AtomicValue {
     }
   }
   
-  /**
-   * @type hydra/core.FloatValue
-   */
   public static final class FloatEsc extends AtomicValue {
     public final FloatValue floatEsc;
     
@@ -157,9 +148,6 @@ public abstract class AtomicValue {
     }
   }
   
-  /**
-   * @type hydra/core.IntegerValue
-   */
   public static final class IntegerEsc extends AtomicValue {
     public final IntegerValue integer;
     
@@ -190,9 +178,6 @@ public abstract class AtomicValue {
     }
   }
   
-  /**
-   * @type string
-   */
   public static final class StringEsc extends AtomicValue {
     public final String string;
     

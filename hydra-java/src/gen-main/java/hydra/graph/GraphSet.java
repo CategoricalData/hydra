@@ -4,18 +4,11 @@ package hydra.graph;
  * A collection of graphs with a distinguished root graph
  */
 public class GraphSet {
-  /**
-   * @type map:
-   *         keys: hydra/graph.GraphName
-   *         values: hydra/graph.Graph
-   */
   public final java.util.Map<GraphName, Graph> graphs;
   
   /**
    * The focal graph of this set; 'the' graph. This root graph's schema graph, the second-degree schema graph, etc. are
    * also provided as non-root graphs.
-   * 
-   * @type hydra/graph.GraphName
    */
   public final GraphName root;
   

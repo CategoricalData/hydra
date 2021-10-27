@@ -1,8 +1,5 @@
 package hydra.ext.tinkerpop.v3;
 
-/**
- * @type string
- */
 public class PropertyKey {
   public final String value;
   

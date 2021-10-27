@@ -7,28 +7,14 @@ import hydra.core.Term;
  * schema graph
  */
 public class Graph {
-  /**
-   * @type hydra/graph.GraphName
-   */
   public final GraphName name;
   
-  /**
-   * @type list: hydra/graph.Element
-   */
   public final java.util.List<Element> elements;
   
-  /**
-   * @type function:
-   *         from:
-   *         - hydra/core.Term
-   *         to: boolean
-   */
   public final java.util.function.Function<Term, Boolean> dataTerms;
   
   /**
    * A reference to this graph's schema graph within the provided graph set
-   * 
-   * @type hydra/graph.GraphName
    */
   public final GraphName schemaGraph;
   

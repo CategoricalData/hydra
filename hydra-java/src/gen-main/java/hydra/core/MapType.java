@@ -1,14 +1,8 @@
 package hydra.core;
 
 public class MapType {
-  /**
-   * @type hydra/core.Type
-   */
   public final Type keys;
   
-  /**
-   * @type hydra/core.Type
-   */
   public final Type values;
   
   /**

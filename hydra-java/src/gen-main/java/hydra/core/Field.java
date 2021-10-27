@@ -4,14 +4,8 @@ package hydra.core;
  * A labeled term
  */
 public class Field {
-  /**
-   * @type hydra/core.FieldName
-   */
   public final FieldName name;
   
-  /**
-   * @type hydra/core.Term
-   */
   public final Term term;
   
   /**

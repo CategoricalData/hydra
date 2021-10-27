@@ -7,19 +7,10 @@ import hydra.core.Term;
  * A graph element, having a name, data term (value), and schema term (type)
  */
 public class Element {
-  /**
-   * @type hydra/core.Name
-   */
   public final Name name;
   
-  /**
-   * @type hydra/core.Term
-   */
   public final Term schema;
   
-  /**
-   * @type hydra/core.Term
-   */
   public final Term data;
   
   /**

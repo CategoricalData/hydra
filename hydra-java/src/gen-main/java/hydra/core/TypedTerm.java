@@ -1,14 +1,8 @@
 package hydra.core;
 
 public class TypedTerm {
-  /**
-   * @type hydra/core.Type
-   */
   public final Type type;
   
-  /**
-   * @type hydra/core.Term
-   */
   public final Term term;
   
   /**

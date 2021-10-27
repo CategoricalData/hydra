@@ -43,9 +43,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/core.AtomicType
-   */
   public static final class Atomic extends Type {
     public final AtomicType atomic;
     
@@ -76,9 +73,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.CollectionType
-   */
   public static final class Collection extends Type {
     public final CollectionType collection;
     
@@ -109,9 +103,6 @@ public abstract class Type {
     }
   }
   
-  /**
-   * @type list: hydra/ext/tinkerpop/v3.PropertyType
-   */
   public static final class Record extends Type {
     public final java.util.List<PropertyType> recordEsc;
     

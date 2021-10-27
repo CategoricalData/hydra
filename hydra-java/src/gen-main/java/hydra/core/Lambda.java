@@ -6,15 +6,11 @@ package hydra.core;
 public class Lambda {
   /**
    * The parameter of the lambda
-   * 
-   * @type hydra/core.Variable
    */
   public final Variable parameter;
   
   /**
    * The body of the lambda
-   * 
-   * @type hydra/core.Term
    */
   public final Term body;
   

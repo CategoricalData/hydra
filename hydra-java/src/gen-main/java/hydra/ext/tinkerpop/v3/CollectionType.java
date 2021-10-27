@@ -48,9 +48,6 @@ public abstract class CollectionType {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.Type
-   */
   public static final class List extends CollectionType {
     public final Type list;
     
@@ -81,9 +78,6 @@ public abstract class CollectionType {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.Type
-   */
   public static final class Map extends CollectionType {
     public final Type map;
     
@@ -114,9 +108,6 @@ public abstract class CollectionType {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.Type
-   */
   public static final class Optional extends CollectionType {
     public final Type optional;
     
@@ -147,9 +138,6 @@ public abstract class CollectionType {
     }
   }
   
-  /**
-   * @type hydra/ext/tinkerpop/v3.Type
-   */
   public static final class Set extends CollectionType {
     public final Type set;
     

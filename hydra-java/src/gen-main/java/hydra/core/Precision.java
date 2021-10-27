@@ -60,9 +60,6 @@ public abstract class Precision {
     }
   }
   
-  /**
-   * @type integer
-   */
   public static final class Bits extends Precision {
     public final Integer bits;
     

@@ -2,8 +2,6 @@ package hydra.core;
 
 /**
  * Any of a fixed set of atomic types, also called base types, primitive types, or type constants
- * 
- * @comments The so-called term constants, or valid values, of each atomic type are unspecified
  */
 public abstract class AtomicType {
   private AtomicType() {}
@@ -112,9 +110,6 @@ public abstract class AtomicType {
     }
   }
   
-  /**
-   * @type hydra/core.FloatType
-   */
   public static final class FloatEsc extends AtomicType {
     public final FloatType floatEsc;
     
@@ -145,9 +140,6 @@ public abstract class AtomicType {
     }
   }
   
-  /**
-   * @type hydra/core.IntegerType
-   */
   public static final class IntegerEsc extends AtomicType {
     public final IntegerType integer;
     
