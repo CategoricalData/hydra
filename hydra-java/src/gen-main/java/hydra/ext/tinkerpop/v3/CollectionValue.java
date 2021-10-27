@@ -1,5 +1,8 @@
 package hydra.ext.tinkerpop.v3;
 
+/**
+ * A collection of values, such as a list of strings or an optional integer value
+ */
 public abstract class CollectionValue {
   private CollectionValue() {}
   
@@ -79,12 +82,12 @@ public abstract class CollectionValue {
   }
   
   public static final class Map extends CollectionValue {
-    public final java.util.Map<String, hydra.ext.tinkerpop.v3.Value> map;
+    public final java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Value> map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(java.util.Map<String, hydra.ext.tinkerpop.v3.Value> map) {
+    public Map(java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Value> map) {
       this.map = map;
     }
     

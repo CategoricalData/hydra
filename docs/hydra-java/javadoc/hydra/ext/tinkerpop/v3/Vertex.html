@@ -133,6 +133,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">Vertex</span>
 extends java.lang.Object</pre>
+<div class="block">A vertex, comprised of an id and zero or more properties</div>
 </li>
 </ul>
 </div>
@@ -159,7 +160,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt;</code></td>
+<td class="colFirst"><code>java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#properties">properties</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -181,8 +182,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.ext.tinkerpop.v3.Value,java.util.List)">Vertex</a></span>&#8203;(<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&nbsp;id,
-      java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt;&nbsp;properties)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.ext.tinkerpop.v3.Value,java.util.Map)">Vertex</a></span>&#8203;(<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&nbsp;id,
+      java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt;&nbsp;properties)</code></th>
 <td class="colLast">
 <div class="block">Constructs an immutable Vertex object</div>
 </td>
@@ -224,7 +225,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Vertex.html" title="class in hydra.ext.tinkerpop.v3">Vertex</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withProperties(java.util.List)">withProperties</a></span>&#8203;(java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt;&nbsp;properties)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withProperties(java.util.Map)">withProperties</a></span>&#8203;(java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt;&nbsp;properties)</code></th>
 <td class="colLast">
 <div class="block">Construct a new immutable Vertex object in which properties is overridden</div>
 </td>
@@ -268,7 +269,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>properties</h4>
-<pre>public final&nbsp;java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt; properties</pre>
+<pre>public final&nbsp;java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt; properties</pre>
 </li>
 </ul>
 </li>
@@ -281,14 +282,14 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(hydra.ext.tinkerpop.v3.Value,java.util.List)">
+<a id="&lt;init&gt;(hydra.ext.tinkerpop.v3.Value,java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Vertex</h4>
 <pre>public&nbsp;Vertex&#8203;(<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&nbsp;id,
-              java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt;&nbsp;properties)</pre>
+              java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt;&nbsp;properties)</pre>
 <div class="block">Constructs an immutable Vertex object</div>
 </li>
 </ul>
@@ -338,13 +339,13 @@ extends java.lang.Object</pre>
 <div class="block">Construct a new immutable Vertex object in which id is overridden</div>
 </li>
 </ul>
-<a id="withProperties(java.util.List)">
+<a id="withProperties(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>withProperties</h4>
-<pre class="methodSignature">public&nbsp;<a href="Vertex.html" title="class in hydra.ext.tinkerpop.v3">Vertex</a>&nbsp;withProperties&#8203;(java.util.List&lt;<a href="Property.html" title="class in hydra.ext.tinkerpop.v3">Property</a>&gt;&nbsp;properties)</pre>
+<pre class="methodSignature">public&nbsp;<a href="Vertex.html" title="class in hydra.ext.tinkerpop.v3">Vertex</a>&nbsp;withProperties&#8203;(java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Value.html" title="class in hydra.ext.tinkerpop.v3">Value</a>&gt;&nbsp;properties)</pre>
 <div class="block">Construct a new immutable Vertex object in which properties is overridden</div>
 </li>
 </ul>

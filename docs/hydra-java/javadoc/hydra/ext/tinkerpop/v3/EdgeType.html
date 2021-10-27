@@ -133,6 +133,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">EdgeType</span>
 extends java.lang.Object</pre>
+<div class="block">The type of an edge, with characteristic id, out-vertex, in-vertex, and property types</div>
 </li>
 </ul>
 </div>
@@ -154,22 +155,22 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a></code></td>
+<td class="colFirst"><code><a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#id">id</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a></code></td>
+<td class="colFirst"><code><a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#in">in</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a></code></td>
+<td class="colFirst"><code><a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#out">out</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt;</code></td>
+<td class="colFirst"><code>java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#properties">properties</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -191,10 +192,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.ext.tinkerpop.v3.Type,hydra.ext.tinkerpop.v3.VertexType,hydra.ext.tinkerpop.v3.VertexType,java.util.List)">EdgeType</a></span>&#8203;(<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&nbsp;id,
-        <a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;out,
-        <a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;in,
-        java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt;&nbsp;properties)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(hydra.core.AtomicType,hydra.ext.tinkerpop.v3.VertexIdType,hydra.ext.tinkerpop.v3.VertexIdType,java.util.Map)">EdgeType</a></span>&#8203;(<a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a>&nbsp;id,
+        <a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;out,
+        <a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;in,
+        java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt;&nbsp;properties)</code></th>
 <td class="colLast">
 <div class="block">Constructs an immutable EdgeType object</div>
 </td>
@@ -229,28 +230,28 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withId(hydra.ext.tinkerpop.v3.Type)">withId</a></span>&#8203;(<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&nbsp;id)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withId(hydra.core.AtomicType)">withId</a></span>&#8203;(<a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a>&nbsp;id)</code></th>
 <td class="colLast">
 <div class="block">Construct a new immutable EdgeType object in which id is overridden</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withIn(hydra.ext.tinkerpop.v3.VertexType)">withIn</a></span>&#8203;(<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;in)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withIn(hydra.ext.tinkerpop.v3.VertexIdType)">withIn</a></span>&#8203;(<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;in)</code></th>
 <td class="colLast">
 <div class="block">Construct a new immutable EdgeType object in which in is overridden</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withOut(hydra.ext.tinkerpop.v3.VertexType)">withOut</a></span>&#8203;(<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;out)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withOut(hydra.ext.tinkerpop.v3.VertexIdType)">withOut</a></span>&#8203;(<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;out)</code></th>
 <td class="colLast">
 <div class="block">Construct a new immutable EdgeType object in which out is overridden</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withProperties(java.util.List)">withProperties</a></span>&#8203;(java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt;&nbsp;properties)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withProperties(java.util.Map)">withProperties</a></span>&#8203;(java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt;&nbsp;properties)</code></th>
 <td class="colLast">
 <div class="block">Construct a new immutable EdgeType object in which properties is overridden</div>
 </td>
@@ -285,7 +286,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>id</h4>
-<pre>public final&nbsp;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a> id</pre>
+<pre>public final&nbsp;<a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a> id</pre>
 </li>
 </ul>
 <a id="out">
@@ -294,7 +295,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>out</h4>
-<pre>public final&nbsp;<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a> out</pre>
+<pre>public final&nbsp;<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a> out</pre>
 </li>
 </ul>
 <a id="in">
@@ -303,7 +304,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>in</h4>
-<pre>public final&nbsp;<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a> in</pre>
+<pre>public final&nbsp;<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a> in</pre>
 </li>
 </ul>
 <a id="properties">
@@ -312,7 +313,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>properties</h4>
-<pre>public final&nbsp;java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt; properties</pre>
+<pre>public final&nbsp;java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt; properties</pre>
 </li>
 </ul>
 </li>
@@ -325,16 +326,16 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(hydra.ext.tinkerpop.v3.Type,hydra.ext.tinkerpop.v3.VertexType,hydra.ext.tinkerpop.v3.VertexType,java.util.List)">
+<a id="&lt;init&gt;(hydra.core.AtomicType,hydra.ext.tinkerpop.v3.VertexIdType,hydra.ext.tinkerpop.v3.VertexIdType,java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>EdgeType</h4>
-<pre>public&nbsp;EdgeType&#8203;(<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&nbsp;id,
-                <a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;out,
-                <a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;in,
-                java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt;&nbsp;properties)</pre>
+<pre>public&nbsp;EdgeType&#8203;(<a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a>&nbsp;id,
+                <a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;out,
+                <a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;in,
+                java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt;&nbsp;properties)</pre>
 <div class="block">Constructs an immutable EdgeType object</div>
 </li>
 </ul>
@@ -374,43 +375,43 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="withId(hydra.ext.tinkerpop.v3.Type)">
+<a id="withId(hydra.core.AtomicType)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>withId</h4>
-<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withId&#8203;(<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&nbsp;id)</pre>
+<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withId&#8203;(<a href="../../../core/AtomicType.html" title="class in hydra.core">AtomicType</a>&nbsp;id)</pre>
 <div class="block">Construct a new immutable EdgeType object in which id is overridden</div>
 </li>
 </ul>
-<a id="withOut(hydra.ext.tinkerpop.v3.VertexType)">
+<a id="withOut(hydra.ext.tinkerpop.v3.VertexIdType)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>withOut</h4>
-<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withOut&#8203;(<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;out)</pre>
+<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withOut&#8203;(<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;out)</pre>
 <div class="block">Construct a new immutable EdgeType object in which out is overridden</div>
 </li>
 </ul>
-<a id="withIn(hydra.ext.tinkerpop.v3.VertexType)">
+<a id="withIn(hydra.ext.tinkerpop.v3.VertexIdType)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>withIn</h4>
-<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withIn&#8203;(<a href="VertexType.html" title="class in hydra.ext.tinkerpop.v3">VertexType</a>&nbsp;in)</pre>
+<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withIn&#8203;(<a href="VertexIdType.html" title="class in hydra.ext.tinkerpop.v3">VertexIdType</a>&nbsp;in)</pre>
 <div class="block">Construct a new immutable EdgeType object in which in is overridden</div>
 </li>
 </ul>
-<a id="withProperties(java.util.List)">
+<a id="withProperties(java.util.Map)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>withProperties</h4>
-<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withProperties&#8203;(java.util.List&lt;<a href="PropertyType.html" title="class in hydra.ext.tinkerpop.v3">PropertyType</a>&gt;&nbsp;properties)</pre>
+<pre class="methodSignature">public&nbsp;<a href="EdgeType.html" title="class in hydra.ext.tinkerpop.v3">EdgeType</a>&nbsp;withProperties&#8203;(java.util.Map&lt;<a href="Key.html" title="class in hydra.ext.tinkerpop.v3">Key</a>,&#8203;<a href="Type.html" title="class in hydra.ext.tinkerpop.v3">Type</a>&gt;&nbsp;properties)</pre>
 <div class="block">Construct a new immutable EdgeType object in which properties is overridden</div>
 </li>
 </ul>

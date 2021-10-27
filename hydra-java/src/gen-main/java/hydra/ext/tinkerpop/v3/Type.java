@@ -2,6 +2,9 @@ package hydra.ext.tinkerpop.v3;
 
 import hydra.core.AtomicType;
 
+/**
+ * The type of a value, such as a property value
+ */
 public abstract class Type {
   private Type() {}
   
@@ -15,7 +18,7 @@ public abstract class Type {
     
     R visit(Collection instance) ;
     
-    R visit(Record instance) ;
+    R visit(Element instance) ;
   }
   
   /**
@@ -38,7 +41,7 @@ public abstract class Type {
     }
     
     @Override
-    default R visit(Record instance) {
+    default R visit(Element instance) {
       return otherwise(instance);
     }
   }
@@ -103,14 +106,14 @@ public abstract class Type {
     }
   }
   
-  public static final class Record extends Type {
-    public final java.util.List<hydra.ext.tinkerpop.v3.PropertyType> recordEsc;
+  public static final class Element extends Type {
+    public final hydra.ext.tinkerpop.v3.IdType element;
     
     /**
-     * Constructs an immutable Record object
+     * Constructs an immutable Element object
      */
-    public Record(java.util.List<hydra.ext.tinkerpop.v3.PropertyType> recordEsc) {
-      this.recordEsc = recordEsc;
+    public Element(hydra.ext.tinkerpop.v3.IdType element) {
+      this.element = element;
     }
     
     @Override
@@ -120,16 +123,16 @@ public abstract class Type {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Record)) {
+      if (!(other instanceof Element)) {
           return false;
       }
-      Record o = (Record) other;
-      return recordEsc.equals(o.recordEsc);
+      Element o = (Element) other;
+      return element.equals(o.element);
     }
     
     @Override
     public int hashCode() {
-      return 2 * recordEsc.hashCode();
+      return 2 * element.hashCode();
     }
   }
 }

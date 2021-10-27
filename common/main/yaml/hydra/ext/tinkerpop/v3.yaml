@@ -4,6 +4,7 @@ includes:
 definitions:
 
   - name: CollectionType
+    description: "The type of a collection, such as a list of strings or an optional integer value"
     type:
       union:
         - name: list
@@ -19,6 +20,7 @@ definitions:
           type: Type
 
   - name: CollectionValue
+    description: "A collection of values, such as a list of strings or an optional integer value"
     type:
       union:
         - name: list
@@ -28,7 +30,7 @@ definitions:
         - name: map
           type:
             map:
-              keys: string
+              keys: Key
               values: Value
 
         - name: optional
@@ -40,62 +42,77 @@ definitions:
             set: Value
 
   - name: Edge
+    description: "An edge, comprised of an id, an out-vertex and in-vertex id, and zero or more properties"
     type:
       record:
         - name: id
-          type: Value
+          type: EdgeId
 
         - name: out
-          type: Vertex
+          type: VertexId
 
         - name: in
-          type: Vertex
+          type: VertexId
 
         - name: properties
           type:
-            list: Property
+            map:
+              keys: Key
+              values: Value
 
   - name: EdgeId
-    type: Value
+    description: "An atomic value representing an edge id"
+    type: core.AtomicValue
+
+  - name: EdgeIdType
+    description: "The type of a reference to an edge by id"
+    type: EdgeType
 
   - name: EdgeType
+    description: "The type of an edge, with characteristic id, out-vertex, in-vertex, and property types"
     type:
       record:
         - name: id
-          type: Type
+          type: core.AtomicType
 
         - name: out
-          type: VertexType
+          type: VertexIdType
 
         - name: in
-          type: VertexType
+          type: VertexIdType
 
         - name: properties
           type:
-            list: PropertyType
+            map:
+              keys: Key
+              values: Type
 
-  - name: Property
+  - name: Id
+    description: "A vertex or edge id"
     type:
-      record:
-        - name: key
-          type: PropertyKey
+      union:
+        - name: vertex
+          type: VertexId
 
-        - name: value
-          type: Value
+        - name: edge
+          type: EdgeId
 
-  - name: PropertyKey
+  - name: IdType
+    description: "The type of a reference to a strongly-typed element (vertex or edge) by id"
+    type:
+      union:
+        - name: vertex
+          type: VertexType
+
+        - name: edge
+          type: EdgeType
+
+  - name: Key
+    description: "A property key or map key"
     type: string
 
-  - name: PropertyType
-    type:
-      record:
-        - name: key
-          type: PropertyKey
-
-        - name: value
-          type: Type
-
   - name: Type
+    description: "The type of a value, such as a property value"
     type:
       union:
         - name: atomic
@@ -104,11 +121,11 @@ definitions:
         - name: collection
           type: CollectionType
 
-        - name: record
-          type:
-            list: PropertyType
+        - name: element
+          type: IdType
 
   - name: Value
+    description: "A concrete value such as a number or string, a collection of other values, or an element reference"
     type:
       union:
         - name: atomic
@@ -117,11 +134,11 @@ definitions:
         - name: collection
           type: CollectionValue
 
-        - name: record
-          type:
-            list: Property
+        - name: element
+          type: IdType
 
   - name: Vertex
+    description: "A vertex, comprised of an id and zero or more properties"
     type:
       record:
         - name: id
@@ -129,14 +146,27 @@ definitions:
 
         - name: properties
           type:
-            list: Property
+            map:
+              keys: Key
+              values: Value
+
+  - name: VertexId
+    description: "An atomic value representing a vertex id"
+    type: core.AtomicValue
+
+  - name: VertexIdType
+    description: "The type of a reference to a vertex by id"
+    type: VertexType
 
   - name: VertexType
+    description: "The type of a vertex, with characteristic id and property types"
     type:
       record:
         - name: id
-          type: Value
+          type: core.AtomicType
 
         - name: properties
           type:
-            list: PropertyType
+            map:
+              keys: Key
+              values: Type
