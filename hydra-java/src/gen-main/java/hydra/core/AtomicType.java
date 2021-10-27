@@ -111,12 +111,12 @@ public abstract class AtomicType {
   }
   
   public static final class FloatEsc extends AtomicType {
-    public final FloatType floatEsc;
+    public final hydra.core.FloatType floatEsc;
     
     /**
      * Constructs an immutable FloatEsc object
      */
-    public FloatEsc(FloatType floatEsc) {
+    public FloatEsc(hydra.core.FloatType floatEsc) {
       this.floatEsc = floatEsc;
     }
     
@@ -141,12 +141,12 @@ public abstract class AtomicType {
   }
   
   public static final class IntegerEsc extends AtomicType {
-    public final IntegerType integer;
+    public final hydra.core.IntegerType integer;
     
     /**
      * Constructs an immutable IntegerEsc object
      */
-    public IntegerEsc(IntegerType integer) {
+    public IntegerEsc(hydra.core.IntegerType integer) {
       this.integer = integer;
     }
     

@@ -4,14 +4,14 @@ package hydra.core;
  * A function type, also known as an arrow type
  */
 public class FunctionType {
-  public final Type domain;
+  public final hydra.core.Type domain;
   
-  public final Type codomain;
+  public final hydra.core.Type codomain;
   
   /**
    * Constructs an immutable FunctionType object
    */
-  public FunctionType(Type domain, Type codomain) {
+  public FunctionType(hydra.core.Type domain, hydra.core.Type codomain) {
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -35,14 +35,14 @@ public class FunctionType {
   /**
    * Construct a new immutable FunctionType object in which domain is overridden
    */
-  public FunctionType withDomain(Type domain) {
+  public FunctionType withDomain(hydra.core.Type domain) {
     return new FunctionType(domain, codomain);
   }
   
   /**
    * Construct a new immutable FunctionType object in which codomain is overridden
    */
-  public FunctionType withCodomain(Type codomain) {
+  public FunctionType withCodomain(hydra.core.Type codomain) {
     return new FunctionType(domain, codomain);
   }
 }

@@ -66,12 +66,12 @@ public abstract class Function {
    * A case statement applied to a variant record, consisting of a function term for each alternative in the union
    */
   public static final class Cases extends Function {
-    public final java.util.List<Field> cases;
+    public final java.util.List<hydra.core.Field> cases;
     
     /**
      * Constructs an immutable Cases object
      */
-    public Cases(java.util.List<Field> cases) {
+    public Cases(java.util.List<hydra.core.Field> cases) {
       this.cases = cases;
     }
     
@@ -99,12 +99,12 @@ public abstract class Function {
    * Compares a term with a given term of the same type, producing a Comparison
    */
   public static final class CompareTo extends Function {
-    public final Term compareTo;
+    public final hydra.core.Term compareTo;
     
     /**
      * Constructs an immutable CompareTo object
      */
-    public CompareTo(Term compareTo) {
+    public CompareTo(hydra.core.Term compareTo) {
       this.compareTo = compareTo;
     }
     
@@ -161,12 +161,12 @@ public abstract class Function {
    * A function abstraction (lambda)
    */
   public static final class Lambda extends Function {
-    public final Lambda lambda;
+    public final hydra.core.Lambda lambda;
     
     /**
      * Constructs an immutable Lambda object
      */
-    public Lambda(Lambda lambda) {
+    public Lambda(hydra.core.Lambda lambda) {
       this.lambda = lambda;
     }
     
@@ -194,12 +194,12 @@ public abstract class Function {
    * A reference to a built-in (primitive) function
    */
   public static final class Primitive extends Function {
-    public final Name primitive;
+    public final hydra.core.Name primitive;
     
     /**
      * Constructs an immutable Primitive object
      */
-    public Primitive(Name primitive) {
+    public Primitive(hydra.core.Name primitive) {
       this.primitive = primitive;
     }
     
@@ -227,12 +227,12 @@ public abstract class Function {
    * A projection of a field from a record
    */
   public static final class Projection extends Function {
-    public final FieldName projection;
+    public final hydra.core.FieldName projection;
     
     /**
      * Constructs an immutable Projection object
      */
-    public Projection(FieldName projection) {
+    public Projection(hydra.core.FieldName projection) {
       this.projection = projection;
     }
     

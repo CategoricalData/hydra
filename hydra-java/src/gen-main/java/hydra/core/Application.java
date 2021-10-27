@@ -4,14 +4,14 @@ package hydra.core;
  * A term which applies a function to an argument
  */
 public class Application {
-  public final Term function;
+  public final hydra.core.Term function;
   
-  public final Term argument;
+  public final hydra.core.Term argument;
   
   /**
    * Constructs an immutable Application object
    */
-  public Application(Term function, Term argument) {
+  public Application(hydra.core.Term function, hydra.core.Term argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -35,14 +35,14 @@ public class Application {
   /**
    * Construct a new immutable Application object in which function is overridden
    */
-  public Application withFunction(Term function) {
+  public Application withFunction(hydra.core.Term function) {
     return new Application(function, argument);
   }
   
   /**
    * Construct a new immutable Application object in which argument is overridden
    */
-  public Application withArgument(Term argument) {
+  public Application withArgument(hydra.core.Term argument) {
     return new Application(function, argument);
   }
 }

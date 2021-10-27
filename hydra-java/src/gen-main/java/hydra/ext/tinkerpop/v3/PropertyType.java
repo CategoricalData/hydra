@@ -1,14 +1,14 @@
 package hydra.ext.tinkerpop.v3;
 
 public class PropertyType {
-  public final PropertyKey key;
+  public final hydra.ext.tinkerpop.v3.PropertyKey key;
   
-  public final Type value;
+  public final hydra.ext.tinkerpop.v3.Type value;
   
   /**
    * Constructs an immutable PropertyType object
    */
-  public PropertyType(PropertyKey key, Type value) {
+  public PropertyType(hydra.ext.tinkerpop.v3.PropertyKey key, hydra.ext.tinkerpop.v3.Type value) {
     this.key = key;
     this.value = value;
   }
@@ -32,14 +32,14 @@ public class PropertyType {
   /**
    * Construct a new immutable PropertyType object in which key is overridden
    */
-  public PropertyType withKey(PropertyKey key) {
+  public PropertyType withKey(hydra.ext.tinkerpop.v3.PropertyKey key) {
     return new PropertyType(key, value);
   }
   
   /**
    * Construct a new immutable PropertyType object in which value is overridden
    */
-  public PropertyType withValue(Type value) {
+  public PropertyType withValue(hydra.ext.tinkerpop.v3.Type value) {
     return new PropertyType(key, value);
   }
 }

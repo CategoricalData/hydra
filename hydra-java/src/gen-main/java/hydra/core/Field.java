@@ -4,14 +4,14 @@ package hydra.core;
  * A labeled term
  */
 public class Field {
-  public final FieldName name;
+  public final hydra.core.FieldName name;
   
-  public final Term term;
+  public final hydra.core.Term term;
   
   /**
    * Constructs an immutable Field object
    */
-  public Field(FieldName name, Term term) {
+  public Field(hydra.core.FieldName name, hydra.core.Term term) {
     this.name = name;
     this.term = term;
   }
@@ -35,14 +35,14 @@ public class Field {
   /**
    * Construct a new immutable Field object in which name is overridden
    */
-  public Field withName(FieldName name) {
+  public Field withName(hydra.core.FieldName name) {
     return new Field(name, term);
   }
   
   /**
    * Construct a new immutable Field object in which term is overridden
    */
-  public Field withTerm(Term term) {
+  public Field withTerm(hydra.core.Term term) {
     return new Field(name, term);
   }
 }

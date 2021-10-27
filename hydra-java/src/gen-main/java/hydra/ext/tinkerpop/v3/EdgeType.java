@@ -1,18 +1,18 @@
 package hydra.ext.tinkerpop.v3;
 
 public class EdgeType {
-  public final Type id;
+  public final hydra.ext.tinkerpop.v3.Type id;
   
-  public final VertexType out;
+  public final hydra.ext.tinkerpop.v3.VertexType out;
   
-  public final VertexType in;
+  public final hydra.ext.tinkerpop.v3.VertexType in;
   
-  public final java.util.List<PropertyType> properties;
+  public final java.util.List<hydra.ext.tinkerpop.v3.PropertyType> properties;
   
   /**
    * Constructs an immutable EdgeType object
    */
-  public EdgeType(Type id, VertexType out, VertexType in, java.util.List<PropertyType> properties) {
+  public EdgeType(hydra.ext.tinkerpop.v3.Type id, hydra.ext.tinkerpop.v3.VertexType out, hydra.ext.tinkerpop.v3.VertexType in, java.util.List<hydra.ext.tinkerpop.v3.PropertyType> properties) {
     this.id = id;
     this.out = out;
     this.in = in;
@@ -42,28 +42,28 @@ public class EdgeType {
   /**
    * Construct a new immutable EdgeType object in which id is overridden
    */
-  public EdgeType withId(Type id) {
+  public EdgeType withId(hydra.ext.tinkerpop.v3.Type id) {
     return new EdgeType(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable EdgeType object in which out is overridden
    */
-  public EdgeType withOut(VertexType out) {
+  public EdgeType withOut(hydra.ext.tinkerpop.v3.VertexType out) {
     return new EdgeType(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable EdgeType object in which in is overridden
    */
-  public EdgeType withIn(VertexType in) {
+  public EdgeType withIn(hydra.ext.tinkerpop.v3.VertexType in) {
     return new EdgeType(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable EdgeType object in which properties is overridden
    */
-  public EdgeType withProperties(java.util.List<PropertyType> properties) {
+  public EdgeType withProperties(java.util.List<hydra.ext.tinkerpop.v3.PropertyType> properties) {
     return new EdgeType(id, out, in, properties);
   }
 }

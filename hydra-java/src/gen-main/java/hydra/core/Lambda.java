@@ -7,17 +7,17 @@ public class Lambda {
   /**
    * The parameter of the lambda
    */
-  public final Variable parameter;
+  public final hydra.core.Variable parameter;
   
   /**
    * The body of the lambda
    */
-  public final Term body;
+  public final hydra.core.Term body;
   
   /**
    * Constructs an immutable Lambda object
    */
-  public Lambda(Variable parameter, Term body) {
+  public Lambda(hydra.core.Variable parameter, hydra.core.Term body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -41,14 +41,14 @@ public class Lambda {
   /**
    * Construct a new immutable Lambda object in which parameter is overridden
    */
-  public Lambda withParameter(Variable parameter) {
+  public Lambda withParameter(hydra.core.Variable parameter) {
     return new Lambda(parameter, body);
   }
   
   /**
    * Construct a new immutable Lambda object in which body is overridden
    */
-  public Lambda withBody(Term body) {
+  public Lambda withBody(hydra.core.Term body) {
     return new Lambda(parameter, body);
   }
 }

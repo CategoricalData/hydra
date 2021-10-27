@@ -89,12 +89,12 @@ public abstract class AtomicValue {
   }
   
   public static final class BooleanEsc extends AtomicValue {
-    public final BooleanValue booleanEsc;
+    public final hydra.core.BooleanValue booleanEsc;
     
     /**
      * Constructs an immutable BooleanEsc object
      */
-    public BooleanEsc(BooleanValue booleanEsc) {
+    public BooleanEsc(hydra.core.BooleanValue booleanEsc) {
       this.booleanEsc = booleanEsc;
     }
     
@@ -119,12 +119,12 @@ public abstract class AtomicValue {
   }
   
   public static final class FloatEsc extends AtomicValue {
-    public final FloatValue floatEsc;
+    public final hydra.core.FloatValue floatEsc;
     
     /**
      * Constructs an immutable FloatEsc object
      */
-    public FloatEsc(FloatValue floatEsc) {
+    public FloatEsc(hydra.core.FloatValue floatEsc) {
       this.floatEsc = floatEsc;
     }
     
@@ -149,12 +149,12 @@ public abstract class AtomicValue {
   }
   
   public static final class IntegerEsc extends AtomicValue {
-    public final IntegerValue integer;
+    public final hydra.core.IntegerValue integer;
     
     /**
      * Constructs an immutable IntegerEsc object
      */
-    public IntegerEsc(IntegerValue integer) {
+    public IntegerEsc(hydra.core.IntegerValue integer) {
       this.integer = integer;
     }
     

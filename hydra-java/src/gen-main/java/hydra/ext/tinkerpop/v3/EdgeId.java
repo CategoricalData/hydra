@@ -1,12 +1,12 @@
 package hydra.ext.tinkerpop.v3;
 
 public class EdgeId {
-  public final Value value;
+  public final hydra.ext.tinkerpop.v3.Value value;
   
   /**
    * Constructs an immutable EdgeId object
    */
-  public EdgeId(Value value) {
+  public EdgeId(hydra.ext.tinkerpop.v3.Value value) {
     this.value = value;
   }
   

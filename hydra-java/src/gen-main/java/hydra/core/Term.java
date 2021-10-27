@@ -101,12 +101,12 @@ public abstract class Term {
    * A function application
    */
   public static final class Application extends Term {
-    public final Application application;
+    public final hydra.core.Application application;
     
     /**
      * Constructs an immutable Application object
      */
-    public Application(Application application) {
+    public Application(hydra.core.Application application) {
       this.application = application;
     }
     
@@ -134,12 +134,12 @@ public abstract class Term {
    * An atomic value
    */
   public static final class Atomic extends Term {
-    public final AtomicValue atomic;
+    public final hydra.core.AtomicValue atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(AtomicValue atomic) {
+    public Atomic(hydra.core.AtomicValue atomic) {
       this.atomic = atomic;
     }
     
@@ -167,12 +167,12 @@ public abstract class Term {
    * An element reference
    */
   public static final class Element extends Term {
-    public final Name element;
+    public final hydra.core.Name element;
     
     /**
      * Constructs an immutable Element object
      */
-    public Element(Name element) {
+    public Element(hydra.core.Name element) {
       this.element = element;
     }
     
@@ -200,12 +200,12 @@ public abstract class Term {
    * A function term
    */
   public static final class Function extends Term {
-    public final Function function;
+    public final hydra.core.Function function;
     
     /**
      * Constructs an immutable Function object
      */
-    public Function(Function function) {
+    public Function(hydra.core.Function function) {
       this.function = function;
     }
     
@@ -233,12 +233,12 @@ public abstract class Term {
    * A list
    */
   public static final class List extends Term {
-    public final java.util.List<Term> list;
+    public final java.util.List<hydra.core.Term> list;
     
     /**
      * Constructs an immutable List object
      */
-    public List(java.util.List<Term> list) {
+    public List(java.util.List<hydra.core.Term> list) {
       this.list = list;
     }
     
@@ -266,12 +266,12 @@ public abstract class Term {
    * A map of key terms to value terms
    */
   public static final class Map extends Term {
-    public final java.util.Map<Term, Term> map;
+    public final java.util.Map<hydra.core.Term, hydra.core.Term> map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(java.util.Map<Term, Term> map) {
+    public Map(java.util.Map<hydra.core.Term, hydra.core.Term> map) {
       this.map = map;
     }
     
@@ -299,12 +299,12 @@ public abstract class Term {
    * An optional value
    */
   public static final class Optional extends Term {
-    public final java.util.Optional<Term> optional;
+    public final java.util.Optional<hydra.core.Term> optional;
     
     /**
      * Constructs an immutable Optional object
      */
-    public Optional(java.util.Optional<Term> optional) {
+    public Optional(java.util.Optional<hydra.core.Term> optional) {
       this.optional = optional;
     }
     
@@ -332,12 +332,12 @@ public abstract class Term {
    * A record, or labeled tuple
    */
   public static final class Record extends Term {
-    public final java.util.List<Field> recordEsc;
+    public final java.util.List<hydra.core.Field> recordEsc;
     
     /**
      * Constructs an immutable Record object
      */
-    public Record(java.util.List<Field> recordEsc) {
+    public Record(java.util.List<hydra.core.Field> recordEsc) {
       this.recordEsc = recordEsc;
     }
     
@@ -365,12 +365,12 @@ public abstract class Term {
    * A set of terms
    */
   public static final class Set extends Term {
-    public final java.util.Set<Term> set;
+    public final java.util.Set<hydra.core.Term> set;
     
     /**
      * Constructs an immutable Set object
      */
-    public Set(java.util.Set<Term> set) {
+    public Set(java.util.Set<hydra.core.Term> set) {
       this.set = set;
     }
     
@@ -398,12 +398,12 @@ public abstract class Term {
    * A union term, i.e. a generalization of inl() or inr()
    */
   public static final class Union extends Term {
-    public final Field union;
+    public final hydra.core.Field union;
     
     /**
      * Constructs an immutable Union object
      */
-    public Union(Field union) {
+    public Union(hydra.core.Field union) {
       this.union = union;
     }
     
@@ -431,12 +431,12 @@ public abstract class Term {
    * A variable reference
    */
   public static final class Variable extends Term {
-    public final Variable variable;
+    public final hydra.core.Variable variable;
     
     /**
      * Constructs an immutable Variable object
      */
-    public Variable(Variable variable) {
+    public Variable(hydra.core.Variable variable) {
       this.variable = variable;
     }
     

@@ -91,12 +91,12 @@ public abstract class Type {
   }
   
   public static final class Atomic extends Type {
-    public final AtomicType atomic;
+    public final hydra.core.AtomicType atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(AtomicType atomic) {
+    public Atomic(hydra.core.AtomicType atomic) {
       this.atomic = atomic;
     }
     
@@ -121,12 +121,12 @@ public abstract class Type {
   }
   
   public static final class Element extends Type {
-    public final Type element;
+    public final hydra.core.Type element;
     
     /**
      * Constructs an immutable Element object
      */
-    public Element(Type element) {
+    public Element(hydra.core.Type element) {
       this.element = element;
     }
     
@@ -151,12 +151,12 @@ public abstract class Type {
   }
   
   public static final class Function extends Type {
-    public final FunctionType function;
+    public final hydra.core.FunctionType function;
     
     /**
      * Constructs an immutable Function object
      */
-    public Function(FunctionType function) {
+    public Function(hydra.core.FunctionType function) {
       this.function = function;
     }
     
@@ -181,12 +181,12 @@ public abstract class Type {
   }
   
   public static final class List extends Type {
-    public final Type list;
+    public final hydra.core.Type list;
     
     /**
      * Constructs an immutable List object
      */
-    public List(Type list) {
+    public List(hydra.core.Type list) {
       this.list = list;
     }
     
@@ -211,12 +211,12 @@ public abstract class Type {
   }
   
   public static final class Map extends Type {
-    public final MapType map;
+    public final hydra.core.MapType map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(MapType map) {
+    public Map(hydra.core.MapType map) {
       this.map = map;
     }
     
@@ -241,12 +241,12 @@ public abstract class Type {
   }
   
   public static final class Nominal extends Type {
-    public final Name nominal;
+    public final hydra.core.Name nominal;
     
     /**
      * Constructs an immutable Nominal object
      */
-    public Nominal(Name nominal) {
+    public Nominal(hydra.core.Name nominal) {
       this.nominal = nominal;
     }
     
@@ -271,12 +271,12 @@ public abstract class Type {
   }
   
   public static final class Optional extends Type {
-    public final Type optional;
+    public final hydra.core.Type optional;
     
     /**
      * Constructs an immutable Optional object
      */
-    public Optional(Type optional) {
+    public Optional(hydra.core.Type optional) {
       this.optional = optional;
     }
     
@@ -301,12 +301,12 @@ public abstract class Type {
   }
   
   public static final class Record extends Type {
-    public final java.util.List<FieldType> recordEsc;
+    public final java.util.List<hydra.core.FieldType> recordEsc;
     
     /**
      * Constructs an immutable Record object
      */
-    public Record(java.util.List<FieldType> recordEsc) {
+    public Record(java.util.List<hydra.core.FieldType> recordEsc) {
       this.recordEsc = recordEsc;
     }
     
@@ -331,12 +331,12 @@ public abstract class Type {
   }
   
   public static final class Set extends Type {
-    public final Type set;
+    public final hydra.core.Type set;
     
     /**
      * Constructs an immutable Set object
      */
-    public Set(Type set) {
+    public Set(hydra.core.Type set) {
       this.set = set;
     }
     
@@ -361,12 +361,12 @@ public abstract class Type {
   }
   
   public static final class Union extends Type {
-    public final java.util.List<FieldType> union;
+    public final java.util.List<hydra.core.FieldType> union;
     
     /**
      * Constructs an immutable Union object
      */
-    public Union(java.util.List<FieldType> union) {
+    public Union(java.util.List<hydra.core.FieldType> union) {
       this.union = union;
     }
     

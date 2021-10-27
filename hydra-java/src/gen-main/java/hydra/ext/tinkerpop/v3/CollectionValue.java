@@ -49,12 +49,12 @@ public abstract class CollectionValue {
   }
   
   public static final class List extends CollectionValue {
-    public final java.util.List<Value> list;
+    public final java.util.List<hydra.ext.tinkerpop.v3.Value> list;
     
     /**
      * Constructs an immutable List object
      */
-    public List(java.util.List<Value> list) {
+    public List(java.util.List<hydra.ext.tinkerpop.v3.Value> list) {
       this.list = list;
     }
     
@@ -79,12 +79,12 @@ public abstract class CollectionValue {
   }
   
   public static final class Map extends CollectionValue {
-    public final java.util.Map<String, Value> map;
+    public final java.util.Map<String, hydra.ext.tinkerpop.v3.Value> map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(java.util.Map<String, Value> map) {
+    public Map(java.util.Map<String, hydra.ext.tinkerpop.v3.Value> map) {
       this.map = map;
     }
     
@@ -109,12 +109,12 @@ public abstract class CollectionValue {
   }
   
   public static final class Optional extends CollectionValue {
-    public final java.util.Optional<Value> optional;
+    public final java.util.Optional<hydra.ext.tinkerpop.v3.Value> optional;
     
     /**
      * Constructs an immutable Optional object
      */
-    public Optional(java.util.Optional<Value> optional) {
+    public Optional(java.util.Optional<hydra.ext.tinkerpop.v3.Value> optional) {
       this.optional = optional;
     }
     
@@ -139,12 +139,12 @@ public abstract class CollectionValue {
   }
   
   public static final class Set extends CollectionValue {
-    public final java.util.Set<Value> set;
+    public final java.util.Set<hydra.ext.tinkerpop.v3.Value> set;
     
     /**
      * Constructs an immutable Set object
      */
-    public Set(java.util.Set<Value> set) {
+    public Set(java.util.Set<hydra.ext.tinkerpop.v3.Value> set) {
       this.set = set;
     }
     

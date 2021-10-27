@@ -1,18 +1,18 @@
 package hydra.ext.tinkerpop.v3;
 
 public class Edge {
-  public final Value id;
+  public final hydra.ext.tinkerpop.v3.Value id;
   
-  public final Vertex out;
+  public final hydra.ext.tinkerpop.v3.Vertex out;
   
-  public final Vertex in;
+  public final hydra.ext.tinkerpop.v3.Vertex in;
   
-  public final java.util.List<Property> properties;
+  public final java.util.List<hydra.ext.tinkerpop.v3.Property> properties;
   
   /**
    * Constructs an immutable Edge object
    */
-  public Edge(Value id, Vertex out, Vertex in, java.util.List<Property> properties) {
+  public Edge(hydra.ext.tinkerpop.v3.Value id, hydra.ext.tinkerpop.v3.Vertex out, hydra.ext.tinkerpop.v3.Vertex in, java.util.List<hydra.ext.tinkerpop.v3.Property> properties) {
     this.id = id;
     this.out = out;
     this.in = in;
@@ -42,28 +42,28 @@ public class Edge {
   /**
    * Construct a new immutable Edge object in which id is overridden
    */
-  public Edge withId(Value id) {
+  public Edge withId(hydra.ext.tinkerpop.v3.Value id) {
     return new Edge(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which out is overridden
    */
-  public Edge withOut(Vertex out) {
+  public Edge withOut(hydra.ext.tinkerpop.v3.Vertex out) {
     return new Edge(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which in is overridden
    */
-  public Edge withIn(Vertex in) {
+  public Edge withIn(hydra.ext.tinkerpop.v3.Vertex in) {
     return new Edge(id, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which properties is overridden
    */
-  public Edge withProperties(java.util.List<Property> properties) {
+  public Edge withProperties(java.util.List<hydra.ext.tinkerpop.v3.Property> properties) {
     return new Edge(id, out, in, properties);
   }
 }
