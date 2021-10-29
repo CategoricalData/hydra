@@ -6,6 +6,8 @@ package hydra.ext.tinkerpop.v3;
 public class Edge {
   public final hydra.ext.tinkerpop.v3.EdgeId id;
   
+  public final hydra.ext.tinkerpop.v3.Label label;
+  
   public final hydra.ext.tinkerpop.v3.VertexId out;
   
   public final hydra.ext.tinkerpop.v3.VertexId in;
@@ -15,8 +17,9 @@ public class Edge {
   /**
    * Constructs an immutable Edge object
    */
-  public Edge(hydra.ext.tinkerpop.v3.EdgeId id, hydra.ext.tinkerpop.v3.VertexId out, hydra.ext.tinkerpop.v3.VertexId in, java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Value> properties) {
+  public Edge(hydra.ext.tinkerpop.v3.EdgeId id, hydra.ext.tinkerpop.v3.Label label, hydra.ext.tinkerpop.v3.VertexId out, hydra.ext.tinkerpop.v3.VertexId in, java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Value> properties) {
     this.id = id;
+    this.label = label;
     this.out = out;
     this.in = in;
     this.properties = properties;
@@ -29,6 +32,7 @@ public class Edge {
     }
     Edge o = (Edge) other;
     return id.equals(o.id)
+        && label.equals(o.label)
         && out.equals(o.out)
         && in.equals(o.in)
         && properties.equals(o.properties);
@@ -37,36 +41,44 @@ public class Edge {
   @Override
   public int hashCode() {
     return 2 * id.hashCode()
-        + 3 * out.hashCode()
-        + 5 * in.hashCode()
-        + 7 * properties.hashCode();
+        + 3 * label.hashCode()
+        + 5 * out.hashCode()
+        + 7 * in.hashCode()
+        + 11 * properties.hashCode();
   }
   
   /**
    * Construct a new immutable Edge object in which id is overridden
    */
   public Edge withId(hydra.ext.tinkerpop.v3.EdgeId id) {
-    return new Edge(id, out, in, properties);
+    return new Edge(id, label, out, in, properties);
+  }
+  
+  /**
+   * Construct a new immutable Edge object in which label is overridden
+   */
+  public Edge withLabel(hydra.ext.tinkerpop.v3.Label label) {
+    return new Edge(id, label, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which out is overridden
    */
   public Edge withOut(hydra.ext.tinkerpop.v3.VertexId out) {
-    return new Edge(id, out, in, properties);
+    return new Edge(id, label, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which in is overridden
    */
   public Edge withIn(hydra.ext.tinkerpop.v3.VertexId in) {
-    return new Edge(id, out, in, properties);
+    return new Edge(id, label, out, in, properties);
   }
   
   /**
    * Construct a new immutable Edge object in which properties is overridden
    */
   public Edge withProperties(java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Value> properties) {
-    return new Edge(id, out, in, properties);
+    return new Edge(id, label, out, in, properties);
   }
 }

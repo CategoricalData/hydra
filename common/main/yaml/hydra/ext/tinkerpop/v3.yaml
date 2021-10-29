@@ -48,6 +48,9 @@ definitions:
         - name: id
           type: EdgeId
 
+        - name: label
+          type: Label
+
         - name: out
           type: VertexId
 
@@ -111,6 +114,10 @@ definitions:
     description: "A property key or map key"
     type: string
 
+  - name: Label
+    description: "A vertex or edge label"
+    type: string
+
   - name: Type
     description: "The type of a value, such as a property value"
     type:
@@ -143,6 +150,9 @@ definitions:
       record:
         - name: id
           type: Value
+
+        - name: label
+          type: Label
 
         - name: properties
           type:
