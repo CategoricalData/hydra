@@ -6,7 +6,6 @@ module Hydra.Impl.Haskell.Ext.Yaml.Serde (
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
-import Hydra.Prototyping.Steps
 import Hydra.Ext.Yaml.Coder
 import qualified Hydra.Ext.Yaml.Model as YM
 

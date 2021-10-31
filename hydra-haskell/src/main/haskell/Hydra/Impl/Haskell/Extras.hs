@@ -3,6 +3,7 @@ module Hydra.Impl.Haskell.Extras (
   convertIntegerValue,
   eitherToQualified,
   qualifiedToResult,
+  unidirectionalStep,
   module Hydra.Errors
   ) where
 
@@ -71,3 +72,8 @@ qualifiedToResult :: Qualified a -> Result a
 qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
+
+unidirectionalStep :: (a -> Result b) -> Step a b
+unidirectionalStep m = Step {
+  stepOut = m,
+  stepIn = \_ -> fail "inbound mapping is unsupported"}
