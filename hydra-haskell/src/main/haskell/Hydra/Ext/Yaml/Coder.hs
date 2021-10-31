@@ -48,12 +48,13 @@ recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
   where
-    encode coders (TermRecord fields) = YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
-      where
---        encodeField (_, coder) (Field fn fv) = (,) <$> pure (yamlString fn) <*> stepOut coder fv
-        encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
-          (TypeOptional _ , TermOptional Nothing) -> pure Nothing
-          _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
+    encode coders term = case term of
+      TermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+        where
+          encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
+            (TypeOptional _ , TermOptional Nothing) -> pure Nothing
+            _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
+      _ -> unexpected term "record"
     decode coders n = case n of
       YM.NodeMapping m -> TermRecord <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored 
         where
