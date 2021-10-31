@@ -8,7 +8,6 @@ import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
-import Hydra.Impl.Haskell.Dsl
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import qualified Hydra.Ext.Yaml.Model as YM
@@ -117,6 +116,7 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
   languageConstraintsAtomicVariants = S.fromList [
     AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
   languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+  languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [

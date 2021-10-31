@@ -280,6 +280,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsAtomicVariants = S.fromList [
         AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
       languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+      languageConstraintsFunctionVariants = S.empty,
       languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
