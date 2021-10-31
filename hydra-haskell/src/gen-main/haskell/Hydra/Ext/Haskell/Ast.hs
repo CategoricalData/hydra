@@ -318,10 +318,10 @@ data DataDeclaration
     , dataDeclarationDeriving :: [Deriving] } deriving (Eq, Generic, Ord, Read, Show)
 
 data Declaration
-  -- | @type hydra/ext/haskell/ast.TypeDeclaration
-  = DeclarationType TypeDeclaration
   -- | @type hydra/ext/haskell/ast.DataDeclaration
-  | DeclarationData DataDeclaration
+  = DeclarationData DataDeclaration
+  -- | @type hydra/ext/haskell/ast.TypeDeclaration
+  | DeclarationType TypeDeclaration
   -- | @type hydra/ext/haskell/ast.TypeSignature
   | DeclarationTypeSignature TypeSignature
   -- | @type hydra/ext/haskell/ast.ValueBinding
@@ -335,12 +335,12 @@ data DeclarationHead_Application
     , declarationHeadApplicationOperand :: TypeVariable } deriving (Eq, Generic, Ord, Read, Show)
 
 data DeclarationHead
-  -- | @type hydra/ext/haskell/ast.Name
-  = DeclarationHeadSimple Name
+  -- | @type hydra/ext/haskell/ast.DeclarationHead.Application
+  = DeclarationHeadApplication DeclarationHead_Application
   -- | @type hydra/ext/haskell/ast.DeclarationHead
   | DeclarationHeadParens DeclarationHead
-  -- | @type hydra/ext/haskell/ast.DeclarationHead.Application
-  | DeclarationHeadApplication DeclarationHead_Application deriving (Eq, Generic, Ord, Read, Show)
+  -- | @type hydra/ext/haskell/ast.Name
+  | DeclarationHeadSimple Name deriving (Eq, Generic, Ord, Read, Show)
 
 -- | @type list: hydra/ext/haskell/ast.Name
 type Deriving = [Name]
@@ -433,42 +433,42 @@ data Expression_UpdateRecord
     , expressionUpdateRecordFields :: [FieldUpdate] } deriving (Eq, Generic, Ord, Read, Show)
 
 data Expression
-  -- | @type hydra/ext/haskell/ast.Name
-  = ExpressionVariable Name
-  -- | @type hydra/ext/haskell/ast.Literal
-  | ExpressionLiteral Literal
   -- | @type hydra/ext/haskell/ast.Expression.Application
-  | ExpressionApplication Expression_Application
-  -- | @type hydra/ext/haskell/ast.Expression.InfixApplication
-  | ExpressionInfixApplication Expression_InfixApplication
-  -- | @type hydra/ext/haskell/ast.Expression.PrefixApplication
-  | ExpressionPrefixApplication Expression_PrefixApplication
-  -- | @type hydra/ext/haskell/ast.Expression.Lambda
-  | ExpressionLambda Expression_Lambda
-  -- | @type hydra/ext/haskell/ast.Expression.Let
-  | ExpressionLet Expression_Let
-  -- | @type hydra/ext/haskell/ast.Expression.If
-  | ExpressionIf Expression_If
+  = ExpressionApplication Expression_Application
   -- | @type hydra/ext/haskell/ast.Expression.Case
   | ExpressionCase Expression_Case
+  -- | @type hydra/ext/haskell/ast.Expression.ConstructRecord
+  | ExpressionConstructRecord Expression_ConstructRecord
   -- | @type list: hydra/ext/haskell/ast.Statement
   | ExpressionDo [Statement]
-  -- | @type list: hydra/ext/haskell/ast.Expression
-  | ExpressionTuple [Expression]
+  -- | @type hydra/ext/haskell/ast.Expression.If
+  | ExpressionIf Expression_If
+  -- | @type hydra/ext/haskell/ast.Expression.InfixApplication
+  | ExpressionInfixApplication Expression_InfixApplication
+  -- | @type hydra/ext/haskell/ast.Literal
+  | ExpressionLiteral Literal
+  -- | @type hydra/ext/haskell/ast.Expression.Lambda
+  | ExpressionLambda Expression_Lambda
+  -- | @type hydra/ext/haskell/ast.Expression.Section
+  | ExpressionLeftSection Expression_Section
+  -- | @type hydra/ext/haskell/ast.Expression.Let
+  | ExpressionLet Expression_Let
   -- | @type list: hydra/ext/haskell/ast.Expression
   | ExpressionList [Expression]
   -- | @type hydra/ext/haskell/ast.Expression
   | ExpressionParens Expression
-  -- | @type hydra/ext/haskell/ast.Expression.Section
-  | ExpressionLeftSection Expression_Section
+  -- | @type hydra/ext/haskell/ast.Expression.PrefixApplication
+  | ExpressionPrefixApplication Expression_PrefixApplication
   -- | @type hydra/ext/haskell/ast.Expression.Section
   | ExpressionRightSection Expression_Section
-  -- | @type hydra/ext/haskell/ast.Expression.ConstructRecord
-  | ExpressionConstructRecord Expression_ConstructRecord
+  -- | @type list: hydra/ext/haskell/ast.Expression
+  | ExpressionTuple [Expression]
+  -- | @type hydra/ext/haskell/ast.Expression.TypeSignature
+  | ExpressionTypeSignature Expression_TypeSignature
   -- | @type hydra/ext/haskell/ast.Expression.UpdateRecord
   | ExpressionUpdateRecord Expression_UpdateRecord
-  -- | @type hydra/ext/haskell/ast.Expression.TypeSignature
-  | ExpressionTypeSignature Expression_TypeSignature deriving (Eq, Generic, Ord, Read, Show)
+  -- | @type hydra/ext/haskell/ast.Name
+  | ExpressionVariable Name deriving (Eq, Generic, Ord, Read, Show)
 
 data Field
   = Field
@@ -525,25 +525,25 @@ data Literal
                 bits: 16
               signed: false -}
   = LiteralChar Integer
-  -- | @type string
-  | LiteralString String
-  {-| @type integer:
-              precision: arbitrary -}
-  | LiteralInteger Integer
-  -- | @type integer
-  | LiteralInt Int
-  -- | @type float
-  | LiteralFloat Float
   {-| @type float:
               precision:
                 bits: 64 -}
-  | LiteralDouble Double deriving (Eq, Generic, Ord, Read, Show)
+  | LiteralDouble Double
+  -- | @type float
+  | LiteralFloat Float
+  -- | @type integer
+  | LiteralInt Int
+  {-| @type integer:
+              precision: arbitrary -}
+  | LiteralInteger Integer
+  -- | @type string
+  | LiteralString String deriving (Eq, Generic, Ord, Read, Show)
 
 data LocalBinding
-  -- | @type hydra/ext/haskell/ast.ValueBinding
-  = LocalBindingValue ValueBinding
   -- | @type hydra/ext/haskell/ast.TypeSignature
-  | LocalBindingSignature TypeSignature deriving (Eq, Generic, Ord, Read, Show)
+  = LocalBindingSignature TypeSignature
+  -- | @type hydra/ext/haskell/ast.ValueBinding
+  | LocalBindingValue ValueBinding deriving (Eq, Generic, Ord, Read, Show)
 
 -- | @type list: hydra/ext/haskell/ast.LocalBinding
 type LocalBindings = [LocalBinding]
@@ -569,11 +569,11 @@ type ModuleName = String
 
 data Name
   -- | @type hydra/ext/haskell/ast.QualifiedName
-  = NameParens QualifiedName
+  = NameImplicit QualifiedName
   -- | @type hydra/ext/haskell/ast.QualifiedName
   | NameNormal QualifiedName
   -- | @type hydra/ext/haskell/ast.QualifiedName
-  | NameImplicit QualifiedName deriving (Eq, Generic, Ord, Read, Show)
+  | NameParens QualifiedName deriving (Eq, Generic, Ord, Read, Show)
 
 -- | @type string
 type NamePart = String
@@ -613,25 +613,25 @@ data Pattern_Typed
     , patternTypedType :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
 data Pattern
-  -- | @type hydra/ext/haskell/ast.Name
-  = PatternName Name
-  -- | @type hydra/ext/haskell/ast.Literal
-  | PatternLiteral Literal
   -- | @type hydra/ext/haskell/ast.Pattern.Application
-  | PatternApplication Pattern_Application
-  -- | @type list: hydra/ext/haskell/ast.Pattern
-  | PatternTuple [Pattern]
+  = PatternApplication Pattern_Application
+  -- | @type hydra/ext/haskell/ast.Pattern.As
+  | PatternAs Pattern_As
   -- | @type list: hydra/ext/haskell/ast.Pattern
   | PatternList [Pattern]
+  -- | @type hydra/ext/haskell/ast.Literal
+  | PatternLiteral Literal
+  -- | @type hydra/ext/haskell/ast.Name
+  | PatternName Name
   -- | @type hydra/ext/haskell/ast.Pattern
   | PatternParens Pattern
   -- | @type hydra/ext/haskell/ast.Pattern.Record
   | PatternRecord Pattern_Record
-  -- | @type hydra/ext/haskell/ast.Pattern.As
-  | PatternAs Pattern_As
-  | PatternWildcard
+  -- | @type list: hydra/ext/haskell/ast.Pattern
+  | PatternTuple [Pattern]
   -- | @type hydra/ext/haskell/ast.Pattern.Typed
-  | PatternTyped Pattern_Typed deriving (Eq, Generic, Ord, Read, Show)
+  | PatternTyped Pattern_Typed
+  | PatternWildcard deriving (Eq, Generic, Ord, Read, Show)
 
 data PatternField
   = PatternField
@@ -677,20 +677,20 @@ data Type_Infix
     , typeInfixRhs :: Operator } deriving (Eq, Generic, Ord, Read, Show)
 
 data Type
+  -- | @type hydra/ext/haskell/ast.Type.Application
+  = TypeApplication Type_Application
   -- | @type hydra/ext/haskell/ast.Type.Function
-  = TypeFunction Type_Function
-  -- | @type list: hydra/ext/haskell/ast.Type
-  | TypeTuple [Type]
+  | TypeFunction Type_Function
+  -- | @type hydra/ext/haskell/ast.Type.Infix
+  | TypeInfix Type_Infix
   -- | @type hydra/ext/haskell/ast.Type
   | TypeList Type
-  -- | @type hydra/ext/haskell/ast.Type.Application
-  | TypeApplication Type_Application
-  -- | @type hydra/ext/haskell/ast.Name
-  | TypeVariable Name
   -- | @type hydra/ext/haskell/ast.Type
   | TypeParens Type
-  -- | @type hydra/ext/haskell/ast.Type.Infix
-  | TypeInfix Type_Infix deriving (Eq, Generic, Ord, Read, Show)
+  -- | @type list: hydra/ext/haskell/ast.Type
+  | TypeTuple [Type]
+  -- | @type hydra/ext/haskell/ast.Name
+  | TypeVariable Name deriving (Eq, Generic, Ord, Read, Show)
 
 data TypeDeclaration
   = TypeDeclaration

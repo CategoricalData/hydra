@@ -86,11 +86,11 @@ definitions:
         #                  patternSynonym, deriv, fixity, default, patTypeSig, foreignImport, foreignExport, pragma,
         #                  role, splice
 
-        - name: type
-          type: TypeDeclaration
-
         - name: data
           type: DataDeclaration
+
+        - name: type
+          type: TypeDeclaration
 
         - name: typeSignature
           type: TypeSignature
@@ -103,14 +103,14 @@ definitions:
       union:
         # omitted for now: infix application
 
-        - name: simple
-          type: Name
+        - name: application
+          type: DeclarationHead.Application
 
         - name: parens
           type: DeclarationHead
 
-        - name: application
-          type: DeclarationHead.Application
+        - name: simple
+          type: Name
 
     innerTypes:
       - name: Application
@@ -144,41 +144,40 @@ definitions:
         #                  (all Template Haskell constructors), pragma, arrow definition, arrow application,
         #                  lambda cases, static, unboxed sum, hole
 
-        - name: variable
-          type: Name
-
-        - name: literal
-          type: Literal
-
         - name: application
           type: Expression.Application
 
-        - name: infixApplication
-          type: Expression.InfixApplication
-
-        - name: prefixApplication
-          type: Expression.PrefixApplication
-
-        - name: lambda
-          type: Expression.Lambda
-
-        - name: let
-          type: Expression.Let
-
-        - name: if
-          type: Expression.If
+#        - name: arrowDefinition
+#          type: Expression.ArrowDefinition
 
         - name: case
           type: Expression.Case
+
+        - name: constructRecord
+          type: Expression.ConstructRecord
 
         - name: do
           # omitted for now: do vs. mdo
           type:
             list: Statement
 
-        - name: tuple
-          type:
-            list: Expression
+        - name: if
+          type: Expression.If
+
+        - name: infixApplication
+          type: Expression.InfixApplication
+
+        - name: literal
+          type: Literal
+
+        - name: lambda
+          type: Expression.Lambda
+
+        - name: leftSection
+          type: Expression.Section
+
+        - name: let
+          type: Expression.Let
 
         - name: list
           type:
@@ -187,23 +186,24 @@ definitions:
         - name: parens
           type: Expression
 
-        - name: leftSection
-          type: Expression.Section
+        - name: prefixApplication
+          type: Expression.PrefixApplication
 
         - name: rightSection
           type: Expression.Section
 
-        - name: constructRecord
-          type: Expression.ConstructRecord
-
-        - name: updateRecord
-          type: Expression.UpdateRecord
+        - name: tuple
+          type:
+            list: Expression
 
         - name: typeSignature
           type: Expression.TypeSignature
 
-#        - name: arrowDefinition
-#          type: Expression.ArrowDefinition
+        - name: updateRecord
+          type: Expression.UpdateRecord
+
+        - name: variable
+          type: Name
 
     innerTypes:
       - name: Application
@@ -417,36 +417,36 @@ definitions:
                 bits: 16
               signed: false
 
-        - name: string
-          type: string
-
-        - name: integer
-          type:
-            integer:
-              precision: arbitrary
-
-        - name: int
-          type: integer
-
-        - name: float
-          type: float
-
         - name: double
           type:
             float:
               precision:
                 bits: 64
 
+        - name: float
+          type: float
+
+        - name: int
+          type: integer
+
+        - name: integer
+          type:
+            integer:
+              precision: arbitrary
+
+        - name: string
+          type: string
+
   - name: LocalBinding # ULocalBind
     type:
       union:
         # omitted for now: fixity, pragma
 
-        - name: value
-          type: ValueBinding
-
         - name: signature
           type: TypeSignature
+
+        - name: value
+          type: ValueBinding
 
   - name: LocalBindings # ULocalBinds
     type:
@@ -487,13 +487,13 @@ definitions:
   - name: Name # UName
     type:
       union:
-        - name: parens
+        - name: implicit
           type: QualifiedName
 
         - name: normal
           type: QualifiedName
 
-        - name: implicit
+        - name: parens
           type: QualifiedName
 
   - name: NamePart # UNamePart
@@ -513,22 +513,21 @@ definitions:
       union:
         # omitted for now: unboxed tuples, parallel arrays, irrefutable, bang, view, splice, quasiquote, plusk, unboxed sum
 
-        - name: name
-          type: Name
-
-        - name: literal
-          type: Literal
-
         - name: application
           type: Pattern.Application
 
-        - name: tuple
-          type:
-            list: Pattern
+        - name: as
+          type: Pattern.As
 
         - name: list
           type:
             list: Pattern
+
+        - name: literal
+          type: Literal
+
+        - name: name
+          type: Name
 
         - name: parens
           type: Pattern
@@ -536,13 +535,14 @@ definitions:
         - name: record
           type: Pattern.Record
 
-        - name: as
-          type: Pattern.As
-
-        - name: wildcard
+        - name: tuple
+          type:
+            list: Pattern
 
         - name: typed
           type: Pattern.Typed
+
+        - name: wildcard
 
     innerTypes:
       - name: Application
@@ -616,27 +616,27 @@ definitions:
         # omitted for now: forall, ctx, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
         #                  lazy, unpack, nounpack, wildcard, named wildcard, sum
 
+        - name: application
+          type: Type.Application
+
         - name: function
           type: Type.Function
+
+        - name: infix
+          type: Type.Infix
+
+        - name: list
+          type: Type
+
+        - name: parens
+          type: Type
 
         - name: tuple
           type:
             list: Type
 
-        - name: list
-          type: Type
-
-        - name: application
-          type: Type.Application
-
         - name: variable
           type: Name
-
-        - name: parens
-          type: Type
-
-        - name: infix
-          type: Type.Infix
 
     innerTypes:
       - name: Application
