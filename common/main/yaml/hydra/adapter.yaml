@@ -63,6 +63,10 @@ definitions:
               type:
                 set: core.FloatVariant
 
+            - name: functionVariants
+              type:
+                set: core.FunctionVariant
+
             - name: integerVariants
               type:
                 set: core.IntegerVariant

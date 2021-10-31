@@ -28,6 +28,13 @@ object Language {
         floatVariants: Set[hydra.core.FloatVariant],
         
         /**
+         * @type set: hydra/core.FunctionVariant
+         * 
+         * @type set: hydra/core.FunctionVariant
+         */
+        functionVariants: Set[hydra.core.FunctionVariant],
+        
+        /**
          * @type set: hydra/core.IntegerVariant
          * 
          * @type set: hydra/core.IntegerVariant
@@ -72,6 +79,7 @@ val _Language: String = "hydra/adapter.Language"
 val _Language_Constraints: String = "hydra/adapter.Language.Constraints"
 val _Language_Constraints_atomicVariants: String = "atomicVariants"
 val _Language_Constraints_floatVariants: String = "floatVariants"
+val _Language_Constraints_functionVariants: String = "functionVariants"
 val _Language_Constraints_integerVariants: String = "integerVariants"
 val _Language_Constraints_termVariants: String = "termVariants"
 val _Language_Constraints_typeVariants: String = "typeVariants"

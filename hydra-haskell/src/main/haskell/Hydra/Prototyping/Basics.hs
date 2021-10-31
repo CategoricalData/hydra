@@ -31,7 +31,7 @@ module Hydra.Prototyping.Basics (
 import Hydra.Core
 import Hydra.Adapter
 
-import qualified Data.Set   as S
+import qualified Data.Set as S
 
 
 atomicTypeVariant :: AtomicType -> AtomicVariant
@@ -111,6 +111,7 @@ hydraCoreLanguage :: Language
 hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsAtomicVariants = S.fromList atomicVariants,
   languageConstraintsFloatVariants = S.fromList floatVariants,
+  languageConstraintsFunctionVariants = S.fromList functionVariants,
   languageConstraintsIntegerVariants = S.fromList integerVariants,
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList typeVariants,
