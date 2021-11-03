@@ -77,7 +77,7 @@ decodeType = matchUnion [
     (_Type_element, fmap TypeElement . decodeType),
     (_Type_function, fmap TypeFunction . decodeFunctionType),
     (_Type_list, fmap TypeList . decodeType),
-    (_Type_map, fmap TypeMap . decodeMapType), 
+    (_Type_map, fmap TypeMap . decodeMapType),
     (_Type_nominal, fmap TypeNominal . decodeString),
     (_Type_optional, fmap TypeOptional . decodeType),
     (_Type_record, fmap TypeRecord . decodeFieldTypes),

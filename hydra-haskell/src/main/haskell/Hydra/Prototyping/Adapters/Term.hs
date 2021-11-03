@@ -110,7 +110,7 @@ optionalToList context t@(TypeOptional ot) = do
     stepIn = \(TermList l) -> TermOptional <$> if L.null l then
       pure Nothing
       else Just <$> stepIn (adapterStep ad) (L.head l)}
-    
+
 optionalToUnion :: AdapterContext -> Type -> Qualified (Adapter Type Term)
 optionalToUnion context t@(TypeOptional ot) = do
     ad <- termAdapter context ot

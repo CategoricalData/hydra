@@ -38,6 +38,7 @@ requireElement :: Context -> Name -> Result Element
 requireElement context name = Y.maybe error pure $ M.lookup name $ contextElements context
   where
     error = fail $ "no such element: " ++ name
+      ++ " in graph " ++ graphSetRoot (contextGraphs context)
 
 requirePrimitiveFunction :: Context -> Name -> Result PrimitiveFunction
 requirePrimitiveFunction context fn = Y.maybe error pure $ lookupPrimitiveFunction context fn

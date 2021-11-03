@@ -16,6 +16,7 @@ module Hydra.Impl.Haskell.Dsl (
   constFunction,
   dataTerm,
   deref,
+  elementRef,
   expectAtomicValue,
   expectNArgs,
   expectRecordTerm,
@@ -29,7 +30,6 @@ module Hydra.Impl.Haskell.Dsl (
   float64Value,
   floatType,
   floatValue,
-  funcRef,
   function,
   functionType,
   int16Type,
@@ -43,6 +43,7 @@ module Hydra.Impl.Haskell.Dsl (
   integerType,
   integerValue,
   lambda,
+  listType,
   mapType,
   match,
   matchWithVariants,
@@ -129,6 +130,9 @@ dataTerm = TermFunction FunctionData
 deref :: Name -> Term
 deref name = apply dataTerm $ TermElement name
 
+elementRef :: Element -> Term
+elementRef el = apply dataTerm $ TermElement $ elementName el
+
 expectAtomicValue :: Term -> Result AtomicValue
 expectAtomicValue term = case term of
   TermAtomic av -> pure av
@@ -178,9 +182,6 @@ floatType = TypeAtomic . AtomicTypeFloat
 floatValue :: FloatValue -> Term
 floatValue = TermAtomic . AtomicValueFloat
 
-funcRef :: Element -> Term
-funcRef el = apply (TermFunction FunctionData) $ TermElement $ elementName el
-
 function :: Name -> Term
 function = TermFunction . FunctionPrimitive
 
@@ -219,6 +220,9 @@ integerValue = TermAtomic . AtomicValueInteger
 
 lambda :: Variable -> Term -> Term
 lambda param body = TermFunction $ FunctionLambda $ Lambda param body
+
+listType :: Type -> Type
+listType = TypeList
 
 mapType :: Type -> Type -> Type
 mapType kt vt = TypeMap $ MapType kt vt
@@ -296,7 +300,7 @@ variant :: FieldName -> Term -> Term
 variant fname term = TermUnion (Field fname term)
 
 withFunction :: FieldName -> Element -> Term
-withFunction name el = lambda var $ variant name $ apply (funcRef el) (variable var)
+withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
   where var = "x"
 
 withVariant :: FieldName -> Term
