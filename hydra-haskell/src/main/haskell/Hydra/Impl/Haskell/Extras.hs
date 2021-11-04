@@ -2,6 +2,7 @@ module Hydra.Impl.Haskell.Extras (
   convertFloatValue,
   convertIntegerValue,
   eitherToQualified,
+  elementAsTypedTerm,
   qualifiedToResult,
   unidirectionalStep,
   module Hydra.Errors
@@ -9,7 +10,9 @@ module Hydra.Impl.Haskell.Extras (
 
 import Hydra.Core
 import Hydra.Errors
+import Hydra.Graph
 import Hydra.Prototyping.Steps
+import Hydra.Prototyping.CoreDecoding
 
 import qualified Data.List as L
 
@@ -63,6 +66,9 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
           
+elementAsTypedTerm :: Context -> Element -> Result TypedTerm
+elementAsTypedTerm context el = TypedTerm <$> decodeType context (elementSchema el) <*> pure (elementData el)
+
 eitherToQualified :: Result a -> Qualified a
 eitherToQualified e = case e of
   ResultFailure msg -> Qualified Nothing [msg]

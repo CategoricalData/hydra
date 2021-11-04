@@ -28,7 +28,7 @@ dereferenceNominal context t@(TypeNominal name) = do
     -- TODO: precompute the schema graph; don't construct it anew for each adapter
     scontext <- schemaContext $ adapterContextEvaluation context
     -- Note: we just assume the schema term is a reference to hydra/core.Type
-    requireElement scontext name >>= decodeType . elementData
+    requireElement scontext name >>= decodeType (adapterContextEvaluation context) . elementData
   ad <- termAdapter context typ
   return ad { adapterSource = t }
 
