@@ -1,4 +1,5 @@
 module Hydra.Prototyping.Primitives (
+  dereferenceElement,
   graphElementsMap,
   lookupPrimitiveFunction,
   primitiveFunctionArity,
@@ -15,6 +16,11 @@ import Hydra.Prototyping.Steps
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+dereferenceElement :: Context -> Name -> Result Term
+dereferenceElement context en = case M.lookup en (contextElements context) of
+  Nothing -> fail $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs context)
+  Just e -> pure $ elementData e
 
 getGraph :: GraphSet -> GraphName -> Result Graph
 getGraph graphs name = Y.maybe error pure $ M.lookup name (graphSetGraphs graphs)

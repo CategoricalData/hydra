@@ -12,7 +12,6 @@ import Hydra.Graph
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.Steps
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -27,11 +26,6 @@ import qualified Data.Set as S
 evaluate :: Context -> Term -> Result Term
 evaluate context term = reduce M.empty term
   where
-    dereferenceElement :: Name -> Result Term
-    dereferenceElement en = case M.lookup en (contextElements context) of
-      Nothing -> fail $ "referenced element does not exist in graph: " ++ en
-      Just e -> pure $ elementData e
-
     reduce :: M.Map Variable Term -> Term -> Result Term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then pure term
@@ -86,7 +80,7 @@ evaluate context term = reduce M.empty term
         FunctionData -> do
             arg <- reduce bindings $ L.head args
             case arg of
-              TermElement name -> dereferenceElement name
+              TermElement name -> dereferenceElement context name
                 >>= reduce bindings
                 >>= reduceApplication bindings (L.tail args)
               _ -> fail "tried to apply data (delta) to a non- element reference"

@@ -1,6 +1,6 @@
-module Hydra.Prototyping.BasicsWithDsl where -- (
---  basicsGraph,
---  ) where
+module Hydra.Prototyping.BasicsWithDsl (
+  basicsGraph,
+) where
 
 import Hydra.Core
 import Hydra.Graph
@@ -20,7 +20,7 @@ basicsGraph :: Graph
 basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
   where
     dataTerms = const True -- TODO
-    schemaGraph = "none" -- TODO
+    schemaGraph = "hydra/core"
     elements = [
         basicsAtomicTypeVariant,
         basicsAtomicValueType,
