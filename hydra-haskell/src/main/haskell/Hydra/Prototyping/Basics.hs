@@ -209,6 +209,7 @@ termVariants = [
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
+  TypeAbstract _ -> TypeVariantAbstract
   TypeAtomic _ -> TypeVariantAtomic
   TypeElement _ -> TypeVariantElement
   TypeFunction _ -> TypeVariantFunction
@@ -219,11 +220,11 @@ typeVariant typ = case typ of
   TypeRecord _ -> TypeVariantRecord
   TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
-  TypeUniversal _ -> TypeVariantUniversal
   TypeVariable _ -> TypeVariantVariable
 
 typeVariants :: [TypeVariant]
 typeVariants = [
+  TypeVariantAbstract,
   TypeVariantAtomic,
   TypeVariantElement,
   TypeVariantFunction,
@@ -234,5 +235,4 @@ typeVariants = [
   TypeVariantRecord,
   TypeVariantSet,
   TypeVariantUnion,
-  TypeVariantUniversal,
   TypeVariantVariable]

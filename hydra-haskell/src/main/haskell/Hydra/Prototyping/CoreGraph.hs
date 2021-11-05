@@ -11,6 +11,7 @@ hydraCoreGraph :: Graph
 hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
   where
     elements = [
+      hsAbstractType,
       hcApplication,
       hcAtomicType,
       hcAtomicVariant,
@@ -39,7 +40,6 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hsTypeVariable,
       hsTypeVariant,
       hsTypedTerm,
-      hsUniversalType,
       hsVariable]
 
 typeElement :: Name -> Type -> Element
@@ -50,6 +50,11 @@ typeElement name typ = Element {
 
 enum :: [FieldName] -> Type
 enum names = TypeUnion $ (`FieldType` unitType) <$> names
+
+hsAbstractType :: Element
+hsAbstractType = typeElement _AbstractType $ TypeRecord [
+  FieldType _AbstractType_variable stringType,
+  FieldType _AbstractType_body $ TypeNominal _Type]
 
 hcApplication :: Element
 hcApplication = typeElement _Application $ TypeRecord [
@@ -260,11 +265,6 @@ hsTypedTerm :: Element
 hsTypedTerm = typeElement _TypedTerm $ TypeRecord [
   FieldType _TypedTerm_type $ TypeNominal _Type,
   FieldType _TypedTerm_term $ TypeNominal _Term]
-
-hsUniversalType :: Element
-hsUniversalType = typeElement _UniversalType $ TypeRecord [
-  FieldType _UniversalType_variable stringType,
-  FieldType _UniversalType_body $ TypeNominal _Type]
 
 hsVariable :: Element
 hsVariable = typeElement _Variable stringType
