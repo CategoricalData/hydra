@@ -36,8 +36,10 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hsTerm,
       hsTermVariant,
       hsType,
+      hsTypeVariable,
       hsTypeVariant,
       hsTypedTerm,
+      hsUniversalType,
       hsVariable]
 
 typeElement :: Name -> Type -> Element
@@ -69,7 +71,7 @@ hcAtomicVariant = typeElement _AtomicVariant $ enum [
   _AtomicVariant_float,
   _AtomicVariant_integer,
   _AtomicVariant_string]
-  
+
 hcAtomicValue :: Element
 hcAtomicValue = typeElement _AtomicValue $ TypeUnion [
   FieldType _AtomicValue_binary binaryType,
@@ -88,7 +90,7 @@ hcComparison = typeElement _Comparison $ enum [
   _Comparison_lessThan,
   _Comparison_equalTo,
   _Comparison_greaterThan]
-  
+
 hcField :: Element
 hcField = typeElement _Field $ TypeRecord [
   FieldType _Field_name $ TypeNominal _FieldName,
@@ -101,25 +103,25 @@ hcFieldType :: Element
 hcFieldType = typeElement _FieldType $ TypeRecord [
   FieldType _FieldType_name $ TypeNominal _FieldName,
   FieldType _FieldType_type $ TypeNominal _Type]
-  
+
 hcFloatType :: Element
 hcFloatType = typeElement _FloatType $ enum [
   _FloatType_bigfloat,
   _FloatType_float32,
   _FloatType_float64]
-  
+
 hcFloatValue :: Element
 hcFloatValue = typeElement _FloatValue $ TypeUnion [
   FieldType _FloatValue_bigfloat bigfloatType,
   FieldType _FloatValue_float32 float32Type,
   FieldType _FloatValue_float64 float64Type]
-  
+
 hcFloatVariant :: Element
 hcFloatVariant = typeElement _FloatVariant $ enum [
   _FloatVariant_bigfloat,
   _FloatVariant_float32,
   _FloatVariant_float64]
-  
+
 hcFunction :: Element
 hcFunction = typeElement _Function $ TypeUnion [
   FieldType _Function_cases $ TypeList $ TypeNominal _Field,
@@ -142,7 +144,7 @@ hsFunctionVariant = typeElement _FunctionVariant $ enum [
   _FunctionVariant_lambda,
   _FunctionVariant_primitive,
   _FunctionVariant_projection]
-  
+
 hsIntegerType :: Element
 hsIntegerType = typeElement _IntegerType $ enum [
   _IntegerType_bigint,
@@ -154,7 +156,7 @@ hsIntegerType = typeElement _IntegerType $ enum [
   _IntegerType_uint16,
   _IntegerType_uint32,
   _IntegerType_uint64]
-  
+
 hsIntegerValue :: Element
 hsIntegerValue = typeElement _IntegerValue $ TypeUnion [
   FieldType _IntegerValue_bigint bigintType,
@@ -166,7 +168,7 @@ hsIntegerValue = typeElement _IntegerValue $ TypeUnion [
   FieldType _IntegerValue_uint16 uint16Type,
   FieldType _IntegerValue_uint32 uint32Type,
   FieldType _IntegerValue_uint64 uint64Type]
-  
+
 hsIntegerVariant :: Element
 hsIntegerVariant = typeElement _IntegerVariant $ enum [
   _IntegerVariant_bigint,
@@ -178,7 +180,7 @@ hsIntegerVariant = typeElement _IntegerVariant $ enum [
   _IntegerVariant_uint16,
   _IntegerVariant_uint32,
   _IntegerVariant_uint64]
-  
+
 hsLambda :: Element
 hsLambda = typeElement _Lambda $ TypeRecord [
   FieldType _Lambda_parameter $ TypeNominal _Variable,
@@ -224,7 +226,7 @@ hsTermVariant = typeElement _TermVariant $ enum [
   _TermVariant_set,
   _TermVariant_union,
   _TermVariant_variable]
-  
+
 hsType :: Element
 hsType = typeElement _Type $ TypeUnion [
   FieldType _Type_atomic $ TypeNominal _AtomicType,
@@ -237,6 +239,9 @@ hsType = typeElement _Type $ TypeUnion [
   FieldType _Type_record $ TypeList $ TypeNominal _FieldType,
   FieldType _Type_set $ TypeNominal _Type,
   FieldType _Type_union $ TypeList $ TypeNominal _FieldType]
+
+hsTypeVariable :: Element
+hsTypeVariable = typeElement _TypeVariable stringType
 
 hsTypeVariant :: Element
 hsTypeVariant = typeElement _TypeVariant $ enum [
@@ -255,6 +260,11 @@ hsTypedTerm :: Element
 hsTypedTerm = typeElement _TypedTerm $ TypeRecord [
   FieldType _TypedTerm_type $ TypeNominal _Type,
   FieldType _TypedTerm_term $ TypeNominal _Term]
+
+hsUniversalType :: Element
+hsUniversalType = typeElement _UniversalType $ TypeRecord [
+  FieldType _UniversalType_variable stringType,
+  FieldType _UniversalType_body $ TypeNominal _Type]
 
 hsVariable :: Element
 hsVariable = typeElement _Variable stringType

@@ -399,6 +399,16 @@ definitions:
           type:
             list: FieldType
 
+        - name: universal
+          type: UniversalType
+
+        - name: variable
+          type: TypeVariable
+
+  - name: TypeVariable
+    description: "A symbol which stands in for a type"
+    type: string
+
   - name: TypeVariant
     type:
       enum:
@@ -412,6 +422,8 @@ definitions:
         - record
         - set
         - union
+        - universal
+        - variable
 
   - name: TypedTerm
     type:
@@ -421,6 +433,16 @@ definitions:
 
         - name: term
           type: Term
+
+  - name: UniversalType
+    description: "A universally quantified ('forall') type, parameterized by a type variable"
+    type:
+      record:
+        - name: variable
+          type: TypeVariable
+
+        - name: body
+          type: Type
 
   - name: Variable
     description: "A symbol which stands in for a term"

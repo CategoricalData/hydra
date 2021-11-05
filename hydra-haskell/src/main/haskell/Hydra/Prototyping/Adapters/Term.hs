@@ -212,6 +212,9 @@ passUnion context t@(TypeUnion sfields) = do
 --      - cases
 --      - lambda
 --      - variable
+--    type constructors
+--      - universal
+--      - variable
 --
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
