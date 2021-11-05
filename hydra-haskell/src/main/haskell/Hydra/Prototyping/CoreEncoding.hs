@@ -145,6 +145,8 @@ encodeType typ = case typ of
   TypeRecord fields -> variant _Type_record $ TermList $ fmap encodeFieldType fields
   TypeSet t -> variant _Type_set $ encodeType t
   TypeUnion fields -> variant _Type_union $ TermList $ fmap encodeFieldType fields
+  TypeUniversal ut -> variant _Type_universal $ encodeUniversalType ut
+  TypeVariable var -> variant _Type_variable $ stringTerm var
 
 encodeTypeVariant :: TypeVariant -> Term
 encodeTypeVariant tv = unitVariant $ case tv of
@@ -158,3 +160,10 @@ encodeTypeVariant tv = unitVariant $ case tv of
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
   TypeVariantUnion -> _TypeVariant_union
+  TypeVariantUniversal -> _TypeVariant_universal
+  TypeVariantVariable -> _TypeVariant_variable
+
+encodeUniversalType :: UniversalType -> Term
+encodeUniversalType (UniversalType var body) = TermRecord [
+  Field _UniversalType_variable $ stringValue var,
+  Field _UniversalType_body $ encodeType body]

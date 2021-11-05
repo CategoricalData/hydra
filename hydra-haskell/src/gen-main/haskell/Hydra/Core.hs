@@ -26,8 +26,10 @@ module Hydra.Core
   , Term(..)
   , TermVariant(..)
   , Type(..)
+  , TypeVariable
   , TypeVariant(..)
   , TypedTerm(..)
+  , UniversalType(..)
   , Variable
   , _Application
   , _Application_argument
@@ -158,6 +160,7 @@ module Hydra.Core
   , _Term_union
   , _Term_variable
   , _Type
+  , _TypeVariable
   , _TypeVariant
   , _TypeVariant_atomic
   , _TypeVariant_element
@@ -169,6 +172,8 @@ module Hydra.Core
   , _TypeVariant_record
   , _TypeVariant_set
   , _TypeVariant_union
+  , _TypeVariant_universal
+  , _TypeVariant_variable
   , _Type_atomic
   , _Type_element
   , _Type_function
@@ -179,9 +184,14 @@ module Hydra.Core
   , _Type_record
   , _Type_set
   , _Type_union
+  , _Type_universal
+  , _Type_variable
   , _TypedTerm
   , _TypedTerm_term
   , _TypedTerm_type
+  , _UniversalType
+  , _UniversalType_body
+  , _UniversalType_variable
   , _Variable
   ) where
 
@@ -489,7 +499,16 @@ data Type
   -- | @type hydra/core.Type
   | TypeSet Type
   -- | @type list: hydra/core.FieldType
-  | TypeUnion [FieldType] deriving (Eq, Generic, Ord, Read, Show)
+  | TypeUnion [FieldType]
+  -- | @type hydra/core.UniversalType
+  | TypeUniversal UniversalType
+  -- | @type hydra/core.TypeVariable
+  | TypeVariable TypeVariable deriving (Eq, Generic, Ord, Read, Show)
+
+{-| A symbol which stands in for a type
+    
+    @type string -}
+type TypeVariable = String
 
 data TypeVariant
   = TypeVariantAtomic
@@ -501,7 +520,9 @@ data TypeVariant
   | TypeVariantOptional
   | TypeVariantRecord
   | TypeVariantSet
-  | TypeVariantUnion deriving (Eq, Generic, Ord, Read, Show)
+  | TypeVariantUnion
+  | TypeVariantUniversal
+  | TypeVariantVariable deriving (Eq, Generic, Ord, Read, Show)
 
 data TypedTerm
   = TypedTerm
@@ -509,6 +530,14 @@ data TypedTerm
     { typedTermType :: Type
     -- | @type hydra/core.Term
     , typedTermTerm :: Term } deriving (Eq, Generic, Ord, Read, Show)
+
+-- | A universally quantified ('forall') type, parameterized by a type variable
+data UniversalType
+  = UniversalType
+    -- | @type hydra/core.TypeVariable
+    { universalTypeVariable :: TypeVariable
+    -- | @type hydra/core.Type
+    , universalTypeBody :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A symbol which stands in for a term
     
@@ -644,6 +673,7 @@ _Term_set = "set" :: String
 _Term_union = "union" :: String
 _Term_variable = "variable" :: String
 _Type = "hydra/core.Type" :: String
+_TypeVariable = "hydra/core.TypeVariable" :: String
 _TypeVariant = "hydra/core.TypeVariant" :: String
 _TypeVariant_atomic = "atomic" :: String
 _TypeVariant_element = "element" :: String
@@ -655,6 +685,8 @@ _TypeVariant_optional = "optional" :: String
 _TypeVariant_record = "record" :: String
 _TypeVariant_set = "set" :: String
 _TypeVariant_union = "union" :: String
+_TypeVariant_universal = "universal" :: String
+_TypeVariant_variable = "variable" :: String
 _Type_atomic = "atomic" :: String
 _Type_element = "element" :: String
 _Type_function = "function" :: String
@@ -665,7 +697,12 @@ _Type_optional = "optional" :: String
 _Type_record = "record" :: String
 _Type_set = "set" :: String
 _Type_union = "union" :: String
+_Type_universal = "universal" :: String
+_Type_variable = "variable" :: String
 _TypedTerm = "hydra/core.TypedTerm" :: String
 _TypedTerm_term = "term" :: String
 _TypedTerm_type = "type" :: String
+_UniversalType = "hydra/core.UniversalType" :: String
+_UniversalType_body = "body" :: String
+_UniversalType_variable = "variable" :: String
 _Variable = "hydra/core.Variable" :: String

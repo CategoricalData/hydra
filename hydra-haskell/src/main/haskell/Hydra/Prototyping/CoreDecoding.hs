@@ -83,7 +83,14 @@ decodeType context = matchUnion context [
     (_Type_optional, fmap TypeOptional . decodeType context),
     (_Type_record, fmap TypeRecord . decodeFieldTypes context),
     (_Type_set, fmap TypeSet . decodeType context),
-    (_Type_union, fmap TypeUnion . decodeFieldTypes context)]
+    (_Type_union, fmap TypeUnion . decodeFieldTypes context),
+    (_Type_universal, fmap TypeUniversal . decodeUniversalType context),
+    (_Type_variable, fmap TypeVariable . decodeString)]
+
+decodeUniversalType :: Context -> Term -> Result UniversalType
+decodeUniversalType context = matchRecord context $ \m -> UniversalType
+  <$> getField m _UniversalType_variable decodeString
+  <*> getField m _UniversalType_body (decodeType context)
 
 deref :: Context -> Term -> Result Term
 deref context term = case term of

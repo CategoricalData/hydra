@@ -219,6 +219,8 @@ typeVariant typ = case typ of
   TypeRecord _ -> TypeVariantRecord
   TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
+  TypeUniversal _ -> TypeVariantUniversal
+  TypeVariable _ -> TypeVariantVariable
 
 typeVariants :: [TypeVariant]
 typeVariants = [
@@ -231,4 +233,6 @@ typeVariants = [
   TypeVariantOptional,
   TypeVariantRecord,
   TypeVariantSet,
-  TypeVariantUnion]
+  TypeVariantUnion,
+  TypeVariantUniversal,
+  TypeVariantVariable]

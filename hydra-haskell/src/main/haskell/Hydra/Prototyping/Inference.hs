@@ -130,3 +130,18 @@ checkType context typ term = check M.empty typ term
       where
         matches = L.filter (\f -> fieldTypeName f == fn) fields
 
+inferType :: Context -> Term -> Result Type
+inferType context term = case term of
+--  TermApplication (Application fun arg) ->
+  TermAtomic av -> pure $ TypeAtomic $ atomicValueType av
+  TermElement name -> do
+    el <- requireElement context name
+    scon <- schemaContext context
+    decodeType scon $ elementSchema el
+--  TermFunction name ->
+--  TermList els ->
+--  TermMap m ->
+--  TermOptional m ->
+--  TermRecord fields ->
+--  TermUnion field ->
+--  TermVariable v ->
