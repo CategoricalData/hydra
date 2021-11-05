@@ -8,6 +8,7 @@ import Hydra.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
+import Hydra.Prototyping.CoreDecoding
 
 import qualified Data.List as L
 import qualified Data.Map  as M
@@ -128,3 +129,4 @@ checkType context typ term = check M.empty typ term
     matchingField fn fields = if L.null matches then Nothing else Just (L.head matches)
       where
         matches = L.filter (\f -> fieldTypeName f == fn) fields
+
