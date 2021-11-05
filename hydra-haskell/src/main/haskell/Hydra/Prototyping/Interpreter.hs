@@ -8,7 +8,6 @@ module Hydra.Prototyping.Interpreter (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives
@@ -140,9 +139,7 @@ termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaq
 
 -- | Whether a term has been fully reduced to a "value"
 termIsValue :: EvaluationStrategy -> Term -> Bool
-termIsValue strategy term = if termIsOpaque strategy term
-    then True
-    else case term of
+termIsValue strategy term = termIsOpaque strategy term || case term of
       TermApplication _ -> False
       TermAtomic _ -> True
       TermElement _ -> True
