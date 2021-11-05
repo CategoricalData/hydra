@@ -2,6 +2,16 @@ description: "The Hydra Core model (in progress)"
 
 definitions:
 
+  - name: AbstractType
+    description: "A universally quantified ('forall') type, parameterized by a type variable"
+    type:
+      record:
+        - name: variable
+          type: TypeVariable
+
+        - name: body
+          type: Type
+
   - name: Application
     description: "A term which applies a function to an argument"
     type:
@@ -367,6 +377,9 @@ definitions:
   - name: Type
     type:
       union:
+        - name: abstract
+          type: AbstractType
+
         - name: atomic
           type: AtomicType
 
@@ -399,9 +412,6 @@ definitions:
           type:
             list: FieldType
 
-        - name: universal
-          type: UniversalType
-
         - name: variable
           type: TypeVariable
 
@@ -412,6 +422,7 @@ definitions:
   - name: TypeVariant
     type:
       enum:
+        - abstract
         - atomic
         - element
         - function
@@ -422,7 +433,6 @@ definitions:
         - record
         - set
         - union
-        - universal
         - variable
 
   - name: TypedTerm
@@ -433,16 +443,6 @@ definitions:
 
         - name: term
           type: Term
-
-  - name: UniversalType
-    description: "A universally quantified ('forall') type, parameterized by a type variable"
-    type:
-      record:
-        - name: variable
-          type: TypeVariable
-
-        - name: body
-          type: Type
 
   - name: Variable
     description: "A symbol which stands in for a term"

@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 -- | The Hydra Core model (in progress)
 module Hydra.Core
-  ( Application(..)
+  ( AbstractType(..)
+  , Application(..)
   , AtomicType(..)
   , AtomicValue(..)
   , AtomicVariant(..)
@@ -29,8 +30,10 @@ module Hydra.Core
   , TypeVariable
   , TypeVariant(..)
   , TypedTerm(..)
-  , UniversalType(..)
   , Variable
+  , _AbstractType
+  , _AbstractType_body
+  , _AbstractType_variable
   , _Application
   , _Application_argument
   , _Application_function
@@ -162,6 +165,7 @@ module Hydra.Core
   , _Type
   , _TypeVariable
   , _TypeVariant
+  , _TypeVariant_abstract
   , _TypeVariant_atomic
   , _TypeVariant_element
   , _TypeVariant_function
@@ -172,8 +176,8 @@ module Hydra.Core
   , _TypeVariant_record
   , _TypeVariant_set
   , _TypeVariant_union
-  , _TypeVariant_universal
   , _TypeVariant_variable
+  , _Type_abstract
   , _Type_atomic
   , _Type_element
   , _Type_function
@@ -184,14 +188,10 @@ module Hydra.Core
   , _Type_record
   , _Type_set
   , _Type_union
-  , _Type_universal
   , _Type_variable
   , _TypedTerm
   , _TypedTerm_term
   , _TypedTerm_type
-  , _UniversalType
-  , _UniversalType_body
-  , _UniversalType_variable
   , _Variable
   ) where
 
@@ -199,6 +199,14 @@ import GHC.Generics (Generic)
 import Data.Int
 import Data.Map
 import Data.Set
+
+-- | A universally quantified ('forall') type, parameterized by a type variable
+data AbstractType
+  = AbstractType
+    -- | @type hydra/core.TypeVariable
+    { abstractTypeVariable :: TypeVariable
+    -- | @type hydra/core.Type
+    , abstractTypeBody :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A term which applies a function to an argument
 data Application
@@ -480,8 +488,10 @@ data TermVariant
   | TermVariantVariable deriving (Eq, Generic, Ord, Read, Show)
 
 data Type
+  -- | @type hydra/core.AbstractType
+  = TypeAbstract AbstractType
   -- | @type hydra/core.AtomicType
-  = TypeAtomic AtomicType
+  | TypeAtomic AtomicType
   -- | @type hydra/core.Type
   | TypeElement Type
   -- | @type hydra/core.FunctionType
@@ -500,8 +510,6 @@ data Type
   | TypeSet Type
   -- | @type list: hydra/core.FieldType
   | TypeUnion [FieldType]
-  -- | @type hydra/core.UniversalType
-  | TypeUniversal UniversalType
   -- | @type hydra/core.TypeVariable
   | TypeVariable TypeVariable deriving (Eq, Generic, Ord, Read, Show)
 
@@ -511,7 +519,8 @@ data Type
 type TypeVariable = String
 
 data TypeVariant
-  = TypeVariantAtomic
+  = TypeVariantAbstract
+  | TypeVariantAtomic
   | TypeVariantElement
   | TypeVariantFunction
   | TypeVariantList
@@ -521,7 +530,6 @@ data TypeVariant
   | TypeVariantRecord
   | TypeVariantSet
   | TypeVariantUnion
-  | TypeVariantUniversal
   | TypeVariantVariable deriving (Eq, Generic, Ord, Read, Show)
 
 data TypedTerm
@@ -531,19 +539,14 @@ data TypedTerm
     -- | @type hydra/core.Term
     , typedTermTerm :: Term } deriving (Eq, Generic, Ord, Read, Show)
 
--- | A universally quantified ('forall') type, parameterized by a type variable
-data UniversalType
-  = UniversalType
-    -- | @type hydra/core.TypeVariable
-    { universalTypeVariable :: TypeVariable
-    -- | @type hydra/core.Type
-    , universalTypeBody :: Type } deriving (Eq, Generic, Ord, Read, Show)
-
 {-| A symbol which stands in for a term
     
     @type string -}
 type Variable = String
 
+_AbstractType = "hydra/core.AbstractType" :: String
+_AbstractType_body = "body" :: String
+_AbstractType_variable = "variable" :: String
 _Application = "hydra/core.Application" :: String
 _Application_argument = "argument" :: String
 _Application_function = "function" :: String
@@ -675,6 +678,7 @@ _Term_variable = "variable" :: String
 _Type = "hydra/core.Type" :: String
 _TypeVariable = "hydra/core.TypeVariable" :: String
 _TypeVariant = "hydra/core.TypeVariant" :: String
+_TypeVariant_abstract = "abstract" :: String
 _TypeVariant_atomic = "atomic" :: String
 _TypeVariant_element = "element" :: String
 _TypeVariant_function = "function" :: String
@@ -685,8 +689,8 @@ _TypeVariant_optional = "optional" :: String
 _TypeVariant_record = "record" :: String
 _TypeVariant_set = "set" :: String
 _TypeVariant_union = "union" :: String
-_TypeVariant_universal = "universal" :: String
 _TypeVariant_variable = "variable" :: String
+_Type_abstract = "abstract" :: String
 _Type_atomic = "atomic" :: String
 _Type_element = "element" :: String
 _Type_function = "function" :: String
@@ -697,12 +701,8 @@ _Type_optional = "optional" :: String
 _Type_record = "record" :: String
 _Type_set = "set" :: String
 _Type_union = "union" :: String
-_Type_universal = "universal" :: String
 _Type_variable = "variable" :: String
 _TypedTerm = "hydra/core.TypedTerm" :: String
 _TypedTerm_term = "term" :: String
 _TypedTerm_type = "type" :: String
-_UniversalType = "hydra/core.UniversalType" :: String
-_UniversalType_body = "body" :: String
-_UniversalType_variable = "variable" :: String
 _Variable = "hydra/core.Variable" :: String

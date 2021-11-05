@@ -213,7 +213,7 @@ passUnion context t@(TypeUnion sfields) = do
 --      - lambda
 --      - variable
 --    type constructors
---      - universal
+--      - abstract
 --      - variable
 --
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
