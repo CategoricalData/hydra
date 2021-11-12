@@ -138,10 +138,19 @@ inferType context term = case term of
     el <- requireElement context name
     scon <- schemaContext context
     decodeType scon $ elementSchema el
---  TermFunction name ->
+--  TermFunction fun -> case fun of
+----      FunctionVariantCases
+----      FunctionVariantCompareTo
+----      FunctionVariantData
+----      FunctionVariantLambda
+--      FunctionPrimitive name -> TypeFunction <$> (primitiveFunctionType <$> requirePrimitiveFunction context name)
+--      FunctionProjection fn -> 
 --  TermList els ->
 --  TermMap m ->
 --  TermOptional m ->
 --  TermRecord fields ->
 --  TermUnion field ->
 --  TermVariable v ->
+
+--applicationType :: Type -> Application -> (Type, Type)
+--applicationType typ (Application fun arg) = 

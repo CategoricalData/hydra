@@ -1,0 +1,86 @@
+definitions:
+
+  - name: Associativity
+    type:
+      enum:
+        - left
+        - right
+
+  - name: Delimiters
+    type:
+      record:
+        - name: open
+          type:
+            optional: string
+
+        - name: close
+          type:
+            optional: string
+
+  - name: Expression
+    type:
+      union:
+        - name: atomic
+          type: string
+
+        - name: block
+          type: Expression.Block
+
+        - name: infix
+          type: Expression.Operator
+
+        - name: list
+          type: Expression.List
+
+        - name: prefix
+          type: Expression.Operator
+
+    innerTypes:
+      - name: Block
+        type:
+          record:
+            - name: delimiters
+              type: Delimiters
+
+            - name: head
+              type:
+                optional: Expression
+
+            - name: subexpressions
+              type:
+                list: Expression
+
+      - name: List
+        type:
+          record:
+            - name: separator
+              type: string
+
+            - name: elements
+              type:
+                list: Expression
+
+      - name: Operator
+        type:
+          record:
+            - name: operator
+              type: Operator
+
+            - name: operands
+              type:
+                list: Expression
+
+  - name: Operator
+    type:
+      record:
+        - name: symbol
+          type: string
+
+        - name: precedence
+          type: Precedence
+
+        - name: associativity
+          type: Associativity
+
+  - name: Precedence
+    type: integer
