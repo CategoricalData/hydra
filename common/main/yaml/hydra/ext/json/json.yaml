@@ -1,0 +1,45 @@
+definitions:
+
+  - name: Number
+    type:
+      record:
+        - name: integer
+          type:
+            integer:
+              precision: arbitrary
+
+        - name: fraction
+          comments:
+            - Positive numbers only
+          type:
+            integer:
+              precision: arbitrary
+
+        - name: exponent
+          type:
+            integer:
+              precision: arbitrary
+
+  - name: Value
+    type:
+      union:
+        - name: array
+          type:
+            list: Value
+
+        - name: boolean
+          type: boolean
+
+        - name: "null"
+
+        - name: number
+          type: Number
+
+        - name: object
+          type:
+            map:
+              keys: string
+              values: Value
+
+        - name: string
+          type: string
