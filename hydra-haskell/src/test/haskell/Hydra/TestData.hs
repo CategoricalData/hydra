@@ -1,6 +1,6 @@
 module Hydra.TestData where
   
-import Hydra.Core
+import Hydra.V1.Core
 import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.Map as M

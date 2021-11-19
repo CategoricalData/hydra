@@ -4,11 +4,11 @@ module Hydra.Prototyping.Adapters.Atomic (
   integerAdapter,
 ) where
 
-import Hydra.Core
+import Hydra.V1.Core
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
-import Hydra.Adapter
+import Hydra.V1.Adapter
 import Hydra.Prototyping.Adapters.Utils
 
 import qualified Data.List as L

@@ -2,8 +2,8 @@ module Hydra.Prototyping.BasicsWithDsl (
   basicsGraph,
 ) where
 
-import Hydra.Core
-import Hydra.Graph
+import Hydra.V1.Core
+import Hydra.V1.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl
 

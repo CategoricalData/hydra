@@ -3,9 +3,9 @@ module Hydra.Prototyping.Adapters.Term (
   termAdapter,
 ) where
 
-import Hydra.Core
-import Hydra.Graph
-import Hydra.Adapter
+import Hydra.V1.Core
+import Hydra.V1.Graph
+import Hydra.V1.Adapter
 import Hydra.Prototyping.Adapters.Atomic
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras

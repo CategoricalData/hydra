@@ -71,8 +71,8 @@ module Hydra.Impl.Haskell.Dsl (
   withVariant,
 ) where
 
-import Hydra.Core
-import Hydra.Graph
+import Hydra.V1.Core
+import Hydra.V1.Graph
 import Hydra.Prototyping.Steps
 import qualified Data.List as L
 import qualified Data.Map as M
