@@ -44,7 +44,7 @@ data Value
   {-| @type map:
               keys: string
               values: hydra/ext/json/json.Value -}
-  | ValueObject (Map String Value)
+  | ValueObject (Map (String) (Value))
   -- | @type string
   | ValueString String deriving (Eq, Generic, Ord, Read, Show)
 

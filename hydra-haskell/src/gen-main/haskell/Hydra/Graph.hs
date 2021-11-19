@@ -65,7 +65,7 @@ data GraphSet
     {-| @type map:
                 keys: hydra/graph.GraphName
                 values: hydra/graph.Graph -}
-    { graphSetGraphs :: (Map GraphName Graph)
+    { graphSetGraphs :: (Map (GraphName) (Graph))
     {-| The focal graph of this set; 'the' graph. This root graph's schema graph,
         the second-degree schema graph, etc. are
         also provided as non-root graphs.

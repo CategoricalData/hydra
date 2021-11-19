@@ -452,7 +452,7 @@ data Term
       @type map:
               keys: hydra/core.Term
               values: hydra/core.Term -}
-  | TermMap (Map Term Term)
+  | TermMap (Map (Term) (Term))
   {-| An optional value
       
       @type optional: hydra/core.Term -}
@@ -464,7 +464,7 @@ data Term
   {-| A set of terms
       
       @type set: hydra/core.Term -}
-  | TermSet (Set Term)
+  | TermSet (Set (Term))
   {-| A union term, i.e. a generalization of inl() or inr()
       
       @type hydra/core.Field -}
