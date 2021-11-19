@@ -66,17 +66,17 @@ data AdapterContext
 data Language_Constraints
   = Language_Constraints
     -- | @type set: hydra/core.AtomicVariant
-    { languageConstraintsAtomicVariants :: (Set AtomicVariant)
+    { languageConstraintsAtomicVariants :: (Set (AtomicVariant))
     -- | @type set: hydra/core.FloatVariant
-    , languageConstraintsFloatVariants :: (Set FloatVariant)
+    , languageConstraintsFloatVariants :: (Set (FloatVariant))
     -- | @type set: hydra/core.FunctionVariant
-    , languageConstraintsFunctionVariants :: (Set FunctionVariant)
+    , languageConstraintsFunctionVariants :: (Set (FunctionVariant))
     -- | @type set: hydra/core.IntegerVariant
-    , languageConstraintsIntegerVariants :: (Set IntegerVariant)
+    , languageConstraintsIntegerVariants :: (Set (IntegerVariant))
     -- | @type set: hydra/core.TermVariant
-    , languageConstraintsTermVariants :: (Set TermVariant)
+    , languageConstraintsTermVariants :: (Set (TermVariant))
     -- | @type set: hydra/core.TypeVariant
-    , languageConstraintsTypeVariants :: (Set TypeVariant)
+    , languageConstraintsTypeVariants :: (Set (TypeVariant))
     {-| @type function:
                 from:
                 - hydra/core.Type

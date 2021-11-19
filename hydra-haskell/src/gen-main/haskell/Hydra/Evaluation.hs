@@ -42,11 +42,11 @@ data Context
     {-| @type map:
                 keys: hydra/core.Name
                 values: hydra/graph.Element -}
-    , contextElements :: (Map Name Element)
+    , contextElements :: (Map (Name) (Element))
     {-| @type map:
                 keys: hydra/core.Name
                 values: hydra/evaluation.PrimitiveFunction -}
-    , contextFunctions :: (Map Name PrimitiveFunction)
+    , contextFunctions :: (Map (Name) (PrimitiveFunction))
     -- | @type hydra/evaluation.EvaluationStrategy
     , contextStrategy :: EvaluationStrategy }
 
@@ -56,7 +56,7 @@ data EvaluationStrategy
         without further inspection
         
         @type set: hydra/core.TermVariant -}
-    { evaluationStrategyOpaqueTermVariants :: (Set TermVariant) } deriving (Eq, Generic, Ord, Read, Show)
+    { evaluationStrategyOpaqueTermVariants :: (Set (TermVariant)) } deriving (Eq, Generic, Ord, Read, Show)
 
 data PrimitiveFunction
   = PrimitiveFunction

@@ -33,7 +33,7 @@ data Node
       @type map:
               keys: hydra/ext/yaml/model.Node
               values: hydra/ext/yaml/model.Node -}
-  = NodeMapping (Map Node Node)
+  = NodeMapping (Map (Node) (Node))
   -- | @type hydra/ext/yaml/model.Scalar
   | NodeScalar Scalar
   {-| @comments Failsafe schema: tag:yaml.org,2002:seq
