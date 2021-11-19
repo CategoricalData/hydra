@@ -1,0 +1,96 @@
+includes:
+  - core
+  - evaluation
+
+definitions:
+
+  - name: Adapter
+    type:
+      record:
+        - name: isLossy
+          type: boolean
+
+        - name: source
+          type:
+            variable: t
+
+        - name: target
+          type:
+            variable: t
+
+        - name: step
+          type:
+            parameterized:
+              genericType: evaluation.Step
+              parameters:
+                - variable: a
+                  type:
+                    variable: v
+                - variable: b
+                  type:
+                    variable: v
+
+  - name: AdapterContext
+    type:
+      record:
+        - name: evaluation
+          type:
+            parameterized:
+              genericType: evaluation.Context
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: source
+          type: Language
+
+        - name: target
+          type: Language
+
+  - name: Language
+    type:
+      record:
+        - name: name
+          type: Language.Name
+
+        - name: constraints
+          type: Language.Constraints
+
+    innerTypes:
+      - name: Constraints
+        type:
+          record:
+            - name: atomicVariants
+              type:
+                set: core.AtomicVariant
+
+            - name: floatVariants
+              type:
+                set: core.FloatVariant
+
+            - name: functionVariants
+              type:
+                set: core.FunctionVariant
+
+            - name: integerVariants
+              type:
+                set: core.IntegerVariant
+
+            - name: termVariants
+              type:
+                set: core.TermVariant
+
+            - name: typeVariants
+              type:
+                set: core.TypeVariant
+
+            - name: types
+              type:
+                function:
+                  from:
+                    - core.Type
+                  to: boolean
+
+      - name: Name
+        type: string
