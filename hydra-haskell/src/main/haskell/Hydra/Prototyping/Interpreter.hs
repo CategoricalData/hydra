@@ -6,8 +6,8 @@ module Hydra.Prototyping.Interpreter (
   termIsValue,
 ) where
 
-import Hydra.Core
-import Hydra.Evaluation
+import Hydra.V1.Core
+import Hydra.V1.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives

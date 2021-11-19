@@ -1,9 +1,9 @@
 module Hydra.Ext.Scala.Prepare (
   prepareType,
-  module Hydra.Core,
+  module Hydra.V1.Core,
 ) where
 
-import Hydra.Core
+import Hydra.V1.Core
 
 import qualified Data.Set as S
 

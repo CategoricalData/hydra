@@ -11,7 +11,7 @@ module Hydra.Prototyping.CoreDecoding (
   decodeType,
   ) where
 
-import Hydra.Core
+import Hydra.V1.Core
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 
