@@ -2,8 +2,8 @@ module Hydra.Prototyping.BasicsWithDsl (
   basicsGraph,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Graph
+import Hydra.V2.Core
+import Hydra.V2.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl
 
@@ -114,7 +114,7 @@ basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVari
     (_Function_lambda,     _FunctionVariant_lambda),
     (_Function_primitive,  _FunctionVariant_primitive),
     (_Function_projection, _FunctionVariant_projection)]
-    
+
 basicsTermVariant :: Element
 basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
   matchWithVariants [

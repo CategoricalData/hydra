@@ -8,9 +8,9 @@ module Hydra.Prototyping.Primitives (
   schemaContext,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Evaluation
-import Hydra.V1.Graph
+import Hydra.V2.Core
+import Hydra.V2.Evaluation
+import Hydra.V2.Graph
 import Hydra.Prototyping.Steps
 
 import qualified Data.Map as M

@@ -6,9 +6,9 @@ module Hydra.TestGraph (
   module Hydra.Impl.Haskell.Lib.Strings,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Graph
-import Hydra.V1.Evaluation
+import Hydra.V2.Core
+import Hydra.V2.Graph
+import Hydra.V2.Evaluation
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.CoreGraph
 import Hydra.Prototyping.Primitives
@@ -40,8 +40,8 @@ testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
   where
     arthur = Element {
       elementName = "ArthurDent",
-      elementSchema = TermElement "Person",
-      elementData = TermRecord [
+      elementSchema = ExpressionElement "Person",
+      elementData = ExpressionRecord [
         Field "firstName" $ stringValue "Arthur",
         Field "lastName" $ stringValue "Dent",
         Field "age" $ int32Value 42]}

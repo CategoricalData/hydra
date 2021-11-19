@@ -8,9 +8,9 @@ module Hydra.Impl.Haskell.Extras (
   module Hydra.Errors
   ) where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Errors
-import Hydra.V1.Graph
+import Hydra.V2.Graph
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.CoreDecoding
 

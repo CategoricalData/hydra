@@ -2,9 +2,9 @@ module Hydra.Prototyping.Inference (
     checkType,
   ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Graph
-import Hydra.V1.Evaluation
+import Hydra.V2.Core
+import Hydra.V2.Graph
+import Hydra.V2.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
@@ -22,11 +22,11 @@ checkType context typ term = check M.empty typ term
     check bindings typ term = case term of
       -- TODO: nominal types
 
-      TermApplication (Application f arg) -> case f of
---        TermApplication ... ->
-        TermAtomic _ -> False
-        TermElement _ -> False
-        TermFunction f -> case f of
+      ExpressionApplication (Application f arg) -> case f of
+--        ExpressionApplication ... ->
+        ExpressionAtomic _ -> False
+        ExpressionElement _ -> False
+        ExpressionFunction f -> case f of
 --          FunctionCases ... ->
 --          FunctionCompareTo other ->
           FunctionData -> check bindings (TypeElement typ) arg
@@ -37,38 +37,38 @@ checkType context typ term = check M.empty typ term
               where
                 FunctionType dom cod = primitiveFunctionType prim
 --          FunctionProjection fn ->
-        TermList _ -> False
-        TermMap _ -> False
-        TermRecord _ -> False
-        TermSet _ -> False
-        TermUnion _ -> False
-        TermVariable v -> case M.lookup v bindings of
+        ExpressionList _ -> False
+        ExpressionMap _ -> False
+        ExpressionRecord _ -> False
+        ExpressionSet _ -> False
+        ExpressionUnion _ -> False
+        ExpressionVariable v -> case M.lookup v bindings of
           Nothing -> False
           Just t -> case t of
             TypeFunction (FunctionType dom cod) -> cod == typ && check bindings dom arg
             _ -> False
                   
-      TermAtomic v -> case typ of
+      ExpressionAtomic v -> case typ of
         TypeAtomic at -> at == atomicValueType v
         _ -> False
 
-      TermElement en -> case typ of
+      ExpressionElement en -> case typ of
         TypeElement et -> case M.lookup en (contextElements context) of
           Nothing -> False -- TODO: this is not a term/type failure, but a data integrity failure
           Just e -> encodeType et == elementSchema e
         _ -> False
 
-      TermList list -> case typ of
+      ExpressionList list -> case typ of
         TypeList lt -> and $ fmap (check bindings lt) list
         _ -> False
 
-      TermOptional m -> case typ of
+      ExpressionOptional m -> case typ of
         TypeOptional ot -> case m of
           Nothing -> True
           Just term -> check bindings ot term
         _ -> False
         
-      TermRecord fields -> case typ of
+      ExpressionRecord fields -> case typ of
         TypeRecord tfields -> sameLength tfields fields
             && (L.foldl (&&) True $ L.zipWith matches tfields fields)
           where
@@ -76,17 +76,17 @@ checkType context typ term = check M.empty typ term
               && check bindings (fieldTypeType tf) (fieldTerm f)
         _ -> False
 
-      TermUnion field -> case typ of
+      ExpressionUnion field -> case typ of
         TypeUnion fields -> case matchingField (fieldName field) fields of
           Nothing -> False
           Just f -> check bindings (fieldTypeType f) $ fieldTerm field
         _ -> False
 
-      TermVariable v -> case M.lookup v bindings of
+      ExpressionVariable v -> case M.lookup v bindings of
         Nothing -> False
         Just t -> t == typ
 
-      TermFunction f -> case f of
+      ExpressionFunction f -> case f of
         FunctionCases cases -> case typ of
           TypeFunction (FunctionType dom cod) -> case dom of
             TypeUnion fields -> and $ fmap checkCase cases
@@ -132,25 +132,25 @@ checkType context typ term = check M.empty typ term
 
 inferType :: Context -> Term -> Result Type
 inferType context term = case term of
---  TermApplication (Application fun arg) ->
-  TermAtomic av -> pure $ TypeAtomic $ atomicValueType av
-  TermElement name -> do
+--  ExpressionApplication (Application fun arg) ->
+  ExpressionAtomic av -> pure $ TypeAtomic $ atomicValueType av
+  ExpressionElement name -> do
     el <- requireElement context name
     scon <- schemaContext context
     decodeType scon $ elementSchema el
---  TermFunction fun -> case fun of
+--  ExpressionFunction fun -> case fun of
 ----      FunctionVariantCases
 ----      FunctionVariantCompareTo
 ----      FunctionVariantData
 ----      FunctionVariantLambda
 --      FunctionPrimitive name -> TypeFunction <$> (primitiveFunctionType <$> requirePrimitiveFunction context name)
 --      FunctionProjection fn -> 
---  TermList els ->
---  TermMap m ->
---  TermOptional m ->
---  TermRecord fields ->
---  TermUnion field ->
---  TermVariable v ->
+--  ExpressionList els ->
+--  ExpressionMap m ->
+--  ExpressionOptional m ->
+--  ExpressionRecord fields ->
+--  ExpressionUnion field ->
+--  ExpressionVariable v ->
 
 --applicationType :: Type -> Application -> (Type, Type)
 --applicationType typ (Application fun arg) = 

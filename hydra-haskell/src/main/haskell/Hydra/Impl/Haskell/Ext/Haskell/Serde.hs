@@ -3,9 +3,9 @@ module Hydra.Impl.Haskell.Ext.Haskell.Serde (
   haskellSerdeStr,
 ) where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Errors
-import Hydra.V1.Evaluation
+import Hydra.V2.Evaluation
 import Hydra.Ext.Haskell.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Ser

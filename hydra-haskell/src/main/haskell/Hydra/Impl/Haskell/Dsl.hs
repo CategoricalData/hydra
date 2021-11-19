@@ -71,8 +71,8 @@ module Hydra.Impl.Haskell.Dsl (
   withVariant,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Graph
+import Hydra.V2.Core
+import Hydra.V2.Graph
 import Hydra.Prototyping.Steps
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -85,7 +85,7 @@ type SchemaError = String
 
 
 apply :: Term -> Term -> Term
-apply func arg = TermApplication $ Application func arg
+apply func arg = ExpressionApplication $ Application func arg
 
 bigfloatType :: Type
 bigfloatType = floatType FloatTypeBigfloat
@@ -100,7 +100,7 @@ bigintValue :: Integer -> Term
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
 binaryTerm :: String -> Term
-binaryTerm = TermAtomic . AtomicValueBinary
+binaryTerm = ExpressionAtomic . AtomicValueBinary
 
 binaryType :: Type
 binaryType = TypeAtomic AtomicTypeBinary
@@ -109,13 +109,13 @@ booleanType :: Type
 booleanType = TypeAtomic AtomicTypeBoolean
 
 booleanValue :: Bool -> Term
-booleanValue b = TermAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+booleanValue b = ExpressionAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 cases :: [Field] -> Term
-cases = TermFunction . FunctionCases
+cases = ExpressionFunction . FunctionCases
 
 compareTo :: Term -> Term
-compareTo = TermFunction . FunctionCompareTo
+compareTo = ExpressionFunction . FunctionCompareTo
  
 compose :: Term -> Term -> Term
 compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
@@ -125,17 +125,17 @@ constFunction :: Term -> Term
 constFunction = lambda "_"
 
 dataTerm :: Term
-dataTerm = TermFunction FunctionData
+dataTerm = ExpressionFunction FunctionData
 
 deref :: Name -> Term
-deref name = apply dataTerm $ TermElement name
+deref name = apply dataTerm $ ExpressionElement name
 
 elementRef :: Element -> Term
-elementRef el = apply dataTerm $ TermElement $ elementName el
+elementRef el = apply dataTerm $ ExpressionElement $ elementName el
 
 expectAtomicValue :: Term -> Result AtomicValue
 expectAtomicValue term = case term of
-  TermAtomic av -> pure av
+  ExpressionAtomic av -> pure av
   _ -> fail $ "expected an atomic value, got " ++ show term
 
 expectNArgs :: Int -> [Term] -> Result ()
@@ -145,17 +145,17 @@ expectNArgs n args = if L.length args /= n
 
 expectRecordTerm :: Term -> Result [Field]
 expectRecordTerm term = case term of
-  TermRecord fields -> pure fields
+  ExpressionRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
 expectStringTerm :: Term -> Result String
 expectStringTerm term = case term of
-  TermAtomic (AtomicValueString s) -> pure s
+  ExpressionAtomic (AtomicValueString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
 expectUnionTerm :: Term -> Result Field
 expectUnionTerm term = case term of
-  TermUnion field -> pure field
+  ExpressionUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
 fieldsToMap :: [Field] -> M.Map FieldName Term
@@ -180,10 +180,10 @@ floatType :: FloatType -> Type
 floatType = TypeAtomic . AtomicTypeFloat
 
 floatValue :: FloatValue -> Term
-floatValue = TermAtomic . AtomicValueFloat
+floatValue = ExpressionAtomic . AtomicValueFloat
 
 function :: Name -> Term
-function = TermFunction . FunctionPrimitive
+function = ExpressionFunction . FunctionPrimitive
 
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
@@ -216,10 +216,10 @@ integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger
 
 integerValue :: IntegerValue -> Term
-integerValue = TermAtomic . AtomicValueInteger
+integerValue = ExpressionAtomic . AtomicValueInteger
 
 lambda :: Variable -> Term -> Term
-lambda param body = TermFunction $ FunctionLambda $ Lambda param body
+lambda param body = ExpressionFunction $ FunctionLambda $ Lambda param body
 
 listType :: Type -> Type
 listType = TypeList
@@ -241,10 +241,10 @@ nominalType :: Name -> Type
 nominalType = TypeNominal
 
 primitive :: Name -> Term
-primitive = TermFunction . FunctionPrimitive
+primitive = ExpressionFunction . FunctionPrimitive
 
 projection :: Name -> Term
-projection = TermFunction . FunctionProjection
+projection = ExpressionFunction . FunctionProjection
 
 requireField :: M.Map FieldName Term -> FieldName -> Result Term
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
@@ -252,13 +252,13 @@ requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
     error = fail $ "no such field: " ++ fname
 
 stringTerm :: String -> Term
-stringTerm = TermAtomic . AtomicValueString
+stringTerm = ExpressionAtomic . AtomicValueString
 
 stringType :: Type
 stringType = TypeAtomic AtomicTypeString
 
 stringValue :: String -> Term
-stringValue = TermAtomic . AtomicValueString
+stringValue = ExpressionAtomic . AtomicValueString
 
 uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16
@@ -285,7 +285,7 @@ uint8Value :: Integer -> Term
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
 unitTerm :: Term
-unitTerm = TermRecord []
+unitTerm = ExpressionRecord []
 
 unitType :: Type
 unitType = TypeRecord []
@@ -294,10 +294,10 @@ unitVariant :: FieldName -> Term
 unitVariant fname = variant fname unitTerm
 
 variable :: Variable -> Term
-variable = TermVariable
+variable = ExpressionVariable
 
 variant :: FieldName -> Term -> Term
-variant fname term = TermUnion (Field fname term)
+variant fname term = ExpressionUnion (Field fname term)
 
 withFunction :: FieldName -> Element -> Term
 withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)

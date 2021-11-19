@@ -3,9 +3,9 @@ module Hydra.Ext.Haskell.Coder (
   haskellLanguage,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Evaluation
-import Hydra.V1.Adapter
+import Hydra.V2.Core
+import Hydra.V2.Evaluation
+import Hydra.V2.Adapter
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
@@ -51,15 +51,15 @@ encodeFunction fun = case fun of
 
 encodeTerm :: Term -> Result H.Expression
 encodeTerm term = case term of
-  TermApplication (Application fun arg) -> hsapp <$> encodeTerm fun <*> encodeTerm arg
-  TermAtomic av -> encodeAtomic av
-  TermElement name -> pure $ hsvar name
-  TermFunction f -> encodeFunction f
-  TermList els -> H.ExpressionList <$> CM.mapM encodeTerm els
-  TermOptional m -> case m of
+  ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm fun <*> encodeTerm arg
+  ExpressionAtomic av -> encodeAtomic av
+  ExpressionElement name -> pure $ hsvar name
+  ExpressionFunction f -> encodeFunction f
+  ExpressionList els -> H.ExpressionList <$> CM.mapM encodeTerm els
+  ExpressionOptional m -> case m of
     Nothing -> pure $ hsvar "Nothing"
     Just t -> hsapp (hsvar "Just") <$> encodeTerm t
-  TermRecord fields -> case fields of
+  ExpressionRecord fields -> case fields of
     [] -> pure $ H.ExpressionTuple []
     _ -> do
         let typeName = "Placeholder"
@@ -67,8 +67,8 @@ encodeTerm term = case term of
         return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
       where
         toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname fn) <$> encodeTerm ft
-  TermUnion (Field fn ft) -> hsapp (hsvar fn) <$> encodeTerm ft
-  TermVariable v -> pure $ hsvar v
+  ExpressionUnion (Field fn ft) -> hsapp (hsvar fn) <$> encodeTerm ft
+  ExpressionVariable v -> pure $ hsvar v
   _ -> fail $ "unexpected term: " ++ show term
 
 haskellCoder :: Context -> Type -> Qualified (Step Term H.Expression)

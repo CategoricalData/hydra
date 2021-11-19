@@ -3,7 +3,7 @@
 
 module Hydra.Impl.Haskell.Ext.Yaml.SerdeSpec where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Dsl
@@ -52,21 +52,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (TypeOptional int32Type)
-        (TermOptional $ (Just . int32Value) =<< mi))
+        (ExpressionOptional $ (Just . int32Value) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (TypeOptional $ TypeOptional int32Type)
-        (TermOptional $ Just $ TermOptional $ (Just . int32Value) =<< mi))
+        (ExpressionOptional $ Just $ ExpressionOptional $ (Just . int32Value) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeOptional $ TypeOptional int32Type)
-        (TermOptional Nothing))
+        (ExpressionOptional Nothing))
       "[]"
 
 checkRecordsAndUnions :: H.SpecWith ()
@@ -84,14 +84,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeRecord [FieldType "one" $ TypeOptional stringType, FieldType "two" $ TypeOptional int32Type])
-        (TermRecord [Field "one" $ TermOptional $ Just $ stringValue "test", Field "two" $ TermOptional Nothing]))
+        (ExpressionRecord [Field "one" $ ExpressionOptional $ Just $ stringValue "test", Field "two" $ ExpressionOptional Nothing]))
       "one: test"
       
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeUnion [FieldType "left" stringType, FieldType "right" int32Type])
-        (TermUnion $ Field "left" $ stringValue "test"))
+        (ExpressionUnion $ Field "left" $ stringValue "test"))
       "left: test"
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()

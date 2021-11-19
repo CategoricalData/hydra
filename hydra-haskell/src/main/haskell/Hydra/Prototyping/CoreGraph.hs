@@ -1,7 +1,7 @@
 module Hydra.Prototyping.CoreGraph ( hydraCoreGraph ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Graph
+import Hydra.V2.Core
+import Hydra.V2.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl
 
@@ -45,7 +45,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
 typeElement :: Name -> Type -> Element
 typeElement name typ = Element {
   elementName = name,
-  elementSchema = TermElement _Type,
+  elementSchema = ExpressionElement _Type,
   elementData = encodeType typ}
 
 enum :: [FieldName] -> Type

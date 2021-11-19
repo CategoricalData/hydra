@@ -3,8 +3,8 @@ module Hydra.Impl.Haskell.Lib.Strings (
   stringsFunc,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Evaluation
+import Hydra.V2.Core
+import Hydra.V2.Evaluation
 import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.Char as C
