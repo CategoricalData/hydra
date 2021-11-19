@@ -1,20 +1,24 @@
 plugins {
-    id 'java-library'
+  id 'java-library'
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
+  maven {
+    url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
+  }
 }
 
 sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java'
-            srcDirs 'src/gen-main/java'
-        }
+  main {
+    java {
+      srcDirs 'src/main/java'
+      srcDirs 'src/gen-main/java'
     }
+  }
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
+  implementation 'com.linkedin.pegasus:generator:29.22.13'
+  testImplementation 'junit:junit:4.13.2'
 }
