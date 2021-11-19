@@ -1,5 +1,5 @@
 includes:
-  - ../../core
+  - ../../v1/core
 
 definitions:
 

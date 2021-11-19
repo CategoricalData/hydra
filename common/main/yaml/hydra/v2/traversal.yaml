@@ -1,0 +1,35 @@
+includes:
+  - core
+
+definitions:
+
+  - name: TermStep
+    type:
+      union:
+        - name: applicationFunction
+
+        - name: applicationArgument
+
+        - name: case
+          type: core.FieldName
+
+        - name: compareTo
+
+        - name: lambdaBody
+
+        - name: list
+          type: integer # note: precision
+
+        - name: mapKey
+          type: integer # note: precision
+
+        - name: mapValue
+          type: integer # note: precision
+
+        - name: record
+          type: core.FieldName
+
+        - name: set
+          type: integer # note: precision
+
+        - name: union
