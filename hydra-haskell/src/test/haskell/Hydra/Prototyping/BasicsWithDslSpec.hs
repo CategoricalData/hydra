@@ -1,7 +1,7 @@
 module Hydra.Prototyping.BasicsWithDslSpec where
 
-import Hydra.V1.Core
-import Hydra.V1.Evaluation
+import Hydra.V2.Core
+import Hydra.V2.Evaluation
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.BasicsWithDsl
@@ -35,7 +35,7 @@ testsForTermVariantFunctions = do
 
 testsForTypeVariantFunctions = do
   H.describe "Tests for DSL-defined type-to-variant functions" $ do
-    
+
     H.it "Test atomicTypeVariant function element" $
       QC.property $ \at ->
         testEvaluate (apply (deref "hydra/basics.atomicTypeVariant") (encodeAtomicType at))

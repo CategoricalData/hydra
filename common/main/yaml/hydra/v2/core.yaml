@@ -94,6 +94,116 @@ definitions:
         - equalTo
         - greaterThan
 
+  - name: Expression
+    type:
+      union:
+        - name: application
+          description: "A function application"
+          type:
+            parameterized:
+              genericType: Application
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: atomic
+          description: "An atomic value"
+          type: AtomicValue
+
+        - name: element
+          description: "An element reference"
+          type: Name
+
+        - name: function
+          description: "A function term"
+          type:
+            parameterized:
+              genericType: Function
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: list
+          description: "A list"
+          type:
+            list:
+              parameterized:
+                genericType: Term
+                parameters:
+                  - variable: a
+                    type:
+                      variable: a
+
+        # TODO: list elimination
+
+        - name: map
+          description: "A map of key terms to value terms"
+          type:
+            map:
+              keys:
+                parameterized:
+                  genericType: Term
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: a
+              values:
+                parameterized:
+                  genericType: Term
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: a
+
+        - name: optional
+          description: "An optional value"
+          type:
+            optional:
+              parameterized:
+                genericType: Term
+                parameters:
+                  - variable: a
+                    type:
+                      variable: a
+
+        - name: record
+          description: "A record, or labeled tuple"
+          type:
+            list:
+              parameterized:
+                genericType: Field
+                parameters:
+                  - variable: a
+                    type:
+                      variable: a
+
+        - name: set
+          description: "A set of terms"
+          type:
+            set:
+              parameterized:
+                genericType: Term
+                parameters:
+                  - variable: a
+                    type:
+                      variable: a
+
+        - name: union
+          description: "A union term, i.e. a generalization of inl() or inr()"
+          type:
+            parameterized:
+              genericType: Field
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: variable
+          description: "A variable reference"
+          type: Variable
+
   - name: Field
     description: "A labeled term"
     type:
@@ -348,119 +458,18 @@ definitions:
   - name: Term
     type:
       record:
+        - name: data
+          type:
+            parameterized:
+              genericType: Expression
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
         - name: meta
           type:
             variable: a
-
-        - name: data
-          type:
-            union:
-              - name: application
-                description: "A function application"
-                type:
-                  parameterized:
-                    genericType: Application
-                    parameters:
-                      - variable: a
-                        type:
-                          variable: a
-
-              - name: atomic
-                description: "An atomic value"
-                type: AtomicValue
-
-              - name: element
-                description: "An element reference"
-                type: Name
-
-              - name: function
-                description: "A function term"
-                type:
-                  parameterized:
-                    genericType: Function
-                    parameters:
-                      - variable: a
-                        type:
-                          variable: a
-
-              - name: list
-                description: "A list"
-                type:
-                  list:
-                    parameterized:
-                      genericType: Term
-                      parameters:
-                        - variable: a
-                          type:
-                            variable: a
-
-              # TODO: list elimination
-
-              - name: map
-                description: "A map of key terms to value terms"
-                type:
-                  map:
-                    keys:
-                      parameterized:
-                        genericType: Term
-                        parameters:
-                          - variable: a
-                            type:
-                              variable: a
-                    values:
-                      parameterized:
-                        genericType: Term
-                        parameters:
-                          - variable: a
-                            type:
-                              variable: a
-
-              - name: optional
-                description: "An optional value"
-                type:
-                  optional:
-                    parameterized:
-                      genericType: Term
-                      parameters:
-                        - variable: a
-                          type:
-                            variable: a
-
-              - name: record
-                description: "A record, or labeled tuple"
-                type:
-                  list:
-                    parameterized:
-                      genericType: Field
-                      parameters:
-                        - variable: a
-                          type:
-                            variable: a
-
-              - name: set
-                description: "A set of terms"
-                type:
-                  set:
-                    parameterized:
-                      genericType: Term
-                      parameters:
-                        - variable: a
-                          type:
-                            variable: a
-
-              - name: union
-                description: "A union term, i.e. a generalization of inl() or inr()"
-                type:
-                  parameterized:
-                    genericType: Field
-                    parameters:
-                      - variable: a
-                        type:
-                          variable: a
-
-              - name: variable
-                description: "A variable reference"
-                type: Variable
 
   - name: TermVariant
     type:

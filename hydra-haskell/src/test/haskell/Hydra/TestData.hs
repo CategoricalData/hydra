@@ -1,6 +1,6 @@
 module Hydra.TestData where
   
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.Map as M
@@ -26,7 +26,7 @@ int32ElementDataType :: Type
 int32ElementDataType = functionType int32ElementType int32Type
 
 latlonRecord :: Int -> Int -> Term
-latlonRecord lat lon = TermRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
+latlonRecord lat lon = ExpressionRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
 
 latLonType :: Type
 latLonType = TypeRecord [FieldType "lat" int32Type, FieldType "lon" int32Type]
@@ -50,7 +50,7 @@ listOfStringsType :: Type
 listOfStringsType = TypeList stringType
 
 makeMap :: [(String, Int)] -> Term
-makeMap keyvals = TermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+makeMap keyvals = ExpressionMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Type
 mapOfStringsToIntsType = mapType stringType int32Type
@@ -71,13 +71,13 @@ stringAliasType :: Type
 stringAliasType = TypeNominal "StringTypeAlias"
 
 stringList :: [String] -> Term
-stringList strings = TermList $ stringValue <$> strings
+stringList strings = ExpressionList $ stringValue <$> strings
 
 stringOrIntType :: Type
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
 
 stringSet :: S.Set String -> Term
-stringSet strings = TermSet $ S.fromList $ stringValue <$> S.toList strings
+stringSet strings = ExpressionSet $ S.fromList $ stringValue <$> S.toList strings
 
 unionTypeForFunctions :: Type -> Type
 unionTypeForFunctions dom = TypeUnion [

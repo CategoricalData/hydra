@@ -1,6 +1,6 @@
 module Hydra.Ext.Yaml.CoderSpec where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Extras
@@ -51,7 +51,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
   
   H.it "Lists become YAML sequences" $
     QC.property $ \strings -> checkYamlCoder listOfStringsType
-      (TermList $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
+      (ExpressionList $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
 
   H.it "Maps become YAML mappings" $
     QC.property $ \keyvals -> checkYamlCoder mapOfStringsToIntsType
@@ -59,7 +59,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
 
   H.it "Optionals become YAML null or type-specific nodes" $
     QC.property $ \ms -> checkYamlCoder optionalStringType
-      (TermOptional $ stringValue <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
+      (ExpressionOptional $ stringValue <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
 
   H.it "Records become YAML mappings" $
     QC.property $ \lat lon -> checkYamlCoder latLonType
@@ -74,7 +74,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkYamlCoder int32ElementType
-      (TermElement name) (yamlStr name)
+      (ExpressionElement name) (yamlStr name)
 
   H.it "Sets become sequences" $
     QC.property $ \strings -> checkYamlCoder setOfStringsType

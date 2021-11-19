@@ -1,6 +1,6 @@
 module Hydra.Prototyping.InterpreterSpec where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
@@ -21,16 +21,16 @@ testsForAtomicValues = do
   H.describe "Tests for atomic values" $ do
     
     H.it "Atomic terms have no free variables" $
-      QC.property $ \av -> termIsClosed (TermAtomic av)
+      QC.property $ \av -> termIsClosed (ExpressionAtomic av)
 
     H.it "Atomic terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testStrategy (TermAtomic av)
+      QC.property $ \av -> termIsValue testStrategy (ExpressionAtomic av)
 
     H.it "Atomic terms are fully reduced; check by trying to reduce them" $
-      QC.property $ \av -> testEvaluate (TermAtomic av) == pure (TermAtomic av)
+      QC.property $ \av -> testEvaluate (ExpressionAtomic av) == pure (ExpressionAtomic av)
 
     H.it "Atomic terms cannot be applied" $
-      QC.property $ \av (TypedTerm _ term) -> isFailure (testEvaluate $ apply (TermAtomic av) term)
+      QC.property $ \av (TypedTerm _ term) -> isFailure (testEvaluate $ apply (ExpressionAtomic av) term)
 
 testsForPrimitiveFunctions :: H.SpecWith ()
 testsForPrimitiveFunctions = do

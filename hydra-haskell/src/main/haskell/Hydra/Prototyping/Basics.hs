@@ -28,8 +28,8 @@ module Hydra.Prototyping.Basics (
     typeVariants,
   ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Adapter
+import Hydra.V2.Core
+import Hydra.V2.Adapter
 
 import qualified Data.Set as S
 
@@ -90,7 +90,7 @@ floatVariantPrecision v = case v of
 floatVariants :: [FloatVariant]
 floatVariants = [FloatVariantFloat32, FloatVariantFloat64, FloatVariantBigfloat]
 
-functionVariant :: Function -> FunctionVariant
+functionVariant :: Function a -> FunctionVariant
 functionVariant f = case f of
   FunctionCases _ -> FunctionVariantCases
   FunctionCompareTo _ -> FunctionVariantCompareTo
@@ -179,19 +179,19 @@ integerTypes = [
 integerVariants :: [IntegerVariant]
 integerVariants = integerTypeVariant <$> integerTypes
 
-termVariant :: Term -> TermVariant
-termVariant term = case term of
-  TermApplication _ -> TermVariantApplication
-  TermAtomic _ -> TermVariantAtomic
-  TermElement _ -> TermVariantElement
-  TermFunction _ -> TermVariantFunction
-  TermList _ -> TermVariantList
-  TermMap _ -> TermVariantMap
-  TermOptional _ -> TermVariantOptional
-  TermRecord _ -> TermVariantRecord
-  TermSet _ -> TermVariantSet
-  TermUnion _ -> TermVariantUnion
-  TermVariable _ -> TermVariantVariable
+termVariant :: Term a -> TermVariant
+termVariant term = case termData term of
+  ExpressionApplication _ -> TermVariantApplication
+  ExpressionAtomic _ -> TermVariantAtomic
+  ExpressionElement _ -> TermVariantElement
+  ExpressionFunction _ -> TermVariantFunction
+  ExpressionList _ -> TermVariantList
+  ExpressionMap _ -> TermVariantMap
+  ExpressionOptional _ -> TermVariantOptional
+  ExpressionRecord _ -> TermVariantRecord
+  ExpressionSet _ -> TermVariantSet
+  ExpressionUnion _ -> TermVariantUnion
+  ExpressionVariable _ -> TermVariantVariable
 
 termVariants :: [TermVariant]
 termVariants = [

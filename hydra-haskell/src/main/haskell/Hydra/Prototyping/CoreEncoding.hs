@@ -17,7 +17,7 @@ module Hydra.Prototyping.CoreEncoding (
     encodeTypeVariant,
   ) where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.Map as M
@@ -25,7 +25,7 @@ import qualified Data.Set as S
 
 
 encodeApplication :: Application -> Term
-encodeApplication (Application f a) = TermRecord [
+encodeApplication (Application f a) = ExpressionRecord [
   Field _Application_function $ encodeTerm f,
   Field _Application_argument $ encodeTerm f]
 
@@ -38,7 +38,7 @@ encodeAtomicType at = case at of
   AtomicTypeString -> unitVariant _AtomicType_string
 
 encodeAtomicValue :: AtomicValue -> Term
-encodeAtomicValue = TermAtomic
+encodeAtomicValue = ExpressionAtomic
 
 encodeAtomicVariant :: AtomicVariant -> Term
 encodeAtomicVariant av = unitVariant $ case av of
@@ -49,12 +49,12 @@ encodeAtomicVariant av = unitVariant $ case av of
   AtomicVariantString -> _AtomicVariant_string
 
 encodeField :: Field -> Term
-encodeField (Field name term) = TermRecord [
+encodeField (Field name term) = ExpressionRecord [
   Field _Field_name $ stringValue name,
   Field _Field_term $ encodeTerm term]
 
 encodeFieldType :: FieldType -> Term
-encodeFieldType (FieldType fname t) = TermRecord [
+encodeFieldType (FieldType fname t) = ExpressionRecord [
   Field _FieldType_name $ stringTerm fname,
   Field _FieldType_type $ encodeType t]
 
@@ -72,7 +72,7 @@ encodeFloatVariant fv = unitVariant $ case fv of
 
 encodeFunction :: Function -> Term
 encodeFunction f = case f of
-  FunctionCases cases -> variant _Function_cases $ TermList $ encodeField <$> cases
+  FunctionCases cases -> variant _Function_cases $ ExpressionList $ encodeField <$> cases
   FunctionCompareTo other -> variant _Function_compareTo $ encodeTerm other
   FunctionData -> unitVariant _Function_data
   FunctionLambda l -> variant _Function_lambda $ encodeLambda l
@@ -80,7 +80,7 @@ encodeFunction f = case f of
   FunctionProjection fname -> variant _Function_projection $ stringValue fname
 
 encodeFunctionType :: FunctionType -> Term
-encodeFunctionType (FunctionType dom cod) = TermRecord [
+encodeFunctionType (FunctionType dom cod) = ExpressionRecord [
   Field _FunctionType_domain $ encodeType dom,
   Field _FunctionType_codomain $ encodeType cod]
 
@@ -109,29 +109,29 @@ encodeIntegerVariant iv = unitVariant $ case iv of
   IntegerVariantUint64 -> _IntegerType_uint64
 
 encodeLambda :: Lambda -> Term
-encodeLambda (Lambda v b) = TermRecord [
+encodeLambda (Lambda v b) = ExpressionRecord [
   Field _Lambda_parameter $ stringValue v,
   Field _Lambda_body $ encodeTerm b]
 
 encodeMapType :: MapType -> Term
-encodeMapType (MapType kt vt) = TermRecord [
+encodeMapType (MapType kt vt) = ExpressionRecord [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
 
 encodeTerm :: Term -> Term
 encodeTerm term = case term of
-  TermApplication a -> variant _Term_application $ encodeApplication a
-  TermAtomic av -> variant _Term_atomic $ encodeAtomicValue av
-  TermElement name -> variant _Term_element $ stringValue name
-  TermFunction f -> variant _Term_function $ encodeFunction f
-  TermList terms -> variant _Term_list $ TermList $ encodeTerm <$> terms
-  TermMap map -> variant _Term_map $ TermMap $ M.fromList $ encodePair <$> M.toList map
+  ExpressionApplication a -> variant _Term_application $ encodeApplication a
+  ExpressionAtomic av -> variant _Term_atomic $ encodeAtomicValue av
+  ExpressionElement name -> variant _Term_element $ stringValue name
+  ExpressionFunction f -> variant _Term_function $ encodeFunction f
+  ExpressionList terms -> variant _Term_list $ ExpressionList $ encodeTerm <$> terms
+  ExpressionMap map -> variant _Term_map $ ExpressionMap $ M.fromList $ encodePair <$> M.toList map
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
-  TermOptional m -> variant _Term_optional $ TermOptional $ encodeTerm <$> m
-  TermRecord fields -> variant _Term_record $ TermList $ encodeField <$> fields
-  TermSet terms -> variant _Term_set $ TermSet $ S.fromList $ encodeTerm <$> S.toList terms
-  TermUnion field -> variant _Term_union $ encodeField field
-  TermVariable var -> variant _Term_variable $ stringValue var
+  ExpressionOptional m -> variant _Term_optional $ ExpressionOptional $ encodeTerm <$> m
+  ExpressionRecord fields -> variant _Term_record $ ExpressionList $ encodeField <$> fields
+  ExpressionSet terms -> variant _Term_set $ ExpressionSet $ S.fromList $ encodeTerm <$> S.toList terms
+  ExpressionUnion field -> variant _Term_union $ encodeField field
+  ExpressionVariable var -> variant _Term_variable $ stringValue var
 
 encodeType :: Type -> Term
 encodeType typ = case typ of
@@ -142,9 +142,9 @@ encodeType typ = case typ of
   TypeMap mt -> variant _Type_map $ encodeMapType mt
   TypeNominal name -> variant _Type_nominal $ stringTerm name
   TypeOptional t -> variant _Type_optional $ encodeType t
-  TypeRecord fields -> variant _Type_record $ TermList $ fmap encodeFieldType fields
+  TypeRecord fields -> variant _Type_record $ ExpressionList $ fmap encodeFieldType fields
   TypeSet t -> variant _Type_set $ encodeType t
-  TypeUnion fields -> variant _Type_union $ TermList $ fmap encodeFieldType fields
+  TypeUnion fields -> variant _Type_union $ ExpressionList $ fmap encodeFieldType fields
   TypeAbstract ut -> variant _Type_abstract $ encodeAbstractType ut
   TypeVariable var -> variant _Type_variable $ stringTerm var
 
@@ -164,6 +164,6 @@ encodeTypeVariant tv = unitVariant $ case tv of
   TypeVariantVariable -> _TypeVariant_variable
 
 encodeAbstractType :: AbstractType -> Term
-encodeAbstractType (AbstractType var body) = TermRecord [
+encodeAbstractType (AbstractType var body) = ExpressionRecord [
   Field _AbstractType_variable $ stringValue var,
   Field _AbstractType_body $ encodeType body]

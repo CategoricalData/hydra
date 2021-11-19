@@ -6,8 +6,8 @@ module Hydra.Prototyping.Interpreter (
   termIsValue,
 ) where
 
-import Hydra.V1.Core
-import Hydra.V1.Evaluation
+import Hydra.V2.Core
+import Hydra.V2.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Primitives
@@ -29,19 +29,19 @@ evaluate context term = reduce M.empty term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then pure term
       else case term of
-        TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
-        TermAtomic _ -> done
-        TermElement _ -> done
-        TermFunction f -> reduceFunction f
-        TermList terms -> TermList <$> CM.mapM reduceb terms
-        TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
+        ExpressionApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
+        ExpressionAtomic _ -> done
+        ExpressionElement _ -> done
+        ExpressionFunction f -> reduceFunction f
+        ExpressionList terms -> ExpressionList <$> CM.mapM reduceb terms
+        ExpressionMap map -> ExpressionMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-        TermOptional m -> TermOptional <$> CM.mapM reduceb m
-        TermRecord fields -> TermRecord <$> CM.mapM reduceField fields
-        TermSet terms -> TermSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
-        TermUnion f -> TermUnion <$> reduceField f
-        TermVariable v -> case M.lookup v bindings of
+        ExpressionOptional m -> ExpressionOptional <$> CM.mapM reduceb m
+        ExpressionRecord fields -> ExpressionRecord <$> CM.mapM reduceField fields
+        ExpressionSet terms -> ExpressionSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
+        ExpressionUnion f -> ExpressionUnion <$> reduceField f
+        ExpressionVariable v -> case M.lookup v bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
       where
@@ -49,24 +49,24 @@ evaluate context term = reduce M.empty term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
-          FunctionCases cases -> TermRecord <$> CM.mapM reduceField cases
-          FunctionCompareTo other -> TermFunction . FunctionCompareTo <$> reduceb other
+          FunctionCases cases -> ExpressionRecord <$> CM.mapM reduceField cases
+          FunctionCompareTo other -> ExpressionFunction . FunctionCompareTo <$> reduceb other
           FunctionData -> done
-          FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
+          FunctionLambda (Lambda v body) -> ExpressionFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive _ -> done
           FunctionProjection _ -> done
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
     reduceApplication :: M.Map Variable Term -> [Term] -> Term -> Result Term
     reduceApplication bindings args f = if L.null args then pure f else case f of
-      TermApplication (Application func arg) -> reduce bindings func
+      ExpressionApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
 
-      TermFunction f -> case f of
+      ExpressionFunction f -> case f of
         FunctionCases cases -> do
           arg <- reduce bindings $ L.head args
           case arg of
-            TermUnion (Field fname t) -> if L.null matching
+            ExpressionUnion (Field fname t) -> if L.null matching
                 then fail $ "no case for field named " ++ fname
                 else reduce bindings (fieldTerm $ L.head matching)
                   >>= reduceApplication bindings (t:(L.tail args))
@@ -79,7 +79,7 @@ evaluate context term = reduce M.empty term
         FunctionData -> do
             arg <- reduce bindings $ L.head args
             case arg of
-              TermElement name -> dereferenceElement context name
+              ExpressionElement name -> dereferenceElement context name
                 >>= reduce bindings
                 >>= reduceApplication bindings (L.tail args)
               _ -> fail "tried to apply data (delta) to a non- element reference"
@@ -94,7 +94,7 @@ evaluate context term = reduce M.empty term
                  >>= reduceApplication bindings (L.drop arity args)
                else unwind
            where
-             unwind = pure $ L.foldl apply (TermFunction f) args
+             unwind = pure $ L.foldl apply (ExpressionFunction f) args
 
         FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
           >>= reduceApplication bindings (L.tail args)
@@ -107,19 +107,19 @@ freeVariables :: Term -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term
   where
     free bound term = case term of
-        TermApplication (Application t1 t2) -> free bound t1 ++ free bound t2
-        TermAtomic _ -> []
-        TermElement _ -> []
-        TermFunction f -> freeInFunction f
-        TermList terms -> L.concatMap (free bound) terms
-        TermMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
-        TermOptional m -> case m of
+        ExpressionApplication (Application t1 t2) -> free bound t1 ++ free bound t2
+        ExpressionAtomic _ -> []
+        ExpressionElement _ -> []
+        ExpressionFunction f -> freeInFunction f
+        ExpressionList terms -> L.concatMap (free bound) terms
+        ExpressionMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
+        ExpressionOptional m -> case m of
           Nothing -> []
           Just term -> free bound term
-        TermRecord fields -> L.concatMap (free bound . fieldTerm) fields
-        TermSet terms -> L.concatMap (free bound) terms
-        TermUnion field -> free bound $ fieldTerm field
-        TermVariable v -> [v | not (S.member v bound)]
+        ExpressionRecord fields -> L.concatMap (free bound . fieldTerm) fields
+        ExpressionSet terms -> L.concatMap (free bound) terms
+        ExpressionUnion field -> free bound $ fieldTerm field
+        ExpressionVariable v -> [v | not (S.member v bound)]
       where
         freeInFunction f = case f of
           FunctionCases cases -> L.concatMap (free bound . fieldTerm) cases
@@ -140,21 +140,21 @@ termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaq
 -- | Whether a term has been fully reduced to a "value"
 termIsValue :: EvaluationStrategy -> Term -> Bool
 termIsValue strategy term = termIsOpaque strategy term || case term of
-      TermApplication _ -> False
-      TermAtomic _ -> True
-      TermElement _ -> True
-      TermFunction f -> functionIsValue f
-      TermList els -> forList els
-      TermMap map -> L.foldl
+      ExpressionApplication _ -> False
+      ExpressionAtomic _ -> True
+      ExpressionElement _ -> True
+      ExpressionFunction f -> functionIsValue f
+      ExpressionList els -> forList els
+      ExpressionMap map -> L.foldl
         (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
         True $ M.toList map
-      TermOptional m -> case m of
+      ExpressionOptional m -> case m of
         Nothing -> True
         Just term -> termIsValue strategy term
-      TermRecord fields -> checkFields fields
-      TermSet els -> forList $ S.toList els
-      TermUnion field -> checkField field
-      TermVariable _ -> False
+      ExpressionRecord fields -> checkFields fields
+      ExpressionSet els -> forList $ S.toList els
+      ExpressionUnion field -> checkField field
+      ExpressionVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
     checkField = termIsValue strategy . fieldTerm

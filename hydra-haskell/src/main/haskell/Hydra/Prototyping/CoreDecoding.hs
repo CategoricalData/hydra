@@ -11,7 +11,7 @@ module Hydra.Prototyping.CoreDecoding (
   decodeType,
   ) where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 
@@ -40,7 +40,7 @@ decodeFieldType context = matchRecord context $ \m -> FieldType
 
 decodeFieldTypes :: Context -> Term -> Result [FieldType]
 decodeFieldTypes context term = case term of
-  TermList els -> CM.mapM (decodeFieldType context) els
+  ExpressionList els -> CM.mapM (decodeFieldType context) els
   _ -> fail "expected a list"
 
 decodeFloatType :: Context -> Term -> Result FloatType
@@ -73,7 +73,7 @@ decodeMapType context = matchRecord context $ \m -> MapType
 
 decodeString :: Term -> Result String
 decodeString term = case term of
-  TermAtomic av -> case av of
+  ExpressionAtomic av -> case av of
     AtomicValueString s -> pure s
     _ -> fail "expected a string value"
   _ -> fail "expected an atomic value"
@@ -95,7 +95,7 @@ decodeType context = matchUnion context [
 
 deref :: Context -> Term -> Result Term
 deref context term = case term of
-  TermElement name -> dereferenceElement context name >>= deref context
+  ExpressionElement name -> dereferenceElement context name >>= deref context
   _ -> pure term
 
 getField :: M.Map FieldName Term -> FieldName -> (Term -> Result a) -> Result a
@@ -110,14 +110,14 @@ matchRecord :: Context -> (M.Map FieldName Term -> Result a) -> Term -> Result a
 matchRecord context decode term = do
   term' <- deref context term
   case term' of
-    TermRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
+    ExpressionRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail "expected a record"
 
 matchUnion :: Context -> [(FieldName, Term -> Result a)] -> Term -> Result a
 matchUnion context pairs term = do
     term' <- deref context term
     case term' of
-      TermUnion (Field fname val) -> case M.lookup fname mapping of
+      ExpressionUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (fst <$> pairs) ++ "}"

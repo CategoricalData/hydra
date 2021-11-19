@@ -1,9 +1,9 @@
 module Hydra.Ext.Scala.Prepare (
   prepareType,
-  module Hydra.V1.Core,
+  module Hydra.V2.Core,
 ) where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 
 import qualified Data.Set as S
 
@@ -44,9 +44,9 @@ prepareIntegerType it = case it of
     $ \(IntegerValueUint64 v) -> IntegerValueInt64 v
   _ -> same it
 
-prepareType :: Type -> (Type, Term -> Term, S.Set String)
+prepareType :: Type -> (Type, Term a -> Term a, S.Set String)
 prepareType typ = case typ of
-  TypeAtomic at -> (TypeAtomic rtyp, \(TermAtomic av) -> TermAtomic $ rep av, msgs)
+  TypeAtomic at -> (TypeAtomic rtyp, \(Term (ExpressionAtomic av) m) -> Term (ExpressionAtomic $ rep av) m, msgs)
     where
       (rtyp, rep, msgs) = prepareAtomicType at
 --  TypeElement et ->

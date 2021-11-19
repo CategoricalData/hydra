@@ -1,6 +1,6 @@
 module Hydra.Prototyping.CoreCodersSpec where
 
-import Hydra.V1.Core
+import Hydra.V2.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.CoreEncoding
@@ -27,13 +27,13 @@ individualEncoderTestCases = do
 
     H.it "record type" $ do
       (encodeType $ TypeRecord [FieldType "something" stringType, FieldType "nothing" unitType]) `H.shouldBe`
-        (variant _Type_record $ TermList [
-          (TermRecord [
+        (variant _Type_record $ ExpressionList [
+          (ExpressionRecord [
             Field _FieldType_name $ stringValue "something",
             Field _FieldType_type $ variant _Type_atomic $ unitVariant _AtomicType_string]),
-          (TermRecord [
+          (ExpressionRecord [
             Field _FieldType_name $ stringValue "nothing",
-            Field _FieldType_type $ variant _Type_record $ TermList []])])
+            Field _FieldType_type $ variant _Type_record $ ExpressionList []])])
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -48,11 +48,11 @@ individualDecoderTestCases = do
         `H.shouldBe` pure float32Type
         
     H.it "union type" $ do
-      decodeType testContext (variant _Type_union $ TermList [
-        TermRecord [
+      decodeType testContext (variant _Type_union $ ExpressionList [
+        ExpressionRecord [
           Field _FieldType_name $ stringValue "left",
           Field _FieldType_type $ variant _Type_atomic $ variant _AtomicType_integer $ unitVariant _IntegerType_int64],
-        TermRecord [
+        ExpressionRecord [
           Field _FieldType_name $ stringValue "right",
           Field _FieldType_type $ variant _Type_atomic $ variant _AtomicType_float $ unitVariant _FloatType_float64]])
         `H.shouldBe` pure (TypeUnion [FieldType "left" int64Type, FieldType "right" float64Type])
@@ -62,7 +62,7 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
       
     H.it "Try to decode a term with wrong fields for Type" $ do
-      isFailure (decodeType testContext $ variant "unknownField" $ TermList []) `H.shouldBe` True
+      isFailure (decodeType testContext $ variant "unknownField" $ ExpressionList []) `H.shouldBe` True
 
     H.it "Try to decode an incomplete representation of a Type" $ do
       isFailure (decodeType testContext$ variant _Type_atomic $ unitVariant _AtomicType_integer) `H.shouldBe` True
