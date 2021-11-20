@@ -20,12 +20,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-decodeAbstractType :: Context -> Term -> Result AbstractType
+decodeAbstractType :: Show a => Context a -> Term a -> Result AbstractType
 decodeAbstractType context = matchRecord context $ \m -> AbstractType
   <$> getField m _AbstractType_variable decodeString
   <*> getField m _AbstractType_body (decodeType context)
 
-decodeAtomicType :: Context -> Term -> Result AtomicType
+decodeAtomicType :: Show a => Context a -> Term a -> Result AtomicType
 decodeAtomicType context = matchUnion context [
   matchUnitField _AtomicType_binary AtomicTypeBinary,
   matchUnitField _AtomicType_boolean AtomicTypeBoolean,
@@ -33,28 +33,28 @@ decodeAtomicType context = matchUnion context [
   (_AtomicType_integer, fmap AtomicTypeInteger . decodeIntegerType context),
   matchUnitField _AtomicType_string AtomicTypeString]
 
-decodeFieldType :: Context -> Term -> Result FieldType
+decodeFieldType :: Show a => Context a -> Term a -> Result FieldType
 decodeFieldType context = matchRecord context $ \m -> FieldType
   <$> getField m _FieldType_name decodeString
   <*> getField m _FieldType_type (decodeType context)
 
-decodeFieldTypes :: Context -> Term -> Result [FieldType]
-decodeFieldTypes context term = case term of
+decodeFieldTypes :: Show a => Context a -> Term a -> Result [FieldType]
+decodeFieldTypes context term = case termData term of
   ExpressionList els -> CM.mapM (decodeFieldType context) els
   _ -> fail "expected a list"
 
-decodeFloatType :: Context -> Term -> Result FloatType
+decodeFloatType :: Show a => Context a -> Term a -> Result FloatType
 decodeFloatType context = matchEnum context [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
-decodeFunctionType :: Context -> Term -> Result FunctionType
+decodeFunctionType :: Show a => Context a -> Term a -> Result FunctionType
 decodeFunctionType context = matchRecord context $ \m -> FunctionType
   <$> getField m _FunctionType_domain (decodeType context)
   <*> getField m _FunctionType_codomain (decodeType context)
 
-decodeIntegerType :: Context -> Term -> Result IntegerType
+decodeIntegerType :: Show a => Context a -> Term a -> Result IntegerType
 decodeIntegerType context = matchEnum context [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
@@ -66,19 +66,19 @@ decodeIntegerType context = matchEnum context [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
-decodeMapType :: Context -> Term -> Result MapType
+decodeMapType :: Show a => Context a -> Term a -> Result MapType
 decodeMapType context = matchRecord context $ \m -> MapType
   <$> getField m _MapType_keys (decodeType context)
   <*> getField m _MapType_values (decodeType context)
 
-decodeString :: Term -> Result String
-decodeString term = case term of
+decodeString :: Term a -> Result String
+decodeString term = case termData term of
   ExpressionAtomic av -> case av of
     AtomicValueString s -> pure s
     _ -> fail "expected a string value"
   _ -> fail "expected an atomic value"
 
-decodeType :: Context -> Term -> Result Type
+decodeType :: Show a => Context a -> Term a -> Result Type
 decodeType context = matchUnion context [
     (_Type_abstract, fmap TypeAbstract . decodeAbstractType context),
     (_Type_atomic, fmap TypeAtomic . decodeAtomicType context),
@@ -93,30 +93,30 @@ decodeType context = matchUnion context [
     (_Type_union, fmap TypeUnion . decodeFieldTypes context),
     (_Type_variable, fmap TypeVariable . decodeString)]
 
-deref :: Context -> Term -> Result Term
-deref context term = case term of
+deref :: Context a -> Term a -> Result (Term a)
+deref context term = case termData term of
   ExpressionElement name -> dereferenceElement context name >>= deref context
   _ -> pure term
 
-getField :: M.Map FieldName Term -> FieldName -> (Term -> Result a) -> Result a
+getField :: M.Map FieldName (Term a) -> FieldName -> (Term a -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
 
-matchEnum :: Context -> [(FieldName, a)] -> Term -> Result a
+matchEnum :: Show a => Context a -> [(FieldName, b)] -> Term a -> Result b
 matchEnum context = matchUnion context . fmap (uncurry matchUnitField)
 
-matchRecord :: Context -> (M.Map FieldName Term -> Result a) -> Term -> Result a
+matchRecord :: Context a -> (M.Map FieldName (Term a) -> Result b) -> Term a -> Result b
 matchRecord context decode term = do
   term' <- deref context term
-  case term' of
+  case termData term' of
     ExpressionRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail "expected a record"
 
-matchUnion :: Context -> [(FieldName, Term -> Result a)] -> Term -> Result a
+matchUnion :: Show a => Context a -> [(FieldName, Term a -> Result b)] -> Term a -> Result b
 matchUnion context pairs term = do
     term' <- deref context term
-    case term' of
+    case termData term' of
       ExpressionUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val

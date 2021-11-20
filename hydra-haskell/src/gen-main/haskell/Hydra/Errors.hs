@@ -17,7 +17,7 @@ data Qualified a
                 variable: a -}
     { qualifiedValue :: Maybe a
     -- | @type list: string
-    , qualifiedWarnings :: [String] }
+    , qualifiedWarnings :: [String] } deriving (Eq, Generic, Ord, Read, Show)
 
 _Qualified = "hydra/errors.Qualified" :: String
 _Qualified_value = "value" :: String

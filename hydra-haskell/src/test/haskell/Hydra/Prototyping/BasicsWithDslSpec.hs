@@ -15,7 +15,7 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 
 
-testEvaluate :: Term -> Result Term
+testEvaluate :: Term Meta -> Result (Term Meta)
 testEvaluate = evaluate $ testContext { contextElements = graphElementsMap basicsGraph }
 
 testsForTermTypeFunctions = do

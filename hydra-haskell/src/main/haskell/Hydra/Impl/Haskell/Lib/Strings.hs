@@ -11,7 +11,7 @@ import qualified Data.Char as C
 import qualified Data.List as L
 
 
-stringPrimitives :: [PrimitiveFunction]
+stringPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 stringPrimitives = [
   prim "cat" stringType (functionType stringType stringType)
     $ withTwoStrings $ \x y -> stringTerm $ x ++ y,
@@ -25,18 +25,18 @@ stringPrimitives = [
 stringsFunc :: String -> Name
 stringsFunc local = "hydra/lib/strings." ++ local
 
-prim :: String -> Type -> Type -> ([Term] -> Result Term) -> PrimitiveFunction
+prim :: String -> Type -> Type -> ([Term a] -> Result (Term a)) -> PrimitiveFunction a
 prim nm dom cod impl = PrimitiveFunction {
   primitiveFunctionName = stringsFunc nm,
   primitiveFunctionType = FunctionType dom cod,
   primitiveFunctionImplementation  = impl}
- 
-withString :: (String -> Term) -> [Term] -> Result Term
+
+withString :: Show a => (String -> Term a) -> [Term a] -> Result (Term a)
 withString func args = do
   expectNArgs 1 args
   func <$> expectStringTerm (L.head args)
 
-withTwoStrings :: (String -> String -> Term) -> [Term] -> Result Term
+withTwoStrings :: Show a => (String -> String -> Term a) -> [Term a] -> Result (Term a)
 withTwoStrings func args = do
   expectNArgs 2 args
   func <$> expectStringTerm (L.head args) <*> expectStringTerm (args !! 1)

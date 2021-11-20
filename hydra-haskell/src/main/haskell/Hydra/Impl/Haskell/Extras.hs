@@ -66,7 +66,7 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-elementAsTypedTerm :: Context -> Element -> Result TypedTerm
+elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
 eitherToQualified :: Result a -> Qualified a

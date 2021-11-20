@@ -19,7 +19,7 @@ import qualified Data.Map  as M
 import qualified Data.Set  as S
 
 
-testContext :: Context
+testContext :: Context Meta
 testContext = Context {
     contextGraphs = GraphSet {
       graphSetGraphs = M.fromList [
@@ -35,18 +35,18 @@ testContext = Context {
         TermVariantElement,
         TermVariantFunction]}}
 
-testGraph :: Graph
+testGraph :: Graph Meta
 testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
   where
     arthur = Element {
       elementName = "ArthurDent",
-      elementSchema = ExpressionElement "Person",
-      elementData = ExpressionRecord [
+      elementSchema = element "Person",
+      elementData = record [
         Field "firstName" $ stringValue "Arthur",
         Field "lastName" $ stringValue "Dent",
         Field "age" $ int32Value 42]}
 
-testSchemaGraph :: Graph
+testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [exampleNominalType] allTerms "hydra/core"
   where
     exampleNominalType = typeElement "StringTypeAlias" stringType
@@ -59,13 +59,13 @@ testSchemaGraph = Graph "testSchemaGraph" [exampleNominalType] allTerms "hydra/c
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
-noElements :: [Element]
+noElements :: [Element Meta]
 noElements = []
 
-allTerms :: Term -> Bool
+allTerms :: Term Meta -> Bool
 allTerms _ = True
 
-typeElement :: Name -> Type -> Element
+typeElement :: Name -> Type -> Element Meta
 typeElement name typ = Element {
   elementName = name,
   elementSchema = encodeType $ TypeNominal "hydra/core.Type",

@@ -27,15 +27,15 @@ instance Monad Result where
     ResultSuccess x -> f x
 instance MonadFail Result where
   fail = ResultFailure
-instance Eq a => Eq (Result a) where
-  r1 == r2 = case (r1, r2) of
-    (ResultFailure msg1, ResultFailure msg2) -> msg1 == msg2
-    (ResultSuccess x1, ResultSuccess x2) -> x1 == x2
-    _ -> False
-instance Show a => Show (Result a) where
-  show r = case r of
-    ResultFailure msg -> "ResultFailure " ++ show msg
-    ResultSuccess x -> "ResultSuccess " ++ show x
+--instance Eq a => Eq (Result a) where
+--  r1 == r2 = case (r1, r2) of
+--    (ResultFailure msg1, ResultFailure msg2) -> msg1 == msg2
+--    (ResultSuccess x1, ResultSuccess x2) -> x1 == x2
+--    _ -> False
+--instance Show a => Show (Result a) where
+--  show r = case r of
+--    ResultFailure msg -> "ResultFailure " ++ show msg
+--    ResultSuccess x -> "ResultSuccess " ++ show x
 
 composeSteps :: Step a b -> Step b c -> Step a c
 composeSteps s1 s2 = Step {

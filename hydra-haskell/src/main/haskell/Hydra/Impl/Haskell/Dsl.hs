@@ -1,7 +1,10 @@
 module Hydra.Impl.Haskell.Dsl (
   DataError,
+  Default(..),
+  Meta(..),
   SchemaError,
   apply,
+  atomic,
   bigfloatType,
   bigfloatValue,
   bigintType,
@@ -15,7 +18,9 @@ module Hydra.Impl.Haskell.Dsl (
   compose,
   constFunction,
   dataTerm,
+  defaultTerm,
   deref,
+  element,
   elementRef,
   expectAtomicValue,
   expectNArgs,
@@ -43,14 +48,19 @@ module Hydra.Impl.Haskell.Dsl (
   integerType,
   integerValue,
   lambda,
+  list,
   listType,
+  map,
   mapType,
   match,
   matchWithVariants,
   nominalType,
+  optional,
   primitive,
   projection,
+  record,
   requireField,
+  set,
   stringTerm,
   stringType,
   stringValue,
@@ -62,6 +72,7 @@ module Hydra.Impl.Haskell.Dsl (
   uint64Value,
   uint8Type,
   uint8Value,
+  union,
   unitTerm,
   unitType,
   unitVariant,
@@ -74,33 +85,41 @@ module Hydra.Impl.Haskell.Dsl (
 import Hydra.V2.Core
 import Hydra.V2.Graph
 import Hydra.Prototyping.Steps
+import Prelude hiding (map)
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
 
 
 type DataError = String
+class Default a where dflt :: a
 type SchemaError = String
+instance Default () where dflt = ()
+data Meta = Meta deriving (Eq, Ord, Read, Show)
+instance Default Meta where dflt = Meta
 
+apply :: Default a => Term a -> Term a -> Term a
+apply func arg = defaultTerm $ ExpressionApplication $ Application func arg
 
-apply :: Term -> Term -> Term
-apply func arg = ExpressionApplication $ Application func arg
+atomic :: Default a => AtomicValue -> Term a
+atomic = defaultTerm . ExpressionAtomic
 
 bigfloatType :: Type
 bigfloatType = floatType FloatTypeBigfloat
 
-bigfloatValue :: Double -> Term
+bigfloatValue :: Default a => Double -> Term a
 bigfloatValue = floatValue . FloatValueBigfloat
 
 bigintType :: Type
 bigintType = integerType IntegerTypeBigint
 
-bigintValue :: Integer -> Term
+bigintValue :: Default a => Integer -> Term a
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
-binaryTerm :: String -> Term
-binaryTerm = ExpressionAtomic . AtomicValueBinary
+binaryTerm :: Default a => String -> Term a
+binaryTerm = defaultTerm . ExpressionAtomic . AtomicValueBinary
 
 binaryType :: Type
 binaryType = TypeAtomic AtomicTypeBinary
@@ -108,57 +127,63 @@ binaryType = TypeAtomic AtomicTypeBinary
 booleanType :: Type
 booleanType = TypeAtomic AtomicTypeBoolean
 
-booleanValue :: Bool -> Term
-booleanValue b = ExpressionAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+booleanValue :: Default a => Bool -> Term a
+booleanValue b = defaultTerm $ ExpressionAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
-cases :: [Field] -> Term
-cases = ExpressionFunction . FunctionCases
+cases :: Default a => [Field a] -> Term a
+cases = defaultTerm . ExpressionFunction . FunctionCases
 
-compareTo :: Term -> Term
-compareTo = ExpressionFunction . FunctionCompareTo
- 
-compose :: Term -> Term -> Term
+compareTo :: Default a => Term a -> Term a
+compareTo = defaultTerm . ExpressionFunction . FunctionCompareTo
+
+compose :: Default a => Term a -> Term a -> Term a
 compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
   where var = "x"
 
-constFunction :: Term -> Term
+constFunction :: Default a => Term a -> Term a
 constFunction = lambda "_"
 
-dataTerm :: Term
-dataTerm = ExpressionFunction FunctionData
+dataTerm :: Default a => Term a
+dataTerm = defaultTerm $ ExpressionFunction FunctionData
 
-deref :: Name -> Term
-deref name = apply dataTerm $ ExpressionElement name
+defaultTerm  :: Default a => Expression a -> Term a
+defaultTerm e = Term e dflt
 
-elementRef :: Element -> Term
-elementRef el = apply dataTerm $ ExpressionElement $ elementName el
+deref :: Default a => Name -> Term a
+deref name = apply dataTerm $ defaultTerm $ ExpressionElement name
 
-expectAtomicValue :: Term -> Result AtomicValue
-expectAtomicValue term = case term of
+element :: Default a => Name -> Term a
+element = defaultTerm . ExpressionElement
+
+elementRef :: Default a => Element a -> Term a
+elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName el
+
+expectAtomicValue :: Show a => Term a -> Result AtomicValue
+expectAtomicValue term = case termData term of
   ExpressionAtomic av -> pure av
   _ -> fail $ "expected an atomic value, got " ++ show term
 
-expectNArgs :: Int -> [Term] -> Result ()
+expectNArgs :: Int -> [Term a] -> Result ()
 expectNArgs n args = if L.length args /= n
   then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
   else pure ()
 
-expectRecordTerm :: Term -> Result [Field]
-expectRecordTerm term = case term of
+expectRecordTerm :: Show a => Term a -> Result [Field a]
+expectRecordTerm term = case termData term of
   ExpressionRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
-expectStringTerm :: Term -> Result String
-expectStringTerm term = case term of
+expectStringTerm :: Show a => Term a -> Result String
+expectStringTerm term = case termData term of
   ExpressionAtomic (AtomicValueString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
-expectUnionTerm :: Term -> Result Field
-expectUnionTerm term = case term of
+expectUnionTerm :: Show a => Term a -> Result (Field a)
+expectUnionTerm term = case termData term of
   ExpressionUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
-fieldsToMap :: [Field] -> M.Map FieldName Term
+fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
 fieldTypesToMap :: [FieldType] -> M.Map FieldName Type
@@ -167,23 +192,23 @@ fieldTypesToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$>
 float32Type :: Type
 float32Type = floatType FloatTypeFloat32
 
-float32Value :: Float -> Term
+float32Value :: Default a => Float -> Term a
 float32Value = floatValue . FloatValueFloat32
 
 float64Type :: Type
 float64Type = floatType FloatTypeFloat64
 
-float64Value :: Double -> Term
+float64Value :: Default a => Double -> Term a
 float64Value = floatValue . FloatValueFloat64
 
 floatType :: FloatType -> Type
 floatType = TypeAtomic . AtomicTypeFloat
 
-floatValue :: FloatValue -> Term
-floatValue = ExpressionAtomic . AtomicValueFloat
+floatValue :: Default a => FloatValue -> Term a
+floatValue = defaultTerm . ExpressionAtomic . AtomicValueFloat
 
-function :: Name -> Term
-function = ExpressionFunction . FunctionPrimitive
+function :: Default a => Name -> Term a
+function = defaultTerm . ExpressionFunction . FunctionPrimitive
 
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
@@ -191,48 +216,54 @@ functionType dom cod = TypeFunction $ FunctionType dom cod
 int16Type :: Type
 int16Type = integerType IntegerTypeInt16
 
-int16Value :: Int -> Term
+int16Value :: Default a => Int -> Term a
 int16Value = integerValue . IntegerValueInt16 . fromIntegral
 
 int32Type :: Type
 int32Type = integerType IntegerTypeInt32
 
-int32Value :: Int -> Term
+int32Value :: Default a => Int -> Term a
 int32Value = integerValue . IntegerValueInt32
 
 int64Type :: Type
 int64Type = integerType IntegerTypeInt64
 
-int64Value :: Int64 -> Term
+int64Value :: Default a => Int64 -> Term a
 int64Value = integerValue . IntegerValueInt64
 
 int8Type :: Type
 int8Type = integerType IntegerTypeInt8
 
-int8Value :: Int -> Term
+int8Value :: Default a => Int -> Term a
 int8Value = integerValue . IntegerValueInt8 . fromIntegral
 
 integerType :: IntegerType -> Type
 integerType = TypeAtomic . AtomicTypeInteger
 
-integerValue :: IntegerValue -> Term
-integerValue = ExpressionAtomic . AtomicValueInteger
+integerValue :: Default a => IntegerValue -> Term a
+integerValue = defaultTerm . ExpressionAtomic . AtomicValueInteger
 
-lambda :: Variable -> Term -> Term
-lambda param body = ExpressionFunction $ FunctionLambda $ Lambda param body
+lambda :: Default a => Variable -> Term a -> Term a
+lambda param body = defaultTerm $ ExpressionFunction $ FunctionLambda $ Lambda param body
+
+list :: Default a => [Term a] -> Term a
+list = defaultTerm . ExpressionList
 
 listType :: Type -> Type
 listType = TypeList
 
+map :: Default a => M.Map (Term a) (Term a) -> Term a
+map = defaultTerm . ExpressionMap
+
 mapType :: Type -> Type -> Type
 mapType kt vt = TypeMap $ MapType kt vt
 
-match :: [(FieldName, Term)] -> Term
+match :: Default a => [(FieldName, Term a)] -> Term a
 match = cases . fmap toField
   where
     toField (name, term) = Field name term
 
-matchWithVariants :: [(FieldName, FieldName)] -> Term
+matchWithVariants :: Default a => [(FieldName, FieldName)] -> Term a
 matchWithVariants = cases . fmap toField
   where
     toField (from, to) = Field from $ constFunction $ unitVariant to
@@ -240,68 +271,80 @@ matchWithVariants = cases . fmap toField
 nominalType :: Name -> Type
 nominalType = TypeNominal
 
-primitive :: Name -> Term
-primitive = ExpressionFunction . FunctionPrimitive
+optional :: Default a => Y.Maybe (Term a) -> Term a
+optional = defaultTerm . ExpressionOptional
 
-projection :: Name -> Term
-projection = ExpressionFunction . FunctionProjection
+primitive :: Default a => Name -> Term a
+primitive = defaultTerm . ExpressionFunction . FunctionPrimitive
 
-requireField :: M.Map FieldName Term -> FieldName -> Result Term
+projection :: Default a => Name -> Term a
+projection = defaultTerm . ExpressionFunction . FunctionProjection
+
+record :: Default a => [Field a] -> Term a
+record = defaultTerm . ExpressionRecord
+
+requireField :: M.Map FieldName (Term a) -> FieldName -> Result (Term a)
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
     error = fail $ "no such field: " ++ fname
 
-stringTerm :: String -> Term
-stringTerm = ExpressionAtomic . AtomicValueString
+set :: Default a => S.Set (Term a) -> Term a
+set = defaultTerm . ExpressionSet
+
+stringTerm :: Default a => String -> Term a
+stringTerm = defaultTerm . ExpressionAtomic . AtomicValueString
 
 stringType :: Type
 stringType = TypeAtomic AtomicTypeString
 
-stringValue :: String -> Term
-stringValue = ExpressionAtomic . AtomicValueString
+stringValue :: Default a => String -> Term a
+stringValue = defaultTerm . ExpressionAtomic . AtomicValueString
 
 uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16
 
-uint16Value :: Integer -> Term
+uint16Value :: Default a => Integer -> Term a
 uint16Value = integerValue . IntegerValueUint16 . fromIntegral
 
 uint32Type :: Type
 uint32Type = integerType IntegerTypeUint32
 
-uint32Value :: Integer -> Term
+uint32Value :: Default a => Integer -> Term a
 uint32Value = integerValue . IntegerValueUint32 . fromIntegral
 
 uint64Type :: Type
 uint64Type = integerType IntegerTypeUint64
 
-uint64Value :: Integer -> Term
+uint64Value :: Default a => Integer -> Term a
 uint64Value = integerValue . IntegerValueUint64 . fromIntegral
 
 uint8Type :: Type
 uint8Type = integerType IntegerTypeUint8
 
-uint8Value :: Integer -> Term
+uint8Value :: Default a => Integer -> Term a
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
-unitTerm :: Term
-unitTerm = ExpressionRecord []
+union :: Default a => Field a -> Term a
+union = defaultTerm . ExpressionUnion
+
+unitTerm :: Default a => Term a
+unitTerm = defaultTerm $ ExpressionRecord []
 
 unitType :: Type
 unitType = TypeRecord []
 
-unitVariant :: FieldName -> Term
+unitVariant :: Default a => FieldName -> Term a
 unitVariant fname = variant fname unitTerm
 
-variable :: Variable -> Term
-variable = ExpressionVariable
+variable :: Default a => Variable -> Term a
+variable = defaultTerm . ExpressionVariable
 
-variant :: FieldName -> Term -> Term
-variant fname term = ExpressionUnion (Field fname term)
+variant :: Default a => FieldName -> Term a -> Term a
+variant fname term = defaultTerm $ ExpressionUnion (Field fname term)
 
-withFunction :: FieldName -> Element -> Term
+withFunction :: Default a => FieldName -> Element a -> Term a
 withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
   where var = "x"
 
-withVariant :: FieldName -> Term
+withVariant :: Default a => FieldName -> Term a
 withVariant name = constFunction $ unitVariant name

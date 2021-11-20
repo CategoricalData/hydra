@@ -10,6 +10,7 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
+import Hydra.Impl.Haskell.Dsl
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Control.Monad as CM
@@ -43,20 +44,20 @@ atomicCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ AtomicValueString s'
       _ -> unexpected s "string"}
 
-recordCoder :: [FieldType] -> Qualified (Step Term YM.Node)
+recordCoder :: (Default a, Eq a, Ord a, Read a, Show a) => [FieldType] -> Qualified (Step (Term a) YM.Node)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
   where
-    encode coders term = case term of
+    encode coders term = case termData term of
       ExpressionRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
-            (TypeOptional _ , ExpressionOptional Nothing) -> pure Nothing
+            (TypeOptional _ , Term (ExpressionOptional Nothing) _) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected term "record"
     decode coders n = case n of
-      YM.NodeMapping m -> ExpressionRecord <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored 
+      YM.NodeMapping m -> record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored 
         where
           decodeField m (FieldType fn ft, coder) = do
             v <- stepIn coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m        
@@ -66,45 +67,45 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: Type -> Qualified (Step Term YM.Node)
+termCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> Qualified (Step (Term a) YM.Node)
 termCoder typ = case typ of
   TypeAtomic at -> do
     ac <- atomicCoder at
     return Step {
-      stepOut = \(ExpressionAtomic av) -> YM.NodeScalar <$> stepOut ac av,
+      stepOut = \(Term (ExpressionAtomic av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
-        YM.NodeScalar s -> ExpressionAtomic <$> stepIn ac s
+        YM.NodeScalar s -> atomic <$> stepIn ac s
         _ -> unexpected n "scalar node"}
   TypeList lt -> do
     lc <- termCoder lt
     return Step {
-      stepOut = \(ExpressionList els) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
+      stepOut = \(Term (ExpressionList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
       stepIn = \n -> case n of
-        YM.NodeSequence nodes -> ExpressionList <$> CM.mapM (stepIn lc) nodes
+        YM.NodeSequence nodes -> list <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected n "sequence"}
   TypeOptional ot -> do
     oc <- termCoder ot
     return Step {
-      stepOut = \(ExpressionOptional el) -> Y.maybe (pure yamlNull) (stepOut oc) el,
+      stepOut = \(Term (ExpressionOptional el) _) -> Y.maybe (pure yamlNull) (stepOut oc) el,
       stepIn = \n -> case n of
-        YM.NodeScalar YM.ScalarNull -> pure $ ExpressionOptional Nothing
-        _ -> ExpressionOptional . Just <$> stepIn oc n}
+        YM.NodeScalar YM.ScalarNull -> pure $ optional Nothing
+        _ -> optional . Just <$> stepIn oc n}
   TypeMap (MapType kt vt) -> do
     kc <- termCoder kt
     vc <- termCoder vt
     let encodeEntry (k, v) = (,) <$> stepOut kc k <*> stepOut vc v
     let decodeEntry (k, v) = (,) <$> stepIn kc k <*> stepIn vc v
     return Step {
-      stepOut = \(ExpressionMap m) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+      stepOut = \(Term (ExpressionMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
       stepIn = \n -> case n of
-        YM.NodeMapping m -> ExpressionMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
+        YM.NodeMapping m -> defaultTerm . ExpressionMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected n "mapping"}
   TypeRecord sfields -> recordCoder sfields
 
-unexpected :: Show v => v -> String -> Result a
+unexpected :: Show v => v -> String -> Result b
 unexpected x desc = fail $ "expected " ++ desc ++ ", found: " ++ show x
 
-yamlCoder :: Context -> Type -> Qualified (Step Term YM.Node)
+yamlCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) YM.Node)
 yamlCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter

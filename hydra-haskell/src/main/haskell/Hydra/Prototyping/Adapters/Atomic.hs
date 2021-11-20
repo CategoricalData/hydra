@@ -15,7 +15,7 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-atomicAdapter :: AdapterContext -> AtomicType -> Qualified (Adapter AtomicType AtomicValue)
+atomicAdapter :: AdapterContext a -> AtomicType -> Qualified (Adapter AtomicType AtomicValue)
 atomicAdapter context = chooseAdapter alts supported describeAtomicType
   where
     alts t = case t of
@@ -79,7 +79,7 @@ disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
   ++ if lossy then " (lossy)" else ""
 
-floatAdapter :: AdapterContext -> FloatType -> Qualified (Adapter FloatType FloatValue)
+floatAdapter :: AdapterContext a -> FloatType -> Qualified (Adapter FloatType FloatValue)
 floatAdapter context = chooseAdapter alts supported describeFloatType
   where
     alts t = makeAdapter t <$> case t of
@@ -95,7 +95,7 @@ floatAdapter context = chooseAdapter alts supported describeFloatType
 
     supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget context
 
-integerAdapter :: AdapterContext -> IntegerType -> Qualified (Adapter IntegerType IntegerValue)
+integerAdapter :: AdapterContext a -> IntegerType -> Qualified (Adapter IntegerType IntegerValue)
 integerAdapter context = chooseAdapter alts supported describeIntegerType
   where
     alts t = makeAdapter t <$> case t of
