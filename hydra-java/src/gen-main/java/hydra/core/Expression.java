@@ -1,15 +1,15 @@
 package hydra.core;
 
-public abstract class Type {
-  private Type() {}
+public abstract class Expression<A> {
+  private Expression() {}
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   /**
-   * An interface for applying a function to a Type according to its variant (subclass)
+   * An interface for applying a function to a Expression according to its variant (subclass)
    */
   public interface Visitor<R> {
-    R visit(Abstract instance) ;
+    R visit(Application instance) ;
     
     R visit(Atomic instance) ;
     
@@ -20,8 +20,6 @@ public abstract class Type {
     R visit(List instance) ;
     
     R visit(Map instance) ;
-    
-    R visit(Nominal instance) ;
     
     R visit(Optional instance) ;
     
@@ -35,16 +33,16 @@ public abstract class Type {
   }
   
   /**
-   * An interface for applying a function to a Type according to its variant (subclass). If a visit() method for a
+   * An interface for applying a function to a Expression according to its variant (subclass). If a visit() method for a
    * particular variant is not implemented, a default method is used instead.
    */
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Type instance) {
+    default R otherwise(Expression instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     @Override
-    default R visit(Abstract instance) {
+    default R visit(Application instance) {
       return otherwise(instance);
     }
     
@@ -74,11 +72,6 @@ public abstract class Type {
     }
     
     @Override
-    default R visit(Nominal instance) {
-      return otherwise(instance);
-    }
-    
-    @Override
     default R visit(Optional instance) {
       return otherwise(instance);
     }
@@ -104,14 +97,17 @@ public abstract class Type {
     }
   }
   
-  public static final class Abstract extends Type {
-    public final hydra.core.AbstractType abstractEsc;
+  /**
+   * A function application
+   */
+  public static final class Application<A> extends Expression<A> {
+    public final hydra.core.Application<A> application;
     
     /**
-     * Constructs an immutable Abstract object
+     * Constructs an immutable Application object
      */
-    public Abstract(hydra.core.AbstractType abstractEsc) {
-      this.abstractEsc = abstractEsc;
+    public Application(hydra.core.Application<A> application) {
+      this.application = application;
     }
     
     @Override
@@ -121,26 +117,29 @@ public abstract class Type {
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Abstract)) {
+      if (!(other instanceof Application)) {
           return false;
       }
-      Abstract o = (Abstract) other;
-      return abstractEsc.equals(o.abstractEsc);
+      Application o = (Application) other;
+      return application.equals(o.application);
     }
     
     @Override
     public int hashCode() {
-      return 2 * abstractEsc.hashCode();
+      return 2 * application.hashCode();
     }
   }
   
-  public static final class Atomic extends Type {
-    public final hydra.core.AtomicType atomic;
+  /**
+   * An atomic value
+   */
+  public static final class Atomic<A> extends Expression<A> {
+    public final hydra.core.AtomicValue atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(hydra.core.AtomicType atomic) {
+    public Atomic(hydra.core.AtomicValue atomic) {
       this.atomic = atomic;
     }
     
@@ -164,13 +163,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Element extends Type {
-    public final hydra.core.Type element;
+  /**
+   * An element reference
+   */
+  public static final class Element<A> extends Expression<A> {
+    public final hydra.core.Name element;
     
     /**
      * Constructs an immutable Element object
      */
-    public Element(hydra.core.Type element) {
+    public Element(hydra.core.Name element) {
       this.element = element;
     }
     
@@ -194,13 +196,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Function extends Type {
-    public final hydra.core.FunctionType function;
+  /**
+   * A function term
+   */
+  public static final class Function<A> extends Expression<A> {
+    public final hydra.core.Function<A> function;
     
     /**
      * Constructs an immutable Function object
      */
-    public Function(hydra.core.FunctionType function) {
+    public Function(hydra.core.Function<A> function) {
       this.function = function;
     }
     
@@ -224,13 +229,16 @@ public abstract class Type {
     }
   }
   
-  public static final class List extends Type {
-    public final hydra.core.Type list;
+  /**
+   * A list
+   */
+  public static final class List<A> extends Expression<A> {
+    public final java.util.List<hydra.core.Term<A>> list;
     
     /**
      * Constructs an immutable List object
      */
-    public List(hydra.core.Type list) {
+    public List(java.util.List<hydra.core.Term<A>> list) {
       this.list = list;
     }
     
@@ -254,13 +262,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Map extends Type {
-    public final hydra.core.MapType map;
+  /**
+   * A map of key terms to value terms
+   */
+  public static final class Map<A> extends Expression<A> {
+    public final java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> map;
     
     /**
      * Constructs an immutable Map object
      */
-    public Map(hydra.core.MapType map) {
+    public Map(java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> map) {
       this.map = map;
     }
     
@@ -284,43 +295,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Nominal extends Type {
-    public final hydra.core.Name nominal;
-    
-    /**
-     * Constructs an immutable Nominal object
-     */
-    public Nominal(hydra.core.Name nominal) {
-      this.nominal = nominal;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Nominal)) {
-          return false;
-      }
-      Nominal o = (Nominal) other;
-      return nominal.equals(o.nominal);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * nominal.hashCode();
-    }
-  }
-  
-  public static final class Optional extends Type {
-    public final hydra.core.Type optional;
+  /**
+   * An optional value
+   */
+  public static final class Optional<A> extends Expression<A> {
+    public final java.util.Optional<hydra.core.Term<A>> optional;
     
     /**
      * Constructs an immutable Optional object
      */
-    public Optional(hydra.core.Type optional) {
+    public Optional(java.util.Optional<hydra.core.Term<A>> optional) {
       this.optional = optional;
     }
     
@@ -344,13 +328,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Record extends Type {
-    public final java.util.List<hydra.core.FieldType> recordEsc;
+  /**
+   * A record, or labeled tuple
+   */
+  public static final class Record<A> extends Expression<A> {
+    public final java.util.List<hydra.core.Field<A>> recordEsc;
     
     /**
      * Constructs an immutable Record object
      */
-    public Record(java.util.List<hydra.core.FieldType> recordEsc) {
+    public Record(java.util.List<hydra.core.Field<A>> recordEsc) {
       this.recordEsc = recordEsc;
     }
     
@@ -374,13 +361,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Set extends Type {
-    public final hydra.core.Type set;
+  /**
+   * A set of terms
+   */
+  public static final class Set<A> extends Expression<A> {
+    public final java.util.Set<hydra.core.Term<A>> set;
     
     /**
      * Constructs an immutable Set object
      */
-    public Set(hydra.core.Type set) {
+    public Set(java.util.Set<hydra.core.Term<A>> set) {
       this.set = set;
     }
     
@@ -404,13 +394,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Union extends Type {
-    public final java.util.List<hydra.core.FieldType> union;
+  /**
+   * A union term, i.e. a generalization of inl() or inr()
+   */
+  public static final class Union<A> extends Expression<A> {
+    public final hydra.core.Field<A> union;
     
     /**
      * Constructs an immutable Union object
      */
-    public Union(java.util.List<hydra.core.FieldType> union) {
+    public Union(hydra.core.Field<A> union) {
       this.union = union;
     }
     
@@ -434,13 +427,16 @@ public abstract class Type {
     }
   }
   
-  public static final class Variable extends Type {
-    public final hydra.core.TypeVariable variable;
+  /**
+   * A variable reference
+   */
+  public static final class Variable<A> extends Expression<A> {
+    public final hydra.core.Variable variable;
     
     /**
      * Constructs an immutable Variable object
      */
-    public Variable(hydra.core.TypeVariable variable) {
+    public Variable(hydra.core.Variable variable) {
       this.variable = variable;
     }
     

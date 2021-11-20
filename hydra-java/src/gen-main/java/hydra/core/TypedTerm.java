@@ -1,14 +1,14 @@
 package hydra.core;
 
-public class TypedTerm {
+public class TypedTerm<A> {
   public final hydra.core.Type type;
   
-  public final hydra.core.Term term;
+  public final hydra.core.Term<A> term;
   
   /**
    * Constructs an immutable TypedTerm object
    */
-  public TypedTerm(hydra.core.Type type, hydra.core.Term term) {
+  public TypedTerm(hydra.core.Type type, hydra.core.Term<A> term) {
     this.type = type;
     this.term = term;
   }
@@ -39,7 +39,7 @@ public class TypedTerm {
   /**
    * Construct a new immutable TypedTerm object in which term is overridden
    */
-  public TypedTerm withTerm(hydra.core.Term term) {
+  public TypedTerm withTerm(hydra.core.Term<A> term) {
     return new TypedTerm(type, term);
   }
 }

@@ -3,15 +3,15 @@ package hydra.core;
 /**
  * A labeled term
  */
-public class Field {
+public class Field<A> {
   public final hydra.core.FieldName name;
   
-  public final hydra.core.Term term;
+  public final hydra.core.Term<A> term;
   
   /**
    * Constructs an immutable Field object
    */
-  public Field(hydra.core.FieldName name, hydra.core.Term term) {
+  public Field(hydra.core.FieldName name, hydra.core.Term<A> term) {
     this.name = name;
     this.term = term;
   }
@@ -42,7 +42,7 @@ public class Field {
   /**
    * Construct a new immutable Field object in which term is overridden
    */
-  public Field withTerm(hydra.core.Term term) {
+  public Field withTerm(hydra.core.Term<A> term) {
     return new Field(name, term);
   }
 }
