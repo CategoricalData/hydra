@@ -10,6 +10,7 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
+import Hydra.Impl.Haskell.Dsl
 import qualified Hydra.Ext.Haskell.Ast as H
 
 import qualified Control.Monad as CM
@@ -32,7 +33,7 @@ encodeAtomic av = case av of
     AtomicValueString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "atomic value" av
     
-encodeFunction :: Function -> Result H.Expression
+encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Function a -> Result H.Expression
 encodeFunction fun = case fun of
   FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
     where
@@ -49,8 +50,8 @@ encodeFunction fun = case fun of
   FunctionProjection fname -> pure $ hsvar fname
   _ -> fail $ "unexpected function: " ++ show fun
 
-encodeTerm :: Term -> Result H.Expression
-encodeTerm term = case term of
+encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
+encodeTerm term = case termData term of
   ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm fun <*> encodeTerm arg
   ExpressionAtomic av -> encodeAtomic av
   ExpressionElement name -> pure $ hsvar name
@@ -71,7 +72,7 @@ encodeTerm term = case term of
   ExpressionVariable v -> pure $ hsvar v
   _ -> fail $ "unexpected term: " ++ show term
 
-haskellCoder :: Context -> Type -> Qualified (Step Term H.Expression)
+haskellCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
 haskellCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter

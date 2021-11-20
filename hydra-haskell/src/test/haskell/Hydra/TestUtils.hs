@@ -20,6 +20,7 @@ import Hydra.Prototyping.Adapters.Atomic
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
+import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -28,13 +29,12 @@ import qualified Test.Hspec as H
 baseLanguage :: Language
 baseLanguage = hydraCoreLanguage
 
-baseContext :: AdapterContext
+baseContext :: AdapterContext Meta
 baseContext = AdapterContext testContext baseLanguage baseLanguage
 
-
 checkAdapter :: (Eq t, Eq v, Show t, Show v)
-  => (AdapterContext -> t -> Qualified (Adapter t v))
-  -> (r -> AdapterContext)
+  => (AdapterContext Meta -> t -> Qualified (Adapter t v))
+  -> (r -> AdapterContext Meta)
   -> r -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter mkAdapter context variants source target lossy vs vt = do
     Y.isJust adapter' `H.shouldBe` True
@@ -59,7 +59,7 @@ checkAtomicAdapter = checkAdapter atomicAdapter context
         floatVars = S.fromList [FloatVariantFloat32]
         integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
 
-checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field -> Field -> H.Expectation
+checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field Meta -> Field Meta -> H.Expectation
 checkFieldAdapter = checkAdapter fieldAdapter termTestContext
 
 checkFloatAdapter :: [FloatVariant] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
@@ -74,10 +74,10 @@ checkIntegerAdapter = checkAdapter integerAdapter context
     context variants = withConstraints $ (languageConstraints baseLanguage) {
       languageConstraintsIntegerVariants = S.fromList variants }
 
-checkTermAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term -> Term -> H.Expectation
+checkTermAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term Meta -> Term Meta -> H.Expectation
 checkTermAdapter = checkAdapter termAdapter termTestContext
 
-termTestContext :: [TypeVariant] -> AdapterContext
+termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
     languageConstraintsTypeVariants = S.fromList variants,
     languageConstraintsAtomicVariants = atomicVars,
@@ -93,5 +93,5 @@ isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
 
-withConstraints :: Language_Constraints -> AdapterContext
+withConstraints :: Language_Constraints -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}

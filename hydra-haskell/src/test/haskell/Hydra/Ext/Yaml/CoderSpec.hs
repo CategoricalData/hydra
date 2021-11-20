@@ -51,7 +51,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
   
   H.it "Lists become YAML sequences" $
     QC.property $ \strings -> checkYamlCoder listOfStringsType
-      (ExpressionList $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
+      (list $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
 
   H.it "Maps become YAML mappings" $
     QC.property $ \keyvals -> checkYamlCoder mapOfStringsToIntsType
@@ -59,7 +59,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
 
   H.it "Optionals become YAML null or type-specific nodes" $
     QC.property $ \ms -> checkYamlCoder optionalStringType
-      (ExpressionOptional $ stringValue <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
+      (optional $ stringValue <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
 
   H.it "Records become YAML mappings" $
     QC.property $ \lat lon -> checkYamlCoder latLonType
@@ -74,7 +74,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkYamlCoder int32ElementType
-      (ExpressionElement name) (yamlStr name)
+      (element name) (yamlStr name)
 
   H.it "Sets become sequences" $
     QC.property $ \strings -> checkYamlCoder setOfStringsType
@@ -95,7 +95,7 @@ spec = do
   supportedTypesPassThrough
   unsupportedTypesAreTransformed
   
-checkYamlCoder :: Type -> Term -> YM.Node -> H.Expectation
+checkYamlCoder :: Type -> Term Meta -> YM.Node -> H.Expectation
 checkYamlCoder typ term node = do
     Y.isJust step' `H.shouldBe` True
     stepOut step term `H.shouldBe` ResultSuccess node

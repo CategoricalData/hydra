@@ -13,7 +13,7 @@ import qualified Data.Char as C
 import qualified Test.QuickCheck as QC
 
 
-testEvaluate :: Term -> Result Term
+testEvaluate :: Term Meta -> Result (Term Meta)
 testEvaluate = evaluate testContext
 
 testsForAtomicValues :: H.SpecWith ()
@@ -21,16 +21,16 @@ testsForAtomicValues = do
   H.describe "Tests for atomic values" $ do
     
     H.it "Atomic terms have no free variables" $
-      QC.property $ \av -> termIsClosed (ExpressionAtomic av)
+      QC.property $ \av -> termIsClosed (atomic av :: Term Meta)
 
     H.it "Atomic terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testStrategy (ExpressionAtomic av)
+      QC.property $ \av -> termIsValue testStrategy (atomic av :: Term Meta)
 
     H.it "Atomic terms are fully reduced; check by trying to reduce them" $
-      QC.property $ \av -> testEvaluate (ExpressionAtomic av) == pure (ExpressionAtomic av)
+      QC.property $ \av -> testEvaluate (atomic av) == pure (atomic av :: Term Meta)
 
     H.it "Atomic terms cannot be applied" $
-      QC.property $ \av (TypedTerm _ term) -> isFailure (testEvaluate $ apply (ExpressionAtomic av) term)
+      QC.property $ \av (TypedTerm _ term) -> isFailure (testEvaluate $ apply (atomic av) term)
 
 testsForPrimitiveFunctions :: H.SpecWith ()
 testsForPrimitiveFunctions = do
@@ -61,7 +61,7 @@ testsForPrimitiveFunctions = do
       QC.property $ \s1 s2 ->
         isFailure (testEvaluate (apply (apply (func "toUpper") $ stringTerm s1) $ stringTerm s2))
 
-func :: String -> Term
+func :: String -> Term Meta
 func = function . stringsFunc
 
 spec :: H.Spec

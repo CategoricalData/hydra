@@ -52,21 +52,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (TypeOptional int32Type)
-        (ExpressionOptional $ (Just . int32Value) =<< mi))
+        (optional $ (Just . int32Value) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (TypeOptional $ TypeOptional int32Type)
-        (ExpressionOptional $ Just $ ExpressionOptional $ (Just . int32Value) =<< mi))
+        (optional $ Just $ optional $ (Just . int32Value) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeOptional $ TypeOptional int32Type)
-        (ExpressionOptional Nothing))
+        (optional Nothing))
       "[]"
 
 checkRecordsAndUnions :: H.SpecWith ()
@@ -84,14 +84,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeRecord [FieldType "one" $ TypeOptional stringType, FieldType "two" $ TypeOptional int32Type])
-        (ExpressionRecord [Field "one" $ ExpressionOptional $ Just $ stringValue "test", Field "two" $ ExpressionOptional Nothing]))
+        (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
       "one: test"
       
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeUnion [FieldType "left" stringType, FieldType "right" int32Type])
-        (ExpressionUnion $ Field "left" $ stringValue "test"))
+        (union $ Field "left" $ stringValue "test"))
       "left: test"
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
@@ -100,7 +100,7 @@ yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a t
   H.it "Generate arbitrary type/term pairs, serialize the terms to YAML, deserialize them, and compare" $
     QC.property checkSerdeRoundTrip
 
-checkSerialization :: TypedTerm -> String -> H.Expectation
+checkSerialization :: TypedTerm Meta -> String -> H.Expectation
 checkSerialization (TypedTerm typ term) expected = do
     if Y.isNothing (qualifiedValue serde)
       then qualifiedWarnings serde `H.shouldBe` []
@@ -111,7 +111,7 @@ checkSerialization (TypedTerm typ term) expected = do
     serde = yamlSerdeStr testContext typ
     serde' = Y.fromJust $ qualifiedValue serde
 
-checkSerdeRoundTrip :: TypedTerm -> H.Expectation
+checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
 checkSerdeRoundTrip (TypedTerm typ term) = do
     Y.isJust (qualifiedValue serde) `H.shouldBe` True
     (stepOut serde' term >>= stepIn serde') `H.shouldBe` ResultSuccess term

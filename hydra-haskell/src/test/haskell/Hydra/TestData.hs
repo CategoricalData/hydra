@@ -25,8 +25,8 @@ int32ElementType = TypeElement int32Type
 int32ElementDataType :: Type
 int32ElementDataType = functionType int32ElementType int32Type
 
-latlonRecord :: Int -> Int -> Term
-latlonRecord lat lon = ExpressionRecord [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
+latlonRecord :: (Default a, Eq a, Ord a, Read a, Show a) => Int -> Int -> Term a
+latlonRecord lat lon = record [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
 
 latLonType :: Type
 latLonType = TypeRecord [FieldType "lat" int32Type, FieldType "lon" int32Type]
@@ -49,8 +49,8 @@ listOfSetOfStringsType = TypeList $ TypeSet stringType
 listOfStringsType :: Type
 listOfStringsType = TypeList stringType
 
-makeMap :: [(String, Int)] -> Term
-makeMap keyvals = ExpressionMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Term a
+makeMap keyvals = defaultTerm $ ExpressionMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Type
 mapOfStringsToIntsType = mapType stringType int32Type
@@ -70,14 +70,14 @@ setOfStringsType = TypeSet stringType
 stringAliasType :: Type
 stringAliasType = TypeNominal "StringTypeAlias"
 
-stringList :: [String] -> Term
-stringList strings = ExpressionList $ stringValue <$> strings
+stringList :: (Default a, Eq a, Ord a, Read a, Show a) => [String] -> Term a
+stringList strings = list $ stringValue <$> strings
 
 stringOrIntType :: Type
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
 
-stringSet :: S.Set String -> Term
-stringSet strings = ExpressionSet $ S.fromList $ stringValue <$> S.toList strings
+stringSet :: (Default a, Eq a, Ord a, Read a, Show a) => S.Set String -> Term a
+stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
 
 unionTypeForFunctions :: Type -> Type
 unionTypeForFunctions dom = TypeUnion [
@@ -87,4 +87,4 @@ unionTypeForFunctions dom = TypeUnion [
   FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
   FieldType _Function_primitive stringType,
   FieldType _Function_projection stringType,
-  FieldType _Term_variable stringType] -- TODO
+  FieldType _Expression_variable stringType] -- TODO

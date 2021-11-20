@@ -39,7 +39,7 @@ instance QC.Arbitrary FloatType
       FloatTypeBigfloat,
       FloatTypeFloat32,
       FloatTypeFloat64]
-      
+
 instance QC.Arbitrary FloatValue
   where
     arbitrary = QC.oneof [
@@ -81,8 +81,8 @@ instance QC.Arbitrary Type where
       AtomicTypeFloat _ -> [AtomicTypeBoolean]
       _ -> []
     _ -> [] -- TODO
-    
-instance QC.Arbitrary TypedTerm where
+
+instance (Default a, Eq a, Ord a, Read a, Show a) => QC.Arbitrary (TypedTerm a) where
   arbitrary = QC.sized arbitraryTypedTerm
   shrink (TypedTerm typ term) = L.concat ((\(t, m) -> TypedTerm t <$> m term) <$> shrinkers typ)
 
@@ -90,11 +90,11 @@ arbitraryAtomicValue :: AtomicType -> QC.Gen AtomicValue
 arbitraryAtomicValue at = case at of
   AtomicTypeBinary -> AtomicValueBinary <$> QC.arbitrary
   AtomicTypeBoolean -> AtomicValueBoolean <$> QC.arbitrary
-  AtomicTypeFloat ft -> AtomicValueFloat <$> arbitraryFloatValue ft         
+  AtomicTypeFloat ft -> AtomicValueFloat <$> arbitraryFloatValue ft
   AtomicTypeInteger it -> AtomicValueInteger <$> arbitraryIntegerValue it
   AtomicTypeString -> AtomicValueString <$> QC.arbitrary
 
-arbitraryField :: FieldType -> Int -> QC.Gen Field
+arbitraryField :: (Default a, Eq a, Ord a, Read a, Show a) => FieldType -> Int -> QC.Gen (Field a)
 arbitraryField (FieldType fn ft) n = Field fn <$> arbitraryTerm ft n
 
 arbitraryFieldType :: Int -> QC.Gen FieldType
@@ -107,7 +107,7 @@ arbitraryFloatValue ft = case ft of
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
-arbitraryFunction :: FunctionType -> Int -> QC.Gen Function
+arbitraryFunction :: (Default a, Eq a, Ord a, Read a, Show a) => FunctionType -> Int -> QC.Gen (Function a)
 arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++ domainSpecific
   where
     n' = decr n
@@ -122,7 +122,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
         where
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
-            return $ Field fn $ ExpressionFunction term
+            return $ Field fn $ defaultTerm $ ExpressionFunction term
           n2 = div n' $ L.length sfields
       TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
       _ -> []
@@ -158,12 +158,12 @@ arbitraryPair c g n = c <$> g n' <*> g n'
   where n' = div n 2
 
 -- Note: variables and function applications are not (currently) generated
-arbitraryTerm :: Type -> Int -> QC.Gen Term
+arbitraryTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> Int -> QC.Gen (Term a)
 arbitraryTerm typ n = case typ of
-    TypeAtomic at -> ExpressionAtomic <$> arbitraryAtomicValue at
-    TypeFunction ft -> ExpressionFunction <$> arbitraryFunction ft n'
-    TypeList lt -> ExpressionList <$> arbitraryList False (arbitraryTerm lt) n'
-    TypeMap (MapType kt vt) -> ExpressionMap <$> (M.fromList <$> arbitraryList False arbPair n')
+    TypeAtomic at -> atomic <$> arbitraryAtomicValue at
+    TypeFunction ft -> defaultTerm . ExpressionFunction <$> arbitraryFunction ft n'
+    TypeList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
+    TypeMap (MapType kt vt) -> defaultTerm . ExpressionMap <$> (M.fromList <$> arbitraryList False arbPair n')
       where
         arbPair n = do
             k <- arbitraryTerm kt n'
@@ -171,10 +171,10 @@ arbitraryTerm typ n = case typ of
             return (k, v)
           where
             n' = div n 2
-    TypeOptional ot -> ExpressionOptional <$> arbitraryOptional (arbitraryTerm ot) n'
-    TypeRecord sfields -> ExpressionRecord <$> arbitraryFields sfields
-    TypeSet st -> ExpressionSet <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
-    TypeUnion sfields -> ExpressionUnion <$> do
+    TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
+    TypeRecord sfields -> record <$> arbitraryFields sfields
+    TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
+    TypeUnion sfields -> union <$> do
       f <- QC.elements sfields
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
@@ -200,7 +200,7 @@ arbitraryType n = if n == 0 then pure unitType else QC.oneof [
     TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
-arbitraryTypedTerm :: Int -> QC.Gen TypedTerm
+arbitraryTypedTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Int -> QC.Gen (TypedTerm a)
 arbitraryTypedTerm n = do
     typ <- arbitraryType n'
     term <- arbitraryTerm typ n'
@@ -211,58 +211,61 @@ arbitraryTypedTerm n = do
 decr :: Int -> Int
 decr n = max 0 (n-1)
 
-shrinkers :: Type -> [(Type, Term -> [Term])]
+-- Note: shrinking currently discards any metadata
+shrinkers :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> [(Type, (Term a) -> [Term a])]
 shrinkers typ = trivialShrinker ++ case typ of
     TypeAtomic at -> case at of
-      AtomicTypeBinary -> [(binaryType, \(ExpressionAtomic (AtomicValueBinary s)) -> binaryTerm <$> QC.shrink s)]
+      AtomicTypeBinary -> [(binaryType, \(Term (ExpressionAtomic (AtomicValueBinary s)) _) -> binaryTerm <$> QC.shrink s)]
       AtomicTypeBoolean -> []
       AtomicTypeFloat ft -> []
       AtomicTypeInteger it -> []
-      AtomicTypeString -> [(stringType, \(ExpressionAtomic (AtomicValueString s)) -> stringTerm <$> QC.shrink s)]
+      AtomicTypeString -> [(stringType, \(Term (ExpressionAtomic (AtomicValueString s)) _) -> stringTerm <$> QC.shrink s)]
   --  TypeElement et ->
   --  TypeFunction ft ->
     TypeList lt -> dropElements : promoteType : shrinkType
       where
-        dropElements = (TypeList lt, \(ExpressionList els) -> ExpressionList <$> dropAny els)
-        promoteType = (lt, \(ExpressionList els) -> els)
-        shrinkType = (\(t, m) -> (TypeList t, \(ExpressionList els) -> ExpressionList <$> CM.mapM m els)) <$> shrinkers lt
+        dropElements = (TypeList lt, \(Term (ExpressionList els) _) -> list <$> dropAny els)
+        promoteType = (lt, \(Term (ExpressionList els) _) -> els)
+        shrinkType = (\(t, m) -> (TypeList t, \(Term (ExpressionList els) _) -> list <$> CM.mapM m els)) <$> shrinkers lt
     TypeMap mt@(MapType kt vt) -> shrinkKeys ++ shrinkValues ++ dropPairs
       where
         shrinkKeys = (\(t, m) -> (TypeMap (MapType t vt),
-            \(ExpressionMap mp) -> ExpressionMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers kt
+            \(Term (ExpressionMap mp) _) -> defaultTerm . ExpressionMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers kt
           where
             shrinkPair m (km, vm) = (\km' -> (km', vm)) <$> m km
         shrinkValues = (\(t, m) -> (TypeMap (MapType kt t),
-            \(ExpressionMap mp) -> ExpressionMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers vt
+            \(Term (ExpressionMap mp) _) -> defaultTerm . ExpressionMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers vt
           where
             shrinkPair m (km, vm) = (\vm' -> (km, vm')) <$> m vm
-        dropPairs = [(TypeMap mt, \(ExpressionMap m) -> ExpressionMap . M.fromList <$> dropAny (M.toList m))]
+        dropPairs = [(TypeMap mt, \(Term (ExpressionMap m) _) -> defaultTerm . ExpressionMap . M.fromList <$> dropAny (M.toList m))]
   --  TypeNominal name ->
     TypeOptional ot -> toNothing : promoteType : shrinkType
       where
-        toNothing = (TypeOptional ot, \(ExpressionOptional m) -> ExpressionOptional <$> Y.maybe [] (const [Nothing]) m)
-        promoteType = (ot, \(ExpressionOptional m) -> Y.maybeToList m)
+        toNothing = (TypeOptional ot, \(Term (ExpressionOptional m) _) -> optional <$> Y.maybe [] (const [Nothing]) m)
+        promoteType = (ot, \(Term (ExpressionOptional m) _) -> Y.maybeToList m)
         shrinkType = (\(t, m) -> (TypeOptional t,
-          \(ExpressionOptional mb) -> Y.maybe [] (fmap (ExpressionOptional . Just) . m) mb)) <$> shrinkers ot
+          \(Term (ExpressionOptional mb) _) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
     TypeRecord sfields -> dropFields
-        ++ shrinkFieldNames TypeRecord ExpressionRecord (\(ExpressionRecord dfields) -> dfields) sfields
+        ++ shrinkFieldNames TypeRecord record (\(Term (ExpressionRecord dfields) _) -> dfields) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = dropField <$> indices
           where
-            dropField i = (TypeRecord $ dropIth i sfields, \(ExpressionRecord dfields) -> [ExpressionRecord $ dropIth i dfields])
+            dropField i = (TypeRecord $ dropIth i sfields, \(Term (ExpressionRecord dfields) _)
+              -> [record $ dropIth i dfields])
         promoteTypes = promoteField <$> indices
           where
-            promoteField i = (fieldTypeType $ sfields !! i, \(ExpressionRecord dfields) -> [fieldTerm $ dfields !! i])
+            promoteField i = (fieldTypeType $ sfields !! i, \(Term (ExpressionRecord dfields) _)
+              -> [fieldTerm $ dfields !! i])
         shrinkTypes = [] -- TODO
         indices = [0..(L.length sfields - 1)]
     TypeSet st -> dropElements : promoteType : shrinkType
       where
-        dropElements = (TypeSet st, \(ExpressionSet els) -> ExpressionSet . S.fromList <$> dropAny (S.toList els))
-        promoteType = (st, \(ExpressionSet els) -> S.toList els)
-        shrinkType = (\(t, m) -> (TypeSet t, \(ExpressionSet els) -> ExpressionSet . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
+        dropElements = (TypeSet st, \(Term (ExpressionSet els) _) -> set . S.fromList <$> dropAny (S.toList els))
+        promoteType = (st, \(Term (ExpressionSet els) _) -> S.toList els)
+        shrinkType = (\(t, m) -> (TypeSet t, \(Term (ExpressionSet els) _) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
     TypeUnion sfields -> dropFields
-        ++ shrinkFieldNames TypeUnion (ExpressionUnion . L.head) (\(ExpressionUnion f) -> [f]) sfields
+        ++ shrinkFieldNames TypeUnion (union . L.head) (\(Term (ExpressionUnion f) _) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO

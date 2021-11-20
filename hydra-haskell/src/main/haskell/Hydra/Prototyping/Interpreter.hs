@@ -22,25 +22,24 @@ import qualified Data.Set as S
 --   This function does not assume that term to be evaluated is in a normal form,
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
-evaluate :: Context -> Term -> Result Term
+evaluate :: (Ord a, Show a, Default a) => Context a -> Term a -> Result (Term a)
 evaluate context term = reduce M.empty term
   where
-    reduce :: M.Map Variable Term -> Term -> Result Term
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then pure term
-      else case term of
+      else case termData term of
         ExpressionApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
         ExpressionAtomic _ -> done
         ExpressionElement _ -> done
         ExpressionFunction f -> reduceFunction f
-        ExpressionList terms -> ExpressionList <$> CM.mapM reduceb terms
-        ExpressionMap map -> ExpressionMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
+        ExpressionList terms -> defaultTerm . ExpressionList <$> CM.mapM reduceb terms
+        ExpressionMap map -> defaultTerm . ExpressionMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-        ExpressionOptional m -> ExpressionOptional <$> CM.mapM reduceb m
-        ExpressionRecord fields -> ExpressionRecord <$> CM.mapM reduceField fields
-        ExpressionSet terms -> ExpressionSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
-        ExpressionUnion f -> ExpressionUnion <$> reduceField f
+        ExpressionOptional m -> defaultTerm . ExpressionOptional <$> CM.mapM reduceb m
+        ExpressionRecord fields -> defaultTerm  . ExpressionRecord <$> CM.mapM reduceField fields
+        ExpressionSet terms -> defaultTerm . ExpressionSet <$> (fmap S.fromList $ CM.mapM reduceb $ S.toList terms)
+        ExpressionUnion f -> defaultTerm . ExpressionUnion <$> reduceField f
         ExpressionVariable v -> case M.lookup v bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
@@ -49,23 +48,22 @@ evaluate context term = reduce M.empty term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
-          FunctionCases cases -> ExpressionRecord <$> CM.mapM reduceField cases
-          FunctionCompareTo other -> ExpressionFunction . FunctionCompareTo <$> reduceb other
+          FunctionCases cases -> defaultTerm . ExpressionRecord <$> CM.mapM reduceField cases
+          FunctionCompareTo other -> defaultTerm . ExpressionFunction . FunctionCompareTo <$> reduceb other
           FunctionData -> done
-          FunctionLambda (Lambda v body) -> ExpressionFunction . FunctionLambda . Lambda v <$> reduceb body
+          FunctionLambda (Lambda v body) -> defaultTerm . ExpressionFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive _ -> done
           FunctionProjection _ -> done
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
-    reduceApplication :: M.Map Variable Term -> [Term] -> Term -> Result Term
-    reduceApplication bindings args f = if L.null args then pure f else case f of
+    reduceApplication bindings args f = if L.null args then pure f else case termData f of
       ExpressionApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
 
       ExpressionFunction f -> case f of
         FunctionCases cases -> do
           arg <- reduce bindings $ L.head args
-          case arg of
+          case termData arg of
             ExpressionUnion (Field fname t) -> if L.null matching
                 then fail $ "no case for field named " ++ fname
                 else reduce bindings (fieldTerm $ L.head matching)
@@ -78,7 +76,7 @@ evaluate context term = reduce M.empty term
 
         FunctionData -> do
             arg <- reduce bindings $ L.head args
-            case arg of
+            case termData arg of
               ExpressionElement name -> dereferenceElement context name
                 >>= reduce bindings
                 >>= reduceApplication bindings (L.tail args)
@@ -94,7 +92,7 @@ evaluate context term = reduce M.empty term
                  >>= reduceApplication bindings (L.drop arity args)
                else unwind
            where
-             unwind = pure $ L.foldl apply (ExpressionFunction f) args
+             unwind = pure $ L.foldl apply (defaultTerm $ ExpressionFunction f) args
 
         FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
           >>= reduceApplication bindings (L.tail args)
@@ -103,10 +101,10 @@ evaluate context term = reduce M.empty term
 
       _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 
-freeVariables :: Term -> S.Set Variable
+freeVariables :: Term a -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term
   where
-    free bound term = case term of
+    free bound term = case termData term of
         ExpressionApplication (Application t1 t2) -> free bound t1 ++ free bound t2
         ExpressionAtomic _ -> []
         ExpressionElement _ -> []
@@ -130,16 +128,16 @@ freeVariables term = S.fromList $ free S.empty term
           FunctionProjection _ -> []
 
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term -> Bool
+termIsClosed :: Term a -> Bool
 termIsClosed = S.null . freeVariables
 
 -- | Whether a term is opaque to reduction, i.e. need not be reduced
-termIsOpaque :: EvaluationStrategy -> Term -> Bool
+termIsOpaque :: EvaluationStrategy -> Term a -> Bool
 termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: EvaluationStrategy -> Term -> Bool
-termIsValue strategy term = termIsOpaque strategy term || case term of
+termIsValue :: EvaluationStrategy -> Term a -> Bool
+termIsValue strategy term = termIsOpaque strategy term || case termData term of
       ExpressionApplication _ -> False
       ExpressionAtomic _ -> True
       ExpressionElement _ -> True

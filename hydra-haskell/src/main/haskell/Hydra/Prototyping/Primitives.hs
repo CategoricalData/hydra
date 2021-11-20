@@ -17,41 +17,41 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-dereferenceElement :: Context -> Name -> Result Term
+dereferenceElement :: Context a -> Name -> Result (Term a)
 dereferenceElement context en = case M.lookup en (contextElements context) of
   Nothing -> fail $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs context)
   Just e -> pure $ elementData e
 
-getGraph :: GraphSet -> GraphName -> Result Graph
+getGraph :: GraphSet a -> GraphName -> Result (Graph a)
 getGraph graphs name = Y.maybe error pure $ M.lookup name (graphSetGraphs graphs)
   where
     error = fail $ "no such graph: " ++ name
 
-graphElementsMap :: Graph -> M.Map Name Element
+graphElementsMap :: Graph a -> M.Map Name (Element a)
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
 
-lookupPrimitiveFunction :: Context -> Name -> Maybe PrimitiveFunction
+lookupPrimitiveFunction :: Context a -> Name -> Maybe (PrimitiveFunction a)
 lookupPrimitiveFunction context fn = M.lookup fn $ contextFunctions context
 
-primitiveFunctionArity :: PrimitiveFunction -> Int
+primitiveFunctionArity :: PrimitiveFunction a -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
   where
     arity (FunctionType _ cod) = 1 + case cod of
       TypeFunction ft -> arity ft
       _ -> 0
 
-requireElement :: Context -> Name -> Result Element
+requireElement :: Context a -> Name -> Result (Element a)
 requireElement context name = Y.maybe error pure $ M.lookup name $ contextElements context
   where
     error = fail $ "no such element: " ++ name
       ++ " in graph " ++ graphSetRoot (contextGraphs context)
 
-requirePrimitiveFunction :: Context -> Name -> Result PrimitiveFunction
+requirePrimitiveFunction :: Context a -> Name -> Result (PrimitiveFunction a)
 requirePrimitiveFunction context fn = Y.maybe error pure $ lookupPrimitiveFunction context fn
   where
     error = fail $ "no such primitive function: " ++ fn
 
-schemaContext :: Context -> Result Context
+schemaContext :: Context a -> Result (Context a)
 schemaContext context = do
     dgraph <- getGraph graphs $ graphSetRoot graphs
     sgraph <- getGraph graphs $ graphSchemaGraph dgraph

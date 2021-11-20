@@ -62,7 +62,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
     QC.property $ \strings -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantList]
       listOfStringsType listOfStringsType False
-      (ExpressionList $ stringValue <$> strings) (ExpressionList $ stringValue <$> strings)
+      (list $ stringValue <$> strings) (list $ stringValue <$> strings)
 
   H.it "Maps (when supported) pass through without change" $
     QC.property $ \keyvals -> checkTermAdapter
@@ -74,7 +74,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
     QC.property $ \mi -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantOptional]
       optionalInt8Type optionalInt16Type False
-      (ExpressionOptional $ int8Value <$> mi) (ExpressionOptional $ int16Value <$> mi)
+      (optional $ int8Value <$> mi) (optional $ int16Value <$> mi)
 
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkTermAdapter
@@ -82,8 +82,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
       (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
       False
-      (ExpressionRecord [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
-      (ExpressionRecord [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
+      (record [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
+      (record [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkTermAdapter
@@ -101,7 +101,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
     QC.property $ \name -> checkTermAdapter
       [TypeVariantElement]
       int32ElementType int32ElementType False
-      (ExpressionElement name) (ExpressionElement name)
+      (element name) (element name)
 
   H.it "CompareTo terms (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
@@ -146,38 +146,38 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \name -> checkTermAdapter
       [TypeVariantAtomic]
       int32ElementType stringType False
-      (ExpressionElement name) (stringValue name) -- Note: the element name is not dereferenced
+      (element name) (stringValue name) -- Note: the element name is not dereferenced
 
   H.it "CompareTo terms (when unsupported) become variant terms" $
     QC.property $ \s -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       compareStringsType (unionTypeForFunctions stringType) False
-      (compareTo $ stringValue s) (ExpressionUnion $ Field "compareTo" $ stringValue s)
+      (compareTo $ stringValue s) (union $ Field "compareTo" $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType (unionTypeForFunctions stringType) False
-      dataTerm (ExpressionUnion $ Field "data" unitTerm)
+      dataTerm (union $ Field "data" unitTerm)
 
   H.it "Optionals (when unsupported) become unions" $
     QC.property $ \ms -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantRecord, TypeVariantUnion]
       optionalStringType (TypeUnion [FieldType "nothing" unitType, FieldType "just" stringType]) False
-      (ExpressionOptional $ stringValue <$> ms)
-      (ExpressionUnion $ Y.maybe (Field "nothing" unitTerm) (Field "just" . stringTerm) ms)
+      (optional $ stringValue <$> ms)
+      (union $ Y.maybe (Field "nothing" unitTerm) (Field "just" . stringTerm) ms)
 
   H.it "Primitive function references (when unsupported) become variant terms" $
     QC.property $ \name -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       concatType (unionTypeForFunctions stringType) False
-      (primitive name) (ExpressionUnion $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
+      (primitive name) (union $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType (unionTypeForFunctions latLonType) False
-      (projection fname) (ExpressionUnion $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
+      (projection fname) (union $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter
@@ -192,10 +192,10 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (TypeRecord [
         FieldType "left" $ TypeOptional stringType,
         FieldType "right" $ TypeOptional int16Type]) False
-      (ExpressionUnion $ Field "right" $ int8Value i)
-      (ExpressionRecord [
-        Field "left" $ ExpressionOptional Nothing,
-        Field "right" $ ExpressionOptional $ Just $ int16Value i])
+      (union $ Field "right" $ int8Value i)
+      (record [
+        Field "left" $ optional Nothing,
+        Field "right" $ optional $ Just $ int16Value i])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
@@ -204,22 +204,22 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
     QC.property $ \ints -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantList]
       listOfInt8sType listOfInt16sType False
-      (ExpressionList $ int8Value <$> ints)
-      (ExpressionList $ int16Value <$> ints)
+      (list $ int8Value <$> ints)
+      (list $ int16Value <$> ints)
 
   H.it "A list of sets of strings becomes a list of lists of strings" $
     QC.property $ \lists -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantList]
       listOfSetOfStringsType listOfListsOfStringsType False
-      (ExpressionList $ (\l -> ExpressionSet $ S.fromList $ stringValue <$> l) <$> lists)
-      (ExpressionList $ (\l -> ExpressionList $ stringValue <$> S.toList (S.fromList l)) <$> lists)
+      (list $ (\l -> set $ S.fromList $ stringValue <$> l) <$> lists)
+      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> lists)
 
   H.it "A list of sets of element references becomes a list of lists of strings" $
     QC.property $ \names -> checkTermAdapter
       [TypeVariantAtomic, TypeVariantList]
       listOfSetOfInt32ElementReferencesType listOfListsOfStringsType False
-      (ExpressionList $ (\l -> ExpressionSet $ S.fromList $ ExpressionElement <$> l) <$> names)
-      (ExpressionList $ (\l -> ExpressionList $ stringValue <$> S.toList (S.fromList l)) <$> names)
+      (list $ (\l -> set $ S.fromList $ element <$> l) <$> names)
+      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> names)
 
 roundTripsPreserveSelectedTypes :: H.SpecWith ()
 roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
@@ -228,13 +228,13 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
 
   H.it "Check lists (pass-through)" $
-    QC.property $ \strings -> roundTripIsNoop listOfStringsType (ExpressionList $ stringValue <$> strings)
+    QC.property $ \strings -> roundTripIsNoop listOfStringsType (list $ stringValue <$> strings)
 
   H.it "Check sets (which map to lists)" $
     QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
 
   H.it "Check element references (which map to strings)" $
-    QC.property $ \name -> roundTripIsNoop int32ElementType (ExpressionElement name)
+    QC.property $ \name -> roundTripIsNoop int32ElementType (element name)
 
   H.it "Check compareTo terms (which map to variants)" $
     QC.property $ \s -> roundTripIsNoop compareStringsType (compareTo $ stringValue s)
@@ -269,7 +269,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Field "second" $ int8Value i)
       (Field "second" $ int16Value i)
 
-roundTripIsNoop :: Type -> Term -> Bool
+roundTripIsNoop :: Type -> Term Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
     step = adapt typ
@@ -289,12 +289,10 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 
-    transContext :: AdapterContext
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage
     
     -- Note: in a real application, you wouldn't create the adapter just to use it once;
     --       it should be created once, then applied to many terms.
-    adapt :: Type -> (Step Term Term -> t -> Result b) -> t -> Result b
     adapt typ dir term = do
       ad <- qualifiedToResult $ termAdapter transContext typ
       dir (adapterStep ad) term

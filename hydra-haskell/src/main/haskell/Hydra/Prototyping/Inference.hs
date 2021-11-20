@@ -9,20 +9,20 @@ import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Prototyping.CoreDecoding
+import Hydra.Impl.Haskell.Dsl
 
 import qualified Data.List as L
 import qualified Data.Map  as M
 
 
 -- Check whether a term conforms to a type
-checkType :: Context -> Type -> Term -> Bool
+checkType :: (Default a, Eq a) => Context a -> Type -> Term a -> Bool
 checkType context typ term = check M.empty typ term
   where
-    check :: M.Map Variable Type -> Type -> Term -> Bool
-    check bindings typ term = case term of
+    check bindings typ term = case termData term of
       -- TODO: nominal types
 
-      ExpressionApplication (Application f arg) -> case f of
+      ExpressionApplication (Application f arg) -> case termData f of
 --        ExpressionApplication ... ->
         ExpressionAtomic _ -> False
         ExpressionElement _ -> False
@@ -47,7 +47,7 @@ checkType context typ term = check M.empty typ term
           Just t -> case t of
             TypeFunction (FunctionType dom cod) -> cod == typ && check bindings dom arg
             _ -> False
-                  
+
       ExpressionAtomic v -> case typ of
         TypeAtomic at -> at == atomicValueType v
         _ -> False
@@ -67,7 +67,7 @@ checkType context typ term = check M.empty typ term
           Nothing -> True
           Just term -> check bindings ot term
         _ -> False
-        
+
       ExpressionRecord fields -> case typ of
         TypeRecord tfields -> sameLength tfields fields
             && (L.foldl (&&) True $ L.zipWith matches tfields fields)
@@ -130,8 +130,8 @@ checkType context typ term = check M.empty typ term
       where
         matches = L.filter (\f -> fieldTypeName f == fn) fields
 
-inferType :: Context -> Term -> Result Type
-inferType context term = case term of
+inferType :: Show a => Context a -> Term a -> Result Type
+inferType context term = case termData term of
 --  ExpressionApplication (Application fun arg) ->
   ExpressionAtomic av -> pure $ TypeAtomic $ atomicValueType av
   ExpressionElement name -> do
@@ -144,7 +144,7 @@ inferType context term = case term of
 ----      FunctionVariantData
 ----      FunctionVariantLambda
 --      FunctionPrimitive name -> TypeFunction <$> (primitiveFunctionType <$> requirePrimitiveFunction context name)
---      FunctionProjection fn -> 
+--      FunctionProjection fn ->
 --  ExpressionList els ->
 --  ExpressionMap m ->
 --  ExpressionOptional m ->
@@ -153,4 +153,4 @@ inferType context term = case term of
 --  ExpressionVariable v ->
 
 --applicationType :: Type -> Application -> (Type, Type)
---applicationType typ (Application fun arg) = 
+--applicationType typ (Application fun arg) =

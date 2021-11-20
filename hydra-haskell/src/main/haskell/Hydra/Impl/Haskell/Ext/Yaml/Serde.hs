@@ -7,6 +7,7 @@ import Hydra.V2.Core
 import Hydra.Errors
 import Hydra.V2.Evaluation
 import Hydra.Ext.Yaml.Coder
+import Hydra.Impl.Haskell.Dsl
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
@@ -29,7 +30,7 @@ bytesToHsYaml bs = case DY.decodeNode bs of
         (DY.Doc node) -> pure node
 
 bytesToHydraYaml :: BS.ByteString -> Result YM.Node
-bytesToHydraYaml = bytesToHsYaml CM.>=> hsYamlToHydraYaml 
+bytesToHydraYaml = bytesToHsYaml CM.>=> hsYamlToHydraYaml
 
 hsYamlToBytes :: DY.Node () -> BS.ByteString
 hsYamlToBytes node = DY.encodeNode [DY.Doc node]
@@ -46,9 +47,9 @@ hsYamlToHydraYaml hs = case hs of
   DY.Mapping _ _ m -> YM.NodeMapping . M.fromList <$> CM.mapM mapPair (M.toList m)
     where
       mapPair (k, v) = (,) <$> hsYamlToHydraYaml k <*> hsYamlToHydraYaml v
-  DY.Sequence _ _ s -> YM.NodeSequence <$> CM.mapM hsYamlToHydraYaml s 
+  DY.Sequence _ _ s -> YM.NodeSequence <$> CM.mapM hsYamlToHydraYaml s
   DY.Anchor {} -> fail "YAML anchors are unsupported"
-  
+
 hydraYamlToBytes :: YM.Node -> BS.ByteString
 hydraYamlToBytes = hsYamlToBytes . hydraYamlToHsYaml
 
@@ -65,14 +66,14 @@ hydraYamlToHsYaml hy = case hy of
     YM.ScalarStr s -> DY.SStr $ T.pack s
   YM.NodeSequence s -> DY.Sequence () DYE.untagged $ hydraYamlToHsYaml <$> s
 
-yamlSerde :: Context -> Type -> Qualified (Step Term BS.ByteString)
+yamlSerde :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) BS.ByteString)
 yamlSerde context typ = do
-  coder <- yamlCoder context typ 
+  coder <- yamlCoder context typ
   return Step {
     stepOut = fmap hydraYamlToBytes . stepOut coder,
     stepIn = bytesToHydraYaml CM.>=> stepIn coder}
 
-yamlSerdeStr :: Context -> Type -> Qualified (Step Term String)
+yamlSerdeStr :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) String)
 yamlSerdeStr context typ = do
   serde <- yamlSerde context typ
   return Step {
