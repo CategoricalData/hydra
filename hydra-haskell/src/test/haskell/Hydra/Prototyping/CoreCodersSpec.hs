@@ -1,6 +1,6 @@
 module Hydra.Prototyping.CoreCodersSpec where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.CoreEncoding

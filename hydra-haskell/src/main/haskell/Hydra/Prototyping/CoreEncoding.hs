@@ -17,7 +17,7 @@ module Hydra.Prototyping.CoreEncoding (
     encodeTypeVariant,
   ) where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 
 import Prelude hiding (map)

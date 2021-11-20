@@ -82,8 +82,8 @@ module Hydra.Impl.Haskell.Dsl (
   withVariant,
 ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Graph
+import Hydra.Core
+import Hydra.Graph
 import Hydra.Prototyping.Steps
 import Prelude hiding (map)
 import qualified Data.List as L

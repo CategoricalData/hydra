@@ -3,9 +3,9 @@ module Hydra.Impl.Haskell.Ext.Yaml.Serde (
   yamlSerdeStr,
 ) where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Errors
-import Hydra.V2.Evaluation
+import Hydra.Evaluation
 import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Dsl
 import qualified Hydra.Ext.Yaml.Model as YM

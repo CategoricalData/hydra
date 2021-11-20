@@ -1,6 +1,6 @@
 module Hydra.Prototyping.Adapters.AtomicSpec where
 
-import Hydra.V2.Core
+import Hydra.Core
 
 import Hydra.TestUtils
 

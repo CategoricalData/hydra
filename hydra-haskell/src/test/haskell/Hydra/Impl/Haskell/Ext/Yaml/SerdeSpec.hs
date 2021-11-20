@@ -3,7 +3,7 @@
 
 module Hydra.Impl.Haskell.Ext.Yaml.SerdeSpec where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Dsl

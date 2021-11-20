@@ -28,8 +28,8 @@ module Hydra.Prototyping.Basics (
     typeVariants,
   ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Adapter
+import Hydra.Core
+import Hydra.Adapter
 
 import qualified Data.Set as S
 

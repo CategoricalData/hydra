@@ -2,9 +2,9 @@ module Hydra.Prototyping.Inference (
     checkType,
   ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Graph
-import Hydra.V2.Evaluation
+import Hydra.Core
+import Hydra.Graph
+import Hydra.Evaluation
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
