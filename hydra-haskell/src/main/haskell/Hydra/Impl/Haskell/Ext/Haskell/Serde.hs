@@ -56,7 +56,7 @@ instance ToTree H.Expression_ConstructRecord where
       fromUpdate (H.FieldUpdate fn val) = listSpace [toTree fn, atom "=", toTree val]
 
 instance ToTree H.Expression_If where
-  toTree (H.Expression_If eif ethen eelse) = CT.ExpressionBlock $ CT.Expression_Block noDelimiters
+  toTree (H.Expression_If eif ethen eelse) = CT.ExpressionBlock $ CT.BlockExpression noDelimiters
     (Just $ listSpace [atom "if", toTree eif])
     [listSpace [atom "then", toTree ethen],
      listSpace [atom "else", toTree eelse]]
@@ -120,19 +120,19 @@ htuple :: [CT.Expression] -> CT.Expression
 htuple exprs = listCat [atom "(", listCommas exprs, atom ")"]
 
 indentBlock :: Maybe CT.Expression -> [CT.Expression] -> CT.Expression
-indentBlock head exprs = CT.ExpressionBlock $ CT.Expression_Block noDelimiters head exprs
+indentBlock head exprs = CT.ExpressionBlock $ CT.BlockExpression noDelimiters head exprs
 
 indentCurly :: Maybe CT.Expression -> [CT.Expression] -> CT.Expression
-indentCurly head exprs = CT.ExpressionBlock $ CT.Expression_Block (CT.Delimiters (Just "{") (Just "}")) head exprs
+indentCurly head exprs = CT.ExpressionBlock $ CT.BlockExpression (CT.Delimiters (Just "{") (Just "}")) head exprs
 
 listCat :: [CT.Expression] -> CT.Expression
-listCat l = CT.ExpressionList $ CT.Expression_List "" l
+listCat l = CT.ExpressionList $ CT.ListExpression "" l
 
 listCommas :: [CT.Expression] -> CT.Expression
-listCommas l = CT.ExpressionList $ CT.Expression_List ", " l
+listCommas l = CT.ExpressionList $ CT.ListExpression ", " l
 
 listSpace :: [CT.Expression] -> CT.Expression
-listSpace l = CT.ExpressionList $ CT.Expression_List " " l
+listSpace l = CT.ExpressionList $ CT.ListExpression " " l
 
 noDelimiters :: CT.Delimiters
 noDelimiters = CT.Delimiters Nothing Nothing

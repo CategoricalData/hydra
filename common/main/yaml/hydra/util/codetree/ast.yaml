@@ -6,6 +6,20 @@ definitions:
         - left
         - right
 
+  - name: BlockExpression
+    type:
+      record:
+        - name: delimiters
+          type: Delimiters
+
+        - name: head
+          type:
+            optional: Expression
+
+        - name: subexpressions
+          type:
+            list: Expression
+
   - name: Delimiters
     type:
       record:
@@ -24,51 +38,26 @@ definitions:
           type: string
 
         - name: block
-          type: Expression.Block
+          type: BlockExpression
 
         - name: infix
-          type: Expression.Operator
+          type: OperatorExpression
 
         - name: list
-          type: Expression.List
+          type: ListExpression
 
         - name: prefix
-          type: Expression.Operator
+          type: OperatorExpression
 
-    innerTypes:
-      - name: Block
-        type:
-          record:
-            - name: delimiters
-              type: Delimiters
+  - name: ListExpression
+    type:
+      record:
+        - name: separator
+          type: string
 
-            - name: head
-              type:
-                optional: Expression
-
-            - name: subexpressions
-              type:
-                list: Expression
-
-      - name: List
-        type:
-          record:
-            - name: separator
-              type: string
-
-            - name: elements
-              type:
-                list: Expression
-
-      - name: Operator
-        type:
-          record:
-            - name: operator
-              type: Operator
-
-            - name: operands
-              type:
-                list: Expression
+        - name: elements
+          type:
+            list: Expression
 
   - name: Operator
     type:
@@ -81,6 +70,16 @@ definitions:
 
         - name: associativity
           type: Associativity
+
+  - name: OperatorExpression
+    type:
+      record:
+        - name: operator
+          type: Operator
+
+        - name: operands
+          type:
+            list: Expression
 
   - name: Precedence
     type: integer
