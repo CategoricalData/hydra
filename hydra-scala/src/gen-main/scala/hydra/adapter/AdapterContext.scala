@@ -1,10 +1,15 @@
 package hydra.adapter
 
-case class AdapterContext (
+case class AdapterContext[a] (
     /**
-     * @type hydra/evaluation.Context
+     * @type parameterized:
+     *         genericType: hydra/evaluation.Context
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    evaluation: hydra.evaluation.Context,
+    evaluation: hydra.evaluation.Context[a],
     
     /**
      * @type hydra/adapter.Language

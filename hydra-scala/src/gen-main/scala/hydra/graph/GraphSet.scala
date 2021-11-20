@@ -6,13 +6,19 @@ package hydra.graph
 /**
  * A collection of graphs with a distinguished root graph
  */
-case class GraphSet (
+case class GraphSet[a] (
     /**
      * @type map:
      *         keys: hydra/graph.GraphName
-     *         values: hydra/graph.Graph
+     *         values:
+     *           parameterized:
+     *             genericType: hydra/graph.Graph
+     *             parameters:
+     *             - type:
+     *                 variable: a
+     *               variable: a
      */
-    graphs: Map[hydra.graph.GraphName, hydra.graph.Graph],
+    graphs: Map[hydra.graph.GraphName, hydra.graph.Graph[a]],
     
     /**
      * The focal graph of this set; 'the' graph. This root graph's schema graph, the second-degree schema graph, etc. are

@@ -6,7 +6,7 @@ package hydra.core
 /**
  * A function abstraction (lambda)
  */
-case class Lambda (
+case class Lambda[a] (
     /**
      * The parameter of the lambda
      * 
@@ -17,9 +17,14 @@ case class Lambda (
     /**
      * The body of the lambda
      * 
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    body: hydra.core.Term
+    body: hydra.core.Term[a]
 )
 
 val _Lambda: String = "hydra/core.Lambda"
