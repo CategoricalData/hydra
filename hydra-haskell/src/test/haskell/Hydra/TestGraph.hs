@@ -6,9 +6,9 @@ module Hydra.TestGraph (
   module Hydra.Impl.Haskell.Lib.Strings,
 ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Graph
-import Hydra.V2.Evaluation
+import Hydra.Core
+import Hydra.Graph
+import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.CoreGraph
 import Hydra.Prototyping.Primitives

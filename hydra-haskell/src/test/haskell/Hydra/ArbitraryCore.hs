@@ -1,6 +1,6 @@
 module Hydra.ArbitraryCore where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
 
 import qualified Control.Monad as CM

@@ -1,7 +1,7 @@
 module Hydra.Prototyping.CoreGraph ( hydraCoreGraph ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Graph
+import Hydra.Core
+import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl
 

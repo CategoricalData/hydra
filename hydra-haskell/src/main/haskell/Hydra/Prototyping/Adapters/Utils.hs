@@ -13,11 +13,11 @@ module Hydra.Prototyping.Adapters.Utils (
   unqualify,
 ) where
 
-import Hydra.V2.Core
+import Hydra.Core
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
-import Hydra.V2.Adapter
+import Hydra.Adapter
 
 import qualified Data.List as L
 import qualified Data.Set as S

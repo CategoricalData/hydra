@@ -4,10 +4,10 @@ module Hydra.Prototyping.Steps (
   composeSteps,
   idStep,
   stepBoth,
-  module Hydra.V2.Evaluation
+  module Hydra.Evaluation
 ) where
 
-import Hydra.V2.Evaluation
+import Hydra.Evaluation
 import Control.Monad
 
 

@@ -3,9 +3,9 @@ module Hydra.Ext.Yaml.Coder (
   yamlLanguage,
 ) where
 
-import Hydra.V2.Core
-import Hydra.V2.Evaluation
-import Hydra.V2.Adapter
+import Hydra.Core
+import Hydra.Evaluation
+import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
