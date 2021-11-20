@@ -6,12 +6,12 @@ import hydra.core.Term;
  * A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph, called the
  * schema graph
  */
-public class Graph {
+public class Graph<A> {
   public final hydra.graph.GraphName name;
   
-  public final java.util.List<hydra.graph.Element> elements;
+  public final java.util.List<hydra.graph.Element<A>> elements;
   
-  public final java.util.function.Function<hydra.core.Term, Boolean> dataTerms;
+  public final java.util.function.Function<hydra.core.Term<A>, Boolean> dataTerms;
   
   /**
    * A reference to this graph's schema graph within the provided graph set
@@ -21,7 +21,7 @@ public class Graph {
   /**
    * Constructs an immutable Graph object
    */
-  public Graph(hydra.graph.GraphName name, java.util.List<hydra.graph.Element> elements, java.util.function.Function<hydra.core.Term, Boolean> dataTerms, hydra.graph.GraphName schemaGraph) {
+  public Graph(hydra.graph.GraphName name, java.util.List<hydra.graph.Element<A>> elements, java.util.function.Function<hydra.core.Term<A>, Boolean> dataTerms, hydra.graph.GraphName schemaGraph) {
     this.name = name;
     this.elements = elements;
     this.dataTerms = dataTerms;
@@ -58,14 +58,14 @@ public class Graph {
   /**
    * Construct a new immutable Graph object in which elements is overridden
    */
-  public Graph withElements(java.util.List<hydra.graph.Element> elements) {
+  public Graph withElements(java.util.List<hydra.graph.Element<A>> elements) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
   
   /**
    * Construct a new immutable Graph object in which dataTerms is overridden
    */
-  public Graph withDataTerms(java.util.function.Function<hydra.core.Term, Boolean> dataTerms) {
+  public Graph withDataTerms(java.util.function.Function<hydra.core.Term<A>, Boolean> dataTerms) {
     return new Graph(name, elements, dataTerms, schemaGraph);
   }
   

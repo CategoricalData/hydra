@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A function abstraction (lambda)
  */
-public class Lambda {
+public class Lambda<A> {
   /**
    * The parameter of the lambda
    */
@@ -12,12 +12,12 @@ public class Lambda {
   /**
    * The body of the lambda
    */
-  public final hydra.core.Term body;
+  public final hydra.core.Term<A> body;
   
   /**
    * Constructs an immutable Lambda object
    */
-  public Lambda(hydra.core.Variable parameter, hydra.core.Term body) {
+  public Lambda(hydra.core.Variable parameter, hydra.core.Term<A> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -48,7 +48,7 @@ public class Lambda {
   /**
    * Construct a new immutable Lambda object in which body is overridden
    */
-  public Lambda withBody(hydra.core.Term body) {
+  public Lambda withBody(hydra.core.Term<A> body) {
     return new Lambda(parameter, body);
   }
 }

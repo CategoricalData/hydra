@@ -1,6 +1,6 @@
 package hydra.core;
 
-public abstract class Function {
+public abstract class Function<A> {
   private Function() {}
   
   public abstract <R> R accept(Visitor<R> visitor) ;
@@ -65,13 +65,13 @@ public abstract class Function {
   /**
    * A case statement applied to a variant record, consisting of a function term for each alternative in the union
    */
-  public static final class Cases extends Function {
-    public final java.util.List<hydra.core.Field> cases;
+  public static final class Cases<A> extends Function<A> {
+    public final java.util.List<hydra.core.Field<A>> cases;
     
     /**
      * Constructs an immutable Cases object
      */
-    public Cases(java.util.List<hydra.core.Field> cases) {
+    public Cases(java.util.List<hydra.core.Field<A>> cases) {
       this.cases = cases;
     }
     
@@ -98,13 +98,13 @@ public abstract class Function {
   /**
    * Compares a term with a given term of the same type, producing a Comparison
    */
-  public static final class CompareTo extends Function {
-    public final hydra.core.Term compareTo;
+  public static final class CompareTo<A> extends Function<A> {
+    public final hydra.core.Term<A> compareTo;
     
     /**
      * Constructs an immutable CompareTo object
      */
-    public CompareTo(hydra.core.Term compareTo) {
+    public CompareTo(hydra.core.Term<A> compareTo) {
       this.compareTo = compareTo;
     }
     
@@ -131,7 +131,7 @@ public abstract class Function {
   /**
    * Hydra's delta function, which maps an element to its data term
    */
-  public static final class Data extends Function {
+  public static final class Data<A> extends Function<A> {
     /**
      * Constructs an immutable Data object
      */
@@ -160,13 +160,13 @@ public abstract class Function {
   /**
    * A function abstraction (lambda)
    */
-  public static final class Lambda extends Function {
-    public final hydra.core.Lambda lambda;
+  public static final class Lambda<A> extends Function<A> {
+    public final hydra.core.Lambda<A> lambda;
     
     /**
      * Constructs an immutable Lambda object
      */
-    public Lambda(hydra.core.Lambda lambda) {
+    public Lambda(hydra.core.Lambda<A> lambda) {
       this.lambda = lambda;
     }
     
@@ -193,7 +193,7 @@ public abstract class Function {
   /**
    * A reference to a built-in (primitive) function
    */
-  public static final class Primitive extends Function {
+  public static final class Primitive<A> extends Function<A> {
     public final hydra.core.Name primitive;
     
     /**
@@ -226,7 +226,7 @@ public abstract class Function {
   /**
    * A projection of a field from a record
    */
-  public static final class Projection extends Function {
+  public static final class Projection<A> extends Function<A> {
     public final hydra.core.FieldName projection;
     
     /**
