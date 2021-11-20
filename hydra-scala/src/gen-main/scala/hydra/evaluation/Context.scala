@@ -1,24 +1,41 @@
 package hydra.evaluation
 
-case class Context (
+case class Context[a] (
     /**
-     * @type hydra/graph.GraphSet
+     * @type parameterized:
+     *         genericType: hydra/graph.GraphSet
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    graphs: hydra.graph.GraphSet,
+    graphs: hydra.graph.GraphSet[a],
     
     /**
      * @type map:
      *         keys: hydra/core.Name
-     *         values: hydra/graph.Element
+     *         values:
+     *           parameterized:
+     *             genericType: hydra/graph.Element
+     *             parameters:
+     *             - type:
+     *                 variable: a
+     *               variable: a
      */
-    elements: Map[hydra.core.Name, hydra.graph.Element],
+    elements: Map[hydra.core.Name, hydra.graph.Element[a]],
     
     /**
      * @type map:
      *         keys: hydra/core.Name
-     *         values: hydra/evaluation.PrimitiveFunction
+     *         values:
+     *           parameterized:
+     *             genericType: hydra/evaluation.PrimitiveFunction
+     *             parameters:
+     *             - type:
+     *                 variable: a
+     *               variable: a
      */
-    functions: Map[hydra.core.Name, hydra.evaluation.PrimitiveFunction],
+    functions: Map[hydra.core.Name, hydra.evaluation.PrimitiveFunction[a]],
     
     /**
      * @type hydra/evaluation.EvaluationStrategy

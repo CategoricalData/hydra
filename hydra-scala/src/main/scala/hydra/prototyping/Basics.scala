@@ -31,7 +31,7 @@ def floatValueType(fv: FloatValue): FloatType = fv match
 
 def floatValueVariant(fv: FloatValue): FloatVariant = floatTypeVariant(floatValueType(fv))
 
-def functionVariant(fun: Function): FunctionVariant = fun match
+def functionVariant[a](fun: Function[a]): FunctionVariant = fun match
   case Function.cases(_) => FunctionVariant.cases()
   case Function.compareTo(_) => FunctionVariant.compareTo()
   case Function.data() => FunctionVariant.data()
@@ -63,18 +63,18 @@ def integerValueType(iv: IntegerValue): IntegerType = iv match
 
 def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(integerValueType(it))
 
-def termVariant(term: Term): TermVariant = term match
-  case Term.application(_) => TermVariant.application()
-  case Term.atomic(_) => TermVariant.atomic()
-  case Term.element(_) => TermVariant.element()
-  case Term.function(_) => TermVariant.function()
-  case Term.list(_) => TermVariant.list()
-  case Term.map(_) => TermVariant.map()
-  case Term.optional(_) => TermVariant.optional()
-  case Term.record(_) => TermVariant.record()
-  case Term.set(_) => TermVariant.set()
-  case Term.union(_) => TermVariant.union()
-  case Term.variable(_) => TermVariant.variable()
+def termVariant[a](term: Term[a]): TermVariant = term.data match
+  case Expression.application(_) => TermVariant.application()
+  case Expression.atomic(_) => TermVariant.atomic()
+  case Expression.element(_) => TermVariant.element()
+  case Expression.function(_) => TermVariant.function()
+  case Expression.list(_) => TermVariant.list()
+  case Expression.map(_) => TermVariant.map()
+  case Expression.optional(_) => TermVariant.optional()
+  case Expression.record(_) => TermVariant.record()
+  case Expression.set(_) => TermVariant.set()
+  case Expression.union(_) => TermVariant.union()
+  case Expression.variable(_) => TermVariant.variable()
 
 def typeVariant(typ: Type): TypeVariant = typ match
   case Type.atomic(_) => TypeVariant.atomic()

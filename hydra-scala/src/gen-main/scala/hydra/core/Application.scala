@@ -6,16 +6,26 @@ package hydra.core
 /**
  * A term which applies a function to an argument
  */
-case class Application (
+case class Application[a] (
     /**
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    function: hydra.core.Term,
+    function: hydra.core.Term[a],
     
     /**
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    argument: hydra.core.Term
+    argument: hydra.core.Term[a]
 )
 
 val _Application: String = "hydra/core.Application"

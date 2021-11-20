@@ -6,21 +6,31 @@ package hydra.graph
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
-case class Element (
+case class Element[a] (
     /**
      * @type hydra/core.Name
      */
     name: hydra.core.Name,
     
     /**
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    schema: hydra.core.Term,
+    schema: hydra.core.Term[a],
     
     /**
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    data: hydra.core.Term
+    data: hydra.core.Term[a]
 )
 
 val _Element: String = "hydra/graph.Element"

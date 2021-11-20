@@ -1,29 +1,30 @@
 package hydra.prototyping
 
 import hydra.core.*;
+import hydra.impl.scala.*
 
 
-def atomicTypeAsTerm(at: AtomicType): Term = at match
-  case AtomicType.binary() => unitVariant(_AtomicType_binary)
-  case AtomicType.boolean() => unitVariant(_AtomicType_boolean)
-  case AtomicType.float(ft) => variant(_AtomicType_float, floatTypeAsTerm(ft))
-  case AtomicType.integer(it) => variant(_AtomicType_integer, integerTypeAsTerm(it))
-  case AtomicType.string() => unitVariant(_AtomicType_string)
+def atomicTypeAsTerm[a](meta: a, at: AtomicType): Term[a] = at match
+  case AtomicType.binary() => unitVariant(meta, _AtomicType_binary)
+  case AtomicType.boolean() => unitVariant(meta, _AtomicType_boolean)
+  case AtomicType.float(ft) => variant(meta, _AtomicType_float, floatTypeAsTerm(meta, ft))
+  case AtomicType.integer(it) => variant(meta, _AtomicType_integer, integerTypeAsTerm(meta, it))
+  case AtomicType.string() => unitVariant(meta, _AtomicType_string)
 
-def fieldTypeAsTerm(ft: FieldType): Term = Term.record(Seq(
-  Field(_FieldType_name, stringTerm(ft.name)),
-  Field(_FieldType_type, typeAsTerm(ft.`type`))))
+def fieldTypeAsTerm[a](meta: a, ft: FieldType): Term[a] = recordTerm(meta, Seq(
+  Field(_FieldType_name, stringTerm(meta, ft.name)),
+  Field(_FieldType_type, typeAsTerm(meta, ft.`type`))))
 
-def floatTypeAsTerm(ft: FloatType): Term = unitVariant(ft match
+def floatTypeAsTerm[a](meta: a, ft: FloatType): Term[a] = unitVariant(meta, ft match
   case FloatType.bigfloat() => _FloatType_bigfloat
   case FloatType.float32() => _FloatType_float32
   case FloatType.float64() => _FloatType_float64)
 
-def functionTypeAsTerm(ft: FunctionType): Term = Term.record(Seq(
-  Field(_FunctionType_domain, typeAsTerm(ft.domain)),
-  Field(_FunctionType_codomain, typeAsTerm(ft.codomain))))
+def functionTypeAsTerm[a](meta: a, ft: FunctionType): Term[a] = recordTerm(meta, Seq(
+  Field(_FunctionType_domain, typeAsTerm(meta, ft.domain)),
+  Field(_FunctionType_codomain, typeAsTerm(meta, ft.codomain))))
 
-def integerTypeAsTerm(it: IntegerType): Term = unitVariant(it match
+def integerTypeAsTerm[a](meta: a, it: IntegerType): Term[a] = unitVariant(meta, it match
   case IntegerType.bigint() => _IntegerType_bigint
   case IntegerType.int8() => _IntegerType_int8
   case IntegerType.int16() => _IntegerType_int16
@@ -34,18 +35,18 @@ def integerTypeAsTerm(it: IntegerType): Term = unitVariant(it match
   case IntegerType.uint32() => _IntegerType_uint32
   case IntegerType.uint64() => _IntegerType_uint64)
 
-def mapTypeAsTerm(mt: MapType): Term = Term.record(Seq(
-  Field(_MapType_keys, typeAsTerm(mt.keys)),
-  Field(_MapType_values, typeAsTerm(mt.values))))
+def mapTypeAsTerm[a](meta: a, mt: MapType): Term[a] = recordTerm(meta, Seq(
+  Field(_MapType_keys, typeAsTerm(meta, mt.keys)),
+  Field(_MapType_values, typeAsTerm(meta, mt.values))))
 
-def typeAsTerm(typ: Type): Term = typ match
-  case Type.atomic(at) => variant(_Type_atomic, atomicTypeAsTerm(at))
-  case Type.element(t) => variant(_Type_element, typeAsTerm(t))
-  case Type.function(ft) => variant(_Type_function, functionTypeAsTerm(ft))
-  case Type.list(t) => variant(_Type_list, typeAsTerm(t))
-  case Type.map(mt) => variant(_Type_map, mapTypeAsTerm(mt))
-  case Type.nominal(name) => variant(_Type_nominal, stringTerm(name))
-  case Type.optional(ot) => variant(_Type_optional, typeAsTerm(ot))
-  case Type.record(fields) => variant(_Type_record, Term.list(fields.map(fieldTypeAsTerm)))
-  case Type.set(t) => variant(_Type_set, typeAsTerm(t))
-  case Type.union(fields) => variant(_Type_union, Term.list(fields.map(fieldTypeAsTerm)))
+def typeAsTerm[a](meta: a, typ: Type): Term[a] = typ match
+  case Type.atomic(at) => variant(meta, _Type_atomic, atomicTypeAsTerm(meta, at))
+  case Type.element(t) => variant(meta, _Type_element, typeAsTerm(meta, t))
+  case Type.function(ft) => variant(meta, _Type_function, functionTypeAsTerm(meta, ft))
+  case Type.list(t) => variant(meta, _Type_list, typeAsTerm(meta, t))
+  case Type.map(mt) => variant(meta, _Type_map, mapTypeAsTerm(meta, mt))
+  case Type.nominal(name) => variant(meta, _Type_nominal, stringTerm(meta, name))
+  case Type.optional(ot) => variant(meta, _Type_optional, typeAsTerm(meta, ot))
+  case Type.record(fields) => variant(meta, _Type_record, list(meta, fields.map(ft => fieldTypeAsTerm(meta, ft))))
+  case Type.set(t) => variant(meta, _Type_set, typeAsTerm(meta, t))
+  case Type.union(fields) => variant(meta, _Type_union, list(meta, fields.map(ft => fieldTypeAsTerm(meta, ft))))

@@ -1,6 +1,6 @@
 package hydra.evaluation
 
-case class PrimitiveFunction (
+case class PrimitiveFunction[a] (
     /**
      * @type hydra/core.Name
      */
@@ -14,15 +14,27 @@ case class PrimitiveFunction (
     /**
      * @type function:
      *         from:
-     *         - list: hydra/core.Term
+     *         - list:
+     *             parameterized:
+     *               genericType: hydra/core.Term
+     *               parameters:
+     *               - type:
+     *                   variable: a
+     *                 variable: a
      *         to:
      *           parameterized:
      *             genericType: hydra/evaluation.Result
      *             parameters:
-     *             - type: hydra/core.Term
+     *             - type:
+     *                 parameterized:
+     *                   genericType: hydra/core.Term
+     *                   parameters:
+     *                   - type:
+     *                       variable: a
+     *                     variable: a
      *               variable: a
      */
-    implementation: Seq[hydra.core.Term] => hydra.evaluation.Result[hydra.core.Term]
+    implementation: Seq[hydra.core.Term[a]] => hydra.evaluation.Result[hydra.core.Term[a]]
 )
 
 val _PrimitiveFunction: String = "hydra/evaluation.PrimitiveFunction"

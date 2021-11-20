@@ -1,40 +1,56 @@
 package hydra.core
 
-enum Function:
+enum Function[a]:
     /**
      * A case statement applied to a variant record, consisting of a function term for each alternative in the union
      * 
-     * @type list: hydra/core.Field
+     * @type list:
+     *         parameterized:
+     *           genericType: hydra/core.Field
+     *           parameters:
+     *           - type:
+     *               variable: a
+     *             variable: a
      */
-    case cases(value: Seq[hydra.core.Field]) extends Function
+    case cases(value: Seq[hydra.core.Field[a]]) extends Function[a]
     /**
      * Compares a term with a given term of the same type, producing a Comparison
      * 
-     * @type hydra/core.Term
+     * @type parameterized:
+     *         genericType: hydra/core.Term
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    case compareTo(value: hydra.core.Term) extends Function
+    case compareTo(value: hydra.core.Term[a]) extends Function[a]
     /**
      * Hydra's delta function, which maps an element to its data term
      */
-    case data() extends Function
+    case data() extends Function[a]
     /**
      * A function abstraction (lambda)
      * 
-     * @type hydra/core.Lambda
+     * @type parameterized:
+     *         genericType: hydra/core.Lambda
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
      */
-    case lambda(value: hydra.core.Lambda) extends Function
+    case lambda(value: hydra.core.Lambda[a]) extends Function[a]
     /**
      * A reference to a built-in (primitive) function
      * 
      * @type hydra/core.Name
      */
-    case primitive(value: hydra.core.Name) extends Function
+    case primitive(value: hydra.core.Name) extends Function[a]
     /**
      * A projection of a field from a record
      * 
      * @type hydra/core.FieldName
      */
-    case projection(value: hydra.core.FieldName) extends Function
+    case projection(value: hydra.core.FieldName) extends Function[a]
 
 val _Function: String = "hydra/core.Function"
 val _Function_cases: String = "cases"
