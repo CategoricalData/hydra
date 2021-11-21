@@ -130,14 +130,14 @@ checkType context typ term = check M.empty typ term
       where
         matches = L.filter (\f -> fieldTypeName f == fn) fields
 
-inferType :: Show a => Context a -> Term a -> Result Type
-inferType context term = case termData term of
+inferType :: Context a -> Term a -> Result (Term (a, Type))
+inferType context (Term expr meta) = case expr of
 --  ExpressionApplication (Application fun arg) ->
-  ExpressionAtomic av -> pure $ TypeAtomic $ atomicValueType av
-  ExpressionElement name -> do
-    el <- requireElement context name
-    scon <- schemaContext context
-    decodeType scon $ elementSchema el
+    ExpressionAtomic av -> pure $ Term (ExpressionAtomic av) (meta, stringType)
+--    ExpressionElement name -> do
+--      el <- requireElement context name
+--      scon <- schemaContext context
+--      withType <$> decodeType scon $ elementSchema el
 --  ExpressionFunction fun -> case fun of
 ----      FunctionVariantCases
 ----      FunctionVariantCompareTo
@@ -151,6 +151,7 @@ inferType context term = case termData term of
 --  ExpressionRecord fields ->
 --  ExpressionUnion field ->
 --  ExpressionVariable v ->
-
+--  where
+--    withType typ = Term expr (meta, typ)
 --applicationType :: Type -> Application -> (Type, Type)
 --applicationType typ (Application fun arg) =

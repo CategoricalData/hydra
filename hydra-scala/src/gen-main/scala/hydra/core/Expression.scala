@@ -104,6 +104,28 @@ enum Expression[a]:
      */
     case set(value: Set[hydra.core.Term[a]]) extends Expression[a]
     /**
+     * A type abstraction (generalization), which binds a type variable to a term
+     * 
+     * @type parameterized:
+     *         genericType: hydra/core.TypeAbstraction
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
+     */
+    case typeAbstraction(value: hydra.core.TypeAbstraction[a]) extends Expression[a]
+    /**
+     * A type application (instantiation), which applies a term to a type
+     * 
+     * @type parameterized:
+     *         genericType: hydra/core.TypeApplication
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
+     */
+    case typeApplication(value: hydra.core.TypeApplication[a]) extends Expression[a]
+    /**
      * A union term, i.e. a generalization of inl() or inr()
      * 
      * @type parameterized:
@@ -131,5 +153,7 @@ val _Expression_map: String = "map"
 val _Expression_optional: String = "optional"
 val _Expression_record: String = "record"
 val _Expression_set: String = "set"
+val _Expression_typeAbstraction: String = "typeAbstraction"
+val _Expression_typeApplication: String = "typeApplication"
 val _Expression_union: String = "union"
 val _Expression_variable: String = "variable"

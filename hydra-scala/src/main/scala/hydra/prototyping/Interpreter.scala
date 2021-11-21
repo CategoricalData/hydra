@@ -13,6 +13,8 @@ def freeVariables[a](term: Term[a]): Set[Variable] = {
     case Expression.optional(m) => (m map {t => free(bound, t)}) getOrElse List()
     case Expression.record(fields) => fields.flatMap(f => free(bound, f.term)).toList
     case Expression.set(els) => els.flatMap(t => free(bound, t)).toList
+    case Expression.typeAbstraction(TypeAbstraction(v, term)) => free(bound, term)
+    case Expression.typeApplication(TypeApplication(lhs, rhs)) => free(bound, lhs)
     case Expression.union(f) => free(bound, f.term)
     case Expression.variable(v) => if bound.contains(v) then List() else List(v)
 

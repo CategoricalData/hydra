@@ -190,6 +190,8 @@ termVariant term = case termData term of
   ExpressionOptional _ -> TermVariantOptional
   ExpressionRecord _ -> TermVariantRecord
   ExpressionSet _ -> TermVariantSet
+  ExpressionTypeAbstraction _ -> TermVariantTypeAbstraction
+  ExpressionTypeApplication _ -> TermVariantTypeApplication
   ExpressionUnion _ -> TermVariantUnion
   ExpressionVariable _ -> TermVariantVariable
 
@@ -209,7 +211,6 @@ termVariants = [
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
-  TypeAbstract _ -> TypeVariantAbstract
   TypeAtomic _ -> TypeVariantAtomic
   TypeElement _ -> TypeVariantElement
   TypeFunction _ -> TypeVariantFunction
@@ -221,10 +222,10 @@ typeVariant typ = case typ of
   TypeSet _ -> TypeVariantSet
   TypeUnion _ -> TypeVariantUnion
   TypeVariable _ -> TypeVariantVariable
+  TypeUniversal _ -> TypeVariantUniversal
 
 typeVariants :: [TypeVariant]
 typeVariants = [
-  TypeVariantAbstract,
   TypeVariantAtomic,
   TypeVariantElement,
   TypeVariantFunction,
@@ -235,4 +236,5 @@ typeVariants = [
   TypeVariantRecord,
   TypeVariantSet,
   TypeVariantUnion,
+  TypeVariantUniversal,
   TypeVariantVariable]

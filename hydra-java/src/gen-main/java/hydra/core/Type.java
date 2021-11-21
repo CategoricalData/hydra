@@ -9,8 +9,6 @@ public abstract class Type {
    * An interface for applying a function to a Type according to its variant (subclass)
    */
   public interface Visitor<R> {
-    R visit(Abstract instance) ;
-    
     R visit(Atomic instance) ;
     
     R visit(Element instance) ;
@@ -31,6 +29,8 @@ public abstract class Type {
     
     R visit(Union instance) ;
     
+    R visit(Universal instance) ;
+    
     R visit(Variable instance) ;
   }
   
@@ -41,11 +41,6 @@ public abstract class Type {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Type instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
-    }
-    
-    @Override
-    default R visit(Abstract instance) {
-      return otherwise(instance);
     }
     
     @Override
@@ -99,38 +94,13 @@ public abstract class Type {
     }
     
     @Override
-    default R visit(Variable instance) {
+    default R visit(Universal instance) {
       return otherwise(instance);
     }
-  }
-  
-  public static final class Abstract extends Type {
-    public final hydra.core.AbstractType abstractEsc;
-    
-    /**
-     * Constructs an immutable Abstract object
-     */
-    public Abstract(hydra.core.AbstractType abstractEsc) {
-      this.abstractEsc = abstractEsc;
-    }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Abstract)) {
-          return false;
-      }
-      Abstract o = (Abstract) other;
-      return abstractEsc.equals(o.abstractEsc);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * abstractEsc.hashCode();
+    default R visit(Variable instance) {
+      return otherwise(instance);
     }
   }
   
@@ -431,6 +401,36 @@ public abstract class Type {
     @Override
     public int hashCode() {
       return 2 * union.hashCode();
+    }
+  }
+  
+  public static final class Universal extends Type {
+    public final hydra.core.UniversalType universal;
+    
+    /**
+     * Constructs an immutable Universal object
+     */
+    public Universal(hydra.core.UniversalType universal) {
+      this.universal = universal;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Universal)) {
+          return false;
+      }
+      Universal o = (Universal) other;
+      return universal.equals(o.universal);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * universal.hashCode();
     }
   }
   

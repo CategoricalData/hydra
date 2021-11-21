@@ -1,5 +1,4 @@
 module Hydra.Prototyping.CoreDecoding (
-  decodeAbstractType,
   decodeAtomicType,
   decodeFieldType,
   decodeFieldTypes,
@@ -9,6 +8,7 @@ module Hydra.Prototyping.CoreDecoding (
   decodeMapType,
   decodeString,
   decodeType,
+  decodeUniversalType,
   ) where
 
 import Hydra.Core
@@ -19,11 +19,6 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 
-
-decodeAbstractType :: Show a => Context a -> Term a -> Result AbstractType
-decodeAbstractType context = matchRecord context $ \m -> AbstractType
-  <$> getField m _AbstractType_variable decodeString
-  <*> getField m _AbstractType_body (decodeType context)
 
 decodeAtomicType :: Show a => Context a -> Term a -> Result AtomicType
 decodeAtomicType context = matchUnion context [
@@ -80,7 +75,6 @@ decodeString term = case termData term of
 
 decodeType :: Show a => Context a -> Term a -> Result Type
 decodeType context = matchUnion context [
-    (_Type_abstract, fmap TypeAbstract . decodeAbstractType context),
     (_Type_atomic, fmap TypeAtomic . decodeAtomicType context),
     (_Type_element, fmap TypeElement . decodeType context),
     (_Type_function, fmap TypeFunction . decodeFunctionType context),
@@ -91,7 +85,13 @@ decodeType context = matchUnion context [
     (_Type_record, fmap TypeRecord . decodeFieldTypes context),
     (_Type_set, fmap TypeSet . decodeType context),
     (_Type_union, fmap TypeUnion . decodeFieldTypes context),
+    (_Type_universal, fmap TypeUniversal . decodeUniversalType context),
     (_Type_variable, fmap TypeVariable . decodeString)]
+
+decodeUniversalType :: Show a => Context a -> Term a -> Result UniversalType
+decodeUniversalType context = matchRecord context $ \m -> UniversalType
+  <$> getField m _UniversalType_variable decodeString
+  <*> getField m _UniversalType_body (decodeType context)
 
 deref :: Context a -> Term a -> Result (Term a)
 deref context term = case termData term of

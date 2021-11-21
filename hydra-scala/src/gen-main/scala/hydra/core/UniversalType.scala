@@ -6,7 +6,7 @@ package hydra.core
 /**
  * A universally quantified ('forall') type, parameterized by a type variable
  */
-case class AbstractType (
+case class UniversalType (
     /**
      * @type hydra/core.TypeVariable
      */
@@ -18,6 +18,6 @@ case class AbstractType (
     body: hydra.core.Type
 )
 
-val _AbstractType: String = "hydra/core.AbstractType"
-val _AbstractType_body: String = "body"
-val _AbstractType_variable: String = "variable"
+val _UniversalType: String = "hydra/core.UniversalType"
+val _UniversalType_body: String = "body"
+val _UniversalType_variable: String = "variable"

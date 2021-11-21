@@ -1,8 +1,6 @@
 package hydra.core;
 
 public enum TypeVariant {
-  ABSTRACT,
-  
   ATOMIC,
   
   ELEMENT,
@@ -22,6 +20,8 @@ public enum TypeVariant {
   SET,
   
   UNION,
+  
+  UNIVERSAL,
   
   VARIABLE;
 }

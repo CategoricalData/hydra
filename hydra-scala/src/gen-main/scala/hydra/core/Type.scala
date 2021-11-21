@@ -2,10 +2,6 @@ package hydra.core
 
 enum Type:
     /**
-     * @type hydra/core.AbstractType
-     */
-    case `abstract`(value: hydra.core.AbstractType) extends Type
-    /**
      * @type hydra/core.AtomicType
      */
     case atomic(value: hydra.core.AtomicType) extends Type
@@ -46,12 +42,15 @@ enum Type:
      */
     case union(value: Seq[hydra.core.FieldType]) extends Type
     /**
+     * @type hydra/core.UniversalType
+     */
+    case universal(value: hydra.core.UniversalType) extends Type
+    /**
      * @type hydra/core.TypeVariable
      */
     case variable(value: hydra.core.TypeVariable) extends Type
 
 val _Type: String = "hydra/core.Type"
-val _Type_abstract: String = "abstract"
 val _Type_atomic: String = "atomic"
 val _Type_element: String = "element"
 val _Type_function: String = "function"
@@ -62,4 +61,5 @@ val _Type_optional: String = "optional"
 val _Type_record: String = "record"
 val _Type_set: String = "set"
 val _Type_union: String = "union"
+val _Type_universal: String = "universal"
 val _Type_variable: String = "variable"

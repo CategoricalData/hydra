@@ -2,21 +2,12 @@ description: "The Hydra Core model (in progress)"
 
 definitions:
 
-  - name: AbstractType
-    description: "A universally quantified ('forall') type, parameterized by a type variable"
-    type:
-      record:
-        - name: variable
-          type: TypeVariable
-
-        - name: body
-          type: Type
-
   - name: Application
     description: "A term which applies a function to an argument"
     type:
       record:
         - name: function
+          description: "The left-hand side of the application"
           type:
             parameterized:
               genericType: Term
@@ -26,6 +17,7 @@ definitions:
                     variable: a
 
         - name: argument
+          description: "The right-hand side of the application"
           type:
             parameterized:
               genericType: Term
@@ -189,6 +181,26 @@ definitions:
                   - variable: a
                     type:
                       variable: a
+
+        - name: typeAbstraction
+          description: "A type abstraction (generalization), which binds a type variable to a term"
+          type:
+            parameterized:
+              genericType: TypeAbstraction
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: typeApplication
+          description: "A type application (instantiation), which applies a term to a type"
+          type:
+            parameterized:
+              genericType: TypeApplication
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
 
         - name: union
           description: "A union term, i.e. a generalization of inl() or inr()"
@@ -483,15 +495,14 @@ definitions:
         - optional
         - record
         - set
+        - typeAbstraction
+        - typeApplication
         - union
         - variable
 
   - name: Type
     type:
       union:
-        - name: abstract
-          type: AbstractType
-
         - name: atomic
           type: AtomicType
 
@@ -524,8 +535,47 @@ definitions:
           type:
             list: FieldType
 
+        - name: universal
+          type: UniversalType
+
         - name: variable
           type: TypeVariable
+
+  - name: TypeAbstraction
+    description: "A type abstraction (generalization), which binds a type variable to a term"
+    type:
+      record:
+        - name: parameter
+          description: "The parameter of the abstraction"
+          type: TypeVariable
+
+        - name: body
+          description: "The body of the abstraction"
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+  - name: TypeApplication
+    description: "A type application (instantiation), which applies a term to a type"
+    type:
+      record:
+        - name: function
+          description: "A term which is the left-hand side of the application"
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: argument
+          description: "A type which is the right-hand side of the application"
+          type: Type
 
   - name: TypeVariable
     description: "A symbol which stands in for a type"
@@ -534,7 +584,6 @@ definitions:
   - name: TypeVariant
     type:
       enum:
-        - abstract
         - atomic
         - element
         - function
@@ -545,6 +594,7 @@ definitions:
         - record
         - set
         - union
+        - universal
         - variable
 
   - name: TypedTerm
@@ -561,6 +611,16 @@ definitions:
                 - variable: a
                   type:
                     variable: a
+
+  - name: UniversalType
+    description: "A universally quantified ('forall') type, parameterized by a type variable"
+    type:
+      record:
+        - name: variable
+          type: TypeVariable
+
+        - name: body
+          type: Type
 
   - name: Variable
     description: "A symbol which stands in for a term"
