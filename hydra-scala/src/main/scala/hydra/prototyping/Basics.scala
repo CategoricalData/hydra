@@ -73,6 +73,8 @@ def termVariant[a](term: Term[a]): TermVariant = term.data match
   case Expression.optional(_) => TermVariant.optional()
   case Expression.record(_) => TermVariant.record()
   case Expression.set(_) => TermVariant.set()
+  case Expression.typeAbstraction(_) => TermVariant.typeAbstraction()
+  case Expression.typeApplication(_) => TermVariant.typeApplication()
   case Expression.union(_) => TermVariant.union()
   case Expression.variable(_) => TermVariant.variable()
 
@@ -86,4 +88,5 @@ def typeVariant(typ: Type): TypeVariant = typ match
   case Type.optional(_) => TypeVariant.optional()
   case Type.record(_) => TypeVariant.record()
   case Type.set(_) => TypeVariant.set()
+  case Type.universal(_) => TypeVariant.universal()
   case Type.union(_) => TypeVariant.union()

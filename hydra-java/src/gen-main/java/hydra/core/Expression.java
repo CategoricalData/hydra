@@ -27,6 +27,10 @@ public abstract class Expression<A> {
     
     R visit(Set instance) ;
     
+    R visit(TypeAbstraction instance) ;
+    
+    R visit(TypeApplication instance) ;
+    
     R visit(Union instance) ;
     
     R visit(Variable instance) ;
@@ -83,6 +87,16 @@ public abstract class Expression<A> {
     
     @Override
     default R visit(Set instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
+    default R visit(TypeAbstraction instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
+    default R visit(TypeApplication instance) {
       return otherwise(instance);
     }
     
@@ -391,6 +405,72 @@ public abstract class Expression<A> {
     @Override
     public int hashCode() {
       return 2 * set.hashCode();
+    }
+  }
+  
+  /**
+   * A type abstraction (generalization), which binds a type variable to a term
+   */
+  public static final class TypeAbstraction<A> extends Expression<A> {
+    public final hydra.core.TypeAbstraction<A> typeAbstraction;
+    
+    /**
+     * Constructs an immutable TypeAbstraction object
+     */
+    public TypeAbstraction(hydra.core.TypeAbstraction<A> typeAbstraction) {
+      this.typeAbstraction = typeAbstraction;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeAbstraction)) {
+          return false;
+      }
+      TypeAbstraction o = (TypeAbstraction) other;
+      return typeAbstraction.equals(o.typeAbstraction);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * typeAbstraction.hashCode();
+    }
+  }
+  
+  /**
+   * A type application (instantiation), which applies a term to a type
+   */
+  public static final class TypeApplication<A> extends Expression<A> {
+    public final hydra.core.TypeApplication<A> typeApplication;
+    
+    /**
+     * Constructs an immutable TypeApplication object
+     */
+    public TypeApplication(hydra.core.TypeApplication<A> typeApplication) {
+      this.typeApplication = typeApplication;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof TypeApplication)) {
+          return false;
+      }
+      TypeApplication o = (TypeApplication) other;
+      return typeApplication.equals(o.typeApplication);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * typeApplication.hashCode();
     }
   }
   

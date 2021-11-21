@@ -10,6 +10,8 @@ enum TermVariant:
     case optional() extends TermVariant
     case record() extends TermVariant
     case set() extends TermVariant
+    case typeAbstraction() extends TermVariant
+    case typeApplication() extends TermVariant
     case union() extends TermVariant
     case variable() extends TermVariant
 
@@ -23,5 +25,7 @@ val _TermVariant_map: String = "map"
 val _TermVariant_optional: String = "optional"
 val _TermVariant_record: String = "record"
 val _TermVariant_set: String = "set"
+val _TermVariant_typeAbstraction: String = "typeAbstraction"
+val _TermVariant_typeApplication: String = "typeApplication"
 val _TermVariant_union: String = "union"
 val _TermVariant_variable: String = "variable"

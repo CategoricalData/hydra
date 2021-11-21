@@ -8,6 +8,8 @@ package hydra.core
  */
 case class Application[a] (
     /**
+     * The left-hand side of the application
+     * 
      * @type parameterized:
      *         genericType: hydra/core.Term
      *         parameters:
@@ -18,6 +20,8 @@ case class Application[a] (
     function: hydra.core.Term[a],
     
     /**
+     * The right-hand side of the application
+     * 
      * @type parameterized:
      *         genericType: hydra/core.Term
      *         parameters:

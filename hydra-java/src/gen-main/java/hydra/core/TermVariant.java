@@ -19,6 +19,10 @@ public enum TermVariant {
   
   SET,
   
+  TYPE_ABSTRACTION,
+  
+  TYPE_APPLICATION,
+  
   UNION,
   
   VARIABLE;
