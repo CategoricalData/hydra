@@ -128,7 +128,7 @@ caseStatement cond cases = ifx ofOp lhs rhs
   where
     lhs = spaceSep [cst "case", cond]
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
-    ofOp = Op "of" (Padding WsSpace WsBreakIndent) 0 AssociativityNone
+    ofOp = Op "of" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
 commaSep :: [Expr] -> Expr
 commaSep l = case l of
@@ -141,7 +141,7 @@ cst = ExprConst
 indentBlock :: Expr -> [Expr] -> Expr
 indentBlock head els = ifx idtOp head $ newlineSep els 
   where
-    idtOp = Op "" (Padding WsSpace WsBreakIndent) 0 AssociativityNone
+    idtOp = Op "" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
 htuple :: [Expr] -> Expr
 htuple els = case els of
@@ -151,7 +151,7 @@ htuple els = case els of
 indentLines :: [Expr] -> Expr
 indentLines els = ifx topOp (cst "") (newlineSep els)
   where
-    topOp = Op "" (Padding WsNone WsBreakIndent) 0 AssociativityNone
+    topOp = Op "" (Padding WsNone WsBreakAndIndent) 0 AssociativityNone
   
 lam :: [Symbol] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars

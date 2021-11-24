@@ -53,7 +53,7 @@ instance ToTree H.Expression_Case where
     where
       lhs = spaceSep [cst "case", toTree cs]
       rhs = newlineSep (toTree <$> alts)
-      ofOp = CT.Op "of" (CT.Padding CT.WsSpace CT.WsBreakIndent) 0 CT.AssociativityNone
+      ofOp = CT.Op "of" (CT.Padding CT.WsSpace CT.WsBreakAndIndent) 0 CT.AssociativityNone
 
 instance ToTree H.Expression_ConstructRecord where
   toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces body]
@@ -64,7 +64,7 @@ instance ToTree H.Expression_ConstructRecord where
 instance ToTree H.Expression_If where
   toTree (H.Expression_If eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
     where
-      ifOp = CT.Op "" (CT.Padding CT.WsNone CT.WsBreakIndent) 0 CT.AssociativityNone
+      ifOp = CT.Op "" (CT.Padding CT.WsNone CT.WsBreakAndIndent) 0 CT.AssociativityNone
       body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
 
 instance ToTree H.Expression_Lambda where

@@ -20,10 +20,10 @@ definitions:
   - name: Brackets
     type:
       record:
-        - name: left
+        - name: open
           type: Symbol
 
-        - name: right
+        - name: close
           type: Symbol
 
   - name: Expr
@@ -86,4 +86,4 @@ definitions:
         - none
         - space
         - break
-        - breakIndent
+        - breakAndIndent

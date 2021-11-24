@@ -55,12 +55,12 @@ printExpr exp = case exp of
     where
       lhs = idt padl $ printExpr l
       rhs = idt padr $ printExpr r
-      idt ws s = if ws == WsBreakIndent then indent s else s
+      idt ws s = if ws == WsBreakAndIndent then indent s else s
       pad ws = case ws of
         WsNone -> ""
         WsSpace -> " "
         WsBreak -> "\n"
-        WsBreakIndent -> "\n"
+        WsBreakAndIndent -> "\n"
   ExprBrackets (BracketExpr (Brackets l r) e) -> l ++ printExpr e ++ r
 
 printExprAsTree :: Expr -> String
