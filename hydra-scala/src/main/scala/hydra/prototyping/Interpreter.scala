@@ -5,7 +5,7 @@ import hydra.core.*
 def freeVariables[a](term: Term[a]): Set[Variable] = {
   def free(bound: Set[Variable], t: Term[a]): List[Variable] = term.data match
     case Expression.application(Application(t1, t2)) => free(bound, t1) ++ free(bound, t2)
-    case Expression.atomic(_) => List()
+    case Expression.literal(_) => List()
     case Expression.element(_) => List()
     case Expression.function(fun) => functionFree(bound, fun)
     case Expression.list(els) => els.flatMap(t => free(bound, t)).toList

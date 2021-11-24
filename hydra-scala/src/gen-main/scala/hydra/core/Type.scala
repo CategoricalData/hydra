@@ -2,10 +2,6 @@ package hydra.core
 
 enum Type:
     /**
-     * @type hydra/core.AtomicType
-     */
-    case atomic(value: hydra.core.AtomicType) extends Type
-    /**
      * @type hydra/core.Type
      */
     case element(value: hydra.core.Type) extends Type
@@ -17,6 +13,10 @@ enum Type:
      * @type hydra/core.Type
      */
     case list(value: hydra.core.Type) extends Type
+    /**
+     * @type hydra/core.LiteralType
+     */
+    case literal(value: hydra.core.LiteralType) extends Type
     /**
      * @type hydra/core.MapType
      */
@@ -51,10 +51,10 @@ enum Type:
     case variable(value: hydra.core.TypeVariable) extends Type
 
 val _Type: String = "hydra/core.Type"
-val _Type_atomic: String = "atomic"
 val _Type_element: String = "element"
 val _Type_function: String = "function"
 val _Type_list: String = "list"
+val _Type_literal: String = "literal"
 val _Type_map: String = "map"
 val _Type_nominal: String = "nominal"
 val _Type_optional: String = "optional"
