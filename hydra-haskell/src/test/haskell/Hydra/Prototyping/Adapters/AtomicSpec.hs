@@ -73,39 +73,39 @@ testAtomicAdapter = H.describe "Test atomic adapter" $ do
 
   H.it "encode binary data as strings" $
     QC.property $ \b -> checkAtomicAdapter
-      [AtomicVariantString]
-      AtomicTypeBinary AtomicTypeString False
-      (AtomicValueBinary b) (AtomicValueString b)
+      [LiteralVariantString]
+      LiteralTypeBinary LiteralTypeString False
+      (LiteralBinary b) (LiteralString b)
 
   H.it "encode booleans as strings" $
     QC.property $ \b -> checkAtomicAdapter
-      [AtomicVariantString]
-      AtomicTypeBoolean AtomicTypeString False
-      (AtomicValueBoolean b) (AtomicValueString $ if b == BooleanValueTrue then "true" else "false")
+      [LiteralVariantString]
+      LiteralTypeBoolean LiteralTypeString False
+      (LiteralBoolean b) (LiteralString $ if b == BooleanValueTrue then "true" else "false")
 
   H.it "encode booleans as integers" $
     QC.property $ \b -> checkAtomicAdapter
-      [AtomicVariantInteger]
-      AtomicTypeBoolean (AtomicTypeInteger IntegerTypeInt16) False
-      (AtomicValueBoolean b) (AtomicValueInteger $ IntegerValueInt16 $ if b == BooleanValueTrue then 1 else 0)
+      [LiteralVariantInteger]
+      LiteralTypeBoolean (LiteralTypeInteger IntegerTypeInt16) False
+      (LiteralBoolean b) (LiteralInteger $ IntegerValueInt16 $ if b == BooleanValueTrue then 1 else 0)
 
   H.it "floating-point encoding is delegated to the float adapter" $
     QC.property $ \f -> checkAtomicAdapter
-      [AtomicVariantFloat]
-      (AtomicTypeFloat FloatTypeBigfloat) (AtomicTypeFloat FloatTypeFloat32) True
-      (AtomicValueFloat $ FloatValueBigfloat f) (AtomicValueFloat $ FloatValueFloat32 $ realToFrac f)
+      [LiteralVariantFloat]
+      (LiteralTypeFloat FloatTypeBigfloat) (LiteralTypeFloat FloatTypeFloat32) True
+      (LiteralFloat $ FloatValueBigfloat f) (LiteralFloat $ FloatValueFloat32 $ realToFrac f)
 
   H.it "integer encoding is delegated to the integer adapter" $
     QC.property $ \i -> checkAtomicAdapter
-      [AtomicVariantInteger]
-      (AtomicTypeInteger IntegerTypeBigint) (AtomicTypeInteger IntegerTypeInt32) True
-      (AtomicValueInteger $ IntegerValueBigint i) (AtomicValueInteger $ IntegerValueInt32 $ fromIntegral i)
+      [LiteralVariantInteger]
+      (LiteralTypeInteger IntegerTypeBigint) (LiteralTypeInteger IntegerTypeInt32) True
+      (LiteralInteger $ IntegerValueBigint i) (LiteralInteger $ IntegerValueInt32 $ fromIntegral i)
 
   H.it "strings are unchanged" $
     QC.property $ \s -> checkAtomicAdapter
-      [AtomicVariantString]
-      AtomicTypeString AtomicTypeString False
-      (AtomicValueString s) (AtomicValueString s)
+      [LiteralVariantString]
+      LiteralTypeString LiteralTypeString False
+      (LiteralString s) (LiteralString s)
 
 spec :: H.Spec
 spec = do

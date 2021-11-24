@@ -64,8 +64,8 @@ definitions:
               values: Value
 
   - name: EdgeId
-    description: "An atomic value representing an edge id"
-    type: core.AtomicValue
+    description: "A literal value representing an edge id"
+    type: core.Literal
 
   - name: EdgeIdType
     description: "The type of a reference to an edge by id"
@@ -76,7 +76,7 @@ definitions:
     type:
       record:
         - name: id
-          type: core.AtomicType
+          type: core.LiteralType
 
         - name: out
           type: VertexIdType
@@ -123,7 +123,7 @@ definitions:
     type:
       union:
         - name: atomic
-          type: core.AtomicType
+          type: core.LiteralType
 
         - name: collection
           type: CollectionType
@@ -136,7 +136,7 @@ definitions:
     type:
       union:
         - name: atomic
-          type: core.AtomicValue
+          type: core.Literal
 
         - name: collection
           type: CollectionValue
@@ -161,8 +161,8 @@ definitions:
               values: Value
 
   - name: VertexId
-    description: "An atomic value representing a vertex id"
-    type: core.AtomicValue
+    description: "A literal value representing a vertex id"
+    type: core.Literal
 
   - name: VertexIdType
     description: "The type of a reference to a vertex by id"
@@ -173,7 +173,7 @@ definitions:
     type:
       record:
         - name: id
-          type: core.AtomicType
+          type: core.LiteralType
 
         - name: properties
           type:

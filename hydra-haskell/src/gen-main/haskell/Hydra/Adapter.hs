@@ -16,10 +16,10 @@ module Hydra.Adapter
   , _Adapter_target
   , _Language
   , _Language_Constraints
-  , _Language_Constraints_atomicVariants
   , _Language_Constraints_floatVariants
   , _Language_Constraints_functionVariants
   , _Language_Constraints_integerVariants
+  , _Language_Constraints_literalVariants
   , _Language_Constraints_termVariants
   , _Language_Constraints_typeVariants
   , _Language_Constraints_types
@@ -70,8 +70,8 @@ data AdapterContext a
 
 data Language_Constraints
   = Language_Constraints
-    -- | @type set: hydra/core.AtomicVariant
-    { languageConstraintsAtomicVariants :: (Set (AtomicVariant))
+    -- | @type set: hydra/core.LiteralVariant
+    { languageConstraintsLiteralVariants :: (Set (LiteralVariant))
     -- | @type set: hydra/core.FloatVariant
     , languageConstraintsFloatVariants :: (Set (FloatVariant))
     -- | @type set: hydra/core.FunctionVariant
@@ -109,10 +109,10 @@ _Adapter_step = "step" :: String
 _Adapter_target = "target" :: String
 _Language = "hydra/adapter.Language" :: String
 _Language_Constraints = "hydra/adapter.Language_Constraints" :: String
-_Language_Constraints_atomicVariants = "atomicVariants" :: String
 _Language_Constraints_floatVariants = "floatVariants" :: String
 _Language_Constraints_functionVariants = "functionVariants" :: String
 _Language_Constraints_integerVariants = "integerVariants" :: String
+_Language_Constraints_literalVariants = "literalVariants" :: String
 _Language_Constraints_termVariants = "termVariants" :: String
 _Language_Constraints_typeVariants = "typeVariants" :: String
 _Language_Constraints_types = "types" :: String

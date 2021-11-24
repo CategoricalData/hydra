@@ -24,7 +24,7 @@ checkType context typ term = check M.empty typ term
 
       ExpressionApplication (Application f arg) -> case termData f of
 --        ExpressionApplication ... ->
-        ExpressionAtomic _ -> False
+        ExpressionLiteral _ -> False
         ExpressionElement _ -> False
         ExpressionFunction f -> case f of
 --          FunctionCases ... ->
@@ -48,8 +48,8 @@ checkType context typ term = check M.empty typ term
             TypeFunction (FunctionType dom cod) -> cod == typ && check bindings dom arg
             _ -> False
 
-      ExpressionAtomic v -> case typ of
-        TypeAtomic at -> at == atomicValueType v
+      ExpressionLiteral v -> case typ of
+        TypeLiteral at -> at == literalType v
         _ -> False
 
       ExpressionElement en -> case typ of
@@ -133,7 +133,7 @@ checkType context typ term = check M.empty typ term
 inferType :: Context a -> Term a -> Result (Term (a, Type))
 inferType context (Term expr meta) = case expr of
 --  ExpressionApplication (Application fun arg) ->
-    ExpressionAtomic av -> pure $ Term (ExpressionAtomic av) (meta, stringType)
+    ExpressionLiteral av -> pure $ Term (ExpressionLiteral av) (meta, stringType)
 --    ExpressionElement name -> do
 --      el <- requireElement context name
 --      scon <- schemaContext context

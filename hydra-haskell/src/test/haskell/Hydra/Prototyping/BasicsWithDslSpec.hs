@@ -21,14 +21,14 @@ testEvaluate = evaluate $ testContext { contextElements = graphElementsMap basic
 testsForTermTypeFunctions = do
   H.describe "Tests for DSL-defined term-to-type functions" $ do
     return ()
---    atomicValueType,
+--    literalType,
 --    floatValueType,
 --    integerValueType,
 
 testsForTermVariantFunctions = do
   H.describe "Tests for DSL-defined term-to-variant functions" $ do
     return ()
---    atomicValueVariant,
+--    literalVariant,
 --    floatValueVariant,
 --    integerValueVariant,
 --    termVariant
@@ -36,10 +36,10 @@ testsForTermVariantFunctions = do
 testsForTypeVariantFunctions = do
   H.describe "Tests for DSL-defined type-to-variant functions" $ do
 
-    H.it "Test atomicTypeVariant function element" $
+    H.it "Test literalTypeVariant function element" $
       QC.property $ \at ->
-        testEvaluate (apply (deref "hydra/basics.atomicTypeVariant") (encodeAtomicType at))
-        == pure (encodeAtomicVariant $ atomicTypeVariant at)
+        testEvaluate (apply (deref "hydra/basics.literalTypeVariant") (encodeLiteralType at))
+        == pure (encodeLiteralVariant $ literalTypeVariant at)
 
     H.it "Test floatTypeVariant function element" $
       QC.property $ \ft ->

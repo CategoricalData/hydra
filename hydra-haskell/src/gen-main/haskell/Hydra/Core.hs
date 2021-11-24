@@ -2,9 +2,6 @@
 -- | The Hydra Core model (in progress)
 module Hydra.Core
   ( Application(..)
-  , AtomicType(..)
-  , AtomicValue(..)
-  , AtomicVariant(..)
   , BooleanValue(..)
   , Comparison(..)
   , Expression(..)
@@ -22,6 +19,9 @@ module Hydra.Core
   , IntegerVariant(..)
   , Lambda(..)
   , Let(..)
+  , Literal(..)
+  , LiteralType(..)
+  , LiteralVariant(..)
   , MapType(..)
   , Name
   , Precision(..)
@@ -38,24 +38,6 @@ module Hydra.Core
   , _Application
   , _Application_argument
   , _Application_function
-  , _AtomicType
-  , _AtomicType_binary
-  , _AtomicType_boolean
-  , _AtomicType_float
-  , _AtomicType_integer
-  , _AtomicType_string
-  , _AtomicValue
-  , _AtomicValue_binary
-  , _AtomicValue_boolean
-  , _AtomicValue_float
-  , _AtomicValue_integer
-  , _AtomicValue_string
-  , _AtomicVariant
-  , _AtomicVariant_binary
-  , _AtomicVariant_boolean
-  , _AtomicVariant_float
-  , _AtomicVariant_integer
-  , _AtomicVariant_string
   , _BooleanValue
   , _BooleanValue_false
   , _BooleanValue_true
@@ -65,11 +47,11 @@ module Hydra.Core
   , _Comparison_lessThan
   , _Expression
   , _Expression_application
-  , _Expression_atomic
   , _Expression_element
   , _Expression_function
   , _Expression_let
   , _Expression_list
+  , _Expression_literal
   , _Expression_map
   , _Expression_optional
   , _Expression_record
@@ -151,6 +133,24 @@ module Hydra.Core
   , _Let_environment
   , _Let_key
   , _Let_value
+  , _Literal
+  , _LiteralType
+  , _LiteralType_binary
+  , _LiteralType_boolean
+  , _LiteralType_float
+  , _LiteralType_integer
+  , _LiteralType_string
+  , _LiteralVariant
+  , _LiteralVariant_binary
+  , _LiteralVariant_boolean
+  , _LiteralVariant_float
+  , _LiteralVariant_integer
+  , _LiteralVariant_string
+  , _Literal_binary
+  , _Literal_boolean
+  , _Literal_float
+  , _Literal_integer
+  , _Literal_string
   , _MapType
   , _MapType_keys
   , _MapType_values
@@ -161,11 +161,11 @@ module Hydra.Core
   , _Term
   , _TermVariant
   , _TermVariant_application
-  , _TermVariant_atomic
   , _TermVariant_element
   , _TermVariant_function
   , _TermVariant_let
   , _TermVariant_list
+  , _TermVariant_literal
   , _TermVariant_map
   , _TermVariant_optional
   , _TermVariant_record
@@ -185,10 +185,10 @@ module Hydra.Core
   , _TypeApplication_function
   , _TypeVariable
   , _TypeVariant
-  , _TypeVariant_atomic
   , _TypeVariant_element
   , _TypeVariant_function
   , _TypeVariant_list
+  , _TypeVariant_literal
   , _TypeVariant_map
   , _TypeVariant_nominal
   , _TypeVariant_optional
@@ -197,10 +197,10 @@ module Hydra.Core
   , _TypeVariant_union
   , _TypeVariant_universal
   , _TypeVariant_variable
-  , _Type_atomic
   , _Type_element
   , _Type_function
   , _Type_list
+  , _Type_literal
   , _Type_map
   , _Type_nominal
   , _Type_optional
@@ -245,40 +245,6 @@ data Application a
                   variable: a -}
     , applicationArgument :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
-{-| Any of a fixed set of atomic types, also called base types, primitive types,
-    or type constants
-    
-    @comments The so-called term constants, or valid values, of each atomic type
-    are unspecified -}
-data AtomicType
-  = AtomicTypeBinary
-  | AtomicTypeBoolean
-  -- | @type hydra/core.FloatType
-  | AtomicTypeFloat FloatType
-  -- | @type hydra/core.IntegerType
-  | AtomicTypeInteger IntegerType
-  | AtomicTypeString deriving (Eq, Generic, Ord, Read, Show)
-
--- | A term constant; an instance of an atomic type
-data AtomicValue
-  -- | @type binary
-  = AtomicValueBinary String
-  -- | @type hydra/core.BooleanValue
-  | AtomicValueBoolean BooleanValue
-  -- | @type hydra/core.FloatValue
-  | AtomicValueFloat FloatValue
-  -- | @type hydra/core.IntegerValue
-  | AtomicValueInteger IntegerValue
-  -- | @type string
-  | AtomicValueString String deriving (Eq, Generic, Ord, Read, Show)
-
-data AtomicVariant
-  = AtomicVariantBinary
-  | AtomicVariantBoolean
-  | AtomicVariantFloat
-  | AtomicVariantInteger
-  | AtomicVariantString deriving (Eq, Generic, Ord, Read, Show)
-
 data BooleanValue
   = BooleanValueFalse
   | BooleanValueTrue deriving (Eq, Generic, Ord, Read, Show)
@@ -299,10 +265,6 @@ data Expression a
                   variable: a
                 variable: a -}
   = ExpressionApplication (Application a)
-  {-| An atomic value
-      
-      @type hydra/core.AtomicValue -}
-  | ExpressionAtomic AtomicValue
   {-| An element reference
       
       @type hydra/core.Name -}
@@ -333,6 +295,10 @@ data Expression a
                     variable: a
                   variable: a -}
   | ExpressionList [Term a]
+  {-| A literal value
+      
+      @type hydra/core.Literal -}
+  | ExpressionLiteral Literal
   {-| A map of key terms to value terms
       
       @type map:
@@ -610,6 +576,40 @@ data Let a
                   variable: a -}
     , letEnvironment :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
+-- | A term constant; an instance of a literal type
+data Literal
+  -- | @type binary
+  = LiteralBinary String
+  -- | @type hydra/core.BooleanValue
+  | LiteralBoolean BooleanValue
+  -- | @type hydra/core.FloatValue
+  | LiteralFloat FloatValue
+  -- | @type hydra/core.IntegerValue
+  | LiteralInteger IntegerValue
+  -- | @type string
+  | LiteralString String deriving (Eq, Generic, Ord, Read, Show)
+
+{-| Any of a fixed set of literal types, also called atomic types, base types,
+    primitive types, or type constants
+    
+    @comments The so-called term constants, or valid values, of each literal type
+    are unspecified -}
+data LiteralType
+  = LiteralTypeBinary
+  | LiteralTypeBoolean
+  -- | @type hydra/core.FloatType
+  | LiteralTypeFloat FloatType
+  -- | @type hydra/core.IntegerType
+  | LiteralTypeInteger IntegerType
+  | LiteralTypeString deriving (Eq, Generic, Ord, Read, Show)
+
+data LiteralVariant
+  = LiteralVariantBinary
+  | LiteralVariantBoolean
+  | LiteralVariantFloat
+  | LiteralVariantInteger
+  | LiteralVariantString deriving (Eq, Generic, Ord, Read, Show)
+
 data MapType
   = MapType
     -- | @type hydra/core.Type
@@ -639,11 +639,11 @@ data Term a
 
 data TermVariant
   = TermVariantApplication
-  | TermVariantAtomic
   | TermVariantElement
   | TermVariantFunction
   | TermVariantLet
   | TermVariantList
+  | TermVariantLiteral
   | TermVariantMap
   | TermVariantOptional
   | TermVariantRecord
@@ -654,14 +654,14 @@ data TermVariant
   | TermVariantVariable deriving (Eq, Generic, Ord, Read, Show)
 
 data Type
-  -- | @type hydra/core.AtomicType
-  = TypeAtomic AtomicType
   -- | @type hydra/core.Type
-  | TypeElement Type
+  = TypeElement Type
   -- | @type hydra/core.FunctionType
   | TypeFunction FunctionType
   -- | @type hydra/core.Type
   | TypeList Type
+  -- | @type hydra/core.LiteralType
+  | TypeLiteral LiteralType
   -- | @type hydra/core.MapType
   | TypeMap MapType
   -- | @type hydra/core.Name
@@ -719,10 +719,10 @@ data TypeApplication a
 type TypeVariable = String
 
 data TypeVariant
-  = TypeVariantAtomic
-  | TypeVariantElement
+  = TypeVariantElement
   | TypeVariantFunction
   | TypeVariantList
+  | TypeVariantLiteral
   | TypeVariantMap
   | TypeVariantNominal
   | TypeVariantOptional
@@ -760,24 +760,6 @@ type Variable = String
 _Application = "hydra/core.Application" :: String
 _Application_argument = "argument" :: String
 _Application_function = "function" :: String
-_AtomicType = "hydra/core.AtomicType" :: String
-_AtomicType_binary = "binary" :: String
-_AtomicType_boolean = "boolean" :: String
-_AtomicType_float = "float" :: String
-_AtomicType_integer = "integer" :: String
-_AtomicType_string = "string" :: String
-_AtomicValue = "hydra/core.AtomicValue" :: String
-_AtomicValue_binary = "binary" :: String
-_AtomicValue_boolean = "boolean" :: String
-_AtomicValue_float = "float" :: String
-_AtomicValue_integer = "integer" :: String
-_AtomicValue_string = "string" :: String
-_AtomicVariant = "hydra/core.AtomicVariant" :: String
-_AtomicVariant_binary = "binary" :: String
-_AtomicVariant_boolean = "boolean" :: String
-_AtomicVariant_float = "float" :: String
-_AtomicVariant_integer = "integer" :: String
-_AtomicVariant_string = "string" :: String
 _BooleanValue = "hydra/core.BooleanValue" :: String
 _BooleanValue_false = "false" :: String
 _BooleanValue_true = "true" :: String
@@ -787,11 +769,11 @@ _Comparison_greaterThan = "greaterThan" :: String
 _Comparison_lessThan = "lessThan" :: String
 _Expression = "hydra/core.Expression" :: String
 _Expression_application = "application" :: String
-_Expression_atomic = "atomic" :: String
 _Expression_element = "element" :: String
 _Expression_function = "function" :: String
 _Expression_let = "let" :: String
 _Expression_list = "list" :: String
+_Expression_literal = "literal" :: String
 _Expression_map = "map" :: String
 _Expression_optional = "optional" :: String
 _Expression_record = "record" :: String
@@ -873,6 +855,24 @@ _Let = "hydra/core.Let" :: String
 _Let_environment = "environment" :: String
 _Let_key = "key" :: String
 _Let_value = "value" :: String
+_Literal = "hydra/core.Literal" :: String
+_LiteralType = "hydra/core.LiteralType" :: String
+_LiteralType_binary = "binary" :: String
+_LiteralType_boolean = "boolean" :: String
+_LiteralType_float = "float" :: String
+_LiteralType_integer = "integer" :: String
+_LiteralType_string = "string" :: String
+_LiteralVariant = "hydra/core.LiteralVariant" :: String
+_LiteralVariant_binary = "binary" :: String
+_LiteralVariant_boolean = "boolean" :: String
+_LiteralVariant_float = "float" :: String
+_LiteralVariant_integer = "integer" :: String
+_LiteralVariant_string = "string" :: String
+_Literal_binary = "binary" :: String
+_Literal_boolean = "boolean" :: String
+_Literal_float = "float" :: String
+_Literal_integer = "integer" :: String
+_Literal_string = "string" :: String
 _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
@@ -883,11 +883,11 @@ _Precision_bits = "bits" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String
-_TermVariant_atomic = "atomic" :: String
 _TermVariant_element = "element" :: String
 _TermVariant_function = "function" :: String
 _TermVariant_let = "let" :: String
 _TermVariant_list = "list" :: String
+_TermVariant_literal = "literal" :: String
 _TermVariant_map = "map" :: String
 _TermVariant_optional = "optional" :: String
 _TermVariant_record = "record" :: String
@@ -907,10 +907,10 @@ _TypeApplication_argument = "argument" :: String
 _TypeApplication_function = "function" :: String
 _TypeVariable = "hydra/core.TypeVariable" :: String
 _TypeVariant = "hydra/core.TypeVariant" :: String
-_TypeVariant_atomic = "atomic" :: String
 _TypeVariant_element = "element" :: String
 _TypeVariant_function = "function" :: String
 _TypeVariant_list = "list" :: String
+_TypeVariant_literal = "literal" :: String
 _TypeVariant_map = "map" :: String
 _TypeVariant_nominal = "nominal" :: String
 _TypeVariant_optional = "optional" :: String
@@ -919,10 +919,10 @@ _TypeVariant_set = "set" :: String
 _TypeVariant_union = "union" :: String
 _TypeVariant_universal = "universal" :: String
 _TypeVariant_variable = "variable" :: String
-_Type_atomic = "atomic" :: String
 _Type_element = "element" :: String
 _Type_function = "function" :: String
 _Type_list = "list" :: String
+_Type_literal = "literal" :: String
 _Type_map = "map" :: String
 _Type_nominal = "nominal" :: String
 _Type_optional = "optional" :: String

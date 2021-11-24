@@ -22,7 +22,7 @@ module Hydra.Impl.Haskell.Dsl (
   deref,
   element,
   elementRef,
-  expectAtomicValue,
+  expectLiteral,
   expectNArgs,
   expectRecordTerm,
   expectStringTerm,
@@ -103,8 +103,8 @@ instance Default Meta where dflt = Meta
 apply :: Default a => Term a -> Term a -> Term a
 apply func arg = defaultTerm $ ExpressionApplication $ Application func arg
 
-atomic :: Default a => AtomicValue -> Term a
-atomic = defaultTerm . ExpressionAtomic
+atomic :: Default a => Literal -> Term a
+atomic = defaultTerm . ExpressionLiteral
 
 bigfloatType :: Type
 bigfloatType = floatType FloatTypeBigfloat
@@ -119,16 +119,16 @@ bigintValue :: Default a => Integer -> Term a
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
 binaryTerm :: Default a => String -> Term a
-binaryTerm = defaultTerm . ExpressionAtomic . AtomicValueBinary
+binaryTerm = defaultTerm . ExpressionLiteral . LiteralBinary
 
 binaryType :: Type
-binaryType = TypeAtomic AtomicTypeBinary
+binaryType = TypeLiteral LiteralTypeBinary
 
 booleanType :: Type
-booleanType = TypeAtomic AtomicTypeBoolean
+booleanType = TypeLiteral LiteralTypeBoolean
 
 booleanValue :: Default a => Bool -> Term a
-booleanValue b = defaultTerm $ ExpressionAtomic $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+booleanValue b = defaultTerm $ ExpressionLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 cases :: Default a => [Field a] -> Term a
 cases = defaultTerm . ExpressionFunction . FunctionCases
@@ -158,10 +158,10 @@ element = defaultTerm . ExpressionElement
 elementRef :: Default a => Element a -> Term a
 elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName el
 
-expectAtomicValue :: Show a => Term a -> Result AtomicValue
-expectAtomicValue term = case termData term of
-  ExpressionAtomic av -> pure av
-  _ -> fail $ "expected an atomic value, got " ++ show term
+expectLiteral :: Show a => Term a -> Result Literal
+expectLiteral term = case termData term of
+  ExpressionLiteral av -> pure av
+  _ -> fail $ "expected a literal value, got " ++ show term
 
 expectNArgs :: Int -> [Term a] -> Result ()
 expectNArgs n args = if L.length args /= n
@@ -175,7 +175,7 @@ expectRecordTerm term = case termData term of
 
 expectStringTerm :: Show a => Term a -> Result String
 expectStringTerm term = case termData term of
-  ExpressionAtomic (AtomicValueString s) -> pure s
+  ExpressionLiteral (LiteralString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
 expectUnionTerm :: Show a => Term a -> Result (Field a)
@@ -202,10 +202,10 @@ float64Value :: Default a => Double -> Term a
 float64Value = floatValue . FloatValueFloat64
 
 floatType :: FloatType -> Type
-floatType = TypeAtomic . AtomicTypeFloat
+floatType = TypeLiteral . LiteralTypeFloat
 
 floatValue :: Default a => FloatValue -> Term a
-floatValue = defaultTerm . ExpressionAtomic . AtomicValueFloat
+floatValue = defaultTerm . ExpressionLiteral . LiteralFloat
 
 function :: Default a => Name -> Term a
 function = defaultTerm . ExpressionFunction . FunctionPrimitive
@@ -238,10 +238,10 @@ int8Value :: Default a => Int -> Term a
 int8Value = integerValue . IntegerValueInt8 . fromIntegral
 
 integerType :: IntegerType -> Type
-integerType = TypeAtomic . AtomicTypeInteger
+integerType = TypeLiteral . LiteralTypeInteger
 
 integerValue :: Default a => IntegerValue -> Term a
-integerValue = defaultTerm . ExpressionAtomic . AtomicValueInteger
+integerValue = defaultTerm . ExpressionLiteral . LiteralInteger
 
 lambda :: Default a => Variable -> Term a -> Term a
 lambda param body = defaultTerm $ ExpressionFunction $ FunctionLambda $ Lambda param body
@@ -292,13 +292,13 @@ set :: Default a => S.Set (Term a) -> Term a
 set = defaultTerm . ExpressionSet
 
 stringTerm :: Default a => String -> Term a
-stringTerm = defaultTerm . ExpressionAtomic . AtomicValueString
+stringTerm = defaultTerm . ExpressionLiteral . LiteralString
 
 stringType :: Type
-stringType = TypeAtomic AtomicTypeString
+stringType = TypeLiteral LiteralTypeString
 
 stringValue :: Default a => String -> Term a
-stringValue = defaultTerm . ExpressionAtomic . AtomicValueString
+stringValue = defaultTerm . ExpressionLiteral . LiteralString
 
 uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16

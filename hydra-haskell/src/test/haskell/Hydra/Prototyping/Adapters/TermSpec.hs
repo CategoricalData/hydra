@@ -22,29 +22,29 @@ constraintsAreAsExpected :: H.SpecWith ()
 constraintsAreAsExpected = H.describe "Verify that the language constraints include/exclude the appropriate types" $ do
 
     H.it "int16 and int32 are supported in the test context" $ do
-      typeIsSupported (context [TypeVariantAtomic]) int16Type `H.shouldBe` True
-      typeIsSupported (context [TypeVariantAtomic]) int32Type `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral]) int16Type `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral]) int32Type `H.shouldBe` True
       
     H.it "int8 and bigint are unsupported in the test context" $ do
-      typeIsSupported (context [TypeVariantAtomic]) int8Type `H.shouldBe` False
-      typeIsSupported (context [TypeVariantAtomic]) bigintType `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral]) int8Type `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral]) bigintType `H.shouldBe` False
       
     H.it "Records are supported, but unions are not" $ do
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord]) latLonType `H.shouldBe` True
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord]) stringOrIntType `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord]) latLonType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord]) stringOrIntType `H.shouldBe` False
 
     H.it "Records are supported if and only if each of their fields are supported" $ do
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord])
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
         (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
         `H.shouldBe` True
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantRecord])
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
         (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
         `H.shouldBe` False
 
     H.it "Lists are supported if the list element type is supported" $ do
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfStringsType `H.shouldBe` True
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfListsOfStringsType `H.shouldBe` True
-      typeIsSupported (context [TypeVariantAtomic, TypeVariantList]) listOfSetOfStringsType `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantList]) listOfStringsType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantList]) listOfListsOfStringsType `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral, TypeVariantList]) listOfSetOfStringsType `H.shouldBe` False
 
   where
     context = languageConstraints . adapterContextTarget . termTestContext
@@ -54,31 +54,31 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
 
   H.it "Strings (and other supported atomic values) pass through without change" $
     QC.property $ \b -> checkTermAdapter
-      [TypeVariantAtomic]
+      [TypeVariantLiteral]
       stringType stringType False
       (stringValue b) (stringValue b)
 
   H.it "Lists (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantList]
+      [TypeVariantLiteral, TypeVariantList]
       listOfStringsType listOfStringsType False
       (list $ stringValue <$> strings) (list $ stringValue <$> strings)
 
   H.it "Maps (when supported) pass through without change" $
     QC.property $ \keyvals -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantMap]
+      [TypeVariantLiteral, TypeVariantMap]
       mapOfStringsToIntsType mapOfStringsToIntsType False
       (makeMap keyvals) (makeMap keyvals)
 
   H.it "Optionals (when supported) pass through without change" $
     QC.property $ \mi -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantOptional]
+      [TypeVariantLiteral, TypeVariantOptional]
       optionalInt8Type optionalInt16Type False
       (optional $ int8Value <$> mi) (optional $ int16Value <$> mi)
 
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantRecord]
       (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
       (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
       False
@@ -87,13 +87,13 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion]
+      [TypeVariantLiteral, TypeVariantUnion]
       stringOrIntType stringOrIntType False
       (variant "right" $ int32Value int) (variant "right" $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantSet]
+      [TypeVariantLiteral, TypeVariantSet]
       setOfStringsType setOfStringsType False
       (stringSet strings) (stringSet strings)
 
@@ -105,31 +105,31 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
 
   H.it "CompareTo terms (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantFunction]
+      [TypeVariantLiteral, TypeVariantFunction]
       compareStringsType compareStringsType False
       (compareTo $ stringValue s) (compareTo $ stringValue s)
 
   H.it "Data terms (when supported) pass through without change" $
     QC.property $ \() -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantFunction, TypeVariantElement]
+      [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
       int32ElementDataType int32ElementDataType False
       dataTerm dataTerm
 
   H.it "Primitive function references (when supported) pass through without change" $
     QC.property $ \name -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantFunction]
+      [TypeVariantLiteral, TypeVariantFunction]
       concatType concatType False
       (primitive name) (primitive name)
 
   H.it "Projections (when supported) pass through without change" $
     QC.property $ \fname -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantFunction, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantFunction, TypeVariantRecord]
       exampleProjectionType exampleProjectionType False
       (projection fname) (projection fname)
 
   H.it "Nominal types (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantNominal]
+      [TypeVariantLiteral, TypeVariantNominal]
       stringAliasType stringAliasType False
       (stringValue s) (stringValue s)
 
@@ -138,56 +138,56 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
 
   H.it "Sets (when unsupported) become lists" $
     QC.property $ \strings -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantList]
+      [TypeVariantLiteral, TypeVariantList]
       setOfStringsType listOfStringsType False
       (stringSet strings) (stringList $ S.toList strings)
 
   H.it "Element references (when unsupported) become strings" $
     QC.property $ \name -> checkTermAdapter
-      [TypeVariantAtomic]
+      [TypeVariantLiteral]
       int32ElementType stringType False
       (element name) (stringValue name) -- Note: the element name is not dereferenced
 
   H.it "CompareTo terms (when unsupported) become variant terms" $
     QC.property $ \s -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       compareStringsType (unionTypeForFunctions stringType) False
       (compareTo $ stringValue s) (union $ Field "compareTo" $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType (unionTypeForFunctions stringType) False
       dataTerm (union $ Field "data" unitTerm)
 
   H.it "Optionals (when unsupported) become unions" $
     QC.property $ \ms -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantRecord, TypeVariantUnion]
+      [TypeVariantLiteral, TypeVariantRecord, TypeVariantUnion]
       optionalStringType (TypeUnion [FieldType "nothing" unitType, FieldType "just" stringType]) False
       (optional $ stringValue <$> ms)
       (union $ Y.maybe (Field "nothing" unitTerm) (Field "just" . stringTerm) ms)
 
   H.it "Primitive function references (when unsupported) become variant terms" $
     QC.property $ \name -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       concatType (unionTypeForFunctions stringType) False
       (primitive name) (union $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantUnion, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType (unionTypeForFunctions latLonType) False
       (projection fname) (union $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter
-      [TypeVariantAtomic]
+      [TypeVariantLiteral]
       stringAliasType stringType False
       (stringValue s) (stringValue s)
 
   H.it "Unions (when unsupported) become records" $
     QC.property $ \i -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantOptional, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
       (TypeRecord [
         FieldType "left" $ TypeOptional stringType,
@@ -202,21 +202,21 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
 
   H.it "A list of int8's becomes a list of int32's" $
     QC.property $ \ints -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantList]
+      [TypeVariantLiteral, TypeVariantList]
       listOfInt8sType listOfInt16sType False
       (list $ int8Value <$> ints)
       (list $ int16Value <$> ints)
 
   H.it "A list of sets of strings becomes a list of lists of strings" $
     QC.property $ \lists -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantList]
+      [TypeVariantLiteral, TypeVariantList]
       listOfSetOfStringsType listOfListsOfStringsType False
       (list $ (\l -> set $ S.fromList $ stringValue <$> l) <$> lists)
       (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> lists)
 
   H.it "A list of sets of element references becomes a list of lists of strings" $
     QC.property $ \names -> checkTermAdapter
-      [TypeVariantAtomic, TypeVariantList]
+      [TypeVariantLiteral, TypeVariantList]
       listOfSetOfInt32ElementReferencesType listOfListsOfStringsType False
       (list $ (\l -> set $ S.fromList $ element <$> l) <$> names)
       (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> names)
@@ -262,7 +262,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
 
   H.it "An int8 field becomes an int16 field" $
     QC.property $ \i -> checkFieldAdapter
-      [TypeVariantAtomic, TypeVariantRecord]
+      [TypeVariantLiteral, TypeVariantRecord]
       (FieldType "second" int8Type)
       (FieldType "second" int16Type)
       False
@@ -277,14 +277,14 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
     -- Use a YAML-like language (but supporting unions) as the default target language
     testLanguage :: Language
     testLanguage = Language "hydra/test" $ Language_Constraints {
-      languageConstraintsAtomicVariants = S.fromList [
-        AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+      languageConstraintsLiteralVariants = S.fromList [
+        LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
       languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
       languageConstraintsFunctionVariants = S.empty,
       languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
-        TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
+        TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
       languageConstraintsTypes = \typ -> case typ of
         TypeOptional (TypeOptional _) -> False
         _ -> True }

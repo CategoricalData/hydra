@@ -11,23 +11,23 @@ import qualified Data.Maybe as Y
 import qualified Test.QuickCheck as QC
 
 
-instance QC.Arbitrary AtomicType
+instance QC.Arbitrary LiteralType
   where
     arbitrary = QC.oneof [
-      pure AtomicTypeBinary,
-      pure AtomicTypeBoolean,
-      AtomicTypeFloat <$> QC.arbitrary,
-      AtomicTypeInteger <$> QC.arbitrary,
-      pure AtomicTypeString]
+      pure LiteralTypeBinary,
+      pure LiteralTypeBoolean,
+      LiteralTypeFloat <$> QC.arbitrary,
+      LiteralTypeInteger <$> QC.arbitrary,
+      pure LiteralTypeString]
 
-instance QC.Arbitrary AtomicValue
+instance QC.Arbitrary Literal
   where
     arbitrary = QC.oneof [
-      AtomicValueBinary <$> QC.arbitrary,
-      AtomicValueBoolean <$> QC.arbitrary,
-      AtomicValueFloat <$> QC.arbitrary,
-      AtomicValueInteger <$> QC.arbitrary,
-      AtomicValueString <$> QC.arbitrary]
+      LiteralBinary <$> QC.arbitrary,
+      LiteralBoolean <$> QC.arbitrary,
+      LiteralFloat <$> QC.arbitrary,
+      LiteralInteger <$> QC.arbitrary,
+      LiteralString <$> QC.arbitrary]
 
 instance QC.Arbitrary BooleanValue
   where
@@ -76,9 +76,9 @@ instance QC.Arbitrary IntegerValue
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
-    TypeAtomic at -> TypeAtomic <$> case at of
-      AtomicTypeInteger _ -> [AtomicTypeBoolean]
-      AtomicTypeFloat _ -> [AtomicTypeBoolean]
+    TypeLiteral at -> TypeLiteral <$> case at of
+      LiteralTypeInteger _ -> [LiteralTypeBoolean]
+      LiteralTypeFloat _ -> [LiteralTypeBoolean]
       _ -> []
     _ -> [] -- TODO
 
@@ -86,13 +86,13 @@ instance (Default a, Eq a, Ord a, Read a, Show a) => QC.Arbitrary (TypedTerm a) 
   arbitrary = QC.sized arbitraryTypedTerm
   shrink (TypedTerm typ term) = L.concat ((\(t, m) -> TypedTerm t <$> m term) <$> shrinkers typ)
 
-arbitraryAtomicValue :: AtomicType -> QC.Gen AtomicValue
-arbitraryAtomicValue at = case at of
-  AtomicTypeBinary -> AtomicValueBinary <$> QC.arbitrary
-  AtomicTypeBoolean -> AtomicValueBoolean <$> QC.arbitrary
-  AtomicTypeFloat ft -> AtomicValueFloat <$> arbitraryFloatValue ft
-  AtomicTypeInteger it -> AtomicValueInteger <$> arbitraryIntegerValue it
-  AtomicTypeString -> AtomicValueString <$> QC.arbitrary
+arbitraryLiteral :: LiteralType -> QC.Gen Literal
+arbitraryLiteral at = case at of
+  LiteralTypeBinary -> LiteralBinary <$> QC.arbitrary
+  LiteralTypeBoolean -> LiteralBoolean <$> QC.arbitrary
+  LiteralTypeFloat ft -> LiteralFloat <$> arbitraryFloatValue ft
+  LiteralTypeInteger it -> LiteralInteger <$> arbitraryIntegerValue it
+  LiteralTypeString -> LiteralString <$> QC.arbitrary
 
 arbitraryField :: (Default a, Eq a, Ord a, Read a, Show a) => FieldType -> Int -> QC.Gen (Field a)
 arbitraryField (FieldType fn ft) n = Field fn <$> arbitraryTerm ft n
@@ -160,7 +160,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
 -- Note: variables and function applications are not (currently) generated
 arbitraryTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> Int -> QC.Gen (Term a)
 arbitraryTerm typ n = case typ of
-    TypeAtomic at -> atomic <$> arbitraryAtomicValue at
+    TypeLiteral at -> atomic <$> arbitraryLiteral at
     TypeFunction ft -> defaultTerm . ExpressionFunction <$> arbitraryFunction ft n'
     TypeList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
     TypeMap (MapType kt vt) -> defaultTerm . ExpressionMap <$> (M.fromList <$> arbitraryList False arbPair n')
@@ -190,7 +190,7 @@ arbitraryTerm typ n = case typ of
 -- Note: nominal types and element types are not currently generated, as instantiating them requires a context
 arbitraryType :: Int -> QC.Gen Type
 arbitraryType n = if n == 0 then pure unitType else QC.oneof [
-    TypeAtomic <$> QC.arbitrary,
+    TypeLiteral <$> QC.arbitrary,
     TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
     TypeList <$> arbitraryType n',
     TypeMap <$> arbitraryPair MapType arbitraryType n',
@@ -214,12 +214,12 @@ decr n = max 0 (n-1)
 -- Note: shrinking currently discards any metadata
 shrinkers :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> [(Type, (Term a) -> [Term a])]
 shrinkers typ = trivialShrinker ++ case typ of
-    TypeAtomic at -> case at of
-      AtomicTypeBinary -> [(binaryType, \(Term (ExpressionAtomic (AtomicValueBinary s)) _) -> binaryTerm <$> QC.shrink s)]
-      AtomicTypeBoolean -> []
-      AtomicTypeFloat ft -> []
-      AtomicTypeInteger it -> []
-      AtomicTypeString -> [(stringType, \(Term (ExpressionAtomic (AtomicValueString s)) _) -> stringTerm <$> QC.shrink s)]
+    TypeLiteral at -> case at of
+      LiteralTypeBinary -> [(binaryType, \(Term (ExpressionLiteral (LiteralBinary s)) _) -> binaryTerm <$> QC.shrink s)]
+      LiteralTypeBoolean -> []
+      LiteralTypeFloat ft -> []
+      LiteralTypeInteger it -> []
+      LiteralTypeString -> [(stringType, \(Term (ExpressionLiteral (LiteralString s)) _) -> stringTerm <$> QC.shrink s)]
   --  TypeElement et ->
   --  TypeFunction ft ->
     TypeList lt -> dropElements : promoteType : shrinkType

@@ -1,7 +1,7 @@
 module Hydra.Prototyping.Adapters.Utils (
-  atomicTypeIsSupported,
+  literalTypeIsSupported,
   chooseAdapter,
-  describeAtomicType,
+  describeLiteralType,
   describeFloatType,
   describeIntegerType,
   describePrecision,
@@ -39,13 +39,13 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ if L.null raw then "" else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")"
       else return $ L.head candidates
 
-describeAtomicType :: AtomicType -> String
-describeAtomicType t = case t of
-  AtomicTypeBinary -> "binary strings"
-  AtomicTypeBoolean -> "boolean values"
-  AtomicTypeFloat ft -> describeFloatType ft
-  AtomicTypeInteger it -> describeIntegerType it
-  AtomicTypeString -> "character strings"
+describeLiteralType :: LiteralType -> String
+describeLiteralType t = case t of
+  LiteralTypeBinary -> "binary strings"
+  LiteralTypeBoolean -> "boolean values"
+  LiteralTypeFloat ft -> describeFloatType ft
+  LiteralTypeInteger it -> describeIntegerType it
+  LiteralTypeString -> "character strings"
 
 describeFloatType :: FloatType -> String
 describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers" 
@@ -60,7 +60,7 @@ describePrecision p = case p of
 
 describeType :: Type -> String
 describeType t = case t of
-  TypeAtomic at -> describeAtomicType at
+  TypeLiteral at -> describeLiteralType at
   TypeElement t -> "elements containing " ++ describeType t 
   TypeFunction (FunctionType dom cod) -> "functions from " ++ describeType dom ++ " to " ++ describeType cod
   TypeList t -> "lists of " ++ describeType t
@@ -74,11 +74,11 @@ describeType t = case t of
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]
 
-atomicTypeIsSupported :: Language_Constraints -> AtomicType -> Bool
-atomicTypeIsSupported constraints at = S.member (atomicTypeVariant at) (languageConstraintsAtomicVariants constraints)
+literalTypeIsSupported :: Language_Constraints -> LiteralType -> Bool
+literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (languageConstraintsLiteralVariants constraints)
   && case at of
-    AtomicTypeFloat ft -> floatTypeIsSupported constraints ft
-    AtomicTypeInteger it -> integerTypeIsSupported constraints it
+    LiteralTypeFloat ft -> floatTypeIsSupported constraints ft
+    LiteralTypeInteger it -> integerTypeIsSupported constraints it
     _ -> True
 
 floatTypeIsSupported :: Language_Constraints -> FloatType -> Bool
@@ -91,7 +91,7 @@ typeIsSupported :: Language_Constraints -> Type -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
   && case t of
-    TypeAtomic at -> atomicTypeIsSupported constraints at
+    TypeLiteral at -> literalTypeIsSupported constraints at
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt
     TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt

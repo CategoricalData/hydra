@@ -19,29 +19,29 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-atomicCoder :: AtomicType -> Qualified (Step AtomicValue YM.Scalar)
+atomicCoder :: LiteralType -> Qualified (Step Literal YM.Scalar)
 atomicCoder at = pure $ case at of
-  AtomicTypeBoolean -> Step {
-    stepOut = \(AtomicValueBoolean b) -> pure $ YM.ScalarBool $ case b of
+  LiteralTypeBoolean -> Step {
+    stepOut = \(LiteralBoolean b) -> pure $ YM.ScalarBool $ case b of
       BooleanValueFalse -> False
       BooleanValueTrue -> True,
     stepIn = \s -> case s of
-      YM.ScalarBool b -> pure $ AtomicValueBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+      YM.ScalarBool b -> pure $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
       _ -> unexpected s "boolean"}
-  AtomicTypeFloat _ -> Step {
-    stepOut = \(AtomicValueFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
+  LiteralTypeFloat _ -> Step {
+    stepOut = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
     stepIn = \s -> case s of
-      YM.ScalarFloat f -> pure $ AtomicValueFloat $ FloatValueBigfloat f
+      YM.ScalarFloat f -> pure $ LiteralFloat $ FloatValueBigfloat f
       _ -> unexpected s "floating-point value"}
-  AtomicTypeInteger _ -> Step {
-    stepOut = \(AtomicValueInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
+  LiteralTypeInteger _ -> Step {
+    stepOut = \(LiteralInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
     stepIn = \s -> case s of
-      YM.ScalarInt i -> pure $ AtomicValueInteger $ IntegerValueBigint i
+      YM.ScalarInt i -> pure $ LiteralInteger $ IntegerValueBigint i
       _ -> unexpected s "integer"}
-  AtomicTypeString -> Step {
-    stepOut = \(AtomicValueString s) -> pure $ YM.ScalarStr s,
+  LiteralTypeString -> Step {
+    stepOut = \(LiteralString s) -> pure $ YM.ScalarStr s,
     stepIn = \s -> case s of
-      YM.ScalarStr s' -> pure $ AtomicValueString s'
+      YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected s "string"}
 
 recordCoder :: (Default a, Eq a, Ord a, Read a, Show a) => [FieldType] -> Qualified (Step (Term a) YM.Node)
@@ -69,10 +69,10 @@ recordCoder sfields = do
 
 termCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> Qualified (Step (Term a) YM.Node)
 termCoder typ = case typ of
-  TypeAtomic at -> do
+  TypeLiteral at -> do
     ac <- atomicCoder at
     return Step {
-      stepOut = \(Term (ExpressionAtomic av) _) -> YM.NodeScalar <$> stepOut ac av,
+      stepOut = \(Term (ExpressionLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
         YM.NodeScalar s -> atomic <$> stepIn ac s
         _ -> unexpected n "scalar node"}
@@ -115,14 +115,14 @@ yamlCoder context typ = do
 
 yamlLanguage :: Language
 yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList [
-    AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+  languageConstraintsLiteralVariants = S.fromList [
+    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAtomic, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
+    TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
   languageConstraintsTypes = \typ -> case typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }
