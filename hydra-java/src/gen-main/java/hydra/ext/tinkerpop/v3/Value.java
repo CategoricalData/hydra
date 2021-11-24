@@ -1,6 +1,6 @@
 package hydra.ext.tinkerpop.v3;
 
-import hydra.core.AtomicValue;
+import hydra.core.Literal;
 
 /**
  * A concrete value such as a number or string, a collection of other values, or an element reference
@@ -47,12 +47,12 @@ public abstract class Value {
   }
   
   public static final class Atomic extends Value {
-    public final hydra.core.AtomicValue atomic;
+    public final hydra.core.Literal atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(hydra.core.AtomicValue atomic) {
+    public Atomic(hydra.core.Literal atomic) {
       this.atomic = atomic;
     }
     

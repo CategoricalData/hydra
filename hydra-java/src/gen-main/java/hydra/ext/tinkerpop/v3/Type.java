@@ -1,6 +1,6 @@
 package hydra.ext.tinkerpop.v3;
 
-import hydra.core.AtomicType;
+import hydra.core.LiteralType;
 
 /**
  * The type of a value, such as a property value
@@ -47,12 +47,12 @@ public abstract class Type {
   }
   
   public static final class Atomic extends Type {
-    public final hydra.core.AtomicType atomic;
+    public final hydra.core.LiteralType atomic;
     
     /**
      * Constructs an immutable Atomic object
      */
-    public Atomic(hydra.core.AtomicType atomic) {
+    public Atomic(hydra.core.LiteralType atomic) {
       this.atomic = atomic;
     }
     

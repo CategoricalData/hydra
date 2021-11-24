@@ -1,15 +1,15 @@
 package hydra.core;
 
 /**
- * Any of a fixed set of atomic types, also called base types, primitive types, or type constants
+ * A term constant; an instance of a literal type
  */
-public abstract class AtomicType {
-  private AtomicType() {}
+public abstract class Literal {
+  private Literal() {}
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   /**
-   * An interface for applying a function to a AtomicType according to its variant (subclass)
+   * An interface for applying a function to a Literal according to its variant (subclass)
    */
   public interface Visitor<R> {
     R visit(Binary instance) ;
@@ -24,11 +24,11 @@ public abstract class AtomicType {
   }
   
   /**
-   * An interface for applying a function to a AtomicType according to its variant (subclass). If a visit() method for a
+   * An interface for applying a function to a Literal according to its variant (subclass). If a visit() method for a
    * particular variant is not implemented, a default method is used instead.
    */
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(AtomicType instance) {
+    default R otherwise(Literal instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
@@ -58,11 +58,15 @@ public abstract class AtomicType {
     }
   }
   
-  public static final class Binary extends AtomicType {
+  public static final class Binary extends Literal {
+    public final String binary;
+    
     /**
      * Constructs an immutable Binary object
      */
-    public Binary() {}
+    public Binary(String binary) {
+      this.binary = binary;
+    }
     
     @Override
     public <R> R accept(Visitor<R> visitor) {
@@ -75,20 +79,24 @@ public abstract class AtomicType {
           return false;
       }
       Binary o = (Binary) other;
-      return true;
+      return binary.equals(o.binary);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * binary.hashCode();
     }
   }
   
-  public static final class BooleanEsc extends AtomicType {
+  public static final class BooleanEsc extends Literal {
+    public final hydra.core.BooleanValue booleanEsc;
+    
     /**
      * Constructs an immutable BooleanEsc object
      */
-    public BooleanEsc() {}
+    public BooleanEsc(hydra.core.BooleanValue booleanEsc) {
+      this.booleanEsc = booleanEsc;
+    }
     
     @Override
     public <R> R accept(Visitor<R> visitor) {
@@ -101,22 +109,22 @@ public abstract class AtomicType {
           return false;
       }
       BooleanEsc o = (BooleanEsc) other;
-      return true;
+      return booleanEsc.equals(o.booleanEsc);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * booleanEsc.hashCode();
     }
   }
   
-  public static final class FloatEsc extends AtomicType {
-    public final hydra.core.FloatType floatEsc;
+  public static final class FloatEsc extends Literal {
+    public final hydra.core.FloatValue floatEsc;
     
     /**
      * Constructs an immutable FloatEsc object
      */
-    public FloatEsc(hydra.core.FloatType floatEsc) {
+    public FloatEsc(hydra.core.FloatValue floatEsc) {
       this.floatEsc = floatEsc;
     }
     
@@ -140,13 +148,13 @@ public abstract class AtomicType {
     }
   }
   
-  public static final class IntegerEsc extends AtomicType {
-    public final hydra.core.IntegerType integer;
+  public static final class IntegerEsc extends Literal {
+    public final hydra.core.IntegerValue integer;
     
     /**
      * Constructs an immutable IntegerEsc object
      */
-    public IntegerEsc(hydra.core.IntegerType integer) {
+    public IntegerEsc(hydra.core.IntegerValue integer) {
       this.integer = integer;
     }
     
@@ -170,11 +178,15 @@ public abstract class AtomicType {
     }
   }
   
-  public static final class StringEsc extends AtomicType {
+  public static final class StringEsc extends Literal {
+    public final String string;
+    
     /**
      * Constructs an immutable StringEsc object
      */
-    public StringEsc() {}
+    public StringEsc(String string) {
+      this.string = string;
+    }
     
     @Override
     public <R> R accept(Visitor<R> visitor) {
@@ -187,12 +199,12 @@ public abstract class AtomicType {
           return false;
       }
       StringEsc o = (StringEsc) other;
-      return true;
+      return string.equals(o.string);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * string.hashCode();
     }
   }
 }

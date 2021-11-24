@@ -1,6 +1,6 @@
 package hydra.core;
 
-public enum AtomicVariant {
+public enum LiteralVariant {
   BINARY,
   
   BOOLEAN,

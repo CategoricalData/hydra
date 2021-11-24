@@ -1,12 +1,12 @@
 package hydra.ext.tinkerpop.v3;
 
-import hydra.core.AtomicType;
+import hydra.core.LiteralType;
 
 /**
  * The type of an edge, with characteristic id, out-vertex, in-vertex, and property types
  */
 public class EdgeType {
-  public final hydra.core.AtomicType id;
+  public final hydra.core.LiteralType id;
   
   public final hydra.ext.tinkerpop.v3.VertexIdType out;
   
@@ -17,7 +17,7 @@ public class EdgeType {
   /**
    * Constructs an immutable EdgeType object
    */
-  public EdgeType(hydra.core.AtomicType id, hydra.ext.tinkerpop.v3.VertexIdType out, hydra.ext.tinkerpop.v3.VertexIdType in, java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Type> properties) {
+  public EdgeType(hydra.core.LiteralType id, hydra.ext.tinkerpop.v3.VertexIdType out, hydra.ext.tinkerpop.v3.VertexIdType in, java.util.Map<hydra.ext.tinkerpop.v3.Key, hydra.ext.tinkerpop.v3.Type> properties) {
     this.id = id;
     this.out = out;
     this.in = in;
@@ -47,7 +47,7 @@ public class EdgeType {
   /**
    * Construct a new immutable EdgeType object in which id is overridden
    */
-  public EdgeType withId(hydra.core.AtomicType id) {
+  public EdgeType withId(hydra.core.LiteralType id) {
     return new EdgeType(id, out, in, properties);
   }
   
