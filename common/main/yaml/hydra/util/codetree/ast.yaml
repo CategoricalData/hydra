@@ -3,67 +3,49 @@ definitions:
   - name: Associativity
     type:
       enum:
+        - none
         - left
         - right
+        - both
 
-  - name: BlockExpression
+  - name: BracketExpr
     type:
       record:
-        - name: delimiters
-          type: Delimiters
+        - name: brackets
+          type: Brackets
 
-        - name: head
-          type:
-            optional: Expression
+        - name: enclosed
+          type: Expr
 
-        - name: subexpressions
-          type:
-            list: Expression
-
-  - name: Delimiters
+  - name: Brackets
     type:
       record:
-        - name: open
-          type:
-            optional: string
+        - name: left
+          type: Symbol
 
-        - name: close
-          type:
-            optional: string
+        - name: right
+          type: Symbol
 
-  - name: Expression
+  - name: Expr
     type:
       union:
-        - name: atomic
-          type: string
+        - name: const
+          type: Symbol
 
-        - name: block
-          type: BlockExpression
+        - name: op
+          type: OpExpr
 
-        - name: infix
-          type: OperatorExpression
+        - name: brackets
+          type: BracketExpr
 
-        - name: list
-          type: ListExpression
-
-        - name: prefix
-          type: OperatorExpression
-
-  - name: ListExpression
-    type:
-      record:
-        - name: separator
-          type: string
-
-        - name: elements
-          type:
-            list: Expression
-
-  - name: Operator
+  - name: Op
     type:
       record:
         - name: symbol
-          type: string
+          type: Symbol
+
+        - name: padding
+          type: Padding
 
         - name: precedence
           type: Precedence
@@ -71,15 +53,37 @@ definitions:
         - name: associativity
           type: Associativity
 
-  - name: OperatorExpression
+  - name: OpExpr
     type:
       record:
-        - name: operator
-          type: Operator
+        - name: op
+          type: Op
 
-        - name: operands
-          type:
-            list: Expression
+        - name: lhs
+          type: Expr
+
+        - name: rhs
+          type: Expr
+
+  - name: Padding
+    type:
+      record:
+        - name: left
+          type: Ws
+
+        - name: right
+          type: Ws
 
   - name: Precedence
     type: integer
+
+  - name: Symbol
+    type: string
+
+  - name: Ws
+    type:
+      union:
+        - none
+        - space
+        - break
+        - breakIndent
