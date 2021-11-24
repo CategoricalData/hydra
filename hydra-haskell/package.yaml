@@ -20,6 +20,10 @@ dependencies:
   - bytestring
   - text
 
+  # temporary
+  - mtl
+  - pretty
+
 library:
   source-dirs:
     - src/main/haskell

@@ -21,6 +21,7 @@ module Hydra.Core
   , IntegerValue(..)
   , IntegerVariant(..)
   , Lambda(..)
+  , Let(..)
   , MapType(..)
   , Name
   , Precision(..)
@@ -67,6 +68,7 @@ module Hydra.Core
   , _Expression_atomic
   , _Expression_element
   , _Expression_function
+  , _Expression_let
   , _Expression_list
   , _Expression_map
   , _Expression_optional
@@ -145,6 +147,10 @@ module Hydra.Core
   , _Lambda
   , _Lambda_body
   , _Lambda_parameter
+  , _Let
+  , _Let_environment
+  , _Let_key
+  , _Let_value
   , _MapType
   , _MapType_keys
   , _MapType_values
@@ -158,6 +164,7 @@ module Hydra.Core
   , _TermVariant_atomic
   , _TermVariant_element
   , _TermVariant_function
+  , _TermVariant_let
   , _TermVariant_list
   , _TermVariant_map
   , _TermVariant_optional
@@ -309,6 +316,13 @@ data Expression a
                   variable: a
                 variable: a -}
   | ExpressionFunction (Function a)
+  {-| @type parameterized:
+              genericType: hydra/core.Let
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | ExpressionLet (Let a)
   {-| A list
       
       @type list:
@@ -576,6 +590,26 @@ data Lambda a
                   variable: a -}
     , lambdaBody :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
+-- | A 'let' binding
+data Let a
+  = Let
+    -- | @type hydra/core.Variable
+    { letKey :: Variable
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , letValue :: Term a
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , letEnvironment :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
 data MapType
   = MapType
     -- | @type hydra/core.Type
@@ -608,6 +642,7 @@ data TermVariant
   | TermVariantAtomic
   | TermVariantElement
   | TermVariantFunction
+  | TermVariantLet
   | TermVariantList
   | TermVariantMap
   | TermVariantOptional
@@ -755,6 +790,7 @@ _Expression_application = "application" :: String
 _Expression_atomic = "atomic" :: String
 _Expression_element = "element" :: String
 _Expression_function = "function" :: String
+_Expression_let = "let" :: String
 _Expression_list = "list" :: String
 _Expression_map = "map" :: String
 _Expression_optional = "optional" :: String
@@ -833,6 +869,10 @@ _IntegerVariant_uint8 = "uint8" :: String
 _Lambda = "hydra/core.Lambda" :: String
 _Lambda_body = "body" :: String
 _Lambda_parameter = "parameter" :: String
+_Let = "hydra/core.Let" :: String
+_Let_environment = "environment" :: String
+_Let_key = "key" :: String
+_Let_value = "value" :: String
 _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
@@ -846,6 +886,7 @@ _TermVariant_application = "application" :: String
 _TermVariant_atomic = "atomic" :: String
 _TermVariant_element = "element" :: String
 _TermVariant_function = "function" :: String
+_TermVariant_let = "let" :: String
 _TermVariant_list = "list" :: String
 _TermVariant_map = "map" :: String
 _TermVariant_optional = "optional" :: String

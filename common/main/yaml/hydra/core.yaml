@@ -117,6 +117,15 @@ definitions:
                   type:
                     variable: a
 
+        - name: let
+          type:
+            parameterized:
+              genericType: Let
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
         - name: list
           description: "A list"
           type:
@@ -447,6 +456,31 @@ definitions:
                   type:
                     variable: a
 
+  - name: Let
+    description: "A 'let' binding"
+    type:
+      record:
+        - name: key
+          type: Variable
+
+        - name: value
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: environment
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
   - name: MapType
     type:
       record:
@@ -490,6 +524,7 @@ definitions:
         - atomic
         - element
         - function
+        - let
         - list
         - map
         - optional

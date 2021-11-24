@@ -29,8 +29,6 @@ def freeVariables[a](term: Term[a]): Set[Variable] = {
   free(Set(), term).toSet
 }
 
-
-
 /**
  * Whether a term is closed, i.e. represents a complete program
  */
