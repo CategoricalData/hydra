@@ -36,7 +36,7 @@ elementToString :: (Default a, Eq a, Ord a, Read a, Show a) => AdapterContext a 
 elementToString context t@(TypeElement _) = pure $ Adapter False t stringType $ Step encode decode
   where
     encode (Term (ExpressionElement name) _) = pure $ stringValue name
-    decode (Term (ExpressionAtomic (AtomicValueString name)) _) = pure $ defaultTerm $ ExpressionElement name
+    decode (Term (ExpressionLiteral (LiteralString name)) _) = pure $ defaultTerm $ ExpressionElement name
 
 fieldAdapter :: (Default a, Eq a, Ord a, Read a, Show a) => AdapterContext a -> FieldType -> Qualified (Adapter FieldType (Field a))
 fieldAdapter context ftyp = do
@@ -128,10 +128,10 @@ optionalToUnion context t@(TypeOptional ot) = do
           return $ optional $ Just term'}
 
 passAtomic :: (Default a, Eq a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passAtomic context (TypeAtomic at) = do
+passAtomic context (TypeLiteral at) = do
   ad <- atomicAdapter context at
-  let step = bidirectional $ \dir (Term (ExpressionAtomic av) _) -> atomic <$> stepBoth dir (adapterStep ad) av
-  return $ Adapter (adapterIsLossy ad) (TypeAtomic $ adapterSource ad) (TypeAtomic $ adapterTarget ad) step
+  let step = bidirectional $ \dir (Term (ExpressionLiteral av) _) -> atomic <$> stepBoth dir (adapterStep ad) av
+  return $ Adapter (adapterIsLossy ad) (TypeLiteral $ adapterSource ad) (TypeLiteral $ adapterTarget ad) step
 
 passFunction :: (Default a, Eq a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passFunction context t@(TypeFunction (FunctionType dom cod)) = do
@@ -223,7 +223,7 @@ termAdapter context = chooseAdapter alts supported describeType
   where
     alts t = (\c -> c context t) <$> if variantIsSupported t
       then case typeVariant t of
-        TypeVariantAtomic -> pure passAtomic
+        TypeVariantLiteral -> pure passAtomic
         TypeVariantFunction ->  pure passFunction
         TypeVariantList -> pure passList
         TypeVariantMap -> pure passMap

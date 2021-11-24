@@ -29,7 +29,7 @@ evaluate context term = reduce M.empty term
       then pure term
       else case termData term of
         ExpressionApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
-        ExpressionAtomic _ -> done
+        ExpressionLiteral _ -> done
         ExpressionElement _ -> done
         ExpressionFunction f -> reduceFunction f
         ExpressionList terms -> defaultTerm . ExpressionList <$> CM.mapM reduceb terms
@@ -106,7 +106,7 @@ freeVariables term = S.fromList $ free S.empty term
   where
     free bound term = case termData term of
         ExpressionApplication (Application t1 t2) -> free bound t1 ++ free bound t2
-        ExpressionAtomic _ -> []
+        ExpressionLiteral _ -> []
         ExpressionElement _ -> []
         ExpressionFunction f -> freeInFunction f
         ExpressionList terms -> L.concatMap (free bound) terms
@@ -139,7 +139,7 @@ termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaq
 termIsValue :: EvaluationStrategy -> Term a -> Bool
 termIsValue strategy term = termIsOpaque strategy term || case termData term of
       ExpressionApplication _ -> False
-      ExpressionAtomic _ -> True
+      ExpressionLiteral _ -> True
       ExpressionElement _ -> True
       ExpressionFunction f -> functionIsValue f
       ExpressionList els -> forList els

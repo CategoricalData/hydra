@@ -26,52 +26,6 @@ definitions:
                   type:
                     variable: a
 
-  - name: AtomicType
-    description: "Any of a fixed set of atomic types, also called base types, primitive types, or type constants"
-    comments:
-      - "The so-called term constants, or valid values, of each atomic type are unspecified"
-    type:
-      union:
-        - name: binary
-
-        - name: boolean
-
-        - name: float
-          type: FloatType
-
-        - name: integer
-          type: IntegerType
-
-        - name: string
-
-  - name: AtomicVariant
-    type:
-      enum:
-        - binary
-        - boolean
-        - float
-        - integer
-        - string
-
-  - name: AtomicValue
-    description: "A term constant; an instance of an atomic type"
-    type:
-      union:
-        - name: binary
-          type: binary
-
-        - name: boolean
-          type: BooleanValue
-
-        - name: float
-          type: FloatValue
-
-        - name: integer
-          type: IntegerValue
-
-        - name: string
-          type: string
-
   - name: BooleanValue
     type:
       enum:
@@ -98,10 +52,6 @@ definitions:
                 - variable: a
                   type:
                     variable: a
-
-        - name: atomic
-          description: "An atomic value"
-          type: AtomicValue
 
         - name: element
           description: "An element reference"
@@ -138,6 +88,10 @@ definitions:
                       variable: a
 
         # TODO: list elimination
+
+        - name: literal
+          description: "A literal value"
+          type: Literal
 
         - name: map
           description: "A map of key terms to value terms"
@@ -481,6 +435,52 @@ definitions:
                   type:
                     variable: a
 
+  - name: LiteralType
+    description: "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"
+    comments:
+      - "The so-called term constants, or valid values, of each literal type are unspecified"
+    type:
+      union:
+        - name: binary
+
+        - name: boolean
+
+        - name: float
+          type: FloatType
+
+        - name: integer
+          type: IntegerType
+
+        - name: string
+
+  - name: LiteralVariant
+    type:
+      enum:
+        - binary
+        - boolean
+        - float
+        - integer
+        - string
+
+  - name: Literal
+    description: "A term constant; an instance of a literal type"
+    type:
+      union:
+        - name: binary
+          type: binary
+
+        - name: boolean
+          type: BooleanValue
+
+        - name: float
+          type: FloatValue
+
+        - name: integer
+          type: IntegerValue
+
+        - name: string
+          type: string
+
   - name: MapType
     type:
       record:
@@ -521,11 +521,11 @@ definitions:
     type:
       enum:
         - application
-        - atomic
         - element
         - function
         - let
         - list
+        - literal
         - map
         - optional
         - record
@@ -538,9 +538,6 @@ definitions:
   - name: Type
     type:
       union:
-        - name: atomic
-          type: AtomicType
-
         - name: element
           type: Type
 
@@ -549,6 +546,9 @@ definitions:
 
         - name: list
           type: Type
+
+        - name: literal
+          type: LiteralType
 
         - name: map
           type: MapType
@@ -619,10 +619,10 @@ definitions:
   - name: TypeVariant
     type:
       enum:
-        - atomic
         - element
         - function
         - list
+        - literal
         - map
         - nominal
         - optional

@@ -13,9 +13,9 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
     elements = [
       hsUniversalType,
       hcApplication,
-      hcAtomicType,
-      hcAtomicVariant,
-      hcAtomicValue,
+      hcLiteralType,
+      hcLiteralVariant,
+      hcLiteral,
       hcBooleanValue,
       hcComparison,
       hcField,
@@ -61,29 +61,29 @@ hcApplication = typeElement _Application $ TypeRecord [
   FieldType _Application_function $ TypeNominal _Term,
   FieldType _Application_argument $ TypeNominal _Term]
 
-hcAtomicType :: Element Meta
-hcAtomicType = typeElement _AtomicType $ TypeUnion [
-  FieldType _AtomicType_binary unitType,
-  FieldType _AtomicType_boolean unitType,
-  FieldType _AtomicType_float $ TypeNominal _FloatType,
-  FieldType _AtomicType_integer $ TypeNominal _IntegerType,
-  FieldType _AtomicType_string unitType]
+hcLiteralType :: Element Meta
+hcLiteralType = typeElement _LiteralType $ TypeUnion [
+  FieldType _LiteralType_binary unitType,
+  FieldType _LiteralType_boolean unitType,
+  FieldType _LiteralType_float $ TypeNominal _FloatType,
+  FieldType _LiteralType_integer $ TypeNominal _IntegerType,
+  FieldType _LiteralType_string unitType]
 
-hcAtomicVariant :: Element Meta
-hcAtomicVariant = typeElement _AtomicVariant $ enum [
-  _AtomicVariant_binary,
-  _AtomicVariant_boolean,
-  _AtomicVariant_float,
-  _AtomicVariant_integer,
-  _AtomicVariant_string]
+hcLiteralVariant :: Element Meta
+hcLiteralVariant = typeElement _LiteralVariant $ enum [
+  _LiteralVariant_binary,
+  _LiteralVariant_boolean,
+  _LiteralVariant_float,
+  _LiteralVariant_integer,
+  _LiteralVariant_string]
 
-hcAtomicValue :: Element Meta
-hcAtomicValue = typeElement _AtomicValue $ TypeUnion [
-  FieldType _AtomicValue_binary binaryType,
-  FieldType _AtomicValue_boolean $ TypeNominal _BooleanValue,
-  FieldType _AtomicValue_float $ TypeNominal _FloatValue,
-  FieldType _AtomicValue_integer $ TypeNominal _IntegerValue,
-  FieldType _AtomicValue_string stringType]
+hcLiteral :: Element Meta
+hcLiteral = typeElement _Literal $ TypeUnion [
+  FieldType _Literal_binary binaryType,
+  FieldType _Literal_boolean $ TypeNominal _BooleanValue,
+  FieldType _Literal_float $ TypeNominal _FloatValue,
+  FieldType _Literal_integer $ TypeNominal _IntegerValue,
+  FieldType _Literal_string stringType]
 
 hcBooleanValue :: Element Meta
 hcBooleanValue = typeElement _BooleanValue $ enum [
@@ -207,7 +207,7 @@ hsPrecision = typeElement _Precision $ TypeUnion [
 hsTerm :: Element Meta
 hsTerm = typeElement _Term $ TypeUnion [
   FieldType _Expression_application $ TypeNominal _Application,
-  FieldType _Expression_atomic $ TypeNominal _AtomicValue,
+  FieldType _Expression_literal $ TypeNominal _Literal,
   FieldType _Expression_element $ TypeNominal _Name,
   FieldType _Expression_function $ TypeNominal _Function,
   FieldType _Expression_list $ TypeList $ TypeNominal _Term,
@@ -221,7 +221,7 @@ hsTerm = typeElement _Term $ TypeUnion [
 hsTermVariant :: Element Meta
 hsTermVariant = typeElement _TermVariant $ enum [
   _TermVariant_application,
-  _TermVariant_atomic,
+  _TermVariant_literal,
   _TermVariant_element,
   _TermVariant_function,
   _TermVariant_list,
@@ -234,7 +234,7 @@ hsTermVariant = typeElement _TermVariant $ enum [
 
 hsType :: Element Meta
 hsType = typeElement _Type $ TypeUnion [
-  FieldType _Type_atomic $ TypeNominal _AtomicType,
+  FieldType _Type_literal $ TypeNominal _LiteralType,
   FieldType _Type_element $ TypeNominal _Type,
   FieldType _Type_function $ TypeNominal _FunctionType,
   FieldType _Type_list $ TypeNominal _Type,
@@ -250,7 +250,7 @@ hsTypeVariable = typeElement _TypeVariable stringType
 
 hsTypeVariant :: Element Meta
 hsTypeVariant = typeElement _TypeVariant $ enum [
-  _TypeVariant_atomic,
+  _TypeVariant_literal,
   _TypeVariant_element,
   _TypeVariant_function,
   _TypeVariant_list,

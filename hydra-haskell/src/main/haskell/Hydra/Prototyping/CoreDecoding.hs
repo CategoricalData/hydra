@@ -1,5 +1,5 @@
 module Hydra.Prototyping.CoreDecoding (
-  decodeAtomicType,
+  decodeLiteralType,
   decodeFieldType,
   decodeFieldTypes,
   decodeFloatType,
@@ -20,13 +20,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-decodeAtomicType :: Show a => Context a -> Term a -> Result AtomicType
-decodeAtomicType context = matchUnion context [
-  matchUnitField _AtomicType_binary AtomicTypeBinary,
-  matchUnitField _AtomicType_boolean AtomicTypeBoolean,
-  (_AtomicType_float, fmap AtomicTypeFloat . decodeFloatType context),
-  (_AtomicType_integer, fmap AtomicTypeInteger . decodeIntegerType context),
-  matchUnitField _AtomicType_string AtomicTypeString]
+decodeLiteralType :: Show a => Context a -> Term a -> Result LiteralType
+decodeLiteralType context = matchUnion context [
+  matchUnitField _LiteralType_binary LiteralTypeBinary,
+  matchUnitField _LiteralType_boolean LiteralTypeBoolean,
+  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType context),
+  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType context),
+  matchUnitField _LiteralType_string LiteralTypeString]
 
 decodeFieldType :: Show a => Context a -> Term a -> Result FieldType
 decodeFieldType context = matchRecord context $ \m -> FieldType
@@ -68,14 +68,14 @@ decodeMapType context = matchRecord context $ \m -> MapType
 
 decodeString :: Term a -> Result String
 decodeString term = case termData term of
-  ExpressionAtomic av -> case av of
-    AtomicValueString s -> pure s
+  ExpressionLiteral av -> case av of
+    LiteralString s -> pure s
     _ -> fail "expected a string value"
-  _ -> fail "expected an atomic value"
+  _ -> fail "expected a literal value"
 
 decodeType :: Show a => Context a -> Term a -> Result Type
 decodeType context = matchUnion context [
-    (_Type_atomic, fmap TypeAtomic . decodeAtomicType context),
+    (_Type_literal, fmap TypeLiteral . decodeLiteralType context),
     (_Type_element, fmap TypeElement . decodeType context),
     (_Type_function, fmap TypeFunction . decodeFunctionType context),
     (_Type_list, fmap TypeList . decodeType context),

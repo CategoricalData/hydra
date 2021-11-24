@@ -18,8 +18,8 @@ import qualified Data.Maybe as Y
 import qualified Test.QuickCheck as QC
 
 
-atomicTypeConstraintsAreRespected :: H.SpecWith ()
-atomicTypeConstraintsAreRespected = H.describe "Verify that YAML's atomic type constraints are respected" $ do
+literalTypeConstraintsAreRespected :: H.SpecWith ()
+literalTypeConstraintsAreRespected = H.describe "Verify that YAML's literal type constraints are respected" $ do
 
   -- TODO: binary data
 
@@ -91,7 +91,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
 spec :: H.Spec
 spec = do
-  atomicTypeConstraintsAreRespected
+  literalTypeConstraintsAreRespected
   supportedTypesPassThrough
   unsupportedTypesAreTransformed
   

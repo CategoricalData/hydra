@@ -1,8 +1,8 @@
 module Hydra.Prototyping.CoreEncoding (
     encodeApplication,
-    encodeAtomicType,
-    encodeAtomicValue,
-    encodeAtomicVariant,
+    encodeLiteralType,
+    encodeLiteral,
+    encodeLiteralVariant,
     encodeField,
     encodeFieldType,
     encodeFloatType,
@@ -30,24 +30,24 @@ encodeApplication (Application f a) = record [
   Field _Application_function $ encodeTerm f,
   Field _Application_argument $ encodeTerm f]
 
-encodeAtomicType :: Default a => AtomicType -> Term a
-encodeAtomicType at = case at of
-  AtomicTypeBinary -> unitVariant _AtomicType_binary
-  AtomicTypeBoolean -> unitVariant _AtomicType_boolean
-  AtomicTypeFloat ft -> variant _AtomicType_float $ encodeFloatType ft
-  AtomicTypeInteger it -> variant _AtomicType_integer $ encodeIntegerType it
-  AtomicTypeString -> unitVariant _AtomicType_string
+encodeLiteralType :: Default a => LiteralType -> Term a
+encodeLiteralType at = case at of
+  LiteralTypeBinary -> unitVariant _LiteralType_binary
+  LiteralTypeBoolean -> unitVariant _LiteralType_boolean
+  LiteralTypeFloat ft -> variant _LiteralType_float $ encodeFloatType ft
+  LiteralTypeInteger it -> variant _LiteralType_integer $ encodeIntegerType it
+  LiteralTypeString -> unitVariant _LiteralType_string
 
-encodeAtomicValue :: Default a => AtomicValue -> Term a
-encodeAtomicValue = atomic
+encodeLiteral :: Default a => Literal -> Term a
+encodeLiteral = atomic
 
-encodeAtomicVariant :: Default a => AtomicVariant -> Term a
-encodeAtomicVariant av = unitVariant $ case av of
-  AtomicVariantBinary -> _AtomicVariant_binary
-  AtomicVariantBoolean -> _AtomicVariant_boolean
-  AtomicVariantFloat -> _AtomicVariant_float
-  AtomicVariantInteger -> _AtomicVariant_integer
-  AtomicVariantString -> _AtomicVariant_string
+encodeLiteralVariant :: Default a => LiteralVariant -> Term a
+encodeLiteralVariant av = unitVariant $ case av of
+  LiteralVariantBinary -> _LiteralVariant_binary
+  LiteralVariantBoolean -> _LiteralVariant_boolean
+  LiteralVariantFloat -> _LiteralVariant_float
+  LiteralVariantInteger -> _LiteralVariant_integer
+  LiteralVariantString -> _LiteralVariant_string
 
 encodeField :: (Default a, Ord a) => Field a -> Term a
 encodeField (Field name term) = record [
@@ -122,7 +122,7 @@ encodeMapType (MapType kt vt) = record [
 encodeTerm :: (Default a, Ord a) => Term a -> Term a
 encodeTerm term = case termData term of
   ExpressionApplication a -> variant _Expression_application $ encodeApplication a
-  ExpressionAtomic av -> variant _Expression_atomic $ encodeAtomicValue av
+  ExpressionLiteral av -> variant _Expression_literal $ encodeLiteral av
   ExpressionElement name -> variant _Expression_element $ stringValue name
   ExpressionFunction f -> variant _Expression_function $ encodeFunction f
   ExpressionList terms -> variant _Expression_list $ list $ encodeTerm <$> terms
@@ -136,7 +136,7 @@ encodeTerm term = case termData term of
 
 encodeType :: Default a => Type -> Term a
 encodeType typ = case typ of
-  TypeAtomic at -> variant _Type_atomic $ encodeAtomicType at
+  TypeLiteral at -> variant _Type_literal $ encodeLiteralType at
   TypeElement t -> variant _Type_element $ encodeType t
   TypeFunction ft -> variant _Type_function $ encodeFunctionType ft
   TypeList t -> variant _Type_list $ encodeType t
@@ -151,7 +151,7 @@ encodeType typ = case typ of
 
 encodeTypeVariant :: Default a => TypeVariant -> Term a
 encodeTypeVariant tv = unitVariant $ case tv of
-  TypeVariantAtomic -> _TypeVariant_atomic
+  TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantElement -> _TypeVariant_element
   TypeVariantFunction -> _TypeVariant_function
   TypeVariantList -> _TypeVariant_list

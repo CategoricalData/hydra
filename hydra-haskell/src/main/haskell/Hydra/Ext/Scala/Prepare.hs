@@ -8,15 +8,15 @@ import Hydra.Core
 import qualified Data.Set as S
 
 
-prepareAtomicType :: AtomicType -> (AtomicType, AtomicValue -> AtomicValue, S.Set String)
-prepareAtomicType at = case at of
-  AtomicTypeBinary -> subst AtomicTypeString
+prepareLiteralType :: LiteralType -> (LiteralType, Literal -> Literal, S.Set String)
+prepareLiteralType at = case at of
+  LiteralTypeBinary -> subst LiteralTypeString
     "binary strings" "character strings"
-    $ \(AtomicValueBinary v) -> AtomicValueString v
-  AtomicTypeFloat ft -> (AtomicTypeFloat rtyp, \(AtomicValueFloat v) -> AtomicValueFloat $ rep v, msgs)
+    $ \(LiteralBinary v) -> LiteralString v
+  LiteralTypeFloat ft -> (LiteralTypeFloat rtyp, \(LiteralFloat v) -> LiteralFloat $ rep v, msgs)
     where
       (rtyp, rep, msgs) = prepareFloatType ft
-  AtomicTypeInteger it -> (AtomicTypeInteger rtyp, \(AtomicValueInteger v) -> AtomicValueInteger $ rep v, msgs)
+  LiteralTypeInteger it -> (LiteralTypeInteger rtyp, \(LiteralInteger v) -> LiteralInteger $ rep v, msgs)
     where
       (rtyp, rep, msgs) = prepareIntegerType it
   _ -> same at
@@ -46,9 +46,9 @@ prepareIntegerType it = case it of
 
 prepareType :: Type -> (Type, Term a -> Term a, S.Set String)
 prepareType typ = case typ of
-  TypeAtomic at -> (TypeAtomic rtyp, \(Term (ExpressionAtomic av) m) -> Term (ExpressionAtomic $ rep av) m, msgs)
+  TypeLiteral at -> (TypeLiteral rtyp, \(Term (ExpressionLiteral av) m) -> Term (ExpressionLiteral $ rep av) m, msgs)
     where
-      (rtyp, rep, msgs) = prepareAtomicType at
+      (rtyp, rep, msgs) = prepareLiteralType at
 --  TypeElement et ->
 --  TypeFunction (FunctionType dom cod) ->
 --  TypeList lt ->

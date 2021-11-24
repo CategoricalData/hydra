@@ -31,7 +31,7 @@ testContext = Context {
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) stringPrimitives,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
-        TermVariantAtomic,
+        TermVariantLiteral,
         TermVariantElement,
         TermVariantFunction]}}
 

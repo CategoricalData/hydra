@@ -48,11 +48,11 @@ checkAdapter mkAdapter context variants source target lossy vs vt = do
     adapter = Y.fromJust adapter'
     step = adapterStep adapter
 
-checkAtomicAdapter :: [AtomicVariant] -> AtomicType -> AtomicType -> Bool -> AtomicValue -> AtomicValue -> H.Expectation
+checkAtomicAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
 checkAtomicAdapter = checkAdapter atomicAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
-        languageConstraintsAtomicVariants = S.fromList variants,
+        languageConstraintsLiteralVariants = S.fromList variants,
         languageConstraintsFloatVariants = floatVars,
         languageConstraintsIntegerVariants = integerVars }
       where
@@ -80,11 +80,11 @@ checkTermAdapter = checkAdapter termAdapter termTestContext
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
     languageConstraintsTypeVariants = S.fromList variants,
-    languageConstraintsAtomicVariants = atomicVars,
+    languageConstraintsLiteralVariants = atomicVars,
     languageConstraintsFloatVariants = floatVars,
     languageConstraintsIntegerVariants = integerVars }
   where
-    atomicVars = S.fromList [AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
+    atomicVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
     floatVars = S.fromList [FloatVariantFloat32]
     integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
 

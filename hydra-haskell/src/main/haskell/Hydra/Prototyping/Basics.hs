@@ -1,8 +1,4 @@
 module Hydra.Prototyping.Basics (
-    atomicTypeVariant,
-    atomicValueType,
-    atomicValueVariant,
-    atomicVariants,
     comparePrecision,
     floatTypePrecision,
     floatTypeVariant,
@@ -22,6 +18,10 @@ module Hydra.Prototyping.Basics (
     integerVariantIsSigned,
     integerVariantPrecision,
     integerVariants,
+    literalTypeVariant,
+    literalType,
+    literalVariant,
+    literalVariants,
     termVariant,
     termVariants,
     typeVariant,
@@ -33,29 +33,6 @@ import Hydra.Adapter
 
 import qualified Data.Set as S
 
-
-atomicTypeVariant :: AtomicType -> AtomicVariant
-atomicTypeVariant at = case at of
-  AtomicTypeBinary -> AtomicVariantBinary
-  AtomicTypeBoolean -> AtomicVariantBoolean
-  AtomicTypeFloat _ -> AtomicVariantFloat
-  AtomicTypeInteger _ -> AtomicVariantInteger
-  AtomicTypeString -> AtomicVariantString
-
-atomicValueType :: AtomicValue -> AtomicType
-atomicValueType v = case v of
-  AtomicValueBinary _ -> AtomicTypeBinary
-  AtomicValueBoolean _ -> AtomicTypeBoolean
-  AtomicValueFloat fv -> AtomicTypeFloat $ floatValueType fv
-  AtomicValueInteger iv -> AtomicTypeInteger $ integerValueType iv
-  AtomicValueString _ -> AtomicTypeString
-
-atomicValueVariant :: AtomicValue -> AtomicVariant
-atomicValueVariant = atomicTypeVariant . atomicValueType
-
-atomicVariants :: [AtomicVariant]
-atomicVariants = [
-  AtomicVariantBinary, AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString]
 
 comparePrecision :: Precision -> Precision -> Ordering
 comparePrecision p1 p2 = if p1 == p2 then EQ else case (p1, p2) of
@@ -109,7 +86,7 @@ functionVariants = [
 
 hydraCoreLanguage :: Language
 hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList atomicVariants,
+  languageConstraintsLiteralVariants = S.fromList literalVariants,
   languageConstraintsFloatVariants = S.fromList floatVariants,
   languageConstraintsFunctionVariants = S.fromList functionVariants,
   languageConstraintsIntegerVariants = S.fromList integerVariants,
@@ -179,10 +156,33 @@ integerTypes = [
 integerVariants :: [IntegerVariant]
 integerVariants = integerTypeVariant <$> integerTypes
 
+literalTypeVariant :: LiteralType -> LiteralVariant
+literalTypeVariant at = case at of
+  LiteralTypeBinary -> LiteralVariantBinary
+  LiteralTypeBoolean -> LiteralVariantBoolean
+  LiteralTypeFloat _ -> LiteralVariantFloat
+  LiteralTypeInteger _ -> LiteralVariantInteger
+  LiteralTypeString -> LiteralVariantString
+
+literalType :: Literal -> LiteralType
+literalType v = case v of
+  LiteralBinary _ -> LiteralTypeBinary
+  LiteralBoolean _ -> LiteralTypeBoolean
+  LiteralFloat fv -> LiteralTypeFloat $ floatValueType fv
+  LiteralInteger iv -> LiteralTypeInteger $ integerValueType iv
+  LiteralString _ -> LiteralTypeString
+
+literalVariant :: Literal -> LiteralVariant
+literalVariant = literalTypeVariant . literalType
+
+literalVariants :: [LiteralVariant]
+literalVariants = [
+  LiteralVariantBinary, LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
+
 termVariant :: Term a -> TermVariant
 termVariant term = case termData term of
   ExpressionApplication _ -> TermVariantApplication
-  ExpressionAtomic _ -> TermVariantAtomic
+  ExpressionLiteral _ -> TermVariantLiteral
   ExpressionElement _ -> TermVariantElement
   ExpressionFunction _ -> TermVariantFunction
   ExpressionList _ -> TermVariantList
@@ -198,7 +198,7 @@ termVariant term = case termData term of
 termVariants :: [TermVariant]
 termVariants = [
   TermVariantApplication,
-  TermVariantAtomic,
+  TermVariantLiteral,
   TermVariantElement,
   TermVariantFunction,
   TermVariantList,
@@ -211,7 +211,7 @@ termVariants = [
 
 typeVariant :: Type -> TypeVariant
 typeVariant typ = case typ of
-  TypeAtomic _ -> TypeVariantAtomic
+  TypeLiteral _ -> TypeVariantLiteral
   TypeElement _ -> TypeVariantElement
   TypeFunction _ -> TypeVariantFunction
   TypeList _ -> TypeVariantList
@@ -226,7 +226,7 @@ typeVariant typ = case typ of
 
 typeVariants :: [TypeVariant]
 typeVariants = [
-  TypeVariantAtomic,
+  TypeVariantLiteral,
   TypeVariantElement,
   TypeVariantFunction,
   TypeVariantList,

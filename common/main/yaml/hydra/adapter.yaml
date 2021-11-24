@@ -61,9 +61,9 @@ definitions:
       - name: Constraints
         type:
           record:
-            - name: atomicVariants
+            - name: literalVariants
               type:
-                set: core.AtomicVariant
+                set: core.LiteralVariant
 
             - name: floatVariants
               type:

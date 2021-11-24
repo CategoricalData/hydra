@@ -17,20 +17,20 @@ import qualified Control.Monad as CM
 import qualified Data.Set as S
 
 
-encodeAtomic :: AtomicValue -> Result H.Expression
+encodeAtomic :: Literal -> Result H.Expression
 encodeAtomic av = case av of
-    AtomicValueBoolean b -> pure $ hsvar $ case b of
+    LiteralBoolean b -> pure $ hsvar $ case b of
       BooleanValueTrue -> "True"
       _ -> "False"
-    AtomicValueFloat fv -> case fv of
+    LiteralFloat fv -> case fv of
       FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
       FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f
       _ -> unexpected "floating-point number" fv
-    AtomicValueInteger iv -> case iv of
+    LiteralInteger iv -> case iv of
       IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
       _ -> unexpected "integer" iv
-    AtomicValueString s -> pure $ hslit $ H.LiteralString s
+    LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "atomic value" av
     
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Function a -> Result H.Expression
@@ -53,7 +53,7 @@ encodeFunction fun = case fun of
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
 encodeTerm term = case termData term of
   ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm fun <*> encodeTerm arg
-  ExpressionAtomic av -> encodeAtomic av
+  ExpressionLiteral av -> encodeAtomic av
   ExpressionElement name -> pure $ hsvar name
   ExpressionFunction f -> encodeFunction f
   ExpressionList els -> H.ExpressionList <$> CM.mapM encodeTerm els
@@ -83,8 +83,8 @@ haskellCoder context typ = do
 
 haskellLanguage :: Language
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
-  languageConstraintsAtomicVariants = S.fromList [
-    AtomicVariantBoolean, AtomicVariantFloat, AtomicVariantInteger, AtomicVariantString],
+  languageConstraintsLiteralVariants = S.fromList [
+    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatVariants = S.fromList [
     -- Bigfloat is excluded for now
     FloatVariantFloat32,
@@ -94,7 +94,7 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
   languageConstraintsTermVariants = S.fromList [
     -- No native maps or sets
     TermVariantApplication,
-    TermVariantAtomic,
+    TermVariantLiteral,
     TermVariantElement,
     TermVariantFunction,
     TermVariantList,
@@ -104,7 +104,7 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
     -- No native maps or sets
-    TypeVariantAtomic,
+    TypeVariantLiteral,
     TypeVariantElement,
     TypeVariantFunction,
     TypeVariantList,

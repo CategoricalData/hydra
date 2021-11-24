@@ -18,8 +18,8 @@ import qualified Test.QuickCheck as QC
 import qualified Data.Maybe as Y
 
 
-checkAtomicValues :: H.SpecWith ()
-checkAtomicValues = H.describe "Test atomic values" $ do
+checkLiterals :: H.SpecWith ()
+checkLiterals = H.describe "Test atomic values" $ do
   
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization
@@ -121,7 +121,7 @@ checkSerdeRoundTrip (TypedTerm typ term) = do
 
 spec :: H.Spec
 spec = do
-  checkAtomicValues
+  checkLiterals
   checkOptionals
   checkRecordsAndUnions
   yamlSerdeIsInformationPreserving

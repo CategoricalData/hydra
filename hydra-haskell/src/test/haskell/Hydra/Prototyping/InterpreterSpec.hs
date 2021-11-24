@@ -16,8 +16,8 @@ import qualified Test.QuickCheck as QC
 testEvaluate :: Term Meta -> Result (Term Meta)
 testEvaluate = evaluate testContext
 
-testsForAtomicValues :: H.SpecWith ()
-testsForAtomicValues = do
+testsForLiterals :: H.SpecWith ()
+testsForLiterals = do
   H.describe "Tests for atomic values" $ do
     
     H.it "Atomic terms have no free variables" $
@@ -66,5 +66,5 @@ func = function . stringsFunc
 
 spec :: H.Spec
 spec = do
-  testsForAtomicValues
+  testsForLiterals
   testsForPrimitiveFunctions

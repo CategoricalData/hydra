@@ -22,9 +22,6 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
     dataTerms = const True -- TODO
     schemaGraph = "hydra/core"
     elements = [
-        basicsAtomicTypeVariant,
-        basicsAtomicValueType,
-        basicsAtomicValueVariant,
         basicsFloatTypeVariant,
         basicsFloatValueType,
         basicsFloatValueVariant,
@@ -32,30 +29,11 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
         basicsIntegerTypeVariant,
         basicsIntegerValueType,
         basicsIntegerValueVariant,
+        basicsLiteralTypeVariant,
+        basicsLiteralType,
+        basicsLiteralVariant,
         basicsTermVariant,
         basicsTypeVariant]
-
-basicsAtomicTypeVariant :: Element Meta
-basicsAtomicTypeVariant = basicsFunction "atomicTypeVariant" _AtomicType _AtomicVariant $
-  matchWithVariants [
-    (_AtomicType_binary,  _AtomicVariant_binary),
-    (_AtomicType_boolean, _AtomicVariant_boolean),
-    (_AtomicType_float,   _AtomicVariant_float),
-    (_AtomicType_integer, _AtomicVariant_integer),
-    (_AtomicType_string,  _AtomicVariant_string)]
-
-basicsAtomicValueType :: Element Meta
-basicsAtomicValueType = basicsFunction "atomicValueType" _AtomicValue _AtomicType $
-  match [
-    (_AtomicValue_binary,  withVariant  _AtomicType_binary),
-    (_AtomicValue_boolean, withVariant  _AtomicType_boolean),
-    (_AtomicValue_float,   withFunction _AtomicType_float basicsFloatValueType),
-    (_AtomicValue_integer, withFunction _AtomicType_integer basicsIntegerValueType),
-    (_AtomicValue_string,  withVariant  _AtomicType_string)]
-
-basicsAtomicValueVariant :: Element Meta
-basicsAtomicValueVariant = basicsFunction "atomicValueVariant" _AtomicValue _AtomicVariant $
-  compose (elementRef basicsAtomicTypeVariant) (elementRef basicsAtomicValueType)
 
 basicsFloatTypeVariant :: Element Meta
 basicsFloatTypeVariant = basicsFunction "floatTypeVariant" _FloatType _FloatVariant $
@@ -115,10 +93,32 @@ basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVari
     (_Function_primitive,  _FunctionVariant_primitive),
     (_Function_projection, _FunctionVariant_projection)]
 
+basicsLiteralTypeVariant :: Element Meta
+basicsLiteralTypeVariant = basicsFunction "literalTypeVariant" _LiteralType _LiteralVariant $
+  matchWithVariants [
+    (_LiteralType_binary,  _LiteralVariant_binary),
+    (_LiteralType_boolean, _LiteralVariant_boolean),
+    (_LiteralType_float,   _LiteralVariant_float),
+    (_LiteralType_integer, _LiteralVariant_integer),
+    (_LiteralType_string,  _LiteralVariant_string)]
+
+basicsLiteralType :: Element Meta
+basicsLiteralType = basicsFunction "literalType" _Literal _LiteralType $
+  match [
+    (_Literal_binary,  withVariant  _LiteralType_binary),
+    (_Literal_boolean, withVariant  _LiteralType_boolean),
+    (_Literal_float,   withFunction _LiteralType_float basicsFloatValueType),
+    (_Literal_integer, withFunction _LiteralType_integer basicsIntegerValueType),
+    (_Literal_string,  withVariant  _LiteralType_string)]
+
+basicsLiteralVariant :: Element Meta
+basicsLiteralVariant = basicsFunction "literalVariant" _Literal _LiteralVariant $
+  compose (elementRef basicsLiteralTypeVariant) (elementRef basicsLiteralType)
+
 basicsTermVariant :: Element Meta
 basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
   matchWithVariants [
-    (_Expression_atomic,          _TermVariant_atomic),
+    (_Expression_literal,          _TermVariant_literal),
     (_Expression_element,         _TermVariant_element),
     (_Expression_function,        _TermVariant_function),
     (_Expression_list,            _TermVariant_list),
@@ -134,7 +134,7 @@ basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
 basicsTypeVariant :: Element Meta
 basicsTypeVariant = basicsFunction "typeVariant" _Type _TypeVariant $
   matchWithVariants [
-    (_Type_atomic,    _TypeVariant_atomic),
+    (_Type_literal,    _TypeVariant_literal),
     (_Type_element,   _TypeVariant_element),
     (_Type_function,  _TypeVariant_function),
     (_Type_list,      _TypeVariant_list),
