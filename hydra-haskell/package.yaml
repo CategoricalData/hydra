@@ -23,6 +23,8 @@ dependencies:
   # temporary
   - mtl
   - pretty
+  - parsec
+  - repline
 
 library:
   source-dirs:

@@ -19,8 +19,8 @@ module Hydra.Util.Codetree.Ast
   , _BracketExpr_brackets
   , _BracketExpr_enclosed
   , _Brackets
-  , _Brackets_left
-  , _Brackets_right
+  , _Brackets_close
+  , _Brackets_open
   , _Expr
   , _Expr_brackets
   , _Expr_const
@@ -41,7 +41,7 @@ module Hydra.Util.Codetree.Ast
   , _Symbol
   , _Ws
   , _Ws_break
-  , _Ws_breakIndent
+  , _Ws_breakAndIndent
   , _Ws_none
   , _Ws_space
   ) where
@@ -67,9 +67,9 @@ data BracketExpr
 data Brackets
   = Brackets
     -- | @type hydra/util/codetree/ast.Symbol
-    { bracketsLeft :: Symbol
+    { bracketsOpen :: Symbol
     -- | @type hydra/util/codetree/ast.Symbol
-    , bracketsRight :: Symbol } deriving (Eq, Generic, Ord, Read, Show)
+    , bracketsClose :: Symbol } deriving (Eq, Generic, Ord, Read, Show)
 
 data Expr
   -- | @type hydra/util/codetree/ast.Symbol
@@ -116,7 +116,7 @@ data Ws
   = WsNone
   | WsSpace
   | WsBreak
-  | WsBreakIndent deriving (Eq, Generic, Ord, Read, Show)
+  | WsBreakAndIndent deriving (Eq, Generic, Ord, Read, Show)
 
 _Associativity = "hydra/util/codetree/ast.Associativity" :: String
 _Associativity_both = "both" :: String
@@ -127,8 +127,8 @@ _BracketExpr = "hydra/util/codetree/ast.BracketExpr" :: String
 _BracketExpr_brackets = "brackets" :: String
 _BracketExpr_enclosed = "enclosed" :: String
 _Brackets = "hydra/util/codetree/ast.Brackets" :: String
-_Brackets_left = "left" :: String
-_Brackets_right = "right" :: String
+_Brackets_close = "close" :: String
+_Brackets_open = "open" :: String
 _Expr = "hydra/util/codetree/ast.Expr" :: String
 _Expr_brackets = "brackets" :: String
 _Expr_const = "const" :: String
@@ -149,6 +149,6 @@ _Precedence = "hydra/util/codetree/ast.Precedence" :: String
 _Symbol = "hydra/util/codetree/ast.Symbol" :: String
 _Ws = "hydra/util/codetree/ast.Ws" :: String
 _Ws_break = "break" :: String
-_Ws_breakIndent = "breakIndent" :: String
+_Ws_breakAndIndent = "breakAndIndent" :: String
 _Ws_none = "none" :: String
 _Ws_space = "space" :: String
