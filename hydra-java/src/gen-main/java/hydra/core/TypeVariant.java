@@ -1,13 +1,13 @@
 package hydra.core;
 
 public enum TypeVariant {
-  ATOMIC,
-  
   ELEMENT,
   
   FUNCTION,
   
   LIST,
+  
+  LITERAL,
   
   MAP,
   

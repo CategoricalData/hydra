@@ -1,18 +1,18 @@
 package hydra.ext.tinkerpop.v3;
 
-import hydra.core.AtomicValue;
+import hydra.core.Literal;
 
 /**
- * An atomic value representing an edge id
+ * A literal value representing an edge id
  */
 public class EdgeId {
-  public final hydra.core.AtomicValue atomicValue;
+  public final hydra.core.Literal literal;
   
   /**
    * Constructs an immutable EdgeId object
    */
-  public EdgeId(hydra.core.AtomicValue atomicValue) {
-    this.atomicValue = atomicValue;
+  public EdgeId(hydra.core.Literal literal) {
+    this.literal = literal;
   }
   
   @Override
@@ -21,11 +21,11 @@ public class EdgeId {
         return false;
     }
     EdgeId o = (EdgeId) other;
-    return atomicValue.equals(o.atomicValue);
+    return literal.equals(o.literal);
   }
   
   @Override
   public int hashCode() {
-    return 2 * atomicValue.hashCode();
+    return 2 * literal.hashCode();
   }
 }

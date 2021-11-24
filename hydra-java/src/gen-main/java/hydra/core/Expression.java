@@ -11,13 +11,15 @@ public abstract class Expression<A> {
   public interface Visitor<R> {
     R visit(Application instance) ;
     
-    R visit(Atomic instance) ;
-    
     R visit(Element instance) ;
     
     R visit(Function instance) ;
     
+    R visit(Let instance) ;
+    
     R visit(List instance) ;
+    
+    R visit(Literal instance) ;
     
     R visit(Map instance) ;
     
@@ -51,11 +53,6 @@ public abstract class Expression<A> {
     }
     
     @Override
-    default R visit(Atomic instance) {
-      return otherwise(instance);
-    }
-    
-    @Override
     default R visit(Element instance) {
       return otherwise(instance);
     }
@@ -66,7 +63,17 @@ public abstract class Expression<A> {
     }
     
     @Override
+    default R visit(Let instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
     default R visit(List instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
+    default R visit(Literal instance) {
       return otherwise(instance);
     }
     
@@ -145,39 +152,6 @@ public abstract class Expression<A> {
   }
   
   /**
-   * An atomic value
-   */
-  public static final class Atomic<A> extends Expression<A> {
-    public final hydra.core.AtomicValue atomic;
-    
-    /**
-     * Constructs an immutable Atomic object
-     */
-    public Atomic(hydra.core.AtomicValue atomic) {
-      this.atomic = atomic;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Atomic)) {
-          return false;
-      }
-      Atomic o = (Atomic) other;
-      return atomic.equals(o.atomic);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * atomic.hashCode();
-    }
-  }
-  
-  /**
    * An element reference
    */
   public static final class Element<A> extends Expression<A> {
@@ -243,6 +217,36 @@ public abstract class Expression<A> {
     }
   }
   
+  public static final class Let<A> extends Expression<A> {
+    public final hydra.core.Let<A> let;
+    
+    /**
+     * Constructs an immutable Let object
+     */
+    public Let(hydra.core.Let<A> let) {
+      this.let = let;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Let)) {
+          return false;
+      }
+      Let o = (Let) other;
+      return let.equals(o.let);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * let.hashCode();
+    }
+  }
+  
   /**
    * A list
    */
@@ -273,6 +277,39 @@ public abstract class Expression<A> {
     @Override
     public int hashCode() {
       return 2 * list.hashCode();
+    }
+  }
+  
+  /**
+   * A literal value
+   */
+  public static final class Literal<A> extends Expression<A> {
+    public final hydra.core.Literal literal;
+    
+    /**
+     * Constructs an immutable Literal object
+     */
+    public Literal(hydra.core.Literal literal) {
+      this.literal = literal;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Literal)) {
+          return false;
+      }
+      Literal o = (Literal) other;
+      return literal.equals(o.literal);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * literal.hashCode();
     }
   }
   

@@ -3,13 +3,15 @@ package hydra.core;
 public enum TermVariant {
   APPLICATION,
   
-  ATOMIC,
-  
   ELEMENT,
   
   FUNCTION,
   
+  LET,
+  
   LIST,
+  
+  LITERAL,
   
   MAP,
   

@@ -9,13 +9,13 @@ public abstract class Type {
    * An interface for applying a function to a Type according to its variant (subclass)
    */
   public interface Visitor<R> {
-    R visit(Atomic instance) ;
-    
     R visit(Element instance) ;
     
     R visit(Function instance) ;
     
     R visit(List instance) ;
+    
+    R visit(Literal instance) ;
     
     R visit(Map instance) ;
     
@@ -44,11 +44,6 @@ public abstract class Type {
     }
     
     @Override
-    default R visit(Atomic instance) {
-      return otherwise(instance);
-    }
-    
-    @Override
     default R visit(Element instance) {
       return otherwise(instance);
     }
@@ -60,6 +55,11 @@ public abstract class Type {
     
     @Override
     default R visit(List instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
+    default R visit(Literal instance) {
       return otherwise(instance);
     }
     
@@ -101,36 +101,6 @@ public abstract class Type {
     @Override
     default R visit(Variable instance) {
       return otherwise(instance);
-    }
-  }
-  
-  public static final class Atomic extends Type {
-    public final hydra.core.AtomicType atomic;
-    
-    /**
-     * Constructs an immutable Atomic object
-     */
-    public Atomic(hydra.core.AtomicType atomic) {
-      this.atomic = atomic;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Atomic)) {
-          return false;
-      }
-      Atomic o = (Atomic) other;
-      return atomic.equals(o.atomic);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * atomic.hashCode();
     }
   }
   
@@ -221,6 +191,36 @@ public abstract class Type {
     @Override
     public int hashCode() {
       return 2 * list.hashCode();
+    }
+  }
+  
+  public static final class Literal extends Type {
+    public final hydra.core.LiteralType literal;
+    
+    /**
+     * Constructs an immutable Literal object
+     */
+    public Literal(hydra.core.LiteralType literal) {
+      this.literal = literal;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Literal)) {
+          return false;
+      }
+      Literal o = (Literal) other;
+      return literal.equals(o.literal);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * literal.hashCode();
     }
   }
   
