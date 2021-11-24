@@ -4,12 +4,12 @@ import hydra.core.*;
 import hydra.impl.scala.*
 
 
-def atomicTypeAsTerm[a](meta: a, at: AtomicType): Term[a] = at match
-  case AtomicType.binary() => unitVariant(meta, _AtomicType_binary)
-  case AtomicType.boolean() => unitVariant(meta, _AtomicType_boolean)
-  case AtomicType.float(ft) => variant(meta, _AtomicType_float, floatTypeAsTerm(meta, ft))
-  case AtomicType.integer(it) => variant(meta, _AtomicType_integer, integerTypeAsTerm(meta, it))
-  case AtomicType.string() => unitVariant(meta, _AtomicType_string)
+def atomicTypeAsTerm[a](meta: a, at: LiteralType): Term[a] = at match
+  case LiteralType.binary() => unitVariant(meta, _LiteralType_binary)
+  case LiteralType.boolean() => unitVariant(meta, _LiteralType_boolean)
+  case LiteralType.float(ft) => variant(meta, _LiteralType_float, floatTypeAsTerm(meta, ft))
+  case LiteralType.integer(it) => variant(meta, _LiteralType_integer, integerTypeAsTerm(meta, it))
+  case LiteralType.string() => unitVariant(meta, _LiteralType_string)
 
 def fieldTypeAsTerm[a](meta: a, ft: FieldType): Term[a] = recordTerm(meta, Seq(
   Field(_FieldType_name, stringTerm(meta, ft.name)),
@@ -40,7 +40,7 @@ def mapTypeAsTerm[a](meta: a, mt: MapType): Term[a] = recordTerm(meta, Seq(
   Field(_MapType_values, typeAsTerm(meta, mt.values))))
 
 def typeAsTerm[a](meta: a, typ: Type): Term[a] = typ match
-  case Type.atomic(at) => variant(meta, _Type_atomic, atomicTypeAsTerm(meta, at))
+  case Type.literal(at) => variant(meta, _Type_literal, atomicTypeAsTerm(meta, at))
   case Type.element(t) => variant(meta, _Type_element, typeAsTerm(meta, t))
   case Type.function(ft) => variant(meta, _Type_function, functionTypeAsTerm(meta, ft))
   case Type.list(t) => variant(meta, _Type_list, typeAsTerm(meta, t))

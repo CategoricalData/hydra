@@ -13,12 +13,6 @@ enum Expression[a]:
      */
     case application(value: hydra.core.Application[a]) extends Expression[a]
     /**
-     * An atomic value
-     * 
-     * @type hydra/core.AtomicValue
-     */
-    case atomic(value: hydra.core.AtomicValue) extends Expression[a]
-    /**
      * An element reference
      * 
      * @type hydra/core.Name
@@ -36,6 +30,15 @@ enum Expression[a]:
      */
     case function(value: hydra.core.Function[a]) extends Expression[a]
     /**
+     * @type parameterized:
+     *         genericType: hydra/core.Let
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
+     */
+    case let(value: hydra.core.Let[a]) extends Expression[a]
+    /**
      * A list
      * 
      * @type list:
@@ -47,6 +50,12 @@ enum Expression[a]:
      *             variable: a
      */
     case list(value: Seq[hydra.core.Term[a]]) extends Expression[a]
+    /**
+     * A literal value
+     * 
+     * @type hydra/core.Literal
+     */
+    case literal(value: hydra.core.Literal) extends Expression[a]
     /**
      * A map of key terms to value terms
      * 
@@ -145,10 +154,11 @@ enum Expression[a]:
 
 val _Expression: String = "hydra/core.Expression"
 val _Expression_application: String = "application"
-val _Expression_atomic: String = "atomic"
 val _Expression_element: String = "element"
 val _Expression_function: String = "function"
+val _Expression_let: String = "let"
 val _Expression_list: String = "list"
+val _Expression_literal: String = "literal"
 val _Expression_map: String = "map"
 val _Expression_optional: String = "optional"
 val _Expression_record: String = "record"

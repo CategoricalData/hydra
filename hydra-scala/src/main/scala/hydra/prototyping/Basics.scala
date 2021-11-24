@@ -3,21 +3,21 @@ package hydra.prototyping
 import hydra.core.*;
 
 
-def atomicTypeVariant(at: AtomicType): AtomicVariant = at match
-  case AtomicType.binary() => AtomicVariant.boolean()
-  case AtomicType.boolean() => AtomicVariant.boolean()
-  case AtomicType.float(_) => AtomicVariant.float()
-  case AtomicType.integer(_) => AtomicVariant.integer()
-  case AtomicType.string() => AtomicVariant.string()
+def literalTypeVariant(at: LiteralType): LiteralVariant = at match
+  case LiteralType.binary() => LiteralVariant.boolean()
+  case LiteralType.boolean() => LiteralVariant.boolean()
+  case LiteralType.float(_) => LiteralVariant.float()
+  case LiteralType.integer(_) => LiteralVariant.integer()
+  case LiteralType.string() => LiteralVariant.string()
 
-def atomicValueType(av: AtomicValue): AtomicType = av match
-  case AtomicValue.binary(_) => AtomicType.binary()
-  case AtomicValue.boolean(_) => AtomicType.boolean()
-  case AtomicValue.float(fv) => AtomicType.float(floatValueType(fv))
-  case AtomicValue.integer(iv) => AtomicType.integer(integerValueType(iv))
-  case AtomicValue.string(_) => AtomicType.string()
+def literalType(av: Literal): LiteralType = av match
+  case Literal.binary(_) => LiteralType.binary()
+  case Literal.boolean(_) => LiteralType.boolean()
+  case Literal.float(fv) => LiteralType.float(floatValueType(fv))
+  case Literal.integer(iv) => LiteralType.integer(integerValueType(iv))
+  case Literal.string(_) => LiteralType.string()
 
-def atomicValueVariant(av: AtomicValue): AtomicVariant = atomicTypeVariant(atomicValueType(av))
+def literalVariant(av: Literal): LiteralVariant = literalTypeVariant(literalType(av))
 
 def floatTypeVariant(ft: FloatType): FloatVariant = ft match
   case FloatType.bigfloat() => FloatVariant.bigfloat()
@@ -65,7 +65,7 @@ def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(i
 
 def termVariant[a](term: Term[a]): TermVariant = term.data match
   case Expression.application(_) => TermVariant.application()
-  case Expression.atomic(_) => TermVariant.atomic()
+  case Expression.literal(_) => TermVariant.literal()
   case Expression.element(_) => TermVariant.element()
   case Expression.function(_) => TermVariant.function()
   case Expression.list(_) => TermVariant.list()
@@ -79,7 +79,7 @@ def termVariant[a](term: Term[a]): TermVariant = term.data match
   case Expression.variable(_) => TermVariant.variable()
 
 def typeVariant(typ: Type): TypeVariant = typ match
-  case Type.atomic(_) => TypeVariant.atomic()
+  case Type.literal(_) => TypeVariant.literal()
   case Type.element(_) => TypeVariant.element()
   case Type.function(_) => TypeVariant.function()
   case Type.list(_) => TypeVariant.list()

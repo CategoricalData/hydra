@@ -13,7 +13,7 @@ def nominalType(name: Name) = Type.nominal(name)
 
 def recordTerm[a](meta: a, fields: Seq[Field[a]]): Term[a] = Term(Expression.record(fields), meta)
 
-def stringTerm[a](meta: a, s: String): Term[a] = Term(Expression.atomic(AtomicValue.string(s)), meta)
+def stringTerm[a](meta: a, s: String): Term[a] = Term(Expression.literal(Literal.string(s)), meta)
 
 def unitTerm[a](meta: a): Term[a] = Term(Expression.record(Seq()), meta)
 

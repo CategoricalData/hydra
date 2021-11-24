@@ -14,11 +14,11 @@ case class Language (
 object Language {
     case class Constraints (
         /**
-         * @type set: hydra/core.AtomicVariant
+         * @type set: hydra/core.LiteralVariant
          * 
-         * @type set: hydra/core.AtomicVariant
+         * @type set: hydra/core.LiteralVariant
          */
-        atomicVariants: Set[hydra.core.AtomicVariant],
+        literalVariants: Set[hydra.core.LiteralVariant],
         
         /**
          * @type set: hydra/core.FloatVariant
@@ -77,10 +77,10 @@ object Language {
 
 val _Language: String = "hydra/adapter.Language"
 val _Language_Constraints: String = "hydra/adapter.Language.Constraints"
-val _Language_Constraints_atomicVariants: String = "atomicVariants"
 val _Language_Constraints_floatVariants: String = "floatVariants"
 val _Language_Constraints_functionVariants: String = "functionVariants"
 val _Language_Constraints_integerVariants: String = "integerVariants"
+val _Language_Constraints_literalVariants: String = "literalVariants"
 val _Language_Constraints_termVariants: String = "termVariants"
 val _Language_Constraints_typeVariants: String = "typeVariants"
 val _Language_Constraints_types: String = "types"
