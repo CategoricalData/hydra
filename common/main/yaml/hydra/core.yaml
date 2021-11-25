@@ -26,6 +26,14 @@ definitions:
                   type:
                     variable: a
 
+  - name: Binop # TODO: temporary; remove me after the type inferencer is fully integrated
+    type:
+      enum:
+        - add
+        - sub
+        - mul
+        - eql
+
   - name: BooleanValue
     type:
       enum:
@@ -57,11 +65,29 @@ definitions:
           description: "An element reference"
           type: Name
 
+        - name: fix # TODO: temporary; remove me after the type inferencer is fully integrated
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
         - name: function
           description: "A function term"
           type:
             parameterized:
               genericType: Function
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: if # TODO: temporary; remove me after the type inferencer is fully integrated
+          type:
+            parameterized:
+              genericType: If
               parameters:
                 - variable: a
                   type:
@@ -111,6 +137,15 @@ definitions:
                     - variable: a
                       type:
                         variable: a
+
+        - name: op # TODO: temporary; remove me after the type inferencer is fully integrated
+          type:
+            parameterized:
+              genericType: Op
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
 
         - name: optional
           description: "An optional value"
@@ -306,6 +341,36 @@ definitions:
         - primitive
         - projection
 
+  - name: If # TODO: temporary; remove me after the type inferencer is fully integrated
+    type:
+      record:
+        - name: cond
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: then
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: else
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
   - name: IntegerType
     type:
       enum:
@@ -493,6 +558,30 @@ definitions:
   - name: Name
     type: string
 
+  - name: Op # TODO: temporary; remove me after the type inferencer is fully integrated
+    type:
+      record:
+        - name: op
+          type: Binop
+
+        - name: lhs
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: rhs
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
   - name: Precision
     type:
       union:
@@ -610,6 +699,16 @@ definitions:
 
         - name: argument
           description: "A type which is the right-hand side of the application"
+          type: Type
+
+  - name: TypeScheme
+    type:
+      record:
+        - name: variables
+          type:
+            list: TypeVariable
+
+        - name: type
           type: Type
 
   - name: TypeVariable
