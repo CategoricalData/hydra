@@ -2,6 +2,7 @@
 -- | The Hydra Core model (in progress)
 module Hydra.Core
   ( Application(..)
+  , Binop(..)
   , BooleanValue(..)
   , Comparison(..)
   , Expression(..)
@@ -14,6 +15,7 @@ module Hydra.Core
   , Function(..)
   , FunctionType(..)
   , FunctionVariant(..)
+  , If(..)
   , IntegerType(..)
   , IntegerValue(..)
   , IntegerVariant(..)
@@ -24,12 +26,14 @@ module Hydra.Core
   , LiteralVariant(..)
   , MapType(..)
   , Name
+  , Op(..)
   , Precision(..)
   , Term(..)
   , TermVariant(..)
   , Type(..)
   , TypeAbstraction(..)
   , TypeApplication(..)
+  , TypeScheme(..)
   , TypeVariable
   , TypeVariant(..)
   , TypedTerm(..)
@@ -38,6 +42,11 @@ module Hydra.Core
   , _Application
   , _Application_argument
   , _Application_function
+  , _Binop
+  , _Binop_add
+  , _Binop_eql
+  , _Binop_mul
+  , _Binop_sub
   , _BooleanValue
   , _BooleanValue_false
   , _BooleanValue_true
@@ -48,11 +57,14 @@ module Hydra.Core
   , _Expression
   , _Expression_application
   , _Expression_element
+  , _Expression_fix
   , _Expression_function
+  , _Expression_if
   , _Expression_let
   , _Expression_list
   , _Expression_literal
   , _Expression_map
+  , _Expression_op
   , _Expression_optional
   , _Expression_record
   , _Expression_set
@@ -96,6 +108,10 @@ module Hydra.Core
   , _Function_lambda
   , _Function_primitive
   , _Function_projection
+  , _If
+  , _If_cond
+  , _If_else
+  , _If_then
   , _IntegerType
   , _IntegerType_bigint
   , _IntegerType_int16
@@ -155,6 +171,10 @@ module Hydra.Core
   , _MapType_keys
   , _MapType_values
   , _Name
+  , _Op
+  , _Op_lhs
+  , _Op_op
+  , _Op_rhs
   , _Precision
   , _Precision_arbitrary
   , _Precision_bits
@@ -183,6 +203,9 @@ module Hydra.Core
   , _TypeApplication
   , _TypeApplication_argument
   , _TypeApplication_function
+  , _TypeScheme
+  , _TypeScheme_type
+  , _TypeScheme_variables
   , _TypeVariable
   , _TypeVariant
   , _TypeVariant_element
@@ -245,6 +268,12 @@ data Application a
                   variable: a -}
     , applicationArgument :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
+data Binop
+  = BinopAdd
+  | BinopSub
+  | BinopMul
+  | BinopEql deriving (Eq, Generic, Ord, Read, Show)
+
 data BooleanValue
   = BooleanValueFalse
   | BooleanValueTrue deriving (Eq, Generic, Ord, Read, Show)
@@ -269,6 +298,13 @@ data Expression a
       
       @type hydra/core.Name -}
   | ExpressionElement Name
+  {-| @type parameterized:
+              genericType: hydra/core.Term
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | ExpressionFix (Term a)
   {-| A function term
       
       @type parameterized:
@@ -278,6 +314,13 @@ data Expression a
                   variable: a
                 variable: a -}
   | ExpressionFunction (Function a)
+  {-| @type parameterized:
+              genericType: hydra/core.If
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | ExpressionIf (If a)
   {-| @type parameterized:
               genericType: hydra/core.Let
               parameters:
@@ -317,6 +360,13 @@ data Expression a
                       variable: a
                     variable: a -}
   | ExpressionMap (Map (Term a) (Term a))
+  {-| @type parameterized:
+              genericType: hydra/core.Op
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | ExpressionOp (Op a)
   {-| An optional value
       
       @type optional:
@@ -480,6 +530,30 @@ data FunctionVariant
   | FunctionVariantPrimitive
   | FunctionVariantProjection deriving (Eq, Generic, Ord, Read, Show)
 
+data If a
+  = If
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    { ifCond :: Term a
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , ifThen :: Term a
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , ifElse :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
 data IntegerType
   = IntegerTypeBigint
   | IntegerTypeInt8
@@ -620,6 +694,25 @@ data MapType
 -- | @type string
 type Name = String
 
+data Op a
+  = Op
+    -- | @type hydra/core.Binop
+    { opOp :: Binop
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , opLhs :: Term a
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , opRhs :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
 data Precision
   = PrecisionArbitrary
   -- | @type integer
@@ -713,6 +806,13 @@ data TypeApplication a
         @type hydra/core.Type -}
     , typeApplicationArgument :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
+data TypeScheme
+  = TypeScheme
+    -- | @type list: hydra/core.TypeVariable
+    { typeSchemeVariables :: [TypeVariable]
+    -- | @type hydra/core.Type
+    , typeSchemeType :: Type } deriving (Eq, Generic, Ord, Read, Show)
+
 {-| A symbol which stands in for a type
     
     @type string -}
@@ -760,6 +860,11 @@ type Variable = String
 _Application = "hydra/core.Application" :: String
 _Application_argument = "argument" :: String
 _Application_function = "function" :: String
+_Binop = "hydra/core.Binop" :: String
+_Binop_add = "add" :: String
+_Binop_eql = "eql" :: String
+_Binop_mul = "mul" :: String
+_Binop_sub = "sub" :: String
 _BooleanValue = "hydra/core.BooleanValue" :: String
 _BooleanValue_false = "false" :: String
 _BooleanValue_true = "true" :: String
@@ -770,11 +875,14 @@ _Comparison_lessThan = "lessThan" :: String
 _Expression = "hydra/core.Expression" :: String
 _Expression_application = "application" :: String
 _Expression_element = "element" :: String
+_Expression_fix = "fix" :: String
 _Expression_function = "function" :: String
+_Expression_if = "if" :: String
 _Expression_let = "let" :: String
 _Expression_list = "list" :: String
 _Expression_literal = "literal" :: String
 _Expression_map = "map" :: String
+_Expression_op = "op" :: String
 _Expression_optional = "optional" :: String
 _Expression_record = "record" :: String
 _Expression_set = "set" :: String
@@ -818,6 +926,10 @@ _Function_data = "data" :: String
 _Function_lambda = "lambda" :: String
 _Function_primitive = "primitive" :: String
 _Function_projection = "projection" :: String
+_If = "hydra/core.If" :: String
+_If_cond = "cond" :: String
+_If_else = "else" :: String
+_If_then = "then" :: String
 _IntegerType = "hydra/core.IntegerType" :: String
 _IntegerType_bigint = "bigint" :: String
 _IntegerType_int16 = "int16" :: String
@@ -877,6 +989,10 @@ _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
 _Name = "hydra/core.Name" :: String
+_Op = "hydra/core.Op" :: String
+_Op_lhs = "lhs" :: String
+_Op_op = "op" :: String
+_Op_rhs = "rhs" :: String
 _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String
@@ -905,6 +1021,9 @@ _TypeAbstraction_parameter = "parameter" :: String
 _TypeApplication = "hydra/core.TypeApplication" :: String
 _TypeApplication_argument = "argument" :: String
 _TypeApplication_function = "function" :: String
+_TypeScheme = "hydra/core.TypeScheme" :: String
+_TypeScheme_type = "type" :: String
+_TypeScheme_variables = "variables" :: String
 _TypeVariable = "hydra/core.TypeVariable" :: String
 _TypeVariant = "hydra/core.TypeVariant" :: String
 _TypeVariant_element = "element" :: String
