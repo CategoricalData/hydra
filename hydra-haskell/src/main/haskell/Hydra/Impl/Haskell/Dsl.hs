@@ -22,6 +22,7 @@ module Hydra.Impl.Haskell.Dsl (
   deref,
   element,
   elementRef,
+  elementType,
   expectLiteral,
   expectNArgs,
   expectRecordTerm,
@@ -56,11 +57,14 @@ module Hydra.Impl.Haskell.Dsl (
   matchWithVariants,
   nominalType,
   optional,
+  optionalType,
   primitive,
   projection,
   record,
+  recordType,
   requireField,
   set,
+  setType,
   stringTerm,
   stringType,
   stringValue,
@@ -74,6 +78,7 @@ module Hydra.Impl.Haskell.Dsl (
   uint8Value,
   union,
   unitTerm,
+  unionType,
   unitType,
   unitVariant,
   variable,
@@ -157,6 +162,9 @@ element = defaultTerm . ExpressionElement
 
 elementRef :: Default a => Element a -> Term a
 elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName el
+
+elementType :: Type -> Type
+elementType = TypeElement
 
 expectLiteral :: Show a => Term a -> Result Literal
 expectLiteral term = case termData term of
@@ -274,6 +282,9 @@ nominalType = TypeNominal
 optional :: Default a => Y.Maybe (Term a) -> Term a
 optional = defaultTerm . ExpressionOptional
 
+optionalType :: Type -> Type
+optionalType = TypeOptional
+
 primitive :: Default a => Name -> Term a
 primitive = defaultTerm . ExpressionFunction . FunctionPrimitive
 
@@ -283,6 +294,9 @@ projection = defaultTerm . ExpressionFunction . FunctionProjection
 record :: Default a => [Field a] -> Term a
 record = defaultTerm . ExpressionRecord
 
+recordType :: [FieldType] -> Type
+recordType = TypeRecord
+
 requireField :: M.Map FieldName (Term a) -> FieldName -> Result (Term a)
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
@@ -290,6 +304,9 @@ requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
 
 set :: Default a => S.Set (Term a) -> Term a
 set = defaultTerm . ExpressionSet
+
+setType :: Type -> Type
+setType = TypeSet
 
 stringTerm :: Default a => String -> Term a
 stringTerm = defaultTerm . ExpressionLiteral . LiteralString
@@ -329,6 +346,9 @@ union = defaultTerm . ExpressionUnion
 
 unitTerm :: Default a => Term a
 unitTerm = defaultTerm $ ExpressionRecord []
+
+unionType :: [FieldType] -> Type
+unionType = TypeUnion
 
 unitType :: Type
 unitType = TypeRecord []
