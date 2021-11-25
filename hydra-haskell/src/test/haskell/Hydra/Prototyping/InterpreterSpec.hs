@@ -62,7 +62,7 @@ testsForPrimitiveFunctions = do
         isFailure (testEvaluate (apply (apply (func "toUpper") $ stringTerm s1) $ stringTerm s2))
 
 func :: String -> Term Meta
-func = function . stringsFunc
+func = primitive . stringsFunc
 
 spec :: H.Spec
 spec = do

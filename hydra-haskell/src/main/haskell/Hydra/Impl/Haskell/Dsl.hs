@@ -36,7 +36,7 @@ module Hydra.Impl.Haskell.Dsl (
   float64Value,
   floatType,
   floatValue,
-  function,
+--  function,
   functionType,
   int16Type,
   int16Value,
@@ -49,6 +49,7 @@ module Hydra.Impl.Haskell.Dsl (
   integerType,
   integerValue,
   lambda,
+  letTerm,
   list,
   listType,
   map,
@@ -68,6 +69,7 @@ module Hydra.Impl.Haskell.Dsl (
   stringTerm,
   stringType,
   stringValue,
+  typeVariable,
   uint16Type,
   uint16Value,
   uint32Type,
@@ -215,9 +217,6 @@ floatType = TypeLiteral . LiteralTypeFloat
 floatValue :: Default a => FloatValue -> Term a
 floatValue = defaultTerm . ExpressionLiteral . LiteralFloat
 
-function :: Default a => Name -> Term a
-function = defaultTerm . ExpressionFunction . FunctionPrimitive
-
 functionType :: Type -> Type -> Type
 functionType dom cod = TypeFunction $ FunctionType dom cod
 
@@ -253,6 +252,9 @@ integerValue = defaultTerm . ExpressionLiteral . LiteralInteger
 
 lambda :: Default a => Variable -> Term a -> Term a
 lambda param body = defaultTerm $ ExpressionFunction $ FunctionLambda $ Lambda param body
+
+letTerm :: Default a => Variable -> Term a -> Term a -> Term a
+letTerm v t1 t2 = defaultTerm $ ExpressionLet $ Let v t1 t2
 
 list :: Default a => [Term a] -> Term a
 list = defaultTerm . ExpressionList
@@ -316,6 +318,9 @@ stringType = TypeLiteral LiteralTypeString
 
 stringValue :: Default a => String -> Term a
 stringValue = defaultTerm . ExpressionLiteral . LiteralString
+
+typeVariable :: TypeVariable -> Type
+typeVariable = TypeVariable
 
 uint16Type :: Type
 uint16Type = integerType IntegerTypeUint16

@@ -15,7 +15,7 @@ inferType t1
 
 -}
 
-module Hydra.Prototyping.Typing (
+module Hydra.Prototyping.TypeInference (
   Constraint,
   TypeError(..),
   inferType,
@@ -65,49 +65,36 @@ substType s typ = case typ of
     TypeOptional t -> optionalType $ subst t
     TypeRecord tfields -> recordType (substField <$> tfields)
     TypeSet t -> setType $ subst t
-    TypeUnion tfields -> unionType (substField <$> tfields)    
+    TypeUnion tfields -> unionType (substField <$> tfields)
     TypeVariable a -> M.findWithDefault typ a s
   where
     subst = substType s
     substField (FieldType fname t) = FieldType fname $ subst t
 
 freeVarsInType :: Type -> S.Set TypeVariable
-freeVarsInType typ = case typ of
-  TypeElement t -> freeVarsInType t
-  TypeFunction (FunctionType dom cod) -> S.union (freeVarsInType dom) (freeVarsInType cod)
-  TypeList t -> freeVarsInType t
-  TypeLiteral _ -> S.empty
-  TypeMap (MapType kt vt) -> S.union (freeVarsInType kt) (freeVarsInType vt)
---  TypeNominal name -> TODO
-  TypeOptional t -> freeVarsInType t
-  TypeRecord tfields -> L.foldl S.union S.empty (freeVarsInType . fieldTypeType <$> tfields)
-  TypeSet t -> freeVarsInType t
-  TypeUnion tfields -> L.foldl S.union S.empty (freeVarsInType . fieldTypeType <$> tfields)
-  TypeVariable v -> S.singleton v
+freeVarsInType typ = S.fromList $ fv typ
+  where
+    fv typ = case typ of
+      TypeElement t -> fv t
+      TypeFunction (FunctionType dom cod) -> fv dom ++ fv cod
+      TypeList t -> fv t
+      TypeLiteral _ -> []
+      TypeMap (MapType kt vt) -> fv kt ++ fv vt
+      -- TypeNominal name -> TODO
+      TypeOptional t -> fv t
+      TypeRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeSet t -> fv t
+      TypeUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeVariable v -> [v]
 
 --instance Substitutable TypeScheme where
 substTypeScheme :: M.Map TypeVariable Type -> TypeScheme -> TypeScheme
 substTypeScheme s (TypeScheme as t) = TypeScheme as $ substType s' t
   where
     s' = L.foldr M.delete s as
-    
+
 freeVarsInTypeScheme :: TypeScheme -> S.Set TypeVariable
 freeVarsInTypeScheme (TypeScheme as t) = S.difference (freeVarsInType t) (S.fromList as)
-
-substConstraint :: Subst -> (Type, Type) -> (Type, Type)
-substConstraint s (t1, t2) = (substType s t1, substType s t2)
-
-substList :: (Subst -> a -> a) -> Subst -> [a] -> [a]
-substList ap = fmap . ap
-
-freeVarsInList :: (a -> S.Set TypeVariable) -> [a] -> S.Set TypeVariable
-freeVarsInList ap = L.foldr (S.union . ap) S.empty
-
-substMap :: (Subst -> b -> b) -> Subst -> M.Map k b -> M.Map k b
-substMap ap s = M.map (ap s)
-
-freeVarsInMap :: (a -> S.Set TypeVariable) -> M.Map k a -> S.Set TypeVariable
-freeVarsInMap ap env = freeVarsInList ap $ M.elems env
 
 data TypeError
   = UnificationFail Type Type
@@ -149,10 +136,10 @@ inGamma (x, sc) m = do
 
 -- | Lookup type in the environment
 lookupGamma :: Variable -> Infer Type
-lookupGamma x = do
+lookupGamma v = do
   env <- ask
-  case M.lookup x env of
-      Nothing   -> throwError $ UnboundVariable x
+  case M.lookup v env of
+      Nothing   -> throwError $ UnboundVariable v
       Just s    -> instantiate s
 
 variables :: [String]
@@ -173,7 +160,7 @@ instantiate (TypeScheme as t) = do
 generalize :: Gamma -> Type -> TypeScheme
 generalize env t  = TypeScheme as t
   where
-    as = S.toList $ S.difference (freeVarsInType t) (freeVarsInMap freeVarsInTypeScheme env)
+    as = S.toList $ S.difference (freeVarsInType t) (L.foldr (S.union . freeVarsInTypeScheme) S.empty $ M.elems env)
 
 binopType :: Binop -> Type
 binopType BinopAdd = functionType int32Type (functionType int32Type int32Type)
@@ -221,8 +208,8 @@ infer term = case termData term of
     case runSolve c1 of
         Left err -> throwError err
         Right sub -> do
-            let sc = generalize (substMap substTypeScheme sub env) (substType sub t1)
-            (t2, c2) <- inGamma (x, sc) $ local (substMap substTypeScheme sub) (infer e2)
+            let sc = generalize (M.map (substTypeScheme sub) env) (substType sub t1)
+            (t2, c2) <- inGamma (x, sc) $ local (M.map (substTypeScheme sub)) (infer e2)
             return (t2, c1 ++ c2)
 
 --  ExpressionList els -> TODO
@@ -262,19 +249,26 @@ inferType term = case inferTop M.empty [("x", term)] of
     Just scheme -> pure scheme
 
 normalizeTypeScheme :: TypeScheme -> TypeScheme
-normalizeTypeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normtype body)
+normalizeTypeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
   where
-    ord = zip (L.nub $ fv body) variables
+    ord = L.zip (S.toList $ freeVarsInType body) variables
 
-    fv (TypeVariable a)   = [a]
-    fv (TypeFunction (FunctionType a b)) = fv a ++ fv b
-    fv (TypeLiteral _)    = []
+    normalizeFieldType (FieldType fname typ) = FieldType fname $ normalizeType typ
 
-    normtype (TypeFunction (FunctionType a b)) = functionType (normtype a) (normtype b)
-    normtype (TypeLiteral a)   = TypeLiteral a
-    normtype (TypeVariable a)   =
-      case Prelude.lookup a ord of
-        Just x -> TypeVariable x
+    normalizeType typ = case typ of
+      TypeElement t -> TypeElement $ normalizeType t
+      TypeFunction (FunctionType dom cod) -> functionType (normalizeType dom) (normalizeType cod)
+      TypeList t -> TypeList $ normalizeType t
+      TypeLiteral l -> typ
+      TypeMap (MapType kt vt) -> TypeMap $ MapType (normalizeType kt) (normalizeType vt)
+--      TypeNominal name -> TODO
+      TypeOptional t -> TypeOptional $ normalizeType t
+      TypeRecord fields -> TypeRecord (normalizeFieldType <$> fields)
+      TypeSet t -> TypeSet $ normalizeType t
+      TypeUnion fields -> TypeUnion (normalizeFieldType <$> fields)
+      TypeUniversal (UniversalType v t) -> TypeUniversal $ UniversalType v $ normalizeType t
+      TypeVariable v -> case Prelude.lookup v ord of
+        Just v' -> TypeVariable v'
         Nothing -> error "type variable not in signature"
 
 -------------------------------------------------------------------------------
@@ -293,7 +287,7 @@ unifyMany :: [Type] -> [Type] -> Solve Subst
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unifies t1 t2
-     su2 <- unifyMany (substList substType su1 ts1) (substList substType su1 ts2)
+     su2 <- unifyMany (substType su1 <$> ts1) (substType su1 <$> ts2)
      return (substCompose su2 su1)
 unifyMany t1 t2 = throwError $ UnificationMismatch t1 t2
 
@@ -311,7 +305,7 @@ solver (su, cs) =
     [] -> return su
     ((t1, t2): cs0) -> do
       su1  <- unifies t1 t2
-      solver (substCompose su1 su, substList substConstraint su1 cs0)
+      solver (substCompose su1 su, (\(t1, t2) -> (substType su1 t1, substType su1 t2)) <$> cs0)
 
 bind ::  TypeVariable -> Type -> Solve Subst
 bind a t | t == TypeVariable a = return M.empty
