@@ -14,6 +14,7 @@ import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.CoreGraph
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
+import Hydra.Impl.Haskell.Lib.Math
 import Hydra.Impl.Haskell.Lib.Strings
 
 import qualified Data.Map  as M
@@ -29,12 +30,14 @@ testContext = Context {
         ("hydra/core", hydraCoreGraph)],
       graphSetRoot = "testGraph"},
     contextElements = graphElementsMap testGraph,
-    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) stringPrimitives,
+    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) allPrimitives,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantLiteral,
         TermVariantElement,
         TermVariantFunction]}}
+  where
+    allPrimitives = mathPrimitives ++ stringPrimitives
 
 testGraph :: Graph Meta
 testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"

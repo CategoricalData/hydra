@@ -178,6 +178,9 @@ typeOfElement context name = do
   scon <- schemaContext context
   decodeType scon $ elementSchema el
 
+typeOfPrimitiveFunction :: Context a -> Name -> Result FunctionType
+typeOfPrimitiveFunction context name = primitiveFunctionType <$> requirePrimitiveFunction context name
+
 infer :: Show a => Context a -> Term a -> Infer (Type, [Constraint])
 infer context term = case termData term of
 
@@ -189,8 +192,8 @@ infer context term = case termData term of
 
   ExpressionElement name -> do
     case typeOfElement context name of
-      ResultSuccess et -> pure (elementType et, []) -- TODO: for now, we assume that element types are monotypes. This will not always be the case.
-      ResultFailure msg -> error $ "failed to resolve element " ++ name ++ ": " ++ msg
+      ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements may be allowed in the future
+      ResultFailure msg -> error msg
 
   ExpressionFix e1 -> do
     (t1, c1) <- infer context e1
@@ -206,7 +209,11 @@ infer context term = case termData term of
       (t, c) <- inTypingEnvironment (x, TypeScheme [] tv) (infer context e)
       return (functionType tv t, c)
 
---    FunctionPrimitive name -> TODO
+    FunctionPrimitive name -> do
+      case typeOfPrimitiveFunction context name of
+        ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
+        ResultFailure msg -> error msg
+
 --    FunctionProjection fname -> TODO
 
   ExpressionIf (If cond tr fl) -> do

@@ -15,7 +15,7 @@ stringPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 stringPrimitives = [
   prim "cat" stringType (functionType stringType stringType)
     $ withTwoStrings $ \x y -> stringTerm $ x ++ y,
-  prim "length" stringType stringType
+  prim "length" stringType int32Type
     $ withString $ int32Value . L.length,
   prim "toLower" stringType stringType
     $ withString $ stringValue . fmap C.toLower,
