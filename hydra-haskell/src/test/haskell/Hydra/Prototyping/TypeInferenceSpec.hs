@@ -58,6 +58,22 @@ checkIndividualTerms = do
         (element "ArthurDent")
         (elementType testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
 
+    H.it "Check primitive functions" $ do
+      expectMonotype
+        (primitive "hydra/lib/strings.length")
+        (functionType stringType int32Type)
+      expectMonotype
+        (primitive "hydra/lib/math/int32.sub")
+        (functionType int32Type (functionType int32Type int32Type))        
+
+    H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
+      expectMonotype
+        (lambda "x" $
+          apply
+            (apply (primitive "hydra/lib/math/int32.sub") (apply (apply (primitive "hydra/lib/math/int32.add") (variable "x")) (variable "x")))
+            (int32Value 1))     
+        (functionType int32Type int32Type)
+        
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do

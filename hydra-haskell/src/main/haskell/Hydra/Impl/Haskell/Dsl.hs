@@ -23,6 +23,7 @@ module Hydra.Impl.Haskell.Dsl (
   element,
   elementRef,
   elementType,
+  expectInt32Term,
   expectLiteral,
   expectNArgs,
   expectRecordTerm,
@@ -167,6 +168,11 @@ elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName e
 
 elementType :: Type -> Type
 elementType = TypeElement
+
+expectInt32Term :: Show a => Term a -> Result Int
+expectInt32Term term = case termData term of
+  ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
+  _ -> fail $ "expected an int32, got " ++ show term
 
 expectLiteral :: Show a => Term a -> Result Literal
 expectLiteral term = case termData term of
