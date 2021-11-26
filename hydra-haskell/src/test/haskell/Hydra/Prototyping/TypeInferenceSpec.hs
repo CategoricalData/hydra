@@ -73,6 +73,11 @@ checkIndividualTerms = do
             (apply (primitive "hydra/lib/math/int32.sub") (apply (apply (primitive "hydra/lib/math/int32.add") (variable "x")) (variable "x")))
             (int32Value 1))     
         (functionType int32Type int32Type)
+
+    H.it "Check optionals" $ do
+      expectMonotype
+        (optional $ Just $ int32Value 42)
+        (optionalType int32Type)
         
 checkLiterals :: H.SpecWith ()
 checkLiterals = do

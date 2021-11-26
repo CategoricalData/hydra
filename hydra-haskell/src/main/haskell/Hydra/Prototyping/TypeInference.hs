@@ -111,7 +111,7 @@ runInfer :: TypingEnvironment -> Infer (Type, [Constraint]) -> Either TypeError 
 runInfer env m = runExcept $ evalStateT (runReaderT m env) startState
 
 -- | Solve for the toplevel type of an expression in a given environment
-inferExpr :: Show a => TypingEnvironment -> Context a -> Term a -> Either TypeError TypeScheme
+inferExpr :: (Default a, Show a) => TypingEnvironment -> Context a -> Term a -> Either TypeError TypeScheme
 inferExpr env context ex = case runInfer env (infer context ex) of
   Left err -> Left err
   Right (ty, cs) -> case runSolve cs of
@@ -119,7 +119,7 @@ inferExpr env context ex = case runInfer env (infer context ex) of
     Right subst -> Right $ closeOver $ substInType subst ty
 
 -- | Return the internal constraints used in solving for the type of an expression
-constraintsExpr :: Show a => TypingEnvironment -> Context a -> Term a -> Either TypeError ([Constraint], Subst, Type, TypeScheme)
+constraintsExpr :: (Default a, Show a) => TypingEnvironment -> Context a -> Term a -> Either TypeError ([Constraint], Subst, Type, TypeScheme)
 constraintsExpr env context ex = case runInfer env (infer context ex) of
   Left err -> Left err
   Right (ty, cs) -> case runSolve cs of
@@ -181,7 +181,7 @@ typeOfElement context name = do
 typeOfPrimitiveFunction :: Context a -> Name -> Result FunctionType
 typeOfPrimitiveFunction context name = primitiveFunctionType <$> requirePrimitiveFunction context name
 
-infer :: Show a => Context a -> Term a -> Infer (Type, [Constraint])
+infer :: (Default a, Show a) => Context a -> Term a -> Infer (Type, [Constraint])
 infer context term = case termData term of
 
   ExpressionApplication (Application e1 e2) -> do
@@ -246,7 +246,12 @@ infer context term = case termData term of
         u2 = binopType op
     return (tv, c1 ++ c2 ++ [(u1, u2)])
 
---  ExpressionOptional m -> TODO
+  ExpressionOptional m -> do
+    (t1, c1) <- infer context $ case m of
+      Nothing -> variable "ot"
+      Just term -> term
+    return (optionalType t1, c1)
+
 --  ExpressionRecord fields -> TODO
 --  ExpressionSet els -> TODO
 --  ExpressionUnion field -> TODO
@@ -255,13 +260,13 @@ infer context term = case termData term of
       t <- lookupTypingEnvironment x
       return (t, [])
 
-inferTop :: Show a => TypingEnvironment -> Context a -> [(String, Term a)] -> Either TypeError TypingEnvironment
+inferTop :: (Default a, Show a) => TypingEnvironment -> Context a -> [(String, Term a)] -> Either TypeError TypingEnvironment
 inferTop env context [] = Right env
 inferTop env context ((name, ex):xs) = case inferExpr env context ex of
   Left err -> Left err
   Right ty -> inferTop (M.insert name ty env) context xs
 
-inferType :: Show a => Context a -> Term a -> Result TypeScheme
+inferType :: (Default a, Show a) => Context a -> Term a -> Result TypeScheme
 inferType context term = case inferTop M.empty context [("x", term)] of
   Left err -> fail $ "type inference failed: " ++ show err
   Right m -> case M.lookup "x" m of
