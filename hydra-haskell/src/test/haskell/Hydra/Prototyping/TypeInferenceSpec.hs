@@ -11,11 +11,11 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 
 
-expectMonotype :: Term () -> Type -> H.Expectation
+expectMonotype :: Term Meta -> Type -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term () -> [TypeVariable] -> Type -> H.Expectation
-expectPolytype term vars typ = inferType term `H.shouldBe` ResultSuccess (TypeScheme vars typ)
+expectPolytype :: Term Meta-> [TypeVariable] -> Type -> H.Expectation
+expectPolytype term vars typ = inferType testContext term `H.shouldBe` ResultSuccess (TypeScheme vars typ)
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = do
@@ -47,11 +47,16 @@ checkIndividualTerms = do
       expectMonotype
         (apply (lambda "x" (variable "x")) (stringValue "foo"))
         stringType
-        
+
     H.it "Check let terms" $ do
       expectPolytype
         (letTerm "x" (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
         ["v1", "v2"] (functionType (typeVariable "v1") (functionType (typeVariable "v2") float32Type))
+
+    H.it "Check elements" $ do
+      expectMonotype
+        (element "ArthurDent")
+        (elementType testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
