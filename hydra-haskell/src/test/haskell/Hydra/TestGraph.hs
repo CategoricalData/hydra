@@ -3,6 +3,7 @@ module Hydra.TestGraph (
   testContext,
   testGraph,
   testStrategy,
+  testTypePerson,
   module Hydra.Impl.Haskell.Lib.Strings,
 ) where
 
@@ -47,21 +48,20 @@ testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
         Field "age" $ int32Value 42]}
 
 testSchemaGraph :: Graph Meta
-testSchemaGraph = Graph "testSchemaGraph" [exampleNominalType] allTerms "hydra/core"
+testSchemaGraph = Graph "testSchemaGraph" [exampleNominalType, exampleVertexType] allTerms "hydra/core"
   where
     exampleNominalType = typeElement "StringTypeAlias" stringType
-    exampleVertexType = typeElement "Person" $
-      TypeRecord [
-        FieldType "firstName" stringType,
-        FieldType "lastName" stringType,
-        FieldType "age" int32Type]
+    exampleVertexType = typeElement "Person" testTypePerson
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
-noElements :: [Element Meta]
-noElements = []
-
+testTypePerson :: Type
+testTypePerson = TypeRecord [
+  FieldType "firstName" stringType,
+  FieldType "lastName" stringType,
+  FieldType "age" int32Type]
+  
 allTerms :: Term Meta -> Bool
 allTerms _ = True
 
