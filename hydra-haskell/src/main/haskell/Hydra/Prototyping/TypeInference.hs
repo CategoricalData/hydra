@@ -30,6 +30,7 @@ import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Impl.Haskell.Dsl
 
+import qualified Control.Monad as CM
 import Control.Monad.Except
 import Control.Monad.State
 import Control.Monad.Reader
@@ -249,16 +250,31 @@ infer context term = case termData term of
   ExpressionOptional m -> do
     (t1, c1) <- infer context $ case m of
       Nothing -> variable "ot"
-      Just term -> term
+      Just term' -> term'
     return (optionalType t1, c1)
 
---  ExpressionRecord fields -> TODO
+  ExpressionRecord fields -> do
+      (ftypes, c1) <- CM.foldM forField ([], []) fields
+      return (recordType $ L.reverse ftypes, c1)
+    where
+      forField (ftypes, c) field = do
+        (ft, c') <- inferFieldType context field
+        return (ft:ftypes, c' ++ c)
+
 --  ExpressionSet els -> TODO
---  ExpressionUnion field -> TODO
+
+  ExpressionUnion field -> do
+    (ft, c1) <- inferFieldType context field
+    return (unionType [ft], c1)
 
   ExpressionVariable x -> do
       t <- lookupTypingEnvironment x
       return (t, [])
+
+inferFieldType :: (Default a, Show a) => Context a -> Field a -> Infer (FieldType, [Constraint])
+inferFieldType context (Field fname term) = do
+  (t1, c1) <- infer context term
+  return (FieldType fname t1, c1)
 
 inferTop :: (Default a, Show a) => TypingEnvironment -> Context a -> [(String, Term a)] -> Either TypeError TypingEnvironment
 inferTop env context [] = Right env
