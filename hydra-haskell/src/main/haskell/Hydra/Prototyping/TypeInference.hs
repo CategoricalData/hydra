@@ -202,8 +202,17 @@ infer context term = case termData term of
     return (tv, c1 ++ [(functionType tv tv, t1)])
 
   ExpressionFunction f -> case f of
---    FunctionCases cases -> TODO
-
+--    FunctionCases cases -> do
+--        (ftypes, c) <- CM.foldM forField ([], []) cases
+--        return (unionType $ L.reverse ftypes, c)
+--      where
+--        forField (ftypes, c) (Field fname fun) = do
+--          (ft, c) <- infer context fun
+--          case ft of
+--            FunctionType dom cod -> 
+--            _ -> error "expected a function type"
+--          return (ft:ftypes, c' ++ c)
+        
     FunctionCompareTo other -> do
       (t, c) <- infer context other
       return (functionType t booleanType, c)
@@ -236,8 +245,19 @@ infer context term = case termData term of
             (t2, c2) <- inTypingEnvironment (x, sc) $ local (M.map (substInTypeScheme sub)) (infer context e2)
             return (t2, c1 ++ c2)
 
---  ExpressionList els -> TODO
-
+  ExpressionList els -> forList els
+    where
+      forList l = case l of
+        [] -> do
+          tv <- freshTypeVariable
+          return (listType tv, [])
+        (h:r) -> do
+          (t, c) <- infer context h
+          (lt, lc) <- forList r
+          case lt of
+            TypeList et -> return (lt, c ++ lc ++ [(t, et)])
+            _ -> error "expected a list type"
+            
   ExpressionLiteral l -> return (TypeLiteral $ literalType l, [])
 
 --  ExpressionMap m -> TODO

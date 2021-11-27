@@ -104,6 +104,17 @@ checkIndividualTerms = do
         (lambda "x" $ compareTo (variable "x"))
         ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") booleanType))
 
+    H.it "Check lists" $ do
+      expectMonotype
+        (list [stringValue "foo", stringValue "bar"])
+        (listType stringType)
+      expectPolytype
+        (list [])
+        ["v1"] (listType $ typeVariable "v1")
+      expectMonotype
+        (lambda "x" (list [variable "x", int32Value 42]))
+        (functionType int32Type $ listType int32Type)
+        
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do
