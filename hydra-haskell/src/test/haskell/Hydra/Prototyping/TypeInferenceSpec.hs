@@ -78,7 +78,10 @@ checkIndividualTerms = do
       expectMonotype
         (optional $ Just $ int32Value 42)
         (optionalType int32Type)
-
+      expectPolytype
+        (optional Nothing)
+        ["v1"] (optionalType $ typeVariable "v1")
+        
     H.it "Check records" $ do
       expectMonotype
         (record [Field "lat" $ float64Value 37.7749, Field "lon" $ float64Value $ negate 122.4194])

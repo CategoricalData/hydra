@@ -250,11 +250,13 @@ infer context term = case termData term of
         u2 = binopType op
     return (tv, c1 ++ c2 ++ [(u1, u2)])
 
-  ExpressionOptional m -> do
-    (t1, c1) <- infer context $ case m of
-      Nothing -> variable "ot"
-      Just term' -> term'
-    return (optionalType t1, c1)
+  ExpressionOptional m -> case m of
+    Nothing -> do
+      tv <- freshTypeVariable
+      return (optionalType tv, [])
+    Just term' -> do
+      (t, c) <- infer context term'
+      return (optionalType t, c)
 
   ExpressionRecord fields -> do
       (ftypes, c1) <- CM.foldM forField ([], []) fields
