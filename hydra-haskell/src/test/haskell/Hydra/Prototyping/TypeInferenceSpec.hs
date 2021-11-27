@@ -133,7 +133,17 @@ checkIndividualTerms = do
         (lambda "x" (lambda "y" (mapTerm $ M.fromList
           [(variable "x", float64Value 0.1), (variable "y", float64Value 0.2)])))
         ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") (mapType (typeVariable "v1") float64Type)))
-        
+
+    H.it "Check projections" $ do
+      expectPolytype
+        (projection "lat")
+        ["v1", "v2"] (functionType (recordType [FieldType "lat" $ typeVariable "v1"]) (typeVariable "v2"))
+--      expectMonotype
+--        (lambda "r" (apply
+--          (apply (primitive "hydra/lib/math/int32.add") (apply (projection "lat") (variable "r")))
+--          (apply (projection "lon") (variable "r"))))
+--        (functionType (recordType [FieldType "lat" int32Type, FieldType "lon" int32Type]) int32Type)
+
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do
