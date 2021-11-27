@@ -79,6 +79,20 @@ checkIndividualTerms = do
         (optional $ Just $ int32Value 42)
         (optionalType int32Type)
         
+    H.it "Check records" $ do
+      expectMonotype
+        (record [Field "lat" $ float64Value 37.7749, Field "lon" $ float64Value $ negate 122.4194])
+        (recordType [FieldType "lat" float64Type, FieldType "lon" float64Type])
+      expectPolytype
+        (lambda "lon" (record [Field "lat" $ float64Value 37.7749, Field "lon" $ variable "lon"]))
+        ["v1"] (functionType (typeVariable "v1") (recordType [FieldType "lat" float64Type, FieldType "lon" $ typeVariable "v1"]))
+        
+    H.it "Check unions" $ do
+      -- Note that type inference only guesses the "top" type, even if this union "really" should have more than one field
+      expectMonotype
+        (union $ Field "lat" $ float64Value 37.7749)
+        (unionType [FieldType "lat" float64Type])
+        
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do
