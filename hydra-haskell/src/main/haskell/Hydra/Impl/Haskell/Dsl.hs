@@ -54,6 +54,7 @@ module Hydra.Impl.Haskell.Dsl (
   list,
   listType,
   map,
+  mapTerm,
   mapType,
   match,
   matchWithVariants,
@@ -270,6 +271,9 @@ listType = TypeList
 
 map :: Default a => M.Map (Term a) (Term a) -> Term a
 map = defaultTerm . ExpressionMap
+
+mapTerm :: Default a => M.Map (Term a) (Term a) -> Term a
+mapTerm = defaultTerm . ExpressionMap
 
 mapType :: Type -> Type -> Type
 mapType kt vt = TypeMap $ MapType kt vt

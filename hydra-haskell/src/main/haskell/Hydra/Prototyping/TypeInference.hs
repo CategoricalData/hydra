@@ -209,10 +209,10 @@ infer context term = case termData term of
 --        forField (ftypes, c) (Field fname fun) = do
 --          (ft, c) <- infer context fun
 --          case ft of
---            FunctionType dom cod -> 
+--            FunctionType dom cod ->
 --            _ -> error "expected a function type"
 --          return (ft:ftypes, c' ++ c)
-        
+
     FunctionCompareTo other -> do
       (t, c) <- infer context other
       return (functionType t booleanType, c)
@@ -257,10 +257,22 @@ infer context term = case termData term of
           case lt of
             TypeList et -> return (lt, c ++ lc ++ [(t, et)])
             _ -> error "expected a list type"
-            
+
   ExpressionLiteral l -> return (TypeLiteral $ literalType l, [])
 
---  ExpressionMap m -> TODO
+  ExpressionMap m -> toMap <$> forList (M.toList m)
+    where
+      toMap ((kt, vt), c) = (mapType kt vt, c)
+      forList l = case l of
+        [] -> do
+          kv <- freshTypeVariable
+          vv <- freshTypeVariable
+          return ((kv, vv), [])
+        ((k, v):r) -> do
+          (kt, kc) <- infer context k
+          (vt, vc) <- infer context v
+          ((kt', vt'), c') <- forList r
+          return ((kt, vt), c' ++ kc ++ vc ++ [(kt, kt'), (vt, vt')])
 
   ExpressionOp (Op op e1 e2) -> do
     (t1, c1) <- infer context e1
@@ -286,7 +298,12 @@ infer context term = case termData term of
         (ft, c') <- inferFieldType context field
         return (ft:ftypes, c' ++ c)
 
---  ExpressionSet els -> TODO
+  ExpressionSet els -> do
+    let expr = ExpressionList $ S.toList els
+    (t, c) <- infer context $ term {termData = expr}
+    case t of
+      TypeList et -> return (TypeSet et, c)
+      _ -> error "expected a list type"
 
   ExpressionUnion field -> do
     (ft, c1) <- inferFieldType context field
