@@ -203,7 +203,10 @@ infer context term = case termData term of
 
   ExpressionFunction f -> case f of
 --    FunctionCases cases -> TODO
---    FunctionCompareTo other -> TODO
+
+    FunctionCompareTo other -> do
+      (t, c) <- infer context other
+      return (functionType t booleanType, c)
 
     FunctionLambda (Lambda x e) -> do
       tv <- freshTypeVariable
@@ -277,7 +280,7 @@ inferFieldType context (Field fname term) = do
   return (FieldType fname t1, c1)
 
 inferTop :: (Default a, Show a) => TypingEnvironment -> Context a -> [(String, Term a)] -> Either TypeError TypingEnvironment
-inferTop env context [] = Right env
+inferTop env _ [] = Right env
 inferTop env context ((name, ex):xs) = case inferExpr env context ex of
   Left err -> Left err
   Right ty -> inferTop (M.insert name ty env) context xs

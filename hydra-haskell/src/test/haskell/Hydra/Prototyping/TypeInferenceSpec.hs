@@ -78,7 +78,7 @@ checkIndividualTerms = do
       expectMonotype
         (optional $ Just $ int32Value 42)
         (optionalType int32Type)
-        
+
     H.it "Check records" $ do
       expectMonotype
         (record [Field "lat" $ float64Value 37.7749, Field "lon" $ float64Value $ negate 122.4194])
@@ -93,6 +93,14 @@ checkIndividualTerms = do
         (union $ Field "lat" $ float64Value 37.7749)
         (unionType [FieldType "lat" float64Type])
         
+    H.it "Check 'compareTo' terms" $ do
+      expectMonotype
+        (compareTo $ record [Field "fst" $ booleanValue True, Field "snd" $ stringValue "Betelgeuse"])
+        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) booleanType)      
+      expectPolytype
+        (lambda "x" $ compareTo (variable "x"))
+        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") booleanType))
+
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do
