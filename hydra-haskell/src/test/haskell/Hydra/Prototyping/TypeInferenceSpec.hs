@@ -9,6 +9,8 @@ import Hydra.TestUtils
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 expectMonotype :: Term Meta -> Type -> H.Expectation
@@ -114,6 +116,23 @@ checkIndividualTerms = do
       expectMonotype
         (lambda "x" (list [variable "x", int32Value 42]))
         (functionType int32Type $ listType int32Type)
+
+    H.it "Check sets" $ do
+      expectMonotype
+        (set $ S.fromList [booleanValue True])
+        (setType booleanType)
+        
+    H.it "Check maps" $ do
+      expectMonotype
+        (mapTerm $ M.fromList [(stringValue "firstName", stringValue "Arthur"), (stringValue "lastName", stringValue "Dent")])
+        (mapType stringType stringType)
+      expectPolytype
+        (mapTerm M.empty)
+        ["v1", "v2"] (mapType (typeVariable "v1") (typeVariable "v2"))
+      expectPolytype
+        (lambda "x" (lambda "y" (mapTerm $ M.fromList
+          [(variable "x", float64Value 0.1), (variable "y", float64Value 0.2)])))
+        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") (mapType (typeVariable "v1") float64Type)))
         
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
