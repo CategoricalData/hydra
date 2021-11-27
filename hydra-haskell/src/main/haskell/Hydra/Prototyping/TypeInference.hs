@@ -227,7 +227,10 @@ infer context term = case termData term of
         ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
         ResultFailure msg -> error msg
 
---    FunctionProjection fname -> TODO
+    FunctionProjection fname -> do
+      dom <- freshTypeVariable
+      cod <- freshTypeVariable
+      return (functionType (recordType [FieldType fname dom]) cod, [])
 
   ExpressionIf (If cond tr fl) -> do
     (t1, c1) <- infer context cond
