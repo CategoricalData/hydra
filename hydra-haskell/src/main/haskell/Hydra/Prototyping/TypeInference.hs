@@ -215,9 +215,11 @@ infer context term = case termData term of
             TypeFunction (FunctionType dom cod) -> return (dom, cod)
             _ -> error "expected a function type"
 
+    -- TODO: here we assume that compareTo evaluates to an integer, not a Comparison value.
+    --       For the latter, Comparison would have to be added to the literal type grammar.
     FunctionCompareTo other -> do
       (t, c) <- infer context other
-      return (functionType t booleanType, c)
+      return (functionType t int8Type, c)
 
     FunctionLambda (Lambda x e) -> do
       tv <- freshTypeVariable
@@ -229,6 +231,7 @@ infer context term = case termData term of
         ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
         ResultFailure msg -> error msg
 
+    -- TODO: need row polymorphism or qualified field names
     FunctionProjection fname -> do
       dom <- freshTypeVariable
       cod <- freshTypeVariable
@@ -310,6 +313,7 @@ infer context term = case termData term of
       TypeList et -> return (TypeSet et, c)
       _ -> error "expected a list type"
 
+  -- TODO: need row polymorphism or qualified field names
   ExpressionUnion field -> do
     (ft, c1) <- inferFieldType context field
     return (unionType [ft], c1)

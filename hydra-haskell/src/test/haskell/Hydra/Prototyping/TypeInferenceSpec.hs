@@ -101,10 +101,10 @@ checkIndividualTerms = do
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
         (compareTo $ record [Field "fst" $ booleanValue True, Field "snd" $ stringValue "Betelgeuse"])
-        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) booleanType)
+        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) int8Type)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
-        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") booleanType))
+        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") int8Type))
 
     H.it "Check lists" $ do
       expectMonotype
