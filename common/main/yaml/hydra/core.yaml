@@ -1,4 +1,4 @@
-description: "The Hydra Core model (in progress)"
+description: "The Hydra Core model"
 
 definitions:
 
@@ -319,7 +319,9 @@ definitions:
 
         - name: projection
           description: "A projection of a field from a record"
-          type: FieldName
+          comments:
+            - "By using a qualified field name, we assume that we can only project from named record types"
+          type: QualifiedFieldName
 
   - name: FunctionType
     description: "A function type, also known as an arrow type"
@@ -589,6 +591,15 @@ definitions:
 
         - name: bits
           type: integer
+
+  - name: QualifiedFieldName
+    type:
+      record:
+        - name: "local"
+          type: string
+
+        - name: "schema"
+          type: Name
 
   - name: Term
     type:

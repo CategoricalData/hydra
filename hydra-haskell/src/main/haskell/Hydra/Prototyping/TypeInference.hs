@@ -179,6 +179,13 @@ typeOfElement context name = do
   scon <- schemaContext context
   decodeType scon $ elementSchema el
 
+namedType :: Show a => Context a -> Name -> Result Type
+namedType context name = do
+  scon <- schemaContext context
+  typeTerm <- requireElement scon name
+  scon' <- schemaContext scon
+  decodeType scon' $ elementData typeTerm
+
 typeOfPrimitiveFunction :: Context a -> Name -> Result FunctionType
 typeOfPrimitiveFunction context name = primitiveFunctionType <$> requirePrimitiveFunction context name
 
@@ -231,11 +238,17 @@ infer context term = case termData term of
         ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
         ResultFailure msg -> error msg
 
-    -- TODO: need row polymorphism or qualified field names
-    FunctionProjection fname -> do
-      dom <- freshTypeVariable
-      cod <- freshTypeVariable
-      return (functionType (recordType [FieldType fname dom]) cod, [])
+    FunctionProjection (QualifiedFieldName local schema) -> do
+      case namedType context schema of
+        ResultFailure msg -> error msg
+        ResultSuccess typ -> do
+          case typ of
+            TypeRecord sfields -> if L.null matches
+                then error $ "no field " ++ show local ++ " found in record type " ++ show schema
+                else return (functionType typ (fieldTypeType $ L.head matches), [])
+              where
+                matches = L.filter (\f -> fieldTypeName f == local) sfields
+            _ -> error $ "type name " ++ show schema ++ " did not resolve to a record type"
 
   ExpressionIf (If cond tr fl) -> do
     (t1, c1) <- infer context cond
