@@ -193,7 +193,7 @@ infer context term = case termData term of
 
   ExpressionElement name -> do
     case typeOfElement context name of
-      ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements may be allowed in the future
+      ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements will probably be allowed in the future
       ResultFailure msg -> error msg
 
   ExpressionFix e1 -> do
@@ -202,16 +202,18 @@ infer context term = case termData term of
     return (tv, c1 ++ [(functionType tv tv, t1)])
 
   ExpressionFunction f -> case f of
---    FunctionCases cases -> do
---        (ftypes, c) <- CM.foldM forField ([], []) cases
---        return (unionType $ L.reverse ftypes, c)
---      where
---        forField (ftypes, c) (Field fname fun) = do
---          (ft, c) <- infer context fun
---          case ft of
---            FunctionType dom cod ->
---            _ -> error "expected a function type"
---          return (ft:ftypes, c' ++ c)
+    FunctionCases cases -> do
+        pairs <- CM.mapM forField cases
+        let cods = snd <$> pairs
+        let ftypes = L.zipWith FieldType (fieldName <$> cases) (fst <$> pairs)
+        let constraints = L.zip cods (L.tail cods)
+        return (functionType (unionType ftypes) (L.head cods), constraints)
+      where
+        forField (Field _ fun) = do
+          (ft, c) <- infer context fun
+          case ft of
+            TypeFunction (FunctionType dom cod) -> return (dom, cod)
+            _ -> error "expected a function type"
 
     FunctionCompareTo other -> do
       (t, c) <- infer context other

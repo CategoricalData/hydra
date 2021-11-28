@@ -66,14 +66,14 @@ checkIndividualTerms = do
         (functionType stringType int32Type)
       expectMonotype
         (primitive "hydra/lib/math/int32.sub")
-        (functionType int32Type (functionType int32Type int32Type))        
+        (functionType int32Type (functionType int32Type int32Type))
 
     H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
       expectMonotype
         (lambda "x" $
           apply
             (apply (primitive "hydra/lib/math/int32.sub") (apply (apply (primitive "hydra/lib/math/int32.add") (variable "x")) (variable "x")))
-            (int32Value 1))     
+            (int32Value 1))
         (functionType int32Type int32Type)
 
     H.it "Check optionals" $ do
@@ -83,7 +83,7 @@ checkIndividualTerms = do
       expectPolytype
         (optional Nothing)
         ["v1"] (optionalType $ typeVariable "v1")
-        
+
     H.it "Check records" $ do
       expectMonotype
         (record [Field "lat" $ float64Value 37.7749, Field "lon" $ float64Value $ negate 122.4194])
@@ -91,17 +91,17 @@ checkIndividualTerms = do
       expectPolytype
         (lambda "lon" (record [Field "lat" $ float64Value 37.7749, Field "lon" $ variable "lon"]))
         ["v1"] (functionType (typeVariable "v1") (recordType [FieldType "lat" float64Type, FieldType "lon" $ typeVariable "v1"]))
-        
+
     H.it "Check unions" $ do
       -- Note that type inference only guesses the "top" type, even if this union "really" should have more than one field
       expectMonotype
         (union $ Field "lat" $ float64Value 37.7749)
         (unionType [FieldType "lat" float64Type])
-        
+
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
         (compareTo $ record [Field "fst" $ booleanValue True, Field "snd" $ stringValue "Betelgeuse"])
-        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) booleanType)      
+        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) booleanType)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
         ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") booleanType))
@@ -121,7 +121,7 @@ checkIndividualTerms = do
       expectMonotype
         (set $ S.fromList [booleanValue True])
         (setType booleanType)
-        
+
     H.it "Check maps" $ do
       expectMonotype
         (mapTerm $ M.fromList [(stringValue "firstName", stringValue "Arthur"), (stringValue "lastName", stringValue "Dent")])
@@ -138,11 +138,16 @@ checkIndividualTerms = do
       expectPolytype
         (projection "lat")
         ["v1", "v2"] (functionType (recordType [FieldType "lat" $ typeVariable "v1"]) (typeVariable "v2"))
---      expectMonotype
+--      expectMonotype -- TODO: row polymorphism OR nominally-typed records
 --        (lambda "r" (apply
 --          (apply (primitive "hydra/lib/math/int32.add") (apply (projection "lat") (variable "r")))
 --          (apply (projection "lon") (variable "r"))))
 --        (functionType (recordType [FieldType "lat" int32Type, FieldType "lon" int32Type]) int32Type)
+
+    H.it "Check case statements" $ do
+      expectPolytype
+        (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])
+        ["v1", "v2"] (functionType (unionType [FieldType "left" (typeVariable "v1"), FieldType "right" (typeVariable "v2")]) booleanType)
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
