@@ -11,9 +11,12 @@ import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Dsl
+import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
 
 import qualified Control.Monad as CM
+import qualified Data.List as L
+import qualified Data.List.Split as LS
 import qualified Data.Set as S
 
 
@@ -32,7 +35,7 @@ encodeAtomic av = case av of
       _ -> unexpected "integer" iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "atomic value" av
-    
+
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Function a -> Result H.Expression
 encodeFunction fun = case fun of
   FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
@@ -47,7 +50,7 @@ encodeFunction fun = case fun of
   FunctionData -> pure $ hsvar "id"
   FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm body
   FunctionPrimitive name -> pure $ hsvar name
-  FunctionProjection fname -> pure $ hsvar fname
+  FunctionProjection qname -> pure $ hsvar $ qualifyFieldName qname
   _ -> fail $ "unexpected function: " ++ show fun
 
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
@@ -128,6 +131,11 @@ hsname s = H.NameNormal $ H.QualifiedName [] s
 
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
+
+qualifyFieldName :: QualifiedFieldName -> String
+qualifyFieldName (QualifiedFieldName local schema) = decapitalize tname ++ capitalize local
+  where
+    tname = L.head $ L.reverse $ LS.splitOn "." schema
 
 unexpected :: (MonadFail m, Show a1) => [Char] -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj

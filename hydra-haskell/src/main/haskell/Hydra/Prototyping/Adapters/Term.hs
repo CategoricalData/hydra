@@ -14,6 +14,7 @@ import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.Adapters.Utils
+import Hydra.Prototyping.CoreEncoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -58,7 +59,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionData -> unitVariant _Function_data
         FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
         FunctionPrimitive name -> variant _Function_primitive $ stringValue name
-        FunctionProjection fname -> variant _Function_projection $ stringValue fname
+        FunctionProjection qname -> variant _Function_projection $ encodeQualifiedFieldName qname
       ExpressionVariable var -> variant _Expression_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
@@ -77,7 +78,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         forData _ = pure dataTerm
         forPrimitive fterm = primitive <$> expectStringTerm fterm
         forLambda fterm = read <$> expectStringTerm fterm -- TODO
-        forProjection fterm = projection <$> expectStringTerm fterm
+        forProjection fterm = projection <$> decodeQualifiedFieldName (adapterContextEvaluation context) fterm
         forVariable fterm = variable <$> expectStringTerm fterm
 
     unionType = do

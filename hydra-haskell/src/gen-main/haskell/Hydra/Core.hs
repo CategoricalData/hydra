@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
--- | The Hydra Core model (in progress)
+-- | The Hydra Core model
 module Hydra.Core
   ( Application(..)
   , Binop(..)
@@ -28,6 +28,7 @@ module Hydra.Core
   , Name
   , Op(..)
   , Precision(..)
+  , QualifiedFieldName(..)
   , Term(..)
   , TermVariant(..)
   , Type(..)
@@ -178,6 +179,9 @@ module Hydra.Core
   , _Precision
   , _Precision_arbitrary
   , _Precision_bits
+  , _QualifiedFieldName
+  , _QualifiedFieldName_local
+  , _QualifiedFieldName_schema
   , _Term
   , _TermVariant
   , _TermVariant_application
@@ -511,8 +515,8 @@ data Function a
   | FunctionPrimitive Name
   {-| A projection of a field from a record
       
-      @type hydra/core.FieldName -}
-  | FunctionProjection FieldName deriving (Eq, Generic, Ord, Read, Show)
+      @type hydra/core.QualifiedFieldName -}
+  | FunctionProjection QualifiedFieldName deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A function type, also known as an arrow type
 data FunctionType
@@ -717,6 +721,13 @@ data Precision
   = PrecisionArbitrary
   -- | @type integer
   | PrecisionBits Int deriving (Eq, Generic, Ord, Read, Show)
+
+data QualifiedFieldName
+  = QualifiedFieldName
+    -- | @type string
+    { qualifiedFieldNameLocal :: String
+    -- | @type hydra/core.Name
+    , qualifiedFieldNameSchema :: Name } deriving (Eq, Generic, Ord, Read, Show)
 
 data Term a
   = Term
@@ -996,6 +1007,9 @@ _Op_rhs = "rhs" :: String
 _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String
+_QualifiedFieldName = "hydra/core.QualifiedFieldName" :: String
+_QualifiedFieldName_local = "local" :: String
+_QualifiedFieldName_schema = "schema" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String

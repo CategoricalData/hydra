@@ -64,7 +64,7 @@ testTypePerson = TypeRecord [
   FieldType "firstName" stringType,
   FieldType "lastName" stringType,
   FieldType "age" int32Type]
-  
+
 allTerms :: Term Meta -> Bool
 allTerms _ = True
 

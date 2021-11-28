@@ -73,6 +73,10 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
+instance QC.Arbitrary QualifiedFieldName
+  where
+    arbitrary = QualifiedFieldName <$> QC.arbitrary <*> QC.arbitrary
+    
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
@@ -124,7 +128,8 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
             term <- arbitraryFunction (FunctionType dom' cod) n2
             return $ Field fn $ defaultTerm $ ExpressionFunction term
           n2 = div n' $ L.length sfields
-      TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
+        -- Note: projections now require nominally-typed records
+--      TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
       _ -> []
 
 arbitraryIntegerValue :: IntegerType -> QC.Gen IntegerValue

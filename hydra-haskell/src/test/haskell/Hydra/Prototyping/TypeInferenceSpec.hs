@@ -135,9 +135,9 @@ checkIndividualTerms = do
         ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") (mapType (typeVariable "v1") float64Type)))
 
     H.it "Check projections" $ do
-      expectPolytype
-        (projection "lat")
-        ["v1", "v2"] (functionType (recordType [FieldType "lat" $ typeVariable "v1"]) (typeVariable "v2"))
+      expectMonotype
+        (projection (QualifiedFieldName "firstName" "Person"))
+        (functionType (testTypePerson) stringType)
 --      expectMonotype -- TODO: row polymorphism OR nominally-typed records
 --        (lambda "r" (apply
 --          (apply (primitive "hydra/lib/math/int32.add") (apply (projection "lat") (variable "r")))

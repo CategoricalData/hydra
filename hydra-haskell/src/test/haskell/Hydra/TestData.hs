@@ -2,6 +2,7 @@ module Hydra.TestData where
   
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl
+import Hydra.TestGraph
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -16,8 +17,11 @@ compareStringsType = functionType stringType stringType
 eitherStringOrInt8Type :: Type
 eitherStringOrInt8Type = TypeUnion [FieldType "left" stringType, FieldType "right" int8Type]
 
+exampleProjectionFieldName :: QualifiedFieldName
+exampleProjectionFieldName = QualifiedFieldName "firstName" "Person"
+
 exampleProjectionType :: Type
-exampleProjectionType = functionType latLonType int32Type
+exampleProjectionType = functionType testTypePerson stringType
 
 int32ElementType :: Type
 int32ElementType = TypeElement int32Type

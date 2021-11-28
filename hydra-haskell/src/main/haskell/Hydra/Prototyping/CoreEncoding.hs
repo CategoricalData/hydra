@@ -12,6 +12,7 @@ module Hydra.Prototyping.CoreEncoding (
     encodeIntegerType,
     encodeIntegerVariant,
     encodeLambda,
+    encodeQualifiedFieldName,
     encodeTerm,
     encodeType,
     encodeTypeVariant,
@@ -78,7 +79,7 @@ encodeFunction f = case f of
   FunctionData -> unitVariant _Function_data
   FunctionLambda l -> variant _Function_lambda $ encodeLambda l
   FunctionPrimitive name -> variant _Function_primitive $ stringValue name
-  FunctionProjection fname -> variant _Function_projection $ stringValue fname
+  FunctionProjection qname -> variant _Function_projection $ encodeQualifiedFieldName qname
 
 encodeFunctionType :: Default a => FunctionType -> Term a
 encodeFunctionType (FunctionType dom cod) = record [
@@ -118,6 +119,11 @@ encodeMapType :: Default a => MapType -> Term a
 encodeMapType (MapType kt vt) = record [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
+
+encodeQualifiedFieldName :: Default a => QualifiedFieldName -> Term a
+encodeQualifiedFieldName (QualifiedFieldName local schema) = record [
+  Field _QualifiedFieldName_local $ stringValue local,
+  Field _QualifiedFieldName_schema $ stringValue schema]
 
 encodeTerm :: (Default a, Ord a) => Term a -> Term a
 encodeTerm term = case termData term of
