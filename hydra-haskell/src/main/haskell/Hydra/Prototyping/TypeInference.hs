@@ -1,20 +1,3 @@
-{-
-import Hydra.Core as HC
-import Control.Monad.Except
-import Control.Monad.State
-import Hydra.Impl.Haskell.Dsl
-import qualified Data.Map as M
-
-term expr = Term expr ()
-
-t0 = int32Value 42 :: HC.Term ()
-t1 = lambda "x" $ term $ ExpressionOp $ HC.Op BinopAdd t0 (variable "x") :: HC.Term ()
-
-inferType t0
-inferType t1
-
--}
-
 module Hydra.Prototyping.TypeInference (
   Constraint,
   TypeError(..),
@@ -167,12 +150,6 @@ generalize env t  = TypeScheme as t
   where
     as = S.toList $ S.difference (freeVarsInType t) (L.foldr (S.union . freeVarsInTypeScheme) S.empty $ M.elems env)
 
-binopType :: Binop -> Type
-binopType BinopAdd = functionType int32Type (functionType int32Type int32Type)
-binopType BinopMul = functionType int32Type (functionType int32Type int32Type)
-binopType BinopSub = functionType int32Type (functionType int32Type int32Type)
-binopType BinopEql = functionType int32Type (functionType int32Type booleanType)
-
 typeOfElement :: Show a => Context a -> Name -> Result Type
 typeOfElement context name = do
   el <- requireElement context name
@@ -202,11 +179,6 @@ infer context term = case termData term of
     case typeOfElement context name of
       ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements will probably be allowed in the future
       ResultFailure msg -> error msg
-
-  ExpressionFix e1 -> do
-    (t1, c1) <- infer context e1
-    tv <- freshTypeVariable
-    return (tv, c1 ++ [(functionType tv tv, t1)])
 
   ExpressionFunction f -> case f of
     FunctionCases cases -> do
@@ -250,12 +222,6 @@ infer context term = case termData term of
                 matches = L.filter (\f -> fieldTypeName f == fname) sfields
             _ -> error $ "type name " ++ show sname ++ " did not resolve to a record type"
 
-  ExpressionIf (If cond tr fl) -> do
-    (t1, c1) <- infer context cond
-    (t2, c2) <- infer context tr
-    (t3, c3) <- infer context fl
-    return (t2, c1 ++ c2 ++ c3 ++ [(t1, booleanType), (t2, t3)])
-
   ExpressionLet (Let x e1 e2) -> do
     env <- ask
     (t1, c1) <- infer context e1
@@ -294,14 +260,6 @@ infer context term = case termData term of
           (vt, vc) <- infer context v
           ((kt', vt'), c') <- forList r
           return ((kt, vt), c' ++ kc ++ vc ++ [(kt, kt'), (vt, vt')])
-
-  ExpressionOp (Op op e1 e2) -> do
-    (t1, c1) <- infer context e1
-    (t2, c2) <- infer context e2
-    tv <- freshTypeVariable
-    let u1 = functionType t1 (functionType t2 tv)
-        u2 = binopType op
-    return (tv, c1 ++ c2 ++ [(u1, u2)])
 
   ExpressionOptional m -> case m of
     Nothing -> do
