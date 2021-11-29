@@ -27,6 +27,7 @@ module Hydra.Core
   , MapType(..)
   , Name
   , Op(..)
+  , OptionalExpression(..)
   , Precision(..)
   , Projection(..)
   , Term(..)
@@ -177,6 +178,9 @@ module Hydra.Core
   , _Op_lhs
   , _Op_op
   , _Op_rhs
+  , _OptionalExpression
+  , _OptionalExpression_just
+  , _OptionalExpression_nothing
   , _Precision
   , _Precision_arbitrary
   , _Precision_bits
@@ -423,15 +427,15 @@ data Expression a
                   variable: a
                 variable: a -}
   | ExpressionTypeApplication (TypeApplication a)
-  {-| A union term, i.e. a generalization of inl() or inr()
+  {-| A union term, i.e. a string-indexed generalization of inl() or inr()
       
       @type parameterized:
-              genericType: hydra/core.Field
+              genericType: hydra/core.UnionExpression
               parameters:
               - type:
                   variable: a
                 variable: a -}
-  | ExpressionUnion (Field a)
+  | ExpressionUnion (UnionExpression a)
   {-| A variable reference
       
       @type hydra/core.Variable -}
@@ -721,6 +725,18 @@ data Op a
                   variable: a -}
     , opRhs :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
+{-| An encoded optional value, for languages which do not natively support
+    optionals -}
+data OptionalExpression a
+  {-| @type parameterized:
+              genericType: hydra/core.Term
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  = OptionalExpressionJust (Term a)
+  | OptionalExpressionNothing deriving (Eq, Generic, Ord, Read, Show)
+
 data Precision
   = PrecisionArbitrary
   -- | @type integer
@@ -868,15 +884,15 @@ data TypedTerm a
 -- | A variant expression, or instance of a union type
 data UnionExpression a
   = UnionExpression
+    -- | @type hydra/core.Name
+    { unionExpressionContext :: Name
     {-| @type parameterized:
                 genericType: hydra/core.Field
                 parameters:
                 - type:
                     variable: a
                   variable: a -}
-    { unionExpressionField :: Field a
-    -- | @type hydra/core.Name
-    , unionExpressionContext :: Name } deriving (Eq, Generic, Ord, Read, Show)
+    , unionExpressionField :: Field a } deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A universally quantified ('forall') type, parameterized by a type variable
 data UniversalType
@@ -1027,6 +1043,9 @@ _Op = "hydra/core.Op" :: String
 _Op_lhs = "lhs" :: String
 _Op_op = "op" :: String
 _Op_rhs = "rhs" :: String
+_OptionalExpression = "hydra/core.OptionalExpression" :: String
+_OptionalExpression_just = "just" :: String
+_OptionalExpression_nothing = "nothing" :: String
 _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String

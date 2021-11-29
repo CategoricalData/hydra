@@ -37,14 +37,14 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
 
 basicsFloatTypeVariant :: Element Meta
 basicsFloatTypeVariant = basicsFunction "floatTypeVariant" _FloatType _FloatVariant $
-  matchWithVariants [
+  matchWithVariants _FloatVariant [
     (_FloatType_bigfloat, _FloatVariant_bigfloat),
     (_FloatType_float32,  _FloatVariant_float32),
     (_FloatType_float64,  _FloatVariant_float64)]
 
 basicsFloatValueType :: Element Meta
 basicsFloatValueType = basicsFunction "floatValueType" _FloatValue _FloatType $
-  matchWithVariants [
+  matchWithVariants _FloatType [
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
@@ -55,7 +55,7 @@ basicsFloatValueVariant = basicsFunction "floatValueVariant" _FloatValue _FloatV
 
 basicsIntegerTypeVariant :: Element Meta
 basicsIntegerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _IntegerVariant $
-  matchWithVariants [
+  matchWithVariants _IntegerVariant [
     (_IntegerType_bigint, _IntegerVariant_bigint),
     (_IntegerType_int8,   _IntegerVariant_int8),
     (_IntegerType_int16,  _IntegerVariant_int16),
@@ -68,7 +68,7 @@ basicsIntegerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _Int
 
 basicsIntegerValueType :: Element Meta
 basicsIntegerValueType = basicsFunction "integerValueType"_IntegerValue _IntegerType $
-  matchWithVariants [
+  matchWithVariants _IntegerValue [
     (_IntegerValue_bigint, _IntegerValue_bigint),
     (_IntegerValue_int8,   _IntegerValue_int8),
     (_IntegerValue_int16,  _IntegerValue_int16),
@@ -85,7 +85,7 @@ basicsIntegerValueVariant = basicsFunction "integerValueVariant" _IntegerValue _
 
 basicsFunctionVariant :: Element Meta
 basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVariant $
-  matchWithVariants [
+  matchWithVariants _FunctionVariant [
     (_Function_cases,      _FunctionVariant_cases),
     (_Function_compareTo,  _FunctionVariant_compareTo),
     (_Function_data,       _FunctionVariant_data),
@@ -95,7 +95,7 @@ basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVari
 
 basicsLiteralTypeVariant :: Element Meta
 basicsLiteralTypeVariant = basicsFunction "literalTypeVariant" _LiteralType _LiteralVariant $
-  matchWithVariants [
+  matchWithVariants _LiteralVariant [
     (_LiteralType_binary,  _LiteralVariant_binary),
     (_LiteralType_boolean, _LiteralVariant_boolean),
     (_LiteralType_float,   _LiteralVariant_float),
@@ -105,11 +105,11 @@ basicsLiteralTypeVariant = basicsFunction "literalTypeVariant" _LiteralType _Lit
 basicsLiteralType :: Element Meta
 basicsLiteralType = basicsFunction "literalType" _Literal _LiteralType $
   match [
-    (_Literal_binary,  withVariant  _LiteralType_binary),
-    (_Literal_boolean, withVariant  _LiteralType_boolean),
-    (_Literal_float,   withFunction _LiteralType_float basicsFloatValueType),
-    (_Literal_integer, withFunction _LiteralType_integer basicsIntegerValueType),
-    (_Literal_string,  withVariant  _LiteralType_string)]
+    (_Literal_binary,  withVariant  _LiteralType _LiteralType_binary),
+    (_Literal_boolean, withVariant  _LiteralType _LiteralType_boolean),
+    (_Literal_float,   withFunction _LiteralType _LiteralType_float basicsFloatValueType),
+    (_Literal_integer, withFunction _LiteralType _LiteralType_integer basicsIntegerValueType),
+    (_Literal_string,  withVariant  _LiteralType _LiteralType_string)]
 
 basicsLiteralVariant :: Element Meta
 basicsLiteralVariant = basicsFunction "literalVariant" _Literal _LiteralVariant $
@@ -117,11 +117,11 @@ basicsLiteralVariant = basicsFunction "literalVariant" _Literal _LiteralVariant 
 
 basicsTermVariant :: Element Meta
 basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
-  matchWithVariants [
-    (_Expression_literal,          _TermVariant_literal),
+  matchWithVariants _Expression [
     (_Expression_element,         _TermVariant_element),
     (_Expression_function,        _TermVariant_function),
     (_Expression_list,            _TermVariant_list),
+    (_Expression_literal,         _TermVariant_literal),
     (_Expression_map,             _TermVariant_map),
     (_Expression_optional,        _TermVariant_optional),
     (_Expression_record,          _TermVariant_record),
@@ -133,11 +133,11 @@ basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
 
 basicsTypeVariant :: Element Meta
 basicsTypeVariant = basicsFunction "typeVariant" _Type _TypeVariant $
-  matchWithVariants [
-    (_Type_literal,    _TypeVariant_literal),
+  matchWithVariants _TypeVariant [
     (_Type_element,   _TypeVariant_element),
     (_Type_function,  _TypeVariant_function),
     (_Type_list,      _TypeVariant_list),
+    (_Type_literal,   _TypeVariant_literal),
     (_Type_map,       _TypeVariant_map),
     (_Type_nominal,   _TypeVariant_nominal),
     (_Type_optional,  _TypeVariant_optional),

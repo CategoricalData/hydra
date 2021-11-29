@@ -67,7 +67,7 @@ decodeMapType context = matchRecord context $ \m -> MapType
   <$> getField m _MapType_keys (decodeType context)
   <*> getField m _MapType_values (decodeType context)
 
-decodeProjection :: Show a => Context a -> Term a -> Result Projection
+decodeProjection :: Context a -> Term a -> Result Projection
 decodeProjection context = matchRecord context $ \m -> Projection
   <$> getField m _Projection_field decodeString
   <*> getField m _Projection_context decodeString
@@ -123,7 +123,7 @@ matchUnion :: Show a => Context a -> [(FieldName, Term a -> Result b)] -> Term a
 matchUnion context pairs term = do
     term' <- deref context term
     case termData term' of
-      ExpressionUnion (Field fname val) -> case M.lookup fname mapping of
+      ExpressionUnion (UnionExpression _ (Field fname val)) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (fst <$> pairs) ++ "}"

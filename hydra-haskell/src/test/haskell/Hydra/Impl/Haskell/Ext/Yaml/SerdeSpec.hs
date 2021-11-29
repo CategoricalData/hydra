@@ -11,6 +11,7 @@ import Hydra.Impl.Haskell.Ext.Yaml.Serde
 
 import Hydra.TestData
 import Hydra.TestUtils
+import Hydra.ArbitraryCore (untyped)
 
 import qualified Test.Hspec as H
 import qualified Data.List as L
@@ -91,8 +92,8 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeUnion [FieldType "left" stringType, FieldType "right" int32Type])
-        (union $ Field "left" $ stringValue "test"))
-      "left: test"
+        (union untyped $ Field "left" $ stringValue "test"))
+      "context: UNTYPED\nrecord:\n  left: test\n"
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
 yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do
@@ -105,7 +106,7 @@ checkSerialization (TypedTerm typ term) expected = do
     if Y.isNothing (qualifiedValue serde)
       then qualifiedWarnings serde `H.shouldBe` []
       else True `H.shouldBe` True
-    (normalize <$> stepOut serde' term) `H.shouldBe` (ResultSuccess $ normalize expected)
+    (normalize <$> stepOut serde' term) `H.shouldBe` ResultSuccess (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines
     serde = yamlSerdeStr testContext typ

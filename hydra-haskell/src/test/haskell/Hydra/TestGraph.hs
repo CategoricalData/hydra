@@ -4,6 +4,7 @@ module Hydra.TestGraph (
   testGraph,
   testStrategy,
   testTypePerson,
+  testTypeTimestamp,
   module Hydra.Impl.Haskell.Lib.Strings,
 ) where
 
@@ -51,10 +52,11 @@ testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
         Field "age" $ int32Value 42]}
 
 testSchemaGraph :: Graph Meta
-testSchemaGraph = Graph "testSchemaGraph" [exampleNominalType, exampleVertexType] allTerms "hydra/core"
-  where
-    exampleNominalType = typeElement "StringTypeAlias" stringType
-    exampleVertexType = typeElement "Person" testTypePerson
+testSchemaGraph = Graph "testSchemaGraph" [
+      typeElement "StringTypeAlias" stringType,
+      typeElement "Person" testTypePerson,
+      typeElement "Timestamp" testTypeTimestamp]
+    allTerms "hydra/core"
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
@@ -65,6 +67,11 @@ testTypePerson = TypeRecord [
   FieldType "lastName" stringType,
   FieldType "age" int32Type]
 
+testTypeTimestamp :: Type
+testTypeTimestamp = TypeUnion [
+  FieldType "unixTimeMillis" uint64Type,
+  FieldType "date" stringType]
+  
 allTerms :: Term Meta -> Bool
 allTerms _ = True
 
