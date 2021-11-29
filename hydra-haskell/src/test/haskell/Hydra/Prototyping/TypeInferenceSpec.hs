@@ -136,14 +136,8 @@ checkIndividualTerms = do
 
     H.it "Check projections" $ do
       expectMonotype
-        (projection (QualifiedFieldName "firstName" "Person"))
-        (functionType (testTypePerson) stringType)
---      expectMonotype -- TODO: row polymorphism OR nominally-typed records
---        (lambda "r" (apply
---          (apply (primitive "hydra/lib/math/int32.add") (apply (projection "lat") (variable "r")))
---          (apply (projection "lon") (variable "r"))))
---        (functionType (recordType [FieldType "lat" int32Type, FieldType "lon" int32Type]) int32Type)
-
+        (projection (Projection "firstName" "Person"))
+        (functionType testTypePerson stringType)
     H.it "Check case statements" $ do
       expectPolytype
         (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])

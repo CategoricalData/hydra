@@ -238,17 +238,17 @@ infer context term = case termData term of
         ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
         ResultFailure msg -> error msg
 
-    FunctionProjection (QualifiedFieldName local schema) -> do
-      case namedType context schema of
+    FunctionProjection (Projection fname rname) -> do
+      case namedType context rname of
         ResultFailure msg -> error msg
         ResultSuccess typ -> do
           case typ of
             TypeRecord sfields -> if L.null matches
-                then error $ "no field " ++ show local ++ " found in record type " ++ show schema
+                then error $ "no field " ++ show fname ++ " found in record type " ++ show rname
                 else return (functionType typ (fieldTypeType $ L.head matches), [])
               where
-                matches = L.filter (\f -> fieldTypeName f == local) sfields
-            _ -> error $ "type name " ++ show schema ++ " did not resolve to a record type"
+                matches = L.filter (\f -> fieldTypeName f == fname) sfields
+            _ -> error $ "type name " ++ show rname ++ " did not resolve to a record type"
 
   ExpressionIf (If cond tr fl) -> do
     (t1, c1) <- infer context cond

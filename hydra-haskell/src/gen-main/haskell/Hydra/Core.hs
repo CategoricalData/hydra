@@ -28,7 +28,7 @@ module Hydra.Core
   , Name
   , Op(..)
   , Precision(..)
-  , QualifiedFieldName(..)
+  , Projection(..)
   , Term(..)
   , TermVariant(..)
   , Type(..)
@@ -179,9 +179,9 @@ module Hydra.Core
   , _Precision
   , _Precision_arbitrary
   , _Precision_bits
-  , _QualifiedFieldName
-  , _QualifiedFieldName_local
-  , _QualifiedFieldName_schema
+  , _Projection
+  , _Projection_field
+  , _Projection_record
   , _Term
   , _TermVariant
   , _TermVariant_application
@@ -515,8 +515,8 @@ data Function a
   | FunctionPrimitive Name
   {-| A projection of a field from a record
       
-      @type hydra/core.QualifiedFieldName -}
-  | FunctionProjection QualifiedFieldName deriving (Eq, Generic, Ord, Read, Show)
+      @type hydra/core.Projection -}
+  | FunctionProjection Projection deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A function type, also known as an arrow type
 data FunctionType
@@ -722,12 +722,18 @@ data Precision
   -- | @type integer
   | PrecisionBits Int deriving (Eq, Generic, Ord, Read, Show)
 
-data QualifiedFieldName
-  = QualifiedFieldName
-    -- | @type string
-    { qualifiedFieldNameLocal :: String
-    -- | @type hydra/core.Name
-    , qualifiedFieldNameSchema :: Name } deriving (Eq, Generic, Ord, Read, Show)
+-- | A projection of a field from a record
+data Projection
+  = Projection
+    {-| The projected field
+        
+        @type hydra/core.FieldName -}
+    { projectionField :: FieldName
+    {-| The name of the record element containing the field
+        
+        @comments We assume that we can only project from named record types
+        @type hydra/core.Name -}
+    , projectionRecord :: Name } deriving (Eq, Generic, Ord, Read, Show)
 
 data Term a
   = Term
@@ -1007,9 +1013,9 @@ _Op_rhs = "rhs" :: String
 _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String
-_QualifiedFieldName = "hydra/core.QualifiedFieldName" :: String
-_QualifiedFieldName_local = "local" :: String
-_QualifiedFieldName_schema = "schema" :: String
+_Projection = "hydra/core.Projection" :: String
+_Projection_field = "field" :: String
+_Projection_record = "record" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String

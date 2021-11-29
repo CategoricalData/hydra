@@ -59,7 +59,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionData -> unitVariant _Function_data
         FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
         FunctionPrimitive name -> variant _Function_primitive $ stringValue name
-        FunctionProjection qname -> variant _Function_projection $ encodeQualifiedFieldName qname
+        FunctionProjection prj -> variant _Function_projection $ encodeProjection prj
       ExpressionVariable var -> variant _Expression_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
@@ -78,7 +78,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         forData _ = pure dataTerm
         forPrimitive fterm = primitive <$> expectStringTerm fterm
         forLambda fterm = read <$> expectStringTerm fterm -- TODO
-        forProjection fterm = projection <$> decodeQualifiedFieldName (adapterContextEvaluation context) fterm
+        forProjection fterm = projection <$> decodeProjection (adapterContextEvaluation context) fterm
         forVariable fterm = variable <$> expectStringTerm fterm
 
     unionType = do

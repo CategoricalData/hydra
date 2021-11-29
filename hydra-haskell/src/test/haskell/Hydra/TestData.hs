@@ -17,9 +17,6 @@ compareStringsType = functionType stringType stringType
 eitherStringOrInt8Type :: Type
 eitherStringOrInt8Type = TypeUnion [FieldType "left" stringType, FieldType "right" int8Type]
 
-exampleProjectionFieldName :: QualifiedFieldName
-exampleProjectionFieldName = QualifiedFieldName "firstName" "Person"
-
 exampleProjectionType :: Type
 exampleProjectionType = functionType testTypePerson stringType
 

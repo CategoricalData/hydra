@@ -174,13 +174,13 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (primitive name) (union $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
-    QC.property $ \qname@(QualifiedFieldName local schema) -> checkTermAdapter
+    QC.property $ \prj@(Projection fname rname) -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType (unionTypeForFunctions testTypePerson) False
-      (projection qname)
+      (projection prj)
       (union $ Field "projection" $ record [ -- Note: the field name is not dereferenced
-        Field "local" $ stringValue local,
-        Field "schema" $ stringValue schema])
+        Field "field" $ stringValue fname,
+        Field "record" $ stringValue rname])
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter
