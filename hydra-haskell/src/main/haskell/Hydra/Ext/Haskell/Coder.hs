@@ -50,7 +50,7 @@ encodeFunction fun = case fun of
   FunctionData -> pure $ hsvar "id"
   FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm body
   FunctionPrimitive name -> pure $ hsvar name
-  FunctionProjection qname -> pure $ hsvar $ qualifyFieldName qname
+  FunctionProjection (Projection fname rname) -> pure $ hsvar $ qualifyFieldName fname rname
   _ -> fail $ "unexpected function: " ++ show fun
 
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
@@ -132,10 +132,10 @@ hsname s = H.NameNormal $ H.QualifiedName [] s
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
 
-qualifyFieldName :: QualifiedFieldName -> String
-qualifyFieldName (QualifiedFieldName local schema) = decapitalize tname ++ capitalize local
+qualifyFieldName :: FieldName -> Name -> String
+qualifyFieldName fname sname = decapitalize tname ++ capitalize fname
   where
-    tname = L.head $ L.reverse $ LS.splitOn "." schema
+    tname = L.last (LS.splitOn "." sname)
 
 unexpected :: (MonadFail m, Show a1) => [Char] -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj

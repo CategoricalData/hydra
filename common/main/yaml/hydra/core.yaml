@@ -319,9 +319,7 @@ definitions:
 
         - name: projection
           description: "A projection of a field from a record"
-          comments:
-            - "By using a qualified field name, we assume that we can only project from named record types"
-          type: QualifiedFieldName
+          type: Projection
 
   - name: FunctionType
     description: "A function type, also known as an arrow type"
@@ -592,13 +590,18 @@ definitions:
         - name: bits
           type: integer
 
-  - name: QualifiedFieldName
+  - name: Projection
+    description: "A projection of a field from a record"
     type:
       record:
-        - name: "local"
-          type: string
+        - name: field
+          description: "The projected field"
+          type: FieldName
 
-        - name: "schema"
+        - name: record
+          description: "The name of the record element containing the field"
+          comments:
+            - "We assume that we can only project from named record types"
           type: Name
 
   - name: Term
