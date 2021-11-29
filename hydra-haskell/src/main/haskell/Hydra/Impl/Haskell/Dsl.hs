@@ -37,7 +37,6 @@ module Hydra.Impl.Haskell.Dsl (
   float64Value,
   floatType,
   floatValue,
---  function,
   functionType,
   int16Type,
   int16Value,
@@ -58,6 +57,7 @@ module Hydra.Impl.Haskell.Dsl (
   mapType,
   match,
   matchWithVariants,
+  nominal,
   nominalType,
   optional,
   optionalType,
@@ -287,6 +287,9 @@ matchWithVariants :: Default a => Name -> [(FieldName, FieldName)] -> Term a
 matchWithVariants sname = cases . fmap toField
   where
     toField (from, to) = Field from $ constFunction $ unitVariant sname to
+
+nominal :: Default a => Name -> Term a -> Term a
+nominal name term = defaultTerm $ ExpressionNominal $ NominalTerm name term
 
 nominalType :: Name -> Type
 nominalType = TypeNominal

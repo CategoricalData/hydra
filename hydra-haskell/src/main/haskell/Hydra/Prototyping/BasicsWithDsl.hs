@@ -123,6 +123,7 @@ basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
     (_Expression_list,            _TermVariant_list),
     (_Expression_literal,         _TermVariant_literal),
     (_Expression_map,             _TermVariant_map),
+    (_Expression_nominal,         _TermVariant_nominal),
     (_Expression_optional,        _TermVariant_optional),
     (_Expression_record,          _TermVariant_record),
     (_Expression_set,             _TermVariant_set),

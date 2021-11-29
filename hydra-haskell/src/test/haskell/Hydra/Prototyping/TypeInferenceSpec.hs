@@ -142,6 +142,17 @@ checkIndividualTerms = do
         (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])
         ["v1", "v2"] (functionType (unionType [FieldType "left" (typeVariable "v1"), FieldType "right" (typeVariable "v2")]) booleanType)
 
+    H.it "Check nominal (newtype) terms" $ do
+      expectMonotype
+        (nominal "Person" testTermArthur)
+        testTypePerson
+      expectMonotype
+        (lambda "x" (nominal "Person" $ record [
+          Field "firstName" $ variable "x",
+          Field "lastName" $ variable "x",
+          Field "age" $ int32Value 42]))
+        (functionType stringType testTypePerson)
+
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Check arbitrary literals" $ do
