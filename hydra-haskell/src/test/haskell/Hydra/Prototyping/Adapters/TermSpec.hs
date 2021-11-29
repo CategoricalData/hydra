@@ -180,7 +180,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (projection prj)
       (union $ Field "projection" $ record [ -- Note: the field name is not dereferenced
         Field "field" $ stringValue fname,
-        Field "record" $ stringValue rname])
+        Field "context" $ stringValue rname])
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter

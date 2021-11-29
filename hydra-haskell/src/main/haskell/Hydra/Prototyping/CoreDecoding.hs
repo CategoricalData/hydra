@@ -70,7 +70,7 @@ decodeMapType context = matchRecord context $ \m -> MapType
 decodeProjection :: Show a => Context a -> Term a -> Result Projection
 decodeProjection context = matchRecord context $ \m -> Projection
   <$> getField m _Projection_field decodeString
-  <*> getField m _Projection_record decodeString
+  <*> getField m _Projection_context decodeString
 
 decodeString :: Term a -> Result String
 decodeString term = case termData term of

@@ -123,7 +123,7 @@ encodeMapType (MapType kt vt) = record [
 encodeProjection :: Default a => Projection -> Term a
 encodeProjection (Projection fname rname) = record [
   Field _Projection_field $ stringValue fname,
-  Field _Projection_record $ stringValue rname]
+  Field _Projection_context $ stringValue rname]
 
 encodeTerm :: (Default a, Ord a) => Term a -> Term a
 encodeTerm term = case termData term of
