@@ -17,6 +17,7 @@ def stringTerm[a](meta: a, s: String): Term[a] = Term(Expression.literal(Literal
 
 def unitTerm[a](meta: a): Term[a] = Term(Expression.record(Seq()), meta)
 
-def unitVariant[a](meta: a, fname: FieldName): Term[a] = variant(meta, fname, unitTerm(meta))
+def unitVariant[a](meta: a, context: Name, fname: FieldName): Term[a] = variant(meta, context, fname, unitTerm(meta))
 
-def variant[a](meta: a, fname: FieldName, term: Term[a]): Term[a] = Term(Expression.union(Field(fname, term)), meta)
+def variant[a](meta: a, context: Name, fname: FieldName, term: Term[a]): Term[a]
+  = Term(Expression.union(UnionExpression(context, Field(fname, term))), meta)
