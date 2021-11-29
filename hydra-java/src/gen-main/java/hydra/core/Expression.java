@@ -512,15 +512,15 @@ public abstract class Expression<A> {
   }
   
   /**
-   * A union term, i.e. a generalization of inl() or inr()
+   * A union term, i.e. a string-indexed generalization of inl() or inr()
    */
   public static final class Union<A> extends Expression<A> {
-    public final hydra.core.Field<A> union;
+    public final hydra.core.UnionExpression<A> union;
     
     /**
      * Constructs an immutable Union object
      */
-    public Union(hydra.core.Field<A> union) {
+    public Union(hydra.core.UnionExpression<A> union) {
       this.union = union;
     }
     
