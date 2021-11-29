@@ -369,12 +369,24 @@ unifyMany (t1 : ts1) (t2 : ts2) =
 unifyMany t1 t2 = throwError $ UnificationMismatch t1 t2
 
 unifies :: Type -> Type -> Solve Subst
-unifies t1 t2 | t1 == t2 = return M.empty
-unifies (TypeVariable v) t = bind v t
-unifies t (TypeVariable v) = bind v t
-unifies (TypeFunction (FunctionType t1 t2)) (TypeFunction (FunctionType t3 t4)) = unifyMany [t1, t2] [t3, t4]
-unifies (TypeRecord f1) (TypeRecord f2) = unifyMany (fieldTypeType <$> f1) (fieldTypeType <$> f2)
-unifies t1 t2 = throwError $ UnificationFail t1 t2
+unifies t1 t2 = if t1 == t2
+    then return M.empty
+    else case (t1, t2) of
+      (TypeElement et1, TypeElement et2) -> unifies et1 et2
+      (TypeFunction (FunctionType t1 t2), TypeFunction (FunctionType t3 t4)) -> unifyMany [t1, t2] [t3, t4]
+      (TypeList lt1, TypeList lt2) -> unifies lt1 lt2
+      (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
+--      (TypeNominal name1, TypeNominal name2) -> TODO: not necessary until named polytypes are supported
+      (TypeOptional ot1, TypeOptional ot2) -> unifies ot1 ot2
+      (TypeRecord f1, TypeRecord f2) -> unifyRowType f1 f2
+      (TypeSet st1, TypeSet st2) -> unifies st1 st2
+      (TypeUnion f1, TypeUnion f2) -> unifyRowType f1 f2
+--      (TypeUniversal... ) -> TODO: TypeUniversal is not yet used
+      (TypeVariable v, t) -> bind v t
+      (t, TypeVariable v) -> bind v t
+      _ -> throwError $ UnificationFail t1 t2
+  where
+    unifyRowType f1 f2 = unifyMany (fieldTypeType <$> f1) (fieldTypeType <$> f2)
 
 -- Unification solver
 solver :: Unifier -> Solve Subst
