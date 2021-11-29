@@ -77,6 +77,15 @@ enum Expression[a]:
      */
     case map(value: Map[hydra.core.Term[a], hydra.core.Term[a]]) extends Expression[a]
     /**
+     * @type parameterized:
+     *         genericType: hydra/core.NominalTerm
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
+     */
+    case nominal(value: hydra.core.NominalTerm[a]) extends Expression[a]
+    /**
      * An optional value
      * 
      * @type optional:
@@ -160,6 +169,7 @@ val _Expression_let: String = "let"
 val _Expression_list: String = "list"
 val _Expression_literal: String = "literal"
 val _Expression_map: String = "map"
+val _Expression_nominal: String = "nominal"
 val _Expression_optional: String = "optional"
 val _Expression_record: String = "record"
 val _Expression_set: String = "set"

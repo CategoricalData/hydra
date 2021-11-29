@@ -24,6 +24,7 @@ module Hydra.Core
   , LiteralVariant(..)
   , MapType(..)
   , Name
+  , NominalTerm(..)
   , OptionalExpression(..)
   , Precision(..)
   , Projection(..)
@@ -57,6 +58,7 @@ module Hydra.Core
   , _Expression_list
   , _Expression_literal
   , _Expression_map
+  , _Expression_nominal
   , _Expression_optional
   , _Expression_record
   , _Expression_set
@@ -159,6 +161,9 @@ module Hydra.Core
   , _MapType_keys
   , _MapType_values
   , _Name
+  , _NominalTerm
+  , _NominalTerm_term
+  , _NominalTerm_typeName
   , _OptionalExpression
   , _OptionalExpression_just
   , _OptionalExpression_nothing
@@ -177,6 +182,7 @@ module Hydra.Core
   , _TermVariant_list
   , _TermVariant_literal
   , _TermVariant_map
+  , _TermVariant_nominal
   , _TermVariant_optional
   , _TermVariant_record
   , _TermVariant_set
@@ -333,6 +339,13 @@ data Expression a
                       variable: a
                     variable: a -}
   | ExpressionMap (Map (Term a) (Term a))
+  {-| @type parameterized:
+              genericType: hydra/core.NominalTerm
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | ExpressionNominal (NominalTerm a)
   {-| An optional value
       
       @type optional:
@@ -636,6 +649,19 @@ data MapType
 -- | @type string
 type Name = String
 
+-- | A term annotated with a fixed, named type; an instance of a newtype
+data NominalTerm a
+  = NominalTerm
+    -- | @type hydra/core.Name
+    { nominallyTypedTermTypeName :: Name
+    {-| @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , nominallyTypedTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
 {-| An encoded optional value, for languages which do not natively support
     optionals -}
 data OptionalExpression a
@@ -686,6 +712,7 @@ data TermVariant
   | TermVariantList
   | TermVariantLiteral
   | TermVariantMap
+  | TermVariantNominal
   | TermVariantOptional
   | TermVariantRecord
   | TermVariantSet
@@ -839,6 +866,7 @@ _Expression_let = "let" :: String
 _Expression_list = "list" :: String
 _Expression_literal = "literal" :: String
 _Expression_map = "map" :: String
+_Expression_nominal = "nominal" :: String
 _Expression_optional = "optional" :: String
 _Expression_record = "record" :: String
 _Expression_set = "set" :: String
@@ -941,6 +969,9 @@ _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
 _Name = "hydra/core.Name" :: String
+_NominalTerm = "hydra/core.NominalTerm" :: String
+_NominalTerm_term = "term" :: String
+_NominalTerm_typeName = "typeName" :: String
 _OptionalExpression = "hydra/core.OptionalExpression" :: String
 _OptionalExpression_just = "just" :: String
 _OptionalExpression_nothing = "nothing" :: String
@@ -959,6 +990,7 @@ _TermVariant_let = "let" :: String
 _TermVariant_list = "list" :: String
 _TermVariant_literal = "literal" :: String
 _TermVariant_map = "map" :: String
+_TermVariant_nominal = "nominal" :: String
 _TermVariant_optional = "optional" :: String
 _TermVariant_record = "record" :: String
 _TermVariant_set = "set" :: String

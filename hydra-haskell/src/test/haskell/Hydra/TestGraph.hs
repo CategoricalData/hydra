@@ -3,6 +3,7 @@ module Hydra.TestGraph (
   testContext,
   testGraph,
   testStrategy,
+  testTermArthur,
   testTypePerson,
   testTypeTimestamp,
   module Hydra.Impl.Haskell.Lib.Strings,
@@ -46,10 +47,7 @@ testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
     arthur = Element {
       elementName = "ArthurDent",
       elementSchema = element "Person",
-      elementData = record [
-        Field "firstName" $ stringValue "Arthur",
-        Field "lastName" $ stringValue "Dent",
-        Field "age" $ int32Value 42]}
+      elementData = testTermArthur}
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
@@ -61,6 +59,12 @@ testSchemaGraph = Graph "testSchemaGraph" [
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
+testTermArthur :: Term Meta
+testTermArthur = record [
+  Field "firstName" $ stringValue "Arthur",
+  Field "lastName" $ stringValue "Dent",
+  Field "age" $ int32Value 42]
+        
 testTypePerson :: Type
 testTypePerson = TypeRecord [
   FieldType "firstName" stringType,

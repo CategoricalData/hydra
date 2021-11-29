@@ -15,6 +15,8 @@ public enum TermVariant {
   
   MAP,
   
+  NOMINAL,
+  
   OPTIONAL,
   
   RECORD,

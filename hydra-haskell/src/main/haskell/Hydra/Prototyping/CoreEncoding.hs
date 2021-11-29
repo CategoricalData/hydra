@@ -120,6 +120,11 @@ encodeMapType (MapType kt vt) = record [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
 
+encodeNominalTerm :: (Default a, Ord a) => NominalTerm a -> Term a
+encodeNominalTerm (NominalTerm name term) = record [
+  Field _NominalTerm_typeName $ stringValue name,
+  Field _NominalTerm_term $ encodeTerm term]
+
 encodeProjection :: Default a => Projection -> Term a
 encodeProjection (Projection fname rname) = record [
   Field _Projection_field $ stringValue fname,
@@ -134,6 +139,7 @@ encodeTerm term = case termData term of
   ExpressionList terms -> variant _Expression _Expression_list $ list $ encodeTerm <$> terms
   ExpressionMap m -> variant _Expression _Expression_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
+  ExpressionNominal ntt -> variant _Expression _Expression_nominal $ encodeNominalTerm ntt 
   ExpressionOptional m -> variant _Expression _Expression_optional $ optional $ encodeTerm <$> m
   ExpressionRecord fields -> variant _Expression _Expression_record $ list $ encodeField <$> fields
   ExpressionSet terms -> variant _Expression _Expression_set $ set $ S.fromList $ encodeTerm <$> S.toList terms

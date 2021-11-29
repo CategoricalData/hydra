@@ -187,6 +187,7 @@ termVariant term = case termData term of
   ExpressionFunction _ -> TermVariantFunction
   ExpressionList _ -> TermVariantList
   ExpressionMap _ -> TermVariantMap
+  ExpressionNominal _ -> TermVariantNominal
   ExpressionOptional _ -> TermVariantOptional
   ExpressionRecord _ -> TermVariantRecord
   ExpressionSet _ -> TermVariantSet
@@ -203,6 +204,7 @@ termVariants = [
   TermVariantFunction,
   TermVariantList,
   TermVariantMap,
+  TermVariantNominal,
   TermVariantOptional,
   TermVariantRecord,
   TermVariantSet,

@@ -112,6 +112,15 @@ definitions:
                       type:
                         variable: a
 
+        - name: nominal
+          type:
+            parameterized:
+              genericType: NominalTerm
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
         - name: optional
           description: "An optional value"
           type:
@@ -493,6 +502,22 @@ definitions:
   - name: Name
     type: string
 
+  - name: NominalTerm
+    description: "A term annotated with a fixed, named type; an instance of a newtype"
+    type:
+      record:
+        - name: typeName
+          type: Name
+
+        - name: term
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
   - name: OptionalExpression
     description: "An encoded optional value, for languages which do not natively support optionals"
     type:
@@ -556,6 +581,7 @@ definitions:
         - list
         - literal
         - map
+        - nominal
         - optional
         - record
         - set

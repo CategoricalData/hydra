@@ -23,6 +23,8 @@ public abstract class Expression<A> {
     
     R visit(Map instance) ;
     
+    R visit(Nominal instance) ;
+    
     R visit(Optional instance) ;
     
     R visit(Record instance) ;
@@ -79,6 +81,11 @@ public abstract class Expression<A> {
     
     @Override
     default R visit(Map instance) {
+      return otherwise(instance);
+    }
+    
+    @Override
+    default R visit(Nominal instance) {
       return otherwise(instance);
     }
     
@@ -343,6 +350,36 @@ public abstract class Expression<A> {
     @Override
     public int hashCode() {
       return 2 * map.hashCode();
+    }
+  }
+  
+  public static final class Nominal<A> extends Expression<A> {
+    public final hydra.core.NominalTerm<A> nominal;
+    
+    /**
+     * Constructs an immutable Nominal object
+     */
+    public Nominal(hydra.core.NominalTerm<A> nominal) {
+      this.nominal = nominal;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Nominal)) {
+          return false;
+      }
+      Nominal o = (Nominal) other;
+      return nominal.equals(o.nominal);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * nominal.hashCode();
     }
   }
   

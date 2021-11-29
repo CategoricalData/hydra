@@ -261,6 +261,13 @@ infer context term = case termData term of
           ((kt', vt'), c') <- forList r
           return ((kt, vt), c' ++ kc ++ vc ++ [(kt, kt'), (vt, vt')])
 
+  ExpressionNominal (NominalTerm name term') -> do
+    case namedType context name of
+      ResultFailure msg -> error msg
+      ResultSuccess typ -> do
+        (typ', c) <- infer context term'
+        return (typ, c ++ [(typ, typ')])
+
   ExpressionOptional m -> case m of
     Nothing -> do
       tv <- freshTypeVariable
@@ -284,19 +291,14 @@ infer context term = case termData term of
       TypeList et -> return (TypeSet et, c)
       _ -> error "expected a list type"
 
-  -- Note: this branch not only retrieves the union type associated with a union term,
-  --       but also performs type checking on the provided field, matching it against the
-  --       corresponding variant of the union type.
-  ExpressionUnion (UnionExpression sname field@(Field fname fterm)) -> case namedType context sname of
+  ExpressionUnion (UnionExpression sname (Field fname fterm)) -> case namedType context sname of
     ResultFailure msg -> error msg
     ResultSuccess typ -> do
       (ftype, _) <- infer context fterm
       case typ of
         TypeUnion sfields -> if L.null matches
             then error $ "no field " ++ show fname ++ " found in union type " ++ show sname
-            else if ftype /= fieldTypeType (L.head matches)
-            then error $ "mismatch between provided type " ++ show sname ++ " and field " ++ show field
-            else return (typ, [])
+            else return (typ, [(ftype, fieldTypeType (L.head matches))])
           where
             matches = L.filter (\f -> fieldTypeName f == fname) sfields
         _ -> error $ "type name " ++ show sname ++ " did not resolve to a union type"
@@ -371,6 +373,7 @@ unifies t1 t2 | t1 == t2 = return M.empty
 unifies (TypeVariable v) t = bind v t
 unifies t (TypeVariable v) = bind v t
 unifies (TypeFunction (FunctionType t1 t2)) (TypeFunction (FunctionType t3 t4)) = unifyMany [t1, t2] [t3, t4]
+unifies (TypeRecord f1) (TypeRecord f2) = unifyMany (fieldTypeType <$> f1) (fieldTypeType <$> f2)
 unifies t1 t2 = throwError $ UnificationFail t1 t2
 
 -- Unification solver
