@@ -1,10 +1,10 @@
-module Hydra.Prototyping.TypeInferenceSpec where
+module Hydra.Prototyping.Types.InferenceSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl
 import Hydra.Prototyping.Basics
-import Hydra.Prototyping.TypeInference
+import Hydra.Prototyping.Types.Inference
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H
