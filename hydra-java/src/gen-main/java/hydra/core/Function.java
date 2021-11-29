@@ -227,12 +227,12 @@ public abstract class Function<A> {
    * A projection of a field from a record
    */
   public static final class Projection<A> extends Function<A> {
-    public final hydra.core.FieldName projection;
+    public final hydra.core.Projection projection;
     
     /**
      * Constructs an immutable Projection object
      */
-    public Projection(hydra.core.FieldName projection) {
+    public Projection(hydra.core.Projection projection) {
       this.projection = projection;
     }
     
