@@ -38,6 +38,7 @@ module Hydra.Core
   , TypeVariable
   , TypeVariant(..)
   , TypedTerm(..)
+  , UnionExpression(..)
   , UniversalType(..)
   , Variable
   , _Application
@@ -180,8 +181,8 @@ module Hydra.Core
   , _Precision_arbitrary
   , _Precision_bits
   , _Projection
+  , _Projection_context
   , _Projection_field
-  , _Projection_record
   , _Term
   , _TermVariant
   , _TermVariant_application
@@ -239,6 +240,9 @@ module Hydra.Core
   , _TypedTerm
   , _TypedTerm_term
   , _TypedTerm_type
+  , _UnionExpression
+  , _UnionExpression_context
+  , _UnionExpression_field
   , _UniversalType
   , _UniversalType_body
   , _UniversalType_variable
@@ -733,7 +737,7 @@ data Projection
         
         @comments We assume that we can only project from named record types
         @type hydra/core.Name -}
-    , projectionRecord :: Name } deriving (Eq, Generic, Ord, Read, Show)
+    , projectionContext :: Name } deriving (Eq, Generic, Ord, Read, Show)
 
 data Term a
   = Term
@@ -860,6 +864,19 @@ data TypedTerm a
                     variable: a
                   variable: a -}
     , typedTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
+-- | A variant expression, or instance of a union type
+data UnionExpression a
+  = UnionExpression
+    {-| @type parameterized:
+                genericType: hydra/core.Field
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    { unionExpressionField :: Field a
+    -- | @type hydra/core.Name
+    , unionExpressionContext :: Name } deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A universally quantified ('forall') type, parameterized by a type variable
 data UniversalType
@@ -1014,8 +1031,8 @@ _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String
 _Projection = "hydra/core.Projection" :: String
+_Projection_context = "context" :: String
 _Projection_field = "field" :: String
-_Projection_record = "record" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String
@@ -1073,6 +1090,9 @@ _Type_variable = "variable" :: String
 _TypedTerm = "hydra/core.TypedTerm" :: String
 _TypedTerm_term = "term" :: String
 _TypedTerm_type = "type" :: String
+_UnionExpression = "hydra/core.UnionExpression" :: String
+_UnionExpression_context = "context" :: String
+_UnionExpression_field = "field" :: String
 _UniversalType = "hydra/core.UniversalType" :: String
 _UniversalType_body = "body" :: String
 _UniversalType_variable = "variable" :: String
