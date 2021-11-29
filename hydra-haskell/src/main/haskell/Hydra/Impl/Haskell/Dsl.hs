@@ -197,7 +197,7 @@ expectStringTerm term = case termData term of
 
 expectUnionTerm :: Show a => Term a -> Result (Field a)
 expectUnionTerm term = case termData term of
-  ExpressionUnion field -> pure field
+  ExpressionUnion (UnionExpression _ field) -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
 fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
@@ -283,10 +283,10 @@ match = cases . fmap toField
   where
     toField (name, term) = Field name term
 
-matchWithVariants :: Default a => [(FieldName, FieldName)] -> Term a
-matchWithVariants = cases . fmap toField
+matchWithVariants :: Default a => Name -> [(FieldName, FieldName)] -> Term a
+matchWithVariants sname = cases . fmap toField
   where
-    toField (from, to) = Field from $ constFunction $ unitVariant to
+    toField (from, to) = Field from $ constFunction $ unitVariant sname to
 
 nominalType :: Name -> Type
 nominalType = TypeNominal
@@ -356,8 +356,8 @@ uint8Type = integerType IntegerTypeUint8
 uint8Value :: Default a => Integer -> Term a
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
-union :: Default a => Field a -> Term a
-union = defaultTerm . ExpressionUnion
+union :: Default a => Name -> Field a -> Term a
+union sname field = defaultTerm $ ExpressionUnion $ UnionExpression sname field
 
 unitTerm :: Default a => Term a
 unitTerm = defaultTerm $ ExpressionRecord []
@@ -368,18 +368,18 @@ unionType = TypeUnion
 unitType :: Type
 unitType = TypeRecord []
 
-unitVariant :: Default a => FieldName -> Term a
-unitVariant fname = variant fname unitTerm
+unitVariant :: Default a => Name -> FieldName -> Term a
+unitVariant sname fname = variant sname fname unitTerm
 
 variable :: Default a => Variable -> Term a
 variable = defaultTerm . ExpressionVariable
 
-variant :: Default a => FieldName -> Term a -> Term a
-variant fname term = defaultTerm $ ExpressionUnion (Field fname term)
+variant :: Default a => Name -> FieldName -> Term a -> Term a
+variant sname fname term = defaultTerm $ ExpressionUnion $ UnionExpression sname (Field fname term)
 
-withFunction :: Default a => FieldName -> Element a -> Term a
-withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
+withFunction :: Default a => Name -> FieldName -> Element a -> Term a
+withFunction sname name el = lambda var $ variant sname name $ apply (elementRef el) (variable var)
   where var = "x"
 
-withVariant :: Default a => FieldName -> Term a
-withVariant name = constFunction $ unitVariant name
+withVariant :: Default a => Name -> FieldName -> Term a
+withVariant sname name = constFunction $ unitVariant sname name

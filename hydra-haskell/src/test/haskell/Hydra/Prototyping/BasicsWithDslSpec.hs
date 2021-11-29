@@ -39,22 +39,26 @@ testsForTypeVariantFunctions = do
     H.it "Test literalTypeVariant function element" $
       QC.property $ \at ->
         testEvaluate (apply (deref "hydra/basics.literalTypeVariant") (encodeLiteralType at))
-        == pure (encodeLiteralVariant $ literalTypeVariant at)
+        `H.shouldBe`
+        pure (encodeLiteralVariant $ literalTypeVariant at)
 
     H.it "Test floatTypeVariant function element" $
       QC.property $ \ft ->
         testEvaluate (apply (deref "hydra/basics.floatTypeVariant") (encodeFloatType ft))
-        == pure (encodeFloatVariant $ floatTypeVariant ft)
+        `H.shouldBe`
+        pure (encodeFloatVariant $ floatTypeVariant ft)
 
     H.it "Test integerTypeVariant function element" $
       QC.property $ \at ->
         testEvaluate (apply (deref "hydra/basics.integerTypeVariant") (encodeIntegerType at))
-        == pure (encodeIntegerVariant $ integerTypeVariant at)
+        `H.shouldBe`
+        pure (encodeIntegerVariant $ integerTypeVariant at)
 
     H.it "Test typeVariant function element" $
       QC.property $ \t ->
         testEvaluate (apply (deref "hydra/basics.typeVariant") (encodeType t))
-        == pure (encodeTypeVariant $ typeVariant t)
+        `H.shouldBe`
+        pure (encodeTypeVariant $ typeVariant t)
 
 spec :: H.Spec
 spec = do

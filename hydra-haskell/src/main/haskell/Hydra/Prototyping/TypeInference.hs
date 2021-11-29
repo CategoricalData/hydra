@@ -238,17 +238,17 @@ infer context term = case termData term of
         ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
         ResultFailure msg -> error msg
 
-    FunctionProjection (Projection fname rname) -> do
-      case namedType context rname of
+    FunctionProjection (Projection fname sname) -> do
+      case namedType context sname of
         ResultFailure msg -> error msg
         ResultSuccess typ -> do
           case typ of
             TypeRecord sfields -> if L.null matches
-                then error $ "no field " ++ show fname ++ " found in record type " ++ show rname
+                then error $ "no field " ++ show fname ++ " found in record type " ++ show sname
                 else return (functionType typ (fieldTypeType $ L.head matches), [])
               where
                 matches = L.filter (\f -> fieldTypeName f == fname) sfields
-            _ -> error $ "type name " ++ show rname ++ " did not resolve to a record type"
+            _ -> error $ "type name " ++ show sname ++ " did not resolve to a record type"
 
   ExpressionIf (If cond tr fl) -> do
     (t1, c1) <- infer context cond
@@ -326,10 +326,22 @@ infer context term = case termData term of
       TypeList et -> return (TypeSet et, c)
       _ -> error "expected a list type"
 
-  -- TODO: need row polymorphism or qualified field names
-  ExpressionUnion field -> do
-    (ft, c1) <- inferFieldType context field
-    return (unionType [ft], c1)
+  -- Note: this branch not only retrieves the union type associated with a union term,
+  --       but also performs type checking on the provided field, matching it against the
+  --       corresponding variant of the union type.
+  ExpressionUnion (UnionExpression sname field@(Field fname fterm)) -> case namedType context sname of
+    ResultFailure msg -> error msg
+    ResultSuccess typ -> do
+      (ftype, _) <- infer context fterm
+      case typ of
+        TypeUnion sfields -> if L.null matches
+            then error $ "no field " ++ show fname ++ " found in union type " ++ show sname
+            else if ftype /= fieldTypeType (L.head matches)
+            then error $ "mismatch between provided type " ++ show sname ++ " and field " ++ show field
+            else return (typ, [])
+          where
+            matches = L.filter (\f -> fieldTypeName f == fname) sfields
+        _ -> error $ "type name " ++ show sname ++ " did not resolve to a union type"
 
   ExpressionVariable x -> do
       t <- lookupTypingEnvironment x

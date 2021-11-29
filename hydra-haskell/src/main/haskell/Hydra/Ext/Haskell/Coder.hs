@@ -71,7 +71,7 @@ encodeTerm term = case termData term of
         return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
       where
         toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname fn) <$> encodeTerm ft
-  ExpressionUnion (Field fn ft) -> hsapp (hsvar fn) <$> encodeTerm ft
+  ExpressionUnion (UnionExpression _ (Field fn ft)) -> hsapp (hsvar fn) <$> encodeTerm ft
   ExpressionVariable v -> pure $ hsvar v
   _ -> fail $ "unexpected term: " ++ show term
 

@@ -204,7 +204,7 @@ definitions:
           description: "A union term, i.e. a string-indexed generalization of inl() or inr()"
           type:
             parameterized:
-              genericType: VariantRecord
+              genericType: UnionExpression
               parameters:
                 - variable: a
                   type:
@@ -582,6 +582,21 @@ definitions:
                   type:
                     variable: a
 
+  - name: OptionalExpression
+    description: "An encoded optional value, for languages which do not natively support optionals"
+    type:
+      union:
+        - name: just
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: nothing
+
   - name: Precision
     type:
       union:
@@ -599,7 +614,7 @@ definitions:
           type: FieldName
 
         - name: context
-          description: "The name of the record element containing the field"
+          description: "The name of the record type which defines the field"
           comments:
             - "We assume that we can only project from named record types"
           type: Name
@@ -760,10 +775,16 @@ definitions:
                   type:
                     variable: a
 
-  - name: VariantRecord
+  - name: UnionExpression
     description: "A variant expression, or instance of a union type"
     type:
       record:
+        - name: context
+          description: "The name of the type of this union expression"
+          comments:
+            - "We assume that we can only instantiate named union types"
+          type: Name
+
         - name: field
           type:
             parameterized:
@@ -772,9 +793,6 @@ definitions:
                 - variable: a
                   type:
                     variable: a
-
-        - name: context
-          type: Name
 
   - name: UniversalType
     description: "A universally quantified ('forall') type, parameterized by a type variable"

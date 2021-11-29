@@ -9,6 +9,7 @@ import qualified Hydra.Ext.Yaml.Model as YM
 
 import Hydra.TestData
 import Hydra.TestUtils
+import Hydra.ArbitraryCore (untyped)
 
 import qualified Data.Bifunctor as BF
 import qualified Test.Hspec as H
@@ -86,9 +87,11 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Unions become YAML mappings (as records)" $
     QC.property $ \int -> checkYamlCoder stringOrIntType
-      (variant "right" $ int32Value int) (yamlMap [
-        (yamlStr "right", yamlInt int)])
-
+      (variant untyped "right" $ int32Value int)
+      (yamlMap [
+        (yamlStr "context", yamlStr untyped),
+        (yamlStr "record", yamlMap [(yamlStr "right", yamlInt int)])])
+          
 spec :: H.Spec
 spec = do
   literalTypeConstraintsAreRespected

@@ -37,14 +37,14 @@ checkAdapter :: (Eq t, Eq v, Show t, Show v)
   -> (r -> AdapterContext Meta)
   -> r -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter mkAdapter context variants source target lossy vs vt = do
-    Y.isJust adapter' `H.shouldBe` True
+    (if Y.isNothing adapter' then warnings else []) `H.shouldBe` []
     adapterSource adapter `H.shouldBe` source
     adapterTarget adapter `H.shouldBe` target
     adapterIsLossy adapter `H.shouldBe` lossy
     stepOut step vs `H.shouldBe` ResultSuccess vt
     if lossy then True `H.shouldBe` True else (stepOut step vs >>= stepIn step) `H.shouldBe` ResultSuccess vs
   where
-    adapter' = qualifiedValue $ mkAdapter (context variants) source
+    Qualified adapter' warnings = mkAdapter (context variants) source
     adapter = Y.fromJust adapter'
     step = adapterStep adapter
 

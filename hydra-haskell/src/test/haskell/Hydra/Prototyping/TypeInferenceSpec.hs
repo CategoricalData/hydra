@@ -93,10 +93,9 @@ checkIndividualTerms = do
         ["v1"] (functionType (typeVariable "v1") (recordType [FieldType "lat" float64Type, FieldType "lon" $ typeVariable "v1"]))
 
     H.it "Check unions" $ do
-      -- Note that type inference only guesses the "top" type, even if this union "really" should have more than one field
       expectMonotype
-        (union $ Field "lat" $ float64Value 37.7749)
-        (unionType [FieldType "lat" float64Type])
+        (union "Timestamp" $ Field "unixTimeMillis" $ uint64Value 1638200308368)
+        testTypeTimestamp
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
