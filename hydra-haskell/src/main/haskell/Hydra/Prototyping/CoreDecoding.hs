@@ -80,7 +80,9 @@ decodeString term = case termData term of
   _ -> fail "expected a literal value"
 
 decodeType :: Show a => Context a -> Term a -> Result Type
-decodeType context = matchUnion context [
+decodeType context term = case termData term of
+  ExpressionElement name -> pure $ TypeNominal name
+  _ -> matchUnion context [
     (_Type_literal, fmap TypeLiteral . decodeLiteralType context),
     (_Type_element, fmap TypeElement . decodeType context),
     (_Type_function, fmap TypeFunction . decodeFunctionType context),
@@ -91,8 +93,7 @@ decodeType context = matchUnion context [
     (_Type_record, fmap TypeRecord . decodeFieldTypes context),
     (_Type_set, fmap TypeSet . decodeType context),
     (_Type_union, fmap TypeUnion . decodeFieldTypes context),
-    (_Type_universal, fmap TypeUniversal . decodeUniversalType context),
-    (_Type_variable, fmap TypeVariable . decodeString)]
+    (_Type_variable, fmap TypeVariable . decodeString)] term
 
 decodeUniversalType :: Show a => Context a -> Term a -> Result UniversalType
 decodeUniversalType context = matchRecord context $ \m -> UniversalType

@@ -1,6 +1,7 @@
 module Hydra.TestGraph (
   graphElementsMap,
   testContext,
+  testElementArthur,
   testGraph,
   testStrategy,
   testTermArthur,
@@ -41,13 +42,14 @@ testContext = Context {
   where
     allPrimitives = mathPrimitives ++ stringPrimitives
 
+testElementArthur :: Element Meta
+testElementArthur = Element {
+  elementName = "ArthurDent",
+  elementSchema = element "Person",
+  elementData = testTermArthur}
+
 testGraph :: Graph Meta
-testGraph = Graph "testGraph" [arthur] allTerms "testSchemaGraph"
-  where
-    arthur = Element {
-      elementName = "ArthurDent",
-      elementSchema = element "Person",
-      elementData = testTermArthur}
+testGraph = Graph "testGraph" [testElementArthur] allTerms "testSchemaGraph"
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
@@ -64,7 +66,7 @@ testTermArthur = record [
   Field "firstName" $ stringValue "Arthur",
   Field "lastName" $ stringValue "Dent",
   Field "age" $ int32Value 42]
-        
+
 testTypePerson :: Type
 testTypePerson = TypeRecord [
   FieldType "firstName" stringType,
@@ -75,7 +77,7 @@ testTypeTimestamp :: Type
 testTypeTimestamp = TypeUnion [
   FieldType "unixTimeMillis" uint64Type,
   FieldType "date" stringType]
-  
+
 allTerms :: Term Meta -> Bool
 allTerms _ = True
 

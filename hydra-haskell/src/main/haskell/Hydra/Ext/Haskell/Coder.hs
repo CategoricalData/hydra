@@ -60,17 +60,20 @@ encodeTerm term = case termData term of
   ExpressionElement name -> pure $ hsvar name
   ExpressionFunction f -> encodeFunction f
   ExpressionList els -> H.ExpressionList <$> CM.mapM encodeTerm els
+  ExpressionNominal (NominalTerm sname term') -> case termData term' of
+    ExpressionRecord fields -> case fields of
+      [] -> pure $ H.ExpressionTuple []
+      _ -> do
+          let typeName = typeNameForRecord sname
+          updates <- CM.mapM toFieldUpdate fields
+          return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
+        where
+          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyFieldName sname fn) <$> encodeTerm ft
+--    ExpressionUnion (UnionExpression sname' field) ->
+    _ -> encodeTerm term'
   ExpressionOptional m -> case m of
     Nothing -> pure $ hsvar "Nothing"
     Just t -> hsapp (hsvar "Just") <$> encodeTerm t
-  ExpressionRecord fields -> case fields of
-    [] -> pure $ H.ExpressionTuple []
-    _ -> do
-        let typeName = "Placeholder"
-        updates <- CM.mapM toFieldUpdate fields
-        return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
-      where
-        toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname fn) <$> encodeTerm ft
   ExpressionUnion (UnionExpression _ (Field fn ft)) -> hsapp (hsvar fn) <$> encodeTerm ft
   ExpressionVariable v -> pure $ hsvar v
   _ -> fail $ "unexpected term: " ++ show term
@@ -133,9 +136,10 @@ hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
 
 qualifyFieldName :: FieldName -> Name -> String
-qualifyFieldName fname sname = decapitalize tname ++ capitalize fname
-  where
-    tname = L.last (LS.splitOn "." sname)
+qualifyFieldName fname sname = decapitalize (typeNameForRecord sname) ++ capitalize fname
+
+typeNameForRecord :: Name -> String
+typeNameForRecord sname = L.last (LS.splitOn "." sname)
 
 unexpected :: (MonadFail m, Show a1) => [Char] -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj
