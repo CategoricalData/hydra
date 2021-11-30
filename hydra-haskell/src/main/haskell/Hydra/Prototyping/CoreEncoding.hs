@@ -27,7 +27,7 @@ import qualified Data.Set as S
 
 
 encodeApplication :: (Default a, Ord a) => Application a -> Term a
-encodeApplication (Application f a) = record [
+encodeApplication (Application f a) = nominal _Application $ record [
   Field _Application_function $ encodeTerm f,
   Field _Application_argument $ encodeTerm f]
 
@@ -51,12 +51,12 @@ encodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
   LiteralVariantString -> _LiteralVariant_string
 
 encodeField :: (Default a, Ord a) => Field a -> Term a
-encodeField (Field name term) = record [
+encodeField (Field name term) = nominal _Field $ record [
   Field _Field_name $ stringValue name,
   Field _Field_term $ encodeTerm term]
 
 encodeFieldType :: Default a => FieldType -> Term a
-encodeFieldType (FieldType fname t) = record [
+encodeFieldType (FieldType fname t) = nominal _FieldType $ record [
   Field _FieldType_name $ stringTerm fname,
   Field _FieldType_type $ encodeType t]
 
@@ -82,7 +82,7 @@ encodeFunction f = case f of
   FunctionProjection prj -> variant _Function _Function_projection $ encodeProjection prj
 
 encodeFunctionType :: Default a => FunctionType -> Term a
-encodeFunctionType (FunctionType dom cod) = record [
+encodeFunctionType (FunctionType dom cod) = nominal _FunctionType $ record [
   Field _FunctionType_domain $ encodeType dom,
   Field _FunctionType_codomain $ encodeType cod]
 
@@ -111,22 +111,22 @@ encodeIntegerVariant iv = unitVariant _IntegerVariant $ case iv of
   IntegerVariantUint64 -> _IntegerVariant_uint64
 
 encodeLambda :: (Default a, Ord a) => Lambda a -> Term a
-encodeLambda (Lambda v b) = record [
+encodeLambda (Lambda v b) = nominal _Lambda $ record [
   Field _Lambda_parameter $ stringValue v,
   Field _Lambda_body $ encodeTerm b]
 
 encodeMapType :: Default a => MapType -> Term a
-encodeMapType (MapType kt vt) = record [
+encodeMapType (MapType kt vt) = nominal _MapType $ record [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
 
 encodeNominalTerm :: (Default a, Ord a) => NominalTerm a -> Term a
-encodeNominalTerm (NominalTerm name term) = record [
+encodeNominalTerm (NominalTerm name term) = nominal _NominalTerm $ record [
   Field _NominalTerm_typeName $ stringValue name,
   Field _NominalTerm_term $ encodeTerm term]
 
 encodeProjection :: Default a => Projection -> Term a
-encodeProjection (Projection fname rname) = record [
+encodeProjection (Projection fname rname) = nominal _Projection $ record [
   Field _Projection_field $ stringValue fname,
   Field _Projection_context $ stringValue rname]
 
@@ -147,7 +147,7 @@ encodeTerm term = case termData term of
   ExpressionVariable var -> variant _Expression _Expression_variable $ stringValue var
 
 encodeType :: Default a => Type -> Term a
-encodeType typ = case typ of
+encodeType typ = nominal _Type $ case typ of
   TypeLiteral at -> variant _Type _Type_literal $ encodeLiteralType at
   TypeElement t -> variant _Type _Type_element $ encodeType t
   TypeFunction ft -> variant _Type _Type_function $ encodeFunctionType ft
@@ -177,11 +177,11 @@ encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
   TypeVariantVariable -> _TypeVariant_variable
 
 encodeUniversalType :: Default a => UniversalType -> Term a
-encodeUniversalType (UniversalType var body) = record [
+encodeUniversalType (UniversalType var body) = nominal _UniversalType $ record [
   Field _UniversalType_variable $ stringValue var,
   Field _UniversalType_body $ encodeType body]
 
 encodeUnionExpression :: (Default a, Ord a) => UnionExpression a -> Term a
-encodeUnionExpression (UnionExpression context field) = record [
+encodeUnionExpression (UnionExpression context field) = nominal _UnionExpression $ record [
   Field _UnionExpression_field $ encodeField field,
   Field _UnionExpression_context $ stringValue context]

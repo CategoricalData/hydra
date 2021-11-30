@@ -76,6 +76,7 @@ encodeTerm term = case termData term of
     Just t -> hsapp (hsvar "Just") <$> encodeTerm t
   ExpressionUnion (UnionExpression _ (Field fn ft)) -> hsapp (hsvar fn) <$> encodeTerm ft
   ExpressionVariable v -> pure $ hsvar v
+  ExpressionRecord _ -> fail $ "unexpected anonymous record: " ++ show term
   _ -> fail $ "unexpected term: " ++ show term
 
 haskellCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
@@ -135,8 +136,8 @@ hsname s = H.NameNormal $ H.QualifiedName [] s
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
 
-qualifyFieldName :: FieldName -> Name -> String
-qualifyFieldName fname sname = decapitalize (typeNameForRecord sname) ++ capitalize fname
+qualifyFieldName :: Name -> FieldName -> String
+qualifyFieldName sname fname = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (LS.splitOn "." sname)

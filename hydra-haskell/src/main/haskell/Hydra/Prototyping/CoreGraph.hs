@@ -1,4 +1,37 @@
-module Hydra.Prototyping.CoreGraph ( hydraCoreGraph ) where
+module Hydra.Prototyping.CoreGraph (
+  hydraCoreGraph,
+   
+  hsUniversalType,
+  hcApplication,
+  hcLiteralType,
+  hcLiteralVariant,
+  hcLiteral,
+  hcBooleanValue,
+  hcComparison,
+  hcField,
+  hcFieldName,
+  hcFieldType,
+  hcFloatType,
+  hcFloatValue,
+  hcFloatVariant,
+  hcFunction,
+  hsFunctionType,
+  hsFunctionVariant,
+  hsIntegerType,
+  hsIntegerValue,
+  hsIntegerVariant,
+  hsLambda,
+  hsMapType,
+  hsName,
+  hsPrecision,
+  hsTerm,
+  hsTermVariant,
+  hsType,
+  hsTypeVariable,
+  hsTypeVariant,
+  hsTypedTerm,
+  hsVariable,
+   ) where
 
 import Hydra.Core
 import Hydra.Graph

@@ -58,7 +58,7 @@ instance ToTree H.Expression_Case where
 instance ToTree H.Expression_ConstructRecord where
   toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces body]
     where
-      body = indentLines (fromUpdate <$> updates)
+      body = commaSep True (fromUpdate <$> updates)
       fromUpdate (H.FieldUpdate fn val) = ifx defineOp (toTree fn) (toTree val)
 
 instance ToTree H.Expression_If where

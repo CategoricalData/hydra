@@ -100,11 +100,6 @@ decodeUniversalType context = matchRecord context $ \m -> UniversalType
   <$> getField m _UniversalType_variable decodeString
   <*> getField m _UniversalType_body (decodeType context)
 
-deref :: Context a -> Term a -> Result (Term a)
-deref context term = case termData term of
-  ExpressionElement name -> dereferenceElement context name >>= deref context
-  _ -> pure term
-
 getField :: M.Map FieldName (Term a) -> FieldName -> (Term a -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"

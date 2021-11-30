@@ -19,9 +19,9 @@ module Hydra.Impl.Haskell.Dsl (
   constFunction,
   dataTerm,
   defaultTerm,
-  deref,
   element,
   elementRef,
+  elementRefByName,
   elementType,
   expectInt32Term,
   expectLiteral,
@@ -158,14 +158,14 @@ dataTerm = defaultTerm $ ExpressionFunction FunctionData
 defaultTerm  :: Default a => Expression a -> Term a
 defaultTerm e = Term e dflt
 
-deref :: Default a => Name -> Term a
-deref name = apply dataTerm $ defaultTerm $ ExpressionElement name
-
 element :: Default a => Name -> Term a
 element = defaultTerm . ExpressionElement
 
 elementRef :: Default a => Element a -> Term a
 elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName el
+
+elementRefByName :: Default a => Name -> Term a
+elementRefByName name = apply dataTerm $ defaultTerm $ ExpressionElement name
 
 elementType :: Type -> Type
 elementType = TypeElement
