@@ -17,24 +17,31 @@ individualEncoderTestCases = do
   H.describe "Individual encoder test cases" $ do
     
     H.it "string literal type" $ do
-      encodeLiteralType LiteralTypeString `H.shouldBe` mterm (unitVariant _LiteralType _LiteralType_string)
+      H.shouldBe
+        (encodeLiteralType LiteralTypeString)
+        (mterm (unitVariant _LiteralType _LiteralType_string))
 
     H.it "string type" $ do
-      encodeType stringType `H.shouldBe` mterm (variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
+      H.shouldBe
+        (encodeType stringType)
+        (mterm (nominal _Type $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string)))
 
     H.it "int32 type" $ do
-      encodeType int32Type `H.shouldBe`
-        mterm (variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
+      H.shouldBe
+        (encodeType int32Type)
+        (mterm (nominal _Type $
+          variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32)))
 
     H.it "record type" $ do
-      encodeType (TypeRecord [FieldType "something" stringType, FieldType "nothing" unitType]) `H.shouldBe`
-        mterm (variant _Type _Type_record $ list [
-          record [
+      H.shouldBe
+        (encodeType (TypeRecord [FieldType "something" stringType, FieldType "nothing" unitType]))
+        (mterm (nominal _Type $ variant _Type _Type_record $ list [
+          nominal _FieldType $ record [
             Field _FieldType_name $ stringValue "something",
-            Field _FieldType_type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
-          record [
+            Field _FieldType_type $ nominal _Type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
+          nominal _FieldType $ record [
             Field _FieldType_name $ stringValue "nothing",
-            Field _FieldType_type $ variant _Type _Type_record $ list []]])
+            Field _FieldType_type $ nominal _Type $ variant _Type _Type_record $ list []]]))
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -50,14 +57,14 @@ individualDecoderTestCases = do
         
     H.it "union type" $ do
       decodeType testContext (variant _Type _Type_union $ list [
-        record [
+        nominal _FieldType $ record [
           Field _FieldType_name $ stringValue "left",
           Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int64],
-        record [
+        nominal _FieldType $ record [
           Field _FieldType_name $ stringValue "right",
           Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float64]])
         `H.shouldBe` pure (TypeUnion [FieldType "left" int64Type, FieldType "right" float64Type])
-        
+
 decodeInvalidTerms :: H.SpecWith ()
 decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do

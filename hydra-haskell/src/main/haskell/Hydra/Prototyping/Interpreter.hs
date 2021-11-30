@@ -36,6 +36,7 @@ evaluate context term = reduce M.empty term
         ExpressionMap map -> defaultTerm . ExpressionMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
+        ExpressionNominal (NominalTerm name term') -> (\t -> defaultTerm $ ExpressionNominal (NominalTerm name t)) <$> reduce bindings term'
         ExpressionOptional m -> defaultTerm . ExpressionOptional <$> CM.mapM reduceb m
         ExpressionRecord fields -> defaultTerm  . ExpressionRecord <$> CM.mapM reduceField fields
         ExpressionSet terms -> defaultTerm . ExpressionSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
@@ -62,7 +63,7 @@ evaluate context term = reduce M.empty term
 
       ExpressionFunction f -> case f of
         FunctionCases cases -> do
-          arg <- reduce bindings $ L.head args
+          arg <- (reduce bindings $ L.head args) >>= deref context
           case termData arg of
             ExpressionUnion (UnionExpression _ (Field fname t)) -> if L.null matching
                 then fail $ "no case for field named " ++ fname

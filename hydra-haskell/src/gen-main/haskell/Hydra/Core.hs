@@ -653,14 +653,14 @@ type Name = String
 data NominalTerm a
   = NominalTerm
     -- | @type hydra/core.Name
-    { nominallyTypedTermTypeName :: Name
+    { nominalTermTypeName :: Name
     {-| @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
                 - type:
                     variable: a
                   variable: a -}
-    , nominallyTypedTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+    , nominalTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| An encoded optional value, for languages which do not natively support
     optionals -}

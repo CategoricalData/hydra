@@ -1,6 +1,7 @@
 module Hydra.Util.Codetree.Print (
   brackets,
   curlyBraces,
+  indent,
   parentheses,
   parenthesize,
   printExpr,
@@ -16,7 +17,7 @@ brackets :: Brackets -> Expr -> Expr
 brackets br e = ExprBrackets $ BracketExpr br e
 
 curlyBraces :: Brackets
-curlyBraces = Brackets "[" "]"
+curlyBraces = Brackets "{" "}"
 
 parenthesize :: Expr -> Expr
 parenthesize exp = case exp of
@@ -61,7 +62,11 @@ printExpr exp = case exp of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
-  ExprBrackets (BracketExpr (Brackets l r) e) -> l ++ printExpr e ++ r
+  ExprBrackets (BracketExpr (Brackets l r) e) -> if L.length (lines body) > 1
+      then l ++ "\n" ++ indent body ++ r
+      else l ++ body ++ r
+    where
+      body = printExpr e
 
 printExprAsTree :: Expr -> String
 printExprAsTree expr = case expr of

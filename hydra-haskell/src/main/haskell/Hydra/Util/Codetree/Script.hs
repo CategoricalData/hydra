@@ -34,8 +34,8 @@ bindOp = op ">>=" 1 AssociativityLeft
 caseOp :: Op
 caseOp = op "->" 0 AssociativityNone -- No source
 
-commaOp :: Op
-commaOp = Op "," (Padding WsNone WsSpace) 0 AssociativityNone -- No source
+commaOp :: Bool -> Op
+commaOp newlines = Op "," (Padding WsNone (if newlines then WsBreak else WsSpace)) 0 AssociativityNone -- No source
 
 composeOp :: Op
 composeOp = op "." 9 AssociativityLeft
@@ -130,36 +130,36 @@ caseStatement cond cases = ifx ofOp lhs rhs
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
     ofOp = Op "of" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
-commaSep :: [Expr] -> Expr
-commaSep l = case l of
+commaSep :: Bool -> [Expr] -> Expr
+commaSep newlines l = case l of
   [x] -> x
-  (h:r) -> ifx commaOp h $ commaSep r
-        
+  (h:r) -> ifx (commaOp newlines) h $ commaSep newlines r
+
 cst :: String -> Expr
 cst = ExprConst
 
 indentBlock :: Expr -> [Expr] -> Expr
-indentBlock head els = ifx idtOp head $ newlineSep els 
+indentBlock head els = ifx idtOp head $ newlineSep els
   where
     idtOp = Op "" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
 htuple :: [Expr] -> Expr
 htuple els = case els of
   [] -> cst "()"
-  _ -> brackets parentheses $ commaSep els 
+  _ -> brackets parentheses $ commaSep False els
 
 indentLines :: [Expr] -> Expr
 indentLines els = ifx topOp (cst "") (newlineSep els)
   where
     topOp = Op "" (Padding WsNone WsBreakAndIndent) 0 AssociativityNone
-  
+
 lam :: [Symbol] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
 
 hlist :: [Expr] -> Expr
 hlist els = case els of
   [] -> cst "[]"
-  _ -> brackets squareBrackets $ commaSep els 
+  _ -> brackets squareBrackets $ commaSep False els
 
 newlineSep :: [Expr] -> Expr
 newlineSep = sep $ Op "" (Padding WsNone WsBreak) 0 AssociativityNone
@@ -174,11 +174,11 @@ prefix :: String -> Expr -> Expr
 prefix p = ifx preOp (cst "")
   where
     preOp = Op p (Padding WsNone WsNone) 0 AssociativityNone
-    
+
 sep :: Op -> [Expr] -> Expr
 sep op els =  case els of
   [x] -> x
   (h:r) -> ifx op h $ sep op r
-                 
+
 spaceSep :: [Expr] -> Expr
 spaceSep = sep $ Op "" (Padding WsSpace WsNone) 0 AssociativityNone

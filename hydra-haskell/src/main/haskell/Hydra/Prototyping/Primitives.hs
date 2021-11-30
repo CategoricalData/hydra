@@ -1,4 +1,5 @@
 module Hydra.Prototyping.Primitives (
+  deref,
   dereferenceElement,
   graphElementsMap,
   lookupPrimitiveFunction,
@@ -16,6 +17,12 @@ import Hydra.Prototyping.Steps
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+deref :: Context a -> Term a -> Result (Term a)
+deref context term = case termData term of
+  ExpressionElement name -> dereferenceElement context name >>= deref context
+  ExpressionNominal (NominalTerm _ term') -> deref context term'
+  _ -> pure term
 
 dereferenceElement :: Context a -> Name -> Result (Term a)
 dereferenceElement context en = case M.lookup en (contextElements context) of
