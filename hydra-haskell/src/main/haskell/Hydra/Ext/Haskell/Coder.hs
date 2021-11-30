@@ -50,7 +50,7 @@ encodeFunction fun = case fun of
   FunctionData -> pure $ hsvar "id"
   FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm body
   FunctionPrimitive name -> pure $ hsvar name
-  FunctionProjection (Projection fname rname) -> pure $ hsvar $ qualifyFieldName fname rname
+  FunctionProjection (Projection fname rname) -> pure $ hsvar $ qualifyRecordFieldName fname rname
   _ -> fail $ "unexpected function: " ++ show fun
 
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
@@ -68,13 +68,13 @@ encodeTerm term = case termData term of
           updates <- CM.mapM toFieldUpdate fields
           return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
         where
-          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyFieldName sname fn) <$> encodeTerm ft
+          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm ft
 --    ExpressionUnion (UnionExpression sname' field) ->
     _ -> encodeTerm term'
   ExpressionOptional m -> case m of
     Nothing -> pure $ hsvar "Nothing"
     Just t -> hsapp (hsvar "Just") <$> encodeTerm t
-  ExpressionUnion (UnionExpression _ (Field fn ft)) -> hsapp (hsvar fn) <$> encodeTerm ft
+  ExpressionUnion (UnionExpression sname (Field fn ft)) -> hsapp (hsvar $ qualifyUnionFieldName sname fn) <$> encodeTerm ft
   ExpressionVariable v -> pure $ hsvar v
   ExpressionRecord _ -> fail $ "unexpected anonymous record: " ++ show term
   _ -> fail $ "unexpected term: " ++ show term
@@ -136,8 +136,11 @@ hsname s = H.NameNormal $ H.QualifiedName [] s
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
 
-qualifyFieldName :: Name -> FieldName -> String
-qualifyFieldName sname fname = decapitalize (typeNameForRecord sname) ++ capitalize fname
+qualifyRecordFieldName :: Name -> FieldName -> String
+qualifyRecordFieldName sname fname = decapitalize (typeNameForRecord sname) ++ capitalize fname
+
+qualifyUnionFieldName :: Name -> FieldName -> String
+qualifyUnionFieldName sname fname = capitalize (typeNameForRecord sname) ++ capitalize fname
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (LS.splitOn "." sname)
