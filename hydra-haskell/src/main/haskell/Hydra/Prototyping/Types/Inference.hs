@@ -46,6 +46,17 @@ constraintsExpr env context ex = case runInference env (infer context ex) of
       where
         sc = closeOver $ sustituteVariablesInType subst ty
 
+-- Decode a type, eliminating nominal types for the sake of unification
+decodeStructuralType :: Show a => Context a -> Term a -> Result Type
+decodeStructuralType con term = do
+  typ <- decodeType con term
+  case typ of
+    TypeNominal name -> do
+      scon <- schemaContext con
+      el <- requireElement scon name
+      decodeStructuralType scon $ elementData el
+    _ -> pure typ
+
 freshTypeVariable :: Infer Type
 freshTypeVariable = do
     s <- get
@@ -246,9 +257,9 @@ lookupTypeInEnvironment v = do
 namedType :: Show a => Context a -> Name -> Result Type
 namedType context name = do
   scon <- schemaContext context
-  typeTerm <- requireElement scon name
+  el <- requireElement scon name
   scon' <- schemaContext scon
-  decodeType scon' $ elementData typeTerm
+  decodeStructuralType scon' $ elementData el
 
 solveConstraints :: [Constraint] -> Either TypeError Subst
 solveConstraints cs = runIdentity $ runExceptT $ unificationSolver (M.empty, cs)
@@ -262,8 +273,7 @@ startState = 0
 typeOfElement :: Show a => Context a -> Name -> Result Type
 typeOfElement context name = do
   el <- requireElement context name
-  scon <- schemaContext context
-  decodeType scon $ elementSchema el
+  decodeStructuralType context $ elementSchema el
 
 typeOfPrimitiveFunction :: Context a -> Name -> Result FunctionType
 typeOfPrimitiveFunction context name = primitiveFunctionType <$> requirePrimitiveFunction context name
@@ -273,4 +283,6 @@ unificationSolver (su, cs) = case cs of
   [] -> return su
   ((t1, t2): cs0) -> do
     su1  <- unify t1 t2
-    unificationSolver (composeSubstitutions su1 su, (\(t1, t2) -> (sustituteVariablesInType su1 t1, sustituteVariablesInType su1 t2)) <$> cs0)
+    unificationSolver (
+      composeSubstitutions su1 su,
+      (\(t1, t2) -> (sustituteVariablesInType su1 t1, sustituteVariablesInType su1 t2)) <$> cs0)
