@@ -1,11 +1,7 @@
 module Hydra.Prototyping.CoreGraph (
   hydraCoreGraph,
    
-  hsUniversalType,
   hcApplication,
-  hcLiteralType,
-  hcLiteralVariant,
-  hcLiteral,
   hcBooleanValue,
   hcComparison,
   hcField,
@@ -15,22 +11,26 @@ module Hydra.Prototyping.CoreGraph (
   hcFloatValue,
   hcFloatVariant,
   hcFunction,
-  hsFunctionType,
-  hsFunctionVariant,
-  hsIntegerType,
-  hsIntegerValue,
-  hsIntegerVariant,
-  hsLambda,
-  hsMapType,
-  hsName,
-  hsPrecision,
-  hsTerm,
-  hsTermVariant,
-  hsType,
-  hsTypeVariable,
-  hsTypeVariant,
-  hsTypedTerm,
-  hsVariable,
+  hcFunctionType,
+  hcFunctionVariant,
+  hcIntegerType,
+  hcIntegerValue,
+  hcIntegerVariant,
+  hcLambda,
+  hcLiteral,
+  hcLiteralType,
+  hcLiteralVariant,
+  hcMapType,
+  hcName,
+  hcPrecision,
+  hcTerm,
+  hcTermVariant,
+  hcType,
+  hcTypeVariable,
+  hcTypeVariant,
+  hcTypedTerm,
+  hcUniversalType,
+  hcVariable,
    ) where
 
 import Hydra.Core
@@ -44,11 +44,7 @@ hydraCoreGraph :: Graph Meta
 hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
   where
     elements = [
-      hsUniversalType,
       hcApplication,
-      hcLiteralType,
-      hcLiteralVariant,
-      hcLiteral,
       hcBooleanValue,
       hcComparison,
       hcField,
@@ -58,22 +54,26 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hcFloatValue,
       hcFloatVariant,
       hcFunction,
-      hsFunctionType,
-      hsFunctionVariant,
-      hsIntegerType,
-      hsIntegerValue,
-      hsIntegerVariant,
-      hsLambda,
-      hsMapType,
-      hsName,
-      hsPrecision,
-      hsTerm,
-      hsTermVariant,
-      hsType,
-      hsTypeVariable,
-      hsTypeVariant,
-      hsTypedTerm,
-      hsVariable]
+      hcFunctionType,
+      hcFunctionVariant,
+      hcIntegerType,
+      hcIntegerValue,
+      hcIntegerVariant,
+      hcLambda,
+      hcLiteral,
+      hcLiteralType,
+      hcLiteralVariant,
+      hcMapType,
+      hcName,
+      hcPrecision,
+      hcTerm,
+      hcTermVariant,
+      hcType,
+      hcTypeVariable,
+      hcTypeVariant,
+      hcTypedTerm,
+      hcUniversalType,
+      hcVariable]
 
 typeElement :: Name -> Type -> Element Meta
 typeElement name typ = Element {
@@ -84,39 +84,10 @@ typeElement name typ = Element {
 enum :: [FieldName] -> Type
 enum names = TypeUnion $ (`FieldType` unitType) <$> names
 
-hsUniversalType :: Element Meta
-hsUniversalType = typeElement _UniversalType $ TypeRecord [
-  FieldType _UniversalType_variable stringType,
-  FieldType _UniversalType_body $ TypeNominal _Type]
-
 hcApplication :: Element Meta
 hcApplication = typeElement _Application $ TypeRecord [
   FieldType _Application_function $ TypeNominal _Term,
   FieldType _Application_argument $ TypeNominal _Term]
-
-hcLiteralType :: Element Meta
-hcLiteralType = typeElement _LiteralType $ TypeUnion [
-  FieldType _LiteralType_binary unitType,
-  FieldType _LiteralType_boolean unitType,
-  FieldType _LiteralType_float $ TypeNominal _FloatType,
-  FieldType _LiteralType_integer $ TypeNominal _IntegerType,
-  FieldType _LiteralType_string unitType]
-
-hcLiteralVariant :: Element Meta
-hcLiteralVariant = typeElement _LiteralVariant $ enum [
-  _LiteralVariant_binary,
-  _LiteralVariant_boolean,
-  _LiteralVariant_float,
-  _LiteralVariant_integer,
-  _LiteralVariant_string]
-
-hcLiteral :: Element Meta
-hcLiteral = typeElement _Literal $ TypeUnion [
-  FieldType _Literal_binary binaryType,
-  FieldType _Literal_boolean $ TypeNominal _BooleanValue,
-  FieldType _Literal_float $ TypeNominal _FloatValue,
-  FieldType _Literal_integer $ TypeNominal _IntegerValue,
-  FieldType _Literal_string stringType]
 
 hcBooleanValue :: Element Meta
 hcBooleanValue = typeElement _BooleanValue $ enum [
@@ -169,13 +140,13 @@ hcFunction = typeElement _Function $ TypeUnion [
   FieldType _Function_primitive $ TypeNominal _Name,
   FieldType _Function_projection $ TypeNominal _FieldType]
 
-hsFunctionType :: Element Meta
-hsFunctionType = typeElement _FunctionType $ TypeRecord [
+hcFunctionType :: Element Meta
+hcFunctionType = typeElement _FunctionType $ TypeRecord [
   FieldType _FunctionType_domain $ TypeNominal _Type,
   FieldType _FunctionType_codomain $ TypeNominal _Type]
 
-hsFunctionVariant :: Element Meta
-hsFunctionVariant = typeElement _FunctionVariant $ enum [
+hcFunctionVariant :: Element Meta
+hcFunctionVariant = typeElement _FunctionVariant $ enum [
   _FunctionVariant_cases,
   _FunctionVariant_compareTo,
   _FunctionVariant_data,
@@ -183,8 +154,8 @@ hsFunctionVariant = typeElement _FunctionVariant $ enum [
   _FunctionVariant_primitive,
   _FunctionVariant_projection]
 
-hsIntegerType :: Element Meta
-hsIntegerType = typeElement _IntegerType $ enum [
+hcIntegerType :: Element Meta
+hcIntegerType = typeElement _IntegerType $ enum [
   _IntegerType_bigint,
   _IntegerType_int8,
   _IntegerType_int16,
@@ -195,8 +166,8 @@ hsIntegerType = typeElement _IntegerType $ enum [
   _IntegerType_uint32,
   _IntegerType_uint64]
 
-hsIntegerValue :: Element Meta
-hsIntegerValue = typeElement _IntegerValue $ TypeUnion [
+hcIntegerValue :: Element Meta
+hcIntegerValue = typeElement _IntegerValue $ TypeUnion [
   FieldType _IntegerValue_bigint bigintType,
   FieldType _IntegerValue_int8 int8Type,
   FieldType _IntegerValue_int16 int16Type,
@@ -207,8 +178,8 @@ hsIntegerValue = typeElement _IntegerValue $ TypeUnion [
   FieldType _IntegerValue_uint32 uint32Type,
   FieldType _IntegerValue_uint64 uint64Type]
 
-hsIntegerVariant :: Element Meta
-hsIntegerVariant = typeElement _IntegerVariant $ enum [
+hcIntegerVariant :: Element Meta
+hcIntegerVariant = typeElement _IntegerVariant $ enum [
   _IntegerVariant_bigint,
   _IntegerVariant_int8,
   _IntegerVariant_int16,
@@ -219,26 +190,50 @@ hsIntegerVariant = typeElement _IntegerVariant $ enum [
   _IntegerVariant_uint32,
   _IntegerVariant_uint64]
 
-hsLambda :: Element Meta
-hsLambda = typeElement _Lambda $ TypeRecord [
+hcLambda :: Element Meta
+hcLambda = typeElement _Lambda $ TypeRecord [
   FieldType _Lambda_parameter $ TypeNominal _Variable,
   FieldType _Lambda_body $ TypeNominal _Term]
 
-hsMapType :: Element Meta
-hsMapType = typeElement _MapType $ TypeRecord [
+hcLiteral :: Element Meta
+hcLiteral = typeElement _Literal $ TypeUnion [
+  FieldType _Literal_binary binaryType,
+  FieldType _Literal_boolean $ TypeNominal _BooleanValue,
+  FieldType _Literal_float $ TypeNominal _FloatValue,
+  FieldType _Literal_integer $ TypeNominal _IntegerValue,
+  FieldType _Literal_string stringType]
+
+hcLiteralType :: Element Meta
+hcLiteralType = typeElement _LiteralType $ TypeUnion [
+  FieldType _LiteralType_binary unitType,
+  FieldType _LiteralType_boolean unitType,
+  FieldType _LiteralType_float $ TypeNominal _FloatType,
+  FieldType _LiteralType_integer $ TypeNominal _IntegerType,
+  FieldType _LiteralType_string unitType]
+
+hcLiteralVariant :: Element Meta
+hcLiteralVariant = typeElement _LiteralVariant $ enum [
+  _LiteralVariant_binary,
+  _LiteralVariant_boolean,
+  _LiteralVariant_float,
+  _LiteralVariant_integer,
+  _LiteralVariant_string]
+
+hcMapType :: Element Meta
+hcMapType = typeElement _MapType $ TypeRecord [
   FieldType _MapType_keys $ TypeNominal _Type,
   FieldType _MapType_values $ TypeNominal _Type]
 
-hsName :: Element Meta
-hsName = typeElement _Name stringType
+hcName :: Element Meta
+hcName = typeElement _Name stringType
 
-hsPrecision :: Element Meta
-hsPrecision = typeElement _Precision $ TypeUnion [
+hcPrecision :: Element Meta
+hcPrecision = typeElement _Precision $ TypeUnion [
   FieldType _Precision_arbitrary unitType,
   FieldType _Precision_bits int32Type]
 
-hsTerm :: Element Meta
-hsTerm = typeElement _Term $ TypeUnion [
+hcTerm :: Element Meta
+hcTerm = typeElement _Term $ TypeUnion [
   FieldType _Expression_application $ TypeNominal _Application,
   FieldType _Expression_literal $ TypeNominal _Literal,
   FieldType _Expression_element $ TypeNominal _Name,
@@ -251,8 +246,8 @@ hsTerm = typeElement _Term $ TypeUnion [
   FieldType _Expression_union $ TypeNominal _Field,
   FieldType _Expression_variable $ TypeNominal _Variable]
 
-hsTermVariant :: Element Meta
-hsTermVariant = typeElement _TermVariant $ enum [
+hcTermVariant :: Element Meta
+hcTermVariant = typeElement _TermVariant $ enum [
   _TermVariant_application,
   _TermVariant_literal,
   _TermVariant_element,
@@ -265,8 +260,8 @@ hsTermVariant = typeElement _TermVariant $ enum [
   _TermVariant_union,
   _TermVariant_variable]
 
-hsType :: Element Meta
-hsType = typeElement _Type $ TypeUnion [
+hcType :: Element Meta
+hcType = typeElement _Type $ TypeUnion [
   FieldType _Type_literal $ TypeNominal _LiteralType,
   FieldType _Type_element $ TypeNominal _Type,
   FieldType _Type_function $ TypeNominal _FunctionType,
@@ -278,11 +273,11 @@ hsType = typeElement _Type $ TypeUnion [
   FieldType _Type_set $ TypeNominal _Type,
   FieldType _Type_union $ TypeList $ TypeNominal _FieldType]
 
-hsTypeVariable :: Element Meta
-hsTypeVariable = typeElement _TypeVariable stringType
+hcTypeVariable :: Element Meta
+hcTypeVariable = typeElement _TypeVariable stringType
 
-hsTypeVariant :: Element Meta
-hsTypeVariant = typeElement _TypeVariant $ enum [
+hcTypeVariant :: Element Meta
+hcTypeVariant = typeElement _TypeVariant $ enum [
   _TypeVariant_literal,
   _TypeVariant_element,
   _TypeVariant_function,
@@ -294,10 +289,15 @@ hsTypeVariant = typeElement _TypeVariant $ enum [
   _TypeVariant_set,
   _TypeVariant_union]
 
-hsTypedTerm :: Element Meta
-hsTypedTerm = typeElement _TypedTerm $ TypeRecord [
+hcTypedTerm :: Element Meta
+hcTypedTerm = typeElement _TypedTerm $ TypeRecord [
   FieldType _TypedTerm_type $ TypeNominal _Type,
   FieldType _TypedTerm_term $ TypeNominal _Term]
 
-hsVariable :: Element Meta
-hsVariable = typeElement _Variable stringType
+hcUniversalType :: Element Meta
+hcUniversalType = typeElement _UniversalType $ TypeRecord [
+  FieldType _UniversalType_variable stringType,
+  FieldType _UniversalType_body $ TypeNominal _Type]
+
+hcVariable :: Element Meta
+hcVariable = typeElement _Variable stringType

@@ -74,9 +74,11 @@ encodeTerm term = case termData term of
   ExpressionOptional m -> case m of
     Nothing -> pure $ hsvar "Nothing"
     Just t -> hsapp (hsvar "Just") <$> encodeTerm t
+  ExpressionRecord fields -> case fields of
+    [] -> pure $ H.ExpressionTuple []
+    _ -> fail $ "unexpected anonymous record: " ++ show term
   ExpressionUnion (UnionExpression sname (Field fn ft)) -> hsapp (hsvar $ qualifyUnionFieldName sname fn) <$> encodeTerm ft
   ExpressionVariable v -> pure $ hsvar v
-  ExpressionRecord _ -> fail $ "unexpected anonymous record: " ++ show term
   _ -> fail $ "unexpected term: " ++ show term
 
 haskellCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
