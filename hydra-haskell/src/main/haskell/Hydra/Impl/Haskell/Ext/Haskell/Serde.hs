@@ -36,7 +36,7 @@ instance ToTree H.Expression where
       H.ExpressionLambda lam -> toTree lam
     --  H.ExpressionLeftSection Expression_Section
     --  H.ExpressionLet Expression_Let
-      H.ExpressionList exprs -> hlist $ toTree <$> exprs
+      H.ExpressionList exprs -> hlist True $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Expression_PrefixApplication
     --  H.ExpressionRightSection Expression_Section
@@ -92,7 +92,7 @@ instance ToTree H.Pattern where
   toTree pat = case pat of
       H.PatternApplication app -> toTree app
 --      H.PatternAs (H.Pattern_As ) ->
-      H.PatternList pats -> hlist $ toTree <$> pats
+      H.PatternList pats -> hlist True $ toTree <$> pats
       H.PatternLiteral lit -> toTree lit
       H.PatternName name -> toTree name
       H.PatternParens pat -> parenthesize $ toTree pat

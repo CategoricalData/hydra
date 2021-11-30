@@ -156,10 +156,10 @@ indentLines els = ifx topOp (cst "") (newlineSep els)
 lam :: [Symbol] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
 
-hlist :: [Expr] -> Expr
-hlist els = case els of
+hlist :: Bool -> [Expr] -> Expr
+hlist newlines els = case els of
   [] -> cst "[]"
-  _ -> brackets squareBrackets $ commaSep False els
+  _ -> brackets squareBrackets $ commaSep newlines els
 
 newlineSep :: [Expr] -> Expr
 newlineSep = sep $ Op "" (Padding WsNone WsBreak) 0 AssociativityNone
