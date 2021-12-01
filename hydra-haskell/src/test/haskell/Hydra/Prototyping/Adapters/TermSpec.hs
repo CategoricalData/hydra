@@ -234,7 +234,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection prj)
-      (union _Function $ Field "projection" $ nominal _Projection $ record [ -- Note: the field name is not dereferenced
+      (union _Function $ Field "projection" $ record [ -- Note: the field name is not dereferenced
         Field "field" $ stringValue fname,
         Field "context" $ stringValue rname])
 

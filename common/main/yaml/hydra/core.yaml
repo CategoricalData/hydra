@@ -508,7 +508,7 @@ definitions:
           type:
             optional: string
 
-        - name: typeAnnotation
+        - name: type
           description: >
             An optional type annotation associated with the term. This may be used as a hint to the type inferencer
             and/or to code generators.

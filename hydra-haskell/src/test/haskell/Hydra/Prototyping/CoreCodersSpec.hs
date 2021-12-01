@@ -4,6 +4,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.CoreEncoding
+import Hydra.Impl.Haskell.Extras
 
 import Hydra.TestUtils
 import Hydra.ArbitraryCore (untyped)
@@ -18,30 +19,29 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (encodeLiteralType LiteralTypeString)
+        (stripMeta $ encodeLiteralType testContext LiteralTypeString)
         (mterm (unitVariant _LiteralType _LiteralType_string))
 
     H.it "string type" $ do
       H.shouldBe
-        (encodeType stringType)
-        (mterm (nominal _Type $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string)))
+        (stripMeta $ encodeType testContext stringType)
+        (mterm (variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string)))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (encodeType int32Type)
-        (mterm (nominal _Type $
-          variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32)))
+        (stripMeta $ encodeType testContext int32Type)
+        (mterm (variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32)))
 
     H.it "record type" $ do
       H.shouldBe
-        (encodeType (TypeRecord [FieldType "something" stringType, FieldType "nothing" unitType]))
-        (mterm (nominal _Type $ variant _Type _Type_record $ list [
-          nominal _FieldType $ record [
+        (stripMeta $ encodeType testContext (recordType [FieldType "something" stringType, FieldType "nothing" unitType]))
+        (mterm (variant _Type _Type_record $ list [
+          record [
             Field _FieldType_name $ stringValue "something",
-            Field _FieldType_type $ nominal _Type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
-          nominal _FieldType $ record [
+            Field _FieldType_type $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_string],
+          record [
             Field _FieldType_name $ stringValue "nothing",
-            Field _FieldType_type $ nominal _Type $ variant _Type _Type_record $ list []]]))
+            Field _FieldType_type $ variant _Type _Type_record $ list []]]))
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -57,10 +57,10 @@ individualDecoderTestCases = do
 
     H.it "union type" $ do
       decodeType testContext (variant _Type _Type_union $ list [
-        nominal _FieldType $ record [
+        record [
           Field _FieldType_name $ stringValue "left",
           Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int64],
-        nominal _FieldType $ record [
+        record [
           Field _FieldType_name $ stringValue "right",
           Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float64]])
         `H.shouldBe` pure (TypeUnion [FieldType "left" int64Type, FieldType "right" float64Type])
@@ -83,7 +83,7 @@ testRoundTripsFromType = do
   H.describe "Check that encoding, then decoding random types is a no-op" $ do
 
     H.it "Try random types" $
-      QC.property $ \typ -> decodeType testContext (encodeType typ) == pure typ
+      QC.property $ \typ -> decodeType testContext (encodeType testContext typ) == pure typ
 
 spec :: H.Spec
 spec = do

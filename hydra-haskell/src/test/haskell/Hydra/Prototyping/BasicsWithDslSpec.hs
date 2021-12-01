@@ -16,8 +16,9 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term Meta -> Result (Term Meta)
-testEvaluate = evaluate $ testContext { contextElements = graphElementsMap basicsGraph }
+testEvaluate = evaluate $ testContext { contextElements = graphElementsMap (basicsGraph testContext) }
 
+testsForTermTypeFunctions :: H.SpecWith a
 testsForTermTypeFunctions = do
   H.describe "Tests for DSL-defined term-to-type functions" $ do
     return ()
@@ -25,6 +26,7 @@ testsForTermTypeFunctions = do
 --    floatValueType,
 --    integerValueType,
 
+testsForTermVariantFunctions :: H.SpecWith a
 testsForTermVariantFunctions = do
   H.describe "Tests for DSL-defined term-to-variant functions" $ do
     return ()
@@ -33,32 +35,33 @@ testsForTermVariantFunctions = do
 --    integerValueVariant,
 --    termVariant
 
+testsForTypeVariantFunctions :: H.SpecWith ()
 testsForTypeVariantFunctions = do
   H.describe "Tests for DSL-defined type-to-variant functions" $ do
 
     H.it "Test literalTypeVariant function element" $
       QC.property $ \at ->
-        testEvaluate (apply (elementRefByName "hydra/basics.literalTypeVariant") (encodeLiteralType at))
+        testEvaluate (apply (elementRefByName "hydra/basics.literalTypeVariant") (encodeLiteralType testContext at))
         `H.shouldBe`
-        pure (encodeLiteralVariant $ literalTypeVariant at)
+        pure (encodeLiteralVariant testContext $ literalTypeVariant at)
 
     H.it "Test floatTypeVariant function element" $
       QC.property $ \ft ->
-        testEvaluate (apply (elementRefByName "hydra/basics.floatTypeVariant") (encodeFloatType ft))
+        testEvaluate (apply (elementRefByName "hydra/basics.floatTypeVariant") (encodeFloatType testContext ft))
         `H.shouldBe`
-        pure (encodeFloatVariant $ floatTypeVariant ft)
+        pure (encodeFloatVariant testContext $ floatTypeVariant ft)
 
     H.it "Test integerTypeVariant function element" $
       QC.property $ \at ->
-        testEvaluate (apply (elementRefByName "hydra/basics.integerTypeVariant") (encodeIntegerType at))
+        testEvaluate (apply (elementRefByName "hydra/basics.integerTypeVariant") (encodeIntegerType testContext at))
         `H.shouldBe`
-        pure (encodeIntegerVariant $ integerTypeVariant at)
+        pure (encodeIntegerVariant testContext $ integerTypeVariant at)
 
     H.it "Test typeVariant function element" $
       QC.property $ \t ->
-        testEvaluate (apply (elementRefByName "hydra/basics.typeVariant") (encodeType t))
+        testEvaluate (apply (elementRefByName "hydra/basics.typeVariant") (encodeType testContext t))
         `H.shouldBe`
-        pure (encodeTypeVariant $ typeVariant t)
+        pure (encodeTypeVariant testContext $ typeVariant t)
 
 spec :: H.Spec
 spec = do

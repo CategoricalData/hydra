@@ -1,8 +1,4 @@
 module Hydra.Impl.Haskell.Dsl.Terms (
-  DataError,
-  Default(..),
-  Meta(..),
-  SchemaError,
   apply,
   atomic,
   bigfloatType,
@@ -94,6 +90,7 @@ module Hydra.Impl.Haskell.Dsl.Terms (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Prototyping.Steps
+import Hydra.Impl.Haskell.Extras
 import Prelude hiding (map)
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -101,14 +98,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
 
-
-type DataError = String
-class Default a where dflt :: a
-type SchemaError = String
-instance Default () where dflt = ()
-instance Default Meta where dflt = Meta {
-  metaDescription = Nothing,
-  metaTypeAnnotation = Nothing}
 
 apply :: Default a => Term a -> Term a -> Term a
 apply func arg = defaultTerm $ ExpressionApplication $ Application func arg
