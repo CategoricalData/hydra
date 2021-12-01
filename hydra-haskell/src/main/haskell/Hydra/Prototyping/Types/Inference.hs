@@ -8,7 +8,7 @@ import Hydra.Graph
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Types.Substitution
 import Hydra.Prototyping.Types.Unification
 

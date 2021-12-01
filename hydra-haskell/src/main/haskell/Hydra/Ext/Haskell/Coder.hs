@@ -10,7 +10,7 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
 

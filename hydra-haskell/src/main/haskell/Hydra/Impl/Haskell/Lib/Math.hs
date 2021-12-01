@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Lib.Math (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.Char as C
 import qualified Data.List as L

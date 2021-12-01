@@ -9,7 +9,7 @@ import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Atomic
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding

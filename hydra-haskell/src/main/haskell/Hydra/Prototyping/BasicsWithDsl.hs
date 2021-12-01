@@ -5,7 +5,7 @@ module Hydra.Prototyping.BasicsWithDsl (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 
 basicsElement :: String -> Type -> Term Meta -> Element Meta

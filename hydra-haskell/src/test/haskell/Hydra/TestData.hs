@@ -1,7 +1,7 @@
 module Hydra.TestData where
-  
+
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.TestGraph
 
 import qualified Data.Map as M

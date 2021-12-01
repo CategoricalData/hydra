@@ -5,7 +5,7 @@ module Hydra.Impl.Haskell.Lib.Strings (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.Char as C
 import qualified Data.List as L

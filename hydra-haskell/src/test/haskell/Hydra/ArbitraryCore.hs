@@ -1,7 +1,7 @@
 module Hydra.ArbitraryCore where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

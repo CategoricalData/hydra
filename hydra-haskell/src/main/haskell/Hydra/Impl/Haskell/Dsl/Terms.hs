@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Dsl (
+module Hydra.Impl.Haskell.Dsl.Terms (
   DataError,
   Default(..),
   Meta(..),

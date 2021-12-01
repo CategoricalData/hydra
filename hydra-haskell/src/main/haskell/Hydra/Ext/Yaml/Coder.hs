@@ -10,7 +10,7 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Control.Monad as CM
@@ -57,10 +57,10 @@ recordCoder sfields = do
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected term "record"
     decode coders n = case n of
-      YM.NodeMapping m -> record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored 
+      YM.NodeMapping m -> record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField m (FieldType fn ft, coder) = do
-            v <- stepIn coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m        
+            v <- stepIn coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
             return $ Field fn v
       _ -> unexpected n "mapping"
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders

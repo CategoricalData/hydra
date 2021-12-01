@@ -13,7 +13,7 @@ module Hydra.TestGraph (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.CoreGraph
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
@@ -38,7 +38,8 @@ testContext = Context {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantLiteral,
         TermVariantElement,
-        TermVariantFunction]}}
+        TermVariantFunction]},
+    contextTypeAnnotations = metaTypeAnnotation}
   where
     allPrimitives = mathPrimitives ++ stringPrimitives
 

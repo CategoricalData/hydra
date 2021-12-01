@@ -1,7 +1,7 @@
 module Hydra.Prototyping.InterpreterSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
@@ -19,7 +19,7 @@ testEvaluate = evaluate testContext
 testsForLiterals :: H.SpecWith ()
 testsForLiterals = do
   H.describe "Tests for atomic values" $ do
-    
+
     H.it "Atomic terms have no free variables" $
       QC.property $ \av -> termIsClosed (atomic av :: Term Meta)
 
@@ -35,24 +35,24 @@ testsForLiterals = do
 testsForPrimitiveFunctions :: H.SpecWith ()
 testsForPrimitiveFunctions = do
   H.describe "Tests for primitive functions" $ do
-    
+
     H.it "Example primitives have the expected arity" $ do
       (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "toUpper"))
         `H.shouldBe` Just 1
       (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "cat"))
         `H.shouldBe` Just 2
-    
+
     H.it "Simple applications of a unary function succeed" $
-      QC.property $ \s -> 
+      QC.property $ \s ->
         testEvaluate (apply (func "toUpper") $ stringTerm s)
         == pure (stringTerm $ fmap C.toUpper s)
-        
+
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \s1 s2 ->
         testEvaluate (apply (apply (func "cat") $ stringTerm s1) $ stringTerm s2)
         == pure (stringTerm $ s1 ++ s2)
 
-    H.it "Incomplete application of a primitive function leaves the term unchanged" $ 
+    H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
         testEvaluate (apply (func "cat") $ stringTerm s1)
         == pure (apply (func "cat") $ stringTerm s1)

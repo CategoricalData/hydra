@@ -1,6 +1,6 @@
 module Hydra.Prototyping.CoreGraph (
   hydraCoreGraph,
-   
+
   hcApplication,
   hcBooleanValue,
   hcComparison,
@@ -36,7 +36,7 @@ module Hydra.Prototyping.CoreGraph (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 
 -- Note: here, the element namespace "hydra/core" doubles as a graph name
