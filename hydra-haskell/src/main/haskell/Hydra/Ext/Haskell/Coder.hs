@@ -17,6 +17,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Set as S
+import qualified Data.Maybe as Y 
 
 
 encodeAtomic :: Literal -> Result H.Expression
@@ -57,34 +58,38 @@ encodeFunction cx meta fun = case fun of
     domName = case contextTypeOf cx meta of
       Just (TypeFunction (FunctionType (TypeNominal name) _)) -> Just name
       Nothing -> Nothing
-    
+
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
-encodeTerm cx term = case termData term of
-  ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
-  ExpressionLiteral av -> encodeAtomic av
-  ExpressionElement name -> pure $ hsvar name
-  ExpressionFunction f -> encodeFunction cx (termMeta term) f
-  ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
-  ExpressionNominal (NominalTerm sname term') -> case termData term' of
+encodeTerm cx term@(Term expr meta) = case expr of
+    ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
+    ExpressionLiteral av -> encodeAtomic av
+    ExpressionElement name -> pure $ hsvar name
+    ExpressionFunction f -> encodeFunction cx (termMeta term) f
+    ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
+    ExpressionNominal (NominalTerm sname term') -> case termData term' of
+      ExpressionRecord fields -> case fields of
+        [] -> pure $ H.ExpressionTuple []
+        _ -> do
+            let typeName = typeNameForRecord sname
+            updates <- CM.mapM toFieldUpdate fields
+            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
+          where
+            toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm cx ft
+  --    ExpressionUnion (UnionExpression sname' field) ->
+      _ -> encodeTerm cx term'
+    ExpressionOptional m -> case m of
+      Nothing -> pure $ hsvar "Nothing"
+      Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
     ExpressionRecord fields -> case fields of
       [] -> pure $ H.ExpressionTuple []
-      _ -> do
-          let typeName = typeNameForRecord sname
-          updates <- CM.mapM toFieldUpdate fields
-          return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
-        where
-          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm cx ft
---    ExpressionUnion (UnionExpression sname' field) ->
-    _ -> encodeTerm cx term'
-  ExpressionOptional m -> case m of
-    Nothing -> pure $ hsvar "Nothing"
-    Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
-  ExpressionRecord fields -> case fields of
-    [] -> pure $ H.ExpressionTuple []
-    _ -> fail $ "unexpected anonymous record: " ++ show term
-  ExpressionUnion (UnionExpression sname (Field fn ft)) -> hsapp (hsvar $ qualifyUnionFieldName sname fn) <$> encodeTerm cx ft
-  ExpressionVariable v -> pure $ hsvar v
-  _ -> fail $ "unexpected term: " ++ show term
+      _ -> fail $ "unexpected anonymous record: " ++ show term
+    ExpressionUnion (Field fn ft) -> hsapp (hsvar $ Y.maybe fn (\s -> qualifyUnionFieldName s fn) sname) <$> encodeTerm cx ft
+    ExpressionVariable v -> pure $ hsvar v
+    _ -> fail $ "unexpected term: " ++ show term
+  where
+    sname = case contextTypeOf cx meta of
+      Just (TypeNominal name) -> Just name
+      Nothing -> Nothing
 
 haskellCoder :: (Default a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
 haskellCoder cx typ = do

@@ -75,138 +75,126 @@ inTypingEnvironment (x, sc) m = do
   local scope m
 
 infer :: (Default a, Show a) => Context a -> Term a -> Infer (Type, [Constraint])
-infer cx term = case termData term of
-
-  ExpressionApplication (Application e1 e2) -> do
-    (t1, c1) <- infer cx e1
-    (t2, c2) <- infer cx e2
-    tv <- freshTypeVariable
-    return (tv, c1 ++ c2 ++ [(t1, functionType t2 tv)])
-
-  ExpressionElement name -> do
-    case typeOfElement cx name of
-      ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements will probably be allowed in the future
-      ResultFailure msg -> error msg
-
-  ExpressionFunction f -> case f of
-    FunctionCases cases -> do
-        pairs <- CM.mapM forField cases
-        let cods = snd <$> pairs
-        let ftypes = L.zipWith FieldType (fieldName <$> cases) (fst <$> pairs)
-        let constraints = L.zip cods (L.tail cods)
-        return (functionType (unionType ftypes) (L.head cods), constraints)
-      where
-        forField (Field _ fun) = do
-          (ft, c) <- infer cx fun
-          case ft of
-            TypeFunction (FunctionType dom cod) -> return (dom, cod)
-            _ -> error "expected a function type"
-
-    -- TODO: here we assume that compareTo evaluates to an integer, not a Comparison value.
-    --       For the latter, Comparison would have to be added to the literal type grammar.
-    FunctionCompareTo other -> do
-      (t, c) <- infer cx other
-      return (functionType t int8Type, c)
-
-    FunctionLambda (Lambda x e) -> do
+infer cx term = case contextTypeOf cx (termMeta term) of
+  Just typ -> pure (typ, [])
+  Nothing -> case termData term of
+    ExpressionApplication (Application e1 e2) -> do
+      (t1, c1) <- infer cx e1
+      (t2, c2) <- infer cx e2
       tv <- freshTypeVariable
-      (t, c) <- inTypingEnvironment (x, TypeScheme [] tv) (infer cx e)
-      return (functionType tv t, c)
-
-    FunctionPrimitive name -> do
-      case typeOfPrimitiveFunction cx name of
-        ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
+      return (tv, c1 ++ c2 ++ [(t1, functionType t2 tv)])
+  
+    ExpressionElement name -> do
+      case typeOfElement cx name of
+        ResultSuccess et -> pure (elementType et, []) -- TODO: polytyped elements will probably be allowed in the future
         ResultFailure msg -> error msg
+  
+    ExpressionFunction f -> case f of
+      FunctionCases cases -> do
+          pairs <- CM.mapM forField cases
+          let cods = snd <$> pairs
+          let ftypes = L.zipWith FieldType (fieldName <$> cases) (fst <$> pairs)
+          let constraints = L.zip cods (L.tail cods)
+          return (functionType (unionType ftypes) (L.head cods), constraints)
+        where
+          forField (Field _ fun) = do
+            (ft, c) <- infer cx fun
+            case ft of
+              TypeFunction (FunctionType dom cod) -> return (dom, cod)
+              _ -> error "expected a function type"
+  
+      -- TODO: here we assume that compareTo evaluates to an integer, not a Comparison value.
+      --       For the latter, Comparison would have to be added to the literal type grammar.
+      FunctionCompareTo other -> do
+        (t, c) <- infer cx other
+        return (functionType t int8Type, c)
+  
+      FunctionLambda (Lambda x e) -> do
+        tv <- freshTypeVariable
+        (t, c) <- inTypingEnvironment (x, TypeScheme [] tv) (infer cx e)
+        return (functionType tv t, c)
+  
+      FunctionPrimitive name -> do
+        case typeOfPrimitiveFunction cx name of
+          ResultSuccess t -> pure (TypeFunction t, []) -- TODO: polytyped primitive functions may be allowed in the future
+          ResultFailure msg -> error msg
+  
+      _ -> error $ "type inference is unsupported for function: " ++ show f
 
-    FunctionProjection _ -> do
-      case contextTypeOf cx (termMeta term) of
-        Nothing -> error "cannot infer type of projection without type annotation"
-        Just typ -> pure (typ, [])
+    ExpressionLet (Let x e1 e2) -> do
+      env <- ask
+      (t1, c1) <- infer cx e1
+      case solveConstraints c1 of
+          Left err -> throwError err
+          Right sub -> do
+              let sc = generalize (M.map (sustituteVariablesInTypeScheme sub) env) (sustituteVariablesInType sub t1)
+              (t2, c2) <- inTypingEnvironment (x, sc) $ local (M.map (sustituteVariablesInTypeScheme sub)) (infer cx e2)
+              return (t2, c1 ++ c2)
+  
+    ExpressionList els -> forList els
+      where
+        forList l = case l of
+          [] -> do
+            tv <- freshTypeVariable
+            return (listType tv, [])
+          (h:r) -> do
+            (t, c) <- infer cx h
+            (lt, lc) <- forList r
+            case lt of
+              TypeList et -> return (lt, c ++ lc ++ [(t, et)])
+              _ -> error "expected a list type"
+  
+    ExpressionLiteral l -> return (TypeLiteral $ literalType l, [])
+  
+    ExpressionMap m -> toMap <$> forList (M.toList m)
+      where
+        toMap ((kt, vt), c) = (mapType kt vt, c)
+        forList l = case l of
+          [] -> do
+            kv <- freshTypeVariable
+            vv <- freshTypeVariable
+            return ((kv, vv), [])
+          ((k, v):r) -> do
+            (kt, kc) <- infer cx k
+            (vt, vc) <- infer cx v
+            ((kt', vt'), c') <- forList r
+            return ((kt, vt), c' ++ kc ++ vc ++ [(kt, kt'), (vt, vt')])
+  
+    ExpressionNominal (NominalTerm name term') -> do
+      case namedType cx name of
+        ResultFailure msg -> error msg
+        ResultSuccess typ -> do
+          (typ', c) <- infer cx term'
+          return (typ, c ++ [(typ, typ')])
+  
+    ExpressionOptional m -> case m of
+      Nothing -> do
+        tv <- freshTypeVariable
+        return (optionalType tv, [])
+      Just term' -> do
+        (t, c) <- infer cx term'
+        return (optionalType t, c)
+  
+    ExpressionRecord fields -> do
+        (ftypes, c1) <- CM.foldM forField ([], []) fields
+        return (recordType $ L.reverse ftypes, c1)
+      where
+        forField (ftypes, c) field = do
+          (ft, c') <- inferFieldType cx field
+          return (ft:ftypes, c' ++ c)
+  
+    ExpressionSet els -> do
+      let expr = ExpressionList $ S.toList els
+      (t, c) <- infer cx $ term {termData = expr}
+      case t of
+        TypeList et -> return (TypeSet et, c)
+        _ -> error "expected a list type"
+  
+    ExpressionVariable x -> do
+        t <- lookupTypeInEnvironment x
+        return (t, [])
 
-  ExpressionLet (Let x e1 e2) -> do
-    env <- ask
-    (t1, c1) <- infer cx e1
-    case solveConstraints c1 of
-        Left err -> throwError err
-        Right sub -> do
-            let sc = generalize (M.map (sustituteVariablesInTypeScheme sub) env) (sustituteVariablesInType sub t1)
-            (t2, c2) <- inTypingEnvironment (x, sc) $ local (M.map (sustituteVariablesInTypeScheme sub)) (infer cx e2)
-            return (t2, c1 ++ c2)
-
-  ExpressionList els -> forList els
-    where
-      forList l = case l of
-        [] -> do
-          tv <- freshTypeVariable
-          return (listType tv, [])
-        (h:r) -> do
-          (t, c) <- infer cx h
-          (lt, lc) <- forList r
-          case lt of
-            TypeList et -> return (lt, c ++ lc ++ [(t, et)])
-            _ -> error "expected a list type"
-
-  ExpressionLiteral l -> return (TypeLiteral $ literalType l, [])
-
-  ExpressionMap m -> toMap <$> forList (M.toList m)
-    where
-      toMap ((kt, vt), c) = (mapType kt vt, c)
-      forList l = case l of
-        [] -> do
-          kv <- freshTypeVariable
-          vv <- freshTypeVariable
-          return ((kv, vv), [])
-        ((k, v):r) -> do
-          (kt, kc) <- infer cx k
-          (vt, vc) <- infer cx v
-          ((kt', vt'), c') <- forList r
-          return ((kt, vt), c' ++ kc ++ vc ++ [(kt, kt'), (vt, vt')])
-
-  ExpressionNominal (NominalTerm name term') -> do
-    case namedType cx name of
-      ResultFailure msg -> error msg
-      ResultSuccess typ -> do
-        (typ', c) <- infer cx term'
-        return (typ, c ++ [(typ, typ')])
-
-  ExpressionOptional m -> case m of
-    Nothing -> do
-      tv <- freshTypeVariable
-      return (optionalType tv, [])
-    Just term' -> do
-      (t, c) <- infer cx term'
-      return (optionalType t, c)
-
-  ExpressionRecord fields -> do
-      (ftypes, c1) <- CM.foldM forField ([], []) fields
-      return (recordType $ L.reverse ftypes, c1)
-    where
-      forField (ftypes, c) field = do
-        (ft, c') <- inferFieldType cx field
-        return (ft:ftypes, c' ++ c)
-
-  ExpressionSet els -> do
-    let expr = ExpressionList $ S.toList els
-    (t, c) <- infer cx $ term {termData = expr}
-    case t of
-      TypeList et -> return (TypeSet et, c)
-      _ -> error "expected a list type"
-
-  ExpressionUnion (UnionExpression sname (Field fname fterm)) -> case namedType cx sname of
-    ResultFailure msg -> error msg
-    ResultSuccess typ -> do
-      (ftype, _) <- infer cx fterm
-      case typ of
-        TypeUnion sfields -> if L.null matches
-            then error $ "no field " ++ show fname ++ " found in union type " ++ show sname
-            else return (typ, [(ftype, fieldTypeType (L.head matches))])
-          where
-            matches = L.filter (\f -> fieldTypeName f == fname) sfields
-        _ -> error $ "type name " ++ show sname ++ " did not resolve to a union type"
-
-  ExpressionVariable x -> do
-      t <- lookupTypeInEnvironment x
-      return (t, [])
+    _ -> error $ "type inference is unsupported for term: " ++ show term
 
 -- | Solve for the toplevel type of an expression in a given environment
 inferTerm :: (Default a, Show a) => TypingEnvironment -> Context a -> Term a -> Either TypeError TypeScheme

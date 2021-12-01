@@ -176,7 +176,7 @@ arbitraryTerm typ n = case typ of
     TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
     TypeRecord sfields -> record <$> arbitraryFields sfields
     TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
-    TypeUnion sfields -> union untyped <$> do
+    TypeUnion sfields -> union <$> do
       f <- QC.elements sfields
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
@@ -267,7 +267,7 @@ shrinkers typ = trivialShrinker ++ case typ of
         promoteType = (st, \(Term (ExpressionSet els) _) -> S.toList els)
         shrinkType = (\(t, m) -> (TypeSet t, \(Term (ExpressionSet els) _) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
     TypeUnion sfields -> dropFields
-        ++ shrinkFieldNames TypeUnion (union untyped . L.head) (\(Term (ExpressionUnion (UnionExpression _ f)) _) -> [f]) sfields
+        ++ shrinkFieldNames TypeUnion (union . L.head) (\(Term (ExpressionUnion f) _) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO
@@ -291,4 +291,4 @@ shrinkers typ = trivialShrinker ++ case typ of
 
 -- | A placeholder for a type name. Use in tests only, where a union term is needed but no type name is known.
 untyped :: Name
-untyped = "UNTYPED"
+untyped = show (dflt :: Meta)

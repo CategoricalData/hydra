@@ -115,7 +115,7 @@ replaceTerm order rep term = case order of
           ExpressionOptional m -> ExpressionOptional $ replace <$> m
           ExpressionRecord fields -> ExpressionRecord $ replaceField <$> fields
           ExpressionSet s -> ExpressionSet $ S.fromList $ replace <$> S.toList s
-          ExpressionUnion (UnionExpression name field) -> ExpressionUnion $ UnionExpression name $ replaceField field
+          ExpressionUnion field -> ExpressionUnion $ replaceField field
           _ -> expr
 
 stripMeta :: (Default a, Ord a) => Term a -> Term a

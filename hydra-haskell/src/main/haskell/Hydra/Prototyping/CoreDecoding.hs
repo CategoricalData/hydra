@@ -113,7 +113,7 @@ matchUnion :: Show a => Context a -> [(FieldName, Term a -> Result b)] -> Term a
 matchUnion context pairs term = do
     term' <- deref context term
     case termData term' of
-      ExpressionUnion (UnionExpression _ (Field fname val)) -> case M.lookup fname mapping of
+      ExpressionUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (fst <$> pairs) ++ "}"

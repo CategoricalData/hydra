@@ -37,7 +37,6 @@ module Hydra.Core
   , TypeVariable
   , TypeVariant(..)
   , TypedTerm(..)
-  , UnionExpression(..)
   , UniversalType(..)
   , Variable
   , _Application
@@ -231,9 +230,6 @@ module Hydra.Core
   , _TypedTerm
   , _TypedTerm_term
   , _TypedTerm_type
-  , _UnionExpression
-  , _UnionExpression_context
-  , _UnionExpression_field
   , _UniversalType
   , _UniversalType_body
   , _UniversalType_variable
@@ -397,12 +393,12 @@ data Expression a
   {-| A union term, i.e. a string-indexed generalization of inl() or inr()
       
       @type parameterized:
-              genericType: hydra/core.UnionExpression
+              genericType: hydra/core.Field
               parameters:
               - type:
                   variable: a
                 variable: a -}
-  | ExpressionUnion (UnionExpression a)
+  | ExpressionUnion (Field a)
   {-| A variable reference
       
       @type hydra/core.Variable -}
@@ -820,22 +816,6 @@ data TypedTerm a
                   variable: a -}
     , typedTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
--- | A variant expression, or instance of a union type
-data UnionExpression a
-  = UnionExpression
-    {-| The name of the type of this union expression
-        
-        @comments We assume that we can only instantiate named union types
-        @type hydra/core.Name -}
-    { unionExpressionContext :: Name
-    {-| @type parameterized:
-                genericType: hydra/core.Field
-                parameters:
-                - type:
-                    variable: a
-                  variable: a -}
-    , unionExpressionField :: Field a } deriving (Eq, Generic, Ord, Read, Show)
-
 -- | A universally quantified ('forall') type, parameterized by a type variable
 data UniversalType
   = UniversalType
@@ -1040,9 +1020,6 @@ _Type_variable = "variable" :: String
 _TypedTerm = "hydra/core.TypedTerm" :: String
 _TypedTerm_term = "term" :: String
 _TypedTerm_type = "type" :: String
-_UnionExpression = "hydra/core.UnionExpression" :: String
-_UnionExpression_context = "context" :: String
-_UnionExpression_field = "field" :: String
 _UniversalType = "hydra/core.UniversalType" :: String
 _UniversalType_body = "body" :: String
 _UniversalType_variable = "variable" :: String

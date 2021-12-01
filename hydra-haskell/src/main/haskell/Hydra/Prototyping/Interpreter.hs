@@ -41,7 +41,7 @@ evaluate context term = reduce M.empty term
         ExpressionOptional m -> defaultTerm . ExpressionOptional <$> CM.mapM reduceb m
         ExpressionRecord fields -> defaultTerm  . ExpressionRecord <$> CM.mapM reduceField fields
         ExpressionSet terms -> defaultTerm . ExpressionSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-        ExpressionUnion (UnionExpression c f) -> defaultTerm . ExpressionUnion <$> (UnionExpression c <$> reduceField f)
+        ExpressionUnion f -> defaultTerm . ExpressionUnion <$> reduceField f
         ExpressionVariable v -> case M.lookup v bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
@@ -66,7 +66,7 @@ evaluate context term = reduce M.empty term
         FunctionCases cases -> do
           arg <- (reduce bindings $ L.head args) >>= deref context
           case termData arg of
-            ExpressionUnion (UnionExpression _ (Field fname t)) -> if L.null matching
+            ExpressionUnion (Field fname t) -> if L.null matching
                 then fail $ "no case for field named " ++ fname
                 else reduce bindings (fieldTerm $ L.head matching)
                   >>= reduceApplication bindings (t:L.tail args)
@@ -118,7 +118,7 @@ freeVariables term = S.fromList $ free S.empty term
           Just term -> free bound term
         ExpressionRecord fields -> L.concatMap (free bound . fieldTerm) fields
         ExpressionSet terms -> L.concatMap (free bound) terms
-        ExpressionUnion (UnionExpression _ field) -> free bound $ fieldTerm field
+        ExpressionUnion field -> free bound $ fieldTerm field
         ExpressionVariable v -> [v | not (S.member v bound)]
       where
         freeInFunction f = case f of
@@ -153,7 +153,7 @@ termIsValue strategy term = termIsOpaque strategy term || case termData term of
         Just term -> termIsValue strategy term
       ExpressionRecord fields -> checkFields fields
       ExpressionSet els -> forList $ S.toList els
-      ExpressionUnion (UnionExpression _ field) -> checkField field
+      ExpressionUnion field -> checkField field
       ExpressionVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
