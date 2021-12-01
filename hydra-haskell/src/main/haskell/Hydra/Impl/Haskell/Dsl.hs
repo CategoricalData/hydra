@@ -106,8 +106,9 @@ type DataError = String
 class Default a where dflt :: a
 type SchemaError = String
 instance Default () where dflt = ()
-data Meta = Meta deriving (Eq, Ord, Read, Show)
-instance Default Meta where dflt = Meta
+instance Default Meta where dflt = Meta {
+  metaDescription = Nothing,
+  metaTypeAnnotation = Nothing}
 
 apply :: Default a => Term a -> Term a -> Term a
 apply func arg = defaultTerm $ ExpressionApplication $ Application func arg
