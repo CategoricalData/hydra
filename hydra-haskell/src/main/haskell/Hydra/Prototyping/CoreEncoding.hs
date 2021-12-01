@@ -19,7 +19,7 @@ module Hydra.Prototyping.CoreEncoding (
   ) where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import Prelude hiding (map)
 import qualified Data.Map as M
@@ -139,7 +139,7 @@ encodeTerm term = case termData term of
   ExpressionList terms -> variant _Expression _Expression_list $ list $ encodeTerm <$> terms
   ExpressionMap m -> variant _Expression _Expression_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
-  ExpressionNominal ntt -> variant _Expression _Expression_nominal $ encodeNominalTerm ntt 
+  ExpressionNominal ntt -> variant _Expression _Expression_nominal $ encodeNominalTerm ntt
   ExpressionOptional m -> variant _Expression _Expression_optional $ optional $ encodeTerm <$> m
   ExpressionRecord fields -> variant _Expression _Expression_record $ list $ encodeField <$> fields
   ExpressionSet terms -> variant _Expression _Expression_set $ set $ S.fromList $ encodeTerm <$> S.toList terms

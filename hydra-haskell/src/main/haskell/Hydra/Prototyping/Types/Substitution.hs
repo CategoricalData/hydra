@@ -1,7 +1,7 @@
 module Hydra.Prototyping.Types.Substitution where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.List as L
 import qualified Data.Map as M

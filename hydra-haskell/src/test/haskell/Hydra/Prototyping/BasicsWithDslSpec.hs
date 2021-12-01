@@ -2,7 +2,7 @@ module Hydra.Prototyping.BasicsWithDslSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.BasicsWithDsl
 import Hydra.Prototyping.Interpreter

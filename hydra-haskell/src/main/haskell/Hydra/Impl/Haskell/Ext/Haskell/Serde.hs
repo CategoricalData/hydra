@@ -10,7 +10,7 @@ import Hydra.Ext.Haskell.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
 

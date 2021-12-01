@@ -1,7 +1,7 @@
 module Hydra.Prototyping.CoreCodersSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.CoreEncoding
 
@@ -15,7 +15,7 @@ import qualified Test.QuickCheck as QC
 individualEncoderTestCases :: H.SpecWith ()
 individualEncoderTestCases = do
   H.describe "Individual encoder test cases" $ do
-    
+
     H.it "string literal type" $ do
       H.shouldBe
         (encodeLiteralType LiteralTypeString)
@@ -46,7 +46,7 @@ individualEncoderTestCases = do
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
   H.describe "Individual decoder test cases" $ do
-    
+
     H.it "float32 literal type" $ do
       decodeLiteralType testContext (variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32) `H.shouldBe`
         pure (LiteralTypeFloat FloatTypeFloat32)
@@ -54,7 +54,7 @@ individualDecoderTestCases = do
     H.it "float32 type" $ do
       decodeType testContext (variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32)
         `H.shouldBe` pure float32Type
-        
+
     H.it "union type" $ do
       decodeType testContext (variant _Type _Type_union $ list [
         nominal _FieldType $ record [
@@ -68,7 +68,7 @@ individualDecoderTestCases = do
 decodeInvalidTerms :: H.SpecWith ()
 decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
-      
+
     H.it "Try to decode a term with wrong fields for Type" $ do
       isFailure (decodeType testContext $ variant untyped "unknownField" $ list []) `H.shouldBe` True
 
@@ -81,7 +81,7 @@ mterm = id
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do
   H.describe "Check that encoding, then decoding random types is a no-op" $ do
-    
+
     H.it "Try random types" $
       QC.property $ \typ -> decodeType testContext (encodeType typ) == pure typ
 

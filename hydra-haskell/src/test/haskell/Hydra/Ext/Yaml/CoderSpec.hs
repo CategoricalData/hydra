@@ -1,7 +1,7 @@
 module Hydra.Ext.Yaml.CoderSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
@@ -34,7 +34,7 @@ literalTypeConstraintsAreRespected = H.describe "Verify that YAML's literal type
     QC.property $ \d -> checkYamlCoder float64Type (float64Value d) (yamlFloat $ realToFrac d)
 
   -- TODO: bigfloat
-  
+
   H.it "Check 32-bit integers" $
     QC.property $ \i -> checkYamlCoder int32Type (int32Value i) (yamlInt i)
 
@@ -43,13 +43,13 @@ literalTypeConstraintsAreRespected = H.describe "Verify that YAML's literal type
 
   H.it "Check arbitrary-precision integers" $
     QC.property $ \i -> checkYamlCoder bigintType (bigintValue i) (yamlInt i)
-  
+
   H.it "Check strings" $
     QC.property $ \s -> checkYamlCoder stringType (stringValue s) (yamlStr s)
 
 supportedTypesPassThrough :: H.SpecWith ()
 supportedTypesPassThrough = H.describe "Verify that supported types are mapped directly" $ do
-  
+
   H.it "Lists become YAML sequences" $
     QC.property $ \strings -> checkYamlCoder listOfStringsType
       (list $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
@@ -91,13 +91,13 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
       (yamlMap [
         (yamlStr "context", yamlStr untyped),
         (yamlStr "record", yamlMap [(yamlStr "right", yamlInt int)])])
-          
+
 spec :: H.Spec
 spec = do
   literalTypeConstraintsAreRespected
   supportedTypesPassThrough
   unsupportedTypesAreTransformed
-  
+
 checkYamlCoder :: Type -> Term Meta -> YM.Node -> H.Expectation
 checkYamlCoder typ term node = do
     (if Y.isJust step' then [] else warnings) `H.shouldBe` []

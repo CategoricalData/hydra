@@ -1,7 +1,7 @@
 module Hydra.Prototyping.Adapters.TermSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Adapters.Utils
 import Hydra.Prototyping.Basics
@@ -25,11 +25,11 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
     H.it "int16 and int32 are supported in the test context" $ do
       typeIsSupported (context [TypeVariantLiteral]) int16Type `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral]) int32Type `H.shouldBe` True
-      
+
     H.it "int8 and bigint are unsupported in the test context" $ do
       typeIsSupported (context [TypeVariantLiteral]) int8Type `H.shouldBe` False
       typeIsSupported (context [TypeVariantLiteral]) bigintType `H.shouldBe` False
-      
+
     H.it "Records are supported, but unions are not" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord]) latLonType `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord]) stringOrIntType `H.shouldBe` False
@@ -56,28 +56,28 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Strings (and other supported atomic values) pass through without change" $
     QC.property $ \b -> checkTermAdapter
       [TypeVariantLiteral]
-      stringType 
-      stringType 
+      stringType
+      stringType
       False
-      (stringValue b) 
+      (stringValue b)
       (stringValue b)
 
   H.it "Lists (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantList]
-      listOfStringsType 
-      listOfStringsType 
+      listOfStringsType
+      listOfStringsType
       False
-      (list $ stringValue <$> strings) 
+      (list $ stringValue <$> strings)
       (list $ stringValue <$> strings)
 
   H.it "Maps (when supported) pass through without change" $
     QC.property $ \keyvals -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantMap]
-      mapOfStringsToIntsType 
-      mapOfStringsToIntsType 
+      mapOfStringsToIntsType
+      mapOfStringsToIntsType
       False
-      (makeMap keyvals) 
+      (makeMap keyvals)
       (makeMap keyvals)
 
   H.it "Optionals (when supported) pass through without change" $
@@ -101,46 +101,46 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantUnion]
-      stringOrIntType 
-      stringOrIntType 
+      stringOrIntType
+      stringOrIntType
       False
-      (variant untyped "right" $ int32Value int) 
+      (variant untyped "right" $ int32Value int)
       (variant untyped "right" $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantSet]
-      setOfStringsType 
-      setOfStringsType 
+      setOfStringsType
+      setOfStringsType
       False
-      (stringSet strings) 
+      (stringSet strings)
       (stringSet strings)
 
   H.it "Element references (when supported) pass through without change" $
     QC.property $ \name -> checkTermAdapter
       [TypeVariantElement]
-      int32ElementType 
-      int32ElementType 
+      int32ElementType
+      int32ElementType
       False
-      (element name) 
+      (element name)
       (element name)
 
   H.it "CompareTo terms (when supported) pass through without change" $
     QC.property $ \s -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantFunction]
-      compareStringsType 
-      compareStringsType 
+      compareStringsType
+      compareStringsType
       False
-      (compareTo $ stringValue s) 
+      (compareTo $ stringValue s)
       (compareTo $ stringValue s)
 
   H.it "Data terms (when supported) pass through without change" $
     QC.property $ \() -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
-      int32ElementDataType 
-      int32ElementDataType 
+      int32ElementDataType
+      int32ElementDataType
       False
-      dataTerm 
+      dataTerm
       dataTerm
 
   H.it "Primitive function references (when supported) pass through without change" $
@@ -361,7 +361,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
         _ -> True }
 
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage
-    
+
     -- Note: in a real application, you wouldn't create the adapter just to use it once;
     --       it should be created once, then applied to many terms.
     adapt typ dir term = do

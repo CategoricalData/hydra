@@ -6,7 +6,7 @@ module Hydra.Impl.Haskell.Ext.Yaml.SerdeSpec where
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Ext.Yaml.Serde
 
 import Hydra.TestData
@@ -21,7 +21,7 @@ import qualified Data.Maybe as Y
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = H.describe "Test atomic values" $ do
-  
+
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization
       (TypedTerm booleanType $ booleanValue b)
@@ -31,7 +31,7 @@ checkLiterals = H.describe "Test atomic values" $ do
     QC.property $ \i -> checkSerialization
       (TypedTerm int32Type $ int32Value i)
       (show i)
-      
+
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
       (TypedTerm uint8Type $ uint8Value i)
@@ -87,7 +87,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
         (TypeRecord [FieldType "one" $ TypeOptional stringType, FieldType "two" $ TypeOptional int32Type])
         (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
       "one: test"
-      
+
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm

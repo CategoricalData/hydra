@@ -20,7 +20,7 @@ import Hydra.Prototyping.Adapters.Atomic
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
-import Hydra.Impl.Haskell.Dsl
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
