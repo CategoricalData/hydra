@@ -11,6 +11,7 @@ module Hydra.Evaluation
   , _Context_functions
   , _Context_graphs
   , _Context_strategy
+  , _Context_typeAnnotations
   , _EvaluationStrategy
   , _EvaluationStrategy_opaqueTermVariants
   , _PrimitiveFunction
@@ -65,7 +66,13 @@ data Context a
                       variable: a -}
     , contextFunctions :: (Map (Name) (PrimitiveFunction a))
     -- | @type hydra/evaluation.EvaluationStrategy
-    , contextStrategy :: EvaluationStrategy }
+    , contextStrategy :: EvaluationStrategy
+    {-| @type function:
+                from:
+                - variable: a
+                to:
+                  optional: hydra/core.Type -}
+    , contextTypeAnnotations :: a -> (Maybe Type) }
 
 data EvaluationStrategy
   = EvaluationStrategy
@@ -144,6 +151,7 @@ _Context_elements = "elements" :: String
 _Context_functions = "functions" :: String
 _Context_graphs = "graphs" :: String
 _Context_strategy = "strategy" :: String
+_Context_typeAnnotations = "typeAnnotations" :: String
 _EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
 _EvaluationStrategy_opaqueTermVariants = "opaqueTermVariants" :: String
 _PrimitiveFunction = "hydra/evaluation.PrimitiveFunction" :: String

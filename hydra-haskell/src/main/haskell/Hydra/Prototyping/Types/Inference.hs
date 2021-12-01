@@ -31,7 +31,6 @@ type TypingEnvironment = M.Map Variable TypeScheme
 
 type Unifier = (Subst, [Constraint])
 
-
 -- | Canonicalize and return the polymorphic toplevel type.
 closeOver :: Type -> TypeScheme
 closeOver = normalizeTypeScheme . generalize M.empty

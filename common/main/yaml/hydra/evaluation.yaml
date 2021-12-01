@@ -43,6 +43,14 @@ definitions:
         - name: strategy
           type: EvaluationStrategy
 
+        - name: typeAnnotations
+          type:
+            function:
+              from:
+                - variable: a
+              to:
+                optional: core.Type
+
   - name: EvaluationStrategy
     type:
       record:

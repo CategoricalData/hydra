@@ -23,6 +23,7 @@ module Hydra.Core
   , LiteralType(..)
   , LiteralVariant(..)
   , MapType(..)
+  , Meta(..)
   , Name
   , NominalTerm(..)
   , OptionalExpression(..)
@@ -160,6 +161,9 @@ module Hydra.Core
   , _MapType
   , _MapType_keys
   , _MapType_values
+  , _Meta
+  , _Meta_description
+  , _Meta_typeAnnotation
   , _Name
   , _NominalTerm
   , _NominalTerm_term
@@ -646,6 +650,20 @@ data MapType
     -- | @type hydra/core.Type
     , mapTypeValues :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
+-- | A built-in metadata container for terms
+data Meta
+  = Meta
+    {-| An optional description associated with the term
+        
+        @type optional: string -}
+    { metaDescription :: Maybe String
+    {-| An optional type annotation associated with the term. This may be used as
+        a hint to the type inferencer and/or to
+        code generators.
+        
+        @type optional: hydra/core.Type -}
+    , metaTypeAnnotation :: Maybe Type } deriving (Eq, Generic, Ord, Read, Show)
+
 -- | @type string
 type Name = String
 
@@ -968,6 +986,9 @@ _Literal_string = "string" :: String
 _MapType = "hydra/core.MapType" :: String
 _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
+_Meta = "hydra/core.Meta" :: String
+_Meta_description = "description" :: String
+_Meta_typeAnnotation = "typeAnnotation" :: String
 _Name = "hydra/core.Name" :: String
 _NominalTerm = "hydra/core.NominalTerm" :: String
 _NominalTerm_term = "term" :: String

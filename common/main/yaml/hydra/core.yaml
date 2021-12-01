@@ -499,6 +499,22 @@ definitions:
         - name: values
           type: Type
 
+  - name: Meta
+    description: "A built-in metadata container for terms"
+    type:
+      record:
+        - name: description
+          description: "An optional description associated with the term"
+          type:
+            optional: string
+
+        - name: typeAnnotation
+          description: >
+            An optional type annotation associated with the term. This may be used as a hint to the type inferencer
+            and/or to code generators.
+          type:
+            optional: Type
+
   - name: Name
     type: string
 
