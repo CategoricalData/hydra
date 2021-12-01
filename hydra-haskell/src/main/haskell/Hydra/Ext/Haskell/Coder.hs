@@ -10,7 +10,6 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
-import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
 
@@ -36,30 +35,36 @@ encodeAtomic av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "atomic value" av
 
-encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Function a -> Result H.Expression
-encodeFunction fun = case fun of
-  FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
-    where
-      caseExpr :: Result H.Expression
-      caseExpr = H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM toAlt fields)
-      toAlt (Field fn fun) = do
-        let var = "y"
-        let pat = H.PatternApplication $ H.Pattern_Application (hsname fn) [H.PatternName $ hsname var]
-        rhs <- hsapp <$> encodeTerm fun <*> pure (hsvar var)
-        return $ H.Alternative pat rhs Nothing
-  FunctionData -> pure $ hsvar "id"
-  FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm body
-  FunctionPrimitive name -> pure $ hsvar name
-  FunctionProjection (Projection fname rname) -> pure $ hsvar $ qualifyRecordFieldName fname rname
-  _ -> fail $ "unexpected function: " ++ show fun
-
-encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Term a -> Result H.Expression
-encodeTerm term = case termData term of
-  ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm fun <*> encodeTerm arg
+encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
+encodeFunction cx meta fun = case fun of
+    FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
+      where
+        caseExpr :: Result H.Expression
+        caseExpr = H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM toAlt fields)
+        toAlt (Field fn fun) = do
+          let var = "y"
+          let pat = H.PatternApplication $ H.Pattern_Application (hsname fn) [H.PatternName $ hsname var]
+          rhs <- hsapp <$> encodeTerm cx fun <*> pure (hsvar var)
+          return $ H.Alternative pat rhs Nothing
+    FunctionData -> pure $ hsvar "id"
+    FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm cx body
+    FunctionPrimitive name -> pure $ hsvar name
+    FunctionProjection fname -> pure $ hsvar $ case domName of
+      Just rname -> qualifyRecordFieldName fname rname
+      Nothing -> fname
+    _ -> fail $ "unexpected function: " ++ show fun
+  where
+    domName = case contextTypeOf cx meta of
+      Just (TypeFunction (FunctionType (TypeNominal name) _)) -> Just name
+      Nothing -> Nothing
+    
+encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
+encodeTerm cx term = case termData term of
+  ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
   ExpressionLiteral av -> encodeAtomic av
   ExpressionElement name -> pure $ hsvar name
-  ExpressionFunction f -> encodeFunction f
-  ExpressionList els -> H.ExpressionList <$> CM.mapM encodeTerm els
+  ExpressionFunction f -> encodeFunction cx (termMeta term) f
+  ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
   ExpressionNominal (NominalTerm sname term') -> case termData term' of
     ExpressionRecord fields -> case fields of
       [] -> pure $ H.ExpressionTuple []
@@ -68,27 +73,27 @@ encodeTerm term = case termData term of
           updates <- CM.mapM toFieldUpdate fields
           return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
         where
-          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm ft
+          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm cx ft
 --    ExpressionUnion (UnionExpression sname' field) ->
-    _ -> encodeTerm term'
+    _ -> encodeTerm cx term'
   ExpressionOptional m -> case m of
     Nothing -> pure $ hsvar "Nothing"
-    Just t -> hsapp (hsvar "Just") <$> encodeTerm t
+    Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
   ExpressionRecord fields -> case fields of
     [] -> pure $ H.ExpressionTuple []
     _ -> fail $ "unexpected anonymous record: " ++ show term
-  ExpressionUnion (UnionExpression sname (Field fn ft)) -> hsapp (hsvar $ qualifyUnionFieldName sname fn) <$> encodeTerm ft
+  ExpressionUnion (UnionExpression sname (Field fn ft)) -> hsapp (hsvar $ qualifyUnionFieldName sname fn) <$> encodeTerm cx ft
   ExpressionVariable v -> pure $ hsvar v
   _ -> fail $ "unexpected term: " ++ show term
 
-haskellCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
-haskellCoder context typ = do
+haskellCoder :: (Default a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
+haskellCoder cx typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeSteps (adapterStep adapter) coder
   where
-    adContext = AdapterContext context hydraCoreLanguage haskellLanguage
-    termCoder _ = pure $ unidirectionalStep encodeTerm
+    adContext = AdapterContext cx hydraCoreLanguage haskellLanguage
+    termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
 
 haskellLanguage :: Language
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {

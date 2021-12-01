@@ -6,7 +6,6 @@ module Hydra.Prototyping.CoreDecoding (
   decodeFunctionType,
   decodeIntegerType,
   decodeMapType,
-  decodeProjection,
   decodeString,
   decodeType,
   decodeUniversalType,
@@ -66,11 +65,6 @@ decodeMapType :: Show a => Context a -> Term a -> Result MapType
 decodeMapType context = matchRecord context $ \m -> MapType
   <$> getField m _MapType_keys (decodeType context)
   <*> getField m _MapType_values (decodeType context)
-
-decodeProjection :: Context a -> Term a -> Result Projection
-decodeProjection context = matchRecord context $ \m -> Projection
-  <$> getField m _Projection_field decodeString
-  <*> getField m _Projection_context decodeString
 
 decodeString :: Term a -> Result String
 decodeString term = case termData term of

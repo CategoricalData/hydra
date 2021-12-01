@@ -293,7 +293,7 @@ definitions:
 
         - name: projection
           description: "A projection of a field from a record"
-          type: Projection
+          type: FieldName
 
   - name: FunctionType
     description: "A function type, also known as an arrow type"
@@ -556,20 +556,6 @@ definitions:
 
         - name: bits
           type: integer
-
-  - name: Projection
-    description: "A projection of a field from a record"
-    type:
-      record:
-        - name: field
-          description: "The projected field"
-          type: FieldName
-
-        - name: context
-          description: "The name of the record type which defines the field"
-          comments:
-            - "We assume that we can only project from named record types"
-          type: Name
 
   - name: Term
     type:

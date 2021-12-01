@@ -19,9 +19,7 @@ nominalCases :: Default a => Context a -> Name -> [Field a] -> Type -> Term a
 nominalCases context name fields codomain = withType context (functionType (nominalType name) codomain) $ cases fields
 
 nominalProjection :: Default a => Context a -> Name -> FieldName -> Type -> Term a
-nominalProjection context name fname ftype = withType context
-  (functionType (nominalType name) ftype) $
-  projection (Projection fname name) -- TODO: simplify me
+nominalProjection context name fname ftype = withType context (functionType (nominalType name) ftype) $ projection fname
 
 nominalRecord :: Default a => Context a -> Name -> [Field a] -> Term a
 nominalRecord context name fields = withType context (nominalType name) $ record fields

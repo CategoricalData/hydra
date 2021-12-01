@@ -74,10 +74,6 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
-instance QC.Arbitrary Projection
-  where
-    arbitrary = Projection <$> QC.arbitrary <*> QC.arbitrary
-
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
