@@ -92,8 +92,8 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (TypeUnion [FieldType "left" stringType, FieldType "right" int32Type])
-        (union untyped $ Field "left" $ stringValue "test"))
-      "context: UNTYPED\nrecord:\n  left: test\n"
+        (union $ Field "left" $ stringValue "test"))
+      ("context: " ++ show untyped ++ "\nrecord:\n  left: test\n")
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
 yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do
@@ -115,7 +115,7 @@ checkSerialization (TypedTerm typ term) expected = do
 checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
 checkSerdeRoundTrip (TypedTerm typ term) = do
     Y.isJust (qualifiedValue serde) `H.shouldBe` True
-    (stepOut serde' term >>= stepIn serde') `H.shouldBe` ResultSuccess term
+    (stripMeta <$> (stepOut serde' term >>= stepIn serde')) `H.shouldBe` ResultSuccess (stripMeta term)
   where
     serde = yamlSerde testContext typ
     serde' = Y.fromJust $ qualifiedValue serde

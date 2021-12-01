@@ -187,7 +187,7 @@ expectStringTerm term = case termData term of
 
 expectUnionTerm :: Show a => Term a -> Result (Field a)
 expectUnionTerm term = case termData term of
-  ExpressionUnion (UnionExpression _ field) -> pure field
+  ExpressionUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
 fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
@@ -273,10 +273,10 @@ match = cases . fmap toField
   where
     toField (name, term) = Field name term
 
-matchWithVariants :: Default a => Name -> [(FieldName, FieldName)] -> Term a
-matchWithVariants sname = cases . fmap toField
+matchWithVariants :: Default a => [(FieldName, FieldName)] -> Term a
+matchWithVariants = cases . fmap toField
   where
-    toField (from, to) = Field from $ constFunction $ unitVariant sname to
+    toField (from, to) = Field from $ constFunction $ unitVariant to
 
 nominal :: Default a => Name -> Term a -> Term a
 nominal name term = defaultTerm $ ExpressionNominal $ NominalTerm name term
@@ -349,8 +349,8 @@ uint8Type = integerType IntegerTypeUint8
 uint8Value :: Default a => Integer -> Term a
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
-union :: Default a => Name -> Field a -> Term a
-union sname field = defaultTerm $ ExpressionUnion $ UnionExpression sname field
+union :: Default a => Field a -> Term a
+union field = defaultTerm $ ExpressionUnion field
 
 unitTerm :: Default a => Term a
 unitTerm = defaultTerm $ ExpressionRecord []
@@ -361,18 +361,18 @@ unionType = TypeUnion
 unitType :: Type
 unitType = TypeRecord []
 
-unitVariant :: Default a => Name -> FieldName -> Term a
-unitVariant sname fname = variant sname fname unitTerm
+unitVariant :: Default a => FieldName -> Term a
+unitVariant fname = variant fname unitTerm
 
 variable :: Default a => Variable -> Term a
 variable = defaultTerm . ExpressionVariable
 
-variant :: Default a => Name -> FieldName -> Term a -> Term a
-variant sname fname term = defaultTerm $ ExpressionUnion $ UnionExpression sname (Field fname term)
+variant :: Default a => FieldName -> Term a -> Term a
+variant fname term = defaultTerm $ ExpressionUnion $ Field fname term
 
-withFunction :: Default a => Name -> FieldName -> Element a -> Term a
-withFunction sname name el = lambda var $ variant sname name $ apply (elementRef el) (variable var)
+withFunction :: Default a => FieldName -> Element a -> Term a
+withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
   where var = "x"
 
-withVariant :: Default a => Name -> FieldName -> Term a
-withVariant sname name = constFunction $ unitVariant sname name
+withVariant :: Default a => FieldName -> Term a
+withVariant = constFunction . unitVariant

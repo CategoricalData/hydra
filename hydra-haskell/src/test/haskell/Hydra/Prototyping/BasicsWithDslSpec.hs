@@ -3,6 +3,7 @@ module Hydra.Prototyping.BasicsWithDslSpec where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.BasicsWithDsl
 import Hydra.Prototyping.Interpreter
@@ -16,7 +17,7 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term Meta -> Result (Term Meta)
-testEvaluate = evaluate $ testContext { contextElements = graphElementsMap (basicsGraph testContext) }
+testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap (basicsGraph testContext) }) term
 
 testsForTermTypeFunctions :: H.SpecWith a
 testsForTermTypeFunctions = do
@@ -43,25 +44,25 @@ testsForTypeVariantFunctions = do
       QC.property $ \at ->
         testEvaluate (apply (elementRefByName "hydra/basics.literalTypeVariant") (encodeLiteralType testContext at))
         `H.shouldBe`
-        pure (encodeLiteralVariant testContext $ literalTypeVariant at)
+        pure (stripMeta $ encodeLiteralVariant testContext $ literalTypeVariant at)
 
     H.it "Test floatTypeVariant function element" $
       QC.property $ \ft ->
         testEvaluate (apply (elementRefByName "hydra/basics.floatTypeVariant") (encodeFloatType testContext ft))
         `H.shouldBe`
-        pure (encodeFloatVariant testContext $ floatTypeVariant ft)
+        pure (stripMeta $ encodeFloatVariant testContext $ floatTypeVariant ft)
 
     H.it "Test integerTypeVariant function element" $
       QC.property $ \at ->
         testEvaluate (apply (elementRefByName "hydra/basics.integerTypeVariant") (encodeIntegerType testContext at))
         `H.shouldBe`
-        pure (encodeIntegerVariant testContext $ integerTypeVariant at)
+        pure (stripMeta $ encodeIntegerVariant testContext $ integerTypeVariant at)
 
     H.it "Test typeVariant function element" $
       QC.property $ \t ->
         testEvaluate (apply (elementRefByName "hydra/basics.typeVariant") (encodeType testContext t))
         `H.shouldBe`
-        pure (encodeTypeVariant testContext $ typeVariant t)
+        pure (stripMeta $ encodeTypeVariant testContext $ typeVariant t)
 
 spec :: H.Spec
 spec = do

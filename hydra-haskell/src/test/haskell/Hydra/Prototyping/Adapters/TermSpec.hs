@@ -1,7 +1,7 @@
 module Hydra.Prototyping.Adapters.TermSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Adapters.Utils
 import Hydra.Prototyping.Basics
@@ -104,8 +104,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       stringOrIntType
       stringOrIntType
       False
-      (variant untyped "right" $ int32Value int)
-      (variant untyped "right" $ int32Value int)
+      (variant "right" $ int32Value int)
+      (variant "right" $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkTermAdapter
@@ -198,7 +198,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions stringType)
       False
       (compareTo $ stringValue s)
-      (union _Function $ Field "compareTo" $ stringValue s)
+      (nominalUnion testContext _Function $ Field "compareTo" $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkTermAdapter
@@ -207,7 +207,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions stringType)
       False
       dataTerm
-      (union _Function $ Field "data" unitTerm)
+      (nominalUnion testContext _Function $ Field "data" unitTerm)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkTermAdapter
@@ -225,7 +225,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions stringType)
       False
       (primitive name)
-      (union _Function $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
+      (nominalUnion testContext _Function $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkTermAdapter
@@ -234,7 +234,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection fname)
-      (union _Function $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
+      (nominalUnion testContext _Function $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkTermAdapter
@@ -253,7 +253,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         FieldType "left" $ TypeOptional stringType,
         FieldType "right" $ TypeOptional int16Type])])
       False
-      (union untyped $ Field "right" $ int8Value i)
+      (union $ Field "right" $ int8Value i)
       (record [
         Field "context" $ stringValue untyped,
         Field "record" (record [

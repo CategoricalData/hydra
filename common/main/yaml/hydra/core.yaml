@@ -178,7 +178,7 @@ definitions:
           description: "A union term, i.e. a string-indexed generalization of inl() or inr()"
           type:
             parameterized:
-              genericType: UnionExpression
+              genericType: Field
               parameters:
                 - variable: a
                   type:
@@ -709,25 +709,6 @@ definitions:
           type:
             parameterized:
               genericType: Term
-              parameters:
-                - variable: a
-                  type:
-                    variable: a
-
-  - name: UnionExpression
-    description: "A variant expression, or instance of a union type"
-    type:
-      record:
-        - name: context
-          description: "The name of the type of this union expression"
-          comments:
-            - "We assume that we can only instantiate named union types"
-          type: Name
-
-        - name: field
-          type:
-            parameterized:
-              genericType: Field
               parameters:
                 - variable: a
                   type:

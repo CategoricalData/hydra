@@ -9,7 +9,7 @@ import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Atomic
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
@@ -55,13 +55,13 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
     cx = adapterContextEvaluation context
     encode ad term = stepOut (adapterStep ad) $ case termData term of
       ExpressionFunction f -> case f of
-        FunctionCases _ -> variant _Function _Function_cases $ stringValue $ show term -- TODO ExpressionRecord cases
-        FunctionCompareTo other -> variant _Function _Function_compareTo other
-        FunctionData -> unitVariant _Function _Function_data
-        FunctionLambda _ -> variant _Function _Function_lambda $ stringValue $ show term -- TODO
-        FunctionPrimitive name -> variant _Function _Function_primitive $ stringValue name
-        FunctionProjection fname -> variant _Function _Function_projection $ stringValue fname
-      ExpressionVariable var -> variant _Function _Expression_variable $ stringValue var
+        FunctionCases _ -> nominalVariant cx _Function _Function_cases $ stringValue $ show term -- TODO ExpressionRecord cases
+        FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo other
+        FunctionData -> nominalUnitVariant cx _Function _Function_data
+        FunctionLambda _ -> nominalVariant cx _Function _Function_lambda $ stringValue $ show term -- TODO
+        FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
+        FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
+      ExpressionVariable var -> nominalVariant cx _Function _Expression_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -203,9 +203,9 @@ passUnion context t@(TypeUnion sfields) = do
     let lossy = or $ adapterIsLossy <$> adapters
     let sfields' = adapterTarget . snd <$> M.toList adapters
     return $ Adapter lossy t (TypeUnion sfields')
-      $ bidirectional $ \dir (Term (ExpressionUnion (UnionExpression sname dfield)) _) -> do
+      $ bidirectional $ \dir (Term (ExpressionUnion dfield) meta) -> do
         ad <- getAdapter adapters dfield
-        union sname <$> stepBoth dir (adapterStep ad) dfield
+        (\f -> Term (ExpressionUnion f) meta) <$> stepBoth dir (adapterStep ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
 
@@ -256,16 +256,18 @@ unionToRecord context t@(TypeUnion sfields) = do
                   FieldType "record" $ TypeRecord $ makeOptional <$> sfields]
     ad <- termAdapter context target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
-      stepOut = \(Term (ExpressionUnion (UnionExpression sname (Field fn term))) _) -> stepOut (adapterStep ad)
+      stepOut = \(Term (ExpressionUnion (Field fn term)) meta) -> stepOut (adapterStep ad)
         $ record [
-          Field "context" $ stringValue sname,
+          Field "context" $ stringValue $ show meta, -- TODO: use encoded metadata once supported
           Field "record" $ record (toRecordField term fn <$> sfields)],
       stepIn = \term -> do
         (Term (ExpressionRecord [
-           Field "context" (Term (ExpressionLiteral (LiteralString sname)) _),
+           Field "context" (Term (ExpressionLiteral (LiteralString metaStr)) _),
            Field "record" (Term (ExpressionRecord fields) _)]) _) <- stepIn (adapterStep ad) term
-        union sname <$> fromRecordFields term (ExpressionRecord fields) (adapterTarget ad) fields}
+        (\t -> t {termMeta = read metaStr})
+          <$> (union <$> fromRecordFields term (ExpressionRecord fields) (adapterTarget ad) fields)}
   where
+    cx = adapterContextEvaluation context
     makeOptional (FieldType fn t) = FieldType fn $ TypeOptional t
 
     toRecordField term fn (FieldType fn' _) = Field fn' $ defaultTerm $ ExpressionOptional $ if fn' == fn then Just term else Nothing

@@ -94,8 +94,8 @@ checkIndividualTerms = do
 
     H.it "Check unions" $ do
       expectMonotype
-        (union "Timestamp" $ Field "unixTimeMillis" $ uint64Value 1638200308368)
-        testTypeTimestamp
+        (nominalUnion testContext "Timestamp" $ Field "unixTimeMillis" $ uint64Value 1638200308368)
+        (nominalType "Timestamp")
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
