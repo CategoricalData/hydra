@@ -12,7 +12,6 @@ module Hydra.Prototyping.CoreEncoding (
     encodeIntegerType,
     encodeIntegerVariant,
     encodeLambda,
-    encodeProjection,
     encodeTerm,
     encodeType,
     encodeTypeVariant,
@@ -81,7 +80,7 @@ encodeFunction cx f = case f of
   FunctionData -> unitVariant _Function _Function_data
   FunctionLambda l -> variant _Function _Function_lambda $ encodeLambda cx l
   FunctionPrimitive name -> variant _Function _Function_primitive $ stringValue name
-  FunctionProjection prj -> variant _Function _Function_projection $ encodeProjection cx prj
+  FunctionProjection fname -> variant _Function _Function_projection $ stringValue fname
 
 encodeFunctionType :: Default a => Context a -> FunctionType -> Term a
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
@@ -126,11 +125,6 @@ encodeNominalTerm :: (Default a, Ord a) => Context a -> NominalTerm a -> Term a
 encodeNominalTerm cx (NominalTerm name term) = nominalRecord cx _NominalTerm [
   Field _NominalTerm_typeName $ stringValue name,
   Field _NominalTerm_term $ encodeTerm cx term]
-
-encodeProjection :: Default a => Context a -> Projection -> Term a
-encodeProjection cx (Projection fname rname) = nominalRecord cx _Projection [
-  Field _Projection_field $ stringValue fname,
-  Field _Projection_context $ stringValue rname]
 
 encodeTerm :: (Default a, Ord a) => Context a -> Term a -> Term a
 encodeTerm cx term = case termData term of

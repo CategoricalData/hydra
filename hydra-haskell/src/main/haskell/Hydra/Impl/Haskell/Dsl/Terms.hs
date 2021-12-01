@@ -293,7 +293,7 @@ optionalType = TypeOptional
 primitive :: Default a => Name -> Term a
 primitive = defaultTerm . ExpressionFunction . FunctionPrimitive
 
-projection :: Default a => Projection -> Term a
+projection :: Default a => FieldName -> Term a
 projection = defaultTerm . ExpressionFunction . FunctionProjection
 
 record :: Default a => [Field a] -> Term a

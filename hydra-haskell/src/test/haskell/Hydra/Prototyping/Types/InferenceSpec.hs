@@ -2,7 +2,7 @@ module Hydra.Prototyping.Types.InferenceSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Types.Inference
 import Hydra.TestUtils
@@ -135,8 +135,8 @@ checkIndividualTerms = do
 
     H.it "Check projections" $ do
       expectMonotype
-        (projection (Projection "firstName" "Person"))
-        (functionType testTypePerson stringType)
+        (nominalProjection testContext "Person" "firstName" stringType)
+        (functionType (nominalType "Person") stringType)
     H.it "Check case statements" $ do
       expectPolytype
         (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])

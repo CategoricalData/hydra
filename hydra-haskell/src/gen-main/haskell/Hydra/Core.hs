@@ -28,7 +28,6 @@ module Hydra.Core
   , NominalTerm(..)
   , OptionalExpression(..)
   , Precision(..)
-  , Projection(..)
   , Term(..)
   , TermVariant(..)
   , Type(..)
@@ -174,9 +173,6 @@ module Hydra.Core
   , _Precision
   , _Precision_arbitrary
   , _Precision_bits
-  , _Projection
-  , _Projection_context
-  , _Projection_field
   , _Term
   , _TermVariant
   , _TermVariant_application
@@ -494,8 +490,8 @@ data Function a
   | FunctionPrimitive Name
   {-| A projection of a field from a record
       
-      @type hydra/core.Projection -}
-  | FunctionProjection Projection deriving (Eq, Generic, Ord, Read, Show)
+      @type hydra/core.FieldName -}
+  | FunctionProjection FieldName deriving (Eq, Generic, Ord, Read, Show)
 
 -- | A function type, also known as an arrow type
 data FunctionType
@@ -696,19 +692,6 @@ data Precision
   = PrecisionArbitrary
   -- | @type integer
   | PrecisionBits Int deriving (Eq, Generic, Ord, Read, Show)
-
--- | A projection of a field from a record
-data Projection
-  = Projection
-    {-| The projected field
-        
-        @type hydra/core.FieldName -}
-    { projectionField :: FieldName
-    {-| The name of the record type which defines the field
-        
-        @comments We assume that we can only project from named record types
-        @type hydra/core.Name -}
-    , projectionContext :: Name } deriving (Eq, Generic, Ord, Read, Show)
 
 data Term a
   = Term
@@ -999,9 +982,6 @@ _OptionalExpression_nothing = "nothing" :: String
 _Precision = "hydra/core.Precision" :: String
 _Precision_arbitrary = "arbitrary" :: String
 _Precision_bits = "bits" :: String
-_Projection = "hydra/core.Projection" :: String
-_Projection_context = "context" :: String
-_Projection_field = "field" :: String
 _Term = "hydra/core.Term" :: String
 _TermVariant = "hydra/core.TermVariant" :: String
 _TermVariant_application = "application" :: String

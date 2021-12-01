@@ -72,13 +72,13 @@ setOfStringsType = TypeSet stringType
 stringAliasType :: Type
 stringAliasType = TypeNominal "StringTypeAlias"
 
-stringList :: (Default a, Eq a, Ord a, Read a, Show a) => [String] -> Term a
+stringList :: Default a => [String] -> Term a
 stringList strings = list $ stringValue <$> strings
 
 stringOrIntType :: Type
 stringOrIntType = TypeUnion [FieldType "left" stringType, FieldType "right" int32Type]
 
-stringSet :: (Default a, Eq a, Ord a, Read a, Show a) => S.Set String -> Term a
+stringSet :: (Default a, Ord a) => S.Set String -> Term a
 stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
 
 unionTypeForFunctions :: Type -> Type
