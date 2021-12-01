@@ -9,6 +9,7 @@ import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Types.Substitution
 import Hydra.Prototyping.Types.Unification
 

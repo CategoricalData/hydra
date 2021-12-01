@@ -163,7 +163,7 @@ module Hydra.Core
   , _MapType_values
   , _Meta
   , _Meta_description
-  , _Meta_typeAnnotation
+  , _Meta_type
   , _Name
   , _NominalTerm
   , _NominalTerm_term
@@ -662,7 +662,7 @@ data Meta
         code generators.
         
         @type optional: hydra/core.Type -}
-    , metaTypeAnnotation :: Maybe Type } deriving (Eq, Generic, Ord, Read, Show)
+    , metaType :: Maybe Type } deriving (Eq, Generic, Ord, Read, Show)
 
 -- | @type string
 type Name = String
@@ -988,7 +988,7 @@ _MapType_keys = "keys" :: String
 _MapType_values = "values" :: String
 _Meta = "hydra/core.Meta" :: String
 _Meta_description = "description" :: String
-_Meta_typeAnnotation = "typeAnnotation" :: String
+_Meta_type = "type" :: String
 _Name = "hydra/core.Name" :: String
 _NominalTerm = "hydra/core.NominalTerm" :: String
 _NominalTerm_term = "term" :: String

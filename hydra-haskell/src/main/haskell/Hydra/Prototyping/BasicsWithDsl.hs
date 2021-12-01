@@ -3,25 +3,26 @@ module Hydra.Prototyping.BasicsWithDsl (
 ) where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
 
 
-basicsElement :: String -> Type -> Term Meta -> Element Meta
-basicsElement name typ = Element ("hydra/basics." ++ name) (encodeType typ)
+basicsElement :: Context Meta -> String -> Type -> Term Meta -> Element Meta
+basicsElement cx name typ = Element ("hydra/basics." ++ name) (encodeType cx typ)
 
-basicsFunction :: String -> Name -> Name -> Term Meta -> Element Meta
-basicsFunction name dom cod = basicsElement name typ
+basicsFunction :: Context Meta -> String -> Name -> Name -> Term Meta -> Element Meta
+basicsFunction cx name dom cod = basicsElement cx name typ
   where
     typ = functionType (nominalType dom) (nominalType cod)
 
-basicsGraph :: Graph Meta
-basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
+basicsGraph :: Context Meta -> Graph Meta
+basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
   where
     dataTerms = const True -- TODO
     schemaGraph = "hydra/core"
-    elements = [
+    elements = (\f -> f cx) <$> [
         basicsFloatTypeVariant,
         basicsFloatValueType,
         basicsFloatValueVariant,
@@ -35,26 +36,26 @@ basicsGraph = Graph "hydra/basics" elements dataTerms schemaGraph
         basicsTermVariant,
         basicsTypeVariant]
 
-basicsFloatTypeVariant :: Element Meta
-basicsFloatTypeVariant = basicsFunction "floatTypeVariant" _FloatType _FloatVariant $
+basicsFloatTypeVariant :: Context Meta -> Element Meta
+basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant" _FloatType _FloatVariant $
   matchWithVariants _FloatVariant [
     (_FloatType_bigfloat, _FloatVariant_bigfloat),
     (_FloatType_float32,  _FloatVariant_float32),
     (_FloatType_float64,  _FloatVariant_float64)]
 
-basicsFloatValueType :: Element Meta
-basicsFloatValueType = basicsFunction "floatValueType" _FloatValue _FloatType $
+basicsFloatValueType :: Context Meta -> Element Meta
+basicsFloatValueType cx = basicsFunction cx "floatValueType" _FloatValue _FloatType $
   matchWithVariants _FloatType [
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
 
-basicsFloatValueVariant :: Element Meta
-basicsFloatValueVariant = basicsFunction "floatValueVariant" _FloatValue _FloatVariant $
-  compose (elementRef basicsFloatTypeVariant) (elementRef basicsFloatValueType)
+basicsFloatValueVariant :: Context Meta -> Element Meta
+basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant" _FloatValue _FloatVariant $
+  compose (elementRef $ basicsFloatTypeVariant cx) (elementRef $ basicsFloatValueType cx)
 
-basicsIntegerTypeVariant :: Element Meta
-basicsIntegerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _IntegerVariant $
+basicsIntegerTypeVariant :: Context Meta -> Element Meta
+basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant" _IntegerType _IntegerVariant $
   matchWithVariants _IntegerVariant [
     (_IntegerType_bigint, _IntegerVariant_bigint),
     (_IntegerType_int8,   _IntegerVariant_int8),
@@ -66,8 +67,8 @@ basicsIntegerTypeVariant = basicsFunction "integerTypeVariant" _IntegerType _Int
     (_IntegerType_uint32, _IntegerVariant_uint32),
     (_IntegerType_uint64, _IntegerVariant_uint64)]
 
-basicsIntegerValueType :: Element Meta
-basicsIntegerValueType = basicsFunction "integerValueType"_IntegerValue _IntegerType $
+basicsIntegerValueType :: Context Meta -> Element Meta
+basicsIntegerValueType cx = basicsFunction cx "integerValueType"_IntegerValue _IntegerType $
   matchWithVariants _IntegerValue [
     (_IntegerValue_bigint, _IntegerValue_bigint),
     (_IntegerValue_int8,   _IntegerValue_int8),
@@ -79,12 +80,12 @@ basicsIntegerValueType = basicsFunction "integerValueType"_IntegerValue _Integer
     (_IntegerValue_uint32, _IntegerValue_uint32),
     (_IntegerValue_uint64, _IntegerValue_uint64)]
 
-basicsIntegerValueVariant :: Element Meta
-basicsIntegerValueVariant = basicsFunction "integerValueVariant" _IntegerValue _IntegerVariant $
-  compose (elementRef basicsIntegerTypeVariant) (elementRef basicsIntegerValueType)
+basicsIntegerValueVariant :: Context Meta -> Element Meta
+basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant" _IntegerValue _IntegerVariant $
+  compose (elementRef $ basicsIntegerTypeVariant cx) (elementRef $ basicsIntegerValueType cx)
 
-basicsFunctionVariant :: Element Meta
-basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVariant $
+basicsFunctionVariant :: Context Meta -> Element Meta
+basicsFunctionVariant cx = basicsFunction cx "functionVariant" _Function _FunctionVariant $
   matchWithVariants _FunctionVariant [
     (_Function_cases,      _FunctionVariant_cases),
     (_Function_compareTo,  _FunctionVariant_compareTo),
@@ -93,8 +94,8 @@ basicsFunctionVariant = basicsFunction "functionVariant" _Function _FunctionVari
     (_Function_primitive,  _FunctionVariant_primitive),
     (_Function_projection, _FunctionVariant_projection)]
 
-basicsLiteralTypeVariant :: Element Meta
-basicsLiteralTypeVariant = basicsFunction "literalTypeVariant" _LiteralType _LiteralVariant $
+basicsLiteralTypeVariant :: Context Meta -> Element Meta
+basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant" _LiteralType _LiteralVariant $
   matchWithVariants _LiteralVariant [
     (_LiteralType_binary,  _LiteralVariant_binary),
     (_LiteralType_boolean, _LiteralVariant_boolean),
@@ -102,21 +103,21 @@ basicsLiteralTypeVariant = basicsFunction "literalTypeVariant" _LiteralType _Lit
     (_LiteralType_integer, _LiteralVariant_integer),
     (_LiteralType_string,  _LiteralVariant_string)]
 
-basicsLiteralType :: Element Meta
-basicsLiteralType = basicsFunction "literalType" _Literal _LiteralType $
+basicsLiteralType :: Context Meta -> Element Meta
+basicsLiteralType cx = basicsFunction cx "literalType" _Literal _LiteralType $
   match [
     (_Literal_binary,  withVariant  _LiteralType _LiteralType_binary),
     (_Literal_boolean, withVariant  _LiteralType _LiteralType_boolean),
-    (_Literal_float,   withFunction _LiteralType _LiteralType_float basicsFloatValueType),
-    (_Literal_integer, withFunction _LiteralType _LiteralType_integer basicsIntegerValueType),
+    (_Literal_float,   withFunction _LiteralType _LiteralType_float (basicsFloatValueType cx)),
+    (_Literal_integer, withFunction _LiteralType _LiteralType_integer (basicsIntegerValueType cx)),
     (_Literal_string,  withVariant  _LiteralType _LiteralType_string)]
 
-basicsLiteralVariant :: Element Meta
-basicsLiteralVariant = basicsFunction "literalVariant" _Literal _LiteralVariant $
-  compose (elementRef basicsLiteralTypeVariant) (elementRef basicsLiteralType)
+basicsLiteralVariant :: Context Meta -> Element Meta
+basicsLiteralVariant cx = basicsFunction cx "literalVariant" _Literal _LiteralVariant $
+  compose (elementRef $ basicsLiteralTypeVariant cx) (elementRef $ basicsLiteralType cx)
 
-basicsTermVariant :: Element Meta
-basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
+basicsTermVariant :: Context Meta -> Element Meta
+basicsTermVariant cx = basicsFunction cx "termVariant" _Term _TermVariant $
   matchWithVariants _Expression [
     (_Expression_element,         _TermVariant_element),
     (_Expression_function,        _TermVariant_function),
@@ -132,8 +133,8 @@ basicsTermVariant = basicsFunction "termVariant" _Term _TermVariant $
     (_Expression_union,           _TermVariant_union),
     (_Expression_variable,        _TermVariant_variable)]
 
-basicsTypeVariant :: Element Meta
-basicsTypeVariant = basicsFunction "typeVariant" _Type _TypeVariant $
+basicsTypeVariant :: Context Meta -> Element Meta
+basicsTypeVariant cx = basicsFunction cx "typeVariant" _Type _TypeVariant $
   matchWithVariants _TypeVariant [
     (_Type_element,   _TypeVariant_element),
     (_Type_function,  _TypeVariant_function),

@@ -52,6 +52,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad)
       $ Step (encode ad) (decode ad)
   where
+    cx = adapterContextEvaluation context
     encode ad term = stepOut (adapterStep ad) $ case termData term of
       ExpressionFunction f -> case f of
         FunctionCases _ -> variant _Function _Function_cases $ stringValue $ show term -- TODO ExpressionRecord cases
@@ -59,7 +60,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionData -> unitVariant _Function _Function_data
         FunctionLambda _ -> variant _Function _Function_lambda $ stringValue $ show term -- TODO
         FunctionPrimitive name -> variant _Function _Function_primitive $ stringValue name
-        FunctionProjection prj -> variant _Function _Function_projection $ encodeProjection prj
+        FunctionProjection prj -> variant _Function _Function_projection $ encodeProjection cx prj
       ExpressionVariable var -> variant _Function _Expression_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
@@ -78,7 +79,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         forData _ = pure dataTerm
         forPrimitive fterm = primitive <$> expectStringTerm fterm
         forLambda fterm = read <$> expectStringTerm fterm -- TODO
-        forProjection fterm = projection <$> decodeProjection (adapterContextEvaluation context) fterm
+        forProjection fterm = projection <$> decodeProjection cx fterm
         forVariable fterm = variable <$> expectStringTerm fterm
 
     unionType = do

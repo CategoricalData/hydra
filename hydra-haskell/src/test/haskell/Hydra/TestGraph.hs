@@ -13,7 +13,7 @@ module Hydra.TestGraph (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.CoreGraph
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
@@ -23,6 +23,9 @@ import Hydra.Impl.Haskell.Lib.Strings
 import qualified Data.Map  as M
 import qualified Data.Set  as S
 
+
+cx :: Context Meta
+cx = emptyCoreContext
 
 testContext :: Context Meta
 testContext = Context {
@@ -39,7 +42,8 @@ testContext = Context {
         TermVariantLiteral,
         TermVariantElement,
         TermVariantFunction]},
-    contextTypeAnnotations = metaTypeAnnotation}
+    contextTypeOf = metaType,
+    contextSetTypeOf = \t m -> m {metaType = t}}
   where
     allPrimitives = mathPrimitives ++ stringPrimitives
 
@@ -54,16 +58,16 @@ testGraph = Graph "testGraph" [testElementArthur] allTerms "testSchemaGraph"
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-      typeElement "StringTypeAlias" stringType,
-      typeElement "Person" testTypePerson,
-      typeElement "Timestamp" testTypeTimestamp]
-    allTerms "hydra/core"
+    typeElement "StringTypeAlias" stringType,
+    typeElement "Person" testTypePerson,
+    typeElement "Timestamp" testTypeTimestamp]
+  allTerms "hydra/core"
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
 testTermArthur :: Term Meta
-testTermArthur = record [
+testTermArthur = nominalRecord cx "Person" [
   Field "firstName" $ stringValue "Arthur",
   Field "lastName" $ stringValue "Dent",
   Field "age" $ int32Value 42]
@@ -85,5 +89,5 @@ allTerms _ = True
 typeElement :: Name -> Type -> Element Meta
 typeElement name typ = Element {
   elementName = name,
-  elementSchema = encodeType $ TypeNominal "hydra/core.Type",
-  elementData = encodeType typ}
+  elementSchema = encodeType cx $ TypeNominal "hydra/core.Type",
+  elementData = encodeType cx typ}

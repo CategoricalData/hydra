@@ -8,6 +8,7 @@ import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Extras
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
