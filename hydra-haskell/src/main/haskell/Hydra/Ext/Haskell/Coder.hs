@@ -66,24 +66,22 @@ encodeTerm cx term@(Term expr meta) = case expr of
     ExpressionElement name -> pure $ hsvar name
     ExpressionFunction f -> encodeFunction cx (termMeta term) f
     ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
-    ExpressionNominal (NominalTerm sname term') -> case termData term' of
-      ExpressionRecord fields -> case fields of
-        [] -> pure $ H.ExpressionTuple []
-        _ -> do
-            let typeName = typeNameForRecord sname
-            updates <- CM.mapM toFieldUpdate fields
-            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
-          where
-            toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName sname fn) <$> encodeTerm cx ft
-  --    ExpressionUnion (UnionExpression sname' field) ->
-      _ -> encodeTerm cx term'
+    ExpressionNominal (NominalTerm _ term') -> encodeTerm cx term'
     ExpressionOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
-    ExpressionRecord fields -> case fields of
-      [] -> pure $ H.ExpressionTuple []
-      _ -> fail $ "unexpected anonymous record: " ++ show term
-    ExpressionUnion (Field fn ft) -> hsapp (hsvar $ Y.maybe fn (\s -> qualifyUnionFieldName s fn) sname) <$> encodeTerm cx ft
+    ExpressionRecord fields -> case sname of
+      Nothing -> 
+        case fields of
+          [] -> pure $ H.ExpressionTuple []
+          _ -> fail $ "unexpected anonymous record: " ++ show term
+      Just name -> do
+          let typeName = typeNameForRecord name
+          updates <- CM.mapM toFieldUpdate fields
+          return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
+        where
+          toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName name fn) <$> encodeTerm cx ft
+    ExpressionUnion (Field fn ft) -> hsapp (hsvar $ Y.maybe fn (`qualifyUnionFieldName` fn) sname) <$> encodeTerm cx ft
     ExpressionVariable v -> pure $ hsvar v
     _ -> fail $ "unexpected term: " ++ show term
   where

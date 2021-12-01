@@ -142,11 +142,11 @@ checkIndividualTerms = do
         (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])
         ["v1", "v2"] (functionType (unionType [FieldType "left" (typeVariable "v1"), FieldType "right" (typeVariable "v2")]) booleanType)
 
-    -- TODO: restore me after type names have been removed from union and projection expressions
+    -- TODO: restore me, and add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
 --    H.it "Check nominal (newtype) terms" $ do
 --      expectMonotype
 --        testTermArthur
---        testTypePerson
+--        (nominalType "Person")
 --      expectMonotype
 --        (lambda "x" (record [
 --          Field "firstName" $ variable "x",
