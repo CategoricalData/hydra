@@ -38,14 +38,14 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
 
 basicsFloatTypeVariant :: Context Meta -> Element Meta
 basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant" _FloatType _FloatVariant $
-  nominalMatchWithVariants cx _FloatVariant [
+  nominalMatchWithVariants cx _FloatType _FloatVariant [
     (_FloatType_bigfloat, _FloatVariant_bigfloat),
     (_FloatType_float32,  _FloatVariant_float32),
     (_FloatType_float64,  _FloatVariant_float64)]
 
 basicsFloatValueType :: Context Meta -> Element Meta
 basicsFloatValueType cx = basicsFunction cx "floatValueType" _FloatValue _FloatType $
-  nominalMatchWithVariants cx _FloatType [
+  nominalMatchWithVariants cx _FloatValue _FloatType [
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
@@ -56,7 +56,7 @@ basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant" _FloatValue _
 
 basicsIntegerTypeVariant :: Context Meta -> Element Meta
 basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant" _IntegerType _IntegerVariant $
-  nominalMatchWithVariants cx _IntegerVariant [
+  nominalMatchWithVariants cx _IntegerType _IntegerVariant [
     (_IntegerType_bigint, _IntegerVariant_bigint),
     (_IntegerType_int8,   _IntegerVariant_int8),
     (_IntegerType_int16,  _IntegerVariant_int16),
@@ -69,7 +69,7 @@ basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant" _IntegerTyp
 
 basicsIntegerValueType :: Context Meta -> Element Meta
 basicsIntegerValueType cx = basicsFunction cx "integerValueType"_IntegerValue _IntegerType $
-  nominalMatchWithVariants cx _IntegerValue [
+  nominalMatchWithVariants cx _IntegerValue _IntegerValue [
     (_IntegerValue_bigint, _IntegerValue_bigint),
     (_IntegerValue_int8,   _IntegerValue_int8),
     (_IntegerValue_int16,  _IntegerValue_int16),
@@ -86,7 +86,7 @@ basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant" _IntegerV
 
 basicsFunctionVariant :: Context Meta -> Element Meta
 basicsFunctionVariant cx = basicsFunction cx "functionVariant" _Function _FunctionVariant $
-  nominalMatchWithVariants cx _FunctionVariant [
+  nominalMatchWithVariants cx _Function _FunctionVariant [
     (_Function_cases,      _FunctionVariant_cases),
     (_Function_compareTo,  _FunctionVariant_compareTo),
     (_Function_data,       _FunctionVariant_data),
@@ -96,7 +96,7 @@ basicsFunctionVariant cx = basicsFunction cx "functionVariant" _Function _Functi
 
 basicsLiteralTypeVariant :: Context Meta -> Element Meta
 basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant" _LiteralType _LiteralVariant $
-  nominalMatchWithVariants cx _LiteralVariant [
+  nominalMatchWithVariants cx _LiteralType _LiteralVariant [
     (_LiteralType_binary,  _LiteralVariant_binary),
     (_LiteralType_boolean, _LiteralVariant_boolean),
     (_LiteralType_float,   _LiteralVariant_float),
@@ -105,7 +105,7 @@ basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant" _LiteralTyp
 
 basicsLiteralType :: Context Meta -> Element Meta
 basicsLiteralType cx = basicsFunction cx "literalType" _Literal _LiteralType $
-  match [
+  nominalMatch cx _Literal (nominalType _LiteralType) [
     (_Literal_binary,  nominalWithVariant cx  _LiteralType _LiteralType_binary),
     (_Literal_boolean, nominalWithVariant cx  _LiteralType _LiteralType_boolean),
     (_Literal_float,   nominalWithFunction cx _LiteralType _LiteralType_float (basicsFloatValueType cx)),
@@ -118,7 +118,7 @@ basicsLiteralVariant cx = basicsFunction cx "literalVariant" _Literal _LiteralVa
 
 basicsTermVariant :: Context Meta -> Element Meta
 basicsTermVariant cx = basicsFunction cx "termVariant" _Term _TermVariant $
-  nominalMatchWithVariants cx _Expression [
+  nominalMatchWithVariants cx _Expression _TermVariant [
     (_Expression_element,         _TermVariant_element),
     (_Expression_function,        _TermVariant_function),
     (_Expression_list,            _TermVariant_list),
@@ -135,7 +135,7 @@ basicsTermVariant cx = basicsFunction cx "termVariant" _Term _TermVariant $
 
 basicsTypeVariant :: Context Meta -> Element Meta
 basicsTypeVariant cx = basicsFunction cx "typeVariant" _Type _TypeVariant $
-  nominalMatchWithVariants cx _TypeVariant [
+  nominalMatchWithVariants cx _Type _TypeVariant [
     (_Type_element,   _TypeVariant_element),
     (_Type_function,  _TypeVariant_function),
     (_Type_list,      _TypeVariant_list),

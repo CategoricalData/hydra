@@ -1,5 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.CoreMeta (
   nominalCases,
+  nominalMatch,
   nominalMatchWithVariants,
   nominalProjection,
   nominalRecord,
@@ -21,13 +22,19 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 
 
-nominalCases :: Default a => Context a -> Name -> [Field a] -> Type -> Term a
-nominalCases cx name fields codomain = withType cx (functionType (nominalType name) codomain) $ cases fields
+nominalCases :: Default a => Context a -> Name -> Type -> [Field a] -> Term a
+nominalCases cx name cod fields = withType cx (functionType (nominalType name) cod) $ cases fields
 
-nominalMatchWithVariants :: Default a => Context a -> Name -> [(FieldName, FieldName)] -> Term a
-nominalMatchWithVariants cx name = cases . fmap toField
+nominalMatch :: Default a => Context a -> Name -> Type -> [(FieldName, Term a)] -> Term a
+nominalMatch cx name cod fields = nominalCases cx name cod (fmap toField fields)
   where
-    toField (from, to) = Field from $ constFunction $ nominalUnitVariant cx name to
+    toField (fname, term) = Field fname term
+
+nominalMatchWithVariants :: Default a => Context a -> Name -> Name -> [(FieldName, FieldName)] -> Term a
+nominalMatchWithVariants cx dom cod = withType cx ft . cases . fmap toField
+  where
+    ft = functionType (nominalType dom) (nominalType cod)
+    toField (from, to) = Field from $ constFunction $ nominalUnitVariant cx cod to
 
 nominalProjection :: Default a => Context a -> Name -> FieldName -> Type -> Term a
 nominalProjection cx name fname ftype = withType cx (functionType (nominalType name) ftype) $ projection fname

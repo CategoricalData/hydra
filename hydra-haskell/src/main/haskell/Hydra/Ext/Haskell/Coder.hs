@@ -9,6 +9,8 @@ import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Prototyping.Rewriting
 import Hydra.Prototyping.Steps
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
@@ -36,17 +38,30 @@ encodeAtomic av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "atomic value" av
 
+
+
+---- hydra/basics.floatTypeVariant
+--floatTypeVariant = \x -> case x of
+--  FloatTypeBigfloat y -> (\_ -> (FloatVariantBigfloat ()) y)
+--  FloatTypeFloat32 y -> (\_ -> (FloatVariantFloat32 ()) y)
+--  FloatTypeFloat64 y -> (\_ -> (FloatVariantFloat64 ()) y)
+--
+
+
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
 encodeFunction cx meta fun = case fun of
     FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
       where
-        caseExpr :: Result H.Expression
         caseExpr = H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM toAlt fields)
-        toAlt (Field fn fun) = do
-          let var = "y"
-          let pat = H.PatternApplication $ H.Pattern_Application (hsname fn) [H.PatternName $ hsname var]
-          rhs <- hsapp <$> encodeTerm cx fun <*> pure (hsvar var)
-          return $ H.Alternative pat rhs Nothing
+        toAlt (Field fn fun') = do
+          let rhsTerm = simplifyTerm $ apply fun' (variable "v")
+          let v = case termData rhsTerm of
+                ExpressionFunction (FunctionLambda (Lambda v' _)) -> v'
+                _ -> "_"
+          let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
+          let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) [H.PatternName $ hsname v]
+          rhs <- encodeTerm cx rhsTerm
+          return $ H.Alternative lhs rhs Nothing
     FunctionData -> pure $ hsvar "id"
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm cx body
     FunctionPrimitive name -> pure $ hsvar name
