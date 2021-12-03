@@ -5,6 +5,7 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Extras
+import Hydra.Prototyping.Rewriting
 
 import Hydra.TestUtils
 import Hydra.ArbitraryCore (untyped)
@@ -88,9 +89,3 @@ spec = do
   individualDecoderTestCases
   decodeInvalidTerms
   testRoundTripsFromType
-
-unitVar :: Name -> FieldName -> Term Meta
-unitVar = nominalUnitVariant testContext
-
-var :: Name -> FieldName -> Term Meta -> Term Meta
-var = nominalVariant testContext

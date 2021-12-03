@@ -6,6 +6,8 @@ module Hydra.TestUtils (
   checkTermAdapter,
   isFailure,
   termTestContext,
+  unitVar,
+  var,
   module Hydra.TestGraph,
   module Hydra.Prototyping.Steps,
 ) where
@@ -21,7 +23,8 @@ import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Prototyping.Rewriting
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -95,6 +98,12 @@ isFailure :: Result a -> Bool
 isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
+
+unitVar :: Name -> FieldName -> Term Meta
+unitVar = nominalUnitVariant testContext
+
+var :: Name -> FieldName -> Term Meta -> Term Meta
+var = nominalVariant testContext
 
 withConstraints :: Language_Constraints -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}

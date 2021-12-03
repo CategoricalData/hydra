@@ -9,6 +9,7 @@ import Hydra.Prototyping.BasicsWithDsl
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
+import Hydra.Prototyping.Rewriting
 
 import Hydra.TestUtils
 
