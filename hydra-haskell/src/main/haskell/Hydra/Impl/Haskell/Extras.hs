@@ -4,7 +4,9 @@ module Hydra.Impl.Haskell.Extras (
   convertIntegerValue,
   eitherToQualified,
   elementAsTypedTerm,
+  localNameOf,
   qualifiedToResult,
+  resultToQualified,
   unidirectionalStep,
   module Hydra.Errors
   ) where
@@ -16,6 +18,7 @@ import Hydra.Prototyping.Steps
 import Hydra.Prototyping.CoreDecoding
 
 import qualified Data.List as L
+import qualified Data.List.Split as LS
 
 
 class Default a where dflt :: a
@@ -76,6 +79,9 @@ convertIntegerValue target = encoder . decoder
 elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
+localNameOf :: Name -> String
+localNameOf name = last (LS.splitOn "." name)
+
 eitherToQualified :: Result a -> Qualified a
 eitherToQualified e = case e of
   ResultFailure msg -> Qualified Nothing [msg]
@@ -86,6 +92,11 @@ qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
 
+resultToQualified :: Result a -> Qualified a
+resultToQualified r = case r of
+  ResultSuccess x -> pure x
+  ResultFailure msg -> fail msg
+  
 unidirectionalStep :: (a -> Result b) -> Step a b
 unidirectionalStep m = Step {
   stepOut = m,

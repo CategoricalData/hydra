@@ -1,4 +1,5 @@
 module Hydra.Impl.Haskell.Ext.Haskell.Serde (
+  dataGraphToHaskellString,
   haskellSerdeDebug,
   haskellSerdeStr,
 ) where
@@ -6,6 +7,7 @@ module Hydra.Impl.Haskell.Ext.Haskell.Serde (
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
+import Hydra.Graph
 import Hydra.Ext.Haskell.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Print
@@ -23,6 +25,11 @@ class ToTree a where
 
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
+
+instance ToTree H.Declaration where
+  toTree decl = case decl of
+    H.DeclarationValueBinding (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _)) -> -- TODO: local bindings
+        ifx defineOp (toTree pat) (toTree rhs)
 
 instance ToTree H.Expression where
   toTree expr = case expr of
@@ -82,6 +89,10 @@ instance ToTree H.Literal where
     H.LiteralInteger i -> show i
     H.LiteralString s -> show s
 
+instance ToTree H.Module where
+  toTree (H.Module mh imports decls) = -- TODO: header, imports
+    doubleNewlineSep (toTree <$> decls)
+    
 instance ToTree H.Name where
   toTree name = cst $ case name of
     H.NameImplicit qn -> "?" ++ writeQName qn
@@ -104,14 +115,19 @@ instance ToTree H.Pattern where
 instance ToTree H.Pattern_Application where
   toTree (H.Pattern_Application name pats) = spaceSep $ toTree name:(toTree <$> pats)
 
+dataGraphToHaskellString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
+dataGraphToHaskellString cx g = do
+  hsmod <- dataGraphToHaskellModule cx g
+  return $ printExpr $ parenthesize $ toTree hsmod
+
 haskellSerdeDebug :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) CT.Expr)
-haskellSerdeDebug context typ = do
-  coder <- haskellCoder context typ
+haskellSerdeDebug cx typ = do
+  coder <- haskellCoder cx typ
   return $ unidirectionalStep (fmap toTree . stepOut coder)
 
 haskellSerdeStr :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) String)
-haskellSerdeStr context typ = do
-  coder <- haskellCoder context typ
+haskellSerdeStr cx typ = do
+  coder <- haskellCoder cx typ
   return $ unidirectionalStep (fmap (printExpr . parenthesize . toTree) . stepOut coder)
 
 writeQName :: H.QualifiedName -> String

@@ -138,6 +138,9 @@ commaSep newlines l = case l of
 cst :: String -> Expr
 cst = ExprConst
 
+doubleNewlineSep :: [Expr] -> Expr
+doubleNewlineSep = sep $ Op "" (Padding WsBreak WsBreak) 0 AssociativityNone
+
 indentBlock :: Expr -> [Expr] -> Expr
 indentBlock head els = ifx idtOp head $ newlineSep els
   where
