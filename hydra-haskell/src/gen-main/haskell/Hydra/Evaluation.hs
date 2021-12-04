@@ -7,6 +7,7 @@ module Hydra.Evaluation
   , Step(..)
   , StepDirection(..)
   , _Context
+  , _Context_descriptionOf
   , _Context_elements
   , _Context_functions
   , _Context_graphs
@@ -68,6 +69,12 @@ data Context a
     , contextFunctions :: (Map (Name) (PrimitiveFunction a))
     -- | @type hydra/evaluation.EvaluationStrategy
     , contextStrategy :: EvaluationStrategy
+    {-| @type function:
+                from:
+                - variable: a
+                to:
+                  optional: string -}
+    , contextDescriptionOf :: a -> (Maybe String)
     {-| @type function:
                 from:
                 - variable: a
@@ -155,6 +162,7 @@ data StepDirection
   | StepDirectionIn deriving (Eq, Generic, Ord, Read, Show)
 
 _Context = "hydra/evaluation.Context" :: String
+_Context_descriptionOf = "descriptionOf" :: String
 _Context_elements = "elements" :: String
 _Context_functions = "functions" :: String
 _Context_graphs = "graphs" :: String

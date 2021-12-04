@@ -27,6 +27,13 @@ class ToTree a where
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
 
+instance ToTree H.DeclarationWithComments where
+  toTree (H.DeclarationWithComments body mc) = case mc of
+      Nothing -> toTree body
+      Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
+    where
+      toHaskellComments c = L.intercalate "\n" $ (\l -> "-- " ++ l) <$> L.lines c
+
 instance ToTree H.Declaration where
   toTree decl = case decl of
     H.DeclarationValueBinding (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _)) -> -- TODO: local bindings

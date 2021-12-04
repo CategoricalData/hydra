@@ -79,6 +79,16 @@ definitions:
             - data
             - newtype
 
+  - name: DeclarationWithComments
+    type:
+      record:
+        - name: body
+          type: Declaration
+
+        - name: comments
+          type:
+            optional: string
+
   - name: Declaration # UDecl
     type:
       union:
@@ -467,7 +477,7 @@ definitions:
 
         - name: declarations
           type:
-            list: Declaration
+            list: DeclarationWithComments
 
   - name: ModuleHead # UModuleHead
     type:

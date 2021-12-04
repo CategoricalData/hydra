@@ -42,20 +42,17 @@ dataGraphToHaskellModule cx g = do
     createDeclaration coders (el, TypedTerm typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
       rhs <- stepOut coder term
-      let pat = H.PatternApplication $ H.Pattern_Application (H.NameNormal $ H.QualifiedName [] $ localNameOf el) []
-      return $ H.DeclarationValueBinding $ H.ValueBindingSimple $
-        rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing
+      let pat = H.PatternApplication $ H.Pattern_Application (H.NameNormal $ H.QualifiedName [] $ localNameOf $ elementName el) []
+      let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing
+      let comments = contextDescriptionOf cx $ termMeta term
+      return $ H.DeclarationWithComments decl comments
 
     createModule coders pairs = do
       decls <- CM.mapM (createDeclaration coders) pairs
       return $ H.Module (Just $ H.ModuleHead moduleName []) [] decls
 
-    localNameOf el = L.last $ LS.splitOn "." $ elementName el
-    
-    moduleName = L.intercalate "." $ capitalize <$> LS.splitOn "/" modulePart
-      where
-        modulePart = L.head $ LS.splitOn "." $ graphName g
-        
+    moduleName = L.intercalate "." $ capitalize <$> LS.splitOn "/" (graphName g)
+
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
         H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $

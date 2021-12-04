@@ -42,6 +42,7 @@ testContext = Context {
         TermVariantLiteral,
         TermVariantElement,
         TermVariantFunction]},
+    contextDescriptionOf = metaDescription,
     contextTypeOf = metaType,
     contextSetTypeOf = \t m -> m {metaType = t}}
   where
