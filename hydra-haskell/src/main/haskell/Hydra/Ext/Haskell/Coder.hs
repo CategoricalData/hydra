@@ -1,9 +1,11 @@
 module Hydra.Ext.Haskell.Coder (
+  dataGraphToHaskellModule,
   haskellCoder,
   haskellLanguage,
 ) where
 
 import Hydra.Core
+import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
@@ -13,40 +15,49 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Rewriting
 import Hydra.Prototyping.Steps
 import Hydra.Util.Formatting
+import Hydra.Prototyping.Primitives
 import qualified Hydra.Ext.Haskell.Ast as H
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.List.Split as LS
+import qualified Data.Map as M
 import qualified Data.Set as S
-import qualified Data.Maybe as Y 
+import qualified Data.Maybe as Y
 
 
-encodeAtomic :: Literal -> Result H.Expression
-encodeAtomic av = case av of
-    LiteralBoolean b -> pure $ hsvar $ case b of
-      BooleanValueTrue -> "True"
-      _ -> "False"
-    LiteralFloat fv -> case fv of
-      FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
-      FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f
-      _ -> unexpected "floating-point number" fv
-    LiteralInteger iv -> case iv of
-      IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
-      IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
-      _ -> unexpected "integer" iv
-    LiteralString s -> pure $ hslit $ H.LiteralString s
-    _ -> unexpected "atomic value" av
+dataGraphToHaskellModule :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified H.Module
+dataGraphToHaskellModule cx g = do
+    scx <- resultToQualified $ schemaContext cx
+    pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
+    coders <- codersFor $ L.nub (typedTermType <$> pairs)
+    resultToQualified $ createModule coders $ L.zip els pairs
+  where
+    els = graphElements g
 
+    codersFor types = do
+      cdrs <- CM.mapM (haskellCoder cx) types
+      return $ M.fromList $ L.zip types cdrs
 
+    createDeclaration coders (el, TypedTerm typ term) = do
+      let coder = Y.fromJust $ M.lookup typ coders
+      rhs <- stepOut coder term
+      let pat = H.PatternApplication $ H.Pattern_Application (H.NameNormal $ H.QualifiedName [] $ localNameOf el) []
+      return $ H.DeclarationValueBinding $ H.ValueBindingSimple $
+        rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing
 
----- hydra/basics.floatTypeVariant
---floatTypeVariant = \x -> case x of
---  FloatTypeBigfloat y -> (\_ -> (FloatVariantBigfloat ()) y)
---  FloatTypeFloat32 y -> (\_ -> (FloatVariantFloat32 ()) y)
---  FloatTypeFloat64 y -> (\_ -> (FloatVariantFloat64 ()) y)
---
+    createModule coders pairs = do
+      decls <- CM.mapM (createDeclaration coders) pairs
+      return $ H.Module Nothing [] decls
 
+    localNameOf el = L.last $ LS.splitOn "." $ elementName el
+    
+    rewriteValueBinding vb = case vb of
+      H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
+        H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $
+          H.ValueBinding_Simple
+            (H.PatternApplication (H.Pattern_Application name (args ++ vars))) body bindings
+        _ -> vb
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
 encodeFunction cx meta fun = case fun of
@@ -74,11 +85,29 @@ encodeFunction cx meta fun = case fun of
       Just (TypeFunction (FunctionType (TypeNominal name) _)) -> Just name
       Nothing -> Nothing
 
+encodeLiteral :: Literal -> Result H.Expression
+encodeLiteral av = case av of
+    LiteralBoolean b -> pure $ hsvar $ case b of
+      BooleanValueTrue -> "True"
+      _ -> "False"
+    LiteralFloat fv -> case fv of
+      FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
+      FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f
+      _ -> unexpected "floating-point number" fv
+    LiteralInteger iv -> case iv of
+      IntegerValueBigint i -> pure $ hslit $ H.LiteralInteger i
+      IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
+      _ -> unexpected "integer" iv
+    LiteralString s -> pure $ hslit $ H.LiteralString s
+    _ -> unexpected "atomic value" av
+
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
 encodeTerm cx term@(Term expr meta) = case expr of
-    ExpressionApplication (Application fun arg) -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
-    ExpressionLiteral av -> encodeAtomic av
-    ExpressionElement name -> pure $ hsvar name
+    ExpressionApplication (Application fun arg) -> case termData fun of
+       ExpressionFunction FunctionData -> encodeTerm cx arg
+       _ -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
+    ExpressionLiteral av -> encodeLiteral av
+    ExpressionElement name -> pure $ hsvar $ localNameOf name
     ExpressionFunction f -> encodeFunction cx (termMeta term) f
     ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
     ExpressionNominal (NominalTerm _ term') -> encodeTerm cx term'
@@ -86,7 +115,7 @@ encodeTerm cx term@(Term expr meta) = case expr of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
     ExpressionRecord fields -> case sname of
-      Nothing -> 
+      Nothing ->
         case fields of
           [] -> pure $ H.ExpressionTuple []
           _ -> fail $ "unexpected anonymous record: " ++ show term
@@ -96,7 +125,11 @@ encodeTerm cx term@(Term expr meta) = case expr of
           return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (hsname typeName) updates
         where
           toFieldUpdate (Field fn ft) = H.FieldUpdate (hsname $ qualifyRecordFieldName name fn) <$> encodeTerm cx ft
-    ExpressionUnion (Field fn ft) -> hsapp (hsvar $ Y.maybe fn (`qualifyUnionFieldName` fn) sname) <$> encodeTerm cx ft
+    ExpressionUnion (Field fn ft) -> do
+      let lhs = hsvar $ Y.maybe fn (`qualifyUnionFieldName` fn) sname
+      case termData ft of
+        ExpressionRecord [] -> pure lhs
+        _ -> hsapp lhs <$> encodeTerm cx ft
     ExpressionVariable v -> pure $ hsvar v
     _ -> fail $ "unexpected term: " ++ show term
   where
