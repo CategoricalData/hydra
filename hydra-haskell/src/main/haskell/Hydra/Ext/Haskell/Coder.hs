@@ -48,10 +48,14 @@ dataGraphToHaskellModule cx g = do
 
     createModule coders pairs = do
       decls <- CM.mapM (createDeclaration coders) pairs
-      return $ H.Module Nothing [] decls
+      return $ H.Module (Just $ H.ModuleHead moduleName []) [] decls
 
     localNameOf el = L.last $ LS.splitOn "." $ elementName el
     
+    moduleName = L.intercalate "." $ capitalize <$> LS.splitOn "/" modulePart
+      where
+        modulePart = L.head $ LS.splitOn "." $ graphName g
+        
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
         H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $

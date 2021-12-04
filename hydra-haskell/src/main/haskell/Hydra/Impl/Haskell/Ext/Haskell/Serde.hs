@@ -18,6 +18,7 @@ import qualified Hydra.Ext.Haskell.Ast as H
 
 import qualified Data.Char as C
 import qualified Data.List as L
+import qualified Data.Maybe as Y
 
 
 class ToTree a where
@@ -90,14 +91,17 @@ instance ToTree H.Literal where
     H.LiteralString s -> show s
 
 instance ToTree H.Module where
-  toTree (H.Module mh imports decls) = -- TODO: header, imports
-    doubleNewlineSep (toTree <$> decls)
-    
+  toTree (H.Module mh imports decls) = doubleNewlineSep $
+      Y.maybe [] (\h -> [toTree h]) mh ++ (toTree <$> decls) -- TODO: imports
+
 instance ToTree H.Name where
   toTree name = cst $ case name of
     H.NameImplicit qn -> "?" ++ writeQName qn
     H.NameNormal qn -> writeQName qn
     H.NameParens qn -> "(" ++ writeQName qn ++ ")"
+
+instance ToTree H.ModuleHead where
+  toTree (H.ModuleHead mname _) = spaceSep [cst "module", cst mname, cst "where"]
 
 instance ToTree H.Pattern where
   toTree pat = case pat of
