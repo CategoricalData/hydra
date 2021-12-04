@@ -10,6 +10,7 @@ module Hydra.Ext.Haskell.Ast
   , Declaration(..)
   , DeclarationHead_Application(..)
   , DeclarationHead(..)
+  , DeclarationWithComments(..)
   , Deriving
   , Export(..)
   , Expression_Application(..)
@@ -88,6 +89,9 @@ module Hydra.Ext.Haskell.Ast
   , _DeclarationHead_application
   , _DeclarationHead_parens
   , _DeclarationHead_simple
+  , _DeclarationWithComments
+  , _DeclarationWithComments_body
+  , _DeclarationWithComments_comments
   , _Declaration_data
   , _Declaration_type
   , _Declaration_typeSignature
@@ -342,6 +346,13 @@ data DeclarationHead
   -- | @type hydra/ext/haskell/ast.Name
   | DeclarationHeadSimple Name deriving (Eq, Generic, Ord, Read, Show)
 
+data DeclarationWithComments
+  = DeclarationWithComments
+    -- | @type hydra/ext/haskell/ast.Declaration
+    { declarationWithCommentsBody :: Declaration
+    -- | @type optional: string
+    , declarationWithCommentsComments :: Maybe String } deriving (Eq, Generic, Ord, Read, Show)
+
 -- | @type list: hydra/ext/haskell/ast.Name
 type Deriving = [Name]
 
@@ -554,8 +565,8 @@ data Module
     { moduleHead :: Maybe ModuleHead
     -- | @type list: hydra/ext/haskell/ast.Import
     , moduleImports :: [Import]
-    -- | @type list: hydra/ext/haskell/ast.Declaration
-    , moduleDeclarations :: [Declaration] } deriving (Eq, Generic, Ord, Read, Show)
+    -- | @type list: hydra/ext/haskell/ast.DeclarationWithComments
+    , moduleDeclarations :: [DeclarationWithComments] } deriving (Eq, Generic, Ord, Read, Show)
 
 data ModuleHead
   = ModuleHead
@@ -752,6 +763,9 @@ _DeclarationHead_Application_operand = "operand" :: String
 _DeclarationHead_application = "application" :: String
 _DeclarationHead_parens = "parens" :: String
 _DeclarationHead_simple = "simple" :: String
+_DeclarationWithComments = "hydra/ext/haskell/ast.DeclarationWithComments" :: String
+_DeclarationWithComments_body = "body" :: String
+_DeclarationWithComments_comments = "comments" :: String
 _Declaration_data = "data" :: String
 _Declaration_type = "type" :: String
 _Declaration_typeSignature = "typeSignature" :: String

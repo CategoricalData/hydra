@@ -80,7 +80,7 @@ elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
 localNameOf :: Name -> String
-localNameOf name = last (LS.splitOn "." name)
+localNameOf name = L.last (LS.splitOn "." name)
 
 eitherToQualified :: Result a -> Qualified a
 eitherToQualified e = case e of

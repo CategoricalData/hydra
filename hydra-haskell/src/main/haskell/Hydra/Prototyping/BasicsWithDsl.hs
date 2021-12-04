@@ -9,11 +9,11 @@ import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 
 
-basicsElement :: Context Meta -> String -> Type -> Term Meta -> Element Meta
-basicsElement cx name typ = Element ("hydra/basics." ++ name) (encodeType cx typ)
+basicsElement :: Context Meta -> String -> String -> Type -> Term Meta -> Element Meta
+basicsElement cx name desc typ term = Element ("hydra/basics." ++ name) (encodeType cx typ) $ withDoc desc term
 
-basicsFunction :: Context Meta -> String -> Name -> Name -> Term Meta -> Element Meta
-basicsFunction cx name dom cod = basicsElement cx name typ
+basicsFunction :: Context Meta -> String -> String -> Name -> Name -> Term Meta -> Element Meta
+basicsFunction cx name desc dom cod = basicsElement cx name desc typ
   where
     typ = functionType (nominalType dom) (nominalType cod)
 
@@ -37,25 +37,33 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
         basicsTypeVariant]
 
 basicsFloatTypeVariant :: Context Meta -> Element Meta
-basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant" _FloatType _FloatVariant $
+basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant"
+  "Find the float type variant (constructor) for a given float type"
+  _FloatType _FloatVariant $
   nominalMatchWithVariants cx _FloatType _FloatVariant [
     (_FloatType_bigfloat, _FloatVariant_bigfloat),
     (_FloatType_float32,  _FloatVariant_float32),
     (_FloatType_float64,  _FloatVariant_float64)]
 
 basicsFloatValueType :: Context Meta -> Element Meta
-basicsFloatValueType cx = basicsFunction cx "floatValueType" _FloatValue _FloatType $
+basicsFloatValueType cx = basicsFunction cx "floatValueType"
+  "Find the float type for a given floating-point value"
+  _FloatValue _FloatType $
   nominalMatchWithVariants cx _FloatValue _FloatType [
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
 
 basicsFloatValueVariant :: Context Meta -> Element Meta
-basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant" _FloatValue _FloatVariant $
+basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant"
+  "Find the float variant (constructor) for a given floating-point value"
+  _FloatValue _FloatVariant $
   compose (elementRef $ basicsFloatTypeVariant cx) (elementRef $ basicsFloatValueType cx)
 
 basicsIntegerTypeVariant :: Context Meta -> Element Meta
-basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant" _IntegerType _IntegerVariant $
+basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant"
+  "Find the integer variant (constructor) for a given integer type"
+  _IntegerType _IntegerVariant $
   nominalMatchWithVariants cx _IntegerType _IntegerVariant [
     (_IntegerType_bigint, _IntegerVariant_bigint),
     (_IntegerType_int8,   _IntegerVariant_int8),
@@ -68,7 +76,9 @@ basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant" _IntegerTyp
     (_IntegerType_uint64, _IntegerVariant_uint64)]
 
 basicsIntegerValueType :: Context Meta -> Element Meta
-basicsIntegerValueType cx = basicsFunction cx "integerValueType"_IntegerValue _IntegerType $
+basicsIntegerValueType cx = basicsFunction cx "integerValueType"
+  "Find the integer type for a given integer value"
+  _IntegerValue _IntegerType $
   nominalMatchWithVariants cx _IntegerValue _IntegerValue [
     (_IntegerValue_bigint, _IntegerValue_bigint),
     (_IntegerValue_int8,   _IntegerValue_int8),
@@ -81,11 +91,15 @@ basicsIntegerValueType cx = basicsFunction cx "integerValueType"_IntegerValue _I
     (_IntegerValue_uint64, _IntegerValue_uint64)]
 
 basicsIntegerValueVariant :: Context Meta -> Element Meta
-basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant" _IntegerValue _IntegerVariant $
+basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant"
+  "Find the integer variant (constructor) for a given integer value"
+  _IntegerValue _IntegerVariant $
   compose (elementRef $ basicsIntegerTypeVariant cx) (elementRef $ basicsIntegerValueType cx)
 
 basicsFunctionVariant :: Context Meta -> Element Meta
-basicsFunctionVariant cx = basicsFunction cx "functionVariant" _Function _FunctionVariant $
+basicsFunctionVariant cx = basicsFunction cx "functionVariant"
+  "Find the function variant (constructor) for a given function"
+  _Function _FunctionVariant $
   nominalMatchWithVariants cx _Function _FunctionVariant [
     (_Function_cases,      _FunctionVariant_cases),
     (_Function_compareTo,  _FunctionVariant_compareTo),
@@ -95,7 +109,9 @@ basicsFunctionVariant cx = basicsFunction cx "functionVariant" _Function _Functi
     (_Function_projection, _FunctionVariant_projection)]
 
 basicsLiteralTypeVariant :: Context Meta -> Element Meta
-basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant" _LiteralType _LiteralVariant $
+basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
+  "Find the literal type variant (constructor) for a given literal value"
+  _LiteralType _LiteralVariant $
   nominalMatchWithVariants cx _LiteralType _LiteralVariant [
     (_LiteralType_binary,  _LiteralVariant_binary),
     (_LiteralType_boolean, _LiteralVariant_boolean),
@@ -104,7 +120,9 @@ basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant" _LiteralTyp
     (_LiteralType_string,  _LiteralVariant_string)]
 
 basicsLiteralType :: Context Meta -> Element Meta
-basicsLiteralType cx = basicsFunction cx "literalType" _Literal _LiteralType $
+basicsLiteralType cx = basicsFunction cx "literalType"
+  "Find the literal type for a given literal value"
+  _Literal _LiteralType $
   nominalMatch cx _Literal (nominalType _LiteralType) [
     (_Literal_binary,  nominalWithVariant cx  _LiteralType _LiteralType_binary),
     (_Literal_boolean, nominalWithVariant cx  _LiteralType _LiteralType_boolean),
@@ -113,11 +131,15 @@ basicsLiteralType cx = basicsFunction cx "literalType" _Literal _LiteralType $
     (_Literal_string,  nominalWithVariant cx  _LiteralType _LiteralType_string)]
 
 basicsLiteralVariant :: Context Meta -> Element Meta
-basicsLiteralVariant cx = basicsFunction cx "literalVariant" _Literal _LiteralVariant $
+basicsLiteralVariant cx = basicsFunction cx "literalVariant"
+  "Find the literal variant (constructor) for a given literal value"
+  _Literal _LiteralVariant $
   compose (elementRef $ basicsLiteralTypeVariant cx) (elementRef $ basicsLiteralType cx)
 
 basicsTermVariant :: Context Meta -> Element Meta
-basicsTermVariant cx = basicsFunction cx "termVariant" _Term _TermVariant $
+basicsTermVariant cx = basicsFunction cx "termVariant"
+  "Find the term variant (constructor) for a given term"
+  _Term _TermVariant $
   nominalMatchWithVariants cx _Expression _TermVariant [
     (_Expression_element,         _TermVariant_element),
     (_Expression_function,        _TermVariant_function),
@@ -134,7 +156,9 @@ basicsTermVariant cx = basicsFunction cx "termVariant" _Term _TermVariant $
     (_Expression_variable,        _TermVariant_variable)]
 
 basicsTypeVariant :: Context Meta -> Element Meta
-basicsTypeVariant cx = basicsFunction cx "typeVariant" _Type _TypeVariant $
+basicsTypeVariant cx = basicsFunction cx "typeVariant"
+  "Find the type variant (constructor) for a given type"
+  _Type _TypeVariant $
   nominalMatchWithVariants cx _Type _TypeVariant [
     (_Type_element,   _TypeVariant_element),
     (_Type_function,  _TypeVariant_function),

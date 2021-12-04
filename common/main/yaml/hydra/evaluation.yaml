@@ -43,6 +43,14 @@ definitions:
         - name: strategy
           type: EvaluationStrategy
 
+        - name: descriptionOf
+          type:
+            function:
+              from:
+                - variable: a
+              to:
+                optional: string
+
         - name: typeOf
           type:
             function:
