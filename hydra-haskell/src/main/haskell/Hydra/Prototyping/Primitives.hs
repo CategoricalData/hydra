@@ -13,7 +13,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Prototyping.Steps
-
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
@@ -52,6 +52,7 @@ requireElement context name = Y.maybe error pure $ M.lookup name $ contextElemen
   where
     error = fail $ "no such element: " ++ name
       ++ " in graph " ++ graphSetRoot (contextGraphs context)
+      ++ ". Available elements: " ++ L.intercalate ", " (elementName <$> M.elems (contextElements context))
 
 requirePrimitiveFunction :: Context a -> Name -> Result (PrimitiveFunction a)
 requirePrimitiveFunction context fn = Y.maybe error pure $ lookupPrimitiveFunction context fn

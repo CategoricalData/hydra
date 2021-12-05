@@ -5,6 +5,7 @@ module Hydra.Prototyping.CoreGraph (
   hcApplication,
   hcBooleanValue,
   hcComparison,
+  hcExpression,
   hcField,
   hcFieldName,
   hcFieldType,
@@ -53,6 +54,7 @@ emptyCoreContext = Context {
     contextFunctions = M.empty,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList []},
+    contextDescriptionOf = metaDescription,
     contextTypeOf = metaType,
     contextSetTypeOf = \t m -> m {metaType = t}}
   where
@@ -67,6 +69,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hcApplication,
       hcBooleanValue,
       hcComparison,
+      hcExpression,
       hcField,
       hcFieldName,
       hcFieldType,
@@ -119,6 +122,20 @@ hcComparison cx = typeElement cx _Comparison $ enum [
   _Comparison_lessThan,
   _Comparison_equalTo,
   _Comparison_greaterThan]
+
+hcExpression :: Context Meta -> Element Meta
+hcExpression cx = typeElement cx _Expression $ TypeUnion [
+  FieldType _Expression_application $ TypeNominal _Application,
+  FieldType _Expression_literal $ TypeNominal _Literal,
+  FieldType _Expression_element $ TypeNominal _Name,
+  FieldType _Expression_function $ TypeNominal _Function,
+  FieldType _Expression_list $ TypeList $ TypeNominal _Term,
+  FieldType _Expression_map $ TypeMap $ MapType (TypeNominal _Term) (TypeNominal _Term),
+  FieldType _Expression_optional $ TypeOptional $ TypeNominal _Term,
+  FieldType _Expression_record $ TypeList $ TypeNominal _Field,
+  FieldType _Expression_set $ TypeSet $ TypeNominal _Term,
+  FieldType _Expression_union $ TypeNominal _Field,
+  FieldType _Expression_variable $ TypeNominal _Variable]
 
 hcField :: Context Meta -> Element Meta
 hcField cx = typeElement cx _Field $ TypeRecord [
@@ -253,18 +270,9 @@ hcPrecision cx = typeElement cx _Precision $ TypeUnion [
   FieldType _Precision_bits int32Type]
 
 hcTerm :: Context Meta -> Element Meta
-hcTerm cx = typeElement cx _Term $ TypeUnion [
-  FieldType _Expression_application $ TypeNominal _Application,
-  FieldType _Expression_literal $ TypeNominal _Literal,
-  FieldType _Expression_element $ TypeNominal _Name,
-  FieldType _Expression_function $ TypeNominal _Function,
-  FieldType _Expression_list $ TypeList $ TypeNominal _Term,
-  FieldType _Expression_map $ TypeMap $ MapType (TypeNominal _Term) (TypeNominal _Term),
-  FieldType _Expression_optional $ TypeOptional $ TypeNominal _Term,
-  FieldType _Expression_record $ TypeList $ TypeNominal _Field,
-  FieldType _Expression_set $ TypeSet $ TypeNominal _Term,
-  FieldType _Expression_union $ TypeNominal _Field,
-  FieldType _Expression_variable $ TypeNominal _Variable]
+hcTerm cx = typeElement cx _Term $ TypeRecord [
+  FieldType _Term_data $ TypeNominal _Expression,
+  FieldType _Term_meta unitType] -- TODO: encoding for termMeta
 
 hcTermVariant :: Context Meta -> Element Meta
 hcTermVariant cx = typeElement cx _TermVariant $ enum [

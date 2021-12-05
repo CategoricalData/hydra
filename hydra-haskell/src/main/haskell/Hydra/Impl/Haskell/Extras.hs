@@ -6,6 +6,7 @@ module Hydra.Impl.Haskell.Extras (
   elementAsTypedTerm,
   localNameOf,
   qualifiedToResult,
+  requireType,
   resultToQualified,
   unidirectionalStep,
   module Hydra.Errors
@@ -14,6 +15,7 @@ module Hydra.Impl.Haskell.Extras (
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Graph
+import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.CoreDecoding
 
@@ -91,6 +93,11 @@ qualifiedToResult :: Qualified a -> Result a
 qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
+
+requireType :: Show a => Context a -> Name -> Result Type
+requireType scx name = do
+  el <- requireElement scx name
+  decodeType scx $ elementData el
 
 resultToQualified :: Result a -> Qualified a
 resultToQualified r = case r of
