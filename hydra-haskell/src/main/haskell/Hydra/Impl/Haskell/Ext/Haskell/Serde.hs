@@ -86,7 +86,7 @@ instance ToTree H.Expression_If where
       body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
 
 instance ToTree H.Expression_Lambda where
-  toTree (H.Expression_Lambda bindings inner) = prefix "\\" $ ifx lambdaOp head body
+  toTree (H.Expression_Lambda bindings inner) = ifx lambdaOp (prefix "\\" head) body
     where
       head = spaceSep (toTree <$> bindings)
       body = toTree inner
