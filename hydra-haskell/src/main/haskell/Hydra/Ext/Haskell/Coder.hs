@@ -42,8 +42,12 @@ dataGraphToHaskellModule cx g = do
     createDeclaration coders (el, TypedTerm typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
       rhs <- stepOut coder term
-      let pat = H.PatternApplication $ H.Pattern_Application (H.NameNormal $ H.QualifiedName [] $ localNameOf $ elementName el) []
-      let decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing
+      let hname = simpleName $ localNameOf $ elementName el
+      let pat = H.PatternApplication $ H.Pattern_Application hname []
+      htype <- encodeType typ
+      let decl = H.DeclarationTypedBinding $ H.TypedBinding
+                  (H.TypeSignature hname htype)
+                  (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       let comments = contextDescriptionOf cx $ termMeta term
       return $ H.DeclarationWithComments decl comments
 
@@ -56,7 +60,7 @@ dataGraphToHaskellModule cx g = do
     moduleName name = L.intercalate "." $ capitalize <$> LS.splitOn "/" name
 
     toSimpleImport mname = H.Import False mname Nothing Nothing
-    
+
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
         H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $
@@ -168,6 +172,49 @@ encodeTerm cx term@(Term expr meta) = case expr of
       Just (TypeNominal name) -> Just name
       Nothing -> Nothing
 
+encodeType :: Type -> Result H.Type
+encodeType typ = case typ of
+  TypeElement et -> encodeType et
+  TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encodeType dom <*> encodeType cod)
+  TypeList lt -> H.TypeList <$> encodeType lt
+  TypeLiteral lt -> H.TypeVariable . simpleName <$> case lt of
+--    LiteralTypeBinary ->
+    LiteralTypeBoolean -> pure "Bool"
+    LiteralTypeFloat ft -> case ft of
+--      FloatTypeBigfloat ->
+      FloatTypeFloat32 -> pure "Float"
+      FloatTypeFloat64 -> pure "Double"
+      _ -> fail $ "unexpected floating-point type: " ++ show ft
+    LiteralTypeInteger it -> case it of
+      IntegerTypeBigint -> pure "Integer"
+--      IntegerTypeInt8 -> ""
+--      IntegerTypeInt16 -> ""
+      IntegerTypeInt32 -> pure "Int"
+--      IntegerTypeInt64 -> ""
+--      IntegerTypeUint8 -> ""
+--      IntegerTypeUint16 -> ""
+--      IntegerTypeUint32 -> ""
+--      IntegerTypeUint64 -> ""
+      _ -> fail $ "unexpected integer type: " ++ show it
+    LiteralTypeString -> pure "String"
+    _ -> fail $ "unexpected literal type: " ++ show lt
+  TypeMap (MapType kt vt) -> H.TypeApplication <$> (H.Type_Application
+    <$> (H.TypeApplication <$> (pure (H.Type_Application $ H.TypeVariable $ simpleName "Map")
+      <*> encodeType kt))
+    <*> encodeType vt)
+  TypeNominal name -> pure $ H.TypeVariable $ simpleName $ localNameOf name
+  TypeOptional ot -> H.TypeApplication <$> (H.Type_Application
+    <$> (pure $ H.TypeVariable $ simpleName "Maybe")
+    <*> encodeType ot)
+--  TypeRecord fields ->
+  TypeSet st -> H.TypeApplication <$> (H.Type_Application
+    <$> (pure $ H.TypeVariable $ simpleName "Set")
+    <*> encodeType st)
+--  TypeUnion fields ->
+--  TypeUniversal ut ->
+--  TypeVariable v ->
+  _ -> fail $ "unexpected type: " ++ show typ
+
 haskellCoder :: (Default a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
 haskellCoder cx typ = do
     adapter <- termAdapter adContext typ
@@ -230,6 +277,9 @@ qualifyRecordFieldName sname fname = decapitalize (typeNameForRecord sname) ++ c
 
 qualifyUnionFieldName :: Name -> FieldName -> String
 qualifyUnionFieldName sname fname = capitalize (typeNameForRecord sname) ++ capitalize fname
+
+simpleName :: String -> H.Name
+simpleName n = H.NameNormal $ H.QualifiedName [] n
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (LS.splitOn "." sname)

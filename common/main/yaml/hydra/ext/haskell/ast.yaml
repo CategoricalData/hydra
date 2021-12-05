@@ -102,11 +102,14 @@ definitions:
         - name: type
           type: TypeDeclaration
 
-        - name: typeSignature
-          type: TypeSignature
+#        - name: typeSignature
+#          type: TypeSignature
+#
+#        - name: valueBinding
+#          type: ValueBinding
 
-        - name: valueBinding
-          type: ValueBinding
+        - name: typedBinding
+          type: TypedBinding
 
   - name: DeclarationHead # UDeclHead
     type:
@@ -700,6 +703,15 @@ definitions:
   - name: TypeVariable
     type: Name
     # omitted for now: kind constraints
+
+  - name: TypedBinding # Added for convenience
+    type:
+      record:
+        - name: typeSignature
+          type: TypeSignature
+
+        - name: valueBinding
+          type: ValueBinding
 
   - name: ValueBinding # UValueBind
     type:

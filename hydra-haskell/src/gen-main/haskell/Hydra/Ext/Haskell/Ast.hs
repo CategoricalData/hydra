@@ -57,6 +57,7 @@ module Hydra.Ext.Haskell.Ast
   , TypeDeclaration(..)
   , TypeSignature(..)
   , TypeVariable
+  , TypedBinding(..)
   , ValueBinding_Simple(..)
   , ValueBinding(..)
   , _Alternative
@@ -94,8 +95,7 @@ module Hydra.Ext.Haskell.Ast
   , _DeclarationWithComments_comments
   , _Declaration_data
   , _Declaration_type
-  , _Declaration_typeSignature
-  , _Declaration_valueBinding
+  , _Declaration_typedBinding
   , _Deriving
   , _Export
   , _Export_declaration
@@ -261,6 +261,9 @@ module Hydra.Ext.Haskell.Ast
   , _Type_parens
   , _Type_tuple
   , _Type_variable
+  , _TypedBinding
+  , _TypedBinding_typeSignature
+  , _TypedBinding_valueBinding
   , _ValueBinding
   , _ValueBinding_Simple
   , _ValueBinding_Simple_localBindings
@@ -326,10 +329,8 @@ data Declaration
   = DeclarationData DataDeclaration
   -- | @type hydra/ext/haskell/ast.TypeDeclaration
   | DeclarationType TypeDeclaration
-  -- | @type hydra/ext/haskell/ast.TypeSignature
-  | DeclarationTypeSignature TypeSignature
-  -- | @type hydra/ext/haskell/ast.ValueBinding
-  | DeclarationValueBinding ValueBinding deriving (Eq, Generic, Ord, Read, Show)
+  -- | @type hydra/ext/haskell/ast.TypedBinding
+  | DeclarationTypedBinding TypedBinding deriving (Eq, Generic, Ord, Read, Show)
 
 data DeclarationHead_Application
   = DeclarationHead_Application
@@ -720,6 +721,13 @@ data TypeSignature
 -- | @type hydra/ext/haskell/ast.Name
 type TypeVariable = Name
 
+data TypedBinding
+  = TypedBinding
+    -- | @type hydra/ext/haskell/ast.TypeSignature
+    { typedBindingTypeSignature :: TypeSignature
+    -- | @type hydra/ext/haskell/ast.ValueBinding
+    , typedBindingValueBinding :: ValueBinding } deriving (Eq, Generic, Ord, Read, Show)
+
 data ValueBinding_Simple
   = ValueBinding_Simple
     -- | @type hydra/ext/haskell/ast.Pattern
@@ -768,8 +776,7 @@ _DeclarationWithComments_body = "body" :: String
 _DeclarationWithComments_comments = "comments" :: String
 _Declaration_data = "data" :: String
 _Declaration_type = "type" :: String
-_Declaration_typeSignature = "typeSignature" :: String
-_Declaration_valueBinding = "valueBinding" :: String
+_Declaration_typedBinding = "typedBinding" :: String
 _Deriving = "hydra/ext/haskell/ast.Deriving" :: String
 _Export = "hydra/ext/haskell/ast.Export" :: String
 _Export_declaration = "declaration" :: String
@@ -935,6 +942,9 @@ _Type_list = "list" :: String
 _Type_parens = "parens" :: String
 _Type_tuple = "tuple" :: String
 _Type_variable = "variable" :: String
+_TypedBinding = "hydra/ext/haskell/ast.TypedBinding" :: String
+_TypedBinding_typeSignature = "typeSignature" :: String
+_TypedBinding_valueBinding = "valueBinding" :: String
 _ValueBinding = "hydra/ext/haskell/ast.ValueBinding" :: String
 _ValueBinding_Simple = "hydra/ext/haskell/ast.ValueBinding_Simple" :: String
 _ValueBinding_Simple_localBindings = "localBindings" :: String

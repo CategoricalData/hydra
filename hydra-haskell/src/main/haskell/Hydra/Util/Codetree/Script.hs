@@ -116,7 +116,8 @@ remOp = op "`rem`" 7 AssociativityLeft
 
 --thenOp = op "=>"
 
---typeOp = op "::"
+typeOp :: Op
+typeOp = op "::" 0 AssociativityNone -- No source
 
 ----------------------------------------
 
