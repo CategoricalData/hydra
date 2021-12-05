@@ -36,8 +36,11 @@ instance ToTree H.DeclarationWithComments where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationValueBinding (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _)) -> -- TODO: local bindings
-        ifx defineOp (toTree pat) (toTree rhs)
+    H.DeclarationTypedBinding (H.TypedBinding
+      (H.TypeSignature name htype)
+      (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _))) -> newlineSep [ -- TODO: local bindings
+        ifx typeOp (toTree name) (toTree htype),
+        ifx defineOp (toTree pat) (toTree rhs)]
 
 instance ToTree H.Expression where
   toTree expr = case expr of
@@ -90,7 +93,7 @@ instance ToTree H.Expression_Lambda where
 
 instance ToTree H.Import where
   toTree (H.Import _ name _ _) = spaceSep [cst "import", cst name]
-  
+
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of
     H.LiteralChar c -> show $ C.chr $ fromIntegral c
@@ -133,6 +136,16 @@ instance ToTree H.Pattern where
 instance ToTree H.Pattern_Application where
   toTree (H.Pattern_Application name pats) = spaceSep $ toTree name:(toTree <$> pats)
 
+instance ToTree H.Type where
+  toTree htype = case htype of
+    H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
+    H.TypeFunction (H.Type_Function dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
+--  H.TypeInfix Type_Infix
+    H.TypeList htype -> hlist False [toTree htype]
+--  H.TypeParens Type
+--  H.TypeTuple [Type]
+    H.TypeVariable name -> toTree name
+  
 dataGraphToHaskellString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
 dataGraphToHaskellString cx g = do
   hsmod <- dataGraphToHaskellModule cx g
