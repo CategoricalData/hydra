@@ -77,7 +77,7 @@ indexOp :: Op
 indexOp = op "!!" 9 AssociativityLeft
 
 lambdaOp :: Op
-lambdaOp = op "->" 0 AssociativityNone -- No source
+lambdaOp = op "->" (negate 1) AssociativityRight -- No source
 
 ltOp :: Op
 ltOp = op "<" 4 AssociativityNone
