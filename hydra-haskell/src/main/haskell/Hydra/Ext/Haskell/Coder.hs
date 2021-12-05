@@ -64,14 +64,19 @@ encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> 
 encodeFunction cx meta fun = case fun of
     FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
       where
-        caseExpr = H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM toAlt fields)
-        toAlt (Field fn fun') = do
+        caseExpr = do
+          fieldMap <- fieldMapOf <$> findDomain
+          H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
+        toAlt fieldMap (Field fn fun') = do
           let rhsTerm = simplifyTerm $ apply fun' (variable "v")
           let v = case termData rhsTerm of
                 ExpressionFunction (FunctionLambda (Lambda v' _)) -> v'
                 _ -> "_"
           let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
-          let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) [H.PatternName $ hsname v]
+          let args = case fieldMap >>= M.lookup fn of
+                Just (FieldType _ (TypeRecord [])) -> []
+                _ -> [H.PatternName $ hsname v]
+          let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) args
           rhs <- encodeTerm cx rhsTerm
           return $ H.Alternative lhs rhs Nothing
     FunctionData -> pure $ hsvar "id"
@@ -82,6 +87,15 @@ encodeFunction cx meta fun = case fun of
       Nothing -> fname
     _ -> fail $ "unexpected function: " ++ show fun
   where
+    fieldMapOf typ = case typ of
+      Just (TypeUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
+      _ -> Nothing
+    findDomain = case domName of
+      Nothing -> pure Nothing
+      Just name -> do
+        scx <- schemaContext cx -- TODO: cache this
+        typ <- requireType scx name
+        return $ Just typ
     domName = case contextTypeOf cx meta of
       Just (TypeFunction (FunctionType (TypeNominal name) _)) -> Just name
       Nothing -> Nothing
