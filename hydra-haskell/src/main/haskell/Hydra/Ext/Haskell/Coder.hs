@@ -49,16 +49,33 @@ dataGraphToHaskellModule cx g = do
 
     createModule coders pairs = do
       decls <- CM.mapM (createDeclaration coders) pairs
-      return $ H.Module (Just $ H.ModuleHead moduleName []) [] decls
+      return $ H.Module (Just $ H.ModuleHead (moduleName $ graphName g) []) imports decls
 
-    moduleName = L.intercalate "." $ capitalize <$> LS.splitOn "/" (graphName g)
+    imports = toSimpleImport . moduleName <$> S.toList (dataGraphDependencies g)
 
+    moduleName name = L.intercalate "." $ capitalize <$> LS.splitOn "/" name
+
+    toSimpleImport mname = H.Import False mname Nothing Nothing
+    
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
         H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $
           H.ValueBinding_Simple
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) body bindings
         _ -> vb
+
+dataGraphDependencies :: Show a => Graph a -> S.Set GraphName
+dataGraphDependencies g = S.delete (graphName g) allDeps
+  where
+    allDeps = L.foldl (\s t -> S.union s $ depsOf t) S.empty $
+      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
+    depsOf term = foldOverTerm TraversalOrderPre addNames S.empty term
+    addNames names term = case termData term of
+      ExpressionElement name -> S.insert (graphNameOf name) names
+      ExpressionFunction (FunctionPrimitive name) -> S.insert (graphNameOf name) names
+      ExpressionNominal (NominalTerm name _) -> S.insert name names
+      _ -> names
+    graphNameOf = L.head . LS.splitOn "."
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
 encodeFunction cx meta fun = case fun of
@@ -68,14 +85,13 @@ encodeFunction cx meta fun = case fun of
           fieldMap <- fieldMapOf <$> findDomain
           H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
         toAlt fieldMap (Field fn fun') = do
-          let rhsTerm = simplifyTerm $ apply fun' (variable "v")
-          let v = case termData rhsTerm of
-                ExpressionFunction (FunctionLambda (Lambda v' _)) -> v'
-                _ -> "_"
+          let v0 = "v"
+          let rhsTerm = simplifyTerm $ apply fun' (variable v0)
+          let v1 = if S.member v0 $ freeVariablesInTerm rhsTerm then v0 else "_"
           let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
           let args = case fieldMap >>= M.lookup fn of
                 Just (FieldType _ (TypeRecord [])) -> []
-                _ -> [H.PatternName $ hsname v]
+                _ -> [H.PatternName $ hsname v1]
           let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) args
           rhs <- encodeTerm cx rhsTerm
           return $ H.Alternative lhs rhs Nothing

@@ -10,6 +10,7 @@ module Hydra.Prototyping.Rewriting (
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Dsl.CoreMeta
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -32,10 +33,12 @@ freeVariablesInTerm term = case termData term of
   ExpressionVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
 
-replaceTerm :: Ord a => TraversalOrder -> (Term a -> Term a) -> Term a -> Term a
+replaceTerm :: Ord a => TraversalOrder -> (Term a -> Y.Maybe (Term a)) -> Term a -> Term a
 replaceTerm order rep term = case order of
-    TraversalOrderPre -> recurse $ rep term
-    TraversalOrderPost -> rep $ recurse term
+    TraversalOrderPre -> case rep term of
+      Nothing -> term
+      Just term' -> recurse term'
+    TraversalOrderPost -> Y.fromMaybe term $ rep $ recurse term
   where
     replace = replaceTerm order rep
     replaceField f = f {fieldTerm = replace (fieldTerm f)}
@@ -58,20 +61,31 @@ replaceTerm order rep term = case order of
           ExpressionUnion field -> ExpressionUnion $ replaceField field
           _ -> expr
 
-simplifyTerm :: Ord a => Term a -> Term a
+simplifyTerm :: (Default a, Ord a) => Term a -> Term a
 simplifyTerm = replaceTerm TraversalOrderPre simplify
   where
-    simplify term = case termData term of
-      ExpressionApplication (Application lhs _) -> case termData lhs of
+    simplify term = Just $ case termData term of
+      ExpressionApplication (Application lhs rhs) -> case termData lhs of
         ExpressionFunction (FunctionLambda (Lambda var body)) -> if S.member var (freeVariablesInTerm body)
-          then term
-          else Term (termData body) $ mergeMeta (termMeta term) (termMeta body)
+          then case termData rhs of
+            ExpressionVariable v -> substituteVariable var v body
+            _ -> term
+          else body
         _ -> term
       _ -> term
-    mergeMeta _ inner = inner -- For now, inner meta wins
 
 stripMeta :: (Default a, Ord a) => Term a -> Term a
-stripMeta = replaceTerm TraversalOrderPre $ \term -> term {termMeta = dflt}
+stripMeta = replaceTerm TraversalOrderPre $ \term -> Just $ term {termMeta = dflt}
+
+substituteVariable :: (Default a, Ord a) => Variable -> Variable -> Term a -> Term a
+substituteVariable from to = replaceTerm TraversalOrderPre replace
+  where
+    replace term = case termData term of
+      ExpressionVariable x -> Just $ Term (ExpressionVariable $ if x == from then to else x) $ termMeta term
+      ExpressionFunction (FunctionLambda (Lambda var _)) -> if var == from
+        then Nothing
+        else Just term
+      _ -> Just term
 
 subterms :: Term a -> [Term a]
 subterms term = case termData term of

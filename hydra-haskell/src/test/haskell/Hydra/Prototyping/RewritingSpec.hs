@@ -87,12 +87,12 @@ testReplaceTerm = do
             (list [list [list []]]))
           (list [] :: Term Meta)
   where
-    replaceLists term = case termData term of
+    replaceLists term = Just $ case termData term of
       ExpressionList (h:_) -> case termData h of
         ExpressionList [] -> list []
         _ -> term
       _ -> term
-    replaceInts term = case termData term of
+    replaceInts term = Just $ case termData term of
       ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64Value $ fromIntegral v
       _ -> term
 
