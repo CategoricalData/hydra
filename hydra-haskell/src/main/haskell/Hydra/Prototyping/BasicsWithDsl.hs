@@ -140,20 +140,22 @@ basicsTermVariant :: Context Meta -> Element Meta
 basicsTermVariant cx = basicsFunction cx "termVariant"
   "Find the term variant (constructor) for a given term"
   _Term _TermVariant $
-  nominalMatchWithVariants cx _Expression _TermVariant [
-    (_Expression_element,         _TermVariant_element),
-    (_Expression_function,        _TermVariant_function),
-    (_Expression_list,            _TermVariant_list),
-    (_Expression_literal,         _TermVariant_literal),
-    (_Expression_map,             _TermVariant_map),
-    (_Expression_nominal,         _TermVariant_nominal),
-    (_Expression_optional,        _TermVariant_optional),
-    (_Expression_record,          _TermVariant_record),
-    (_Expression_set,             _TermVariant_set),
-    (_Expression_typeAbstraction, _TermVariant_typeAbstraction),
-    (_Expression_typeApplication, _TermVariant_typeApplication),
-    (_Expression_union,           _TermVariant_union),
-    (_Expression_variable,        _TermVariant_variable)]
+  lambda "term" $ apply
+    (nominalMatchWithVariants cx _Expression _TermVariant [
+          (_Expression_element,         _TermVariant_element),
+          (_Expression_function,        _TermVariant_function),
+          (_Expression_list,            _TermVariant_list),
+          (_Expression_literal,         _TermVariant_literal),
+          (_Expression_map,             _TermVariant_map),
+          (_Expression_nominal,         _TermVariant_nominal),
+          (_Expression_optional,        _TermVariant_optional),
+          (_Expression_record,          _TermVariant_record),
+          (_Expression_set,             _TermVariant_set),
+          (_Expression_typeAbstraction, _TermVariant_typeAbstraction),
+          (_Expression_typeApplication, _TermVariant_typeApplication),
+          (_Expression_union,           _TermVariant_union),
+          (_Expression_variable,        _TermVariant_variable)])
+    (apply (nominalProjection cx _Term _Term_data (nominalType _Term)) $ variable "term")
 
 basicsTypeVariant :: Context Meta -> Element Meta
 basicsTypeVariant cx = basicsFunction cx "typeVariant"

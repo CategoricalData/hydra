@@ -103,7 +103,7 @@ encodeFunction cx meta fun = case fun of
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm cx body
     FunctionPrimitive name -> pure $ hsvar name
     FunctionProjection fname -> pure $ hsvar $ case domName of
-      Just rname -> qualifyRecordFieldName fname rname
+      Just rname -> qualifyRecordFieldName rname fname
       Nothing -> fname
     _ -> fail $ "unexpected function: " ++ show fun
   where
