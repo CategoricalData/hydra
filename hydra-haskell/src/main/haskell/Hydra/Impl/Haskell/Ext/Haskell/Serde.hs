@@ -88,6 +88,9 @@ instance ToTree H.Expression_Lambda where
       head = spaceSep (toTree <$> bindings)
       body = toTree inner
 
+instance ToTree H.Import where
+  toTree (H.Import _ name _ _) = spaceSep [cst "import", cst name]
+  
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of
     H.LiteralChar c -> show $ C.chr $ fromIntegral c
@@ -99,7 +102,11 @@ instance ToTree H.Literal where
 
 instance ToTree H.Module where
   toTree (H.Module mh imports decls) = doubleNewlineSep $
-      Y.maybe [] (\h -> [toTree h]) mh ++ (toTree <$> decls) -- TODO: imports
+      headerLine ++ importLines ++ declLines
+    where
+      headerLine = Y.maybe [] (\h -> [toTree h]) mh
+      declLines = toTree <$> decls
+      importLines = [newlineSep $ toTree <$> imports | not (L.null imports)]
 
 instance ToTree H.Name where
   toTree name = cst $ case name of

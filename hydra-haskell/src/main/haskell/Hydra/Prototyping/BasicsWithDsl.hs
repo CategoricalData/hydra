@@ -79,16 +79,16 @@ basicsIntegerValueType :: Context Meta -> Element Meta
 basicsIntegerValueType cx = basicsFunction cx "integerValueType"
   "Find the integer type for a given integer value"
   _IntegerValue _IntegerType $
-  nominalMatchWithVariants cx _IntegerValue _IntegerValue [
-    (_IntegerValue_bigint, _IntegerValue_bigint),
-    (_IntegerValue_int8,   _IntegerValue_int8),
-    (_IntegerValue_int16,  _IntegerValue_int16),
-    (_IntegerValue_int32,  _IntegerValue_int32),
-    (_IntegerValue_int64,  _IntegerValue_int64),
-    (_IntegerValue_uint8,  _IntegerValue_uint8),
-    (_IntegerValue_uint16, _IntegerValue_uint16),
-    (_IntegerValue_uint32, _IntegerValue_uint32),
-    (_IntegerValue_uint64, _IntegerValue_uint64)]
+  nominalMatchWithVariants cx _IntegerValue _IntegerType [
+    (_IntegerValue_bigint, _IntegerType_bigint),
+    (_IntegerValue_int8,   _IntegerType_int8),
+    (_IntegerValue_int16,  _IntegerType_int16),
+    (_IntegerValue_int32,  _IntegerType_int32),
+    (_IntegerValue_int64,  _IntegerType_int64),
+    (_IntegerValue_uint8,  _IntegerType_uint8),
+    (_IntegerValue_uint16, _IntegerType_uint16),
+    (_IntegerValue_uint32, _IntegerType_uint32),
+    (_IntegerValue_uint64, _IntegerType_uint64)]
 
 basicsIntegerValueVariant :: Context Meta -> Element Meta
 basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant"

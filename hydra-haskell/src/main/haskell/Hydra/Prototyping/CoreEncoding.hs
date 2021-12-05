@@ -149,7 +149,7 @@ encodeType cx typ = case typ of
   TypeFunction ft -> nominalVariant cx _Type _Type_function $ encodeFunctionType cx ft
   TypeList t -> nominalVariant cx _Type _Type_list $ encodeType cx t
   TypeMap mt -> nominalVariant cx _Type _Type_map $ encodeMapType cx mt
-  TypeNominal name -> nominalVariant cx _Type _Type_nominal $ stringTerm name
+  TypeNominal name -> nominalVariant cx _Type _Type_nominal $ element name
   TypeOptional t -> nominalVariant cx _Type _Type_optional $ encodeType cx t
   TypeRecord fields -> nominalVariant cx _Type _Type_record $ list $ fmap (encodeFieldType cx) fields
   TypeSet t -> nominalVariant cx _Type _Type_set $ encodeType cx t

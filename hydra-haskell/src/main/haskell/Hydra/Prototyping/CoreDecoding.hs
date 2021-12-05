@@ -20,13 +20,10 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-decodeLiteralType :: Show a => Context a -> Term a -> Result LiteralType
-decodeLiteralType context = matchUnion context [
-  matchUnitField _LiteralType_binary LiteralTypeBinary,
-  matchUnitField _LiteralType_boolean LiteralTypeBoolean,
-  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType context),
-  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType context),
-  matchUnitField _LiteralType_string LiteralTypeString]
+decodeElement :: Term a -> Result Name
+decodeElement term = case termData term of
+  ExpressionElement name -> pure name
+  _ -> fail "expected an element"
 
 decodeFieldType :: Show a => Context a -> Term a -> Result FieldType
 decodeFieldType context = matchRecord context $ \m -> FieldType
@@ -61,6 +58,14 @@ decodeIntegerType context = matchEnum context [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
+decodeLiteralType :: Show a => Context a -> Term a -> Result LiteralType
+decodeLiteralType context = matchUnion context [
+  matchUnitField _LiteralType_binary LiteralTypeBinary,
+  matchUnitField _LiteralType_boolean LiteralTypeBoolean,
+  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType context),
+  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType context),
+  matchUnitField _LiteralType_string LiteralTypeString]
+
 decodeMapType :: Show a => Context a -> Term a -> Result MapType
 decodeMapType context = matchRecord context $ \m -> MapType
   <$> getField m _MapType_keys (decodeType context)
@@ -82,7 +87,7 @@ decodeType context term = case termData term of
     (_Type_function, fmap TypeFunction . decodeFunctionType context),
     (_Type_list, fmap TypeList . decodeType context),
     (_Type_map, fmap TypeMap . decodeMapType context),
-    (_Type_nominal, fmap TypeNominal . decodeString),
+    (_Type_nominal, fmap TypeNominal . decodeElement),
     (_Type_optional, fmap TypeOptional . decodeType context),
     (_Type_record, fmap TypeRecord . decodeFieldTypes context),
     (_Type_set, fmap TypeSet . decodeType context),
