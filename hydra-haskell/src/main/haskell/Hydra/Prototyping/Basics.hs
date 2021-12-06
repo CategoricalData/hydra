@@ -149,20 +149,18 @@ integerVariantPrecision v = case v of
 
 integerTypes :: [IntegerType]
 integerTypes = [
-  IntegerTypeInt8, IntegerTypeInt16, IntegerTypeInt32, IntegerTypeInt64,
-  IntegerTypeUint8, IntegerTypeUint16, IntegerTypeUint32, IntegerTypeUint64,
-  IntegerTypeBigint]
+  IntegerTypeBigint,
+  IntegerTypeInt8, 
+  IntegerTypeInt16,
+  IntegerTypeInt32,
+  IntegerTypeInt64,
+  IntegerTypeUint8,
+  IntegerTypeUint16,
+  IntegerTypeUint32,
+  IntegerTypeUint64]
 
 integerVariants :: [IntegerVariant]
 integerVariants = integerTypeVariant <$> integerTypes
-
-literalTypeVariant :: LiteralType -> LiteralVariant
-literalTypeVariant at = case at of
-  LiteralTypeBinary -> LiteralVariantBinary
-  LiteralTypeBoolean -> LiteralVariantBoolean
-  LiteralTypeFloat _ -> LiteralVariantFloat
-  LiteralTypeInteger _ -> LiteralVariantInteger
-  LiteralTypeString -> LiteralVariantString
 
 literalType :: Literal -> LiteralType
 literalType v = case v of
@@ -172,12 +170,24 @@ literalType v = case v of
   LiteralInteger iv -> LiteralTypeInteger $ integerValueType iv
   LiteralString _ -> LiteralTypeString
 
+literalTypeVariant :: LiteralType -> LiteralVariant
+literalTypeVariant at = case at of
+  LiteralTypeBinary -> LiteralVariantBinary
+  LiteralTypeBoolean -> LiteralVariantBoolean
+  LiteralTypeFloat _ -> LiteralVariantFloat
+  LiteralTypeInteger _ -> LiteralVariantInteger
+  LiteralTypeString -> LiteralVariantString
+
 literalVariant :: Literal -> LiteralVariant
 literalVariant = literalTypeVariant . literalType
 
 literalVariants :: [LiteralVariant]
 literalVariants = [
-  LiteralVariantBinary, LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
+  LiteralVariantBinary,
+  LiteralVariantBoolean,
+  LiteralVariantFloat,
+  LiteralVariantInteger,
+  LiteralVariantString]
 
 termVariant :: Term a -> TermVariant
 termVariant term = case termData term of

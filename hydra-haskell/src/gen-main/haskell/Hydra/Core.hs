@@ -245,7 +245,7 @@ import Data.Set
 data Application a
   = Application
     {-| The left-hand side of the application
-        
+
         @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
@@ -254,7 +254,7 @@ data Application a
                   variable: a -}
     { applicationFunction :: Term a
     {-| The right-hand side of the application
-        
+
         @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
@@ -275,7 +275,7 @@ data Comparison
 
 data Expression a
   {-| A function application
-      
+
       @type parameterized:
               genericType: hydra/core.Application
               parameters:
@@ -284,11 +284,11 @@ data Expression a
                 variable: a -}
   = ExpressionApplication (Application a)
   {-| An element reference
-      
+
       @type hydra/core.Name -}
   | ExpressionElement Name
   {-| A function term
-      
+
       @type parameterized:
               genericType: hydra/core.Function
               parameters:
@@ -304,7 +304,7 @@ data Expression a
                 variable: a -}
   | ExpressionLet (Let a)
   {-| A list
-      
+
       @type list:
               parameterized:
                 genericType: hydra/core.Term
@@ -314,11 +314,11 @@ data Expression a
                   variable: a -}
   | ExpressionList [Term a]
   {-| A literal value
-      
+
       @type hydra/core.Literal -}
   | ExpressionLiteral Literal
   {-| A map of key terms to value terms
-      
+
       @type map:
               keys:
                 parameterized:
@@ -343,7 +343,7 @@ data Expression a
                 variable: a -}
   | ExpressionNominal (NominalTerm a)
   {-| An optional value
-      
+
       @type optional:
               parameterized:
                 genericType: hydra/core.Term
@@ -353,7 +353,7 @@ data Expression a
                   variable: a -}
   | ExpressionOptional (Maybe (Term a))
   {-| A record, or labeled tuple
-      
+
       @type list:
               parameterized:
                 genericType: hydra/core.Field
@@ -363,7 +363,7 @@ data Expression a
                   variable: a -}
   | ExpressionRecord [Field a]
   {-| A set of terms
-      
+
       @type set:
               parameterized:
                 genericType: hydra/core.Term
@@ -373,7 +373,7 @@ data Expression a
                   variable: a -}
   | ExpressionSet (Set (Term a))
   {-| A type abstraction (generalization), which binds a type variable to a term
-      
+
       @type parameterized:
               genericType: hydra/core.TypeAbstraction
               parameters:
@@ -382,7 +382,7 @@ data Expression a
                 variable: a -}
   | ExpressionTypeAbstraction (TypeAbstraction a)
   {-| A type application (instantiation), which applies a term to a type
-      
+
       @type parameterized:
               genericType: hydra/core.TypeApplication
               parameters:
@@ -391,7 +391,7 @@ data Expression a
                 variable: a -}
   | ExpressionTypeApplication (TypeApplication a)
   {-| A union term, i.e. a string-indexed generalization of inl() or inr()
-      
+
       @type parameterized:
               genericType: hydra/core.Field
               parameters:
@@ -400,7 +400,7 @@ data Expression a
                 variable: a -}
   | ExpressionUnion (Field a)
   {-| A variable reference
-      
+
       @type hydra/core.Variable -}
   | ExpressionVariable Variable deriving (Eq, Generic, Ord, Read, Show)
 
@@ -451,7 +451,7 @@ data FloatVariant
 data Function a
   {-| A case statement applied to a variant record, consisting of a function term
       for each alternative in the union
-      
+
       @type list:
               parameterized:
                 genericType: hydra/core.Field
@@ -461,7 +461,7 @@ data Function a
                   variable: a -}
   = FunctionCases [Field a]
   {-| Compares a term with a given term of the same type, producing a Comparison
-      
+
       @type parameterized:
               genericType: hydra/core.Term
               parameters:
@@ -472,7 +472,7 @@ data Function a
   -- | Hydra's delta function, which maps an element to its data term
   | FunctionData
   {-| A function abstraction (lambda)
-      
+
       @type parameterized:
               genericType: hydra/core.Lambda
               parameters:
@@ -481,11 +481,11 @@ data Function a
                 variable: a -}
   | FunctionLambda (Lambda a)
   {-| A reference to a built-in (primitive) function
-      
+
       @type hydra/core.Name -}
   | FunctionPrimitive Name
   {-| A projection of a field from a record
-      
+
       @type hydra/core.FieldName -}
   | FunctionProjection FieldName deriving (Eq, Generic, Ord, Read, Show)
 
@@ -568,11 +568,11 @@ data IntegerVariant
 data Lambda a
   = Lambda
     {-| The parameter of the lambda
-        
+
         @type hydra/core.Variable -}
     { lambdaParameter :: Variable
     {-| The body of the lambda
-        
+
         @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
@@ -616,7 +616,7 @@ data Literal
 
 {-| Any of a fixed set of literal types, also called atomic types, base types,
     primitive types, or type constants
-    
+
     @comments The so-called term constants, or valid values, of each literal type
     are unspecified -}
 data LiteralType
@@ -646,13 +646,13 @@ data MapType
 data Meta
   = Meta
     {-| An optional description associated with the term
-        
+
         @type optional: string -}
     { metaDescription :: Maybe String
     {-| An optional type annotation associated with the term. This may be used as
         a hint to the type inferencer and/or to
         code generators.
-        
+
         @type optional: hydra/core.Type -}
     , metaType :: Maybe Type } deriving (Eq, Generic, Ord, Read, Show)
 
@@ -748,11 +748,11 @@ data Type
 data TypeAbstraction a
   = TypeAbstraction
     {-| The parameter of the abstraction
-        
+
         @type hydra/core.TypeVariable -}
     { typeAbstractionParameter :: TypeVariable
     {-| The body of the abstraction
-        
+
         @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
@@ -765,7 +765,7 @@ data TypeAbstraction a
 data TypeApplication a
   = TypeApplication
     {-| A term which is the left-hand side of the application
-        
+
         @type parameterized:
                 genericType: hydra/core.Term
                 parameters:
@@ -774,7 +774,7 @@ data TypeApplication a
                   variable: a -}
     { typeApplicationFunction :: Term a
     {-| A type which is the right-hand side of the application
-        
+
         @type hydra/core.Type -}
     , typeApplicationArgument :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
@@ -786,7 +786,7 @@ data TypeScheme
     , typeSchemeType :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A symbol which stands in for a type
-    
+
     @type string -}
 type TypeVariable = String
 
@@ -825,7 +825,7 @@ data UniversalType
     , universalTypeBody :: Type } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A symbol which stands in for a term
-    
+
     @type string -}
 type Variable = String
 

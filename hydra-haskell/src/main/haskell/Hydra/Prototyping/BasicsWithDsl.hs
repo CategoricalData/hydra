@@ -30,11 +30,14 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
         basicsIntegerTypeVariant,
         basicsIntegerValueType,
         basicsIntegerValueVariant,
-        basicsLiteralTypeVariant,
         basicsLiteralType,
+        basicsLiteralTypeVariant,
         basicsLiteralVariant,
+        basicsLiteralVariants,
         basicsTermVariant,
-        basicsTypeVariant]
+        basicsTermVariants,
+        basicsTypeVariant,
+        basicsTypeVariants]
 
 basicsFloatTypeVariant :: Context Meta -> Element Meta
 basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant"
@@ -108,17 +111,6 @@ basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant"
   (nominalType _IntegerValue) (nominalType _IntegerVariant) $
   compose (elementRef $ basicsIntegerTypeVariant cx) (elementRef $ basicsIntegerValueType cx)
 
-basicsLiteralTypeVariant :: Context Meta -> Element Meta
-basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
-  "Find the literal type variant (constructor) for a given literal value"
-  (nominalType _LiteralType) (nominalType _LiteralVariant) $
-  nominalMatchWithVariants cx (nominalType _LiteralType) (nominalType _LiteralVariant) [
-    (_LiteralType_binary,  _LiteralVariant_binary),
-    (_LiteralType_boolean, _LiteralVariant_boolean),
-    (_LiteralType_float,   _LiteralVariant_float),
-    (_LiteralType_integer, _LiteralVariant_integer),
-    (_LiteralType_string,  _LiteralVariant_string)]
-
 basicsLiteralType :: Context Meta -> Element Meta
 basicsLiteralType cx = basicsFunction cx "literalType"
   "Find the literal type for a given literal value"
@@ -130,12 +122,34 @@ basicsLiteralType cx = basicsFunction cx "literalType"
     (_Literal_integer, nominalWithFunction cx _LiteralType _LiteralType_integer (basicsIntegerValueType cx)),
     (_Literal_string,  nominalWithVariant cx  _LiteralType _LiteralType_string)]
 
+basicsLiteralTypeVariant :: Context Meta -> Element Meta
+basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
+  "Find the literal type variant (constructor) for a given literal value"
+  (nominalType _LiteralType) (nominalType _LiteralVariant) $
+  nominalMatchWithVariants cx (nominalType _LiteralType) (nominalType _LiteralVariant) [
+    (_LiteralType_binary,  _LiteralVariant_binary),
+    (_LiteralType_boolean, _LiteralVariant_boolean),
+    (_LiteralType_float,   _LiteralVariant_float),
+    (_LiteralType_integer, _LiteralVariant_integer),
+    (_LiteralType_string,  _LiteralVariant_string)]
+
 basicsLiteralVariant :: Context Meta -> Element Meta
 basicsLiteralVariant cx = basicsFunction cx "literalVariant"
   "Find the literal variant (constructor) for a given literal value"
   (nominalType _Literal) (nominalType _LiteralVariant) $
   compose (elementRef $ basicsLiteralTypeVariant cx) (elementRef $ basicsLiteralType cx)
 
+basicsLiteralVariants :: Context Meta -> Element Meta
+basicsLiteralVariants cx = basicsElement cx "literalVariants"
+  "All literal variants, in a canonical order"
+  (listType $ nominalType _LiteralVariant)
+  (list $ withType cx (nominalType _LiteralVariant) . unitVariant <$> [
+    _LiteralVariant_binary,
+    _LiteralVariant_boolean,
+    _LiteralVariant_float,
+    _LiteralVariant_integer,
+    _LiteralVariant_string])
+    
 basicsTermVariant :: Context Meta -> Element Meta
 basicsTermVariant cx = basicsFunction cx "termVariant"
   "Find the term variant (constructor) for a given term"
@@ -157,6 +171,24 @@ basicsTermVariant cx = basicsFunction cx "termVariant"
           (_Expression_variable,        _TermVariant_variable)])
     (apply (nominalProjection cx _Term _Term_data (nominalType _Term)) $ variable "term")
 
+basicsTermVariants :: Context Meta -> Element Meta
+basicsTermVariants cx = basicsElement cx "termVariants"
+  "All term (expression) variants, in a canonical order"
+  (listType $ nominalType _TermVariant)
+  (list $ withType cx (nominalType _TermVariant) . unitVariant <$> [
+    _TermVariant_application,
+    _TermVariant_literal,
+    _TermVariant_element,
+    _TermVariant_function,
+    _TermVariant_list,
+    _TermVariant_map,
+    _TermVariant_nominal,
+    _TermVariant_optional,
+    _TermVariant_record,
+    _TermVariant_set,
+    _TermVariant_union,
+    _TermVariant_variable])
+    
 basicsTypeVariant :: Context Meta -> Element Meta
 basicsTypeVariant cx = basicsFunction cx "typeVariant"
   "Find the type variant (constructor) for a given type"
@@ -174,3 +206,21 @@ basicsTypeVariant cx = basicsFunction cx "typeVariant"
     (_Type_union,     _TypeVariant_union),
     (_Type_universal, _TypeVariant_universal),
     (_Type_variable,  _TypeVariant_variable)]
+
+basicsTypeVariants :: Context Meta -> Element Meta
+basicsTypeVariants cx = basicsElement cx "typeVariants"
+  "All type variants, in a canonical order"
+  (listType $ nominalType _TypeVariant)
+  (list $ withType cx (nominalType _TypeVariant) . unitVariant <$> [
+    _TypeVariant_literal,
+    _TypeVariant_element,
+    _TypeVariant_function,
+    _TypeVariant_list,
+    _TypeVariant_map,
+    _TypeVariant_nominal,
+    _TypeVariant_optional,
+    _TypeVariant_record,
+    _TypeVariant_set,
+    _TypeVariant_union,
+    _TypeVariant_universal,
+    _TypeVariant_variable])
