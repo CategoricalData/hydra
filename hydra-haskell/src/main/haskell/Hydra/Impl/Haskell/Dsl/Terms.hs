@@ -81,6 +81,7 @@ module Hydra.Impl.Haskell.Dsl.Terms (
   unionType,
   unitType,
   unitVariant,
+  universal,
   variable,
   variant,
   withFunction,
@@ -363,6 +364,9 @@ unitType = TypeRecord []
 
 unitVariant :: Default a => FieldName -> Term a
 unitVariant fname = variant fname unitTerm
+
+universal :: TypeVariable -> Type -> Type
+universal v body = TypeUniversal $ UniversalType v body
 
 variable :: Default a => Variable -> Term a
 variable = defaultTerm . ExpressionVariable

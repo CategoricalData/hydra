@@ -37,7 +37,7 @@ elementToString :: Default a => AdapterContext a -> Type -> Qualified (Adapter T
 elementToString context t@(TypeElement _) = pure $ Adapter False t stringType $ Step encode decode
   where
     encode (Term (ExpressionElement name) _) = pure $ stringValue name
-    decode (Term (ExpressionLiteral (LiteralString name)) _) = pure $ defaultTerm $ ExpressionElement name
+    decode (Term (ExpressionLiteral (LiteralString name)) meta) = pure $ withData meta $ ExpressionElement name
 
 fieldAdapter :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> FieldType -> Qualified (Adapter FieldType (Field a))
 fieldAdapter context ftyp = do
@@ -99,8 +99,8 @@ listToSet context t@(TypeSet st) = do
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad)
       $ Step (encode ad) (decode ad)
   where
-    encode ad (Term (ExpressionSet s) _) = stepOut (adapterStep ad) $ defaultTerm $ ExpressionList $ S.toList s
-    decode ad term = defaultTerm . ExpressionSet . S.fromList . (\(Term (ExpressionList l') _) -> l') <$> stepIn (adapterStep ad) term
+    encode ad (Term (ExpressionSet s) meta) = stepOut (adapterStep ad) $ withData meta $ ExpressionList $ S.toList s
+    decode ad term = withData (termMeta term) . ExpressionSet . S.fromList . (\(Term (ExpressionList l') _) -> l') <$> stepIn (adapterStep ad) term
 
 optionalToList :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 optionalToList context t@(TypeOptional ot) = do
@@ -146,7 +146,7 @@ passFunction context t@(TypeFunction (FunctionType dom cod)) = do
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd
     return $ Adapter lossy t (TypeFunction (FunctionType dom' cod'))
-      $ bidirectional $ \dir (Term (ExpressionFunction f) _) -> defaultTerm . ExpressionFunction <$> case f of
+      $ bidirectional $ \dir (Term (ExpressionFunction f) meta) -> withData meta . ExpressionFunction <$> case f of
         FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases
           where
             -- Note: this causes unrecognized cases to simply be passed through;
@@ -168,7 +168,7 @@ passMap context t@(TypeMap (MapType kt vt)) = do
   vad <- termAdapter context vt
   return $ Adapter (adapterIsLossy kad || adapterIsLossy vad)
     t (TypeMap (MapType (adapterTarget kad) (adapterTarget vad)))
-    $ bidirectional $ \dir (Term (ExpressionMap m) _) -> defaultTerm . ExpressionMap . M.fromList
+    $ bidirectional $ \dir (Term (ExpressionMap m) meta) -> withData meta . ExpressionMap . M.fromList
       <$> CM.mapM (\(k, v) -> (,) <$> stepBoth dir (adapterStep kad) k <*> stepBoth dir (adapterStep vad) v)
         (M.toList m)
 
@@ -177,7 +177,7 @@ passOptional context t@(TypeOptional ot) = do
   ad <- termAdapter context ot
   return $ Adapter (adapterIsLossy ad) t (TypeOptional $ adapterTarget ad) $
     bidirectional $ \dir term -> case term of
-      (Term (ExpressionOptional m) _) -> defaultTerm . ExpressionOptional <$> case m of
+      (Term (ExpressionOptional m) meta) -> withData meta . ExpressionOptional <$> case m of
         Nothing -> pure Nothing
         Just term' -> Just <$> stepBoth dir (adapterStep ad) term'
       _ -> fail $ "expected optional term, found: " ++ show term
@@ -222,7 +222,9 @@ passUnion context t@(TypeUnion sfields) = do
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-termAdapter context = chooseAdapter alts supported describeType
+termAdapter context typ = case typ of
+    TypeUniversal (UniversalType _ body) -> termAdapter context body
+    _ -> chooseAdapter alts supported describeType typ
   where
     alts t = (\c -> c context t) <$> if variantIsSupported t
       then case typeVariant t of
@@ -270,10 +272,14 @@ unionToRecord context t@(TypeUnion sfields) = do
     cx = adapterContextEvaluation context
     makeOptional (FieldType fn t) = FieldType fn $ TypeOptional t
 
-    toRecordField term fn (FieldType fn' _) = Field fn' $ defaultTerm $ ExpressionOptional $ if fn' == fn then Just term else Nothing
+    toRecordField term fn (FieldType fn' _) = Field fn' $ withData (termMeta term)
+      $ ExpressionOptional $ if fn' == fn then Just term else Nothing
     fromRecordFields term term' t' fields = if L.null matches
         then fail $ "cannot convert term back to union: " ++ show term ++ " -- becomes " ++ show term'
           ++ " where type = " ++ show t ++ "    and target type = " ++ show t'
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (Term (ExpressionOptional opt) _)) -> (Just . Field fn) =<< opt) fields
+
+withData :: a -> Expression a -> Term a
+withData meta expr = Term expr meta

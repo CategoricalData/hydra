@@ -26,28 +26,28 @@ decodeElement term = case termData term of
   _ -> fail "expected an element"
 
 decodeFieldType :: Show a => Context a -> Term a -> Result FieldType
-decodeFieldType context = matchRecord context $ \m -> FieldType
+decodeFieldType cx = matchRecord cx $ \m -> FieldType
   <$> getField m _FieldType_name decodeString
-  <*> getField m _FieldType_type (decodeType context)
+  <*> getField m _FieldType_type (decodeType cx)
 
 decodeFieldTypes :: Show a => Context a -> Term a -> Result [FieldType]
-decodeFieldTypes context term = case termData term of
-  ExpressionList els -> CM.mapM (decodeFieldType context) els
+decodeFieldTypes cx term = case termData term of
+  ExpressionList els -> CM.mapM (decodeFieldType cx) els
   _ -> fail "expected a list"
 
 decodeFloatType :: Show a => Context a -> Term a -> Result FloatType
-decodeFloatType context = matchEnum context [
+decodeFloatType cx = matchEnum cx [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
 decodeFunctionType :: Show a => Context a -> Term a -> Result FunctionType
-decodeFunctionType context = matchRecord context $ \m -> FunctionType
-  <$> getField m _FunctionType_domain (decodeType context)
-  <*> getField m _FunctionType_codomain (decodeType context)
+decodeFunctionType cx = matchRecord cx $ \m -> FunctionType
+  <$> getField m _FunctionType_domain (decodeType cx)
+  <*> getField m _FunctionType_codomain (decodeType cx)
 
 decodeIntegerType :: Show a => Context a -> Term a -> Result IntegerType
-decodeIntegerType context = matchEnum context [
+decodeIntegerType cx = matchEnum cx [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
   (_IntegerType_int16, IntegerTypeInt16),
@@ -59,17 +59,17 @@ decodeIntegerType context = matchEnum context [
   (_IntegerType_uint64, IntegerTypeUint64)]
 
 decodeLiteralType :: Show a => Context a -> Term a -> Result LiteralType
-decodeLiteralType context = matchUnion context [
+decodeLiteralType cx = matchUnion cx [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
-  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType context),
-  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType context),
+  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType cx),
+  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType cx),
   matchUnitField _LiteralType_string LiteralTypeString]
 
 decodeMapType :: Show a => Context a -> Term a -> Result MapType
-decodeMapType context = matchRecord context $ \m -> MapType
-  <$> getField m _MapType_keys (decodeType context)
-  <*> getField m _MapType_values (decodeType context)
+decodeMapType cx = matchRecord cx $ \m -> MapType
+  <$> getField m _MapType_keys (decodeType cx)
+  <*> getField m _MapType_values (decodeType cx)
 
 decodeString :: Term a -> Result String
 decodeString term = case termData term of
@@ -79,25 +79,26 @@ decodeString term = case termData term of
   _ -> fail "expected a literal value"
 
 decodeType :: Show a => Context a -> Term a -> Result Type
-decodeType context term = case termData term of
+decodeType cx term = case termData term of
   ExpressionElement name -> pure $ TypeNominal name
-  _ -> matchUnion context [
-    (_Type_literal, fmap TypeLiteral . decodeLiteralType context),
-    (_Type_element, fmap TypeElement . decodeType context),
-    (_Type_function, fmap TypeFunction . decodeFunctionType context),
-    (_Type_list, fmap TypeList . decodeType context),
-    (_Type_map, fmap TypeMap . decodeMapType context),
+  _ -> matchUnion cx [
+    (_Type_literal, fmap TypeLiteral . decodeLiteralType cx),
+    (_Type_element, fmap TypeElement . decodeType cx),
+    (_Type_function, fmap TypeFunction . decodeFunctionType cx),
+    (_Type_list, fmap TypeList . decodeType cx),
+    (_Type_map, fmap TypeMap . decodeMapType cx),
     (_Type_nominal, fmap TypeNominal . decodeElement),
-    (_Type_optional, fmap TypeOptional . decodeType context),
-    (_Type_record, fmap TypeRecord . decodeFieldTypes context),
-    (_Type_set, fmap TypeSet . decodeType context),
-    (_Type_union, fmap TypeUnion . decodeFieldTypes context),
+    (_Type_optional, fmap TypeOptional . decodeType cx),
+    (_Type_record, fmap TypeRecord . decodeFieldTypes cx),
+    (_Type_set, fmap TypeSet . decodeType cx),
+    (_Type_union, fmap TypeUnion . decodeFieldTypes cx),
+    (_Type_universal, fmap TypeUniversal . decodeUniversalType cx),
     (_Type_variable, fmap TypeVariable . decodeString)] term
 
 decodeUniversalType :: Show a => Context a -> Term a -> Result UniversalType
-decodeUniversalType context = matchRecord context $ \m -> UniversalType
+decodeUniversalType cx = matchRecord cx $ \m -> UniversalType
   <$> getField m _UniversalType_variable decodeString
-  <*> getField m _UniversalType_body (decodeType context)
+  <*> getField m _UniversalType_body (decodeType cx)
 
 getField :: M.Map FieldName (Term a) -> FieldName -> (Term a -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
@@ -105,18 +106,18 @@ getField m fname decode = case M.lookup fname m of
   Just val -> decode val
 
 matchEnum :: Show a => Context a -> [(FieldName, b)] -> Term a -> Result b
-matchEnum context = matchUnion context . fmap (uncurry matchUnitField)
+matchEnum cx = matchUnion cx . fmap (uncurry matchUnitField)
 
 matchRecord :: Context a -> (M.Map FieldName (Term a) -> Result b) -> Term a -> Result b
-matchRecord context decode term = do
-  term' <- deref context term
+matchRecord cx decode term = do
+  term' <- deref cx term
   case termData term' of
     ExpressionRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail "expected a record"
 
 matchUnion :: Show a => Context a -> [(FieldName, Term a -> Result b)] -> Term a -> Result b
-matchUnion context pairs term = do
-    term' <- deref context term
+matchUnion cx pairs term = do
+    term' <- deref cx term
     case termData term' of
       ExpressionUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname

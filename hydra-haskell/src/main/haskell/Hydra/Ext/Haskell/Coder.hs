@@ -93,9 +93,13 @@ encodeFunction cx meta fun = case fun of
           let rhsTerm = simplifyTerm $ apply fun' (variable v0)
           let v1 = if S.member v0 $ freeVariablesInTerm rhsTerm then v0 else "_"
           let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
-          let args = case fieldMap >>= M.lookup fn of
-                Just (FieldType _ (TypeRecord [])) -> []
-                _ -> [H.PatternName $ hsname v1]
+          args <- case fieldMap >>= M.lookup fn of
+                Just (FieldType _ (TypeRecord [])) -> pure []
+                Just _ -> pure [H.PatternName $ hsname v1]
+                Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show domName
+--                  ++ ": " ++ show fieldMap
+--                  ++ ". metadata: " ++ show meta
+--                  ++ ". function: " ++ show fun
           let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) args
           rhs <- encodeTerm cx rhsTerm
           return $ H.Alternative lhs rhs Nothing
@@ -117,8 +121,15 @@ encodeFunction cx meta fun = case fun of
         typ <- requireType scx name
         return $ Just typ
     domName = case contextTypeOf cx meta of
-      Just (TypeFunction (FunctionType (TypeNominal name) _)) -> Just name
-      Nothing -> Nothing
+        Just typ -> case typ of
+          TypeFunction (FunctionType dom _) -> nomName dom
+          _ -> Nothing
+        Nothing -> Nothing
+      where
+        nomName typ = case typ of
+          TypeNominal name -> Just name
+          TypeUniversal (UniversalType _ body) -> nomName body
+          _ -> Nothing
 
 encodeLiteral :: Literal -> Result H.Expression
 encodeLiteral av = case av of
@@ -137,7 +148,8 @@ encodeLiteral av = case av of
     _ -> unexpected "atomic value" av
 
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
-encodeTerm cx term@(Term expr meta) = case expr of
+encodeTerm cx term@(Term expr meta) = do
+   case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
        ExpressionFunction FunctionData -> encodeTerm cx arg
        _ -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
@@ -150,8 +162,7 @@ encodeTerm cx term@(Term expr meta) = case expr of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encodeTerm cx t
     ExpressionRecord fields -> case sname of
-      Nothing ->
-        case fields of
+      Nothing -> case fields of
           [] -> pure $ H.ExpressionTuple []
           _ -> fail $ "unexpected anonymous record: " ++ show term
       Just name -> do
@@ -198,22 +209,31 @@ encodeType typ = case typ of
       _ -> fail $ "unexpected integer type: " ++ show it
     LiteralTypeString -> pure "String"
     _ -> fail $ "unexpected literal type: " ++ show lt
-  TypeMap (MapType kt vt) -> H.TypeApplication <$> (H.Type_Application
-    <$> (H.TypeApplication <$> (pure (H.Type_Application $ H.TypeVariable $ simpleName "Map")
-      <*> encodeType kt))
-    <*> encodeType vt)
+  TypeMap (MapType kt vt) -> toApplicationType <$> CM.sequence [
+    pure $ H.TypeVariable $ simpleName "Map",
+    encodeType kt,
+    encodeType vt]
   TypeNominal name -> pure $ H.TypeVariable $ simpleName $ localNameOf name
-  TypeOptional ot -> H.TypeApplication <$> (H.Type_Application
-    <$> (pure $ H.TypeVariable $ simpleName "Maybe")
-    <*> encodeType ot)
+  TypeOptional ot -> toApplicationType <$> CM.sequence [
+    pure $ H.TypeVariable $ simpleName "Maybe",
+    encodeType ot]
 --  TypeRecord fields ->
-  TypeSet st -> H.TypeApplication <$> (H.Type_Application
-    <$> (pure $ H.TypeVariable $ simpleName "Set")
-    <*> encodeType st)
+  TypeSet st -> toApplicationType <$> CM.sequence [
+    pure $ H.TypeVariable $ simpleName "Set",
+    encodeType st]
 --  TypeUnion fields ->
---  TypeUniversal ut ->
+  TypeUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
+    pure $ H.TypeVariable $ simpleName v,
+    encodeType body]
 --  TypeVariable v ->
   _ -> fail $ "unexpected type: " ++ show typ
+
+toApplicationType :: [H.Type] -> H.Type
+toApplicationType types = app types
+  where
+    app l = case l of
+      [e] -> e
+      (h:r) -> H.TypeApplication $ H.Type_Application (app r) h
 
 haskellCoder :: (Default a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
 haskellCoder cx typ = do
