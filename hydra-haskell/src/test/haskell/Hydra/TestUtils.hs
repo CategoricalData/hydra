@@ -59,26 +59,26 @@ checkAtomicAdapter = checkAdapter id atomicAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
         languageConstraintsLiteralVariants = S.fromList variants,
-        languageConstraintsFloatVariants = floatVars,
-        languageConstraintsIntegerVariants = integerVars }
+        languageConstraintsFloatTypes = floatVars,
+        languageConstraintsIntegerTypes = integerVars }
       where
-        floatVars = S.fromList [FloatVariantFloat32]
-        integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
+        floatVars = S.fromList [FloatTypeFloat32]
+        integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
 
 checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field Meta -> Field Meta -> H.Expectation
 checkFieldAdapter = checkAdapter id fieldAdapter termTestContext
 
-checkFloatAdapter :: [FloatVariant] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
+checkFloatAdapter :: [FloatType] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
 checkFloatAdapter = checkAdapter id floatAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
-      languageConstraintsFloatVariants = S.fromList variants }
+      languageConstraintsFloatTypes = S.fromList variants }
 
-checkIntegerAdapter :: [IntegerVariant] -> IntegerType -> IntegerType -> Bool -> IntegerValue -> IntegerValue -> H.Expectation
+checkIntegerAdapter :: [IntegerType] -> IntegerType -> IntegerType -> Bool -> IntegerValue -> IntegerValue -> H.Expectation
 checkIntegerAdapter = checkAdapter id integerAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
-      languageConstraintsIntegerVariants = S.fromList variants }
+      languageConstraintsIntegerTypes = S.fromList variants }
 
 checkTermAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term Meta -> Term Meta -> H.Expectation
 checkTermAdapter = checkAdapter stripMeta termAdapter termTestContext
@@ -87,12 +87,12 @@ termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
     languageConstraintsTypeVariants = S.fromList variants,
     languageConstraintsLiteralVariants = atomicVars,
-    languageConstraintsFloatVariants = floatVars,
-    languageConstraintsIntegerVariants = integerVars }
+    languageConstraintsFloatTypes = floatVars,
+    languageConstraintsIntegerTypes = integerVars }
   where
     atomicVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
-    floatVars = S.fromList [FloatVariantFloat32]
-    integerVars = S.fromList [IntegerVariantInt16, IntegerVariantInt32]
+    floatVars = S.fromList [FloatTypeFloat32]
+    integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
 
 isFailure :: Result a -> Bool
 isFailure r = case r of

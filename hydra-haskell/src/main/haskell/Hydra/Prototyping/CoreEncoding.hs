@@ -6,11 +6,9 @@ module Hydra.Prototyping.CoreEncoding (
     encodeField,
     encodeFieldType,
     encodeFloatType,
-    encodeFloatVariant,
     encodeFunction,
     encodeFunctionType,
     encodeIntegerType,
-    encodeIntegerVariant,
     encodeLambda,
     encodeTerm,
     encodeType,
@@ -67,12 +65,6 @@ encodeFloatType cx ft = nominalUnitVariant cx _FloatType $ case ft of
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
-encodeFloatVariant :: Default a => Context a -> FloatVariant -> Term a
-encodeFloatVariant cx fv = nominalUnitVariant cx _FloatVariant $ case fv of
-  FloatVariantBigfloat -> _FloatVariant_bigfloat
-  FloatVariantFloat32 -> _FloatVariant_float32
-  FloatVariantFloat64 -> _FloatVariant_float64
-
 encodeFunction :: (Default a, Ord a) => Context a -> Function a -> Term a
 encodeFunction cx f = case f of
   FunctionCases cases -> nominalVariant cx _Function _Function_cases $ list $ encodeField cx <$> cases
@@ -98,18 +90,6 @@ encodeIntegerType cx it = nominalUnitVariant cx _IntegerType $ case it of
   IntegerTypeUint16 -> _IntegerType_uint16
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
-
-encodeIntegerVariant :: Default a => Context a -> IntegerVariant -> Term a
-encodeIntegerVariant cx iv = nominalUnitVariant cx _IntegerVariant $ case iv of
-  IntegerVariantBigint -> _IntegerVariant_bigint
-  IntegerVariantInt8 -> _IntegerVariant_int8
-  IntegerVariantInt16 -> _IntegerVariant_int16
-  IntegerVariantInt32 -> _IntegerVariant_int32
-  IntegerVariantInt64 -> _IntegerVariant_int64
-  IntegerVariantUint8 -> _IntegerVariant_uint8
-  IntegerVariantUint16 -> _IntegerVariant_uint16
-  IntegerVariantUint32 -> _IntegerVariant_uint32
-  IntegerVariantUint64 -> _IntegerVariant_uint64
 
 encodeLambda :: (Default a, Ord a) => Context a -> Lambda a -> Term a
 encodeLambda cx (Lambda v b) = nominalRecord cx _Lambda [

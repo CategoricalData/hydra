@@ -16,9 +16,9 @@ module Hydra.Adapter
   , _Adapter_target
   , _Language
   , _Language_Constraints
-  , _Language_Constraints_floatVariants
+  , _Language_Constraints_floatTypes
   , _Language_Constraints_functionVariants
-  , _Language_Constraints_integerVariants
+  , _Language_Constraints_integerTypes
   , _Language_Constraints_literalVariants
   , _Language_Constraints_termVariants
   , _Language_Constraints_typeVariants
@@ -72,12 +72,12 @@ data Language_Constraints
   = Language_Constraints
     -- | @type set: hydra/core.LiteralVariant
     { languageConstraintsLiteralVariants :: (Set (LiteralVariant))
-    -- | @type set: hydra/core.FloatVariant
-    , languageConstraintsFloatVariants :: (Set (FloatVariant))
+    -- | @type set: hydra/core.FloatType
+    , languageConstraintsFloatTypes :: (Set (FloatType))
     -- | @type set: hydra/core.FunctionVariant
     , languageConstraintsFunctionVariants :: (Set (FunctionVariant))
-    -- | @type set: hydra/core.IntegerVariant
-    , languageConstraintsIntegerVariants :: (Set (IntegerVariant))
+    -- | @type set: hydra/core.IntegerType
+    , languageConstraintsIntegerTypes :: (Set (IntegerType))
     -- | @type set: hydra/core.TermVariant
     , languageConstraintsTermVariants :: (Set (TermVariant))
     -- | @type set: hydra/core.TypeVariant
@@ -109,9 +109,9 @@ _Adapter_step = "step" :: String
 _Adapter_target = "target" :: String
 _Language = "hydra/adapter.Language" :: String
 _Language_Constraints = "hydra/adapter.Language_Constraints" :: String
-_Language_Constraints_floatVariants = "floatVariants" :: String
+_Language_Constraints_floatTypes = "floatTypes" :: String
 _Language_Constraints_functionVariants = "functionVariants" :: String
-_Language_Constraints_integerVariants = "integerVariants" :: String
+_Language_Constraints_integerTypes = "integerTypes" :: String
 _Language_Constraints_literalVariants = "literalVariants" :: String
 _Language_Constraints_termVariants = "termVariants" :: String
 _Language_Constraints_typeVariants = "typeVariants" :: String

@@ -13,25 +13,25 @@ testFloatAdapter = H.describe "Test floating-point adapter" $ do
 
   H.it "upgrade float32 to bigfloat, since float32 and float64 are unsupported" $
     QC.property $ \f -> checkFloatAdapter
-      [FloatVariantBigfloat]
+      [FloatTypeBigfloat]
       FloatTypeFloat32 FloatTypeBigfloat False
       (FloatValueFloat32 f) (FloatValueBigfloat $ realToFrac f)
 
   H.it "downgrade bigfloat to float64" $
     QC.property $ \d -> checkFloatAdapter
-      [FloatVariantFloat32, FloatVariantFloat64]
+      [FloatTypeFloat32, FloatTypeFloat64]
       FloatTypeBigfloat FloatTypeFloat64 True
       (FloatValueBigfloat d) (FloatValueFloat64 $ realToFrac d)
 
   H.it "downgrade bigfloat to float32, since float64 is unsupported" $
     QC.property $ \d -> checkFloatAdapter
-      [FloatVariantFloat32]
+      [FloatTypeFloat32]
       FloatTypeBigfloat FloatTypeFloat32 True
       (FloatValueBigfloat d) (FloatValueFloat32 $ realToFrac d)
   
   H.it "bigfloat is supported and remains unchanged" $
     QC.property $ \d -> checkFloatAdapter
-      [FloatVariantFloat32, FloatVariantBigfloat]
+      [FloatTypeFloat32, FloatTypeBigfloat]
       FloatTypeBigfloat FloatTypeBigfloat False
       (FloatValueBigfloat d) (FloatValueBigfloat d)
 
@@ -40,31 +40,31 @@ testIntegerAdapter = H.describe "Test integer adapter" $ do
 
   H.it "upgrade uint8 to uint16, not int16" $
     QC.property $ \b -> checkIntegerAdapter
-      [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantBigint]
+      [IntegerTypeInt16, IntegerTypeUint16, IntegerTypeBigint]
       IntegerTypeUint8 IntegerTypeUint16 False
       (IntegerValueUint8 b) (IntegerValueUint16 $ fromIntegral b)
 
   H.it "upgrade int8 to int16, not uint16" $
     QC.property $ \b -> checkIntegerAdapter
-      [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantBigint]
+      [IntegerTypeInt16, IntegerTypeUint16, IntegerTypeBigint]
       IntegerTypeInt8 IntegerTypeInt16 False
       (IntegerValueInt8 b) (IntegerValueInt16 $ fromIntegral b)
 
   H.it "upgrade uint8 to int16 when uint16 is not supported" $
     QC.property $ \b -> checkIntegerAdapter
-      [IntegerVariantInt16, IntegerVariantInt32, IntegerVariantBigint]
+      [IntegerTypeInt16, IntegerTypeInt32, IntegerTypeBigint]
       IntegerTypeUint8 IntegerTypeInt16 False
       (IntegerValueUint8 b) (IntegerValueInt16 $ fromIntegral b)
 
   H.it "cross-convert uint32 to int32, even when uint16 is supported" $
     QC.property $ \b -> checkIntegerAdapter
-      [IntegerVariantUint16, IntegerVariantInt32]
+      [IntegerTypeUint16, IntegerTypeInt32]
       IntegerTypeUint32 IntegerTypeInt32 True
       (IntegerValueUint32 b) (IntegerValueInt32 $ fromIntegral b)
 
   H.it "downgrade bigint to int32, not uint32" $
     QC.property $ \b -> checkIntegerAdapter
-      [IntegerVariantInt16, IntegerVariantUint16, IntegerVariantInt32, IntegerVariantUint32]
+      [IntegerTypeInt16, IntegerTypeUint16, IntegerTypeInt32, IntegerTypeUint32]
       IntegerTypeBigint IntegerTypeInt32 True
       (IntegerValueBigint b) (IntegerValueInt32 $ fromIntegral b)
 

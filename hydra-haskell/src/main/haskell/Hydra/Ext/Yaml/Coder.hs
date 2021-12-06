@@ -117,9 +117,9 @@ yamlLanguage :: Language
 yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
-  languageConstraintsFloatVariants = S.fromList [FloatVariantBigfloat],
+  languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
   languageConstraintsFunctionVariants = S.empty,
-  languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint],
+  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
   languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
