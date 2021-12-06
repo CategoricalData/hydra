@@ -30,11 +30,11 @@ nominalMatch cx name cod fields = nominalCases cx name cod (fmap toField fields)
   where
     toField (fname, term) = Field fname term
 
-nominalMatchWithVariants :: Default a => Context a -> Name -> Name -> [(FieldName, FieldName)] -> Term a
+nominalMatchWithVariants :: Context Meta -> Type -> Type -> [(FieldName, FieldName)] -> Term Meta
 nominalMatchWithVariants cx dom cod = withType cx ft . cases . fmap toField
   where
-    ft = functionType (nominalType dom) (nominalType cod)
-    toField (from, to) = Field from $ constFunction $ nominalUnitVariant cx cod to
+    ft = functionType dom cod
+    toField (from, to) = Field from $ constFunction $ withType cx cod $ unitVariant to -- nominalUnitVariant cx cod to
 
 nominalProjection :: Default a => Context a -> Name -> FieldName -> Type -> Term a
 nominalProjection cx name fname ftype = withType cx (functionType (nominalType name) ftype) $ projection fname

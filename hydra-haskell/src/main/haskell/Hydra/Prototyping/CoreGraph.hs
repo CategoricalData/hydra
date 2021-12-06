@@ -131,9 +131,12 @@ hcExpression cx = typeElement cx _Expression $ TypeUnion [
   FieldType _Expression_function $ TypeNominal _Function,
   FieldType _Expression_list $ TypeList $ TypeNominal _Term,
   FieldType _Expression_map $ TypeMap $ MapType (TypeNominal _Term) (TypeNominal _Term),
+  FieldType _Expression_nominal $ TypeNominal _NominalTerm,
   FieldType _Expression_optional $ TypeOptional $ TypeNominal _Term,
   FieldType _Expression_record $ TypeList $ TypeNominal _Field,
   FieldType _Expression_set $ TypeSet $ TypeNominal _Term,
+  FieldType _Expression_typeAbstraction $ TypeNominal _TypeAbstraction,
+  FieldType _Expression_typeApplication $ TypeNominal _TypeApplication,
   FieldType _Expression_union $ TypeNominal _Field,
   FieldType _Expression_variable $ TypeNominal _Variable]
 
@@ -175,7 +178,7 @@ hcFunction cx = typeElement cx _Function $ TypeUnion [
   FieldType _Function_data unitType,
   FieldType _Function_lambda $ TypeNominal _Lambda,
   FieldType _Function_primitive $ TypeNominal _Name,
-  FieldType _Function_projection $ TypeNominal _FieldType]
+  FieldType _Function_projection $ TypeNominal _FieldName]
 
 hcFunctionType :: Context Meta -> Element Meta
 hcFunctionType cx = typeElement cx _FunctionType $ TypeRecord [
@@ -299,7 +302,9 @@ hcType cx = typeElement cx _Type $ TypeUnion [
   FieldType _Type_optional $ TypeNominal _Type,
   FieldType _Type_record $ TypeList $ TypeNominal _FieldType,
   FieldType _Type_set $ TypeNominal _Type,
-  FieldType _Type_union $ TypeList $ TypeNominal _FieldType]
+  FieldType _Type_union $ TypeList $ TypeNominal _FieldType,
+  FieldType _Type_universal $ TypeNominal _UniversalType,
+  FieldType _Type_variable $ TypeNominal _TypeVariable]
 
 hcTypeVariable :: Context Meta -> Element Meta
 hcTypeVariable cx = typeElement cx _TypeVariable stringType

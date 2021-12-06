@@ -70,6 +70,8 @@ describeType t = case t of
   TypeRecord _ -> "records of a particular set of fields"
   TypeSet t -> "sets of " ++ describeType t
   TypeUnion _ -> "unions of a particular set of fields"
+  TypeUniversal _ -> "polymorphic terms"
+  TypeVariable _ -> "unspecified/parameteric terms"
 
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]

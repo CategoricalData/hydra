@@ -35,9 +35,7 @@ freeVariablesInTerm term = case termData term of
 
 replaceTerm :: Ord a => TraversalOrder -> (Term a -> Y.Maybe (Term a)) -> Term a -> Term a
 replaceTerm order rep term = case order of
-    TraversalOrderPre -> case rep term of
-      Nothing -> term
-      Just term' -> recurse term'
+    TraversalOrderPre -> Y.maybe term recurse (rep term)
     TraversalOrderPost -> Y.fromMaybe term $ rep $ recurse term
   where
     replace = replaceTerm order rep
