@@ -23,13 +23,15 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
     dataTerms = const True -- TODO
     schemaGraph = "hydra/core"
     elements = (\f -> f cx) <$> [
-        basicsFloatTypeVariant,
+        basicsFloatTypePrecision,
+        basicsFloatTypes,
         basicsFloatValueType,
-        basicsFloatValueVariant,
         basicsFunctionVariant,
-        basicsIntegerTypeVariant,
+        basicsFunctionVariants,
+        basicsIntegerTypeIsSigned,
+        basicsIntegerTypePrecision,
+        basicsIntegerTypes,
         basicsIntegerValueType,
-        basicsIntegerValueVariant,
         basicsLiteralType,
         basicsLiteralTypeVariant,
         basicsLiteralVariant,
@@ -39,14 +41,29 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
         basicsTypeVariant,
         basicsTypeVariants]
 
-basicsFloatTypeVariant :: Context Meta -> Element Meta
-basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant"
-  "Find the float type variant (constructor) for a given float type"
-  (nominalType _FloatType) (nominalType _FloatType) $
-  nominalMatchWithVariants cx (nominalType _FloatType) (nominalType _FloatType) [
-    (_FloatType_bigfloat, _FloatType_bigfloat),
-    (_FloatType_float32,  _FloatType_float32),
-    (_FloatType_float64,  _FloatType_float64)]
+floatTypePrecision :: FloatType -> Precision
+floatTypePrecision v = case v of
+  FloatTypeBigfloat -> PrecisionArbitrary
+  FloatTypeFloat32 -> PrecisionBits 32
+  FloatTypeFloat64 -> PrecisionBits 64
+
+basicsFloatTypePrecision :: Context Meta -> Element Meta
+basicsFloatTypePrecision cx = basicsFunction cx "floatTypePrecision"
+  "Find the precision of a given floating-point type"
+  (nominalType _FloatType) (nominalType _Precision) $
+  nominalMatch cx _FloatType (nominalType _Precision) [
+    (_FloatType_bigfloat, nominalWithUnitVariant cx _Precision _Precision_arbitrary),
+    (_FloatType_float32, nominalWithVariant cx _Precision _Precision_bits (int32Value 32)),
+    (_FloatType_float64, nominalWithVariant cx _Precision _Precision_bits (int32Value 64))]
+
+basicsFloatTypes :: Context Meta -> Element Meta
+basicsFloatTypes cx = basicsElement cx "floatTypes"
+    "All floating-point types in a canonical order"
+    (listType $ nominalType _FloatType)
+    (list $ withType cx (nominalType _FloatType) . unitVariant <$> [
+      _FloatType_bigfloat,
+      _FloatType_float32,
+      _FloatType_float64])
 
 basicsFloatValueType :: Context Meta -> Element Meta
 basicsFloatValueType cx = basicsFunction cx "floatValueType"
@@ -56,12 +73,6 @@ basicsFloatValueType cx = basicsFunction cx "floatValueType"
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
-
-basicsFloatValueVariant :: Context Meta -> Element Meta
-basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant"
-  "Find the float variant (constructor) for a given floating-point value"
-  (nominalType _FloatValue) (nominalType _FloatType) $
-  compose (elementRef $ basicsFloatTypeVariant cx) (elementRef $ basicsFloatValueType cx)
 
 basicsFunctionVariant :: Context Meta -> Element Meta
 basicsFunctionVariant cx = basicsFunction cx "functionVariant"
@@ -75,20 +86,62 @@ basicsFunctionVariant cx = basicsFunction cx "functionVariant"
     (_Function_primitive,  _FunctionVariant_primitive),
     (_Function_projection, _FunctionVariant_projection)]
 
-basicsIntegerTypeVariant :: Context Meta -> Element Meta
-basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant"
-  "Find the integer variant (constructor) for a given integer type"
-  (nominalType _IntegerType) (nominalType _IntegerType) $
-  nominalMatchWithVariants cx (nominalType _IntegerType) (nominalType _IntegerType) [
-    (_IntegerType_bigint, _IntegerType_bigint),
-    (_IntegerType_int8,   _IntegerType_int8),
-    (_IntegerType_int16,  _IntegerType_int16),
-    (_IntegerType_int32,  _IntegerType_int32),
-    (_IntegerType_int64,  _IntegerType_int64),
-    (_IntegerType_uint8,  _IntegerType_uint8),
-    (_IntegerType_uint16, _IntegerType_uint16),
-    (_IntegerType_uint32, _IntegerType_uint32),
-    (_IntegerType_uint64, _IntegerType_uint64)]
+basicsFunctionVariants :: Context Meta -> Element Meta
+basicsFunctionVariants cx = basicsElement cx "functionVariants"
+    "All function variants (constructors), in a canonical order"
+    (listType $ nominalType _FunctionVariant)
+    (list $ withType cx (nominalType _FunctionVariant) . unitVariant <$> [
+      _FunctionVariant_cases,
+      _FunctionVariant_compareTo,
+      _FunctionVariant_data,
+      _FunctionVariant_primitive,
+      _FunctionVariant_lambda,
+      _FunctionVariant_projection])
+
+basicsIntegerTypeIsSigned :: Context Meta -> Element Meta
+basicsIntegerTypeIsSigned cx = basicsFunction cx "integerTypeIsSigned"
+  "Find whether a given integer type is signed (true) or unsigned (false)"
+  (nominalType _IntegerType) booleanType $
+  nominalMatch cx _IntegerType booleanType [
+    (_IntegerType_bigint, constFunction $ booleanValue True),
+    (_IntegerType_int8, constFunction $ booleanValue True),
+    (_IntegerType_int16, constFunction $ booleanValue True),
+    (_IntegerType_int32, constFunction $ booleanValue True),
+    (_IntegerType_int64, constFunction $ booleanValue True),
+    (_IntegerType_uint8, constFunction $ booleanValue False),
+    (_IntegerType_uint16, constFunction $ booleanValue False),
+    (_IntegerType_uint32, constFunction $ booleanValue False),
+    (_IntegerType_uint64, constFunction $ booleanValue False)]
+
+basicsIntegerTypePrecision :: Context Meta -> Element Meta
+basicsIntegerTypePrecision cx = basicsFunction cx "integerTypePrecision"
+  "Find the precision of a given integer type"
+  (nominalType _IntegerType) (nominalType _Precision) $
+  nominalMatch cx _IntegerType (nominalType _Precision) [
+    (_IntegerType_bigint, nominalWithUnitVariant cx _Precision _Precision_arbitrary),
+    (_IntegerType_int8, nominalWithVariant cx _Precision _Precision_bits (int32Value 8)),
+    (_IntegerType_int16, nominalWithVariant cx _Precision _Precision_bits (int32Value 16)),
+    (_IntegerType_int32, nominalWithVariant cx _Precision _Precision_bits (int32Value 32)),
+    (_IntegerType_int64, nominalWithVariant cx _Precision _Precision_bits (int32Value 64)),
+    (_IntegerType_uint8, nominalWithVariant cx _Precision _Precision_bits (int32Value 8)),
+    (_IntegerType_uint16, nominalWithVariant cx _Precision _Precision_bits (int32Value 16)),
+    (_IntegerType_uint32, nominalWithVariant cx _Precision _Precision_bits (int32Value 32)),
+    (_IntegerType_uint64, nominalWithVariant cx _Precision _Precision_bits (int32Value 64))]
+
+basicsIntegerTypes :: Context Meta -> Element Meta
+basicsIntegerTypes cx = basicsElement cx "integerTypes"
+    "All integer types, in a canonical order"
+    (listType $ nominalType _IntegerType)
+    (list $ withType cx (nominalType _IntegerType) . unitVariant <$> [
+      _IntegerType_bigint,
+      _IntegerType_int8,
+      _IntegerType_int16,
+      _IntegerType_int32,
+      _IntegerType_int64,
+      _IntegerType_uint8,
+      _IntegerType_uint16,
+      _IntegerType_uint32,
+      _IntegerType_uint64])
 
 basicsIntegerValueType :: Context Meta -> Element Meta
 basicsIntegerValueType cx = basicsFunction cx "integerValueType"
@@ -105,22 +158,16 @@ basicsIntegerValueType cx = basicsFunction cx "integerValueType"
     (_IntegerValue_uint32, _IntegerType_uint32),
     (_IntegerValue_uint64, _IntegerType_uint64)]
 
-basicsIntegerValueVariant :: Context Meta -> Element Meta
-basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant"
-  "Find the integer variant (constructor) for a given integer value"
-  (nominalType _IntegerValue) (nominalType _IntegerType) $
-  compose (elementRef $ basicsIntegerTypeVariant cx) (elementRef $ basicsIntegerValueType cx)
-
 basicsLiteralType :: Context Meta -> Element Meta
 basicsLiteralType cx = basicsFunction cx "literalType"
   "Find the literal type for a given literal value"
   (nominalType _Literal) (nominalType _LiteralType) $
   nominalMatch cx _Literal (nominalType _LiteralType) [
-    (_Literal_binary,  nominalWithVariant cx  _LiteralType _LiteralType_binary),
-    (_Literal_boolean, nominalWithVariant cx  _LiteralType _LiteralType_boolean),
+    (_Literal_binary,  nominalWithUnitVariant cx  _LiteralType _LiteralType_binary),
+    (_Literal_boolean, nominalWithUnitVariant cx  _LiteralType _LiteralType_boolean),
     (_Literal_float,   nominalWithFunction cx _LiteralType _LiteralType_float (basicsFloatValueType cx)),
     (_Literal_integer, nominalWithFunction cx _LiteralType _LiteralType_integer (basicsIntegerValueType cx)),
-    (_Literal_string,  nominalWithVariant cx  _LiteralType _LiteralType_string)]
+    (_Literal_string,  nominalWithUnitVariant cx  _LiteralType _LiteralType_string)]
 
 basicsLiteralTypeVariant :: Context Meta -> Element Meta
 basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
@@ -156,6 +203,7 @@ basicsTermVariant cx = basicsFunction cx "termVariant"
   (universal "a" $ nominalType _Term) (nominalType _TermVariant) $
   lambda "term" $ apply
     (nominalMatchWithVariants cx (universal "a" $ nominalType _Expression) (nominalType _TermVariant) [
+          (_Expression_application,     _TermVariant_application),
           (_Expression_element,         _TermVariant_element),
           (_Expression_function,        _TermVariant_function),
           (_Expression_list,            _TermVariant_list),

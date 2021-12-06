@@ -5,7 +5,7 @@ module Hydra.Prototyping.Adapters.Atomic (
 ) where
 
 import Hydra.Core
-import Hydra.Prototyping.Basics
+import Hydra.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
@@ -74,6 +74,12 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
               LiteralTypeBinary -> LiteralBinary s
               LiteralTypeBoolean -> LiteralBoolean $ if s == "true" then BooleanValueTrue else BooleanValueFalse
               _ -> read s
+
+comparePrecision :: Precision -> Precision -> Ordering
+comparePrecision p1 p2 = if p1 == p2 then EQ else case (p1, p2) of
+  (PrecisionArbitrary, _) -> GT
+  (_, PrecisionArbitrary) -> LT
+  (PrecisionBits b1, PrecisionBits b2) -> compare b1 b2
 
 disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target

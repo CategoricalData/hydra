@@ -4,9 +4,10 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Adapters.Term
 import Hydra.Prototyping.Adapters.Utils
-import Hydra.Prototyping.Basics
+import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
+import Hydra.Prototyping.CoreLanguage 
 import Hydra.Adapter
 
 import Hydra.TestData
