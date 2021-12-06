@@ -11,13 +11,11 @@ module Hydra.Prototyping.CoreGraph (
   hcFieldType,
   hcFloatType,
   hcFloatValue,
-  hcFloatVariant,
   hcFunction,
   hcFunctionType,
   hcFunctionVariant,
   hcIntegerType,
   hcIntegerValue,
-  hcIntegerVariant,
   hcLambda,
   hcLiteral,
   hcLiteralType,
@@ -75,13 +73,12 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hcFieldType,
       hcFloatType,
       hcFloatValue,
-      hcFloatVariant,
+      hcFloatType,
       hcFunction,
       hcFunctionType,
       hcFunctionVariant,
       hcIntegerType,
       hcIntegerValue,
-      hcIntegerVariant,
       hcLambda,
       hcLiteral,
       hcLiteralType,
@@ -165,12 +162,6 @@ hcFloatValue cx = typeElement cx _FloatValue $ TypeUnion [
   FieldType _FloatValue_float32 float32Type,
   FieldType _FloatValue_float64 float64Type]
 
-hcFloatVariant :: Context Meta -> Element Meta
-hcFloatVariant cx = typeElement cx _FloatVariant $ enum [
-  _FloatVariant_bigfloat,
-  _FloatVariant_float32,
-  _FloatVariant_float64]
-
 hcFunction :: Context Meta -> Element Meta
 hcFunction cx = typeElement cx _Function $ TypeUnion [
   FieldType _Function_cases $ TypeList $ TypeNominal _Field,
@@ -217,18 +208,6 @@ hcIntegerValue cx = typeElement cx _IntegerValue $ TypeUnion [
   FieldType _IntegerValue_uint16 uint16Type,
   FieldType _IntegerValue_uint32 uint32Type,
   FieldType _IntegerValue_uint64 uint64Type]
-
-hcIntegerVariant :: Context Meta -> Element Meta
-hcIntegerVariant cx = typeElement cx _IntegerVariant $ enum [
-  _IntegerVariant_bigint,
-  _IntegerVariant_int8,
-  _IntegerVariant_int16,
-  _IntegerVariant_int32,
-  _IntegerVariant_int64,
-  _IntegerVariant_uint8,
-  _IntegerVariant_uint16,
-  _IntegerVariant_uint32,
-  _IntegerVariant_uint64]
 
 hcLambda :: Context Meta -> Element Meta
 hcLambda cx = typeElement cx _Lambda $ TypeRecord [

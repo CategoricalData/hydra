@@ -243,13 +243,6 @@ definitions:
               precision:
                 bits: 64
 
-  - name: FloatVariant
-    type:
-      enum:
-        - bigfloat
-        - float32
-        - float64
-
   - name: Function
     type:
       union:
@@ -387,19 +380,6 @@ definitions:
               precision:
                 bits: 64
               signed: false
-
-  - name: IntegerVariant
-    type:
-      enum:
-        - bigint
-        - int8
-        - int16
-        - int32
-        - int64
-        - uint8
-        - uint16
-        - uint32
-        - uint64
 
   - name: Lambda
     description: "A function abstraction (lambda)"

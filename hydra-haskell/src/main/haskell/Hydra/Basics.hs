@@ -2,23 +2,12 @@ module Hydra.Basics where
 
 import Hydra.Core
 
--- Find the float type variant (constructor) for a given float type
-floatTypeVariant :: (FloatType -> FloatVariant)
-floatTypeVariant x = case x of
-  FloatTypeBigfloat -> FloatVariantBigfloat
-  FloatTypeFloat32 -> FloatVariantFloat32
-  FloatTypeFloat64 -> FloatVariantFloat64
-
 -- Find the float type for a given floating-point value
 floatValueType :: (FloatValue -> FloatType)
 floatValueType x = case x of
   FloatValueBigfloat _ -> FloatTypeBigfloat
   FloatValueFloat32 _ -> FloatTypeFloat32
   FloatValueFloat64 _ -> FloatTypeFloat64
-
--- Find the float variant (constructor) for a given floating-point value
-floatValueVariant :: (FloatValue -> FloatVariant)
-floatValueVariant x = (floatTypeVariant (floatValueType x))
 
 -- Find the function variant (constructor) for a given function
 functionVariant :: (Function a -> FunctionVariant)
@@ -29,19 +18,6 @@ functionVariant x = case x of
   FunctionLambda _ -> FunctionVariantLambda
   FunctionPrimitive _ -> FunctionVariantPrimitive
   FunctionProjection _ -> FunctionVariantProjection
-
--- Find the integer variant (constructor) for a given integer type
-integerTypeVariant :: (IntegerType -> IntegerVariant)
-integerTypeVariant x = case x of
-  IntegerTypeBigint -> IntegerVariantBigint
-  IntegerTypeInt8 -> IntegerVariantInt8
-  IntegerTypeInt16 -> IntegerVariantInt16
-  IntegerTypeInt32 -> IntegerVariantInt32
-  IntegerTypeInt64 -> IntegerVariantInt64
-  IntegerTypeUint8 -> IntegerVariantUint8
-  IntegerTypeUint16 -> IntegerVariantUint16
-  IntegerTypeUint32 -> IntegerVariantUint32
-  IntegerTypeUint64 -> IntegerVariantUint64
 
 -- Find the integer type for a given integer value
 integerValueType :: (IntegerValue -> IntegerType)
@@ -55,10 +31,6 @@ integerValueType x = case x of
   IntegerValueUint16 _ -> IntegerTypeUint16
   IntegerValueUint32 _ -> IntegerTypeUint32
   IntegerValueUint64 _ -> IntegerTypeUint64
-
--- Find the integer variant (constructor) for a given integer value
-integerValueVariant :: (IntegerValue -> IntegerVariant)
-integerValueVariant x = (integerTypeVariant (integerValueType x))
 
 -- Find the literal type variant (constructor) for a given literal value
 literalTypeVariant :: (LiteralType -> LiteralVariant)

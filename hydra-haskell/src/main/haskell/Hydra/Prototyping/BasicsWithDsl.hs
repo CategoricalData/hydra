@@ -42,11 +42,11 @@ basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
 basicsFloatTypeVariant :: Context Meta -> Element Meta
 basicsFloatTypeVariant cx = basicsFunction cx "floatTypeVariant"
   "Find the float type variant (constructor) for a given float type"
-  (nominalType _FloatType) (nominalType _FloatVariant) $
-  nominalMatchWithVariants cx (nominalType _FloatType) (nominalType _FloatVariant) [
-    (_FloatType_bigfloat, _FloatVariant_bigfloat),
-    (_FloatType_float32,  _FloatVariant_float32),
-    (_FloatType_float64,  _FloatVariant_float64)]
+  (nominalType _FloatType) (nominalType _FloatType) $
+  nominalMatchWithVariants cx (nominalType _FloatType) (nominalType _FloatType) [
+    (_FloatType_bigfloat, _FloatType_bigfloat),
+    (_FloatType_float32,  _FloatType_float32),
+    (_FloatType_float64,  _FloatType_float64)]
 
 basicsFloatValueType :: Context Meta -> Element Meta
 basicsFloatValueType cx = basicsFunction cx "floatValueType"
@@ -60,7 +60,7 @@ basicsFloatValueType cx = basicsFunction cx "floatValueType"
 basicsFloatValueVariant :: Context Meta -> Element Meta
 basicsFloatValueVariant cx = basicsFunction cx "floatValueVariant"
   "Find the float variant (constructor) for a given floating-point value"
-  (nominalType _FloatValue) (nominalType _FloatVariant) $
+  (nominalType _FloatValue) (nominalType _FloatType) $
   compose (elementRef $ basicsFloatTypeVariant cx) (elementRef $ basicsFloatValueType cx)
 
 basicsFunctionVariant :: Context Meta -> Element Meta
@@ -78,17 +78,17 @@ basicsFunctionVariant cx = basicsFunction cx "functionVariant"
 basicsIntegerTypeVariant :: Context Meta -> Element Meta
 basicsIntegerTypeVariant cx = basicsFunction cx "integerTypeVariant"
   "Find the integer variant (constructor) for a given integer type"
-  (nominalType _IntegerType) (nominalType _IntegerVariant) $
-  nominalMatchWithVariants cx (nominalType _IntegerType) (nominalType _IntegerVariant) [
-    (_IntegerType_bigint, _IntegerVariant_bigint),
-    (_IntegerType_int8,   _IntegerVariant_int8),
-    (_IntegerType_int16,  _IntegerVariant_int16),
-    (_IntegerType_int32,  _IntegerVariant_int32),
-    (_IntegerType_int64,  _IntegerVariant_int64),
-    (_IntegerType_uint8,  _IntegerVariant_uint8),
-    (_IntegerType_uint16, _IntegerVariant_uint16),
-    (_IntegerType_uint32, _IntegerVariant_uint32),
-    (_IntegerType_uint64, _IntegerVariant_uint64)]
+  (nominalType _IntegerType) (nominalType _IntegerType) $
+  nominalMatchWithVariants cx (nominalType _IntegerType) (nominalType _IntegerType) [
+    (_IntegerType_bigint, _IntegerType_bigint),
+    (_IntegerType_int8,   _IntegerType_int8),
+    (_IntegerType_int16,  _IntegerType_int16),
+    (_IntegerType_int32,  _IntegerType_int32),
+    (_IntegerType_int64,  _IntegerType_int64),
+    (_IntegerType_uint8,  _IntegerType_uint8),
+    (_IntegerType_uint16, _IntegerType_uint16),
+    (_IntegerType_uint32, _IntegerType_uint32),
+    (_IntegerType_uint64, _IntegerType_uint64)]
 
 basicsIntegerValueType :: Context Meta -> Element Meta
 basicsIntegerValueType cx = basicsFunction cx "integerValueType"
@@ -108,7 +108,7 @@ basicsIntegerValueType cx = basicsFunction cx "integerValueType"
 basicsIntegerValueVariant :: Context Meta -> Element Meta
 basicsIntegerValueVariant cx = basicsFunction cx "integerValueVariant"
   "Find the integer variant (constructor) for a given integer value"
-  (nominalType _IntegerValue) (nominalType _IntegerVariant) $
+  (nominalType _IntegerValue) (nominalType _IntegerType) $
   compose (elementRef $ basicsIntegerTypeVariant cx) (elementRef $ basicsIntegerValueType cx)
 
 basicsLiteralType :: Context Meta -> Element Meta

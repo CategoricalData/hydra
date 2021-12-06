@@ -51,13 +51,13 @@ testsForTypeVariantFunctions = do
       QC.property $ \ft ->
         testEvaluate (apply (elementRefByName "hydra/basics.floatTypeVariant") (encodeFloatType testContext ft))
         `H.shouldBe`
-        pure (stripMeta $ encodeFloatVariant testContext $ floatTypeVariant ft)
+        pure (stripMeta $ encodeFloatType testContext ft)
 
     H.it "Test integerTypeVariant function element" $
       QC.property $ \at ->
         testEvaluate (apply (elementRefByName "hydra/basics.integerTypeVariant") (encodeIntegerType testContext at))
         `H.shouldBe`
-        pure (stripMeta $ encodeIntegerVariant testContext $ integerTypeVariant at)
+        pure (stripMeta $ encodeIntegerType testContext at)
 
     H.it "Test typeVariant function element" $
       QC.property $ \t ->

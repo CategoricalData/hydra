@@ -54,9 +54,9 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
     supported = literalTypeIsSupported constraints
     constraints = languageConstraints $ adapterContextTarget context
     noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants constraints)
-      || S.null (languageConstraintsFloatVariants constraints)
+      || S.null (languageConstraintsFloatTypes constraints)
     noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants constraints)
-      || S.null (languageConstraintsIntegerVariants constraints)
+      || S.null (languageConstraintsIntegerTypes constraints)
     noStrings = not $ supported LiteralTypeString
     fallbackAdapter t = if noStrings
         then fail "cannot serialize unsupported type; strings are unsupported"

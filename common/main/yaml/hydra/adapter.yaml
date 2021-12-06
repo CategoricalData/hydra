@@ -65,17 +65,17 @@ definitions:
               type:
                 set: core.LiteralVariant
 
-            - name: floatVariants
+            - name: floatTypes
               type:
-                set: core.FloatVariant
+                set: core.FloatType
 
             - name: functionVariants
               type:
                 set: core.FunctionVariant
 
-            - name: integerVariants
+            - name: integerTypes
               type:
-                set: core.IntegerVariant
+                set: core.IntegerType
 
             - name: termVariants
               type:

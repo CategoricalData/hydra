@@ -248,12 +248,12 @@ haskellLanguage :: Language
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
-  languageConstraintsFloatVariants = S.fromList [
+  languageConstraintsFloatTypes = S.fromList [
     -- Bigfloat is excluded for now
-    FloatVariantFloat32,
-    FloatVariantFloat64],
+    FloatTypeFloat32,
+    FloatTypeFloat64],
   languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerVariants = S.fromList [IntegerVariantBigint, IntegerVariantInt32],
+  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint, IntegerTypeInt32],
   languageConstraintsTermVariants = S.fromList [
     -- No native maps or sets
     TermVariantApplication,

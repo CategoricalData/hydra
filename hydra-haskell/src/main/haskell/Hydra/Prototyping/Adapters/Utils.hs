@@ -84,10 +84,10 @@ literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (langua
     _ -> True
 
 floatTypeIsSupported :: Language_Constraints -> FloatType -> Bool
-floatTypeIsSupported constraints ft = S.member (floatTypeVariant ft) $ languageConstraintsFloatVariants constraints
+floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
 integerTypeIsSupported :: Language_Constraints -> IntegerType -> Bool
-integerTypeIsSupported constraints it = S.member (integerTypeVariant it) $ languageConstraintsIntegerVariants constraints
+integerTypeIsSupported constraints it = S.member it $ languageConstraintsIntegerTypes constraints
 
 typeIsSupported :: Language_Constraints -> Type -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
