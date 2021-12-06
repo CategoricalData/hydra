@@ -1,5 +1,4 @@
 module Hydra.Prototyping.Basics (
-    comparePrecision,
     floatTypePrecision,
     floatValueType,
     floatTypes,
@@ -25,12 +24,6 @@ import Hydra.Adapter
 
 import qualified Data.Set as S
 
-
-comparePrecision :: Precision -> Precision -> Ordering
-comparePrecision p1 p2 = if p1 == p2 then EQ else case (p1, p2) of
-  (PrecisionArbitrary, _) -> GT
-  (_, PrecisionArbitrary) -> LT
-  (PrecisionBits b1, PrecisionBits b2) -> compare b1 b2
 
 floatValueType :: FloatValue -> FloatType
 floatValueType fv = case fv of

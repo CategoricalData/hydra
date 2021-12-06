@@ -5,7 +5,7 @@ module Hydra.Prototyping.Types.Inference (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.Basics
+import Hydra.Basics
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms

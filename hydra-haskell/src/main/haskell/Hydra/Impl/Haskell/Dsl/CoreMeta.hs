@@ -9,6 +9,7 @@ module Hydra.Impl.Haskell.Dsl.CoreMeta (
   nominalUnitVariant,
   nominalVariant,
   nominalWithFunction,
+  nominalWithUnitVariant,
   nominalWithVariant,
   withDoc,
   withType,
@@ -58,8 +59,11 @@ nominalWithFunction :: Default a => Context a -> Name -> FieldName -> Element a 
 nominalWithFunction cx name fname el = lambda var $ nominalVariant cx name fname $ apply (elementRef el) (variable var)
   where var = "x"
 
-nominalWithVariant :: Default a => Context a -> Name -> FieldName -> Term a
-nominalWithVariant cx name fname = constFunction $ nominalUnitVariant cx name fname
+nominalWithUnitVariant :: Default a => Context a -> Name -> FieldName -> Term a
+nominalWithUnitVariant cx name fname = constFunction $ nominalUnitVariant cx name fname
+
+nominalWithVariant :: Default a => Context a -> Name -> FieldName -> Term a -> Term a
+nominalWithVariant cx name fname term = constFunction $ nominalVariant cx name fname term
 
 withType :: Context a -> Type -> Term a -> Term a
 withType cx typ term = term { termMeta = contextSetTypeOf cx (Just typ) (termMeta term)}

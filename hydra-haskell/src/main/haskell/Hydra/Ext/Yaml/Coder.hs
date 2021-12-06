@@ -7,7 +7,8 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.Basics
+import Hydra.Prototyping.CoreLanguage 
+import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Dsl.Terms

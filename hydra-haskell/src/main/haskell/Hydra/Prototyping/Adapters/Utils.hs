@@ -14,7 +14,7 @@ module Hydra.Prototyping.Adapters.Utils (
 ) where
 
 import Hydra.Core
-import Hydra.Prototyping.Basics
+import Hydra.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
