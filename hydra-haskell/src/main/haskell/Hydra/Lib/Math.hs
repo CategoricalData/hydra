@@ -1,47 +1,47 @@
-module Hydra.Lib.Math (
-  mathPrimitives,
-) where
+module Hydra.Lib.Math where
 
-import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Dsl.Prims
 
-import qualified Data.List as L
 
+hsNeg :: Int -> Int
+hsNeg = negate
+
+hsAdd :: Int -> Int -> Int
+hsAdd x y = x + y
+
+hsSub :: Int -> Int -> Int
+hsSub x y = x - y
+
+hsMul :: Int -> Int -> Int
+hsMul x y = x * y
+
+hsDiv :: Int -> Int -> Int
+hsDiv = div
+
+hsMod :: Int -> Int -> Int
+hsMod = mod
+
+hsRem :: Int -> Int -> Int
+hsRem = rem
 
 mathPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 mathPrimitives = [
-  prim "neg" int32Type int32Type
-    $ withInt32 $ int32Value . negate,
-  prim "add" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x + y,
-  prim "sub" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x - y,
-  prim "mul" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x * y,
-  prim "div" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x `div` y,
-  prim "mod" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x `mod` y,
-  prim "rem" int32Type (functionType int32Type int32Type)
-    $ withTwoInt32s $ \x y -> int32Value $ x `rem` y]
-
-int32MathFunc :: String -> Name
-int32MathFunc local = "hydra/lib/math/int32." ++ local
-
-prim :: String -> Type -> Type -> ([Term a] -> Result (Term a)) -> PrimitiveFunction a
-prim nm dom cod impl = PrimitiveFunction {
-  primitiveFunctionName = int32MathFunc nm,
-  primitiveFunctionType = FunctionType dom cod,
-  primitiveFunctionImplementation  = impl}
-
-withInt32 :: Show a => (Int -> Term a) -> [Term a] -> Result (Term a)
-withInt32 func args = do
-  expectNArgs 1 args
-  func <$> expectInt32Term (L.head args)
-
-withTwoInt32s :: Show a => (Int -> Int -> Term a) -> [Term a] -> Result (Term a)
-withTwoInt32s func args = do
-  expectNArgs 2 args
-  func <$> expectInt32Term (L.head args) <*> expectInt32Term (args !! 1)
+    int32Prim "neg" [int32Type, int32Type]
+      $ withInt32 int32Value hsNeg,
+    int32Prim "add" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsAdd,
+    int32Prim "sub" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsSub,
+    int32Prim "mul" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsMul,
+    int32Prim "div" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsDiv,
+    int32Prim "mod" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsMod,
+    int32Prim "rem" [int32Type, int32Type, int32Type]
+      $ withTwoInt32s int32Value hsRem]
+  where
+    int32Prim = prim "hydra/lib/math/int32" 
