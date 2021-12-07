@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Lib.Math (
+module Hydra.Lib.Math (
   mathPrimitives,
 ) where
 
