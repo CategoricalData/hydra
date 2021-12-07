@@ -37,32 +37,35 @@ testsForPrimitiveFunctions = do
   H.describe "Tests for primitive functions" $ do
 
     H.it "Example primitives have the expected arity" $ do
-      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "toUpper"))
+      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsPrim "toUpper"))
         `H.shouldBe` Just 1
-      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsFunc "cat"))
+      (primitiveFunctionArity <$> lookupPrimitiveFunction testContext (stringsPrim "cat"))
         `H.shouldBe` Just 2
 
     H.it "Simple applications of a unary function succeed" $
       QC.property $ \s ->
-        testEvaluate (apply (func "toUpper") $ stringValue s)
+        testEvaluate (apply (prim "toUpper") $ stringValue s)
         == pure (stringValue $ fmap C.toUpper s)
 
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \s1 s2 ->
-        testEvaluate (apply (apply (func "cat") $ stringValue s1) $ stringValue s2)
+        testEvaluate (apply (apply (prim "cat") $ stringValue s1) $ stringValue s2)
         == pure (stringValue $ s1 ++ s2)
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
-        testEvaluate (apply (func "cat") $ stringValue s1)
-        == pure (apply (func "cat") $ stringValue s1)
+        testEvaluate (apply (prim "cat") $ stringValue s1)
+        == pure (apply (prim "cat") $ stringValue s1)
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->
-        isFailure (testEvaluate (apply (apply (func "toUpper") $ stringValue s1) $ stringValue s2))
+        isFailure (testEvaluate (apply (apply (prim "toUpper") $ stringValue s1) $ stringValue s2))
 
-func :: String -> Term Meta
-func = primitive . stringsFunc
+stringsPrim :: [Char] -> [Char]
+stringsPrim local = "hydra/lib/strings." ++ local
+
+prim :: String -> Term Meta
+prim = primitive . stringsPrim
 
 spec :: H.Spec
 spec = do
