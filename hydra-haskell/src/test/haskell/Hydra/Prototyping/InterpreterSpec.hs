@@ -44,22 +44,22 @@ testsForPrimitiveFunctions = do
 
     H.it "Simple applications of a unary function succeed" $
       QC.property $ \s ->
-        testEvaluate (apply (func "toUpper") $ stringTerm s)
-        == pure (stringTerm $ fmap C.toUpper s)
+        testEvaluate (apply (func "toUpper") $ stringValue s)
+        == pure (stringValue $ fmap C.toUpper s)
 
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \s1 s2 ->
-        testEvaluate (apply (apply (func "cat") $ stringTerm s1) $ stringTerm s2)
-        == pure (stringTerm $ s1 ++ s2)
+        testEvaluate (apply (apply (func "cat") $ stringValue s1) $ stringValue s2)
+        == pure (stringValue $ s1 ++ s2)
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
-        testEvaluate (apply (func "cat") $ stringTerm s1)
-        == pure (apply (func "cat") $ stringTerm s1)
+        testEvaluate (apply (func "cat") $ stringValue s1)
+        == pure (apply (func "cat") $ stringValue s1)
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->
-        isFailure (testEvaluate (apply (apply (func "toUpper") $ stringTerm s1) $ stringTerm s2))
+        isFailure (testEvaluate (apply (apply (func "toUpper") $ stringValue s1) $ stringValue s2))
 
 func :: String -> Term Meta
 func = primitive . stringsFunc

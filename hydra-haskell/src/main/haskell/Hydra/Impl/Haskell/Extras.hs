@@ -103,7 +103,7 @@ resultToQualified :: Result a -> Qualified a
 resultToQualified r = case r of
   ResultSuccess x -> pure x
   ResultFailure msg -> fail msg
-  
+
 unidirectionalStep :: (a -> Result b) -> Step a b
 unidirectionalStep m = Step {
   stepOut = m,

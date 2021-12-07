@@ -2,7 +2,7 @@ module Hydra.Basics where
 
 import Hydra.Core
 
-
+-- Find the precision of a given floating-point type
 floatTypePrecision :: (FloatType -> Precision)
 floatTypePrecision x = case x of
   FloatTypeBigfloat -> PrecisionArbitrary

@@ -1,11 +1,11 @@
-module Hydra.Prototyping.BasicsWithDslSpec where
+module Hydra.Impl.Haskell.Sources.BasicsSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Basics
-import Hydra.Prototyping.BasicsWithDsl
+import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding

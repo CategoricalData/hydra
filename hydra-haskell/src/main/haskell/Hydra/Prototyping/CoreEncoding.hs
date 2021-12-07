@@ -56,7 +56,7 @@ encodeField cx (Field name term) = nominalRecord cx _Field [
 
 encodeFieldType :: Default a => Context a -> FieldType -> Term a
 encodeFieldType cx (FieldType fname t) = nominalRecord cx _FieldType [
-  Field _FieldType_name $ stringTerm fname,
+  Field _FieldType_name $ stringValue fname,
   Field _FieldType_type $ encodeType cx t]
 
 encodeFloatType :: Default a => Context a -> FloatType -> Term a
@@ -135,7 +135,7 @@ encodeType cx typ = case typ of
   TypeSet t -> nominalVariant cx _Type _Type_set $ encodeType cx t
   TypeUnion fields -> nominalVariant cx _Type _Type_union $ list $ fmap (encodeFieldType cx) fields
   TypeUniversal ut -> nominalVariant cx _Type _Type_universal $ encodeUniversalType cx ut
-  TypeVariable var -> nominalVariant cx _Type _Type_variable $ stringTerm var
+  TypeVariable var -> nominalVariant cx _Type _Type_variable $ stringValue var
 
 encodeTypeVariant :: Default a => Context a -> TypeVariant -> Term a
 encodeTypeVariant cx tv = nominalUnitVariant cx _TypeVariant $ case tv of
