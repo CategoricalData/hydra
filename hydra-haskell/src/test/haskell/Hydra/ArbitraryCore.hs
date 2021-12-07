@@ -221,7 +221,7 @@ shrinkers typ = trivialShrinker ++ case typ of
       LiteralTypeBoolean -> []
       LiteralTypeFloat ft -> []
       LiteralTypeInteger it -> []
-      LiteralTypeString -> [(stringType, \(Term (ExpressionLiteral (LiteralString s)) _) -> stringTerm <$> QC.shrink s)]
+      LiteralTypeString -> [(stringType, \(Term (ExpressionLiteral (LiteralString s)) _) -> stringValue <$> QC.shrink s)]
   --  TypeElement et ->
   --  TypeFunction ft ->
     TypeList lt -> dropElements : promoteType : shrinkType

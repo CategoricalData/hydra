@@ -64,7 +64,6 @@ module Hydra.Impl.Haskell.Dsl.Terms (
   requireField,
   set,
   setType,
-  stringTerm,
   stringType,
   stringValue,
   typeVariable,
@@ -313,9 +312,6 @@ set = defaultTerm . ExpressionSet
 
 setType :: Type -> Type
 setType = TypeSet
-
-stringTerm :: Default a => String -> Term a
-stringTerm = defaultTerm . ExpressionLiteral . LiteralString
 
 stringType :: Type
 stringType = TypeLiteral LiteralTypeString

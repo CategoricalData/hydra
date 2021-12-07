@@ -1,4 +1,4 @@
-module Hydra.Prototyping.BasicsWithDsl (
+module Hydra.Impl.Haskell.Sources.Basics (
   basicsGraph,
 ) where
 
