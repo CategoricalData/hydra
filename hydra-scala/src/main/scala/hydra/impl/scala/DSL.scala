@@ -20,4 +20,4 @@ def unitTerm[a](meta: a): Term[a] = Term(Expression.record(Seq()), meta)
 def unitVariant[a](meta: a, context: Name, fname: FieldName): Term[a] = variant(meta, context, fname, unitTerm(meta))
 
 def variant[a](meta: a, context: Name, fname: FieldName, term: Term[a]): Term[a]
-  = Term(Expression.union(UnionExpression(context, Field(fname, term))), meta)
+  = Term(Expression.union(Field(fname, term)), meta)

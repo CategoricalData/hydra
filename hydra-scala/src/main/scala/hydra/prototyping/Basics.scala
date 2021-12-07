@@ -19,17 +19,10 @@ def literalType(av: Literal): LiteralType = av match
 
 def literalVariant(av: Literal): LiteralVariant = literalTypeVariant(literalType(av))
 
-def floatTypeVariant(ft: FloatType): FloatVariant = ft match
-  case FloatType.bigfloat() => FloatVariant.bigfloat()
-  case FloatType.float32() => FloatVariant.float32()
-  case FloatType.float64() => FloatVariant.float64()
-
 def floatValueType(fv: FloatValue): FloatType = fv match
   case FloatValue.bigfloat(_) => FloatType.bigfloat()
   case FloatValue.float32(_) => FloatType.float32()
   case FloatValue.float64(_) => FloatType.float64()
-
-def floatValueVariant(fv: FloatValue): FloatVariant = floatTypeVariant(floatValueType(fv))
 
 def functionVariant[a](fun: Function[a]): FunctionVariant = fun match
   case Function.cases(_) => FunctionVariant.cases()
@@ -38,17 +31,6 @@ def functionVariant[a](fun: Function[a]): FunctionVariant = fun match
   case Function.lambda(_) => FunctionVariant.lambda()
   case Function.primitive(_) => FunctionVariant.primitive()
   case Function.projection(_) => FunctionVariant.projection()
-
-def integerTypeVariant(it: IntegerType): IntegerVariant = it match
-  case IntegerType.bigint() => IntegerVariant.bigint()
-  case IntegerType.int8() => IntegerVariant.int8()
-  case IntegerType.int16() => IntegerVariant.int16()
-  case IntegerType.int32() => IntegerVariant.int32()
-  case IntegerType.int64() => IntegerVariant.int64()
-  case IntegerType.uint8() => IntegerVariant.uint8()
-  case IntegerType.uint16() => IntegerVariant.uint16()
-  case IntegerType.uint32() => IntegerVariant.uint32()
-  case IntegerType.uint64() => IntegerVariant.uint64()
 
 def integerValueType(iv: IntegerValue): IntegerType = iv match
   case IntegerValue.bigint(_) => IntegerType.bigint()
@@ -60,8 +42,6 @@ def integerValueType(iv: IntegerValue): IntegerType = iv match
   case IntegerValue.uint16(_) => IntegerType.uint16()
   case IntegerValue.uint32(_) => IntegerType.uint32()
   case IntegerValue.uint64(_) => IntegerType.uint64()
-
-def integerValueVariant(it: IntegerValue): IntegerVariant = integerTypeVariant(integerValueType(it))
 
 def termVariant[a](term: Term[a]): TermVariant = term.data match
   case Expression.application(_) => TermVariant.application()

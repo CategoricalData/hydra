@@ -48,9 +48,9 @@ enum Function[a]:
     /**
      * A projection of a field from a record
      * 
-     * @type hydra/core.Projection
+     * @type hydra/core.FieldName
      */
-    case projection(value: hydra.core.Projection) extends Function[a]
+    case projection(value: hydra.core.FieldName) extends Function[a]
 
 val _Function: String = "hydra/core.Function"
 val _Function_cases: String = "cases"
