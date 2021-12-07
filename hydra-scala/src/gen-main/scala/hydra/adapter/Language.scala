@@ -21,11 +21,11 @@ object Language {
         literalVariants: Set[hydra.core.LiteralVariant],
         
         /**
-         * @type set: hydra/core.FloatVariant
+         * @type set: hydra/core.FloatType
          * 
-         * @type set: hydra/core.FloatVariant
+         * @type set: hydra/core.FloatType
          */
-        floatVariants: Set[hydra.core.FloatVariant],
+        floatTypes: Set[hydra.core.FloatType],
         
         /**
          * @type set: hydra/core.FunctionVariant
@@ -35,11 +35,11 @@ object Language {
         functionVariants: Set[hydra.core.FunctionVariant],
         
         /**
-         * @type set: hydra/core.IntegerVariant
+         * @type set: hydra/core.IntegerType
          * 
-         * @type set: hydra/core.IntegerVariant
+         * @type set: hydra/core.IntegerType
          */
-        integerVariants: Set[hydra.core.IntegerVariant],
+        integerTypes: Set[hydra.core.IntegerType],
         
         /**
          * @type set: hydra/core.TermVariant
@@ -77,9 +77,9 @@ object Language {
 
 val _Language: String = "hydra/adapter.Language"
 val _Language_Constraints: String = "hydra/adapter.Language.Constraints"
-val _Language_Constraints_floatVariants: String = "floatVariants"
+val _Language_Constraints_floatTypes: String = "floatTypes"
 val _Language_Constraints_functionVariants: String = "functionVariants"
-val _Language_Constraints_integerVariants: String = "integerVariants"
+val _Language_Constraints_integerTypes: String = "integerTypes"
 val _Language_Constraints_literalVariants: String = "literalVariants"
 val _Language_Constraints_termVariants: String = "termVariants"
 val _Language_Constraints_typeVariants: String = "typeVariants"

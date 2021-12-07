@@ -15,7 +15,7 @@ def freeVariables[a](term: Term[a]): Set[Variable] = {
     case Expression.set(els) => els.flatMap(t => free(bound, t)).toList
     case Expression.typeAbstraction(TypeAbstraction(v, term)) => free(bound, term)
     case Expression.typeApplication(TypeApplication(lhs, rhs)) => free(bound, lhs)
-    case Expression.union(UnionExpression(_, f)) => free(bound, f.term)
+    case Expression.union(f) => free(bound, f.term)
     case Expression.variable(v) => if bound.contains(v) then List() else List(v)
 
   def functionFree(bound: Set[Variable], fun: Function[a]): List[Variable] = fun match

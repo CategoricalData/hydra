@@ -147,13 +147,13 @@ enum Expression[a]:
      * A union term, i.e. a string-indexed generalization of inl() or inr()
      * 
      * @type parameterized:
-     *         genericType: hydra/core.UnionExpression
+     *         genericType: hydra/core.Field
      *         parameters:
      *         - type:
      *             variable: a
      *           variable: a
      */
-    case union(value: hydra.core.UnionExpression[a]) extends Expression[a]
+    case union(value: hydra.core.Field[a]) extends Expression[a]
     /**
      * A variable reference
      * 
