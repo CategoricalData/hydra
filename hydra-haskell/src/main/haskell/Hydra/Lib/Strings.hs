@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Lib.Strings (
+module Hydra.Lib.Strings (
   hsCat,
   hsLength,
   hsSplitOn,
