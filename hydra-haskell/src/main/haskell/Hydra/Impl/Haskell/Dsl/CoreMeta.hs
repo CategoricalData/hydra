@@ -68,6 +68,5 @@ nominalWithVariant cx name fname term = constFunction $ nominalVariant cx name f
 withType :: Context a -> Type -> Term a -> Term a
 withType cx typ term = term { termMeta = contextSetTypeOf cx (Just typ) (termMeta term)}
 
-
 withDoc :: String -> Term Meta -> Term Meta
 withDoc desc term = term { termMeta = (termMeta term) {metaDescription = Just desc}}
