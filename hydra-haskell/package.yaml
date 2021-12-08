@@ -15,6 +15,8 @@ dependencies:
   - base
   - containers
   - split
+  - filepath
+  - directory
 
   # ext dependencies
   - HsYAML
