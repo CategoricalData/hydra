@@ -14,8 +14,8 @@ int32Input = InputSpec int32Type expectInt32
 int32Output :: Default m => OutputSpec Int m
 int32Output = OutputSpec int32Type int32Value
 
-prim1 :: Name -> String -> InputSpec a1 m -> OutputSpec b m -> (a1 -> b) -> PrimitiveFunction m
-prim1 ns name input1 output compute = PrimitiveFunction (ns ++ "." ++ name) ft impl
+prim1 :: Name -> InputSpec a1 m -> OutputSpec b m -> (a1 -> b) -> PrimitiveFunction m
+prim1 name input1 output compute = PrimitiveFunction name ft impl
   where
     ft = FunctionType (inputSpecType input1) (outputSpecType output)
     impl args = do
@@ -23,8 +23,8 @@ prim1 ns name input1 output compute = PrimitiveFunction (ns ++ "." ++ name) ft i
       arg1 <- inputSpecUnmarshal input1 $ L.head args
       return $ outputSpecMarshal output $ compute arg1
 
-prim2 :: Name -> String -> InputSpec a1 m -> InputSpec a2 m -> OutputSpec b m -> (a1 -> a2 -> b) -> PrimitiveFunction m
-prim2 ns name input1 input2 output compute = PrimitiveFunction (ns ++ "." ++ name) ft impl
+prim2 :: Name -> InputSpec a1 m -> InputSpec a2 m -> OutputSpec b m -> (a1 -> a2 -> b) -> PrimitiveFunction m
+prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
   where
     ft = FunctionType (inputSpecType input1) (functionType (inputSpecType input2) $ outputSpecType output)
     impl args = do
