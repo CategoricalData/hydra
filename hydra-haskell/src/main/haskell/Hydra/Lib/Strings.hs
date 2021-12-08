@@ -10,20 +10,20 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 
 
-hsCat :: String -> String -> Result String
-hsCat x y = pure $ x ++ y
+hsCat :: String -> String -> String
+hsCat x y = x ++ y
 
-hsLength :: String -> Result Int
-hsLength = pure . L.length
+hsLength :: String -> Int
+hsLength = L.length
 
-hsSplitOn :: String -> String -> Result [String]
-hsSplitOn x y = pure $ LS.splitOn x y
+hsSplitOn :: String -> String -> [String]
+hsSplitOn = LS.splitOn
 
-hsToLower :: String -> Result String
-hsToLower = pure . fmap C.toLower
+hsToLower :: String -> String
+hsToLower = fmap C.toLower
 
-hsToUpper :: String -> Result String
-hsToUpper = pure . fmap C.toUpper
+hsToUpper :: String -> String
+hsToUpper = fmap C.toUpper
 
 _hydra_lib_strings :: Name
 _hydra_lib_strings = "hydra/lib/strings"

@@ -6,26 +6,26 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Prims
 
 
-hsNeg :: Int -> Result Int
-hsNeg = pure . negate
+hsNeg :: Int -> Int
+hsNeg = negate
 
-hsAdd :: Int -> Int -> Result Int
-hsAdd x y = pure $ x + y
+hsAdd :: Int -> Int -> Int
+hsAdd x y = x + y
 
-hsSub :: Int -> Int -> Result Int
-hsSub x y = pure $ x - y
+hsSub :: Int -> Int -> Int
+hsSub x y = x - y
 
-hsMul :: Int -> Int -> Result Int
-hsMul x y = pure $ x * y
+hsMul :: Int -> Int -> Int
+hsMul x y = x * y
 
-hsDiv :: Int -> Int -> Result Int
-hsDiv x y = pure $ div x y
+hsDiv :: Int -> Int -> Int
+hsDiv = div
 
-hsMod :: Int -> Int -> Result Int
-hsMod x y = pure $ mod x y
+hsMod :: Int -> Int -> Int
+hsMod = mod
 
-hsRem :: Int -> Int -> Result Int
-hsRem x y = pure $ rem x y
+hsRem :: Int -> Int -> Int
+hsRem = rem
 
 _hydra_lib_math_int32 :: Name
 _hydra_lib_math_int32 = "hydra/lib/math/int32"
