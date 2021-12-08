@@ -14,7 +14,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.CoreGraph
+import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Lib.Math

@@ -1,43 +1,10 @@
-module Hydra.Prototyping.CoreGraph (
-  emptyCoreContext,
-  hydraCoreGraph,
-
-  hcApplication,
-  hcBooleanValue,
-  hcComparison,
-  hcExpression,
-  hcField,
-  hcFieldName,
-  hcFieldType,
-  hcFloatType,
-  hcFloatValue,
-  hcFunction,
-  hcFunctionType,
-  hcFunctionVariant,
-  hcIntegerType,
-  hcIntegerValue,
-  hcLambda,
-  hcLiteral,
-  hcLiteralType,
-  hcLiteralVariant,
-  hcMapType,
-  hcName,
-  hcPrecision,
-  hcTerm,
-  hcTermVariant,
-  hcType,
-  hcTypeVariable,
-  hcTypeVariant,
-  hcTypedTerm,
-  hcUniversalType,
-  hcVariable,
-   ) where
+module Hydra.Impl.Haskell.Sources.CoreGraph where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.Elements
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -94,15 +61,6 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hcTypedTerm,
       hcUniversalType,
       hcVariable]
-
-typeElement :: Context Meta -> Name -> Type -> Element Meta
-typeElement cx name typ = Element {
-  elementName = name,
-  elementSchema = defaultTerm $ ExpressionElement _Type,
-  elementData = encodeType cx typ}
-
-enum :: [FieldName] -> Type
-enum names = TypeUnion $ (`FieldType` unitType) <$> names
 
 hcApplication :: Context Meta -> Element Meta
 hcApplication cx = typeElement cx _Application $ TypeRecord [

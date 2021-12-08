@@ -73,6 +73,9 @@ elementRefByName name = apply dataTerm $ defaultTerm $ ExpressionElement name
 elementType :: Type -> Type
 elementType = TypeElement
 
+enum :: [FieldName] -> Type
+enum names = TypeUnion $ (`FieldType` unitType) <$> names
+
 expectInt32 :: Show a => Term a -> Result Int
 expectInt32 term = case termData term of
   ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
