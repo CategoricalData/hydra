@@ -6,25 +6,6 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Dsl.Elements
 
-import qualified Data.Map as M
-import qualified Data.Set as S
-
-
-emptyCoreContext :: Context Meta
-emptyCoreContext = Context {
-    contextGraphs = GraphSet {
-      graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
-      graphSetRoot = emptyGraphName},
-    contextElements = M.empty,
-    contextFunctions = M.empty,
-    contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueTermVariants = S.fromList []},
-    contextDescriptionOf = metaDescription,
-    contextTypeOf = metaType,
-    contextSetTypeOf = \t m -> m {metaType = t}}
-  where
-    emptyGraphName = "empty"
-    emptyGraph = Graph emptyGraphName [] (const True) "empty"
 
 -- Note: here, the element namespace "hydra/core" doubles as a graph name
 hydraCoreGraph :: Graph Meta

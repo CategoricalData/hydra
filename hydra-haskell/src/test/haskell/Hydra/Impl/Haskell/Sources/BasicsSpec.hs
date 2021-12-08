@@ -18,7 +18,7 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term Meta -> Result (Term Meta)
-testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap (basicsGraph testContext) }) term
+testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap basicsGraph }) term
 
 testsForTermTypeFunctions :: H.SpecWith a
 testsForTermTypeFunctions = do

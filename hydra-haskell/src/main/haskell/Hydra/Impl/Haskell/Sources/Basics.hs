@@ -7,6 +7,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Dsl.Elements
 
 
 basicsElement :: Context Meta -> String -> String -> Type -> Term Meta -> Element Meta
@@ -17,29 +18,33 @@ basicsFunction cx name desc dom cod = basicsElement cx name desc typ
   where
     typ = functionType dom cod
 
-basicsGraph :: Context Meta -> Graph Meta
-basicsGraph cx = Graph "hydra/basics" elements dataTerms schemaGraph
+standardGraph :: Name -> [Context Meta -> Element Meta] -> Graph Meta
+standardGraph name els = Graph name elements dataTerms schemaGraph
   where
+    cx = emptyCoreContext
     dataTerms = const True -- TODO
+    elements = (\f -> f cx) <$> els
     schemaGraph = "hydra/core"
-    elements = (\f -> f cx) <$> [
-        basicsFloatTypePrecision,
-        basicsFloatTypes,
-        basicsFloatValueType,
-        basicsFunctionVariant,
-        basicsFunctionVariants,
-        basicsIntegerTypeIsSigned,
-        basicsIntegerTypePrecision,
-        basicsIntegerTypes,
-        basicsIntegerValueType,
-        basicsLiteralType,
-        basicsLiteralTypeVariant,
-        basicsLiteralVariant,
-        basicsLiteralVariants,
-        basicsTermVariant,
-        basicsTermVariants,
-        basicsTypeVariant,
-        basicsTypeVariants]
+    
+basicsGraph :: Graph Meta
+basicsGraph = standardGraph "hydra/basics" [
+  basicsFloatTypePrecision,
+  basicsFloatTypes,
+  basicsFloatValueType,
+  basicsFunctionVariant,
+  basicsFunctionVariants,
+  basicsIntegerTypeIsSigned,
+  basicsIntegerTypePrecision,
+  basicsIntegerTypes,
+  basicsIntegerValueType,
+  basicsLiteralType,
+  basicsLiteralTypeVariant,
+  basicsLiteralVariant,
+  basicsLiteralVariants,
+  basicsTermVariant,
+  basicsTermVariants,
+  basicsTypeVariant,
+  basicsTypeVariants]
 
 floatTypePrecision :: FloatType -> Precision
 floatTypePrecision v = case v of

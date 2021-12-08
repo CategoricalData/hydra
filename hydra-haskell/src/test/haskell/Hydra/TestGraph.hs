@@ -14,9 +14,9 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Dsl.Elements
 import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.CoreEncoding
 import Hydra.Lib.Math
 import Hydra.Lib.Strings
 
@@ -59,9 +59,9 @@ testGraph = Graph "testGraph" [testElementArthur] allTerms "testSchemaGraph"
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement "StringTypeAlias" stringType,
-    typeElement "Person" testTypePerson,
-    typeElement "Timestamp" testTypeTimestamp]
+    typeElement cx "StringTypeAlias" stringType,
+    typeElement cx "Person" testTypePerson,
+    typeElement cx "Timestamp" testTypeTimestamp]
   allTerms "hydra/core"
 
 testStrategy :: EvaluationStrategy
@@ -86,9 +86,3 @@ testTypeTimestamp = TypeUnion [
 
 allTerms :: Term Meta -> Bool
 allTerms _ = True
-
-typeElement :: Name -> Type -> Element Meta
-typeElement name typ = Element {
-  elementName = name,
-  elementSchema = encodeType cx $ TypeNominal "hydra/core.Type",
-  elementData = encodeType cx typ}
