@@ -63,7 +63,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
       ExpressionVariable var -> nominalVariant cx _Function _Expression_variable $ stringValue var
     decode ad term = do
-        (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnionTerm
+        (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Function_cases, forCases fterm),
           (_Function_compareTo, forCompareTo fterm),
@@ -74,13 +74,13 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
           (_Expression_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ fname
-        forCases fterm = read <$> expectStringTerm fterm -- TODO
+        forCases fterm = read <$> expectString fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure dataTerm
-        forPrimitive fterm = primitive <$> expectStringTerm fterm
-        forLambda fterm = read <$> expectStringTerm fterm -- TODO
-        forProjection fterm = projection <$> expectStringTerm fterm
-        forVariable fterm = variable <$> expectStringTerm fterm
+        forPrimitive fterm = primitive <$> expectString fterm
+        forLambda fterm = read <$> expectString fterm -- TODO
+        forProjection fterm = projection <$> expectString fterm
+        forVariable fterm = variable <$> expectString fterm
 
     unionType = do
       domAd <- termAdapter context dom

@@ -1,7 +1,7 @@
 module Hydra.Lib.Strings where
 
+import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Prims
 
@@ -10,32 +10,28 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 
 
-hsCat :: String -> String -> String
-hsCat x y = x ++ y
+hsCat :: String -> String -> Result String
+hsCat x y = pure $ x ++ y
 
-hsLength :: String -> Int
-hsLength = L.length
+hsLength :: String -> Result Int
+hsLength = pure . L.length
 
-hsSplitOn :: String -> String -> [String]
-hsSplitOn = LS.splitOn
+hsSplitOn :: String -> String -> Result [String]
+hsSplitOn x y = pure $ LS.splitOn x y
 
-hsToLower :: String -> String
-hsToLower = fmap C.toLower
+hsToLower :: String -> Result String
+hsToLower = pure . fmap C.toLower
 
-hsToUpper :: String -> String
-hsToUpper = fmap C.toUpper
+hsToUpper :: String -> Result String
+hsToUpper = pure . fmap C.toUpper
 
-stringPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
-stringPrimitives = [
-    stringPrim "cat"     [stringType, stringType, stringType]
-      $ withTwoStrings stringValue hsCat,
-    stringPrim "length"  [stringType, int32Type]
-      $ withString int32Value hsLength,
-    stringPrim "splitOn" [stringType, stringType, listType stringType]
-      $ withTwoStrings (\l -> list (stringValue <$> l)) hsSplitOn,
-    stringPrim "toLower" [stringType, stringType]
-      $ withString stringValue hsToLower,
-    stringPrim "toUpper" [stringType, stringType]
-      $ withString stringValue hsToUpper]
-  where
-    stringPrim = prim "hydra/lib/strings"
+_hydra_lib_strings :: Name
+_hydra_lib_strings = "hydra/lib/strings"
+
+hydraLibStringsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
+hydraLibStringsPrimitives = [
+    prim2 _hydra_lib_strings "cat" stringInput stringInput stringOutput hsCat,
+    prim1 _hydra_lib_strings "length" stringInput int32Output hsLength,
+    prim2 _hydra_lib_strings "splitOn" stringInput stringInput stringListOutput hsSplitOn,
+    prim1 _hydra_lib_strings "toLower" stringInput stringOutput hsToLower,
+    prim1 _hydra_lib_strings "toUpper" stringInput stringOutput hsToUpper]

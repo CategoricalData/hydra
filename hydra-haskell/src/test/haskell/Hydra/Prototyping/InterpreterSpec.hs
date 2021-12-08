@@ -62,7 +62,7 @@ testsForPrimitiveFunctions = do
         isFailure (testEvaluate (apply (apply (prim "toUpper") $ stringValue s1) $ stringValue s2))
 
 stringsPrim :: [Char] -> [Char]
-stringsPrim local = "hydra/lib/strings." ++ local
+stringsPrim local = _hydra_lib_strings ++ "." ++ local
 
 prim :: String -> Term Meta
 prim = primitive . stringsPrim

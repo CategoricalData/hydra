@@ -2,6 +2,8 @@
 module Hydra.Evaluation
   ( Context(..)
   , EvaluationStrategy(..)
+  , InputSpec(..)
+  , OutputSpec(..)
   , PrimitiveFunction(..)
   , Result(..)
   , Step(..)
@@ -16,6 +18,12 @@ module Hydra.Evaluation
   , _Context_typeOf
   , _EvaluationStrategy
   , _EvaluationStrategy_opaqueTermVariants
+  , _InputSpec
+  , _InputSpec_type
+  , _InputSpec_unmarshal
+  , _OutputSpec
+  , _OutputSpec_marshal
+  , _OutputSpec_type
   , _PrimitiveFunction
   , _PrimitiveFunction_implementation
   , _PrimitiveFunction_name
@@ -97,6 +105,47 @@ data EvaluationStrategy
         @type set: hydra/core.TermVariant -}
     { evaluationStrategyOpaqueTermVariants :: (Set (TermVariant)) } deriving (Eq, Generic, Ord, Read, Show)
 
+{-| A helper object for specifying and unmarshalling an argument to a primitive
+    function -}
+data InputSpec a m
+  = InputSpec
+    -- | @type hydra/core.Type
+    { inputSpecType :: Type
+    {-| @type function:
+                from:
+                - parameterized:
+                    genericType: hydra/core.Term
+                    parameters:
+                    - type:
+                        variable: m
+                      variable: a
+                to:
+                  parameterized:
+                    genericType: hydra/evaluation.Result
+                    parameters:
+                    - type:
+                        variable: a
+                      variable: a -}
+    , inputSpecUnmarshal :: (Term m) -> (Result a) }
+
+{-| A helper object for specifying and marshalling the output of a primitive
+    function -}
+data OutputSpec a m
+  = OutputSpec
+    -- | @type hydra/core.Type
+    { outputSpecType :: Type
+    {-| @type function:
+                from:
+                - variable: a
+                to:
+                  parameterized:
+                    genericType: hydra/core.Term
+                    parameters:
+                    - type:
+                        variable: m
+                      variable: a -}
+    , outputSpecMarshal :: a -> (Term m) }
+
 data PrimitiveFunction a
   = PrimitiveFunction
     -- | @type hydra/core.Name
@@ -171,6 +220,12 @@ _Context_strategy = "strategy" :: String
 _Context_typeOf = "typeOf" :: String
 _EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
 _EvaluationStrategy_opaqueTermVariants = "opaqueTermVariants" :: String
+_InputSpec = "hydra/evaluation.InputSpec" :: String
+_InputSpec_type = "type" :: String
+_InputSpec_unmarshal = "unmarshal" :: String
+_OutputSpec = "hydra/evaluation.OutputSpec" :: String
+_OutputSpec_marshal = "marshal" :: String
+_OutputSpec_type = "type" :: String
 _PrimitiveFunction = "hydra/evaluation.PrimitiveFunction" :: String
 _PrimitiveFunction_implementation = "implementation" :: String
 _PrimitiveFunction_name = "name" :: String

@@ -1,91 +1,4 @@
-module Hydra.Impl.Haskell.Dsl.Terms (
-  apply,
-  atomic,
-  bigfloatType,
-  bigfloatValue,
-  bigintType,
-  bigintValue,
-  binaryTerm,
-  binaryType,
-  booleanType,
-  booleanValue,
-  cases,
-  compareTo,
-  compose,
-  constFunction,
-  dataTerm,
-  defaultTerm,
-  element,
-  elementRef,
-  elementRefByName,
-  elementType,
-  expectInt32Term,
-  expectLiteral,
-  expectNArgs,
-  expectRecordTerm,
-  expectStringTerm,
-  expectUnionTerm,
-  fieldsToMap,
-  fieldTypesToMap,
-  float32Type,
-  float32Value,
-  float64Type,
-  float64Value,
-  floatType,
-  floatValue,
-  functionType,
-  int16Type,
-  int16Value,
-  int32Type,
-  int32Value,
-  int64Type,
-  int64Value,
-  int8Type,
-  int8Value,
-  integerType,
-  integerValue,
-  lambda,
-  letTerm,
-  list,
-  listType,
-  map,
-  mapTerm,
-  mapType,
-  match,
-  matchWithVariants,
-  nominal,
-  nominalType,
-  optional,
-  optionalType,
-  primitive,
-  projection,
-  record,
-  recordType,
-  requireField,
-  set,
-  setType,
-  stringType,
-  stringValue,
-  typeVariable,
-  uint16Type,
-  uint16Value,
-  uint32Type,
-  uint32Value,
-  uint64Type,
-  uint64Value,
-  uint8Type,
-  uint8Value,
-  union,
-  unitTerm,
-  unionType,
-  unitType,
-  unitVariant,
-  universal,
-  variable,
-  variant,
-  withFunction,
-  withVariant,
-) where
+module Hydra.Impl.Haskell.Dsl.Terms where
 
 import Hydra.Core
 import Hydra.Graph
@@ -160,8 +73,8 @@ elementRefByName name = apply dataTerm $ defaultTerm $ ExpressionElement name
 elementType :: Type -> Type
 elementType = TypeElement
 
-expectInt32Term :: Show a => Term a -> Result Int
-expectInt32Term term = case termData term of
+expectInt32 :: Show a => Term a -> Result Int
+expectInt32 term = case termData term of
   ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
   _ -> fail $ "expected an int32, got " ++ show term
 
@@ -175,18 +88,18 @@ expectNArgs n args = if L.length args /= n
   then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
   else pure ()
 
-expectRecordTerm :: Show a => Term a -> Result [Field a]
-expectRecordTerm term = case termData term of
+expectRecord :: Show a => Term a -> Result [Field a]
+expectRecord term = case termData term of
   ExpressionRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
-expectStringTerm :: Show a => Term a -> Result String
-expectStringTerm term = case termData term of
+expectString :: Show a => Term a -> Result String
+expectString term = case termData term of
   ExpressionLiteral (LiteralString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
-expectUnionTerm :: Show a => Term a -> Result (Field a)
-expectUnionTerm term = case termData term of
+expectUnion :: Show a => Term a -> Result (Field a)
+expectUnion term = case termData term of
   ExpressionUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
@@ -312,6 +225,12 @@ set = defaultTerm . ExpressionSet
 
 setType :: Type -> Type
 setType = TypeSet
+
+stringList :: Default a => [String] -> Term a
+stringList l = list (stringValue <$> l)
+
+stringSet :: (Default a, Ord a) => S.Set String -> Term a
+stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
 
 stringType :: Type
 stringType = TypeLiteral LiteralTypeString

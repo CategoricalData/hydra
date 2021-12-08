@@ -45,19 +45,22 @@ definitions:
           type: QualifiedName
 
         - name: type
-          type:
-            union:
-              - name: record
-                type: RecordSchema
-
-              - name: enum
-                type: EnumSchema
-
-              - name: typeref
-                type: Schema
+          type: NamedSchema.Type
 
         - name: annotations
           type: Annotations
+    innerTypes:
+      - name: Type
+        type:
+          union:
+            - name: record
+              type: RecordSchema
+
+            - name: enum
+              type: EnumSchema
+
+            - name: typeref
+              type: Schema
 
   - name: Name
     type: string

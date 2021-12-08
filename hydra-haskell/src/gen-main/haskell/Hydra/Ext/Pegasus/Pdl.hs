@@ -7,6 +7,7 @@ module Hydra.Ext.Pegasus.Pdl
   , EnumSchema(..)
   , FieldName
   , Name
+  , NamedSchema_Type(..)
   , NamedSchema(..)
   , Namespace
   , Package
@@ -32,6 +33,10 @@ module Hydra.Ext.Pegasus.Pdl
   , _FieldName
   , _Name
   , _NamedSchema
+  , _NamedSchema_Type
+  , _NamedSchema_Type_enum
+  , _NamedSchema_Type_record
+  , _NamedSchema_Type_typeref
   , _NamedSchema_annotations
   , _NamedSchema_qualifiedName
   , _NamedSchema_type
@@ -110,11 +115,20 @@ type FieldName = String
 -- | @type string
 type Name = String
 
+data NamedSchema_Type
+  -- | @type hydra/ext/pegasus/pdl.RecordSchema
+  = NamedSchema_TypeRecord RecordSchema
+  -- | @type hydra/ext/pegasus/pdl.EnumSchema
+  | NamedSchema_TypeEnum EnumSchema
+  -- | @type hydra/ext/pegasus/pdl.Schema
+  | NamedSchema_TypeTyperef Schema deriving (Eq, Generic, Ord, Read, Show)
+
 data NamedSchema
   = NamedSchema
     -- | @type hydra/ext/pegasus/pdl.QualifiedName
     { namedSchemaQualifiedName :: QualifiedName
-    , namedSchemaType :: ()
+    -- | @type hydra/ext/pegasus/pdl.NamedSchema.Type
+    , namedSchemaType :: NamedSchema_Type
     -- | @type hydra/ext/pegasus/pdl.Annotations
     , namedSchemaAnnotations :: Annotations } deriving (Eq, Generic, Ord, Read, Show)
 
@@ -219,6 +233,10 @@ _EnumSchema_fields = "fields" :: String
 _FieldName = "hydra/ext/pegasus/pdl.FieldName" :: String
 _Name = "hydra/ext/pegasus/pdl.Name" :: String
 _NamedSchema = "hydra/ext/pegasus/pdl.NamedSchema" :: String
+_NamedSchema_Type = "hydra/ext/pegasus/pdl.NamedSchema_Type" :: String
+_NamedSchema_Type_enum = "enum" :: String
+_NamedSchema_Type_record = "record" :: String
+_NamedSchema_Type_typeref = "typeref" :: String
 _NamedSchema_annotations = "annotations" :: String
 _NamedSchema_qualifiedName = "qualifiedName" :: String
 _NamedSchema_type = "type" :: String

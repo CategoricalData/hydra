@@ -46,7 +46,7 @@ testContext = Context {
     contextTypeOf = metaType,
     contextSetTypeOf = \t m -> m {metaType = t}}
   where
-    allPrimitives = mathPrimitives ++ stringPrimitives
+    allPrimitives = hydraLibMathInt32Primitives ++ hydraLibStringsPrimitives
 
 testElementArthur :: Element Meta
 testElementArthur = Element {
