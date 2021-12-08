@@ -77,6 +77,31 @@ definitions:
           type:
             set: core.TermVariant
 
+  - name: InputSpec
+    description: "A helper object for specifying and unmarshalling an argument to a primitive function"
+    type:
+      record:
+        - name: type
+          type: core.Type
+
+        - name: unmarshal
+          type:
+            function:
+              from:
+                - parameterized:
+                    genericType: core.Term
+                    parameters:
+                      - variable: a
+                        type:
+                          variable: m
+              to:
+                parameterized:
+                  genericType: Result
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: a
+
   - name: PrimitiveFunction
     type:
       record:
@@ -109,6 +134,26 @@ definitions:
                             - variable: a
                               type:
                                 variable: a
+
+  - name: OutputSpec
+    description: "A helper object for specifying and marshalling the output of a primitive function"
+    type:
+      record:
+        - name: type
+          type: core.Type
+
+        - name: marshal
+          type:
+            function:
+              from:
+                - variable: a
+              to:
+                parameterized:
+                  genericType: core.Term
+                  parameters:
+                    - variable: a
+                      type:
+                        variable: m
 
   - name: Result
     type:
