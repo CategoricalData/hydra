@@ -22,17 +22,17 @@ deref :: Context a -> Term a -> Result (Term a)
 deref context term = case termData term of
   ExpressionElement name -> dereferenceElement context name >>= deref context
   ExpressionNominal (NominalTerm _ term') -> deref context term'
-  _ -> pure term
+  _ -> ResultSuccess term
 
 dereferenceElement :: Context a -> Name -> Result (Term a)
 dereferenceElement context en = case M.lookup en (contextElements context) of
-  Nothing -> fail $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs context)
-  Just e -> pure $ elementData e
+  Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs context)
+  Just e -> ResultSuccess $ elementData e
 
 getGraph :: GraphSet a -> GraphName -> Result (Graph a)
-getGraph graphs name = Y.maybe error pure $ M.lookup name (graphSetGraphs graphs)
+getGraph graphs name = Y.maybe error ResultSuccess $ M.lookup name (graphSetGraphs graphs)
   where
-    error = fail $ "no such graph: " ++ name
+    error = ResultFailure $ "no such graph: " ++ name
 
 graphElementsMap :: Graph a -> M.Map Name (Element a)
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
@@ -48,16 +48,16 @@ primitiveFunctionArity = arity . primitiveFunctionType
       _ -> 0
 
 requireElement :: Context a -> Name -> Result (Element a)
-requireElement context name = Y.maybe error pure $ M.lookup name $ contextElements context
+requireElement context name = Y.maybe error ResultSuccess $ M.lookup name $ contextElements context
   where
-    error = fail $ "no such element: " ++ name
+    error = ResultFailure $ "no such element: " ++ name
       ++ " in graph " ++ graphSetRoot (contextGraphs context)
       ++ ". Available elements: " ++ L.intercalate ", " (elementName <$> M.elems (contextElements context))
 
 requirePrimitiveFunction :: Context a -> Name -> Result (PrimitiveFunction a)
-requirePrimitiveFunction context fn = Y.maybe error pure $ lookupPrimitiveFunction context fn
+requirePrimitiveFunction context fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction context fn
   where
-    error = fail $ "no such primitive function: " ++ fn
+    error = ResultFailure $ "no such primitive function: " ++ fn
 
 schemaContext :: Context a -> Result (Context a)
 schemaContext context = do
