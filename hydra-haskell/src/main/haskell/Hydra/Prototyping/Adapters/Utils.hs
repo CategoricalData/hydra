@@ -4,13 +4,13 @@ module Hydra.Prototyping.Adapters.Utils (
   describeLiteralType,
   describeFloatType,
   describeIntegerType,
-  describePrecision,
   describeType,
   floatTypeIsSupported,
   integerTypeIsSupported,
   qualify,
   typeIsSupported,
   unqualify,
+  module Hydra.Adapters.Utils
 ) where
 
 import Hydra.Core
@@ -18,6 +18,7 @@ import Hydra.Basics
 import Hydra.Prototyping.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
+import Hydra.Adapters.Utils
 
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -52,11 +53,6 @@ describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-poi
 
 describeIntegerType :: IntegerType -> String
 describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"
-
-describePrecision :: Precision -> String
-describePrecision p = case p of
-  PrecisionArbitrary -> "arbitrary-precision"
-  PrecisionBits bits -> show bits ++ "-bit"
 
 describeType :: Type -> String
 describeType t = case t of

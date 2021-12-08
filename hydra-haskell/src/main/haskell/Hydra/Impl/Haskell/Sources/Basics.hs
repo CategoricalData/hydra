@@ -5,34 +5,20 @@ module Hydra.Impl.Haskell.Sources.Basics (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Elements
 
 
-basicsElement :: Context Meta -> String -> String -> Type -> Term Meta -> Element Meta
-basicsElement cx name desc typ term = Element ("hydra/basics." ++ name) (encodeType cx typ) $ withDoc desc term
+_hydra_basics :: Name
+_hydra_basics = "hydra/basics"
 
-basicsFunction :: Context Meta -> String -> String -> Type -> Type -> Term Meta -> Element Meta
-basicsFunction cx name desc dom cod = basicsElement cx name desc typ
-  where
-    typ = functionType dom cod
-
-standardGraph :: Name -> [Context Meta -> Element Meta] -> Graph Meta
-standardGraph name els = Graph name elements dataTerms schemaGraph
-  where
-    cx = emptyCoreContext
-    dataTerms = const True -- TODO
-    elements = (\f -> f cx) <$> els
-    schemaGraph = "hydra/core"
-    
 basicsGraph :: Graph Meta
-basicsGraph = standardGraph "hydra/basics" [
+basicsGraph = standardGraph _hydra_basics [
   basicsFloatTypePrecision,
   basicsFloatTypes,
   basicsFloatValueType,
-  basicsFunctionVariant,
-  basicsFunctionVariants,
+  standardFunctionVariant,
+  standardFunctionVariants,
   basicsIntegerTypeIsSigned,
   basicsIntegerTypePrecision,
   basicsIntegerTypes,
@@ -53,7 +39,7 @@ floatTypePrecision v = case v of
   FloatTypeFloat64 -> PrecisionBits 64
 
 basicsFloatTypePrecision :: Context Meta -> Element Meta
-basicsFloatTypePrecision cx = basicsFunction cx "floatTypePrecision"
+basicsFloatTypePrecision cx = standardFunction cx _hydra_basics "floatTypePrecision"
   "Find the precision of a given floating-point type"
   (nominalType _FloatType) (nominalType _Precision) $
   nominalMatch cx _FloatType (nominalType _Precision) [
@@ -62,7 +48,7 @@ basicsFloatTypePrecision cx = basicsFunction cx "floatTypePrecision"
     (_FloatType_float64, nominalWithVariant cx _Precision _Precision_bits (int32Value 64))]
 
 basicsFloatTypes :: Context Meta -> Element Meta
-basicsFloatTypes cx = basicsElement cx "floatTypes"
+basicsFloatTypes cx = standardElement cx _hydra_basics "floatTypes"
     "All floating-point types in a canonical order"
     (listType $ nominalType _FloatType)
     (list $ withType cx (nominalType _FloatType) . unitVariant <$> [
@@ -71,7 +57,7 @@ basicsFloatTypes cx = basicsElement cx "floatTypes"
       _FloatType_float64])
 
 basicsFloatValueType :: Context Meta -> Element Meta
-basicsFloatValueType cx = basicsFunction cx "floatValueType"
+basicsFloatValueType cx = standardFunction cx _hydra_basics "floatValueType"
   "Find the float type for a given floating-point value"
   (nominalType _FloatValue) (nominalType _FloatType) $
   nominalMatchWithVariants cx (nominalType _FloatValue) (nominalType _FloatType) [
@@ -79,8 +65,8 @@ basicsFloatValueType cx = basicsFunction cx "floatValueType"
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
 
-basicsFunctionVariant :: Context Meta -> Element Meta
-basicsFunctionVariant cx = basicsFunction cx "functionVariant"
+standardFunctionVariant :: Context Meta -> Element Meta
+standardFunctionVariant cx = standardFunction cx _hydra_basics "functionVariant"
   "Find the function variant (constructor) for a given function"
   (universal "a" $ nominalType _Function) (nominalType _FunctionVariant) $
   nominalMatchWithVariants cx (universal "a" $ nominalType _Function) (nominalType _FunctionVariant) [
@@ -91,8 +77,8 @@ basicsFunctionVariant cx = basicsFunction cx "functionVariant"
     (_Function_primitive,  _FunctionVariant_primitive),
     (_Function_projection, _FunctionVariant_projection)]
 
-basicsFunctionVariants :: Context Meta -> Element Meta
-basicsFunctionVariants cx = basicsElement cx "functionVariants"
+standardFunctionVariants :: Context Meta -> Element Meta
+standardFunctionVariants cx = standardElement cx _hydra_basics "functionVariants"
     "All function variants (constructors), in a canonical order"
     (listType $ nominalType _FunctionVariant)
     (list $ withType cx (nominalType _FunctionVariant) . unitVariant <$> [
@@ -104,7 +90,7 @@ basicsFunctionVariants cx = basicsElement cx "functionVariants"
       _FunctionVariant_projection])
 
 basicsIntegerTypeIsSigned :: Context Meta -> Element Meta
-basicsIntegerTypeIsSigned cx = basicsFunction cx "integerTypeIsSigned"
+basicsIntegerTypeIsSigned cx = standardFunction cx _hydra_basics "integerTypeIsSigned"
   "Find whether a given integer type is signed (true) or unsigned (false)"
   (nominalType _IntegerType) booleanType $
   nominalMatch cx _IntegerType booleanType [
@@ -119,7 +105,7 @@ basicsIntegerTypeIsSigned cx = basicsFunction cx "integerTypeIsSigned"
     (_IntegerType_uint64, constFunction $ booleanValue False)]
 
 basicsIntegerTypePrecision :: Context Meta -> Element Meta
-basicsIntegerTypePrecision cx = basicsFunction cx "integerTypePrecision"
+basicsIntegerTypePrecision cx = standardFunction cx _hydra_basics "integerTypePrecision"
   "Find the precision of a given integer type"
   (nominalType _IntegerType) (nominalType _Precision) $
   nominalMatch cx _IntegerType (nominalType _Precision) [
@@ -134,7 +120,7 @@ basicsIntegerTypePrecision cx = basicsFunction cx "integerTypePrecision"
     (_IntegerType_uint64, nominalWithVariant cx _Precision _Precision_bits (int32Value 64))]
 
 basicsIntegerTypes :: Context Meta -> Element Meta
-basicsIntegerTypes cx = basicsElement cx "integerTypes"
+basicsIntegerTypes cx = standardElement cx _hydra_basics "integerTypes"
     "All integer types, in a canonical order"
     (listType $ nominalType _IntegerType)
     (list $ withType cx (nominalType _IntegerType) . unitVariant <$> [
@@ -149,7 +135,7 @@ basicsIntegerTypes cx = basicsElement cx "integerTypes"
       _IntegerType_uint64])
 
 basicsIntegerValueType :: Context Meta -> Element Meta
-basicsIntegerValueType cx = basicsFunction cx "integerValueType"
+basicsIntegerValueType cx = standardFunction cx _hydra_basics "integerValueType"
   "Find the integer type for a given integer value"
   (nominalType _IntegerValue) (nominalType _IntegerType) $
   nominalMatchWithVariants cx (nominalType _IntegerValue) (nominalType _IntegerType) [
@@ -164,7 +150,7 @@ basicsIntegerValueType cx = basicsFunction cx "integerValueType"
     (_IntegerValue_uint64, _IntegerType_uint64)]
 
 basicsLiteralType :: Context Meta -> Element Meta
-basicsLiteralType cx = basicsFunction cx "literalType"
+basicsLiteralType cx = standardFunction cx _hydra_basics "literalType"
   "Find the literal type for a given literal value"
   (nominalType _Literal) (nominalType _LiteralType) $
   nominalMatch cx _Literal (nominalType _LiteralType) [
@@ -175,7 +161,7 @@ basicsLiteralType cx = basicsFunction cx "literalType"
     (_Literal_string,  nominalWithUnitVariant cx  _LiteralType _LiteralType_string)]
 
 basicsLiteralTypeVariant :: Context Meta -> Element Meta
-basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
+basicsLiteralTypeVariant cx = standardFunction cx _hydra_basics "literalTypeVariant"
   "Find the literal type variant (constructor) for a given literal value"
   (nominalType _LiteralType) (nominalType _LiteralVariant) $
   nominalMatchWithVariants cx (nominalType _LiteralType) (nominalType _LiteralVariant) [
@@ -186,13 +172,13 @@ basicsLiteralTypeVariant cx = basicsFunction cx "literalTypeVariant"
     (_LiteralType_string,  _LiteralVariant_string)]
 
 basicsLiteralVariant :: Context Meta -> Element Meta
-basicsLiteralVariant cx = basicsFunction cx "literalVariant"
+basicsLiteralVariant cx = standardFunction cx _hydra_basics "literalVariant"
   "Find the literal variant (constructor) for a given literal value"
   (nominalType _Literal) (nominalType _LiteralVariant) $
   compose (elementRef $ basicsLiteralTypeVariant cx) (elementRef $ basicsLiteralType cx)
 
 basicsLiteralVariants :: Context Meta -> Element Meta
-basicsLiteralVariants cx = basicsElement cx "literalVariants"
+basicsLiteralVariants cx = standardElement cx _hydra_basics "literalVariants"
   "All literal variants, in a canonical order"
   (listType $ nominalType _LiteralVariant)
   (list $ withType cx (nominalType _LiteralVariant) . unitVariant <$> [
@@ -201,9 +187,9 @@ basicsLiteralVariants cx = basicsElement cx "literalVariants"
     _LiteralVariant_float,
     _LiteralVariant_integer,
     _LiteralVariant_string])
-    
+
 basicsTermVariant :: Context Meta -> Element Meta
-basicsTermVariant cx = basicsFunction cx "termVariant"
+basicsTermVariant cx = standardFunction cx _hydra_basics "termVariant"
   "Find the term variant (constructor) for a given term"
   (universal "a" $ nominalType _Term) (nominalType _TermVariant) $
   lambda "term" $ apply
@@ -225,7 +211,7 @@ basicsTermVariant cx = basicsFunction cx "termVariant"
     (apply (nominalProjection cx _Term _Term_data (nominalType _Term)) $ variable "term")
 
 basicsTermVariants :: Context Meta -> Element Meta
-basicsTermVariants cx = basicsElement cx "termVariants"
+basicsTermVariants cx = standardElement cx _hydra_basics "termVariants"
   "All term (expression) variants, in a canonical order"
   (listType $ nominalType _TermVariant)
   (list $ withType cx (nominalType _TermVariant) . unitVariant <$> [
@@ -241,9 +227,9 @@ basicsTermVariants cx = basicsElement cx "termVariants"
     _TermVariant_set,
     _TermVariant_union,
     _TermVariant_variable])
-    
+
 basicsTypeVariant :: Context Meta -> Element Meta
-basicsTypeVariant cx = basicsFunction cx "typeVariant"
+basicsTypeVariant cx = standardFunction cx _hydra_basics"typeVariant"
   "Find the type variant (constructor) for a given type"
   (nominalType _Type) (nominalType _TypeVariant) $
   nominalMatchWithVariants cx (nominalType _Type) (nominalType _TypeVariant) [
@@ -261,7 +247,7 @@ basicsTypeVariant cx = basicsFunction cx "typeVariant"
     (_Type_variable,  _TypeVariant_variable)]
 
 basicsTypeVariants :: Context Meta -> Element Meta
-basicsTypeVariants cx = basicsElement cx "typeVariants"
+basicsTypeVariants cx = standardElement cx _hydra_basics "typeVariants"
   "All type variants, in a canonical order"
   (listType $ nominalType _TypeVariant)
   (list $ withType cx (nominalType _TypeVariant) . unitVariant <$> [

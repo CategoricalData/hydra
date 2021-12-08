@@ -106,7 +106,7 @@ encodeFunction cx meta fun = case fun of
           return $ H.Alternative lhs rhs Nothing
     FunctionData -> pure $ hsvar "id"
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm cx body
-    FunctionPrimitive name -> pure $ hsvar name
+    FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveName name
     FunctionProjection fname -> pure $ hsvar $ case domName of
       Just rname -> qualifyRecordFieldName rname fname
       Nothing -> fname
@@ -289,6 +289,9 @@ hslit = H.ExpressionLiteral
 
 hsname :: H.NamePart -> H.Name
 hsname s = H.NameNormal $ H.QualifiedName [] s
+
+hsPrimitiveName :: Name -> H.Name
+hsPrimitiveName name = simpleName $ "hs" ++ capitalize (localNameOf name)
 
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
