@@ -7,6 +7,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Elements
+import Hydra.Lib.Lists
 
 
 _hydra_basics :: Name
@@ -29,6 +30,7 @@ basicsGraph = standardGraph _hydra_basics [
   basicsLiteralVariants,
   basicsTermVariant,
   basicsTermVariants,
+  basicsTmpTestLists,
   basicsTypeVariant,
   basicsTypeVariants]
 
@@ -228,8 +230,15 @@ basicsTermVariants cx = standardElement cx _hydra_basics "termVariants"
     _TermVariant_union,
     _TermVariant_variable])
 
+-- TODO: remove once there are other polymorphic functions in use
+basicsTmpTestLists :: Context Meta -> Element Meta
+basicsTmpTestLists cx = standardFunction cx _hydra_basics "testLists"
+  "TODO: temporary. Just a token polymorphic function for testing"
+  (listType $ listType $ typeVariable "a") int32Type
+  (lambda "lists" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "lists")))
+
 basicsTypeVariant :: Context Meta -> Element Meta
-basicsTypeVariant cx = standardFunction cx _hydra_basics"typeVariant"
+basicsTypeVariant cx = standardFunction cx _hydra_basics "typeVariant"
   "Find the type variant (constructor) for a given type"
   (nominalType _Type) (nominalType _TypeVariant) $
   nominalMatchWithVariants cx (nominalType _Type) (nominalType _TypeVariant) [

@@ -17,6 +17,7 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Elements
 import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Prototyping.Primitives
+import Hydra.Lib.Lists
 import Hydra.Lib.Literals
 import Hydra.Lib.Math
 import Hydra.Lib.Strings
@@ -47,7 +48,11 @@ testContext = Context {
     contextTypeOf = metaType,
     contextSetTypeOf = \t m -> m {metaType = t}}
   where
-    allPrimitives = hydraLibLiteralsPrimitives ++ hydraLibMathInt32Primitives ++ hydraLibStringsPrimitives
+    allPrimitives = []
+      ++ hydraLibListsPrimitives
+      ++ hydraLibLiteralsPrimitives
+      ++ hydraLibMathInt32Primitives
+      ++ hydraLibStringsPrimitives
 
 testElementArthur :: Element Meta
 testElementArthur = Element {
