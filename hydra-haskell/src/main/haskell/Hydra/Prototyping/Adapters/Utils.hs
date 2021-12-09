@@ -37,7 +37,10 @@ chooseAdapter alts supported describe typ = if supported typ
     let candidates = L.filter (supported . adapterTarget) raw
     if L.null candidates
       then fail $ "no adapters found for " ++ describe typ
-        ++ if L.null raw then "" else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")"
+        ++ (if L.null raw
+           then ""
+           else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")")
+        ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
 
 describeLiteralType :: LiteralType -> String
@@ -49,7 +52,7 @@ describeLiteralType t = case t of
   LiteralTypeString -> "character strings"
 
 describeFloatType :: FloatType -> String
-describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers" 
+describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers"
 
 describeIntegerType :: IntegerType -> String
 describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"
@@ -57,7 +60,7 @@ describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers
 describeType :: Type -> String
 describeType t = case t of
   TypeLiteral at -> describeLiteralType at
-  TypeElement t -> "elements containing " ++ describeType t 
+  TypeElement t -> "elements containing " ++ describeType t
   TypeFunction (FunctionType dom cod) -> "functions from " ++ describeType dom ++ " to " ++ describeType cod
   TypeList t -> "lists of " ++ describeType t
   TypeMap (MapType kt vt) -> "maps from " ++ describeType kt ++ " to " ++ describeType vt

@@ -74,6 +74,9 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
+instance (Default a, Eq a, Ord a, Read a, Show a) => QC.Arbitrary (Term a) where
+  arbitrary = (\(TypedTerm _ term) -> term) <$> QC.sized arbitraryTypedTerm
+  
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of

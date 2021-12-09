@@ -1,6 +1,7 @@
 module Hydra.Basics where
 
 import Hydra.Core
+import Hydra.Lib.Lists
 
 -- Find the precision of a given floating-point type
 floatTypePrecision :: (FloatType -> Precision)
@@ -161,6 +162,10 @@ termVariants = [
   TermVariantSet,
   TermVariantUnion,
   TermVariantVariable]
+
+-- TODO: temporary. Just a token polymorphic function for testing
+testLists :: ([[a]] -> Int)
+testLists lists = (hsLength (hsConcat lists))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Type -> TypeVariant)

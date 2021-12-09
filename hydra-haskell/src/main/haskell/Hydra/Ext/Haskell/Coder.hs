@@ -226,7 +226,7 @@ encodeType typ = case typ of
   TypeUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
     pure $ H.TypeVariable $ simpleName v,
     encodeType body]
---  TypeVariable v ->
+  TypeVariable v -> pure $ H.TypeVariable $ simpleName v
   _ -> fail $ "unexpected type: " ++ show typ
 
 toApplicationType :: [H.Type] -> H.Type
@@ -275,7 +275,8 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
     TypeVariantNominal,
     TypeVariantOptional,
     TypeVariantRecord,
-    TypeVariantUnion],
+    TypeVariantUnion,
+    TypeVariantVariable],
   languageConstraintsTypes = const True }
 
 hsapp :: H.Expression -> H.Expression -> H.Expression
