@@ -10,6 +10,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Data.Int
+import qualified Control.Monad as CM
 
 
 apply :: Default a => Term a -> Term a -> Term a
@@ -81,6 +82,14 @@ expectInt32 term = case termData term of
   ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
   _ -> fail $ "expected an int32, got " ++ show term
 
+expectList :: Show m => (Term m -> Result a) -> Term m -> Result [a]
+expectList f term = expectListPoly term >>= CM.mapM f
+
+expectListPoly :: Show m => Term m -> Result [Term m]
+expectListPoly term = case termData term of
+  ExpressionList els -> pure els
+  _ -> fail $ "expected a list, got " ++ show term
+
 expectLiteral :: Show a => Term a -> Result Literal
 expectLiteral term = case termData term of
   ExpressionLiteral av -> pure av
@@ -95,6 +104,11 @@ expectRecord :: Show a => Term a -> Result [Field a]
 expectRecord term = case termData term of
   ExpressionRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
+
+expectSet :: (Ord a, Show m) => (Term m -> Result a) -> Term m -> Result (S.Set a)
+expectSet f term = case termData term of
+  ExpressionSet s -> S.fromList <$> CM.mapM f (S.toList s)
+  _ -> fail $ "expected a set, got " ++ show term
 
 expectString :: Show a => Term a -> Result String
 expectString term = case termData term of
