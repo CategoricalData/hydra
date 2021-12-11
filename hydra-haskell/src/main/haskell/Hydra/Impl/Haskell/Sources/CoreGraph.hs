@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Impl.Haskell.Dsl.Elements
+import Hydra.Impl.Haskell.Dsl.Standard
 
 
 -- Note: here, the element namespace "hydra/core" doubles as a graph name

@@ -5,7 +5,7 @@ import Hydra.Lib.Literals
 import Hydra.Lib.Strings
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Impl.Haskell.Dsl.Elements
+import Hydra.Impl.Haskell.Dsl.Standard
 
 
 _hydra_adapters_utils :: Name

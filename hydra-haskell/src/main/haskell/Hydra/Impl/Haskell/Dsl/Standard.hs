@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Dsl.Elements where
+module Hydra.Impl.Haskell.Dsl.Standard where
 
 import Hydra.Core
 import Hydra.Evaluation
