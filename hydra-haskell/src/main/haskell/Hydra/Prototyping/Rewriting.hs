@@ -48,6 +48,8 @@ replaceTerm order rep term = case order of
             FunctionCases fields -> FunctionCases $ replaceField <$> fields
             FunctionCompareTo other -> FunctionCompareTo $ replace other
             FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
+            FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases
+              (OptionalCases (replace nothing) (replace just))
             _ -> fun
           ExpressionLet (Let v t1 t2) -> ExpressionLet $ Let v (replace t1) (replace t2)
           ExpressionList els -> ExpressionList $ replace <$> els
@@ -92,6 +94,7 @@ subterms term = case termData term of
     FunctionCases cases -> fieldTerm <$> cases
     FunctionCompareTo other -> [other]
     FunctionLambda (Lambda _ body) -> [body]
+    FunctionOptionalCases (OptionalCases nothing just) -> [nothing, just]
     _ -> []
   ExpressionLet (Let _ t1 t2) -> [t1, t2]
   ExpressionList els -> els

@@ -130,6 +130,10 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
           n2 = div n' $ L.length sfields
         -- Note: projections now require nominally-typed records
 --      TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
+--      TypeOptional ot -> [FunctionOptionalCases <$> (
+--        OptionalCases <$> arbitraryTerm cod n'
+--          <*> (defaultTerm . ExpressionFunction
+--          <$> arbitraryFunction (FunctionType ot cod) n'))]
       _ -> []
 
 arbitraryIntegerValue :: IntegerType -> QC.Gen IntegerValue

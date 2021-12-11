@@ -72,12 +72,13 @@ standardFunctionVariant cx = standardFunction cx _hydra_basics "functionVariant"
   "Find the function variant (constructor) for a given function"
   (universal "a" $ nominalType _Function) (nominalType _FunctionVariant) $
   nominalMatchWithVariants cx (universal "a" $ nominalType _Function) (nominalType _FunctionVariant) [
-    (_Function_cases,      _FunctionVariant_cases),
-    (_Function_compareTo,  _FunctionVariant_compareTo),
-    (_Function_data,       _FunctionVariant_data),
-    (_Function_lambda,     _FunctionVariant_lambda),
-    (_Function_primitive,  _FunctionVariant_primitive),
-    (_Function_projection, _FunctionVariant_projection)]
+    (_Function_cases,         _FunctionVariant_cases),
+    (_Function_compareTo,     _FunctionVariant_compareTo),
+    (_Function_data,          _FunctionVariant_data),
+    (_Function_lambda,        _FunctionVariant_lambda),
+    (_Function_optionalCases, _FunctionVariant_optionalCases),
+    (_Function_primitive,     _FunctionVariant_primitive),
+    (_Function_projection,    _FunctionVariant_projection)]
 
 standardFunctionVariants :: Context Meta -> Element Meta
 standardFunctionVariants cx = standardElement cx _hydra_basics "functionVariants"
@@ -87,8 +88,9 @@ standardFunctionVariants cx = standardElement cx _hydra_basics "functionVariants
       _FunctionVariant_cases,
       _FunctionVariant_compareTo,
       _FunctionVariant_data,
-      _FunctionVariant_primitive,
       _FunctionVariant_lambda,
+      _FunctionVariant_optionalCases,
+      _FunctionVariant_primitive,
       _FunctionVariant_projection])
 
 basicsIntegerTypeIsSigned :: Context Meta -> Element Meta

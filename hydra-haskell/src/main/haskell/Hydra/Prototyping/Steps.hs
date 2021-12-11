@@ -3,7 +3,7 @@ module Hydra.Prototyping.Steps (
   bidirectional,
   composeSteps,
   idStep,
-  stepBoth,
+  stepEither,
   module Hydra.Evaluation
 ) where
 
@@ -48,7 +48,7 @@ bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
 idStep :: Step a a
 idStep = Step pure pure
 
-stepBoth :: StepDirection -> Step a a -> a -> Result a
-stepBoth dir = case dir of
+stepEither :: StepDirection -> Step a a -> a -> Result a
+stepEither dir = case dir of
   StepDirectionOut -> stepOut
   StepDirectionIn -> stepIn

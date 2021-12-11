@@ -43,7 +43,7 @@ fieldAdapter :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> FieldT
 fieldAdapter context ftyp = do
   ad <- termAdapter context $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
-    $ bidirectional $ \dir (Field name term) -> Field name <$> stepBoth dir (adapterStep ad) term
+    $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir (adapterStep ad) term
 
 functionToUnion :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
@@ -59,6 +59,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo other
         FunctionData -> nominalUnitVariant cx _Function _Function_data
         FunctionLambda _ -> nominalVariant cx _Function _Function_lambda $ stringValue $ show term -- TODO
+        FunctionOptionalCases _ -> nominalVariant cx _Function _Function_optionalCases $ stringValue $ show term -- TODO
         FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
         FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
       ExpressionVariable var -> nominalVariant cx _Function _Expression_variable $ stringValue var
@@ -69,6 +70,7 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
           (_Function_compareTo, forCompareTo fterm),
           (_Function_data, forData fterm),
           (_Function_lambda, forLambda fterm),
+          (_Function_optionalCases, forOptionalCases fterm),
           (_Function_primitive, forPrimitive fterm),
           (_Function_projection, forProjection fterm),
           (_Expression_variable, forVariable fterm)]
@@ -77,8 +79,9 @@ functionToUnion context t@(TypeFunction (FunctionType dom _)) = do
         forCases fterm = read <$> expectString fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure dataTerm
-        forPrimitive fterm = primitive <$> expectString fterm
         forLambda fterm = read <$> expectString fterm -- TODO
+        forOptionalCases fterm = read <$> expectString fterm -- TODO
+        forPrimitive fterm = primitive <$> expectString fterm
         forProjection fterm = projection <$> expectString fterm
         forVariable fterm = variable <$> expectString fterm
 
@@ -131,7 +134,7 @@ optionalToList context t@(TypeOptional ot) = do
 passAtomic :: Default a => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passAtomic context (TypeLiteral at) = do
   ad <- atomicAdapter context at
-  let step = bidirectional $ \dir (Term (ExpressionLiteral av) _) -> atomic <$> stepBoth dir (adapterStep ad) av
+  let step = bidirectional $ \dir (Term (ExpressionLiteral av) _) -> atomic <$> stepEither dir (adapterStep ad) av
   return $ Adapter (adapterIsLossy ad) (TypeLiteral $ adapterSource ad) (TypeLiteral $ adapterTarget ad) step
 
 passFunction :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
@@ -142,25 +145,31 @@ passFunction context t@(TypeFunction (FunctionType dom cod)) = do
       TypeUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
         <$> CM.mapM (fieldAdapter context) sfields
       _ -> pure M.empty
+    optionAd <- case dom of
+      TypeOptional ot -> Just <$> termAdapter context (functionType ot cod)
+      _ -> pure Nothing 
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd
     return $ Adapter lossy t (TypeFunction (FunctionType dom' cod'))
       $ bidirectional $ \dir (Term (ExpressionFunction f) meta) -> withData meta . ExpressionFunction <$> case f of
-        FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepBoth dir (getStep $ fieldName f) f) cases
+        FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases
           where
             -- Note: this causes unrecognized cases to simply be passed through;
             --       it is not the job of this adapter to catch validation issues.
             getStep fname = Y.maybe idStep adapterStep $ M.lookup fname caseAds
-        FunctionCompareTo other -> FunctionCompareTo <$> stepBoth dir (adapterStep codAd) other
-        FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepBoth dir (adapterStep codAd) body)
-        _ -> pure f
+        FunctionCompareTo other -> FunctionCompareTo <$> stepEither dir (adapterStep codAd) other
+        FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterStep codAd) body)
+        FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases <$> (
+          OptionalCases
+            <$> stepEither dir (adapterStep codAd) nothing
+            <*> (stepEither dir (adapterStep $ Y.fromJust optionAd) just))
 
 passList :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passList context t@(TypeList lt) = do
   ad <- termAdapter context lt
   return $ Adapter (adapterIsLossy ad) t (TypeList $ adapterTarget ad)
-    $ bidirectional $ \dir (Term (ExpressionList terms) _) -> list <$> CM.mapM (stepBoth dir $ adapterStep ad) terms
+    $ bidirectional $ \dir (Term (ExpressionList terms) _) -> list <$> CM.mapM (stepEither dir $ adapterStep ad) terms
 
 passMap :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passMap context t@(TypeMap (MapType kt vt)) = do
@@ -169,7 +178,7 @@ passMap context t@(TypeMap (MapType kt vt)) = do
   return $ Adapter (adapterIsLossy kad || adapterIsLossy vad)
     t (TypeMap (MapType (adapterTarget kad) (adapterTarget vad)))
     $ bidirectional $ \dir (Term (ExpressionMap m) meta) -> withData meta . ExpressionMap . M.fromList
-      <$> CM.mapM (\(k, v) -> (,) <$> stepBoth dir (adapterStep kad) k <*> stepBoth dir (adapterStep vad) v)
+      <$> CM.mapM (\(k, v) -> (,) <$> stepEither dir (adapterStep kad) k <*> stepEither dir (adapterStep vad) v)
         (M.toList m)
 
 passOptional :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
@@ -179,7 +188,7 @@ passOptional context t@(TypeOptional ot) = do
     bidirectional $ \dir term -> case term of
       (Term (ExpressionOptional m) meta) -> withData meta . ExpressionOptional <$> case m of
         Nothing -> pure Nothing
-        Just term' -> Just <$> stepBoth dir (adapterStep ad) term'
+        Just term' -> Just <$> stepEither dir (adapterStep ad) term'
       _ -> fail $ "expected optional term, found: " ++ show term
 
 passRecord :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
@@ -188,14 +197,14 @@ passRecord context t@(TypeRecord sfields) = do
   let lossy = or $ adapterIsLossy <$> adapters
   let sfields' = adapterTarget <$> adapters
   return $ Adapter lossy t (TypeRecord sfields') $ bidirectional
-    $ \dir (Term (ExpressionRecord dfields) _) -> record <$> CM.zipWithM (stepBoth dir . adapterStep) adapters dfields
+    $ \dir (Term (ExpressionRecord dfields) _) -> record <$> CM.zipWithM (stepEither dir . adapterStep) adapters dfields
 
 passSet :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passSet context t@(TypeSet st) = do
   ad <- termAdapter context st
   return $ Adapter (adapterIsLossy ad) t (TypeSet $ adapterTarget ad)
     $ bidirectional $ \dir (Term (ExpressionSet terms) _) -> set . S.fromList
-      <$> CM.mapM (stepBoth dir (adapterStep ad)) (S.toList terms)
+      <$> CM.mapM (stepEither dir (adapterStep ad)) (S.toList terms)
 
 passUnion :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 passUnion context t@(TypeUnion sfields) = do
@@ -205,7 +214,7 @@ passUnion context t@(TypeUnion sfields) = do
     return $ Adapter lossy t (TypeUnion sfields')
       $ bidirectional $ \dir (Term (ExpressionUnion dfield) meta) -> do
         ad <- getAdapter adapters dfield
-        (\f -> Term (ExpressionUnion f) meta) <$> stepBoth dir (adapterStep ad) dfield
+        (\f -> Term (ExpressionUnion f) meta) <$> stepEither dir (adapterStep ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
 

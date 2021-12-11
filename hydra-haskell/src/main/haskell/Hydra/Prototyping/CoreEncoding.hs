@@ -71,6 +71,7 @@ encodeFunction cx f = case f of
   FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo $ encodeTerm cx other
   FunctionData -> nominalUnitVariant cx _Function _Function_data
   FunctionLambda l -> nominalVariant cx _Function _Function_lambda $ encodeLambda cx l
+  FunctionOptionalCases cases -> nominalVariant cx _Function _Function_optionalCases $ encodeOptionalCases cx cases
   FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
   FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
 
@@ -106,6 +107,11 @@ encodeNominalTerm cx (NominalTerm name term) = nominalRecord cx _NominalTerm [
   Field _NominalTerm_typeName $ stringValue name,
   Field _NominalTerm_term $ encodeTerm cx term]
 
+encodeOptionalCases :: (Default a, Ord a) => Context a -> OptionalCases a -> Term a
+encodeOptionalCases cx (OptionalCases nothing just) = nominalRecord cx _OptionalCases [
+  Field _OptionalCases_nothing $ encodeTerm cx nothing,
+  Field _OptionalCases_just $ encodeTerm cx just]
+  
 encodeTerm :: (Default a, Ord a) => Context a -> Term a -> Term a
 encodeTerm cx term = case termData term of
   ExpressionApplication a -> nominalVariant cx _Expression _Expression_application $ encodeApplication cx a
