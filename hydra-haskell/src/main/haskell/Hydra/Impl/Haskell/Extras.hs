@@ -28,7 +28,7 @@ instance Default () where dflt = ()
 instance Default Meta where dflt = Meta {
   metaDescription = Nothing,
   metaType = Nothing}
-
+ 
 instance Functor Qualified where
   fmap f (Qualified x msgs) = Qualified (fmap f x) msgs
 instance Applicative Qualified where

@@ -11,8 +11,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-emptyCoreContext :: Context Meta
-emptyCoreContext = Context {
+standardContext :: Context Meta
+standardContext = Context {
     contextGraphs = GraphSet {
       graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
       graphSetRoot = emptyGraphName},
@@ -27,21 +27,40 @@ emptyCoreContext = Context {
     emptyGraphName = "empty"
     emptyGraph = Graph emptyGraphName [] (const True) "empty"
 
-standardElement :: Context Meta -> Name -> String -> String -> Type -> Term Meta -> Element Meta
-standardElement cx ns name desc typ term = Element (ns ++ "." ++ name) (encodeType cx typ) $ withDoc desc term
+standardElement :: Name -> String -> String -> Type -> Term Meta -> Element Meta
+standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ withDoc desc term
 
-standardFunction :: Context Meta -> Name -> String -> String -> Type -> Type -> Term Meta -> Element Meta
-standardFunction cx ns name desc dom cod = standardElement cx ns name desc typ
+standardFunction :: Name -> String -> String -> Type -> Type -> Term Meta -> Element Meta
+standardFunction ns name desc dom cod = standardElement ns name desc typ
   where
     typ = functionType dom cod
 
-standardGraph :: Name -> [Context Meta -> Element Meta] -> Graph Meta
-standardGraph name els = Graph name elements dataTerms schemaGraph
+standardGraph :: Name -> [Element Meta] -> Graph Meta
+standardGraph name els = Graph name els dataTerms schemaGraph
   where
-    cx = emptyCoreContext
     dataTerms = const True -- TODO
-    elements = (\f -> f cx) <$> els
     schemaGraph = "hydra/core"
+
+standardMatch :: Name -> Type -> [(FieldName, Term Meta)] -> Term Meta
+standardMatch = nominalMatch standardContext
+
+standardMatchWithVariants :: Type -> Type -> [(FieldName, FieldName)] -> Term Meta
+standardMatchWithVariants = nominalMatchWithVariants standardContext
+
+standardProjection :: Name -> FieldName -> Type -> Term Meta
+standardProjection = nominalProjection standardContext
+
+standardWithUnitVariant :: Name -> FieldName -> Term Meta
+standardWithUnitVariant = nominalWithUnitVariant standardContext
+
+standardWithFunction :: Name -> FieldName -> Element Meta -> Term Meta
+standardWithFunction = nominalWithFunction standardContext
+
+standardWithType :: Type -> Term Meta -> Term Meta
+standardWithType = withType standardContext
+
+standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
+standardWithVariant = nominalWithVariant standardContext
 
 typeElement :: Context Meta -> Name -> Type -> Element Meta
 typeElement cx name typ = Element {
