@@ -40,7 +40,7 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- floatAdapter context ft
             let step = bidirectional
                   $ \dir (LiteralFloat fv) -> LiteralFloat
-                    <$> stepBoth dir (adapterStep adapter) fv
+                    <$> stepEither dir (adapterStep adapter) fv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeFloat $ adapterTarget adapter) step
         LiteralTypeInteger it -> pure $ if noIntegerVars
           then fallbackAdapter t
@@ -48,7 +48,7 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- integerAdapter context it
             let step = bidirectional
                   $ \dir (LiteralInteger iv) -> LiteralInteger
-                    <$> stepBoth dir (adapterStep adapter) iv
+                    <$> stepEither dir (adapterStep adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the atomic string type"
     supported = literalTypeIsSupported constraints

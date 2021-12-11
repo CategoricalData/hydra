@@ -50,10 +50,12 @@ evaluate context term = reduce M.empty term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
-          FunctionCases cases -> defaultTerm . ExpressionRecord <$> CM.mapM reduceField cases
+          FunctionCases cases -> defaultTerm . ExpressionFunction . FunctionCases <$> CM.mapM reduceField cases
           FunctionCompareTo other -> defaultTerm . ExpressionFunction . FunctionCompareTo <$> reduceb other
           FunctionData -> done
           FunctionLambda (Lambda v body) -> defaultTerm . ExpressionFunction . FunctionLambda . Lambda v <$> reduceb body
+          FunctionOptionalCases (OptionalCases nothing just) -> defaultTerm . ExpressionFunction . FunctionOptionalCases <$>
+            (OptionalCases <$> reduceb nothing <*> reduceb just)
           FunctionPrimitive _ -> done
           FunctionProjection _ -> done
 
@@ -77,13 +79,21 @@ evaluate context term = reduce M.empty term
         -- TODO: FunctionCompareTo
 
         FunctionData -> do
-            arg <- reduce bindings $ L.head args
-            case termData arg of
-              ExpressionElement name -> dereferenceElement context name
-                >>= reduce bindings
-                >>= reduceApplication bindings (L.tail args)
-              _ -> fail "tried to apply data (delta) to a non- element reference"
+          arg <- reduce bindings $ L.head args
+          case termData arg of
+            ExpressionElement name -> dereferenceElement context name
+              >>= reduce bindings
+              >>= reduceApplication bindings (L.tail args)
+            _ -> fail "tried to apply data (delta) to a non- element reference"
 
+        FunctionOptionalCases (OptionalCases nothing just) -> do
+          arg <- (reduce bindings $ L.head args) >>= deref context
+          case termData arg of
+            ExpressionOptional m -> case m of
+              Nothing -> reduce bindings nothing
+              Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
+            _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
+     
         FunctionPrimitive name -> do
              prim <- requirePrimitiveFunction context name
              let arity = primitiveFunctionArity prim
@@ -126,6 +136,7 @@ freeVariables term = S.fromList $ free S.empty term
           FunctionCompareTo term -> free bound term
           FunctionData -> []
           FunctionLambda (Lambda v t) -> free (S.insert v bound) t
+          FunctionOptionalCases (OptionalCases nothing just) -> free bound nothing ++ free bound just
           FunctionPrimitive _ -> []
           FunctionProjection _ -> []
 
@@ -165,5 +176,6 @@ termIsValue strategy term = termIsOpaque strategy term || case termData term of
       FunctionCompareTo other -> termIsValue strategy other
       FunctionData -> True
       FunctionLambda (Lambda _ body) -> termIsValue strategy body
+      FunctionOptionalCases (OptionalCases nothing just) -> termIsValue strategy nothing && termIsValue strategy just
       FunctionPrimitive _ -> True
       FunctionProjection _ -> True

@@ -280,6 +280,16 @@ definitions:
                   type:
                     variable: a
 
+        - name: optionalCases
+          description: "Eliminator for optional terms"
+          type:
+            parameterized:
+              genericType: OptionalCases
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
         - name: primitive
           description: "A reference to a built-in (primitive) function"
           type: Name
@@ -305,6 +315,7 @@ definitions:
         - compareTo
         - data
         - lambda
+        - optionalCases
         - primitive
         - projection
 
@@ -506,6 +517,29 @@ definitions:
           type: Name
 
         - name: term
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+  - name: OptionalCases
+    type:
+      record:
+        - name: nothing
+          description: "A term provided if the optional value is nothing"
+          type:
+            parameterized:
+              genericType: Term
+              parameters:
+                - variable: a
+                  type:
+                    variable: a
+
+        - name: just
+          description: "A function which is applied of the optional value is non-nothing"
           type:
             parameterized:
               genericType: Term

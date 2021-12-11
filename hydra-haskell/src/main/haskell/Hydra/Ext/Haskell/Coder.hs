@@ -106,12 +106,25 @@ encodeFunction cx meta fun = case fun of
           return $ H.Alternative lhs rhs Nothing
     FunctionData -> pure $ hsvar "id"
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeTerm cx body
+    FunctionOptionalCases (OptionalCases nothing just) -> do
+      nothingRhs <- encodeTerm cx nothing
+      let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
+      justAlt <- do
+        -- Note: some of the following could be brought together with FunctionCases
+        let v0 = "v"
+        let rhsTerm = simplifyTerm $ apply just (variable v0)
+        let v1 = if S.member v0 $ freeVariablesInTerm rhsTerm then v0 else "_"
+        let lhs = H.PatternApplication $ H.Pattern_Application (hsname "Just") [H.PatternName $ hsname v1]
+        rhs <- encodeTerm cx rhsTerm
+        return $ H.Alternative lhs rhs Nothing
+      return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveName name
     FunctionProjection fname -> pure $ hsvar $ case domName of
       Just rname -> qualifyRecordFieldName rname fname
       Nothing -> fname
     _ -> fail $ "unexpected function: " ++ show fun
   where
+    
     fieldMapOf typ = case typ of
       Just (TypeUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
       _ -> Nothing

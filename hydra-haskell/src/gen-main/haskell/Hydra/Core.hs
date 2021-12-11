@@ -24,6 +24,7 @@ module Hydra.Core
   , Meta(..)
   , Name
   , NominalTerm(..)
+  , OptionalCases(..)
   , OptionalExpression(..)
   , Precision(..)
   , Term(..)
@@ -87,12 +88,14 @@ module Hydra.Core
   , _FunctionVariant_compareTo
   , _FunctionVariant_data
   , _FunctionVariant_lambda
+  , _FunctionVariant_optionalCases
   , _FunctionVariant_primitive
   , _FunctionVariant_projection
   , _Function_cases
   , _Function_compareTo
   , _Function_data
   , _Function_lambda
+  , _Function_optionalCases
   , _Function_primitive
   , _Function_projection
   , _IntegerType
@@ -150,6 +153,9 @@ module Hydra.Core
   , _NominalTerm
   , _NominalTerm_term
   , _NominalTerm_typeName
+  , _OptionalCases
+  , _OptionalCases_just
+  , _OptionalCases_nothing
   , _OptionalExpression
   , _OptionalExpression_just
   , _OptionalExpression_nothing
@@ -459,6 +465,15 @@ data Function a
                   variable: a
                 variable: a -}
   | FunctionLambda (Lambda a)
+  {-| Eliminator for optional terms
+      
+      @type parameterized:
+              genericType: hydra/core.OptionalCases
+              parameters:
+              - type:
+                  variable: a
+                variable: a -}
+  | FunctionOptionalCases (OptionalCases a)
   {-| A reference to a built-in (primitive) function
       
       @type hydra/core.Name -}
@@ -481,6 +496,7 @@ data FunctionVariant
   | FunctionVariantCompareTo
   | FunctionVariantData
   | FunctionVariantLambda
+  | FunctionVariantOptionalCases
   | FunctionVariantPrimitive
   | FunctionVariantProjection deriving (Eq, Generic, Ord, Read, Show)
 
@@ -639,6 +655,27 @@ data NominalTerm a
                     variable: a
                   variable: a -}
     , nominalTermTerm :: Term a } deriving (Eq, Generic, Ord, Read, Show)
+
+data OptionalCases a
+  = OptionalCases
+    {-| A term provided if the optional value is nothing
+        
+        @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    { optionalCasesNothing :: Term a
+    {-| A function which is applied of the optional value is non-nothing
+        
+        @type parameterized:
+                genericType: hydra/core.Term
+                parameters:
+                - type:
+                    variable: a
+                  variable: a -}
+    , optionalCasesJust :: Term a } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| An encoded optional value, for languages which do not natively support
     optionals -}
@@ -847,12 +884,14 @@ _FunctionVariant_cases = "cases" :: String
 _FunctionVariant_compareTo = "compareTo" :: String
 _FunctionVariant_data = "data" :: String
 _FunctionVariant_lambda = "lambda" :: String
+_FunctionVariant_optionalCases = "optionalCases" :: String
 _FunctionVariant_primitive = "primitive" :: String
 _FunctionVariant_projection = "projection" :: String
 _Function_cases = "cases" :: String
 _Function_compareTo = "compareTo" :: String
 _Function_data = "data" :: String
 _Function_lambda = "lambda" :: String
+_Function_optionalCases = "optionalCases" :: String
 _Function_primitive = "primitive" :: String
 _Function_projection = "projection" :: String
 _IntegerType = "hydra/core.IntegerType" :: String
@@ -910,6 +949,9 @@ _Name = "hydra/core.Name" :: String
 _NominalTerm = "hydra/core.NominalTerm" :: String
 _NominalTerm_term = "term" :: String
 _NominalTerm_typeName = "typeName" :: String
+_OptionalCases = "hydra/core.OptionalCases" :: String
+_OptionalCases_just = "just" :: String
+_OptionalCases_nothing = "nothing" :: String
 _OptionalExpression = "hydra/core.OptionalExpression" :: String
 _OptionalExpression_just = "just" :: String
 _OptionalExpression_nothing = "nothing" :: String

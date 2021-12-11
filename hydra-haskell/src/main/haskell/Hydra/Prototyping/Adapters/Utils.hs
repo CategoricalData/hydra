@@ -6,6 +6,7 @@ module Hydra.Prototyping.Adapters.Utils (
   describeIntegerType,
   describeType,
   floatTypeIsSupported,
+  idAdapter,
   integerTypeIsSupported,
   qualify,
   typeIsSupported,
@@ -71,6 +72,9 @@ describeType t = case t of
   TypeUnion _ -> "unions of a particular set of fields"
   TypeUniversal _ -> "polymorphic terms"
   TypeVariable _ -> "unspecified/parameteric terms"
+
+idAdapter :: Type -> Adapter Type (Term a)
+idAdapter t = Adapter False t t idStep
 
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]

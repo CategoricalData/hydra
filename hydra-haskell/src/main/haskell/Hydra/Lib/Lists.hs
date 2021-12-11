@@ -18,14 +18,31 @@ _lists_concat = qname _hydra_lib_lists "concat"
 _lists_length :: Name
 _lists_length = qname _hydra_lib_lists "length"
 
+_lists_map :: Name
+_lists_map = qname _hydra_lib_lists "map"
+
 hsConcat :: [[a]] -> [a]
 hsConcat = L.concat
 
 hsLength :: [a] -> Int
 hsLength = L.length
 
- 
+hsMap :: (a -> b) -> [a] -> [b]
+hsMap = fmap
+
 hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
   prim1 _lists_concat (listInput expectListPoly "a") (listOutputPoly "a") hsConcat,
-  prim1 _lists_length (listInputPoly "a") int32Output hsLength]
+  prim1 _lists_length (listInputPoly "a") int32Output hsLength
+--  ,
+--  PrimitiveFunction _lists_map
+--    (FunctionType
+--      (functionType (typeVariable "a") (typeVariable "b"))
+--      (functionType (listType $ typeVariable "a") (listType $ typeVariable "b")))
+--    $ \args -> do
+--      expectNArgs 2 args
+--      a1 <- expectString $ L.head args
+--      a2 <- expectListPoly $ args !! 1
+--      
+  
+  ]
