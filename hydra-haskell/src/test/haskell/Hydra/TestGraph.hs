@@ -27,7 +27,7 @@ import qualified Data.Set  as S
 
 
 cx :: Context Meta
-cx = emptyCoreContext
+cx = standardContext
 
 testContext :: Context Meta
 testContext = Context {

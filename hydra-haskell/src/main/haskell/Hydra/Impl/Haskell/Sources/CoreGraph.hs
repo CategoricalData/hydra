@@ -11,7 +11,7 @@ import Hydra.Impl.Haskell.Dsl.Elements
 hydraCoreGraph :: Graph Meta
 hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
   where
-    elements = (\f -> f emptyCoreContext) <$> [
+    elements = (\f -> f standardContext) <$> [
       hcApplication,
       hcBooleanValue,
       hcComparison,
