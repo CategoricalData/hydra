@@ -10,7 +10,6 @@ module Hydra.Prototyping.Adapters.Utils (
   integerTypeIsSupported,
   qualify,
   typeIsSupported,
-  unqualify,
   module Hydra.Adapters.Utils
 ) where
 
@@ -106,6 +105,3 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeSet st -> typeIsSupported constraints st
     TypeUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     _ -> True
-
-unqualify :: Qualified a -> a
-unqualify (Qualified (Just x) _) = x
