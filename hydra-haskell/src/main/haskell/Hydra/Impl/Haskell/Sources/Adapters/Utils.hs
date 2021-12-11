@@ -22,6 +22,7 @@ describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
   standardMatch _Precision stringType [
     (_Precision_arbitrary, constFunction $ stringValue "arbitrary-precision"),
     (_Precision_bits,
-      lambda "bits" $ apply
-        (apply (primitive _strings_cat) (apply (primitive _literals_showInt32) $ variable "bits"))
-        (stringValue "-bit"))]
+      lambda "bits" $ apply (primitive _strings_cat)
+        (list [
+          (apply (primitive _literals_showInt32) $ variable "bits"),
+          (stringValue "-bit")]))]

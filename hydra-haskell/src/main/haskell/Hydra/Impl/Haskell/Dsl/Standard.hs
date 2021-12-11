@@ -47,8 +47,8 @@ standardMatch = nominalMatch standardContext
 standardMatchWithVariants :: Type -> Type -> [(FieldName, FieldName)] -> Term Meta
 standardMatchWithVariants = nominalMatchWithVariants standardContext
 
-standardProjection :: Name -> FieldName -> Type -> Term Meta
-standardProjection = nominalProjection standardContext
+project :: Name -> FieldName -> Type -> Term Meta
+project = nominalProjection standardContext
 
 standardWithUnitVariant :: Name -> FieldName -> Term Meta
 standardWithUnitVariant = nominalWithUnitVariant standardContext

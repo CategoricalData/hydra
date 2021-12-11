@@ -6,6 +6,7 @@ import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 import Hydra.Lib.Lists
+import Hydra.Lib.Math
 import Hydra.Lib.Strings
 
 import Hydra.TestUtils
@@ -44,7 +45,7 @@ checkMonomorphicPrimitives = do
         (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_cat)
+        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $
@@ -54,16 +55,16 @@ checkMonomorphicPrimitives = do
           (pure (stringValue $ fmap C.toUpper s))
 
     H.it "Simple applications of a binary function succeed" $
-      QC.property $ \s1 s2 ->
+      QC.property $ \i1 i2 ->
         H.shouldBe
-          (eval (apply (apply (primitive _strings_cat) $ stringValue s1) $ stringValue s2))
-          (pure (stringValue $ s1 ++ s2))
+          (eval (apply (apply (primitive (qname _hydra_lib_math_int32 "add")) $ int32Value i1) $ int32Value i2))
+          (pure (int32Value $ i1 + i2))
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
         H.shouldBe
-          (eval (apply (primitive _strings_cat) $ stringValue s1))
-          (pure (apply (primitive _strings_cat) $ stringValue s1))
+          (eval (apply (primitive _strings_splitOn) $ stringValue s1))
+          (pure (apply (primitive _strings_splitOn) $ stringValue s1))
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->

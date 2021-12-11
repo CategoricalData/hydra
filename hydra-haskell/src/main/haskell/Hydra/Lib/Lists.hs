@@ -32,7 +32,7 @@ hsMap = fmap
 
 hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
-  prim1 _lists_concat (listInput expectListPoly "a") (listOutputPoly "a") hsConcat,
+  prim1 _lists_concat (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") hsConcat,
   prim1 _lists_length (listInputPoly "a") int32Output hsLength
 --  ,
 --  PrimitiveFunction _lists_map

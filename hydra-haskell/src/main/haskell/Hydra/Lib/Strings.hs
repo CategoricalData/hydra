@@ -29,8 +29,8 @@ _strings_toLower = qname _hydra_lib_strings "toLower"
 _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
-hsCat :: String -> String -> String
-hsCat x y = x ++ y
+hsCat :: [String] -> String
+hsCat = L.concat
 
 hsLength :: String -> Int
 hsLength = L.length
@@ -46,7 +46,7 @@ hsToUpper = fmap C.toUpper
 
 hydraLibStringsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 hydraLibStringsPrimitives = [
-    prim2 _strings_cat stringInput stringInput stringOutput hsCat,
+    prim1 _strings_cat (listInput stringType expectString) stringOutput hsCat,
     prim1 _strings_length stringInput int32Output hsLength,
     prim2 _strings_splitOn stringInput stringInput stringListOutput hsSplitOn,
     prim1 _strings_toLower stringInput stringOutput hsToLower,

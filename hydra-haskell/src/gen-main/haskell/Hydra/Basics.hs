@@ -31,6 +31,7 @@ functionVariant x = case x of
   FunctionCompareTo _ -> FunctionVariantCompareTo
   FunctionData -> FunctionVariantData
   FunctionLambda _ -> FunctionVariantLambda
+  FunctionOptionalCases _ -> FunctionVariantOptionalCases
   FunctionPrimitive _ -> FunctionVariantPrimitive
   FunctionProjection _ -> FunctionVariantProjection
 
@@ -40,8 +41,9 @@ functionVariants = [
   FunctionVariantCases,
   FunctionVariantCompareTo,
   FunctionVariantData,
-  FunctionVariantPrimitive,
   FunctionVariantLambda,
+  FunctionVariantOptionalCases,
+  FunctionVariantPrimitive,
   FunctionVariantProjection]
 
 -- Find whether a given integer type is signed (true) or unsigned (false)
