@@ -3,7 +3,7 @@ module Hydra.Impl.Haskell.Sources.Basics (basicsGraph) where
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Impl.Haskell.Dsl.Elements
+import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Lib.Lists
 
 
