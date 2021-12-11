@@ -1,7 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Adapters.Utils (adaptersUtilsGraph) where
 
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Lib.Literals
 import Hydra.Lib.Strings
 import Hydra.Graph
@@ -16,8 +15,7 @@ _hydra_adapters_utils = "hydra/adapters/utils"
 
 adaptersUtilsGraph :: Graph Meta
 adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
-  describePrecision,
-  unqualify]
+  describePrecision]
   
 describePrecision :: Context Meta -> Element Meta
 describePrecision cx = standardFunction cx _hydra_adapters_utils "describePrecision"
@@ -29,11 +27,3 @@ describePrecision cx = standardFunction cx _hydra_adapters_utils "describePrecis
       lambda "bits" $ apply
         (apply (primitive _strings_cat) (apply (primitive _literals_showInt32) $ variable "bits"))
         (stringValue "-bit"))]
-
---unqualify cx = standardFunction cx _hydra_adapters_utils "unqualify"
---  "Unbox a normal (non-error) qualified value"
---  (nominalType _Qualified) (typeVariable "a")
---  (lambda "q" (apply (...) (nominalProjection cx _Qualified _Qualified_value $ typeVariable "a")))
---
-----unqualify :: Qualified a -> a
-----unqualify (Qualified (Just x) _) = x
