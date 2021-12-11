@@ -3,6 +3,7 @@ module Hydra.Prototyping.Types.InferenceSpec where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Basics
 import Hydra.Prototyping.Types.Inference
 import Hydra.TestUtils
@@ -65,14 +66,14 @@ checkIndividualTerms = do
         (primitive "hydra/lib/strings.length")
         (functionType stringType int32Type)
       expectMonotype
-        (primitive "hydra/lib/math/int32.sub")
+        (primitive _math_sub)
         (functionType int32Type (functionType int32Type int32Type))
 
     H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
       expectMonotype
         (lambda "x" $
           apply
-            (apply (primitive "hydra/lib/math/int32.sub") (apply (apply (primitive "hydra/lib/math/int32.add") (variable "x")) (variable "x")))
+            (apply (primitive _math_sub) (apply (apply (primitive _math_add) (variable "x")) (variable "x")))
             (int32Value 1))
         (functionType int32Type int32Type)
 

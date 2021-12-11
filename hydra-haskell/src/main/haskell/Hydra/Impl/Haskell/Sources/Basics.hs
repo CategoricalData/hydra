@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Lib.Lists
+import Hydra.Impl.Haskell.Sources.Libraries
 
 
 _hydra_basics :: Name
@@ -25,6 +25,7 @@ basicsGraph = standardGraph _hydra_basics [
   literalTypeVariant,
   literalVariant,
   literalVariants,
+  qname,
   termVariant,
   termVariants,
   tmpTestLists,
@@ -183,15 +184,12 @@ literalVariants = standardElement _hydra_basics "literalVariants"
     _LiteralVariant_integer,
     _LiteralVariant_string])
 
---qname :: Name -> String -> Name
---qname ns name = ns ++ "." ++ name
---
---qname = standardFunction _hydra_basics "qname"
---  "Construct a qualified (dot-separated) name"
---  (nominalType _Name) stringType
-  
---
---basicsFunction :: 
+qname :: Element Meta
+qname = standardFunction _hydra_basics "qname"
+  "Construct a qualified (dot-separated) name"
+  (nominalType _Name) (functionType stringType $ nominalType _Name)
+  (lambda "ns" (lambda "name" (apply (primitive _strings_cat) (list [
+   variable "ns", stringValue ".", variable "name"]))))
 
 termVariant :: Element Meta
 termVariant = standardFunction _hydra_basics "termVariant"

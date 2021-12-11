@@ -220,9 +220,6 @@ optional = defaultTerm . ExpressionOptional
 optionalType :: Type -> Type
 optionalType = TypeOptional
 
-qname :: Name -> String -> Name
-qname ns name = ns ++ "." ++ name
-
 primitive :: Default a => Name -> Term a
 primitive = defaultTerm . ExpressionFunction . FunctionPrimitive
 
