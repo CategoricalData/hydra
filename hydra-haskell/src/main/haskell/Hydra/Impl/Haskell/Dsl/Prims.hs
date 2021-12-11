@@ -18,8 +18,11 @@ int32Input = InputSpec int32Type expectInt32
 int32Output :: Default m => OutputSpec Int m
 int32Output = OutputSpec int32Type int32Value
 
-listInput :: Show m => (Term m -> Result a) -> TypeVariable -> InputSpec [a] m
-listInput f v = InputSpec (listType $ typeVariable v) (expectList f)
+listInput :: Show m => Type -> (Term m -> Result a) -> InputSpec [a] m
+listInput lt f = InputSpec (listType lt) (expectList f)
+
+listOutput :: Default m => Type -> (a -> Term m) -> OutputSpec [a] m
+listOutput lt f = OutputSpec (listType lt) $ \l -> list (f <$> l)
 
 listInputPoly :: Show m => TypeVariable -> InputSpec [Term m] m
 listInputPoly v = InputSpec (listType $ typeVariable v) expectListPoly

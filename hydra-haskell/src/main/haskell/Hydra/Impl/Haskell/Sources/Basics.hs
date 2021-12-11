@@ -186,7 +186,10 @@ literalVariants = standardElement _hydra_basics "literalVariants"
 --qname :: Name -> String -> Name
 --qname ns name = ns ++ "." ++ name
 --
---qname = standardFunction _hydra_basics
+--qname = standardFunction _hydra_basics "qname"
+--  "Construct a qualified (dot-separated) name"
+--  (nominalType _Name) stringType
+  
 --
 --basicsFunction :: 
 
@@ -210,7 +213,7 @@ termVariant = standardFunction _hydra_basics "termVariant"
           (_Expression_typeApplication, _TermVariant_typeApplication),
           (_Expression_union,           _TermVariant_union),
           (_Expression_variable,        _TermVariant_variable)])
-    (apply (standardProjection _Term _Term_data (nominalType _Term)) $ variable "term")
+    (apply (project _Term _Term_data (nominalType _Term)) $ variable "term")
 
 termVariants :: Element Meta
 termVariants = standardElement _hydra_basics "termVariants"

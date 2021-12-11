@@ -107,6 +107,7 @@ hcFunction cx = typeElement cx _Function $ TypeUnion [
   FieldType _Function_compareTo $ TypeNominal _Term,
   FieldType _Function_data unitType,
   FieldType _Function_lambda $ TypeNominal _Lambda,
+  FieldType _Function_optionalCases $ TypeNominal _OptionalCases,
   FieldType _Function_primitive $ TypeNominal _Name,
   FieldType _Function_projection $ TypeNominal _FieldName]
 
@@ -121,6 +122,7 @@ hcFunctionVariant cx = typeElement cx _FunctionVariant $ enum [
   _FunctionVariant_compareTo,
   _FunctionVariant_data,
   _FunctionVariant_lambda,
+  _FunctionVariant_optionalCases,
   _FunctionVariant_primitive,
   _FunctionVariant_projection]
 

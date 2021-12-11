@@ -8,4 +8,7 @@ import Hydra.Lib.Strings
 describePrecision :: (Precision -> String)
 describePrecision x = case x of
   PrecisionArbitrary -> "arbitrary-precision"
-  PrecisionBits v -> (hsCat (hsShowInt32 v) "-bit")
+  PrecisionBits v -> (
+    hsCat [
+      hsShowInt32 v,
+      "-bit"])
