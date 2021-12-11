@@ -7,7 +7,7 @@ module Hydra.TestGraph (
   testTermArthur,
   testTypePerson,
   testTypeTimestamp,
-  module Hydra.Lib.Strings,
+  module Hydra.Impl.Haskell.Sources.Libraries,
 ) where
 
 import Hydra.Core
@@ -17,10 +17,7 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Prototyping.Primitives
-import Hydra.Lib.Lists
-import Hydra.Lib.Literals
-import Hydra.Lib.Math
-import Hydra.Lib.Strings
+import Hydra.Impl.Haskell.Sources.Libraries
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S

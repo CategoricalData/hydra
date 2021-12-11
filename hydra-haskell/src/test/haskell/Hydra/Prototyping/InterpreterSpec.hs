@@ -1,13 +1,11 @@
 module Hydra.Prototyping.InterpreterSpec where
 
+import Hydra.Basics
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
-import Hydra.Lib.Lists
-import Hydra.Lib.Math
-import Hydra.Lib.Strings
 
 import Hydra.TestUtils
 
@@ -57,7 +55,7 @@ checkMonomorphicPrimitives = do
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \i1 i2 ->
         H.shouldBe
-          (eval (apply (apply (primitive (qname _hydra_lib_math_int32 "add")) $ int32Value i1) $ int32Value i2))
+          (eval (apply (apply (primitive _math_add) $ int32Value i1) $ int32Value i2))
           (pure (int32Value $ i1 + i2))
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
