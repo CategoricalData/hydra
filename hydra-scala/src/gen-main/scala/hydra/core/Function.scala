@@ -40,6 +40,17 @@ enum Function[a]:
      */
     case lambda(value: hydra.core.Lambda[a]) extends Function[a]
     /**
+     * Eliminator for optional terms
+     * 
+     * @type parameterized:
+     *         genericType: hydra/core.OptionalCases
+     *         parameters:
+     *         - type:
+     *             variable: a
+     *           variable: a
+     */
+    case optionalCases(value: hydra.core.OptionalCases[a]) extends Function[a]
+    /**
      * A reference to a built-in (primitive) function
      * 
      * @type hydra/core.Name
@@ -57,5 +68,6 @@ val _Function_cases: String = "cases"
 val _Function_compareTo: String = "compareTo"
 val _Function_data: String = "data"
 val _Function_lambda: String = "lambda"
+val _Function_optionalCases: String = "optionalCases"
 val _Function_primitive: String = "primitive"
 val _Function_projection: String = "projection"
