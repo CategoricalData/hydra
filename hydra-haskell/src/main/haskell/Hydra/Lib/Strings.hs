@@ -5,17 +5,17 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 
 
-hsCat :: [String] -> String
-hsCat = L.concat
+cat :: [String] -> String
+cat = L.concat
 
-hsLength :: String -> Int
-hsLength = L.length
+length :: String -> Int
+length = L.length
 
-hsSplitOn :: String -> String -> [String]
-hsSplitOn = LS.splitOn
+splitOn :: String -> String -> [String]
+splitOn = LS.splitOn
 
-hsToLower :: String -> String
-hsToLower = fmap C.toLower
+toLower :: String -> String
+toLower = fmap C.toLower
 
-hsToUpper :: String -> String
-hsToUpper = fmap C.toUpper
+toUpper :: String -> String
+toUpper = fmap C.toUpper

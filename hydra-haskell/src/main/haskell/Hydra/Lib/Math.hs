@@ -1,23 +1,23 @@
 module Hydra.Lib.Math where
 
 
-hsNeg :: Int -> Int
-hsNeg = negate
+neg :: Int -> Int
+neg = negate
 
-hsAdd :: Int -> Int -> Int
-hsAdd x y = x + y
+add :: Int -> Int -> Int
+add x y = x + y
 
-hsSub :: Int -> Int -> Int
-hsSub x y = x - y
+sub :: Int -> Int -> Int
+sub x y = x - y
 
-hsMul :: Int -> Int -> Int
-hsMul x y = x * y
+mul :: Int -> Int -> Int
+mul x y = x * y
 
-hsDiv :: Int -> Int -> Int
-hsDiv = div
+div :: Int -> Int -> Int
+div = Prelude.div
 
-hsMod :: Int -> Int -> Int
-hsMod = mod
+mod :: Int -> Int -> Int
+mod = Prelude.mod
 
-hsRem :: Int -> Int -> Int
-hsRem = rem
+rem :: Int -> Int -> Int
+rem = Prelude.rem
