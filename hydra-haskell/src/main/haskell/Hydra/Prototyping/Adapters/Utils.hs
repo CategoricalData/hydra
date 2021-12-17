@@ -1,7 +1,6 @@
 module Hydra.Prototyping.Adapters.Utils (
   literalTypeIsSupported,
   chooseAdapter,
-  describeType,
   floatTypeIsSupported,
   idAdapter,
   integerTypeIsSupported,
@@ -39,21 +38,6 @@ chooseAdapter alts supported describe typ = if supported typ
            else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")")
         ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
-
-describeType :: Type -> String
-describeType t = case t of
-  TypeLiteral at -> describeLiteralType at
-  TypeElement t -> "elements containing " ++ describeType t
-  TypeFunction (FunctionType dom cod) -> "functions from " ++ describeType dom ++ " to " ++ describeType cod
-  TypeList t -> "lists of " ++ describeType t
-  TypeMap (MapType kt vt) -> "maps from " ++ describeType kt ++ " to " ++ describeType vt
-  TypeNominal name -> "alias for " ++ name
-  TypeOptional t -> "optional " ++ describeType t
-  TypeRecord _ -> "records of a particular set of fields"
-  TypeSet t -> "sets of " ++ describeType t
-  TypeUnion _ -> "unions of a particular set of fields"
-  TypeUniversal _ -> "polymorphic terms"
-  TypeVariable _ -> "unspecified/parameteric terms"
 
 idAdapter :: Type -> Adapter Type (Term a)
 idAdapter t = Adapter False t t idStep
