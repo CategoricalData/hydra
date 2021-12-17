@@ -1,8 +1,8 @@
 module Hydra.Basics where
 
-import Hydra.Core
-import Hydra.Lib.Lists
-import Hydra.Lib.Strings
+import Hydra.Core as Core
+import Hydra.Lib.Lists as Lists
+import Hydra.Lib.Strings as Strings
 
 -- Find the precision of a given floating-point type
 floatTypePrecision :: (FloatType -> Precision)
@@ -133,7 +133,7 @@ literalVariants = [
 -- Construct a qualified (dot-separated) name
 qname :: (Name -> String -> Name)
 qname ns name = (
-  Hydra.Lib.Strings.cat [
+  Strings.cat [
     ns,
     ".",
     name])
@@ -176,7 +176,7 @@ termVariants = [
 
 -- TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)
-testLists lists = (Hydra.Lib.Lists.length (Hydra.Lib.Lists.concat lists))
+testLists lists = (Lists.length (Lists.concat lists))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Type -> TypeVariant)
