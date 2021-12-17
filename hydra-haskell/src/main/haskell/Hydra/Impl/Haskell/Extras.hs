@@ -8,6 +8,7 @@ module Hydra.Impl.Haskell.Extras (
   qualifiedToResult,
   requireType,
   resultToQualified,
+  toQname,
   unidirectionalStep,
   module Hydra.Errors
   ) where
@@ -28,7 +29,7 @@ instance Default () where dflt = ()
 instance Default Meta where dflt = Meta {
   metaDescription = Nothing,
   metaType = Nothing}
- 
+
 instance Functor Qualified where
   fmap f (Qualified x msgs) = Qualified (fmap f x) msgs
 instance Applicative Qualified where
@@ -82,7 +83,7 @@ elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
 localNameOf :: Name -> String
-localNameOf name = L.last (LS.splitOn "." name)
+localNameOf = snd . toQname
 
 eitherToQualified :: Result a -> Qualified a
 eitherToQualified e = case e of
@@ -103,6 +104,11 @@ resultToQualified :: Result a -> Qualified a
 resultToQualified r = case r of
   ResultSuccess x -> pure x
   ResultFailure msg -> fail msg
+
+toQname :: Name -> (String, String)
+toQname name = (ns, local)
+  where
+    [ns, local] = LS.splitOn "." name
 
 unidirectionalStep :: (a -> Result b) -> Step a b
 unidirectionalStep m = Step {

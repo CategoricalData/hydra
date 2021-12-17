@@ -2,7 +2,6 @@ module Hydra.Prototyping.Adapters.Utils (
   literalTypeIsSupported,
   chooseAdapter,
   describeLiteralType,
-  describeFloatType,
   describeIntegerType,
   describeType,
   floatTypeIsSupported,
@@ -50,9 +49,6 @@ describeLiteralType t = case t of
   LiteralTypeFloat ft -> describeFloatType ft
   LiteralTypeInteger it -> describeIntegerType it
   LiteralTypeString -> "character strings"
-
-describeFloatType :: FloatType -> String
-describeFloatType t = describePrecision (floatTypePrecision t) ++ " floating-point numbers"
 
 describeIntegerType :: IntegerType -> String
 describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"

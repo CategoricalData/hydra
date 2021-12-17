@@ -5,7 +5,7 @@ import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Basics
-import Hydra.Impl.Haskell.Sources.Basics
+import Hydra.Impl.Haskell.Sources.Basics (basicsGraph)
 import Hydra.Prototyping.Interpreter
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.CoreEncoding

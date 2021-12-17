@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.Basics (basicsGraph) where
+module Hydra.Impl.Haskell.Sources.Basics where
 
 import Hydra.Core
 import Hydra.Graph
