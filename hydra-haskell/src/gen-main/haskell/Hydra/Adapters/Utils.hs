@@ -9,7 +9,7 @@ import Hydra.Lib.Strings as Strings
 describeFloatType :: (FloatType -> String)
 describeFloatType t = (
   Strings.cat [
-    (describePrecision (floatTypePrecision t)),
+    describePrecision (floatTypePrecision t),
     " floating-point numbers"])
 
 -- Display numeric precision as a string
@@ -18,5 +18,5 @@ describePrecision x = case x of
   PrecisionArbitrary -> "arbitrary-precision"
   PrecisionBits v -> (
     Strings.cat [
-      (Literals.showInt32 v),
+      Literals.showInt32 v,
       "-bit"])

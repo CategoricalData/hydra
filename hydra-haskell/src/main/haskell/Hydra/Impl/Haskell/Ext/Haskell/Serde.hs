@@ -92,7 +92,11 @@ instance ToTree H.Expression_Lambda where
       body = toTree inner
 
 instance ToTree H.Import where
-  toTree (H.Import _ name _ _) = spaceSep [cst "import", cst name]
+  toTree (H.Import qual name mod _) = spaceSep $ Y.catMaybes [
+      Just $ cst "import",
+      if qual then Just (cst "qualified") else Nothing,
+      Just $ cst name,
+      (\m -> cst $ "as " ++ m) <$> mod]
 
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of

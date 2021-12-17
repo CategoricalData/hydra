@@ -54,13 +54,17 @@ dataGraphToHaskellModule cx g = do
 
     createModule coders pairs = do
       decls <- CM.mapM (createDeclaration coders) pairs
-      return $ H.Module (Just $ H.ModuleHead (moduleName $ graphName g) []) imports decls
+      return $ H.Module (Just $ H.ModuleHead (fst $ importName $ graphName g) []) imports decls
 
-    imports = toSimpleImport . moduleName <$> S.toList (dataGraphDependencies g)
+    imports = toImport <$> S.toList (dataGraphDependencies g)
 
-    moduleName name = L.intercalate "." $ capitalize <$> LS.splitOn "/" name
-
-    toSimpleImport mname = H.Import False mname Nothing Nothing
+    toImport name = H.Import False mname (Just alias) Nothing
+      where
+        (mname, alias) = importName name
+        
+    importName name = (L.intercalate "." parts, L.last parts)
+      where
+        parts = capitalize <$> LS.splitOn "/" name
 
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
@@ -118,7 +122,7 @@ encodeFunction cx meta fun = case fun of
         rhs <- encodeTerm cx rhsTerm
         return $ H.Alternative lhs rhs Nothing
       return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
-    FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveName name
+    FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
     FunctionProjection fname -> pure $ hsvar $ case domName of
       Just rname -> qualifyRecordFieldName rname fname
       Nothing -> fname
@@ -304,8 +308,11 @@ hslit = H.ExpressionLiteral
 hsname :: H.NamePart -> H.Name
 hsname s = H.NameNormal $ H.QualifiedName [] s
 
-hsPrimitiveName :: Name -> H.Name
-hsPrimitiveName name = simpleName $ "hs" ++ capitalize (localNameOf name)
+hsPrimitiveReference :: Name -> H.Name
+hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] local
+  where
+    (ns, local) = toQname name
+    prefix = capitalize $ L.last $ LS.splitOn "/" ns
 
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
