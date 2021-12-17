@@ -52,6 +52,8 @@ _hydra_adapters_utils = "hydra/adapters/utils"
 adaptersUtilsGraph :: Graph Meta
 adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
   describeFloatType,
+  describeIntegerType,
+  describeLiteralType,
   describePrecision]
 
 describeFloatType :: Element Meta
@@ -60,12 +62,29 @@ describeFloatType = standardFunction _hydra_adapters_utils "describeFloatType"
   (t_ _FloatType) string_
   $ l_"t" $ (e_ describePrecision @. (e_ floatTypePrecision @. v_"t")) ++. s_" floating-point numbers"
 
+describeIntegerType :: Element Meta
+describeIntegerType = standardFunction _hydra_adapters_utils "describeIntegerType"
+  "Display an integer type as a string"
+  (t_ _IntegerType) string_
+  $ l_"t" $ (e_ describePrecision @. (e_ integerTypePrecision @. v_"t")) ++. s_" integers"
+  
+describeLiteralType :: Element Meta
+describeLiteralType = standardFunction _hydra_adapters_utils "describeLiteralType"
+  "Display a literal type as a string"
+  (t_ _LiteralType) string_ $
+  match_ _LiteralType string_ [
+    (_LiteralType_binary, const_ $ s_"binary strings"),
+    (_LiteralType_boolean, const_ $ s_"boolean values"),
+    (_LiteralType_float, e_ describeFloatType),
+    (_LiteralType_integer, e_ describeIntegerType),
+    (_LiteralType_string, const_ $ s_"character strings")]
+    
 describePrecision :: Element Meta
 describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
   "Display numeric precision as a string"
   (t_ _Precision) string_ $
   match_ _Precision string_ [
-    (_Precision_arbitrary, constFunction $ s_"arbitrary-precision"),
+    (_Precision_arbitrary, const_ $ s_"arbitrary-precision"),
     (_Precision_bits,
       l_"bits" $ p_ _strings_cat @.
         list [
