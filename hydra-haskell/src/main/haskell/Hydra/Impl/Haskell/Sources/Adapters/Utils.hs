@@ -54,7 +54,8 @@ adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
   describeFloatType,
   describeIntegerType,
   describeLiteralType,
-  describePrecision]
+  describePrecision,
+  describeType]
 
 describeFloatType :: Element Meta
 describeFloatType = standardFunction _hydra_adapters_utils "describeFloatType"
@@ -90,3 +91,27 @@ describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
         list [
           p_ _literals_showInt32 @. v_"bits",
           s_"-bit"])]
+          
+describeType :: Element Meta
+describeType = standardFunction _hydra_adapters_utils "describeType"
+  "Display a type as a string"
+  (t_ _Type) string_ $
+  match_ _Type string_ [
+    (_Type_literal, e_ describeLiteralType),
+    (_Type_element, l_"t" $ s_"elements containing " ++. (e_ describeType @. v_"t")),
+    (_Type_function, l_"ft" $ s_"functions from "
+      ++. (e_ describeType @. (project _FunctionType _FunctionType_domain (t_ _Type) @. v_"ft"))
+      ++. s_" to "
+      ++. (e_ describeType @. (project _FunctionType _FunctionType_codomain (t_ _Type) @. v_"ft"))),
+    (_Type_list, l_"t" $ s_"lists of " ++. (e_ describeType @. v_"t")),
+    (_Type_map, l_"mt" $ s_"maps from "
+      ++. (e_ describeType @. (project _MapType _MapType_keys (t_ _Type) @. v_"mt"))
+      ++. s_" to "
+      ++. (e_ describeType @. (project _MapType _MapType_values (t_ _Type) @. v_"mt"))),
+    (_Type_nominal, l_"name" $ s_"alias for" ++. v_"name"),
+    (_Type_optional, l_"ot" $ s_"optional " ++. (e_ describeType @. v_"ot")),
+    (_Type_record, const_ $ s_"records of a particular set of fields"),
+    (_Type_set, l_"st" $ s_"sets of " ++. (e_ describeType @. v_"st")),
+    (_Type_union, const_ $ s_"unions of a particular set of fields"),
+    (_Type_universal, const_ $ s_"polymorphic terms"),
+    (_Type_variable, const_ $ s_"unspecified/parametric terms")]
