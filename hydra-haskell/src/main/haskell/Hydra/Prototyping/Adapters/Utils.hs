@@ -1,8 +1,6 @@
 module Hydra.Prototyping.Adapters.Utils (
   literalTypeIsSupported,
   chooseAdapter,
-  describeLiteralType,
-  describeIntegerType,
   describeType,
   floatTypeIsSupported,
   idAdapter,
@@ -41,17 +39,6 @@ chooseAdapter alts supported describe typ = if supported typ
            else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")")
         ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
-
-describeLiteralType :: LiteralType -> String
-describeLiteralType t = case t of
-  LiteralTypeBinary -> "binary strings"
-  LiteralTypeBoolean -> "boolean values"
-  LiteralTypeFloat ft -> describeFloatType ft
-  LiteralTypeInteger it -> describeIntegerType it
-  LiteralTypeString -> "character strings"
-
-describeIntegerType :: IntegerType -> String
-describeIntegerType t = describePrecision (integerTypePrecision t) ++ " integers"
 
 describeType :: Type -> String
 describeType t = case t of
