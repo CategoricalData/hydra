@@ -133,7 +133,7 @@ literalVariants = [
 -- Construct a qualified (dot-separated) name
 qname :: (Name -> String -> Name)
 qname ns name = (
-  hsCat [
+  Hydra.Lib.Strings.cat [
     ns,
     ".",
     name])
@@ -176,7 +176,7 @@ termVariants = [
 
 -- TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)
-testLists lists = (Hydra.Lib.Lists.hsLength (hsConcat lists))
+testLists lists = (Hydra.Lib.Lists.length (Hydra.Lib.Lists.concat lists))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Type -> TypeVariant)

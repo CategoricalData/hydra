@@ -9,6 +9,6 @@ describePrecision :: (Precision -> String)
 describePrecision x = case x of
   PrecisionArbitrary -> "arbitrary-precision"
   PrecisionBits v -> (
-    hsCat [
-      hsShowInt32 v,
+    Hydra.Lib.Strings.cat [
+      Hydra.Lib.Literals.showInt32 v,
       "-bit"])
