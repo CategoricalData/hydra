@@ -50,6 +50,9 @@ standardMatchWithVariants = nominalMatchWithVariants standardContext
 project :: Name -> FieldName -> Type -> Term Meta
 project = nominalProjection standardContext
 
+standardRecord :: Name -> [Field Meta] -> Term Meta
+standardRecord = nominalRecord standardContext
+
 standardWithUnitVariant :: Name -> FieldName -> Term Meta
 standardWithUnitVariant = nominalWithUnitVariant standardContext
 

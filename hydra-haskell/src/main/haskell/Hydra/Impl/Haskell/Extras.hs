@@ -9,6 +9,7 @@ module Hydra.Impl.Haskell.Extras (
   requireType,
   resultToQualified,
   toQname,
+  unexpected,
   unidirectionalStep,
   module Hydra.Errors
   ) where
@@ -109,6 +110,9 @@ toQname :: Name -> (String, String)
 toQname name = (ns, local)
   where
     [ns, local] = LS.splitOn "." name
+
+unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
+unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj
 
 unidirectionalStep :: (a -> Result b) -> Step a b
 unidirectionalStep m = Step {
