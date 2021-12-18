@@ -95,7 +95,7 @@ definitions:
 #@branch trait Name extends Ref { def value: String } #@
   - name: Name
     type:
-      record:
+      union:
         - name: value
           type: string
         - name: anonymous
