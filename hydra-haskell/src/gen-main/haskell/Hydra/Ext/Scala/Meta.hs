@@ -1280,12 +1280,11 @@ data Mod
   | ModTransparent deriving (Eq, Generic, Ord, Read, Show)
 
 data Name
-  = Name
-    -- | @type string
-    { nameValue :: String
-    , nameAnonymous :: ()
-    -- | @type hydra/ext/scala/meta.PredefString
-    , nameIndeterminate :: PredefString } deriving (Eq, Generic, Ord, Read, Show)
+  -- | @type string
+  = NameValue String
+  | NameAnonymous
+  -- | @type hydra/ext/scala/meta.PredefString
+  | NameIndeterminate PredefString deriving (Eq, Generic, Ord, Read, Show)
 
 data Pat_Var
   = Pat_Var
