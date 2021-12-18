@@ -1,5 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Adapters.Utils (adaptersUtilsGraph) where
 
+import Hydra.Adapter
 import Hydra.Core
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Graph
@@ -32,6 +33,9 @@ match_ = standardMatch
 
 p_ :: Default a => Name -> Term a
 p_ = primitive
+
+r_ :: Name -> [Field Meta] -> Term Meta
+r_ = standardRecord
 
 s_ :: String -> Term Meta
 s_ = stringValue
@@ -91,7 +95,7 @@ describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
         list [
           p_ _literals_showInt32 @. v_"bits",
           s_"-bit"])]
-          
+
 describeType :: Element Meta
 describeType = standardFunction _hydra_adapters_utils "describeType"
   "Display a type as a string"
@@ -115,3 +119,13 @@ describeType = standardFunction _hydra_adapters_utils "describeType"
     (_Type_union, const_ $ s_"unions of a particular set of fields"),
     (_Type_universal, const_ $ s_"polymorphic terms"),
     (_Type_variable, const_ $ s_"unspecified/parametric terms")]
+
+--idAdapter :: Element Meta
+--idAdapter = standardFunction _hydra_adapters_utils "idAdapter"
+--  "An identity adapter for a given type"
+--  (t_ _Type) (TypeUniversal (UniversalType "m" $ ())) $
+--  l_"t" $ r_ _Adapter [
+--    Field _Adapter_isLossy (booleanValue False),
+--    Field _Adapter_source (v_"t"),
+--    Field _Adapter_target (v_"t"),
+--    Field _Adapter_step (e_ idStep)]

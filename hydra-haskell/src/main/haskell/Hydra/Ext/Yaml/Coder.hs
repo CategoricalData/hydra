@@ -7,7 +7,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage 
+import Hydra.Prototyping.CoreLanguage
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Steps
@@ -28,22 +28,22 @@ atomicCoder at = pure $ case at of
       BooleanValueTrue -> True,
     stepIn = \s -> case s of
       YM.ScalarBool b -> pure $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
-      _ -> unexpected s "boolean"}
+      _ -> unexpected "boolean" s}
   LiteralTypeFloat _ -> Step {
     stepOut = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
     stepIn = \s -> case s of
       YM.ScalarFloat f -> pure $ LiteralFloat $ FloatValueBigfloat f
-      _ -> unexpected s "floating-point value"}
+      _ -> unexpected "floating-point value" s}
   LiteralTypeInteger _ -> Step {
     stepOut = \(LiteralInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
     stepIn = \s -> case s of
       YM.ScalarInt i -> pure $ LiteralInteger $ IntegerValueBigint i
-      _ -> unexpected s "integer"}
+      _ -> unexpected "integer" s}
   LiteralTypeString -> Step {
     stepOut = \(LiteralString s) -> pure $ YM.ScalarStr s,
     stepIn = \s -> case s of
       YM.ScalarStr s' -> pure $ LiteralString s'
-      _ -> unexpected s "string"}
+      _ -> unexpected "string" s}
 
 recordCoder :: (Default a, Eq a, Ord a, Read a, Show a) => [FieldType] -> Qualified (Step (Term a) YM.Node)
 recordCoder sfields = do
@@ -56,14 +56,14 @@ recordCoder sfields = do
           encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _ , Term (ExpressionOptional Nothing) _) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
-      _ -> unexpected term "record"
+      _ -> unexpected "record" term
     decode coders n = case n of
       YM.NodeMapping m -> record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField m (FieldType fn ft, coder) = do
             v <- stepIn coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
             return $ Field fn v
-      _ -> unexpected n "mapping"
+      _ -> unexpected "mapping" n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
@@ -76,14 +76,14 @@ termCoder typ = case typ of
       stepOut = \(Term (ExpressionLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
         YM.NodeScalar s -> atomic <$> stepIn ac s
-        _ -> unexpected n "scalar node"}
+        _ -> unexpected "scalar node" n}
   TypeList lt -> do
     lc <- termCoder lt
     return Step {
       stepOut = \(Term (ExpressionList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
       stepIn = \n -> case n of
         YM.NodeSequence nodes -> list <$> CM.mapM (stepIn lc) nodes
-        _ -> unexpected n "sequence"}
+        _ -> unexpected "sequence" n}
   TypeOptional ot -> do
     oc <- termCoder ot
     return Step {
@@ -100,11 +100,8 @@ termCoder typ = case typ of
       stepOut = \(Term (ExpressionMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
       stepIn = \n -> case n of
         YM.NodeMapping m -> defaultTerm . ExpressionMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
-        _ -> unexpected n "mapping"}
+        _ -> unexpected "mapping" n}
   TypeRecord sfields -> recordCoder sfields
-
-unexpected :: Show v => v -> String -> Result b
-unexpected x desc = fail $ "expected " ++ desc ++ ", found: " ++ show x
 
 yamlCoder :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) YM.Node)
 yamlCoder context typ = do

@@ -128,7 +128,6 @@ encodeFunction cx meta fun = case fun of
       Nothing -> fname
     _ -> fail $ "unexpected function: " ++ show fun
   where
-    
     fieldMapOf typ = case typ of
       Just (TypeUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
       _ -> Nothing
@@ -163,7 +162,7 @@ encodeLiteral av = case av of
       IntegerValueInt32 i -> pure $ hslit $ H.LiteralInt i
       _ -> unexpected "integer" iv
     LiteralString s -> pure $ hslit $ H.LiteralString s
-    _ -> unexpected "atomic value" av
+    _ -> unexpected "literal value" av
 
 encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
 encodeTerm cx term@(Term expr meta) = do
@@ -171,10 +170,10 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionApplication (Application fun arg) -> case termData fun of
        ExpressionFunction FunctionData -> encodeTerm cx arg
        _ -> hsapp <$> encodeTerm cx fun <*> encodeTerm cx arg
-    ExpressionLiteral av -> encodeLiteral av
     ExpressionElement name -> pure $ hsvar $ localNameOf name
     ExpressionFunction f -> encodeFunction cx (termMeta term) f
     ExpressionList els -> H.ExpressionList <$> CM.mapM (encodeTerm cx) els
+    ExpressionLiteral v -> encodeLiteral v
     ExpressionNominal (NominalTerm _ term') -> encodeTerm cx term'
     ExpressionOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
@@ -207,23 +206,14 @@ encodeType typ = case typ of
   TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encodeType dom <*> encodeType cod)
   TypeList lt -> H.TypeList <$> encodeType lt
   TypeLiteral lt -> H.TypeVariable . simpleName <$> case lt of
---    LiteralTypeBinary ->
     LiteralTypeBoolean -> pure "Bool"
     LiteralTypeFloat ft -> case ft of
---      FloatTypeBigfloat ->
       FloatTypeFloat32 -> pure "Float"
       FloatTypeFloat64 -> pure "Double"
       _ -> fail $ "unexpected floating-point type: " ++ show ft
     LiteralTypeInteger it -> case it of
       IntegerTypeBigint -> pure "Integer"
---      IntegerTypeInt8 -> ""
---      IntegerTypeInt16 -> ""
       IntegerTypeInt32 -> pure "Int"
---      IntegerTypeInt64 -> ""
---      IntegerTypeUint8 -> ""
---      IntegerTypeUint16 -> ""
---      IntegerTypeUint32 -> ""
---      IntegerTypeUint64 -> ""
       _ -> fail $ "unexpected integer type: " ++ show it
     LiteralTypeString -> pure "String"
     _ -> fail $ "unexpected literal type: " ++ show lt
@@ -235,11 +225,9 @@ encodeType typ = case typ of
   TypeOptional ot -> toApplicationType <$> CM.sequence [
     pure $ H.TypeVariable $ simpleName "Maybe",
     encodeType ot]
---  TypeRecord fields ->
   TypeSet st -> toApplicationType <$> CM.sequence [
     pure $ H.TypeVariable $ simpleName "Set",
     encodeType st]
---  TypeUnion fields ->
   TypeUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
     pure $ H.TypeVariable $ simpleName v,
     encodeType body]
@@ -275,20 +263,21 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
   languageConstraintsTermVariants = S.fromList [
     -- No native maps or sets
     TermVariantApplication,
-    TermVariantLiteral,
     TermVariantElement,
     TermVariantFunction,
     TermVariantList,
+    TermVariantLiteral,
+    TermVariantNominal,
     TermVariantOptional,
     TermVariantRecord,
     TermVariantUnion,
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
     -- No native maps or sets
-    TypeVariantLiteral,
     TypeVariantElement,
     TypeVariantFunction,
     TypeVariantList,
+    TypeVariantLiteral,
     TypeVariantNominal,
     TypeVariantOptional,
     TypeVariantRecord,
@@ -328,6 +317,3 @@ simpleName n = H.NameNormal $ H.QualifiedName [] n
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (LS.splitOn "." sname)
-
-unexpected :: (MonadFail m, Show a1) => [Char] -> a1 -> m a2
-unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj
