@@ -1,6 +1,5 @@
 module Hydra.Ext.Haskell.Coder (
   dataGraphToHaskellModule,
-  haskellCoder,
   haskellLanguage,
 ) where
 
@@ -8,15 +7,13 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Adapter
-import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage 
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Prototyping.Rewriting
-import Hydra.Prototyping.Steps
 import Hydra.Util.Formatting
 import Hydra.Prototyping.Primitives
+import Hydra.Util.Coders
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 
@@ -27,20 +24,12 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-dataGraphToHaskellModule :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified H.Module
-dataGraphToHaskellModule cx g = do
-    scx <- resultToQualified $ schemaContext cx
-    pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
-    coders <- codersFor $ L.nub (typedTermType <$> pairs)
-    resultToQualified $ createModule coders $ L.zip els pairs
+constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
+constructModule cx g coders pairs = do
+    decls <- CM.mapM createDeclaration pairs
+    return $ H.Module (Just $ H.ModuleHead (fst $ importName $ graphName g) []) imports decls
   where
-    els = graphElements g
-
-    codersFor types = do
-      cdrs <- CM.mapM (haskellCoder cx) types
-      return $ M.fromList $ L.zip types cdrs
-
-    createDeclaration coders (el, TypedTerm typ term) = do
+    createDeclaration (el, TypedTerm typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
       rhs <- stepOut coder term
       let hname = simpleName $ localNameOf $ elementName el
@@ -51,10 +40,6 @@ dataGraphToHaskellModule cx g = do
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       let comments = contextDescriptionOf cx $ termMeta term
       return $ H.DeclarationWithComments decl comments
-
-    createModule coders pairs = do
-      decls <- CM.mapM (createDeclaration coders) pairs
-      return $ H.Module (Just $ H.ModuleHead (fst $ importName $ graphName g) []) imports decls
 
     imports = toImport <$> S.toList (dataGraphDependencies g)
 
@@ -73,18 +58,8 @@ dataGraphToHaskellModule cx g = do
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) body bindings
         _ -> vb
 
-dataGraphDependencies :: Show a => Graph a -> S.Set GraphName
-dataGraphDependencies g = S.delete (graphName g) allDeps
-  where
-    allDeps = L.foldl (\s t -> S.union s $ depsOf t) S.empty $
-      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
-    depsOf term = foldOverTerm TraversalOrderPre addNames S.empty term
-    addNames names term = case termData term of
-      ExpressionElement name -> S.insert (graphNameOf name) names
-      ExpressionFunction (FunctionPrimitive name) -> S.insert (graphNameOf name) names
-      ExpressionNominal (NominalTerm name _) -> S.insert name names
-      _ -> names
-    graphNameOf = L.head . Strings.splitOn "."
+dataGraphToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
+dataGraphToHaskellModule = dataGraphToExternalModule haskellLanguage encodeTerm constructModule
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
 encodeFunction cx meta fun = case fun of
@@ -235,20 +210,11 @@ encodeType typ = case typ of
   _ -> fail $ "unexpected type: " ++ show typ
 
 toApplicationType :: [H.Type] -> H.Type
-toApplicationType types = app types
+toApplicationType = app
   where
     app l = case l of
       [e] -> e
       (h:r) -> H.TypeApplication $ H.Type_Application (app r) h
-
-haskellCoder :: (Default a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) H.Expression)
-haskellCoder cx typ = do
-    adapter <- termAdapter adContext typ
-    coder <- termCoder $ adapterTarget adapter
-    return $ composeSteps (adapterStep adapter) coder
-  where
-    adContext = AdapterContext cx hydraCoreLanguage haskellLanguage
-    termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
 
 haskellLanguage :: Language
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
