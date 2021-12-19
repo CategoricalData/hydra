@@ -1,10 +1,7 @@
 module Hydra.Ext.Haskell.Serde (
   dataGraphToHaskellString,
-  haskellSerdeDebug,
-  haskellSerdeStr,
 ) where
 
-import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
@@ -153,16 +150,6 @@ dataGraphToHaskellString :: (Default a, Ord a, Read a, Show a) => Context a -> G
 dataGraphToHaskellString cx g = do
   hsmod <- dataGraphToHaskellModule cx g
   return $ printExpr $ parenthesize $ toTree hsmod
-
-haskellSerdeDebug :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) CT.Expr)
-haskellSerdeDebug cx typ = do
-  coder <- haskellCoder cx typ
-  return $ unidirectionalStep (fmap toTree . stepOut coder)
-
-haskellSerdeStr :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Type -> Qualified (Step (Term a) String)
-haskellSerdeStr cx typ = do
-  coder <- haskellCoder cx typ
-  return $ unidirectionalStep (fmap (printExpr . parenthesize . toTree) . stepOut coder)
 
 writeQName :: H.QualifiedName -> String
 writeQName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ qualifiers ++ [unqual]

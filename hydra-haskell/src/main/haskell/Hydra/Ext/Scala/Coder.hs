@@ -1,4 +1,5 @@
 module Hydra.Ext.Scala.Coder (
+  dataGraphToScalaModule,
   scalaLanguage,
 ) where
 
@@ -6,16 +7,35 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Basics
+import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
+import Hydra.Util.Coders
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+
+
+
+dataGraphToScalaModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified [Scala.Stat]
+dataGraphToScalaModule = dataGraphToExternalModule scalaLanguage encodeTerm constructModule
+
+constructModule :: Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
+  -> Result [Scala.Stat]
+constructModule cx g coders pairs = do
+    let package = []
+    let imports = []
+    let defs = []
+    return $ package ++ imports ++ defs
+  where
+
+
 
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result Scala.Term
