@@ -20,9 +20,9 @@ import Hydra.Graph
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Steps
 import Hydra.Prototyping.CoreDecoding
+import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
-import qualified Data.List.Split as LS
 
 
 class Default a where dflt :: a
@@ -109,7 +109,7 @@ resultToQualified r = case r of
 toQname :: Name -> (String, String)
 toQname name = (ns, local)
   where
-    [ns, local] = LS.splitOn "." name
+    [ns, local] = Strings.splitOn "." name
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj

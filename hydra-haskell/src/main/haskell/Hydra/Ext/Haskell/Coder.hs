@@ -18,10 +18,10 @@ import Hydra.Prototyping.Steps
 import Hydra.Util.Formatting
 import Hydra.Prototyping.Primitives
 import qualified Hydra.Ext.Haskell.Ast as H
+import qualified Hydra.Lib.Strings as Strings
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
-import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -64,7 +64,7 @@ dataGraphToHaskellModule cx g = do
         
     importName name = (L.intercalate "." parts, L.last parts)
       where
-        parts = capitalize <$> LS.splitOn "/" name
+        parts = capitalize <$> Strings.splitOn "/" name
 
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
@@ -84,7 +84,7 @@ dataGraphDependencies g = S.delete (graphName g) allDeps
       ExpressionFunction (FunctionPrimitive name) -> S.insert (graphNameOf name) names
       ExpressionNominal (NominalTerm name _) -> S.insert name names
       _ -> names
-    graphNameOf = L.head . LS.splitOn "."
+    graphNameOf = L.head . Strings.splitOn "."
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
 encodeFunction cx meta fun = case fun of
@@ -301,7 +301,7 @@ hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] local
   where
     (ns, local) = toQname name
-    prefix = capitalize $ L.last $ LS.splitOn "/" ns
+    prefix = capitalize $ L.last $ Strings.splitOn "/" ns
 
 hsvar :: H.NamePart -> H.Expression
 hsvar = H.ExpressionVariable . hsname
@@ -316,4 +316,4 @@ simpleName :: String -> H.Name
 simpleName n = H.NameNormal $ H.QualifiedName [] n
 
 typeNameForRecord :: Name -> String
-typeNameForRecord sname = L.last (LS.splitOn "." sname)
+typeNameForRecord sname = L.last (Strings.splitOn "." sname)

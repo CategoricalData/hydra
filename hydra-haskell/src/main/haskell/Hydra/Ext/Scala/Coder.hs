@@ -10,10 +10,10 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Ext.Scala.Meta as Scala
+import qualified Hydra.Lib.Strings as Strings
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
-import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -153,10 +153,10 @@ sprim :: Name -> Scala.Term
 sprim name = sname $ prefix ++ "." ++ local
   where
     (ns, local) = toQname name
-    prefix = capitalize $ L.last $ LS.splitOn "/" ns
+    prefix = capitalize $ L.last $ Strings.splitOn "/" ns
 
 svar :: Variable -> Scala.Pat
 svar = Scala.PatVar . Scala.Pat_Var . Scala.Term_Name
 
 typeNameForRecord :: Name -> String
-typeNameForRecord sname = L.last (LS.splitOn "." sname)
+typeNameForRecord sname = L.last (Strings.splitOn "." sname)
