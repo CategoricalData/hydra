@@ -27,7 +27,7 @@ cx :: Context Meta
 cx = standardContext
 
 testContext :: Context Meta
-testContext = Context {
+testContext = standardContext {
     contextGraphs = GraphSet {
       graphSetGraphs = M.fromList [
         ("testGraph", testGraph),
@@ -35,21 +35,12 @@ testContext = Context {
         ("hydra/core", hydraCoreGraph)],
       graphSetRoot = "testGraph"},
     contextElements = graphElementsMap testGraph,
-    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) allPrimitives,
+    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantLiteral,
         TermVariantElement,
-        TermVariantFunction]},
-    contextDescriptionOf = metaDescription,
-    contextTypeOf = metaType,
-    contextSetTypeOf = \t m -> m {metaType = t}}
-  where
-    allPrimitives = []
-      ++ hydraLibListsPrimitives
-      ++ hydraLibLiteralsPrimitives
-      ++ hydraLibMathInt32Primitives
-      ++ hydraLibStringsPrimitives
+        TermVariantFunction]}}
 
 testElementArthur :: Element Meta
 testElementArthur = Element {

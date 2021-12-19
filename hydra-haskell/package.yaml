@@ -14,16 +14,16 @@ extra-source-files:
 dependencies:
   - base
   - containers
-  - split
-  - filepath
-  - directory
 
-  # ext dependencies
+  # Hydra.Impl.Haskell dependencies
+  - directory
+  - filepath
   - HsYAML
   - bytestring
+  - split
   - text
 
-  # temporary
+  # temporary, for type inference
   - mtl
 
 library:

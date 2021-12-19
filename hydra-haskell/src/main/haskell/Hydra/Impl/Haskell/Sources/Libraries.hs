@@ -130,3 +130,10 @@ hydraLibStringsPrimitives = [
     prim2 _strings_splitOn stringInput stringInput stringListOutput Strings.splitOn,
     prim1 _strings_toLower stringInput stringOutput Strings.toLower,
     prim1 _strings_toUpper stringInput stringOutput Strings.toUpper]
+
+standardPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
+standardPrimitives = 
+         hydraLibListsPrimitives
+      ++ hydraLibLiteralsPrimitives
+      ++ hydraLibMathInt32Primitives
+      ++ hydraLibStringsPrimitives

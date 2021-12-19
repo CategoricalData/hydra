@@ -26,7 +26,7 @@ standardContext = Context {
   where
     emptyGraphName = "empty"
     emptyGraph = Graph emptyGraphName [] (const True) "empty"
-
+      
 standardElement :: Name -> String -> String -> Type -> Term Meta -> Element Meta
 standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ withDoc desc term
 
