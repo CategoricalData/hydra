@@ -26,6 +26,9 @@ _lists_head = qname _hydra_lib_lists "head"
 _lists_intercalate :: Name
 _lists_intercalate = qname _hydra_lib_lists "intercalate"
 
+_lists_intersperse :: Name
+_lists_intersperse = qname _hydra_lib_lists "intersperse"
+
 _lists_last :: Name
 _lists_last = qname _hydra_lib_lists "last"
 
@@ -106,6 +109,7 @@ hydraLibListsPrimitives = [
   prim1 _lists_concat (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
   prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
   prim2 _lists_intercalate (listInputPoly "a") (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
+  prim2 _lists_intersperse (inputPoly "a") (listInputPoly "a") (listOutputPoly "a") Lists.intersperse,
   prim1 _lists_last (listInputPoly "a") (outputPoly "a") Lists.last,
   prim1 _lists_length (listInputPoly "a") int32Output Lists.length
 --  ,
