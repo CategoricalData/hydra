@@ -34,7 +34,7 @@ constructModule cx g coders pairs = do
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
     toImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
-      Scala.Importer (Scala.Term_RefName $ toScalaName gname) []]
+      Scala.Importer (Scala.Term_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
     toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result Scala.Term

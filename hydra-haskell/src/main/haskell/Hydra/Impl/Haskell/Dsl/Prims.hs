@@ -12,6 +12,9 @@ import qualified Data.Set as S
 booleanOutput :: Default m => OutputSpec Bool m
 booleanOutput = OutputSpec booleanType booleanValue
 
+inputPoly :: TypeVariable -> InputSpec (Term m) m
+inputPoly v = InputSpec (typeVariable v) pure
+
 int32Input :: Show m => InputSpec Int m
 int32Input = InputSpec int32Type expectInt32
 

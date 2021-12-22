@@ -28,7 +28,12 @@ writeImportExportStat ie = case ie of
 --  Scala.ImportExportStatExport exp ->
 
 writeImporter :: Scala.Importer -> CT.Expr
-writeImporter (Scala.Importer ref _) = spaceSep [cst "import", writeTerm_Ref ref]
+writeImporter (Scala.Importer (Scala.Term_RefName (Scala.Term_Name ref)) importees) = newlineSep (write <$> importees)
+  where
+    write it = spaceSep [cst "import", cst (ref ++ forImportee it)]
+    forImportee it = case it of
+      Scala.ImporteeWildcard -> ".*"
+      Scala.ImporteeName (Scala.Importee_Name (Scala.NameValue name)) -> "." ++ name
 
 writePkg :: Scala.Pkg -> CT.Expr
 writePkg (Scala.Pkg (Scala.Term_Name name) _ stats) = doubleNewlineSep $ package:(writeStat <$> stats)
@@ -41,7 +46,3 @@ writeStat stat = case stat of
 --  Scala.StatDecl Decl ->
 --  Scala.StatDefn Defn ->
   Scala.StatImportExport ie -> writeImportExportStat ie
-
-writeTerm_Ref :: Scala.Term_Ref -> CT.Expr
-writeTerm_Ref ref = case ref of
-  Scala.Term_RefName (Scala.Term_Name name) -> cst name
