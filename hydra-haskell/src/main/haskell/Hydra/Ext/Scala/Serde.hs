@@ -22,5 +22,26 @@ dataGraphToScalaString cx g = do
   pkg <- dataGraphToScalaPackage cx g
   return $ printExpr $ parenthesize $ writePkg pkg
 
+writeImportExportStat :: Scala.ImportExportStat -> CT.Expr
+writeImportExportStat ie = case ie of
+  Scala.ImportExportStatImport (Scala.Import importers) -> newlineSep (writeImporter <$> importers)
+--  Scala.ImportExportStatExport exp ->
+
+writeImporter :: Scala.Importer -> CT.Expr
+writeImporter (Scala.Importer ref _) = spaceSep [cst "import", writeTerm_Ref ref]
+
 writePkg :: Scala.Pkg -> CT.Expr
-writePkg (Scala.Pkg name _ stats) = cst "TODO"
+writePkg (Scala.Pkg (Scala.Term_Name name) _ stats) = doubleNewlineSep $ package:(writeStat <$> stats)
+  where
+    package = spaceSep [cst "package", cst name]
+
+writeStat :: Scala.Stat -> CT.Expr
+writeStat stat = case stat of
+--  Scala.StatTerm Term ->
+--  Scala.StatDecl Decl ->
+--  Scala.StatDefn Defn ->
+  Scala.StatImportExport ie -> writeImportExportStat ie
+
+writeTerm_Ref :: Scala.Term_Ref -> CT.Expr
+writeTerm_Ref ref = case ref of
+  Scala.Term_RefName (Scala.Term_Name name) -> cst name
