@@ -30,6 +30,9 @@ listInputPoly v = InputSpec (listType $ typeVariable v) expectListPoly
 listOutputPoly :: Default m => TypeVariable -> OutputSpec [Term m] m
 listOutputPoly v = OutputSpec (listType $ typeVariable v) list
 
+outputPoly :: TypeVariable -> OutputSpec (Term m) m
+outputPoly v = OutputSpec (typeVariable v) id
+
 prim1 :: Name -> InputSpec a1 m -> OutputSpec b m -> (a1 -> b) -> PrimitiveFunction m
 prim1 name input1 output compute = PrimitiveFunction name ft impl
   where
