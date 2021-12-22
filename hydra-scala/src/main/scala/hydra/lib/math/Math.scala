@@ -11,6 +11,6 @@ def mul(x: Int, y: Int): Int = x * y
 
 def div(x: Int, y: Int): Int = x / y
 
-def mod(x: Int, y: Int): Int = x % y
+def mod(x: Int, y: Int): Int = Math.floorMod(x, y)
 
-def rem(x: Int, y: Int): Int = x % y // TODO
+def rem(x: Int, y: Int): Int = x % y
