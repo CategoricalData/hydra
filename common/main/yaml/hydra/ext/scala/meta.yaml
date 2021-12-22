@@ -89,7 +89,7 @@ definitions:
           type: Decl #@
         - name: defn
           type: Defn #@
-        - name: importExportStat
+        - name: importExport
           type: ImportExportStat #@
 #
 #@branch trait Name extends Ref { def value: String } #@

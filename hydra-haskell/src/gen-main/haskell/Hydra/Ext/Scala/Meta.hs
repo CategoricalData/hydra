@@ -462,7 +462,7 @@ module Hydra.Ext.Scala.Meta
   , _Stat
   , _Stat_decl
   , _Stat_defn
-  , _Stat_importExportStat
+  , _Stat_importExport
   , _Stat_term
   , _Template
   , _Template_early
@@ -1439,7 +1439,7 @@ data Stat
   -- | @type hydra/ext/scala/meta.Defn
   | StatDefn Defn
   -- | @type hydra/ext/scala/meta.ImportExportStat
-  | StatImportExportStat ImportExportStat deriving (Eq, Generic, Ord, Read, Show)
+  | StatImportExport ImportExportStat deriving (Eq, Generic, Ord, Read, Show)
 
 data Template
   = Template
@@ -2404,7 +2404,7 @@ _Source_stats = "stats" :: String
 _Stat = "hydra/ext/scala/meta.Stat" :: String
 _Stat_decl = "decl" :: String
 _Stat_defn = "defn" :: String
-_Stat_importExportStat = "importExportStat" :: String
+_Stat_importExport = "importExport" :: String
 _Stat_term = "term" :: String
 _Template = "hydra/ext/scala/meta.Template" :: String
 _Template_early = "early" :: String
