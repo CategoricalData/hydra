@@ -12,6 +12,9 @@ head = L.head
 intercalate :: [a] -> [[a]] -> [a]
 intercalate = L.intercalate
 
+intersperse :: a -> [a] -> [a]
+intersperse = L.intersperse
+
 last :: [a] -> a
 last = L.last
 
