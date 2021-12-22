@@ -1,10 +1,15 @@
-module Hydra.Impl.Haskell.GraphIO where
+module Hydra.Impl.Haskell.GraphIO (
+  generateHydraHaskell,
+  generateHydraScala,
+) where
 
+import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Ext.Haskell.Serde
+import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
 import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Impl.Haskell.Sources.Basics
@@ -20,9 +25,34 @@ import qualified Data.Map as M
 import qualified System.Directory as SD
 
 
-graphToHaskell :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Graph a -> Maybe FilePath -> IO ()
-graphToHaskell cx g path = do
-  case dataGraphToHaskellString cx g of
+generateHydraHaskell :: FP.FilePath -> IO ()
+generateHydraHaskell hydraHome = generateSources "haskell" nameToHaskellFileName dataGraphToHaskellString (FP.combine hydraHome "hydra-haskell")
+  where
+    nameToHaskellFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".hs"
+
+generateHydraScala :: FP.FilePath -> IO ()
+generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataGraphToScalaString (FP.combine hydraHome "hydra-scala")
+  where
+    nameToScalaFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".scala"
+
+generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
+generateSources langName toFile toString baseDir = do
+    writeDataGraph basicsGraph
+    writeDataGraph adaptersUtilsGraph
+  where
+    writeDataGraph g = do
+      let cx = standardContext {
+             contextGraphs = GraphSet (M.fromList [(graphName g, g), ("hydra/core", hydraCoreGraph)]) (graphName g),
+             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
+             contextElements = M.empty}
+      writeGraph toString cx g $ Just $ FP.combine baseDir
+        $ "src/gen-main/" ++ langName ++ "/" ++ toFile (graphName g)
+
+writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
+  => (Context m -> Graph m -> Qualified String)
+  -> Context m -> Graph m -> Maybe FilePath -> IO ()
+writeGraph toString cx g path = do
+  case toString cx g of
     Qualified Nothing warnings -> putStrLn $ "Transformation failed: " ++ indent (unlines warnings)
     Qualified (Just s) warnings -> do
       if not (L.null warnings)
@@ -33,17 +63,3 @@ graphToHaskell cx g path = do
         Just p -> do
           SD.createDirectoryIfMissing True $ FP.takeDirectory p
           writeFile p s
-
-generateHydraHaskell :: FP.FilePath -> IO ()
-generateHydraHaskell hydraHome = do
-    writeDataGraph basicsGraph
-    writeDataGraph adaptersUtilsGraph
-  where
-    baseDir = FP.combine hydraHome "hydra-haskell"
-    writeDataGraph g = do
-      let cx = standardContext {
-             contextGraphs = GraphSet (M.fromList [(graphName g, g), ("hydra/core", hydraCoreGraph)]) (graphName g),
-             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
-             contextElements = M.empty}
-      graphToHaskell cx g $ Just $ FP.combine baseDir $ "src/gen-main/haskell/" ++ nameToHaskellFileName (graphName g)
-    nameToHaskellFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".hs"
