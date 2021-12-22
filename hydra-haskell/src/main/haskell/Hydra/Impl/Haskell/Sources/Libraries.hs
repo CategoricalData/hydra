@@ -20,6 +20,15 @@ _hydra_lib_lists = "hydra/lib/lists"
 _lists_concat :: Name
 _lists_concat = qname _hydra_lib_lists "concat"
 
+_lists_head :: Name
+_lists_head = qname _hydra_lib_lists "head"
+
+_lists_intercalate :: Name
+_lists_intercalate = qname _hydra_lib_lists "intercalate"
+
+_lists_last :: Name
+_lists_last = qname _hydra_lib_lists "last"
+
 _lists_length :: Name
 _lists_length = qname _hydra_lib_lists "length"
 
@@ -95,6 +104,9 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
   prim1 _lists_concat (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
+  prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
+  prim2 _lists_intercalate (listInputPoly "a") (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
+  prim1 _lists_last (listInputPoly "a") (outputPoly "a") Lists.last,
   prim1 _lists_length (listInputPoly "a") int32Output Lists.length
 --  ,
 --  PrimitiveFunction _lists_map
