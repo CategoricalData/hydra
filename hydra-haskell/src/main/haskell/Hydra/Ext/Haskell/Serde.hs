@@ -11,6 +11,7 @@ import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
+import Hydra.Ext.Haskell.Syntax
 
 import qualified Data.Char as C
 import qualified Data.List as L
