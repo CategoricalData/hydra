@@ -9,8 +9,7 @@ lazy val root = project
     scalaVersion := scala3Version,
 
     Compile / unmanagedSourceDirectories += baseDirectory.value / "src" / "gen-main" / "scala",
-    //    Compile / unmanagedSourceDirectories += baseDirectory.value / "src" / "main" / "scala-lite",
 
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
-//    libraryDependencies += "org.scalameta" %% "scalameta" % "4.4.28"
+    libraryDependencies += "org.apache.commons" % "commons-text" % "1.9"
   )
