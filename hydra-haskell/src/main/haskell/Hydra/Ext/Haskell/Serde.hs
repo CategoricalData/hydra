@@ -145,8 +145,8 @@ instance ToTree H.Type where
 --  H.TypeParens Type
 --  H.TypeTuple [Type]
     H.TypeVariable name -> toTree name
-  
-dataGraphToHaskellString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
+
+dataGraphToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
 dataGraphToHaskellString cx g = do
   hsmod <- dataGraphToHaskellModule cx g
   return $ printExpr $ parenthesize $ toTree hsmod

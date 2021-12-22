@@ -1,5 +1,5 @@
 module Hydra.Ext.Scala.Coder (
-  dataGraphToScalaModule,
+  dataGraphToScalaPackage,
   scalaLanguage,
 ) where
 
@@ -21,22 +21,21 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+dataGraphToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
+dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeTerm constructModule
 
-
-dataGraphToScalaModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified [Scala.Stat]
-dataGraphToScalaModule = dataGraphToExternalModule scalaLanguage encodeTerm constructModule
-
-constructModule :: Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
-  -> Result [Scala.Stat]
+constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
+  -> Result Scala.Pkg
 constructModule cx g coders pairs = do
-    let package = []
-    let imports = []
+    let imports = toImport <$> S.toList (dataGraphDependencies g)
     let defs = []
-    return $ package ++ imports ++ defs
+    let pname = toScalaName $ graphName g
+    let pref = Scala.Term_RefName pname
+    return $ Scala.Pkg pname pref (imports ++ defs)
   where
-
-
-
+    toImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+      Scala.Importer (Scala.Term_RefName $ toScalaName gname) []]
+    toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result Scala.Term
 encodeFunction cx meta fun = case fun of
@@ -78,7 +77,7 @@ encodeTerm cx term@(Term expr meta) = do
                let var = "v"
                -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
                let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar var] -- TODO: qualify with type name
-               body <- encodeTerm cx $ apply fterm $ variable var        
+               body <- encodeTerm cx $ apply fterm $ variable var
                return $ Scala.Case pat Nothing body
          _ -> sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
     ExpressionElement name -> pure $ sname $ localNameOf name

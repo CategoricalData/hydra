@@ -7,7 +7,7 @@ synopsis:   An experimental framework for data integration
 github:     CategoricalData/hydra
 
 extra-source-files:
-  - ../LICENSE  # TODO: need separate LICENSE and README in this directory
+  - ../LICENSE
   - ../README.md
   - stack.yaml
 

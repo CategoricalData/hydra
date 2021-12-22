@@ -17,7 +17,7 @@ import Hydra.Prototyping.CoreLanguage
 import Hydra.Prototyping.Steps
 
 
-dataGraphDependencies :: Show a => Graph a -> S.Set GraphName
+dataGraphDependencies :: Show m => Graph m -> S.Set GraphName
 dataGraphDependencies g = S.delete (graphName g) allDeps
   where
     allDeps = L.foldl (\s t -> S.union s $ depsOf t) S.empty $
