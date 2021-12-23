@@ -235,31 +235,25 @@ infer cx term = case contextTypeOf cx (termMeta term) of
 inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type, [Constraint]))
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
+-- | Solve for the toplevel type of an expression in a given environment
 inferTop :: (Default m, Ord m, Show m)
-  => TypingEnvironment -> Context m -> [(TypeVariable, Term m)] -> Either TypeError TypingEnvironment
-inferTop env _ [] = Right env
-inferTop env cx ((v, e):xs) = case inferred of
-    Left err -> Left err
-    Right (todo, ts) -> inferTop (M.insert v ts env) cx xs
+  => TypingEnvironment -> Context m -> TypeVariable -> Term m -> Either TypeError TypingEnvironment
+inferTop env cx v term = do
+    term1 <- runInference env (infer cx term)
+    subst <- solveConstraints (termConstraints term1)
+    let replace typ = sustituteVariablesInType subst typ
+    let term2 = replaceTermType replace term1 -- TODO: use me
+    let ts = closeOver $ termType term2
+    return $ M.insert v ts env
   where
-    -- | Solve for the toplevel type of an expression in a given environment
-    inferred = case runInference env (infer cx e) of
-      Left err -> Left err
-      Right term -> case solveConstraints (termConstraints term) of
-        Left err -> Left err
-        Right subst -> Right (term1, closeOver $ termType term1)
-          where
-            replace typ = sustituteVariablesInType subst typ
-            term1 = replaceTermType replace term
-
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver :: Type -> TypeScheme
     closeOver = normalizeTypeScheme . generalize M.empty
 
-inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result TypeScheme
-inferType cx term = case inferTop M.empty cx [("x", term)] of
+inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result TypeScheme --Result (Term (m, Type), TypeScheme)
+inferType cx term = case inferTop M.empty cx "x" term of
   Left err -> fail $ "type inference failed: " ++ show err
-  Right m -> case M.lookup "x" m of
+  Right env -> case M.lookup "x" env of
     Nothing -> fail "inferred type not resolved"
     Just scheme -> pure scheme
 
