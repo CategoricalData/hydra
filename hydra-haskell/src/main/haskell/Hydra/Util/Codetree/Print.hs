@@ -49,6 +49,9 @@ parenthesize exp = case exp of
 indent :: String -> String
 indent s = L.intercalate "\n" $ ("  " ++) <$> lines s
 
+noPadding :: Padding
+noPadding = Padding WsNone WsNone
+
 printExpr :: Expr -> String
 printExpr exp = case exp of
   ExprConst s -> s
@@ -82,6 +85,3 @@ parentheses = Brackets "(" ")"
 
 squareBrackets :: Brackets
 squareBrackets = Brackets "[" "]"
-
-noPadding :: Padding
-noPadding = Padding WsNone WsNone

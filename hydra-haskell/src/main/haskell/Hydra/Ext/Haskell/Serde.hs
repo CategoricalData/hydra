@@ -51,11 +51,11 @@ instance ToTree H.Expression where
       H.ExpressionLambda lam -> toTree lam
     --  H.ExpressionLeftSection Expression_Section
     --  H.ExpressionLet Expression_Let
-      H.ExpressionList exprs -> hlist True $ toTree <$> exprs
+      H.ExpressionList exprs -> bracketList True $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Expression_PrefixApplication
     --  H.ExpressionRightSection Expression_Section
-      H.ExpressionTuple exprs -> htuple $ toTree <$> exprs
+      H.ExpressionTuple exprs -> parenList $ toTree <$> exprs
     --  H.ExpressionTypeSignature Expression_TypeSignature
     --  H.ExpressionUpdateRecord Expression_UpdateRecord
       H.ExpressionVariable name -> toTree name
@@ -125,12 +125,12 @@ instance ToTree H.Pattern where
   toTree pat = case pat of
       H.PatternApplication app -> toTree app
 --      H.PatternAs (H.Pattern_As ) ->
-      H.PatternList pats -> hlist True $ toTree <$> pats
+      H.PatternList pats -> bracketList True $ toTree <$> pats
       H.PatternLiteral lit -> toTree lit
       H.PatternName name -> toTree name
       H.PatternParens pat -> parenthesize $ toTree pat
 --      H.PatternRecord (H.Pattern_Record ) ->
-      H.PatternTuple pats -> htuple $ toTree <$> pats
+      H.PatternTuple pats -> parenList $ toTree <$> pats
 --      H.PatternTyped (H.Pattern_Typed ) ->
       H.PatternWildcard -> cst "_"
 
@@ -142,7 +142,7 @@ instance ToTree H.Type where
     H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
     H.TypeFunction (H.Type_Function dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
 --  H.TypeInfix Type_Infix
-    H.TypeList htype -> hlist False [toTree htype]
+    H.TypeList htype -> bracketList False [toTree htype]
 --  H.TypeParens Type
 --  H.TypeTuple [Type]
     H.TypeVariable name -> toTree name

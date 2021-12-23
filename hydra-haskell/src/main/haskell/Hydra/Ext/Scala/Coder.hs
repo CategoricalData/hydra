@@ -19,6 +19,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 dataGraphToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
@@ -28,7 +29,7 @@ constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) S
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
     let imports = toImport <$> S.toList (dataGraphDependencies g)
-    let defs = []
+    defs <- CM.mapM toDef pairs
     let pname = toScalaName $ graphName g
     let pref = Scala.Term_RefName pname
     return $ Scala.Pkg pname pref (imports ++ defs)
@@ -36,11 +37,36 @@ constructModule cx g coders pairs = do
     toImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
       Scala.Importer (Scala.Term_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
     toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
+    toDef (el, TypedTerm typ term) = do
+        let coder = Y.fromJust $ M.lookup typ coders
+        rhs <- stepOut coder term
+        Scala.StatDefn <$> case rhs of
+          Scala.TermApply _ -> toVal rhs
+          Scala.TermFunctionTerm fun -> toDef fun
+--          Scala.TermFunctionTerm _ -> toVal $ Scala.TermLit $ Scala.LitString $ show rhs -- TODO
+          Scala.TermLit _ -> toVal rhs
+          Scala.TermRef _ -> toVal rhs -- TODO
+          _ -> fail $ "unexpected RHS: " ++ show rhs
+      where
+        lname = localNameOf $ elementName el
+
+        toDef (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) = do
+          let tparams = []
+          let paramss = [params]
+          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams paramss () body
+
+        toVal rhs = pure $ Scala.DefnVal $ Scala.Defn_Val [] [namePat] Nothing rhs
+          where
+            namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Term_Name lname
 
 encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result Scala.Term
 encodeFunction cx meta fun = case fun of
-    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body
+--    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body
+    FunctionLambda _ -> pure $ sname $ show fun --TODO: temp
     FunctionPrimitive name -> pure $ sprim name
+    FunctionCases _ -> pure $ sname "CASES" -- TODO
+    FunctionData -> pure $ sname "DATA" -- TODO
+    FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
     _ -> fail $ "unexpected function: " ++ show fun
 
 encodeLiteral :: Literal -> Result Scala.Lit
@@ -61,7 +87,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ Scala.LitString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result Scala.Term
+encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Term
 encodeTerm cx term@(Term expr meta) = do
    case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
@@ -98,7 +124,7 @@ encodeTerm cx term@(Term expr meta) = do
           args <- CM.mapM (encodeTerm cx) (fieldTerm <$> fields)
           return $ sapply (sname typeName) args
     ExpressionSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
---    ExpressionUnion (Field fn ft) -> do
+    ExpressionUnion (Field fn ft) -> pure $ sname "UNION" -- do  TODO
 --      let lhs = hsvar $ Y.maybe fn (`qualifyUnionFieldName` fn) sname
 --      case termData ft of
 --        ExpressionRecord [] -> pure lhs
@@ -179,3 +205,4 @@ svar = Scala.PatVar . Scala.Pat_Var . Scala.Term_Name
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
+
