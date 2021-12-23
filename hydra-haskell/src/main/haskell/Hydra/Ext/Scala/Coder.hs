@@ -205,4 +205,3 @@ svar = Scala.PatVar . Scala.Pat_Var . Scala.Term_Name
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
-
