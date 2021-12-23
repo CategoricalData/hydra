@@ -37,7 +37,7 @@ closeOver :: Type -> TypeScheme
 closeOver = normalizeTypeScheme . generalize M.empty
 
 ---- | Return the internal constraints used in solving for the type of an expression
---constraintsExpr :: (Default a, Show a) => TypingEnvironment -> Context a -> Term a -> Either TypeError ([Constraint], Subst, Type, TypeScheme)
+--constraintsExpr :: (Default m, Show m) => TypingEnvironment -> Context m -> Term m -> Either TypeError ([Constraint], Subst, Type, TypeScheme)
 --constraintsExpr env cx ex = case runInference env (infer cx ex) of
 --  Left err -> Left err
 --  Right (ty, cs) -> case solveConstraints cs of
@@ -47,7 +47,7 @@ closeOver = normalizeTypeScheme . generalize M.empty
 --        sc = closeOver $ sustituteVariablesInType subst ty
 
 -- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: Show a => Context a -> Term a -> Result Type
+decodeStructuralType :: Show m => Context m -> Term m -> Result Type
 decodeStructuralType con term = do
   typ <- decodeType con term
   case typ of
@@ -74,7 +74,7 @@ inTypingEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   local scope m
 
-infer :: (Default a, Show a) => Context a -> Term a -> Infer (Type, [Constraint])
+infer :: (Default m, Show m) => Context m -> Term m -> Infer (Type, [Constraint])
 infer cx term = case contextTypeOf cx (termMeta term) of
   Just typ -> pure (typ, [])
   Nothing -> case termData term of
@@ -197,25 +197,25 @@ infer cx term = case contextTypeOf cx (termMeta term) of
     _ -> error $ "type inference is unsupported for term: " ++ show term
 
 -- | Solve for the toplevel type of an expression in a given environment
-inferTerm :: (Default a, Show a) => TypingEnvironment -> Context a -> Term a -> Either TypeError TypeScheme
+inferTerm :: (Default m, Show m) => TypingEnvironment -> Context m -> Term m -> Either TypeError TypeScheme
 inferTerm env cx ex = case runInference env (infer cx ex) of
   Left err -> Left err
   Right (ty, cs) -> case solveConstraints cs of
     Left err -> Left err
     Right subst -> Right $ closeOver $ sustituteVariablesInType subst ty
 
-inferFieldType :: (Default a, Show a) => Context a -> Field a -> Infer (FieldType, [Constraint])
+inferFieldType :: (Default m, Show m) => Context m -> Field m -> Infer (FieldType, [Constraint])
 inferFieldType cx (Field fname term) = do
   (t1, c1) <- infer cx term
   return (FieldType fname t1, c1)
 
-inferTop :: (Default a, Show a) => TypingEnvironment -> Context a -> [(String, Term a)] -> Either TypeError TypingEnvironment
+inferTop :: (Default m, Show m) => TypingEnvironment -> Context m -> [(String, Term m)] -> Either TypeError TypingEnvironment
 inferTop env _ [] = Right env
 inferTop env cx ((name, ex):xs) = case inferTerm env cx ex of
   Left err -> Left err
   Right ty -> inferTop (M.insert name ty env) cx xs
 
-inferType :: (Default a, Show a) => Context a -> Term a -> Result TypeScheme
+inferType :: (Default m, Show m) => Context m -> Term m -> Result TypeScheme
 inferType cx term = case inferTop M.empty cx [("x", term)] of
   Left err -> fail $ "type inference failed: " ++ show err
   Right m -> case M.lookup "x" m of
@@ -235,7 +235,7 @@ lookupTypeInEnvironment v = do
       Nothing   -> throwError $ UnboundVariable v
       Just s    -> instantiate s
 
-namedType :: Show a => Context a -> Name -> Result Type
+namedType :: Show m => Context m -> Name -> Result Type
 namedType cx name = do
   scon <- schemaContext cx
   el <- requireElement scon name
@@ -251,12 +251,12 @@ runInference env m = runExcept $ evalStateT (runReaderT m env) startState
 startState :: InferenceState
 startState = 0
 
-typeOfElement :: Show a => Context a -> Name -> Result Type
+typeOfElement :: Show m => Context m -> Name -> Result Type
 typeOfElement cx name = do
   el <- requireElement cx name
   decodeStructuralType cx $ elementSchema el
 
-typeOfPrimitiveFunction :: Context a -> Name -> Result FunctionType
+typeOfPrimitiveFunction :: Context m -> Name -> Result FunctionType
 typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name
 
 unificationSolver :: Unifier -> Solve Subst
