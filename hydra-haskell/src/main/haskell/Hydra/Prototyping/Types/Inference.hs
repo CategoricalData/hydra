@@ -237,25 +237,28 @@ inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
 -- | Solve for the toplevel type of an expression in a given environment
 inferTop :: (Default m, Ord m, Show m)
-  => TypingEnvironment -> Context m -> TypeVariable -> Term m -> Either TypeError TypingEnvironment
+  => TypingEnvironment -> Context m -> TypeVariable -> Term m
+  -> Either TypeError (Term (m, Type, [Constraint]), TypingEnvironment)
 inferTop env cx v term = do
     term1 <- runInference env (infer cx term)
     subst <- solveConstraints (termConstraints term1)
     let replace typ = sustituteVariablesInType subst typ
     let term2 = replaceTermType replace term1 -- TODO: use me
     let ts = closeOver $ termType term2
-    return $ M.insert v ts env
+    return (term2, M.insert v ts env)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver :: Type -> TypeScheme
     closeOver = normalizeTypeScheme . generalize M.empty
 
-inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result TypeScheme --Result (Term (m, Type), TypeScheme)
-inferType cx term = case inferTop M.empty cx "x" term of
-  Left err -> fail $ "type inference failed: " ++ show err
-  Right env -> case M.lookup "x" env of
-    Nothing -> fail "inferred type not resolved"
-    Just scheme -> pure scheme
+inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type, [Constraint]), TypeScheme)
+inferType cx term = case inferTop M.empty cx var term of
+    Left err -> fail $ "type inference failed: " ++ show err
+    Right (term1, env) -> case M.lookup var env of
+      Nothing -> fail "inferred type not resolved"
+      Just ts -> pure (term1, ts)
+  where
+    var = "x"
 
 instantiate ::  TypeScheme -> Infer Type
 instantiate (TypeScheme as t) = do

@@ -18,7 +18,7 @@ expectMonotype :: Term Meta -> Type -> H.Expectation
 expectMonotype term = expectPolytype term []
 
 expectPolytype :: Term Meta-> [TypeVariable] -> Type -> H.Expectation
-expectPolytype term vars typ = inferType testContext term `H.shouldBe` ResultSuccess (TypeScheme vars typ)
+expectPolytype term vars typ = snd <$> (inferType testContext term) `H.shouldBe` ResultSuccess (TypeScheme vars typ)
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = do
