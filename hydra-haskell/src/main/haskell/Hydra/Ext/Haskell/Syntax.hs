@@ -117,15 +117,6 @@ caseStatement cond cases = ifx ofOp lhs rhs
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
     ofOp = Op "of" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
-htuple :: [Expr] -> Expr
-htuple els = case els of
-  [] -> cst "()"
-  _ -> brackets parentheses $ commaSep False els
-
 lam :: [Symbol] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
 
-hlist :: Bool -> [Expr] -> Expr
-hlist newlines els = case els of
-  [] -> cst "[]"
-  _ -> brackets squareBrackets $ commaSep newlines els

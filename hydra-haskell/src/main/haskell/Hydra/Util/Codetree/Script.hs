@@ -11,6 +11,11 @@ import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Print
 
 
+bracketList :: Bool -> [Expr] -> Expr
+bracketList newlines els = case els of
+  [] -> cst "[]"
+  _ -> brackets squareBrackets $ commaSep newlines els
+
 commaOp :: Bool -> Op
 commaOp newlines = Op "," (Padding WsNone (if newlines then WsBreak else WsSpace)) 0 AssociativityNone -- No source
 
@@ -41,11 +46,19 @@ indentLines els = ifx topOp (cst "") (newlineSep els)
 newlineSep :: [Expr] -> Expr
 newlineSep = sep $ Op "" (Padding WsNone WsBreak) 0 AssociativityNone
 
+noSep :: [Expr] -> Expr
+noSep = sep $ Op "" (Padding WsNone WsNone) 0 AssociativityNone
+
 num :: Int -> Expr
 num = cst . show
 
 op :: Symbol -> Precedence -> Associativity -> Op
 op s = Op s (Padding WsSpace WsSpace)
+
+parenList :: [Expr] -> Expr
+parenList els = case els of
+  [] -> cst "()"
+  _ -> brackets parentheses $ commaSep False els
 
 prefix :: String -> Expr -> Expr
 prefix p = ifx preOp (cst "")
