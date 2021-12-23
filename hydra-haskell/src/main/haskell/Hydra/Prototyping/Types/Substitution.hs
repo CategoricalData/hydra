@@ -55,7 +55,7 @@ normalizeTypeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTy
       TypeUnion fields -> TypeUnion (normalizeFieldType <$> fields)
       TypeUniversal (UniversalType v t) -> TypeUniversal $ UniversalType v $ normalizeType t
       TypeVariable v -> case Prelude.lookup v ord of
-        Just v' -> TypeVariable v'
+        Just v1 -> TypeVariable v1
         Nothing -> error "type variable not in signature"
 
 sustituteVariablesInType :: M.Map TypeVariable Type -> Type -> Type
