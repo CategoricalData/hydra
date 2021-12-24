@@ -14,11 +14,21 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+checkType :: Term (Meta, Type, [Constraint]) -> Type -> H.Expectation
+checkType term typ = typeAnn term `H.shouldBe` typ
+  where
+    typeAnn (Term _ (_, typ, _)) = typ
+
 expectMonotype :: Term Meta -> Type -> H.Expectation
 expectMonotype term = expectPolytype term []
 
 expectPolytype :: Term Meta-> [TypeVariable] -> Type -> H.Expectation
-expectPolytype term vars typ = snd <$> (inferType testContext term) `H.shouldBe` ResultSuccess (TypeScheme vars typ)
+expectPolytype term vars typ = do
+    let result = inferType testContext term
+    snd <$> result `H.shouldBe` ResultSuccess (TypeScheme vars typ)
+--    typeAnn . fst <$> result `H.shouldBe` ResultSuccess typ -- TODO: re-enable me
+  where
+    typeAnn (Term _ (_, typ, _)) = typ
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = do
@@ -164,6 +174,24 @@ checkLiterals = do
         (defaultTerm $ ExpressionLiteral l)
         (TypeLiteral $ literalType l)
 
+checkTypeAnnotations :: H.SpecWith ()
+checkTypeAnnotations = do
+  H.describe "Check that type annotations are added to terms and subterms" $ do
+
+    H.it "Check literals" $
+      QC.property $ \l -> do
+        let term = defaultTerm $ ExpressionLiteral l
+        let (ResultSuccess term1) = fst <$> inferType testContext term
+        checkType term1 (TypeLiteral $ literalType l)
+
+    H.it "Check lists of literals" $
+      QC.property $ \l -> do
+        let term = defaultTerm $ ExpressionList [defaultTerm $ ExpressionLiteral l]
+        let (ResultSuccess term1) = fst <$> inferType testContext term
+        checkType term1 (TypeList $ TypeLiteral $ literalType l)
+        let (ExpressionList [term2]) = termData term1
+        checkType term2 (TypeLiteral $ literalType l)
+
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = do
   H.describe "Check that term/type pairs are consistent with type inference" $ do
@@ -175,4 +203,5 @@ spec :: H.Spec
 spec = do
   checkIndividualTerms
   checkLiterals
+  checkTypeAnnotations
 --  checkTypedTerms

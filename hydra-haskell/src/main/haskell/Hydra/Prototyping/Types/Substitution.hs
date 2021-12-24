@@ -10,8 +10,11 @@ import qualified Data.Set as S
 
 type Subst = M.Map TypeVariable Type
 
-composeSubstitutions :: Subst -> Subst -> Subst
-composeSubstitutions s1 s2 = M.union s1 $ M.map (sustituteVariablesInType s1) s2
+composeSubst :: Subst -> Subst -> Subst
+composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
+
+freeVariablesInScheme :: TypeScheme -> S.Set TypeVariable
+freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
 freeVariablesInType :: Type -> S.Set TypeVariable
 freeVariablesInType typ = S.fromList $ fv typ
@@ -29,14 +32,11 @@ freeVariablesInType typ = S.fromList $ fv typ
       TypeUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
       TypeVariable v -> [v]
 
-freeVariablesInTypeScheme :: TypeScheme -> S.Set TypeVariable
-freeVariablesInTypeScheme (TypeScheme as t) = S.difference (freeVariablesInType t) (S.fromList as)
-
 normalVariables :: [String]
 normalVariables = (\n -> "v" ++ show n) <$> [1..]
 
-normalizeTypeScheme :: TypeScheme -> TypeScheme
-normalizeTypeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
+normalizeScheme :: TypeScheme -> TypeScheme
+normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
   where
     ord = L.zip (S.toList $ freeVariablesInType body) normalVariables
 
@@ -58,8 +58,13 @@ normalizeTypeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTy
         Just v1 -> TypeVariable v1
         Nothing -> error "type variable not in signature"
 
-sustituteVariablesInType :: M.Map TypeVariable Type -> Type -> Type
-sustituteVariablesInType s typ = case typ of
+substituteInScheme :: M.Map TypeVariable Type -> TypeScheme -> TypeScheme
+substituteInScheme s (TypeScheme as t) = TypeScheme as $ substituteInType s' t
+  where
+    s' = L.foldr M.delete s as
+
+substituteInType :: M.Map TypeVariable Type -> Type -> Type
+substituteInType s typ = case typ of
     TypeElement t -> elementType $ subst t
     TypeFunction (FunctionType dom cod) -> functionType (subst dom) (subst cod)
     TypeList t -> listType $ subst t
@@ -72,10 +77,5 @@ sustituteVariablesInType s typ = case typ of
     TypeUnion tfields -> unionType (substField <$> tfields)
     TypeVariable a -> M.findWithDefault typ a s
   where
-    subst = sustituteVariablesInType s
+    subst = substituteInType s
     substField (FieldType fname t) = FieldType fname $ subst t
-
-sustituteVariablesInTypeScheme :: M.Map TypeVariable Type -> TypeScheme -> TypeScheme
-sustituteVariablesInTypeScheme s (TypeScheme as t) = TypeScheme as $ sustituteVariablesInType s' t
-  where
-    s' = L.foldr M.delete s as
