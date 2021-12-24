@@ -1,5 +1,6 @@
 module Hydra.Prototyping.Types.Inference (
   inferType,
+  Constraint,
 ) where
 
 import Hydra.Core
@@ -31,8 +32,6 @@ type InferenceState = Int
 
 type TypingEnvironment = M.Map TypeVariable TypeScheme
 
-type Unifier = (Subst, [Constraint])
-
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Context m -> Term m -> Result Type
 decodeStructuralType con term = do
@@ -51,9 +50,11 @@ freshTypeVariable = do
     return $ TypeVariable (normalVariables !! s)
 
 generalize :: TypingEnvironment -> Type -> TypeScheme
-generalize env t  = TypeScheme as t
+generalize env t  = TypeScheme vars t
   where
-    as = S.toList $ S.difference (freeVariablesInType t) (L.foldr (S.union . freeVariablesInTypeScheme) S.empty $ M.elems env)
+    vars = S.toList $ S.difference
+      (freeVariablesInType t)
+      (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
 extendEnvironment :: (Variable, TypeScheme) -> Infer a -> Infer a
 extendEnvironment (x, sc) m = do
@@ -143,8 +144,8 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         case solveConstraints c1 of
             Left err -> throwError err
             Right sub -> do
-                let sc = generalize (M.map (sustituteVariablesInTypeScheme sub) env) (sustituteVariablesInType sub t1)
-                i2 <- extendEnvironment (x, sc) $ local (M.map (sustituteVariablesInTypeScheme sub)) (infer cx e2)
+                let sc = generalize (M.map (substituteInScheme sub) env) (substituteInType sub t1)
+                i2 <- extendEnvironment (x, sc) $ local (M.map (substituteInScheme sub)) (infer cx e2)
                 let t2 = termType i2
                 let c2 = termConstraints i2
                 yield (ExpressionLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
@@ -242,14 +243,14 @@ inferTop :: (Default m, Ord m, Show m)
 inferTop env cx v term = do
     term1 <- runInference env (infer cx term)
     subst <- solveConstraints (termConstraints term1)
-    let replace typ = sustituteVariablesInType subst typ
-    let term2 = replaceTermType replace term1 -- TODO: use me
+    let replace typ = substituteInType subst typ
+    let term2 = replaceTermType replace term1
     let ts = closeOver $ termType term2
     return (term2, M.insert v ts env)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver :: Type -> TypeScheme
-    closeOver = normalizeTypeScheme . generalize M.empty
+    closeOver = normalizeScheme . generalize M.empty
 
 inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type, [Constraint]), TypeScheme)
 inferType cx term = case inferTop M.empty cx var term of
@@ -261,10 +262,9 @@ inferType cx term = case inferTop M.empty cx var term of
     var = "x"
 
 instantiate ::  TypeScheme -> Infer Type
-instantiate (TypeScheme as t) = do
-    as' <- mapM (const freshTypeVariable) as
-    let s = M.fromList $ zip as as'
-    return $ sustituteVariablesInType s t
+instantiate (TypeScheme vars t) = do
+    vars1 <- mapM (const freshTypeVariable) vars
+    return $ substituteInType (M.fromList $ zip vars vars1) t
 
 lookupTypeInEnvironment :: Variable -> Infer Type
 lookupTypeInEnvironment v = do
@@ -282,9 +282,6 @@ namedType cx name = do
 
 replaceTermType :: (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
 replaceTermType f (Term expr (x, typ, c)) = Term expr (x, f typ, c) -- TODO: replace recursively
-
-solveConstraints :: [Constraint] -> Either TypeError Subst
-solveConstraints cs = runIdentity $ runExceptT $ unificationSolver (M.empty, cs)
 
 runInference :: TypingEnvironment -> Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
 runInference env term = runExcept $ evalStateT (runReaderT term env) startState
@@ -305,12 +302,3 @@ typeOfElement cx name = do
 
 typeOfPrimitiveFunction :: Context m -> Name -> Result FunctionType
 typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name
-
-unificationSolver :: Unifier -> Solve Subst
-unificationSolver (su, cs) = case cs of
-  [] -> return su
-  ((t1, t2): cs0) -> do
-    su1  <- unify t1 t2
-    unificationSolver (
-      composeSubstitutions su1 su,
-      (\(t1, t2) -> (sustituteVariablesInType su1 t1, sustituteVariablesInType su1 t2)) <$> cs0)

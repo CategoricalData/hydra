@@ -3,6 +3,7 @@ module Hydra.Prototyping.Types.Unification (
   Solve,
   Subst,
   TypeError(..),
+  solveConstraints,
   unify,
 ) where
 
@@ -26,10 +27,24 @@ data TypeError
   | UnboundVariable String
   | UnificationMismatch [Type] [Type] deriving Show
 
+type Unifier = (Subst, [Constraint])
+
 bind ::  TypeVariable -> Type -> Solve Subst
 bind a t | t == TypeVariable a = return M.empty
          | variableOccursInType a t = throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
+
+solveConstraints :: [Constraint] -> Either TypeError Subst
+solveConstraints cs = runIdentity $ runExceptT $ unificationSolver (M.empty, cs)
+
+unificationSolver :: Unifier -> Solve Subst
+unificationSolver (su, cs) = case cs of
+  [] -> return su
+  ((t1, t2): cs0) -> do
+    su1  <- unify t1 t2
+    unificationSolver (
+      composeSubst su1 su,
+      (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
 unify :: Type -> Type -> Solve Subst
 unify t1 t2 = if t1 == t2
@@ -55,8 +70,8 @@ unifyMany :: [Type] -> [Type] -> Solve Subst
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
-     su2 <- unifyMany (sustituteVariablesInType su1 <$> ts1) (sustituteVariablesInType su1 <$> ts2)
-     return (composeSubstitutions su2 su1)
+     su2 <- unifyMany (substituteInType su1 <$> ts1) (substituteInType su1 <$> ts2)
+     return (composeSubst su2 su1)
 unifyMany t1 t2 = throwError $ UnificationMismatch t1 t2
 
 variableOccursInType ::  TypeVariable -> Type -> Bool
