@@ -8,12 +8,13 @@ import Hydra.Impl.Haskell.Extras
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Prototyping.Primitives
 import Hydra.Prototyping.Rewriting
+import Hydra.Prototyping.Types.Inference
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage 
+import Hydra.Prototyping.CoreLanguage
 import Hydra.Prototyping.Steps
 
 
@@ -54,3 +55,8 @@ dataGraphToExternalModule lang encodeTerm createModule cx g = do
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
         termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
+
+--    annotateTerm term = rewriteTerm ref <$> inferType cx term
+--      where
+--        rep (Term expr )
+

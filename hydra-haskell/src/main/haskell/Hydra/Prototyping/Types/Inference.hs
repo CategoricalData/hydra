@@ -244,7 +244,7 @@ inferTop env cx v term = do
     term1 <- runInference env (infer cx term)
     subst <- solveConstraints (termConstraints term1)
     let replace typ = substituteInType subst typ
-    let term2 = replaceTermType replace term1
+    let term2 = rewriteTermType replace term1
     let ts = closeOver $ termType term2
     return (term2, M.insert v ts env)
   where
@@ -280,8 +280,8 @@ namedType cx name = do
   scon' <- schemaContext scon
   decodeStructuralType scon' $ elementData el
 
-replaceTermType :: (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
-replaceTermType f (Term expr (x, typ, c)) = Term expr (x, f typ, c) -- TODO: replace recursively
+rewriteTermType :: (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
+rewriteTermType f (Term expr (x, typ, c)) = Term expr (x, f typ, c) -- TODO: replace recursively
 
 runInference :: TypingEnvironment -> Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
 runInference env term = runExcept $ evalStateT (runReaderT term env) startState

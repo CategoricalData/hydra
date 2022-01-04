@@ -15,13 +15,13 @@ import qualified Data.Set as S
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
   H.describe "Test folding over terms" $ do
-    
+
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
           (list [int32Value 42, apply (lambda "x" $ variable "x") (int32Value 10)] :: Term Meta))
         52
-        
+
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
@@ -69,32 +69,50 @@ testReplaceTerm = do
 
       H.it "Check that the correct subterms are replaced" $ do
         H.shouldBe
-          (replaceTerm TraversalOrderPre replaceInts
+          (rewriteTerm replaceInts keepMeta
             (int32Value 42))
           (int64Value 42 :: Term Meta)
         H.shouldBe
-          (replaceTerm TraversalOrderPre replaceInts
+          (rewriteTerm replaceInts keepMeta
             (list [int32Value 42, apply (lambda "x" $ variable "x") (int32Value 137)]))
           (list [int64Value 42, apply (lambda "x" $ variable "x") (int64Value 137)] :: Term Meta)
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
-          (replaceTerm TraversalOrderPre replaceLists
+          (rewriteTerm replaceListsPre keepMeta
             (list [list [list []]]))
           (list [list []] :: Term Meta)
         H.shouldBe
-          (replaceTerm TraversalOrderPost replaceLists
+          (rewriteTerm replaceListsPost keepMeta
             (list [list [list []]]))
           (list [] :: Term Meta)
+
+      H.it "Check that metadata is replace recursively" $ do
+        H.shouldBe
+          (rewriteTerm keepData replaceMeta (list [Term (ExpressionLiteral $ LiteralString "foo") 42] :: Term Int))
+          (Term (ExpressionList [Term (ExpressionLiteral $ LiteralString "foo") "42"]) "0")
   where
-    replaceLists term = Just $ case termData term of
+    keepData recurse term = recurse term
+
+    keepMeta = id
+
+    replaceInts recurse term = case termData term2 of
+        ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64Value $ fromIntegral v
+        _ -> term2
+      where
+        term2 = recurse term
+
+    replaceLists term = case termData term of
       ExpressionList (h:_) -> case termData h of
         ExpressionList [] -> list []
         _ -> term
       _ -> term
-    replaceInts term = Just $ case termData term of
-      ExpressionLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64Value $ fromIntegral v
-      _ -> term
+
+    replaceListsPre recurse = recurse . replaceLists
+
+    replaceListsPost recurse = replaceLists . recurse
+
+    replaceMeta i = show i
 
 testSimplifyTerm :: H.SpecWith ()
 testSimplifyTerm = do
@@ -108,12 +126,12 @@ testSimplifyTerm = do
 testStripMeta :: H.SpecWith ()
 testStripMeta = do
   H.describe "Test stripping metadata from terms" $ do
-    
+
     H.it "Strip typ annotations" $ do
       QC.property $ \(TypedTerm typ term) -> do
         H.shouldBe
           (contextTypeOf testContext $ termMeta term)
-          Nothing                    
+          Nothing
         H.shouldBe
           (contextTypeOf testContext $ termMeta $ withType testContext typ term)
           (Just typ)
