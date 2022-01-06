@@ -252,6 +252,8 @@ definitions:
           type: Term.Eta #@
         - name: repeated
           type: Term.Repeated #@
+        - name: param
+          type: Term.Param
 #object Term {
     innerTypes:
 #  @branch trait Ref extends Term with scala.meta.Ref #@
@@ -651,6 +653,12 @@ definitions:
                 list: Mod
             - name: name
               type: Name
+            - name: decltpe
+              type:
+                optional: Type
+            - name: default
+              type:
+                optional: Term
 #  def fresh(): Term.Name = fresh("fresh")
 #  def fresh(prefix: String): Term.Name = Term.Name(prefix + Fresh.nextId())
 #}
@@ -1544,7 +1552,7 @@ definitions:
 #      decltpe: Option[scala.meta.Type],
             - name: decltpe
               type:
-                option: Type
+                optional: Type
 #      body: Term
             - name: body
               type: Term

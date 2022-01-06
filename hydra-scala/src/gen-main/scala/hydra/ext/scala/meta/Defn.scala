@@ -353,7 +353,12 @@ object Defn {
          */
         paramss: Seq[Seq[hydra.ext.scala.meta.Term.Param]],
         
-        decltpe: Void,
+        /**
+         * @type optional: hydra/ext/scala/meta.Type
+         * 
+         * @type optional: hydra/ext/scala/meta.Type
+         */
+        decltpe: Option[hydra.ext.scala.meta.Type],
         
         /**
          * @type hydra/ext/scala/meta.Term
