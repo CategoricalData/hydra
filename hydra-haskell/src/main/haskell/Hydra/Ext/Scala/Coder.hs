@@ -62,21 +62,22 @@ constructModule cx g coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Term_Name lname
 
---encodeCase :: (Default m, Ord m, Read m) => Context m -> Field m -> Result Scala.Case
-
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Result Scala.Term
 encodeFunction cx meta fun = case fun of
     FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> sdom
     FunctionPrimitive name -> pure $ sprim name
     FunctionCases cases -> do
         let v = "x"
-        scases <- CM.mapM (encodeCase cx) cases :: Result [Scala.Case]
+        let sn = case dom of
+              Just (TypeNominal name) -> Just name
+              _ -> Nothing
+        scases <- CM.mapM (encodeCase sn cx) cases
         slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> sdom
       where
-        encodeCase cx (Field fname fterm) = do
+        encodeCase sn cx (Field fname fterm) = do
           let v = "y"
           -- Note: pattern extraction may or may not be the most appropriate constructor here
-          let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar v]
+          let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) [svar v]
           let cond = Nothing
           body <- encodeTerm cx $ apply fterm (variable v)
           return $ Scala.Case pat cond body
@@ -84,11 +85,10 @@ encodeFunction cx meta fun = case fun of
     FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
     _ -> fail $ "unexpected function: " ++ show fun
   where
-    sdom = case contextTypeOf cx meta of
-      Just t -> case t of
-        TypeFunction (FunctionType dom _) -> Just <$> encodeType dom
-        _ -> fail $ "expected function type, but found " ++ show t
+    dom = fmap (\(TypeFunction (FunctionType d _)) -> d) $ contextTypeOf cx meta
+    sdom = case dom of
       Nothing -> pure Nothing
+      Just t -> Just <$> encodeType t
 
 encodeLiteral :: Literal -> Result Scala.Lit
 encodeLiteral av = case av of
@@ -114,7 +114,6 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionApplication (Application fun arg) -> case termData fun of
        ExpressionFunction FunctionData -> encodeTerm cx arg
        _ -> case termData fun of
---         ExpressionFunction (FunctionProjection fname) -> sapply <$> (pure $ sname fname) <*> encodeTerm cx arg
          ExpressionFunction (FunctionCases fields) -> do
              body <- encodeTerm cx arg
              cases <- CM.mapM toCase fields
@@ -145,11 +144,13 @@ encodeTerm cx term@(Term expr meta) = do
           args <- CM.mapM (encodeTerm cx) (fieldTerm <$> fields)
           return $ sapply (sname typeName) args
     ExpressionSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
-    ExpressionUnion (Field fn ft) -> pure $ sname "UNION" -- do  TODO
---      let lhs = hsvar $ Y.maybe fn (`qualifyUnionFieldName` fn) sname
---      case termData ft of
---        ExpressionRecord [] -> pure lhs
---        _ -> hsapp lhs <$> encodeTerm cx ft
+    ExpressionUnion (Field fn ft) -> do
+      let lhs = sname $ qualifyUnionFieldName schemaName fn
+      case termData ft of
+        ExpressionRecord [] -> pure lhs
+        _ -> do
+          arg <- encodeTerm cx ft
+          return $ sapply lhs [arg]
     ExpressionVariable v -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
@@ -194,6 +195,9 @@ encodeType t = case t of
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
   TypeVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type: " ++ show t
+
+qualifyUnionFieldName :: Y.Maybe Name -> FieldName -> String
+qualifyUnionFieldName sname fname = (Y.maybe "" (\n -> localNameOf n ++ ".") sname) ++ fname
 
 scalaLanguage :: Language
 scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
