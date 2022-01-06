@@ -42,7 +42,9 @@ constructModule cx g coders pairs = do
         rhs <- stepOut coder term
         Scala.StatDefn <$> case rhs of
           Scala.TermApply _ -> toVal rhs
-          Scala.TermFunctionTerm fun -> toDef fun
+          Scala.TermFunctionTerm fun -> case typ of
+            TypeFunction (FunctionType _ cod) -> toDef fun cod
+            _ -> fail $ "expected function type, but found " ++ show typ
 --          Scala.TermFunctionTerm _ -> toVal $ Scala.TermLit $ Scala.LitString $ show rhs -- TODO
           Scala.TermLit _ -> toVal rhs
           Scala.TermRef _ -> toVal rhs -- TODO
@@ -50,24 +52,43 @@ constructModule cx g coders pairs = do
       where
         lname = localNameOf $ elementName el
 
-        toDef (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) = do
+        toDef (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) cod = do
           let tparams = []
           let paramss = [params]
-          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams paramss () body
+          scod <- encodeType cod
+          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams paramss (Just scod) body
 
         toVal rhs = pure $ Scala.DefnVal $ Scala.Defn_Val [] [namePat] Nothing rhs
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Term_Name lname
 
-encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result Scala.Term
+--encodeCase :: (Default m, Ord m, Read m) => Context m -> Field m -> Result Scala.Case
+
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Result Scala.Term
 encodeFunction cx meta fun = case fun of
---    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body
-    FunctionLambda _ -> pure $ sname $ show fun --TODO: temp
+    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> sdom
     FunctionPrimitive name -> pure $ sprim name
-    FunctionCases _ -> pure $ sname "CASES" -- TODO
+    FunctionCases cases -> do
+        let v = "x"
+        scases <- CM.mapM (encodeCase cx) cases :: Result [Scala.Case]
+        slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> sdom
+      where
+        encodeCase cx (Field fname fterm) = do
+          let v = "y"
+          -- Note: pattern extraction may or may not be the most appropriate constructor here
+          let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar v]
+          let cond = Nothing
+          body <- encodeTerm cx $ apply fterm (variable v)
+          return $ Scala.Case pat cond body
     FunctionData -> pure $ sname "DATA" -- TODO
     FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
     _ -> fail $ "unexpected function: " ++ show fun
+  where
+    sdom = case contextTypeOf cx meta of
+      Just t -> case t of
+        TypeFunction (FunctionType dom _) -> Just <$> encodeType dom
+        _ -> fail $ "expected function type, but found " ++ show t
+      Nothing -> pure Nothing
 
 encodeLiteral :: Literal -> Result Scala.Lit
 encodeLiteral av = case av of
@@ -136,6 +157,44 @@ encodeTerm cx term@(Term expr meta) = do
       Just (TypeNominal name) -> Just name
       Nothing -> Nothing
 
+encodeType :: Type -> Result Scala.Type
+encodeType t = case t of
+--  TypeElement et ->
+  TypeFunction (FunctionType dom cod) -> do
+    sdom <- encodeType dom
+    scod <- encodeType cod
+    return $ Scala.TypeFunctionType $ Scala.Type_FunctionTypeFunction $ Scala.Type_Function [sdom] scod
+  TypeList lt -> stapply <$> pure (stref "Seq") <*> encodeType lt
+  TypeLiteral lt -> case lt of
+--    TypeBinary ->
+    LiteralTypeBoolean -> pure $ stref "Boolean"
+    LiteralTypeFloat ft -> case ft of
+--      FloatTypeBigfloat ->
+      FloatTypeFloat32 -> pure $ stref "Float"
+      FloatTypeFloat64 -> pure $ stref "Double"
+    LiteralTypeInteger it -> case it of
+--      IntegerTypeBigint ->
+--      IntegerTypeInt8 ->
+      IntegerTypeInt16 -> pure $ stref "Short"
+      IntegerTypeInt32 -> pure $ stref "Int"
+      IntegerTypeInt64 -> pure $ stref "Long"
+      IntegerTypeUint8 -> pure $ stref "Byte"
+--      IntegerTypeUint16 ->
+--      IntegerTypeUint32 ->
+--      IntegerTypeUint64 ->
+    LiteralTypeString -> pure $ stref "String"
+  TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
+  TypeNominal name -> pure $ stref $ localNameOf name
+  TypeOptional ot -> stapply <$> pure (stref "Option") <*> encodeType ot
+--  TypeRecord sfields ->
+  TypeSet st -> stapply <$> pure (stref "Set") <*> encodeType st
+--  TypeUnion sfields ->
+  TypeUniversal (UniversalType v body) -> do
+    sbody <- encodeType body
+    return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
+  TypeVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
+  _ -> fail $ "can't encode unsupported type: " ++ show t
+
 scalaLanguage :: Language
 scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [
@@ -187,9 +246,13 @@ sapply fun args = Scala.TermApply $ Scala.Term_Apply fun args
 sassign :: Scala.Term -> Scala.Term -> Scala.Term
 sassign lhs rhs = Scala.TermAssign $ Scala.Term_Assign lhs rhs
 
-slambda :: Variable -> Scala.Term -> Scala.Term
-slambda v body = Scala.TermFunctionTerm $ Scala.Term_FunctionTermFunction
-  $ Scala.Term_Function [Scala.Term_Param [] $ Scala.NameValue v] body
+slambda :: Variable -> Scala.Term -> Y.Maybe Scala.Type -> Scala.Term
+slambda v body sdom = Scala.TermFunctionTerm $ Scala.Term_FunctionTermFunction
+    $ Scala.Term_Function [Scala.Term_Param mods name sdom def] body
+  where
+    mods = []
+    name = Scala.NameValue v
+    def = Nothing
 
 sname :: String -> Scala.Term
 sname = Scala.TermRef . Scala.Term_RefName . Scala.Term_Name
@@ -199,6 +262,18 @@ sprim name = sname $ prefix ++ "." ++ local
   where
     (ns, local) = toQname name
     prefix = capitalize $ L.last $ Strings.splitOn "/" ns
+
+stapply :: Scala.Type -> Scala.Type -> Scala.Type
+stapply t1 t2 = Scala.TypeApply $ Scala.Type_Apply t1 [t2]
+
+stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
+stapply2 t1 t2 t3 = Scala.TypeApply $ Scala.Type_Apply t1 [t2, t3]
+
+stparam :: TypeVariable -> Scala.Type_Param
+stparam v = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
+
+stref :: String -> Scala.Type
+stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 
 svar :: Variable -> Scala.Pat
 svar = Scala.PatVar . Scala.Pat_Var . Scala.Term_Name
