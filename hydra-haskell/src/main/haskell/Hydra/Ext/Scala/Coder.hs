@@ -28,14 +28,18 @@ dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeTerm con
 constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
-    let imports = toImport <$> S.toList (dataGraphDependencies g)
     defs <- CM.mapM toDef pairs
     let pname = toScalaName $ graphName g
     let pref = Scala.Term_RefName pname
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
-    toImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
-      Scala.Importer (Scala.Term_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
+    imports = (toElImport <$> (S.toList $ dataGraphDependencies True False True g))
+        ++ (toPrimImport <$> (S.toList $ dataGraphDependencies False True False g))
+      where
+        toElImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+          Scala.Importer (Scala.Term_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
+        toPrimImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+          Scala.Importer (Scala.Term_RefName $ toScalaName gname) []]
     toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedTerm typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders
@@ -265,7 +269,7 @@ sprim :: Name -> Scala.Term
 sprim name = sname $ prefix ++ "." ++ local
   where
     (ns, local) = toQname name
-    prefix = capitalize $ L.last $ Strings.splitOn "/" ns
+    prefix = L.last $ Strings.splitOn "/" ns
 
 stapply :: Scala.Type -> Scala.Type -> Scala.Type
 stapply t1 t2 = Scala.TypeApply $ Scala.Type_Apply t1 [t2]

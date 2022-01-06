@@ -55,13 +55,17 @@ writeImportExportStat ie = case ie of
 --  Scala.ImportExportStatExport exp ->
 
 writeImporter :: Scala.Importer -> CT.Expr
-writeImporter (Scala.Importer (Scala.Term_RefName (Scala.Term_Name ref)) importees) = newlineSep (write <$> importees)
+writeImporter (Scala.Importer (Scala.Term_RefName (Scala.Term_Name ref)) importees) = spaceSep [
+    cst "import", noSep [cst ref, forImportees importees]]
   where
-    write it = spaceSep [cst "import", cst (ref ++ forImportee it)]
-    forImportee it = case it of
-      Scala.ImporteeWildcard -> ".*"
-      Scala.ImporteeName (Scala.Importee_Name (Scala.NameValue name)) -> "." ++ name
-
+    forImportee it = cst $ case it of
+      Scala.ImporteeWildcard -> "*"
+      Scala.ImporteeName (Scala.Importee_Name (Scala.NameValue name)) -> name
+    forImportees its = if L.null its
+      then cst ""
+      else if L.length its == 1
+      then noSep [cst ".", forImportee $ L.head its]
+      else noSep [cst ".", curlyBracesList False (forImportee <$> its)]
 writeLit :: Scala.Lit -> CT.Expr
 writeLit lit = case lit of
 --  Scala.LitNull

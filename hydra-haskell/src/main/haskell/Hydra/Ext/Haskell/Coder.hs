@@ -41,12 +41,12 @@ constructModule cx g coders pairs = do
       let comments = contextDescriptionOf cx $ termMeta term
       return $ H.DeclarationWithComments decl comments
 
-    imports = toImport <$> S.toList (dataGraphDependencies g)
+    imports = toImport <$> S.toList (dataGraphDependencies True True True g)
 
     toImport name = H.Import False mname (Just alias) Nothing
       where
         (mname, alias) = importName name
-        
+
     importName name = (L.intercalate "." parts, L.last parts)
       where
         parts = capitalize <$> Strings.splitOn "/" name
