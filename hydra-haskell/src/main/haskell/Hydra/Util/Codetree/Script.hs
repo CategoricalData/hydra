@@ -19,6 +19,11 @@ bracketList newlines els = case els of
 commaOp :: Bool -> Op
 commaOp newlines = Op "," (Padding WsNone (if newlines then WsBreak else WsSpace)) 0 AssociativityNone -- No source
 
+curlyBracesList :: Bool -> [Expr] -> Expr
+curlyBracesList newlines els = case els of
+  [] -> cst "{}"
+  _ -> brackets curlyBraces $ commaSep newlines els
+
 ifx :: Op -> Expr -> Expr -> Expr
 ifx op lhs rhs = ExprOp $ OpExpr op lhs rhs
 
@@ -67,6 +72,7 @@ prefix p = ifx preOp (cst "")
 
 sep :: Op -> [Expr] -> Expr
 sep op els =  case els of
+  [] -> cst ""
   [x] -> x
   (h:r) -> ifx op h $ sep op r
 

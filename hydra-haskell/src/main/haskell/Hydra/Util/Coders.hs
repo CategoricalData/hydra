@@ -18,16 +18,16 @@ import Hydra.Prototyping.CoreLanguage
 import Hydra.Prototyping.Steps
 
 
-dataGraphDependencies :: Show m => Graph m -> S.Set GraphName
-dataGraphDependencies g = S.delete (graphName g) allDeps
+dataGraphDependencies :: Show m => Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
+dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) allDeps
   where
     allDeps = L.foldl (\s t -> S.union s $ depsOf t) S.empty $
       (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
     depsOf term = foldOverTerm TraversalOrderPre addNames S.empty term
     addNames names term = case termData term of
-      ExpressionElement name -> S.insert (graphNameOf name) names
-      ExpressionFunction (FunctionPrimitive name) -> S.insert (graphNameOf name) names
-      ExpressionNominal (NominalTerm name _) -> S.insert name names
+      ExpressionElement name -> if withEls then (S.insert (graphNameOf name) names) else names
+      ExpressionFunction (FunctionPrimitive name) -> if withPrims then (S.insert (graphNameOf name) names) else names
+      ExpressionNominal (NominalTerm name _) -> if withNoms then (S.insert name names) else names
       _ -> names
     graphNameOf = L.head . Strings.splitOn "."
 
