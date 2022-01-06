@@ -141,6 +141,10 @@ enum Term:
      * @type hydra/ext/scala/meta.Term.Repeated
      */
     case repeated(value: hydra.ext.scala.meta.Term.Repeated) extends Term
+    /**
+     * @type hydra/ext/scala/meta.Term.Param
+     */
+    case param(value: hydra.ext.scala.meta.Term.Param) extends Term
 object Term {
     enum Ref:
         /**
@@ -749,7 +753,21 @@ object Term {
          * 
          * @type hydra/ext/scala/meta.Name
          */
-        name: hydra.ext.scala.meta.Name
+        name: hydra.ext.scala.meta.Name,
+        
+        /**
+         * @type optional: hydra/ext/scala/meta.Type
+         * 
+         * @type optional: hydra/ext/scala/meta.Type
+         */
+        decltpe: Option[hydra.ext.scala.meta.Type],
+        
+        /**
+         * @type optional: hydra/ext/scala/meta.Term
+         * 
+         * @type optional: hydra/ext/scala/meta.Term
+         */
+        default: Option[hydra.ext.scala.meta.Term]
     )
 }
 
@@ -823,6 +841,8 @@ val _Term_NewAnonymous: String = "hydra/ext/scala/meta.Term.NewAnonymous"
 val _Term_NewAnonymous_templ: String = "templ"
 val _Term_New_init: String = "init"
 val _Term_Param: String = "hydra/ext/scala/meta.Term.Param"
+val _Term_Param_decltpe: String = "decltpe"
+val _Term_Param_default: String = "default"
 val _Term_Param_mods: String = "mods"
 val _Term_Param_name: String = "name"
 val _Term_PartialFunction: String = "hydra/ext/scala/meta.Term.PartialFunction"
@@ -893,6 +913,7 @@ val _Term_lit: String = "lit"
 val _Term_match: String = "match"
 val _Term_new: String = "new"
 val _Term_newAnonymous: String = "newAnonymous"
+val _Term_param: String = "param"
 val _Term_partialFunction: String = "partialFunction"
 val _Term_placeholder: String = "placeholder"
 val _Term_polyFunction: String = "polyFunction"

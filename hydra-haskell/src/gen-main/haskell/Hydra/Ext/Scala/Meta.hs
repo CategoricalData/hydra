@@ -539,6 +539,8 @@ module Hydra.Ext.Scala.Meta
   , _Term_NewAnonymous_templ
   , _Term_New_init
   , _Term_Param
+  , _Term_Param_decltpe
+  , _Term_Param_defaultEsc
   , _Term_Param_mods
   , _Term_Param_name
   , _Term_PartialFunction
@@ -609,6 +611,7 @@ module Hydra.Ext.Scala.Meta
   , _Term_match
   , _Term_new
   , _Term_newAnonymous
+  , _Term_param
   , _Term_partialFunction
   , _Term_placeholder
   , _Term_polyFunction
@@ -985,7 +988,8 @@ data Defn_Def
     {-| @type list:
                 list: hydra/ext/scala/meta.Term.Param -}
     , defnDefParamss :: [[Term_Param]]
-    , defnDefDecltpe :: ()
+    -- | @type optional: hydra/ext/scala/meta.Type
+    , defnDefDecltpe :: Maybe Type
     -- | @type hydra/ext/scala/meta.Term
     , defnDefBody :: Term } deriving (Eq, Generic, Ord, Read, Show)
 
@@ -1726,7 +1730,11 @@ data Term_Param
     -- | @type list: hydra/ext/scala/meta.Mod
     { termParamMods :: [Mod]
     -- | @type hydra/ext/scala/meta.Name
-    , termParamName :: Name } deriving (Eq, Generic, Ord, Read, Show)
+    , termParamName :: Name
+    -- | @type optional: hydra/ext/scala/meta.Type
+    , termParamDecltpe :: Maybe Type
+    -- | @type optional: hydra/ext/scala/meta.Term
+    , termParamDefaultEsc :: Maybe Term } deriving (Eq, Generic, Ord, Read, Show)
 
 data Term
   -- | @type hydra/ext/scala/meta.Lit
@@ -1798,7 +1806,9 @@ data Term
   -- | @type hydra/ext/scala/meta.Term.Eta
   | TermEta Term_Eta
   -- | @type hydra/ext/scala/meta.Term.Repeated
-  | TermRepeated Term_Repeated deriving (Eq, Generic, Ord, Read, Show)
+  | TermRepeated Term_Repeated
+  -- | @type hydra/ext/scala/meta.Term.Param
+  | TermParam Term_Param deriving (Eq, Generic, Ord, Read, Show)
 
 data Tree
   -- | @type hydra/ext/scala/meta.Ref
@@ -2481,6 +2491,8 @@ _Term_NewAnonymous = "hydra/ext/scala/meta.Term_NewAnonymous" :: String
 _Term_NewAnonymous_templ = "templ" :: String
 _Term_New_init = "init" :: String
 _Term_Param = "hydra/ext/scala/meta.Term_Param" :: String
+_Term_Param_decltpe = "decltpe" :: String
+_Term_Param_defaultEsc = "defaultEsc" :: String
 _Term_Param_mods = "mods" :: String
 _Term_Param_name = "name" :: String
 _Term_PartialFunction = "hydra/ext/scala/meta.Term_PartialFunction" :: String
@@ -2551,6 +2563,7 @@ _Term_lit = "lit" :: String
 _Term_match = "match" :: String
 _Term_new = "new" :: String
 _Term_newAnonymous = "newAnonymous" :: String
+_Term_param = "param" :: String
 _Term_partialFunction = "partialFunction" :: String
 _Term_placeholder = "placeholder" :: String
 _Term_polyFunction = "polyFunction" :: String
