@@ -197,6 +197,7 @@ termVariant = standardFunction _hydra_basics "termVariant"
   (universal "a" $ nominalType _Term) (nominalType _TermVariant) $
   lambda "term" $ apply
     (standardMatchWithVariants (universal "a" $ nominalType _Expression) (nominalType _TermVariant) [
+--    (standardMatchWithVariants (universal "a" $ nominalType _Term) (nominalType _TermVariant) [
           (_Expression_application,     _TermVariant_application),
           (_Expression_element,         _TermVariant_element),
           (_Expression_function,        _TermVariant_function),

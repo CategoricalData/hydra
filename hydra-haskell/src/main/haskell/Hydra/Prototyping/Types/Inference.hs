@@ -117,6 +117,10 @@ infer cx term = case contextTypeOf cx (termMeta term) of
           i <- infer cx other
           yieldFunction (FunctionCompareTo i) (functionType (termType i) int8Type) (termConstraints i)
 
+        FunctionData -> do
+          et <- freshTypeVariable
+          yieldFunction FunctionData (functionType (elementType et) et) []
+
         FunctionLambda (Lambda x e) -> do
           tv <- freshTypeVariable
           i <- extendEnvironment (x, TypeScheme [] tv) (infer cx e)
@@ -141,7 +145,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         i1 <- infer cx e1
         let t1 = termType i1
         let c1 = termConstraints i1
-        case solveConstraints c1 of
+        case solveConstraints cx c1 of
             Left err -> throwError err
             Right sub -> do
                 let sc = generalize (M.map (substituteInScheme sub) env) (substituteInType sub t1)
@@ -242,7 +246,8 @@ inferTop :: (Default m, Ord m, Show m)
   -> Either TypeError (Term (m, Type, [Constraint]), TypingEnvironment)
 inferTop env cx v term = do
     term1 <- runInference env (infer cx term)
-    subst <- solveConstraints (termConstraints term1)
+    let (ResultSuccess scon) = schemaContext cx
+    subst <- solveConstraints scon (termConstraints term1)
     let replace typ = substituteInType subst typ
     let term2 = rewriteTermType replace term1
     let ts = closeOver $ termType term2

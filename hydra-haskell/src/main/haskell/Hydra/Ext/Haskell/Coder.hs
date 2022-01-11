@@ -61,7 +61,7 @@ constructModule cx g coders pairs = do
 dataGraphToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
 dataGraphToHaskellModule = dataGraphToExternalModule haskellLanguage encodeTerm constructModule
 
-encodeFunction :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> a -> Function a -> Result H.Expression
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Result H.Expression
 encodeFunction cx meta fun = case fun of
     FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
       where
@@ -71,15 +71,12 @@ encodeFunction cx meta fun = case fun of
         toAlt fieldMap (Field fn fun') = do
           let v0 = "v"
           let rhsTerm = simplifyTerm $ apply fun' (variable v0)
-          let v1 = if S.member v0 $ freeVariablesInTerm rhsTerm then v0 else "_"
+          let v1 = if isFreeIn v0 rhsTerm then v0 else "_"
           let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
           args <- case fieldMap >>= M.lookup fn of
                 Just (FieldType _ (TypeRecord [])) -> pure []
                 Just _ -> pure [H.PatternName $ hsname v1]
                 Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show domName
---                  ++ ": " ++ show fieldMap
---                  ++ ". metadata: " ++ show meta
---                  ++ ". function: " ++ show fun
           let lhs = H.PatternApplication $ H.Pattern_Application (hsname hn) args
           rhs <- encodeTerm cx rhsTerm
           return $ H.Alternative lhs rhs Nothing

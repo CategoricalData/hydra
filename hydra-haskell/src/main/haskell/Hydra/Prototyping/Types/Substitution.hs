@@ -6,6 +6,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 type Subst = M.Map TypeVariable Type
@@ -75,6 +76,9 @@ substituteInType s typ = case typ of
     TypeRecord tfields -> recordType (substField <$> tfields)
     TypeSet t -> setType $ subst t
     TypeUnion tfields -> unionType (substField <$> tfields)
+    TypeUniversal (UniversalType v body) -> if Y.isNothing (M.lookup v s)
+      then TypeUniversal $ UniversalType v (subst body)
+      else typ
     TypeVariable a -> M.findWithDefault typ a s
   where
     subst = substituteInType s
