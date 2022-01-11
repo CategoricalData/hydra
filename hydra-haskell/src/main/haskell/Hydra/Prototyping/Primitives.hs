@@ -52,7 +52,7 @@ requireElement context name = Y.maybe error ResultSuccess $ M.lookup name $ cont
   where
     error = ResultFailure $ "no such element: " ++ name
       ++ " in graph " ++ graphSetRoot (contextGraphs context)
-      ++ ". Available elements: " ++ L.intercalate ", " (elementName <$> M.elems (contextElements context))
+      ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements context))) ++ "}"
 
 requirePrimitiveFunction :: Context a -> Name -> Result (PrimitiveFunction a)
 requirePrimitiveFunction context fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction context fn

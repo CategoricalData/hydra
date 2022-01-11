@@ -2,7 +2,9 @@ module Hydra.Prototyping.Rewriting (
   TraversalOrder(..),
   foldOverTerm,
   freeVariablesInTerm,
+  isFreeIn,
   rewriteTerm,
+  rewriteTermMeta,
   simplifyTerm,
   stripMeta,
   subterms,
@@ -32,6 +34,9 @@ freeVariablesInTerm term = case termData term of
   ExpressionFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   ExpressionVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
+
+isFreeIn :: Variable -> Term m -> Bool
+isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 rewriteTerm :: (Ord a, Ord b) => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
 rewriteTerm mapData mapMeta = replace
@@ -65,6 +70,11 @@ rewriteTerm mapData mapMeta = replace
           ExpressionUnion field -> ExpressionUnion $ replaceField field
           ExpressionVariable v -> ExpressionVariable v
 
+rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
+rewriteTermMeta mapMeta = rewriteTerm mapData mapMeta
+  where
+    mapData recurse term = recurse term
+
 simplifyTerm :: (Default m, Ord m) => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
   where
@@ -79,10 +89,7 @@ simplifyTerm = rewriteTerm simplify id
       _ -> term
 
 stripMeta :: (Default m, Ord m) => Term m -> Term m
-stripMeta = rewriteTerm mapData mapMeta
-  where
-    mapData recurse term = recurse term
-    mapMeta _ = dflt
+stripMeta = rewriteTermMeta $ \_ -> dflt
 
 substituteVariable :: (Default m, Ord m) => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id

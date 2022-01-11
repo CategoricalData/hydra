@@ -14,6 +14,8 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Coders
+import Hydra.Prototyping.Rewriting
+import Hydra.Prototyping.Types.Inference
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -23,7 +25,7 @@ import qualified Data.Maybe as Y
 
 
 dataGraphToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
-dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeTerm constructModule
+dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedTerm constructModule
 
 constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
@@ -79,12 +81,21 @@ encodeFunction cx meta fun = case fun of
         slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> sdom
       where
         encodeCase sn cx (Field fname fterm) = do
-          let v = "y"
-          -- Note: pattern extraction may or may not be the most appropriate constructor here
-          let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) [svar v]
-          let cond = Nothing
-          body <- encodeTerm cx $ apply fterm (variable v)
-          return $ Scala.Case pat cond body
+            body <- encodeTerm cx $ applyVar fterm v
+--            return $ Scala.Case pat cond body
+            return $ Scala.Case pat cond $ sname $ "TYPE: " ++ show ftype
+          where
+            v = "y"
+            patArgs = [svar v]
+            -- Note: pattern extraction may or may not be the most appropriate constructor here
+            pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) patArgs
+            cond = Nothing
+            ftype = contextTypeOf cx (termMeta fterm)
+        applyVar fterm v = case termData fterm of
+          ExpressionFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
+            then body
+            else fterm
+          _ -> apply fterm (variable v)
     FunctionData -> pure $ sname "DATA" -- TODO
     FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
     _ -> fail $ "unexpected function: " ++ show fun
@@ -118,17 +129,17 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionApplication (Application fun arg) -> case termData fun of
        ExpressionFunction FunctionData -> encodeTerm cx arg
        _ -> case termData fun of
-         ExpressionFunction (FunctionCases fields) -> do
-             body <- encodeTerm cx arg
-             cases <- CM.mapM toCase fields
-             return $ Scala.TermMatch $ Scala.Term_Match body cases
-           where
-             toCase (Field fname fterm) = do
-               let var = "v"
-               -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
-               let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar var] -- TODO: qualify with type name
-               body <- encodeTerm cx $ apply fterm $ variable var
-               return $ Scala.Case pat Nothing body
+--         ExpressionFunction (FunctionCases fields) -> do
+--             body <- encodeTerm cx arg
+--             cases <- CM.mapM toCase fields
+--             return $ Scala.TermMatch $ Scala.Term_Match body cases
+--           where
+--             toCase (Field fname fterm) = do
+--               let var = "v"
+--               -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
+--               let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar var] -- TODO: qualify with type name
+--               body <- encodeTerm cx $ apply fterm $ variable var
+--               return $ Scala.Case pat Nothing body
          _ -> sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
     ExpressionElement name -> pure $ sname $ localNameOf name
     ExpressionFunction f -> encodeFunction cx (termMeta term) f
@@ -198,7 +209,15 @@ encodeType t = case t of
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
   TypeVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
-  _ -> fail $ "can't encode unsupported type: " ++ show t
+  _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
+
+encodeUntypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Term
+encodeUntypedTerm cx term = do
+    (term1, _) <- inferType cx term
+    let term2 = rewriteTermMeta annotType term1
+    encodeTerm cx term2
+  where
+    annotType (m, t, _) = contextSetTypeOf cx (Just t) m
 
 qualifyUnionFieldName :: Y.Maybe Name -> FieldName -> String
 qualifyUnionFieldName sname fname = (Y.maybe "" (\n -> localNameOf n ++ ".") sname) ++ fname
