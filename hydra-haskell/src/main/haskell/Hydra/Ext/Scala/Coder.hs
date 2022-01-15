@@ -72,7 +72,7 @@ encodeFunction cx meta fun = case fun of
     FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> sdom
     FunctionPrimitive name -> pure $ sprim name
     FunctionCases cases -> do
-        let v = "x"
+        let v = "v"
         let sn = case dom of
               Just (TypeNominal name) -> Just name
               _ -> Nothing
@@ -83,7 +83,7 @@ encodeFunction cx meta fun = case fun of
             body <- encodeTerm cx $ applyVar fterm v
             return $ Scala.Case pat cond body
           where
-            v = "y"
+            v = "v1"
             patArgs = [svar v]
             -- Note: pattern extraction may or may not be the most appropriate constructor here
             pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) patArgs
@@ -159,11 +159,12 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
     ExpressionUnion (Field fn ft) -> do
       let lhs = sname $ qualifyUnionFieldName schemaName fn
-      case termData ft of
-        ExpressionRecord [] -> pure lhs
+      args <- case termData ft of
+        ExpressionRecord [] -> pure []
         _ -> do
           arg <- encodeTerm cx ft
-          return $ sapply lhs [arg]
+          return [arg]
+      return $ sapply lhs args
     ExpressionVariable v -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
