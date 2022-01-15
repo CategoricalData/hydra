@@ -11,6 +11,7 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Prototyping.Primitives
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Coders
@@ -69,26 +70,30 @@ constructModule cx g coders pairs = do
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Result Scala.Term
 encodeFunction cx meta fun = case fun of
-    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> sdom
+    FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> (findSdom meta)
     FunctionPrimitive name -> pure $ sprim name
     FunctionCases cases -> do
         let v = "v"
+        dom <- findDomain meta
+        scx <- schemaContext cx
+        ftypes <- fieldTypes scx dom
         let sn = case dom of
-              Just (TypeNominal name) -> Just name
-              _ -> Nothing
-        scases <- CM.mapM (encodeCase sn cx) cases
-        slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> sdom
+                TypeNominal name -> Just name
+                _ -> Nothing
+        scases <- CM.mapM (encodeCase ftypes sn cx) cases
+        slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> findSdom meta
       where
-        encodeCase sn cx (Field fname fterm) = do
+        encodeCase ftypes sn cx (Field fname fterm) = do
+--            dom <- findDomain (termMeta fterm)           -- Option #1: use type inference
+            let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
+            let patArgs = if dom == unitType then [] else [svar v]
+            -- Note: pattern extraction may or may not be the most appropriate constructor here
+            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v
             return $ Scala.Case pat cond body
           where
             v = "v1"
-            patArgs = [svar v]
-            -- Note: pattern extraction may or may not be the most appropriate constructor here
-            pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) patArgs
             cond = Nothing
-            ftype = contextTypeOf cx (termMeta fterm)
         applyVar fterm v = case termData fterm of
           ExpressionFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
             then body
@@ -98,10 +103,16 @@ encodeFunction cx meta fun = case fun of
     FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
     _ -> fail $ "unexpected function: " ++ show fun
   where
-    dom = fmap (\(TypeFunction (FunctionType d _)) -> d) $ contextTypeOf cx meta
-    sdom = case dom of
-      Nothing -> pure Nothing
-      Just t -> Just <$> encodeType t
+    findSdom meta = Just <$> (findDomain meta >>= encodeType)
+    findDomain meta = do
+        case contextTypeOf cx meta of
+          Nothing -> fail $ "expected a typed term"
+          Just t -> domainOf t
+      where
+        domainOf t = case t of
+          TypeFunction (FunctionType dom _) -> pure dom
+          TypeElement et -> domainOf et
+          _ -> fail $ "expected a function type, but found " ++ show t
 
 encodeLiteral :: Literal -> Result Scala.Lit
 encodeLiteral av = case av of

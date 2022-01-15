@@ -5,6 +5,7 @@ module Hydra.Impl.Haskell.Extras (
   debug,
   eitherToQualified,
   elementAsTypedTerm,
+  fieldTypes,
   localNameOf,
   qualifiedToResult,
   requireType,
@@ -92,6 +93,20 @@ debug msg r = case r of
 
 elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
+
+fieldTypes :: Show m => Context m -> Type -> Result (M.Map FieldName Type)
+fieldTypes scx t = case t of
+    TypeRecord fields -> pure $ toMap fields
+    TypeUnion fields -> pure $ toMap fields
+    TypeElement et -> fieldTypes scx et
+    TypeNominal name -> do
+      el <- requireElement scx name
+      decodeType scx (elementData el) >>= fieldTypes scx
+    TypeUniversal (UniversalType _ body) -> fieldTypes scx body
+    _ -> fail $ "expected record or union type, but found " ++ show t
+  where
+    toMap fields = M.fromList (toPair <$> fields)
+    toPair (FieldType fname ftype) = (fname, ftype)
 
 setContextElements :: [Graph m] -> Context m -> Context m
 setContextElements graphs cx = cx { contextElements = M.fromList $
