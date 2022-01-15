@@ -8,6 +8,7 @@ module Hydra.Impl.Haskell.Extras (
   qualifiedToResult,
   requireType,
   resultToQualified,
+  setContextElements,
   toQname,
   unexpected,
   unidirectionalStep,
@@ -23,6 +24,7 @@ import Hydra.Prototyping.CoreDecoding
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
+import qualified Data.Map as M
 
 
 class Default a where dflt :: a
@@ -84,6 +86,10 @@ convertIntegerValue target = encoder . decoder
 
 elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
+
+setContextElements :: [Graph m] -> Context m -> Context m
+setContextElements graphs cx = cx { contextElements = M.fromList $
+  ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname

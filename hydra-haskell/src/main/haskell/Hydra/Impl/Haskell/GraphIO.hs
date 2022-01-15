@@ -36,23 +36,24 @@ generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataG
     nameToScalaFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".scala"
 
 generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
-generateSources langName toFile toString baseDir = do
-    writeDataGraph basicsGraph
-    writeDataGraph adaptersUtilsGraph
+generateSources langName toFile serialize baseDir = do
+    writeDataGraph basicsGraph []
+    writeDataGraph adaptersUtilsGraph [basicsGraph]
   where
-    writeDataGraph g = do
-      let cx = standardContext {
-             contextGraphs = GraphSet (M.fromList [(graphName g, g), ("hydra/core", hydraCoreGraph)]) (graphName g),
-             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
-             contextElements = M.empty}
-      writeGraph toString cx g $ Just $ FP.combine baseDir
+    writeDataGraph g deps = do
+      let cx = setContextElements (g:deps) $ standardContext {
+             contextGraphs = GraphSet (M.fromList [
+               (graphName g, g),
+               ("hydra/core", hydraCoreGraph)]) (graphName g),
+             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+      writeGraph serialize cx g $ Just $ FP.combine baseDir
         $ "src/gen-main/" ++ langName ++ "/" ++ toFile (graphName g)
 
 writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
   => (Context m -> Graph m -> Qualified String)
   -> Context m -> Graph m -> Maybe FilePath -> IO ()
-writeGraph toString cx g path = do
-  case toString cx g of
+writeGraph serialize cx g path = do
+  case serialize cx g of
     Qualified Nothing warnings -> putStrLn $ "Transformation failed: " ++ indent (unlines warnings)
     Qualified (Just s) warnings -> do
       if not (L.null warnings)
