@@ -55,7 +55,9 @@ unify :: Show m => Context m -> Type -> Type -> Solve Subst
 unify cx t1 t2 = if t1 == t2
     then return M.empty
     else case (t1, t2) of
-      (TypeElement et1, TypeElement et2) -> unify cx et1 et2
+      (TypeElement et, _) -> unify cx et t2
+      (_, TypeElement et) -> unify cx t1 et
+--      (TypeElement et1, TypeElement et2) -> unify cx et1 et2
       (TypeFunction (FunctionType t1 t2), TypeFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
       (TypeList lt1, TypeList lt2) -> unify cx lt1 lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
