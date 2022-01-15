@@ -109,7 +109,6 @@ infer cx term = case contextTypeOf cx (termMeta term) of
               let c = termConstraints $ fieldTerm field1
               case ft of
                 TypeFunction (FunctionType dom cod) -> return ((dom, cod), (field1, c))
-                TypeElement (TypeFunction (FunctionType dom cod)) -> return ((dom, cod), (field1, c))
                 _ -> error $ "expected a function type in case; found " ++ show ft
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.

@@ -71,7 +71,7 @@ encodeFunction cx meta fun = case fun of
         toAlt fieldMap (Field fn fun') = do
           let v0 = "v"
           let rhsTerm = simplifyTerm $ apply fun' (variable v0)
-          let v1 = if isFreeIn v0 rhsTerm then v0 else "_"
+          let v1 = if isFreeIn v0 rhsTerm then "_" else v0
           let hn = Y.maybe fn (`qualifyUnionFieldName` fn) domName
           args <- case fieldMap >>= M.lookup fn of
                 Just (FieldType _ (TypeRecord [])) -> pure []
