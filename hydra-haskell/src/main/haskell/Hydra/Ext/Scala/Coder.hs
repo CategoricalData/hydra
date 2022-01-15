@@ -51,7 +51,6 @@ constructModule cx g coders pairs = do
           Scala.TermFunctionTerm fun -> case typ of
             TypeFunction (FunctionType _ cod) -> toDef fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
---          Scala.TermFunctionTerm _ -> toVal $ Scala.TermLit $ Scala.LitString $ show rhs -- TODO
           Scala.TermLit _ -> toVal rhs
           Scala.TermRef _ -> toVal rhs -- TODO
           _ -> fail $ "unexpected RHS: " ++ show rhs
@@ -82,8 +81,7 @@ encodeFunction cx meta fun = case fun of
       where
         encodeCase sn cx (Field fname fterm) = do
             body <- encodeTerm cx $ applyVar fterm v
---            return $ Scala.Case pat cond body
-            return $ Scala.Case pat cond $ sname $ "TYPE: " ++ show ftype
+            return $ Scala.Case pat cond body
           where
             v = "y"
             patArgs = [svar v]

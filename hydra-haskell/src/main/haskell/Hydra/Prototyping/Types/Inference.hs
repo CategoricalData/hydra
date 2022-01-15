@@ -34,13 +34,13 @@ type TypingEnvironment = M.Map TypeVariable TypeScheme
 
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Context m -> Term m -> Result Type
-decodeStructuralType con term = do
-  typ <- decodeType con term
+decodeStructuralType cx term = do
+  typ <- decodeType cx term
   case typ of
     TypeNominal name -> do
-      scon <- schemaContext con
-      el <- requireElement scon name
-      decodeStructuralType scon $ elementData el
+      scx <- schemaContext cx
+      el <- requireElement scx name
+      decodeStructuralType scx $ elementData el
     _ -> pure typ
 
 freshTypeVariable :: Infer Type
@@ -109,7 +109,8 @@ infer cx term = case contextTypeOf cx (termMeta term) of
               let c = termConstraints $ fieldTerm field1
               case ft of
                 TypeFunction (FunctionType dom cod) -> return ((dom, cod), (field1, c))
-                _ -> error "expected a function type"
+                TypeElement (TypeFunction (FunctionType dom cod)) -> return ((dom, cod), (field1, c))
+                _ -> error $ "expected a function type in case; found " ++ show ft
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
         --       For the latter, Comparison would have to be added to the literal type grammar.

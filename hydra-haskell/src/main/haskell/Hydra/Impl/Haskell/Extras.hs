@@ -2,6 +2,7 @@ module Hydra.Impl.Haskell.Extras (
   Default(..),
   convertFloatValue,
   convertIntegerValue,
+  debug,
   eitherToQualified,
   elementAsTypedTerm,
   localNameOf,
@@ -83,6 +84,11 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint16 -> IntegerValueUint16 $ fromIntegral d
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
+
+debug :: String -> Result a -> Result a
+debug msg r = case r of
+  ResultSuccess _ -> r
+  ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
 
 elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
