@@ -18,6 +18,7 @@ import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Prototyping.Primitives
 import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Prototyping.CoreEncoding
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
@@ -48,8 +49,14 @@ testElementArthur = Element {
   elementSchema = element "Person",
   elementData = testTermArthur}
 
+testElementFirstName :: Element Meta
+testElementFirstName = Element {
+  elementName = "firstName",
+  elementSchema = encodeType cx (functionType (nominalType "Person") stringType),
+  elementData = projection "firstName"}
+
 testGraph :: Graph Meta
-testGraph = Graph "testGraph" [testElementArthur] allTerms "testSchemaGraph"
+testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms "testSchemaGraph"
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
