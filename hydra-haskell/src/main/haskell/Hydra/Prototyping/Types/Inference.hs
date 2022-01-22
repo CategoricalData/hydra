@@ -75,17 +75,13 @@ infer cx term = case contextTypeOf cx (termMeta term) of
     yieldFunction fun = yield (ExpressionFunction fun)
 
     inferInternal = case termData term of
-      ExpressionApplication (Application e1 e2) -> do
-        i1 <- infer cx e1
-        i2 <- infer cx e2
-        let t1 = termType i1
-        let t2 = termType i2
-        let c1 = termConstraints i1
-        let c2 = termConstraints i2
-        let e = ExpressionApplication $ Application i1 i2
-        t <- freshTypeVariable
-        let c = c1 ++ c2 ++ [(t1, functionType t2 t)]
-        yield e t c
+      ExpressionApplication (Application fun arg) -> do
+        ifun <- infer cx fun
+        iarg <- infer cx arg
+        v <- freshTypeVariable
+        let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, functionType (termType iarg) v)]
+        let app = ExpressionApplication $ Application ifun iarg
+        yield app v c
 
       ExpressionElement name -> do
         case typeOfElement cx name of
@@ -109,7 +105,9 @@ infer cx term = case contextTypeOf cx (termMeta term) of
               let c = termConstraints $ fieldTerm field1
               case ft of
                 TypeFunction (FunctionType dom cod) -> return ((dom, cod), (field1, c))
-                _ -> error $ "expected a function type in case; found " ++ show ft
+                _ -> error $ "expected a function type in case " ++ show (fieldName field) ++ "; found " ++ show ft
+                  ++ " when inferring type of function " ++ show f
+--                _ -> error $ "expected a function type in case " ++ show (fieldName field) ++ "; found " ++ show field1
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
         --       For the latter, Comparison would have to be added to the literal type grammar.

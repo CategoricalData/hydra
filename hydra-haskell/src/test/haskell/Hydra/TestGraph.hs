@@ -2,6 +2,7 @@ module Hydra.TestGraph (
   graphElementsMap,
   testContext,
   testElementArthur,
+  testElementFirstName,
   testGraph,
   testStrategy,
   testTermArthur,
