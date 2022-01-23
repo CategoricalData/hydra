@@ -91,23 +91,14 @@ infer cx term = case contextTypeOf cx (termMeta term) of
 
       ExpressionFunction f -> case f of
         FunctionCases cases -> do
-            pairs <- CM.mapM forField cases
-            let icases = fst . snd <$> pairs
-            let cods = snd . fst <$> pairs
-            let ftypes = L.zipWith FieldType (fieldName <$> cases) (fst . fst <$> pairs)
-            let c1 = L.concat (snd . snd <$> pairs)
-            let c2 = L.zip cods (L.tail cods)
-            yieldFunction (FunctionCases icases) (functionType (unionType ftypes) (L.head cods)) (c1 ++ c2)
-          where
-            forField field = do
-              field1 <- inferFieldType cx field
-              let ft = termType $ fieldTerm field1
-              let c = termConstraints $ fieldTerm field1
-              case ft of
-                TypeFunction (FunctionType dom cod) -> return ((dom, cod), (field1, c))
-                _ -> error $ "expected a function type in case " ++ show (fieldName field) ++ "; found " ++ show ft
-                  ++ " when inferring type of function " ++ show f
---                _ -> error $ "expected a function type in case " ++ show (fieldName field) ++ "; found " ++ show field1
+            icases <- CM.mapM (inferFieldType cx) cases
+            cod <- freshTypeVariable
+            doms <- CM.mapM (\_ -> freshTypeVariable) cases
+            let ftypes = termType . fieldTerm <$> icases
+            let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
+            let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
+            let outerConstraints = L.zipWith (\t d -> (t, functionType d cod)) ftypes doms
+            yieldFunction (FunctionCases icases) (functionType (unionType ftypes1) cod) (innerConstraints ++ outerConstraints)
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
         --       For the latter, Comparison would have to be added to the literal type grammar.

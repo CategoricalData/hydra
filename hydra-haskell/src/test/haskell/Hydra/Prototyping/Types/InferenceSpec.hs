@@ -91,8 +91,23 @@ checkFunctionTerms = do
 
     H.it "Check case statements" $ do
       expectPolytype
-        (cases [Field "left" (lambda "x" (booleanValue True)), Field "right" (lambda "x" (booleanValue False))])
-        ["v1", "v2"] (functionType (unionType [FieldType "left" (typeVariable "v1"), FieldType "right" (typeVariable "v2")]) booleanType)
+        (cases [
+          Field "left" (lambda "x" (booleanValue True)),
+          Field "right" (lambda "x" (booleanValue False))])
+        ["v1", "v2"] (functionType
+          (unionType [
+            FieldType "left" (typeVariable "v1"),
+            FieldType "right" (typeVariable "v2")])
+          booleanType)
+      expectPolytype
+        (cases [
+          Field "person" (apply dataTerm (element "firstName")),
+          Field "other" (lambda "x" (stringValue "NONE"))])
+        ["v1"] (functionType
+          (unionType [
+            FieldType "person" (nominalType "Person"),
+            FieldType "other" (typeVariable "v1")])
+          stringType)
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = do
