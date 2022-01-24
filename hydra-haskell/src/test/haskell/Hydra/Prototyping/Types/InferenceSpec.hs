@@ -27,9 +27,9 @@ expectPolytype :: Term Meta-> [TypeVariable] -> Type -> H.Expectation
 expectPolytype term vars typ = do
     let result = inferType testContext term
     snd <$> result `H.shouldBe` ResultSuccess (TypeScheme vars typ)
---    typeAnn . fst <$> result `H.shouldBe` ResultSuccess typ -- TODO: re-enable me
-  where
-    typeAnn (Term _ (_, typ, _)) = typ
+--    if (snd <$> result) == ResultSuccess (TypeScheme vars typ)
+--      then True `H.shouldBe` True
+--      else "foo" `H.shouldBe` (show result)
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = do
