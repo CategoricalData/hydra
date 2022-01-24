@@ -31,6 +31,7 @@ freeVariablesInType typ = S.fromList $ fv typ
       TypeRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
       TypeSet t -> fv t
       TypeUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeUniversal (UniversalType v body) -> v:(fv body)
       TypeVariable v -> [v]
 
 normalVariables :: [String]
