@@ -30,9 +30,10 @@ data TypeError
   | UnboundVariable String
   | UnificationMismatch [Type] [Type]
   | ElementUndefined Name
-  | InvalidTypeEncoding String deriving Show
+  | InvalidTypeEncoding String deriving (Eq, Show)
 
 type Unifier = (Subst, [Constraint])
+
 
 bind ::  TypeVariable -> Type -> Solve Subst
 bind a t | t == TypeVariable a = return M.empty
@@ -64,8 +65,6 @@ unify cx t1 t2 = if t1 == t2
 --          Just (Element _ _ dat) -> case decodeType cx dat of
 --            ResultFailure msg -> throwError $ InvalidTypeEncoding msg
 --            ResultSuccess typ -> unify cx typ t
-      (TypeNominal name, t) -> return M.empty
-      (t, TypeNominal name) -> unify cx (TypeNominal name) t
       (TypeOptional ot1, TypeOptional ot2) -> unify cx ot1 ot2
       (TypeRecord f1, TypeRecord f2) -> unifyRowType f1 f2
       (TypeSet st1, TypeSet st2) -> unify cx st1 st2
@@ -78,6 +77,8 @@ unify cx t1 t2 = if t1 == t2
 --          body3 = substituteInType (M.fromList [(v2, TypeVariable v1)]) body2
       (TypeVariable v, t) -> bind v t
       (t, TypeVariable v) -> bind v t
+      (TypeNominal name, t) -> return M.empty
+      (t, TypeNominal name) -> unify cx (TypeNominal name) t
       _ -> throwError $ UnificationFail t1 t2
   where
     unifyRowType f1 f2 = unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
