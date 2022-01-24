@@ -41,9 +41,9 @@ writeDefn def = case def of
     where
       nameAndParams = noSep $ Y.catMaybes [
         Just $ writeTerm_Name name,
+        if L.null tparams then Nothing else Just $ bracketList False (writeType_Param <$> tparams),
         Just $ parenList (writeTerm_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
-
   Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Term_Name name))] typ term) -> spaceSep [
       cst "val", nameAndType, cst "=", writeTerm term]
     where
@@ -140,3 +140,6 @@ writeType typ = case typ of
 
 writeType_Name :: Scala.Type_Name -> CT.Expr
 writeType_Name (Scala.Type_Name name) = cst name
+
+writeType_Param :: Scala.Type_Param -> CT.Expr
+writeType_Param (Scala.Type_Param [] n [] [] [] []) = writeName n

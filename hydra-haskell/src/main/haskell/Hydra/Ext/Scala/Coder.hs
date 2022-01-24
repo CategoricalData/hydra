@@ -17,6 +17,7 @@ import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Coders
 import Hydra.Prototyping.Rewriting
 import Hydra.Prototyping.Types.Inference
+import Hydra.Prototyping.Types.Substitution
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -50,7 +51,7 @@ constructModule cx g coders pairs = do
         Scala.StatDefn <$> case rhs of
           Scala.TermApply _ -> toVal rhs
           Scala.TermFunctionTerm fun -> case typ of
-            TypeFunction (FunctionType _ cod) -> toDef fun cod
+            TypeFunction (FunctionType _ cod) -> toDefn fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
           Scala.TermLit _ -> toVal rhs
           Scala.TermRef _ -> toVal rhs -- TODO
@@ -58,8 +59,10 @@ constructModule cx g coders pairs = do
       where
         lname = localNameOf $ elementName el
 
-        toDef (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) cod = do
-          let tparams = []
+        freeTypeVars = S.toList $ freeVariablesInType typ
+
+        toDefn (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) cod = do
+          let tparams = stparam <$> freeTypeVars
           let paramss = [params]
           scod <- encodeType cod
           return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams paramss (Just scod) body
