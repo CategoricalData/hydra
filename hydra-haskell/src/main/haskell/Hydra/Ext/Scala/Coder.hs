@@ -80,9 +80,7 @@ encodeFunction cx meta fun = case fun of
         dom <- findDomain meta
         scx <- schemaContext cx
         ftypes <- fieldTypes scx dom
-        let sn = case dom of
-                TypeNominal name -> Just name
-                _ -> Nothing
+        let sn = nameOfType dom
         scases <- CM.mapM (encodeCase ftypes sn cx) cases
         slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> findSdom meta
       where
@@ -91,7 +89,7 @@ encodeFunction cx meta fun = case fun of
             let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
             let patArgs = if dom == unitType then [] else [svar v]
             -- Note: pattern extraction may or may not be the most appropriate constructor here
-            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName sn fname) patArgs
+            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName ("MATCHED" ++ show sn ++ ".") sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v
             return $ Scala.Case pat cond body
           where
@@ -172,7 +170,7 @@ encodeTerm cx term@(Term expr meta) = do
           return $ sapply (sname n) args
     ExpressionSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
     ExpressionUnion (Field fn ft) -> do
-      let lhs = sname $ qualifyUnionFieldName schemaName fn
+      let lhs = sname $ qualifyUnionFieldName "UNION." schemaName fn
       args <- case termData ft of
         ExpressionRecord [] -> pure []
         _ -> do
@@ -182,9 +180,7 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionVariable v -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
-    schemaName = case contextTypeOf cx meta of
-      Just (TypeNominal name) -> Just name
-      Nothing -> Nothing
+    schemaName = contextTypeOf cx meta >>= nameOfType
 
 encodeType :: Type -> Result Scala.Type
 encodeType t = case t of
@@ -232,8 +228,14 @@ encodeUntypedTerm cx term = do
   where
     annotType (m, t, _) = contextSetTypeOf cx (Just t) m
 
-qualifyUnionFieldName :: Y.Maybe Name -> FieldName -> String
-qualifyUnionFieldName sname fname = (Y.maybe "" (\n -> localNameOf n ++ ".") sname) ++ fname
+nameOfType :: Type -> Y.Maybe Name
+nameOfType t = case t of
+  TypeNominal name -> Just name
+  TypeUniversal (UniversalType _ body) -> nameOfType body
+  _ -> Nothing
+
+qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
+qualifyUnionFieldName dlft sname fname = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
 
 scalaLanguage :: Language
 scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
