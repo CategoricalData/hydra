@@ -134,7 +134,7 @@ writeType typ = case typ of
   Scala.TypeRef (Scala.Type_RefName name) -> writeType_Name name
   Scala.TypeApply (Scala.Type_Apply fun args) -> noSep [writeType fun, bracketList False (writeType <$> args)]
   Scala.TypeFunctionType (Scala.Type_FunctionTypeFunction (Scala.Type_Function [dom] cod)) -> ifx functionArrowOp (writeType dom) (writeType cod)
-  Scala.TypeLambda (Scala.Type_Lambda params body) -> writeType body
+  Scala.TypeLambda (Scala.Type_Lambda params body) -> noSep [writeType body, bracketList False (writeType_Param <$> params)]
   Scala.TypeVar (Scala.Type_Var name) -> writeType_Name name
   _ -> cst $ "UNKNOWN TYPE: " ++ show typ
 

@@ -193,7 +193,7 @@ encodeType t = case t of
     sdom <- encodeType dom
     scod <- encodeType cod
     return $ Scala.TypeFunctionType $ Scala.Type_FunctionTypeFunction $ Scala.Type_Function [sdom] scod
-  TypeList lt -> stapply <$> pure (stref "Seq") <*> encodeType lt
+  TypeList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
   TypeLiteral lt -> case lt of
 --    TypeBinary ->
     LiteralTypeBoolean -> pure $ stref "Boolean"
@@ -214,9 +214,9 @@ encodeType t = case t of
     LiteralTypeString -> pure $ stref "String"
   TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
   TypeNominal name -> pure $ stref $ typeName True name
-  TypeOptional ot -> stapply <$> pure (stref "Option") <*> encodeType ot
+  TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
 --  TypeRecord sfields ->
-  TypeSet st -> stapply <$> pure (stref "Set") <*> encodeType st
+  TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
 --  TypeUnion sfields ->
   TypeUniversal (UniversalType v body) -> do
     sbody <- encodeType body
@@ -312,11 +312,14 @@ sprim name = sname $ prefix ++ "." ++ local
     (ns, local) = toQname name
     prefix = L.last $ Strings.splitOn "/" ns
 
-stapply :: Scala.Type -> Scala.Type -> Scala.Type
-stapply t1 t2 = Scala.TypeApply $ Scala.Type_Apply t1 [t2]
+stapply :: Scala.Type -> [Scala.Type] -> Scala.Type
+stapply t args = Scala.TypeApply $ Scala.Type_Apply t args
+
+stapply1 :: Scala.Type -> Scala.Type -> Scala.Type
+stapply1 t1 t2 = stapply t1 [t2]
 
 stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
-stapply2 t1 t2 t3 = Scala.TypeApply $ Scala.Type_Apply t1 [t2, t3]
+stapply2 t1 t2 t3 = stapply t1 [t2, t3]
 
 stparam :: TypeVariable -> Scala.Type_Param
 stparam v = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
