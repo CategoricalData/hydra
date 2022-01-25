@@ -237,7 +237,7 @@ tmpTestLists :: Element Meta
 tmpTestLists = standardFunction _hydra_basics "testLists"
   "TODO: temporary. Just a token polymorphic function for testing"
   (listType $ listType $ typeVariable "a") int32Type
-  (lambda "lists" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "lists")))
+  (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
 
 typeVariant :: Element Meta
 typeVariant = standardFunction _hydra_basics "typeVariant"

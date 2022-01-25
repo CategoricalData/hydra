@@ -167,9 +167,9 @@ encodeTerm cx term@(Term expr meta) = do
     ExpressionRecord fields -> case schemaName of
       Nothing -> fail $ "unexpected anonymous record: " ++ show term
       Just name -> do
-          let typeName = typeNameForRecord name
+          let n = typeName False name
           args <- CM.mapM (encodeTerm cx) (fieldTerm <$> fields)
-          return $ sapply (sname typeName) args
+          return $ sapply (sname n) args
     ExpressionSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
     ExpressionUnion (Field fn ft) -> do
       let lhs = sname $ qualifyUnionFieldName schemaName fn
@@ -213,7 +213,7 @@ encodeType t = case t of
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
   TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeNominal name -> pure $ stref $ localNameOf name
+  TypeNominal name -> pure $ stref $ typeName True name
   TypeOptional ot -> stapply <$> pure (stref "Option") <*> encodeType ot
 --  TypeRecord sfields ->
   TypeSet st -> stapply <$> pure (stref "Set") <*> encodeType st
@@ -280,6 +280,15 @@ scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
+scalaReservedWords = S.fromList $ keywords ++ classNames
+  where
+    classNames = ["Function"]
+    keywords = [
+      "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",
+      "forSome", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
+      "protected", "return", "sealed", "super", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
+      "with", "yield"]
+
 sapply :: Scala.Term -> [Scala.Term] -> Scala.Term
 sapply fun args = Scala.TermApply $ Scala.Term_Apply fun args
 
@@ -318,5 +327,9 @@ stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 svar :: Variable -> Scala.Pat
 svar = Scala.PatVar . Scala.Pat_Var . Scala.Term_Name
 
-typeNameForRecord :: Name -> String
-typeNameForRecord sname = L.last (Strings.splitOn "." sname)
+typeName :: Bool -> Name -> String
+typeName qualify sname = if qualify && S.member local scalaReservedWords
+    then L.intercalate "." $ Strings.splitOn "/" sname
+    else local
+  where
+    (ns, local) = toQname sname
