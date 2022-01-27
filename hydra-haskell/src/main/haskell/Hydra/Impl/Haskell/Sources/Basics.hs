@@ -28,7 +28,7 @@ basicsGraph = standardGraph _hydra_basics [
   qname,
   termVariant,
   termVariants,
-  tmpTestLists,
+  testLists,
   typeVariant,
   typeVariants]
 
@@ -233,8 +233,8 @@ termVariants = standardElement _hydra_basics "termVariants"
     _TermVariant_variable])
 
 -- TODO: remove once there are other polymorphic functions in use
-tmpTestLists :: Element Meta
-tmpTestLists = standardFunction _hydra_basics "testLists"
+testLists :: Element Meta
+testLists = standardFunction _hydra_basics "testLists"
   "TODO: temporary. Just a token polymorphic function for testing"
   (listType $ listType $ typeVariable "a") int32Type
   (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))

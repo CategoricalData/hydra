@@ -110,14 +110,14 @@ infer cx term = case contextTypeOf cx (termMeta term) of
           et <- freshTypeVariable
           yieldFunction FunctionData (functionType (elementType et) et) []
 
-        FunctionLambda (Lambda x e) -> do
+        FunctionLambda (Lambda v body) -> do
           tv <- freshTypeVariable
-          i <- extendEnvironment (x, TypeScheme [] tv) (infer cx e)
-          yieldFunction (FunctionLambda $ Lambda x i) (functionType tv (termType i)) (termConstraints i) -- TODO: is x constant?
+          i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
+          yieldFunction (FunctionLambda $ Lambda v i) (functionType tv (termType i)) (termConstraints i)
 
         FunctionPrimitive name -> do
           case typeOfPrimitiveFunction cx name of
-            ResultSuccess t -> yieldFunction (FunctionPrimitive name) (TypeFunction t) [] -- TODO: account for polytyped primitive functions
+            ResultSuccess t -> yieldFunction (FunctionPrimitive name) (TypeFunction t) []
             ResultFailure msg -> error msg
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed

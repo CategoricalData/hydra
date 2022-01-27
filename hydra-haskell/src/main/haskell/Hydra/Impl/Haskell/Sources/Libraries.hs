@@ -106,7 +106,7 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
-  prim1 _lists_concat (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
+  prim1 _lists_concat (listInput (listType $ typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
   prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
   prim2 _lists_intercalate (listInputPoly "a") (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
   prim2 _lists_intersperse (inputPoly "a") (listInputPoly "a") (listOutputPoly "a") Lists.intersperse,
@@ -121,9 +121,9 @@ hydraLibListsPrimitives = [
 --      expectNArgs 2 args
 --      a1 <- expectString $ L.head args
 --      a2 <- expectListPoly $ args !! 1
---      
+--
   ]
-  
+
 hydraLibLiteralsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 hydraLibLiteralsPrimitives = [
     prim1 _literals_showInt32 int32Input stringOutput Literals.showInt32,
@@ -148,7 +148,7 @@ hydraLibStringsPrimitives = [
     prim1 _strings_toUpper stringInput stringOutput Strings.toUpper]
 
 standardPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
-standardPrimitives = 
+standardPrimitives =
          hydraLibListsPrimitives
       ++ hydraLibLiteralsPrimitives
       ++ hydraLibMathInt32Primitives
