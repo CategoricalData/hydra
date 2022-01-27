@@ -165,9 +165,15 @@ checkIndividualTerms = do
       expectMonotype
         (list [stringValue "foo", stringValue "bar"])
         (listType stringType)
+      expectMonotype
+        (list [list [stringValue "foo"], list []])
+        (listType $ listType stringType)
       expectPolytype
         (list [])
         ["v1"] (listType $ typeVariable "v1")
+      expectPolytype
+        (list [list []])
+        ["v1"] (listType $ listType $ typeVariable "v1")
       expectMonotype
         (lambda "x" (list [variable "x", int32Value 42]))
         (functionType int32Type $ listType int32Type)
@@ -176,6 +182,9 @@ checkIndividualTerms = do
       expectMonotype
         (set $ S.fromList [booleanValue True])
         (setType booleanType)
+      expectPolytype
+        (set $ S.fromList [set S.empty])
+        ["v1"] (setType $ setType $ typeVariable "v1")
 
     H.it "Check maps" $ do
       expectMonotype

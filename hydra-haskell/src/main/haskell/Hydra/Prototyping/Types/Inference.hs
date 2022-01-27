@@ -144,41 +144,26 @@ infer cx term = case contextTypeOf cx (termMeta term) of
                 yield (ExpressionLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
 
       ExpressionList els -> do
-          (els1, t, c) <- forList els
-          yield (ExpressionList els1) t c
-        where
-          forList l = case l of
-            [] -> do
-              v <- freshTypeVariable
-              return ([], listType v, [])
-            (h:r) -> do
-              i <- infer cx h
-              let t = termType i
-              let c = termConstraints i
-              (ir, lt, lc) <- forList r
-              let (TypeList et) = lt
-              return (i:ir, lt ,c ++ lc ++ [(t, et)])
+        v <- freshTypeVariable
+        iels <- CM.mapM (infer cx) els
+        let co = (\e -> (v, termType e)) <$> iels
+        let ci = L.concat (termConstraints <$> iels)
+        yield (ExpressionList iels) (TypeList v) (co ++ ci)
 
       ExpressionLiteral l -> yield (ExpressionLiteral l) (TypeLiteral $ literalType l) []
 
       ExpressionMap m -> do
-          (l, kt, vt, c) <- forList (M.toList m)
-          yield (ExpressionMap $ M.fromList l) (mapType kt vt) c
+          kv <- freshTypeVariable
+          vv <- freshTypeVariable
+          pairs <- CM.mapM toPair $ M.toList m
+          let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
+          let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
+          yield (ExpressionMap $ M.fromList pairs) (TypeMap $ MapType kv vv) (co ++ ci)
         where
-          forList l = case l of
-            [] -> do
-              kv <- freshTypeVariable
-              vv <- freshTypeVariable
-              return ([], kv, vv, [])
-            ((k, v):r) -> do
-              ki <- infer cx k
-              let kt = termType ki
-              let kc = termConstraints ki
-              vi <- infer cx v
-              let vt = termType vi
-              let vc = termConstraints vi
-              (r, kt1, vt1, c1) <- forList r
-              return ((ki, vi):r, kt, vt, c1 ++ kc ++ vc ++ [(kt, kt1), (vt, vt1)])
+          toPair (k, v) = do
+            ik <- infer cx k
+            iv <- infer cx v
+            return (ik, iv)
 
       ExpressionNominal (NominalTerm name term1) -> do
         case namedType cx name of
@@ -189,13 +174,13 @@ infer cx term = case contextTypeOf cx (termMeta term) of
             let c = termConstraints i
             yield (ExpressionNominal $ NominalTerm name i) typ (c ++ [(typ, typ1)])
 
-      ExpressionOptional m -> case m of
-        Nothing -> do
-          tv <- freshTypeVariable
-          yield (ExpressionOptional Nothing) (optionalType tv) []
-        Just term1 -> do
-          i <- infer cx term1
-          yield (ExpressionOptional $ Just i) (optionalType (termType i)) (termConstraints i)
+      ExpressionOptional m -> do
+        v <- freshTypeVariable
+        case m of
+          Nothing -> yield (ExpressionOptional Nothing) (optionalType v) []
+          Just e -> do
+            i <- infer cx e
+            yield (ExpressionOptional $ Just i) (optionalType v) ((v, termType i):(termConstraints i))
 
       ExpressionRecord fields -> do
           (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
@@ -208,11 +193,11 @@ infer cx term = case contextTypeOf cx (termMeta term) of
             return (i:typed, (FieldType (fieldName field) ft):ftypes, c1 ++ c)
 
       ExpressionSet els -> do
-        let expr = ExpressionList $ S.toList els
-        i <- infer cx $ term {termData = expr}
-        let (TypeList et) = termType i
-        let (ExpressionList els1) = termData i
-        yield (ExpressionSet $ S.fromList els1) (TypeSet et) (termConstraints i)
+        v <- freshTypeVariable
+        iels <- CM.mapM (infer cx) $ S.toList els
+        let co = (\e -> (v, termType e)) <$> iels
+        let ci = L.concat (termConstraints <$> iels)
+        yield (ExpressionSet $ S.fromList iels) (TypeSet v) (co ++ ci)
 
       -- Note: type inference cannot recover complete union types from union values; type annotations are needed
       ExpressionUnion field -> do
