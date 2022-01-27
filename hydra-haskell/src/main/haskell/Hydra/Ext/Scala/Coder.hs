@@ -48,6 +48,7 @@ constructModule cx g coders pairs = do
     toDef (el, TypedTerm typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- stepOut coder term
+
         Scala.StatDefn <$> case rhs of
           Scala.TermApply _ -> toVal rhs
           Scala.TermFunctionTerm fun -> case typ of
@@ -63,9 +64,8 @@ constructModule cx g coders pairs = do
 
         toDefn (Scala.Term_FunctionTermFunction (Scala.Term_Function params body)) cod = do
           let tparams = stparam <$> freeTypeVars
-          let paramss = [params]
           scod <- encodeType cod
-          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams paramss (Just scod) body
+          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Term_Name lname) tparams [params] (Just scod) body
 
         toVal rhs = pure $ Scala.DefnVal $ Scala.Defn_Val [] [namePat] Nothing rhs
           where
@@ -134,8 +134,7 @@ encodeLiteral av = case av of
     _ -> unexpected "literal value" av
 
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Term
-encodeTerm cx term@(Term expr meta) = do
-   case expr of
+encodeTerm cx term@(Term expr meta) = case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
        ExpressionFunction FunctionData -> encodeTerm cx arg
        _ -> case termData fun of
@@ -284,7 +283,9 @@ scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
 
 scalaReservedWords = S.fromList $ keywords ++ classNames
   where
+    -- Add as needed
     classNames = ["Function"]
+    -- Not an official or comprehensive list; taken from https://www.geeksforgeeks.org/scala-keywords
     keywords = [
       "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",
       "forSome", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",

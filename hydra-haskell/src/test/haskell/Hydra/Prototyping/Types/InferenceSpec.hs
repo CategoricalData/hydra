@@ -68,14 +68,6 @@ checkFunctionTerms = do
         (lambda "x" (int16Value 137))
         ["v1"] (functionType (typeVariable "v1") int16Type)
 
-    H.it "Check primitive functions" $ do
-      expectMonotype
-        (primitive "hydra/lib/strings.length")
-        (functionType stringType int32Type)
-      expectMonotype
-        (primitive _math_sub)
-        (functionType int32Type (functionType int32Type int32Type))
-
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
         (compareTo $ record [Field "fst" $ booleanValue True, Field "snd" $ stringValue "Betelgeuse"])
@@ -219,6 +211,23 @@ checkLiterals = do
         (defaultTerm $ ExpressionLiteral l)
         (TypeLiteral $ literalType l)
 
+checkPrimitiveFunctions :: H.SpecWith ()
+checkPrimitiveFunctions = do
+  H.describe "Check a few hand-picked terms with primitive functions" $ do
+
+    H.it "Check monomorphic primitive functions" $ do
+      expectMonotype
+        (primitive "hydra/lib/strings.length")
+        (functionType stringType int32Type)
+      expectMonotype
+        (primitive _math_sub)
+        (functionType int32Type (functionType int32Type int32Type))
+
+    H.it "Check polymorphic primitive functions" $ do
+      expectPolytype
+        (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
+        ["v1"] (functionType (listType $ listType $ typeVariable "v1") int32Type)
+
 checkTypeAnnotations :: H.SpecWith ()
 checkTypeAnnotations = do
   H.describe "Check that type annotations are added to terms and subterms" $ do
@@ -250,5 +259,6 @@ spec = do
   checkFunctionTerms
   checkIndividualTerms
   checkLiterals
+  checkPrimitiveFunctions
   checkTypeAnnotations
 --  checkTypedTerms
