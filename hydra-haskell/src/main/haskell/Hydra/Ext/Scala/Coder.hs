@@ -283,8 +283,14 @@ scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
 
 scalaReservedWords = S.fromList $ keywords ++ classNames
   where
-    -- Add as needed
-    classNames = ["Function"]
+    -- Classes in the Scala Standard Library 2.13.8
+    -- Note: numbered class names like Function1, Product16, etc. are omitted
+    classNames = [
+      "Any", "AnyVal", "App", "Array", "Boolean", "Byte", "Char", "Console", "DelayedInit", "Double", "DummyExplicit",
+      "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None",
+       "NotImplementedError", "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
+       "ScalaReflectionException", "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
+       "Symbol", "UninitializedError", "UninitializedFieldError", "Unit", "ValueOf"]
     -- Not an official or comprehensive list; taken from https://www.geeksforgeeks.org/scala-keywords
     keywords = [
       "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",
