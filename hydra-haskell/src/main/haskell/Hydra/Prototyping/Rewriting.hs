@@ -7,6 +7,7 @@ module Hydra.Prototyping.Rewriting (
   rewriteTermMeta,
   simplifyTerm,
   stripMeta,
+  substituteVariable,
   subterms,
   ) where
 
