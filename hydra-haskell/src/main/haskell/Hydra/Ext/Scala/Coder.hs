@@ -84,21 +84,24 @@ encodeFunction cx meta fun = case fun of
         scases <- CM.mapM (encodeCase ftypes sn cx) cases
         slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> findSdom meta
       where
-        encodeCase ftypes sn cx (Field fname fterm) = do
+        encodeCase ftypes sn cx f@(Field fname fterm) = do
 --            dom <- findDomain (termMeta fterm)           -- Option #1: use type inference
             let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
             let patArgs = if dom == unitType then [] else [svar v]
             -- Note: pattern extraction may or may not be the most appropriate constructor here
             let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName ("MATCHED" ++ show sn ++ ".") sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v
-            return $ Scala.Case pat cond body
+            return $ Scala.Case pat Nothing body
+--            let r = Scala.Case pat Nothing body
+--            if sn == Just "hydra/core.Literal"
+--              then fail $ "mapped[" ++ show sn ++ "] " ++ show f ++ " to " ++ show r
+--              else return r
           where
-            v = "v1"
-            cond = Nothing
+            v = "y"
         applyVar fterm v = case termData fterm of
           ExpressionFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
             then body
-            else fterm
+            else substituteVariable v1 v body
           _ -> apply fterm (variable v)
     FunctionData -> pure $ sname "DATA" -- TODO
     FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
