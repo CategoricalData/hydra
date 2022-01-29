@@ -25,7 +25,6 @@ functionArrowOp = op "=>" (negate 1) AssociativityRight
 matchOp :: Op
 matchOp = Op "match" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
 
-
 dataGraphToScalaString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
 dataGraphToScalaString cx g = do
   pkg <- dataGraphToScalaPackage cx g
@@ -115,7 +114,8 @@ writeTerm term = case term of
 
 writeTerm_FunctionTerm :: Scala.Term_FunctionTerm -> CT.Expr
 writeTerm_FunctionTerm ft = case ft of
-  Scala.Term_FunctionTermFunction (Scala.Term_Function params body) -> noSep [writeTerm body, parenList (writeTerm_Param <$> params)]
+  Scala.Term_FunctionTermFunction (Scala.Term_Function params body) ->
+    spaceSep [parenList (writeTerm_Param <$> params), cst "=>", writeTerm body]
 
 writeTerm_Name :: Scala.Term_Name -> CT.Expr
 writeTerm_Name (Scala.Term_Name name) = cst name
