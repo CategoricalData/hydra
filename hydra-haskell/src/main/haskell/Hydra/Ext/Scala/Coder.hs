@@ -46,6 +46,9 @@ constructModule cx g coders pairs = do
           Scala.Importer (Scala.Term_RefName $ toScalaName gname) []]
     toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedTerm typ term) = do
+--        if elementName el == "hydra/basics.termVariant"
+--          then fail $ "term: " ++ show term
+--          else pure ()
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- stepOut coder term
 
@@ -89,11 +92,11 @@ encodeFunction cx meta fun = case fun of
             let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
             let patArgs = if dom == unitType then [] else [svar v]
             -- Note: pattern extraction may or may not be the most appropriate constructor here
-            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName ("MATCHED" ++ show sn ++ ".") sn fname) patArgs
+            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v
             return $ Scala.Case pat Nothing body
 --            let r = Scala.Case pat Nothing body
---            if sn == Just "hydra/core.Literal"
+--            if sn == Just "hydra/core.Expression" && fname == "variable"
 --              then fail $ "mapped[" ++ show sn ++ "] " ++ show f ++ " to " ++ show r
 --              else return r
           where
@@ -104,7 +107,7 @@ encodeFunction cx meta fun = case fun of
             else substituteVariable v1 v body
           _ -> apply fterm (variable v)
     FunctionData -> pure $ sname "DATA" -- TODO
-    FunctionProjection _ -> pure $ sname "PROJECTION" -- TODO
+    FunctionProjection fname -> fail $ "unapplied projection not yet supported"
     _ -> fail $ "unexpected function: " ++ show fun
   where
     findSdom meta = Just <$> (findDomain meta >>= encodeType)
@@ -139,8 +142,14 @@ encodeLiteral av = case av of
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Term
 encodeTerm cx term@(Term expr meta) = case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
-       ExpressionFunction FunctionData -> encodeTerm cx arg
-       _ -> case termData fun of
+        ExpressionFunction f -> case f of
+          FunctionData -> encodeTerm cx arg
+          FunctionProjection fname -> do
+            sarg <- encodeTerm cx arg
+            return $ Scala.TermRef $ Scala.Term_RefSelect $ Scala.Term_Select sarg (Scala.Term_Name fname)
+--            let r = Scala.TermRef $ Scala.Term_RefSelect $ Scala.Term_Select sarg (Scala.Term_Name fname)
+--            fail $ "encoded " ++ show term ++ " as " ++ show r
+          _ -> fallback
 --         ExpressionFunction (FunctionCases fields) -> do
 --             body <- encodeTerm cx arg
 --             cases <- CM.mapM toCase fields
@@ -152,7 +161,9 @@ encodeTerm cx term@(Term expr meta) = case expr of
 --               let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar var] -- TODO: qualify with type name
 --               body <- encodeTerm cx $ apply fterm $ variable var
 --               return $ Scala.Case pat Nothing body
-         _ -> sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
+        _ -> fallback
+      where
+        fallback = sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
     ExpressionElement name -> pure $ sname $ localNameOf name
     ExpressionFunction f -> encodeFunction cx (termMeta term) f
     ExpressionList els -> sapply (sname "Seq") <$> CM.mapM (encodeTerm cx) els
@@ -287,13 +298,14 @@ scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
 scalaReservedWords = S.fromList $ keywords ++ classNames
   where
     -- Classes in the Scala Standard Library 2.13.8
-    -- Note: numbered class names like Function1, Product16, etc. are omitted
+    -- Note: numbered class names like Function1, Product16, and the names of exception/error classes are omitted,
+    --       as they are unlikely to occur by chance.
     classNames = [
       "Any", "AnyVal", "App", "Array", "Boolean", "Byte", "Char", "Console", "DelayedInit", "Double", "DummyExplicit",
       "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None",
-       "NotImplementedError", "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
-       "ScalaReflectionException", "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
-       "Symbol", "UninitializedError", "UninitializedFieldError", "Unit", "ValueOf"]
+      "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
+      "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
+      "Symbol", "Unit", "ValueOf"]
     -- Not an official or comprehensive list; taken from https://www.geeksforgeeks.org/scala-keywords
     keywords = [
       "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",

@@ -19,6 +19,9 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
+dotOp :: Op
+dotOp = Op "." (Padding WsNone WsNone) 0 AssociativityLeft
+
 functionArrowOp :: Op
 functionArrowOp = op "=>" (negate 1) AssociativityRight
 
@@ -128,6 +131,12 @@ writeTerm_Param (Scala.Term_Param _ name stype _) = noSep $ Y.catMaybes [
 writeTerm_Ref :: Scala.Term_Ref -> CT.Expr
 writeTerm_Ref ref = case ref of
   Scala.Term_RefName name -> writeTerm_Name name
+  Scala.Term_RefSelect sel -> writeTerm_Select sel
+
+writeTerm_Select :: Scala.Term_Select -> CT.Expr
+writeTerm_Select (Scala.Term_Select arg name) = ifx dotOp (writeTerm arg) (writeTerm proj)
+  where
+    proj = Scala.TermRef $ Scala.Term_RefName name
 
 writeType :: Scala.Type -> CT.Expr
 writeType typ = case typ of
