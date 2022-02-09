@@ -197,7 +197,6 @@ termVariant = standardFunction _hydra_basics "termVariant"
   (universal "a" $ nominalType _Term) (nominalType _TermVariant) $
   lambda "term" $ apply
     (standardMatchWithVariants (universal "a" $ nominalType _Expression) (nominalType _TermVariant) [
---    (standardMatchWithVariants (universal "a" $ nominalType _Term) (nominalType _TermVariant) [
           (_Expression_application,     _TermVariant_application),
           (_Expression_element,         _TermVariant_element),
           (_Expression_function,        _TermVariant_function),
@@ -212,7 +211,8 @@ termVariant = standardFunction _hydra_basics "termVariant"
           (_Expression_typeApplication, _TermVariant_typeApplication),
           (_Expression_union,           _TermVariant_union),
           (_Expression_variable,        _TermVariant_variable)])
-    (apply (project _Term _Term_data (nominalType _Term)) $ variable "term")
+    (apply (project (universal "a" $ nominalType _Term) _Term_data (universal "a" $ nominalType _Expression))
+      $ variable "term")
 
 termVariants :: Element Meta
 termVariants = standardElement _hydra_basics "termVariants"

@@ -46,12 +46,8 @@ constructModule cx g coders pairs = do
           Scala.Importer (Scala.Term_RefName $ toScalaName gname) []]
     toScalaName name = Scala.Term_Name $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedTerm typ term) = do
---        if elementName el == "hydra/basics.termVariant"
---          then fail $ "term: " ++ show term
---          else pure ()
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- stepOut coder term
-
         Scala.StatDefn <$> case rhs of
           Scala.TermApply _ -> toVal rhs
           Scala.TermFunctionTerm fun -> case typ of
@@ -74,8 +70,8 @@ constructModule cx g coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Term_Name lname
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Result Scala.Term
-encodeFunction cx meta fun = case fun of
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Term m) -> Result Scala.Term
+encodeFunction cx meta fun arg = case fun of
     FunctionLambda (Lambda v body) -> slambda v <$> encodeTerm cx body <*> (findSdom meta)
     FunctionPrimitive name -> pure $ sprim name
     FunctionCases cases -> do
@@ -85,20 +81,20 @@ encodeFunction cx meta fun = case fun of
         ftypes <- fieldTypes scx dom
         let sn = nameOfType dom
         scases <- CM.mapM (encodeCase ftypes sn cx) cases
-        slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> findSdom meta
+        case arg of
+          Nothing -> slambda v <$> pure (Scala.TermMatch $ Scala.Term_Match (sname v) scases) <*> findSdom meta
+          Just a -> do
+            sa <- encodeTerm cx a
+            return $ Scala.TermMatch $ Scala.Term_Match sa scases
       where
         encodeCase ftypes sn cx f@(Field fname fterm) = do
 --            dom <- findDomain (termMeta fterm)           -- Option #1: use type inference
             let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
             let patArgs = if dom == unitType then [] else [svar v]
-            -- Note: pattern extraction may or may not be the most appropriate constructor here
+            -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
             let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v
             return $ Scala.Case pat Nothing body
---            let r = Scala.Case pat Nothing body
---            if sn == Just "hydra/core.Expression" && fname == "variable"
---              then fail $ "mapped[" ++ show sn ++ "] " ++ show f ++ " to " ++ show r
---              else return r
           where
             v = "y"
         applyVar fterm v = case termData fterm of
@@ -143,29 +139,17 @@ encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m ->
 encodeTerm cx term@(Term expr meta) = case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
         ExpressionFunction f -> case f of
+          FunctionCases _ -> encodeFunction cx (termMeta fun) f (Just arg)
           FunctionData -> encodeTerm cx arg
           FunctionProjection fname -> do
             sarg <- encodeTerm cx arg
             return $ Scala.TermRef $ Scala.Term_RefSelect $ Scala.Term_Select sarg (Scala.Term_Name fname)
---            let r = Scala.TermRef $ Scala.Term_RefSelect $ Scala.Term_Select sarg (Scala.Term_Name fname)
---            fail $ "encoded " ++ show term ++ " as " ++ show r
           _ -> fallback
---         ExpressionFunction (FunctionCases fields) -> do
---             body <- encodeTerm cx arg
---             cases <- CM.mapM toCase fields
---             return $ Scala.TermMatch $ Scala.Term_Match body cases
---           where
---             toCase (Field fname fterm) = do
---               let var = "v"
---               -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
---               let pat = Scala.PatExtract $ Scala.Pat_Extract (sname fname) [svar var] -- TODO: qualify with type name
---               body <- encodeTerm cx $ apply fterm $ variable var
---               return $ Scala.Case pat Nothing body
         _ -> fallback
       where
         fallback = sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
     ExpressionElement name -> pure $ sname $ localNameOf name
-    ExpressionFunction f -> encodeFunction cx (termMeta term) f
+    ExpressionFunction f -> encodeFunction cx (termMeta term) f Nothing
     ExpressionList els -> sapply (sname "Seq") <$> CM.mapM (encodeTerm cx) els
     ExpressionLiteral v -> Scala.TermLit <$> encodeLiteral v
     ExpressionMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
