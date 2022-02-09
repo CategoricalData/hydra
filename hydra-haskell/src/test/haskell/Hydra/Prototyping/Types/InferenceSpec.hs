@@ -153,23 +153,6 @@ checkIndividualTerms = do
         (nominalUnion testContext "Timestamp" $ Field "unixTimeMillis" $ uint64Value 1638200308368)
         (nominalType "Timestamp")
 
-    H.it "Check lists" $ do
-      expectMonotype
-        (list [stringValue "foo", stringValue "bar"])
-        (listType stringType)
-      expectMonotype
-        (list [list [stringValue "foo"], list []])
-        (listType $ listType stringType)
-      expectPolytype
-        (list [])
-        ["v1"] (listType $ typeVariable "v1")
-      expectPolytype
-        (list [list []])
-        ["v1"] (listType $ listType $ typeVariable "v1")
-      expectMonotype
-        (lambda "x" (list [variable "x", int32Value 42]))
-        (functionType int32Type $ listType int32Type)
-
     H.it "Check sets" $ do
       expectMonotype
         (set $ S.fromList [booleanValue True])
@@ -201,6 +184,35 @@ checkIndividualTerms = do
 --          Field "lastName" $ variable "x",
 --          Field "age" $ int32Value 42]))
 --        (functionType stringType testTypePerson)
+
+checkLists :: H.SpecWith ()
+checkLists = do
+  H.describe "Check a few hand-picked list terms" $ do
+
+    H.it "Check list of strings" $ do
+      expectMonotype
+        (list [stringValue "foo", stringValue "bar"])
+        (listType stringType)
+    H.it "Check list of lists of strings" $ do
+      expectMonotype
+        (list [list [stringValue "foo"], list []])
+        (listType $ listType stringType)
+    H.it "Check empty list" $ do
+      expectPolytype
+        (list [])
+        ["v1"] (listType $ typeVariable "v1")
+    H.it "Check list containing an empty list" $ do
+      expectPolytype
+        (list [list []])
+        ["v1"] (listType $ listType $ typeVariable "v1")
+    H.it "Check lambda producing a list of integers" $ do
+      expectMonotype
+        (lambda "x" (list [variable "x", int32Value 42]))
+        (functionType int32Type $ listType int32Type)
+    H.it "Check list with bound variables" $ do
+      expectMonotype
+        (lambda "x" (list [variable "x", stringValue "foo", variable "x"]))
+        (functionType stringType (listType stringType))
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
@@ -258,6 +270,7 @@ spec = do
   checkApplicationTerms
   checkFunctionTerms
   checkIndividualTerms
+  checkLists
   checkLiterals
   checkPrimitiveFunctions
   checkTypeAnnotations
