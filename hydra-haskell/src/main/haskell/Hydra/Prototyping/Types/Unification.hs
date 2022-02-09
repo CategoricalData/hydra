@@ -69,12 +69,8 @@ unify cx t1 t2 = if t1 == t2
       (TypeRecord f1, TypeRecord f2) -> unifyRowType f1 f2
       (TypeSet st1, TypeSet st2) -> unify cx st1 st2
       (TypeUnion f1, TypeUnion f2) -> unifyRowType f1 f2
---      (TypeUniversal (UniversalType v body), t) -> unify cx body t
-      (TypeUniversal (UniversalType v body), t) -> return M.empty
-      (t, TypeUniversal ut) -> unify cx (TypeUniversal ut) t
---      (TypeUniversal (UniversalType v1 body1), TypeUniversal (UniversalType v2 body2)) -> unify cx body1 body3
---        where
---          body3 = substituteInType (M.fromList [(v2, TypeVariable v1)]) body2
+      (TypeUniversal (UniversalType v1 body1), TypeUniversal (UniversalType v2 body2)) -> unifyMany cx
+        [TypeVariable v1, body1] [TypeVariable v2, body2]
       (TypeVariable v, t) -> bind v t
       (t, TypeVariable v) -> bind v t
       (TypeNominal name, t) -> return M.empty
