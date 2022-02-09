@@ -13,6 +13,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Prototyping.Types.Substitution
 import Hydra.Prototyping.Types.Unification
+import Hydra.Prototyping.Rewriting
 
 import qualified Control.Monad as CM
 import Control.Monad.Except
@@ -254,8 +255,10 @@ namedType cx name = do
   scon' <- schemaContext scon
   decodeStructuralType scon' $ elementData el
 
-rewriteTermType :: (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
-rewriteTermType f (Term expr (x, typ, c)) = Term expr (x, f typ, c) -- TODO: replace recursively
+rewriteTermType :: Ord m => (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
+rewriteTermType f = rewriteTermMeta rewrite
+  where
+    rewrite (x, typ, c) = (x, f typ, c)
 
 runInference :: Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
 runInference term = runExcept $ evalStateT (runReaderT term M.empty) startState
