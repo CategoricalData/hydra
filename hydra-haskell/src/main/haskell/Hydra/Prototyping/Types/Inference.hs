@@ -216,29 +216,24 @@ inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
 -- | Solve for the toplevel type of an expression in a given environment
 inferTop :: (Default m, Ord m, Show m)
-  => TypingEnvironment -> Context m -> TypeVariable -> Term m
-  -> Either TypeError (Term (m, Type, [Constraint]), TypingEnvironment)
-inferTop env cx v term = do
-    term1 <- runInference env (infer cx term)
+  => Context m -> Term m
+  -> Either TypeError (Term (m, Type, [Constraint]), TypeScheme)
+inferTop cx term = do
+    term1 <- runInference (infer cx term)
     let (ResultSuccess scon) = schemaContext cx
     subst <- solveConstraints scon (termConstraints term1)
-    let replace typ = substituteInType subst typ
-    let term2 = rewriteTermType replace term1
+    let term2 = rewriteTermType (substituteInType subst) term1
     let ts = closeOver $ termType term2
-    return (term2, M.insert v ts env)
+    return (term2, ts)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver :: Type -> TypeScheme
     closeOver = normalizeScheme . generalize M.empty
 
 inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type, [Constraint]), TypeScheme)
-inferType cx term = case inferTop M.empty cx var term of
+inferType cx term = case inferTop cx term of
     Left err -> fail $ "type inference failed: " ++ show err
-    Right (term1, env) -> case M.lookup var env of
-      Nothing -> fail "inferred type not resolved"
-      Just ts -> pure (term1, ts)
-  where
-    var = "x"
+    Right p -> pure p
 
 instantiate ::  TypeScheme -> Infer Type
 instantiate (TypeScheme vars t) = do
@@ -262,8 +257,8 @@ namedType cx name = do
 rewriteTermType :: (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
 rewriteTermType f (Term expr (x, typ, c)) = Term expr (x, f typ, c) -- TODO: replace recursively
 
-runInference :: TypingEnvironment -> Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
-runInference env term = runExcept $ evalStateT (runReaderT term env) startState
+runInference :: Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
+runInference term = runExcept $ evalStateT (runReaderT term M.empty) startState
 
 startState :: InferenceState
 startState = 0
