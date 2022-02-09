@@ -6,10 +6,14 @@ import Hydra.Graph
 import Hydra.Prototyping.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Extras
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+
+project :: Type -> FieldName -> Type -> Term Meta
+project dom fname cod = withType standardContext (functionType dom cod) $ projection fname
 
 standardContext :: Context Meta
 standardContext = Context {
@@ -26,7 +30,7 @@ standardContext = Context {
   where
     emptyGraphName = "empty"
     emptyGraph = Graph emptyGraphName [] (const True) "empty"
-      
+
 standardElement :: Name -> String -> String -> Type -> Term Meta -> Element Meta
 standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ withDoc desc term
 
@@ -46,9 +50,6 @@ standardMatch = nominalMatch standardContext
 
 standardMatchWithVariants :: Type -> Type -> [(FieldName, FieldName)] -> Term Meta
 standardMatchWithVariants = nominalMatchWithVariants standardContext
-
-project :: Name -> FieldName -> Type -> Term Meta
-project = nominalProjection standardContext
 
 standardRecord :: Name -> [Field Meta] -> Term Meta
 standardRecord = nominalRecord standardContext

@@ -104,14 +104,14 @@ describeType = standardFunction _hydra_adapters_utils "describeType"
     (_Type_literal, _eldata describeLiteralType),
     (_Type_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
     (_Type_function, l_"ft" $ s_"functions from "
-      ++. (_eldata describeType @. (project _FunctionType _FunctionType_domain (t_ _Type) @. v_"ft"))
+      ++. (_eldata describeType @. (project (nominalType _FunctionType) _FunctionType_domain (t_ _Type) @. v_"ft"))
       ++. s_" to "
-      ++. (_eldata describeType @. (project _FunctionType _FunctionType_codomain (t_ _Type) @. v_"ft"))),
+      ++. (_eldata describeType @. (project (nominalType _FunctionType) _FunctionType_codomain (t_ _Type) @. v_"ft"))),
     (_Type_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
     (_Type_map, l_"mt" $ s_"maps from "
-      ++. (_eldata describeType @. (project _MapType _MapType_keys (t_ _Type) @. v_"mt"))
+      ++. (_eldata describeType @. (project (nominalType _MapType) _MapType_keys (t_ _Type) @. v_"mt"))
       ++. s_" to "
-      ++. (_eldata describeType @. (project _MapType _MapType_values (t_ _Type) @. v_"mt"))),
+      ++. (_eldata describeType @. (project (nominalType _MapType) _MapType_values (t_ _Type) @. v_"mt"))),
     (_Type_nominal, l_"name" $ s_"alias for" ++. v_"name"),
     (_Type_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
     (_Type_record, const_ $ s_"records of a particular set of fields"),
