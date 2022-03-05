@@ -176,7 +176,7 @@ termVariants = [
 
 -- TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)
-testLists lists = (Lists.length (Lists.concat lists))
+testLists els = (Lists.length (Lists.concat els))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Type -> TypeVariant)
