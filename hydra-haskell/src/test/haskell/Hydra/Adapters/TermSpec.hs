@@ -1,14 +1,15 @@
-module Hydra.Prototyping.Adapters.TermSpec where
+module Hydra.Adapters.TermSpec where
 
-import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.Adapters.Utils
-import Hydra.Basics
-import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Steps
-import Hydra.Prototyping.CoreLanguage 
 import Hydra.Adapter
+import Hydra.Adapters.Term
+import Hydra.Adapters.Utils
+import Hydra.Adapters.UtilsEtc
+import Hydra.Basics
+import Hydra.Core
+import Hydra.CoreLanguage
+import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Extras
+import Hydra.Steps
 
 import Hydra.TestData
 import Hydra.TestUtils

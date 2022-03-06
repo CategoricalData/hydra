@@ -1,11 +1,11 @@
-module Hydra.Prototyping.InterpreterSpec where
+module Hydra.InterpreterSpec where
 
 import Hydra.Basics
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Prototyping.Interpreter
-import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.Steps
+import Hydra.Interpreter
+import Hydra.Primitives
+import Hydra.Steps
 
 import Hydra.TestUtils
 

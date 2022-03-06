@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Rewriting (
+module Hydra.Rewriting (
   TraversalOrder(..),
   foldOverTerm,
   freeVariablesInTerm,

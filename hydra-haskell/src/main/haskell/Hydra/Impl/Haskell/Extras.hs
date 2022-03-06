@@ -20,9 +20,9 @@ module Hydra.Impl.Haskell.Extras (
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Graph
-import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.Steps
-import Hydra.Prototyping.CoreDecoding
+import Hydra.Primitives
+import Hydra.Steps
+import Hydra.CoreDecoding
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L

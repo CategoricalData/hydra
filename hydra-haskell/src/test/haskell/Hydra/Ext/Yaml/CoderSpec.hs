@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import Hydra.TestData

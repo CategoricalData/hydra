@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Adapters.Atomic (
+module Hydra.Adapters.Atomic (
   atomicAdapter,
   floatAdapter,
   integerAdapter,
@@ -6,10 +6,11 @@ module Hydra.Prototyping.Adapters.Atomic (
 
 import Hydra.Core
 import Hydra.Basics
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
-import Hydra.Prototyping.Adapters.Utils
+import Hydra.Adapters.Utils
+import Hydra.Adapters.UtilsEtc
 
 import qualified Data.List as L
 import qualified Data.Set as S

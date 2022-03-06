@@ -1,4 +1,4 @@
-module Hydra.Prototyping.CoreLanguage where
+module Hydra.CoreLanguage where
 
 import Hydra.Adapter
 import Hydra.Basics

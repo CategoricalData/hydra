@@ -9,7 +9,7 @@ module Hydra.TestUtils (
   unitVar,
   var,
   module Hydra.TestGraph,
-  module Hydra.Prototyping.Steps,
+  module Hydra.Steps,
 ) where
 
 import Hydra.ArbitraryCore()
@@ -18,14 +18,14 @@ import Hydra.Core
 import Hydra.Adapter
 import Hydra.Errors
 import Hydra.TestGraph
-import Hydra.Prototyping.Adapters.Atomic
-import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage
+import Hydra.Adapters.Atomic
+import Hydra.Adapters.Term
+import Hydra.CoreLanguage
 import Hydra.Basics
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.Rewriting
+import Hydra.Rewriting
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y

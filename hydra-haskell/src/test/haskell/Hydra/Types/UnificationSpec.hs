@@ -1,11 +1,11 @@
-module Hydra.Prototyping.Types.UnificationSpec where
+module Hydra.Types.UnificationSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Basics
-import Hydra.Prototyping.Types.Unification
+import Hydra.Types.Unification
 import Hydra.TestUtils
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 

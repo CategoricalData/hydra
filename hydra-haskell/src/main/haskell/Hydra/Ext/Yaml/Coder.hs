@@ -6,11 +6,11 @@ module Hydra.Ext.Yaml.Coder (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Adapter
-import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage
+import Hydra.Adapters.Term
+import Hydra.CoreLanguage
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Ext.Yaml.Model as YM
 

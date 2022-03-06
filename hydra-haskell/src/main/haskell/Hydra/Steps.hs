@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Steps (
+module Hydra.Steps (
   Step(..),
   bidirectional,
   composeSteps,

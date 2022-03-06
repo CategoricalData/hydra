@@ -11,13 +11,13 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Prototyping.Primitives
+import Hydra.Primitives
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Coders
-import Hydra.Prototyping.Rewriting
-import Hydra.Prototyping.Types.Inference
-import Hydra.Prototyping.Types.Substitution
+import Hydra.Rewriting
+import Hydra.Types.Inference
+import Hydra.Types.Substitution
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

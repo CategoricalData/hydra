@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Adapters.AtomicSpec where
+module Hydra.Adapters.AtomicSpec where
 
 import Hydra.Core
 

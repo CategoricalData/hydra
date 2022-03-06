@@ -1,8 +1,8 @@
-module Hydra.Prototyping.RewritingSpec where
+module Hydra.RewritingSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.Rewriting
+import Hydra.Rewriting
 
 import Hydra.TestUtils
 

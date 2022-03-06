@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Types.Substitution where
+module Hydra.Types.Substitution where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms

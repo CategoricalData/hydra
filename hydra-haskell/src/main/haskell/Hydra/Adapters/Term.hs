@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Adapters.Term (
+module Hydra.Adapters.Term (
   fieldAdapter,
   termAdapter,
 ) where
@@ -6,15 +6,16 @@ module Hydra.Prototyping.Adapters.Term (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Adapter
-import Hydra.Prototyping.Adapters.Atomic
+import Hydra.Adapters.Atomic
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.Steps
-import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.CoreDecoding
-import Hydra.Prototyping.Adapters.Utils
-import Hydra.Prototyping.CoreEncoding
+import Hydra.Steps
+import Hydra.Primitives
+import Hydra.CoreDecoding
+import Hydra.Adapters.Utils
+import Hydra.Adapters.UtilsEtc
+import Hydra.CoreEncoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -147,7 +148,7 @@ passFunction context t@(TypeFunction (FunctionType dom cod)) = do
       _ -> pure M.empty
     optionAd <- case dom of
       TypeOptional ot -> Just <$> termAdapter context (functionType ot cod)
-      _ -> pure Nothing 
+      _ -> pure Nothing
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd

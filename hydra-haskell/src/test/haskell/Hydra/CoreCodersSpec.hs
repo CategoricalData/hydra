@@ -1,11 +1,11 @@
-module Hydra.Prototyping.CoreCodersSpec where
+module Hydra.CoreCodersSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.CoreDecoding
-import Hydra.Prototyping.CoreEncoding
+import Hydra.CoreDecoding
+import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Rewriting
+import Hydra.Rewriting
 
 import Hydra.TestUtils
 import Hydra.ArbitraryCore (untyped)

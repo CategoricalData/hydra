@@ -5,10 +5,10 @@ module Hydra.Impl.Haskell.Ext.Yaml.SerdeSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Ext.Yaml.Serde
-import Hydra.Prototyping.Rewriting
+import Hydra.Rewriting
 
 import Hydra.TestData
 import Hydra.TestUtils

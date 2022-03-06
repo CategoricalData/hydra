@@ -10,9 +10,9 @@ import Hydra.Adapter
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Prototyping.Rewriting
+import Hydra.Rewriting
 import Hydra.Util.Formatting
-import Hydra.Prototyping.Primitives
+import Hydra.Primitives
 import Hydra.Util.Coders
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
