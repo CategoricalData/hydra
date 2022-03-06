@@ -24,20 +24,47 @@ class ToTree a where
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
 
+instance ToTree H.Constructor where
+  toTree (H.ConstructorRecord (H.Constructor_Record name fields)) = spaceSep [
+    toTree name,
+    bracketList True (toTree <$> fields)]
+
+instance ToTree H.DataDeclaration_Keyword where
+  toTree kw = case kw of
+    H.DataDeclaration_KeywordData -> cst "data"
+    H.DataDeclaration_KeywordNewtype -> cst "newtype"
+
+instance ToTree H.Declaration where
+  toTree decl = case decl of
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> spaceSep [
+        toTree kw,
+        toTree hd,
+        newlineSep consLines,
+        commaSep False (toTree <$> L.concat deriv)]
+      where
+        consLines = L.zipWith consLine cons [0..]
+        consLine c i = spaceSep [symb, toTree c]
+          where
+            symb = cst $ if i == 0 then "=" else "|"
+    H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", toTree hd, cst "=", toTree typ]
+    H.DeclarationTypedBinding (H.TypedBinding
+      (H.TypeSignature name htype)
+      (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _))) -> newlineSep [ -- TODO: local bindings
+        ifx typeOp (toTree name) (toTree htype),
+        ifx defineOp (toTree pat) (toTree rhs)]
+
+instance ToTree H.DeclarationHead where
+  toTree hd = case hd of
+--    H.DeclarationHeadApplication ... ->
+--    H.DeclarationHeadParens ... ->
+    H.DeclarationHeadSimple name -> toTree name
+
 instance ToTree H.DeclarationWithComments where
   toTree (H.DeclarationWithComments body mc) = case mc of
       Nothing -> toTree body
       Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
     where
       toHaskellComments c = L.intercalate "\n" $ (\l -> "-- " ++ l) <$> L.lines c
-
-instance ToTree H.Declaration where
-  toTree decl = case decl of
-    H.DeclarationTypedBinding (H.TypedBinding
-      (H.TypeSignature name htype)
-      (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _))) -> newlineSep [ -- TODO: local bindings
-        ifx typeOp (toTree name) (toTree htype),
-        ifx defineOp (toTree pat) (toTree rhs)]
 
 instance ToTree H.Expression where
   toTree expr = case expr of
@@ -87,6 +114,9 @@ instance ToTree H.Expression_Lambda where
     where
       head = spaceSep (toTree <$> bindings)
       body = toTree inner
+
+instance ToTree H.Field where
+  toTree (H.Field name typ) = spaceSep [toTree name, cst "::", toTree typ]
 
 instance ToTree H.Import where
   toTree (H.Import qual name mod _) = spaceSep $ Y.catMaybes [
