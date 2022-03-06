@@ -17,6 +17,9 @@ import qualified Data.Set as S
 apply :: Program (a -> b) -> Program a -> Program b
 apply (Program fun) (Program arg) = program $ ExpressionApplication $ Application fun arg
 
+field :: FieldName -> Program a -> Fld b
+field fname prog = Fld (Field fname $ strip prog)
+
 letProg :: Var a -> Program a -> Program b -> Program b
 letProg (Var k) (Program v) (Program env) = program $ ExpressionLet $ Let k v env
 
@@ -38,9 +41,6 @@ optional m = program $ ExpressionOptional $ strip <$> m
 record :: [Fld a] -> Program a
 record fields = program $ ExpressionRecord $ stripField <$> fields
 
-recordField :: FieldName -> Program a -> Fld b
-recordField fname prog = Fld (Field fname $ strip prog)
-
 ref :: Name -> Program (Ref a)
 ref name = program $ ExpressionElement name
 
@@ -50,6 +50,9 @@ set els = program $ ExpressionSet $ S.fromList $ strip <$> els
 -- Note: Haskell cannot check that the provided field agrees with a particular union type
 union :: Fld a -> Program a
 union field = program $ ExpressionUnion $ stripField field
+
+unit :: Program ()
+unit = record []
 
 var :: Var a -> Program a
 var (Var v) = program $ ExpressionVariable v
