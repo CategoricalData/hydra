@@ -8,8 +8,9 @@ caseField :: FieldName -> Program (a -> b) -> Case (c -> b)
 caseField fname (Program term) = Case (Field fname term)
 
 -- Note: Haskell cannot check that the provided cases agree with a particular union type
-cases :: [Case (a -> b)] -> Program (a -> b)
-cases cs = program $ ExpressionFunction $ FunctionCases $ toField <$> cs
+cases :: Type -> Type -> [Case (a -> b)] -> Program (a -> b)
+cases dom cod cs = typed (TypeFunction $ FunctionType dom cod) $
+    program $ ExpressionFunction $ FunctionCases $ toField <$> cs
   where
     toField (Case field) = field
 
