@@ -1,4 +1,4 @@
-module Hydra.Prototyping.CoreDecoding (
+module Hydra.CoreDecoding (
   decodeLiteralType,
   decodeFieldType,
   decodeFieldTypes,
@@ -12,8 +12,8 @@ module Hydra.Prototyping.CoreDecoding (
   ) where
 
 import Hydra.Core
-import Hydra.Prototyping.Steps
-import Hydra.Prototyping.Primitives
+import Hydra.Steps
+import Hydra.Primitives
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

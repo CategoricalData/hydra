@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Types.Unification (
+module Hydra.Types.Unification (
   Constraint,
   Solve,
   Subst,
@@ -10,8 +10,8 @@ module Hydra.Prototyping.Types.Unification (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.Types.Substitution
-import Hydra.Prototyping.CoreDecoding
+import Hydra.Types.Substitution
+import Hydra.CoreDecoding
 
 import Control.Monad.Except
 import Control.Monad.Identity

@@ -1,11 +1,11 @@
-module Hydra.Prototyping.Types.InferenceSpec where
+module Hydra.Types.InferenceSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Basics
-import Hydra.Prototyping.Types.Inference
+import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 

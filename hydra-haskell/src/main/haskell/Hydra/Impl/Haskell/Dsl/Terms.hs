@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Terms where
 
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Extras
 import Prelude hiding (map)
 import qualified Data.List as L

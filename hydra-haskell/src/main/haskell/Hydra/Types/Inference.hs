@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Types.Inference (
+module Hydra.Types.Inference (
   inferType,
   Constraint,
 ) where
@@ -7,13 +7,13 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Basics
-import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.CoreDecoding
+import Hydra.Primitives
+import Hydra.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Types.Substitution
-import Hydra.Prototyping.Types.Unification
-import Hydra.Prototyping.Rewriting
+import Hydra.Types.Substitution
+import Hydra.Types.Unification
+import Hydra.Rewriting
 
 import qualified Control.Monad as CM
 import Control.Monad.Except

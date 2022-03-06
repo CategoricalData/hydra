@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Interpreter (
+module Hydra.Interpreter (
   evaluate,
   freeVariables,
   termIsClosed,
@@ -11,7 +11,7 @@ import Hydra.Evaluation
 import Hydra.Basics
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
-import Hydra.Prototyping.Primitives
+import Hydra.Primitives
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

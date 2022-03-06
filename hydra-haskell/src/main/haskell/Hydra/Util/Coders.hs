@@ -6,16 +6,16 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Prototyping.Primitives
-import Hydra.Prototyping.Rewriting
-import Hydra.Prototyping.Types.Inference
+import Hydra.Primitives
+import Hydra.Rewriting
+import Hydra.Types.Inference
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-import Hydra.Prototyping.Adapters.Term
-import Hydra.Prototyping.CoreLanguage
-import Hydra.Prototyping.Steps
+import Hydra.Adapters.Term
+import Hydra.CoreLanguage
+import Hydra.Steps
 
 
 dataGraphDependencies :: Show m => Bool -> Bool -> Bool -> Graph m -> S.Set GraphName

@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Adapters.Utils (
+module Hydra.Adapters.UtilsEtc (
   literalTypeIsSupported,
   chooseAdapter,
   floatTypeIsSupported,
@@ -11,7 +11,7 @@ module Hydra.Prototyping.Adapters.Utils (
 
 import Hydra.Core
 import Hydra.Basics
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import Hydra.Impl.Haskell.Extras
 import Hydra.Adapter
 import Hydra.Adapters.Utils

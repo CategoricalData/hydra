@@ -1,4 +1,4 @@
-module Hydra.Prototyping.Primitives (
+module Hydra.Primitives (
   deref,
   dereferenceElement,
   graphElementsMap,
@@ -12,7 +12,7 @@ module Hydra.Prototyping.Primitives (
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.Steps
+import Hydra.Steps
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y

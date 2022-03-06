@@ -1,4 +1,4 @@
-module Hydra.Prototyping.CoreEncoding (
+module Hydra.CoreEncoding (
     encodeApplication,
     encodeLiteralType,
     encodeLiteral,

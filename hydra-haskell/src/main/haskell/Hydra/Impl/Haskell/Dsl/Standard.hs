@@ -3,7 +3,7 @@ module Hydra.Impl.Haskell.Dsl.Standard where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Prototyping.CoreEncoding
+import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
