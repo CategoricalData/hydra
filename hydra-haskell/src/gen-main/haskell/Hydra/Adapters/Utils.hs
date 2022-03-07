@@ -67,7 +67,7 @@ describeType x = case x of
       (describeType (mapTypeValues v))])
   TypeNominal v -> (
     Strings.cat [
-      "alias for",
+      "alias for ",
       v])
   TypeOptional v -> (
     Strings.cat [
