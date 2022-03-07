@@ -3,17 +3,20 @@ module Hydra.Ext.Haskell.Coder (
   haskellLanguage,
 ) where
 
-import Hydra.Core
-import Hydra.Graph
-import Hydra.Evaluation
 import Hydra.Adapter
+import Hydra.Adapters.Term
 import Hydra.Basics
-import Hydra.Impl.Haskell.Extras
+import Hydra.Core
+import Hydra.CoreDecoding
+import Hydra.CoreLanguage
+import Hydra.Evaluation
+import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Rewriting
-import Hydra.Util.Formatting
+import Hydra.Impl.Haskell.Extras
 import Hydra.Primitives
+import Hydra.Rewriting
 import Hydra.Util.Coders
+import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 
@@ -24,12 +27,54 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
+constructModule :: (Default m, Ord m, Read m, Show m)
+  => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
 constructModule cx g coders pairs = do
     decls <- CM.mapM createDeclaration pairs
     return $ H.Module (Just $ H.ModuleHead (fst $ importName $ graphName g) []) imports decls
   where
-    createDeclaration (el, TypedTerm typ term) = do
+    createDeclaration pair@(el, TypedTerm typ term) = if typ == TypeNominal _Type
+      then createTypeDeclaration pair
+      else createOtherDeclaration pair
+
+    createTypeDeclaration (el, TypedTerm typ term) = do
+        let lname = localNameOf $ elementName el
+        let hname = simpleName lname
+        t <- decodeType cx term
+        let hd = H.DeclarationHeadSimple hname
+        let deriv = simpleName <$> ["Eq", "Ord", "Read", "Show"]
+        decl <- case t of
+          TypeRecord fields -> do
+            cons <- recordCons lname fields
+            return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
+          TypeUnion fields -> do
+            cons <- CM.mapM (unionCons lname) fields
+            return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
+          _ -> do
+            htype <- encodeAdaptedType cx t
+            return $ H.DeclarationType (H.TypeDeclaration hd htype)
+        let comments = contextDescriptionOf cx $ termMeta term
+        return $ H.DeclarationWithComments decl comments
+      where
+        recordCons lname fields = do
+            hFields <- CM.mapM toField fields
+            return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
+          where
+            toField (FieldType fname ftype) = do
+              let hname = simpleName $ decapitalize lname ++ capitalize fname
+              htype <- encodeAdaptedType cx ftype
+              return $ H.Field hname htype
+
+        unionCons lname (FieldType fname ftype) = do
+          let nm = capitalize lname ++ capitalize fname
+          typeList <- if ftype == unitType
+            then pure []
+            else do
+              htype <- encodeAdaptedType cx ftype
+              return [htype]
+          return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
+
+    createOtherDeclaration (el, TypedTerm typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
       rhs <- stepOut coder term
       let hname = simpleName $ localNameOf $ elementName el
@@ -40,6 +85,8 @@ constructModule cx g coders pairs = do
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       let comments = contextDescriptionOf cx $ termMeta term
       return $ H.DeclarationWithComments decl comments
+
+    toCons _ = H.Constructor_Record
 
     imports = toImport <$> S.toList (dataGraphDependencies True True True g)
 
@@ -136,7 +183,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Default a, Eq a, Ord a, Read a, Show a) => Context a -> Term a -> Result H.Expression
+encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result H.Expression
 encodeTerm cx term@(Term expr meta) = do
    case expr of
     ExpressionApplication (Application fun arg) -> case termData fun of
@@ -204,7 +251,14 @@ encodeType typ = case typ of
     pure $ H.TypeVariable $ simpleName v,
     encodeType body]
   TypeVariable v -> pure $ H.TypeVariable $ simpleName v
+  TypeRecord [] -> pure $ H.TypeTuple []
   _ -> fail $ "unexpected type: " ++ show typ
+
+encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => Context m -> Type -> Result H.Type
+encodeAdaptedType cx typ = do
+  let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
+  ad <- qualifiedToResult $ termAdapter ac typ
+  encodeType $ adapterTarget ad
 
 toApplicationType :: [H.Type] -> H.Type
 toApplicationType = app
@@ -224,26 +278,28 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
   languageConstraintsFunctionVariants = S.fromList functionVariants,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint, IntegerTypeInt32],
   languageConstraintsTermVariants = S.fromList [
-    -- No native maps or sets
     TermVariantApplication,
     TermVariantElement,
     TermVariantFunction,
     TermVariantList,
     TermVariantLiteral,
+    TermVariantMap,
     TermVariantNominal,
     TermVariantOptional,
     TermVariantRecord,
+    TermVariantSet,
     TermVariantUnion,
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
-    -- No native maps or sets
     TypeVariantElement,
     TypeVariantFunction,
     TypeVariantList,
     TypeVariantLiteral,
+    TypeVariantMap,
     TypeVariantNominal,
     TypeVariantOptional,
     TypeVariantRecord,
+    TypeVariantSet,
     TypeVariantUnion,
     TypeVariantVariable],
   languageConstraintsTypes = const True }

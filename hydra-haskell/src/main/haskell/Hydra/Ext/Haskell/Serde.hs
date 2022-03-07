@@ -25,9 +25,13 @@ instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
 
 instance ToTree H.Constructor where
-  toTree (H.ConstructorRecord (H.Constructor_Record name fields)) = spaceSep [
-    toTree name,
-    bracketList True (toTree <$> fields)]
+  toTree cons = case cons of
+    H.ConstructorOrdinary (H.Constructor_Ordinary name types) -> spaceSep [
+      toTree name,
+      spaceSep (toTree <$> types)]
+    H.ConstructorRecord (H.Constructor_Record name fields) -> spaceSep [
+      toTree name,
+      curlyBracesList True (toTree <$> fields)]
 
 instance ToTree H.DataDeclaration_Keyword where
   toTree kw = case kw of
@@ -36,12 +40,16 @@ instance ToTree H.DataDeclaration_Keyword where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> spaceSep [
-        toTree kw,
-        toTree hd,
-        newlineSep consLines,
-        commaSep False (toTree <$> L.concat deriv)]
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> spaceSep $ Y.catMaybes [
+        Just $ toTree kw,
+        Just $ toTree hd,
+        Just $ newlineSep consLines,
+        derivExpr]
       where
+        derivCat = L.concat deriv
+        derivExpr = if L.null derivCat
+          then Nothing
+          else Just $ spaceSep [cst "deriving", parenList (toTree <$> derivCat)]
         consLines = L.zipWith consLine cons [0..]
         consLine c i = spaceSep [symb, toTree c]
           where
@@ -174,7 +182,7 @@ instance ToTree H.Type where
 --  H.TypeInfix Type_Infix
     H.TypeList htype -> bracketList False [toTree htype]
 --  H.TypeParens Type
---  H.TypeTuple [Type]
+    H.TypeTuple types -> parenList $ toTree <$> types
     H.TypeVariable name -> toTree name
 
 dataGraphToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String

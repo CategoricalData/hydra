@@ -55,8 +55,3 @@ dataGraphToExternalModule lang encodeTerm createModule cx g = do
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
         termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
-
---    annotateTerm term = rewriteTerm ref <$> inferType cx term
---      where
---        rep (Term expr )
-
