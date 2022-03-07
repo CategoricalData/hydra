@@ -3,6 +3,7 @@ module Hydra.Ext.Haskell.Ast
   ( Alternative(..)
   , Assertion(..)
   , CaseRhs
+  , Constructor_Ordinary(..)
   , Constructor_Record(..)
   , Constructor(..)
   , DataDeclaration_Keyword(..)
@@ -69,9 +70,13 @@ module Hydra.Ext.Haskell.Ast
   , _Assertion_types
   , _CaseRhs
   , _Constructor
+  , _Constructor_Ordinary
+  , _Constructor_Ordinary_fields
+  , _Constructor_Ordinary_name
   , _Constructor_Record
   , _Constructor_Record_fields
   , _Constructor_Record_name
+  , _Constructor_ordinary
   , _Constructor_record
   , _DataDeclaration
   , _DataDeclaration_Keyword
@@ -296,6 +301,13 @@ data Assertion
 -- | @type hydra/ext/haskell/ast.Expression
 type CaseRhs = Expression
 
+data Constructor_Ordinary
+  = Constructor_Ordinary
+    -- | @type hydra/ext/haskell/ast.Name
+    { constructorOrdinaryName :: Name
+    -- | @type list: hydra/ext/haskell/ast.Type
+    , constructorOrdinaryFields :: [Type] } deriving (Eq, Generic, Ord, Read, Show)
+
 data Constructor_Record
   = Constructor_Record
     -- | @type hydra/ext/haskell/ast.Name
@@ -304,8 +316,10 @@ data Constructor_Record
     , constructorRecordFields :: [Field] } deriving (Eq, Generic, Ord, Read, Show)
 
 data Constructor
+  -- | @type hydra/ext/haskell/ast.Constructor.Ordinary
+  = ConstructorOrdinary Constructor_Ordinary
   -- | @type hydra/ext/haskell/ast.Constructor.Record
-  = ConstructorRecord Constructor_Record deriving (Eq, Generic, Ord, Read, Show)
+  | ConstructorRecord Constructor_Record deriving (Eq, Generic, Ord, Read, Show)
 
 data DataDeclaration_Keyword
   = DataDeclaration_KeywordData
@@ -750,9 +764,13 @@ _Assertion_name = "name" :: String
 _Assertion_types = "types" :: String
 _CaseRhs = "hydra/ext/haskell/ast.CaseRhs" :: String
 _Constructor = "hydra/ext/haskell/ast.Constructor" :: String
+_Constructor_Ordinary = "hydra/ext/haskell/ast.Constructor_Ordinary" :: String
+_Constructor_Ordinary_fields = "fields" :: String
+_Constructor_Ordinary_name = "name" :: String
 _Constructor_Record = "hydra/ext/haskell/ast.Constructor_Record" :: String
 _Constructor_Record_fields = "fields" :: String
 _Constructor_Record_name = "name" :: String
+_Constructor_ordinary = "ordinary" :: String
 _Constructor_record = "record" :: String
 _DataDeclaration = "hydra/ext/haskell/ast.DataDeclaration" :: String
 _DataDeclaration_Keyword = "hydra/ext/haskell/ast.DataDeclaration_Keyword" :: String

@@ -35,10 +35,23 @@ definitions:
     type:
       union:
         # omitted for now: ordinary (positional), infix
+        - name: ordinary
+          type: Constructor.Ordinary
+
         - name: record
           type: Constructor.Record
 
     innerTypes:
+      - name: Ordinary
+        type:
+          record:
+            - name: name
+              type: Name
+
+            - name: fields
+              type:
+                list: Type
+
       - name: Record
         type:
           record:
