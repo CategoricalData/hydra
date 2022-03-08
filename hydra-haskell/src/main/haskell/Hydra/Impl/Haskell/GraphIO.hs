@@ -37,7 +37,7 @@ generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataG
 
 generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
 generateSources langName toFile serialize baseDir = do
---    writeDataGraph hydraCoreGraph []
+    writeDataGraph hydraCoreGraph []
     writeDataGraph basicsGraph []
     writeDataGraph adaptersUtilsGraph [basicsGraph]
   where
