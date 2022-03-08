@@ -40,16 +40,11 @@ instance ToTree H.DataDeclaration_Keyword where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> spaceSep $ Y.catMaybes [
-        Just $ toTree kw,
-        Just $ toTree hd,
-        Just $ newlineSep consLines,
-        derivExpr]
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd]) $
+        consLines
+        ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList (toTree <$> derivCat)]]
       where
         derivCat = L.concat deriv
-        derivExpr = if L.null derivCat
-          then Nothing
-          else Just $ spaceSep [cst "deriving", parenList (toTree <$> derivCat)]
         consLines = L.zipWith consLine cons [0..]
         consLine c i = spaceSep [symb, toTree c]
           where
