@@ -261,7 +261,7 @@ encodeAdaptedType cx typ = do
   encodeType $ adapterTarget ad
 
 toApplicationType :: [H.Type] -> H.Type
-toApplicationType = app
+toApplicationType = app . L.reverse
   where
     app l = case l of
       [e] -> e
