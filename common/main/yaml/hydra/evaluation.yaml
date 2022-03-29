@@ -59,6 +59,15 @@ definitions:
               to:
                 optional: core.Type
 
+        - name: setDescriptionOf
+          type:
+            function:
+              from:
+                - optional: string
+                - variable: a
+              to:
+                variable: a
+
         - name: setTypeOf
           type:
             function:

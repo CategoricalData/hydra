@@ -435,6 +435,25 @@ definitions:
                   type:
                     variable: a
 
+  - name: Literal
+    description: "A term constant; an instance of a literal type"
+    type:
+      union:
+        - name: binary
+          type: binary
+
+        - name: boolean
+          type: BooleanValue
+
+        - name: float
+          type: FloatValue
+
+        - name: integer
+          type: IntegerValue
+
+        - name: string
+          type: string
+
   - name: LiteralType
     description: "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"
     comments:
@@ -461,25 +480,6 @@ definitions:
         - float
         - integer
         - string
-
-  - name: Literal
-    description: "A term constant; an instance of a literal type"
-    type:
-      union:
-        - name: binary
-          type: binary
-
-        - name: boolean
-          type: BooleanValue
-
-        - name: float
-          type: FloatValue
-
-        - name: integer
-          type: IntegerValue
-
-        - name: string
-          type: string
 
   - name: MapType
     type:

@@ -26,6 +26,7 @@ standardContext = Context {
       evaluationStrategyOpaqueTermVariants = S.fromList []},
     contextDescriptionOf = metaDescription,
     contextTypeOf = metaType,
+    contextSetDescriptionOf = \d m -> m {metaDescription = d},
     contextSetTypeOf = \t m -> m {metaType = t}}
   where
     emptyGraphName = "empty"
@@ -66,8 +67,10 @@ standardWithType = withType standardContext
 standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
 standardWithVariant = nominalWithVariant standardContext
 
-typeElement :: Context Meta -> Name -> Type -> Element Meta
-typeElement cx name typ = Element {
-  elementName = name,
-  elementSchema = defaultTerm $ ExpressionElement _Type,
-  elementData = encodeType cx typ}
+typeElement :: Context Meta -> Name -> String -> Type -> Element Meta
+typeElement cx name doc typ = Element {
+    elementName = name,
+    elementSchema = setDoc (defaultTerm $ ExpressionElement _Type),
+    elementData = encodeType cx typ}
+  where
+    setDoc (Term d m) = Term d (contextSetDescriptionOf cx (Just doc) m)

@@ -13,6 +13,7 @@ module Hydra.Evaluation
   , _Context_elements
   , _Context_functions
   , _Context_graphs
+  , _Context_setDescriptionOf
   , _Context_setTypeOf
   , _Context_strategy
   , _Context_typeOf
@@ -89,6 +90,13 @@ data Context a
                 to:
                   optional: hydra/core.Type -}
     , contextTypeOf :: a -> (Maybe Type)
+    {-| @type function:
+                from:
+                - optional: string
+                - variable: a
+                to:
+                  variable: a -}
+    , contextSetDescriptionOf :: (Maybe String) -> (a -> a)
     {-| @type function:
                 from:
                 - optional: hydra/core.Type
@@ -215,6 +223,7 @@ _Context_descriptionOf = "descriptionOf" :: String
 _Context_elements = "elements" :: String
 _Context_functions = "functions" :: String
 _Context_graphs = "graphs" :: String
+_Context_setDescriptionOf = "setDescriptionOf" :: String
 _Context_setTypeOf = "setTypeOf" :: String
 _Context_strategy = "strategy" :: String
 _Context_typeOf = "typeOf" :: String
