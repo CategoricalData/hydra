@@ -28,6 +28,8 @@ import qualified Data.Set  as S
 cx :: Context Meta
 cx = standardContext
 
+noDoc = ""
+
 testContext :: Context Meta
 testContext = standardContext {
     contextGraphs = GraphSet {
@@ -61,9 +63,9 @@ testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement cx "StringTypeAlias" stringType,
-    typeElement cx "Person" testTypePerson,
-    typeElement cx "Timestamp" testTypeTimestamp]
+    typeElement cx "StringTypeAlias" noDoc stringType,
+    typeElement cx "Person" noDoc testTypePerson,
+    typeElement cx "Timestamp" noDoc testTypeTimestamp]
   allTerms "hydra/core"
 
 testStrategy :: EvaluationStrategy
