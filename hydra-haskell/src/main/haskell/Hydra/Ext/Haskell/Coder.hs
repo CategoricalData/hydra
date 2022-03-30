@@ -258,6 +258,9 @@ encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => Context m -> Type -> 
 encodeAdaptedType cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
+--  case typ of
+--    TypeUniversal (UniversalType v body) -> fail $ "from " ++ (show typ) ++ " to " ++ show (adapterTarget ad)
+--    _ -> pure ()
   encodeType $ adapterTarget ad
 
 toApplicationType :: [H.Type] -> H.Type
@@ -301,6 +304,7 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
+    TypeVariantUniversal,
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
