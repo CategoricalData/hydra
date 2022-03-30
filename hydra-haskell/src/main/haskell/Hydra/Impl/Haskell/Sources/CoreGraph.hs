@@ -55,8 +55,8 @@ hcApplication :: Context Meta -> Element Meta
 hcApplication cx = typeElement cx _Application
   "A term which applies a function to an argument" $
   TypeRecord [
-    FieldType _Application_function $ TypeNominal _Term,
-    FieldType _Application_argument $ TypeNominal _Term]
+    FieldType _Application_function $ universal "a" $ TypeNominal _Term,
+    FieldType _Application_argument $ universal "a" $ TypeNominal _Term]
 
 hcBooleanValue :: Context Meta -> Element Meta
 hcBooleanValue cx = typeElement cx _BooleanValue
