@@ -70,7 +70,7 @@ standardWithVariant = nominalWithVariant standardContext
 typeElement :: Context Meta -> Name -> String -> Type -> Element Meta
 typeElement cx name doc typ = Element {
     elementName = name,
-    elementSchema = setDoc (defaultTerm $ ExpressionElement _Type),
-    elementData = encodeType cx typ}
+    elementSchema = defaultTerm $ ExpressionElement _Type,
+    elementData = setDoc $ encodeType cx typ}
   where
     setDoc (Term d m) = Term d (contextSetDescriptionOf cx (Just doc) m)
