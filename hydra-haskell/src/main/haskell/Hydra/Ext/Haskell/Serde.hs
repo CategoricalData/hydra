@@ -58,7 +58,7 @@ instance ToTree H.Declaration where
 
 instance ToTree H.DeclarationHead where
   toTree hd = case hd of
---    H.DeclarationHeadApplication ... ->
+    H.DeclarationHeadApplication (H.DeclarationHead_Application fun op) -> spaceSep [toTree fun, toTree op]
 --    H.DeclarationHeadParens ... ->
     H.DeclarationHeadSimple name -> toTree name
 
