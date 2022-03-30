@@ -41,9 +41,10 @@ constructModule cx g coders pairs = do
         let lname = localNameOf $ elementName el
         let hname = simpleName lname
         t <- decodeType cx term
-        let hd = H.DeclarationHeadSimple hname
         let deriv = simpleName <$> ["Eq", "Ord", "Read", "Show"]
-        decl <- case t of
+        let (vars, t') = unpackUniversalType t
+        let hd = declHead hname $ L.reverse vars
+        decl <- case t' of
           TypeRecord fields -> do
             cons <- recordCons lname fields
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
@@ -56,6 +57,14 @@ constructModule cx g coders pairs = do
         let comments = contextDescriptionOf cx $ termMeta term
         return $ H.DeclarationWithComments decl comments
       where
+        declHead name vars = case vars of
+          [] -> H.DeclarationHeadSimple name
+          (h:rest) -> H.DeclarationHeadApplication $ H.DeclarationHead_Application (declHead name rest) (simpleName h)
+        unpackUniversalType t = case t of
+          TypeUniversal (UniversalType v tbody) -> (v:vars, t')
+            where
+              (vars, t') = unpackUniversalType tbody
+          _ -> ([], t)
         recordCons lname fields = do
             hFields <- CM.mapM toField fields
             return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields

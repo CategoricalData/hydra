@@ -54,7 +54,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
 hcApplication :: Context Meta -> Element Meta
 hcApplication cx = typeElement cx _Application
   "A term which applies a function to an argument" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _Application_function $ universal "a" $ TypeNominal _Term,
     FieldType _Application_argument $ universal "a" $ TypeNominal _Term]
 
