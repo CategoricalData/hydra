@@ -33,11 +33,18 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
       hcLiteralType,
       hcLiteralVariant,
       hcMapType,
+      hcMeta,
       hcName,
+      hcNominalTerm,
+      hcOptionalCases,
+      hcOptionalExpression,
       hcPrecision,
       hcTerm,
       hcTermVariant,
       hcType,
+      hcTypeAbstraction,
+      hcTypeApplication,
+      hcTypeScheme,
       hcTypeVariable,
       hcTypeVariant,
       hcTypedTerm,
@@ -231,22 +238,38 @@ hcMapType cx = typeElement cx _MapType
     FieldType _MapType_keys $ TypeNominal _Type,
     FieldType _MapType_values $ TypeNominal _Type]
 
---hcMeta ...
---  "A built-in metadata container for terms"
+hcMeta :: Context Meta -> Element Meta
+hcMeta cx = typeElement cx _Meta
+  "A built-in metadata container for terms" $
+  TypeRecord [
+    FieldType _Meta_description (TypeOptional stringType),
+    FieldType _Meta_type (TypeOptional $ TypeNominal _Type)]
 
 hcName :: Context Meta -> Element Meta
 hcName cx = typeElement cx _Name
   "A unique element name"
   stringType
 
---hcNominalTerm ...
---  "A term annotated with a fixed, named type; an instance of a newtype"
---
---hcOptionalCases ...
---  ""
---
---hcOptionalExpression ...
---  "An encoded optional value, for languages which do not natively support optionals"
+hcNominalTerm :: Context Meta -> Element Meta
+hcNominalTerm cx = typeElement cx _NominalTerm
+  "A term annotated with a fixed, named type; an instance of a newtype" $
+  TypeRecord [
+    FieldType _NominalTerm_typeName (TypeNominal _Name),
+    FieldType _NominalTerm_term (TypeNominal _Term)]
+
+hcOptionalCases :: Context Meta -> Element Meta
+hcOptionalCases cx = typeElement cx _OptionalCases
+  "A case statement for matching optional terms" $
+  TypeRecord [
+    FieldType _OptionalCases_nothing (TypeNominal _Term),
+    FieldType _OptionalCases_just (TypeNominal _Term)]
+
+hcOptionalExpression :: Context Meta -> Element Meta
+hcOptionalExpression cx = typeElement cx _OptionalExpression
+  "An encoded optional value, for languages which do not natively support optionals" $
+  TypeUnion [
+    FieldType _OptionalExpression_just (TypeNominal _Term),
+    FieldType _OptionalExpression_nothing unitType]
 
 hcPrecision :: Context Meta -> Element Meta
 hcPrecision cx = typeElement cx _Precision
@@ -295,14 +318,26 @@ hcType cx = typeElement cx _Type
     FieldType _Type_universal $ TypeNominal _UniversalType,
     FieldType _Type_variable $ TypeNominal _TypeVariable]
 
---hcTypeAbstraction ...
---  "A type abstraction (generalization), which binds a type variable to a term"
---
---hcTypeApplication ...
---  "A type application (instantiation), which applies a term to a type"
---
---hcTypeScheme ...
---  ""
+hcTypeAbstraction :: Context Meta -> Element Meta
+hcTypeAbstraction cx = typeElement cx _TypeAbstraction
+  "A type abstraction (generalization), which binds a type variable to a term" $
+  TypeRecord [
+    FieldType _TypeAbstraction_parameter (TypeNominal _TypeVariable),
+    FieldType _TypeAbstraction_body (TypeNominal _Term)]
+
+hcTypeApplication :: Context Meta -> Element Meta
+hcTypeApplication cx = typeElement cx _TypeApplication
+  "A type application (instantiation), which applies a term to a type" $
+  TypeRecord [
+    FieldType _TypeApplication_function (TypeNominal _Term),
+    FieldType _TypeApplication_argument (TypeNominal _Type)]
+
+hcTypeScheme :: Context Meta -> Element Meta
+hcTypeScheme cx = typeElement cx _TypeScheme
+  "A type expression together with free type variables occurring in the expression" $
+  TypeRecord [
+    FieldType _TypeScheme_variables (TypeList $ TypeNominal _TypeVariable),
+    FieldType _TypeScheme_type (TypeNominal _Type)]
 
 hcTypeVariable :: Context Meta -> Element Meta
 hcTypeVariable cx = typeElement cx _TypeVariable
