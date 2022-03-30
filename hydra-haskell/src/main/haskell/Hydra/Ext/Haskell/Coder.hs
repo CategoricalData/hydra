@@ -248,8 +248,8 @@ encodeType typ = case typ of
     pure $ H.TypeVariable $ simpleName "Set",
     encodeType st]
   TypeUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
-    pure $ H.TypeVariable $ simpleName v,
-    encodeType body]
+    encodeType body,
+    pure $ H.TypeVariable $ simpleName v]
   TypeVariable v -> pure $ H.TypeVariable $ simpleName v
   TypeRecord [] -> pure $ H.TypeTuple []
   _ -> fail $ "unexpected type: " ++ show typ
