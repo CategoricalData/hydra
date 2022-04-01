@@ -14,26 +14,26 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
     element name doc typ = typeElement standardContext name doc typ
     elements = [
 
-      element _Application
+      element "Application"
         "A term which applies a function to an argument" $
         universal "m" $ TypeRecord [
           FieldType _Application_function $ universal "m" $ TypeNominal _Term,
           FieldType _Application_argument $ universal "m" $ TypeNominal _Term],
 
-      element _BooleanValue
+      element "BooleanValue"
         "A boolean literal value" $
         enum [
           _BooleanValue_false,
           _BooleanValue_true],
 
-      element _Comparison
+      element "Comparison"
         "An equality judgement: less than, equal to, or greater than" $
         enum [
           _Comparison_lessThan,
           _Comparison_equalTo,
           _Comparison_greaterThan],
 
-      element _Expression
+      element "Expression"
         "A term expression" $
         universal "m" $ TypeUnion [
           FieldType _Expression_application $ universal "m" $ TypeNominal _Application,
@@ -51,37 +51,37 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _Expression_union $ universal "m" $ TypeNominal _Field,
           FieldType _Expression_variable $ TypeNominal _Variable],
 
-      element _Field
+      element "Field"
         "A labeled term" $
         universal "m" $ TypeRecord [
           FieldType _Field_name $ TypeNominal _FieldName,
           FieldType _Field_term $ universal "m" $ TypeNominal _Term],
 
-      element _FieldName
+      element "FieldName"
         "The name of a field"
         stringType,
 
-      element _FieldType
+      element "FieldType"
         "The name and type of a field" $
         TypeRecord [
           FieldType _FieldType_name $ TypeNominal _FieldName,
           FieldType _FieldType_type $ TypeNominal _Type],
 
-      element _FloatType
+      element "FloatType"
         "A floating-point type" $
         enum [
           _FloatType_bigfloat,
           _FloatType_float32,
           _FloatType_float64],
 
-      element _FloatValue
+      element "FloatValue"
         "A floating-point literal value" $
         TypeUnion [
           FieldType _FloatValue_bigfloat bigfloatType,
           FieldType _FloatValue_float32 float32Type,
           FieldType _FloatValue_float64 float64Type],
 
-      element _Function
+      element "Function"
         "A function" $
         universal "m" $ TypeUnion [
           FieldType _Function_cases $ TypeList $ universal "m" $ TypeNominal _Field,
@@ -92,13 +92,13 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _Function_primitive $ TypeNominal _Name,
           FieldType _Function_projection $ TypeNominal _FieldName],
 
-      element _FunctionType
+      element "FunctionType"
         "A function type, also known as an arrow type" $
         TypeRecord [
           FieldType _FunctionType_domain $ TypeNominal _Type,
           FieldType _FunctionType_codomain $ TypeNominal _Type],
 
-      element _FunctionVariant
+      element "FunctionVariant"
         "The identifier of a function constructor" $
         enum [
           _FunctionVariant_cases,
@@ -109,7 +109,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           _FunctionVariant_primitive,
           _FunctionVariant_projection],
 
-      element _IntegerType
+      element "IntegerType"
         "An integer type" $
         enum [
           _IntegerType_bigint,
@@ -122,7 +122,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           _IntegerType_uint32,
           _IntegerType_uint64],
 
-      element _IntegerValue
+      element "IntegerValue"
         "An integer literal value" $
         TypeUnion [
           FieldType _IntegerValue_bigint bigintType,
@@ -135,20 +135,20 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _IntegerValue_uint32 uint32Type,
           FieldType _IntegerValue_uint64 uint64Type],
 
-      element _Lambda
+      element "Lambda"
         "A function abstraction (lambda)" $
         universal "m" $ TypeRecord [
           FieldType _Lambda_parameter $ TypeNominal _Variable,
           FieldType _Lambda_body $ universal "m" $ TypeNominal _Term],
 
-      element _Let
+      element "Let"
         "A 'let' binding" $
         universal "m" $ TypeRecord [
           FieldType _Let_key $ TypeNominal _Variable,
           FieldType _Let_value $ universal "m" $ TypeNominal _Term,
           FieldType _Let_environment $ universal "m" $ TypeNominal _Term],
 
-      element _Literal
+      element "Literal"
         "A term constant; an instance of a literal type" $
         TypeUnion [
           FieldType _Literal_binary binaryType,
@@ -157,7 +157,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _Literal_integer $ TypeNominal _IntegerValue,
           FieldType _Literal_string stringType],
 
-      element _LiteralType
+      element "LiteralType"
         "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $
         TypeUnion [
           FieldType _LiteralType_binary unitType,
@@ -166,7 +166,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _LiteralType_integer $ TypeNominal _IntegerType,
           FieldType _LiteralType_string unitType],
 
-      element _LiteralVariant
+      element "LiteralVariant"
         "The identifier of a literal constructor" $
         enum [
           _LiteralVariant_binary,
@@ -175,53 +175,53 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           _LiteralVariant_integer,
           _LiteralVariant_string],
 
-      element _MapType
+      element "MapType"
         "A map type" $
         TypeRecord [
           FieldType _MapType_keys $ TypeNominal _Type,
           FieldType _MapType_values $ TypeNominal _Type],
 
-      element _Meta
+      element "Meta"
         "A built-in metadata container for terms" $
         TypeRecord [
           FieldType _Meta_description (TypeOptional stringType),
           FieldType _Meta_type (TypeOptional $ TypeNominal _Type)],
 
-      element _Name
+      element "Name"
         "A unique element name"
         stringType,
 
-      element _NominalTerm
+      element "NominalTerm"
         "A term annotated with a fixed, named type; an instance of a newtype" $
         universal "m" $ TypeRecord [
           FieldType _NominalTerm_typeName (TypeNominal _Name),
           FieldType _NominalTerm_term (universal "m" $ TypeNominal _Term)],
 
-      element _OptionalCases
+      element "OptionalCases"
         "A case statement for matching optional terms" $
         universal "m" $ TypeRecord [
           FieldType _OptionalCases_nothing (universal "m" $ TypeNominal _Term),
           FieldType _OptionalCases_just (universal "m" $ TypeNominal _Term)],
 
-      element _OptionalExpression
+      element "OptionalExpression"
         "An encoded optional value, for languages which do not natively support optionals" $
         universal "m" $ TypeUnion [
           FieldType _OptionalExpression_just (universal "m" $ TypeNominal _Term),
           FieldType _OptionalExpression_nothing unitType],
 
-      element _Precision
+      element "Precision"
         "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
         TypeUnion [
           FieldType _Precision_arbitrary unitType,
           FieldType _Precision_bits int32Type],
 
-      element _Term
+      element "Term"
         "A data term" $
         universal "m" $ TypeRecord [
           FieldType _Term_data $ universal "m" $ TypeNominal _Expression,
           FieldType _Term_meta $ typeVariable "a"],
 
-      element _TermVariant
+      element "TermVariant"
         "The identifier of a term expression constructor" $
         enum [
           _TermVariant_application,
@@ -236,7 +236,7 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           _TermVariant_union,
           _TermVariant_variable],
 
-      element _Type
+      element "Type"
         "A data type" $
         TypeUnion [
           FieldType _Type_literal $ TypeNominal _LiteralType,
@@ -252,29 +252,29 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           FieldType _Type_universal $ TypeNominal _UniversalType,
           FieldType _Type_variable $ TypeNominal _TypeVariable],
 
-      element _TypeAbstraction
+      element "TypeAbstraction"
         "A type abstraction (generalization), which binds a type variable to a term" $
         universal "m" $ TypeRecord [
           FieldType _TypeAbstraction_parameter (TypeNominal _TypeVariable),
           FieldType _TypeAbstraction_body (universal "m" $ TypeNominal _Term)],
 
-      element _TypeApplication
+      element "TypeApplication"
         "A type application (instantiation), which applies a term to a type" $
         universal "m" $ TypeRecord [
           FieldType _TypeApplication_function (universal "m" $ TypeNominal _Term),
           FieldType _TypeApplication_argument (TypeNominal _Type)],
 
-      element _TypeScheme
+      element "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
         TypeRecord [
           FieldType _TypeScheme_variables (TypeList $ TypeNominal _TypeVariable),
           FieldType _TypeScheme_type (TypeNominal _Type)],
 
-      element _TypeVariable
+      element "TypeVariable"
         "A symbol which stands in for a type"
         stringType,
 
-      element _TypeVariant
+      element "TypeVariant"
         "The identifier of a type constructor" $
         enum [
           _TypeVariant_literal,
@@ -288,18 +288,18 @@ hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
           _TypeVariant_set,
           _TypeVariant_union],
 
-      element _TypedTerm
+      element "TypedTerm"
         "A type together with an instance of the type" $
         universal "m" $ TypeRecord [
           FieldType _TypedTerm_type $ TypeNominal _Type,
           FieldType _TypedTerm_term $ universal "m" $ TypeNominal _Term],
 
-      element _UniversalType
+      element "UniversalType"
         "A universally quantified ('forall') type, parameterized by a type variable" $
         TypeRecord [
           FieldType _UniversalType_variable stringType,
           FieldType _UniversalType_body $ TypeNominal _Type],
 
-      element _Variable
+      element "Variable"
         "A symbol which stands in for a term"
         stringType]
