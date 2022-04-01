@@ -4,6 +4,8 @@ import Hydra.Basics as Basics
 import Hydra.Core as Core
 import Hydra.Lib.Literals as Literals
 import Hydra.Lib.Strings as Strings
+import Data.Map
+import Data.Set
 
 -- Display a floating-point type as a string
 describeFloatType :: (FloatType -> String)
