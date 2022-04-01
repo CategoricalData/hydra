@@ -6,6 +6,7 @@ module Hydra.Impl.Haskell.Extras (
   eitherToQualified,
   elementAsTypedTerm,
   fieldTypes,
+  graphNameOf,
   localNameOf,
   qualifiedToResult,
   requireType,
@@ -91,6 +92,11 @@ debug msg r = case r of
   ResultSuccess _ -> r
   ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
 
+eitherToQualified :: Result a -> Qualified a
+eitherToQualified e = case e of
+  ResultFailure msg -> Qualified Nothing [msg]
+  ResultSuccess x -> Qualified (Just x) []
+
 elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
@@ -108,17 +114,11 @@ fieldTypes scx t = case t of
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
 
-setContextElements :: [Graph m] -> Context m -> Context m
-setContextElements graphs cx = cx { contextElements = M.fromList $
-  ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
+graphNameOf :: Name -> String
+graphNameOf = fst . toQname
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
-
-eitherToQualified :: Result a -> Qualified a
-eitherToQualified e = case e of
-  ResultFailure msg -> Qualified Nothing [msg]
-  ResultSuccess x -> Qualified (Just x) []
 
 qualifiedToResult :: Qualified a -> Result a
 qualifiedToResult (Qualified x m) = case x of
@@ -134,6 +134,10 @@ resultToQualified :: Result a -> Qualified a
 resultToQualified r = case r of
   ResultSuccess x -> pure x
   ResultFailure msg -> fail msg
+
+setContextElements :: [Graph m] -> Context m -> Context m
+setContextElements graphs cx = cx { contextElements = M.fromList $
+  ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
 toQname :: Name -> (String, String)
 toQname name = case Strings.splitOn "." name of

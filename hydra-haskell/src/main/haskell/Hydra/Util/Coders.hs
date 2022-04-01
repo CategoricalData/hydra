@@ -29,7 +29,6 @@ dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) allD
       ExpressionFunction (FunctionPrimitive name) -> if withPrims then (S.insert (graphNameOf name) names) else names
       ExpressionNominal (NominalTerm name _) -> if withNoms then (S.insert name names) else names
       _ -> names
-    graphNameOf = L.head . Strings.splitOn "."
 
 dataGraphToExternalModule :: (Default m, Ord m, Read m, Show m)
   => Language

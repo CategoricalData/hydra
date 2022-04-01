@@ -111,10 +111,11 @@ constructModule cx g coders pairs = do
 
     toCons _ = H.Constructor_Record
 
-    imports =  domainImports ++ standardImports
+    imports = domainImports ++ standardImports
       where
-        domainImports = toImport <$> S.toList (dataGraphDependencies True True True g)
+        domainImports = toImport <$> S.toList deps
           where
+            deps = dataGraphDependencies True True True g
             toImport name = H.Import False mname (Just alias) Nothing
               where
                 (mname, alias) = importName name
