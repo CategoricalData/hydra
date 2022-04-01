@@ -158,6 +158,7 @@ encodeFunction cx meta fun = case fun of
   where
     fieldMapOf typ = case typ of
       Just (TypeUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
+      Just (TypeUniversal (UniversalType _ tbody)) -> fieldMapOf $ Just tbody
       _ -> Nothing
     findDomain = case domName of
       Nothing -> pure Nothing
