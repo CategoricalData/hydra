@@ -228,14 +228,18 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
         "The identifier of a term expression constructor" $
         enum [
           _TermVariant_application,
-          _TermVariant_literal,
           _TermVariant_element,
           _TermVariant_function,
+          _TermVariant_let,
           _TermVariant_list,
+          _TermVariant_literal,
           _TermVariant_map,
+          _TermVariant_nominal,
           _TermVariant_optional,
           _TermVariant_record,
           _TermVariant_set,
+          _TermVariant_typeAbstraction,
+          _TermVariant_typeApplication,
           _TermVariant_union,
           _TermVariant_variable],
 
