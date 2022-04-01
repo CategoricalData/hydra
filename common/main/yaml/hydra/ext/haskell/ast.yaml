@@ -117,9 +117,9 @@ definitions:
 
 #        - name: typeSignature
 #          type: TypeSignature
-#
-#        - name: valueBinding
-#          type: ValueBinding
+
+        - name: valueBinding
+          type: ValueBinding
 
         - name: typedBinding
           type: TypedBinding

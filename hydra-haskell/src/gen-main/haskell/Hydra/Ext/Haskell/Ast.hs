@@ -101,6 +101,7 @@ module Hydra.Ext.Haskell.Ast
   , _Declaration_data
   , _Declaration_type
   , _Declaration_typedBinding
+  , _Declaration_valueBinding
   , _Deriving
   , _Export
   , _Export_declaration
@@ -343,6 +344,8 @@ data Declaration
   = DeclarationData DataDeclaration
   -- | @type hydra/ext/haskell/ast.TypeDeclaration
   | DeclarationType TypeDeclaration
+  -- | @type hydra/ext/haskell/ast.ValueBinding
+  | DeclarationValueBinding ValueBinding
   -- | @type hydra/ext/haskell/ast.TypedBinding
   | DeclarationTypedBinding TypedBinding deriving (Eq, Generic, Ord, Read, Show)
 
@@ -795,6 +798,7 @@ _DeclarationWithComments_comments = "comments" :: String
 _Declaration_data = "data" :: String
 _Declaration_type = "type" :: String
 _Declaration_typedBinding = "typedBinding" :: String
+_Declaration_valueBinding = "valueBinding" :: String
 _Deriving = "hydra/ext/haskell/ast.Deriving" :: String
 _Export = "hydra/ext/haskell/ast.Export" :: String
 _Export_declaration = "declaration" :: String
