@@ -27,17 +27,34 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+constantDecls :: String -> Type -> [H.DeclarationWithComments]
+constantDecls localName typ = toDecl <$> (nameDecl:fieldDecls)
+  where
+    toDecl (k, v) = H.DeclarationWithComments decl Nothing
+      where
+        decl = H.DeclarationValueBinding $
+          H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+        pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
+        rhs = H.ExpressionLiteral $ H.LiteralString v
+    nameDecl = ("_" ++ localName, localName)
+    fieldsOf typ = case typ of
+      TypeRecord fields -> fields
+      TypeUnion fields -> fields
+      _ -> []
+    fieldDecls = toConstant <$> (fieldsOf typ)
+    toConstant (FieldType fname _) = ("_" ++ localName ++ "_" ++ fname, fname)
+
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
 constructModule cx g coders pairs = do
-    decls <- CM.mapM createDeclaration pairs
+    decls <- L.concat <$> (CM.mapM createDeclarations pairs)
     return $ H.Module (Just $ H.ModuleHead (fst $ importName $ graphName g) []) imports decls
   where
-    createDeclaration pair@(el, TypedTerm typ term) = if typ == TypeNominal _Type
-      then createTypeDeclaration pair
-      else createOtherDeclaration pair
+    createDeclarations pair@(el, TypedTerm typ term) = if typ == TypeNominal _Type
+      then createTypeDeclarations pair
+      else createOtherDeclarations pair
 
-    createTypeDeclaration (el, TypedTerm typ term) = do
+    createTypeDeclarations (el, TypedTerm typ term) = do
         let lname = localNameOf $ elementName el
         let hname = simpleName lname
         t <- decodeType cx term
@@ -55,7 +72,7 @@ constructModule cx g coders pairs = do
             htype <- encodeAdaptedType cx t
             return $ H.DeclarationType (H.TypeDeclaration hd htype)
         let comments = contextDescriptionOf cx $ termMeta term
-        return $ H.DeclarationWithComments decl comments
+        return $ [H.DeclarationWithComments decl comments] ++ constantDecls lname t
       where
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
@@ -83,7 +100,7 @@ constructModule cx g coders pairs = do
               return [htype]
           return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
-    createOtherDeclaration (el, TypedTerm typ term) = do
+    createOtherDeclarations (el, TypedTerm typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
       rhs <- stepOut coder term
       let hname = simpleName $ localNameOf $ elementName el
@@ -93,7 +110,7 @@ constructModule cx g coders pairs = do
                   (H.TypeSignature hname htype)
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       let comments = contextDescriptionOf cx $ termMeta term
-      return $ H.DeclarationWithComments decl comments
+      return [H.DeclarationWithComments decl comments]
 
     toCons _ = H.Constructor_Record
 

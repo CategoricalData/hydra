@@ -136,9 +136,9 @@ resultToQualified r = case r of
   ResultFailure msg -> fail msg
 
 toQname :: Name -> (String, String)
-toQname name = (ns, local)
-  where
-    [ns, local] = Strings.splitOn "." name
+toQname name = case Strings.splitOn "." name of
+  [ns, local] -> (ns, local)
+  _ -> ("UNKNOWN", name)
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj
