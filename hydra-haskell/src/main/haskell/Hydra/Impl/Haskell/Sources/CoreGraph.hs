@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.CoreGraph (hydraCoreGraph) where
+module Hydra.Impl.Haskell.Sources.CoreGraph where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -7,11 +7,14 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
--- Note: here, the element namespace "hydra/core" doubles as a graph name
 hydraCoreGraph :: Graph Meta
-hydraCoreGraph = Graph "hydra/core" elements (const True) "hydra/core"
+hydraCoreGraph = Graph modName elements (const True) "hydra/core"
   where
-    element name doc typ = typeElement standardContext name doc typ
+    -- Note: here, the element namespace "hydra/core" doubles as a graph name
+    modName = "hydra/core"
+
+    element lname doc typ = typeElement standardContext (modName ++ "." ++ lname) doc typ
+
     elements = [
 
       element "Application"
