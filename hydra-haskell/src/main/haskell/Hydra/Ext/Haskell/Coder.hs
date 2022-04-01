@@ -27,22 +27,23 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-constantDecls :: String -> Type -> [H.DeclarationWithComments]
-constantDecls localName typ = toDecl <$> (nameDecl:fieldDecls)
+constantDecls :: Name -> Type -> [H.DeclarationWithComments]
+constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
   where
+    lname = localNameOf name
     toDecl (k, v) = H.DeclarationWithComments decl Nothing
       where
         decl = H.DeclarationValueBinding $
           H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
         pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
         rhs = H.ExpressionLiteral $ H.LiteralString v
-    nameDecl = ("_" ++ localName, localName)
+    nameDecl = ("_" ++ lname, name)
     fieldsOf typ = case typ of
       TypeRecord fields -> fields
       TypeUnion fields -> fields
       _ -> []
     fieldDecls = toConstant <$> (fieldsOf $ snd $ unpackUniversalType typ)
-    toConstant (FieldType fname _) = ("_" ++ localName ++ "_" ++ fname, fname)
+    toConstant (FieldType fname _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
@@ -72,7 +73,7 @@ constructModule cx g coders pairs = do
             htype <- encodeAdaptedType cx t
             return $ H.DeclarationType (H.TypeDeclaration hd htype)
         let comments = contextDescriptionOf cx $ termMeta term
-        return $ [H.DeclarationWithComments decl comments] ++ constantDecls lname t
+        return $ [H.DeclarationWithComments decl comments] ++ constantDecls (elementName el) t
       where
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
