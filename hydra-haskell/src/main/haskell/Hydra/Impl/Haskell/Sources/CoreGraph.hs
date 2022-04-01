@@ -284,16 +284,18 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "TypeVariant"
         "The identifier of a type constructor" $
         enum [
-          _TypeVariant_literal,
           _TypeVariant_element,
           _TypeVariant_function,
           _TypeVariant_list,
+          _TypeVariant_literal,
           _TypeVariant_map,
           _TypeVariant_nominal,
           _TypeVariant_optional,
           _TypeVariant_record,
           _TypeVariant_set,
-          _TypeVariant_union],
+          _TypeVariant_union,
+          _TypeVariant_universal,
+          _TypeVariant_variable],
 
       element "TypedTerm"
         "A type together with an instance of the type" $
