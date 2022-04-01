@@ -127,10 +127,10 @@ encodeLiteral av = case av of
       FloatValueFloat64 f -> pure $ Scala.LitDouble f
       _ -> unexpected "floating-point number" fv
     LiteralInteger iv -> case iv of
-      IntegerValueInt16 i -> pure $ Scala.LitShort i
+      IntegerValueInt16 i -> pure $ Scala.LitShort $ fromIntegral i
       IntegerValueInt32 i -> pure $ Scala.LitInt i
-      IntegerValueInt64 i -> pure $ Scala.LitLong i
-      IntegerValueUint8 i -> pure $ Scala.LitByte i
+      IntegerValueInt64 i -> pure $ Scala.LitLong $ fromIntegral i
+      IntegerValueUint8 i -> pure $ Scala.LitByte $ fromIntegral i
       _ -> unexpected "integer" iv
     LiteralString s -> pure $ Scala.LitString s
     _ -> unexpected "literal value" av

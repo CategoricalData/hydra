@@ -38,7 +38,7 @@ prepareIntegerType it = case it of
     $ \(IntegerValueUint8 v) -> IntegerValueInt8 v
   IntegerTypeUint32 -> subst IntegerTypeInt32
     "unsigned 32-bit integers" "signed 32-bit integers"
-    $ \(IntegerValueUint32 v) -> IntegerValueInt32 v
+    $ \(IntegerValueUint32 v) -> IntegerValueInt32 $ fromIntegral v
   IntegerTypeUint64 -> subst IntegerTypeInt64
     "unsigned 64-bit integers" "signed 64-bit integers"
     $ \(IntegerValueUint64 v) -> IntegerValueInt64 v

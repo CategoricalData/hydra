@@ -9,7 +9,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Data.Int
 import qualified Control.Monad as CM
 
 
@@ -162,7 +161,7 @@ int32Value = integerValue . IntegerValueInt32
 int64Type :: Type
 int64Type = integerType IntegerTypeInt64
 
-int64Value :: Default a => Int64 -> Term a
+int64Value :: Default a => Integer -> Term a
 int64Value = integerValue . IntegerValueInt64
 
 int8Type :: Type
