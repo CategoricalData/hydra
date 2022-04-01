@@ -13,15 +13,19 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
     -- Note: here, the element namespace "hydra/core" doubles as a graph name
     modName = "hydra/core"
 
-    element lname doc typ = typeElement standardContext (modName ++ "." ++ lname) doc typ
+    qualify lname = modName ++ "." ++ lname
+
+    local = TypeNominal . qualify
+
+    element lname doc typ = typeElement standardContext (qualify lname) doc typ
 
     elements = [
 
       element "Application"
         "A term which applies a function to an argument" $
         universal "m" $ TypeRecord [
-          FieldType "function" $ universal "m" $ TypeNominal "Term",
-          FieldType "argument" $ universal "m" $ TypeNominal "Term"],
+          FieldType "function" $ universal "m" $ local "Term",
+          FieldType "argument" $ universal "m" $ local "Term"],
 
       element "BooleanValue"
         "A boolean literal value" $
@@ -39,27 +43,27 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "Expression"
         "A term expression" $
         universal "m" $ TypeUnion [
-          FieldType "application" $ universal "m" $ TypeNominal "Application",
-          FieldType "literal" $ TypeNominal "Literal",
-          FieldType "element" $ TypeNominal "Name",
-          FieldType "function" $ universal "m" $ TypeNominal "Function",
-          FieldType "let" $ universal "m" $ TypeNominal "Let",
-          FieldType "list" $ TypeList $ universal "m" $ TypeNominal "Term",
-          FieldType "map" $ TypeMap $ MapType (universal "m" $ TypeNominal "Term") (universal "m" $ TypeNominal "Term"),
-          FieldType "nominal" $ universal "m" $ TypeNominal "NominalTerm",
-          FieldType "optional" $ TypeOptional $ universal "m" $ TypeNominal "Term",
-          FieldType "record" $ TypeList $ universal "m" $ TypeNominal "Field",
-          FieldType "set" $ TypeSet $ universal "m" $ TypeNominal "Term",
-          FieldType "typeAbstraction" $ universal "m" $ TypeNominal "TypeAbstraction",
-          FieldType "typeApplication" $ universal "m" $ TypeNominal "TypeApplication",
-          FieldType "union" $ universal "m" $ TypeNominal "Field",
-          FieldType "variable" $ TypeNominal "Variable"],
+          FieldType "application" $ universal "m" $ local "Application",
+          FieldType "literal" $ local "Literal",
+          FieldType "element" $ local "Name",
+          FieldType "function" $ universal "m" $ local "Function",
+          FieldType "let" $ universal "m" $ local "Let",
+          FieldType "list" $ TypeList $ universal "m" $ local "Term",
+          FieldType "map" $ TypeMap $ MapType (universal "m" $ local "Term") (universal "m" $ local "Term"),
+          FieldType "nominal" $ universal "m" $ local "NominalTerm",
+          FieldType "optional" $ TypeOptional $ universal "m" $ local "Term",
+          FieldType "record" $ TypeList $ universal "m" $ local "Field",
+          FieldType "set" $ TypeSet $ universal "m" $ local "Term",
+          FieldType "typeAbstraction" $ universal "m" $ local "TypeAbstraction",
+          FieldType "typeApplication" $ universal "m" $ local "TypeApplication",
+          FieldType "union" $ universal "m" $ local "Field",
+          FieldType "variable" $ local "Variable"],
 
       element "Field"
         "A labeled term" $
         universal "m" $ TypeRecord [
-          FieldType "name" $ TypeNominal "FieldName",
-          FieldType "term" $ universal "m" $ TypeNominal "Term"],
+          FieldType "name" $ local "FieldName",
+          FieldType "term" $ universal "m" $ local "Term"],
 
       element "FieldName"
         "The name of a field"
@@ -68,8 +72,8 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "FieldType"
         "The name and type of a field" $
         TypeRecord [
-          FieldType "name" $ TypeNominal "FieldName",
-          FieldType "type" $ TypeNominal "Type"],
+          FieldType "name" $ local "FieldName",
+          FieldType "type" $ local "Type"],
 
       element "FloatType"
         "A floating-point type" $
@@ -88,19 +92,19 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "Function"
         "A function" $
         universal "m" $ TypeUnion [
-          FieldType "cases" $ TypeList $ universal "m" $ TypeNominal "Field",
-          FieldType "compareTo" $ universal "m" $ TypeNominal "Term",
+          FieldType "cases" $ TypeList $ universal "m" $ local "Field",
+          FieldType "compareTo" $ universal "m" $ local "Term",
           FieldType "data" unitType,
-          FieldType "lambda" $ universal "m" $ TypeNominal "Lambda",
-          FieldType "optionalCases" $ universal "m" $ TypeNominal "OptionalCases",
-          FieldType "primitive" $ TypeNominal "Name",
-          FieldType "projection" $ TypeNominal "FieldName"],
+          FieldType "lambda" $ universal "m" $ local "Lambda",
+          FieldType "optionalCases" $ universal "m" $ local "OptionalCases",
+          FieldType "primitive" $ local "Name",
+          FieldType "projection" $ local "FieldName"],
 
       element "FunctionType"
         "A function type, also known as an arrow type" $
         TypeRecord [
-          FieldType "domain" $ TypeNominal "Type",
-          FieldType "codomain" $ TypeNominal "Type"],
+          FieldType "domain" $ local "Type",
+          FieldType "codomain" $ local "Type"],
 
       element "FunctionVariant"
         "The identifier of a function constructor" $
@@ -142,23 +146,23 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "Lambda"
         "A function abstraction (lambda)" $
         universal "m" $ TypeRecord [
-          FieldType "parameter" $ TypeNominal "Variable",
-          FieldType "body" $ universal "m" $ TypeNominal "Term"],
+          FieldType "parameter" $ local "Variable",
+          FieldType "body" $ universal "m" $ local "Term"],
 
       element "Let"
         "A 'let' binding" $
         universal "m" $ TypeRecord [
-          FieldType "key" $ TypeNominal "Variable",
-          FieldType "value" $ universal "m" $ TypeNominal "Term",
-          FieldType "environment" $ universal "m" $ TypeNominal "Term"],
+          FieldType "key" $ local "Variable",
+          FieldType "value" $ universal "m" $ local "Term",
+          FieldType "environment" $ universal "m" $ local "Term"],
 
       element "Literal"
         "A term constant; an instance of a literal type" $
         TypeUnion [
           FieldType "binary" binaryType,
-          FieldType "boolean" $ TypeNominal "BooleanValue",
-          FieldType "float" $ TypeNominal "FloatValue",
-          FieldType "integer" $ TypeNominal "IntegerValue",
+          FieldType "boolean" $ local "BooleanValue",
+          FieldType "float" $ local "FloatValue",
+          FieldType "integer" $ local "IntegerValue",
           FieldType "string" stringType],
 
       element "LiteralType"
@@ -166,8 +170,8 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
         TypeUnion [
           FieldType "binary" unitType,
           FieldType "boolean" unitType,
-          FieldType "float" $ TypeNominal "FloatType",
-          FieldType "integer" $ TypeNominal "IntegerType",
+          FieldType "float" $ local "FloatType",
+          FieldType "integer" $ local "IntegerType",
           FieldType "string" unitType],
 
       element "LiteralVariant"
@@ -182,14 +186,14 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "MapType"
         "A map type" $
         TypeRecord [
-          FieldType "keys" $ TypeNominal "Type",
-          FieldType "values" $ TypeNominal "Type"],
+          FieldType "keys" $ local "Type",
+          FieldType "values" $ local "Type"],
 
       element "Meta"
         "A built-in metadata container for terms" $
         TypeRecord [
           FieldType "description" (TypeOptional stringType),
-          FieldType "type" (TypeOptional $ TypeNominal "Type")],
+          FieldType "type" (TypeOptional $ local "Type")],
 
       element "Name"
         "A unique element name"
@@ -198,19 +202,19 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "NominalTerm"
         "A term annotated with a fixed, named type; an instance of a newtype" $
         universal "m" $ TypeRecord [
-          FieldType "typeName" (TypeNominal "Name"),
-          FieldType "term" (universal "m" $ TypeNominal "Term")],
+          FieldType "typeName" (local "Name"),
+          FieldType "term" (universal "m" $ local "Term")],
 
       element "OptionalCases"
         "A case statement for matching optional terms" $
         universal "m" $ TypeRecord [
-          FieldType "nothing" (universal "m" $ TypeNominal "Term"),
-          FieldType "just" (universal "m" $ TypeNominal "Term")],
+          FieldType "nothing" (universal "m" $ local "Term"),
+          FieldType "just" (universal "m" $ local "Term")],
 
       element "OptionalExpression"
         "An encoded optional value, for languages which do not natively support optionals" $
         universal "m" $ TypeUnion [
-          FieldType "just" (universal "m" $ TypeNominal "Term"),
+          FieldType "just" (universal "m" $ local "Term"),
           FieldType "nothing" unitType],
 
       element "Precision"
@@ -222,7 +226,7 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "Term"
         "A data term" $
         universal "m" $ TypeRecord [
-          FieldType "data" $ universal "m" $ TypeNominal "Expression",
+          FieldType "data" $ universal "m" $ local "Expression",
           FieldType "meta" $ typeVariable "m"],
 
       element "TermVariant"
@@ -247,36 +251,36 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "Type"
         "A data type" $
         TypeUnion [
-          FieldType "literal" $ TypeNominal "LiteralType",
-          FieldType "element" $ TypeNominal "Type",
-          FieldType "function" $ TypeNominal "FunctionType",
-          FieldType "list" $ TypeNominal "Type",
-          FieldType "map" $ TypeNominal "MapType",
-          FieldType "nominal" $ TypeNominal "Name",
-          FieldType "optional" $ TypeNominal "Type",
-          FieldType "record" $ TypeList $ TypeNominal "FieldType",
-          FieldType "set" $ TypeNominal "Type",
-          FieldType "union" $ TypeList $ TypeNominal "FieldType",
-          FieldType "universal" $ TypeNominal "UniversalType",
-          FieldType "variable" $ TypeNominal "TypeVariable"],
+          FieldType "literal" $ local "LiteralType",
+          FieldType "element" $ local "Type",
+          FieldType "function" $ local "FunctionType",
+          FieldType "list" $ local "Type",
+          FieldType "map" $ local "MapType",
+          FieldType "nominal" $ local "Name",
+          FieldType "optional" $ local "Type",
+          FieldType "record" $ TypeList $ local "FieldType",
+          FieldType "set" $ local "Type",
+          FieldType "union" $ TypeList $ local "FieldType",
+          FieldType "universal" $ local "UniversalType",
+          FieldType "variable" $ local "TypeVariable"],
 
       element "TypeAbstraction"
         "A type abstraction (generalization), which binds a type variable to a term" $
         universal "m" $ TypeRecord [
-          FieldType "parameter" (TypeNominal "TypeVariable"),
-          FieldType "body" (universal "m" $ TypeNominal "Term")],
+          FieldType "parameter" (local "TypeVariable"),
+          FieldType "body" (universal "m" $ local "Term")],
 
       element "TypeApplication"
         "A type application (instantiation), which applies a term to a type" $
         universal "m" $ TypeRecord [
-          FieldType "function" (universal "m" $ TypeNominal "Term"),
-          FieldType "argument" (TypeNominal "Type")],
+          FieldType "function" (universal "m" $ local "Term"),
+          FieldType "argument" (local "Type")],
 
       element "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
         TypeRecord [
-          FieldType "variables" (TypeList $ TypeNominal "TypeVariable"),
-          FieldType "type" (TypeNominal "Type")],
+          FieldType "variables" (TypeList $ local "TypeVariable"),
+          FieldType "type" (local "Type")],
 
       element "TypeVariable"
         "A symbol which stands in for a type"
@@ -301,14 +305,14 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
       element "TypedTerm"
         "A type together with an instance of the type" $
         universal "m" $ TypeRecord [
-          FieldType "type" $ TypeNominal "Type",
-          FieldType "term" $ universal "m" $ TypeNominal "Term"],
+          FieldType "type" $ local "Type",
+          FieldType "term" $ universal "m" $ local "Term"],
 
       element "UniversalType"
         "A universally quantified ('forall') type, parameterized by a type variable" $
         TypeRecord [
           FieldType "variable" stringType,
-          FieldType "body" $ TypeNominal "Type"],
+          FieldType "body" $ local "Type"],
 
       element "Variable"
         "A symbol which stands in for a term"
