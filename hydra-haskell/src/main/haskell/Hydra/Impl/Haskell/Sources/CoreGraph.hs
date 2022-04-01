@@ -43,6 +43,7 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
           FieldType _Expression_literal $ TypeNominal _Literal,
           FieldType _Expression_element $ TypeNominal _Name,
           FieldType _Expression_function $ universal "m" $ TypeNominal _Function,
+          FieldType _Expression_let $ universal "m" $ TypeNominal _Let,
           FieldType _Expression_list $ TypeList $ universal "m" $ TypeNominal _Term,
           FieldType _Expression_map $ TypeMap $ MapType (universal "m" $ TypeNominal _Term) (universal "m" $ TypeNominal _Term),
           FieldType _Expression_nominal $ universal "m" $ TypeNominal _NominalTerm,
