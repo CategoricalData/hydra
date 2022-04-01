@@ -4,7 +4,7 @@ import Data.Map
 import Data.Set
 
 -- A term which applies a function to an argument
-data Application m
+data Application m 
   = Application {
     applicationFunction :: (Term m),
     applicationArgument :: (Term m)}
@@ -17,9 +17,9 @@ _Application_function = "function"
 _Application_argument = "argument"
 
 -- A boolean literal value
-data BooleanValue
-  = BooleanValueFalse
-  | BooleanValueTrue
+data BooleanValue 
+  = BooleanValueFalse 
+  | BooleanValueTrue 
   deriving (Eq, Ord, Read, Show)
 
 _BooleanValue = "hydra/core.BooleanValue"
@@ -29,10 +29,10 @@ _BooleanValue_false = "false"
 _BooleanValue_true = "true"
 
 -- An equality judgement: less than, equal to, or greater than
-data Comparison
-  = ComparisonLessThan
-  | ComparisonEqualTo
-  | ComparisonGreaterThan
+data Comparison 
+  = ComparisonLessThan 
+  | ComparisonEqualTo 
+  | ComparisonGreaterThan 
   deriving (Eq, Ord, Read, Show)
 
 _Comparison = "hydra/core.Comparison"
@@ -44,7 +44,7 @@ _Comparison_equalTo = "equalTo"
 _Comparison_greaterThan = "greaterThan"
 
 -- A term expression
-data Expression m
+data Expression m 
   = ExpressionApplication (Application m)
   | ExpressionLiteral Literal
   | ExpressionElement Name
@@ -95,7 +95,7 @@ _Expression_union = "union"
 _Expression_variable = "variable"
 
 -- A labeled term
-data Field m
+data Field m 
   = Field {
     fieldName :: FieldName,
     fieldTerm :: (Term m)}
@@ -113,7 +113,7 @@ type FieldName = String
 _FieldName = "hydra/core.FieldName"
 
 -- The name and type of a field
-data FieldType
+data FieldType 
   = FieldType {
     fieldTypeName :: FieldName,
     fieldTypeType :: Type}
@@ -126,10 +126,10 @@ _FieldType_name = "name"
 _FieldType_type = "type"
 
 -- A floating-point type
-data FloatType
-  = FloatTypeBigfloat
-  | FloatTypeFloat32
-  | FloatTypeFloat64
+data FloatType 
+  = FloatTypeBigfloat 
+  | FloatTypeFloat32 
+  | FloatTypeFloat64 
   deriving (Eq, Ord, Read, Show)
 
 _FloatType = "hydra/core.FloatType"
@@ -141,7 +141,7 @@ _FloatType_float32 = "float32"
 _FloatType_float64 = "float64"
 
 -- A floating-point literal value
-data FloatValue
+data FloatValue 
   = FloatValueBigfloat Double
   | FloatValueFloat32 Float
   | FloatValueFloat64 Double
@@ -156,10 +156,10 @@ _FloatValue_float32 = "float32"
 _FloatValue_float64 = "float64"
 
 -- A function
-data Function m
+data Function m 
   = FunctionCases [Field m]
   | FunctionCompareTo (Term m)
-  | FunctionData
+  | FunctionData 
   | FunctionLambda (Lambda m)
   | FunctionOptionalCases (OptionalCases m)
   | FunctionPrimitive Name
@@ -183,7 +183,7 @@ _Function_primitive = "primitive"
 _Function_projection = "projection"
 
 -- A function type, also known as an arrow type
-data FunctionType
+data FunctionType 
   = FunctionType {
     functionTypeDomain :: Type,
     functionTypeCodomain :: Type}
@@ -196,14 +196,14 @@ _FunctionType_domain = "domain"
 _FunctionType_codomain = "codomain"
 
 -- The identifier of a function constructor
-data FunctionVariant
-  = FunctionVariantCases
-  | FunctionVariantCompareTo
-  | FunctionVariantData
-  | FunctionVariantLambda
-  | FunctionVariantOptionalCases
-  | FunctionVariantPrimitive
-  | FunctionVariantProjection
+data FunctionVariant 
+  = FunctionVariantCases 
+  | FunctionVariantCompareTo 
+  | FunctionVariantData 
+  | FunctionVariantLambda 
+  | FunctionVariantOptionalCases 
+  | FunctionVariantPrimitive 
+  | FunctionVariantProjection 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = "hydra/core.FunctionVariant"
@@ -223,16 +223,16 @@ _FunctionVariant_primitive = "primitive"
 _FunctionVariant_projection = "projection"
 
 -- An integer type
-data IntegerType
-  = IntegerTypeBigint
-  | IntegerTypeInt8
-  | IntegerTypeInt16
-  | IntegerTypeInt32
-  | IntegerTypeInt64
-  | IntegerTypeUint8
-  | IntegerTypeUint16
-  | IntegerTypeUint32
-  | IntegerTypeUint64
+data IntegerType 
+  = IntegerTypeBigint 
+  | IntegerTypeInt8 
+  | IntegerTypeInt16 
+  | IntegerTypeInt32 
+  | IntegerTypeInt64 
+  | IntegerTypeUint8 
+  | IntegerTypeUint16 
+  | IntegerTypeUint32 
+  | IntegerTypeUint64 
   deriving (Eq, Ord, Read, Show)
 
 _IntegerType = "hydra/core.IntegerType"
@@ -256,7 +256,7 @@ _IntegerType_uint32 = "uint32"
 _IntegerType_uint64 = "uint64"
 
 -- An integer literal value
-data IntegerValue
+data IntegerValue 
   = IntegerValueBigint Integer
   | IntegerValueInt8 Int
   | IntegerValueInt16 Int
@@ -289,7 +289,7 @@ _IntegerValue_uint32 = "uint32"
 _IntegerValue_uint64 = "uint64"
 
 -- A function abstraction (lambda)
-data Lambda m
+data Lambda m 
   = Lambda {
     lambdaParameter :: Variable,
     lambdaBody :: (Term m)}
@@ -302,7 +302,7 @@ _Lambda_parameter = "parameter"
 _Lambda_body = "body"
 
 -- A 'let' binding
-data Let m
+data Let m 
   = Let {
     letKey :: Variable,
     letValue :: (Term m),
@@ -318,7 +318,7 @@ _Let_value = "value"
 _Let_environment = "environment"
 
 -- A term constant; an instance of a literal type
-data Literal
+data Literal 
   = LiteralBinary String
   | LiteralBoolean BooleanValue
   | LiteralFloat FloatValue
@@ -339,12 +339,12 @@ _Literal_integer = "integer"
 _Literal_string = "string"
 
 -- Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
-data LiteralType
-  = LiteralTypeBinary
-  | LiteralTypeBoolean
+data LiteralType 
+  = LiteralTypeBinary 
+  | LiteralTypeBoolean 
   | LiteralTypeFloat FloatType
   | LiteralTypeInteger IntegerType
-  | LiteralTypeString
+  | LiteralTypeString 
   deriving (Eq, Ord, Read, Show)
 
 _LiteralType = "hydra/core.LiteralType"
@@ -360,12 +360,12 @@ _LiteralType_integer = "integer"
 _LiteralType_string = "string"
 
 -- The identifier of a literal constructor
-data LiteralVariant
-  = LiteralVariantBinary
-  | LiteralVariantBoolean
-  | LiteralVariantFloat
-  | LiteralVariantInteger
-  | LiteralVariantString
+data LiteralVariant 
+  = LiteralVariantBinary 
+  | LiteralVariantBoolean 
+  | LiteralVariantFloat 
+  | LiteralVariantInteger 
+  | LiteralVariantString 
   deriving (Eq, Ord, Read, Show)
 
 _LiteralVariant = "hydra/core.LiteralVariant"
@@ -381,7 +381,7 @@ _LiteralVariant_integer = "integer"
 _LiteralVariant_string = "string"
 
 -- A map type
-data MapType
+data MapType 
   = MapType {
     mapTypeKeys :: Type,
     mapTypeValues :: Type}
@@ -394,7 +394,7 @@ _MapType_keys = "keys"
 _MapType_values = "values"
 
 -- A built-in metadata container for terms
-data Meta
+data Meta 
   = Meta {
     metaDescription :: (Maybe String),
     metaType :: (Maybe Type)}
@@ -412,7 +412,7 @@ type Name = String
 _Name = "hydra/core.Name"
 
 -- A term annotated with a fixed, named type; an instance of a newtype
-data NominalTerm m
+data NominalTerm m 
   = NominalTerm {
     nominalTermTypeName :: Name,
     nominalTermTerm :: (Term m)}
@@ -425,7 +425,7 @@ _NominalTerm_typeName = "typeName"
 _NominalTerm_term = "term"
 
 -- A case statement for matching optional terms
-data OptionalCases m
+data OptionalCases m 
   = OptionalCases {
     optionalCasesNothing :: (Term m),
     optionalCasesJust :: (Term m)}
@@ -438,9 +438,9 @@ _OptionalCases_nothing = "nothing"
 _OptionalCases_just = "just"
 
 -- An encoded optional value, for languages which do not natively support optionals
-data OptionalExpression m
+data OptionalExpression m 
   = OptionalExpressionJust (Term m)
-  | OptionalExpressionNothing
+  | OptionalExpressionNothing 
   deriving (Eq, Ord, Read, Show)
 
 _OptionalExpression = "hydra/core.OptionalExpression"
@@ -450,8 +450,8 @@ _OptionalExpression_just = "just"
 _OptionalExpression_nothing = "nothing"
 
 -- Numeric precision: arbitrary precision, or precision to a specified number of bits
-data Precision
-  = PrecisionArbitrary
+data Precision 
+  = PrecisionArbitrary 
   | PrecisionBits Int
   deriving (Eq, Ord, Read, Show)
 
@@ -462,7 +462,7 @@ _Precision_arbitrary = "arbitrary"
 _Precision_bits = "bits"
 
 -- A data term
-data Term m
+data Term m 
   = Term {
     termData :: (Expression m),
     termMeta :: m}
@@ -475,22 +475,22 @@ _Term_data = "data"
 _Term_meta = "meta"
 
 -- The identifier of a term expression constructor
-data TermVariant
-  = TermVariantApplication
-  | TermVariantElement
-  | TermVariantFunction
-  | TermVariantLet
-  | TermVariantList
-  | TermVariantLiteral
-  | TermVariantMap
-  | TermVariantNominal
-  | TermVariantOptional
-  | TermVariantRecord
-  | TermVariantSet
-  | TermVariantTypeAbstraction
-  | TermVariantTypeApplication
-  | TermVariantUnion
-  | TermVariantVariable
+data TermVariant 
+  = TermVariantApplication 
+  | TermVariantElement 
+  | TermVariantFunction 
+  | TermVariantLet 
+  | TermVariantList 
+  | TermVariantLiteral 
+  | TermVariantMap 
+  | TermVariantNominal 
+  | TermVariantOptional 
+  | TermVariantRecord 
+  | TermVariantSet 
+  | TermVariantTypeAbstraction 
+  | TermVariantTypeApplication 
+  | TermVariantUnion 
+  | TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
 _TermVariant = "hydra/core.TermVariant"
@@ -526,7 +526,7 @@ _TermVariant_union = "union"
 _TermVariant_variable = "variable"
 
 -- A data type
-data Type
+data Type 
   = TypeLiteral LiteralType
   | TypeElement Type
   | TypeFunction FunctionType
@@ -568,7 +568,7 @@ _Type_universal = "universal"
 _Type_variable = "variable"
 
 -- A type abstraction (generalization), which binds a type variable to a term
-data TypeAbstraction m
+data TypeAbstraction m 
   = TypeAbstraction {
     typeAbstractionParameter :: TypeVariable,
     typeAbstractionBody :: (Term m)}
@@ -581,7 +581,7 @@ _TypeAbstraction_parameter = "parameter"
 _TypeAbstraction_body = "body"
 
 -- A type application (instantiation), which applies a term to a type
-data TypeApplication m
+data TypeApplication m 
   = TypeApplication {
     typeApplicationFunction :: (Term m),
     typeApplicationArgument :: Type}
@@ -594,7 +594,7 @@ _TypeApplication_function = "function"
 _TypeApplication_argument = "argument"
 
 -- A type expression together with free type variables occurring in the expression
-data TypeScheme
+data TypeScheme 
   = TypeScheme {
     typeSchemeVariables :: [TypeVariable],
     typeSchemeType :: Type}
@@ -612,19 +612,19 @@ type TypeVariable = String
 _TypeVariable = "hydra/core.TypeVariable"
 
 -- The identifier of a type constructor
-data TypeVariant
-  = TypeVariantElement
-  | TypeVariantFunction
-  | TypeVariantList
-  | TypeVariantLiteral
-  | TypeVariantMap
-  | TypeVariantNominal
-  | TypeVariantOptional
-  | TypeVariantRecord
-  | TypeVariantSet
-  | TypeVariantUnion
-  | TypeVariantUniversal
-  | TypeVariantVariable
+data TypeVariant 
+  = TypeVariantElement 
+  | TypeVariantFunction 
+  | TypeVariantList 
+  | TypeVariantLiteral 
+  | TypeVariantMap 
+  | TypeVariantNominal 
+  | TypeVariantOptional 
+  | TypeVariantRecord 
+  | TypeVariantSet 
+  | TypeVariantUnion 
+  | TypeVariantUniversal 
+  | TypeVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = "hydra/core.TypeVariant"
@@ -654,7 +654,7 @@ _TypeVariant_universal = "universal"
 _TypeVariant_variable = "variable"
 
 -- A type together with an instance of the type
-data TypedTerm m
+data TypedTerm m 
   = TypedTerm {
     typedTermType :: Type,
     typedTermTerm :: (Term m)}
@@ -667,7 +667,7 @@ _TypedTerm_type = "type"
 _TypedTerm_term = "term"
 
 -- A universally quantified ('forall') type, parameterized by a type variable
-data UniversalType
+data UniversalType 
   = UniversalType {
     universalTypeVariable :: String,
     universalTypeBody :: Type}
