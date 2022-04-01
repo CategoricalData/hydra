@@ -114,11 +114,16 @@ constructModule cx g coders pairs = do
 
     toCons _ = H.Constructor_Record
 
-    imports = toImport <$> S.toList (dataGraphDependencies True True True g)
-
-    toImport name = H.Import False mname (Just alias) Nothing
+    imports =  domainImports ++ standardImports
       where
-        (mname, alias) = importName name
+        domainImports = toImport <$> S.toList (dataGraphDependencies True True True g)
+          where
+            toImport name = H.Import False mname (Just alias) Nothing
+              where
+                (mname, alias) = importName name
+        standardImports = toImport <$> ["Data.Map", "Data.Set"]
+          where
+            toImport name = H.Import False name Nothing Nothing
 
     importName name = (L.intercalate "." parts, L.last parts)
       where

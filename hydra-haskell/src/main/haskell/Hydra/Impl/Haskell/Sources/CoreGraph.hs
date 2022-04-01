@@ -222,7 +222,7 @@ hydraCoreGraph = Graph modName elements (const True) "hydra/core"
         "A data term" $
         universal "m" $ TypeRecord [
           FieldType _Term_data $ universal "m" $ TypeNominal _Expression,
-          FieldType _Term_meta $ typeVariable "a"],
+          FieldType _Term_meta $ typeVariable "m"],
 
       element "TermVariant"
         "The identifier of a term expression constructor" $

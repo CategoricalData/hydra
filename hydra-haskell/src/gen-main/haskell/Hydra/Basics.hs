@@ -3,6 +3,8 @@ module Hydra.Basics where
 import Hydra.Core as Core
 import Hydra.Lib.Lists as Lists
 import Hydra.Lib.Strings as Strings
+import Data.Map
+import Data.Set
 
 -- Find the precision of a given floating-point type
 floatTypePrecision :: (FloatType -> Precision)
