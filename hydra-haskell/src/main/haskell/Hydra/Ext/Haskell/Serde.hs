@@ -50,11 +50,14 @@ instance ToTree H.Declaration where
           where
             symb = cst $ if i == 0 then "=" else "|"
     H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", toTree hd, cst "=", toTree typ]
-    H.DeclarationTypedBinding (H.TypedBinding
-      (H.TypeSignature name htype)
-      (H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _))) -> newlineSep [ -- TODO: local bindings
+    H.DeclarationValueBinding vb -> toTree vb
+    H.DeclarationTypedBinding (H.TypedBinding (H.TypeSignature name htype) vb) -> newlineSep [ -- TODO: local bindings
         ifx typeOp (toTree name) (toTree htype),
-        ifx defineOp (toTree pat) (toTree rhs)]
+        toTree vb]
+
+instance ToTree H.ValueBinding where
+  toTree vb = case vb of
+    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _) -> ifx defineOp (toTree pat) (toTree rhs)
 
 instance ToTree H.DeclarationHead where
   toTree hd = case hd of
