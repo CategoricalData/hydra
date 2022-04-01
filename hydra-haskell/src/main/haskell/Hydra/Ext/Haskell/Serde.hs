@@ -55,10 +55,6 @@ instance ToTree H.Declaration where
         ifx typeOp (toTree name) (toTree htype),
         toTree vb]
 
-instance ToTree H.ValueBinding where
-  toTree vb = case vb of
-    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _) -> ifx defineOp (toTree pat) (toTree rhs)
-
 instance ToTree H.DeclarationHead where
   toTree hd = case hd of
     H.DeclarationHeadApplication (H.DeclarationHead_Application fun op) -> spaceSep [toTree fun, toTree op]
@@ -182,6 +178,10 @@ instance ToTree H.Type where
 --  H.TypeParens Type
     H.TypeTuple types -> parenList $ toTree <$> types
     H.TypeVariable name -> toTree name
+
+instance ToTree H.ValueBinding where
+  toTree vb = case vb of
+    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _) -> ifx defineOp (toTree pat) (toTree rhs)
 
 dataGraphToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
 dataGraphToHaskellString cx g = do

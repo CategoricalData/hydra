@@ -41,7 +41,7 @@ constantDecls localName typ = toDecl <$> (nameDecl:fieldDecls)
       TypeRecord fields -> fields
       TypeUnion fields -> fields
       _ -> []
-    fieldDecls = toConstant <$> (fieldsOf typ)
+    fieldDecls = toConstant <$> (fieldsOf $ snd $ unpackUniversalType typ)
     toConstant (FieldType fname _) = ("_" ++ localName ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
@@ -77,11 +77,7 @@ constructModule cx g coders pairs = do
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
           (h:rest) -> H.DeclarationHeadApplication $ H.DeclarationHead_Application (declHead name rest) (simpleName h)
-        unpackUniversalType t = case t of
-          TypeUniversal (UniversalType v tbody) -> (v:vars, t')
-            where
-              (vars, t') = unpackUniversalType tbody
-          _ -> ([], t)
+
         recordCons lname fields = do
             hFields <- CM.mapM toField fields
             return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
@@ -372,3 +368,10 @@ simpleName n = H.NameNormal $ H.QualifiedName [] n
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
+
+unpackUniversalType :: Type -> ([TypeVariable], Type)
+unpackUniversalType t = case t of
+  TypeUniversal (UniversalType v tbody) -> (v:vars, t')
+    where
+      (vars, t') = unpackUniversalType tbody
+  _ -> ([], t)
