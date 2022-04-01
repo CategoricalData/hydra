@@ -76,28 +76,28 @@ hcComparison cx = typeElement cx _Comparison
 hcExpression :: Context Meta -> Element Meta
 hcExpression cx = typeElement cx _Expression
   "A term expression" $
-  TypeUnion [
-    FieldType _Expression_application $ TypeNominal _Application,
+  universal "a" $ TypeUnion [
+    FieldType _Expression_application $ universal "a" $ TypeNominal _Application,
     FieldType _Expression_literal $ TypeNominal _Literal,
     FieldType _Expression_element $ TypeNominal _Name,
-    FieldType _Expression_function $ TypeNominal _Function,
-    FieldType _Expression_list $ TypeList $ TypeNominal _Term,
-    FieldType _Expression_map $ TypeMap $ MapType (TypeNominal _Term) (TypeNominal _Term),
-    FieldType _Expression_nominal $ TypeNominal _NominalTerm,
-    FieldType _Expression_optional $ TypeOptional $ TypeNominal _Term,
-    FieldType _Expression_record $ TypeList $ TypeNominal _Field,
-    FieldType _Expression_set $ TypeSet $ TypeNominal _Term,
-    FieldType _Expression_typeAbstraction $ TypeNominal _TypeAbstraction,
-    FieldType _Expression_typeApplication $ TypeNominal _TypeApplication,
-    FieldType _Expression_union $ TypeNominal _Field,
+    FieldType _Expression_function $ universal "a" $ TypeNominal _Function,
+    FieldType _Expression_list $ TypeList $ universal "a" $ TypeNominal _Term,
+    FieldType _Expression_map $ TypeMap $ MapType (universal "a" $ TypeNominal _Term) (universal "a" $ TypeNominal _Term),
+    FieldType _Expression_nominal $ universal "a" $ TypeNominal _NominalTerm,
+    FieldType _Expression_optional $ TypeOptional $ universal "a" $ TypeNominal _Term,
+    FieldType _Expression_record $ TypeList $ universal "a" $ TypeNominal _Field,
+    FieldType _Expression_set $ TypeSet $ universal "a" $ TypeNominal _Term,
+    FieldType _Expression_typeAbstraction $ universal "a" $ TypeNominal _TypeAbstraction,
+    FieldType _Expression_typeApplication $ universal "a" $ TypeNominal _TypeApplication,
+    FieldType _Expression_union $ universal "a" $ TypeNominal _Field,
     FieldType _Expression_variable $ TypeNominal _Variable]
 
 hcField :: Context Meta -> Element Meta
 hcField cx = typeElement cx _Field
   "A labeled term" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _Field_name $ TypeNominal _FieldName,
-    FieldType _Field_term $ TypeNominal _Term]
+    FieldType _Field_term $ universal "a" $ TypeNominal _Term]
 
 hcFieldName :: Context Meta -> Element Meta
 hcFieldName cx = typeElement cx _FieldName
@@ -130,12 +130,12 @@ hcFloatValue cx = typeElement cx _FloatValue
 hcFunction :: Context Meta -> Element Meta
 hcFunction cx = typeElement cx _Function
   "A function" $
-  TypeUnion [
-    FieldType _Function_cases $ TypeList $ TypeNominal _Field,
-    FieldType _Function_compareTo $ TypeNominal _Term,
+  universal "a" $ TypeUnion [
+    FieldType _Function_cases $ TypeList $ universal "a" $ TypeNominal _Field,
+    FieldType _Function_compareTo $ universal "a" $ TypeNominal _Term,
     FieldType _Function_data unitType,
-    FieldType _Function_lambda $ TypeNominal _Lambda,
-    FieldType _Function_optionalCases $ TypeNominal _OptionalCases,
+    FieldType _Function_lambda $ universal "a" $ TypeNominal _Lambda,
+    FieldType _Function_optionalCases $ universal "a" $ TypeNominal _OptionalCases,
     FieldType _Function_primitive $ TypeNominal _Name,
     FieldType _Function_projection $ TypeNominal _FieldName]
 
@@ -189,17 +189,17 @@ hcIntegerValue cx = typeElement cx _IntegerValue
 hcLambda :: Context Meta -> Element Meta
 hcLambda cx = typeElement cx _Lambda
   "A function abstraction (lambda)" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _Lambda_parameter $ TypeNominal _Variable,
-    FieldType _Lambda_body $ TypeNominal _Term]
+    FieldType _Lambda_body $ universal "a" $ TypeNominal _Term]
 
 hcLet :: Context Meta -> Element Meta
 hcLet cx = typeElement cx _Let
   "A 'let' binding" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _Let_key $ TypeNominal _Variable,
-    FieldType _Let_value $ TypeNominal _Term,
-    FieldType _Let_environment $ TypeNominal _Term]
+    FieldType _Let_value $ universal "a" $ TypeNominal _Term,
+    FieldType _Let_environment $ universal "a" $ TypeNominal _Term]
 
 hcLiteral :: Context Meta -> Element Meta
 hcLiteral cx = typeElement cx _Literal
@@ -253,22 +253,22 @@ hcName cx = typeElement cx _Name
 hcNominalTerm :: Context Meta -> Element Meta
 hcNominalTerm cx = typeElement cx _NominalTerm
   "A term annotated with a fixed, named type; an instance of a newtype" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _NominalTerm_typeName (TypeNominal _Name),
-    FieldType _NominalTerm_term (TypeNominal _Term)]
+    FieldType _NominalTerm_term (universal "a" $ TypeNominal _Term)]
 
 hcOptionalCases :: Context Meta -> Element Meta
 hcOptionalCases cx = typeElement cx _OptionalCases
   "A case statement for matching optional terms" $
-  TypeRecord [
-    FieldType _OptionalCases_nothing (TypeNominal _Term),
-    FieldType _OptionalCases_just (TypeNominal _Term)]
+  universal "a" $ TypeRecord [
+    FieldType _OptionalCases_nothing (universal "a" $ TypeNominal _Term),
+    FieldType _OptionalCases_just (universal "a" $ TypeNominal _Term)]
 
 hcOptionalExpression :: Context Meta -> Element Meta
 hcOptionalExpression cx = typeElement cx _OptionalExpression
   "An encoded optional value, for languages which do not natively support optionals" $
-  TypeUnion [
-    FieldType _OptionalExpression_just (TypeNominal _Term),
+  universal "a" $ TypeUnion [
+    FieldType _OptionalExpression_just (universal "a" $ TypeNominal _Term),
     FieldType _OptionalExpression_nothing unitType]
 
 hcPrecision :: Context Meta -> Element Meta
@@ -281,9 +281,9 @@ hcPrecision cx = typeElement cx _Precision
 hcTerm :: Context Meta -> Element Meta
 hcTerm cx = typeElement cx _Term
   "A data term" $
-  TypeRecord [
-    FieldType _Term_data $ TypeNominal _Expression,
-    FieldType _Term_meta unitType] -- TODO: encoding for termMeta
+  universal "a" $ TypeRecord [
+    FieldType _Term_data $ universal "a" $ TypeNominal _Expression,
+    FieldType _Term_meta $ typeVariable "a"]
 
 hcTermVariant :: Context Meta -> Element Meta
 hcTermVariant cx = typeElement cx _TermVariant
@@ -321,15 +321,15 @@ hcType cx = typeElement cx _Type
 hcTypeAbstraction :: Context Meta -> Element Meta
 hcTypeAbstraction cx = typeElement cx _TypeAbstraction
   "A type abstraction (generalization), which binds a type variable to a term" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _TypeAbstraction_parameter (TypeNominal _TypeVariable),
-    FieldType _TypeAbstraction_body (TypeNominal _Term)]
+    FieldType _TypeAbstraction_body (universal "a" $ TypeNominal _Term)]
 
 hcTypeApplication :: Context Meta -> Element Meta
 hcTypeApplication cx = typeElement cx _TypeApplication
   "A type application (instantiation), which applies a term to a type" $
-  TypeRecord [
-    FieldType _TypeApplication_function (TypeNominal _Term),
+  universal "a" $ TypeRecord [
+    FieldType _TypeApplication_function (universal "a" $ TypeNominal _Term),
     FieldType _TypeApplication_argument (TypeNominal _Type)]
 
 hcTypeScheme :: Context Meta -> Element Meta
@@ -362,9 +362,9 @@ hcTypeVariant cx = typeElement cx _TypeVariant
 hcTypedTerm :: Context Meta -> Element Meta
 hcTypedTerm cx = typeElement cx _TypedTerm
   "A type together with an instance of the type" $
-  TypeRecord [
+  universal "a" $ TypeRecord [
     FieldType _TypedTerm_type $ TypeNominal _Type,
-    FieldType _TypedTerm_term $ TypeNominal _Term]
+    FieldType _TypedTerm_term $ universal "a" $ TypeNominal _Term]
 
 hcUniversalType :: Context Meta -> Element Meta
 hcUniversalType cx = typeElement cx _UniversalType
