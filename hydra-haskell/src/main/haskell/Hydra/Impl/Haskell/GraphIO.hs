@@ -11,7 +11,7 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
-import Hydra.Impl.Haskell.Sources.CoreGraph
+import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Util.Formatting
@@ -37,7 +37,7 @@ generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataG
 
 generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
 generateSources langName toFile serialize baseDir = do
-    writeDataGraph hydraCoreGraph []
+    writeDataGraph hydraCore []
     writeDataGraph basicsGraph []
     writeDataGraph adaptersUtilsGraph [basicsGraph]
   where
@@ -45,7 +45,7 @@ generateSources langName toFile serialize baseDir = do
       let cx = setContextElements (g:deps) $ standardContext {
              contextGraphs = GraphSet (M.fromList [
                (graphName g, g),
-               ("hydra/core", hydraCoreGraph)]) (graphName g),
+               ("hydra/core", hydraCore)]) (graphName g),
              contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
       writeGraph serialize cx g $ Just $ FP.combine baseDir
         $ "src/gen-main/" ++ langName ++ "/" ++ toFile (graphName g)
