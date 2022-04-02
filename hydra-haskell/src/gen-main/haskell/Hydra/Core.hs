@@ -527,10 +527,10 @@ _TermVariant_variable = "variable"
 
 -- A data type
 data Type 
-  = TypeLiteral LiteralType
-  | TypeElement Type
+  = TypeElement Type
   | TypeFunction FunctionType
   | TypeList Type
+  | TypeLiteral LiteralType
   | TypeMap MapType
   | TypeNominal Name
   | TypeOptional Type
@@ -543,13 +543,13 @@ data Type
 
 _Type = "hydra/core.Type"
 
-_Type_literal = "literal"
-
 _Type_element = "element"
 
 _Type_function = "function"
 
 _Type_list = "list"
+
+_Type_literal = "literal"
 
 _Type_map = "map"
 
