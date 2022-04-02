@@ -6,6 +6,7 @@ import Hydra.Ext.Yaml.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Steps
 import qualified Hydra.Ext.Yaml.Model as YM
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -25,27 +26,27 @@ literalTypeConstraintsAreRespected = H.describe "Verify that YAML's literal type
   -- TODO: binary data
 
   H.it "Check booleans" $
-    QC.property $ \b -> checkYamlCoder booleanType (booleanValue b) (yamlBool b)
+    QC.property $ \b -> checkYamlCoder Types.boolean (booleanValue b) (yamlBool b)
 
   H.it "Check 32-bit floats" $
-    QC.property $ \f -> checkYamlCoder float32Type (float32Value f) (yamlFloat $ realToFrac f)
+    QC.property $ \f -> checkYamlCoder Types.float32 (float32Value f) (yamlFloat $ realToFrac f)
 
   H.it "Check 64-bit floats (doubles)" $
-    QC.property $ \d -> checkYamlCoder float64Type (float64Value d) (yamlFloat $ realToFrac d)
+    QC.property $ \d -> checkYamlCoder Types.float64 (float64Value d) (yamlFloat $ realToFrac d)
 
   -- TODO: bigfloat
 
   H.it "Check 32-bit integers" $
-    QC.property $ \i -> checkYamlCoder int32Type (int32Value i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.int32 (int32Value i) (yamlInt i)
 
   H.it "Check 16-bit unsigned integers" $
-    QC.property $ \i -> checkYamlCoder uint16Type (uint16Value i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.uint16 (uint16Value i) (yamlInt i)
 
   H.it "Check arbitrary-precision integers" $
-    QC.property $ \i -> checkYamlCoder bigintType (bigintValue i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.bigint (bigintValue i) (yamlInt i)
 
   H.it "Check strings" $
-    QC.property $ \s -> checkYamlCoder stringType (stringValue s) (yamlStr s)
+    QC.property $ \s -> checkYamlCoder Types.string (stringValue s) (yamlStr s)
 
 supportedTypesPassThrough :: H.SpecWith ()
 supportedTypesPassThrough = H.describe "Verify that supported types are mapped directly" $ do

@@ -8,6 +8,7 @@ import Hydra.Basics
 import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -38,7 +39,7 @@ checkApplicationTerms = do
     H.it "Check lambda applications" $ do
       expectMonotype
         (apply (lambda "x" (variable "x")) (stringValue "foo"))
-        stringType
+        Types.string
 
     H.it "Check data (delta) applications" $ do
       expectMonotype
@@ -46,7 +47,7 @@ checkApplicationTerms = do
         testTypePerson
 --      expectMonotype
 --        (apply dataTerm describeType)
---        (functionType (nominalType _Type) stringType)
+--        (Types.function (Types.nominal _Type) Types.string)
 
     H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
       expectMonotype
@@ -54,7 +55,7 @@ checkApplicationTerms = do
           apply
             (apply (primitive _math_sub) (apply (apply (primitive _math_add) (variable "x")) (variable "x")))
             (int32Value 1))
-        (functionType int32Type int32Type)
+        (Types.function Types.int32 Types.int32)
 
 checkFunctionTerms :: H.SpecWith ()
 checkFunctionTerms = do
@@ -63,43 +64,43 @@ checkFunctionTerms = do
     H.it "Check lambdas" $ do
       expectPolytype
         (lambda "x" (variable "x"))
-        ["v1"] (functionType (typeVariable "v1") (typeVariable "v1"))
+        ["v1"] (Types.function (Types.variable "v1") (Types.variable "v1"))
       expectPolytype
         (lambda "x" (int16Value 137))
-        ["v1"] (functionType (typeVariable "v1") int16Type)
+        ["v1"] (Types.function (Types.variable "v1") Types.int16)
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
         (compareTo $ record [Field "fst" $ booleanValue True, Field "snd" $ stringValue "Betelgeuse"])
-        (functionType (recordType [FieldType "fst" booleanType, FieldType "snd" stringType]) int8Type)
+        (Types.function (Types.record [FieldType "fst" Types.boolean, FieldType "snd" Types.string]) Types.int8)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
-        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") int8Type))
+        ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
 
     H.it "Check projections" $ do
       expectMonotype
-        (nominalProjection testContext "Person" "firstName" stringType)
-        (functionType (nominalType "Person") stringType)
+        (nominalProjection testContext "Person" "firstName" Types.string)
+        (Types.function (Types.nominal "Person") Types.string)
 
     H.it "Check case statements" $ do
       expectPolytype
         (cases [
           Field "left" (lambda "x" (booleanValue True)),
           Field "right" (lambda "x" (booleanValue False))])
-        ["v1", "v2"] (functionType
-          (unionType [
-            FieldType "left" (typeVariable "v1"),
-            FieldType "right" (typeVariable "v2")])
-          booleanType)
+        ["v1", "v2"] (Types.function
+          (Types.union [
+            FieldType "left" (Types.variable "v1"),
+            FieldType "right" (Types.variable "v2")])
+          Types.boolean)
       expectPolytype
         (cases [
           Field "person" (apply dataTerm (element "firstName")),
           Field "other" (lambda "x" (stringValue "NONE"))])
-        ["v1"] (functionType
-          (unionType [
-            FieldType "person" (nominalType "Person"),
-            FieldType "other" (typeVariable "v1")])
-          stringType)
+        ["v1"] (Types.function
+          (Types.union [
+            FieldType "person" (Types.nominal "Person"),
+            FieldType "other" (Types.variable "v1")])
+          Types.string)
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = do
@@ -108,82 +109,82 @@ checkIndividualTerms = do
     H.it "Check literal values" $ do
       expectMonotype
         (int32Value 42)
-        int32Type
+        Types.int32
       expectMonotype
         (stringValue "foo")
-        stringType
+        Types.string
       expectMonotype
         (booleanValue False)
-        booleanType
+        Types.boolean
       expectMonotype
         (float64Value 42.0)
-        float64Type
+        Types.float64
 
     H.it "Check let terms" $ do
       expectPolytype
         (letTerm "x" (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
-        ["v1", "v2"] (functionType (typeVariable "v1") (functionType (typeVariable "v2") float32Type))
+        ["v1", "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
 
     H.it "Check elements" $ do
       expectMonotype
         (element "ArthurDent")
-        (elementType testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
+        (Types.element testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
       expectMonotype
         (element "firstName")
-        (elementType (functionType (nominalType "Person") stringType))
+        (Types.element (Types.function (Types.nominal "Person") Types.string))
 
     H.it "Check optionals" $ do
       expectMonotype
         (optional $ Just $ int32Value 42)
-        (optionalType int32Type)
+        (Types.optional Types.int32)
       expectPolytype
         (optional Nothing)
-        ["v1"] (optionalType $ typeVariable "v1")
+        ["v1"] (Types.optional $ Types.variable "v1")
 
     H.it "Check records" $ do
       expectMonotype
         (record [Field "lat" $ float64Value 37.7749, Field "lon" $ float64Value $ negate 122.4194])
-        (recordType [FieldType "lat" float64Type, FieldType "lon" float64Type])
+        (Types.record [FieldType "lat" Types.float64, FieldType "lon" Types.float64])
       expectPolytype
         (lambda "lon" (record [Field "lat" $ float64Value 37.7749, Field "lon" $ variable "lon"]))
-        ["v1"] (functionType (typeVariable "v1") (recordType [FieldType "lat" float64Type, FieldType "lon" $ typeVariable "v1"]))
+        ["v1"] (Types.function (Types.variable "v1") (Types.record [FieldType "lat" Types.float64, FieldType "lon" $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
       expectMonotype
         (nominalUnion testContext "Timestamp" $ Field "unixTimeMillis" $ uint64Value 1638200308368)
-        (nominalType "Timestamp")
+        (Types.nominal "Timestamp")
 
     H.it "Check sets" $ do
       expectMonotype
         (set $ S.fromList [booleanValue True])
-        (setType booleanType)
+        (Types.set Types.boolean)
       expectPolytype
         (set $ S.fromList [set S.empty])
-        ["v1"] (setType $ setType $ typeVariable "v1")
+        ["v1"] (Types.set $ Types.set $ Types.variable "v1")
 
     H.it "Check maps" $ do
       expectMonotype
         (mapTerm $ M.fromList [(stringValue "firstName", stringValue "Arthur"), (stringValue "lastName", stringValue "Dent")])
-        (mapType stringType stringType)
+        (Types.map Types.string Types.string)
       expectPolytype
         (mapTerm M.empty)
-        ["v1", "v2"] (mapType (typeVariable "v1") (typeVariable "v2"))
+        ["v1", "v2"] (Types.map (Types.variable "v1") (Types.variable "v2"))
       expectPolytype
         (lambda "x" (lambda "y" (mapTerm $ M.fromList
           [(variable "x", float64Value 0.1), (variable "y", float64Value 0.2)])))
-        ["v1"] (functionType (typeVariable "v1") (functionType (typeVariable "v1") (mapType (typeVariable "v1") float64Type)))
+        ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") (Types.map (Types.variable "v1") Types.float64)))
 
     -- TODO: restore me, and add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
 --    H.it "Check nominal (newtype) terms" $ do
 --      expectMonotype
 --        testTermArthur
---        (nominalType "Person")
+--        (Types.nominal "Person")
 --      expectMonotype
 --        (lambda "x" (record [
 --          Field "firstName" $ variable "x",
 --          Field "lastName" $ variable "x",
 --          Field "age" $ int32Value 42]))
---        (functionType stringType testTypePerson)
+--        (Types.function Types.string testTypePerson)
 
 checkLists :: H.SpecWith ()
 checkLists = do
@@ -192,27 +193,27 @@ checkLists = do
     H.it "Check list of strings" $ do
       expectMonotype
         (list [stringValue "foo", stringValue "bar"])
-        (listType stringType)
+        (Types.list Types.string)
     H.it "Check list of lists of strings" $ do
       expectMonotype
         (list [list [stringValue "foo"], list []])
-        (listType $ listType stringType)
+        (Types.list $ Types.list Types.string)
     H.it "Check empty list" $ do
       expectPolytype
         (list [])
-        ["v1"] (listType $ typeVariable "v1")
+        ["v1"] (Types.list $ Types.variable "v1")
     H.it "Check list containing an empty list" $ do
       expectPolytype
         (list [list []])
-        ["v1"] (listType $ listType $ typeVariable "v1")
+        ["v1"] (Types.list $ Types.list $ Types.variable "v1")
     H.it "Check lambda producing a list of integers" $ do
       expectMonotype
         (lambda "x" (list [variable "x", int32Value 42]))
-        (functionType int32Type $ listType int32Type)
+        (Types.function Types.int32 $ Types.list Types.int32)
     H.it "Check list with bound variables" $ do
       expectMonotype
         (lambda "x" (list [variable "x", stringValue "foo", variable "x"]))
-        (functionType stringType (listType stringType))
+        (Types.function Types.string (Types.list Types.string))
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
@@ -230,15 +231,15 @@ checkPrimitiveFunctions = do
     H.it "Check monomorphic primitive functions" $ do
       expectMonotype
         (primitive "hydra/lib/strings.length")
-        (functionType stringType int32Type)
+        (Types.function Types.string Types.int32)
       expectMonotype
         (primitive _math_sub)
-        (functionType int32Type (functionType int32Type int32Type))
+        (Types.function Types.int32 (Types.function Types.int32 Types.int32))
 
     H.it "Check polymorphic primitive functions" $ do
       expectPolytype
         (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
-        ["v1"] (functionType (listType $ listType $ typeVariable "v1") int32Type)
+        ["v1"] (Types.function (Types.list $ Types.list $ Types.variable "v1") Types.int32)
 
 checkTypeAnnotations :: H.SpecWith ()
 checkTypeAnnotations = do

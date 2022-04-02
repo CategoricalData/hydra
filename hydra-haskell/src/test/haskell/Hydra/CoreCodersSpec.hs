@@ -6,6 +6,7 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Extras
 import Hydra.Rewriting
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestUtils
 import Hydra.ArbitraryCore (untyped)
@@ -25,17 +26,17 @@ individualEncoderTestCases = do
 
     H.it "string type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext stringType)
+        (stripMeta $ encodeType testContext Types.string)
         (stripMeta $  var _Type _Type_literal (unitVar _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext int32Type)
+        (stripMeta $ encodeType testContext Types.int32)
         (stripMeta $ var _Type _Type_literal (var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext (recordType [FieldType "something" stringType, FieldType "nothing" unitType]))
+        (stripMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
         (stripMeta $ var _Type _Type_record $ list [
           record [
             Field _FieldType_name $ stringValue "something",
@@ -54,7 +55,7 @@ individualDecoderTestCases = do
 
     H.it "float32 type" $ do
       decodeType testContext (var _Type _Type_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float32)
-        `H.shouldBe` pure float32Type
+        `H.shouldBe` pure Types.float32
 
     H.it "union type" $ do
       decodeType testContext (var _Type _Type_union $ list [
@@ -64,7 +65,7 @@ individualDecoderTestCases = do
         record [
           Field _FieldType_name $ stringValue "right",
           Field _FieldType_type $ var _Type _Type_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float64]])
-        `H.shouldBe` pure (TypeUnion [FieldType "left" int64Type, FieldType "right" float64Type])
+        `H.shouldBe` pure (Types.union [Types.field "left" Types.int64, Types.field "right" Types.float64])
 
 decodeInvalidTerms :: H.SpecWith ()
 decodeInvalidTerms = do

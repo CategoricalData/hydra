@@ -10,6 +10,7 @@ import Hydra.Basics
 import Hydra.Primitives
 import Hydra.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Extras
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
@@ -80,14 +81,14 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         ifun <- infer cx fun
         iarg <- infer cx arg
         v <- freshTypeVariable
-        let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, functionType (termType iarg) v)]
+        let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) v)]
         let app = ExpressionApplication $ Application ifun iarg
         yield app v c
 
       ExpressionElement name -> do
         case typeOfElement cx name of
           -- TODO: polytyped elements will probably be allowed in the future
-          ResultSuccess et -> yield (ExpressionElement name) (elementType et) []
+          ResultSuccess et -> yield (ExpressionElement name) (Types.element et) []
           ResultFailure msg -> error msg
 
       ExpressionFunction f -> case f of
@@ -98,23 +99,23 @@ infer cx term = case contextTypeOf cx (termMeta term) of
             let ftypes = termType . fieldTerm <$> icases
             let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
             let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
-            let outerConstraints = L.zipWith (\t d -> (t, functionType d cod)) ftypes doms
-            yieldFunction (FunctionCases icases) (functionType (unionType ftypes1) cod) (innerConstraints ++ outerConstraints)
+            let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
+            yieldFunction (FunctionCases icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
         --       For the latter, Comparison would have to be added to the literal type grammar.
         FunctionCompareTo other -> do
           i <- infer cx other
-          yieldFunction (FunctionCompareTo i) (functionType (termType i) int8Type) (termConstraints i)
+          yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
 
         FunctionData -> do
           et <- freshTypeVariable
-          yieldFunction FunctionData (functionType (elementType et) et) []
+          yieldFunction FunctionData (Types.function (Types.element et) et) []
 
         FunctionLambda (Lambda v body) -> do
           tv <- freshTypeVariable
           i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
-          yieldFunction (FunctionLambda $ Lambda v i) (functionType tv (termType i)) (termConstraints i)
+          yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
         FunctionPrimitive name -> do
           case typeOfPrimitiveFunction cx name of
@@ -125,7 +126,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         FunctionProjection fname -> do
           dom <- freshTypeVariable
           cod <- freshTypeVariable
-          let ftype = functionType (TypeRecord [FieldType fname dom]) cod
+          let ftype = Types.function (TypeRecord [FieldType fname dom]) cod
           yieldFunction (FunctionProjection fname) ftype []
 
         _ -> error $ "type inference is unsupported for function: " ++ show f
@@ -178,14 +179,14 @@ infer cx term = case contextTypeOf cx (termMeta term) of
       ExpressionOptional m -> do
         v <- freshTypeVariable
         case m of
-          Nothing -> yield (ExpressionOptional Nothing) (optionalType v) []
+          Nothing -> yield (ExpressionOptional Nothing) (Types.optional v) []
           Just e -> do
             i <- infer cx e
-            yield (ExpressionOptional $ Just i) (optionalType v) ((v, termType i):(termConstraints i))
+            yield (ExpressionOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
       ExpressionRecord fields -> do
           (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
-          yield (ExpressionRecord $ L.reverse fields0) (recordType $ L.reverse ftypes0) c1
+          yield (ExpressionRecord $ L.reverse fields0) (Types.record $ L.reverse ftypes0) c1
         where
           forField (typed, ftypes, c) field = do
             i <- inferFieldType cx field
@@ -198,12 +199,12 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         iels <- CM.mapM (infer cx) $ S.toList els
         let co = (\e -> (v, termType e)) <$> iels
         let ci = L.concat (termConstraints <$> iels)
-        yield (ExpressionSet $ S.fromList iels) (TypeSet v) (co ++ ci)
+        yield (ExpressionSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
       -- Note: type inference cannot recover complete union types from union values; type annotations are needed
       ExpressionUnion field -> do
         ifield <- inferFieldType cx field
-        let typ = TypeUnion [FieldType (fieldName field) (termType $ fieldTerm ifield)]
+        let typ = TypeUnion [Types.field (fieldName field) (termType $ fieldTerm ifield)]
         yield (ExpressionUnion ifield) typ (termConstraints $ fieldTerm ifield)
 
       ExpressionVariable x -> do

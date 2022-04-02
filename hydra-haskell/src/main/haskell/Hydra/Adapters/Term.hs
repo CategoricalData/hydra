@@ -16,6 +16,7 @@ import Hydra.CoreDecoding
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
 import Hydra.CoreEncoding
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -35,7 +36,7 @@ dereferenceNominal acx t@(TypeNominal name) = do
   return ad { adapterSource = t }
 
 elementToString :: Default a => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-elementToString acx t@(TypeElement _) = pure $ Adapter False t stringType $ Step encode decode
+elementToString acx t@(TypeElement _) = pure $ Adapter False t Types.string $ Step encode decode
   where
     encode (Term (ExpressionElement name) _) = pure $ stringValue name
     decode (Term (ExpressionLiteral (LiteralString name)) meta) = pure $ withData meta $ ExpressionElement name
@@ -89,13 +90,13 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
     unionType = do
       domAd <- termAdapter acx dom
       return $ TypeUnion [
-        FieldType _Function_cases stringType, -- TODO (TypeRecord cases)
+        FieldType _Function_cases Types.string, -- TODO (TypeRecord cases)
         FieldType _Function_compareTo (adapterTarget domAd),
-        FieldType _Function_data unitType,
-        FieldType _Function_lambda stringType, -- TODO (TypeRecord [FieldType _Lambda_parameter stringType, FieldType _Lambda_body cod]),
-        FieldType _Function_primitive stringType,
-        FieldType _Function_projection stringType,
-        FieldType _Expression_variable stringType]
+        FieldType _Function_data Types.unit,
+        FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
+        FieldType _Function_primitive Types.string,
+        FieldType _Function_projection Types.string,
+        FieldType _Expression_variable Types.string]
 
 listToSet :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 listToSet acx t@(TypeSet st) = do
@@ -147,7 +148,7 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
         <$> CM.mapM (fieldAdapter acx) sfields
       _ -> pure M.empty
     optionAd <- case dom of
-      TypeOptional ot -> Just <$> termAdapter acx (functionType ot cod)
+      TypeOptional ot -> Just <$> termAdapter acx (Types.function ot cod)
       _ -> pure Nothing
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let dom' = adapterTarget domAd
@@ -272,7 +273,7 @@ termAdapter acx typ = case typ of
 unionToRecord :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
 unionToRecord acx t@(TypeUnion sfields) = do
     let target = TypeRecord [
-                  FieldType "context" stringType,
+                  FieldType "context" Types.string,
                   FieldType "record" $ TypeRecord $ makeOptional <$> sfields]
     ad <- termAdapter acx target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {

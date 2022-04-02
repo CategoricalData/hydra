@@ -9,6 +9,7 @@ import Hydra.Steps
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Ext.Yaml.Serde
 import Hydra.Rewriting
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -25,22 +26,22 @@ checkLiterals = H.describe "Test atomic values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization
-      (TypedTerm booleanType $ booleanValue b)
+      (TypedTerm Types.boolean $ booleanValue b)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm int32Type $ int32Value i)
+      (TypedTerm Types.int32 $ int32Value i)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm uint8Type $ uint8Value i)
+      (TypedTerm Types.uint8 $ uint8Value i)
       (show i)
 
   H.it "bigints become ints" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm bigintType $ bigintValue i)
+      (TypedTerm Types.bigint $ bigintValue i)
       (show i)
 
   -- TODO: examine quirks around floating-point serialization more closely. These could affect portability of the serialized YAML.
@@ -53,21 +54,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
     QC.property $ \mi -> checkSerialization
       (TypedTerm
-        (TypeOptional int32Type)
+        (Types.optional Types.int32)
         (optional $ (Just . int32Value) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization
       (TypedTerm
-        (TypeOptional $ TypeOptional int32Type)
+        (Types.optional $ Types.optional Types.int32)
         (optional $ Just $ optional $ (Just . int32Value) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
-        (TypeOptional $ TypeOptional int32Type)
+        (Types.optional $ Types.optional Types.int32)
         (optional Nothing))
       "[]"
 
@@ -75,7 +76,7 @@ checkRecordsAndUnions :: H.SpecWith ()
 checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
-    QC.property $ \() -> checkSerialization (TypedTerm unitType unitTerm) "{}"
+    QC.property $ \() -> checkSerialization (TypedTerm Types.unit unitTerm) "{}"
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization
@@ -85,14 +86,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
   H.it "Optionals are omitted from record objects if 'nothing'" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
-        (TypeRecord [FieldType "one" $ TypeOptional stringType, FieldType "two" $ TypeOptional int32Type])
+        (TypeRecord [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
         (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
-        (TypeUnion [FieldType "left" stringType, FieldType "right" int32Type])
+        (TypeUnion [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union $ Field "left" $ stringValue "test"))
       ("context: " ++ show untyped ++ "\nrecord:\n  left: test\n")
 

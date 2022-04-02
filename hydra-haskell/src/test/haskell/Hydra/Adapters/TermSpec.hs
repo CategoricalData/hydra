@@ -10,6 +10,7 @@ import Hydra.CoreLanguage
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
 import Hydra.Steps
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -25,12 +26,12 @@ constraintsAreAsExpected :: H.SpecWith ()
 constraintsAreAsExpected = H.describe "Verify that the language constraints include/exclude the appropriate types" $ do
 
     H.it "int16 and int32 are supported in the test context" $ do
-      typeIsSupported (context [TypeVariantLiteral]) int16Type `H.shouldBe` True
-      typeIsSupported (context [TypeVariantLiteral]) int32Type `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral]) Types.int16 `H.shouldBe` True
+      typeIsSupported (context [TypeVariantLiteral]) Types.int32 `H.shouldBe` True
 
     H.it "int8 and bigint are unsupported in the test context" $ do
-      typeIsSupported (context [TypeVariantLiteral]) int8Type `H.shouldBe` False
-      typeIsSupported (context [TypeVariantLiteral]) bigintType `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral]) Types.int8 `H.shouldBe` False
+      typeIsSupported (context [TypeVariantLiteral]) Types.bigint `H.shouldBe` False
 
     H.it "Records are supported, but unions are not" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord]) latLonType `H.shouldBe` True
@@ -38,10 +39,10 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
 
     H.it "Records are supported if and only if each of their fields are supported" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
+        (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int16])
         `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
+        (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int8])
         `H.shouldBe` False
 
     H.it "Lists are supported if the list element type is supported" $ do
@@ -58,8 +59,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Strings (and other supported atomic values) pass through without change" $
     QC.property $ \b -> checkTermAdapter
       [TypeVariantLiteral]
-      stringType
-      stringType
+      Types.string
+      Types.string
       False
       (stringValue b)
       (stringValue b)
@@ -94,8 +95,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantRecord]
-      (TypeRecord [FieldType "first" stringType, FieldType "second" int8Type])
-      (TypeRecord [FieldType "first" stringType, FieldType "second" int16Type])
+      (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int8])
+      (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
       (record [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
       (record [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
@@ -188,7 +189,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \name -> checkTermAdapter
       [TypeVariantLiteral]
       int32ElementType
-      stringType
+      Types.string
       False
       (element name)
       (stringValue name) -- Note: the element name is not dereferenced
@@ -197,7 +198,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       compareStringsType
-      (unionTypeForFunctions stringType)
+      (unionTypeForFunctions Types.string)
       False
       (compareTo $ stringValue s)
       (nominalUnion testContext _Function $ Field "compareTo" $ stringValue s)
@@ -206,7 +207,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \() -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType
-      (unionTypeForFunctions stringType)
+      (unionTypeForFunctions Types.string)
       False
       dataTerm
       (nominalUnion testContext _Function $ Field "data" unitTerm)
@@ -214,8 +215,8 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantList]
-      (TypeOptional stringType)
-      (TypeList stringType)
+      (TypeOptional Types.string)
+      (TypeList Types.string)
       False
       (optional $ stringValue <$> ms)
       (list $ Y.maybe [] (\s -> [stringValue s]) ms)
@@ -224,7 +225,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \name -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       concatType
-      (unionTypeForFunctions stringType)
+      (unionTypeForFunctions Types.string)
       False
       (primitive name)
       (nominalUnion testContext _Function $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
@@ -242,7 +243,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkTermAdapter
       [TypeVariantLiteral]
       stringAliasType
-      stringType
+      Types.string
       False
       (stringValue s)
       (stringValue s)
@@ -251,9 +252,9 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \i -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
-      (TypeRecord [FieldType "context" stringType, FieldType "record" (TypeRecord [
-        FieldType "left" $ TypeOptional stringType,
-        FieldType "right" $ TypeOptional int16Type])])
+      (TypeRecord [Types.field "context" Types.string, Types.field "record" (TypeRecord [
+        Types.field "left" $ TypeOptional Types.string,
+        Types.field "right" $ TypeOptional Types.int16])])
       False
       (union $ Field "right" $ int8Value i)
       (record [
@@ -296,7 +297,7 @@ roundTripsPreserveSelectedTypes :: H.SpecWith ()
 roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
 
   H.it "Check strings (pass-through)" $
-    QC.property $ \s -> roundTripIsNoop stringType (stringValue s)
+    QC.property $ \s -> roundTripIsNoop Types.string (stringValue s)
 
   H.it "Check lists (pass-through)" $
     QC.property $ \strings -> roundTripIsNoop listOfStringsType (list $ stringValue <$> strings)
@@ -334,8 +335,8 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
   H.it "An int8 field becomes an int16 field" $
     QC.property $ \i -> checkFieldAdapter
       [TypeVariantLiteral, TypeVariantRecord]
-      (FieldType "second" int8Type)
-      (FieldType "second" int16Type)
+      (Types.field "second" Types.int8)
+      (Types.field "second" Types.int16)
       False
       (Field "second" $ int8Value i)
       (Field "second" $ int16Value i)

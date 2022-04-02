@@ -8,6 +8,7 @@ import Hydra.Basics
 import Hydra.Types.Unification
 import Hydra.TestUtils
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -29,13 +30,13 @@ checkIndividualConstraints = do
 
     H.it "Unify variable with variable" $
       expectUnified
-        [(typeVariable "a", typeVariable "b")]
-        [("a", typeVariable "b")]
+        [(Types.variable "a", Types.variable "b")]
+        [("a", Types.variable "b")]
 
     H.it "Unify variable with literal type" $
       expectUnified
-        [(typeVariable "a", stringType)]
-        [("a", stringType)]
+        [(Types.variable "a", Types.string)]
+        [("a", Types.string)]
 
 spec :: H.Spec
 spec = do

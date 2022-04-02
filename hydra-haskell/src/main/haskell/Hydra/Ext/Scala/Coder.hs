@@ -11,6 +11,7 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Primitives
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
@@ -90,7 +91,7 @@ encodeFunction cx meta fun arg = case fun of
         encodeCase ftypes sn cx f@(Field fname fterm) = do
 --            dom <- findDomain (termMeta fterm)           -- Option #1: use type inference
             let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
-            let patArgs = if dom == unitType then [] else [svar v]
+            let patArgs = if dom == Types.unit then [] else [svar v]
             -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
             let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
             body <- encodeTerm cx $ applyVar fterm v

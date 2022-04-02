@@ -18,26 +18,14 @@ apply func arg = defaultTerm $ ExpressionApplication $ Application func arg
 atomic :: Default a => Literal -> Term a
 atomic = defaultTerm . ExpressionLiteral
 
-bigfloatType :: Type
-bigfloatType = floatType FloatTypeBigfloat
-
 bigfloatValue :: Default a => Double -> Term a
 bigfloatValue = floatValue . FloatValueBigfloat
-
-bigintType :: Type
-bigintType = integerType IntegerTypeBigint
 
 bigintValue :: Default a => Integer -> Term a
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
 binaryTerm :: Default a => String -> Term a
 binaryTerm = defaultTerm . ExpressionLiteral . LiteralBinary
-
-binaryType :: Type
-binaryType = TypeLiteral LiteralTypeBinary
-
-booleanType :: Type
-booleanType = TypeLiteral LiteralTypeBoolean
 
 booleanValue :: Default a => Bool -> Term a
 booleanValue b = defaultTerm $ ExpressionLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
@@ -69,12 +57,6 @@ elementRef el = apply dataTerm $ defaultTerm $ ExpressionElement $ elementName e
 
 elementRefByName :: Default a => Name -> Term a
 elementRefByName name = apply dataTerm $ defaultTerm $ ExpressionElement name
-
-elementType :: Type -> Type
-elementType = TypeElement
-
-enum :: [FieldName] -> Type
-enum names = TypeUnion $ (`FieldType` unitType) <$> names
 
 expectInt32 :: Show a => Term a -> Result Int
 expectInt32 term = case termData term of
@@ -122,56 +104,26 @@ expectUnion term = case termData term of
 fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
-fieldTypesToMap :: [FieldType] -> M.Map FieldName Type
-fieldTypesToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
-
-float32Type :: Type
-float32Type = floatType FloatTypeFloat32
-
 float32Value :: Default a => Float -> Term a
 float32Value = floatValue . FloatValueFloat32
-
-float64Type :: Type
-float64Type = floatType FloatTypeFloat64
 
 float64Value :: Default a => Double -> Term a
 float64Value = floatValue . FloatValueFloat64
 
-floatType :: FloatType -> Type
-floatType = TypeLiteral . LiteralTypeFloat
-
 floatValue :: Default a => FloatValue -> Term a
 floatValue = defaultTerm . ExpressionLiteral . LiteralFloat
-
-functionType :: Type -> Type -> Type
-functionType dom cod = TypeFunction $ FunctionType dom cod
-
-int16Type :: Type
-int16Type = integerType IntegerTypeInt16
 
 int16Value :: Default a => Int -> Term a
 int16Value = integerValue . IntegerValueInt16 . fromIntegral
 
-int32Type :: Type
-int32Type = integerType IntegerTypeInt32
-
 int32Value :: Default a => Int -> Term a
 int32Value = integerValue . IntegerValueInt32
-
-int64Type :: Type
-int64Type = integerType IntegerTypeInt64
 
 int64Value :: Default a => Integer -> Term a
 int64Value = integerValue . IntegerValueInt64
 
-int8Type :: Type
-int8Type = integerType IntegerTypeInt8
-
 int8Value :: Default a => Int -> Term a
 int8Value = integerValue . IntegerValueInt8 . fromIntegral
-
-integerType :: IntegerType -> Type
-integerType = TypeLiteral . LiteralTypeInteger
 
 integerValue :: Default a => IntegerValue -> Term a
 integerValue = defaultTerm . ExpressionLiteral . LiteralInteger
@@ -185,17 +137,11 @@ letTerm v t1 t2 = defaultTerm $ ExpressionLet $ Let v t1 t2
 list :: Default a => [Term a] -> Term a
 list = defaultTerm . ExpressionList
 
-listType :: Type -> Type
-listType = TypeList
-
 map :: Default a => M.Map (Term a) (Term a) -> Term a
 map = defaultTerm . ExpressionMap
 
 mapTerm :: Default a => M.Map (Term a) (Term a) -> Term a
 mapTerm = defaultTerm . ExpressionMap
-
-mapType :: Type -> Type -> Type
-mapType kt vt = TypeMap $ MapType kt vt
 
 match :: Default a => [(FieldName, Term a)] -> Term a
 match = cases . fmap toField
@@ -210,14 +156,8 @@ matchWithVariants = cases . fmap toField
 nominal :: Default a => Name -> Term a -> Term a
 nominal name term = defaultTerm $ ExpressionNominal $ NominalTerm name term
 
-nominalType :: Name -> Type
-nominalType = TypeNominal
-
 optional :: Default a => Y.Maybe (Term a) -> Term a
 optional = defaultTerm . ExpressionOptional
-
-optionalType :: Type -> Type
-optionalType = TypeOptional
 
 primitive :: Default a => Name -> Term a
 primitive = defaultTerm . ExpressionFunction . FunctionPrimitive
@@ -228,9 +168,6 @@ projection = defaultTerm . ExpressionFunction . FunctionProjection
 record :: Default a => [Field a] -> Term a
 record = defaultTerm . ExpressionRecord
 
-recordType :: [FieldType] -> Type
-recordType = TypeRecord
-
 requireField :: M.Map FieldName (Term a) -> FieldName -> Result (Term a)
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
@@ -239,44 +176,23 @@ requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
 set :: Default a => S.Set (Term a) -> Term a
 set = defaultTerm . ExpressionSet
 
-setType :: Type -> Type
-setType = TypeSet
-
 stringList :: Default a => [String] -> Term a
 stringList l = list (stringValue <$> l)
 
 stringSet :: (Default a, Ord a) => S.Set String -> Term a
 stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
 
-stringType :: Type
-stringType = TypeLiteral LiteralTypeString
-
 stringValue :: Default a => String -> Term a
 stringValue = defaultTerm . ExpressionLiteral . LiteralString
-
-typeVariable :: TypeVariable -> Type
-typeVariable = TypeVariable
-
-uint16Type :: Type
-uint16Type = integerType IntegerTypeUint16
 
 uint16Value :: Default a => Integer -> Term a
 uint16Value = integerValue . IntegerValueUint16 . fromIntegral
 
-uint32Type :: Type
-uint32Type = integerType IntegerTypeUint32
-
 uint32Value :: Default a => Integer -> Term a
 uint32Value = integerValue . IntegerValueUint32 . fromIntegral
 
-uint64Type :: Type
-uint64Type = integerType IntegerTypeUint64
-
 uint64Value :: Default a => Integer -> Term a
 uint64Value = integerValue . IntegerValueUint64 . fromIntegral
-
-uint8Type :: Type
-uint8Type = integerType IntegerTypeUint8
 
 uint8Value :: Default a => Integer -> Term a
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
@@ -287,17 +203,8 @@ union field = defaultTerm $ ExpressionUnion field
 unitTerm :: Default a => Term a
 unitTerm = defaultTerm $ ExpressionRecord []
 
-unionType :: [FieldType] -> Type
-unionType = TypeUnion
-
-unitType :: Type
-unitType = TypeRecord []
-
 unitVariant :: Default a => FieldName -> Term a
 unitVariant fname = variant fname unitTerm
-
-universal :: TypeVariable -> Type -> Type
-universal v body = TypeUniversal $ UniversalType v body
 
 variable :: Default a => Variable -> Term a
 variable = defaultTerm . ExpressionVariable

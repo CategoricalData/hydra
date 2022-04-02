@@ -5,6 +5,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
 
@@ -13,7 +14,7 @@ import qualified Data.Set as S
 
 
 project :: Type -> FieldName -> Type -> Term Meta
-project dom fname cod = withType standardContext (functionType dom cod) $ projection fname
+project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
 standardContext :: Context Meta
 standardContext = Context {
@@ -38,7 +39,7 @@ standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType 
 standardFunction :: Name -> String -> String -> Type -> Type -> Term Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ
   where
-    typ = functionType dom cod
+    typ = Types.function dom cod
 
 standardGraph :: Name -> [Element Meta] -> Graph Meta
 standardGraph name els = Graph name els dataTerms schemaGraph
