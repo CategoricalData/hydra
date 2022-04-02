@@ -19,14 +19,14 @@ import qualified Data.Maybe as Y
 
 
 deref :: Context m -> Term m -> Result (Term m)
-deref context term = case termData term of
-  ExpressionElement name -> dereferenceElement context name >>= deref context
-  ExpressionNominal (NominalTerm _ term') -> deref context term'
+deref cx term = case termData term of
+  ExpressionElement name -> dereferenceElement cx name >>= deref cx
+  ExpressionNominal (NominalTerm _ term') -> deref cx term'
   _ -> ResultSuccess term
 
 dereferenceElement :: Context m -> Name -> Result (Term m)
-dereferenceElement context en = case M.lookup en (contextElements context) of
-  Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs context)
+dereferenceElement cx en = case M.lookup en (contextElements cx) of
+  Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs cx)
   Just e -> ResultSuccess $ elementData e
 
 getGraph :: GraphSet m -> GraphName -> Result (Graph m)
@@ -38,7 +38,7 @@ graphElementsMap :: Graph m -> M.Map Name (Element m)
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
 
 lookupPrimitiveFunction :: Context m -> Name -> Maybe (PrimitiveFunction m)
-lookupPrimitiveFunction context fn = M.lookup fn $ contextFunctions context
+lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 
 primitiveFunctionArity :: PrimitiveFunction m -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
@@ -48,24 +48,24 @@ primitiveFunctionArity = arity . primitiveFunctionType
       _ -> 0
 
 requireElement :: Context m -> Name -> Result (Element m)
-requireElement context name = Y.maybe error ResultSuccess $ M.lookup name $ contextElements context
+requireElement cx name = Y.maybe error ResultSuccess $ M.lookup name $ contextElements cx
   where
     error = ResultFailure $ "no such element: " ++ name
-      ++ " in graph " ++ graphSetRoot (contextGraphs context)
-      ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements context))) ++ "}"
+      ++ " in graph " ++ graphSetRoot (contextGraphs cx)
+      ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements cx))) ++ "}"
 
-requirePrimitiveFunction :: Context a -> Name -> Result (PrimitiveFunction a)
-requirePrimitiveFunction context fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction context fn
+requirePrimitiveFunction :: Context m -> Name -> Result (PrimitiveFunction m)
+requirePrimitiveFunction cx fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction cx fn
   where
     error = ResultFailure $ "no such primitive function: " ++ fn
 
 schemaContext :: Context m -> Result (Context m)
-schemaContext context = do
+schemaContext cx = do
     dgraph <- getGraph graphs $ graphSetRoot graphs
     sgraph <- getGraph graphs $ graphSchemaGraph dgraph
     -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
-    return context {
+    return cx {
       contextGraphs = graphs { graphSetRoot = graphName sgraph },
       contextElements = graphElementsMap sgraph}
   where
-    graphs = contextGraphs context
+    graphs = contextGraphs cx
