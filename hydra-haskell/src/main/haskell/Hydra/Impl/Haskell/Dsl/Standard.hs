@@ -13,8 +13,12 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+datatype gname lname doc typ = typeElement standardContext (qualify gname lname) doc typ
+
 project :: Type -> FieldName -> Type -> Term Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
+
+qualify gname lname = gname ++ "." ++ lname
 
 standardContext :: Context Meta
 standardContext = Context {

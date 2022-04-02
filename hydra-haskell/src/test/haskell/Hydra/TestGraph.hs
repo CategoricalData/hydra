@@ -16,7 +16,7 @@ import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.CoreGraph
+import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Primitives
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.CoreEncoding
@@ -37,7 +37,7 @@ testContext = standardContext {
       graphSetGraphs = M.fromList [
         ("testGraph", testGraph),
         ("testSchemaGraph", testSchemaGraph),
-        ("hydra/core", hydraCoreGraph)],
+        ("hydra/core", hydraCore)],
       graphSetRoot = "testGraph"},
     contextElements = graphElementsMap testGraph,
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,

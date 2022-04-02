@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.CoreGraph where
+module Hydra.Impl.Haskell.Sources.Core where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -7,40 +7,36 @@ import Hydra.Impl.Haskell.Dsl.Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-hydraCoreGraph :: Graph Meta
-hydraCoreGraph = Graph gname elements (const True) "hydra/core"
+-- Note: here, the element namespace doubles as a graph name
+hydraCoreName = "hydra/core"
+
+hydraCore :: Graph Meta
+hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
-    -- Note: here, the element namespace "hydra/core" doubles as a graph name
-    gname = "hydra/core"
-
-    qualify lname = gname ++ "." ++ lname
-
-    core = nominal . qualify
-
-    datatype lname doc typ = typeElement standardContext (qualify lname) doc typ
-
+    core = nominal . qualify hydraCoreName
+    coreDef = datatype hydraCoreName
     elements = [
 
-      datatype "Application"
+      coreDef "Application"
         "A term which applies a function to an argument" $
         universal "m" $ record [
           field "function" $ universal "m" $ core "Term",
           field "argument" $ universal "m" $ core "Term"],
 
-      datatype "BooleanValue"
+      coreDef "BooleanValue"
         "A boolean literal value" $
         enum [
           "false",
           "true"],
 
-      datatype "Comparison"
+      coreDef "Comparison"
         "An equality judgement: less than, equal to, or greater than" $
         enum [
           "lessThan",
           "equalTo",
           "greaterThan"],
 
-      datatype "Expression"
+      coreDef "Expression"
         "A term expression" $
         universal "m" $ union [
           field "application" $ universal "m" $ core "Application",
@@ -59,37 +55,37 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "union" $ universal "m" $ core "Field",
           field "variable" $ core "Variable"],
 
-      datatype "Field"
+      coreDef "Field"
         "A labeled term" $
         universal "m" $ record [
           field "name" $ core "FieldName",
           field "term" $ universal "m" $ core "Term"],
 
-      datatype "FieldName"
+      coreDef "FieldName"
         "The name of a field"
         string,
 
-      datatype "FieldType"
+      coreDef "FieldType"
         "The name and type of a field" $
         record [
           field "name" $ core "FieldName",
           field "type" $ core "Type"],
 
-      datatype "FloatType"
+      coreDef "FloatType"
         "A floating-point type" $
         enum [
           "bigfloat",
           "float32",
           "float64"],
 
-      datatype "FloatValue"
+      coreDef "FloatValue"
         "A floating-point literal value" $
         union [
           field "bigfloat" bigfloat,
           field "float32" float32,
           field "float64" float64],
 
-      datatype "Function"
+      coreDef "Function"
         "A function" $
         universal "m" $ union [
           field "cases" $ list $ universal "m" $ core "Field",
@@ -100,13 +96,13 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "primitive" $ core "Name",
           field "projection" $ core "FieldName"],
 
-      datatype "FunctionType"
+      coreDef "FunctionType"
         "A function type, also known as an arrow type" $
         record [
           field "domain" $ core "Type",
           field "codomain" $ core "Type"],
 
-      datatype "FunctionVariant"
+      coreDef "FunctionVariant"
         "The identifier of a function constructor" $
         enum [
           "cases",
@@ -117,7 +113,7 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           "primitive",
           "projection"],
 
-      datatype "IntegerType"
+      coreDef "IntegerType"
         "An integer type" $
         enum [
           "bigint",
@@ -130,7 +126,7 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           "uint32",
           "uint64"],
 
-      datatype "IntegerValue"
+      coreDef "IntegerValue"
         "An integer literal value" $
         union [
           field "bigint" bigint,
@@ -143,20 +139,20 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "uint32" uint32,
           field "uint64" uint64],
 
-      datatype "Lambda"
+      coreDef "Lambda"
         "A function abstraction (lambda)" $
         universal "m" $ record [
           field "parameter" $ core "Variable",
           field "body" $ universal "m" $ core "Term"],
 
-      datatype "Let"
+      coreDef "Let"
         "A 'let' binding" $
         universal "m" $ record [
           field "key" $ core "Variable",
           field "value" $ universal "m" $ core "Term",
           field "environment" $ universal "m" $ core "Term"],
 
-      datatype "Literal"
+      coreDef "Literal"
         "A term constant; an instance of a literal type" $
         union [
           field "binary" binary,
@@ -165,7 +161,7 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "integer" $ core "IntegerValue",
           field "string" string],
 
-      datatype "LiteralType"
+      coreDef "LiteralType"
         "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $
         union [
           field "binary" unit,
@@ -174,7 +170,7 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "integer" $ core "IntegerType",
           field "string" unit],
 
-      datatype "LiteralVariant"
+      coreDef "LiteralVariant"
         "The identifier of a literal constructor" $
         enum [
           "binary",
@@ -183,53 +179,53 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           "integer",
           "string"],
 
-      datatype "MapType"
+      coreDef "MapType"
         "A map type" $
         record [
           field "keys" $ core "Type",
           field "values" $ core "Type"],
 
-      datatype "Meta"
+      coreDef "Meta"
         "A built-in metadata container for terms" $
         record [
           field "description" (optional string),
           field "type" (optional $ core "Type")],
 
-      datatype "Name"
+      coreDef "Name"
         "A unique element name"
         string,
 
-      datatype "NominalTerm"
+      coreDef "NominalTerm"
         "A term annotated with a fixed, named type; an instance of a newtype" $
         universal "m" $ record [
           field "typeName" (core "Name"),
           field "term" (universal "m" $ core "Term")],
 
-      datatype "OptionalCases"
+      coreDef "OptionalCases"
         "A case statement for matching optional terms" $
         universal "m" $ record [
           field "nothing" (universal "m" $ core "Term"),
           field "just" (universal "m" $ core "Term")],
 
-      datatype "OptionalExpression"
+      coreDef "OptionalExpression"
         "An encoded optional value, for languages which do not natively support optionals" $
         universal "m" $ union [
           field "just" (universal "m" $ core "Term"),
           field "nothing" unit],
 
-      datatype "Precision"
+      coreDef "Precision"
         "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
         union [
           field "arbitrary" unit,
           field "bits" int32],
 
-      datatype "Term"
+      coreDef "Term"
         "A data term" $
         universal "m" $ record [
           field "data" $ universal "m" $ core "Expression",
           field "meta" $ variable "m"],
 
-      datatype "TermVariant"
+      coreDef "TermVariant"
         "The identifier of a term expression constructor" $
         enum [
           "application",
@@ -248,7 +244,7 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           "union",
           "variable"],
 
-      datatype "Type"
+      coreDef "Type"
         "A data type" $
         union [
           field "literal" $ core "LiteralType",
@@ -264,29 +260,29 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           field "universal" $ core "UniversalType",
           field "variable" $ core "TypeVariable"],
 
-      datatype "TypeAbstraction"
+      coreDef "TypeAbstraction"
         "A type abstraction (generalization), which binds a type variable to a term" $
         universal "m" $ record [
           field "parameter" (core "TypeVariable"),
           field "body" (universal "m" $ core "Term")],
 
-      datatype "TypeApplication"
+      coreDef "TypeApplication"
         "A type application (instantiation), which applies a term to a type" $
         universal "m" $ record [
           field "function" (universal "m" $ core "Term"),
           field "argument" (core "Type")],
 
-      datatype "TypeScheme"
+      coreDef "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
         record [
           field "variables" (list $ core "TypeVariable"),
           field "type" (core "Type")],
 
-      datatype "TypeVariable"
+      coreDef "TypeVariable"
         "A symbol which stands in for a type"
         string,
 
-      datatype "TypeVariant"
+      coreDef "TypeVariant"
         "The identifier of a type constructor" $
         enum [
           "element",
@@ -302,18 +298,18 @@ hydraCoreGraph = Graph gname elements (const True) "hydra/core"
           "universal",
           "variable"],
 
-      datatype "TypedTerm"
+      coreDef "TypedTerm"
         "A type together with an instance of the type" $
         universal "m" $ record [
           field "type" $ core "Type",
           field "term" $ universal "m" $ core "Term"],
 
-      datatype "UniversalType"
+      coreDef "UniversalType"
         "A universally quantified ('forall') type, parameterized by a type variable" $
         record [
           field "variable" string,
           field "body" $ core "Type"],
 
-      datatype "Variable"
+      coreDef "Variable"
         "A symbol which stands in for a term"
         string]
