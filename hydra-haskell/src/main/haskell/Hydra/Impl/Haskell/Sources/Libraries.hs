@@ -6,6 +6,7 @@ import Hydra.Evaluation
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Prims
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
@@ -106,17 +107,17 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
-  prim1 _lists_concat (listInput (listType $ typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
+  prim1 _lists_concat (listInput (Types.list $ Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
   prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
-  prim2 _lists_intercalate (listInputPoly "a") (listInput (typeVariable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
+  prim2 _lists_intercalate (listInputPoly "a") (listInput (Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
   prim2 _lists_intersperse (inputPoly "a") (listInputPoly "a") (listOutputPoly "a") Lists.intersperse,
   prim1 _lists_last (listInputPoly "a") (outputPoly "a") Lists.last,
   prim1 _lists_length (listInputPoly "a") int32Output Lists.length
 --  ,
 --  PrimitiveFunction _lists_map
 --    (FunctionType
---      (functionType (typeVariable "a") (typeVariable "b"))
---      (functionType (listType $ typeVariable "a") (listType $ typeVariable "b")))
+--      (functionType (Types.variable "a") (Types.variable "b"))
+--      (functionType (Types.list $ Types.variable "a") (Types.list $ Types.variable "b")))
 --    $ \args -> do
 --      expectNArgs 2 args
 --      a1 <- expectString $ L.head args
@@ -141,7 +142,7 @@ hydraLibMathInt32Primitives = [
 
 hydraLibStringsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
 hydraLibStringsPrimitives = [
-    prim1 _strings_cat (listInput stringType expectString) stringOutput Strings.cat,
+    prim1 _strings_cat (listInput Types.string expectString) stringOutput Strings.cat,
     prim1 _strings_length stringInput int32Output Strings.length,
     prim2 _strings_splitOn stringInput stringInput stringListOutput Strings.splitOn,
     prim1 _strings_toLower stringInput stringOutput Strings.toLower,

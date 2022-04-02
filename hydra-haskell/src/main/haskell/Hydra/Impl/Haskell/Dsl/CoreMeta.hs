@@ -20,11 +20,12 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Extras
 
 
 nominalCases :: Default a => Context a -> Name -> Type -> [Field a] -> Term a
-nominalCases cx name cod fields = withType cx (functionType (nominalType name) cod) $ cases fields
+nominalCases cx name cod fields = withType cx (Types.function (Types.nominal name) cod) $ cases fields
 
 nominalMatch :: Default a => Context a -> Name -> Type -> [(FieldName, Term a)] -> Term a
 nominalMatch cx name cod fields = nominalCases cx name cod (fmap toField fields)
@@ -34,20 +35,20 @@ nominalMatch cx name cod fields = nominalCases cx name cod (fmap toField fields)
 nominalMatchWithVariants :: Context Meta -> Type -> Type -> [(FieldName, FieldName)] -> Term Meta
 nominalMatchWithVariants cx dom cod = withType cx ft . cases . fmap toField
   where
-    ft = functionType dom cod
+    ft = Types.function dom cod
     toField (from, to) = Field from $ constFunction $ withType cx cod $ unitVariant to -- nominalUnitVariant cx cod to
 
 nominalProjection :: Default a => Context a -> Name -> FieldName -> Type -> Term a
-nominalProjection cx name fname ftype = withType cx (functionType (nominalType name) ftype) $ projection fname
+nominalProjection cx name fname ftype = withType cx (Types.function (Types.nominal name) ftype) $ projection fname
 
 nominalRecord :: Default a => Context a -> Name -> [Field a] -> Term a
 nominalRecord cx name fields = nominalTerm cx name $ record fields
 
 nominalTerm :: Context a -> Name -> Term a -> Term a
-nominalTerm cx name = withType cx (nominalType name)
+nominalTerm cx name = withType cx (Types.nominal name)
 
 nominalUnion :: Default a => Context a -> Name -> Field a -> Term a
-nominalUnion cx name field = withType cx (nominalType name) $ union field
+nominalUnion cx name field = withType cx (Types.nominal name) $ union field
 
 nominalUnitVariant :: Default a => Context a -> Name -> FieldName -> Term a
 nominalUnitVariant cx name fname = nominalVariant cx name fname unitTerm

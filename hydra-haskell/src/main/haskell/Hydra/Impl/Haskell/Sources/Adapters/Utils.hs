@@ -5,6 +5,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Sources.Basics
@@ -40,12 +41,6 @@ r_ = standardRecord
 s_ :: String -> Term Meta
 s_ = stringValue
 
-string_ :: Type
-string_ = stringType
-
-t_ :: Name -> Type
-t_ = nominalType
-
 v_ :: Default a => Variable -> Term a
 v_ = variable
 
@@ -64,20 +59,20 @@ adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
 describeFloatType :: Element Meta
 describeFloatType = standardFunction _hydra_adapters_utils "describeFloatType"
   "Display a floating-point type as a string"
-  (t_ _FloatType) string_
+  (Types.nominal _FloatType) Types.string
   $ l_"t" $ (_eldata describePrecision @. (_eldata floatTypePrecision @. v_"t")) ++. s_" floating-point numbers"
 
 describeIntegerType :: Element Meta
 describeIntegerType = standardFunction _hydra_adapters_utils "describeIntegerType"
   "Display an integer type as a string"
-  (t_ _IntegerType) string_
+  (Types.nominal _IntegerType) Types.string
   $ l_"t" $ (_eldata describePrecision @. (_eldata integerTypePrecision @. v_"t")) ++. s_" integers"
 
 describeLiteralType :: Element Meta
 describeLiteralType = standardFunction _hydra_adapters_utils "describeLiteralType"
   "Display a literal type as a string"
-  (t_ _LiteralType) string_ $
-  match_ _LiteralType string_ [
+  (Types.nominal _LiteralType) Types.string $
+  match_ _LiteralType Types.string [
     (_LiteralType_binary, const_ $ s_"binary strings"),
     (_LiteralType_boolean, const_ $ s_"boolean values"),
     (_LiteralType_float, _eldata describeFloatType),
@@ -87,8 +82,8 @@ describeLiteralType = standardFunction _hydra_adapters_utils "describeLiteralTyp
 describePrecision :: Element Meta
 describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
   "Display numeric precision as a string"
-  (t_ _Precision) string_ $
-  match_ _Precision string_ [
+  (Types.nominal _Precision) Types.string $
+  match_ _Precision Types.string [
     (_Precision_arbitrary, const_ $ s_"arbitrary-precision"),
     (_Precision_bits,
       l_"bits" $ p_ _strings_cat @.
@@ -99,19 +94,19 @@ describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
 describeType :: Element Meta
 describeType = standardFunction _hydra_adapters_utils "describeType"
   "Display a type as a string"
-  (t_ _Type) string_ $
-  match_ _Type string_ [
+  (Types.nominal _Type) Types.string $
+  match_ _Type Types.string [
     (_Type_literal, _eldata describeLiteralType),
     (_Type_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
     (_Type_function, l_"ft" $ s_"functions from "
-      ++. (_eldata describeType @. (project (nominalType _FunctionType) _FunctionType_domain (t_ _Type) @. v_"ft"))
+      ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_domain (Types.nominal _Type) @. v_"ft"))
       ++. s_" to "
-      ++. (_eldata describeType @. (project (nominalType _FunctionType) _FunctionType_codomain (t_ _Type) @. v_"ft"))),
+      ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_codomain (Types.nominal _Type) @. v_"ft"))),
     (_Type_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
     (_Type_map, l_"mt" $ s_"maps from "
-      ++. (_eldata describeType @. (project (nominalType _MapType) _MapType_keys (t_ _Type) @. v_"mt"))
+      ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_keys (Types.nominal _Type) @. v_"mt"))
       ++. s_" to "
-      ++. (_eldata describeType @. (project (nominalType _MapType) _MapType_values (t_ _Type) @. v_"mt"))),
+      ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_values (Types.nominal _Type) @. v_"mt"))),
     (_Type_nominal, l_"name" $ s_"alias for " ++. v_"name"),
     (_Type_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
     (_Type_record, const_ $ s_"records of a particular set of fields"),
@@ -123,7 +118,7 @@ describeType = standardFunction _hydra_adapters_utils "describeType"
 --idAdapter :: Element Meta
 --idAdapter = standardFunction _hydra_adapters_utils "idAdapter"
 --  "An identity adapter for a given type"
---  (t_ _Type) (TypeUniversal (UniversalType "m" $ ())) $
+--  (Types.nominal _Type) (TypeUniversal (UniversalType "m" $ ())) $
 --  l_"t" $ r_ _Adapter [
 --    Field _Adapter_isLossy (booleanValue False),
 --    Field _Adapter_source (v_"t"),

@@ -20,6 +20,7 @@ import Hydra.Impl.Haskell.Sources.CoreGraph
 import Hydra.Primitives
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.CoreEncoding
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
@@ -55,7 +56,7 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = "firstName",
-  elementSchema = encodeType cx (functionType (nominalType "Person") stringType),
+  elementSchema = encodeType cx (Types.function (Types.nominal "Person") Types.string),
   elementData = projection "firstName"}
 
 testGraph :: Graph Meta
@@ -63,7 +64,7 @@ testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement cx "StringTypeAlias" noDoc stringType,
+    typeElement cx "StringTypeAlias" noDoc Types.string,
     typeElement cx "Person" noDoc testTypePerson,
     typeElement cx "Timestamp" noDoc testTypeTimestamp]
   allTerms "hydra/core"
@@ -79,14 +80,14 @@ testTermArthur = nominalRecord cx "Person" [
 
 testTypePerson :: Type
 testTypePerson = TypeRecord [
-  FieldType "firstName" stringType,
-  FieldType "lastName" stringType,
-  FieldType "age" int32Type]
+  FieldType "firstName" Types.string,
+  FieldType "lastName" Types.string,
+  FieldType "age" Types.int32]
 
 testTypeTimestamp :: Type
 testTypeTimestamp = TypeUnion [
-  FieldType "unixTimeMillis" uint64Type,
-  FieldType "date" stringType]
+  FieldType "unixTimeMillis" Types.uint64,
+  FieldType "date" Types.string]
 
 allTerms :: Term Meta -> Bool
 allTerms _ = True

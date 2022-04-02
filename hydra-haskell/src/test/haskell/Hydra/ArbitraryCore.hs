@@ -3,6 +3,7 @@ module Hydra.ArbitraryCore where
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -76,7 +77,7 @@ instance QC.Arbitrary IntegerValue
 
 instance (Default a, Eq a, Ord a, Read a, Show a) => QC.Arbitrary (Term a) where
   arbitrary = (\(TypedTerm _ term) -> term) <$> QC.sized arbitraryTypedTerm
-  
+
 instance QC.Arbitrary Type where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
@@ -198,7 +199,7 @@ arbitraryTerm typ n = case typ of
 
 -- Note: nominal types and element types are not currently generated, as instantiating them requires a context
 arbitraryType :: Int -> QC.Gen Type
-arbitraryType n = if n == 0 then pure unitType else QC.oneof [
+arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
     TypeLiteral <$> QC.arbitrary,
     TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
     TypeList <$> arbitraryType n',
@@ -224,11 +225,11 @@ decr n = max 0 (n-1)
 shrinkers :: (Default a, Eq a, Ord a, Read a, Show a) => Type -> [(Type, (Term a) -> [Term a])]
 shrinkers typ = trivialShrinker ++ case typ of
     TypeLiteral at -> case at of
-      LiteralTypeBinary -> [(binaryType, \(Term (ExpressionLiteral (LiteralBinary s)) _) -> binaryTerm <$> QC.shrink s)]
+      LiteralTypeBinary -> [(Types.binary, \(Term (ExpressionLiteral (LiteralBinary s)) _) -> binaryTerm <$> QC.shrink s)]
       LiteralTypeBoolean -> []
       LiteralTypeFloat ft -> []
       LiteralTypeInteger it -> []
-      LiteralTypeString -> [(stringType, \(Term (ExpressionLiteral (LiteralString s)) _) -> stringValue <$> QC.shrink s)]
+      LiteralTypeString -> [(Types.string, \(Term (ExpressionLiteral (LiteralString s)) _) -> stringValue <$> QC.shrink s)]
   --  TypeElement et ->
   --  TypeFunction ft ->
     TypeList lt -> dropElements : promoteType : shrinkType
@@ -287,7 +288,7 @@ shrinkers typ = trivialShrinker ++ case typ of
       (h:r) -> [r] ++ ((h :) <$> dropAny r)
     dropIth i l = L.take i l ++ L.drop (i+1) l
     nodupes l = L.length (L.nub l) == L.length l
-    trivialShrinker = [(unitType, const [unitTerm]) | typ /= unitType]
+    trivialShrinker = [(Types.unit, const [unitTerm]) | typ /= Types.unit]
     shrinkFieldNames toType toTerm fromTerm sfields = forNames <$> altNames
       where
         forNames names = (toType $ withFieldTypeNames names sfields,

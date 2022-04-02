@@ -19,6 +19,7 @@ import Hydra.Util.Coders
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -90,7 +91,7 @@ constructModule cx g coders pairs = do
 
         unionCons lname (FieldType fname ftype) = do
           let nm = capitalize lname ++ capitalize fname
-          typeList <- if ftype == unitType
+          typeList <- if ftype == Types.unit
             then pure []
             else do
               htype <- encodeAdaptedType cx ftype
