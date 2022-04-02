@@ -60,7 +60,10 @@ constructModule cx g coders pairs = do
         let lname = localNameOf $ elementName el
         let hname = simpleName lname
         t <- decodeType cx term
-        let deriv = simpleName <$> ["Eq", "Ord", "Read", "Show"]
+        isSer <- isSerializable t
+        let deriv = if isSer
+                      then simpleName <$> ["Eq", "Ord", "Read", "Show"]
+                      else []
         let (vars, t') = unpackUniversalType t
         let hd = declHead hname $ L.reverse vars
         decl <- case t' of
@@ -76,6 +79,13 @@ constructModule cx g coders pairs = do
         let comments = contextDescriptionOf cx $ termMeta term
         return $ [H.DeclarationWithComments decl comments] ++ constantDecls (elementName el) t
       where
+        isSerializable typ = do
+            deps <- typeDependencies cx (elementName el)
+            let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
+            return $ not $ S.member TypeVariantFunction allVariants
+          where
+            variants typ = typeVariant <$> (foldOverType TraversalOrderPre (\m t -> t:m) [] typ)
+
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
           (h:rest) -> H.DeclarationHeadApplication $ H.DeclarationHead_Application (declHead name rest) (simpleName h)

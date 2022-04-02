@@ -19,16 +19,11 @@ import Hydra.Steps
 
 
 dataGraphDependencies :: Show m => Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
-dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) allDeps
+dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
   where
-    allDeps = L.foldl (\s t -> S.union s $ depsOf t) S.empty $
+    graphNames = S.fromList (graphNameOf <$> S.toList elNames)
+    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
-    depsOf term = foldOverTerm TraversalOrderPre addNames S.empty term
-    addNames names term = case termData term of
-      ExpressionElement name -> if withEls then (S.insert (graphNameOf name) names) else names
-      ExpressionFunction (FunctionPrimitive name) -> if withPrims then (S.insert (graphNameOf name) names) else names
-      ExpressionNominal (NominalTerm name _) -> if withNoms then (S.insert name names) else names
-      _ -> names
 
 dataGraphToExternalModule :: (Default m, Ord m, Read m, Show m)
   => Language
