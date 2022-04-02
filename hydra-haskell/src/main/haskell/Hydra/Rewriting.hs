@@ -1,6 +1,7 @@
 module Hydra.Rewriting (
   TraversalOrder(..),
   foldOverTerm,
+  foldOverType,
   freeVariablesInTerm,
   isFreeIn,
   rewriteTerm,
@@ -9,6 +10,7 @@ module Hydra.Rewriting (
   stripMeta,
   substituteVariable,
   subterms,
+  subtypes,
   ) where
 
 import Hydra.Core
@@ -29,6 +31,13 @@ foldOverTerm order fld b0 term = case order of
     TraversalOrderPost -> fld (L.foldl (foldOverTerm order fld) b0 children) term
   where
     children = subterms term
+
+foldOverType :: TraversalOrder -> (a -> Type -> a) -> a -> Type -> a
+foldOverType order fld b0 typ = case order of
+    TraversalOrderPre -> L.foldl (foldOverType order fld) (fld b0 typ) children
+    TraversalOrderPost -> fld (L.foldl (foldOverType order fld) b0 children) typ
+  where
+    children = subtypes typ
 
 freeVariablesInTerm :: Term m -> S.Set Variable
 freeVariablesInTerm term = case termData term of
@@ -120,3 +129,18 @@ subterms term = case termData term of
   ExpressionSet s -> S.toList s
   ExpressionUnion field -> [fieldTerm field]
   _ -> []
+
+subtypes :: Type -> [Type]
+subtypes typ = case typ of
+  TypeElement et -> [et]
+  TypeFunction (FunctionType dom cod) -> [dom, cod]
+  TypeList lt -> [lt]
+  TypeLiteral _ -> []
+  TypeMap (MapType kt vt) -> [kt, vt]
+  TypeNominal _ -> []
+  TypeOptional ot -> [ot]
+  TypeRecord fields -> fieldTypeType <$> fields
+  TypeSet st -> [st]
+  TypeUnion fields -> fieldTypeType <$> fields
+  TypeUniversal (UniversalType v body) -> [body]
+  TypeVariable _ -> []
