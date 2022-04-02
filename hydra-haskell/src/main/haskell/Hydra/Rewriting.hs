@@ -11,17 +11,24 @@ module Hydra.Rewriting (
   substituteVariable,
   subterms,
   subtypes,
+  termDependencyNames,
+  typeDependencyNames,
+  typeDependencies,
   ) where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Graph
+import Hydra.Primitives
+import Hydra.Evaluation
+import Hydra.CoreDecoding
 
+import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-
 
 data TraversalOrder = TraversalOrderPre | TraversalOrderPost
 
@@ -144,3 +151,41 @@ subtypes typ = case typ of
   TypeUnion fields -> fieldTypeType <$> fields
   TypeUniversal (UniversalType v body) -> [body]
   TypeVariable _ -> []
+
+termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
+termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
+  where
+    addNames names term = case termData term of
+      ExpressionElement name -> if withEls then S.insert name names else names
+      ExpressionFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
+      ExpressionNominal (NominalTerm name _) -> if withNoms then S.insert name names else names
+      _ -> names
+
+typeDependencies :: Show m => Context m -> Name -> Result (M.Map Name Type)
+typeDependencies scx name = deps (S.fromList [name]) M.empty
+  where
+    deps seeds names = if S.null seeds
+        then return names
+        else do
+          pairs <- CM.mapM toPair $ S.toList seeds
+          let newNames = M.union names (M.fromList pairs)
+          let refs = L.foldl S.union S.empty (typeDependencyNames <$> (snd <$> pairs))
+          let visited = S.fromList $ M.keys names
+          let newSeeds = S.difference refs visited
+          deps newSeeds newNames
+      where
+        toPair name = do
+          typ <- requireType scx name
+          return (name, typ)
+
+--    requireType :: Show m => Context m -> Name -> Result Type
+    requireType scx name = do
+      el <- requireElement scx name
+      decodeType scx (elementData el)
+
+typeDependencyNames :: Type -> S.Set Name
+typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
+  where
+    addNames names typ = case typ of
+      TypeNominal name -> S.insert name names
+      _ -> names
