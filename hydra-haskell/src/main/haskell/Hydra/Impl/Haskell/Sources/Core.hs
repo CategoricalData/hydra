@@ -247,10 +247,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       coreDef "Type"
         "A data type" $
         union [
-          field "literal" $ core "LiteralType",
           field "element" $ core "Type",
           field "function" $ core "FunctionType",
           field "list" $ core "Type",
+          field "literal" $ core "LiteralType",
           field "map" $ core "MapType",
           field "nominal" $ core "Name",
           field "optional" $ core "Type",
