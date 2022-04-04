@@ -12,6 +12,7 @@ import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
 import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Impl.Haskell.Sources.Errors
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
@@ -39,6 +40,7 @@ generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataG
 generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
 generateSources langName toFile serialize baseDir = do
     writeDataGraph hydraCore []
+    writeDataGraph hydraErrors []
     writeDataGraph hydraGraph [hydraCore]
     writeDataGraph basicsGraph []
     writeDataGraph adaptersUtilsGraph [basicsGraph]
