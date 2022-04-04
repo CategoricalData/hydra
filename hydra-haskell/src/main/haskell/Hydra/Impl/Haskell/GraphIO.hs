@@ -16,6 +16,7 @@ import Hydra.Impl.Haskell.Sources.Errors
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
+import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Libraries
@@ -44,6 +45,7 @@ generateSources langName toFile serialize baseDir = do
     writeDataGraph hydraGraph [hydraCore]
     writeDataGraph basicsGraph []
     writeDataGraph adaptersUtilsGraph [basicsGraph]
+    writeDataGraph codetreeAst []
   where
     writeDataGraph g deps = do
       let cx = setContextElements (g:deps) $ standardContext {
