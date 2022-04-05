@@ -141,7 +141,7 @@ setContextElements graphs cx = cx { contextElements = M.fromList $
 
 toQname :: Name -> (String, String)
 toQname name = case Strings.splitOn "." name of
-  [ns, local] -> (ns, local)
+  (ns:rest) -> (ns, L.intercalate "." rest)
   _ -> ("UNKNOWN", name)
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
