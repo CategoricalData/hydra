@@ -14,10 +14,10 @@ hydraErrorsName = "hydra/errors"
 hydraErrors :: Graph Meta
 hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName
   where
-    errorsDef = datatype hydraErrorsName
+    def = datatype hydraErrorsName
     elements = [
 
-      errorsDef "Qualified"
+      def "Qualified"
         "An optional value qualified with a (possibly empty) list of warnings" $
         universal "m" $ record [
           field "value" (optional $ variable "m"),
