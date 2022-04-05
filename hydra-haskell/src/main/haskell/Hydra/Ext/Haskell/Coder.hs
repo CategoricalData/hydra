@@ -377,7 +377,9 @@ qualifyUnionFieldName :: Name -> FieldName -> String
 qualifyUnionFieldName sname fname = capitalize (typeNameForRecord sname) ++ capitalize fname
 
 simpleName :: String -> H.Name
-simpleName n = H.NameNormal $ H.QualifiedName [] n
+simpleName n = H.NameNormal $ H.QualifiedName [] $ sanitize n
+  where
+    sanitize = fmap (\c -> if c == '.' then '_' else c)
 
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
