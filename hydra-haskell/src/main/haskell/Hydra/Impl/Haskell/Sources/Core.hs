@@ -14,29 +14,29 @@ hydraCore :: Graph Meta
 hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
     core = nominal . qualify hydraCoreName
-    coreDef = datatype hydraCoreName
+    def = datatype hydraCoreName
     elements = [
 
-      coreDef "Application"
+      def "Application"
         "A term which applies a function to an argument" $
         universal "m" $ record [
           field "function" $ universal "m" $ core "Term",
           field "argument" $ universal "m" $ core "Term"],
 
-      coreDef "BooleanValue"
+      def "BooleanValue"
         "A boolean literal value" $
         enum [
           "false",
           "true"],
 
-      coreDef "Comparison"
+      def "Comparison"
         "An equality judgement: less than, equal to, or greater than" $
         enum [
           "lessThan",
           "equalTo",
           "greaterThan"],
 
-      coreDef "Expression"
+      def "Expression"
         "A term expression" $
         universal "m" $ union [
           field "application" $ universal "m" $ core "Application",
@@ -55,37 +55,37 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "union" $ universal "m" $ core "Field",
           field "variable" $ core "Variable"],
 
-      coreDef "Field"
+      def "Field"
         "A labeled term" $
         universal "m" $ record [
           field "name" $ core "FieldName",
           field "term" $ universal "m" $ core "Term"],
 
-      coreDef "FieldName"
+      def "FieldName"
         "The name of a field"
         string,
 
-      coreDef "FieldType"
+      def "FieldType"
         "The name and type of a field" $
         record [
           field "name" $ core "FieldName",
           field "type" $ core "Type"],
 
-      coreDef "FloatType"
+      def "FloatType"
         "A floating-point type" $
         enum [
           "bigfloat",
           "float32",
           "float64"],
 
-      coreDef "FloatValue"
+      def "FloatValue"
         "A floating-point literal value" $
         union [
           field "bigfloat" bigfloat,
           field "float32" float32,
           field "float64" float64],
 
-      coreDef "Function"
+      def "Function"
         "A function" $
         universal "m" $ union [
           field "cases" $ list $ universal "m" $ core "Field",
@@ -96,13 +96,13 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "primitive" $ core "Name",
           field "projection" $ core "FieldName"],
 
-      coreDef "FunctionType"
+      def "FunctionType"
         "A function type, also known as an arrow type" $
         record [
           field "domain" $ core "Type",
           field "codomain" $ core "Type"],
 
-      coreDef "FunctionVariant"
+      def "FunctionVariant"
         "The identifier of a function constructor" $
         enum [
           "cases",
@@ -113,7 +113,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "primitive",
           "projection"],
 
-      coreDef "IntegerType"
+      def "IntegerType"
         "An integer type" $
         enum [
           "bigint",
@@ -126,7 +126,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "uint32",
           "uint64"],
 
-      coreDef "IntegerValue"
+      def "IntegerValue"
         "An integer literal value" $
         union [
           field "bigint" bigint,
@@ -139,20 +139,20 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "uint32" uint32,
           field "uint64" uint64],
 
-      coreDef "Lambda"
+      def "Lambda"
         "A function abstraction (lambda)" $
         universal "m" $ record [
           field "parameter" $ core "Variable",
           field "body" $ universal "m" $ core "Term"],
 
-      coreDef "Let"
+      def "Let"
         "A 'let' binding" $
         universal "m" $ record [
           field "key" $ core "Variable",
           field "value" $ universal "m" $ core "Term",
           field "environment" $ universal "m" $ core "Term"],
 
-      coreDef "Literal"
+      def "Literal"
         "A term constant; an instance of a literal type" $
         union [
           field "binary" binary,
@@ -161,7 +161,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "integer" $ core "IntegerValue",
           field "string" string],
 
-      coreDef "LiteralType"
+      def "LiteralType"
         "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $
         union [
           field "binary" unit,
@@ -170,7 +170,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "integer" $ core "IntegerType",
           field "string" unit],
 
-      coreDef "LiteralVariant"
+      def "LiteralVariant"
         "The identifier of a literal constructor" $
         enum [
           "binary",
@@ -179,53 +179,53 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "integer",
           "string"],
 
-      coreDef "MapType"
+      def "MapType"
         "A map type" $
         record [
           field "keys" $ core "Type",
           field "values" $ core "Type"],
 
-      coreDef "Meta"
+      def "Meta"
         "A built-in metadata container for terms" $
         record [
           field "description" (optional string),
           field "type" (optional $ core "Type")],
 
-      coreDef "Name"
+      def "Name"
         "A unique element name"
         string,
 
-      coreDef "NominalTerm"
+      def "NominalTerm"
         "A term annotated with a fixed, named type; an instance of a newtype" $
         universal "m" $ record [
           field "typeName" (core "Name"),
           field "term" (universal "m" $ core "Term")],
 
-      coreDef "OptionalCases"
+      def "OptionalCases"
         "A case statement for matching optional terms" $
         universal "m" $ record [
           field "nothing" (universal "m" $ core "Term"),
           field "just" (universal "m" $ core "Term")],
 
-      coreDef "OptionalExpression"
+      def "OptionalExpression"
         "An encoded optional value, for languages which do not natively support optionals" $
         universal "m" $ union [
           field "just" (universal "m" $ core "Term"),
           field "nothing" unit],
 
-      coreDef "Precision"
+      def "Precision"
         "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
         union [
           field "arbitrary" unit,
           field "bits" int32],
 
-      coreDef "Term"
+      def "Term"
         "A data term" $
         universal "m" $ record [
           field "data" $ universal "m" $ core "Expression",
           field "meta" $ variable "m"],
 
-      coreDef "TermVariant"
+      def "TermVariant"
         "The identifier of a term expression constructor" $
         enum [
           "application",
@@ -244,7 +244,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "union",
           "variable"],
 
-      coreDef "Type"
+      def "Type"
         "A data type" $
         union [
           field "element" $ core "Type",
@@ -260,29 +260,29 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "universal" $ core "UniversalType",
           field "variable" $ core "TypeVariable"],
 
-      coreDef "TypeAbstraction"
+      def "TypeAbstraction"
         "A type abstraction (generalization), which binds a type variable to a term" $
         universal "m" $ record [
           field "parameter" (core "TypeVariable"),
           field "body" (universal "m" $ core "Term")],
 
-      coreDef "TypeApplication"
+      def "TypeApplication"
         "A type application (instantiation), which applies a term to a type" $
         universal "m" $ record [
           field "function" (universal "m" $ core "Term"),
           field "argument" (core "Type")],
 
-      coreDef "TypeScheme"
+      def "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
         record [
           field "variables" (list $ core "TypeVariable"),
           field "type" (core "Type")],
 
-      coreDef "TypeVariable"
+      def "TypeVariable"
         "A symbol which stands in for a type"
         string,
 
-      coreDef "TypeVariant"
+      def "TypeVariant"
         "The identifier of a type constructor" $
         enum [
           "element",
@@ -298,18 +298,18 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "universal",
           "variable"],
 
-      coreDef "TypedTerm"
+      def "TypedTerm"
         "A type together with an instance of the type" $
         universal "m" $ record [
           field "type" $ core "Type",
           field "term" $ universal "m" $ core "Term"],
 
-      coreDef "UniversalType"
+      def "UniversalType"
         "A universally quantified ('forall') type, parameterized by a type variable" $
         record [
           field "variable" string,
           field "body" $ core "Type"],
 
-      coreDef "Variable"
+      def "Variable"
         "A symbol which stands in for a term"
         string]

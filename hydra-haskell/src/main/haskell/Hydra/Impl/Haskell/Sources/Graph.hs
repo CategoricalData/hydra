@@ -16,17 +16,17 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
   where
     core = nominal . qualify hydraCoreName
     graph = nominal . qualify hydraGraphName
-    graphDef = datatype hydraGraphName
+    def = datatype hydraGraphName
     elements = [
 
-      graphDef "Element"
+      def "Element"
         "A graph element, having a name, data term (value), and schema term (type)" $
         universal "m" $ record [
           field "name" $ core "Name",
           field "schema" $ universal "m" $ core "Term",
           field "data" $ universal "m" $ core "Term"],
 
-      graphDef "Graph"
+      def "Graph"
         ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
           ++ " called the schema graph") $
         universal "m" $ record [
@@ -35,11 +35,11 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
           field "dataTerms" $ function (universal "m" $ core "Term") boolean,
           field "schemaGraph" $ graph "GraphName"],
 
-      graphDef "GraphName"
+      def "GraphName"
         "A unique identifier for a graph within a graph set"
         string,
 
-      graphDef "GraphSet"
+      def "GraphSet"
         "A collection of graphs with a distinguished root graph" $
         universal "m" $ record [
           field "graphs" $ Types.map (graph "GraphName") (universal "m" $ graph "Graph"),

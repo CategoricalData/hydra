@@ -14,35 +14,35 @@ codetreeAstName = "hydra/util/codetree/ast"
 codetreeAst :: Graph Meta
 codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
   where
-    astDef = datatype codetreeAstName
+    def = datatype codetreeAstName
     ast = nominal . qualify codetreeAstName
 
     elements = [
 
-      astDef "Associativity"
+      def "Associativity"
         "Operator associativity" $
         enum ["none", "left", "right", "both"],
 
-      astDef "BracketExpr"
+      def "BracketExpr"
         "An expression enclosed by brackets" $
         record [
           field "brackets" $ ast "Brackets",
           field "enclosed" $ ast "Expr"],
 
-      astDef "Brackets"
+      def "Brackets"
         "Matching open and close bracket symbols" $
         record [
           field "open" $ ast "Symbol",
           field "close" $ ast "Symbol"],
 
-      astDef "Expr"
+      def "Expr"
         "An abstract expression" $
         union [
           field "const" $ ast "Symbol",
           field "op" $ ast "OpExpr",
           field "brackets" $ ast "BracketExpr"],
 
-      astDef "Op"
+      def "Op"
         "An operator symbol" $
         record [
           field "symbol" $ ast "Symbol",
@@ -50,27 +50,27 @@ codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
           field "precedence" $ ast "Precedence",
           field "associativity" $ ast "Associativity"],
 
-      astDef "OpExpr"
+      def "OpExpr"
         "An operator expression" $
         record [
           field "op" $ ast "Op",
           field "lhs" $ ast "Expr",
           field "rhs" $ ast "Expr"],
 
-      astDef "Padding"
+      def "Padding"
         "Left and right padding for an operator" $
         record [
           field "left" $ ast "Ws",
           field "right" $ ast "Ws"],
 
-      astDef "Precedence"
+      def "Precedence"
         "Operator precedence" $
         int32,
 
-      astDef "Symbol"
+      def "Symbol"
         "Any symbol" $
         string,
 
-      astDef "Ws"
+      def "Ws"
         "One of several classes of whitespace" $
         enum ["none", "space", "break", "breakAndIndent"]]
