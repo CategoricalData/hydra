@@ -6,6 +6,7 @@ module Hydra.Impl.Haskell.Extras (
   eitherToQualified,
   elementAsTypedTerm,
   fieldTypes,
+  fromQname,
   graphNameOf,
   localNameOf,
   qualifiedToResult,
@@ -113,6 +114,9 @@ fieldTypes scx t = case t of
   where
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
+
+fromQname :: String -> String -> Name
+fromQname ns local = ns ++ "." ++ local
 
 graphNameOf :: Name -> String
 graphNameOf = fst . toQname
