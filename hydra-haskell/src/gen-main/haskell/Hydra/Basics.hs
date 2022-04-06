@@ -1,139 +1,139 @@
 module Hydra.Basics where
 
-import Hydra.Core as Core
-import Hydra.Lib.Lists as Lists
-import Hydra.Lib.Strings as Strings
+import qualified Hydra.Core as Core
+import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Strings as Strings
 import Data.Map
 import Data.Set
 
 -- Find the precision of a given floating-point type
-floatTypePrecision :: (FloatType -> Precision)
+floatTypePrecision :: (Core.FloatType -> Core.Precision)
 floatTypePrecision x = case x of
-  FloatTypeBigfloat -> PrecisionArbitrary
-  FloatTypeFloat32 -> (PrecisionBits 32)
-  FloatTypeFloat64 -> (PrecisionBits 64)
+  Core.FloatTypeBigfloat -> Core.PrecisionArbitrary
+  Core.FloatTypeFloat32 -> (Core.PrecisionBits 32)
+  Core.FloatTypeFloat64 -> (Core.PrecisionBits 64)
 
 -- All floating-point types in a canonical order
-floatTypes :: [FloatType]
+floatTypes :: [Core.FloatType]
 floatTypes = [
-  FloatTypeBigfloat,
-  FloatTypeFloat32,
-  FloatTypeFloat64]
+  Core.FloatTypeBigfloat,
+  Core.FloatTypeFloat32,
+  Core.FloatTypeFloat64]
 
 -- Find the float type for a given floating-point value
-floatValueType :: (FloatValue -> FloatType)
+floatValueType :: (Core.FloatValue -> Core.FloatType)
 floatValueType x = case x of
-  FloatValueBigfloat _ -> FloatTypeBigfloat
-  FloatValueFloat32 _ -> FloatTypeFloat32
-  FloatValueFloat64 _ -> FloatTypeFloat64
+  Core.FloatValueBigfloat _ -> Core.FloatTypeBigfloat
+  Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
+  Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- Find the function variant (constructor) for a given function
-functionVariant :: (Function a -> FunctionVariant)
+functionVariant :: (Core.Function a -> Core.FunctionVariant)
 functionVariant x = case x of
-  FunctionCases _ -> FunctionVariantCases
-  FunctionCompareTo _ -> FunctionVariantCompareTo
-  FunctionData -> FunctionVariantData
-  FunctionLambda _ -> FunctionVariantLambda
-  FunctionOptionalCases _ -> FunctionVariantOptionalCases
-  FunctionPrimitive _ -> FunctionVariantPrimitive
-  FunctionProjection _ -> FunctionVariantProjection
+  Core.FunctionCases _ -> Core.FunctionVariantCases
+  Core.FunctionCompareTo _ -> Core.FunctionVariantCompareTo
+  Core.FunctionData -> Core.FunctionVariantData
+  Core.FunctionLambda _ -> Core.FunctionVariantLambda
+  Core.FunctionOptionalCases _ -> Core.FunctionVariantOptionalCases
+  Core.FunctionPrimitive _ -> Core.FunctionVariantPrimitive
+  Core.FunctionProjection _ -> Core.FunctionVariantProjection
 
 -- All function variants (constructors), in a canonical order
-functionVariants :: [FunctionVariant]
+functionVariants :: [Core.FunctionVariant]
 functionVariants = [
-  FunctionVariantCases,
-  FunctionVariantCompareTo,
-  FunctionVariantData,
-  FunctionVariantLambda,
-  FunctionVariantOptionalCases,
-  FunctionVariantPrimitive,
-  FunctionVariantProjection]
+  Core.FunctionVariantCases,
+  Core.FunctionVariantCompareTo,
+  Core.FunctionVariantData,
+  Core.FunctionVariantLambda,
+  Core.FunctionVariantOptionalCases,
+  Core.FunctionVariantPrimitive,
+  Core.FunctionVariantProjection]
 
 -- Find whether a given integer type is signed (true) or unsigned (false)
-integerTypeIsSigned :: (IntegerType -> Bool)
+integerTypeIsSigned :: (Core.IntegerType -> Bool)
 integerTypeIsSigned x = case x of
-  IntegerTypeBigint -> True
-  IntegerTypeInt8 -> True
-  IntegerTypeInt16 -> True
-  IntegerTypeInt32 -> True
-  IntegerTypeInt64 -> True
-  IntegerTypeUint8 -> False
-  IntegerTypeUint16 -> False
-  IntegerTypeUint32 -> False
-  IntegerTypeUint64 -> False
+  Core.IntegerTypeBigint -> True
+  Core.IntegerTypeInt8 -> True
+  Core.IntegerTypeInt16 -> True
+  Core.IntegerTypeInt32 -> True
+  Core.IntegerTypeInt64 -> True
+  Core.IntegerTypeUint8 -> False
+  Core.IntegerTypeUint16 -> False
+  Core.IntegerTypeUint32 -> False
+  Core.IntegerTypeUint64 -> False
 
 -- Find the precision of a given integer type
-integerTypePrecision :: (IntegerType -> Precision)
+integerTypePrecision :: (Core.IntegerType -> Core.Precision)
 integerTypePrecision x = case x of
-  IntegerTypeBigint -> PrecisionArbitrary
-  IntegerTypeInt8 -> (PrecisionBits 8)
-  IntegerTypeInt16 -> (PrecisionBits 16)
-  IntegerTypeInt32 -> (PrecisionBits 32)
-  IntegerTypeInt64 -> (PrecisionBits 64)
-  IntegerTypeUint8 -> (PrecisionBits 8)
-  IntegerTypeUint16 -> (PrecisionBits 16)
-  IntegerTypeUint32 -> (PrecisionBits 32)
-  IntegerTypeUint64 -> (PrecisionBits 64)
+  Core.IntegerTypeBigint -> Core.PrecisionArbitrary
+  Core.IntegerTypeInt8 -> (Core.PrecisionBits 8)
+  Core.IntegerTypeInt16 -> (Core.PrecisionBits 16)
+  Core.IntegerTypeInt32 -> (Core.PrecisionBits 32)
+  Core.IntegerTypeInt64 -> (Core.PrecisionBits 64)
+  Core.IntegerTypeUint8 -> (Core.PrecisionBits 8)
+  Core.IntegerTypeUint16 -> (Core.PrecisionBits 16)
+  Core.IntegerTypeUint32 -> (Core.PrecisionBits 32)
+  Core.IntegerTypeUint64 -> (Core.PrecisionBits 64)
 
 -- All integer types, in a canonical order
-integerTypes :: [IntegerType]
+integerTypes :: [Core.IntegerType]
 integerTypes = [
-  IntegerTypeBigint,
-  IntegerTypeInt8,
-  IntegerTypeInt16,
-  IntegerTypeInt32,
-  IntegerTypeInt64,
-  IntegerTypeUint8,
-  IntegerTypeUint16,
-  IntegerTypeUint32,
-  IntegerTypeUint64]
+  Core.IntegerTypeBigint,
+  Core.IntegerTypeInt8,
+  Core.IntegerTypeInt16,
+  Core.IntegerTypeInt32,
+  Core.IntegerTypeInt64,
+  Core.IntegerTypeUint8,
+  Core.IntegerTypeUint16,
+  Core.IntegerTypeUint32,
+  Core.IntegerTypeUint64]
 
 -- Find the integer type for a given integer value
-integerValueType :: (IntegerValue -> IntegerType)
+integerValueType :: (Core.IntegerValue -> Core.IntegerType)
 integerValueType x = case x of
-  IntegerValueBigint _ -> IntegerTypeBigint
-  IntegerValueInt8 _ -> IntegerTypeInt8
-  IntegerValueInt16 _ -> IntegerTypeInt16
-  IntegerValueInt32 _ -> IntegerTypeInt32
-  IntegerValueInt64 _ -> IntegerTypeInt64
-  IntegerValueUint8 _ -> IntegerTypeUint8
-  IntegerValueUint16 _ -> IntegerTypeUint16
-  IntegerValueUint32 _ -> IntegerTypeUint32
-  IntegerValueUint64 _ -> IntegerTypeUint64
+  Core.IntegerValueBigint _ -> Core.IntegerTypeBigint
+  Core.IntegerValueInt8 _ -> Core.IntegerTypeInt8
+  Core.IntegerValueInt16 _ -> Core.IntegerTypeInt16
+  Core.IntegerValueInt32 _ -> Core.IntegerTypeInt32
+  Core.IntegerValueInt64 _ -> Core.IntegerTypeInt64
+  Core.IntegerValueUint8 _ -> Core.IntegerTypeUint8
+  Core.IntegerValueUint16 _ -> Core.IntegerTypeUint16
+  Core.IntegerValueUint32 _ -> Core.IntegerTypeUint32
+  Core.IntegerValueUint64 _ -> Core.IntegerTypeUint64
 
 -- Find the literal type for a given literal value
-literalType :: (Literal -> LiteralType)
+literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
-  LiteralBinary _ -> LiteralTypeBinary
-  LiteralBoolean _ -> LiteralTypeBoolean
-  LiteralFloat v -> (LiteralTypeFloat (floatValueType v))
-  LiteralInteger v -> (LiteralTypeInteger (integerValueType v))
-  LiteralString _ -> LiteralTypeString
+  Core.LiteralBinary _ -> Core.LiteralTypeBinary
+  Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
+  Core.LiteralFloat v -> (Core.LiteralTypeFloat (floatValueType v))
+  Core.LiteralInteger v -> (Core.LiteralTypeInteger (integerValueType v))
+  Core.LiteralString _ -> Core.LiteralTypeString
 
 -- Find the literal type variant (constructor) for a given literal value
-literalTypeVariant :: (LiteralType -> LiteralVariant)
+literalTypeVariant :: (Core.LiteralType -> Core.LiteralVariant)
 literalTypeVariant x = case x of
-  LiteralTypeBinary -> LiteralVariantBinary
-  LiteralTypeBoolean -> LiteralVariantBoolean
-  LiteralTypeFloat _ -> LiteralVariantFloat
-  LiteralTypeInteger _ -> LiteralVariantInteger
-  LiteralTypeString -> LiteralVariantString
+  Core.LiteralTypeBinary -> Core.LiteralVariantBinary
+  Core.LiteralTypeBoolean -> Core.LiteralVariantBoolean
+  Core.LiteralTypeFloat _ -> Core.LiteralVariantFloat
+  Core.LiteralTypeInteger _ -> Core.LiteralVariantInteger
+  Core.LiteralTypeString -> Core.LiteralVariantString
 
 -- Find the literal variant (constructor) for a given literal value
-literalVariant :: (Literal -> LiteralVariant)
+literalVariant :: (Core.Literal -> Core.LiteralVariant)
 literalVariant x = (literalTypeVariant (literalType x))
 
 -- All literal variants, in a canonical order
-literalVariants :: [LiteralVariant]
+literalVariants :: [Core.LiteralVariant]
 literalVariants = [
-  LiteralVariantBinary,
-  LiteralVariantBoolean,
-  LiteralVariantFloat,
-  LiteralVariantInteger,
-  LiteralVariantString]
+  Core.LiteralVariantBinary,
+  Core.LiteralVariantBoolean,
+  Core.LiteralVariantFloat,
+  Core.LiteralVariantInteger,
+  Core.LiteralVariantString]
 
 -- Construct a qualified (dot-separated) name
-qname :: (Name -> String -> Name)
+qname :: (Core.Name -> String -> Core.Name)
 qname ns name = (
   Strings.cat [
     ns,
@@ -141,73 +141,73 @@ qname ns name = (
     name])
 
 -- Find the term variant (constructor) for a given term
-termVariant :: (Term a -> TermVariant)
+termVariant :: (Core.Term a -> Core.TermVariant)
 termVariant term = (
   (
     \x -> case x of
-      ExpressionApplication _ -> TermVariantApplication
-      ExpressionElement _ -> TermVariantElement
-      ExpressionFunction _ -> TermVariantFunction
-      ExpressionList _ -> TermVariantList
-      ExpressionLiteral _ -> TermVariantLiteral
-      ExpressionMap _ -> TermVariantMap
-      ExpressionNominal _ -> TermVariantNominal
-      ExpressionOptional _ -> TermVariantOptional
-      ExpressionRecord _ -> TermVariantRecord
-      ExpressionSet _ -> TermVariantSet
-      ExpressionTypeAbstraction _ -> TermVariantTypeAbstraction
-      ExpressionTypeApplication _ -> TermVariantTypeApplication
-      ExpressionUnion _ -> TermVariantUnion
-      ExpressionVariable _ -> TermVariantVariable) (termData term))
+      Core.ExpressionApplication _ -> Core.TermVariantApplication
+      Core.ExpressionElement _ -> Core.TermVariantElement
+      Core.ExpressionFunction _ -> Core.TermVariantFunction
+      Core.ExpressionList _ -> Core.TermVariantList
+      Core.ExpressionLiteral _ -> Core.TermVariantLiteral
+      Core.ExpressionMap _ -> Core.TermVariantMap
+      Core.ExpressionNominal _ -> Core.TermVariantNominal
+      Core.ExpressionOptional _ -> Core.TermVariantOptional
+      Core.ExpressionRecord _ -> Core.TermVariantRecord
+      Core.ExpressionSet _ -> Core.TermVariantSet
+      Core.ExpressionTypeAbstraction _ -> Core.TermVariantTypeAbstraction
+      Core.ExpressionTypeApplication _ -> Core.TermVariantTypeApplication
+      Core.ExpressionUnion _ -> Core.TermVariantUnion
+      Core.ExpressionVariable _ -> Core.TermVariantVariable) (Core.termData term))
 
 -- All term (expression) variants, in a canonical order
-termVariants :: [TermVariant]
+termVariants :: [Core.TermVariant]
 termVariants = [
-  TermVariantApplication,
-  TermVariantLiteral,
-  TermVariantElement,
-  TermVariantFunction,
-  TermVariantList,
-  TermVariantMap,
-  TermVariantNominal,
-  TermVariantOptional,
-  TermVariantRecord,
-  TermVariantSet,
-  TermVariantUnion,
-  TermVariantVariable]
+  Core.TermVariantApplication,
+  Core.TermVariantLiteral,
+  Core.TermVariantElement,
+  Core.TermVariantFunction,
+  Core.TermVariantList,
+  Core.TermVariantMap,
+  Core.TermVariantNominal,
+  Core.TermVariantOptional,
+  Core.TermVariantRecord,
+  Core.TermVariantSet,
+  Core.TermVariantUnion,
+  Core.TermVariantVariable]
 
 -- TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)
 testLists els = (Lists.length (Lists.concat els))
 
 -- Find the type variant (constructor) for a given type
-typeVariant :: (Type -> TypeVariant)
+typeVariant :: (Core.Type -> Core.TypeVariant)
 typeVariant x = case x of
-  TypeElement _ -> TypeVariantElement
-  TypeFunction _ -> TypeVariantFunction
-  TypeList _ -> TypeVariantList
-  TypeLiteral _ -> TypeVariantLiteral
-  TypeMap _ -> TypeVariantMap
-  TypeNominal _ -> TypeVariantNominal
-  TypeOptional _ -> TypeVariantOptional
-  TypeRecord _ -> TypeVariantRecord
-  TypeSet _ -> TypeVariantSet
-  TypeUnion _ -> TypeVariantUnion
-  TypeUniversal _ -> TypeVariantUniversal
-  TypeVariable _ -> TypeVariantVariable
+  Core.TypeElement _ -> Core.TypeVariantElement
+  Core.TypeFunction _ -> Core.TypeVariantFunction
+  Core.TypeList _ -> Core.TypeVariantList
+  Core.TypeLiteral _ -> Core.TypeVariantLiteral
+  Core.TypeMap _ -> Core.TypeVariantMap
+  Core.TypeNominal _ -> Core.TypeVariantNominal
+  Core.TypeOptional _ -> Core.TypeVariantOptional
+  Core.TypeRecord _ -> Core.TypeVariantRecord
+  Core.TypeSet _ -> Core.TypeVariantSet
+  Core.TypeUnion _ -> Core.TypeVariantUnion
+  Core.TypeUniversal _ -> Core.TypeVariantUniversal
+  Core.TypeVariable _ -> Core.TypeVariantVariable
 
 -- All type variants, in a canonical order
-typeVariants :: [TypeVariant]
+typeVariants :: [Core.TypeVariant]
 typeVariants = [
-  TypeVariantLiteral,
-  TypeVariantElement,
-  TypeVariantFunction,
-  TypeVariantList,
-  TypeVariantMap,
-  TypeVariantNominal,
-  TypeVariantOptional,
-  TypeVariantRecord,
-  TypeVariantSet,
-  TypeVariantUnion,
-  TypeVariantUniversal,
-  TypeVariantVariable]
+  Core.TypeVariantLiteral,
+  Core.TypeVariantElement,
+  Core.TypeVariantFunction,
+  Core.TypeVariantList,
+  Core.TypeVariantMap,
+  Core.TypeVariantNominal,
+  Core.TypeVariantOptional,
+  Core.TypeVariantRecord,
+  Core.TypeVariantSet,
+  Core.TypeVariantUnion,
+  Core.TypeVariantUniversal,
+  Core.TypeVariantVariable]

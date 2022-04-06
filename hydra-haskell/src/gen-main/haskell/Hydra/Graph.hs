@@ -1,15 +1,15 @@
 module Hydra.Graph where
 
-import Hydra.Core as Core
+import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
 -- A graph element, having a name, data term (value), and schema term (type)
 data Element m 
   = Element {
-    elementName :: Name,
-    elementSchema :: (Term m),
-    elementData :: (Term m)}
+    elementName :: Core.Name,
+    elementSchema :: (Core.Term m),
+    elementData :: (Core.Term m)}
   deriving (Eq, Ord, Read, Show)
 
 _Element = "hydra/graph.Element"
@@ -25,7 +25,7 @@ data Graph m
   = Graph {
     graphName :: GraphName,
     graphElements :: [Element m],
-    graphDataTerms :: (Term m -> Bool),
+    graphDataTerms :: (Core.Term m -> Bool),
     graphSchemaGraph :: GraphName}
 
 _Graph = "hydra/graph.Graph"

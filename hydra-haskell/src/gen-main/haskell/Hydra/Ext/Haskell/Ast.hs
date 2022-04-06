@@ -5,7 +5,7 @@ import Data.Map
 import Data.Set
 
 -- A pattern-matching alternative
-data Alternative
+data Alternative 
   = Alternative {
     alternativePattern :: Pattern,
     alternativeRhs :: CaseRhs,
@@ -21,7 +21,7 @@ _Alternative_rhs = "rhs"
 _Alternative_binds = "binds"
 
 -- A type assertion
-data Assertion
+data Assertion 
   = Assertion {
     assertionName :: Name,
     assertionTypes :: [Type]}
@@ -39,7 +39,7 @@ type CaseRhs = Expression
 _CaseRhs = "hydra/ext/haskell/ast.CaseRhs"
 
 -- A data constructor
-data Constructor
+data Constructor 
   = ConstructorOrdinary Constructor_Ordinary
   | ConstructorRecord Constructor_Record
   deriving (Eq, Ord, Read, Show)
@@ -51,7 +51,7 @@ _Constructor_ordinary = "ordinary"
 _Constructor_record = "record"
 
 -- An ordinary (positional) data constructor
-data Constructor_Ordinary
+data Constructor_Ordinary 
   = Constructor_Ordinary {
     constructor_OrdinaryName :: Name,
     constructor_OrdinaryFields :: [Type]}
@@ -64,7 +64,7 @@ _Constructor_Ordinary_name = "name"
 _Constructor_Ordinary_fields = "fields"
 
 -- A record-style data constructor
-data Constructor_Record
+data Constructor_Record 
   = Constructor_Record {
     constructor_RecordName :: Name,
     constructor_RecordFields :: [Field]}
@@ -77,7 +77,7 @@ _Constructor_Record_name = "name"
 _Constructor_Record_fields = "fields"
 
 -- A data type declaration
-data DataDeclaration
+data DataDeclaration 
   = DataDeclaration {
     dataDeclarationKeyword :: DataDeclaration_Keyword,
     dataDeclarationContext :: [Assertion],
@@ -99,9 +99,9 @@ _DataDeclaration_constructors = "constructors"
 _DataDeclaration_deriving = "deriving"
 
 -- The 'data' versus 'newtype keyword
-data DataDeclaration_Keyword
-  = DataDeclaration_KeywordData
-  | DataDeclaration_KeywordNewtype
+data DataDeclaration_Keyword 
+  = DataDeclaration_KeywordData 
+  | DataDeclaration_KeywordNewtype 
   deriving (Eq, Ord, Read, Show)
 
 _DataDeclaration_Keyword = "hydra/ext/haskell/ast.DataDeclaration.Keyword"
@@ -111,7 +111,7 @@ _DataDeclaration_Keyword_data = "data"
 _DataDeclaration_Keyword_newtype = "newtype"
 
 -- A data declaration together with any comments
-data DeclarationWithComments
+data DeclarationWithComments 
   = DeclarationWithComments {
     declarationWithCommentsBody :: Declaration,
     declarationWithCommentsComments :: (Maybe String)}
@@ -124,7 +124,7 @@ _DeclarationWithComments_body = "body"
 _DeclarationWithComments_comments = "comments"
 
 -- A data or value declaration
-data Declaration
+data Declaration 
   = DeclarationData DataDeclaration
   | DeclarationType TypeDeclaration
   | DeclarationValueBinding ValueBinding
@@ -142,7 +142,7 @@ _Declaration_valueBinding = "valueBinding"
 _Declaration_typedBinding = "typedBinding"
 
 -- The left-hand side of a declaration
-data DeclarationHead
+data DeclarationHead 
   = DeclarationHeadApplication DeclarationHead_Application
   | DeclarationHeadParens DeclarationHead
   | DeclarationHeadSimple Name
@@ -157,7 +157,7 @@ _DeclarationHead_parens = "parens"
 _DeclarationHead_simple = "simple"
 
 -- An application-style declaration head
-data DeclarationHead_Application
+data DeclarationHead_Application 
   = DeclarationHead_Application {
     declarationHead_ApplicationFunction :: DeclarationHead,
     declarationHead_ApplicationOperand :: TypeVariable}
@@ -175,7 +175,7 @@ type Deriving = [Name]
 _Deriving = "hydra/ext/haskell/ast.Deriving"
 
 -- An export statement
-data Export
+data Export 
   = ExportDeclaration ImportExportSpec
   | ExportModule ModuleName
   deriving (Eq, Ord, Read, Show)
@@ -187,7 +187,7 @@ _Export_declaration = "declaration"
 _Export_module = "module"
 
 -- A data expression
-data Expression
+data Expression 
   = ExpressionApplication Expression_Application
   | ExpressionCase Expression_Case
   | ExpressionConstructRecord Expression_ConstructRecord
@@ -247,7 +247,7 @@ _Expression_updateRecord = "updateRecord"
 _Expression_variable = "variable"
 
 -- An application expression
-data Expression_Application
+data Expression_Application 
   = Expression_Application {
     expression_ApplicationFunction :: Expression,
     expression_ApplicationArgument :: Expression}
@@ -260,7 +260,7 @@ _Expression_Application_function = "function"
 _Expression_Application_argument = "argument"
 
 -- A case expression
-data Expression_Case
+data Expression_Case 
   = Expression_Case {
     expression_CaseCase :: Expression,
     expression_CaseAlternatives :: [Alternative]}
@@ -273,7 +273,7 @@ _Expression_Case_case = "case"
 _Expression_Case_alternatives = "alternatives"
 
 -- A record constructor expression
-data Expression_ConstructRecord
+data Expression_ConstructRecord 
   = Expression_ConstructRecord {
     expression_ConstructRecordName :: Name,
     expression_ConstructRecordFields :: [FieldUpdate]}
@@ -286,7 +286,7 @@ _Expression_ConstructRecord_name = "name"
 _Expression_ConstructRecord_fields = "fields"
 
 -- An 'if' expression
-data Expression_If
+data Expression_If 
   = Expression_If {
     expression_IfCondition :: Expression,
     expression_IfThen :: Expression,
@@ -302,7 +302,7 @@ _Expression_If_then = "then"
 _Expression_If_else = "else"
 
 -- An infix application expression
-data Expression_InfixApplication
+data Expression_InfixApplication 
   = Expression_InfixApplication {
     expression_InfixApplicationLhs :: Expression,
     expression_InfixApplicationOperator :: Operator,
@@ -318,7 +318,7 @@ _Expression_InfixApplication_operator = "operator"
 _Expression_InfixApplication_rhs = "rhs"
 
 -- A lambda expression
-data Expression_Lambda
+data Expression_Lambda 
   = Expression_Lambda {
     expression_LambdaBindings :: [Pattern],
     expression_LambdaInner :: Expression}
@@ -331,7 +331,7 @@ _Expression_Lambda_bindings = "bindings"
 _Expression_Lambda_inner = "inner"
 
 -- A 'let' expression
-data Expression_Let
+data Expression_Let 
   = Expression_Let {
     expression_LetBindings :: [Pattern],
     expression_LetInner :: Expression}
@@ -344,7 +344,7 @@ _Expression_Let_bindings = "bindings"
 _Expression_Let_inner = "inner"
 
 -- A prefix expression
-data Expression_PrefixApplication
+data Expression_PrefixApplication 
   = Expression_PrefixApplication {
     expression_PrefixApplicationOperator :: Operator,
     expression_PrefixApplicationRhs :: Expression}
@@ -357,7 +357,7 @@ _Expression_PrefixApplication_operator = "operator"
 _Expression_PrefixApplication_rhs = "rhs"
 
 -- A section expression
-data Expression_Section
+data Expression_Section 
   = Expression_Section {
     expression_SectionOperator :: Operator,
     expression_SectionExpression :: Expression}
@@ -370,7 +370,7 @@ _Expression_Section_operator = "operator"
 _Expression_Section_expression = "expression"
 
 -- A type signature expression
-data Expression_TypeSignature
+data Expression_TypeSignature 
   = Expression_TypeSignature {
     expression_TypeSignatureInner :: Expression,
     expression_TypeSignatureType :: Type}
@@ -383,7 +383,7 @@ _Expression_TypeSignature_inner = "inner"
 _Expression_TypeSignature_type = "type"
 
 -- An update record expression
-data Expression_UpdateRecord
+data Expression_UpdateRecord 
   = Expression_UpdateRecord {
     expression_UpdateRecordInner :: Expression,
     expression_UpdateRecordFields :: [FieldUpdate]}
@@ -396,7 +396,7 @@ _Expression_UpdateRecord_inner = "inner"
 _Expression_UpdateRecord_fields = "fields"
 
 -- A field (name/type pair)
-data Field
+data Field 
   = Field {
     fieldName :: Name,
     fieldType :: Type}
@@ -409,7 +409,7 @@ _Field_name = "name"
 _Field_type = "type"
 
 -- A field name and value
-data FieldUpdate
+data FieldUpdate 
   = FieldUpdate {
     fieldUpdateName :: Name,
     fieldUpdateValue :: Expression}
@@ -422,7 +422,7 @@ _FieldUpdate_name = "name"
 _FieldUpdate_value = "value"
 
 -- An import statement
-data Import
+data Import 
   = Import {
     importQualified :: Bool,
     importModule :: ModuleName,
@@ -441,7 +441,7 @@ _Import_as = "as"
 _Import_spec = "spec"
 
 -- An import specification
-data Import_Spec
+data Import_Spec 
   = Import_SpecList [ImportExportSpec]
   | Import_SpecHiding [ImportExportSpec]
   deriving (Eq, Ord, Read, Show)
@@ -453,9 +453,9 @@ _Import_Spec_list = "list"
 _Import_Spec_hiding = "hiding"
 
 -- An import modifier ('pattern' or 'type')
-data ImportModifier
-  = ImportModifierPattern
-  | ImportModifierType
+data ImportModifier 
+  = ImportModifierPattern 
+  | ImportModifierType 
   deriving (Eq, Ord, Read, Show)
 
 _ImportModifier = "hydra/ext/haskell/ast.ImportModifier"
@@ -465,7 +465,7 @@ _ImportModifier_pattern = "pattern"
 _ImportModifier_type = "type"
 
 -- An import or export specification
-data ImportExportSpec
+data ImportExportSpec 
   = ImportExportSpec {
     importExportSpecModifier :: (Maybe ImportModifier),
     importExportSpecName :: Name,
@@ -481,8 +481,8 @@ _ImportExportSpec_name = "name"
 _ImportExportSpec_subspec = "subspec"
 
 
-data ImportExportSpec_Subspec
-  = ImportExportSpec_SubspecAll
+data ImportExportSpec_Subspec 
+  = ImportExportSpec_SubspecAll 
   | ImportExportSpec_SubspecList [Name]
   deriving (Eq, Ord, Read, Show)
 
@@ -493,7 +493,7 @@ _ImportExportSpec_Subspec_all = "all"
 _ImportExportSpec_Subspec_list = "list"
 
 -- A literal value
-data Literal
+data Literal 
   = LiteralChar Int
   | LiteralDouble Double
   | LiteralFloat Float
@@ -517,7 +517,7 @@ _Literal_integer = "integer"
 _Literal_string = "string"
 
 
-data LocalBinding
+data LocalBinding 
   = LocalBindingSignature TypeSignature
   | LocalBindingValue ValueBinding
   deriving (Eq, Ord, Read, Show)
@@ -534,7 +534,7 @@ type LocalBindings = [LocalBinding]
 _LocalBindings = "hydra/ext/haskell/ast.LocalBindings"
 
 
-data Module
+data Module 
   = Module {
     moduleHead :: (Maybe ModuleHead),
     moduleImports :: [Import],
@@ -550,7 +550,7 @@ _Module_imports = "imports"
 _Module_declarations = "declarations"
 
 
-data ModuleHead
+data ModuleHead 
   = ModuleHead {
     moduleHeadName :: ModuleName,
     moduleHeadExports :: [Export]}
@@ -568,7 +568,7 @@ type ModuleName = String
 _ModuleName = "hydra/ext/haskell/ast.ModuleName"
 
 
-data Name
+data Name 
   = NameImplicit QualifiedName
   | NameNormal QualifiedName
   | NameParens QualifiedName
@@ -588,7 +588,7 @@ type NamePart = String
 _NamePart = "hydra/ext/haskell/ast.NamePart"
 
 
-data Operator
+data Operator 
   = OperatorBacktick QualifiedName
   | OperatorNormal QualifiedName
   deriving (Eq, Ord, Read, Show)
@@ -600,7 +600,7 @@ _Operator_backtick = "backtick"
 _Operator_normal = "normal"
 
 
-data Pattern
+data Pattern 
   = PatternApplication Pattern_Application
   | PatternAs Pattern_As
   | PatternList [Pattern]
@@ -610,7 +610,7 @@ data Pattern
   | PatternRecord Pattern_Record
   | PatternTuple [Pattern]
   | PatternTyped Pattern_Typed
-  | PatternWildcard
+  | PatternWildcard 
   deriving (Eq, Ord, Read, Show)
 
 _Pattern = "hydra/ext/haskell/ast.Pattern"
@@ -636,7 +636,7 @@ _Pattern_typed = "typed"
 _Pattern_wildcard = "wildcard"
 
 
-data Pattern_Application
+data Pattern_Application 
   = Pattern_Application {
     pattern_ApplicationName :: Name,
     pattern_ApplicationArgs :: [Pattern]}
@@ -649,7 +649,7 @@ _Pattern_Application_name = "name"
 _Pattern_Application_args = "args"
 
 
-data Pattern_As
+data Pattern_As 
   = Pattern_As {
     pattern_AsName :: Name,
     pattern_AsInner :: Pattern}
@@ -662,7 +662,7 @@ _Pattern_As_name = "name"
 _Pattern_As_inner = "inner"
 
 
-data Pattern_Record
+data Pattern_Record 
   = Pattern_Record {
     pattern_RecordName :: Name,
     pattern_RecordFields :: [PatternField]}
@@ -675,7 +675,7 @@ _Pattern_Record_name = "name"
 _Pattern_Record_fields = "fields"
 
 
-data Pattern_Typed
+data Pattern_Typed 
   = Pattern_Typed {
     pattern_TypedInner :: Pattern,
     pattern_TypedType :: Type}
@@ -688,7 +688,7 @@ _Pattern_Typed_inner = "inner"
 _Pattern_Typed_type = "type"
 
 
-data PatternField
+data PatternField 
   = PatternField {
     patternFieldName :: Name,
     patternFieldPattern :: Pattern}
@@ -701,7 +701,7 @@ _PatternField_name = "name"
 _PatternField_pattern = "pattern"
 
 
-data QualifiedName
+data QualifiedName 
   = QualifiedName {
     qualifiedNameQualifiers :: [NamePart],
     qualifiedNameUnqualified :: NamePart}
@@ -724,7 +724,7 @@ type Statement = Expression
 _Statement = "hydra/ext/haskell/ast.Statement"
 
 
-data Type
+data Type 
   = TypeApplication Type_Application
   | TypeFunction Type_Function
   | TypeInfix Type_Infix
@@ -751,7 +751,7 @@ _Type_tuple = "tuple"
 _Type_variable = "variable"
 
 
-data Type_Application
+data Type_Application 
   = Type_Application {
     type_ApplicationContext :: Type,
     type_ApplicationArgument :: Type}
@@ -764,7 +764,7 @@ _Type_Application_context = "context"
 _Type_Application_argument = "argument"
 
 
-data Type_Function
+data Type_Function 
   = Type_Function {
     type_FunctionDomain :: Type,
     type_FunctionCodomain :: Type}
@@ -777,7 +777,7 @@ _Type_Function_domain = "domain"
 _Type_Function_codomain = "codomain"
 
 
-data Type_Infix
+data Type_Infix 
   = Type_Infix {
     type_InfixLhs :: Type,
     type_InfixOperator :: Operator,
@@ -793,7 +793,7 @@ _Type_Infix_operator = "operator"
 _Type_Infix_rhs = "rhs"
 
 
-data TypeDeclaration
+data TypeDeclaration 
   = TypeDeclaration {
     typeDeclarationName :: DeclarationHead,
     typeDeclarationType :: Type}
@@ -806,7 +806,7 @@ _TypeDeclaration_name = "name"
 _TypeDeclaration_type = "type"
 
 
-data TypeSignature
+data TypeSignature 
   = TypeSignature {
     typeSignatureName :: Name,
     typeSignatureType :: Type}
@@ -824,7 +824,7 @@ type TypeVariable = Name
 _TypeVariable = "hydra/ext/haskell/ast.TypeVariable"
 
 
-data TypedBinding
+data TypedBinding 
   = TypedBinding {
     typedBindingTypeSignature :: TypeSignature,
     typedBindingValueBinding :: ValueBinding}
@@ -837,7 +837,7 @@ _TypedBinding_typeSignature = "typeSignature"
 _TypedBinding_valueBinding = "valueBinding"
 
 
-data ValueBinding
+data ValueBinding 
   = ValueBindingSimple ValueBinding_Simple
   deriving (Eq, Ord, Read, Show)
 
@@ -846,7 +846,7 @@ _ValueBinding = "hydra/ext/haskell/ast.ValueBinding"
 _ValueBinding_simple = "simple"
 
 
-data ValueBinding_Simple
+data ValueBinding_Simple 
   = ValueBinding_Simple {
     valueBinding_SimplePattern :: Pattern,
     valueBinding_SimpleRhs :: RightHandSide,
