@@ -5,7 +5,7 @@ import Data.Map
 import Data.Set
 
 -- The type of a collection, such as a list of strings or an optional integer value
-data CollectionType
+data CollectionType 
   = CollectionTypeList Type
   | CollectionTypeMap Type
   | CollectionTypeOptional Type
@@ -23,7 +23,7 @@ _CollectionType_optional = "optional"
 _CollectionType_set = "set"
 
 -- A collection of values, such as a list of strings or an optional integer value
-data CollectionValue
+data CollectionValue 
   = CollectionValueList [Value]
   | CollectionValueMap (Map Key Value)
   | CollectionValueOptional (Maybe Value)
@@ -41,7 +41,7 @@ _CollectionValue_optional = "optional"
 _CollectionValue_set = "set"
 
 -- An edge, comprised of an id, an out-vertex and in-vertex id, and zero or more properties
-data Edge
+data Edge 
   = Edge {
     edgeId :: EdgeId,
     edgeLabel :: Label,
@@ -73,7 +73,7 @@ type EdgeIdType = EdgeType
 _EdgeIdType = "hydra/ext/tinkerpop/v3.EdgeIdType"
 
 -- The type of an edge, with characteristic id, out-vertex, in-vertex, and property types
-data EdgeType
+data EdgeType 
   = EdgeType {
     edgeTypeId :: Core.LiteralType,
     edgeTypeOut :: VertexIdType,
@@ -92,7 +92,7 @@ _EdgeType_in = "in"
 _EdgeType_properties = "properties"
 
 -- A vertex or edge id
-data Id
+data Id 
   = IdVertex VertexId
   | IdEdge EdgeId
   deriving (Eq, Ord, Read, Show)
@@ -104,7 +104,7 @@ _Id_vertex = "vertex"
 _Id_edge = "edge"
 
 -- The type of a reference to a strongly-typed element (vertex or edge) by id
-data IdType
+data IdType 
   = IdTypeVertex VertexType
   | IdTypeEdge EdgeType
   deriving (Eq, Ord, Read, Show)
@@ -126,7 +126,7 @@ type Label = String
 _Label = "hydra/ext/tinkerpop/v3.Label"
 
 -- The type of a value, such as a property value
-data Type
+data Type 
   = TypeAtomic Core.LiteralType
   | TypeCollection CollectionType
   | TypeElement IdType
@@ -141,7 +141,7 @@ _Type_collection = "collection"
 _Type_element = "element"
 
 -- A concrete value such as a number or string, a collection of other values, or an element reference
-data Value
+data Value 
   = ValueAtomic Core.Literal
   | ValueCollection CollectionValue
   | ValueElement Id
@@ -156,7 +156,7 @@ _Value_collection = "collection"
 _Value_element = "element"
 
 -- A vertex, comprised of an id and zero or more properties
-data Vertex
+data Vertex 
   = Vertex {
     vertexId :: VertexId,
     vertexLabel :: Label,
@@ -182,7 +182,7 @@ type VertexIdType = VertexType
 _VertexIdType = "hydra/ext/tinkerpop/v3.VertexIdType"
 
 -- The type of a vertex, with characteristic id and property types
-data VertexType
+data VertexType 
   = VertexType {
     vertexTypeId :: Core.LiteralType,
     vertexTypeProperties :: (Map Key Value)}

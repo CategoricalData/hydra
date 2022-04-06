@@ -1,6 +1,6 @@
 module Hydra.Util.Codetree.Ast where
 
-import Hydra.Core as Core
+import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 

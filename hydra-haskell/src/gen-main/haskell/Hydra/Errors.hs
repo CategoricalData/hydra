@@ -1,6 +1,6 @@
 module Hydra.Errors where
 
-import Hydra.Core as Core
+import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
