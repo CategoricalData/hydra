@@ -18,6 +18,7 @@ import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
+import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Formatting
@@ -50,6 +51,7 @@ generateSources langName toFile serialize baseDir = do
     writeDataGraph adaptersUtilsGraph [basicsGraph]
     writeDataGraph haskellAst []
     writeDataGraph jsonJson []
+    writeDataGraph pegasusPdl [jsonJson]
     writeDataGraph codetreeAst []
     writeDataGraph tinkerpopV3 [hydraCore]
   where
