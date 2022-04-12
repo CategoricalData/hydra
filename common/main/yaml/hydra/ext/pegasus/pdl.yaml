@@ -68,53 +68,44 @@ definitions:
   - name: Namespace
     type: string
 
-  - name: QualifiedName
-    type:
-      record:
-        - name: name
-          type: Name
-
-        - name: namespace
-          type:
-            optional: Namespace
-
   - name: Package
     type: string
 
   - name: PrimitiveType
     type:
-      - name: boolean
-        type: boolean
+      record:
+        - name: boolean
+          type: boolean
 
-      - name: bytes
-        type: bytes
+        - name: bytes
+          type: bytes
 
-      - name: double
-        type:
-          float:
-            precision:
-              bits: 64
+        - name: double
+          type:
+            float:
+              precision:
+                bits: 64
 
-      - name: float
-        type:
-          float:
-            precision:
-              bits: 32
+        - name: float
+          type:
+            float:
+              precision:
+                bits: 32
 
-      - name: int
-        type:
-          integer:
-            precision:
-              bits: 32
+        - name: int
+          type:
+            integer:
+              precision:
+                bits: 32
 
-      - name: long
-        type:
-          integer:
-            precision:
-              bits: 64
+        - name: long
+          type:
+            integer:
+              precision:
+                bits: 64
 
-      - name: string
-        type: string
+        - name: string
+          type: string
 
   - name: PropertyKey
     type: string
@@ -128,6 +119,16 @@ definitions:
         - name: value
           type:
             optional: json.Value
+
+  - name: QualifiedName
+    type:
+      record:
+        - name: name
+          type: Name
+
+        - name: namespace
+          type:
+            optional: Namespace
 
   - name: RecordField
     type:
