@@ -1,3 +1,9 @@
+{-|
+Model for PDL (Pegasus Data Language) schemas
+
+Based on the specification at https://linkedin.github.io/rest.li/pdl_schema
+-}
+
 module Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -73,14 +79,14 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
 
       def "PrimitiveType"
         "" $
-        record [
-          field "boolean" boolean,
-          field "bytes" binary,
-          field "double" float64,
-          field "float" float32,
-          field "int" int32,
-          field "long" int64,
-          field "string" string],
+        enum [
+          "boolean",
+          "bytes",
+          "double",
+          "float",
+          "int",
+          "long",
+          "string"],
 
       def "PropertyKey"
         ""
@@ -104,6 +110,7 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           field "name" $ pdl "FieldName",
           field "value" $ pdl "Schema",
           field "optional" boolean,
+          -- Note: the default value for an enum-valued field must be one of the enumerated string symbols
           field "default" $ optional $ json "Value",
           field "annotations" $ pdl "Annotations"],
 
@@ -111,6 +118,7 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
         "" $
         record [
           field "fields" $ list $ pdl "RecordField",
+          -- Note: all included schemas must be record schemas
           field "includes" $ list $ pdl "NamedSchema"],
 
       def "Schema"
@@ -121,6 +129,7 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           field "inline" $ pdl "NamedSchema",
           field "map" $ pdl "Schema",
           field "named" $ pdl "QualifiedName",
+          field "null" unit,
           field "primitive" $ pdl "PrimitiveType",
           field "union" $ pdl "UnionSchema"],
 
@@ -137,8 +146,10 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
         record [
           field "alias" $ optional $ pdl "FieldName",
           field "value" $ pdl "Schema",
+          -- Note: annotations are only available for aliased members
           field "annotations" $ pdl "Annotations"],
 
+      -- Note: unions are not allowed as member types of other unions
       def "UnionSchema"
         "" $
         list $ pdl "UnionMember"]

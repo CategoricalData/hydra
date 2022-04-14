@@ -1,5 +1,6 @@
 module Hydra.Impl.Haskell.GraphIO (
   generateHydraHaskell,
+  generateHydraPdl,
   generateHydraScala,
 ) where
 
@@ -9,6 +10,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Ext.Haskell.Serde
+import Hydra.Ext.Pegasus.Serde
 import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
 import Hydra.Impl.Haskell.Sources.Core
@@ -34,15 +36,17 @@ import qualified Data.Map as M
 import qualified System.Directory as SD
 
 
+toFileName :: String -> String -> String
+toFileName ext name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ext
+
 generateHydraHaskell :: FP.FilePath -> IO ()
-generateHydraHaskell hydraHome = generateSources "haskell" nameToHaskellFileName dataGraphToHaskellString (FP.combine hydraHome "hydra-haskell")
-  where
-    nameToHaskellFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".hs"
+generateHydraHaskell hydraHome = generateSources "haskell" (toFileName ".hs") dataGraphToHaskellString (FP.combine hydraHome "hydra-haskell")
+
+generateHydraPdl :: FP.FilePath -> IO ()
+generateHydraPdl hydraHome = generateSources "pdl" (toFileName ".pdl") dataGraphToPdlString (FP.combine hydraHome "hydra-pdl")
 
 generateHydraScala :: FP.FilePath -> IO ()
-generateHydraScala hydraHome = generateSources "scala" nameToScalaFileName dataGraphToScalaString (FP.combine hydraHome "hydra-scala")
-  where
-    nameToScalaFileName name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ".scala"
+generateHydraScala hydraHome = generateSources "scala" (toFileName ".scala") dataGraphToScalaString (FP.combine hydraHome "hydra-scala")
 
 generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
 generateSources langName toFile serialize baseDir = do
@@ -73,7 +77,7 @@ writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
   -> Context m -> Graph m -> Maybe FilePath -> IO ()
 writeGraph serialize cx g path = do
   case serialize cx g of
-    Qualified Nothing warnings -> putStrLn $ "Transformation failed: " ++ indent (unlines warnings)
+    Qualified Nothing warnings -> putStrLn $ "Transformation failed in " ++ graphName g ++ ": " ++ indent (unlines warnings)
     Qualified (Just s) warnings -> do
       if not (L.null warnings)
         then putStrLn $ "Warnings: " ++ indent (unlines warnings) ++ "\n"

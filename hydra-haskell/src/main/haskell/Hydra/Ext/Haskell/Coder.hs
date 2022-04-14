@@ -53,10 +53,10 @@ constructModule cx g coders pairs = do
     return $ H.Module (Just $ H.ModuleHead (importName $ graphName g) []) imports decls
   where
     createDeclarations pair@(el, TypedTerm typ term) = if typ == TypeNominal _Type
-      then createTypeDeclarations pair
+      then createTypeDeclarations el term
       else createOtherDeclarations pair
 
-    createTypeDeclarations (el, TypedTerm typ term) = do
+    createTypeDeclarations el term = do
         let lname = localNameOf $ elementName el
         let hname = simpleName lname
         t <- decodeType cx term
@@ -152,6 +152,12 @@ elementReference aliases name = case alias of
   where
     (ns, local) = toQname name
     alias = M.lookup ns aliases
+
+encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Type -> Result H.Type
+encodeAdaptedType aliases cx typ = do
+  let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
+  ad <- qualifiedToResult $ termAdapter ac typ
+  encodeType aliases $ adapterTarget ad
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction aliases cx meta fun = case fun of
@@ -306,15 +312,6 @@ encodeType aliases typ = case typ of
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType aliases
-
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Type -> Result H.Type
-encodeAdaptedType aliases cx typ = do
-  let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
-  ad <- qualifiedToResult $ termAdapter ac typ
---  case typ of
---    TypeUniversal (UniversalType v body) -> fail $ "from " ++ (show typ) ++ " to " ++ show (adapterTarget ad)
---    _ -> pure ()
-  encodeType aliases $ adapterTarget ad
 
 haskellLanguage :: Language
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
