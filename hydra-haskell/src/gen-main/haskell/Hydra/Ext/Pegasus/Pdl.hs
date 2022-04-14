@@ -98,14 +98,13 @@ _Package = "hydra/ext/pegasus/pdl.Package"
 
 
 data PrimitiveType 
-  = PrimitiveType {
-    primitiveTypeBoolean :: Bool,
-    primitiveTypeBytes :: String,
-    primitiveTypeDouble :: Double,
-    primitiveTypeFloat :: Float,
-    primitiveTypeInt :: Int,
-    primitiveTypeLong :: Integer,
-    primitiveTypeString :: String}
+  = PrimitiveTypeBoolean 
+  | PrimitiveTypeBytes 
+  | PrimitiveTypeDouble 
+  | PrimitiveTypeFloat 
+  | PrimitiveTypeInt 
+  | PrimitiveTypeLong 
+  | PrimitiveTypeString 
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveType = "hydra/ext/pegasus/pdl.PrimitiveType"
@@ -197,6 +196,7 @@ data Schema
   | SchemaInline NamedSchema
   | SchemaMap Schema
   | SchemaNamed QualifiedName
+  | SchemaNull 
   | SchemaPrimitive PrimitiveType
   | SchemaUnion UnionSchema
   deriving (Eq, Ord, Read, Show)
@@ -212,6 +212,8 @@ _Schema_inline = "inline"
 _Schema_map = "map"
 
 _Schema_named = "named"
+
+_Schema_null = "null"
 
 _Schema_primitive = "primitive"
 

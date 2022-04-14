@@ -1,15 +1,7 @@
 module Hydra.Impl.Haskell.Dsl.Types where
 
 import Hydra.Core
---import Hydra.Graph
---import Hydra.Steps
---import Hydra.Impl.Haskell.Extras
---import Prelude hiding (map)
---import qualified Data.List as L
 import qualified Data.Map as M
---import qualified Data.Set as S
---import qualified Data.Maybe as Y
---import qualified Control.Monad as CM
 
 
 bigfloat :: Type
