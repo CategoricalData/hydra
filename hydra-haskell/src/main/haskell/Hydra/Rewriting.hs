@@ -12,6 +12,7 @@ module Hydra.Rewriting (
   subterms,
   subtypes,
   termDependencyNames,
+  topologicalSortElements,
   typeDependencyNames,
   typeDependencies,
   ) where
@@ -23,6 +24,7 @@ import Hydra.Graph
 import Hydra.Primitives
 import Hydra.Evaluation
 import Hydra.CoreDecoding
+import Hydra.Sorting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -160,6 +162,11 @@ termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre 
       ExpressionFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
       ExpressionNominal (NominalTerm name _) -> if withNoms then S.insert name names else names
       _ -> names
+
+topologicalSortElements :: [Element m] -> Maybe [Name]
+topologicalSortElements els = topologicalSort $ adjlist <$> els
+  where
+    adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
 
 typeDependencies :: Show m => Context m -> Name -> Result (M.Map Name Type)
 typeDependencies scx name = deps (S.fromList [name]) M.empty

@@ -34,16 +34,20 @@ constructModule cx g coders pairs = do
     let ns = pdlNameForGraph g
     let pkg = Nothing
     let imports = [] -- TODO
-    schemas <- CM.mapM toSchema pairs
+    sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
+      Nothing -> fail $ "types form a cycle (unsupported in PDL)"
+      Just sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
+    schemas <- CM.mapM toSchema sortedPairs
     return $ PDL.SchemaFile ns pkg imports schemas
   where
+    pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
     aliases = importAliasesForGraph g
     toSchema (el, TypedTerm typ term) = if typ == TypeNominal _Type
       then decodeType cx term >>= typeToSchema el
 --      then deref cx term >>= decodeType cx >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
-      let qname = pdlNameForElement $ elementName el
+      let qname = pdlNameForElement False $ elementName el
       res <- encodeAdaptedType aliases cx typ
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
@@ -84,7 +88,7 @@ encodeType aliases typ = case typ of
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement name
+    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
     TypeRecord fields -> do
       let includes = []
@@ -129,8 +133,9 @@ importAliasesForGraph g = M.empty -- TODO
 
 noAnnotations = PDL.Annotations Nothing False
 
-pdlNameForElement :: Name -> PDL.QualifiedName
-pdlNameForElement name = PDL.QualifiedName local $ Just (slashesToDots ns)
+pdlNameForElement :: Bool -> Name -> PDL.QualifiedName
+pdlNameForElement withNs name = PDL.QualifiedName local
+    $ if withNs then Just (slashesToDots ns) else Nothing
   where
     (ns, local) = toQname name
 
