@@ -15,6 +15,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+pegasusPdlModule = Module pegasusPdl [jsonJsonModule]
+
 pegasusPdlName = "hydra/ext/pegasus/pdl"
 
 pegasusPdl :: Graph Meta

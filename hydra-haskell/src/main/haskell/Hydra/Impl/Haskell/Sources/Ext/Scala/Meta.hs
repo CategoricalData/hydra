@@ -8,6 +8,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+scalaMetaModule = Module scalaMeta []
+
 scalaMetaName = "hydra/ext/scala/meta"
 
 scalaMeta :: Graph Meta

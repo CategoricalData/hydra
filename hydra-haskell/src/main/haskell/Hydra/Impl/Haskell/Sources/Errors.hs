@@ -8,6 +8,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+hydraErrorsModule = Module hydraErrors []
+
 -- Note: here, the element namespace doubles as a graph name
 hydraErrorsName = "hydra/errors"
 

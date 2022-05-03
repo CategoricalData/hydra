@@ -54,3 +54,15 @@ _GraphSet = "hydra/graph.GraphSet"
 _GraphSet_graphs = "graphs"
 
 _GraphSet_root = "root"
+
+-- A logical collection of elements; a graph subset with dependencies on zero or more other subsets
+data Module m 
+  = Module {
+    moduleGraph :: (Graph m),
+    moduleImports :: [Module m]}
+
+_Module = "hydra/graph.Module"
+
+_Module_graph = "graph"
+
+_Module_imports = "imports"

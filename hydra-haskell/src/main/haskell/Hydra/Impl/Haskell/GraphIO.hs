@@ -1,7 +1,8 @@
 module Hydra.Impl.Haskell.GraphIO (
-  generateHydraHaskell,
-  generateHydraPdl,
-  generateHydraScala,
+  generateHaskell,
+  generatePdl,
+  generateScala,
+  coreModules
 ) where
 
 import Hydra.Core
@@ -30,47 +31,52 @@ import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Libraries
 import qualified Hydra.Lib.Strings as Strings
 
+import qualified Control.Monad as CM
 import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified System.Directory as SD
 
 
-toFileName :: String -> String -> String
-toFileName ext name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ext
+generateHaskell :: [Module Meta] -> FP.FilePath -> IO ()
+generateHaskell = generateSources (toFileName ".hs") dataGraphToHaskellString
 
-generateHydraHaskell :: FP.FilePath -> IO ()
-generateHydraHaskell hydraHome = generateSources "haskell" (toFileName ".hs") dataGraphToHaskellString (FP.combine hydraHome "hydra-haskell")
+generatePdl :: [Module Meta] -> FP.FilePath -> IO ()
+generatePdl = generateSources (toFileName ".pdl") dataGraphToPdlString
 
-generateHydraPdl :: FP.FilePath -> IO ()
-generateHydraPdl hydraHome = generateSources "pdl" (toFileName ".pdl") dataGraphToPdlString (FP.combine hydraHome "hydra-pdl")
+generateScala :: [Module Meta] -> FP.FilePath -> IO ()
+generateScala = generateSources (toFileName ".scala") dataGraphToScalaString
 
-generateHydraScala :: FP.FilePath -> IO ()
-generateHydraScala hydraHome = generateSources "scala" (toFileName ".scala") dataGraphToScalaString (FP.combine hydraHome "hydra-scala")
-
-generateSources :: String -> (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> FP.FilePath -> IO ()
-generateSources langName toFile serialize baseDir = do
-    writeDataGraph hydraCore []
-    writeDataGraph hydraErrors []
-    writeDataGraph hydraGraph [hydraCore]
-    writeDataGraph basicsGraph []
-    writeDataGraph adaptersUtilsGraph [basicsGraph]
-    writeDataGraph haskellAst []
-    writeDataGraph jsonJson []
-    writeDataGraph pegasusPdl [jsonJson]
-    writeDataGraph scalaMeta []
-    writeDataGraph yamlModel []
-    writeDataGraph codetreeAst []
-    writeDataGraph tinkerpopV3 [hydraCore]
+generateSources :: (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> [Module Meta] -> FP.FilePath -> IO ()
+generateSources toFile serialize modules baseDir = do
+    CM.mapM writeDataGraph modules
+    return ()
   where
-    writeDataGraph g deps = do
-      let cx = setContextElements (g:deps) $ standardContext {
+    writeDataGraph (Module g deps) = do
+      let cx = setContextElements (g:(moduleGraph <$> deps)) $ standardContext {
              contextGraphs = GraphSet (M.fromList [
                (graphName g, g),
                ("hydra/core", hydraCore)]) (graphName g),
              contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
-      writeGraph serialize cx g $ Just $ FP.combine baseDir
-        $ "src/gen-main/" ++ langName ++ "/" ++ toFile (graphName g)
+      writeGraph serialize cx g $ Just $ FP.combine baseDir $ toFile (graphName g)
+
+coreModules :: [Module Meta]
+coreModules = [
+  hydraCoreModule,
+  hydraErrorsModule,
+  hydraGraphModule,
+  hydraBasicsModule,
+  adapterUtilsModule,
+  haskellAstModule,
+  jsonJsonModule,
+  pegasusPdlModule,
+  scalaMetaModule,
+  yamlModelModule,
+  codetreeAstModule,
+  tinkerpopV3Module]
+
+toFileName :: String -> String -> String
+toFileName ext name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ext
 
 writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
   => (Context m -> Graph m -> Qualified String)

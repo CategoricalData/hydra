@@ -8,6 +8,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+codetreeAstModule = Module codetreeAst []
+
 -- Note: here, the element namespace doubles as a graph name
 codetreeAstName = "hydra/util/codetree/ast"
 
