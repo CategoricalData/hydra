@@ -8,6 +8,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+hydraGraphModule = Module hydraGraph [hydraCoreModule]
+
 -- Note: here, the element namespace doubles as a graph name
 hydraGraphName = "hydra/graph"
 
@@ -43,4 +46,10 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
         "A collection of graphs with a distinguished root graph" $
         universal "m" $ record [
           field "graphs" $ Types.map (graph "GraphName") (universal "m" $ graph "Graph"),
-          field "root" $ graph "GraphName"]]
+          field "root" $ graph "GraphName"],
+
+     def "Module"
+       "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
+       universal "m" $ record [
+         field "graph" $ universal "m" $ graph "Graph",
+         field "imports" $ list $ universal "m" $ graph "Module"]]

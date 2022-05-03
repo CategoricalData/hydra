@@ -18,6 +18,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+yamlModelModule = Module yamlModel []
+
 yamlModelName = "hydra/ext/yaml/model"
 
 yamlModel :: Graph Meta

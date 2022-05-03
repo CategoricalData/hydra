@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.Adapters.Utils (adaptersUtilsGraph) where
+module Hydra.Impl.Haskell.Sources.Adapters.Utils (adapterUtilsModule) where
 
 import Hydra.Adapter
 import Hydra.Core
@@ -45,11 +45,13 @@ v_ :: Default a => Variable -> Term a
 v_ = variable
 
 
-_hydra_adapters_utils :: Name
-_hydra_adapters_utils = "hydra/adapters/utils"
+adapterUtilsModule = Module adapterUtils [hydraBasicsModule]
 
-adaptersUtilsGraph :: Graph Meta
-adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
+adapterUtilsName :: Name
+adapterUtilsName = "hydra/adapters/utils"
+
+adapterUtils :: Graph Meta
+adapterUtils = standardGraph adapterUtilsName [
   describeFloatType,
   describeIntegerType,
   describeLiteralType,
@@ -57,19 +59,19 @@ adaptersUtilsGraph = standardGraph _hydra_adapters_utils [
   describeType]
 
 describeFloatType :: Element Meta
-describeFloatType = standardFunction _hydra_adapters_utils "describeFloatType"
+describeFloatType = standardFunction adapterUtilsName "describeFloatType"
   "Display a floating-point type as a string"
   (Types.nominal _FloatType) Types.string
   $ l_"t" $ (_eldata describePrecision @. (_eldata floatTypePrecision @. v_"t")) ++. s_" floating-point numbers"
 
 describeIntegerType :: Element Meta
-describeIntegerType = standardFunction _hydra_adapters_utils "describeIntegerType"
+describeIntegerType = standardFunction adapterUtilsName "describeIntegerType"
   "Display an integer type as a string"
   (Types.nominal _IntegerType) Types.string
   $ l_"t" $ (_eldata describePrecision @. (_eldata integerTypePrecision @. v_"t")) ++. s_" integers"
 
 describeLiteralType :: Element Meta
-describeLiteralType = standardFunction _hydra_adapters_utils "describeLiteralType"
+describeLiteralType = standardFunction adapterUtilsName "describeLiteralType"
   "Display a literal type as a string"
   (Types.nominal _LiteralType) Types.string $
   match_ _LiteralType Types.string [
@@ -80,7 +82,7 @@ describeLiteralType = standardFunction _hydra_adapters_utils "describeLiteralTyp
     (_LiteralType_string, const_ $ s_"character strings")]
 
 describePrecision :: Element Meta
-describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
+describePrecision = standardFunction adapterUtilsName "describePrecision"
   "Display numeric precision as a string"
   (Types.nominal _Precision) Types.string $
   match_ _Precision Types.string [
@@ -92,7 +94,7 @@ describePrecision = standardFunction _hydra_adapters_utils "describePrecision"
           s_"-bit"])]
 
 describeType :: Element Meta
-describeType = standardFunction _hydra_adapters_utils "describeType"
+describeType = standardFunction adapterUtilsName "describeType"
   "Display a type as a string"
   (Types.nominal _Type) Types.string $
   match_ _Type Types.string [
@@ -116,7 +118,7 @@ describeType = standardFunction _hydra_adapters_utils "describeType"
     (_Type_variable, const_ $ s_"unspecified/parametric terms")]
 
 --idAdapter :: Element Meta
---idAdapter = standardFunction _hydra_adapters_utils "idAdapter"
+--idAdapter = standardFunction adapterUtilsName "idAdapter"
 --  "An identity adapter for a given type"
 --  (Types.nominal _Type) (TypeUniversal (UniversalType "m" $ ())) $
 --  l_"t" $ r_ _Adapter [

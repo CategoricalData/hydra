@@ -8,6 +8,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+tinkerpopV3Module = Module tinkerpopV3 [hydraCoreModule]
+
 tinkerpopV3Name = "hydra/ext/tinkerpop/v3"
 
 tinkerpopV3 :: Graph Meta

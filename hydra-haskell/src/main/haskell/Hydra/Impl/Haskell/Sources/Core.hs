@@ -7,6 +7,8 @@ import Hydra.Impl.Haskell.Dsl.Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+hydraCoreModule = Module hydraCore []
+
 -- Note: here, the element namespace doubles as a graph name
 hydraCoreName = "hydra/core"
 

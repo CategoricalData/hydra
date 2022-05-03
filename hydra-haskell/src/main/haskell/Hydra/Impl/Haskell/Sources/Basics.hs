@@ -8,11 +8,13 @@ import Hydra.Impl.Haskell.Sources.Libraries
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 
-_hydra_basics :: Name
-_hydra_basics = "hydra/basics"
+hydraBasicsModule = Module hydraBasics []
 
-basicsGraph :: Graph Meta
-basicsGraph = standardGraph _hydra_basics [
+hydraBasicsName :: Name
+hydraBasicsName = "hydra/basics"
+
+hydraBasics :: Graph Meta
+hydraBasics = standardGraph hydraBasicsName [
   floatTypePrecision,
   floatTypes,
   floatValueType,
@@ -34,7 +36,7 @@ basicsGraph = standardGraph _hydra_basics [
   typeVariants]
 
 floatTypePrecision :: Element Meta
-floatTypePrecision = standardFunction _hydra_basics "floatTypePrecision"
+floatTypePrecision = standardFunction hydraBasicsName "floatTypePrecision"
   "Find the precision of a given floating-point type"
   (Types.nominal _FloatType) (Types.nominal _Precision) $
   standardMatch _FloatType (Types.nominal _Precision) [
@@ -43,7 +45,7 @@ floatTypePrecision = standardFunction _hydra_basics "floatTypePrecision"
     (_FloatType_float64, standardWithVariant _Precision _Precision_bits (int32Value 64))]
 
 floatTypes :: Element Meta
-floatTypes = standardElement _hydra_basics "floatTypes"
+floatTypes = standardElement hydraBasicsName "floatTypes"
     "All floating-point types in a canonical order"
     (Types.list $ Types.nominal _FloatType)
     (list $ standardWithType (Types.nominal _FloatType) . unitVariant <$> [
@@ -52,7 +54,7 @@ floatTypes = standardElement _hydra_basics "floatTypes"
       _FloatType_float64])
 
 floatValueType :: Element Meta
-floatValueType = standardFunction _hydra_basics "floatValueType"
+floatValueType = standardFunction hydraBasicsName "floatValueType"
   "Find the float type for a given floating-point value"
   (Types.nominal _FloatValue) (Types.nominal _FloatType) $
   standardMatchWithVariants (Types.nominal _FloatValue) (Types.nominal _FloatType) [
@@ -61,7 +63,7 @@ floatValueType = standardFunction _hydra_basics "floatValueType"
     (_FloatValue_float64,  _FloatType_float64)]
 
 functionVariant :: Element Meta
-functionVariant = standardFunction _hydra_basics "functionVariant"
+functionVariant = standardFunction hydraBasicsName "functionVariant"
   "Find the function variant (constructor) for a given function"
   (Types.universal "a" $ Types.nominal _Function) (Types.nominal _FunctionVariant) $
   standardMatchWithVariants (Types.universal "a" $ Types.nominal _Function) (Types.nominal _FunctionVariant) [
@@ -74,7 +76,7 @@ functionVariant = standardFunction _hydra_basics "functionVariant"
     (_Function_projection,    _FunctionVariant_projection)]
 
 functionVariants :: Element Meta
-functionVariants = standardElement _hydra_basics "functionVariants"
+functionVariants = standardElement hydraBasicsName "functionVariants"
     "All function variants (constructors), in a canonical order"
     (Types.list $ Types.nominal _FunctionVariant)
     (list $ standardWithType (Types.nominal _FunctionVariant) . unitVariant <$> [
@@ -87,7 +89,7 @@ functionVariants = standardElement _hydra_basics "functionVariants"
       _FunctionVariant_projection])
 
 integerTypeIsSigned :: Element Meta
-integerTypeIsSigned = standardFunction _hydra_basics "integerTypeIsSigned"
+integerTypeIsSigned = standardFunction hydraBasicsName "integerTypeIsSigned"
   "Find whether a given integer type is signed (true) or unsigned (false)"
   (Types.nominal _IntegerType) Types.boolean $
   standardMatch _IntegerType Types.boolean [
@@ -102,7 +104,7 @@ integerTypeIsSigned = standardFunction _hydra_basics "integerTypeIsSigned"
     (_IntegerType_uint64, constFunction $ booleanValue False)]
 
 integerTypePrecision :: Element Meta
-integerTypePrecision = standardFunction _hydra_basics "integerTypePrecision"
+integerTypePrecision = standardFunction hydraBasicsName "integerTypePrecision"
   "Find the precision of a given integer type"
   (Types.nominal _IntegerType) (Types.nominal _Precision) $
   standardMatch _IntegerType (Types.nominal _Precision) [
@@ -117,7 +119,7 @@ integerTypePrecision = standardFunction _hydra_basics "integerTypePrecision"
     (_IntegerType_uint64, standardWithVariant _Precision _Precision_bits (int32Value 64))]
 
 integerTypes :: Element Meta
-integerTypes = standardElement _hydra_basics "integerTypes"
+integerTypes = standardElement hydraBasicsName "integerTypes"
     "All integer types, in a canonical order"
     (Types.list $ Types.nominal _IntegerType)
     (list $ standardWithType (Types.nominal _IntegerType) . unitVariant <$> [
@@ -132,7 +134,7 @@ integerTypes = standardElement _hydra_basics "integerTypes"
       _IntegerType_uint64])
 
 integerValueType :: Element Meta
-integerValueType = standardFunction _hydra_basics "integerValueType"
+integerValueType = standardFunction hydraBasicsName "integerValueType"
   "Find the integer type for a given integer value"
   (Types.nominal _IntegerValue) (Types.nominal _IntegerType) $
   standardMatchWithVariants (Types.nominal _IntegerValue) (Types.nominal _IntegerType) [
@@ -147,7 +149,7 @@ integerValueType = standardFunction _hydra_basics "integerValueType"
     (_IntegerValue_uint64, _IntegerType_uint64)]
 
 literalType :: Element Meta
-literalType = standardFunction _hydra_basics "literalType"
+literalType = standardFunction hydraBasicsName "literalType"
   "Find the literal type for a given literal value"
   (Types.nominal _Literal) (Types.nominal _LiteralType) $
   standardMatch _Literal (Types.nominal _LiteralType) [
@@ -158,7 +160,7 @@ literalType = standardFunction _hydra_basics "literalType"
     (_Literal_string,  standardWithUnitVariant  _LiteralType _LiteralType_string)]
 
 literalTypeVariant :: Element Meta
-literalTypeVariant = standardFunction _hydra_basics "literalTypeVariant"
+literalTypeVariant = standardFunction hydraBasicsName "literalTypeVariant"
   "Find the literal type variant (constructor) for a given literal value"
   (Types.nominal _LiteralType) (Types.nominal _LiteralVariant) $
   standardMatchWithVariants (Types.nominal _LiteralType) (Types.nominal _LiteralVariant) [
@@ -169,13 +171,13 @@ literalTypeVariant = standardFunction _hydra_basics "literalTypeVariant"
     (_LiteralType_string,  _LiteralVariant_string)]
 
 literalVariant :: Element Meta
-literalVariant = standardFunction _hydra_basics "literalVariant"
+literalVariant = standardFunction hydraBasicsName "literalVariant"
   "Find the literal variant (constructor) for a given literal value"
   (Types.nominal _Literal) (Types.nominal _LiteralVariant) $
   compose (elementRef literalTypeVariant) (elementRef literalType)
 
 literalVariants :: Element Meta
-literalVariants = standardElement _hydra_basics "literalVariants"
+literalVariants = standardElement hydraBasicsName "literalVariants"
   "All literal variants, in a canonical order"
   (Types.list $ Types.nominal _LiteralVariant)
   (list $ standardWithType (Types.nominal _LiteralVariant) . unitVariant <$> [
@@ -186,14 +188,14 @@ literalVariants = standardElement _hydra_basics "literalVariants"
     _LiteralVariant_string])
 
 qname :: Element Meta
-qname = standardFunction _hydra_basics "qname"
+qname = standardFunction hydraBasicsName "qname"
   "Construct a qualified (dot-separated) name"
   (Types.nominal _Name) (Types.function Types.string $ Types.nominal _Name)
   (lambda "ns" (lambda "name" (apply (primitive _strings_cat) (list [
    variable "ns", stringValue ".", variable "name"]))))
 
 termVariant :: Element Meta
-termVariant = standardFunction _hydra_basics "termVariant"
+termVariant = standardFunction hydraBasicsName "termVariant"
   "Find the term variant (constructor) for a given term"
   (Types.universal "a" $ Types.nominal _Term) (Types.nominal _TermVariant) $
   lambda "term" $ apply
@@ -216,7 +218,7 @@ termVariant = standardFunction _hydra_basics "termVariant"
       $ variable "term")
 
 termVariants :: Element Meta
-termVariants = standardElement _hydra_basics "termVariants"
+termVariants = standardElement hydraBasicsName "termVariants"
   "All term (expression) variants, in a canonical order"
   (Types.list $ Types.nominal _TermVariant)
   (list $ standardWithType (Types.nominal _TermVariant) . unitVariant <$> [
@@ -235,13 +237,13 @@ termVariants = standardElement _hydra_basics "termVariants"
 
 -- TODO: remove once there are other polymorphic functions in use
 testLists :: Element Meta
-testLists = standardFunction _hydra_basics "testLists"
+testLists = standardFunction hydraBasicsName "testLists"
   "TODO: temporary. Just a token polymorphic function for testing"
   (Types.list $ Types.list $ Types.variable "a") Types.int32
   (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
 
 typeVariant :: Element Meta
-typeVariant = standardFunction _hydra_basics "typeVariant"
+typeVariant = standardFunction hydraBasicsName "typeVariant"
   "Find the type variant (constructor) for a given type"
   (Types.nominal _Type) (Types.nominal _TypeVariant) $
   standardMatchWithVariants (Types.nominal _Type) (Types.nominal _TypeVariant) [
@@ -259,7 +261,7 @@ typeVariant = standardFunction _hydra_basics "typeVariant"
     (_Type_variable,  _TypeVariant_variable)]
 
 typeVariants :: Element Meta
-typeVariants = standardElement _hydra_basics "typeVariants"
+typeVariants = standardElement hydraBasicsName "typeVariants"
   "All type variants, in a canonical order"
   (Types.list $ Types.nominal _TypeVariant)
   (list $ standardWithType (Types.nominal _TypeVariant) . unitVariant <$> [

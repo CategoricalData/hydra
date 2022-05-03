@@ -5,7 +5,7 @@ import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Basics
-import Hydra.Impl.Haskell.Sources.Basics (basicsGraph)
+import Hydra.Impl.Haskell.Sources.Basics (hydraBasics)
 import Hydra.Interpreter
 import Hydra.Primitives
 import Hydra.CoreEncoding
@@ -18,7 +18,7 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term Meta -> Result (Term Meta)
-testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap basicsGraph }) term
+testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap hydraBasics }) term
 
 testsForTermTypeFunctions :: H.SpecWith a
 testsForTermTypeFunctions = do

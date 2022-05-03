@@ -11,6 +11,9 @@ import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
+
+haskellAstModule = Module haskellAst []
+
 haskellAstName = "hydra/ext/haskell/ast"
 
 haskellAst :: Graph Meta
