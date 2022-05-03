@@ -39,13 +39,13 @@ import qualified System.Directory as SD
 
 
 generateHaskell :: [Module Meta] -> FP.FilePath -> IO ()
-generateHaskell = generateSources (toFileName ".hs") dataGraphToHaskellString
+generateHaskell = generateSources (toFileName True ".hs") dataGraphToHaskellString
 
 generatePdl :: [Module Meta] -> FP.FilePath -> IO ()
-generatePdl = generateSources (toFileName ".pdl") dataGraphToPdlString
+generatePdl = generateSources (toFileName False ".pdl") dataGraphToPdlString
 
 generateScala :: [Module Meta] -> FP.FilePath -> IO ()
-generateScala = generateSources (toFileName ".scala") dataGraphToScalaString
+generateScala = generateSources (toFileName False ".scala") dataGraphToScalaString
 
 generateSources :: (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> [Module Meta] -> FP.FilePath -> IO ()
 generateSources toFile serialize modules baseDir = do
@@ -75,8 +75,10 @@ coreModules = [
   codetreeAstModule,
   tinkerpopV3Module]
 
-toFileName :: String -> String -> String
-toFileName ext name = L.intercalate "/" (capitalize <$> Strings.splitOn "/" name) ++ ext
+toFileName :: Bool -> String -> String -> String
+toFileName caps ext name = L.intercalate "/" parts ++ ext
+  where
+    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
 writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
   => (Context m -> Graph m -> Qualified String)
