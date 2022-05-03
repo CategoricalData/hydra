@@ -94,7 +94,11 @@ encodeType aliases typ = case typ of
       let includes = []
       rfields <- CM.mapM encodeRecordField fields
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeUnion fields -> Left . PDL.SchemaUnion <$> CM.mapM encodeUnionField fields
+    TypeUnion fields -> if isEnum
+        then pure . Right . PDL.NamedSchema_TypeEnum $ PDL.EnumSchema $ fmap encodeEnumField fields
+        else Left . PDL.SchemaUnion <$> CM.mapM encodeUnionField fields
+      where
+        isEnum = L.foldl (\b t -> b && t == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode t = case t of
@@ -121,6 +125,7 @@ encodeType aliases typ = case typ of
         PDL.unionMemberAlias = Just name,
         PDL.unionMemberValue = schema,
         PDL.unionMemberAnnotations = noAnnotations}
+    encodeEnumField (FieldType name _) = PDL.EnumField name noAnnotations
     encodePossiblyOptionalType typ = case typ of
       TypeOptional ot -> do
         t <- encode ot

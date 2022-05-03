@@ -22,6 +22,9 @@ dataGraphToPdlString cx g = do
   sf <- dataGraphToPegasusSchema cx g
   return $ printExpr $ parenthesize $ exprSchemaFile sf
 
+exprEnumField :: PDL.EnumField -> CT.Expr
+exprEnumField (PDL.EnumField name anns) = cst name -- TODO: annotations
+
 exprImport :: PDL.QualifiedName -> CT.Expr
 exprImport qn = spaceSep [cst "import", exprQualifiedName qn]
 
@@ -29,7 +32,8 @@ exprNamedSchema :: PDL.NamedSchema -> CT.Expr
 exprNamedSchema (PDL.NamedSchema qn t anns) = case t of -- TODO: annotations
   PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
     curlyBracesList True (exprRecordField <$> fields)]
---  PDL.NamedSchema_TypeEnum ->
+  PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
+    curlyBracesList True (exprEnumField <$> fields)]
   PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
 
 exprPrimitiveType :: PDL.PrimitiveType -> CT.Expr
