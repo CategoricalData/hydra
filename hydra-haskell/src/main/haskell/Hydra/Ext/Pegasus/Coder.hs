@@ -44,7 +44,6 @@ constructModule cx g coders pairs = do
     aliases = importAliasesForGraph g
     toSchema (el, TypedTerm typ term) = if typ == TypeNominal _Type
       then decodeType cx term >>= typeToSchema el
---      then deref cx term >>= decodeType cx >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
       let qname = pdlNameForElement False $ elementName el
@@ -52,13 +51,16 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      let anns = noAnnotations
+      let anns = doc $ contextDescriptionOf cx $ termMeta $ elementData el
       return $ PDL.NamedSchema qname ptype anns
 
 dataGraphToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
 dataGraphToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
+
+doc :: Y.Maybe String -> PDL.Annotations
+doc s = PDL.Annotations s False
 
 encodeAdaptedType :: (Default m, Ord m, Read m, Show m)
   => M.Map Name String -> Context m -> Type
