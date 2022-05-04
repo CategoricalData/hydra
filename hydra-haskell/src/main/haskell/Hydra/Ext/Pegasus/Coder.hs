@@ -46,7 +46,7 @@ constructModule cx g coders pairs = do
       then decodeType cx term >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
-      let qname = pdlNameForElement False $ elementName el
+      let qname = pdlNameForElement aliases False $ elementName el
       res <- encodeAdaptedType aliases cx typ
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
@@ -90,7 +90,7 @@ encodeType aliases typ = case typ of
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement True name
+    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
     TypeRecord fields -> do
       let includes = []
@@ -140,11 +140,14 @@ importAliasesForGraph g = M.empty -- TODO
 
 noAnnotations = PDL.Annotations Nothing False
 
-pdlNameForElement :: Bool -> Name -> PDL.QualifiedName
-pdlNameForElement withNs name = PDL.QualifiedName local
-    $ if withNs then Just (slashesToDots ns) else Nothing
+pdlNameForElement :: M.Map Name String -> Bool -> Name -> PDL.QualifiedName
+pdlNameForElement aliases withNs name = PDL.QualifiedName local
+    $ if withNs
+      then slashesToDots <$> alias
+      else Nothing
   where
     (ns, local) = toQname name
+    alias = M.lookup ns aliases
 
 pdlNameForGraph :: Graph m -> PDL.Namespace
 pdlNameForGraph = slashesToDots . graphName
