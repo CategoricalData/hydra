@@ -12,3 +12,6 @@ decapitalize :: String -> String
 decapitalize s = case s of
   [] -> []
   (h:r) -> C.toLower h : r
+
+javaStyleComment :: String -> String
+javaStyleComment s = "/**\n" ++ " * " ++ s ++ "\n */"

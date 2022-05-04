@@ -8,6 +8,7 @@ import Hydra.Graph
 import Hydra.Ext.Pegasus.Coder
 import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
+import Hydra.Util.Formatting
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import Hydra.Impl.Haskell.Extras
@@ -22,19 +23,23 @@ dataGraphToPdlString cx g = do
   sf <- dataGraphToPegasusSchema cx g
   return $ printExpr $ parenthesize $ exprSchemaFile sf
 
+exprAnnotations :: PDL.Annotations -> Y.Maybe CT.Expr
+exprAnnotations (PDL.Annotations doc _) = cst . javaStyleComment <$> doc
+
 exprEnumField :: PDL.EnumField -> CT.Expr
-exprEnumField (PDL.EnumField name anns) = cst name -- TODO: annotations
+exprEnumField (PDL.EnumField name anns) = withAnnotations anns $ cst name
 
 exprImport :: PDL.QualifiedName -> CT.Expr
 exprImport qn = spaceSep [cst "import", exprQualifiedName qn]
 
 exprNamedSchema :: PDL.NamedSchema -> CT.Expr
-exprNamedSchema (PDL.NamedSchema qn t anns) = case t of -- TODO: annotations
-  PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
-    curlyBracesList True (exprRecordField <$> fields)]
-  PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
-    curlyBracesList True (exprEnumField <$> fields)]
-  PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
+exprNamedSchema (PDL.NamedSchema qn t anns) = withAnnotations anns $
+  case t of
+    PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
+      curlyBracesList True (exprRecordField <$> fields)]
+    PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
+      curlyBracesList True (exprEnumField <$> fields)]
+    PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
 
 exprPrimitiveType :: PDL.PrimitiveType -> CT.Expr
 exprPrimitiveType pt = cst $ case pt of
@@ -50,10 +55,11 @@ exprQualifiedName :: PDL.QualifiedName -> CT.Expr
 exprQualifiedName (PDL.QualifiedName name ns) = cst $ L.intercalate "." $ Y.catMaybes [ns, Just name]
 
 exprRecordField :: PDL.RecordField -> CT.Expr
-exprRecordField (PDL.RecordField name schema optional def anns) = spaceSep $ Y.catMaybes [ -- TODO: annotations, default
-  if optional then Just (cst "optional") else Nothing,
-  Just $ cst $ name ++ ":",
-  Just $ exprSchema schema]
+exprRecordField (PDL.RecordField name schema optional def anns) = withAnnotations anns $
+  spaceSep $ Y.catMaybes [ -- TODO: default
+    if optional then Just (cst "optional") else Nothing,
+    Just $ cst $ name ++ ":",
+    Just $ exprSchema schema]
 
 exprSchema :: PDL.Schema -> CT.Expr
 exprSchema schema = case schema of
@@ -78,6 +84,10 @@ exprSchemaFile (PDL.SchemaFile ns pkg imports schemas) = doubleNewlineSep $ (Y.c
     schemaSecs = exprNamedSchema <$> schemas
 
 exprUnionMember :: PDL.UnionMember -> CT.Expr
-exprUnionMember (PDL.UnionMember alias schema anns) = spaceSep $ Y.catMaybes [ -- TODO: annotations
-  fmap (\n -> cst $ n ++ ":") alias,
-  Just $ exprSchema schema]
+exprUnionMember (PDL.UnionMember alias schema anns) = withAnnotations anns $
+  spaceSep $ Y.catMaybes [
+    fmap (\n -> cst $ n ++ ":") alias,
+    Just $ exprSchema schema]
+
+withAnnotations :: PDL.Annotations -> CT.Expr -> CT.Expr
+withAnnotations anns expr = newlineSep $ Y.catMaybes [exprAnnotations anns, Y.Just expr]
