@@ -127,7 +127,7 @@ encodeType aliases typ = case typ of
         PDL.unionMemberAlias = Just name,
         PDL.unionMemberValue = schema,
         PDL.unionMemberAnnotations = noAnnotations}
-    encodeEnumField (FieldType name _) = PDL.EnumField name noAnnotations
+    encodeEnumField (FieldType name _) = PDL.EnumField (convertCase CaseCamel CaseUpperSnake name) noAnnotations
     encodePossiblyOptionalType typ = case typ of
       TypeOptional ot -> do
         t <- encode ot
