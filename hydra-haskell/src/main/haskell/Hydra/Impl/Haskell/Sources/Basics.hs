@@ -65,8 +65,8 @@ floatValueType = standardFunction hydraBasicsName "floatValueType"
 functionVariant :: Element Meta
 functionVariant = standardFunction hydraBasicsName "functionVariant"
   "Find the function variant (constructor) for a given function"
-  (Types.universal "a" $ Types.nominal _Function) (Types.nominal _FunctionVariant) $
-  standardMatchWithVariants (Types.universal "a" $ Types.nominal _Function) (Types.nominal _FunctionVariant) [
+  (Types.universal "m" $ Types.nominal _Function) (Types.nominal _FunctionVariant) $
+  standardMatchWithVariants (Types.universal "m" $ Types.nominal _Function) (Types.nominal _FunctionVariant) [
     (_Function_cases,         _FunctionVariant_cases),
     (_Function_compareTo,     _FunctionVariant_compareTo),
     (_Function_data,          _FunctionVariant_data),
@@ -197,9 +197,9 @@ qname = standardFunction hydraBasicsName "qname"
 termVariant :: Element Meta
 termVariant = standardFunction hydraBasicsName "termVariant"
   "Find the term variant (constructor) for a given term"
-  (Types.universal "a" $ Types.nominal _Term) (Types.nominal _TermVariant) $
+  (Types.universal "m" $ Types.nominal _Term) (Types.nominal _TermVariant) $
   lambda "term" $ apply
-    (standardMatchWithVariants (Types.universal "a" $ Types.nominal _Expression) (Types.nominal _TermVariant) [
+    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _Expression) (Types.nominal _TermVariant) [
           (_Expression_application,     _TermVariant_application),
           (_Expression_element,         _TermVariant_element),
           (_Expression_function,        _TermVariant_function),
@@ -214,7 +214,7 @@ termVariant = standardFunction hydraBasicsName "termVariant"
           (_Expression_typeApplication, _TermVariant_typeApplication),
           (_Expression_union,           _TermVariant_union),
           (_Expression_variable,        _TermVariant_variable)])
-    (apply (project (Types.universal "a" $ Types.nominal _Term) _Term_data (Types.universal "a" $ Types.nominal _Expression))
+    (apply (project (Types.universal "m" $ Types.nominal _Term) _Term_data (Types.universal "m" $ Types.nominal _Expression))
       $ variable "term")
 
 termVariants :: Element Meta
@@ -245,20 +245,53 @@ testLists = standardFunction hydraBasicsName "testLists"
 typeVariant :: Element Meta
 typeVariant = standardFunction hydraBasicsName "typeVariant"
   "Find the type variant (constructor) for a given type"
-  (Types.nominal _Type) (Types.nominal _TypeVariant) $
-  standardMatchWithVariants (Types.nominal _Type) (Types.nominal _TypeVariant) [
-    (_Type_element,   _TypeVariant_element),
-    (_Type_function,  _TypeVariant_function),
-    (_Type_list,      _TypeVariant_list),
-    (_Type_literal,   _TypeVariant_literal),
-    (_Type_map,       _TypeVariant_map),
-    (_Type_nominal,   _TypeVariant_nominal),
-    (_Type_optional,  _TypeVariant_optional),
-    (_Type_record,    _TypeVariant_record),
-    (_Type_set,       _TypeVariant_set),
-    (_Type_union,     _TypeVariant_union),
-    (_Type_universal, _TypeVariant_universal),
-    (_Type_variable,  _TypeVariant_variable)]
+  (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
+  lambda "type" $ apply
+    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _TypeExpr) (Types.nominal _TypeVariant) [
+        (_TypeExpr_element,   _TypeVariant_element),
+        (_TypeExpr_function,  _TypeVariant_function),
+        (_TypeExpr_list,      _TypeVariant_list),
+        (_TypeExpr_literal,   _TypeVariant_literal),
+        (_TypeExpr_map,       _TypeVariant_map),
+        (_TypeExpr_nominal,   _TypeVariant_nominal),
+        (_TypeExpr_optional,  _TypeVariant_optional),
+        (_TypeExpr_record,    _TypeVariant_record),
+        (_TypeExpr_set,       _TypeVariant_set),
+        (_TypeExpr_union,     _TypeVariant_union),
+        (_TypeExpr_universal, _TypeVariant_universal),
+        (_TypeExpr_variable,  _TypeVariant_variable)])
+    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_data (Types.universal "m" $ Types.nominal _TypeExpr))
+      $ variable "type")
+
+_Type_data = "data"
+
+_Type_meta = "meta"
+
+_TypeExpr = "hydra/core.TypeExpr"
+
+_TypeExpr_element = "element"
+
+_TypeExpr_function = "function"
+
+_TypeExpr_list = "list"
+
+_TypeExpr_literal = "literal"
+
+_TypeExpr_map = "map"
+
+_TypeExpr_nominal = "nominal"
+
+_TypeExpr_optional = "optional"
+
+_TypeExpr_record = "record"
+
+_TypeExpr_set = "set"
+
+_TypeExpr_union = "union"
+
+_TypeExpr_universal = "universal"
+
+_TypeExpr_variable = "variable"
 
 typeVariants :: Element Meta
 typeVariants = standardElement hydraBasicsName "typeVariants"
