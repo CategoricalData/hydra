@@ -41,7 +41,7 @@ describePrecision x = case x of
 
 -- Display a type as a string
 describeType :: (Core.Type -> String)
-describeType type = (
+describeType typ = (
   (
     \x -> case x of
       Core.TypeExprLiteral v -> (describeLiteralType v)
@@ -84,4 +84,4 @@ describeType type = (
           (describeType v)])
       Core.TypeExprUnion _ -> "unions of a particular set of fields"
       Core.TypeExprUniversal _ -> "polymorphic terms"
-      Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeData type))
+      Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeData typ))

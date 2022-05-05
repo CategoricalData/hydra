@@ -89,7 +89,7 @@ data Context a
                 - variable: a
                 to:
                   optional: hydra/core.Type -}
-    , contextTypeOf :: a -> (Maybe Type)
+    , contextTypeOf :: a -> (Maybe (Type a))
     {-| @type function:
                 from:
                 - optional: string
@@ -103,13 +103,13 @@ data Context a
                 - variable: a
                 to:
                   variable: a -}
-    , contextSetTypeOf :: (Maybe Type) -> (a -> a) }
+    , contextSetTypeOf :: (Maybe (Type a)) -> (a -> a) }
 
 data EvaluationStrategy
   = EvaluationStrategy
     {-| Whether a term of a given variant is considered to be fully reduced,
         without further inspection
-        
+
         @type set: hydra/core.TermVariant -}
     { evaluationStrategyOpaqueTermVariants :: (Set (TermVariant)) } deriving (Eq, Generic, Ord, Read, Show)
 
@@ -118,7 +118,7 @@ data EvaluationStrategy
 data InputSpec a m
   = InputSpec
     -- | @type hydra/core.Type
-    { inputSpecType :: Type
+    { inputSpecType :: Type m
     {-| @type function:
                 from:
                 - parameterized:
@@ -141,7 +141,7 @@ data InputSpec a m
 data OutputSpec a m
   = OutputSpec
     -- | @type hydra/core.Type
-    { outputSpecType :: Type
+    { outputSpecType :: Type m
     {-| @type function:
                 from:
                 - variable: a
@@ -159,7 +159,7 @@ data PrimitiveFunction a
     -- | @type hydra/core.Name
     { primitiveFunctionName :: Name
     -- | @type hydra/core.FunctionType
-    , primitiveFunctionType :: FunctionType
+    , primitiveFunctionType :: FunctionType a
     {-| @type function:
                 from:
                 - list:

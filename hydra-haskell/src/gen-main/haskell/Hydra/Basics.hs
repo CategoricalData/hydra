@@ -182,7 +182,7 @@ testLists els = (Lists.length (Lists.concat els))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type m -> Core.TypeVariant)
-typeVariant type = (
+typeVariant typ = (
   (
     \x -> case x of
       Core.TypeExprElement _ -> Core.TypeVariantElement
@@ -196,7 +196,7 @@ typeVariant type = (
       Core.TypeExprSet _ -> Core.TypeVariantSet
       Core.TypeExprUnion _ -> Core.TypeVariantUnion
       Core.TypeExprUniversal _ -> Core.TypeVariantUniversal
-      Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeData type))
+      Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeData typ))
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]

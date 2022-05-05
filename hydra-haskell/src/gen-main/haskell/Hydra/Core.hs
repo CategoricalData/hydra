@@ -394,10 +394,10 @@ _MapType_keys = "keys"
 _MapType_values = "values"
 
 -- A built-in metadata container for terms
-data Meta m
+data Meta
   = Meta {
     metaDescription :: (Maybe String),
-    metaType :: (Maybe (Type m))}
+    metaType :: (Maybe (Type Meta))}
   deriving (Eq, Ord, Read, Show)
 
 _Meta = "hydra/core.Meta"
@@ -597,7 +597,7 @@ _TypeAbstraction_body = "body"
 data TypeApplication m
   = TypeApplication {
     typeApplicationFunction :: (Term m),
-    typeApplicationArgument :: Type}
+    typeApplicationArgument :: Type m}
   deriving (Eq, Ord, Read, Show)
 
 _TypeApplication = "hydra/core.TypeApplication"
@@ -669,7 +669,7 @@ _TypeVariant_variable = "variable"
 -- A type together with an instance of the type
 data TypedTerm m
   = TypedTerm {
-    typedTermType :: Type,
+    typedTermType :: Type m,
     typedTermTerm :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
