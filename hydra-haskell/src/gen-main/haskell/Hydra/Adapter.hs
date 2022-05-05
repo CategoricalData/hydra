@@ -64,11 +64,11 @@ data AdapterContext a
                   variable: a -}
     { adapterContextEvaluation :: Context a
     -- | @type hydra/adapter.Language
-    , adapterContextSource :: Language
+    , adapterContextSource :: Language a
     -- | @type hydra/adapter.Language
-    , adapterContextTarget :: Language }
+    , adapterContextTarget :: Language a }
 
-data Language_Constraints
+data Language_Constraints m
   = Language_Constraints
     -- | @type set: hydra/core.LiteralVariant
     { languageConstraintsLiteralVariants :: (Set (LiteralVariant))
@@ -86,17 +86,17 @@ data Language_Constraints
                 from:
                 - hydra/core.Type
                 to: boolean -}
-    , languageConstraintsTypes :: Type -> Bool }
+    , languageConstraintsTypes :: Type m -> Bool }
 
 -- | @type string
 type Language_Name = String
 
-data Language
+data Language m
   = Language
     -- | @type hydra/adapter.Language.Name
     { languageName :: Language_Name
     -- | @type hydra/adapter.Language.Constraints
-    , languageConstraints :: Language_Constraints }
+    , languageConstraints :: Language_Constraints m }
 
 _Adapter = "hydra/adapter.Adapter" :: String
 _AdapterContext = "hydra/adapter.AdapterContext" :: String
