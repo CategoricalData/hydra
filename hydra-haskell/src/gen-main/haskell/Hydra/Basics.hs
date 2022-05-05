@@ -28,7 +28,7 @@ floatValueType x = case x of
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function a -> Core.FunctionVariant)
+functionVariant :: (Core.Function m -> Core.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionCases _ -> Core.FunctionVariantCases
   Core.FunctionCompareTo _ -> Core.FunctionVariantCompareTo
@@ -141,7 +141,7 @@ qname ns name = (
     name])
 
 -- Find the term variant (constructor) for a given term
-termVariant :: (Core.Term a -> Core.TermVariant)
+termVariant :: (Core.Term m -> Core.TermVariant)
 termVariant term = (
   (
     \x -> case x of
@@ -181,20 +181,22 @@ testLists :: ([[a]] -> Int)
 testLists els = (Lists.length (Lists.concat els))
 
 -- Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type -> Core.TypeVariant)
-typeVariant x = case x of
-  Core.TypeElement _ -> Core.TypeVariantElement
-  Core.TypeFunction _ -> Core.TypeVariantFunction
-  Core.TypeList _ -> Core.TypeVariantList
-  Core.TypeLiteral _ -> Core.TypeVariantLiteral
-  Core.TypeMap _ -> Core.TypeVariantMap
-  Core.TypeNominal _ -> Core.TypeVariantNominal
-  Core.TypeOptional _ -> Core.TypeVariantOptional
-  Core.TypeRecord _ -> Core.TypeVariantRecord
-  Core.TypeSet _ -> Core.TypeVariantSet
-  Core.TypeUnion _ -> Core.TypeVariantUnion
-  Core.TypeUniversal _ -> Core.TypeVariantUniversal
-  Core.TypeVariable _ -> Core.TypeVariantVariable
+typeVariant :: (Core.Type m -> Core.TypeVariant)
+typeVariant type = (
+  (
+    \x -> case x of
+      Core.TypeExprElement _ -> Core.TypeVariantElement
+      Core.TypeExprFunction _ -> Core.TypeVariantFunction
+      Core.TypeExprList _ -> Core.TypeVariantList
+      Core.TypeExprLiteral _ -> Core.TypeVariantLiteral
+      Core.TypeExprMap _ -> Core.TypeVariantMap
+      Core.TypeExprNominal _ -> Core.TypeVariantNominal
+      Core.TypeExprOptional _ -> Core.TypeVariantOptional
+      Core.TypeExprRecord _ -> Core.TypeVariantRecord
+      Core.TypeExprSet _ -> Core.TypeVariantSet
+      Core.TypeExprUnion _ -> Core.TypeVariantUnion
+      Core.TypeExprUniversal _ -> Core.TypeVariantUniversal
+      Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeData type))
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]

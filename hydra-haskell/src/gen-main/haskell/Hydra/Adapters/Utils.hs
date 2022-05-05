@@ -41,45 +41,47 @@ describePrecision x = case x of
 
 -- Display a type as a string
 describeType :: (Core.Type -> String)
-describeType x = case x of
-  Core.TypeLiteral v -> (describeLiteralType v)
-  Core.TypeElement v -> (
-    Strings.cat [
-      "elements containing ",
-      (describeType v)])
-  Core.TypeFunction v -> (
-    Strings.cat [
-      Strings.cat [
+describeType type = (
+  (
+    \x -> case x of
+      Core.TypeExprLiteral v -> (describeLiteralType v)
+      Core.TypeExprElement v -> (
         Strings.cat [
-          "functions from ",
-          (describeType (Core.functionTypeDomain v))],
-        " to "],
-      (describeType (Core.functionTypeCodomain v))])
-  Core.TypeList v -> (
-    Strings.cat [
-      "lists of ",
-      (describeType v)])
-  Core.TypeMap v -> (
-    Strings.cat [
-      Strings.cat [
+          "elements containing ",
+          (describeType v)])
+      Core.TypeExprFunction v -> (
         Strings.cat [
-          "maps from ",
-          (describeType (Core.mapTypeKeys v))],
-        " to "],
-      (describeType (Core.mapTypeValues v))])
-  Core.TypeNominal v -> (
-    Strings.cat [
-      "alias for ",
-      v])
-  Core.TypeOptional v -> (
-    Strings.cat [
-      "optional ",
-      (describeType v)])
-  Core.TypeRecord _ -> "records of a particular set of fields"
-  Core.TypeSet v -> (
-    Strings.cat [
-      "sets of ",
-      (describeType v)])
-  Core.TypeUnion _ -> "unions of a particular set of fields"
-  Core.TypeUniversal _ -> "polymorphic terms"
-  Core.TypeVariable _ -> "unspecified/parametric terms"
+          Strings.cat [
+            Strings.cat [
+              "functions from ",
+              (describeType (Core.functionTypeDomain v))],
+            " to "],
+          (describeType (Core.functionTypeCodomain v))])
+      Core.TypeExprList v -> (
+        Strings.cat [
+          "lists of ",
+          (describeType v)])
+      Core.TypeExprMap v -> (
+        Strings.cat [
+          Strings.cat [
+            Strings.cat [
+              "maps from ",
+              (describeType (Core.mapTypeKeys v))],
+            " to "],
+          (describeType (Core.mapTypeValues v))])
+      Core.TypeExprNominal v -> (
+        Strings.cat [
+          "alias for ",
+          v])
+      Core.TypeExprOptional v -> (
+        Strings.cat [
+          "optional ",
+          (describeType v)])
+      Core.TypeExprRecord _ -> "records of a particular set of fields"
+      Core.TypeExprSet v -> (
+        Strings.cat [
+          "sets of ",
+          (describeType v)])
+      Core.TypeExprUnion _ -> "unions of a particular set of fields"
+      Core.TypeExprUniversal _ -> "polymorphic terms"
+      Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeData type))

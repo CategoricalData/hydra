@@ -69,9 +69,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "FieldType"
         "The name and type of a field" $
-        record [
+        universal "m" $ record [
           field "name" $ core "FieldName",
-          field "type" $ core "Type"],
+          field "type" $ universal "m" $ core "Type"],
 
       def "FloatType"
         "A floating-point type" $
@@ -100,9 +100,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "FunctionType"
         "A function type, also known as an arrow type" $
-        record [
-          field "domain" $ core "Type",
-          field "codomain" $ core "Type"],
+        universal "m" $ record [
+          field "domain" $ universal "m" $ core "Type",
+          field "codomain" $ universal "m" $ core "Type"],
 
       def "FunctionVariant"
         "The identifier of a function constructor" $
@@ -183,15 +183,15 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "MapType"
         "A map type" $
-        record [
-          field "keys" $ core "Type",
-          field "values" $ core "Type"],
+        universal "m" $ record [
+          field "keys" $ universal "m" $ core "Type",
+          field "values" $ universal "m" $ core "Type"],
 
       def "Meta"
         "A built-in metadata container for terms" $
-        record [
-          field "description" (optional string),
-          field "type" (optional $ core "Type")],
+        universal "m" $ record [
+          field "description" $ optional string,
+          field "type" $ optional $ universal "m" $ core "Type"],
 
       def "Name"
         "A unique element name"
@@ -248,18 +248,24 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Type"
         "A data type" $
-        union [
-          field "element" $ core "Type",
-          field "function" $ core "FunctionType",
-          field "list" $ core "Type",
+        universal "m" $ record [
+          field "data" $ universal "m" $ core "TypeExpr",
+          field "meta" $ variable "m"],
+
+      def "TypeExpr"
+        "A data type" $
+        universal "m" $ union [
+          field "element" $ universal "m" $ core "Type",
+          field "function" $ universal "m" $ core "FunctionType",
+          field "list" $ universal "m" $ core "Type",
           field "literal" $ core "LiteralType",
-          field "map" $ core "MapType",
+          field "map" $ universal "m" $ core "MapType",
           field "nominal" $ core "Name",
-          field "optional" $ core "Type",
-          field "record" $ list $ core "FieldType",
-          field "set" $ core "Type",
-          field "union" $ list $ core "FieldType",
-          field "universal" $ core "UniversalType",
+          field "optional" $ universal "m" $ core "Type",
+          field "record" $ list $ universal "m" $ core "FieldType",
+          field "set" $ universal "m" $ core "Type",
+          field "union" $ list $ universal "m" $ core "FieldType",
+          field "universal" $ universal "m" $ core "UniversalType",
           field "variable" $ core "TypeVariable"],
 
       def "TypeAbstraction"
@@ -276,9 +282,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
-        record [
-          field "variables" (list $ core "TypeVariable"),
-          field "type" (core "Type")],
+        universal "m" $ record [
+          field "variables" $ list $ core "TypeVariable",
+          field "type" $ universal "m" $ core "Type"],
 
       def "TypeVariable"
         "A symbol which stands in for a type"
@@ -308,9 +314,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "UniversalType"
         "A universally quantified ('forall') type, parameterized by a type variable" $
-        record [
+        universal "m" $ record [
           field "variable" string,
-          field "body" $ core "Type"],
+          field "body" $ universal "m" $ core "Type"],
 
       def "Variable"
         "A symbol which stands in for a term"

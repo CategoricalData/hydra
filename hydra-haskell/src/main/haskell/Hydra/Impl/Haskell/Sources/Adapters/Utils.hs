@@ -97,25 +97,28 @@ describeType :: Element Meta
 describeType = standardFunction adapterUtilsName "describeType"
   "Display a type as a string"
   (Types.nominal _Type) Types.string $
-  match_ _Type Types.string [
-    (_Type_literal, _eldata describeLiteralType),
-    (_Type_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
-    (_Type_function, l_"ft" $ s_"functions from "
-      ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_domain (Types.nominal _Type) @. v_"ft"))
-      ++. s_" to "
-      ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_codomain (Types.nominal _Type) @. v_"ft"))),
-    (_Type_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
-    (_Type_map, l_"mt" $ s_"maps from "
-      ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_keys (Types.nominal _Type) @. v_"mt"))
-      ++. s_" to "
-      ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_values (Types.nominal _Type) @. v_"mt"))),
-    (_Type_nominal, l_"name" $ s_"alias for " ++. v_"name"),
-    (_Type_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
-    (_Type_record, const_ $ s_"records of a particular set of fields"),
-    (_Type_set, l_"st" $ s_"sets of " ++. (_eldata describeType @. v_"st")),
-    (_Type_union, const_ $ s_"unions of a particular set of fields"),
-    (_Type_universal, const_ $ s_"polymorphic terms"),
-    (_Type_variable, const_ $ s_"unspecified/parametric terms")]
+  lambda "type" $ apply
+    (match_ _TypeExpr Types.string [
+      (_TypeExpr_literal, _eldata describeLiteralType),
+      (_TypeExpr_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
+      (_TypeExpr_function, l_"ft" $ s_"functions from "
+        ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_domain (Types.nominal _Type) @. v_"ft"))
+        ++. s_" to "
+        ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_codomain (Types.nominal _Type) @. v_"ft"))),
+      (_TypeExpr_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
+      (_TypeExpr_map, l_"mt" $ s_"maps from "
+        ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_keys (Types.nominal _Type) @. v_"mt"))
+        ++. s_" to "
+        ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_values (Types.nominal _Type) @. v_"mt"))),
+      (_TypeExpr_nominal, l_"name" $ s_"alias for " ++. v_"name"),
+      (_TypeExpr_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
+      (_TypeExpr_record, const_ $ s_"records of a particular set of fields"),
+      (_TypeExpr_set, l_"st" $ s_"sets of " ++. (_eldata describeType @. v_"st")),
+      (_TypeExpr_union, const_ $ s_"unions of a particular set of fields"),
+      (_TypeExpr_universal, const_ $ s_"polymorphic terms"),
+      (_TypeExpr_variable, const_ $ s_"unspecified/parametric terms")])
+    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_data (Types.universal "m" $ Types.nominal _TypeExpr))
+           $ variable "type")
 
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"
