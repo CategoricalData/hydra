@@ -68,14 +68,14 @@ encodeAdaptedType :: (Default m, Ord m, Read m, Show m)
 encodeAdaptedType aliases cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage pegasusDataLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
-  encodeType aliases $ adapterTarget ad
+  encodeType aliases cx $ adapterTarget ad
 
 encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Data m -> Result ()
 encodeData aliases cx term@(Data expr meta) = do
     fail "not yet implemented"
 
-encodeType :: (Default m, Eq m, Show m) => M.Map Name String -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
-encodeType aliases typ = case typeTerm typ of
+encodeType :: (Default m, Eq m, Show m) => M.Map Name String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType aliases cx typ = case typeTerm typ of
     TypeTermList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeTermLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -100,13 +100,13 @@ encodeType aliases typ = case typeTerm typ of
         then pure . Right . PDL.NamedSchema_TypeEnum $ PDL.EnumSchema $ fmap encodeEnumField fields
         else Left . PDL.SchemaUnion <$> CM.mapM encodeUnionField fields
       where
-        isEnum = L.foldl (\b t -> b && t == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && t {typeMeta = dflt} == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode t = case typeTerm t of
       TypeTermRecord [] -> encode Types.int32 -- special case for the unit type
       _ -> do
-        res <- encodeType aliases t
+        res <- encodeType aliases cx t
         case res of
           Left schema -> pure schema
           Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
@@ -117,7 +117,7 @@ encodeType aliases typ = case typeTerm typ of
         PDL.recordFieldValue = schema,
         PDL.recordFieldOptional = optional,
         PDL.recordFieldDefault = Nothing,
-        PDL.recordFieldAnnotations = noAnnotations}
+        PDL.recordFieldAnnotations = anns typ}
     encodeUnionField (FieldType name typ) = do
       (s, optional) <- encodePossiblyOptionalType typ
       let schema = if optional
@@ -126,8 +126,10 @@ encodeType aliases typ = case typeTerm typ of
       return PDL.UnionMember {
         PDL.unionMemberAlias = Just name,
         PDL.unionMemberValue = schema,
-        PDL.unionMemberAnnotations = noAnnotations}
-    encodeEnumField (FieldType name _) = PDL.EnumField (convertCase CaseCamel CaseUpperSnake name) noAnnotations
+        PDL.unionMemberAnnotations = anns typ}
+    encodeEnumField (FieldType name typ) = PDL.EnumField {
+      PDL.enumFieldName = convertCase CaseCamel CaseUpperSnake name,
+      PDL.enumFieldAnnotations = anns typ}
     encodePossiblyOptionalType typ = case typeTerm typ of
       TypeTermOptional ot -> do
         t <- encode ot
@@ -135,6 +137,7 @@ encodeType aliases typ = case typeTerm typ of
       _ -> do
         t <- encode typ
         return (t, False)
+    anns typ = doc $ contextDescriptionOf cx $ typeMeta typ
 
 importAliasesForGraph g = M.empty -- TODO
 
