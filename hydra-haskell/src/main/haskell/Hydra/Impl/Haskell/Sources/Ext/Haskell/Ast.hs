@@ -24,46 +24,46 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
 
     elements = [
 
-      def "Alternative" -- UAlt
-        "A pattern-matching alternative" $
+      def "Alternative" $ -- UAlt
+        doc "A pattern-matching alternative" $
         record [
           field "pattern" $ ast "Pattern",
           field "rhs" $ ast "CaseRhs",
           field "binds" $ optional $ ast "LocalBindings"],
 
-      def "Assertion" -- UAssertion (UClassAssert)
-        "A type assertion" $
+      def "Assertion" $ -- UAssertion (UClassAssert)
+        doc "A type assertion" $
         -- omitted for now: implicit and infix assertions
         record [
           field "name" $ ast "Name",
           field "types" $ list $ ast "Type"],
 
-      def "CaseRhs" -- UCaseRhs'
-        "The right-hand side of a pattern-matching alternative" $
+      def "CaseRhs" $ -- UCaseRhs'
+        doc "The right-hand side of a pattern-matching alternative" $
         -- omitted for now: guarded
         ast "Expression",
 
-      def "Constructor" -- UConDecl
-        "A data constructor" $
+      def "Constructor" $ -- UConDecl
+        doc "A data constructor" $
         -- omitted for now: ordinary (positional), infix
         union [
           field "ordinary" $ ast "Constructor.Ordinary",
           field "record" $ ast "Constructor.Record"],
 
-      def "Constructor.Ordinary"
-        "An ordinary (positional) data constructor" $
+      def "Constructor.Ordinary" $
+        doc "An ordinary (positional) data constructor" $
         record [
           field "name" $ ast "Name",
           field "fields" $ list $ ast "Type"],
 
-      def "Constructor.Record"
-        "A record-style data constructor" $
+      def "Constructor.Record" $
+        doc "A record-style data constructor" $
         record [
           field "name" $ ast "Name",
           field "fields" $ list $ ast "Field"],
 
-      def "DataDeclaration" -- UDataDecl
-        "A data type declaration" $
+      def "DataDeclaration" $ -- UDataDecl
+        doc "A data type declaration" $
         record [
           field "keyword" $ ast "DataDeclaration.Keyword",
           field "context" $ list $ ast "Assertion",
@@ -71,18 +71,18 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "constructors" $ list $ ast "Constructor",
           field "deriving" $ list $ ast "Deriving"],
 
-      def "DataDeclaration.Keyword"
-        "The 'data' versus 'newtype keyword" $
+      def "DataDeclaration.Keyword" $
+        doc "The 'data' versus 'newtype keyword" $
         enum ["data", "newtype"],
 
-      def "DeclarationWithComments"
-        "A data declaration together with any comments" $
+      def "DeclarationWithComments" $
+        doc "A data declaration together with any comments" $
         record [
           field "body" $ ast "Declaration",
           field "comments" $ optional string],
 
-      def "Declaration" -- UDecl
-        "A data or value declaration" $
+      def "Declaration" $ -- UDecl
+        doc "A data or value declaration" $
         -- omitted for now: typeFamily, typeSignature, closedTypeFamily, gDataDecl, typeInst, dataInst, gDataInst, class, inst,
         --                  patternSynonym, deriv, fixity, default, patTypeSig, foreignImport, foreignExport, pragma,
         --                  role, splice
@@ -92,33 +92,33 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "valueBinding" $ ast "ValueBinding",
           field "typedBinding" $ ast "TypedBinding"],
 
-      def "DeclarationHead" -- UDeclHead
-        "The left-hand side of a declaration" $
+      def "DeclarationHead" $ -- UDeclHead
+        doc "The left-hand side of a declaration" $
         -- omitted for now: infix application
         union [
           field "application" $ ast "DeclarationHead.Application",
           field "parens" $ ast "DeclarationHead",
           field "simple" $ ast "Name"],
 
-      def "DeclarationHead.Application"
-        "An application-style declaration head" $
+      def "DeclarationHead.Application" $
+        doc "An application-style declaration head" $
         record [
           field "function" $ ast "DeclarationHead",
           field "operand" $ ast "TypeVariable"],
 
-      def "Deriving" -- UDeriving
-        "A 'deriving' statement" $
+      def "Deriving" $ -- UDeriving
+        doc "A 'deriving' statement" $
         -- omitted for now: infix, parenthesized, and application instance heads
         list $ ast "Name",
 
-      def "Export" -- UExportSpec
-        "An export statement" $
+      def "Export" $ -- UExportSpec
+        doc "An export statement" $
         union [
           field "declaration" $ ast "ImportExportSpec",
           field "module" $ ast "ModuleName"],
 
-      def "Expression" -- UExpr
-        "A data expression" $
+      def "Expression" $ -- UExpr
+        doc "A data expression" $
         -- omitted for now: multi-if, unboxed tuple, tuple section, unboxed tuple section, parallel array,
         --                  enum, parallel array enum, list comp, parallel array comp, type application,
         --                  (all Template Haskell constructors), pragma, arrow definition, arrow application,
@@ -143,89 +143,89 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "updateRecord" $ ast "Expression.UpdateRecord",
           field "variable" $ ast "Name"],
 
-      def "Expression.Application"
-        "An application expression" $
+      def "Expression.Application" $
+        doc "An application expression" $
         record [
           field "function" $ ast "Expression",
           field "argument" $ ast "Expression"],
 
-      def "Expression.Case"
-        "A case expression" $
+      def "Expression.Case" $
+        doc "A case expression" $
         record [
           field "case" $ ast "Expression",
           field "alternatives" $ list $ ast "Alternative"],
 
-      def "Expression.ConstructRecord"
-        "A record constructor expression" $
+      def "Expression.ConstructRecord" $
+        doc "A record constructor expression" $
         record [
           field "name" $ ast "Name",
           field "fields" $ list $ ast "FieldUpdate"],
 
-      def "Expression.If"
-        "An 'if' expression" $
+      def "Expression.If" $
+        doc "An 'if' expression" $
         record [
           field "condition" $ ast "Expression",
           field "then" $ ast "Expression",
           field "else" $ ast "Expression"],
 
-      def "Expression.InfixApplication"
-        "An infix application expression" $
+      def "Expression.InfixApplication" $
+        doc "An infix application expression" $
         record [
           field "lhs" $ ast "Expression",
           field "operator" $ ast "Operator",
           field "rhs" $ ast "Expression"],
 
-      def "Expression.Lambda"
-        "A lambda expression" $
+      def "Expression.Lambda" $
+        doc "A lambda expression" $
         record [
           field "bindings" $ list $ ast "Pattern",
           field "inner" $ ast "Expression"],
 
-      def "Expression.Let"
-        "A 'let' expression" $
+      def "Expression.Let" $
+        doc "A 'let' expression" $
         record [
           field "bindings" $ list $ ast "Pattern",
           field "inner" $ ast "Expression"],
 
-      def "Expression.PrefixApplication"
-        "A prefix expression" $
+      def "Expression.PrefixApplication" $
+        doc "A prefix expression" $
         record [
           field "operator" $ ast "Operator",
           field "rhs" $ ast "Expression"],
 
-      def "Expression.Section"
-        "A section expression" $
+      def "Expression.Section" $
+        doc "A section expression" $
         record [
           field "operator" $ ast "Operator",
           field "expression" $ ast "Expression"],
 
-      def "Expression.TypeSignature"
-        "A type signature expression" $
+      def "Expression.TypeSignature" $
+        doc "A type signature expression" $
         record [
           field "inner" $ ast "Expression",
           field "type" $ ast "Type"],
 
-      def "Expression.UpdateRecord"
-        "An update record expression" $
+      def "Expression.UpdateRecord" $
+        doc "An update record expression" $
         record [
           field "inner" $ ast "Expression",
           field "fields" $ list $ ast "FieldUpdate"],
 
-      def "Field" -- UFieldDecl
-        "A field (name/type pair)" $
+      def "Field" $ -- UFieldDecl
+        doc "A field (name/type pair)" $
         record [
           field "name" $ ast "Name",
           field "type" $ ast "Type"],
 
-      def "FieldUpdate" -- UFieldUpdate
-        "A field name and value" $
+      def "FieldUpdate" $ -- UFieldUpdate
+        doc "A field name and value" $
         -- omitted for now: pun, wildcard
         record [
           field "name" $ ast "Name",
           field "value" $ ast "Expression"],
 
-      def "Import" -- UImportDecl
-        "An import statement" $
+      def "Import" $ -- UImportDecl
+        doc "An import statement" $
         -- omitted for now: source, safe, pkg
         record [
           field "qualified" boolean,
@@ -233,31 +233,30 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "as" $ optional $ ast "ModuleName",
           field "spec" $ optional $ ast "Import.Spec"],
 
-      def "Import.Spec"
-        "An import specification" $
+      def "Import.Spec" $
+        doc "An import specification" $
         union [
           field "list" $ list $ ast "ImportExportSpec",
           field "hiding" $ list $ ast "ImportExportSpec"],
 
-      def "ImportModifier" -- UImportModifier
-        "An import modifier ('pattern' or 'type')" $
+      def "ImportModifier" $ -- UImportModifier
+        doc "An import modifier ('pattern' or 'type')" $
         enum ["pattern", "type"],
 
-      def "ImportExportSpec" -- UIESpec
-        "An import or export specification" $
+      def "ImportExportSpec" $ -- UIESpec
+        doc "An import or export specification" $
         record [
           field "modifier" $ optional $ ast "ImportModifier",
           field "name" $ ast "Name",
           field "subspec" $ optional $ ast "ImportExportSpec.Subspec"],
 
-      def "ImportExportSpec.Subspec"
-        "" $
+      def "ImportExportSpec.Subspec" $
         union [
           field "all" unit,
           field "list" $ list $ ast "Name"],
 
-      def "Literal" -- ULiteral
-        "A literal value" $
+      def "Literal" $ -- ULiteral
+        doc "A literal value" $
         -- omitted for now: frac, primChar
         union [
           field "char" uint16,
@@ -267,55 +266,46 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "integer" bigint,
           field "string" string],
 
-      def "LocalBinding" -- ULocalBind
-        "" $
+      def "LocalBinding" $ -- ULocalBind
         -- omitted for now: fixity, pragma
         union [
           field "signature" $ ast "TypeSignature",
           field "value" $ ast "ValueBinding"],
 
-      def "LocalBindings" -- ULocalBinds
-        "" $
+      def "LocalBindings" $ -- ULocalBinds
         list $ ast "LocalBinding",
 
-      def "Module" -- UModule
-        "" $
+      def "Module" $ -- UModule
         -- omitted for now: pragma
         record [
           field "head" $ optional $ ast "ModuleHead",
           field "imports" $ list $ ast "Import",
           field "declarations" $ list $ ast "DeclarationWithComments"],
 
-      def "ModuleHead" -- UModuleHead
-        "" $
+      def "ModuleHead" $ -- UModuleHead
         -- omitted for now: pragma
         record [
           field "name" $ ast "ModuleName",
           field "exports" $ list $ ast "Export"], -- UExportSpecs
 
       def "ModuleName" -- UModuleName
-        ""
         string,
 
-      def "Name" -- UName
-        "" $
+      def "Name" $ -- UName
         union [
           field "implicit" $ ast "QualifiedName",
           field "normal" $ ast "QualifiedName",
           field "parens" $ ast "QualifiedName"],
 
       def "NamePart" -- UNamePart
-        ""
         string,
 
-      def "Operator" -- UOperator
-        "" $
+      def "Operator" $ -- UOperator
         union [
           field "backtick" $ ast "QualifiedName",
           field "normal" $ ast "QualifiedName"],
 
-      def "Pattern" -- UPattern
-        "" $
+      def "Pattern" $ -- UPattern
         -- omitted for now: unboxed tuples, parallel arrays, irrefutable, bang, view, splice, quasiquote, plusk, unboxed sum
         union [
           field "application" $ ast "Pattern.Application",
@@ -329,54 +319,45 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "typed" $ ast "Pattern.Typed",
           field "wildcard" unit],
 
-      def "Pattern.Application"
-        "" $
+      def "Pattern.Application" $
         record [
           field "name" $ ast "Name",
           field "args" $ list $ ast "Pattern"],
 
-      def "Pattern.As"
-        "" $
+      def "Pattern.As" $
         record [
           field "name" $ ast "Name",
           field "inner" $ ast "Pattern"],
 
-      def "Pattern.Record"
-        "" $
+      def "Pattern.Record" $
         record [
           field "name" $ ast "Name",
           field "fields" $ list $ ast "PatternField"],
 
-      def "Pattern.Typed"
-        "" $
+      def "Pattern.Typed" $
         record [
           field "inner" $ ast "Pattern",
           field "type" $ ast "Type"],
 
-      def "PatternField" -- UPatternField
-        "" $
+      def "PatternField" $ -- UPatternField
         -- omitted for now: puns, wildcards
         record [
           field "name" $ ast "Name",
           field "pattern" $ ast "Pattern"],
 
-      def "QualifiedName" -- UQualifiedName
-        "" $
+      def "QualifiedName" $ -- UQualifiedName
         record [
           field "qualifiers" $ list $ ast "NamePart",
           field "unqualified" $ ast "NamePart"],
 
-      def "RightHandSide" -- URhs
-        "" $
+      def "RightHandSide" $ -- URhs
         -- omitted for now: guarded rhs
         ast "Expression",
 
-      def "Statement" -- UStmt
-        "" $
+      def "Statement" $ -- UStmt
         ast "Expression",
 
-      def "Type" -- UType
-        "" $
+      def "Type" $ -- UType
         -- omitted for now: forall, ctx, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
         --                  lazy, unpack, nounpack, wildcard, named wildcard, sum
         union [
@@ -388,56 +369,47 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "tuple" $ list $ ast "Type",
           field "variable" $ ast "Name"],
 
-      def "Type.Application"
-        "" $
+      def "Type.Application" $
         record [
           field "context" $ ast "Type",
           field "argument" $ ast "Type"],
 
-      def "Type.Function"
-        "" $
+      def "Type.Function" $
         record [
           field "domain" $ ast "Type",
           field "codomain" $ ast "Type"],
 
-      def "Type.Infix"
-        "" $
+      def "Type.Infix" $
         record [
           field "lhs" $ ast "Type",
           field "operator" $ ast "Operator",
           field "rhs" $ ast "Operator"],
 
-      def "TypeDeclaration" -- UTypeDecl
-        "" $
+      def "TypeDeclaration" $ -- UTypeDecl
         record [
           field "name" $ ast "DeclarationHead",
           field "type" $ ast "Type"],
 
-      def "TypeSignature" -- UTypeSignature
-        "" $
+      def "TypeSignature" $ -- UTypeSignature
         record [
           field "name" $ ast "Name",
           field "type" $ ast "Type"],
 
-      def "TypeVariable"
-        "" $
+      def "TypeVariable" $
         -- omitted for now: kind constraints
         ast "Name",
 
-      def "TypedBinding" -- Added for convenience
-        "" $
+      def "TypedBinding" $ -- Added for convenience
         record [
           field "typeSignature" $ ast "TypeSignature",
           field "valueBinding" $ ast "ValueBinding"],
 
-      def "ValueBinding" -- UValueBind
-        "" $
+      def "ValueBinding" $ -- UValueBind
         -- omitted for now: funBind
         union [
           field "simple" $ ast "ValueBinding.Simple"],
 
-      def "ValueBinding.Simple"
-        "" $
+      def "ValueBinding.Simple" $
         record [
           field "pattern" $ ast "Pattern",
           field "rhs" $ ast "RightHandSide",

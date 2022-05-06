@@ -21,15 +21,15 @@ jsonJson = Graph jsonJsonName elements (const True) hydraCoreName
 
     elements = [
 
-      def "Number"
-        "A numeric value" $
+      def "Number" $
+        doc "A numeric value" $
         record [
           field "integer" bigint,
           field "fraction" bigint,
           field "exponent" bigint],
 
-      def "Value"
-        "A JSON value" $
+      def "Value" $
+        doc "A JSON value" $
         union [
           field "array" $ list $ json "Value",
           field "boolean" boolean,
