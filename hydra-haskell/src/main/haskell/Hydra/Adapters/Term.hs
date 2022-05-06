@@ -57,14 +57,14 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
     cx = adapterContextEvaluation acx
     encode ad term = stepOut (adapterStep ad) $ case dataTerm term of
       DataTermFunction f -> case f of
-        FunctionCases _ -> nominalVariant cx _Function _Function_cases $ stringValue $ show term -- TODO DataTermRecord cases
-        FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo other
-        FunctionDelta -> nominalUnitVariant cx _Function _Function_delta
-        FunctionLambda _ -> nominalVariant cx _Function _Function_lambda $ stringValue $ show term -- TODO
-        FunctionOptionalCases _ -> nominalVariant cx _Function _Function_optionalCases $ stringValue $ show term -- TODO
-        FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
-        FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
-      DataTermVariable var -> nominalVariant cx _Function _DataTerm_variable $ stringValue var
+        FunctionCases _ -> variant _Function_cases $ stringValue $ show term -- TODO DataTermRecord cases
+        FunctionCompareTo other -> variant _Function_compareTo other
+        FunctionDelta -> unitVariant _Function_delta
+        FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
+        FunctionOptionalCases _ -> variant _Function_optionalCases $ stringValue $ show term -- TODO
+        FunctionPrimitive name -> variant _Function_primitive $ stringValue name
+        FunctionProjection fname -> variant _Function_projection $ stringValue fname
+      DataTermVariable var -> variant _DataTerm_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [

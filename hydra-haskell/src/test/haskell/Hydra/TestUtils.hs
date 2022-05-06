@@ -6,8 +6,6 @@ module Hydra.TestUtils (
   checkDataAdapter,
   isFailure,
   termTestContext,
-  unitVar,
-  var,
   module Hydra.TestGraph,
   module Hydra.Steps,
 ) where
@@ -99,12 +97,6 @@ isFailure :: Result a -> Bool
 isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
-
-unitVar :: Name -> FieldName -> Data Meta
-unitVar = nominalUnitVariant testContext
-
-var :: Name -> FieldName -> Data Meta -> Data Meta
-var = nominalVariant testContext
 
 withConstraints :: Language_Constraints Meta -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
