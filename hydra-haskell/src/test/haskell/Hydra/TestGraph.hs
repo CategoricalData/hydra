@@ -64,7 +64,7 @@ testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement cx "StringTypeAlias" noDoc Types.string,
+    typeElement cx "StringTypeAlias" "An alias for the string type" Types.string,
     typeElement cx "Person" noDoc testTypePerson,
     typeElement cx "Timestamp" noDoc testTypeTimestamp]
   allTerms "hydra/core"
