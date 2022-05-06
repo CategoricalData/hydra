@@ -19,7 +19,7 @@ compareTo :: Program a -> Program (a -> Bool)
 compareTo (Program other) = program $ DataTermFunction $ FunctionCompareTo other
 
 deref :: Program (Ref a -> a)
-deref = program $ DataTermFunction $ FunctionData
+deref = program $ DataTermFunction $ FunctionDelta
 
 lambda :: Var a -> Program b -> Program (a -> b)
 lambda (Var v) (Program body) = program $ DataTermFunction $ FunctionLambda $ Lambda v body

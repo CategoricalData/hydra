@@ -108,9 +108,9 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
           i <- infer cx other
           yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
 
-        FunctionData -> do
+        FunctionDelta -> do
           et <- freshTypeVariable
-          yieldFunction FunctionData (Types.function (Types.element et) et) []
+          yieldFunction FunctionDelta (Types.function (Types.element et) et) []
 
         FunctionLambda (Lambda v body) -> do
           tv <- freshTypeVariable

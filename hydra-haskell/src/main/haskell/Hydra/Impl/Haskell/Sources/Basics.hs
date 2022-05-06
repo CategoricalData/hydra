@@ -69,7 +69,7 @@ functionVariant = standardFunction hydraBasicsName "functionVariant"
   standardMatchWithVariants (Types.universal "m" $ Types.nominal _Function) (Types.nominal _FunctionVariant) [
     (_Function_cases,         _FunctionVariant_cases),
     (_Function_compareTo,     _FunctionVariant_compareTo),
-    (_Function_data,          _FunctionVariant_data),
+    (_Function_delta,          _FunctionVariant_delta),
     (_Function_lambda,        _FunctionVariant_lambda),
     (_Function_optionalCases, _FunctionVariant_optionalCases),
     (_Function_primitive,     _FunctionVariant_primitive),
@@ -82,7 +82,7 @@ functionVariants = standardElement hydraBasicsName "functionVariants"
     (list $ standardWithType (Types.nominal _FunctionVariant) . unitVariant <$> [
       _FunctionVariant_cases,
       _FunctionVariant_compareTo,
-      _FunctionVariant_data,
+      _FunctionVariant_delta,
       _FunctionVariant_lambda,
       _FunctionVariant_optionalCases,
       _FunctionVariant_primitive,

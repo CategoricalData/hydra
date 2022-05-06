@@ -180,7 +180,7 @@ encodeFunction aliases cx meta fun = case fun of
           let lhs = H.PatternApplication $ H.Pattern_Application hname args
           rhs <- encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
-    FunctionData -> pure $ hsvar "id"
+    FunctionDelta -> pure $ hsvar "id"
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeData aliases cx body
     FunctionOptionalCases (OptionalCases nothing just) -> do
       nothingRhs <- encodeData aliases cx nothing
@@ -241,7 +241,7 @@ encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> C
 encodeData aliases cx term@(Data expr meta) = do
    case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
-       DataTermFunction FunctionData -> encode cx arg
+       DataTermFunction FunctionDelta -> encode cx arg
        _ -> hsapp <$> encode cx fun <*> encode cx arg
     DataTermElement name -> pure $ H.ExpressionVariable $ elementReference aliases name
     DataTermFunction f -> encodeFunction aliases cx (dataMeta term) f

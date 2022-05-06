@@ -59,7 +59,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
       DataTermFunction f -> case f of
         FunctionCases _ -> nominalVariant cx _Function _Function_cases $ stringValue $ show term -- TODO DataTermRecord cases
         FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo other
-        FunctionData -> nominalUnitVariant cx _Function _Function_data
+        FunctionDelta -> nominalUnitVariant cx _Function _Function_delta
         FunctionLambda _ -> nominalVariant cx _Function _Function_lambda $ stringValue $ show term -- TODO
         FunctionOptionalCases _ -> nominalVariant cx _Function _Function_optionalCases $ stringValue $ show term -- TODO
         FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
@@ -70,7 +70,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Function_cases, forCases fterm),
           (_Function_compareTo, forCompareTo fterm),
-          (_Function_data, forData fterm),
+          (_Function_delta, forData fterm),
           (_Function_lambda, forLambda fterm),
           (_Function_optionalCases, forOptionalCases fterm),
           (_Function_primitive, forPrimitive fterm),
@@ -92,7 +92,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
       return $ Types.union [
         FieldType _Function_cases Types.string, -- TODO (TypeTermRecord cases)
         FieldType _Function_compareTo (adapterTarget domAd),
-        FieldType _Function_data Types.unit,
+        FieldType _Function_delta Types.unit,
         FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
         FieldType _Function_primitive Types.string,
         FieldType _Function_projection Types.string,

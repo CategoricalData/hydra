@@ -117,7 +117,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         universal "m" $ union [
           field "cases" $ list $ universal "m" $ core "Field",
           field "compareTo" $ universal "m" $ core "Data",
-          field "data" unit,
+          field "delta" unit,
           field "lambda" $ universal "m" $ core "Lambda",
           field "optionalCases" $ universal "m" $ core "OptionalCases",
           field "primitive" $ core "Name",
@@ -134,7 +134,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         enum [
           "cases",
           "compareTo",
-          "data",
+          "delta",
           "lambda",
           "optionalCases",
           "primitive",

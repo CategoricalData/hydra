@@ -80,7 +80,7 @@ unionTypeForFunctions :: Default m => Type m -> Type m
 unionTypeForFunctions dom = Types.union [
   Types.field _Function_cases Types.string, -- TODO (TypeTermRecord cases)
   Types.field _Function_compareTo dom,
-  Types.field _Function_data Types.unit,
+  Types.field _Function_delta Types.unit,
   Types.field _Function_lambda Types.string, -- TODO (TypeTermRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
   Types.field _Function_primitive Types.string,
   Types.field _Function_projection Types.string,

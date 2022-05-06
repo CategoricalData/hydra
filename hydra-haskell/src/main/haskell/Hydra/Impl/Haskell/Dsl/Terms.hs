@@ -44,7 +44,7 @@ constFunction :: Default a => Data a -> Data a
 constFunction = lambda "_"
 
 delta :: Default a => Data a
-delta = defaultData $ DataTermFunction FunctionData
+delta = defaultData $ DataTermFunction FunctionDelta
 
 defaultData  :: Default a => DataTerm a -> Data a
 defaultData e = Data e dflt

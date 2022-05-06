@@ -32,7 +32,7 @@ functionVariant :: (Core.Function m -> Core.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionCases _ -> Core.FunctionVariantCases
   Core.FunctionCompareTo _ -> Core.FunctionVariantCompareTo
-  Core.FunctionData -> Core.FunctionVariantData
+  Core.FunctionDelta -> Core.FunctionVariantDelta
   Core.FunctionLambda _ -> Core.FunctionVariantLambda
   Core.FunctionOptionalCases _ -> Core.FunctionVariantOptionalCases
   Core.FunctionPrimitive _ -> Core.FunctionVariantPrimitive
@@ -43,7 +43,7 @@ functionVariants :: [Core.FunctionVariant]
 functionVariants = [
   Core.FunctionVariantCases,
   Core.FunctionVariantCompareTo,
-  Core.FunctionVariantData,
+  Core.FunctionVariantDelta,
   Core.FunctionVariantLambda,
   Core.FunctionVariantOptionalCases,
   Core.FunctionVariantPrimitive,
