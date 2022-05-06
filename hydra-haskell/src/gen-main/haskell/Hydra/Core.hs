@@ -597,7 +597,7 @@ _TypeAbstraction_body = "body"
 data TypeApplication m
   = TypeApplication {
     typeApplicationFunction :: (Term m),
-    typeApplicationArgument :: Type m}
+    typeApplicationArgument :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeApplication = "hydra/core.TypeApplication"
@@ -610,7 +610,7 @@ _TypeApplication_argument = "argument"
 data TypeScheme m
   = TypeScheme {
     typeSchemeVariables :: [TypeVariable],
-    typeSchemeType :: Type m}
+    typeSchemeType :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeScheme = "hydra/core.TypeScheme"
@@ -669,7 +669,7 @@ _TypeVariant_variable = "variable"
 -- A type together with an instance of the type
 data TypedTerm m
   = TypedTerm {
-    typedTermType :: Type m,
+    typedTermType :: (Type m),
     typedTermTerm :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 

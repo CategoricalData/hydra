@@ -32,7 +32,7 @@ import qualified Data.Maybe as Y
 import qualified Test.Hspec as H
 
 
-baseLanguage :: Language
+baseLanguage :: Language m
 baseLanguage = hydraCoreLanguage
 
 baseContext :: AdapterContext Meta
@@ -66,7 +66,7 @@ checkAtomicAdapter = checkAdapter id atomicAdapter context
         floatVars = S.fromList [FloatTypeFloat32]
         integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
 
-checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field Meta -> Field Meta -> H.Expectation
+checkFieldAdapter :: [TypeVariant] -> FieldType Meta -> FieldType Meta -> Bool -> Field Meta -> Field Meta -> H.Expectation
 checkFieldAdapter = checkAdapter id fieldAdapter termTestContext
 
 checkFloatAdapter :: [FloatType] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
@@ -81,7 +81,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
     context variants = withConstraints $ (languageConstraints baseLanguage) {
       languageConstraintsIntegerTypes = S.fromList variants }
 
-checkTermAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term Meta -> Term Meta -> H.Expectation
+checkTermAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
 checkTermAdapter = checkAdapter stripMeta termAdapter termTestContext
 
 termTestContext :: [TypeVariant] -> AdapterContext Meta
@@ -106,5 +106,5 @@ unitVar = nominalUnitVariant testContext
 var :: Name -> FieldName -> Term Meta -> Term Meta
 var = nominalVariant testContext
 
-withConstraints :: Language_Constraints -> AdapterContext Meta
+withConstraints :: Language_Constraints Meta -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}

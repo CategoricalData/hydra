@@ -26,9 +26,9 @@ dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) grap
       (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
 dataGraphToExternalModule :: (Default m, Ord m, Read m, Show m)
-  => Language
+  => Language m
   -> (Context m -> Term m -> Result e)
-  -> (Context m -> Graph m -> M.Map Type (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
+  -> (Context m -> Graph m -> M.Map (Type m) (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
   -> Context m -> Graph m -> Qualified d
 dataGraphToExternalModule lang encodeTerm createModule cx g = do
     scx <- resultToQualified $ schemaContext cx

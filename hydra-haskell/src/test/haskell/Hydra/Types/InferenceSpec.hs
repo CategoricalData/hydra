@@ -16,15 +16,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-checkType :: Term (Meta, Type, [Constraint]) -> Type -> H.Expectation
+checkType :: Term (Meta, Type Meta, [Constraint Meta]) -> Type Meta -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
     typeAnn (Term _ (_, typ, _)) = typ
 
-expectMonotype :: Term Meta -> Type -> H.Expectation
+expectMonotype :: Term Meta -> Type Meta -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term Meta-> [TypeVariable] -> Type -> H.Expectation
+expectPolytype :: Term Meta-> [TypeVariable] -> Type Meta -> H.Expectation
 expectPolytype term vars typ = do
     let result = inferType testContext term
     snd <$> result `H.shouldBe` ResultSuccess (TypeScheme vars typ)
@@ -222,7 +222,7 @@ checkLiterals = do
     H.it "Verify that type inference preserves the literal to literal type mapping" $
       QC.property $ \l -> expectMonotype
         (defaultTerm $ ExpressionLiteral l)
-        (TypeLiteral $ literalType l)
+        (Types.literal $ literalType l)
 
 checkPrimitiveFunctions :: H.SpecWith ()
 checkPrimitiveFunctions = do
@@ -249,15 +249,15 @@ checkTypeAnnotations = do
       QC.property $ \l -> do
         let term = defaultTerm $ ExpressionLiteral l
         let (ResultSuccess term1) = fst <$> inferType testContext term
-        checkType term1 (TypeLiteral $ literalType l)
+        checkType term1 (Types.literal $ literalType l)
 
     H.it "Check lists of literals" $
       QC.property $ \l -> do
         let term = defaultTerm $ ExpressionList [defaultTerm $ ExpressionLiteral l]
         let (ResultSuccess term1) = fst <$> inferType testContext term
-        checkType term1 (TypeList $ TypeLiteral $ literalType l)
+        checkType term1 (Types.list $ Types.literal $ literalType l)
         let (ExpressionList [term2]) = termData term1
-        checkType term2 (TypeLiteral $ literalType l)
+        checkType term2 (Types.literal $ literalType l)
 
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = do

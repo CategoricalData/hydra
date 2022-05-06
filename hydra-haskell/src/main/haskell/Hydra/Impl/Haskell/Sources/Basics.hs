@@ -246,7 +246,7 @@ typeVariant :: Element Meta
 typeVariant = standardFunction hydraBasicsName "typeVariant"
   "Find the type variant (constructor) for a given type"
   (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
-  lambda "type" $ apply
+  lambda "typ" $ apply
     (standardMatchWithVariants (Types.universal "m" $ Types.nominal _TypeExpr) (Types.nominal _TypeVariant) [
         (_TypeExpr_element,   _TypeVariant_element),
         (_TypeExpr_function,  _TypeVariant_function),
@@ -261,37 +261,7 @@ typeVariant = standardFunction hydraBasicsName "typeVariant"
         (_TypeExpr_universal, _TypeVariant_universal),
         (_TypeExpr_variable,  _TypeVariant_variable)])
     (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_data (Types.universal "m" $ Types.nominal _TypeExpr))
-      $ variable "type")
-
-_Type_data = "data"
-
-_Type_meta = "meta"
-
-_TypeExpr = "hydra/core.TypeExpr"
-
-_TypeExpr_element = "element"
-
-_TypeExpr_function = "function"
-
-_TypeExpr_list = "list"
-
-_TypeExpr_literal = "literal"
-
-_TypeExpr_map = "map"
-
-_TypeExpr_nominal = "nominal"
-
-_TypeExpr_optional = "optional"
-
-_TypeExpr_record = "record"
-
-_TypeExpr_set = "set"
-
-_TypeExpr_union = "union"
-
-_TypeExpr_universal = "universal"
-
-_TypeExpr_variable = "variable"
+      $ variable "typ")
 
 typeVariants :: Element Meta
 typeVariants = standardElement hydraBasicsName "typeVariants"

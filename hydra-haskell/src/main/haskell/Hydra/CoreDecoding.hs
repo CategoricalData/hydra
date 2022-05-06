@@ -14,6 +14,8 @@ module Hydra.CoreDecoding (
 import Hydra.Core
 import Hydra.Steps
 import Hydra.Primitives
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Default
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -25,28 +27,28 @@ decodeElement term = case termData term of
   ExpressionElement name -> pure name
   _ -> fail "expected an element"
 
-decodeFieldType :: Show m => Context m -> Term m -> Result FieldType
+decodeFieldType :: (Default m, Show m) => Context m -> Term m -> Result (FieldType m)
 decodeFieldType cx = matchRecord cx $ \m -> FieldType
   <$> getField m _FieldType_name decodeString
   <*> getField m _FieldType_type (decodeType cx)
 
-decodeFieldTypes :: Show m => Context m -> Term m -> Result [FieldType]
+decodeFieldTypes :: (Default m, Show m) => Context m -> Term m -> Result [FieldType m]
 decodeFieldTypes cx term = case termData term of
   ExpressionList els -> CM.mapM (decodeFieldType cx) els
   _ -> fail "expected a list"
 
-decodeFloatType :: Show m => Context m -> Term m -> Result FloatType
+decodeFloatType :: (Default m, Show m) => Context m -> Term m -> Result FloatType
 decodeFloatType cx = matchEnum cx [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
-decodeFunctionType :: Show m => Context m -> Term m -> Result FunctionType
+decodeFunctionType :: (Default m, Show m) => Context m -> Term m -> Result (FunctionType m)
 decodeFunctionType cx = matchRecord cx $ \m -> FunctionType
   <$> getField m _FunctionType_domain (decodeType cx)
   <*> getField m _FunctionType_codomain (decodeType cx)
 
-decodeIntegerType :: Show m => Context m -> Term m -> Result IntegerType
+decodeIntegerType :: (Default m, Show m) => Context m -> Term m -> Result IntegerType
 decodeIntegerType cx = matchEnum cx [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
@@ -58,7 +60,7 @@ decodeIntegerType cx = matchEnum cx [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
-decodeLiteralType :: Show m => Context m -> Term m -> Result LiteralType
+decodeLiteralType :: (Default m, Show m) => Context m -> Term m -> Result LiteralType
 decodeLiteralType cx = matchUnion cx [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
@@ -66,7 +68,7 @@ decodeLiteralType cx = matchUnion cx [
   (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType cx),
   matchUnitField _LiteralType_string LiteralTypeString]
 
-decodeMapType :: Show m => Context m -> Term m -> Result MapType
+decodeMapType :: (Default m, Show m) => Context m -> Term m -> Result (MapType m)
 decodeMapType cx = matchRecord cx $ \m -> MapType
   <$> getField m _MapType_keys (decodeType cx)
   <*> getField m _MapType_values (decodeType cx)
@@ -78,24 +80,24 @@ decodeString term = case termData term of
     _ -> fail "expected a string value"
   _ -> fail "expected a literal value"
 
-decodeType :: Show m => Context m -> Term m -> Result Type
+decodeType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
 decodeType cx term = case termData term of
-  ExpressionElement name -> pure $ TypeNominal name
-  _ -> matchUnion cx [
-    (_Type_literal, fmap TypeLiteral . decodeLiteralType cx),
-    (_Type_element, fmap TypeElement . decodeType cx),
-    (_Type_function, fmap TypeFunction . decodeFunctionType cx),
-    (_Type_list, fmap TypeList . decodeType cx),
-    (_Type_map, fmap TypeMap . decodeMapType cx),
-    (_Type_nominal, fmap TypeNominal . decodeElement),
-    (_Type_optional, fmap TypeOptional . decodeType cx),
-    (_Type_record, fmap TypeRecord . decodeFieldTypes cx),
-    (_Type_set, fmap TypeSet . decodeType cx),
-    (_Type_union, fmap TypeUnion . decodeFieldTypes cx),
-    (_Type_universal, fmap TypeUniversal . decodeUniversalType cx),
-    (_Type_variable, fmap TypeVariable . decodeString)] term
+  ExpressionElement name -> pure $ Types.nominal name
+  _ -> Types.defaultType <$> matchUnion cx [
+    (_TypeExpr_literal, fmap TypeExprLiteral . decodeLiteralType cx),
+    (_TypeExpr_element, fmap TypeExprElement . decodeType cx),
+    (_TypeExpr_function, fmap TypeExprFunction . decodeFunctionType cx),
+    (_TypeExpr_list, fmap TypeExprList . decodeType cx),
+    (_TypeExpr_map, fmap TypeExprMap . decodeMapType cx),
+    (_TypeExpr_nominal, fmap TypeExprNominal . decodeElement),
+    (_TypeExpr_optional, fmap TypeExprOptional . decodeType cx),
+    (_TypeExpr_record, fmap TypeExprRecord . decodeFieldTypes cx),
+    (_TypeExpr_set, fmap TypeExprSet . decodeType cx),
+    (_TypeExpr_union, fmap TypeExprUnion . decodeFieldTypes cx),
+    (_TypeExpr_universal, fmap TypeExprUniversal . decodeUniversalType cx),
+    (_TypeExpr_variable, fmap TypeExprVariable . decodeString)] term
 
-decodeUniversalType :: Show m => Context m -> Term m -> Result UniversalType
+decodeUniversalType :: (Default m, Show m) => Context m -> Term m -> Result (UniversalType m)
 decodeUniversalType cx = matchRecord cx $ \m -> UniversalType
   <$> getField m _UniversalType_variable decodeString
   <*> getField m _UniversalType_body (decodeType cx)
@@ -105,7 +107,7 @@ getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
 
-matchEnum :: Show m => Context m -> [(FieldName, b)] -> Term m -> Result b
+matchEnum :: (Default m, Show m) => Context m -> [(FieldName, b)] -> Term m -> Result b
 matchEnum cx = matchUnion cx . fmap (uncurry matchUnitField)
 
 matchRecord :: Context m -> (M.Map FieldName (Term m) -> Result b) -> Term m -> Result b
@@ -115,7 +117,7 @@ matchRecord cx decode term = do
     ExpressionRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail "expected a record"
 
-matchUnion :: Show m => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
+matchUnion :: (Default m, Show m) => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
 matchUnion cx pairs term = do
     term' <- deref cx term
     case termData term' of

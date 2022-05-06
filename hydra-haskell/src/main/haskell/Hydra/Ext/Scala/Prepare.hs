@@ -4,7 +4,8 @@ module Hydra.Ext.Scala.Prepare (
 ) where
 
 import Hydra.Core
-
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Default
 import qualified Data.Set as S
 
 
@@ -44,19 +45,19 @@ prepareIntegerType it = case it of
     $ \(IntegerValueUint64 v) -> IntegerValueInt64 v
   _ -> same it
 
-prepareType :: Type -> (Type, Term a -> Term a, S.Set String)
-prepareType typ = case typ of
-  TypeLiteral at -> (TypeLiteral rtyp, \(Term (ExpressionLiteral av) m) -> Term (ExpressionLiteral $ rep av) m, msgs)
+prepareType :: Default m => Type m -> (Type m, Term m -> Term m, S.Set String)
+prepareType typ = case typeData typ of
+  TypeExprLiteral at -> (Types.literal rtyp, \(Term (ExpressionLiteral av) m) -> Term (ExpressionLiteral $ rep av) m, msgs)
     where
       (rtyp, rep, msgs) = prepareLiteralType at
---  TypeElement et ->
---  TypeFunction (FunctionType dom cod) ->
---  TypeList lt ->
---  TypeMap (MapType kt vt) ->
---  TypeNominal name ->
---  TypeRecord fields ->
---  TypeSet st ->
---  TypeUnion fields ->
+--  TypeExprElement et ->
+--  TypeExprFunction (FunctionType dom cod) ->
+--  TypeExprList lt ->
+--  TypeExprMap (MapType kt vt) ->
+--  TypeExprNominal name ->
+--  TypeExprRecord fields ->
+--  TypeExprSet st ->
+--  TypeExprUnion fields ->
 
 same :: a -> (a, b -> b, S.Set c)
 same x = (x, id, S.empty)

@@ -25,8 +25,8 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-dereferenceNominal :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-dereferenceNominal acx t@(TypeNominal name) = do
+dereferenceNominal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+dereferenceNominal acx t@(Type (TypeExprNominal name) _) = do
   typ <- eitherToQualified $ do
     -- TODO: precompute the schema graph; don't construct it anew for each adapter
     scx <- schemaContext $ adapterContextEvaluation acx
@@ -35,20 +35,20 @@ dereferenceNominal acx t@(TypeNominal name) = do
   ad <- termAdapter acx typ
   return ad { adapterSource = t }
 
-elementToString :: Default a => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-elementToString acx t@(TypeElement _) = pure $ Adapter False t Types.string $ Step encode decode
+elementToString :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+elementToString acx t@(Type (TypeExprElement _) _) = pure $ Adapter False t Types.string $ Step encode decode
   where
     encode (Term (ExpressionElement name) _) = pure $ stringValue name
     decode (Term (ExpressionLiteral (LiteralString name)) meta) = pure $ withData meta $ ExpressionElement name
 
-fieldAdapter :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> FieldType -> Qualified (Adapter FieldType (Field a))
+fieldAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> FieldType m -> Qualified (Adapter (FieldType m) (Field m))
 fieldAdapter acx ftyp = do
   ad <- termAdapter acx $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
     $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir (adapterStep ad) term
 
-functionToUnion :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
+functionToUnion :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+functionToUnion acx t@(Type (TypeExprFunction (FunctionType dom _)) _) = do
     ut <- unionType
     ad <- termAdapter acx ut
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad)
@@ -89,28 +89,28 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
 
     unionType = do
       domAd <- termAdapter acx dom
-      return $ TypeUnion [
-        FieldType _Function_cases Types.string, -- TODO (TypeRecord cases)
+      return $ Types.union [
+        FieldType _Function_cases Types.string, -- TODO (TypeExprRecord cases)
         FieldType _Function_compareTo (adapterTarget domAd),
         FieldType _Function_data Types.unit,
-        FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
+        FieldType _Function_lambda Types.string, -- TODO (TypeExprRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
         FieldType _Function_primitive Types.string,
         FieldType _Function_projection Types.string,
         FieldType _Expression_variable Types.string]
 
-listToSet :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-listToSet acx t@(TypeSet st) = do
-    ad <- termAdapter acx $ TypeList st
+listToSet :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+listToSet acx t@(Type (TypeExprSet st) _ ) = do
+    ad <- termAdapter acx $ Types.list st
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad)
       $ Step (encode ad) (decode ad)
   where
     encode ad (Term (ExpressionSet s) meta) = stepOut (adapterStep ad) $ withData meta $ ExpressionList $ S.toList s
     decode ad term = withData (termMeta term) . ExpressionSet . S.fromList . (\(Term (ExpressionList l') _) -> l') <$> stepIn (adapterStep ad) term
 
-optionalToList :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-optionalToList acx t@(TypeOptional ot) = do
+optionalToList :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+optionalToList acx t@(Type (TypeExprOptional ot) _) = do
   ad <- termAdapter acx ot
-  return $ Adapter False t (TypeList $ adapterTarget ad) $ Step {
+  return $ Adapter False t (Types.list $ adapterTarget ad) $ Step {
     stepOut = \(Term (ExpressionOptional m) _) -> Y.maybe
       (pure $ list [])
       (fmap (\ r -> list [r]) . stepOut (adapterStep ad)) m,
@@ -119,7 +119,7 @@ optionalToList acx t@(TypeOptional ot) = do
       else Just <$> stepIn (adapterStep ad) (L.head l)}
 
 --optionalToUnion :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
---optionalToUnion acx t@(TypeOptional ot) = do
+--optionalToUnion acx t@(TypeExprOptional ot) = do
 --    ad <- termAdapter acx ot
 --    return $ Adapter (adapterIsLossy ad) t (nominalType _OptionalExpression) $ Step {
 --      stepOut = \(Term (ExpressionOptional m) _) -> case m of
@@ -133,27 +133,27 @@ optionalToList acx t@(TypeOptional ot) = do
 --          term' <- stepIn (adapterStep ad) term
 --          return $ optional $ Just term'}
 
-passAtomic :: Default a => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passAtomic acx (TypeLiteral at) = do
+passAtomic :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passAtomic acx (Type (TypeExprLiteral at) _) = do
   ad <- atomicAdapter acx at
   let step = bidirectional $ \dir (Term (ExpressionLiteral av) _) -> atomic <$> stepEither dir (adapterStep ad) av
-  return $ Adapter (adapterIsLossy ad) (TypeLiteral $ adapterSource ad) (TypeLiteral $ adapterTarget ad) step
+  return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
-passFunction :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
+passFunction :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passFunction acx t@(Type (TypeExprFunction (FunctionType dom cod)) _) = do
     domAd <- termAdapter acx dom
     codAd <- termAdapter acx cod
-    caseAds <- case dom of
-      TypeUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
+    caseAds <- case typeData dom of
+      TypeExprUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
         <$> CM.mapM (fieldAdapter acx) sfields
       _ -> pure M.empty
-    optionAd <- case dom of
-      TypeOptional ot -> Just <$> termAdapter acx (Types.function ot cod)
+    optionAd <- case typeData dom of
+      TypeExprOptional ot -> Just <$> termAdapter acx (Types.function ot cod)
       _ -> pure Nothing
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd
-    return $ Adapter lossy t (TypeFunction (FunctionType dom' cod'))
+    return $ Adapter lossy t (Types.function dom' cod')
       $ bidirectional $ \dir (Term (ExpressionFunction f) meta) -> withData meta . ExpressionFunction <$> case f of
         FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases
           where
@@ -167,63 +167,63 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
             <$> stepEither dir (adapterStep codAd) nothing
             <*> (stepEither dir (adapterStep $ Y.fromJust optionAd) just))
 
-passList :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passList acx t@(TypeList lt) = do
+passList :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passList acx t@(Type (TypeExprList lt) _) = do
   ad <- termAdapter acx lt
-  return $ Adapter (adapterIsLossy ad) t (TypeList $ adapterTarget ad)
+  return $ Adapter (adapterIsLossy ad) t (Types.list $ adapterTarget ad)
     $ bidirectional $ \dir (Term (ExpressionList terms) _) -> list <$> CM.mapM (stepEither dir $ adapterStep ad) terms
 
-passMap :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passMap acx t@(TypeMap (MapType kt vt)) = do
+passMap :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passMap acx t@(Type (TypeExprMap (MapType kt vt)) _) = do
   kad <- termAdapter acx kt
   vad <- termAdapter acx vt
   return $ Adapter (adapterIsLossy kad || adapterIsLossy vad)
-    t (TypeMap (MapType (adapterTarget kad) (adapterTarget vad)))
+    t (Types.map (adapterTarget kad) (adapterTarget vad))
     $ bidirectional $ \dir (Term (ExpressionMap m) meta) -> withData meta . ExpressionMap . M.fromList
       <$> CM.mapM (\(k, v) -> (,) <$> stepEither dir (adapterStep kad) k <*> stepEither dir (adapterStep vad) v)
         (M.toList m)
 
-passOptional :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passOptional acx t@(TypeOptional ot) = do
+passOptional :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passOptional acx t@(Type (TypeExprOptional ot) _) = do
   ad <- termAdapter acx ot
-  return $ Adapter (adapterIsLossy ad) t (TypeOptional $ adapterTarget ad) $
+  return $ Adapter (adapterIsLossy ad) t (Types.optional $ adapterTarget ad) $
     bidirectional $ \dir term -> case term of
       (Term (ExpressionOptional m) meta) -> withData meta . ExpressionOptional <$> case m of
         Nothing -> pure Nothing
         Just term' -> Just <$> stepEither dir (adapterStep ad) term'
       _ -> fail $ "expected optional term, found: " ++ show term
 
-passRecord :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passRecord acx t@(TypeRecord sfields) = do
+passRecord :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passRecord acx t@(Type (TypeExprRecord sfields) _) = do
   adapters <- CM.mapM (fieldAdapter acx) sfields
   let lossy = or $ adapterIsLossy <$> adapters
   let sfields' = adapterTarget <$> adapters
-  return $ Adapter lossy t (TypeRecord sfields') $ bidirectional
+  return $ Adapter lossy t (Types.record sfields') $ bidirectional
     $ \dir (Term (ExpressionRecord dfields) _) -> record <$> CM.zipWithM (stepEither dir . adapterStep) adapters dfields
 
-passSet :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passSet acx t@(TypeSet st) = do
+passSet :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passSet acx t@(Type (TypeExprSet st) _) = do
   ad <- termAdapter acx st
-  return $ Adapter (adapterIsLossy ad) t (TypeSet $ adapterTarget ad)
+  return $ Adapter (adapterIsLossy ad) t (Types.set $ adapterTarget ad)
     $ bidirectional $ \dir (Term (ExpressionSet terms) _) -> set . S.fromList
       <$> CM.mapM (stepEither dir (adapterStep ad)) (S.toList terms)
 
-passUnion :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passUnion acx t@(TypeUnion sfields) = do
+passUnion :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passUnion acx t@(Type (TypeExprUnion sfields) _) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter acx f) sfields
     let lossy = or $ adapterIsLossy <$> adapters
     let sfields' = adapterTarget . snd <$> M.toList adapters
-    return $ Adapter lossy t (TypeUnion sfields')
+    return $ Adapter lossy t (Types.union sfields')
       $ bidirectional $ \dir (Term (ExpressionUnion dfield) meta) -> do
         ad <- getAdapter adapters dfield
         (\f -> Term (ExpressionUnion f) meta) <$> stepEither dir (adapterStep ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
 
-passUniversal :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-passUniversal acx t@(TypeUniversal (UniversalType v body)) = do
+passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passUniversal acx t@(Type (TypeExprUniversal (UniversalType v body)) _) = do
   ad <- termAdapter acx body
-  return $ Adapter (adapterIsLossy ad) t (TypeUniversal $ UniversalType v $ adapterTarget ad)
+  return $ Adapter (adapterIsLossy ad) t (Types.universal v $ adapterTarget ad)
     $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
 
 --  TODO:
@@ -238,9 +238,9 @@ passUniversal acx t@(TypeUniversal (UniversalType v body)) = do
 --
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
-termAdapter :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
+termAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 termAdapter acx typ = case typ of
---    TypeUniversal (UniversalType _ body) -> termAdapter acx body
+--    TypeExprUniversal (UniversalType _ body) -> termAdapter acx body
     _ -> chooseAdapter alts supported describeType typ
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
@@ -270,11 +270,11 @@ termAdapter acx typ = case typ of
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
-unionToRecord :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-unionToRecord acx t@(TypeUnion sfields) = do
-    let target = TypeRecord [
+unionToRecord :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
+    let target = Types.record [
                   FieldType "context" Types.string,
-                  FieldType "record" $ TypeRecord $ makeOptional <$> sfields]
+                  FieldType "record" $ Types.record $ makeOptional <$> sfields]
     ad <- termAdapter acx target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
       stepOut = \(Term (ExpressionUnion (Field fn term)) meta) -> stepOut (adapterStep ad)
@@ -288,7 +288,7 @@ unionToRecord acx t@(TypeUnion sfields) = do
         (\t -> t {termMeta = read metaStr})
           <$> (union <$> fromRecordFields term (ExpressionRecord fields) (adapterTarget ad) fields)}
   where
-    makeOptional (FieldType fn t) = FieldType fn $ TypeOptional t
+    makeOptional (FieldType fn t) = FieldType fn $ Types.optional t
 
     toRecordField term fn (FieldType fn' _) = Field fn' $ withData (termMeta term)
       $ ExpressionOptional $ if fn' == fn then Just term else Nothing
@@ -299,10 +299,10 @@ unionToRecord acx t@(TypeUnion sfields) = do
       where
         matches = Y.mapMaybe (\(Field fn (Term (ExpressionOptional opt) _)) -> (Just . Field fn) =<< opt) fields
 
-universalToMonotype :: (Default a, Ord a, Read a, Show a) => AdapterContext a -> Type -> Qualified (Adapter Type (Term a))
-universalToMonotype acx t@(TypeUniversal (UniversalType v tbody)) = do
-  ad <- termAdapter acx tbody
+universalToMonotype :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+universalToMonotype acx t@(Type (TypeExprUniversal (UniversalType _ body)) _) = do
+  ad <- termAdapter acx body
   return ad {adapterSource = t}
 
-withData :: a -> Expression a -> Term a
+withData :: m -> Expression m -> Term m
 withData meta expr = Term expr meta

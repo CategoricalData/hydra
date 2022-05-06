@@ -54,7 +54,7 @@ encodeField cx (Field name term) = nominalRecord cx _Field [
   Field _Field_name $ stringValue name,
   Field _Field_term $ encodeTerm cx term]
 
-encodeFieldType :: Default m => Context m -> FieldType -> Term m
+encodeFieldType :: Default m => Context m -> FieldType m -> Term m
 encodeFieldType cx (FieldType fname t) = nominalRecord cx _FieldType [
   Field _FieldType_name $ stringValue fname,
   Field _FieldType_type $ encodeType cx t]
@@ -75,7 +75,7 @@ encodeFunction cx f = case f of
   FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
   FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
 
-encodeFunctionType :: Default m => Context m -> FunctionType -> Term m
+encodeFunctionType :: Default m => Context m -> FunctionType m -> Term m
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
   Field _FunctionType_domain $ encodeType cx dom,
   Field _FunctionType_codomain $ encodeType cx cod]
@@ -97,7 +97,7 @@ encodeLambda cx (Lambda v b) = nominalRecord cx _Lambda [
   Field _Lambda_parameter $ stringValue v,
   Field _Lambda_body $ encodeTerm cx b]
 
-encodeMapType :: Default m => Context m -> MapType -> Term m
+encodeMapType :: Default m => Context m -> MapType m -> Term m
 encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [
   Field _MapType_keys $ encodeType cx kt,
   Field _MapType_values $ encodeType cx vt]
@@ -128,20 +128,20 @@ encodeTerm cx term = case termData term of
   ExpressionUnion field -> nominalVariant cx _Expression _Expression_union $ encodeField cx field
   ExpressionVariable var -> nominalVariant cx _Expression _Expression_variable $ stringValue var
 
-encodeType :: Default m => Context m -> Type -> Term m
-encodeType cx typ = case typ of
-  TypeLiteral at -> nominalVariant cx _Type _Type_literal $ encodeLiteralType cx at
-  TypeElement t -> nominalVariant cx _Type _Type_element $ encodeType cx t
-  TypeFunction ft -> nominalVariant cx _Type _Type_function $ encodeFunctionType cx ft
-  TypeList t -> nominalVariant cx _Type _Type_list $ encodeType cx t
-  TypeMap mt -> nominalVariant cx _Type _Type_map $ encodeMapType cx mt
-  TypeNominal name -> nominalVariant cx _Type _Type_nominal $ element name
-  TypeOptional t -> nominalVariant cx _Type _Type_optional $ encodeType cx t
-  TypeRecord fields -> nominalVariant cx _Type _Type_record $ list $ fmap (encodeFieldType cx) fields
-  TypeSet t -> nominalVariant cx _Type _Type_set $ encodeType cx t
-  TypeUnion fields -> nominalVariant cx _Type _Type_union $ list $ fmap (encodeFieldType cx) fields
-  TypeUniversal ut -> nominalVariant cx _Type _Type_universal $ encodeUniversalType cx ut
-  TypeVariable var -> nominalVariant cx _Type _Type_variable $ stringValue var
+encodeType :: Default m => Context m -> Type m -> Term m
+encodeType cx typ = case typeData typ of
+  TypeExprLiteral at -> nominalVariant cx _TypeExpr _TypeExpr_literal $ encodeLiteralType cx at
+  TypeExprElement t -> nominalVariant cx _TypeExpr _TypeExpr_element $ encodeType cx t
+  TypeExprFunction ft -> nominalVariant cx _TypeExpr _TypeExpr_function $ encodeFunctionType cx ft
+  TypeExprList t -> nominalVariant cx _TypeExpr _TypeExpr_list $ encodeType cx t
+  TypeExprMap mt -> nominalVariant cx _TypeExpr _TypeExpr_map $ encodeMapType cx mt
+  TypeExprNominal name -> nominalVariant cx _TypeExpr _TypeExpr_nominal $ element name
+  TypeExprOptional t -> nominalVariant cx _TypeExpr _TypeExpr_optional $ encodeType cx t
+  TypeExprRecord fields -> nominalVariant cx _TypeExpr _TypeExpr_record $ list $ fmap (encodeFieldType cx) fields
+  TypeExprSet t -> nominalVariant cx _TypeExpr _TypeExpr_set $ encodeType cx t
+  TypeExprUnion fields -> nominalVariant cx _TypeExpr _TypeExpr_union $ list $ fmap (encodeFieldType cx) fields
+  TypeExprUniversal ut -> nominalVariant cx _TypeExpr _TypeExpr_universal $ encodeUniversalType cx ut
+  TypeExprVariable var -> nominalVariant cx _TypeExpr _TypeExpr_variable $ stringValue var
 
 encodeTypeVariant :: Default m => Context m -> TypeVariant -> Term m
 encodeTypeVariant cx tv = nominalUnitVariant cx _TypeVariant $ case tv of
@@ -158,7 +158,7 @@ encodeTypeVariant cx tv = nominalUnitVariant cx _TypeVariant $ case tv of
   TypeVariantUniversal -> _TypeVariant_universal
   TypeVariantVariable -> _TypeVariant_variable
 
-encodeUniversalType :: Default m => Context m -> UniversalType -> Term m
+encodeUniversalType :: Default m => Context m -> UniversalType m -> Term m
 encodeUniversalType cx (UniversalType var body) = nominalRecord cx _UniversalType [
   Field _UniversalType_variable $ stringValue var,
   Field _UniversalType_body $ encodeType cx body]

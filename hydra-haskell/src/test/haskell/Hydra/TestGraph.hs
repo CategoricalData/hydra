@@ -78,14 +78,14 @@ testTermArthur = nominalRecord cx "Person" [
   Field "lastName" $ stringValue "Dent",
   Field "age" $ int32Value 42]
 
-testTypePerson :: Type
-testTypePerson = TypeRecord [
+testTypePerson :: Type Meta
+testTypePerson = Types.record [
   FieldType "firstName" Types.string,
   FieldType "lastName" Types.string,
   FieldType "age" Types.int32]
 
-testTypeTimestamp :: Type
-testTypeTimestamp = TypeUnion [
+testTypeTimestamp :: Type Meta
+testTypeTimestamp = Types.union [
   FieldType "unixTimeMillis" Types.uint64,
   FieldType "date" Types.string]
 

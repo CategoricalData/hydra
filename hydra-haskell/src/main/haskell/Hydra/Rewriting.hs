@@ -6,6 +6,8 @@ module Hydra.Rewriting (
   isFreeIn,
   rewriteTerm,
   rewriteTermMeta,
+  rewriteType,
+  rewriteTypeMeta,
   simplifyTerm,
   stripMeta,
   substituteVariable,
@@ -41,7 +43,7 @@ foldOverTerm order fld b0 term = case order of
   where
     children = subterms term
 
-foldOverType :: TraversalOrder -> (a -> Type -> a) -> a -> Type -> a
+foldOverType :: TraversalOrder -> (a -> Type m -> a) -> a -> Type m -> a
 foldOverType order fld b0 typ = case order of
     TraversalOrderPre -> L.foldl (foldOverType order fld) (fld b0 typ) children
     TraversalOrderPost -> fld (L.foldl (foldOverType order fld) b0 children) typ
@@ -84,13 +86,40 @@ rewriteTerm mapData mapMeta = replace
           ExpressionOptional m -> ExpressionOptional $ replace <$> m
           ExpressionRecord fields -> ExpressionRecord $ replaceField <$> fields
           ExpressionSet s -> ExpressionSet $ S.fromList $ replace <$> S.toList s
-          ExpressionTypeAbstraction (TypeAbstraction v b) -> ExpressionTypeAbstraction $ TypeAbstraction v (replace b)
-          ExpressionTypeApplication (TypeApplication f a) -> ExpressionTypeApplication $ TypeApplication (replace f) a
+          ExpressionTypeAbstraction (TypeAbstraction v b0) -> ExpressionTypeAbstraction $ TypeAbstraction v (replace b0)
+          ExpressionTypeApplication (TypeApplication f t) -> ExpressionTypeApplication $ TypeApplication (replace f) $
+            rewriteTypeMeta mapMeta t
           ExpressionUnion field -> ExpressionUnion $ replaceField field
           ExpressionVariable v -> ExpressionVariable v
 
 rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
 rewriteTermMeta mapMeta = rewriteTerm mapData mapMeta
+  where
+    mapData recurse term = recurse term
+
+rewriteType :: (Ord a, Ord b) => ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
+rewriteType mapData mapMeta = replace
+  where
+    replace = mapData recurse
+    replaceField f = f {fieldTypeType = replace (fieldTypeType f)}
+    recurse (Type expr meta) = Type expr1 $ mapMeta meta
+      where
+        expr1 = case expr of
+          TypeExprElement t -> TypeExprElement $ replace t
+          TypeExprFunction (FunctionType dom cod) -> TypeExprFunction (FunctionType (replace dom) (replace cod))
+          TypeExprList t -> TypeExprList $ replace t
+          TypeExprLiteral lt -> TypeExprLiteral lt
+          TypeExprMap (MapType kt vt) -> TypeExprMap (MapType (replace kt) (replace vt))
+          TypeExprNominal name -> TypeExprNominal name
+          TypeExprOptional t -> TypeExprOptional $ replace t
+          TypeExprRecord fields -> TypeExprRecord $ replaceField <$> fields
+          TypeExprSet t -> TypeExprSet $ replace t
+          TypeExprUnion fields -> TypeExprUnion $ replaceField <$> fields
+          TypeExprUniversal (UniversalType v b) -> TypeExprUniversal (UniversalType v $ replace b)
+          TypeExprVariable v -> TypeExprVariable v
+
+rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
+rewriteTypeMeta mapMeta = rewriteType mapData mapMeta
   where
     mapData recurse term = recurse term
 
@@ -139,20 +168,20 @@ subterms term = case termData term of
   ExpressionUnion field -> [fieldTerm field]
   _ -> []
 
-subtypes :: Type -> [Type]
-subtypes typ = case typ of
-  TypeElement et -> [et]
-  TypeFunction (FunctionType dom cod) -> [dom, cod]
-  TypeList lt -> [lt]
-  TypeLiteral _ -> []
-  TypeMap (MapType kt vt) -> [kt, vt]
-  TypeNominal _ -> []
-  TypeOptional ot -> [ot]
-  TypeRecord fields -> fieldTypeType <$> fields
-  TypeSet st -> [st]
-  TypeUnion fields -> fieldTypeType <$> fields
-  TypeUniversal (UniversalType v body) -> [body]
-  TypeVariable _ -> []
+subtypes :: Type m -> [Type m]
+subtypes typ = case typeData typ of
+  TypeExprElement et -> [et]
+  TypeExprFunction (FunctionType dom cod) -> [dom, cod]
+  TypeExprList lt -> [lt]
+  TypeExprLiteral _ -> []
+  TypeExprMap (MapType kt vt) -> [kt, vt]
+  TypeExprNominal _ -> []
+  TypeExprOptional ot -> [ot]
+  TypeExprRecord fields -> fieldTypeType <$> fields
+  TypeExprSet st -> [st]
+  TypeExprUnion fields -> fieldTypeType <$> fields
+  TypeExprUniversal (UniversalType v body) -> [body]
+  TypeExprVariable _ -> []
 
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
 termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
@@ -168,7 +197,7 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
 
-typeDependencies :: Show m => Context m -> Name -> Result (M.Map Name Type)
+typeDependencies :: (Default m, Show m) => Context m -> Name -> Result (M.Map Name (Type m))
 typeDependencies scx name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
@@ -185,14 +214,13 @@ typeDependencies scx name = deps (S.fromList [name]) M.empty
           typ <- requireType scx name
           return (name, typ)
 
---    requireType :: Show m => Context m -> Name -> Result Type
     requireType scx name = do
       el <- requireElement scx name
       decodeType scx (elementData el)
 
-typeDependencyNames :: Type -> S.Set Name
+typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
   where
-    addNames names typ = case typ of
-      TypeNominal name -> S.insert name names
+    addNames names typ = case typeData typ of
+      TypeExprNominal name -> S.insert name names
       _ -> names

@@ -24,49 +24,49 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Extras
 
 
-nominalCases :: Default a => Context a -> Name -> Type -> [Field a] -> Term a
+nominalCases :: Default m => Context m -> Name -> Type m -> [Field m] -> Term m
 nominalCases cx name cod fields = withType cx (Types.function (Types.nominal name) cod) $ cases fields
 
-nominalMatch :: Default a => Context a -> Name -> Type -> [(FieldName, Term a)] -> Term a
+nominalMatch :: Default m => Context m -> Name -> Type m -> [(FieldName, Term m)] -> Term m
 nominalMatch cx name cod fields = nominalCases cx name cod (fmap toField fields)
   where
     toField (fname, term) = Field fname term
 
-nominalMatchWithVariants :: Context Meta -> Type -> Type -> [(FieldName, FieldName)] -> Term Meta
+nominalMatchWithVariants :: Context Meta -> Type Meta -> Type Meta -> [(FieldName, FieldName)] -> Term Meta
 nominalMatchWithVariants cx dom cod = withType cx ft . cases . fmap toField
   where
     ft = Types.function dom cod
     toField (from, to) = Field from $ constFunction $ withType cx cod $ unitVariant to -- nominalUnitVariant cx cod to
 
-nominalProjection :: Default a => Context a -> Name -> FieldName -> Type -> Term a
+nominalProjection :: Default m => Context m -> Name -> FieldName -> Type m -> Term m
 nominalProjection cx name fname ftype = withType cx (Types.function (Types.nominal name) ftype) $ projection fname
 
-nominalRecord :: Default a => Context a -> Name -> [Field a] -> Term a
+nominalRecord :: Default m => Context m -> Name -> [Field m] -> Term m
 nominalRecord cx name fields = nominalTerm cx name $ record fields
 
-nominalTerm :: Context a -> Name -> Term a -> Term a
+nominalTerm :: Default m => Context m -> Name -> Term m -> Term m
 nominalTerm cx name = withType cx (Types.nominal name)
 
-nominalUnion :: Default a => Context a -> Name -> Field a -> Term a
+nominalUnion :: Default m => Context m -> Name -> Field m -> Term m
 nominalUnion cx name field = withType cx (Types.nominal name) $ union field
 
-nominalUnitVariant :: Default a => Context a -> Name -> FieldName -> Term a
+nominalUnitVariant :: Default m => Context m -> Name -> FieldName -> Term m
 nominalUnitVariant cx name fname = nominalVariant cx name fname unitTerm
 
-nominalVariant :: Default a => Context a -> Name -> FieldName -> Term a -> Term a
+nominalVariant :: Default m => Context m -> Name -> FieldName -> Term m -> Term m
 nominalVariant cx name fname term = nominalTerm cx name $ variant fname term
 
-nominalWithFunction :: Default a => Context a -> Name -> FieldName -> Element a -> Term a
+nominalWithFunction :: Default m => Context m -> Name -> FieldName -> Element m -> Term m
 nominalWithFunction cx name fname el = lambda var $ nominalVariant cx name fname $ apply (elementRef el) (variable var)
   where var = "x"
 
-nominalWithUnitVariant :: Default a => Context a -> Name -> FieldName -> Term a
+nominalWithUnitVariant :: Default m => Context m -> Name -> FieldName -> Term m
 nominalWithUnitVariant cx name fname = constFunction $ nominalUnitVariant cx name fname
 
-nominalWithVariant :: Default a => Context a -> Name -> FieldName -> Term a -> Term a
+nominalWithVariant :: Default m => Context m -> Name -> FieldName -> Term m -> Term m
 nominalWithVariant cx name fname term = constFunction $ nominalVariant cx name fname term
 
-withType :: Context a -> Type -> Term a -> Term a
+withType :: Context m -> Type m -> Term m -> Term m
 withType cx typ term = term { termMeta = contextSetTypeOf cx (Just typ) (termMeta term)}
 
 withDoc :: String -> Term Meta -> Term Meta

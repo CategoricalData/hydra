@@ -39,10 +39,10 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
 
     H.it "Records are supported if and only if each of their fields are supported" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int16])
+        (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
         `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int8])
+        (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
         `H.shouldBe` False
 
     H.it "Lists are supported if the list element type is supported" $ do
@@ -95,8 +95,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantRecord]
-      (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int8])
-      (TypeRecord [Types.field "first" Types.string, Types.field "second" Types.int16])
+      (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
+      (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
       (record [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
       (record [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
@@ -215,8 +215,8 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantList]
-      (TypeOptional Types.string)
-      (TypeList Types.string)
+      (Types.optional Types.string)
+      (Types.list Types.string)
       False
       (optional $ stringValue <$> ms)
       (list $ Y.maybe [] (\s -> [stringValue s]) ms)
@@ -252,9 +252,9 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \i -> checkTermAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
-      (TypeRecord [Types.field "context" Types.string, Types.field "record" (TypeRecord [
-        Types.field "left" $ TypeOptional Types.string,
-        Types.field "right" $ TypeOptional Types.int16])])
+      (Types.record [Types.field "context" Types.string, Types.field "record" (Types.record [
+        Types.field "left" $ Types.optional Types.string,
+        Types.field "right" $ Types.optional Types.int16])])
       False
       (union $ Field "right" $ int8Value i)
       (record [
@@ -341,13 +341,12 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Field "second" $ int8Value i)
       (Field "second" $ int16Value i)
 
-roundTripIsNoop :: Type -> Term Meta -> Bool
+roundTripIsNoop :: Type Meta -> Term Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
     step = adapt typ
 
     -- Use a YAML-like language (but supporting unions) as the default target language
-    testLanguage :: Language
     testLanguage = Language "hydra/test" $ Language_Constraints {
       languageConstraintsLiteralVariants = S.fromList [
         LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
@@ -357,8 +356,8 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case typ of
-        TypeOptional (TypeOptional _) -> False
+      languageConstraintsTypes = \typ -> case typeData typ of
+        TypeExprOptional (Type (TypeExprOptional _) _) -> False
         _ -> True }
 
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage

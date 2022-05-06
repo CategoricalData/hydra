@@ -27,23 +27,23 @@ individualEncoderTestCases = do
     H.it "string type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext Types.string)
-        (stripMeta $  var _Type _Type_literal (unitVar _LiteralType _LiteralType_string))
+        (stripMeta $  var _Type _TypeExpr_literal (unitVar _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext Types.int32)
-        (stripMeta $ var _Type _Type_literal (var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int32))
+        (stripMeta $ var _Type _TypeExpr_literal (var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
-        (stripMeta $ var _Type _Type_record $ list [
+        (stripMeta $ var _Type _TypeExpr_record $ list [
           record [
             Field _FieldType_name $ stringValue "something",
-            Field _FieldType_type $ var _Type _Type_literal $ unitVar _LiteralType _LiteralType_string],
+            Field _FieldType_type $ var _Type _TypeExpr_literal $ unitVar _LiteralType _LiteralType_string],
           record [
             Field _FieldType_name $ stringValue "nothing",
-            Field _FieldType_type $ var _Type _Type_record $ list []]])
+            Field _FieldType_type $ var _Type _TypeExpr_record $ list []]])
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
@@ -54,17 +54,17 @@ individualDecoderTestCases = do
         pure (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
-      decodeType testContext (var _Type _Type_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float32)
+      decodeType testContext (var _Type _TypeExpr_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float32)
         `H.shouldBe` pure Types.float32
 
     H.it "union type" $ do
-      decodeType testContext (var _Type _Type_union $ list [
+      decodeType testContext (var _Type _TypeExpr_union $ list [
         record [
           Field _FieldType_name $ stringValue "left",
-          Field _FieldType_type $ var _Type _Type_literal $ var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int64],
+          Field _FieldType_type $ var _Type _TypeExpr_literal $ var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int64],
         record [
           Field _FieldType_name $ stringValue "right",
-          Field _FieldType_type $ var _Type _Type_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float64]])
+          Field _FieldType_type $ var _Type _TypeExpr_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float64]])
         `H.shouldBe` pure (Types.union [Types.field "left" Types.int64, Types.field "right" Types.float64])
 
 decodeInvalidTerms :: H.SpecWith ()
@@ -75,7 +75,7 @@ decodeInvalidTerms = do
       isFailure (decodeType testContext $ var untyped "unknownField" $ list []) `H.shouldBe` True
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      isFailure (decodeType testContext$ var _Type _Type_literal $ unitVar _LiteralType _LiteralType_integer) `H.shouldBe` True
+      isFailure (decodeType testContext$ var _Type _TypeExpr_literal $ unitVar _LiteralType _LiteralType_integer) `H.shouldBe` True
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

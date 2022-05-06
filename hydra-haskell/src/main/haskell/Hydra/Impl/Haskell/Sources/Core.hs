@@ -3,7 +3,7 @@ module Hydra.Impl.Haskell.Sources.Core where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Dsl.Types
+import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
@@ -47,11 +47,11 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "function" $ universal "m" $ core "Function",
           field "let" $ universal "m" $ core "Let",
           field "list" $ list $ universal "m" $ core "Term",
-          field "map" $ TypeMap $ MapType (universal "m" $ core "Term") (universal "m" $ core "Term"),
+          field "map" $ Types.map (universal "m" $ core "Term") (universal "m" $ core "Term"),
           field "nominal" $ universal "m" $ core "NominalTerm",
           field "optional" $ optional $ universal "m" $ core "Term",
           field "record" $ list $ universal "m" $ core "Field",
-          field "set" $ TypeSet $ universal "m" $ core "Term",
+          field "set" $ set $ universal "m" $ core "Term",
           field "typeAbstraction" $ universal "m" $ core "TypeAbstraction",
           field "typeApplication" $ universal "m" $ core "TypeApplication",
           field "union" $ universal "m" $ core "Field",
@@ -189,7 +189,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Meta"
         "A built-in metadata container for terms" $
-        universal "m" $ record [
+        record [
           field "description" $ optional string,
           field "type" $ optional $ universal "m" $ core "Type"],
 
@@ -277,8 +277,8 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "TypeApplication"
         "A type application (instantiation), which applies a term to a type" $
         universal "m" $ record [
-          field "function" (universal "m" $ core "Term"),
-          field "argument" (core "Type")],
+          field "function" $ universal "m" $ core "Term",
+          field "argument" $ universal "m" $ core "Type"],
 
       def "TypeScheme"
         "A type expression together with free type variables occurring in the expression" $
@@ -309,7 +309,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "TypedTerm"
         "A type together with an instance of the type" $
         universal "m" $ record [
-          field "type" $ core "Type",
+          field "type" $ universal "m" $ core "Type",
           field "term" $ universal "m" $ core "Term"],
 
       def "UniversalType"

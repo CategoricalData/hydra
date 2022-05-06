@@ -16,10 +16,12 @@ module Hydra.Impl.Haskell.Extras (
   toQname,
   unexpected,
   unidirectionalStep,
-  module Hydra.Errors
+  module Hydra.Errors,
+  module Hydra.Impl.Haskell.Default
   ) where
 
 import Hydra.Core
+import Hydra.Impl.Haskell.Default
 import Hydra.Errors
 import Hydra.Graph
 import Hydra.Primitives
@@ -30,14 +32,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Data.List as L
 import qualified Data.Map as M
 
-
-class Default a where dflt :: a
-instance Default () where dflt = ()
-instance Default [a] where dflt = []
-instance Default Int where dflt = 0
-instance Default Meta where dflt = Meta {
-  metaDescription = Nothing,
-  metaType = Nothing}
 
 instance Functor Qualified where
   fmap f (Qualified x msgs) = Qualified (fmap f x) msgs
@@ -88,28 +82,28 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-debug :: String -> Result a -> Result a
+debug :: String -> Result m -> Result m
 debug msg r = case r of
   ResultSuccess _ -> r
   ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
 
-eitherToQualified :: Result a -> Qualified a
+eitherToQualified :: Result m -> Qualified m
 eitherToQualified e = case e of
   ResultFailure msg -> Qualified Nothing [msg]
   ResultSuccess x -> Qualified (Just x) []
 
-elementAsTypedTerm :: Show a => Context a -> Element a -> Result (TypedTerm a)
+elementAsTypedTerm :: (Default m, Show m) => Context m -> Element m -> Result (TypedTerm m)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
-fieldTypes :: Show m => Context m -> Type -> Result (M.Map FieldName Type)
-fieldTypes scx t = case t of
-    TypeRecord fields -> pure $ toMap fields
-    TypeUnion fields -> pure $ toMap fields
-    TypeElement et -> fieldTypes scx et
-    TypeNominal name -> do
+fieldTypes :: (Default m, Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
+fieldTypes scx t = case typeData t of
+    TypeExprRecord fields -> pure $ toMap fields
+    TypeExprUnion fields -> pure $ toMap fields
+    TypeExprElement et -> fieldTypes scx et
+    TypeExprNominal name -> do
       el <- requireElement scx name
       decodeType scx (elementData el) >>= fieldTypes scx
-    TypeUniversal (UniversalType _ body) -> fieldTypes scx body
+    TypeExprUniversal (UniversalType _ body) -> fieldTypes scx body
     _ -> fail $ "expected record or union type, but found " ++ show t
   where
     toMap fields = M.fromList (toPair <$> fields)
@@ -124,17 +118,17 @@ graphNameOf = fst . toQname
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
-qualifiedToResult :: Qualified a -> Result a
+qualifiedToResult :: Qualified m -> Result m
 qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
 
-requireType :: Show a => Context a -> Name -> Result Type
+requireType :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 requireType scx name = do
   el <- requireElement scx name
   decodeType scx $ elementData el
 
-resultToQualified :: Result a -> Qualified a
+resultToQualified :: Result m -> Qualified m
 resultToQualified r = case r of
   ResultSuccess x -> pure x
   ResultFailure msg -> fail msg
