@@ -103,7 +103,7 @@ encodeFunction cx meta fun arg = case fun of
             then body
             else substituteVariable v1 v body
           _ -> apply fterm (variable v)
-    FunctionData -> pure $ sname "DATA" -- TODO
+    FunctionDelta -> pure $ sname "DATA" -- TODO
     FunctionProjection fname -> fail $ "unapplied projection not yet supported"
     _ -> fail $ "unexpected function: " ++ show fun
   where
@@ -141,7 +141,7 @@ encodeData cx term@(Data expr meta) = case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
         DataTermFunction f -> case f of
           FunctionCases _ -> encodeFunction cx (dataMeta fun) f (Just arg)
-          FunctionData -> encodeData cx arg
+          FunctionDelta -> encodeData cx arg
           FunctionProjection fname -> do
             sarg <- encodeData cx arg
             return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg (Scala.Data_Name fname)

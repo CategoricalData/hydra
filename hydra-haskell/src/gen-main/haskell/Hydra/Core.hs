@@ -223,7 +223,7 @@ _FloatValue_float64 = "float64"
 data Function m
   = FunctionCases [Field m]
   | FunctionCompareTo (Data m)
-  | FunctionData
+  | FunctionDelta
   | FunctionLambda (Lambda m)
   | FunctionOptionalCases (OptionalCases m)
   | FunctionPrimitive Name
@@ -236,7 +236,7 @@ _Function_cases = "cases"
 
 _Function_compareTo = "compareTo"
 
-_Function_data = "data"
+_Function_delta = "delta"
 
 _Function_lambda = "lambda"
 
@@ -263,7 +263,7 @@ _FunctionType_codomain = "codomain"
 data FunctionVariant
   = FunctionVariantCases
   | FunctionVariantCompareTo
-  | FunctionVariantData
+  | FunctionVariantDelta
   | FunctionVariantLambda
   | FunctionVariantOptionalCases
   | FunctionVariantPrimitive
@@ -276,7 +276,7 @@ _FunctionVariant_cases = "cases"
 
 _FunctionVariant_compareTo = "compareTo"
 
-_FunctionVariant_data = "data"
+_FunctionVariant_delta = "delta"
 
 _FunctionVariant_lambda = "lambda"
 

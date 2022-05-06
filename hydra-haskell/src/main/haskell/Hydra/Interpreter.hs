@@ -52,7 +52,7 @@ evaluate context term = reduce M.empty term
         reduceFunction f = case f of
           FunctionCases cases -> defaultData . DataTermFunction . FunctionCases <$> CM.mapM reduceField cases
           FunctionCompareTo other -> defaultData . DataTermFunction . FunctionCompareTo <$> reduceb other
-          FunctionData -> done
+          FunctionDelta -> done
           FunctionLambda (Lambda v body) -> defaultData . DataTermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionOptionalCases (OptionalCases nothing just) -> defaultData . DataTermFunction . FunctionOptionalCases <$>
             (OptionalCases <$> reduceb nothing <*> reduceb just)
@@ -78,7 +78,7 @@ evaluate context term = reduce M.empty term
 
         -- TODO: FunctionCompareTo
 
-        FunctionData -> do
+        FunctionDelta -> do
           arg <- reduce bindings $ L.head args
           case dataTerm arg of
             DataTermElement name -> dereferenceElement context name
@@ -136,7 +136,7 @@ freeVariables term = S.fromList $ free S.empty term
         freeInFunction f = case f of
           FunctionCases cases -> L.concatMap (free bound . fieldData) cases
           FunctionCompareTo term -> free bound term
-          FunctionData -> []
+          FunctionDelta -> []
           FunctionLambda (Lambda v t) -> free (S.insert v bound) t
           FunctionOptionalCases (OptionalCases nothing just) -> free bound nothing ++ free bound just
           FunctionPrimitive _ -> []
@@ -176,7 +176,7 @@ termIsValue strategy term = termIsOpaque strategy term || case dataTerm term of
     functionIsValue f = case f of
       FunctionCases cases -> checkFields cases
       FunctionCompareTo other -> termIsValue strategy other
-      FunctionData -> True
+      FunctionDelta -> True
       FunctionLambda (Lambda _ body) -> termIsValue strategy body
       FunctionOptionalCases (OptionalCases nothing just) -> termIsValue strategy nothing && termIsValue strategy just
       FunctionPrimitive _ -> True

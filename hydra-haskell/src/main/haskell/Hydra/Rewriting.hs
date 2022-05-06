@@ -72,7 +72,7 @@ rewriteData mapData mapMeta = replace
           DataTermFunction fun -> DataTermFunction $ case fun of
             FunctionCases fields -> FunctionCases $ replaceField <$> fields
             FunctionCompareTo other -> FunctionCompareTo $ replace other
-            FunctionData -> FunctionData
+            FunctionDelta -> FunctionDelta
             FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
             FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases
               (OptionalCases (replace nothing) (replace just))

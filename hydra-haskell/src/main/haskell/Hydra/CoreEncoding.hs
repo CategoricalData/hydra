@@ -69,7 +69,7 @@ encodeFunction :: (Default m, Ord m) => Context m -> Function m -> Data m
 encodeFunction cx f = case f of
   FunctionCases cases -> nominalVariant cx _Function _Function_cases $ list $ encodeField cx <$> cases
   FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo $ encodeData cx other
-  FunctionData -> nominalUnitVariant cx _Function _Function_data
+  FunctionDelta -> nominalUnitVariant cx _Function _Function_delta
   FunctionLambda l -> nominalVariant cx _Function _Function_lambda $ encodeLambda cx l
   FunctionOptionalCases cases -> nominalVariant cx _Function _Function_optionalCases $ encodeOptionalCases cx cases
   FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
