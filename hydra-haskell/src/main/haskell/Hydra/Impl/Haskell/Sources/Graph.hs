@@ -22,15 +22,15 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
     def = datatype hydraGraphName
     elements = [
 
-      def "Element"
-        "A graph element, having a name, data term (value), and schema term (type)" $
+      def "Element" $
+        doc "A graph element, having a name, data term (value), and schema term (type)" $
         universal "m" $ record [
           field "name" $ core "Name",
           field "schema" $ universal "m" $ core "Data",
           field "data" $ universal "m" $ core "Data"],
 
-      def "Graph"
-        ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
+      def "Graph" $
+        doc ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
           ++ " called the schema graph") $
         universal "m" $ record [
           field "name" $ graph "GraphName",
@@ -38,18 +38,18 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
           field "dataTerms" $ function (universal "m" $ core "Data") boolean,
           field "schemaGraph" $ graph "GraphName"],
 
-      def "GraphName"
-        "A unique identifier for a graph within a graph set"
+      def "GraphName" $
+        doc "A unique identifier for a graph within a graph set"
         string,
 
-      def "GraphSet"
-        "A collection of graphs with a distinguished root graph" $
+      def "GraphSet" $
+        doc "A collection of graphs with a distinguished root graph" $
         universal "m" $ record [
           field "graphs" $ Types.map (graph "GraphName") (universal "m" $ graph "Graph"),
           field "root" $ graph "GraphName"],
 
-     def "Module"
-       "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
+     def "Module" $
+       doc "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
        universal "m" $ record [
          field "graph" $ universal "m" $ graph "Graph",
          field "imports" $ list $ universal "m" $ graph "Module"]]

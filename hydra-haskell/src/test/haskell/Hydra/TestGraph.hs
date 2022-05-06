@@ -29,8 +29,6 @@ import qualified Data.Set  as S
 cx :: Context Meta
 cx = standardContext
 
-noDoc = ""
-
 testContext :: Context Meta
 testContext = standardContext {
     contextGraphs = GraphSet {
@@ -64,9 +62,9 @@ testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement cx "StringTypeAlias" "An alias for the string type" Types.string,
-    typeElement cx "Person" noDoc testTypePerson,
-    typeElement cx "Timestamp" noDoc testTypeTimestamp]
+    typeElement cx "StringTypeAlias" $ Types.doc "An alias for the string type" Types.string,
+    typeElement cx "Person" testTypePerson,
+    typeElement cx "Timestamp" testTypeTimestamp]
   allTerms "hydra/core"
 
 testStrategy :: EvaluationStrategy

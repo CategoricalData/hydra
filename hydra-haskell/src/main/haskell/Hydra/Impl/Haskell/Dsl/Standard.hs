@@ -13,7 +13,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-datatype gname lname doc typ = typeElement standardContext (qualify gname lname) doc typ
+datatype gname lname typ = typeElement standardContext (qualify gname lname) typ
 
 project :: Type Meta -> FieldName -> Type Meta -> Data Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
@@ -72,10 +72,8 @@ standardWithType = withType standardContext
 standardWithVariant :: Name -> FieldName -> Data Meta -> Data Meta
 standardWithVariant = nominalWithVariant standardContext
 
-typeElement :: Context Meta -> Name -> String -> Type Meta -> Element Meta
-typeElement cx name doc typ = Element {
+typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
+typeElement cx name typ = Element {
     elementName = name,
     elementSchema = defaultData $ DataTermElement _Type,
-    elementData = setDoc $ encodeType cx typ}
-  where
-    setDoc (Data d m) = Data d (contextSetDescriptionOf cx (Just doc) m)
+    elementData = encodeType cx typ}

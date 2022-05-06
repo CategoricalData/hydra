@@ -29,59 +29,49 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
 
     elements = [
 
-      def "Annotations"
-        "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
+      def "Annotations" $
+        doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
         record [
           field "doc" $ optional string,
           field "deprecated" boolean],
 
-      def "EnumField"
-        "" $
+      def "EnumField" $
         record [
           field "name" $ pdl "EnumFieldName",
           field "annotations" $ pdl "Annotations"],
 
       def "EnumFieldName"
-        ""
         string,
 
-      def "EnumSchema"
-        "" $
+      def "EnumSchema" $
         record [
           field "fields" $ list $ pdl "EnumField"],
 
       def "FieldName"
-        ""
         string,
 
-      def "NamedSchema"
-        "" $
+      def "NamedSchema" $
         record [
           field "qualifiedName" $ pdl "QualifiedName",
           field "type" $ pdl "NamedSchema.Type",
           field "annotations" $ pdl "Annotations"],
 
-      def "NamedSchema.Type"
-        "" $
+      def "NamedSchema.Type" $
         union [
           field "record" $ pdl "RecordSchema",
           field "enum" $ pdl "EnumSchema",
           field "typeref" $ pdl "Schema"],
 
       def "Name"
-        ""
         string,
 
       def "Namespace"
-        ""
         string,
 
       def "Package"
-        ""
         string,
 
-      def "PrimitiveType"
-        "" $
+      def "PrimitiveType" $
         enum [
           "boolean",
           "bytes",
@@ -92,23 +82,19 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           "string"],
 
       def "PropertyKey"
-        ""
         string,
 
-      def "Property"
-        "" $
+      def "Property" $
         record [
           field "key" $ pdl "PropertyKey",
           field "value" $ optional $ json "Value"],
 
-      def "QualifiedName"
-        "" $
+      def "QualifiedName" $
         record [
           field "name" $ pdl "Name",
           field "namespace" $ optional $ pdl "Namespace"],
 
-      def "RecordField"
-        "" $
+      def "RecordField" $
         record [
           field "name" $ pdl "FieldName",
           field "value" $ pdl "Schema",
@@ -117,15 +103,13 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           field "default" $ optional $ json "Value",
           field "annotations" $ pdl "Annotations"],
 
-      def "RecordSchema"
-        "" $
+      def "RecordSchema" $
         record [
           field "fields" $ list $ pdl "RecordField",
           -- Note: all included schemas must be record schemas
           field "includes" $ list $ pdl "NamedSchema"],
 
-      def "Schema"
-        "" $
+      def "Schema" $
         union [
           field "array" $ pdl "Schema",
           field "fixed" int32,
@@ -136,16 +120,14 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           field "primitive" $ pdl "PrimitiveType",
           field "union" $ pdl "UnionSchema"],
 
-      def "SchemaFile"
-        "" $
+      def "SchemaFile" $
         record [
           field "namespace" $ pdl "Namespace",
           field "package" $ optional $ pdl "Package",
           field "imports" $ list $ pdl "QualifiedName",
           field "schemas" $ list $ pdl "NamedSchema"],
 
-      def "UnionMember"
-        "" $
+      def "UnionMember" $
         record [
           field "alias" $ optional $ pdl "FieldName",
           field "value" $ pdl "Schema",
@@ -153,6 +135,5 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
           field "annotations" $ pdl "Annotations"],
 
       -- Note: unions are not allowed as member types of other unions
-      def "UnionSchema"
-        "" $
+      def "UnionSchema" $
         list $ pdl "UnionMember"]

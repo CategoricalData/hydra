@@ -34,15 +34,15 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
       {-
       Every YAML node has an optional scalar tag or non-specific tag (omitted from this model)
       -}
-      def "Node"
-        "" $
+      def "Node" $
+        doc "A YAML node (value)" $
         union [
           field "mapping" $ Types.map (model "Node") (model "Node"), -- Failsafe schema: tag:yaml.org,2002:map
           field "scalar" $ model "Scalar",
           field "sequence" $ list $ model "Node"], -- Failsafe schema: tag:yaml.org,2002:seq
 
-      def "Scalar"
-        "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here" $
+      def "Scalar" $
+        doc "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here" $
         union [
           {-
           Represents a true/false value

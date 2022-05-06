@@ -22,11 +22,9 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
     elements = [
 
       def "PredefString" --  See scala/Predef.scala
-        ""
         string,
 
-      def "ScalaSymbol" --  See scala/Symbol.scala
-        "" $
+      def "ScalaSymbol" $ --  See scala/Symbol.scala
         record [
           field "name" string],
 
@@ -42,8 +40,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- import scala.meta.internal.trees._
 -- import scala.meta.internal.trees.Metadata.binaryCompatField
 -- @root trait Tree extends InternalTree {
-      def "Tree" --  Note: ignoring fields of Tree and InternalTree for now
-        "" $
+      def "Tree" $ --  Note: ignoring fields of Tree and InternalTree for now
         union [
           field "ref" $ meta "Ref",
           field "stat" $ meta "Stat",
@@ -81,14 +78,12 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Ref extends Tree
-      def "Ref"
-        "" $
+      def "Ref" $
         union [
           field "name" $ meta "Name",
           field "init" $ meta "Init"],
 -- @branch trait Stat extends Tree
-      def "Stat"
-        "" $
+      def "Stat" $
         union [
           field "term" $ meta "Data",
           field "decl" $ meta "Decl",
@@ -96,8 +91,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "importExport" $ meta "ImportExportStat"],
 --
 -- @branch trait Name extends Ref { def value: String }
-      def "Name"
-        "" $
+      def "Name" $
         union [
           field "value" string,
           field "anonymous" unit,
@@ -113,8 +107,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Lit extends Data with Pat with Type {
-      def "Lit"
-        "" $
+      def "Lit" $
         union [
 --   def value: Any
 -- }
@@ -153,8 +146,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Data extends Stat
-      def "Data"
-        "" $
+      def "Data" $
         union [
           field "lit" $ meta "Lit",
           field "ref" $ meta "Data.Ref",
@@ -193,8 +185,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "param" $ meta "Data.Param"],
 -- object Data {
 --   @branch trait Ref extends Data with scala.meta.Ref
-      def "Data.Ref"
-        "" $
+      def "Data.Ref" $
         union [
           field "this" $ meta "Data.This",
           field "super" $ meta "Data.Super",
@@ -204,35 +195,29 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "applyUnary" $ meta "Data.ApplyUnary"],
 --   @ast class This(qual: scala.meta.Name) extends Data.Ref
       def "Data.This"
-        ""
         unit,
 --   @ast class Super(thisp: scala.meta.Name, superp: scala.meta.Name) extends Data.Ref
-      def "Data.Super"
-        "" $
+      def "Data.Super" $
         record [
           field "thisp" $ meta "Name",
           field "superp" $ meta "Name"],
 --   @ast class Name(value: Predef.String @nonEmpty) extends scala.meta.Name with Data.Ref with Pat
-      def "Data.Name"
-        "" $
+      def "Data.Name" $
         record [
           field "value" $ meta "PredefString"],
 --   @ast class Anonymous() extends scala.meta.Name with Data.Ref {
       def "Data.Anonymous"
-        ""
         unit,
 --     def value = ""
 --     checkParent(ParentChecks.AnonymousImport)
 --   }
 --   @ast class Select(qual: Data, name: Data.Name) extends Data.Ref with Pat
-      def "Data.Select"
-        "" $
+      def "Data.Select" $
         record [
           field "qual" $ meta "Data",
           field "name" $ meta "Data.Name"],
 --   @ast class Interpolate(prefix: Name, parts: List[Lit] @nonEmpty, args: List[Data]) extends Data {
-      def "Data.Interpolate"
-        "" $
+      def "Data.Interpolate" $
         record [
           field "prefix" $ meta "Data.Name",
           field "parts" $ list $ meta "Lit",
@@ -240,52 +225,45 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(parts.length == args.length + 1)
 --   }
 --   @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Data]) extends Data {
-      def "Data.Xml"
-        "" $
+      def "Data.Xml" $
         record [
           field "parts" $ list $ meta "Lit",
           field "args" $ list $ meta "Data"],
 --     checkFields(parts.length == args.length + 1)
 --   }
 --   @ast class Apply(fun: Data, args: List[Data]) extends Data
-      def "Data.Apply"
-        "" $
+      def "Data.Apply" $
         record [
           field "fun" $ meta "Data",
           field "args" $ list $ meta "Data"],
 --   @ast class ApplyUsing(fun: Data, args: List[Data]) extends Data
-      def "Data.ApplyUsing"
-        "" $
+      def "Data.ApplyUsing" $
         record [
           field "fun" $ meta "Data",
           field "targs" $ list $ meta "Data"],
 --   @ast class ApplyType(fun: Data, targs: List[Type] @nonEmpty) extends Data
-      def "Data.ApplyType"
-        "" $
+      def "Data.ApplyType" $
         record [
           field "lhs" $ meta "Data",
           field "op" $ meta "Data.Name",
           field "targs" $ list $ meta "Type",
           field "args" $ list $ meta "Data"],
 --   @ast class ApplyInfix(lhs: Data, op: Name, targs: List[Type], args: List[Data]) extends Data
-      def "Data.ApplyInfix"
-        "" $
+      def "Data.ApplyInfix" $
         record [
           field "lhs" $ meta "Data",
           field "op" $ meta "Data.Name",
           field "targs" $ list $ meta "Type",
           field "args" $ list $ meta "Data"],
 --   @ast class ApplyUnary(op: Name, arg: Data) extends Data.Ref {
-      def "Data.ApplyUnary"
-        "" $
+      def "Data.ApplyUnary" $
         record [
           field "op" $ meta "Data.Name",
           field "arg" $ meta "Data"],
 --     checkFields(op.isUnaryOp)
 --   }
 --   @ast class Assign(lhs: Data, rhs: Data) extends Data {
-      def "Data.Assign"
-        "" $
+      def "Data.Assign" $
         record [
           field "lhs" $ meta "Data",
           field "rhs" $ meta "Data"],
@@ -293,30 +271,25 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkParent(ParentChecks.DataAssign)
 --   }
 --   @ast class Return(expr: Data) extends Data
-      def "Data.Return"
-        "" $
+      def "Data.Return" $
         record [
           field "expr" $ meta "Data"],
 --   @ast class Throw(expr: Data) extends Data
-      def "Data.Throw"
-        "" $
+      def "Data.Throw" $
         record [
           field "expr" $ meta "Data"],
 --   @ast class Ascribe(expr: Data, tpe: Type) extends Data
-      def "Data.Ascribe"
-        "" $
+      def "Data.Ascribe" $
         record [
           field "expr" $ meta "Data",
           field "tpe" $ meta "Type"],
 --   @ast class Annotate(expr: Data, annots: List[Mod.Annot] @nonEmpty) extends Data
-      def "Data.Annotate"
-        "" $
+      def "Data.Annotate" $
         record [
           field "expr" $ meta "Data",
           field "annots" $ list $ meta "Mod.Annot"],
 --   @ast class Tuple(args: List[Data] @nonEmpty) extends Data {
-      def "Data.Tuple"
-        "" $
+      def "Data.Tuple" $
         record [
           field "args" $ list $ meta "Data"],
 --     // tuple must have more than one element
@@ -324,21 +297,18 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Data.Quasi]))
 --   }
 --   @ast class Block(stats: List[Stat]) extends Data {
-      def "Data.Block"
-        "" $
+      def "Data.Block" $
         record [
           field "stats" $ list $ meta "Stat"],
 --     // extension group block can have declarations without body too
 --     checkFields(stats.forall(st => st.isBlockStat || st.is[Decl]))
 --   }
 --   @ast class EndMarker(name: Data.Name) extends Data
-      def "Data.EndMarker"
-        "" $
+      def "Data.EndMarker" $
         record [
           field "name" $ meta "Data.Name"],
 --   @ast class If(cond: Data, thenp: Data, elsep: Data) extends Data {
-      def "Data.If"
-        "" $
+      def "Data.If" $
         record [
           field "cond" $ meta "Data",
           field "thenp" $ meta "Data",
@@ -347,23 +317,19 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     private var _mods: List[Mod] = Nil
 --   }
 --   @ast class QuotedMacroExpr(body: Data) extends Data
-      def "Data.QuotedMacroExpr"
-        "" $
+      def "Data.QuotedMacroExpr" $
         record [
           field "body" $ meta "Data"],
 --   @ast class QuotedMacroType(tpe: Type) extends Data
-      def "Data.QuotedMacroType"
-        "" $
+      def "Data.QuotedMacroType" $
         record [
           field "tpe" $ meta "Type"],
 --   @ast class SplicedMacroExpr(body: Data) extends Data
-      def "Data.SplicedMacroExpr"
-        "" $
+      def "Data.SplicedMacroExpr" $
         record [
           field "body" $ meta "Data"],
 --   @ast class Match(expr: Data, cases: List[Case] @nonEmpty) extends Data {
-      def "Data.Match"
-        "" $
+      def "Data.Match" $
         record [
           field "expr" $ meta "Data",
           field "cases" $ list $ meta "Case"],
@@ -371,23 +337,20 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     private var _mods: List[Mod] = Nil
 --   }
 --   @ast class Try(expr: Data, catchp: List[Case], finallyp: Option[Data]) extends Data
-      def "Data.Try"
-        "" $
+      def "Data.Try" $
         record [
           field "expr" $ meta "Data",
           field "catchp" $ list $ meta "Case",
           field "finallyp" $ optional $ meta "Data"],
 --   @ast class TryWithHandler(expr: Data, catchp: Data, finallyp: Option[Data]) extends Data
-      def "Data.TryWithHandler"
-        "" $
+      def "Data.TryWithHandler" $
         record [
           field "expr" $ meta "Data",
           field "catchp" $ meta "Data",
           field "finallyp" $ optional $ meta "Data"],
 --
 --   @branch trait FunctionData extends Data {
-      def "Data.FunctionData"
-        "" $
+      def "Data.FunctionData" $
         union [
           field "contextFunction" $ meta "Data.ContextFunction",
           field "function" $ meta "Data.Function"],
@@ -395,8 +358,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     def body: Data
 --   }
 --   @ast class ContextFunction(params: List[Data.Param], body: Data) extends FunctionData {
-      def "Data.ContextFunction"
-        "" $
+      def "Data.ContextFunction" $
         record [
           field "params" $ list $ meta "Data.Param",
           field "body" $ meta "Data"],
@@ -408,8 +370,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     )
 --   }
 --   @ast class Function(params: List[Data.Param], body: Data) extends FunctionData {
-      def "Data.Function"
-        "" $
+      def "Data.Function" $
         record [
           field "params" $ list $ meta "Data.Param",
           field "body" $ meta "Data"],
@@ -425,31 +386,26 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     )
 --   }
 --   @ast class PolyFunction(tparams: List[Type.Param], body: Data) extends Data
-      def "Data.PolyFunction"
-        "" $
+      def "Data.PolyFunction" $
         record [
           field "tparams" $ list $ meta "Type.Param",
           field "body" $ meta "Data"],
 --   @ast class PartialFunction(cases: List[Case] @nonEmpty) extends Data
-      def "Data.PartialFunction"
-        "" $
+      def "Data.PartialFunction" $
         record [
           field "cases" $ list $ meta "Case"],
 --   @ast class While(expr: Data, body: Data) extends Data
-      def "Data.While"
-        "" $
+      def "Data.While" $
         record [
           field "expr" $ meta "Data",
           field "body" $ meta "Data"],
 --   @ast class Do(body: Data, expr: Data) extends Data
-      def "Data.Do"
-        "" $
+      def "Data.Do" $
         record [
           field "body" $ meta "Data",
           field "expr" $ meta "Data"],
 --   @ast class For(enums: List[Enumerator] @nonEmpty, body: Data) extends Data {
-      def "Data.For"
-        "" $
+      def "Data.For" $
         record [
           field "enums" $ list $ meta "Enumerator"],
 --     checkFields(
@@ -458,40 +414,33 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     )
 --   }
 --   @ast class ForYield(enums: List[Enumerator] @nonEmpty, body: Data) extends Data
-      def "Data.ForYield"
-        "" $
+      def "Data.ForYield" $
         record [
           field "enums" $ list $ meta "Enumerator"],
 --   @ast class New(init: Init) extends Data
-      def "Data.New"
-        "" $
+      def "Data.New" $
         record [
           field "init" $ meta "Init"],
 --   @ast class NewAnonymous(templ: Template) extends Data
-      def "Data.NewAnonymous"
-        "" $
+      def "Data.NewAnonymous" $
         record [
           field "templ" $ meta "Template"],
 --   @ast class Placeholder() extends Data
       def "Data.Placeholder"
-        ""
         unit,
 --   @ast class Eta(expr: Data) extends Data
-      def "Data.Eta"
-        "" $
+      def "Data.Eta" $
         record [
           field "expr" $ meta "Data"],
 --   @ast class Repeated(expr: Data) extends Data {
-      def "Data.Repeated"
-        "" $
+      def "Data.Repeated" $
         record [
           field "expr" $ meta "Data"],
 --     checkParent(ParentChecks.DataRepeated)
 --   }
 --   @ast class Param(mods: List[Mod], name: meta.Name, decltpe: Option[Type], default: Option[Data])
 --       extends Member
-      def "Data.Param"
-        "" $
+      def "Data.Param" $
         record [
           field "mods" $ list $ meta "Mod",
           field "name" $ meta "Name",
@@ -502,8 +451,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Type extends Tree
-      def "Type"
-        "" $
+      def "Type" $
         union [
           field "ref" $ meta "Type.Ref",
           field "anonymousName" $ meta "Type.AnonymousName",
@@ -530,59 +478,50 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "match" $ meta "Type.Match"],
 -- object Type {
 --   @branch trait Ref extends Type with scala.meta.Ref
-      def "Type.Ref"
-        "" $
+      def "Type.Ref" $
         union [
           field "name" $ meta "Type.Name",
           field "select" $ meta "Type.Select",
           field "project" $ meta "Type.Project",
           field "singleton" $ meta "Type.Singleton"],
 --   @ast class Name(value: String @nonEmpty) extends scala.meta.Name with Type.Ref
-      def "Type.Name"
-        "" $
+      def "Type.Name" $
         record [
           field "value" string],
 --   @ast class AnonymousName() extends Type
       def "Type.AnonymousName"
-        ""
         unit,
 --   @ast class Select(qual: Data.Ref, name: Type.Name) extends Type.Ref {
-      def "Type.Select"
-        "" $
+      def "Type.Select" $
         record [
           field "qual" $ meta "Data.Ref",
           field "name" $ meta "Type.Name"],
 --     checkFields(qual.isPath || qual.is[Data.Super] || qual.is[Data.Ref.Quasi])
 --   }
 --   @ast class Project(qual: Type, name: Type.Name) extends Type.Ref
-      def "Type.Project"
-        "" $
+      def "Type.Project" $
         record [
           field "qual" $ meta "Type",
           field "name" $ meta "Type.Name"],
 --   @ast class Singleton(ref: Data.Ref) extends Type.Ref {
-      def "Type.Singleton"
-        "" $
+      def "Type.Singleton" $
         record [
           field "ref" $ meta "Data.Ref"],
 --     checkFields(ref.isPath || ref.is[Data.Super])
 --   }
 --   @ast class Apply(tpe: Type, args: List[Type] @nonEmpty) extends Type
-      def "Type.Apply"
-        "" $
+      def "Type.Apply" $
         record [
           field "tpe" $ meta "Type",
           field "args" $ list $ meta "Type"],
 --   @ast class ApplyInfix(lhs: Type, op: Name, rhs: Type) extends Type
-      def "Type.ApplyInfix"
-        "" $
+      def "Type.ApplyInfix" $
         record [
           field "lhs" $ meta "Type",
           field "op" $ meta "Type.Name",
           field "rhs" $ meta "Type"],
 --   @branch trait FunctionType extends Type {
-      def "Type.FunctionType"
-        "" $
+      def "Type.FunctionType" $
         union [
           field "function" $ meta "Type.Function",
           field "contextFunction" $ meta "Type.ContextFunction"],
@@ -590,27 +529,23 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     def res: Type
 --   }
 --   @ast class Function(params: List[Type], res: Type) extends FunctionType
-      def "Type.Function"
-        "" $
+      def "Type.Function" $
         record [
           field "params" $ list $ meta "Type",
           field "res" $ meta "Type"],
 --   @ast class PolyFunction(tparams: List[Type.Param], tpe: Type) extends Type
-      def "Type.PolyFunction"
-        "" $
+      def "Type.PolyFunction" $
         record [
           field "tparams" $ list $ meta "Type.Param",
           field "tpe" $ meta "Type"],
 --   @ast class ContextFunction(params: List[Type], res: Type) extends FunctionType
-      def "Type.ContextFunction"
-        "" $
+      def "Type.ContextFunction" $
         record [
           field "params" $ list $ meta "Type",
           field "res" $ meta "Type"],
 --   @ast @deprecated("Implicit functions are not supported in any dialect")
 --   class ImplicitFunction(
-      def "Type.ImplicitFunction"
-        "" $
+      def "Type.ImplicitFunction" $
         record [
 --       params: List[Type],
           field "params" $ list $ meta "Type",
@@ -618,102 +553,87 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "res" $ meta "Type"],
 --   ) extends Type
 --   @ast class Tuple(args: List[Type] @nonEmpty) extends Type {
-      def "Type.Tuple"
-        "" $
+      def "Type.Tuple" $
         record [
           field "args" $ list $ meta "Type"],
 --     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Type.Quasi]))
 --   }
 --   @ast class With(lhs: Type, rhs: Type) extends Type
-      def "Type.With"
-        "" $
+      def "Type.With" $
         record [
           field "lhs" $ meta "Type",
           field "rhs" $ meta "Type"],
 --   @ast class And(lhs: Type, rhs: Type) extends Type
-      def "Type.And"
-        "" $
+      def "Type.And" $
         record [
           field "lhs" $ meta "Type",
           field "rhs" $ meta "Type"],
 --   @ast class Or(lhs: Type, rhs: Type) extends Type
-      def "Type.Or"
-        "" $
+      def "Type.Or" $
         record [
           field "lhs" $ meta "Type",
           field "rhs" $ meta "Type"],
 --   @ast class Refine(tpe: Option[Type], stats: List[Stat]) extends Type {
-      def "Type.Refine"
-        "" $
+      def "Type.Refine" $
         record [
           field "tpe" $ optional $ meta "Type",
           field "stats" $ list $ meta "Stat"],
 --     checkFields(stats.forall(_.isRefineStat))
 --   }
 --   @ast class Existential(tpe: Type, stats: List[Stat] @nonEmpty) extends Type {
-      def "Type.Existential"
-        "" $
+      def "Type.Existential" $
         record [
           field "tpe" $ meta "Type",
           field "stats" $ list $ meta "Stat"],
 --     checkFields(stats.forall(_.isExistentialStat))
 --   }
 --   @ast class Annotate(tpe: Type, annots: List[Mod.Annot] @nonEmpty) extends Type
-      def "Type.Annotate"
-        "" $
+      def "Type.Annotate" $
         record [
           field "tpe" $ meta "Type",
           field "annots" $ list $ meta "Mod.Annot"],
 --   @ast class Lambda(tparams: List[Type.Param], tpe: Type) extends Type {
-      def "Type.Lambda"
-        "" $
+      def "Type.Lambda" $
         record [
           field "tparams" $ list $ meta "Type.Param",
           field "tpe" $ meta "Type"],
 --     checkParent(ParentChecks.TypeLambda)
 --   }
 --   @ast class Macro(body: Data) extends Type
-      def "Type.Macro"
-        "" $
+      def "Type.Macro" $
         record [
           field "body" $ meta "Data"],
 --   @deprecated("Method type syntax is no longer supported in any dialect", "4.4.3")
 --   @ast class Method(paramss: List[List[Data.Param]], tpe: Type) extends Type {
-      def "Type.Method"
-        "" $
+      def "Type.Method" $
         record [
           field "paramss" $ list $ list $ meta "Data.Param",
           field "tpe" $ meta "Type"],
 --     checkParent(ParentChecks.TypeMethod)
 --   }
 --   @ast class Placeholder(bounds: Bounds) extends Type
-      def "Type.Placeholder"
-        "" $
+      def "Type.Placeholder" $
         record [
           field "bounds" $ meta "Type.Bounds"],
 --   @ast class Bounds(lo: Option[Type], hi: Option[Type]) extends Tree
-      def "Type.Bounds"
-        "" $
+      def "Type.Bounds" $
         record [
           field "lo" $ optional $ meta "Type",
           field "hi" $ optional $ meta "Type"],
 --   @ast class ByName(tpe: Type) extends Type {
-      def "Type.ByName"
-        "" $
+      def "Type.ByName" $
         record [
           field "tpe" $ meta "Type"],
 --     checkParent(ParentChecks.TypeByName)
 --   }
 --   @ast class Repeated(tpe: Type) extends Type {
-      def "Type.Repeated"
-        "" $
+      def "Type.Repeated" $
         record [
           field "tpe" $ meta "Type"],
 --     checkParent(ParentChecks.TypeRepeated)
 --   }
 --   @ast class Var(name: Name) extends Type with Member.Type {
-      def "Type.Var"
-        "" $
+      def "Type.Var" $
         record [
           field "name" $ meta "Type.Name"],
 --     checkFields(name.value(0).isLower)
@@ -721,14 +641,12 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --   }
 --
 --   @ast class TypedParam(name: Name, typ: Type) extends Type with Member.Type
-      def "Type.TypedParam"
-        "" $
+      def "Type.TypedParam" $
         record [
           field "name" $ meta "Name",
           field "typ" $ meta "Type"],
 --   @ast class Param(
-      def "Type.Param"
-        "" $
+      def "Type.Param" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -745,8 +663,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --   ) extends Member
 --
 --   @ast class Match(tpe: Type, cases: List[TypeCase] @nonEmpty) extends Type
-      def "Type.Match"
-        "" $
+      def "Type.Match" $
         record [
           field "tpe" $ meta "Type",
           field "cases" $ list $ meta "TypeCase"],
@@ -755,8 +672,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Pat extends Tree
-      def "Pat"
-        "" $
+      def "Pat" $
         union [
           field "var" $ meta "Pat.Var",
           field "wildcard" unit,
@@ -774,8 +690,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "given" $ meta "Pat.Given"],
 -- object Pat {
 --   @ast class Var(name: scala.meta.Data.Name) extends Pat with Member.Data { @
-      def "Pat.Var"
-        "" $
+      def "Pat.Var" $
         record [
           field "name" $ meta "Data.Name"],
 --     // NOTE: can't do this check here because of things like `val X = 2`
@@ -787,49 +702,42 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkParent(ParentChecks.PatSeqWildcard)
 --   }
 --   @ast class Bind(lhs: Pat, rhs: Pat) extends Pat {
-      def "Pat.Bind"
-        "" $
+      def "Pat.Bind" $
         record [
           field "lhs" $ meta "Pat",
           field "rhs" $ meta "Pat"],
 --     checkFields(lhs.is[Pat.Var] || lhs.is[Pat.Quasi])
 --   }
 --   @ast class Alternative(lhs: Pat, rhs: Pat) extends Pat
-      def "Pat.Alternative"
-        "" $
+      def "Pat.Alternative" $
         record [
           field "lhs" $ meta "Pat",
           field "rhs" $ meta "Pat"],
 --   @ast class Tuple(args: List[Pat] @nonEmpty) extends Pat {
-      def "Pat.Tuple"
-        "" $
+      def "Pat.Tuple" $
         record [
           field "args" $ list $ meta "Pat"],
 --     checkFields(args.length > 1 || (args.length == 1 && args.head.is[Pat.Quasi]))
 --   }
 --   @ast class Repeated(name: scala.meta.Data.Name) extends Pat
-      def "Pat.Repeated"
-        "" $
+      def "Pat.Repeated" $
         record [
           field "name" $ meta "Data.Name"],
 --   @ast class Extract(fun: Data, args: List[Pat]) extends Pat {
-      def "Pat.Extract"
-        "" $
+      def "Pat.Extract" $
         record [
           field "fun" $ meta "Data",
           field "args" $ list $ meta "Pat"],
 --     checkFields(fun.isExtractor)
 --   }
 --   @ast class ExtractInfix(lhs: Pat, op: Data.Name, rhs: List[Pat]) extends Pat
-      def "Pat.ExtractInfix"
-        "" $
+      def "Pat.ExtractInfix" $
         record [
           field "lhs" $ meta "Pat",
           field "op" $ meta "Data.Name",
           field "rhs" $ list $ meta "Pat"],
 --   @ast class Interpolate(prefix: Data.Name, parts: List[Lit] @nonEmpty, args: List[Pat])
-      def "Pat.Interpolate"
-        "" $
+      def "Pat.Interpolate" $
         record [
           field "prefix" $ meta "Data.Name",
           field "parts" $ list $ meta "Lit"],
@@ -837,31 +745,27 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(parts.length == args.length + 1)
 --   }
 --   @ast class Xml(parts: List[Lit] @nonEmpty, args: List[Pat]) extends Pat {
-      def "Pat.Xml"
-        "" $
+      def "Pat.Xml" $
         record [
           field "parts" $ list $ meta "Lit",
           field "args" $ list $ meta "Pat"],
 --     checkFields(parts.length == args.length + 1)
 --   }
 --   @ast class Typed(lhs: Pat, rhs: Type) extends Pat {
-      def "Pat.Typed"
-        "" $
+      def "Pat.Typed" $
         record [
           field "lhs" $ meta "Pat",
           field "rhs" $ meta "Type"],
 --     checkFields(!rhs.is[Type.Var] && !rhs.is[Type.Placeholder])
 --   }
 --   @ast class Macro(body: Data) extends Pat {
-      def "Pat.Macro"
-        "" $
+      def "Pat.Macro" $
         record [
           field "body" $ meta "Data"],
 --     checkFields(body.is[Data.QuotedMacroExpr] || body.is[Data.QuotedMacroType])
 --   }
 --   @ast class Given(tpe: Type) extends Pat
-      def "Pat.Given"
-        "" $
+      def "Pat.Given" $
         record [
           field "tpe" $ meta "Type"],
 --   def fresh(): Pat.Var = Pat.Var(Data.fresh())
@@ -869,8 +773,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Member extends Tree {
-      def "Member"
-        "" $
+      def "Member" $
         union [
           field "term" $ meta "Member.Data",
           field "type" $ meta "Member.Type",
@@ -881,16 +784,14 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 -- object Member {
 --   @branch trait Data extends Member {
-      def "Member.Data"
-        "" $
+      def "Member.Data" $
         union [
           field "pkg" $ meta "Pkg",
           field "object" $ meta "Pkg.Object"],
 --     def name: scala.meta.Data.Name
 --   }
 --   @branch trait Type extends Member {
-      def "Member.Type"
-        "" $
+      def "Member.Type" $
         record [
 --     def name: scala.meta.Type.Name
           field "name" $ meta "Type.Name"],
@@ -898,8 +799,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Decl extends Stat
-      def "Decl"
-        "" $
+      def "Decl" $
         union [
           field "val" $ meta "Decl.Val",
           field "var" $ meta "Decl.Var",
@@ -908,22 +808,19 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "given" $ meta "Decl.Given"],
 -- object Decl {
 --   @ast class Val(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
-      def "Decl.Val"
-        "" $
+      def "Decl.Val" $
         record [
           field "mods" $ list $ meta "Mod",
           field "pats" $ list $ meta "Pat",
           field "decltpe" $ meta "Type"],
 --   @ast class Var(mods: List[Mod], pats: List[Pat] @nonEmpty, decltpe: scala.meta.Type) extends Decl
-      def "Decl.Var"
-        "" $
+      def "Decl.Var" $
         record [
           field "mods" $ list $ meta "Mod",
           field "pats" $ list $ meta "Pat",
           field "decltpe" $ meta "Type"],
 --   @ast class Def(
-      def "Decl.Def"
-        "" $
+      def "Decl.Def" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -937,8 +834,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "decltpe" $ meta "Type"],
 --   ) extends Decl with Member.Data @
       --   @ast class Type(
-      def "Decl.Type"
-        "" $
+      def "Decl.Type" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -950,8 +846,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "bounds" $ meta "Type.Bounds"],
 --   ) extends Decl with Member.Type
 --   @ast class Given(
-      def "Decl.Given"
-        "" $
+      def "Decl.Given" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -967,8 +862,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Defn extends Stat
-      def "Defn"
-        "" $
+      def "Defn" $
         union [
           field "val" $ meta "Defn.Val",
           field "var" $ meta "Defn.Var",
@@ -986,8 +880,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "object" $ meta "Defn.Object"],
 -- object Defn {
 --   @ast class Val(
-      def "Defn.Val"
-        "" $
+      def "Defn.Val" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1001,8 +894,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(pats.forall(!_.is[Data.Name]))
 --   }
 --   @ast class Var(
-      def "Defn.Var"
-        "" $
+      def "Defn.Var" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1018,8 +910,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(rhs.isEmpty ==> pats.forall(_.is[Pat.Var]))
 --   }
 --   @ast class Given(
-      def "Defn.Given"
-        "" $
+      def "Defn.Given" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1033,8 +924,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "templ" $ meta "Template"],
 --   ) extends Defn
 --   @ast class Enum(
-      def "Defn.Enum"
-        "" $
+      def "Defn.Enum" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1048,8 +938,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "template" $ meta "Template"],
 --   ) extends Defn with Member.Type
 --   @ast class EnumCase(
-      def "Defn.EnumCase"
-        "" $
+      def "Defn.EnumCase" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1065,8 +954,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkParent(ParentChecks.EnumCase)
 --   }
 --   @ast class RepeatedEnumCase(
-      def "Defn.RepeatedEnumCase"
-        "" $
+      def "Defn.RepeatedEnumCase" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1076,8 +964,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkParent(ParentChecks.EnumCase)
 --   }
 --   @ast class GivenAlias(
-      def "Defn.GivenAlias"
-        "" $
+      def "Defn.GivenAlias" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1093,8 +980,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "body" $ meta "Data"],
 --   ) extends Defn
 --   @ast class ExtensionGroup(
-      def "Defn.ExtensionGroup"
-        "" $
+      def "Defn.ExtensionGroup" $
         record [
 --       tparams: List[scala.meta.Type.Param],
           field "tparams" $ list $ meta "Type.Param",
@@ -1104,8 +990,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "body" $ meta "Stat"],
 --   ) extends Defn
 --   @ast class Def(
-      def "Defn.Def"
-        "" $
+      def "Defn.Def" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1123,8 +1008,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(paramss.forall(onlyLastParamCanBeRepeated))
 --   }
 --   @ast class Macro(
-      def "Defn.Macro"
-        "" $
+      def "Defn.Macro" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1140,8 +1024,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "body" $ meta "Data"],
 --   ) extends Defn with Member.Data @
 --   @ast class Type(
-      def "Defn.Type"
-        "" $
+      def "Defn.Type" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1156,8 +1039,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     private var _bounds: scala.meta.Type.Bounds = scala.meta.Type.Bounds(None, None)
 --   }
 --   @ast class Class(
-      def "Defn.Class"
-        "" $
+      def "Defn.Class" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1171,8 +1053,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "template" $ meta "Template"],
 --   ) extends Defn with Member.Type
 --   @ast class Trait(
-      def "Defn.Trait"
-        "" $
+      def "Defn.Trait" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1188,8 +1069,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(templ.is[Template.Quasi] || templ.stats.forall(!_.is[Ctor]))
 --   }
 --   @ast class Object(mods: List[Mod], name: Data.Name, templ: Template)
-      def "Defn.Object"
-        "" $
+      def "Defn.Object" $
         record [
           field "name" $ meta "Data.Name"], --  from Member.Data
 --       extends Defn with Member.Data { @
@@ -1198,8 +1078,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @ast class Pkg(ref: Data.Ref, stats: List[Stat]) extends Member.Data with Stat { @
-      def "Pkg"
-        "" $
+      def "Pkg" $
         record [
           field "name" $ meta "Data.Name", --  from Member.Data
           field "ref" $ meta "Data.Ref",
@@ -1213,8 +1092,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- object Pkg {
 --   @ast class Object(mods: List[Mod], name: Data.Name, templ: Template)
 --       extends Member.Data with Stat { @
-      def "Pkg.Object"
-        "" $
+      def "Pkg.Object" $
         record [
           field "mods" $ list $ meta "Mod",
           field "name" $ meta "Data.Name",
@@ -1227,22 +1105,19 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- // While seemingly useless, this name is crucial to one of the key principles behind the semantic API:
 -- // "every definition and every reference should carry a name".
 -- @branch trait Ctor extends Tree with Member
-      def "Ctor"
-        "" $
+      def "Ctor" $
         union [
           field "primary" $ meta "Ctor.Primary",
           field "secondary" $ meta "Ctor.Secondary"],
 -- object Ctor {
 --   @ast class Primary(mods: List[Mod], name: Name, paramss: List[List[Data.Param]]) extends Ctor
-      def "Ctor.Primary"
-        "" $
+      def "Ctor.Primary" $
         record [
           field "mods" $ list $ meta "Mod",
           field "name" $ meta "Name",
           field "paramss" $ list $ list $ meta "Data.Param"],
 --   @ast class Secondary(
-      def "Ctor.Secondary"
-        "" $
+      def "Ctor.Secondary" $
         record [
 --       mods: List[Mod],
           field "mods" $ list $ meta "Mod",
@@ -1262,8 +1137,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- // NOTE: The name here is always Name.Anonymous.
 -- // See comments to Ctor.Primary and Ctor.Secondary for justification.
 -- @ast class Init(tpe: Type, name: Name, argss: List[List[Data]]) extends Ref {
-      def "Init"
-        "" $
+      def "Init" $
         record [
           field "tpe" $ meta "Type",
           field "name" $ meta "Name",
@@ -1274,12 +1148,10 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --
 -- @ast class Self(name: Name, decltpe: Option[Type]) extends Member
       def "Self"
-        ""
         unit,
 --
 -- @ast class Template(
-      def "Template"
-        "" $
+      def "Template" $
         record [
 --     early: List[Stat],
           field "early" $ list $ meta "Stat",
@@ -1297,8 +1169,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Mod extends Tree
-      def "Mod"
-        "" $
+      def "Mod" $
         union [
           field "annot" $ meta "Mod.Annot",
           field "private" $ meta "Mod.Private",
@@ -1323,23 +1194,20 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "transparent" unit],
 -- object Mod {
 --   @ast class Annot(init: Init) extends Mod {
-      def "Mod.Annot"
-        "" $
+      def "Mod.Annot" $
         record [
           field "init" $ meta "Init"],
 --     @deprecated("Use init instead", "1.9.0")
 --     def body = init
 --   }
 --   @ast class Private(within: Ref) extends Mod {
-      def "Mod.Private"
-        "" $
+      def "Mod.Private" $
         record [
           field "within" $ meta "Ref"],
 --     checkFields(within.isWithin)
 --   }
 --   @ast class Protected(within: Ref) extends Mod {
-      def "Mod.Protected"
-        "" $
+      def "Mod.Protected" $
         record [
           field "within" $ meta "Ref"],
 --     checkFields(within.isWithin)
@@ -1366,8 +1234,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Enumerator extends Tree
-      def "Enumerator"
-        "" $
+      def "Enumerator" $
         union [
           field "generator" $ meta "Enumerator.Generator",
           field "caseGenerator" $ meta "Enumerator.CaseGenerator",
@@ -1375,52 +1242,44 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
           field "guard" $ meta "Enumerator.Guard"],
 -- object Enumerator {
 --   @ast class Generator(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator.Generator"
-        "" $
+      def "Enumerator.Generator" $
         record [
           field "pat" $ meta "Pat",
           field "rhs" $ meta "Data"],
 --   @ast class CaseGenerator(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator.CaseGenerator"
-        "" $
+      def "Enumerator.CaseGenerator" $
         record [
           field "pat" $ meta "Pat",
           field "rhs" $ meta "Data"],
 --   @ast class Val(pat: Pat, rhs: Data) extends Enumerator
-      def "Enumerator.Val"
-        "" $
+      def "Enumerator.Val" $
         record [
           field "pat" $ meta "Pat",
           field "rhs" $ meta "Data"],
 --   @ast class Guard(cond: Data) extends Enumerator
-      def "Enumerator.Guard"
-        "" $
+      def "Enumerator.Guard" $
         record [
           field "cond" $ meta "Data"],
 -- }
 --
 -- @branch trait ImportExportStat extends Stat {
-      def "ImportExportStat"
-        "" $
+      def "ImportExportStat" $
         union [
           field "import" $ meta "Import",
           field "export" $ meta "Export"],
 --   def importers: List[Importer]
 -- }
 -- @ast class Import(importers: List[Importer] @nonEmpty) extends ImportExportStat
-      def "Import"
-        "" $
+      def "Import" $
         record [
           field "importers" $ list $ meta "Importer"],
 -- @ast class Export(importers: List[Importer] @nonEmpty) extends ImportExportStat
-      def "Export"
-        "" $
+      def "Export" $
         record [
           field "importers" $ list $ meta "Importer"],
 --
 -- @ast class Importer(ref: Data.Ref, importees: List[Importee] @nonEmpty) extends Tree {
-      def "Importer"
-        "" $
+      def "Importer" $
         record [
           field "ref" $ meta "Data.Ref",
           field "importees" $ list $ meta "Importee"],
@@ -1428,8 +1287,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait Importee extends Tree with Ref
-      def "Importee"
-        "" $
+      def "Importee" $
         union [
           field "wildcard" unit,
           field "given" $ meta "Importee.Given",
@@ -1440,21 +1298,18 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- object Importee {
 --   @ast class Wildcard() extends Importee
 --   @ast class Given(tpe: Type) extends Importee
-      def "Importee.Given"
-        "" $
+      def "Importee.Given" $
         record [
           field "tpe" $ meta "Type"],
 --   @ast class GivenAll() extends Importee
 --   @ast class Name(name: scala.meta.Name) extends Importee {
-      def "Importee.Name"
-        "" $
+      def "Importee.Name" $
         record [
           field "name" $ meta "Name"],
 --     checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
 --   }
 --   @ast class Rename(name: scala.meta.Name, rename: scala.meta.Name) extends Importee {
-      def "Importee.Rename"
-        "" $
+      def "Importee.Rename" $
         record [
           field "name" $ meta "Name",
           field "rename" $ meta "Name"],
@@ -1462,8 +1317,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --     checkFields(rename.is[scala.meta.Name.Quasi] || rename.is[scala.meta.Name.Indeterminate])
 --   }
 --   @ast class Unimport(name: scala.meta.Name) extends Importee {
-      def "Importee.Unimport"
-        "" $
+      def "Importee.Unimport" $
         record [
           field "name" $ meta "Name"],
 --     checkFields(name.is[scala.meta.Name.Quasi] || name.is[scala.meta.Name.Indeterminate])
@@ -1471,8 +1325,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 -- }
 --
 -- @branch trait CaseTree extends Tree {
-      def "CaseTree"
-        "" $
+      def "CaseTree" $
         union [
           field "case" $ meta "Case",
           field "typeCase" $ meta "TypeCase"],
@@ -1480,22 +1333,19 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --   def body: Tree
 -- }
 -- @ast class Case(pat: Pat, cond: Option[Data], body: Data) extends CaseTree
-      def "Case"
-        "" $
+      def "Case" $
         record [
           field "pat" $ meta "Pat",
           field "cond" $ optional $ meta "Data",
           field "body" $ meta "Data"],
 -- @ast class TypeCase(pat: Type, body: Type) extends CaseTree
-      def "TypeCase"
-        "" $
+      def "TypeCase" $
         record [
           field "pat" $ meta "Type",
           field "body" $ meta "Type"],
 --
 -- @ast class Source(stats: List[Stat]) extends Tree {
-      def "Source"
-        "" $
+      def "Source" $
         record [
           field "stats" $ list $ meta "Stat"],
 --   // NOTE: This validation has been removed to allow dialects with top-level terms.
@@ -1516,7 +1366,6 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
 --   //   * ..{$fs($args)} => Complex ellipses aren't supported yet
 --   @branch trait Quasi extends Tree {
       def "Quasi" --  TODO
-        ""
         unit]
 --     def rank: Int
 --     def tree: Tree
