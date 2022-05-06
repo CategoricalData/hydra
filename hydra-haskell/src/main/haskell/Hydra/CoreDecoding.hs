@@ -81,9 +81,9 @@ decodeString term = case dataTerm term of
   _ -> fail "expected a literal value"
 
 decodeType :: (Default m, Show m) => Context m -> Data m -> Result (Type m)
-decodeType cx term = case dataTerm term of
+decodeType cx dat = case dataTerm dat of
   DataTermElement name -> pure $ Types.nominal name
-  _ -> Types.defaultType <$> matchUnion cx [
+  _ -> (\t -> Type t (dataMeta dat)) <$> matchUnion cx [
     (_TypeTerm_literal, fmap TypeTermLiteral . decodeLiteralType cx),
     (_TypeTerm_element, fmap TypeTermElement . decodeType cx),
     (_TypeTerm_function, fmap TypeTermFunction . decodeFunctionType cx),
@@ -95,7 +95,7 @@ decodeType cx term = case dataTerm term of
     (_TypeTerm_set, fmap TypeTermSet . decodeType cx),
     (_TypeTerm_union, fmap TypeTermUnion . decodeFieldTypes cx),
     (_TypeTerm_universal, fmap TypeTermUniversal . decodeUniversalType cx),
-    (_TypeTerm_variable, fmap TypeTermVariable . decodeString)] term
+    (_TypeTerm_variable, fmap TypeTermVariable . decodeString)] dat
 
 decodeUniversalType :: (Default m, Show m) => Context m -> Data m -> Result (UniversalType m)
 decodeUniversalType cx = matchRecord cx $ \m -> UniversalType

@@ -77,6 +77,18 @@ decodeInvalidTerms = do
     H.it "Try to decode an incomplete representation of a Type" $ do
       isFailure (decodeType testContext$ variant _TypeTerm_literal $ unitVariant _LiteralType_integer) `H.shouldBe` True
 
+metadataIsPreserved :: H.SpecWith ()
+metadataIsPreserved = do
+  H.describe "Check that metadata is preserved through a type-encoding round trip" $ do
+
+    H.it "Basic metadata" $ do
+      H.shouldBe
+        (decodeType testContext $ encodeType testContext annotatedStringType)
+        (pure annotatedStringType)
+  where
+    annotatedStringType :: Type Meta
+    annotatedStringType = Types.string {typeMeta = Meta (Just "The string literal type") (Just $ Types.nominal _Type)}
+
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do
   H.describe "Check that encoding, then decoding random types is a no-op" $ do
@@ -89,4 +101,5 @@ spec = do
   individualEncoderTestCases
   individualDecoderTestCases
   decodeInvalidTerms
+  metadataIsPreserved
   testRoundTripsFromType

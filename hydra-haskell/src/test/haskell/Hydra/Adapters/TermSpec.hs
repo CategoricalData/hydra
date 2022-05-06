@@ -243,7 +243,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral]
       stringAliasType
-      Types.string
+      Types.string {typeMeta = Meta (Just "An alias for the string type") Nothing}
       False
       (stringValue s)
       (stringValue s)
