@@ -49,7 +49,9 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
 
           JSON schema: tag:yaml.org,2002:bool
           -}
-          field "bool" boolean,
+          field "bool" $
+            doc "Represents a true/false value"
+            boolean,
           {-
           Represents an approximation to real numbers
 
@@ -59,20 +61,28 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
           YAML allows for three special values, which are not supported here:
           positive and negative infinity (.inf and -.inf), and "not a number (.nan)
           -}
-          field "float" bigfloat,
+          field "float" $
+            doc "Represents an approximation to real numbers"
+            bigfloat,
           {-
           Represents arbitrary sized finite mathematical integers
 
           JSON schema: tag:yaml.org,2002:int
           -}
-          field "int" bigint,
+          field "int" $
+            doc "Represents arbitrary sized finite mathematical integers"
+            bigint,
           {-
           Represents the lack of a value
 
           JSON schema: tag:yaml.org,2002:null
           -}
-          field "null" unit,
+          field "null" $
+            doc "Represents the lack of a value"
+            unit,
           {-
           Failsafe schema: tag:yaml.org,2002:str
           -}
-          field "str" string]]
+          field "str" $
+            doc "A string value"
+            string]]

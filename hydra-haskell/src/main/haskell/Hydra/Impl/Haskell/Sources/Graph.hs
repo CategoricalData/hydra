@@ -36,7 +36,9 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
           field "name" $ graph "GraphName",
           field "elements" $ list $ universal "m" $ graph "Element",
           field "dataTerms" $ function (universal "m" $ core "Data") boolean,
-          field "schemaGraph" $ graph "GraphName"],
+          field "schemaGraph" $
+            doc "A reference to this graph's schema graph within the provided graph set" $
+            graph "GraphName"],
 
       def "GraphName" $
         doc "A unique identifier for a graph within a graph set"
