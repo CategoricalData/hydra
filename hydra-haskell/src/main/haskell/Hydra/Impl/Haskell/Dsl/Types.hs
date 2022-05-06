@@ -1,104 +1,108 @@
 module Hydra.Impl.Haskell.Dsl.Types where
 
 import Hydra.Core
+import Hydra.Impl.Haskell.Default
 import qualified Data.Map as M
 
 
-bigfloat :: Type
+bigfloat :: Default m => Type m
 bigfloat = float FloatTypeBigfloat
 
-bigint :: Type
+bigint :: Default m => Type m
 bigint = integer IntegerTypeBigint
 
-binary :: Type
+binary :: Default m => Type m
 binary = literal LiteralTypeBinary
 
-boolean :: Type
+boolean :: Default m => Type m
 boolean = literal LiteralTypeBoolean
 
-element :: Type -> Type
-element = TypeElement
+defaultType  :: Default m => TypeExpr m -> Type m
+defaultType e = Type e dflt
 
-enum :: [FieldName] -> Type
+element :: Default m => Type m -> Type m
+element = defaultType . TypeExprElement
+
+enum :: Default m => [FieldName] -> Type m
 enum names = union $ (`field` unit) <$> names
 
-field :: FieldName -> Type -> FieldType
+field :: Default m => FieldName -> Type m -> FieldType m
 field = FieldType
 
-fieldsToMap :: [FieldType] -> M.Map FieldName Type
+fieldsToMap :: Default m => [FieldType m] -> M.Map FieldName (Type m)
 fieldsToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
 
-float32 :: Type
+float32 :: Default m => Type m
 float32 = float FloatTypeFloat32
 
-float64 :: Type
+float64 :: Default m => Type m
 float64 = float FloatTypeFloat64
 
-float :: FloatType -> Type
+float :: Default m => FloatType -> Type m
 float = literal . LiteralTypeFloat
 
-function :: Type -> Type -> Type
-function dom cod = TypeFunction $ FunctionType dom cod
+function :: Default m => Type m -> Type m -> Type m
+function dom cod = defaultType $ TypeExprFunction $ FunctionType dom cod
 
-int16 :: Type
+int16 :: Default m => Type m
 int16 = integer IntegerTypeInt16
 
-int32 :: Type
+int32 :: Default m => Type m
 int32 = integer IntegerTypeInt32
 
-int64 :: Type
+int64 :: Default m => Type m
 int64 = integer IntegerTypeInt64
 
-int8 :: Type
+int8 :: Default m => Type m
 int8 = integer IntegerTypeInt8
 
-integer :: IntegerType -> Type
+integer :: Default m => IntegerType -> Type m
 integer = literal . LiteralTypeInteger
 
-list :: Type -> Type
-list = TypeList
+list :: Default m => Type m -> Type m
+list = defaultType . TypeExprList
 
-literal :: LiteralType -> Type
-literal = TypeLiteral
+literal :: Default m => LiteralType -> Type m
+literal = defaultType . TypeExprLiteral
 
-map :: Type -> Type -> Type
-map kt vt = TypeMap $ MapType kt vt
+map :: Default m => Type m -> Type m -> Type m
+map kt vt = defaultType $ TypeExprMap $ MapType kt vt
 
-nominal :: Name -> Type
-nominal = TypeNominal
+nominal :: Default m => Name -> Type m
+nominal = defaultType . TypeExprNominal
 
-optional :: Type -> Type
-optional = TypeOptional
+optional :: Default m => Type m -> Type m
+optional = defaultType . TypeExprOptional
 
-record :: [FieldType] -> Type
-record = TypeRecord
+record :: Default m => [FieldType m] -> Type m
+record = defaultType . TypeExprRecord
 
-set :: Type -> Type
-set = TypeSet
+set :: Default m => Type m -> Type m
+set = defaultType . TypeExprSet
 
-string :: Type
+string :: Default m => Type m
 string = literal LiteralTypeString
 
-variable :: TypeVariable -> Type
-variable = TypeVariable
+variable :: Default m => TypeVariable -> Type m
+variable = defaultType . TypeExprVariable
 
-uint16 :: Type
+uint16 :: Default m => Type m
 uint16 = integer IntegerTypeUint16
 
-uint32 :: Type
+uint32 :: Default m => Type m
 uint32 = integer IntegerTypeUint32
 
-uint64 :: Type
+uint64 :: Default m => Type m
 uint64 = integer IntegerTypeUint64
 
-uint8 :: Type
+uint8 :: Default m => Type m
 uint8 = integer IntegerTypeUint8
 
-union :: [FieldType] -> Type
-union = TypeUnion
+union :: Default m => [FieldType m] -> Type m
+union = defaultType . TypeExprUnion
 
-unit :: Type
+unit :: Default m => Type m
 unit = record []
 
-universal :: TypeVariable -> Type -> Type
-universal v body = TypeUniversal $ UniversalType v body
+universal :: Default m => TypeVariable -> Type m -> Type m
+universal v body = defaultType $ TypeExprUniversal $ UniversalType v body

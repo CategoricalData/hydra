@@ -30,7 +30,7 @@ import qualified Data.Maybe as Y
 dataGraphToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedTerm constructModule
 
-constructModule :: Show m => Context m -> Graph m -> M.Map Type (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
+constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Term) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -51,8 +51,8 @@ constructModule cx g coders pairs = do
         rhs <- stepOut coder term
         Scala.StatDefn <$> case rhs of
           Scala.TermApply _ -> toVal rhs
-          Scala.TermFunctionTerm fun -> case typ of
-            TypeFunction (FunctionType _ cod) -> toDefn fun cod
+          Scala.TermFunctionTerm fun -> case typeData typ of
+            TypeExprFunction (FunctionType _ cod) -> toDefn fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
           Scala.TermLit _ -> toVal rhs
           Scala.TermRef _ -> toVal rhs -- TODO
@@ -113,9 +113,9 @@ encodeFunction cx meta fun arg = case fun of
           Nothing -> fail $ "expected a typed term"
           Just t -> domainOf t
       where
-        domainOf t = case t of
-          TypeFunction (FunctionType dom _) -> pure dom
-          TypeElement et -> domainOf et
+        domainOf t = case typeData t of
+          TypeExprFunction (FunctionType dom _) -> pure dom
+          TypeExprElement et -> domainOf et
           _ -> fail $ "expected a function type, but found " ++ show t
 
 encodeLiteral :: Literal -> Result Scala.Lit
@@ -180,15 +180,15 @@ encodeTerm cx term@(Term expr meta) = case expr of
   where
     schemaName = contextTypeOf cx meta >>= nameOfType
 
-encodeType :: Type -> Result Scala.Type
-encodeType t = case t of
---  TypeElement et ->
-  TypeFunction (FunctionType dom cod) -> do
+encodeType :: Show m => Type m -> Result Scala.Type
+encodeType t = case typeData t of
+--  TypeExprElement et ->
+  TypeExprFunction (FunctionType dom cod) -> do
     sdom <- encodeType dom
     scod <- encodeType cod
     return $ Scala.TypeFunctionType $ Scala.Type_FunctionTypeFunction $ Scala.Type_Function [sdom] scod
-  TypeList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
-  TypeLiteral lt -> case lt of
+  TypeExprList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
+  TypeExprLiteral lt -> case lt of
 --    TypeBinary ->
     LiteralTypeBoolean -> pure $ stref "Boolean"
     LiteralTypeFloat ft -> case ft of
@@ -206,16 +206,16 @@ encodeType t = case t of
 --      IntegerTypeUint32 ->
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
-  TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeNominal name -> pure $ stref $ typeName True name
-  TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
---  TypeRecord sfields ->
-  TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
---  TypeUnion sfields ->
-  TypeUniversal (UniversalType v body) -> do
+  TypeExprMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
+  TypeExprNominal name -> pure $ stref $ typeName True name
+  TypeExprOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
+--  TypeExprRecord sfields ->
+  TypeExprSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
+--  TypeExprUnion sfields ->
+  TypeExprUniversal (UniversalType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
-  TypeVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
+  TypeExprVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Term
@@ -226,16 +226,16 @@ encodeUntypedTerm cx term = do
   where
     annotType (m, t, _) = contextSetTypeOf cx (Just t) m
 
-nameOfType :: Type -> Y.Maybe Name
-nameOfType t = case t of
-  TypeNominal name -> Just name
-  TypeUniversal (UniversalType _ body) -> nameOfType body
+nameOfType :: Type m -> Y.Maybe Name
+nameOfType t = case typeData t of
+  TypeExprNominal name -> Just name
+  TypeExprUniversal (UniversalType _ body) -> nameOfType body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
 qualifyUnionFieldName dlft sname fname = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
 
-scalaLanguage :: Language
+scalaLanguage :: Language m
 scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean,

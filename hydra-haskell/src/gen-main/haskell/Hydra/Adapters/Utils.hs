@@ -40,7 +40,7 @@ describePrecision x = case x of
       "-bit"])
 
 -- Display a type as a string
-describeType :: (Core.Type -> String)
+describeType :: (Core.Type m -> String)
 describeType typ = (
   (
     \x -> case x of

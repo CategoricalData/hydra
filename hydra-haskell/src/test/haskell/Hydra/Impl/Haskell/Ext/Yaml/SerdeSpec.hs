@@ -86,14 +86,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
   H.it "Optionals are omitted from record objects if 'nothing'" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
-        (TypeRecord [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
+        (Types.record [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
         (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
-        (TypeUnion [Types.field "left" Types.string, Types.field "right" Types.int32])
+        (Types.union [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union $ Field "left" $ stringValue "test"))
       ("context: " ++ show untyped ++ "\nrecord:\n  left: test\n")
 

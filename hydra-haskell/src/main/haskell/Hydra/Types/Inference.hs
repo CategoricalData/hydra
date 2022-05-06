@@ -28,42 +28,42 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type Infer a = ReaderT TypingEnvironment (StateT InferenceState (Except TypeError)) a
+type Infer a m = ReaderT (TypingEnvironment m) (StateT InferenceState (Except (TypeError m))) a
 
 type InferenceState = Int
 
-type TypingEnvironment = M.Map TypeVariable TypeScheme
+type TypingEnvironment m = M.Map TypeVariable (TypeScheme m)
 
 -- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: Show m => Context m -> Term m -> Result Type
+decodeStructuralType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
 decodeStructuralType cx term = do
   typ <- decodeType cx term
-  case typ of
-    TypeNominal name -> do
+  case typeData typ of
+    TypeExprNominal name -> do
       scx <- schemaContext cx
       el <- requireElement scx name
       decodeStructuralType scx $ elementData el
     _ -> pure typ
 
-freshTypeVariable :: Infer Type
+freshTypeVariable :: Default m => Infer (Type m) m
 freshTypeVariable = do
     s <- get
     put (s + 1)
-    return $ TypeVariable (normalVariables !! s)
+    return $ Types.variable (normalVariables !! s)
 
-generalize :: TypingEnvironment -> Type -> TypeScheme
+generalize :: TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
   where
     vars = S.toList $ S.difference
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-extendEnvironment :: (Variable, TypeScheme) -> Infer a -> Infer a
+extendEnvironment :: (Variable, TypeScheme m) -> Infer a m -> Infer a m
 extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   local scope m
 
-infer :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type, [Constraint]))
+infer :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
 infer cx term = case contextTypeOf cx (termMeta term) of
     Just typ -> do
       i <- inferInternal
@@ -119,14 +119,14 @@ infer cx term = case contextTypeOf cx (termMeta term) of
 
         FunctionPrimitive name -> do
           case typeOfPrimitiveFunction cx name of
-            ResultSuccess t -> yieldFunction (FunctionPrimitive name) (TypeFunction t) []
+            ResultSuccess (FunctionType dom cod) -> yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
             ResultFailure msg -> error msg
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed
         FunctionProjection fname -> do
           dom <- freshTypeVariable
           cod <- freshTypeVariable
-          let ftype = Types.function (TypeRecord [FieldType fname dom]) cod
+          let ftype = Types.function (Types.record [FieldType fname dom]) cod
           yieldFunction (FunctionProjection fname) ftype []
 
         _ -> error $ "type inference is unsupported for function: " ++ show f
@@ -150,9 +150,9 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         iels <- CM.mapM (infer cx) els
         let co = (\e -> (v, termType e)) <$> iels
         let ci = L.concat (termConstraints <$> iels)
-        yield (ExpressionList iels) (TypeList v) (co ++ ci)
+        yield (ExpressionList iels) (Types.list v) (co ++ ci)
 
-      ExpressionLiteral l -> yield (ExpressionLiteral l) (TypeLiteral $ literalType l) []
+      ExpressionLiteral l -> yield (ExpressionLiteral l) (Types.literal $ literalType l) []
 
       ExpressionMap m -> do
           kv <- freshTypeVariable
@@ -160,7 +160,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
           pairs <- CM.mapM toPair $ M.toList m
           let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
           let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
-          yield (ExpressionMap $ M.fromList pairs) (TypeMap $ MapType kv vv) (co ++ ci)
+          yield (ExpressionMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
         where
           toPair (k, v) = do
             ik <- infer cx k
@@ -204,7 +204,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
       -- Note: type inference cannot recover complete union types from union values; type annotations are needed
       ExpressionUnion field -> do
         ifield <- inferFieldType cx field
-        let typ = TypeUnion [Types.field (fieldName field) (termType $ fieldTerm ifield)]
+        let typ = Types.union [Types.field (fieldName field) (termType $ fieldTerm ifield)]
         yield (ExpressionUnion ifield) typ (termConstraints $ fieldTerm ifield)
 
       ExpressionVariable x -> do
@@ -213,13 +213,13 @@ infer cx term = case contextTypeOf cx (termMeta term) of
 
       _ -> error $ "type inference is unsupported for term: " ++ show term
 
-inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type, [Constraint]))
+inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
 -- | Solve for the toplevel type of an expression in a given environment
 inferTop :: (Default m, Ord m, Show m)
   => Context m -> Term m
-  -> Either TypeError (Term (m, Type, [Constraint]), TypeScheme)
+  -> Either (TypeError m) (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferTop cx term = do
     term1 <- runInference (infer cx term)
     let (ResultSuccess scon) = schemaContext cx
@@ -229,54 +229,53 @@ inferTop cx term = do
     return (term2, ts)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
-    closeOver :: Type -> TypeScheme
     closeOver = normalizeScheme . generalize M.empty
 
-inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type, [Constraint]), TypeScheme)
+inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferType cx term = case inferTop cx term of
     Left err -> fail $ "type inference failed: " ++ show err
     Right p -> pure p
 
-instantiate ::  TypeScheme -> Infer Type
+instantiate :: Default m => TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshTypeVariable) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
-lookupTypeInEnvironment :: Variable -> Infer Type
+lookupTypeInEnvironment :: Default m => Variable -> Infer (Type m) m
 lookupTypeInEnvironment v = do
   env <- ask
   case M.lookup v env of
       Nothing   -> throwError $ UnboundVariable v
       Just s    -> instantiate s
 
-namedType :: Show m => Context m -> Name -> Result Type
+namedType :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 namedType cx name = do
   scon <- schemaContext cx
   el <- requireElement scon name
   scon' <- schemaContext scon
   decodeStructuralType scon' $ elementData el
 
-rewriteTermType :: Ord m => (Type -> Type) -> Term (m, Type, [Constraint]) -> Term (m, Type, [Constraint])
+rewriteTermType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteTermType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-runInference :: Infer (Term (m, Type, [Constraint])) -> Either TypeError (Term (m, Type, [Constraint]))
+runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Either (TypeError m) (Term (m, Type m, [Constraint m]))
 runInference term = runExcept $ evalStateT (runReaderT term M.empty) startState
 
 startState :: InferenceState
 startState = 0
 
-termConstraints :: Term (m, Type, [Constraint]) -> [Constraint]
+termConstraints :: Term (m, Type m, [Constraint m]) -> [Constraint m]
 termConstraints (Term _ (_, _, constraints)) = constraints
 
-termType :: Term (m, Type, [Constraint]) -> Type
+termType :: Term (m, Type m, [Constraint m]) -> Type m
 termType (Term _ (_, typ, _)) = typ
 
-typeOfElement :: Show m => Context m -> Name -> Result Type
+typeOfElement :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 typeOfElement cx name = do
   el <- requireElement cx name
   decodeStructuralType cx $ elementSchema el
 
-typeOfPrimitiveFunction :: Context m -> Name -> Result FunctionType
+typeOfPrimitiveFunction :: Context m -> Name -> Result (FunctionType m)
 typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name

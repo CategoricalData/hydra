@@ -28,7 +28,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-constantDecls :: Name -> Type -> [H.DeclarationWithComments]
+constantDecls :: Name -> Type m -> [H.DeclarationWithComments]
 constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
   where
     lname = localNameOf name
@@ -39,20 +39,20 @@ constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
         pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
         rhs = H.ExpressionLiteral $ H.LiteralString v
     nameDecl = ("_" ++ lname, name)
-    fieldsOf typ = case typ of
-      TypeRecord fields -> fields
-      TypeUnion fields -> fields
+    fieldsOf typ = case typeData typ of
+      TypeExprRecord fields -> fields
+      TypeExprUnion fields -> fields
       _ -> []
     fieldDecls = toConstant <$> (fieldsOf $ snd $ unpackUniversalType typ)
     toConstant (FieldType fname _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map Type (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
+  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
 constructModule cx g coders pairs = do
     decls <- L.concat <$> (CM.mapM createDeclarations pairs)
     return $ H.Module (Just $ H.ModuleHead (importName $ graphName g) []) imports decls
   where
-    createDeclarations pair@(el, TypedTerm typ term) = if typ == TypeNominal _Type
+    createDeclarations pair@(el, TypedTerm typ term) = if typeData typ == TypeExprNominal _Type
       then createTypeDeclarations el term
       else createOtherDeclarations pair
 
@@ -66,11 +66,11 @@ constructModule cx g coders pairs = do
                       else []
         let (vars, t') = unpackUniversalType t
         let hd = declHead hname $ L.reverse vars
-        decl <- case t' of
-          TypeRecord fields -> do
+        decl <- case typeData t' of
+          TypeExprRecord fields -> do
             cons <- recordCons lname fields
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
-          TypeUnion fields -> do
+          TypeExprUnion fields -> do
             cons <- CM.mapM (unionCons lname) fields
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
           _ -> do
@@ -153,7 +153,7 @@ elementReference aliases name = case alias of
     (ns, local) = toQname name
     alias = M.lookup ns aliases
 
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Type -> Result H.Type
+encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Type m -> Result H.Type
 encodeAdaptedType aliases cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
@@ -174,7 +174,7 @@ encodeFunction aliases cx meta fun = case fun of
             Just n -> pure $ unionFieldReference aliases n fn
             Nothing -> fail $ "unqualified field name"
           args <- case fieldMap >>= M.lookup fn of
-                Just (FieldType _ (TypeRecord [])) -> pure []
+                Just (FieldType _ (Type (TypeExprRecord []) _)) -> pure []
                 Just _ -> pure [H.PatternName $ rawName v1]
                 Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show domName
           let lhs = H.PatternApplication $ H.Pattern_Application hname args
@@ -200,9 +200,9 @@ encodeFunction aliases cx meta fun = case fun of
       Nothing -> fail $ "unqualified record"
     _ -> fail $ "unexpected function: " ++ show fun
   where
-    fieldMapOf typ = case typ of
-      Just (TypeUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
-      Just (TypeUniversal (UniversalType _ tbody)) -> fieldMapOf $ Just tbody
+    fieldMapOf typ = case typeData <$> typ of
+      Just (TypeExprUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
+      Just (TypeExprUniversal (UniversalType _ tbody)) -> fieldMapOf $ Just tbody
       _ -> Nothing
     findDomain = case domName of
       Nothing -> pure Nothing
@@ -211,14 +211,14 @@ encodeFunction aliases cx meta fun = case fun of
         typ <- requireType scx name
         return $ Just typ
     domName = case contextTypeOf cx meta of
-        Just typ -> case typ of
-          TypeFunction (FunctionType dom _) -> nomName dom
+        Just typ -> case typeData typ of
+          TypeExprFunction (FunctionType dom _) -> nomName dom
           _ -> Nothing
         Nothing -> Nothing
       where
-        nomName typ = case typ of
-          TypeNominal name -> Just name
-          TypeUniversal (UniversalType _ body) -> nomName body
+        nomName typ = case typeData typ of
+          TypeExprNominal name -> Just name
+          TypeExprUniversal (UniversalType _ body) -> nomName body
           _ -> Nothing
 
 encodeLiteral :: Literal -> Result H.Expression
@@ -272,16 +272,16 @@ encodeTerm aliases cx term@(Term expr meta) = do
     _ -> fail $ "unexpected term: " ++ show term
   where
     encode = encodeTerm aliases
-    sname = case contextTypeOf cx meta of
-      Just (TypeNominal name) -> Just name
+    sname = case typeData <$> (contextTypeOf cx meta) of
+      Just (TypeExprNominal name) -> Just name
       Nothing -> Nothing
 
-encodeType :: M.Map Name String -> Type -> Result H.Type
-encodeType aliases typ = case typ of
-    TypeElement et -> encode et
-    TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
-    TypeList lt -> H.TypeList <$> encode lt
-    TypeLiteral lt -> H.TypeVariable . simpleName <$> case lt of
+encodeType :: Show m => M.Map Name String -> Type m -> Result H.Type
+encodeType aliases typ = case typeData typ of
+    TypeExprElement et -> encode et
+    TypeExprFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
+    TypeExprList lt -> H.TypeList <$> encode lt
+    TypeExprLiteral lt -> H.TypeVariable . simpleName <$> case lt of
       LiteralTypeBoolean -> pure "Bool"
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure "Float"
@@ -293,27 +293,27 @@ encodeType aliases typ = case typ of
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure "String"
       _ -> fail $ "unexpected literal type: " ++ show lt
-    TypeMap (MapType kt vt) -> toApplicationType <$> CM.sequence [
+    TypeExprMap (MapType kt vt) -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ simpleName "Map",
       encode kt,
       encode vt]
-    TypeNominal name -> pure $ H.TypeVariable $ elementReference aliases name
-    TypeOptional ot -> toApplicationType <$> CM.sequence [
+    TypeExprNominal name -> pure $ H.TypeVariable $ elementReference aliases name
+    TypeExprOptional ot -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ simpleName "Maybe",
       encode ot]
-    TypeSet st -> toApplicationType <$> CM.sequence [
+    TypeExprSet st -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ simpleName "Set",
       encode st]
-    TypeUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
+    TypeExprUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
-    TypeVariable v -> pure $ H.TypeVariable $ simpleName v
-    TypeRecord [] -> pure $ H.TypeTuple []
+    TypeExprVariable v -> pure $ H.TypeVariable $ simpleName v
+    TypeExprRecord [] -> pure $ H.TypeTuple []
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType aliases
 
-haskellLanguage :: Language
+haskellLanguage :: Language m
 haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
@@ -406,9 +406,9 @@ unionFieldReference aliases sname fname = elementReference aliases $ fromQname (
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
-unpackUniversalType :: Type -> ([TypeVariable], Type)
-unpackUniversalType t = case t of
-  TypeUniversal (UniversalType v tbody) -> (v:vars, t')
+unpackUniversalType :: Type m -> ([TypeVariable], Type m)
+unpackUniversalType t = case typeData t of
+  TypeExprUniversal (UniversalType v tbody) -> (v:vars, t')
     where
       (vars, t') = unpackUniversalType tbody
   _ -> ([], t)

@@ -34,5 +34,5 @@ stripField (Fld field) = field
 term :: Expression Meta -> Term Meta
 term e = Term e dflt
 
-typed :: Type -> Program a -> Program a
+typed :: Type Meta -> Program a -> Program a
 typed t (Program (Term d m)) = Program $ Term d (m {metaType = Just t})

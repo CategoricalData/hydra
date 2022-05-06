@@ -93,7 +93,7 @@ evaluate context term = reduce M.empty term
               Nothing -> reduce bindings nothing
               Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
             _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
-     
+
         FunctionPrimitive name -> do
              prim <- requirePrimitiveFunction context name
              let arity = primitiveFunctionArity prim
@@ -110,6 +110,8 @@ evaluate context term = reduce M.empty term
           >>= reduceApplication bindings (L.tail args)
 
         -- TODO: FunctionProjection
+
+        _ -> fail $ "unsupported function variant: " ++ show (functionVariant f)
 
       _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 

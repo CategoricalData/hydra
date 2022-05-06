@@ -39,36 +39,36 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
 
-idAdapter :: Type -> Adapter Type (Term a)
+idAdapter :: Type m -> Adapter (Type m) (Term m)
 idAdapter t = Adapter False t t idStep
 
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]
 
-literalTypeIsSupported :: Language_Constraints -> LiteralType -> Bool
+literalTypeIsSupported :: Language_Constraints m -> LiteralType -> Bool
 literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (languageConstraintsLiteralVariants constraints)
   && case at of
     LiteralTypeFloat ft -> floatTypeIsSupported constraints ft
     LiteralTypeInteger it -> integerTypeIsSupported constraints it
     _ -> True
 
-floatTypeIsSupported :: Language_Constraints -> FloatType -> Bool
+floatTypeIsSupported :: Language_Constraints m -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
-integerTypeIsSupported :: Language_Constraints -> IntegerType -> Bool
+integerTypeIsSupported :: Language_Constraints m -> IntegerType -> Bool
 integerTypeIsSupported constraints it = S.member it $ languageConstraintsIntegerTypes constraints
 
-typeIsSupported :: Language_Constraints -> Type -> Bool
+typeIsSupported :: Language_Constraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
-  && case t of
-    TypeLiteral at -> literalTypeIsSupported constraints at
-    TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
-    TypeList lt -> typeIsSupported constraints lt
-    TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
-    TypeNominal _ -> True -- TODO: dereference the type
-    TypeOptional t -> typeIsSupported constraints t
-    TypeRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
-    TypeSet st -> typeIsSupported constraints st
-    TypeUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+  && case typeData t of
+    TypeExprLiteral at -> literalTypeIsSupported constraints at
+    TypeExprFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
+    TypeExprList lt -> typeIsSupported constraints lt
+    TypeExprMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
+    TypeExprNominal _ -> True -- TODO: dereference the type
+    TypeExprOptional t -> typeIsSupported constraints t
+    TypeExprRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeExprSet st -> typeIsSupported constraints st
+    TypeExprUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     _ -> True

@@ -15,7 +15,7 @@ import qualified Data.Set as S
 
 datatype gname lname doc typ = typeElement standardContext (qualify gname lname) doc typ
 
-project :: Type -> FieldName -> Type -> Term Meta
+project :: Type Meta -> FieldName -> Type Meta -> Term Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
 qualify gname lname = gname ++ "." ++ lname
@@ -37,10 +37,10 @@ standardContext = Context {
     emptyGraphName = "empty"
     emptyGraph = Graph emptyGraphName [] (const True) "empty"
 
-standardElement :: Name -> String -> String -> Type -> Term Meta -> Element Meta
+standardElement :: Name -> String -> String -> Type Meta -> Term Meta -> Element Meta
 standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ withDoc desc term
 
-standardFunction :: Name -> String -> String -> Type -> Type -> Term Meta -> Element Meta
+standardFunction :: Name -> String -> String -> Type Meta -> Type Meta -> Term Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ
   where
     typ = Types.function dom cod
@@ -51,10 +51,10 @@ standardGraph name els = Graph name els dataTerms schemaGraph
     dataTerms = const True -- TODO
     schemaGraph = "hydra/core"
 
-standardMatch :: Name -> Type -> [(FieldName, Term Meta)] -> Term Meta
+standardMatch :: Name -> Type Meta -> [(FieldName, Term Meta)] -> Term Meta
 standardMatch = nominalMatch standardContext
 
-standardMatchWithVariants :: Type -> Type -> [(FieldName, FieldName)] -> Term Meta
+standardMatchWithVariants :: Type Meta -> Type Meta -> [(FieldName, FieldName)] -> Term Meta
 standardMatchWithVariants = nominalMatchWithVariants standardContext
 
 standardRecord :: Name -> [Field Meta] -> Term Meta
@@ -66,13 +66,13 @@ standardWithUnitVariant = nominalWithUnitVariant standardContext
 standardWithFunction :: Name -> FieldName -> Element Meta -> Term Meta
 standardWithFunction = nominalWithFunction standardContext
 
-standardWithType :: Type -> Term Meta -> Term Meta
+standardWithType :: Type Meta -> Term Meta -> Term Meta
 standardWithType = withType standardContext
 
 standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
 standardWithVariant = nominalWithVariant standardContext
 
-typeElement :: Context Meta -> Name -> String -> Type -> Element Meta
+typeElement :: Context Meta -> Name -> String -> Type Meta -> Element Meta
 typeElement cx name doc typ = Element {
     elementName = name,
     elementSchema = defaultTerm $ ExpressionElement _Type,

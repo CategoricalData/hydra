@@ -16,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-expectUnified :: [Constraint] -> [(TypeVariable, Type)] -> H.Expectation
+expectUnified :: [Constraint Meta] -> [(TypeVariable, Type Meta)] -> H.Expectation
 expectUnified constraints subst = H.shouldBe
   (solveConstraints testContext constraints)
   (Right $ M.fromList subst)
@@ -35,7 +35,7 @@ checkIndividualConstraints = do
 
     H.it "Unify variable with literal type" $
       expectUnified
-        [(Types.variable "a", Types.string)]
+        [(Types.variable "a" :: Type Meta, Types.string)]
         [("a", Types.string)]
 
 spec :: H.Spec

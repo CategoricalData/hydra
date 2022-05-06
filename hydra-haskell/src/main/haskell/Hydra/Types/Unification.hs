@@ -12,6 +12,8 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Types.Substitution
 import Hydra.CoreDecoding
+import Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Default
 
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -20,30 +22,30 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Constraint = (Type, Type)
+type Constraint m = (Type m, Type m)
 
-type Solve a = ExceptT TypeError Identity a
+type Solve a m = ExceptT (TypeError m) Identity a
 
-data TypeError
-  = UnificationFail Type Type
-  | InfiniteType TypeVariable Type
+data TypeError m
+  = UnificationFail (Type m) (Type m)
+  | InfiniteType TypeVariable (Type m)
   | UnboundVariable String
-  | UnificationMismatch [Type] [Type]
+  | UnificationMismatch [Type m] [Type m]
   | ElementUndefined Name
   | InvalidTypeEncoding String deriving (Eq, Show)
 
-type Unifier = (Subst, [Constraint])
+type Unifier m = (Subst m, [Constraint m])
 
 
-bind ::  TypeVariable -> Type -> Solve Subst
-bind a t | t == TypeVariable a = return M.empty
+bind :: Eq m => TypeVariable -> Type m -> Solve (Subst m) m
+bind a t | typeData t == TypeExprVariable a = return M.empty
          | variableOccursInType a t = throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
 
-solveConstraints :: Show m => Context m -> [Constraint] -> Either TypeError Subst
+solveConstraints :: (Default m, Eq m, Show m) => Context m -> [Constraint m] -> Either (TypeError m) (Subst m)
 solveConstraints cx cs = runIdentity $ runExceptT $ unificationSolver cx (M.empty, cs)
 
-unificationSolver :: Show m => Context m -> Unifier -> Solve Subst
+unificationSolver :: (Default m, Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
 unificationSolver cx (su, cs) = case cs of
   [] -> return su
   ((t1, t2): cs0) -> do
@@ -52,34 +54,34 @@ unificationSolver cx (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
-unify :: Show m => Context m -> Type -> Type -> Solve Subst
-unify cx t1 t2 = if t1 == t2
+unify :: (Default m, Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
+unify cx t1 t2 = if typeData t1 == typeData t2
     then return M.empty
-    else case (t1, t2) of
-      (TypeElement et1, TypeElement et2) -> unify cx et1 et2
-      (TypeFunction (FunctionType t1 t2), TypeFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
-      (TypeList lt1, TypeList lt2) -> unify cx lt1 lt2
-      (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
---      (TypeNominal name, t) -> case M.lookup name (contextElements cx) of
+    else case (typeData t1, typeData t2) of
+      (TypeExprElement et1, TypeExprElement et2) -> unify cx et1 et2
+      (TypeExprFunction (FunctionType t1 t2), TypeExprFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
+      (TypeExprList lt1, TypeExprList lt2) -> unify cx lt1 lt2
+      (TypeExprMap (MapType k1 v1), TypeExprMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
+--      (TypeExprNominal name, t) -> case M.lookup name (contextElements cx) of
 --          Nothing -> throwError $ ElementUndefined name
 --          Just (Element _ _ dat) -> case decodeType cx dat of
 --            ResultFailure msg -> throwError $ InvalidTypeEncoding msg
 --            ResultSuccess typ -> unify cx typ t
-      (TypeOptional ot1, TypeOptional ot2) -> unify cx ot1 ot2
-      (TypeRecord f1, TypeRecord f2) -> unifyRowType f1 f2
-      (TypeSet st1, TypeSet st2) -> unify cx st1 st2
-      (TypeUnion f1, TypeUnion f2) -> unifyRowType f1 f2
-      (TypeUniversal (UniversalType v1 body1), TypeUniversal (UniversalType v2 body2)) -> unifyMany cx
-        [TypeVariable v1, body1] [TypeVariable v2, body2]
-      (TypeVariable v, t) -> bind v t
-      (t, TypeVariable v) -> bind v t
-      (TypeNominal name, t) -> return M.empty
-      (t, TypeNominal name) -> unify cx (TypeNominal name) t
+      (TypeExprOptional ot1, TypeExprOptional ot2) -> unify cx ot1 ot2
+      (TypeExprRecord f1, TypeExprRecord f2) -> unifyRowType f1 f2
+      (TypeExprSet st1, TypeExprSet st2) -> unify cx st1 st2
+      (TypeExprUnion f1, TypeExprUnion f2) -> unifyRowType f1 f2
+      (TypeExprUniversal (UniversalType v1 body1), TypeExprUniversal (UniversalType v2 body2)) -> unifyMany cx
+        [Types.variable v1, body1] [Types.variable v2, body2]
+      (TypeExprVariable v, _) -> bind v t2
+      (_, TypeExprVariable v) -> bind v t1
+      (TypeExprNominal name, _) -> return M.empty
+      (_, TypeExprNominal name) -> unify cx (Types.nominal name) t1
       _ -> throwError $ UnificationFail t1 t2
   where
     unifyRowType f1 f2 = unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
 
-unifyMany :: Show m => Context m -> [Type] -> [Type] -> Solve Subst
+unifyMany :: (Default m, Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
 unifyMany _ [] [] = return M.empty
 unifyMany cx (t1 : ts1) (t2 : ts2) =
   do su1 <- unify cx t1 t2
@@ -87,5 +89,5 @@ unifyMany cx (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany _ t1 t2 = throwError $ UnificationMismatch t1 t2
 
-variableOccursInType ::  TypeVariable -> Type -> Bool
+variableOccursInType ::  TypeVariable -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t

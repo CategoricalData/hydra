@@ -99,7 +99,7 @@ spec = do
   supportedTypesPassThrough
   unsupportedTypesAreTransformed
 
-checkYamlCoder :: Type -> Term Meta -> YM.Node -> H.Expectation
+checkYamlCoder :: Type Meta -> Term Meta -> YM.Node -> H.Expectation
 checkYamlCoder typ term node = do
     (if Y.isJust step' then [] else warnings) `H.shouldBe` []
     stepOut step term `H.shouldBe` ResultSuccess node

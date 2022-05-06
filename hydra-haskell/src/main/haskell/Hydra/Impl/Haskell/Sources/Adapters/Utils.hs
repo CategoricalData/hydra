@@ -29,7 +29,7 @@ _eldata el = dataTerm @. element (elementName el)
 l_ :: Default a => Variable -> Term a -> Term a
 l_ = lambda
 
-match_ :: Name -> Type -> [(FieldName, Term Meta)] -> Term Meta
+match_ :: Name -> Type Meta -> [(FieldName, Term Meta)] -> Term Meta
 match_ = standardMatch
 
 p_ :: Default a => Name -> Term a
@@ -96,8 +96,8 @@ describePrecision = standardFunction adapterUtilsName "describePrecision"
 describeType :: Element Meta
 describeType = standardFunction adapterUtilsName "describeType"
   "Display a type as a string"
-  (Types.nominal _Type) Types.string $
-  lambda "type" $ apply
+  (Types.universal "m" $ Types.nominal _Type) Types.string $
+  lambda "typ" $ apply
     (match_ _TypeExpr Types.string [
       (_TypeExpr_literal, _eldata describeLiteralType),
       (_TypeExpr_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
@@ -118,12 +118,12 @@ describeType = standardFunction adapterUtilsName "describeType"
       (_TypeExpr_universal, const_ $ s_"polymorphic terms"),
       (_TypeExpr_variable, const_ $ s_"unspecified/parametric terms")])
     (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_data (Types.universal "m" $ Types.nominal _TypeExpr))
-           $ variable "type")
+           $ variable "typ")
 
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"
 --  "An identity adapter for a given type"
---  (Types.nominal _Type) (TypeUniversal (UniversalType "m" $ ())) $
+--  (Types.nominal _Type) (TypeExprUniversal (UniversalType "m" $ ())) $
 --  l_"t" $ r_ _Adapter [
 --    Field _Adapter_isLossy (booleanValue False),
 --    Field _Adapter_source (v_"t"),

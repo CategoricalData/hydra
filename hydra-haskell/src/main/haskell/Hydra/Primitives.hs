@@ -43,8 +43,8 @@ lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 primitiveFunctionArity :: PrimitiveFunction m -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
   where
-    arity (FunctionType _ cod) = 1 + case cod of
-      TypeFunction ft -> arity ft
+    arity (FunctionType _ cod) = 1 + case typeData cod of
+      TypeExprFunction ft -> arity ft
       _ -> 0
 
 requireElement :: Context m -> Name -> Result (Element m)
