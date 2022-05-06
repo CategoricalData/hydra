@@ -22,8 +22,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Application" $
         doc "A term which applies a function to an argument" $
         universal "m" $ record [
-          field "function" $ universal "m" $ core "Data",
-          field "argument" $ universal "m" $ core "Data"],
+          field "function" $
+            doc "The left-hand side of the application" $
+            universal "m" $ core "Data",
+          field "argument" $
+            doc "The right-hand side of the application" $
+            universal "m" $ core "Data"],
 
       def "BooleanValue" $
         doc "A boolean literal value" $
@@ -47,21 +51,48 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "DataTerm" $
         doc "A term expression" $
         universal "m" $ union [
-          field "application" $ universal "m" $ core "Application",
-          field "literal" $ core "Literal",
-          field "element" $ core "Name",
-          field "function" $ universal "m" $ core "Function",
+          field "application" $
+            doc "A function application" $
+            universal "m" $ core "Application",
+          field "literal" $
+            doc "A literal value" $
+            core "Literal",
+          field "element" $
+            doc "An element reference" $
+            core "Name",
+          field "function" $
+            doc "A function term" $
+            universal "m" $ core "Function",
           field "let" $ universal "m" $ core "Let",
-          field "list" $ list $ universal "m" $ core "Data",
-          field "map" $ Types.map (universal "m" $ core "Data") (universal "m" $ core "Data"),
+          field "list" $
+            doc "A list" $
+            list $ universal "m" $ core "Data",
+          -- TODO: list elimination
+          field "map" $
+            doc "A map of keys to values" $
+            Types.map (universal "m" $ core "Data") (universal "m" $ core "Data"),
           field "nominal" $ universal "m" $ core "Named",
-          field "optional" $ optional $ universal "m" $ core "Data",
-          field "record" $ list $ universal "m" $ core "Field",
-          field "set" $ set $ universal "m" $ core "Data",
-          field "typeAbstraction" $ universal "m" $ core "TypeAbstraction",
-          field "typeApplication" $ universal "m" $ core "TypeApplication",
-          field "union" $ universal "m" $ core "Field",
-          field "variable" $ core "Variable"],
+          field "optional" $
+            doc "An optional value" $
+            optional $ universal "m" $ core "Data",
+          field "record" $
+            doc "A record, or labeled tuple" $
+            list $ universal "m" $ core "Field",
+          field "set" $
+            doc "A set of values" $
+            set $ universal "m" $ core "Data",
+          field "typeAbstraction" $
+            doc "A type abstraction (generalization), which binds a type variable to a term" $
+            universal "m" $ core "TypeAbstraction",
+          field "typeApplication" $
+            doc "A type application (instantiation), which applies a term to a type" $
+            universal "m" $ core "TypeApplication",
+          field "union" $
+            doc "A union term, i.e. a string-indexed generalization of inl() or inr()" $
+            universal "m" $ core "Field",
+          field "variable" $
+            doc "A variable reference" $
+            core "Variable"],
 
       def "DataVariant" $
         doc "The identifier of a term expression constructor" $
@@ -115,13 +146,27 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Function" $
         doc "A function" $
         universal "m" $ union [
-          field "cases" $ list $ universal "m" $ core "Field",
-          field "compareTo" $ universal "m" $ core "Data",
-          field "delta" unit,
-          field "lambda" $ universal "m" $ core "Lambda",
-          field "optionalCases" $ universal "m" $ core "OptionalCases",
-          field "primitive" $ core "Name",
-          field "projection" $ core "FieldName"],
+          field "cases" $
+            doc "A case statement applied to a variant record, consisting of a function term for each alternative in the union" $
+            list $ universal "m" $ core "Field",
+          field "compareTo" $
+            doc "Compares a term with a given term of the same type, producing a Comparison" $
+            universal "m" $ core "Data",
+          field "delta" $
+            doc "Hydra's delta function, which maps an element to its data term"
+            unit,
+          field "lambda" $
+            doc "A function abstraction (lambda)" $
+            universal "m" $ core "Lambda",
+          field "optionalCases" $
+            doc "Eliminator for optional terms" $
+            universal "m" $ core "OptionalCases",
+          field "primitive" $
+            doc "A reference to a built-in (primitive) function" $
+            core "Name",
+          field "projection" $
+            doc "A projection of a field from a record" $
+            core "FieldName"],
 
       def "FunctionType" $
         doc "A function type, also known as an arrow type" $
@@ -169,8 +214,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Lambda" $
         doc "A function abstraction (lambda)" $
         universal "m" $ record [
-          field "parameter" $ core "Variable",
-          field "body" $ universal "m" $ core "Data"],
+          field "parameter" $
+            doc "The parameter of the lambda" $
+            core "Variable",
+          field "body" $
+            doc "The body of the lambda" $
+            universal "m" $ core "Data"],
 
       def "Let" $
         doc "A 'let' binding" $
@@ -215,8 +264,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Meta" $
         doc "A built-in metadata container for terms" $
         record [
-          field "description" $ optional string,
-          field "type" $ optional $ universal "m" $ core "Type"],
+          field "description" $
+            doc "An optional description associated with the term" $
+            optional string,
+          field "type" $
+            doc "An optional type annotation associated with the term. This may be used as a hint to the type inferencer and/or to code generators." $
+            optional $ universal "m" $ core "Type"],
 
       def "Name" $
         doc "A unique element name"
@@ -231,8 +284,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
         universal "m" $ record [
-          field "nothing" (universal "m" $ core "Data"),
-          field "just" (universal "m" $ core "Data")],
+          field "nothing" $
+            doc "A term provided if the optional value is nothing" $
+            universal "m" $ core "Data",
+          field "just" $
+            doc "A function which is applied of the optional value is non-nothing" $
+            universal "m" $ core "Data"],
 
       def "Precision" $
         doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
@@ -245,6 +302,32 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         universal "m" $ record [
           field "term" $ universal "m" $ core "TypeTerm",
           field "meta" $ variable "m"],
+
+      def "TypeAbstraction" $
+        doc "A type abstraction (generalization), which binds a type variable to a term" $
+        universal "m" $ record [
+          field "parameter" $
+            doc "The parameter of the abstraction" $
+            core "TypeVariable",
+          field "body" $
+            doc "The body of the abstraction" $
+            universal "m" $ core "Data"],
+
+      def "TypeApplication" $
+        doc "A type application (instantiation), which applies a term to a type" $
+        universal "m" $ record [
+          field "function" $
+            doc "A term which is the left-hand side of the application" $
+            universal "m" $ core "Data",
+          field "argument" $
+            doc "A type which is the right-hand side of the application" $
+            universal "m" $ core "Type"],
+
+      def "TypeScheme" $
+        doc "A type expression together with free type variables occurring in the expression" $
+        universal "m" $ record [
+          field "variables" $ list $ core "TypeVariable",
+          field "type" $ universal "m" $ core "Type"],
 
       def "TypeTerm" $
         doc "A data type" $
@@ -261,24 +344,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "union" $ list $ universal "m" $ core "FieldType",
           field "universal" $ universal "m" $ core "UniversalType",
           field "variable" $ core "TypeVariable"],
-
-      def "TypeAbstraction" $
-        doc "A type abstraction (generalization), which binds a type variable to a term" $
-        universal "m" $ record [
-          field "parameter" (core "TypeVariable"),
-          field "body" (universal "m" $ core "Data")],
-
-      def "TypeApplication" $
-        doc "A type application (instantiation), which applies a term to a type" $
-        universal "m" $ record [
-          field "function" $ universal "m" $ core "Data",
-          field "argument" $ universal "m" $ core "Type"],
-
-      def "TypeScheme" $
-        doc "A type expression together with free type variables occurring in the expression" $
-        universal "m" $ record [
-          field "variables" $ list $ core "TypeVariable",
-          field "type" $ universal "m" $ core "Type"],
 
       def "TypeVariable" $
         doc "A symbol which stands in for a type"
