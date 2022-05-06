@@ -3,7 +3,7 @@ module Hydra.TestUtils (
   checkFieldAdapter,
   checkFloatAdapter,
   checkIntegerAdapter,
-  checkTermAdapter,
+  checkDataAdapter,
   isFailure,
   termTestContext,
   unitVar,
@@ -81,8 +81,8 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
     context variants = withConstraints $ (languageConstraints baseLanguage) {
       languageConstraintsIntegerTypes = S.fromList variants }
 
-checkTermAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
-checkTermAdapter = checkAdapter stripMeta termAdapter termTestContext
+checkDataAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Data Meta -> Data Meta -> H.Expectation
+checkDataAdapter = checkAdapter stripMeta termAdapter termTestContext
 
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
@@ -100,10 +100,10 @@ isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
 
-unitVar :: Name -> FieldName -> Term Meta
+unitVar :: Name -> FieldName -> Data Meta
 unitVar = nominalUnitVariant testContext
 
-var :: Name -> FieldName -> Term Meta -> Term Meta
+var :: Name -> FieldName -> Data Meta -> Data Meta
 var = nominalVariant testContext
 
 withConstraints :: Language_Constraints Meta -> AdapterContext Meta

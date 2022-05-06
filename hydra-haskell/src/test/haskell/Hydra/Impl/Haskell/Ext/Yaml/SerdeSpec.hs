@@ -26,22 +26,22 @@ checkLiterals = H.describe "Test atomic values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization
-      (TypedTerm Types.boolean $ booleanValue b)
+      (TypedData Types.boolean $ booleanValue b)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.int32 $ int32Value i)
+      (TypedData Types.int32 $ int32Value i)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.uint8 $ uint8Value i)
+      (TypedData Types.uint8 $ uint8Value i)
       (show i)
 
   H.it "bigints become ints" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.bigint $ bigintValue i)
+      (TypedData Types.bigint $ bigintValue i)
       (show i)
 
   -- TODO: examine quirks around floating-point serialization more closely. These could affect portability of the serialized YAML.
@@ -53,21 +53,21 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
 
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
     QC.property $ \mi -> checkSerialization
-      (TypedTerm
+      (TypedData
         (Types.optional Types.int32)
         (optional $ (Just . int32Value) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization
-      (TypedTerm
+      (TypedData
         (Types.optional $ Types.optional Types.int32)
         (optional $ Just $ optional $ (Just . int32Value) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
     QC.property $ \() -> checkSerialization
-      (TypedTerm
+      (TypedData
         (Types.optional $ Types.optional Types.int32)
         (optional Nothing))
       "[]"
@@ -76,23 +76,23 @@ checkRecordsAndUnions :: H.SpecWith ()
 checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
-    QC.property $ \() -> checkSerialization (TypedTerm Types.unit unitTerm) "{}"
+    QC.property $ \() -> checkSerialization (TypedData Types.unit unitData) "{}"
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization
-      (TypedTerm latLonType (latlonRecord 37 (negate 122)))
+      (TypedData latLonType (latlonRecord 37 (negate 122)))
       "lat: 37\nlon: -122"
 
   H.it "Optionals are omitted from record objects if 'nothing'" $
     QC.property $ \() -> checkSerialization
-      (TypedTerm
+      (TypedData
         (Types.record [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
         (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
-      (TypedTerm
+      (TypedData
         (Types.union [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union $ Field "left" $ stringValue "test"))
       ("context: " ++ show untyped ++ "\nrecord:\n  left: test\n")
@@ -103,8 +103,8 @@ yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a t
   H.it "Generate arbitrary type/term pairs, serialize the terms to YAML, deserialize them, and compare" $
     QC.property checkSerdeRoundTrip
 
-checkSerialization :: TypedTerm Meta -> String -> H.Expectation
-checkSerialization (TypedTerm typ term) expected = do
+checkSerialization :: TypedData Meta -> String -> H.Expectation
+checkSerialization (TypedData typ term) expected = do
     if Y.isNothing (qualifiedValue serde)
       then qualifiedWarnings serde `H.shouldBe` []
       else True `H.shouldBe` True
@@ -114,8 +114,8 @@ checkSerialization (TypedTerm typ term) expected = do
     serde = yamlSerdeStr testContext typ
     serde' = Y.fromJust $ qualifiedValue serde
 
-checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
-checkSerdeRoundTrip (TypedTerm typ term) = do
+checkSerdeRoundTrip :: TypedData Meta -> H.Expectation
+checkSerdeRoundTrip (TypedData typ term) = do
     Y.isJust (qualifiedValue serde) `H.shouldBe` True
     (stripMeta <$> (stepOut serde' term >>= stepIn serde')) `H.shouldBe` ResultSuccess (stripMeta term)
   where

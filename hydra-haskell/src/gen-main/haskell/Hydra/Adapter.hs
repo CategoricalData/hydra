@@ -78,8 +78,8 @@ data Language_Constraints m
     , languageConstraintsFunctionVariants :: (Set (FunctionVariant))
     -- | @type set: hydra/core.IntegerType
     , languageConstraintsIntegerTypes :: (Set (IntegerType))
-    -- | @type set: hydra/core.TermVariant
-    , languageConstraintsTermVariants :: (Set (TermVariant))
+    -- | @type set: hydra/core.DataVariant
+    , languageConstraintsDataVariants :: (Set (DataVariant))
     -- | @type set: hydra/core.TypeVariant
     , languageConstraintsTypeVariants :: (Set (TypeVariant))
     {-| @type function:

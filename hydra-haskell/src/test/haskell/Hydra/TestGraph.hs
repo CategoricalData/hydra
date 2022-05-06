@@ -5,7 +5,7 @@ module Hydra.TestGraph (
   testElementFirstName,
   testGraph,
   testStrategy,
-  testTermArthur,
+  testDataArthur,
   testTypePerson,
   testTypeTimestamp,
   module Hydra.Impl.Haskell.Sources.Libraries,
@@ -42,16 +42,16 @@ testContext = standardContext {
     contextElements = graphElementsMap testGraph,
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
     contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
-        TermVariantLiteral,
-        TermVariantElement,
-        TermVariantFunction]}}
+      evaluationStrategyOpaqueDataVariants = S.fromList [ -- TODO: revisit this list
+        DataVariantLiteral,
+        DataVariantElement,
+        DataVariantFunction]}}
 
 testElementArthur :: Element Meta
 testElementArthur = Element {
   elementName = "ArthurDent",
   elementSchema = element "Person",
-  elementData = testTermArthur}
+  elementData = testDataArthur}
 
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
@@ -72,8 +72,8 @@ testSchemaGraph = Graph "testSchemaGraph" [
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
-testTermArthur :: Term Meta
-testTermArthur = nominalRecord cx "Person" [
+testDataArthur :: Data Meta
+testDataArthur = nominalRecord cx "Person" [
   Field "firstName" $ stringValue "Arthur",
   Field "lastName" $ stringValue "Dent",
   Field "age" $ int32Value 42]
@@ -89,5 +89,5 @@ testTypeTimestamp = Types.union [
   FieldType "unixTimeMillis" Types.uint64,
   FieldType "date" Types.string]
 
-allTerms :: Term Meta -> Bool
+allTerms :: Data Meta -> Bool
 allTerms _ = True

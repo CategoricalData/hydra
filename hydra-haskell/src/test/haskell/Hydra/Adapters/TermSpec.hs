@@ -57,7 +57,7 @@ supportedConstructorsAreUnchanged :: H.SpecWith ()
 supportedConstructorsAreUnchanged = H.describe "Verify that supported term constructors are unchanged" $ do
 
   H.it "Strings (and other supported atomic values) pass through without change" $
-    QC.property $ \b -> checkTermAdapter
+    QC.property $ \b -> checkDataAdapter
       [TypeVariantLiteral]
       Types.string
       Types.string
@@ -66,7 +66,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (stringValue b)
 
   H.it "Lists (when supported) pass through without change" $
-    QC.property $ \strings -> checkTermAdapter
+    QC.property $ \strings -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       listOfStringsType
       listOfStringsType
@@ -75,7 +75,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (list $ stringValue <$> strings)
 
   H.it "Maps (when supported) pass through without change" $
-    QC.property $ \keyvals -> checkTermAdapter
+    QC.property $ \keyvals -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantMap]
       mapOfStringsToIntsType
       mapOfStringsToIntsType
@@ -84,7 +84,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (makeMap keyvals)
 
   H.it "Optionals (when supported) pass through without change" $
-    QC.property $ \mi -> checkTermAdapter
+    QC.property $ \mi -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantOptional]
       optionalInt8Type
       optionalInt16Type
@@ -93,7 +93,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (optional $ int16Value <$> mi)
 
   H.it "Records (when supported) pass through without change" $
-    QC.property $ \a1 a2 -> checkTermAdapter
+    QC.property $ \a1 a2 -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantRecord]
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
@@ -102,7 +102,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (record [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
 
   H.it "Unions (when supported) pass through without change" $
-    QC.property $ \int -> checkTermAdapter
+    QC.property $ \int -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion]
       stringOrIntType
       stringOrIntType
@@ -111,7 +111,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (variant "right" $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
-    QC.property $ \strings -> checkTermAdapter
+    QC.property $ \strings -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantSet]
       setOfStringsType
       setOfStringsType
@@ -120,7 +120,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (stringSet strings)
 
   H.it "Element references (when supported) pass through without change" $
-    QC.property $ \name -> checkTermAdapter
+    QC.property $ \name -> checkDataAdapter
       [TypeVariantElement]
       int32ElementType
       int32ElementType
@@ -129,7 +129,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (element name)
 
   H.it "CompareTo terms (when supported) pass through without change" $
-    QC.property $ \s -> checkTermAdapter
+    QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction]
       compareStringsType
       compareStringsType
@@ -138,16 +138,16 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (compareTo $ stringValue s)
 
   H.it "Data terms (when supported) pass through without change" $
-    QC.property $ \() -> checkTermAdapter
+    QC.property $ \() -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
       int32ElementDataType
       int32ElementDataType
       False
-      dataTerm
-      dataTerm
+      delta
+      delta
 
   H.it "Primitive function references (when supported) pass through without change" $
-    QC.property $ \name -> checkTermAdapter
+    QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction]
       concatType
       concatType
@@ -156,7 +156,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (primitive name)
 
   H.it "Projections (when supported) pass through without change" $
-    QC.property $ \fname -> checkTermAdapter
+    QC.property $ \fname -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction, TypeVariantRecord]
       exampleProjectionType
       exampleProjectionType
@@ -165,7 +165,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (projection fname)
 
   H.it "Nominal types (when supported) pass through without change" $
-    QC.property $ \s -> checkTermAdapter
+    QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantNominal]
       stringAliasType
       stringAliasType
@@ -177,7 +177,7 @@ unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
   H.it "Sets (when unsupported) become lists" $
-    QC.property $ \strings -> checkTermAdapter
+    QC.property $ \strings -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       setOfStringsType
       listOfStringsType
@@ -186,7 +186,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (stringList $ S.toList strings)
 
   H.it "Element references (when unsupported) become strings" $
-    QC.property $ \name -> checkTermAdapter
+    QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral]
       int32ElementType
       Types.string
@@ -195,7 +195,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (stringValue name) -- Note: the element name is not dereferenced
 
   H.it "CompareTo terms (when unsupported) become variant terms" $
-    QC.property $ \s -> checkTermAdapter
+    QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       compareStringsType
       (unionTypeForFunctions Types.string)
@@ -204,16 +204,16 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (nominalUnion testContext _Function $ Field "compareTo" $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
-    QC.property $ \() -> checkTermAdapter
+    QC.property $ \() -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType
       (unionTypeForFunctions Types.string)
       False
-      dataTerm
-      (nominalUnion testContext _Function $ Field "data" unitTerm)
+      delta
+      (nominalUnion testContext _Function $ Field "data" unitData)
 
   H.it "Optionals (when unsupported) become lists" $
-    QC.property $ \ms -> checkTermAdapter
+    QC.property $ \ms -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       (Types.optional Types.string)
       (Types.list Types.string)
@@ -222,7 +222,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (list $ Y.maybe [] (\s -> [stringValue s]) ms)
 
   H.it "Primitive function references (when unsupported) become variant terms" $
-    QC.property $ \name -> checkTermAdapter
+    QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       concatType
       (unionTypeForFunctions Types.string)
@@ -231,7 +231,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (nominalUnion testContext _Function $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
-    QC.property $ \fname -> checkTermAdapter
+    QC.property $ \fname -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType
       (unionTypeForFunctions testTypePerson)
@@ -240,7 +240,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (nominalUnion testContext _Function $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
-    QC.property $ \s -> checkTermAdapter
+    QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral]
       stringAliasType
       Types.string
@@ -249,7 +249,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (stringValue s)
 
   H.it "Unions (when unsupported) become records" $
-    QC.property $ \i -> checkTermAdapter
+    QC.property $ \i -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
       (Types.record [Types.field "context" Types.string, Types.field "record" (Types.record [
@@ -267,7 +267,7 @@ termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
 
   H.it "A list of int8's becomes a list of int32's" $
-    QC.property $ \ints -> checkTermAdapter
+    QC.property $ \ints -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       listOfInt8sType
       listOfInt16sType
@@ -276,7 +276,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       (list $ int16Value <$> ints)
 
   H.it "A list of sets of strings becomes a list of lists of strings" $
-    QC.property $ \lists -> checkTermAdapter
+    QC.property $ \lists -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       listOfSetOfStringsType
       listOfListsOfStringsType
@@ -285,7 +285,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> lists)
 
   H.it "A list of sets of element references becomes a list of lists of strings" $
-    QC.property $ \names -> checkTermAdapter
+    QC.property $ \names -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantList]
       listOfSetOfInt32ElementReferencesType
       listOfListsOfStringsType
@@ -312,7 +312,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \s -> roundTripIsNoop compareStringsType (compareTo $ stringValue s)
 
   H.it "Check data terms (which map to variants)" $
-    roundTripIsNoop int32ElementDataType dataTerm `H.shouldBe` True
+    roundTripIsNoop int32ElementDataType delta `H.shouldBe` True
 
   H.it "Check primitive function references (which map to variants)" $
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)
@@ -327,7 +327,7 @@ roundTripsPreserveArbitraryTypes :: H.SpecWith ()
 roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do
 
   H.it "Check arbitrary type/term pairs" $
-    QC.property $ \(TypedTerm typ term) -> roundTripIsNoop typ term
+    QC.property $ \(TypedData typ term) -> roundTripIsNoop typ term
 
 fieldAdaptersAreAsExpected :: H.SpecWith ()
 fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do
@@ -341,7 +341,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Field "second" $ int8Value i)
       (Field "second" $ int16Value i)
 
-roundTripIsNoop :: Type Meta -> Term Meta -> Bool
+roundTripIsNoop :: Type Meta -> Data Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
     step = adapt typ
@@ -353,11 +353,11 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
       languageConstraintsFunctionVariants = S.empty,
       languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-      languageConstraintsTermVariants = S.fromList termVariants,
+      languageConstraintsDataVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case typeData typ of
-        TypeExprOptional (Type (TypeExprOptional _) _) -> False
+      languageConstraintsTypes = \typ -> case typeTerm typ of
+        TypeTermOptional (Type (TypeTermOptional _) _) -> False
         _ -> True }
 
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage

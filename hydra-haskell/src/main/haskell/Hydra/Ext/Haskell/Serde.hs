@@ -75,18 +75,18 @@ instance ToTree H.Expression where
       H.ExpressionConstructRecord r -> toTree r
       H.ExpressionDo statements -> indentBlock (cst "do") $ toTree <$> statements
       H.ExpressionIf ifte -> toTree ifte
-    --  H.ExpressionInfixApplication Expression_InfixApplication
+    --  H.ExpressionInfixApplication DataTerm_InfixApplication
       H.ExpressionLiteral lit -> toTree lit
       H.ExpressionLambda lam -> toTree lam
-    --  H.ExpressionLeftSection Expression_Section
-    --  H.ExpressionLet Expression_Let
+    --  H.ExpressionLeftSection DataTerm_Section
+    --  H.ExpressionLet DataTerm_Let
       H.ExpressionList exprs -> bracketList True $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
-    --  H.ExpressionPrefixApplication Expression_PrefixApplication
-    --  H.ExpressionRightSection Expression_Section
+    --  H.ExpressionPrefixApplication DataTerm_PrefixApplication
+    --  H.ExpressionRightSection DataTerm_Section
       H.ExpressionTuple exprs -> parenList $ toTree <$> exprs
-    --  H.ExpressionTypeSignature Expression_TypeSignature
-    --  H.ExpressionUpdateRecord Expression_UpdateRecord
+    --  H.ExpressionTypeSignature DataTerm_TypeSignature
+    --  H.ExpressionUpdateRecord DataTerm_UpdateRecord
       H.ExpressionVariable name -> toTree name
 
 instance ToTree H.Expression_Application where

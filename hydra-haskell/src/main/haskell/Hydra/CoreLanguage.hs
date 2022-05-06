@@ -12,6 +12,6 @@ hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
   languageConstraintsFloatTypes = S.fromList floatTypes,
   languageConstraintsFunctionVariants = S.fromList functionVariants,
   languageConstraintsIntegerTypes = S.fromList integerTypes,
-  languageConstraintsTermVariants = S.fromList termVariants,
+  languageConstraintsDataVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList typeVariants,
   languageConstraintsTypes = const True }

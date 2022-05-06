@@ -44,12 +44,12 @@ describeType :: (Core.Type m -> String)
 describeType typ = (
   (
     \x -> case x of
-      Core.TypeExprLiteral v -> (describeLiteralType v)
-      Core.TypeExprElement v -> (
+      Core.TypeTermLiteral v -> (describeLiteralType v)
+      Core.TypeTermElement v -> (
         Strings.cat [
           "elements containing ",
           (describeType v)])
-      Core.TypeExprFunction v -> (
+      Core.TypeTermFunction v -> (
         Strings.cat [
           Strings.cat [
             Strings.cat [
@@ -57,11 +57,11 @@ describeType typ = (
               (describeType (Core.functionTypeDomain v))],
             " to "],
           (describeType (Core.functionTypeCodomain v))])
-      Core.TypeExprList v -> (
+      Core.TypeTermList v -> (
         Strings.cat [
           "lists of ",
           (describeType v)])
-      Core.TypeExprMap v -> (
+      Core.TypeTermMap v -> (
         Strings.cat [
           Strings.cat [
             Strings.cat [
@@ -69,19 +69,19 @@ describeType typ = (
               (describeType (Core.mapTypeKeys v))],
             " to "],
           (describeType (Core.mapTypeValues v))])
-      Core.TypeExprNominal v -> (
+      Core.TypeTermNominal v -> (
         Strings.cat [
           "alias for ",
           v])
-      Core.TypeExprOptional v -> (
+      Core.TypeTermOptional v -> (
         Strings.cat [
           "optional ",
           (describeType v)])
-      Core.TypeExprRecord _ -> "records of a particular set of fields"
-      Core.TypeExprSet v -> (
+      Core.TypeTermRecord _ -> "records of a particular set of fields"
+      Core.TypeTermSet v -> (
         Strings.cat [
           "sets of ",
           (describeType v)])
-      Core.TypeExprUnion _ -> "unions of a particular set of fields"
-      Core.TypeExprUniversal _ -> "polymorphic terms"
-      Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeData typ))
+      Core.TypeTermUnion _ -> "unions of a particular set of fields"
+      Core.TypeTermUniversal _ -> "polymorphic terms"
+      Core.TypeTermVariable _ -> "unspecified/parametric terms") (Core.typeTerm typ))

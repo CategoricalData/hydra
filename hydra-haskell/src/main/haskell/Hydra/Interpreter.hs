@@ -23,26 +23,26 @@ import qualified Data.Set as S
 --   This function does not assume that term to be evaluated is in a normal form,
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
-evaluate :: (Ord a, Show a, Default a) => Context a -> Term a -> Result (Term a)
+evaluate :: (Ord a, Show a, Default a) => Context a -> Data a -> Result (Data a)
 evaluate context term = reduce M.empty term
   where
     reduce bindings term = if termIsOpaque (contextStrategy context) term
       then pure term
-      else case termData term of
-        ExpressionApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
-        ExpressionLiteral _ -> done
-        ExpressionElement _ -> done
-        ExpressionFunction f -> reduceFunction f
-        ExpressionList terms -> defaultTerm . ExpressionList <$> CM.mapM reduceb terms
-        ExpressionMap map -> defaultTerm . ExpressionMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
+      else case dataTerm term of
+        DataTermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
+        DataTermLiteral _ -> done
+        DataTermElement _ -> done
+        DataTermFunction f -> reduceFunction f
+        DataTermList terms -> defaultData . DataTermList <$> CM.mapM reduceb terms
+        DataTermMap map -> defaultData . DataTermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-        ExpressionNominal (NominalTerm name term') -> (\t -> defaultTerm $ ExpressionNominal (NominalTerm name t)) <$> reduce bindings term'
-        ExpressionOptional m -> defaultTerm . ExpressionOptional <$> CM.mapM reduceb m
-        ExpressionRecord fields -> defaultTerm  . ExpressionRecord <$> CM.mapM reduceField fields
-        ExpressionSet terms -> defaultTerm . ExpressionSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-        ExpressionUnion f -> defaultTerm . ExpressionUnion <$> reduceField f
-        ExpressionVariable v -> case M.lookup v bindings of
+        DataTermNominal (Named name term') -> (\t -> defaultData $ DataTermNominal (Named name t)) <$> reduce bindings term'
+        DataTermOptional m -> defaultData . DataTermOptional <$> CM.mapM reduceb m
+        DataTermRecord fields -> defaultData  . DataTermRecord <$> CM.mapM reduceField fields
+        DataTermSet terms -> defaultData . DataTermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
+        DataTermUnion f -> defaultData . DataTermUnion <$> reduceField f
+        DataTermVariable v -> case M.lookup v bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
       where
@@ -50,27 +50,27 @@ evaluate context term = reduce M.empty term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
-          FunctionCases cases -> defaultTerm . ExpressionFunction . FunctionCases <$> CM.mapM reduceField cases
-          FunctionCompareTo other -> defaultTerm . ExpressionFunction . FunctionCompareTo <$> reduceb other
+          FunctionCases cases -> defaultData . DataTermFunction . FunctionCases <$> CM.mapM reduceField cases
+          FunctionCompareTo other -> defaultData . DataTermFunction . FunctionCompareTo <$> reduceb other
           FunctionData -> done
-          FunctionLambda (Lambda v body) -> defaultTerm . ExpressionFunction . FunctionLambda . Lambda v <$> reduceb body
-          FunctionOptionalCases (OptionalCases nothing just) -> defaultTerm . ExpressionFunction . FunctionOptionalCases <$>
+          FunctionLambda (Lambda v body) -> defaultData . DataTermFunction . FunctionLambda . Lambda v <$> reduceb body
+          FunctionOptionalCases (OptionalCases nothing just) -> defaultData . DataTermFunction . FunctionOptionalCases <$>
             (OptionalCases <$> reduceb nothing <*> reduceb just)
           FunctionPrimitive _ -> done
           FunctionProjection _ -> done
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
-    reduceApplication bindings args f = if L.null args then pure f else case termData f of
-      ExpressionApplication (Application func arg) -> reduce bindings func
+    reduceApplication bindings args f = if L.null args then pure f else case dataTerm f of
+      DataTermApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
 
-      ExpressionFunction f -> case f of
+      DataTermFunction f -> case f of
         FunctionCases cases -> do
           arg <- (reduce bindings $ L.head args) >>= deref context
-          case termData arg of
-            ExpressionUnion (Field fname t) -> if L.null matching
+          case dataTerm arg of
+            DataTermUnion (Field fname t) -> if L.null matching
                 then fail $ "no case for field named " ++ fname
-                else reduce bindings (fieldTerm $ L.head matching)
+                else reduce bindings (fieldData $ L.head matching)
                   >>= reduceApplication bindings (t:L.tail args)
               where
                 matching = L.filter (\c -> fieldName c == fname) cases
@@ -80,16 +80,16 @@ evaluate context term = reduce M.empty term
 
         FunctionData -> do
           arg <- reduce bindings $ L.head args
-          case termData arg of
-            ExpressionElement name -> dereferenceElement context name
+          case dataTerm arg of
+            DataTermElement name -> dereferenceElement context name
               >>= reduce bindings
               >>= reduceApplication bindings (L.tail args)
             _ -> fail "tried to apply data (delta) to a non- element reference"
 
         FunctionOptionalCases (OptionalCases nothing just) -> do
           arg <- (reduce bindings $ L.head args) >>= deref context
-          case termData arg of
-            ExpressionOptional m -> case m of
+          case dataTerm arg of
+            DataTermOptional m -> case m of
               Nothing -> reduce bindings nothing
               Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
             _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
@@ -104,7 +104,7 @@ evaluate context term = reduce M.empty term
                  >>= reduceApplication bindings (L.drop arity args)
                else unwind
            where
-             unwind = pure $ L.foldl apply (defaultTerm $ ExpressionFunction f) args
+             unwind = pure $ L.foldl apply (defaultData $ DataTermFunction f) args
 
         FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
           >>= reduceApplication bindings (L.tail args)
@@ -115,26 +115,26 @@ evaluate context term = reduce M.empty term
 
       _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 
-freeVariables :: Term a -> S.Set Variable
+freeVariables :: Data a -> S.Set Variable
 freeVariables term = S.fromList $ free S.empty term
   where
-    free bound term = case termData term of
-        ExpressionApplication (Application t1 t2) -> free bound t1 ++ free bound t2
-        ExpressionLiteral _ -> []
-        ExpressionElement _ -> []
-        ExpressionFunction f -> freeInFunction f
-        ExpressionList terms -> L.concatMap (free bound) terms
-        ExpressionMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
-        ExpressionOptional m -> case m of
+    free bound term = case dataTerm term of
+        DataTermApplication (Application t1 t2) -> free bound t1 ++ free bound t2
+        DataTermLiteral _ -> []
+        DataTermElement _ -> []
+        DataTermFunction f -> freeInFunction f
+        DataTermList terms -> L.concatMap (free bound) terms
+        DataTermMap map -> L.concatMap (\(k, v) -> free bound k ++ free bound v) $ M.toList map
+        DataTermOptional m -> case m of
           Nothing -> []
           Just term -> free bound term
-        ExpressionRecord fields -> L.concatMap (free bound . fieldTerm) fields
-        ExpressionSet terms -> L.concatMap (free bound) terms
-        ExpressionUnion field -> free bound $ fieldTerm field
-        ExpressionVariable v -> [v | not (S.member v bound)]
+        DataTermRecord fields -> L.concatMap (free bound . fieldData) fields
+        DataTermSet terms -> L.concatMap (free bound) terms
+        DataTermUnion field -> free bound $ fieldData field
+        DataTermVariable v -> [v | not (S.member v bound)]
       where
         freeInFunction f = case f of
-          FunctionCases cases -> L.concatMap (free bound . fieldTerm) cases
+          FunctionCases cases -> L.concatMap (free bound . fieldData) cases
           FunctionCompareTo term -> free bound term
           FunctionData -> []
           FunctionLambda (Lambda v t) -> free (S.insert v bound) t
@@ -143,34 +143,34 @@ freeVariables term = S.fromList $ free S.empty term
           FunctionProjection _ -> []
 
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term a -> Bool
+termIsClosed :: Data a -> Bool
 termIsClosed = S.null . freeVariables
 
 -- | Whether a term is opaque to reduction, i.e. need not be reduced
-termIsOpaque :: EvaluationStrategy -> Term a -> Bool
-termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
+termIsOpaque :: EvaluationStrategy -> Data a -> Bool
+termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueDataVariants strategy)
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: EvaluationStrategy -> Term a -> Bool
-termIsValue strategy term = termIsOpaque strategy term || case termData term of
-      ExpressionApplication _ -> False
-      ExpressionLiteral _ -> True
-      ExpressionElement _ -> True
-      ExpressionFunction f -> functionIsValue f
-      ExpressionList els -> forList els
-      ExpressionMap map -> L.foldl
+termIsValue :: EvaluationStrategy -> Data a -> Bool
+termIsValue strategy term = termIsOpaque strategy term || case dataTerm term of
+      DataTermApplication _ -> False
+      DataTermLiteral _ -> True
+      DataTermElement _ -> True
+      DataTermFunction f -> functionIsValue f
+      DataTermList els -> forList els
+      DataTermMap map -> L.foldl
         (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
         True $ M.toList map
-      ExpressionOptional m -> case m of
+      DataTermOptional m -> case m of
         Nothing -> True
         Just term -> termIsValue strategy term
-      ExpressionRecord fields -> checkFields fields
-      ExpressionSet els -> forList $ S.toList els
-      ExpressionUnion field -> checkField field
-      ExpressionVariable _ -> False
+      DataTermRecord fields -> checkFields fields
+      DataTermSet els -> forList $ S.toList els
+      DataTermUnion field -> checkField field
+      DataTermVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
-    checkField = termIsValue strategy . fieldTerm
+    checkField = termIsValue strategy . fieldData
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of

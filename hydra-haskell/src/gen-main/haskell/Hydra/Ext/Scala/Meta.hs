@@ -83,7 +83,7 @@ _Ref_init = "init"
 
 
 data Stat 
-  = StatTerm Term
+  = StatTerm Data
   | StatDecl Decl
   | StatDefn Defn
   | StatImportExport ImportExportStat
@@ -157,632 +157,632 @@ _Lit_string = "string"
 _Lit_symbol = "symbol"
 
 
-data Term 
-  = TermLit Lit
-  | TermRef Term_Ref
-  | TermInterpolate Term_Interpolate
-  | TermXml Term_Xml
-  | TermApply Term_Apply
-  | TermApplyUsing Term_ApplyUsing
-  | TermApplyType Term_ApplyType
-  | TermAssign Term_Assign
-  | TermReturn Term_Return
-  | TermThrow Term_Throw
-  | TermAscribe Term_Ascribe
-  | TermAnnotate Term_Annotate
-  | TermTuple Term_Tuple
-  | TermBlock Term_Block
-  | TermEndMarker Term_EndMarker
-  | TermIf Term_If
-  | TermQuotedMacroExpr Term_QuotedMacroExpr
-  | TermQuotedMacroType Term_QuotedMacroType
-  | TermSplicedMacroExpr Term_SplicedMacroExpr
-  | TermMatch Term_Match
-  | TermTry Term_Try
-  | TermTryWithHandler Term_TryWithHandler
-  | TermFunctionTerm Term_FunctionTerm
-  | TermPolyFunction Term_PolyFunction
-  | TermPartialFunction Term_PartialFunction
-  | TermWhile Term_While
-  | TermDo Term_Do
-  | TermFor Term_For
-  | TermForYield Term_ForYield
-  | TermNew Term_New
-  | TermNewAnonymous Term_NewAnonymous
-  | TermPlaceholder Term_Placeholder
-  | TermEta Term_Eta
-  | TermRepeated Term_Repeated
-  | TermParam Term_Param
+data Data 
+  = DataLit Lit
+  | DataRef Data_Ref
+  | DataInterpolate Data_Interpolate
+  | DataXml Data_Xml
+  | DataApply Data_Apply
+  | DataApplyUsing Data_ApplyUsing
+  | DataApplyType Data_ApplyType
+  | DataAssign Data_Assign
+  | DataReturn Data_Return
+  | DataThrow Data_Throw
+  | DataAscribe Data_Ascribe
+  | DataAnnotate Data_Annotate
+  | DataTuple Data_Tuple
+  | DataBlock Data_Block
+  | DataEndMarker Data_EndMarker
+  | DataIf Data_If
+  | DataQuotedMacroExpr Data_QuotedMacroExpr
+  | DataQuotedMacroType Data_QuotedMacroType
+  | DataSplicedMacroExpr Data_SplicedMacroExpr
+  | DataMatch Data_Match
+  | DataTry Data_Try
+  | DataTryWithHandler Data_TryWithHandler
+  | DataFunctionData Data_FunctionData
+  | DataPolyFunction Data_PolyFunction
+  | DataPartialFunction Data_PartialFunction
+  | DataWhile Data_While
+  | DataDo Data_Do
+  | DataFor Data_For
+  | DataForYield Data_ForYield
+  | DataNew Data_New
+  | DataNewAnonymous Data_NewAnonymous
+  | DataPlaceholder Data_Placeholder
+  | DataEta Data_Eta
+  | DataRepeated Data_Repeated
+  | DataParam Data_Param
   deriving (Eq, Ord, Read, Show)
 
-_Term = "hydra/ext/scala/meta.Term"
+_Data = "hydra/ext/scala/meta.Data"
 
-_Term_lit = "lit"
+_Data_lit = "lit"
 
-_Term_ref = "ref"
+_Data_ref = "ref"
 
-_Term_interpolate = "interpolate"
+_Data_interpolate = "interpolate"
 
-_Term_xml = "xml"
+_Data_xml = "xml"
 
-_Term_apply = "apply"
+_Data_apply = "apply"
 
-_Term_applyUsing = "applyUsing"
+_Data_applyUsing = "applyUsing"
 
-_Term_applyType = "applyType"
+_Data_applyType = "applyType"
 
-_Term_assign = "assign"
+_Data_assign = "assign"
 
-_Term_return = "return"
+_Data_return = "return"
 
-_Term_throw = "throw"
+_Data_throw = "throw"
 
-_Term_ascribe = "ascribe"
+_Data_ascribe = "ascribe"
 
-_Term_annotate = "annotate"
+_Data_annotate = "annotate"
 
-_Term_tuple = "tuple"
+_Data_tuple = "tuple"
 
-_Term_block = "block"
+_Data_block = "block"
 
-_Term_endMarker = "endMarker"
+_Data_endMarker = "endMarker"
 
-_Term_if = "if"
+_Data_if = "if"
 
-_Term_quotedMacroExpr = "quotedMacroExpr"
+_Data_quotedMacroExpr = "quotedMacroExpr"
 
-_Term_quotedMacroType = "quotedMacroType"
+_Data_quotedMacroType = "quotedMacroType"
 
-_Term_splicedMacroExpr = "splicedMacroExpr"
+_Data_splicedMacroExpr = "splicedMacroExpr"
 
-_Term_match = "match"
+_Data_match = "match"
 
-_Term_try = "try"
+_Data_try = "try"
 
-_Term_tryWithHandler = "tryWithHandler"
+_Data_tryWithHandler = "tryWithHandler"
 
-_Term_functionTerm = "functionTerm"
+_Data_functionData = "functionData"
 
-_Term_polyFunction = "polyFunction"
+_Data_polyFunction = "polyFunction"
 
-_Term_partialFunction = "partialFunction"
+_Data_partialFunction = "partialFunction"
 
-_Term_while = "while"
+_Data_while = "while"
 
-_Term_do = "do"
+_Data_do = "do"
 
-_Term_for = "for"
+_Data_for = "for"
 
-_Term_forYield = "forYield"
+_Data_forYield = "forYield"
 
-_Term_new = "new"
+_Data_new = "new"
 
-_Term_newAnonymous = "newAnonymous"
+_Data_newAnonymous = "newAnonymous"
 
-_Term_placeholder = "placeholder"
+_Data_placeholder = "placeholder"
 
-_Term_eta = "eta"
+_Data_eta = "eta"
 
-_Term_repeated = "repeated"
+_Data_repeated = "repeated"
 
-_Term_param = "param"
+_Data_param = "param"
 
 
-data Term_Ref 
-  = Term_RefThis Term_This
-  | Term_RefSuper Term_Super
-  | Term_RefName Term_Name
-  | Term_RefAnonymous Term_Anonymous
-  | Term_RefSelect Term_Select
-  | Term_RefApplyUnary Term_ApplyUnary
+data Data_Ref 
+  = Data_RefThis Data_This
+  | Data_RefSuper Data_Super
+  | Data_RefName Data_Name
+  | Data_RefAnonymous Data_Anonymous
+  | Data_RefSelect Data_Select
+  | Data_RefApplyUnary Data_ApplyUnary
   deriving (Eq, Ord, Read, Show)
 
-_Term_Ref = "hydra/ext/scala/meta.Term.Ref"
+_Data_Ref = "hydra/ext/scala/meta.Data.Ref"
 
-_Term_Ref_this = "this"
+_Data_Ref_this = "this"
 
-_Term_Ref_super = "super"
+_Data_Ref_super = "super"
 
-_Term_Ref_name = "name"
+_Data_Ref_name = "name"
 
-_Term_Ref_anonymous = "anonymous"
+_Data_Ref_anonymous = "anonymous"
 
-_Term_Ref_select = "select"
+_Data_Ref_select = "select"
 
-_Term_Ref_applyUnary = "applyUnary"
+_Data_Ref_applyUnary = "applyUnary"
 
 
-data Term_This 
-  = Term_This {}
+data Data_This 
+  = Data_This {}
   deriving (Eq, Ord, Read, Show)
 
-_Term_This = "hydra/ext/scala/meta.Term.This"
+_Data_This = "hydra/ext/scala/meta.Data.This"
 
 
-data Term_Super 
-  = Term_Super {
-    term_SuperThisp :: Name,
-    term_SuperSuperp :: Name}
+data Data_Super 
+  = Data_Super {
+    data_SuperThisp :: Name,
+    data_SuperSuperp :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Super = "hydra/ext/scala/meta.Term.Super"
+_Data_Super = "hydra/ext/scala/meta.Data.Super"
 
-_Term_Super_thisp = "thisp"
+_Data_Super_thisp = "thisp"
 
-_Term_Super_superp = "superp"
+_Data_Super_superp = "superp"
 
 
-data Term_Name 
-  = Term_Name {term_NameValue :: PredefString}
+data Data_Name 
+  = Data_Name {data_NameValue :: PredefString}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Name = "hydra/ext/scala/meta.Term.Name"
+_Data_Name = "hydra/ext/scala/meta.Data.Name"
 
-_Term_Name_value = "value"
+_Data_Name_value = "value"
 
 
-data Term_Anonymous 
-  = Term_Anonymous {}
+data Data_Anonymous 
+  = Data_Anonymous {}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Anonymous = "hydra/ext/scala/meta.Term.Anonymous"
+_Data_Anonymous = "hydra/ext/scala/meta.Data.Anonymous"
 
 
-data Term_Select 
-  = Term_Select {
-    term_SelectQual :: Term,
-    term_SelectName :: Term_Name}
+data Data_Select 
+  = Data_Select {
+    data_SelectQual :: Data,
+    data_SelectName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Select = "hydra/ext/scala/meta.Term.Select"
+_Data_Select = "hydra/ext/scala/meta.Data.Select"
 
-_Term_Select_qual = "qual"
+_Data_Select_qual = "qual"
 
-_Term_Select_name = "name"
+_Data_Select_name = "name"
 
 
-data Term_Interpolate 
-  = Term_Interpolate {
-    term_InterpolatePrefix :: Term_Name,
-    term_InterpolateParts :: [Lit],
-    term_InterpolateArgs :: [Term]}
+data Data_Interpolate 
+  = Data_Interpolate {
+    data_InterpolatePrefix :: Data_Name,
+    data_InterpolateParts :: [Lit],
+    data_InterpolateArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Interpolate = "hydra/ext/scala/meta.Term.Interpolate"
+_Data_Interpolate = "hydra/ext/scala/meta.Data.Interpolate"
 
-_Term_Interpolate_prefix = "prefix"
+_Data_Interpolate_prefix = "prefix"
 
-_Term_Interpolate_parts = "parts"
+_Data_Interpolate_parts = "parts"
 
-_Term_Interpolate_args = "args"
+_Data_Interpolate_args = "args"
 
 
-data Term_Xml 
-  = Term_Xml {
-    term_XmlParts :: [Lit],
-    term_XmlArgs :: [Term]}
+data Data_Xml 
+  = Data_Xml {
+    data_XmlParts :: [Lit],
+    data_XmlArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Xml = "hydra/ext/scala/meta.Term.Xml"
+_Data_Xml = "hydra/ext/scala/meta.Data.Xml"
 
-_Term_Xml_parts = "parts"
+_Data_Xml_parts = "parts"
 
-_Term_Xml_args = "args"
+_Data_Xml_args = "args"
 
 
-data Term_Apply 
-  = Term_Apply {
-    term_ApplyFun :: Term,
-    term_ApplyArgs :: [Term]}
+data Data_Apply 
+  = Data_Apply {
+    data_ApplyFun :: Data,
+    data_ApplyArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Apply = "hydra/ext/scala/meta.Term.Apply"
+_Data_Apply = "hydra/ext/scala/meta.Data.Apply"
 
-_Term_Apply_fun = "fun"
+_Data_Apply_fun = "fun"
 
-_Term_Apply_args = "args"
+_Data_Apply_args = "args"
 
 
-data Term_ApplyUsing 
-  = Term_ApplyUsing {
-    term_ApplyUsingFun :: Term,
-    term_ApplyUsingTargs :: [Term]}
+data Data_ApplyUsing 
+  = Data_ApplyUsing {
+    data_ApplyUsingFun :: Data,
+    data_ApplyUsingTargs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ApplyUsing = "hydra/ext/scala/meta.Term.ApplyUsing"
+_Data_ApplyUsing = "hydra/ext/scala/meta.Data.ApplyUsing"
 
-_Term_ApplyUsing_fun = "fun"
+_Data_ApplyUsing_fun = "fun"
 
-_Term_ApplyUsing_targs = "targs"
+_Data_ApplyUsing_targs = "targs"
 
 
-data Term_ApplyType 
-  = Term_ApplyType {
-    term_ApplyTypeLhs :: Term,
-    term_ApplyTypeOp :: Term_Name,
-    term_ApplyTypeTargs :: [Type],
-    term_ApplyTypeArgs :: [Term]}
+data Data_ApplyType 
+  = Data_ApplyType {
+    data_ApplyTypeLhs :: Data,
+    data_ApplyTypeOp :: Data_Name,
+    data_ApplyTypeTargs :: [Type],
+    data_ApplyTypeArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ApplyType = "hydra/ext/scala/meta.Term.ApplyType"
+_Data_ApplyType = "hydra/ext/scala/meta.Data.ApplyType"
 
-_Term_ApplyType_lhs = "lhs"
+_Data_ApplyType_lhs = "lhs"
 
-_Term_ApplyType_op = "op"
+_Data_ApplyType_op = "op"
 
-_Term_ApplyType_targs = "targs"
+_Data_ApplyType_targs = "targs"
 
-_Term_ApplyType_args = "args"
+_Data_ApplyType_args = "args"
 
 
-data Term_ApplyInfix 
-  = Term_ApplyInfix {
-    term_ApplyInfixLhs :: Term,
-    term_ApplyInfixOp :: Term_Name,
-    term_ApplyInfixTargs :: [Type],
-    term_ApplyInfixArgs :: [Term]}
+data Data_ApplyInfix 
+  = Data_ApplyInfix {
+    data_ApplyInfixLhs :: Data,
+    data_ApplyInfixOp :: Data_Name,
+    data_ApplyInfixTargs :: [Type],
+    data_ApplyInfixArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ApplyInfix = "hydra/ext/scala/meta.Term.ApplyInfix"
+_Data_ApplyInfix = "hydra/ext/scala/meta.Data.ApplyInfix"
 
-_Term_ApplyInfix_lhs = "lhs"
+_Data_ApplyInfix_lhs = "lhs"
 
-_Term_ApplyInfix_op = "op"
+_Data_ApplyInfix_op = "op"
 
-_Term_ApplyInfix_targs = "targs"
+_Data_ApplyInfix_targs = "targs"
 
-_Term_ApplyInfix_args = "args"
+_Data_ApplyInfix_args = "args"
 
 
-data Term_ApplyUnary 
-  = Term_ApplyUnary {
-    term_ApplyUnaryOp :: Term_Name,
-    term_ApplyUnaryArg :: Term}
+data Data_ApplyUnary 
+  = Data_ApplyUnary {
+    data_ApplyUnaryOp :: Data_Name,
+    data_ApplyUnaryArg :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ApplyUnary = "hydra/ext/scala/meta.Term.ApplyUnary"
+_Data_ApplyUnary = "hydra/ext/scala/meta.Data.ApplyUnary"
 
-_Term_ApplyUnary_op = "op"
+_Data_ApplyUnary_op = "op"
 
-_Term_ApplyUnary_arg = "arg"
+_Data_ApplyUnary_arg = "arg"
 
 
-data Term_Assign 
-  = Term_Assign {
-    term_AssignLhs :: Term,
-    term_AssignRhs :: Term}
+data Data_Assign 
+  = Data_Assign {
+    data_AssignLhs :: Data,
+    data_AssignRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Assign = "hydra/ext/scala/meta.Term.Assign"
+_Data_Assign = "hydra/ext/scala/meta.Data.Assign"
 
-_Term_Assign_lhs = "lhs"
+_Data_Assign_lhs = "lhs"
 
-_Term_Assign_rhs = "rhs"
+_Data_Assign_rhs = "rhs"
 
 
-data Term_Return 
-  = Term_Return {term_ReturnExpr :: Term}
+data Data_Return 
+  = Data_Return {data_ReturnExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Return = "hydra/ext/scala/meta.Term.Return"
+_Data_Return = "hydra/ext/scala/meta.Data.Return"
 
-_Term_Return_expr = "expr"
+_Data_Return_expr = "expr"
 
 
-data Term_Throw 
-  = Term_Throw {term_ThrowExpr :: Term}
+data Data_Throw 
+  = Data_Throw {data_ThrowExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Throw = "hydra/ext/scala/meta.Term.Throw"
+_Data_Throw = "hydra/ext/scala/meta.Data.Throw"
 
-_Term_Throw_expr = "expr"
+_Data_Throw_expr = "expr"
 
 
-data Term_Ascribe 
-  = Term_Ascribe {
-    term_AscribeExpr :: Term,
-    term_AscribeTpe :: Type}
+data Data_Ascribe 
+  = Data_Ascribe {
+    data_AscribeExpr :: Data,
+    data_AscribeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Ascribe = "hydra/ext/scala/meta.Term.Ascribe"
+_Data_Ascribe = "hydra/ext/scala/meta.Data.Ascribe"
 
-_Term_Ascribe_expr = "expr"
+_Data_Ascribe_expr = "expr"
 
-_Term_Ascribe_tpe = "tpe"
+_Data_Ascribe_tpe = "tpe"
 
 
-data Term_Annotate 
-  = Term_Annotate {
-    term_AnnotateExpr :: Term,
-    term_AnnotateAnnots :: [Mod_Annot]}
+data Data_Annotate 
+  = Data_Annotate {
+    data_AnnotateExpr :: Data,
+    data_AnnotateAnnots :: [Mod_Annot]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Annotate = "hydra/ext/scala/meta.Term.Annotate"
+_Data_Annotate = "hydra/ext/scala/meta.Data.Annotate"
 
-_Term_Annotate_expr = "expr"
+_Data_Annotate_expr = "expr"
 
-_Term_Annotate_annots = "annots"
+_Data_Annotate_annots = "annots"
 
 
-data Term_Tuple 
-  = Term_Tuple {term_TupleArgs :: [Term]}
+data Data_Tuple 
+  = Data_Tuple {data_TupleArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Tuple = "hydra/ext/scala/meta.Term.Tuple"
+_Data_Tuple = "hydra/ext/scala/meta.Data.Tuple"
 
-_Term_Tuple_args = "args"
+_Data_Tuple_args = "args"
 
 
-data Term_Block 
-  = Term_Block {term_BlockStats :: [Stat]}
+data Data_Block 
+  = Data_Block {data_BlockStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Block = "hydra/ext/scala/meta.Term.Block"
+_Data_Block = "hydra/ext/scala/meta.Data.Block"
 
-_Term_Block_stats = "stats"
+_Data_Block_stats = "stats"
 
 
-data Term_EndMarker 
-  = Term_EndMarker {term_EndMarkerName :: Term_Name}
+data Data_EndMarker 
+  = Data_EndMarker {data_EndMarkerName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Term_EndMarker = "hydra/ext/scala/meta.Term.EndMarker"
+_Data_EndMarker = "hydra/ext/scala/meta.Data.EndMarker"
 
-_Term_EndMarker_name = "name"
+_Data_EndMarker_name = "name"
 
 
-data Term_If 
-  = Term_If {
-    term_IfCond :: Term,
-    term_IfThenp :: Term,
-    term_IfElsep :: Term}
+data Data_If 
+  = Data_If {
+    data_IfCond :: Data,
+    data_IfThenp :: Data,
+    data_IfElsep :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_If = "hydra/ext/scala/meta.Term.If"
+_Data_If = "hydra/ext/scala/meta.Data.If"
 
-_Term_If_cond = "cond"
+_Data_If_cond = "cond"
 
-_Term_If_thenp = "thenp"
+_Data_If_thenp = "thenp"
 
-_Term_If_elsep = "elsep"
+_Data_If_elsep = "elsep"
 
 
-data Term_QuotedMacroExpr 
-  = Term_QuotedMacroExpr {term_QuotedMacroExprBody :: Term}
+data Data_QuotedMacroExpr 
+  = Data_QuotedMacroExpr {data_QuotedMacroExprBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_QuotedMacroExpr = "hydra/ext/scala/meta.Term.QuotedMacroExpr"
+_Data_QuotedMacroExpr = "hydra/ext/scala/meta.Data.QuotedMacroExpr"
 
-_Term_QuotedMacroExpr_body = "body"
+_Data_QuotedMacroExpr_body = "body"
 
 
-data Term_QuotedMacroType 
-  = Term_QuotedMacroType {term_QuotedMacroTypeTpe :: Type}
+data Data_QuotedMacroType 
+  = Data_QuotedMacroType {data_QuotedMacroTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Term_QuotedMacroType = "hydra/ext/scala/meta.Term.QuotedMacroType"
+_Data_QuotedMacroType = "hydra/ext/scala/meta.Data.QuotedMacroType"
 
-_Term_QuotedMacroType_tpe = "tpe"
+_Data_QuotedMacroType_tpe = "tpe"
 
 
-data Term_SplicedMacroExpr 
-  = Term_SplicedMacroExpr {term_SplicedMacroExprBody :: Term}
+data Data_SplicedMacroExpr 
+  = Data_SplicedMacroExpr {data_SplicedMacroExprBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_SplicedMacroExpr = "hydra/ext/scala/meta.Term.SplicedMacroExpr"
+_Data_SplicedMacroExpr = "hydra/ext/scala/meta.Data.SplicedMacroExpr"
 
-_Term_SplicedMacroExpr_body = "body"
+_Data_SplicedMacroExpr_body = "body"
 
 
-data Term_Match 
-  = Term_Match {
-    term_MatchExpr :: Term,
-    term_MatchCases :: [Case]}
+data Data_Match 
+  = Data_Match {
+    data_MatchExpr :: Data,
+    data_MatchCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Match = "hydra/ext/scala/meta.Term.Match"
+_Data_Match = "hydra/ext/scala/meta.Data.Match"
 
-_Term_Match_expr = "expr"
+_Data_Match_expr = "expr"
 
-_Term_Match_cases = "cases"
+_Data_Match_cases = "cases"
 
 
-data Term_Try 
-  = Term_Try {
-    term_TryExpr :: Term,
-    term_TryCatchp :: [Case],
-    term_TryFinallyp :: (Maybe Term)}
+data Data_Try 
+  = Data_Try {
+    data_TryExpr :: Data,
+    data_TryCatchp :: [Case],
+    data_TryFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Try = "hydra/ext/scala/meta.Term.Try"
+_Data_Try = "hydra/ext/scala/meta.Data.Try"
 
-_Term_Try_expr = "expr"
+_Data_Try_expr = "expr"
 
-_Term_Try_catchp = "catchp"
+_Data_Try_catchp = "catchp"
 
-_Term_Try_finallyp = "finallyp"
+_Data_Try_finallyp = "finallyp"
 
 
-data Term_TryWithHandler 
-  = Term_TryWithHandler {
-    term_TryWithHandlerExpr :: Term,
-    term_TryWithHandlerCatchp :: Term,
-    term_TryWithHandlerFinallyp :: (Maybe Term)}
+data Data_TryWithHandler 
+  = Data_TryWithHandler {
+    data_TryWithHandlerExpr :: Data,
+    data_TryWithHandlerCatchp :: Data,
+    data_TryWithHandlerFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Term_TryWithHandler = "hydra/ext/scala/meta.Term.TryWithHandler"
+_Data_TryWithHandler = "hydra/ext/scala/meta.Data.TryWithHandler"
 
-_Term_TryWithHandler_expr = "expr"
+_Data_TryWithHandler_expr = "expr"
 
-_Term_TryWithHandler_catchp = "catchp"
+_Data_TryWithHandler_catchp = "catchp"
 
-_Term_TryWithHandler_finallyp = "finallyp"
+_Data_TryWithHandler_finallyp = "finallyp"
 
 
-data Term_FunctionTerm 
-  = Term_FunctionTermContextFunction Term_ContextFunction
-  | Term_FunctionTermFunction Term_Function
+data Data_FunctionData 
+  = Data_FunctionDataContextFunction Data_ContextFunction
+  | Data_FunctionDataFunction Data_Function
   deriving (Eq, Ord, Read, Show)
 
-_Term_FunctionTerm = "hydra/ext/scala/meta.Term.FunctionTerm"
+_Data_FunctionData = "hydra/ext/scala/meta.Data.FunctionData"
 
-_Term_FunctionTerm_contextFunction = "contextFunction"
+_Data_FunctionData_contextFunction = "contextFunction"
 
-_Term_FunctionTerm_function = "function"
+_Data_FunctionData_function = "function"
 
 
-data Term_ContextFunction 
-  = Term_ContextFunction {
-    term_ContextFunctionParams :: [Term_Param],
-    term_ContextFunctionBody :: Term}
+data Data_ContextFunction 
+  = Data_ContextFunction {
+    data_ContextFunctionParams :: [Data_Param],
+    data_ContextFunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ContextFunction = "hydra/ext/scala/meta.Term.ContextFunction"
+_Data_ContextFunction = "hydra/ext/scala/meta.Data.ContextFunction"
 
-_Term_ContextFunction_params = "params"
+_Data_ContextFunction_params = "params"
 
-_Term_ContextFunction_body = "body"
+_Data_ContextFunction_body = "body"
 
 
-data Term_Function 
-  = Term_Function {
-    term_FunctionParams :: [Term_Param],
-    term_FunctionBody :: Term}
+data Data_Function 
+  = Data_Function {
+    data_FunctionParams :: [Data_Param],
+    data_FunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Function = "hydra/ext/scala/meta.Term.Function"
+_Data_Function = "hydra/ext/scala/meta.Data.Function"
 
-_Term_Function_params = "params"
+_Data_Function_params = "params"
 
-_Term_Function_body = "body"
+_Data_Function_body = "body"
 
 
-data Term_PolyFunction 
-  = Term_PolyFunction {
-    term_PolyFunctionTparams :: [Type_Param],
-    term_PolyFunctionBody :: Term}
+data Data_PolyFunction 
+  = Data_PolyFunction {
+    data_PolyFunctionTparams :: [Type_Param],
+    data_PolyFunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_PolyFunction = "hydra/ext/scala/meta.Term.PolyFunction"
+_Data_PolyFunction = "hydra/ext/scala/meta.Data.PolyFunction"
 
-_Term_PolyFunction_tparams = "tparams"
+_Data_PolyFunction_tparams = "tparams"
 
-_Term_PolyFunction_body = "body"
+_Data_PolyFunction_body = "body"
 
 
-data Term_PartialFunction 
-  = Term_PartialFunction {term_PartialFunctionCases :: [Case]}
+data Data_PartialFunction 
+  = Data_PartialFunction {data_PartialFunctionCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_PartialFunction = "hydra/ext/scala/meta.Term.PartialFunction"
+_Data_PartialFunction = "hydra/ext/scala/meta.Data.PartialFunction"
 
-_Term_PartialFunction_cases = "cases"
+_Data_PartialFunction_cases = "cases"
 
 
-data Term_While 
-  = Term_While {
-    term_WhileExpr :: Term,
-    term_WhileBody :: Term}
+data Data_While 
+  = Data_While {
+    data_WhileExpr :: Data,
+    data_WhileBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_While = "hydra/ext/scala/meta.Term.While"
+_Data_While = "hydra/ext/scala/meta.Data.While"
 
-_Term_While_expr = "expr"
+_Data_While_expr = "expr"
 
-_Term_While_body = "body"
+_Data_While_body = "body"
 
 
-data Term_Do 
-  = Term_Do {
-    term_DoBody :: Term,
-    term_DoExpr :: Term}
+data Data_Do 
+  = Data_Do {
+    data_DoBody :: Data,
+    data_DoExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Do = "hydra/ext/scala/meta.Term.Do"
+_Data_Do = "hydra/ext/scala/meta.Data.Do"
 
-_Term_Do_body = "body"
+_Data_Do_body = "body"
 
-_Term_Do_expr = "expr"
+_Data_Do_expr = "expr"
 
 
-data Term_For 
-  = Term_For {term_ForEnums :: [Enumerator]}
+data Data_For 
+  = Data_For {data_ForEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_For = "hydra/ext/scala/meta.Term.For"
+_Data_For = "hydra/ext/scala/meta.Data.For"
 
-_Term_For_enums = "enums"
+_Data_For_enums = "enums"
 
 
-data Term_ForYield 
-  = Term_ForYield {term_ForYieldEnums :: [Enumerator]}
+data Data_ForYield 
+  = Data_ForYield {data_ForYieldEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
 
-_Term_ForYield = "hydra/ext/scala/meta.Term.ForYield"
+_Data_ForYield = "hydra/ext/scala/meta.Data.ForYield"
 
-_Term_ForYield_enums = "enums"
+_Data_ForYield_enums = "enums"
 
 
-data Term_New 
-  = Term_New {term_NewInit :: Init}
+data Data_New 
+  = Data_New {data_NewInit :: Init}
   deriving (Eq, Ord, Read, Show)
 
-_Term_New = "hydra/ext/scala/meta.Term.New"
+_Data_New = "hydra/ext/scala/meta.Data.New"
 
-_Term_New_init = "init"
+_Data_New_init = "init"
 
 
-data Term_NewAnonymous 
-  = Term_NewAnonymous {term_NewAnonymousTempl :: Template}
+data Data_NewAnonymous 
+  = Data_NewAnonymous {data_NewAnonymousTempl :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Term_NewAnonymous = "hydra/ext/scala/meta.Term.NewAnonymous"
+_Data_NewAnonymous = "hydra/ext/scala/meta.Data.NewAnonymous"
 
-_Term_NewAnonymous_templ = "templ"
+_Data_NewAnonymous_templ = "templ"
 
 
-data Term_Placeholder 
-  = Term_Placeholder {}
+data Data_Placeholder 
+  = Data_Placeholder {}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Placeholder = "hydra/ext/scala/meta.Term.Placeholder"
+_Data_Placeholder = "hydra/ext/scala/meta.Data.Placeholder"
 
 
-data Term_Eta 
-  = Term_Eta {term_EtaExpr :: Term}
+data Data_Eta 
+  = Data_Eta {data_EtaExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Eta = "hydra/ext/scala/meta.Term.Eta"
+_Data_Eta = "hydra/ext/scala/meta.Data.Eta"
 
-_Term_Eta_expr = "expr"
+_Data_Eta_expr = "expr"
 
 
-data Term_Repeated 
-  = Term_Repeated {term_RepeatedExpr :: Term}
+data Data_Repeated 
+  = Data_Repeated {data_RepeatedExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Repeated = "hydra/ext/scala/meta.Term.Repeated"
+_Data_Repeated = "hydra/ext/scala/meta.Data.Repeated"
 
-_Term_Repeated_expr = "expr"
+_Data_Repeated_expr = "expr"
 
 
-data Term_Param 
-  = Term_Param {
-    term_ParamMods :: [Mod],
-    term_ParamName :: Name,
-    term_ParamDecltpe :: (Maybe Type),
-    term_ParamDefault :: (Maybe Term)}
+data Data_Param 
+  = Data_Param {
+    data_ParamMods :: [Mod],
+    data_ParamName :: Name,
+    data_ParamDecltpe :: (Maybe Type),
+    data_ParamDefault :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Term_Param = "hydra/ext/scala/meta.Term.Param"
+_Data_Param = "hydra/ext/scala/meta.Data.Param"
 
-_Term_Param_mods = "mods"
+_Data_Param_mods = "mods"
 
-_Term_Param_name = "name"
+_Data_Param_name = "name"
 
-_Term_Param_decltpe = "decltpe"
+_Data_Param_decltpe = "decltpe"
 
-_Term_Param_default = "default"
+_Data_Param_default = "default"
 
 
 data Type 
@@ -896,7 +896,7 @@ _Type_AnonymousName = "hydra/ext/scala/meta.Type.AnonymousName"
 
 data Type_Select 
   = Type_Select {
-    type_SelectQual :: Term_Ref,
+    type_SelectQual :: Data_Ref,
     type_SelectName :: Type_Name}
   deriving (Eq, Ord, Read, Show)
 
@@ -921,7 +921,7 @@ _Type_Project_name = "name"
 
 
 data Type_Singleton 
-  = Type_Singleton {type_SingletonRef :: Term_Ref}
+  = Type_Singleton {type_SingletonRef :: Data_Ref}
   deriving (Eq, Ord, Read, Show)
 
 _Type_Singleton = "hydra/ext/scala/meta.Type.Singleton"
@@ -1123,7 +1123,7 @@ _Type_Lambda_tpe = "tpe"
 
 
 data Type_Macro 
-  = Type_Macro {type_MacroBody :: Term}
+  = Type_Macro {type_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Type_Macro = "hydra/ext/scala/meta.Type.Macro"
@@ -1133,7 +1133,7 @@ _Type_Macro_body = "body"
 
 data Type_Method 
   = Type_Method {
-    type_MethodParamss :: [[Term_Param]],
+    type_MethodParamss :: [[Data_Param]],
     type_MethodTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -1293,7 +1293,7 @@ _Pat_given = "given"
 
 
 data Pat_Var 
-  = Pat_Var {pat_VarName :: Term_Name}
+  = Pat_Var {pat_VarName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
 _Pat_Var = "hydra/ext/scala/meta.Pat.Var"
@@ -1337,7 +1337,7 @@ _Pat_Tuple_args = "args"
 
 
 data Pat_Repeated 
-  = Pat_Repeated {pat_RepeatedName :: Term_Name}
+  = Pat_Repeated {pat_RepeatedName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
 _Pat_Repeated = "hydra/ext/scala/meta.Pat.Repeated"
@@ -1347,7 +1347,7 @@ _Pat_Repeated_name = "name"
 
 data Pat_Extract 
   = Pat_Extract {
-    pat_ExtractFun :: Term,
+    pat_ExtractFun :: Data,
     pat_ExtractArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
@@ -1361,7 +1361,7 @@ _Pat_Extract_args = "args"
 data Pat_ExtractInfix 
   = Pat_ExtractInfix {
     pat_ExtractInfixLhs :: Pat,
-    pat_ExtractInfixOp :: Term_Name,
+    pat_ExtractInfixOp :: Data_Name,
     pat_ExtractInfixRhs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
@@ -1376,7 +1376,7 @@ _Pat_ExtractInfix_rhs = "rhs"
 
 data Pat_Interpolate 
   = Pat_Interpolate {
-    pat_InterpolatePrefix :: Term_Name,
+    pat_InterpolatePrefix :: Data_Name,
     pat_InterpolateParts :: [Lit]}
   deriving (Eq, Ord, Read, Show)
 
@@ -1414,7 +1414,7 @@ _Pat_Typed_rhs = "rhs"
 
 
 data Pat_Macro 
-  = Pat_Macro {pat_MacroBody :: Term}
+  = Pat_Macro {pat_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Pat_Macro = "hydra/ext/scala/meta.Pat.Macro"
@@ -1432,9 +1432,9 @@ _Pat_Given_tpe = "tpe"
 
 
 data Member 
-  = MemberTerm Member_Term
+  = MemberTerm Member_Data
   | MemberType Member_Type
-  | MemberTermParam Term_Param
+  | MemberTermParam Data_Param
   | MemberTypeParam Type_Param
   | MemberSelf Self
   deriving (Eq, Ord, Read, Show)
@@ -1452,16 +1452,16 @@ _Member_typeParam = "typeParam"
 _Member_self = "self"
 
 
-data Member_Term 
-  = Member_TermPkg Pkg
-  | Member_TermObject Pkg_Object
+data Member_Data 
+  = Member_DataPkg Pkg
+  | Member_DataObject Pkg_Object
   deriving (Eq, Ord, Read, Show)
 
-_Member_Term = "hydra/ext/scala/meta.Member.Term"
+_Member_Data = "hydra/ext/scala/meta.Member.Data"
 
-_Member_Term_pkg = "pkg"
+_Member_Data_pkg = "pkg"
 
-_Member_Term_object = "object"
+_Member_Data_object = "object"
 
 
 data Member_Type 
@@ -1529,9 +1529,9 @@ _Decl_Var_decltpe = "decltpe"
 data Decl_Def 
   = Decl_Def {
     decl_DefMods :: [Mod],
-    decl_DefName :: Term_Name,
+    decl_DefName :: Data_Name,
     decl_DefTparams :: [Type_Param],
-    decl_DefParamss :: [[Term_Param]],
+    decl_DefParamss :: [[Data_Param]],
     decl_DefDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -1570,9 +1570,9 @@ _Decl_Type_bounds = "bounds"
 data Decl_Given 
   = Decl_Given {
     decl_GivenMods :: [Mod],
-    decl_GivenName :: Term_Name,
+    decl_GivenName :: Data_Name,
     decl_GivenTparams :: [Type_Param],
-    decl_GivenSparams :: [[Term_Param]],
+    decl_GivenSparams :: [[Data_Param]],
     decl_GivenDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -1642,7 +1642,7 @@ data Defn_Val
     defn_ValMods :: [Mod],
     defn_ValPats :: [Pat],
     defn_ValDecltpe :: (Maybe Type),
-    defn_ValRhs :: Term}
+    defn_ValRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_Val = "hydra/ext/scala/meta.Defn.Val"
@@ -1661,7 +1661,7 @@ data Defn_Var
     defn_VarMods :: [Mod],
     defn_VarPats :: [Pat],
     defn_VarDecltpe :: Type,
-    defn_VarRhs :: (Maybe Term)}
+    defn_VarRhs :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_Var = "hydra/ext/scala/meta.Defn.Var"
@@ -1680,7 +1680,7 @@ data Defn_Given
     defn_GivenMods :: [Mod],
     defn_GivenName :: Name,
     defn_GivenTparams :: [[Type_Param]],
-    defn_GivenSparams :: [[Term_Param]],
+    defn_GivenSparams :: [[Data_Param]],
     defn_GivenTempl :: Template}
   deriving (Eq, Ord, Read, Show)
 
@@ -1722,7 +1722,7 @@ _Defn_Enum_template = "template"
 data Defn_EnumCase 
   = Defn_EnumCase {
     defn_EnumCaseMods :: [Mod],
-    defn_EnumCaseName :: Term_Name,
+    defn_EnumCaseName :: Data_Name,
     defn_EnumCaseTparams :: [Type_Param],
     defn_EnumCaseCtor :: Ctor_Primary,
     defn_EnumCaseInits :: [Init]}
@@ -1744,7 +1744,7 @@ _Defn_EnumCase_inits = "inits"
 data Defn_RepeatedEnumCase 
   = Defn_RepeatedEnumCase {
     defn_RepeatedEnumCaseMods :: [Mod],
-    defn_RepeatedEnumCaseCases :: [Term_Name]}
+    defn_RepeatedEnumCaseCases :: [Data_Name]}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_RepeatedEnumCase = "hydra/ext/scala/meta.Defn.RepeatedEnumCase"
@@ -1759,9 +1759,9 @@ data Defn_GivenAlias
     defn_GivenAliasMods :: [Mod],
     defn_GivenAliasName :: Name,
     defn_GivenAliasTparams :: [[Type_Param]],
-    defn_GivenAliasSparams :: [[Term_Param]],
+    defn_GivenAliasSparams :: [[Data_Param]],
     defn_GivenAliasDecltpe :: Type,
-    defn_GivenAliasBody :: Term}
+    defn_GivenAliasBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_GivenAlias = "hydra/ext/scala/meta.Defn.GivenAlias"
@@ -1782,7 +1782,7 @@ _Defn_GivenAlias_body = "body"
 data Defn_ExtensionGroup 
   = Defn_ExtensionGroup {
     defn_ExtensionGroupTparams :: [Type_Param],
-    defn_ExtensionGroupParmss :: [[Term_Param]],
+    defn_ExtensionGroupParmss :: [[Data_Param]],
     defn_ExtensionGroupBody :: Stat}
   deriving (Eq, Ord, Read, Show)
 
@@ -1798,11 +1798,11 @@ _Defn_ExtensionGroup_body = "body"
 data Defn_Def 
   = Defn_Def {
     defn_DefMods :: [Mod],
-    defn_DefName :: Term_Name,
+    defn_DefName :: Data_Name,
     defn_DefTparams :: [Type_Param],
-    defn_DefParamss :: [[Term_Param]],
+    defn_DefParamss :: [[Data_Param]],
     defn_DefDecltpe :: (Maybe Type),
-    defn_DefBody :: Term}
+    defn_DefBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_Def = "hydra/ext/scala/meta.Defn.Def"
@@ -1823,11 +1823,11 @@ _Defn_Def_body = "body"
 data Defn_Macro 
   = Defn_Macro {
     defn_MacroMods :: [Mod],
-    defn_MacroName :: Term_Name,
+    defn_MacroName :: Data_Name,
     defn_MacroTparams :: [Type_Param],
-    defn_MacroParamss :: [[Term_Param]],
+    defn_MacroParamss :: [[Data_Param]],
     defn_MacroDecltpe :: (Maybe Type),
-    defn_MacroBody :: Term}
+    defn_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_Macro = "hydra/ext/scala/meta.Defn.Macro"
@@ -1909,7 +1909,7 @@ _Defn_Trait_template = "template"
 
 
 data Defn_Object 
-  = Defn_Object {defn_ObjectName :: Term_Name}
+  = Defn_Object {defn_ObjectName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
 _Defn_Object = "hydra/ext/scala/meta.Defn.Object"
@@ -1919,8 +1919,8 @@ _Defn_Object_name = "name"
 
 data Pkg 
   = Pkg {
-    pkgName :: Term_Name,
-    pkgRef :: Term_Ref,
+    pkgName :: Data_Name,
+    pkgRef :: Data_Ref,
     pkgStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
@@ -1936,7 +1936,7 @@ _Pkg_stats = "stats"
 data Pkg_Object 
   = Pkg_Object {
     pkg_ObjectMods :: [Mod],
-    pkg_ObjectName :: Term_Name,
+    pkg_ObjectName :: Data_Name,
     pkg_ObjectTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
 
@@ -1965,7 +1965,7 @@ data Ctor_Primary
   = Ctor_Primary {
     ctor_PrimaryMods :: [Mod],
     ctor_PrimaryName :: Name,
-    ctor_PrimaryParamss :: [[Term_Param]]}
+    ctor_PrimaryParamss :: [[Data_Param]]}
   deriving (Eq, Ord, Read, Show)
 
 _Ctor_Primary = "hydra/ext/scala/meta.Ctor.Primary"
@@ -1981,7 +1981,7 @@ data Ctor_Secondary
   = Ctor_Secondary {
     ctor_SecondaryMods :: [Mod],
     ctor_SecondaryName :: Name,
-    ctor_SecondaryParamss :: [[Term_Param]],
+    ctor_SecondaryParamss :: [[Data_Param]],
     ctor_SecondaryInit :: Init,
     ctor_SecondaryStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
@@ -2003,7 +2003,7 @@ data Init
   = Init {
     initTpe :: Type,
     initName :: Name,
-    initArgss :: [[Term]]}
+    initArgss :: [[Data]]}
   deriving (Eq, Ord, Read, Show)
 
 _Init = "hydra/ext/scala/meta.Init"
@@ -2158,7 +2158,7 @@ _Enumerator_guard = "guard"
 data Enumerator_Generator 
   = Enumerator_Generator {
     enumerator_GeneratorPat :: Pat,
-    enumerator_GeneratorRhs :: Term}
+    enumerator_GeneratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Enumerator_Generator = "hydra/ext/scala/meta.Enumerator.Generator"
@@ -2171,7 +2171,7 @@ _Enumerator_Generator_rhs = "rhs"
 data Enumerator_CaseGenerator 
   = Enumerator_CaseGenerator {
     enumerator_CaseGeneratorPat :: Pat,
-    enumerator_CaseGeneratorRhs :: Term}
+    enumerator_CaseGeneratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Enumerator_CaseGenerator = "hydra/ext/scala/meta.Enumerator.CaseGenerator"
@@ -2184,7 +2184,7 @@ _Enumerator_CaseGenerator_rhs = "rhs"
 data Enumerator_Val 
   = Enumerator_Val {
     enumerator_ValPat :: Pat,
-    enumerator_ValRhs :: Term}
+    enumerator_ValRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Enumerator_Val = "hydra/ext/scala/meta.Enumerator.Val"
@@ -2195,7 +2195,7 @@ _Enumerator_Val_rhs = "rhs"
 
 
 data Enumerator_Guard 
-  = Enumerator_Guard {enumerator_GuardCond :: Term}
+  = Enumerator_Guard {enumerator_GuardCond :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Enumerator_Guard = "hydra/ext/scala/meta.Enumerator.Guard"
@@ -2235,7 +2235,7 @@ _Export_importers = "importers"
 
 data Importer 
   = Importer {
-    importerRef :: Term_Ref,
+    importerRef :: Data_Ref,
     importerImportees :: [Importee]}
   deriving (Eq, Ord, Read, Show)
 
@@ -2325,8 +2325,8 @@ _CaseTree_typeCase = "typeCase"
 data Case 
   = Case {
     casePat :: Pat,
-    caseCond :: (Maybe Term),
-    caseBody :: Term}
+    caseCond :: (Maybe Data),
+    caseBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
 _Case = "hydra/ext/scala/meta.Case"

@@ -8,8 +8,8 @@ import Data.Set
 data Element m 
   = Element {
     elementName :: Core.Name,
-    elementSchema :: (Core.Term m),
-    elementData :: (Core.Term m)}
+    elementSchema :: (Core.Data m),
+    elementData :: (Core.Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _Element = "hydra/graph.Element"
@@ -25,7 +25,7 @@ data Graph m
   = Graph {
     graphName :: GraphName,
     graphElements :: [Element m],
-    graphDataTerms :: (Core.Term m -> Bool),
+    graphDataTerms :: (Core.Data m -> Bool),
     graphSchemaGraph :: GraphName}
 
 _Graph = "hydra/graph.Graph"
