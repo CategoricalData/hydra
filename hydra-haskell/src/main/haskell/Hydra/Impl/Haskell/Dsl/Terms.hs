@@ -176,6 +176,9 @@ requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
 set :: Default a => S.Set (Data a) -> Data a
 set = defaultData . DataTermSet
 
+setMeta :: m -> Data m -> Data m
+setMeta meta dat = dat {dataMeta = meta}
+
 stringList :: Default a => [String] -> Data a
 stringList l = list (stringValue <$> l)
 

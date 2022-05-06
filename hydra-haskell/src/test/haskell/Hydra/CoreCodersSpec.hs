@@ -22,49 +22,49 @@ individualEncoderTestCases = do
     H.it "string literal type" $ do
       H.shouldBe
         (stripMeta $ encodeLiteralType testContext LiteralTypeString)
-        (stripMeta $  unitVar _LiteralType _LiteralType_string)
+        (stripMeta $ unitVariant _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext Types.string)
-        (stripMeta $  var _Type _TypeTerm_literal (unitVar _LiteralType _LiteralType_string))
+        (stripMeta $  variant _TypeTerm_literal (unitVariant _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext Types.int32)
-        (stripMeta $ var _Type _TypeTerm_literal (var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int32))
+        (stripMeta $ variant _TypeTerm_literal (variant _LiteralType_integer $ unitVariant _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (stripMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
-        (stripMeta $ var _Type _TypeTerm_record $ list [
+        (stripMeta $ variant _TypeTerm_record $ list [
           record [
             Field _FieldType_name $ stringValue "something",
-            Field _FieldType_type $ var _Type _TypeTerm_literal $ unitVar _LiteralType _LiteralType_string],
+            Field _FieldType_type $ variant _TypeTerm_literal $ unitVariant _LiteralType_string],
           record [
             Field _FieldType_name $ stringValue "nothing",
-            Field _FieldType_type $ var _Type _TypeTerm_record $ list []]])
+            Field _FieldType_type $ variant _TypeTerm_record $ list []]])
 
 individualDecoderTestCases :: H.SpecWith ()
 individualDecoderTestCases = do
   H.describe "Individual decoder test cases" $ do
 
     H.it "float32 literal type" $ do
-      decodeLiteralType testContext (var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float32) `H.shouldBe`
+      decodeLiteralType testContext (variant _LiteralType_float $ unitVariant _FloatType_float32) `H.shouldBe`
         pure (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
-      decodeType testContext (var _Type _TypeTerm_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float32)
+      decodeType testContext (variant _TypeTerm_literal $ variant _LiteralType_float $ unitVariant _FloatType_float32)
         `H.shouldBe` pure Types.float32
 
     H.it "union type" $ do
-      decodeType testContext (var _Type _TypeTerm_union $ list [
+      decodeType testContext (variant _TypeTerm_union $ list [
         record [
           Field _FieldType_name $ stringValue "left",
-          Field _FieldType_type $ var _Type _TypeTerm_literal $ var _LiteralType _LiteralType_integer $ unitVar _IntegerType _IntegerType_int64],
+          Field _FieldType_type $ variant _TypeTerm_literal $ variant _LiteralType_integer $ unitVariant _IntegerType_int64],
         record [
           Field _FieldType_name $ stringValue "right",
-          Field _FieldType_type $ var _Type _TypeTerm_literal $ var _LiteralType _LiteralType_float $ unitVar _FloatType _FloatType_float64]])
+          Field _FieldType_type $ variant _TypeTerm_literal $ variant _LiteralType_float $ unitVariant _FloatType_float64]])
         `H.shouldBe` pure (Types.union [Types.field "left" Types.int64, Types.field "right" Types.float64])
 
 decodeInvalidTerms :: H.SpecWith ()
@@ -72,10 +72,10 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      isFailure (decodeType testContext $ var untyped "unknownField" $ list []) `H.shouldBe` True
+      isFailure (decodeType testContext $ nominalVariant testContext untyped "unknownField" $ list []) `H.shouldBe` True
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      isFailure (decodeType testContext$ var _Type _TypeTerm_literal $ unitVar _LiteralType _LiteralType_integer) `H.shouldBe` True
+      isFailure (decodeType testContext$ variant _TypeTerm_literal $ unitVariant _LiteralType_integer) `H.shouldBe` True
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

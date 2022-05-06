@@ -32,17 +32,17 @@ encodeApplication cx (Application f a) = nominalRecord cx _Application [
 
 encodeLiteralType :: Default m => Context m -> LiteralType -> Data m
 encodeLiteralType cx at = case at of
-  LiteralTypeBinary -> nominalUnitVariant cx _LiteralType _LiteralType_binary
-  LiteralTypeBoolean -> nominalUnitVariant cx _LiteralType _LiteralType_boolean
-  LiteralTypeFloat ft -> nominalVariant cx _LiteralType _LiteralType_float $ encodeFloatType cx ft
-  LiteralTypeInteger it -> nominalVariant cx _LiteralType _LiteralType_integer $ encodeIntegerType cx it
-  LiteralTypeString -> nominalUnitVariant cx _LiteralType _LiteralType_string
+  LiteralTypeBinary -> unitVariant _LiteralType_binary
+  LiteralTypeBoolean -> unitVariant _LiteralType_boolean
+  LiteralTypeFloat ft -> variant _LiteralType_float $ encodeFloatType cx ft
+  LiteralTypeInteger it -> variant _LiteralType_integer $ encodeIntegerType cx it
+  LiteralTypeString -> unitVariant _LiteralType_string
 
 encodeLiteral :: Default m => Context m -> Literal -> Data m
 encodeLiteral cx = atomic
 
 encodeLiteralVariant :: Default m => Context m -> LiteralVariant -> Data m
-encodeLiteralVariant cx av = nominalUnitVariant cx _LiteralVariant $ case av of
+encodeLiteralVariant cx av = unitVariant $ case av of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
   LiteralVariantFloat -> _LiteralVariant_float
@@ -60,20 +60,20 @@ encodeFieldType cx (FieldType fname t) = nominalRecord cx _FieldType [
   Field _FieldType_type $ encodeType cx t]
 
 encodeFloatType :: Default m => Context m -> FloatType -> Data m
-encodeFloatType cx ft = nominalUnitVariant cx _FloatType $ case ft of
+encodeFloatType cx ft = unitVariant $ case ft of
   FloatTypeBigfloat -> _FloatType_bigfloat
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
 encodeFunction :: (Default m, Ord m) => Context m -> Function m -> Data m
 encodeFunction cx f = case f of
-  FunctionCases cases -> nominalVariant cx _Function _Function_cases $ list $ encodeField cx <$> cases
-  FunctionCompareTo other -> nominalVariant cx _Function _Function_compareTo $ encodeData cx other
-  FunctionDelta -> nominalUnitVariant cx _Function _Function_delta
-  FunctionLambda l -> nominalVariant cx _Function _Function_lambda $ encodeLambda cx l
-  FunctionOptionalCases cases -> nominalVariant cx _Function _Function_optionalCases $ encodeOptionalCases cx cases
-  FunctionPrimitive name -> nominalVariant cx _Function _Function_primitive $ stringValue name
-  FunctionProjection fname -> nominalVariant cx _Function _Function_projection $ stringValue fname
+  FunctionCases cases -> variant _Function_cases $ list $ encodeField cx <$> cases
+  FunctionCompareTo other -> variant _Function_compareTo $ encodeData cx other
+  FunctionDelta -> unitVariant _Function_delta
+  FunctionLambda l -> variant _Function_lambda $ encodeLambda cx l
+  FunctionOptionalCases cases -> variant _Function_optionalCases $ encodeOptionalCases cx cases
+  FunctionPrimitive name -> variant _Function_primitive $ stringValue name
+  FunctionProjection fname -> variant _Function_projection $ stringValue fname
 
 encodeFunctionType :: Default m => Context m -> FunctionType m -> Data m
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
@@ -81,7 +81,7 @@ encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
   Field _FunctionType_codomain $ encodeType cx cod]
 
 encodeIntegerType :: Default m => Context m -> IntegerType -> Data m
-encodeIntegerType cx it = nominalUnitVariant cx _IntegerType $ case it of
+encodeIntegerType cx it = unitVariant $ case it of
   IntegerTypeBigint -> _IntegerType_bigint
   IntegerTypeInt8 -> _IntegerType_int8
   IntegerTypeInt16 -> _IntegerType_int16
@@ -114,37 +114,37 @@ encodeOptionalCases cx (OptionalCases nothing just) = nominalRecord cx _Optional
 
 encodeData :: (Default m, Ord m) => Context m -> Data m -> Data m
 encodeData cx term = case dataTerm term of
-  DataTermApplication a -> nominalVariant cx _DataTerm _DataTerm_application $ encodeApplication cx a
-  DataTermLiteral av -> nominalVariant cx _DataTerm _DataTerm_literal $ encodeLiteral cx av
-  DataTermElement name -> nominalVariant cx _DataTerm _DataTerm_element $ stringValue name
-  DataTermFunction f -> nominalVariant cx _DataTerm _DataTerm_function $ encodeFunction cx f
-  DataTermList terms -> nominalVariant cx _DataTerm _DataTerm_list $ list $ encodeData cx <$> terms
-  DataTermMap m -> nominalVariant cx _DataTerm _DataTerm_map $ map $ M.fromList $ encodePair <$> M.toList m
+  DataTermApplication a -> variant _DataTerm_application $ encodeApplication cx a
+  DataTermLiteral av -> variant _DataTerm_literal $ encodeLiteral cx av
+  DataTermElement name -> variant _DataTerm_element $ stringValue name
+  DataTermFunction f -> variant _DataTerm_function $ encodeFunction cx f
+  DataTermList terms -> variant _DataTerm_list $ list $ encodeData cx <$> terms
+  DataTermMap m -> variant _DataTerm_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeData cx k, encodeData cx v)
-  DataTermNominal ntt -> nominalVariant cx _DataTerm _DataTerm_nominal $ encodeNamed cx ntt
-  DataTermOptional m -> nominalVariant cx _DataTerm _DataTerm_optional $ optional $ encodeData cx <$> m
-  DataTermRecord fields -> nominalVariant cx _DataTerm _DataTerm_record $ list $ encodeField cx <$> fields
-  DataTermSet terms -> nominalVariant cx _DataTerm _DataTerm_set $ set $ S.fromList $ encodeData cx <$> S.toList terms
-  DataTermUnion field -> nominalVariant cx _DataTerm _DataTerm_union $ encodeField cx field
-  DataTermVariable var -> nominalVariant cx _DataTerm _DataTerm_variable $ stringValue var
+  DataTermNominal ntt -> variant _DataTerm_nominal $ encodeNamed cx ntt
+  DataTermOptional m -> variant _DataTerm_optional $ optional $ encodeData cx <$> m
+  DataTermRecord fields -> variant _DataTerm_record $ list $ encodeField cx <$> fields
+  DataTermSet terms -> variant _DataTerm_set $ set $ S.fromList $ encodeData cx <$> S.toList terms
+  DataTermUnion field -> variant _DataTerm_union $ encodeField cx field
+  DataTermVariable var -> variant _DataTerm_variable $ stringValue var
 
 encodeType :: Default m => Context m -> Type m -> Data m
-encodeType cx typ = case typeTerm typ of
-  TypeTermLiteral at -> nominalVariant cx _TypeTerm _TypeTerm_literal $ encodeLiteralType cx at
-  TypeTermElement t -> nominalVariant cx _TypeTerm _TypeTerm_element $ encodeType cx t
-  TypeTermFunction ft -> nominalVariant cx _TypeTerm _TypeTerm_function $ encodeFunctionType cx ft
-  TypeTermList t -> nominalVariant cx _TypeTerm _TypeTerm_list $ encodeType cx t
-  TypeTermMap mt -> nominalVariant cx _TypeTerm _TypeTerm_map $ encodeMapType cx mt
-  TypeTermNominal name -> nominalVariant cx _TypeTerm _TypeTerm_nominal $ element name
-  TypeTermOptional t -> nominalVariant cx _TypeTerm _TypeTerm_optional $ encodeType cx t
-  TypeTermRecord fields -> nominalVariant cx _TypeTerm _TypeTerm_record $ list $ fmap (encodeFieldType cx) fields
-  TypeTermSet t -> nominalVariant cx _TypeTerm _TypeTerm_set $ encodeType cx t
-  TypeTermUnion fields -> nominalVariant cx _TypeTerm _TypeTerm_union $ list $ fmap (encodeFieldType cx) fields
-  TypeTermUniversal ut -> nominalVariant cx _TypeTerm _TypeTerm_universal $ encodeUniversalType cx ut
-  TypeTermVariable var -> nominalVariant cx _TypeTerm _TypeTerm_variable $ stringValue var
+encodeType cx typ = setMeta (typeMeta typ) $ case typeTerm typ of
+  TypeTermLiteral at -> variant _TypeTerm_literal $ encodeLiteralType cx at
+  TypeTermElement t -> variant _TypeTerm_element $ encodeType cx t
+  TypeTermFunction ft -> variant _TypeTerm_function $ encodeFunctionType cx ft
+  TypeTermList t -> variant _TypeTerm_list $ encodeType cx t
+  TypeTermMap mt -> variant _TypeTerm_map $ encodeMapType cx mt
+  TypeTermNominal name -> variant _TypeTerm_nominal $ element name
+  TypeTermOptional t -> variant _TypeTerm_optional $ encodeType cx t
+  TypeTermRecord fields -> variant _TypeTerm_record $ list $ fmap (encodeFieldType cx) fields
+  TypeTermSet t -> variant _TypeTerm_set $ encodeType cx t
+  TypeTermUnion fields -> variant _TypeTerm_union $ list $ fmap (encodeFieldType cx) fields
+  TypeTermUniversal ut -> variant _TypeTerm_universal $ encodeUniversalType cx ut
+  TypeTermVariable var -> variant _TypeTerm_variable $ stringValue var
 
 encodeTypeVariant :: Default m => Context m -> TypeVariant -> Data m
-encodeTypeVariant cx tv = nominalUnitVariant cx _TypeVariant $ case tv of
+encodeTypeVariant cx tv = unitVariant $ case tv of
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantElement -> _TypeVariant_element
   TypeVariantFunction -> _TypeVariant_function
