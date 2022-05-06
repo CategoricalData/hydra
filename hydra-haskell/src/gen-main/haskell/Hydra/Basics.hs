@@ -141,40 +141,40 @@ qname ns name = (
     name])
 
 -- Find the term variant (constructor) for a given term
-termVariant :: (Core.Term m -> Core.TermVariant)
+termVariant :: (Core.Data m -> Core.DataVariant)
 termVariant term = (
   (
     \x -> case x of
-      Core.ExpressionApplication _ -> Core.TermVariantApplication
-      Core.ExpressionElement _ -> Core.TermVariantElement
-      Core.ExpressionFunction _ -> Core.TermVariantFunction
-      Core.ExpressionList _ -> Core.TermVariantList
-      Core.ExpressionLiteral _ -> Core.TermVariantLiteral
-      Core.ExpressionMap _ -> Core.TermVariantMap
-      Core.ExpressionNominal _ -> Core.TermVariantNominal
-      Core.ExpressionOptional _ -> Core.TermVariantOptional
-      Core.ExpressionRecord _ -> Core.TermVariantRecord
-      Core.ExpressionSet _ -> Core.TermVariantSet
-      Core.ExpressionTypeAbstraction _ -> Core.TermVariantTypeAbstraction
-      Core.ExpressionTypeApplication _ -> Core.TermVariantTypeApplication
-      Core.ExpressionUnion _ -> Core.TermVariantUnion
-      Core.ExpressionVariable _ -> Core.TermVariantVariable) (Core.termData term))
+      Core.DataTermApplication _ -> Core.DataVariantApplication
+      Core.DataTermElement _ -> Core.DataVariantElement
+      Core.DataTermFunction _ -> Core.DataVariantFunction
+      Core.DataTermList _ -> Core.DataVariantList
+      Core.DataTermLiteral _ -> Core.DataVariantLiteral
+      Core.DataTermMap _ -> Core.DataVariantMap
+      Core.DataTermNominal _ -> Core.DataVariantNominal
+      Core.DataTermOptional _ -> Core.DataVariantOptional
+      Core.DataTermRecord _ -> Core.DataVariantRecord
+      Core.DataTermSet _ -> Core.DataVariantSet
+      Core.DataTermTypeAbstraction _ -> Core.DataVariantTypeAbstraction
+      Core.DataTermTypeApplication _ -> Core.DataVariantTypeApplication
+      Core.DataTermUnion _ -> Core.DataVariantUnion
+      Core.DataTermVariable _ -> Core.DataVariantVariable) (Core.dataTerm term))
 
 -- All term (expression) variants, in a canonical order
-termVariants :: [Core.TermVariant]
+termVariants :: [Core.DataVariant]
 termVariants = [
-  Core.TermVariantApplication,
-  Core.TermVariantLiteral,
-  Core.TermVariantElement,
-  Core.TermVariantFunction,
-  Core.TermVariantList,
-  Core.TermVariantMap,
-  Core.TermVariantNominal,
-  Core.TermVariantOptional,
-  Core.TermVariantRecord,
-  Core.TermVariantSet,
-  Core.TermVariantUnion,
-  Core.TermVariantVariable]
+  Core.DataVariantApplication,
+  Core.DataVariantLiteral,
+  Core.DataVariantElement,
+  Core.DataVariantFunction,
+  Core.DataVariantList,
+  Core.DataVariantMap,
+  Core.DataVariantNominal,
+  Core.DataVariantOptional,
+  Core.DataVariantRecord,
+  Core.DataVariantSet,
+  Core.DataVariantUnion,
+  Core.DataVariantVariable]
 
 -- TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)
@@ -185,18 +185,18 @@ typeVariant :: (Core.Type m -> Core.TypeVariant)
 typeVariant typ = (
   (
     \x -> case x of
-      Core.TypeExprElement _ -> Core.TypeVariantElement
-      Core.TypeExprFunction _ -> Core.TypeVariantFunction
-      Core.TypeExprList _ -> Core.TypeVariantList
-      Core.TypeExprLiteral _ -> Core.TypeVariantLiteral
-      Core.TypeExprMap _ -> Core.TypeVariantMap
-      Core.TypeExprNominal _ -> Core.TypeVariantNominal
-      Core.TypeExprOptional _ -> Core.TypeVariantOptional
-      Core.TypeExprRecord _ -> Core.TypeVariantRecord
-      Core.TypeExprSet _ -> Core.TypeVariantSet
-      Core.TypeExprUnion _ -> Core.TypeVariantUnion
-      Core.TypeExprUniversal _ -> Core.TypeVariantUniversal
-      Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeData typ))
+      Core.TypeTermElement _ -> Core.TypeVariantElement
+      Core.TypeTermFunction _ -> Core.TypeVariantFunction
+      Core.TypeTermList _ -> Core.TypeVariantList
+      Core.TypeTermLiteral _ -> Core.TypeVariantLiteral
+      Core.TypeTermMap _ -> Core.TypeVariantMap
+      Core.TypeTermNominal _ -> Core.TypeVariantNominal
+      Core.TypeTermOptional _ -> Core.TypeVariantOptional
+      Core.TypeTermRecord _ -> Core.TypeVariantRecord
+      Core.TypeTermSet _ -> Core.TypeVariantSet
+      Core.TypeTermUnion _ -> Core.TypeVariantUnion
+      Core.TypeTermUniversal _ -> Core.TypeVariantUniversal
+      Core.TypeTermVariable _ -> Core.TypeVariantVariable) (Core.typeTerm typ))
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]

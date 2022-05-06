@@ -18,7 +18,7 @@ module Hydra.Evaluation
   , _Context_strategy
   , _Context_typeOf
   , _EvaluationStrategy
-  , _EvaluationStrategy_opaqueTermVariants
+  , _EvaluationStrategy_opaqueDataVariants
   , _InputSpec
   , _InputSpec_type
   , _InputSpec_unmarshal
@@ -110,8 +110,8 @@ data EvaluationStrategy
     {-| Whether a term of a given variant is considered to be fully reduced,
         without further inspection
 
-        @type set: hydra/core.TermVariant -}
-    { evaluationStrategyOpaqueTermVariants :: (Set (TermVariant)) } deriving (Eq, Generic, Ord, Read, Show)
+        @type set: hydra/core.DataVariant -}
+    { evaluationStrategyOpaqueDataVariants :: (Set (DataVariant)) } deriving (Eq, Generic, Ord, Read, Show)
 
 {-| A helper object for specifying and unmarshalling an argument to a primitive
     function -}
@@ -122,7 +122,7 @@ data InputSpec a m
     {-| @type function:
                 from:
                 - parameterized:
-                    genericType: hydra/core.Term
+                    genericType: hydra/core.Data
                     parameters:
                     - type:
                         variable: m
@@ -134,7 +134,7 @@ data InputSpec a m
                     - type:
                         variable: a
                       variable: a -}
-    , inputSpecUnmarshal :: (Term m) -> (Result a) }
+    , inputSpecUnmarshal :: (Data m) -> (Result a) }
 
 {-| A helper object for specifying and marshalling the output of a primitive
     function -}
@@ -147,12 +147,12 @@ data OutputSpec a m
                 - variable: a
                 to:
                   parameterized:
-                    genericType: hydra/core.Term
+                    genericType: hydra/core.Data
                     parameters:
                     - type:
                         variable: m
                       variable: a -}
-    , outputSpecMarshal :: a -> (Term m) }
+    , outputSpecMarshal :: a -> (Data m) }
 
 data PrimitiveFunction a
   = PrimitiveFunction
@@ -164,7 +164,7 @@ data PrimitiveFunction a
                 from:
                 - list:
                     parameterized:
-                      genericType: hydra/core.Term
+                      genericType: hydra/core.Data
                       parameters:
                       - type:
                           variable: a
@@ -175,13 +175,13 @@ data PrimitiveFunction a
                     parameters:
                     - type:
                         parameterized:
-                          genericType: hydra/core.Term
+                          genericType: hydra/core.Data
                           parameters:
                           - type:
                               variable: a
                             variable: a
                       variable: a -}
-    , primitiveFunctionImplementation :: [Term a] -> (Result (Term a)) }
+    , primitiveFunctionImplementation :: [Data a] -> (Result (Data a)) }
 
 data Result a
   -- | @type variable: a
@@ -228,7 +228,7 @@ _Context_setTypeOf = "setTypeOf" :: String
 _Context_strategy = "strategy" :: String
 _Context_typeOf = "typeOf" :: String
 _EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
-_EvaluationStrategy_opaqueTermVariants = "opaqueTermVariants" :: String
+_EvaluationStrategy_opaqueDataVariants = "opaqueDataVariants" :: String
 _InputSpec = "hydra/evaluation.InputSpec" :: String
 _InputSpec_type = "type" :: String
 _InputSpec_unmarshal = "unmarshal" :: String

@@ -34,20 +34,20 @@ dataGraphToScalaString cx g = do
   return $ printExpr $ parenthesize $ writePkg pkg
 
 writeCase :: Scala.Case -> CT.Expr
-writeCase (Scala.Case pat _ term) = spaceSep [cst "case", writePat pat, cst "=>", writeTerm term]
+writeCase (Scala.Case pat _ term) = spaceSep [cst "case", writePat pat, cst "=>", writeData term]
 
 writeDefn :: Scala.Defn -> CT.Expr
 writeDefn def = case def of
   Scala.DefnDef (Scala.Defn_Def _ name tparams [params] scod body) -> spaceSep [
-      cst "def", nameAndParams, cst "=", writeTerm body]
+      cst "def", nameAndParams, cst "=", writeData body]
     where
       nameAndParams = noSep $ Y.catMaybes [
-        Just $ writeTerm_Name name,
+        Just $ writeData_Name name,
         if L.null tparams then Nothing else Just $ bracketList False (writeType_Param <$> tparams),
-        Just $ parenList (writeTerm_Param <$> params),
+        Just $ parenList (writeData_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
-  Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Term_Name name))] typ term) -> spaceSep [
-      cst "val", nameAndType, cst "=", writeTerm term]
+  Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name name))] typ term) -> spaceSep [
+      cst "val", nameAndType, cst "=", writeData term]
     where
       nameAndType = Y.maybe (cst name) (\t -> spaceSep [cst $ name ++ ":", writeType t]) typ
 
@@ -57,7 +57,7 @@ writeImportExportStat ie = case ie of
 --  Scala.ImportExportStatExport exp ->
 
 writeImporter :: Scala.Importer -> CT.Expr
-writeImporter (Scala.Importer (Scala.Term_RefName (Scala.Term_Name ref)) importees) = spaceSep [
+writeImporter (Scala.Importer (Scala.Data_RefName (Scala.Data_Name ref)) importees) = spaceSep [
     cst "import", noSep [cst ref, forImportees importees]]
   where
     forImportee it = cst $ case it of
@@ -90,53 +90,53 @@ writeName name = case name of
 
 writePat :: Scala.Pat -> CT.Expr
 writePat pat = case pat of
-  Scala.PatExtract (Scala.Pat_Extract fun args) -> noSep [writeTerm fun, parenList (writePat <$> args)]
-  Scala.PatVar (Scala.Pat_Var tname) -> writeTerm_Name tname
+  Scala.PatExtract (Scala.Pat_Extract fun args) -> noSep [writeData fun, parenList (writePat <$> args)]
+  Scala.PatVar (Scala.Pat_Var tname) -> writeData_Name tname
 
 writePkg :: Scala.Pkg -> CT.Expr
 writePkg (Scala.Pkg name _ stats) = doubleNewlineSep $ package:(writeStat <$> stats)
   where
-    package = spaceSep [cst "package", writeTerm_Name name]
+    package = spaceSep [cst "package", writeData_Name name]
 
 writeStat :: Scala.Stat -> CT.Expr
 writeStat stat = case stat of
---  Scala.StatTerm Term ->
+--  Scala.StatData Data ->
 --  Scala.StatDecl Decl ->
   Scala.StatDefn def -> writeDefn def
   Scala.StatImportExport ie -> writeImportExportStat ie
 
-writeTerm :: Scala.Term -> CT.Expr
-writeTerm term = case term of
-  Scala.TermLit lit -> writeLit lit
-  Scala.TermRef ref -> writeTerm_Ref ref
-  Scala.TermApply (Scala.Term_Apply fun args) -> noSep [writeTerm fun, parenList (writeTerm <$> args)]
-  Scala.TermAssign assign -> cst ">ASSIGN"
-  Scala.TermTuple (Scala.Term_Tuple args) -> parenList (writeTerm <$> args)
-  Scala.TermMatch (Scala.Term_Match expr cases) -> ifx matchOp (writeTerm expr) $ newlineSep (writeCase <$> cases)
-  Scala.TermFunctionTerm ft -> writeTerm_FunctionTerm ft
+writeData :: Scala.Data -> CT.Expr
+writeData term = case term of
+  Scala.DataLit lit -> writeLit lit
+  Scala.DataRef ref -> writeData_Ref ref
+  Scala.DataApply (Scala.Data_Apply fun args) -> noSep [writeData fun, parenList (writeData <$> args)]
+  Scala.DataAssign assign -> cst ">ASSIGN"
+  Scala.DataTuple (Scala.Data_Tuple args) -> parenList (writeData <$> args)
+  Scala.DataMatch (Scala.Data_Match expr cases) -> ifx matchOp (writeData expr) $ newlineSep (writeCase <$> cases)
+  Scala.DataFunctionData ft -> writeData_FunctionData ft
 
-writeTerm_FunctionTerm :: Scala.Term_FunctionTerm -> CT.Expr
-writeTerm_FunctionTerm ft = case ft of
-  Scala.Term_FunctionTermFunction (Scala.Term_Function params body) ->
-    spaceSep [parenList (writeTerm_Param <$> params), cst "=>", writeTerm body]
+writeData_FunctionData :: Scala.Data_FunctionData -> CT.Expr
+writeData_FunctionData ft = case ft of
+  Scala.Data_FunctionDataFunction (Scala.Data_Function params body) ->
+    spaceSep [parenList (writeData_Param <$> params), cst "=>", writeData body]
 
-writeTerm_Name :: Scala.Term_Name -> CT.Expr
-writeTerm_Name (Scala.Term_Name name) = cst name
+writeData_Name :: Scala.Data_Name -> CT.Expr
+writeData_Name (Scala.Data_Name name) = cst name
 
-writeTerm_Param :: Scala.Term_Param -> CT.Expr
-writeTerm_Param (Scala.Term_Param _ name stype _) = noSep $ Y.catMaybes [
+writeData_Param :: Scala.Data_Param -> CT.Expr
+writeData_Param (Scala.Data_Param _ name stype _) = noSep $ Y.catMaybes [
   Just $ writeName name,
   fmap (\t -> spaceSep [cst ":", writeType t]) stype]
 
-writeTerm_Ref :: Scala.Term_Ref -> CT.Expr
-writeTerm_Ref ref = case ref of
-  Scala.Term_RefName name -> writeTerm_Name name
-  Scala.Term_RefSelect sel -> writeTerm_Select sel
+writeData_Ref :: Scala.Data_Ref -> CT.Expr
+writeData_Ref ref = case ref of
+  Scala.Data_RefName name -> writeData_Name name
+  Scala.Data_RefSelect sel -> writeData_Select sel
 
-writeTerm_Select :: Scala.Term_Select -> CT.Expr
-writeTerm_Select (Scala.Term_Select arg name) = ifx dotOp (writeTerm arg) (writeTerm proj)
+writeData_Select :: Scala.Data_Select -> CT.Expr
+writeData_Select (Scala.Data_Select arg name) = ifx dotOp (writeData arg) (writeData proj)
   where
-    proj = Scala.TermRef $ Scala.Term_RefName name
+    proj = Scala.DataRef $ Scala.Data_RefName name
 
 writeType :: Scala.Type -> CT.Expr
 writeType typ = case typ of

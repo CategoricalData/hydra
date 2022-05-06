@@ -17,19 +17,19 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 
 
-testEvaluate :: Term Meta -> Result (Term Meta)
+testEvaluate :: Data Meta -> Result (Data Meta)
 testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap hydraBasics }) term
 
-testsForTermTypeExprFunctions :: H.SpecWith a
-testsForTermTypeExprFunctions = do
+testsForDataTypeTermFunctions :: H.SpecWith a
+testsForDataTypeTermFunctions = do
   H.describe "Tests for DSL-defined term-to-type functions" $ do
     return ()
 --    literalType,
 --    floatValueType,
 --    integerValueType,
 
-testsForTermVariantFunctions :: H.SpecWith a
-testsForTermVariantFunctions = do
+testsForDataVariantFunctions :: H.SpecWith a
+testsForDataVariantFunctions = do
   H.describe "Tests for DSL-defined term-to-variant functions" $ do
     return ()
 --    literalVariant,
@@ -56,6 +56,6 @@ testsForTypeVariantFunctions = do
 
 spec :: H.Spec
 spec = do
-  testsForTermTypeExprFunctions
-  testsForTermVariantFunctions
+  testsForDataTypeTermFunctions
+  testsForDataVariantFunctions
   testsForTypeVariantFunctions

@@ -16,15 +16,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-checkType :: Term (Meta, Type Meta, [Constraint Meta]) -> Type Meta -> H.Expectation
+checkType :: Data (Meta, Type Meta, [Constraint Meta]) -> Type Meta -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
-    typeAnn (Term _ (_, typ, _)) = typ
+    typeAnn (Data _ (_, typ, _)) = typ
 
-expectMonotype :: Term Meta -> Type Meta -> H.Expectation
+expectMonotype :: Data Meta -> Type Meta -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term Meta-> [TypeVariable] -> Type Meta -> H.Expectation
+expectPolytype :: Data Meta-> [TypeVariable] -> Type Meta -> H.Expectation
 expectPolytype term vars typ = do
     let result = inferType testContext term
     snd <$> result `H.shouldBe` ResultSuccess (TypeScheme vars typ)
@@ -43,7 +43,7 @@ checkApplicationTerms = do
 
     H.it "Check data (delta) applications" $ do
       expectMonotype
-        (apply dataTerm (element "ArthurDent"))
+        (apply delta (element "ArthurDent"))
         testTypePerson
 --      expectMonotype
 --        (apply dataTerm describeType)
@@ -94,7 +94,7 @@ checkFunctionTerms = do
           Types.boolean)
       expectPolytype
         (cases [
-          Field "person" (apply dataTerm (element "firstName")),
+          Field "person" (apply delta (element "firstName")),
           Field "other" (lambda "x" (stringValue "NONE"))])
         ["v1"] (Types.function
           (Types.union [
@@ -122,7 +122,7 @@ checkIndividualTerms = do
 
     H.it "Check let terms" $ do
       expectPolytype
-        (letTerm "x" (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
+        (letData "x" (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
         ["v1", "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
 
     H.it "Check elements" $ do
@@ -164,20 +164,20 @@ checkIndividualTerms = do
 
     H.it "Check maps" $ do
       expectMonotype
-        (mapTerm $ M.fromList [(stringValue "firstName", stringValue "Arthur"), (stringValue "lastName", stringValue "Dent")])
+        (mapData $ M.fromList [(stringValue "firstName", stringValue "Arthur"), (stringValue "lastName", stringValue "Dent")])
         (Types.map Types.string Types.string)
       expectPolytype
-        (mapTerm M.empty)
+        (mapData M.empty)
         ["v1", "v2"] (Types.map (Types.variable "v1") (Types.variable "v2"))
       expectPolytype
-        (lambda "x" (lambda "y" (mapTerm $ M.fromList
+        (lambda "x" (lambda "y" (mapData $ M.fromList
           [(variable "x", float64Value 0.1), (variable "y", float64Value 0.2)])))
         ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") (Types.map (Types.variable "v1") Types.float64)))
 
     -- TODO: restore me, and add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
 --    H.it "Check nominal (newtype) terms" $ do
 --      expectMonotype
---        testTermArthur
+--        testDataArthur
 --        (Types.nominal "Person")
 --      expectMonotype
 --        (lambda "x" (record [
@@ -221,7 +221,7 @@ checkLiterals = do
 
     H.it "Verify that type inference preserves the literal to literal type mapping" $
       QC.property $ \l -> expectMonotype
-        (defaultTerm $ ExpressionLiteral l)
+        (defaultData $ DataTermLiteral l)
         (Types.literal $ literalType l)
 
 checkPrimitiveFunctions :: H.SpecWith ()
@@ -247,24 +247,24 @@ checkTypeAnnotations = do
 
     H.it "Check literals" $
       QC.property $ \l -> do
-        let term = defaultTerm $ ExpressionLiteral l
+        let term = defaultData $ DataTermLiteral l
         let (ResultSuccess term1) = fst <$> inferType testContext term
         checkType term1 (Types.literal $ literalType l)
 
     H.it "Check lists of literals" $
       QC.property $ \l -> do
-        let term = defaultTerm $ ExpressionList [defaultTerm $ ExpressionLiteral l]
+        let term = defaultData $ DataTermList [defaultData $ DataTermLiteral l]
         let (ResultSuccess term1) = fst <$> inferType testContext term
         checkType term1 (Types.list $ Types.literal $ literalType l)
-        let (ExpressionList [term2]) = termData term1
+        let (DataTermList [term2]) = dataTerm term1
         checkType term2 (Types.literal $ literalType l)
 
-checkTypedTerms :: H.SpecWith ()
-checkTypedTerms = do
+checkTypedDatas :: H.SpecWith ()
+checkTypedDatas = do
   H.describe "Check that term/type pairs are consistent with type inference" $ do
 
     H.it "Check arbitrary typed terms" $
-      QC.property $ \(TypedTerm typ term) -> expectMonotype term typ
+      QC.property $ \(TypedData typ term) -> expectMonotype term typ
 
 spec :: H.Spec
 spec = do
@@ -275,4 +275,4 @@ spec = do
   checkLiterals
   checkPrimitiveFunctions
   checkTypeAnnotations
---  checkTypedTerms
+--  checkTypedDatas

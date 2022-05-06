@@ -197,43 +197,43 @@ qname = standardFunction hydraBasicsName "qname"
 termVariant :: Element Meta
 termVariant = standardFunction hydraBasicsName "termVariant"
   "Find the term variant (constructor) for a given term"
-  (Types.universal "m" $ Types.nominal _Term) (Types.nominal _TermVariant) $
+  (Types.universal "m" $ Types.nominal _Data) (Types.nominal _DataVariant) $
   lambda "term" $ apply
-    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _Expression) (Types.nominal _TermVariant) [
-          (_Expression_application,     _TermVariant_application),
-          (_Expression_element,         _TermVariant_element),
-          (_Expression_function,        _TermVariant_function),
-          (_Expression_list,            _TermVariant_list),
-          (_Expression_literal,         _TermVariant_literal),
-          (_Expression_map,             _TermVariant_map),
-          (_Expression_nominal,         _TermVariant_nominal),
-          (_Expression_optional,        _TermVariant_optional),
-          (_Expression_record,          _TermVariant_record),
-          (_Expression_set,             _TermVariant_set),
-          (_Expression_typeAbstraction, _TermVariant_typeAbstraction),
-          (_Expression_typeApplication, _TermVariant_typeApplication),
-          (_Expression_union,           _TermVariant_union),
-          (_Expression_variable,        _TermVariant_variable)])
-    (apply (project (Types.universal "m" $ Types.nominal _Term) _Term_data (Types.universal "m" $ Types.nominal _Expression))
+    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _DataTerm) (Types.nominal _DataVariant) [
+          (_DataTerm_application,     _DataVariant_application),
+          (_DataTerm_element,         _DataVariant_element),
+          (_DataTerm_function,        _DataVariant_function),
+          (_DataTerm_list,            _DataVariant_list),
+          (_DataTerm_literal,         _DataVariant_literal),
+          (_DataTerm_map,             _DataVariant_map),
+          (_DataTerm_nominal,         _DataVariant_nominal),
+          (_DataTerm_optional,        _DataVariant_optional),
+          (_DataTerm_record,          _DataVariant_record),
+          (_DataTerm_set,             _DataVariant_set),
+          (_DataTerm_typeAbstraction, _DataVariant_typeAbstraction),
+          (_DataTerm_typeApplication, _DataVariant_typeApplication),
+          (_DataTerm_union,           _DataVariant_union),
+          (_DataTerm_variable,        _DataVariant_variable)])
+    (apply (project (Types.universal "m" $ Types.nominal _Data) _Data_term (Types.universal "m" $ Types.nominal _DataTerm))
       $ variable "term")
 
 termVariants :: Element Meta
 termVariants = standardElement hydraBasicsName "termVariants"
   "All term (expression) variants, in a canonical order"
-  (Types.list $ Types.nominal _TermVariant)
-  (list $ standardWithType (Types.nominal _TermVariant) . unitVariant <$> [
-    _TermVariant_application,
-    _TermVariant_literal,
-    _TermVariant_element,
-    _TermVariant_function,
-    _TermVariant_list,
-    _TermVariant_map,
-    _TermVariant_nominal,
-    _TermVariant_optional,
-    _TermVariant_record,
-    _TermVariant_set,
-    _TermVariant_union,
-    _TermVariant_variable])
+  (Types.list $ Types.nominal _DataVariant)
+  (list $ standardWithType (Types.nominal _DataVariant) . unitVariant <$> [
+    _DataVariant_application,
+    _DataVariant_literal,
+    _DataVariant_element,
+    _DataVariant_function,
+    _DataVariant_list,
+    _DataVariant_map,
+    _DataVariant_nominal,
+    _DataVariant_optional,
+    _DataVariant_record,
+    _DataVariant_set,
+    _DataVariant_union,
+    _DataVariant_variable])
 
 -- TODO: remove once there are other polymorphic functions in use
 testLists :: Element Meta
@@ -247,20 +247,20 @@ typeVariant = standardFunction hydraBasicsName "typeVariant"
   "Find the type variant (constructor) for a given type"
   (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
-    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _TypeExpr) (Types.nominal _TypeVariant) [
-        (_TypeExpr_element,   _TypeVariant_element),
-        (_TypeExpr_function,  _TypeVariant_function),
-        (_TypeExpr_list,      _TypeVariant_list),
-        (_TypeExpr_literal,   _TypeVariant_literal),
-        (_TypeExpr_map,       _TypeVariant_map),
-        (_TypeExpr_nominal,   _TypeVariant_nominal),
-        (_TypeExpr_optional,  _TypeVariant_optional),
-        (_TypeExpr_record,    _TypeVariant_record),
-        (_TypeExpr_set,       _TypeVariant_set),
-        (_TypeExpr_union,     _TypeVariant_union),
-        (_TypeExpr_universal, _TypeVariant_universal),
-        (_TypeExpr_variable,  _TypeVariant_variable)])
-    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_data (Types.universal "m" $ Types.nominal _TypeExpr))
+    (standardMatchWithVariants (Types.universal "m" $ Types.nominal _TypeTerm) (Types.nominal _TypeVariant) [
+        (_TypeTerm_element,   _TypeVariant_element),
+        (_TypeTerm_function,  _TypeVariant_function),
+        (_TypeTerm_list,      _TypeVariant_list),
+        (_TypeTerm_literal,   _TypeVariant_literal),
+        (_TypeTerm_map,       _TypeVariant_map),
+        (_TypeTerm_nominal,   _TypeVariant_nominal),
+        (_TypeTerm_optional,  _TypeVariant_optional),
+        (_TypeTerm_record,    _TypeVariant_record),
+        (_TypeTerm_set,       _TypeVariant_set),
+        (_TypeTerm_union,     _TypeVariant_union),
+        (_TypeTerm_universal, _TypeVariant_universal),
+        (_TypeTerm_variable,  _TypeVariant_variable)])
+    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_term (Types.universal "m" $ Types.nominal _TypeTerm))
       $ variable "typ")
 
 typeVariants :: Element Meta

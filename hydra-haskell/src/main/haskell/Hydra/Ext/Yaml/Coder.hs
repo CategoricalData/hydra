@@ -45,16 +45,16 @@ atomicCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) YM.Node)
+recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Data m) YM.Node)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
   where
-    encode coders term = case termData term of
-      ExpressionRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+    encode coders term = case dataTerm term of
+      DataTermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
-            (Type (TypeExprOptional _) _, Term (ExpressionOptional Nothing) _) -> pure Nothing
+            (Type (TypeTermOptional _) _, Data (DataTermOptional Nothing) _) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
@@ -68,42 +68,42 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
-termCoder typ = case typeData typ of
-  TypeExprLiteral at -> do
+termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Data m) YM.Node)
+termCoder typ = case typeTerm typ of
+  TypeTermLiteral at -> do
     ac <- atomicCoder at
     return Step {
-      stepOut = \(Term (ExpressionLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
+      stepOut = \(Data (DataTermLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
         YM.NodeScalar s -> atomic <$> stepIn ac s
         _ -> unexpected "scalar node" n}
-  TypeExprList lt -> do
+  TypeTermList lt -> do
     lc <- termCoder lt
     return Step {
-      stepOut = \(Term (ExpressionList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
+      stepOut = \(Data (DataTermList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
       stepIn = \n -> case n of
         YM.NodeSequence nodes -> list <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected "sequence" n}
-  TypeExprOptional ot -> do
+  TypeTermOptional ot -> do
     oc <- termCoder ot
     return Step {
-      stepOut = \(Term (ExpressionOptional el) _) -> Y.maybe (pure yamlNull) (stepOut oc) el,
+      stepOut = \(Data (DataTermOptional el) _) -> Y.maybe (pure yamlNull) (stepOut oc) el,
       stepIn = \n -> case n of
         YM.NodeScalar YM.ScalarNull -> pure $ optional Nothing
         _ -> optional . Just <$> stepIn oc n}
-  TypeExprMap (MapType kt vt) -> do
+  TypeTermMap (MapType kt vt) -> do
     kc <- termCoder kt
     vc <- termCoder vt
     let encodeEntry (k, v) = (,) <$> stepOut kc k <*> stepOut vc v
     let decodeEntry (k, v) = (,) <$> stepIn kc k <*> stepIn vc v
     return Step {
-      stepOut = \(Term (ExpressionMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+      stepOut = \(Data (DataTermMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
       stepIn = \n -> case n of
-        YM.NodeMapping m -> defaultTerm . ExpressionMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
+        YM.NodeMapping m -> defaultData . DataTermMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeExprRecord sfields -> recordCoder sfields
+  TypeTermRecord sfields -> recordCoder sfields
 
-yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) YM.Node)
+yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Data m) YM.Node)
 yamlCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter
@@ -118,11 +118,11 @@ yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
   languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-  languageConstraintsTermVariants = S.fromList termVariants,
+  languageConstraintsDataVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case typeData typ of
-    TypeExprOptional (Type (TypeExprOptional _) _) -> False
+  languageConstraintsTypes = \typ -> case typeTerm typ of
+    TypeTermOptional (Type (TypeTermOptional _) _) -> False
     _ -> True }
 
 yamlNull :: YM.Node

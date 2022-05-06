@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Extras (
   convertIntegerValue,
   debug,
   eitherToQualified,
-  elementAsTypedTerm,
+  elementAsTypedData,
   fieldTypes,
   fromQname,
   graphNameOf,
@@ -92,18 +92,18 @@ eitherToQualified e = case e of
   ResultFailure msg -> Qualified Nothing [msg]
   ResultSuccess x -> Qualified (Just x) []
 
-elementAsTypedTerm :: (Default m, Show m) => Context m -> Element m -> Result (TypedTerm m)
-elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
+elementAsTypedData :: (Default m, Show m) => Context m -> Element m -> Result (TypedData m)
+elementAsTypedData schemaCtx el = TypedData <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
 fieldTypes :: (Default m, Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
-fieldTypes scx t = case typeData t of
-    TypeExprRecord fields -> pure $ toMap fields
-    TypeExprUnion fields -> pure $ toMap fields
-    TypeExprElement et -> fieldTypes scx et
-    TypeExprNominal name -> do
+fieldTypes scx t = case typeTerm t of
+    TypeTermRecord fields -> pure $ toMap fields
+    TypeTermUnion fields -> pure $ toMap fields
+    TypeTermElement et -> fieldTypes scx et
+    TypeTermNominal name -> do
       el <- requireElement scx name
       decodeType scx (elementData el) >>= fieldTypes scx
-    TypeExprUniversal (UniversalType _ body) -> fieldTypes scx body
+    TypeTermUniversal (UniversalType _ body) -> fieldTypes scx body
     _ -> fail $ "expected record or union type, but found " ++ show t
   where
     toMap fields = M.fromList (toPair <$> fields)

@@ -6,8 +6,8 @@ import Data.Set
 -- A term which applies a function to an argument
 data Application m
   = Application {
-    applicationFunction :: (Term m),
-    applicationArgument :: (Term m)}
+    applicationFunction :: (Data m),
+    applicationArgument :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _Application = "hydra/core.Application"
@@ -43,69 +43,133 @@ _Comparison_equalTo = "equalTo"
 
 _Comparison_greaterThan = "greaterThan"
 
--- A term expression
-data Expression m
-  = ExpressionApplication (Application m)
-  | ExpressionLiteral Literal
-  | ExpressionElement Name
-  | ExpressionFunction (Function m)
-  | ExpressionLet (Let m)
-  | ExpressionList [Term m]
-  | ExpressionMap (Map (Term m) (Term m))
-  | ExpressionNominal (NominalTerm m)
-  | ExpressionOptional (Maybe (Term m))
-  | ExpressionRecord [Field m]
-  | ExpressionSet (Set (Term m))
-  | ExpressionTypeAbstraction (TypeAbstraction m)
-  | ExpressionTypeApplication (TypeApplication m)
-  | ExpressionUnion (Field m)
-  | ExpressionVariable Variable
+-- A data term
+data Data m
+  = Data {
+    dataTerm :: (DataTerm m),
+    dataMeta :: m}
   deriving (Eq, Ord, Read, Show)
 
-_Expression = "hydra/core.Expression"
+_Data = "hydra/core.Data"
 
-_Expression_application = "application"
+_Data_term = "term"
 
-_Expression_literal = "literal"
+_Data_meta = "meta"
 
-_Expression_element = "element"
+-- A term expression
+data DataTerm m
+  = DataTermApplication (Application m)
+  | DataTermLiteral Literal
+  | DataTermElement Name
+  | DataTermFunction (Function m)
+  | DataTermLet (Let m)
+  | DataTermList [Data m]
+  | DataTermMap (Map (Data m) (Data m))
+  | DataTermNominal (Named m)
+  | DataTermOptional (Maybe (Data m))
+  | DataTermRecord [Field m]
+  | DataTermSet (Set (Data m))
+  | DataTermTypeAbstraction (TypeAbstraction m)
+  | DataTermTypeApplication (TypeApplication m)
+  | DataTermUnion (Field m)
+  | DataTermVariable Variable
+  deriving (Eq, Ord, Read, Show)
 
-_Expression_function = "function"
+_DataTerm = "hydra/core.DataTerm"
 
-_Expression_let = "let"
+_DataTerm_application = "application"
 
-_Expression_list = "list"
+_DataTerm_literal = "literal"
 
-_Expression_map = "map"
+_DataTerm_element = "element"
 
-_Expression_nominal = "nominal"
+_DataTerm_function = "function"
 
-_Expression_optional = "optional"
+_DataTerm_let = "let"
 
-_Expression_record = "record"
+_DataTerm_list = "list"
 
-_Expression_set = "set"
+_DataTerm_map = "map"
 
-_Expression_typeAbstraction = "typeAbstraction"
+_DataTerm_nominal = "nominal"
 
-_Expression_typeApplication = "typeApplication"
+_DataTerm_optional = "optional"
 
-_Expression_union = "union"
+_DataTerm_record = "record"
 
-_Expression_variable = "variable"
+_DataTerm_set = "set"
+
+_DataTerm_typeAbstraction = "typeAbstraction"
+
+_DataTerm_typeApplication = "typeApplication"
+
+_DataTerm_union = "union"
+
+_DataTerm_variable = "variable"
+
+-- The identifier of a term expression constructor
+data DataVariant
+  = DataVariantApplication
+  | DataVariantElement
+  | DataVariantFunction
+  | DataVariantLet
+  | DataVariantList
+  | DataVariantLiteral
+  | DataVariantMap
+  | DataVariantNominal
+  | DataVariantOptional
+  | DataVariantRecord
+  | DataVariantSet
+  | DataVariantTypeAbstraction
+  | DataVariantTypeApplication
+  | DataVariantUnion
+  | DataVariantVariable
+  deriving (Eq, Ord, Read, Show)
+
+_DataVariant = "hydra/core.DataVariant"
+
+_DataVariant_application = "application"
+
+_DataVariant_element = "element"
+
+_DataVariant_function = "function"
+
+_DataVariant_let = "let"
+
+_DataVariant_list = "list"
+
+_DataVariant_literal = "literal"
+
+_DataVariant_map = "map"
+
+_DataVariant_nominal = "nominal"
+
+_DataVariant_optional = "optional"
+
+_DataVariant_record = "record"
+
+_DataVariant_set = "set"
+
+_DataVariant_typeAbstraction = "typeAbstraction"
+
+_DataVariant_typeApplication = "typeApplication"
+
+_DataVariant_union = "union"
+
+_DataVariant_variable = "variable"
 
 -- A labeled term
 data Field m
   = Field {
     fieldName :: FieldName,
-    fieldTerm :: (Term m)}
+    fieldData :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _Field = "hydra/core.Field"
 
 _Field_name = "name"
 
-_Field_term = "term"
+_Field_data = "data"
 
 -- The name of a field
 type FieldName = String
@@ -158,7 +222,7 @@ _FloatValue_float64 = "float64"
 -- A function
 data Function m
   = FunctionCases [Field m]
-  | FunctionCompareTo (Term m)
+  | FunctionCompareTo (Data m)
   | FunctionData
   | FunctionLambda (Lambda m)
   | FunctionOptionalCases (OptionalCases m)
@@ -292,7 +356,7 @@ _IntegerValue_uint64 = "uint64"
 data Lambda m
   = Lambda {
     lambdaParameter :: Variable,
-    lambdaBody :: (Term m)}
+    lambdaBody :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _Lambda = "hydra/core.Lambda"
@@ -305,8 +369,8 @@ _Lambda_body = "body"
 data Let m
   = Let {
     letKey :: Variable,
-    letValue :: (Term m),
-    letEnvironment :: (Term m)}
+    letValue :: (Data m),
+    letEnvironment :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _Let = "hydra/core.Let"
@@ -412,23 +476,23 @@ type Name = String
 _Name = "hydra/core.Name"
 
 -- A term annotated with a fixed, named type; an instance of a newtype
-data NominalTerm m
-  = NominalTerm {
-    nominalTermTypeName :: Name,
-    nominalTermTerm :: (Term m)}
+data Named m
+  = Named {
+    namedTypeName :: Name,
+    namedTerm :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
-_NominalTerm = "hydra/core.NominalTerm"
+_Named = "hydra/core.Named"
 
-_NominalTerm_typeName = "typeName"
+_Named_typeName = "typeName"
 
-_NominalTerm_term = "term"
+_Named_term = "term"
 
 -- A case statement for matching optional terms
 data OptionalCases m
   = OptionalCases {
-    optionalCasesNothing :: (Term m),
-    optionalCasesJust :: (Term m)}
+    optionalCasesNothing :: (Data m),
+    optionalCasesJust :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _OptionalCases = "hydra/core.OptionalCases"
@@ -436,18 +500,6 @@ _OptionalCases = "hydra/core.OptionalCases"
 _OptionalCases_nothing = "nothing"
 
 _OptionalCases_just = "just"
-
--- An encoded optional value, for languages which do not natively support optionals
-data OptionalExpression m
-  = OptionalExpressionJust (Term m)
-  | OptionalExpressionNothing
-  deriving (Eq, Ord, Read, Show)
-
-_OptionalExpression = "hydra/core.OptionalExpression"
-
-_OptionalExpression_just = "just"
-
-_OptionalExpression_nothing = "nothing"
 
 -- Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision
@@ -461,130 +513,66 @@ _Precision_arbitrary = "arbitrary"
 
 _Precision_bits = "bits"
 
--- A data term
-data Term m
-  = Term {
-    termData :: (Expression m),
-    termMeta :: m}
-  deriving (Eq, Ord, Read, Show)
-
-_Term = "hydra/core.Term"
-
-_Term_data = "data"
-
-_Term_meta = "meta"
-
--- The identifier of a term expression constructor
-data TermVariant
-  = TermVariantApplication
-  | TermVariantElement
-  | TermVariantFunction
-  | TermVariantLet
-  | TermVariantList
-  | TermVariantLiteral
-  | TermVariantMap
-  | TermVariantNominal
-  | TermVariantOptional
-  | TermVariantRecord
-  | TermVariantSet
-  | TermVariantTypeAbstraction
-  | TermVariantTypeApplication
-  | TermVariantUnion
-  | TermVariantVariable
-  deriving (Eq, Ord, Read, Show)
-
-_TermVariant = "hydra/core.TermVariant"
-
-_TermVariant_application = "application"
-
-_TermVariant_element = "element"
-
-_TermVariant_function = "function"
-
-_TermVariant_let = "let"
-
-_TermVariant_list = "list"
-
-_TermVariant_literal = "literal"
-
-_TermVariant_map = "map"
-
-_TermVariant_nominal = "nominal"
-
-_TermVariant_optional = "optional"
-
-_TermVariant_record = "record"
-
-_TermVariant_set = "set"
-
-_TermVariant_typeAbstraction = "typeAbstraction"
-
-_TermVariant_typeApplication = "typeApplication"
-
-_TermVariant_union = "union"
-
-_TermVariant_variable = "variable"
-
 -- A data type
 data Type m
   = Type {
-    typeData :: (TypeExpr m),
+    typeTerm :: (TypeTerm m),
     typeMeta :: m}
   deriving (Eq, Ord, Read, Show)
 
 _Type = "hydra/core.Type"
 
-_Type_data = "data"
+_Type_term = "term"
 
 _Type_meta = "meta"
 
 -- A data type
-data TypeExpr m
-  = TypeExprElement (Type m)
-  | TypeExprFunction (FunctionType m)
-  | TypeExprList (Type m)
-  | TypeExprLiteral LiteralType
-  | TypeExprMap (MapType m)
-  | TypeExprNominal Name
-  | TypeExprOptional (Type m)
-  | TypeExprRecord [FieldType m]
-  | TypeExprSet (Type m)
-  | TypeExprUnion [FieldType m]
-  | TypeExprUniversal (UniversalType m)
-  | TypeExprVariable TypeVariable
+data TypeTerm m
+  = TypeTermElement (Type m)
+  | TypeTermFunction (FunctionType m)
+  | TypeTermList (Type m)
+  | TypeTermLiteral LiteralType
+  | TypeTermMap (MapType m)
+  | TypeTermNominal Name
+  | TypeTermOptional (Type m)
+  | TypeTermRecord [FieldType m]
+  | TypeTermSet (Type m)
+  | TypeTermUnion [FieldType m]
+  | TypeTermUniversal (UniversalType m)
+  | TypeTermVariable TypeVariable
   deriving (Eq, Ord, Read, Show)
 
-_TypeExpr = "hydra/core.TypeExpr"
+_TypeTerm = "hydra/core.TypeTerm"
 
-_TypeExpr_element = "element"
+_TypeTerm_element = "element"
 
-_TypeExpr_function = "function"
+_TypeTerm_function = "function"
 
-_TypeExpr_list = "list"
+_TypeTerm_list = "list"
 
-_TypeExpr_literal = "literal"
+_TypeTerm_literal = "literal"
 
-_TypeExpr_map = "map"
+_TypeTerm_map = "map"
 
-_TypeExpr_nominal = "nominal"
+_TypeTerm_nominal = "nominal"
 
-_TypeExpr_optional = "optional"
+_TypeTerm_optional = "optional"
 
-_TypeExpr_record = "record"
+_TypeTerm_record = "record"
 
-_TypeExpr_set = "set"
+_TypeTerm_set = "set"
 
-_TypeExpr_union = "union"
+_TypeTerm_union = "union"
 
-_TypeExpr_universal = "universal"
+_TypeTerm_universal = "universal"
 
-_TypeExpr_variable = "variable"
+_TypeTerm_variable = "variable"
 
 -- A type abstraction (generalization), which binds a type variable to a term
 data TypeAbstraction m
   = TypeAbstraction {
     typeAbstractionParameter :: TypeVariable,
-    typeAbstractionBody :: (Term m)}
+    typeAbstractionBody :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeAbstraction = "hydra/core.TypeAbstraction"
@@ -596,7 +584,7 @@ _TypeAbstraction_body = "body"
 -- A type application (instantiation), which applies a term to a type
 data TypeApplication m
   = TypeApplication {
-    typeApplicationFunction :: (Term m),
+    typeApplicationFunction :: (Data m),
     typeApplicationArgument :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -667,17 +655,17 @@ _TypeVariant_universal = "universal"
 _TypeVariant_variable = "variable"
 
 -- A type together with an instance of the type
-data TypedTerm m
-  = TypedTerm {
-    typedTermType :: (Type m),
-    typedTermTerm :: (Term m)}
+data TypedData m
+  = TypedData {
+    typedDataType :: (Type m),
+    typedDataTerm :: (Data m)}
   deriving (Eq, Ord, Read, Show)
 
-_TypedTerm = "hydra/core.TypedTerm"
+_TypedData = "hydra/core.TypedData"
 
-_TypedTerm_type = "type"
+_TypedData_type = "type"
 
-_TypedTerm_term = "term"
+_TypedData_term = "term"
 
 -- A universally quantified ('forall') type, parameterized by a type variable
 data UniversalType m

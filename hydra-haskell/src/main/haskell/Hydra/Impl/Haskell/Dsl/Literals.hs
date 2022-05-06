@@ -13,16 +13,16 @@ type Bigfloat = Double
 type Binary = String
 
 bigfloat :: Bigfloat -> Program Bigfloat
-bigfloat f = program $ ExpressionLiteral $ LiteralFloat $ FloatValueBigfloat f
+bigfloat f = program $ DataTermLiteral $ LiteralFloat $ FloatValueBigfloat f
 
 bigint :: Integer -> Program Integer
-bigint i = program $ ExpressionLiteral $ LiteralInteger $ IntegerValueBigint i
+bigint i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueBigint i
 
 binary :: Binary -> Program Binary
-binary b = program $ ExpressionLiteral $ LiteralBinary b
+binary b = program $ DataTermLiteral $ LiteralBinary b
 
 bool :: Bool -> Program Bool
-bool b = program $ ExpressionLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+bool b = program $ DataTermLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 boolean = bool
 
@@ -31,27 +31,27 @@ double = float64
 float = float32
 
 float32 :: Float -> Program Float
-float32 f = program $ ExpressionLiteral $ LiteralFloat $ FloatValueFloat32 f
+float32 f = program $ DataTermLiteral $ LiteralFloat $ FloatValueFloat32 f
 
 float64 :: Double -> Program Double
-float64 f = program $ ExpressionLiteral $ LiteralFloat $ FloatValueFloat64 f
+float64 f = program $ DataTermLiteral $ LiteralFloat $ FloatValueFloat64 f
 
 int = int32
 
 int8 :: Int8 -> Program Int8
-int8 i = program $ ExpressionLiteral $ LiteralInteger $ IntegerValueInt8 $ fromIntegral i
+int8 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt8 $ fromIntegral i
 
 int16 :: Int16 -> Program Int16
-int16 i = program $ ExpressionLiteral $ LiteralInteger $ IntegerValueInt16 $ fromIntegral i
+int16 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt16 $ fromIntegral i
 
 int32 :: Int -> Program Int
-int32 i = program $ ExpressionLiteral $ LiteralInteger $ IntegerValueInt32 i
+int32 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt32 i
 
 int64 :: Int64 -> Program Int64
-int64 i = program $ ExpressionLiteral $ LiteralInteger $ IntegerValueInt64 $ fromIntegral i
+int64 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt64 $ fromIntegral i
 
 str :: String -> Program String
-str s = program $ ExpressionLiteral $ LiteralString s
+str s = program $ DataTermLiteral $ LiteralString s
 
 -- Note: untyped integers are not yet properly supported by the DSL,
 --       because they are not properly supported by code generation.

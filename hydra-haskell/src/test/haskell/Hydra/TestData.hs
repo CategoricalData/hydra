@@ -28,7 +28,7 @@ int32ElementType = Types.element Types.int32
 int32ElementDataType :: Default m => Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
-latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Term m
+latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Data m
 latlonRecord lat lon = record [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
 
 latLonType :: Default m => Type m
@@ -52,8 +52,8 @@ listOfSetOfStringsType = Types.list $ Types.set Types.string
 listOfStringsType :: Default m => Type m
 listOfStringsType = Types.list Types.string
 
-makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Term a
-makeMap keyvals = defaultTerm $ ExpressionMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Data a
+makeMap keyvals = defaultData $ DataTermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Default m => Type m
 mapOfStringsToIntsType = Types.map Types.string Types.int32
@@ -78,10 +78,10 @@ stringOrIntType = Types.union [Types.field "left" Types.string, Types.field "rig
 
 unionTypeForFunctions :: Default m => Type m -> Type m
 unionTypeForFunctions dom = Types.union [
-  Types.field _Function_cases Types.string, -- TODO (TypeExprRecord cases)
+  Types.field _Function_cases Types.string, -- TODO (TypeTermRecord cases)
   Types.field _Function_compareTo dom,
   Types.field _Function_data Types.unit,
-  Types.field _Function_lambda Types.string, -- TODO (TypeExprRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
+  Types.field _Function_lambda Types.string, -- TODO (TypeTermRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
   Types.field _Function_primitive Types.string,
   Types.field _Function_projection Types.string,
-  Types.field _Expression_variable Types.string] -- TODO
+  Types.field _DataTerm_variable Types.string] -- TODO
