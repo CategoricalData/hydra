@@ -1,6 +1,7 @@
 module Hydra.Impl.Haskell.Dsl.Functions where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Phantoms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
@@ -9,8 +10,8 @@ caseField :: FieldName -> Program (a -> b) -> Case (c -> b)
 caseField fname (Program term) = Case (Field fname term)
 
 -- Note: Haskell cannot check that the provided cases agree with a particular union type
-cases :: Type Meta -> Type Meta -> [Case (a -> b)] -> Program (a -> b)
-cases dom cod cs = typed (Types.function dom cod) $
+cases :: Context Meta -> Type Meta -> Type Meta -> [Case (a -> b)] -> Program (a -> b)
+cases cx dom cod cs = typed cx (Types.function dom cod) $
     program $ DataTermFunction $ FunctionCases $ toField <$> cs
   where
     toField (Case field) = field

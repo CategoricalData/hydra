@@ -76,7 +76,7 @@ constructModule cx g coders pairs = do
           _ -> do
             htype <- encodeAdaptedType importAliases cx t
             return $ H.DeclarationType (H.TypeDeclaration hd htype)
-        let comments = contextDescriptionOf cx $ dataMeta term
+        comments <- contextDescriptionOf cx $ dataMeta term
         return $ [H.DeclarationWithComments decl comments] ++ constantDecls (elementName el) t
       where
         isSerializable typ = do
@@ -101,7 +101,7 @@ constructModule cx g coders pairs = do
 
         unionCons lname (FieldType fname ftype) = do
           let nm = capitalize lname ++ capitalize fname
-          typeList <- if ftype == Types.unit
+          typeList <- if ftype {typeMeta = dflt} == Types.unit
             then pure []
             else do
               htype <- encodeAdaptedType importAliases cx ftype
@@ -117,7 +117,7 @@ constructModule cx g coders pairs = do
       let decl = H.DeclarationTypedBinding $ H.TypedBinding
                   (H.TypeSignature hname htype)
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
-      let comments = contextDescriptionOf cx $ dataMeta term
+      comments <- contextDescriptionOf cx $ dataMeta term
       return [H.DeclarationWithComments decl comments]
 
     toCons _ = H.Constructor_Record
@@ -170,13 +170,14 @@ encodeFunction aliases cx meta fun = case fun of
           let v0 = "v"
           let rhsData = simplifyData $ apply fun' (variable v0)
           let v1 = if isFreeIn v0 rhsData then "_" else v0
-          hname <- case domName of
+          dn <- domName
+          hname <- case dn of
             Just n -> pure $ unionFieldReference aliases n fn
             Nothing -> fail $ "unqualified field name"
           args <- case fieldMap >>= M.lookup fn of
                 Just (FieldType _ (Type (TypeTermRecord []) _)) -> pure []
                 Just _ -> pure [H.PatternName $ rawName v1]
-                Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show domName
+                Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
           let lhs = H.PatternApplication $ H.Pattern_Application hname args
           rhs <- encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
@@ -195,26 +196,32 @@ encodeFunction aliases cx meta fun = case fun of
         return $ H.Alternative lhs rhs Nothing
       return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
-    FunctionProjection fname -> case domName of
-      Just n -> pure $ H.ExpressionVariable $ recordFieldReference aliases n fname
-      Nothing -> fail $ "unqualified record"
+    FunctionProjection fname -> do
+      dn <- domName
+      case dn of
+        Just n -> pure $ H.ExpressionVariable $ recordFieldReference aliases n fname
+        Nothing -> fail "unqualified record"
     _ -> fail $ "unexpected function: " ++ show fun
   where
     fieldMapOf typ = case typeTerm <$> typ of
       Just (TypeTermUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
       Just (TypeTermUniversal (UniversalType _ tbody)) -> fieldMapOf $ Just tbody
       _ -> Nothing
-    findDomain = case domName of
-      Nothing -> pure Nothing
-      Just name -> do
-        scx <- schemaContext cx -- TODO: cache this
-        typ <- requireType scx name
-        return $ Just typ
-    domName = case contextTypeOf cx meta of
-        Just typ -> case typeTerm typ of
-          TypeTermFunction (FunctionType dom _) -> nomName dom
-          _ -> Nothing
-        Nothing -> Nothing
+    findDomain = do
+      dn <- domName
+      case dn of
+        Nothing -> pure Nothing
+        Just name -> do
+          scx <- schemaContext cx -- TODO: cache this
+          typ <- requireType scx name
+          return $ Just typ
+    domName = do
+        t <- contextTypeOf cx meta
+        return $ case t of
+          Just typ -> case typeTerm typ of
+            TypeTermFunction (FunctionType dom _) -> nomName dom
+            _ -> Nothing
+          Nothing -> Nothing
       where
         nomName typ = case typeTerm typ of
           TypeTermNominal name -> Just name
@@ -251,17 +258,20 @@ encodeData aliases cx term@(Data expr meta) = do
     DataTermOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encode cx t
-    DataTermRecord fields -> case sname of
-      Nothing -> case fields of
-          [] -> pure $ H.ExpressionTuple []
-          _ -> fail $ "unexpected anonymous record: " ++ show term
-      Just name -> do
-          let typeName = typeNameForRecord name
-          updates <- CM.mapM toFieldUpdate fields
-          return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (rawName typeName) updates
-        where
-          toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference aliases name fn) <$> encode cx ft
+    DataTermRecord fields -> do
+      sname <- findSname
+      case sname of
+        Nothing -> case fields of
+            [] -> pure $ H.ExpressionTuple []
+            _ -> fail $ "unexpected anonymous record: " ++ show term
+        Just name -> do
+            let typeName = typeNameForRecord name
+            updates <- CM.mapM toFieldUpdate fields
+            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (rawName typeName) updates
+          where
+            toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference aliases name fn) <$> encode cx ft
     DataTermUnion (Field fn ft) -> do
+      sname <- findSname
       lhs <- case sname of
         Just n -> pure $ H.ExpressionVariable $ unionFieldReference aliases n fn
         Nothing -> fail $ "unqualified field"
@@ -272,9 +282,11 @@ encodeData aliases cx term@(Data expr meta) = do
     _ -> fail $ "unexpected term: " ++ show term
   where
     encode = encodeData aliases
-    sname = case typeTerm <$> (contextTypeOf cx meta) of
-      Just (TypeTermNominal name) -> Just name
-      Nothing -> Nothing
+    findSname = do
+      r <- contextTypeOf cx meta
+      return $ case typeTerm <$> r of
+        Just (TypeTermNominal name) -> Just name
+        Nothing -> Nothing
 
 encodeType :: Show m => M.Map Name String -> Type m -> Result H.Type
 encodeType aliases typ = case typeTerm typ of

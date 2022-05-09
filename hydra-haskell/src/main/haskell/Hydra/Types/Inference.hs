@@ -65,10 +65,11 @@ extendEnvironment (x, sc) m = do
 
 infer :: (Default m, Ord m, Show m) => Context m -> Data m -> Infer (Data (m, Type m, [Constraint m])) m
 infer cx term = case contextTypeOf cx (dataMeta term) of
-    Just typ -> do
-      i <- inferInternal
-      return i { dataMeta = (dataMeta term, typ, [])} -- TODO: unify "suggested" types with inferred types
-    Nothing -> inferInternal
+    ResultSuccess t -> case t of
+      Just typ -> do
+        i <- inferInternal
+        return i { dataMeta = (dataMeta term, typ, [])} -- TODO: unify "suggested" types with inferred types
+      Nothing -> inferInternal
   where
     yield expr typ constraints = return Data {
       dataTerm = expr,

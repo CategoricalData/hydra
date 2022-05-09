@@ -8,6 +8,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Meta
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -15,30 +16,37 @@ import qualified Data.Set as S
 
 datatype gname lname typ = typeElement standardContext (qualify gname lname) typ
 
+doc :: String -> Type Meta -> Type Meta
+doc s (Type term meta) = Type term $ setDescription (Just s) meta
+
+dataDoc :: String -> Data Meta -> Data Meta
+dataDoc s (Data term meta) = Data term $ setDescription (Just s) meta
+
 project :: Type Meta -> FieldName -> Type Meta -> Data Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
 qualify gname lname = gname ++ "." ++ lname
 
 standardContext :: Context Meta
-standardContext = Context {
-    contextGraphs = GraphSet {
-      graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
-      graphSetRoot = emptyGraphName},
-    contextElements = M.empty,
-    contextFunctions = M.empty,
-    contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueDataVariants = S.fromList []},
-    contextDescriptionOf = metaDescription,
-    contextTypeOf = metaType,
-    contextSetDescriptionOf = \d m -> m {metaDescription = d},
-    contextSetTypeOf = \t m -> m {metaType = t}}
+standardContext = cx
   where
+    cx = Context {
+             contextGraphs = GraphSet {
+               graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
+               graphSetRoot = emptyGraphName},
+             contextElements = M.empty,
+             contextFunctions = M.empty,
+             contextStrategy = EvaluationStrategy {
+               evaluationStrategyOpaqueDataVariants = S.fromList []},
+             contextDescriptionOf = getDescription,
+             contextTypeOf = getType cx,
+             contextSetDescriptionOf = \d m -> setDescription d m,
+             contextSetTypeOf = \t m -> setType cx t m}
     emptyGraphName = "empty"
     emptyGraph = Graph emptyGraphName [] (const True) "empty"
 
 standardElement :: Name -> String -> String -> Type Meta -> Data Meta -> Element Meta
-standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ withDoc desc term
+standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ dataDoc desc term
 
 standardFunction :: Name -> String -> String -> Type Meta -> Type Meta -> Data Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ
@@ -71,6 +79,7 @@ standardWithType = withType standardContext
 
 standardWithVariant :: Name -> FieldName -> Data Meta -> Data Meta
 standardWithVariant = nominalWithVariant standardContext
+
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {

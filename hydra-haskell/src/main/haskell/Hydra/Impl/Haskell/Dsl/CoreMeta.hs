@@ -11,7 +11,6 @@ module Hydra.Impl.Haskell.Dsl.CoreMeta (
   nominalWithFunction,
   nominalWithUnitVariant,
   nominalWithVariant,
-  withDoc,
   withType,
   module Hydra.Impl.Haskell.Dsl.Terms,
 ) where
@@ -68,6 +67,3 @@ nominalWithVariant cx name fname term = constFunction $ nominalVariant cx name f
 
 withType :: Context m -> Type m -> Data m -> Data m
 withType cx typ term = term { dataMeta = contextSetTypeOf cx (Just typ) (dataMeta term)}
-
-withDoc :: String -> Data Meta -> Data Meta
-withDoc desc term = term { dataMeta = (dataMeta term) {metaDescription = Just desc}}
