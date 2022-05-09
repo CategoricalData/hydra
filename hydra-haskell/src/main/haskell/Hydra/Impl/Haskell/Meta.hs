@@ -16,20 +16,26 @@ metaDescription = "description"
 metaType :: String
 metaType = "type"
 
+getAnnotation :: Name -> Meta -> Maybe (Data Meta)
+getAnnotation key (Meta m) = M.lookup key m
+
 getDescription :: Meta -> Result (Y.Maybe String)
-getDescription (Meta m) = case M.lookup metaDescription m of
+getDescription meta = case getAnnotation metaDescription meta of
   Nothing -> pure Nothing
   Just (Data term _) -> case term of
     DataTermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show metaDescription ++ ": " ++ show term
 
-setDescription :: Y.Maybe String -> Meta -> Meta
-setDescription d (Meta m) = Meta $ M.alter (\_ -> stringValue <$> d) metaDescription m
-
 getType :: Context Meta -> Meta -> Result (Y.Maybe (Type Meta))
-getType cx (Meta m) = case M.lookup metaType m of
+getType cx meta = case getAnnotation metaType meta of
   Nothing -> pure Nothing
   Just dat -> Just <$> decodeType cx dat
 
+setAnnotation :: Name -> Y.Maybe (Data Meta) -> Meta -> Meta
+setAnnotation key val (Meta m) = Meta $ M.alter (const val) key m
+
+setDescription :: Y.Maybe String -> Meta -> Meta
+setDescription d = setAnnotation metaDescription (stringValue <$> d)
+
 setType :: Context Meta -> Y.Maybe (Type Meta) -> Meta -> Meta
-setType cx d (Meta m) = Meta $ M.alter (\_ -> fmap (\t -> encodeType cx t) d) metaType m
+setType cx d = setAnnotation metaType (encodeType cx <$> d)
