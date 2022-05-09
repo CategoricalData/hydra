@@ -7,14 +7,18 @@ import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Meta
 
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
-datatype gname lname typ = typeElement standardContext (qualify gname lname) typ
+datatype :: String -> String -> Type Meta -> Element Meta
+datatype gname lname = typeElement standardContext (qualify gname lname)
+
+annotate :: Name -> Y.Maybe (Data Meta) -> Type Meta -> Type Meta
+annotate key val (Type term meta) = Type term $ setAnnotation key val meta
 
 doc :: String -> Type Meta -> Type Meta
 doc s (Type term meta) = Type term $ setDescription (Just s) meta
