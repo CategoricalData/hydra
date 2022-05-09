@@ -83,13 +83,13 @@ data Context a
                 - variable: a
                 to:
                   optional: string -}
-    , contextDescriptionOf :: a -> (Maybe String)
+    , contextDescriptionOf :: a -> Result (Maybe String)
     {-| @type function:
                 from:
                 - variable: a
                 to:
                   optional: hydra/core.Type -}
-    , contextTypeOf :: a -> (Maybe (Type a))
+    , contextTypeOf :: a -> Result (Maybe (Type a))
     {-| @type function:
                 from:
                 - optional: string

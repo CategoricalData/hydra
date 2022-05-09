@@ -480,7 +480,6 @@ _ImportExportSpec_name = "name"
 
 _ImportExportSpec_subspec = "subspec"
 
-
 data ImportExportSpec_Subspec 
   = ImportExportSpec_SubspecAll 
   | ImportExportSpec_SubspecList [Name]
@@ -516,7 +515,6 @@ _Literal_integer = "integer"
 
 _Literal_string = "string"
 
-
 data LocalBinding 
   = LocalBindingSignature TypeSignature
   | LocalBindingValue ValueBinding
@@ -528,11 +526,9 @@ _LocalBinding_signature = "signature"
 
 _LocalBinding_value = "value"
 
-
 type LocalBindings = [LocalBinding]
 
 _LocalBindings = "hydra/ext/haskell/ast.LocalBindings"
-
 
 data Module 
   = Module {
@@ -549,7 +545,6 @@ _Module_imports = "imports"
 
 _Module_declarations = "declarations"
 
-
 data ModuleHead 
   = ModuleHead {
     moduleHeadName :: ModuleName,
@@ -562,11 +557,9 @@ _ModuleHead_name = "name"
 
 _ModuleHead_exports = "exports"
 
-
 type ModuleName = String
 
 _ModuleName = "hydra/ext/haskell/ast.ModuleName"
-
 
 data Name 
   = NameImplicit QualifiedName
@@ -582,11 +575,9 @@ _Name_normal = "normal"
 
 _Name_parens = "parens"
 
-
 type NamePart = String
 
 _NamePart = "hydra/ext/haskell/ast.NamePart"
-
 
 data Operator 
   = OperatorBacktick QualifiedName
@@ -598,7 +589,6 @@ _Operator = "hydra/ext/haskell/ast.Operator"
 _Operator_backtick = "backtick"
 
 _Operator_normal = "normal"
-
 
 data Pattern 
   = PatternApplication Pattern_Application
@@ -635,7 +625,6 @@ _Pattern_typed = "typed"
 
 _Pattern_wildcard = "wildcard"
 
-
 data Pattern_Application 
   = Pattern_Application {
     pattern_ApplicationName :: Name,
@@ -647,7 +636,6 @@ _Pattern_Application = "hydra/ext/haskell/ast.Pattern.Application"
 _Pattern_Application_name = "name"
 
 _Pattern_Application_args = "args"
-
 
 data Pattern_As 
   = Pattern_As {
@@ -661,7 +649,6 @@ _Pattern_As_name = "name"
 
 _Pattern_As_inner = "inner"
 
-
 data Pattern_Record 
   = Pattern_Record {
     pattern_RecordName :: Name,
@@ -673,7 +660,6 @@ _Pattern_Record = "hydra/ext/haskell/ast.Pattern.Record"
 _Pattern_Record_name = "name"
 
 _Pattern_Record_fields = "fields"
-
 
 data Pattern_Typed 
   = Pattern_Typed {
@@ -687,7 +673,6 @@ _Pattern_Typed_inner = "inner"
 
 _Pattern_Typed_type = "type"
 
-
 data PatternField 
   = PatternField {
     patternFieldName :: Name,
@@ -699,7 +684,6 @@ _PatternField = "hydra/ext/haskell/ast.PatternField"
 _PatternField_name = "name"
 
 _PatternField_pattern = "pattern"
-
 
 data QualifiedName 
   = QualifiedName {
@@ -713,16 +697,13 @@ _QualifiedName_qualifiers = "qualifiers"
 
 _QualifiedName_unqualified = "unqualified"
 
-
 type RightHandSide = Expression
 
 _RightHandSide = "hydra/ext/haskell/ast.RightHandSide"
 
-
 type Statement = Expression
 
 _Statement = "hydra/ext/haskell/ast.Statement"
-
 
 data Type 
   = TypeApplication Type_Application
@@ -750,7 +731,6 @@ _Type_tuple = "tuple"
 
 _Type_variable = "variable"
 
-
 data Type_Application 
   = Type_Application {
     type_ApplicationContext :: Type,
@@ -763,7 +743,6 @@ _Type_Application_context = "context"
 
 _Type_Application_argument = "argument"
 
-
 data Type_Function 
   = Type_Function {
     type_FunctionDomain :: Type,
@@ -775,7 +754,6 @@ _Type_Function = "hydra/ext/haskell/ast.Type.Function"
 _Type_Function_domain = "domain"
 
 _Type_Function_codomain = "codomain"
-
 
 data Type_Infix 
   = Type_Infix {
@@ -792,7 +770,6 @@ _Type_Infix_operator = "operator"
 
 _Type_Infix_rhs = "rhs"
 
-
 data TypeDeclaration 
   = TypeDeclaration {
     typeDeclarationName :: DeclarationHead,
@@ -804,7 +781,6 @@ _TypeDeclaration = "hydra/ext/haskell/ast.TypeDeclaration"
 _TypeDeclaration_name = "name"
 
 _TypeDeclaration_type = "type"
-
 
 data TypeSignature 
   = TypeSignature {
@@ -818,11 +794,9 @@ _TypeSignature_name = "name"
 
 _TypeSignature_type = "type"
 
-
 type TypeVariable = Name
 
 _TypeVariable = "hydra/ext/haskell/ast.TypeVariable"
-
 
 data TypedBinding 
   = TypedBinding {
@@ -836,7 +810,6 @@ _TypedBinding_typeSignature = "typeSignature"
 
 _TypedBinding_valueBinding = "valueBinding"
 
-
 data ValueBinding 
   = ValueBindingSimple ValueBinding_Simple
   deriving (Eq, Ord, Read, Show)
@@ -844,7 +817,6 @@ data ValueBinding
 _ValueBinding = "hydra/ext/haskell/ast.ValueBinding"
 
 _ValueBinding_simple = "simple"
-
 
 data ValueBinding_Simple 
   = ValueBinding_Simple {

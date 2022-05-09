@@ -4,7 +4,7 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
-
+-- A YAML node (value)
 data Node 
   = NodeMapping (Map Node Node)
   | NodeScalar Scalar
