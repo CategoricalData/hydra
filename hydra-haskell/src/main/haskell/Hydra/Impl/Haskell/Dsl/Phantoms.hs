@@ -1,7 +1,9 @@
 module Hydra.Impl.Haskell.Dsl.Phantoms where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Meta
 
 
 data Case a = Case (Field Meta) deriving Show
@@ -17,7 +19,7 @@ data Ref a = Ref Name
 data Var a = Var String
 
 doc :: String -> Program a -> Program a
-doc str (Program (Data d m)) = Program $ Data d (m {metaDescription = Just str})
+doc str (Program (Data d m)) = Program $ Data d (setDescription (Just str) m)
 
 element :: Name -> String -> Program a -> Element a
 element ns name prog = Element (ns ++ "." ++ name) prog
@@ -34,5 +36,5 @@ stripField (Fld field) = field
 term :: DataTerm Meta -> Data Meta
 term e = Data e dflt
 
-typed :: Type Meta -> Program a -> Program a
-typed t (Program (Data d m)) = Program $ Data d (m {metaType = Just t})
+typed :: Context Meta -> Type Meta -> Program a -> Program a
+typed cx t (Program (Data d m)) = Program $ Data d (setType cx (Just t) m)

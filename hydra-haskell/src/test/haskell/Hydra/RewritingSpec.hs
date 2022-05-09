@@ -131,13 +131,13 @@ testStripMeta = do
       QC.property $ \(TypedData typ term) -> do
         H.shouldBe
           (contextTypeOf testContext $ dataMeta term)
-          Nothing
+          (pure Nothing)
         H.shouldBe
           (contextTypeOf testContext $ dataMeta $ withType testContext typ term)
-          (Just typ)
+          (pure $ Just typ)
         H.shouldBe
           (contextTypeOf testContext $ dataMeta $ stripMeta $ withType testContext typ term)
-          Nothing
+          (pure Nothing)
 
 spec :: H.Spec
 spec = do

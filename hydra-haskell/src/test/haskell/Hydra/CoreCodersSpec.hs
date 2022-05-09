@@ -2,9 +2,10 @@ module Hydra.CoreCodersSpec where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Meta
 import Hydra.Rewriting
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
@@ -13,6 +14,7 @@ import Hydra.ArbitraryCore (untyped)
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
+import qualified Data.Map as M
 
 
 individualEncoderTestCases :: H.SpecWith ()
@@ -87,7 +89,9 @@ metadataIsPreserved = do
         (pure annotatedStringType)
   where
     annotatedStringType :: Type Meta
-    annotatedStringType = Types.string {typeMeta = Meta (Just "The string literal type") (Just $ Types.nominal _Type)}
+    annotatedStringType = Types.string {typeMeta = Meta $ M.fromList [
+      (metaDescription, Terms.stringValue "The string literal type"),
+      (metaType, encodeType testContext $ Types.nominal _Type)]}
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

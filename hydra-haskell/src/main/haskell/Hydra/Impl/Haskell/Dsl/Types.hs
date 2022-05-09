@@ -2,6 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Types where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Default
+
 import qualified Data.Map as M
 
 
@@ -19,9 +20,6 @@ boolean = literal LiteralTypeBoolean
 
 defaultType  :: Default m => TypeTerm m -> Type m
 defaultType e = Type e dflt
-
-doc :: String -> Type Meta -> Type Meta
-doc s (Type term meta) = Type term $ meta {metaDescription = Just s}
 
 element :: Default m => Type m -> Type m
 element = defaultType . TypeTermElement

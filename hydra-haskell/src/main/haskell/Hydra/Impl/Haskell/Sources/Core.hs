@@ -264,12 +264,15 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Meta" $
         doc "A built-in metadata container for terms" $
         record [
-          field "description" $
-            doc "An optional description associated with the term" $
-            optional string,
-          field "type" $
-            doc "An optional type annotation associated with the term. This may be used as a hint to the type inferencer and/or to code generators." $
-            optional $ universal "m" $ core "Type"],
+          field "annotations" $
+            doc "A map of annotation names to annotation values" $
+            Types.map (core "Name") (universal "Meta" $ core "Data")], -- TODO: the concrete type parameter is a hack
+--          field "description" $
+--            doc "An optional description associated with the term" $
+--            optional string,
+--          field "type" $
+--            doc "An optional type annotation associated with the term. This may be used as a hint to the type inferencer and/or to code generators." $
+--            optional $ universal "m" $ core "Type"],
 
       def "Name" $
         doc "A unique element name"

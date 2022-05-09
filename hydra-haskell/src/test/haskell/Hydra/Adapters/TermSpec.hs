@@ -2,13 +2,14 @@ module Hydra.Adapters.TermSpec where
 
 import Hydra.Adapter
 import Hydra.Adapters.Term
-import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
 import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreLanguage
 import Hydra.Impl.Haskell.Dsl.CoreMeta
+import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Meta
 import Hydra.Steps
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
@@ -17,6 +18,7 @@ import Hydra.TestUtils
 import Hydra.ArbitraryCore (untyped)
 
 import qualified Test.Hspec as H
+import qualified Data.Map as M
 import qualified Test.QuickCheck as QC
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -243,7 +245,8 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral]
       stringAliasType
-      Types.string {typeMeta = Meta (Just "An alias for the string type") Nothing}
+      Types.string {typeMeta = Meta $
+        M.fromList [(metaDescription, Terms.stringValue "An alias for the string type")]}
       False
       (stringValue s)
       (stringValue s)

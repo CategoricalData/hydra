@@ -51,7 +51,8 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      let anns = doc $ contextDescriptionOf cx $ dataMeta $ elementData el
+      r <- contextDescriptionOf cx $ dataMeta $ elementData el
+      let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
 dataGraphToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
@@ -97,7 +98,9 @@ encodeType aliases cx typ = case typeTerm typ of
       rfields <- CM.mapM encodeRecordField fields
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
     TypeTermUnion fields -> if isEnum
-        then pure . Right . PDL.NamedSchema_TypeEnum $ PDL.EnumSchema $ fmap encodeEnumField fields
+        then do
+          fs <- CM.mapM encodeEnumField fields
+          return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion <$> CM.mapM encodeUnionField fields
       where
         isEnum = L.foldl (\b t -> b && t {typeMeta = dflt} == Types.unit) True $ fmap fieldTypeType fields
@@ -111,14 +114,16 @@ encodeType aliases cx typ = case typeTerm typ of
           Left schema -> pure schema
           Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
     encodeRecordField (FieldType name typ) = do
+      anns <- getAnns typ
       (schema, optional) <- encodePossiblyOptionalType typ
       return PDL.RecordField {
         PDL.recordFieldName = name,
         PDL.recordFieldValue = schema,
         PDL.recordFieldOptional = optional,
         PDL.recordFieldDefault = Nothing,
-        PDL.recordFieldAnnotations = anns typ}
+        PDL.recordFieldAnnotations = anns}
     encodeUnionField (FieldType name typ) = do
+      anns <- getAnns typ
       (s, optional) <- encodePossiblyOptionalType typ
       let schema = if optional
           then PDL.SchemaUnion (simpleUnionMember <$> [PDL.SchemaNull, s])
@@ -126,10 +131,12 @@ encodeType aliases cx typ = case typeTerm typ of
       return PDL.UnionMember {
         PDL.unionMemberAlias = Just name,
         PDL.unionMemberValue = schema,
-        PDL.unionMemberAnnotations = anns typ}
-    encodeEnumField (FieldType name typ) = PDL.EnumField {
-      PDL.enumFieldName = convertCase CaseCamel CaseUpperSnake name,
-      PDL.enumFieldAnnotations = anns typ}
+        PDL.unionMemberAnnotations = anns}
+    encodeEnumField (FieldType name typ) = do
+      anns <- getAnns typ
+      return PDL.EnumField {
+        PDL.enumFieldName = convertCase CaseCamel CaseUpperSnake name,
+        PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case typeTerm typ of
       TypeTermOptional ot -> do
         t <- encode ot
@@ -137,7 +144,9 @@ encodeType aliases cx typ = case typeTerm typ of
       _ -> do
         t <- encode typ
         return (t, False)
-    anns typ = doc $ contextDescriptionOf cx $ typeMeta typ
+    getAnns typ = do
+      r <- contextDescriptionOf cx $ typeMeta typ
+      return $ doc r
 
 importAliasesForGraph g = M.empty -- TODO
 

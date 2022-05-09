@@ -15,7 +15,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Primitives
 import Hydra.Impl.Haskell.Sources.Libraries
@@ -62,7 +62,7 @@ testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph "testSchemaGraph" [
-    typeElement cx "StringTypeAlias" $ Types.doc "An alias for the string type" Types.string,
+    typeElement cx "StringTypeAlias" $ Standard.doc "An alias for the string type" Types.string,
     typeElement cx "Person" testTypePerson,
     typeElement cx "Timestamp" testTypeTimestamp]
   allTerms "hydra/core"

@@ -109,7 +109,8 @@ encodeFunction cx meta fun arg = case fun of
   where
     findSdom meta = Just <$> (findDomain meta >>= encodeType)
     findDomain meta = do
-        case contextTypeOf cx meta of
+        r <- contextTypeOf cx meta
+        case r of
           Nothing -> fail $ "expected a typed term"
           Just t -> domainOf t
       where
@@ -160,15 +161,18 @@ encodeData cx term@(Data expr meta) = case expr of
     DataTermOptional m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeData cx t
-    DataTermRecord fields -> case schemaName of
-      Nothing -> fail $ "unexpected anonymous record: " ++ show term
-      Just name -> do
+    DataTermRecord fields -> do
+      sn <- schemaName
+      case sn of
+        Nothing -> fail $ "unexpected anonymous record: " ++ show term
+        Just name -> do
           let n = typeName False name
           args <- CM.mapM (encodeData cx) (fieldData <$> fields)
           return $ sapply (sname n) args
     DataTermSet s -> sapply (sname "Set") <$> CM.mapM (encodeData cx) (S.toList s)
     DataTermUnion (Field fn ft) -> do
-      let lhs = sname $ qualifyUnionFieldName "UNION." schemaName fn
+      sn <- schemaName
+      let lhs = sname $ qualifyUnionFieldName "UNION." sn fn
       args <- case dataTerm ft of
         DataTermRecord [] -> pure []
         _ -> do
@@ -178,7 +182,9 @@ encodeData cx term@(Data expr meta) = case expr of
     DataTermVariable v -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
-    schemaName = contextTypeOf cx meta >>= nameOfType
+    schemaName = do
+      r <- contextTypeOf cx meta
+      pure $ r >>= nameOfType
 
 encodeType :: Show m => Type m -> Result Scala.Type
 encodeType t = case typeTerm t of
