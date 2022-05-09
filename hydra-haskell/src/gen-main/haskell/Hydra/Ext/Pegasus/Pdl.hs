@@ -18,7 +18,6 @@ _Annotations_doc = "doc"
 
 _Annotations_deprecated = "deprecated"
 
-
 data EnumField 
   = EnumField {
     enumFieldName :: EnumFieldName,
@@ -31,11 +30,9 @@ _EnumField_name = "name"
 
 _EnumField_annotations = "annotations"
 
-
 type EnumFieldName = String
 
 _EnumFieldName = "hydra/ext/pegasus/pdl.EnumFieldName"
-
 
 data EnumSchema 
   = EnumSchema {enumSchemaFields :: [EnumField]}
@@ -45,11 +42,9 @@ _EnumSchema = "hydra/ext/pegasus/pdl.EnumSchema"
 
 _EnumSchema_fields = "fields"
 
-
 type FieldName = String
 
 _FieldName = "hydra/ext/pegasus/pdl.FieldName"
-
 
 data NamedSchema 
   = NamedSchema {
@@ -66,7 +61,6 @@ _NamedSchema_type = "type"
 
 _NamedSchema_annotations = "annotations"
 
-
 data NamedSchema_Type 
   = NamedSchema_TypeRecord RecordSchema
   | NamedSchema_TypeEnum EnumSchema
@@ -81,21 +75,17 @@ _NamedSchema_Type_enum = "enum"
 
 _NamedSchema_Type_typeref = "typeref"
 
-
 type Name = String
 
 _Name = "hydra/ext/pegasus/pdl.Name"
-
 
 type Namespace = String
 
 _Namespace = "hydra/ext/pegasus/pdl.Namespace"
 
-
 type Package = String
 
 _Package = "hydra/ext/pegasus/pdl.Package"
-
 
 data PrimitiveType 
   = PrimitiveTypeBoolean 
@@ -123,11 +113,9 @@ _PrimitiveType_long = "long"
 
 _PrimitiveType_string = "string"
 
-
 type PropertyKey = String
 
 _PropertyKey = "hydra/ext/pegasus/pdl.PropertyKey"
-
 
 data Property 
   = Property {
@@ -141,7 +129,6 @@ _Property_key = "key"
 
 _Property_value = "value"
 
-
 data QualifiedName 
   = QualifiedName {
     qualifiedNameName :: Name,
@@ -153,7 +140,6 @@ _QualifiedName = "hydra/ext/pegasus/pdl.QualifiedName"
 _QualifiedName_name = "name"
 
 _QualifiedName_namespace = "namespace"
-
 
 data RecordField 
   = RecordField {
@@ -176,7 +162,6 @@ _RecordField_default = "default"
 
 _RecordField_annotations = "annotations"
 
-
 data RecordSchema 
   = RecordSchema {
     recordSchemaFields :: [RecordField],
@@ -188,7 +173,6 @@ _RecordSchema = "hydra/ext/pegasus/pdl.RecordSchema"
 _RecordSchema_fields = "fields"
 
 _RecordSchema_includes = "includes"
-
 
 data Schema 
   = SchemaArray Schema
@@ -219,7 +203,6 @@ _Schema_primitive = "primitive"
 
 _Schema_union = "union"
 
-
 data SchemaFile 
   = SchemaFile {
     schemaFileNamespace :: Namespace,
@@ -238,7 +221,6 @@ _SchemaFile_imports = "imports"
 
 _SchemaFile_schemas = "schemas"
 
-
 data UnionMember 
   = UnionMember {
     unionMemberAlias :: (Maybe FieldName),
@@ -253,7 +235,6 @@ _UnionMember_alias = "alias"
 _UnionMember_value = "value"
 
 _UnionMember_annotations = "annotations"
-
 
 type UnionSchema = [UnionMember]
 
