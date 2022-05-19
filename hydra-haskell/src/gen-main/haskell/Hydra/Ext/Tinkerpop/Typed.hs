@@ -1,4 +1,4 @@
-module Hydra.Ext.Tinkerpop.V3 where
+module Hydra.Ext.Tinkerpop.Typed where
 
 import qualified Hydra.Core as Core
 import Data.Map
@@ -12,7 +12,7 @@ data CollectionType
   | CollectionTypeSet Type
   deriving (Eq, Ord, Read, Show)
 
-_CollectionType = "hydra/ext/tinkerpop/v3.CollectionType"
+_CollectionType = "hydra/ext/tinkerpop/typed.CollectionType"
 
 _CollectionType_list = "list"
 
@@ -30,7 +30,7 @@ data CollectionValue
   | CollectionValueSet (Set Value)
   deriving (Eq, Ord, Read, Show)
 
-_CollectionValue = "hydra/ext/tinkerpop/v3.CollectionValue"
+_CollectionValue = "hydra/ext/tinkerpop/typed.CollectionValue"
 
 _CollectionValue_list = "list"
 
@@ -50,7 +50,7 @@ data Edge
     edgeProperties :: (Map Key Value)}
   deriving (Eq, Ord, Read, Show)
 
-_Edge = "hydra/ext/tinkerpop/v3.Edge"
+_Edge = "hydra/ext/tinkerpop/typed.Edge"
 
 _Edge_id = "id"
 
@@ -65,12 +65,12 @@ _Edge_properties = "properties"
 -- A literal value representing an edge id
 type EdgeId = Core.Literal
 
-_EdgeId = "hydra/ext/tinkerpop/v3.EdgeId"
+_EdgeId = "hydra/ext/tinkerpop/typed.EdgeId"
 
 -- The type of a reference to an edge by id
 type EdgeIdType = EdgeType
 
-_EdgeIdType = "hydra/ext/tinkerpop/v3.EdgeIdType"
+_EdgeIdType = "hydra/ext/tinkerpop/typed.EdgeIdType"
 
 -- The type of an edge, with characteristic id, out-vertex, in-vertex, and property types
 data EdgeType 
@@ -81,7 +81,7 @@ data EdgeType
     edgeTypeProperties :: (Map Key Type)}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeType = "hydra/ext/tinkerpop/v3.EdgeType"
+_EdgeType = "hydra/ext/tinkerpop/typed.EdgeType"
 
 _EdgeType_id = "id"
 
@@ -97,7 +97,7 @@ data Id
   | IdEdge EdgeId
   deriving (Eq, Ord, Read, Show)
 
-_Id = "hydra/ext/tinkerpop/v3.Id"
+_Id = "hydra/ext/tinkerpop/typed.Id"
 
 _Id_vertex = "vertex"
 
@@ -109,7 +109,7 @@ data IdType
   | IdTypeEdge EdgeType
   deriving (Eq, Ord, Read, Show)
 
-_IdType = "hydra/ext/tinkerpop/v3.IdType"
+_IdType = "hydra/ext/tinkerpop/typed.IdType"
 
 _IdType_vertex = "vertex"
 
@@ -118,12 +118,12 @@ _IdType_edge = "edge"
 -- A property key or map key
 type Key = String
 
-_Key = "hydra/ext/tinkerpop/v3.Key"
+_Key = "hydra/ext/tinkerpop/typed.Key"
 
 -- A vertex or edge label
 type Label = String
 
-_Label = "hydra/ext/tinkerpop/v3.Label"
+_Label = "hydra/ext/tinkerpop/typed.Label"
 
 -- The type of a value, such as a property value
 data Type 
@@ -132,7 +132,7 @@ data Type
   | TypeElement IdType
   deriving (Eq, Ord, Read, Show)
 
-_Type = "hydra/ext/tinkerpop/v3.Type"
+_Type = "hydra/ext/tinkerpop/typed.Type"
 
 _Type_atomic = "atomic"
 
@@ -147,7 +147,7 @@ data Value
   | ValueElement Id
   deriving (Eq, Ord, Read, Show)
 
-_Value = "hydra/ext/tinkerpop/v3.Value"
+_Value = "hydra/ext/tinkerpop/typed.Value"
 
 _Value_atomic = "atomic"
 
@@ -163,7 +163,7 @@ data Vertex
     vertexProperties :: (Map Key Value)}
   deriving (Eq, Ord, Read, Show)
 
-_Vertex = "hydra/ext/tinkerpop/v3.Vertex"
+_Vertex = "hydra/ext/tinkerpop/typed.Vertex"
 
 _Vertex_id = "id"
 
@@ -174,12 +174,12 @@ _Vertex_properties = "properties"
 -- A literal value representing a vertex id
 type VertexId = Core.Literal
 
-_VertexId = "hydra/ext/tinkerpop/v3.VertexId"
+_VertexId = "hydra/ext/tinkerpop/typed.VertexId"
 
 -- The type of a reference to a vertex by id
 type VertexIdType = VertexType
 
-_VertexIdType = "hydra/ext/tinkerpop/v3.VertexIdType"
+_VertexIdType = "hydra/ext/tinkerpop/typed.VertexIdType"
 
 -- The type of a vertex, with characteristic id and property types
 data VertexType 
@@ -188,7 +188,7 @@ data VertexType
     vertexTypeProperties :: (Map Key Value)}
   deriving (Eq, Ord, Read, Show)
 
-_VertexType = "hydra/ext/tinkerpop/v3.VertexType"
+_VertexType = "hydra/ext/tinkerpop/typed.VertexType"
 
 _VertexType_id = "id"
 

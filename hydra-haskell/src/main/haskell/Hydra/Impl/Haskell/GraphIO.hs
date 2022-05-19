@@ -23,7 +23,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
-import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
+import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Formatting
@@ -73,7 +73,7 @@ coreModules = [
   scalaMetaModule,
   yamlModelModule,
   codetreeAstModule,
-  tinkerpopV3Module]
+  tinkerpopTypedModule]
 
 toFileName :: Bool -> String -> String -> String
 toFileName caps ext name = L.intercalate "/" parts ++ ext
