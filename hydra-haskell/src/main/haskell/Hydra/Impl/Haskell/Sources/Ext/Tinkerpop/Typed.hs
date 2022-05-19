@@ -8,8 +8,10 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+tinkerpopTypedModule :: Module Meta
 tinkerpopTypedModule = Module tinkerpopTyped [hydraCoreModule]
 
+tinkerpopTypedName :: String
 tinkerpopTypedName = "hydra/ext/tinkerpop/typed"
 
 tinkerpopTyped :: Graph Meta
