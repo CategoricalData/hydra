@@ -7,7 +7,6 @@ import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Yaml.Coder
-import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import qualified Hydra.Ext.Yaml.Model as YM
 
@@ -19,6 +18,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as LB
+
 
 bytesToHsYaml :: BS.ByteString -> Result (DY.Node DY.Pos)
 bytesToHsYaml bs = case DY.decodeNode bs of
