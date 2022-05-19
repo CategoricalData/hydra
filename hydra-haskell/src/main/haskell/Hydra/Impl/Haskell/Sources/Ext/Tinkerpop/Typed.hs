@@ -1,23 +1,22 @@
-module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3 where
+module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed where
 
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-tinkerpopV3Module = Module tinkerpopV3 [hydraCoreModule]
+tinkerpopTypedModule = Module tinkerpopTyped [hydraCoreModule]
 
-tinkerpopV3Name = "hydra/ext/tinkerpop/v3"
+tinkerpopTypedName = "hydra/ext/tinkerpop/typed"
 
-tinkerpopV3 :: Graph Meta
-tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
+tinkerpopTyped :: Graph Meta
+tinkerpopTyped = Graph tinkerpopTypedName elements (const True) hydraCoreName
   where
-    def = datatype tinkerpopV3Name
-    v3 = nominal . qualify tinkerpopV3Name
+    def = datatype tinkerpopTypedName
+    typed = nominal . qualify tinkerpopTypedName
     core = nominal . qualify hydraCoreName
 
     elements = [
@@ -25,27 +24,27 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
       def "CollectionType" $
         doc "The type of a collection, such as a list of strings or an optional integer value" $
         union [
-          field "list" $ v3 "Type",
-          field "map" $ v3 "Type",
-          field "optional" $ v3 "Type",
-          field "set" $ v3 "Type"],
+          field "list" $ typed "Type",
+          field "map" $ typed "Type",
+          field "optional" $ typed "Type",
+          field "set" $ typed "Type"],
 
       def "CollectionValue" $
         doc "A collection of values, such as a list of strings or an optional integer value" $
         union [
-          field "list" $ list $ v3 "Value",
-          field "map" $ Types.map (v3 "Key") (v3 "Value"),
-          field "optional" $ optional $ v3 "Value",
-          field "set" $ set $ v3 "Value"],
+          field "list" $ list $ typed "Value",
+          field "map" $ Types.map (typed "Key") (typed "Value"),
+          field "optional" $ optional $ typed "Value",
+          field "set" $ set $ typed "Value"],
 
       def "Edge" $
         doc "An edge, comprised of an id, an out-vertex and in-vertex id, and zero or more properties" $
         record [
-          field "id" $ v3 "EdgeId",
-          field "label" $ v3 "Label",
-          field "out" $ v3 "VertexId",
-          field "in" $ v3 "VertexId",
-          field "properties" $ Types.map (v3 "Key") (v3 "Value")],
+          field "id" $ typed "EdgeId",
+          field "label" $ typed "Label",
+          field "out" $ typed "VertexId",
+          field "in" $ typed "VertexId",
+          field "properties" $ Types.map (typed "Key") (typed "Value")],
 
       def "EdgeId" $
         doc "A literal value representing an edge id" $
@@ -53,27 +52,27 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
 
       def "EdgeIdType" $
         doc "The type of a reference to an edge by id" $
-        v3 "EdgeType",
+        typed "EdgeType",
 
       def "EdgeType" $
         doc "The type of an edge, with characteristic id, out-vertex, in-vertex, and property types" $
         record [
           field "id" $ core "LiteralType",
-          field "out" $ v3 "VertexIdType",
-          field "in" $ v3 "VertexIdType",
-          field "properties" $ Types.map (v3 "Key") (v3 "Type")],
+          field "out" $ typed "VertexIdType",
+          field "in" $ typed "VertexIdType",
+          field "properties" $ Types.map (typed "Key") (typed "Type")],
 
       def "Id" $
         doc "A vertex or edge id" $
         union [
-          field "vertex" $ v3 "VertexId",
-          field "edge" $ v3 "EdgeId"],
+          field "vertex" $ typed "VertexId",
+          field "edge" $ typed "EdgeId"],
 
       def "IdType" $
         doc "The type of a reference to a strongly-typed element (vertex or edge) by id" $
         union [
-          field "vertex" $ v3 "VertexType",
-          field "edge" $ v3 "EdgeType"],
+          field "vertex" $ typed "VertexType",
+          field "edge" $ typed "EdgeType"],
 
       def "Key" $
         doc "A property key or map key"
@@ -87,22 +86,22 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
         doc "The type of a value, such as a property value" $
         union [
           field "atomic" $ core "LiteralType",
-          field "collection" $ v3 "CollectionType",
-          field "element" $ v3 "IdType"],
+          field "collection" $ typed "CollectionType",
+          field "element" $ typed "IdType"],
 
       def "Value" $
         doc "A concrete value such as a number or string, a collection of other values, or an element reference" $
         union [
           field "atomic" $ core "Literal",
-          field "collection" $ v3 "CollectionValue",
-          field "element" $ v3 "Id"],
+          field "collection" $ typed "CollectionValue",
+          field "element" $ typed "Id"],
 
       def "Vertex" $
         doc "A vertex, comprised of an id and zero or more properties" $
         record [
-          field "id" $ v3 "VertexId",
-          field "label" $ v3 "Label",
-          field "properties" $ Types.map (v3 "Key") (v3 "Value")],
+          field "id" $ typed "VertexId",
+          field "label" $ typed "Label",
+          field "properties" $ Types.map (typed "Key") (typed "Value")],
 
       def "VertexId" $
         doc "A literal value representing a vertex id" $
@@ -110,10 +109,10 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
 
       def "VertexIdType" $
         doc "The type of a reference to a vertex by id" $
-        v3 "VertexType",
+        typed "VertexType",
 
       def "VertexType" $
         doc "The type of a vertex, with characteristic id and property types" $
         record [
           field "id" $ core "LiteralType",
-          field "properties" $ Types.map (v3 "Key") (v3 "Value")]]
+          field "properties" $ Types.map (typed "Key") (typed "Value")]]
