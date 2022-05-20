@@ -24,6 +24,9 @@ class ToTree a where
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
 
+instance ToTree H.CaseRhs where
+  toTree (H.CaseRhs expr) = toTree expr
+  
 instance ToTree H.Constructor where
   toTree cons = case cons of
     H.ConstructorOrdinary (H.Constructor_Ordinary name types) -> spaceSep [
@@ -44,7 +47,9 @@ instance ToTree H.Declaration where
         consLines
         ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList (toTree <$> derivCat)]]
       where
-        derivCat = L.concat deriv
+        derivCat = L.concat $ h <$> deriv
+          where
+            h (H.Deriving names) = names
         consLines = L.zipWith consLine cons [0..]
         consLine c i = spaceSep [symb, toTree c]
           where
@@ -121,11 +126,11 @@ instance ToTree H.Field where
   toTree (H.Field name typ) = spaceSep [toTree name, cst "::", toTree typ]
 
 instance ToTree H.Import where
-  toTree (H.Import qual name mod _) = spaceSep $ Y.catMaybes [
+  toTree (H.Import qual (H.ModuleName name) mod _) = spaceSep $ Y.catMaybes [
       Just $ cst "import",
       if qual then Just (cst "qualified") else Nothing,
       Just $ cst name,
-      (\m -> cst $ "as " ++ m) <$> mod]
+      (\(H.ModuleName m) -> cst $ "as " ++ m) <$> mod]
 
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of
@@ -151,7 +156,7 @@ instance ToTree H.Name where
     H.NameParens qn -> "(" ++ writeQName qn ++ ")"
 
 instance ToTree H.ModuleHead where
-  toTree (H.ModuleHead mname _) = spaceSep [cst "module", cst mname, cst "where"]
+  toTree (H.ModuleHead (H.ModuleName mname) _) = spaceSep [cst "module", cst mname, cst "where"]
 
 instance ToTree H.Pattern where
   toTree pat = case pat of
@@ -169,6 +174,12 @@ instance ToTree H.Pattern where
 instance ToTree H.Pattern_Application where
   toTree (H.Pattern_Application name pats) = spaceSep $ toTree name:(toTree <$> pats)
 
+instance ToTree H.RightHandSide where
+  toTree (H.RightHandSide expr) = toTree expr
+
+instance ToTree H.Statement where
+  toTree (H.Statement expr) = toTree expr
+  
 instance ToTree H.Type where
   toTree htype = case htype of
     H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
@@ -183,10 +194,15 @@ instance ToTree H.ValueBinding where
   toTree vb = case vb of
     H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _) -> ifx defineOp (toTree pat) (toTree rhs)
 
+instance ToTree H.Variable where
+  toTree (H.Variable v) = toTree v
+  
 dataGraphToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
 dataGraphToHaskellString cx g = do
   hsmod <- dataGraphToHaskellModule cx g
   return $ printExpr $ parenthesize $ toTree hsmod
 
 writeQName :: H.QualifiedName -> String
-writeQName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ qualifiers ++ [unqual]
+writeQName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ (h <$> qualifiers) ++ [h unqual]
+  where
+    h (H.NamePart part) = part

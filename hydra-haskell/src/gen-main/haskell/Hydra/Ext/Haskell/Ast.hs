@@ -34,7 +34,9 @@ _Assertion_name = "name"
 _Assertion_types = "types"
 
 -- The right-hand side of a pattern-matching alternative
-type CaseRhs = Expression
+newtype CaseRhs 
+  = CaseRhs Expression
+  deriving (Eq, Ord, Read, Show)
 
 _CaseRhs = "hydra/ext/haskell/ast.CaseRhs"
 
@@ -170,7 +172,9 @@ _DeclarationHead_Application_function = "function"
 _DeclarationHead_Application_operand = "operand"
 
 -- A 'deriving' statement
-type Deriving = [Name]
+newtype Deriving 
+  = Deriving [Name]
+  deriving (Eq, Ord, Read, Show)
 
 _Deriving = "hydra/ext/haskell/ast.Deriving"
 
@@ -526,7 +530,9 @@ _LocalBinding_signature = "signature"
 
 _LocalBinding_value = "value"
 
-type LocalBindings = [LocalBinding]
+newtype LocalBindings 
+  = LocalBindings [LocalBinding]
+  deriving (Eq, Ord, Read, Show)
 
 _LocalBindings = "hydra/ext/haskell/ast.LocalBindings"
 
@@ -557,7 +563,9 @@ _ModuleHead_name = "name"
 
 _ModuleHead_exports = "exports"
 
-type ModuleName = String
+newtype ModuleName 
+  = ModuleName String
+  deriving (Eq, Ord, Read, Show)
 
 _ModuleName = "hydra/ext/haskell/ast.ModuleName"
 
@@ -575,7 +583,9 @@ _Name_normal = "normal"
 
 _Name_parens = "parens"
 
-type NamePart = String
+newtype NamePart 
+  = NamePart String
+  deriving (Eq, Ord, Read, Show)
 
 _NamePart = "hydra/ext/haskell/ast.NamePart"
 
@@ -697,11 +707,15 @@ _QualifiedName_qualifiers = "qualifiers"
 
 _QualifiedName_unqualified = "unqualified"
 
-type RightHandSide = Expression
+newtype RightHandSide 
+  = RightHandSide Expression
+  deriving (Eq, Ord, Read, Show)
 
 _RightHandSide = "hydra/ext/haskell/ast.RightHandSide"
 
-type Statement = Expression
+newtype Statement 
+  = Statement Expression
+  deriving (Eq, Ord, Read, Show)
 
 _Statement = "hydra/ext/haskell/ast.Statement"
 
@@ -794,10 +808,6 @@ _TypeSignature_name = "name"
 
 _TypeSignature_type = "type"
 
-type Variable = Name
-
-_Variable = "hydra/ext/haskell/ast.Variable"
-
 data TypedBinding 
   = TypedBinding {
     typedBindingTypeSignature :: TypeSignature,
@@ -832,3 +842,9 @@ _ValueBinding_Simple_pattern = "pattern"
 _ValueBinding_Simple_rhs = "rhs"
 
 _ValueBinding_Simple_localBindings = "localBindings"
+
+newtype Variable 
+  = Variable Name
+  deriving (Eq, Ord, Read, Show)
+
+_Variable = "hydra/ext/haskell/ast.Variable"
