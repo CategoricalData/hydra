@@ -31,16 +31,23 @@ import qualified Data.Maybe as Y
 newtypesNotTypedefs :: Bool
 newtypesNotTypedefs = True
 
-constantDecls :: Name -> Type m -> [H.DeclarationWithComments]
-constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
+useCoreImport :: Bool
+useCoreImport = True
+
+constantDecls :: M.Map GraphName H.ModuleName -> Name -> Type m -> [H.DeclarationWithComments]
+constantDecls aliases name typ = if useCoreImport
+    then toDecl "hydra/core.Name" nameDecl:(toDecl "hydra/core.FieldName" <$> fieldDecls)
+    else []
   where
     lname = localNameOf name
-    toDecl (k, v) = H.DeclarationWithComments decl Nothing
+    toDecl n (k, v) = H.DeclarationWithComments decl Nothing
       where
         decl = H.DeclarationValueBinding $
           H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
         pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
-        rhs = H.RightHandSide $ H.ExpressionLiteral $ H.LiteralString v
+        rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
+          (H.ExpressionVariable $ elementReference aliases n)
+          (H.ExpressionLiteral $ H.LiteralString v)
     nameDecl = ("_" ++ lname, name)
     fieldsOf t = case typeTerm t of
       TypeTermRecord fields -> fields
@@ -79,14 +86,14 @@ constructModule cx g coders pairs = do
             cons <- CM.mapM (unionCons lname) fields
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
           _ -> do
-            htype <- encodeAdaptedType importAliases cx t
+            htype <- encodeAdaptedType aliases cx t
             if newtypesNotTypedefs
               then do
                 let con = H.ConstructorOrdinary $ H.Constructor_Ordinary hname [htype]
                 return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [con] [deriv])
               else return $ H.DeclarationType (H.TypeDeclaration hd htype)
         comments <- contextDescriptionOf cx $ dataMeta term
-        return $ [H.DeclarationWithComments decl comments] ++ constantDecls (elementName el) t
+        return $ [H.DeclarationWithComments decl comments] ++ constantDecls aliases (elementName el) t
       where
         isSerializable = do
             deps <- typeDependencies cx (elementName el)
@@ -106,7 +113,7 @@ constructModule cx g coders pairs = do
           where
             toField (FieldType fname ftype) = do
               let hname = simpleName $ decapitalize lname ++ capitalize fname
-              htype <- encodeAdaptedType importAliases cx ftype
+              htype <- encodeAdaptedType aliases cx ftype
               return $ H.Field hname htype
 
         unionCons lname (FieldType fname ftype) = do
@@ -114,7 +121,7 @@ constructModule cx g coders pairs = do
           typeList <- if ftype {typeMeta = dflt} == Types.unit
             then pure []
             else do
-              htype <- encodeAdaptedType importAliases cx ftype
+              htype <- encodeAdaptedType aliases cx ftype
               return [htype]
           return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
@@ -123,21 +130,26 @@ constructModule cx g coders pairs = do
       rhs <- H.RightHandSide <$> stepOut coder term
       let hname = simpleName $ localNameOf $ elementName el
       let pat = H.PatternApplication $ H.Pattern_Application hname []
-      htype <- encodeType importAliases typ
+      htype <- encodeType aliases typ
       let decl = H.DeclarationTypedBinding $ H.TypedBinding
                   (H.TypeSignature hname htype)
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       comments <- contextDescriptionOf cx $ dataMeta term
       return [H.DeclarationWithComments decl comments]
 
-    importAliases = importAliasesForGraph g
+    aliases = importAliasesForGraph g
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
     imports = domainImports ++ standardImports
       where
-        domainImports = toImport <$> M.toList importAliases
+        domainImports = toImport <$> M.toList aliases
           where
             toImport (GraphName name, alias) = H.Import True (importName name) (Just alias) Nothing
-        standardImports = toImport . H.ModuleName <$> ["Data.Map", "Data.Set"]
+        standardImports = toImport . H.ModuleName <$> Y.catMaybes [
+            Just "Data.Map", 
+            Just "Data.Set"{-,
+            if useCoreImport && graphName g /= GraphName "hydra/core"
+              then Just "Hydra.Core"
+              else Nothing-}]
           where
             toImport name = H.Import False name Nothing Nothing
 
