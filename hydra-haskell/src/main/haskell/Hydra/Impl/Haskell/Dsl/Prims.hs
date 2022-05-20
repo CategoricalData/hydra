@@ -13,7 +13,7 @@ import qualified Data.Set as S
 booleanOutput :: Default m => OutputSpec Bool m
 booleanOutput = OutputSpec Types.boolean booleanValue
 
-inputPoly :: Default m => TypeVariable -> InputSpec (Data m) m
+inputPoly :: Default m => String -> InputSpec (Data m) m
 inputPoly v = InputSpec (Types.variable v) pure
 
 int32Input :: (Default m, Show m) => InputSpec Int m
@@ -28,13 +28,13 @@ listInput lt f = InputSpec (Types.list lt) (expectList f)
 listOutput :: Default m => Type m -> (a -> Data m) -> OutputSpec [a] m
 listOutput lt f = OutputSpec (Types.list lt) $ \l -> list (f <$> l)
 
-listInputPoly :: (Default m, Show m) => TypeVariable -> InputSpec [Data m] m
+listInputPoly :: (Default m, Show m) => String -> InputSpec [Data m] m
 listInputPoly v = InputSpec (Types.list $ Types.variable v) expectListPoly
 
-listOutputPoly :: Default m => TypeVariable -> OutputSpec [Data m] m
+listOutputPoly :: Default m => String -> OutputSpec [Data m] m
 listOutputPoly v = OutputSpec (Types.list $ Types.variable v) list
 
-outputPoly :: Default m => TypeVariable -> OutputSpec (Data m) m
+outputPoly :: Default m => String -> OutputSpec (Data m) m
 outputPoly v = OutputSpec (Types.variable v) id
 
 prim1 :: Name -> InputSpec a m -> OutputSpec b m -> (a -> b) -> PrimitiveFunction m
@@ -56,10 +56,10 @@ prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
       arg2 <- inputSpecUnmarshal input2 $ args !! 1
       return $ outputSpecMarshal output $ compute arg1 arg2
 
-setInput :: (Default m, Ord a, Show m) => (Data m -> Result a) -> TypeVariable -> InputSpec (S.Set a) m
+setInput :: (Default m, Ord a, Show m) => (Data m -> Result a) -> String -> InputSpec (S.Set a) m
 setInput f v = InputSpec (Types.set $ Types.variable v) (expectSet f)
 
-setOutput :: (Default m, Ord m) => (a -> Data m) -> TypeVariable -> OutputSpec (S.Set a) m
+setOutput :: (Default m, Ord m) => (a -> Data m) -> String -> OutputSpec (S.Set a) m
 setOutput f v = OutputSpec (Types.set $ Types.variable v) (\s -> set (S.fromList (f <$> S.toList s)))
 
 stringInput :: (Default m, Show m) => InputSpec String m

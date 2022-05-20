@@ -206,7 +206,7 @@ passUnion acx t@(Type (TypeTermUnion sfields) _) = do
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
 
 passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
-passUniversal acx t@(Type (TypeTermUniversal (UniversalType v body)) _) = do
+passUniversal acx t@(Type (TypeTermUniversal (UniversalType (TypeVariable v) body)) _) = do
   ad <- termAdapter acx body
   return $ Adapter (adapterIsLossy ad) t (Types.universal v $ adapterTarget ad)
     $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term

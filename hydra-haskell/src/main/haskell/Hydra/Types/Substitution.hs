@@ -35,8 +35,8 @@ freeVariablesInType typ = S.fromList $ fv typ
       TypeTermUniversal (UniversalType v body) -> v:(fv body)
       TypeTermVariable v -> [v]
 
-normalVariables :: [String]
-normalVariables = (\n -> "v" ++ show n) <$> [1..]
+normalVariables :: [TypeVariable]
+normalVariables = (\n -> TypeVariable $ "v" ++ show n) <$> [1..]
 
 normalizeScheme :: Default m => TypeScheme m -> TypeScheme m
 normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
@@ -56,9 +56,9 @@ normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType b
       TypeTermRecord fields -> record (normalizeFieldType <$> fields)
       TypeTermSet t -> set $ normalizeType t
       TypeTermUnion fields -> union (normalizeFieldType <$> fields)
-      TypeTermUniversal (UniversalType v t) -> universal v $ normalizeType t
+      TypeTermUniversal (UniversalType (TypeVariable v) t) -> universal v $ normalizeType t
       TypeTermVariable v -> case Prelude.lookup v ord of
-        Just v1 -> variable v1
+        Just (TypeVariable v1) -> variable v1
         Nothing -> error "type variable not in signature"
 
 substituteInScheme :: Default m => M.Map TypeVariable (Type m) -> TypeScheme m -> TypeScheme m
@@ -78,7 +78,7 @@ substituteInType s typ = case typeTerm typ of
     TypeTermRecord tfields -> record (substField <$> tfields)
     TypeTermSet t -> set $ subst t
     TypeTermUnion tfields -> union (substField <$> tfields)
-    TypeTermUniversal (UniversalType v body) -> if Y.isNothing (M.lookup v s)
+    TypeTermUniversal (UniversalType var@(TypeVariable v) body) -> if Y.isNothing (M.lookup var s)
       then Types.universal v (subst body)
       else typ
     TypeTermVariable a -> M.findWithDefault typ a s

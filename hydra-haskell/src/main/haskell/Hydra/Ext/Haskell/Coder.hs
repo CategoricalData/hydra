@@ -97,7 +97,7 @@ constructModule cx g coders pairs = do
 
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
-          (h:rest) -> H.DeclarationHeadApplication $
+          ((TypeVariable h):rest) -> H.DeclarationHeadApplication $
             H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
         recordCons lname fields = do
@@ -324,10 +324,10 @@ encodeType aliases typ = case typeTerm typ of
     TypeTermSet st -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ simpleName "Set",
       encode st]
-    TypeTermUniversal (UniversalType v body) -> toApplicationType <$> CM.sequence [
+    TypeTermUniversal (UniversalType (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
-    TypeTermVariable v -> pure $ H.TypeVariable $ simpleName v
+    TypeTermVariable (TypeVariable v) -> pure $ H.TypeVariable $ simpleName v
     TypeTermRecord [] -> pure $ H.TypeTuple []
     _ -> fail $ "unexpected type: " ++ show typ
   where

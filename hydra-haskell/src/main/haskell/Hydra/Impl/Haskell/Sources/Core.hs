@@ -378,7 +378,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "UniversalType" $
         doc "A universally quantified ('forall') type, parameterized by a type variable" $
         universal "m" $ record [
-          field "variable" string,
+          field "variable" $ core "TypeVariable",
           field "body" $ universal "m" $ core "Type"],
 
       def "Variable" $

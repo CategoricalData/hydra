@@ -604,7 +604,9 @@ _TypeTerm_universal = "universal"
 _TypeTerm_variable = "variable"
 
 -- A symbol which stands in for a type
-type TypeVariable = String
+newtype TypeVariable 
+  = TypeVariable String
+  deriving (Eq, Ord, Read, Show)
 
 _TypeVariable = "hydra/core.TypeVariable"
 
@@ -666,7 +668,7 @@ _TypedData_term = "term"
 -- A universally quantified ('forall') type, parameterized by a type variable
 data UniversalType m 
   = UniversalType {
-    universalTypeVariable :: String,
+    universalTypeVariable :: TypeVariable,
     universalTypeBody :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 

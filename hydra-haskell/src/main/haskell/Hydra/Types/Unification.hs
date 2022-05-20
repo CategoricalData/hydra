@@ -9,9 +9,7 @@ module Hydra.Types.Unification (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
 import Hydra.Types.Substitution
-import Hydra.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Default
 
@@ -29,7 +27,7 @@ type Solve a m = ExceptT (TypeError m) Identity a
 data TypeError m
   = UnificationFail (Type m) (Type m)
   | InfiniteType TypeVariable (Type m)
-  | UnboundVariable String
+  | UnboundVariable Variable
   | UnificationMismatch [Type m] [Type m]
   | ElementUndefined Name
   | InvalidTypeEncoding String deriving (Eq, Show)
@@ -71,7 +69,7 @@ unify cx t1 t2 = if typeTerm t1 == typeTerm t2
       (TypeTermRecord f1, TypeTermRecord f2) -> unifyRowType f1 f2
       (TypeTermSet st1, TypeTermSet st2) -> unify cx st1 st2
       (TypeTermUnion f1, TypeTermUnion f2) -> unifyRowType f1 f2
-      (TypeTermUniversal (UniversalType v1 body1), TypeTermUniversal (UniversalType v2 body2)) -> unifyMany cx
+      (TypeTermUniversal (UniversalType (TypeVariable v1) body1), TypeTermUniversal (UniversalType (TypeVariable v2) body2)) -> unifyMany cx
         [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeTermVariable v, _) -> bind v t2
       (_, TypeTermVariable v) -> bind v t1

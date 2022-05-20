@@ -84,8 +84,8 @@ set = defaultType . TypeTermSet
 string :: Default m => Type m
 string = literal LiteralTypeString
 
-variable :: Default m => TypeVariable -> Type m
-variable = defaultType . TypeTermVariable
+variable :: Default m => String -> Type m
+variable = defaultType . TypeTermVariable . TypeVariable
 
 uint16 :: Default m => Type m
 uint16 = integer IntegerTypeUint16
@@ -105,5 +105,5 @@ union = defaultType . TypeTermUnion
 unit :: Default m => Type m
 unit = record []
 
-universal :: Default m => TypeVariable -> Type m -> Type m
-universal v body = defaultType $ TypeTermUniversal $ UniversalType v body
+universal :: Default m => String -> Type m -> Type m
+universal v body = defaultType $ TypeTermUniversal $ UniversalType (TypeVariable v) body
