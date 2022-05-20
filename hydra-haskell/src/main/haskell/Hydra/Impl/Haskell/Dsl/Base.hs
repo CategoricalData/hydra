@@ -21,7 +21,7 @@ field :: FieldName -> Program a -> Fld b
 field fname prog = Fld (Field fname $ strip prog)
 
 letProg :: Var a -> Program a -> Program b -> Program b
-letProg (Var k) (Program v) (Program env) = program $ DataTermLet $ Let k v env
+letProg (Var k) (Program v) (Program env) = program $ DataTermLet $ Let (Variable k) v env
 
 list :: [Program a] -> Program [a]
 list els = program $ DataTermList $ strip <$> els
@@ -31,7 +31,7 @@ mapProg pairs = program $ DataTermMap $ M.fromList $ stripPair <$> pairs
   where
     stripPair (kp, vp) = (strip kp, strip vp)
 
-nominal :: Name -> (Program a) -> Program b
+nominal :: Name -> Program a -> Program b
 nominal name (Program term) = program $ DataTermNominal $ Named name term
 
 optional :: Maybe (Program a) -> Program (Maybe a)
@@ -55,4 +55,4 @@ unit :: Program ()
 unit = record []
 
 var :: Var a -> Program a
-var (Var v) = program $ DataTermVariable v
+var (Var v) = program $ DataTermVariable $ Variable v

@@ -42,7 +42,7 @@ evaluate context term = reduce M.empty term
         DataTermRecord fields -> defaultData  . DataTermRecord <$> CM.mapM reduceField fields
         DataTermSet terms -> defaultData . DataTermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
         DataTermUnion f -> defaultData . DataTermUnion <$> reduceField f
-        DataTermVariable v -> case M.lookup v bindings of
+        DataTermVariable var@(Variable v) -> case M.lookup var bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
       where

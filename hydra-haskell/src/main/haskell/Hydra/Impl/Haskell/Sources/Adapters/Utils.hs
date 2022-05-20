@@ -16,7 +16,7 @@ l ++. r = apply (primitive _strings_cat) $ list [l, r]
 (@.) :: Default a => Data a -> Data a -> Data a
 l @. r = apply l r
 
-(->.) :: Default a => Variable -> Data a -> Data a
+(->.) :: Default a => String -> Data a -> Data a
 v ->. body = lambda v body
 
 const_ :: Default a => Data a -> Data a
@@ -25,7 +25,7 @@ const_ = constFunction
 _eldata :: Default a1 => Element a2 -> Data a1
 _eldata el = delta @. element (elementName el)
 
-l_ :: Default a => Variable -> Data a -> Data a
+l_ :: Default a => String -> Data a -> Data a
 l_ = lambda
 
 match_ :: Name -> Type Meta -> [(FieldName, Data Meta)] -> Data Meta
@@ -40,7 +40,7 @@ r_ = standardRecord
 s_ :: String -> Data Meta
 s_ = stringValue
 
-v_ :: Default a => Variable -> Data a
+v_ :: Default a => String -> Data a
 v_ = variable
 
 

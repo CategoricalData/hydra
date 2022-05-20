@@ -74,7 +74,7 @@ constructModule cx g coders pairs = do
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Data m) -> Result Scala.Data
 encodeFunction cx meta fun arg = case fun of
-    FunctionLambda (Lambda v body) -> slambda v <$> encodeData cx body <*> (findSdom meta)
+    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeData cx body <*> (findSdom meta)
     FunctionPrimitive name -> pure $ sprim name
     FunctionCases cases -> do
         let v = "v"
@@ -98,11 +98,11 @@ encodeFunction cx meta fun arg = case fun of
             body <- encodeData cx $ applyVar fterm v
             return $ Scala.Case pat Nothing body
           where
-            v = "y"
-        applyVar fterm v = case dataTerm fterm of
+            v = Variable "y"
+        applyVar fterm var@(Variable v) = case dataTerm fterm of
           DataTermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
             then body
-            else substituteVariable v1 v body
+            else substituteVariable v1 var body
           _ -> apply fterm (variable v)
     FunctionDelta -> pure $ sname "DATA" -- TODO
     FunctionProjection fname -> fail $ "unapplied projection not yet supported"
@@ -181,7 +181,7 @@ encodeData cx term@(Data expr meta) = case expr of
           arg <- encodeData cx ft
           return [arg]
       return $ sapply lhs args
-    DataTermVariable v -> pure $ sname v
+    DataTermVariable (Variable v) -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
     schemaName = do
@@ -312,7 +312,7 @@ sapply fun args = Scala.DataApply $ Scala.Data_Apply fun args
 sassign :: Scala.Data -> Scala.Data -> Scala.Data
 sassign lhs rhs = Scala.DataAssign $ Scala.Data_Assign lhs rhs
 
-slambda :: Variable -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data
+slambda :: String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data
 slambda v body sdom = Scala.DataFunctionData $ Scala.Data_FunctionDataFunction
     $ Scala.Data_Function [Scala.Data_Param mods name sdom def] body
   where
@@ -345,7 +345,7 @@ stref :: String -> Scala.Type
 stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 
 svar :: Variable -> Scala.Pat
-svar = Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString
+svar (Variable v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v
 
 typeName :: Bool -> Name -> String
 typeName qualify sname = if qualify && S.member local scalaReservedWords

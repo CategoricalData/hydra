@@ -64,7 +64,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
         FunctionOptionalCases _ -> variant _Function_optionalCases $ stringValue $ show term -- TODO
         FunctionPrimitive name -> variant _Function_primitive $ stringValue name
         FunctionProjection fname -> variant _Function_projection $ stringValue fname
-      DataTermVariable var -> variant _DataTerm_variable $ stringValue var
+      DataTermVariable (Variable var) -> variant _DataTerm_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [

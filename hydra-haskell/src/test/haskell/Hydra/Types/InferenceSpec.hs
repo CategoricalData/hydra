@@ -121,7 +121,7 @@ checkIndividualTerms = do
 
     H.it "Check let terms" $ do
       expectPolytype
-        (letData "x" (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
+        (letData (Variable "x") (float32Value 42.0) (lambda "y" (lambda "z" (variable "x"))))
         [TypeVariable "v1", TypeVariable "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
 
     H.it "Check elements" $ do

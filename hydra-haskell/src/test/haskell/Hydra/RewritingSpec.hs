@@ -55,13 +55,13 @@ testFreeVariablesInData = do
         S.empty
       H.shouldBe
         (freeVariablesInData (variable "x" :: Data ()))
-        (S.fromList ["x"])
+        (S.fromList [Variable "x"])
       H.shouldBe
         (freeVariablesInData (list [variable "x", apply (lambda "y" $ variable "y") (int32Value 42)] :: Data ()))
-        (S.fromList ["x"])
+        (S.fromList [Variable "x"])
       H.shouldBe
         (freeVariablesInData (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Data ()))
-        (S.fromList ["x", "y"])
+        (S.fromList [Variable "x", Variable "y"])
 
 testReplaceData :: H.SpecWith ()
 testReplaceData = do

@@ -128,8 +128,8 @@ int8Value = integerValue . IntegerValueInt8 . fromIntegral
 integerValue :: Default a => IntegerValue -> Data a
 integerValue = defaultData . DataTermLiteral . LiteralInteger
 
-lambda :: Default a => Variable -> Data a -> Data a
-lambda param body = defaultData $ DataTermFunction $ FunctionLambda $ Lambda param body
+lambda :: Default a => String -> Data a -> Data a
+lambda param body = defaultData $ DataTermFunction $ FunctionLambda $ Lambda (Variable param) body
 
 letData :: Default a => Variable -> Data a -> Data a -> Data a
 letData v t1 t2 = defaultData $ DataTermLet $ Let v t1 t2
@@ -209,8 +209,8 @@ unitData = defaultData $ DataTermRecord []
 unitVariant :: Default a => FieldName -> Data a
 unitVariant fname = variant fname unitData
 
-variable :: Default a => Variable -> Data a
-variable = defaultData . DataTermVariable
+variable :: Default a => String -> Data a
+variable = defaultData . DataTermVariable . Variable
 
 variant :: Default a => FieldName -> Data a -> Data a
 variant fname term = defaultData $ DataTermUnion $ Field fname term
