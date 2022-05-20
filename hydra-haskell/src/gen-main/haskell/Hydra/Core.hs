@@ -679,6 +679,8 @@ _UniversalType_variable = "variable"
 _UniversalType_body = "body"
 
 -- A symbol which stands in for a term
-type Variable = String
+newtype Variable 
+  = Variable String
+  deriving (Eq, Ord, Read, Show)
 
 _Variable = "hydra/core.Variable"

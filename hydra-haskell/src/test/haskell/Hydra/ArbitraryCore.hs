@@ -119,7 +119,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
     defaults = [
       -- Note: this simple lambda is a bit of a cheat. We just have to make sure we can generate at least one term
       --       for any supported function type.
-      FunctionLambda <$> (Lambda "x" <$> arbitraryData cod n')]
+      FunctionLambda <$> (Lambda (Variable "x") <$> arbitraryData cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     whenEqual = [FunctionCompareTo <$> arbitraryData dom n' | dom == cod]
     domainSpecific = case typeTerm dom of

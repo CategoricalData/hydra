@@ -20,10 +20,10 @@ compareTo :: Program a -> Program (a -> Bool)
 compareTo (Program other) = program $ DataTermFunction $ FunctionCompareTo other
 
 deref :: Program (Ref a -> a)
-deref = program $ DataTermFunction $ FunctionDelta
+deref = program $ DataTermFunction FunctionDelta
 
 lambda :: Var a -> Program b -> Program (a -> b)
-lambda (Var v) (Program body) = program $ DataTermFunction $ FunctionLambda $ Lambda v body
+lambda (Var v) (Program body) = program $ DataTermFunction $ FunctionLambda $ Lambda (Variable v) body
 
 optionalCases :: Program b -> Program (a -> b) -> Program (Maybe a -> b)
 optionalCases (Program nothing) (Program just)

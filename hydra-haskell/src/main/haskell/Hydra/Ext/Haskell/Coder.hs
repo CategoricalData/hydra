@@ -177,7 +177,7 @@ encodeFunction aliases cx meta fun = case fun of
         toAlt fieldMap (Field fn fun') = do
           let v0 = "v"
           let rhsData = simplifyData $ apply fun' (variable v0)
-          let v1 = if isFreeIn v0 rhsData then "_" else v0
+          let v1 = if isFreeIn (Variable v0) rhsData then "_" else v0
           dn <- domName
           hname <- case dn of
             Just n -> pure $ unionFieldReference aliases n fn
@@ -190,7 +190,7 @@ encodeFunction aliases cx meta fun = case fun of
           rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
     FunctionDelta -> pure $ hsvar "id"
-    FunctionLambda (Lambda v body) -> hslambda v <$> encodeData aliases cx body
+    FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeData aliases cx body
     FunctionOptionalCases (OptionalCases nothing just) -> do
       nothingRhs <- H.CaseRhs <$> encodeData aliases cx nothing
       let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
@@ -198,7 +198,7 @@ encodeFunction aliases cx meta fun = case fun of
         -- Note: some of the following could be brought together with FunctionCases
         let v0 = "v"
         let rhsData = simplifyData $ apply just (variable v0)
-        let v1 = if S.member v0 $ freeVariablesInData rhsData then v0 else "_"
+        let v1 = if S.member (Variable v0) $ freeVariablesInData rhsData then v0 else "_"
         let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
         rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
         return $ H.Alternative lhs rhs Nothing
@@ -286,7 +286,7 @@ encodeData aliases cx term@(Data expr meta) = do
       case dataTerm ft of
         DataTermRecord [] -> pure lhs
         _ -> hsapp lhs <$> encode cx ft
-    DataTermVariable v -> pure $ hsvar v
+    DataTermVariable (Variable v) -> pure $ hsvar v
     _ -> fail $ "unexpected term: " ++ show term
   where
     encode = encodeData aliases

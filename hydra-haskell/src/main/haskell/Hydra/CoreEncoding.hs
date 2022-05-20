@@ -93,7 +93,7 @@ encodeIntegerType cx it = unitVariant $ case it of
   IntegerTypeUint64 -> _IntegerType_uint64
 
 encodeLambda :: (Default m, Ord m) => Context m -> Lambda m -> Data m
-encodeLambda cx (Lambda v b) = nominalRecord cx _Lambda [
+encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
   Field _Lambda_parameter $ stringValue v,
   Field _Lambda_body $ encodeData cx b]
 
@@ -126,7 +126,7 @@ encodeData cx term = case dataTerm term of
   DataTermRecord fields -> variant _DataTerm_record $ list $ encodeField cx <$> fields
   DataTermSet terms -> variant _DataTerm_set $ set $ S.fromList $ encodeData cx <$> S.toList terms
   DataTermUnion field -> variant _DataTerm_union $ encodeField cx field
-  DataTermVariable var -> variant _DataTerm_variable $ stringValue var
+  DataTermVariable (Variable var) -> variant _DataTerm_variable $ stringValue var
 
 encodeType :: Default m => Context m -> Type m -> Data m
 encodeType cx typ = setMeta (typeMeta typ) $ case typeTerm typ of
