@@ -3,15 +3,16 @@ module Hydra.Impl.Haskell.Sources.Ext.Scala.Meta where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+scalaMetaModule :: Module Meta
 scalaMetaModule = Module scalaMeta []
 
-scalaMetaName = "hydra/ext/scala/meta"
+scalaMetaName :: GraphName
+scalaMetaName = GraphName "hydra/ext/scala/meta"
 
 scalaMeta :: Graph Meta
 scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName

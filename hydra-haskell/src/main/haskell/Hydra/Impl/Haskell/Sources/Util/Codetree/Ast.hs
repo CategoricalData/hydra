@@ -3,16 +3,17 @@ module Hydra.Impl.Haskell.Sources.Util.Codetree.Ast where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+codetreeAstModule :: Module Meta
 codetreeAstModule = Module codetreeAst []
 
 -- Note: here, the element namespace doubles as a graph name
-codetreeAstName = "hydra/util/codetree/ast"
+codetreeAstName :: GraphName
+codetreeAstName = GraphName "hydra/util/codetree/ast"
 
 codetreeAst :: Graph Meta
 codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName

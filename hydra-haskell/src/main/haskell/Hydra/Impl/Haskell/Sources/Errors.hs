@@ -3,16 +3,17 @@ module Hydra.Impl.Haskell.Sources.Errors where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+hydraErrorsModule :: Module Meta
 hydraErrorsModule = Module hydraErrors []
 
 -- Note: here, the element namespace doubles as a graph name
-hydraErrorsName = "hydra/errors"
+hydraErrorsName :: GraphName
+hydraErrorsName = GraphName "hydra/errors"
 
 hydraErrors :: Graph Meta
 hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName

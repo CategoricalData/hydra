@@ -8,10 +8,11 @@ import Hydra.Impl.Haskell.Sources.Libraries
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 
+hydraBasicsModule :: Module Meta
 hydraBasicsModule = Module hydraBasics []
 
-hydraBasicsName :: Name
-hydraBasicsName = "hydra/basics"
+hydraBasicsName :: GraphName
+hydraBasicsName = GraphName "hydra/basics"
 
 hydraBasics :: Graph Meta
 hydraBasics = standardGraph hydraBasicsName [

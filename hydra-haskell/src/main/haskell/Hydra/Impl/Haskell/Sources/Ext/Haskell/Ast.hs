@@ -6,15 +6,16 @@ module Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+haskellAstModule :: Module Meta
 haskellAstModule = Module haskellAst []
 
-haskellAstName = "hydra/ext/haskell/ast"
+haskellAstName :: GraphName
+haskellAstName = GraphName "hydra/ext/haskell/ast"
 
 haskellAst :: Graph Meta
 haskellAst = Graph haskellAstName elements (const True) hydraCoreName

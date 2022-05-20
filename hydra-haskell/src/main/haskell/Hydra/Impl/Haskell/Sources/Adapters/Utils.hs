@@ -1,6 +1,5 @@
 module Hydra.Impl.Haskell.Sources.Adapters.Utils (adapterUtilsModule) where
 
-import Hydra.Adapter
 import Hydra.Core
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Graph
@@ -45,10 +44,11 @@ v_ :: Default a => Variable -> Data a
 v_ = variable
 
 
+adapterUtilsModule :: Module Meta
 adapterUtilsModule = Module adapterUtils [hydraBasicsModule]
 
-adapterUtilsName :: Name
-adapterUtilsName = "hydra/adapters/utils"
+adapterUtilsName :: GraphName
+adapterUtilsName = GraphName "hydra/adapters/utils"
 
 adapterUtils :: Graph Meta
 adapterUtils = standardGraph adapterUtilsName [

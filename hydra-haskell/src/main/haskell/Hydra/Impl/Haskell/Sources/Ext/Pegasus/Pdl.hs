@@ -10,15 +10,16 @@ import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+pegasusPdlModule :: Module Meta
 pegasusPdlModule = Module pegasusPdl [jsonJsonModule]
 
-pegasusPdlName = "hydra/ext/pegasus/pdl"
+pegasusPdlName :: GraphName
+pegasusPdlName = GraphName "hydra/ext/pegasus/pdl"
 
 pegasusPdl :: Graph Meta
 pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName

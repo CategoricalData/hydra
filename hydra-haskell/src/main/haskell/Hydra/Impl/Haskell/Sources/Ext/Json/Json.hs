@@ -8,9 +8,11 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+jsonJsonModule :: Module Meta
 jsonJsonModule = Module jsonJson []
 
-jsonJsonName = "hydra/ext/json/json"
+jsonJsonName :: GraphName
+jsonJsonName = GraphName "hydra/ext/json/json"
 
 jsonJson :: Graph Meta
 jsonJson = Graph jsonJsonName elements (const True) hydraCoreName

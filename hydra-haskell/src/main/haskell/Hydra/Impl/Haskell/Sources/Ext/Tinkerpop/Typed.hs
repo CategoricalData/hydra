@@ -11,8 +11,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 tinkerpopTypedModule :: Module Meta
 tinkerpopTypedModule = Module tinkerpopTyped [hydraCoreModule]
 
-tinkerpopTypedName :: String
-tinkerpopTypedName = "hydra/ext/tinkerpop/typed"
+tinkerpopTypedName :: GraphName
+tinkerpopTypedName = GraphName "hydra/ext/tinkerpop/typed"
 
 tinkerpopTyped :: Graph Meta
 tinkerpopTyped = Graph tinkerpopTypedName elements (const True) hydraCoreName

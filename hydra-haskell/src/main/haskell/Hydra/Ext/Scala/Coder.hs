@@ -9,7 +9,6 @@ import Hydra.Adapter
 import Hydra.Basics
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
-import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Primitives
@@ -34,16 +33,17 @@ constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (St
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
     defs <- CM.mapM toDef pairs
-    let pname = toScalaName $ graphName g
+    let pname = toScalaName $ h $ graphName g
     let pref = Scala.Data_RefName pname
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
+    h (GraphName n) = n
     imports = (toElImport <$> S.toList (dataGraphDependencies True False True g))
         ++ (toPrimImport <$> S.toList (dataGraphDependencies False True False g))
       where
-        toElImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+        toElImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
-        toPrimImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+        toPrimImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedData typ term) = do
