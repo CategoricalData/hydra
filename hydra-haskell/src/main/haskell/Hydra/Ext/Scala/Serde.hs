@@ -45,7 +45,7 @@ writeDefn def = case def of
         if L.null tparams then Nothing else Just $ bracketList False (writeType_Param <$> tparams),
         Just $ parenList (writeData_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
-  Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name name))] typ term) -> spaceSep [
+  Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name (Scala.PredefString name)))] typ term) -> spaceSep [
       cst "val", nameAndType, cst "=", writeData term]
     where
       nameAndType = Y.maybe (cst name) (\t -> spaceSep [cst $ name ++ ":", writeType t]) typ
@@ -56,7 +56,7 @@ writeImportExportStat ie = case ie of
 --  Scala.ImportExportStatExport exp ->
 
 writeImporter :: Scala.Importer -> CT.Expr
-writeImporter (Scala.Importer (Scala.Data_RefName (Scala.Data_Name ref)) importees) = spaceSep [
+writeImporter (Scala.Importer (Scala.Data_RefName (Scala.Data_Name (Scala.PredefString ref))) importees) = spaceSep [
     cst "import", noSep [cst ref, forImportees importees]]
   where
     forImportee it = cst $ case it of
@@ -120,7 +120,7 @@ writeData_FunctionData ft = case ft of
     spaceSep [parenList (writeData_Param <$> params), cst "=>", writeData body]
 
 writeData_Name :: Scala.Data_Name -> CT.Expr
-writeData_Name (Scala.Data_Name name) = cst name
+writeData_Name (Scala.Data_Name (Scala.PredefString name)) = cst name
 
 writeData_Param :: Scala.Data_Param -> CT.Expr
 writeData_Param (Scala.Data_Param _ name stype _) = noSep $ Y.catMaybes [

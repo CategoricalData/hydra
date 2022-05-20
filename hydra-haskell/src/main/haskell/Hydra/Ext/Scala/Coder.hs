@@ -38,14 +38,14 @@ constructModule cx g coders pairs = do
     let pref = Scala.Data_RefName pname
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
-    imports = (toElImport <$> (S.toList $ dataGraphDependencies True False True g))
-        ++ (toPrimImport <$> (S.toList $ dataGraphDependencies False True False g))
+    imports = (toElImport <$> S.toList (dataGraphDependencies True False True g))
+        ++ (toPrimImport <$> S.toList (dataGraphDependencies False True False g))
       where
         toElImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
         toPrimImport gname = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) []]
-    toScalaName name = Scala.Data_Name $ L.intercalate "." $ Strings.splitOn "/" name
+    toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedData typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- stepOut coder term
@@ -65,11 +65,12 @@ constructModule cx g coders pairs = do
         toDefn (Scala.Data_FunctionDataFunction (Scala.Data_Function params body)) cod = do
           let tparams = stparam <$> freeTypeVars
           scod <- encodeType cod
-          return $ Scala.DefnDef $ Scala.Defn_Def [] (Scala.Data_Name lname) tparams [params] (Just scod) body
+          return $ Scala.DefnDef $ Scala.Defn_Def []
+            (Scala.Data_Name $ Scala.PredefString lname) tparams [params] (Just scod) body
 
         toVal rhs = pure $ Scala.DefnVal $ Scala.Defn_Val [] [namePat] Nothing rhs
           where
-            namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name lname
+            namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name $ Scala.PredefString lname
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Data m) -> Result Scala.Data
 encodeFunction cx meta fun arg = case fun of
@@ -145,7 +146,8 @@ encodeData cx term@(Data expr meta) = case expr of
           FunctionDelta -> encodeData cx arg
           FunctionProjection fname -> do
             sarg <- encodeData cx arg
-            return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg (Scala.Data_Name fname)
+            return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
+              (Scala.Data_Name $ Scala.PredefString fname)
           _ -> fallback
         _ -> fallback
       where
@@ -319,7 +321,7 @@ slambda v body sdom = Scala.DataFunctionData $ Scala.Data_FunctionDataFunction
     def = Nothing
 
 sname :: String -> Scala.Data
-sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name
+sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name . Scala.PredefString
 
 sprim :: Name -> Scala.Data
 sprim name = sname $ prefix ++ "." ++ local
@@ -343,7 +345,7 @@ stref :: String -> Scala.Type
 stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 
 svar :: Variable -> Scala.Pat
-svar = Scala.PatVar . Scala.Pat_Var . Scala.Data_Name
+svar = Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString
 
 typeName :: Bool -> Name -> String
 typeName qualify sname = if qualify && S.member local scalaReservedWords

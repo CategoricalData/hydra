@@ -4,7 +4,9 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
-type PredefString = String
+newtype PredefString 
+  = PredefString String
+  deriving (Eq, Ord, Read, Show)
 
 _PredefString = "hydra/ext/scala/meta.PredefString"
 

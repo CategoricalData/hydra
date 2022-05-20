@@ -13,7 +13,6 @@ import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import Hydra.Impl.Haskell.Extras
 
-import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 
