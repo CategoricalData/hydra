@@ -29,7 +29,7 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
           field "properties" $ v3 "Properties",
           field "out" $ v3 "Id",
           field "in" $ v3 "Id"],
-          
+
       def "Id" $
         doc "A vertex or edge id" $
         core "Literal",

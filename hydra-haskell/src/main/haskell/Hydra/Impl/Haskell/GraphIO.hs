@@ -23,6 +23,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
+import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
@@ -74,6 +75,7 @@ coreModules = [
   scalaMetaModule,
   yamlModelModule,
   codetreeAstModule,
+  tinkerpopFeaturesModule,
   tinkerpopTypedModule,
   tinkerpopV3Module]
 
