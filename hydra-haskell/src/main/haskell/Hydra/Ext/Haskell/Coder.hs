@@ -40,7 +40,7 @@ constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
         decl = H.DeclarationValueBinding $
           H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
         pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
-        rhs = H.ExpressionLiteral $ H.LiteralString v
+        rhs = H.RightHandSide $ H.ExpressionLiteral $ H.LiteralString v
     nameDecl = ("_" ++ lname, name)
     fieldsOf t = case typeTerm t of
       TypeTermRecord fields -> fields
@@ -64,7 +64,7 @@ constructModule cx g coders pairs = do
         let hname = simpleName lname
         t <- decodeType cx term
         isSer <- isSerializable
-        let deriv = if isSer
+        let deriv = H.Deriving $ if isSer
                       then simpleName <$> ["Eq", "Ord", "Read", "Show"]
                       else []
         let (vars, t') = unpackUniversalType t
@@ -95,7 +95,8 @@ constructModule cx g coders pairs = do
 
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
-          (h:rest) -> H.DeclarationHeadApplication $ H.DeclarationHead_Application (declHead name rest) (simpleName h)
+          (h:rest) -> H.DeclarationHeadApplication $
+            H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
         recordCons lname fields = do
             hFields <- CM.mapM toField fields
@@ -117,7 +118,7 @@ constructModule cx g coders pairs = do
 
     createOtherDeclarations (el, TypedData typ term) = do
       let coder = Y.fromJust $ M.lookup typ coders
-      rhs <- stepOut coder term
+      rhs <- H.RightHandSide <$> stepOut coder term
       let hname = simpleName $ localNameOf $ elementName el
       let pat = H.PatternApplication $ H.Pattern_Application hname []
       htype <- encodeType importAliases typ
@@ -128,21 +129,21 @@ constructModule cx g coders pairs = do
       return [H.DeclarationWithComments decl comments]
 
     importAliases = importAliasesForGraph g
-    importName name = L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
+    importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
     imports = domainImports ++ standardImports
       where
         domainImports = toImport <$> M.toList importAliases
           where
             toImport (name, alias) = H.Import True (importName name) (Just alias) Nothing
-        standardImports = toImport <$> ["Data.Map", "Data.Set"]
+        standardImports = toImport . H.ModuleName <$> ["Data.Map", "Data.Set"]
           where
             toImport name = H.Import False name Nothing Nothing
 
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
-        H.ExpressionLambda (H.Expression_Lambda vars body) -> rewriteValueBinding $
+        H.RightHandSide (H.ExpressionLambda (H.Expression_Lambda vars body)) -> rewriteValueBinding $
           H.ValueBinding_Simple
-            (H.PatternApplication (H.Pattern_Application name (args ++ vars))) body bindings
+            (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
         _ -> vb
 
 dataGraphToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
@@ -150,21 +151,21 @@ dataGraphToHaskellModule cx g = dataGraphToExternalModule haskellLanguage (encod
   where
     aliases = importAliasesForGraph g
 
-elementReference :: M.Map Name String -> Name -> H.Name
+elementReference :: M.Map Name H.ModuleName -> Name -> H.Name
 elementReference aliases name = case alias of
     Nothing -> simpleName local
-    Just a -> rawName $ a ++ "." ++ sanitize local
+    Just (H.ModuleName a) -> rawName $ a ++ "." ++ sanitize local
   where
     (ns, local) = toQname name
     alias = M.lookup ns aliases
 
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Type m -> Result H.Type
+encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> Type m -> Result H.Type
 encodeAdaptedType aliases cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases $ adapterTarget ad
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> m -> Function m -> Result H.Expression
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction aliases cx meta fun = case fun of
     FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
       where
@@ -184,12 +185,12 @@ encodeFunction aliases cx meta fun = case fun of
                 Just _ -> pure [H.PatternName $ rawName v1]
                 Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
           let lhs = H.PatternApplication $ H.Pattern_Application hname args
-          rhs <- encodeData aliases cx rhsData
+          rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
     FunctionDelta -> pure $ hsvar "id"
     FunctionLambda (Lambda v body) -> hslambda v <$> encodeData aliases cx body
     FunctionOptionalCases (OptionalCases nothing just) -> do
-      nothingRhs <- encodeData aliases cx nothing
+      nothingRhs <- H.CaseRhs <$> encodeData aliases cx nothing
       let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
       justAlt <- do
         -- Note: some of the following could be brought together with FunctionCases
@@ -197,7 +198,7 @@ encodeFunction aliases cx meta fun = case fun of
         let rhsData = simplifyData $ apply just (variable v0)
         let v1 = if S.member v0 $ freeVariablesInData rhsData then v0 else "_"
         let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
-        rhs <- encodeData aliases cx rhsData
+        rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
         return $ H.Alternative lhs rhs Nothing
       return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
@@ -249,7 +250,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" av
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Data m -> Result H.Expression
+encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> Data m -> Result H.Expression
 encodeData aliases cx term@(Data expr meta) = do
    case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
@@ -293,7 +294,7 @@ encodeData aliases cx term@(Data expr meta) = do
         Just (TypeTermNominal name) -> Just name
         Nothing -> Nothing
 
-encodeType :: Show m => M.Map Name String -> Type m -> Result H.Type
+encodeType :: Show m => M.Map Name H.ModuleName -> Type m -> Result H.Type
 encodeType aliases typ = case typeTerm typ of
     TypeTermElement et -> encode et
     TypeTermFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
@@ -371,33 +372,34 @@ haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
 hsapp :: H.Expression -> H.Expression -> H.Expression
 hsapp l r = H.ExpressionApplication $ H.Expression_Application l r
 
-hslambda :: H.NamePart -> H.Expression -> H.Expression
+hslambda :: String -> H.Expression -> H.Expression
 hslambda v rhs = H.ExpressionLambda (H.Expression_Lambda [H.PatternName $ rawName v] rhs)
 
 hslit :: H.Literal -> H.Expression
 hslit = H.ExpressionLiteral
 
 hsPrimitiveReference :: Name -> H.Name
-hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] local
+hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
     (ns, local) = toQname name
-    prefix = capitalize $ L.last $ Strings.splitOn "/" ns
+    prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
 
-hsvar :: H.NamePart -> H.Expression
-hsvar = H.ExpressionVariable . rawName
+hsvar :: String -> H.Expression
+hsvar s = H.ExpressionVariable $ rawName s
 
-importAliasesForGraph :: Show m => Graph m -> M.Map Name String
-importAliasesForGraph g = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> (S.toList $ dataGraphDependencies True True True g))
+importAliasesForGraph :: Show m => Graph m -> M.Map Name H.ModuleName
+importAliasesForGraph g = fst $ L.foldl addPair (M.empty, S.empty)
+    (toPair <$> S.toList (dataGraphDependencies True True True g))
   where
-    toPair name = (name, capitalize $ L.last $ Strings.splitOn "/" name)
-    addPair (m, s) (name, alias) = if S.member alias s
-      then addPair (m, s) (name, alias ++ "_")
+    toPair name = (name, H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" name)
+    addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
+      then addPair (m, s) (name, H.ModuleName $ aliasStr ++ "_")
       else (M.insert name alias m, S.insert alias s)
 
 rawName :: String -> H.Name
-rawName n = H.NameNormal $ H.QualifiedName [] n
+rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
-recordFieldReference :: M.Map Name String -> Name -> FieldName -> H.Name
+recordFieldReference :: M.Map Name H.ModuleName -> Name -> FieldName -> H.Name
 recordFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
@@ -418,7 +420,7 @@ toApplicationType = app . L.reverse
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
 
-unionFieldReference :: M.Map Name String -> Name -> FieldName -> H.Name
+unionFieldReference :: M.Map Name H.ModuleName -> Name -> FieldName -> H.Name
 unionFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
