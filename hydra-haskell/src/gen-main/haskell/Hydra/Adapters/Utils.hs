@@ -69,7 +69,7 @@ describeType typ = (
               (describeType (Core.mapTypeKeys v))],
             " to "],
           (describeType (Core.mapTypeValues v))])
-      Core.TypeTermNominal v -> (
+      Core.TypeTermNominal (Core.Name v) -> (
         Strings.cat [
           "alias for ",
           v])
