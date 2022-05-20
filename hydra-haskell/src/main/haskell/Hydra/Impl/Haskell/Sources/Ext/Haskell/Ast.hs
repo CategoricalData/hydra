@@ -104,7 +104,7 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
         doc "An application-style declaration head" $
         record [
           field "function" $ ast "DeclarationHead",
-          field "operand" $ ast "TypeVariable"],
+          field "operand" $ ast "Variable"],
 
       def "Deriving" $ -- UDeriving
         doc "A 'deriving' statement" $
@@ -395,10 +395,6 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "name" $ ast "Name",
           field "type" $ ast "Type"],
 
-      def "TypeVariable" $
-        -- omitted for now: kind constraints
-        ast "Name",
-
       def "TypedBinding" $ -- Added for convenience
         record [
           field "typeSignature" $ ast "TypeSignature",
@@ -413,4 +409,8 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
         record [
           field "pattern" $ ast "Pattern",
           field "rhs" $ ast "RightHandSide",
-          field "localBindings" $ optional $ ast "LocalBindings"]]
+          field "localBindings" $ optional $ ast "LocalBindings"],
+          
+      def "Variable" $
+        -- omitted for now: kind constraints
+        ast "Name"]

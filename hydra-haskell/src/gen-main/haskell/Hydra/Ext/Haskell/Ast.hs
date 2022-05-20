@@ -160,7 +160,7 @@ _DeclarationHead_simple = "simple"
 data DeclarationHead_Application 
   = DeclarationHead_Application {
     declarationHead_ApplicationFunction :: DeclarationHead,
-    declarationHead_ApplicationOperand :: TypeVariable}
+    declarationHead_ApplicationOperand :: Variable}
   deriving (Eq, Ord, Read, Show)
 
 _DeclarationHead_Application = "hydra/ext/haskell/ast.DeclarationHead.Application"
@@ -794,9 +794,9 @@ _TypeSignature_name = "name"
 
 _TypeSignature_type = "type"
 
-type TypeVariable = Name
+type Variable = Name
 
-_TypeVariable = "hydra/ext/haskell/ast.TypeVariable"
+_Variable = "hydra/ext/haskell/ast.Variable"
 
 data TypedBinding 
   = TypedBinding {
