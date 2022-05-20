@@ -1,13 +1,4 @@
-module Hydra.Util.Codetree.Print (
-  brackets,
-  curlyBraces,
-  indent,
-  parentheses,
-  parenthesize,
-  printExpr,
-  printExprAsTree,
-  squareBrackets,
-) where
+module Hydra.Util.Codetree.Print where
 
 import Hydra.Util.Codetree.Ast
 import qualified Data.List as L
@@ -17,7 +8,7 @@ brackets :: Brackets -> Expr -> Expr
 brackets br e = ExprBrackets $ BracketExpr br e
 
 curlyBraces :: Brackets
-curlyBraces = Brackets "{" "}"
+curlyBraces = Brackets (sym "{") (sym "}")
 
 parenthesize :: Expr -> Expr
 parenthesize exp = case exp of
@@ -54,8 +45,8 @@ noPadding = Padding WsNone WsNone
 
 printExpr :: Expr -> String
 printExpr exp = case exp of
-  ExprConst s -> s
-  ExprOp (OpExpr (Op sym (Padding padl padr) _ _) l r) -> lhs ++ pad padl ++ sym ++ pad padr ++ rhs
+  ExprConst (Symbol s) -> s
+  ExprOp (OpExpr (Op (Symbol sym) (Padding padl padr) _ _) l r) -> lhs ++ pad padl ++ sym ++ pad padr ++ rhs
     where
       lhs = idt padl $ printExpr l
       rhs = idt padr $ printExpr r
@@ -65,7 +56,7 @@ printExpr exp = case exp of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
-  ExprBrackets (BracketExpr (Brackets l r) e) -> if L.length (lines body) > 1
+  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e) -> if L.length (lines body) > 1
       then l ++ "\n" ++ indent body ++ r
       else l ++ body ++ r
     where
@@ -73,15 +64,20 @@ printExpr exp = case exp of
 
 printExprAsTree :: Expr -> String
 printExprAsTree expr = case expr of
-  ExprConst s -> s
-  ExprBrackets (BracketExpr (Brackets l r) e) -> l ++ r ++ ":\n" ++ indent (printExprAsTree e)
-  ExprOp (OpExpr op l r) -> opSymbol op ++ ":\n" ++ indent (printExprAsTree l) ++ "\n" ++ indent (printExprAsTree r)
-
+  ExprConst (Symbol s) -> s
+  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e) -> l ++ r ++ ":\n" ++ indent (printExprAsTree e)
+  ExprOp (OpExpr op l r) -> h (opSymbol op) ++ ":\n" ++ indent (printExprAsTree l) ++ "\n" ++ indent (printExprAsTree r)
+    where
+      h (Symbol s) = s
+        
 parens :: Expr -> Expr
 parens = brackets parentheses
 
 parentheses :: Brackets
-parentheses = Brackets "(" ")"
+parentheses = Brackets (sym "(") (sym ")")
 
 squareBrackets :: Brackets
-squareBrackets = Brackets "[" "]"
+squareBrackets = Brackets (sym "[") (sym "]")
+
+sym :: String -> Symbol
+sym = Symbol

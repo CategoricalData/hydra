@@ -14,19 +14,18 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Scala.Meta as Scala
 
-import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
 dotOp :: Op
-dotOp = Op "." (Padding WsNone WsNone) 0 AssociativityLeft
+dotOp = Op (Symbol ".") (Padding WsNone WsNone) (Precedence 0) AssociativityLeft
 
 functionArrowOp :: Op
 functionArrowOp = op "=>" (negate 1) AssociativityRight
 
 matchOp :: Op
-matchOp = Op "match" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
+matchOp = Op (Symbol "match") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
 
 dataGraphToScalaString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
 dataGraphToScalaString cx g = do
