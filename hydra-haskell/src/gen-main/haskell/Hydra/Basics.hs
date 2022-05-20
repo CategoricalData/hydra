@@ -134,8 +134,8 @@ literalVariants = [
 
 -- Construct a qualified (dot-separated) name
 qname :: (Core.Name -> String -> Core.Name)
-qname ns name = (
-  Strings.cat [
+qname (Core.Name ns) name = (
+  Core.Name $ Strings.cat [
     ns,
     ".",
     name])
