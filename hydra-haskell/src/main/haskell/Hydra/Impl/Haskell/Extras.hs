@@ -16,10 +16,12 @@ module Hydra.Impl.Haskell.Extras (
   toQname,
   unexpected,
   unidirectionalStep,
+  module Hydra.Common,
   module Hydra.Errors,
   module Hydra.Impl.Haskell.Default
   ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Impl.Haskell.Default
 import Hydra.Errors
@@ -110,7 +112,7 @@ fieldTypes scx t = case typeTerm t of
     toPair (FieldType fname ftype) = (fname, ftype)
 
 fromQname :: String -> String -> Name
-fromQname ns local = ns ++ "." ++ local
+fromQname ns local = Name $ ns ++ "." ++ local
 
 graphNameOf :: Name -> GraphName
 graphNameOf = GraphName . fst . toQname
@@ -138,7 +140,7 @@ setContextElements graphs cx = cx { contextElements = M.fromList $
   ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
 toQname :: Name -> (String, String)
-toQname name = case Strings.splitOn "." name of
+toQname (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (ns, L.intercalate "." rest)
   _ -> ("UNKNOWN", name)
 
