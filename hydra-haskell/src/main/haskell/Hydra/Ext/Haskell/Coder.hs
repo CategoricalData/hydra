@@ -28,6 +28,9 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+newtypesNotTypedefs :: Bool
+newtypesNotTypedefs = True
+
 constantDecls :: Name -> Type m -> [H.DeclarationWithComments]
 constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
   where
@@ -39,17 +42,17 @@ constantDecls name typ = toDecl <$> (nameDecl:fieldDecls)
         pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
         rhs = H.ExpressionLiteral $ H.LiteralString v
     nameDecl = ("_" ++ lname, name)
-    fieldsOf typ = case typeTerm typ of
+    fieldsOf t = case typeTerm t of
       TypeTermRecord fields -> fields
       TypeTermUnion fields -> fields
       _ -> []
-    fieldDecls = toConstant <$> (fieldsOf $ snd $ unpackUniversalType typ)
+    fieldDecls = toConstant <$> fieldsOf (snd $ unpackUniversalType typ)
     toConstant (FieldType fname _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Data m) H.Expression) -> [(Element m, TypedData m)] -> Result H.Module
 constructModule cx g coders pairs = do
-    decls <- L.concat <$> (CM.mapM createDeclarations pairs)
+    decls <- L.concat <$> CM.mapM createDeclarations pairs
     return $ H.Module (Just $ H.ModuleHead (importName $ graphName g) []) imports decls
   where
     createDeclarations pair@(el, TypedData typ term) = if typeTerm typ == TypeTermNominal _Type
@@ -60,7 +63,7 @@ constructModule cx g coders pairs = do
         let lname = localNameOf $ elementName el
         let hname = simpleName lname
         t <- decodeType cx term
-        isSer <- isSerializable t
+        isSer <- isSerializable
         let deriv = if isSer
                       then simpleName <$> ["Eq", "Ord", "Read", "Show"]
                       else []
@@ -75,16 +78,20 @@ constructModule cx g coders pairs = do
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
           _ -> do
             htype <- encodeAdaptedType importAliases cx t
-            return $ H.DeclarationType (H.TypeDeclaration hd htype)
+            if newtypesNotTypedefs
+              then do
+                let con = H.ConstructorOrdinary $ H.Constructor_Ordinary hname [htype]
+                return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [con] [deriv])
+              else return $ H.DeclarationType (H.TypeDeclaration hd htype)
         comments <- contextDescriptionOf cx $ dataMeta term
         return $ [H.DeclarationWithComments decl comments] ++ constantDecls (elementName el) t
       where
-        isSerializable typ = do
+        isSerializable = do
             deps <- typeDependencies cx (elementName el)
             let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
             return $ not $ S.member TypeVariantFunction allVariants
           where
-            variants typ = typeVariant <$> (foldOverType TraversalOrderPre (\m t -> t:m) [] typ)
+            variants typ = typeVariant <$> foldOverType TraversalOrderPre (\m t -> t:m) [] typ
 
         declHead name vars = case vars of
           [] -> H.DeclarationHeadSimple name
@@ -119,8 +126,6 @@ constructModule cx g coders pairs = do
                   (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
       comments <- contextDescriptionOf cx $ dataMeta term
       return [H.DeclarationWithComments decl comments]
-
-    toCons _ = H.Constructor_Record
 
     importAliases = importAliasesForGraph g
     importName name = L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
@@ -173,7 +178,7 @@ encodeFunction aliases cx meta fun = case fun of
           dn <- domName
           hname <- case dn of
             Just n -> pure $ unionFieldReference aliases n fn
-            Nothing -> fail $ "unqualified field name"
+            Nothing -> fail "unqualified field name"
           args <- case fieldMap >>= M.lookup fn of
                 Just (FieldType _ (Type (TypeTermRecord []) _)) -> pure []
                 Just _ -> pure [H.PatternName $ rawName v1]
@@ -274,7 +279,7 @@ encodeData aliases cx term@(Data expr meta) = do
       sname <- findSname
       lhs <- case sname of
         Just n -> pure $ H.ExpressionVariable $ unionFieldReference aliases n fn
-        Nothing -> fail $ "unqualified field"
+        Nothing -> fail "unqualified field"
       case dataTerm ft of
         DataTermRecord [] -> pure lhs
         _ -> hsapp lhs <$> encode cx ft
