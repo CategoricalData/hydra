@@ -101,7 +101,7 @@ encodeType aliases cx typ = case typeTerm typ of
         then do
           fs <- CM.mapM encodeEnumField fields
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
-        else Left . PDL.SchemaUnion <$> CM.mapM encodeUnionField fields
+        else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
       where
         isEnum = L.foldl (\b t -> b && t {typeMeta = dflt} == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
@@ -117,7 +117,7 @@ encodeType aliases cx typ = case typeTerm typ of
       anns <- getAnns typ
       (schema, optional) <- encodePossiblyOptionalType typ
       return PDL.RecordField {
-        PDL.recordFieldName = name,
+        PDL.recordFieldName = PDL.FieldName name,
         PDL.recordFieldValue = schema,
         PDL.recordFieldOptional = optional,
         PDL.recordFieldDefault = Nothing,
@@ -126,16 +126,16 @@ encodeType aliases cx typ = case typeTerm typ of
       anns <- getAnns typ
       (s, optional) <- encodePossiblyOptionalType typ
       let schema = if optional
-          then PDL.SchemaUnion (simpleUnionMember <$> [PDL.SchemaNull, s])
+          then PDL.SchemaUnion $ PDL.UnionSchema (simpleUnionMember <$> [PDL.SchemaNull, s])
           else s
       return PDL.UnionMember {
-        PDL.unionMemberAlias = Just name,
+        PDL.unionMemberAlias = Just $ PDL.FieldName name,
         PDL.unionMemberValue = schema,
         PDL.unionMemberAnnotations = anns}
     encodeEnumField (FieldType name typ) = do
       anns <- getAnns typ
       return PDL.EnumField {
-        PDL.enumFieldName = convertCase CaseCamel CaseUpperSnake name,
+        PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
         PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case typeTerm typ of
       TypeTermOptional ot -> do
@@ -153,16 +153,16 @@ importAliasesForGraph g = M.empty -- TODO
 noAnnotations = PDL.Annotations Nothing False
 
 pdlNameForElement :: M.Map Name String -> Bool -> Name -> PDL.QualifiedName
-pdlNameForElement aliases withNs name = PDL.QualifiedName local
+pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     $ if withNs
-      then slashesToDots <$> alias
+      then PDL.Namespace . slashesToDots <$> alias
       else Nothing
   where
     (ns, local) = toQname name
     alias = M.lookup ns aliases
 
 pdlNameForGraph :: Graph m -> PDL.Namespace
-pdlNameForGraph = slashesToDots . graphName
+pdlNameForGraph = PDL.Namespace . slashesToDots . graphName
 
 pegasusDataLanguage :: Language m
 pegasusDataLanguage = Language "hydra/ext/pegasus/pdl" $ Language_Constraints {

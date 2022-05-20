@@ -30,7 +30,9 @@ _EnumField_name = "name"
 
 _EnumField_annotations = "annotations"
 
-type EnumFieldName = String
+newtype EnumFieldName 
+  = EnumFieldName String
+  deriving (Eq, Ord, Read, Show)
 
 _EnumFieldName = "hydra/ext/pegasus/pdl.EnumFieldName"
 
@@ -42,7 +44,9 @@ _EnumSchema = "hydra/ext/pegasus/pdl.EnumSchema"
 
 _EnumSchema_fields = "fields"
 
-type FieldName = String
+newtype FieldName 
+  = FieldName String
+  deriving (Eq, Ord, Read, Show)
 
 _FieldName = "hydra/ext/pegasus/pdl.FieldName"
 
@@ -75,15 +79,21 @@ _NamedSchema_Type_enum = "enum"
 
 _NamedSchema_Type_typeref = "typeref"
 
-type Name = String
+newtype Name 
+  = Name String
+  deriving (Eq, Ord, Read, Show)
 
 _Name = "hydra/ext/pegasus/pdl.Name"
 
-type Namespace = String
+newtype Namespace 
+  = Namespace String
+  deriving (Eq, Ord, Read, Show)
 
 _Namespace = "hydra/ext/pegasus/pdl.Namespace"
 
-type Package = String
+newtype Package 
+  = Package String
+  deriving (Eq, Ord, Read, Show)
 
 _Package = "hydra/ext/pegasus/pdl.Package"
 
@@ -113,7 +123,9 @@ _PrimitiveType_long = "long"
 
 _PrimitiveType_string = "string"
 
-type PropertyKey = String
+newtype PropertyKey 
+  = PropertyKey String
+  deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = "hydra/ext/pegasus/pdl.PropertyKey"
 
@@ -236,6 +248,8 @@ _UnionMember_value = "value"
 
 _UnionMember_annotations = "annotations"
 
-type UnionSchema = [UnionMember]
+newtype UnionSchema 
+  = UnionSchema [UnionMember]
+  deriving (Eq, Ord, Read, Show)
 
 _UnionSchema = "hydra/ext/pegasus/pdl.UnionSchema"

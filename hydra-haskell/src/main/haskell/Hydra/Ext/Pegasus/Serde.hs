@@ -27,7 +27,7 @@ exprAnnotations :: PDL.Annotations -> Y.Maybe CT.Expr
 exprAnnotations (PDL.Annotations doc _) = cst . javaStyleComment <$> doc
 
 exprEnumField :: PDL.EnumField -> CT.Expr
-exprEnumField (PDL.EnumField name anns) = withAnnotations anns $ cst name
+exprEnumField (PDL.EnumField (PDL.EnumFieldName name) anns) = withAnnotations anns $ cst name
 
 exprImport :: PDL.QualifiedName -> CT.Expr
 exprImport qn = spaceSep [cst "import", exprQualifiedName qn]
@@ -52,10 +52,12 @@ exprPrimitiveType pt = cst $ case pt of
   PDL.PrimitiveTypeString -> "string"
 
 exprQualifiedName :: PDL.QualifiedName -> CT.Expr
-exprQualifiedName (PDL.QualifiedName name ns) = cst $ L.intercalate "." $ Y.catMaybes [ns, Just name]
+exprQualifiedName (PDL.QualifiedName (PDL.Name name) ns) = cst $ L.intercalate "." $ Y.catMaybes [h <$> ns, Just name]
+  where
+    h (PDL.Namespace ns) = ns
 
 exprRecordField :: PDL.RecordField -> CT.Expr
-exprRecordField (PDL.RecordField name schema optional def anns) = withAnnotations anns $
+exprRecordField (PDL.RecordField (PDL.FieldName name) schema optional def anns) = withAnnotations anns $
   spaceSep $ Y.catMaybes [ -- TODO: default
     if optional then Just (cst "optional") else Nothing,
     Just $ cst $ name ++ ":",
@@ -70,14 +72,14 @@ exprSchema schema = case schema of
   PDL.SchemaNamed qn -> exprQualifiedName qn
   PDL.SchemaNull -> cst "null"
   PDL.SchemaPrimitive pt -> exprPrimitiveType pt
-  PDL.SchemaUnion us -> noSep [cst "union", bracketList True (exprUnionMember <$> us)]
+  PDL.SchemaUnion (PDL.UnionSchema us) -> noSep [cst "union", bracketList True (exprUnionMember <$> us)]
 
 exprSchemaFile :: PDL.SchemaFile -> CT.Expr
-exprSchemaFile (PDL.SchemaFile ns pkg imports schemas) = doubleNewlineSep $ (Y.catMaybes
-    [namespaceSec, packageSec, importsSec]) ++ schemaSecs
+exprSchemaFile (PDL.SchemaFile (PDL.Namespace ns) pkg imports schemas) = doubleNewlineSep $ Y.catMaybes
+    [namespaceSec, packageSec, importsSec] ++ schemaSecs
   where
     namespaceSec = Just $ spaceSep [cst "namespace", cst ns]
-    packageSec = fmap (\p -> spaceSep [cst "package", cst p]) pkg
+    packageSec = fmap (\(PDL.Package p) -> spaceSep [cst "package", cst p]) pkg
     importsSec = if L.null imports
       then Nothing
       else Just $ newlineSep (exprImport <$> imports)
@@ -86,7 +88,7 @@ exprSchemaFile (PDL.SchemaFile ns pkg imports schemas) = doubleNewlineSep $ (Y.c
 exprUnionMember :: PDL.UnionMember -> CT.Expr
 exprUnionMember (PDL.UnionMember alias schema anns) = withAnnotations anns $
   spaceSep $ Y.catMaybes [
-    fmap (\n -> cst $ n ++ ":") alias,
+    fmap (\(PDL.FieldName n) -> cst $ n ++ ":") alias,
     Just $ exprSchema schema]
 
 withAnnotations :: PDL.Annotations -> CT.Expr -> CT.Expr
