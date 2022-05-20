@@ -24,17 +24,23 @@ _Edge_out = "out"
 _Edge_in = "in"
 
 -- A vertex or edge id
-type Id = Core.Literal
+newtype Id 
+  = Id Core.Literal
+  deriving (Eq, Ord, Read, Show)
 
 _Id = "hydra/ext/tinkerpop/v3.Id"
 
 -- A map of property keys to property values
-type Properties = (Map PropertyKey Core.Literal)
+newtype Properties 
+  = Properties (Map PropertyKey Core.Literal)
+  deriving (Eq, Ord, Read, Show)
 
 _Properties = "hydra/ext/tinkerpop/v3.Properties"
 
 -- A property key
-type PropertyKey = String
+newtype PropertyKey 
+  = PropertyKey String
+  deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = "hydra/ext/tinkerpop/v3.PropertyKey"
 
@@ -64,6 +70,8 @@ _Vertex_id = "id"
 _Vertex_properties = "properties"
 
 -- A vertex id
-type VertexId = Core.Literal
+newtype VertexId 
+  = VertexId Core.Literal
+  deriving (Eq, Ord, Read, Show)
 
 _VertexId = "hydra/ext/tinkerpop/v3.VertexId"
