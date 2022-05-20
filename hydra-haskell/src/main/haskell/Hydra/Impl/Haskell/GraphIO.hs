@@ -58,7 +58,7 @@ generateSources toFile serialize modules baseDir = do
       let cx = setContextElements (g:(moduleGraph <$> deps)) $ standardContext {
              contextGraphs = GraphSet (M.fromList [
                (graphName g, g),
-               ("hydra/core", hydraCore)]) (graphName g),
+               (hydraCoreName, hydraCore)]) (graphName g),
              contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
       writeGraph serialize cx g $ Just $ FP.combine baseDir $ toFile (graphName g)
 
@@ -79,8 +79,8 @@ coreModules = [
   tinkerpopTypedModule,
   tinkerpopV3Module]
 
-toFileName :: Bool -> String -> String -> String
-toFileName caps ext name = L.intercalate "/" parts ++ ext
+toFileName :: Bool -> String -> GraphName -> String
+toFileName caps ext (GraphName name) = L.intercalate "/" parts ++ ext
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
@@ -89,7 +89,9 @@ writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
   -> Context m -> Graph m -> Maybe FilePath -> IO ()
 writeGraph serialize cx g path = do
   case serialize cx g of
-    Qualified Nothing warnings -> putStrLn $ "Transformation failed in " ++ graphName g ++ ": " ++ indent (unlines warnings)
+    Qualified Nothing warnings -> putStrLn $ "Transformation failed in " ++ h (graphName g) ++ ": " ++ indent (unlines warnings)
+      where
+        h (GraphName n) = n
     Qualified (Just s) warnings -> do
       if not (L.null warnings)
         then putStrLn $ "Warnings: " ++ indent (unlines warnings) ++ "\n"

@@ -29,14 +29,20 @@ import qualified Data.Set  as S
 cx :: Context Meta
 cx = standardContext
 
+testGraphName :: GraphName
+testGraphName = GraphName "testGraph"
+
+testSchemaGraphName :: GraphName
+testSchemaGraphName = GraphName "testSchemaGraph"
+
 testContext :: Context Meta
 testContext = standardContext {
     contextGraphs = GraphSet {
       graphSetGraphs = M.fromList [
-        ("testGraph", testGraph),
-        ("testSchemaGraph", testSchemaGraph),
-        ("hydra/core", hydraCore)],
-      graphSetRoot = "testGraph"},
+        (testGraphName, testGraph),
+        (testSchemaGraphName, testSchemaGraph),
+        (hydraCoreName, hydraCore)],
+      graphSetRoot = testGraphName},
     contextElements = graphElementsMap testGraph,
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
     contextStrategy = EvaluationStrategy {
@@ -58,14 +64,14 @@ testElementFirstName = Element {
   elementData = projection "firstName"}
 
 testGraph :: Graph Meta
-testGraph = Graph "testGraph" [testElementArthur, testElementFirstName] allTerms "testSchemaGraph"
+testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
 
 testSchemaGraph :: Graph Meta
-testSchemaGraph = Graph "testSchemaGraph" [
+testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx "StringTypeAlias" $ Standard.doc "An alias for the string type" Types.string,
     typeElement cx "Person" testTypePerson,
     typeElement cx "Timestamp" testTypeTimestamp]
-  allTerms "hydra/core"
+  allTerms hydraCoreName
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext

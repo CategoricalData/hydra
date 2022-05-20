@@ -14,7 +14,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-datatype :: String -> String -> Type Meta -> Element Meta
+datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname lname)
 
 annotate :: Name -> Y.Maybe (Data Meta) -> Type Meta -> Type Meta
@@ -29,7 +29,8 @@ dataDoc s (Data term meta) = Data term $ setDescription (Just s) meta
 project :: Type Meta -> FieldName -> Type Meta -> Data Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
-qualify gname lname = gname ++ "." ++ lname
+qualify :: GraphName -> Name -> Name
+qualify (GraphName gname) lname = gname ++ "." ++ lname
 
 standardContext :: Context Meta
 standardContext = cx
@@ -46,22 +47,22 @@ standardContext = cx
              contextTypeOf = getType cx,
              contextSetDescriptionOf = \d m -> setDescription d m,
              contextSetTypeOf = \t m -> setType cx t m}
-    emptyGraphName = "empty"
-    emptyGraph = Graph emptyGraphName [] (const True) "empty"
+    emptyGraphName = GraphName "empty"
+    emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
-standardElement :: Name -> String -> String -> Type Meta -> Data Meta -> Element Meta
-standardElement ns name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ dataDoc desc term
+standardElement :: GraphName -> String -> String -> Type Meta -> Data Meta -> Element Meta
+standardElement (GraphName ns) name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ dataDoc desc term
 
-standardFunction :: Name -> String -> String -> Type Meta -> Type Meta -> Data Meta -> Element Meta
+standardFunction :: GraphName -> String -> String -> Type Meta -> Type Meta -> Data Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ
   where
     typ = Types.function dom cod
 
-standardGraph :: Name -> [Element Meta] -> Graph Meta
+standardGraph :: GraphName -> [Element Meta] -> Graph Meta
 standardGraph name els = Graph name els dataTerms schemaGraph
   where
     dataTerms = const True -- TODO
-    schemaGraph = "hydra/core"
+    schemaGraph = GraphName "hydra/core"
 
 standardMatch :: Name -> Type Meta -> [(FieldName, Data Meta)] -> Data Meta
 standardMatch = nominalMatch standardContext

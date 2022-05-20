@@ -13,15 +13,16 @@ module Hydra.Impl.Haskell.Sources.Ext.Yaml.Model where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+yamlModelModule :: Module Meta
 yamlModelModule = Module yamlModel []
 
-yamlModelName = "hydra/ext/yaml/model"
+yamlModelName :: GraphName
+yamlModelName = GraphName "hydra/ext/yaml/model"
 
 yamlModel :: Graph Meta
 yamlModel = Graph yamlModelName elements (const True) hydraCoreName

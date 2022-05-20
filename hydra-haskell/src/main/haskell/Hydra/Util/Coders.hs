@@ -5,10 +5,8 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
-import qualified Hydra.Lib.Strings as Strings
 import Hydra.Primitives
 import Hydra.Rewriting
-import Hydra.Types.Inference
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -18,7 +16,7 @@ import Hydra.CoreLanguage
 import Hydra.Steps
 
 
-dataGraphDependencies :: Show m => Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
+dataGraphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
 dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
   where
     graphNames = S.fromList (graphNameOf <$> S.toList elNames)

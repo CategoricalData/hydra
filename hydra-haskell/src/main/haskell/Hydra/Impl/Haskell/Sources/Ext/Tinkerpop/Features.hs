@@ -1,7 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features where
 
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 
 import Hydra.Core
 import Hydra.Graph
@@ -13,8 +12,8 @@ import Hydra.Util.Formatting
 tinkerpopFeaturesModule :: Module Meta
 tinkerpopFeaturesModule = Module tinkerpopFeatures []
 
-tinkerpopFeaturesName :: String
-tinkerpopFeaturesName = "hydra/ext/tinkerpop/features"
+tinkerpopFeaturesName :: GraphName
+tinkerpopFeaturesName = GraphName "hydra/ext/tinkerpop/features"
 
 {-
 Derived from TinkerPop's Graph.Features.

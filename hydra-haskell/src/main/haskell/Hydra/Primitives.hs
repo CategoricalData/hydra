@@ -26,13 +26,15 @@ deref cx term = case dataTerm term of
 
 dereferenceElement :: Context m -> Name -> Result (Data m)
 dereferenceElement cx en = case M.lookup en (contextElements cx) of
-  Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ graphSetRoot (contextGraphs cx)
-  Just e -> ResultSuccess $ elementData e
+    Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ h (graphSetRoot (contextGraphs cx))
+    Just e -> ResultSuccess $ elementData e
+  where
+    h (GraphName n) = n
 
 getGraph :: GraphSet m -> GraphName -> Result (Graph m)
-getGraph graphs name = Y.maybe error ResultSuccess $ M.lookup name (graphSetGraphs graphs)
+getGraph graphs name@(GraphName n) = Y.maybe error ResultSuccess $ M.lookup name (graphSetGraphs graphs)
   where
-    error = ResultFailure $ "no such graph: " ++ name
+    error = ResultFailure $ "no such graph: " ++ n
 
 graphElementsMap :: Graph m -> M.Map Name (Element m)
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
@@ -51,9 +53,11 @@ requireElement :: Context m -> Name -> Result (Element m)
 requireElement cx name = Y.maybe error ResultSuccess $ M.lookup name $ contextElements cx
   where
     error = ResultFailure $ "no such element: " ++ name
-      ++ " in graph " ++ graphSetRoot (contextGraphs cx)
-      ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements cx))) ++ "}"
-
+        ++ " in graph " ++ h (graphSetRoot (contextGraphs cx))
+        ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements cx))) ++ "}"
+      where
+        h (GraphName n) = n
+          
 requirePrimitiveFunction :: Context m -> Name -> Result (PrimitiveFunction m)
 requirePrimitiveFunction cx fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction cx fn
   where

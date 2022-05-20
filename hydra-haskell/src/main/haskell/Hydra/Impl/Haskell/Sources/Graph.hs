@@ -3,16 +3,17 @@ module Hydra.Impl.Haskell.Sources.Graph where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
+hydraGraphModule :: Module Meta
 hydraGraphModule = Module hydraGraph [hydraCoreModule]
 
 -- Note: here, the element namespace doubles as a graph name
-hydraGraphName = "hydra/graph"
+hydraGraphName :: GraphName
+hydraGraphName = GraphName "hydra/graph"
 
 hydraGraph :: Graph Meta
 hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName

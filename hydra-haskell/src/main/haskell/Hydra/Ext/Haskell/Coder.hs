@@ -53,8 +53,10 @@ constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Data m) H.Expression) -> [(Element m, TypedData m)] -> Result H.Module
 constructModule cx g coders pairs = do
     decls <- L.concat <$> CM.mapM createDeclarations pairs
-    return $ H.Module (Just $ H.ModuleHead (importName $ graphName g) []) imports decls
+    return $ H.Module (Just $ H.ModuleHead (importName $ h $ graphName g) []) imports decls
   where
+    h (GraphName name) = name
+    
     createDeclarations pair@(el, TypedData typ term) = if typeTerm typ == TypeTermNominal _Type
       then createTypeDeclarations el term
       else createOtherDeclarations pair
@@ -134,7 +136,7 @@ constructModule cx g coders pairs = do
       where
         domainImports = toImport <$> M.toList importAliases
           where
-            toImport (name, alias) = H.Import True (importName name) (Just alias) Nothing
+            toImport (GraphName name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport . H.ModuleName <$> ["Data.Map", "Data.Set"]
           where
             toImport name = H.Import False name Nothing Nothing
@@ -151,21 +153,21 @@ dataGraphToHaskellModule cx g = dataGraphToExternalModule haskellLanguage (encod
   where
     aliases = importAliasesForGraph g
 
-elementReference :: M.Map Name H.ModuleName -> Name -> H.Name
+elementReference :: M.Map GraphName H.ModuleName -> Name -> H.Name
 elementReference aliases name = case alias of
     Nothing -> simpleName local
     Just (H.ModuleName a) -> rawName $ a ++ "." ++ sanitize local
   where
     (ns, local) = toQname name
-    alias = M.lookup ns aliases
+    alias = M.lookup (GraphName ns) aliases
 
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> Type m -> Result H.Type
+encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map GraphName H.ModuleName -> Context m -> Type m -> Result H.Type
 encodeAdaptedType aliases cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases $ adapterTarget ad
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> m -> Function m -> Result H.Expression
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName H.ModuleName -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction aliases cx meta fun = case fun of
     FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
       where
@@ -250,7 +252,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" av
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name H.ModuleName -> Context m -> Data m -> Result H.Expression
+encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName H.ModuleName -> Context m -> Data m -> Result H.Expression
 encodeData aliases cx term@(Data expr meta) = do
    case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
@@ -294,7 +296,7 @@ encodeData aliases cx term@(Data expr meta) = do
         Just (TypeTermNominal name) -> Just name
         Nothing -> Nothing
 
-encodeType :: Show m => M.Map Name H.ModuleName -> Type m -> Result H.Type
+encodeType :: Show m => M.Map GraphName H.ModuleName -> Type m -> Result H.Type
 encodeType aliases typ = case typeTerm typ of
     TypeTermElement et -> encode et
     TypeTermFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
@@ -387,11 +389,11 @@ hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
 
-importAliasesForGraph :: Show m => Graph m -> M.Map Name H.ModuleName
+importAliasesForGraph :: Graph m -> M.Map GraphName H.ModuleName
 importAliasesForGraph g = fst $ L.foldl addPair (M.empty, S.empty)
     (toPair <$> S.toList (dataGraphDependencies True True True g))
   where
-    toPair name = (name, H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" name)
+    toPair name@(GraphName n) = (name, H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
       then addPair (m, s) (name, H.ModuleName $ aliasStr ++ "_")
       else (M.insert name alias m, S.insert alias s)
@@ -399,7 +401,7 @@ importAliasesForGraph g = fst $ L.foldl addPair (M.empty, S.empty)
 rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
-recordFieldReference :: M.Map Name H.ModuleName -> Name -> FieldName -> H.Name
+recordFieldReference :: M.Map GraphName H.ModuleName -> Name -> FieldName -> H.Name
 recordFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
@@ -420,7 +422,7 @@ toApplicationType = app . L.reverse
 typeNameForRecord :: Name -> String
 typeNameForRecord sname = L.last (Strings.splitOn "." sname)
 
-unionFieldReference :: M.Map Name H.ModuleName -> Name -> FieldName -> H.Name
+unionFieldReference :: M.Map GraphName H.ModuleName -> Name -> FieldName -> H.Name
 unionFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname

@@ -39,7 +39,9 @@ _Graph_dataTerms = "dataTerms"
 _Graph_schemaGraph = "schemaGraph"
 
 -- A unique identifier for a graph within a graph set
-type GraphName = String
+newtype GraphName 
+  = GraphName String
+  deriving (Eq, Ord, Read, Show)
 
 _GraphName = "hydra/graph.GraphName"
 

@@ -5,20 +5,16 @@ module Hydra.Ext.Pegasus.Coder (
 
 import Hydra.Adapter
 import Hydra.Adapters.Term
-import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.CoreLanguage
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
-import Hydra.Primitives
 import Hydra.Rewriting
 import Hydra.Util.Coders
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -162,8 +158,10 @@ pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     alias = M.lookup ns aliases
 
 pdlNameForGraph :: Graph m -> PDL.Namespace
-pdlNameForGraph = PDL.Namespace . slashesToDots . graphName
-
+pdlNameForGraph = PDL.Namespace . slashesToDots . h . graphName
+  where
+    h (GraphName n) = n
+      
 pegasusDataLanguage :: Language m
 pegasusDataLanguage = Language "hydra/ext/pegasus/pdl" $ Language_Constraints {
   languageConstraintsLiteralVariants = S.fromList [

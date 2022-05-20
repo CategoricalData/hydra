@@ -112,8 +112,8 @@ fieldTypes scx t = case typeTerm t of
 fromQname :: String -> String -> Name
 fromQname ns local = ns ++ "." ++ local
 
-graphNameOf :: Name -> String
-graphNameOf = fst . toQname
+graphNameOf :: Name -> GraphName
+graphNameOf = GraphName . fst . toQname
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
