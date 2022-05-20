@@ -141,7 +141,7 @@ encodeType cx typ = setMeta (typeMeta typ) $ case typeTerm typ of
   TypeTermSet t -> variant _TypeTerm_set $ encodeType cx t
   TypeTermUnion fields -> variant _TypeTerm_union $ list $ fmap (encodeFieldType cx) fields
   TypeTermUniversal ut -> variant _TypeTerm_universal $ encodeUniversalType cx ut
-  TypeTermVariable var -> variant _TypeTerm_variable $ stringValue var
+  TypeTermVariable (TypeVariable var) -> variant _TypeTerm_variable $ stringValue var
 
 encodeTypeVariant :: Default m => Context m -> TypeVariant -> Data m
 encodeTypeVariant cx tv = unitVariant $ case tv of
@@ -159,6 +159,6 @@ encodeTypeVariant cx tv = unitVariant $ case tv of
   TypeVariantVariable -> _TypeVariant_variable
 
 encodeUniversalType :: Default m => Context m -> UniversalType m -> Data m
-encodeUniversalType cx (UniversalType var body) = nominalRecord cx _UniversalType [
+encodeUniversalType cx (UniversalType (TypeVariable var) body) = nominalRecord cx _UniversalType [
   Field _UniversalType_variable $ stringValue var,
   Field _UniversalType_body $ encodeType cx body]

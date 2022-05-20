@@ -95,11 +95,11 @@ decodeType cx dat = case dataTerm dat of
     (_TypeTerm_set, fmap TypeTermSet . decodeType cx),
     (_TypeTerm_union, fmap TypeTermUnion . decodeFieldTypes cx),
     (_TypeTerm_universal, fmap TypeTermUniversal . decodeUniversalType cx),
-    (_TypeTerm_variable, fmap TypeTermVariable . decodeString)] dat
+    (_TypeTerm_variable, fmap (TypeTermVariable . TypeVariable) . decodeString)] dat
 
 decodeUniversalType :: (Default m, Show m) => Context m -> Data m -> Result (UniversalType m)
 decodeUniversalType cx = matchRecord cx $ \m -> UniversalType
-  <$> getField m _UniversalType_variable decodeString
+  <$> (TypeVariable <$> getField m _UniversalType_variable decodeString)
   <*> getField m _UniversalType_body (decodeType cx)
 
 getField :: M.Map FieldName (Data m) -> FieldName -> (Data m -> Result b) -> Result b

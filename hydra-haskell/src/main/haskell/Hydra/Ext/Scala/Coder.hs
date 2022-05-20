@@ -223,7 +223,7 @@ encodeType t = case typeTerm t of
   TypeTermUniversal (UniversalType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
-  TypeTermVariable v -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
+  TypeTermVariable (TypeVariable v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedData :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Data m -> Result Scala.Data
@@ -339,7 +339,7 @@ stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
 stapply2 t1 t2 t3 = stapply t1 [t2, t3]
 
 stparam :: TypeVariable -> Scala.Type_Param
-stparam v = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
+stparam (TypeVariable v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
 
 stref :: String -> Scala.Type
 stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name

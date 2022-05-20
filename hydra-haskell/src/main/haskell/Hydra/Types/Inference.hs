@@ -9,7 +9,6 @@ import Hydra.Graph
 import Hydra.Basics
 import Hydra.Primitives
 import Hydra.CoreDecoding
-import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Extras
 import Hydra.Types.Substitution
@@ -20,19 +19,17 @@ import qualified Control.Monad as CM
 import Control.Monad.Except
 import Control.Monad.State
 import Control.Monad.Reader
-import Control.Monad.Identity
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-import qualified Data.Maybe as Y
 
 
 type Infer a m = ReaderT (TypingEnvironment m) (StateT InferenceState (Except (TypeError m))) a
 
 type InferenceState = Int
 
-type TypingEnvironment m = M.Map TypeVariable (TypeScheme m)
+type TypingEnvironment m = M.Map Variable (TypeScheme m)
 
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: (Default m, Show m) => Context m -> Data m -> Result (Type m)
@@ -49,7 +46,9 @@ freshTypeVariable :: Default m => Infer (Type m) m
 freshTypeVariable = do
     s <- get
     put (s + 1)
-    return $ Types.variable (normalVariables !! s)
+    return $ Types.variable (h $ normalVariables !! s)
+  where
+    h (TypeVariable v) = v
 
 generalize :: TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
