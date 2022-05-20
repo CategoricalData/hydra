@@ -112,12 +112,16 @@ _Padding_left = "left"
 _Padding_right = "right"
 
 -- Operator precedence
-type Precedence = Int
+newtype Precedence 
+  = Precedence Int
+  deriving (Eq, Ord, Read, Show)
 
 _Precedence = "hydra/util/codetree/ast.Precedence"
 
 -- Any symbol
-type Symbol = String
+newtype Symbol 
+  = Symbol String
+  deriving (Eq, Ord, Read, Show)
 
 _Symbol = "hydra/util/codetree/ast.Symbol"
 

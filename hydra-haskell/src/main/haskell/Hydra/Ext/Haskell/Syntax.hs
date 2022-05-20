@@ -1,7 +1,6 @@
 module Hydra.Ext.Haskell.Syntax where
 
 import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 
 
@@ -12,7 +11,7 @@ apOp :: Op
 apOp = op "<*>" 4 AssociativityLeft
 
 appOp :: Op
-appOp = Op "" (Padding WsNone WsSpace) 0 AssociativityLeft -- No source
+appOp = Op (Symbol "") (Padding WsNone WsSpace) (Precedence 0) AssociativityLeft -- No source
 
 applyOp :: Op
 applyOp = op "$" 0 AssociativityRight
@@ -115,8 +114,7 @@ caseStatement cond cases = ifx ofOp lhs rhs
   where
     lhs = spaceSep [cst "case", cond]
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
-    ofOp = Op "of" (Padding WsSpace WsBreakAndIndent) 0 AssociativityNone
+    ofOp = Op (Symbol "of") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
 
-lam :: [Symbol] -> Expr -> Expr
+lam :: [String] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
-
