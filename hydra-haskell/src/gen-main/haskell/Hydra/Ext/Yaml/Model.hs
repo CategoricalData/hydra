@@ -11,13 +11,13 @@ data Node
   | NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
 
-_Node = "hydra/ext/yaml/model.Node"
+_Node = (Core.Name "hydra/ext/yaml/model.Node")
 
-_Node_mapping = "mapping"
+_Node_mapping = (Core.FieldName "mapping")
 
-_Node_scalar = "scalar"
+_Node_scalar = (Core.FieldName "scalar")
 
-_Node_sequence = "sequence"
+_Node_sequence = (Core.FieldName "sequence")
 
 -- A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
 data Scalar 
@@ -28,14 +28,14 @@ data Scalar
   | ScalarStr String
   deriving (Eq, Ord, Read, Show)
 
-_Scalar = "hydra/ext/yaml/model.Scalar"
+_Scalar = (Core.Name "hydra/ext/yaml/model.Scalar")
 
-_Scalar_bool = "bool"
+_Scalar_bool = (Core.FieldName "bool")
 
-_Scalar_float = "float"
+_Scalar_float = (Core.FieldName "float")
 
-_Scalar_int = "int"
+_Scalar_int = (Core.FieldName "int")
 
-_Scalar_null = "null"
+_Scalar_null = (Core.FieldName "null")
 
-_Scalar_str = "str"
+_Scalar_str = (Core.FieldName "str")

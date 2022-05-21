@@ -50,12 +50,12 @@ encodeLiteralVariant cx av = unitVariant $ case av of
   LiteralVariantString -> _LiteralVariant_string
 
 encodeField :: (Default m, Ord m) => Context m -> Field m -> Data m
-encodeField cx (Field name term) = nominalRecord cx _Field [
+encodeField cx (Field (FieldName name) term) = nominalRecord cx _Field [
   Field _Field_name $ stringValue name,
   Field _Field_data $ encodeData cx term]
 
 encodeFieldType :: Default m => Context m -> FieldType m -> Data m
-encodeFieldType cx (FieldType fname t) = nominalRecord cx _FieldType [
+encodeFieldType cx (FieldType (FieldName fname) t) = nominalRecord cx _FieldType [
   Field _FieldType_name $ stringValue fname,
   Field _FieldType_type $ encodeType cx t]
 
@@ -72,8 +72,8 @@ encodeFunction cx f = case f of
   FunctionDelta -> unitVariant _Function_delta
   FunctionLambda l -> variant _Function_lambda $ encodeLambda cx l
   FunctionOptionalCases cases -> variant _Function_optionalCases $ encodeOptionalCases cx cases
-  FunctionPrimitive name -> variant _Function_primitive $ stringValue name
-  FunctionProjection fname -> variant _Function_projection $ stringValue fname
+  FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
+  FunctionProjection (FieldName fname) -> variant _Function_projection $ stringValue fname
 
 encodeFunctionType :: Default m => Context m -> FunctionType m -> Data m
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
@@ -103,7 +103,7 @@ encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [
   Field _MapType_values $ encodeType cx vt]
 
 encodeNamed :: (Default m, Ord m) => Context m -> Named m -> Data m
-encodeNamed cx (Named name term) = nominalRecord cx _Named [
+encodeNamed cx (Named (Name name) term) = nominalRecord cx _Named [
   Field _Named_typeName $ stringValue name,
   Field _Named_term $ encodeData cx term]
 
@@ -116,7 +116,7 @@ encodeData :: (Default m, Ord m) => Context m -> Data m -> Data m
 encodeData cx term = case dataTerm term of
   DataTermApplication a -> variant _DataTerm_application $ encodeApplication cx a
   DataTermLiteral av -> variant _DataTerm_literal $ encodeLiteral cx av
-  DataTermElement name -> variant _DataTerm_element $ stringValue name
+  DataTermElement (Name name) -> variant _DataTerm_element $ stringValue name
   DataTermFunction f -> variant _DataTerm_function $ encodeFunction cx f
   DataTermList terms -> variant _DataTerm_list $ list $ encodeData cx <$> terms
   DataTermMap m -> variant _DataTerm_map $ map $ M.fromList $ encodePair <$> M.toList m

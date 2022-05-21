@@ -2,6 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Phantoms where
 
 import Hydra.Core
 import Hydra.Evaluation
+import qualified Hydra.Graph as Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Meta
 
@@ -21,8 +22,8 @@ data Var a = Var String
 doc :: String -> Program a -> Program a
 doc str (Program (Data d m)) = Program $ Data d (setDescription (Just str) m)
 
-element :: Name -> String -> Program a -> Element a
-element ns name prog = Element (ns ++ "." ++ name) prog
+element :: Graph.GraphName -> Name -> Program a -> Element a
+element (Graph.GraphName ns) (Name name) prog = Element (Name $ ns ++ "." ++ name) prog
 
 program :: DataTerm Meta -> Program a
 program e = Program $ term e

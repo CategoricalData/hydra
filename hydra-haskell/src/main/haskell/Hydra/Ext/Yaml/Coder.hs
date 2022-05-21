@@ -53,16 +53,16 @@ recordCoder sfields = do
     encode coders term = case dataTerm term of
       DataTermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
-          encodeField (ft, coder) (Field fn fv) = case (fieldTypeType ft, fv) of
+          encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
             (Type (TypeTermOptional _) _, Data (DataTermOptional Nothing) _) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
       YM.NodeMapping m -> record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
-          decodeField m (FieldType fn ft, coder) = do
+          decodeField m (FieldType fname@(FieldName fn) ft, coder) = do
             v <- stepIn coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
-            return $ Field fn v
+            return $ Field fname v
       _ -> unexpected "mapping" n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where

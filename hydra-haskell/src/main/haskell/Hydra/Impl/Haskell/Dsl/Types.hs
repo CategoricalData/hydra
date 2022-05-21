@@ -24,11 +24,11 @@ defaultType e = Type e dflt
 element :: Default m => Type m -> Type m
 element = defaultType . TypeTermElement
 
-enum :: Default m => [FieldName] -> Type m
+enum :: Default m => [String] -> Type m
 enum names = union $ (`field` unit) <$> names
 
-field :: Default m => FieldName -> Type m -> FieldType m
-field = FieldType
+field :: Default m => String -> Type m -> FieldType m
+field fn = FieldType (FieldName fn)
 
 fieldsToMap :: Default m => [FieldType m] -> M.Map FieldName (Type m)
 fieldsToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields

@@ -11,6 +11,7 @@ module Hydra.CoreDecoding (
   decodeUniversalType,
   ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Steps
 import Hydra.Primitives
@@ -29,7 +30,7 @@ decodeElement term = case dataTerm term of
 
 decodeFieldType :: (Default m, Show m) => Context m -> Data m -> Result (FieldType m)
 decodeFieldType cx = matchRecord cx $ \m -> FieldType
-  <$> getField m _FieldType_name decodeString
+  <$> (FieldName <$> getField m _FieldType_name decodeString)
   <*> getField m _FieldType_type (decodeType cx)
 
 decodeFieldTypes :: (Default m, Show m) => Context m -> Data m -> Result [FieldType m]
@@ -124,7 +125,7 @@ matchUnion cx pairs term = do
       DataTermUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
-      _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (fst <$> pairs) ++ "}"
+      _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (showFieldName . fst <$> pairs) ++ "}"
         ++ ". Got: " ++ show term
   where
     mapping = M.fromList pairs

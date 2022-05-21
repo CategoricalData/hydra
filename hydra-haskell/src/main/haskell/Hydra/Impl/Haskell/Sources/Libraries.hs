@@ -2,6 +2,7 @@ module Hydra.Impl.Haskell.Sources.Libraries where
 
 import Hydra.Basics
 import Hydra.Core
+import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Prims
@@ -15,8 +16,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
 
-_hydra_lib_lists :: Name
-_hydra_lib_lists = "hydra/lib/lists"
+_hydra_lib_lists :: GraphName
+_hydra_lib_lists = GraphName "hydra/lib/lists"
 
 _lists_concat :: Name
 _lists_concat = qname _hydra_lib_lists "concat"
@@ -39,8 +40,8 @@ _lists_length = qname _hydra_lib_lists "length"
 _lists_map :: Name
 _lists_map = qname _hydra_lib_lists "map"
 
-_hydra_lib_literals :: Name
-_hydra_lib_literals = "hydra/lib/literals"
+_hydra_lib_literals :: GraphName
+_hydra_lib_literals = GraphName "hydra/lib/literals"
 
 _literals_showInt32 :: Name
 _literals_showInt32 = qname _hydra_lib_literals "showInt32"
@@ -48,8 +49,8 @@ _literals_showInt32 = qname _hydra_lib_literals "showInt32"
 _literals_showString :: Name
 _literals_showString = qname _hydra_lib_literals "showString"
 
-_hydra_lib_math :: Name
-_hydra_lib_math = "hydra/lib/math"
+_hydra_lib_math :: GraphName
+_hydra_lib_math = GraphName "hydra/lib/math"
 
 _math_add :: Name
 _math_add = qname _hydra_lib_math "add"
@@ -72,8 +73,8 @@ _math_rem = qname _hydra_lib_math "rem"
 _math_sub :: Name
 _math_sub = qname _hydra_lib_math "sub"
 
-_hydra_lib_sets :: Name
-_hydra_lib_sets = "hydra/lib/sets"
+_hydra_lib_sets :: GraphName
+_hydra_lib_sets = GraphName "hydra/lib/sets"
 
 _sets_add :: Name
 _sets_add = qname _hydra_lib_sets "add"
@@ -87,8 +88,8 @@ _sets_isEmpty = qname _hydra_lib_sets "isEmpty"
 _sets_remove :: Name
 _sets_remove = qname _hydra_lib_sets "remove"
 
-_hydra_lib_strings :: Name
-_hydra_lib_strings = "hydra/lib/strings"
+_hydra_lib_strings :: GraphName
+_hydra_lib_strings = GraphName "hydra/lib/strings"
 
 _strings_cat :: Name
 _strings_cat = qname _hydra_lib_strings "cat"

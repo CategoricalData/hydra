@@ -16,7 +16,7 @@ hydraCoreName = GraphName "hydra/core"
 hydraCore :: Graph Meta
 hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
-    core = nominal . qualify hydraCoreName
+    core = nominal . qualify hydraCoreName . Name
     def = datatype hydraCoreName
     elements = [
 
@@ -267,13 +267,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         record [
           field "annotations" $
             doc "A map of annotation names to annotation values" $
-            Types.map (core "Name") (universal "Meta" $ core "Data")], -- TODO: the concrete type parameter is a hack
---          field "description" $
---            doc "An optional description associated with the term" $
---            optional string,
---          field "type" $
---            doc "An optional type annotation associated with the term. This may be used as a hint to the type inferencer and/or to code generators." $
---            optional $ universal "m" $ core "Type"],
+            Types.map string (universal "Meta" $ core "Data")], -- TODO: the concrete type parameter is a hack
 
       def "Name" $
         doc "A unique element name"

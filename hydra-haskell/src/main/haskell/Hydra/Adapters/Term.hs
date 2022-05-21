@@ -15,7 +15,6 @@ import Hydra.Primitives
 import Hydra.CoreDecoding
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
-import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -24,6 +23,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
+
+_context = FieldName "context"
+_record = FieldName "record"
 
 dereferenceNominal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 dereferenceNominal acx t@(Type (TypeTermNominal name) _) = do
@@ -38,8 +40,8 @@ dereferenceNominal acx t@(Type (TypeTermNominal name) _) = do
 elementToString :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 elementToString acx t@(Type (TypeTermElement _) _) = pure $ Adapter False t Types.string $ Step encode decode
   where
-    encode (Data (DataTermElement name) _) = pure $ stringValue name
-    decode (Data (DataTermLiteral (LiteralString name)) meta) = pure $ withData meta $ DataTermElement name
+    encode (Data (DataTermElement (Name name)) _) = pure $ stringValue name
+    decode (Data (DataTermLiteral (LiteralString name)) meta) = pure $ withData meta $ DataTermElement $ Name name
 
 fieldAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> FieldType m -> Qualified (Adapter (FieldType m) (Field m))
 fieldAdapter acx ftyp = do
@@ -62,8 +64,8 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
         FunctionDelta -> unitVariant _Function_delta
         FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
         FunctionOptionalCases _ -> variant _Function_optionalCases $ stringValue $ show term -- TODO
-        FunctionPrimitive name -> variant _Function_primitive $ stringValue name
-        FunctionProjection fname -> variant _Function_projection $ stringValue fname
+        FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
+        FunctionProjection (FieldName fname) -> variant _Function_projection $ stringValue fname
       DataTermVariable (Variable var) -> variant _DataTerm_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
@@ -77,14 +79,14 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
           (_Function_projection, forProjection fterm),
           (_DataTerm_variable, forVariable fterm)]
       where
-        notFound fname = fail $ "unexpected field: " ++ fname
+        notFound fname = fail $ "unexpected field: " ++ showFieldName fname
         forCases fterm = read <$> expectString fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure delta
         forLambda fterm = read <$> expectString fterm -- TODO
         forOptionalCases fterm = read <$> expectString fterm -- TODO
-        forPrimitive fterm = primitive <$> expectString fterm
-        forProjection fterm = projection <$> expectString fterm
+        forPrimitive fterm = primitive . Name <$> expectString fterm
+        forProjection fterm = projection . FieldName <$> expectString fterm
         forVariable fterm = variable <$> expectString fterm
 
     unionType = do
@@ -203,7 +205,7 @@ passUnion acx t@(Type (TypeTermUnion sfields) _) = do
         ad <- getAdapter adapters dfield
         (\f -> Data (DataTermUnion f) meta) <$> stepEither dir (adapterStep ad) dfield
   where
-    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ fieldName f) pure $ M.lookup (fieldName f) adapters
+    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ showFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
 
 passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 passUniversal acx t@(Type (TypeTermUniversal (UniversalType (TypeVariable v) body)) _) = do
@@ -258,18 +260,18 @@ termAdapter acx typ = case typ of
 unionToRecord :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 unionToRecord acx t@(Type (TypeTermUnion sfields) _) = do
     let target = Types.record [
-                  FieldType "context" Types.string,
-                  FieldType "record" $ Types.record $ makeOptional <$> sfields]
+                  FieldType _context Types.string,
+                  FieldType _record $ Types.record $ makeOptional <$> sfields]
     ad <- termAdapter acx target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
       stepOut = \(Data (DataTermUnion (Field fn term)) meta) -> stepOut (adapterStep ad)
         $ record [
-          Field "context" $ stringValue $ show meta, -- TODO: use encoded metadata once supported
-          Field "record" $ record (toRecordField term fn <$> sfields)],
+          Field _context $ stringValue $ show meta, -- TODO: use encoded metadata once supported
+          Field _record $ record (toRecordField term fn <$> sfields)],
       stepIn = \term -> do
         (Data (DataTermRecord [
-           Field "context" (Data (DataTermLiteral (LiteralString metaStr)) _),
-           Field "record" (Data (DataTermRecord fields) _)]) _) <- stepIn (adapterStep ad) term
+           Field _context (Data (DataTermLiteral (LiteralString metaStr)) _),
+           Field _record (Data (DataTermRecord fields) _)]) _) <- stepIn (adapterStep ad) term
         (\t -> t {dataMeta = read metaStr})
           <$> (union <$> fromRecordFields term (DataTermRecord fields) (adapterTarget ad) fields)}
   where

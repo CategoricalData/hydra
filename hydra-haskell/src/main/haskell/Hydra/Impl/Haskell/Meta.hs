@@ -16,7 +16,7 @@ metaDescription = "description"
 metaType :: String
 metaType = "type"
 
-getAnnotation :: Name -> Meta -> Maybe (Data Meta)
+getAnnotation :: String -> Meta -> Maybe (Data Meta)
 getAnnotation key (Meta m) = M.lookup key m
 
 getDescription :: Meta -> Result (Y.Maybe String)
@@ -31,7 +31,7 @@ getType cx meta = case getAnnotation metaType meta of
   Nothing -> pure Nothing
   Just dat -> Just <$> decodeType cx dat
 
-setAnnotation :: Name -> Y.Maybe (Data Meta) -> Meta -> Meta
+setAnnotation :: String -> Y.Maybe (Data Meta) -> Meta -> Meta
 setAnnotation key val (Meta m) = Meta $ M.alter (const val) key m
 
 setDescription :: Y.Maybe String -> Meta -> Meta

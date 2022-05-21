@@ -53,45 +53,45 @@ testContext = standardContext {
 
 testElementArthur :: Element Meta
 testElementArthur = Element {
-  elementName = "ArthurDent",
-  elementSchema = element "Person",
+  elementName = Name "ArthurDent",
+  elementSchema = element $ Name "Person",
   elementData = testDataArthur}
 
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
-  elementName = "firstName",
-  elementSchema = encodeType cx (Types.function (Types.nominal "Person") Types.string),
-  elementData = projection "firstName"}
+  elementName = Name "firstName",
+  elementSchema = encodeType cx (Types.function (Types.nominal $ Name "Person") Types.string),
+  elementData = projection $ FieldName "firstName"}
 
 testGraph :: Graph Meta
 testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph testSchemaGraphName [
-    typeElement cx "StringTypeAlias" $ Standard.doc "An alias for the string type" Types.string,
-    typeElement cx "Person" testTypePerson,
-    typeElement cx "Timestamp" testTypeTimestamp]
+    typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
+    typeElement cx (Name "Person") testTypePerson,
+    typeElement cx (Name "Timestamp") testTypeTimestamp]
   allTerms hydraCoreName
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
 testDataArthur :: Data Meta
-testDataArthur = nominalRecord cx "Person" [
-  Field "firstName" $ stringValue "Arthur",
-  Field "lastName" $ stringValue "Dent",
-  Field "age" $ int32Value 42]
+testDataArthur = nominalRecord cx (Name "Person") [
+  Field (FieldName "firstName") $ stringValue "Arthur",
+  Field (FieldName "lastName") $ stringValue "Dent",
+  Field (FieldName "age") $ int32Value 42]
 
 testTypePerson :: Type Meta
 testTypePerson = Types.record [
-  FieldType "firstName" Types.string,
-  FieldType "lastName" Types.string,
-  FieldType "age" Types.int32]
+  FieldType (FieldName "firstName") Types.string,
+  FieldType (FieldName "lastName") Types.string,
+  FieldType (FieldName "age") Types.int32]
 
 testTypeTimestamp :: Type Meta
 testTypeTimestamp = Types.union [
-  FieldType "unixTimeMillis" Types.uint64,
-  FieldType "date" Types.string]
+  FieldType (FieldName "unixTimeMillis") Types.uint64,
+  FieldType (FieldName "date") Types.string]
 
 allTerms :: Data Meta -> Bool
 allTerms _ = True

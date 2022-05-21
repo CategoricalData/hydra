@@ -35,6 +35,11 @@ instance QC.Arbitrary BooleanValue
   where
     arbitrary = QC.oneof $ pure <$> [ BooleanValueFalse, BooleanValueTrue ]
 
+instance QC.Arbitrary FieldName
+  where
+    arbitrary = FieldName <$> QC.arbitrary
+    shrink (FieldName n) = FieldName <$> QC.shrink n
+    
 instance QC.Arbitrary FloatType
   where
     arbitrary = QC.oneof $ pure <$> [
@@ -78,6 +83,11 @@ instance QC.Arbitrary IntegerValue
 instance (Default m, Eq m, Ord m, Read m, Show m) => QC.Arbitrary (Data m) where
   arbitrary = (\(TypedData _ term) -> term) <$> QC.sized arbitraryTypedData
 
+instance QC.Arbitrary Name
+  where
+    arbitrary = Name <$> QC.arbitrary
+    shrink (Name name)= Name <$> QC.shrink name
+    
 instance Default m => QC.Arbitrary (Type m) where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typeTerm typ of
@@ -299,4 +309,4 @@ shrinkers typ = trivialShrinker ++ case typeTerm typ of
 
 -- | A placeholder for a type name. Use in tests only, where a union term is needed but no type name is known.
 untyped :: Name
-untyped = show (dflt :: Meta)
+untyped = Name $ show (dflt :: Meta)

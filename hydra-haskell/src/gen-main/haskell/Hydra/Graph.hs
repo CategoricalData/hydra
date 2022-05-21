@@ -12,13 +12,13 @@ data Element m
     elementData :: (Core.Data m)}
   deriving (Eq, Ord, Read, Show)
 
-_Element = "hydra/graph.Element"
+_Element = (Core.Name "hydra/graph.Element")
 
-_Element_name = "name"
+_Element_name = (Core.FieldName "name")
 
-_Element_schema = "schema"
+_Element_schema = (Core.FieldName "schema")
 
-_Element_data = "data"
+_Element_data = (Core.FieldName "data")
 
 -- A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph, called the schema graph
 data Graph m 
@@ -28,22 +28,22 @@ data Graph m
     graphDataTerms :: (Core.Data m -> Bool),
     graphSchemaGraph :: GraphName}
 
-_Graph = "hydra/graph.Graph"
+_Graph = (Core.Name "hydra/graph.Graph")
 
-_Graph_name = "name"
+_Graph_name = (Core.FieldName "name")
 
-_Graph_elements = "elements"
+_Graph_elements = (Core.FieldName "elements")
 
-_Graph_dataTerms = "dataTerms"
+_Graph_dataTerms = (Core.FieldName "dataTerms")
 
-_Graph_schemaGraph = "schemaGraph"
+_Graph_schemaGraph = (Core.FieldName "schemaGraph")
 
 -- A unique identifier for a graph within a graph set
 newtype GraphName 
   = GraphName String
   deriving (Eq, Ord, Read, Show)
 
-_GraphName = "hydra/graph.GraphName"
+_GraphName = (Core.Name "hydra/graph.GraphName")
 
 -- A collection of graphs with a distinguished root graph
 data GraphSet m 
@@ -51,11 +51,11 @@ data GraphSet m
     graphSetGraphs :: (Map GraphName (Graph m)),
     graphSetRoot :: GraphName}
 
-_GraphSet = "hydra/graph.GraphSet"
+_GraphSet = (Core.Name "hydra/graph.GraphSet")
 
-_GraphSet_graphs = "graphs"
+_GraphSet_graphs = (Core.FieldName "graphs")
 
-_GraphSet_root = "root"
+_GraphSet_root = (Core.FieldName "root")
 
 -- A logical collection of elements; a graph subset with dependencies on zero or more other subsets
 data Module m 
@@ -63,8 +63,8 @@ data Module m
     moduleGraph :: (Graph m),
     moduleImports :: [Module m]}
 
-_Module = "hydra/graph.Module"
+_Module = (Core.Name "hydra/graph.Module")
 
-_Module_graph = "graph"
+_Module_graph = (Core.FieldName "graph")
 
-_Module_imports = "imports"
+_Module_imports = (Core.FieldName "imports")

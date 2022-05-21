@@ -43,7 +43,7 @@ testsForTypeVariantFunctions = do
 
     H.it "Test literalTypeVariant function element" $
       QC.property $ \at ->
-        testEvaluate (apply (elementRefByName "hydra/basics.literalTypeVariant") (encodeLiteralType testContext at))
+        testEvaluate (apply (elementRefByName $ Name "hydra/basics.literalTypeVariant") (encodeLiteralType testContext at))
         `H.shouldBe`
         pure (stripMeta $ encodeLiteralVariant testContext $ literalTypeVariant at)
 

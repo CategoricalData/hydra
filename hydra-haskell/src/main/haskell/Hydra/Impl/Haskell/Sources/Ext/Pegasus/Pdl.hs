@@ -25,8 +25,8 @@ pegasusPdl :: Graph Meta
 pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
   where
     def = datatype pegasusPdlName
-    pdl = nominal . qualify pegasusPdlName
-    json = nominal . qualify jsonJsonName
+    pdl = nominal . qualify pegasusPdlName . Name
+    json = nominal . qualify jsonJsonName . Name
 
     elements = [
 

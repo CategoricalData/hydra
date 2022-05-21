@@ -35,8 +35,8 @@ useCoreImport :: Bool
 useCoreImport = True
 
 constantDecls :: M.Map GraphName H.ModuleName -> Name -> Type m -> [H.DeclarationWithComments]
-constantDecls aliases name typ = if useCoreImport
-    then toDecl "hydra/core.Name" nameDecl:(toDecl "hydra/core.FieldName" <$> fieldDecls)
+constantDecls aliases name@(Name nm) typ = if useCoreImport
+    then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
   where
     lname = localNameOf name
@@ -48,13 +48,13 @@ constantDecls aliases name typ = if useCoreImport
         rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
           (H.ExpressionVariable $ elementReference aliases n)
           (H.ExpressionLiteral $ H.LiteralString v)
-    nameDecl = ("_" ++ lname, name)
+    nameDecl = ("_" ++ lname, nm)
     fieldsOf t = case typeTerm t of
       TypeTermRecord fields -> fields
       TypeTermUnion fields -> fields
       _ -> []
     fieldDecls = toConstant <$> fieldsOf (snd $ unpackUniversalType typ)
-    toConstant (FieldType fname _) = ("_" ++ lname ++ "_" ++ fname, fname)
+    toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Data m) H.Expression) -> [(Element m, TypedData m)] -> Result H.Module
@@ -111,12 +111,12 @@ constructModule cx g coders pairs = do
             hFields <- CM.mapM toField fields
             return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
           where
-            toField (FieldType fname ftype) = do
+            toField (FieldType (FieldName fname) ftype) = do
               let hname = simpleName $ decapitalize lname ++ capitalize fname
               htype <- encodeAdaptedType aliases cx ftype
               return $ H.Field hname htype
 
-        unionCons lname (FieldType fname ftype) = do
+        unionCons lname (FieldType (FieldName fname) ftype) = do
           let nm = capitalize lname ++ capitalize fname
           typeList <- if ftype {typeMeta = dflt} == Types.unit
             then pure []
@@ -171,7 +171,7 @@ elementReference aliases name = case alias of
     Just (H.ModuleName a) -> rawName $ a ++ "." ++ sanitize local
   where
     (ns, local) = toQname name
-    alias = M.lookup (GraphName ns) aliases
+    alias = M.lookup ns aliases
 
 encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => M.Map GraphName H.ModuleName -> Context m -> Type m -> Result H.Type
 encodeAdaptedType aliases cx typ = do
@@ -395,7 +395,7 @@ hslit = H.ExpressionLiteral
 hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
-    (ns, local) = toQname name
+    (GraphName ns, local) = toQname name
     prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
 
 hsvar :: String -> H.Expression
@@ -414,14 +414,14 @@ rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
 recordFieldReference :: M.Map GraphName H.ModuleName -> Name -> FieldName -> H.Name
-recordFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
+recordFieldReference aliases sname (FieldName fname) = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
-sanitize :: Name -> String
+sanitize :: String -> String
 sanitize = fmap (\c -> if c == '.' then '_' else c)
 
-simpleName :: Name -> H.Name
+simpleName :: String -> H.Name
 simpleName = rawName . sanitize
 
 toApplicationType :: [H.Type] -> H.Type
@@ -432,10 +432,10 @@ toApplicationType = app . L.reverse
       (h:r) -> H.TypeApplication $ H.Type_Application (app r) h
 
 typeNameForRecord :: Name -> String
-typeNameForRecord sname = L.last (Strings.splitOn "." sname)
+typeNameForRecord (Name sname) = L.last (Strings.splitOn "." sname)
 
 unionFieldReference :: M.Map GraphName H.ModuleName -> Name -> FieldName -> H.Name
-unionFieldReference aliases sname fname = elementReference aliases $ fromQname (fst $ toQname sname) nm
+unionFieldReference aliases sname (FieldName fname) = elementReference aliases $ fromQname (fst $ toQname sname) nm
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 

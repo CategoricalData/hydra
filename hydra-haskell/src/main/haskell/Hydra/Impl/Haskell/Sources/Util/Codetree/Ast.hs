@@ -19,7 +19,7 @@ codetreeAst :: Graph Meta
 codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
   where
     def = datatype codetreeAstName
-    ast = nominal . qualify codetreeAstName
+    ast = nominal . qualify codetreeAstName . Name
 
     elements = [
 

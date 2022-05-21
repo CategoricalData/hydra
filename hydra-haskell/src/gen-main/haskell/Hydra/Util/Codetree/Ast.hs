@@ -12,15 +12,15 @@ data Associativity
   | AssociativityBoth 
   deriving (Eq, Ord, Read, Show)
 
-_Associativity = "hydra/util/codetree/ast.Associativity"
+_Associativity = (Core.Name "hydra/util/codetree/ast.Associativity")
 
-_Associativity_none = "none"
+_Associativity_none = (Core.FieldName "none")
 
-_Associativity_left = "left"
+_Associativity_left = (Core.FieldName "left")
 
-_Associativity_right = "right"
+_Associativity_right = (Core.FieldName "right")
 
-_Associativity_both = "both"
+_Associativity_both = (Core.FieldName "both")
 
 -- An expression enclosed by brackets
 data BracketExpr 
@@ -29,11 +29,11 @@ data BracketExpr
     bracketExprEnclosed :: Expr}
   deriving (Eq, Ord, Read, Show)
 
-_BracketExpr = "hydra/util/codetree/ast.BracketExpr"
+_BracketExpr = (Core.Name "hydra/util/codetree/ast.BracketExpr")
 
-_BracketExpr_brackets = "brackets"
+_BracketExpr_brackets = (Core.FieldName "brackets")
 
-_BracketExpr_enclosed = "enclosed"
+_BracketExpr_enclosed = (Core.FieldName "enclosed")
 
 -- Matching open and close bracket symbols
 data Brackets 
@@ -42,11 +42,11 @@ data Brackets
     bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
 
-_Brackets = "hydra/util/codetree/ast.Brackets"
+_Brackets = (Core.Name "hydra/util/codetree/ast.Brackets")
 
-_Brackets_open = "open"
+_Brackets_open = (Core.FieldName "open")
 
-_Brackets_close = "close"
+_Brackets_close = (Core.FieldName "close")
 
 -- An abstract expression
 data Expr 
@@ -55,13 +55,13 @@ data Expr
   | ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
 
-_Expr = "hydra/util/codetree/ast.Expr"
+_Expr = (Core.Name "hydra/util/codetree/ast.Expr")
 
-_Expr_const = "const"
+_Expr_const = (Core.FieldName "const")
 
-_Expr_op = "op"
+_Expr_op = (Core.FieldName "op")
 
-_Expr_brackets = "brackets"
+_Expr_brackets = (Core.FieldName "brackets")
 
 -- An operator symbol
 data Op 
@@ -72,15 +72,15 @@ data Op
     opAssociativity :: Associativity}
   deriving (Eq, Ord, Read, Show)
 
-_Op = "hydra/util/codetree/ast.Op"
+_Op = (Core.Name "hydra/util/codetree/ast.Op")
 
-_Op_symbol = "symbol"
+_Op_symbol = (Core.FieldName "symbol")
 
-_Op_padding = "padding"
+_Op_padding = (Core.FieldName "padding")
 
-_Op_precedence = "precedence"
+_Op_precedence = (Core.FieldName "precedence")
 
-_Op_associativity = "associativity"
+_Op_associativity = (Core.FieldName "associativity")
 
 -- An operator expression
 data OpExpr 
@@ -90,13 +90,13 @@ data OpExpr
     opExprRhs :: Expr}
   deriving (Eq, Ord, Read, Show)
 
-_OpExpr = "hydra/util/codetree/ast.OpExpr"
+_OpExpr = (Core.Name "hydra/util/codetree/ast.OpExpr")
 
-_OpExpr_op = "op"
+_OpExpr_op = (Core.FieldName "op")
 
-_OpExpr_lhs = "lhs"
+_OpExpr_lhs = (Core.FieldName "lhs")
 
-_OpExpr_rhs = "rhs"
+_OpExpr_rhs = (Core.FieldName "rhs")
 
 -- Left and right padding for an operator
 data Padding 
@@ -105,25 +105,25 @@ data Padding
     paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
 
-_Padding = "hydra/util/codetree/ast.Padding"
+_Padding = (Core.Name "hydra/util/codetree/ast.Padding")
 
-_Padding_left = "left"
+_Padding_left = (Core.FieldName "left")
 
-_Padding_right = "right"
+_Padding_right = (Core.FieldName "right")
 
 -- Operator precedence
 newtype Precedence 
   = Precedence Int
   deriving (Eq, Ord, Read, Show)
 
-_Precedence = "hydra/util/codetree/ast.Precedence"
+_Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
 
 -- Any symbol
 newtype Symbol 
   = Symbol String
   deriving (Eq, Ord, Read, Show)
 
-_Symbol = "hydra/util/codetree/ast.Symbol"
+_Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")
 
 -- One of several classes of whitespace
 data Ws 
@@ -133,12 +133,12 @@ data Ws
   | WsBreakAndIndent 
   deriving (Eq, Ord, Read, Show)
 
-_Ws = "hydra/util/codetree/ast.Ws"
+_Ws = (Core.Name "hydra/util/codetree/ast.Ws")
 
-_Ws_none = "none"
+_Ws_none = (Core.FieldName "none")
 
-_Ws_space = "space"
+_Ws_space = (Core.FieldName "space")
 
-_Ws_break = "break"
+_Ws_break = (Core.FieldName "break")
 
-_Ws_breakAndIndent = "breakAndIndent"
+_Ws_breakAndIndent = (Core.FieldName "breakAndIndent")

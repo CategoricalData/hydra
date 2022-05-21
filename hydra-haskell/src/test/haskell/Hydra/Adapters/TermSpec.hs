@@ -100,8 +100,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
-      (record [Field "first" $ stringValue a1, Field "second" $ int8Value a2])
-      (record [Field "first" $ stringValue a1, Field "second" $ int16Value a2])
+      (record [Field (FieldName "first") $ stringValue a1, Field (FieldName "second") $ int8Value a2])
+      (record [Field (FieldName "first") $ stringValue a1, Field (FieldName "second") $ int16Value a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkDataAdapter
@@ -109,8 +109,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       stringOrIntType
       stringOrIntType
       False
-      (variant "right" $ int32Value int)
-      (variant "right" $ int32Value int)
+      (variant (FieldName "right") $ int32Value int)
+      (variant (FieldName "right") $ int32Value int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkDataAdapter
@@ -188,13 +188,13 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (stringList $ S.toList strings)
 
   H.it "Element references (when unsupported) become strings" $
-    QC.property $ \name -> checkDataAdapter
+    QC.property $ \name@(Name nm) -> checkDataAdapter
       [TypeVariantLiteral]
       int32ElementType
       Types.string
       False
       (element name)
-      (stringValue name) -- Note: the element name is not dereferenced
+      (stringValue nm) -- Note: the element name is not dereferenced
 
   H.it "CompareTo terms (when unsupported) become variant terms" $
     QC.property $ \s -> checkDataAdapter
@@ -203,7 +203,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       (compareTo $ stringValue s)
-      (nominalUnion testContext _Function $ Field "compareTo" $ stringValue s)
+      (nominalUnion testContext _Function $ Field (FieldName "compareTo") $ stringValue s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
@@ -212,7 +212,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       delta
-      (nominalUnion testContext _Function $ Field "delta" unitData)
+      (nominalUnion testContext _Function $ Field (FieldName "delta") unitData)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -230,7 +230,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       (primitive name)
-      (nominalUnion testContext _Function $ Field "primitive" $ stringValue name) -- Note: the function name is not dereferenced
+      (nominalUnion testContext _Function $ Field (FieldName "primitive") $ stringValue $ showName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
@@ -239,7 +239,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection fname)
-      (nominalUnion testContext _Function $ Field "projection" $ stringValue fname) -- Note: the field name is not dereferenced
+      (nominalUnion testContext _Function $ Field (FieldName "projection") $ stringValue $ showFieldName fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
@@ -259,12 +259,12 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])])
       False
-      (union $ Field "right" $ int8Value i)
+      (union $ Field (FieldName "right") $ int8Value i)
       (record [
-        Field "context" $ stringValue untyped,
-        Field "record" (record [
-          Field "left" $ optional Nothing,
-          Field "right" $ optional $ Just $ int16Value i])])
+        Field (FieldName "context") $ stringValue $ showName untyped,
+        Field (FieldName "record") (record [
+          Field (FieldName "left") $ optional Nothing,
+          Field (FieldName "right") $ optional $ Just $ int16Value i])])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
@@ -294,7 +294,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       listOfListsOfStringsType
       False
       (list $ (\l -> set $ S.fromList $ element <$> l) <$> names)
-      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList l)) <$> names)
+      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList $ showName <$> l)) <$> names)
 
 roundTripsPreserveSelectedTypes :: H.SpecWith ()
 roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
@@ -341,8 +341,8 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Types.field "second" Types.int8)
       (Types.field "second" Types.int16)
       False
-      (Field "second" $ int8Value i)
-      (Field "second" $ int16Value i)
+      (Field (FieldName "second") $ int8Value i)
+      (Field (FieldName "second") $ int16Value i)
 
 roundTripIsNoop :: Type Meta -> Data Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
