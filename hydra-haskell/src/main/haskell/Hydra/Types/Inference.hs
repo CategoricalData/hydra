@@ -204,7 +204,7 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
       -- Note: type inference cannot recover complete union types from union values; type annotations are needed
       DataTermUnion field -> do
         ifield <- inferFieldType cx field
-        let typ = Types.union [Types.field (fieldName field) (termType $ fieldData ifield)]
+        let typ = Types.union [FieldType (fieldName field) (termType $ fieldData ifield)]
         yield (DataTermUnion ifield) typ (termConstraints $ fieldData ifield)
 
       DataTermVariable x -> do

@@ -87,15 +87,15 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedData
         (Types.record [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
-        (record [Field "one" $ optional $ Just $ stringValue "test", Field "two" $ optional Nothing]))
+        (record [Field (FieldName "one") $ optional $ Just $ stringValue "test", Field (FieldName "two") $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedData
         (Types.union [Types.field "left" Types.string, Types.field "right" Types.int32])
-        (union $ Field "left" $ stringValue "test"))
-      ("context: " ++ show untyped ++ "\nrecord:\n  left: test\n")
+        (union $ Field (FieldName "left") $ stringValue "test"))
+      ("context: " ++ show (showName untyped) ++ "\nrecord:\n  left: test\n")
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
 yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do

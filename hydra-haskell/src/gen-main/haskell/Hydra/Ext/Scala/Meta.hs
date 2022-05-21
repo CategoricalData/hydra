@@ -8,15 +8,15 @@ newtype PredefString
   = PredefString String
   deriving (Eq, Ord, Read, Show)
 
-_PredefString = "hydra/ext/scala/meta.PredefString"
+_PredefString = (Core.Name "hydra/ext/scala/meta.PredefString")
 
 data ScalaSymbol 
   = ScalaSymbol {scalaSymbolName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ScalaSymbol = "hydra/ext/scala/meta.ScalaSymbol"
+_ScalaSymbol = (Core.Name "hydra/ext/scala/meta.ScalaSymbol")
 
-_ScalaSymbol_name = "name"
+_ScalaSymbol_name = (Core.FieldName "name")
 
 data Tree 
   = TreeRef Ref
@@ -36,48 +36,48 @@ data Tree
   | TreeQuasi Quasi
   deriving (Eq, Ord, Read, Show)
 
-_Tree = "hydra/ext/scala/meta.Tree"
+_Tree = (Core.Name "hydra/ext/scala/meta.Tree")
 
-_Tree_ref = "ref"
+_Tree_ref = (Core.FieldName "ref")
 
-_Tree_stat = "stat"
+_Tree_stat = (Core.FieldName "stat")
 
-_Tree_type = "type"
+_Tree_type = (Core.FieldName "type")
 
-_Tree_bounds = "bounds"
+_Tree_bounds = (Core.FieldName "bounds")
 
-_Tree_pat = "pat"
+_Tree_pat = (Core.FieldName "pat")
 
-_Tree_member = "member"
+_Tree_member = (Core.FieldName "member")
 
-_Tree_ctor = "ctor"
+_Tree_ctor = (Core.FieldName "ctor")
 
-_Tree_template = "template"
+_Tree_template = (Core.FieldName "template")
 
-_Tree_mod = "mod"
+_Tree_mod = (Core.FieldName "mod")
 
-_Tree_enumerator = "enumerator"
+_Tree_enumerator = (Core.FieldName "enumerator")
 
-_Tree_importer = "importer"
+_Tree_importer = (Core.FieldName "importer")
 
-_Tree_importee = "importee"
+_Tree_importee = (Core.FieldName "importee")
 
-_Tree_caseTree = "caseTree"
+_Tree_caseTree = (Core.FieldName "caseTree")
 
-_Tree_source = "source"
+_Tree_source = (Core.FieldName "source")
 
-_Tree_quasi = "quasi"
+_Tree_quasi = (Core.FieldName "quasi")
 
 data Ref 
   = RefName Name
   | RefInit Init
   deriving (Eq, Ord, Read, Show)
 
-_Ref = "hydra/ext/scala/meta.Ref"
+_Ref = (Core.Name "hydra/ext/scala/meta.Ref")
 
-_Ref_name = "name"
+_Ref_name = (Core.FieldName "name")
 
-_Ref_init = "init"
+_Ref_init = (Core.FieldName "init")
 
 data Stat 
   = StatTerm Data
@@ -86,15 +86,15 @@ data Stat
   | StatImportExport ImportExportStat
   deriving (Eq, Ord, Read, Show)
 
-_Stat = "hydra/ext/scala/meta.Stat"
+_Stat = (Core.Name "hydra/ext/scala/meta.Stat")
 
-_Stat_term = "term"
+_Stat_term = (Core.FieldName "term")
 
-_Stat_decl = "decl"
+_Stat_decl = (Core.FieldName "decl")
 
-_Stat_defn = "defn"
+_Stat_defn = (Core.FieldName "defn")
 
-_Stat_importExport = "importExport"
+_Stat_importExport = (Core.FieldName "importExport")
 
 data Name 
   = NameValue String
@@ -102,13 +102,13 @@ data Name
   | NameIndeterminate PredefString
   deriving (Eq, Ord, Read, Show)
 
-_Name = "hydra/ext/scala/meta.Name"
+_Name = (Core.Name "hydra/ext/scala/meta.Name")
 
-_Name_value = "value"
+_Name_value = (Core.FieldName "value")
 
-_Name_anonymous = "anonymous"
+_Name_anonymous = (Core.FieldName "anonymous")
 
-_Name_indeterminate = "indeterminate"
+_Name_indeterminate = (Core.FieldName "indeterminate")
 
 data Lit 
   = LitNull 
@@ -125,31 +125,31 @@ data Lit
   | LitSymbol ScalaSymbol
   deriving (Eq, Ord, Read, Show)
 
-_Lit = "hydra/ext/scala/meta.Lit"
+_Lit = (Core.Name "hydra/ext/scala/meta.Lit")
 
-_Lit_null = "null"
+_Lit_null = (Core.FieldName "null")
 
-_Lit_int = "int"
+_Lit_int = (Core.FieldName "int")
 
-_Lit_double = "double"
+_Lit_double = (Core.FieldName "double")
 
-_Lit_float = "float"
+_Lit_float = (Core.FieldName "float")
 
-_Lit_byte = "byte"
+_Lit_byte = (Core.FieldName "byte")
 
-_Lit_short = "short"
+_Lit_short = (Core.FieldName "short")
 
-_Lit_char = "char"
+_Lit_char = (Core.FieldName "char")
 
-_Lit_long = "long"
+_Lit_long = (Core.FieldName "long")
 
-_Lit_boolean = "boolean"
+_Lit_boolean = (Core.FieldName "boolean")
 
-_Lit_unit = "unit"
+_Lit_unit = (Core.FieldName "unit")
 
-_Lit_string = "string"
+_Lit_string = (Core.FieldName "string")
 
-_Lit_symbol = "symbol"
+_Lit_symbol = (Core.FieldName "symbol")
 
 data Data 
   = DataLit Lit
@@ -189,77 +189,77 @@ data Data
   | DataParam Data_Param
   deriving (Eq, Ord, Read, Show)
 
-_Data = "hydra/ext/scala/meta.Data"
+_Data = (Core.Name "hydra/ext/scala/meta.Data")
 
-_Data_lit = "lit"
+_Data_lit = (Core.FieldName "lit")
 
-_Data_ref = "ref"
+_Data_ref = (Core.FieldName "ref")
 
-_Data_interpolate = "interpolate"
+_Data_interpolate = (Core.FieldName "interpolate")
 
-_Data_xml = "xml"
+_Data_xml = (Core.FieldName "xml")
 
-_Data_apply = "apply"
+_Data_apply = (Core.FieldName "apply")
 
-_Data_applyUsing = "applyUsing"
+_Data_applyUsing = (Core.FieldName "applyUsing")
 
-_Data_applyType = "applyType"
+_Data_applyType = (Core.FieldName "applyType")
 
-_Data_assign = "assign"
+_Data_assign = (Core.FieldName "assign")
 
-_Data_return = "return"
+_Data_return = (Core.FieldName "return")
 
-_Data_throw = "throw"
+_Data_throw = (Core.FieldName "throw")
 
-_Data_ascribe = "ascribe"
+_Data_ascribe = (Core.FieldName "ascribe")
 
-_Data_annotate = "annotate"
+_Data_annotate = (Core.FieldName "annotate")
 
-_Data_tuple = "tuple"
+_Data_tuple = (Core.FieldName "tuple")
 
-_Data_block = "block"
+_Data_block = (Core.FieldName "block")
 
-_Data_endMarker = "endMarker"
+_Data_endMarker = (Core.FieldName "endMarker")
 
-_Data_if = "if"
+_Data_if = (Core.FieldName "if")
 
-_Data_quotedMacroExpr = "quotedMacroExpr"
+_Data_quotedMacroExpr = (Core.FieldName "quotedMacroExpr")
 
-_Data_quotedMacroType = "quotedMacroType"
+_Data_quotedMacroType = (Core.FieldName "quotedMacroType")
 
-_Data_splicedMacroExpr = "splicedMacroExpr"
+_Data_splicedMacroExpr = (Core.FieldName "splicedMacroExpr")
 
-_Data_match = "match"
+_Data_match = (Core.FieldName "match")
 
-_Data_try = "try"
+_Data_try = (Core.FieldName "try")
 
-_Data_tryWithHandler = "tryWithHandler"
+_Data_tryWithHandler = (Core.FieldName "tryWithHandler")
 
-_Data_functionData = "functionData"
+_Data_functionData = (Core.FieldName "functionData")
 
-_Data_polyFunction = "polyFunction"
+_Data_polyFunction = (Core.FieldName "polyFunction")
 
-_Data_partialFunction = "partialFunction"
+_Data_partialFunction = (Core.FieldName "partialFunction")
 
-_Data_while = "while"
+_Data_while = (Core.FieldName "while")
 
-_Data_do = "do"
+_Data_do = (Core.FieldName "do")
 
-_Data_for = "for"
+_Data_for = (Core.FieldName "for")
 
-_Data_forYield = "forYield"
+_Data_forYield = (Core.FieldName "forYield")
 
-_Data_new = "new"
+_Data_new = (Core.FieldName "new")
 
-_Data_newAnonymous = "newAnonymous"
+_Data_newAnonymous = (Core.FieldName "newAnonymous")
 
-_Data_placeholder = "placeholder"
+_Data_placeholder = (Core.FieldName "placeholder")
 
-_Data_eta = "eta"
+_Data_eta = (Core.FieldName "eta")
 
-_Data_repeated = "repeated"
+_Data_repeated = (Core.FieldName "repeated")
 
-_Data_param = "param"
+_Data_param = (Core.FieldName "param")
 
 data Data_Ref 
   = Data_RefThis Data_This
@@ -270,25 +270,25 @@ data Data_Ref
   | Data_RefApplyUnary Data_ApplyUnary
   deriving (Eq, Ord, Read, Show)
 
-_Data_Ref = "hydra/ext/scala/meta.Data.Ref"
+_Data_Ref = (Core.Name "hydra/ext/scala/meta.Data.Ref")
 
-_Data_Ref_this = "this"
+_Data_Ref_this = (Core.FieldName "this")
 
-_Data_Ref_super = "super"
+_Data_Ref_super = (Core.FieldName "super")
 
-_Data_Ref_name = "name"
+_Data_Ref_name = (Core.FieldName "name")
 
-_Data_Ref_anonymous = "anonymous"
+_Data_Ref_anonymous = (Core.FieldName "anonymous")
 
-_Data_Ref_select = "select"
+_Data_Ref_select = (Core.FieldName "select")
 
-_Data_Ref_applyUnary = "applyUnary"
+_Data_Ref_applyUnary = (Core.FieldName "applyUnary")
 
 data Data_This 
   = Data_This {}
   deriving (Eq, Ord, Read, Show)
 
-_Data_This = "hydra/ext/scala/meta.Data.This"
+_Data_This = (Core.Name "hydra/ext/scala/meta.Data.This")
 
 data Data_Super 
   = Data_Super {
@@ -296,25 +296,25 @@ data Data_Super
     data_SuperSuperp :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Super = "hydra/ext/scala/meta.Data.Super"
+_Data_Super = (Core.Name "hydra/ext/scala/meta.Data.Super")
 
-_Data_Super_thisp = "thisp"
+_Data_Super_thisp = (Core.FieldName "thisp")
 
-_Data_Super_superp = "superp"
+_Data_Super_superp = (Core.FieldName "superp")
 
 data Data_Name 
   = Data_Name {data_NameValue :: PredefString}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Name = "hydra/ext/scala/meta.Data.Name"
+_Data_Name = (Core.Name "hydra/ext/scala/meta.Data.Name")
 
-_Data_Name_value = "value"
+_Data_Name_value = (Core.FieldName "value")
 
 data Data_Anonymous 
   = Data_Anonymous {}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Anonymous = "hydra/ext/scala/meta.Data.Anonymous"
+_Data_Anonymous = (Core.Name "hydra/ext/scala/meta.Data.Anonymous")
 
 data Data_Select 
   = Data_Select {
@@ -322,11 +322,11 @@ data Data_Select
     data_SelectName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Select = "hydra/ext/scala/meta.Data.Select"
+_Data_Select = (Core.Name "hydra/ext/scala/meta.Data.Select")
 
-_Data_Select_qual = "qual"
+_Data_Select_qual = (Core.FieldName "qual")
 
-_Data_Select_name = "name"
+_Data_Select_name = (Core.FieldName "name")
 
 data Data_Interpolate 
   = Data_Interpolate {
@@ -335,13 +335,13 @@ data Data_Interpolate
     data_InterpolateArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Interpolate = "hydra/ext/scala/meta.Data.Interpolate"
+_Data_Interpolate = (Core.Name "hydra/ext/scala/meta.Data.Interpolate")
 
-_Data_Interpolate_prefix = "prefix"
+_Data_Interpolate_prefix = (Core.FieldName "prefix")
 
-_Data_Interpolate_parts = "parts"
+_Data_Interpolate_parts = (Core.FieldName "parts")
 
-_Data_Interpolate_args = "args"
+_Data_Interpolate_args = (Core.FieldName "args")
 
 data Data_Xml 
   = Data_Xml {
@@ -349,11 +349,11 @@ data Data_Xml
     data_XmlArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Xml = "hydra/ext/scala/meta.Data.Xml"
+_Data_Xml = (Core.Name "hydra/ext/scala/meta.Data.Xml")
 
-_Data_Xml_parts = "parts"
+_Data_Xml_parts = (Core.FieldName "parts")
 
-_Data_Xml_args = "args"
+_Data_Xml_args = (Core.FieldName "args")
 
 data Data_Apply 
   = Data_Apply {
@@ -361,11 +361,11 @@ data Data_Apply
     data_ApplyArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Apply = "hydra/ext/scala/meta.Data.Apply"
+_Data_Apply = (Core.Name "hydra/ext/scala/meta.Data.Apply")
 
-_Data_Apply_fun = "fun"
+_Data_Apply_fun = (Core.FieldName "fun")
 
-_Data_Apply_args = "args"
+_Data_Apply_args = (Core.FieldName "args")
 
 data Data_ApplyUsing 
   = Data_ApplyUsing {
@@ -373,11 +373,11 @@ data Data_ApplyUsing
     data_ApplyUsingTargs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ApplyUsing = "hydra/ext/scala/meta.Data.ApplyUsing"
+_Data_ApplyUsing = (Core.Name "hydra/ext/scala/meta.Data.ApplyUsing")
 
-_Data_ApplyUsing_fun = "fun"
+_Data_ApplyUsing_fun = (Core.FieldName "fun")
 
-_Data_ApplyUsing_targs = "targs"
+_Data_ApplyUsing_targs = (Core.FieldName "targs")
 
 data Data_ApplyType 
   = Data_ApplyType {
@@ -387,15 +387,15 @@ data Data_ApplyType
     data_ApplyTypeArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ApplyType = "hydra/ext/scala/meta.Data.ApplyType"
+_Data_ApplyType = (Core.Name "hydra/ext/scala/meta.Data.ApplyType")
 
-_Data_ApplyType_lhs = "lhs"
+_Data_ApplyType_lhs = (Core.FieldName "lhs")
 
-_Data_ApplyType_op = "op"
+_Data_ApplyType_op = (Core.FieldName "op")
 
-_Data_ApplyType_targs = "targs"
+_Data_ApplyType_targs = (Core.FieldName "targs")
 
-_Data_ApplyType_args = "args"
+_Data_ApplyType_args = (Core.FieldName "args")
 
 data Data_ApplyInfix 
   = Data_ApplyInfix {
@@ -405,15 +405,15 @@ data Data_ApplyInfix
     data_ApplyInfixArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ApplyInfix = "hydra/ext/scala/meta.Data.ApplyInfix"
+_Data_ApplyInfix = (Core.Name "hydra/ext/scala/meta.Data.ApplyInfix")
 
-_Data_ApplyInfix_lhs = "lhs"
+_Data_ApplyInfix_lhs = (Core.FieldName "lhs")
 
-_Data_ApplyInfix_op = "op"
+_Data_ApplyInfix_op = (Core.FieldName "op")
 
-_Data_ApplyInfix_targs = "targs"
+_Data_ApplyInfix_targs = (Core.FieldName "targs")
 
-_Data_ApplyInfix_args = "args"
+_Data_ApplyInfix_args = (Core.FieldName "args")
 
 data Data_ApplyUnary 
   = Data_ApplyUnary {
@@ -421,11 +421,11 @@ data Data_ApplyUnary
     data_ApplyUnaryArg :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ApplyUnary = "hydra/ext/scala/meta.Data.ApplyUnary"
+_Data_ApplyUnary = (Core.Name "hydra/ext/scala/meta.Data.ApplyUnary")
 
-_Data_ApplyUnary_op = "op"
+_Data_ApplyUnary_op = (Core.FieldName "op")
 
-_Data_ApplyUnary_arg = "arg"
+_Data_ApplyUnary_arg = (Core.FieldName "arg")
 
 data Data_Assign 
   = Data_Assign {
@@ -433,27 +433,27 @@ data Data_Assign
     data_AssignRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Assign = "hydra/ext/scala/meta.Data.Assign"
+_Data_Assign = (Core.Name "hydra/ext/scala/meta.Data.Assign")
 
-_Data_Assign_lhs = "lhs"
+_Data_Assign_lhs = (Core.FieldName "lhs")
 
-_Data_Assign_rhs = "rhs"
+_Data_Assign_rhs = (Core.FieldName "rhs")
 
 data Data_Return 
   = Data_Return {data_ReturnExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Return = "hydra/ext/scala/meta.Data.Return"
+_Data_Return = (Core.Name "hydra/ext/scala/meta.Data.Return")
 
-_Data_Return_expr = "expr"
+_Data_Return_expr = (Core.FieldName "expr")
 
 data Data_Throw 
   = Data_Throw {data_ThrowExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Throw = "hydra/ext/scala/meta.Data.Throw"
+_Data_Throw = (Core.Name "hydra/ext/scala/meta.Data.Throw")
 
-_Data_Throw_expr = "expr"
+_Data_Throw_expr = (Core.FieldName "expr")
 
 data Data_Ascribe 
   = Data_Ascribe {
@@ -461,11 +461,11 @@ data Data_Ascribe
     data_AscribeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Ascribe = "hydra/ext/scala/meta.Data.Ascribe"
+_Data_Ascribe = (Core.Name "hydra/ext/scala/meta.Data.Ascribe")
 
-_Data_Ascribe_expr = "expr"
+_Data_Ascribe_expr = (Core.FieldName "expr")
 
-_Data_Ascribe_tpe = "tpe"
+_Data_Ascribe_tpe = (Core.FieldName "tpe")
 
 data Data_Annotate 
   = Data_Annotate {
@@ -473,35 +473,35 @@ data Data_Annotate
     data_AnnotateAnnots :: [Mod_Annot]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Annotate = "hydra/ext/scala/meta.Data.Annotate"
+_Data_Annotate = (Core.Name "hydra/ext/scala/meta.Data.Annotate")
 
-_Data_Annotate_expr = "expr"
+_Data_Annotate_expr = (Core.FieldName "expr")
 
-_Data_Annotate_annots = "annots"
+_Data_Annotate_annots = (Core.FieldName "annots")
 
 data Data_Tuple 
   = Data_Tuple {data_TupleArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Tuple = "hydra/ext/scala/meta.Data.Tuple"
+_Data_Tuple = (Core.Name "hydra/ext/scala/meta.Data.Tuple")
 
-_Data_Tuple_args = "args"
+_Data_Tuple_args = (Core.FieldName "args")
 
 data Data_Block 
   = Data_Block {data_BlockStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Block = "hydra/ext/scala/meta.Data.Block"
+_Data_Block = (Core.Name "hydra/ext/scala/meta.Data.Block")
 
-_Data_Block_stats = "stats"
+_Data_Block_stats = (Core.FieldName "stats")
 
 data Data_EndMarker 
   = Data_EndMarker {data_EndMarkerName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Data_EndMarker = "hydra/ext/scala/meta.Data.EndMarker"
+_Data_EndMarker = (Core.Name "hydra/ext/scala/meta.Data.EndMarker")
 
-_Data_EndMarker_name = "name"
+_Data_EndMarker_name = (Core.FieldName "name")
 
 data Data_If 
   = Data_If {
@@ -510,37 +510,37 @@ data Data_If
     data_IfElsep :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_If = "hydra/ext/scala/meta.Data.If"
+_Data_If = (Core.Name "hydra/ext/scala/meta.Data.If")
 
-_Data_If_cond = "cond"
+_Data_If_cond = (Core.FieldName "cond")
 
-_Data_If_thenp = "thenp"
+_Data_If_thenp = (Core.FieldName "thenp")
 
-_Data_If_elsep = "elsep"
+_Data_If_elsep = (Core.FieldName "elsep")
 
 data Data_QuotedMacroExpr 
   = Data_QuotedMacroExpr {data_QuotedMacroExprBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_QuotedMacroExpr = "hydra/ext/scala/meta.Data.QuotedMacroExpr"
+_Data_QuotedMacroExpr = (Core.Name "hydra/ext/scala/meta.Data.QuotedMacroExpr")
 
-_Data_QuotedMacroExpr_body = "body"
+_Data_QuotedMacroExpr_body = (Core.FieldName "body")
 
 data Data_QuotedMacroType 
   = Data_QuotedMacroType {data_QuotedMacroTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Data_QuotedMacroType = "hydra/ext/scala/meta.Data.QuotedMacroType"
+_Data_QuotedMacroType = (Core.Name "hydra/ext/scala/meta.Data.QuotedMacroType")
 
-_Data_QuotedMacroType_tpe = "tpe"
+_Data_QuotedMacroType_tpe = (Core.FieldName "tpe")
 
 data Data_SplicedMacroExpr 
   = Data_SplicedMacroExpr {data_SplicedMacroExprBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_SplicedMacroExpr = "hydra/ext/scala/meta.Data.SplicedMacroExpr"
+_Data_SplicedMacroExpr = (Core.Name "hydra/ext/scala/meta.Data.SplicedMacroExpr")
 
-_Data_SplicedMacroExpr_body = "body"
+_Data_SplicedMacroExpr_body = (Core.FieldName "body")
 
 data Data_Match 
   = Data_Match {
@@ -548,11 +548,11 @@ data Data_Match
     data_MatchCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Match = "hydra/ext/scala/meta.Data.Match"
+_Data_Match = (Core.Name "hydra/ext/scala/meta.Data.Match")
 
-_Data_Match_expr = "expr"
+_Data_Match_expr = (Core.FieldName "expr")
 
-_Data_Match_cases = "cases"
+_Data_Match_cases = (Core.FieldName "cases")
 
 data Data_Try 
   = Data_Try {
@@ -561,13 +561,13 @@ data Data_Try
     data_TryFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Try = "hydra/ext/scala/meta.Data.Try"
+_Data_Try = (Core.Name "hydra/ext/scala/meta.Data.Try")
 
-_Data_Try_expr = "expr"
+_Data_Try_expr = (Core.FieldName "expr")
 
-_Data_Try_catchp = "catchp"
+_Data_Try_catchp = (Core.FieldName "catchp")
 
-_Data_Try_finallyp = "finallyp"
+_Data_Try_finallyp = (Core.FieldName "finallyp")
 
 data Data_TryWithHandler 
   = Data_TryWithHandler {
@@ -576,24 +576,24 @@ data Data_TryWithHandler
     data_TryWithHandlerFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Data_TryWithHandler = "hydra/ext/scala/meta.Data.TryWithHandler"
+_Data_TryWithHandler = (Core.Name "hydra/ext/scala/meta.Data.TryWithHandler")
 
-_Data_TryWithHandler_expr = "expr"
+_Data_TryWithHandler_expr = (Core.FieldName "expr")
 
-_Data_TryWithHandler_catchp = "catchp"
+_Data_TryWithHandler_catchp = (Core.FieldName "catchp")
 
-_Data_TryWithHandler_finallyp = "finallyp"
+_Data_TryWithHandler_finallyp = (Core.FieldName "finallyp")
 
 data Data_FunctionData 
   = Data_FunctionDataContextFunction Data_ContextFunction
   | Data_FunctionDataFunction Data_Function
   deriving (Eq, Ord, Read, Show)
 
-_Data_FunctionData = "hydra/ext/scala/meta.Data.FunctionData"
+_Data_FunctionData = (Core.Name "hydra/ext/scala/meta.Data.FunctionData")
 
-_Data_FunctionData_contextFunction = "contextFunction"
+_Data_FunctionData_contextFunction = (Core.FieldName "contextFunction")
 
-_Data_FunctionData_function = "function"
+_Data_FunctionData_function = (Core.FieldName "function")
 
 data Data_ContextFunction 
   = Data_ContextFunction {
@@ -601,11 +601,11 @@ data Data_ContextFunction
     data_ContextFunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ContextFunction = "hydra/ext/scala/meta.Data.ContextFunction"
+_Data_ContextFunction = (Core.Name "hydra/ext/scala/meta.Data.ContextFunction")
 
-_Data_ContextFunction_params = "params"
+_Data_ContextFunction_params = (Core.FieldName "params")
 
-_Data_ContextFunction_body = "body"
+_Data_ContextFunction_body = (Core.FieldName "body")
 
 data Data_Function 
   = Data_Function {
@@ -613,11 +613,11 @@ data Data_Function
     data_FunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Function = "hydra/ext/scala/meta.Data.Function"
+_Data_Function = (Core.Name "hydra/ext/scala/meta.Data.Function")
 
-_Data_Function_params = "params"
+_Data_Function_params = (Core.FieldName "params")
 
-_Data_Function_body = "body"
+_Data_Function_body = (Core.FieldName "body")
 
 data Data_PolyFunction 
   = Data_PolyFunction {
@@ -625,19 +625,19 @@ data Data_PolyFunction
     data_PolyFunctionBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_PolyFunction = "hydra/ext/scala/meta.Data.PolyFunction"
+_Data_PolyFunction = (Core.Name "hydra/ext/scala/meta.Data.PolyFunction")
 
-_Data_PolyFunction_tparams = "tparams"
+_Data_PolyFunction_tparams = (Core.FieldName "tparams")
 
-_Data_PolyFunction_body = "body"
+_Data_PolyFunction_body = (Core.FieldName "body")
 
 data Data_PartialFunction 
   = Data_PartialFunction {data_PartialFunctionCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_PartialFunction = "hydra/ext/scala/meta.Data.PartialFunction"
+_Data_PartialFunction = (Core.Name "hydra/ext/scala/meta.Data.PartialFunction")
 
-_Data_PartialFunction_cases = "cases"
+_Data_PartialFunction_cases = (Core.FieldName "cases")
 
 data Data_While 
   = Data_While {
@@ -645,11 +645,11 @@ data Data_While
     data_WhileBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_While = "hydra/ext/scala/meta.Data.While"
+_Data_While = (Core.Name "hydra/ext/scala/meta.Data.While")
 
-_Data_While_expr = "expr"
+_Data_While_expr = (Core.FieldName "expr")
 
-_Data_While_body = "body"
+_Data_While_body = (Core.FieldName "body")
 
 data Data_Do 
   = Data_Do {
@@ -657,65 +657,65 @@ data Data_Do
     data_DoExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Do = "hydra/ext/scala/meta.Data.Do"
+_Data_Do = (Core.Name "hydra/ext/scala/meta.Data.Do")
 
-_Data_Do_body = "body"
+_Data_Do_body = (Core.FieldName "body")
 
-_Data_Do_expr = "expr"
+_Data_Do_expr = (Core.FieldName "expr")
 
 data Data_For 
   = Data_For {data_ForEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_For = "hydra/ext/scala/meta.Data.For"
+_Data_For = (Core.Name "hydra/ext/scala/meta.Data.For")
 
-_Data_For_enums = "enums"
+_Data_For_enums = (Core.FieldName "enums")
 
 data Data_ForYield 
   = Data_ForYield {data_ForYieldEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
 
-_Data_ForYield = "hydra/ext/scala/meta.Data.ForYield"
+_Data_ForYield = (Core.Name "hydra/ext/scala/meta.Data.ForYield")
 
-_Data_ForYield_enums = "enums"
+_Data_ForYield_enums = (Core.FieldName "enums")
 
 data Data_New 
   = Data_New {data_NewInit :: Init}
   deriving (Eq, Ord, Read, Show)
 
-_Data_New = "hydra/ext/scala/meta.Data.New"
+_Data_New = (Core.Name "hydra/ext/scala/meta.Data.New")
 
-_Data_New_init = "init"
+_Data_New_init = (Core.FieldName "init")
 
 data Data_NewAnonymous 
   = Data_NewAnonymous {data_NewAnonymousTempl :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Data_NewAnonymous = "hydra/ext/scala/meta.Data.NewAnonymous"
+_Data_NewAnonymous = (Core.Name "hydra/ext/scala/meta.Data.NewAnonymous")
 
-_Data_NewAnonymous_templ = "templ"
+_Data_NewAnonymous_templ = (Core.FieldName "templ")
 
 data Data_Placeholder 
   = Data_Placeholder {}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Placeholder = "hydra/ext/scala/meta.Data.Placeholder"
+_Data_Placeholder = (Core.Name "hydra/ext/scala/meta.Data.Placeholder")
 
 data Data_Eta 
   = Data_Eta {data_EtaExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Eta = "hydra/ext/scala/meta.Data.Eta"
+_Data_Eta = (Core.Name "hydra/ext/scala/meta.Data.Eta")
 
-_Data_Eta_expr = "expr"
+_Data_Eta_expr = (Core.FieldName "expr")
 
 data Data_Repeated 
   = Data_Repeated {data_RepeatedExpr :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Repeated = "hydra/ext/scala/meta.Data.Repeated"
+_Data_Repeated = (Core.Name "hydra/ext/scala/meta.Data.Repeated")
 
-_Data_Repeated_expr = "expr"
+_Data_Repeated_expr = (Core.FieldName "expr")
 
 data Data_Param 
   = Data_Param {
@@ -725,15 +725,15 @@ data Data_Param
     data_ParamDefault :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Data_Param = "hydra/ext/scala/meta.Data.Param"
+_Data_Param = (Core.Name "hydra/ext/scala/meta.Data.Param")
 
-_Data_Param_mods = "mods"
+_Data_Param_mods = (Core.FieldName "mods")
 
-_Data_Param_name = "name"
+_Data_Param_name = (Core.FieldName "name")
 
-_Data_Param_decltpe = "decltpe"
+_Data_Param_decltpe = (Core.FieldName "decltpe")
 
-_Data_Param_default = "default"
+_Data_Param_default = (Core.FieldName "default")
 
 data Type 
   = TypeRef Type_Ref
@@ -761,53 +761,53 @@ data Type
   | TypeMatch Type_Match
   deriving (Eq, Ord, Read, Show)
 
-_Type = "hydra/ext/scala/meta.Type"
+_Type = (Core.Name "hydra/ext/scala/meta.Type")
 
-_Type_ref = "ref"
+_Type_ref = (Core.FieldName "ref")
 
-_Type_anonymousName = "anonymousName"
+_Type_anonymousName = (Core.FieldName "anonymousName")
 
-_Type_apply = "apply"
+_Type_apply = (Core.FieldName "apply")
 
-_Type_applyInfix = "applyInfix"
+_Type_applyInfix = (Core.FieldName "applyInfix")
 
-_Type_functionType = "functionType"
+_Type_functionType = (Core.FieldName "functionType")
 
-_Type_polyFunction = "polyFunction"
+_Type_polyFunction = (Core.FieldName "polyFunction")
 
-_Type_implicitFunction = "implicitFunction"
+_Type_implicitFunction = (Core.FieldName "implicitFunction")
 
-_Type_tuple = "tuple"
+_Type_tuple = (Core.FieldName "tuple")
 
-_Type_with = "with"
+_Type_with = (Core.FieldName "with")
 
-_Type_and = "and"
+_Type_and = (Core.FieldName "and")
 
-_Type_or = "or"
+_Type_or = (Core.FieldName "or")
 
-_Type_refine = "refine"
+_Type_refine = (Core.FieldName "refine")
 
-_Type_existential = "existential"
+_Type_existential = (Core.FieldName "existential")
 
-_Type_annotate = "annotate"
+_Type_annotate = (Core.FieldName "annotate")
 
-_Type_lambda = "lambda"
+_Type_lambda = (Core.FieldName "lambda")
 
-_Type_macro = "macro"
+_Type_macro = (Core.FieldName "macro")
 
-_Type_method = "method"
+_Type_method = (Core.FieldName "method")
 
-_Type_placeholder = "placeholder"
+_Type_placeholder = (Core.FieldName "placeholder")
 
-_Type_byName = "byName"
+_Type_byName = (Core.FieldName "byName")
 
-_Type_repeated = "repeated"
+_Type_repeated = (Core.FieldName "repeated")
 
-_Type_var = "var"
+_Type_var = (Core.FieldName "var")
 
-_Type_typedParam = "typedParam"
+_Type_typedParam = (Core.FieldName "typedParam")
 
-_Type_match = "match"
+_Type_match = (Core.FieldName "match")
 
 data Type_Ref 
   = Type_RefName Type_Name
@@ -816,29 +816,29 @@ data Type_Ref
   | Type_RefSingleton Type_Singleton
   deriving (Eq, Ord, Read, Show)
 
-_Type_Ref = "hydra/ext/scala/meta.Type.Ref"
+_Type_Ref = (Core.Name "hydra/ext/scala/meta.Type.Ref")
 
-_Type_Ref_name = "name"
+_Type_Ref_name = (Core.FieldName "name")
 
-_Type_Ref_select = "select"
+_Type_Ref_select = (Core.FieldName "select")
 
-_Type_Ref_project = "project"
+_Type_Ref_project = (Core.FieldName "project")
 
-_Type_Ref_singleton = "singleton"
+_Type_Ref_singleton = (Core.FieldName "singleton")
 
 data Type_Name 
   = Type_Name {type_NameValue :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Name = "hydra/ext/scala/meta.Type.Name"
+_Type_Name = (Core.Name "hydra/ext/scala/meta.Type.Name")
 
-_Type_Name_value = "value"
+_Type_Name_value = (Core.FieldName "value")
 
 data Type_AnonymousName 
   = Type_AnonymousName {}
   deriving (Eq, Ord, Read, Show)
 
-_Type_AnonymousName = "hydra/ext/scala/meta.Type.AnonymousName"
+_Type_AnonymousName = (Core.Name "hydra/ext/scala/meta.Type.AnonymousName")
 
 data Type_Select 
   = Type_Select {
@@ -846,11 +846,11 @@ data Type_Select
     type_SelectName :: Type_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Select = "hydra/ext/scala/meta.Type.Select"
+_Type_Select = (Core.Name "hydra/ext/scala/meta.Type.Select")
 
-_Type_Select_qual = "qual"
+_Type_Select_qual = (Core.FieldName "qual")
 
-_Type_Select_name = "name"
+_Type_Select_name = (Core.FieldName "name")
 
 data Type_Project 
   = Type_Project {
@@ -858,19 +858,19 @@ data Type_Project
     type_ProjectName :: Type_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Project = "hydra/ext/scala/meta.Type.Project"
+_Type_Project = (Core.Name "hydra/ext/scala/meta.Type.Project")
 
-_Type_Project_qual = "qual"
+_Type_Project_qual = (Core.FieldName "qual")
 
-_Type_Project_name = "name"
+_Type_Project_name = (Core.FieldName "name")
 
 data Type_Singleton 
   = Type_Singleton {type_SingletonRef :: Data_Ref}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Singleton = "hydra/ext/scala/meta.Type.Singleton"
+_Type_Singleton = (Core.Name "hydra/ext/scala/meta.Type.Singleton")
 
-_Type_Singleton_ref = "ref"
+_Type_Singleton_ref = (Core.FieldName "ref")
 
 data Type_Apply 
   = Type_Apply {
@@ -878,11 +878,11 @@ data Type_Apply
     type_ApplyArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Apply = "hydra/ext/scala/meta.Type.Apply"
+_Type_Apply = (Core.Name "hydra/ext/scala/meta.Type.Apply")
 
-_Type_Apply_tpe = "tpe"
+_Type_Apply_tpe = (Core.FieldName "tpe")
 
-_Type_Apply_args = "args"
+_Type_Apply_args = (Core.FieldName "args")
 
 data Type_ApplyInfix 
   = Type_ApplyInfix {
@@ -891,24 +891,24 @@ data Type_ApplyInfix
     type_ApplyInfixRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_ApplyInfix = "hydra/ext/scala/meta.Type.ApplyInfix"
+_Type_ApplyInfix = (Core.Name "hydra/ext/scala/meta.Type.ApplyInfix")
 
-_Type_ApplyInfix_lhs = "lhs"
+_Type_ApplyInfix_lhs = (Core.FieldName "lhs")
 
-_Type_ApplyInfix_op = "op"
+_Type_ApplyInfix_op = (Core.FieldName "op")
 
-_Type_ApplyInfix_rhs = "rhs"
+_Type_ApplyInfix_rhs = (Core.FieldName "rhs")
 
 data Type_FunctionType 
   = Type_FunctionTypeFunction Type_Function
   | Type_FunctionTypeContextFunction Type_ContextFunction
   deriving (Eq, Ord, Read, Show)
 
-_Type_FunctionType = "hydra/ext/scala/meta.Type.FunctionType"
+_Type_FunctionType = (Core.Name "hydra/ext/scala/meta.Type.FunctionType")
 
-_Type_FunctionType_function = "function"
+_Type_FunctionType_function = (Core.FieldName "function")
 
-_Type_FunctionType_contextFunction = "contextFunction"
+_Type_FunctionType_contextFunction = (Core.FieldName "contextFunction")
 
 data Type_Function 
   = Type_Function {
@@ -916,11 +916,11 @@ data Type_Function
     type_FunctionRes :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Function = "hydra/ext/scala/meta.Type.Function"
+_Type_Function = (Core.Name "hydra/ext/scala/meta.Type.Function")
 
-_Type_Function_params = "params"
+_Type_Function_params = (Core.FieldName "params")
 
-_Type_Function_res = "res"
+_Type_Function_res = (Core.FieldName "res")
 
 data Type_PolyFunction 
   = Type_PolyFunction {
@@ -928,11 +928,11 @@ data Type_PolyFunction
     type_PolyFunctionTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_PolyFunction = "hydra/ext/scala/meta.Type.PolyFunction"
+_Type_PolyFunction = (Core.Name "hydra/ext/scala/meta.Type.PolyFunction")
 
-_Type_PolyFunction_tparams = "tparams"
+_Type_PolyFunction_tparams = (Core.FieldName "tparams")
 
-_Type_PolyFunction_tpe = "tpe"
+_Type_PolyFunction_tpe = (Core.FieldName "tpe")
 
 data Type_ContextFunction 
   = Type_ContextFunction {
@@ -940,11 +940,11 @@ data Type_ContextFunction
     type_ContextFunctionRes :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_ContextFunction = "hydra/ext/scala/meta.Type.ContextFunction"
+_Type_ContextFunction = (Core.Name "hydra/ext/scala/meta.Type.ContextFunction")
 
-_Type_ContextFunction_params = "params"
+_Type_ContextFunction_params = (Core.FieldName "params")
 
-_Type_ContextFunction_res = "res"
+_Type_ContextFunction_res = (Core.FieldName "res")
 
 data Type_ImplicitFunction 
   = Type_ImplicitFunction {
@@ -952,19 +952,19 @@ data Type_ImplicitFunction
     type_ImplicitFunctionRes :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_ImplicitFunction = "hydra/ext/scala/meta.Type.ImplicitFunction"
+_Type_ImplicitFunction = (Core.Name "hydra/ext/scala/meta.Type.ImplicitFunction")
 
-_Type_ImplicitFunction_params = "params"
+_Type_ImplicitFunction_params = (Core.FieldName "params")
 
-_Type_ImplicitFunction_res = "res"
+_Type_ImplicitFunction_res = (Core.FieldName "res")
 
 data Type_Tuple 
   = Type_Tuple {type_TupleArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Tuple = "hydra/ext/scala/meta.Type.Tuple"
+_Type_Tuple = (Core.Name "hydra/ext/scala/meta.Type.Tuple")
 
-_Type_Tuple_args = "args"
+_Type_Tuple_args = (Core.FieldName "args")
 
 data Type_With 
   = Type_With {
@@ -972,11 +972,11 @@ data Type_With
     type_WithRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_With = "hydra/ext/scala/meta.Type.With"
+_Type_With = (Core.Name "hydra/ext/scala/meta.Type.With")
 
-_Type_With_lhs = "lhs"
+_Type_With_lhs = (Core.FieldName "lhs")
 
-_Type_With_rhs = "rhs"
+_Type_With_rhs = (Core.FieldName "rhs")
 
 data Type_And 
   = Type_And {
@@ -984,11 +984,11 @@ data Type_And
     type_AndRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_And = "hydra/ext/scala/meta.Type.And"
+_Type_And = (Core.Name "hydra/ext/scala/meta.Type.And")
 
-_Type_And_lhs = "lhs"
+_Type_And_lhs = (Core.FieldName "lhs")
 
-_Type_And_rhs = "rhs"
+_Type_And_rhs = (Core.FieldName "rhs")
 
 data Type_Or 
   = Type_Or {
@@ -996,11 +996,11 @@ data Type_Or
     type_OrRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Or = "hydra/ext/scala/meta.Type.Or"
+_Type_Or = (Core.Name "hydra/ext/scala/meta.Type.Or")
 
-_Type_Or_lhs = "lhs"
+_Type_Or_lhs = (Core.FieldName "lhs")
 
-_Type_Or_rhs = "rhs"
+_Type_Or_rhs = (Core.FieldName "rhs")
 
 data Type_Refine 
   = Type_Refine {
@@ -1008,11 +1008,11 @@ data Type_Refine
     type_RefineStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Refine = "hydra/ext/scala/meta.Type.Refine"
+_Type_Refine = (Core.Name "hydra/ext/scala/meta.Type.Refine")
 
-_Type_Refine_tpe = "tpe"
+_Type_Refine_tpe = (Core.FieldName "tpe")
 
-_Type_Refine_stats = "stats"
+_Type_Refine_stats = (Core.FieldName "stats")
 
 data Type_Existential 
   = Type_Existential {
@@ -1020,11 +1020,11 @@ data Type_Existential
     type_ExistentialStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Existential = "hydra/ext/scala/meta.Type.Existential"
+_Type_Existential = (Core.Name "hydra/ext/scala/meta.Type.Existential")
 
-_Type_Existential_tpe = "tpe"
+_Type_Existential_tpe = (Core.FieldName "tpe")
 
-_Type_Existential_stats = "stats"
+_Type_Existential_stats = (Core.FieldName "stats")
 
 data Type_Annotate 
   = Type_Annotate {
@@ -1032,11 +1032,11 @@ data Type_Annotate
     type_AnnotateAnnots :: [Mod_Annot]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Annotate = "hydra/ext/scala/meta.Type.Annotate"
+_Type_Annotate = (Core.Name "hydra/ext/scala/meta.Type.Annotate")
 
-_Type_Annotate_tpe = "tpe"
+_Type_Annotate_tpe = (Core.FieldName "tpe")
 
-_Type_Annotate_annots = "annots"
+_Type_Annotate_annots = (Core.FieldName "annots")
 
 data Type_Lambda 
   = Type_Lambda {
@@ -1044,19 +1044,19 @@ data Type_Lambda
     type_LambdaTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Lambda = "hydra/ext/scala/meta.Type.Lambda"
+_Type_Lambda = (Core.Name "hydra/ext/scala/meta.Type.Lambda")
 
-_Type_Lambda_tparams = "tparams"
+_Type_Lambda_tparams = (Core.FieldName "tparams")
 
-_Type_Lambda_tpe = "tpe"
+_Type_Lambda_tpe = (Core.FieldName "tpe")
 
 data Type_Macro 
   = Type_Macro {type_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Macro = "hydra/ext/scala/meta.Type.Macro"
+_Type_Macro = (Core.Name "hydra/ext/scala/meta.Type.Macro")
 
-_Type_Macro_body = "body"
+_Type_Macro_body = (Core.FieldName "body")
 
 data Type_Method 
   = Type_Method {
@@ -1064,19 +1064,19 @@ data Type_Method
     type_MethodTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Method = "hydra/ext/scala/meta.Type.Method"
+_Type_Method = (Core.Name "hydra/ext/scala/meta.Type.Method")
 
-_Type_Method_paramss = "paramss"
+_Type_Method_paramss = (Core.FieldName "paramss")
 
-_Type_Method_tpe = "tpe"
+_Type_Method_tpe = (Core.FieldName "tpe")
 
 data Type_Placeholder 
   = Type_Placeholder {type_PlaceholderBounds :: Type_Bounds}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Placeholder = "hydra/ext/scala/meta.Type.Placeholder"
+_Type_Placeholder = (Core.Name "hydra/ext/scala/meta.Type.Placeholder")
 
-_Type_Placeholder_bounds = "bounds"
+_Type_Placeholder_bounds = (Core.FieldName "bounds")
 
 data Type_Bounds 
   = Type_Bounds {
@@ -1084,35 +1084,35 @@ data Type_Bounds
     type_BoundsHi :: (Maybe Type)}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Bounds = "hydra/ext/scala/meta.Type.Bounds"
+_Type_Bounds = (Core.Name "hydra/ext/scala/meta.Type.Bounds")
 
-_Type_Bounds_lo = "lo"
+_Type_Bounds_lo = (Core.FieldName "lo")
 
-_Type_Bounds_hi = "hi"
+_Type_Bounds_hi = (Core.FieldName "hi")
 
 data Type_ByName 
   = Type_ByName {type_ByNameTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_ByName = "hydra/ext/scala/meta.Type.ByName"
+_Type_ByName = (Core.Name "hydra/ext/scala/meta.Type.ByName")
 
-_Type_ByName_tpe = "tpe"
+_Type_ByName_tpe = (Core.FieldName "tpe")
 
 data Type_Repeated 
   = Type_Repeated {type_RepeatedTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Repeated = "hydra/ext/scala/meta.Type.Repeated"
+_Type_Repeated = (Core.Name "hydra/ext/scala/meta.Type.Repeated")
 
-_Type_Repeated_tpe = "tpe"
+_Type_Repeated_tpe = (Core.FieldName "tpe")
 
 data Type_Var 
   = Type_Var {type_VarName :: Type_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Var = "hydra/ext/scala/meta.Type.Var"
+_Type_Var = (Core.Name "hydra/ext/scala/meta.Type.Var")
 
-_Type_Var_name = "name"
+_Type_Var_name = (Core.FieldName "name")
 
 data Type_TypedParam 
   = Type_TypedParam {
@@ -1120,11 +1120,11 @@ data Type_TypedParam
     type_TypedParamTyp :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_TypedParam = "hydra/ext/scala/meta.Type.TypedParam"
+_Type_TypedParam = (Core.Name "hydra/ext/scala/meta.Type.TypedParam")
 
-_Type_TypedParam_name = "name"
+_Type_TypedParam_name = (Core.FieldName "name")
 
-_Type_TypedParam_typ = "typ"
+_Type_TypedParam_typ = (Core.FieldName "typ")
 
 data Type_Param 
   = Type_Param {
@@ -1136,19 +1136,19 @@ data Type_Param
     type_ParamCbounds :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Param = "hydra/ext/scala/meta.Type.Param"
+_Type_Param = (Core.Name "hydra/ext/scala/meta.Type.Param")
 
-_Type_Param_mods = "mods"
+_Type_Param_mods = (Core.FieldName "mods")
 
-_Type_Param_name = "name"
+_Type_Param_name = (Core.FieldName "name")
 
-_Type_Param_tparams = "tparams"
+_Type_Param_tparams = (Core.FieldName "tparams")
 
-_Type_Param_tbounds = "tbounds"
+_Type_Param_tbounds = (Core.FieldName "tbounds")
 
-_Type_Param_vbounds = "vbounds"
+_Type_Param_vbounds = (Core.FieldName "vbounds")
 
-_Type_Param_cbounds = "cbounds"
+_Type_Param_cbounds = (Core.FieldName "cbounds")
 
 data Type_Match 
   = Type_Match {
@@ -1156,11 +1156,11 @@ data Type_Match
     type_MatchCases :: [TypeCase]}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Match = "hydra/ext/scala/meta.Type.Match"
+_Type_Match = (Core.Name "hydra/ext/scala/meta.Type.Match")
 
-_Type_Match_tpe = "tpe"
+_Type_Match_tpe = (Core.FieldName "tpe")
 
-_Type_Match_cases = "cases"
+_Type_Match_cases = (Core.FieldName "cases")
 
 data Pat 
   = PatVar Pat_Var
@@ -1179,43 +1179,43 @@ data Pat
   | PatGiven Pat_Given
   deriving (Eq, Ord, Read, Show)
 
-_Pat = "hydra/ext/scala/meta.Pat"
+_Pat = (Core.Name "hydra/ext/scala/meta.Pat")
 
-_Pat_var = "var"
+_Pat_var = (Core.FieldName "var")
 
-_Pat_wildcard = "wildcard"
+_Pat_wildcard = (Core.FieldName "wildcard")
 
-_Pat_seqWildcard = "seqWildcard"
+_Pat_seqWildcard = (Core.FieldName "seqWildcard")
 
-_Pat_bind = "bind"
+_Pat_bind = (Core.FieldName "bind")
 
-_Pat_alternative = "alternative"
+_Pat_alternative = (Core.FieldName "alternative")
 
-_Pat_tuple = "tuple"
+_Pat_tuple = (Core.FieldName "tuple")
 
-_Pat_repeated = "repeated"
+_Pat_repeated = (Core.FieldName "repeated")
 
-_Pat_extract = "extract"
+_Pat_extract = (Core.FieldName "extract")
 
-_Pat_extractInfix = "extractInfix"
+_Pat_extractInfix = (Core.FieldName "extractInfix")
 
-_Pat_interpolate = "interpolate"
+_Pat_interpolate = (Core.FieldName "interpolate")
 
-_Pat_xml = "xml"
+_Pat_xml = (Core.FieldName "xml")
 
-_Pat_typed = "typed"
+_Pat_typed = (Core.FieldName "typed")
 
-_Pat_macro = "macro"
+_Pat_macro = (Core.FieldName "macro")
 
-_Pat_given = "given"
+_Pat_given = (Core.FieldName "given")
 
 data Pat_Var 
   = Pat_Var {pat_VarName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Var = "hydra/ext/scala/meta.Pat.Var"
+_Pat_Var = (Core.Name "hydra/ext/scala/meta.Pat.Var")
 
-_Pat_Var_name = "name"
+_Pat_Var_name = (Core.FieldName "name")
 
 data Pat_Bind 
   = Pat_Bind {
@@ -1223,11 +1223,11 @@ data Pat_Bind
     pat_BindRhs :: Pat}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Bind = "hydra/ext/scala/meta.Pat.Bind"
+_Pat_Bind = (Core.Name "hydra/ext/scala/meta.Pat.Bind")
 
-_Pat_Bind_lhs = "lhs"
+_Pat_Bind_lhs = (Core.FieldName "lhs")
 
-_Pat_Bind_rhs = "rhs"
+_Pat_Bind_rhs = (Core.FieldName "rhs")
 
 data Pat_Alternative 
   = Pat_Alternative {
@@ -1235,27 +1235,27 @@ data Pat_Alternative
     pat_AlternativeRhs :: Pat}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Alternative = "hydra/ext/scala/meta.Pat.Alternative"
+_Pat_Alternative = (Core.Name "hydra/ext/scala/meta.Pat.Alternative")
 
-_Pat_Alternative_lhs = "lhs"
+_Pat_Alternative_lhs = (Core.FieldName "lhs")
 
-_Pat_Alternative_rhs = "rhs"
+_Pat_Alternative_rhs = (Core.FieldName "rhs")
 
 data Pat_Tuple 
   = Pat_Tuple {pat_TupleArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Tuple = "hydra/ext/scala/meta.Pat.Tuple"
+_Pat_Tuple = (Core.Name "hydra/ext/scala/meta.Pat.Tuple")
 
-_Pat_Tuple_args = "args"
+_Pat_Tuple_args = (Core.FieldName "args")
 
 data Pat_Repeated 
   = Pat_Repeated {pat_RepeatedName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Repeated = "hydra/ext/scala/meta.Pat.Repeated"
+_Pat_Repeated = (Core.Name "hydra/ext/scala/meta.Pat.Repeated")
 
-_Pat_Repeated_name = "name"
+_Pat_Repeated_name = (Core.FieldName "name")
 
 data Pat_Extract 
   = Pat_Extract {
@@ -1263,11 +1263,11 @@ data Pat_Extract
     pat_ExtractArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Extract = "hydra/ext/scala/meta.Pat.Extract"
+_Pat_Extract = (Core.Name "hydra/ext/scala/meta.Pat.Extract")
 
-_Pat_Extract_fun = "fun"
+_Pat_Extract_fun = (Core.FieldName "fun")
 
-_Pat_Extract_args = "args"
+_Pat_Extract_args = (Core.FieldName "args")
 
 data Pat_ExtractInfix 
   = Pat_ExtractInfix {
@@ -1276,13 +1276,13 @@ data Pat_ExtractInfix
     pat_ExtractInfixRhs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_ExtractInfix = "hydra/ext/scala/meta.Pat.ExtractInfix"
+_Pat_ExtractInfix = (Core.Name "hydra/ext/scala/meta.Pat.ExtractInfix")
 
-_Pat_ExtractInfix_lhs = "lhs"
+_Pat_ExtractInfix_lhs = (Core.FieldName "lhs")
 
-_Pat_ExtractInfix_op = "op"
+_Pat_ExtractInfix_op = (Core.FieldName "op")
 
-_Pat_ExtractInfix_rhs = "rhs"
+_Pat_ExtractInfix_rhs = (Core.FieldName "rhs")
 
 data Pat_Interpolate 
   = Pat_Interpolate {
@@ -1290,11 +1290,11 @@ data Pat_Interpolate
     pat_InterpolateParts :: [Lit]}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Interpolate = "hydra/ext/scala/meta.Pat.Interpolate"
+_Pat_Interpolate = (Core.Name "hydra/ext/scala/meta.Pat.Interpolate")
 
-_Pat_Interpolate_prefix = "prefix"
+_Pat_Interpolate_prefix = (Core.FieldName "prefix")
 
-_Pat_Interpolate_parts = "parts"
+_Pat_Interpolate_parts = (Core.FieldName "parts")
 
 data Pat_Xml 
   = Pat_Xml {
@@ -1302,11 +1302,11 @@ data Pat_Xml
     pat_XmlArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Xml = "hydra/ext/scala/meta.Pat.Xml"
+_Pat_Xml = (Core.Name "hydra/ext/scala/meta.Pat.Xml")
 
-_Pat_Xml_parts = "parts"
+_Pat_Xml_parts = (Core.FieldName "parts")
 
-_Pat_Xml_args = "args"
+_Pat_Xml_args = (Core.FieldName "args")
 
 data Pat_Typed 
   = Pat_Typed {
@@ -1314,27 +1314,27 @@ data Pat_Typed
     pat_TypedRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Typed = "hydra/ext/scala/meta.Pat.Typed"
+_Pat_Typed = (Core.Name "hydra/ext/scala/meta.Pat.Typed")
 
-_Pat_Typed_lhs = "lhs"
+_Pat_Typed_lhs = (Core.FieldName "lhs")
 
-_Pat_Typed_rhs = "rhs"
+_Pat_Typed_rhs = (Core.FieldName "rhs")
 
 data Pat_Macro 
   = Pat_Macro {pat_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Macro = "hydra/ext/scala/meta.Pat.Macro"
+_Pat_Macro = (Core.Name "hydra/ext/scala/meta.Pat.Macro")
 
-_Pat_Macro_body = "body"
+_Pat_Macro_body = (Core.FieldName "body")
 
 data Pat_Given 
   = Pat_Given {pat_GivenTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Pat_Given = "hydra/ext/scala/meta.Pat.Given"
+_Pat_Given = (Core.Name "hydra/ext/scala/meta.Pat.Given")
 
-_Pat_Given_tpe = "tpe"
+_Pat_Given_tpe = (Core.FieldName "tpe")
 
 data Member 
   = MemberTerm Member_Data
@@ -1344,36 +1344,36 @@ data Member
   | MemberSelf Self
   deriving (Eq, Ord, Read, Show)
 
-_Member = "hydra/ext/scala/meta.Member"
+_Member = (Core.Name "hydra/ext/scala/meta.Member")
 
-_Member_term = "term"
+_Member_term = (Core.FieldName "term")
 
-_Member_type = "type"
+_Member_type = (Core.FieldName "type")
 
-_Member_termParam = "termParam"
+_Member_termParam = (Core.FieldName "termParam")
 
-_Member_typeParam = "typeParam"
+_Member_typeParam = (Core.FieldName "typeParam")
 
-_Member_self = "self"
+_Member_self = (Core.FieldName "self")
 
 data Member_Data 
   = Member_DataPkg Pkg
   | Member_DataObject Pkg_Object
   deriving (Eq, Ord, Read, Show)
 
-_Member_Data = "hydra/ext/scala/meta.Member.Data"
+_Member_Data = (Core.Name "hydra/ext/scala/meta.Member.Data")
 
-_Member_Data_pkg = "pkg"
+_Member_Data_pkg = (Core.FieldName "pkg")
 
-_Member_Data_object = "object"
+_Member_Data_object = (Core.FieldName "object")
 
 data Member_Type 
   = Member_Type {member_TypeName :: Type_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Member_Type = "hydra/ext/scala/meta.Member.Type"
+_Member_Type = (Core.Name "hydra/ext/scala/meta.Member.Type")
 
-_Member_Type_name = "name"
+_Member_Type_name = (Core.FieldName "name")
 
 data Decl 
   = DeclVal Decl_Val
@@ -1383,17 +1383,17 @@ data Decl
   | DeclGiven Decl_Given
   deriving (Eq, Ord, Read, Show)
 
-_Decl = "hydra/ext/scala/meta.Decl"
+_Decl = (Core.Name "hydra/ext/scala/meta.Decl")
 
-_Decl_val = "val"
+_Decl_val = (Core.FieldName "val")
 
-_Decl_var = "var"
+_Decl_var = (Core.FieldName "var")
 
-_Decl_def = "def"
+_Decl_def = (Core.FieldName "def")
 
-_Decl_type = "type"
+_Decl_type = (Core.FieldName "type")
 
-_Decl_given = "given"
+_Decl_given = (Core.FieldName "given")
 
 data Decl_Val 
   = Decl_Val {
@@ -1402,13 +1402,13 @@ data Decl_Val
     decl_ValDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Decl_Val = "hydra/ext/scala/meta.Decl.Val"
+_Decl_Val = (Core.Name "hydra/ext/scala/meta.Decl.Val")
 
-_Decl_Val_mods = "mods"
+_Decl_Val_mods = (Core.FieldName "mods")
 
-_Decl_Val_pats = "pats"
+_Decl_Val_pats = (Core.FieldName "pats")
 
-_Decl_Val_decltpe = "decltpe"
+_Decl_Val_decltpe = (Core.FieldName "decltpe")
 
 data Decl_Var 
   = Decl_Var {
@@ -1417,13 +1417,13 @@ data Decl_Var
     decl_VarDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Decl_Var = "hydra/ext/scala/meta.Decl.Var"
+_Decl_Var = (Core.Name "hydra/ext/scala/meta.Decl.Var")
 
-_Decl_Var_mods = "mods"
+_Decl_Var_mods = (Core.FieldName "mods")
 
-_Decl_Var_pats = "pats"
+_Decl_Var_pats = (Core.FieldName "pats")
 
-_Decl_Var_decltpe = "decltpe"
+_Decl_Var_decltpe = (Core.FieldName "decltpe")
 
 data Decl_Def 
   = Decl_Def {
@@ -1434,17 +1434,17 @@ data Decl_Def
     decl_DefDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Decl_Def = "hydra/ext/scala/meta.Decl.Def"
+_Decl_Def = (Core.Name "hydra/ext/scala/meta.Decl.Def")
 
-_Decl_Def_mods = "mods"
+_Decl_Def_mods = (Core.FieldName "mods")
 
-_Decl_Def_name = "name"
+_Decl_Def_name = (Core.FieldName "name")
 
-_Decl_Def_tparams = "tparams"
+_Decl_Def_tparams = (Core.FieldName "tparams")
 
-_Decl_Def_paramss = "paramss"
+_Decl_Def_paramss = (Core.FieldName "paramss")
 
-_Decl_Def_decltpe = "decltpe"
+_Decl_Def_decltpe = (Core.FieldName "decltpe")
 
 data Decl_Type 
   = Decl_Type {
@@ -1454,15 +1454,15 @@ data Decl_Type
     decl_TypeBounds :: Type_Bounds}
   deriving (Eq, Ord, Read, Show)
 
-_Decl_Type = "hydra/ext/scala/meta.Decl.Type"
+_Decl_Type = (Core.Name "hydra/ext/scala/meta.Decl.Type")
 
-_Decl_Type_mods = "mods"
+_Decl_Type_mods = (Core.FieldName "mods")
 
-_Decl_Type_name = "name"
+_Decl_Type_name = (Core.FieldName "name")
 
-_Decl_Type_tparams = "tparams"
+_Decl_Type_tparams = (Core.FieldName "tparams")
 
-_Decl_Type_bounds = "bounds"
+_Decl_Type_bounds = (Core.FieldName "bounds")
 
 data Decl_Given 
   = Decl_Given {
@@ -1473,17 +1473,17 @@ data Decl_Given
     decl_GivenDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Decl_Given = "hydra/ext/scala/meta.Decl.Given"
+_Decl_Given = (Core.Name "hydra/ext/scala/meta.Decl.Given")
 
-_Decl_Given_mods = "mods"
+_Decl_Given_mods = (Core.FieldName "mods")
 
-_Decl_Given_name = "name"
+_Decl_Given_name = (Core.FieldName "name")
 
-_Decl_Given_tparams = "tparams"
+_Decl_Given_tparams = (Core.FieldName "tparams")
 
-_Decl_Given_sparams = "sparams"
+_Decl_Given_sparams = (Core.FieldName "sparams")
 
-_Decl_Given_decltpe = "decltpe"
+_Decl_Given_decltpe = (Core.FieldName "decltpe")
 
 data Defn 
   = DefnVal Defn_Val
@@ -1502,35 +1502,35 @@ data Defn
   | DefnObject Defn_Object
   deriving (Eq, Ord, Read, Show)
 
-_Defn = "hydra/ext/scala/meta.Defn"
+_Defn = (Core.Name "hydra/ext/scala/meta.Defn")
 
-_Defn_val = "val"
+_Defn_val = (Core.FieldName "val")
 
-_Defn_var = "var"
+_Defn_var = (Core.FieldName "var")
 
-_Defn_given = "given"
+_Defn_given = (Core.FieldName "given")
 
-_Defn_enum = "enum"
+_Defn_enum = (Core.FieldName "enum")
 
-_Defn_enumCase = "enumCase"
+_Defn_enumCase = (Core.FieldName "enumCase")
 
-_Defn_repeatedEnumCase = "repeatedEnumCase"
+_Defn_repeatedEnumCase = (Core.FieldName "repeatedEnumCase")
 
-_Defn_givenAlias = "givenAlias"
+_Defn_givenAlias = (Core.FieldName "givenAlias")
 
-_Defn_extensionGroup = "extensionGroup"
+_Defn_extensionGroup = (Core.FieldName "extensionGroup")
 
-_Defn_def = "def"
+_Defn_def = (Core.FieldName "def")
 
-_Defn_macro = "macro"
+_Defn_macro = (Core.FieldName "macro")
 
-_Defn_type = "type"
+_Defn_type = (Core.FieldName "type")
 
-_Defn_class = "class"
+_Defn_class = (Core.FieldName "class")
 
-_Defn_trait = "trait"
+_Defn_trait = (Core.FieldName "trait")
 
-_Defn_object = "object"
+_Defn_object = (Core.FieldName "object")
 
 data Defn_Val 
   = Defn_Val {
@@ -1540,15 +1540,15 @@ data Defn_Val
     defn_ValRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Val = "hydra/ext/scala/meta.Defn.Val"
+_Defn_Val = (Core.Name "hydra/ext/scala/meta.Defn.Val")
 
-_Defn_Val_mods = "mods"
+_Defn_Val_mods = (Core.FieldName "mods")
 
-_Defn_Val_pats = "pats"
+_Defn_Val_pats = (Core.FieldName "pats")
 
-_Defn_Val_decltpe = "decltpe"
+_Defn_Val_decltpe = (Core.FieldName "decltpe")
 
-_Defn_Val_rhs = "rhs"
+_Defn_Val_rhs = (Core.FieldName "rhs")
 
 data Defn_Var 
   = Defn_Var {
@@ -1558,15 +1558,15 @@ data Defn_Var
     defn_VarRhs :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Var = "hydra/ext/scala/meta.Defn.Var"
+_Defn_Var = (Core.Name "hydra/ext/scala/meta.Defn.Var")
 
-_Defn_Var_mods = "mods"
+_Defn_Var_mods = (Core.FieldName "mods")
 
-_Defn_Var_pats = "pats"
+_Defn_Var_pats = (Core.FieldName "pats")
 
-_Defn_Var_decltpe = "decltpe"
+_Defn_Var_decltpe = (Core.FieldName "decltpe")
 
-_Defn_Var_rhs = "rhs"
+_Defn_Var_rhs = (Core.FieldName "rhs")
 
 data Defn_Given 
   = Defn_Given {
@@ -1577,17 +1577,17 @@ data Defn_Given
     defn_GivenTempl :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Given = "hydra/ext/scala/meta.Defn.Given"
+_Defn_Given = (Core.Name "hydra/ext/scala/meta.Defn.Given")
 
-_Defn_Given_mods = "mods"
+_Defn_Given_mods = (Core.FieldName "mods")
 
-_Defn_Given_name = "name"
+_Defn_Given_name = (Core.FieldName "name")
 
-_Defn_Given_tparams = "tparams"
+_Defn_Given_tparams = (Core.FieldName "tparams")
 
-_Defn_Given_sparams = "sparams"
+_Defn_Given_sparams = (Core.FieldName "sparams")
 
-_Defn_Given_templ = "templ"
+_Defn_Given_templ = (Core.FieldName "templ")
 
 data Defn_Enum 
   = Defn_Enum {
@@ -1598,17 +1598,17 @@ data Defn_Enum
     defn_EnumTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Enum = "hydra/ext/scala/meta.Defn.Enum"
+_Defn_Enum = (Core.Name "hydra/ext/scala/meta.Defn.Enum")
 
-_Defn_Enum_mods = "mods"
+_Defn_Enum_mods = (Core.FieldName "mods")
 
-_Defn_Enum_name = "name"
+_Defn_Enum_name = (Core.FieldName "name")
 
-_Defn_Enum_tparams = "tparams"
+_Defn_Enum_tparams = (Core.FieldName "tparams")
 
-_Defn_Enum_ctor = "ctor"
+_Defn_Enum_ctor = (Core.FieldName "ctor")
 
-_Defn_Enum_template = "template"
+_Defn_Enum_template = (Core.FieldName "template")
 
 data Defn_EnumCase 
   = Defn_EnumCase {
@@ -1619,17 +1619,17 @@ data Defn_EnumCase
     defn_EnumCaseInits :: [Init]}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_EnumCase = "hydra/ext/scala/meta.Defn.EnumCase"
+_Defn_EnumCase = (Core.Name "hydra/ext/scala/meta.Defn.EnumCase")
 
-_Defn_EnumCase_mods = "mods"
+_Defn_EnumCase_mods = (Core.FieldName "mods")
 
-_Defn_EnumCase_name = "name"
+_Defn_EnumCase_name = (Core.FieldName "name")
 
-_Defn_EnumCase_tparams = "tparams"
+_Defn_EnumCase_tparams = (Core.FieldName "tparams")
 
-_Defn_EnumCase_ctor = "ctor"
+_Defn_EnumCase_ctor = (Core.FieldName "ctor")
 
-_Defn_EnumCase_inits = "inits"
+_Defn_EnumCase_inits = (Core.FieldName "inits")
 
 data Defn_RepeatedEnumCase 
   = Defn_RepeatedEnumCase {
@@ -1637,11 +1637,11 @@ data Defn_RepeatedEnumCase
     defn_RepeatedEnumCaseCases :: [Data_Name]}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_RepeatedEnumCase = "hydra/ext/scala/meta.Defn.RepeatedEnumCase"
+_Defn_RepeatedEnumCase = (Core.Name "hydra/ext/scala/meta.Defn.RepeatedEnumCase")
 
-_Defn_RepeatedEnumCase_mods = "mods"
+_Defn_RepeatedEnumCase_mods = (Core.FieldName "mods")
 
-_Defn_RepeatedEnumCase_cases = "cases"
+_Defn_RepeatedEnumCase_cases = (Core.FieldName "cases")
 
 data Defn_GivenAlias 
   = Defn_GivenAlias {
@@ -1653,19 +1653,19 @@ data Defn_GivenAlias
     defn_GivenAliasBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_GivenAlias = "hydra/ext/scala/meta.Defn.GivenAlias"
+_Defn_GivenAlias = (Core.Name "hydra/ext/scala/meta.Defn.GivenAlias")
 
-_Defn_GivenAlias_mods = "mods"
+_Defn_GivenAlias_mods = (Core.FieldName "mods")
 
-_Defn_GivenAlias_name = "name"
+_Defn_GivenAlias_name = (Core.FieldName "name")
 
-_Defn_GivenAlias_tparams = "tparams"
+_Defn_GivenAlias_tparams = (Core.FieldName "tparams")
 
-_Defn_GivenAlias_sparams = "sparams"
+_Defn_GivenAlias_sparams = (Core.FieldName "sparams")
 
-_Defn_GivenAlias_decltpe = "decltpe"
+_Defn_GivenAlias_decltpe = (Core.FieldName "decltpe")
 
-_Defn_GivenAlias_body = "body"
+_Defn_GivenAlias_body = (Core.FieldName "body")
 
 data Defn_ExtensionGroup 
   = Defn_ExtensionGroup {
@@ -1674,13 +1674,13 @@ data Defn_ExtensionGroup
     defn_ExtensionGroupBody :: Stat}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_ExtensionGroup = "hydra/ext/scala/meta.Defn.ExtensionGroup"
+_Defn_ExtensionGroup = (Core.Name "hydra/ext/scala/meta.Defn.ExtensionGroup")
 
-_Defn_ExtensionGroup_tparams = "tparams"
+_Defn_ExtensionGroup_tparams = (Core.FieldName "tparams")
 
-_Defn_ExtensionGroup_parmss = "parmss"
+_Defn_ExtensionGroup_parmss = (Core.FieldName "parmss")
 
-_Defn_ExtensionGroup_body = "body"
+_Defn_ExtensionGroup_body = (Core.FieldName "body")
 
 data Defn_Def 
   = Defn_Def {
@@ -1692,19 +1692,19 @@ data Defn_Def
     defn_DefBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Def = "hydra/ext/scala/meta.Defn.Def"
+_Defn_Def = (Core.Name "hydra/ext/scala/meta.Defn.Def")
 
-_Defn_Def_mods = "mods"
+_Defn_Def_mods = (Core.FieldName "mods")
 
-_Defn_Def_name = "name"
+_Defn_Def_name = (Core.FieldName "name")
 
-_Defn_Def_tparams = "tparams"
+_Defn_Def_tparams = (Core.FieldName "tparams")
 
-_Defn_Def_paramss = "paramss"
+_Defn_Def_paramss = (Core.FieldName "paramss")
 
-_Defn_Def_decltpe = "decltpe"
+_Defn_Def_decltpe = (Core.FieldName "decltpe")
 
-_Defn_Def_body = "body"
+_Defn_Def_body = (Core.FieldName "body")
 
 data Defn_Macro 
   = Defn_Macro {
@@ -1716,19 +1716,19 @@ data Defn_Macro
     defn_MacroBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Macro = "hydra/ext/scala/meta.Defn.Macro"
+_Defn_Macro = (Core.Name "hydra/ext/scala/meta.Defn.Macro")
 
-_Defn_Macro_mods = "mods"
+_Defn_Macro_mods = (Core.FieldName "mods")
 
-_Defn_Macro_name = "name"
+_Defn_Macro_name = (Core.FieldName "name")
 
-_Defn_Macro_tparams = "tparams"
+_Defn_Macro_tparams = (Core.FieldName "tparams")
 
-_Defn_Macro_paramss = "paramss"
+_Defn_Macro_paramss = (Core.FieldName "paramss")
 
-_Defn_Macro_decltpe = "decltpe"
+_Defn_Macro_decltpe = (Core.FieldName "decltpe")
 
-_Defn_Macro_body = "body"
+_Defn_Macro_body = (Core.FieldName "body")
 
 data Defn_Type 
   = Defn_Type {
@@ -1738,15 +1738,15 @@ data Defn_Type
     defn_TypeBody :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Type = "hydra/ext/scala/meta.Defn.Type"
+_Defn_Type = (Core.Name "hydra/ext/scala/meta.Defn.Type")
 
-_Defn_Type_mods = "mods"
+_Defn_Type_mods = (Core.FieldName "mods")
 
-_Defn_Type_name = "name"
+_Defn_Type_name = (Core.FieldName "name")
 
-_Defn_Type_tparams = "tparams"
+_Defn_Type_tparams = (Core.FieldName "tparams")
 
-_Defn_Type_body = "body"
+_Defn_Type_body = (Core.FieldName "body")
 
 data Defn_Class 
   = Defn_Class {
@@ -1757,17 +1757,17 @@ data Defn_Class
     defn_ClassTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Class = "hydra/ext/scala/meta.Defn.Class"
+_Defn_Class = (Core.Name "hydra/ext/scala/meta.Defn.Class")
 
-_Defn_Class_mods = "mods"
+_Defn_Class_mods = (Core.FieldName "mods")
 
-_Defn_Class_name = "name"
+_Defn_Class_name = (Core.FieldName "name")
 
-_Defn_Class_tparams = "tparams"
+_Defn_Class_tparams = (Core.FieldName "tparams")
 
-_Defn_Class_ctor = "ctor"
+_Defn_Class_ctor = (Core.FieldName "ctor")
 
-_Defn_Class_template = "template"
+_Defn_Class_template = (Core.FieldName "template")
 
 data Defn_Trait 
   = Defn_Trait {
@@ -1778,25 +1778,25 @@ data Defn_Trait
     defn_TraitTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Trait = "hydra/ext/scala/meta.Defn.Trait"
+_Defn_Trait = (Core.Name "hydra/ext/scala/meta.Defn.Trait")
 
-_Defn_Trait_mods = "mods"
+_Defn_Trait_mods = (Core.FieldName "mods")
 
-_Defn_Trait_name = "name"
+_Defn_Trait_name = (Core.FieldName "name")
 
-_Defn_Trait_tparams = "tparams"
+_Defn_Trait_tparams = (Core.FieldName "tparams")
 
-_Defn_Trait_ctor = "ctor"
+_Defn_Trait_ctor = (Core.FieldName "ctor")
 
-_Defn_Trait_template = "template"
+_Defn_Trait_template = (Core.FieldName "template")
 
 data Defn_Object 
   = Defn_Object {defn_ObjectName :: Data_Name}
   deriving (Eq, Ord, Read, Show)
 
-_Defn_Object = "hydra/ext/scala/meta.Defn.Object"
+_Defn_Object = (Core.Name "hydra/ext/scala/meta.Defn.Object")
 
-_Defn_Object_name = "name"
+_Defn_Object_name = (Core.FieldName "name")
 
 data Pkg 
   = Pkg {
@@ -1805,13 +1805,13 @@ data Pkg
     pkgStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Pkg = "hydra/ext/scala/meta.Pkg"
+_Pkg = (Core.Name "hydra/ext/scala/meta.Pkg")
 
-_Pkg_name = "name"
+_Pkg_name = (Core.FieldName "name")
 
-_Pkg_ref = "ref"
+_Pkg_ref = (Core.FieldName "ref")
 
-_Pkg_stats = "stats"
+_Pkg_stats = (Core.FieldName "stats")
 
 data Pkg_Object 
   = Pkg_Object {
@@ -1820,24 +1820,24 @@ data Pkg_Object
     pkg_ObjectTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
 
-_Pkg_Object = "hydra/ext/scala/meta.Pkg.Object"
+_Pkg_Object = (Core.Name "hydra/ext/scala/meta.Pkg.Object")
 
-_Pkg_Object_mods = "mods"
+_Pkg_Object_mods = (Core.FieldName "mods")
 
-_Pkg_Object_name = "name"
+_Pkg_Object_name = (Core.FieldName "name")
 
-_Pkg_Object_template = "template"
+_Pkg_Object_template = (Core.FieldName "template")
 
 data Ctor 
   = CtorPrimary Ctor_Primary
   | CtorSecondary Ctor_Secondary
   deriving (Eq, Ord, Read, Show)
 
-_Ctor = "hydra/ext/scala/meta.Ctor"
+_Ctor = (Core.Name "hydra/ext/scala/meta.Ctor")
 
-_Ctor_primary = "primary"
+_Ctor_primary = (Core.FieldName "primary")
 
-_Ctor_secondary = "secondary"
+_Ctor_secondary = (Core.FieldName "secondary")
 
 data Ctor_Primary 
   = Ctor_Primary {
@@ -1846,13 +1846,13 @@ data Ctor_Primary
     ctor_PrimaryParamss :: [[Data_Param]]}
   deriving (Eq, Ord, Read, Show)
 
-_Ctor_Primary = "hydra/ext/scala/meta.Ctor.Primary"
+_Ctor_Primary = (Core.Name "hydra/ext/scala/meta.Ctor.Primary")
 
-_Ctor_Primary_mods = "mods"
+_Ctor_Primary_mods = (Core.FieldName "mods")
 
-_Ctor_Primary_name = "name"
+_Ctor_Primary_name = (Core.FieldName "name")
 
-_Ctor_Primary_paramss = "paramss"
+_Ctor_Primary_paramss = (Core.FieldName "paramss")
 
 data Ctor_Secondary 
   = Ctor_Secondary {
@@ -1863,17 +1863,17 @@ data Ctor_Secondary
     ctor_SecondaryStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Ctor_Secondary = "hydra/ext/scala/meta.Ctor.Secondary"
+_Ctor_Secondary = (Core.Name "hydra/ext/scala/meta.Ctor.Secondary")
 
-_Ctor_Secondary_mods = "mods"
+_Ctor_Secondary_mods = (Core.FieldName "mods")
 
-_Ctor_Secondary_name = "name"
+_Ctor_Secondary_name = (Core.FieldName "name")
 
-_Ctor_Secondary_paramss = "paramss"
+_Ctor_Secondary_paramss = (Core.FieldName "paramss")
 
-_Ctor_Secondary_init = "init"
+_Ctor_Secondary_init = (Core.FieldName "init")
 
-_Ctor_Secondary_stats = "stats"
+_Ctor_Secondary_stats = (Core.FieldName "stats")
 
 data Init 
   = Init {
@@ -1882,19 +1882,19 @@ data Init
     initArgss :: [[Data]]}
   deriving (Eq, Ord, Read, Show)
 
-_Init = "hydra/ext/scala/meta.Init"
+_Init = (Core.Name "hydra/ext/scala/meta.Init")
 
-_Init_tpe = "tpe"
+_Init_tpe = (Core.FieldName "tpe")
 
-_Init_name = "name"
+_Init_name = (Core.FieldName "name")
 
-_Init_argss = "argss"
+_Init_argss = (Core.FieldName "argss")
 
 data Self 
   = Self {}
   deriving (Eq, Ord, Read, Show)
 
-_Self = "hydra/ext/scala/meta.Self"
+_Self = (Core.Name "hydra/ext/scala/meta.Self")
 
 data Template 
   = Template {
@@ -1904,15 +1904,15 @@ data Template
     templateStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Template = "hydra/ext/scala/meta.Template"
+_Template = (Core.Name "hydra/ext/scala/meta.Template")
 
-_Template_early = "early"
+_Template_early = (Core.FieldName "early")
 
-_Template_inits = "inits"
+_Template_inits = (Core.FieldName "inits")
 
-_Template_self = "self"
+_Template_self = (Core.FieldName "self")
 
-_Template_stats = "stats"
+_Template_stats = (Core.FieldName "stats")
 
 data Mod 
   = ModAnnot Mod_Annot
@@ -1938,73 +1938,73 @@ data Mod
   | ModTransparent 
   deriving (Eq, Ord, Read, Show)
 
-_Mod = "hydra/ext/scala/meta.Mod"
+_Mod = (Core.Name "hydra/ext/scala/meta.Mod")
 
-_Mod_annot = "annot"
+_Mod_annot = (Core.FieldName "annot")
 
-_Mod_private = "private"
+_Mod_private = (Core.FieldName "private")
 
-_Mod_protected = "protected"
+_Mod_protected = (Core.FieldName "protected")
 
-_Mod_implicit = "implicit"
+_Mod_implicit = (Core.FieldName "implicit")
 
-_Mod_final = "final"
+_Mod_final = (Core.FieldName "final")
 
-_Mod_sealed = "sealed"
+_Mod_sealed = (Core.FieldName "sealed")
 
-_Mod_open = "open"
+_Mod_open = (Core.FieldName "open")
 
-_Mod_super = "super"
+_Mod_super = (Core.FieldName "super")
 
-_Mod_override = "override"
+_Mod_override = (Core.FieldName "override")
 
-_Mod_case = "case"
+_Mod_case = (Core.FieldName "case")
 
-_Mod_abstract = "abstract"
+_Mod_abstract = (Core.FieldName "abstract")
 
-_Mod_covariant = "covariant"
+_Mod_covariant = (Core.FieldName "covariant")
 
-_Mod_contravariant = "contravariant"
+_Mod_contravariant = (Core.FieldName "contravariant")
 
-_Mod_lazy = "lazy"
+_Mod_lazy = (Core.FieldName "lazy")
 
-_Mod_valParam = "valParam"
+_Mod_valParam = (Core.FieldName "valParam")
 
-_Mod_varParam = "varParam"
+_Mod_varParam = (Core.FieldName "varParam")
 
-_Mod_infix = "infix"
+_Mod_infix = (Core.FieldName "infix")
 
-_Mod_inline = "inline"
+_Mod_inline = (Core.FieldName "inline")
 
-_Mod_using = "using"
+_Mod_using = (Core.FieldName "using")
 
-_Mod_opaque = "opaque"
+_Mod_opaque = (Core.FieldName "opaque")
 
-_Mod_transparent = "transparent"
+_Mod_transparent = (Core.FieldName "transparent")
 
 data Mod_Annot 
   = Mod_Annot {mod_AnnotInit :: Init}
   deriving (Eq, Ord, Read, Show)
 
-_Mod_Annot = "hydra/ext/scala/meta.Mod.Annot"
+_Mod_Annot = (Core.Name "hydra/ext/scala/meta.Mod.Annot")
 
-_Mod_Annot_init = "init"
+_Mod_Annot_init = (Core.FieldName "init")
 
 data Mod_Private 
   = Mod_Private {mod_PrivateWithin :: Ref}
   deriving (Eq, Ord, Read, Show)
 
-_Mod_Private = "hydra/ext/scala/meta.Mod.Private"
+_Mod_Private = (Core.Name "hydra/ext/scala/meta.Mod.Private")
 
-_Mod_Private_within = "within"
+_Mod_Private_within = (Core.FieldName "within")
 
 data Mod_Protected 
   = Mod_Protected {mod_ProtectedWithin :: Ref}
   deriving (Eq, Ord, Read, Show)
 
-_Mod_Protected = "hydra/ext/scala/meta.Mod.Protected"
+_Mod_Protected = (Core.Name "hydra/ext/scala/meta.Mod.Protected")
 
-_Mod_Protected_within = "within"
+_Mod_Protected_within = (Core.FieldName "within")
 
 data Enumerator 
   = EnumeratorGenerator Enumerator_Generator
@@ -2013,15 +2013,15 @@ data Enumerator
   | EnumeratorGuard Enumerator_Guard
   deriving (Eq, Ord, Read, Show)
 
-_Enumerator = "hydra/ext/scala/meta.Enumerator"
+_Enumerator = (Core.Name "hydra/ext/scala/meta.Enumerator")
 
-_Enumerator_generator = "generator"
+_Enumerator_generator = (Core.FieldName "generator")
 
-_Enumerator_caseGenerator = "caseGenerator"
+_Enumerator_caseGenerator = (Core.FieldName "caseGenerator")
 
-_Enumerator_val = "val"
+_Enumerator_val = (Core.FieldName "val")
 
-_Enumerator_guard = "guard"
+_Enumerator_guard = (Core.FieldName "guard")
 
 data Enumerator_Generator 
   = Enumerator_Generator {
@@ -2029,11 +2029,11 @@ data Enumerator_Generator
     enumerator_GeneratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Enumerator_Generator = "hydra/ext/scala/meta.Enumerator.Generator"
+_Enumerator_Generator = (Core.Name "hydra/ext/scala/meta.Enumerator.Generator")
 
-_Enumerator_Generator_pat = "pat"
+_Enumerator_Generator_pat = (Core.FieldName "pat")
 
-_Enumerator_Generator_rhs = "rhs"
+_Enumerator_Generator_rhs = (Core.FieldName "rhs")
 
 data Enumerator_CaseGenerator 
   = Enumerator_CaseGenerator {
@@ -2041,11 +2041,11 @@ data Enumerator_CaseGenerator
     enumerator_CaseGeneratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Enumerator_CaseGenerator = "hydra/ext/scala/meta.Enumerator.CaseGenerator"
+_Enumerator_CaseGenerator = (Core.Name "hydra/ext/scala/meta.Enumerator.CaseGenerator")
 
-_Enumerator_CaseGenerator_pat = "pat"
+_Enumerator_CaseGenerator_pat = (Core.FieldName "pat")
 
-_Enumerator_CaseGenerator_rhs = "rhs"
+_Enumerator_CaseGenerator_rhs = (Core.FieldName "rhs")
 
 data Enumerator_Val 
   = Enumerator_Val {
@@ -2053,46 +2053,46 @@ data Enumerator_Val
     enumerator_ValRhs :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Enumerator_Val = "hydra/ext/scala/meta.Enumerator.Val"
+_Enumerator_Val = (Core.Name "hydra/ext/scala/meta.Enumerator.Val")
 
-_Enumerator_Val_pat = "pat"
+_Enumerator_Val_pat = (Core.FieldName "pat")
 
-_Enumerator_Val_rhs = "rhs"
+_Enumerator_Val_rhs = (Core.FieldName "rhs")
 
 data Enumerator_Guard 
   = Enumerator_Guard {enumerator_GuardCond :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Enumerator_Guard = "hydra/ext/scala/meta.Enumerator.Guard"
+_Enumerator_Guard = (Core.Name "hydra/ext/scala/meta.Enumerator.Guard")
 
-_Enumerator_Guard_cond = "cond"
+_Enumerator_Guard_cond = (Core.FieldName "cond")
 
 data ImportExportStat 
   = ImportExportStatImport Import
   | ImportExportStatExport Export
   deriving (Eq, Ord, Read, Show)
 
-_ImportExportStat = "hydra/ext/scala/meta.ImportExportStat"
+_ImportExportStat = (Core.Name "hydra/ext/scala/meta.ImportExportStat")
 
-_ImportExportStat_import = "import"
+_ImportExportStat_import = (Core.FieldName "import")
 
-_ImportExportStat_export = "export"
+_ImportExportStat_export = (Core.FieldName "export")
 
 data Import 
   = Import {importImporters :: [Importer]}
   deriving (Eq, Ord, Read, Show)
 
-_Import = "hydra/ext/scala/meta.Import"
+_Import = (Core.Name "hydra/ext/scala/meta.Import")
 
-_Import_importers = "importers"
+_Import_importers = (Core.FieldName "importers")
 
 data Export 
   = Export {exportImporters :: [Importer]}
   deriving (Eq, Ord, Read, Show)
 
-_Export = "hydra/ext/scala/meta.Export"
+_Export = (Core.Name "hydra/ext/scala/meta.Export")
 
-_Export_importers = "importers"
+_Export_importers = (Core.FieldName "importers")
 
 data Importer 
   = Importer {
@@ -2100,11 +2100,11 @@ data Importer
     importerImportees :: [Importee]}
   deriving (Eq, Ord, Read, Show)
 
-_Importer = "hydra/ext/scala/meta.Importer"
+_Importer = (Core.Name "hydra/ext/scala/meta.Importer")
 
-_Importer_ref = "ref"
+_Importer_ref = (Core.FieldName "ref")
 
-_Importer_importees = "importees"
+_Importer_importees = (Core.FieldName "importees")
 
 data Importee 
   = ImporteeWildcard 
@@ -2115,35 +2115,35 @@ data Importee
   | ImporteeUnimport Importee_Unimport
   deriving (Eq, Ord, Read, Show)
 
-_Importee = "hydra/ext/scala/meta.Importee"
+_Importee = (Core.Name "hydra/ext/scala/meta.Importee")
 
-_Importee_wildcard = "wildcard"
+_Importee_wildcard = (Core.FieldName "wildcard")
 
-_Importee_given = "given"
+_Importee_given = (Core.FieldName "given")
 
-_Importee_givenAll = "givenAll"
+_Importee_givenAll = (Core.FieldName "givenAll")
 
-_Importee_name = "name"
+_Importee_name = (Core.FieldName "name")
 
-_Importee_rename = "rename"
+_Importee_rename = (Core.FieldName "rename")
 
-_Importee_unimport = "unimport"
+_Importee_unimport = (Core.FieldName "unimport")
 
 data Importee_Given 
   = Importee_Given {importee_GivenTpe :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Importee_Given = "hydra/ext/scala/meta.Importee.Given"
+_Importee_Given = (Core.Name "hydra/ext/scala/meta.Importee.Given")
 
-_Importee_Given_tpe = "tpe"
+_Importee_Given_tpe = (Core.FieldName "tpe")
 
 data Importee_Name 
   = Importee_Name {importee_NameName :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Importee_Name = "hydra/ext/scala/meta.Importee.Name"
+_Importee_Name = (Core.Name "hydra/ext/scala/meta.Importee.Name")
 
-_Importee_Name_name = "name"
+_Importee_Name_name = (Core.FieldName "name")
 
 data Importee_Rename 
   = Importee_Rename {
@@ -2151,30 +2151,30 @@ data Importee_Rename
     importee_RenameRename :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Importee_Rename = "hydra/ext/scala/meta.Importee.Rename"
+_Importee_Rename = (Core.Name "hydra/ext/scala/meta.Importee.Rename")
 
-_Importee_Rename_name = "name"
+_Importee_Rename_name = (Core.FieldName "name")
 
-_Importee_Rename_rename = "rename"
+_Importee_Rename_rename = (Core.FieldName "rename")
 
 data Importee_Unimport 
   = Importee_Unimport {importee_UnimportName :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Importee_Unimport = "hydra/ext/scala/meta.Importee.Unimport"
+_Importee_Unimport = (Core.Name "hydra/ext/scala/meta.Importee.Unimport")
 
-_Importee_Unimport_name = "name"
+_Importee_Unimport_name = (Core.FieldName "name")
 
 data CaseTree 
   = CaseTreeCase Case
   | CaseTreeTypeCase TypeCase
   deriving (Eq, Ord, Read, Show)
 
-_CaseTree = "hydra/ext/scala/meta.CaseTree"
+_CaseTree = (Core.Name "hydra/ext/scala/meta.CaseTree")
 
-_CaseTree_case = "case"
+_CaseTree_case = (Core.FieldName "case")
 
-_CaseTree_typeCase = "typeCase"
+_CaseTree_typeCase = (Core.FieldName "typeCase")
 
 data Case 
   = Case {
@@ -2183,13 +2183,13 @@ data Case
     caseBody :: Data}
   deriving (Eq, Ord, Read, Show)
 
-_Case = "hydra/ext/scala/meta.Case"
+_Case = (Core.Name "hydra/ext/scala/meta.Case")
 
-_Case_pat = "pat"
+_Case_pat = (Core.FieldName "pat")
 
-_Case_cond = "cond"
+_Case_cond = (Core.FieldName "cond")
 
-_Case_body = "body"
+_Case_body = (Core.FieldName "body")
 
 data TypeCase 
   = TypeCase {
@@ -2197,22 +2197,22 @@ data TypeCase
     typeCaseBody :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeCase = "hydra/ext/scala/meta.TypeCase"
+_TypeCase = (Core.Name "hydra/ext/scala/meta.TypeCase")
 
-_TypeCase_pat = "pat"
+_TypeCase_pat = (Core.FieldName "pat")
 
-_TypeCase_body = "body"
+_TypeCase_body = (Core.FieldName "body")
 
 data Source 
   = Source {sourceStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 
-_Source = "hydra/ext/scala/meta.Source"
+_Source = (Core.Name "hydra/ext/scala/meta.Source")
 
-_Source_stats = "stats"
+_Source_stats = (Core.FieldName "stats")
 
 data Quasi 
   = Quasi {}
   deriving (Eq, Ord, Read, Show)
 
-_Quasi = "hydra/ext/scala/meta.Quasi"
+_Quasi = (Core.Name "hydra/ext/scala/meta.Quasi")

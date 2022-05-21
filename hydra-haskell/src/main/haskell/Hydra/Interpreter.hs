@@ -69,7 +69,7 @@ evaluate context term = reduce M.empty term
           arg <- (reduce bindings $ L.head args) >>= deref context
           case dataTerm arg of
             DataTermUnion (Field fname t) -> if L.null matching
-                then fail $ "no case for field named " ++ fname
+                then fail $ "no case for field named " ++ showFieldName fname
                 else reduce bindings (fieldData $ L.head matching)
                   >>= reduceApplication bindings (t:L.tail args)
               where

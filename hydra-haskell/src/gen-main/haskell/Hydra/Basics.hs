@@ -1,6 +1,7 @@
 module Hydra.Basics where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 import Data.Map
@@ -133,8 +134,8 @@ literalVariants = [
   Core.LiteralVariantString]
 
 -- Construct a qualified (dot-separated) name
-qname :: (Core.Name -> String -> Core.Name)
-qname (Core.Name ns) name = (
+qname :: (Graph.GraphName -> String -> Core.Name)
+qname (Graph.GraphName ns) name = (
   Core.Name $ Strings.cat [
     ns,
     ".",

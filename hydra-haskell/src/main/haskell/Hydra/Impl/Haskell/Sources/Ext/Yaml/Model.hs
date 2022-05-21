@@ -28,7 +28,7 @@ yamlModel :: Graph Meta
 yamlModel = Graph yamlModelName elements (const True) hydraCoreName
   where
     def = datatype yamlModelName
-    model = nominal . qualify yamlModelName
+    model = nominal . qualify yamlModelName . Name
 
     elements = [
 

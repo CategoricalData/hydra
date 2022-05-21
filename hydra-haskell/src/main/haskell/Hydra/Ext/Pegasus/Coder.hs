@@ -60,18 +60,18 @@ doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
 encodeAdaptedType :: (Default m, Ord m, Read m, Show m)
-  => M.Map Name String -> Context m -> Type m
+  => M.Map GraphName String -> Context m -> Type m
   -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases cx typ = do
   let ac = AdapterContext cx hydraCoreLanguage pegasusDataLanguage
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases cx $ adapterTarget ad
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map Name String -> Context m -> Data m -> Result ()
+encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Data m -> Result ()
 encodeData aliases cx term@(Data expr meta) = do
     fail "not yet implemented"
 
-encodeType :: (Default m, Eq m, Show m) => M.Map Name String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: (Default m, Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases cx typ = case typeTerm typ of
     TypeTermList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeTermLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
@@ -109,7 +109,7 @@ encodeType aliases cx typ = case typeTerm typ of
         case res of
           Left schema -> pure schema
           Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
-    encodeRecordField (FieldType name typ) = do
+    encodeRecordField (FieldType (FieldName name) typ) = do
       anns <- getAnns typ
       (schema, optional) <- encodePossiblyOptionalType typ
       return PDL.RecordField {
@@ -118,7 +118,7 @@ encodeType aliases cx typ = case typeTerm typ of
         PDL.recordFieldOptional = optional,
         PDL.recordFieldDefault = Nothing,
         PDL.recordFieldAnnotations = anns}
-    encodeUnionField (FieldType name typ) = do
+    encodeUnionField (FieldType (FieldName name) typ) = do
       anns <- getAnns typ
       (s, optional) <- encodePossiblyOptionalType typ
       let schema = if optional
@@ -128,7 +128,7 @@ encodeType aliases cx typ = case typeTerm typ of
         PDL.unionMemberAlias = Just $ PDL.FieldName name,
         PDL.unionMemberValue = schema,
         PDL.unionMemberAnnotations = anns}
-    encodeEnumField (FieldType name typ) = do
+    encodeEnumField (FieldType (FieldName name) typ) = do
       anns <- getAnns typ
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
@@ -148,7 +148,7 @@ importAliasesForGraph g = M.empty -- TODO
 
 noAnnotations = PDL.Annotations Nothing False
 
-pdlNameForElement :: M.Map Name String -> Bool -> Name -> PDL.QualifiedName
+pdlNameForElement :: M.Map GraphName String -> Bool -> Name -> PDL.QualifiedName
 pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     $ if withNs
       then PDL.Namespace . slashesToDots <$> alias

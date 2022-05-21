@@ -12,13 +12,13 @@ data Number
     numberExponent :: Integer}
   deriving (Eq, Ord, Read, Show)
 
-_Number = "hydra/ext/json/json.Number"
+_Number = (Core.Name "hydra/ext/json/json.Number")
 
-_Number_integer = "integer"
+_Number_integer = (Core.FieldName "integer")
 
-_Number_fraction = "fraction"
+_Number_fraction = (Core.FieldName "fraction")
 
-_Number_exponent = "exponent"
+_Number_exponent = (Core.FieldName "exponent")
 
 -- A JSON value
 data Value 
@@ -30,16 +30,16 @@ data Value
   | ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = "hydra/ext/json/json.Value"
+_Value = (Core.Name "hydra/ext/json/json.Value")
 
-_Value_array = "array"
+_Value_array = (Core.FieldName "array")
 
-_Value_boolean = "boolean"
+_Value_boolean = (Core.FieldName "boolean")
 
-_Value_null = "null"
+_Value_null = (Core.FieldName "null")
 
-_Value_number = "number"
+_Value_number = (Core.FieldName "number")
 
-_Value_object = "object"
+_Value_object = (Core.FieldName "object")
 
-_Value_string = "string"
+_Value_string = (Core.FieldName "string")

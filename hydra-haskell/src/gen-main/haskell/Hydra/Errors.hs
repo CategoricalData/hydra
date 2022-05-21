@@ -11,8 +11,8 @@ data Qualified m
     qualifiedWarnings :: [String]}
   deriving (Eq, Ord, Read, Show)
 
-_Qualified = "hydra/errors.Qualified"
+_Qualified = (Core.Name "hydra/errors.Qualified")
 
-_Qualified_value = "value"
+_Qualified_value = (Core.FieldName "value")
 
-_Qualified_warnings = "warnings"
+_Qualified_warnings = (Core.FieldName "warnings")

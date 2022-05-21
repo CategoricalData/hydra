@@ -74,7 +74,7 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      isFailure (decodeType testContext $ nominalVariant testContext untyped "unknownField" $ list []) `H.shouldBe` True
+      isFailure (decodeType testContext $ nominalVariant testContext untyped (FieldName "unknownField") $ list []) `H.shouldBe` True
 
     H.it "Try to decode an incomplete representation of a Type" $ do
       isFailure (decodeType testContext$ variant _TypeTerm_literal $ unitVariant _LiteralType_integer) `H.shouldBe` True

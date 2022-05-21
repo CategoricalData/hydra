@@ -18,7 +18,7 @@ scalaMeta :: Graph Meta
 scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
   where
     def = datatype scalaMetaName
-    meta = nominal . qualify scalaMetaName
+    meta = nominal . qualify scalaMetaName . Name
 
     elements = [
 

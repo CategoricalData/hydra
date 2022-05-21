@@ -9,6 +9,7 @@ module Hydra.Primitives (
   schemaContext,
 ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
@@ -26,7 +27,7 @@ deref cx term = case dataTerm term of
 
 dereferenceElement :: Context m -> Name -> Result (Data m)
 dereferenceElement cx en = case M.lookup en (contextElements cx) of
-    Nothing -> ResultFailure $ "element " ++ en ++ " does not exist in graph " ++ h (graphSetRoot (contextGraphs cx))
+    Nothing -> ResultFailure $ "element " ++ showName en ++ " does not exist in graph " ++ h (graphSetRoot (contextGraphs cx))
     Just e -> ResultSuccess $ elementData e
   where
     h (GraphName n) = n
@@ -52,16 +53,16 @@ primitiveFunctionArity = arity . primitiveFunctionType
 requireElement :: Context m -> Name -> Result (Element m)
 requireElement cx name = Y.maybe error ResultSuccess $ M.lookup name $ contextElements cx
   where
-    error = ResultFailure $ "no such element: " ++ name
+    error = ResultFailure $ "no such element: " ++ showName name
         ++ " in graph " ++ h (graphSetRoot (contextGraphs cx))
-        ++ ". Available elements: {" ++ (L.intercalate ", " (elementName <$> M.elems (contextElements cx))) ++ "}"
+        ++ ". Available elements: {" ++ (L.intercalate ", " (showName . elementName <$> M.elems (contextElements cx))) ++ "}"
       where
         h (GraphName n) = n
           
 requirePrimitiveFunction :: Context m -> Name -> Result (PrimitiveFunction m)
 requirePrimitiveFunction cx fn = Y.maybe error ResultSuccess $ lookupPrimitiveFunction cx fn
   where
-    error = ResultFailure $ "no such primitive function: " ++ fn
+    error = ResultFailure $ "no such primitive function: " ++ showName fn
 
 schemaContext :: Context m -> Result (Context m)
 schemaContext cx = do

@@ -171,7 +171,7 @@ record = defaultData . DataTermRecord
 requireField :: M.Map FieldName (Data a) -> FieldName -> Result (Data a)
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
-    error = fail $ "no such field: " ++ fname
+    error = fail $ "no such field: " ++ showFieldName fname
 
 set :: Default a => S.Set (Data a) -> Data a
 set = defaultData . DataTermSet

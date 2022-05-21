@@ -144,7 +144,7 @@ encodeData cx term@(Data expr meta) = case expr of
         DataTermFunction f -> case f of
           FunctionCases _ -> encodeFunction cx (dataMeta fun) f (Just arg)
           FunctionDelta -> encodeData cx arg
-          FunctionProjection fname -> do
+          FunctionProjection (FieldName fname) -> do
             sarg <- encodeData cx arg
             return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
               (Scala.Data_Name $ Scala.PredefString fname)
@@ -241,7 +241,7 @@ nameOfType t = case typeTerm t of
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
-qualifyUnionFieldName dlft sname fname = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
+qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
 
 scalaLanguage :: Language m
 scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
@@ -326,7 +326,7 @@ sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name . Scala.PredefStrin
 sprim :: Name -> Scala.Data
 sprim name = sname $ prefix ++ "." ++ local
   where
-    (ns, local) = toQname name
+    (GraphName ns, local) = toQname name
     prefix = L.last $ Strings.splitOn "/" ns
 
 stapply :: Scala.Type -> [Scala.Type] -> Scala.Type
@@ -348,8 +348,8 @@ svar :: Variable -> Scala.Pat
 svar (Variable v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v
 
 typeName :: Bool -> Name -> String
-typeName qualify sname = if qualify && S.member local scalaReservedWords
-    then L.intercalate "." $ Strings.splitOn "/" sname
+typeName qualify name@(Name n) = if qualify && S.member local scalaReservedWords
+    then L.intercalate "." $ Strings.splitOn "/" n
     else local
   where
-    (ns, local) = toQname sname
+    (_, local) = toQname name

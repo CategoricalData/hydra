@@ -12,13 +12,13 @@ data Alternative
     alternativeBinds :: (Maybe LocalBindings)}
   deriving (Eq, Ord, Read, Show)
 
-_Alternative = "hydra/ext/haskell/ast.Alternative"
+_Alternative = (Core.Name "hydra/ext/haskell/ast.Alternative")
 
-_Alternative_pattern = "pattern"
+_Alternative_pattern = (Core.FieldName "pattern")
 
-_Alternative_rhs = "rhs"
+_Alternative_rhs = (Core.FieldName "rhs")
 
-_Alternative_binds = "binds"
+_Alternative_binds = (Core.FieldName "binds")
 
 -- A type assertion
 data Assertion 
@@ -27,18 +27,18 @@ data Assertion
     assertionTypes :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_Assertion = "hydra/ext/haskell/ast.Assertion"
+_Assertion = (Core.Name "hydra/ext/haskell/ast.Assertion")
 
-_Assertion_name = "name"
+_Assertion_name = (Core.FieldName "name")
 
-_Assertion_types = "types"
+_Assertion_types = (Core.FieldName "types")
 
 -- The right-hand side of a pattern-matching alternative
 newtype CaseRhs 
   = CaseRhs Expression
   deriving (Eq, Ord, Read, Show)
 
-_CaseRhs = "hydra/ext/haskell/ast.CaseRhs"
+_CaseRhs = (Core.Name "hydra/ext/haskell/ast.CaseRhs")
 
 -- A data constructor
 data Constructor 
@@ -46,11 +46,11 @@ data Constructor
   | ConstructorRecord Constructor_Record
   deriving (Eq, Ord, Read, Show)
 
-_Constructor = "hydra/ext/haskell/ast.Constructor"
+_Constructor = (Core.Name "hydra/ext/haskell/ast.Constructor")
 
-_Constructor_ordinary = "ordinary"
+_Constructor_ordinary = (Core.FieldName "ordinary")
 
-_Constructor_record = "record"
+_Constructor_record = (Core.FieldName "record")
 
 -- An ordinary (positional) data constructor
 data Constructor_Ordinary 
@@ -59,11 +59,11 @@ data Constructor_Ordinary
     constructor_OrdinaryFields :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_Constructor_Ordinary = "hydra/ext/haskell/ast.Constructor.Ordinary"
+_Constructor_Ordinary = (Core.Name "hydra/ext/haskell/ast.Constructor.Ordinary")
 
-_Constructor_Ordinary_name = "name"
+_Constructor_Ordinary_name = (Core.FieldName "name")
 
-_Constructor_Ordinary_fields = "fields"
+_Constructor_Ordinary_fields = (Core.FieldName "fields")
 
 -- A record-style data constructor
 data Constructor_Record 
@@ -72,11 +72,11 @@ data Constructor_Record
     constructor_RecordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
-_Constructor_Record = "hydra/ext/haskell/ast.Constructor.Record"
+_Constructor_Record = (Core.Name "hydra/ext/haskell/ast.Constructor.Record")
 
-_Constructor_Record_name = "name"
+_Constructor_Record_name = (Core.FieldName "name")
 
-_Constructor_Record_fields = "fields"
+_Constructor_Record_fields = (Core.FieldName "fields")
 
 -- A data type declaration
 data DataDeclaration 
@@ -88,17 +88,17 @@ data DataDeclaration
     dataDeclarationDeriving :: [Deriving]}
   deriving (Eq, Ord, Read, Show)
 
-_DataDeclaration = "hydra/ext/haskell/ast.DataDeclaration"
+_DataDeclaration = (Core.Name "hydra/ext/haskell/ast.DataDeclaration")
 
-_DataDeclaration_keyword = "keyword"
+_DataDeclaration_keyword = (Core.FieldName "keyword")
 
-_DataDeclaration_context = "context"
+_DataDeclaration_context = (Core.FieldName "context")
 
-_DataDeclaration_head = "head"
+_DataDeclaration_head = (Core.FieldName "head")
 
-_DataDeclaration_constructors = "constructors"
+_DataDeclaration_constructors = (Core.FieldName "constructors")
 
-_DataDeclaration_deriving = "deriving"
+_DataDeclaration_deriving = (Core.FieldName "deriving")
 
 -- The 'data' versus 'newtype keyword
 data DataDeclaration_Keyword 
@@ -106,11 +106,11 @@ data DataDeclaration_Keyword
   | DataDeclaration_KeywordNewtype 
   deriving (Eq, Ord, Read, Show)
 
-_DataDeclaration_Keyword = "hydra/ext/haskell/ast.DataDeclaration.Keyword"
+_DataDeclaration_Keyword = (Core.Name "hydra/ext/haskell/ast.DataDeclaration.Keyword")
 
-_DataDeclaration_Keyword_data = "data"
+_DataDeclaration_Keyword_data = (Core.FieldName "data")
 
-_DataDeclaration_Keyword_newtype = "newtype"
+_DataDeclaration_Keyword_newtype = (Core.FieldName "newtype")
 
 -- A data declaration together with any comments
 data DeclarationWithComments 
@@ -119,11 +119,11 @@ data DeclarationWithComments
     declarationWithCommentsComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_DeclarationWithComments = "hydra/ext/haskell/ast.DeclarationWithComments"
+_DeclarationWithComments = (Core.Name "hydra/ext/haskell/ast.DeclarationWithComments")
 
-_DeclarationWithComments_body = "body"
+_DeclarationWithComments_body = (Core.FieldName "body")
 
-_DeclarationWithComments_comments = "comments"
+_DeclarationWithComments_comments = (Core.FieldName "comments")
 
 -- A data or value declaration
 data Declaration 
@@ -133,15 +133,15 @@ data Declaration
   | DeclarationTypedBinding TypedBinding
   deriving (Eq, Ord, Read, Show)
 
-_Declaration = "hydra/ext/haskell/ast.Declaration"
+_Declaration = (Core.Name "hydra/ext/haskell/ast.Declaration")
 
-_Declaration_data = "data"
+_Declaration_data = (Core.FieldName "data")
 
-_Declaration_type = "type"
+_Declaration_type = (Core.FieldName "type")
 
-_Declaration_valueBinding = "valueBinding"
+_Declaration_valueBinding = (Core.FieldName "valueBinding")
 
-_Declaration_typedBinding = "typedBinding"
+_Declaration_typedBinding = (Core.FieldName "typedBinding")
 
 -- The left-hand side of a declaration
 data DeclarationHead 
@@ -150,13 +150,13 @@ data DeclarationHead
   | DeclarationHeadSimple Name
   deriving (Eq, Ord, Read, Show)
 
-_DeclarationHead = "hydra/ext/haskell/ast.DeclarationHead"
+_DeclarationHead = (Core.Name "hydra/ext/haskell/ast.DeclarationHead")
 
-_DeclarationHead_application = "application"
+_DeclarationHead_application = (Core.FieldName "application")
 
-_DeclarationHead_parens = "parens"
+_DeclarationHead_parens = (Core.FieldName "parens")
 
-_DeclarationHead_simple = "simple"
+_DeclarationHead_simple = (Core.FieldName "simple")
 
 -- An application-style declaration head
 data DeclarationHead_Application 
@@ -165,18 +165,18 @@ data DeclarationHead_Application
     declarationHead_ApplicationOperand :: Variable}
   deriving (Eq, Ord, Read, Show)
 
-_DeclarationHead_Application = "hydra/ext/haskell/ast.DeclarationHead.Application"
+_DeclarationHead_Application = (Core.Name "hydra/ext/haskell/ast.DeclarationHead.Application")
 
-_DeclarationHead_Application_function = "function"
+_DeclarationHead_Application_function = (Core.FieldName "function")
 
-_DeclarationHead_Application_operand = "operand"
+_DeclarationHead_Application_operand = (Core.FieldName "operand")
 
 -- A 'deriving' statement
 newtype Deriving 
   = Deriving [Name]
   deriving (Eq, Ord, Read, Show)
 
-_Deriving = "hydra/ext/haskell/ast.Deriving"
+_Deriving = (Core.Name "hydra/ext/haskell/ast.Deriving")
 
 -- An export statement
 data Export 
@@ -184,11 +184,11 @@ data Export
   | ExportModule ModuleName
   deriving (Eq, Ord, Read, Show)
 
-_Export = "hydra/ext/haskell/ast.Export"
+_Export = (Core.Name "hydra/ext/haskell/ast.Export")
 
-_Export_declaration = "declaration"
+_Export_declaration = (Core.FieldName "declaration")
 
-_Export_module = "module"
+_Export_module = (Core.FieldName "module")
 
 -- A data expression
 data Expression 
@@ -212,43 +212,43 @@ data Expression
   | ExpressionVariable Name
   deriving (Eq, Ord, Read, Show)
 
-_Expression = "hydra/ext/haskell/ast.Expression"
+_Expression = (Core.Name "hydra/ext/haskell/ast.Expression")
 
-_Expression_application = "application"
+_Expression_application = (Core.FieldName "application")
 
-_Expression_case = "case"
+_Expression_case = (Core.FieldName "case")
 
-_Expression_constructRecord = "constructRecord"
+_Expression_constructRecord = (Core.FieldName "constructRecord")
 
-_Expression_do = "do"
+_Expression_do = (Core.FieldName "do")
 
-_Expression_if = "if"
+_Expression_if = (Core.FieldName "if")
 
-_Expression_infixApplication = "infixApplication"
+_Expression_infixApplication = (Core.FieldName "infixApplication")
 
-_Expression_literal = "literal"
+_Expression_literal = (Core.FieldName "literal")
 
-_Expression_lambda = "lambda"
+_Expression_lambda = (Core.FieldName "lambda")
 
-_Expression_leftSection = "leftSection"
+_Expression_leftSection = (Core.FieldName "leftSection")
 
-_Expression_let = "let"
+_Expression_let = (Core.FieldName "let")
 
-_Expression_list = "list"
+_Expression_list = (Core.FieldName "list")
 
-_Expression_parens = "parens"
+_Expression_parens = (Core.FieldName "parens")
 
-_Expression_prefixApplication = "prefixApplication"
+_Expression_prefixApplication = (Core.FieldName "prefixApplication")
 
-_Expression_rightSection = "rightSection"
+_Expression_rightSection = (Core.FieldName "rightSection")
 
-_Expression_tuple = "tuple"
+_Expression_tuple = (Core.FieldName "tuple")
 
-_Expression_typeSignature = "typeSignature"
+_Expression_typeSignature = (Core.FieldName "typeSignature")
 
-_Expression_updateRecord = "updateRecord"
+_Expression_updateRecord = (Core.FieldName "updateRecord")
 
-_Expression_variable = "variable"
+_Expression_variable = (Core.FieldName "variable")
 
 -- An application expression
 data Expression_Application 
@@ -257,11 +257,11 @@ data Expression_Application
     expression_ApplicationArgument :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_Application = "hydra/ext/haskell/ast.Expression.Application"
+_Expression_Application = (Core.Name "hydra/ext/haskell/ast.Expression.Application")
 
-_Expression_Application_function = "function"
+_Expression_Application_function = (Core.FieldName "function")
 
-_Expression_Application_argument = "argument"
+_Expression_Application_argument = (Core.FieldName "argument")
 
 -- A case expression
 data Expression_Case 
@@ -270,11 +270,11 @@ data Expression_Case
     expression_CaseAlternatives :: [Alternative]}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_Case = "hydra/ext/haskell/ast.Expression.Case"
+_Expression_Case = (Core.Name "hydra/ext/haskell/ast.Expression.Case")
 
-_Expression_Case_case = "case"
+_Expression_Case_case = (Core.FieldName "case")
 
-_Expression_Case_alternatives = "alternatives"
+_Expression_Case_alternatives = (Core.FieldName "alternatives")
 
 -- A record constructor expression
 data Expression_ConstructRecord 
@@ -283,11 +283,11 @@ data Expression_ConstructRecord
     expression_ConstructRecordFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_ConstructRecord = "hydra/ext/haskell/ast.Expression.ConstructRecord"
+_Expression_ConstructRecord = (Core.Name "hydra/ext/haskell/ast.Expression.ConstructRecord")
 
-_Expression_ConstructRecord_name = "name"
+_Expression_ConstructRecord_name = (Core.FieldName "name")
 
-_Expression_ConstructRecord_fields = "fields"
+_Expression_ConstructRecord_fields = (Core.FieldName "fields")
 
 -- An 'if' expression
 data Expression_If 
@@ -297,13 +297,13 @@ data Expression_If
     expression_IfElse :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_If = "hydra/ext/haskell/ast.Expression.If"
+_Expression_If = (Core.Name "hydra/ext/haskell/ast.Expression.If")
 
-_Expression_If_condition = "condition"
+_Expression_If_condition = (Core.FieldName "condition")
 
-_Expression_If_then = "then"
+_Expression_If_then = (Core.FieldName "then")
 
-_Expression_If_else = "else"
+_Expression_If_else = (Core.FieldName "else")
 
 -- An infix application expression
 data Expression_InfixApplication 
@@ -313,13 +313,13 @@ data Expression_InfixApplication
     expression_InfixApplicationRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_InfixApplication = "hydra/ext/haskell/ast.Expression.InfixApplication"
+_Expression_InfixApplication = (Core.Name "hydra/ext/haskell/ast.Expression.InfixApplication")
 
-_Expression_InfixApplication_lhs = "lhs"
+_Expression_InfixApplication_lhs = (Core.FieldName "lhs")
 
-_Expression_InfixApplication_operator = "operator"
+_Expression_InfixApplication_operator = (Core.FieldName "operator")
 
-_Expression_InfixApplication_rhs = "rhs"
+_Expression_InfixApplication_rhs = (Core.FieldName "rhs")
 
 -- A lambda expression
 data Expression_Lambda 
@@ -328,11 +328,11 @@ data Expression_Lambda
     expression_LambdaInner :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_Lambda = "hydra/ext/haskell/ast.Expression.Lambda"
+_Expression_Lambda = (Core.Name "hydra/ext/haskell/ast.Expression.Lambda")
 
-_Expression_Lambda_bindings = "bindings"
+_Expression_Lambda_bindings = (Core.FieldName "bindings")
 
-_Expression_Lambda_inner = "inner"
+_Expression_Lambda_inner = (Core.FieldName "inner")
 
 -- A 'let' expression
 data Expression_Let 
@@ -341,11 +341,11 @@ data Expression_Let
     expression_LetInner :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_Let = "hydra/ext/haskell/ast.Expression.Let"
+_Expression_Let = (Core.Name "hydra/ext/haskell/ast.Expression.Let")
 
-_Expression_Let_bindings = "bindings"
+_Expression_Let_bindings = (Core.FieldName "bindings")
 
-_Expression_Let_inner = "inner"
+_Expression_Let_inner = (Core.FieldName "inner")
 
 -- A prefix expression
 data Expression_PrefixApplication 
@@ -354,11 +354,11 @@ data Expression_PrefixApplication
     expression_PrefixApplicationRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_PrefixApplication = "hydra/ext/haskell/ast.Expression.PrefixApplication"
+_Expression_PrefixApplication = (Core.Name "hydra/ext/haskell/ast.Expression.PrefixApplication")
 
-_Expression_PrefixApplication_operator = "operator"
+_Expression_PrefixApplication_operator = (Core.FieldName "operator")
 
-_Expression_PrefixApplication_rhs = "rhs"
+_Expression_PrefixApplication_rhs = (Core.FieldName "rhs")
 
 -- A section expression
 data Expression_Section 
@@ -367,11 +367,11 @@ data Expression_Section
     expression_SectionExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_Section = "hydra/ext/haskell/ast.Expression.Section"
+_Expression_Section = (Core.Name "hydra/ext/haskell/ast.Expression.Section")
 
-_Expression_Section_operator = "operator"
+_Expression_Section_operator = (Core.FieldName "operator")
 
-_Expression_Section_expression = "expression"
+_Expression_Section_expression = (Core.FieldName "expression")
 
 -- A type signature expression
 data Expression_TypeSignature 
@@ -380,11 +380,11 @@ data Expression_TypeSignature
     expression_TypeSignatureType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_TypeSignature = "hydra/ext/haskell/ast.Expression.TypeSignature"
+_Expression_TypeSignature = (Core.Name "hydra/ext/haskell/ast.Expression.TypeSignature")
 
-_Expression_TypeSignature_inner = "inner"
+_Expression_TypeSignature_inner = (Core.FieldName "inner")
 
-_Expression_TypeSignature_type = "type"
+_Expression_TypeSignature_type = (Core.FieldName "type")
 
 -- An update record expression
 data Expression_UpdateRecord 
@@ -393,11 +393,11 @@ data Expression_UpdateRecord
     expression_UpdateRecordFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
 
-_Expression_UpdateRecord = "hydra/ext/haskell/ast.Expression.UpdateRecord"
+_Expression_UpdateRecord = (Core.Name "hydra/ext/haskell/ast.Expression.UpdateRecord")
 
-_Expression_UpdateRecord_inner = "inner"
+_Expression_UpdateRecord_inner = (Core.FieldName "inner")
 
-_Expression_UpdateRecord_fields = "fields"
+_Expression_UpdateRecord_fields = (Core.FieldName "fields")
 
 -- A field (name/type pair)
 data Field 
@@ -406,11 +406,11 @@ data Field
     fieldType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Field = "hydra/ext/haskell/ast.Field"
+_Field = (Core.Name "hydra/ext/haskell/ast.Field")
 
-_Field_name = "name"
+_Field_name = (Core.FieldName "name")
 
-_Field_type = "type"
+_Field_type = (Core.FieldName "type")
 
 -- A field name and value
 data FieldUpdate 
@@ -419,11 +419,11 @@ data FieldUpdate
     fieldUpdateValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_FieldUpdate = "hydra/ext/haskell/ast.FieldUpdate"
+_FieldUpdate = (Core.Name "hydra/ext/haskell/ast.FieldUpdate")
 
-_FieldUpdate_name = "name"
+_FieldUpdate_name = (Core.FieldName "name")
 
-_FieldUpdate_value = "value"
+_FieldUpdate_value = (Core.FieldName "value")
 
 -- An import statement
 data Import 
@@ -434,15 +434,15 @@ data Import
     importSpec :: (Maybe Import_Spec)}
   deriving (Eq, Ord, Read, Show)
 
-_Import = "hydra/ext/haskell/ast.Import"
+_Import = (Core.Name "hydra/ext/haskell/ast.Import")
 
-_Import_qualified = "qualified"
+_Import_qualified = (Core.FieldName "qualified")
 
-_Import_module = "module"
+_Import_module = (Core.FieldName "module")
 
-_Import_as = "as"
+_Import_as = (Core.FieldName "as")
 
-_Import_spec = "spec"
+_Import_spec = (Core.FieldName "spec")
 
 -- An import specification
 data Import_Spec 
@@ -450,11 +450,11 @@ data Import_Spec
   | Import_SpecHiding [ImportExportSpec]
   deriving (Eq, Ord, Read, Show)
 
-_Import_Spec = "hydra/ext/haskell/ast.Import.Spec"
+_Import_Spec = (Core.Name "hydra/ext/haskell/ast.Import.Spec")
 
-_Import_Spec_list = "list"
+_Import_Spec_list = (Core.FieldName "list")
 
-_Import_Spec_hiding = "hiding"
+_Import_Spec_hiding = (Core.FieldName "hiding")
 
 -- An import modifier ('pattern' or 'type')
 data ImportModifier 
@@ -462,11 +462,11 @@ data ImportModifier
   | ImportModifierType 
   deriving (Eq, Ord, Read, Show)
 
-_ImportModifier = "hydra/ext/haskell/ast.ImportModifier"
+_ImportModifier = (Core.Name "hydra/ext/haskell/ast.ImportModifier")
 
-_ImportModifier_pattern = "pattern"
+_ImportModifier_pattern = (Core.FieldName "pattern")
 
-_ImportModifier_type = "type"
+_ImportModifier_type = (Core.FieldName "type")
 
 -- An import or export specification
 data ImportExportSpec 
@@ -476,24 +476,24 @@ data ImportExportSpec
     importExportSpecSubspec :: (Maybe ImportExportSpec_Subspec)}
   deriving (Eq, Ord, Read, Show)
 
-_ImportExportSpec = "hydra/ext/haskell/ast.ImportExportSpec"
+_ImportExportSpec = (Core.Name "hydra/ext/haskell/ast.ImportExportSpec")
 
-_ImportExportSpec_modifier = "modifier"
+_ImportExportSpec_modifier = (Core.FieldName "modifier")
 
-_ImportExportSpec_name = "name"
+_ImportExportSpec_name = (Core.FieldName "name")
 
-_ImportExportSpec_subspec = "subspec"
+_ImportExportSpec_subspec = (Core.FieldName "subspec")
 
 data ImportExportSpec_Subspec 
   = ImportExportSpec_SubspecAll 
   | ImportExportSpec_SubspecList [Name]
   deriving (Eq, Ord, Read, Show)
 
-_ImportExportSpec_Subspec = "hydra/ext/haskell/ast.ImportExportSpec.Subspec"
+_ImportExportSpec_Subspec = (Core.Name "hydra/ext/haskell/ast.ImportExportSpec.Subspec")
 
-_ImportExportSpec_Subspec_all = "all"
+_ImportExportSpec_Subspec_all = (Core.FieldName "all")
 
-_ImportExportSpec_Subspec_list = "list"
+_ImportExportSpec_Subspec_list = (Core.FieldName "list")
 
 -- A literal value
 data Literal 
@@ -505,36 +505,36 @@ data Literal
   | LiteralString String
   deriving (Eq, Ord, Read, Show)
 
-_Literal = "hydra/ext/haskell/ast.Literal"
+_Literal = (Core.Name "hydra/ext/haskell/ast.Literal")
 
-_Literal_char = "char"
+_Literal_char = (Core.FieldName "char")
 
-_Literal_double = "double"
+_Literal_double = (Core.FieldName "double")
 
-_Literal_float = "float"
+_Literal_float = (Core.FieldName "float")
 
-_Literal_int = "int"
+_Literal_int = (Core.FieldName "int")
 
-_Literal_integer = "integer"
+_Literal_integer = (Core.FieldName "integer")
 
-_Literal_string = "string"
+_Literal_string = (Core.FieldName "string")
 
 data LocalBinding 
   = LocalBindingSignature TypeSignature
   | LocalBindingValue ValueBinding
   deriving (Eq, Ord, Read, Show)
 
-_LocalBinding = "hydra/ext/haskell/ast.LocalBinding"
+_LocalBinding = (Core.Name "hydra/ext/haskell/ast.LocalBinding")
 
-_LocalBinding_signature = "signature"
+_LocalBinding_signature = (Core.FieldName "signature")
 
-_LocalBinding_value = "value"
+_LocalBinding_value = (Core.FieldName "value")
 
 newtype LocalBindings 
   = LocalBindings [LocalBinding]
   deriving (Eq, Ord, Read, Show)
 
-_LocalBindings = "hydra/ext/haskell/ast.LocalBindings"
+_LocalBindings = (Core.Name "hydra/ext/haskell/ast.LocalBindings")
 
 data Module 
   = Module {
@@ -543,13 +543,13 @@ data Module
     moduleDeclarations :: [DeclarationWithComments]}
   deriving (Eq, Ord, Read, Show)
 
-_Module = "hydra/ext/haskell/ast.Module"
+_Module = (Core.Name "hydra/ext/haskell/ast.Module")
 
-_Module_head = "head"
+_Module_head = (Core.FieldName "head")
 
-_Module_imports = "imports"
+_Module_imports = (Core.FieldName "imports")
 
-_Module_declarations = "declarations"
+_Module_declarations = (Core.FieldName "declarations")
 
 data ModuleHead 
   = ModuleHead {
@@ -557,17 +557,17 @@ data ModuleHead
     moduleHeadExports :: [Export]}
   deriving (Eq, Ord, Read, Show)
 
-_ModuleHead = "hydra/ext/haskell/ast.ModuleHead"
+_ModuleHead = (Core.Name "hydra/ext/haskell/ast.ModuleHead")
 
-_ModuleHead_name = "name"
+_ModuleHead_name = (Core.FieldName "name")
 
-_ModuleHead_exports = "exports"
+_ModuleHead_exports = (Core.FieldName "exports")
 
 newtype ModuleName 
   = ModuleName String
   deriving (Eq, Ord, Read, Show)
 
-_ModuleName = "hydra/ext/haskell/ast.ModuleName"
+_ModuleName = (Core.Name "hydra/ext/haskell/ast.ModuleName")
 
 data Name 
   = NameImplicit QualifiedName
@@ -575,30 +575,30 @@ data Name
   | NameParens QualifiedName
   deriving (Eq, Ord, Read, Show)
 
-_Name = "hydra/ext/haskell/ast.Name"
+_Name = (Core.Name "hydra/ext/haskell/ast.Name")
 
-_Name_implicit = "implicit"
+_Name_implicit = (Core.FieldName "implicit")
 
-_Name_normal = "normal"
+_Name_normal = (Core.FieldName "normal")
 
-_Name_parens = "parens"
+_Name_parens = (Core.FieldName "parens")
 
 newtype NamePart 
   = NamePart String
   deriving (Eq, Ord, Read, Show)
 
-_NamePart = "hydra/ext/haskell/ast.NamePart"
+_NamePart = (Core.Name "hydra/ext/haskell/ast.NamePart")
 
 data Operator 
   = OperatorBacktick QualifiedName
   | OperatorNormal QualifiedName
   deriving (Eq, Ord, Read, Show)
 
-_Operator = "hydra/ext/haskell/ast.Operator"
+_Operator = (Core.Name "hydra/ext/haskell/ast.Operator")
 
-_Operator_backtick = "backtick"
+_Operator_backtick = (Core.FieldName "backtick")
 
-_Operator_normal = "normal"
+_Operator_normal = (Core.FieldName "normal")
 
 data Pattern 
   = PatternApplication Pattern_Application
@@ -613,27 +613,27 @@ data Pattern
   | PatternWildcard 
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = "hydra/ext/haskell/ast.Pattern"
+_Pattern = (Core.Name "hydra/ext/haskell/ast.Pattern")
 
-_Pattern_application = "application"
+_Pattern_application = (Core.FieldName "application")
 
-_Pattern_as = "as"
+_Pattern_as = (Core.FieldName "as")
 
-_Pattern_list = "list"
+_Pattern_list = (Core.FieldName "list")
 
-_Pattern_literal = "literal"
+_Pattern_literal = (Core.FieldName "literal")
 
-_Pattern_name = "name"
+_Pattern_name = (Core.FieldName "name")
 
-_Pattern_parens = "parens"
+_Pattern_parens = (Core.FieldName "parens")
 
-_Pattern_record = "record"
+_Pattern_record = (Core.FieldName "record")
 
-_Pattern_tuple = "tuple"
+_Pattern_tuple = (Core.FieldName "tuple")
 
-_Pattern_typed = "typed"
+_Pattern_typed = (Core.FieldName "typed")
 
-_Pattern_wildcard = "wildcard"
+_Pattern_wildcard = (Core.FieldName "wildcard")
 
 data Pattern_Application 
   = Pattern_Application {
@@ -641,11 +641,11 @@ data Pattern_Application
     pattern_ApplicationArgs :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern_Application = "hydra/ext/haskell/ast.Pattern.Application"
+_Pattern_Application = (Core.Name "hydra/ext/haskell/ast.Pattern.Application")
 
-_Pattern_Application_name = "name"
+_Pattern_Application_name = (Core.FieldName "name")
 
-_Pattern_Application_args = "args"
+_Pattern_Application_args = (Core.FieldName "args")
 
 data Pattern_As 
   = Pattern_As {
@@ -653,11 +653,11 @@ data Pattern_As
     pattern_AsInner :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern_As = "hydra/ext/haskell/ast.Pattern.As"
+_Pattern_As = (Core.Name "hydra/ext/haskell/ast.Pattern.As")
 
-_Pattern_As_name = "name"
+_Pattern_As_name = (Core.FieldName "name")
 
-_Pattern_As_inner = "inner"
+_Pattern_As_inner = (Core.FieldName "inner")
 
 data Pattern_Record 
   = Pattern_Record {
@@ -665,11 +665,11 @@ data Pattern_Record
     pattern_RecordFields :: [PatternField]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern_Record = "hydra/ext/haskell/ast.Pattern.Record"
+_Pattern_Record = (Core.Name "hydra/ext/haskell/ast.Pattern.Record")
 
-_Pattern_Record_name = "name"
+_Pattern_Record_name = (Core.FieldName "name")
 
-_Pattern_Record_fields = "fields"
+_Pattern_Record_fields = (Core.FieldName "fields")
 
 data Pattern_Typed 
   = Pattern_Typed {
@@ -677,11 +677,11 @@ data Pattern_Typed
     pattern_TypedType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern_Typed = "hydra/ext/haskell/ast.Pattern.Typed"
+_Pattern_Typed = (Core.Name "hydra/ext/haskell/ast.Pattern.Typed")
 
-_Pattern_Typed_inner = "inner"
+_Pattern_Typed_inner = (Core.FieldName "inner")
 
-_Pattern_Typed_type = "type"
+_Pattern_Typed_type = (Core.FieldName "type")
 
 data PatternField 
   = PatternField {
@@ -689,11 +689,11 @@ data PatternField
     patternFieldPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_PatternField = "hydra/ext/haskell/ast.PatternField"
+_PatternField = (Core.Name "hydra/ext/haskell/ast.PatternField")
 
-_PatternField_name = "name"
+_PatternField_name = (Core.FieldName "name")
 
-_PatternField_pattern = "pattern"
+_PatternField_pattern = (Core.FieldName "pattern")
 
 data QualifiedName 
   = QualifiedName {
@@ -701,23 +701,23 @@ data QualifiedName
     qualifiedNameUnqualified :: NamePart}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedName = "hydra/ext/haskell/ast.QualifiedName"
+_QualifiedName = (Core.Name "hydra/ext/haskell/ast.QualifiedName")
 
-_QualifiedName_qualifiers = "qualifiers"
+_QualifiedName_qualifiers = (Core.FieldName "qualifiers")
 
-_QualifiedName_unqualified = "unqualified"
+_QualifiedName_unqualified = (Core.FieldName "unqualified")
 
 newtype RightHandSide 
   = RightHandSide Expression
   deriving (Eq, Ord, Read, Show)
 
-_RightHandSide = "hydra/ext/haskell/ast.RightHandSide"
+_RightHandSide = (Core.Name "hydra/ext/haskell/ast.RightHandSide")
 
 newtype Statement 
   = Statement Expression
   deriving (Eq, Ord, Read, Show)
 
-_Statement = "hydra/ext/haskell/ast.Statement"
+_Statement = (Core.Name "hydra/ext/haskell/ast.Statement")
 
 data Type 
   = TypeApplication Type_Application
@@ -729,21 +729,21 @@ data Type
   | TypeVariable Name
   deriving (Eq, Ord, Read, Show)
 
-_Type = "hydra/ext/haskell/ast.Type"
+_Type = (Core.Name "hydra/ext/haskell/ast.Type")
 
-_Type_application = "application"
+_Type_application = (Core.FieldName "application")
 
-_Type_function = "function"
+_Type_function = (Core.FieldName "function")
 
-_Type_infix = "infix"
+_Type_infix = (Core.FieldName "infix")
 
-_Type_list = "list"
+_Type_list = (Core.FieldName "list")
 
-_Type_parens = "parens"
+_Type_parens = (Core.FieldName "parens")
 
-_Type_tuple = "tuple"
+_Type_tuple = (Core.FieldName "tuple")
 
-_Type_variable = "variable"
+_Type_variable = (Core.FieldName "variable")
 
 data Type_Application 
   = Type_Application {
@@ -751,11 +751,11 @@ data Type_Application
     type_ApplicationArgument :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Application = "hydra/ext/haskell/ast.Type.Application"
+_Type_Application = (Core.Name "hydra/ext/haskell/ast.Type.Application")
 
-_Type_Application_context = "context"
+_Type_Application_context = (Core.FieldName "context")
 
-_Type_Application_argument = "argument"
+_Type_Application_argument = (Core.FieldName "argument")
 
 data Type_Function 
   = Type_Function {
@@ -763,11 +763,11 @@ data Type_Function
     type_FunctionCodomain :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Function = "hydra/ext/haskell/ast.Type.Function"
+_Type_Function = (Core.Name "hydra/ext/haskell/ast.Type.Function")
 
-_Type_Function_domain = "domain"
+_Type_Function_domain = (Core.FieldName "domain")
 
-_Type_Function_codomain = "codomain"
+_Type_Function_codomain = (Core.FieldName "codomain")
 
 data Type_Infix 
   = Type_Infix {
@@ -776,13 +776,13 @@ data Type_Infix
     type_InfixRhs :: Operator}
   deriving (Eq, Ord, Read, Show)
 
-_Type_Infix = "hydra/ext/haskell/ast.Type.Infix"
+_Type_Infix = (Core.Name "hydra/ext/haskell/ast.Type.Infix")
 
-_Type_Infix_lhs = "lhs"
+_Type_Infix_lhs = (Core.FieldName "lhs")
 
-_Type_Infix_operator = "operator"
+_Type_Infix_operator = (Core.FieldName "operator")
 
-_Type_Infix_rhs = "rhs"
+_Type_Infix_rhs = (Core.FieldName "rhs")
 
 data TypeDeclaration 
   = TypeDeclaration {
@@ -790,11 +790,11 @@ data TypeDeclaration
     typeDeclarationType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeDeclaration = "hydra/ext/haskell/ast.TypeDeclaration"
+_TypeDeclaration = (Core.Name "hydra/ext/haskell/ast.TypeDeclaration")
 
-_TypeDeclaration_name = "name"
+_TypeDeclaration_name = (Core.FieldName "name")
 
-_TypeDeclaration_type = "type"
+_TypeDeclaration_type = (Core.FieldName "type")
 
 data TypeSignature 
   = TypeSignature {
@@ -802,11 +802,11 @@ data TypeSignature
     typeSignatureType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSignature = "hydra/ext/haskell/ast.TypeSignature"
+_TypeSignature = (Core.Name "hydra/ext/haskell/ast.TypeSignature")
 
-_TypeSignature_name = "name"
+_TypeSignature_name = (Core.FieldName "name")
 
-_TypeSignature_type = "type"
+_TypeSignature_type = (Core.FieldName "type")
 
 data TypedBinding 
   = TypedBinding {
@@ -814,19 +814,19 @@ data TypedBinding
     typedBindingValueBinding :: ValueBinding}
   deriving (Eq, Ord, Read, Show)
 
-_TypedBinding = "hydra/ext/haskell/ast.TypedBinding"
+_TypedBinding = (Core.Name "hydra/ext/haskell/ast.TypedBinding")
 
-_TypedBinding_typeSignature = "typeSignature"
+_TypedBinding_typeSignature = (Core.FieldName "typeSignature")
 
-_TypedBinding_valueBinding = "valueBinding"
+_TypedBinding_valueBinding = (Core.FieldName "valueBinding")
 
 data ValueBinding 
   = ValueBindingSimple ValueBinding_Simple
   deriving (Eq, Ord, Read, Show)
 
-_ValueBinding = "hydra/ext/haskell/ast.ValueBinding"
+_ValueBinding = (Core.Name "hydra/ext/haskell/ast.ValueBinding")
 
-_ValueBinding_simple = "simple"
+_ValueBinding_simple = (Core.FieldName "simple")
 
 data ValueBinding_Simple 
   = ValueBinding_Simple {
@@ -835,16 +835,16 @@ data ValueBinding_Simple
     valueBinding_SimpleLocalBindings :: (Maybe LocalBindings)}
   deriving (Eq, Ord, Read, Show)
 
-_ValueBinding_Simple = "hydra/ext/haskell/ast.ValueBinding.Simple"
+_ValueBinding_Simple = (Core.Name "hydra/ext/haskell/ast.ValueBinding.Simple")
 
-_ValueBinding_Simple_pattern = "pattern"
+_ValueBinding_Simple_pattern = (Core.FieldName "pattern")
 
-_ValueBinding_Simple_rhs = "rhs"
+_ValueBinding_Simple_rhs = (Core.FieldName "rhs")
 
-_ValueBinding_Simple_localBindings = "localBindings"
+_ValueBinding_Simple_localBindings = (Core.FieldName "localBindings")
 
 newtype Variable 
   = Variable Name
   deriving (Eq, Ord, Read, Show)
 
-_Variable = "hydra/ext/haskell/ast.Variable"
+_Variable = (Core.Name "hydra/ext/haskell/ast.Variable")

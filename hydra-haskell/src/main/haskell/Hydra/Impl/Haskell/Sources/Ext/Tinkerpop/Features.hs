@@ -27,7 +27,7 @@ For example, a common usage would be to check if a graph supports transactions p
 tinkerpopFeatures :: Graph Meta
 tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreName
   where
-    features = nominal . qualify tinkerpopFeaturesName
+    features = nominal . qualify tinkerpopFeaturesName . Name
 --    v3 = nominal . qualify tinkerpopV3Name
     def = datatype tinkerpopFeaturesName
     supports name comment = field ("supports" ++ capitalize name) $ doc comment boolean

@@ -29,7 +29,7 @@ int32ElementDataType :: Default m => Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
 latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Data m
-latlonRecord lat lon = record [Field "lat" $ int32Value lat, Field "lon" $ int32Value lon]
+latlonRecord lat lon = record [Field (FieldName "lat") $ int32Value lat, Field (FieldName "lon") $ int32Value lon]
 
 latLonType :: Default m => Type m
 latLonType = Types.record [Types.field "lat" Types.int32, Types.field "lon" Types.int32]
@@ -71,17 +71,17 @@ setOfStringsType :: Default m => Type m
 setOfStringsType = Types.set Types.string
 
 stringAliasType :: Default m => Type m
-stringAliasType = Types.nominal "StringTypeAlias"
+stringAliasType = Types.nominal $ Name "StringTypeAlias"
 
 stringOrIntType :: Default m => Type m
 stringOrIntType = Types.union [Types.field "left" Types.string, Types.field "right" Types.int32]
 
 unionTypeForFunctions :: Default m => Type m -> Type m
 unionTypeForFunctions dom = Types.union [
-  Types.field _Function_cases Types.string, -- TODO (TypeTermRecord cases)
-  Types.field _Function_compareTo dom,
-  Types.field _Function_delta Types.unit,
-  Types.field _Function_lambda Types.string, -- TODO (TypeTermRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
-  Types.field _Function_primitive Types.string,
-  Types.field _Function_projection Types.string,
-  Types.field _DataTerm_variable Types.string] -- TODO
+  FieldType _Function_cases Types.string, -- TODO (TypeTermRecord cases)
+  FieldType _Function_compareTo dom,
+  FieldType _Function_delta Types.unit,
+  FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
+  FieldType _Function_primitive Types.string,
+  FieldType _Function_projection Types.string,
+  FieldType _DataTerm_variable Types.string] -- TODO

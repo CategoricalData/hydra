@@ -17,8 +17,8 @@ tinkerpopV3Name = GraphName "hydra/ext/tinkerpop/v3"
 tinkerpopV3 :: Graph Meta
 tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
   where
-    core = nominal . qualify hydraCoreName
-    v3 = nominal . qualify tinkerpopV3Name
+    core = nominal . qualify hydraCoreName . Name
+    v3 = nominal . qualify tinkerpopV3Name . Name
     def = datatype tinkerpopV3Name
     elements = [
 

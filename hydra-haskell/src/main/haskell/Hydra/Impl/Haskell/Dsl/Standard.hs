@@ -15,9 +15,9 @@ import qualified Data.Maybe as Y
 
 
 datatype :: GraphName -> String -> Type Meta -> Element Meta
-datatype gname lname = typeElement standardContext (qualify gname lname)
+datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
-annotate :: Name -> Y.Maybe (Data Meta) -> Type Meta -> Type Meta
+annotate :: String -> Y.Maybe (Data Meta) -> Type Meta -> Type Meta
 annotate key val (Type term meta) = Type term $ setAnnotation key val meta
 
 doc :: String -> Type Meta -> Type Meta
@@ -30,7 +30,7 @@ project :: Type Meta -> FieldName -> Type Meta -> Data Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
 qualify :: GraphName -> Name -> Name
-qualify (GraphName gname) lname = gname ++ "." ++ lname
+qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname
 
 standardContext :: Context Meta
 standardContext = cx
@@ -51,7 +51,8 @@ standardContext = cx
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
 standardElement :: GraphName -> String -> String -> Type Meta -> Data Meta -> Element Meta
-standardElement (GraphName ns) name desc typ term = Element (ns ++ "." ++ name) (encodeType standardContext typ) $ dataDoc desc term
+standardElement (GraphName ns) name desc typ term = Element (Name $ ns ++ "." ++ name) (encodeType standardContext typ)
+  $ dataDoc desc term
 
 standardFunction :: GraphName -> String -> String -> Type Meta -> Type Meta -> Data Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ

@@ -13,36 +13,36 @@ data Edge
     edgeIn :: Id}
   deriving (Eq, Ord, Read, Show)
 
-_Edge = "hydra/ext/tinkerpop/v3.Edge"
+_Edge = (Core.Name "hydra/ext/tinkerpop/v3.Edge")
 
-_Edge_id = "id"
+_Edge_id = (Core.FieldName "id")
 
-_Edge_properties = "properties"
+_Edge_properties = (Core.FieldName "properties")
 
-_Edge_out = "out"
+_Edge_out = (Core.FieldName "out")
 
-_Edge_in = "in"
+_Edge_in = (Core.FieldName "in")
 
 -- A vertex or edge id
 newtype Id 
   = Id Core.Literal
   deriving (Eq, Ord, Read, Show)
 
-_Id = "hydra/ext/tinkerpop/v3.Id"
+_Id = (Core.Name "hydra/ext/tinkerpop/v3.Id")
 
 -- A map of property keys to property values
 newtype Properties 
   = Properties (Map PropertyKey Core.Literal)
   deriving (Eq, Ord, Read, Show)
 
-_Properties = "hydra/ext/tinkerpop/v3.Properties"
+_Properties = (Core.Name "hydra/ext/tinkerpop/v3.Properties")
 
 -- A property key
 newtype PropertyKey 
   = PropertyKey String
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKey = "hydra/ext/tinkerpop/v3.PropertyKey"
+_PropertyKey = (Core.Name "hydra/ext/tinkerpop/v3.PropertyKey")
 
 -- A property value
 data PropertyValue 
@@ -50,11 +50,11 @@ data PropertyValue
   | PropertyValueList [PropertyValue]
   deriving (Eq, Ord, Read, Show)
 
-_PropertyValue = "hydra/ext/tinkerpop/v3.PropertyValue"
+_PropertyValue = (Core.Name "hydra/ext/tinkerpop/v3.PropertyValue")
 
-_PropertyValue_literal = "literal"
+_PropertyValue_literal = (Core.FieldName "literal")
 
-_PropertyValue_list = "list"
+_PropertyValue_list = (Core.FieldName "list")
 
 -- A vertex
 data Vertex 
@@ -63,15 +63,15 @@ data Vertex
     vertexProperties :: Properties}
   deriving (Eq, Ord, Read, Show)
 
-_Vertex = "hydra/ext/tinkerpop/v3.Vertex"
+_Vertex = (Core.Name "hydra/ext/tinkerpop/v3.Vertex")
 
-_Vertex_id = "id"
+_Vertex_id = (Core.FieldName "id")
 
-_Vertex_properties = "properties"
+_Vertex_properties = (Core.FieldName "properties")
 
 -- A vertex id
 newtype VertexId 
   = VertexId Core.Literal
   deriving (Eq, Ord, Read, Show)
 
-_VertexId = "hydra/ext/tinkerpop/v3.VertexId"
+_VertexId = (Core.Name "hydra/ext/tinkerpop/v3.VertexId")

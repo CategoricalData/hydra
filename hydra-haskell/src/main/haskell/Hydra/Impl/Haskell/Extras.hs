@@ -111,11 +111,11 @@ fieldTypes scx t = case typeTerm t of
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
 
-fromQname :: String -> String -> Name
-fromQname ns local = Name $ ns ++ "." ++ local
+fromQname :: GraphName -> String -> Name
+fromQname (GraphName ns) local = Name $ ns ++ "." ++ local
 
 graphNameOf :: Name -> GraphName
-graphNameOf = GraphName . fst . toQname
+graphNameOf = fst . toQname
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
@@ -139,10 +139,10 @@ setContextElements :: [Graph m] -> Context m -> Context m
 setContextElements graphs cx = cx { contextElements = M.fromList $
   ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
-toQname :: Name -> (String, String)
+toQname :: Name -> (GraphName, String)
 toQname (Name name) = case Strings.splitOn "." name of
-  (ns:rest) -> (ns, L.intercalate "." rest)
-  _ -> ("UNKNOWN", name)
+  (ns:rest) -> (GraphName ns, L.intercalate "." rest)
+  _ -> (GraphName "UNKNOWN", name)
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj

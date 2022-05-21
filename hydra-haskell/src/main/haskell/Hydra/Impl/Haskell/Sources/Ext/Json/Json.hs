@@ -18,7 +18,7 @@ jsonJson :: Graph Meta
 jsonJson = Graph jsonJsonName elements (const True) hydraCoreName
   where
     def = datatype jsonJsonName
-    json = nominal . qualify jsonJsonName
+    json = nominal . qualify jsonJsonName . Name
 
     elements = [
 
