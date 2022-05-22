@@ -7,7 +7,7 @@ import qualified Data.Set as S
 
 
 hydraCoreLanguage :: Language m
-hydraCoreLanguage = Language "hydra/core" $ Language_Constraints {
+hydraCoreLanguage = Language (LanguageName "hydra/core") $ LanguageConstraints {
   languageConstraintsLiteralVariants = S.fromList literalVariants,
   languageConstraintsFloatTypes = S.fromList floatTypes,
   languageConstraintsFunctionVariants = S.fromList functionVariants,

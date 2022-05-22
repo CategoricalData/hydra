@@ -244,7 +244,7 @@ qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
 qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
 
 scalaLanguage :: Language m
-scalaLanguage = Language "hydra/ext/scala" $ Language_Constraints {
+scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean,
     LiteralVariantFloat,

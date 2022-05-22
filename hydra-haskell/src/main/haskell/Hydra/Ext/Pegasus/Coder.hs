@@ -163,7 +163,7 @@ pdlNameForGraph = PDL.Namespace . slashesToDots . h . graphName
     h (GraphName n) = n
       
 pegasusDataLanguage :: Language m
-pegasusDataLanguage = Language "hydra/ext/pegasus/pdl" $ Language_Constraints {
+pegasusDataLanguage = Language (LanguageName "hydra/ext/pegasus/pdl") $ LanguageConstraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBinary,
     LiteralVariantBoolean,
