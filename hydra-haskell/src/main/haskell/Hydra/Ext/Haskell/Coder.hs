@@ -419,7 +419,12 @@ recordFieldReference aliases sname (FieldName fname) = elementReference aliases 
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
 sanitize :: String -> String
-sanitize = fmap (\c -> if c == '.' then '_' else c)
+sanitize s = if preserve
+  then s
+  else fmap (\c -> if c == '.' then '_' else c) s
+  where
+    -- TODO: hack
+    preserve = L.isInfixOf " " s
 
 simpleName :: String -> H.Name
 simpleName = rawName . sanitize

@@ -16,6 +16,7 @@ import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Errors
+import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
@@ -66,6 +67,7 @@ coreModules :: [Module Meta]
 coreModules = [
   hydraCoreModule,
   hydraErrorsModule,
+  hydraEvaluationModule,
   hydraGraphModule,
   hydraBasicsModule,
   adapterUtilsModule,
