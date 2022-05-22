@@ -1,250 +1,120 @@
-{-# LANGUAGE DeriveGeneric #-}
-module Hydra.Evaluation
-  ( Context(..)
-  , EvaluationStrategy(..)
-  , InputSpec(..)
-  , OutputSpec(..)
-  , PrimitiveFunction(..)
-  , Result(..)
-  , Step(..)
-  , StepDirection(..)
-  , _Context
-  , _Context_descriptionOf
-  , _Context_elements
-  , _Context_functions
-  , _Context_graphs
-  , _Context_setDescriptionOf
-  , _Context_setTypeOf
-  , _Context_strategy
-  , _Context_typeOf
-  , _EvaluationStrategy
-  , _EvaluationStrategy_opaqueDataVariants
-  , _InputSpec
-  , _InputSpec_type
-  , _InputSpec_unmarshal
-  , _OutputSpec
-  , _OutputSpec_marshal
-  , _OutputSpec_type
-  , _PrimitiveFunction
-  , _PrimitiveFunction_implementation
-  , _PrimitiveFunction_name
-  , _PrimitiveFunction_type
-  , _Result
-  , _Result_failure
-  , _Result_success
-  , _Step
-  , _StepDirection
-  , _StepDirection_in
-  , _StepDirection_out
-  , _Step_in
-  , _Step_out
-  ) where
+module Hydra.Evaluation where
 
-import GHC.Generics (Generic)
-import Data.Int
+import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import Data.Map
 import Data.Set
-import Hydra.Core
-import Hydra.Graph
 
-data Context a
-  = Context
-    {-| @type parameterized:
-                genericType: hydra/graph.GraphSet
-                parameters:
-                - type:
-                    variable: a
-                  variable: a -}
-    { contextGraphs :: GraphSet a
-    {-| @type map:
-                keys: hydra/core.Name
-                values:
-                  parameterized:
-                    genericType: hydra/graph.Element
-                    parameters:
-                    - type:
-                        variable: a
-                      variable: a -}
-    , contextElements :: (Map (Name) (Element a))
-    {-| @type map:
-                keys: hydra/core.Name
-                values:
-                  parameterized:
-                    genericType: hydra/evaluation.PrimitiveFunction
-                    parameters:
-                    - type:
-                        variable: a
-                      variable: a -}
-    , contextFunctions :: (Map (Name) (PrimitiveFunction a))
-    -- | @type hydra/evaluation.EvaluationStrategy
-    , contextStrategy :: EvaluationStrategy
-    {-| @type function:
-                from:
-                - variable: a
-                to:
-                  optional: string -}
-    , contextDescriptionOf :: a -> Result (Maybe String)
-    {-| @type function:
-                from:
-                - variable: a
-                to:
-                  optional: hydra/core.Type -}
-    , contextTypeOf :: a -> Result (Maybe (Type a))
-    {-| @type function:
-                from:
-                - optional: string
-                - variable: a
-                to:
-                  variable: a -}
-    , contextSetDescriptionOf :: (Maybe String) -> (a -> a)
-    {-| @type function:
-                from:
-                - optional: hydra/core.Type
-                - variable: a
-                to:
-                  variable: a -}
-    , contextSetTypeOf :: (Maybe (Type a)) -> (a -> a) }
+-- A pointed set of graph modules; a graph in the logical sense
+data Context m 
+  = Context {
+    contextGraphs :: (Graph.GraphSet m),
+    contextElements :: (Map Core.Name (Graph.Element m)),
+    contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
+    contextStrategy :: EvaluationStrategy,
+    contextDescriptionOf :: (m -> Result (Maybe String)),
+    contextTypeOf :: (m -> Result (Maybe (Core.Type m))),
+    contextSetDescriptionOf :: (Maybe String -> m -> m),
+    contextSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
 
-data EvaluationStrategy
-  = EvaluationStrategy
-    {-| Whether a term of a given variant is considered to be fully reduced,
-        without further inspection
+_Context = (Core.Name "hydra/evaluation.Context")
 
-        @type set: hydra/core.DataVariant -}
-    { evaluationStrategyOpaqueDataVariants :: (Set (DataVariant)) } deriving (Eq, Generic, Ord, Read, Show)
+_Context_graphs = (Core.FieldName "graphs")
 
-{-| A helper object for specifying and unmarshalling an argument to a primitive
-    function -}
-data InputSpec a m
-  = InputSpec
-    -- | @type hydra/core.Type
-    { inputSpecType :: Type m
-    {-| @type function:
-                from:
-                - parameterized:
-                    genericType: hydra/core.Data
-                    parameters:
-                    - type:
-                        variable: m
-                      variable: a
-                to:
-                  parameterized:
-                    genericType: hydra/evaluation.Result
-                    parameters:
-                    - type:
-                        variable: a
-                      variable: a -}
-    , inputSpecUnmarshal :: (Data m) -> (Result a) }
+_Context_elements = (Core.FieldName "elements")
 
-{-| A helper object for specifying and marshalling the output of a primitive
-    function -}
-data OutputSpec a m
-  = OutputSpec
-    -- | @type hydra/core.Type
-    { outputSpecType :: Type m
-    {-| @type function:
-                from:
-                - variable: a
-                to:
-                  parameterized:
-                    genericType: hydra/core.Data
-                    parameters:
-                    - type:
-                        variable: m
-                      variable: a -}
-    , outputSpecMarshal :: a -> (Data m) }
+_Context_functions = (Core.FieldName "functions")
 
-data PrimitiveFunction a
-  = PrimitiveFunction
-    -- | @type hydra/core.Name
-    { primitiveFunctionName :: Name
-    -- | @type hydra/core.FunctionType
-    , primitiveFunctionType :: FunctionType a
-    {-| @type function:
-                from:
-                - list:
-                    parameterized:
-                      genericType: hydra/core.Data
-                      parameters:
-                      - type:
-                          variable: a
-                        variable: a
-                to:
-                  parameterized:
-                    genericType: hydra/evaluation.Result
-                    parameters:
-                    - type:
-                        parameterized:
-                          genericType: hydra/core.Data
-                          parameters:
-                          - type:
-                              variable: a
-                            variable: a
-                      variable: a -}
-    , primitiveFunctionImplementation :: [Data a] -> (Result (Data a)) }
+_Context_strategy = (Core.FieldName "strategy")
 
-data Result a
-  -- | @type variable: a
-  = ResultSuccess a
-  -- | @type string
-  | ResultFailure String deriving (Eq, Generic, Ord, Read, Show)
+_Context_descriptionOf = (Core.FieldName "descriptionOf")
 
-data Step a b
-  = Step
-    {-| @type function:
-                from:
-                - variable: a
-                to:
-                  parameterized:
-                    genericType: hydra/evaluation.Result
-                    parameters:
-                    - type:
-                        variable: b
-                      variable: a -}
-    { stepOut :: a -> (Result b)
-    {-| @type function:
-                from:
-                - variable: b
-                to:
-                  parameterized:
-                    genericType: hydra/evaluation.Result
-                    parameters:
-                    - type:
-                        variable: a
-                      variable: a -}
-    , stepIn :: b -> (Result a) }
+_Context_typeOf = (Core.FieldName "typeOf")
 
-data StepDirection
-  = StepDirectionOut
-  | StepDirectionIn deriving (Eq, Generic, Ord, Read, Show)
+_Context_setDescriptionOf = (Core.FieldName "setDescriptionOf")
 
-_Context = "hydra/evaluation.Context" :: String
-_Context_descriptionOf = "descriptionOf" :: String
-_Context_elements = "elements" :: String
-_Context_functions = "functions" :: String
-_Context_graphs = "graphs" :: String
-_Context_setDescriptionOf = "setDescriptionOf" :: String
-_Context_setTypeOf = "setTypeOf" :: String
-_Context_strategy = "strategy" :: String
-_Context_typeOf = "typeOf" :: String
-_EvaluationStrategy = "hydra/evaluation.EvaluationStrategy" :: String
-_EvaluationStrategy_opaqueDataVariants = "opaqueDataVariants" :: String
-_InputSpec = "hydra/evaluation.InputSpec" :: String
-_InputSpec_type = "type" :: String
-_InputSpec_unmarshal = "unmarshal" :: String
-_OutputSpec = "hydra/evaluation.OutputSpec" :: String
-_OutputSpec_marshal = "marshal" :: String
-_OutputSpec_type = "type" :: String
-_PrimitiveFunction = "hydra/evaluation.PrimitiveFunction" :: String
-_PrimitiveFunction_implementation = "implementation" :: String
-_PrimitiveFunction_name = "name" :: String
-_PrimitiveFunction_type = "type" :: String
-_Result = "hydra/evaluation.Result" :: String
-_Result_failure = "failure" :: String
-_Result_success = "success" :: String
-_Step = "hydra/evaluation.Step" :: String
-_StepDirection = "hydra/evaluation.StepDirection" :: String
-_StepDirection_in = "in" :: String
-_StepDirection_out = "out" :: String
-_Step_in = "in" :: String
-_Step_out = "out" :: String
+_Context_setTypeOf = (Core.FieldName "setTypeOf")
+
+-- Settings which determine how terms are evaluated
+data EvaluationStrategy 
+  = EvaluationStrategy {evaluationStrategyOpaqueDataVariants :: (Set Core.DataVariant)}
+  deriving (Eq, Ord, Read, Show)
+
+_EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
+
+_EvaluationStrategy_opaqueDataVariants = (Core.FieldName "opaqueDataVariants")
+
+-- A helper object for specifying and unmarshalling an argument to a primitive function
+data InputSpec a m 
+  = InputSpec {
+    inputSpecType :: (Core.Type m),
+    inputSpecUnmarshal :: (Core.Data m -> Result a)}
+
+_InputSpec = (Core.Name "hydra/evaluation.InputSpec")
+
+_InputSpec_type = (Core.FieldName "type")
+
+_InputSpec_unmarshal = (Core.FieldName "unmarshal")
+
+-- A helper object for specifying and marshalling the output of a primitive function
+data OutputSpec a m 
+  = OutputSpec {
+    outputSpecType :: (Core.Type m),
+    outputSpecMarshal :: (a -> Core.Data m)}
+
+_OutputSpec = (Core.Name "hydra/evaluation.OutputSpec")
+
+_OutputSpec_type = (Core.FieldName "type")
+
+_OutputSpec_marshal = (Core.FieldName "marshal")
+
+-- A built-in function
+data PrimitiveFunction m 
+  = PrimitiveFunction {
+    primitiveFunctionName :: Core.Name,
+    primitiveFunctionType :: (Core.FunctionType m),
+    primitiveFunctionImplementation :: ([Core.Data m] -> Result (Core.Data m))}
+
+_PrimitiveFunction = (Core.Name "hydra/evaluation.PrimitiveFunction")
+
+_PrimitiveFunction_name = (Core.FieldName "name")
+
+_PrimitiveFunction_type = (Core.FieldName "type")
+
+_PrimitiveFunction_implementation = (Core.FieldName "implementation")
+
+-- A qualified result; success with a value or failure with an error message
+data Result m 
+  = ResultSuccess m
+  | ResultFailure String
+  deriving (Eq, Ord, Read, Show)
+
+_Result = (Core.Name "hydra/evaluation.Result")
+
+_Result_success = (Core.FieldName "success")
+
+_Result_failure = (Core.FieldName "failure")
+
+-- A qualified bidirectional transformation
+data Step a b 
+  = Step {
+    stepOut :: (a -> Result b),
+    stepIn :: (b -> Result a)}
+
+_Step = (Core.Name "hydra/evaluation.Step")
+
+_Step_out = (Core.FieldName "out")
+
+_Step_in = (Core.FieldName "in")
+
+-- Indicates either the 'out' or the 'in' direction of a step
+data StepDirection 
+  = StepDirectionOut 
+  | StepDirectionIn 
+  deriving (Eq, Ord, Read, Show)
+
+_StepDirection = (Core.Name "hydra/evaluation.StepDirection")
+
+_StepDirection_out = (Core.FieldName "out")
+
+_StepDirection_in = (Core.FieldName "in")
