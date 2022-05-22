@@ -350,7 +350,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
     step = adapt typ
 
     -- Use a YAML-like language (but supporting unions) as the default target language
-    testLanguage = Language "hydra/test" $ Language_Constraints {
+    testLanguage = Language (LanguageName "hydra/test") $ LanguageConstraints {
       languageConstraintsLiteralVariants = S.fromList [
         LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
       languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],

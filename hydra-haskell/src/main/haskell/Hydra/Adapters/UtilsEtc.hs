@@ -45,20 +45,20 @@ idAdapter t = Adapter False t t idStep
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]
 
-literalTypeIsSupported :: Language_Constraints m -> LiteralType -> Bool
+literalTypeIsSupported :: LanguageConstraints m -> LiteralType -> Bool
 literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (languageConstraintsLiteralVariants constraints)
   && case at of
     LiteralTypeFloat ft -> floatTypeIsSupported constraints ft
     LiteralTypeInteger it -> integerTypeIsSupported constraints it
     _ -> True
 
-floatTypeIsSupported :: Language_Constraints m -> FloatType -> Bool
+floatTypeIsSupported :: LanguageConstraints m -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
-integerTypeIsSupported :: Language_Constraints m -> IntegerType -> Bool
+integerTypeIsSupported :: LanguageConstraints m -> IntegerType -> Bool
 integerTypeIsSupported constraints it = S.member it $ languageConstraintsIntegerTypes constraints
 
-typeIsSupported :: Language_Constraints m -> Type m -> Bool
+typeIsSupported :: LanguageConstraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
   && case typeTerm t of

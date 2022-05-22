@@ -98,5 +98,5 @@ isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
 
-withConstraints :: Language_Constraints Meta -> AdapterContext Meta
+withConstraints :: LanguageConstraints Meta -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}

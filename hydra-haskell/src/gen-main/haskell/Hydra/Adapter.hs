@@ -1,121 +1,80 @@
-{-# LANGUAGE DeriveGeneric #-}
-module Hydra.Adapter
-  ( Adapter(..)
-  , AdapterContext(..)
-  , Language_Constraints(..)
-  , Language_Name
-  , Language(..)
-  , _Adapter
-  , _AdapterContext
-  , _AdapterContext_evaluation
-  , _AdapterContext_source
-  , _AdapterContext_target
-  , _Adapter_isLossy
-  , _Adapter_source
-  , _Adapter_step
-  , _Adapter_target
-  , _Language
-  , _Language_Constraints
-  , _Language_Constraints_floatTypes
-  , _Language_Constraints_functionVariants
-  , _Language_Constraints_integerTypes
-  , _Language_Constraints_literalVariants
-  , _Language_Constraints_termVariants
-  , _Language_Constraints_typeVariants
-  , _Language_Constraints_types
-  , _Language_Name
-  , _Language_constraints
-  , _Language_name
-  ) where
+module Hydra.Adapter where
 
-import GHC.Generics (Generic)
-import Data.Int
+import qualified Hydra.Core as Core
+import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
-import Hydra.Core
-import Hydra.Evaluation
 
-data Adapter t v
-  = Adapter
-    -- | @type boolean
-    { adapterIsLossy :: Bool
-    -- | @type variable: t
-    , adapterSource :: t
-    -- | @type variable: t
-    , adapterTarget :: t
-    {-| @type parameterized:
-                genericType: hydra/evaluation.Step
-                parameters:
-                - type:
-                    variable: v
-                  variable: a
-                - type:
-                    variable: v
-                  variable: b -}
-    , adapterStep :: Step v v }
+data Adapter t v 
+  = Adapter {
+    adapterIsLossy :: Bool,
+    adapterSource :: t,
+    adapterTarget :: t,
+    adapterStep :: (Evaluation.Step v v)}
 
-data AdapterContext a
-  = AdapterContext
-    {-| @type parameterized:
-                genericType: hydra/evaluation.Context
-                parameters:
-                - type:
-                    variable: a
-                  variable: a -}
-    { adapterContextEvaluation :: Context a
-    -- | @type hydra/adapter.Language
-    , adapterContextSource :: Language a
-    -- | @type hydra/adapter.Language
-    , adapterContextTarget :: Language a }
+_Adapter = (Core.Name "hydra/adapter.Adapter")
 
-data Language_Constraints m
-  = Language_Constraints
-    -- | @type set: hydra/core.LiteralVariant
-    { languageConstraintsLiteralVariants :: (Set (LiteralVariant))
-    -- | @type set: hydra/core.FloatType
-    , languageConstraintsFloatTypes :: (Set (FloatType))
-    -- | @type set: hydra/core.FunctionVariant
-    , languageConstraintsFunctionVariants :: (Set (FunctionVariant))
-    -- | @type set: hydra/core.IntegerType
-    , languageConstraintsIntegerTypes :: (Set (IntegerType))
-    -- | @type set: hydra/core.DataVariant
-    , languageConstraintsDataVariants :: (Set (DataVariant))
-    -- | @type set: hydra/core.TypeVariant
-    , languageConstraintsTypeVariants :: (Set (TypeVariant))
-    {-| @type function:
-                from:
-                - hydra/core.Type
-                to: boolean -}
-    , languageConstraintsTypes :: Type m -> Bool }
+_Adapter_isLossy = (Core.FieldName "isLossy")
 
--- | @type string
-type Language_Name = String
+_Adapter_source = (Core.FieldName "source")
 
-data Language m
-  = Language
-    -- | @type hydra/adapter.Language.Name
-    { languageName :: Language_Name
-    -- | @type hydra/adapter.Language.Constraints
-    , languageConstraints :: Language_Constraints m }
+_Adapter_target = (Core.FieldName "target")
 
-_Adapter = "hydra/adapter.Adapter" :: String
-_AdapterContext = "hydra/adapter.AdapterContext" :: String
-_AdapterContext_evaluation = "evaluation" :: String
-_AdapterContext_source = "source" :: String
-_AdapterContext_target = "target" :: String
-_Adapter_isLossy = "isLossy" :: String
-_Adapter_source = "source" :: String
-_Adapter_step = "step" :: String
-_Adapter_target = "target" :: String
-_Language = "hydra/adapter.Language" :: String
-_Language_Constraints = "hydra/adapter.Language_Constraints" :: String
-_Language_Constraints_floatTypes = "floatTypes" :: String
-_Language_Constraints_functionVariants = "functionVariants" :: String
-_Language_Constraints_integerTypes = "integerTypes" :: String
-_Language_Constraints_literalVariants = "literalVariants" :: String
-_Language_Constraints_termVariants = "termVariants" :: String
-_Language_Constraints_typeVariants = "typeVariants" :: String
-_Language_Constraints_types = "types" :: String
-_Language_Name = "hydra/adapter.Language_Name" :: String
-_Language_constraints = "constraints" :: String
-_Language_name = "name" :: String
+_Adapter_step = (Core.FieldName "step")
+
+data AdapterContext a 
+  = AdapterContext {
+    adapterContextEvaluation :: (Evaluation.Context a),
+    adapterContextSource :: (Language a),
+    adapterContextTarget :: (Language a)}
+
+_AdapterContext = (Core.Name "hydra/adapter.AdapterContext")
+
+_AdapterContext_evaluation = (Core.FieldName "evaluation")
+
+_AdapterContext_source = (Core.FieldName "source")
+
+_AdapterContext_target = (Core.FieldName "target")
+
+data LanguageConstraints m 
+  = LanguageConstraints {
+    languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
+    languageConstraintsFloatTypes :: (Set Core.FloatType),
+    languageConstraintsFunctionVariants :: (Set Core.FunctionVariant),
+    languageConstraintsIntegerTypes :: (Set Core.IntegerType),
+    languageConstraintsDataVariants :: (Set Core.DataVariant),
+    languageConstraintsTypeVariants :: (Set Core.TypeVariant),
+    languageConstraintsTypes :: (Core.Type m -> Bool)}
+
+_LanguageConstraints = (Core.Name "hydra/adapter.LanguageConstraints")
+
+_LanguageConstraints_literalVariants = (Core.FieldName "literalVariants")
+
+_LanguageConstraints_floatTypes = (Core.FieldName "floatTypes")
+
+_LanguageConstraints_functionVariants = (Core.FieldName "functionVariants")
+
+_LanguageConstraints_integerTypes = (Core.FieldName "integerTypes")
+
+_LanguageConstraints_dataVariants = (Core.FieldName "dataVariants")
+
+_LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
+
+_LanguageConstraints_types = (Core.FieldName "types")
+
+newtype LanguageName 
+  = LanguageName String
+  deriving (Eq, Ord, Read, Show)
+
+_LanguageName = (Core.Name "hydra/adapter.LanguageName")
+
+data Language m 
+  = Language {
+    languageName :: LanguageName,
+    languageConstraints :: (LanguageConstraints m)}
+
+_Language = (Core.Name "hydra/adapter.Language")
+
+_Language_name = (Core.FieldName "name")
+
+_Language_constraints = (Core.FieldName "constraints")

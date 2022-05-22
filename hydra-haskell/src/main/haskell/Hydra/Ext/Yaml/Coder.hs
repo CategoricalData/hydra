@@ -112,7 +112,7 @@ yamlCoder context typ = do
     adContext = AdapterContext context hydraCoreLanguage yamlLanguage
 
 yamlLanguage :: Language m
-yamlLanguage = Language "hydra/ext/yaml" $ Language_Constraints {
+yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],

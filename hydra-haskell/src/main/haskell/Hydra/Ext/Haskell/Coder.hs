@@ -346,7 +346,7 @@ encodeType aliases typ = case typeTerm typ of
     encode = encodeType aliases
 
 haskellLanguage :: Language m
-haskellLanguage = Language "hydra/ext/haskell" $ Language_Constraints {
+haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [
