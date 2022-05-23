@@ -10,7 +10,7 @@ import Hydra.Util.Formatting
 
 
 tinkerpopFeaturesModule :: Module Meta
-tinkerpopFeaturesModule = Module tinkerpopFeatures []
+tinkerpopFeaturesModule = Module tinkerpopFeatures [hydraCoreModule]
 
 tinkerpopFeaturesName :: GraphName
 tinkerpopFeaturesName = GraphName "hydra/ext/tinkerpop/features"
@@ -27,8 +27,8 @@ For example, a common usage would be to check if a graph supports transactions p
 tinkerpopFeatures :: Graph Meta
 tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreName
   where
+    core = nominal . qualify hydraCoreName . Name
     features = nominal . qualify tinkerpopFeaturesName . Name
---    v3 = nominal . qualify tinkerpopV3Name
     def = datatype tinkerpopFeaturesName
     supports name comment = field ("supports" ++ capitalize name) $ doc comment boolean
     
@@ -86,6 +86,12 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
 --              doc "Determines if an identifier will be accepted by the Graph." $
 --            function (v3 "Id") boolean
             ],
+
+      def "ExtraFeatures" $
+        doc ("Additional features which are needed for the complete specification of language constaints in Hydra, "
+          ++ "above and beyond TinkerPop Graph.Features") $
+        universal "m" $ record [
+          field "supportsMapKey" $ function (universal "m" $ core "Type") boolean],
 
       def "Features" $
         doc ("An interface that represents the capabilities of a Graph implementation. By default all methods of " ++
