@@ -156,6 +156,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "delta" $
             doc "Hydra's delta function, which maps an element to its data term"
             unit,
+          field "eliminateNominal" $
+            doc "Eliminate a nominal term" $
+            core "Name",
           field "lambda" $
             doc "A function abstraction (lambda)" $
             universal "m" $ core "Lambda",
@@ -181,6 +184,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "cases",
           "compareTo",
           "delta",
+          "eliminateNominal",
           "lambda",
           "optionalCases",
           "primitive",

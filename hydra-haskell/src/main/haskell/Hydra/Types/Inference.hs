@@ -112,6 +112,11 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
           et <- freshTypeVariable
           yieldFunction FunctionDelta (Types.function (Types.element et) et) []
 
+        FunctionEliminateNominal name -> do
+          case namedType cx name of
+            ResultFailure msg -> error msg
+            ResultSuccess typ -> yieldFunction (FunctionEliminateNominal name) (Types.function (Types.nominal name) typ) []  
+          
         FunctionLambda (Lambda v body) -> do
           tv <- freshTypeVariable
           i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
@@ -174,7 +179,7 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
             i <- infer cx term1
             let typ1 = termType i
             let c = termConstraints i
-            yield (DataTermNominal $ Named name i) typ (c ++ [(typ, typ1)])
+            yield (DataTermNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
 
       DataTermOptional m -> do
         v <- freshTypeVariable

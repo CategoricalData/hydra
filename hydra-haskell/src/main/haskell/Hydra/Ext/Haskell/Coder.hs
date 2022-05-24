@@ -208,6 +208,7 @@ encodeFunction aliases cx meta fun = case fun of
           rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
     FunctionDelta -> pure $ hsvar "id"
+    FunctionEliminateNominal name -> pure $ hsvar $ newtypeAccessorName name
     FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeData aliases cx body
     FunctionOptionalCases (OptionalCases nothing just) -> do
       nothingRhs <- H.CaseRhs <$> encodeData aliases cx nothing

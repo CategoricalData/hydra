@@ -7,7 +7,6 @@ import Hydra.TestGraph
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Data.Map as M
-import qualified Data.Set as S
 
 
 concatType :: Default m => Type m

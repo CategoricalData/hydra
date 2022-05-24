@@ -7,6 +7,8 @@ import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Basics
 import Hydra.Types.Inference
 import Hydra.TestUtils
+import Hydra.TestData
+import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Test.Hspec as H
@@ -224,6 +226,26 @@ checkLiterals = do
         (defaultData $ DataTermLiteral l)
         (Types.literal $ literalType l)
 
+checkNominalTerms :: H.SpecWith ()
+checkNominalTerms = do
+  H.describe "Check nominal introductions and eliminations" $ do
+    
+    H.it "Check nominal introductions" $ do
+      expectMonotype
+        (nominal (Name "StringTypeAlias") $ stringValue "foo")
+        stringAliasType
+      expectMonotype
+        (lambda "v" $ nominal (Name "StringTypeAlias") $ variable "v")
+        (Types.function (Standard.doc "An alias for the string type" Types.string) stringAliasType)
+        
+    H.it "Check nominal eliminations" $ do
+      expectMonotype
+        (eliminateNominal $ Name "StringTypeAlias")
+        (Types.function stringAliasType (Standard.doc "An alias for the string type" Types.string))
+      expectMonotype
+        (apply (eliminateNominal $ Name "StringTypeAlias") (nominal (Name "StringTypeAlias") $ stringValue "foo"))
+        (Standard.doc "An alias for the string type" Types.string)
+        
 checkPrimitiveFunctions :: H.SpecWith ()
 checkPrimitiveFunctions = do
   H.describe "Check a few hand-picked terms with primitive functions" $ do
@@ -273,6 +295,7 @@ spec = do
   checkIndividualTerms
   checkLists
   checkLiterals
+  checkNominalTerms
   checkPrimitiveFunctions
   checkTypeAnnotations
 --  checkTypedDatas
