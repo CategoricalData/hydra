@@ -58,6 +58,9 @@ elementRef el = apply delta $ defaultData $ DataTermElement $ elementName el
 elementRefByName :: Default a => Name -> Data a
 elementRefByName name = apply delta $ defaultData $ DataTermElement name
 
+eliminateNominal :: Default a => Name -> Data a
+eliminateNominal name = defaultData $ DataTermFunction $ FunctionEliminateNominal name
+
 expectInt32 :: Show a => Data a -> Result Int
 expectInt32 term = case dataTerm term of
   DataTermLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v

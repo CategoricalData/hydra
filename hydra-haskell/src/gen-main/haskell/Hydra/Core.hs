@@ -226,6 +226,7 @@ data Function m
   = FunctionCases [Field m]
   | FunctionCompareTo (Data m)
   | FunctionDelta 
+  | FunctionEliminateNominal Name
   | FunctionLambda (Lambda m)
   | FunctionOptionalCases (OptionalCases m)
   | FunctionPrimitive Name
@@ -239,6 +240,8 @@ _Function_cases = (FieldName "cases")
 _Function_compareTo = (FieldName "compareTo")
 
 _Function_delta = (FieldName "delta")
+
+_Function_eliminateNominal = (FieldName "eliminateNominal")
 
 _Function_lambda = (FieldName "lambda")
 
@@ -266,6 +269,7 @@ data FunctionVariant
   = FunctionVariantCases 
   | FunctionVariantCompareTo 
   | FunctionVariantDelta 
+  | FunctionVariantEliminateNominal 
   | FunctionVariantLambda 
   | FunctionVariantOptionalCases 
   | FunctionVariantPrimitive 
@@ -279,6 +283,8 @@ _FunctionVariant_cases = (FieldName "cases")
 _FunctionVariant_compareTo = (FieldName "compareTo")
 
 _FunctionVariant_delta = (FieldName "delta")
+
+_FunctionVariant_eliminateNominal = (FieldName "eliminateNominal")
 
 _FunctionVariant_lambda = (FieldName "lambda")
 
