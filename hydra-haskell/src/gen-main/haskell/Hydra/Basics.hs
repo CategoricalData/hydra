@@ -135,11 +135,12 @@ literalVariants = [
 
 -- Construct a qualified (dot-separated) name
 qname :: (Graph.GraphName -> String -> Core.Name)
-qname (Graph.GraphName ns) name = Core.Name $ (
-  Strings.cat [
-    ns,
-    ".",
-    name])
+qname ns name = (
+  Core.Name (
+    Strings.cat [
+      Graph.unGraphName ns,
+      ".",
+      name]))
 
 -- Find the term variant (constructor) for a given term
 termVariant :: (Core.Data m -> Core.DataVariant)
