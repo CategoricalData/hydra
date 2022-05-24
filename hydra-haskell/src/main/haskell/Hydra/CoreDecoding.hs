@@ -125,7 +125,7 @@ matchUnion cx pairs term = do
       DataTermUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
-      _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (showFieldName . fst <$> pairs) ++ "}"
+      _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}"
         ++ ". Got: " ++ show term
   where
     mapping = M.fromList pairs

@@ -63,7 +63,7 @@ _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 _LanguageConstraints_types = (Core.FieldName "types")
 
 newtype LanguageName 
-  = LanguageName String
+  = LanguageName {unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LanguageName = (Core.Name "hydra/adapter.LanguageName")

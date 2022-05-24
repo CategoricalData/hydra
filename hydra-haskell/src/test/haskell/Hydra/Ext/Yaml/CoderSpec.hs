@@ -76,7 +76,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkYamlCoder int32ElementType
-      (element name) (yamlStr $ showName name)
+      (element name) (yamlStr $ unName name)
 
   H.it "Sets become sequences" $
     QC.property $ \strings -> checkYamlCoder setOfStringsType
@@ -90,7 +90,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
     QC.property $ \int -> checkYamlCoder stringOrIntType
       (variant (FieldName "right") $ int32Value int)
       (yamlMap [
-        (yamlStr "context", yamlStr $ showName untyped),
+        (yamlStr "context", yamlStr $ unName untyped),
         (yamlStr "record", yamlMap [(yamlStr "right", yamlInt int)])])
 
 spec :: H.Spec

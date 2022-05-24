@@ -79,7 +79,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
           (_Function_projection, forProjection fterm),
           (_DataTerm_variable, forVariable fterm)]
       where
-        notFound fname = fail $ "unexpected field: " ++ showFieldName fname
+        notFound fname = fail $ "unexpected field: " ++ unFieldName fname
         forCases fterm = read <$> expectString fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure delta
@@ -205,7 +205,7 @@ passUnion acx t@(Type (TypeTermUnion sfields) _) = do
         ad <- getAdapter adapters dfield
         (\f -> Data (DataTermUnion f) meta) <$> stepEither dir (adapterStep ad) dfield
   where
-    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ showFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
+    getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
 
 passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 passUniversal acx t@(Type (TypeTermUniversal (UniversalType (TypeVariable v) body)) _) = do

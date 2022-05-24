@@ -173,7 +173,7 @@ _Field_data = (FieldName "data")
 
 -- The name of a field
 newtype FieldName 
-  = FieldName String
+  = FieldName {unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = (Name "hydra/core.FieldName")
@@ -470,7 +470,7 @@ _Meta_annotations = (FieldName "annotations")
 
 -- A unique element name
 newtype Name 
-  = Name String
+  = Name {unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Name "hydra/core.Name")
@@ -609,7 +609,7 @@ _TypeTerm_variable = (FieldName "variable")
 
 -- A symbol which stands in for a type
 newtype TypeVariable 
-  = TypeVariable String
+  = TypeVariable {unTypeVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariable = (Name "hydra/core.TypeVariable")
@@ -684,7 +684,7 @@ _UniversalType_body = (FieldName "body")
 
 -- A symbol which stands in for a term
 newtype Variable 
-  = Variable String
+  = Variable {unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = (Name "hydra/core.Variable")

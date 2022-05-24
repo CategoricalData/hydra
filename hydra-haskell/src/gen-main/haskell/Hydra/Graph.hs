@@ -40,7 +40,7 @@ _Graph_schemaGraph = (Core.FieldName "schemaGraph")
 
 -- A unique identifier for a graph within a graph set
 newtype GraphName 
-  = GraphName String
+  = GraphName {unGraphName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GraphName = (Core.Name "hydra/graph.GraphName")
