@@ -6,10 +6,11 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Libraries
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Sources.Graph
 
 
 hydraBasicsModule :: Module Meta
-hydraBasicsModule = Module hydraBasics []
+hydraBasicsModule = Module hydraBasics [hydraGraphModule]
 
 hydraBasicsName :: GraphName
 hydraBasicsName = GraphName "hydra/basics"
@@ -191,9 +192,9 @@ literalVariants = standardElement hydraBasicsName "literalVariants"
 qname :: Element Meta
 qname = standardFunction hydraBasicsName "qname"
   "Construct a qualified (dot-separated) name"
-  (Types.nominal _GraphName) (Types.function Types.string $ Types.nominal _Name)
-  (lambda "ns" (lambda "name" (apply (primitive _strings_cat) (list [
-   variable "ns", stringValue ".", variable "name"]))))
+  (Types.nominal _GraphName) (Types.function Types.string $ Types.nominal _Name) $
+  lambda "ns" (lambda "name" (nominal _Name $ apply (primitive _strings_cat) (list [
+   apply (eliminateNominal _GraphName) (variable "ns"), stringValue ".", variable "name"])))
 
 termVariant :: Element Meta
 termVariant = standardFunction hydraBasicsName "termVariant"

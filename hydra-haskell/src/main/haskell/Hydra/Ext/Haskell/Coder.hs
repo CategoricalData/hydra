@@ -208,7 +208,8 @@ encodeFunction aliases cx meta fun = case fun of
           rhs <- H.CaseRhs <$> encodeData aliases cx rhsData
           return $ H.Alternative lhs rhs Nothing
     FunctionDelta -> pure $ hsvar "id"
-    FunctionEliminateNominal name -> pure $ hsvar $ newtypeAccessorName name
+    FunctionEliminateNominal name -> pure $ H.ExpressionVariable $ elementReference aliases $
+      qname (graphNameOf name) $ newtypeAccessorName name
     FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeData aliases cx body
     FunctionOptionalCases (OptionalCases nothing just) -> do
       nothingRhs <- H.CaseRhs <$> encodeData aliases cx nothing
@@ -281,7 +282,9 @@ encodeData aliases cx term@(Data expr meta) = do
     DataTermFunction f -> encodeFunction aliases cx (dataMeta term) f
     DataTermList els -> H.ExpressionList <$> CM.mapM (encode cx) els
     DataTermLiteral v -> encodeLiteral v
-    DataTermNominal (Named _ term') -> encode cx term'
+    DataTermNominal (Named tname term') -> if newtypesNotTypedefs
+      then hsapp <$> pure (H.ExpressionVariable $ elementReference aliases tname) <*> encode cx term'
+      else encode cx term'
     DataTermOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encode cx t

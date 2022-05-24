@@ -73,6 +73,7 @@ rewriteData mapData mapMeta = replace
             FunctionCases fields -> FunctionCases $ replaceField <$> fields
             FunctionCompareTo other -> FunctionCompareTo $ replace other
             FunctionDelta -> FunctionDelta
+            FunctionEliminateNominal name -> FunctionEliminateNominal name
             FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
             FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases
               (OptionalCases (replace nothing) (replace just))

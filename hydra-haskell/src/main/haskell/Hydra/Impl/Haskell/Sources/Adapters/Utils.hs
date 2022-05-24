@@ -110,7 +110,7 @@ describeType = standardFunction adapterUtilsName "describeType"
         ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_keys (Types.nominal _Type) @. v_"mt"))
         ++. s_" to "
         ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_values (Types.nominal _Type) @. v_"mt"))),
-      (_TypeTerm_nominal, l_"name" $ s_"alias for " ++. v_"name"),
+      (_TypeTerm_nominal, l_"name" $ s_"alias for " ++. apply (eliminateNominal _Name) (v_"name")),
       (_TypeTerm_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
       (_TypeTerm_record, const_ $ s_"records of a particular set of fields"),
       (_TypeTerm_set, l_"st" $ s_"sets of " ++. (_eldata describeType @. v_"st")),
