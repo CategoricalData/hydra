@@ -230,7 +230,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       (primitive name)
-      (nominalUnion testContext _Function $ Field (FieldName "primitive") $ stringValue $ showName name) -- Note: the function name is not dereferenced
+      (nominalUnion testContext _Function $ Field (FieldName "primitive") $ stringValue $ unName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
@@ -239,7 +239,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection fname)
-      (nominalUnion testContext _Function $ Field (FieldName "projection") $ stringValue $ showFieldName fname) -- Note: the field name is not dereferenced
+      (nominalUnion testContext _Function $ Field (FieldName "projection") $ stringValue $ unFieldName fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
@@ -261,7 +261,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       False
       (union $ Field (FieldName "right") $ int8Value i)
       (record [
-        Field (FieldName "context") $ stringValue $ showName untyped,
+        Field (FieldName "context") $ stringValue $ unName untyped,
         Field (FieldName "record") (record [
           Field (FieldName "left") $ optional Nothing,
           Field (FieldName "right") $ optional $ Just $ int16Value i])])
@@ -294,7 +294,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       listOfListsOfStringsType
       False
       (list $ (\l -> set $ S.fromList $ element <$> l) <$> names)
-      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList $ showName <$> l)) <$> names)
+      (list $ (\l -> list $ stringValue <$> S.toList (S.fromList $ unName <$> l)) <$> names)
 
 roundTripsPreserveSelectedTypes :: H.SpecWith ()
 roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do

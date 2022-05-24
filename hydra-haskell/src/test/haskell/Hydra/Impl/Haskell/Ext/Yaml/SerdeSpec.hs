@@ -95,7 +95,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
       (TypedData
         (Types.union [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union $ Field (FieldName "left") $ stringValue "test"))
-      ("context: " ++ show (showName untyped) ++ "\nrecord:\n  left: test\n")
+      ("context: " ++ show (unName untyped) ++ "\nrecord:\n  left: test\n")
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
 yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do

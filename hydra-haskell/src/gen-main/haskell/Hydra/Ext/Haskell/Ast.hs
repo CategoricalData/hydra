@@ -35,7 +35,7 @@ _Assertion_types = (Core.FieldName "types")
 
 -- The right-hand side of a pattern-matching alternative
 newtype CaseRhs 
-  = CaseRhs Expression
+  = CaseRhs {unCaseRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _CaseRhs = (Core.Name "hydra/ext/haskell/ast.CaseRhs")
@@ -173,7 +173,7 @@ _DeclarationHead_Application_operand = (Core.FieldName "operand")
 
 -- A 'deriving' statement
 newtype Deriving 
-  = Deriving [Name]
+  = Deriving {unDeriving :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
 _Deriving = (Core.Name "hydra/ext/haskell/ast.Deriving")
@@ -531,7 +531,7 @@ _LocalBinding_signature = (Core.FieldName "signature")
 _LocalBinding_value = (Core.FieldName "value")
 
 newtype LocalBindings 
-  = LocalBindings [LocalBinding]
+  = LocalBindings {unLocalBindings :: [LocalBinding]}
   deriving (Eq, Ord, Read, Show)
 
 _LocalBindings = (Core.Name "hydra/ext/haskell/ast.LocalBindings")
@@ -564,7 +564,7 @@ _ModuleHead_name = (Core.FieldName "name")
 _ModuleHead_exports = (Core.FieldName "exports")
 
 newtype ModuleName 
-  = ModuleName String
+  = ModuleName {unModuleName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleName = (Core.Name "hydra/ext/haskell/ast.ModuleName")
@@ -584,7 +584,7 @@ _Name_normal = (Core.FieldName "normal")
 _Name_parens = (Core.FieldName "parens")
 
 newtype NamePart 
-  = NamePart String
+  = NamePart {unNamePart :: String}
   deriving (Eq, Ord, Read, Show)
 
 _NamePart = (Core.Name "hydra/ext/haskell/ast.NamePart")
@@ -708,13 +708,13 @@ _QualifiedName_qualifiers = (Core.FieldName "qualifiers")
 _QualifiedName_unqualified = (Core.FieldName "unqualified")
 
 newtype RightHandSide 
-  = RightHandSide Expression
+  = RightHandSide {unRightHandSide :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _RightHandSide = (Core.Name "hydra/ext/haskell/ast.RightHandSide")
 
 newtype Statement 
-  = Statement Expression
+  = Statement {unStatement :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Statement = (Core.Name "hydra/ext/haskell/ast.Statement")
@@ -844,7 +844,7 @@ _ValueBinding_Simple_rhs = (Core.FieldName "rhs")
 _ValueBinding_Simple_localBindings = (Core.FieldName "localBindings")
 
 newtype Variable 
-  = Variable Name
+  = Variable {unVariable :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = (Core.Name "hydra/ext/haskell/ast.Variable")

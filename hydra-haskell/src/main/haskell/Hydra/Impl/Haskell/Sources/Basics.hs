@@ -191,7 +191,7 @@ literalVariants = standardElement hydraBasicsName "literalVariants"
 qname :: Element Meta
 qname = standardFunction hydraBasicsName "qname"
   "Construct a qualified (dot-separated) name"
-  (Types.nominal _Name) (Types.function Types.string $ Types.nominal _Name)
+  (Types.nominal _GraphName) (Types.function Types.string $ Types.nominal _Name)
   (lambda "ns" (lambda "name" (apply (primitive _strings_cat) (list [
    variable "ns", stringValue ".", variable "name"]))))
 

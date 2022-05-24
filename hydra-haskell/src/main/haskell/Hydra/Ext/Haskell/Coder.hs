@@ -85,13 +85,13 @@ constructModule cx g coders pairs = do
           TypeTermUnion fields -> do
             cons <- CM.mapM (unionCons lname) fields
             return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
-          _ -> do
-            htype <- encodeAdaptedType aliases cx t
-            if newtypesNotTypedefs
-              then do
-                let con = H.ConstructorOrdinary $ H.Constructor_Ordinary hname [htype]
-                return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [con] [deriv])
-              else return $ H.DeclarationType (H.TypeDeclaration hd htype)
+          _ -> if newtypesNotTypedefs
+            then do
+              cons <- newtypeCons el t'
+              return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv])
+            else do
+              htype <- encodeAdaptedType aliases cx t
+              return $ H.DeclarationType (H.TypeDeclaration hd htype)
         comments <- contextDescriptionOf cx $ dataMeta term
         return $ [H.DeclarationWithComments decl comments] ++ constantDecls aliases (elementName el) t
       where
@@ -107,6 +107,12 @@ constructModule cx g coders pairs = do
           ((TypeVariable h):rest) -> H.DeclarationHeadApplication $
             H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
+        newtypeCons el typ = do
+            let hname = simpleName $ newtypeAccessorName $ elementName el
+            htype <- encodeAdaptedType aliases cx typ
+            let hfield = H.Field hname htype
+            return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]
+              
         recordCons lname fields = do
             hFields <- CM.mapM toField fields
             return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
@@ -409,6 +415,9 @@ importAliasesForGraph g = fst $ L.foldl addPair (M.empty, S.empty)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
       then addPair (m, s) (name, H.ModuleName $ aliasStr ++ "_")
       else (M.insert name alias m, S.insert alias s)
+
+newtypeAccessorName :: Name -> String
+newtypeAccessorName name = "un" ++ localNameOf name
 
 rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n

@@ -5,7 +5,7 @@ import Data.Map
 import Data.Set
 
 newtype PredefString 
-  = PredefString String
+  = PredefString {unPredefString :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PredefString = (Core.Name "hydra/ext/scala/meta.PredefString")

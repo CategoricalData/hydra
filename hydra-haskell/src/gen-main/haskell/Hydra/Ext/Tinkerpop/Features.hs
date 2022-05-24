@@ -127,7 +127,7 @@ _ElementFeatures_supportsUserSuppliedIds = (Core.FieldName "supportsUserSupplied
 
 _ElementFeatures_supportsUuidIds = (Core.FieldName "supportsUuidIds")
 
--- Additional features which are needed for the complete specification of language constaints in Hydra, above and beyond TinkerPop Graph.Features
+-- Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures m 
   = ExtraFeatures {extraFeaturesSupportsMapKey :: (Core.Type m -> Bool)}
 

@@ -88,7 +88,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
             ],
 
       def "ExtraFeatures" $
-        doc ("Additional features which are needed for the complete specification of language constaints in Hydra, "
+        doc ("Additional features which are needed for the complete specification of language constraints in Hydra, "
           ++ "above and beyond TinkerPop Graph.Features") $
         universal "m" $ record [
           field "supportsMapKey" $ function (universal "m" $ core "Type") boolean],

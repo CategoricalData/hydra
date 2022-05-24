@@ -135,8 +135,8 @@ literalVariants = [
 
 -- Construct a qualified (dot-separated) name
 qname :: (Graph.GraphName -> String -> Core.Name)
-qname (Graph.GraphName ns) name = (
-  Core.Name $ Strings.cat [
+qname (Graph.GraphName ns) name = Core.Name $ (
+  Strings.cat [
     ns,
     ".",
     name])
