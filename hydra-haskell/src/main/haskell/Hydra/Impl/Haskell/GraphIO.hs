@@ -2,7 +2,8 @@ module Hydra.Impl.Haskell.GraphIO (
   generateHaskell,
   generatePdl,
   generateScala,
-  coreModules
+  coreModules,
+  testModules
 ) where
 
 import Hydra.Core
@@ -22,6 +23,7 @@ import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
+import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
@@ -74,6 +76,7 @@ coreModules = [
   hydraBasicsModule,
   adapterUtilsModule,
   haskellAstModule,
+  javaSyntaxModule,
   jsonJsonModule,
   pegasusPdlModule,
   scalaMetaModule,
@@ -82,6 +85,10 @@ coreModules = [
   tinkerpopFeaturesModule,
   tinkerpopTypedModule,
   tinkerpopV3Module]
+
+-- TODO: remove me eventually. Handy for debugging.
+testModules :: [Module Meta]
+testModules = [javaSyntaxModule]
 
 toFileName :: Bool -> String -> GraphName -> String
 toFileName caps ext (GraphName name) = L.intercalate "/" parts ++ ext
