@@ -26,6 +26,9 @@ doc s (Type term meta) = Type term $ setDescription (Just s) meta
 dataDoc :: String -> Data Meta -> Data Meta
 dataDoc s (Data term meta) = Data term $ setDescription (Just s) meta
 
+nonemptyList :: Type Meta -> Type Meta
+nonemptyList t = doc "Note: list cannot be empty" $ Types.list t
+
 project :: Type Meta -> FieldName -> Type Meta -> Data Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
