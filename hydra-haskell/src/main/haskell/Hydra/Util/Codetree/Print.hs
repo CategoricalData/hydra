@@ -4,6 +4,9 @@ import Hydra.Util.Codetree.Ast
 import qualified Data.List as L
 
 
+angleBraces :: Brackets
+angleBraces = Brackets (sym "<") (sym ">")
+
 brackets :: Brackets -> Expr -> Expr
 brackets br e = ExprBrackets $ BracketExpr br e
 
