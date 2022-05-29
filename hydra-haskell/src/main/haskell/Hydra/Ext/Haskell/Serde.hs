@@ -1,5 +1,5 @@
 module Hydra.Ext.Haskell.Serde (
-  dataGraphToHaskellString,
+  moduleToHaskellString,
 ) where
 
 import Hydra.Errors
@@ -197,9 +197,9 @@ instance ToTree H.ValueBinding where
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
   
-dataGraphToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-dataGraphToHaskellString cx g = do
-  hsmod <- dataGraphToHaskellModule cx g
+moduleToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToHaskellString cx g = do
+  hsmod <- moduleToHaskellModule cx g
   return $ printExpr $ parenthesize $ toTree hsmod
 
 writeQName :: H.QualifiedName -> String
