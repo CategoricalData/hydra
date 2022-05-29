@@ -1,5 +1,5 @@
 module Hydra.Ext.Scala.Coder (
-  dataGraphToScalaPackage,
+  moduleToScalaPackage,
   scalaLanguage,
 ) where
 
@@ -26,8 +26,8 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-dataGraphToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
-dataGraphToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedData constructModule
+moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
+moduleToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedData constructModule
 
 constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Data m) Scala.Data) -> [(Element m, TypedData m)]
   -> Result Scala.Pkg
@@ -168,7 +168,7 @@ encodeData cx term@(Data expr meta) = case expr of
       case sn of
         Nothing -> fail $ "unexpected anonymous record: " ++ show term
         Just name -> do
-          let n = typeName False name
+          let n = scalaTypeName False name
           args <- CM.mapM (encodeData cx) (fieldData <$> fields)
           return $ sapply (sname n) args
     DataTermSet s -> sapply (sname "Set") <$> CM.mapM (encodeData cx) (S.toList s)
@@ -215,7 +215,7 @@ encodeType t = case typeTerm t of
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
   TypeTermMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeTermNominal name -> pure $ stref $ typeName True name
+  TypeTermNominal name -> pure $ stref $ scalaTypeName True name
   TypeTermOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
 --  TypeTermRecord sfields ->
   TypeTermSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
@@ -241,7 +241,7 @@ nameOfType t = case typeTerm t of
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
-qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> typeName True n ++ ".") sname) ++ fname
+qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> scalaTypeName True n ++ ".") sname) ++ fname
 
 scalaLanguage :: Language m
 scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
@@ -285,6 +285,7 @@ scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints 
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
+    TypeVariantUniversal,
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
@@ -305,6 +306,13 @@ scalaReservedWords = S.fromList $ keywords ++ classNames
       "forSome", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
       "protected", "return", "sealed", "super", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
       "with", "yield"]
+
+scalaTypeName :: Bool -> Name -> String
+scalaTypeName qualify name@(Name n) = if qualify || S.member local scalaReservedWords
+    then L.intercalate "." $ Strings.splitOn "/" n
+    else local
+  where
+    (_, local) = toQname name
 
 sapply :: Scala.Data -> [Scala.Data] -> Scala.Data
 sapply fun args = Scala.DataApply $ Scala.Data_Apply fun args
@@ -346,10 +354,3 @@ stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 
 svar :: Variable -> Scala.Pat
 svar (Variable v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v
-
-typeName :: Bool -> Name -> String
-typeName qualify name@(Name n) = if qualify && S.member local scalaReservedWords
-    then L.intercalate "." $ Strings.splitOn "/" n
-    else local
-  where
-    (_, local) = toQname name

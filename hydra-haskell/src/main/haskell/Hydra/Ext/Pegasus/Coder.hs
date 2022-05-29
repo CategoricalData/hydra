@@ -1,5 +1,5 @@
 module Hydra.Ext.Pegasus.Coder (
-  dataGraphToPegasusSchema,
+  moduleToPegasusSchema,
   pegasusDataLanguage,
 ) where
 
@@ -51,8 +51,8 @@ constructModule cx g coders pairs = do
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
-dataGraphToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
-dataGraphToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeData aliases) constructModule cx g
+moduleToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
+moduleToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeData aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 

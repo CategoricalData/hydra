@@ -1,5 +1,5 @@
 module Hydra.Ext.Pegasus.Serde (
-  dataGraphToPdlString,
+  moduleToPdlString,
 ) where
 
 import Hydra.Errors
@@ -17,9 +17,9 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
-dataGraphToPdlString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-dataGraphToPdlString cx g = do
-  sf <- dataGraphToPegasusSchema cx g
+moduleToPdlString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToPdlString cx g = do
+  sf <- moduleToPegasusSchema cx g
   return $ printExpr $ parenthesize $ exprSchemaFile sf
 
 exprAnnotations :: PDL.Annotations -> Y.Maybe CT.Expr

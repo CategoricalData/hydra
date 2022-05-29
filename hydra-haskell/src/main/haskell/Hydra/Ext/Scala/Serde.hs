@@ -1,5 +1,5 @@
 module Hydra.Ext.Scala.Serde (
-  dataGraphToScalaString,
+  moduleToScalaString,
 ) where
 
 import Hydra.Errors
@@ -27,9 +27,9 @@ functionArrowOp = op "=>" (negate 1) AssociativityRight
 matchOp :: Op
 matchOp = Op (Symbol "match") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
 
-dataGraphToScalaString :: (Default a, Ord a, Read a, Show a) => Context a -> Graph a -> Qualified String
-dataGraphToScalaString cx g = do
-  pkg <- dataGraphToScalaPackage cx g
+moduleToScalaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToScalaString cx g = do
+  pkg <- moduleToScalaPackage cx g
   return $ printExpr $ parenthesize $ writePkg pkg
 
 writeCase :: Scala.Case -> CT.Expr

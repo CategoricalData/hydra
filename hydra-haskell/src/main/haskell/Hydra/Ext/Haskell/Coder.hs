@@ -1,5 +1,5 @@
 module Hydra.Ext.Haskell.Coder (
-  dataGraphToHaskellModule,
+  moduleToHaskellModule,
   haskellLanguage,
 ) where
 
@@ -34,6 +34,11 @@ newtypesNotTypedefs = True
 useCoreImport :: Bool
 useCoreImport = True
 
+moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
+moduleToHaskellModule cx g = dataGraphToExternalModule haskellLanguage (encodeData aliases) constructModule cx g
+  where
+    aliases = importAliasesForGraph g
+
 constantDecls :: M.Map GraphName H.ModuleName -> Name -> Type m -> [H.DeclarationWithComments]
 constantDecls aliases name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
@@ -64,84 +69,9 @@ constructModule cx g coders pairs = do
   where
     h (GraphName name) = name
     
-    createDeclarations pair@(el, TypedData typ term) = if typeTerm typ == TypeTermNominal _Type
-      then createTypeDeclarations el term
-      else createOtherDeclarations pair
-
-    createTypeDeclarations el term = do
-        let lname = localNameOf $ elementName el
-        let hname = simpleName lname
-        t <- decodeType cx term
-        isSer <- isSerializable
-        let deriv = H.Deriving $ if isSer
-                      then simpleName <$> ["Eq", "Ord", "Read", "Show"]
-                      else []
-        let (vars, t') = unpackUniversalType t
-        let hd = declHead hname $ L.reverse vars
-        decl <- case typeTerm t' of
-          TypeTermRecord fields -> do
-            cons <- recordCons lname fields
-            return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
-          TypeTermUnion fields -> do
-            cons <- CM.mapM (unionCons lname) fields
-            return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
-          _ -> if newtypesNotTypedefs
-            then do
-              cons <- newtypeCons el t'
-              return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv])
-            else do
-              htype <- encodeAdaptedType aliases cx t
-              return $ H.DeclarationType (H.TypeDeclaration hd htype)
-        comments <- contextDescriptionOf cx $ dataMeta term
-        return $ [H.DeclarationWithComments decl comments] ++ constantDecls aliases (elementName el) t
-      where
-        isSerializable = do
-            deps <- typeDependencies cx (elementName el)
-            let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
-            return $ not $ S.member TypeVariantFunction allVariants
-          where
-            variants typ = typeVariant <$> foldOverType TraversalOrderPre (\m t -> t:m) [] typ
-
-        declHead name vars = case vars of
-          [] -> H.DeclarationHeadSimple name
-          ((TypeVariable h):rest) -> H.DeclarationHeadApplication $
-            H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
-
-        newtypeCons el typ = do
-            let hname = simpleName $ newtypeAccessorName $ elementName el
-            htype <- encodeAdaptedType aliases cx typ
-            let hfield = H.Field hname htype
-            return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]
-              
-        recordCons lname fields = do
-            hFields <- CM.mapM toField fields
-            return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
-          where
-            toField (FieldType (FieldName fname) ftype) = do
-              let hname = simpleName $ decapitalize lname ++ capitalize fname
-              htype <- encodeAdaptedType aliases cx ftype
-              return $ H.Field hname htype
-
-        unionCons lname (FieldType (FieldName fname) ftype) = do
-          let nm = capitalize lname ++ capitalize fname
-          typeList <- if ftype {typeMeta = dflt} == Types.unit
-            then pure []
-            else do
-              htype <- encodeAdaptedType aliases cx ftype
-              return [htype]
-          return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
-
-    createOtherDeclarations (el, TypedData typ term) = do
-      let coder = Y.fromJust $ M.lookup typ coders
-      rhs <- H.RightHandSide <$> stepOut coder term
-      let hname = simpleName $ localNameOf $ elementName el
-      let pat = H.PatternApplication $ H.Pattern_Application hname []
-      htype <- encodeType aliases typ
-      let decl = H.DeclarationTypedBinding $ H.TypedBinding
-                  (H.TypeSignature hname htype)
-                  (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
-      comments <- contextDescriptionOf cx $ dataMeta term
-      return [H.DeclarationWithComments decl comments]
+    createDeclarations pair@(el, TypedData typ term) = if isType typ
+      then toTypeDeclarations aliases cx el term
+      else toDataDeclarations coders aliases cx pair
 
     aliases = importAliasesForGraph g
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
@@ -159,17 +89,92 @@ constructModule cx g coders pairs = do
           where
             toImport name = H.Import False name Nothing Nothing
 
+toDataDeclarations :: (Ord m, Show m)
+  => M.Map (Type m) (Step (Data m) H.Expression) -> M.Map GraphName H.ModuleName -> Context m
+  -> (Element m, TypedData m) -> Result [H.DeclarationWithComments]
+toDataDeclarations coders aliases cx (el, TypedData typ term) = do
+    let coder = Y.fromJust $ M.lookup typ coders
+    rhs <- H.RightHandSide <$> stepOut coder term
+    let hname = simpleName $ localNameOf $ elementName el
+    let pat = H.PatternApplication $ H.Pattern_Application hname []
+    htype <- encodeType aliases typ
+    let decl = H.DeclarationTypedBinding $ H.TypedBinding
+                (H.TypeSignature hname htype)
+                (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
+    comments <- contextDescriptionOf cx $ dataMeta term
+    return [H.DeclarationWithComments decl comments]
+  where
     rewriteValueBinding vb = case vb of
       H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
         H.RightHandSide (H.ExpressionLambda (H.Expression_Lambda vars body)) -> rewriteValueBinding $
           H.ValueBinding_Simple
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
         _ -> vb
-
-dataGraphToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
-dataGraphToHaskellModule cx g = dataGraphToExternalModule haskellLanguage (encodeData aliases) constructModule cx g
+        
+toTypeDeclarations :: (Default m, Ord m, Read m, Show m)
+  => M.Map GraphName H.ModuleName -> Context m -> Element m -> Data m -> Result [H.DeclarationWithComments]
+toTypeDeclarations aliases cx el term = do
+    let lname = localNameOf $ elementName el
+    let hname = simpleName lname
+    t <- decodeType cx term
+    isSer <- isSerializable
+    let deriv = H.Deriving $ if isSer
+                  then simpleName <$> ["Eq", "Ord", "Read", "Show"]
+                  else []
+    let (vars, t') = unpackUniversalType t
+    let hd = declHead hname $ L.reverse vars
+    decl <- case typeTerm t' of
+      TypeTermRecord fields -> do
+        cons <- recordCons lname fields
+        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
+      TypeTermUnion fields -> do
+        cons <- CM.mapM (unionCons lname) fields
+        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
+      _ -> if newtypesNotTypedefs
+        then do
+          cons <- newtypeCons el t'
+          return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv])
+        else do
+          htype <- encodeAdaptedType aliases cx t
+          return $ H.DeclarationType (H.TypeDeclaration hd htype)
+    comments <- contextDescriptionOf cx $ dataMeta term
+    return $ [H.DeclarationWithComments decl comments] ++ constantDecls aliases (elementName el) t
   where
-    aliases = importAliasesForGraph g
+    isSerializable = do
+        deps <- typeDependencies cx (elementName el)
+        let allVariants = S.fromList $ L.concat (variants <$> M.elems deps)
+        return $ not $ S.member TypeVariantFunction allVariants
+      where
+        variants typ = typeVariant <$> foldOverType TraversalOrderPre (\m t -> t:m) [] typ
+
+    declHead name vars = case vars of
+      [] -> H.DeclarationHeadSimple name
+      ((TypeVariable h):rest) -> H.DeclarationHeadApplication $
+        H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
+
+    newtypeCons el typ = do
+        let hname = simpleName $ newtypeAccessorName $ elementName el
+        htype <- encodeAdaptedType aliases cx typ
+        let hfield = H.Field hname htype
+        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]
+          
+    recordCons lname fields = do
+        hFields <- CM.mapM toField fields
+        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
+      where
+        toField (FieldType (FieldName fname) ftype) = do
+          let hname = simpleName $ decapitalize lname ++ capitalize fname
+          htype <- encodeAdaptedType aliases cx ftype
+          return $ H.Field hname htype
+
+    unionCons lname (FieldType (FieldName fname) ftype) = do
+      let nm = capitalize lname ++ capitalize fname
+      typeList <- if ftype {typeMeta = dflt} == Types.unit
+        then pure []
+        else do
+          htype <- encodeAdaptedType aliases cx ftype
+          return [htype]
+      return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
 elementReference :: M.Map GraphName H.ModuleName -> Name -> H.Name
 elementReference aliases name = case alias of

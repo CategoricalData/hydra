@@ -45,13 +45,13 @@ import qualified System.Directory as SD
 
 
 generateHaskell :: [Module Meta] -> FP.FilePath -> IO ()
-generateHaskell = generateSources (toFileName True ".hs") dataGraphToHaskellString
+generateHaskell = generateSources (toFileName True ".hs") moduleToHaskellString
 
 generatePdl :: [Module Meta] -> FP.FilePath -> IO ()
-generatePdl = generateSources (toFileName False ".pdl") dataGraphToPdlString
+generatePdl = generateSources (toFileName False ".pdl") moduleToPdlString
 
 generateScala :: [Module Meta] -> FP.FilePath -> IO ()
-generateScala = generateSources (toFileName False ".scala") dataGraphToScalaString
+generateScala = generateSources (toFileName False ".scala") moduleToScalaString
 
 generateSources :: (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String) -> [Module Meta] -> FP.FilePath -> IO ()
 generateSources toFile serialize modules baseDir = do
