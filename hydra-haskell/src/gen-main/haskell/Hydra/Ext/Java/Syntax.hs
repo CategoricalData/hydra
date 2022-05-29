@@ -245,14 +245,14 @@ _Dims = (Core.Name "hydra/ext/java/syntax.Dims")
 
 data TypeParameter 
   = TypeParameter {
-    typeParameterModifier :: [TypeParameterModifier],
+    typeParameterModifiers :: [TypeParameterModifier],
     typeParameterIdentifier :: TypeIdentifier,
     typeParameterBound :: (Maybe TypeBound)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeParameter = (Core.Name "hydra/ext/java/syntax.TypeParameter")
 
-_TypeParameter_modifier = (Core.FieldName "modifier")
+_TypeParameter_modifiers = (Core.FieldName "modifiers")
 
 _TypeParameter_identifier = (Core.FieldName "identifier")
 
@@ -348,14 +348,14 @@ _PackageName = (Core.Name "hydra/ext/java/syntax.PackageName")
 data TypeName 
   = TypeName {
     typeNameIdentifier :: TypeIdentifier,
-    typeNameName :: (Maybe PackageOrTypeName)}
+    typeNameQualifier :: (Maybe PackageOrTypeName)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeName = (Core.Name "hydra/ext/java/syntax.TypeName")
 
 _TypeName_identifier = (Core.FieldName "identifier")
 
-_TypeName_name = (Core.FieldName "name")
+_TypeName_qualifier = (Core.FieldName "qualifier")
 
 data ExpressionName 
   = ExpressionName {
@@ -601,9 +601,9 @@ data NormalClassDeclaration
   = NormalClassDeclaration {
     normalClassDeclarationModifiers :: [ClassModifier],
     normalClassDeclarationIdentifier :: TypeIdentifier,
-    normalClassDeclarationParameters :: (Maybe TypeParameters),
-    normalClassDeclarationSuperclass :: (Maybe Superclass),
-    normalClassDeclarationSuperinterfaces :: (Maybe Superinterfaces),
+    normalClassDeclarationParameters :: [TypeParameter],
+    normalClassDeclarationExtends :: (Maybe ClassType),
+    normalClassDeclarationImplements :: [InterfaceType],
     normalClassDeclarationBody :: ClassBody}
   deriving (Eq, Ord, Read, Show)
 
@@ -615,9 +615,9 @@ _NormalClassDeclaration_identifier = (Core.FieldName "identifier")
 
 _NormalClassDeclaration_parameters = (Core.FieldName "parameters")
 
-_NormalClassDeclaration_superclass = (Core.FieldName "superclass")
+_NormalClassDeclaration_extends = (Core.FieldName "extends")
 
-_NormalClassDeclaration_superinterfaces = (Core.FieldName "superinterfaces")
+_NormalClassDeclaration_implements = (Core.FieldName "implements")
 
 _NormalClassDeclaration_body = (Core.FieldName "body")
 
@@ -650,28 +650,8 @@ _ClassModifier_final = (Core.FieldName "final")
 
 _ClassModifier_strictfp = (Core.FieldName "strictfp")
 
--- Note: list cannot be empty
-newtype TypeParameters 
-  = TypeParameters {unTypeParameters :: [TypeParameter]}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeParameters = (Core.Name "hydra/ext/java/syntax.TypeParameters")
-
-newtype Superclass 
-  = Superclass {unSuperclass :: ClassType}
-  deriving (Eq, Ord, Read, Show)
-
-_Superclass = (Core.Name "hydra/ext/java/syntax.Superclass")
-
--- Note: list cannot be empty
-newtype Superinterfaces 
-  = Superinterfaces {unSuperinterfaces :: [InterfaceType]}
-  deriving (Eq, Ord, Read, Show)
-
-_Superinterfaces = (Core.Name "hydra/ext/java/syntax.Superinterfaces")
-
 newtype ClassBody 
-  = ClassBody {unClassBody :: [[ClassBodyDeclaration]]}
+  = ClassBody {unClassBody :: [ClassBodyDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassBody = (Core.Name "hydra/ext/java/syntax.ClassBody")
@@ -958,7 +938,7 @@ data MethodHeader
     methodHeaderDeclarator :: MethodDeclarator,
     methodHeaderThrows :: (Maybe Throws),
     methodHeaderAnnotations :: [Annotation],
-    methodHeaderParameters :: (Maybe TypeParameters)}
+    methodHeaderParameters :: [TypeParameter]}
   deriving (Eq, Ord, Read, Show)
 
 _MethodHeader = (Core.Name "hydra/ext/java/syntax.MethodHeader")
@@ -1140,7 +1120,7 @@ _ConstructorModifier_private = (Core.FieldName "private")
 
 data ConstructorDeclarator 
   = ConstructorDeclarator {
-    constructorDeclaratorParameters :: (Maybe TypeParameters),
+    constructorDeclaratorParameters :: [TypeParameter],
     constructorDeclaratorName :: SimpleTypeName,
     constructorDeclaratorReceiverParameter :: (Maybe ReceiverParameter),
     constructorDeclaratorFormalParameters :: [FormalParameter]}
@@ -1213,7 +1193,7 @@ data EnumDeclaration
   = EnumDeclaration {
     enumDeclarationModifiers :: [ClassModifier],
     enumDeclarationIdentifier :: TypeIdentifier,
-    enumDeclarationSuperinterfaces :: (Maybe Superinterfaces),
+    enumDeclarationImplements :: [InterfaceType],
     enumDeclarationBody :: EnumBody}
   deriving (Eq, Ord, Read, Show)
 
@@ -1223,7 +1203,7 @@ _EnumDeclaration_modifiers = (Core.FieldName "modifiers")
 
 _EnumDeclaration_identifier = (Core.FieldName "identifier")
 
-_EnumDeclaration_superinterfaces = (Core.FieldName "superinterfaces")
+_EnumDeclaration_implements = (Core.FieldName "implements")
 
 _EnumDeclaration_body = (Core.FieldName "body")
 
@@ -1552,7 +1532,7 @@ _ElementValue_elementValueArrayInitializer = (Core.FieldName "elementValueArrayI
 _ElementValue_annotation = (Core.FieldName "annotation")
 
 newtype ElementValueArrayInitializer 
-  = ElementValueArrayInitializer {unElementValueArrayInitializer :: [[ElementValue]]}
+  = ElementValueArrayInitializer {unElementValueArrayInitializer :: [ElementValue]}
   deriving (Eq, Ord, Read, Show)
 
 _ElementValueArrayInitializer = (Core.Name "hydra/ext/java/syntax.ElementValueArrayInitializer")
