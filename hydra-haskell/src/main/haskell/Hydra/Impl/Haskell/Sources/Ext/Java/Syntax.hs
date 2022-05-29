@@ -79,8 +79,8 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --PrimitiveType:
       def "PrimitiveTypeWithAnnotations" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "variant" $ java "PrimitiveType"],
+        field "type" $ java "PrimitiveType",
+        field "annotations" $ list $ java "Annotation"],
       def "PrimitiveType" $ union [
 --  {Annotation} NumericType
         field "numeric" $ java "NumericType",
@@ -125,9 +125,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ClassType:
       def "ClassType" $ record [
         field "annotations" $ list $ java "Annotation",
+        field "qualifier" $ java "ClassTypeQualifier",
         field "identifier" $ java "TypeIdentifier",
-        field "arguments" $ list $ java "TypeArgument",
-        field "qualifier" $ java "ClassTypeQualifier"],
+        field "arguments" $ list $ java "TypeArgument"],
       def "ClassTypeQualifier" $ union [
 --  {Annotation} TypeIdentifier [TypeArguments]
         field "none" unit,
@@ -477,70 +477,36 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "arrayInitializer" $ java "ArrayInitializer"],
 
 --UnannType:
-      def "UnannType" $ union [
 --  UnannPrimitiveType
-        field "primitive" $ java "UnannPrimitiveType",
 --  UnannReferenceType
-        field "reference" $ java "UnannReferenceType"],
-
+      def "UnannType" $
+        doc "A Type which does not allow annotations" $
+        java "Type",
 --UnannPrimitiveType:
-      def "UnannPrimitiveType" $ union [
 --  NumericType
-        field "numeric" $ java "NumericType",
 --  boolean
-        field "boolean" unit],
-
 --UnannReferenceType:
-      def "UnannReferenceType" $ union [
 --  UnannClassOrInterfaceType
-        field "classOrInterface" $ java "UnannClassOrInterfaceType",
 --  UnannTypeVariable
-        field "typeVariable" $ java "UnannTypeVariable",
 --  UnannArrayType
-        field "arrayType" $ java "UnannArrayType"],
-
 --UnannClassOrInterfaceType:
-      def "UnannClassOrInterfaceType" $ union [
 --  UnannClassType
-        field "class" $ java "UnannClassType",
 --  UnannInterfaceType
-        field "interface" $ java "UnannInterfaceType"],
-
 --UnannClassType:
-      def "UnannClassType" $ record [
-        field "identifier" $ java "TypeIdentifier",
-        field "arguments" $ list $ java "TypeArgument",
-        field "annotation" $
-          doc "Note: simple unannotated class types cannot have annotations" $
-          list $ java "Annotation",
-        field "variant" $ java "UnannClassTypeQualifier"],
-      def "UnannClassTypeQualifier" $ union [
 --  TypeIdentifier [TypeArguments]
-        field "simple" unit,
 --  PackageName . {Annotation} TypeIdentifier [TypeArguments]
-        field "package" $ java "PackageName",
 --  UnannClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
-        field "classOrInterface" $ java "UnannClassOrInterfaceType"],
-
+      def "UnannClassType" $
+        doc "A ClassType which does not allow annotations" $
+        java "ClassType",
 --UnannInterfaceType:
-      def "UnannInterfaceType" $ java "UnannClassType",
 --  UnannClassType
-
 --UnannTypeVariable:
-      def "UnannTypeVariable" $ java "TypeIdentifier",
 --  TypeIdentifier
-
 --UnannArrayType:
-      def "UnannArrayType" $ record [
-        field "dims" $ java "Dims",
-        field "variant" $ java "UnannArrayType.Variant"],
-      def "UnannArrayType.Variant" $ union [
 --  UnannPrimitiveType Dims
-        field "primitive" $ java "UnannPrimitiveType",
 --  UnannClassOrInterfaceType Dims
-        field "classOrInterface" $ java "UnannClassOrInterfaceType",
 --  UnannTypeVariable Dims
-        field "variable" $ java "UnannTypeVariable"],
 
 --MethodDeclaration:
 --  {MethodModifier} MethodHeader MethodBody
@@ -586,7 +552,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
       def "MethodDeclarator" $ record [
         field "identifier" $ java "Identifier",
-        field "reseiverParameter" $ optional $ java "ReceiverParameter",
+        field "receiverParameter" $ optional $ java "ReceiverParameter",
         field "formalParameters" $ nonemptyList $ java "FormalParameter"],
 
 --ReceiverParameter:
