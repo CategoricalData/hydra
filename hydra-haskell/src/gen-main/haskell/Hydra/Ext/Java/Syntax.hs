@@ -61,7 +61,7 @@ newtype StringLiteral
 _StringLiteral = (Core.Name "hydra/ext/java/syntax.StringLiteral")
 
 data Type 
-  = TypePrimitive PrimitiveType
+  = TypePrimitive PrimitiveTypeWithAnnotations
   | TypeReference ReferenceType
   deriving (Eq, Ord, Read, Show)
 
@@ -71,28 +71,28 @@ _Type_primitive = (Core.FieldName "primitive")
 
 _Type_reference = (Core.FieldName "reference")
 
+data PrimitiveTypeWithAnnotations 
+  = PrimitiveTypeWithAnnotations {
+    primitiveTypeWithAnnotationsAnnotations :: [Annotation],
+    primitiveTypeWithAnnotationsVariant :: PrimitiveType}
+  deriving (Eq, Ord, Read, Show)
+
+_PrimitiveTypeWithAnnotations = (Core.Name "hydra/ext/java/syntax.PrimitiveTypeWithAnnotations")
+
+_PrimitiveTypeWithAnnotations_annotations = (Core.FieldName "annotations")
+
+_PrimitiveTypeWithAnnotations_variant = (Core.FieldName "variant")
+
 data PrimitiveType 
-  = PrimitiveType {
-    primitiveTypeAnnotations :: [Annotation],
-    primitiveTypeVariant :: PrimitiveType_Variant}
+  = PrimitiveTypeNumeric NumericType
+  | PrimitiveTypeBoolean 
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveType = (Core.Name "hydra/ext/java/syntax.PrimitiveType")
 
-_PrimitiveType_annotations = (Core.FieldName "annotations")
+_PrimitiveType_numeric = (Core.FieldName "numeric")
 
-_PrimitiveType_variant = (Core.FieldName "variant")
-
-data PrimitiveType_Variant 
-  = PrimitiveType_VariantNumeric NumericType
-  | PrimitiveType_VariantBoolean 
-  deriving (Eq, Ord, Read, Show)
-
-_PrimitiveType_Variant = (Core.Name "hydra/ext/java/syntax.PrimitiveType.Variant")
-
-_PrimitiveType_Variant_numeric = (Core.FieldName "numeric")
-
-_PrimitiveType_Variant_boolean = (Core.FieldName "boolean")
+_PrimitiveType_boolean = (Core.FieldName "boolean")
 
 data NumericType 
   = NumericTypeIntegral IntegralType
@@ -166,7 +166,7 @@ data ClassType
     classTypeAnnotations :: [Annotation],
     classTypeIdentifier :: TypeIdentifier,
     classTypeArguments :: [TypeArgument],
-    classTypeVariant :: ClassType_Variant}
+    classTypeQualifier :: ClassTypeQualifier}
   deriving (Eq, Ord, Read, Show)
 
 _ClassType = (Core.Name "hydra/ext/java/syntax.ClassType")
@@ -177,21 +177,21 @@ _ClassType_identifier = (Core.FieldName "identifier")
 
 _ClassType_arguments = (Core.FieldName "arguments")
 
-_ClassType_variant = (Core.FieldName "variant")
+_ClassType_qualifier = (Core.FieldName "qualifier")
 
-data ClassType_Variant 
-  = ClassType_VariantSimple 
-  | ClassType_VariantPackage PackageName
-  | ClassType_VariantClassOrInterface ClassOrInterfaceType
+data ClassTypeQualifier 
+  = ClassTypeQualifierNone 
+  | ClassTypeQualifierPackage PackageName
+  | ClassTypeQualifierParent ClassOrInterfaceType
   deriving (Eq, Ord, Read, Show)
 
-_ClassType_Variant = (Core.Name "hydra/ext/java/syntax.ClassType.Variant")
+_ClassTypeQualifier = (Core.Name "hydra/ext/java/syntax.ClassTypeQualifier")
 
-_ClassType_Variant_simple = (Core.FieldName "simple")
+_ClassTypeQualifier_none = (Core.FieldName "none")
 
-_ClassType_Variant_package = (Core.FieldName "package")
+_ClassTypeQualifier_package = (Core.FieldName "package")
 
-_ClassType_Variant_classOrInterface = (Core.FieldName "classOrInterface")
+_ClassTypeQualifier_parent = (Core.FieldName "parent")
 
 newtype InterfaceType 
   = InterfaceType {unInterfaceType :: ClassType}
@@ -224,10 +224,9 @@ _ArrayType_dims = (Core.FieldName "dims")
 _ArrayType_variant = (Core.FieldName "variant")
 
 data ArrayType_Variant 
-  = ArrayType_Variant {
-    arrayType_VariantPrimitive :: PrimitiveType,
-    arrayType_VariantClassOrInterface :: ClassOrInterfaceType,
-    arrayType_VariantVariable :: TypeVariable}
+  = ArrayType_VariantPrimitive PrimitiveTypeWithAnnotations
+  | ArrayType_VariantClassOrInterface ClassOrInterfaceType
+  | ArrayType_VariantVariable TypeVariable
   deriving (Eq, Ord, Read, Show)
 
 _ArrayType_Variant = (Core.Name "hydra/ext/java/syntax.ArrayType.Variant")
@@ -842,7 +841,7 @@ data UnannClassType
     unannClassTypeIdentifier :: TypeIdentifier,
     unannClassTypeArguments :: [TypeArgument],
     unannClassTypeAnnotation :: [Annotation],
-    unannClassTypeVariant :: UnannClassType_Variant}
+    unannClassTypeVariant :: UnannClassTypeQualifier}
   deriving (Eq, Ord, Read, Show)
 
 _UnannClassType = (Core.Name "hydra/ext/java/syntax.UnannClassType")
@@ -855,19 +854,19 @@ _UnannClassType_annotation = (Core.FieldName "annotation")
 
 _UnannClassType_variant = (Core.FieldName "variant")
 
-data UnannClassType_Variant 
-  = UnannClassType_VariantSimple 
-  | UnannClassType_VariantPackage PackageName
-  | UnannClassType_VariantClassOrInterface UnannClassOrInterfaceType
+data UnannClassTypeQualifier 
+  = UnannClassTypeQualifierSimple 
+  | UnannClassTypeQualifierPackage PackageName
+  | UnannClassTypeQualifierClassOrInterface UnannClassOrInterfaceType
   deriving (Eq, Ord, Read, Show)
 
-_UnannClassType_Variant = (Core.Name "hydra/ext/java/syntax.UnannClassType.Variant")
+_UnannClassTypeQualifier = (Core.Name "hydra/ext/java/syntax.UnannClassTypeQualifier")
 
-_UnannClassType_Variant_simple = (Core.FieldName "simple")
+_UnannClassTypeQualifier_simple = (Core.FieldName "simple")
 
-_UnannClassType_Variant_package = (Core.FieldName "package")
+_UnannClassTypeQualifier_package = (Core.FieldName "package")
 
-_UnannClassType_Variant_classOrInterface = (Core.FieldName "classOrInterface")
+_UnannClassTypeQualifier_classOrInterface = (Core.FieldName "classOrInterface")
 
 newtype UnannInterfaceType 
   = UnannInterfaceType {unUnannInterfaceType :: UnannClassType}
@@ -2650,7 +2649,7 @@ _ArrayCreationExpression_classOrInterfaceArray = (Core.FieldName "classOrInterfa
 
 data ArrayCreationExpression_Primitive 
   = ArrayCreationExpression_Primitive {
-    arrayCreationExpression_PrimitiveType :: PrimitiveType,
+    arrayCreationExpression_PrimitiveType :: PrimitiveTypeWithAnnotations,
     arrayCreationExpression_PrimitiveDimExprs :: [DimExpr],
     arrayCreationExpression_PrimitiveDims :: (Maybe Dims)}
   deriving (Eq, Ord, Read, Show)
@@ -2680,7 +2679,7 @@ _ArrayCreationExpression_ClassOrInterface_dims = (Core.FieldName "dims")
 
 data ArrayCreationExpression_PrimitiveArray 
   = ArrayCreationExpression_PrimitiveArray {
-    arrayCreationExpression_PrimitiveArrayType :: PrimitiveType,
+    arrayCreationExpression_PrimitiveArrayType :: PrimitiveTypeWithAnnotations,
     arrayCreationExpression_PrimitiveArrayDims :: [Dims],
     arrayCreationExpression_PrimitiveArrayArray :: ArrayInitializer}
   deriving (Eq, Ord, Read, Show)
@@ -3254,7 +3253,7 @@ _CastExpression_lambda = (Core.FieldName "lambda")
 
 data CastExpression_Primitive 
   = CastExpression_Primitive {
-    castExpression_PrimitiveType :: (Maybe PrimitiveType),
+    castExpression_PrimitiveType :: (Maybe PrimitiveTypeWithAnnotations),
     castExpression_PrimitiveExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
