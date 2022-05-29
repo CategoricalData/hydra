@@ -73,15 +73,15 @@ _Type_reference = (Core.FieldName "reference")
 
 data PrimitiveTypeWithAnnotations 
   = PrimitiveTypeWithAnnotations {
-    primitiveTypeWithAnnotationsAnnotations :: [Annotation],
-    primitiveTypeWithAnnotationsVariant :: PrimitiveType}
+    primitiveTypeWithAnnotationsType :: PrimitiveType,
+    primitiveTypeWithAnnotationsAnnotations :: [Annotation]}
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveTypeWithAnnotations = (Core.Name "hydra/ext/java/syntax.PrimitiveTypeWithAnnotations")
 
-_PrimitiveTypeWithAnnotations_annotations = (Core.FieldName "annotations")
+_PrimitiveTypeWithAnnotations_type = (Core.FieldName "type")
 
-_PrimitiveTypeWithAnnotations_variant = (Core.FieldName "variant")
+_PrimitiveTypeWithAnnotations_annotations = (Core.FieldName "annotations")
 
 data PrimitiveType 
   = PrimitiveTypeNumeric NumericType
@@ -164,20 +164,20 @@ _ClassOrInterfaceType_interface = (Core.FieldName "interface")
 data ClassType 
   = ClassType {
     classTypeAnnotations :: [Annotation],
+    classTypeQualifier :: ClassTypeQualifier,
     classTypeIdentifier :: TypeIdentifier,
-    classTypeArguments :: [TypeArgument],
-    classTypeQualifier :: ClassTypeQualifier}
+    classTypeArguments :: [TypeArgument]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassType = (Core.Name "hydra/ext/java/syntax.ClassType")
 
 _ClassType_annotations = (Core.FieldName "annotations")
 
+_ClassType_qualifier = (Core.FieldName "qualifier")
+
 _ClassType_identifier = (Core.FieldName "identifier")
 
 _ClassType_arguments = (Core.FieldName "arguments")
-
-_ClassType_qualifier = (Core.FieldName "qualifier")
 
 data ClassTypeQualifier 
   = ClassTypeQualifierNone 
@@ -769,122 +769,19 @@ _VariableInitializer_expression = (Core.FieldName "expression")
 
 _VariableInitializer_arrayInitializer = (Core.FieldName "arrayInitializer")
 
-data UnannType 
-  = UnannTypePrimitive UnannPrimitiveType
-  | UnannTypeReference UnannReferenceType
+-- A Type which does not allow annotations
+newtype UnannType 
+  = UnannType {unUnannType :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _UnannType = (Core.Name "hydra/ext/java/syntax.UnannType")
 
-_UnannType_primitive = (Core.FieldName "primitive")
-
-_UnannType_reference = (Core.FieldName "reference")
-
-data UnannPrimitiveType 
-  = UnannPrimitiveTypeNumeric NumericType
-  | UnannPrimitiveTypeBoolean 
-  deriving (Eq, Ord, Read, Show)
-
-_UnannPrimitiveType = (Core.Name "hydra/ext/java/syntax.UnannPrimitiveType")
-
-_UnannPrimitiveType_numeric = (Core.FieldName "numeric")
-
-_UnannPrimitiveType_boolean = (Core.FieldName "boolean")
-
-data UnannReferenceType 
-  = UnannReferenceTypeClassOrInterface UnannClassOrInterfaceType
-  | UnannReferenceTypeTypeVariable UnannTypeVariable
-  | UnannReferenceTypeArrayType UnannArrayType
-  deriving (Eq, Ord, Read, Show)
-
-_UnannReferenceType = (Core.Name "hydra/ext/java/syntax.UnannReferenceType")
-
-_UnannReferenceType_classOrInterface = (Core.FieldName "classOrInterface")
-
-_UnannReferenceType_typeVariable = (Core.FieldName "typeVariable")
-
-_UnannReferenceType_arrayType = (Core.FieldName "arrayType")
-
-data UnannClassOrInterfaceType 
-  = UnannClassOrInterfaceTypeClass UnannClassType
-  | UnannClassOrInterfaceTypeInterface UnannInterfaceType
-  deriving (Eq, Ord, Read, Show)
-
-_UnannClassOrInterfaceType = (Core.Name "hydra/ext/java/syntax.UnannClassOrInterfaceType")
-
-_UnannClassOrInterfaceType_class = (Core.FieldName "class")
-
-_UnannClassOrInterfaceType_interface = (Core.FieldName "interface")
-
-data UnannClassType 
-  = UnannClassType {
-    unannClassTypeIdentifier :: TypeIdentifier,
-    unannClassTypeArguments :: [TypeArgument],
-    unannClassTypeAnnotation :: [Annotation],
-    unannClassTypeVariant :: UnannClassTypeQualifier}
+-- A ClassType which does not allow annotations
+newtype UnannClassType 
+  = UnannClassType {unUnannClassType :: ClassType}
   deriving (Eq, Ord, Read, Show)
 
 _UnannClassType = (Core.Name "hydra/ext/java/syntax.UnannClassType")
-
-_UnannClassType_identifier = (Core.FieldName "identifier")
-
-_UnannClassType_arguments = (Core.FieldName "arguments")
-
-_UnannClassType_annotation = (Core.FieldName "annotation")
-
-_UnannClassType_variant = (Core.FieldName "variant")
-
-data UnannClassTypeQualifier 
-  = UnannClassTypeQualifierSimple 
-  | UnannClassTypeQualifierPackage PackageName
-  | UnannClassTypeQualifierClassOrInterface UnannClassOrInterfaceType
-  deriving (Eq, Ord, Read, Show)
-
-_UnannClassTypeQualifier = (Core.Name "hydra/ext/java/syntax.UnannClassTypeQualifier")
-
-_UnannClassTypeQualifier_simple = (Core.FieldName "simple")
-
-_UnannClassTypeQualifier_package = (Core.FieldName "package")
-
-_UnannClassTypeQualifier_classOrInterface = (Core.FieldName "classOrInterface")
-
-newtype UnannInterfaceType 
-  = UnannInterfaceType {unUnannInterfaceType :: UnannClassType}
-  deriving (Eq, Ord, Read, Show)
-
-_UnannInterfaceType = (Core.Name "hydra/ext/java/syntax.UnannInterfaceType")
-
-newtype UnannTypeVariable 
-  = UnannTypeVariable {unUnannTypeVariable :: TypeIdentifier}
-  deriving (Eq, Ord, Read, Show)
-
-_UnannTypeVariable = (Core.Name "hydra/ext/java/syntax.UnannTypeVariable")
-
-data UnannArrayType 
-  = UnannArrayType {
-    unannArrayTypeDims :: Dims,
-    unannArrayTypeVariant :: UnannArrayType_Variant}
-  deriving (Eq, Ord, Read, Show)
-
-_UnannArrayType = (Core.Name "hydra/ext/java/syntax.UnannArrayType")
-
-_UnannArrayType_dims = (Core.FieldName "dims")
-
-_UnannArrayType_variant = (Core.FieldName "variant")
-
-data UnannArrayType_Variant 
-  = UnannArrayType_VariantPrimitive UnannPrimitiveType
-  | UnannArrayType_VariantClassOrInterface UnannClassOrInterfaceType
-  | UnannArrayType_VariantVariable UnannTypeVariable
-  deriving (Eq, Ord, Read, Show)
-
-_UnannArrayType_Variant = (Core.Name "hydra/ext/java/syntax.UnannArrayType.Variant")
-
-_UnannArrayType_Variant_primitive = (Core.FieldName "primitive")
-
-_UnannArrayType_Variant_classOrInterface = (Core.FieldName "classOrInterface")
-
-_UnannArrayType_Variant_variable = (Core.FieldName "variable")
 
 data MethodDeclaration 
   = MethodDeclaration {
@@ -973,7 +870,7 @@ _MethodDeclarator = (Core.Name "hydra/ext/java/syntax.MethodDeclarator")
 
 _MethodDeclarator_identifier = (Core.FieldName "identifier")
 
-_MethodDeclarator_reseiverParameter = (Core.FieldName "reseiverParameter")
+_MethodDeclarator_reseiverParameter = (Core.FieldName "receiverParameter")
 
 _MethodDeclarator_formalParameters = (Core.FieldName "formalParameters")
 
