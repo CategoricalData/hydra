@@ -165,7 +165,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeParameter:
 --  {TypeParameterModifier} TypeIdentifier [TypeBound]
       def "TypeParameter" $ record [
-        field "modifier" $ list $ java "TypeParameterModifier",
+        field "modifiers" $ list $ java "TypeParameterModifier",
         field "identifier" $ java "TypeIdentifier",
         field "bound" $ optional $ java "TypeBound"],
 
@@ -231,7 +231,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  TypeIdentifier
         field "identifier" $ java "TypeIdentifier",
 --  PackageOrTypeName . TypeIdentifier
-        field "name" $ optional $ java "PackageOrTypeName"],
+        field "qualifier" $ optional $ java "PackageOrTypeName"],
 
 --ExpressionName:
       def "ExpressionName" $ record [
@@ -377,9 +377,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
       def "NormalClassDeclaration" $ record [
         field "modifiers" $ list $ java "ClassModifier",
         field "identifier" $ java "TypeIdentifier",
-        field "parameters" $ optional $ java "TypeParameters",
-        field "superclass" $ optional $ java "Superclass",
-        field "superinterfaces" $ optional $ java "Superinterfaces",
+        field "parameters" $ list $ java "TypeParameter",
+        field "extends" $ optional $ java "ClassType",
+        field "implements" $ list $ java "InterfaceType",
         field "body" $ java "ClassBody"],
 
 --ClassModifier:
@@ -397,24 +397,19 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "strictfp" unit],
 
 --TypeParameters:
-      def "TypeParameters" $ nonemptyList $ java "TypeParameter",
 --  < TypeParameterList >
 --TypeParameterList:
 --  TypeParameter {, TypeParameter}
-
 --Superclass:
 --  extends ClassType
-      def "Superclass" $ java "ClassType",
-
 --Superinterfaces:
-      def "Superinterfaces" $ nonemptyList $ java "InterfaceType",
 --  implements InterfaceTypeList
 --InterfaceTypeList:
 --  InterfaceType {, InterfaceType}
 
 --ClassBody:
 --  { {ClassBodyDeclaration} }
-      def "ClassBody" $ list $ list $ java "ClassBodyDeclaration",
+      def "ClassBody" $ list $ java "ClassBodyDeclaration",
 
 --ClassBodyDeclaration:
       def "ClassBodyDeclaration" $ union [
@@ -578,7 +573,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "annotations" $
           doc "Note: simple method headers cannot have annotations" $
           list $ java "Annotation",
-        field "parameters" $ optional $ java "TypeParameters"],
+        field "parameters" $ list $ java "TypeParameter"],
 
 --Result:
       def "Result" $ union [
@@ -675,7 +670,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ConstructorDeclarator:
 --  [TypeParameters] SimpleTypeName ( [ReceiverParameter ,] [FormalParameterList] )
       def "ConstructorDeclarator" $ record [
-        field "parameters" $ optional $ java "TypeParameters",
+        field "parameters" $ list $ java "TypeParameter",
         field "name" $ java "SimpleTypeName",
         field "receiverParameter" $ optional $ java "ReceiverParameter",
         field "formalParameters" $ nonemptyList $ java "FormalParameter"],
@@ -710,7 +705,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
       def "EnumDeclaration" $ record [
         field "modifiers" $ list $ java "ClassModifier",
         field "identifier" $ java "TypeIdentifier",
-        field "superinterfaces" $ optional $ java "Superinterfaces",
+        field "implements" $ list $ java "InterfaceType",
         field "body" $ java "EnumBody"],
 
 --EnumBody:
@@ -902,7 +897,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --ElementValueArrayInitializer:
 --  { [ElementValueList] [,] }
-      def "ElementValueArrayInitializer" $ list $ list $ java "ElementValue",
+      def "ElementValueArrayInitializer" $ list $ java "ElementValue",
 --ElementValueList:
 --  ElementValue {, ElementValue}
 
