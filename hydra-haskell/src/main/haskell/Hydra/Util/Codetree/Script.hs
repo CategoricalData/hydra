@@ -11,6 +11,11 @@ import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Print
 
 
+angleBracesList :: Bool -> [Expr] -> Expr
+angleBracesList newlines els = case els of
+  [] -> cst "<>"
+  _ -> brackets angleBraces $ commaSep newlines els
+
 bracketList :: Bool -> [Expr] -> Expr
 bracketList newlines els = case els of
   [] -> cst "[]"
@@ -19,24 +24,30 @@ bracketList newlines els = case els of
 commaOp :: Bool -> Op
 commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
 
-curlyBracesList :: Bool -> [Expr] -> Expr
-curlyBracesList newlines els = case els of
-  [] -> cst "{}"
-  _ -> brackets curlyBraces $ commaSep newlines els
-
-ifx :: Op -> Expr -> Expr -> Expr
-ifx op lhs rhs = ExprOp $ OpExpr op lhs rhs
-
 commaSep :: Bool -> [Expr] -> Expr
 commaSep newlines l = case l of
   [x] -> x
   (h:r) -> ifx (commaOp newlines) h $ commaSep newlines r
 
+curlyBlock :: Expr -> Expr
+curlyBlock e = curlyBracesList True [e]
+
+curlyBracesList :: Bool -> [Expr] -> Expr
+curlyBracesList newlines els = case els of
+  [] -> cst "{}"
+  _ -> brackets curlyBraces $ commaSep newlines els
+
 cst :: String -> Expr
 cst = ExprConst . Symbol
 
+dotSep :: [Expr] -> Expr
+dotSep = sep $ Op (sym ".") (Padding WsNone WsNone) (Precedence 0) AssociativityNone
+
 doubleNewlineSep :: [Expr] -> Expr
 doubleNewlineSep = sep $ Op (sym "") (Padding WsBreak WsBreak) (Precedence 0) AssociativityNone
+
+ifx :: Op -> Expr -> Expr -> Expr
+ifx op lhs rhs = ExprOp $ OpExpr op lhs rhs
 
 indentBlock :: Expr -> [Expr] -> Expr
 indentBlock head els = ifx idtOp head $ newlineSep els
