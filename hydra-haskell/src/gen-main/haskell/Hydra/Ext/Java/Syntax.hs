@@ -832,37 +832,40 @@ _MethodModifier_strictfb = (Core.FieldName "strictfb")
 
 data MethodHeader 
   = MethodHeader {
-    methodHeaderDeclarator :: MethodDeclarator,
-    methodHeaderThrows :: (Maybe Throws),
+    methodHeaderParameters :: [TypeParameter],
     methodHeaderAnnotations :: [Annotation],
-    methodHeaderParameters :: [TypeParameter]}
+    methodHeaderResult :: Result,
+    methodHeaderDeclarator :: MethodDeclarator,
+    methodHeaderThrows :: (Maybe Throws)}
   deriving (Eq, Ord, Read, Show)
 
 _MethodHeader = (Core.Name "hydra/ext/java/syntax.MethodHeader")
+
+_MethodHeader_parameters = (Core.FieldName "parameters")
+
+_MethodHeader_annotations = (Core.FieldName "annotations")
+
+_MethodHeader_result = (Core.FieldName "result")
 
 _MethodHeader_declarator = (Core.FieldName "declarator")
 
 _MethodHeader_throws = (Core.FieldName "throws")
 
-_MethodHeader_annotations = (Core.FieldName "annotations")
-
-_MethodHeader_parameters = (Core.FieldName "parameters")
-
 data Result 
-  = ResultUnann UnannType
+  = ResultType UnannType
   | ResultVoid 
   deriving (Eq, Ord, Read, Show)
 
 _Result = (Core.Name "hydra/ext/java/syntax.Result")
 
-_Result_unann = (Core.FieldName "unann")
+_Result_type = (Core.FieldName "type")
 
 _Result_void = (Core.FieldName "void")
 
 data MethodDeclarator 
   = MethodDeclarator {
     methodDeclaratorIdentifier :: Identifier,
-    methodDeclaratorReseiverParameter :: (Maybe ReceiverParameter),
+    methodDeclaratorReceiverParameter :: (Maybe ReceiverParameter),
     methodDeclaratorFormalParameters :: [FormalParameter]}
   deriving (Eq, Ord, Read, Show)
 
@@ -870,7 +873,7 @@ _MethodDeclarator = (Core.Name "hydra/ext/java/syntax.MethodDeclarator")
 
 _MethodDeclarator_identifier = (Core.FieldName "identifier")
 
-_MethodDeclarator_reseiverParameter = (Core.FieldName "receiverParameter")
+_MethodDeclarator_receiverParameter = (Core.FieldName "receiverParameter")
 
 _MethodDeclarator_formalParameters = (Core.FieldName "formalParameters")
 
@@ -890,30 +893,30 @@ _ReceiverParameter_unannType = (Core.FieldName "unannType")
 _ReceiverParameter_identifier = (Core.FieldName "identifier")
 
 data FormalParameter 
-  = FormalParameterUnann FormalParameter_Unann
+  = FormalParameterSimple FormalParameter_Simple
   | FormalParameterVariableArity VariableArityParameter
   deriving (Eq, Ord, Read, Show)
 
 _FormalParameter = (Core.Name "hydra/ext/java/syntax.FormalParameter")
 
-_FormalParameter_unann = (Core.FieldName "unann")
+_FormalParameter_simple = (Core.FieldName "simple")
 
 _FormalParameter_variableArity = (Core.FieldName "variableArity")
 
-data FormalParameter_Unann 
-  = FormalParameter_Unann {
-    formalParameter_UnannModifiers :: [VariableModifier],
-    formalParameter_UnannType :: UnannType,
-    formalParameter_UnannVariable :: VariableDeclaratorId}
+data FormalParameter_Simple 
+  = FormalParameter_Simple {
+    formalParameter_SimpleModifiers :: [VariableModifier],
+    formalParameter_SimpleType :: UnannType,
+    formalParameter_SimpleId :: VariableDeclaratorId}
   deriving (Eq, Ord, Read, Show)
 
-_FormalParameter_Unann = (Core.Name "hydra/ext/java/syntax.FormalParameter.Unann")
+_FormalParameter_Simple = (Core.Name "hydra/ext/java/syntax.FormalParameter.Simple")
 
-_FormalParameter_Unann_modifiers = (Core.FieldName "modifiers")
+_FormalParameter_Simple_modifiers = (Core.FieldName "modifiers")
 
-_FormalParameter_Unann_type = (Core.FieldName "type")
+_FormalParameter_Simple_type = (Core.FieldName "type")
 
-_FormalParameter_Unann_variable = (Core.FieldName "variable")
+_FormalParameter_Simple_id = (Core.FieldName "id")
 
 data VariableArityParameter 
   = VariableArityParameter {
