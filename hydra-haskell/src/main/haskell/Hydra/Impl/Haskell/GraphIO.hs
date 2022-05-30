@@ -1,9 +1,12 @@
 module Hydra.Impl.Haskell.GraphIO (
   generateHaskell,
+  generateJava,
   generatePdl,
   generateScala,
   coreModules,
-  testModules
+  
+  testModules,
+  javaTestModules,
 ) where
 
 import Hydra.Core
@@ -12,6 +15,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Ext.Haskell.Serde
+import Hydra.Ext.Java.Serde
 import Hydra.Ext.Pegasus.Serde
 import Hydra.Ext.Scala.Serde
 import Hydra.Util.Codetree.Print
@@ -46,6 +50,9 @@ import qualified System.Directory as SD
 
 generateHaskell :: [Module Meta] -> FP.FilePath -> IO ()
 generateHaskell = generateSources (toFileName True ".hs") moduleToHaskellString
+
+generateJava :: [Module Meta] -> FP.FilePath -> IO ()
+generateJava = generateSources (toFileName False ".java") moduleToJavaString
 
 generatePdl :: [Module Meta] -> FP.FilePath -> IO ()
 generatePdl = generateSources (toFileName False ".pdl") moduleToPdlString
@@ -89,6 +96,9 @@ coreModules = [
 -- TODO: remove me eventually. Handy for debugging.
 testModules :: [Module Meta]
 testModules = [javaSyntaxModule]
+javaTestModules :: [Module Meta]
+javaTestModules = [jsonJsonModule]
+
 
 toFileName :: Bool -> String -> GraphName -> String
 toFileName caps ext (GraphName name) = L.intercalate "/" parts ++ ext
