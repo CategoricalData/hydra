@@ -534,17 +534,18 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  Result MethodDeclarator [Throws]
 --  TypeParameters {Annotation} Result MethodDeclarator [Throws]
       def "MethodHeader" $ record [
-        field "declarator" $ java "MethodDeclarator",
-        field "throws" $ optional $ java "Throws",
+        field "parameters" $ list $ java "TypeParameter",
         field "annotations" $
           doc "Note: simple method headers cannot have annotations" $
           list $ java "Annotation",
-        field "parameters" $ list $ java "TypeParameter"],
+        field "result" $ java "Result",
+        field "declarator" $ java "MethodDeclarator",
+        field "throws" $ optional $ java "Throws"],
 
 --Result:
       def "Result" $ union [
 --  UnannType
-        field "unann" $ java "UnannType",
+        field "type" $ java "UnannType",
 --  void
         field "void" unit],
 
@@ -567,13 +568,13 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --FormalParameter:
       def "FormalParameter" $ union [
 --  {VariableModifier} UnannType VariableDeclaratorId
-        field "unann" $ java "FormalParameter.Unann",
+        field "simple" $ java "FormalParameter.Simple",
 --  VariableArityParameter
         field "variableArity" $ java "VariableArityParameter"],
-      def "FormalParameter.Unann" $ record [
+      def "FormalParameter.Simple" $ record [
         field "modifiers" $ list $ java "VariableModifier",
         field "type" $ java "UnannType",
-        field "variable" $ java "VariableDeclaratorId"],
+        field "id" $ java "VariableDeclaratorId"],
 
 --VariableArityParameter:
 --  {VariableModifier} UnannType {Annotation} ... Identifier
