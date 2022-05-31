@@ -3,7 +3,6 @@ module Hydra.Util.Codetree.PrintSpec where
 import qualified Test.Hspec as H
 
 import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Syntax
 

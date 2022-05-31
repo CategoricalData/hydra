@@ -18,7 +18,7 @@ import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Pegasus.Serde
 import Hydra.Ext.Scala.Serde
-import Hydra.Util.Codetree.Print
+import Hydra.Util.Codetree.Script
 import Hydra.Impl.Haskell.Sources.Adapter
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Errors

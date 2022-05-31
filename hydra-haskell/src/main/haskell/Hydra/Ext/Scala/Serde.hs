@@ -8,7 +8,6 @@ import Hydra.Graph
 import Hydra.Ext.Scala.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Util.Codetree.Ast as CT

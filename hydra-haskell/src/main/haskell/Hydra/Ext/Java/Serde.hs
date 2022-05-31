@@ -9,7 +9,6 @@ import Hydra.Ext.Java.Coder
 import Hydra.Ext.Java.Operators
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Java.Syntax as Java
@@ -241,7 +240,7 @@ writeExpression e = case e of
   Java.ExpressionAssignment a -> writeAssignmentExpression a
 
 writeExpressionName :: Java.ExpressionName -> CT.Expr
-writeExpressionName _ = cst "TODO:ExpressionName"
+writeExpressionName (Java.ExpressionName id _) = writeIdentifier id -- Note: ignoring the AmbiguousName part for now
 
 writeExpressionStatement :: Java.ExpressionStatement -> CT.Expr
 writeExpressionStatement _ = cst "TODO:ExpressionStatement"
