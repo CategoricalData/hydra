@@ -62,12 +62,35 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           let bodyDecls = memberVars ++ cons ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
           return $ classDecl Nothing bodyDecls
         where
+          constructor = do
+            let nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
+            let cons = Java.ConstructorDeclarator [] nm Nothing fieldArgs
+            let mods = [Java.ConstructorModifierPublic]
+            return $ Java.ClassBodyDeclarationConstructorDeclaration $ Java.ConstructorDeclaration mods cons Nothing body
+ 
+             {-
+               public NumberEsc(Long integer, Long fraction, Long exponent) {
+                 this.integer = integer;
+                 this.fraction = fraction;
+                 this.exponent = exponent;
+               }
+               -}           
+          fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
+          
+          fieldParameters = do
+            jt <- encodeType aliases ft
+
+           
+          toField (FieldType fname ft) = do
+            jt <- encodeType aliases ft
+     
           toMemberVar (FieldType fname ft) = do
             let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
             jt <- encodeType aliases ft
             let var = Java.VariableDeclarator (fieldNameToJavaVariableDeclaratorId fname) Nothing
             return $ Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
               Java.FieldDeclaration mods (Java.UnannType jt) [var]
+              
           toWithMethod (FieldType fname@(FieldName fn) ft) = do
             jt <- encodeType aliases ft
             let mods = [Java.MethodModifierPublic]
@@ -84,19 +107,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             let mthrows = Nothing
             let header = Java.MethodHeader params anns result decl mthrows
 
-            let args = fieldNameToJavaExpression . fieldTypeName <$> fields
-            let ex = javaConstructorCall elName args
+            let ex = javaConstructorCall elName fieldArgs
             let returnStmt = javaReturnStatement $ Just ex
             
             return $ methodDeclaration mods header [returnStmt]
-      {-
-        public NumberEsc withInteger(Long integer) {
-          return new NumberEsc(integer, fraction, exponent);
-        }
 
-  public Number withInteger(java.math.BigInteger integer) {return new Number_(integer, fraction, exponent);}
-
-      -}
       TypeTermUnion fields -> do
         let bodyDecls = [] -- TODO
         return $ classDecl Nothing bodyDecls
