@@ -2320,7 +2320,7 @@ _FieldAccess_identifier = (Core.FieldName "identifier")
 _FieldAccess_variant = (Core.FieldName "variant")
 
 data FieldAccess_Variant 
-  = FieldAccess_VariantPrimary 
+  = FieldAccess_VariantPrimary Primary
   | FieldAccess_VariantSuper 
   | FieldAccess_VariantTyped TypeName
   deriving (Eq, Ord, Read, Show)

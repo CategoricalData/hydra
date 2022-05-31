@@ -6,7 +6,6 @@ import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Ext.Pegasus.Coder
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import Hydra.Util.Formatting
 import qualified Hydra.Util.Codetree.Ast as CT

@@ -1344,7 +1344,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "variant" $ java "FieldAccess.Variant"],
       def "FieldAccess.Variant" $ union [
 --  Primary . Identifier
-        field "primary" unit,
+        field "primary" $ java "Primary",
 --  super . Identifier
         field "super" unit,
 --  TypeName . super . Identifier

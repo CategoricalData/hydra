@@ -72,7 +72,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             jt <- encodeType aliases ft
             let mods = [Java.MethodModifierPublic]
             let methodName = Java.Identifier $ "with" ++ capitalize fn
-            let recParam = Nothing
+            
             let argType = Java.UnannType jt
             let argId = fieldNameToJavaVariableDeclaratorId fname
             let formalParams = [Java.FormalParameterSimple $ Java.FormalParameter_Simple [] argType argId]
@@ -80,36 +80,21 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             let anns = [] -- TODO
             let result = Java.ResultType $ Java.UnannType $ Java.TypeReference $
                   nameToJavaReferenceType aliases False elName
-            let decl = Java.MethodDeclarator methodName recParam formalParams
+            let decl = Java.MethodDeclarator methodName Nothing formalParams
             let mthrows = Nothing
             let header = Java.MethodHeader params anns result decl mthrows
-            let cit = javaConstructorName elName
-            let consCall = Java.UnqualifiedClassInstanceCreationExpression [] cit [] Nothing
 
-            let relEx = Java.RelationalExpressionSimple $
-                  Java.ShiftExpressionUnary $
-                  Java.AdditiveExpressionUnary $
-                  Java.MultiplicativeExpressionUnary $
-                  Java.UnaryExpressionOther $
-                  Java.UnaryExpressionNotPlusMinusPostfix $
-                  Java.PostfixExpressionPrimary $
-                  Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayClassInstance $
-                  Java.ClassInstanceCreationExpression Nothing consCall
-
-            let andEx = Java.AndExpression [Java.EqualityExpressionUnary relEx]
-            let exOrEx = Java.ExclusiveOrExpression [andEx]
-            let incOrEx = Java.InclusiveOrExpression [exOrEx]
-            let condAndEx = Java.ConditionalAndExpression [incOrEx]
-            let ex = Java.ExpressionAssignment $ Java.AssignmentExpressionConditional $
-                     Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
+            let args = fieldNameToJavaExpression . fieldTypeName <$> fields
+            let ex = javaConstructorCall elName args
             let returnStmt = javaReturnStatement $ Just ex
-            let body = Java.MethodBody $ javaStatementsToBlock [returnStmt]
-            return $ Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationMethod $
-              Java.MethodDeclaration mods header body
+            
+            return $ methodDeclaration mods header [returnStmt]
       {-
         public NumberEsc withInteger(Long integer) {
           return new NumberEsc(integer, fraction, exponent);
         }
+
+  public Number withInteger(java.math.BigInteger integer) {return new Number_(integer, fraction, exponent);}
 
       -}
       TypeTermUnion fields -> do
@@ -129,7 +114,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True) supname,
       Java.normalClassDeclarationImplements = [],
       Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
-
+                                         
 -- Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
 toDeclarationType t = case typeTerm t of

@@ -1,3 +1,9 @@
+-- | Haskell operator precendence and associativity are drawn from:
+--   https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html
+-- Other operators were investigated using GHCi, e.g. ":info (->)"
+-- Operator names are drawn (loosely) from:
+--   https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators
+
 module Hydra.Ext.Haskell.Serde (
   moduleToHaskellString,
 ) where
@@ -7,7 +13,6 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Ext.Haskell.Coder
 import Hydra.Impl.Haskell.Extras
-import Hydra.Util.Codetree.Print
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
