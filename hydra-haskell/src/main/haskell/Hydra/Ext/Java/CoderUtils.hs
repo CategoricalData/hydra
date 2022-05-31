@@ -122,7 +122,12 @@ methodDeclaration mods header stmts = Java.ClassBodyDeclarationClassMember $ Jav
   Java.MethodBody $ javaStatementsToBlock stmts
          
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
-nameToJavaClassType aliases qualify name = Java.ClassType [] pkg (javaTypeIdentifier local) []
+nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
+  where
+    (id, pkg) = nameToQualifiedJavaName aliases qualify name
+
+nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name -> (Java.Identifier, Y.Maybe PackageName)
+nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier local, pkg)
   where
     (gname, local) = toQname name
     pkg = if qualify || S.member local javaReservedWords
@@ -133,6 +138,9 @@ nameToJavaClassType aliases qualify name = Java.ClassType [] pkg (javaTypeIdenti
 nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   nameToJavaClassType aliases qualify name
+
+nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Name -> Java.TypeIdentifier
+nameToJavaTypeIdentifier aliases name = fst $ nameToQualifiedJavaName aliases qualify name
 
 toJavaArrayType :: Java.Type -> Result Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
