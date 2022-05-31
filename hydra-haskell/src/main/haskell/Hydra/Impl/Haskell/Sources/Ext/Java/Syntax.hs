@@ -1304,13 +1304,13 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "array" $ java "BooleanArray"],
 
 --ClassInstanceCreationExpression:
-      def "ClassInstanceCreationExpression" $ record [
-        field "expression" $ java "UnqualifiedClassInstanceCreationExpression",
-        field "variant" $ java "ClassInstanceCreationExpression.Variant"],
-      def "ClassInstanceCreationExpression.Variant" $ union [
 --  UnqualifiedClassInstanceCreationExpression
-        field "simple" unit,
 --  ExpressionName . UnqualifiedClassInstanceCreationExpression
+--  Primary . UnqualifiedClassInstanceCreationExpression
+      def "ClassInstanceCreationExpression" $ record [
+        field "qualifier" $ optional $ java "ClassInstanceCreationExpression.Qualifier",
+        field "expression" $ java "UnqualifiedClassInstanceCreationExpression"],
+      def "ClassInstanceCreationExpression.Qualifier" $ union [
         field "expression" $ java "ExpressionName",
         field "primary" $ java "Primary"],
 
@@ -1475,8 +1475,8 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  ( [LambdaParameterList] )
 --  Identifier
       def "LambdaParameters" $ union [
-        field "parameters" $ list $ java "LambdaParameters",
-        field "identifiers" $ list $ java "Identifier"],
+        field "tuple" $ list $ java "LambdaParameters",
+        field "single" $ java "Identifier"],
 
 --LambdaParameterList:
 --  LambdaParameter {, LambdaParameter}
@@ -1554,11 +1554,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "ifFalse" $ java "LambdaExpression"],
 
 --ConditionalOrExpression:
-      def "ConditionalOrExpression" $ record [
 --  ConditionalAndExpression
 --  ConditionalOrExpression || ConditionalAndExpression
-        field "or" $ optional $ java "ConditionalOrExpression",
-        field "and" $ java "ConditionalAndExpression"],
+      def "ConditionalOrExpression" $ nonemptyList $ java "ConditionalAndExpression",
 
 --ConditionalAndExpression:
 --  InclusiveOrExpression
@@ -1581,16 +1579,16 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
       def "AndExpression" $ nonemptyList $ java "EqualityExpression",
 
 --EqualityExpression:
-      def "EqualityExpression" $ record [
-        field "relational" $ java "RelationalExpression",
-        field "variant" $ java "EqualityExpression.Variant"],
-      def "EqualityExpression.Variant" $ union [
+      def "EqualityExpression" $ union [
 --  RelationalExpression
-        field "simple" unit,
+        field "unary" $ java "RelationalExpression",
 --  EqualityExpression == RelationalExpression
-        field "equal" $ java "EqualityExpression",
+        field "equal" $ java "EqualityExpression.Binary",
 --  EqualityExpression != RelationalExpression
-        field "notEqual" $ java "EqualityExpression"],
+        field "notEqual" $ java "EqualityExpression.Binary"],
+      def "EqualityExpression.Binary" $ record [
+        field "lhs" $ java "EqualityExpression",
+        field "rhs" $ java "RelationalExpression"],
 
 --RelationalExpression:
       def "RelationalExpression" $ union [
@@ -1625,40 +1623,40 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ShiftExpression:
       def "ShiftExpression" $ union [
 --  AdditiveExpression
-        field "simple" $ java "AdditiveExpression",
+        field "unary" $ java "AdditiveExpression",
 --  ShiftExpression << AdditiveExpression
-        field "shiftLeft" $ java "ShiftExpression.Complex",
+        field "shiftLeft" $ java "ShiftExpression.Binary",
 --  ShiftExpression >> AdditiveExpression
-        field "shiftRight" $ java "ShiftExpression.Complex",
+        field "shiftRight" $ java "ShiftExpression.Binary",
 --  ShiftExpression >>> AdditiveExpression
-        field "shiftRightZeroFill" $ java "ShiftExpression.Complex"],
-      def "ShiftExpression.Complex" $ record [
+        field "shiftRightZeroFill" $ java "ShiftExpression.Binary"],
+      def "ShiftExpression.Binary" $ record [
         field "lhs" $ java "ShiftExpression",
         field "rhs" $ java "AdditiveExpression"],
 
 --AdditiveExpression:
       def "AdditiveExpression" $ union [
 --  MultiplicativeExpression
-        field "simple" $ java "MultiplicativeExpression",
+        field "unary" $ java "MultiplicativeExpression",
 --  AdditiveExpression + MultiplicativeExpression
-        field "plus" $ java "AdditiveExpression.Complex",
+        field "plus" $ java "AdditiveExpression.Binary",
 --  AdditiveExpression - MultiplicativeExpression
-        field "minus" $ java "AdditiveExpression.Complex"],
-      def "AdditiveExpression.Complex" $ record [
+        field "minus" $ java "AdditiveExpression.Binary"],
+      def "AdditiveExpression.Binary" $ record [
         field "lhs" $ java "AdditiveExpression",
         field "rhs" $ java "MultiplicativeExpression"],
 
 --MultiplicativeExpression:
       def "MultiplicativeExpression" $ union [
 --  UnaryExpression
-        field "simple" $ java "UnaryExpression",
+        field "unary" $ java "UnaryExpression",
 --  MultiplicativeExpression * UnaryExpression
-        field "times" $ java "MultiplicativeExpression.Complex",
+        field "times" $ java "MultiplicativeExpression.Binary",
 --  MultiplicativeExpression / UnaryExpression
-        field "divide" $ java "MultiplicativeExpression.Complex",
+        field "divide" $ java "MultiplicativeExpression.Binary",
 --  MultiplicativeExpression % UnaryExpression
-        field "mod" $ java "MultiplicativeExpression.Complex"],
-      def "MultiplicativeExpression.Complex" $ record [
+        field "mod" $ java "MultiplicativeExpression.Binary"],
+      def "MultiplicativeExpression.Binary" $ record [
         field "lhs" $ java "MultiplicativeExpression",
         field "rhs" $ java "UnaryExpression"],
 

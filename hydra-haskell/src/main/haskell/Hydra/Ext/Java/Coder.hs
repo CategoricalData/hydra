@@ -87,21 +87,21 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             let consCall = Java.UnqualifiedClassInstanceCreationExpression [] cit [] Nothing
 
             let relEx = Java.RelationalExpressionSimple $
-                  Java.ShiftExpressionSimple $
-                  Java.AdditiveExpressionSimple $
-                  Java.MultiplicativeExpressionSimple $
+                  Java.ShiftExpressionUnary $
+                  Java.AdditiveExpressionUnary $
+                  Java.MultiplicativeExpressionUnary $
                   Java.UnaryExpressionOther $
                   Java.UnaryExpressionNotPlusMinusPostfix $
                   Java.PostfixExpressionPrimary $
                   Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayClassInstance $
-                  Java.ClassInstanceCreationExpression consCall Java.ClassInstanceCreationExpression_VariantSimple
+                  Java.ClassInstanceCreationExpression Nothing consCall
 
-            let andEx = Java.AndExpression [Java.EqualityExpression relEx Java.EqualityExpression_VariantSimple]
+            let andEx = Java.AndExpression [Java.EqualityExpressionUnary relEx]
             let exOrEx = Java.ExclusiveOrExpression [andEx]
             let incOrEx = Java.InclusiveOrExpression [exOrEx]
             let condAndEx = Java.ConditionalAndExpression [incOrEx]
             let ex = Java.ExpressionAssignment $ Java.AssignmentExpressionConditional $
-                     Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression Nothing condAndEx
+                     Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
             let returnStmt = javaReturnStatement $ Just ex
             let body = Java.MethodBody $ javaStatementsToBlock [returnStmt]
             return $ Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationMethod $
@@ -208,4 +208,3 @@ encodeType aliases t = case typeTerm t of
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
-
