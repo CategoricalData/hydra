@@ -2233,29 +2233,26 @@ _BooleanArray_array = (Core.FieldName "array")
 
 data ClassInstanceCreationExpression 
   = ClassInstanceCreationExpression {
-    classInstanceCreationExpressionExpression :: UnqualifiedClassInstanceCreationExpression,
-    classInstanceCreationExpressionVariant :: ClassInstanceCreationExpression_Variant}
+    classInstanceCreationExpressionQualifier :: (Maybe ClassInstanceCreationExpression_Qualifier),
+    classInstanceCreationExpressionExpression :: UnqualifiedClassInstanceCreationExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ClassInstanceCreationExpression = (Core.Name "hydra/ext/java/syntax.ClassInstanceCreationExpression")
 
+_ClassInstanceCreationExpression_qualifier = (Core.FieldName "qualifier")
+
 _ClassInstanceCreationExpression_expression = (Core.FieldName "expression")
 
-_ClassInstanceCreationExpression_variant = (Core.FieldName "variant")
-
-data ClassInstanceCreationExpression_Variant 
-  = ClassInstanceCreationExpression_VariantSimple 
-  | ClassInstanceCreationExpression_VariantExpression ExpressionName
-  | ClassInstanceCreationExpression_VariantPrimary Primary
+data ClassInstanceCreationExpression_Qualifier 
+  = ClassInstanceCreationExpression_QualifierExpression ExpressionName
+  | ClassInstanceCreationExpression_QualifierPrimary Primary
   deriving (Eq, Ord, Read, Show)
 
-_ClassInstanceCreationExpression_Variant = (Core.Name "hydra/ext/java/syntax.ClassInstanceCreationExpression.Variant")
+_ClassInstanceCreationExpression_Qualifier = (Core.Name "hydra/ext/java/syntax.ClassInstanceCreationExpression.Qualifier")
 
-_ClassInstanceCreationExpression_Variant_simple = (Core.FieldName "simple")
+_ClassInstanceCreationExpression_Qualifier_expression = (Core.FieldName "expression")
 
-_ClassInstanceCreationExpression_Variant_expression = (Core.FieldName "expression")
-
-_ClassInstanceCreationExpression_Variant_primary = (Core.FieldName "primary")
+_ClassInstanceCreationExpression_Qualifier_primary = (Core.FieldName "primary")
 
 data UnqualifiedClassInstanceCreationExpression 
   = UnqualifiedClassInstanceCreationExpression {
@@ -2623,15 +2620,15 @@ _LambdaExpression_parameters = (Core.FieldName "parameters")
 _LambdaExpression_body = (Core.FieldName "body")
 
 data LambdaParameters 
-  = LambdaParametersParameters [LambdaParameters]
-  | LambdaParametersIdentifiers [Identifier]
+  = LambdaParametersTuple [LambdaParameters]
+  | LambdaParametersSingle Identifier
   deriving (Eq, Ord, Read, Show)
 
 _LambdaParameters = (Core.Name "hydra/ext/java/syntax.LambdaParameters")
 
-_LambdaParameters_parameters = (Core.FieldName "parameters")
+_LambdaParameters_tuple = (Core.FieldName "tuple")
 
-_LambdaParameters_identifiers = (Core.FieldName "identifiers")
+_LambdaParameters_single = (Core.FieldName "single")
 
 data LambdaParameter 
   = LambdaParameterNormal LambdaParameter_Normal
@@ -2806,17 +2803,12 @@ _ConditionalExpression_TernaryLambda_ifTrue = (Core.FieldName "ifTrue")
 
 _ConditionalExpression_TernaryLambda_ifFalse = (Core.FieldName "ifFalse")
 
-data ConditionalOrExpression 
-  = ConditionalOrExpression {
-    conditionalOrExpressionOr :: (Maybe ConditionalOrExpression),
-    conditionalOrExpressionAnd :: ConditionalAndExpression}
+-- Note: list cannot be empty
+newtype ConditionalOrExpression 
+  = ConditionalOrExpression {unConditionalOrExpression :: [ConditionalAndExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ConditionalOrExpression = (Core.Name "hydra/ext/java/syntax.ConditionalOrExpression")
-
-_ConditionalOrExpression_or = (Core.FieldName "or")
-
-_ConditionalOrExpression_and = (Core.FieldName "and")
 
 -- Note: list cannot be empty
 newtype ConditionalAndExpression 
@@ -2847,30 +2839,30 @@ newtype AndExpression
 _AndExpression = (Core.Name "hydra/ext/java/syntax.AndExpression")
 
 data EqualityExpression 
-  = EqualityExpression {
-    equalityExpressionRelational :: RelationalExpression,
-    equalityExpressionVariant :: EqualityExpression_Variant}
+  = EqualityExpressionUnary RelationalExpression
+  | EqualityExpressionEqual EqualityExpression_Binary
+  | EqualityExpressionNotEqual EqualityExpression_Binary
   deriving (Eq, Ord, Read, Show)
 
 _EqualityExpression = (Core.Name "hydra/ext/java/syntax.EqualityExpression")
 
-_EqualityExpression_relational = (Core.FieldName "relational")
+_EqualityExpression_unary = (Core.FieldName "unary")
 
-_EqualityExpression_variant = (Core.FieldName "variant")
+_EqualityExpression_equal = (Core.FieldName "equal")
 
-data EqualityExpression_Variant 
-  = EqualityExpression_VariantSimple 
-  | EqualityExpression_VariantEqual EqualityExpression
-  | EqualityExpression_VariantNotEqual EqualityExpression
+_EqualityExpression_notEqual = (Core.FieldName "notEqual")
+
+data EqualityExpression_Binary 
+  = EqualityExpression_Binary {
+    equalityExpression_BinaryLhs :: EqualityExpression,
+    equalityExpression_BinaryRhs :: RelationalExpression}
   deriving (Eq, Ord, Read, Show)
 
-_EqualityExpression_Variant = (Core.Name "hydra/ext/java/syntax.EqualityExpression.Variant")
+_EqualityExpression_Binary = (Core.Name "hydra/ext/java/syntax.EqualityExpression.Binary")
 
-_EqualityExpression_Variant_simple = (Core.FieldName "simple")
+_EqualityExpression_Binary_lhs = (Core.FieldName "lhs")
 
-_EqualityExpression_Variant_equal = (Core.FieldName "equal")
-
-_EqualityExpression_Variant_notEqual = (Core.FieldName "notEqual")
+_EqualityExpression_Binary_rhs = (Core.FieldName "rhs")
 
 data RelationalExpression 
   = RelationalExpressionSimple ShiftExpression
@@ -2956,15 +2948,15 @@ _RelationalExpression_InstanceOf_lhs = (Core.FieldName "lhs")
 _RelationalExpression_InstanceOf_rhs = (Core.FieldName "rhs")
 
 data ShiftExpression 
-  = ShiftExpressionSimple AdditiveExpression
-  | ShiftExpressionShiftLeft ShiftExpression_Complex
-  | ShiftExpressionShiftRight ShiftExpression_Complex
-  | ShiftExpressionShiftRightZeroFill ShiftExpression_Complex
+  = ShiftExpressionUnary AdditiveExpression
+  | ShiftExpressionShiftLeft ShiftExpression_Binary
+  | ShiftExpressionShiftRight ShiftExpression_Binary
+  | ShiftExpressionShiftRightZeroFill ShiftExpression_Binary
   deriving (Eq, Ord, Read, Show)
 
 _ShiftExpression = (Core.Name "hydra/ext/java/syntax.ShiftExpression")
 
-_ShiftExpression_simple = (Core.FieldName "simple")
+_ShiftExpression_unary = (Core.FieldName "unary")
 
 _ShiftExpression_shiftLeft = (Core.FieldName "shiftLeft")
 
@@ -2972,54 +2964,54 @@ _ShiftExpression_shiftRight = (Core.FieldName "shiftRight")
 
 _ShiftExpression_shiftRightZeroFill = (Core.FieldName "shiftRightZeroFill")
 
-data ShiftExpression_Complex 
-  = ShiftExpression_Complex {
-    shiftExpression_ComplexLhs :: ShiftExpression,
-    shiftExpression_ComplexRhs :: AdditiveExpression}
+data ShiftExpression_Binary 
+  = ShiftExpression_Binary {
+    shiftExpression_BinaryLhs :: ShiftExpression,
+    shiftExpression_BinaryRhs :: AdditiveExpression}
   deriving (Eq, Ord, Read, Show)
 
-_ShiftExpression_Complex = (Core.Name "hydra/ext/java/syntax.ShiftExpression.Complex")
+_ShiftExpression_Binary = (Core.Name "hydra/ext/java/syntax.ShiftExpression.Binary")
 
-_ShiftExpression_Complex_lhs = (Core.FieldName "lhs")
+_ShiftExpression_Binary_lhs = (Core.FieldName "lhs")
 
-_ShiftExpression_Complex_rhs = (Core.FieldName "rhs")
+_ShiftExpression_Binary_rhs = (Core.FieldName "rhs")
 
 data AdditiveExpression 
-  = AdditiveExpressionSimple MultiplicativeExpression
-  | AdditiveExpressionPlus AdditiveExpression_Complex
-  | AdditiveExpressionMinus AdditiveExpression_Complex
+  = AdditiveExpressionUnary MultiplicativeExpression
+  | AdditiveExpressionPlus AdditiveExpression_Binary
+  | AdditiveExpressionMinus AdditiveExpression_Binary
   deriving (Eq, Ord, Read, Show)
 
 _AdditiveExpression = (Core.Name "hydra/ext/java/syntax.AdditiveExpression")
 
-_AdditiveExpression_simple = (Core.FieldName "simple")
+_AdditiveExpression_unary = (Core.FieldName "unary")
 
 _AdditiveExpression_plus = (Core.FieldName "plus")
 
 _AdditiveExpression_minus = (Core.FieldName "minus")
 
-data AdditiveExpression_Complex 
-  = AdditiveExpression_Complex {
-    additiveExpression_ComplexLhs :: AdditiveExpression,
-    additiveExpression_ComplexRhs :: MultiplicativeExpression}
+data AdditiveExpression_Binary 
+  = AdditiveExpression_Binary {
+    additiveExpression_BinaryLhs :: AdditiveExpression,
+    additiveExpression_BinaryRhs :: MultiplicativeExpression}
   deriving (Eq, Ord, Read, Show)
 
-_AdditiveExpression_Complex = (Core.Name "hydra/ext/java/syntax.AdditiveExpression.Complex")
+_AdditiveExpression_Binary = (Core.Name "hydra/ext/java/syntax.AdditiveExpression.Binary")
 
-_AdditiveExpression_Complex_lhs = (Core.FieldName "lhs")
+_AdditiveExpression_Binary_lhs = (Core.FieldName "lhs")
 
-_AdditiveExpression_Complex_rhs = (Core.FieldName "rhs")
+_AdditiveExpression_Binary_rhs = (Core.FieldName "rhs")
 
 data MultiplicativeExpression 
-  = MultiplicativeExpressionSimple UnaryExpression
-  | MultiplicativeExpressionTimes MultiplicativeExpression_Complex
-  | MultiplicativeExpressionDivide MultiplicativeExpression_Complex
-  | MultiplicativeExpressionMod MultiplicativeExpression_Complex
+  = MultiplicativeExpressionUnary UnaryExpression
+  | MultiplicativeExpressionTimes MultiplicativeExpression_Binary
+  | MultiplicativeExpressionDivide MultiplicativeExpression_Binary
+  | MultiplicativeExpressionMod MultiplicativeExpression_Binary
   deriving (Eq, Ord, Read, Show)
 
 _MultiplicativeExpression = (Core.Name "hydra/ext/java/syntax.MultiplicativeExpression")
 
-_MultiplicativeExpression_simple = (Core.FieldName "simple")
+_MultiplicativeExpression_unary = (Core.FieldName "unary")
 
 _MultiplicativeExpression_times = (Core.FieldName "times")
 
@@ -3027,17 +3019,17 @@ _MultiplicativeExpression_divide = (Core.FieldName "divide")
 
 _MultiplicativeExpression_mod = (Core.FieldName "mod")
 
-data MultiplicativeExpression_Complex 
-  = MultiplicativeExpression_Complex {
-    multiplicativeExpression_ComplexLhs :: MultiplicativeExpression,
-    multiplicativeExpression_ComplexRhs :: UnaryExpression}
+data MultiplicativeExpression_Binary 
+  = MultiplicativeExpression_Binary {
+    multiplicativeExpression_BinaryLhs :: MultiplicativeExpression,
+    multiplicativeExpression_BinaryRhs :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
-_MultiplicativeExpression_Complex = (Core.Name "hydra/ext/java/syntax.MultiplicativeExpression.Complex")
+_MultiplicativeExpression_Binary = (Core.Name "hydra/ext/java/syntax.MultiplicativeExpression.Binary")
 
-_MultiplicativeExpression_Complex_lhs = (Core.FieldName "lhs")
+_MultiplicativeExpression_Binary_lhs = (Core.FieldName "lhs")
 
-_MultiplicativeExpression_Complex_rhs = (Core.FieldName "rhs")
+_MultiplicativeExpression_Binary_rhs = (Core.FieldName "rhs")
 
 data UnaryExpression 
   = UnaryExpressionPreIncrement PreIncrementExpression
