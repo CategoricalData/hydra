@@ -95,7 +95,7 @@ coreModules = [
 
 -- TODO: remove me eventually. Handy for debugging.
 testModules :: [Module Meta]
-testModules = [javaSyntaxModule]
+testModules = [javaSyntaxModule, codetreeAstModule]
 javaTestModules :: [Module Meta]
 javaTestModules = [jsonJsonModule]
 

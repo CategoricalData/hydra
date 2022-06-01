@@ -26,7 +26,9 @@ _Associativity_both = (Core.FieldName "both")
 data BracketExpr 
   = BracketExpr {
     bracketExprBrackets :: Brackets,
-    bracketExprEnclosed :: Expr}
+    bracketExprEnclosed :: Expr,
+    bracketExprNewlines :: Bool
+  }
   deriving (Eq, Ord, Read, Show)
 
 _BracketExpr = (Core.Name "hydra/util/codetree/ast.BracketExpr")
@@ -35,11 +37,14 @@ _BracketExpr_brackets = (Core.FieldName "brackets")
 
 _BracketExpr_enclosed = (Core.FieldName "enclosed")
 
+_BracketExpr_newlines = (Core.FieldName "newlines")
+
 -- Matching open and close bracket symbols
 data Brackets 
   = Brackets {
     bracketsOpen :: Symbol,
-    bracketsClose :: Symbol}
+    bracketsClose :: Symbol
+  }
   deriving (Eq, Ord, Read, Show)
 
 _Brackets = (Core.Name "hydra/util/codetree/ast.Brackets")
@@ -69,8 +74,8 @@ data Op
     opSymbol :: Symbol,
     opPadding :: Padding,
     opPrecedence :: Precedence,
-    opAssociativity :: Associativity}
-  deriving (Eq, Ord, Read, Show)
+    opAssociativity :: Associativity
+  } deriving (Eq, Ord, Read, Show)
 
 _Op = (Core.Name "hydra/util/codetree/ast.Op")
 
@@ -87,7 +92,8 @@ data OpExpr
   = OpExpr {
     opExprOp :: Op,
     opExprLhs :: Expr,
-    opExprRhs :: Expr}
+    opExprRhs :: Expr
+  }
   deriving (Eq, Ord, Read, Show)
 
 _OpExpr = (Core.Name "hydra/util/codetree/ast.OpExpr")
@@ -102,7 +108,8 @@ _OpExpr_rhs = (Core.FieldName "rhs")
 data Padding 
   = Padding {
     paddingLeft :: Ws,
-    paddingRight :: Ws}
+    paddingRight :: Ws
+  }
   deriving (Eq, Ord, Read, Show)
 
 _Padding = (Core.Name "hydra/util/codetree/ast.Padding")
@@ -113,14 +120,18 @@ _Padding_right = (Core.FieldName "right")
 
 -- Operator precedence
 newtype Precedence 
-  = Precedence {unPrecedence :: Int}
+  = Precedence {
+    unPrecedence :: Int
+  }
   deriving (Eq, Ord, Read, Show)
 
 _Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
 
 -- Any symbol
 newtype Symbol 
-  = Symbol {unSymbol :: String}
+  = Symbol {
+    unSymbol :: String
+  }
   deriving (Eq, Ord, Read, Show)
 
 _Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")
