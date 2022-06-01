@@ -648,8 +648,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --ConstructorBody:
 --  { [ExplicitConstructorInvocation] [BlockStatements] }
-      def "ConstructorBody" $ list $ java "ConstructorBody.Element",
-      def "ConstructorBody.Element" $ record [
+      def "ConstructorBody" $ record [
         field "invocation" $ optional $ java "ExplicitConstructorInvocation",
         field "statements" $ list $ java "BlockStatement"],
 

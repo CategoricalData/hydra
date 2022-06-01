@@ -1042,23 +1042,17 @@ newtype SimpleTypeName
 
 _SimpleTypeName = (Core.Name "hydra/ext/java/syntax.SimpleTypeName")
 
-newtype ConstructorBody 
-  = ConstructorBody {unConstructorBody :: [ConstructorBody_Element]}
+data ConstructorBody 
+  = ConstructorBody {
+    constructorBodyInvocation :: (Maybe ExplicitConstructorInvocation),
+    constructorBodyStatements :: [BlockStatement]}
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorBody = (Core.Name "hydra/ext/java/syntax.ConstructorBody")
 
-data ConstructorBody_Element 
-  = ConstructorBody_Element {
-    constructorBody_ElementInvocation :: (Maybe ExplicitConstructorInvocation),
-    constructorBody_ElementStatements :: [BlockStatement]}
-  deriving (Eq, Ord, Read, Show)
+_ConstructorBody_invocation = (Core.FieldName "invocation")
 
-_ConstructorBody_Element = (Core.Name "hydra/ext/java/syntax.ConstructorBody.Element")
-
-_ConstructorBody_Element_invocation = (Core.FieldName "invocation")
-
-_ConstructorBody_Element_statements = (Core.FieldName "statements")
+_ConstructorBody_statements = (Core.FieldName "statements")
 
 data ExplicitConstructorInvocation 
   = ExplicitConstructorInvocation {
