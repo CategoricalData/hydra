@@ -55,19 +55,23 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       TypeTermNominal name -> return $ classDecl (Just name) []
       TypeTermRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
-          let cons = []  :: [Java.ClassBodyDeclaration]-- TODO
           let eq = []  :: [Java.ClassBodyDeclaration]-- TODO
           let hashCode = []  :: [Java.ClassBodyDeclaration]-- TODO
           withMethods <- CM.mapM toWithMethod fields
-          let bodyDecls = memberVars ++ cons ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
+          cons <- constructor
+          let bodyDecls = memberVars ++ [cons] ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
           return $ classDecl Nothing bodyDecls
         where
+          constructor :: Result Java.ClassBodyDeclaration
           constructor = do
             let nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
-            let cons = Java.ConstructorDeclarator [] nm Nothing fieldArgs
+            params <- CM.mapM fieldToFormalParam fields
+            let cons = Java.ConstructorDeclarator [] nm Nothing params
             let mods = [Java.ConstructorModifierPublic]
+            let stmts = [] -- TODO
+            let body = Java.ConstructorBody Nothing stmts
             return $ Java.ClassBodyDeclarationConstructorDeclaration $ Java.ConstructorDeclaration mods cons Nothing body
- 
+
              {-
                public NumberEsc(Long integer, Long fraction, Long exponent) {
                  this.integer = integer;
@@ -77,12 +81,12 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                -}           
           fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
           
-          fieldParameters = do
-            jt <- encodeType aliases ft
-
-           
-          toField (FieldType fname ft) = do
-            jt <- encodeType aliases ft
+--          fieldParameters = do
+--            jt <- encodeType aliases ft
+--
+--           
+--          toField (FieldType fname ft) = do
+--            jt <- encodeType aliases ft
      
           toMemberVar (FieldType fname ft) = do
             let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
@@ -90,20 +94,17 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             let var = Java.VariableDeclarator (fieldNameToJavaVariableDeclaratorId fname) Nothing
             return $ Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
               Java.FieldDeclaration mods (Java.UnannType jt) [var]
-              
-          toWithMethod (FieldType fname@(FieldName fn) ft) = do
-            jt <- encodeType aliases ft
+
+          toWithMethod field = do
             let mods = [Java.MethodModifierPublic]
-            let methodName = Java.Identifier $ "with" ++ capitalize fn
+            let methodName = Java.Identifier $ "with" ++ capitalize (unFieldName $ fieldTypeName field)
             
-            let argType = Java.UnannType jt
-            let argId = fieldNameToJavaVariableDeclaratorId fname
-            let formalParams = [Java.FormalParameterSimple $ Java.FormalParameter_Simple [] argType argId]
+            param <- fieldToFormalParam field
             let params = []
             let anns = [] -- TODO
             let result = Java.ResultType $ Java.UnannType $ Java.TypeReference $
                   nameToJavaReferenceType aliases False elName
-            let decl = Java.MethodDeclarator methodName Nothing formalParams
+            let decl = Java.MethodDeclarator methodName Nothing [param]
             let mthrows = Nothing
             let header = Java.MethodHeader params anns result decl mthrows
 
@@ -112,6 +113,10 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             
             return $ methodDeclaration mods header [returnStmt]
 
+          fieldToFormalParam (FieldType fname ft) = do
+            jt <- encodeType aliases ft
+            return $ javaTypeToJavaFormalParameter jt fname
+              
       TypeTermUnion fields -> do
         let bodyDecls = [] -- TODO
         return $ classDecl Nothing bodyDecls
@@ -130,7 +135,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       Java.normalClassDeclarationImplements = [],
       Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
                                          
--- Transform a given type into a type which can be used as the basis for a Java class
+-- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
 toDeclarationType t = case typeTerm t of
   TypeTermNominal _ -> pure t

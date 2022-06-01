@@ -116,17 +116,24 @@ javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTyp
 javaUtilPackageName :: Maybe Java.PackageName
 javaUtilPackageName = Just $ javaPackageName ["java", "util"]
 
+javaTypeToJavaFormalParameter :: Java.Type -> FieldName -> Java.FormalParameter
+javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.FormalParameter_Simple [] argType argId
+  where
+    argType = Java.UnannType jt
+    argId = fieldNameToJavaVariableDeclaratorId fname
+              
 methodDeclaration :: [Java.MethodModifier] -> Java.MethodHeader -> [Java.Statement] -> Java.ClassBodyDeclaration
 methodDeclaration mods header stmts = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationMethod $
   Java.MethodDeclaration mods header $
   Java.MethodBody $ javaStatementsToBlock stmts
-         
+
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
 nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
   where
     (id, pkg) = nameToQualifiedJavaName aliases qualify name
 
-nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name -> (Java.Identifier, Y.Maybe PackageName)
+nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name
+  -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier local, pkg)
   where
     (gname, local) = toQname name
@@ -139,8 +146,8 @@ nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> J
 nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   nameToJavaClassType aliases qualify name
 
-nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Name -> Java.TypeIdentifier
-nameToJavaTypeIdentifier aliases name = fst $ nameToQualifiedJavaName aliases qualify name
+nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
+nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name
 
 toJavaArrayType :: Java.Type -> Result Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of

@@ -50,7 +50,7 @@ writeAndExpression (Java.AndExpression eqs) = associateList bitAndOp (writeEqual
 
 writeAnnotatedIdentifier :: Java.AnnotatedIdentifier -> CT.Expr
 writeAnnotatedIdentifier (Java.AnnotatedIdentifier anns id) = writeIdentifier id -- Note: ignoring annotations for now
-      
+
 writeAnnotation :: Java.Annotation -> CT.Expr
 writeAnnotation ann = case ann of
   Java.AnnotationNormal n -> writeNormalAnnotation n
@@ -148,7 +148,7 @@ writeClassOrInterfaceTypeToInstantiate (Java.ClassOrInterfaceTypeToInstantiate i
   noSep $ Y.catMaybes [
     Just $ dotSep (writeAnnotatedIdentifier <$> ids),
     writeTypeArgumentsOrDiamond <$> margs]
-     
+
 writeClassType :: Java.ClassType -> CT.Expr
 writeClassType (Java.ClassType anns qual id args) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ commaSep False (writeAnnotation <$> anns),
@@ -193,8 +193,31 @@ writeConditionalOrExpression :: Java.ConditionalOrExpression -> CT.Expr
 writeConditionalOrExpression (Java.ConditionalOrExpression ands)
   = associateList orOp (writeConditionalAndExpression <$> ands)
 
+writeConstructorBody :: Java.ConstructorBody -> CT.Expr
+writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock $ doubleNewlineSep $ Y.catMaybes [
+  writeExplicitConstructorInvocation <$> minvoc,
+  Just $ newlineSep (writeBlockStatement <$> stmts)]
+
 writeConstructorDeclaration :: Java.ConstructorDeclaration -> CT.Expr
-writeConstructorDeclaration _ = cst "TODO:ConstructorDeclaration"
+writeConstructorDeclaration (Java.ConstructorDeclaration mods cons mthrows body) = spaceSep $ Y.catMaybes [
+  if L.null mods then Nothing else Just $ spaceSep (writeConstructorModifier <$> mods),
+  Just $ writeConstructorDeclarator cons,
+  writeThrows <$> mthrows,
+  Just $ writeConstructorBody body]
+
+writeConstructorDeclarator :: Java.ConstructorDeclarator -> CT.Expr
+writeConstructorDeclarator (Java.ConstructorDeclarator tparams name mrecparam fparams) = spaceSep $ Y.catMaybes [
+  if L.null tparams then Nothing else Just $ angleBracesList False (writeTypeParameter <$> tparams),
+  Just $ writeSimpleTypeName name,
+  writeReceiverParameter <$> mrecparam,
+  Just $ parenList (writeFormalParameter <$> fparams)]
+
+writeConstructorModifier :: Java.ConstructorModifier -> CT.Expr
+writeConstructorModifier m = case m of
+  Java.ConstructorModifierAnnotation ann -> writeAnnotation ann
+  Java.ConstructorModifierPublic -> cst "public"
+  Java.ConstructorModifierProtected -> cst "protected"
+  Java.ConstructorModifierPrivate -> cst "private"
 
 writeContinueStatement :: Java.ContinueStatement -> CT.Expr
 writeContinueStatement _ = cst "TODO:ContinueStatement"
@@ -233,6 +256,9 @@ writeEqualityExpression e = case e of
 
 writeExclusiveOrExpression :: Java.ExclusiveOrExpression -> CT.Expr
 writeExclusiveOrExpression (Java.ExclusiveOrExpression ands) = associateList bitXorOp (writeAndExpression <$> ands)
+
+writeExplicitConstructorInvocation :: Java.ExplicitConstructorInvocation -> CT.Expr
+writeExplicitConstructorInvocation _ = cst "TODO:ExplicitConstructorInvocation"
 
 writeExpression :: Java.Expression -> CT.Expr
 writeExpression e = case e of
@@ -464,6 +490,9 @@ writePrimaryNoNewArray p = case p of
 writePrimitiveTypeWithAnnotations :: Java.PrimitiveTypeWithAnnotations -> CT.Expr
 writePrimitiveTypeWithAnnotations _ = cst "TODO:PrimitiveTypeWithAnnotations" -- (Java.PrimitiveTypeWithAnnotations )
 
+writeReceiverParameter :: Java.ReceiverParameter -> CT.Expr
+writeReceiverParameter _ = cst "TODO:ReceiverParameter"
+
 writeReferenceType :: Java.ReferenceType -> CT.Expr
 writeReferenceType rt = case rt of
   Java.ReferenceTypeClassOrInterface cit -> writeClassOrInterfaceType cit
@@ -513,6 +542,9 @@ writeShiftExpression e = case e of
     ifx shiftRightOp (writeShiftExpression lhs) (writeAdditiveExpression rhs)
   Java.ShiftExpressionShiftRightZeroFill (Java.ShiftExpression_Binary lhs rhs) ->
     ifx shiftRightZeroFillOp (writeShiftExpression lhs) (writeAdditiveExpression rhs)
+
+writeSimpleTypeName :: Java.SimpleTypeName -> CT.Expr
+writeSimpleTypeName (Java.SimpleTypeName tid) = writeTypeIdentifier tid
 
 writeSingleElementAnnotation :: Java.SingleElementAnnotation -> CT.Expr
 writeSingleElementAnnotation (Java.SingleElementAnnotation tname mv) = case mv of
@@ -573,7 +605,7 @@ writeTypeArgument a = case a of
 
 writeTypeArgumentsOrDiamond :: Java.TypeArgumentsOrDiamond -> CT.Expr
 writeTypeArgumentsOrDiamond _ = cst "TODO:TypeArgumentsOrDiamond"
-      
+
 writeTypeBound :: Java.TypeBound -> CT.Expr
 writeTypeBound _ = cst "TODO:TypeBound"
 
