@@ -135,32 +135,28 @@ literalVariants = [
 
 -- Construct a qualified (dot-separated) name
 qname :: (Graph.GraphName -> String -> Core.Name)
-qname ns name = (
-  Core.Name (
-    Strings.cat [
-      Graph.unGraphName ns,
-      ".",
-      name]))
+qname ns name = (Core.Name (Strings.cat [
+  Graph.unGraphName ns,
+  ".",
+  name]))
 
 -- Find the term variant (constructor) for a given term
 termVariant :: (Core.Data m -> Core.DataVariant)
-termVariant term = (
-  (
-    \x -> case x of
-      Core.DataTermApplication _ -> Core.DataVariantApplication
-      Core.DataTermElement _ -> Core.DataVariantElement
-      Core.DataTermFunction _ -> Core.DataVariantFunction
-      Core.DataTermList _ -> Core.DataVariantList
-      Core.DataTermLiteral _ -> Core.DataVariantLiteral
-      Core.DataTermMap _ -> Core.DataVariantMap
-      Core.DataTermNominal _ -> Core.DataVariantNominal
-      Core.DataTermOptional _ -> Core.DataVariantOptional
-      Core.DataTermRecord _ -> Core.DataVariantRecord
-      Core.DataTermSet _ -> Core.DataVariantSet
-      Core.DataTermTypeAbstraction _ -> Core.DataVariantTypeAbstraction
-      Core.DataTermTypeApplication _ -> Core.DataVariantTypeApplication
-      Core.DataTermUnion _ -> Core.DataVariantUnion
-      Core.DataTermVariable _ -> Core.DataVariantVariable) (Core.dataTerm term))
+termVariant term = ((\x -> case x of
+  Core.DataTermApplication _ -> Core.DataVariantApplication
+  Core.DataTermElement _ -> Core.DataVariantElement
+  Core.DataTermFunction _ -> Core.DataVariantFunction
+  Core.DataTermList _ -> Core.DataVariantList
+  Core.DataTermLiteral _ -> Core.DataVariantLiteral
+  Core.DataTermMap _ -> Core.DataVariantMap
+  Core.DataTermNominal _ -> Core.DataVariantNominal
+  Core.DataTermOptional _ -> Core.DataVariantOptional
+  Core.DataTermRecord _ -> Core.DataVariantRecord
+  Core.DataTermSet _ -> Core.DataVariantSet
+  Core.DataTermTypeAbstraction _ -> Core.DataVariantTypeAbstraction
+  Core.DataTermTypeApplication _ -> Core.DataVariantTypeApplication
+  Core.DataTermUnion _ -> Core.DataVariantUnion
+  Core.DataTermVariable _ -> Core.DataVariantVariable) (Core.dataTerm term))
 
 -- All term (expression) variants, in a canonical order
 termVariants :: [Core.DataVariant]
@@ -184,21 +180,19 @@ testLists els = (Lists.length (Lists.concat els))
 
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type m -> Core.TypeVariant)
-typeVariant typ = (
-  (
-    \x -> case x of
-      Core.TypeTermElement _ -> Core.TypeVariantElement
-      Core.TypeTermFunction _ -> Core.TypeVariantFunction
-      Core.TypeTermList _ -> Core.TypeVariantList
-      Core.TypeTermLiteral _ -> Core.TypeVariantLiteral
-      Core.TypeTermMap _ -> Core.TypeVariantMap
-      Core.TypeTermNominal _ -> Core.TypeVariantNominal
-      Core.TypeTermOptional _ -> Core.TypeVariantOptional
-      Core.TypeTermRecord _ -> Core.TypeVariantRecord
-      Core.TypeTermSet _ -> Core.TypeVariantSet
-      Core.TypeTermUnion _ -> Core.TypeVariantUnion
-      Core.TypeTermUniversal _ -> Core.TypeVariantUniversal
-      Core.TypeTermVariable _ -> Core.TypeVariantVariable) (Core.typeTerm typ))
+typeVariant typ = ((\x -> case x of
+  Core.TypeTermElement _ -> Core.TypeVariantElement
+  Core.TypeTermFunction _ -> Core.TypeVariantFunction
+  Core.TypeTermList _ -> Core.TypeVariantList
+  Core.TypeTermLiteral _ -> Core.TypeVariantLiteral
+  Core.TypeTermMap _ -> Core.TypeVariantMap
+  Core.TypeTermNominal _ -> Core.TypeVariantNominal
+  Core.TypeTermOptional _ -> Core.TypeVariantOptional
+  Core.TypeTermRecord _ -> Core.TypeVariantRecord
+  Core.TypeTermSet _ -> Core.TypeVariantSet
+  Core.TypeTermUnion _ -> Core.TypeVariantUnion
+  Core.TypeTermUniversal _ -> Core.TypeVariantUniversal
+  Core.TypeTermVariable _ -> Core.TypeVariantVariable) (Core.typeTerm typ))
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]

@@ -78,7 +78,7 @@ writeAssignmentExpression e = case e of
   Java.AssignmentExpressionAssignment a -> writeAssignment a
 
 writeBlock :: Java.Block -> CT.Expr
-writeBlock (Java.Block stmts) = curlyBlock $ newlineSep (writeBlockStatement <$> stmts)
+writeBlock (Java.Block stmts) = curlyBlock fullBlockStyle $ newlineSep (writeBlockStatement <$> stmts)
 
 writeBlockStatement :: Java.BlockStatement -> CT.Expr
 writeBlockStatement s = case s of
@@ -93,7 +93,7 @@ writeCastExpression :: Java.CastExpression -> CT.Expr
 writeCastExpression _ = cst "TODO:CastExpression"
 
 writeClassBody :: Java.ClassBody -> CT.Expr
-writeClassBody (Java.ClassBody decls) = curlyBlock $ doubleNewlineSep (writeClassBodyDeclaration <$> decls)
+writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $ doubleNewlineSep (writeClassBodyDeclaration <$> decls)
 
 writeClassBodyDeclaration :: Java.ClassBodyDeclaration -> CT.Expr
 writeClassBodyDeclaration d = case d of
@@ -151,9 +151,9 @@ writeClassOrInterfaceTypeToInstantiate (Java.ClassOrInterfaceTypeToInstantiate i
 
 writeClassType :: Java.ClassType -> CT.Expr
 writeClassType (Java.ClassType anns qual id args) = spaceSep $ Y.catMaybes [
-  if L.null anns then Nothing else Just $ commaSep False (writeAnnotation <$> anns),
+  if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
   Just qualifiedId,
-  if L.null args then Nothing else Just $ angleBracesList False (writeTypeArgument <$> args)]
+  if L.null args then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> args)]
   where
     qualifiedId = case qual of
       Java.ClassTypeQualifierNone -> writeTypeIdentifier id
@@ -194,7 +194,7 @@ writeConditionalOrExpression (Java.ConditionalOrExpression ands)
   = associateList orOp (writeConditionalAndExpression <$> ands)
 
 writeConstructorBody :: Java.ConstructorBody -> CT.Expr
-writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock $ doubleNewlineSep $ Y.catMaybes [
+writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [
   writeExplicitConstructorInvocation <$> minvoc,
   Just $ newlineSep (writeBlockStatement <$> stmts)]
 
@@ -207,7 +207,7 @@ writeConstructorDeclaration (Java.ConstructorDeclaration mods cons mthrows body)
 
 writeConstructorDeclarator :: Java.ConstructorDeclarator -> CT.Expr
 writeConstructorDeclarator (Java.ConstructorDeclarator tparams name mrecparam fparams) = spaceSep $ Y.catMaybes [
-  if L.null tparams then Nothing else Just $ angleBracesList False (writeTypeParameter <$> tparams),
+  if L.null tparams then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> tparams),
   Just $ writeSimpleTypeName name,
   writeReceiverParameter <$> mrecparam,
   Just $ parenList (writeFormalParameter <$> fparams)]
@@ -234,7 +234,7 @@ writeElementValue :: Java.ElementValue -> CT.Expr
 writeElementValue ev = case ev of
   Java.ElementValueConditionalExpression c -> writeConditionalExpression c
   Java.ElementValueElementValueArrayInitializer (Java.ElementValueArrayInitializer values) ->
-    commaSep False (writeElementValue <$> values)
+    commaSep inlineStyle (writeElementValue <$> values)
   Java.ElementValueAnnotation ann -> writeAnnotation ann
 
 writeElementValuePair :: Java.ElementValuePair -> CT.Expr
@@ -278,7 +278,7 @@ writeFieldDeclaration :: Java.FieldDeclaration -> CT.Expr
 writeFieldDeclaration (Java.FieldDeclaration mods typ vars) = suffixSemi $ spaceSep $ Y.catMaybes [
     if L.null mods then Nothing else Just $ spaceSep (writeFieldModifier <$> mods),
     Just $ writeUnannType typ,
-    Just $ commaSep False (writeVariableDeclarator <$> vars)]
+    Just $ commaSep inlineStyle (writeVariableDeclarator <$> vars)]
 
 writeFieldModifier :: Java.FieldModifier -> CT.Expr
 writeFieldModifier m = case m of
@@ -365,8 +365,8 @@ writeMethodBody (Java.MethodBody block) = writeBlock block
 
 writeMethodHeader :: Java.MethodHeader -> CT.Expr
 writeMethodHeader (Java.MethodHeader params anns result decl mthrows) = spaceSep $ Y.catMaybes [
-  if L.null params then Nothing else Just $ angleBracesList False (writeTypeParameter <$> params),
-  if L.null anns then Nothing else Just $ commaSep False (writeAnnotation <$> anns),
+  if L.null params then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> params),
+  if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
   Just $ writeResult result,
   Just $ writeMethodDeclarator decl,
   writeThrows <$> mthrows]
@@ -414,7 +414,7 @@ writeMultiplicativeExpression e = case e of
 writeNormalAnnotation :: Java.NormalAnnotation -> CT.Expr
 writeNormalAnnotation (Java.NormalAnnotation tname pairs) = prefixAt $ noSep [
   writeTypeName tname,
-  commaSep False (writeElementValuePair <$> pairs)]
+  commaSep inlineStyle (writeElementValuePair <$> pairs)]
 
 writeNormalClassDeclaration :: Java.NormalClassDeclaration -> CT.Expr
 writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc superi body) =
@@ -428,11 +428,11 @@ writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc
       where
         params = if L.null tparams
           then Nothing
-          else Just $ angleBracesList False (writeTypeParameter <$> tparams)
+          else Just $ angleBracesList inlineStyle (writeTypeParameter <$> tparams)
     extendsSec = fmap (\c -> spaceSep [cst "extends", writeClassType c]) msuperc
     implementsSec = if L.null superi
       then Nothing
-      else Just $ spaceSep [cst "implements", commaSep False (writeInterfaceType <$> superi)]
+      else Just $ spaceSep [cst "implements", commaSep inlineStyle (writeInterfaceType <$> superi)]
     bodySec = Just $ writeClassBody body
 
 writePackageDeclaration :: Java.PackageDeclaration -> CT.Expr
@@ -656,7 +656,7 @@ writeUnqualifiedClassInstanceCreationExpression  :: Java.UnqualifiedClassInstanc
 writeUnqualifiedClassInstanceCreationExpression (Java.UnqualifiedClassInstanceCreationExpression targs cit args mbody)
   = spaceSep $ Y.catMaybes [
     Just $ cst "new",
-    if L.null targs then Nothing else Just $ angleBracesList False (writeTypeArgument <$> targs),
+    if L.null targs then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> targs),
     Just $ noSep [writeClassOrInterfaceTypeToInstantiate cit, parenList (writeExpression <$> args)],
     writeClassBody <$> mbody]
 
@@ -686,7 +686,7 @@ writeWhileStatement _ = cst "TODO:WhileStatement"
 
 writeWildcard :: Java.Wildcard -> CT.Expr
 writeWildcard (Java.Wildcard anns mbounds) = spaceSep $ Y.catMaybes [
-  if L.null anns then Nothing else Just $ commaSep False (writeAnnotation <$> anns),
+  if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
   Just $ cst "*",
   writeWildcardBounds <$> mbounds]
 

@@ -56,22 +56,22 @@ checkLists = do
     
     H.it "Empty list" $ do
       check
-        (bracketList False [])
+        (bracketList inlineStyle [])
         "[]"
 
     H.it "Simple non-empty list" $ do
       check
-        (bracketList False [num 1, num 2, num 3])
+        (bracketList inlineStyle [num 1, num 2, num 3])
         "[1, 2, 3]"
 
     H.it "Nested list" $ do
       check
-        (bracketList False [bracketList False [num 1, num 3], num 2])
+        (bracketList inlineStyle [bracketList inlineStyle [num 1, num 3], num 2])
         "[[1, 3], 2]"
 
     H.it "List with parenthesized expression inside" $ do
       check
-        (bracketList False [bracketList False [num 1, ifx multOp (ifx plusOp (num 2) (num 3)) (ifx plusOp (num 1) (num 10))], num 2])
+        (bracketList inlineStyle [bracketList inlineStyle [num 1, ifx multOp (ifx plusOp (num 2) (num 3)) (ifx plusOp (num 1) (num 10))], num 2])
         "[[1, (2 + 3) * (1 + 10)], 2]"
 
 checkPrecedence :: H.SpecWith ()

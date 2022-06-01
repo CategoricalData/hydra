@@ -31,13 +31,15 @@ _EnumField_name = (Core.FieldName "name")
 _EnumField_annotations = (Core.FieldName "annotations")
 
 newtype EnumFieldName 
-  = EnumFieldName {unEnumFieldName :: String}
+  = EnumFieldName {
+    unEnumFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EnumFieldName = (Core.Name "hydra/ext/pegasus/pdl.EnumFieldName")
 
 data EnumSchema 
-  = EnumSchema {enumSchemaFields :: [EnumField]}
+  = EnumSchema {
+    enumSchemaFields :: [EnumField]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumSchema = (Core.Name "hydra/ext/pegasus/pdl.EnumSchema")
@@ -45,7 +47,8 @@ _EnumSchema = (Core.Name "hydra/ext/pegasus/pdl.EnumSchema")
 _EnumSchema_fields = (Core.FieldName "fields")
 
 newtype FieldName 
-  = FieldName {unFieldName :: String}
+  = FieldName {
+    unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = (Core.Name "hydra/ext/pegasus/pdl.FieldName")
@@ -80,19 +83,22 @@ _NamedSchema_Type_enum = (Core.FieldName "enum")
 _NamedSchema_Type_typeref = (Core.FieldName "typeref")
 
 newtype Name 
-  = Name {unName :: String}
+  = Name {
+    unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Core.Name "hydra/ext/pegasus/pdl.Name")
 
 newtype Namespace 
-  = Namespace {unNamespace :: String}
+  = Namespace {
+    unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Namespace = (Core.Name "hydra/ext/pegasus/pdl.Namespace")
 
 newtype Package 
-  = Package {unPackage :: String}
+  = Package {
+    unPackage :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Package = (Core.Name "hydra/ext/pegasus/pdl.Package")
@@ -124,7 +130,8 @@ _PrimitiveType_long = (Core.FieldName "long")
 _PrimitiveType_string = (Core.FieldName "string")
 
 newtype PropertyKey 
-  = PropertyKey {unPropertyKey :: String}
+  = PropertyKey {
+    unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = (Core.Name "hydra/ext/pegasus/pdl.PropertyKey")
@@ -249,7 +256,8 @@ _UnionMember_value = (Core.FieldName "value")
 _UnionMember_annotations = (Core.FieldName "annotations")
 
 newtype UnionSchema 
-  = UnionSchema {unUnionSchema :: [UnionMember]}
+  = UnionSchema {
+    unUnionSchema :: [UnionMember]}
   deriving (Eq, Ord, Read, Show)
 
 _UnionSchema = (Core.Name "hydra/ext/pegasus/pdl.UnionSchema")

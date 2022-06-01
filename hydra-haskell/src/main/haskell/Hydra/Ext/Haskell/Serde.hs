@@ -39,7 +39,7 @@ instance ToTree H.Constructor where
       spaceSep (toTree <$> types)]
     H.ConstructorRecord (H.Constructor_Record name fields) -> spaceSep [
       toTree name,
-      curlyBracesList True (toTree <$> fields)]
+      curlyBracesList halfBlockStyle (toTree <$> fields)]
 
 instance ToTree H.DataDeclaration_Keyword where
   toTree kw = case kw of
@@ -90,7 +90,7 @@ instance ToTree H.Expression where
       H.ExpressionLambda lam -> toTree lam
     --  H.ExpressionLeftSection DataTerm_Section
     --  H.ExpressionLet DataTerm_Let
-      H.ExpressionList exprs -> bracketList True $ toTree <$> exprs
+      H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication DataTerm_PrefixApplication
     --  H.ExpressionRightSection DataTerm_Section
@@ -110,9 +110,9 @@ instance ToTree H.Expression_Case where
       ofOp = CT.Op (CT.Symbol "of") (CT.Padding CT.WsSpace CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
 
 instance ToTree H.Expression_ConstructRecord where
-  toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces True body]
+  toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
     where
-      body = commaSep True (fromUpdate <$> updates)
+      body = commaSep halfBlockStyle (fromUpdate <$> updates)
       fromUpdate (H.FieldUpdate fn val) = ifx defineOp (toTree fn) (toTree val)
 
 instance ToTree H.Expression_If where
@@ -167,7 +167,7 @@ instance ToTree H.Pattern where
   toTree pat = case pat of
       H.PatternApplication app -> toTree app
 --      H.PatternAs (H.Pattern_As ) ->
-      H.PatternList pats -> bracketList True $ toTree <$> pats
+      H.PatternList pats -> bracketList halfBlockStyle $ toTree <$> pats
       H.PatternLiteral lit -> toTree lit
       H.PatternName name -> toTree name
       H.PatternParens pat -> parenthesize $ toTree pat
@@ -190,7 +190,7 @@ instance ToTree H.Type where
     H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
     H.TypeFunction (H.Type_Function dom cod) -> ifx arrowOp (toTree dom) (toTree cod)
 --  H.TypeInfix Type_Infix
-    H.TypeList htype -> bracketList False [toTree htype]
+    H.TypeList htype -> bracketList inlineStyle [toTree htype]
 --  H.TypeParens Type
     H.TypeTuple types -> parenList $ toTree <$> types
     H.TypeVariable name -> toTree name

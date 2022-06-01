@@ -22,13 +22,28 @@ _Associativity_right = (Core.FieldName "right")
 
 _Associativity_both = (Core.FieldName "both")
 
+-- Formatting option for code blocks
+data BlockStyle 
+  = BlockStyle {
+    blockStyleIndent :: Bool,
+    blockStyleNewlineBeforeContent :: Bool,
+    blockStyleNewlineAfterContent :: Bool}
+  deriving (Eq, Ord, Read, Show)
+
+_BlockStyle = (Core.Name "hydra/util/codetree/ast.BlockStyle")
+
+_BlockStyle_indent = (Core.FieldName "indent")
+
+_BlockStyle_newlineBeforeContent = (Core.FieldName "newlineBeforeContent")
+
+_BlockStyle_newlineAfterContent = (Core.FieldName "newlineAfterContent")
+
 -- An expression enclosed by brackets
 data BracketExpr 
   = BracketExpr {
     bracketExprBrackets :: Brackets,
     bracketExprEnclosed :: Expr,
-    bracketExprNewlines :: Bool
-  }
+    bracketExprStyle :: BlockStyle}
   deriving (Eq, Ord, Read, Show)
 
 _BracketExpr = (Core.Name "hydra/util/codetree/ast.BracketExpr")
@@ -37,14 +52,13 @@ _BracketExpr_brackets = (Core.FieldName "brackets")
 
 _BracketExpr_enclosed = (Core.FieldName "enclosed")
 
-_BracketExpr_newlines = (Core.FieldName "newlines")
+_BracketExpr_style = (Core.FieldName "style")
 
 -- Matching open and close bracket symbols
 data Brackets 
   = Brackets {
     bracketsOpen :: Symbol,
-    bracketsClose :: Symbol
-  }
+    bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
 
 _Brackets = (Core.Name "hydra/util/codetree/ast.Brackets")
@@ -74,8 +88,8 @@ data Op
     opSymbol :: Symbol,
     opPadding :: Padding,
     opPrecedence :: Precedence,
-    opAssociativity :: Associativity
-  } deriving (Eq, Ord, Read, Show)
+    opAssociativity :: Associativity}
+  deriving (Eq, Ord, Read, Show)
 
 _Op = (Core.Name "hydra/util/codetree/ast.Op")
 
@@ -92,8 +106,7 @@ data OpExpr
   = OpExpr {
     opExprOp :: Op,
     opExprLhs :: Expr,
-    opExprRhs :: Expr
-  }
+    opExprRhs :: Expr}
   deriving (Eq, Ord, Read, Show)
 
 _OpExpr = (Core.Name "hydra/util/codetree/ast.OpExpr")
@@ -108,8 +121,7 @@ _OpExpr_rhs = (Core.FieldName "rhs")
 data Padding 
   = Padding {
     paddingLeft :: Ws,
-    paddingRight :: Ws
-  }
+    paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
 
 _Padding = (Core.Name "hydra/util/codetree/ast.Padding")
@@ -121,8 +133,7 @@ _Padding_right = (Core.FieldName "right")
 -- Operator precedence
 newtype Precedence 
   = Precedence {
-    unPrecedence :: Int
-  }
+    unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
@@ -130,8 +141,7 @@ _Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
 -- Any symbol
 newtype Symbol 
   = Symbol {
-    unSymbol :: String
-  }
+    unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")

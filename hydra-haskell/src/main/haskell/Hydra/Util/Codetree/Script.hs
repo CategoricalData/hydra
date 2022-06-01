@@ -8,37 +8,39 @@ import qualified Data.List as L
 angleBraces :: Brackets
 angleBraces = Brackets (sym "<") (sym ">")
 
-angleBracesList :: Bool -> [Expr] -> Expr
-angleBracesList newlines els = case els of
+angleBracesList ::  BlockStyle -> [Expr] -> Expr
+angleBracesList style els = case els of
   [] -> cst "<>"
-  _ -> brackets angleBraces newlines $ commaSep newlines els
+  _ -> brackets angleBraces style $ commaSep style els
 
-bracketList :: Bool -> [Expr] -> Expr
-bracketList newlines els = case els of
+bracketList :: BlockStyle -> [Expr] -> Expr
+bracketList style els = case els of
   [] -> cst "[]"
-  _ -> brackets squareBrackets newlines $ commaSep newlines els
+  _ -> brackets squareBrackets style $ commaSep style els
 
-brackets :: Brackets -> Bool -> Expr -> Expr
-brackets br newlines e = ExprBrackets $ BracketExpr br e newlines
+brackets :: Brackets -> BlockStyle -> Expr -> Expr
+brackets br style e = ExprBrackets $ BracketExpr br e style
 
 commaOp :: Bool -> Op
 commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
 
-commaSep :: Bool -> [Expr] -> Expr
-commaSep newlines l = case l of
+commaSep :: BlockStyle -> [Expr] -> Expr
+commaSep style l = case l of
   [x] -> x
-  (h:r) -> ifx (commaOp newlines) h $ commaSep newlines r
+  (h:r) -> ifx (commaOp newlines) h $ commaSep style r
+  where
+    newlines = blockStyleNewlineBeforeContent style
 
-curlyBlock :: Expr -> Expr
-curlyBlock e = curlyBracesList True [e]
+curlyBlock :: BlockStyle -> Expr -> Expr
+curlyBlock style e = curlyBracesList style [e]
 
 curlyBraces :: Brackets
 curlyBraces = Brackets (sym "{") (sym "}")
 
-curlyBracesList :: Bool -> [Expr] -> Expr
-curlyBracesList newlines els = case els of
+curlyBracesList :: BlockStyle -> [Expr] -> Expr
+curlyBracesList style els = case els of
   [] -> cst "{}"
-  _ -> brackets curlyBraces newlines $ commaSep newlines els
+  _ -> brackets curlyBraces style $ commaSep style els
 
 cst :: String -> Expr
 cst = ExprConst . Symbol
@@ -48,6 +50,12 @@ dotSep = sep $ Op (sym ".") (Padding WsNone WsNone) (Precedence 0) Associativity
 
 doubleNewlineSep :: [Expr] -> Expr
 doubleNewlineSep = sep $ Op (sym "") (Padding WsBreak WsBreak) (Precedence 0) AssociativityNone
+
+fullBlockStyle :: BlockStyle
+fullBlockStyle = BlockStyle True True True
+
+halfBlockStyle :: BlockStyle
+halfBlockStyle = BlockStyle True True False
 
 ifx :: Op -> Expr -> Expr -> Expr
 ifx op lhs rhs = ExprOp $ OpExpr op lhs rhs
@@ -64,6 +72,9 @@ indentLines :: [Expr] -> Expr
 indentLines els = ifx topOp (cst "") (newlineSep els)
   where
     topOp = Op (sym "") (Padding WsNone WsBreakAndIndent) (Precedence 0) AssociativityNone
+
+inlineStyle :: BlockStyle
+inlineStyle = BlockStyle False False False
 
 newlineSep :: [Expr] -> Expr
 newlineSep = sep $ Op (sym "") (Padding WsNone WsBreak) (Precedence 0) AssociativityNone
@@ -83,10 +94,10 @@ op s p = Op (Symbol s) (Padding WsSpace WsSpace) (Precedence p)
 parenList :: [Expr] -> Expr
 parenList els = case els of
   [] -> cst "()"
-  _ -> brackets parentheses False $ commaSep False els
+  _ -> brackets parentheses inlineStyle $ commaSep inlineStyle els
 
 parens :: Expr -> Expr
-parens = brackets parentheses False
+parens = brackets parentheses inlineStyle
 
 parentheses :: Brackets
 parentheses = Brackets (sym "(") (sym ")")
@@ -124,7 +135,7 @@ prefix p = ifx preOp (cst "")
     preOp = Op (sym p) (Padding WsNone WsNone) (Precedence 0) AssociativityNone
 
 printExpr :: Expr -> String
-printExpr exp = case exp of
+printExpr e = case e of
   ExprConst (Symbol s) -> s
   ExprOp (OpExpr (Op (Symbol sym) (Padding padl padr) _ _) l r) -> lhs ++ pad padl ++ sym ++ pad padr ++ rhs
     where
@@ -136,11 +147,14 @@ printExpr exp = case exp of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
-  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e newlines) -> if newlines
-      then l ++ "\n" ++ indent body ++ "\n" ++ r
-      else l ++ body ++ r
+  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e style) ->
+      l ++ pre ++ ibody ++ suf ++ r
     where
       body = printExpr e
+      ibody = if doIndent then indent body else body
+      pre = if nlBefore then "\n" else ""
+      suf = if nlAfter then "\n" else ""
+      BlockStyle doIndent nlBefore nlAfter = style
 
 printExprAsTree :: Expr -> String
 printExprAsTree expr = case expr of

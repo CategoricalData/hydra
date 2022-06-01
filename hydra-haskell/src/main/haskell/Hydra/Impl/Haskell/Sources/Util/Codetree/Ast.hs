@@ -27,14 +27,19 @@ codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
         doc "Operator associativity" $
         enum ["none", "left", "right", "both"],
 
+      def "BlockStyle" $
+        doc "Formatting option for code blocks" $
+        record [
+          field "indent" boolean,
+          field "newlineBeforeContent" boolean,
+          field "newlineAfterContent" boolean],
+          
       def "BracketExpr" $
         doc "An expression enclosed by brackets" $
         record [
           field "brackets" $ ast "Brackets",
           field "enclosed" $ ast "Expr",
-          field "newlines" $
-            doc "Whether to prefix and suffix the enclosed expression with a newline"
-            boolean],
+          field "style" $ ast "BlockStyle"],
 
       def "Brackets" $
         doc "Matching open and close bracket symbols" $

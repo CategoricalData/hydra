@@ -6,16 +6,14 @@ import Data.Set
 
 newtype Identifier 
   = Identifier {
-    unIdentifier :: String
-  }
+    unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Identifier = (Core.Name "hydra/ext/java/syntax.Identifier")
 
 newtype TypeIdentifier 
   = TypeIdentifier {
-    unTypeIdentifier :: Identifier
-  }
+    unTypeIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _TypeIdentifier = (Core.Name "hydra/ext/java/syntax.TypeIdentifier")
@@ -46,8 +44,7 @@ _Literal_string = (Core.FieldName "string")
 -- Note: this is an approximation which ignores encoding
 newtype IntegerLiteral 
   = IntegerLiteral {
-    unIntegerLiteral :: Integer
-  }
+    unIntegerLiteral :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _IntegerLiteral = (Core.Name "hydra/ext/java/syntax.IntegerLiteral")
@@ -55,8 +52,7 @@ _IntegerLiteral = (Core.Name "hydra/ext/java/syntax.IntegerLiteral")
 -- Note: this is an approximation which ignores encoding
 newtype FloatingPointLiteral 
   = FloatingPointLiteral {
-    unFloatingPointLiteral :: Double
-  }
+    unFloatingPointLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
 _FloatingPointLiteral = (Core.Name "hydra/ext/java/syntax.FloatingPointLiteral")
@@ -64,8 +60,7 @@ _FloatingPointLiteral = (Core.Name "hydra/ext/java/syntax.FloatingPointLiteral")
 -- Note: this is an approximation which ignores encoding
 newtype StringLiteral 
   = StringLiteral {
-    unStringLiteral :: String
-  }
+    unStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteral = (Core.Name "hydra/ext/java/syntax.StringLiteral")
@@ -84,8 +79,7 @@ _Type_reference = (Core.FieldName "reference")
 data PrimitiveTypeWithAnnotations 
   = PrimitiveTypeWithAnnotations {
     primitiveTypeWithAnnotationsType :: PrimitiveType,
-    primitiveTypeWithAnnotationsAnnotations :: [Annotation]
-  }
+    primitiveTypeWithAnnotationsAnnotations :: [Annotation]}
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveTypeWithAnnotations = (Core.Name "hydra/ext/java/syntax.PrimitiveTypeWithAnnotations")
@@ -177,8 +171,7 @@ data ClassType
     classTypeAnnotations :: [Annotation],
     classTypeQualifier :: ClassTypeQualifier,
     classTypeIdentifier :: TypeIdentifier,
-    classTypeArguments :: [TypeArgument]
-  }
+    classTypeArguments :: [TypeArgument]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassType = (Core.Name "hydra/ext/java/syntax.ClassType")
@@ -207,8 +200,7 @@ _ClassTypeQualifier_parent = (Core.FieldName "parent")
 
 newtype InterfaceType 
   = InterfaceType {
-    unInterfaceType :: ClassType
-  }
+    unInterfaceType :: ClassType}
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceType = (Core.Name "hydra/ext/java/syntax.InterfaceType")
@@ -216,8 +208,7 @@ _InterfaceType = (Core.Name "hydra/ext/java/syntax.InterfaceType")
 data TypeVariable 
   = TypeVariable {
     typeVariableAnnotations :: [Annotation],
-    typeVariableIdentifier :: TypeIdentifier
-  }
+    typeVariableIdentifier :: TypeIdentifier}
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariable = (Core.Name "hydra/ext/java/syntax.TypeVariable")
@@ -229,8 +220,7 @@ _TypeVariable_identifier = (Core.FieldName "identifier")
 data ArrayType 
   = ArrayType {
     arrayTypeDims :: Dims,
-    arrayTypeVariant :: ArrayType_Variant
-  }
+    arrayTypeVariant :: ArrayType_Variant}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayType = (Core.Name "hydra/ext/java/syntax.ArrayType")
@@ -255,8 +245,7 @@ _ArrayType_Variant_variable = (Core.FieldName "variable")
 
 newtype Dims 
   = Dims {
-    unDims :: [[Annotation]]
-  }
+    unDims :: [[Annotation]]}
   deriving (Eq, Ord, Read, Show)
 
 _Dims = (Core.Name "hydra/ext/java/syntax.Dims")
@@ -265,8 +254,7 @@ data TypeParameter
   = TypeParameter {
     typeParameterModifiers :: [TypeParameterModifier],
     typeParameterIdentifier :: TypeIdentifier,
-    typeParameterBound :: (Maybe TypeBound)
-  }
+    typeParameterBound :: (Maybe TypeBound)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeParameter = (Core.Name "hydra/ext/java/syntax.TypeParameter")
@@ -279,8 +267,7 @@ _TypeParameter_bound = (Core.FieldName "bound")
 
 newtype TypeParameterModifier 
   = TypeParameterModifier {
-    unTypeParameterModifier :: Annotation
-  }
+    unTypeParameterModifier :: Annotation}
   deriving (Eq, Ord, Read, Show)
 
 _TypeParameterModifier = (Core.Name "hydra/ext/java/syntax.TypeParameterModifier")
@@ -299,8 +286,7 @@ _TypeBound_classOrInterface = (Core.FieldName "classOrInterface")
 data TypeBound_ClassOrInterface 
   = TypeBound_ClassOrInterface {
     typeBound_ClassOrInterfaceType :: ClassOrInterfaceType,
-    typeBound_ClassOrInterfaceAdditional :: [AdditionalBound]
-  }
+    typeBound_ClassOrInterfaceAdditional :: [AdditionalBound]}
   deriving (Eq, Ord, Read, Show)
 
 _TypeBound_ClassOrInterface = (Core.Name "hydra/ext/java/syntax.TypeBound.ClassOrInterface")
@@ -311,8 +297,7 @@ _TypeBound_ClassOrInterface_additional = (Core.FieldName "additional")
 
 newtype AdditionalBound 
   = AdditionalBound {
-    unAdditionalBound :: InterfaceType
-  }
+    unAdditionalBound :: InterfaceType}
   deriving (Eq, Ord, Read, Show)
 
 _AdditionalBound = (Core.Name "hydra/ext/java/syntax.AdditionalBound")
@@ -331,8 +316,7 @@ _TypeArgument_wildcard = (Core.FieldName "wildcard")
 data Wildcard 
   = Wildcard {
     wildcardAnnotations :: [Annotation],
-    wildcardWildcard :: (Maybe WildcardBounds)
-  }
+    wildcardWildcard :: (Maybe WildcardBounds)}
   deriving (Eq, Ord, Read, Show)
 
 _Wildcard = (Core.Name "hydra/ext/java/syntax.Wildcard")
@@ -355,8 +339,7 @@ _WildcardBounds_super = (Core.FieldName "super")
 data ModuleName 
   = ModuleName {
     moduleNameIdentifier :: Identifier,
-    moduleNameName :: (Maybe ModuleName)
-  }
+    moduleNameName :: (Maybe ModuleName)}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleName = (Core.Name "hydra/ext/java/syntax.ModuleName")
@@ -367,8 +350,7 @@ _ModuleName_name = (Core.FieldName "name")
 
 newtype PackageName 
   = PackageName {
-    unPackageName :: [Identifier]
-  }
+    unPackageName :: [Identifier]}
   deriving (Eq, Ord, Read, Show)
 
 _PackageName = (Core.Name "hydra/ext/java/syntax.PackageName")
@@ -376,8 +358,7 @@ _PackageName = (Core.Name "hydra/ext/java/syntax.PackageName")
 data TypeName 
   = TypeName {
     typeNameIdentifier :: TypeIdentifier,
-    typeNameQualifier :: (Maybe PackageOrTypeName)
-  }
+    typeNameQualifier :: (Maybe PackageOrTypeName)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeName = (Core.Name "hydra/ext/java/syntax.TypeName")
@@ -389,8 +370,7 @@ _TypeName_qualifier = (Core.FieldName "qualifier")
 data ExpressionName 
   = ExpressionName {
     expressionNameIdentifier :: Identifier,
-    expressionNameName :: (Maybe AmbiguousName)
-  }
+    expressionNameName :: (Maybe AmbiguousName)}
   deriving (Eq, Ord, Read, Show)
 
 _ExpressionName = (Core.Name "hydra/ext/java/syntax.ExpressionName")
@@ -401,24 +381,21 @@ _ExpressionName_name = (Core.FieldName "name")
 
 newtype MethodName 
   = MethodName {
-    unMethodName :: Identifier
-  }
+    unMethodName :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _MethodName = (Core.Name "hydra/ext/java/syntax.MethodName")
 
 newtype PackageOrTypeName 
   = PackageOrTypeName {
-    unPackageOrTypeName :: [Identifier]
-  }
+    unPackageOrTypeName :: [Identifier]}
   deriving (Eq, Ord, Read, Show)
 
 _PackageOrTypeName = (Core.Name "hydra/ext/java/syntax.PackageOrTypeName")
 
 newtype AmbiguousName 
   = AmbiguousName {
-    unAmbiguousName :: [Identifier]
-  }
+    unAmbiguousName :: [Identifier]}
   deriving (Eq, Ord, Read, Show)
 
 _AmbiguousName = (Core.Name "hydra/ext/java/syntax.AmbiguousName")
@@ -438,8 +415,7 @@ data OrdinaryCompilationUnit
   = OrdinaryCompilationUnit {
     ordinaryCompilationUnitPackage :: (Maybe PackageDeclaration),
     ordinaryCompilationUnitImports :: [ImportDeclaration],
-    ordinaryCompilationUnitTypes :: [TypeDeclaration]
-  }
+    ordinaryCompilationUnitTypes :: [TypeDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _OrdinaryCompilationUnit = (Core.Name "hydra/ext/java/syntax.OrdinaryCompilationUnit")
@@ -453,8 +429,7 @@ _OrdinaryCompilationUnit_types = (Core.FieldName "types")
 data ModularCompilationUnit 
   = ModularCompilationUnit {
     modularCompilationUnitImports :: [ImportDeclaration],
-    modularCompilationUnitModule :: ModuleDeclaration
-  }
+    modularCompilationUnitModule :: ModuleDeclaration}
   deriving (Eq, Ord, Read, Show)
 
 _ModularCompilationUnit = (Core.Name "hydra/ext/java/syntax.ModularCompilationUnit")
@@ -466,8 +441,7 @@ _ModularCompilationUnit_module = (Core.FieldName "module")
 data PackageDeclaration 
   = PackageDeclaration {
     packageDeclarationModifiers :: [PackageModifier],
-    packageDeclarationIdentifiers :: [Identifier]
-  }
+    packageDeclarationIdentifiers :: [Identifier]}
   deriving (Eq, Ord, Read, Show)
 
 _PackageDeclaration = (Core.Name "hydra/ext/java/syntax.PackageDeclaration")
@@ -478,8 +452,7 @@ _PackageDeclaration_identifiers = (Core.FieldName "identifiers")
 
 newtype PackageModifier 
   = PackageModifier {
-    unPackageModifier :: Annotation
-  }
+    unPackageModifier :: Annotation}
   deriving (Eq, Ord, Read, Show)
 
 _PackageModifier = (Core.Name "hydra/ext/java/syntax.PackageModifier")
@@ -503,16 +476,14 @@ _ImportDeclaration_staticImportOnDemand = (Core.FieldName "staticImportOnDemand"
 
 newtype SingleTypeImportDeclaration 
   = SingleTypeImportDeclaration {
-    unSingleTypeImportDeclaration :: TypeName
-  }
+    unSingleTypeImportDeclaration :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _SingleTypeImportDeclaration = (Core.Name "hydra/ext/java/syntax.SingleTypeImportDeclaration")
 
 newtype TypeImportOnDemandDeclaration 
   = TypeImportOnDemandDeclaration {
-    unTypeImportOnDemandDeclaration :: PackageOrTypeName
-  }
+    unTypeImportOnDemandDeclaration :: PackageOrTypeName}
   deriving (Eq, Ord, Read, Show)
 
 _TypeImportOnDemandDeclaration = (Core.Name "hydra/ext/java/syntax.TypeImportOnDemandDeclaration")
@@ -520,8 +491,7 @@ _TypeImportOnDemandDeclaration = (Core.Name "hydra/ext/java/syntax.TypeImportOnD
 data SingleStaticImportDeclaration 
   = SingleStaticImportDeclaration {
     singleStaticImportDeclarationTypeName :: TypeName,
-    singleStaticImportDeclarationIdentifier :: Identifier
-  }
+    singleStaticImportDeclarationIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _SingleStaticImportDeclaration = (Core.Name "hydra/ext/java/syntax.SingleStaticImportDeclaration")
@@ -532,8 +502,7 @@ _SingleStaticImportDeclaration_identifier = (Core.FieldName "identifier")
 
 newtype StaticImportOnDemandDeclaration 
   = StaticImportOnDemandDeclaration {
-    unStaticImportOnDemandDeclaration :: TypeName
-  }
+    unStaticImportOnDemandDeclaration :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _StaticImportOnDemandDeclaration = (Core.Name "hydra/ext/java/syntax.StaticImportOnDemandDeclaration")
@@ -554,8 +523,7 @@ data ModuleDeclaration
     moduleDeclarationAnnotations :: [Annotation],
     moduleDeclarationOpen :: Bool,
     moduleDeclarationIdentifiers :: [Identifier],
-    moduleDeclarationDirectives :: [[ModuleDirective]]
-  }
+    moduleDeclarationDirectives :: [[ModuleDirective]]}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleDeclaration = (Core.Name "hydra/ext/java/syntax.ModuleDeclaration")
@@ -591,8 +559,7 @@ _ModuleDirective_provides = (Core.FieldName "provides")
 data ModuleDirective_Requires 
   = ModuleDirective_Requires {
     moduleDirective_RequiresModifiers :: [RequiresModifier],
-    moduleDirective_RequiresModule :: ModuleName
-  }
+    moduleDirective_RequiresModule :: ModuleName}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleDirective_Requires = (Core.Name "hydra/ext/java/syntax.ModuleDirective.Requires")
@@ -604,8 +571,7 @@ _ModuleDirective_Requires_module = (Core.FieldName "module")
 data ModuleDirective_ExportsOrOpens 
   = ModuleDirective_ExportsOrOpens {
     moduleDirective_ExportsOrOpensPackage :: PackageName,
-    moduleDirective_ExportsOrOpensModules :: [ModuleName]
-  }
+    moduleDirective_ExportsOrOpensModules :: [ModuleName]}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleDirective_ExportsOrOpens = (Core.Name "hydra/ext/java/syntax.ModuleDirective.ExportsOrOpens")
@@ -617,8 +583,7 @@ _ModuleDirective_ExportsOrOpens_modules = (Core.FieldName "modules")
 data ModuleDirective_Provides 
   = ModuleDirective_Provides {
     moduleDirective_ProvidesTo :: TypeName,
-    moduleDirective_ProvidesWith :: [TypeName]
-  }
+    moduleDirective_ProvidesWith :: [TypeName]}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleDirective_Provides = (Core.Name "hydra/ext/java/syntax.ModuleDirective.Provides")
@@ -656,8 +621,7 @@ data NormalClassDeclaration
     normalClassDeclarationParameters :: [TypeParameter],
     normalClassDeclarationExtends :: (Maybe ClassType),
     normalClassDeclarationImplements :: [InterfaceType],
-    normalClassDeclarationBody :: ClassBody
-  }
+    normalClassDeclarationBody :: ClassBody}
   deriving (Eq, Ord, Read, Show)
 
 _NormalClassDeclaration = (Core.Name "hydra/ext/java/syntax.NormalClassDeclaration")
@@ -705,8 +669,7 @@ _ClassModifier_strictfp = (Core.FieldName "strictfp")
 
 newtype ClassBody 
   = ClassBody {
-    unClassBody :: [ClassBodyDeclaration]
-  }
+    unClassBody :: [ClassBodyDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _ClassBody = (Core.Name "hydra/ext/java/syntax.ClassBody")
@@ -749,8 +712,7 @@ data FieldDeclaration
   = FieldDeclaration {
     fieldDeclarationModifiers :: [FieldModifier],
     fieldDeclarationUnannType :: UnannType,
-    fieldDeclarationVariableDeclarators :: [VariableDeclarator]
-  }
+    fieldDeclarationVariableDeclarators :: [VariableDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
 _FieldDeclaration = (Core.Name "hydra/ext/java/syntax.FieldDeclaration")
@@ -793,8 +755,7 @@ _FieldModifier_volatile = (Core.FieldName "volatile")
 data VariableDeclarator 
   = VariableDeclarator {
     variableDeclaratorId :: VariableDeclaratorId,
-    variableDeclaratorInitializer :: (Maybe VariableInitializer)
-  }
+    variableDeclaratorInitializer :: (Maybe VariableInitializer)}
   deriving (Eq, Ord, Read, Show)
 
 _VariableDeclarator = (Core.Name "hydra/ext/java/syntax.VariableDeclarator")
@@ -806,8 +767,7 @@ _VariableDeclarator_initializer = (Core.FieldName "initializer")
 data VariableDeclaratorId 
   = VariableDeclaratorId {
     variableDeclaratorIdIdentifier :: Identifier,
-    variableDeclaratorIdDims :: (Maybe Dims)
-  }
+    variableDeclaratorIdDims :: (Maybe Dims)}
   deriving (Eq, Ord, Read, Show)
 
 _VariableDeclaratorId = (Core.Name "hydra/ext/java/syntax.VariableDeclaratorId")
@@ -830,8 +790,7 @@ _VariableInitializer_arrayInitializer = (Core.FieldName "arrayInitializer")
 -- A Type which does not allow annotations
 newtype UnannType 
   = UnannType {
-    unUnannType :: Type
-  }
+    unUnannType :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _UnannType = (Core.Name "hydra/ext/java/syntax.UnannType")
@@ -839,8 +798,7 @@ _UnannType = (Core.Name "hydra/ext/java/syntax.UnannType")
 -- A ClassType which does not allow annotations
 newtype UnannClassType 
   = UnannClassType {
-    unUnannClassType :: ClassType
-  }
+    unUnannClassType :: ClassType}
   deriving (Eq, Ord, Read, Show)
 
 _UnannClassType = (Core.Name "hydra/ext/java/syntax.UnannClassType")
@@ -849,8 +807,7 @@ data MethodDeclaration
   = MethodDeclaration {
     methodDeclarationModifiers :: [MethodModifier],
     methodDeclarationHeader :: MethodHeader,
-    methodDeclarationBody :: MethodBody
-  }
+    methodDeclarationBody :: MethodBody}
   deriving (Eq, Ord, Read, Show)
 
 _MethodDeclaration = (Core.Name "hydra/ext/java/syntax.MethodDeclaration")
@@ -899,8 +856,7 @@ data MethodHeader
     methodHeaderAnnotations :: [Annotation],
     methodHeaderResult :: Result,
     methodHeaderDeclarator :: MethodDeclarator,
-    methodHeaderThrows :: (Maybe Throws)
-  }
+    methodHeaderThrows :: (Maybe Throws)}
   deriving (Eq, Ord, Read, Show)
 
 _MethodHeader = (Core.Name "hydra/ext/java/syntax.MethodHeader")
@@ -930,8 +886,7 @@ data MethodDeclarator
   = MethodDeclarator {
     methodDeclaratorIdentifier :: Identifier,
     methodDeclaratorReceiverParameter :: (Maybe ReceiverParameter),
-    methodDeclaratorFormalParameters :: [FormalParameter]
-  }
+    methodDeclaratorFormalParameters :: [FormalParameter]}
   deriving (Eq, Ord, Read, Show)
 
 _MethodDeclarator = (Core.Name "hydra/ext/java/syntax.MethodDeclarator")
@@ -946,8 +901,7 @@ data ReceiverParameter
   = ReceiverParameter {
     receiverParameterAnnotations :: [Annotation],
     receiverParameterUnannType :: UnannType,
-    receiverParameterIdentifier :: (Maybe Identifier)
-  }
+    receiverParameterIdentifier :: (Maybe Identifier)}
   deriving (Eq, Ord, Read, Show)
 
 _ReceiverParameter = (Core.Name "hydra/ext/java/syntax.ReceiverParameter")
@@ -973,8 +927,7 @@ data FormalParameter_Simple
   = FormalParameter_Simple {
     formalParameter_SimpleModifiers :: [VariableModifier],
     formalParameter_SimpleType :: UnannType,
-    formalParameter_SimpleId :: VariableDeclaratorId
-  }
+    formalParameter_SimpleId :: VariableDeclaratorId}
   deriving (Eq, Ord, Read, Show)
 
 _FormalParameter_Simple = (Core.Name "hydra/ext/java/syntax.FormalParameter.Simple")
@@ -990,8 +943,7 @@ data VariableArityParameter
     variableArityParameterModifiers :: VariableModifier,
     variableArityParameterType :: UnannType,
     variableArityParameterAnnotations :: [Annotation],
-    variableArityParameterIdentifier :: Identifier
-  }
+    variableArityParameterIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _VariableArityParameter = (Core.Name "hydra/ext/java/syntax.VariableArityParameter")
@@ -1018,8 +970,7 @@ _VariableModifier_final = (Core.FieldName "final")
 -- Note: list cannot be empty
 newtype Throws 
   = Throws {
-    unThrows :: [ExceptionType]
-  }
+    unThrows :: [ExceptionType]}
   deriving (Eq, Ord, Read, Show)
 
 _Throws = (Core.Name "hydra/ext/java/syntax.Throws")
@@ -1037,24 +988,21 @@ _ExceptionType_variable = (Core.FieldName "variable")
 
 newtype MethodBody 
   = MethodBody {
-    unMethodBody :: Block
-  }
+    unMethodBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _MethodBody = (Core.Name "hydra/ext/java/syntax.MethodBody")
 
 newtype InstanceInitializer 
   = InstanceInitializer {
-    unInstanceInitializer :: Block
-  }
+    unInstanceInitializer :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _InstanceInitializer = (Core.Name "hydra/ext/java/syntax.InstanceInitializer")
 
 newtype StaticInitializer 
   = StaticInitializer {
-    unStaticInitializer :: Block
-  }
+    unStaticInitializer :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _StaticInitializer = (Core.Name "hydra/ext/java/syntax.StaticInitializer")
@@ -1064,8 +1012,7 @@ data ConstructorDeclaration
     constructorDeclarationModifiers :: [ConstructorModifier],
     constructorDeclarationConstructor :: ConstructorDeclarator,
     constructorDeclarationThrows :: (Maybe Throws),
-    constructorDeclarationBody :: ConstructorBody
-  }
+    constructorDeclarationBody :: ConstructorBody}
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorDeclaration = (Core.Name "hydra/ext/java/syntax.ConstructorDeclaration")
@@ -1100,8 +1047,7 @@ data ConstructorDeclarator
     constructorDeclaratorParameters :: [TypeParameter],
     constructorDeclaratorName :: SimpleTypeName,
     constructorDeclaratorReceiverParameter :: (Maybe ReceiverParameter),
-    constructorDeclaratorFormalParameters :: [FormalParameter]
-  }
+    constructorDeclaratorFormalParameters :: [FormalParameter]}
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorDeclarator = (Core.Name "hydra/ext/java/syntax.ConstructorDeclarator")
@@ -1116,8 +1062,7 @@ _ConstructorDeclarator_formalParameters = (Core.FieldName "formalParameters")
 
 newtype SimpleTypeName 
   = SimpleTypeName {
-    unSimpleTypeName :: TypeIdentifier
-  }
+    unSimpleTypeName :: TypeIdentifier}
   deriving (Eq, Ord, Read, Show)
 
 _SimpleTypeName = (Core.Name "hydra/ext/java/syntax.SimpleTypeName")
@@ -1125,8 +1070,7 @@ _SimpleTypeName = (Core.Name "hydra/ext/java/syntax.SimpleTypeName")
 data ConstructorBody 
   = ConstructorBody {
     constructorBodyInvocation :: (Maybe ExplicitConstructorInvocation),
-    constructorBodyStatements :: [BlockStatement]
-  }
+    constructorBodyStatements :: [BlockStatement]}
   deriving (Eq, Ord, Read, Show)
 
 _ConstructorBody = (Core.Name "hydra/ext/java/syntax.ConstructorBody")
@@ -1139,8 +1083,7 @@ data ExplicitConstructorInvocation
   = ExplicitConstructorInvocation {
     explicitConstructorInvocationTypeArguments :: [TypeArgument],
     explicitConstructorInvocationArguments :: [Expression],
-    explicitConstructorInvocationVariant :: ExplicitConstructorInvocation_Variant
-  }
+    explicitConstructorInvocationVariant :: ExplicitConstructorInvocation_Variant}
   deriving (Eq, Ord, Read, Show)
 
 _ExplicitConstructorInvocation = (Core.Name "hydra/ext/java/syntax.ExplicitConstructorInvocation")
@@ -1170,8 +1113,7 @@ data EnumDeclaration
     enumDeclarationModifiers :: [ClassModifier],
     enumDeclarationIdentifier :: TypeIdentifier,
     enumDeclarationImplements :: [InterfaceType],
-    enumDeclarationBody :: EnumBody
-  }
+    enumDeclarationBody :: EnumBody}
   deriving (Eq, Ord, Read, Show)
 
 _EnumDeclaration = (Core.Name "hydra/ext/java/syntax.EnumDeclaration")
@@ -1186,8 +1128,7 @@ _EnumDeclaration_body = (Core.FieldName "body")
 
 newtype EnumBody 
   = EnumBody {
-    unEnumBody :: [EnumBody_Element]
-  }
+    unEnumBody :: [EnumBody_Element]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumBody = (Core.Name "hydra/ext/java/syntax.EnumBody")
@@ -1195,8 +1136,7 @@ _EnumBody = (Core.Name "hydra/ext/java/syntax.EnumBody")
 data EnumBody_Element 
   = EnumBody_Element {
     enumBody_ElementConstants :: [EnumConstant],
-    enumBody_ElementBodyDeclarations :: [ClassBodyDeclaration]
-  }
+    enumBody_ElementBodyDeclarations :: [ClassBodyDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumBody_Element = (Core.Name "hydra/ext/java/syntax.EnumBody.Element")
@@ -1210,8 +1150,7 @@ data EnumConstant
     enumConstantModifiers :: [EnumConstantModifier],
     enumConstantIdentifier :: Identifier,
     enumConstantArguments :: [[Expression]],
-    enumConstantBody :: (Maybe ClassBody)
-  }
+    enumConstantBody :: (Maybe ClassBody)}
   deriving (Eq, Ord, Read, Show)
 
 _EnumConstant = (Core.Name "hydra/ext/java/syntax.EnumConstant")
@@ -1226,8 +1165,7 @@ _EnumConstant_body = (Core.FieldName "body")
 
 newtype EnumConstantModifier 
   = EnumConstantModifier {
-    unEnumConstantModifier :: Annotation
-  }
+    unEnumConstantModifier :: Annotation}
   deriving (Eq, Ord, Read, Show)
 
 _EnumConstantModifier = (Core.Name "hydra/ext/java/syntax.EnumConstantModifier")
@@ -1249,8 +1187,7 @@ data NormalInterfaceDeclaration
     normalInterfaceDeclarationIdentifier :: TypeIdentifier,
     normalInterfaceDeclarationParameters :: [TypeParameter],
     normalInterfaceDeclarationExtends :: [InterfaceType],
-    normalInterfaceDeclarationBody :: InterfaceBody
-  }
+    normalInterfaceDeclarationBody :: InterfaceBody}
   deriving (Eq, Ord, Read, Show)
 
 _NormalInterfaceDeclaration = (Core.Name "hydra/ext/java/syntax.NormalInterfaceDeclaration")
@@ -1293,8 +1230,7 @@ _InterfaceModifier_strictfb = (Core.FieldName "strictfb")
 
 newtype InterfaceBody 
   = InterfaceBody {
-    unInterfaceBody :: [[InterfaceMemberDeclaration]]
-  }
+    unInterfaceBody :: [[InterfaceMemberDeclaration]]}
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceBody = (Core.Name "hydra/ext/java/syntax.InterfaceBody")
@@ -1320,8 +1256,7 @@ data ConstantDeclaration
   = ConstantDeclaration {
     constantDeclarationModifiers :: [ConstantModifier],
     constantDeclarationType :: UnannType,
-    constantDeclarationVariables :: [VariableDeclarator]
-  }
+    constantDeclarationVariables :: [VariableDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
 _ConstantDeclaration = (Core.Name "hydra/ext/java/syntax.ConstantDeclaration")
@@ -1353,8 +1288,7 @@ data InterfaceMethodDeclaration
   = InterfaceMethodDeclaration {
     interfaceMethodDeclarationModifiers :: [InterfaceMethodModifier],
     interfaceMethodDeclarationHeader :: MethodHeader,
-    interfaceMethodDeclarationBody :: MethodBody
-  }
+    interfaceMethodDeclarationBody :: MethodBody}
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceMethodDeclaration = (Core.Name "hydra/ext/java/syntax.InterfaceMethodDeclaration")
@@ -1395,8 +1329,7 @@ data AnnotationTypeDeclaration
   = AnnotationTypeDeclaration {
     annotationTypeDeclarationModifiers :: [InterfaceModifier],
     annotationTypeDeclarationIdentifier :: TypeIdentifier,
-    annotationTypeDeclarationBody :: AnnotationTypeBody
-  }
+    annotationTypeDeclarationBody :: AnnotationTypeBody}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationTypeDeclaration = (Core.Name "hydra/ext/java/syntax.AnnotationTypeDeclaration")
@@ -1409,8 +1342,7 @@ _AnnotationTypeDeclaration_body = (Core.FieldName "body")
 
 newtype AnnotationTypeBody 
   = AnnotationTypeBody {
-    unAnnotationTypeBody :: [[AnnotationTypeMemberDeclaration]]
-  }
+    unAnnotationTypeBody :: [[AnnotationTypeMemberDeclaration]]}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationTypeBody = (Core.Name "hydra/ext/java/syntax.AnnotationTypeBody")
@@ -1438,8 +1370,7 @@ data AnnotationTypeElementDeclaration
     annotationTypeElementDeclarationType :: UnannType,
     annotationTypeElementDeclarationIdentifier :: Identifier,
     annotationTypeElementDeclarationDims :: (Maybe Dims),
-    annotationTypeElementDeclarationDefault :: (Maybe DefaultValue)
-  }
+    annotationTypeElementDeclarationDefault :: (Maybe DefaultValue)}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationTypeElementDeclaration = (Core.Name "hydra/ext/java/syntax.AnnotationTypeElementDeclaration")
@@ -1467,8 +1398,7 @@ _AnnotationTypeElementModifier_abstract = (Core.FieldName "abstract")
 
 newtype DefaultValue 
   = DefaultValue {
-    unDefaultValue :: ElementValue
-  }
+    unDefaultValue :: ElementValue}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultValue = (Core.Name "hydra/ext/java/syntax.DefaultValue")
@@ -1490,8 +1420,7 @@ _Annotation_singleElement = (Core.FieldName "singleElement")
 data NormalAnnotation 
   = NormalAnnotation {
     normalAnnotationTypeName :: TypeName,
-    normalAnnotationPairs :: [ElementValuePair]
-  }
+    normalAnnotationPairs :: [ElementValuePair]}
   deriving (Eq, Ord, Read, Show)
 
 _NormalAnnotation = (Core.Name "hydra/ext/java/syntax.NormalAnnotation")
@@ -1503,8 +1432,7 @@ _NormalAnnotation_pairs = (Core.FieldName "pairs")
 data ElementValuePair 
   = ElementValuePair {
     elementValuePairKey :: Identifier,
-    elementValuePairValue :: ElementValue
-  }
+    elementValuePairValue :: ElementValue}
   deriving (Eq, Ord, Read, Show)
 
 _ElementValuePair = (Core.Name "hydra/ext/java/syntax.ElementValuePair")
@@ -1529,16 +1457,14 @@ _ElementValue_annotation = (Core.FieldName "annotation")
 
 newtype ElementValueArrayInitializer 
   = ElementValueArrayInitializer {
-    unElementValueArrayInitializer :: [ElementValue]
-  }
+    unElementValueArrayInitializer :: [ElementValue]}
   deriving (Eq, Ord, Read, Show)
 
 _ElementValueArrayInitializer = (Core.Name "hydra/ext/java/syntax.ElementValueArrayInitializer")
 
 newtype MarkerAnnotation 
   = MarkerAnnotation {
-    unMarkerAnnotation :: TypeName
-  }
+    unMarkerAnnotation :: TypeName}
   deriving (Eq, Ord, Read, Show)
 
 _MarkerAnnotation = (Core.Name "hydra/ext/java/syntax.MarkerAnnotation")
@@ -1546,8 +1472,7 @@ _MarkerAnnotation = (Core.Name "hydra/ext/java/syntax.MarkerAnnotation")
 data SingleElementAnnotation 
   = SingleElementAnnotation {
     singleElementAnnotationName :: TypeName,
-    singleElementAnnotationValue :: (Maybe ElementValue)
-  }
+    singleElementAnnotationValue :: (Maybe ElementValue)}
   deriving (Eq, Ord, Read, Show)
 
 _SingleElementAnnotation = (Core.Name "hydra/ext/java/syntax.SingleElementAnnotation")
@@ -1558,16 +1483,14 @@ _SingleElementAnnotation_value = (Core.FieldName "value")
 
 newtype ArrayInitializer 
   = ArrayInitializer {
-    unArrayInitializer :: [[VariableInitializer]]
-  }
+    unArrayInitializer :: [[VariableInitializer]]}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayInitializer = (Core.Name "hydra/ext/java/syntax.ArrayInitializer")
 
 newtype Block 
   = Block {
-    unBlock :: [BlockStatement]
-  }
+    unBlock :: [BlockStatement]}
   deriving (Eq, Ord, Read, Show)
 
 _Block = (Core.Name "hydra/ext/java/syntax.Block")
@@ -1588,8 +1511,7 @@ _BlockStatement_statement = (Core.FieldName "statement")
 
 newtype LocalVariableDeclarationStatement 
   = LocalVariableDeclarationStatement {
-    unLocalVariableDeclarationStatement :: LocalVariableDeclaration
-  }
+    unLocalVariableDeclarationStatement :: LocalVariableDeclaration}
   deriving (Eq, Ord, Read, Show)
 
 _LocalVariableDeclarationStatement = (Core.Name "hydra/ext/java/syntax.LocalVariableDeclarationStatement")
@@ -1598,8 +1520,7 @@ data LocalVariableDeclaration
   = LocalVariableDeclaration {
     localVariableDeclarationModifiers :: [VariableModifier],
     localVariableDeclarationType :: LocalVariableType,
-    localVariableDeclarationDeclarators :: [VariableDeclarator]
-  }
+    localVariableDeclarationDeclarators :: [VariableDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
 _LocalVariableDeclaration = (Core.Name "hydra/ext/java/syntax.LocalVariableDeclaration")
@@ -1714,8 +1635,7 @@ _EmptyStatement = (Core.Name "hydra/ext/java/syntax.EmptyStatement")
 data LabeledStatement 
   = LabeledStatement {
     labeledStatementIdentifier :: Identifier,
-    labeledStatementStatement :: Statement
-  }
+    labeledStatementStatement :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _LabeledStatement = (Core.Name "hydra/ext/java/syntax.LabeledStatement")
@@ -1727,8 +1647,7 @@ _LabeledStatement_statement = (Core.FieldName "statement")
 data LabeledStatementNoShortIf 
   = LabeledStatementNoShortIf {
     labeledStatementNoShortIfIdentifier :: Identifier,
-    labeledStatementNoShortIfStatement :: StatementNoShortIf
-  }
+    labeledStatementNoShortIfStatement :: StatementNoShortIf}
   deriving (Eq, Ord, Read, Show)
 
 _LabeledStatementNoShortIf = (Core.Name "hydra/ext/java/syntax.LabeledStatementNoShortIf")
@@ -1739,8 +1658,7 @@ _LabeledStatementNoShortIf_statement = (Core.FieldName "statement")
 
 newtype ExpressionStatement 
   = ExpressionStatement {
-    unExpressionStatement :: StatementExpression
-  }
+    unExpressionStatement :: StatementExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ExpressionStatement = (Core.Name "hydra/ext/java/syntax.ExpressionStatement")
@@ -1774,8 +1692,7 @@ _StatementExpression_classInstanceCreation = (Core.FieldName "classInstanceCreat
 data IfThenStatement 
   = IfThenStatement {
     ifThenStatementExpression :: (Maybe Expression),
-    ifThenStatementStatement :: Statement
-  }
+    ifThenStatementStatement :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _IfThenStatement = (Core.Name "hydra/ext/java/syntax.IfThenStatement")
@@ -1788,8 +1705,7 @@ data IfThenElseStatement
   = IfThenElseStatement {
     ifThenElseStatementCond :: (Maybe Expression),
     ifThenElseStatementThen :: StatementNoShortIf,
-    ifThenElseStatementElse :: Statement
-  }
+    ifThenElseStatementElse :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _IfThenElseStatement = (Core.Name "hydra/ext/java/syntax.IfThenElseStatement")
@@ -1804,8 +1720,7 @@ data IfThenElseStatementNoShortIf
   = IfThenElseStatementNoShortIf {
     ifThenElseStatementNoShortIfCond :: (Maybe Expression),
     ifThenElseStatementNoShortIfThen :: StatementNoShortIf,
-    ifThenElseStatementNoShortIfElse :: StatementNoShortIf
-  }
+    ifThenElseStatementNoShortIfElse :: StatementNoShortIf}
   deriving (Eq, Ord, Read, Show)
 
 _IfThenElseStatementNoShortIf = (Core.Name "hydra/ext/java/syntax.IfThenElseStatementNoShortIf")
@@ -1830,8 +1745,7 @@ _AssertStatement_pair = (Core.FieldName "pair")
 data AssertStatement_Pair 
   = AssertStatement_Pair {
     assertStatement_PairFirst :: Expression,
-    assertStatement_PairSecond :: Expression
-  }
+    assertStatement_PairSecond :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _AssertStatement_Pair = (Core.Name "hydra/ext/java/syntax.AssertStatement.Pair")
@@ -1843,8 +1757,7 @@ _AssertStatement_Pair_second = (Core.FieldName "second")
 data SwitchStatement 
   = SwitchStatement {
     switchStatementCond :: Expression,
-    switchStatementBlock :: SwitchBlock
-  }
+    switchStatementBlock :: SwitchBlock}
   deriving (Eq, Ord, Read, Show)
 
 _SwitchStatement = (Core.Name "hydra/ext/java/syntax.SwitchStatement")
@@ -1855,8 +1768,7 @@ _SwitchStatement_block = (Core.FieldName "block")
 
 newtype SwitchBlock 
   = SwitchBlock {
-    unSwitchBlock :: [SwitchBlock_Pair]
-  }
+    unSwitchBlock :: [SwitchBlock_Pair]}
   deriving (Eq, Ord, Read, Show)
 
 _SwitchBlock = (Core.Name "hydra/ext/java/syntax.SwitchBlock")
@@ -1864,8 +1776,7 @@ _SwitchBlock = (Core.Name "hydra/ext/java/syntax.SwitchBlock")
 data SwitchBlock_Pair 
   = SwitchBlock_Pair {
     switchBlock_PairStatements :: [SwitchBlockStatementGroup],
-    switchBlock_PairLabels :: [SwitchLabel]
-  }
+    switchBlock_PairLabels :: [SwitchLabel]}
   deriving (Eq, Ord, Read, Show)
 
 _SwitchBlock_Pair = (Core.Name "hydra/ext/java/syntax.SwitchBlock.Pair")
@@ -1877,8 +1788,7 @@ _SwitchBlock_Pair_labels = (Core.FieldName "labels")
 data SwitchBlockStatementGroup 
   = SwitchBlockStatementGroup {
     switchBlockStatementGroupLabels :: [SwitchLabel],
-    switchBlockStatementGroupStatements :: [BlockStatement]
-  }
+    switchBlockStatementGroupStatements :: [BlockStatement]}
   deriving (Eq, Ord, Read, Show)
 
 _SwitchBlockStatementGroup = (Core.Name "hydra/ext/java/syntax.SwitchBlockStatementGroup")
@@ -1903,8 +1813,7 @@ _SwitchLabel_default = (Core.FieldName "default")
 
 newtype EnumConstantName 
   = EnumConstantName {
-    unEnumConstantName :: Identifier
-  }
+    unEnumConstantName :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _EnumConstantName = (Core.Name "hydra/ext/java/syntax.EnumConstantName")
@@ -1912,8 +1821,7 @@ _EnumConstantName = (Core.Name "hydra/ext/java/syntax.EnumConstantName")
 data WhileStatement 
   = WhileStatement {
     whileStatementCond :: (Maybe Expression),
-    whileStatementBody :: Statement
-  }
+    whileStatementBody :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _WhileStatement = (Core.Name "hydra/ext/java/syntax.WhileStatement")
@@ -1925,8 +1833,7 @@ _WhileStatement_body = (Core.FieldName "body")
 data WhileStatementNoShortIf 
   = WhileStatementNoShortIf {
     whileStatementNoShortIfCond :: (Maybe Expression),
-    whileStatementNoShortIfBody :: StatementNoShortIf
-  }
+    whileStatementNoShortIfBody :: StatementNoShortIf}
   deriving (Eq, Ord, Read, Show)
 
 _WhileStatementNoShortIf = (Core.Name "hydra/ext/java/syntax.WhileStatementNoShortIf")
@@ -1938,8 +1845,7 @@ _WhileStatementNoShortIf_body = (Core.FieldName "body")
 data DoStatement 
   = DoStatement {
     doStatementBody :: Statement,
-    doStatementConde :: (Maybe Expression)
-  }
+    doStatementConde :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
 _DoStatement = (Core.Name "hydra/ext/java/syntax.DoStatement")
@@ -1973,8 +1879,7 @@ _ForStatementNoShortIf_enhanced = (Core.FieldName "enhanced")
 data BasicForStatement 
   = BasicForStatement {
     basicForStatementCond :: ForCond,
-    basicForStatementBody :: Statement
-  }
+    basicForStatementBody :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _BasicForStatement = (Core.Name "hydra/ext/java/syntax.BasicForStatement")
@@ -1987,8 +1892,7 @@ data ForCond
   = ForCond {
     forCondInit :: (Maybe ForInit),
     forCondCond :: (Maybe Expression),
-    forCondUpdate :: (Maybe ForUpdate)
-  }
+    forCondUpdate :: (Maybe ForUpdate)}
   deriving (Eq, Ord, Read, Show)
 
 _ForCond = (Core.Name "hydra/ext/java/syntax.ForCond")
@@ -2002,8 +1906,7 @@ _ForCond_update = (Core.FieldName "update")
 data BasicForStatementNoShortIf 
   = BasicForStatementNoShortIf {
     basicForStatementNoShortIfCond :: ForCond,
-    basicForStatementNoShortIfBody :: StatementNoShortIf
-  }
+    basicForStatementNoShortIfBody :: StatementNoShortIf}
   deriving (Eq, Ord, Read, Show)
 
 _BasicForStatementNoShortIf = (Core.Name "hydra/ext/java/syntax.BasicForStatementNoShortIf")
@@ -2026,8 +1929,7 @@ _ForInit_localVariable = (Core.FieldName "localVariable")
 -- Note: list cannot be empty
 newtype ForUpdate 
   = ForUpdate {
-    unForUpdate :: [StatementExpression]
-  }
+    unForUpdate :: [StatementExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ForUpdate = (Core.Name "hydra/ext/java/syntax.ForUpdate")
@@ -2035,8 +1937,7 @@ _ForUpdate = (Core.Name "hydra/ext/java/syntax.ForUpdate")
 data EnhancedForStatement 
   = EnhancedForStatement {
     enhancedForStatementCond :: EnhancedForCond,
-    enhancedForStatementBody :: Statement
-  }
+    enhancedForStatementBody :: Statement}
   deriving (Eq, Ord, Read, Show)
 
 _EnhancedForStatement = (Core.Name "hydra/ext/java/syntax.EnhancedForStatement")
@@ -2050,8 +1951,7 @@ data EnhancedForCond
     enhancedForCondModifiers :: [VariableModifier],
     enhancedForCondType :: LocalVariableType,
     enhancedForCondId :: VariableDeclaratorId,
-    enhancedForCondExpression :: Expression
-  }
+    enhancedForCondExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _EnhancedForCond = (Core.Name "hydra/ext/java/syntax.EnhancedForCond")
@@ -2067,8 +1967,7 @@ _EnhancedForCond_expression = (Core.FieldName "expression")
 data EnhancedForStatementNoShortIf 
   = EnhancedForStatementNoShortIf {
     enhancedForStatementNoShortIfCond :: EnhancedForCond,
-    enhancedForStatementNoShortIfBody :: StatementNoShortIf
-  }
+    enhancedForStatementNoShortIfBody :: StatementNoShortIf}
   deriving (Eq, Ord, Read, Show)
 
 _EnhancedForStatementNoShortIf = (Core.Name "hydra/ext/java/syntax.EnhancedForStatementNoShortIf")
@@ -2079,32 +1978,28 @@ _EnhancedForStatementNoShortIf_body = (Core.FieldName "body")
 
 newtype BreakStatement 
   = BreakStatement {
-    unBreakStatement :: (Maybe Identifier)
-  }
+    unBreakStatement :: (Maybe Identifier)}
   deriving (Eq, Ord, Read, Show)
 
 _BreakStatement = (Core.Name "hydra/ext/java/syntax.BreakStatement")
 
 newtype ContinueStatement 
   = ContinueStatement {
-    unContinueStatement :: (Maybe Identifier)
-  }
+    unContinueStatement :: (Maybe Identifier)}
   deriving (Eq, Ord, Read, Show)
 
 _ContinueStatement = (Core.Name "hydra/ext/java/syntax.ContinueStatement")
 
 newtype ReturnStatement 
   = ReturnStatement {
-    unReturnStatement :: (Maybe Expression)
-  }
+    unReturnStatement :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
 _ReturnStatement = (Core.Name "hydra/ext/java/syntax.ReturnStatement")
 
 newtype ThrowStatement 
   = ThrowStatement {
-    unThrowStatement :: Expression
-  }
+    unThrowStatement :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _ThrowStatement = (Core.Name "hydra/ext/java/syntax.ThrowStatement")
@@ -2112,8 +2007,7 @@ _ThrowStatement = (Core.Name "hydra/ext/java/syntax.ThrowStatement")
 data SynchronizedStatement 
   = SynchronizedStatement {
     synchronizedStatementExpression :: Expression,
-    synchronizedStatementBlock :: Block
-  }
+    synchronizedStatementBlock :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _SynchronizedStatement = (Core.Name "hydra/ext/java/syntax.SynchronizedStatement")
@@ -2139,8 +2033,7 @@ _TryStatement_withResources = (Core.FieldName "withResources")
 data TryStatement_Simple 
   = TryStatement_Simple {
     tryStatement_SimpleBlock :: Block,
-    tryStatement_SimpleCatches :: Catches
-  }
+    tryStatement_SimpleCatches :: Catches}
   deriving (Eq, Ord, Read, Show)
 
 _TryStatement_Simple = (Core.Name "hydra/ext/java/syntax.TryStatement.Simple")
@@ -2153,8 +2046,7 @@ data TryStatement_WithFinally
   = TryStatement_WithFinally {
     tryStatement_WithFinallyBlock :: Block,
     tryStatement_WithFinallyCatches :: (Maybe Catches),
-    tryStatement_WithFinallyFinally :: Finally
-  }
+    tryStatement_WithFinallyFinally :: Finally}
   deriving (Eq, Ord, Read, Show)
 
 _TryStatement_WithFinally = (Core.Name "hydra/ext/java/syntax.TryStatement.WithFinally")
@@ -2167,8 +2059,7 @@ _TryStatement_WithFinally_finally = (Core.FieldName "finally")
 
 newtype Catches 
   = Catches {
-    unCatches :: [CatchClause]
-  }
+    unCatches :: [CatchClause]}
   deriving (Eq, Ord, Read, Show)
 
 _Catches = (Core.Name "hydra/ext/java/syntax.Catches")
@@ -2176,8 +2067,7 @@ _Catches = (Core.Name "hydra/ext/java/syntax.Catches")
 data CatchClause 
   = CatchClause {
     catchClauseParameter :: (Maybe CatchFormalParameter),
-    catchClauseBlock :: Block
-  }
+    catchClauseBlock :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _CatchClause = (Core.Name "hydra/ext/java/syntax.CatchClause")
@@ -2190,8 +2080,7 @@ data CatchFormalParameter
   = CatchFormalParameter {
     catchFormalParameterModifiers :: [VariableModifier],
     catchFormalParameterType :: CatchType,
-    catchFormalParameterId :: VariableDeclaratorId
-  }
+    catchFormalParameterId :: VariableDeclaratorId}
   deriving (Eq, Ord, Read, Show)
 
 _CatchFormalParameter = (Core.Name "hydra/ext/java/syntax.CatchFormalParameter")
@@ -2205,8 +2094,7 @@ _CatchFormalParameter_id = (Core.FieldName "id")
 data CatchType 
   = CatchType {
     catchTypeType :: UnannClassType,
-    catchTypeTypes :: [ClassType]
-  }
+    catchTypeTypes :: [ClassType]}
   deriving (Eq, Ord, Read, Show)
 
 _CatchType = (Core.Name "hydra/ext/java/syntax.CatchType")
@@ -2217,8 +2105,7 @@ _CatchType_types = (Core.FieldName "types")
 
 newtype Finally 
   = Finally {
-    unFinally :: Block
-  }
+    unFinally :: Block}
   deriving (Eq, Ord, Read, Show)
 
 _Finally = (Core.Name "hydra/ext/java/syntax.Finally")
@@ -2228,8 +2115,7 @@ data TryWithResourcesStatement
     tryWithResourcesStatementResourceSpecification :: ResourceSpecification,
     tryWithResourcesStatementBlock :: Block,
     tryWithResourcesStatementCatches :: (Maybe Catches),
-    tryWithResourcesStatementFinally :: (Maybe Finally)
-  }
+    tryWithResourcesStatementFinally :: (Maybe Finally)}
   deriving (Eq, Ord, Read, Show)
 
 _TryWithResourcesStatement = (Core.Name "hydra/ext/java/syntax.TryWithResourcesStatement")
@@ -2244,8 +2130,7 @@ _TryWithResourcesStatement_finally = (Core.FieldName "finally")
 
 newtype ResourceSpecification 
   = ResourceSpecification {
-    unResourceSpecification :: [Resource]
-  }
+    unResourceSpecification :: [Resource]}
   deriving (Eq, Ord, Read, Show)
 
 _ResourceSpecification = (Core.Name "hydra/ext/java/syntax.ResourceSpecification")
@@ -2266,8 +2151,7 @@ data Resource_Local
     resource_LocalModifiers :: [VariableModifier],
     resource_LocalType :: LocalVariableType,
     resource_LocalIdentifier :: Identifier,
-    resource_LocalExpression :: Expression
-  }
+    resource_LocalExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Resource_Local = (Core.Name "hydra/ext/java/syntax.Resource.Local")
@@ -2390,8 +2274,7 @@ _BooleanArray_array = (Core.FieldName "array")
 data ClassInstanceCreationExpression 
   = ClassInstanceCreationExpression {
     classInstanceCreationExpressionQualifier :: (Maybe ClassInstanceCreationExpression_Qualifier),
-    classInstanceCreationExpressionExpression :: UnqualifiedClassInstanceCreationExpression
-  }
+    classInstanceCreationExpressionExpression :: UnqualifiedClassInstanceCreationExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ClassInstanceCreationExpression = (Core.Name "hydra/ext/java/syntax.ClassInstanceCreationExpression")
@@ -2416,8 +2299,7 @@ data UnqualifiedClassInstanceCreationExpression
     unqualifiedClassInstanceCreationExpressionTypeArguments :: [TypeArgument],
     unqualifiedClassInstanceCreationExpressionClassOrInterface :: ClassOrInterfaceTypeToInstantiate,
     unqualifiedClassInstanceCreationExpressionArguments :: [Expression],
-    unqualifiedClassInstanceCreationExpressionBody :: (Maybe ClassBody)
-  }
+    unqualifiedClassInstanceCreationExpressionBody :: (Maybe ClassBody)}
   deriving (Eq, Ord, Read, Show)
 
 _UnqualifiedClassInstanceCreationExpression = (Core.Name "hydra/ext/java/syntax.UnqualifiedClassInstanceCreationExpression")
@@ -2433,8 +2315,7 @@ _UnqualifiedClassInstanceCreationExpression_body = (Core.FieldName "body")
 data ClassOrInterfaceTypeToInstantiate 
   = ClassOrInterfaceTypeToInstantiate {
     classOrInterfaceTypeToInstantiateIdentifiers :: [AnnotatedIdentifier],
-    classOrInterfaceTypeToInstantiateTypeArguments :: (Maybe TypeArgumentsOrDiamond)
-  }
+    classOrInterfaceTypeToInstantiateTypeArguments :: (Maybe TypeArgumentsOrDiamond)}
   deriving (Eq, Ord, Read, Show)
 
 _ClassOrInterfaceTypeToInstantiate = (Core.Name "hydra/ext/java/syntax.ClassOrInterfaceTypeToInstantiate")
@@ -2446,8 +2327,7 @@ _ClassOrInterfaceTypeToInstantiate_typeArguments = (Core.FieldName "typeArgument
 data AnnotatedIdentifier 
   = AnnotatedIdentifier {
     annotatedIdentifierAnnotations :: [Annotation],
-    annotatedIdentifierIdentifier :: Identifier
-  }
+    annotatedIdentifierIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotatedIdentifier = (Core.Name "hydra/ext/java/syntax.AnnotatedIdentifier")
@@ -2470,8 +2350,7 @@ _TypeArgumentsOrDiamond_diamond = (Core.FieldName "diamond")
 data FieldAccess 
   = FieldAccess {
     fieldAccessIdentifier :: Identifier,
-    fieldAccessVariant :: FieldAccess_Variant
-  }
+    fieldAccessVariant :: FieldAccess_Variant}
   deriving (Eq, Ord, Read, Show)
 
 _FieldAccess = (Core.Name "hydra/ext/java/syntax.FieldAccess")
@@ -2497,8 +2376,7 @@ _FieldAccess_Variant_typed = (Core.FieldName "typed")
 data ArrayAccess 
   = ArrayAccess {
     arrayAccessExpression :: (Maybe Expression),
-    arrayAccessVariant :: ArrayAccess_Variant
-  }
+    arrayAccessVariant :: ArrayAccess_Variant}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayAccess = (Core.Name "hydra/ext/java/syntax.ArrayAccess")
@@ -2522,8 +2400,7 @@ data MethodInvocation
   = MethodInvocation {
     methodInvocationId :: [MethodInvocation_Id],
     methodInvocationArguments :: [Expression],
-    methodInvocationVariant :: MethodInvocation_Variant
-  }
+    methodInvocationVariant :: MethodInvocation_Variant}
   deriving (Eq, Ord, Read, Show)
 
 _MethodInvocation = (Core.Name "hydra/ext/java/syntax.MethodInvocation")
@@ -2560,8 +2437,7 @@ _MethodInvocation_Variant_typeSuper = (Core.FieldName "typeSuper")
 data MethodInvocation_Id 
   = MethodInvocation_Id {
     methodInvocation_IdTypeArguments :: [TypeArgument],
-    methodInvocation_IdIdentifier :: Identifier
-  }
+    methodInvocation_IdIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _MethodInvocation_Id = (Core.Name "hydra/ext/java/syntax.MethodInvocation.Id")
@@ -2597,8 +2473,7 @@ data MethodReference_Expression
   = MethodReference_Expression {
     methodReference_ExpressionName :: ExpressionName,
     methodReference_ExpressionTypeArguments :: [TypeArgument],
-    methodReference_ExpressionIdentifier :: Identifier
-  }
+    methodReference_ExpressionIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_Expression = (Core.Name "hydra/ext/java/syntax.MethodReference.Expression")
@@ -2613,8 +2488,7 @@ data MethodReference_Primary
   = MethodReference_Primary {
     methodReference_PrimaryPrimary :: Primary,
     methodReference_PrimaryTypeArguments :: [TypeArgument],
-    methodReference_PrimaryIdentifier :: Identifier
-  }
+    methodReference_PrimaryIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_Primary = (Core.Name "hydra/ext/java/syntax.MethodReference.Primary")
@@ -2629,8 +2503,7 @@ data MethodReference_ReferenceType
   = MethodReference_ReferenceType {
     methodReference_ReferenceTypeReferenceType :: ReferenceType,
     methodReference_ReferenceTypeTypeArguments :: [TypeArgument],
-    methodReference_ReferenceTypeIdentifier :: Identifier
-  }
+    methodReference_ReferenceTypeIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_ReferenceType = (Core.Name "hydra/ext/java/syntax.MethodReference.ReferenceType")
@@ -2645,8 +2518,7 @@ data MethodReference_Super
   = MethodReference_Super {
     methodReference_SuperTypeArguments :: [TypeArgument],
     methodReference_SuperIdentifier :: Identifier,
-    methodReference_SuperSuper :: Bool
-  }
+    methodReference_SuperSuper :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_Super = (Core.Name "hydra/ext/java/syntax.MethodReference.Super")
@@ -2660,8 +2532,7 @@ _MethodReference_Super_super = (Core.FieldName "super")
 data MethodReference_New 
   = MethodReference_New {
     methodReference_NewClassType :: ClassType,
-    methodReference_NewTypeArguments :: [TypeArgument]
-  }
+    methodReference_NewTypeArguments :: [TypeArgument]}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_New = (Core.Name "hydra/ext/java/syntax.MethodReference.New")
@@ -2672,8 +2543,7 @@ _MethodReference_New_typeArguments = (Core.FieldName "typeArguments")
 
 newtype MethodReference_Array 
   = MethodReference_Array {
-    unMethodReference_Array :: ArrayType
-  }
+    unMethodReference_Array :: ArrayType}
   deriving (Eq, Ord, Read, Show)
 
 _MethodReference_Array = (Core.Name "hydra/ext/java/syntax.MethodReference.Array")
@@ -2699,8 +2569,7 @@ data ArrayCreationExpression_Primitive
   = ArrayCreationExpression_Primitive {
     arrayCreationExpression_PrimitiveType :: PrimitiveTypeWithAnnotations,
     arrayCreationExpression_PrimitiveDimExprs :: [DimExpr],
-    arrayCreationExpression_PrimitiveDims :: (Maybe Dims)
-  }
+    arrayCreationExpression_PrimitiveDims :: (Maybe Dims)}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayCreationExpression_Primitive = (Core.Name "hydra/ext/java/syntax.ArrayCreationExpression.Primitive")
@@ -2715,8 +2584,7 @@ data ArrayCreationExpression_ClassOrInterface
   = ArrayCreationExpression_ClassOrInterface {
     arrayCreationExpression_ClassOrInterfaceType :: ClassOrInterfaceType,
     arrayCreationExpression_ClassOrInterfaceDimExprs :: [DimExpr],
-    arrayCreationExpression_ClassOrInterfaceDims :: (Maybe Dims)
-  }
+    arrayCreationExpression_ClassOrInterfaceDims :: (Maybe Dims)}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayCreationExpression_ClassOrInterface = (Core.Name "hydra/ext/java/syntax.ArrayCreationExpression.ClassOrInterface")
@@ -2731,8 +2599,7 @@ data ArrayCreationExpression_PrimitiveArray
   = ArrayCreationExpression_PrimitiveArray {
     arrayCreationExpression_PrimitiveArrayType :: PrimitiveTypeWithAnnotations,
     arrayCreationExpression_PrimitiveArrayDims :: [Dims],
-    arrayCreationExpression_PrimitiveArrayArray :: ArrayInitializer
-  }
+    arrayCreationExpression_PrimitiveArrayArray :: ArrayInitializer}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayCreationExpression_PrimitiveArray = (Core.Name "hydra/ext/java/syntax.ArrayCreationExpression.PrimitiveArray")
@@ -2747,8 +2614,7 @@ data ArrayCreationExpression_ClassOrInterfaceArray
   = ArrayCreationExpression_ClassOrInterfaceArray {
     arrayCreationExpression_ClassOrInterfaceArrayType :: ClassOrInterfaceType,
     arrayCreationExpression_ClassOrInterfaceArrayDims :: [Dims],
-    arrayCreationExpression_ClassOrInterfaceArrayArray :: ArrayInitializer
-  }
+    arrayCreationExpression_ClassOrInterfaceArrayArray :: ArrayInitializer}
   deriving (Eq, Ord, Read, Show)
 
 _ArrayCreationExpression_ClassOrInterfaceArray = (Core.Name "hydra/ext/java/syntax.ArrayCreationExpression.ClassOrInterfaceArray")
@@ -2762,8 +2628,7 @@ _ArrayCreationExpression_ClassOrInterfaceArray_array = (Core.FieldName "array")
 data DimExpr 
   = DimExpr {
     dimExprAnnotations :: [Annotation],
-    dimExprExpression :: (Maybe Expression)
-  }
+    dimExprExpression :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
 _DimExpr = (Core.Name "hydra/ext/java/syntax.DimExpr")
@@ -2786,8 +2651,7 @@ _Expression_assignment = (Core.FieldName "assignment")
 data LambdaExpression 
   = LambdaExpression {
     lambdaExpressionParameters :: LambdaParameters,
-    lambdaExpressionBody :: LambdaBody
-  }
+    lambdaExpressionBody :: LambdaBody}
   deriving (Eq, Ord, Read, Show)
 
 _LambdaExpression = (Core.Name "hydra/ext/java/syntax.LambdaExpression")
@@ -2822,8 +2686,7 @@ data LambdaParameter_Normal
   = LambdaParameter_Normal {
     lambdaParameter_NormalModifiers :: [VariableModifier],
     lambdaParameter_NormalType :: LambdaParameterType,
-    lambdaParameter_NormalId :: VariableDeclaratorId
-  }
+    lambdaParameter_NormalId :: VariableDeclaratorId}
   deriving (Eq, Ord, Read, Show)
 
 _LambdaParameter_Normal = (Core.Name "hydra/ext/java/syntax.LambdaParameter.Normal")
@@ -2871,8 +2734,7 @@ data Assignment
   = Assignment {
     assignmentLhs :: LeftHandSide,
     assignmentOp :: AssignmentOperator,
-    assignmentExpression :: Expression
-  }
+    assignmentExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _Assignment = (Core.Name "hydra/ext/java/syntax.Assignment")
@@ -2956,8 +2818,7 @@ data ConditionalExpression_TernaryCond
   = ConditionalExpression_TernaryCond {
     conditionalExpression_TernaryCondCond :: ConditionalOrExpression,
     conditionalExpression_TernaryCondIfTrue :: Expression,
-    conditionalExpression_TernaryCondIfFalse :: ConditionalExpression
-  }
+    conditionalExpression_TernaryCondIfFalse :: ConditionalExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ConditionalExpression_TernaryCond = (Core.Name "hydra/ext/java/syntax.ConditionalExpression.TernaryCond")
@@ -2972,8 +2833,7 @@ data ConditionalExpression_TernaryLambda
   = ConditionalExpression_TernaryLambda {
     conditionalExpression_TernaryLambdaCond :: ConditionalOrExpression,
     conditionalExpression_TernaryLambdaIfTrue :: Expression,
-    conditionalExpression_TernaryLambdaIfFalse :: LambdaExpression
-  }
+    conditionalExpression_TernaryLambdaIfFalse :: LambdaExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ConditionalExpression_TernaryLambda = (Core.Name "hydra/ext/java/syntax.ConditionalExpression.TernaryLambda")
@@ -2987,8 +2847,7 @@ _ConditionalExpression_TernaryLambda_ifFalse = (Core.FieldName "ifFalse")
 -- Note: list cannot be empty
 newtype ConditionalOrExpression 
   = ConditionalOrExpression {
-    unConditionalOrExpression :: [ConditionalAndExpression]
-  }
+    unConditionalOrExpression :: [ConditionalAndExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ConditionalOrExpression = (Core.Name "hydra/ext/java/syntax.ConditionalOrExpression")
@@ -2996,8 +2855,7 @@ _ConditionalOrExpression = (Core.Name "hydra/ext/java/syntax.ConditionalOrExpres
 -- Note: list cannot be empty
 newtype ConditionalAndExpression 
   = ConditionalAndExpression {
-    unConditionalAndExpression :: [InclusiveOrExpression]
-  }
+    unConditionalAndExpression :: [InclusiveOrExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ConditionalAndExpression = (Core.Name "hydra/ext/java/syntax.ConditionalAndExpression")
@@ -3005,8 +2863,7 @@ _ConditionalAndExpression = (Core.Name "hydra/ext/java/syntax.ConditionalAndExpr
 -- Note: list cannot be empty
 newtype InclusiveOrExpression 
   = InclusiveOrExpression {
-    unInclusiveOrExpression :: [ExclusiveOrExpression]
-  }
+    unInclusiveOrExpression :: [ExclusiveOrExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _InclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.InclusiveOrExpression")
@@ -3014,8 +2871,7 @@ _InclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.InclusiveOrExpression
 -- Note: list cannot be empty
 newtype ExclusiveOrExpression 
   = ExclusiveOrExpression {
-    unExclusiveOrExpression :: [AndExpression]
-  }
+    unExclusiveOrExpression :: [AndExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _ExclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.ExclusiveOrExpression")
@@ -3023,8 +2879,7 @@ _ExclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.ExclusiveOrExpression
 -- Note: list cannot be empty
 newtype AndExpression 
   = AndExpression {
-    unAndExpression :: [EqualityExpression]
-  }
+    unAndExpression :: [EqualityExpression]}
   deriving (Eq, Ord, Read, Show)
 
 _AndExpression = (Core.Name "hydra/ext/java/syntax.AndExpression")
@@ -3046,8 +2901,7 @@ _EqualityExpression_notEqual = (Core.FieldName "notEqual")
 data EqualityExpression_Binary 
   = EqualityExpression_Binary {
     equalityExpression_BinaryLhs :: EqualityExpression,
-    equalityExpression_BinaryRhs :: RelationalExpression
-  }
+    equalityExpression_BinaryRhs :: RelationalExpression}
   deriving (Eq, Ord, Read, Show)
 
 _EqualityExpression_Binary = (Core.Name "hydra/ext/java/syntax.EqualityExpression.Binary")
@@ -3082,8 +2936,7 @@ _RelationalExpression_instanceof = (Core.FieldName "instanceof")
 data RelationalExpression_LessThan 
   = RelationalExpression_LessThan {
     relationalExpression_LessThanLhs :: RelationalExpression,
-    relationalExpression_LessThanRhs :: ShiftExpression
-  }
+    relationalExpression_LessThanRhs :: ShiftExpression}
   deriving (Eq, Ord, Read, Show)
 
 _RelationalExpression_LessThan = (Core.Name "hydra/ext/java/syntax.RelationalExpression.LessThan")
@@ -3095,8 +2948,7 @@ _RelationalExpression_LessThan_rhs = (Core.FieldName "rhs")
 data RelationalExpression_GreaterThan 
   = RelationalExpression_GreaterThan {
     relationalExpression_GreaterThanLhs :: RelationalExpression,
-    relationalExpression_GreaterThanRhs :: ShiftExpression
-  }
+    relationalExpression_GreaterThanRhs :: ShiftExpression}
   deriving (Eq, Ord, Read, Show)
 
 _RelationalExpression_GreaterThan = (Core.Name "hydra/ext/java/syntax.RelationalExpression.GreaterThan")
@@ -3108,8 +2960,7 @@ _RelationalExpression_GreaterThan_rhs = (Core.FieldName "rhs")
 data RelationalExpression_LessThanEqual 
   = RelationalExpression_LessThanEqual {
     relationalExpression_LessThanEqualLhs :: RelationalExpression,
-    relationalExpression_LessThanEqualRhs :: ShiftExpression
-  }
+    relationalExpression_LessThanEqualRhs :: ShiftExpression}
   deriving (Eq, Ord, Read, Show)
 
 _RelationalExpression_LessThanEqual = (Core.Name "hydra/ext/java/syntax.RelationalExpression.LessThanEqual")
@@ -3121,8 +2972,7 @@ _RelationalExpression_LessThanEqual_rhs = (Core.FieldName "rhs")
 data RelationalExpression_GreaterThanEqual 
   = RelationalExpression_GreaterThanEqual {
     relationalExpression_GreaterThanEqualLhs :: RelationalExpression,
-    relationalExpression_GreaterThanEqualRhs :: ShiftExpression
-  }
+    relationalExpression_GreaterThanEqualRhs :: ShiftExpression}
   deriving (Eq, Ord, Read, Show)
 
 _RelationalExpression_GreaterThanEqual = (Core.Name "hydra/ext/java/syntax.RelationalExpression.GreaterThanEqual")
@@ -3134,8 +2984,7 @@ _RelationalExpression_GreaterThanEqual_rhs = (Core.FieldName "rhs")
 data RelationalExpression_InstanceOf 
   = RelationalExpression_InstanceOf {
     relationalExpression_InstanceOfLhs :: RelationalExpression,
-    relationalExpression_InstanceOfRhs :: ReferenceType
-  }
+    relationalExpression_InstanceOfRhs :: ReferenceType}
   deriving (Eq, Ord, Read, Show)
 
 _RelationalExpression_InstanceOf = (Core.Name "hydra/ext/java/syntax.RelationalExpression.InstanceOf")
@@ -3164,8 +3013,7 @@ _ShiftExpression_shiftRightZeroFill = (Core.FieldName "shiftRightZeroFill")
 data ShiftExpression_Binary 
   = ShiftExpression_Binary {
     shiftExpression_BinaryLhs :: ShiftExpression,
-    shiftExpression_BinaryRhs :: AdditiveExpression
-  }
+    shiftExpression_BinaryRhs :: AdditiveExpression}
   deriving (Eq, Ord, Read, Show)
 
 _ShiftExpression_Binary = (Core.Name "hydra/ext/java/syntax.ShiftExpression.Binary")
@@ -3191,8 +3039,7 @@ _AdditiveExpression_minus = (Core.FieldName "minus")
 data AdditiveExpression_Binary 
   = AdditiveExpression_Binary {
     additiveExpression_BinaryLhs :: AdditiveExpression,
-    additiveExpression_BinaryRhs :: MultiplicativeExpression
-  }
+    additiveExpression_BinaryRhs :: MultiplicativeExpression}
   deriving (Eq, Ord, Read, Show)
 
 _AdditiveExpression_Binary = (Core.Name "hydra/ext/java/syntax.AdditiveExpression.Binary")
@@ -3221,8 +3068,7 @@ _MultiplicativeExpression_mod = (Core.FieldName "mod")
 data MultiplicativeExpression_Binary 
   = MultiplicativeExpression_Binary {
     multiplicativeExpression_BinaryLhs :: MultiplicativeExpression,
-    multiplicativeExpression_BinaryRhs :: UnaryExpression
-  }
+    multiplicativeExpression_BinaryRhs :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _MultiplicativeExpression_Binary = (Core.Name "hydra/ext/java/syntax.MultiplicativeExpression.Binary")
@@ -3253,16 +3099,14 @@ _UnaryExpression_other = (Core.FieldName "other")
 
 newtype PreIncrementExpression 
   = PreIncrementExpression {
-    unPreIncrementExpression :: UnaryExpression
-  }
+    unPreIncrementExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _PreIncrementExpression = (Core.Name "hydra/ext/java/syntax.PreIncrementExpression")
 
 newtype PreDecrementExpression 
   = PreDecrementExpression {
-    unPreDecrementExpression :: UnaryExpression
-  }
+    unPreDecrementExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _PreDecrementExpression = (Core.Name "hydra/ext/java/syntax.PreDecrementExpression")
@@ -3303,16 +3147,14 @@ _PostfixExpression_postDecrement = (Core.FieldName "postDecrement")
 
 newtype PostIncrementExpression 
   = PostIncrementExpression {
-    unPostIncrementExpression :: PostfixExpression
-  }
+    unPostIncrementExpression :: PostfixExpression}
   deriving (Eq, Ord, Read, Show)
 
 _PostIncrementExpression = (Core.Name "hydra/ext/java/syntax.PostIncrementExpression")
 
 newtype PostDecrementExpression 
   = PostDecrementExpression {
-    unPostDecrementExpression :: PostfixExpression
-  }
+    unPostDecrementExpression :: PostfixExpression}
   deriving (Eq, Ord, Read, Show)
 
 _PostDecrementExpression = (Core.Name "hydra/ext/java/syntax.PostDecrementExpression")
@@ -3334,8 +3176,7 @@ _CastExpression_lambda = (Core.FieldName "lambda")
 data CastExpression_Primitive 
   = CastExpression_Primitive {
     castExpression_PrimitiveType :: (Maybe PrimitiveTypeWithAnnotations),
-    castExpression_PrimitiveExpression :: UnaryExpression
-  }
+    castExpression_PrimitiveExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _CastExpression_Primitive = (Core.Name "hydra/ext/java/syntax.CastExpression.Primitive")
@@ -3347,8 +3188,7 @@ _CastExpression_Primitive_expression = (Core.FieldName "expression")
 data CastExpression_NotPlusMinus 
   = CastExpression_NotPlusMinus {
     castExpression_NotPlusMinusRefAndBounds :: (Maybe CastExpression_RefAndBounds),
-    castExpression_NotPlusMinusExpression :: UnaryExpression
-  }
+    castExpression_NotPlusMinusExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
 _CastExpression_NotPlusMinus = (Core.Name "hydra/ext/java/syntax.CastExpression.NotPlusMinus")
@@ -3360,8 +3200,7 @@ _CastExpression_NotPlusMinus_expression = (Core.FieldName "expression")
 data CastExpression_Lambda 
   = CastExpression_Lambda {
     castExpression_LambdaRefAndBounds :: (Maybe CastExpression_RefAndBounds),
-    castExpression_LambdaExpression :: LambdaExpression
-  }
+    castExpression_LambdaExpression :: LambdaExpression}
   deriving (Eq, Ord, Read, Show)
 
 _CastExpression_Lambda = (Core.Name "hydra/ext/java/syntax.CastExpression.Lambda")
@@ -3373,8 +3212,7 @@ _CastExpression_Lambda_expression = (Core.FieldName "expression")
 data CastExpression_RefAndBounds 
   = CastExpression_RefAndBounds {
     castExpression_RefAndBoundsType :: ReferenceType,
-    castExpression_RefAndBoundsBounds :: [AdditionalBound]
-  }
+    castExpression_RefAndBoundsBounds :: [AdditionalBound]}
   deriving (Eq, Ord, Read, Show)
 
 _CastExpression_RefAndBounds = (Core.Name "hydra/ext/java/syntax.CastExpression.RefAndBounds")
@@ -3385,8 +3223,7 @@ _CastExpression_RefAndBounds_bounds = (Core.FieldName "bounds")
 
 newtype ConstantExpression 
   = ConstantExpression {
-    unConstantExpression :: Expression
-  }
+    unConstantExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _ConstantExpression = (Core.Name "hydra/ext/java/syntax.ConstantExpression")
