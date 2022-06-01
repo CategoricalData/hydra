@@ -89,7 +89,8 @@ _EdgeFeatures_supportsUpsert = (Core.FieldName "supportsUpsert")
 
 -- Features that are related to Edge Property objects.
 data EdgePropertyFeatures 
-  = EdgePropertyFeatures {edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
+  = EdgePropertyFeatures {
+    edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
 
 _EdgePropertyFeatures = (Core.Name "hydra/ext/tinkerpop/features.EdgePropertyFeatures")
@@ -129,7 +130,8 @@ _ElementFeatures_supportsUuidIds = (Core.FieldName "supportsUuidIds")
 
 -- Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures m 
-  = ExtraFeatures {extraFeaturesSupportsMapKey :: (Core.Type m -> Bool)}
+  = ExtraFeatures {
+    extraFeaturesSupportsMapKey :: (Core.Type m -> Bool)}
 
 _ExtraFeatures = (Core.Name "hydra/ext/tinkerpop/features.ExtraFeatures")
 

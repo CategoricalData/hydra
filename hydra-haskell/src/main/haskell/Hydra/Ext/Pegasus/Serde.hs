@@ -34,9 +34,9 @@ exprNamedSchema :: PDL.NamedSchema -> CT.Expr
 exprNamedSchema (PDL.NamedSchema qn t anns) = withAnnotations anns $
   case t of
     PDL.NamedSchema_TypeRecord (PDL.RecordSchema fields _) -> spaceSep [cst "record", exprQualifiedName qn,
-      curlyBracesList True (exprRecordField <$> fields)]
+      curlyBracesList fullBlockStyle (exprRecordField <$> fields)]
     PDL.NamedSchema_TypeEnum (PDL.EnumSchema fields) -> spaceSep [cst "enum", exprQualifiedName qn,
-      curlyBracesList True (exprEnumField <$> fields)]
+      curlyBracesList fullBlockStyle (exprEnumField <$> fields)]
     PDL.NamedSchema_TypeTyperef schema -> spaceSep [cst "typeref", exprQualifiedName qn, cst "=", exprSchema schema]
 
 exprPrimitiveType :: PDL.PrimitiveType -> CT.Expr
@@ -63,14 +63,14 @@ exprRecordField (PDL.RecordField (PDL.FieldName name) schema optional def anns) 
 
 exprSchema :: PDL.Schema -> CT.Expr
 exprSchema schema = case schema of
-  PDL.SchemaArray s -> noSep [cst "array", bracketList False [exprSchema s]]
+  PDL.SchemaArray s -> noSep [cst "array", bracketList inlineStyle [exprSchema s]]
 --  PDL.SchemaFixed i ->
 --  PDL.SchemaInline ns ->
-  PDL.SchemaMap s -> noSep [cst "map", bracketList False [cst "string", exprSchema s]]
+  PDL.SchemaMap s -> noSep [cst "map", bracketList inlineStyle [cst "string", exprSchema s]]
   PDL.SchemaNamed qn -> exprQualifiedName qn
   PDL.SchemaNull -> cst "null"
   PDL.SchemaPrimitive pt -> exprPrimitiveType pt
-  PDL.SchemaUnion (PDL.UnionSchema us) -> noSep [cst "union", bracketList True (exprUnionMember <$> us)]
+  PDL.SchemaUnion (PDL.UnionSchema us) -> noSep [cst "union", bracketList fullBlockStyle (exprUnionMember <$> us)]
 
 exprSchemaFile :: PDL.SchemaFile -> CT.Expr
 exprSchemaFile (PDL.SchemaFile (PDL.Namespace ns) pkg imports schemas) = doubleNewlineSep $ Y.catMaybes

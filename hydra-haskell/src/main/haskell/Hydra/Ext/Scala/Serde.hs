@@ -41,7 +41,7 @@ writeDefn def = case def of
     where
       nameAndParams = noSep $ Y.catMaybes [
         Just $ writeData_Name name,
-        if L.null tparams then Nothing else Just $ bracketList False (writeType_Param <$> tparams),
+        if L.null tparams then Nothing else Just $ bracketList inlineStyle (writeType_Param <$> tparams),
         Just $ parenList (writeData_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
   Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name (Scala.PredefString name)))] typ term) -> spaceSep [
@@ -65,7 +65,7 @@ writeImporter (Scala.Importer (Scala.Data_RefName (Scala.Data_Name (Scala.Predef
       then cst ""
       else if L.length its == 1
       then noSep [cst ".", forImportee $ L.head its]
-      else noSep [cst ".", curlyBracesList False (forImportee <$> its)]
+      else noSep [cst ".", curlyBracesList inlineStyle (forImportee <$> its)]
 writeLit :: Scala.Lit -> CT.Expr
 writeLit lit = case lit of
 --  Scala.LitNull
@@ -139,9 +139,9 @@ writeData_Select (Scala.Data_Select arg name) = ifx dotOp (writeData arg) (write
 writeType :: Scala.Type -> CT.Expr
 writeType typ = case typ of
   Scala.TypeRef (Scala.Type_RefName name) -> writeType_Name name
-  Scala.TypeApply (Scala.Type_Apply fun args) -> noSep [writeType fun, bracketList False (writeType <$> args)]
+  Scala.TypeApply (Scala.Type_Apply fun args) -> noSep [writeType fun, bracketList inlineStyle (writeType <$> args)]
   Scala.TypeFunctionType (Scala.Type_FunctionTypeFunction (Scala.Type_Function [dom] cod)) -> ifx functionArrowOp (writeType dom) (writeType cod)
-  Scala.TypeLambda (Scala.Type_Lambda params body) -> noSep [writeType body, bracketList False (writeType_Param <$> params)]
+  Scala.TypeLambda (Scala.Type_Lambda params body) -> noSep [writeType body, bracketList inlineStyle (writeType_Param <$> params)]
   Scala.TypeVar (Scala.Type_Var name) -> writeType_Name name
   _ -> cst $ "UNKNOWN TYPE: " ++ show typ
 

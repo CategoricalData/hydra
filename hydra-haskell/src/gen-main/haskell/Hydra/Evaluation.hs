@@ -37,7 +37,8 @@ _Context_setTypeOf = (Core.FieldName "setTypeOf")
 
 -- Settings which determine how terms are evaluated
 data EvaluationStrategy 
-  = EvaluationStrategy {evaluationStrategyOpaqueDataVariants :: (Set Core.DataVariant)}
+  = EvaluationStrategy {
+    evaluationStrategyOpaqueDataVariants :: (Set Core.DataVariant)}
   deriving (Eq, Ord, Read, Show)
 
 _EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
