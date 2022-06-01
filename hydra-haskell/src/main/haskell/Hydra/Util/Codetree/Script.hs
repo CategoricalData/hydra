@@ -11,15 +11,15 @@ angleBraces = Brackets (sym "<") (sym ">")
 angleBracesList :: Bool -> [Expr] -> Expr
 angleBracesList newlines els = case els of
   [] -> cst "<>"
-  _ -> brackets angleBraces $ commaSep newlines els
+  _ -> brackets angleBraces newlines $ commaSep newlines els
 
 bracketList :: Bool -> [Expr] -> Expr
 bracketList newlines els = case els of
   [] -> cst "[]"
-  _ -> brackets squareBrackets $ commaSep newlines els
+  _ -> brackets squareBrackets newlines $ commaSep newlines els
 
-brackets :: Brackets -> Expr -> Expr
-brackets br e = ExprBrackets $ BracketExpr br e
+brackets :: Brackets -> Bool -> Expr -> Expr
+brackets br newlines e = ExprBrackets $ BracketExpr br e newlines
 
 commaOp :: Bool -> Op
 commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
@@ -38,7 +38,7 @@ curlyBraces = Brackets (sym "{") (sym "}")
 curlyBracesList :: Bool -> [Expr] -> Expr
 curlyBracesList newlines els = case els of
   [] -> cst "{}"
-  _ -> brackets curlyBraces $ commaSep newlines els
+  _ -> brackets curlyBraces newlines $ commaSep newlines els
 
 cst :: String -> Expr
 cst = ExprConst . Symbol
@@ -83,10 +83,10 @@ op s p = Op (Symbol s) (Padding WsSpace WsSpace) (Precedence p)
 parenList :: [Expr] -> Expr
 parenList els = case els of
   [] -> cst "()"
-  _ -> brackets parentheses $ commaSep False els
+  _ -> brackets parentheses False $ commaSep False els
 
 parens :: Expr -> Expr
-parens = brackets parentheses
+parens = brackets parentheses False
 
 parentheses :: Brackets
 parentheses = Brackets (sym "(") (sym ")")
@@ -115,7 +115,7 @@ parenthesize exp = case exp of
         _ -> rhs'
       assocLeft a = a == AssociativityLeft || a == AssociativityNone || a == AssociativityBoth
       assocRight a = a == AssociativityRight || a == AssociativityNone || a == AssociativityBoth
-  ExprBrackets (BracketExpr br e) -> ExprBrackets (BracketExpr br $ parenthesize e)
+  ExprBrackets (BracketExpr br e newlines) -> ExprBrackets (BracketExpr br (parenthesize e) newlines)
   _ -> exp
 
 prefix :: String -> Expr -> Expr
@@ -136,8 +136,8 @@ printExpr exp = case exp of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
-  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e) -> if L.length (lines body) > 1
-      then l ++ "\n" ++ indent body ++ r
+  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e newlines) -> if newlines
+      then l ++ "\n" ++ indent body ++ "\n" ++ r
       else l ++ body ++ r
     where
       body = printExpr e
@@ -145,7 +145,7 @@ printExpr exp = case exp of
 printExprAsTree :: Expr -> String
 printExprAsTree expr = case expr of
   ExprConst (Symbol s) -> s
-  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e) -> l ++ r ++ ":\n" ++ indent (printExprAsTree e)
+  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e _) -> l ++ r ++ ":\n" ++ indent (printExprAsTree e)
   ExprOp (OpExpr op l r) -> h (opSymbol op) ++ ":\n" ++ indent (printExprAsTree l) ++ "\n" ++ indent (printExprAsTree r)
     where
       h (Symbol s) = s

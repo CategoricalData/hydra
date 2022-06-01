@@ -110,7 +110,7 @@ instance ToTree H.Expression_Case where
       ofOp = CT.Op (CT.Symbol "of") (CT.Padding CT.WsSpace CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
 
 instance ToTree H.Expression_ConstructRecord where
-  toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces body]
+  toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces True body]
     where
       body = commaSep True (fromUpdate <$> updates)
       fromUpdate (H.FieldUpdate fn val) = ifx defineOp (toTree fn) (toTree val)

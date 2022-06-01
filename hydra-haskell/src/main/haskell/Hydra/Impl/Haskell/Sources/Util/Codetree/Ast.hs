@@ -31,7 +31,10 @@ codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
         doc "An expression enclosed by brackets" $
         record [
           field "brackets" $ ast "Brackets",
-          field "enclosed" $ ast "Expr"],
+          field "enclosed" $ ast "Expr",
+          field "newlines" $
+            doc "Whether to prefix and suffix the enclosed expression with a newline"
+            boolean],
 
       def "Brackets" $
         doc "Matching open and close bracket symbols" $
