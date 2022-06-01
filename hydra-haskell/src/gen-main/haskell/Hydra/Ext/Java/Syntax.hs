@@ -2349,29 +2349,29 @@ _TypeArgumentsOrDiamond_diamond = (Core.FieldName "diamond")
 
 data FieldAccess 
   = FieldAccess {
-    fieldAccessIdentifier :: Identifier,
-    fieldAccessVariant :: FieldAccess_Variant}
+    fieldAccessQualifier :: FieldAccess_Qualifier,
+    fieldAccessIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _FieldAccess = (Core.Name "hydra/ext/java/syntax.FieldAccess")
 
+_FieldAccess_qualifier = (Core.FieldName "qualifier")
+
 _FieldAccess_identifier = (Core.FieldName "identifier")
 
-_FieldAccess_variant = (Core.FieldName "variant")
-
-data FieldAccess_Variant 
-  = FieldAccess_VariantPrimary Primary
-  | FieldAccess_VariantSuper 
-  | FieldAccess_VariantTyped TypeName
+data FieldAccess_Qualifier 
+  = FieldAccess_QualifierPrimary Primary
+  | FieldAccess_QualifierSuper 
+  | FieldAccess_QualifierTyped TypeName
   deriving (Eq, Ord, Read, Show)
 
-_FieldAccess_Variant = (Core.Name "hydra/ext/java/syntax.FieldAccess.Variant")
+_FieldAccess_Qualifier = (Core.Name "hydra/ext/java/syntax.FieldAccess.Qualifier")
 
-_FieldAccess_Variant_primary = (Core.FieldName "primary")
+_FieldAccess_Qualifier_primary = (Core.FieldName "primary")
 
-_FieldAccess_Variant_super = (Core.FieldName "super")
+_FieldAccess_Qualifier_super = (Core.FieldName "super")
 
-_FieldAccess_Variant_typed = (Core.FieldName "typed")
+_FieldAccess_Qualifier_typed = (Core.FieldName "typed")
 
 data ArrayAccess 
   = ArrayAccess {

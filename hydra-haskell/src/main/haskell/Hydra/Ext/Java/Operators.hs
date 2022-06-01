@@ -9,7 +9,43 @@ andOp :: Op
 andOp = op "&&" 2 AssociativityLeft
 
 arrowOp :: Op
-arrowOp = op "->" (negate 1) AssociativityRight
+arrowOp = op "->" 0 AssociativityRight
+
+assignOp :: Op
+assignOp = op "=" 0 AssociativityRight
+
+assignTimesOp :: Op
+assignTimesOp = op "*=" 0 AssociativityRight
+
+assignDivOp :: Op
+assignDivOp = op "/=" 0 AssociativityRight
+
+assignModOp :: Op
+assignModOp = op "%=" 0 AssociativityRight
+
+assignPlusOp :: Op
+assignPlusOp = op "+=" 0 AssociativityRight
+
+assignMinusOp :: Op
+assignMinusOp = op "-=" 0 AssociativityRight
+
+assignShiftLeftOp :: Op
+assignShiftLeftOp = op "<<=" 0 AssociativityRight
+
+assignShiftRightOp :: Op
+assignShiftRightOp = op ">>=" 0 AssociativityRight
+
+assignShiftRightZeroFillOp :: Op
+assignShiftRightZeroFillOp = op ">>>=" 0 AssociativityRight
+
+assignAndOp :: Op
+assignAndOp = op "&=" 0 AssociativityRight
+
+assignXorOp :: Op
+assignXorOp = op "^=" 0 AssociativityRight
+
+assignOrOp :: Op
+assignOrOp = op "|=" 0 AssociativityRight
 
 -- bitAndOp > bitXorOp 
 bitAndOp :: Op
