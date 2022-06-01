@@ -1,4 +1,4 @@
-module Hydra.Ext.Haskell.Syntax where
+module Hydra.Ext.Haskell.Operators where
 
 import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
@@ -108,13 +108,3 @@ remOp = op "`rem`" 7 AssociativityLeft
 
 typeOp :: Op
 typeOp = op "::" 0 AssociativityNone -- No source
-
-caseStatement :: Expr -> [(Expr, Expr)] -> Expr
-caseStatement cond cases = ifx ofOp lhs rhs
-  where
-    lhs = spaceSep [cst "case", cond]
-    rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
-    ofOp = Op (Symbol "of") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
-
-lam :: [String] -> Expr -> Expr
-lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
