@@ -8,7 +8,7 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.CoreDecoding
-import Hydra.Ext.Java.CoderUtils
+import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
