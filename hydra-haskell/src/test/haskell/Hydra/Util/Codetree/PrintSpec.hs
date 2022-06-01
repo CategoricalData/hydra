@@ -4,11 +4,21 @@ import qualified Test.Hspec as H
 
 import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
-import Hydra.Ext.Haskell.Syntax
+import Hydra.Ext.Haskell.Operators
 
 
 check :: Expr -> String -> H.Expectation
 check expr printed = printExpr (parenthesize expr) `H.shouldBe` printed
+
+caseStatement :: Expr -> [(Expr, Expr)] -> Expr
+caseStatement cond cases = ifx ofOp lhs rhs
+  where
+    lhs = spaceSep [cst "case", cond]
+    rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
+    ofOp = Op (Symbol "of") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
+
+lam :: [String] -> Expr -> Expr
+lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars
 
 checkAssociativity :: H.SpecWith ()
 checkAssociativity = do
@@ -44,7 +54,7 @@ checkCaseStatements = do
 checkLambdas :: H.SpecWith ()
 checkLambdas = do
   H.describe "Unit tests for lambda expressions" $ do
-    
+
     H.it "Simple lambda" $ do
       check
         (lam ["x", "y"] (ifx plusOp (cst "x") (cst "y")))
@@ -53,7 +63,7 @@ checkLambdas = do
 checkLists :: H.SpecWith ()
 checkLists = do
   H.describe "Unit tests for list expressions" $ do
-    
+
     H.it "Empty list" $ do
       check
         (bracketList inlineStyle [])
@@ -77,14 +87,14 @@ checkLists = do
 checkPrecedence :: H.SpecWith ()
 checkPrecedence = do
   H.describe "Unit tests for verify that operator precedence is respected" $ do
-    
+
     H.it "Check expressions with operators of different precedence" $ do
       check
         (ifx plusOp (ifx multOp (num 2) (num 3)) (ifx multOp (num 1) (num 10)))
         "2 * 3 + 1 * 10"
       check
         (ifx multOp (ifx plusOp (num 2) (num 3)) (ifx plusOp (num 1) (num 10)))
-        "(2 + 3) * (1 + 10)"      
+        "(2 + 3) * (1 + 10)"
 
     H.it "Check an operator which is both left- and right-associative" $ do
       check
@@ -92,7 +102,7 @@ checkPrecedence = do
         "x * y * z"
       check
         (ifx multOp (ifx multOp (cst "x") (cst "y")) (cst "z"))
-        "x * y * z"   
+        "x * y * z"
 
 spec :: H.Spec
 spec = do
