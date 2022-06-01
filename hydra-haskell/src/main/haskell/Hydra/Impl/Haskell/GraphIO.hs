@@ -34,6 +34,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
+import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Formatting
@@ -91,11 +92,12 @@ coreModules = [
   codetreeAstModule,
   tinkerpopFeaturesModule,
   tinkerpopTypedModule,
-  tinkerpopV3Module]
+  tinkerpopV3Module,
+  xmlSchemaModule]
 
 -- TODO: remove me eventually. Handy for debugging.
 testModules :: [Module Meta]
-testModules = [javaSyntaxModule, codetreeAstModule]
+testModules = [javaSyntaxModule, xmlSchemaModule]
 javaTestModules :: [Module Meta]
 javaTestModules = [jsonJsonModule]
 
