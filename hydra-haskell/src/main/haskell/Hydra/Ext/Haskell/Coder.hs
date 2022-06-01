@@ -17,6 +17,7 @@ import Hydra.Primitives
 import Hydra.Rewriting
 import Hydra.Util.Coders
 import Hydra.Util.Formatting
+import Hydra.Ext.Haskell.Language
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -359,44 +360,6 @@ encodeType aliases typ = case typeTerm typ of
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType aliases
-
-haskellLanguage :: Language m
-haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [
-    -- Bigfloat is excluded for now
-    FloatTypeFloat32,
-    FloatTypeFloat64],
-  languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint, IntegerTypeInt32],
-  languageConstraintsDataVariants = S.fromList [
-    DataVariantApplication,
-    DataVariantElement,
-    DataVariantFunction,
-    DataVariantList,
-    DataVariantLiteral,
-    DataVariantMap,
-    DataVariantNominal,
-    DataVariantOptional,
-    DataVariantRecord,
-    DataVariantSet,
-    DataVariantUnion,
-    DataVariantVariable],
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantElement,
-    TypeVariantFunction,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantNominal,
-    TypeVariantOptional,
-    TypeVariantRecord,
-    TypeVariantSet,
-    TypeVariantUnion,
-    TypeVariantUniversal,
-    TypeVariantVariable],
-  languageConstraintsTypes = const True }
 
 hsapp :: H.Expression -> H.Expression -> H.Expression
 hsapp l r = H.ExpressionApplication $ H.Expression_Application l r
