@@ -1339,9 +1339,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --FieldAccess:
       def "FieldAccess" $ record [
-        field "identifier" $ java "Identifier",
-        field "variant" $ java "FieldAccess.Variant"],
-      def "FieldAccess.Variant" $ union [
+        field "qualifier" $ java "FieldAccess.Qualifier",
+        field "identifier" $ java "Identifier"],
+      def "FieldAccess.Qualifier" $ union [
 --  Primary . Identifier
         field "primary" $ java "Primary",
 --  super . Identifier

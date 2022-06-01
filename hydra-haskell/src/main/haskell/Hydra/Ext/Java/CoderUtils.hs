@@ -30,8 +30,11 @@ asJavaReferenceType t = case t of
   _ -> fail $ "expected a Java reference type. Found: " ++ show t
 
 fieldNameToJavaExpression :: FieldName -> Java.Expression
-fieldNameToJavaExpression (FieldName name) = javaPostfixExpressionToJavaExpression $
-  Java.PostfixExpressionName $ Java.ExpressionName (Java.Identifier $ javaEscape name) Nothing
+fieldNameToJavaExpression fname = javaPostfixExpressionToJavaExpression $
+  Java.PostfixExpressionName $ Java.ExpressionName (fieldNameToJavaIdentifier fname) Nothing
+
+fieldNameToJavaIdentifier :: FieldName -> Java.Identifier
+fieldNameToJavaIdentifier (FieldName name) = Java.Identifier $ javaEscape name
 
 fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (FieldName n) = Java.VariableDeclaratorId id Nothing
@@ -44,6 +47,12 @@ importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
     deps = dataGraphDependencies True True True g
     addName m name = M.insert name (graphNameToPackageName name) m
     graphNameToPackageName (GraphName n) = javaPackageName $ Strings.splitOn "/" n
+
+javaAssignmentStatement :: Java.LeftHandSide -> Java.Expression -> Java.Statement
+javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementExpression $
+    Java.ExpressionStatement $ Java.StatementExpressionAssignment ass
+  where
+    ass = Java.Assignment lhs Java.AssignmentOperatorSimple rhs
 
 javaClassType :: [Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType
 javaClassType args pkg id = Java.ClassType [] qual (javaTypeIdentifier id) targs
@@ -121,7 +130,7 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
   where
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
-              
+
 methodDeclaration :: [Java.MethodModifier] -> Java.MethodHeader -> [Java.Statement] -> Java.ClassBodyDeclaration
 methodDeclaration mods header stmts = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationMethod $
   Java.MethodDeclaration mods header $

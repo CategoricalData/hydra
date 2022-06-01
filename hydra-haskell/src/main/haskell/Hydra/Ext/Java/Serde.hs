@@ -70,7 +70,21 @@ writeAssertStatement :: Java.AssertStatement -> CT.Expr
 writeAssertStatement _ = cst "TODO:AssertStatement"
 
 writeAssignment :: Java.Assignment -> CT.Expr
-writeAssignment _ = cst "TODO:Assignment"
+writeAssignment (Java.Assignment lhs op rhs) = ifx ctop (writeLeftHandSide lhs) (writeExpression rhs)
+  where
+    ctop = case op of
+      Java.AssignmentOperatorSimple -> assignOp
+      Java.AssignmentOperatorTimes -> assignTimesOp
+      Java.AssignmentOperatorDiv -> assignDivOp
+      Java.AssignmentOperatorMod -> assignModOp
+      Java.AssignmentOperatorPlus -> assignPlusOp
+      Java.AssignmentOperatorMinus -> assignMinusOp
+      Java.AssignmentOperatorShiftLeft -> assignShiftLeftOp
+      Java.AssignmentOperatorShiftRight -> assignShiftRightOp
+      Java.AssignmentOperatorShiftRightZeroFill -> assignShiftRightZeroFillOp
+      Java.AssignmentOperatorAnd -> assignAndOp
+      Java.AssignmentOperatorXor -> assignXorOp
+      Java.AssignmentOperatorOr -> assignOrOp
 
 writeAssignmentExpression :: Java.AssignmentExpression -> CT.Expr
 writeAssignmentExpression e = case e of
@@ -269,10 +283,13 @@ writeExpressionName :: Java.ExpressionName -> CT.Expr
 writeExpressionName (Java.ExpressionName id _) = writeIdentifier id -- Note: ignoring the AmbiguousName part for now
 
 writeExpressionStatement :: Java.ExpressionStatement -> CT.Expr
-writeExpressionStatement _ = cst "TODO:ExpressionStatement"
+writeExpressionStatement (Java.ExpressionStatement stmt) = writeStatementExpression stmt
 
 writeFieldAccess :: Java.FieldAccess -> CT.Expr
-writeFieldAccess _ = cst "TODO:FieldAccess"
+writeFieldAccess (Java.FieldAccess qual id) = dotSep $ case qual of
+  Java.FieldAccess_QualifierPrimary p -> [writePrimary p, writeIdentifier id]
+  Java.FieldAccess_QualifierSuper -> [cst "super", writeIdentifier id]
+  Java.FieldAccess_QualifierTyped tn -> [writeTypeName tn, cst "super", writeIdentifier id]
 
 writeFieldDeclaration :: Java.FieldDeclaration -> CT.Expr
 writeFieldDeclaration (Java.FieldDeclaration mods typ vars) = suffixSemi $ spaceSep $ Y.catMaybes [
@@ -350,6 +367,12 @@ writeLambdaParameters :: Java.LambdaParameters -> CT.Expr
 writeLambdaParameters p = case p of
   Java.LambdaParametersTuple l -> parenList (writeLambdaParameters <$> l)
   Java.LambdaParametersSingle id -> writeIdentifier id
+
+writeLeftHandSide :: Java.LeftHandSide -> CT.Expr
+writeLeftHandSide lhs = case lhs of
+  Java.LeftHandSideExpressionName en -> writeExpressionName en
+  Java.LeftHandSideFieldAccess fa -> writeFieldAccess fa
+  Java.LeftHandSideArrayAccess aa -> writeArrayAccess aa
 
 writeLiteral :: Java.Literal -> CT.Expr
 writeLiteral _ = cst "TODO:Literal"
@@ -552,13 +575,23 @@ writeSingleElementAnnotation (Java.SingleElementAnnotation tname mv) = case mv o
   Just v -> prefixAt $ noSep [writeTypeName tname, parenList [writeElementValue v]]
 
 writeStatement :: Java.Statement -> CT.Expr
-writeStatement s = case s of
+writeStatement s = suffixSemi $ case s of
   Java.StatementWithoutTrailing s -> writeStatementWithoutTrailingSubstatement s
   Java.StatementLabeled l -> writeLabeledStatement l
   Java.StatementIfThen it -> writeIfThenStatement it
   Java.StatementIfThenElse ite -> writeIfThenElseStatement ite
   Java.StatementWhile w -> writeWhileStatement w
   Java.StatementFor f -> writeForStatement f
+
+writeStatementExpression :: Java.StatementExpression -> CT.Expr
+writeStatementExpression e = case e of
+  Java.StatementExpressionAssignment ass -> writeAssignment ass
+  Java.StatementExpressionPreIncrement pi -> writePreIncrementExpression pi
+  Java.StatementExpressionPreDecrement pd -> writePreDecrementExpression pd
+  Java.StatementExpressionPostIncrement pi -> writePostIncrementExpression pi
+  Java.StatementExpressionPostDecrement pd -> writePostDecrementExpression pd
+  Java.StatementExpressionMethodInvocation m -> writeMethodInvocation m
+  Java.StatementExpressionClassInstanceCreation cic -> writeClassInstanceCreationExpression cic
 
 writeStatementWithoutTrailingSubstatement :: Java.StatementWithoutTrailingSubstatement -> CT.Expr
 writeStatementWithoutTrailingSubstatement s = case s of
