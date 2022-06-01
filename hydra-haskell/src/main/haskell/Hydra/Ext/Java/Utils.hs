@@ -1,4 +1,4 @@
-module Hydra.Ext.Java.CoderUtils where
+module Hydra.Ext.Java.Utils where
 
 import Hydra.Core
 import Hydra.Evaluation
