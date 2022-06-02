@@ -37,6 +37,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
+import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Util.Formatting
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Libraries
@@ -83,6 +84,7 @@ coreModules = [
   hydraGraphModule,
   hydraBasicsModule,
   adapterUtilsModule,
+  atlasModelModule,
   haskellAstModule,
   javaSyntaxModule,
   jsonJsonModule,
@@ -97,7 +99,7 @@ coreModules = [
 
 -- TODO: remove me eventually. Handy for debugging.
 testModules :: [Module Meta]
-testModules = [javaSyntaxModule, xmlSchemaModule]
+testModules = [javaSyntaxModule, xmlSchemaModule, atlasModelModule]
 javaTestModules :: [Module Meta]
 javaTestModules = [jsonJsonModule]
 
