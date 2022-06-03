@@ -26,6 +26,7 @@ import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
+import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Json
@@ -85,6 +86,7 @@ coreModules = [
   hydraBasicsModule,
   adapterUtilsModule,
   atlasModelModule,
+  coqSyntaxModule,
   haskellAstModule,
   javaSyntaxModule,
   jsonJsonModule,
@@ -99,7 +101,7 @@ coreModules = [
 
 -- TODO: remove me eventually. Handy for debugging.
 testModules :: [Module Meta]
-testModules = [javaSyntaxModule, xmlSchemaModule, atlasModelModule]
+testModules = [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
 javaTestModules :: [Module Meta]
 javaTestModules = [jsonJsonModule]
 
