@@ -4,9 +4,21 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
+data AnnotatedApplication 
+  = AnnotatedApplication {
+    annotatedApplicationAnnot :: QualidAnnotated,
+    annotatedApplicationTerms :: [Term1]}
+  deriving (Eq, Ord, Read, Show)
+
+_AnnotatedApplication = (Core.Name "hydra/ext/coq/syntax.AnnotatedApplication")
+
+_AnnotatedApplication_annot = (Core.FieldName "annot")
+
+_AnnotatedApplication_terms = (Core.FieldName "terms")
+
 data Application 
-  = ApplicationNormal ApplicationNormal
-  | ApplicationAnnotated ApplicationAnnotated
+  = ApplicationNormal NormalApplication
+  | ApplicationAnnotated AnnotatedApplication
   deriving (Eq, Ord, Read, Show)
 
 _Application = (Core.Name "hydra/ext/coq/syntax.Application")
@@ -15,33 +27,9 @@ _Application_normal = (Core.FieldName "normal")
 
 _Application_annotated = (Core.FieldName "annotated")
 
-data ApplicationNormal 
-  = ApplicationNormal {
-    applicationNormalLhs :: Term1,
-    applicationNormalRhs :: [Arg]}
-  deriving (Eq, Ord, Read, Show)
-
-_ApplicationNormal = (Core.Name "hydra/ext/coq/syntax.ApplicationNormal")
-
-_ApplicationNormal_lhs = (Core.FieldName "lhs")
-
-_ApplicationNormal_rhs = (Core.FieldName "rhs")
-
-data ApplicationAnnotated 
-  = ApplicationAnnotated {
-    applicationAnnotatedAnnot :: QualidAnnotated,
-    applicationAnnotatedTerms :: [Term1]}
-  deriving (Eq, Ord, Read, Show)
-
-_ApplicationAnnotated = (Core.Name "hydra/ext/coq/syntax.ApplicationAnnotated")
-
-_ApplicationAnnotated_annot = (Core.FieldName "annot")
-
-_ApplicationAnnotated_terms = (Core.FieldName "terms")
-
 data Arg 
-  = ArgIdent ArgIdent
-  | ArgNatural ArgNatural
+  = ArgIdent IdentArg
+  | ArgNatural NaturalArg
   | ArgTerm Term1
   deriving (Eq, Ord, Read, Show)
 
@@ -52,30 +40,6 @@ _Arg_ident = (Core.FieldName "ident")
 _Arg_natural = (Core.FieldName "natural")
 
 _Arg_term = (Core.FieldName "term")
-
-data ArgIdent 
-  = ArgIdent {
-    argIdentIdent :: Ident,
-    argIdentTerm :: Term}
-  deriving (Eq, Ord, Read, Show)
-
-_ArgIdent = (Core.Name "hydra/ext/coq/syntax.ArgIdent")
-
-_ArgIdent_ident = (Core.FieldName "ident")
-
-_ArgIdent_term = (Core.FieldName "term")
-
-data ArgNatural 
-  = ArgNatural {
-    argNaturalNatural :: Natural,
-    argNaturalTerm :: Term}
-  deriving (Eq, Ord, Read, Show)
-
-_ArgNatural = (Core.Name "hydra/ext/coq/syntax.ArgNatural")
-
-_ArgNatural_natural = (Core.FieldName "natural")
-
-_ArgNatural_term = (Core.FieldName "term")
 
 data Binder 
   = BinderName Name
@@ -196,7 +160,7 @@ data ExistentialVariableVariant
   = ExistentialVariableVariantPlaceholder 
   | ExistentialVariableVariantInside1 
   | ExistentialVariableVariantInside2 
-  | ExistentialVariableVariantOutside (Maybe ArgIdent)
+  | ExistentialVariableVariantOutside (Maybe IdentArg)
   deriving (Eq, Ord, Read, Show)
 
 _ExistentialVariableVariant = (Core.Name "hydra/ext/coq/syntax.ExistentialVariableVariant")
@@ -217,8 +181,8 @@ newtype FieldIdent
 _FieldIdent = (Core.Name "hydra/ext/coq/syntax.FieldIdent")
 
 data Fix 
-  = FixDecl FixDecl
-  | FixQual (Maybe FixQual)
+  = FixDecl Fix_Decl
+  | FixQual (Maybe Fix_Qual)
   deriving (Eq, Ord, Read, Show)
 
 _Fix = (Core.Name "hydra/ext/coq/syntax.Fix")
@@ -229,8 +193,8 @@ _Fix_qual = (Core.FieldName "qual")
 
 data FixAnnot 
   = FixAnnotStruct Ident
-  | FixAnnotWf FixAnnotWf
-  | FixAnnotMeasure FixAnnotMeasure
+  | FixAnnotWf FixAnnot_Wf
+  | FixAnnotMeasure FixAnnot_Measure
   deriving (Eq, Ord, Read, Show)
 
 _FixAnnot = (Core.Name "hydra/ext/coq/syntax.FixAnnot")
@@ -241,68 +205,68 @@ _FixAnnot_wf = (Core.FieldName "wf")
 
 _FixAnnot_measure = (Core.FieldName "measure")
 
-data FixAnnotMeasure 
-  = FixAnnotMeasure {
-    fixAnnotMeasureTerm :: OneTerm,
-    fixAnnotMeasureIdent :: (Maybe Ident),
-    fixAnnotMeasureTerm2 :: (Maybe OneTerm)}
+data FixAnnot_Measure 
+  = FixAnnot_Measure {
+    fixAnnot_MeasureTerm :: OneTerm,
+    fixAnnot_MeasureIdent :: (Maybe Ident),
+    fixAnnot_MeasureTerm2 :: (Maybe OneTerm)}
   deriving (Eq, Ord, Read, Show)
 
-_FixAnnotMeasure = (Core.Name "hydra/ext/coq/syntax.FixAnnotMeasure")
+_FixAnnot_Measure = (Core.Name "hydra/ext/coq/syntax.FixAnnot.Measure")
 
-_FixAnnotMeasure_term = (Core.FieldName "term")
+_FixAnnot_Measure_term = (Core.FieldName "term")
 
-_FixAnnotMeasure_ident = (Core.FieldName "ident")
+_FixAnnot_Measure_ident = (Core.FieldName "ident")
 
-_FixAnnotMeasure_term2 = (Core.FieldName "term2")
+_FixAnnot_Measure_term2 = (Core.FieldName "term2")
 
-data FixAnnotWf 
-  = FixAnnotWf {
-    fixAnnotWfTerm :: OneTerm,
-    fixAnnotWfIdent :: Ident}
+data FixAnnot_Wf 
+  = FixAnnot_Wf {
+    fixAnnot_WfTerm :: OneTerm,
+    fixAnnot_WfIdent :: Ident}
   deriving (Eq, Ord, Read, Show)
 
-_FixAnnotWf = (Core.Name "hydra/ext/coq/syntax.FixAnnotWf")
+_FixAnnot_Wf = (Core.Name "hydra/ext/coq/syntax.FixAnnot.Wf")
 
-_FixAnnotWf_term = (Core.FieldName "term")
+_FixAnnot_Wf_term = (Core.FieldName "term")
 
-_FixAnnotWf_ident = (Core.FieldName "ident")
+_FixAnnot_Wf_ident = (Core.FieldName "ident")
 
-data FixDecl 
-  = FixDecl {
-    fixDeclIdent :: Ident,
-    fixDeclBinders :: [Binder],
-    fixDeclAnnot :: (Maybe FixAnnot),
-    fixDeclType :: (Maybe Type),
-    fixDeclTerm :: Term}
+data Fix_Decl 
+  = Fix_Decl {
+    fix_DeclIdent :: Ident,
+    fix_DeclBinders :: [Binder],
+    fix_DeclAnnot :: (Maybe FixAnnot),
+    fix_DeclType :: (Maybe Type),
+    fix_DeclTerm :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_FixDecl = (Core.Name "hydra/ext/coq/syntax.FixDecl")
+_Fix_Decl = (Core.Name "hydra/ext/coq/syntax.Fix.Decl")
 
-_FixDecl_ident = (Core.FieldName "ident")
+_Fix_Decl_ident = (Core.FieldName "ident")
 
-_FixDecl_binders = (Core.FieldName "binders")
+_Fix_Decl_binders = (Core.FieldName "binders")
 
-_FixDecl_annot = (Core.FieldName "annot")
+_Fix_Decl_annot = (Core.FieldName "annot")
 
-_FixDecl_type = (Core.FieldName "type")
+_Fix_Decl_type = (Core.FieldName "type")
 
-_FixDecl_term = (Core.FieldName "term")
+_Fix_Decl_term = (Core.FieldName "term")
 
-data FixQual 
-  = FixQualIn Term
-  | FixQualWith FixWith
+data Fix_Qual 
+  = Fix_QualIn Term
+  | Fix_QualWith FixWith
   deriving (Eq, Ord, Read, Show)
 
-_FixQual = (Core.Name "hydra/ext/coq/syntax.FixQual")
+_Fix_Qual = (Core.Name "hydra/ext/coq/syntax.Fix.Qual")
 
-_FixQual_in = (Core.FieldName "in")
+_Fix_Qual_in = (Core.FieldName "in")
 
-_FixQual_with = (Core.FieldName "with")
+_Fix_Qual_with = (Core.FieldName "with")
 
 data FixWith 
   = FixWith {
-    fixWithDecls :: [FixDecl],
+    fixWithDecls :: [Fix_Decl],
     fixWithFor :: (Maybe Ident)}
   deriving (Eq, Ord, Read, Show)
 
@@ -367,6 +331,18 @@ newtype Ident
   deriving (Eq, Ord, Read, Show)
 
 _Ident = (Core.Name "hydra/ext/coq/syntax.Ident")
+
+data IdentArg 
+  = IdentArg {
+    identArgIdent :: Ident,
+    identArgTerm :: Term}
+  deriving (Eq, Ord, Read, Show)
+
+_IdentArg = (Core.Name "hydra/ext/coq/syntax.IdentArg")
+
+_IdentArg_ident = (Core.FieldName "ident")
+
+_IdentArg_term = (Core.FieldName "term")
 
 -- Pattern match on boolean values
 data If 
@@ -452,9 +428,9 @@ _LetNamed_binder = (Core.FieldName "binder")
 _LetNamed_binders = (Core.FieldName "binders")
 
 data LetDestructuring 
-  = LetDestructuringVariant1 LetDestructuringVariant1
-  | LetDestructuringVariant2 LetDestructuringVariant2
-  | LetDestructuringVariant3 LetDestructuringVariant3
+  = LetDestructuringVariant1 LetDestructuring_Variant1
+  | LetDestructuringVariant2 LetDestructuring_Variant2
+  | LetDestructuringVariant3 LetDestructuring_Variant3
   deriving (Eq, Ord, Read, Show)
 
 _LetDestructuring = (Core.Name "hydra/ext/coq/syntax.LetDestructuring")
@@ -465,53 +441,53 @@ _LetDestructuring_variant2 = (Core.FieldName "variant2")
 
 _LetDestructuring_variant3 = (Core.FieldName "variant3")
 
-data LetDestructuringVariant1 
-  = LetDestructuringVariant1 {
-    letDestructuringVariant1Names :: [Name],
-    letDestructuringVariant1ReturnAs :: (Maybe ReturnAs),
-    letDestructuringVariant1Term :: Term}
+data LetDestructuring_Variant1 
+  = LetDestructuring_Variant1 {
+    letDestructuring_Variant1Names :: [Name],
+    letDestructuring_Variant1ReturnAs :: (Maybe ReturnAs),
+    letDestructuring_Variant1Term :: Term}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuringVariant1 = (Core.Name "hydra/ext/coq/syntax.LetDestructuringVariant1")
+_LetDestructuring_Variant1 = (Core.Name "hydra/ext/coq/syntax.LetDestructuring.Variant1")
 
-_LetDestructuringVariant1_names = (Core.FieldName "names")
+_LetDestructuring_Variant1_names = (Core.FieldName "names")
 
-_LetDestructuringVariant1_returnAs = (Core.FieldName "returnAs")
+_LetDestructuring_Variant1_returnAs = (Core.FieldName "returnAs")
 
-_LetDestructuringVariant1_term = (Core.FieldName "term")
+_LetDestructuring_Variant1_term = (Core.FieldName "term")
 
-data LetDestructuringVariant2 
-  = LetDestructuringVariant2 {
-    letDestructuringVariant2Pattern :: Pattern,
-    letDestructuringVariant2Term :: Term,
-    letDestructuringVariant2Return :: (Maybe Term100)}
+data LetDestructuring_Variant2 
+  = LetDestructuring_Variant2 {
+    letDestructuring_Variant2Pattern :: Pattern,
+    letDestructuring_Variant2Term :: Term,
+    letDestructuring_Variant2Return :: (Maybe Term100)}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuringVariant2 = (Core.Name "hydra/ext/coq/syntax.LetDestructuringVariant2")
+_LetDestructuring_Variant2 = (Core.Name "hydra/ext/coq/syntax.LetDestructuring.Variant2")
 
-_LetDestructuringVariant2_pattern = (Core.FieldName "pattern")
+_LetDestructuring_Variant2_pattern = (Core.FieldName "pattern")
 
-_LetDestructuringVariant2_term = (Core.FieldName "term")
+_LetDestructuring_Variant2_term = (Core.FieldName "term")
 
-_LetDestructuringVariant2_return = (Core.FieldName "return")
+_LetDestructuring_Variant2_return = (Core.FieldName "return")
 
-data LetDestructuringVariant3 
-  = LetDestructuringVariant3 {
-    letDestructuringVariant3Pattern1 :: Pattern,
-    letDestructuringVariant3Pattern2 :: Pattern,
-    letDestructuringVariant3Term :: Term,
-    letDestructuringVariant3Return :: Term100}
+data LetDestructuring_Variant3 
+  = LetDestructuring_Variant3 {
+    letDestructuring_Variant3Pattern1 :: Pattern,
+    letDestructuring_Variant3Pattern2 :: Pattern,
+    letDestructuring_Variant3Term :: Term,
+    letDestructuring_Variant3Return :: Term100}
   deriving (Eq, Ord, Read, Show)
 
-_LetDestructuringVariant3 = (Core.Name "hydra/ext/coq/syntax.LetDestructuringVariant3")
+_LetDestructuring_Variant3 = (Core.Name "hydra/ext/coq/syntax.LetDestructuring.Variant3")
 
-_LetDestructuringVariant3_pattern1 = (Core.FieldName "pattern1")
+_LetDestructuring_Variant3_pattern1 = (Core.FieldName "pattern1")
 
-_LetDestructuringVariant3_pattern2 = (Core.FieldName "pattern2")
+_LetDestructuring_Variant3_pattern2 = (Core.FieldName "pattern2")
 
-_LetDestructuringVariant3_term = (Core.FieldName "term")
+_LetDestructuring_Variant3_term = (Core.FieldName "term")
 
-_LetDestructuringVariant3_return = (Core.FieldName "return")
+_LetDestructuring_Variant3_return = (Core.FieldName "return")
 
 data Match 
   = Match {
@@ -545,6 +521,30 @@ newtype Natural
   deriving (Eq, Ord, Read, Show)
 
 _Natural = (Core.Name "hydra/ext/coq/syntax.Natural")
+
+data NaturalArg 
+  = NaturalArg {
+    naturalArgNatural :: Natural,
+    naturalArgTerm :: Term}
+  deriving (Eq, Ord, Read, Show)
+
+_NaturalArg = (Core.Name "hydra/ext/coq/syntax.NaturalArg")
+
+_NaturalArg_natural = (Core.FieldName "natural")
+
+_NaturalArg_term = (Core.FieldName "term")
+
+data NormalApplication 
+  = NormalApplication {
+    normalApplicationLhs :: Term1,
+    normalApplicationRhs :: [Arg]}
+  deriving (Eq, Ord, Read, Show)
+
+_NormalApplication = (Core.Name "hydra/ext/coq/syntax.NormalApplication")
+
+_NormalApplication_lhs = (Core.FieldName "lhs")
+
+_NormalApplication_rhs = (Core.FieldName "rhs")
 
 newtype Number 
   = Number {
@@ -622,9 +622,9 @@ _Pattern1_pattern = (Core.FieldName "pattern")
 _Pattern1_scope = (Core.FieldName "scope")
 
 data Pattern10 
-  = Pattern10As Pattern10As
-  | Pattern10Patterns Pattern10Patterns
-  | Pattern10Qualiid Pattern10Qualid
+  = Pattern10As Pattern10_As
+  | Pattern10Patterns Pattern10_Patterns
+  | Pattern10Qualiid Pattern10_Qualid
   deriving (Eq, Ord, Read, Show)
 
 _Pattern10 = (Core.Name "hydra/ext/coq/syntax.Pattern10")
@@ -635,41 +635,41 @@ _Pattern10_patterns = (Core.FieldName "patterns")
 
 _Pattern10_qualiid = (Core.FieldName "qualiid")
 
-data Pattern10As 
-  = Pattern10As {
-    pattern10AsPattern :: Pattern1,
-    pattern10AsAs :: Name}
+data Pattern10_As 
+  = Pattern10_As {
+    pattern10_AsPattern :: Pattern1,
+    pattern10_AsAs :: Name}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10As = (Core.Name "hydra/ext/coq/syntax.Pattern10As")
+_Pattern10_As = (Core.Name "hydra/ext/coq/syntax.Pattern10.As")
 
-_Pattern10As_pattern = (Core.FieldName "pattern")
+_Pattern10_As_pattern = (Core.FieldName "pattern")
 
-_Pattern10As_as = (Core.FieldName "as")
+_Pattern10_As_as = (Core.FieldName "as")
 
-data Pattern10Patterns 
-  = Pattern10Patterns {
-    pattern10PatternsPattern :: Pattern1,
-    pattern10PatternsPatterns :: [Pattern1]}
+data Pattern10_Patterns 
+  = Pattern10_Patterns {
+    pattern10_PatternsPattern :: Pattern1,
+    pattern10_PatternsPatterns :: [Pattern1]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10Patterns = (Core.Name "hydra/ext/coq/syntax.Pattern10Patterns")
+_Pattern10_Patterns = (Core.Name "hydra/ext/coq/syntax.Pattern10.Patterns")
 
-_Pattern10Patterns_pattern = (Core.FieldName "pattern")
+_Pattern10_Patterns_pattern = (Core.FieldName "pattern")
 
-_Pattern10Patterns_patterns = (Core.FieldName "patterns")
+_Pattern10_Patterns_patterns = (Core.FieldName "patterns")
 
-data Pattern10Qualid 
-  = Pattern10Qualid {
-    pattern10QualidQualid :: Qualid,
-    pattern10QualidPatterns :: [Pattern1]}
+data Pattern10_Qualid 
+  = Pattern10_Qualid {
+    pattern10_QualidQualid :: Qualid,
+    pattern10_QualidPatterns :: [Pattern1]}
   deriving (Eq, Ord, Read, Show)
 
-_Pattern10Qualid = (Core.Name "hydra/ext/coq/syntax.Pattern10Qualid")
+_Pattern10_Qualid = (Core.Name "hydra/ext/coq/syntax.Pattern10.Qualid")
 
-_Pattern10Qualid_qualid = (Core.FieldName "qualid")
+_Pattern10_Qualid_qualid = (Core.FieldName "qualid")
 
-_Pattern10Qualid_patterns = (Core.FieldName "patterns")
+_Pattern10_Qualid_patterns = (Core.FieldName "patterns")
 
 data PrimitiveNotations 
   = PrimitiveNotationsNumber Number
@@ -931,8 +931,8 @@ newtype UnivAnnot
 _UnivAnnot = (Core.Name "hydra/ext/coq/syntax.UnivAnnot")
 
 data Universe 
-  = UniverseMax [UniverseExpr]
-  | UniverseExpr UniverseExpr
+  = UniverseMax [Universe_Expr]
+  | UniverseExpr Universe_Expr
   deriving (Eq, Ord, Read, Show)
 
 _Universe = (Core.Name "hydra/ext/coq/syntax.Universe")
@@ -941,17 +941,17 @@ _Universe_max = (Core.FieldName "max")
 
 _Universe_expr = (Core.FieldName "expr")
 
-data UniverseExpr 
-  = UniverseExpr {
-    universeExprName :: UniverseName,
-    universeExprNumber :: (Maybe Natural)}
+data Universe_Expr 
+  = Universe_Expr {
+    universe_ExprName :: UniverseName,
+    universe_ExprNumber :: (Maybe Natural)}
   deriving (Eq, Ord, Read, Show)
 
-_UniverseExpr = (Core.Name "hydra/ext/coq/syntax.UniverseExpr")
+_Universe_Expr = (Core.Name "hydra/ext/coq/syntax.Universe.Expr")
 
-_UniverseExpr_name = (Core.FieldName "name")
+_Universe_Expr_name = (Core.FieldName "name")
 
-_UniverseExpr_number = (Core.FieldName "number")
+_Universe_Expr_number = (Core.FieldName "number")
 
 data UniverseLevel 
   = UniverseLevelSet 
