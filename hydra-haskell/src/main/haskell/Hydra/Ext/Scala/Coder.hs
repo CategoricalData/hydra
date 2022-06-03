@@ -5,8 +5,6 @@ module Hydra.Ext.Scala.Coder (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Adapter
-import Hydra.Basics
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Terms
@@ -14,6 +12,8 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Primitives
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
+import Hydra.Ext.Scala.Language
+import Hydra.Ext.Scala.Utils
 import Hydra.Util.Coders
 import Hydra.Rewriting
 import Hydra.Types.Inference
@@ -233,124 +233,3 @@ encodeUntypedData cx term = do
     encodeData cx term2
   where
     annotType (m, t, _) = contextSetTypeOf cx (Just t) m
-
-nameOfType :: Type m -> Y.Maybe Name
-nameOfType t = case typeTerm t of
-  TypeTermNominal name -> Just name
-  TypeTermUniversal (UniversalType _ body) -> nameOfType body
-  _ -> Nothing
-
-qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
-qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> scalaTypeName True n ++ ".") sname) ++ fname
-
-scalaLanguage :: Language m
-scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean,
-    LiteralVariantFloat,
-    LiteralVariantInteger,
-    LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [
-    -- Bigfloat is excluded for now
-    FloatTypeFloat32,
-    FloatTypeFloat64],
-  languageConstraintsFunctionVariants = S.fromList functionVariants,
-  languageConstraintsIntegerTypes = S.fromList [
-    IntegerTypeBigint,
-    IntegerTypeInt16,
-    IntegerTypeInt32,
-    IntegerTypeInt64,
-    IntegerTypeUint8],
-  languageConstraintsDataVariants = S.fromList [
-    DataVariantApplication,
-    DataVariantElement,
-    DataVariantFunction,
-    DataVariantList,
-    DataVariantLiteral,
-    DataVariantMap,
-    DataVariantNominal,
-    DataVariantOptional,
-    DataVariantRecord,
-    DataVariantSet,
-    DataVariantUnion,
-    DataVariantVariable],
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantElement,
-    TypeVariantFunction,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantNominal,
-    TypeVariantOptional,
-    TypeVariantRecord,
-    TypeVariantSet,
-    TypeVariantUnion,
-    TypeVariantUniversal,
-    TypeVariantVariable],
-  languageConstraintsTypes = const True }
-
-scalaReservedWords = S.fromList $ keywords ++ classNames
-  where
-    -- Classes in the Scala Standard Library 2.13.8
-    -- Note: numbered class names like Function1, Product16, and the names of exception/error classes are omitted,
-    --       as they are unlikely to occur by chance.
-    classNames = [
-      "Any", "AnyVal", "App", "Array", "Boolean", "Byte", "Char", "Console", "DelayedInit", "Double", "DummyExplicit",
-      "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None",
-      "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
-      "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
-      "Symbol", "Unit", "ValueOf"]
-    -- Not an official or comprehensive list; taken from https://www.geeksforgeeks.org/scala-keywords
-    keywords = [
-      "abstract", "case", "catch", "class", "def", "do", "else", "extends", "false", "final", "finally", "for",
-      "forSome", "if", "implicit", "import", "lazy", "match", "new", "null", "object", "override", "package", "private",
-      "protected", "return", "sealed", "super", "this", "throw", "trait", "true", "try", "type", "val", "var", "while",
-      "with", "yield"]
-
-scalaTypeName :: Bool -> Name -> String
-scalaTypeName qualify name@(Name n) = if qualify || S.member local scalaReservedWords
-    then L.intercalate "." $ Strings.splitOn "/" n
-    else local
-  where
-    (_, local) = toQname name
-
-sapply :: Scala.Data -> [Scala.Data] -> Scala.Data
-sapply fun args = Scala.DataApply $ Scala.Data_Apply fun args
-
-sassign :: Scala.Data -> Scala.Data -> Scala.Data
-sassign lhs rhs = Scala.DataAssign $ Scala.Data_Assign lhs rhs
-
-slambda :: String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.Data
-slambda v body sdom = Scala.DataFunctionData $ Scala.Data_FunctionDataFunction
-    $ Scala.Data_Function [Scala.Data_Param mods name sdom def] body
-  where
-    mods = []
-    name = Scala.NameValue v
-    def = Nothing
-
-sname :: String -> Scala.Data
-sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name . Scala.PredefString
-
-sprim :: Name -> Scala.Data
-sprim name = sname $ prefix ++ "." ++ local
-  where
-    (GraphName ns, local) = toQname name
-    prefix = L.last $ Strings.splitOn "/" ns
-
-stapply :: Scala.Type -> [Scala.Type] -> Scala.Type
-stapply t args = Scala.TypeApply $ Scala.Type_Apply t args
-
-stapply1 :: Scala.Type -> Scala.Type -> Scala.Type
-stapply1 t1 t2 = stapply t1 [t2]
-
-stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
-stapply2 t1 t2 t3 = stapply t1 [t2, t3]
-
-stparam :: TypeVariable -> Scala.Type_Param
-stparam (TypeVariable v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
-
-stref :: String -> Scala.Type
-stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
-
-svar :: Variable -> Scala.Pat
-svar (Variable v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v
