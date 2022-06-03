@@ -29,31 +29,19 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
 
     elements = [
 
-      def "Application" $ union [
-        field "normal" $ coq "ApplicationNormal",
-        field "annotated" $ coq "ApplicationAnnotated"],
-      
-      def "ApplicationNormal" $ record [
-        field "lhs" $ coq "Term1",
-        field "rhs" $ nonemptyList $ coq "Arg"],
-      
-      def "ApplicationAnnotated" $ record [
+      def "AnnotatedApplication" $ record [
         field "annot" $ coq "QualidAnnotated",
         field "terms" $ nonemptyList $ coq "Term1"],
       
+      def "Application" $ union [
+        field "normal" $ coq "NormalApplication",
+        field "annotated" $ coq "AnnotatedApplication"],
+      
       def "Arg" $ union [
-        field "ident" $ coq "ArgIdent",
-        field "natural" $ coq "ArgNatural",
+        field "ident" $ coq "IdentArg",
+        field "natural" $ coq "NaturalArg",
         field "term" $ coq "Term1"],
       
-      def "ArgIdent" $ record [
-        field "ident" $ coq "Ident",
-        field "term" $ coq "Term"],
-        
-      def "ArgNatural" $ record [
-        field "natural" $ coq "Natural",
-        field "term" $ coq "Term"],
-            
       def "Binder" $ union [
         field "name" $ coq "Name",
         field "type" $ coq "TypeBinders",
@@ -98,41 +86,41 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
         field "placeholder" unit,
         field "inside1" unit,
         field "inside2" unit,
-        field "outside" $ optional $ coq "ArgIdent"],
+        field "outside" $ optional $ coq "IdentArg"],
       
       def "FieldIdent" $ coq "Ident",
 
       def "Fix" $ union [
-        field "decl" $ coq "FixDecl",
-        field "qual" $ optional $ coq "FixQual"],
+        field "decl" $ coq "Fix.Decl",
+        field "qual" $ optional $ coq "Fix.Qual"],
         
       def "FixAnnot" $ union [
         field "struct" $ coq "Ident",
-        field "wf" $ coq "FixAnnotWf",
-        field "measure" $ coq "FixAnnotMeasure"],
+        field "wf" $ coq "FixAnnot.Wf",
+        field "measure" $ coq "FixAnnot.Measure"],
       
-      def "FixAnnotMeasure" $ record [
+      def "FixAnnot.Measure" $ record [
         field "term" $ coq "OneTerm",
         field "ident" $ optional $ coq "Ident",
         field "term2" $ optional $ coq "OneTerm"],
       
-      def "FixAnnotWf" $ record [
+      def "FixAnnot.Wf" $ record [
         field "term" $ coq "OneTerm",
         field "ident" $ coq "Ident"],
       
-      def "FixDecl" $ record [
+      def "Fix.Decl" $ record [
         field "ident" $ coq "Ident",
         field "binders" $ list $ coq "Binder",
         field "annot" $ optional $ coq "FixAnnot",
         field "type" $ optional $ coq "Type",
         field "term" $ coq "Term"],
       
-      def "FixQual" $ union [
+      def "Fix.Qual" $ union [
         field "in" $ coq "Term",
         field "with" $ coq "FixWith"],
 
       def "FixWith" $ record [
-        field "decls" $ nonemptyList $ coq "FixDecl",
+        field "decls" $ nonemptyList $ coq "Fix.Decl",
         field "for" $ optional $ coq "Ident"],
       
       def "Forall" $ record [
@@ -162,6 +150,10 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
       
       def "Ident" $ coq "String",
 
+      def "IdentArg" $ record [
+        field "ident" $ coq "Ident",
+        field "term" $ coq "Term"],
+        
       def "If" $
         doc "Pattern match on boolean values" $
         record [
@@ -203,21 +195,21 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
         field "binders" $ list $ coq "Binder"],
       
       def "LetDestructuring" $ union [
-        field "variant1" $ coq "LetDestructuringVariant1",
-        field "variant2" $ coq "LetDestructuringVariant2",
-        field "variant3" $ coq "LetDestructuringVariant3"],
+        field "variant1" $ coq "LetDestructuring.Variant1",
+        field "variant2" $ coq "LetDestructuring.Variant2",
+        field "variant3" $ coq "LetDestructuring.Variant3"],
       
-      def "LetDestructuringVariant1" $ record [
+      def "LetDestructuring.Variant1" $ record [
         field "names" $ list $ coq "Name",
         field "returnAs" $ optional $ coq "ReturnAs",
         field "term" $ coq "Term"],
       
-      def "LetDestructuringVariant2" $ record [
+      def "LetDestructuring.Variant2" $ record [
         field "pattern" $ coq "Pattern",
         field "term" $ coq "Term",
         field "return" $ optional $ coq "Term100"],
         
-      def "LetDestructuringVariant3" $ record [
+      def "LetDestructuring.Variant3" $ record [
         field "pattern1" $ coq "Pattern",
         field "pattern2" $ coq "Pattern",
         field "term" $ coq "Term",
@@ -235,6 +227,14 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
         doc "A non-negative arbitrary-precision integer"
         bigint,
 
+      def "NaturalArg" $ record [
+        field "natural" $ coq "Natural",
+        field "term" $ coq "Term"],
+            
+      def "NormalApplication" $ record [
+        field "lhs" $ coq "Term1",
+        field "rhs" $ nonemptyList $ coq "Arg"],
+      
       def "Number" bigfloat,
       
       def "OneTerm" $ union [
@@ -262,19 +262,19 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
         field "scope" $ optional $ coq "ScopeKey"],
       
       def "Pattern10" $ union [
-        field "as" $ coq "Pattern10As",
-        field "patterns" $ coq "Pattern10Patterns",
-        field "qualiid" $ coq "Pattern10Qualid"],
+        field "as" $ coq "Pattern10.As",
+        field "patterns" $ coq "Pattern10.Patterns",
+        field "qualiid" $ coq "Pattern10.Qualid"],
       
-      def "Pattern10As" $ record [
+      def "Pattern10.As" $ record [
         field "pattern" $ coq "Pattern1",
         field "as" $ coq "Name"],
         
-      def "Pattern10Patterns" $ record [
+      def "Pattern10.Patterns" $ record [
         field "pattern" $ coq "Pattern1",
         field "patterns" $ list $ coq "Pattern1"],
       
-      def "Pattern10Qualid" $ record [
+      def "Pattern10.Qualid" $ record [
         field "qualid" $ coq "Qualid",
         field "patterns" $ list $ coq "Pattern1"],
       
@@ -378,10 +378,10 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
       def "UnivAnnot" $ list $ coq "UniverseLevel",
       
       def "Universe" $ union [
-        field "max" $ nonemptyList $ coq "UniverseExpr",
-        field "expr" $ coq "UniverseExpr"],
+        field "max" $ nonemptyList $ coq "Universe.Expr",
+        field "expr" $ coq "Universe.Expr"],
         
-      def "UniverseExpr" $ record [
+      def "Universe.Expr" $ record [
         field "name" $ coq "UniverseName",
         field "number" $ optional $ coq "Natural"],
       
