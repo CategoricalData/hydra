@@ -1,12 +1,14 @@
 # Hydra
 
-This is an open-source project along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale), but with a more advanced type system and major new features, currently in an early "bootstrapping" stage. The primary superpower of Hydra is that it is able to map schemas and data consistently between languages. It is even able to map functional programs between selected languages, including parts of its own source code.
+Hydra is a transformation toolkit along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale), but open source, and with a more advanced type system and other new features. It is currently in an intermediate "closing the loop" stage. The primary superpower of Hydra is that it is able to map schemas and data consistently between languages. It is even able to map functional programs between selected languages, including parts of its own source code. 
 
-You can find a design document [here](https://bit.ly/hydra-design-doc), and a Slack channel [here](https://bit.ly/hydra-slack) (requires an invite to the Graph Community workspace; feel free to email josh at fortytwo net).
+You can find a design document [here](https://bit.ly/hydra-design-doc), and a Slack channel [here](https://bit.ly/hydra-slack) (click [here](https://join.slack.com/t/graphcommunity/shared_invite/zt-1a6ohrnn9-rXIBwn3L4NSC4cH0c1DN8A) for an invite to the Graph Community workspace, or send an email to josh at fortytwo net if the link has expired).
 
 ## Project structure
 
 This repository currently contains a [hydra-haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell), a [hydra-scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) and a [hydra-java](https://github.com/CategoricalData/hydra/tree/main/hydra-java) directory with language-specific builds, as well as some common resources in the root directory.
+
+Additional Hydra "coders" at this time support [YAML](https://en.wikipedia.org/wiki/YAML) and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language.
 
 ### Haskell build
 
