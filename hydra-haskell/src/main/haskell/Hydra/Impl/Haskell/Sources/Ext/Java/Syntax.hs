@@ -605,9 +605,11 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "variable" $ java "TypeVariable"],
 
 --MethodBody:
+      def "MethodBody" $ union [
 --  Block
-      def "MethodBody" $ java "Block",
+        field "block" $ java "Block",
 --  ;
+        field "none" unit],
 
 --InstanceInitializer:
 --  Block
