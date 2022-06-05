@@ -119,6 +119,9 @@ javaStatementsToBlock stmts = Java.Block (Java.BlockStatementStatement <$> stmts
 javaTypeIdentifier :: String -> Java.TypeIdentifier
 javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
+javaTypeParameter :: String -> Java.TypeParameter
+javaTypeParameter v = Java.TypeParameter [] (javaTypeIdentifier v) Nothing
+
 javaTypeVariable :: String -> Java.ReferenceType
 javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier v
 
@@ -131,10 +134,19 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
 
-methodDeclaration :: [Java.MethodModifier] -> Java.MethodHeader -> [Java.Statement] -> Java.ClassBodyDeclaration
-methodDeclaration mods header stmts = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationMethod $
-  Java.MethodDeclaration mods header $
-  Java.MethodBody $ javaStatementsToBlock stmts
+javaTypeToResult :: Java.Type -> Java.Result
+javaTypeToResult = Java.ResultType . Java.UnannType
+
+methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
+  -> [Java.FormalParameter] -> Java.Result -> [Java.Statement] -> Java.ClassBodyDeclaration
+methodDeclaration mods tparams anns methodName params result stmts = Java.ClassBodyDeclarationClassMember $
+    Java.ClassMemberDeclarationMethod $
+    Java.MethodDeclaration mods header $
+    Java.MethodBody $ javaStatementsToBlock stmts
+  where
+    header = Java.MethodHeader tparams anns result decl mthrows
+    decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
+    mthrows = Nothing
 
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
 nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
@@ -157,6 +169,9 @@ nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterfac
 
 nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name
+
+referenceTypeToResult :: Java.ReferenceType -> Java.Result
+referenceTypeToResult = javaTypeToResult . Java.TypeReference
 
 toJavaArrayType :: Java.Type -> Result Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of

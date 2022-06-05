@@ -52,7 +52,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
     return $ Java.TypeDeclarationClass $ Java.ClassDeclarationNormal cd
   where
     toClassDecl t = case typeTerm t of
-      TypeTermNominal name -> return $ classDecl (Just name) []
+      TypeTermNominal name -> return $ classDecl False (Just name) []
       TypeTermRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
           let eq = []  :: [Java.ClassBodyDeclaration]-- TODO
@@ -60,17 +60,12 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           withMethods <- CM.mapM toWithMethod fields
           cons <- constructor
           let bodyDecls = memberVars ++ [cons] ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
-          return $ classDecl Nothing bodyDecls
+          return $ classDecl False Nothing bodyDecls
         where
-          constructor :: Result Java.ClassBodyDeclaration
           constructor = do
-            let nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
             params <- CM.mapM fieldToFormalParam fields
-            let cons = Java.ConstructorDeclarator [] nm Nothing params
-            let mods = [Java.ConstructorModifierPublic]
             let stmts = Java.BlockStatementStatement . toAssignStmt <$> fields
-            let body = Java.ConstructorBody Nothing stmts
-            return $ Java.ClassBodyDeclarationConstructorDeclaration $ Java.ConstructorDeclaration mods cons Nothing body
+            return $ makeConstructor False params stmts
 
           toAssignStmt field = javaAssignmentStatement lhs rhs
             where
@@ -91,43 +86,66 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
 
           toWithMethod field = do
             let mods = [Java.MethodModifierPublic]
-            let methodName = Java.Identifier $ "with" ++ capitalize (unFieldName $ fieldTypeName field)
-
+            let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
             param <- fieldToFormalParam field
-            let params = []
             let anns = [] -- TODO
-            let result = Java.ResultType $ Java.UnannType $ Java.TypeReference $
-                  nameToJavaReferenceType aliases False elName
-            let decl = Java.MethodDeclarator methodName Nothing [param]
-            let mthrows = Nothing
-            let header = Java.MethodHeader params anns result decl mthrows
-
-            let ex = javaConstructorCall elName fieldArgs
-            let returnStmt = javaReturnStatement $ Just ex
-
-            return $ methodDeclaration mods header [returnStmt]
+            let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
+            let returnStmt = javaReturnStatement $ Just $ javaConstructorCall elName fieldArgs
+            return $ methodDeclaration mods [] anns methodName [param] result [returnStmt]
 
           fieldToFormalParam (FieldType fname ft) = do
             jt <- encodeType aliases ft
             return $ javaTypeToJavaFormalParameter jt fname
 
       TypeTermUnion fields -> do
-        let bodyDecls = [] -- TODO
-        return $ classDecl Nothing bodyDecls
+          let bodyDecls = [privateConstructor, acceptMethod] -- TODO
+          return $ classDecl False Nothing bodyDecls
+        where
+          privateConstructor = makeConstructor True [] []
+          acceptMethod = methodDeclaration mods tparams anns "accept" [param] result []
+            where
+              mods = [Java.MethodModifierPublic, Java.MethodModifierAbstract]
+              tparams = [javaTypeParameter "R"]
+              anns = []
+              param = javaTypeToJavaFormalParameter ref (FieldName "visitor") -- Note: using a field name is a bit of a hack
+                where
+                  ref = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+                    Java.ClassType
+                      []
+                      Java.ClassTypeQualifierNone
+                      (javaTypeIdentifier "Visitor")
+                      [Java.TypeArgumentReference $ javaTypeVariable "R"]
+              result = javaTypeToResult $ Java.TypeReference $ javaTypeVariable "R"
+          {-
+            public abstract <R> R accept(Visitor<R> visitor) ;
+          -}
+
+          visitor = () -- TODO
+          partialVisitor = () -- TODO
+          fieldSubclasses = [] -- TODO
+
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
         cd <- toClassDecl body
         return cd {Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
       _ -> fail $ "unexpected type: " ++ show t
     elName = elementName el
-    addParameter v params = params ++ [Java.TypeParameter [] (javaTypeIdentifier v) Nothing]
+    addParameter v params = params ++ [javaTypeParameter v]
     javaDeclName = javaTypeIdentifier (localNameOf elName)
-    classDecl supname bodyDecls = Java.NormalClassDeclaration {
-      Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic],
+    classDecl abstract supname bodyDecls = Java.NormalClassDeclaration {
+      Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic] ++ if abstract then [Java.ClassModifierAbstract] else [],
       Java.normalClassDeclarationIdentifier = javaDeclName,
       Java.normalClassDeclarationParameters = [],
       Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True) supname,
       Java.normalClassDeclarationImplements = [],
       Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
+
+    makeConstructor private params stmts = Java.ClassBodyDeclarationConstructorDeclaration $
+        Java.ConstructorDeclaration mods cons Nothing body
+      where
+        nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
+        cons = Java.ConstructorDeclarator [] nm Nothing params
+        mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
+        body = Java.ConstructorBody Nothing stmts
 
 -- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
