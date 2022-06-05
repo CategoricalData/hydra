@@ -164,10 +164,11 @@ writeClassOrInterfaceTypeToInstantiate (Java.ClassOrInterfaceTypeToInstantiate i
     writeTypeArgumentsOrDiamond <$> margs]
 
 writeClassType :: Java.ClassType -> CT.Expr
-writeClassType (Java.ClassType anns qual id args) = spaceSep $ Y.catMaybes [
-  if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
-  Just qualifiedId,
-  if L.null args then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> args)]
+writeClassType (Java.ClassType anns qual id args) = noSep $ Y.catMaybes [
+    Just $ spaceSep $ Y.catMaybes [
+      if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
+      Just qualifiedId],
+    if L.null args then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> args)]
   where
     qualifiedId = case qual of
       Java.ClassTypeQualifierNone -> writeTypeIdentifier id
@@ -665,7 +666,9 @@ writeTypeParameterModifier :: Java.TypeParameterModifier -> CT.Expr
 writeTypeParameterModifier (Java.TypeParameterModifier ann) = writeAnnotation ann
 
 writeTypeVariable :: Java.TypeVariable -> CT.Expr
-writeTypeVariable _ = cst "TODO:TypeVariable"
+writeTypeVariable (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
+  if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
+  Just $ writeTypeIdentifier id]
 
 writeUnannType :: Java.UnannType -> CT.Expr
 writeUnannType (Java.UnannType t) = writeType t
