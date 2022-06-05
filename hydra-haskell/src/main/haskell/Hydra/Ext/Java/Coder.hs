@@ -91,7 +91,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             let anns = [] -- TODO
             let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
             let returnStmt = javaReturnStatement $ Just $ javaConstructorCall elName fieldArgs
-            return $ methodDeclaration mods [] anns methodName [param] result [returnStmt]
+            return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
           fieldToFormalParam (FieldType fname ft) = do
             jt <- encodeType aliases ft
@@ -102,7 +102,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           return $ classDecl False Nothing bodyDecls
         where
           privateConstructor = makeConstructor True [] []
-          acceptMethod = methodDeclaration mods tparams anns "accept" [param] result []
+          acceptMethod = methodDeclaration mods tparams anns "accept" [param] result Nothing
             where
               mods = [Java.MethodModifierPublic, Java.MethodModifierAbstract]
               tparams = [javaTypeParameter "R"]

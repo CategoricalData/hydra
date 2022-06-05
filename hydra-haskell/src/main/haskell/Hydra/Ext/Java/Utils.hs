@@ -138,11 +138,11 @@ javaTypeToResult :: Java.Type -> Java.Result
 javaTypeToResult = Java.ResultType . Java.UnannType
 
 methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
-  -> [Java.FormalParameter] -> Java.Result -> [Java.Statement] -> Java.ClassBodyDeclaration
+  -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.Statement] -> Java.ClassBodyDeclaration
 methodDeclaration mods tparams anns methodName params result stmts = Java.ClassBodyDeclarationClassMember $
     Java.ClassMemberDeclarationMethod $
     Java.MethodDeclaration mods header $
-    Java.MethodBody $ javaStatementsToBlock stmts
+    (Y.maybe Java.MethodBodyNone (\s -> Java.MethodBodyBlock $ javaStatementsToBlock s) stmts)
   where
     header = Java.MethodHeader tparams anns result decl mthrows
     decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params

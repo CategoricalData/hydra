@@ -986,12 +986,16 @@ _ExceptionType_class = (Core.FieldName "class")
 
 _ExceptionType_variable = (Core.FieldName "variable")
 
-newtype MethodBody 
-  = MethodBody {
-    unMethodBody :: Block}
+data MethodBody 
+  = MethodBodyBlock Block
+  | MethodBodyNone 
   deriving (Eq, Ord, Read, Show)
 
 _MethodBody = (Core.Name "hydra/ext/java/syntax.MethodBody")
+
+_MethodBody_block = (Core.FieldName "block")
+
+_MethodBody_none = (Core.FieldName "none")
 
 newtype InstanceInitializer 
   = InstanceInitializer {

@@ -385,7 +385,9 @@ writeMarkerAnnotation :: Java.MarkerAnnotation -> CT.Expr
 writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName tname
 
 writeMethodBody :: Java.MethodBody -> CT.Expr
-writeMethodBody (Java.MethodBody block) = writeBlock block
+writeMethodBody b = case b of
+  (Java.MethodBodyBlock block) -> writeBlock block
+  Java.MethodBodyNone -> semi
 
 writeMethodHeader :: Java.MethodHeader -> CT.Expr
 writeMethodHeader (Java.MethodHeader params anns result decl mthrows) = spaceSep $ Y.catMaybes [
@@ -734,5 +736,8 @@ writeWildcardBounds b = case b of
 prefixAt :: CT.Expr -> CT.Expr
 prefixAt e = noSep [cst "@", e]
 
+semi :: CT.Expr
+semi = cst ";"
+
 suffixSemi :: CT.Expr -> CT.Expr
-suffixSemi e = noSep [e, cst ";"]
+suffixSemi e = noSep [e, semi]
