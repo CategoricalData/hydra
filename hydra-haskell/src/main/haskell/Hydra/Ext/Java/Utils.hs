@@ -36,10 +36,11 @@ fieldNameToJavaExpression fname = javaPostfixExpressionToJavaExpression $
 fieldNameToJavaIdentifier :: FieldName -> Java.Identifier
 fieldNameToJavaIdentifier (FieldName name) = Java.Identifier $ javaEscape name
 
+fieldNameToJavaVariableDeclarator :: FieldName -> Java.VariableDeclarator
+fieldNameToJavaVariableDeclarator (FieldName n) = javaVariableDeclarator $ Java.Identifier $ javaEscape n
+
 fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
-fieldNameToJavaVariableDeclaratorId (FieldName n) = Java.VariableDeclaratorId id Nothing
-  where
-    id = Java.Identifier $ javaEscape n
+fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ Java.Identifier $ javaEscape n
 
 importAliasesForGraph :: Graph m -> M.Map GraphName Java.PackageName
 importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
@@ -53,6 +54,15 @@ javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.Statement
     Java.ExpressionStatement $ Java.StatementExpressionAssignment ass
   where
     ass = Java.Assignment lhs Java.AssignmentOperatorSimple rhs
+
+javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
+javaClassDeclaration aliases elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
+  Java.normalClassDeclarationModifiers = mods,
+  Java.normalClassDeclarationIdentifier = javaDeclName elName,
+  Java.normalClassDeclarationParameters = [],
+  Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True) supname,
+  Java.normalClassDeclarationImplements = [],
+  Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
 
 javaClassType :: [Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType
 javaClassType args pkg id = Java.ClassType [] qual (javaTypeIdentifier id) targs
@@ -75,12 +85,19 @@ javaConstructorName name = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
       then local ++ "_"
       else local
 
+javaDeclName :: Name -> Java.TypeIdentifier
+javaDeclName elName = javaTypeIdentifier (localNameOf elName)
+
 javaEscape :: String -> String
 javaEscape s = if S.member s javaReservedWords then s ++ "_" else s
 
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
 
+javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
+javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
+  Java.FieldDeclaration mods (Java.UnannType jt) [var]
+                                          
 javaPackageDeclaration :: GraphName -> Java.PackageDeclaration
 javaPackageDeclaration (GraphName name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
 
@@ -136,6 +153,12 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
 
 javaTypeToResult :: Java.Type -> Java.Result
 javaTypeToResult = Java.ResultType . Java.UnannType
+
+javaVariableDeclarator :: Java.Identifier -> Java.VariableDeclarator
+javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id) Nothing
+
+javaVariableDeclaratorId :: Java.Identifier -> Java.VariableDeclaratorId
+javaVariableDeclaratorId id = Java.VariableDeclaratorId id Nothing
 
 methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
   -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.Statement] -> Java.ClassBodyDeclaration

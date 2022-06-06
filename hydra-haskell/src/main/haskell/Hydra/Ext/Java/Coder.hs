@@ -18,6 +18,7 @@ import Hydra.Util.Formatting
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Maybe as Y
 
 
 listsAsArrays :: Bool
@@ -49,10 +50,10 @@ toTypeDeclaration :: (Default m, Ord m, Show m)
 toTypeDeclaration aliases cx (el, TypedData _ term) = do
     t <- decodeType cx term
     cd <- toClassDecl t
-    return $ Java.TypeDeclarationClass $ Java.ClassDeclarationNormal cd
+    return $ Java.TypeDeclarationClass cd
   where
     toClassDecl t = case typeTerm t of
-      TypeTermNominal name -> return $ classDecl False (Just name) []
+      TypeTermNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
       TypeTermRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
           let eq = []  :: [Java.ClassBodyDeclaration]-- TODO
@@ -60,7 +61,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           withMethods <- CM.mapM toWithMethod fields
           cons <- constructor
           let bodyDecls = memberVars ++ [cons] ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
-          return $ classDecl False Nothing bodyDecls
+          return $ javaClassDeclaration aliases elName topMods Nothing bodyDecls
         where
           constructor = do
             params <- CM.mapM fieldToFormalParam fields
@@ -80,10 +81,9 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           toMemberVar (FieldType fname ft) = do
             let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
             jt <- encodeType aliases ft
-            let var = Java.VariableDeclarator (fieldNameToJavaVariableDeclaratorId fname) Nothing
-            return $ Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
-              Java.FieldDeclaration mods (Java.UnannType jt) [var]
-
+            let var = fieldNameToJavaVariableDeclarator fname
+            return $ javaMemberField mods jt var
+            
           toWithMethod field = do
             let mods = [Java.MethodModifierPublic]
             let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
@@ -98,8 +98,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             return $ javaTypeToJavaFormalParameter jt fname
 
       TypeTermUnion fields -> do
-          let bodyDecls = [privateConstructor, acceptMethod] -- TODO
-          return $ classDecl False Nothing bodyDecls
+          variantClasses <- CM.mapM (toVariantClass aliases elName) fields
+          let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
+          let bodyDecls = [privateConstructor, acceptMethod] ++ variantDecls -- TODO
+          let mods = topMods ++ [Java.ClassModifierAbstract]
+          return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
         where
           privateConstructor = makeConstructor True [] []
           acceptMethod = methodDeclaration mods tparams anns "accept" [param] result Nothing
@@ -122,22 +125,16 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
 
           visitor = () -- TODO
           partialVisitor = () -- TODO
-          fieldSubclasses = [] -- TODO
 
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
-        cd <- toClassDecl body
-        return cd {Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
+        (Java.ClassDeclarationNormal cd) <- toClassDecl body
+        return $ Java.ClassDeclarationNormal $ cd {
+          Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
       _ -> fail $ "unexpected type: " ++ show t
     elName = elementName el
     addParameter v params = params ++ [javaTypeParameter v]
-    javaDeclName = javaTypeIdentifier (localNameOf elName)
-    classDecl abstract supname bodyDecls = Java.NormalClassDeclaration {
-      Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic] ++ if abstract then [Java.ClassModifierAbstract] else [],
-      Java.normalClassDeclarationIdentifier = javaDeclName,
-      Java.normalClassDeclarationParameters = [],
-      Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True) supname,
-      Java.normalClassDeclarationImplements = [],
-      Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
+
+    topMods = [Java.ClassModifierPublic]
 
     makeConstructor private params stmts = Java.ClassBodyDeclarationConstructorDeclaration $
         Java.ConstructorDeclaration mods cons Nothing body
@@ -147,6 +144,56 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
         mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
         body = Java.ConstructorBody Nothing stmts
 
+toVariantClass :: Show m => M.Map GraphName Java.PackageName -> Name -> FieldType m -> Result Java.ClassDeclaration
+toVariantClass aliases supname (FieldType (FieldName fname) ftype) = do
+    valueField <- findValueField
+    let bodyDecls = Y.catMaybes [valueField] -- TODO
+    return $ javaClassDeclaration aliases elName mods (Just supname) bodyDecls
+  where
+    elName = fromQname (graphNameOf supname) (capitalize fname)
+    mods = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal]
+    isUnit = case typeTerm ftype of
+      TypeTermRecord [] -> True
+      _ -> False
+    findValueField = do
+      if isUnit
+        then return Nothing
+        else do
+          jt <- encodeType aliases ftype
+          let var = javaVariableDeclarator $ Java.Identifier "value"
+          return $ Just $ javaMemberField [Java.FieldModifierPublic, Java.FieldModifierFinal] jt var
+      
+{-
+  public static final class StringEsc extends Value {
+    public final String string;
+
+    /**
+     * Constructs an immutable StringEsc object
+     */
+    public StringEsc(String string) {
+      this.string = string;
+    }
+
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof StringEsc)) {
+          return false;
+      }
+      StringEsc o = (StringEsc) other;
+      return string.equals(o.string);
+    }
+
+    @Override
+    public int hashCode() {
+      return 2 * string.hashCode();
+    }
+  }
+-}
 -- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
 toDeclarationType t = case typeTerm t of
