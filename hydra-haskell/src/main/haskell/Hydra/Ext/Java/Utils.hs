@@ -29,6 +29,9 @@ asJavaReferenceType t = case t of
   Java.TypeReference rt -> pure rt
   _ -> fail $ "expected a Java reference type. Found: " ++ show t
 
+fieldExpression :: Java.Identifier -> Java.Identifier -> Java.ExpressionName
+fieldExpression varId fieldId = Java.ExpressionName fieldId (Just $ Java.AmbiguousName [varId])
+
 fieldNameToJavaExpression :: FieldName -> Java.Expression
 fieldNameToJavaExpression fname = javaPostfixExpressionToJavaExpression $
   Java.PostfixExpressionName $ Java.ExpressionName (fieldNameToJavaIdentifier fname) Nothing
@@ -97,7 +100,7 @@ javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTraili
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
   Java.FieldDeclaration mods (Java.UnannType jt) [var]
-                                          
+
 javaPackageDeclaration :: GraphName -> Java.PackageDeclaration
 javaPackageDeclaration (GraphName name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
 
@@ -133,6 +136,9 @@ javaReturnStatement mex = Java.StatementWithoutTrailing $ Java.StatementWithoutT
 javaStatementsToBlock :: [Java.Statement] -> Java.Block
 javaStatementsToBlock stmts = Java.Block (Java.BlockStatementStatement <$> stmts)
 
+javaThis :: Java.Expression
+javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
+
 javaTypeIdentifier :: String -> Java.TypeIdentifier
 javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
@@ -159,6 +165,16 @@ javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id
 
 javaVariableDeclaratorId :: Java.Identifier -> Java.VariableDeclaratorId
 javaVariableDeclaratorId id = Java.VariableDeclaratorId id Nothing
+
+makeConstructor :: M.Map GraphName Java.PackageName -> Name -> Bool -> [Java.FormalParameter]
+  -> [Java.BlockStatement] -> Java.ClassBodyDeclaration
+makeConstructor aliases elName private params stmts = Java.ClassBodyDeclarationConstructorDeclaration $
+    Java.ConstructorDeclaration mods cons Nothing body
+  where
+    nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
+    cons = Java.ConstructorDeclarator [] nm Nothing params
+    mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
+    body = Java.ConstructorBody Nothing stmts
 
 methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
   -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.Statement] -> Java.ClassBodyDeclaration
@@ -195,6 +211,43 @@ nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName al
 
 referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToResult . Java.TypeReference
+
+toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
+toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body
+  where
+    mods = [Java.MethodModifierPublic] ++ if abstract then [Java.MethodModifierAbstract] else []
+    tparams = [javaTypeParameter "R"]
+    anns = []
+    param = javaTypeToJavaFormalParameter ref (FieldName varName)
+      where
+        ref = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+          Java.ClassType
+            []
+            Java.ClassTypeQualifierNone
+            (javaTypeIdentifier "Visitor")
+            [Java.TypeArgumentReference $ javaTypeVariable "R"]
+    result = javaTypeToResult $ Java.TypeReference $ javaTypeVariable "R"
+    varName = "visitor"
+    visitMethodName = Java.Identifier "visit"
+    body = if abstract
+      then Nothing
+      else Just [javaReturnStatement $ Just returnExpr]
+    returnExpr = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
+        Java.MethodInvocation header args
+      where
+        header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs visitMethodName
+        args = [javaThis]
+        targs = []
+        variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName (Java.Identifier varName) Nothing
+
+toAssignStmt :: FieldName -> Java.Statement
+toAssignStmt fname = javaAssignmentStatement lhs rhs
+  where
+    lhs = Java.LeftHandSideFieldAccess $ thisField id
+      where
+        id = fieldNameToJavaIdentifier fname
+    rhs = fieldNameToJavaExpression fname
+    thisField = Java.FieldAccess $ Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
 toJavaArrayType :: Java.Type -> Result Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of

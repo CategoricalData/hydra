@@ -410,7 +410,22 @@ writeMethodDeclarator (Java.MethodDeclarator id rparam params) = noSep [
   parenList (writeFormalParameter <$> params)]
 
 writeMethodInvocation :: Java.MethodInvocation -> CT.Expr
-writeMethodInvocation _ = cst "TODO:MethodInvocation"
+writeMethodInvocation (Java.MethodInvocation header args) = noSep [headerSec, argSec]
+  where
+    argSec = parenList (writeExpression <$> args)
+    headerSec = case header of
+      Java.MethodInvocation_HeaderSimple mname -> writeMethodName mname
+      Java.MethodInvocation_HeaderComplex (Java.MethodInvocation_Complex var targs id) -> case var of
+          Java.MethodInvocation_VariantType tname -> dotSep [writeTypeName tname, idSec]
+          Java.MethodInvocation_VariantExpression en -> dotSep [writeExpressionName en, idSec]
+          Java.MethodInvocation_VariantPrimary p -> dotSep [writePrimary p, idSec]
+          Java.MethodInvocation_VariantSuper -> dotSep [super, idSec]
+          Java.MethodInvocation_VariantTypeSuper tname -> dotSep [writeTypeName tname, super, idSec]
+        where
+          super = cst "super"
+          idSec = noSep $ Y.catMaybes [
+            if L.null targs then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> targs),
+            Just $ writeIdentifier id]
 
 writeMethodModifier :: Java.MethodModifier -> CT.Expr
 writeMethodModifier m = case m of
@@ -423,6 +438,9 @@ writeMethodModifier m = case m of
   Java.MethodModifierSynchronized -> cst "synchronized"
   Java.MethodModifierNative -> cst "native"
   Java.MethodModifierStrictfb -> cst "strictfb"
+
+writeMethodName :: Java.MethodName -> CT.Expr
+writeMethodName (Java.MethodName id) = writeIdentifier id
 
 writeMethodReference :: Java.MethodReference -> CT.Expr
 writeMethodReference _ = cst "TODO:MethodReference"
