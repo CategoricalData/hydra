@@ -1363,14 +1363,17 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --MethodInvocation:
       def "MethodInvocation" $ record [
-        field "id" $
-          doc "Note: no id or type arguments for an invocation by method name" $
-          list $ java "MethodInvocation.Id",
-        field "arguments" $ list $ java "Expression",
-        field "variant" $ java "MethodInvocation.Variant"],
-      def "MethodInvocation.Variant" $ union [
+        field "header" $ java "MethodInvocation.Header",
+        field "arguments" $ list $ java "Expression"],
+      def "MethodInvocation.Header" $ union [
 --  MethodName ( [ArgumentList] )
-        field "method" $ java "MethodName",
+        field "simple" $ java "MethodName",
+        field "complex" $ java "MethodInvocation.Complex"],
+      def "MethodInvocation.Complex" $ record [
+        field "variant" $ java "MethodInvocation.Variant",
+        field "typeArguments" $ list $ java "TypeArgument",
+        field "identifier" $ java "Identifier"],
+      def "MethodInvocation.Variant" $ union [
 --  TypeName . [TypeArguments] Identifier ( [ArgumentList] )
         field "type" $ java "TypeName",
 --  ExpressionName . [TypeArguments] Identifier ( [ArgumentList] )
@@ -1379,11 +1382,8 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "primary" $ java "Primary",
 --  super . [TypeArguments] Identifier ( [ArgumentList] )
         field "super" unit,
---  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
+--  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )      
         field "typeSuper" $ java "TypeName"],
-      def "MethodInvocation.Id" $ record [
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier"],
 
 --ArgumentList:
 --  Expression {, Expression}

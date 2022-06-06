@@ -65,16 +65,8 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
         where
           constructor = do
             params <- CM.mapM fieldToFormalParam fields
-            let stmts = Java.BlockStatementStatement . toAssignStmt <$> fields
-            return $ makeConstructor False params stmts
-
-          toAssignStmt field = javaAssignmentStatement lhs rhs
-            where
-              lhs = Java.LeftHandSideFieldAccess $ Java.FieldAccess qual id
-                where
-                  qual = Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
-                  id = fieldNameToJavaIdentifier $ fieldTypeName field
-              rhs = fieldNameToJavaExpression $ fieldTypeName field
+            let stmts = Java.BlockStatementStatement . toAssignStmt . fieldTypeName <$> fields
+            return $ makeConstructor aliases elName False params stmts
 
           fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
 
@@ -83,7 +75,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             jt <- encodeType aliases ft
             let var = fieldNameToJavaVariableDeclarator fname
             return $ javaMemberField mods jt var
-            
+
           toWithMethod field = do
             let mods = [Java.MethodModifierPublic]
             let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
@@ -100,29 +92,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       TypeTermUnion fields -> do
           variantClasses <- CM.mapM (toVariantClass aliases elName) fields
           let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
-          let bodyDecls = [privateConstructor, acceptMethod] ++ variantDecls -- TODO
+          let bodyDecls = [privateConstructor, toAcceptMethod True] ++ variantDecls -- TODO
           let mods = topMods ++ [Java.ClassModifierAbstract]
           return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
         where
-          privateConstructor = makeConstructor True [] []
-          acceptMethod = methodDeclaration mods tparams anns "accept" [param] result Nothing
-            where
-              mods = [Java.MethodModifierPublic, Java.MethodModifierAbstract]
-              tparams = [javaTypeParameter "R"]
-              anns = []
-              param = javaTypeToJavaFormalParameter ref (FieldName "visitor") -- Note: using a field name is a bit of a hack
-                where
-                  ref = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
-                    Java.ClassType
-                      []
-                      Java.ClassTypeQualifierNone
-                      (javaTypeIdentifier "Visitor")
-                      [Java.TypeArgumentReference $ javaTypeVariable "R"]
-              result = javaTypeToResult $ Java.TypeReference $ javaTypeVariable "R"
-          {-
-            public abstract <R> R accept(Visitor<R> visitor) ;
-          -}
-
+          privateConstructor = makeConstructor aliases elName True [] []
           visitor = () -- TODO
           partialVisitor = () -- TODO
 
@@ -136,18 +110,13 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
 
     topMods = [Java.ClassModifierPublic]
 
-    makeConstructor private params stmts = Java.ClassBodyDeclarationConstructorDeclaration $
-        Java.ConstructorDeclaration mods cons Nothing body
-      where
-        nm = Java.SimpleTypeName $ nameToJavaTypeIdentifier aliases False elName
-        cons = Java.ConstructorDeclarator [] nm Nothing params
-        mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
-        body = Java.ConstructorBody Nothing stmts
-
 toVariantClass :: Show m => M.Map GraphName Java.PackageName -> Name -> FieldType m -> Result Java.ClassDeclaration
-toVariantClass aliases supname (FieldType (FieldName fname) ftype) = do
-    valueField <- findValueField
-    let bodyDecls = Y.catMaybes [valueField] -- TODO
+toVariantClass aliases supname field@(FieldType (FieldName fname) ftype) = do
+    jt <- if isUnit then pure Nothing else Just <$> encodeType aliases ftype
+    let valueField = findValueField <$> jt
+    let cons = Just $ constructor jt
+    let accept = Just $ toAcceptMethod False
+    let bodyDecls = Y.catMaybes [valueField, cons, accept] -- TODO
     return $ javaClassDeclaration aliases elName mods (Just supname) bodyDecls
   where
     elName = fromQname (graphNameOf supname) (capitalize fname)
@@ -155,14 +124,18 @@ toVariantClass aliases supname (FieldType (FieldName fname) ftype) = do
     isUnit = case typeTerm ftype of
       TypeTermRecord [] -> True
       _ -> False
-    findValueField = do
-      if isUnit
-        then return Nothing
-        else do
-          jt <- encodeType aliases ftype
-          let var = javaVariableDeclarator $ Java.Identifier "value"
-          return $ Just $ javaMemberField [Java.FieldModifierPublic, Java.FieldModifierFinal] jt var
-      
+    findValueField jt = javaMemberField [Java.FieldModifierPublic, Java.FieldModifierFinal] jt var
+      where
+        var = javaVariableDeclarator $ Java.Identifier varName
+    constructor jt = makeConstructor aliases elName False params stmts
+      where
+        params = Y.maybe [] (\t -> [javaTypeToJavaFormalParameter t varFieldName]) jt
+        stmts = Y.maybe [] (const [Java.BlockStatementStatement $ toAssignStmt varFieldName]) jt
+    varName = "value"
+    varFieldName = FieldName varName
+    equalsMethod = () -- TODO
+    hashCodeMethod = () -- TODO
+
 {-
   public static final class StringEsc extends Value {
     public final String string;
@@ -194,6 +167,7 @@ toVariantClass aliases supname (FieldType (FieldName fname) ftype) = do
     }
   }
 -}
+
 -- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
 toDeclarationType t = case typeTerm t of
@@ -208,6 +182,7 @@ toDeclarationType t = case typeTerm t of
     let rt = Types.record [Types.field "value" t]
     return t {typeTerm = typeTerm rt}
 
+toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedData m) -> Result a
 toDataDeclaration aliases cx (el, TypedData typ term) = do
   fail "not implemented" -- TODO
 

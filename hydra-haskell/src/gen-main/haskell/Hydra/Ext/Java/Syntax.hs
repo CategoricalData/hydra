@@ -2402,22 +2402,44 @@ _ArrayAccess_Variant_primary = (Core.FieldName "primary")
 
 data MethodInvocation 
   = MethodInvocation {
-    methodInvocationId :: [MethodInvocation_Id],
-    methodInvocationArguments :: [Expression],
-    methodInvocationVariant :: MethodInvocation_Variant}
+    methodInvocationHeader :: MethodInvocation_Header,
+    methodInvocationArguments :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
 _MethodInvocation = (Core.Name "hydra/ext/java/syntax.MethodInvocation")
 
-_MethodInvocation_id = (Core.FieldName "id")
+_MethodInvocation_header = (Core.FieldName "header")
 
 _MethodInvocation_arguments = (Core.FieldName "arguments")
 
-_MethodInvocation_variant = (Core.FieldName "variant")
+data MethodInvocation_Header 
+  = MethodInvocation_HeaderSimple MethodName
+  | MethodInvocation_HeaderComplex MethodInvocation_Complex
+  deriving (Eq, Ord, Read, Show)
+
+_MethodInvocation_Header = (Core.Name "hydra/ext/java/syntax.MethodInvocation.Header")
+
+_MethodInvocation_Header_simple = (Core.FieldName "simple")
+
+_MethodInvocation_Header_complex = (Core.FieldName "complex")
+
+data MethodInvocation_Complex 
+  = MethodInvocation_Complex {
+    methodInvocation_ComplexVariant :: MethodInvocation_Variant,
+    methodInvocation_ComplexTypeArguments :: [TypeArgument],
+    methodInvocation_ComplexIdentifier :: Identifier}
+  deriving (Eq, Ord, Read, Show)
+
+_MethodInvocation_Complex = (Core.Name "hydra/ext/java/syntax.MethodInvocation.Complex")
+
+_MethodInvocation_Complex_variant = (Core.FieldName "variant")
+
+_MethodInvocation_Complex_typeArguments = (Core.FieldName "typeArguments")
+
+_MethodInvocation_Complex_identifier = (Core.FieldName "identifier")
 
 data MethodInvocation_Variant 
-  = MethodInvocation_VariantMethod MethodName
-  | MethodInvocation_VariantType TypeName
+  = MethodInvocation_VariantType TypeName
   | MethodInvocation_VariantExpression ExpressionName
   | MethodInvocation_VariantPrimary Primary
   | MethodInvocation_VariantSuper 
@@ -2425,8 +2447,6 @@ data MethodInvocation_Variant
   deriving (Eq, Ord, Read, Show)
 
 _MethodInvocation_Variant = (Core.Name "hydra/ext/java/syntax.MethodInvocation.Variant")
-
-_MethodInvocation_Variant_method = (Core.FieldName "method")
 
 _MethodInvocation_Variant_type = (Core.FieldName "type")
 
@@ -2437,18 +2457,6 @@ _MethodInvocation_Variant_primary = (Core.FieldName "primary")
 _MethodInvocation_Variant_super = (Core.FieldName "super")
 
 _MethodInvocation_Variant_typeSuper = (Core.FieldName "typeSuper")
-
-data MethodInvocation_Id 
-  = MethodInvocation_Id {
-    methodInvocation_IdTypeArguments :: [TypeArgument],
-    methodInvocation_IdIdentifier :: Identifier}
-  deriving (Eq, Ord, Read, Show)
-
-_MethodInvocation_Id = (Core.Name "hydra/ext/java/syntax.MethodInvocation.Id")
-
-_MethodInvocation_Id_typeArguments = (Core.FieldName "typeArguments")
-
-_MethodInvocation_Id_identifier = (Core.FieldName "identifier")
 
 data MethodReference 
   = MethodReferenceExpression MethodReference_Expression
