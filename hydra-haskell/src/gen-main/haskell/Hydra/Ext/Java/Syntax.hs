@@ -510,6 +510,7 @@ _StaticImportOnDemandDeclaration = (Core.Name "hydra/ext/java/syntax.StaticImpor
 data TypeDeclaration 
   = TypeDeclarationClass ClassDeclaration
   | TypeDeclarationInterface InterfaceDeclaration
+  | TypeDeclarationNone 
   deriving (Eq, Ord, Read, Show)
 
 _TypeDeclaration = (Core.Name "hydra/ext/java/syntax.TypeDeclaration")
@@ -517,6 +518,8 @@ _TypeDeclaration = (Core.Name "hydra/ext/java/syntax.TypeDeclaration")
 _TypeDeclaration_class = (Core.FieldName "class")
 
 _TypeDeclaration_interface = (Core.FieldName "interface")
+
+_TypeDeclaration_none = (Core.FieldName "none")
 
 data ModuleDeclaration 
   = ModuleDeclaration {
@@ -696,6 +699,7 @@ data ClassMemberDeclaration
   | ClassMemberDeclarationMethod MethodDeclaration
   | ClassMemberDeclarationClass ClassDeclaration
   | ClassMemberDeclarationInterface InterfaceDeclaration
+  | ClassMemberDeclarationNone 
   deriving (Eq, Ord, Read, Show)
 
 _ClassMemberDeclaration = (Core.Name "hydra/ext/java/syntax.ClassMemberDeclaration")
@@ -707,6 +711,8 @@ _ClassMemberDeclaration_method = (Core.FieldName "method")
 _ClassMemberDeclaration_class = (Core.FieldName "class")
 
 _ClassMemberDeclaration_interface = (Core.FieldName "interface")
+
+_ClassMemberDeclaration_none = (Core.FieldName "none")
 
 data FieldDeclaration 
   = FieldDeclaration {
