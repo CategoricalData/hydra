@@ -6,9 +6,7 @@ import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Ext.Java.Coder
-import Hydra.Ext.Java.Operators
 import Hydra.Impl.Haskell.Extras
-import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Java.Syntax as Java
@@ -24,19 +22,6 @@ moduleToJavaString cx g = do
 
 ----------------------------------------
 
--- Note: assumes a non-empty list of operands
-associateList :: Op -> [CT.Expr] -> CT.Expr
-associateList op opers = case opAssociativity op of
-    AssociativityRight -> assocRight opers
-    _ -> assocLeft $ L.reverse opers
-  where
-    assocLeft l = case l of
-      [x] -> x
-      (h:r) -> ifx op (assocLeft r) h
-    assocRight l = case l of
-      [x] -> x
-      (h:r) -> ifx op h $ assocRight r
-
 writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
 writeAdditionalBound _ = cst "TODO:AdditionalBound"
 
@@ -44,15 +29,15 @@ writeAdditiveExpression :: Java.AdditiveExpression -> CT.Expr
 writeAdditiveExpression e = case e of
   Java.AdditiveExpressionUnary m -> writeMultiplicativeExpression m
   Java.AdditiveExpressionPlus (Java.AdditiveExpression_Binary lhs rhs) ->
-    ifx plusOp (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
+    infixWs "+" (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
   Java.AdditiveExpressionMinus (Java.AdditiveExpression_Binary lhs rhs) ->
-    ifx minusOp (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
+    infixWs "-" (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
 
 writeAmbiguousName :: Java.AmbiguousName -> CT.Expr
 writeAmbiguousName (Java.AmbiguousName parts) = dotSep (writeIdentifier <$> parts)
 
 writeAndExpression :: Java.AndExpression -> CT.Expr
-writeAndExpression (Java.AndExpression eqs) = associateList bitAndOp (writeEqualityExpression <$> eqs)
+writeAndExpression (Java.AndExpression eqs) = infixWsList "&" (writeEqualityExpression <$> eqs)
 
 writeAnnotatedIdentifier :: Java.AnnotatedIdentifier -> CT.Expr
 writeAnnotatedIdentifier (Java.AnnotatedIdentifier anns id) = writeIdentifier id -- Note: ignoring annotations for now
@@ -79,21 +64,21 @@ writeAssertStatement :: Java.AssertStatement -> CT.Expr
 writeAssertStatement _ = cst "TODO:AssertStatement"
 
 writeAssignment :: Java.Assignment -> CT.Expr
-writeAssignment (Java.Assignment lhs op rhs) = ifx ctop (writeLeftHandSide lhs) (writeExpression rhs)
+writeAssignment (Java.Assignment lhs op rhs) = infixWs ctop (writeLeftHandSide lhs) (writeExpression rhs)
   where
     ctop = case op of
-      Java.AssignmentOperatorSimple -> assignOp
-      Java.AssignmentOperatorTimes -> assignTimesOp
-      Java.AssignmentOperatorDiv -> assignDivOp
-      Java.AssignmentOperatorMod -> assignModOp
-      Java.AssignmentOperatorPlus -> assignPlusOp
-      Java.AssignmentOperatorMinus -> assignMinusOp
-      Java.AssignmentOperatorShiftLeft -> assignShiftLeftOp
-      Java.AssignmentOperatorShiftRight -> assignShiftRightOp
-      Java.AssignmentOperatorShiftRightZeroFill -> assignShiftRightZeroFillOp
-      Java.AssignmentOperatorAnd -> assignAndOp
-      Java.AssignmentOperatorXor -> assignXorOp
-      Java.AssignmentOperatorOr -> assignOrOp
+      Java.AssignmentOperatorSimple -> "="
+      Java.AssignmentOperatorTimes -> "*="
+      Java.AssignmentOperatorDiv -> "/="
+      Java.AssignmentOperatorMod -> "%="
+      Java.AssignmentOperatorPlus -> "+="
+      Java.AssignmentOperatorMinus -> "-="
+      Java.AssignmentOperatorShiftLeft -> "<<="
+      Java.AssignmentOperatorShiftRight -> ">>="
+      Java.AssignmentOperatorShiftRightZeroFill -> ">>>="
+      Java.AssignmentOperatorAnd -> "&="
+      Java.AssignmentOperatorXor -> "^="
+      Java.AssignmentOperatorOr -> "|="
 
 writeAssignmentExpression :: Java.AssignmentExpression -> CT.Expr
 writeAssignmentExpression e = case e of
@@ -222,7 +207,7 @@ writeCompilationUnit u = case u of
 
 writeConditionalAndExpression :: Java.ConditionalAndExpression -> CT.Expr
 writeConditionalAndExpression (Java.ConditionalAndExpression ors)
-  = associateList andOp (writeInclusiveOrExpression <$> ors)
+  = infixWsList "&&" (writeInclusiveOrExpression <$> ors)
 
 writeConditionalExpression :: Java.ConditionalExpression -> CT.Expr
 writeConditionalExpression c = case c of
@@ -238,7 +223,7 @@ writeConditionalExpression_TernaryLambda _ = cst "TODO:ConditionalExpression_Ter
 
 writeConditionalOrExpression :: Java.ConditionalOrExpression -> CT.Expr
 writeConditionalOrExpression (Java.ConditionalOrExpression ands)
-  = associateList orOp (writeConditionalAndExpression <$> ands)
+  = infixWsList "||" (writeConditionalAndExpression <$> ands)
 
 writeConstructorBody :: Java.ConstructorBody -> CT.Expr
 writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [
@@ -285,7 +270,7 @@ writeElementValue ev = case ev of
   Java.ElementValueAnnotation ann -> writeAnnotation ann
 
 writeElementValuePair :: Java.ElementValuePair -> CT.Expr
-writeElementValuePair (Java.ElementValuePair k v) = ifx defineOp (writeIdentifier k) (writeElementValue v)
+writeElementValuePair (Java.ElementValuePair k v) = infixWs "=" (writeIdentifier k) (writeElementValue v)
 
 writeEmptyStatement :: Java.EmptyStatement -> CT.Expr
 writeEmptyStatement _ = semi
@@ -297,12 +282,12 @@ writeEqualityExpression :: Java.EqualityExpression -> CT.Expr
 writeEqualityExpression e = case e of
   Java.EqualityExpressionUnary r -> writeRelationalExpression r
   Java.EqualityExpressionEqual (Java.EqualityExpression_Binary lhs rhs) ->
-    ifx equalOp (writeEqualityExpression lhs) (writeRelationalExpression rhs)
+    infixWs "==" (writeEqualityExpression lhs) (writeRelationalExpression rhs)
   Java.EqualityExpressionNotEqual (Java.EqualityExpression_Binary lhs rhs) ->
-    ifx notEqualOp (writeEqualityExpression lhs) (writeRelationalExpression rhs)
+    infixWs "!=" (writeEqualityExpression lhs) (writeRelationalExpression rhs)
 
 writeExclusiveOrExpression :: Java.ExclusiveOrExpression -> CT.Expr
-writeExclusiveOrExpression (Java.ExclusiveOrExpression ands) = associateList bitXorOp (writeAndExpression <$> ands)
+writeExclusiveOrExpression (Java.ExclusiveOrExpression ands) = infixWsList "^" (writeAndExpression <$> ands)
 
 writeExplicitConstructorInvocation :: Java.ExplicitConstructorInvocation -> CT.Expr
 writeExplicitConstructorInvocation _ = cst "TODO:ExplicitConstructorInvocation"
@@ -384,7 +369,7 @@ writeImportDeclaration imp = case imp of
 
 writeInclusiveOrExpression :: Java.InclusiveOrExpression -> CT.Expr
 writeInclusiveOrExpression (Java.InclusiveOrExpression ors)
-  = associateList bitOrOp (writeExclusiveOrExpression <$> ors)
+  = infixWsList "|" (writeExclusiveOrExpression <$> ors)
 
 writeInstanceInitializer :: Java.InstanceInitializer -> CT.Expr
 writeInstanceInitializer _ = cst "TODO:InstanceInitializer"
@@ -411,7 +396,7 @@ writeLambdaBody b = case b of
 
 writeLambdaExpression :: Java.LambdaExpression -> CT.Expr
 writeLambdaExpression (Java.LambdaExpression params body) =
-  ifx arrowOp (writeLambdaParameters params) (writeLambdaBody body)
+  infixWs "->" (writeLambdaParameters params) (writeLambdaBody body)
 
 writeLambdaParameters :: Java.LambdaParameters -> CT.Expr
 writeLambdaParameters p = case p of
@@ -518,11 +503,11 @@ writeMultiplicativeExpression :: Java.MultiplicativeExpression -> CT.Expr
 writeMultiplicativeExpression e = case e of
   Java.MultiplicativeExpressionUnary u -> writeUnaryExpression u
   Java.MultiplicativeExpressionTimes (Java.MultiplicativeExpression_Binary lhs rhs) ->
-    ifx timesOp (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
+    infixWs "*" (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
   Java.MultiplicativeExpressionDivide (Java.MultiplicativeExpression_Binary lhs rhs) ->
-    ifx divideOp (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
+    infixWs "/" (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
   Java.MultiplicativeExpressionMod (Java.MultiplicativeExpression_Binary lhs rhs) ->
-    ifx modOp (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
+    infixWs "%" (writeMultiplicativeExpression lhs) (writeUnaryExpression rhs)
 
 writeNormalAnnotation :: Java.NormalAnnotation -> CT.Expr
 writeNormalAnnotation (Java.NormalAnnotation tname pairs) = prefixAt $ noSep [
@@ -640,7 +625,7 @@ writeRelationalExpression_GreaterThanEqual _ = cst "TODO:RelationalExpression_Gr
 
 writeRelationalExpression_InstanceOf :: Java.RelationalExpression_InstanceOf -> CT.Expr
 writeRelationalExpression_InstanceOf (Java.RelationalExpression_InstanceOf lhs rhs) =
-  ifx instanceofOp (writeRelationalExpression lhs) (writeReferenceType rhs)
+  infixWs "instanceof" (writeRelationalExpression lhs) (writeReferenceType rhs)
 
 writeRelationalExpression_LessThan :: Java.RelationalExpression_LessThan -> CT.Expr
 writeRelationalExpression_LessThan _ = cst "TODO:RelationalExpression_LessThan"
@@ -662,11 +647,11 @@ writeShiftExpression :: Java.ShiftExpression -> CT.Expr
 writeShiftExpression e = case e of
   Java.ShiftExpressionUnary a -> writeAdditiveExpression a
   Java.ShiftExpressionShiftLeft (Java.ShiftExpression_Binary lhs rhs) ->
-    ifx shiftLeftOp (writeShiftExpression lhs) (writeAdditiveExpression rhs)
+    infixWs "<<" (writeShiftExpression lhs) (writeAdditiveExpression rhs)
   Java.ShiftExpressionShiftRight (Java.ShiftExpression_Binary lhs rhs) ->
-    ifx shiftRightOp (writeShiftExpression lhs) (writeAdditiveExpression rhs)
+    infixWs ">>" (writeShiftExpression lhs) (writeAdditiveExpression rhs)
   Java.ShiftExpressionShiftRightZeroFill (Java.ShiftExpression_Binary lhs rhs) ->
-    ifx shiftRightZeroFillOp (writeShiftExpression lhs) (writeAdditiveExpression rhs)
+    infixWs ">>>" (writeShiftExpression lhs) (writeAdditiveExpression rhs)
 
 writeSimpleTypeName :: Java.SimpleTypeName -> CT.Expr
 writeSimpleTypeName (Java.SimpleTypeName tid) = writeTypeIdentifier tid
@@ -806,7 +791,7 @@ writeVariableArityParameter _ = cst "TODO:VariableArityParameter"
 
 writeVariableDeclarator :: Java.VariableDeclarator -> CT.Expr
 writeVariableDeclarator (Java.VariableDeclarator id minit) =
-    Y.maybe idSec (ifx defineOp idSec . writeVariableInitializer) minit
+    Y.maybe idSec (infixWs "=" idSec . writeVariableInitializer) minit
   where
     idSec = writeVariableDeclaratorId id
 

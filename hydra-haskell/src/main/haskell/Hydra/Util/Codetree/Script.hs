@@ -73,6 +73,14 @@ indentLines els = ifx topOp (cst "") (newlineSep els)
   where
     topOp = Op (sym "") (Padding WsNone WsBreakAndIndent) (Precedence 0) AssociativityNone
 
+infixWs :: String -> Expr -> Expr -> Expr
+infixWs op l r = spaceSep [l, cst op, r]
+
+infixWsList :: String -> [Expr] -> Expr
+infixWsList op opers = spaceSep $ L.foldl (\e r -> if L.null e then [r] else r:opExpr:e) [] $ L.reverse opers
+  where
+    opExpr = cst op
+
 inlineStyle :: BlockStyle
 inlineStyle = BlockStyle False False False
 
