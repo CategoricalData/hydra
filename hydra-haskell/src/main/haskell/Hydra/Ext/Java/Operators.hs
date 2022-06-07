@@ -70,6 +70,9 @@ divideOp = op "/" 9 AssociativityLeft
 equalOp :: Op
 equalOp = op "==" 6 AssociativityLeft
 
+instanceofOp :: Op
+instanceofOp = op "instanceof" 1 AssociativityNone -- Note: precendence is arbitrary
+
 -- minusOp > shiftLeftOp
 minusOp :: Op
 minusOp = op "-" 8 AssociativityLeft

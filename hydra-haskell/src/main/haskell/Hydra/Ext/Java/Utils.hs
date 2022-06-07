@@ -30,11 +30,11 @@ asJavaReferenceType t = case t of
   _ -> fail $ "expected a Java reference type. Found: " ++ show t
 
 fieldExpression :: Java.Identifier -> Java.Identifier -> Java.ExpressionName
-fieldExpression varId fieldId = Java.ExpressionName fieldId (Just $ Java.AmbiguousName [varId])
+fieldExpression varId fieldId = Java.ExpressionName (Just $ Java.AmbiguousName [varId]) fieldId
 
 fieldNameToJavaExpression :: FieldName -> Java.Expression
 fieldNameToJavaExpression fname = javaPostfixExpressionToJavaExpression $
-  Java.PostfixExpressionName $ Java.ExpressionName (fieldNameToJavaIdentifier fname) Nothing
+  Java.PostfixExpressionName $ Java.ExpressionName Nothing (fieldNameToJavaIdentifier fname)
 
 fieldNameToJavaIdentifier :: FieldName -> Java.Identifier
 fieldNameToJavaIdentifier (FieldName name) = Java.Identifier $ javaEscape name
@@ -58,6 +58,19 @@ javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.Statement
   where
     ass = Java.Assignment lhs Java.AssignmentOperatorSimple rhs
 
+javaBoolean :: Bool -> Java.Expression
+javaBoolean b = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayLiteral $
+  Java.LiteralBoolean b
+
+javaBooleanType :: Java.Type
+javaBooleanType = Java.TypePrimitive $ Java.PrimitiveTypeWithAnnotations Java.PrimitiveTypeBoolean []
+
+javaCastExpression :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier -> Java.CastExpression
+javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb $
+    javaIdentifierToJavaUnaryExpression var
+  where
+    rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
+                  
 javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
 javaClassDeclaration aliases elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
@@ -97,6 +110,19 @@ javaEscape s = if S.member s javaReservedWords then s ++ "_" else s
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
 
+javaIdentifierToJavaRelationalExpression :: Java.Identifier -> Java.RelationalExpression
+javaIdentifierToJavaRelationalExpression id = javaPostfixExpressionToJavaRelationalExpression $
+  Java.PostfixExpressionName $ Java.ExpressionName Nothing id
+
+javaIdentifierToJavaUnaryExpression :: Java.Identifier -> Java.UnaryExpression
+javaIdentifierToJavaUnaryExpression = javaRelationalExpressionToJavaUnaryExpression . javaIdentifierToJavaRelationalExpression
+  
+javaInstanceOf :: Java.RelationalExpression -> Java.ReferenceType -> Java.RelationalExpression
+javaInstanceOf lhs rhs = Java.RelationalExpressionInstanceof $ Java.RelationalExpression_InstanceOf lhs rhs
+
+javaLangPackageName :: Maybe Java.PackageName
+javaLangPackageName = Just $ javaPackageName ["java", "lang"]
+
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
   Java.FieldDeclaration mods (Java.UnannType jt) [var]
@@ -108,19 +134,23 @@ javaPackageName :: [String] -> Java.PackageName
 javaPackageName parts = Java.PackageName (Java.Identifier <$> parts)
 
 javaPostfixExpressionToJavaExpression :: Java.PostfixExpression -> Java.Expression
-javaPostfixExpressionToJavaExpression pe = Java.ExpressionAssignment $ Java.AssignmentExpressionConditional $
-    Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
+javaPostfixExpressionToJavaExpression pe = javaRelationalExpressionToJavaExpression relEx
   where
-    relEx = Java.RelationalExpressionSimple $
-      Java.ShiftExpressionUnary $
-      Java.AdditiveExpressionUnary $
-      Java.MultiplicativeExpressionUnary $
-      Java.UnaryExpressionOther $
-      Java.UnaryExpressionNotPlusMinusPostfix pe
-    andEx = Java.AndExpression [Java.EqualityExpressionUnary relEx]
-    exOrEx = Java.ExclusiveOrExpression [andEx]
-    incOrEx = Java.InclusiveOrExpression [exOrEx]
-    condAndEx = Java.ConditionalAndExpression [incOrEx]
+    relEx = javaPostfixExpressionToJavaRelationalExpression pe
+
+javaPostfixExpressionToJavaRelationalExpression :: Java.PostfixExpression -> Java.RelationalExpression
+javaPostfixExpressionToJavaRelationalExpression =
+  javaUnaryExpressionToJavaRelationalExpression . javaPostfixExpressionToUnaryExpression
+
+javaUnaryExpressionToJavaRelationalExpression :: Java.UnaryExpression -> Java.RelationalExpression
+javaUnaryExpressionToJavaRelationalExpression = Java.RelationalExpressionSimple .
+  Java.ShiftExpressionUnary .
+  Java.AdditiveExpressionUnary .
+  Java.MultiplicativeExpressionUnary
+
+javaPostfixExpressionToUnaryExpression :: Java.PostfixExpression -> Java.UnaryExpression
+javaPostfixExpressionToUnaryExpression =
+  Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
 
 javaPrimaryToJavaExpression :: Java.Primary -> Java.Expression
 javaPrimaryToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionPrimary
@@ -128,6 +158,23 @@ javaPrimaryToJavaExpression = javaPostfixExpressionToJavaExpression . Java.Postf
 javaRefType :: [Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.Type
 javaRefType args pkg id = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   javaClassType args pkg id
+
+javaRelationalExpressionToJavaExpression :: Java.RelationalExpression -> Java.Expression
+javaRelationalExpressionToJavaExpression relEx = Java.ExpressionAssignment $ Java.AssignmentExpressionConditional $
+    Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
+  where
+    andEx = Java.AndExpression [Java.EqualityExpressionUnary relEx]
+    exOrEx = Java.ExclusiveOrExpression [andEx]
+    incOrEx = Java.InclusiveOrExpression [exOrEx]
+    condAndEx = Java.ConditionalAndExpression [incOrEx]
+
+javaRelationalExpressionToJavaUnaryExpression :: Java.RelationalExpression -> Java.UnaryExpression
+javaRelationalExpressionToJavaUnaryExpression = Java.UnaryExpressionOther .
+  Java.UnaryExpressionNotPlusMinusPostfix .
+  Java.PostfixExpressionPrimary .
+  Java.PrimaryNoNewArray .
+  Java.PrimaryNoNewArrayParens .
+  javaRelationalExpressionToJavaExpression
 
 javaReturnStatement :: Y.Maybe Java.Expression -> Java.Statement
 javaReturnStatement mex = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementReturn $
@@ -142,11 +189,17 @@ javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNe
 javaTypeIdentifier :: String -> Java.TypeIdentifier
 javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
+javaTypeName :: Java.Identifier -> Java.TypeName
+javaTypeName id = Java.TypeName (Java.TypeIdentifier id) Nothing
+
 javaTypeParameter :: String -> Java.TypeParameter
 javaTypeParameter v = Java.TypeParameter [] (javaTypeIdentifier v) Nothing
 
 javaTypeVariable :: String -> Java.ReferenceType
 javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier v
+
+javaTypeVariableToType :: Java.TypeVariable -> Java.Type
+javaTypeVariableToType = Java.TypeReference . Java.ReferenceTypeVariable
 
 javaUtilPackageName :: Maybe Java.PackageName
 javaUtilPackageName = Just $ javaPackageName ["java", "util"]
@@ -160,6 +213,10 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
 javaTypeToResult :: Java.Type -> Java.Result
 javaTypeToResult = Java.ResultType . Java.UnannType
 
+javaUnaryExpressionToJavaExpression :: Java.UnaryExpression -> Java.Expression
+javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
+  javaUnaryExpressionToJavaRelationalExpression
+                
 javaVariableDeclarator :: Java.Identifier -> Java.VariableDeclarator
 javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id) Nothing
 
@@ -177,13 +234,13 @@ makeConstructor aliases elName private params stmts = Java.ClassBodyDeclarationC
     body = Java.ConstructorBody Nothing stmts
 
 methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
-  -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.Statement] -> Java.ClassBodyDeclaration
+  -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration
 methodDeclaration mods tparams anns methodName params result stmts = Java.ClassBodyDeclarationClassMember $
     Java.ClassMemberDeclarationMethod $
-    Java.MethodDeclaration mods header $
-    (Y.maybe Java.MethodBodyNone (\s -> Java.MethodBodyBlock $ javaStatementsToBlock s) stmts)
+    Java.MethodDeclaration anns mods header $
+    Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
   where
-    header = Java.MethodHeader tparams anns result decl mthrows
+    header = Java.MethodHeader tparams result decl mthrows
     decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
     mthrows = Nothing
 
@@ -209,6 +266,9 @@ nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterfac
 nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name
 
+overrideAnnotation :: Java.Annotation
+overrideAnnotation = Java.AnnotationMarker $ Java.MarkerAnnotation $ javaTypeName $ Java.Identifier "Override"
+
 referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToResult . Java.TypeReference
 
@@ -217,7 +277,9 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
   where
     mods = [Java.MethodModifierPublic] ++ if abstract then [Java.MethodModifierAbstract] else []
     tparams = [javaTypeParameter "R"]
-    anns = []
+    anns = if abstract
+      then []
+      else [overrideAnnotation]
     param = javaTypeToJavaFormalParameter ref (FieldName varName)
       where
         ref = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
@@ -231,14 +293,14 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
     visitMethodName = Java.Identifier "visit"
     body = if abstract
       then Nothing
-      else Just [javaReturnStatement $ Just returnExpr]
+      else Just [Java.BlockStatementStatement $ javaReturnStatement $ Just returnExpr]
     returnExpr = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
         Java.MethodInvocation header args
       where
         header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs visitMethodName
         args = [javaThis]
         targs = []
-        variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName (Java.Identifier varName) Nothing
+        variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier varName)
 
 toAssignStmt :: FieldName -> Java.Statement
 toAssignStmt fname = javaAssignmentStatement lhs rhs
@@ -258,3 +320,14 @@ toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
       Java.ArrayType (Java.Dims $ d ++ [[]]) v
     _ -> fail $ "don't know how to make Java reference type into array type: " ++ show rt
   _ -> fail $ "don't know how to make Java type into array type: " ++ show t
+
+variableDeclarationStatement :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier -> Java.Expression -> Java.BlockStatement
+variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVariableDeclaration $
+    Java.LocalVariableDeclarationStatement $
+    Java.LocalVariableDeclaration [] t [vdec]
+  where
+    t = Java.LocalVariableTypeType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
+      nameToJavaTypeIdentifier aliases False elName
+    vdec = Java.VariableDeclarator (javaVariableDeclaratorId id) (Just init)
+      where
+        init = Java.VariableInitializerExpression rhs

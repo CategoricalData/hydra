@@ -37,6 +37,9 @@ associateList op opers = case opAssociativity op of
       [x] -> x
       (h:r) -> ifx op h $ assocRight r
 
+writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
+writeAdditionalBound _ = cst "TODO:AdditionalBound"
+
 writeAdditiveExpression :: Java.AdditiveExpression -> CT.Expr
 writeAdditiveExpression e = case e of
   Java.AdditiveExpressionUnary m -> writeMultiplicativeExpression m
@@ -44,6 +47,9 @@ writeAdditiveExpression e = case e of
     ifx plusOp (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
   Java.AdditiveExpressionMinus (Java.AdditiveExpression_Binary lhs rhs) ->
     ifx minusOp (writeAdditiveExpression lhs) (writeMultiplicativeExpression rhs)
+
+writeAmbiguousName :: Java.AmbiguousName -> CT.Expr
+writeAmbiguousName (Java.AmbiguousName parts) = dotSep (writeIdentifier <$> parts)
 
 writeAndExpression :: Java.AndExpression -> CT.Expr
 writeAndExpression (Java.AndExpression eqs) = associateList bitAndOp (writeEqualityExpression <$> eqs)
@@ -62,6 +68,9 @@ writeArrayAccess _ = cst "TODO:ArrayAccess"
 
 writeArrayCreationExpression :: Java.ArrayCreationExpression -> CT.Expr
 writeArrayCreationExpression _ = cst "TODO:ArrayCreationExpression"
+
+writeArrayInitializer :: Java.ArrayInitializer -> CT.Expr
+writeArrayInitializer _ = cst "TODO:ArrayInitializer"
 
 writeArrayType :: Java.ArrayType -> CT.Expr
 writeArrayType _ = cst "TODO:ArrayType"
@@ -104,7 +113,29 @@ writeBreakStatement :: Java.BreakStatement -> CT.Expr
 writeBreakStatement _ = cst "TODO:BreakStatement"
 
 writeCastExpression :: Java.CastExpression -> CT.Expr
-writeCastExpression _ = cst "TODO:CastExpression"
+writeCastExpression e = case e of
+  Java.CastExpressionPrimitive p -> writeCastExpression_Primitive p
+  Java.CastExpressionNotPlusMinus npm -> writeCastExpression_NotPlusMinus npm
+  Java.CastExpressionLambda l -> writeCastExpression_Lambda l
+
+writeCastExpression_Lambda :: Java.CastExpression_Lambda -> CT.Expr
+writeCastExpression_Lambda _ = cst "TODO:CastExpression_Lambda"
+
+writeCastExpression_NotPlusMinus :: Java.CastExpression_NotPlusMinus -> CT.Expr
+writeCastExpression_NotPlusMinus (Java.CastExpression_NotPlusMinus rb ex) = spaceSep [
+  writeCastExpression_RefAndBounds rb,
+  writeUnaryExpression ex]
+
+writeCastExpression_RefAndBounds :: Java.CastExpression_RefAndBounds -> CT.Expr
+writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = parenList [spaceSep $ Y.catMaybes [
+  Just $ writeReferenceType rt,
+  if L.null adds then Nothing else Just $ spaceSep (writeAdditionalBound <$> adds)]]
+
+writeCastExpression_Primitive :: Java.CastExpression_Primitive -> CT.Expr
+writeCastExpression_Primitive _ = cst "TODO:CastExpression_Primitive"
+
+writeCharacterLiteral :: Int -> CT.Expr
+writeCharacterLiteral _ = cst "TODO:CharacterLiteral"
 
 writeClassBody :: Java.ClassBody -> CT.Expr
 writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $ doubleNewlineSep (writeClassBodyDeclaration <$> decls)
@@ -256,7 +287,7 @@ writeElementValuePair :: Java.ElementValuePair -> CT.Expr
 writeElementValuePair (Java.ElementValuePair k v) = ifx defineOp (writeIdentifier k) (writeElementValue v)
 
 writeEmptyStatement :: Java.EmptyStatement -> CT.Expr
-writeEmptyStatement _ = cst ";"
+writeEmptyStatement _ = semi
 
 writeEnumDeclaration :: Java.EnumDeclaration -> CT.Expr
 writeEnumDeclaration _ = cst "TODO:EnumDeclaration"
@@ -281,7 +312,9 @@ writeExpression e = case e of
   Java.ExpressionAssignment a -> writeAssignmentExpression a
 
 writeExpressionName :: Java.ExpressionName -> CT.Expr
-writeExpressionName (Java.ExpressionName id _) = writeIdentifier id -- Note: ignoring the AmbiguousName part for now
+writeExpressionName (Java.ExpressionName mqual id) = dotSep $ Y.catMaybes [
+  writeAmbiguousName <$> mqual,
+  Just $ writeIdentifier id]
 
 writeExpressionStatement :: Java.ExpressionStatement -> CT.Expr
 writeExpressionStatement (Java.ExpressionStatement stmt) = writeStatementExpression stmt
@@ -309,6 +342,12 @@ writeFieldModifier m = case m of
   Java.FieldModifierTransient -> cst "transient"
   Java.FieldModifierVolatile -> cst "volatile"
 
+writeFloatingPointLiteral :: Java.FloatingPointLiteral -> CT.Expr
+writeFloatingPointLiteral _ = cst "TODO:FloatingPointLiteral"
+
+writeFloatingPointType :: Java.FloatingPointType -> CT.Expr
+writeFloatingPointType _ = cst "TODO:FloatingPointType"
+
 writeForStatement :: Java.ForStatement -> CT.Expr
 writeForStatement _ = cst "TODO:ForStatement"
 
@@ -327,7 +366,10 @@ writeIdentifier :: Java.Identifier -> CT.Expr
 writeIdentifier (Java.Identifier s) = cst s
 
 writeIfThenStatement :: Java.IfThenStatement -> CT.Expr
-writeIfThenStatement _ = cst "TODO:IfThenStatement"
+writeIfThenStatement (Java.IfThenStatement cond thn) = spaceSep [
+  cst "if",
+  parenList [writeExpression cond],
+  writeBlock (Java.Block [Java.BlockStatementStatement thn])]
 
 writeIfThenElseStatement :: Java.IfThenElseStatement -> CT.Expr
 writeIfThenElseStatement _ = cst "TODO:IfThenElseStatement"
@@ -345,6 +387,12 @@ writeInclusiveOrExpression (Java.InclusiveOrExpression ors)
 
 writeInstanceInitializer :: Java.InstanceInitializer -> CT.Expr
 writeInstanceInitializer _ = cst "TODO:InstanceInitializer"
+
+writeIntegerLiteral :: Java.IntegerLiteral -> CT.Expr
+writeIntegerLiteral _ = cst "TODO:IntegerLiteral"
+
+writeIntegralType :: Java.IntegralType -> CT.Expr
+writeIntegralType _ = cst "TODO:IntegralType"
 
 writeInterfaceDeclaration :: Java.InterfaceDeclaration -> CT.Expr
 writeInterfaceDeclaration d = cst "TODO:InterfaceDeclaration"
@@ -376,10 +424,27 @@ writeLeftHandSide lhs = case lhs of
   Java.LeftHandSideArrayAccess aa -> writeArrayAccess aa
 
 writeLiteral :: Java.Literal -> CT.Expr
-writeLiteral _ = cst "TODO:Literal"
+writeLiteral l = case l of
+  Java.LiteralNull -> cst "null"
+  Java.LiteralInteger il -> writeIntegerLiteral il
+  Java.LiteralFloatingPoint fl -> writeFloatingPointLiteral fl
+  Java.LiteralBoolean b -> cst $ if b then "true" else "false"
+  Java.LiteralCharacter c -> writeCharacterLiteral c
+  Java.LiteralString sl -> writeStringLiteral sl
+
+writeLocalVariableDeclaration :: Java.LocalVariableDeclaration -> CT.Expr
+writeLocalVariableDeclaration (Java.LocalVariableDeclaration mods t decls) = spaceSep $ Y.catMaybes [
+  if L.null mods then Nothing else Just $ spaceSep (writeVariableModifier <$> mods),
+  Just $ writeLocalVariableType t,
+  Just $ commaSep inlineStyle (writeVariableDeclarator <$> decls)]
 
 writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> CT.Expr
-writeLocalVariableDeclarationStatement _ = cst "TODO:LocalVariableDeclarationStatement"
+writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = writeLocalVariableDeclaration d
+
+writeLocalVariableType :: Java.LocalVariableType -> CT.Expr
+writeLocalVariableType t = case t of
+  Java.LocalVariableTypeType ut -> writeUnannType ut
+  Java.LocalVariableTypeVar -> cst "var"
 
 writeMarkerAnnotation :: Java.MarkerAnnotation -> CT.Expr
 writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName tname
@@ -389,25 +454,28 @@ writeMethodBody b = case b of
   (Java.MethodBodyBlock block) -> writeBlock block
   Java.MethodBodyNone -> semi
 
-writeMethodHeader :: Java.MethodHeader -> CT.Expr
-writeMethodHeader (Java.MethodHeader params anns result decl mthrows) = spaceSep $ Y.catMaybes [
-  if L.null params then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> params),
-  if L.null anns then Nothing else Just $ commaSep inlineStyle (writeAnnotation <$> anns),
-  Just $ writeResult result,
-  Just $ writeMethodDeclarator decl,
-  writeThrows <$> mthrows]
-
 writeMethodDeclaration :: Java.MethodDeclaration -> CT.Expr
-writeMethodDeclaration (Java.MethodDeclaration mods header body) = spaceSep $ Y.catMaybes [
-  if L.null mods then Nothing else Just $ spaceSep (writeMethodModifier <$> mods),
-  Just $ writeMethodHeader header,
-  Just $ writeMethodBody body]
+writeMethodDeclaration (Java.MethodDeclaration anns mods header body) = newlineSep $ Y.catMaybes [
+    if L.null anns then Nothing else Just $ newlineSep (writeAnnotation <$> anns),
+    Just headerAndBody]
+  where
+    headerAndBody = spaceSep $ Y.catMaybes [
+      if L.null mods then Nothing else Just $ spaceSep (writeMethodModifier <$> mods),
+      Just $ writeMethodHeader header,
+      Just $ writeMethodBody body]
 
 writeMethodDeclarator :: Java.MethodDeclarator -> CT.Expr
 writeMethodDeclarator (Java.MethodDeclarator id rparam params) = noSep [
   writeIdentifier id,
   -- Note: ignoring receiver param for now
   parenList (writeFormalParameter <$> params)]
+
+writeMethodHeader :: Java.MethodHeader -> CT.Expr
+writeMethodHeader (Java.MethodHeader params result decl mthrows) = spaceSep $ Y.catMaybes [
+  if L.null params then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> params),
+  Just $ writeResult result,
+  Just $ writeMethodDeclarator decl,
+  writeThrows <$> mthrows]
 
 writeMethodInvocation :: Java.MethodInvocation -> CT.Expr
 writeMethodInvocation (Java.MethodInvocation header args) = noSep [headerSec, argSec]
@@ -479,6 +547,11 @@ writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc
       else Just $ spaceSep [cst "implements", commaSep inlineStyle (writeInterfaceType <$> superi)]
     bodySec = Just $ writeClassBody body
 
+writeNumericType :: Java.NumericType -> CT.Expr
+writeNumericType nt = case nt of
+  Java.NumericTypeIntegral it -> writeIntegralType it
+  Java.NumericTypeFloatingPoint ft -> writeFloatingPointType ft
+
 writePackageDeclaration :: Java.PackageDeclaration -> CT.Expr
 writePackageDeclaration (Java.PackageDeclaration mods ids) = newlineSep $ modifierLines ++ [packageLine]
   where
@@ -531,8 +604,15 @@ writePrimaryNoNewArray p = case p of
   Java.PrimaryNoNewArrayMethodInvocation mi -> writeMethodInvocation mi
   Java.PrimaryNoNewArrayMethodReference mr -> writeMethodReference mr
 
+writePrimitiveType :: Java.PrimitiveType -> CT.Expr
+writePrimitiveType pt = case pt of
+  Java.PrimitiveTypeNumeric nt -> writeNumericType nt
+  Java.PrimitiveTypeBoolean -> cst "boolean"
+
 writePrimitiveTypeWithAnnotations :: Java.PrimitiveTypeWithAnnotations -> CT.Expr
-writePrimitiveTypeWithAnnotations _ = cst "TODO:PrimitiveTypeWithAnnotations" -- (Java.PrimitiveTypeWithAnnotations )
+writePrimitiveTypeWithAnnotations (Java.PrimitiveTypeWithAnnotations pt anns) = spaceSep $ Y.catMaybes [
+  if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
+  Just $ writePrimitiveType pt]
 
 writeReceiverParameter :: Java.ReceiverParameter -> CT.Expr
 writeReceiverParameter _ = cst "TODO:ReceiverParameter"
@@ -559,7 +639,8 @@ writeRelationalExpression_GreaterThanEqual :: Java.RelationalExpression_GreaterT
 writeRelationalExpression_GreaterThanEqual _ = cst "TODO:RelationalExpression_GreaterThanEqual"
 
 writeRelationalExpression_InstanceOf :: Java.RelationalExpression_InstanceOf -> CT.Expr
-writeRelationalExpression_InstanceOf _ = cst "TODO:RelationalExpression_InstanceOf"
+writeRelationalExpression_InstanceOf (Java.RelationalExpression_InstanceOf lhs rhs) =
+  ifx instanceofOp (writeRelationalExpression lhs) (writeReferenceType rhs)
 
 writeRelationalExpression_LessThan :: Java.RelationalExpression_LessThan -> CT.Expr
 writeRelationalExpression_LessThan _ = cst "TODO:RelationalExpression_LessThan"
@@ -573,7 +654,7 @@ writeResult r = case r of
   Java.ResultVoid -> cst "void"
 
 writeReturnStatement :: Java.ReturnStatement -> CT.Expr
-writeReturnStatement (Java.ReturnStatement mex) = suffixSemi $ spaceSep $ Y.catMaybes [
+writeReturnStatement (Java.ReturnStatement mex) = spaceSep $ Y.catMaybes [
   Just $ cst "return",
   writeExpression <$> mex]
 
@@ -631,6 +712,9 @@ writeStatementWithoutTrailingSubstatement s = case s of
 
 writeStaticInitializer :: Java.StaticInitializer -> CT.Expr
 writeStaticInitializer _ = cst "TODO:StaticInitializer"
+
+writeStringLiteral :: Java.StringLiteral -> CT.Expr
+writeStringLiteral _ = cst "TODO:StringLiteral"
 
 writeSwitchStatement :: Java.SwitchStatement -> CT.Expr
 writeSwitchStatement _ = cst "TODO:SwitchStatement"
@@ -720,9 +804,10 @@ writeVariableArityParameter :: Java.VariableArityParameter -> CT.Expr
 writeVariableArityParameter _ = cst "TODO:VariableArityParameter"
 
 writeVariableDeclarator :: Java.VariableDeclarator -> CT.Expr
-writeVariableDeclarator (Java.VariableDeclarator id minit) = spaceSep $ Y.catMaybes [
-  Just $ writeVariableDeclaratorId id,
-  writeVariableInitializer <$> minit]
+writeVariableDeclarator (Java.VariableDeclarator id minit) =
+    Y.maybe idSec (ifx defineOp idSec . writeVariableInitializer) minit
+  where
+    idSec = writeVariableDeclaratorId id
 
 writeVariableDeclaratorId :: Java.VariableDeclaratorId -> CT.Expr
 writeVariableDeclaratorId (Java.VariableDeclaratorId id mdims) = noSep $ Y.catMaybes [
@@ -730,7 +815,9 @@ writeVariableDeclaratorId (Java.VariableDeclaratorId id mdims) = noSep $ Y.catMa
   writeDims <$> mdims]
 
 writeVariableInitializer :: Java.VariableInitializer -> CT.Expr
-writeVariableInitializer _ = cst "TODO:VariableInitializer"
+writeVariableInitializer i = case i of
+  Java.VariableInitializerExpression e -> writeExpression e
+  Java.VariableInitializerArrayInitializer ai -> writeArrayInitializer ai
 
 writeVariableModifier :: Java.VariableModifier -> CT.Expr
 writeVariableModifier m = case m of
