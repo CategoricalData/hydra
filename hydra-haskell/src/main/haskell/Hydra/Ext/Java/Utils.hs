@@ -70,7 +70,7 @@ javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.C
     javaIdentifierToJavaUnaryExpression var
   where
     rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
-                  
+
 javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
 javaClassDeclaration aliases elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
@@ -85,6 +85,10 @@ javaClassType args pkg id = Java.ClassType [] qual (javaTypeIdentifier id) targs
   where
     qual = maybe Java.ClassTypeQualifierNone Java.ClassTypeQualifierPackage pkg
     targs = Java.TypeArgumentReference <$> args
+
+javaConditionalAndExpressionToJavaExpression :: Java.ConditionalAndExpression -> Java.Expression
+javaConditionalAndExpressionToJavaExpression condAndEx = Java.ExpressionAssignment $
+  Java.AssignmentExpressionConditional $ Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
 
 javaConstructorCall :: Name -> [Java.Expression] -> Java.Expression
 javaConstructorCall elName args = javaPrimaryToJavaExpression $
@@ -110,13 +114,20 @@ javaEscape s = if S.member s javaReservedWords then s ++ "_" else s
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
 
+javaEqualityExpressionToJavaInclusiveOrExpression :: Java.EqualityExpression -> Java.InclusiveOrExpression
+javaEqualityExpressionToJavaInclusiveOrExpression eq = Java.InclusiveOrExpression [
+  Java.ExclusiveOrExpression [Java.AndExpression [eq]]]
+
+javaExpressionNameToJavaExpression :: Java.ExpressionName -> Java.Expression
+javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionName
+
 javaIdentifierToJavaRelationalExpression :: Java.Identifier -> Java.RelationalExpression
 javaIdentifierToJavaRelationalExpression id = javaPostfixExpressionToJavaRelationalExpression $
   Java.PostfixExpressionName $ Java.ExpressionName Nothing id
 
 javaIdentifierToJavaUnaryExpression :: Java.Identifier -> Java.UnaryExpression
 javaIdentifierToJavaUnaryExpression = javaRelationalExpressionToJavaUnaryExpression . javaIdentifierToJavaRelationalExpression
-  
+
 javaInstanceOf :: Java.RelationalExpression -> Java.ReferenceType -> Java.RelationalExpression
 javaInstanceOf lhs rhs = Java.RelationalExpressionInstanceof $ Java.RelationalExpression_InstanceOf lhs rhs
 
@@ -127,29 +138,35 @@ javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator 
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
   Java.FieldDeclaration mods (Java.UnannType jt) [var]
 
+javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
+javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
+  Java.PrimaryNoNewArrayMethodInvocation
+                    
 javaPackageDeclaration :: GraphName -> Java.PackageDeclaration
 javaPackageDeclaration (GraphName name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
 
 javaPackageName :: [String] -> Java.PackageName
 javaPackageName parts = Java.PackageName (Java.Identifier <$> parts)
 
+javaPostfixExpressionToJavaEqualityExpression :: Java.PostfixExpression -> Java.EqualityExpression
+javaPostfixExpressionToJavaEqualityExpression = Java.EqualityExpressionUnary .
+  javaUnaryExpressionToJavaRelationalExpression . Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
+
 javaPostfixExpressionToJavaExpression :: Java.PostfixExpression -> Java.Expression
 javaPostfixExpressionToJavaExpression pe = javaRelationalExpressionToJavaExpression relEx
   where
     relEx = javaPostfixExpressionToJavaRelationalExpression pe
 
+javaPostfixExpressionToJavaInclusiveOrExpression :: Java.PostfixExpression -> Java.InclusiveOrExpression
+javaPostfixExpressionToJavaInclusiveOrExpression = javaEqualityExpressionToJavaInclusiveOrExpression .
+  javaPostfixExpressionToJavaEqualityExpression
+
 javaPostfixExpressionToJavaRelationalExpression :: Java.PostfixExpression -> Java.RelationalExpression
 javaPostfixExpressionToJavaRelationalExpression =
-  javaUnaryExpressionToJavaRelationalExpression . javaPostfixExpressionToUnaryExpression
+  javaUnaryExpressionToJavaRelationalExpression . javaPostfixExpressionToJavaUnaryExpression
 
-javaUnaryExpressionToJavaRelationalExpression :: Java.UnaryExpression -> Java.RelationalExpression
-javaUnaryExpressionToJavaRelationalExpression = Java.RelationalExpressionSimple .
-  Java.ShiftExpressionUnary .
-  Java.AdditiveExpressionUnary .
-  Java.MultiplicativeExpressionUnary
-
-javaPostfixExpressionToUnaryExpression :: Java.PostfixExpression -> Java.UnaryExpression
-javaPostfixExpressionToUnaryExpression =
+javaPostfixExpressionToJavaUnaryExpression :: Java.PostfixExpression -> Java.UnaryExpression
+javaPostfixExpressionToJavaUnaryExpression =
   Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
 
 javaPrimaryToJavaExpression :: Java.Primary -> Java.Expression
@@ -160,13 +177,8 @@ javaRefType args pkg id = Java.TypeReference $ Java.ReferenceTypeClassOrInterfac
   javaClassType args pkg id
 
 javaRelationalExpressionToJavaExpression :: Java.RelationalExpression -> Java.Expression
-javaRelationalExpressionToJavaExpression relEx = Java.ExpressionAssignment $ Java.AssignmentExpressionConditional $
-    Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
-  where
-    andEx = Java.AndExpression [Java.EqualityExpressionUnary relEx]
-    exOrEx = Java.ExclusiveOrExpression [andEx]
-    incOrEx = Java.InclusiveOrExpression [exOrEx]
-    condAndEx = Java.ConditionalAndExpression [incOrEx]
+javaRelationalExpressionToJavaExpression relEx = javaConditionalAndExpressionToJavaExpression $
+    Java.ConditionalAndExpression [javaEqualityExpressionToJavaInclusiveOrExpression $ Java.EqualityExpressionUnary relEx]
 
 javaRelationalExpressionToJavaUnaryExpression :: Java.RelationalExpression -> Java.UnaryExpression
 javaRelationalExpressionToJavaUnaryExpression = Java.UnaryExpressionOther .
@@ -216,7 +228,13 @@ javaTypeToResult = Java.ResultType . Java.UnannType
 javaUnaryExpressionToJavaExpression :: Java.UnaryExpression -> Java.Expression
 javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaUnaryExpressionToJavaRelationalExpression
-                
+
+javaUnaryExpressionToJavaRelationalExpression :: Java.UnaryExpression -> Java.RelationalExpression
+javaUnaryExpressionToJavaRelationalExpression = Java.RelationalExpressionSimple .
+  Java.ShiftExpressionUnary .
+  Java.AdditiveExpressionUnary .
+  Java.MultiplicativeExpressionUnary
+
 javaVariableDeclarator :: Java.Identifier -> Java.VariableDeclarator
 javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id) Nothing
 

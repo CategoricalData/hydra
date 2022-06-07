@@ -775,7 +775,7 @@ writeUnaryExpressionNotPlusMinus :: Java.UnaryExpressionNotPlusMinus -> CT.Expr
 writeUnaryExpressionNotPlusMinus e = case e of
   Java.UnaryExpressionNotPlusMinusPostfix p -> writePostfixExpression p
   Java.UnaryExpressionNotPlusMinusTilde u -> spaceSep [cst "~", writeUnaryExpression u]
-  Java.UnaryExpressionNotPlusMinusNot u -> spaceSep [cst "!", writeUnaryExpression u]
+  Java.UnaryExpressionNotPlusMinusNot u -> noSep [cst "!", writeUnaryExpression u]
   Java.UnaryExpressionNotPlusMinusCast c -> writeCastExpression c
 
 writeUnqualifiedClassInstanceCreationExpression  :: Java.UnqualifiedClassInstanceCreationExpression -> CT.Expr
