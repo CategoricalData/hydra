@@ -320,8 +320,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  ClassDeclaration
         field "class" $ java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration"],
+        field "interface" $ java "InterfaceDeclaration",
 --  ;
+        field "none" unit],
 
 --ModuleDeclaration:
 --  {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }
@@ -431,8 +432,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  ClassDeclaration
         field "class" $ java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration"],
+        field "interface" $ java "InterfaceDeclaration",
 --  ;
+        field "none" unit],
 
 --FieldDeclaration:
 --  {FieldModifier} UnannType VariableDeclaratorList ;

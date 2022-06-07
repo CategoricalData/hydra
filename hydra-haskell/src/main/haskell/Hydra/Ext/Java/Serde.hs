@@ -171,6 +171,7 @@ writeClassMemberDeclaration d = case d of
   Java.ClassMemberDeclarationMethod md -> writeMethodDeclaration md
   Java.ClassMemberDeclarationClass cd -> writeClassDeclaration cd
   Java.ClassMemberDeclarationInterface id -> writeInterfaceDeclaration id
+  Java.ClassMemberDeclarationNone -> semi
 
 writeClassModifier :: Java.ClassModifier -> CT.Expr
 writeClassModifier m = case m of
@@ -317,7 +318,7 @@ writeExpressionName (Java.ExpressionName mqual id) = dotSep $ Y.catMaybes [
   Just $ writeIdentifier id]
 
 writeExpressionStatement :: Java.ExpressionStatement -> CT.Expr
-writeExpressionStatement (Java.ExpressionStatement stmt) = writeStatementExpression stmt
+writeExpressionStatement (Java.ExpressionStatement stmt) = suffixSemi $ writeStatementExpression stmt
 
 writeFieldAccess :: Java.FieldAccess -> CT.Expr
 writeFieldAccess (Java.FieldAccess qual id) = dotSep $ case qual of
@@ -439,7 +440,7 @@ writeLocalVariableDeclaration (Java.LocalVariableDeclaration mods t decls) = spa
   Just $ commaSep inlineStyle (writeVariableDeclarator <$> decls)]
 
 writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> CT.Expr
-writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = writeLocalVariableDeclaration d
+writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = suffixSemi $ writeLocalVariableDeclaration d
 
 writeLocalVariableType :: Java.LocalVariableType -> CT.Expr
 writeLocalVariableType t = case t of
@@ -451,7 +452,7 @@ writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName t
 
 writeMethodBody :: Java.MethodBody -> CT.Expr
 writeMethodBody b = case b of
-  (Java.MethodBodyBlock block) -> writeBlock block
+  Java.MethodBodyBlock block -> writeBlock block
   Java.MethodBodyNone -> semi
 
 writeMethodDeclaration :: Java.MethodDeclaration -> CT.Expr
@@ -553,10 +554,9 @@ writeNumericType nt = case nt of
   Java.NumericTypeFloatingPoint ft -> writeFloatingPointType ft
 
 writePackageDeclaration :: Java.PackageDeclaration -> CT.Expr
-writePackageDeclaration (Java.PackageDeclaration mods ids) = newlineSep $ modifierLines ++ [packageLine]
-  where
-    modifierLines = writePackageModifier <$> mods
-    packageLine = suffixSemi $ spaceSep [cst "package", cst $ L.intercalate "." (Java.unIdentifier <$> ids)]
+writePackageDeclaration (Java.PackageDeclaration mods ids) = suffixSemi $ spaceSep $ Y.catMaybes [
+    if L.null mods then Nothing else Just $ spaceSep (writePackageModifier <$> mods),
+    Just $ spaceSep [cst "package", cst $ L.intercalate "." (Java.unIdentifier <$> ids)]]
 
 writePackageName :: Java.PackageName -> CT.Expr
 writePackageName (Java.PackageName ids) = dotSep (writeIdentifier <$> ids)
@@ -654,7 +654,7 @@ writeResult r = case r of
   Java.ResultVoid -> cst "void"
 
 writeReturnStatement :: Java.ReturnStatement -> CT.Expr
-writeReturnStatement (Java.ReturnStatement mex) = spaceSep $ Y.catMaybes [
+writeReturnStatement (Java.ReturnStatement mex) = suffixSemi $ spaceSep $ Y.catMaybes [
   Just $ cst "return",
   writeExpression <$> mex]
 
@@ -677,7 +677,7 @@ writeSingleElementAnnotation (Java.SingleElementAnnotation tname mv) = case mv o
   Just v -> prefixAt $ noSep [writeTypeName tname, parenList [writeElementValue v]]
 
 writeStatement :: Java.Statement -> CT.Expr
-writeStatement s = suffixSemi $ case s of
+writeStatement s = case s of
   Java.StatementWithoutTrailing s -> writeStatementWithoutTrailingSubstatement s
   Java.StatementLabeled l -> writeLabeledStatement l
   Java.StatementIfThen it -> writeIfThenStatement it
@@ -751,6 +751,7 @@ writeTypeDeclaration :: Java.TypeDeclaration -> CT.Expr
 writeTypeDeclaration d = case d of
   Java.TypeDeclarationClass d -> writeClassDeclaration d
   Java.TypeDeclarationInterface d -> writeInterfaceDeclaration d
+  Java.TypeDeclarationNone -> semi
 
 writeTypeIdentifier :: Java.TypeIdentifier -> CT.Expr
 writeTypeIdentifier (Java.TypeIdentifier id) = writeIdentifier id
