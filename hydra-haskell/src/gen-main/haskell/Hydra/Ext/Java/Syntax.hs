@@ -369,15 +369,15 @@ _TypeName_qualifier = (Core.FieldName "qualifier")
 
 data ExpressionName 
   = ExpressionName {
-    expressionNameIdentifier :: Identifier,
-    expressionNameName :: (Maybe AmbiguousName)}
+    expressionNameQualifier :: (Maybe AmbiguousName),
+    expressionNameIdentifier :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
 _ExpressionName = (Core.Name "hydra/ext/java/syntax.ExpressionName")
 
-_ExpressionName_identifier = (Core.FieldName "identifier")
+_ExpressionName_qualifier = (Core.FieldName "qualifier")
 
-_ExpressionName_name = (Core.FieldName "name")
+_ExpressionName_identifier = (Core.FieldName "identifier")
 
 newtype MethodName 
   = MethodName {
@@ -805,12 +805,15 @@ _UnannClassType = (Core.Name "hydra/ext/java/syntax.UnannClassType")
 
 data MethodDeclaration 
   = MethodDeclaration {
+    methodDeclarationAnnotations :: [Annotation],
     methodDeclarationModifiers :: [MethodModifier],
     methodDeclarationHeader :: MethodHeader,
     methodDeclarationBody :: MethodBody}
   deriving (Eq, Ord, Read, Show)
 
 _MethodDeclaration = (Core.Name "hydra/ext/java/syntax.MethodDeclaration")
+
+_MethodDeclaration_annotations = (Core.FieldName "annotations")
 
 _MethodDeclaration_modifiers = (Core.FieldName "modifiers")
 
@@ -853,7 +856,6 @@ _MethodModifier_strictfb = (Core.FieldName "strictfb")
 data MethodHeader 
   = MethodHeader {
     methodHeaderParameters :: [TypeParameter],
-    methodHeaderAnnotations :: [Annotation],
     methodHeaderResult :: Result,
     methodHeaderDeclarator :: MethodDeclarator,
     methodHeaderThrows :: (Maybe Throws)}
@@ -862,8 +864,6 @@ data MethodHeader
 _MethodHeader = (Core.Name "hydra/ext/java/syntax.MethodHeader")
 
 _MethodHeader_parameters = (Core.FieldName "parameters")
-
-_MethodHeader_annotations = (Core.FieldName "annotations")
 
 _MethodHeader_result = (Core.FieldName "result")
 
@@ -1695,7 +1695,7 @@ _StatementExpression_classInstanceCreation = (Core.FieldName "classInstanceCreat
 
 data IfThenStatement 
   = IfThenStatement {
-    ifThenStatementExpression :: (Maybe Expression),
+    ifThenStatementExpression :: Expression,
     ifThenStatementStatement :: Statement}
   deriving (Eq, Ord, Read, Show)
 
@@ -3187,7 +3187,7 @@ _CastExpression_lambda = (Core.FieldName "lambda")
 
 data CastExpression_Primitive 
   = CastExpression_Primitive {
-    castExpression_PrimitiveType :: (Maybe PrimitiveTypeWithAnnotations),
+    castExpression_PrimitiveType :: PrimitiveTypeWithAnnotations,
     castExpression_PrimitiveExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
@@ -3199,7 +3199,7 @@ _CastExpression_Primitive_expression = (Core.FieldName "expression")
 
 data CastExpression_NotPlusMinus 
   = CastExpression_NotPlusMinus {
-    castExpression_NotPlusMinusRefAndBounds :: (Maybe CastExpression_RefAndBounds),
+    castExpression_NotPlusMinusRefAndBounds :: CastExpression_RefAndBounds,
     castExpression_NotPlusMinusExpression :: UnaryExpression}
   deriving (Eq, Ord, Read, Show)
 
@@ -3211,7 +3211,7 @@ _CastExpression_NotPlusMinus_expression = (Core.FieldName "expression")
 
 data CastExpression_Lambda 
   = CastExpression_Lambda {
-    castExpression_LambdaRefAndBounds :: (Maybe CastExpression_RefAndBounds),
+    castExpression_LambdaRefAndBounds :: CastExpression_RefAndBounds,
     castExpression_LambdaExpression :: LambdaExpression}
   deriving (Eq, Ord, Read, Show)
 

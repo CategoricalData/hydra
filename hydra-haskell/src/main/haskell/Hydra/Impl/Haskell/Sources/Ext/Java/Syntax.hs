@@ -234,11 +234,11 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "qualifier" $ optional $ java "PackageOrTypeName"],
 
 --ExpressionName:
-      def "ExpressionName" $ record [
 --  Identifier
-        field "identifier" $ java "Identifier",
 --  AmbiguousName . Identifier
-        field "name" $ optional $ java "AmbiguousName"],
+      def "ExpressionName" $ record [
+        field "qualifier" $ optional $ java "AmbiguousName",
+        field "identifier" $ java "Identifier"],
 
 --MethodName:
 --  Identifier
@@ -511,6 +511,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --MethodDeclaration:
 --  {MethodModifier} MethodHeader MethodBody
       def "MethodDeclaration" $ record [
+        field "annotations" $
+          doc "Note: simple methods cannot have annotations" $
+          list $ java "Annotation",
         field "modifiers" $ list $ java "MethodModifier",
         field "header" $ java "MethodHeader",
         field "body" $ java "MethodBody"],
@@ -535,9 +538,6 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  TypeParameters {Annotation} Result MethodDeclarator [Throws]
       def "MethodHeader" $ record [
         field "parameters" $ list $ java "TypeParameter",
-        field "annotations" $
-          doc "Note: simple method headers cannot have annotations" $
-          list $ java "Annotation",
         field "result" $ java "Result",
         field "declarator" $ java "MethodDeclarator",
         field "throws" $ optional $ java "Throws"],
@@ -1017,7 +1017,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --IfThenStatement:
 --  if ( Expression ) Statement
       def "IfThenStatement" $ record [
-        field "expression" $ optional $ java "Expression",
+        field "expression" $ java "Expression",
         field "statement" $ java "Statement"],
 
 --IfThenElseStatement:
@@ -1382,7 +1382,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "primary" $ java "Primary",
 --  super . [TypeArguments] Identifier ( [ArgumentList] )
         field "super" unit,
---  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )      
+--  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
         field "typeSuper" $ java "TypeName"],
 
 --ArgumentList:
@@ -1721,13 +1721,13 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --  ( ReferenceType {AdditionalBound} ) LambdaExpression
         field "lambda" $ java "CastExpression.Lambda"],
       def "CastExpression.Primitive" $ record [
-        field "type" $ optional $ java "PrimitiveTypeWithAnnotations",
+        field "type" $ java "PrimitiveTypeWithAnnotations",
         field "expression" $ java "UnaryExpression"],
       def "CastExpression.NotPlusMinus" $ record [
-        field "refAndBounds" $ optional $ java "CastExpression.RefAndBounds",
+        field "refAndBounds" $ java "CastExpression.RefAndBounds",
         field "expression" $ java "UnaryExpression"],
       def "CastExpression.Lambda" $ record [
-        field "refAndBounds" $ optional $ java "CastExpression.RefAndBounds",
+        field "refAndBounds" $ java "CastExpression.RefAndBounds",
         field "expression" $ java "LambdaExpression"],
       def "CastExpression.RefAndBounds" $ record [
         field "type" $ java "ReferenceType",

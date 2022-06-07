@@ -18,7 +18,6 @@ import Hydra.Util.Formatting
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Maybe as Y
 
 
 listsAsArrays :: Bool
@@ -49,18 +48,19 @@ toTypeDeclaration :: (Default m, Ord m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedData m) -> Result Java.TypeDeclaration
 toTypeDeclaration aliases cx (el, TypedData _ term) = do
     t <- decodeType cx term
-    cd <- toClassDecl t
+    cd <- toClassDecl (elementName el) t
     return $ Java.TypeDeclarationClass cd
   where
-    toClassDecl t = case typeTerm t of
+    toClassDecl elName t = case typeTerm t of
       TypeTermNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
       TypeTermRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
-          let eq = []  :: [Java.ClassBodyDeclaration]-- TODO
           let hashCode = []  :: [Java.ClassBodyDeclaration]-- TODO
-          withMethods <- CM.mapM toWithMethod fields
+          withMethods <- if L.length fields > 1
+            then CM.mapM toWithMethod fields
+            else pure []
           cons <- constructor
-          let bodyDecls = memberVars ++ [cons] ++ eq ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
+          let bodyDecls = memberVars ++ [cons, equalsMethod] ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
           return $ javaClassDeclaration aliases elName topMods Nothing bodyDecls
         where
           constructor = do
@@ -82,59 +82,93 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             param <- fieldToFormalParam field
             let anns = [] -- TODO
             let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
-            let returnStmt = javaReturnStatement $ Just $ javaConstructorCall elName fieldArgs
+            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaConstructorCall elName fieldArgs
             return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
           fieldToFormalParam (FieldType fname ft) = do
             jt <- encodeType aliases ft
             return $ javaTypeToJavaFormalParameter jt fname
 
+          equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
+              Just [instanceOfStmt,
+                castStmt,
+                returnStmt]
+            where
+              anns = [overrideAnnotation]
+              mods = [Java.MethodModifierPublic]
+              param = javaTypeToJavaFormalParameter (javaRefType [] Nothing "Object") (FieldName otherName)
+              result = javaTypeToResult javaBooleanType
+              otherName = "other"
+              tmpName = "o"
+              instanceOfStmt = Java.BlockStatementStatement $ Java.StatementIfThen $ Java.IfThenStatement cond ret
+                where
+                  cond = javaUnaryExpressionToJavaExpression $
+                      Java.UnaryExpressionOther $
+                      Java.UnaryExpressionNotPlusMinusNot $
+                      javaRelationalExpressionToJavaUnaryExpression $
+                      javaInstanceOf other parent
+                    where
+                      other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
+                      parent = nameToJavaReferenceType aliases False elName
+
+                  ret = javaReturnStatement $ Just $ javaBoolean False
+              castStmt = variableDeclarationStatement aliases elName id rhs
+                where
+                  id = Java.Identifier tmpName
+                  rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
+                    Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
+                                  
+              returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaBoolean False -- TODO; placeholder
+
+{-
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof NumberEsc)) {
+        return false;
+    }
+    NumberEsc o = (NumberEsc) other;
+    return integer.equals(o.integer)
+        && fraction.equals(o.fraction)
+        && exponent.equals(o.exponent);
+  }
+
+  @Override
+  public int hashCode() {
+    return 2 * integer.hashCode()
+        + 3 * fraction.hashCode()
+        + 5 * exponent.hashCode();
+  }
+-}
+
       TypeTermUnion fields -> do
-          variantClasses <- CM.mapM (toVariantClass aliases elName) fields
+          variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
           let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
-          let bodyDecls = [privateConstructor, toAcceptMethod True] ++ variantDecls -- TODO
+          let bodyDecls = [privateConstructor, toAcceptMethod True] ++ variantDecls
           let mods = topMods ++ [Java.ClassModifierAbstract]
           return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
         where
           privateConstructor = makeConstructor aliases elName True [] []
           visitor = () -- TODO
           partialVisitor = () -- TODO
+          unionFieldClass (FieldType (FieldName fname) ftype) = do
+            let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
+            toClassDecl (fromQname (graphNameOf elName) $ capitalize fname) rtype
+          augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
+              Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
+              Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True elName,
+              Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
+            where
+              newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
+          isUnit t = typeTerm t  == TypeTermRecord []
 
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
-        (Java.ClassDeclarationNormal cd) <- toClassDecl body
+        (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
         return $ Java.ClassDeclarationNormal $ cd {
           Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
       _ -> fail $ "unexpected type: " ++ show t
-    elName = elementName el
     addParameter v params = params ++ [javaTypeParameter v]
 
     topMods = [Java.ClassModifierPublic]
-
-toVariantClass :: Show m => M.Map GraphName Java.PackageName -> Name -> FieldType m -> Result Java.ClassDeclaration
-toVariantClass aliases supname field@(FieldType (FieldName fname) ftype) = do
-    jt <- if isUnit then pure Nothing else Just <$> encodeType aliases ftype
-    let valueField = findValueField <$> jt
-    let cons = Just $ constructor jt
-    let accept = Just $ toAcceptMethod False
-    let bodyDecls = Y.catMaybes [valueField, cons, accept] -- TODO
-    return $ javaClassDeclaration aliases elName mods (Just supname) bodyDecls
-  where
-    elName = fromQname (graphNameOf supname) (capitalize fname)
-    mods = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal]
-    isUnit = case typeTerm ftype of
-      TypeTermRecord [] -> True
-      _ -> False
-    findValueField jt = javaMemberField [Java.FieldModifierPublic, Java.FieldModifierFinal] jt var
-      where
-        var = javaVariableDeclarator $ Java.Identifier varName
-    constructor jt = makeConstructor aliases elName False params stmts
-      where
-        params = Y.maybe [] (\t -> [javaTypeToJavaFormalParameter t varFieldName]) jt
-        stmts = Y.maybe [] (const [Java.BlockStatementStatement $ toAssignStmt varFieldName]) jt
-    varName = "value"
-    varFieldName = FieldName varName
-    equalsMethod = () -- TODO
-    hashCodeMethod = () -- TODO
 
 {-
   public static final class StringEsc extends Value {
@@ -243,7 +277,8 @@ encodeType aliases t = case typeTerm t of
     jbody <- encode body
     addJavaTypeParameter (javaTypeVariable v) jbody
   TypeTermVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  -- Note: record and union types should not appear at this level
+  TypeTermRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
+  -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
