@@ -92,7 +92,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
           equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
               Just [instanceOfStmt,
                 castStmt,
-                returnStmt]
+                returnAllFieldsEqual]
             where
               anns = [overrideAnnotation]
               mods = [Java.MethodModifierPublic]
@@ -100,7 +100,9 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
               result = javaTypeToResult javaBooleanType
               otherName = "other"
               tmpName = "o"
-              instanceOfStmt = Java.BlockStatementStatement $ Java.StatementIfThen $ Java.IfThenStatement cond ret
+
+              instanceOfStmt = Java.BlockStatementStatement $ Java.StatementIfThen $
+                  Java.IfThenStatement cond returnFalse
                 where
                   cond = javaUnaryExpressionToJavaExpression $
                       Java.UnaryExpressionOther $
@@ -111,27 +113,28 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                       other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
                       parent = nameToJavaReferenceType aliases False elName
 
-                  ret = javaReturnStatement $ Just $ javaBoolean False
+                  returnFalse = javaReturnStatement $ Just $ javaBoolean False
+
               castStmt = variableDeclarationStatement aliases elName id rhs
                 where
                   id = Java.Identifier tmpName
                   rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
                     Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
-                                  
-              returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaBoolean False -- TODO; placeholder
+
+              returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
+                  then javaBoolean True
+                  else javaConditionalAndExpressionToJavaExpression $
+                    Java.ConditionalAndExpression (eqClause . fieldTypeName <$> fields)
+                where
+                  eqClause (FieldName fname) = javaPostfixExpressionToJavaInclusiveOrExpression $
+                      javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
+                    where
+                      arg = javaExpressionNameToJavaExpression $
+                        fieldExpression (Java.Identifier tmpName) (Java.Identifier fname)
+                      header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
+                      var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier fname)
 
 {-
-  @Override
-  public boolean equals(Object other) {
-    if (!(other instanceof NumberEsc)) {
-        return false;
-    }
-    NumberEsc o = (NumberEsc) other;
-    return integer.equals(o.integer)
-        && fraction.equals(o.fraction)
-        && exponent.equals(o.exponent);
-  }
-
   @Override
   public int hashCode() {
     return 2 * integer.hashCode()
@@ -159,7 +162,6 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
               Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
             where
               newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
-          isUnit t = typeTerm t  == TypeTermRecord []
 
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
         (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
@@ -169,6 +171,8 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
     addParameter v params = params ++ [javaTypeParameter v]
 
     topMods = [Java.ClassModifierPublic]
+
+isUnit t = typeTerm t  == TypeTermRecord []
 
 {-
   public static final class StringEsc extends Value {
