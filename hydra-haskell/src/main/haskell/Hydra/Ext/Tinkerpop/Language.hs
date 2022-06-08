@@ -1,6 +1,4 @@
-module Hydra.Ext.Tinkerpop.Coder (
-  tinkerpopLanguage,
-) where
+module Hydra.Ext.Tinkerpop.Language where
 
 import Hydra.Adapter
 import Hydra.Ext.Tinkerpop.Features
