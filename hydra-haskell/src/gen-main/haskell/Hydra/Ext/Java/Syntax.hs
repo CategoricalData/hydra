@@ -1240,7 +1240,7 @@ _InterfaceModifier_strictfb = (Core.FieldName "strictfb")
 
 newtype InterfaceBody 
   = InterfaceBody {
-    unInterfaceBody :: [[InterfaceMemberDeclaration]]}
+    unInterfaceBody :: [InterfaceMemberDeclaration]}
   deriving (Eq, Ord, Read, Show)
 
 _InterfaceBody = (Core.Name "hydra/ext/java/syntax.InterfaceBody")
