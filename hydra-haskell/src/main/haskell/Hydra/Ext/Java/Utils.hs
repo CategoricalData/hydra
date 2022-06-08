@@ -58,12 +58,14 @@ javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.Statement
   where
     ass = Java.Assignment lhs Java.AssignmentOperatorSimple rhs
 
-javaBoolean :: Bool -> Java.Expression
-javaBoolean b = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayLiteral $
-  Java.LiteralBoolean b
+javaBoolean :: Bool -> Java.Literal
+javaBoolean = Java.LiteralBoolean
+
+javaBooleanExpression :: Bool -> Java.Expression
+javaBooleanExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . javaBoolean
 
 javaBooleanType :: Java.Type
-javaBooleanType = Java.TypePrimitive $ Java.PrimitiveTypeWithAnnotations Java.PrimitiveTypeBoolean []
+javaBooleanType = javaPrimitiveTypeToJavaType Java.PrimitiveTypeBoolean
 
 javaCastExpression :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier -> Java.CastExpression
 javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb $
@@ -131,8 +133,20 @@ javaIdentifierToJavaUnaryExpression = javaRelationalExpressionToJavaUnaryExpress
 javaInstanceOf :: Java.RelationalExpression -> Java.ReferenceType -> Java.RelationalExpression
 javaInstanceOf lhs rhs = Java.RelationalExpressionInstanceof $ Java.RelationalExpression_InstanceOf lhs rhs
 
+javaInt :: Integral a => a -> Java.Literal
+javaInt i = Java.LiteralInteger $ Java.IntegerLiteral $ fromIntegral i
+
+javaIntExpression :: Integer -> Java.Expression
+javaIntExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . javaInt
+
+javaIntType :: Java.Type
+javaIntType = javaPrimitiveTypeToJavaType $ Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeInt
+
 javaLangPackageName :: Maybe Java.PackageName
 javaLangPackageName = Just $ javaPackageName ["java", "lang"]
+
+javaLiteralToPrimary :: Java.Literal -> Java.Primary
+javaLiteralToPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayLiteral
 
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
@@ -141,7 +155,7 @@ javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassM
 javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
 javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
   Java.PrimaryNoNewArrayMethodInvocation
-                    
+
 javaPackageDeclaration :: GraphName -> Java.PackageDeclaration
 javaPackageDeclaration (GraphName name) = Java.PackageDeclaration [] (Java.Identifier <$> Strings.splitOn "/" name)
 
@@ -166,11 +180,18 @@ javaPostfixExpressionToJavaRelationalExpression =
   javaUnaryExpressionToJavaRelationalExpression . javaPostfixExpressionToJavaUnaryExpression
 
 javaPostfixExpressionToJavaUnaryExpression :: Java.PostfixExpression -> Java.UnaryExpression
-javaPostfixExpressionToJavaUnaryExpression =
-  Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
+javaPostfixExpressionToJavaUnaryExpression = Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
 
 javaPrimaryToJavaExpression :: Java.Primary -> Java.Expression
 javaPrimaryToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionPrimary
+
+javaPrimaryToJavaUnaryExpression :: Java.Primary -> Java.UnaryExpression
+javaPrimaryToJavaUnaryExpression = Java.UnaryExpressionOther .
+  Java.UnaryExpressionNotPlusMinusPostfix .
+  Java.PostfixExpressionPrimary
+
+javaPrimitiveTypeToJavaType :: Java.PrimitiveType -> Java.Type
+javaPrimitiveTypeToJavaType pt = Java.TypePrimitive $ Java.PrimitiveTypeWithAnnotations pt []
 
 javaRefType :: [Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.Type
 javaRefType args pkg id = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
@@ -181,9 +202,7 @@ javaRelationalExpressionToJavaExpression relEx = javaConditionalAndExpressionToJ
     Java.ConditionalAndExpression [javaEqualityExpressionToJavaInclusiveOrExpression $ Java.EqualityExpressionUnary relEx]
 
 javaRelationalExpressionToJavaUnaryExpression :: Java.RelationalExpression -> Java.UnaryExpression
-javaRelationalExpressionToJavaUnaryExpression = Java.UnaryExpressionOther .
-  Java.UnaryExpressionNotPlusMinusPostfix .
-  Java.PostfixExpressionPrimary .
+javaRelationalExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression .
   Java.PrimaryNoNewArray .
   Java.PrimaryNoNewArrayParens .
   javaRelationalExpressionToJavaExpression
@@ -235,6 +254,9 @@ javaUnaryExpressionToJavaRelationalExpression = Java.RelationalExpressionSimple 
   Java.AdditiveExpressionUnary .
   Java.MultiplicativeExpressionUnary
 
+javaAdditiveExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
+  Java.RelationalExpressionSimple . Java.ShiftExpressionUnary
+
 javaVariableDeclarator :: Java.Identifier -> Java.VariableDeclarator
 javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id) Nothing
 
@@ -261,6 +283,13 @@ methodDeclaration mods tparams anns methodName params result stmts = Java.ClassB
     header = Java.MethodHeader tparams result decl mthrows
     decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
     mthrows = Nothing
+
+methodInvocation :: Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
+methodInvocation self methodName = Java.MethodInvocation header
+  where
+    header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
+    targs = []
+    variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing self
 
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
 nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
@@ -313,12 +342,7 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
       then Nothing
       else Just [Java.BlockStatementStatement $ javaReturnStatement $ Just returnExpr]
     returnExpr = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
-        Java.MethodInvocation header args
-      where
-        header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs visitMethodName
-        args = [javaThis]
-        targs = []
-        variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier varName)
+        methodInvocation (Java.Identifier varName) visitMethodName [javaThis]
 
 toAssignStmt :: FieldName -> Java.Statement
 toAssignStmt fname = javaAssignmentStatement lhs rhs

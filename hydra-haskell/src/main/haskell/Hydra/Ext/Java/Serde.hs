@@ -375,10 +375,15 @@ writeInstanceInitializer :: Java.InstanceInitializer -> CT.Expr
 writeInstanceInitializer _ = cst "TODO:InstanceInitializer"
 
 writeIntegerLiteral :: Java.IntegerLiteral -> CT.Expr
-writeIntegerLiteral _ = cst "TODO:IntegerLiteral"
+writeIntegerLiteral (Java.IntegerLiteral i) = cst $ show i
 
 writeIntegralType :: Java.IntegralType -> CT.Expr
-writeIntegralType _ = cst "TODO:IntegralType"
+writeIntegralType t = cst $ case t of
+  Java.IntegralTypeByte -> "byte"
+  Java.IntegralTypeShort -> "short"
+  Java.IntegralTypeInt -> "int"
+  Java.IntegralTypeLong -> "long"
+  Java.IntegralTypeChar -> "char"
 
 writeInterfaceDeclaration :: Java.InterfaceDeclaration -> CT.Expr
 writeInterfaceDeclaration d = cst "TODO:InterfaceDeclaration"

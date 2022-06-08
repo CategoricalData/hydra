@@ -55,12 +55,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       TypeTermNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
       TypeTermRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
-          let hashCode = []  :: [Java.ClassBodyDeclaration]-- TODO
           withMethods <- if L.length fields > 1
             then CM.mapM toWithMethod fields
             else pure []
           cons <- constructor
-          let bodyDecls = memberVars ++ [cons, equalsMethod] ++ hashCode ++ withMethods :: [Java.ClassBodyDeclaration]
+          let bodyDecls = memberVars ++ [cons, equalsMethod, hashCodeMethod] ++ withMethods
           return $ javaClassDeclaration aliases elName topMods Nothing bodyDecls
         where
           constructor = do
@@ -113,7 +112,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                       other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
                       parent = nameToJavaReferenceType aliases False elName
 
-                  returnFalse = javaReturnStatement $ Just $ javaBoolean False
+                  returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
 
               castStmt = variableDeclarationStatement aliases elName id rhs
                 where
@@ -122,7 +121,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                     Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
 
               returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
-                  then javaBoolean True
+                  then javaBooleanExpression True
                   else javaConditionalAndExpressionToJavaExpression $
                     Java.ConditionalAndExpression (eqClause . fieldTypeName <$> fields)
                 where
@@ -134,14 +133,38 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                       header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
                       var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier fname)
 
-{-
-  @Override
-  public int hashCode() {
-    return 2 * integer.hashCode()
-        + 3 * fraction.hashCode()
-        + 5 * exponent.hashCode();
-  }
--}
+          hashCodeMethod = methodDeclaration mods [] anns "hashCode" [] result $ Just [returnSum]
+            where
+              anns = [overrideAnnotation]
+              mods = [Java.MethodModifierPublic]
+              result = javaTypeToResult javaIntType
+
+              returnSum = Java.BlockStatementStatement $ if L.null fields
+                then returnZero
+                else javaReturnStatement $ Just $
+                  javaAdditiveExpressionToJavaExpression $ addExpressions $
+                    L.zipWith multPair multipliers (fieldTypeName <$> fields)
+                where
+                  returnZero = javaReturnStatement $ Just $ javaIntExpression 0
+                  
+                  multPair :: Int -> FieldName -> Java.MultiplicativeExpression
+                  multPair i (FieldName fname) = Java.MultiplicativeExpressionTimes $
+                      Java.MultiplicativeExpression_Binary lhs rhs
+                    where
+                      lhs = Java.MultiplicativeExpressionUnary $ javaPrimaryToJavaUnaryExpression $
+                        javaLiteralToPrimary $ javaInt i
+                      rhs = javaPostfixExpressionToJavaUnaryExpression $
+                        javaMethodInvocationToJavaPostfixExpression $
+                        methodInvocation (Java.Identifier fname) (Java.Identifier "hashCode") []
+
+                  addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
+                  addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
+                    where
+                      add ae me = Java.AdditiveExpressionPlus $ Java.AdditiveExpression_Binary ae me
+
+                  multipliers = L.cycle first20Primes
+                    where
+                      first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
       TypeTermUnion fields -> do
           variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
