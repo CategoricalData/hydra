@@ -14,13 +14,13 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Rewriting
 import Hydra.Util.Coders
 import Hydra.Util.Formatting
+import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -146,6 +146,7 @@ encodeType aliases cx typ = case typeTerm typ of
 
 importAliasesForGraph g = M.empty -- TODO
 
+noAnnotations :: PDL.Annotations
 noAnnotations = PDL.Annotations Nothing False
 
 pdlNameForElement :: M.Map GraphName String -> Bool -> Name -> PDL.QualifiedName
@@ -161,41 +162,6 @@ pdlNameForGraph :: Graph m -> PDL.Namespace
 pdlNameForGraph = PDL.Namespace . slashesToDots . h . graphName
   where
     h (GraphName n) = n
-      
-pegasusDataLanguage :: Language m
-pegasusDataLanguage = Language (LanguageName "hydra/ext/pegasus/pdl") $ LanguageConstraints {
-  languageConstraintsEliminationVariants = S.empty,
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBinary,
-    LiteralVariantBoolean,
-    LiteralVariantFloat,
-    LiteralVariantInteger,
-    LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [
-    FloatTypeFloat32,
-    FloatTypeFloat64],
-  languageConstraintsFunctionVariants = S.empty,
-  languageConstraintsIntegerTypes = S.fromList [
-    IntegerTypeInt32,
-    IntegerTypeInt64],
-  languageConstraintsDataVariants = S.fromList [
-    DataVariantList,
-    DataVariantLiteral,
-    DataVariantMap,
-    DataVariantNominal,
-    DataVariantOptional,
-    DataVariantRecord,
-    DataVariantUnion],
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantElement,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantNominal,
-    TypeVariantOptional,
-    TypeVariantRecord,
-    TypeVariantUnion],
-  languageConstraintsTypes = const True }
 
 simpleUnionMember :: PDL.Schema -> PDL.UnionMember
 simpleUnionMember schema = PDL.UnionMember Nothing schema noAnnotations
