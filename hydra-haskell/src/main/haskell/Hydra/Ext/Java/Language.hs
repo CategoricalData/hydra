@@ -9,6 +9,8 @@ import qualified Data.Set as S
 
 javaLanguage :: Language m
 javaLanguage = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
+  languageConstraintsEliminationVariants = S.fromList eliminationVariants,
+  
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, -- boolean
     LiteralVariantFloat, -- (see float types)

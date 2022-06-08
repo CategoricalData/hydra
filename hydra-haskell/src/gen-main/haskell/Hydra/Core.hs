@@ -158,6 +158,48 @@ _DataVariant_union = (FieldName "union")
 
 _DataVariant_variable = (FieldName "variable")
 
+-- A corresponding elimination for an introduction term
+data Elimination m 
+  = EliminationElement 
+  | EliminationNominal Name
+  | EliminationOptional (OptionalCases m)
+  | EliminationRecord FieldName
+  | EliminationUnion [Field m]
+  deriving (Eq, Ord, Read, Show)
+
+_Elimination = (Name "hydra/core.Elimination")
+
+_Elimination_element = (FieldName "element")
+
+_Elimination_nominal = (FieldName "nominal")
+
+_Elimination_optional = (FieldName "optional")
+
+_Elimination_record = (FieldName "record")
+
+_Elimination_union = (FieldName "union")
+
+-- The identifier of an elimination constructor
+data EliminationVariant 
+  = EliminationVariantElement 
+  | EliminationVariantNominal 
+  | EliminationVariantOptional 
+  | EliminationVariantRecord 
+  | EliminationVariantUnion 
+  deriving (Eq, Ord, Read, Show)
+
+_EliminationVariant = (Name "hydra/core.EliminationVariant")
+
+_EliminationVariant_element = (FieldName "element")
+
+_EliminationVariant_nominal = (FieldName "nominal")
+
+_EliminationVariant_optional = (FieldName "optional")
+
+_EliminationVariant_record = (FieldName "record")
+
+_EliminationVariant_union = (FieldName "union")
+
 -- A labeled term
 data Field m 
   = Field {
@@ -228,6 +270,7 @@ data Function m
   | FunctionCompareTo (Data m)
   | FunctionDelta 
   | FunctionEliminateNominal Name
+  | FunctionElimination (Elimination m)
   | FunctionLambda (Lambda m)
   | FunctionOptionalCases (OptionalCases m)
   | FunctionPrimitive Name
@@ -243,6 +286,8 @@ _Function_compareTo = (FieldName "compareTo")
 _Function_delta = (FieldName "delta")
 
 _Function_eliminateNominal = (FieldName "eliminateNominal")
+
+_Function_elimination = (FieldName "elimination")
 
 _Function_lambda = (FieldName "lambda")
 
@@ -271,6 +316,7 @@ data FunctionVariant
   | FunctionVariantCompareTo 
   | FunctionVariantDelta 
   | FunctionVariantEliminateNominal 
+  | FunctionVariantElimination 
   | FunctionVariantLambda 
   | FunctionVariantOptionalCases 
   | FunctionVariantPrimitive 
@@ -286,6 +332,8 @@ _FunctionVariant_compareTo = (FieldName "compareTo")
 _FunctionVariant_delta = (FieldName "delta")
 
 _FunctionVariant_eliminateNominal = (FieldName "eliminateNominal")
+
+_FunctionVariant_elimination = (FieldName "elimination")
 
 _FunctionVariant_lambda = (FieldName "lambda")
 

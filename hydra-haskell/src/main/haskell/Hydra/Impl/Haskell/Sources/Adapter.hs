@@ -25,42 +25,6 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
     evaluation = nominal . qualify hydraEvaluationName . Name
 
     elements = [
-      
-      {-
-    
-data Adapter t v
-  = Adapter
-    { adapterIsLossy :: Bool
-    , adapterSource :: t
-    , adapterTarget :: t
-    , adapterStep :: Step v v }
-
-data AdapterContext a
-  = AdapterContext
-    { adapterContextEvaluation :: Context a
-    , adapterContextSource :: Language a
-    , adapterContextTarget :: Language a }
-
-data LanguageConstraints m
-  = LanguageConstraints
-    { languageConstraintsLiteralVariants :: (Set (LiteralVariant))
-    , languageConstraintsFloatTypes :: (Set (FloatType))
-    , languageConstraintsFunctionVariants :: (Set (FunctionVariant))
-    , languageConstraintsIntegerTypes :: (Set (IntegerType))
-    , languageConstraintsDataVariants :: (Set (DataVariant))
-    , languageConstraintsTypeVariants :: (Set (TypeVariant))
-    , languageConstraintsTypes :: Type m -> Bool }
-
-type Language_Name = String
-
-data Language m
-  = Language
-    { languageName :: Language_Name
-    , languageConstraints :: LanguageConstraints m }
-
-
-      -}
-      
       def "Adapter" $
         universal "t" $ universal "v" $ record [
           field "isLossy" boolean,
@@ -76,6 +40,7 @@ data Language m
           
       def "LanguageConstraints" $
         universal "m" $ record [
+          field "eliminationVariants" $ Types.set $ core "EliminationVariant",
           field "literalVariants" $ Types.set $ core "LiteralVariant",
           field "floatTypes" $ Types.set $ core "FloatType",
           field "functionVariants" $ Types.set $ core "FunctionVariant",

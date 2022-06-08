@@ -113,6 +113,7 @@ yamlCoder context typ = do
 
 yamlLanguage :: Language m
 yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
+  languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
