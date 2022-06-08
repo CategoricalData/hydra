@@ -15,6 +15,11 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
+addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
+  where
+    add ae me = Java.AdditiveExpressionPlus $ Java.AdditiveExpression_Binary ae me
+
 addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> Result Java.Type
 addJavaTypeParameter rt t = case t of
   Java.TypeReference (Java.ReferenceTypeClassOrInterface cit) -> case cit of
@@ -52,6 +57,8 @@ importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
     addName m name = M.insert name (graphNameToPackageName name) m
     graphNameToPackageName (GraphName n) = javaPackageName $ Strings.splitOn "/" n
 
+interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> [Char] -> [Java.FormalParameter]
+   -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
 interfaceMethodDeclaration mods tparams methodName params result stmts = Java.InterfaceMemberDeclarationInterfaceMethod $
     Java.InterfaceMethodDeclaration mods header $
     Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
@@ -104,17 +111,16 @@ javaConditionalAndExpressionToJavaExpression :: Java.ConditionalAndExpression ->
 javaConditionalAndExpressionToJavaExpression condAndEx = Java.ExpressionAssignment $
   Java.AssignmentExpressionConditional $ Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
 
-javaConstructorCall :: Name -> [Java.Expression] -> Java.Expression
-javaConstructorCall elName args = javaPrimaryToJavaExpression $
+javaConstructorCall :: Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Java.Expression
+javaConstructorCall ci args = javaPrimaryToJavaExpression $
   Java.PrimaryNoNewArray $
   Java.PrimaryNoNewArrayClassInstance $
   Java.ClassInstanceCreationExpression Nothing $
-  Java.UnqualifiedClassInstanceCreationExpression [] (javaConstructorName elName) args Nothing
+  Java.UnqualifiedClassInstanceCreationExpression [] ci args Nothing
 
-javaConstructorName :: Name -> Java.ClassOrInterfaceTypeToInstantiate
-javaConstructorName name = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
+javaConstructorName :: String -> Java.ClassOrInterfaceTypeToInstantiate
+javaConstructorName local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
   where
-    local = localNameOf name
     id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if S.member local javaReservedWords
       then local ++ "_"
       else local
@@ -135,6 +141,8 @@ javaEqualityExpressionToJavaInclusiveOrExpression eq = Java.InclusiveOrExpressio
 javaExpressionNameToJavaExpression :: Java.ExpressionName -> Java.Expression
 javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionName
 
+javaIdentifierToJavaExpression = javaUnaryExpressionToJavaExpression . javaIdentifierToJavaUnaryExpression
+
 javaIdentifierToJavaRelationalExpression :: Java.Identifier -> Java.RelationalExpression
 javaIdentifierToJavaRelationalExpression id = javaPostfixExpressionToJavaRelationalExpression $
   Java.PostfixExpressionName $ Java.ExpressionName Nothing id
@@ -153,6 +161,10 @@ javaIntExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . javaInt
 
 javaIntType :: Java.Type
 javaIntType = javaPrimitiveTypeToJavaType $ Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeInt
+
+javaInterfaceDeclarationToJavaClassBodyDeclaration :: Java.NormalInterfaceDeclaration -> Java.ClassBodyDeclaration
+javaInterfaceDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember .
+  Java.ClassMemberDeclarationInterface . Java.InterfaceDeclarationNormalInterface
 
 javaLangPackageName :: Maybe Java.PackageName
 javaLangPackageName = Just $ javaPackageName ["java", "lang"]
@@ -229,6 +241,11 @@ javaReturnStatement mex = Java.StatementWithoutTrailing $ Java.StatementWithoutT
 javaStatementsToBlock :: [Java.Statement] -> Java.Block
 javaStatementsToBlock stmts = Java.Block (Java.BlockStatementStatement <$> stmts)
 
+javaString = Java.LiteralString . Java.StringLiteral
+
+javaStringMultiplicativeExpression = Java.MultiplicativeExpressionUnary . javaPrimaryToJavaUnaryExpression .
+  javaLiteralToPrimary . javaString
+
 javaThis :: Java.Expression
 javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
@@ -300,12 +317,15 @@ methodDeclaration mods tparams anns methodName params result stmts =
     decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
     mthrows = Nothing
 
-methodInvocation :: Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
+methodInvocation :: Y.Maybe Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
 methodInvocation self methodName = Java.MethodInvocation header
   where
-    header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
-    targs = []
-    variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing self
+    header = case self of
+      Nothing -> Java.MethodInvocation_HeaderSimple $ Java.MethodName methodName
+      Just s -> Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
+        where
+          targs = []
+          variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing s
 
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
 nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
@@ -358,7 +378,7 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
       then Nothing
       else Just [Java.BlockStatementStatement $ javaReturnStatement $ Just returnExpr]
     returnExpr = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
-        methodInvocation (Java.Identifier varName) visitMethodName [javaThis]
+        methodInvocation (Just $ Java.Identifier varName) visitMethodName [javaThis]
 
 toAssignStmt :: FieldName -> Java.Statement
 toAssignStmt fname = javaAssignmentStatement lhs rhs

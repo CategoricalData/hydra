@@ -766,7 +766,7 @@ writeStaticInitializer :: Java.StaticInitializer -> CT.Expr
 writeStaticInitializer _ = cst "TODO:StaticInitializer"
 
 writeStringLiteral :: Java.StringLiteral -> CT.Expr
-writeStringLiteral _ = cst "TODO:StringLiteral"
+writeStringLiteral (Java.StringLiteral s) = cst $ show s
 
 writeSwitchStatement :: Java.SwitchStatement -> CT.Expr
 writeSwitchStatement _ = cst "TODO:SwitchStatement"
@@ -775,7 +775,7 @@ writeSynchronizedStatement :: Java.SynchronizedStatement -> CT.Expr
 writeSynchronizedStatement _ = cst "TODO:SynchronizedStatement"
 
 writeThrowStatement :: Java.ThrowStatement -> CT.Expr
-writeThrowStatement _ = cst "TODO:ThrowStatement"
+writeThrowStatement (Java.ThrowStatement ex) = suffixSemi $ spaceSep [cst "throw", writeExpression ex]
 
 writeThrows :: Java.Throws -> CT.Expr
 writeThrows _ = cst "TODO:Throws"

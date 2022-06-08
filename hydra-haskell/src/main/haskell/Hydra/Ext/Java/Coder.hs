@@ -81,7 +81,8 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             param <- fieldToFormalParam field
             let anns = [] -- TODO
             let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
-            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $ javaConstructorCall elName fieldArgs
+            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
+                  javaConstructorCall (javaConstructorName $ localNameOf elName) fieldArgs
             return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
           fieldToFormalParam (FieldType fname ft) = do
@@ -155,12 +156,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                         javaLiteralToPrimary $ javaInt i
                       rhs = javaPostfixExpressionToJavaUnaryExpression $
                         javaMethodInvocationToJavaPostfixExpression $
-                        methodInvocation (Java.Identifier fname) (Java.Identifier "hashCode") []
-
-                  addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
-                  addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
-                    where
-                      add ae me = Java.AdditiveExpressionPlus $ Java.AdditiveExpression_Binary ae me
+                        methodInvocation (Just $ Java.Identifier fname) (Java.Identifier "hashCode") []
 
                   multipliers = L.cycle first20Primes
                     where
@@ -169,12 +165,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       TypeTermUnion fields -> do
           variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
           let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
-          let bodyDecls = [privateConstructor, toAcceptMethod True, visitor] ++ variantDecls
+          let bodyDecls = [privateConstructor, toAcceptMethod True, visitor, partialVisitor] ++ variantDecls
           let mods = topMods ++ [Java.ClassModifierAbstract]
           return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
         where
           privateConstructor = makeConstructor aliases elName True [] []
-          partialVisitor = () -- TODO
           unionFieldClass (FieldType fname ftype) = do
             let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
             toClassDecl (variantClassName elName fname) rtype
@@ -185,8 +180,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             where
               newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
 
-          visitor = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationInterface $
-              Java.InterfaceDeclarationNormalInterface $
+          visitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
               Java.NormalInterfaceDeclaration mods ti tparams extends body
             where
               mods = [Java.InterfaceModifierPublic]
@@ -195,31 +189,48 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
               extends = []
               body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
                 where
-                  toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [param] result Nothing
+                  toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [variantInstanceParam fname] resultR Nothing
+
+          partialVisitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
+              Java.NormalInterfaceDeclaration {
+                  Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
+                  Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier "PartialVisitor",
+                  Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
+                  Java.normalInterfaceDeclarationExtends =
+                    [Java.InterfaceType $ javaClassType [javaTypeVariable "R"] Nothing "Visitor"],
+                  Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
+            where
+              otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
+                where
+                  throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
+                      Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
+                      javaConstructorCall (javaConstructorName "IllegalStateException") args
                     where
-                      param = javaTypeToJavaFormalParameter classRef (FieldName "instance")
-                        where
-                          classRef = javaClassTypeToJavaType $
-                            nameToJavaClassType aliases False $ variantClassName elName fname
-                      result = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
+                      args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
+                        javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
+                        Java.MultiplicativeExpressionUnary $ javaIdentifierToJavaUnaryExpression $ Java.Identifier "instance"]]
 
+              toVisitMethod fname = interfaceMethodDeclaration defaultMod [] "visit" [variantInstanceParam fname] resultR $
+                  Just [returnOtherwise]
+                where
+                  returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
+                    javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
+                    methodInvocation Nothing (Java.Identifier "otherwise") [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
 
+          defaultMod = [Java.InterfaceMethodModifierDefault]
 
-{-
-  public interface Visitor<R> {
-    R visit(Array instance) ;
+          resultR = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
 
-    R visit(BooleanEsc instance) ;
+          mainInstanceParam = javaTypeToJavaFormalParameter classRef (FieldName "instance")
+            where
+              classRef = javaClassTypeToJavaType $
+                nameToJavaClassType aliases False elName
 
-    R visit(Null instance) ;
+          variantInstanceParam fname = javaTypeToJavaFormalParameter classRef (FieldName "instance")
+            where
+              classRef = javaClassTypeToJavaType $
+                nameToJavaClassType aliases False $ variantClassName elName fname
 
-    R visit(NumberEsc instance) ;
-
-    R visit(ObjectEsc instance) ;
-
-    R visit(StringEsc instance) ;
-  }
--}
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
         (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
         return $ Java.ClassDeclarationNormal $ cd {
@@ -234,38 +245,6 @@ isUnit t = typeTerm t  == TypeTermRecord []
 
 variantClassName :: Name -> FieldName -> Name
 variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname
-
-{-
-  public static final class StringEsc extends Value {
-    public final String string;
-
-    /**
-     * Constructs an immutable StringEsc object
-     */
-    public StringEsc(String string) {
-      this.string = string;
-    }
-
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof StringEsc)) {
-          return false;
-      }
-      StringEsc o = (StringEsc) other;
-      return string.equals(o.string);
-    }
-
-    @Override
-    public int hashCode() {
-      return 2 * string.hashCode();
-    }
-  }
--}
 
 -- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
