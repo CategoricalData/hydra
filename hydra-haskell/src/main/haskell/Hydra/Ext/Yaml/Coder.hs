@@ -8,15 +8,14 @@ import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Steps
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
-import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -110,21 +109,6 @@ yamlCoder context typ = do
     return $ composeSteps (adapterStep adapter) coder
   where
     adContext = AdapterContext context hydraCoreLanguage yamlLanguage
-
-yamlLanguage :: Language m
-yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
-  languageConstraintsEliminationVariants = S.empty,
-  languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
-  languageConstraintsFunctionVariants = S.empty,
-  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-  languageConstraintsDataVariants = S.fromList termVariants,
-  languageConstraintsTypeVariants = S.fromList [
-    TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case typeTerm typ of
-    TypeTermOptional (Type (TypeTermOptional _) _) -> False
-    _ -> True }
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull
