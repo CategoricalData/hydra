@@ -48,6 +48,9 @@ writeAnnotation ann = case ann of
   Java.AnnotationMarker m -> writeMarkerAnnotation m
   Java.AnnotationSingleElement s -> writeSingleElementAnnotation s
 
+writeAnnotationTypeDeclaration :: Java.AnnotationTypeDeclaration -> CT.Expr
+writeAnnotationTypeDeclaration _ = cst "TODO:AnnotationTypeDeclaration"
+
 writeArrayAccess :: Java.ArrayAccess -> CT.Expr
 writeArrayAccess _ = cst "TODO:ArrayAccess"
 
@@ -225,6 +228,9 @@ writeConditionalOrExpression :: Java.ConditionalOrExpression -> CT.Expr
 writeConditionalOrExpression (Java.ConditionalOrExpression ands)
   = infixWsList "||" (writeConditionalAndExpression <$> ands)
 
+writeConstantDeclaration :: Java.ConstantDeclaration -> CT.Expr
+writeConstantDeclaration _ = cst "TODO:ConstantDeclaration"
+
 writeConstructorBody :: Java.ConstructorBody -> CT.Expr
 writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [
   writeExplicitConstructorInvocation <$> minvoc,
@@ -385,8 +391,47 @@ writeIntegralType t = cst $ case t of
   Java.IntegralTypeLong -> "long"
   Java.IntegralTypeChar -> "char"
 
+writeInterfaceBody :: Java.InterfaceBody -> CT.Expr
+writeInterfaceBody (Java.InterfaceBody decls) = curlyBlock fullBlockStyle $ doubleNewlineSep
+  (writeInterfaceMemberDeclaration <$> decls)
+
 writeInterfaceDeclaration :: Java.InterfaceDeclaration -> CT.Expr
-writeInterfaceDeclaration d = cst "TODO:InterfaceDeclaration"
+writeInterfaceDeclaration d = case d of
+  Java.InterfaceDeclarationNormalInterface n -> writeNormalInterfaceDeclaration n
+  Java.InterfaceDeclarationAnnotationType a -> writeAnnotationTypeDeclaration a
+
+writeInterfaceMemberDeclaration :: Java.InterfaceMemberDeclaration -> CT.Expr
+writeInterfaceMemberDeclaration d = case d of
+  Java.InterfaceMemberDeclarationConstant c -> writeConstantDeclaration c
+  Java.InterfaceMemberDeclarationInterfaceMethod im -> writeInterfaceMethodDeclaration im
+  Java.InterfaceMemberDeclarationClass cd -> writeClassDeclaration cd
+  Java.InterfaceMemberDeclarationInterface id -> writeInterfaceDeclaration id
+
+writeInterfaceMethodDeclaration :: Java.InterfaceMethodDeclaration -> CT.Expr
+writeInterfaceMethodDeclaration (Java.InterfaceMethodDeclaration mods header body) = spaceSep $ Y.catMaybes [
+      if L.null mods then Nothing else Just $ spaceSep (writeInterfaceMethodModifier <$> mods),
+      Just $ writeMethodHeader header,
+      Just $ writeMethodBody body]
+
+writeInterfaceMethodModifier :: Java.InterfaceMethodModifier -> CT.Expr
+writeInterfaceMethodModifier m = case m of
+  Java.InterfaceMethodModifierAnnotation a -> writeAnnotation a
+  Java.InterfaceMethodModifierPublic -> cst "public"
+  Java.InterfaceMethodModifierPrivate -> cst "private"
+  Java.InterfaceMethodModifierAbstract -> cst "abstract"
+  Java.InterfaceMethodModifierDefault -> cst "default"
+  Java.InterfaceMethodModifierStatic -> cst "static"
+  Java.InterfaceMethodModifierStrictfp -> cst "strictfp"
+
+writeInterfaceModifier :: Java.InterfaceModifier -> CT.Expr
+writeInterfaceModifier m = case m of
+  Java.InterfaceModifierAnnotation a -> writeAnnotation a
+  Java.InterfaceModifierPublic -> cst "public"
+  Java.InterfaceModifierProtected -> cst "protected"
+  Java.InterfaceModifierPrivate -> cst "private"
+  Java.InterfaceModifierAbstract -> cst "abstract"
+  Java.InterfaceModifierStatic -> cst "static"
+  Java.InterfaceModifierStrictfb -> cst "strictfb"
 
 writeInterfaceType :: Java.InterfaceType -> CT.Expr
 writeInterfaceType (Java.InterfaceType ct) = writeClassType ct
@@ -537,6 +582,23 @@ writeNormalClassDeclaration (Java.NormalClassDeclaration mods id tparams msuperc
       then Nothing
       else Just $ spaceSep [cst "implements", commaSep inlineStyle (writeInterfaceType <$> superi)]
     bodySec = Just $ writeClassBody body
+
+writeNormalInterfaceDeclaration :: Java.NormalInterfaceDeclaration -> CT.Expr
+writeNormalInterfaceDeclaration (Java.NormalInterfaceDeclaration mods id tparams extends body) =
+    spaceSep $ Y.catMaybes [modSec, classSec, idSec, extendsSec, bodySec]
+  where
+    modSec = if L.null mods
+      then Nothing
+      else Just $ spaceSep (writeInterfaceModifier <$> mods)
+    classSec = Just $ cst "interface"
+    idSec = Just $ noSep $ Y.catMaybes [Just $ writeTypeIdentifier id, params]
+      where
+        params = if L.null tparams
+          then Nothing
+          else Just $ angleBracesList inlineStyle (writeTypeParameter <$> tparams)
+    extendsSec = if L.null extends then Nothing else Just $
+      spaceSep [cst "extends", commaSep inlineStyle (writeInterfaceType <$> extends)]
+    bodySec = Just $ writeInterfaceBody body
 
 writeNumericType :: Java.NumericType -> CT.Expr
 writeNumericType nt = case nt of

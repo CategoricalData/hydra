@@ -738,7 +738,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --InterfaceBody:
 --  { {InterfaceMemberDeclaration} }
-      def "InterfaceBody" $ list $ list $ java "InterfaceMemberDeclaration",
+      def "InterfaceBody" $ list $ java "InterfaceMemberDeclaration",
 
 --InterfaceMemberDeclaration:
       def "InterfaceMemberDeclaration" $ union [

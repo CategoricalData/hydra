@@ -52,6 +52,14 @@ importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
     addName m name = M.insert name (graphNameToPackageName name) m
     graphNameToPackageName (GraphName n) = javaPackageName $ Strings.splitOn "/" n
 
+interfaceMethodDeclaration mods tparams methodName params result stmts = Java.InterfaceMemberDeclarationInterfaceMethod $
+    Java.InterfaceMethodDeclaration mods header $
+    Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
+  where
+    header = Java.MethodHeader tparams result decl mthrows
+    decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
+    mthrows = Nothing
+
 javaAssignmentStatement :: Java.LeftHandSide -> Java.Expression -> Java.Statement
 javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementExpression $
     Java.ExpressionStatement $ Java.StatementExpressionAssignment ass
@@ -73,7 +81,8 @@ javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.C
   where
     rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
 
-javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
+javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name
+   -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
 javaClassDeclaration aliases elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
   Java.normalClassDeclarationIdentifier = javaDeclName elName,
@@ -87,6 +96,9 @@ javaClassType args pkg id = Java.ClassType [] qual (javaTypeIdentifier id) targs
   where
     qual = maybe Java.ClassTypeQualifierNone Java.ClassTypeQualifierPackage pkg
     targs = Java.TypeArgumentReference <$> args
+
+javaClassTypeToJavaType :: Java.ClassType -> Java.Type
+javaClassTypeToJavaType = Java.TypeReference . Java.ReferenceTypeClassOrInterface . Java.ClassOrInterfaceTypeClass
 
 javaConditionalAndExpressionToJavaExpression :: Java.ConditionalAndExpression -> Java.Expression
 javaConditionalAndExpressionToJavaExpression condAndEx = Java.ExpressionAssignment $
@@ -151,6 +163,9 @@ javaLiteralToPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayLiteral
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
   Java.FieldDeclaration mods (Java.UnannType jt) [var]
+
+javaMethodDeclarationToJavaClassBodyDeclaration :: Java.MethodDeclaration -> Java.ClassBodyDeclaration
+javaMethodDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationMethod
 
 javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
 javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
@@ -241,8 +256,8 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
 
-javaTypeToResult :: Java.Type -> Java.Result
-javaTypeToResult = Java.ResultType . Java.UnannType
+javaTypeToJavaResult :: Java.Type -> Java.Result
+javaTypeToJavaResult = Java.ResultType . Java.UnannType
 
 javaUnaryExpressionToJavaExpression :: Java.UnaryExpression -> Java.Expression
 javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
@@ -254,6 +269,7 @@ javaUnaryExpressionToJavaRelationalExpression = Java.RelationalExpressionSimple 
   Java.AdditiveExpressionUnary .
   Java.MultiplicativeExpressionUnary
 
+javaAdditiveExpressionToJavaExpression :: Java.AdditiveExpression -> Java.Expression
 javaAdditiveExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
   Java.RelationalExpressionSimple . Java.ShiftExpressionUnary
 
@@ -273,10 +289,10 @@ makeConstructor aliases elName private params stmts = Java.ClassBodyDeclarationC
     mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
     body = Java.ConstructorBody Nothing stmts
 
-methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
-  -> [Java.FormalParameter] -> Java.Result -> Y.Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration
-methodDeclaration mods tparams anns methodName params result stmts = Java.ClassBodyDeclarationClassMember $
-    Java.ClassMemberDeclarationMethod $
+methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> [Char]
+  -> [Java.FormalParameter] -> Java.Result -> Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration
+methodDeclaration mods tparams anns methodName params result stmts =
+    javaMethodDeclarationToJavaClassBodyDeclaration $
     Java.MethodDeclaration anns mods header $
     Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
   where
@@ -317,7 +333,7 @@ overrideAnnotation :: Java.Annotation
 overrideAnnotation = Java.AnnotationMarker $ Java.MarkerAnnotation $ javaTypeName $ Java.Identifier "Override"
 
 referenceTypeToResult :: Java.ReferenceType -> Java.Result
-referenceTypeToResult = javaTypeToResult . Java.TypeReference
+referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
 
 toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
 toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body
@@ -329,13 +345,13 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
       else [overrideAnnotation]
     param = javaTypeToJavaFormalParameter ref (FieldName varName)
       where
-        ref = Java.TypeReference $ Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+        ref = javaClassTypeToJavaType $
           Java.ClassType
             []
             Java.ClassTypeQualifierNone
             (javaTypeIdentifier "Visitor")
             [Java.TypeArgumentReference $ javaTypeVariable "R"]
-    result = javaTypeToResult $ Java.TypeReference $ javaTypeVariable "R"
+    result = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
     varName = "visitor"
     visitMethodName = Java.Identifier "visit"
     body = if abstract

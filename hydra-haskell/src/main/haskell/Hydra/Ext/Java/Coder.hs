@@ -96,7 +96,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
               anns = [overrideAnnotation]
               mods = [Java.MethodModifierPublic]
               param = javaTypeToJavaFormalParameter (javaRefType [] Nothing "Object") (FieldName otherName)
-              result = javaTypeToResult javaBooleanType
+              result = javaTypeToJavaResult javaBooleanType
               otherName = "other"
               tmpName = "o"
 
@@ -137,7 +137,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             where
               anns = [overrideAnnotation]
               mods = [Java.MethodModifierPublic]
-              result = javaTypeToResult javaIntType
+              result = javaTypeToJavaResult javaIntType
 
               returnSum = Java.BlockStatementStatement $ if L.null fields
                 then returnZero
@@ -146,7 +146,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                     L.zipWith multPair multipliers (fieldTypeName <$> fields)
                 where
                   returnZero = javaReturnStatement $ Just $ javaIntExpression 0
-                  
+
                   multPair :: Int -> FieldName -> Java.MultiplicativeExpression
                   multPair i (FieldName fname) = Java.MultiplicativeExpressionTimes $
                       Java.MultiplicativeExpression_Binary lhs rhs
@@ -169,16 +169,15 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
       TypeTermUnion fields -> do
           variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
           let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
-          let bodyDecls = [privateConstructor, toAcceptMethod True] ++ variantDecls
+          let bodyDecls = [privateConstructor, toAcceptMethod True, visitor] ++ variantDecls
           let mods = topMods ++ [Java.ClassModifierAbstract]
           return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
         where
           privateConstructor = makeConstructor aliases elName True [] []
-          visitor = () -- TODO
           partialVisitor = () -- TODO
-          unionFieldClass (FieldType (FieldName fname) ftype) = do
+          unionFieldClass (FieldType fname ftype) = do
             let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
-            toClassDecl (fromQname (graphNameOf elName) $ capitalize fname) rtype
+            toClassDecl (variantClassName elName fname) rtype
           augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
               Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
               Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True elName,
@@ -186,6 +185,41 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
             where
               newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
 
+          visitor = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationInterface $
+              Java.InterfaceDeclarationNormalInterface $
+              Java.NormalInterfaceDeclaration mods ti tparams extends body
+            where
+              mods = [Java.InterfaceModifierPublic]
+              ti = Java.TypeIdentifier $ Java.Identifier "Visitor"
+              tparams = [javaTypeParameter "R"]
+              extends = []
+              body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
+                where
+                  toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [param] result Nothing
+                    where
+                      param = javaTypeToJavaFormalParameter classRef (FieldName "instance")
+                        where
+                          classRef = javaClassTypeToJavaType $
+                            nameToJavaClassType aliases False $ variantClassName elName fname
+                      result = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
+
+
+
+{-
+  public interface Visitor<R> {
+    R visit(Array instance) ;
+
+    R visit(BooleanEsc instance) ;
+
+    R visit(Null instance) ;
+
+    R visit(NumberEsc instance) ;
+
+    R visit(ObjectEsc instance) ;
+
+    R visit(StringEsc instance) ;
+  }
+-}
       TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
         (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
         return $ Java.ClassDeclarationNormal $ cd {
@@ -195,7 +229,11 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
 
     topMods = [Java.ClassModifierPublic]
 
+isUnit :: Eq m => Type m -> Bool
 isUnit t = typeTerm t  == TypeTermRecord []
+
+variantClassName :: Name -> FieldName -> Name
+variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname
 
 {-
   public static final class StringEsc extends Value {
