@@ -7,6 +7,15 @@ import qualified Hydra.Lib.Strings as Strings
 import Data.Map
 import Data.Set
 
+-- All elimination variants (constructors), in a canonical order
+eliminationVariants :: [Core.EliminationVariant]
+eliminationVariants = [
+  Core.EliminationVariantElement,
+  Core.EliminationVariantNominal,
+  Core.EliminationVariantOptional,
+  Core.EliminationVariantRecord,
+  Core.EliminationVariantUnion]
+
 -- Find the precision of a given floating-point type
 floatTypePrecision :: (Core.FloatType -> Core.Precision)
 floatTypePrecision x = case x of
@@ -45,6 +54,8 @@ functionVariants = [
   Core.FunctionVariantCases,
   Core.FunctionVariantCompareTo,
   Core.FunctionVariantDelta,
+  Core.FunctionVariantEliminateNominal,
+  Core.FunctionVariantElimination,
   Core.FunctionVariantLambda,
   Core.FunctionVariantOptionalCases,
   Core.FunctionVariantPrimitive,

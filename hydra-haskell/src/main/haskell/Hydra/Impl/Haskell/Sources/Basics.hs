@@ -17,6 +17,7 @@ hydraBasicsName = GraphName "hydra/basics"
 
 hydraBasics :: Graph Meta
 hydraBasics = standardGraph hydraBasicsName [
+  eliminationVariants,
   floatTypePrecision,
   floatTypes,
   floatValueType,
@@ -36,6 +37,17 @@ hydraBasics = standardGraph hydraBasicsName [
   testLists,
   typeVariant,
   typeVariants]
+
+eliminationVariants :: Element Meta
+eliminationVariants = standardElement hydraBasicsName "eliminationVariants"
+    "All elimination variants (constructors), in a canonical order"
+    (Types.list $ Types.nominal _EliminationVariant)
+    (list $ standardWithType (Types.nominal _EliminationVariant) . unitVariant <$> [
+      _EliminationVariant_element,
+      _EliminationVariant_nominal,
+      _EliminationVariant_optional,
+      _EliminationVariant_record,
+      _EliminationVariant_union])
 
 floatTypePrecision :: Element Meta
 floatTypePrecision = standardFunction hydraBasicsName "floatTypePrecision"
@@ -85,11 +97,13 @@ functionVariants = standardElement hydraBasicsName "functionVariants"
       _FunctionVariant_cases,
       _FunctionVariant_compareTo,
       _FunctionVariant_delta,
+      _FunctionVariant_eliminateNominal,
+      _FunctionVariant_elimination,
       _FunctionVariant_lambda,
       _FunctionVariant_optionalCases,
       _FunctionVariant_primitive,
       _FunctionVariant_projection])
-
+          
 integerTypeIsSigned :: Element Meta
 integerTypeIsSigned = standardFunction hydraBasicsName "integerTypeIsSigned"
   "Find whether a given integer type is signed (true) or unsigned (false)"

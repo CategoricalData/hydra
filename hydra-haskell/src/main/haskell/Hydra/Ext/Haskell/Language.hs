@@ -9,6 +9,7 @@ import qualified Data.Set as S
 
 haskellLanguage :: Language m
 haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
+  languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [

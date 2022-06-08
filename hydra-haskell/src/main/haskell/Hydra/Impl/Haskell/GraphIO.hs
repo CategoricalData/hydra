@@ -4,7 +4,8 @@ module Hydra.Impl.Haskell.GraphIO (
   generatePdl,
   generateScala,
   coreModules,
-  
+
+  singleModule,
   testModules,
   javaTestModules,
 ) where
@@ -99,7 +100,9 @@ coreModules = [
   tinkerpopV3Module,
   xmlSchemaModule]
 
--- TODO: remove me eventually. Handy for debugging.
+-- TODO: remove these eventually. They are handy for debugging.
+singleModule :: [Module Meta]
+singleModule = [hydraCoreModule, hydraAdapterModule, hydraBasicsModule]
 testModules :: [Module Meta]
 testModules = [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
 javaTestModules :: [Module Meta]

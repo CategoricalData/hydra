@@ -15,6 +15,8 @@ import qualified Data.Maybe as Y
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
 tinkerpopLanguage :: LanguageName -> Features -> ExtraFeatures m -> Language m
 tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
+    languageConstraintsEliminationVariants = S.empty,
+
     languageConstraintsLiteralVariants = S.fromList $ Y.catMaybes [
       -- Binary values map to byte arrays. Lists of uint8 also map to byte arrays.
       cond LiteralVariantBinary (dataTypeFeaturesSupportsByteArrayValues vpFeatures),

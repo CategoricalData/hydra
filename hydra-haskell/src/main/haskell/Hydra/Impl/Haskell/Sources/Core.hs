@@ -114,6 +114,34 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "union",
           "variable"],
 
+      def "Elimination" $
+        doc "A corresponding elimination for an introduction term" $
+        universal "m" $ union [
+          field "element" $
+            doc "Eliminates an element by mapping it to its data term. This is Hydra's delta function."
+            unit,
+          field "nominal" $
+            doc "Eliminates a nominal term by extracting the wrapped term" $
+            core "Name",
+          field "optional" $
+            doc "Eliminates an optional term by matching over the two possible cases" $
+            universal "m" $ core "OptionalCases",
+          field "record" $
+            doc "Eliminates a record by projecting a given field" $
+            core "FieldName",
+          field "union" $
+            doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
+            list $ universal "m" $ core "Field"],
+
+      def "EliminationVariant" $
+        doc "The identifier of an elimination constructor" $
+        enum [
+          "element",
+          "nominal",
+          "optional",
+          "record",
+          "union"],
+
       def "Field" $
         doc "A labeled term" $
         universal "m" $ record [
@@ -159,6 +187,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "eliminateNominal" $
             doc "Eliminate a nominal term" $
             core "Name",
+          field "elimination" $
+            doc "An elimination for any of a few term variants" $
+            universal "m" $ core "Elimination",
           field "lambda" $
             doc "A function abstraction (lambda)" $
             universal "m" $ core "Lambda",
@@ -185,6 +216,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "compareTo",
           "delta",
           "eliminateNominal",
+          "elimination",
           "lambda",
           "optionalCases",
           "primitive",
