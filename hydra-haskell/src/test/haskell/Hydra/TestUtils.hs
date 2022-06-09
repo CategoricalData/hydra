@@ -19,10 +19,7 @@ import Hydra.TestGraph
 import Hydra.Adapters.Atomic
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Basics
 import Hydra.Steps
-import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
 
 import qualified Data.Set as S

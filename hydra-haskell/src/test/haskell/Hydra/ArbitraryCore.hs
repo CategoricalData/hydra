@@ -133,7 +133,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     whenEqual = [FunctionCompareTo <$> arbitraryData dom n' | dom == cod]
     domainSpecific = case typeTerm dom of
-      TypeTermUnion sfields -> [FunctionCases <$> CM.mapM arbitraryCase sfields]
+      TypeTermUnion sfields -> [FunctionElimination . EliminationUnion <$> CM.mapM arbitraryCase sfields]
         where
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
