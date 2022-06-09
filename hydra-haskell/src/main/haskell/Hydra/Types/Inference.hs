@@ -75,6 +75,8 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
       dataMeta = (dataMeta term, typ, constraints)}
 
     yieldFunction fun = yield (DataTermFunction fun)
+    
+    yieldElimination e = yield (DataTermFunction $ FunctionElimination e)
 
     inferInternal = case dataTerm term of
       DataTermApplication (Application fun arg) -> do
@@ -92,15 +94,6 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
           ResultFailure msg -> error msg
 
       DataTermFunction f -> case f of
-        FunctionCases cases -> do
-            icases <- CM.mapM (inferFieldType cx) cases
-            cod <- freshTypeVariable
-            doms <- CM.mapM (\_ -> freshTypeVariable) cases
-            let ftypes = termType . fieldData <$> icases
-            let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
-            let innerConstraints = L.concat (termConstraints . fieldData <$> icases)
-            let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
-            yieldFunction (FunctionCases icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
 
         -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
         --       For the latter, Comparison would have to be added to the literal type grammar.
@@ -108,15 +101,43 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
           i <- infer cx other
           yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
 
-        FunctionDelta -> do
-          et <- freshTypeVariable
-          yieldFunction FunctionDelta (Types.function (Types.element et) et) []
-
-        FunctionEliminateNominal name -> do
-          case namedType cx name of
-            ResultFailure msg -> error msg
-            ResultSuccess typ -> yieldFunction (FunctionEliminateNominal name) (Types.function (Types.nominal name) typ) []  
+        FunctionElimination e -> case e of
           
+          EliminationElement -> do
+            et <- freshTypeVariable
+            yieldElimination EliminationElement (Types.function (Types.element et) et) []
+  
+          EliminationNominal name -> do
+            case namedType cx name of
+              ResultFailure msg -> error msg
+              ResultSuccess typ -> yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []  
+            
+          EliminationOptional (OptionalCases n j) -> do
+            dom <- freshTypeVariable
+            cod <- freshTypeVariable
+            ni <- infer cx n
+            ji <- infer cx j
+            let t = Types.function (Types.optional dom) cod
+            let constraints = [(cod, termType ni), (Types.function dom cod, termType ji)]
+            yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
+            
+          -- Note: type inference cannot recover complete record types from projections; type annotations are needed
+          EliminationRecord fname -> do
+            dom <- freshTypeVariable
+            cod <- freshTypeVariable
+            let ftype = Types.function (Types.record [FieldType fname dom]) cod
+            yieldElimination (EliminationRecord fname) ftype []
+
+          EliminationUnion cases -> do
+              icases <- CM.mapM (inferFieldType cx) cases
+              cod <- freshTypeVariable
+              doms <- CM.mapM (\_ -> freshTypeVariable) cases
+              let ftypes = termType . fieldData <$> icases
+              let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
+              let innerConstraints = L.concat (termConstraints . fieldData <$> icases)
+              let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
+              yieldElimination (EliminationUnion icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
+
         FunctionLambda (Lambda v body) -> do
           tv <- freshTypeVariable
           i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
@@ -126,15 +147,6 @@ infer cx term = case contextTypeOf cx (dataMeta term) of
           case typeOfPrimitiveFunction cx name of
             ResultSuccess (FunctionType dom cod) -> yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
             ResultFailure msg -> error msg
-
-        -- Note: type inference cannot recover complete record types from projections; type annotations are needed
-        FunctionProjection fname -> do
-          dom <- freshTypeVariable
-          cod <- freshTypeVariable
-          let ftype = Types.function (Types.record [FieldType fname dom]) cod
-          yieldFunction (FunctionProjection fname) ftype []
-
-        _ -> error $ "type inference is unsupported for function: " ++ show f
 
       DataTermLet (Let x e1 e2) -> do
         env <- ask

@@ -266,36 +266,21 @@ _FloatValue_float64 = (FieldName "float64")
 
 -- A function
 data Function m 
-  = FunctionCases [Field m]
-  | FunctionCompareTo (Data m)
-  | FunctionDelta 
-  | FunctionEliminateNominal Name
+  = FunctionCompareTo (Data m)
   | FunctionElimination (Elimination m)
   | FunctionLambda (Lambda m)
-  | FunctionOptionalCases (OptionalCases m)
   | FunctionPrimitive Name
-  | FunctionProjection FieldName
   deriving (Eq, Ord, Read, Show)
 
 _Function = (Name "hydra/core.Function")
 
-_Function_cases = (FieldName "cases")
-
 _Function_compareTo = (FieldName "compareTo")
-
-_Function_delta = (FieldName "delta")
-
-_Function_eliminateNominal = (FieldName "eliminateNominal")
 
 _Function_elimination = (FieldName "elimination")
 
 _Function_lambda = (FieldName "lambda")
 
-_Function_optionalCases = (FieldName "optionalCases")
-
 _Function_primitive = (FieldName "primitive")
-
-_Function_projection = (FieldName "projection")
 
 -- A function type, also known as an arrow type
 data FunctionType m 
@@ -312,36 +297,21 @@ _FunctionType_codomain = (FieldName "codomain")
 
 -- The identifier of a function constructor
 data FunctionVariant 
-  = FunctionVariantCases 
-  | FunctionVariantCompareTo 
-  | FunctionVariantDelta 
-  | FunctionVariantEliminateNominal 
+  = FunctionVariantCompareTo 
   | FunctionVariantElimination 
   | FunctionVariantLambda 
-  | FunctionVariantOptionalCases 
   | FunctionVariantPrimitive 
-  | FunctionVariantProjection 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = (Name "hydra/core.FunctionVariant")
 
-_FunctionVariant_cases = (FieldName "cases")
-
 _FunctionVariant_compareTo = (FieldName "compareTo")
-
-_FunctionVariant_delta = (FieldName "delta")
-
-_FunctionVariant_eliminateNominal = (FieldName "eliminateNominal")
 
 _FunctionVariant_elimination = (FieldName "elimination")
 
 _FunctionVariant_lambda = (FieldName "lambda")
 
-_FunctionVariant_optionalCases = (FieldName "optionalCases")
-
 _FunctionVariant_primitive = (FieldName "primitive")
-
-_FunctionVariant_projection = (FieldName "projection")
 
 -- An integer type
 data IntegerType 

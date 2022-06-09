@@ -76,36 +76,37 @@ encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> 
 encodeFunction cx meta fun arg = case fun of
     FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeData cx body <*> (findSdom meta)
     FunctionPrimitive name -> pure $ sprim name
-    FunctionCases cases -> do
-        let v = "v"
-        dom <- findDomain meta
-        scx <- schemaContext cx
-        ftypes <- fieldTypes scx dom
-        let sn = nameOfType dom
-        scases <- CM.mapM (encodeCase ftypes sn cx) cases
-        case arg of
-          Nothing -> slambda v <$> pure (Scala.DataMatch $ Scala.Data_Match (sname v) scases) <*> findSdom meta
-          Just a -> do
-            sa <- encodeData cx a
-            return $ Scala.DataMatch $ Scala.Data_Match sa scases
-      where
-        encodeCase ftypes sn cx f@(Field fname fterm) = do
---            dom <- findDomain (dataMeta fterm)           -- Option #1: use type inference
-            let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
-            let patArgs = if dom == Types.unit then [] else [svar v]
-            -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
-            let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
-            body <- encodeData cx $ applyVar fterm v
-            return $ Scala.Case pat Nothing body
-          where
-            v = Variable "y"
-        applyVar fterm var@(Variable v) = case dataTerm fterm of
-          DataTermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
-            then body
-            else substituteVariable v1 var body
-          _ -> apply fterm (variable v)
-    FunctionDelta -> pure $ sname "DATA" -- TODO
-    FunctionProjection fname -> fail $ "unapplied projection not yet supported"
+    FunctionElimination e -> case e of
+      EliminationElement -> pure $ sname "DATA" -- TODO
+      EliminationRecord fname -> fail $ "unapplied projection not yet supported"
+      EliminationUnion cases -> do
+          let v = "v"
+          dom <- findDomain meta
+          scx <- schemaContext cx
+          ftypes <- fieldTypes scx dom
+          let sn = nameOfType dom
+          scases <- CM.mapM (encodeCase ftypes sn cx) cases
+          case arg of
+            Nothing -> slambda v <$> pure (Scala.DataMatch $ Scala.Data_Match (sname v) scases) <*> findSdom meta
+            Just a -> do
+              sa <- encodeData cx a
+              return $ Scala.DataMatch $ Scala.Data_Match sa scases
+        where
+          encodeCase ftypes sn cx f@(Field fname fterm) = do
+  --            dom <- findDomain (dataMeta fterm)           -- Option #1: use type inference
+              let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
+              let patArgs = if dom == Types.unit then [] else [svar v]
+              -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
+              let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
+              body <- encodeData cx $ applyVar fterm v
+              return $ Scala.Case pat Nothing body
+            where
+              v = Variable "y"
+          applyVar fterm var@(Variable v) = case dataTerm fterm of
+            DataTermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
+              then body
+              else substituteVariable v1 var body
+            _ -> apply fterm (variable v)
     _ -> fail $ "unexpected function: " ++ show fun
   where
     findSdom meta = Just <$> (findDomain meta >>= encodeType)
@@ -142,12 +143,13 @@ encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Data m ->
 encodeData cx term@(Data expr meta) = case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
         DataTermFunction f -> case f of
-          FunctionCases _ -> encodeFunction cx (dataMeta fun) f (Just arg)
-          FunctionDelta -> encodeData cx arg
-          FunctionProjection (FieldName fname) -> do
-            sarg <- encodeData cx arg
-            return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
-              (Scala.Data_Name $ Scala.PredefString fname)
+          FunctionElimination e -> case e of
+            EliminationElement -> encodeData cx arg
+            EliminationRecord (FieldName fname) -> do
+              sarg <- encodeData cx arg
+              return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
+                (Scala.Data_Name $ Scala.PredefString fname)
+            EliminationUnion _ -> encodeFunction cx (dataMeta fun) f (Just arg)
           _ -> fallback
         _ -> fallback
       where

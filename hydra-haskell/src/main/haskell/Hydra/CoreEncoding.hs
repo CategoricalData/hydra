@@ -1,5 +1,6 @@
 module Hydra.CoreEncoding (
     encodeApplication,
+    encodeElimination,
     encodeLiteralType,
     encodeLiteral,
     encodeLiteralVariant,
@@ -29,6 +30,14 @@ encodeApplication :: (Default m, Ord m) => Context m -> Application m -> Data m
 encodeApplication cx (Application f a) = nominalRecord cx _Application [
   Field _Application_function $ encodeData cx f,
   Field _Application_argument $ encodeData cx f]
+
+encodeElimination :: (Default m, Ord m) => Context m -> Elimination m -> Data m
+encodeElimination cx e = case e of
+  EliminationElement -> unitVariant _Elimination_element
+  EliminationNominal (Name name) -> variant _Elimination_nominal $ stringValue name
+  EliminationOptional cases -> variant _Elimination_optional $ encodeOptionalCases cx cases
+  EliminationRecord (FieldName fname) -> variant _Elimination_record $ stringValue fname
+  EliminationUnion cases -> variant _Elimination_union $ list $ encodeField cx <$> cases
 
 encodeLiteralType :: Default m => Context m -> LiteralType -> Data m
 encodeLiteralType cx at = case at of
@@ -67,13 +76,10 @@ encodeFloatType cx ft = unitVariant $ case ft of
 
 encodeFunction :: (Default m, Ord m) => Context m -> Function m -> Data m
 encodeFunction cx f = case f of
-  FunctionCases cases -> variant _Function_cases $ list $ encodeField cx <$> cases
   FunctionCompareTo other -> variant _Function_compareTo $ encodeData cx other
-  FunctionDelta -> unitVariant _Function_delta
+  FunctionElimination e -> variant _Function_compareTo $ encodeElimination cx e
   FunctionLambda l -> variant _Function_lambda $ encodeLambda cx l
-  FunctionOptionalCases cases -> variant _Function_optionalCases $ encodeOptionalCases cx cases
   FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
-  FunctionProjection (FieldName fname) -> variant _Function_projection $ stringValue fname
 
 encodeFunctionType :: Default m => Context m -> FunctionType m -> Data m
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [

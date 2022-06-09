@@ -186,48 +186,49 @@ encodeAdaptedType namespaces cx typ = do
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction namespaces cx meta fun = case fun of
-    FunctionCases fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
-      where
-        caseExpr = do
-          fieldMap <- fieldMapOf <$> findDomain
-          H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
-        toAlt fieldMap (Field fn fun') = do
+    FunctionElimination e -> case e of
+      EliminationElement -> pure $ hsvar "id"
+      EliminationNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
+        qname (graphNameOf name) $ newtypeAccessorName name
+      EliminationOptional (OptionalCases nothing just) -> do
+        nothingRhs <- H.CaseRhs <$> encodeData namespaces cx nothing
+        let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
+        justAlt <- do
+          -- Note: some of the following could be brought together with FunctionCases
           let v0 = "v"
-          let rhsData = simplifyData $ apply fun' (variable v0)
-          let v1 = if isFreeIn (Variable v0) rhsData then "_" else v0
-          dn <- domName
-          hname <- case dn of
-            Just n -> pure $ unionFieldReference namespaces n fn
-            Nothing -> fail "unqualified field name"
-          args <- case fieldMap >>= M.lookup fn of
-                Just (FieldType _ (Type (TypeTermRecord []) _)) -> pure []
-                Just _ -> pure [H.PatternName $ rawName v1]
-                Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
-          let lhs = H.PatternApplication $ H.Pattern_Application hname args
+          let rhsData = simplifyData $ apply just (variable v0)
+          let v1 = if S.member (Variable v0) $ freeVariablesInData rhsData then v0 else "_"
+          let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeData namespaces cx rhsData
           return $ H.Alternative lhs rhs Nothing
-    FunctionDelta -> pure $ hsvar "id"
-    FunctionEliminateNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
-      qname (graphNameOf name) $ newtypeAccessorName name
+        return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
+      EliminationRecord fname -> do
+        dn <- domName
+        case dn of
+          Just n -> pure $ H.ExpressionVariable $ recordFieldReference namespaces n fname
+          Nothing -> fail "unqualified record"
+      EliminationUnion fields -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
+        where
+          caseExpr = do
+            fieldMap <- fieldMapOf <$> findDomain
+            H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
+          toAlt fieldMap (Field fn fun') = do
+            let v0 = "v"
+            let rhsData = simplifyData $ apply fun' (variable v0)
+            let v1 = if isFreeIn (Variable v0) rhsData then "_" else v0
+            dn <- domName
+            hname <- case dn of
+              Just n -> pure $ unionFieldReference namespaces n fn
+              Nothing -> fail "unqualified field name"
+            args <- case fieldMap >>= M.lookup fn of
+                  Just (FieldType _ (Type (TypeTermRecord []) _)) -> pure []
+                  Just _ -> pure [H.PatternName $ rawName v1]
+                  Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
+            let lhs = H.PatternApplication $ H.Pattern_Application hname args
+            rhs <- H.CaseRhs <$> encodeData namespaces cx rhsData
+            return $ H.Alternative lhs rhs Nothing
     FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeData namespaces cx body
-    FunctionOptionalCases (OptionalCases nothing just) -> do
-      nothingRhs <- H.CaseRhs <$> encodeData namespaces cx nothing
-      let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
-      justAlt <- do
-        -- Note: some of the following could be brought together with FunctionCases
-        let v0 = "v"
-        let rhsData = simplifyData $ apply just (variable v0)
-        let v1 = if S.member (Variable v0) $ freeVariablesInData rhsData then v0 else "_"
-        let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
-        rhs <- H.CaseRhs <$> encodeData namespaces cx rhsData
-        return $ H.Alternative lhs rhs Nothing
-      return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
-    FunctionProjection fname -> do
-      dn <- domName
-      case dn of
-        Just n -> pure $ H.ExpressionVariable $ recordFieldReference namespaces n fname
-        Nothing -> fail "unqualified record"
     _ -> fail $ "unexpected function: " ++ show fun
   where
     fieldMapOf typ = case typeTerm <$> typ of
@@ -275,7 +276,7 @@ encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context 
 encodeData namespaces cx term@(Data expr meta) = do
    case expr of
     DataTermApplication (Application fun arg) -> case dataTerm fun of
-       DataTermFunction FunctionDelta -> encode cx arg
+       DataTermFunction (FunctionElimination EliminationElement) -> encode cx arg
        _ -> hsapp <$> encode cx fun <*> encode cx arg
     DataTermElement name -> pure $ H.ExpressionVariable $ elementReference namespaces name
     DataTermFunction f -> encodeFunction namespaces cx (dataMeta term) f

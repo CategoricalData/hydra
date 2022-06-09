@@ -5,7 +5,7 @@ import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
 
-data Adapter t v
+data Adapter t v 
   = Adapter {
     adapterIsLossy :: Bool,
     adapterSource :: t,
@@ -22,7 +22,7 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_step = (Core.FieldName "step")
 
-data AdapterContext a
+data AdapterContext a 
   = AdapterContext {
     adapterContextEvaluation :: (Evaluation.Context a),
     adapterContextSource :: (Language a),
@@ -36,7 +36,7 @@ _AdapterContext_source = (Core.FieldName "source")
 
 _AdapterContext_target = (Core.FieldName "target")
 
-data LanguageConstraints m
+data LanguageConstraints m 
   = LanguageConstraints {
     languageConstraintsEliminationVariants :: (Set Core.EliminationVariant),
     languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
@@ -65,14 +65,14 @@ _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 
 _LanguageConstraints_types = (Core.FieldName "types")
 
-newtype LanguageName
+newtype LanguageName 
   = LanguageName {
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LanguageName = (Core.Name "hydra/adapter.LanguageName")
 
-data Language m
+data Language m 
   = Language {
     languageName :: LanguageName,
     languageConstraints :: (LanguageConstraints m)}

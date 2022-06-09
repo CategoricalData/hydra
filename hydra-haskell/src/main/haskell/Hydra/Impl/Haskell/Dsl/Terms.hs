@@ -31,7 +31,7 @@ booleanValue :: Default a => Bool -> Data a
 booleanValue b = defaultData $ DataTermLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 cases :: Default a => [Field a] -> Data a
-cases = defaultData . DataTermFunction . FunctionCases
+cases = defaultData . DataTermFunction . FunctionElimination . EliminationUnion
 
 compareTo :: Default a => Data a -> Data a
 compareTo = defaultData . DataTermFunction . FunctionCompareTo
@@ -44,7 +44,7 @@ constFunction :: Default a => Data a -> Data a
 constFunction = lambda "_"
 
 delta :: Default a => Data a
-delta = defaultData $ DataTermFunction FunctionDelta
+delta = defaultData $ DataTermFunction $ FunctionElimination EliminationElement
 
 defaultData  :: Default a => DataTerm a -> Data a
 defaultData e = Data e dflt
@@ -59,7 +59,7 @@ elementRefByName :: Default a => Name -> Data a
 elementRefByName name = apply delta $ defaultData $ DataTermElement name
 
 eliminateNominal :: Default a => Name -> Data a
-eliminateNominal name = defaultData $ DataTermFunction $ FunctionEliminateNominal name
+eliminateNominal name = defaultData $ DataTermFunction $ FunctionElimination $ EliminationNominal name
 
 expectInt32 :: Show a => Data a -> Result Int
 expectInt32 term = case dataTerm term of
@@ -166,7 +166,7 @@ primitive :: Default a => Name -> Data a
 primitive = defaultData . DataTermFunction . FunctionPrimitive
 
 projection :: Default a => FieldName -> Data a
-projection = defaultData . DataTermFunction . FunctionProjection
+projection = defaultData . DataTermFunction . FunctionElimination . EliminationRecord
 
 record :: Default a => [Field a] -> Data a
 record = defaultData . DataTermRecord

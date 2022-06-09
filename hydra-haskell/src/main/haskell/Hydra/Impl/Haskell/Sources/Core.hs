@@ -175,33 +175,18 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Function" $
         doc "A function" $
         universal "m" $ union [
-          field "cases" $
-            doc "A case statement applied to a variant record, consisting of a function term for each alternative in the union" $
-            list $ universal "m" $ core "Field",
           field "compareTo" $
             doc "Compares a term with a given term of the same type, producing a Comparison" $
             universal "m" $ core "Data",
-          field "delta" $
-            doc "Hydra's delta function, which maps an element to its data term"
-            unit,
-          field "eliminateNominal" $
-            doc "Eliminate a nominal term" $
-            core "Name",
           field "elimination" $
             doc "An elimination for any of a few term variants" $
             universal "m" $ core "Elimination",
           field "lambda" $
             doc "A function abstraction (lambda)" $
             universal "m" $ core "Lambda",
-          field "optionalCases" $
-            doc "Eliminator for optional terms" $
-            universal "m" $ core "OptionalCases",
           field "primitive" $
             doc "A reference to a built-in (primitive) function" $
-            core "Name",
-          field "projection" $
-            doc "A projection of a field from a record" $
-            core "FieldName"],
+            core "Name"],
 
       def "FunctionType" $
         doc "A function type, also known as an arrow type" $
@@ -212,15 +197,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "FunctionVariant" $
         doc "The identifier of a function constructor" $
         enum [
-          "cases",
           "compareTo",
-          "delta",
-          "eliminateNominal",
           "elimination",
           "lambda",
-          "optionalCases",
-          "primitive",
-          "projection"],
+          "primitive"],
 
       def "IntegerType" $
         doc "An integer type" $

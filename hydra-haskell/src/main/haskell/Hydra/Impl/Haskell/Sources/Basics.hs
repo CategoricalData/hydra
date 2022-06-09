@@ -17,6 +17,7 @@ hydraBasicsName = GraphName "hydra/basics"
 
 hydraBasics :: Graph Meta
 hydraBasics = standardGraph hydraBasicsName [
+  eliminationVariant,
   eliminationVariants,
   floatTypePrecision,
   floatTypes,
@@ -37,6 +38,17 @@ hydraBasics = standardGraph hydraBasicsName [
   testLists,
   typeVariant,
   typeVariants]
+
+eliminationVariant :: Element Meta
+eliminationVariant = standardFunction hydraBasicsName "eliminationVariant"
+  "Find the elimination variant (constructor) for a given elimination term"
+  (Types.universal "m" $ Types.nominal _Elimination) (Types.nominal _EliminationVariant) $
+  standardMatchWithVariants (Types.universal "m" $ Types.nominal _Elimination) (Types.nominal _EliminationVariant) [
+    (_Elimination_element,  _EliminationVariant_element),
+    (_Elimination_nominal,  _EliminationVariant_nominal),
+    (_Elimination_optional, _EliminationVariant_optional),
+    (_Elimination_record,   _EliminationVariant_record),
+    (_Elimination_union,    _EliminationVariant_union)]
 
 eliminationVariants :: Element Meta
 eliminationVariants = standardElement hydraBasicsName "eliminationVariants"
@@ -75,34 +87,26 @@ floatValueType = standardFunction hydraBasicsName "floatValueType"
     (_FloatValue_bigfloat, _FloatType_bigfloat),
     (_FloatValue_float32,  _FloatType_float32),
     (_FloatValue_float64,  _FloatType_float64)]
-
+    
 functionVariant :: Element Meta
 functionVariant = standardFunction hydraBasicsName "functionVariant"
   "Find the function variant (constructor) for a given function"
   (Types.universal "m" $ Types.nominal _Function) (Types.nominal _FunctionVariant) $
   standardMatchWithVariants (Types.universal "m" $ Types.nominal _Function) (Types.nominal _FunctionVariant) [
-    (_Function_cases,         _FunctionVariant_cases),
     (_Function_compareTo,     _FunctionVariant_compareTo),
-    (_Function_delta,          _FunctionVariant_delta),
+    (_Function_elimination,   _FunctionVariant_elimination),
     (_Function_lambda,        _FunctionVariant_lambda),
-    (_Function_optionalCases, _FunctionVariant_optionalCases),
-    (_Function_primitive,     _FunctionVariant_primitive),
-    (_Function_projection,    _FunctionVariant_projection)]
+    (_Function_primitive,     _FunctionVariant_primitive)]
 
 functionVariants :: Element Meta
 functionVariants = standardElement hydraBasicsName "functionVariants"
     "All function variants (constructors), in a canonical order"
     (Types.list $ Types.nominal _FunctionVariant)
     (list $ standardWithType (Types.nominal _FunctionVariant) . unitVariant <$> [
-      _FunctionVariant_cases,
       _FunctionVariant_compareTo,
-      _FunctionVariant_delta,
-      _FunctionVariant_eliminateNominal,
       _FunctionVariant_elimination,
       _FunctionVariant_lambda,
-      _FunctionVariant_optionalCases,
-      _FunctionVariant_primitive,
-      _FunctionVariant_projection])
+      _FunctionVariant_primitive])
           
 integerTypeIsSigned :: Element Meta
 integerTypeIsSigned = standardFunction hydraBasicsName "integerTypeIsSigned"
