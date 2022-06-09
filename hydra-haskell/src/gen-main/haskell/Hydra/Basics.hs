@@ -7,6 +7,15 @@ import qualified Hydra.Lib.Strings as Strings
 import Data.Map
 import Data.Set
 
+-- Find the elimination variant (constructor) for a given elimination term
+eliminationVariant :: (Core.Elimination m -> Core.EliminationVariant)
+eliminationVariant x = case x of
+  Core.EliminationElement -> Core.EliminationVariantElement
+  Core.EliminationNominal _ -> Core.EliminationVariantNominal
+  Core.EliminationOptional _ -> Core.EliminationVariantOptional
+  Core.EliminationRecord _ -> Core.EliminationVariantRecord
+  Core.EliminationUnion _ -> Core.EliminationVariantUnion
+
 -- All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Core.EliminationVariant]
 eliminationVariants = [
@@ -41,6 +50,7 @@ floatValueType x = case x of
 functionVariant :: (Core.Function m -> Core.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionCompareTo _ -> Core.FunctionVariantCompareTo
+  Core.FunctionElimination _ -> Core.FunctionVariantElimination
   Core.FunctionLambda _ -> Core.FunctionVariantLambda
   Core.FunctionPrimitive _ -> Core.FunctionVariantPrimitive
 

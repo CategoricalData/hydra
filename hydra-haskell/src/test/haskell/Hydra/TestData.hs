@@ -77,10 +77,12 @@ stringOrIntType = Types.union [Types.field "left" Types.string, Types.field "rig
 
 unionTypeForFunctions :: Default m => Type m -> Type m
 unionTypeForFunctions dom = Types.union [
-  FieldType _Function_cases Types.string, -- TODO (TypeTermRecord cases)
+  FieldType _Elimination_element Types.unit,
+  FieldType _Elimination_nominal Types.string,
+  FieldType _Elimination_optional Types.string,
+  FieldType _Elimination_record Types.string,
+  FieldType _Elimination_union Types.string, -- TODO (TypeTermRecord cases)
   FieldType _Function_compareTo dom,
-  FieldType _Function_delta Types.unit,
-  FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [Types.field _Lambda_parameter Types.string, Types.field _Lambda_body cod]),
+  FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
   FieldType _Function_primitive Types.string,
-  FieldType _Function_projection Types.string,
-  FieldType _DataTerm_variable Types.string] -- TODO
+  FieldType _DataTerm_variable Types.string]

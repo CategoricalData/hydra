@@ -158,6 +158,7 @@ subterms term = case dataTerm term of
     FunctionElimination e -> case e of
       EliminationOptional (OptionalCases nothing just) -> [nothing, just]
       EliminationUnion cases -> fieldData <$> cases
+      _ -> []
     FunctionLambda (Lambda _ body) -> [body]
     _ -> []
   DataTermLet (Let _ t1 t2) -> [t1, t2]

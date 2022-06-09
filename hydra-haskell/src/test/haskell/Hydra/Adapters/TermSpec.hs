@@ -212,7 +212,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       delta
-      (nominalUnion testContext _Function $ Field (FieldName "delta") unitData)
+      (nominalUnion testContext _Function $ Field (FieldName "element") unitData)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -239,7 +239,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection fname)
-      (nominalUnion testContext _Function $ Field (FieldName "projection") $ stringValue $ unFieldName fname) -- Note: the field name is not dereferenced
+      (nominalUnion testContext _Function $ Field (FieldName "record") $ stringValue $ unFieldName fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
@@ -351,6 +351,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
 
     -- Use a YAML-like language (but supporting unions) as the default target language
     testLanguage = Language (LanguageName "hydra/test") $ LanguageConstraints {
+      languageConstraintsEliminationVariants = S.empty, -- S.fromList eliminationVariants,
       languageConstraintsLiteralVariants = S.fromList [
         LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
       languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
