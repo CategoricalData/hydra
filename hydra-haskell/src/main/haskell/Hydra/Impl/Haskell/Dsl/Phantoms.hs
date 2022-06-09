@@ -7,17 +7,17 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Meta
 
 
-data Case a = Case (Field Meta) deriving Show
+newtype Case a = Case (Field Meta) deriving Show
 
 data Element a = Element Name (Program a)
 
-data Fld a = Fld (Field Meta) deriving Show
+newtype Fld a = Fld (Field Meta) deriving Show
 
-data Program a = Program (Data Meta) deriving Show
+newtype Program a = Program (Data Meta) deriving Show
 
-data Ref a = Ref Name
+newtype Ref a = Ref Name
 
-data Var a = Var String
+newtype Var a = Var String
 
 doc :: String -> Program a -> Program a
 doc str (Program (Data d m)) = Program $ Data d (setDescription (Just str) m)
