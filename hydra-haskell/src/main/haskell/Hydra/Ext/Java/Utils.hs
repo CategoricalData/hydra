@@ -241,8 +241,10 @@ javaReturnStatement mex = Java.StatementWithoutTrailing $ Java.StatementWithoutT
 javaStatementsToBlock :: [Java.Statement] -> Java.Block
 javaStatementsToBlock stmts = Java.Block (Java.BlockStatementStatement <$> stmts)
 
+javaString :: String -> Java.Literal
 javaString = Java.LiteralString . Java.StringLiteral
 
+javaStringMultiplicativeExpression :: String -> Java.MultiplicativeExpression
 javaStringMultiplicativeExpression = Java.MultiplicativeExpressionUnary . javaPrimaryToJavaUnaryExpression .
   javaLiteralToPrimary . javaString
 
