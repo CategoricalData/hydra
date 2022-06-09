@@ -40,26 +40,17 @@ floatValueType x = case x of
 -- Find the function variant (constructor) for a given function
 functionVariant :: (Core.Function m -> Core.FunctionVariant)
 functionVariant x = case x of
-  Core.FunctionCases _ -> Core.FunctionVariantCases
   Core.FunctionCompareTo _ -> Core.FunctionVariantCompareTo
-  Core.FunctionDelta -> Core.FunctionVariantDelta
   Core.FunctionLambda _ -> Core.FunctionVariantLambda
-  Core.FunctionOptionalCases _ -> Core.FunctionVariantOptionalCases
   Core.FunctionPrimitive _ -> Core.FunctionVariantPrimitive
-  Core.FunctionProjection _ -> Core.FunctionVariantProjection
 
 -- All function variants (constructors), in a canonical order
 functionVariants :: [Core.FunctionVariant]
 functionVariants = [
-  Core.FunctionVariantCases,
   Core.FunctionVariantCompareTo,
-  Core.FunctionVariantDelta,
-  Core.FunctionVariantEliminateNominal,
   Core.FunctionVariantElimination,
   Core.FunctionVariantLambda,
-  Core.FunctionVariantOptionalCases,
-  Core.FunctionVariantPrimitive,
-  Core.FunctionVariantProjection]
+  Core.FunctionVariantPrimitive]
 
 -- Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: (Core.IntegerType -> Bool)

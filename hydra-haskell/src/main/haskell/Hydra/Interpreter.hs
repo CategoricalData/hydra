@@ -50,14 +50,15 @@ evaluate context term = reduce M.empty term
         reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
-          FunctionCases cases -> defaultData . DataTermFunction . FunctionCases <$> CM.mapM reduceField cases
+          FunctionElimination el -> case el of
+            EliminationElement -> done
+            EliminationOptional (OptionalCases nothing just) -> defaultData . DataTermFunction . FunctionElimination . EliminationOptional <$>
+              (OptionalCases <$> reduceb nothing <*> reduceb just)
+            EliminationRecord _ -> done
+            EliminationUnion cases -> defaultData . DataTermFunction . FunctionElimination . EliminationUnion <$> CM.mapM reduceField cases
           FunctionCompareTo other -> defaultData . DataTermFunction . FunctionCompareTo <$> reduceb other
-          FunctionDelta -> done
           FunctionLambda (Lambda v body) -> defaultData . DataTermFunction . FunctionLambda . Lambda v <$> reduceb body
-          FunctionOptionalCases (OptionalCases nothing just) -> defaultData . DataTermFunction . FunctionOptionalCases <$>
-            (OptionalCases <$> reduceb nothing <*> reduceb just)
           FunctionPrimitive _ -> done
-          FunctionProjection _ -> done
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
     reduceApplication bindings args f = if L.null args then pure f else case dataTerm f of
@@ -65,34 +66,35 @@ evaluate context term = reduce M.empty term
          >>= reduceApplication bindings (arg:args)
 
       DataTermFunction f -> case f of
-        FunctionCases cases -> do
-          arg <- (reduce bindings $ L.head args) >>= deref context
-          case dataTerm arg of
-            DataTermUnion (Field fname t) -> if L.null matching
-                then fail $ "no case for field named " ++ unFieldName fname
-                else reduce bindings (fieldData $ L.head matching)
-                  >>= reduceApplication bindings (t:L.tail args)
-              where
-                matching = L.filter (\c -> fieldName c == fname) cases
-            _ -> fail $ "tried to apply a case statement to a non- union term: " ++ show arg
+        FunctionElimination e -> case e of
+          EliminationElement -> do
+            arg <- reduce bindings $ L.head args
+            case dataTerm arg of
+              DataTermElement name -> dereferenceElement context name
+                >>= reduce bindings
+                >>= reduceApplication bindings (L.tail args)
+              _ -> fail "tried to apply data (delta) to a non- element reference"
+
+          EliminationOptional (OptionalCases nothing just) -> do
+            arg <- (reduce bindings $ L.head args) >>= deref context
+            case dataTerm arg of
+              DataTermOptional m -> case m of
+                Nothing -> reduce bindings nothing
+                Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
+              _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
+
+          EliminationUnion cases -> do
+            arg <- (reduce bindings $ L.head args) >>= deref context
+            case dataTerm arg of
+              DataTermUnion (Field fname t) -> if L.null matching
+                  then fail $ "no case for field named " ++ unFieldName fname
+                  else reduce bindings (fieldData $ L.head matching)
+                    >>= reduceApplication bindings (t:L.tail args)
+                where
+                  matching = L.filter (\c -> fieldName c == fname) cases
+              _ -> fail $ "tried to apply a case statement to a non- union term: " ++ show arg
 
         -- TODO: FunctionCompareTo
-
-        FunctionDelta -> do
-          arg <- reduce bindings $ L.head args
-          case dataTerm arg of
-            DataTermElement name -> dereferenceElement context name
-              >>= reduce bindings
-              >>= reduceApplication bindings (L.tail args)
-            _ -> fail "tried to apply data (delta) to a non- element reference"
-
-        FunctionOptionalCases (OptionalCases nothing just) -> do
-          arg <- (reduce bindings $ L.head args) >>= deref context
-          case dataTerm arg of
-            DataTermOptional m -> case m of
-              Nothing -> reduce bindings nothing
-              Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
-            _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
         FunctionPrimitive name -> do
              prim <- requirePrimitiveFunction context name
@@ -134,13 +136,15 @@ freeVariables term = S.fromList $ free S.empty term
         DataTermVariable v -> [v | not (S.member v bound)]
       where
         freeInFunction f = case f of
-          FunctionCases cases -> L.concatMap (free bound . fieldData) cases
           FunctionCompareTo term -> free bound term
-          FunctionDelta -> []
+          FunctionElimination e -> case e of
+            EliminationElement -> []
+            EliminationNominal _ -> []
+            EliminationRecord _ -> []
+            EliminationOptional (OptionalCases nothing just) -> free bound nothing ++ free bound just
+            EliminationUnion cases -> L.concatMap (free bound . fieldData) cases
           FunctionLambda (Lambda v t) -> free (S.insert v bound) t
-          FunctionOptionalCases (OptionalCases nothing just) -> free bound nothing ++ free bound just
           FunctionPrimitive _ -> []
-          FunctionProjection _ -> []
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Data a -> Bool
@@ -174,10 +178,12 @@ termIsValue strategy term = termIsOpaque strategy term || case dataTerm term of
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of
-      FunctionCases cases -> checkFields cases
       FunctionCompareTo other -> termIsValue strategy other
-      FunctionDelta -> True
+      FunctionElimination e -> case e of
+        EliminationElement -> True
+        EliminationNominal _ -> True
+        EliminationOptional (OptionalCases nothing just) -> termIsValue strategy nothing && termIsValue strategy just
+        EliminationRecord _ -> True
+        EliminationUnion cases -> checkFields cases
       FunctionLambda (Lambda _ body) -> termIsValue strategy body
-      FunctionOptionalCases (OptionalCases nothing just) -> termIsValue strategy nothing && termIsValue strategy just
       FunctionPrimitive _ -> True
-      FunctionProjection _ -> True

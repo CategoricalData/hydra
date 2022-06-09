@@ -21,7 +21,6 @@ module Hydra.Rewriting (
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Graph
 import Hydra.Primitives
 import Hydra.Evaluation
@@ -70,15 +69,16 @@ rewriteData mapData mapMeta = replace
           DataTermApplication (Application lhs rhs) -> DataTermApplication $ Application (replace lhs) (replace rhs)
           DataTermElement name -> DataTermElement name
           DataTermFunction fun -> DataTermFunction $ case fun of
-            FunctionCases fields -> FunctionCases $ replaceField <$> fields
             FunctionCompareTo other -> FunctionCompareTo $ replace other
-            FunctionDelta -> FunctionDelta
-            FunctionEliminateNominal name -> FunctionEliminateNominal name
+            FunctionElimination e -> FunctionElimination $ case e of
+              EliminationElement -> EliminationElement
+              EliminationNominal name -> EliminationNominal name
+              EliminationOptional (OptionalCases nothing just) -> EliminationOptional
+                (OptionalCases (replace nothing) (replace just))
+              EliminationRecord fname -> EliminationRecord fname
+              EliminationUnion fields -> EliminationUnion $ replaceField <$> fields
             FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
-            FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases
-              (OptionalCases (replace nothing) (replace just))
             FunctionPrimitive name -> FunctionPrimitive name
-            FunctionProjection fname -> FunctionProjection fname
           DataTermLet (Let v t1 t2) -> DataTermLet $ Let v (replace t1) (replace t2)
           DataTermList els -> DataTermList $ replace <$> els
           DataTermLiteral v -> DataTermLiteral v
@@ -154,10 +154,11 @@ subterms :: Data m -> [Data m]
 subterms term = case dataTerm term of
   DataTermApplication (Application lhs rhs) -> [lhs, rhs]
   DataTermFunction f -> case f of
-    FunctionCases cases -> fieldData <$> cases
     FunctionCompareTo other -> [other]
+    FunctionElimination e -> case e of
+      EliminationOptional (OptionalCases nothing just) -> [nothing, just]
+      EliminationUnion cases -> fieldData <$> cases
     FunctionLambda (Lambda _ body) -> [body]
-    FunctionOptionalCases (OptionalCases nothing just) -> [nothing, just]
     _ -> []
   DataTermLet (Let _ t1 t2) -> [t1, t2]
   DataTermList els -> els

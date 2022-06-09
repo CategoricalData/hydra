@@ -59,24 +59,27 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
     cx = adapterContextEvaluation acx
     encode ad term = stepOut (adapterStep ad) $ case dataTerm term of
       DataTermFunction f -> case f of
-        FunctionCases _ -> variant _Function_cases $ stringValue $ show term -- TODO DataTermRecord cases
         FunctionCompareTo other -> variant _Function_compareTo other
-        FunctionDelta -> unitVariant _Function_delta
+        FunctionElimination e -> case e of
+          EliminationElement -> unitVariant _Elimination_element
+          EliminationNominal (Name name) -> variant _Elimination_nominal $ stringValue name
+          EliminationOptional _ -> variant _Elimination_optional $ stringValue $ show term -- TODO
+          EliminationRecord (FieldName fname) -> variant _Elimination_record $ stringValue fname
+          EliminationUnion _ -> variant _Elimination_union $ stringValue $ show term -- TODO DataTermRecord cases
         FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
-        FunctionOptionalCases _ -> variant _Function_optionalCases $ stringValue $ show term -- TODO
         FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
-        FunctionProjection (FieldName fname) -> variant _Function_projection $ stringValue fname
       DataTermVariable (Variable var) -> variant _DataTerm_variable $ stringValue var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
-          (_Function_cases, forCases fterm),
+          (_Elimination_element, forData fterm),
+          (_Elimination_nominal, forNominal fterm),
+          (_Elimination_optional, forOptionalCases fterm),
+          (_Elimination_record, forProjection fterm),
+          (_Elimination_union, forCases fterm),
           (_Function_compareTo, forCompareTo fterm),
-          (_Function_delta, forData fterm),
           (_Function_lambda, forLambda fterm),
-          (_Function_optionalCases, forOptionalCases fterm),
           (_Function_primitive, forPrimitive fterm),
-          (_Function_projection, forProjection fterm),
           (_DataTerm_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ unFieldName fname
@@ -84,6 +87,7 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
         forCompareTo fterm = pure $ compareTo fterm
         forData _ = pure delta
         forLambda fterm = read <$> expectString fterm -- TODO
+        forNominal fterm = eliminateNominal . Name <$> expectString fterm
         forOptionalCases fterm = read <$> expectString fterm -- TODO
         forPrimitive fterm = primitive . Name <$> expectString fterm
         forProjection fterm = projection . FieldName <$> expectString fterm
@@ -92,12 +96,14 @@ functionToUnion acx t@(Type (TypeTermFunction (FunctionType dom _)) _) = do
     unionType = do
       domAd <- termAdapter acx dom
       return $ Types.union [
-        FieldType _Function_cases Types.string, -- TODO (TypeTermRecord cases)
+        FieldType _Elimination_element Types.unit,
+        FieldType _Elimination_nominal Types.string,
+        FieldType _Elimination_optional Types.string,
+        FieldType _Elimination_record Types.string,
+        FieldType _Elimination_union Types.string, -- TODO (TypeTermRecord cases)
         FieldType _Function_compareTo (adapterTarget domAd),
-        FieldType _Function_delta Types.unit,
         FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
         FieldType _Function_primitive Types.string,
-        FieldType _Function_projection Types.string,
         FieldType _DataTerm_variable Types.string]
 
 listToSet :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
@@ -142,17 +148,18 @@ passFunction acx t@(Type (TypeTermFunction (FunctionType dom cod)) _) = do
     let cod' = adapterTarget codAd
     return $ Adapter lossy t (Types.function dom' cod')
       $ bidirectional $ \dir (Data (DataTermFunction f) meta) -> withData meta . DataTermFunction <$> case f of
-        FunctionCases cases -> FunctionCases <$> CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases
-          where
-            -- Note: this causes unrecognized cases to simply be passed through;
-            --       it is not the job of this adapter to catch validation issues.
-            getStep fname = Y.maybe idStep adapterStep $ M.lookup fname caseAds
         FunctionCompareTo other -> FunctionCompareTo <$> stepEither dir (adapterStep codAd) other
+        FunctionElimination e -> FunctionElimination <$> case e of
+          EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
+            OptionalCases
+              <$> stepEither dir (adapterStep codAd) nothing
+              <*> (stepEither dir (adapterStep $ Y.fromJust optionAd) just))
+          EliminationUnion cases -> EliminationUnion <$> CM.mapM (\f -> stepEither dir (getStep $ fieldName f) f) cases
+            where
+              -- Note: this causes unrecognized cases to simply be passed through;
+              --       it is not the job of this adapter to catch validation issues.
+              getStep fname = Y.maybe idStep adapterStep $ M.lookup fname caseAds
         FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterStep codAd) body)
-        FunctionOptionalCases (OptionalCases nothing just) -> FunctionOptionalCases <$> (
-          OptionalCases
-            <$> stepEither dir (adapterStep codAd) nothing
-            <*> (stepEither dir (adapterStep $ Y.fromJust optionAd) just))
 
 passList :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Data m))
 passList acx t@(Type (TypeTermList lt) _) = do
