@@ -61,7 +61,7 @@ lambda :: Var a -> Trm x -> Trm (a -> b)
 lambda (Var v) (Trm body) = Trm $ Terms.lambda v body
 
 letTerm :: Var a -> Trm a -> Trm b -> Trm b
-letTerm (Var k) (Trm v) (Trm env) = Trm $ Terms.letData (Variable k) v env
+letTerm (Var k) (Trm v) (Trm env) = Trm $ Terms.letTerm (Variable k) v env
 
 list :: [Trm a] -> Trm [a]
 list els = Trm $ Terms.list (unTrm <$> els)
@@ -106,7 +106,7 @@ union :: Fld -> Trm Union
 union (Fld field) = Trm $ Terms.union field
 
 unit :: Trm Record
-unit = Trm Terms.unitData
+unit = Trm Terms.unitTerm
 
 var :: Var a -> Trm a
 var (Var v) = Trm $ Terms.variable v

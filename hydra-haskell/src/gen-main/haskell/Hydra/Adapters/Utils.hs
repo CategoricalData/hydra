@@ -39,37 +39,37 @@ describePrecision x = case x of
 -- Display a type as a string
 describeType :: (Core.Type m -> String)
 describeType typ = ((\x -> case x of
-  Core.TypeTermLiteral v -> (describeLiteralType v)
-  Core.TypeTermElement v -> (Strings.cat [
+  Core.TypeExprLiteral v -> (describeLiteralType v)
+  Core.TypeExprElement v -> (Strings.cat [
     "elements containing ",
     (describeType v)])
-  Core.TypeTermFunction v -> (Strings.cat [
+  Core.TypeExprFunction v -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "functions from ",
         (describeType (Core.functionTypeDomain v))],
       " to "],
     (describeType (Core.functionTypeCodomain v))])
-  Core.TypeTermList v -> (Strings.cat [
+  Core.TypeExprList v -> (Strings.cat [
     "lists of ",
     (describeType v)])
-  Core.TypeTermMap v -> (Strings.cat [
+  Core.TypeExprMap v -> (Strings.cat [
     Strings.cat [
       Strings.cat [
         "maps from ",
         (describeType (Core.mapTypeKeys v))],
       " to "],
     (describeType (Core.mapTypeValues v))])
-  Core.TypeTermNominal v -> (Strings.cat [
+  Core.TypeExprNominal v -> (Strings.cat [
     "alias for ",
     (Core.unName v)])
-  Core.TypeTermOptional v -> (Strings.cat [
+  Core.TypeExprOptional v -> (Strings.cat [
     "optional ",
     (describeType v)])
-  Core.TypeTermRecord _ -> "records of a particular set of fields"
-  Core.TypeTermSet v -> (Strings.cat [
+  Core.TypeExprRecord _ -> "records of a particular set of fields"
+  Core.TypeExprSet v -> (Strings.cat [
     "sets of ",
     (describeType v)])
-  Core.TypeTermUnion _ -> "unions of a particular set of fields"
-  Core.TypeTermUniversal _ -> "polymorphic terms"
-  Core.TypeTermVariable _ -> "unspecified/parametric terms") (Core.typeTerm typ))
+  Core.TypeExprUnion _ -> "unions of a particular set of fields"
+  Core.TypeExprUniversal _ -> "polymorphic terms"
+  Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeExpr typ))

@@ -25,7 +25,7 @@ import qualified Data.Maybe as Y
 
 
 constructModule :: (Default m, Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Step (Data m) ()) -> [(Element m, TypedData m)] -> Result PDL.SchemaFile
+  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
 constructModule cx g coders pairs = do
     let ns = pdlNameForGraph g
     let pkg = Nothing
@@ -38,7 +38,7 @@ constructModule cx g coders pairs = do
   where
     pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
     aliases = importAliasesForGraph g
-    toSchema (el, TypedData typ term) = if typeTerm typ == TypeTermNominal _Type
+    toSchema (el, TypedTerm typ term) = if typeExpr typ == TypeExprNominal _Type
       then decodeType cx term >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
@@ -47,12 +47,12 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      r <- contextDescriptionOf cx $ dataMeta $ elementData el
+      r <- contextDescriptionOf cx $ termMeta $ elementData el
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
 moduleToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
-moduleToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeData aliases) constructModule cx g
+moduleToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 
@@ -67,14 +67,14 @@ encodeAdaptedType aliases cx typ = do
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases cx $ adapterTarget ad
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Data m -> Result ()
-encodeData aliases cx term@(Data expr meta) = do
+encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Term m -> Result ()
+encodeTerm aliases cx term@(Term expr meta) = do
     fail "not yet implemented"
 
 encodeType :: (Default m, Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
-encodeType aliases cx typ = case typeTerm typ of
-    TypeTermList lt -> Left . PDL.SchemaArray <$> encode lt
-    TypeTermLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
+encodeType aliases cx typ = case typeExpr typ of
+    TypeExprList lt -> Left . PDL.SchemaArray <$> encode lt
+    TypeExprLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
       LiteralTypeBoolean -> pure PDL.PrimitiveTypeBoolean
       LiteralTypeFloat ft -> case ft of
@@ -86,14 +86,14 @@ encodeType aliases cx typ = case typeTerm typ of
         IntegerTypeInt64 -> pure PDL.PrimitiveTypeLong
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
-    TypeTermMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeTermNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
-    TypeTermOptional ot -> fail $ "optionals unexpected at top level"
-    TypeTermRecord fields -> do
+    TypeExprMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
+    TypeExprNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
+    TypeExprOptional ot -> fail $ "optionals unexpected at top level"
+    TypeExprRecord fields -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField fields
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeTermUnion fields -> if isEnum
+    TypeExprUnion fields -> if isEnum
         then do
           fs <- CM.mapM encodeEnumField fields
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
@@ -102,8 +102,8 @@ encodeType aliases cx typ = case typeTerm typ of
         isEnum = L.foldl (\b t -> b && t {typeMeta = dflt} == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
-    encode t = case typeTerm t of
-      TypeTermRecord [] -> encode Types.int32 -- special case for the unit type
+    encode t = case typeExpr t of
+      TypeExprRecord [] -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases cx t
         case res of
@@ -133,8 +133,8 @@ encodeType aliases cx typ = case typeTerm typ of
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
         PDL.enumFieldAnnotations = anns}
-    encodePossiblyOptionalType typ = case typeTerm typ of
-      TypeTermOptional ot -> do
+    encodePossiblyOptionalType typ = case typeExpr typ of
+      TypeExprOptional ot -> do
         t <- encode ot
         return (t, True)
       _ -> do

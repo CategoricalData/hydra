@@ -27,8 +27,8 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
         doc "A graph element, having a name, data term (value), and schema term (type)" $
         universal "m" $ record [
           field "name" $ core "Name",
-          field "schema" $ universal "m" $ core "Data",
-          field "data" $ universal "m" $ core "Data"],
+          field "schema" $ universal "m" $ core "Term",
+          field "data" $ universal "m" $ core "Term"],
 
       def "Graph" $
         doc ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
@@ -36,7 +36,7 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
         universal "m" $ record [
           field "name" $ graph "GraphName",
           field "elements" $ list $ universal "m" $ graph "Element",
-          field "dataTerms" $ function (universal "m" $ core "Data") boolean,
+          field "termExprs" $ function (universal "m" $ core "Term") boolean,
           field "schemaGraph" $
             doc "A reference to this graph's schema graph within the provided graph set" $
             graph "GraphName"],

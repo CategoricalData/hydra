@@ -21,19 +21,19 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 freeVariablesInType :: Type m -> S.Set TypeVariable
 freeVariablesInType typ = S.fromList $ fv typ
   where
-    fv typ = case typeTerm typ of
-      TypeTermElement t -> fv t
-      TypeTermFunction (FunctionType dom cod) -> fv dom ++ fv cod
-      TypeTermList t -> fv t
-      TypeTermLiteral _ -> []
-      TypeTermMap (MapType kt vt) -> fv kt ++ fv vt
-      TypeTermNominal _ -> [] -- because we do not allow names to be bound to types with free variables
-      TypeTermOptional t -> fv t
-      TypeTermRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
-      TypeTermSet t -> fv t
-      TypeTermUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
-      TypeTermUniversal (UniversalType v body) -> v:(fv body)
-      TypeTermVariable v -> [v]
+    fv typ = case typeExpr typ of
+      TypeExprElement t -> fv t
+      TypeExprFunction (FunctionType dom cod) -> fv dom ++ fv cod
+      TypeExprList t -> fv t
+      TypeExprLiteral _ -> []
+      TypeExprMap (MapType kt vt) -> fv kt ++ fv vt
+      TypeExprNominal _ -> [] -- because we do not allow names to be bound to types with free variables
+      TypeExprOptional t -> fv t
+      TypeExprRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeExprSet t -> fv t
+      TypeExprUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeExprUniversal (UniversalType v body) -> v:(fv body)
+      TypeExprVariable v -> [v]
 
 normalVariables :: [TypeVariable]
 normalVariables = (\n -> TypeVariable $ "v" ++ show n) <$> [1..]
@@ -45,19 +45,19 @@ normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType b
 
     normalizeFieldType (FieldType fname typ) = FieldType fname $ normalizeType typ
 
-    normalizeType typ = case typeTerm typ of
-      TypeTermElement t -> element $ normalizeType t
-      TypeTermFunction (FunctionType dom cod) -> function (normalizeType dom) (normalizeType cod)
-      TypeTermList t -> list $ normalizeType t
-      TypeTermLiteral l -> typ
-      TypeTermMap (MapType kt vt) -> Types.map (normalizeType kt) (normalizeType vt)
-      TypeTermNominal _ -> typ
-      TypeTermOptional t -> optional $ normalizeType t
-      TypeTermRecord fields -> record (normalizeFieldType <$> fields)
-      TypeTermSet t -> set $ normalizeType t
-      TypeTermUnion fields -> union (normalizeFieldType <$> fields)
-      TypeTermUniversal (UniversalType (TypeVariable v) t) -> universal v $ normalizeType t
-      TypeTermVariable v -> case Prelude.lookup v ord of
+    normalizeType typ = case typeExpr typ of
+      TypeExprElement t -> element $ normalizeType t
+      TypeExprFunction (FunctionType dom cod) -> function (normalizeType dom) (normalizeType cod)
+      TypeExprList t -> list $ normalizeType t
+      TypeExprLiteral l -> typ
+      TypeExprMap (MapType kt vt) -> Types.map (normalizeType kt) (normalizeType vt)
+      TypeExprNominal _ -> typ
+      TypeExprOptional t -> optional $ normalizeType t
+      TypeExprRecord fields -> record (normalizeFieldType <$> fields)
+      TypeExprSet t -> set $ normalizeType t
+      TypeExprUnion fields -> union (normalizeFieldType <$> fields)
+      TypeExprUniversal (UniversalType (TypeVariable v) t) -> universal v $ normalizeType t
+      TypeExprVariable v -> case Prelude.lookup v ord of
         Just (TypeVariable v1) -> variable v1
         Nothing -> error "type variable not in signature"
 
@@ -67,21 +67,21 @@ substituteInScheme s (TypeScheme as t) = TypeScheme as $ substituteInType s' t
     s' = L.foldr M.delete s as
 
 substituteInType :: Default m => M.Map TypeVariable (Type m) -> Type m -> Type m
-substituteInType s typ = case typeTerm typ of
-    TypeTermElement t -> element $ subst t
-    TypeTermFunction (FunctionType dom cod) -> function (subst dom) (subst cod)
-    TypeTermList t -> list $ subst t
-    TypeTermLiteral _ -> typ
-    TypeTermMap (MapType kt vt) -> Types.map (subst kt) (subst vt)
-    TypeTermNominal _ -> typ -- because we do not allow names to be bound to types with free variables
-    TypeTermOptional t -> optional $ subst t
-    TypeTermRecord tfields -> record (substField <$> tfields)
-    TypeTermSet t -> set $ subst t
-    TypeTermUnion tfields -> union (substField <$> tfields)
-    TypeTermUniversal (UniversalType var@(TypeVariable v) body) -> if Y.isNothing (M.lookup var s)
+substituteInType s typ = case typeExpr typ of
+    TypeExprElement t -> element $ subst t
+    TypeExprFunction (FunctionType dom cod) -> function (subst dom) (subst cod)
+    TypeExprList t -> list $ subst t
+    TypeExprLiteral _ -> typ
+    TypeExprMap (MapType kt vt) -> Types.map (subst kt) (subst vt)
+    TypeExprNominal _ -> typ -- because we do not allow names to be bound to types with free variables
+    TypeExprOptional t -> optional $ subst t
+    TypeExprRecord tfields -> record (substField <$> tfields)
+    TypeExprSet t -> set $ subst t
+    TypeExprUnion tfields -> union (substField <$> tfields)
+    TypeExprUniversal (UniversalType var@(TypeVariable v) body) -> if Y.isNothing (M.lookup var s)
       then Types.universal v (subst body)
       else typ
-    TypeTermVariable a -> M.findWithDefault typ a s
+    TypeExprVariable a -> M.findWithDefault typ a s
   where
     subst = substituteInType s
     substField (FieldType fname t) = FieldType fname $ subst t

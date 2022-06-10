@@ -46,10 +46,10 @@ testContext = standardContext {
     contextElements = graphElementsMap testGraph,
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
     contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueDataVariants = S.fromList [ -- TODO: revisit this list
-        DataVariantLiteral,
-        DataVariantElement,
-        DataVariantFunction]}}
+      evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
+        TermVariantLiteral,
+        TermVariantElement,
+        TermVariantFunction]}}
 
 testElementArthur :: Element Meta
 testElementArthur = Element {
@@ -76,7 +76,7 @@ testSchemaGraph = Graph testSchemaGraphName [
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
-testDataArthur :: Data Meta
+testDataArthur :: Term Meta
 testDataArthur = nominalRecord cx (Name "Person") [
   Field (FieldName "firstName") $ stringValue "Arthur",
   Field (FieldName "lastName") $ stringValue "Dent",
@@ -93,5 +93,5 @@ testTypeTimestamp = Types.union [
   FieldType (FieldName "unixTimeMillis") Types.uint64,
   FieldType (FieldName "date") Types.string]
 
-allTerms :: Data Meta -> Bool
+allTerms :: Term Meta -> Bool
 allTerms _ = True

@@ -36,7 +36,7 @@ type Unifier m = (Subst m, [Constraint m])
 
 
 bind :: Eq m => TypeVariable -> Type m -> Solve (Subst m) m
-bind a t | typeTerm t == TypeTermVariable a = return M.empty
+bind a t | typeExpr t == TypeExprVariable a = return M.empty
          | variableOccursInType a t = throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
 
@@ -53,28 +53,28 @@ unificationSolver cx (su, cs) = case cs of
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
 unify :: (Default m, Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
-unify cx t1 t2 = if typeTerm t1 == typeTerm t2
+unify cx t1 t2 = if typeExpr t1 == typeExpr t2
     then return M.empty
-    else case (typeTerm t1, typeTerm t2) of
-      (TypeTermElement et1, TypeTermElement et2) -> unify cx et1 et2
-      (TypeTermFunction (FunctionType t1 t2), TypeTermFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
-      (TypeTermList lt1, TypeTermList lt2) -> unify cx lt1 lt2
-      (TypeTermMap (MapType k1 v1), TypeTermMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
---      (TypeTermNominal name, t) -> case M.lookup name (contextElements cx) of
+    else case (typeExpr t1, typeExpr t2) of
+      (TypeExprElement et1, TypeExprElement et2) -> unify cx et1 et2
+      (TypeExprFunction (FunctionType t1 t2), TypeExprFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
+      (TypeExprList lt1, TypeExprList lt2) -> unify cx lt1 lt2
+      (TypeExprMap (MapType k1 v1), TypeExprMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
+--      (TypeExprNominal name, t) -> case M.lookup name (contextElements cx) of
 --          Nothing -> throwError $ ElementUndefined name
 --          Just (Element _ _ dat) -> case decodeType cx dat of
 --            ResultFailure msg -> throwError $ InvalidTypeEncoding msg
 --            ResultSuccess typ -> unify cx typ t
-      (TypeTermOptional ot1, TypeTermOptional ot2) -> unify cx ot1 ot2
-      (TypeTermRecord f1, TypeTermRecord f2) -> unifyRowType f1 f2
-      (TypeTermSet st1, TypeTermSet st2) -> unify cx st1 st2
-      (TypeTermUnion f1, TypeTermUnion f2) -> unifyRowType f1 f2
-      (TypeTermUniversal (UniversalType (TypeVariable v1) body1), TypeTermUniversal (UniversalType (TypeVariable v2) body2)) -> unifyMany cx
+      (TypeExprOptional ot1, TypeExprOptional ot2) -> unify cx ot1 ot2
+      (TypeExprRecord f1, TypeExprRecord f2) -> unifyRowType f1 f2
+      (TypeExprSet st1, TypeExprSet st2) -> unify cx st1 st2
+      (TypeExprUnion f1, TypeExprUnion f2) -> unifyRowType f1 f2
+      (TypeExprUniversal (UniversalType (TypeVariable v1) body1), TypeExprUniversal (UniversalType (TypeVariable v2) body2)) -> unifyMany cx
         [Types.variable v1, body1] [Types.variable v2, body2]
-      (TypeTermVariable v, _) -> bind v t2
-      (_, TypeTermVariable v) -> bind v t1
-      (TypeTermNominal name, _) -> return M.empty
-      (_, TypeTermNominal name) -> unify cx (Types.nominal name) t1
+      (TypeExprVariable v, _) -> bind v t2
+      (_, TypeExprVariable v) -> bind v t1
+      (TypeExprNominal name, _) -> return M.empty
+      (_, TypeExprNominal name) -> unify cx (Types.nominal name) t1
       _ -> throwError $ UnificationFail t1 t2
   where
     unifyRowType f1 f2 = unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)

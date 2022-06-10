@@ -6,7 +6,7 @@ import Hydra.Graph
 
 data Any = Any
 
-newtype Trm a = Trm {unTrm :: Data Meta} deriving (Eq, Ord, Read, Show)
+newtype Trm a = Trm {unTrm :: Term Meta} deriving (Eq, Ord, Read, Show)
 
 data El a = El {
   elGraph :: GraphName,

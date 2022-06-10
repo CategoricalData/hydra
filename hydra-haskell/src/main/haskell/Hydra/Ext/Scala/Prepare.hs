@@ -45,19 +45,19 @@ prepareIntegerType it = case it of
     $ \(IntegerValueUint64 v) -> IntegerValueInt64 v
   _ -> same it
 
-prepareType :: Default m => Type m -> (Type m, Data m -> Data m, S.Set String)
-prepareType typ = case typeTerm typ of
-  TypeTermLiteral at -> (Types.literal rtyp, \(Data (DataTermLiteral av) m) -> Data (DataTermLiteral $ rep av) m, msgs)
+prepareType :: Default m => Type m -> (Type m, Term m -> Term m, S.Set String)
+prepareType typ = case typeExpr typ of
+  TypeExprLiteral at -> (Types.literal rtyp, \(Term (TermExprLiteral av) m) -> Term (TermExprLiteral $ rep av) m, msgs)
     where
       (rtyp, rep, msgs) = prepareLiteralType at
---  TypeTermElement et ->
---  TypeTermFunction (FunctionType dom cod) ->
---  TypeTermList lt ->
---  TypeTermMap (MapType kt vt) ->
---  TypeTermNominal name ->
---  TypeTermRecord fields ->
---  TypeTermSet st ->
---  TypeTermUnion fields ->
+--  TypeExprElement et ->
+--  TypeExprFunction (FunctionType dom cod) ->
+--  TypeExprList lt ->
+--  TypeExprMap (MapType kt vt) ->
+--  TypeExprNominal name ->
+--  TypeExprRecord fields ->
+--  TypeExprSet st ->
+--  TypeExprUnion fields ->
 
 same :: a -> (a, b -> b, S.Set c)
 same x = (x, id, S.empty)

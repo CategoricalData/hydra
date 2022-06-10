@@ -27,7 +27,7 @@ int32ElementType = Types.element Types.int32
 int32ElementDataType :: Default m => Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
-latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Data m
+latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Term m
 latlonRecord lat lon = record [Field (FieldName "lat") $ int32Value lat, Field (FieldName "lon") $ int32Value lon]
 
 latLonType :: Default m => Type m
@@ -51,8 +51,8 @@ listOfSetOfStringsType = Types.list $ Types.set Types.string
 listOfStringsType :: Default m => Type m
 listOfStringsType = Types.list Types.string
 
-makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Data a
-makeMap keyvals = defaultData $ DataTermMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Term a
+makeMap keyvals = defaultTerm $ TermExprMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Default m => Type m
 mapOfStringsToIntsType = Types.map Types.string Types.int32
@@ -81,8 +81,8 @@ unionTypeForFunctions dom = Types.union [
   FieldType _Elimination_nominal Types.string,
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
-  FieldType _Elimination_union Types.string, -- TODO (TypeTermRecord cases)
+  FieldType _Elimination_union Types.string, -- TODO (TypeExprRecord cases)
   FieldType _Function_compareTo dom,
-  FieldType _Function_lambda Types.string, -- TODO (TypeTermRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
+  FieldType _Function_lambda Types.string, -- TODO (TypeExprRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
   FieldType _Function_primitive Types.string,
-  FieldType _DataTerm_variable Types.string]
+  FieldType _TermExpr_variable Types.string]

@@ -15,9 +15,9 @@ yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
   languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-  languageConstraintsDataVariants = S.fromList termVariants,
+  languageConstraintsTermVariants = S.fromList termVariants,
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case typeTerm typ of
-    TypeTermOptional (Type (TypeTermOptional _) _) -> False
+  languageConstraintsTypes = \typ -> case typeExpr typ of
+    TypeExprOptional (Type (TypeExprOptional _) _) -> False
     _ -> True }

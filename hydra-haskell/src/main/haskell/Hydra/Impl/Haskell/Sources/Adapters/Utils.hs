@@ -10,37 +10,37 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Sources.Basics
 
 
-(++.) :: Default a => Data a -> Data a -> Data a
+(++.) :: Default a => Term a -> Term a -> Term a
 l ++. r = apply (primitive _strings_cat) $ list [l, r]
 
-(@.) :: Default a => Data a -> Data a -> Data a
+(@.) :: Default a => Term a -> Term a -> Term a
 l @. r = apply l r
 
-(->.) :: Default a => String -> Data a -> Data a
+(->.) :: Default a => String -> Term a -> Term a
 v ->. body = lambda v body
 
-const_ :: Default a => Data a -> Data a
+const_ :: Default a => Term a -> Term a
 const_ = constFunction
 
-_eldata :: Default a1 => Element a2 -> Data a1
+_eldata :: Default a1 => Element a2 -> Term a1
 _eldata el = delta @. element (elementName el)
 
-l_ :: Default a => String -> Data a -> Data a
+l_ :: Default a => String -> Term a -> Term a
 l_ = lambda
 
-match_ :: Name -> Type Meta -> [(FieldName, Data Meta)] -> Data Meta
+match_ :: Name -> Type Meta -> [(FieldName, Term Meta)] -> Term Meta
 match_ = standardMatch
 
-p_ :: Default a => Name -> Data a
+p_ :: Default a => Name -> Term a
 p_ = primitive
 
-r_ :: Name -> [Field Meta] -> Data Meta
+r_ :: Name -> [Field Meta] -> Term Meta
 r_ = standardRecord
 
-s_ :: String -> Data Meta
+s_ :: String -> Term Meta
 s_ = stringValue
 
-v_ :: Default a => String -> Data a
+v_ :: Default a => String -> Term a
 v_ = variable
 
 
@@ -98,32 +98,32 @@ describeType = standardFunction adapterUtilsName "describeType"
   "Display a type as a string"
   (Types.universal "m" $ Types.nominal _Type) Types.string $
   lambda "typ" $ apply
-    (match_ _TypeTerm Types.string [
-      (_TypeTerm_literal, _eldata describeLiteralType),
-      (_TypeTerm_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
-      (_TypeTerm_function, l_"ft" $ s_"functions from "
+    (match_ _TypeExpr Types.string [
+      (_TypeExpr_literal, _eldata describeLiteralType),
+      (_TypeExpr_element, l_"t" $ s_"elements containing " ++. (_eldata describeType @. v_"t")),
+      (_TypeExpr_function, l_"ft" $ s_"functions from "
         ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_domain (Types.nominal _Type) @. v_"ft"))
         ++. s_" to "
         ++. (_eldata describeType @. (project (Types.nominal _FunctionType) _FunctionType_codomain (Types.nominal _Type) @. v_"ft"))),
-      (_TypeTerm_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
-      (_TypeTerm_map, l_"mt" $ s_"maps from "
+      (_TypeExpr_list, l_"t" $ s_"lists of " ++. (_eldata describeType @. v_"t")),
+      (_TypeExpr_map, l_"mt" $ s_"maps from "
         ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_keys (Types.nominal _Type) @. v_"mt"))
         ++. s_" to "
         ++. (_eldata describeType @. (project (Types.nominal _MapType) _MapType_values (Types.nominal _Type) @. v_"mt"))),
-      (_TypeTerm_nominal, l_"name" $ s_"alias for " ++. apply (eliminateNominal _Name) (v_"name")),
-      (_TypeTerm_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
-      (_TypeTerm_record, const_ $ s_"records of a particular set of fields"),
-      (_TypeTerm_set, l_"st" $ s_"sets of " ++. (_eldata describeType @. v_"st")),
-      (_TypeTerm_union, const_ $ s_"unions of a particular set of fields"),
-      (_TypeTerm_universal, const_ $ s_"polymorphic terms"),
-      (_TypeTerm_variable, const_ $ s_"unspecified/parametric terms")])
-    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_term (Types.universal "m" $ Types.nominal _TypeTerm))
+      (_TypeExpr_nominal, l_"name" $ s_"alias for " ++. apply (eliminateNominal _Name) (v_"name")),
+      (_TypeExpr_optional, l_"ot" $ s_"optional " ++. (_eldata describeType @. v_"ot")),
+      (_TypeExpr_record, const_ $ s_"records of a particular set of fields"),
+      (_TypeExpr_set, l_"st" $ s_"sets of " ++. (_eldata describeType @. v_"st")),
+      (_TypeExpr_union, const_ $ s_"unions of a particular set of fields"),
+      (_TypeExpr_universal, const_ $ s_"polymorphic terms"),
+      (_TypeExpr_variable, const_ $ s_"unspecified/parametric terms")])
+    (apply (project (Types.universal "m" $ Types.nominal _Type) _Type_expr (Types.universal "m" $ Types.nominal _TypeExpr))
            $ variable "typ")
 
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"
 --  "An identity adapter for a given type"
---  (Types.nominal _Type) (TypeTermUniversal (UniversalType "m" $ ())) $
+--  (Types.nominal _Type) (TypeExprUniversal (UniversalType "m" $ ())) $
 --  l_"t" $ r_ _Adapter [
 --    Field _Adapter_isLossy (booleanValue False),
 --    Field _Adapter_source (v_"t"),
