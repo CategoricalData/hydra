@@ -13,218 +13,218 @@ import qualified Control.Monad as CM
 import Data.Int
 
 
-apply :: Default a => Data a -> Data a -> Data a
-apply func arg = defaultData $ DataTermApplication $ Application func arg
+apply :: Default a => Term a -> Term a -> Term a
+apply func arg = defaultTerm $ TermExprApplication $ Application func arg
 
-atomic :: Default a => Literal -> Data a
-atomic = defaultData . DataTermLiteral
+atomic :: Default a => Literal -> Term a
+atomic = defaultTerm . TermExprLiteral
 
-bigfloatValue :: Default a => Double -> Data a
+bigfloatValue :: Default a => Double -> Term a
 bigfloatValue = floatValue . FloatValueBigfloat
 
-bigintValue :: Default a => Integer -> Data a
+bigintValue :: Default a => Integer -> Term a
 bigintValue = integerValue . IntegerValueBigint . fromIntegral
 
-binaryData :: Default a => String -> Data a
-binaryData = defaultData . DataTermLiteral . LiteralBinary
+binaryTerm :: Default a => String -> Term a
+binaryTerm = defaultTerm . TermExprLiteral . LiteralBinary
 
-booleanValue :: Default a => Bool -> Data a
-booleanValue b = defaultData $ DataTermLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+booleanValue :: Default a => Bool -> Term a
+booleanValue b = defaultTerm $ TermExprLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
-cases :: Default a => [Field a] -> Data a
-cases = defaultData . DataTermFunction . FunctionElimination . EliminationUnion
+cases :: Default a => [Field a] -> Term a
+cases = defaultTerm . TermExprFunction . FunctionElimination . EliminationUnion
 
-compareTo :: Default a => Data a -> Data a
-compareTo = defaultData . DataTermFunction . FunctionCompareTo
+compareTo :: Default a => Term a -> Term a
+compareTo = defaultTerm . TermExprFunction . FunctionCompareTo
 
-compose :: Default a => Data a -> Data a -> Data a
+compose :: Default a => Term a -> Term a -> Term a
 compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
   where var = "x"
 
-constFunction :: Default a => Data a -> Data a
+constFunction :: Default a => Term a -> Term a
 constFunction = lambda "_"
 
-delta :: Default a => Data a
-delta = defaultData $ DataTermFunction $ FunctionElimination EliminationElement
+delta :: Default a => Term a
+delta = defaultTerm $ TermExprFunction $ FunctionElimination EliminationElement
 
-defaultData  :: Default a => DataTerm a -> Data a
-defaultData e = Data e dflt
+defaultTerm  :: Default a => TermExpr a -> Term a
+defaultTerm e = Term e dflt
 
-element :: Default a => Name -> Data a
-element = defaultData . DataTermElement
+element :: Default a => Name -> Term a
+element = defaultTerm . TermExprElement
 
-elementRef :: Default a => Element a -> Data a
-elementRef el = apply delta $ defaultData $ DataTermElement $ elementName el
+elementRef :: Default a => Element a -> Term a
+elementRef el = apply delta $ defaultTerm $ TermExprElement $ elementName el
 
-elementRefByName :: Default a => Name -> Data a
-elementRefByName name = apply delta $ defaultData $ DataTermElement name
+elementRefByName :: Default a => Name -> Term a
+elementRefByName name = apply delta $ defaultTerm $ TermExprElement name
 
-eliminateNominal :: Default a => Name -> Data a
-eliminateNominal name = defaultData $ DataTermFunction $ FunctionElimination $ EliminationNominal name
+eliminateNominal :: Default a => Name -> Term a
+eliminateNominal name = defaultTerm $ TermExprFunction $ FunctionElimination $ EliminationNominal name
 
-expectInt32 :: Show a => Data a -> Result Int
-expectInt32 term = case dataTerm term of
-  DataTermLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
+expectInt32 :: Show a => Term a -> Result Int
+expectInt32 term = case termExpr term of
+  TermExprLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
   _ -> fail $ "expected an int32, got " ++ show term
 
-expectList :: Show m => (Data m -> Result a) -> Data m -> Result [a]
+expectList :: Show m => (Term m -> Result a) -> Term m -> Result [a]
 expectList f term = expectListPoly term >>= CM.mapM f
 
-expectListPoly :: Show m => Data m -> Result [Data m]
-expectListPoly term = case dataTerm term of
-  DataTermList els -> pure els
+expectListPoly :: Show m => Term m -> Result [Term m]
+expectListPoly term = case termExpr term of
+  TermExprList els -> pure els
   _ -> fail $ "expected a list, got " ++ show term
 
-expectLiteral :: Show a => Data a -> Result Literal
-expectLiteral term = case dataTerm term of
-  DataTermLiteral av -> pure av
+expectLiteral :: Show a => Term a -> Result Literal
+expectLiteral term = case termExpr term of
+  TermExprLiteral av -> pure av
   _ -> fail $ "expected a literal value, got " ++ show term
 
-expectNArgs :: Int -> [Data a] -> Result ()
+expectNArgs :: Int -> [Term a] -> Result ()
 expectNArgs n args = if L.length args /= n
   then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
   else pure ()
 
-expectRecord :: Show a => Data a -> Result [Field a]
-expectRecord term = case dataTerm term of
-  DataTermRecord fields -> pure fields
+expectRecord :: Show a => Term a -> Result [Field a]
+expectRecord term = case termExpr term of
+  TermExprRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
-expectSet :: (Ord a, Show m) => (Data m -> Result a) -> Data m -> Result (S.Set a)
-expectSet f term = case dataTerm term of
-  DataTermSet s -> S.fromList <$> CM.mapM f (S.toList s)
+expectSet :: (Ord a, Show m) => (Term m -> Result a) -> Term m -> Result (S.Set a)
+expectSet f term = case termExpr term of
+  TermExprSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> fail $ "expected a set, got " ++ show term
 
-expectString :: Show a => Data a -> Result String
-expectString term = case dataTerm term of
-  DataTermLiteral (LiteralString s) -> pure s
+expectString :: Show a => Term a -> Result String
+expectString term = case termExpr term of
+  TermExprLiteral (LiteralString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
-expectUnion :: Show a => Data a -> Result (Field a)
-expectUnion term = case dataTerm term of
-  DataTermUnion field -> pure field
+expectUnion :: Show a => Term a -> Result (Field a)
+expectUnion term = case termExpr term of
+  TermExprUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
-fieldsToMap :: [Field a] -> M.Map FieldName (Data a)
+fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
-float32Value :: Default a => Float -> Data a
+float32Value :: Default a => Float -> Term a
 float32Value = floatValue . FloatValueFloat32
 
-float64Value :: Default a => Double -> Data a
+float64Value :: Default a => Double -> Term a
 float64Value = floatValue . FloatValueFloat64
 
-floatValue :: Default a => FloatValue -> Data a
-floatValue = defaultData . DataTermLiteral . LiteralFloat
+floatValue :: Default a => FloatValue -> Term a
+floatValue = defaultTerm . TermExprLiteral . LiteralFloat
 
-int16Value :: Default a => Int16 -> Data a
+int16Value :: Default a => Int16 -> Term a
 int16Value = integerValue . IntegerValueInt16 . fromIntegral
 
-int32Value :: Default a => Int -> Data a
+int32Value :: Default a => Int -> Term a
 int32Value = integerValue . IntegerValueInt32
 
-int64Value :: Default a => Int64 -> Data a
+int64Value :: Default a => Int64 -> Term a
 int64Value = integerValue . IntegerValueInt64 . fromIntegral
 
-int8Value :: Default a => Int8 -> Data a
+int8Value :: Default a => Int8 -> Term a
 int8Value = integerValue . IntegerValueInt8 . fromIntegral
 
-integerValue :: Default a => IntegerValue -> Data a
-integerValue = defaultData . DataTermLiteral . LiteralInteger
+integerValue :: Default a => IntegerValue -> Term a
+integerValue = defaultTerm . TermExprLiteral . LiteralInteger
 
-lambda :: Default a => String -> Data a -> Data a
-lambda param body = defaultData $ DataTermFunction $ FunctionLambda $ Lambda (Variable param) body
+lambda :: Default a => String -> Term a -> Term a
+lambda param body = defaultTerm $ TermExprFunction $ FunctionLambda $ Lambda (Variable param) body
 
-letData :: Default a => Variable -> Data a -> Data a -> Data a
-letData v t1 t2 = defaultData $ DataTermLet $ Let v t1 t2
+letTerm :: Default a => Variable -> Term a -> Term a -> Term a
+letTerm v t1 t2 = defaultTerm $ TermExprLet $ Let v t1 t2
 
-list :: Default a => [Data a] -> Data a
-list = defaultData . DataTermList
+list :: Default a => [Term a] -> Term a
+list = defaultTerm . TermExprList
 
-map :: Default a => M.Map (Data a) (Data a) -> Data a
-map = defaultData . DataTermMap
+map :: Default a => M.Map (Term a) (Term a) -> Term a
+map = defaultTerm . TermExprMap
 
-mapData :: Default a => M.Map (Data a) (Data a) -> Data a
-mapData = defaultData . DataTermMap
+mapTerm :: Default a => M.Map (Term a) (Term a) -> Term a
+mapTerm = defaultTerm . TermExprMap
 
-match :: Default a => [(FieldName, Data a)] -> Data a
+match :: Default a => [(FieldName, Term a)] -> Term a
 match = cases . fmap toField
   where
     toField (name, term) = Field name term
 
-matchOptional :: Default a => Data a -> Data a -> Data a
-matchOptional n j = defaultData $ DataTermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
+matchOptional :: Default a => Term a -> Term a -> Term a
+matchOptional n j = defaultTerm $ TermExprFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
  
-matchWithVariants :: Default a => [(FieldName, FieldName)] -> Data a
+matchWithVariants :: Default a => [(FieldName, FieldName)] -> Term a
 matchWithVariants = cases . fmap toField
   where
     toField (from, to) = Field from $ constFunction $ unitVariant to
 
-nominal :: Default a => Name -> Data a -> Data a
-nominal name term = defaultData $ DataTermNominal $ Named name term
+nominal :: Default a => Name -> Term a -> Term a
+nominal name term = defaultTerm $ TermExprNominal $ Named name term
 
-optional :: Default a => Y.Maybe (Data a) -> Data a
-optional = defaultData . DataTermOptional
+optional :: Default a => Y.Maybe (Term a) -> Term a
+optional = defaultTerm . TermExprOptional
 
-primitive :: Default a => Name -> Data a
-primitive = defaultData . DataTermFunction . FunctionPrimitive
+primitive :: Default a => Name -> Term a
+primitive = defaultTerm . TermExprFunction . FunctionPrimitive
 
-projection :: Default a => FieldName -> Data a
-projection = defaultData . DataTermFunction . FunctionElimination . EliminationRecord
+projection :: Default a => FieldName -> Term a
+projection = defaultTerm . TermExprFunction . FunctionElimination . EliminationRecord
 
-record :: Default a => [Field a] -> Data a
-record = defaultData . DataTermRecord
+record :: Default a => [Field a] -> Term a
+record = defaultTerm . TermExprRecord
 
-requireField :: M.Map FieldName (Data a) -> FieldName -> Result (Data a)
+requireField :: M.Map FieldName (Term a) -> FieldName -> Result (Term a)
 requireField fields fname = Y.maybe error ResultSuccess $ M.lookup fname fields
   where
     error = fail $ "no such field: " ++ unFieldName fname
 
-set :: Default a => S.Set (Data a) -> Data a
-set = defaultData . DataTermSet
+set :: Default a => S.Set (Term a) -> Term a
+set = defaultTerm . TermExprSet
 
-setMeta :: m -> Data m -> Data m
-setMeta meta dat = dat {dataMeta = meta}
+setMeta :: m -> Term m -> Term m
+setMeta meta dat = dat {termMeta = meta}
 
-stringList :: Default a => [String] -> Data a
+stringList :: Default a => [String] -> Term a
 stringList l = list (stringValue <$> l)
 
-stringSet :: (Default a, Ord a) => S.Set String -> Data a
+stringSet :: (Default a, Ord a) => S.Set String -> Term a
 stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
 
-stringValue :: Default a => String -> Data a
-stringValue = defaultData . DataTermLiteral . LiteralString
+stringValue :: Default a => String -> Term a
+stringValue = defaultTerm . TermExprLiteral . LiteralString
 
-uint16Value :: Default a => Integer -> Data a
+uint16Value :: Default a => Integer -> Term a
 uint16Value = integerValue . IntegerValueUint16 . fromIntegral
 
-uint32Value :: Default a => Integer -> Data a
+uint32Value :: Default a => Integer -> Term a
 uint32Value = integerValue . IntegerValueUint32 . fromIntegral
 
-uint64Value :: Default a => Integer -> Data a
+uint64Value :: Default a => Integer -> Term a
 uint64Value = integerValue . IntegerValueUint64 . fromIntegral
 
-uint8Value :: Default a => Integer -> Data a
+uint8Value :: Default a => Integer -> Term a
 uint8Value = integerValue . IntegerValueUint8 . fromIntegral
 
-union :: Default a => Field a -> Data a
-union field = defaultData $ DataTermUnion field
+union :: Default a => Field a -> Term a
+union field = defaultTerm $ TermExprUnion field
 
-unitData :: Default a => Data a
-unitData = defaultData $ DataTermRecord []
+unitTerm :: Default a => Term a
+unitTerm = defaultTerm $ TermExprRecord []
 
-unitVariant :: Default a => FieldName -> Data a
-unitVariant fname = variant fname unitData
+unitVariant :: Default a => FieldName -> Term a
+unitVariant fname = variant fname unitTerm
 
-variable :: Default a => String -> Data a
-variable = defaultData . DataTermVariable . Variable
+variable :: Default a => String -> Term a
+variable = defaultTerm . TermExprVariable . Variable
 
-variant :: Default a => FieldName -> Data a -> Data a
-variant fname term = defaultData $ DataTermUnion $ Field fname term
+variant :: Default a => FieldName -> Term a -> Term a
+variant fname term = defaultTerm $ TermExprUnion $ Field fname term
 
-withFunction :: Default a => FieldName -> Element a -> Data a
+withFunction :: Default a => FieldName -> Element a -> Term a
 withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
   where var = "x"
 
-withVariant :: Default a => FieldName -> Data a
+withVariant :: Default a => FieldName -> Term a
 withVariant = constFunction . unitVariant

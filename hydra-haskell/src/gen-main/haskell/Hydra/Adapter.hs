@@ -5,7 +5,7 @@ import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
 
-data Adapter t v
+data Adapter t v 
   = Adapter {
     adapterIsLossy :: Bool,
     adapterSource :: t,
@@ -22,7 +22,7 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_step = (Core.FieldName "step")
 
-data AdapterContext a
+data AdapterContext a 
   = AdapterContext {
     adapterContextEvaluation :: (Evaluation.Context a),
     adapterContextSource :: (Language a),
@@ -36,14 +36,14 @@ _AdapterContext_source = (Core.FieldName "source")
 
 _AdapterContext_target = (Core.FieldName "target")
 
-data LanguageConstraints m
+data LanguageConstraints m 
   = LanguageConstraints {
     languageConstraintsEliminationVariants :: (Set Core.EliminationVariant),
     languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
     languageConstraintsFloatTypes :: (Set Core.FloatType),
     languageConstraintsFunctionVariants :: (Set Core.FunctionVariant),
     languageConstraintsIntegerTypes :: (Set Core.IntegerType),
-    languageConstraintsDataVariants :: (Set Core.DataVariant),
+    languageConstraintsTermVariants :: (Set Core.TermVariant),
     languageConstraintsTypeVariants :: (Set Core.TypeVariant),
     languageConstraintsTypes :: (Core.Type m -> Bool)}
 
@@ -59,20 +59,20 @@ _LanguageConstraints_functionVariants = (Core.FieldName "functionVariants")
 
 _LanguageConstraints_integerTypes = (Core.FieldName "integerTypes")
 
-_LanguageConstraints_dataVariants = (Core.FieldName "dataVariants")
+_LanguageConstraints_termVariants = (Core.FieldName "termVariants")
 
 _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 
 _LanguageConstraints_types = (Core.FieldName "types")
 
-newtype LanguageName
+newtype LanguageName 
   = LanguageName {
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LanguageName = (Core.Name "hydra/adapter.LanguageName")
 
-data Language m
+data Language m 
   = Language {
     languageName :: LanguageName,
     languageConstraints :: (LanguageConstraints m)}

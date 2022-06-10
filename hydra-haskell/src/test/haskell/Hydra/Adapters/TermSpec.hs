@@ -139,7 +139,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (compareTo $ stringValue s)
       (compareTo $ stringValue s)
 
-  H.it "Data terms (when supported) pass through without change" $
+  H.it "Term terms (when supported) pass through without change" $
     QC.property $ \() -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
       int32ElementDataType
@@ -212,7 +212,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       delta
-      (nominalUnion testContext _Function $ Field (FieldName "element") unitData)
+      (nominalUnion testContext _Function $ Field (FieldName "element") unitTerm)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -330,7 +330,7 @@ roundTripsPreserveArbitraryTypes :: H.SpecWith ()
 roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do
 
   H.it "Check arbitrary type/term pairs" $
-    QC.property $ \(TypedData typ term) -> roundTripIsNoop typ term
+    QC.property $ \(TypedTerm typ term) -> roundTripIsNoop typ term
 
 fieldAdaptersAreAsExpected :: H.SpecWith ()
 fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expected" $ do
@@ -344,7 +344,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Field (FieldName "second") $ int8Value i)
       (Field (FieldName "second") $ int16Value $ fromIntegral i)
 
-roundTripIsNoop :: Type Meta -> Data Meta -> Bool
+roundTripIsNoop :: Type Meta -> Term Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
   where
     step = adapt typ
@@ -357,11 +357,11 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
       languageConstraintsFunctionVariants = S.empty,
       languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
-      languageConstraintsDataVariants = S.fromList termVariants,
+      languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case typeTerm typ of
-        TypeTermOptional (Type (TypeTermOptional _) _) -> False
+      languageConstraintsTypes = \typ -> case typeExpr typ of
+        TypeExprOptional (Type (TypeExprOptional _) _) -> False
         _ -> True }
 
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage

@@ -18,11 +18,11 @@ binary = literal LiteralTypeBinary
 boolean :: Default m => Type m
 boolean = literal LiteralTypeBoolean
 
-defaultType  :: Default m => TypeTerm m -> Type m
+defaultType  :: Default m => TypeExpr m -> Type m
 defaultType e = Type e dflt
 
 element :: Default m => Type m -> Type m
-element = defaultType . TypeTermElement
+element = defaultType . TypeExprElement
 
 enum :: Default m => [String] -> Type m
 enum names = union $ (`field` unit) <$> names
@@ -43,7 +43,7 @@ float :: Default m => FloatType -> Type m
 float = literal . LiteralTypeFloat
 
 function :: Default m => Type m -> Type m -> Type m
-function dom cod = defaultType $ TypeTermFunction $ FunctionType dom cod
+function dom cod = defaultType $ TypeExprFunction $ FunctionType dom cod
 
 int16 :: Default m => Type m
 int16 = integer IntegerTypeInt16
@@ -61,31 +61,31 @@ integer :: Default m => IntegerType -> Type m
 integer = literal . LiteralTypeInteger
 
 list :: Default m => Type m -> Type m
-list = defaultType . TypeTermList
+list = defaultType . TypeExprList
 
 literal :: Default m => LiteralType -> Type m
-literal = defaultType . TypeTermLiteral
+literal = defaultType . TypeExprLiteral
 
 map :: Default m => Type m -> Type m -> Type m
-map kt vt = defaultType $ TypeTermMap $ MapType kt vt
+map kt vt = defaultType $ TypeExprMap $ MapType kt vt
 
 nominal :: Default m => Name -> Type m
-nominal = defaultType . TypeTermNominal
+nominal = defaultType . TypeExprNominal
 
 optional :: Default m => Type m -> Type m
-optional = defaultType . TypeTermOptional
+optional = defaultType . TypeExprOptional
 
 record :: Default m => [FieldType m] -> Type m
-record = defaultType . TypeTermRecord
+record = defaultType . TypeExprRecord
 
 set :: Default m => Type m -> Type m
-set = defaultType . TypeTermSet
+set = defaultType . TypeExprSet
 
 string :: Default m => Type m
 string = literal LiteralTypeString
 
 variable :: Default m => String -> Type m
-variable = defaultType . TypeTermVariable . TypeVariable
+variable = defaultType . TypeExprVariable . TypeVariable
 
 uint16 :: Default m => Type m
 uint16 = integer IntegerTypeUint16
@@ -100,10 +100,10 @@ uint8 :: Default m => Type m
 uint8 = integer IntegerTypeUint8
 
 union :: Default m => [FieldType m] -> Type m
-union = defaultType . TypeTermUnion
+union = defaultType . TypeExprUnion
 
 unit :: Default m => Type m
 unit = record []
 
 universal :: Default m => String -> Type m -> Type m
-universal v body = defaultType $ TypeTermUniversal $ UniversalType (TypeVariable v) body
+universal v body = defaultType $ TypeExprUniversal $ UniversalType (TypeVariable v) body

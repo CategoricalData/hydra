@@ -19,7 +19,7 @@ bigint :: Integer -> Trm Integer
 bigint = Trm . Terms.bigintValue
 
 binary :: Binary -> Trm Binary
-binary = Trm . Terms.binaryData
+binary = Trm . Terms.binaryTerm
 
 bool :: Bool -> Trm Bool
 bool = Trm . Terms.booleanValue

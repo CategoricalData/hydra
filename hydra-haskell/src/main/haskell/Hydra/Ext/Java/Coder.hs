@@ -24,12 +24,12 @@ listsAsArrays :: Bool
 listsAsArrays = False
 
 moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
-moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encodeData aliases) constructModule cx g
+moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 
 constructModule :: (Default m, Ord m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Step (Data m) Java.Block) -> [(Element m, TypedData m)]
+  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
   -> Result Java.CompilationUnit
 constructModule cx g coders pairs = do
     let pkg = javaPackageDeclaration $ graphName g
@@ -39,21 +39,21 @@ constructModule cx g coders pairs = do
     let types = typeDecls -- TODO
     return $ Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports types
   where
-    isTypePair = isType . typedDataType . snd
+    isTypePair = isType . typedTermType . snd
     typePairs = L.filter isTypePair pairs
     dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
 
 toTypeDeclaration :: (Default m, Ord m, Show m)
-  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedData m) -> Result Java.TypeDeclaration
-toTypeDeclaration aliases cx (el, TypedData _ term) = do
+  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
+toTypeDeclaration aliases cx (el, TypedTerm _ term) = do
     t <- decodeType cx term
     cd <- toClassDecl (elementName el) t
     return $ Java.TypeDeclarationClass cd
   where
-    toClassDecl elName t = case typeTerm t of
-      TypeTermNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
-      TypeTermRecord fields -> do
+    toClassDecl elName t = case typeExpr t of
+      TypeExprNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
+      TypeExprRecord fields -> do
           memberVars <- CM.mapM toMemberVar fields
           withMethods <- if L.length fields > 1
             then CM.mapM toWithMethod fields
@@ -162,7 +162,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
                     where
                       first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-      TypeTermUnion fields -> do
+      TypeExprUnion fields -> do
           variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
           let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
           let bodyDecls = [privateConstructor, toAcceptMethod True, visitor, partialVisitor] ++ variantDecls
@@ -231,7 +231,7 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
               classRef = javaClassTypeToJavaType $
                 nameToJavaClassType aliases False $ variantClassName elName fname
 
-      TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
+      TypeExprUniversal (UniversalType (TypeVariable v) body) -> do
         (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
         return $ Java.ClassDeclarationNormal $ cd {
           Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
@@ -241,32 +241,32 @@ toTypeDeclaration aliases cx (el, TypedData _ term) = do
     topMods = [Java.ClassModifierPublic]
 
 isUnit :: Eq m => Type m -> Bool
-isUnit t = typeTerm t  == TypeTermRecord []
+isUnit t = typeExpr t  == TypeExprRecord []
 
 variantClassName :: Name -> FieldName -> Name
 variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname
 
 -- | Transform a given type into a type which can be used as the basis for a Java class
 toDeclarationType :: Default m => Type m -> Result (Type m)
-toDeclarationType t = case typeTerm t of
-  TypeTermNominal _ -> pure t
-  TypeTermRecord _ -> pure t
-  TypeTermUnion _ -> pure t
-  TypeTermUniversal (UniversalType v body) -> do
+toDeclarationType t = case typeExpr t of
+  TypeExprNominal _ -> pure t
+  TypeExprRecord _ -> pure t
+  TypeExprUnion _ -> pure t
+  TypeExprUniversal (UniversalType v body) -> do
     b <- toDeclarationType body
-    return t {typeTerm = TypeTermUniversal $ UniversalType v b}
-  TypeTermVariable _ -> fail "unexpected type variable"
+    return t {typeExpr = TypeExprUniversal $ UniversalType v b}
+  TypeExprVariable _ -> fail "unexpected type variable"
   _ -> do
     let rt = Types.record [Types.field "value" t]
-    return t {typeTerm = typeTerm rt}
+    return t {typeExpr = typeExpr rt}
 
-toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedData m) -> Result a
-toDataDeclaration aliases cx (el, TypedData typ term) = do
+toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
+toDataDeclaration aliases cx (el, TypedTerm typ term) = do
   fail "not implemented" -- TODO
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Context m -> Data m -> Result Java.Block
-encodeData aliases cx term@(Data expr meta) = do
+encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
+  => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
+encodeTerm aliases cx term@(Term expr meta) = do
   return $ javaStatementsToBlock [javaEmptyStatement] -- TODO
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
@@ -292,36 +292,36 @@ encodeLiteralType lt = case lt of
     simple n = pure $ javaRefType [] Nothing n
 
 encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
-encodeType aliases t = case typeTerm t of
-  TypeTermElement et -> encode et -- Elements are simply unboxed
-  TypeTermFunction (FunctionType dom cod) -> do
+encodeType aliases t = case typeExpr t of
+  TypeExprElement et -> encode et -- Elements are simply unboxed
+  TypeExprFunction (FunctionType dom cod) -> do
     jdom <- encode dom >>= asJavaReferenceType
     jcod <- encode cod >>= asJavaReferenceType
     return $ javaRefType [jdom, jcod] javaUtilPackageName "Function"
-  TypeTermList et -> do
+  TypeExprList et -> do
     jet <- encode et
     if listsAsArrays
       then toJavaArrayType jet
       else do
         rt <- asJavaReferenceType jet
         return $ javaRefType [rt] javaUtilPackageName "List"
-  TypeTermLiteral lt -> encodeLiteralType lt
-  TypeTermMap (MapType kt vt) -> do
+  TypeExprLiteral lt -> encodeLiteralType lt
+  TypeExprMap (MapType kt vt) -> do
     jkt <- encode kt >>= asJavaReferenceType
     jvt <- encode vt >>= asJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeTermNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
-  TypeTermOptional ot -> do
+  TypeExprNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
+  TypeExprOptional ot -> do
     jot <- encode ot >>= asJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
-  TypeTermSet st -> do
+  TypeExprSet st -> do
     jst <- encode st >>= asJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeTermUniversal (UniversalType (TypeVariable v) body) -> do
+  TypeExprUniversal (UniversalType (TypeVariable v) body) -> do
     jbody <- encode body
     addJavaTypeParameter (javaTypeVariable v) jbody
-  TypeTermVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeTermRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeExprVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
+  TypeExprRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
   -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where

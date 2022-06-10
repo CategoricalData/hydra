@@ -13,9 +13,9 @@ import qualified Data.Maybe as Y
 
 
 nameOfType :: Type m -> Y.Maybe Name
-nameOfType t = case typeTerm t of
-  TypeTermNominal name -> Just name
-  TypeTermUniversal (UniversalType _ body) -> nameOfType body
+nameOfType t = case typeExpr t of
+  TypeExprNominal name -> Just name
+  TypeExprUniversal (UniversalType _ body) -> nameOfType body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String

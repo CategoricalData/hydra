@@ -20,19 +20,19 @@ checkLiterals = do
   H.describe "Tests for atomic values" $ do
 
     H.it "Atomic terms have no free variables" $
-      QC.property $ \av -> termIsClosed (atomic av :: Data Meta)
+      QC.property $ \av -> termIsClosed (atomic av :: Term Meta)
 
     H.it "Atomic terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testStrategy (atomic av :: Data Meta)
+      QC.property $ \av -> termIsValue testStrategy (atomic av :: Term Meta)
 
     H.it "Atomic terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
         H.shouldBe
           (eval (atomic av))
-          (pure (atomic av :: Data Meta))
+          (pure (atomic av :: Term Meta))
 
     H.it "Atomic terms cannot be applied" $
-      QC.property $ \av (TypedData _ term) -> isFailure (eval $ apply (atomic av) term)
+      QC.property $ \av (TypedTerm _ term) -> isFailure (eval $ apply (atomic av) term)
 
 checkMonomorphicPrimitives :: H.SpecWith ()
 checkMonomorphicPrimitives = do
@@ -84,5 +84,5 @@ spec = do
   checkMonomorphicPrimitives
   checkPolymorphicPrimitives
   
-eval :: Data Meta -> Result (Data Meta)
+eval :: Term Meta -> Result (Term Meta)
 eval = evaluate testContext

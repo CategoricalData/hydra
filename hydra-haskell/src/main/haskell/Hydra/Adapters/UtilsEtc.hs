@@ -39,7 +39,7 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
 
-idAdapter :: Type m -> Adapter (Type m) (Data m)
+idAdapter :: Type m -> Adapter (Type m) (Term m)
 idAdapter t = Adapter False t t idStep
 
 qualify :: String -> a -> Qualified a
@@ -61,14 +61,14 @@ integerTypeIsSupported constraints it = S.member it $ languageConstraintsInteger
 typeIsSupported :: LanguageConstraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
-  && case typeTerm t of
-    TypeTermLiteral at -> literalTypeIsSupported constraints at
-    TypeTermFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
-    TypeTermList lt -> typeIsSupported constraints lt
-    TypeTermMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
-    TypeTermNominal _ -> True -- TODO: dereference the type
-    TypeTermOptional t -> typeIsSupported constraints t
-    TypeTermRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
-    TypeTermSet st -> typeIsSupported constraints st
-    TypeTermUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+  && case typeExpr t of
+    TypeExprLiteral at -> literalTypeIsSupported constraints at
+    TypeExprFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
+    TypeExprList lt -> typeIsSupported constraints lt
+    TypeExprMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
+    TypeExprNominal _ -> True -- TODO: dereference the type
+    TypeExprOptional t -> typeIsSupported constraints t
+    TypeExprRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeExprSet st -> typeIsSupported constraints st
+    TypeExprUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     _ -> True

@@ -25,13 +25,13 @@ dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) grap
 
 dataGraphToExternalModule :: (Default m, Ord m, Read m, Show m)
   => Language m
-  -> (Context m -> Data m -> Result e)
-  -> (Context m -> Graph m -> M.Map (Type m) (Step (Data m) e) -> [(Element m, TypedData m)] -> Result d)
+  -> (Context m -> Term m -> Result e)
+  -> (Context m -> Graph m -> M.Map (Type m) (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
   -> Context m -> Graph m -> Qualified d
-dataGraphToExternalModule lang encodeData createModule cx g = do
+dataGraphToExternalModule lang encodeTerm createModule cx g = do
     scx <- resultToQualified $ schemaContext cx
-    pairs <- resultToQualified $ CM.mapM (elementAsTypedData scx) els
-    coders <- codersFor $ L.nub (typedDataType <$> pairs)
+    pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
+    coders <- codersFor $ L.nub (typedTermType <$> pairs)
     resultToQualified $ createModule cx g coders $ L.zip els pairs
   where
     els = graphElements g
@@ -46,4 +46,4 @@ dataGraphToExternalModule lang encodeData createModule cx g = do
         return $ composeSteps (adapterStep adapter) coder
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
-        termCoder _ = pure $ unidirectionalStep (encodeData cx)
+        termCoder _ = pure $ unidirectionalStep (encodeTerm cx)

@@ -22,14 +22,14 @@ pegasusDataLanguage = Language (LanguageName "hydra/ext/pegasus/pdl") $ Language
   languageConstraintsIntegerTypes = S.fromList [
     IntegerTypeInt32,
     IntegerTypeInt64],
-  languageConstraintsDataVariants = S.fromList [
-    DataVariantList,
-    DataVariantLiteral,
-    DataVariantMap,
-    DataVariantNominal,
-    DataVariantOptional,
-    DataVariantRecord,
-    DataVariantUnion],
+  languageConstraintsTermVariants = S.fromList [
+    TermVariantList,
+    TermVariantLiteral,
+    TermVariantMap,
+    TermVariantNominal,
+    TermVariantOptional,
+    TermVariantRecord,
+    TermVariantUnion],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantElement,
     TypeVariantList,

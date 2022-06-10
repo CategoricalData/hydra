@@ -40,27 +40,27 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
         record [
-          field "opaqueDataVariants" (set $ core "DataVariant")],
+          field "opaqueTermVariants" (set $ core "TermVariant")],
 
       def "InputSpec" $
         doc "A helper object for specifying and unmarshalling an argument to a primitive function" $
         universal "a" $ universal "m" $ record [
           field "type" $ universal "m" $ core "Type",
-          field "unmarshal" $ function (universal "m" $ core "Data") (universal "a" $ evaluation "Result")],
+          field "unmarshal" $ function (universal "m" $ core "Term") (universal "a" $ evaluation "Result")],
 
       def "OutputSpec" $
         doc "A helper object for specifying and marshalling the output of a primitive function" $
         universal "a" $ universal "m" $ record [
           field "type" $ universal "m" $ core "Type",
-          field "marshal" $ function (variable "a") (universal "m" $ core "Data")],
+          field "marshal" $ function (variable "a") (universal "m" $ core "Term")],
 
       def "PrimitiveFunction" $
         doc "A built-in function" $
         universal "m" $ record [
           field "name" $ core "Name",
           field "type" $ universal "m" $ core "FunctionType",
-          field "implementation" $ function (list $ universal "m" $ core "Data")
-            (universal "(Core.Data m)" $ evaluation "Result")], -- TODO: this is a hack
+          field "implementation" $ function (list $ universal "m" $ core "Term")
+            (universal "(Core.Term m)" $ evaluation "Result")], -- TODO: this is a hack
 
       def "Result" $
         doc "A qualified result; success with a value or failure with an error message" $

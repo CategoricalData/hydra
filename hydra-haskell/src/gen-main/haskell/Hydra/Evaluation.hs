@@ -38,18 +38,18 @@ _Context_setTypeOf = (Core.FieldName "setTypeOf")
 -- Settings which determine how terms are evaluated
 data EvaluationStrategy 
   = EvaluationStrategy {
-    evaluationStrategyOpaqueDataVariants :: (Set Core.DataVariant)}
+    evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
   deriving (Eq, Ord, Read, Show)
 
 _EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
 
-_EvaluationStrategy_opaqueDataVariants = (Core.FieldName "opaqueDataVariants")
+_EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
 -- A helper object for specifying and unmarshalling an argument to a primitive function
 data InputSpec a m 
   = InputSpec {
     inputSpecType :: (Core.Type m),
-    inputSpecUnmarshal :: (Core.Data m -> Result a)}
+    inputSpecUnmarshal :: (Core.Term m -> Result a)}
 
 _InputSpec = (Core.Name "hydra/evaluation.InputSpec")
 
@@ -61,7 +61,7 @@ _InputSpec_unmarshal = (Core.FieldName "unmarshal")
 data OutputSpec a m 
   = OutputSpec {
     outputSpecType :: (Core.Type m),
-    outputSpecMarshal :: (a -> Core.Data m)}
+    outputSpecMarshal :: (a -> Core.Term m)}
 
 _OutputSpec = (Core.Name "hydra/evaluation.OutputSpec")
 
@@ -74,7 +74,7 @@ data PrimitiveFunction m
   = PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
     primitiveFunctionType :: (Core.FunctionType m),
-    primitiveFunctionImplementation :: ([Core.Data m] -> Result (Core.Data m))}
+    primitiveFunctionImplementation :: ([Core.Term m] -> Result (Core.Term m))}
 
 _PrimitiveFunction = (Core.Name "hydra/evaluation.PrimitiveFunction")
 

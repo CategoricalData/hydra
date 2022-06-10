@@ -45,7 +45,7 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "floatTypes" $ Types.set $ core "FloatType",
           field "functionVariants" $ Types.set $ core "FunctionVariant",
           field "integerTypes" $ Types.set $ core "IntegerType",
-          field "dataVariants" $ Types.set $ core "DataVariant",
+          field "termVariants" $ Types.set $ core "TermVariant",
           field "typeVariants" $ Types.set $ core "TypeVariant",
           field "types" $ function (universal "m" $ core "Type") boolean],
           

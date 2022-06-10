@@ -19,13 +19,13 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-deref :: Context m -> Data m -> Result (Data m)
-deref cx term = case dataTerm term of
-  DataTermElement name -> dereferenceElement cx name >>= deref cx
-  DataTermNominal (Named _ term') -> deref cx term'
+deref :: Context m -> Term m -> Result (Term m)
+deref cx term = case termExpr term of
+  TermExprElement name -> dereferenceElement cx name >>= deref cx
+  TermExprNominal (Named _ term') -> deref cx term'
   _ -> ResultSuccess term
 
-dereferenceElement :: Context m -> Name -> Result (Data m)
+dereferenceElement :: Context m -> Name -> Result (Term m)
 dereferenceElement cx en = case M.lookup en (contextElements cx) of
     Nothing -> ResultFailure $ "element " ++ unName en ++ " does not exist in graph " ++ h (graphSetRoot (contextGraphs cx))
     Just e -> ResultSuccess $ elementData e
@@ -46,8 +46,8 @@ lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 primitiveFunctionArity :: PrimitiveFunction m -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
   where
-    arity (FunctionType _ cod) = 1 + case typeTerm cod of
-      TypeTermFunction ft -> arity ft
+    arity (FunctionType _ cod) = 1 + case typeExpr cod of
+      TypeExprFunction ft -> arity ft
       _ -> 0
 
 requireElement :: Context m -> Name -> Result (Element m)

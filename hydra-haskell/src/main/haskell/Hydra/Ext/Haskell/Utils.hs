@@ -100,8 +100,8 @@ unionFieldReference namespaces sname (FieldName fname) = elementReference namesp
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
 unpackUniversalType :: Type m -> ([TypeVariable], Type m)
-unpackUniversalType t = case typeTerm t of
-  TypeTermUniversal (UniversalType v tbody) -> (v:vars, t')
+unpackUniversalType t = case typeExpr t of
+  TypeExprUniversal (UniversalType v tbody) -> (v:vars, t')
     where
       (vars, t') = unpackUniversalType tbody
   _ -> ([], t)

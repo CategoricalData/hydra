@@ -17,19 +17,19 @@ import qualified Data.Maybe as Y
 datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
-annotate :: String -> Y.Maybe (Data Meta) -> Type Meta -> Type Meta
+annotate :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
 annotate key val (Type term meta) = Type term $ setAnnotation key val meta
 
 doc :: String -> Type Meta -> Type Meta
 doc s (Type term meta) = Type term $ setDescription (Just s) meta
 
-dataDoc :: String -> Data Meta -> Data Meta
-dataDoc s (Data term meta) = Data term $ setDescription (Just s) meta
+dataDoc :: String -> Term Meta -> Term Meta
+dataDoc s (Term term meta) = Term term $ setDescription (Just s) meta
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList t = doc "Note: list cannot be empty" $ Types.list t
 
-project :: Type Meta -> FieldName -> Type Meta -> Data Meta
+project :: Type Meta -> FieldName -> Type Meta -> Term Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
 
 qualify :: GraphName -> Name -> Name
@@ -45,7 +45,7 @@ standardContext = cx
              contextElements = M.empty,
              contextFunctions = M.empty,
              contextStrategy = EvaluationStrategy {
-               evaluationStrategyOpaqueDataVariants = S.fromList []},
+               evaluationStrategyOpaqueTermVariants = S.fromList []},
              contextDescriptionOf = getDescription,
              contextTypeOf = getType cx,
              contextSetDescriptionOf = \d m -> setDescription d m,
@@ -53,45 +53,45 @@ standardContext = cx
     emptyGraphName = GraphName "empty"
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
-standardElement :: GraphName -> String -> String -> Type Meta -> Data Meta -> Element Meta
+standardElement :: GraphName -> String -> String -> Type Meta -> Term Meta -> Element Meta
 standardElement (GraphName ns) name desc typ term = Element (Name $ ns ++ "." ++ name) (encodeType standardContext typ)
   $ dataDoc desc term
 
-standardFunction :: GraphName -> String -> String -> Type Meta -> Type Meta -> Data Meta -> Element Meta
+standardFunction :: GraphName -> String -> String -> Type Meta -> Type Meta -> Term Meta -> Element Meta
 standardFunction ns name desc dom cod = standardElement ns name desc typ
   where
     typ = Types.function dom cod
 
 standardGraph :: GraphName -> [Element Meta] -> Graph Meta
-standardGraph name els = Graph name els dataTerms schemaGraph
+standardGraph name els = Graph name els termExprs schemaGraph
   where
-    dataTerms = const True -- TODO
+    termExprs = const True -- TODO
     schemaGraph = GraphName "hydra/core"
 
-standardMatch :: Name -> Type Meta -> [(FieldName, Data Meta)] -> Data Meta
+standardMatch :: Name -> Type Meta -> [(FieldName, Term Meta)] -> Term Meta
 standardMatch = nominalMatch standardContext
 
-standardMatchWithVariants :: Type Meta -> Type Meta -> [(FieldName, FieldName)] -> Data Meta
+standardMatchWithVariants :: Type Meta -> Type Meta -> [(FieldName, FieldName)] -> Term Meta
 standardMatchWithVariants = nominalMatchWithVariants standardContext
 
-standardRecord :: Name -> [Field Meta] -> Data Meta
+standardRecord :: Name -> [Field Meta] -> Term Meta
 standardRecord = nominalRecord standardContext
 
-standardWithUnitVariant :: Name -> FieldName -> Data Meta
+standardWithUnitVariant :: Name -> FieldName -> Term Meta
 standardWithUnitVariant = nominalWithUnitVariant standardContext
 
-standardWithFunction :: Name -> FieldName -> Element Meta -> Data Meta
+standardWithFunction :: Name -> FieldName -> Element Meta -> Term Meta
 standardWithFunction = nominalWithFunction standardContext
 
-standardWithType :: Type Meta -> Data Meta -> Data Meta
+standardWithType :: Type Meta -> Term Meta -> Term Meta
 standardWithType = withType standardContext
 
-standardWithVariant :: Name -> FieldName -> Data Meta -> Data Meta
+standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
 standardWithVariant = nominalWithVariant standardContext
 
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {
     elementName = name,
-    elementSchema = defaultData $ DataTermElement _Type,
+    elementSchema = defaultTerm $ TermExprElement _Type,
     elementData = encodeType cx typ}

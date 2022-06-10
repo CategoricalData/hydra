@@ -38,13 +38,13 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       cond IntegerTypeInt64 (dataTypeFeaturesSupportsLongValues vpFeatures)],
 
     -- Only lists and literal values may be explicitly supported via Graph.Features.
-    languageConstraintsDataVariants = S.fromList $ Y.catMaybes [
-      Just DataVariantElement, -- Note: subject to the APG taxonomy
-      cond DataVariantList supportsLists,
-      cond DataVariantLiteral supportsLiterals,
-      cond DataVariantMap supportsMaps,
+    languageConstraintsTermVariants = S.fromList $ Y.catMaybes [
+      Just TermVariantElement, -- Note: subject to the APG taxonomy
+      cond TermVariantList supportsLists,
+      cond TermVariantLiteral supportsLiterals,
+      cond TermVariantMap supportsMaps,
       -- An optional value translates to an absent vertex property
-      Just DataVariantOptional],
+      Just TermVariantOptional],
 
     languageConstraintsTypeVariants = S.fromList $ Y.catMaybes [
       Just TypeVariantElement,
@@ -54,11 +54,11 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TypeVariantOptional,
       Just TypeVariantNominal],
       
-    languageConstraintsTypes = \typ -> case typeTerm typ of
-      TypeTermElement et -> True
+    languageConstraintsTypes = \typ -> case typeExpr typ of
+      TypeExprElement et -> True
       -- Only lists of atomic values are supported, as nothing else is mentioned in Graph.Features
-      TypeTermList t -> case typeTerm t of
-        TypeTermLiteral lt -> case lt of
+      TypeExprList t -> case typeExpr t of
+        TypeExprLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
           LiteralTypeFloat ft -> case ft of
             FloatTypeFloat64 -> dataTypeFeaturesSupportsDoubleArrayValues vpFeatures
@@ -72,12 +72,12 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
           LiteralTypeString -> dataTypeFeaturesSupportsStringArrayValues vpFeatures
           _ -> False
         _ -> False
-      TypeTermLiteral _ -> True
-      TypeTermMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
-      TypeTermNominal _ -> True
-      TypeTermOptional ot -> case typeTerm ot of
-        TypeTermElement _ -> True -- Note: subject to the APG taxonomy
-        TypeTermLiteral _ -> True
+      TypeExprLiteral _ -> True
+      TypeExprMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
+      TypeExprNominal _ -> True
+      TypeExprOptional ot -> case typeExpr ot of
+        TypeExprElement _ -> True -- Note: subject to the APG taxonomy
+        TypeExprLiteral _ -> True
         _ -> False
       _ -> True}
 

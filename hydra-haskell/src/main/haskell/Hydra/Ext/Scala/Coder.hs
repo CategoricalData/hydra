@@ -27,9 +27,9 @@ import qualified Data.Maybe as Y
 
 
 moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
-moduleToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedData constructModule
+moduleToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedTerm constructModule
 
-constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Data m) Scala.Data) -> [(Element m, TypedData m)]
+constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -46,13 +46,13 @@ constructModule cx g coders pairs = do
         toPrimImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
-    toDef (el, TypedData typ term) = do
+    toDef (el, TypedTerm typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders
         rhs <- stepOut coder term
         Scala.StatDefn <$> case rhs of
           Scala.DataApply _ -> toVal rhs
-          Scala.DataFunctionData fun -> case typeTerm typ of
-            TypeTermFunction (FunctionType _ cod) -> toDefn fun cod
+          Scala.DataFunctionData fun -> case typeExpr typ of
+            TypeExprFunction (FunctionType _ cod) -> toDefn fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
           Scala.DataLit _ -> toVal rhs
           Scala.DataRef _ -> toVal rhs -- TODO
@@ -72,9 +72,9 @@ constructModule cx g coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name $ Scala.PredefString lname
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Data m) -> Result Scala.Data
+encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Term m) -> Result Scala.Data
 encodeFunction cx meta fun arg = case fun of
-    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeData cx body <*> (findSdom meta)
+    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeTerm cx body <*> (findSdom meta)
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationElement -> pure $ sname "DATA" -- TODO
@@ -89,21 +89,21 @@ encodeFunction cx meta fun arg = case fun of
           case arg of
             Nothing -> slambda v <$> pure (Scala.DataMatch $ Scala.Data_Match (sname v) scases) <*> findSdom meta
             Just a -> do
-              sa <- encodeData cx a
+              sa <- encodeTerm cx a
               return $ Scala.DataMatch $ Scala.Data_Match sa scases
         where
           encodeCase ftypes sn cx f@(Field fname fterm) = do
-  --            dom <- findDomain (dataMeta fterm)           -- Option #1: use type inference
+  --            dom <- findDomain (termMeta fterm)           -- Option #1: use type inference
               let dom = Y.fromJust $ M.lookup fname ftypes -- Option #2: look up the union type
               let patArgs = if dom == Types.unit then [] else [svar v]
               -- Note: PatExtract has the right syntax, though this may or may not be the Scalameta-intended way to use it
               let pat = Scala.PatExtract $ Scala.Pat_Extract (sname $ qualifyUnionFieldName "MATCHED." sn fname) patArgs
-              body <- encodeData cx $ applyVar fterm v
+              body <- encodeTerm cx $ applyVar fterm v
               return $ Scala.Case pat Nothing body
             where
               v = Variable "y"
-          applyVar fterm var@(Variable v) = case dataTerm fterm of
-            DataTermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
+          applyVar fterm var@(Variable v) = case termExpr fterm of
+            TermExprFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
               then body
               else substituteVariable v1 var body
             _ -> apply fterm (variable v)
@@ -116,9 +116,9 @@ encodeFunction cx meta fun arg = case fun of
           Nothing -> fail $ "expected a typed term"
           Just t -> domainOf t
       where
-        domainOf t = case typeTerm t of
-          TypeTermFunction (FunctionType dom _) -> pure dom
-          TypeTermElement et -> domainOf et
+        domainOf t = case typeExpr t of
+          TypeExprFunction (FunctionType dom _) -> pure dom
+          TypeExprElement et -> domainOf et
           _ -> fail $ "expected a function type, but found " ++ show t
 
 encodeLiteral :: Literal -> Result Scala.Lit
@@ -139,51 +139,51 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ Scala.LitString s
     _ -> unexpected "literal value" av
 
-encodeData :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Data m -> Result Scala.Data
-encodeData cx term@(Data expr meta) = case expr of
-    DataTermApplication (Application fun arg) -> case dataTerm fun of
-        DataTermFunction f -> case f of
+encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
+encodeTerm cx term@(Term expr meta) = case expr of
+    TermExprApplication (Application fun arg) -> case termExpr fun of
+        TermExprFunction f -> case f of
           FunctionElimination e -> case e of
-            EliminationElement -> encodeData cx arg
+            EliminationElement -> encodeTerm cx arg
             EliminationRecord (FieldName fname) -> do
-              sarg <- encodeData cx arg
+              sarg <- encodeTerm cx arg
               return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
                 (Scala.Data_Name $ Scala.PredefString fname)
-            EliminationUnion _ -> encodeFunction cx (dataMeta fun) f (Just arg)
+            EliminationUnion _ -> encodeFunction cx (termMeta fun) f (Just arg)
           _ -> fallback
         _ -> fallback
       where
-        fallback = sapply <$> encodeData cx fun <*> ((: []) <$> encodeData cx arg)
-    DataTermElement name -> pure $ sname $ localNameOf name
-    DataTermFunction f -> encodeFunction cx (dataMeta term) f Nothing
-    DataTermList els -> sapply (sname "Seq") <$> CM.mapM (encodeData cx) els
-    DataTermLiteral v -> Scala.DataLit <$> encodeLiteral v
-    DataTermMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
+        fallback = sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
+    TermExprElement name -> pure $ sname $ localNameOf name
+    TermExprFunction f -> encodeFunction cx (termMeta term) f Nothing
+    TermExprList els -> sapply (sname "Seq") <$> CM.mapM (encodeTerm cx) els
+    TermExprLiteral v -> Scala.DataLit <$> encodeLiteral v
+    TermExprMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
       where
-        toPair (k, v) = sassign <$> encodeData cx k <*> encodeData cx v
-    DataTermNominal (Named _ term') -> encodeData cx term'
-    DataTermOptional m -> case m of
+        toPair (k, v) = sassign <$> encodeTerm cx k <*> encodeTerm cx v
+    TermExprNominal (Named _ term') -> encodeTerm cx term'
+    TermExprOptional m -> case m of
       Nothing -> pure $ sname "None"
-      Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeData cx t
-    DataTermRecord fields -> do
+      Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm cx t
+    TermExprRecord fields -> do
       sn <- schemaName
       case sn of
         Nothing -> fail $ "unexpected anonymous record: " ++ show term
         Just name -> do
           let n = scalaTypeName False name
-          args <- CM.mapM (encodeData cx) (fieldData <$> fields)
+          args <- CM.mapM (encodeTerm cx) (fieldTerm <$> fields)
           return $ sapply (sname n) args
-    DataTermSet s -> sapply (sname "Set") <$> CM.mapM (encodeData cx) (S.toList s)
-    DataTermUnion (Field fn ft) -> do
+    TermExprSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
+    TermExprUnion (Field fn ft) -> do
       sn <- schemaName
       let lhs = sname $ qualifyUnionFieldName "UNION." sn fn
-      args <- case dataTerm ft of
-        DataTermRecord [] -> pure []
+      args <- case termExpr ft of
+        TermExprRecord [] -> pure []
         _ -> do
-          arg <- encodeData cx ft
+          arg <- encodeTerm cx ft
           return [arg]
       return $ sapply lhs args
-    DataTermVariable (Variable v) -> pure $ sname v
+    TermExprVariable (Variable v) -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
   where
     schemaName = do
@@ -191,14 +191,14 @@ encodeData cx term@(Data expr meta) = case expr of
       pure $ r >>= nameOfType
 
 encodeType :: Show m => Type m -> Result Scala.Type
-encodeType t = case typeTerm t of
---  TypeTermElement et ->
-  TypeTermFunction (FunctionType dom cod) -> do
+encodeType t = case typeExpr t of
+--  TypeExprElement et ->
+  TypeExprFunction (FunctionType dom cod) -> do
     sdom <- encodeType dom
     scod <- encodeType cod
     return $ Scala.TypeFunctionType $ Scala.Type_FunctionTypeFunction $ Scala.Type_Function [sdom] scod
-  TypeTermList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
-  TypeTermLiteral lt -> case lt of
+  TypeExprList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
+  TypeExprLiteral lt -> case lt of
 --    TypeBinary ->
     LiteralTypeBoolean -> pure $ stref "Boolean"
     LiteralTypeFloat ft -> case ft of
@@ -216,22 +216,22 @@ encodeType t = case typeTerm t of
 --      IntegerTypeUint32 ->
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
-  TypeTermMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeTermNominal name -> pure $ stref $ scalaTypeName True name
-  TypeTermOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
---  TypeTermRecord sfields ->
-  TypeTermSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
---  TypeTermUnion sfields ->
-  TypeTermUniversal (UniversalType v body) -> do
+  TypeExprMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
+  TypeExprNominal name -> pure $ stref $ scalaTypeName True name
+  TypeExprOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
+--  TypeExprRecord sfields ->
+  TypeExprSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
+--  TypeExprUnion sfields ->
+  TypeExprUniversal (UniversalType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
-  TypeTermVariable (TypeVariable v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
+  TypeExprVariable (TypeVariable v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
-encodeUntypedData :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Data m -> Result Scala.Data
-encodeUntypedData cx term = do
+encodeUntypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
+encodeUntypedTerm cx term = do
     (term1, _) <- inferType cx term
-    let term2 = rewriteDataMeta annotType term1
-    encodeData cx term2
+    let term2 = rewriteTermMeta annotType term1
+    encodeTerm cx term2
   where
     annotType (m, t, _) = contextSetTypeOf cx (Just t) m

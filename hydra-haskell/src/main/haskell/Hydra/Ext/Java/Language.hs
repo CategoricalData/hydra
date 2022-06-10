@@ -28,20 +28,20 @@ javaLanguage = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
     IntegerTypeInt64, -- long
     IntegerTypeUint8, -- byte
     IntegerTypeUint16], -- char
-  languageConstraintsDataVariants = S.fromList [
-    DataVariantApplication,
-    DataVariantElement,
-    DataVariantFunction,
+  languageConstraintsTermVariants = S.fromList [
+    TermVariantApplication,
+    TermVariantElement,
+    TermVariantFunction,
     -- Note: "let" is excluded for now
-    DataVariantList,
-    DataVariantLiteral,
-    DataVariantMap,
-    DataVariantNominal,
-    DataVariantOptional,
-    DataVariantRecord,
-    DataVariantSet,
-    DataVariantUnion,
-    DataVariantVariable],
+    TermVariantList,
+    TermVariantLiteral,
+    TermVariantMap,
+    TermVariantNominal,
+    TermVariantOptional,
+    TermVariantRecord,
+    TermVariantSet,
+    TermVariantUnion,
+    TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantElement,
     TypeVariantFunction,

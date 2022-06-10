@@ -50,7 +50,7 @@ graphNameOf :: Name -> GraphName
 graphNameOf = fst . toQname
 
 isType :: Eq m => Type m -> Bool
-isType typ = typeTerm typ == TypeTermNominal _Type
+isType typ = typeExpr typ == TypeExprNominal _Type
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname

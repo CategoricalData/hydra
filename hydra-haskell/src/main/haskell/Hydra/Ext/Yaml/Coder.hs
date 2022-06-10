@@ -44,16 +44,16 @@ atomicCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Data m) YM.Node)
+recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) YM.Node)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
   where
-    encode coders term = case dataTerm term of
-      DataTermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+    encode coders term = case termExpr term of
+      TermExprRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
-            (Type (TypeTermOptional _) _, Data (DataTermOptional Nothing) _) -> pure Nothing
+            (Type (TypeExprOptional _) _, Term (TermExprOptional Nothing) _) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
@@ -67,42 +67,42 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Data m) YM.Node)
-termCoder typ = case typeTerm typ of
-  TypeTermLiteral at -> do
+termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
+termCoder typ = case typeExpr typ of
+  TypeExprLiteral at -> do
     ac <- atomicCoder at
     return Step {
-      stepOut = \(Data (DataTermLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
+      stepOut = \(Term (TermExprLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
         YM.NodeScalar s -> atomic <$> stepIn ac s
         _ -> unexpected "scalar node" n}
-  TypeTermList lt -> do
+  TypeExprList lt -> do
     lc <- termCoder lt
     return Step {
-      stepOut = \(Data (DataTermList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
+      stepOut = \(Term (TermExprList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
       stepIn = \n -> case n of
         YM.NodeSequence nodes -> list <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected "sequence" n}
-  TypeTermOptional ot -> do
+  TypeExprOptional ot -> do
     oc <- termCoder ot
     return Step {
-      stepOut = \(Data (DataTermOptional el) _) -> Y.maybe (pure yamlNull) (stepOut oc) el,
+      stepOut = \(Term (TermExprOptional el) _) -> Y.maybe (pure yamlNull) (stepOut oc) el,
       stepIn = \n -> case n of
         YM.NodeScalar YM.ScalarNull -> pure $ optional Nothing
         _ -> optional . Just <$> stepIn oc n}
-  TypeTermMap (MapType kt vt) -> do
+  TypeExprMap (MapType kt vt) -> do
     kc <- termCoder kt
     vc <- termCoder vt
     let encodeEntry (k, v) = (,) <$> stepOut kc k <*> stepOut vc v
     let decodeEntry (k, v) = (,) <$> stepIn kc k <*> stepIn vc v
     return Step {
-      stepOut = \(Data (DataTermMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+      stepOut = \(Term (TermExprMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
       stepIn = \n -> case n of
-        YM.NodeMapping m -> defaultData . DataTermMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
+        YM.NodeMapping m -> defaultTerm . TermExprMap . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeTermRecord sfields -> recordCoder sfields
+  TypeExprRecord sfields -> recordCoder sfields
 
-yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Data m) YM.Node)
+yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) YM.Node)
 yamlCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter
