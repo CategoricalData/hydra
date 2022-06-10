@@ -92,7 +92,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       optionalInt16Type
       False
       (optional $ int8Value <$> mi)
-      (optional $ int16Value <$> mi)
+      (optional $ int16Value . fromIntegral <$> mi)
 
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkDataAdapter
@@ -101,7 +101,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
       (record [Field (FieldName "first") $ stringValue a1, Field (FieldName "second") $ int8Value a2])
-      (record [Field (FieldName "first") $ stringValue a1, Field (FieldName "second") $ int16Value a2])
+      (record [Field (FieldName "first") $ stringValue a1, Field (FieldName "second") $ int16Value $ fromIntegral a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkDataAdapter
@@ -264,7 +264,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         Field (FieldName "context") $ stringValue $ unName untyped,
         Field (FieldName "record") (record [
           Field (FieldName "left") $ optional Nothing,
-          Field (FieldName "right") $ optional $ Just $ int16Value i])])
+          Field (FieldName "right") $ optional $ Just $ int16Value $ fromIntegral i])])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
@@ -276,7 +276,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       listOfInt16sType
       False
       (list $ int8Value <$> ints)
-      (list $ int16Value <$> ints)
+      (list $ int16Value . fromIntegral <$> ints)
 
   H.it "A list of sets of strings becomes a list of lists of strings" $
     QC.property $ \lists -> checkDataAdapter
@@ -342,7 +342,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Types.field "second" Types.int16)
       False
       (Field (FieldName "second") $ int8Value i)
-      (Field (FieldName "second") $ int16Value i)
+      (Field (FieldName "second") $ int16Value $ fromIntegral i)
 
 roundTripIsNoop :: Type Meta -> Data Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
