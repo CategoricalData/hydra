@@ -12,7 +12,6 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
 

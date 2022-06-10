@@ -1,7 +1,7 @@
 module Hydra.Impl.Haskell.Dsl.Literals where
 
-import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Phantoms
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Data.Int
 
 
@@ -12,50 +12,61 @@ type Bigfloat = Double
 -- Note: does not distinguish Binary from String, because code generation does not.
 type Binary = String
 
-bigfloat :: Bigfloat -> Program Bigfloat
-bigfloat f = program $ DataTermLiteral $ LiteralFloat $ FloatValueBigfloat f
+bigfloat :: Bigfloat -> Trm Bigfloat
+bigfloat = Trm . Terms.bigfloatValue
 
-bigint :: Integer -> Program Integer
-bigint i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueBigint i
+bigint :: Integer -> Trm Integer
+bigint = Trm . Terms.bigintValue
 
-binary :: Binary -> Program Binary
-binary b = program $ DataTermLiteral $ LiteralBinary b
+binary :: Binary -> Trm Binary
+binary = Trm . Terms.binaryData
 
-bool :: Bool -> Program Bool
-bool b = program $ DataTermLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+bool :: Bool -> Trm Bool
+bool = Trm . Terms.booleanValue
 
+boolean :: Bool -> Trm Bool
 boolean = bool
 
+double :: Double -> Trm Double
 double = float64
 
+float :: Float -> Trm Float
 float = float32
 
-float32 :: Float -> Program Float
-float32 f = program $ DataTermLiteral $ LiteralFloat $ FloatValueFloat32 f
+float32 :: Float -> Trm Float
+float32 = Trm . Terms.float32Value
 
-float64 :: Double -> Program Double
-float64 f = program $ DataTermLiteral $ LiteralFloat $ FloatValueFloat64 f
+float64 :: Double -> Trm Double
+float64 = Trm . Terms.float64Value
 
+int :: Int -> Trm Int
 int = int32
 
-int8 :: Int8 -> Program Int8
-int8 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt8 $ fromIntegral i
+int8 :: Int8 -> Trm Int8
+int8 = Trm . Terms.int8Value
 
-int16 :: Int16 -> Program Int16
-int16 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt16 $ fromIntegral i
+int16 :: Int16 -> Trm Int16
+int16 = Trm . Terms.int16Value
 
-int32 :: Int -> Program Int
-int32 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt32 i
+int32 :: Int -> Trm Int
+int32 = Trm . Terms.int32Value
 
-int64 :: Int64 -> Program Int64
-int64 i = program $ DataTermLiteral $ LiteralInteger $ IntegerValueInt64 $ fromIntegral i
+int64 :: Int64 -> Trm Int64
+int64 = Trm . Terms.int64Value
 
-str :: String -> Program String
-str s = program $ DataTermLiteral $ LiteralString s
+str :: String -> Trm String
+str = Trm . Terms.stringValue
+
+string :: String -> Trm String
+string = str
 
 -- Note: untyped integers are not yet properly supported by the DSL,
 --       because they are not properly supported by code generation.
+uint8 :: Int8 -> Trm Int8
 uint8 = int8
+uint16 :: Int16 -> Trm Int16
 uint16 = int16
+uint32 :: Int -> Trm Int
 uint32 = int
+uint64 :: Int64 -> Trm Int64
 uint64 = int64
