@@ -10,6 +10,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Control.Monad as CM
+import Data.Int
 
 
 apply :: Default a => Data a -> Data a -> Data a
@@ -116,16 +117,16 @@ float64Value = floatValue . FloatValueFloat64
 floatValue :: Default a => FloatValue -> Data a
 floatValue = defaultData . DataTermLiteral . LiteralFloat
 
-int16Value :: Default a => Int -> Data a
+int16Value :: Default a => Int16 -> Data a
 int16Value = integerValue . IntegerValueInt16 . fromIntegral
 
 int32Value :: Default a => Int -> Data a
 int32Value = integerValue . IntegerValueInt32
 
-int64Value :: Default a => Integer -> Data a
-int64Value = integerValue . IntegerValueInt64
+int64Value :: Default a => Int64 -> Data a
+int64Value = integerValue . IntegerValueInt64 . fromIntegral
 
-int8Value :: Default a => Int -> Data a
+int8Value :: Default a => Int8 -> Data a
 int8Value = integerValue . IntegerValueInt8 . fromIntegral
 
 integerValue :: Default a => IntegerValue -> Data a
@@ -151,6 +152,9 @@ match = cases . fmap toField
   where
     toField (name, term) = Field name term
 
+matchOptional :: Default a => Data a -> Data a -> Data a
+matchOptional n j = defaultData $ DataTermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
+ 
 matchWithVariants :: Default a => [(FieldName, FieldName)] -> Data a
 matchWithVariants = cases . fmap toField
   where

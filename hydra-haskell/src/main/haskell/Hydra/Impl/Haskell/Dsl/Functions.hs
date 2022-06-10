@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Functions where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Phantoms
+import Hydra.Impl.Haskell.Dsl.PhantomsOld
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 
