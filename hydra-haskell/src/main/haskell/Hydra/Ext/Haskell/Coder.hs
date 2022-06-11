@@ -214,16 +214,17 @@ encodeFunction namespaces cx meta fun = case fun of
             H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
           toAlt fieldMap (Field fn fun') = do
             let v0 = "v"
-            let rhsTerm = simplifyTerm $ apply fun' (variable v0)
+            let raw = apply fun' (variable v0)
+            let rhsTerm = simplifyTerm raw
             let v1 = if isFreeIn (Variable v0) rhsTerm then "_" else v0
             dn <- domName
             hname <- case dn of
               Just n -> pure $ unionFieldReference namespaces n fn
               Nothing -> fail "unqualified field name"
             args <- case fieldMap >>= M.lookup fn of
-                  Just (FieldType _ (Type (TypeExprRecord []) _)) -> pure []
-                  Just _ -> pure [H.PatternName $ rawName v1]
-                  Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
+              Just (FieldType _ (Type (TypeExprRecord []) _)) -> pure []
+              Just _ -> pure [H.PatternName $ rawName v1]
+              Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
             let lhs = H.PatternApplication $ H.Pattern_Application hname args
             rhs <- H.CaseRhs <$> encodeTerm namespaces cx rhsTerm
             return $ H.Alternative lhs rhs Nothing

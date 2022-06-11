@@ -129,11 +129,12 @@ simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case termExpr term of
       TermExprApplication (Application lhs rhs) -> case termExpr lhs of
-        TermExprFunction (FunctionLambda (Lambda var body)) -> if S.member var (freeVariablesInTerm body)
-          then case termExpr rhs of
-            TermExprVariable v -> substituteVariable var v body
-            _ -> term
-          else body
+        TermExprFunction (FunctionLambda (Lambda var body)) ->
+          if S.member var (freeVariablesInTerm body)
+            then case termExpr rhs of
+              TermExprVariable v -> simplifyTerm $ substituteVariable var v body
+              _ -> term
+            else simplifyTerm body
         _ -> term
       _ -> term
 

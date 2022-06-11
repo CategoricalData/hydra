@@ -62,7 +62,7 @@ testFreeVariablesInTerm = do
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
         (S.fromList [Variable "x", Variable "y"])
-
+        
 testReplaceTerm :: H.SpecWith ()
 testReplaceTerm = do
     H.describe "Test term replacement" $ do
@@ -122,7 +122,17 @@ testSimplifyTerm = do
       H.shouldBe
         (simplifyTerm (apply (lambda "x" (stringValue "foo")) (int32Value 42)))
         (stringValue "foo" :: Term Meta)
-
+      H.shouldBe
+        (simplifyTerm (apply (lambda "x" $ list [variable "x", variable "x"]) (variable "y")))
+        (list [variable "y", variable "y"] :: Term Meta)
+      H.shouldBe
+        (simplifyTerm (apply (lambda "x" $ stringValue "foo") (variable "y")))
+        (stringValue "foo" :: Term Meta)
+      H.shouldBe
+        (simplifyTerm (apply (lambda "x"
+          (apply (lambda "a" (list [stringValue "foo", variable "a"])) (variable "x"))) (variable "y")))
+        (list [stringValue "foo", variable "y"] :: Term Meta)
+        
 testStripMeta :: H.SpecWith ()
 testStripMeta = do
   H.describe "Test stripping metadata from terms" $ do

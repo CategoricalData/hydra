@@ -8,7 +8,7 @@ import Data.Map
 import Data.Set
 
 -- Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination m -> Core.EliminationVariant)
+eliminationVariant :: (Core.Elimination a -> Core.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Core.EliminationVariantElement
   Core.EliminationNominal _ -> Core.EliminationVariantNominal
@@ -119,8 +119,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v -> (Core.LiteralTypeFloat (floatValueType v))
-  Core.LiteralInteger v -> (Core.LiteralTypeInteger (integerValueType v))
+  Core.LiteralFloat v -> ((\x -> Core.LiteralTypeFloat x) (floatValueType v))
+  Core.LiteralInteger v -> ((\x -> Core.LiteralTypeInteger x) (integerValueType v))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- Find the literal type variant (constructor) for a given literal value

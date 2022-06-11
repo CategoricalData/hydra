@@ -505,7 +505,7 @@ data TermVariant
   | TermVariantTypeAbstraction 
   | TermVariantTypeApplication 
   | TermVariantUnion 
-  | TermVariantUniversal
+  | TermVariantUniversal 
   | TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
@@ -538,6 +538,8 @@ _TermVariant_typeAbstraction = (FieldName "typeAbstraction")
 _TermVariant_typeApplication = (FieldName "typeApplication")
 
 _TermVariant_union = (FieldName "union")
+
+_TermVariant_universal = (FieldName "universal")
 
 _TermVariant_variable = (FieldName "variable")
 
