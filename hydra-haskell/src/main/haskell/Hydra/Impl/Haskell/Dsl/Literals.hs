@@ -30,6 +30,9 @@ boolean = bool
 double :: Double -> Trm Double
 double = float64
 
+false :: Trm Bool
+false = bool False
+
 float :: Float -> Trm Float
 float = float32
 
@@ -59,6 +62,9 @@ str = Trm . Terms.stringValue
 
 string :: String -> Trm String
 string = str
+
+true :: Trm Bool
+true = bool True
 
 -- Note: untyped integers are not yet properly supported by the DSL,
 --       because they are not properly supported by code generation.

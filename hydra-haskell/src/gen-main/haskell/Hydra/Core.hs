@@ -505,6 +505,7 @@ data TermVariant
   | TermVariantTypeAbstraction 
   | TermVariantTypeApplication 
   | TermVariantUnion 
+  | TermVariantUniversal
   | TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
