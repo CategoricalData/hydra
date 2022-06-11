@@ -5,7 +5,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Sources.Libraries
 
 
-cat :: Trm (String -> String -> String)
+cat :: Trm ([String] -> String)
 cat = Trm $ Terms.primitive _strings_cat
 
 length :: Trm (String -> Int)

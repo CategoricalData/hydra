@@ -17,5 +17,11 @@ intercalate = Trm $ Terms.primitive _lists_intercalate
 intersperse :: Trm ([a] -> a -> [a])
 intersperse = Trm $ Terms.primitive _lists_intersperse
 
+last :: Trm ([a] -> a)
+last = Trm $ Terms.primitive _lists_last
+
+length :: Trm ([a] -> Int)
+length = Trm $ Terms.primitive _lists_length
+
 --map :: Trm ((a -> b) -> [a] -> [b])
 --map = Trm $ Terms.primitive _lists_map

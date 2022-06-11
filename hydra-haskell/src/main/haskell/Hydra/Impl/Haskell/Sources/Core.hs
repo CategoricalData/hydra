@@ -309,6 +309,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "typeAbstraction",
           "typeApplication",
           "union",
+          "universal",
           "variable"],
 
       def "Type" $

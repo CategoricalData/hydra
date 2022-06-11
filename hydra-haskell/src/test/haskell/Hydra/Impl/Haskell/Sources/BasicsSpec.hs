@@ -2,10 +2,11 @@ module Hydra.Impl.Haskell.Sources.BasicsSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
+import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Basics
-import Hydra.Impl.Haskell.Sources.Basics (hydraBasics)
+import Hydra.Impl.Haskell.Sources.Basics (hydraBasicsModule)
 import Hydra.Interpreter
 import Hydra.Primitives
 import Hydra.CoreEncoding
@@ -18,7 +19,9 @@ import qualified Test.QuickCheck as QC
 
 
 testEvaluate :: Term Meta -> Result (Term Meta)
-testEvaluate term = stripMeta <$> evaluate (testContext { contextElements = graphElementsMap hydraBasics }) term
+testEvaluate term = do
+  basics <- moduleGraph <$> hydraBasicsModule
+  stripMeta <$> evaluate (testContext { contextElements = graphElementsMap basics }) term
 
 testsForDataTypeExprFunctions :: H.SpecWith a
 testsForDataTypeExprFunctions = do
