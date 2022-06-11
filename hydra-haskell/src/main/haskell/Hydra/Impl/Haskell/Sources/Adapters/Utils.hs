@@ -13,7 +13,7 @@ import Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
 
 adapterUtilsModule :: Result (Module Meta)
 adapterUtilsModule = do
-  g <- graph hydraBasicsName [
+  g <- graph adapterUtilsName [
     el describeFloatType,
     el describeIntegerType,
     el describeLiteralType,
