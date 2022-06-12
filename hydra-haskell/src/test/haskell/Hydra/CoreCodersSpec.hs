@@ -41,10 +41,10 @@ individualEncoderTestCases = do
         (stripMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
         (stripMeta $ variant _TypeExpr_record $ list [
           record [
-            Field _FieldType_name $ stringValue "something",
+            Field _FieldType_name $ string "something",
             Field _FieldType_type $ variant _TypeExpr_literal $ unitVariant _LiteralType_string],
           record [
-            Field _FieldType_name $ stringValue "nothing",
+            Field _FieldType_name $ string "nothing",
             Field _FieldType_type $ variant _TypeExpr_record $ list []]])
 
 individualDecoderTestCases :: H.SpecWith ()
@@ -62,10 +62,10 @@ individualDecoderTestCases = do
     H.it "union type" $ do
       decodeType testContext (variant _TypeExpr_union $ list [
         record [
-          Field _FieldType_name $ stringValue "left",
+          Field _FieldType_name $ string "left",
           Field _FieldType_type $ variant _TypeExpr_literal $ variant _LiteralType_integer $ unitVariant _IntegerType_int64],
         record [
-          Field _FieldType_name $ stringValue "right",
+          Field _FieldType_name $ string "right",
           Field _FieldType_type $ variant _TypeExpr_literal $ variant _LiteralType_float $ unitVariant _FloatType_float64]])
         `H.shouldBe` pure (Types.union [Types.field "left" Types.int64, Types.field "right" Types.float64])
 
@@ -90,7 +90,7 @@ metadataIsPreserved = do
   where
     annotatedStringType :: Type Meta
     annotatedStringType = Types.string {typeMeta = Meta $ M.fromList [
-      (metaDescription, Terms.stringValue "The string literal type"),
+      (metaDescription, Terms.string "The string literal type"),
       (metaType, encodeType testContext $ Types.nominal _Type)]}
 
 testRoundTripsFromType :: H.SpecWith ()

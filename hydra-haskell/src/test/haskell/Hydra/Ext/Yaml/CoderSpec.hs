@@ -26,34 +26,34 @@ literalTypeConstraintsAreRespected = H.describe "Verify that YAML's literal type
   -- TODO: binary data
 
   H.it "Check booleans" $
-    QC.property $ \b -> checkYamlCoder Types.boolean (booleanValue b) (yamlBool b)
+    QC.property $ \b -> checkYamlCoder Types.boolean (boolean b) (yamlBool b)
 
   H.it "Check 32-bit floats" $
-    QC.property $ \f -> checkYamlCoder Types.float32 (float32Value f) (yamlFloat $ realToFrac f)
+    QC.property $ \f -> checkYamlCoder Types.float32 (float32 f) (yamlFloat $ realToFrac f)
 
   H.it "Check 64-bit floats (doubles)" $
-    QC.property $ \d -> checkYamlCoder Types.float64 (float64Value d) (yamlFloat $ realToFrac d)
+    QC.property $ \d -> checkYamlCoder Types.float64 (float64 d) (yamlFloat $ realToFrac d)
 
   -- TODO: bigfloat
 
   H.it "Check 32-bit integers" $
-    QC.property $ \i -> checkYamlCoder Types.int32 (int32Value i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.int32 (int32 i) (yamlInt i)
 
   H.it "Check 16-bit unsigned integers" $
-    QC.property $ \i -> checkYamlCoder Types.uint16 (uint16Value i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.uint16 (uint16 i) (yamlInt i)
 
   H.it "Check arbitrary-precision integers" $
-    QC.property $ \i -> checkYamlCoder Types.bigint (bigintValue i) (yamlInt i)
+    QC.property $ \i -> checkYamlCoder Types.bigint (bigint i) (yamlInt i)
 
   H.it "Check strings" $
-    QC.property $ \s -> checkYamlCoder Types.string (stringValue s) (yamlStr s)
+    QC.property $ \s -> checkYamlCoder Types.string (string s) (yamlStr s)
 
 supportedTypesPassThrough :: H.SpecWith ()
 supportedTypesPassThrough = H.describe "Verify that supported types are mapped directly" $ do
 
   H.it "Lists become YAML sequences" $
     QC.property $ \strings -> checkYamlCoder listOfStringsType
-      (list $ stringValue <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
+      (list $ string <$> strings) (YM.NodeSequence $ yamlStr <$> strings)
 
   H.it "Maps become YAML mappings" $
     QC.property $ \keyvals -> checkYamlCoder mapOfStringsToIntsType
@@ -61,7 +61,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
 
   H.it "Optionals become YAML null or type-specific nodes" $
     QC.property $ \ms -> checkYamlCoder optionalStringType
-      (optional $ stringValue <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
+      (optional $ string <$> ms) (YM.NodeScalar $ Y.maybe YM.ScalarNull YM.ScalarStr ms)
 
   H.it "Records become YAML mappings" $
     QC.property $ \lat lon -> checkYamlCoder latLonType
@@ -84,11 +84,11 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Nominal types are dereferenced" $
     QC.property $ \s -> checkYamlCoder stringAliasType
-      (stringValue s) (yamlStr s)
+      (string s) (yamlStr s)
 
   H.it "Unions become YAML mappings (as records)" $
     QC.property $ \int -> checkYamlCoder stringOrIntType
-      (variant (FieldName "right") $ int32Value int)
+      (variant (FieldName "right") $ int32 int)
       (yamlMap [
         (yamlStr "context", yamlStr $ unName untyped),
         (yamlStr "record", yamlMap [(yamlStr "right", yamlInt int)])])

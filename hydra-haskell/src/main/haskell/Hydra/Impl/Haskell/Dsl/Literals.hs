@@ -12,67 +12,64 @@ type Bigfloat = Double
 -- Note: does not distinguish Binary from String, because code generation does not.
 type Binary = String
 
-bigfloat :: Bigfloat -> Trm Bigfloat
-bigfloat = Trm . Terms.bigfloatValue
+bigfloat :: Bigfloat -> Data Bigfloat
+bigfloat = Data . Terms.bigfloat
 
-bigint :: Integer -> Trm Integer
-bigint = Trm . Terms.bigintValue
+bigint :: Integer -> Data Integer
+bigint = Data . Terms.bigint
 
-binary :: Binary -> Trm Binary
-binary = Trm . Terms.binaryTerm
+binary :: Binary -> Data Binary
+binary = Data . Terms.binaryTerm
 
-bool :: Bool -> Trm Bool
-bool = Trm . Terms.booleanValue
+bool :: Bool -> Data Bool
+bool = Data . Terms.boolean
 
-boolean :: Bool -> Trm Bool
+boolean :: Bool -> Data Bool
 boolean = bool
 
-double :: Double -> Trm Double
+double :: Double -> Data Double
 double = float64
 
-false :: Trm Bool
+false :: Data Bool
 false = bool False
 
-float :: Float -> Trm Float
+float :: Float -> Data Float
 float = float32
 
-float32 :: Float -> Trm Float
-float32 = Trm . Terms.float32Value
+float32 :: Float -> Data Float
+float32 = Data . Terms.float32
 
-float64 :: Double -> Trm Double
-float64 = Trm . Terms.float64Value
+float64 :: Double -> Data Double
+float64 = Data . Terms.float64
 
-int :: Int -> Trm Int
+int :: Int -> Data Int
 int = int32
 
-int8 :: Int8 -> Trm Int8
-int8 = Trm . Terms.int8Value
+int8 :: Int8 -> Data Int8
+int8 = Data . Terms.int8
 
-int16 :: Int16 -> Trm Int16
-int16 = Trm . Terms.int16Value
+int16 :: Int16 -> Data Int16
+int16 = Data . Terms.int16
 
-int32 :: Int -> Trm Int
-int32 = Trm . Terms.int32Value
+int32 :: Int -> Data Int
+int32 = Data . Terms.int32
 
-int64 :: Int64 -> Trm Int64
-int64 = Trm . Terms.int64Value
+int64 :: Int64 -> Data Int64
+int64 = Data . Terms.int64
 
-str :: String -> Trm String
-str = Trm . Terms.stringValue
+string :: String -> Data String
+string = Data . Terms.string
 
-string :: String -> Trm String
-string = str
-
-true :: Trm Bool
+true :: Data Bool
 true = bool True
 
 -- Note: untyped integers are not yet properly supported by the DSL,
 --       because they are not properly supported by code generation.
-uint8 :: Int8 -> Trm Int8
+uint8 :: Int8 -> Data Int8
 uint8 = int8
-uint16 :: Int16 -> Trm Int16
+uint16 :: Int16 -> Data Int16
 uint16 = int16
-uint32 :: Int -> Trm Int
+uint32 :: Int -> Data Int
 uint32 = int
-uint64 :: Int64 -> Trm Int64
+uint64 :: Int64 -> Data Int64
 uint64 = int64

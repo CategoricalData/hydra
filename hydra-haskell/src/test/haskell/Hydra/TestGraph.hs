@@ -78,9 +78,9 @@ testStrategy = contextStrategy testContext
 
 testDataArthur :: Term Meta
 testDataArthur = nominalRecord cx (Name "Person") [
-  Field (FieldName "firstName") $ stringValue "Arthur",
-  Field (FieldName "lastName") $ stringValue "Dent",
-  Field (FieldName "age") $ int32Value 42]
+  Field (FieldName "firstName") $ string "Arthur",
+  Field (FieldName "lastName") $ string "Dent",
+  Field (FieldName "age") $ int32 42]
 
 testTypePerson :: Type Meta
 testTypePerson = Types.record [

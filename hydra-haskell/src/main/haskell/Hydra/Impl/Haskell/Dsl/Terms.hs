@@ -19,17 +19,17 @@ apply func arg = defaultTerm $ TermExprApplication $ Application func arg
 atomic :: Default a => Literal -> Term a
 atomic = defaultTerm . TermExprLiteral
 
-bigfloatValue :: Default a => Double -> Term a
-bigfloatValue = floatValue . FloatValueBigfloat
+bigfloat :: Default a => Double -> Term a
+bigfloat = float . FloatValueBigfloat
 
-bigintValue :: Default a => Integer -> Term a
-bigintValue = integerValue . IntegerValueBigint . fromIntegral
+bigint :: Default a => Integer -> Term a
+bigint = integer . IntegerValueBigint . fromIntegral
 
 binaryTerm :: Default a => String -> Term a
 binaryTerm = defaultTerm . TermExprLiteral . LiteralBinary
 
-booleanValue :: Default a => Bool -> Term a
-booleanValue b = defaultTerm $ TermExprLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+boolean :: Default a => Bool -> Term a
+boolean b = defaultTerm $ TermExprLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
 
 cases :: Default a => [Field a] -> Term a
 cases = defaultTerm . TermExprFunction . FunctionElimination . EliminationUnion
@@ -105,32 +105,35 @@ expectUnion term = case termExpr term of
   TermExprUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
+field :: String -> Term a -> Field a
+field n = Field (FieldName n)
+
 fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
-float32Value :: Default a => Float -> Term a
-float32Value = floatValue . FloatValueFloat32
+float32 :: Default a => Float -> Term a
+float32 = float . FloatValueFloat32
 
-float64Value :: Default a => Double -> Term a
-float64Value = floatValue . FloatValueFloat64
+float64 :: Default a => Double -> Term a
+float64 = float . FloatValueFloat64
 
-floatValue :: Default a => FloatValue -> Term a
-floatValue = defaultTerm . TermExprLiteral . LiteralFloat
+float :: Default a => FloatValue -> Term a
+float = defaultTerm . TermExprLiteral . LiteralFloat
 
-int16Value :: Default a => Int16 -> Term a
-int16Value = integerValue . IntegerValueInt16 . fromIntegral
+int16 :: Default a => Int16 -> Term a
+int16 = integer . IntegerValueInt16 . fromIntegral
 
-int32Value :: Default a => Int -> Term a
-int32Value = integerValue . IntegerValueInt32
+int32 :: Default a => Int -> Term a
+int32 = integer . IntegerValueInt32
 
-int64Value :: Default a => Int64 -> Term a
-int64Value = integerValue . IntegerValueInt64 . fromIntegral
+int64 :: Default a => Int64 -> Term a
+int64 = integer . IntegerValueInt64 . fromIntegral
 
-int8Value :: Default a => Int8 -> Term a
-int8Value = integerValue . IntegerValueInt8 . fromIntegral
+int8 :: Default a => Int8 -> Term a
+int8 = integer . IntegerValueInt8 . fromIntegral
 
-integerValue :: Default a => IntegerValue -> Term a
-integerValue = defaultTerm . TermExprLiteral . LiteralInteger
+integer :: Default a => IntegerValue -> Term a
+integer = defaultTerm . TermExprLiteral . LiteralInteger
 
 lambda :: Default a => String -> Term a -> Term a
 lambda param body = defaultTerm $ TermExprFunction $ FunctionLambda $ Lambda (Variable param) body
@@ -154,7 +157,7 @@ match = cases . fmap toField
 
 matchOptional :: Default a => Term a -> Term a -> Term a
 matchOptional n j = defaultTerm $ TermExprFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
- 
+
 matchWithVariants :: Default a => [(FieldName, FieldName)] -> Term a
 matchWithVariants = cases . fmap toField
   where
@@ -187,34 +190,34 @@ setMeta :: m -> Term m -> Term m
 setMeta meta dat = dat {termMeta = meta}
 
 stringList :: Default a => [String] -> Term a
-stringList l = list (stringValue <$> l)
+stringList l = list (string <$> l)
 
 stringSet :: (Default a, Ord a) => S.Set String -> Term a
-stringSet strings = set $ S.fromList $ stringValue <$> S.toList strings
+stringSet strings = set $ S.fromList $ string <$> S.toList strings
 
-stringValue :: Default a => String -> Term a
-stringValue = defaultTerm . TermExprLiteral . LiteralString
+string :: Default a => String -> Term a
+string = defaultTerm . TermExprLiteral . LiteralString
 
-uint16Value :: Default a => Integer -> Term a
-uint16Value = integerValue . IntegerValueUint16 . fromIntegral
+uint16 :: Default a => Integer -> Term a
+uint16 = integer . IntegerValueUint16 . fromIntegral
 
-uint32Value :: Default a => Integer -> Term a
-uint32Value = integerValue . IntegerValueUint32 . fromIntegral
+uint32 :: Default a => Integer -> Term a
+uint32 = integer . IntegerValueUint32 . fromIntegral
 
-uint64Value :: Default a => Integer -> Term a
-uint64Value = integerValue . IntegerValueUint64 . fromIntegral
+uint64 :: Default a => Integer -> Term a
+uint64 = integer . IntegerValueUint64 . fromIntegral
 
-uint8Value :: Default a => Integer -> Term a
-uint8Value = integerValue . IntegerValueUint8 . fromIntegral
+uint8 :: Default a => Integer -> Term a
+uint8 = integer . IntegerValueUint8 . fromIntegral
 
 union :: Default a => Field a -> Term a
 union field = defaultTerm $ TermExprUnion field
 
-unitTerm :: Default a => Term a
-unitTerm = defaultTerm $ TermExprRecord []
+unit :: Default a => Term a
+unit = defaultTerm $ TermExprRecord []
 
 unitVariant :: Default a => FieldName -> Term a
-unitVariant fname = variant fname unitTerm
+unitVariant fname = variant fname unit
 
 variable :: Default a => String -> Term a
 variable = defaultTerm . TermExprVariable . Variable

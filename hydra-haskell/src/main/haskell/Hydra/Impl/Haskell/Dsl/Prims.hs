@@ -11,7 +11,7 @@ import qualified Data.Set as S
 
 
 booleanOutput :: Default m => OutputSpec Bool m
-booleanOutput = OutputSpec Types.boolean booleanValue
+booleanOutput = OutputSpec Types.boolean boolean
 
 inputPoly :: Default m => String -> InputSpec (Term m) m
 inputPoly v = InputSpec (Types.variable v) pure
@@ -20,7 +20,7 @@ int32Input :: (Default m, Show m) => InputSpec Int m
 int32Input = InputSpec Types.int32 expectInt32
 
 int32Output :: Default m => OutputSpec Int m
-int32Output = OutputSpec Types.int32 int32Value
+int32Output = OutputSpec Types.int32 int32
 
 listInput :: (Default m, Show m) => Type m -> (Term m -> Result a) -> InputSpec [a] m
 listInput lt f = InputSpec (Types.list lt) (expectList f)
@@ -69,4 +69,4 @@ stringListOutput :: Default m => OutputSpec [String] m
 stringListOutput = OutputSpec (Types.list Types.string) stringList
 
 stringOutput :: Default m => OutputSpec String m
-stringOutput = OutputSpec Types.string stringValue
+stringOutput = OutputSpec Types.string string

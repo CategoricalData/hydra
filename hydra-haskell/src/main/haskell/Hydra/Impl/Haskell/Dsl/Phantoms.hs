@@ -5,12 +5,10 @@ import Hydra.Core
 
 newtype Case a = Case FieldName
 
-data El a = El {
-  elName :: Name,
-  elTerm :: Trm a} deriving Show
+data Element a = Element {
+  elementName :: Name,
+  elementData :: Data a} deriving (Eq, Ord, Read, Show)
 
 data Ref a = Ref
 
-newtype Trm a = Trm {unTrm :: Term Meta} deriving (Eq, Ord, Read, Show)
-
-newtype Var a = Var String
+newtype Data a = Data {unData :: Term Meta} deriving (Eq, Ord, Read, Show)

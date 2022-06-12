@@ -239,7 +239,7 @@ shrinkers typ = trivialShrinker ++ case typeExpr typ of
       LiteralTypeBoolean -> []
       LiteralTypeFloat ft -> []
       LiteralTypeInteger it -> []
-      LiteralTypeString -> [(Types.string, \(Term (TermExprLiteral (LiteralString s)) _) -> stringValue <$> QC.shrink s)]
+      LiteralTypeString -> [(Types.string, \(Term (TermExprLiteral (LiteralString s)) _) -> string <$> QC.shrink s)]
   --  TypeExprElement et ->
   --  TypeExprFunction ft ->
     TypeExprList lt -> dropElements : promoteType : shrinkType
@@ -298,7 +298,7 @@ shrinkers typ = trivialShrinker ++ case typeExpr typ of
       (h:r) -> [r] ++ ((h :) <$> dropAny r)
     dropIth i l = L.take i l ++ L.drop (i+1) l
     nodupes l = L.length (L.nub l) == L.length l
-    trivialShrinker = [(Types.unit, const [unitTerm]) | typ /= Types.unit]
+    trivialShrinker = [(Types.unit, const [unit]) | typ /= Types.unit]
     shrinkFieldNames toType toTerm fromTerm sfields = forNames <$> altNames
       where
         forNames names = (toType $ withFieldTypeNames names sfields,

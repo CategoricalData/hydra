@@ -35,7 +35,7 @@ setAnnotation :: String -> Y.Maybe (Term Meta) -> Meta -> Meta
 setAnnotation key val (Meta m) = Meta $ M.alter (const val) key m
 
 setDescription :: Y.Maybe String -> Meta -> Meta
-setDescription d = setAnnotation metaDescription (stringValue <$> d)
+setDescription d = setAnnotation metaDescription (string <$> d)
 
 setType :: Context Meta -> Y.Maybe (Type Meta) -> Meta -> Meta
 setType cx d = setAnnotation metaType (encodeType cx <$> d)

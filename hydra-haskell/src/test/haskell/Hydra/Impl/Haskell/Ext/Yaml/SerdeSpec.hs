@@ -26,22 +26,22 @@ checkLiterals = H.describe "Test atomic values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization
-      (TypedTerm Types.boolean $ booleanValue b)
+      (TypedTerm Types.boolean $ boolean b)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.int32 $ int32Value i)
+      (TypedTerm Types.int32 $ int32 i)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.uint8 $ uint8Value i)
+      (TypedTerm Types.uint8 $ uint8 i)
       (show i)
 
   H.it "bigints become ints" $ do
     QC.property $ \i -> checkSerialization
-      (TypedTerm Types.bigint $ bigintValue i)
+      (TypedTerm Types.bigint $ bigint i)
       (show i)
 
   -- TODO: examine quirks around floating-point serialization more closely. These could affect portability of the serialized YAML.
@@ -55,14 +55,14 @@ checkOptionals = H.describe "Test and document serialization of optionals" $ do
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (Types.optional Types.int32)
-        (optional $ (Just . int32Value) =<< mi))
+        (optional $ (Just . int32) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
     QC.property $ \mi -> checkSerialization
       (TypedTerm
         (Types.optional $ Types.optional Types.int32)
-        (optional $ Just $ optional $ (Just . int32Value) =<< mi))
+        (optional $ Just $ optional $ (Just . int32) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
@@ -76,7 +76,7 @@ checkRecordsAndUnions :: H.SpecWith ()
 checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
-    QC.property $ \() -> checkSerialization (TypedTerm Types.unit unitTerm) "{}"
+    QC.property $ \() -> checkSerialization (TypedTerm Types.unit unit) "{}"
 
   H.it "Simple records become simple objects" $
     QC.property $ \() -> checkSerialization
@@ -87,14 +87,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (Types.record [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
-        (record [Field (FieldName "one") $ optional $ Just $ stringValue "test", Field (FieldName "two") $ optional Nothing]))
+        (record [Field (FieldName "one") $ optional $ Just $ string "test", Field (FieldName "two") $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization
       (TypedTerm
         (Types.union [Types.field "left" Types.string, Types.field "right" Types.int32])
-        (union $ Field (FieldName "left") $ stringValue "test"))
+        (union $ Field (FieldName "left") $ string "test"))
       ("context: " ++ show (unName untyped) ++ "\nrecord:\n  left: test\n")
 
 yamlSerdeIsInformationPreserving :: H.SpecWith ()
