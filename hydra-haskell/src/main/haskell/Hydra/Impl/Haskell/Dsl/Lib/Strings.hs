@@ -5,17 +5,17 @@ import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Sources.Libraries
 
 
-cat :: Trm ([String] -> String)
-cat = Trm $ Terms.primitive _strings_cat
+cat :: Data ([String] -> String)
+cat = Data $ Terms.primitive _strings_cat
 
-length :: Trm (String -> Int)
-length = Trm $ Terms.primitive _strings_length
+length :: Data (String -> Int)
+length = Data $ Terms.primitive _strings_length
 
-splitOn :: Trm (String -> String -> [String])
-splitOn = Trm $ Terms.primitive _strings_splitOn
+splitOn :: Data (String -> String -> [String])
+splitOn = Data $ Terms.primitive _strings_splitOn
 
-toLower :: Trm (String -> String)
-toLower = Trm $ Terms.primitive _strings_toLower
+toLower :: Data (String -> String)
+toLower = Data $ Terms.primitive _strings_toLower
 
-toUpper :: Trm (String -> String)
-toUpper = Trm $ Terms.primitive _strings_toUpper
+toUpper :: Data (String -> String)
+toUpper = Data $ Terms.primitive _strings_toUpper

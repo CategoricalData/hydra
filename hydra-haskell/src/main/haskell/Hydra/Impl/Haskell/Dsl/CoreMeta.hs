@@ -50,7 +50,7 @@ nominalUnion :: Default m => Context m -> Name -> Field m -> Term m
 nominalUnion cx name field = withType cx (Types.nominal name) $ union field
 
 nominalUnitVariant :: Default m => Context m -> Name -> FieldName -> Term m
-nominalUnitVariant cx name fname = nominalVariant cx name fname unitTerm
+nominalUnitVariant cx name fname = nominalVariant cx name fname unit
 
 nominalVariant :: Default m => Context m -> Name -> FieldName -> Term m -> Term m
 nominalVariant cx name fname term = named cx name $ variant fname term

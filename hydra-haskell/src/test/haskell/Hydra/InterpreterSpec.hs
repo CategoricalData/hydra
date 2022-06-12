@@ -49,24 +49,24 @@ checkMonomorphicPrimitives = do
     H.it "Simple applications of a unary function succeed" $
       QC.property $ \s ->
         H.shouldBe
-          (eval (apply (primitive _strings_toUpper) $ stringValue s))
-          (pure (stringValue $ fmap C.toUpper s))
+          (eval (apply (primitive _strings_toUpper) $ string s))
+          (pure (string $ fmap C.toUpper s))
 
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \i1 i2 ->
         H.shouldBe
-          (eval (apply (apply (primitive _math_add) $ int32Value i1) $ int32Value i2))
-          (pure (int32Value $ i1 + i2))
+          (eval (apply (apply (primitive _math_add) $ int32 i1) $ int32 i2))
+          (pure (int32 $ i1 + i2))
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
         H.shouldBe
-          (eval (apply (primitive _strings_splitOn) $ stringValue s1))
-          (pure (apply (primitive _strings_splitOn) $ stringValue s1))
+          (eval (apply (primitive _strings_splitOn) $ string s1))
+          (pure (apply (primitive _strings_splitOn) $ string s1))
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->
-        isFailure (eval (apply (apply (primitive _strings_toUpper) $ stringValue s1) $ stringValue s2))
+        isFailure (eval (apply (apply (primitive _strings_toUpper) $ string s1) $ string s2))
 
 checkPolymorphicPrimitives :: H.SpecWith ()
 checkPolymorphicPrimitives = do
@@ -76,7 +76,7 @@ checkPolymorphicPrimitives = do
       QC.property $ \l ->
         H.shouldBe
           (eval (apply (primitive _lists_length) $ list l))
-          (pure (int32Value $ L.length l))
+          (pure (int32 $ L.length l))
 
 spec :: H.Spec
 spec = do

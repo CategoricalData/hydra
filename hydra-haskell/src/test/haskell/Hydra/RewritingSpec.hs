@@ -19,17 +19,17 @@ testFoldOverTerm = do
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
-          (list [int32Value 42, apply (lambda "x" $ variable "x") (int32Value 10)] :: Term Meta))
+          (list [int32 42, apply (lambda "x" $ variable "x") (int32 10)] :: Term Meta))
         52
 
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
-          (list [list [stringValue "foo", stringValue "bar"], apply (lambda "x" $ variable "x") (list [stringValue "quux"])] :: Term Meta))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Meta))
         [1, 2, 2]
       H.shouldBe
         (foldOverTerm TraversalOrderPost listLengths []
-          (list [list [stringValue "foo", stringValue "bar"], apply (lambda "x" $ variable "x") (list [stringValue "quux"])] :: Term Meta))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Meta))
         [2, 1, 2]
   where
     addInt32s sum term = case termExpr term of
@@ -51,13 +51,13 @@ testFreeVariablesInTerm = do
 
     H.it "Free variables in individual terms" $ do
       H.shouldBe
-        (freeVariablesInTerm (stringValue "foo" :: Term ()))
+        (freeVariablesInTerm (string "foo" :: Term ()))
         S.empty
       H.shouldBe
         (freeVariablesInTerm (variable "x" :: Term ()))
         (S.fromList [Variable "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (int32Value 42)] :: Term ()))
+        (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (int32 42)] :: Term ()))
         (S.fromList [Variable "x"])
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
@@ -70,12 +70,12 @@ testReplaceTerm = do
       H.it "Check that the correct subterms are replaced" $ do
         H.shouldBe
           (rewriteTerm replaceInts keepMeta
-            (int32Value 42))
-          (int64Value 42 :: Term Meta)
+            (int32 42))
+          (int64 42 :: Term Meta)
         H.shouldBe
           (rewriteTerm replaceInts keepMeta
-            (list [int32Value 42, apply (lambda "x" $ variable "x") (int32Value 137)]))
-          (list [int64Value 42, apply (lambda "x" $ variable "x") (int64Value 137)] :: Term Meta)
+            (list [int32 42, apply (lambda "x" $ variable "x") (int32 137)]))
+          (list [int64 42, apply (lambda "x" $ variable "x") (int64 137)] :: Term Meta)
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
@@ -97,7 +97,7 @@ testReplaceTerm = do
     keepMeta = id
 
     replaceInts recurse term = case termExpr term2 of
-        TermExprLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64Value $ fromIntegral v
+        TermExprLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64 $ fromIntegral v
         _ -> term2
       where
         term2 = recurse term
@@ -120,18 +120,18 @@ testSimplifyTerm = do
 
     H.it "Check that 'const' applications are simplified" $ do
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" (stringValue "foo")) (int32Value 42)))
-        (stringValue "foo" :: Term Meta)
+        (simplifyTerm (apply (lambda "x" (string "foo")) (int32 42)))
+        (string "foo" :: Term Meta)
       H.shouldBe
         (simplifyTerm (apply (lambda "x" $ list [variable "x", variable "x"]) (variable "y")))
         (list [variable "y", variable "y"] :: Term Meta)
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" $ stringValue "foo") (variable "y")))
-        (stringValue "foo" :: Term Meta)
+        (simplifyTerm (apply (lambda "x" $ string "foo") (variable "y")))
+        (string "foo" :: Term Meta)
       H.shouldBe
         (simplifyTerm (apply (lambda "x"
-          (apply (lambda "a" (list [stringValue "foo", variable "a"])) (variable "x"))) (variable "y")))
-        (list [stringValue "foo", variable "y"] :: Term Meta)
+          (apply (lambda "a" (list [string "foo", variable "a"])) (variable "x"))) (variable "y")))
+        (list [string "foo", variable "y"] :: Term Meta)
         
 testStripMeta :: H.SpecWith ()
 testStripMeta = do

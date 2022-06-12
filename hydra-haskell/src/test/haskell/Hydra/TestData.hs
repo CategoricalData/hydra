@@ -28,7 +28,7 @@ int32ElementDataType :: Default m => Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
 latlonRecord :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> Int -> Term m
-latlonRecord lat lon = record [Field (FieldName "lat") $ int32Value lat, Field (FieldName "lon") $ int32Value lon]
+latlonRecord lat lon = record [Field (FieldName "lat") $ int32 lat, Field (FieldName "lon") $ int32 lon]
 
 latLonType :: Default m => Type m
 latLonType = Types.record [Types.field "lat" Types.int32, Types.field "lon" Types.int32]
@@ -52,7 +52,7 @@ listOfStringsType :: Default m => Type m
 listOfStringsType = Types.list Types.string
 
 makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Term a
-makeMap keyvals = defaultTerm $ TermExprMap $ M.fromList $ ((\(k, v) -> (stringValue k, int32Value v)) <$> keyvals)
+makeMap keyvals = defaultTerm $ TermExprMap $ M.fromList $ ((\(k, v) -> (string k, int32 v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Default m => Type m
 mapOfStringsToIntsType = Types.map Types.string Types.int32

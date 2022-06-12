@@ -5,8 +5,8 @@ import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Sources.Libraries
 
 
-showInt32 :: Trm (Int -> String)
-showInt32 = Trm $ Terms.primitive _literals_showInt32
+showInt32 :: Data (Int -> String)
+showInt32 = Data $ Terms.primitive _literals_showInt32
 
-showString :: Trm (String -> String)
-showString = Trm $ Terms.primitive _literals_showString
+showString :: Data (String -> String)
+showString = Data $ Terms.primitive _literals_showString

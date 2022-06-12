@@ -8,6 +8,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Meta
+import Hydra.Impl.Haskell.Sources.Libraries
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -43,7 +44,7 @@ standardContext = cx
                graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
                graphSetRoot = emptyGraphName},
              contextElements = M.empty,
-             contextFunctions = M.empty,
+             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
              contextStrategy = EvaluationStrategy {
                evaluationStrategyOpaqueTermVariants = S.fromList []},
              contextDescriptionOf = getDescription,
@@ -89,9 +90,11 @@ standardWithType = withType standardContext
 standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
 standardWithVariant = nominalWithVariant standardContext
 
-
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {
     elementName = name,
     elementSchema = defaultTerm $ TermExprElement _Type,
     elementData = encodeType cx typ}
+
+typed :: Type Meta -> Term Meta -> Term Meta
+typed t (Term d m) = Term d (setType standardContext (Just t) m)

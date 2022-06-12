@@ -34,9 +34,9 @@ encodeApplication cx (Application f a) = nominalRecord cx _Application [
 encodeElimination :: (Default m, Ord m) => Context m -> Elimination m -> Term m
 encodeElimination cx e = case e of
   EliminationElement -> unitVariant _Elimination_element
-  EliminationNominal (Name name) -> variant _Elimination_nominal $ stringValue name
+  EliminationNominal (Name name) -> variant _Elimination_nominal $ string name
   EliminationOptional cases -> variant _Elimination_optional $ encodeOptionalCases cx cases
-  EliminationRecord (FieldName fname) -> variant _Elimination_record $ stringValue fname
+  EliminationRecord (FieldName fname) -> variant _Elimination_record $ string fname
   EliminationUnion cases -> variant _Elimination_union $ list $ encodeField cx <$> cases
 
 encodeLiteralType :: Default m => Context m -> LiteralType -> Term m
@@ -60,12 +60,12 @@ encodeLiteralVariant cx av = unitVariant $ case av of
 
 encodeField :: (Default m, Ord m) => Context m -> Field m -> Term m
 encodeField cx (Field (FieldName name) term) = nominalRecord cx _Field [
-  Field _Field_name $ stringValue name,
+  Field _Field_name $ string name,
   Field _Field_term $ encodeTerm cx term]
 
 encodeFieldType :: Default m => Context m -> FieldType m -> Term m
 encodeFieldType cx (FieldType (FieldName fname) t) = nominalRecord cx _FieldType [
-  Field _FieldType_name $ stringValue fname,
+  Field _FieldType_name $ string fname,
   Field _FieldType_type $ encodeType cx t]
 
 encodeFloatType :: Default m => Context m -> FloatType -> Term m
@@ -79,7 +79,7 @@ encodeFunction cx f = case f of
   FunctionCompareTo other -> variant _Function_compareTo $ encodeTerm cx other
   FunctionElimination e -> variant _Function_compareTo $ encodeElimination cx e
   FunctionLambda l -> variant _Function_lambda $ encodeLambda cx l
-  FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
+  FunctionPrimitive (Name name) -> variant _Function_primitive $ string name
 
 encodeFunctionType :: Default m => Context m -> FunctionType m -> Term m
 encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
@@ -100,7 +100,7 @@ encodeIntegerType cx it = unitVariant $ case it of
 
 encodeLambda :: (Default m, Ord m) => Context m -> Lambda m -> Term m
 encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
-  Field _Lambda_parameter $ stringValue v,
+  Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm cx b]
 
 encodeMapType :: Default m => Context m -> MapType m -> Term m
@@ -110,7 +110,7 @@ encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [
 
 encodeNamed :: (Default m, Ord m) => Context m -> Named m -> Term m
 encodeNamed cx (Named (Name name) term) = nominalRecord cx _Named [
-  Field _Named_typeName $ stringValue name,
+  Field _Named_typeName $ string name,
   Field _Named_term $ encodeTerm cx term]
 
 encodeOptionalCases :: (Default m, Ord m) => Context m -> OptionalCases m -> Term m
@@ -122,7 +122,7 @@ encodeTerm :: (Default m, Ord m) => Context m -> Term m -> Term m
 encodeTerm cx term = case termExpr term of
   TermExprApplication a -> variant _TermExpr_application $ encodeApplication cx a
   TermExprLiteral av -> variant _TermExpr_literal $ encodeLiteral cx av
-  TermExprElement (Name name) -> variant _TermExpr_element $ stringValue name
+  TermExprElement (Name name) -> variant _TermExpr_element $ string name
   TermExprFunction f -> variant _TermExpr_function $ encodeFunction cx f
   TermExprList terms -> variant _TermExpr_list $ list $ encodeTerm cx <$> terms
   TermExprMap m -> variant _TermExpr_map $ map $ M.fromList $ encodePair <$> M.toList m
@@ -132,7 +132,7 @@ encodeTerm cx term = case termExpr term of
   TermExprRecord fields -> variant _TermExpr_record $ list $ encodeField cx <$> fields
   TermExprSet terms -> variant _TermExpr_set $ set $ S.fromList $ encodeTerm cx <$> S.toList terms
   TermExprUnion field -> variant _TermExpr_union $ encodeField cx field
-  TermExprVariable (Variable var) -> variant _TermExpr_variable $ stringValue var
+  TermExprVariable (Variable var) -> variant _TermExpr_variable $ string var
 
 encodeType :: Default m => Context m -> Type m -> Term m
 encodeType cx typ = setMeta (typeMeta typ) $ case typeExpr typ of
@@ -147,7 +147,7 @@ encodeType cx typ = setMeta (typeMeta typ) $ case typeExpr typ of
   TypeExprSet t -> variant _TypeExpr_set $ encodeType cx t
   TypeExprUnion fields -> variant _TypeExpr_union $ list $ fmap (encodeFieldType cx) fields
   TypeExprUniversal ut -> variant _TypeExpr_universal $ encodeUniversalType cx ut
-  TypeExprVariable (TypeVariable var) -> variant _TypeExpr_variable $ stringValue var
+  TypeExprVariable (TypeVariable var) -> variant _TypeExpr_variable $ string var
 
 encodeTypeVariant :: Default m => Context m -> TypeVariant -> Term m
 encodeTypeVariant cx tv = unitVariant $ case tv of
@@ -166,5 +166,5 @@ encodeTypeVariant cx tv = unitVariant $ case tv of
 
 encodeUniversalType :: Default m => Context m -> UniversalType m -> Term m
 encodeUniversalType cx (UniversalType (TypeVariable var) body) = nominalRecord cx _UniversalType [
-  Field _UniversalType_variable $ stringValue var,
+  Field _UniversalType_variable $ string var,
   Field _UniversalType_body $ encodeType cx body]

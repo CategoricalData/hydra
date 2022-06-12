@@ -40,7 +40,7 @@ dereferenceNominal acx t@(Type (TypeExprNominal name) _) = do
 elementToString :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 elementToString acx t@(Type (TypeExprElement _) _) = pure $ Adapter False t Types.string $ Step encode decode
   where
-    encode (Term (TermExprElement (Name name)) _) = pure $ stringValue name
+    encode (Term (TermExprElement (Name name)) _) = pure $ string name
     decode (Term (TermExprLiteral (LiteralString name)) meta) = pure $ withTerm meta $ TermExprElement $ Name name
 
 fieldAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> FieldType m -> Qualified (Adapter (FieldType m) (Field m))
@@ -62,13 +62,13 @@ functionToUnion acx t@(Type (TypeExprFunction (FunctionType dom _)) _) = do
         FunctionCompareTo other -> variant _Function_compareTo other
         FunctionElimination e -> case e of
           EliminationElement -> unitVariant _Elimination_element
-          EliminationNominal (Name name) -> variant _Elimination_nominal $ stringValue name
-          EliminationOptional _ -> variant _Elimination_optional $ stringValue $ show term -- TODO
-          EliminationRecord (FieldName fname) -> variant _Elimination_record $ stringValue fname
-          EliminationUnion _ -> variant _Elimination_union $ stringValue $ show term -- TODO TermExprRecord cases
-        FunctionLambda _ -> variant _Function_lambda $ stringValue $ show term -- TODO
-        FunctionPrimitive (Name name) -> variant _Function_primitive $ stringValue name
-      TermExprVariable (Variable var) -> variant _TermExpr_variable $ stringValue var
+          EliminationNominal (Name name) -> variant _Elimination_nominal $ string name
+          EliminationOptional _ -> variant _Elimination_optional $ string $ show term -- TODO
+          EliminationRecord (FieldName fname) -> variant _Elimination_record $ string fname
+          EliminationUnion _ -> variant _Elimination_union $ string $ show term -- TODO TermExprRecord cases
+        FunctionLambda _ -> variant _Function_lambda $ string $ show term -- TODO
+        FunctionPrimitive (Name name) -> variant _Function_primitive $ string name
+      TermExprVariable (Variable var) -> variant _TermExpr_variable $ string var
     decode ad term = do
         (Field fname fterm) <- stepIn (adapterStep ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -234,7 +234,6 @@ passUniversal acx t@(Type (TypeExprUniversal (UniversalType (TypeVariable v) bod
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 termAdapter acx typ = case typ of
---    TypeExprUniversal (UniversalType _ body) -> termAdapter acx body
     _ -> chooseAdapter alts supported describeType typ
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
@@ -273,7 +272,7 @@ unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Step {
       stepOut = \(Term (TermExprUnion (Field fn term)) meta) -> stepOut (adapterStep ad)
         $ record [
-          Field _context $ stringValue $ show meta, -- TODO: use encoded metadata once supported
+          Field _context $ string $ show meta, -- TODO: use encoded metadata once supported
           Field _record $ record (toRecordField term fn <$> sfields)],
       stepIn = \term -> do
         (Term (TermExprRecord [
