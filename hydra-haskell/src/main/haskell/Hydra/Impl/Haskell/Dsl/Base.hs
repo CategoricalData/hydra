@@ -51,14 +51,8 @@ graph gname cons = do
     schemaGraph = hydraCoreName
 
 
-(@.) :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
-f @. g = compose f g
-
 (<.>) :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
 f <.> g = compose f g
-
-(.$) :: Data (a -> b) -> Data a -> Data b
-f .$ x = apply f x
 
 ($$) :: Data (a -> b) -> Data a -> Data b
 f $$ x = apply f x
@@ -71,16 +65,9 @@ infixr 0 @->
 (@->) :: a -> b -> (a, b)
 x @-> y = (x, y)
 
-infixr 0 .->
-(.->) :: Case a -> Data (a -> b) -> Field Meta
-c .-> t = caseField c t
-
 infixr 0 -->
 (-->) :: Case a -> Data (a -> b) -> Field Meta
 c --> t = caseField c t
-
-(.++) :: Data String -> Data String -> Data String
-l .++ r = apply Strings.cat $ list [l, r]
 
 (++) :: Data String -> Data String -> Data String
 l ++ r = Strings.cat @@ list [l, r]
