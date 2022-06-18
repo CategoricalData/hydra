@@ -54,7 +54,7 @@ fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ J
 importAliasesForGraph :: Graph m -> M.Map GraphName Java.PackageName
 importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
   where
-    deps = dataGraphDependencies True True True g
+    deps = graphDependencies True True True g
     addName m name = M.insert name (graphNameToPackageName name) m
     graphNameToPackageName (GraphName n) = javaPackageName $ Strings.splitOn "/" n
 

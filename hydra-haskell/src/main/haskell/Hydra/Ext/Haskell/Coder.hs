@@ -34,7 +34,7 @@ useCoreImport :: Bool
 useCoreImport = True
 
 moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
-moduleToHaskellModule cx g = dataGraphToExternalModule haskellLanguage (encodeTerm namespaces) constructModule cx g
+moduleToHaskellModule cx g = graphToExternalModule haskellLanguage (encodeTerm namespaces) constructModule cx g
   where
     namespaces = namespacesForGraph g
 

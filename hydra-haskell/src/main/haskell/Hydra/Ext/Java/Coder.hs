@@ -25,7 +25,7 @@ listsAsArrays = False
 
 
 moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
-moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
+moduleToJavaCompilationUnit cx g = graphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 
