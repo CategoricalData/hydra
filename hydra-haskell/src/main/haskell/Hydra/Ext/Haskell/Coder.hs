@@ -19,6 +19,7 @@ import Hydra.Ext.Haskell.Utils
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

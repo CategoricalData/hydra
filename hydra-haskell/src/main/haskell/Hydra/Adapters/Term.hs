@@ -15,6 +15,7 @@ import Hydra.Primitives
 import Hydra.CoreDecoding
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
+import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM

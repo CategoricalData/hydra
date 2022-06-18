@@ -151,6 +151,9 @@ nom name (Data term) = Data $ Terms.nominal name term
 opt :: Maybe (Data a) -> Data (Maybe a)
 opt mc = Data $ Terms.optional (unData <$> mc)
 
+primitive :: Name -> Data a
+primitive = Data . Terms.primitive
+  
 project :: Type Meta -> Type Meta -> FieldName -> Data (a -> b)
 project dom cod fname = function dom cod $
   Data $ Terms.projection fname

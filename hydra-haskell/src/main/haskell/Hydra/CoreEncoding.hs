@@ -1,25 +1,10 @@
-module Hydra.CoreEncoding (
-    encodeApplication,
-    encodeElimination,
-    encodeLiteralType,
-    encodeLiteral,
-    encodeLiteralVariant,
-    encodeField,
-    encodeFieldType,
-    encodeFloatType,
-    encodeFunction,
-    encodeFunctionType,
-    encodeIntegerType,
-    encodeLambda,
-    encodeTerm,
-    encodeType,
-    encodeTypeVariant,
-  ) where
+module Hydra.CoreEncoding where
 
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import Prelude hiding (map)
 import qualified Data.Map as M
