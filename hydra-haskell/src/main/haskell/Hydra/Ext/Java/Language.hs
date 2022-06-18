@@ -7,8 +7,8 @@ import Hydra.Basics
 import qualified Data.Set as S
 
 
-javaLanguage :: Language m
-javaLanguage = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
+language :: Language m
+language = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   
   languageConstraintsLiteralVariants = S.fromList [
@@ -57,8 +57,8 @@ javaLanguage = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
-javaReservedWords :: S.Set String
-javaReservedWords = S.fromList $ classNames ++ keywords ++ literals
+reservedWords :: S.Set String
+reservedWords = S.fromList $ classNames ++ keywords ++ literals
   where
     -- java.lang classes as of JDK 7
     -- See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html

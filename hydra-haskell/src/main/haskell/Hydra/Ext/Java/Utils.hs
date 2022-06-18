@@ -122,7 +122,7 @@ javaConstructorCall ci args = javaPrimaryToJavaExpression $
 javaConstructorName :: String -> Java.ClassOrInterfaceTypeToInstantiate
 javaConstructorName local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
   where
-    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if S.member local javaReservedWords
+    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if S.member local reservedWords
       then local ++ "_"
       else local
 
@@ -130,7 +130,7 @@ javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = javaTypeIdentifier . sanitizeJavaName . localNameOf
 
 javaEscape :: String -> String
-javaEscape s = if S.member s javaReservedWords then s ++ "_" else s
+javaEscape s = if S.member s reservedWords then s ++ "_" else s
 
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
@@ -340,7 +340,7 @@ nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name
 nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJavaName local, pkg)
   where
     (gname, local) = toQname name
-    pkg = if qualify || S.member local javaReservedWords
+    pkg = if qualify || S.member local reservedWords
       then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname aliases
       else none
     none = Java.ClassTypeQualifierNone
@@ -359,7 +359,7 @@ referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
 
 sanitizeJavaName :: String -> String
-sanitizeJavaName = sanitizeWithUnderscores javaReservedWords
+sanitizeJavaName = sanitizeWithUnderscores reservedWords
 
 toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
 toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body

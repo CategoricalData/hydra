@@ -7,8 +7,8 @@ import Hydra.Basics
 import qualified Data.Set as S
 
 
-yamlLanguage :: Language m
-yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
+language :: Language m
+language = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

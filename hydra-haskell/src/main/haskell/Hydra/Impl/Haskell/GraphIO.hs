@@ -3,10 +3,6 @@ module Hydra.Impl.Haskell.GraphIO where
 import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
-import Hydra.Ext.Haskell.Coder
-import Hydra.Ext.Java.Coder
-import Hydra.Ext.Pegasus.Coder
-import Hydra.Ext.Scala.Coder
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Extras
@@ -34,6 +30,10 @@ import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
 import Hydra.Util.Formatting
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Ext.Haskell.Coder as Haskell
+import qualified Hydra.Ext.Java.Coder as Java
+import qualified Hydra.Ext.Pegasus.Coder as PDL
+import qualified Hydra.Ext.Scala.Coder as Scala
 
 import qualified System.FilePath as FP
 import qualified Data.List as L
@@ -42,16 +42,16 @@ import qualified System.Directory as SD
 
 
 generateHaskell :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateHaskell = generateSources (toFileName True ".hs") moduleToHaskellString
+generateHaskell = generateSources (toFileName True ".hs") Haskell.printGraph
 
 generateJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateJava = generateSources (toFileName False ".java") moduleToJavaString
+generateJava = generateSources (toFileName False ".java") Java.printGraph
 
 generatePdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generatePdl = generateSources (toFileName False ".pdl") moduleToPdlString
+generatePdl = generateSources (toFileName False ".pdl") PDL.printGraph
 
 generateScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateScala = generateSources (toFileName False ".scala") moduleToScalaString
+generateScala = generateSources (toFileName False ".scala") Scala.printGraph
 
 generateSources :: (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String)
   -> [Result (Module Meta)] -> FP.FilePath -> IO ()

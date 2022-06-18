@@ -7,8 +7,8 @@ import Hydra.Core
 import qualified Data.Set as S
 
 
-haskellLanguage :: Language m
-haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
+language :: Language m
+language = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
@@ -46,8 +46,8 @@ haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstrai
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
-haskellReservedWords :: S.Set String
-haskellReservedWords = S.fromList preludeSymbols
+reservedWords :: S.Set String
+reservedWords = S.fromList preludeSymbols
   where
     -- See: https://www.haskell.org/onlinereport/standard-prelude.html
     -- List created on 2022-06-01. Symbols not containing at least one alphanumeric character are excluded.

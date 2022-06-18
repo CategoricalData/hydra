@@ -22,7 +22,7 @@ qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
 qualifyUnionFieldName dlft sname (FieldName fname) = (Y.maybe dlft (\n -> scalaTypeName True n ++ ".") sname) ++ fname
 
 scalaTypeName :: Bool -> Name -> String
-scalaTypeName qualify name@(Name n) = if qualify || S.member local scalaReservedWords
+scalaTypeName qualify name@(Name n) = if qualify || S.member local reservedWords
     then L.intercalate "." $ Strings.splitOn "/" n
     else local
   where
