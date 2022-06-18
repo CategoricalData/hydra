@@ -23,10 +23,11 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   sf <- moduleToPegasusSchema cx g
-  return $ printExpr $ parenthesize $ exprSchemaFile sf
+  let s = printExpr $ parenthesize $ exprSchemaFile sf
+  return $ M.fromList [(toFilePath False (FileExtension "pdl") $ graphName g, s)]
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
