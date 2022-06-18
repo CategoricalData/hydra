@@ -37,7 +37,7 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "evaluation" $ universal "a" $ evaluation "Context",
           field "source" $ universal "a" $ adapter "Language",
           field "target" $ universal "a" $ adapter "Language"],
-          
+
       def "LanguageConstraints" $
         universal "m" $ record [
           field "eliminationVariants" $ Types.set $ core "EliminationVariant",
@@ -48,9 +48,9 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "termVariants" $ Types.set $ core "TermVariant",
           field "typeVariants" $ Types.set $ core "TypeVariant",
           field "types" $ function (universal "m" $ core "Type") boolean],
-          
+
       def "LanguageName" string,
-      
+
       def "Language" $
         universal "m" $ record [
           field "name" $ adapter "LanguageName",
