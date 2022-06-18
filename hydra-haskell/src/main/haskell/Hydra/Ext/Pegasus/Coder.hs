@@ -1,5 +1,6 @@
 module Hydra.Ext.Pegasus.Coder (
   moduleToPegasusSchema,
+  moduleToPdlString,
   pegasusDataLanguage,
 ) where
 
@@ -17,12 +18,19 @@ import Hydra.Util.Formatting
 import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Util.Codetree.Script
+import Hydra.Ext.Pegasus.Serde
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+moduleToPdlString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToPdlString cx g = do
+  sf <- moduleToPegasusSchema cx g
+  return $ printExpr $ parenthesize $ exprSchemaFile sf
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile

@@ -1,5 +1,6 @@
 module Hydra.Ext.Java.Coder (
   moduleToJavaCompilationUnit,
+  moduleToJavaString,
   javaLanguage,
 ) where
 
@@ -14,6 +15,8 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
 import Hydra.Util.Coders
 import Hydra.Util.Formatting
+import Hydra.Util.Codetree.Script
+import Hydra.Ext.Java.Serde
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -28,6 +31,11 @@ moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -
 moduleToJavaCompilationUnit cx g = graphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
+
+moduleToJavaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToJavaString cx g = do
+  unit <- moduleToJavaCompilationUnit cx g
+  return $ printExpr $ parenthesize $ writeCompilationUnit unit
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]

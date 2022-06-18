@@ -1,25 +1,13 @@
-module Hydra.Ext.Pegasus.Serde (
-  moduleToPdlString,
-) where
+module Hydra.Ext.Pegasus.Serde where
 
-import Hydra.Errors
-import Hydra.Evaluation
-import Hydra.Graph
-import Hydra.Ext.Pegasus.Coder
 import Hydra.Util.Codetree.Script
 import Hydra.Util.Formatting
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
-import Hydra.Impl.Haskell.Extras
 
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 
-
-moduleToPdlString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToPdlString cx g = do
-  sf <- moduleToPegasusSchema cx g
-  return $ printExpr $ parenthesize $ exprSchemaFile sf
 
 exprAnnotations :: PDL.Annotations -> Y.Maybe CT.Expr
 exprAnnotations (PDL.Annotations doc _) = cst . javaStyleComment <$> doc

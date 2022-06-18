@@ -4,15 +4,8 @@
 -- Operator names are drawn (loosely) from:
 --   https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators
 
-module Hydra.Ext.Haskell.Serde (
-  moduleToHaskellString,
-) where
+module Hydra.Ext.Haskell.Serde where
 
-import Hydra.Errors
-import Hydra.Evaluation
-import Hydra.Graph
-import Hydra.Ext.Haskell.Coder
-import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
@@ -156,9 +149,9 @@ instance ToTree H.Module where
 
 instance ToTree H.Name where
   toTree name = cst $ case name of
-    H.NameImplicit qn -> "?" ++ writeQName qn
-    H.NameNormal qn -> writeQName qn
-    H.NameParens qn -> "(" ++ writeQName qn ++ ")"
+    H.NameImplicit qn -> "?" ++ writeQualifiedName qn
+    H.NameNormal qn -> writeQualifiedName qn
+    H.NameParens qn -> "(" ++ writeQualifiedName qn ++ ")"
 
 instance ToTree H.ModuleHead where
   toTree (H.ModuleHead (H.ModuleName mname) _) = spaceSep [cst "module", cst mname, cst "where"]
@@ -201,13 +194,8 @@ instance ToTree H.ValueBinding where
 
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
-  
-moduleToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToHaskellString cx g = do
-  hsmod <- moduleToHaskellModule cx g
-  return $ printExpr $ parenthesize $ toTree hsmod
 
-writeQName :: H.QualifiedName -> String
-writeQName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ (h <$> qualifiers) ++ [h unqual]
+writeQualifiedName :: H.QualifiedName -> String
+writeQualifiedName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ (h <$> qualifiers) ++ [h unqual]
   where
     h (H.NamePart part) = part

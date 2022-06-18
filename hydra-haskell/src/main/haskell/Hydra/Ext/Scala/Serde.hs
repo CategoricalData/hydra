@@ -1,12 +1,5 @@
-module Hydra.Ext.Scala.Serde (
-  moduleToScalaString,
-) where
+module Hydra.Ext.Scala.Serde where
 
-import Hydra.Errors
-import Hydra.Evaluation
-import Hydra.Graph
-import Hydra.Ext.Scala.Coder
-import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Lib.Literals as Literals
@@ -25,11 +18,6 @@ functionArrowOp = op "=>" (negate 1) AssociativityRight
 
 matchOp :: Op
 matchOp = Op (Symbol "match") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
-
-moduleToScalaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToScalaString cx g = do
-  pkg <- moduleToScalaPackage cx g
-  return $ printExpr $ parenthesize $ writePkg pkg
 
 writeCase :: Scala.Case -> CT.Expr
 writeCase (Scala.Case pat _ term) = spaceSep [cst "case", writePat pat, cst "=>", writeTerm term]

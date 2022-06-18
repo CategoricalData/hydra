@@ -1,5 +1,6 @@
 module Hydra.Ext.Haskell.Coder (
   moduleToHaskellModule,
+  moduleToHaskellString,
   haskellLanguage,
 ) where
 
@@ -8,7 +9,6 @@ import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
 import Hydra.Primitives
 import Hydra.Rewriting
@@ -20,6 +20,8 @@ import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Util.Codetree.Script
+import Hydra.Ext.Haskell.Serde
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -38,6 +40,11 @@ moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Grap
 moduleToHaskellModule cx g = graphToExternalModule haskellLanguage (encodeTerm namespaces) constructModule cx g
   where
     namespaces = namespacesForGraph g
+
+moduleToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToHaskellString cx g = do
+  hsmod <- moduleToHaskellModule cx g
+  return $ printExpr $ parenthesize $ toTree hsmod
 
 constantDecls :: Namespaces -> Name -> Type m -> [H.DeclarationWithComments]
 constantDecls namespaces name@(Name nm) typ = if useCoreImport

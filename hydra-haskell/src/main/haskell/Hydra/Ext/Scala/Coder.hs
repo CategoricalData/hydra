@@ -1,5 +1,6 @@
 module Hydra.Ext.Scala.Coder (
   moduleToScalaPackage,
+  moduleToScalaString,
   scalaLanguage,
 ) where
 
@@ -18,6 +19,8 @@ import Hydra.Util.Coders
 import Hydra.Rewriting
 import Hydra.Types.Inference
 import Hydra.Types.Substitution
+import Hydra.Util.Codetree.Script
+import Hydra.Ext.Scala.Serde
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -28,6 +31,11 @@ import qualified Data.Maybe as Y
 
 moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 moduleToScalaPackage = graphToExternalModule scalaLanguage encodeUntypedTerm constructModule
+
+moduleToScalaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+moduleToScalaString cx g = do
+  pkg <- moduleToScalaPackage cx g
+  return $ printExpr $ parenthesize $ writePkg pkg
 
 constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
