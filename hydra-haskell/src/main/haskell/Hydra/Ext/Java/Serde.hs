@@ -1,12 +1,5 @@
-module Hydra.Ext.Java.Serde (
-  moduleToJavaString,
-) where
+module Hydra.Ext.Java.Serde where
 
-import Hydra.Errors
-import Hydra.Evaluation
-import Hydra.Graph
-import Hydra.Ext.Java.Coder
-import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Java.Syntax as Java
@@ -14,13 +7,6 @@ import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 
-
-moduleToJavaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToJavaString cx g = do
-  unit <- moduleToJavaCompilationUnit cx g
-  return $ printExpr $ parenthesize $ writeCompilationUnit unit
-
-----------------------------------------
 
 writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
 writeAdditionalBound _ = cst "TODO:AdditionalBound"
