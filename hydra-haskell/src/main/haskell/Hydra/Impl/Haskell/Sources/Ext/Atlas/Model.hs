@@ -50,7 +50,7 @@ atlasModel = Graph atlasModelName elements (const True) hydraCoreName
           field "constraints" $ list $ atlas "AtlasConstraintDef",
           field "options" $ Types.map string string,
           field "displayName" $ optional string],
-      
+            
       def "AtlasAttributeDef.Cardinality" $ enum ["single", "list", "set"],
       
       def "AtlasAttributeDef.IndexType" $ enum ["default", "string"],

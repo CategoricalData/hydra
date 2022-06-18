@@ -28,6 +28,9 @@ moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encod
   where
     aliases = importAliasesForGraph g
 
+classModsPublic :: [Java.ClassModifier]
+classModsPublic = [Java.ClassModifierPublic]
+
 constructModule :: (Default m, Ord m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
   -> Result Java.CompilationUnit
@@ -48,197 +51,210 @@ toTypeDeclaration :: (Default m, Ord m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
 toTypeDeclaration aliases cx (el, TypedTerm _ term) = do
     t <- decodeType cx term
-    cd <- toClassDecl (elementName el) t
+    cd <- toClassDecl aliases (elementName el) t
     return $ Java.TypeDeclarationClass cd
+
+toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> Type m
+  -> Result Java.ClassDeclaration
+toClassDecl aliases elName t = case typeExpr t of
+      TypeExprNominal name -> return $ javaClassDeclaration aliases elName classModsPublic (Just name) []
+      TypeExprRecord fields -> declarationForRecordType aliases elName fields
+      TypeExprUnion fields -> declarationForUnionType aliases elName fields
+      TypeExprUniversal ut -> declarationForUniversalType aliases elName ut
+      -- Other types are not supported as class declarations, so we wrap them as record types.
+      -- TODO: wrap and unwrap the corresponding terms as record terms.
+      _ -> declarationForRecordType aliases elName [Types.field "value" t]
+
+declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
+  -> Result Java.ClassDeclaration
+declarationForRecordType aliases elName fields = do
+    memberVars <- CM.mapM toMemberVar fields
+    withMethods <- if L.length fields > 1
+      then CM.mapM toWithMethod fields
+      else pure []
+    cons <- constructor
+    let bodyDecls = memberVars ++ [cons, equalsMethod, hashCodeMethod] ++ withMethods
+    return $ javaClassDeclaration aliases elName classModsPublic Nothing bodyDecls
   where
-    toClassDecl elName t = case typeExpr t of
-      TypeExprNominal name -> return $ javaClassDeclaration aliases elName topMods (Just name) []
-      TypeExprRecord fields -> do
-          memberVars <- CM.mapM toMemberVar fields
-          withMethods <- if L.length fields > 1
-            then CM.mapM toWithMethod fields
-            else pure []
-          cons <- constructor
-          let bodyDecls = memberVars ++ [cons, equalsMethod, hashCodeMethod] ++ withMethods
-          return $ javaClassDeclaration aliases elName topMods Nothing bodyDecls
-        where
-          constructor = do
-            params <- CM.mapM fieldToFormalParam fields
-            let stmts = Java.BlockStatementStatement . toAssignStmt . fieldTypeName <$> fields
-            return $ makeConstructor aliases elName False params stmts
+    constructor = do
+      params <- CM.mapM fieldToFormalParam fields
+      let stmts = Java.BlockStatementStatement . toAssignStmt . fieldTypeName <$> fields
+      return $ makeConstructor aliases elName False params stmts
 
-          fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
+    fieldArgs = fieldNameToJavaExpression . fieldTypeName <$> fields
 
-          toMemberVar (FieldType fname ft) = do
-            let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
-            jt <- encodeType aliases ft
-            let var = fieldNameToJavaVariableDeclarator fname
-            return $ javaMemberField mods jt var
+    toMemberVar (FieldType fname ft) = do
+      let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
+      jt <- encodeType aliases ft
+      let var = fieldNameToJavaVariableDeclarator fname
+      return $ javaMemberField mods jt var
 
-          toWithMethod field = do
-            let mods = [Java.MethodModifierPublic]
-            let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
-            param <- fieldToFormalParam field
-            let anns = [] -- TODO
-            let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
-            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-                  javaConstructorCall (javaConstructorName $ localNameOf elName) fieldArgs
-            return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
+    toWithMethod field = do
+      let mods = [Java.MethodModifierPublic]
+      let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
+      param <- fieldToFormalParam field
+      let anns = [] -- TODO
+      let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
+      let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
+            javaConstructorCall (javaConstructorName $ localNameOf elName) fieldArgs
+      return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
-          fieldToFormalParam (FieldType fname ft) = do
-            jt <- encodeType aliases ft
-            return $ javaTypeToJavaFormalParameter jt fname
+    fieldToFormalParam (FieldType fname ft) = do
+      jt <- encodeType aliases ft
+      return $ javaTypeToJavaFormalParameter jt fname
 
-          equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
-              Just [instanceOfStmt,
-                castStmt,
-                returnAllFieldsEqual]
-            where
-              anns = [overrideAnnotation]
-              mods = [Java.MethodModifierPublic]
-              param = javaTypeToJavaFormalParameter (javaRefType [] Nothing "Object") (FieldName otherName)
-              result = javaTypeToJavaResult javaBooleanType
-              otherName = "other"
-              tmpName = "o"
+    equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
+        Just [instanceOfStmt,
+          castStmt,
+          returnAllFieldsEqual]
+      where
+        anns = [overrideAnnotation]
+        mods = [Java.MethodModifierPublic]
+        param = javaTypeToJavaFormalParameter (javaRefType [] Nothing "Object") (FieldName otherName)
+        result = javaTypeToJavaResult javaBooleanType
+        otherName = "other"
+        tmpName = "o"
 
-              instanceOfStmt = Java.BlockStatementStatement $ Java.StatementIfThen $
-                  Java.IfThenStatement cond returnFalse
-                where
-                  cond = javaUnaryExpressionToJavaExpression $
-                      Java.UnaryExpressionOther $
-                      Java.UnaryExpressionNotPlusMinusNot $
-                      javaRelationalExpressionToJavaUnaryExpression $
-                      javaInstanceOf other parent
-                    where
-                      other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
-                      parent = nameToJavaReferenceType aliases False elName
+        instanceOfStmt = Java.BlockStatementStatement $ Java.StatementIfThen $
+            Java.IfThenStatement cond returnFalse
+          where
+            cond = javaUnaryExpressionToJavaExpression $
+                Java.UnaryExpressionOther $
+                Java.UnaryExpressionNotPlusMinusNot $
+                javaRelationalExpressionToJavaUnaryExpression $
+                javaInstanceOf other parent
+              where
+                other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
+                parent = nameToJavaReferenceType aliases False elName
 
-                  returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
+            returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
 
-              castStmt = variableDeclarationStatement aliases elName id rhs
-                where
-                  id = Java.Identifier tmpName
-                  rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
-                    Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
+        castStmt = variableDeclarationStatement aliases elName id rhs
+          where
+            id = Java.Identifier tmpName
+            rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
+              Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
 
-              returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
-                  then javaBooleanExpression True
-                  else javaConditionalAndExpressionToJavaExpression $
-                    Java.ConditionalAndExpression (eqClause . fieldTypeName <$> fields)
-                where
-                  eqClause (FieldName fname) = javaPostfixExpressionToJavaInclusiveOrExpression $
-                      javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
-                    where
-                      arg = javaExpressionNameToJavaExpression $
-                        fieldExpression (Java.Identifier tmpName) (Java.Identifier fname)
-                      header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
-                      var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier fname)
+        returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
+            then javaBooleanExpression True
+            else javaConditionalAndExpressionToJavaExpression $
+              Java.ConditionalAndExpression (eqClause . fieldTypeName <$> fields)
+          where
+            eqClause (FieldName fname) = javaPostfixExpressionToJavaInclusiveOrExpression $
+                javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
+              where
+                arg = javaExpressionNameToJavaExpression $
+                  fieldExpression (Java.Identifier tmpName) (Java.Identifier fname)
+                header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
+                var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier fname)
 
-          hashCodeMethod = methodDeclaration mods [] anns "hashCode" [] result $ Just [returnSum]
-            where
-              anns = [overrideAnnotation]
-              mods = [Java.MethodModifierPublic]
-              result = javaTypeToJavaResult javaIntType
+    hashCodeMethod = methodDeclaration mods [] anns "hashCode" [] result $ Just [returnSum]
+      where
+        anns = [overrideAnnotation]
+        mods = [Java.MethodModifierPublic]
+        result = javaTypeToJavaResult javaIntType
 
-              returnSum = Java.BlockStatementStatement $ if L.null fields
-                then returnZero
-                else javaReturnStatement $ Just $
-                  javaAdditiveExpressionToJavaExpression $ addExpressions $
-                    L.zipWith multPair multipliers (fieldTypeName <$> fields)
-                where
-                  returnZero = javaReturnStatement $ Just $ javaIntExpression 0
+        returnSum = Java.BlockStatementStatement $ if L.null fields
+          then returnZero
+          else javaReturnStatement $ Just $
+            javaAdditiveExpressionToJavaExpression $ addExpressions $
+              L.zipWith multPair multipliers (fieldTypeName <$> fields)
+          where
+            returnZero = javaReturnStatement $ Just $ javaIntExpression 0
 
-                  multPair :: Int -> FieldName -> Java.MultiplicativeExpression
-                  multPair i (FieldName fname) = Java.MultiplicativeExpressionTimes $
-                      Java.MultiplicativeExpression_Binary lhs rhs
-                    where
-                      lhs = Java.MultiplicativeExpressionUnary $ javaPrimaryToJavaUnaryExpression $
-                        javaLiteralToPrimary $ javaInt i
-                      rhs = javaPostfixExpressionToJavaUnaryExpression $
-                        javaMethodInvocationToJavaPostfixExpression $
-                        methodInvocation (Just $ Java.Identifier fname) (Java.Identifier "hashCode") []
+            multPair :: Int -> FieldName -> Java.MultiplicativeExpression
+            multPair i (FieldName fname) = Java.MultiplicativeExpressionTimes $
+                Java.MultiplicativeExpression_Binary lhs rhs
+              where
+                lhs = Java.MultiplicativeExpressionUnary $ javaPrimaryToJavaUnaryExpression $
+                  javaLiteralToPrimary $ javaInt i
+                rhs = javaPostfixExpressionToJavaUnaryExpression $
+                  javaMethodInvocationToJavaPostfixExpression $
+                  methodInvocation (Just $ Java.Identifier fname) (Java.Identifier "hashCode") []
 
-                  multipliers = L.cycle first20Primes
-                    where
-                      first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
+            multipliers = L.cycle first20Primes
+              where
+                first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-      TypeExprUnion fields -> do
-          variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
-          let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
-          let bodyDecls = [privateConstructor, toAcceptMethod True, visitor, partialVisitor] ++ variantDecls
-          let mods = topMods ++ [Java.ClassModifierAbstract]
-          return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
-        where
-          privateConstructor = makeConstructor aliases elName True [] []
-          unionFieldClass (FieldType fname ftype) = do
-            let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
-            toClassDecl (variantClassName elName fname) rtype
-          augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
-              Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
-              Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True elName,
-              Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
-            where
-              newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
+declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
+  -> Result Java.ClassDeclaration
+declarationForUnionType aliases elName fields = do
+    variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
+    let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
+    let bodyDecls = [privateConstructor, toAcceptMethod True, visitor, partialVisitor] ++ variantDecls
+    let mods = classModsPublic ++ [Java.ClassModifierAbstract]
+    return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
+  where
+    privateConstructor = makeConstructor aliases elName True [] []
+    unionFieldClass (FieldType fname ftype) = do
+      let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
+      toClassDecl aliases (variantClassName elName fname) rtype
+    augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
+        Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
+        Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True elName,
+        Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
+      where
+        newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
 
-          visitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
-              Java.NormalInterfaceDeclaration mods ti tparams extends body
-            where
-              mods = [Java.InterfaceModifierPublic]
-              ti = Java.TypeIdentifier $ Java.Identifier "Visitor"
-              tparams = [javaTypeParameter "R"]
-              extends = []
-              body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
-                where
-                  toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [variantInstanceParam fname] resultR Nothing
+    visitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
+        Java.NormalInterfaceDeclaration mods ti tparams extends body
+      where
+        mods = [Java.InterfaceModifierPublic]
+        ti = Java.TypeIdentifier $ Java.Identifier "Visitor"
+        tparams = [javaTypeParameter "R"]
+        extends = []
+        body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
+          where
+            toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [variantInstanceParam fname] resultR Nothing
 
-          partialVisitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
-              Java.NormalInterfaceDeclaration {
-                  Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
-                  Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier "PartialVisitor",
-                  Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
-                  Java.normalInterfaceDeclarationExtends =
-                    [Java.InterfaceType $ javaClassType [javaTypeVariable "R"] Nothing "Visitor"],
-                  Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
-            where
-              otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
-                where
-                  throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
-                      Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
-                      javaConstructorCall (javaConstructorName "IllegalStateException") args
-                    where
-                      args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
-                        javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
-                        Java.MultiplicativeExpressionUnary $ javaIdentifierToJavaUnaryExpression $ Java.Identifier "instance"]]
+    partialVisitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
+        Java.NormalInterfaceDeclaration {
+            Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
+            Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier "PartialVisitor",
+            Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
+            Java.normalInterfaceDeclarationExtends =
+              [Java.InterfaceType $ javaClassType [javaTypeVariable "R"] Nothing "Visitor"],
+            Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
+      where
+        otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
+          where
+            throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
+                Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
+                javaConstructorCall (javaConstructorName "IllegalStateException") args
+              where
+                args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
+                  javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
+                  Java.MultiplicativeExpressionUnary $ javaIdentifierToJavaUnaryExpression $ Java.Identifier "instance"]]
 
-              toVisitMethod fname = interfaceMethodDeclaration defaultMod [] "visit" [variantInstanceParam fname] resultR $
-                  Just [returnOtherwise]
-                where
-                  returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-                    javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
-                    methodInvocation Nothing (Java.Identifier "otherwise") [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
+        toVisitMethod fname = interfaceMethodDeclaration defaultMod [] "visit" [variantInstanceParam fname] resultR $
+            Just [returnOtherwise]
+          where
+            returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
+              javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
+              methodInvocation Nothing (Java.Identifier "otherwise") [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
 
-          defaultMod = [Java.InterfaceMethodModifierDefault]
+    defaultMod = [Java.InterfaceMethodModifierDefault]
 
-          resultR = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
+    resultR = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
 
-          mainInstanceParam = javaTypeToJavaFormalParameter classRef (FieldName "instance")
-            where
-              classRef = javaClassTypeToJavaType $
-                nameToJavaClassType aliases False elName
+    mainInstanceParam = javaTypeToJavaFormalParameter classRef (FieldName "instance")
+      where
+        classRef = javaClassTypeToJavaType $
+          nameToJavaClassType aliases False elName
 
-          variantInstanceParam fname = javaTypeToJavaFormalParameter classRef (FieldName "instance")
-            where
-              classRef = javaClassTypeToJavaType $
-                nameToJavaClassType aliases False $ variantClassName elName fname
+    variantInstanceParam fname = javaTypeToJavaFormalParameter classRef (FieldName "instance")
+      where
+        classRef = javaClassTypeToJavaType $
+          nameToJavaClassType aliases False $ variantClassName elName fname
 
-      TypeExprUniversal (UniversalType (TypeVariable v) body) -> do
-        (Java.ClassDeclarationNormal cd) <- toClassDecl elName body
-        return $ Java.ClassDeclarationNormal $ cd {
-          Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
-      _ -> fail $ "unexpected type: " ++ show t
+declarationForUniversalType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> UniversalType m
+  -> Result Java.ClassDeclaration
+declarationForUniversalType aliases elName (UniversalType (TypeVariable v) body) = do
+    (Java.ClassDeclarationNormal cd) <- toClassDecl aliases elName body
+    return $ Java.ClassDeclarationNormal $ cd {
+      Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
+  where
     addParameter v params = params ++ [javaTypeParameter v]
-
-    topMods = [Java.ClassModifierPublic]
 
 isUnit :: Eq m => Type m -> Bool
 isUnit t = typeExpr t  == TypeExprRecord []
