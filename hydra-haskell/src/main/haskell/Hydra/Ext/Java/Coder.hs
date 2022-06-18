@@ -1,8 +1,4 @@
-module Hydra.Ext.Java.Coder (
-  moduleToJavaCompilationUnit,
-  moduleToJavaString,
-  javaLanguage,
-) where
+module Hydra.Ext.Java.Coder (printGraph) where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -17,25 +13,22 @@ import Hydra.Util.Coders
 import Hydra.Util.Formatting
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Java.Serde
+import Hydra.Ext.Java.Settings
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 
 
-listsAsArrays :: Bool
-listsAsArrays = False
-
-
-moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
-moduleToJavaCompilationUnit cx g = graphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
-  where
-    aliases = importAliasesForGraph g
-
-moduleToJavaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToJavaString cx g = do
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph cx g = do
   unit <- moduleToJavaCompilationUnit cx g
   return $ printExpr $ parenthesize $ writeCompilationUnit unit
+
+moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
+moduleToJavaCompilationUnit cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
+  where
+    aliases = importAliasesForGraph g
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
@@ -172,7 +165,7 @@ declarationForRecordType aliases elName fields = do
 declarationForType :: (Default m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
 declarationForType aliases cx (el, TypedTerm _ term) = do
-    t <- decodeType cx term >>= adaptType cx javaLanguage
+    t <- decodeType cx term >>= adaptType cx language
     cd <- toClassDecl aliases (elementName el) t
     return $ Java.TypeDeclarationClass cd
 

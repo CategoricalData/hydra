@@ -6,8 +6,8 @@ import Hydra.Core
 import qualified Data.Set as S
 
 
-pegasusDataLanguage :: Language m
-pegasusDataLanguage = Language (LanguageName "hydra/ext/pegasus/pdl") $ LanguageConstraints {
+language :: Language m
+language = Language (LanguageName "hydra/ext/pegasus/pdl") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBinary,

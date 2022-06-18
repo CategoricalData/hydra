@@ -1,8 +1,4 @@
-module Hydra.Ext.Haskell.Coder (
-  moduleToHaskellModule,
-  moduleToHaskellString,
-  haskellLanguage,
-) where
+module Hydra.Ext.Haskell.Coder (printGraph) where
 
 import Hydra.Basics
 import Hydra.Core
@@ -22,6 +18,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
+import Hydra.Ext.Haskell.Settings
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -30,21 +27,15 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-newtypesNotTypedefs :: Bool
-newtypesNotTypedefs = True
-
-useCoreImport :: Bool
-useCoreImport = True
-
-moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
-moduleToHaskellModule cx g = graphToExternalModule haskellLanguage (encodeTerm namespaces) constructModule cx g
-  where
-    namespaces = namespacesForGraph g
-
-moduleToHaskellString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToHaskellString cx g = do
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph cx g = do
   hsmod <- moduleToHaskellModule cx g
   return $ printExpr $ parenthesize $ toTree hsmod
+
+moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
+moduleToHaskellModule cx g = graphToExternalModule language (encodeTerm namespaces) constructModule cx g
+  where
+    namespaces = namespacesForGraph g
 
 constantDecls :: Namespaces -> Name -> Type m -> [H.DeclarationWithComments]
 constantDecls namespaces name@(Name nm) typ = if useCoreImport
@@ -184,7 +175,7 @@ toTypeDeclarations namespaces cx el term = do
       return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
 encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => Namespaces -> Context m -> Type m -> Result H.Type
-encodeAdaptedType namespaces cx typ = adaptType cx haskellLanguage typ >>= encodeType namespaces
+encodeAdaptedType namespaces cx typ = adaptType cx language typ >>= encodeType namespaces
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction namespaces cx meta fun = case fun of

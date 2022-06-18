@@ -7,8 +7,8 @@ import Hydra.Basics
 import qualified Data.Set as S
 
 
-scalaLanguage :: Language m
-scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
+language :: Language m
+language = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean,
@@ -54,8 +54,8 @@ scalaLanguage = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints 
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
-scalaReservedWords :: S.Set [Char]
-scalaReservedWords = S.fromList $ keywords ++ classNames
+reservedWords :: S.Set [Char]
+reservedWords = S.fromList $ keywords ++ classNames
   where
     -- Classes in the Scala Standard Library 2.13.8
     -- Note: numbered class names like Function1, Product16, and the names of exception/error classes are omitted,

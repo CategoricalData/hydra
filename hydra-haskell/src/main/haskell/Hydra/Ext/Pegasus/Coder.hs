@@ -1,8 +1,4 @@
-module Hydra.Ext.Pegasus.Coder (
-  moduleToPegasusSchema,
-  moduleToPdlString,
-  pegasusDataLanguage,
-) where
+module Hydra.Ext.Pegasus.Coder (printGraph) where
 
 import Hydra.Adapter
 import Hydra.Adapters.Term
@@ -27,8 +23,8 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-moduleToPdlString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToPdlString cx g = do
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph cx g = do
   sf <- moduleToPegasusSchema cx g
   return $ printExpr $ parenthesize $ exprSchemaFile sf
 
@@ -60,7 +56,7 @@ constructModule cx g coders pairs = do
       return $ PDL.NamedSchema qname ptype anns
 
 moduleToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
-moduleToPegasusSchema cx g = graphToExternalModule pegasusDataLanguage (encodeTerm aliases) constructModule cx g
+moduleToPegasusSchema cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 
@@ -71,7 +67,7 @@ encodeAdaptedType :: (Default m, Ord m, Read m, Show m)
   => M.Map GraphName String -> Context m -> Type m
   -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases cx typ = do
-  let ac = AdapterContext cx hydraCoreLanguage pegasusDataLanguage
+  let ac = AdapterContext cx hydraCoreLanguage language
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases cx $ adapterTarget ad
 

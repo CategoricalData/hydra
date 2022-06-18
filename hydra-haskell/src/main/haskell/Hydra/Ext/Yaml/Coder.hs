@@ -1,7 +1,4 @@
-module Hydra.Ext.Yaml.Coder (
-  yamlCoder,
-  yamlLanguage,
-) where
+module Hydra.Ext.Yaml.Coder (yamlCoder) where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -108,7 +105,7 @@ yamlCoder context typ = do
     coder <- termCoder $ adapterTarget adapter
     return $ composeSteps (adapterStep adapter) coder
   where
-    adContext = AdapterContext context hydraCoreLanguage yamlLanguage
+    adContext = AdapterContext context hydraCoreLanguage language
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull

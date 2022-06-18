@@ -71,7 +71,7 @@ recordFieldReference namespaces sname (FieldName fname) = elementReference names
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
 sanitizeHaskellName :: String -> String
-sanitizeHaskellName = sanitizeWithUnderscores haskellReservedWords
+sanitizeHaskellName = sanitizeWithUnderscores reservedWords
 
 simpleName :: String -> H.Name
 simpleName = rawName . sanitizeHaskellName

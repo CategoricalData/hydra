@@ -1,8 +1,4 @@
-module Hydra.Ext.Scala.Coder (
-  moduleToScalaPackage,
-  moduleToScalaString,
-  scalaLanguage,
-) where
+module Hydra.Ext.Scala.Coder (printGraph) where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -29,13 +25,13 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
-moduleToScalaPackage = graphToExternalModule scalaLanguage encodeUntypedTerm constructModule
-
-moduleToScalaString :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
-moduleToScalaString cx g = do
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph cx g = do
   pkg <- moduleToScalaPackage cx g
   return $ printExpr $ parenthesize $ writePkg pkg
+
+moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
+moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule
 
 constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
