@@ -27,7 +27,7 @@ import qualified Data.Maybe as Y
 
 
 moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
-moduleToScalaPackage = dataGraphToExternalModule scalaLanguage encodeUntypedTerm constructModule
+moduleToScalaPackage = graphToExternalModule scalaLanguage encodeUntypedTerm constructModule
 
 constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
@@ -38,8 +38,8 @@ constructModule cx g coders pairs = do
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
     h (GraphName n) = n
-    imports = (toElImport <$> S.toList (dataGraphDependencies True False True g))
-        ++ (toPrimImport <$> S.toList (dataGraphDependencies False True False g))
+    imports = (toElImport <$> S.toList (graphDependencies True False True g))
+        ++ (toPrimImport <$> S.toList (graphDependencies False True False g))
       where
         toElImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]

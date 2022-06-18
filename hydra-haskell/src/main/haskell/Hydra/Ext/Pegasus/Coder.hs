@@ -52,7 +52,7 @@ constructModule cx g coders pairs = do
       return $ PDL.NamedSchema qname ptype anns
 
 moduleToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
-moduleToPegasusSchema cx g = dataGraphToExternalModule pegasusDataLanguage (encodeTerm aliases) constructModule cx g
+moduleToPegasusSchema cx g = graphToExternalModule pegasusDataLanguage (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
 

@@ -52,7 +52,7 @@ namespacesForGraph g = Namespaces focusPair mapping
   where
     gname = graphName g
     focusPair = toPair gname
-    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (dataGraphDependencies True True True g))
+    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (graphDependencies True True True g))
     toModuleName (GraphName n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
     toPair name = (name, toModuleName name)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s

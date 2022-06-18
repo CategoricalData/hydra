@@ -23,19 +23,19 @@ adaptType cx targetLang t = do
   where
     ac = AdapterContext cx hydraCoreLanguage targetLang
 
-dataGraphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
-dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
+graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
+graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
   where
     graphNames = S.fromList (graphNameOf <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
-dataGraphToExternalModule :: (Default m, Ord m, Read m, Show m)
+graphToExternalModule :: (Default m, Ord m, Read m, Show m)
   => Language m
   -> (Context m -> Term m -> Result e)
   -> (Context m -> Graph m -> M.Map (Type m) (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
   -> Context m -> Graph m -> Qualified d
-dataGraphToExternalModule lang encodeTerm createModule cx g = do
+graphToExternalModule lang encodeTerm createModule cx g = do
     scx <- resultToQualified $ schemaContext cx
     pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
     coders <- codersFor $ L.nub (typedTermType <$> pairs)

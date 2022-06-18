@@ -40,17 +40,17 @@ standardContext :: Context Meta
 standardContext = cx
   where
     cx = Context {
-             contextGraphs = GraphSet {
-               graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
-               graphSetRoot = emptyGraphName},
-             contextElements = M.empty,
-             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
-             contextStrategy = EvaluationStrategy {
-               evaluationStrategyOpaqueTermVariants = S.fromList []},
-             contextDescriptionOf = getDescription,
-             contextTypeOf = getType cx,
-             contextSetDescriptionOf = \d m -> setDescription d m,
-             contextSetTypeOf = \t m -> setType cx t m}
+      contextGraphs = GraphSet {
+        graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
+        graphSetRoot = emptyGraphName},
+      contextElements = M.empty,
+      contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
+      contextStrategy = EvaluationStrategy {
+        evaluationStrategyOpaqueTermVariants = S.fromList []},
+      contextDescriptionOf = getDescription,
+      contextTypeOf = getType cx,
+      contextSetDescriptionOf = \d m -> setDescription d m,
+      contextSetTypeOf = \t m -> setType cx t m}
     emptyGraphName = GraphName "empty"
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
@@ -68,27 +68,6 @@ standardGraph name els = Graph name els termExprs schemaGraph
   where
     termExprs = const True -- TODO
     schemaGraph = GraphName "hydra/core"
-
-standardMatch :: Name -> Type Meta -> [(FieldName, Term Meta)] -> Term Meta
-standardMatch = nominalMatch standardContext
-
-standardMatchWithVariants :: Type Meta -> Type Meta -> [(FieldName, FieldName)] -> Term Meta
-standardMatchWithVariants = nominalMatchWithVariants standardContext
-
-standardRecord :: Name -> [Field Meta] -> Term Meta
-standardRecord = nominalRecord standardContext
-
-standardWithUnitVariant :: Name -> FieldName -> Term Meta
-standardWithUnitVariant = nominalWithUnitVariant standardContext
-
-standardWithFunction :: Name -> FieldName -> Element Meta -> Term Meta
-standardWithFunction = nominalWithFunction standardContext
-
-standardWithType :: Type Meta -> Term Meta -> Term Meta
-standardWithType = withType standardContext
-
-standardWithVariant :: Name -> FieldName -> Term Meta -> Term Meta
-standardWithVariant = nominalWithVariant standardContext
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {
