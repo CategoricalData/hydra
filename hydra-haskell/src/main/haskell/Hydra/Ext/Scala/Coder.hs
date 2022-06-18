@@ -29,7 +29,7 @@ printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qual
 printGraph cx g = do
   pkg <- moduleToScalaPackage cx g
   let s = printExpr $ parenthesize $ writePkg pkg
-  return $ M.fromList [(toFilePath False (FileExtension "scala") $ graphName g, s)]
+  return $ M.fromList [(graphNameToFilePath False (FileExtension "scala") $ graphName g, s)]
 
 moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule

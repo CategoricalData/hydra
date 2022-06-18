@@ -59,7 +59,12 @@ graphToExternalModule lang encodeTerm createModule cx g = do
         adContext = AdapterContext cx hydraCoreLanguage lang
         termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
 
-toFilePath :: Bool -> FileExtension -> GraphName -> FilePath
-toFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
+graphNameToFilePath :: Bool -> FileExtension -> GraphName -> FilePath
+graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
+
+nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
+nameToFilePath caps ext name = graphNameToFilePath caps ext $ GraphName $ gname ++ "/" ++ dotsToUnderscores local
+  where
+    (GraphName gname, local) = toQname name

@@ -22,11 +22,15 @@ import qualified Data.Map as M
 
 printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
-  unit <- moduleToJavaCompilationUnit cx g
-  let s = printExpr $ parenthesize $ writeCompilationUnit unit
-  return $ M.fromList [(toFilePath True (FileExtension "java") $ graphName g, s)]
+    units <- moduleToJavaCompilationUnit cx g
+    return $ M.fromList $ forPair <$> M.toList units
+  where
+    forPair (name, unit) = (
+      nameToFilePath True (FileExtension "java") name,
+      printExpr $ parenthesize $ writeCompilationUnit unit)
 
-moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
+moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m
+  -> Qualified (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
@@ -36,19 +40,26 @@ classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
-  -> Result Java.CompilationUnit
+  -> Result (M.Map Name Java.CompilationUnit)
 constructModule cx g coders pairs = do
-    let pkg = javaPackageDeclaration $ graphName g
     let imports = []
-    typeDecls <- CM.mapM (declarationForType aliases cx) typePairs
-    dataDecls <- CM.mapM (toDataDeclaration aliases cx) dataPairs
-    let types = typeDecls -- TODO
-    return $ Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports types
+    typeUnits <- CM.mapM typeToClass typePairs
+    dataUnits <- CM.mapM termToClass dataPairs
+    return $ M.fromList $ typeUnits ++ dataUnits
   where
+    pkg = javaPackageDeclaration $ graphName g
     isTypePair = isType . typedTermType . snd
     typePairs = L.filter isTypePair pairs
     dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
+    typeToClass pair@(el, _) = do
+      let imports = [] -- TODO
+      decl <- declarationForType aliases cx pair
+      return (elementName el,
+        Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
+    termToClass pair@(el, _) = do
+      return (elementName el,
+        Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] []) -- TODO
 
 declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
   -> Result Java.ClassDeclaration
@@ -81,7 +92,7 @@ declarationForRecordType aliases elName fields = do
       let anns = [] -- TODO
       let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
       let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-            javaConstructorCall (javaConstructorName $ localNameOf elName) fieldArgs
+            javaConstructorCall (javaConstructorName True $ localNameOf elName) fieldArgs
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
     fieldToFormalParam (FieldType fname ft) = do
@@ -214,7 +225,7 @@ declarationForUnionType aliases elName fields = do
           where
             throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
                 Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
-                javaConstructorCall (javaConstructorName "IllegalStateException") args
+                javaConstructorCall (javaConstructorName False "IllegalStateException") args
               where
                 args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
                   javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
@@ -283,7 +294,7 @@ encodeType aliases t = case typeExpr t of
   TypeExprFunction (FunctionType dom cod) -> do
     jdom <- encode dom >>= asJavaReferenceType
     jcod <- encode cod >>= asJavaReferenceType
-    return $ javaRefType [jdom, jcod] javaUtilPackageName "Function"
+    return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
   TypeExprList et -> do
     jet <- encode et
     if listsAsArrays
