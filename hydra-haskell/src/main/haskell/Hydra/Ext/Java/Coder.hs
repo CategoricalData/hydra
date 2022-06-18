@@ -20,10 +20,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   unit <- moduleToJavaCompilationUnit cx g
-  return $ printExpr $ parenthesize $ writeCompilationUnit unit
+  let s = printExpr $ parenthesize $ writeCompilationUnit unit
+  return $ M.fromList [(toFilePath True (FileExtension "java") $ graphName g, s)]
 
 moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
 moduleToJavaCompilationUnit cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g

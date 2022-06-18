@@ -28,8 +28,6 @@ import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
-import Hydra.Util.Formatting
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL
@@ -40,32 +38,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified System.Directory as SD
 
-
-generateHaskell :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateHaskell = generateSources (toFileName True ".hs") Haskell.printGraph
-
-generateJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateJava = generateSources (toFileName False ".java") Java.printGraph
-
-generatePdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generatePdl = generateSources (toFileName False ".pdl") PDL.printGraph
-
-generateScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateScala = generateSources (toFileName False ".scala") Scala.printGraph
-
-generateSources :: (GraphName -> FP.FilePath) -> (Context Meta -> Graph Meta -> Qualified String)
-  -> [Result (Module Meta)] -> FP.FilePath -> IO ()
-generateSources toFile serialize modules baseDir = case sequence modules of
-    ResultFailure msg -> fail msg
-    ResultSuccess mods -> mapM_ writeDataGraph mods
-  where
-    writeDataGraph (Module g deps) = do
-      let cx = setContextElements (g:(moduleGraph <$> deps)) $ standardContext {
-             contextGraphs = GraphSet (M.fromList [
-               (graphName g, g),
-               (hydraCoreName, hydraCore)]) (graphName g),
-             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
-      writeGraph serialize cx g $ Just $ FP.combine baseDir $ toFile (graphName g)
 
 coreModules :: [Result (Module Meta)]
 coreModules = [
@@ -98,25 +70,45 @@ testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coq
 javaTestModules :: [Result (Module Meta)]
 javaTestModules = pure <$> [jsonJsonModule]
 
-toFileName :: Bool -> String -> GraphName -> String
-toFileName caps ext (GraphName name) = L.intercalate "/" parts ++ ext
-  where
-    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
-writeGraph :: (Default m, Eq m, Ord m, Read m, Show m)
-  => (Context m -> Graph m -> Qualified String)
-  -> Context m -> Graph m -> Maybe FilePath -> IO ()
-writeGraph serialize cx g path = do
-  case serialize cx g of
-    Qualified Nothing warnings -> putStrLn $ "Transformation failed in " ++ h (graphName g) ++ ": " ++ indent (unlines warnings)
-      where
-        h (GraphName n) = n
-    Qualified (Just s) warnings -> do
+printHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
+printHaskell = generateSources Haskell.printGraph
+
+printJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+printJava = generateSources Java.printGraph
+
+printPdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+printPdl = generateSources PDL.printGraph
+
+printScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+printScala = generateSources Scala.printGraph
+
+generateSources ::
+  (Context Meta -> Graph Meta -> Qualified (M.Map FilePath String)) -> [Result (Module Meta)] -> FilePath -> IO ()
+generateSources printGraph modules basePath = case sequence modules of
+    ResultFailure msg -> fail msg
+    ResultSuccess mods -> mapM_ writeDataGraph mods
+  where
+    writeDataGraph (Module g deps) = do
+      let cx = setContextElements (g:(moduleGraph <$> deps)) $ standardContext {
+             contextGraphs = GraphSet (M.fromList [
+               (graphName g, g),
+               (hydraCoreName, hydraCore)]) (graphName g),
+             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+      writeGraph printGraph cx g basePath
+
+writeGraph :: (Context m -> Graph m -> Qualified (M.Map FilePath String)) -> Context m -> Graph m -> FilePath -> IO ()
+writeGraph printGraph cx g basePath = do
+  case printGraph cx g of
+    Qualified Nothing warnings -> putStrLn $
+      "Transformation failed in " ++ unGraphName (graphName g) ++ ": " ++ indent (unlines warnings)
+    Qualified (Just m) warnings -> do
       if not (L.null warnings)
         then putStrLn $ "Warnings: " ++ indent (unlines warnings) ++ "\n"
         else pure ()
-      case path of
-        Nothing -> putStrLn s
-        Just p -> do
-          SD.createDirectoryIfMissing True $ FP.takeDirectory p
-          writeFile p s
+      mapM_ writePair $ M.toList m
+  where
+    writePair (path, s) = do
+      let fullPath = FP.combine basePath path
+      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+      writeFile fullPath s

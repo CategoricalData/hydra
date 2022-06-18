@@ -25,10 +25,11 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   pkg <- moduleToScalaPackage cx g
-  return $ printExpr $ parenthesize $ writePkg pkg
+  let s = printExpr $ parenthesize $ writePkg pkg
+  return $ M.fromList [(toFilePath False (FileExtension "scala") $ graphName g, s)]
 
 moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule

@@ -14,7 +14,11 @@ import qualified Data.Set as S
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
 import Hydra.Steps
+import qualified Hydra.Lib.Strings as Strings
+import Hydra.Util.Formatting
 
+
+newtype FileExtension = FileExtension String
 
 adaptType :: (Default m, Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
 adaptType cx targetLang t = do
@@ -54,3 +58,8 @@ graphToExternalModule lang encodeTerm createModule cx g = do
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
         termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
+
+toFilePath :: Bool -> FileExtension -> GraphName -> FilePath
+toFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
+  where
+    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name

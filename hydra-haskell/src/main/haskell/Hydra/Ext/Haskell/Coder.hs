@@ -27,10 +27,11 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified String
+printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   hsmod <- moduleToHaskellModule cx g
-  return $ printExpr $ parenthesize $ toTree hsmod
+  let s = printExpr $ parenthesize $ toTree hsmod
+  return $ M.fromList [(toFilePath True (FileExtension "hs") $ graphName g, s)]
 
 moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
 moduleToHaskellModule cx g = graphToExternalModule language (encodeTerm namespaces) constructModule cx g
