@@ -418,4 +418,7 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
         init = Java.VariableInitializerExpression rhs
 
 variantClassName :: Name -> FieldName -> Name
-variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname
+variantClassName elName (FieldName fname) = fromQname gname $ if flocal == local then flocal ++ "_" else flocal
+  where
+    (gname, local) = toQname elName
+    flocal = capitalize fname

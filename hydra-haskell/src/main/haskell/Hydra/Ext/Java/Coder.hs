@@ -26,8 +26,13 @@ printGraph cx g = do
     return $ M.fromList $ forPair <$> M.toList units
   where
     forPair (name, unit) = (
-      nameToFilePath True (FileExtension "java") name,
+      elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
+
+elementNameToFilePath :: Name -> FilePath
+elementNameToFilePath name = nameToFilePath True (FileExtension "java") $ fromQname ns (sanitizeJavaName local)
+  where
+    (ns, local) = toQname name
 
 moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m
   -> Qualified (M.Map Name Java.CompilationUnit)

@@ -65,6 +65,6 @@ graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
 nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
-nameToFilePath caps ext name = graphNameToFilePath caps ext $ GraphName $ gname ++ "/" ++ dotsToUnderscores local
+nameToFilePath caps ext name = graphNameToFilePath caps ext $ GraphName $ gname ++ "/" ++ local
   where
     (GraphName gname, local) = toQname name
