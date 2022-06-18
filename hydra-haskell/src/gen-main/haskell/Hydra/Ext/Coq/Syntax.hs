@@ -327,7 +327,7 @@ _GeneralizingBinder_implicitNonMaximallyInserted = (Core.FieldName "implicitNonM
 
 newtype Ident 
   = Ident {
-    unIdent :: String}
+    unIdent :: String_}
   deriving (Eq, Ord, Read, Show)
 
 _Ident = (Core.Name "hydra/ext/coq/syntax.Ident")
@@ -592,7 +592,7 @@ data Pattern0
   | Pattern0Placeholder 
   | Pattern0Parens [Pattern]
   | Pattern0Number Number
-  | Pattern0String String
+  | Pattern0String String_
   deriving (Eq, Ord, Read, Show)
 
 _Pattern0 = (Core.Name "hydra/ext/coq/syntax.Pattern0")
@@ -673,7 +673,7 @@ _Pattern10_Qualid_patterns = (Core.FieldName "patterns")
 
 data PrimitiveNotations 
   = PrimitiveNotationsNumber Number
-  | PrimitiveNotationsString String
+  | PrimitiveNotationsString String_
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveNotations = (Core.Name "hydra/ext/coq/syntax.PrimitiveNotations")
@@ -763,7 +763,7 @@ _Sort_typeWithAnyUniverse = (Core.FieldName "typeWithAnyUniverse")
 _Sort_typeWithUniverse = (Core.FieldName "typeWithUniverse")
 
 newtype String_ 
-  = String {
+  = String_ {
     unString :: String}
   deriving (Eq, Ord, Read, Show)
 

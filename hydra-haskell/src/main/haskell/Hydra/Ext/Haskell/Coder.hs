@@ -3,12 +3,9 @@ module Hydra.Ext.Haskell.Coder (
   haskellLanguage,
 ) where
 
-import Hydra.Adapter
-import Hydra.Adapters.Term
 import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreDecoding
-import Hydra.CoreLanguage
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.CoreMeta
@@ -97,7 +94,7 @@ toDataDeclarations :: (Ord m, Show m)
 toDataDeclarations coders namespaces cx (el, TypedTerm typ term) = do
     let coder = Y.fromJust $ M.lookup typ coders
     rhs <- H.RightHandSide <$> stepOut coder term
-    let hname = simpleName $ escapeHaskellName $ localNameOf $ elementName el
+    let hname = simpleName $ localNameOf $ elementName el
     let pat = H.PatternApplication $ H.Pattern_Application hname []
     htype <- encodeType namespaces typ
     let decl = H.DeclarationTypedBinding $ H.TypedBinding
@@ -117,11 +114,11 @@ toTypeDeclarations :: (Default m, Ord m, Read m, Show m)
   => Namespaces -> Context m -> Element m -> Term m -> Result [H.DeclarationWithComments]
 toTypeDeclarations namespaces cx el term = do
     let lname = localNameOf $ elementName el
-    let hname = simpleName $ escapeHaskellName lname
+    let hname = simpleName lname
     t <- decodeType cx term
     isSer <- isSerializable
     let deriv = H.Deriving $ if isSer
-                  then simpleName <$> ["Eq", "Ord", "Read", "Show"]
+                  then rawName <$> ["Eq", "Ord", "Read", "Show"]
                   else []
     let (vars, t') = unpackUniversalType t
     let hd = declHead hname $ L.reverse vars
@@ -321,7 +318,7 @@ encodeType namespaces typ = case typeExpr typ of
     TypeExprElement et -> encode et
     TypeExprFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
     TypeExprList lt -> H.TypeList <$> encode lt
-    TypeExprLiteral lt -> H.TypeVariable . simpleName <$> case lt of
+    TypeExprLiteral lt -> H.TypeVariable . rawName <$> case lt of
       LiteralTypeBoolean -> pure "Bool"
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure "Float"
@@ -334,15 +331,15 @@ encodeType namespaces typ = case typeExpr typ of
       LiteralTypeString -> pure "String"
       _ -> fail $ "unexpected literal type: " ++ show lt
     TypeExprMap (MapType kt vt) -> toApplicationType <$> CM.sequence [
-      pure $ H.TypeVariable $ simpleName "Map",
+      pure $ H.TypeVariable $ rawName "Map",
       encode kt,
       encode vt]
     TypeExprNominal name -> pure $ H.TypeVariable $ elementReference namespaces name
     TypeExprOptional ot -> toApplicationType <$> CM.sequence [
-      pure $ H.TypeVariable $ simpleName "Maybe",
+      pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
     TypeExprSet st -> toApplicationType <$> CM.sequence [
-      pure $ H.TypeVariable $ simpleName "Set",
+      pure $ H.TypeVariable $ rawName "Set",
       encode st]
     TypeExprUniversal (UniversalType (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
       encode body,

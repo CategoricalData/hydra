@@ -68,7 +68,7 @@ newtype Decimal
 _Decimal = (Core.Name "hydra/ext/xml/schema.Decimal")
 
 newtype Double_ 
-  = Double {
+  = Double_ {
     unDouble :: Double}
   deriving (Eq, Ord, Read, Show)
 
@@ -96,7 +96,7 @@ newtype ENTITY
 _ENTITY = (Core.Name "hydra/ext/xml/schema.ENTITY")
 
 newtype Float_ 
-  = Float {
+  = Float_ {
     unFloat :: Float}
   deriving (Eq, Ord, Read, Show)
 
@@ -166,14 +166,14 @@ newtype IDREFS
 _IDREFS = (Core.Name "hydra/ext/xml/schema.IDREFS")
 
 newtype Int_ 
-  = Int {
+  = Int_ {
     unInt :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Int = (Core.Name "hydra/ext/xml/schema.Int")
 
 newtype Integer_ 
-  = Integer {
+  = Integer_ {
     unInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
@@ -264,7 +264,7 @@ newtype Short
 _Short = (Core.Name "hydra/ext/xml/schema.Short")
 
 newtype String_ 
-  = String {
+  = String_ {
     unString :: String}
   deriving (Eq, Ord, Read, Show)
 

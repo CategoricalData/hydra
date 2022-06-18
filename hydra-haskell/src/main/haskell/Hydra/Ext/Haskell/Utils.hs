@@ -23,14 +23,11 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
     Nothing -> simpleName local
     Just (H.ModuleName a) -> if ns == gname
       then simpleName escLocal
-      else rawName $ a ++ "." ++ sanitize escLocal
+      else rawName $ a ++ "." ++ escLocal
   where
     (ns, local) = toQname name
     alias = M.lookup ns namespaces
-    escLocal = escapeHaskellName local
-
-escapeHaskellName :: String -> String
-escapeHaskellName s = if S.member s haskellReservedWords then s ++ "_" else s
+    escLocal = sanitizeHaskellName local
 
 hsapp :: H.Expression -> H.Expression -> H.Expression
 hsapp l r = H.ExpressionApplication $ H.Expression_Application l r
@@ -73,16 +70,11 @@ recordFieldReference namespaces sname (FieldName fname) = elementReference names
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
-sanitize :: String -> String
-sanitize s = if preserve
-  then s
-  else fmap (\c -> if c == '.' then '_' else c) s
-  where
-    -- TODO: hack
-    preserve = L.isInfixOf " " s
+sanitizeHaskellName :: String -> String
+sanitizeHaskellName = sanitizeWithUnderscores haskellReservedWords
 
 simpleName :: String -> H.Name
-simpleName = rawName . sanitize
+simpleName = rawName . sanitizeHaskellName
 
 toApplicationType :: [H.Type] -> H.Type
 toApplicationType = app . L.reverse

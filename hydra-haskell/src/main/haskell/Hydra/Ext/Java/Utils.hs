@@ -8,6 +8,7 @@ import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Coders
 import Hydra.Ext.Java.Language
+import Hydra.Util.Formatting
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -126,7 +127,7 @@ javaConstructorName local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
       else local
 
 javaDeclName :: Name -> Java.TypeIdentifier
-javaDeclName elName = javaTypeIdentifier (localNameOf elName)
+javaDeclName = javaTypeIdentifier . sanitizeJavaName . localNameOf
 
 javaEscape :: String -> String
 javaEscape s = if S.member s javaReservedWords then s ++ "_" else s
@@ -336,7 +337,7 @@ nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
 
 nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
-nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier local, pkg)
+nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJavaName local, pkg)
   where
     (gname, local) = toQname name
     pkg = if qualify || S.member local javaReservedWords
@@ -356,6 +357,9 @@ overrideAnnotation = Java.AnnotationMarker $ Java.MarkerAnnotation $ javaTypeNam
 
 referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
+
+sanitizeJavaName :: String -> String
+sanitizeJavaName = sanitizeWithUnderscores javaReservedWords
 
 toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
 toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body
