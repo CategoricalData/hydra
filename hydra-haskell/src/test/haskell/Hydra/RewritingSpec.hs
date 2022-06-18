@@ -3,6 +3,7 @@ module Hydra.RewritingSpec where
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import Hydra.TestUtils
 

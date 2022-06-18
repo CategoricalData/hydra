@@ -21,6 +21,7 @@ import Hydra.Primitives
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
