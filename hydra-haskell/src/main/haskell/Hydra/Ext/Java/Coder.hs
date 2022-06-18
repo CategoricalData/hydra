@@ -31,7 +31,7 @@ moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encod
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
-constructModule :: (Default m, Ord m, Show m)
+constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
   -> Result Java.CompilationUnit
 constructModule cx g coders pairs = do
@@ -47,10 +47,10 @@ constructModule cx g coders pairs = do
     dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
 
-toTypeDeclaration :: (Default m, Ord m, Show m)
+toTypeDeclaration :: (Default m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
 toTypeDeclaration aliases cx (el, TypedTerm _ term) = do
-    t <- decodeType cx term
+    t <- decodeType cx term >>= adaptType cx javaLanguage
     cd <- toClassDecl aliases (elementName el) t
     return $ Java.TypeDeclarationClass cd
 
