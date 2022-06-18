@@ -415,3 +415,6 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
     vdec = Java.VariableDeclarator (javaVariableDeclaratorId id) (Just init)
       where
         init = Java.VariableInitializerExpression rhs
+
+variantClassName :: Name -> FieldName -> Name
+variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname

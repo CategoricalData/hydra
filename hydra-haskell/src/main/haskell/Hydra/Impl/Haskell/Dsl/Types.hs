@@ -63,6 +63,9 @@ integer = literal . LiteralTypeInteger
 list :: Default m => Type m -> Type m
 list = defaultType . TypeExprList
 
+isUnit :: Eq m => Type m -> Bool
+isUnit t = typeExpr t  == TypeExprRecord []
+
 literal :: Default m => LiteralType -> Type m
 literal = defaultType . TypeExprLiteral
 

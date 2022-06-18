@@ -23,6 +23,7 @@ import qualified Data.Map as M
 listsAsArrays :: Bool
 listsAsArrays = False
 
+
 moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Java.CompilationUnit
 moduleToJavaCompilationUnit cx g = dataGraphToExternalModule javaLanguage (encodeTerm aliases) constructModule cx g
   where
@@ -37,7 +38,7 @@ constructModule :: (Default m, Ord m, Read m, Show m)
 constructModule cx g coders pairs = do
     let pkg = javaPackageDeclaration $ graphName g
     let imports = []
-    typeDecls <- CM.mapM (toTypeDeclaration aliases cx) typePairs
+    typeDecls <- CM.mapM (declarationForType aliases cx) typePairs
     dataDecls <- CM.mapM (toDataDeclaration aliases cx) dataPairs
     let types = typeDecls -- TODO
     return $ Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports types
@@ -46,24 +47,6 @@ constructModule cx g coders pairs = do
     typePairs = L.filter isTypePair pairs
     dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
-
-toTypeDeclaration :: (Default m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
-toTypeDeclaration aliases cx (el, TypedTerm _ term) = do
-    t <- decodeType cx term >>= adaptType cx javaLanguage
-    cd <- toClassDecl aliases (elementName el) t
-    return $ Java.TypeDeclarationClass cd
-
-toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> Type m
-  -> Result Java.ClassDeclaration
-toClassDecl aliases elName t = case typeExpr t of
-      TypeExprNominal name -> return $ javaClassDeclaration aliases elName classModsPublic (Just name) []
-      TypeExprRecord fields -> declarationForRecordType aliases elName fields
-      TypeExprUnion fields -> declarationForUnionType aliases elName fields
-      TypeExprUniversal ut -> declarationForUniversalType aliases elName ut
-      -- Other types are not supported as class declarations, so we wrap them as record types.
-      -- TODO: wrap and unwrap the corresponding terms as record terms.
-      _ -> declarationForRecordType aliases elName [Types.field "value" t]
 
 declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
   -> Result Java.ClassDeclaration
@@ -178,6 +161,13 @@ declarationForRecordType aliases elName fields = do
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
+declarationForType :: (Default m, Ord m, Read m, Show m)
+  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
+declarationForType aliases cx (el, TypedTerm _ term) = do
+    t <- decodeType cx term >>= adaptType cx javaLanguage
+    cd <- toClassDecl aliases (elementName el) t
+    return $ Java.TypeDeclarationClass cd
+
 declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
   -> Result Java.ClassDeclaration
 declarationForUnionType aliases elName fields = do
@@ -189,7 +179,7 @@ declarationForUnionType aliases elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if isUnit ftype then [] else [FieldType (FieldName "value") ftype]
+      let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName "value") ftype]
       toClassDecl aliases (variantClassName elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -258,30 +248,6 @@ declarationForUniversalType aliases elName (UniversalType (TypeVariable v) body)
   where
     addParameter v params = params ++ [javaTypeParameter v]
 
-isUnit :: Eq m => Type m -> Bool
-isUnit t = typeExpr t  == TypeExprRecord []
-
-variantClassName :: Name -> FieldName -> Name
-variantClassName elName (FieldName fname) = fromQname (graphNameOf elName) $ capitalize fname
-
--- | Transform a given type into a type which can be used as the basis for a Java class
-toDeclarationType :: Default m => Type m -> Result (Type m)
-toDeclarationType t = case typeExpr t of
-  TypeExprNominal _ -> pure t
-  TypeExprRecord _ -> pure t
-  TypeExprUnion _ -> pure t
-  TypeExprUniversal (UniversalType v body) -> do
-    b <- toDeclarationType body
-    return t {typeExpr = TypeExprUniversal $ UniversalType v b}
-  TypeExprVariable _ -> fail "unexpected type variable"
-  _ -> do
-    let rt = Types.record [Types.field "value" t]
-    return t {typeExpr = typeExpr rt}
-
-toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
-toDataDeclaration aliases cx (el, TypedTerm typ term) = do
-  fail "not implemented" -- TODO
-
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
 encodeTerm aliases cx term@(Term expr meta) = do
@@ -344,3 +310,18 @@ encodeType aliases t = case typeExpr t of
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
+
+toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> Type m
+  -> Result Java.ClassDeclaration
+toClassDecl aliases elName t = case typeExpr t of
+      TypeExprNominal name -> return $ javaClassDeclaration aliases elName classModsPublic (Just name) []
+      TypeExprRecord fields -> declarationForRecordType aliases elName fields
+      TypeExprUnion fields -> declarationForUnionType aliases elName fields
+      TypeExprUniversal ut -> declarationForUniversalType aliases elName ut
+      -- Other types are not supported as class declarations, so we wrap them as record types.
+      -- TODO: wrap and unwrap the corresponding terms as record terms.
+      _ -> declarationForRecordType aliases elName [Types.field "value" t]
+
+toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
+toDataDeclaration aliases cx (el, TypedTerm typ term) = do
+  fail "not implemented" -- TODO
