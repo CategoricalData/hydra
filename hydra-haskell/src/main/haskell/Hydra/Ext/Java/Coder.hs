@@ -124,16 +124,17 @@ declarationForRecordType aliases elName fields = do
                 javaRelationalExpressionToJavaUnaryExpression $
                 javaInstanceOf other parent
               where
-                other = javaIdentifierToJavaRelationalExpression $ Java.Identifier otherName
+                other = javaIdentifierToJavaRelationalExpression $ Java.Identifier $ sanitizeJavaName otherName
                 parent = nameToJavaReferenceType aliases False elName
 
             returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
 
         castStmt = variableDeclarationStatement aliases elName id rhs
           where
-            id = Java.Identifier tmpName
+            id = Java.Identifier $ sanitizeJavaName tmpName
             rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
-              Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier otherName
+              Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier $
+                sanitizeJavaName otherName
 
         returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
             then javaBooleanExpression True
@@ -144,9 +145,10 @@ declarationForRecordType aliases elName fields = do
                 javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
               where
                 arg = javaExpressionNameToJavaExpression $
-                  fieldExpression (Java.Identifier tmpName) (Java.Identifier fname)
+                  fieldExpression (Java.Identifier $ sanitizeJavaName tmpName) (Java.Identifier $ sanitizeJavaName fname)
                 header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
-                var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing (Java.Identifier fname)
+                var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing $ Java.Identifier $
+                  sanitizeJavaName fname
 
     hashCodeMethod = methodDeclaration mods [] anns "hashCode" [] result $ Just [returnSum]
       where
@@ -170,7 +172,7 @@ declarationForRecordType aliases elName fields = do
                   javaLiteralToPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
-                  methodInvocation (Just $ Java.Identifier fname) (Java.Identifier "hashCode") []
+                  methodInvocation (Just $ Java.Identifier $ sanitizeJavaName fname) (Java.Identifier "hashCode") []
 
             multipliers = L.cycle first20Primes
               where

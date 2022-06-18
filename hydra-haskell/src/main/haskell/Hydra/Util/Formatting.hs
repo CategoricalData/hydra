@@ -4,6 +4,8 @@ import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.Char as C
 import qualified Data.List as L
+import qualified Data.Set as S
+
 
 data Case = CaseCamel | CasePascal | CaseLowerSnake | CaseUpperSnake
 
@@ -34,5 +36,19 @@ decapitalize s = case s of
   [] -> []
   (h:r) -> C.toLower h : r
 
+dotsToUnderscores :: String -> String
+dotsToUnderscores s = if preserve
+  then s
+  else fmap (\c -> if c == '.' then '_' else c) s
+  where
+    -- TODO: hack
+    preserve = L.isInfixOf " " s
+
+escapeWithUnderscore :: S.Set String -> String -> String
+escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
+
 javaStyleComment :: String -> String
 javaStyleComment s = "/**\n" ++ " * " ++ s ++ "\n */"
+
+sanitizeWithUnderscores :: S.Set String -> String -> String
+sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . dotsToUnderscores
