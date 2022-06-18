@@ -68,6 +68,18 @@ testIntegerAdapter = H.describe "Test integer adapter" $ do
       IntegerTypeBigint IntegerTypeInt32 True
       (IntegerValueBigint b) (IntegerValueInt32 $ fromIntegral b)
 
+  H.it "upgrade uint64 to bigint when supported" $
+    QC.property $ \i -> checkIntegerAdapter
+      [IntegerTypeInt32, IntegerTypeUint32, IntegerTypeBigint]
+      IntegerTypeUint64 IntegerTypeBigint False
+      (IntegerValueUint64 i) (IntegerValueBigint $ fromIntegral i)
+
+  H.it "downgrade uint64 to uint32 when bigint is unsupported" $
+    QC.property $ \i -> checkIntegerAdapter
+      [IntegerTypeInt32, IntegerTypeUint32]
+      IntegerTypeUint64 IntegerTypeUint32 True
+      (IntegerValueUint64 i) (IntegerValueUint32 $ fromIntegral i)
+      
 testAtomicAdapter :: H.SpecWith ()
 testAtomicAdapter = H.describe "Test atomic adapter" $ do
 

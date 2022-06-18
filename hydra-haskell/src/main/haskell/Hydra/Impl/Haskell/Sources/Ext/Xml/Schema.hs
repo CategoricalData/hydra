@@ -4,7 +4,7 @@ See: https://www.w3.org/TR/xmlschema-2
 
 Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply
       the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly
-      corresponding Hydra literal type. 
+      corresponding Hydra literal type.
 -}
 
 module Hydra.Impl.Haskell.Sources.Ext.Xml.Schema where
