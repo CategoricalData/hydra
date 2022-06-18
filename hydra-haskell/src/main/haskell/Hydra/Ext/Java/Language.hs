@@ -75,12 +75,12 @@ reservedWords = S.fromList $ classNames ++ keywords ++ literals
       "InterruptedException", "Iterable", "LinkageError", "Long", "Math", "NegativeArraySizeException",
       "NoClassDefFoundError", "NoSuchFieldError", "NoSuchFieldException", "NoSuchMethodError", "NoSuchMethodException",
       "NullPointerException", "Number", "NumberFormatException", "Object", "OutOfMemoryError", "Override", "Package",
-      "Process", "ProcessBuilder", "Readable", "Redirect", "ReflectiveOperationException", "Runnable", "Runtime",
+      "Process", "ProcessBuilder", "Readable", "ReflectiveOperationException", "Runnable", "Runtime",
       "RuntimeException", "RuntimePermission", "SafeVarargs", "SecurityException", "SecurityManager", "Short",
-      "StackOverflowError", "StackTraceElement", "State", "StrictMath", "String", "StringBuffer", "StringBuilder",
-      "StringIndexOutOfBoundsException", "Subset", "SuppressWarnings", "System", "Thread", "ThreadDeath",
-      "ThreadGroup", "ThreadLocal", "Throwable", "Type", "TypeNotPresentException", "UncaughtExceptionHandler",
-      "UnicodeBlock", "UnicodeScript", "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
+      "StackOverflowError", "StackTraceElement", "StrictMath", "String", "StringBuffer", "StringBuilder",
+      "StringIndexOutOfBoundsException", "SuppressWarnings", "System", "Thread", "ThreadDeath",
+      "ThreadGroup", "ThreadLocal", "Throwable", "TypeNotPresentException",
+      "UnknownError", "UnsatisfiedLinkError", "UnsupportedClassVersionError",
       "UnsupportedOperationException", "VerifyError", "VirtualMachineError", "Void"]
     -- Keywords and literals are taken from Oracle's Java Tutorials on 2022-05-27; said to be complete for Java 1.8 only
     -- See: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
