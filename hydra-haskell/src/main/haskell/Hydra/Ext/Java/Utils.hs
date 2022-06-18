@@ -119,12 +119,10 @@ javaConstructorCall ci args = javaPrimaryToJavaExpression $
   Java.ClassInstanceCreationExpression Nothing $
   Java.UnqualifiedClassInstanceCreationExpression [] ci args Nothing
 
-javaConstructorName :: String -> Java.ClassOrInterfaceTypeToInstantiate
-javaConstructorName local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
+javaConstructorName :: Bool -> String -> Java.ClassOrInterfaceTypeToInstantiate
+javaConstructorName escape local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
   where
-    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if S.member local reservedWords
-      then local ++ "_"
-      else local
+    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if escape then javaEscape local else local
 
 javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = javaTypeIdentifier . sanitizeJavaName . localNameOf
@@ -266,6 +264,9 @@ javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTyp
 
 javaTypeVariableToType :: Java.TypeVariable -> Java.Type
 javaTypeVariableToType = Java.TypeReference . Java.ReferenceTypeVariable
+
+javaUtilFunctionPackageName :: Maybe Java.PackageName
+javaUtilFunctionPackageName = Just $ javaPackageName ["java", "util", "function"]
 
 javaUtilPackageName :: Maybe Java.PackageName
 javaUtilPackageName = Just $ javaPackageName ["java", "util"]

@@ -27,7 +27,7 @@ printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qual
 printGraph cx g = do
   sf <- moduleToPegasusSchema cx g
   let s = printExpr $ parenthesize $ exprSchemaFile sf
-  return $ M.fromList [(toFilePath False (FileExtension "pdl") $ graphName g, s)]
+  return $ M.fromList [(graphNameToFilePath False (FileExtension "pdl") $ graphName g, s)]
 
 constructModule :: (Default m, Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile

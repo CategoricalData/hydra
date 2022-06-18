@@ -31,7 +31,7 @@ printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qual
 printGraph cx g = do
   hsmod <- moduleToHaskellModule cx g
   let s = printExpr $ parenthesize $ toTree hsmod
-  return $ M.fromList [(toFilePath True (FileExtension "hs") $ graphName g, s)]
+  return $ M.fromList [(graphNameToFilePath True (FileExtension "hs") $ graphName g, s)]
 
 moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
 moduleToHaskellModule cx g = graphToExternalModule language (encodeTerm namespaces) constructModule cx g
