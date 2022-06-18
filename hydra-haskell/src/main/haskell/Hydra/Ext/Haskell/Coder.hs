@@ -179,10 +179,7 @@ toTypeDeclarations namespaces cx el term = do
       return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
 encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => Namespaces -> Context m -> Type m -> Result H.Type
-encodeAdaptedType namespaces cx typ = do
-  let ac = AdapterContext cx hydraCoreLanguage haskellLanguage
-  ad <- qualifiedToResult $ termAdapter ac typ
-  encodeType namespaces $ adapterTarget ad
+encodeAdaptedType namespaces cx typ = adaptType cx haskellLanguage typ >>= encodeType namespaces
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction namespaces cx meta fun = case fun of

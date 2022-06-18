@@ -16,6 +16,13 @@ import Hydra.CoreLanguage
 import Hydra.Steps
 
 
+adaptType :: (Default m, Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
+adaptType cx targetLang t = do
+    ad <- qualifiedToResult $ termAdapter ac t
+    return $ adapterTarget ad
+  where
+    ac = AdapterContext cx hydraCoreLanguage targetLang
+
 dataGraphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
 dataGraphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
   where

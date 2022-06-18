@@ -79,7 +79,7 @@ testIntegerAdapter = H.describe "Test integer adapter" $ do
       [IntegerTypeInt32, IntegerTypeUint32]
       IntegerTypeUint64 IntegerTypeUint32 True
       (IntegerValueUint64 i) (IntegerValueUint32 $ fromIntegral i)
-      
+
 testAtomicAdapter :: H.SpecWith ()
 testAtomicAdapter = H.describe "Test atomic adapter" $ do
 
