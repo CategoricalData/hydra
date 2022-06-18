@@ -260,7 +260,7 @@ javaTypeParameter :: String -> Java.TypeParameter
 javaTypeParameter v = Java.TypeParameter [] (javaTypeIdentifier v) Nothing
 
 javaTypeVariable :: String -> Java.ReferenceType
-javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier v
+javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier $ capitalize v
 
 javaTypeVariableToType :: Java.TypeVariable -> Java.Type
 javaTypeVariableToType = Java.TypeReference . Java.ReferenceTypeVariable
@@ -377,8 +377,8 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
             []
             Java.ClassTypeQualifierNone
             (javaTypeIdentifier "Visitor")
-            [Java.TypeArgumentReference $ javaTypeVariable "R"]
-    result = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
+            [Java.TypeArgumentReference visitorTypeVariable]
+    result = javaTypeToJavaResult $ Java.TypeReference visitorTypeVariable
     varName = "visitor"
     visitMethodName = Java.Identifier "visit"
     body = if abstract
@@ -422,3 +422,6 @@ variantClassName elName (FieldName fname) = fromQname gname $ if flocal == local
   where
     (gname, local) = toQname elName
     flocal = capitalize fname
+
+visitorTypeVariable :: Java.ReferenceType
+visitorTypeVariable = javaTypeVariable "r"

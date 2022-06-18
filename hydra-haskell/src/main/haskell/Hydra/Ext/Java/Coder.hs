@@ -223,7 +223,7 @@ declarationForUnionType aliases elName fields = do
             Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier "PartialVisitor",
             Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
             Java.normalInterfaceDeclarationExtends =
-              [Java.InterfaceType $ javaClassType [javaTypeVariable "R"] Nothing "Visitor"],
+              [Java.InterfaceType $ javaClassType [visitorTypeVariable] Nothing "Visitor"],
             Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
       where
         otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
@@ -245,7 +245,7 @@ declarationForUnionType aliases elName fields = do
 
     defaultMod = [Java.InterfaceMethodModifierDefault]
 
-    resultR = javaTypeToJavaResult $ Java.TypeReference $ javaTypeVariable "R"
+    resultR = javaTypeToJavaResult $ Java.TypeReference visitorTypeVariable
 
     mainInstanceParam = javaTypeToJavaFormalParameter classRef (FieldName "instance")
       where
@@ -262,9 +262,9 @@ declarationForUniversalType :: (Show m, Default m, Eq m) => M.Map GraphName Java
 declarationForUniversalType aliases elName (UniversalType (TypeVariable v) body) = do
     (Java.ClassDeclarationNormal cd) <- toClassDecl aliases elName body
     return $ Java.ClassDeclarationNormal $ cd {
-      Java.normalClassDeclarationParameters = addParameter v (Java.normalClassDeclarationParameters cd)}
+      Java.normalClassDeclarationParameters = addParameter (Java.normalClassDeclarationParameters cd)}
   where
-    addParameter v params = params ++ [javaTypeParameter v]
+    addParameter params = params ++ [javaTypeParameter $ capitalize v]
 
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
