@@ -177,11 +177,17 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Literal" $
         doc "A term constant; an instance of a literal type" $
         union [
-          field "binary" binary,
-          field "boolean" $ core "BooleanValue",
-          field "float" $ core "FloatValue",
-          field "integer" $ core "IntegerValue",
-          field "string" string],
+          field "binary" $
+            doc "A binary literal" binary,
+          field "boolean" $
+            doc "A boolean literal" $ core "BooleanValue",
+          field "float" $
+            doc "A floating-point literal" $ core "FloatValue",
+          field "integer" $
+            doc "An integer literal" $
+            core "IntegerValue",
+          field "string" $
+            doc "A string literal" string],
 
       def "LiteralType" $
         doc "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $

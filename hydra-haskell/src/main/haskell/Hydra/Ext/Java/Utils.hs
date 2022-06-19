@@ -90,7 +90,7 @@ javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.C
     rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
 
 javaClassDeclaration :: M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
-   -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
+   -> Maybe Name -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration
 javaClassDeclaration aliases tparams elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
   Java.normalClassDeclarationIdentifier = javaDeclName elName,
