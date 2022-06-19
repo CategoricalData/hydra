@@ -286,7 +286,7 @@ encodeLiteralType lt = case lt of
       IntegerTypeInt32 -> simple "Integer"
       IntegerTypeInt64 -> simple "Long"
       IntegerTypeUint8 -> simple "Byte"
-      IntegerTypeUint16 -> simple "Char"
+      IntegerTypeUint16 -> simple "Character"
       _ -> fail $ "unexpected integer type: " ++ show it
     LiteralTypeString -> simple "String"
     _ -> fail $ "unexpected literal type: " ++ show lt
@@ -332,13 +332,13 @@ encodeType aliases t = case typeExpr t of
 toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> Type m
   -> Result Java.ClassDeclaration
 toClassDecl aliases tparams elName t = case typeExpr t of
-      TypeExprNominal name -> return $ javaClassDeclaration aliases tparams elName classModsPublic (Just name) []
-      TypeExprRecord fields -> declarationForRecordType aliases tparams elName fields
-      TypeExprUnion fields -> declarationForUnionType aliases tparams elName fields
-      TypeExprUniversal ut -> declarationForUniversalType aliases tparams elName ut
-      -- Other types are not supported as class declarations, so we wrap them as record types.
-      -- TODO: wrap and unwrap the corresponding terms as record terms.
-      _ -> declarationForRecordType aliases tparams elName [Types.field "value" t]
+    TypeExprRecord fields -> declarationForRecordType aliases tparams elName fields
+    TypeExprUnion fields -> declarationForUnionType aliases tparams elName fields
+    TypeExprUniversal ut -> declarationForUniversalType aliases tparams elName ut
+    -- Other types are not supported as class declarations, so we wrap them as record types.
+    _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
+  where
+    wrap t' = declarationForRecordType aliases tparams elName [Types.field "value" t'] 
 
 toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
 toDataDeclaration aliases cx (el, TypedTerm typ term) = do
