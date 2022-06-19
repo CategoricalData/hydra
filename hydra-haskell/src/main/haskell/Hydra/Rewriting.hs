@@ -219,7 +219,7 @@ typeDependencies scx name = deps (S.fromList [name]) M.empty
           return (name, typ)
 
     requireType scx name = do
-      el <- requireElement scx name
+      el <- requireElement (Just "type dependencies") scx name
       decodeType scx (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name

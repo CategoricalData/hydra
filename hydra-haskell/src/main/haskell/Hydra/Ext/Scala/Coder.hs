@@ -79,11 +79,13 @@ constructModule cx g coders pairs = do
 
 encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Term m) -> Result Scala.Data
 encodeFunction cx meta fun arg = case fun of
-    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeTerm cx body <*> (findSdom meta)
+    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeTerm cx body <*> findSdom meta
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationElement -> pure $ sname "DATA" -- TODO
-      EliminationRecord fname -> fail $ "unapplied projection not yet supported"
+      EliminationNominal name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
+      EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
+      EliminationRecord fname -> fail "unapplied projection not yet supported"
       EliminationUnion cases -> do
           let v = "v"
           dom <- findDomain meta
@@ -148,6 +150,8 @@ encodeTerm cx term@(Term expr meta) = case expr of
         TermExprFunction f -> case f of
           FunctionElimination e -> case e of
             EliminationElement -> encodeTerm cx arg
+            EliminationNominal name -> fallback
+            EliminationOptional c -> fallback
             EliminationRecord (FieldName fname) -> do
               sarg <- encodeTerm cx arg
               return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
@@ -234,7 +238,6 @@ encodeType t = case typeExpr t of
 encodeUntypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
 encodeUntypedTerm cx term = do
     (term1, _) <- inferType cx term
-    let term2 = rewriteTermMeta annotType term1
-    encodeTerm cx term2
+    encodeTerm cx $ rewriteTermMeta annotType term1
   where
     annotType (m, t, _) = contextSetTypeOf cx (Just t) m

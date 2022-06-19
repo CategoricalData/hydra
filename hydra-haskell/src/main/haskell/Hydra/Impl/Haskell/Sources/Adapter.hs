@@ -11,7 +11,7 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraAdapterModule :: Module Meta
-hydraAdapterModule = Module hydraAdapter [hydraCoreModule, hydraEvaluationModule, hydraGraphModule]
+hydraAdapterModule = Module hydraAdapter [hydraEvaluationModule]
 
 hydraAdapterName :: GraphName
 hydraAdapterName = GraphName "hydra/adapter"

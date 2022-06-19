@@ -10,7 +10,7 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraEvaluationModule :: Module Meta
-hydraEvaluationModule = Module hydraEvaluation [hydraCoreModule, hydraGraphModule]
+hydraEvaluationModule = Module hydraEvaluation [hydraGraphModule]
 
 hydraEvaluationName :: GraphName
 hydraEvaluationName = GraphName "hydra/evaluation"
