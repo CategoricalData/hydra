@@ -63,7 +63,13 @@ public abstract class FloatValue {
     }
   }
   
+  /**
+   * A 32-bit floating-point value
+   */
   public static final class Float32 extends FloatValue {
+    /**
+     * A 32-bit floating-point value
+     */
     public final Float value;
     
     public Float32 (Float value) {
@@ -90,7 +96,13 @@ public abstract class FloatValue {
     }
   }
   
+  /**
+   * A 64-bit floating-point value
+   */
   public static final class Float64 extends FloatValue {
+    /**
+     * A 64-bit floating-point value
+     */
     public final Double value;
     
     public Float64 (Double value) {

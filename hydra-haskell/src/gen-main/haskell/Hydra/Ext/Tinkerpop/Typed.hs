@@ -139,14 +139,14 @@ _Label = (Core.Name "hydra/ext/tinkerpop/typed.Label")
 
 -- The type of a value, such as a property value
 data Type 
-  = TypeAtomic Core.LiteralType
+  = TypeLiteral Core.LiteralType
   | TypeCollection CollectionType
   | TypeElement IdType
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Core.Name "hydra/ext/tinkerpop/typed.Type")
 
-_Type_atomic = (Core.FieldName "atomic")
+_Type_literal = (Core.FieldName "literal")
 
 _Type_collection = (Core.FieldName "collection")
 
@@ -154,14 +154,14 @@ _Type_element = (Core.FieldName "element")
 
 -- A concrete value such as a number or string, a collection of other values, or an element reference
 data Value 
-  = ValueAtomic Core.Literal
+  = ValueLiteral Core.Literal
   | ValueCollection CollectionValue
   | ValueElement Id
   deriving (Eq, Ord, Read, Show)
 
 _Value = (Core.Name "hydra/ext/tinkerpop/typed.Value")
 
-_Value_atomic = (Core.FieldName "atomic")
+_Value_literal = (Core.FieldName "literal")
 
 _Value_collection = (Core.FieldName "collection")
 

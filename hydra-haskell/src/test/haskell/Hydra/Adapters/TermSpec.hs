@@ -58,7 +58,7 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
 supportedConstructorsAreUnchanged :: H.SpecWith ()
 supportedConstructorsAreUnchanged = H.describe "Verify that supported term constructors are unchanged" $ do
 
-  H.it "Strings (and other supported atomic values) pass through without change" $
+  H.it "Strings (and other supported literal values) pass through without change" $
     QC.property $ \b -> checkDataAdapter
       [TypeVariantLiteral]
       Types.string

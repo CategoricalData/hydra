@@ -1,5 +1,5 @@
-module Hydra.Adapters.Atomic (
-  atomicAdapter,
+module Hydra.Adapters.Literal (
+  literalAdapter,
   floatAdapter,
   integerAdapter,
 ) where
@@ -16,8 +16,8 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-atomicAdapter :: AdapterContext a -> LiteralType -> Qualified (Adapter LiteralType Literal)
-atomicAdapter context = chooseAdapter alts supported describeLiteralType
+literalAdapter :: AdapterContext a -> LiteralType -> Qualified (Adapter LiteralType Literal)
+literalAdapter context = chooseAdapter alts supported describeLiteralType
   where
     alts t = case t of
         LiteralTypeBinary -> pure $ fallbackAdapter t
@@ -30,10 +30,10 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
                     where
                       encode (LiteralBoolean bv) = LiteralInteger <$> stepOut step' (toInt bv)
                         where
-                          toInt bv = IntegerValueUint8 $ if bv == BooleanValueFalse then 0 else 1
+                          toInt bv = IntegerValueUint8 $ if bv then 1 else 0
                       decode (LiteralInteger iv) = LiteralBoolean <$> do
                         (IntegerValueUint8 v) <- stepIn step' iv
-                        return $ if v == 0 then BooleanValueFalse else BooleanValueTrue
+                        return $ v == 1
               return $ Adapter False t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeFloat ft -> pure $ if noFloatVars
           then fallbackAdapter t
@@ -51,7 +51,7 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
                   $ \dir (LiteralInteger iv) -> LiteralInteger
                     <$> stepEither dir (adapterStep adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
-        LiteralTypeString -> pure $ fail "no substitute for the atomic string type"
+        LiteralTypeString -> pure $ fail "no substitute for the literal string type"
     supported = literalTypeIsSupported constraints
     constraints = languageConstraints $ adapterContextTarget context
     noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants constraints)
@@ -69,11 +69,11 @@ atomicAdapter context = chooseAdapter alts supported describeLiteralType
             -- TODO: this format is tied to Haskell
             encode av = pure $ LiteralString $ case av of
               LiteralBinary s -> s
-              LiteralBoolean b -> if b == BooleanValueTrue then "true" else "false"
+              LiteralBoolean b -> if b then "true" else "false"
               _ -> show av
             decode (LiteralString s) = pure $ case t of
               LiteralTypeBinary -> LiteralBinary s
-              LiteralTypeBoolean -> LiteralBoolean $ if s == "true" then BooleanValueTrue else BooleanValueFalse
+              LiteralTypeBoolean -> LiteralBoolean $ s == "true"
               _ -> read s
 
 comparePrecision :: Precision -> Precision -> Ordering

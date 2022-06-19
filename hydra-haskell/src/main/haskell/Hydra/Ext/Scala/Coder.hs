@@ -128,9 +128,7 @@ encodeFunction cx meta fun arg = case fun of
 
 encodeLiteral :: Literal -> Result Scala.Lit
 encodeLiteral av = case av of
-    LiteralBoolean b -> pure $ Scala.LitBoolean $ case b of
-      BooleanValueFalse -> False
-      BooleanValueTrue -> True
+    LiteralBoolean b -> pure $ Scala.LitBoolean b
     LiteralFloat fv -> case fv of
       FloatValueFloat32 f -> pure $ Scala.LitFloat f
       FloatValueFloat64 f -> pure $ Scala.LitDouble f

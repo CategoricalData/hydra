@@ -72,7 +72,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * An arbitrary-precision integer value
+   */
   public static final class Bigint extends IntegerValue {
+    /**
+     * An arbitrary-precision integer value
+     */
     public final java.math.BigInteger value;
     
     public Bigint (java.math.BigInteger value) {
@@ -99,7 +105,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * A 16-bit signed integer value (short value)
+   */
   public static final class Int16 extends IntegerValue {
+    /**
+     * A 16-bit signed integer value (short value)
+     */
     public final Short value;
     
     public Int16 (Short value) {
@@ -126,7 +138,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * A 32-bit signed integer value (int value)
+   */
   public static final class Int32 extends IntegerValue {
+    /**
+     * A 32-bit signed integer value (int value)
+     */
     public final Integer value;
     
     public Int32 (Integer value) {
@@ -153,7 +171,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * A 64-bit signed integer value (long value)
+   */
   public static final class Int64 extends IntegerValue {
+    /**
+     * A 64-bit signed integer value (long value)
+     */
     public final Long value;
     
     public Int64 (Long value) {
@@ -207,7 +231,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * A 16-bit unsigned integer value
+   */
   public static final class Uint16 extends IntegerValue {
+    /**
+     * A 16-bit unsigned integer value
+     */
     public final Character value;
     
     public Uint16 (Character value) {
@@ -288,7 +318,13 @@ public abstract class IntegerValue {
     }
   }
   
+  /**
+   * An 8-bit unsigned integer value (byte)
+   */
   public static final class Uint8 extends IntegerValue {
+    /**
+     * An 8-bit unsigned integer value (byte)
+     */
     public final Byte value;
     
     public Uint8 (Byte value) {

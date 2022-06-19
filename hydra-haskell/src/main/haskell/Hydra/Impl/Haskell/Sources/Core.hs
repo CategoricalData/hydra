@@ -30,12 +30,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
             doc "The right-hand side of the application" $
             universal "m" $ core "Term"],
 
-      def "BooleanValue" $
-        doc "A boolean literal value" $
-        enum [
-          "false",
-          "true"],
-
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
         enum [
@@ -97,9 +91,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "FloatValue" $
         doc "A floating-point literal value" $
         union [
-          field "bigfloat" bigfloat,
-          field "float32" float32,
-          field "float64" float64],
+          field "bigfloat" $
+            doc "An arbitrary-precision floating-point value" bigfloat,
+          field "float32" $
+            doc "A 32-bit floating-point value" float32,
+          field "float64" $
+            doc "A 64-bit floating-point value" float64],
 
       def "Function" $
         doc "A function" $
@@ -147,15 +144,24 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "IntegerValue" $
         doc "An integer literal value" $
         union [
-          field "bigint" bigint,
-          field "int8" int8,
-          field "int16" int16,
-          field "int32" int32,
-          field "int64" int64,
-          field "uint8" uint8,
-          field "uint16" uint16,
-          field "uint32" uint32,
-          field "uint64" uint64],
+          field "bigint" $
+            doc "An arbitrary-precision integer value" bigint,
+          field "int8" $
+            doc "An 8-bit signed integer value" int8,
+          field "int16" $
+            doc "A 16-bit signed integer value (short value)" int16,
+          field "int32" $
+            doc "A 32-bit signed integer value (int value)" int32,
+          field "int64" $
+            doc "A 64-bit signed integer value (long value)" int64,
+          field "uint8" $
+            doc "An 8-bit unsigned integer value (byte)" uint8,
+          field "uint16" $
+            doc "A 16-bit unsigned integer value" uint16,
+          field "uint32" $
+            doc "A 32-bit unsigned integer value (unsigned int)" uint32,
+          field "uint64" $
+            doc "A 64-bit unsigned integer value (unsigned long)" uint64],
 
       def "Lambda" $
         doc "A function abstraction (lambda)" $
@@ -180,7 +186,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "binary" $
             doc "A binary literal" binary,
           field "boolean" $
-            doc "A boolean literal" $ core "BooleanValue",
+            doc "A boolean literal" boolean,
           field "float" $
             doc "A floating-point literal" $ core "FloatValue",
           field "integer" $

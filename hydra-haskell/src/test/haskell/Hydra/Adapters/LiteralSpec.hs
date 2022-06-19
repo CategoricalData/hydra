@@ -1,4 +1,4 @@
-module Hydra.Adapters.AtomicSpec where
+module Hydra.Adapters.LiteralSpec where
 
 import Hydra.Core
 
@@ -80,41 +80,41 @@ testIntegerAdapter = H.describe "Test integer adapter" $ do
       IntegerTypeUint64 IntegerTypeUint32 True
       (IntegerValueUint64 i) (IntegerValueUint32 $ fromIntegral i)
 
-testAtomicAdapter :: H.SpecWith ()
-testAtomicAdapter = H.describe "Test atomic adapter" $ do
+testLiteralAdapter :: H.SpecWith ()
+testLiteralAdapter = H.describe "Test literal adapter" $ do
 
   H.it "encode binary data as strings" $
-    QC.property $ \b -> checkAtomicAdapter
+    QC.property $ \b -> checkLiteralAdapter
       [LiteralVariantString]
       LiteralTypeBinary LiteralTypeString False
       (LiteralBinary b) (LiteralString b)
 
   H.it "encode booleans as strings" $
-    QC.property $ \b -> checkAtomicAdapter
+    QC.property $ \b -> checkLiteralAdapter
       [LiteralVariantString]
       LiteralTypeBoolean LiteralTypeString False
-      (LiteralBoolean b) (LiteralString $ if b == BooleanValueTrue then "true" else "false")
+      (LiteralBoolean b) (LiteralString $ if b then "true" else "false")
 
   H.it "encode booleans as integers" $
-    QC.property $ \b -> checkAtomicAdapter
+    QC.property $ \b -> checkLiteralAdapter
       [LiteralVariantInteger]
       LiteralTypeBoolean (LiteralTypeInteger IntegerTypeInt16) False
-      (LiteralBoolean b) (LiteralInteger $ IntegerValueInt16 $ if b == BooleanValueTrue then 1 else 0)
+      (LiteralBoolean b) (LiteralInteger $ IntegerValueInt16 $ if b then 1 else 0)
 
   H.it "floating-point encoding is delegated to the float adapter" $
-    QC.property $ \f -> checkAtomicAdapter
+    QC.property $ \f -> checkLiteralAdapter
       [LiteralVariantFloat]
       (LiteralTypeFloat FloatTypeBigfloat) (LiteralTypeFloat FloatTypeFloat32) True
       (LiteralFloat $ FloatValueBigfloat f) (LiteralFloat $ FloatValueFloat32 $ realToFrac f)
 
   H.it "integer encoding is delegated to the integer adapter" $
-    QC.property $ \i -> checkAtomicAdapter
+    QC.property $ \i -> checkLiteralAdapter
       [LiteralVariantInteger]
       (LiteralTypeInteger IntegerTypeBigint) (LiteralTypeInteger IntegerTypeInt32) True
       (LiteralInteger $ IntegerValueBigint i) (LiteralInteger $ IntegerValueInt32 $ fromIntegral i)
 
   H.it "strings are unchanged" $
-    QC.property $ \s -> checkAtomicAdapter
+    QC.property $ \s -> checkLiteralAdapter
       [LiteralVariantString]
       LiteralTypeString LiteralTypeString False
       (LiteralString s) (LiteralString s)
@@ -123,4 +123,4 @@ spec :: H.Spec
 spec = do
   testFloatAdapter
   testIntegerAdapter
-  testAtomicAdapter
+  testLiteralAdapter

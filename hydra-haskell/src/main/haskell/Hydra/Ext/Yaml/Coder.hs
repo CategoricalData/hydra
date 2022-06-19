@@ -16,14 +16,12 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-atomicCoder :: LiteralType -> Qualified (Step Literal YM.Scalar)
-atomicCoder at = pure $ case at of
+literalCoder :: LiteralType -> Qualified (Step Literal YM.Scalar)
+literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Step {
-    stepOut = \(LiteralBoolean b) -> pure $ YM.ScalarBool $ case b of
-      BooleanValueFalse -> False
-      BooleanValueTrue -> True,
+    stepOut = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
     stepIn = \s -> case s of
-      YM.ScalarBool b -> pure $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+      YM.ScalarBool b -> pure $ LiteralBoolean b
       _ -> unexpected "boolean" s}
   LiteralTypeFloat _ -> Step {
     stepOut = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
@@ -67,11 +65,11 @@ recordCoder sfields = do
 termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
 termCoder typ = case typeExpr typ of
   TypeExprLiteral at -> do
-    ac <- atomicCoder at
+    ac <- literalCoder at
     return Step {
       stepOut = \(Term (TermExprLiteral av) _) -> YM.NodeScalar <$> stepOut ac av,
       stepIn = \n -> case n of
-        YM.NodeScalar s -> atomic <$> stepIn ac s
+        YM.NodeScalar s -> literal <$> stepIn ac s
         _ -> unexpected "scalar node" n}
   TypeExprList lt -> do
     lc <- termCoder lt

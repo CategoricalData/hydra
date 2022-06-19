@@ -17,22 +17,22 @@ import qualified Test.QuickCheck as QC
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
-  H.describe "Tests for atomic values" $ do
+  H.describe "Tests for literal values" $ do
 
-    H.it "Atomic terms have no free variables" $
-      QC.property $ \av -> termIsClosed (atomic av :: Term Meta)
+    H.it "Literal terms have no free variables" $
+      QC.property $ \av -> termIsClosed (literal av :: Term Meta)
 
-    H.it "Atomic terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testStrategy (atomic av :: Term Meta)
+    H.it "Literal terms are fully reduced; check using a dedicated function" $
+      QC.property $ \av -> termIsValue testStrategy (literal av :: Term Meta)
 
-    H.it "Atomic terms are fully reduced; check by trying to reduce them" $
+    H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
         H.shouldBe
-          (eval (atomic av))
-          (pure (atomic av :: Term Meta))
+          (eval (literal av))
+          (pure (literal av :: Term Meta))
 
-    H.it "Atomic terms cannot be applied" $
-      QC.property $ \av (TypedTerm _ term) -> isFailure (eval $ apply (atomic av) term)
+    H.it "Literal terms cannot be applied" $
+      QC.property $ \av (TypedTerm _ term) -> isFailure (eval $ apply (literal av) term)
 
 checkMonomorphicPrimitives :: H.SpecWith ()
 checkMonomorphicPrimitives = do

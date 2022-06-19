@@ -1,5 +1,5 @@
 module Hydra.TestUtils (
-  checkAtomicAdapter,
+  checkLiteralAdapter,
   checkFieldAdapter,
   checkFloatAdapter,
   checkIntegerAdapter,
@@ -16,7 +16,7 @@ import Hydra.Core
 import Hydra.Adapter
 import Hydra.Errors
 import Hydra.TestGraph
-import Hydra.Adapters.Atomic
+import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
 import Hydra.Steps
@@ -50,8 +50,8 @@ checkAdapter normalize mkAdapter context variants source target lossy vs vt = do
     adapter = Y.fromJust adapter'
     step = adapterStep adapter
 
-checkAtomicAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
-checkAtomicAdapter = checkAdapter id atomicAdapter context
+checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
+checkLiteralAdapter = checkAdapter id literalAdapter context
   where
     context variants = withConstraints $ (languageConstraints baseLanguage) {
         languageConstraintsLiteralVariants = S.fromList variants,
@@ -82,11 +82,11 @@ checkDataAdapter = checkAdapter stripMeta termAdapter termTestContext
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
     languageConstraintsTypeVariants = S.fromList variants,
-    languageConstraintsLiteralVariants = atomicVars,
+    languageConstraintsLiteralVariants = literalVars,
     languageConstraintsFloatTypes = floatVars,
     languageConstraintsIntegerTypes = integerVars }
   where
-    atomicVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
+    literalVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
     floatVars = S.fromList [FloatTypeFloat32]
     integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
 
