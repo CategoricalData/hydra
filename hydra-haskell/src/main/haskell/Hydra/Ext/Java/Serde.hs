@@ -121,7 +121,8 @@ writeCharacterLiteral :: Int -> CT.Expr
 writeCharacterLiteral _ = cst "TODO:CharacterLiteral"
 
 writeClassBody :: Java.ClassBody -> CT.Expr
-writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $ doubleNewlineSep (writeClassBodyDeclaration <$> decls)
+writeClassBody (Java.ClassBody decls) = curlyBlock fullBlockStyle $
+  doubleNewlineSep (writeClassBodyDeclarationWithComments <$> decls)
 
 writeClassBodyDeclaration :: Java.ClassBodyDeclaration -> CT.Expr
 writeClassBodyDeclaration d = case d of
@@ -130,6 +131,10 @@ writeClassBodyDeclaration d = case d of
   Java.ClassBodyDeclarationStaticInitializer i -> writeStaticInitializer i
   Java.ClassBodyDeclarationConstructorDeclaration d -> writeConstructorDeclaration d
 
+writeClassBodyDeclarationWithComments :: Java.ClassBodyDeclarationWithComments -> CT.Expr
+writeClassBodyDeclarationWithComments (Java.ClassBodyDeclarationWithComments d mc) = withComments mc $
+  writeClassBodyDeclaration d
+  
 writeClassDeclaration :: Java.ClassDeclaration -> CT.Expr
 writeClassDeclaration d = case d of
   Java.ClassDeclarationNormal nd -> writeNormalClassDeclaration nd

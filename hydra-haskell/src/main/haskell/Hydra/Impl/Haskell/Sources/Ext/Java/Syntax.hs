@@ -415,7 +415,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 
 --ClassBody:
 --  { {ClassBodyDeclaration} }
-      def "ClassBody" $ list $ java "ClassBodyDeclaration",
+      def "ClassBody" $ list $ java "ClassBodyDeclarationWithComments",
 
 --ClassBodyDeclaration:
       def "ClassBodyDeclaration" $ union [
@@ -427,6 +427,10 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "staticInitializer" $ java "StaticInitializer",
 --  ConstructorDeclaration
         field "constructorDeclaration" $ java "ConstructorDeclaration"],
+      def "ClassBodyDeclarationWithComments" $
+        record [
+          field "value" $ java "ClassBodyDeclaration",
+          field "comments" $ optional string],
 
 --ClassMemberDeclaration:
       def "ClassMemberDeclaration" $ union [
