@@ -253,9 +253,7 @@ encodeFunction namespaces cx meta fun = case fun of
 
 encodeLiteral :: Literal -> Result H.Expression
 encodeLiteral av = case av of
-    LiteralBoolean b -> pure $ hsvar $ case b of
-      BooleanValueTrue -> "True"
-      _ -> "False"
+    LiteralBoolean b -> pure $ hsvar $ if b then "True" else "False"
     LiteralFloat fv -> case fv of
       FloatValueFloat32 f -> pure $ hslit $ H.LiteralFloat f
       FloatValueFloat64 f -> pure $ hslit $ H.LiteralDouble f

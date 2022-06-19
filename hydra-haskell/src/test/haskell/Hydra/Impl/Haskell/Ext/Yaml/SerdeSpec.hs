@@ -22,7 +22,7 @@ import qualified Data.Maybe as Y
 
 
 checkLiterals :: H.SpecWith ()
-checkLiterals = H.describe "Test atomic values" $ do
+checkLiterals = H.describe "Test literal values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
     QC.property $ \b -> checkSerialization

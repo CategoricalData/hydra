@@ -24,25 +24,6 @@ encodeElimination cx e = case e of
   EliminationRecord (FieldName fname) -> variant _Elimination_record $ string fname
   EliminationUnion cases -> variant _Elimination_union $ list $ encodeField cx <$> cases
 
-encodeLiteralType :: Default m => Context m -> LiteralType -> Term m
-encodeLiteralType cx at = case at of
-  LiteralTypeBinary -> unitVariant _LiteralType_binary
-  LiteralTypeBoolean -> unitVariant _LiteralType_boolean
-  LiteralTypeFloat ft -> variant _LiteralType_float $ encodeFloatType cx ft
-  LiteralTypeInteger it -> variant _LiteralType_integer $ encodeIntegerType cx it
-  LiteralTypeString -> unitVariant _LiteralType_string
-
-encodeLiteral :: Default m => Context m -> Literal -> Term m
-encodeLiteral cx = atomic
-
-encodeLiteralVariant :: Default m => Context m -> LiteralVariant -> Term m
-encodeLiteralVariant cx av = unitVariant $ case av of
-  LiteralVariantBinary -> _LiteralVariant_binary
-  LiteralVariantBoolean -> _LiteralVariant_boolean
-  LiteralVariantFloat -> _LiteralVariant_float
-  LiteralVariantInteger -> _LiteralVariant_integer
-  LiteralVariantString -> _LiteralVariant_string
-
 encodeField :: (Default m, Ord m) => Context m -> Field m -> Term m
 encodeField cx (Field (FieldName name) term) = nominalRecord cx _Field [
   Field _Field_name $ string name,
@@ -87,6 +68,25 @@ encodeLambda :: (Default m, Ord m) => Context m -> Lambda m -> Term m
 encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm cx b]
+
+encodeLiteralType :: Default m => Context m -> LiteralType -> Term m
+encodeLiteralType cx at = case at of
+  LiteralTypeBinary -> unitVariant _LiteralType_binary
+  LiteralTypeBoolean -> unitVariant _LiteralType_boolean
+  LiteralTypeFloat ft -> variant _LiteralType_float $ encodeFloatType cx ft
+  LiteralTypeInteger it -> variant _LiteralType_integer $ encodeIntegerType cx it
+  LiteralTypeString -> unitVariant _LiteralType_string
+
+encodeLiteral :: Default m => Context m -> Literal -> Term m
+encodeLiteral _ = literal
+
+encodeLiteralVariant :: Default m => Context m -> LiteralVariant -> Term m
+encodeLiteralVariant _ av = unitVariant $ case av of
+  LiteralVariantBinary -> _LiteralVariant_binary
+  LiteralVariantBoolean -> _LiteralVariant_boolean
+  LiteralVariantFloat -> _LiteralVariant_float
+  LiteralVariantInteger -> _LiteralVariant_integer
+  LiteralVariantString -> _LiteralVariant_string
 
 encodeMapType :: Default m => Context m -> MapType m -> Term m
 encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [

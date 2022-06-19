@@ -82,9 +82,9 @@ public abstract class Literal {
     /**
      * A boolean literal
      */
-    public final BooleanValue value;
+    public final Boolean value;
     
-    public Boolean_ (BooleanValue value) {
+    public Boolean_ (Boolean value) {
       this.value = value;
     }
     

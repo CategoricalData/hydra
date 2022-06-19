@@ -16,9 +16,6 @@ import Data.Int
 apply :: Default a => Term a -> Term a -> Term a
 apply func arg = defaultTerm $ TermExprApplication $ Application func arg
 
-atomic :: Default a => Literal -> Term a
-atomic = defaultTerm . TermExprLiteral
-
 bigfloat :: Default a => Double -> Term a
 bigfloat = float . FloatValueBigfloat
 
@@ -29,7 +26,7 @@ binaryTerm :: Default a => String -> Term a
 binaryTerm = defaultTerm . TermExprLiteral . LiteralBinary
 
 boolean :: Default a => Bool -> Term a
-boolean b = defaultTerm $ TermExprLiteral $ LiteralBoolean $ if b then BooleanValueTrue else BooleanValueFalse
+boolean b = defaultTerm $ TermExprLiteral $ LiteralBoolean b
 
 cases :: Default a => [Field a] -> Term a
 cases = defaultTerm . TermExprFunction . FunctionElimination . EliminationUnion
@@ -143,6 +140,9 @@ letTerm v t1 t2 = defaultTerm $ TermExprLet $ Let v t1 t2
 
 list :: Default a => [Term a] -> Term a
 list = defaultTerm . TermExprList
+
+literal :: Default a => Literal -> Term a
+literal = defaultTerm . TermExprLiteral
 
 map :: Default a => M.Map (Term a) (Term a) -> Term a
 map = defaultTerm . TermExprMap

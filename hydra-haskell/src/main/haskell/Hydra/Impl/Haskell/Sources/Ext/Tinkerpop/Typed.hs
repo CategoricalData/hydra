@@ -87,14 +87,14 @@ tinkerpopTyped = Graph tinkerpopTypedName elements (const True) hydraCoreName
       def "Type" $
         doc "The type of a value, such as a property value" $
         union [
-          field "atomic" $ core "LiteralType",
+          field "literal" $ core "LiteralType",
           field "collection" $ typed "CollectionType",
           field "element" $ typed "IdType"],
 
       def "Value" $
         doc "A concrete value such as a number or string, a collection of other values, or an element reference" $
         union [
-          field "atomic" $ core "Literal",
+          field "literal" $ core "Literal",
           field "collection" $ typed "CollectionValue",
           field "element" $ typed "Id"],
 

@@ -31,10 +31,6 @@ instance QC.Arbitrary Literal
       LiteralInteger <$> QC.arbitrary,
       LiteralString <$> QC.arbitrary]
 
-instance QC.Arbitrary BooleanValue
-  where
-    arbitrary = QC.oneof $ pure <$> [ BooleanValueFalse, BooleanValueTrue ]
-
 instance QC.Arbitrary FieldName
   where
     arbitrary = FieldName <$> QC.arbitrary
@@ -180,7 +176,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
 -- Note: variables and function applications are not (currently) generated
 arbitraryTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Int -> QC.Gen (Term m)
 arbitraryTerm typ n = case typeExpr typ of
-    TypeExprLiteral at -> atomic <$> arbitraryLiteral at
+    TypeExprLiteral at -> literal <$> arbitraryLiteral at
     TypeExprFunction ft -> defaultTerm . TermExprFunction <$> arbitraryFunction ft n'
     TypeExprList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
     TypeExprMap (MapType kt vt) -> defaultTerm . TermExprMap <$> (M.fromList <$> arbitraryList False arbPair n')

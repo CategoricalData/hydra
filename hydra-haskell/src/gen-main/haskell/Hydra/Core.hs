@@ -16,18 +16,6 @@ _Application_function = (FieldName "function")
 
 _Application_argument = (FieldName "argument")
 
--- A boolean literal value
-data BooleanValue 
-  = BooleanValueFalse 
-  | BooleanValueTrue 
-  deriving (Eq, Ord, Read, Show)
-
-_BooleanValue = (Name "hydra/core.BooleanValue")
-
-_BooleanValue_false = (FieldName "false")
-
-_BooleanValue_true = (FieldName "true")
-
 -- An equality judgement: less than, equal to, or greater than
 data Comparison 
   = ComparisonLessThan 
@@ -296,7 +284,7 @@ _Let_environment = (FieldName "environment")
 -- A term constant; an instance of a literal type
 data Literal 
   = LiteralBinary String
-  | LiteralBoolean BooleanValue
+  | LiteralBoolean Bool
   | LiteralFloat FloatValue
   | LiteralInteger IntegerValue
   | LiteralString String

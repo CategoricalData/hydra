@@ -56,7 +56,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       
     languageConstraintsTypes = \typ -> case typeExpr typ of
       TypeExprElement et -> True
-      -- Only lists of atomic values are supported, as nothing else is mentioned in Graph.Features
+      -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
       TypeExprList t -> case typeExpr t of
         TypeExprLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
@@ -94,7 +94,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       || dataTypeFeaturesSupportsLongArrayValues vpFeatures
       || dataTypeFeaturesSupportsStringArrayValues vpFeatures
       
-      -- Support for at least one of the Graph.Features atomic types is assumed.
+      -- Support for at least one of the Graph.Features literal types is assumed.
     supportsLiterals = True
     
     -- Note: additional constraints are required, beyond Graph.Features, if maps are supported

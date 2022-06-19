@@ -6,7 +6,7 @@ module Hydra.Adapters.Term (
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Adapter
-import Hydra.Adapters.Atomic
+import Hydra.Adapters.Literal
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.CoreMeta
@@ -127,10 +127,10 @@ optionalToList acx t@(Type (TypeExprOptional ot) _) = do
       pure Nothing
       else Just <$> stepIn (adapterStep ad) (L.head l)}
 
-passAtomic :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passAtomic acx (Type (TypeExprLiteral at) _) = do
-  ad <- atomicAdapter acx at
-  let step = bidirectional $ \dir (Term (TermExprLiteral av) _) -> atomic <$> stepEither dir (adapterStep ad) av
+passLiteral :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passLiteral acx (Type (TypeExprLiteral at) _) = do
+  ad <- literalAdapter acx at
+  let step = bidirectional $ \dir (Term (TermExprLiteral av) _) -> literal <$> stepEither dir (adapterStep ad) av
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
 passFunction :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
@@ -239,7 +239,7 @@ termAdapter acx typ = case typ of
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
       then case typeVariant t of
-        TypeVariantLiteral -> pure passAtomic
+        TypeVariantLiteral -> pure passLiteral
         TypeVariantFunction ->  pure passFunction
         TypeVariantList -> pure passList
         TypeVariantMap -> pure passMap
