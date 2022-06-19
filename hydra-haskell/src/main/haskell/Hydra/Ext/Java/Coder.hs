@@ -82,12 +82,13 @@ declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Contex
   -> [FieldType m] -> Result Java.ClassDeclaration
 declarationForRecordType aliases cx tparams elName fields = do
     memberVars <- CM.mapM toMemberVar fields
+    memberVars' <- CM.zipWithM (addComment cx) memberVars fields
     withMethods <- if L.length fields > 1
       then CM.mapM toWithMethod fields
       else pure []
     cons <- constructor
-    let bodyDecls = memberVars ++ ([cons, equalsMethod, hashCodeMethod] ++ withMethods)
-    return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing (noComment <$> bodyDecls)
+    let bodyDecls = memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
+    return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing bodyDecls
   where
     constructor = do
       params <- CM.mapM fieldToFormalParam fields
