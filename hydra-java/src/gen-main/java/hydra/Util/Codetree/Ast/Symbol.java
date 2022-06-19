@@ -1,24 +1,24 @@
-package hydra.core;
+package hydra.util.codetree.ast;
 
 /**
- * The name of a field
+ * Any symbol
  */
-public class FieldName {
+public class Symbol {
   /**
-   * The name of a field
+   * Any symbol
    */
   public final String value;
   
-  public FieldName (String value) {
+  public Symbol (String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof FieldName)) {
+    if (!(other instanceof Symbol)) {
       return false;
     }
-    FieldName o = (FieldName) (other);
+    Symbol o = (Symbol) (other);
     return value.equals(o.value);
   }
   

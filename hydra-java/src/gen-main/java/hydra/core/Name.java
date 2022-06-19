@@ -1,21 +1,24 @@
 package hydra.core;
 
+/**
+ * A unique element name
+ */
 public class Name {
+  /**
+   * A unique element name
+   */
   public final String value;
   
-  /**
-   * Constructs an immutable Name object
-   */
-  public Name(String value) {
+  public Name (String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Name)) {
-        return false;
+      return false;
     }
-    Name o = (Name) other;
+    Name o = (Name) (other);
     return value.equals(o.value);
   }
   

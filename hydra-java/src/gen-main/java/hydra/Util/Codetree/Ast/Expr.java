@@ -1,54 +1,54 @@
-package hydra.core;
+package hydra.util.codetree.ast;
 
 /**
- * A floating-point literal value
+ * An abstract expression
  */
-public abstract class FloatValue {
-  private FloatValue () {
+public abstract class Expr {
+  private Expr () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Bigfloat instance) ;
+    R visit(Const instance) ;
     
-    R visit(Float32 instance) ;
+    R visit(Op instance) ;
     
-    R visit(Float64 instance) ;
+    R visit(Brackets instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(FloatValue instance) {
+    default R otherwise(Expr instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Bigfloat instance) {
+    default R visit(Const instance) {
       return otherwise((instance));
     }
     
-    default R visit(Float32 instance) {
+    default R visit(Op instance) {
       return otherwise((instance));
     }
     
-    default R visit(Float64 instance) {
+    default R visit(Brackets instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Bigfloat extends FloatValue {
-    public final Double value;
+  public static final class Const extends Expr {
+    public final Symbol value;
     
-    public Bigfloat (Double value) {
+    public Const (Symbol value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Bigfloat)) {
+      if (!(other instanceof Const)) {
         return false;
       }
-      Bigfloat o = (Bigfloat) (other);
+      Const o = (Const) (other);
       return value.equals(o.value);
     }
     
@@ -63,19 +63,19 @@ public abstract class FloatValue {
     }
   }
   
-  public static final class Float32 extends FloatValue {
-    public final Float value;
+  public static final class Op extends Expr {
+    public final OpExpr value;
     
-    public Float32 (Float value) {
+    public Op (OpExpr value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Float32)) {
+      if (!(other instanceof Op)) {
         return false;
       }
-      Float32 o = (Float32) (other);
+      Op o = (Op) (other);
       return value.equals(o.value);
     }
     
@@ -90,19 +90,19 @@ public abstract class FloatValue {
     }
   }
   
-  public static final class Float64 extends FloatValue {
-    public final Double value;
+  public static final class Brackets extends Expr {
+    public final BracketExpr value;
     
-    public Float64 (Double value) {
+    public Brackets (BracketExpr value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Float64)) {
+      if (!(other instanceof Brackets)) {
         return false;
       }
-      Float64 o = (Float64) (other);
+      Brackets o = (Brackets) (other);
       return value.equals(o.value);
     }
     

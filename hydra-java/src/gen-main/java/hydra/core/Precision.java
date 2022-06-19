@@ -1,56 +1,46 @@
 package hydra.core;
 
+/**
+ * Numeric precision: arbitrary precision, or precision to a specified number of bits
+ */
 public abstract class Precision {
-  private Precision() {}
+  private Precision () {
+  
+  }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
-  /**
-   * An interface for applying a function to a Precision according to its variant (subclass)
-   */
   public interface Visitor<R> {
     R visit(Arbitrary instance) ;
     
     R visit(Bits instance) ;
   }
   
-  /**
-   * An interface for applying a function to a Precision according to its variant (subclass). If a visit() method for a
-   * particular variant is not implemented, a default method is used instead.
-   */
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Precision instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    @Override
     default R visit(Arbitrary instance) {
-      return otherwise(instance);
+      return otherwise((instance));
     }
     
-    @Override
     default R visit(Bits instance) {
-      return otherwise(instance);
+      return otherwise((instance));
     }
   }
   
   public static final class Arbitrary extends Precision {
-    /**
-     * Constructs an immutable Arbitrary object
-     */
-    public Arbitrary() {}
+    public Arbitrary () {
     
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
     
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Arbitrary)) {
-          return false;
+        return false;
       }
-      Arbitrary o = (Arbitrary) other;
+      Arbitrary o = (Arbitrary) (other);
       return true;
     }
     
@@ -58,35 +48,37 @@ public abstract class Precision {
     public int hashCode() {
       return 0;
     }
-  }
-  
-  public static final class Bits extends Precision {
-    public final Integer bits;
-    
-    /**
-     * Constructs an immutable Bits object
-     */
-    public Bits(Integer bits) {
-      this.bits = bits;
-    }
     
     @Override
     public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
+  }
+  
+  public static final class Bits extends Precision {
+    public final Integer value;
+    
+    public Bits (Integer value) {
+      this.value = value;
+    }
     
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Bits)) {
-          return false;
+        return false;
       }
-      Bits o = (Bits) other;
-      return bits.equals(o.bits);
+      Bits o = (Bits) (other);
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * bits.hashCode();
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
 }

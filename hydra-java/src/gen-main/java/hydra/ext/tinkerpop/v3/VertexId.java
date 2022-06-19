@@ -1,31 +1,29 @@
 package hydra.ext.tinkerpop.v3;
 
-import hydra.core.Literal;
-
 /**
- * A literal value representing a vertex id
+ * A vertex id
  */
 public class VertexId {
-  public final hydra.core.Literal literal;
-  
   /**
-   * Constructs an immutable VertexId object
+   * A vertex id
    */
-  public VertexId(hydra.core.Literal literal) {
-    this.literal = literal;
+  public final hydra.core.Literal value;
+  
+  public VertexId (hydra.core.Literal value) {
+    this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof VertexId)) {
-        return false;
+      return false;
     }
-    VertexId o = (VertexId) other;
-    return literal.equals(o.literal);
+    VertexId o = (VertexId) (other);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * literal.hashCode();
+    return 2 * value.hashCode();
   }
 }

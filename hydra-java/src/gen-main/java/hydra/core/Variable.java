@@ -4,21 +4,21 @@ package hydra.core;
  * A symbol which stands in for a term
  */
 public class Variable {
+  /**
+   * A symbol which stands in for a term
+   */
   public final String value;
   
-  /**
-   * Constructs an immutable Variable object
-   */
-  public Variable(String value) {
+  public Variable (String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Variable)) {
-        return false;
+      return false;
     }
-    Variable o = (Variable) other;
+    Variable o = (Variable) (other);
     return value.equals(o.value);
   }
   

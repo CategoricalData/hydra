@@ -3,21 +3,18 @@ package hydra.core;
 /**
  * A function abstraction (lambda)
  */
-public class Lambda<A> {
+public class Lambda<M> {
   /**
    * The parameter of the lambda
    */
-  public final hydra.core.Variable parameter;
+  public final Variable parameter;
   
   /**
    * The body of the lambda
    */
-  public final hydra.core.Term<A> body;
+  public final Term<M> body;
   
-  /**
-   * Constructs an immutable Lambda object
-   */
-  public Lambda(hydra.core.Variable parameter, hydra.core.Term<A> body) {
+  public Lambda (Variable parameter, Term<M> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -25,30 +22,22 @@ public class Lambda<A> {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Lambda)) {
-        return false;
+      return false;
     }
-    Lambda o = (Lambda) other;
-    return parameter.equals(o.parameter)
-        && body.equals(o.body);
+    Lambda o = (Lambda) (other);
+    return parameter.equals(o.parameter) && body.equals(o.body);
   }
   
   @Override
   public int hashCode() {
-    return 2 * parameter.hashCode()
-        + 3 * body.hashCode();
+    return 2 * parameter.hashCode() + 3 * body.hashCode();
   }
   
-  /**
-   * Construct a new immutable Lambda object in which parameter is overridden
-   */
-  public Lambda withParameter(hydra.core.Variable parameter) {
+  public Lambda withParameter(Variable parameter) {
     return new Lambda(parameter, body);
   }
   
-  /**
-   * Construct a new immutable Lambda object in which body is overridden
-   */
-  public Lambda withBody(hydra.core.Term<A> body) {
+  public Lambda withBody(Term<M> body) {
     return new Lambda(parameter, body);
   }
 }

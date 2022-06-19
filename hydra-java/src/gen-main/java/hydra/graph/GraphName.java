@@ -4,21 +4,21 @@ package hydra.graph;
  * A unique identifier for a graph within a graph set
  */
 public class GraphName {
+  /**
+   * A unique identifier for a graph within a graph set
+   */
   public final String value;
   
-  /**
-   * Constructs an immutable GraphName object
-   */
-  public GraphName(String value) {
+  public GraphName (String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof GraphName)) {
-        return false;
+      return false;
     }
-    GraphName o = (GraphName) other;
+    GraphName o = (GraphName) (other);
     return value.equals(o.value);
   }
   

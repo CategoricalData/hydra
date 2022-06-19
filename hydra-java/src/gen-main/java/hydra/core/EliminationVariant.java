@@ -1,64 +1,64 @@
 package hydra.core;
 
 /**
- * Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
+ * The identifier of an elimination constructor
  */
-public abstract class LiteralType {
-  private LiteralType () {
+public abstract class EliminationVariant {
+  private EliminationVariant () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Binary instance) ;
+    R visit(Element instance) ;
     
-    R visit(Boolean_ instance) ;
+    R visit(Nominal instance) ;
     
-    R visit(Float_ instance) ;
+    R visit(Optional instance) ;
     
-    R visit(Integer_ instance) ;
+    R visit(Record instance) ;
     
-    R visit(String_ instance) ;
+    R visit(Union instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(LiteralType instance) {
+    default R otherwise(EliminationVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Binary instance) {
+    default R visit(Element instance) {
       return otherwise((instance));
     }
     
-    default R visit(Boolean_ instance) {
+    default R visit(Nominal instance) {
       return otherwise((instance));
     }
     
-    default R visit(Float_ instance) {
+    default R visit(Optional instance) {
       return otherwise((instance));
     }
     
-    default R visit(Integer_ instance) {
+    default R visit(Record instance) {
       return otherwise((instance));
     }
     
-    default R visit(String_ instance) {
+    default R visit(Union instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Binary extends LiteralType {
-    public Binary () {
+  public static final class Element extends EliminationVariant {
+    public Element () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Binary)) {
+      if (!(other instanceof Element)) {
         return false;
       }
-      Binary o = (Binary) (other);
+      Element o = (Element) (other);
       return true;
     }
     
@@ -73,17 +73,17 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Boolean_ extends LiteralType {
-    public Boolean_ () {
+  public static final class Nominal extends EliminationVariant {
+    public Nominal () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Boolean_)) {
+      if (!(other instanceof Nominal)) {
         return false;
       }
-      Boolean_ o = (Boolean_) (other);
+      Nominal o = (Nominal) (other);
       return true;
     }
     
@@ -98,25 +98,23 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Float_ extends LiteralType {
-    public final FloatType value;
+  public static final class Optional extends EliminationVariant {
+    public Optional () {
     
-    public Float_ (FloatType value) {
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Float_)) {
+      if (!(other instanceof Optional)) {
         return false;
       }
-      Float_ o = (Float_) (other);
-      return value.equals(o.value);
+      Optional o = (Optional) (other);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -125,25 +123,23 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Integer_ extends LiteralType {
-    public final IntegerType value;
+  public static final class Record extends EliminationVariant {
+    public Record () {
     
-    public Integer_ (IntegerType value) {
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Integer_)) {
+      if (!(other instanceof Record)) {
         return false;
       }
-      Integer_ o = (Integer_) (other);
-      return value.equals(o.value);
+      Record o = (Record) (other);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -152,17 +148,17 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class String_ extends LiteralType {
-    public String_ () {
+  public static final class Union extends EliminationVariant {
+    public Union () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof String_)) {
+      if (!(other instanceof Union)) {
         return false;
       }
-      String_ o = (String_) (other);
+      Union o = (Union) (other);
       return true;
     }
     

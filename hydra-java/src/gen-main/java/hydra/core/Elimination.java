@@ -1,66 +1,100 @@
 package hydra.core;
 
 /**
- * A term constant; an instance of a literal type
+ * A corresponding elimination for an introduction term
  */
-public abstract class Literal {
-  private Literal () {
+public abstract class Elimination<M> {
+  private Elimination () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Binary instance) ;
+    R visit(Element instance) ;
     
-    R visit(Boolean_ instance) ;
+    R visit(Nominal instance) ;
     
-    R visit(Float_ instance) ;
+    R visit(Optional instance) ;
     
-    R visit(Integer_ instance) ;
+    R visit(Record instance) ;
     
-    R visit(String_ instance) ;
+    R visit(Union instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Literal instance) {
+    default R otherwise(Elimination instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Binary instance) {
+    default R visit(Element instance) {
       return otherwise((instance));
     }
     
-    default R visit(Boolean_ instance) {
+    default R visit(Nominal instance) {
       return otherwise((instance));
     }
     
-    default R visit(Float_ instance) {
+    default R visit(Optional instance) {
       return otherwise((instance));
     }
     
-    default R visit(Integer_ instance) {
+    default R visit(Record instance) {
       return otherwise((instance));
     }
     
-    default R visit(String_ instance) {
+    default R visit(Union instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Binary extends Literal {
-    public final String value;
+  /**
+   * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
+   */
+  public static final class Element<M> extends Elimination<M> {
+    public Element () {
     
-    public Binary (String value) {
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Element)) {
+        return false;
+      }
+      Element o = (Element) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * Eliminates a nominal term by extracting the wrapped term
+   */
+  public static final class Nominal<M> extends Elimination<M> {
+    /**
+     * Eliminates a nominal term by extracting the wrapped term
+     */
+    public final Name value;
+    
+    public Nominal (Name value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Binary)) {
+      if (!(other instanceof Nominal)) {
         return false;
       }
-      Binary o = (Binary) (other);
+      Nominal o = (Nominal) (other);
       return value.equals(o.value);
     }
     
@@ -76,24 +110,24 @@ public abstract class Literal {
   }
   
   /**
-   * A boolean literal
+   * Eliminates an optional term by matching over the two possible cases
    */
-  public static final class Boolean_ extends Literal {
+  public static final class Optional<M> extends Elimination<M> {
     /**
-     * A boolean literal
+     * Eliminates an optional term by matching over the two possible cases
      */
-    public final BooleanValue value;
+    public final OptionalCases<M> value;
     
-    public Boolean_ (BooleanValue value) {
+    public Optional (OptionalCases<M> value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Boolean_)) {
+      if (!(other instanceof Optional)) {
         return false;
       }
-      Boolean_ o = (Boolean_) (other);
+      Optional o = (Optional) (other);
       return value.equals(o.value);
     }
     
@@ -109,24 +143,24 @@ public abstract class Literal {
   }
   
   /**
-   * A floating-point literal
+   * Eliminates a record by projecting a given field
    */
-  public static final class Float_ extends Literal {
+  public static final class Record<M> extends Elimination<M> {
     /**
-     * A floating-point literal
+     * Eliminates a record by projecting a given field
      */
-    public final FloatValue value;
+    public final FieldName value;
     
-    public Float_ (FloatValue value) {
+    public Record (FieldName value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Float_)) {
+      if (!(other instanceof Record)) {
         return false;
       }
-      Float_ o = (Float_) (other);
+      Record o = (Record) (other);
       return value.equals(o.value);
     }
     
@@ -142,57 +176,24 @@ public abstract class Literal {
   }
   
   /**
-   * An integer literal
+   * Eliminates a union term by matching over the fields of the union. This is a case statement.
    */
-  public static final class Integer_ extends Literal {
+  public static final class Union<M> extends Elimination<M> {
     /**
-     * An integer literal
+     * Eliminates a union term by matching over the fields of the union. This is a case statement.
      */
-    public final IntegerValue value;
+    public final java.util.List<Field<M>> value;
     
-    public Integer_ (IntegerValue value) {
+    public Union (java.util.List<Field<M>> value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Integer_)) {
+      if (!(other instanceof Union)) {
         return false;
       }
-      Integer_ o = (Integer_) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * A string literal
-   */
-  public static final class String_ extends Literal {
-    /**
-     * A string literal
-     */
-    public final String value;
-    
-    public String_ (String value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof String_)) {
-        return false;
-      }
-      String_ o = (String_) (other);
+      Union o = (Union) (other);
       return value.equals(o.value);
     }
     
