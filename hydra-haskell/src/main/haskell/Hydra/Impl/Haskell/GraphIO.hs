@@ -62,13 +62,6 @@ coreModules = [
   pure tinkerpopV3Module,
   pure xmlSchemaModule]
 
-
-
-tmpModules :: [Result (Module Meta)]
-tmpModules = [
-  hydraBasicsModule]
-
-
 -- TODO: remove these eventually. They are handy for debugging.
 singleModule :: [Result (Module Meta)]
 singleModule = [pure hydraCoreModule, pure hydraAdapterModule, hydraBasicsModule]
