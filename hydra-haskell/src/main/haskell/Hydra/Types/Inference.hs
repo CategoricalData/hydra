@@ -38,7 +38,7 @@ decodeStructuralType cx term = do
   case typeExpr typ of
     TypeExprNominal name -> do
       scx <- schemaContext cx
-      el <- requireElement scx name
+      el <- requireElement (Just "decode structural type") scx name
       decodeStructuralType scx $ elementData el
     _ -> pure typ
 
@@ -106,12 +106,12 @@ infer cx term = case contextTypeOf cx (termMeta term) of
           EliminationElement -> do
             et <- freshTypeVariable
             yieldElimination EliminationElement (Types.function (Types.element et) et) []
-  
+
           EliminationNominal name -> do
-            case namedType cx name of
+            case namedType "eliminate nominal" cx name of
               ResultFailure msg -> error msg
               ResultSuccess typ -> yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []  
-            
+
           EliminationOptional (OptionalCases n j) -> do
             dom <- freshTypeVariable
             cod <- freshTypeVariable
@@ -120,7 +120,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
             let t = Types.function (Types.optional dom) cod
             let constraints = [(cod, termType ni), (Types.function dom cod, termType ji)]
             yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
-            
+
           -- Note: type inference cannot recover complete record types from projections; type annotations are needed
           EliminationRecord fname -> do
             dom <- freshTypeVariable
@@ -131,7 +131,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
           EliminationUnion cases -> do
               icases <- CM.mapM (inferFieldType cx) cases
               cod <- freshTypeVariable
-              doms <- CM.mapM (\_ -> freshTypeVariable) cases
+              doms <- CM.mapM (const freshTypeVariable) cases
               let ftypes = termType . fieldTerm <$> icases
               let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
               let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
@@ -185,7 +185,7 @@ infer cx term = case contextTypeOf cx (termMeta term) of
             return (ik, iv)
 
       TermExprNominal (Named name term1) -> do
-        case namedType cx name of
+        case namedType "nominal" cx name of
           ResultFailure msg -> error msg
           ResultSuccess typ -> do
             i <- infer cx term1
@@ -239,8 +239,8 @@ inferTop :: (Default m, Ord m, Show m)
   -> Either (TypeError m) (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferTop cx term = do
     term1 <- runInference (infer cx term)
-    let (ResultSuccess scon) = schemaContext cx
-    subst <- solveConstraints scon (termConstraints term1)
+    let (ResultSuccess scx) = schemaContext cx
+    subst <- solveConstraints scx (termConstraints term1)
     let term2 = rewriteDataType (substituteInType subst) term1
     let ts = closeOver $ termType term2
     return (term2, ts)
@@ -265,12 +265,11 @@ lookupTypeInEnvironment v = do
       Nothing   -> throwError $ UnboundVariable v
       Just s    -> instantiate s
 
-namedType :: (Default m, Show m) => Context m -> Name -> Result (Type m)
-namedType cx name = do
-  scon <- schemaContext cx
-  el <- requireElement scon name
-  scon' <- schemaContext scon
-  decodeStructuralType scon' $ elementData el
+namedType :: (Default m, Show m) => String -> Context m -> Name -> Result (Type m)
+namedType debug cx name = do
+  el <- requireElement (Just debug) cx name
+  scx <- schemaContext cx
+  decodeStructuralType scx $ elementData el
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite
@@ -291,7 +290,7 @@ termType (Term _ (_, typ, _)) = typ
 
 typeOfElement :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 typeOfElement cx name = do
-  el <- requireElement cx name
+  el <- requireElement (Just "type of element") cx name
   decodeStructuralType cx $ elementSchema el
 
 typeOfPrimitiveFunction :: Context m -> Name -> Result (FunctionType m)
