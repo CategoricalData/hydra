@@ -71,7 +71,7 @@ floatTypePrecision = basics "floatTypePrecision" $
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
     _FloatType_float64  @-> field _Precision_bits $ int 64]
-  
+
 floatTypes :: Element [FloatType]
 floatTypes = basics "floatTypes" $
   doc "All floating-point types in a canonical order" $
@@ -171,7 +171,7 @@ literalType = basics "literalType" $
   match (Types.nominal _Literal) (Types.nominal _LiteralType) [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
-    Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueType,    
+    Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueType,
     Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueType,
     Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 

@@ -34,7 +34,7 @@ dereferenceNominal acx t@(Type (TypeExprNominal name) _) = do
     -- TODO: precompute the schema graph; don't construct it anew for each adapter
     scx <- schemaContext $ adapterContextEvaluation acx
     -- Note: we just assume the schema term is a reference to hydra/core.Type
-    requireElement scx name >>= decodeType (adapterContextEvaluation acx) . elementData
+    requireElement (Just "dereference nominal") scx name >>= decodeType (adapterContextEvaluation acx) . elementData
   ad <- termAdapter acx typ
   return ad { adapterSource = t }
 

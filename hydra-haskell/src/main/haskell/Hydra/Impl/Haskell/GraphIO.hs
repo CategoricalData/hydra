@@ -62,6 +62,13 @@ coreModules = [
   pure tinkerpopV3Module,
   pure xmlSchemaModule]
 
+
+
+tmpModules :: [Result (Module Meta)]
+tmpModules = [
+  hydraBasicsModule]
+
+
 -- TODO: remove these eventually. They are handy for debugging.
 singleModule :: [Result (Module Meta)]
 singleModule = [pure hydraCoreModule, pure hydraAdapterModule, hydraBasicsModule]
@@ -89,13 +96,20 @@ generateSources printGraph modules basePath = case sequence modules of
     ResultFailure msg -> fail msg
     ResultSuccess mods -> mapM_ writeDataGraph mods
   where
-    writeDataGraph (Module g deps) = do
-      let cx = setContextElements (g:(moduleGraph <$> deps)) $ standardContext {
-             contextGraphs = GraphSet (M.fromList [
-               (graphName g, g),
-               (hydraCoreName, hydraCore)]) (graphName g),
-             contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
-      writeGraph printGraph cx g basePath
+    writeDataGraph mod@(Module g deps) = writeGraph printGraph cx g basePath
+      where
+        cx = setContextElements allGraphs $ standardContext {
+          contextGraphs = GraphSet allGraphsByName (graphName g),
+          contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+        allGraphs = moduleGraph <$> M.elems allModules
+        allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
+        allModules = addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mod
+          where
+            addModule m mod@(Module g' deps) = if M.member gname m
+                then m
+                else L.foldl addModule (M.insert gname mod m) deps
+              where
+                gname = graphName g'
 
 writeGraph :: (Context m -> Graph m -> Qualified (M.Map FilePath String)) -> Context m -> Graph m -> FilePath -> IO ()
 writeGraph printGraph cx g basePath = do

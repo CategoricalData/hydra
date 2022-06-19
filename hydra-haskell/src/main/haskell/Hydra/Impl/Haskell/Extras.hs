@@ -60,7 +60,7 @@ fieldTypes scx t = case typeExpr t of
     TypeExprUnion fields -> pure $ toMap fields
     TypeExprElement et -> fieldTypes scx et
     TypeExprNominal name -> do
-      el <- requireElement scx name
+      el <- requireElement (Just "field types") scx name
       decodeType scx (elementData el) >>= fieldTypes scx
     TypeExprUniversal (UniversalType _ body) -> fieldTypes scx body
     _ -> fail $ "expected record or union type, but found " ++ show t
@@ -75,7 +75,7 @@ qualifiedToResult (Qualified x m) = case x of
 
 requireType :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 requireType scx name = do
-  el <- requireElement scx name
+  el <- requireElement (Just "require type") scx name
   decodeType scx $ elementData el
 
 resultToQualified :: Result m -> Qualified m

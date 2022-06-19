@@ -2,120 +2,128 @@ package hydra.basics
 
 import hydra.core.*
 
+import hydra.graph.*
+
 import hydra.lib.lists
 
 import hydra.lib.strings
 
-def floatTypePrecision(v: FloatType): Precision = v match
-  case FloatType.bigfloat() => Precision.arbitrary()
-  case FloatType.float32() => Precision.bits(32)
-  case FloatType.float64() => Precision.bits(64)
+def eliminationVariant[a](v: hydra.core.Elimination[a]): hydra.core.EliminationVariant = v match
+  case hydra.core.Elimination.element(y) => hydra.core.EliminationVariant.element()
+  case hydra.core.Elimination.nominal(y) => hydra.core.EliminationVariant.nominal()
+  case hydra.core.Elimination.optional(y) => hydra.core.EliminationVariant.optional()
+  case hydra.core.Elimination.record(y) => hydra.core.EliminationVariant.record()
+  case hydra.core.Elimination.union(y) => hydra.core.EliminationVariant.union()
 
-val floatTypes = Seq(FloatType.bigfloat(), FloatType.float32(), FloatType.float64())
+val eliminationVariants = Seq(hydra.core.EliminationVariant.element(), hydra.core.EliminationVariant.nominal(), hydra.core.EliminationVariant.optional(), hydra.core.EliminationVariant.record(), hydra.core.EliminationVariant.union())
 
-def floatValueType(v: FloatValue): FloatType = v match
-  case FloatValue.bigfloat(y) => FloatType.bigfloat()
-  case FloatValue.float32(y) => FloatType.float32()
-  case FloatValue.float64(y) => FloatType.float64()
+def floatTypePrecision(v: hydra.core.FloatType): hydra.core.Precision = v match
+  case hydra.core.FloatType.bigfloat() => hydra.core.Precision.arbitrary()
+  case hydra.core.FloatType.float32() => hydra.core.Precision.bits(32)
+  case hydra.core.FloatType.float64() => hydra.core.Precision.bits(64)
 
-def functionVariant[a](v: hydra.core.Function[a]): FunctionVariant = v match
-  case hydra.core.Function.cases(y) => FunctionVariant.cases()
-  case hydra.core.Function.compareTo(y) => FunctionVariant.compareTo()
-  case hydra.core.Function.data() => FunctionVariant.data()
-  case hydra.core.Function.lambda(y) => FunctionVariant.lambda()
-  case hydra.core.Function.optionalCases(y) => FunctionVariant.optionalCases()
-  case hydra.core.Function.primitive(y) => FunctionVariant.primitive()
-  case hydra.core.Function.projection(y) => FunctionVariant.projection()
+val floatTypes = Seq(hydra.core.FloatType.bigfloat(), hydra.core.FloatType.float32(), hydra.core.FloatType.float64())
 
-val functionVariants = Seq(FunctionVariant.cases(), FunctionVariant.compareTo(), FunctionVariant.data(), FunctionVariant.lambda(), FunctionVariant.optionalCases(), FunctionVariant.primitive(), FunctionVariant.projection())
+def floatValueType(v: hydra.core.FloatValue): hydra.core.FloatType = v match
+  case hydra.core.FloatValue.bigfloat(y) => hydra.core.FloatType.bigfloat()
+  case hydra.core.FloatValue.float32(y) => hydra.core.FloatType.float32()
+  case hydra.core.FloatValue.float64(y) => hydra.core.FloatType.float64()
 
-def integerTypeIsSigned(v: IntegerType): Boolean = v match
-  case IntegerType.bigint() => true
-  case IntegerType.int8() => true
-  case IntegerType.int16() => true
-  case IntegerType.int32() => true
-  case IntegerType.int64() => true
-  case IntegerType.uint8() => false
-  case IntegerType.uint16() => false
-  case IntegerType.uint32() => false
-  case IntegerType.uint64() => false
+def functionVariant[m](v: hydra.core.Function[m]): hydra.core.FunctionVariant = v match
+  case hydra.core.Function.compareTo(y) => hydra.core.FunctionVariant.compareTo()
+  case hydra.core.Function.elimination(y) => hydra.core.FunctionVariant.elimination()
+  case hydra.core.Function.lambda(y) => hydra.core.FunctionVariant.lambda()
+  case hydra.core.Function.primitive(y) => hydra.core.FunctionVariant.primitive()
 
-def integerTypePrecision(v: IntegerType): Precision = v match
-  case IntegerType.bigint() => Precision.arbitrary()
-  case IntegerType.int8() => Precision.bits(8)
-  case IntegerType.int16() => Precision.bits(16)
-  case IntegerType.int32() => Precision.bits(32)
-  case IntegerType.int64() => Precision.bits(64)
-  case IntegerType.uint8() => Precision.bits(8)
-  case IntegerType.uint16() => Precision.bits(16)
-  case IntegerType.uint32() => Precision.bits(32)
-  case IntegerType.uint64() => Precision.bits(64)
+val functionVariants = Seq(hydra.core.FunctionVariant.compareTo(), hydra.core.FunctionVariant.elimination(), hydra.core.FunctionVariant.lambda(), hydra.core.FunctionVariant.primitive())
 
-val integerTypes = Seq(IntegerType.bigint(), IntegerType.int8(), IntegerType.int16(), IntegerType.int32(), IntegerType.int64(), IntegerType.uint8(), IntegerType.uint16(), IntegerType.uint32(), IntegerType.uint64())
+def integerTypeIsSigned(v: hydra.core.IntegerType): Boolean = v match
+  case hydra.core.IntegerType.bigint() => true
+  case hydra.core.IntegerType.int8() => true
+  case hydra.core.IntegerType.int16() => true
+  case hydra.core.IntegerType.int32() => true
+  case hydra.core.IntegerType.int64() => true
+  case hydra.core.IntegerType.uint8() => false
+  case hydra.core.IntegerType.uint16() => false
+  case hydra.core.IntegerType.uint32() => false
+  case hydra.core.IntegerType.uint64() => false
 
-def integerValueType(v: IntegerValue): IntegerType = v match
-  case IntegerValue.bigint(y) => IntegerType.bigint()
-  case IntegerValue.int8(y) => IntegerType.int8()
-  case IntegerValue.int16(y) => IntegerType.int16()
-  case IntegerValue.int32(y) => IntegerType.int32()
-  case IntegerValue.int64(y) => IntegerType.int64()
-  case IntegerValue.uint8(y) => IntegerType.uint8()
-  case IntegerValue.uint16(y) => IntegerType.uint16()
-  case IntegerValue.uint32(y) => IntegerType.uint32()
-  case IntegerValue.uint64(y) => IntegerType.uint64()
+def integerTypePrecision(v: hydra.core.IntegerType): hydra.core.Precision = v match
+  case hydra.core.IntegerType.bigint() => hydra.core.Precision.arbitrary()
+  case hydra.core.IntegerType.int8() => hydra.core.Precision.bits(8)
+  case hydra.core.IntegerType.int16() => hydra.core.Precision.bits(16)
+  case hydra.core.IntegerType.int32() => hydra.core.Precision.bits(32)
+  case hydra.core.IntegerType.int64() => hydra.core.Precision.bits(64)
+  case hydra.core.IntegerType.uint8() => hydra.core.Precision.bits(8)
+  case hydra.core.IntegerType.uint16() => hydra.core.Precision.bits(16)
+  case hydra.core.IntegerType.uint32() => hydra.core.Precision.bits(32)
+  case hydra.core.IntegerType.uint64() => hydra.core.Precision.bits(64)
 
-def literalType(v: Literal): LiteralType = v match
-  case Literal.binary(y) => LiteralType.binary()
-  case Literal.boolean(y) => LiteralType.boolean()
-  case Literal.float(y) => LiteralType.float(floatValueType(y))
-  case Literal.integer(y) => LiteralType.integer(integerValueType(y))
-  case Literal.string(y) => LiteralType.string()
+val integerTypes = Seq(hydra.core.IntegerType.bigint(), hydra.core.IntegerType.int8(), hydra.core.IntegerType.int16(), hydra.core.IntegerType.int32(), hydra.core.IntegerType.int64(), hydra.core.IntegerType.uint8(), hydra.core.IntegerType.uint16(), hydra.core.IntegerType.uint32(), hydra.core.IntegerType.uint64())
 
-def literalTypeVariant(v: LiteralType): LiteralVariant = v match
-  case LiteralType.binary() => LiteralVariant.binary()
-  case LiteralType.boolean() => LiteralVariant.boolean()
-  case LiteralType.float(y) => LiteralVariant.float()
-  case LiteralType.integer(y) => LiteralVariant.integer()
-  case LiteralType.string() => LiteralVariant.string()
+def integerValueType(v: hydra.core.IntegerValue): hydra.core.IntegerType = v match
+  case hydra.core.IntegerValue.bigint(y) => hydra.core.IntegerType.bigint()
+  case hydra.core.IntegerValue.int8(y) => hydra.core.IntegerType.int8()
+  case hydra.core.IntegerValue.int16(y) => hydra.core.IntegerType.int16()
+  case hydra.core.IntegerValue.int32(y) => hydra.core.IntegerType.int32()
+  case hydra.core.IntegerValue.int64(y) => hydra.core.IntegerType.int64()
+  case hydra.core.IntegerValue.uint8(y) => hydra.core.IntegerType.uint8()
+  case hydra.core.IntegerValue.uint16(y) => hydra.core.IntegerType.uint16()
+  case hydra.core.IntegerValue.uint32(y) => hydra.core.IntegerType.uint32()
+  case hydra.core.IntegerValue.uint64(y) => hydra.core.IntegerType.uint64()
 
-def literalVariant(x: Literal): LiteralVariant = literalTypeVariant(literalType(x))
+def literalType(v: hydra.core.Literal): hydra.core.LiteralType = v match
+  case hydra.core.Literal.binary(y) => (_: v2) => hydra.core.LiteralType.binary()(y)
+  case hydra.core.Literal.boolean(y) => (_: v5) => hydra.core.LiteralType.boolean()(y)
+  case hydra.core.Literal.float(y) => (x: v8) => (x: v9) => hydra.core.LiteralType.float(x)(floatValueType(x))(y)
+  case hydra.core.Literal.integer(y) => (x: v16) => (x: v17) => hydra.core.LiteralType.integer(x)(integerValueType(x))(y)
+  case hydra.core.Literal.string(y) => (_: v24) => hydra.core.LiteralType.string()(y)
 
-val literalVariants = Seq(LiteralVariant.binary(), LiteralVariant.boolean(), LiteralVariant.float(), LiteralVariant.integer(), LiteralVariant.string())
+def literalTypeVariant(v: hydra.core.LiteralType): hydra.core.LiteralVariant = v match
+  case hydra.core.LiteralType.binary() => hydra.core.LiteralVariant.binary()
+  case hydra.core.LiteralType.boolean() => hydra.core.LiteralVariant.boolean()
+  case hydra.core.LiteralType.float(y) => hydra.core.LiteralVariant.float()
+  case hydra.core.LiteralType.integer(y) => hydra.core.LiteralVariant.integer()
+  case hydra.core.LiteralType.string() => hydra.core.LiteralVariant.string()
 
-def qname(ns: String): (String => Name) = (name: String) => strings.cat(Seq(ns, ".", name))
+def literalVariant(x: hydra.core.Literal): hydra.core.LiteralVariant = literalTypeVariant(literalType(x))
 
-def termVariant[a](term: Term[a]): TermVariant = term.data match
-  case Expression.application(y) => TermVariant.application()
-  case Expression.element(y) => TermVariant.element()
-  case Expression.function(y) => TermVariant.function()
-  case Expression.list(y) => TermVariant.list()
-  case Expression.literal(y) => TermVariant.literal()
-  case Expression.map(y) => TermVariant.map()
-  case Expression.nominal(y) => TermVariant.nominal()
-  case Expression.optional(y) => TermVariant.optional()
-  case Expression.record(y) => TermVariant.record()
-  case Expression.set(y) => TermVariant.set()
-  case Expression.typeAbstraction(y) => TermVariant.typeAbstraction()
-  case Expression.typeApplication(y) => TermVariant.typeApplication()
-  case Expression.union(y) => TermVariant.union()
-  case Expression.variable(y) => TermVariant.variable()
+val literalVariants = Seq(hydra.core.LiteralVariant.binary(), hydra.core.LiteralVariant.boolean(), hydra.core.LiteralVariant.float(), hydra.core.LiteralVariant.integer(), hydra.core.LiteralVariant.string())
 
-val termVariants = Seq(TermVariant.application(), TermVariant.literal(), TermVariant.element(), TermVariant.function(), TermVariant.list(), TermVariant.map(), TermVariant.nominal(), TermVariant.optional(), TermVariant.record(), TermVariant.set(), TermVariant.union(), TermVariant.variable())
+def qname(ns: hydra.graph.GraphName): (String => hydra.core.Name) = (name: v2) => strings.cat(Seq(ELIM-NOMINAL(Name {unName = "hydra/graph.GraphName"})(ns), ".", name))
+
+def termVariant[m](term: hydra.core.Term[m]): hydra.core.TermVariant = term.expr match
+  case hydra.core.TermExpr.application(y) => hydra.core.TermVariant.application()
+  case hydra.core.TermExpr.element(y) => hydra.core.TermVariant.element()
+  case hydra.core.TermExpr.function(y) => hydra.core.TermVariant.function()
+  case hydra.core.TermExpr.list(y) => hydra.core.TermVariant.list()
+  case hydra.core.TermExpr.literal(y) => hydra.core.TermVariant.literal()
+  case hydra.core.TermExpr.map(y) => hydra.core.TermVariant.map()
+  case hydra.core.TermExpr.nominal(y) => hydra.core.TermVariant.nominal()
+  case hydra.core.TermExpr.optional(y) => hydra.core.TermVariant.optional()
+  case hydra.core.TermExpr.record(y) => hydra.core.TermVariant.record()
+  case hydra.core.TermExpr.set(y) => hydra.core.TermVariant.set()
+  case hydra.core.TermExpr.typeAbstraction(y) => hydra.core.TermVariant.typeAbstraction()
+  case hydra.core.TermExpr.typeApplication(y) => hydra.core.TermVariant.typeApplication()
+  case hydra.core.TermExpr.union(y) => hydra.core.TermVariant.union()
+  case hydra.core.TermExpr.variable(y) => hydra.core.TermVariant.variable()
+
+val termVariants = Seq(hydra.core.TermVariant.application(), hydra.core.TermVariant.literal(), hydra.core.TermVariant.element(), hydra.core.TermVariant.function(), hydra.core.TermVariant.list(), hydra.core.TermVariant.map(), hydra.core.TermVariant.nominal(), hydra.core.TermVariant.optional(), hydra.core.TermVariant.record(), hydra.core.TermVariant.set(), hydra.core.TermVariant.union(), hydra.core.TermVariant.variable())
 
 def testLists[a](els: Seq[Seq[a]]): Int = lists.length(lists.concat(els))
 
-def typeVariant(v: Type): TypeVariant = v match
-  case Type.element(y) => TypeVariant.element()
-  case Type.function(y) => TypeVariant.function()
-  case Type.list(y) => TypeVariant.list()
-  case Type.literal(y) => TypeVariant.literal()
-  case Type.map(y) => TypeVariant.map()
-  case Type.nominal(y) => TypeVariant.nominal()
-  case Type.optional(y) => TypeVariant.optional()
-  case Type.record(y) => TypeVariant.record()
-  case Type.set(y) => TypeVariant.set()
-  case Type.union(y) => TypeVariant.union()
-  case Type.universal(y) => TypeVariant.universal()
-  case Type.variable(y) => TypeVariant.variable()
+def typeVariant[m](typ: hydra.core.Type[m]): hydra.core.TypeVariant = typ.expr match
+  case hydra.core.TypeExpr.element(y) => hydra.core.TypeVariant.element()
+  case hydra.core.TypeExpr.function(y) => hydra.core.TypeVariant.function()
+  case hydra.core.TypeExpr.list(y) => hydra.core.TypeVariant.list()
+  case hydra.core.TypeExpr.literal(y) => hydra.core.TypeVariant.literal()
+  case hydra.core.TypeExpr.map(y) => hydra.core.TypeVariant.map()
+  case hydra.core.TypeExpr.nominal(y) => hydra.core.TypeVariant.nominal()
+  case hydra.core.TypeExpr.optional(y) => hydra.core.TypeVariant.optional()
+  case hydra.core.TypeExpr.record(y) => hydra.core.TypeVariant.record()
+  case hydra.core.TypeExpr.set(y) => hydra.core.TypeVariant.set()
+  case hydra.core.TypeExpr.union(y) => hydra.core.TypeVariant.union()
+  case hydra.core.TypeExpr.universal(y) => hydra.core.TypeVariant.universal()
+  case hydra.core.TypeExpr.variable(y) => hydra.core.TypeVariant.variable()
 
-val typeVariants = Seq(TypeVariant.literal(), TypeVariant.element(), TypeVariant.function(), TypeVariant.list(), TypeVariant.map(), TypeVariant.nominal(), TypeVariant.optional(), TypeVariant.record(), TypeVariant.set(), TypeVariant.union(), TypeVariant.universal(), TypeVariant.variable())
+val typeVariants = Seq(hydra.core.TypeVariant.literal(), hydra.core.TypeVariant.element(), hydra.core.TypeVariant.function(), hydra.core.TypeVariant.list(), hydra.core.TypeVariant.map(), hydra.core.TypeVariant.nominal(), hydra.core.TypeVariant.optional(), hydra.core.TypeVariant.record(), hydra.core.TypeVariant.set(), hydra.core.TypeVariant.union(), hydra.core.TypeVariant.universal(), hydra.core.TypeVariant.variable())
