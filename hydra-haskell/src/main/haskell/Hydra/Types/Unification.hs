@@ -44,11 +44,11 @@ solveConstraints :: (Default m, Eq m, Show m) => Context m -> [Constraint m] -> 
 solveConstraints cx cs = runIdentity $ runExceptT $ unificationSolver cx (M.empty, cs)
 
 unificationSolver :: (Default m, Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
-unificationSolver cx (su, cs) = case cs of
+unificationSolver scx (su, cs) = case cs of
   [] -> return su
   ((t1, t2): cs0) -> do
-    su1  <- unify cx t1 t2
-    unificationSolver cx (
+    su1  <- unify scx t1 t2
+    unificationSolver scx (
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
