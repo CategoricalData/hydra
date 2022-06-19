@@ -89,13 +89,13 @@ javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.C
   where
     rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
 
-javaClassDeclaration :: M.Map GraphName Java.PackageName -> Name -> [Java.ClassModifier] -> Maybe Name
-   -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
-javaClassDeclaration aliases elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
+javaClassDeclaration :: M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
+   -> Maybe Name -> [Java.ClassBodyDeclaration] -> Java.ClassDeclaration
+javaClassDeclaration aliases tparams elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
   Java.normalClassDeclarationIdentifier = javaDeclName elName,
-  Java.normalClassDeclarationParameters = [],
-  Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True) supname,
+  Java.normalClassDeclarationParameters = tparams,
+  Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True []) supname,
   Java.normalClassDeclarationImplements = [],
   Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
 
@@ -331,8 +331,8 @@ methodInvocation self methodName = Java.MethodInvocation header
           targs = []
           variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing s
 
-nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ClassType
-nameToJavaClassType aliases qualify name = Java.ClassType [] pkg id []
+nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Java.ClassType
+nameToJavaClassType aliases qualify args name = Java.ClassType [] pkg id args
   where
     (id, pkg) = nameToQualifiedJavaName aliases qualify name
 
@@ -348,7 +348,7 @@ nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJav
 
 nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
-  nameToJavaClassType aliases qualify name
+  nameToJavaClassType aliases qualify [] name
 
 nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name
@@ -405,6 +405,9 @@ toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
       Java.ArrayType (Java.Dims $ d ++ [[]]) v
     _ -> fail $ "don't know how to make Java reference type into array type: " ++ show rt
   _ -> fail $ "don't know how to make Java type into array type: " ++ show t
+
+typeParameterToTypeArgument (Java.TypeParameter _ id _) = Java.TypeArgumentReference $
+  Java.ReferenceTypeVariable $ Java.TypeVariable [] id
 
 variableDeclarationStatement :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier -> Java.Expression -> Java.BlockStatement
 variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVariableDeclaration $

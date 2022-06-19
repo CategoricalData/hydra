@@ -66,16 +66,16 @@ constructModule cx g coders pairs = do
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] []) -- TODO
 
-declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
+declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> [FieldType m]
   -> Result Java.ClassDeclaration
-declarationForRecordType aliases elName fields = do
+declarationForRecordType aliases tparams elName fields = do
     memberVars <- CM.mapM toMemberVar fields
     withMethods <- if L.length fields > 1
       then CM.mapM toWithMethod fields
       else pure []
     cons <- constructor
     let bodyDecls = memberVars ++ [cons, equalsMethod, hashCodeMethod] ++ withMethods
-    return $ javaClassDeclaration aliases elName classModsPublic Nothing bodyDecls
+    return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing bodyDecls
   where
     constructor = do
       params <- CM.mapM fieldToFormalParam fields
@@ -183,28 +183,30 @@ declarationForType :: (Default m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
 declarationForType aliases cx (el, TypedTerm _ term) = do
     t <- decodeType cx term >>= adaptType cx language
-    cd <- toClassDecl aliases (elementName el) t
+    cd <- toClassDecl aliases [] (elementName el) t
     return $ Java.TypeDeclarationClass cd
 
-declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> [FieldType m]
-  -> Result Java.ClassDeclaration
-declarationForUnionType aliases elName fields = do
+declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
+  -> Name -> [FieldType m] -> Result Java.ClassDeclaration
+declarationForUnionType aliases tparams elName fields = do
     variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
     let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
     let bodyDecls = [privateConstructor, toAcceptMethod True, visitor, partialVisitor] ++ variantDecls
     let mods = classModsPublic ++ [Java.ClassModifierAbstract]
-    return $ javaClassDeclaration aliases elName mods Nothing bodyDecls
+    return $ javaClassDeclaration aliases tparams elName mods Nothing bodyDecls
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
       let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName "value") ftype]
-      toClassDecl aliases (variantClassName elName fname) rtype
+      toClassDecl aliases [] (variantClassName elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
-        Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True elName,
+        Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True args elName,
+        Java.normalClassDeclarationParameters = tparams,
         Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
       where
         newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [toAcceptMethod False]
+        args = typeParameterToTypeArgument <$> tparams
 
     visitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
         Java.NormalInterfaceDeclaration mods ti tparams extends body
@@ -250,21 +252,19 @@ declarationForUnionType aliases elName fields = do
     mainInstanceParam = javaTypeToJavaFormalParameter classRef (FieldName "instance")
       where
         classRef = javaClassTypeToJavaType $
-          nameToJavaClassType aliases False elName
+          nameToJavaClassType aliases False [] elName
 
     variantInstanceParam fname = javaTypeToJavaFormalParameter classRef (FieldName "instance")
       where
         classRef = javaClassTypeToJavaType $
-          nameToJavaClassType aliases False $ variantClassName elName fname
+          nameToJavaClassType aliases False [] $ variantClassName elName fname
 
-declarationForUniversalType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> UniversalType m
-  -> Result Java.ClassDeclaration
-declarationForUniversalType aliases elName (UniversalType (TypeVariable v) body) = do
-    (Java.ClassDeclarationNormal cd) <- toClassDecl aliases elName body
-    return $ Java.ClassDeclarationNormal $ cd {
-      Java.normalClassDeclarationParameters = addParameter (Java.normalClassDeclarationParameters cd)}
+declarationForUniversalType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
+  -> Name -> UniversalType m -> Result Java.ClassDeclaration
+declarationForUniversalType aliases tparams elName (UniversalType (TypeVariable v) body) =
+    toClassDecl aliases (tparams ++ [param]) elName body
   where
-    addParameter params = params ++ [javaTypeParameter $ capitalize v]
+    param = javaTypeParameter $ capitalize v
 
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
@@ -329,16 +329,16 @@ encodeType aliases t = case typeExpr t of
   where
     encode = encodeType aliases
 
-toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Name -> Type m
+toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> Type m
   -> Result Java.ClassDeclaration
-toClassDecl aliases elName t = case typeExpr t of
-      TypeExprNominal name -> return $ javaClassDeclaration aliases elName classModsPublic (Just name) []
-      TypeExprRecord fields -> declarationForRecordType aliases elName fields
-      TypeExprUnion fields -> declarationForUnionType aliases elName fields
-      TypeExprUniversal ut -> declarationForUniversalType aliases elName ut
+toClassDecl aliases tparams elName t = case typeExpr t of
+      TypeExprNominal name -> return $ javaClassDeclaration aliases tparams elName classModsPublic (Just name) []
+      TypeExprRecord fields -> declarationForRecordType aliases tparams elName fields
+      TypeExprUnion fields -> declarationForUnionType aliases tparams elName fields
+      TypeExprUniversal ut -> declarationForUniversalType aliases tparams elName ut
       -- Other types are not supported as class declarations, so we wrap them as record types.
       -- TODO: wrap and unwrap the corresponding terms as record terms.
-      _ -> declarationForRecordType aliases elName [Types.field "value" t]
+      _ -> declarationForRecordType aliases tparams elName [Types.field "value" t]
 
 toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
 toDataDeclaration aliases cx (el, TypedTerm typ term) = do
