@@ -8,6 +8,15 @@ import qualified Data.List as L
 import qualified Data.Maybe as Y
 
 
+withComments :: Maybe String -> CT.Expr -> CT.Expr
+withComments mc expr = case mc of
+    Nothing -> expr
+    Just c -> newlineSep [writeComments c, expr]
+  where
+    writeComments c = cst $ "/**\n" ++ unlines (toLine <$> lines c) ++ " */"
+      where
+        toLine l = " * " ++ l
+
 writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
 writeAdditionalBound _ = cst "TODO:AdditionalBound"
 
@@ -192,7 +201,7 @@ writeCompilationUnit u = case u of
         else Just $ newlineSep (writeImportDeclaration <$> imports)
       typesSec = if L.null types
         then Nothing
-        else Just $ doubleNewlineSep (writeTypeDeclaration <$> types)
+        else Just $ doubleNewlineSep (writeTypeDeclarationWithComments <$> types)
 
 writeConditionalAndExpression :: Java.ConditionalAndExpression -> CT.Expr
 writeConditionalAndExpression (Java.ConditionalAndExpression ors)
@@ -790,6 +799,9 @@ writeTypeDeclaration d = case d of
   Java.TypeDeclarationClass d -> writeClassDeclaration d
   Java.TypeDeclarationInterface d -> writeInterfaceDeclaration d
   Java.TypeDeclarationNone -> semi
+
+writeTypeDeclarationWithComments :: Java.TypeDeclarationWithComments -> CT.Expr
+writeTypeDeclarationWithComments (Java.TypeDeclarationWithComments d mc) = withComments mc $ writeTypeDeclaration d
 
 writeTypeIdentifier :: Java.TypeIdentifier -> CT.Expr
 writeTypeIdentifier (Java.TypeIdentifier id) = writeIdentifier id
