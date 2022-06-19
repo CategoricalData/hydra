@@ -1,14 +1,14 @@
 package hydra.core;
 
-public class MapType {
-  public final hydra.core.Type keys;
+/**
+ * A map type
+ */
+public class MapType<M> {
+  public final Type<M> keys;
   
-  public final hydra.core.Type values;
+  public final Type<M> values;
   
-  /**
-   * Constructs an immutable MapType object
-   */
-  public MapType(hydra.core.Type keys, hydra.core.Type values) {
+  public MapType (Type<M> keys, Type<M> values) {
     this.keys = keys;
     this.values = values;
   }
@@ -16,30 +16,22 @@ public class MapType {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof MapType)) {
-        return false;
+      return false;
     }
-    MapType o = (MapType) other;
-    return keys.equals(o.keys)
-        && values.equals(o.values);
+    MapType o = (MapType) (other);
+    return keys.equals(o.keys) && values.equals(o.values);
   }
   
   @Override
   public int hashCode() {
-    return 2 * keys.hashCode()
-        + 3 * values.hashCode();
+    return 2 * keys.hashCode() + 3 * values.hashCode();
   }
   
-  /**
-   * Construct a new immutable MapType object in which keys is overridden
-   */
-  public MapType withKeys(hydra.core.Type keys) {
+  public MapType withKeys(Type<M> keys) {
     return new MapType(keys, values);
   }
   
-  /**
-   * Construct a new immutable MapType object in which values is overridden
-   */
-  public MapType withValues(hydra.core.Type values) {
+  public MapType withValues(Type<M> values) {
     return new MapType(keys, values);
   }
 }

@@ -3,21 +3,18 @@ package hydra.core;
 /**
  * A type application (instantiation), which applies a term to a type
  */
-public class TypeApplication<A> {
+public class TypeApplication<M> {
   /**
    * A term which is the left-hand side of the application
    */
-  public final hydra.core.Term<A> function;
+  public final Term<M> function;
   
   /**
    * A type which is the right-hand side of the application
    */
-  public final hydra.core.Type argument;
+  public final Type<M> argument;
   
-  /**
-   * Constructs an immutable TypeApplication object
-   */
-  public TypeApplication(hydra.core.Term<A> function, hydra.core.Type argument) {
+  public TypeApplication (Term<M> function, Type<M> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -25,30 +22,22 @@ public class TypeApplication<A> {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypeApplication)) {
-        return false;
+      return false;
     }
-    TypeApplication o = (TypeApplication) other;
-    return function.equals(o.function)
-        && argument.equals(o.argument);
+    TypeApplication o = (TypeApplication) (other);
+    return function.equals(o.function) && argument.equals(o.argument);
   }
   
   @Override
   public int hashCode() {
-    return 2 * function.hashCode()
-        + 3 * argument.hashCode();
+    return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  /**
-   * Construct a new immutable TypeApplication object in which function is overridden
-   */
-  public TypeApplication withFunction(hydra.core.Term<A> function) {
+  public TypeApplication withFunction(Term<M> function) {
     return new TypeApplication(function, argument);
   }
   
-  /**
-   * Construct a new immutable TypeApplication object in which argument is overridden
-   */
-  public TypeApplication withArgument(hydra.core.Type argument) {
+  public TypeApplication withArgument(Type<M> argument) {
     return new TypeApplication(function, argument);
   }
 }

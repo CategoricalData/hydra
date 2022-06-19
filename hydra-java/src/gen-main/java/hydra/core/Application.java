@@ -3,21 +3,18 @@ package hydra.core;
 /**
  * A term which applies a function to an argument
  */
-public class Application<A> {
+public class Application<M> {
   /**
    * The left-hand side of the application
    */
-  public final hydra.core.Term<A> function;
+  public final Term<M> function;
   
   /**
    * The right-hand side of the application
    */
-  public final hydra.core.Term<A> argument;
+  public final Term<M> argument;
   
-  /**
-   * Constructs an immutable Application object
-   */
-  public Application(hydra.core.Term<A> function, hydra.core.Term<A> argument) {
+  public Application (Term<M> function, Term<M> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -25,30 +22,22 @@ public class Application<A> {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Application)) {
-        return false;
+      return false;
     }
-    Application o = (Application) other;
-    return function.equals(o.function)
-        && argument.equals(o.argument);
+    Application o = (Application) (other);
+    return function.equals(o.function) && argument.equals(o.argument);
   }
   
   @Override
   public int hashCode() {
-    return 2 * function.hashCode()
-        + 3 * argument.hashCode();
+    return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  /**
-   * Construct a new immutable Application object in which function is overridden
-   */
-  public Application withFunction(hydra.core.Term<A> function) {
+  public Application withFunction(Term<M> function) {
     return new Application(function, argument);
   }
   
-  /**
-   * Construct a new immutable Application object in which argument is overridden
-   */
-  public Application withArgument(hydra.core.Term<A> argument) {
+  public Application withArgument(Term<M> argument) {
     return new Application(function, argument);
   }
 }

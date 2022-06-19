@@ -1,45 +1,37 @@
 package hydra.core;
 
-public class Term<A> {
-  public final hydra.core.Expression<A> data;
+/**
+ * A data term
+ */
+public class Term<M> {
+  public final TermExpr<M> expr;
   
-  public final A meta;
+  public final M meta;
   
-  /**
-   * Constructs an immutable Term object
-   */
-  public Term(hydra.core.Expression<A> data, A meta) {
-    this.data = data;
+  public Term (TermExpr<M> expr, M meta) {
+    this.expr = expr;
     this.meta = meta;
   }
   
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Term)) {
-        return false;
+      return false;
     }
-    Term o = (Term) other;
-    return data.equals(o.data)
-        && meta.equals(o.meta);
+    Term o = (Term) (other);
+    return expr.equals(o.expr) && meta.equals(o.meta);
   }
   
   @Override
   public int hashCode() {
-    return 2 * data.hashCode()
-        + 3 * meta.hashCode();
+    return 2 * expr.hashCode() + 3 * meta.hashCode();
   }
   
-  /**
-   * Construct a new immutable Term object in which data is overridden
-   */
-  public Term withData(hydra.core.Expression<A> data) {
-    return new Term(data, meta);
+  public Term withExpr(TermExpr<M> expr) {
+    return new Term(expr, meta);
   }
   
-  /**
-   * Construct a new immutable Term object in which meta is overridden
-   */
-  public Term withMeta(A meta) {
-    return new Term(data, meta);
+  public Term withMeta(M meta) {
+    return new Term(expr, meta);
   }
 }

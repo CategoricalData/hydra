@@ -1,14 +1,14 @@
 package hydra.core;
 
-public class TypedTerm<A> {
-  public final hydra.core.Type type;
+/**
+ * A type together with an instance of the type
+ */
+public class TypedTerm<M> {
+  public final Type<M> type;
   
-  public final hydra.core.Term<A> term;
+  public final Term<M> term;
   
-  /**
-   * Constructs an immutable TypedTerm object
-   */
-  public TypedTerm(hydra.core.Type type, hydra.core.Term<A> term) {
+  public TypedTerm (Type<M> type, Term<M> term) {
     this.type = type;
     this.term = term;
   }
@@ -16,30 +16,22 @@ public class TypedTerm<A> {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof TypedTerm)) {
-        return false;
+      return false;
     }
-    TypedTerm o = (TypedTerm) other;
-    return type.equals(o.type)
-        && term.equals(o.term);
+    TypedTerm o = (TypedTerm) (other);
+    return type.equals(o.type) && term.equals(o.term);
   }
   
   @Override
   public int hashCode() {
-    return 2 * type.hashCode()
-        + 3 * term.hashCode();
+    return 2 * type.hashCode() + 3 * term.hashCode();
   }
   
-  /**
-   * Construct a new immutable TypedTerm object in which type is overridden
-   */
-  public TypedTerm withType(hydra.core.Type type) {
+  public TypedTerm withType(Type<M> type) {
     return new TypedTerm(type, term);
   }
   
-  /**
-   * Construct a new immutable TypedTerm object in which term is overridden
-   */
-  public TypedTerm withTerm(hydra.core.Term<A> term) {
+  public TypedTerm withTerm(Term<M> term) {
     return new TypedTerm(type, term);
   }
 }

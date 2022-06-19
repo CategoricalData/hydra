@@ -1,22 +1,16 @@
 package hydra.graph;
 
-import hydra.core.Name;
-import hydra.core.Term;
-
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
-public class Element<A> {
+public class Element<M> {
   public final hydra.core.Name name;
   
-  public final hydra.core.Term<A> schema;
+  public final hydra.core.Term<M> schema;
   
-  public final hydra.core.Term<A> data;
+  public final hydra.core.Term<M> data;
   
-  /**
-   * Constructs an immutable Element object
-   */
-  public Element(hydra.core.Name name, hydra.core.Term<A> schema, hydra.core.Term<A> data) {
+  public Element (hydra.core.Name name, hydra.core.Term<M> schema, hydra.core.Term<M> data) {
     this.name = name;
     this.schema = schema;
     this.data = data;
@@ -25,39 +19,26 @@ public class Element<A> {
   @Override
   public boolean equals(Object other) {
     if (!(other instanceof Element)) {
-        return false;
+      return false;
     }
-    Element o = (Element) other;
-    return name.equals(o.name)
-        && schema.equals(o.schema)
-        && data.equals(o.data);
+    Element o = (Element) (other);
+    return name.equals(o.name) && schema.equals(o.schema) && data.equals(o.data);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode()
-        + 3 * schema.hashCode()
-        + 5 * data.hashCode();
+    return 2 * name.hashCode() + 3 * schema.hashCode() + 5 * data.hashCode();
   }
   
-  /**
-   * Construct a new immutable Element object in which name is overridden
-   */
   public Element withName(hydra.core.Name name) {
     return new Element(name, schema, data);
   }
   
-  /**
-   * Construct a new immutable Element object in which schema is overridden
-   */
-  public Element withSchema(hydra.core.Term<A> schema) {
+  public Element withSchema(hydra.core.Term<M> schema) {
     return new Element(name, schema, data);
   }
   
-  /**
-   * Construct a new immutable Element object in which data is overridden
-   */
-  public Element withData(hydra.core.Term<A> data) {
+  public Element withData(hydra.core.Term<M> data) {
     return new Element(name, schema, data);
   }
 }

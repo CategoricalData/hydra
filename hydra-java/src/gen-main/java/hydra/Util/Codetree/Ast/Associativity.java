@@ -1,58 +1,58 @@
-package hydra.core;
+package hydra.util.codetree.ast;
 
 /**
- * The identifier of a function constructor
+ * Operator associativity
  */
-public abstract class FunctionVariant {
-  private FunctionVariant () {
+public abstract class Associativity {
+  private Associativity () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(CompareTo instance) ;
+    R visit(None instance) ;
     
-    R visit(Elimination instance) ;
+    R visit(Left instance) ;
     
-    R visit(Lambda instance) ;
+    R visit(Right instance) ;
     
-    R visit(Primitive instance) ;
+    R visit(Both instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(FunctionVariant instance) {
+    default R otherwise(Associativity instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(CompareTo instance) {
+    default R visit(None instance) {
       return otherwise((instance));
     }
     
-    default R visit(Elimination instance) {
+    default R visit(Left instance) {
       return otherwise((instance));
     }
     
-    default R visit(Lambda instance) {
+    default R visit(Right instance) {
       return otherwise((instance));
     }
     
-    default R visit(Primitive instance) {
+    default R visit(Both instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class CompareTo extends FunctionVariant {
-    public CompareTo () {
+  public static final class None extends Associativity {
+    public None () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof CompareTo)) {
+      if (!(other instanceof None)) {
         return false;
       }
-      CompareTo o = (CompareTo) (other);
+      None o = (None) (other);
       return true;
     }
     
@@ -67,17 +67,17 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Elimination extends FunctionVariant {
-    public Elimination () {
+  public static final class Left extends Associativity {
+    public Left () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Elimination)) {
+      if (!(other instanceof Left)) {
         return false;
       }
-      Elimination o = (Elimination) (other);
+      Left o = (Left) (other);
       return true;
     }
     
@@ -92,17 +92,17 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Lambda extends FunctionVariant {
-    public Lambda () {
+  public static final class Right extends Associativity {
+    public Right () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Lambda)) {
+      if (!(other instanceof Right)) {
         return false;
       }
-      Lambda o = (Lambda) (other);
+      Right o = (Right) (other);
       return true;
     }
     
@@ -117,17 +117,17 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Primitive extends FunctionVariant {
-    public Primitive () {
+  public static final class Both extends Associativity {
+    public Both () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Primitive)) {
+      if (!(other instanceof Both)) {
         return false;
       }
-      Primitive o = (Primitive) (other);
+      Both o = (Both) (other);
       return true;
     }
     
