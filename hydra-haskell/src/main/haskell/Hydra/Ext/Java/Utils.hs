@@ -43,13 +43,13 @@ fieldNameToJavaExpression fname = javaPostfixExpressionToJavaExpression $
   Java.PostfixExpressionName $ Java.ExpressionName Nothing (fieldNameToJavaIdentifier fname)
 
 fieldNameToJavaIdentifier :: FieldName -> Java.Identifier
-fieldNameToJavaIdentifier (FieldName name) = Java.Identifier $ javaEscape name
+fieldNameToJavaIdentifier (FieldName name) = Java.Identifier $ sanitizeJavaName name
 
 fieldNameToJavaVariableDeclarator :: FieldName -> Java.VariableDeclarator
-fieldNameToJavaVariableDeclarator (FieldName n) = javaVariableDeclarator $ Java.Identifier $ javaEscape n
+fieldNameToJavaVariableDeclarator (FieldName n) = javaVariableDeclarator $ Java.Identifier $ sanitizeJavaName n
 
 fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
-fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ Java.Identifier $ javaEscape n
+fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ Java.Identifier $ sanitizeJavaName n
 
 importAliasesForGraph :: Graph m -> M.Map GraphName Java.PackageName
 importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
@@ -122,13 +122,10 @@ javaConstructorCall ci args = javaPrimaryToJavaExpression $
 javaConstructorName :: Bool -> String -> Java.ClassOrInterfaceTypeToInstantiate
 javaConstructorName escape local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
   where
-    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if escape then javaEscape local else local
+    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if escape then sanitizeJavaName local else local
 
 javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = javaTypeIdentifier . sanitizeJavaName . localNameOf
-
-javaEscape :: String -> String
-javaEscape s = if S.member s reservedWords then s ++ "_" else s
 
 javaEmptyStatement :: Java.Statement
 javaEmptyStatement = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementEmpty Java.EmptyStatement
