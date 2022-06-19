@@ -71,17 +71,17 @@ javaTestModules :: [Result (Module Meta)]
 javaTestModules = pure <$> [jsonJsonModule]
 
 
-printHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
-printHaskell = generateSources Haskell.printGraph
+writeHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
+writeHaskell = generateSources Haskell.printGraph
 
-printJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-printJava = generateSources Java.printGraph
+writeJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writeJava = generateSources Java.printGraph
 
-printPdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-printPdl = generateSources PDL.printGraph
+writePdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writePdl = generateSources PDL.printGraph
 
-printScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
-printScala = generateSources Scala.printGraph
+writeScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writeScala = generateSources Scala.printGraph
 
 generateSources ::
   (Context Meta -> Graph Meta -> Qualified (M.Map FilePath String)) -> [Result (Module Meta)] -> FilePath -> IO ()

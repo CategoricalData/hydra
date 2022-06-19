@@ -1,5 +1,6 @@
 -- Based on the Oracle Java SE 12 BNF.
 -- See https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html
+-- Note: all "WithComments" types were added manually, rather than derived from the BNF, which does not allow for comments.
 
 module Hydra.Impl.Haskell.Sources.Ext.Java.Syntax where
 
@@ -268,7 +269,7 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
       def "OrdinaryCompilationUnit" $ record [
         field "package" $ optional $ java "PackageDeclaration",
         field "imports" $ list $ java "ImportDeclaration",
-        field "types" $ list $ java "TypeDeclaration"],
+        field "types" $ list $ java "TypeDeclarationWithComments"],
 
 --ModularCompilationUnit:
 --  {ImportDeclaration} ModuleDeclaration
@@ -323,6 +324,10 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
         field "interface" $ java "InterfaceDeclaration",
 --  ;
         field "none" unit],
+      def "TypeDeclarationWithComments" $
+        record [
+          field "value" $ java "TypeDeclaration",
+          field "comments" $ optional string],
 
 --ModuleDeclaration:
 --  {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }

@@ -415,7 +415,7 @@ data OrdinaryCompilationUnit
   = OrdinaryCompilationUnit {
     ordinaryCompilationUnitPackage :: (Maybe PackageDeclaration),
     ordinaryCompilationUnitImports :: [ImportDeclaration],
-    ordinaryCompilationUnitTypes :: [TypeDeclaration]}
+    ordinaryCompilationUnitTypes :: [TypeDeclarationWithComments]}
   deriving (Eq, Ord, Read, Show)
 
 _OrdinaryCompilationUnit = (Core.Name "hydra/ext/java/syntax.OrdinaryCompilationUnit")
@@ -520,6 +520,18 @@ _TypeDeclaration_class = (Core.FieldName "class")
 _TypeDeclaration_interface = (Core.FieldName "interface")
 
 _TypeDeclaration_none = (Core.FieldName "none")
+
+data TypeDeclarationWithComments 
+  = TypeDeclarationWithComments {
+    typeDeclarationWithCommentsValue :: TypeDeclaration,
+    typeDeclarationWithCommentsComments :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeDeclarationWithComments = (Core.Name "hydra/ext/java/syntax.TypeDeclarationWithComments")
+
+_TypeDeclarationWithComments_value = (Core.FieldName "value")
+
+_TypeDeclarationWithComments_comments = (Core.FieldName "comments")
 
 data ModuleDeclaration 
   = ModuleDeclaration {

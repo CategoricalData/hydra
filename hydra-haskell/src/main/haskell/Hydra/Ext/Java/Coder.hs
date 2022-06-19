@@ -29,6 +29,11 @@ printGraph cx g = do
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
+commentsFromElement :: Context m -> Element m -> Result (Maybe String)
+commentsFromElement cx el = contextDescriptionOf cx (termMeta $ elementData el)
+
+commentsFromFieldType cx (FieldType _ t) = contextDescriptionOf cx (typeMeta t)
+
 elementNameToFilePath :: Name -> FilePath
 elementNameToFilePath name = nameToFilePath True (FileExtension "java") $ fromQname ns (sanitizeJavaName local)
   where
@@ -180,11 +185,12 @@ declarationForRecordType aliases tparams elName fields = do
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
 declarationForType :: (Default m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclaration
+  => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclarationWithComments
 declarationForType aliases cx (el, TypedTerm _ term) = do
     t <- decodeType cx term >>= adaptType cx language
     cd <- toClassDecl aliases [] (elementName el) t
-    return $ Java.TypeDeclarationClass cd
+    comments <- commentsFromElement cx el
+    return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
 
 declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
   -> Name -> [FieldType m] -> Result Java.ClassDeclaration
@@ -338,7 +344,7 @@ toClassDecl aliases tparams elName t = case typeExpr t of
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where
-    wrap t' = declarationForRecordType aliases tparams elName [Types.field "value" t'] 
+    wrap t' = declarationForRecordType aliases tparams elName [Types.field "value" t']
 
 toDataDeclaration :: M.Map GraphName Java.PackageName -> Context m -> (a, TypedTerm m) -> Result a
 toDataDeclaration aliases cx (el, TypedTerm typ term) = do
