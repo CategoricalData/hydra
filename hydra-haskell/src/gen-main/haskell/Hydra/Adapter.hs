@@ -22,11 +22,11 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_step = (Core.FieldName "step")
 
-data AdapterContext a 
+data AdapterContext m 
   = AdapterContext {
-    adapterContextEvaluation :: (Evaluation.Context a),
-    adapterContextSource :: (Language a),
-    adapterContextTarget :: (Language a)}
+    adapterContextEvaluation :: (Evaluation.Context m),
+    adapterContextSource :: (Language m),
+    adapterContextTarget :: (Language m)}
 
 _AdapterContext = (Core.Name "hydra/adapter.AdapterContext")
 
