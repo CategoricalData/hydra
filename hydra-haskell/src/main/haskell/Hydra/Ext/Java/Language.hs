@@ -43,8 +43,10 @@ language = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
     TermVariantUnion,
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
+    TypeVariantApplication,
     TypeVariantElement,
     TypeVariantFunction,
+    TypeVariantLambda,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,
@@ -53,7 +55,6 @@ language = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
-    TypeVariantLambda,
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 
