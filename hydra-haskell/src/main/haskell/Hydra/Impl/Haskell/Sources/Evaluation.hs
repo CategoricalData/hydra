@@ -27,15 +27,23 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
 
       def "Context" $
         doc "A pointed set of graph modules; a graph in the logical sense" $
-        universal "m" $ record [
-          field "graphs" $ universal "m" $ graph "GraphSet",
-          field "elements" $ Types.map (core "Name") (universal "m" $ graph "Element"),
-          field "functions" $ Types.map (core "Name") (universal "m" $ evaluation "PrimitiveFunction"),
+        lambda "m" $ record [
+          field "graphs" $ apply (graph "GraphSet") (variable "m"),
+          field "elements" $ Types.map (core "Name") (apply (graph "Element") (variable "m")),
+          field "functions" $ Types.map (core "Name") (apply (evaluation "PrimitiveFunction") (variable "m")),
           field "strategy" $ evaluation "EvaluationStrategy",
-          field "descriptionOf" $ function (variable "m") (universal "(Maybe String)" $ evaluation "Result"), -- TODO: hack
-          field "typeOf" $ function (variable "m") (universal "(Maybe (Core.Type m))" $ evaluation "Result"), -- TODO: hack
-          field "setDescriptionOf" $ function (optional string) (function (variable "m") (variable "m")),
-          field "setTypeOf" $ function (optional $ universal "m" $ core "Type") (function (variable "m") (variable "m"))],
+          field "descriptionOf" $ function
+            (variable "m")
+            (apply (evaluation "Result") (optional string)),
+          field "typeOf" $ function
+            (variable "m")
+            (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m"))),
+          field "setDescriptionOf" $ function
+            (optional string)
+            (function (variable "m") (variable "m")),
+          field "setTypeOf" $ function
+            (optional $ apply (core "Type") (variable "m"))
+            (function (variable "m") (variable "m"))],
 
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
@@ -44,35 +52,37 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
 
       def "InputSpec" $
         doc "A helper object for specifying and unmarshalling an argument to a primitive function" $
-        universal "a" $ universal "m" $ record [
-          field "type" $ universal "m" $ core "Type",
-          field "unmarshal" $ function (universal "m" $ core "Term") (universal "a" $ evaluation "Result")],
+        lambda "a" $ lambda "m" $ record [
+          field "type" $ apply (core "Type") (variable "m"),
+          field "unmarshal" $ function
+            (apply (core "Term") (variable "m"))
+            (apply (evaluation "Result") (variable "a"))],
 
       def "OutputSpec" $
         doc "A helper object for specifying and marshalling the output of a primitive function" $
-        universal "a" $ universal "m" $ record [
-          field "type" $ universal "m" $ core "Type",
-          field "marshal" $ function (variable "a") (universal "m" $ core "Term")],
+        lambda "a" $ lambda "m" $ record [
+          field "type" $ apply (core "Type") (variable "m"),
+          field "marshal" $ function (variable "a") (apply (core "Term") (variable "m"))],
 
       def "PrimitiveFunction" $
         doc "A built-in function" $
-        universal "m" $ record [
+        lambda "m" $ record [
           field "name" $ core "Name",
-          field "type" $ universal "m" $ core "FunctionType",
-          field "implementation" $ function (list $ universal "m" $ core "Term")
-            (universal "(Core.Term m)" $ evaluation "Result")], -- TODO: this is a hack
+          field "type" $ apply (core "FunctionType") (variable "m"),
+          field "implementation" $ function (list $ apply (core "Term") (variable "m"))
+            (apply (evaluation "Result") (apply (core "Term") (variable "m")))],
 
       def "Result" $
         doc "A qualified result; success with a value or failure with an error message" $
-        universal "m" $ union [
+        lambda "m" $ union [
           field "success" $ variable "m",
           field "failure" string],
 
       def "Step" $
         doc "A qualified bidirectional transformation" $
-        universal "a" $ universal "b" $ record [
-          field "out" $ function (variable "a") (variable "Result b"), -- TODO: this is a hack
-          field "in" $ function (variable "b") (variable "Result a")], -- TODO: this is a hack
+        lambda "a" $ lambda "b" $ record [
+          field "out" $ function (variable "a") (apply (evaluation "Result") (variable "b")),
+          field "in" $ function (variable "b") (apply (evaluation "Result") (variable "a"))],
 
       def "StepDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a step" $
