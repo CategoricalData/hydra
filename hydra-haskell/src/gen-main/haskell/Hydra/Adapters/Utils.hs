@@ -39,6 +39,7 @@ describePrecision x = case x of
 -- Display a type as a string
 describeType :: (Core.Type m -> String)
 describeType typ = ((\x -> case x of
+  Core.TypeExprApplication _ -> "instances of an application type"
   Core.TypeExprLiteral v -> (describeLiteralType v)
   Core.TypeExprElement v -> (Strings.cat [
     "elements containing ",
@@ -50,6 +51,7 @@ describeType typ = ((\x -> case x of
         (describeType (Core.functionTypeDomain v))],
       " to "],
     (describeType (Core.functionTypeCodomain v))])
+  Core.TypeExprLambda _ -> "polymorphic terms"
   Core.TypeExprList v -> (Strings.cat [
     "lists of ",
     (describeType v)])
@@ -71,5 +73,4 @@ describeType typ = ((\x -> case x of
     "sets of ",
     (describeType v)])
   Core.TypeExprUnion _ -> "unions of a particular set of fields"
-  Core.TypeExprLambda _ -> "polymorphic terms"
   Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeExpr typ))

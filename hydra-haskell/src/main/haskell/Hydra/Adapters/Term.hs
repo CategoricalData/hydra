@@ -17,6 +17,7 @@ import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Rewriting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -127,11 +128,13 @@ optionalToList acx t@(Type (TypeExprOptional ot) _) = do
       pure Nothing
       else Just <$> stepIn (adapterStep ad) (L.head l)}
 
-passLiteral :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passLiteral acx (Type (TypeExprLiteral at) _) = do
-  ad <- literalAdapter acx at
-  let step = bidirectional $ \dir (Term (TermExprLiteral av) _) -> literal <$> stepEither dir (adapterStep ad) av
-  return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
+-- TODO: only tested for type mappings; not yet for types+terms
+passApplication :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passApplication acx t = do
+    ad <- termAdapter acx reduced
+    return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
+  where
+    reduced = betaReduceTypeRecursively True (adapterContextEvaluation acx) t
 
 passFunction :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passFunction acx t@(Type (TypeExprFunction (FunctionType dom cod)) _) = do
@@ -161,6 +164,18 @@ passFunction acx t@(Type (TypeExprFunction (FunctionType dom cod)) _) = do
               --       it is not the job of this adapter to catch validation issues.
               getStep fname = Y.maybe idStep adapterStep $ M.lookup fname caseAds
         FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterStep codAd) body)
+
+passLambda :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passLambda acx t@(Type (TypeExprLambda (TypeLambda (TypeVariable v) body)) _) = do
+  ad <- termAdapter acx body
+  return $ Adapter (adapterIsLossy ad) t (Types.lambda v $ adapterTarget ad)
+    $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
+
+passLiteral :: Default m => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+passLiteral acx (Type (TypeExprLiteral at) _) = do
+  ad <- literalAdapter acx at
+  let step = bidirectional $ \dir (Term (TermExprLiteral av) _) -> literal <$> stepEither dir (adapterStep ad) av
+  return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
 passList :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passList acx t@(Type (TypeExprList lt) _) = do
@@ -215,39 +230,25 @@ passUnion acx t@(Type (TypeExprUnion sfields) _) = do
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
 
-passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passUniversal acx t@(Type (TypeExprLambda (TypeLambda (TypeVariable v) body)) _) = do
-  ad <- termAdapter acx body
-  return $ Adapter (adapterIsLossy ad) t (Types.universal v $ adapterTarget ad)
-    $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
-
---  TODO:
---    term constructors
---      - application
---      - cases
---      - lambda
---      - variable
---    type constructors
---      - abstract
---      - variable
---
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-termAdapter acx typ = case typ of
-    _ -> chooseAdapter alts supported describeType typ
+termAdapter acx typ = do
+    chooseAdapter alts supported describeType typ
+--    chooseAdapter alts supported describeType $ betaReduceTypeRecursively True (adapterContextEvaluation acx) typ
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
       then case typeVariant t of
-        TypeVariantLiteral -> pure passLiteral
+        TypeVariantApplication -> pure passApplication
         TypeVariantFunction ->  pure passFunction
+        TypeVariantLambda -> pure passLambda
         TypeVariantList -> pure passList
+        TypeVariantLiteral -> pure passLiteral
         TypeVariantMap -> pure passMap
         TypeVariantOptional -> [passOptional, optionalToList]
         TypeVariantRecord -> pure passRecord
         TypeVariantSet -> pure passSet
         TypeVariantUnion -> pure passUnion
-        TypeVariantLambda -> pure passUniversal
         _ -> []
       else case typeVariant t of
         TypeVariantElement -> [elementToString]
@@ -256,13 +257,13 @@ termAdapter acx typ = case typ of
         TypeVariantOptional -> [optionalToList]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]
-        TypeVariantLambda -> [universalToMonotype]
+        TypeVariantLambda -> [lambdaToMonotype]
         _ -> []
 
     constraints = languageConstraints $ adapterContextTarget acx
     supported = typeIsSupported constraints
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
-
+    
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
@@ -293,8 +294,8 @@ unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
       where
         matches = Y.mapMaybe (\(Field fn (Term (TermExprOptional opt) _)) -> (Just . Field fn) =<< opt) fields
 
-universalToMonotype :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-universalToMonotype acx t@(Type (TypeExprLambda (TypeLambda _ body)) _) = do
+lambdaToMonotype :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
+lambdaToMonotype acx t@(Type (TypeExprLambda (TypeLambda _ body)) _) = do
   ad <- termAdapter acx body
   return ad {adapterSource = t}
 

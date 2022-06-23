@@ -67,24 +67,25 @@ describeType = utils "describeType" $
   function (Types.universal "m" $ Types.nominal _Type) Types.string $
   lambda "typ" $ apply
     (match typeExprM Types.string [
-      Case _TypeExpr_literal   --> ref describeLiteralType,
-      Case _TypeExpr_element   --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
-      Case _TypeExpr_function  --> lambda "ft" $ string "functions from "
+      Case _TypeExpr_application --> constant $ string "instances of an application type",
+      Case _TypeExpr_literal     --> ref describeLiteralType,
+      Case _TypeExpr_element     --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
+      Case _TypeExpr_function    --> lambda "ft" $ string "functions from "
         ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_domain @@ var "ft"))
         ++ string " to "
         ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_codomain @@ var "ft")),
-      Case _TypeExpr_list      --> lambda "t" $ string "lists of " ++ (ref describeType @@ var "t"),
-      Case _TypeExpr_map       --> lambda "mt" $ string "maps from "
+      Case _TypeExpr_lambda      --> constant $ string "polymorphic terms",
+      Case _TypeExpr_list        --> lambda "t" $ string "lists of " ++ (ref describeType @@ var "t"),
+      Case _TypeExpr_map         --> lambda "mt" $ string "maps from "
         ++ (ref describeType @@ (project mapTypeM typeM _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeType @@ (project mapTypeM typeM _MapType_values  @@ var "mt")),
-      Case _TypeExpr_nominal   --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
-      Case _TypeExpr_optional  --> lambda "ot" $ string "optional " ++ (ref describeType @@ var "ot"),
-      Case _TypeExpr_record    -->constant $ string "records of a particular set of fields",
-      Case _TypeExpr_set       --> lambda "st" $ string "sets of " ++ (ref describeType @@ var "st"),
-      Case _TypeExpr_union     --> constant $ string "unions of a particular set of fields",
-      Case _TypeExpr_lambda --> constant $ string "polymorphic terms",
-      Case _TypeExpr_variable  --> constant $ string "unspecified/parametric terms"])
+      Case _TypeExpr_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
+      Case _TypeExpr_optional    --> lambda "ot" $ string "optional " ++ (ref describeType @@ var "ot"),
+      Case _TypeExpr_record      --> constant $ string "records of a particular set of fields",
+      Case _TypeExpr_set         --> lambda "st" $ string "sets of " ++ (ref describeType @@ var "st"),
+      Case _TypeExpr_union       --> constant $ string "unions of a particular set of fields",
+      Case _TypeExpr_variable    --> constant $ string "unspecified/parametric terms"])
     (project
       (Types.universal "m" $ Types.nominal _Type)
       (Types.universal "m" $ Types.nominal _TypeExpr)
