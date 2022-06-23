@@ -9,7 +9,6 @@ import Hydra.Adapter
 import Hydra.Adapters.Literal
 import Hydra.Basics
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Steps
 import Hydra.Primitives
 import Hydra.CoreDecoding
@@ -17,7 +16,7 @@ import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Rewriting
+import Hydra.Reduction
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -26,7 +25,10 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+_context :: FieldName
 _context = FieldName "context"
+
+_record :: FieldName
 _record = FieldName "record"
 
 dereferenceNominal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
