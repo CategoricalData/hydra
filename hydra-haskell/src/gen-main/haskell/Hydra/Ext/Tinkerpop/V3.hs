@@ -23,6 +23,19 @@ _Edge_out = (Core.FieldName "out")
 
 _Edge_in = (Core.FieldName "in")
 
+-- A graph; a self-contained collection of vertices and edges
+data Graph 
+  = Graph {
+    graphVertices :: (Set Vertex),
+    graphEdges :: (Set Edge)}
+  deriving (Eq, Ord, Read, Show)
+
+_Graph = (Core.Name "hydra/ext/tinkerpop/v3.Graph")
+
+_Graph_vertices = (Core.FieldName "vertices")
+
+_Graph_edges = (Core.FieldName "edges")
+
 -- A vertex or edge id
 newtype Id 
   = Id {
