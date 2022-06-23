@@ -33,10 +33,6 @@ public abstract class TermExpr<M> {
     
     R visit(Set instance) ;
     
-    R visit(TypeAbstraction instance) ;
-    
-    R visit(TypeApplication instance) ;
-    
     R visit(Union instance) ;
     
     R visit(Variable instance) ;
@@ -88,14 +84,6 @@ public abstract class TermExpr<M> {
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(TypeAbstraction instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
@@ -445,72 +433,6 @@ public abstract class TermExpr<M> {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * A type abstraction (generalization), which binds a type variable to a term
-   */
-  public static final class TypeAbstraction<M> extends TermExpr<M> {
-    /**
-     * A type abstraction (generalization), which binds a type variable to a term
-     */
-    public final TypeAbstraction<M> value;
-    
-    public TypeAbstraction (TypeAbstraction<M> value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeAbstraction)) {
-        return false;
-      }
-      TypeAbstraction o = (TypeAbstraction) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * A type application (instantiation), which applies a term to a type
-   */
-  public static final class TypeApplication<M> extends TermExpr<M> {
-    /**
-     * A type application (instantiation), which applies a term to a type
-     */
-    public final TypeApplication<M> value;
-    
-    public TypeApplication (TypeApplication<M> value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeApplication)) {
-        return false;
-      }
-      TypeApplication o = (TypeApplication) (other);
       return value.equals(o.value);
     }
     

@@ -1,20 +1,20 @@
 package hydra.core;
 
 /**
- * A type application (instantiation), which applies a term to a type
+ * The type-level analog of an application term
  */
 public class TypeApplication<M> {
   /**
-   * A term which is the left-hand side of the application
+   * The left-hand side of the application
    */
-  public final Term<M> function;
+  public final Type<M> function;
   
   /**
-   * A type which is the right-hand side of the application
+   * The right-hand side of the application
    */
   public final Type<M> argument;
   
-  public TypeApplication (Term<M> function, Type<M> argument) {
+  public TypeApplication (Type<M> function, Type<M> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -33,7 +33,7 @@ public class TypeApplication<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public TypeApplication withFunction(Term<M> function) {
+  public TypeApplication withFunction(Type<M> function) {
     return new TypeApplication(function, argument);
   }
   

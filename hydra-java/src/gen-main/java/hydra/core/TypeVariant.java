@@ -11,9 +11,13 @@ public abstract class TypeVariant {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
+    R visit(Application instance) ;
+    
     R visit(Element instance) ;
     
     R visit(Function instance) ;
+    
+    R visit(Lambda instance) ;
     
     R visit(List instance) ;
     
@@ -31,8 +35,6 @@ public abstract class TypeVariant {
     
     R visit(Union instance) ;
     
-    R visit(Universal instance) ;
-    
     R visit(Variable instance) ;
   }
   
@@ -41,11 +43,19 @@ public abstract class TypeVariant {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
+    default R visit(Application instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Element instance) {
       return otherwise((instance));
     }
     
     default R visit(Function instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Lambda instance) {
       return otherwise((instance));
     }
     
@@ -81,12 +91,33 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
-    default R visit(Universal instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Variable instance) {
       return otherwise((instance));
+    }
+  }
+  
+  public static final class Application extends TypeVariant {
+    public Application () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Application)) {
+        return false;
+      }
+      Application o = (Application) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
   
@@ -126,6 +157,31 @@ public abstract class TypeVariant {
         return false;
       }
       Function o = (Function) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Lambda extends TypeVariant {
+    public Lambda () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Lambda)) {
+        return false;
+      }
+      Lambda o = (Lambda) (other);
       return true;
     }
     
@@ -326,31 +382,6 @@ public abstract class TypeVariant {
         return false;
       }
       Union o = (Union) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Universal extends TypeVariant {
-    public Universal () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Universal)) {
-        return false;
-      }
-      Universal o = (Universal) (other);
       return true;
     }
     
