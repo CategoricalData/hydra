@@ -313,8 +313,13 @@ encodeTerm namespaces cx term@(Term expr meta) = do
 
 encodeType :: Show m => Namespaces -> Type m -> Result H.Type
 encodeType namespaces typ = case typeExpr typ of
+    TypeExprApplication (TypeApplication lhs rhs) -> toApplicationType <$>
+      CM.sequence [encode lhs, encode rhs]
     TypeExprElement et -> encode et
     TypeExprFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
+    TypeExprLambda (TypeLambda (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
+      encode body,
+      pure $ H.TypeVariable $ simpleName v]
     TypeExprList lt -> H.TypeList <$> encode lt
     TypeExprLiteral lt -> H.TypeVariable . rawName <$> case lt of
       LiteralTypeBoolean -> pure "Bool"
@@ -339,9 +344,6 @@ encodeType namespaces typ = case typeExpr typ of
     TypeExprSet st -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeExprLambda (TypeLambda (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
-      encode body,
-      pure $ H.TypeVariable $ simpleName v]
     TypeExprVariable (TypeVariable v) -> pure $ H.TypeVariable $ simpleName v
     TypeExprRecord [] -> pure $ H.TypeTuple []
     _ -> fail $ "unexpected type: " ++ show typ

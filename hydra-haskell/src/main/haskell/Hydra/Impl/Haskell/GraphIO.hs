@@ -70,6 +70,7 @@ testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coq
 javaTestModules :: [Result (Module Meta)]
 javaTestModules = pure <$> [jsonJsonModule]
 
+tmpModule = [adapterUtilsModule]
 
 writeHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printGraph
