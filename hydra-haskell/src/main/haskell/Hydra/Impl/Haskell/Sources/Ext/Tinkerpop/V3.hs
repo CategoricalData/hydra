@@ -30,6 +30,12 @@ tinkerpopV3 = Graph tinkerpopV3Name elements (const True) hydraCoreName
           field "out" $ v3 "Id",
           field "in" $ v3 "Id"],
 
+      def "Graph" $
+        doc "A graph; a self-contained collection of vertices and edges" $
+        record [
+          field "vertices" $ Types.set $ v3 "Vertex",
+          field "edges" $ Types.set $ v3 "Edge"],
+
       def "Id" $
         doc "A vertex or edge id" $
         core "Literal",
