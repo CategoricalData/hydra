@@ -83,7 +83,7 @@ describeType = utils "describeType" $
       Case _TypeExpr_record    -->constant $ string "records of a particular set of fields",
       Case _TypeExpr_set       --> lambda "st" $ string "sets of " ++ (ref describeType @@ var "st"),
       Case _TypeExpr_union     --> constant $ string "unions of a particular set of fields",
-      Case _TypeExpr_universal --> constant $ string "polymorphic terms",
+      Case _TypeExpr_lambda --> constant $ string "polymorphic terms",
       Case _TypeExpr_variable  --> constant $ string "unspecified/parametric terms"])
     (project
       (Types.universal "m" $ Types.nominal _Type)
@@ -98,7 +98,7 @@ describeType = utils "describeType" $
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"
 --  "An identity adapter for a given type"
---  (Types.nominal _Type) (TypeExprUniversal (UniversalType "m" $ ())) $
+--  (Types.nominal _Type) (TypeExprLambda (TypeLambda "m" $ ())) $
 --  lambda "t" $ r_ _Adapter [
 --    Field _Adapter_isLossy (boolean False),
 --    Field _Adapter_source (var "t"),

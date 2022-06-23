@@ -439,8 +439,6 @@ data TermExpr m
   | TermExprOptional (Maybe (Term m))
   | TermExprRecord [Field m]
   | TermExprSet (Set (Term m))
-  | TermExprTypeAbstraction (TypeAbstraction m)
-  | TermExprTypeApplication (TypeApplication m)
   | TermExprUnion (Field m)
   | TermExprVariable Variable
   deriving (Eq, Ord, Read, Show)
@@ -469,10 +467,6 @@ _TermExpr_record = (FieldName "record")
 
 _TermExpr_set = (FieldName "set")
 
-_TermExpr_typeAbstraction = (FieldName "typeAbstraction")
-
-_TermExpr_typeApplication = (FieldName "typeApplication")
-
 _TermExpr_union = (FieldName "union")
 
 _TermExpr_variable = (FieldName "variable")
@@ -490,8 +484,6 @@ data TermVariant
   | TermVariantOptional 
   | TermVariantRecord 
   | TermVariantSet 
-  | TermVariantTypeAbstraction 
-  | TermVariantTypeApplication 
   | TermVariantUnion 
   | TermVariantUniversal 
   | TermVariantVariable 
@@ -521,10 +513,6 @@ _TermVariant_record = (FieldName "record")
 
 _TermVariant_set = (FieldName "set")
 
-_TermVariant_typeAbstraction = (FieldName "typeAbstraction")
-
-_TermVariant_typeApplication = (FieldName "typeApplication")
-
 _TermVariant_union = (FieldName "union")
 
 _TermVariant_universal = (FieldName "universal")
@@ -544,23 +532,10 @@ _Type_expr = (FieldName "expr")
 
 _Type_meta = (FieldName "meta")
 
--- A type abstraction (generalization), which binds a type variable to a term
-data TypeAbstraction m 
-  = TypeAbstraction {
-    typeAbstractionParameter :: TypeVariable,
-    typeAbstractionBody :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeAbstraction = (Name "hydra/core.TypeAbstraction")
-
-_TypeAbstraction_parameter = (FieldName "parameter")
-
-_TypeAbstraction_body = (FieldName "body")
-
--- A type application (instantiation), which applies a term to a type
+-- The type-level analog of an application term
 data TypeApplication m 
   = TypeApplication {
-    typeApplicationFunction :: (Term m),
+    typeApplicationFunction :: (Type m),
     typeApplicationArgument :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -569,6 +544,19 @@ _TypeApplication = (Name "hydra/core.TypeApplication")
 _TypeApplication_function = (FieldName "function")
 
 _TypeApplication_argument = (FieldName "argument")
+
+-- A type abstraction; the type-level analog of a lambda term
+data TypeLambda m 
+  = TypeLambda {
+    typeLambdaParameter :: TypeVariable,
+    typeLambdaBody :: (Type m)}
+  deriving (Eq, Ord, Read, Show)
+
+_TypeLambda = (Name "hydra/core.TypeLambda")
+
+_TypeLambda_parameter = (FieldName "parameter")
+
+_TypeLambda_body = (FieldName "body")
 
 -- A type expression together with free type variables occurring in the expression
 data TypeScheme m 
@@ -585,8 +573,10 @@ _TypeScheme_type = (FieldName "type")
 
 -- A data type
 data TypeExpr m 
-  = TypeExprElement (Type m)
+  = TypeExprApplication (TypeApplication m)
+  | TypeExprElement (Type m)
   | TypeExprFunction (FunctionType m)
+  | TypeExprLambda (TypeLambda m)
   | TypeExprList (Type m)
   | TypeExprLiteral LiteralType
   | TypeExprMap (MapType m)
@@ -595,15 +585,18 @@ data TypeExpr m
   | TypeExprRecord [FieldType m]
   | TypeExprSet (Type m)
   | TypeExprUnion [FieldType m]
-  | TypeExprUniversal (UniversalType m)
   | TypeExprVariable TypeVariable
   deriving (Eq, Ord, Read, Show)
 
 _TypeExpr = (Name "hydra/core.TypeExpr")
 
+_TypeExpr_application = (FieldName "application")
+
 _TypeExpr_element = (FieldName "element")
 
 _TypeExpr_function = (FieldName "function")
+
+_TypeExpr_lambda = (FieldName "lambda")
 
 _TypeExpr_list = (FieldName "list")
 
@@ -621,8 +614,6 @@ _TypeExpr_set = (FieldName "set")
 
 _TypeExpr_union = (FieldName "union")
 
-_TypeExpr_universal = (FieldName "universal")
-
 _TypeExpr_variable = (FieldName "variable")
 
 -- A symbol which stands in for a type
@@ -635,8 +626,10 @@ _TypeVariable = (Name "hydra/core.TypeVariable")
 
 -- The identifier of a type constructor
 data TypeVariant 
-  = TypeVariantElement 
+  = TypeVariantApplication 
+  | TypeVariantElement 
   | TypeVariantFunction 
+  | TypeVariantLambda 
   | TypeVariantList 
   | TypeVariantLiteral 
   | TypeVariantMap 
@@ -645,15 +638,18 @@ data TypeVariant
   | TypeVariantRecord 
   | TypeVariantSet 
   | TypeVariantUnion 
-  | TypeVariantUniversal 
   | TypeVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = (Name "hydra/core.TypeVariant")
 
+_TypeVariant_application = (FieldName "application")
+
 _TypeVariant_element = (FieldName "element")
 
 _TypeVariant_function = (FieldName "function")
+
+_TypeVariant_lambda = (FieldName "lambda")
 
 _TypeVariant_list = (FieldName "list")
 
@@ -671,8 +667,6 @@ _TypeVariant_set = (FieldName "set")
 
 _TypeVariant_union = (FieldName "union")
 
-_TypeVariant_universal = (FieldName "universal")
-
 _TypeVariant_variable = (FieldName "variable")
 
 -- A type together with an instance of the type
@@ -687,19 +681,6 @@ _TypedTerm = (Name "hydra/core.TypedTerm")
 _TypedTerm_type = (FieldName "type")
 
 _TypedTerm_term = (FieldName "term")
-
--- A universally quantified ('forall') type, parameterized by a type variable
-data UniversalType m 
-  = UniversalType {
-    universalTypeVariable :: TypeVariable,
-    universalTypeBody :: (Type m)}
-  deriving (Eq, Ord, Read, Show)
-
-_UniversalType = (Name "hydra/core.UniversalType")
-
-_UniversalType_variable = (FieldName "variable")
-
-_UniversalType_body = (FieldName "body")
 
 -- A symbol which stands in for a term
 newtype Variable 

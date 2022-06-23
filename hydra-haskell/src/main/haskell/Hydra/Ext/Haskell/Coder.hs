@@ -57,7 +57,7 @@ constantDecls namespaces name@(Name nm) typ = if useCoreImport
       TypeExprRecord fields -> fields
       TypeExprUnion fields -> fields
       _ -> []
-    fieldDecls = toConstant <$> fieldsOf (snd $ unpackUniversalType typ)
+    fieldDecls = toConstant <$> fieldsOf (snd $ unpackTypeLambda typ)
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Default m, Ord m, Read m, Show m)
@@ -120,7 +120,7 @@ toTypeDeclarations namespaces cx el term = do
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]
                   else []
-    let (vars, t') = unpackUniversalType t
+    let (vars, t') = unpackTypeLambda t
     let hd = declHead hname $ L.reverse vars
     decl <- case typeExpr t' of
       TypeExprRecord fields -> do
@@ -228,7 +228,7 @@ encodeFunction namespaces cx meta fun = case fun of
   where
     fieldMapOf typ = case typeExpr <$> typ of
       Just (TypeExprUnion tfields) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
-      Just (TypeExprUniversal (UniversalType _ tbody)) -> fieldMapOf $ Just tbody
+      Just (TypeExprLambda (TypeLambda _ tbody)) -> fieldMapOf $ Just tbody
       _ -> Nothing
     findDomain = do
       dn <- domName
@@ -248,7 +248,7 @@ encodeFunction namespaces cx meta fun = case fun of
       where
         nomName typ = case typeExpr typ of
           TypeExprNominal name -> Just name
-          TypeExprUniversal (UniversalType _ body) -> nomName body
+          TypeExprLambda (TypeLambda _ body) -> nomName body
           _ -> Nothing
 
 encodeLiteral :: Literal -> Result H.Expression
@@ -339,7 +339,7 @@ encodeType namespaces typ = case typeExpr typ of
     TypeExprSet st -> toApplicationType <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeExprUniversal (UniversalType (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
+    TypeExprLambda (TypeLambda (TypeVariable v) body) -> toApplicationType <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
     TypeExprVariable (TypeVariable v) -> pure $ H.TypeVariable $ simpleName v

@@ -228,8 +228,6 @@ termVariant = basics "termVariant" $
       _TermExpr_optional        @-> _TermVariant_optional,
       _TermExpr_record          @-> _TermVariant_record,
       _TermExpr_set             @-> _TermVariant_set,
-      _TermExpr_typeAbstraction @-> _TermVariant_typeAbstraction,
-      _TermExpr_typeApplication @-> _TermVariant_typeApplication,
       _TermExpr_union           @-> _TermVariant_union,
       _TermExpr_variable        @-> _TermVariant_variable])
     (apply
@@ -270,18 +268,19 @@ typeVariant = basics "typeVariant" $
   function (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
     (matchToEnum (Types.universal "m" $ Types.nominal _TypeExpr) _TypeVariant [
-      _TypeExpr_element   @-> _TypeVariant_element,
-      _TypeExpr_function  @-> _TypeVariant_function,
-      _TypeExpr_list      @-> _TypeVariant_list,
-      _TypeExpr_literal   @-> _TypeVariant_literal,
-      _TypeExpr_map       @-> _TypeVariant_map,
-      _TypeExpr_nominal   @-> _TypeVariant_nominal,
-      _TypeExpr_optional  @-> _TypeVariant_optional,
-      _TypeExpr_record    @-> _TypeVariant_record,
-      _TypeExpr_set       @-> _TypeVariant_set,
-      _TypeExpr_union     @-> _TypeVariant_union,
-      _TypeExpr_universal @-> _TypeVariant_universal,
-      _TypeExpr_variable  @-> _TypeVariant_variable])
+      _TypeExpr_application @-> _TypeVariant_application,
+      _TypeExpr_element     @-> _TypeVariant_element,
+      _TypeExpr_function    @-> _TypeVariant_function,
+      _TypeExpr_lambda      @-> _TypeVariant_lambda,
+      _TypeExpr_list        @-> _TypeVariant_list,
+      _TypeExpr_literal     @-> _TypeVariant_literal,
+      _TypeExpr_map         @-> _TypeVariant_map,
+      _TypeExpr_nominal     @-> _TypeVariant_nominal,
+      _TypeExpr_optional    @-> _TypeVariant_optional,
+      _TypeExpr_record      @-> _TypeVariant_record,
+      _TypeExpr_set         @-> _TypeVariant_set,
+      _TypeExpr_union       @-> _TypeVariant_union,
+      _TypeExpr_variable    @-> _TypeVariant_variable])
     (apply
       (project
         (Types.universal "m" $ Types.nominal _Type)
@@ -294,15 +293,16 @@ typeVariants = basics "typeVariants" $
   doc "All type variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [
-    _TypeVariant_literal,
+    _TypeVariant_application,
     _TypeVariant_element,
     _TypeVariant_function,
+    _TypeVariant_lambda,
     _TypeVariant_list,
+    _TypeVariant_literal,
     _TypeVariant_map,
     _TypeVariant_nominal,
     _TypeVariant_optional,
     _TypeVariant_record,
     _TypeVariant_set,
     _TypeVariant_union,
-    _TypeVariant_universal,
     _TypeVariant_variable]

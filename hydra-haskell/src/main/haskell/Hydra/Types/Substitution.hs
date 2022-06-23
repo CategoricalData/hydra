@@ -32,7 +32,7 @@ freeVariablesInType typ = S.fromList $ fv typ
       TypeExprRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
       TypeExprSet t -> fv t
       TypeExprUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
-      TypeExprUniversal (UniversalType v body) -> v:(fv body)
+      TypeExprLambda (TypeLambda v body) -> v:(fv body)
       TypeExprVariable v -> [v]
 
 normalVariables :: [TypeVariable]
@@ -56,7 +56,7 @@ normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType b
       TypeExprRecord fields -> record (normalizeFieldType <$> fields)
       TypeExprSet t -> set $ normalizeType t
       TypeExprUnion fields -> union (normalizeFieldType <$> fields)
-      TypeExprUniversal (UniversalType (TypeVariable v) t) -> universal v $ normalizeType t
+      TypeExprLambda (TypeLambda (TypeVariable v) t) -> universal v $ normalizeType t
       TypeExprVariable v -> case Prelude.lookup v ord of
         Just (TypeVariable v1) -> variable v1
         Nothing -> error "type variable not in signature"
@@ -78,7 +78,7 @@ substituteInType s typ = case typeExpr typ of
     TypeExprRecord tfields -> record (substField <$> tfields)
     TypeExprSet t -> set $ subst t
     TypeExprUnion tfields -> union (substField <$> tfields)
-    TypeExprUniversal (UniversalType var@(TypeVariable v) body) -> if Y.isNothing (M.lookup var s)
+    TypeExprLambda (TypeLambda var@(TypeVariable v) body) -> if Y.isNothing (M.lookup var s)
       then Types.universal v (subst body)
       else typ
     TypeExprVariable a -> M.findWithDefault typ a s

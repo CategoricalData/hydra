@@ -291,12 +291,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "set" $
             doc "A set of values" $
             set $ universal "m" $ core "Term",
-          field "typeAbstraction" $
-            doc "A type abstraction (generalization), which binds a type variable to a term" $
-            universal "m" $ core "TypeAbstraction",
-          field "typeApplication" $
-            doc "A type application (instantiation), which applies a term to a type" $
-            universal "m" $ core "TypeApplication",
           field "union" $
             doc "A union term, i.e. a string-indexed generalization of inl() or inr()" $
             universal "m" $ core "Field",
@@ -318,8 +312,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "optional",
           "record",
           "set",
-          "typeAbstraction",
-          "typeApplication",
           "union",
           "universal",
           "variable"],
@@ -330,24 +322,24 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "expr" $ universal "m" $ core "TypeExpr",
           field "meta" $ variable "m"],
 
-      def "TypeAbstraction" $
-        doc "A type abstraction (generalization), which binds a type variable to a term" $
-        universal "m" $ record [
-          field "parameter" $
-            doc "The parameter of the abstraction" $
-            core "TypeVariable",
-          field "body" $
-            doc "The body of the abstraction" $
-            universal "m" $ core "Term"],
-
       def "TypeApplication" $
-        doc "A type application (instantiation), which applies a term to a type" $
+        doc "The type-level analog of an application term" $
         universal "m" $ record [
           field "function" $
-            doc "A term which is the left-hand side of the application" $
-            universal "m" $ core "Term",
+            doc "The left-hand side of the application" $
+            universal "m" $ core "Type",
           field "argument" $
-            doc "A type which is the right-hand side of the application" $
+            doc "The right-hand side of the application" $
+            universal "m" $ core "Type"],
+
+      def "TypeLambda" $
+        doc "A type abstraction; the type-level analog of a lambda term" $
+        universal "m" $ record [
+          field "parameter" $
+            doc "The parameter of the lambda" $
+            core "TypeVariable",
+          field "body" $
+            doc "The body of the lambda" $
             universal "m" $ core "Type"],
 
       def "TypeScheme" $
@@ -359,8 +351,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "TypeExpr" $
         doc "A data type" $
         universal "m" $ union [
+          field "application" $ universal "m" $ core "TypeApplication",
           field "element" $ universal "m" $ core "Type",
           field "function" $ universal "m" $ core "FunctionType",
+          field "lambda" $ universal "m" $ core "TypeLambda",
           field "list" $ universal "m" $ core "Type",
           field "literal" $ core "LiteralType",
           field "map" $ universal "m" $ core "MapType",
@@ -369,7 +363,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "record" $ list $ universal "m" $ core "FieldType",
           field "set" $ universal "m" $ core "Type",
           field "union" $ list $ universal "m" $ core "FieldType",
-          field "universal" $ universal "m" $ core "UniversalType",
           field "variable" $ core "TypeVariable"],
 
       def "TypeVariable" $
@@ -379,8 +372,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
         enum [
+          "application",
           "element",
           "function",
+          "lambda",
           "list",
           "literal",
           "map",
@@ -389,7 +384,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "record",
           "set",
           "union",
-          "universal",
           "variable"],
 
       def "TypedTerm" $
@@ -397,12 +391,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         universal "m" $ record [
           field "type" $ universal "m" $ core "Type",
           field "term" $ universal "m" $ core "Term"],
-
-      def "UniversalType" $
-        doc "A universally quantified ('forall') type, parameterized by a type variable" $
-        universal "m" $ record [
-          field "variable" $ core "TypeVariable",
-          field "body" $ universal "m" $ core "Type"],
 
       def "Variable" $
         doc "A symbol which stands in for a term"

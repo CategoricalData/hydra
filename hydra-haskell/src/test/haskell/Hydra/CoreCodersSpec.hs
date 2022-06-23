@@ -23,7 +23,7 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (stripMeta $ encodeLiteralType testContext LiteralTypeString)
+        (stripMeta $ encodeLiteralType LiteralTypeString :: Term Meta)
         (stripMeta $ unitVariant _LiteralType_string)
 
     H.it "string type" $ do

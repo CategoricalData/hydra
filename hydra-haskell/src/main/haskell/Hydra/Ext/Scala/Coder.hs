@@ -229,7 +229,7 @@ encodeType t = case typeExpr t of
 --  TypeExprRecord sfields ->
   TypeExprSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
 --  TypeExprUnion sfields ->
-  TypeExprUniversal (UniversalType v body) -> do
+  TypeExprLambda (TypeLambda v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
   TypeExprVariable (TypeVariable v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v

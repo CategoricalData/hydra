@@ -165,8 +165,6 @@ termVariant term = ((\x -> case x of
   Core.TermExprOptional _ -> Core.TermVariantOptional
   Core.TermExprRecord _ -> Core.TermVariantRecord
   Core.TermExprSet _ -> Core.TermVariantSet
-  Core.TermExprTypeAbstraction _ -> Core.TermVariantTypeAbstraction
-  Core.TermExprTypeApplication _ -> Core.TermVariantTypeApplication
   Core.TermExprUnion _ -> Core.TermVariantUnion
   Core.TermExprVariable _ -> Core.TermVariantVariable) (Core.termExpr term))
 
@@ -193,8 +191,10 @@ testLists els = (Lists.length (Lists.concat els))
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type m -> Core.TypeVariant)
 typeVariant typ = ((\x -> case x of
+  Core.TypeExprApplication _ -> Core.TypeVariantApplication
   Core.TypeExprElement _ -> Core.TypeVariantElement
   Core.TypeExprFunction _ -> Core.TypeVariantFunction
+  Core.TypeExprLambda _ -> Core.TypeVariantLambda
   Core.TypeExprList _ -> Core.TypeVariantList
   Core.TypeExprLiteral _ -> Core.TypeVariantLiteral
   Core.TypeExprMap _ -> Core.TypeVariantMap
@@ -203,21 +203,21 @@ typeVariant typ = ((\x -> case x of
   Core.TypeExprRecord _ -> Core.TypeVariantRecord
   Core.TypeExprSet _ -> Core.TypeVariantSet
   Core.TypeExprUnion _ -> Core.TypeVariantUnion
-  Core.TypeExprUniversal _ -> Core.TypeVariantUniversal
   Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeExpr typ))
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]
 typeVariants = [
-  Core.TypeVariantLiteral,
+  Core.TypeVariantApplication,
   Core.TypeVariantElement,
   Core.TypeVariantFunction,
+  Core.TypeVariantLambda,
   Core.TypeVariantList,
+  Core.TypeVariantLiteral,
   Core.TypeVariantMap,
   Core.TypeVariantNominal,
   Core.TypeVariantOptional,
   Core.TypeVariantRecord,
   Core.TypeVariantSet,
   Core.TypeVariantUnion,
-  Core.TypeVariantUniversal,
   Core.TypeVariantVariable]

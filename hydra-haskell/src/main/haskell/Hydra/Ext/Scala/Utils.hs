@@ -15,7 +15,7 @@ import qualified Data.Maybe as Y
 nameOfType :: Type m -> Y.Maybe Name
 nameOfType t = case typeExpr t of
   TypeExprNominal name -> Just name
-  TypeExprUniversal (UniversalType _ body) -> nameOfType body
+  TypeExprLambda (TypeLambda _ body) -> nameOfType body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String

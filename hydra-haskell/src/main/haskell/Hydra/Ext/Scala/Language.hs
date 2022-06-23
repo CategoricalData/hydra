@@ -50,7 +50,7 @@ language = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
     TypeVariantRecord,
     TypeVariantSet,
     TypeVariantUnion,
-    TypeVariantUniversal,
+    TypeVariantLambda,
     TypeVariantVariable],
   languageConstraintsTypes = const True }
 

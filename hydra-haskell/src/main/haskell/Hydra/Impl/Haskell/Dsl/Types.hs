@@ -6,6 +6,9 @@ import Hydra.Impl.Haskell.Default
 import qualified Data.Map as M
 
 
+apply :: Default m => Type m -> Type m -> Type m
+apply lhs rhs = defaultType $ TypeExprApplication (TypeApplication lhs rhs)
+
 bigfloat :: Default m => Type m
 bigfloat = float FloatTypeBigfloat
 
@@ -60,6 +63,9 @@ int8 = integer IntegerTypeInt8
 integer :: Default m => IntegerType -> Type m
 integer = literal . LiteralTypeInteger
 
+lambda :: Default m => String -> Type m -> Type m
+lambda v body = defaultType $ TypeExprLambda $ TypeLambda (TypeVariable v) body
+
 list :: Default m => Type m -> Type m
 list = defaultType . TypeExprList
 
@@ -108,5 +114,8 @@ union = defaultType . TypeExprUnion
 unit :: Default m => Type m
 unit = record []
 
+
+
+-- TODO: deprecate and remove me
 universal :: Default m => String -> Type m -> Type m
-universal v body = defaultType $ TypeExprUniversal $ UniversalType (TypeVariable v) body
+universal v body = defaultType $ TypeExprLambda $ TypeLambda (TypeVariable v) body

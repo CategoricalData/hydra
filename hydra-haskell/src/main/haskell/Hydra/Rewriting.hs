@@ -87,9 +87,6 @@ rewriteTerm mapTerm mapMeta = replace
           TermExprOptional m -> TermExprOptional $ replace <$> m
           TermExprRecord fields -> TermExprRecord $ replaceField <$> fields
           TermExprSet s -> TermExprSet $ S.fromList $ replace <$> S.toList s
-          TermExprTypeAbstraction (TypeAbstraction v b0) -> TermExprTypeAbstraction $ TypeAbstraction v (replace b0)
-          TermExprTypeApplication (TypeApplication f t) -> TermExprTypeApplication $ TypeApplication (replace f) $
-            rewriteTypeMeta mapMeta t
           TermExprUnion field -> TermExprUnion $ replaceField field
           TermExprVariable v -> TermExprVariable v
 
@@ -116,7 +113,7 @@ rewriteType mapTerm mapMeta = replace
           TypeExprRecord fields -> TypeExprRecord $ replaceField <$> fields
           TypeExprSet t -> TypeExprSet $ replace t
           TypeExprUnion fields -> TypeExprUnion $ replaceField <$> fields
-          TypeExprUniversal (UniversalType v b) -> TypeExprUniversal (UniversalType v $ replace b)
+          TypeExprLambda (TypeLambda v b) -> TypeExprLambda (TypeLambda v $ replace b)
           TypeExprVariable v -> TypeExprVariable v
 
 rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
@@ -139,9 +136,9 @@ simplifyTerm = rewriteTerm simplify id
       _ -> term
 
 stripMeta :: (Default m, Ord m) => Term m -> Term m
-stripMeta = rewriteTermMeta $ \_ -> dflt
+stripMeta = rewriteTermMeta $ const dflt
 
-substituteVariable :: (Default m, Ord m) => Variable -> Variable -> Term m -> Term m
+substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case termExpr term of
@@ -184,7 +181,7 @@ subtypes typ = case typeExpr typ of
   TypeExprRecord fields -> fieldTypeType <$> fields
   TypeExprSet st -> [st]
   TypeExprUnion fields -> fieldTypeType <$> fields
-  TypeExprUniversal (UniversalType v body) -> [body]
+  TypeExprLambda (TypeLambda v body) -> [body]
   TypeExprVariable _ -> []
 
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
