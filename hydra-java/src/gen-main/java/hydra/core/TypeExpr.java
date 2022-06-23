@@ -11,9 +11,13 @@ public abstract class TypeExpr<M> {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
+    R visit(Application instance) ;
+    
     R visit(Element instance) ;
     
     R visit(Function instance) ;
+    
+    R visit(Lambda instance) ;
     
     R visit(List instance) ;
     
@@ -31,8 +35,6 @@ public abstract class TypeExpr<M> {
     
     R visit(Union instance) ;
     
-    R visit(Universal instance) ;
-    
     R visit(Variable instance) ;
   }
   
@@ -41,11 +43,19 @@ public abstract class TypeExpr<M> {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
+    default R visit(Application instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Element instance) {
       return otherwise((instance));
     }
     
     default R visit(Function instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Lambda instance) {
       return otherwise((instance));
     }
     
@@ -81,12 +91,35 @@ public abstract class TypeExpr<M> {
       return otherwise((instance));
     }
     
-    default R visit(Universal instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Variable instance) {
       return otherwise((instance));
+    }
+  }
+  
+  public static final class Application<M> extends TypeExpr<M> {
+    public final TypeApplication<M> value;
+    
+    public Application (TypeApplication<M> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Application)) {
+        return false;
+      }
+      Application o = (Application) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
   
@@ -130,6 +163,33 @@ public abstract class TypeExpr<M> {
         return false;
       }
       Function o = (Function) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Lambda<M> extends TypeExpr<M> {
+    public final TypeLambda<M> value;
+    
+    public Lambda (TypeLambda<M> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Lambda)) {
+        return false;
+      }
+      Lambda o = (Lambda) (other);
       return value.equals(o.value);
     }
     
@@ -346,33 +406,6 @@ public abstract class TypeExpr<M> {
         return false;
       }
       Union o = (Union) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Universal<M> extends TypeExpr<M> {
-    public final UniversalType<M> value;
-    
-    public Universal (UniversalType<M> value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Universal)) {
-        return false;
-      }
-      Universal o = (Universal) (other);
       return value.equals(o.value);
     }
     

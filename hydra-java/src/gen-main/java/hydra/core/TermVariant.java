@@ -33,10 +33,6 @@ public abstract class TermVariant {
     
     R visit(Set instance) ;
     
-    R visit(TypeAbstraction instance) ;
-    
-    R visit(TypeApplication instance) ;
-    
     R visit(Union instance) ;
     
     R visit(Universal instance) ;
@@ -90,14 +86,6 @@ public abstract class TermVariant {
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(TypeAbstraction instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(TypeApplication instance) {
       return otherwise((instance));
     }
     
@@ -375,56 +363,6 @@ public abstract class TermVariant {
         return false;
       }
       Set o = (Set) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class TypeAbstraction extends TermVariant {
-    public TypeAbstraction () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeAbstraction)) {
-        return false;
-      }
-      TypeAbstraction o = (TypeAbstraction) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class TypeApplication extends TermVariant {
-    public TypeApplication () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof TypeApplication)) {
-        return false;
-      }
-      TypeApplication o = (TypeApplication) (other);
       return true;
     }
     
