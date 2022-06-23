@@ -30,11 +30,6 @@ addJavaTypeParameter rt t = case t of
     _ -> fail $ "expected a Java class type. Found: " ++ show cit
   _ -> fail $ "expected a Java class or interface type. Found: " ++ show t
 
-asJavaReferenceType :: Java.Type -> Result Java.ReferenceType
-asJavaReferenceType t = case t of
-  Java.TypeReference rt -> pure rt
-  _ -> fail $ "expected a Java reference type. Found: " ++ show t
-
 fieldExpression :: Java.Identifier -> Java.Identifier -> Java.ExpressionName
 fieldExpression varId fieldId = Java.ExpressionName (Just $ Java.AmbiguousName [varId]) fieldId
 
@@ -273,6 +268,11 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
   where
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
+
+javaTypeToJavaReferenceType :: Java.Type -> Result Java.ReferenceType
+javaTypeToJavaReferenceType t = case t of
+  Java.TypeReference rt -> pure rt
+  _ -> fail $ "expected a Java reference type. Found: " ++ show t
 
 javaTypeToJavaResult :: Java.Type -> Java.Result
 javaTypeToJavaResult = Java.ResultType . Java.UnannType

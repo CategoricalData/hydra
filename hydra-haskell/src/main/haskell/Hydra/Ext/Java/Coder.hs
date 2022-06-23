@@ -311,33 +311,37 @@ encodeLiteralType lt = case lt of
 
 encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
 encodeType aliases t = case typeExpr t of
+  TypeExprApplication (TypeApplication lhs rhs) -> do
+    jlhs <- encode lhs
+    jrhs <- encode rhs >>= javaTypeToJavaReferenceType
+    addJavaTypeParameter jrhs jlhs
   TypeExprElement et -> encode et -- Elements are simply unboxed
   TypeExprFunction (FunctionType dom cod) -> do
-    jdom <- encode dom >>= asJavaReferenceType
-    jcod <- encode cod >>= asJavaReferenceType
+    jdom <- encode dom >>= javaTypeToJavaReferenceType
+    jcod <- encode cod >>= javaTypeToJavaReferenceType
     return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
+  TypeExprLambda (TypeLambda (TypeVariable v) body) -> do
+    jbody <- encode body
+    addJavaTypeParameter (javaTypeVariable v) jbody
   TypeExprList et -> do
     jet <- encode et
     if listsAsArrays
       then toJavaArrayType jet
       else do
-        rt <- asJavaReferenceType jet
+        rt <- javaTypeToJavaReferenceType jet
         return $ javaRefType [rt] javaUtilPackageName "List"
   TypeExprLiteral lt -> encodeLiteralType lt
   TypeExprMap (MapType kt vt) -> do
-    jkt <- encode kt >>= asJavaReferenceType
-    jvt <- encode vt >>= asJavaReferenceType
+    jkt <- encode kt >>= javaTypeToJavaReferenceType
+    jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeExprNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
   TypeExprOptional ot -> do
-    jot <- encode ot >>= asJavaReferenceType
+    jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
   TypeExprSet st -> do
-    jst <- encode st >>= asJavaReferenceType
+    jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeExprLambda (TypeLambda (TypeVariable v) body) -> do
-    jbody <- encode body
-    addJavaTypeParameter (javaTypeVariable v) jbody
   TypeExprVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
   TypeExprRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
   -- Note: record (other than unit) and union types should not appear at this level
