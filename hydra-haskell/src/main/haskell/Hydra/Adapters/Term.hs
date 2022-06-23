@@ -136,7 +136,7 @@ passApplication acx t = do
     ad <- termAdapter acx reduced
     return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
   where
-    reduced = betaReduceTypeRecursively True (adapterContextEvaluation acx) t
+    reduced = betaReduceType True (adapterContextEvaluation acx) t
 
 passFunction :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passFunction acx t@(Type (TypeExprFunction (FunctionType dom cod)) _) = do
@@ -237,7 +237,7 @@ passUnion acx t@(Type (TypeExprUnion sfields) _) = do
 termAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 termAdapter acx typ = do
     chooseAdapter alts supported describeType typ
---    chooseAdapter alts supported describeType $ betaReduceTypeRecursively True (adapterContextEvaluation acx) typ
+--    chooseAdapter alts supported describeType $ betaReduceType True (adapterContextEvaluation acx) typ
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
       then case typeVariant t of
