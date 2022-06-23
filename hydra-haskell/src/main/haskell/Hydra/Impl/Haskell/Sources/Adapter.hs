@@ -2,7 +2,6 @@ module Hydra.Impl.Haskell.Sources.Adapter where
 
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Evaluation
-import Hydra.Impl.Haskell.Sources.Graph
 
 import Hydra.Core
 import Hydra.Graph
@@ -26,20 +25,20 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
 
     elements = [
       def "Adapter" $
-        universal "t" $ universal "v" $ record [
+        lambda "t" $ lambda "v" $ record [
           field "isLossy" boolean,
           field "source" $ variable "t",
           field "target" $ variable "t",
-          field "step" $ variable ("(Evaluation.Step v v)")], -- TODO: hack
+          field "step" $ apply (apply (evaluation "Step") (variable "v")) (variable "v")],
 
       def "AdapterContext" $
-        universal "a" $ record [
-          field "evaluation" $ universal "a" $ evaluation "Context",
-          field "source" $ universal "a" $ adapter "Language",
-          field "target" $ universal "a" $ adapter "Language"],
+        lambda "m" $ record [
+          field "evaluation" $ apply (evaluation "Context") (variable "m"),
+          field "source" $ apply (adapter "Language") (variable "m"),
+          field "target" $ apply (adapter "Language") (variable "m")],
 
       def "LanguageConstraints" $
-        universal "m" $ record [
+        lambda "m" $ record [
           field "eliminationVariants" $ Types.set $ core "EliminationVariant",
           field "literalVariants" $ Types.set $ core "LiteralVariant",
           field "floatTypes" $ Types.set $ core "FloatType",
@@ -47,11 +46,11 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "integerTypes" $ Types.set $ core "IntegerType",
           field "termVariants" $ Types.set $ core "TermVariant",
           field "typeVariants" $ Types.set $ core "TypeVariant",
-          field "types" $ function (universal "m" $ core "Type") boolean],
+          field "types" $ function (apply (core "Type") (variable "m")) boolean],
 
       def "LanguageName" string,
 
       def "Language" $
-        universal "m" $ record [
+        lambda "m" $ record [
           field "name" $ adapter "LanguageName",
-          field "constraints" $ universal "m" $ adapter "LanguageConstraints"]]
+          field "constraints" $ apply (adapter "LanguageConstraints") (variable "m")]]
