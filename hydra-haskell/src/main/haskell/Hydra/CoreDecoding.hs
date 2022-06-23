@@ -8,7 +8,7 @@ module Hydra.CoreDecoding (
   decodeMapType,
   decodeString,
   decodeType,
-  decodeUniversalType,
+  decodeTypeLambda,
   ) where
 
 import Hydra.Common
@@ -85,23 +85,29 @@ decodeType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
 decodeType cx dat = case termExpr dat of
   TermExprElement name -> pure $ Types.nominal name
   _ -> (\t -> Type t (termMeta dat)) <$> matchUnion cx [
-    (_TypeExpr_literal, fmap TypeExprLiteral . decodeLiteralType cx),
+    (_TypeExpr_application, fmap TypeExprApplication . decodeTypeApplication cx),
     (_TypeExpr_element, fmap TypeExprElement . decodeType cx),
     (_TypeExpr_function, fmap TypeExprFunction . decodeFunctionType cx),
+    (_TypeExpr_lambda, fmap TypeExprLambda . decodeTypeLambda cx),
     (_TypeExpr_list, fmap TypeExprList . decodeType cx),
+    (_TypeExpr_literal, fmap TypeExprLiteral . decodeLiteralType cx),
     (_TypeExpr_map, fmap TypeExprMap . decodeMapType cx),
     (_TypeExpr_nominal, fmap TypeExprNominal . decodeElement),
     (_TypeExpr_optional, fmap TypeExprOptional . decodeType cx),
     (_TypeExpr_record, fmap TypeExprRecord . decodeFieldTypes cx),
     (_TypeExpr_set, fmap TypeExprSet . decodeType cx),
     (_TypeExpr_union, fmap TypeExprUnion . decodeFieldTypes cx),
-    (_TypeExpr_universal, fmap TypeExprUniversal . decodeUniversalType cx),
     (_TypeExpr_variable, fmap (TypeExprVariable . TypeVariable) . decodeString)] dat
 
-decodeUniversalType :: (Default m, Show m) => Context m -> Term m -> Result (UniversalType m)
-decodeUniversalType cx = matchRecord cx $ \m -> UniversalType
-  <$> (TypeVariable <$> getField m _UniversalType_variable decodeString)
-  <*> getField m _UniversalType_body (decodeType cx)
+decodeTypeApplication :: (Default m, Show m) => Context m -> Term m -> Result (TypeApplication m)
+decodeTypeApplication cx = matchRecord cx $ \m -> TypeApplication
+  <$> getField m _TypeApplication_function (decodeType cx)
+  <*> getField m _TypeApplication_argument (decodeType cx)
+  
+decodeTypeLambda :: (Default m, Show m) => Context m -> Term m -> Result (TypeLambda m)
+decodeTypeLambda cx = matchRecord cx $ \m -> TypeLambda
+  <$> (TypeVariable <$> getField m _TypeLambda_parameter decodeString)
+  <*> getField m _TypeLambda_body (decodeType cx)
 
 getField :: M.Map FieldName (Term m) -> FieldName -> (Term m -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of

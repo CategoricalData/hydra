@@ -89,7 +89,7 @@ generateSources printGraph modules basePath = case sequence modules of
     ResultFailure msg -> fail msg
     ResultSuccess mods -> mapM_ writeDataGraph mods
   where
-    writeDataGraph mod@(Module g deps) = writeGraph printGraph cx g basePath
+    writeDataGraph mod@(Module g _) = writeGraph printGraph cx g basePath
       where
         cx = setContextElements allGraphs $ standardContext {
           contextGraphs = GraphSet allGraphsByName (graphName g),

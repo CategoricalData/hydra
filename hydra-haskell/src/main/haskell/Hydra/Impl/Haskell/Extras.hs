@@ -62,7 +62,7 @@ fieldTypes scx t = case typeExpr t of
     TypeExprNominal name -> do
       el <- requireElement (Just "field types") scx name
       decodeType scx (elementData el) >>= fieldTypes scx
-    TypeExprUniversal (UniversalType _ body) -> fieldTypes scx body
+    TypeExprLambda (TypeLambda _ body) -> fieldTypes scx body
     _ -> fail $ "expected record or union type, but found " ++ show t
   where
     toMap fields = M.fromList (toPair <$> fields)

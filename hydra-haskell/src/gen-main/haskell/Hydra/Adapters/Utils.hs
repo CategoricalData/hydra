@@ -71,5 +71,5 @@ describeType typ = ((\x -> case x of
     "sets of ",
     (describeType v)])
   Core.TypeExprUnion _ -> "unions of a particular set of fields"
-  Core.TypeExprUniversal _ -> "polymorphic terms"
+  Core.TypeExprLambda _ -> "polymorphic terms"
   Core.TypeExprVariable _ -> "unspecified/parametric terms") (Core.typeExpr typ))

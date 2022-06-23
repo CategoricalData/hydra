@@ -69,7 +69,7 @@ unify cx t1 t2 = if typeExpr t1 == typeExpr t2
       (TypeExprRecord f1, TypeExprRecord f2) -> unifyRowType f1 f2
       (TypeExprSet st1, TypeExprSet st2) -> unify cx st1 st2
       (TypeExprUnion f1, TypeExprUnion f2) -> unifyRowType f1 f2
-      (TypeExprUniversal (UniversalType (TypeVariable v1) body1), TypeExprUniversal (UniversalType (TypeVariable v2) body2)) -> unifyMany cx
+      (TypeExprLambda (TypeLambda (TypeVariable v1) body1), TypeExprLambda (TypeLambda (TypeVariable v2) body2)) -> unifyMany cx
         [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeExprVariable v, _) -> bind v t2
       (_, TypeExprVariable v) -> bind v t1

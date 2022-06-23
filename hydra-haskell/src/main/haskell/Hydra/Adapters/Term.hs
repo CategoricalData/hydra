@@ -216,7 +216,7 @@ passUnion acx t@(Type (TypeExprUnion sfields) _) = do
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
 
 passUniversal :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passUniversal acx t@(Type (TypeExprUniversal (UniversalType (TypeVariable v) body)) _) = do
+passUniversal acx t@(Type (TypeExprLambda (TypeLambda (TypeVariable v) body)) _) = do
   ad <- termAdapter acx body
   return $ Adapter (adapterIsLossy ad) t (Types.universal v $ adapterTarget ad)
     $ bidirectional $ \dir term -> stepEither dir (adapterStep ad) term
@@ -247,7 +247,7 @@ termAdapter acx typ = case typ of
         TypeVariantRecord -> pure passRecord
         TypeVariantSet -> pure passSet
         TypeVariantUnion -> pure passUnion
-        TypeVariantUniversal -> pure passUniversal
+        TypeVariantLambda -> pure passUniversal
         _ -> []
       else case typeVariant t of
         TypeVariantElement -> [elementToString]
@@ -256,7 +256,7 @@ termAdapter acx typ = case typ of
         TypeVariantOptional -> [optionalToList]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]
-        TypeVariantUniversal -> [universalToMonotype]
+        TypeVariantLambda -> [universalToMonotype]
         _ -> []
 
     constraints = languageConstraints $ adapterContextTarget acx
@@ -294,7 +294,7 @@ unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
         matches = Y.mapMaybe (\(Field fn (Term (TermExprOptional opt) _)) -> (Just . Field fn) =<< opt) fields
 
 universalToMonotype :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-universalToMonotype acx t@(Type (TypeExprUniversal (UniversalType _ body)) _) = do
+universalToMonotype acx t@(Type (TypeExprLambda (TypeLambda _ body)) _) = do
   ad <- termAdapter acx body
   return ad {adapterSource = t}
 

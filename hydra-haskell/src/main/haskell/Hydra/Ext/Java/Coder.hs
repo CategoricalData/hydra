@@ -275,9 +275,9 @@ declarationForUnionType aliases cx tparams elName fields = do
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] $ variantClassName elName fname
 
-declarationForUniversalType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
-  -> [Java.TypeParameter] -> Name -> UniversalType m -> Result Java.ClassDeclaration
-declarationForUniversalType aliases cx tparams elName (UniversalType (TypeVariable v) body) =
+declarationForTypeLambda :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
+  -> [Java.TypeParameter] -> Name -> TypeLambda m -> Result Java.ClassDeclaration
+declarationForTypeLambda aliases cx tparams elName (TypeLambda (TypeVariable v) body) =
     toClassDecl aliases cx (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
@@ -335,7 +335,7 @@ encodeType aliases t = case typeExpr t of
   TypeExprSet st -> do
     jst <- encode st >>= asJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeExprUniversal (UniversalType (TypeVariable v) body) -> do
+  TypeExprLambda (TypeLambda (TypeVariable v) body) -> do
     jbody <- encode body
     addJavaTypeParameter (javaTypeVariable v) jbody
   TypeExprVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
@@ -350,7 +350,7 @@ toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> 
 toClassDecl aliases cx tparams elName t = case typeExpr t of
     TypeExprRecord fields -> declarationForRecordType aliases cx tparams elName fields
     TypeExprUnion fields -> declarationForUnionType aliases cx tparams elName fields
-    TypeExprUniversal ut -> declarationForUniversalType aliases cx tparams elName ut
+    TypeExprLambda ut -> declarationForTypeLambda aliases cx tparams elName ut
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where

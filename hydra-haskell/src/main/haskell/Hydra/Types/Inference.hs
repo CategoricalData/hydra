@@ -228,8 +228,6 @@ infer cx term = case contextTypeOf cx (termMeta term) of
         t <- lookupTypeInEnvironment x
         yield (TermExprVariable x) t []
 
-      _ -> error $ "type inference is unsupported for term: " ++ show term
-
 inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
