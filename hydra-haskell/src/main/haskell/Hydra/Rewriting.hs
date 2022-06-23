@@ -1,23 +1,4 @@
-module Hydra.Rewriting (
-  TraversalOrder(..),
-  foldOverTerm,
-  foldOverType,
-  freeVariablesInTerm,
-  isFreeIn,
-  rewriteTerm,
-  rewriteTermMeta,
-  rewriteType,
-  rewriteTypeMeta,
-  simplifyTerm,
-  stripMeta,
-  substituteVariable,
-  subterms,
-  subtypes,
-  termDependencyNames,
-  topologicalSortElements,
-  typeDependencyNames,
-  typeDependencies,
-  ) where
+module Hydra.Rewriting where
 
 import Hydra.Core
 import Hydra.Impl.Haskell.Extras
@@ -33,7 +14,20 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
+
 data TraversalOrder = TraversalOrderPre | TraversalOrderPost
+
+betaReduceTypeRecursively :: Ord m => Bool -> Type m -> Type m
+betaReduceTypeRecursively eager = rewriteType mapExpr id
+  where
+    mapExpr _ t = case typeExpr t of
+        TypeExprApplication (TypeApplication lhs rhs) -> case typeExpr lhs' of
+            TypeExprLambda (TypeLambda v body) -> betaReduceTypeRecursively eager $ replaceFreeTypeVariable v rhs' body
+            _ -> t
+          where
+            lhs' = betaReduceTypeRecursively eager lhs
+            rhs' = if eager then betaReduceTypeRecursively eager rhs else rhs
+        _ -> t
 
 foldOverTerm :: TraversalOrder -> (a -> Term m -> a) -> a -> Term m -> a
 foldOverTerm order fld b0 term = case order of
@@ -58,10 +52,20 @@ freeVariablesInTerm term = case termExpr term of
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
-rewriteTerm :: (Ord a, Ord b) => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
-rewriteTerm mapTerm mapMeta = replace
+replaceFreeTypeVariable :: Ord m => TypeVariable -> Type m -> Type m -> Type m
+replaceFreeTypeVariable v rep = rewriteType mapExpr id
   where
-    replace = mapTerm recurse
+    mapExpr recurse t = case typeExpr t of
+      TypeExprLambda (TypeLambda v' body) -> if v == v'
+        then t
+        else t {typeExpr = TypeExprLambda $ TypeLambda v' $ recurse body}
+      TypeExprVariable v' -> if v == v' then rep else t
+      _ -> recurse t
+
+rewriteTerm :: (Ord a, Ord b) => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
+rewriteTerm mapExpr mapMeta = replace
+  where
+    replace = mapExpr recurse
     replaceField f = f {fieldTerm = replace (fieldTerm f)}
     recurse (Term expr meta) = Term expr1 $ mapMeta meta
       where
@@ -91,20 +95,22 @@ rewriteTerm mapTerm mapMeta = replace
           TermExprVariable v -> TermExprVariable v
 
 rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
-rewriteTermMeta mapMeta = rewriteTerm mapTerm mapMeta
+rewriteTermMeta mapMeta = rewriteTerm mapExpr mapMeta
   where
-    mapTerm recurse term = recurse term
+    mapExpr recurse term = recurse term
 
 rewriteType :: (Ord a, Ord b) => ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
-rewriteType mapTerm mapMeta = replace
+rewriteType mapExpr mapMeta = replace
   where
-    replace = mapTerm recurse
+    replace = mapExpr recurse
     replaceField f = f {fieldTypeType = replace (fieldTypeType f)}
     recurse (Type expr meta) = Type expr1 $ mapMeta meta
       where
         expr1 = case expr of
+          TypeExprApplication (TypeApplication lhs rhs) -> TypeExprApplication $ TypeApplication (replace lhs) (replace rhs)
           TypeExprElement t -> TypeExprElement $ replace t
           TypeExprFunction (FunctionType dom cod) -> TypeExprFunction (FunctionType (replace dom) (replace cod))
+          TypeExprLambda (TypeLambda v b) -> TypeExprLambda (TypeLambda v $ replace b)
           TypeExprList t -> TypeExprList $ replace t
           TypeExprLiteral lt -> TypeExprLiteral lt
           TypeExprMap (MapType kt vt) -> TypeExprMap (MapType (replace kt) (replace vt))
@@ -113,13 +119,12 @@ rewriteType mapTerm mapMeta = replace
           TypeExprRecord fields -> TypeExprRecord $ replaceField <$> fields
           TypeExprSet t -> TypeExprSet $ replace t
           TypeExprUnion fields -> TypeExprUnion $ replaceField <$> fields
-          TypeExprLambda (TypeLambda v b) -> TypeExprLambda (TypeLambda v $ replace b)
           TypeExprVariable v -> TypeExprVariable v
 
 rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
-rewriteTypeMeta mapMeta = rewriteType mapTerm mapMeta
+rewriteTypeMeta mapMeta = rewriteType mapExpr mapMeta
   where
-    mapTerm recurse term = recurse term
+    mapExpr recurse term = recurse term
 
 simplifyTerm :: (Default m, Ord m) => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
@@ -171,8 +176,10 @@ subterms term = case termExpr term of
 
 subtypes :: Type m -> [Type m]
 subtypes typ = case typeExpr typ of
+  TypeExprApplication (TypeApplication lhs rhs) -> [lhs, rhs]
   TypeExprElement et -> [et]
   TypeExprFunction (FunctionType dom cod) -> [dom, cod]
+  TypeExprLambda (TypeLambda v body) -> [body]
   TypeExprList lt -> [lt]
   TypeExprLiteral _ -> []
   TypeExprMap (MapType kt vt) -> [kt, vt]
@@ -181,7 +188,6 @@ subtypes typ = case typeExpr typ of
   TypeExprRecord fields -> fieldTypeType <$> fields
   TypeExprSet st -> [st]
   TypeExprUnion fields -> fieldTypeType <$> fields
-  TypeExprLambda (TypeLambda v body) -> [body]
   TypeExprVariable _ -> []
 
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name

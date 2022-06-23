@@ -4,8 +4,10 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
 import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestUtils
+import Hydra.TestData
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -13,6 +15,50 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
+testBetaReduceTypeRecursively :: H.SpecWith ()
+testBetaReduceTypeRecursively = do
+  H.describe "Beta reduce types recursively" $ do
+    
+    H.it "Try non-application types" $ do
+      H.shouldBe
+        (betaReduceTypeRecursively True Types.unit :: Type Meta)
+        Types.unit
+      H.shouldBe
+        (betaReduceTypeRecursively False latLonType :: Type Meta)
+        latLonType
+
+    H.it "Try simple application types" $ do
+      H.shouldBe
+        (betaReduceTypeRecursively False app1)
+        (Types.function Types.string Types.string)
+      H.shouldBe
+        (betaReduceTypeRecursively False app2)
+        latLonType
+      H.shouldBe
+        (betaReduceTypeRecursively False app3)
+        (Types.record [Types.field "foo" Types.unit])
+        
+    H.it "Try recursive application types" $ do
+      H.shouldBe
+        (betaReduceTypeRecursively False app4)
+        (Types.record [Types.field "f1" Types.int32, Types.field "f2" Types.int64])
+        
+    H.it "Distinguish between eager and lazy evaluation" $ do
+      H.shouldBe
+        (betaReduceTypeRecursively False app5)
+        (Types.record [Types.field "foo" app1])
+      H.shouldBe
+        (betaReduceTypeRecursively True app5)
+        (Types.record [Types.field "foo" $ Types.function Types.string Types.string])
+  where
+    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Meta
+    app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Meta
+    app3 = Types.apply (Types.lambda "a" $ Types.record [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Meta
+    app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ Types.record [
+      Types.field "f1" $ Types.variable "x",
+      Types.field "f2" $ Types.variable "y"]) Types.int32) Types.int64 :: Type Meta
+    app5 = Types.apply (Types.lambda "a" $ Types.record [Types.field "foo" $ Types.variable "a"]) app1
+    
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
   H.describe "Test folding over terms" $ do
@@ -63,6 +109,15 @@ testFreeVariablesInTerm = do
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
         (S.fromList [Variable "x", Variable "y"])
+        
+--testReplaceFreeTypeVariable :: H.SpecWith ()
+--testReplaceFreeTypeVariable = do
+--  H.describe "Test replace free type variables" $ do
+--    
+--    H.it "Check that variable types are replaced" $ do
+--      H.shouldBe
+--        (replaceFreeTypeVariable (TypeVariable "v1") Types.string $ Types.variable "v")
+--        ()
         
 testReplaceTerm :: H.SpecWith ()
 testReplaceTerm = do
@@ -152,8 +207,10 @@ testStripMeta = do
 
 spec :: H.Spec
 spec = do
+  testBetaReduceTypeRecursively
   testFoldOverTerm
   testFreeVariablesInTerm
+--  testReplaceFreeTypeVariable
   testReplaceTerm
   testSimplifyTerm
   testStripMeta
