@@ -5,6 +5,7 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Primitives
 
 import Hydra.TestUtils
 import Hydra.TestData
@@ -21,36 +22,38 @@ testBetaReduceTypeRecursively = do
     
     H.it "Try non-application types" $ do
       H.shouldBe
-        (betaReduceTypeRecursively True Types.unit :: Type Meta)
+        (reduce True Types.unit :: Type Meta)
         Types.unit
       H.shouldBe
-        (betaReduceTypeRecursively False latLonType :: Type Meta)
+        (reduce False latLonType :: Type Meta)
         latLonType
 
     H.it "Try simple application types" $ do
       H.shouldBe
-        (betaReduceTypeRecursively False app1)
+        (reduce False app1)
         (Types.function Types.string Types.string)
       H.shouldBe
-        (betaReduceTypeRecursively False app2)
+        (reduce False app2)
         latLonType
       H.shouldBe
-        (betaReduceTypeRecursively False app3)
+        (reduce False app3)
         (Types.record [Types.field "foo" Types.unit])
         
     H.it "Try recursive application types" $ do
       H.shouldBe
-        (betaReduceTypeRecursively False app4)
+        (reduce False app4)
         (Types.record [Types.field "f1" Types.int32, Types.field "f2" Types.int64])
         
     H.it "Distinguish between eager and lazy evaluation" $ do
       H.shouldBe
-        (betaReduceTypeRecursively False app5)
+        (reduce False app5)
         (Types.record [Types.field "foo" app1])
       H.shouldBe
-        (betaReduceTypeRecursively True app5)
+        (reduce True app5)
         (Types.record [Types.field "foo" $ Types.function Types.string Types.string])
   where
+    ResultSuccess scx = schemaContext testContext
+    reduce eager = betaReduceTypeRecursively eager scx 
     app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Meta
     app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Meta
     app3 = Types.apply (Types.lambda "a" $ Types.record [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Meta

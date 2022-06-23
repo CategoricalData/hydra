@@ -7,6 +7,7 @@ import Hydra.Primitives
 import Hydra.Evaluation
 import Hydra.CoreDecoding
 import Hydra.Sorting
+import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -17,17 +18,21 @@ import qualified Data.Maybe as Y
 
 data TraversalOrder = TraversalOrderPre | TraversalOrderPost
 
-betaReduceTypeRecursively :: Ord m => Bool -> Type m -> Type m
-betaReduceTypeRecursively eager = rewriteType mapExpr id
+betaReduceTypeRecursively :: (Default m, Ord m, Show m) => Bool -> Context m -> Type m -> Type m
+betaReduceTypeRecursively eager cx = rewriteType mapExpr id
   where
     mapExpr _ t = case typeExpr t of
         TypeExprApplication (TypeApplication lhs rhs) -> case typeExpr lhs' of
-            TypeExprLambda (TypeLambda v body) -> betaReduceTypeRecursively eager $ replaceFreeTypeVariable v rhs' body
+            TypeExprLambda (TypeLambda v body) -> recurse $ replaceFreeTypeVariable v rhs' body
+            TypeExprNominal name -> recurse $ Types.apply t' rhs' -- nominal types are transparent
+              where
+                ResultSuccess t' = requireType cx name
             _ -> t
           where
-            lhs' = betaReduceTypeRecursively eager lhs
-            rhs' = if eager then betaReduceTypeRecursively eager rhs else rhs
+            lhs' = recurse lhs
+            rhs' = if eager then recurse rhs else rhs
         _ -> t
+    recurse = betaReduceTypeRecursively eager cx
 
 foldOverTerm :: TraversalOrder -> (a -> Term m -> a) -> a -> Term m -> a
 foldOverTerm order fld b0 term = case order of
