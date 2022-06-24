@@ -23,6 +23,18 @@ _Edge_out = (Core.FieldName "out")
 
 _Edge_in = (Core.FieldName "in")
 
+-- Either a vertex or an edge
+data Element 
+  = ElementVertex Vertex
+  | ElementEdge Edge
+  deriving (Eq, Ord, Read, Show)
+
+_Element = (Core.Name "hydra/ext/tinkerpop/v3.Element")
+
+_Element_vertex = (Core.FieldName "vertex")
+
+_Element_edge = (Core.FieldName "edge")
+
 -- A graph; a self-contained collection of vertices and edges
 data Graph 
   = Graph {

@@ -235,8 +235,7 @@ passUnion acx t@(Type (TypeExprUnion sfields) _) = do
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-termAdapter acx typ = do
-    chooseAdapter alts supported describeType typ
+termAdapter acx typ = chooseAdapter alts supported describeType typ
 --    chooseAdapter alts supported describeType $ betaReduceType True (adapterContextEvaluation acx) typ
   where
     alts t = (\c -> c acx t) <$> if variantIsSupported t
@@ -265,7 +264,7 @@ termAdapter acx typ = do
     constraints = languageConstraints $ adapterContextTarget acx
     supported = typeIsSupported constraints
     variantIsSupported t = S.member (typeVariant t) $ languageConstraintsTypeVariants constraints
-    
+
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Default m, Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 unionToRecord acx t@(Type (TypeExprUnion sfields) _) = do
