@@ -16,7 +16,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
-import Hydra.Impl.Haskell.Sources.Ext.Json.Json
+import Hydra.Impl.Haskell.Sources.Ext.Json.Model
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
@@ -52,7 +52,7 @@ coreModules = [
   pure coqSyntaxModule,
   pure haskellAstModule,
   pure javaSyntaxModule,
-  pure jsonJsonModule,
+  pure jsonModelModule,
   pure pegasusPdlModule,
   pure scalaMetaModule,
   pure yamlModelModule,
@@ -68,7 +68,7 @@ singleModule = [pure hydraCoreModule, pure hydraAdapterModule, hydraBasicsModule
 testModules :: [Result (Module Meta)]
 testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
 javaTestModules :: [Result (Module Meta)]
-javaTestModules = pure <$> [jsonJsonModule]
+javaTestModules = pure <$> [jsonModelModule]
 
 tmpModule = [adapterUtilsModule]
 
