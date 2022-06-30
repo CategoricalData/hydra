@@ -7,7 +7,7 @@ Based on the specification at https://linkedin.github.io/rest.li/pdl_schema
 module Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl where
 
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Ext.Json.Json
+import Hydra.Impl.Haskell.Sources.Ext.Json.Model
 
 import Hydra.Core
 import Hydra.Graph
@@ -16,7 +16,7 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 pegasusPdlModule :: Module Meta
-pegasusPdlModule = Module pegasusPdl [jsonJsonModule]
+pegasusPdlModule = Module pegasusPdl [jsonModelModule]
 
 pegasusPdlName :: GraphName
 pegasusPdlName = GraphName "hydra/ext/pegasus/pdl"
@@ -26,7 +26,7 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
   where
     def = datatype pegasusPdlName
     pdl = nominal . qualify pegasusPdlName . Name
-    json = nominal . qualify jsonJsonName . Name
+    json = nominal . qualify jsonModelName . Name
 
     elements = [
 

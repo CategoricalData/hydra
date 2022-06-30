@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.Ext.Json.Json where
+module Hydra.Impl.Haskell.Sources.Ext.Json.Model where
 
 import Hydra.Impl.Haskell.Sources.Core
 
@@ -8,17 +8,17 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-jsonJsonModule :: Module Meta
-jsonJsonModule = Module jsonJson []
+jsonModelModule :: Module Meta
+jsonModelModule = Module jsonModel []
 
-jsonJsonName :: GraphName
-jsonJsonName = GraphName "hydra/ext/json/json"
+jsonModelName :: GraphName
+jsonModelName = GraphName "hydra/ext/json/model"
 
-jsonJson :: Graph Meta
-jsonJson = Graph jsonJsonName elements (const True) hydraCoreName
+jsonModel :: Graph Meta
+jsonModel = Graph jsonModelName elements (const True) hydraCoreName
   where
-    def = datatype jsonJsonName
-    json = nominal . qualify jsonJsonName . Name
+    def = datatype jsonModelName
+    json = nominal . qualify jsonModelName . Name
 
     elements = [
 

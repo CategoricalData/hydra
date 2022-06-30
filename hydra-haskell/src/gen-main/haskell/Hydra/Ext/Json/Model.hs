@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Json where
+module Hydra.Ext.Json.Model where
 
 import qualified Hydra.Core as Core
 import Data.Map
@@ -12,7 +12,7 @@ data Number
     numberExponent :: Integer}
   deriving (Eq, Ord, Read, Show)
 
-_Number = (Core.Name "hydra/ext/json/json.Number")
+_Number = (Core.Name "hydra/ext/json/model.Number")
 
 _Number_integer = (Core.FieldName "integer")
 
@@ -30,7 +30,7 @@ data Value
   | ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra/ext/json/json.Value")
+_Value = (Core.Name "hydra/ext/json/model.Value")
 
 _Value_array = (Core.FieldName "array")
 
