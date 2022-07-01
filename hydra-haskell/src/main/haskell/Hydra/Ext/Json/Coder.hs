@@ -81,7 +81,6 @@ termCoder typ = case typeExpr typ of
       stepOut = \(Term (TermExprLiteral av) _) -> stepOut ac av,
       stepIn = \n -> case n of
         s -> Terms.literal <$> stepIn ac s
-        _ -> unexpected "scalar node" n}
   TypeExprList lt -> do
     lc <- termCoder lt
     return Step {
