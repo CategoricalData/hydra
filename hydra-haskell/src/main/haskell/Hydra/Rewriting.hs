@@ -128,8 +128,11 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-stripMeta :: (Default m, Ord m) => Term m -> Term m
-stripMeta = rewriteTermMeta $ const dflt
+stripTermMeta :: (Default m, Ord m) => Term m -> Term m
+stripTermMeta = rewriteTermMeta $ const dflt
+
+stripTypeMeta :: (Default m, Ord m) => Type m -> Type m
+stripTypeMeta = rewriteTypeMeta $ const dflt
 
 substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id

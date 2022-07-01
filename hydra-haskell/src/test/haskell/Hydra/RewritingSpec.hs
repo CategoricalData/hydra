@@ -156,7 +156,7 @@ testStripMeta = do
           (contextTypeOf testContext $ termMeta $ withType testContext typ term)
           (pure $ Just typ)
         H.shouldBe
-          (contextTypeOf testContext $ termMeta $ stripMeta $ withType testContext typ term)
+          (contextTypeOf testContext $ termMeta $ stripTermMeta $ withType testContext typ term)
           (pure Nothing)
 
 spec :: H.Spec

@@ -117,7 +117,7 @@ checkSerialization (TypedTerm typ term) expected = do
 checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
 checkSerdeRoundTrip (TypedTerm typ term) = do
     Y.isJust (qualifiedValue serde) `H.shouldBe` True
-    (stripMeta <$> (stepOut serde' term >>= stepIn serde')) `H.shouldBe` ResultSuccess (stripMeta term)
+    (stripTermMeta <$> (stepOut serde' term >>= stepIn serde')) `H.shouldBe` ResultSuccess (stripTermMeta term)
   where
     serde = yamlSerde testContext typ
     serde' = Y.fromJust $ qualifiedValue serde

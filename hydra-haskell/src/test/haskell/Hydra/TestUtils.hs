@@ -77,7 +77,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
       languageConstraintsIntegerTypes = S.fromList variants }
 
 checkDataAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
-checkDataAdapter = checkAdapter stripMeta termAdapter termTestContext
+checkDataAdapter = checkAdapter stripTermMeta termAdapter termTestContext
 
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
