@@ -24,6 +24,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
+import Hydra.Impl.Haskell.Sources.Ext.Rdf.Model
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
@@ -60,7 +61,8 @@ coreModules = [
   pure tinkerpopFeaturesModule,
   pure tinkerpopTypedModule,
   pure tinkerpopV3Module,
-  pure xmlSchemaModule]
+  pure xmlSchemaModule,
+  pure rdfModelModule]
 
 -- TODO: remove these eventually. They are handy for debugging.
 singleModule :: [Result (Module Meta)]
