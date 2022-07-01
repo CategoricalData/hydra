@@ -23,23 +23,23 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (stripMeta $ encodeLiteralType LiteralTypeString :: Term Meta)
-        (stripMeta $ unitVariant _LiteralType_string)
+        (stripTermMeta $ encodeLiteralType LiteralTypeString :: Term Meta)
+        (stripTermMeta $ unitVariant _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext Types.string)
-        (stripMeta $  variant _TypeExpr_literal (unitVariant _LiteralType_string))
+        (stripTermMeta $ encodeType testContext Types.string)
+        (stripTermMeta $  variant _TypeExpr_literal (unitVariant _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext Types.int32)
-        (stripMeta $ variant _TypeExpr_literal (variant _LiteralType_integer $ unitVariant _IntegerType_int32))
+        (stripTermMeta $ encodeType testContext Types.int32)
+        (stripTermMeta $ variant _TypeExpr_literal (variant _LiteralType_integer $ unitVariant _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
-        (stripMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
-        (stripMeta $ variant _TypeExpr_record $ list [
+        (stripTermMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
+        (stripTermMeta $ variant _TypeExpr_record $ list [
           record [
             Field _FieldType_name $ string "something",
             Field _FieldType_type $ variant _TypeExpr_literal $ unitVariant _LiteralType_string],
