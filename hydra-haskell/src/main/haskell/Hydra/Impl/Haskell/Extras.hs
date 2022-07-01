@@ -88,7 +88,7 @@ setContextElements graphs cx = cx { contextElements = M.fromList $
   ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
-unexpected cat obj = fail $ "unexpected " ++ cat ++ ": " ++ show obj
+unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
 unidirectionalStep :: (a -> Result b) -> Step a b
 unidirectionalStep m = Step {
