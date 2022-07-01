@@ -22,19 +22,12 @@ jsonModel = Graph jsonModelName elements (const True) hydraCoreName
 
     elements = [
 
-      def "Number" $
-        doc "A numeric value" $
-        record [
-          field "integer" bigint,
-          field "fraction" bigint,
-          field "exponent" bigint],
-
       def "Value" $
         doc "A JSON value" $
         union [
           field "array" $ list $ json "Value",
           field "boolean" boolean,
           field "null" unit,
-          field "number" $ json "Number",
+          field "number" bigfloat, -- TODO: JSON numbers are decimal-encoded
           field "object" $ Types.map string (json "Value"),
           field "string" string]]

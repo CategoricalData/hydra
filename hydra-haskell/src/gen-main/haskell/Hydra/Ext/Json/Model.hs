@@ -4,28 +4,12 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- A numeric value
-data Number 
-  = Number {
-    numberInteger :: Integer,
-    numberFraction :: Integer,
-    numberExponent :: Integer}
-  deriving (Eq, Ord, Read, Show)
-
-_Number = (Core.Name "hydra/ext/json/model.Number")
-
-_Number_integer = (Core.FieldName "integer")
-
-_Number_fraction = (Core.FieldName "fraction")
-
-_Number_exponent = (Core.FieldName "exponent")
-
 -- A JSON value
 data Value 
   = ValueArray [Value]
   | ValueBoolean Bool
   | ValueNull 
-  | ValueNumber Number
+  | ValueNumber Double
   | ValueObject (Map String Value)
   | ValueString String
   deriving (Eq, Ord, Read, Show)
