@@ -33,6 +33,17 @@ _Literal_datatypeIri = (Core.FieldName "datatypeIri")
 
 _Literal_language = (Core.FieldName "language")
 
+data Resource 
+  = ResourceIri IRI
+  | ResourceBnode BlankNode
+  deriving (Eq, Ord, Read, Show)
+
+_Resource = (Core.Name "hydra/ext/rdf/model.Resource")
+
+_Resource_iri = (Core.FieldName "iri")
+
+_Resource_bnode = (Core.FieldName "bnode")
+
 data Node 
   = NodeIri IRI
   | NodeBnode BlankNode
@@ -49,7 +60,7 @@ _Node_literal = (Core.FieldName "literal")
 
 data Quad 
   = Quad {
-    quadSubject :: Node,
+    quadSubject :: Resource,
     quadPredicate :: IRI,
     quadObject :: Node,
     quadGraph :: (Maybe IRI)}
