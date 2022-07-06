@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.Ext.Rdf.Model where
+module Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax where
 
 import Hydra.Impl.Haskell.Sources.Core
 
@@ -8,17 +8,17 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-rdfModelModule :: Module Meta
-rdfModelModule = Module rdfModel []
+rdfSyntaxModule :: Module Meta
+rdfSyntaxModule = Module rdfSyntax []
 
-rdfModelName :: GraphName
-rdfModelName = GraphName "hydra/ext/rdf/model"
+rdfSyntaxName :: GraphName
+rdfSyntaxName = GraphName "hydra/ext/rdf/syntax"
 
-rdfModel :: Graph Meta
-rdfModel = Graph rdfModelName elements (const True) hydraCoreName
+rdfSyntax :: Graph Meta
+rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
   where
-    def = datatype rdfModelName
-    rdf = nominal . qualify rdfModelName . Name
+    def = datatype rdfSyntaxName
+    rdf = nominal . qualify rdfSyntaxName . Name
 
     elements = [
 
@@ -36,9 +36,9 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
           field "literal" $ rdf "Literal"],
 
       def "LanguageTag" $
-        doc "A BCP47 language tag" 
+        doc "A BCP47 language tag"
         string,
-        
+
       def "Literal" $
         doc "A value such as a string, number, or date" $
         record [
@@ -70,7 +70,7 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
         union [
           field "iri" $ rdf "Iri",
           field "bnode" $ rdf "BlankNode"],
-          
+
       def "StringOrLangString" $
         doc ("A string (Literal with datatype IRI xsd:string) or a language-tagged string (rdf:langString). " ++
              " This type is a convenience for downstream models like SHACL") $

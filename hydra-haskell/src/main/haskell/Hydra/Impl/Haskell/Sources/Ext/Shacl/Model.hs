@@ -6,12 +6,12 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.Ext.Rdf.Model
+import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 
 
 
 shaclModelModule :: Module Meta
-shaclModelModule = Module shaclModel [rdfModelModule]
+shaclModelModule = Module shaclModel [rdfSyntaxModule]
 
 shaclModelName :: GraphName
 shaclModelName = GraphName "hydra/ext/shacl/model"
@@ -21,7 +21,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
   where
     def = datatype shaclModelName
     shacl = nominal . qualify shaclModelName . Name
-    rdf = nominal . qualify rdfModelName . Name
+    rdf = nominal . qualify rdfSyntaxName . Name
 
     elements = [
       def "Shape" $
@@ -33,8 +33,8 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
 
 
-      
-      
+
+
       def "NodeShape" $
         doc "A shape which matches nodes in the data graph. For the official definition, see https://www.w3.org/TR/shacl/#node-shapes" $
         record [

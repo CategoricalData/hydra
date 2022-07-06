@@ -24,7 +24,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
 import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
-import Hydra.Impl.Haskell.Sources.Ext.Rdf.Model
+import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Shacl.Model
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Libraries
@@ -43,28 +43,28 @@ import qualified System.Directory as SD
 
 coreModules :: [Result (Module Meta)]
 coreModules = [
+  adapterUtilsModule,
+  pure atlasModelModule,
+  pure codetreeAstModule,
+  pure coqSyntaxModule,
+  pure haskellAstModule,
   pure hydraAdapterModule,
+  hydraBasicsModule,
   pure hydraCoreModule,
   pure hydraErrorsModule,
   pure hydraEvaluationModule,
   pure hydraGraphModule,
-  hydraBasicsModule,
-  adapterUtilsModule,
-  pure atlasModelModule,
-  pure coqSyntaxModule,
-  pure haskellAstModule,
   pure javaSyntaxModule,
   pure jsonModelModule,
   pure pegasusPdlModule,
+  pure rdfSyntaxModule,
   pure scalaMetaModule,
-  pure yamlModelModule,
-  pure codetreeAstModule,
+  pure shaclModelModule,
   pure tinkerpopFeaturesModule,
   pure tinkerpopTypedModule,
   pure tinkerpopV3Module,
   pure xmlSchemaModule,
-  pure rdfModelModule,
-  pure shaclModelModule]
+  pure yamlModelModule]
 
 -- TODO: remove these eventually. They are handy for debugging.
 singleModule :: [Result (Module Meta)]
