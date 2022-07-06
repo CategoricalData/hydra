@@ -23,22 +23,34 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
     elements = [
 
       def "BlankNode" string,
-      
+
       def "Dataset" $ set $ rdf "Quad",
-      
+
       def "Iri" string,
-      
+
       def "IriOrLiteral" $
-        doc "An IRI or a literal; this type is a convenience for other models like SHACL which may exclude blank nodes" $
+        doc ("An IRI or a literal; " ++
+             "this type is a convenience for downstream models like SHACL which may exclude blank nodes") $
         union [
           field "iri" $ rdf "Iri",
           field "literal" $ rdf "Literal"],
-                  
+
+      def "LanguageTag" $
+        doc "A BCP47 language tag" 
+        string,
+        
       def "Literal" $
+        doc "A value such as a string, number, or date" $
         record [
-          field "lexicalForm" string,
-          field "datatypeIri" $ rdf "Iri",
-          field "language" $ optional string],
+          field "lexicalForm" $
+            doc "a Unicode string, which should be in Normal Form C"
+            string,
+          field "datatypeIri" $
+            doc "an IRI identifying a datatype that determines how the lexical form maps to a literal value" $
+            rdf "Iri",
+          field "languageTag" $
+            doc "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString" $
+            optional $ rdf "LanguageTag"],
 
       def "Node" $
         union [
@@ -57,4 +69,11 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
       def "Resource" $
         union [
           field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode"]]
+          field "bnode" $ rdf "BlankNode"],
+          
+      def "StringOrLangString" $
+        doc ("A string (Literal with datatype IRI xsd:string) or a language-tagged string (rdf:langString). " ++
+             " This type is a convenience for downstream models like SHACL") $
+        record [
+          field "lexicalForm" string,
+          field "languageTag" $ optional $ rdf "LanguageTag"]]
