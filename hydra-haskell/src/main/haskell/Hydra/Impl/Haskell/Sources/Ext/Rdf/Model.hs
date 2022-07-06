@@ -24,18 +24,21 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
 
       def "BlankNode" string,
       
+      def "Dataset" $ set $ rdf "Quad",
+      
       def "Iri" string,
       
+      def "IriOrLiteral" $
+        doc "An IRI or a literal; this type is a convenience for other models like SHACL which may exclude blank nodes" $
+        union [
+          field "iri" $ rdf "Iri",
+          field "literal" $ rdf "Literal"],
+                  
       def "Literal" $
         record [
           field "lexicalForm" string,
           field "datatypeIri" $ rdf "Iri",
           field "language" $ optional string],
-
-      def "Resource" $
-        union [
-          field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode"],
 
       def "Node" $
         union [
@@ -44,10 +47,14 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
           field "literal" $ rdf "Literal"],
 
       def "Quad" $
+        doc "An RDF triple with an optional context/graph component" $
         record [
           field "subject" $ rdf "Resource",
           field "predicate" $ rdf "Iri",
           field "object" $ rdf "Node",
           field "graph" $ optional $ rdf "Iri"],
 
-      def "Dataset" $ list $ rdf "Quad"]
+      def "Resource" $
+        union [
+          field "iri" $ rdf "Iri",
+          field "bnode" $ rdf "BlankNode"]]
