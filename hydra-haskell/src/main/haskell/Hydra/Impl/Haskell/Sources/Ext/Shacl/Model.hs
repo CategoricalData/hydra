@@ -48,4 +48,9 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
           field "minCount" $ optional int32,
           field "maxCount" $ optional int32,
           field "node" $ list $ shacl "NodeShape",
-          field "property" $ list $ shacl "PropertyShape"]]
+          field "property" $ list $ shacl "PropertyShape"]
+
+      def "ShapesGraph" $
+        record [
+          field "shapes" $ list $ shacl "Shape"
+        ]]
