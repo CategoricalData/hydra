@@ -11,17 +11,17 @@ newtype BlankNode
 
 _BlankNode = (Core.Name "hydra/ext/rdf/model.BlankNode")
 
-newtype IRI 
-  = IRI {
-    unIRI :: String}
+newtype Iri 
+  = Iri {
+    unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_IRI = (Core.Name "hydra/ext/rdf/model.IRI")
+_Iri = (Core.Name "hydra/ext/rdf/model.Iri")
 
 data Literal 
   = Literal {
     literalLexicalForm :: String,
-    literalDatatypeIri :: IRI,
+    literalDatatypeIri :: Iri,
     literalLanguage :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -34,7 +34,7 @@ _Literal_datatypeIri = (Core.FieldName "datatypeIri")
 _Literal_language = (Core.FieldName "language")
 
 data Resource 
-  = ResourceIri IRI
+  = ResourceIri Iri
   | ResourceBnode BlankNode
   deriving (Eq, Ord, Read, Show)
 
@@ -45,7 +45,7 @@ _Resource_iri = (Core.FieldName "iri")
 _Resource_bnode = (Core.FieldName "bnode")
 
 data Node 
-  = NodeIri IRI
+  = NodeIri Iri
   | NodeBnode BlankNode
   | NodeLiteral Literal
   deriving (Eq, Ord, Read, Show)
@@ -61,9 +61,9 @@ _Node_literal = (Core.FieldName "literal")
 data Quad 
   = Quad {
     quadSubject :: Resource,
-    quadPredicate :: IRI,
+    quadPredicate :: Iri,
     quadObject :: Node,
-    quadGraph :: (Maybe IRI)}
+    quadGraph :: (Maybe Iri)}
   deriving (Eq, Ord, Read, Show)
 
 _Quad = (Core.Name "hydra/ext/rdf/model.Quad")
