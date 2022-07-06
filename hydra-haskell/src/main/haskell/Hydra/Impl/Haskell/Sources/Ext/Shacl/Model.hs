@@ -25,20 +25,26 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
     elements = [
       def "Shape" $
+        doc "A NodeShape or PropertyShape. For the official definition, see https://www.w3.org/TR/shacl/#dfn-shape" $
         union [
-          field "nodeShape" $ shacl "NodeShape",
-          field "propertyShape" $ shacl "PropertyShape"],
+          field "node" $ shacl "NodeShape",
+          field "property" $ shacl "PropertyShape"],
 
+
+
+
+      
+      
       def "NodeShape" $
+        doc "A shape which matches nodes in the data graph. For the official definition, see https://www.w3.org/TR/shacl/#node-shapes" $
         record [
-          field "name" $ set string,
-          field "description" $ set string,
           field "property"  $ list $ shacl "PropertyShape",
           field "xone" $ list $ shacl "Shape",
           field "and" $ list $ shacl "Shape",
           field "node" $ list $ shacl "NodeShape"],
 
       def "PropertyShape" $
+        doc "A shape which matches a property or property path from a node. For the official definition, see https://www.w3.org/TR/shacl/#property-shapes" $
         record [
           field "name" $ set string,
           field "description" $ set string,
@@ -47,8 +53,10 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
           field "minCount" $ optional int32,
           field "maxCount" $ optional int32,
           field "node" $ list $ shacl "NodeShape",
-          field "property" $ list $ shacl "PropertyShape"],
+          field "property" $ list $ shacl "PropertyShape",
+          field "order" $ optional int32],
 
       def "ShapesGraph" $
+        doc "An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes" $
         record [
           field "shapes" $ list $ shacl "Shape"]]
