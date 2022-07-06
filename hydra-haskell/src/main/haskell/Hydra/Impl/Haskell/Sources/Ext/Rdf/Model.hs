@@ -30,6 +30,11 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
           field "datatypeIri" $ rdf "IRI",
           field "language" $ optional string],
 
+      def "Resource" $
+        union [
+          field "iri" $ rdf "IRI",
+          field "bnode" $ rdf "BlankNode"],
+
       def "Node" $
         union [
           field "iri" $ rdf "IRI",
@@ -38,7 +43,7 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
 
       def "Quad" $
         record [
-          field "subject" $ rdf "Node",
+          field "subject" $ rdf "Resource",
           field "predicate" $ rdf "IRI",
           field "object" $ rdf "Node",
           field "graph" $ optional $ rdf "IRI"],
