@@ -23,7 +23,6 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
     shacl = nominal . qualify shaclModelName . Name
     rdf = nominal . qualify rdfModelName . Name
 
-
     elements = [
       def "Shape" $
         union [
@@ -43,14 +42,13 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
         record [
           field "name" $ set string,
           field "description" $ set string,
-          field "path"  $ rdf "IRI",
-          field "datatype" $ optional $ rdf "IRI",
+          field "path"  $ rdf "Iri",
+          field "datatype" $ optional $ rdf "Iri",
           field "minCount" $ optional int32,
           field "maxCount" $ optional int32,
           field "node" $ list $ shacl "NodeShape",
-          field "property" $ list $ shacl "PropertyShape"]
+          field "property" $ list $ shacl "PropertyShape"],
 
       def "ShapesGraph" $
         record [
-          field "shapes" $ list $ shacl "Shape"
-        ]]
+          field "shapes" $ list $ shacl "Shape"]]

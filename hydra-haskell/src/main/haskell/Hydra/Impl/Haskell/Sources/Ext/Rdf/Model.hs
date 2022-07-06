@@ -23,29 +23,31 @@ rdfModel = Graph rdfModelName elements (const True) hydraCoreName
     elements = [
 
       def "BlankNode" string,
-      def "IRI" string,
+      
+      def "Iri" string,
+      
       def "Literal" $
         record [
           field "lexicalForm" string,
-          field "datatypeIri" $ rdf "IRI",
+          field "datatypeIri" $ rdf "Iri",
           field "language" $ optional string],
 
       def "Resource" $
         union [
-          field "iri" $ rdf "IRI",
+          field "iri" $ rdf "Iri",
           field "bnode" $ rdf "BlankNode"],
 
       def "Node" $
         union [
-          field "iri" $ rdf "IRI",
+          field "iri" $ rdf "Iri",
           field "bnode" $ rdf "BlankNode",
           field "literal" $ rdf "Literal"],
 
       def "Quad" $
         record [
           field "subject" $ rdf "Resource",
-          field "predicate" $ rdf "IRI",
+          field "predicate" $ rdf "Iri",
           field "object" $ rdf "Node",
-          field "graph" $ optional $ rdf "IRI"],
+          field "graph" $ optional $ rdf "Iri"],
 
       def "Dataset" $ list $ rdf "Quad"]

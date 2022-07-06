@@ -47,8 +47,8 @@ data PropertyShape
   = PropertyShape {
     propertyShapeName :: (Set String),
     propertyShapeDescription :: (Set String),
-    propertyShapePath :: Model.IRI,
-    propertyShapeDatatype :: (Maybe Model.IRI),
+    propertyShapePath :: Model.Iri,
+    propertyShapeDatatype :: (Maybe Model.Iri),
     propertyShapeMinCount :: (Maybe Int),
     propertyShapeMaxCount :: (Maybe Int),
     propertyShapeNode :: (Maybe NodeShape),
