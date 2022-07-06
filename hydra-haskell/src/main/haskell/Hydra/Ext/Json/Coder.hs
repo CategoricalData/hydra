@@ -80,7 +80,7 @@ termCoder typ = case typeExpr typ of
     return Step {
       stepOut = \(Term (TermExprLiteral av) _) -> stepOut ac av,
       stepIn = \n -> case n of
-        s -> Terms.literal <$> stepIn ac s
+        s -> Terms.literal <$> stepIn ac s}
   TypeExprList lt -> do
     lc <- termCoder lt
     return Step {

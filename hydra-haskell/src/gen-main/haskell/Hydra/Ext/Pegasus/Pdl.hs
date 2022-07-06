@@ -1,7 +1,7 @@
 module Hydra.Ext.Pegasus.Pdl where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Ext.Json.Model as Json
+import qualified Hydra.Ext.Json.Model as Model
 import Data.Map
 import Data.Set
 
@@ -139,7 +139,7 @@ _PropertyKey = (Core.Name "hydra/ext/pegasus/pdl.PropertyKey")
 data Property 
   = Property {
     propertyKey :: PropertyKey,
-    propertyValue :: (Maybe Json.Value)}
+    propertyValue :: (Maybe Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Property = (Core.Name "hydra/ext/pegasus/pdl.Property")
@@ -165,7 +165,7 @@ data RecordField
     recordFieldName :: FieldName,
     recordFieldValue :: Schema,
     recordFieldOptional :: Bool,
-    recordFieldDefault :: (Maybe Json.Value),
+    recordFieldDefault :: (Maybe Model.Value),
     recordFieldAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
 
