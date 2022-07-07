@@ -26,7 +26,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
       def "CommonConstraints" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
-        union [
+        record [
           field "and" $
             doc "See https://www.w3.org/TR/shacl/#AndConstraintComponent" $
             list $ shacl "Shape",
@@ -142,17 +142,17 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
           -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
 
       def "PropertyShapeConstraints" $
-        doc "Any of a number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes" $
-        union [
+        doc "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes" $
+        record [
           field "maxCount" $
             doc ("The maximum cardinality. Node shapes cannot have any value for sh:maxCount. " ++
-                 "See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent")
-            int32,
+                 "See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent") $
+            optional int32,
 
           field "minCount" $
             doc ("The minimum cardinality. Node shapes cannot have any value for sh:minCount. " ++
-                 "See https://www.w3.org/TR/shacl/#MinCountConstraintComponent")
-            int32],
+                 "See https://www.w3.org/TR/shacl/#MinCountConstraintComponent") $
+            optional int32],
 
       def "Severity" $ union [
         field "info" $ doc "A non-critical constraint violation indicating an informative message" unit,
