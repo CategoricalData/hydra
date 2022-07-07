@@ -20,6 +20,12 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
     def = datatype hydraCoreName
     elements = [
 
+      def "Annotated" $
+        lambda "a" $
+        lambda "m" $ record [
+          field "subject" $ variable "a",
+          field "annotation" $ variable "m"],
+
       def "Application" $
         doc "A term which applies a function to an argument" $
         universal "m" $ record [
@@ -29,6 +35,16 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "argument" $
             doc "The right-hand side of the application" $
             universal "m" $ core "Term"],
+
+      def "ApplicationType" $
+        doc "The type-level analog of an application term" $
+        universal "m" $ record [
+          field "function" $
+            doc "The left-hand side of the application" $
+            universal "m" $ core "Type",
+          field "argument" $
+            doc "The right-hand side of the application" $
+            universal "m" $ core "Type"],
 
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
@@ -173,6 +189,16 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
             doc "The body of the lambda" $
             universal "m" $ core "Term"],
 
+      def "LambdaType" $
+        doc "A type abstraction; the type-level analog of a lambda term" $
+        universal "m" $ record [
+          field "parameter" $
+            doc "The parameter of the lambda" $
+            core "VariableType",
+          field "body" $
+            doc "The body of the lambda" $
+            universal "m" $ core "Type"],
+
       def "Let" $
         doc "A 'let' binding" $
         universal "m" $ record [
@@ -254,13 +280,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Term" $
         doc "A data term" $
-        universal "m" $ record [
-          field "expr" $ universal "m" $ core "TermExpr",
-          field "meta" $ variable "m"],
-
-      def "TermExpr" $
-        doc "A term expression" $
-        universal "m" $ union [
+        lambda "m" $ union [
+          field "annotated" $
+            doc "A term annotated with metadata" $
+            apply (apply (core "Annotated") (apply (core "Term") (variable "m"))) (variable "m"),
           field "application" $
             doc "A function application" $
             universal "m" $ core "Application",
@@ -301,6 +324,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "TermVariant" $
         doc "The identifier of a term expression constructor" $
         enum [
+          "annotated",
           "application",
           "element",
           "function",
@@ -318,43 +342,14 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Type" $
         doc "A data type" $
-        universal "m" $ record [
-          field "expr" $ universal "m" $ core "TypeExpr",
-          field "meta" $ variable "m"],
-
-      def "TypeApplication" $
-        doc "The type-level analog of an application term" $
-        universal "m" $ record [
-          field "function" $
-            doc "The left-hand side of the application" $
-            universal "m" $ core "Type",
-          field "argument" $
-            doc "The right-hand side of the application" $
-            universal "m" $ core "Type"],
-
-      def "TypeLambda" $
-        doc "A type abstraction; the type-level analog of a lambda term" $
-        universal "m" $ record [
-          field "parameter" $
-            doc "The parameter of the lambda" $
-            core "TypeVariable",
-          field "body" $
-            doc "The body of the lambda" $
-            universal "m" $ core "Type"],
-
-      def "TypeScheme" $
-        doc "A type expression together with free type variables occurring in the expression" $
-        universal "m" $ record [
-          field "variables" $ list $ core "TypeVariable",
-          field "type" $ universal "m" $ core "Type"],
-
-      def "TypeExpr" $
-        doc "A data type" $
-        universal "m" $ union [
-          field "application" $ universal "m" $ core "TypeApplication",
+        lambda "m" $ union [
+          field "annotated" $
+            doc "A type annotated with metadata" $
+            apply (apply (core "Annotated") (apply (core "Type") (variable "m"))) (variable "m"),
+          field "application" $ universal "m" $ core "ApplicationType",
           field "element" $ universal "m" $ core "Type",
           field "function" $ universal "m" $ core "FunctionType",
-          field "lambda" $ universal "m" $ core "TypeLambda",
+          field "lambda" $ universal "m" $ core "LambdaType",
           field "list" $ universal "m" $ core "Type",
           field "literal" $ core "LiteralType",
           field "map" $ universal "m" $ core "MapType",
@@ -363,15 +358,18 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           field "record" $ list $ universal "m" $ core "FieldType",
           field "set" $ universal "m" $ core "Type",
           field "union" $ list $ universal "m" $ core "FieldType",
-          field "variable" $ core "TypeVariable"],
+          field "variable" $ core "VariableType"],
 
-      def "TypeVariable" $
-        doc "A symbol which stands in for a type"
-        string,
+      def "TypeScheme" $
+        doc "A type expression together with free type variables occurring in the expression" $
+        universal "m" $ record [
+          field "variables" $ list $ core "VariableType",
+          field "type" $ universal "m" $ core "Type"],
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
         enum [
+          "annotated",
           "application",
           "element",
           "function",
@@ -394,4 +392,8 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Variable" $
         doc "A symbol which stands in for a term"
+        string,
+        
+      def "VariableType" $
+        doc "A symbol which stands in for a type"
         string]

@@ -16,6 +16,11 @@ encodeApplication cx (Application lhs rhs) = nominalRecord cx _Application [
   Field _Application_function $ encodeTerm cx lhs,
   Field _Application_argument $ encodeTerm cx rhs]
 
+encodeApplicationType :: Default m => Context m -> ApplicationType m -> Term m
+encodeApplicationType cx (ApplicationType lhs rhs) = nominalRecord cx _ApplicationType [
+  Field _ApplicationType_function $ encodeType cx lhs,
+  Field _ApplicationType_argument $ encodeType cx rhs]
+
 encodeElimination :: (Default m, Ord m) => Context m -> Elimination m -> Term m
 encodeElimination cx e = case e of
   EliminationElement -> unitVariant _Elimination_element
@@ -69,6 +74,11 @@ encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm cx b]
 
+encodeLambdaType :: Default m => Context m -> LambdaType m -> Term m
+encodeLambdaType cx (LambdaType (VariableType var) body) = nominalRecord cx _LambdaType [
+  Field _LambdaType_parameter $ string var,
+  Field _LambdaType_body $ encodeType cx body]
+
 encodeLiteralType :: Default m => LiteralType -> Term m
 encodeLiteralType at = case at of
   LiteralTypeBinary -> unitVariant _LiteralType_binary
@@ -104,49 +114,43 @@ encodeOptionalCases cx (OptionalCases nothing just) = nominalRecord cx _Optional
   Field _OptionalCases_just $ encodeTerm cx just]
 
 encodeTerm :: (Default m, Ord m) => Context m -> Term m -> Term m
-encodeTerm cx term = case termExpr term of
-  TermExprApplication a -> variant _TermExpr_application $ encodeApplication cx a
-  TermExprLiteral av -> variant _TermExpr_literal $ encodeLiteral cx av
-  TermExprElement (Name name) -> variant _TermExpr_element $ string name
-  TermExprFunction f -> variant _TermExpr_function $ encodeFunction cx f
-  TermExprList terms -> variant _TermExpr_list $ list $ encodeTerm cx <$> terms
-  TermExprMap m -> variant _TermExpr_map $ map $ M.fromList $ encodePair <$> M.toList m
+encodeTerm cx term = case term of
+--  TermAnnotated a -> variant _Term_annotated $ encodeAnnotated cx a
+  TermAnnotated (Annotated t ann) -> variant _Term_annotated $ TermAnnotated $ Annotated (encodeTerm cx t) ann
+  TermApplication a -> variant _Term_application $ encodeApplication cx a
+  TermLiteral av -> variant _Term_literal $ encodeLiteral cx av
+  TermElement (Name name) -> variant _Term_element $ string name
+  TermFunction f -> variant _Term_function $ encodeFunction cx f
+  TermList terms -> variant _Term_list $ list $ encodeTerm cx <$> terms
+  TermMap m -> variant _Term_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeTerm cx k, encodeTerm cx v)
-  TermExprNominal ntt -> variant _TermExpr_nominal $ encodeNamed cx ntt
-  TermExprOptional m -> variant _TermExpr_optional $ optional $ encodeTerm cx <$> m
-  TermExprRecord fields -> variant _TermExpr_record $ list $ encodeField cx <$> fields
-  TermExprSet terms -> variant _TermExpr_set $ set $ S.fromList $ encodeTerm cx <$> S.toList terms
-  TermExprUnion field -> variant _TermExpr_union $ encodeField cx field
-  TermExprVariable (Variable var) -> variant _TermExpr_variable $ string var
+  TermNominal ntt -> variant _Term_nominal $ encodeNamed cx ntt
+  TermOptional m -> variant _Term_optional $ optional $ encodeTerm cx <$> m
+  TermRecord fields -> variant _Term_record $ list $ encodeField cx <$> fields
+  TermSet terms -> variant _Term_set $ set $ S.fromList $ encodeTerm cx <$> S.toList terms
+  TermUnion field -> variant _Term_union $ encodeField cx field
+  TermVariable (Variable var) -> variant _Term_variable $ string var
 
 encodeType :: Default m => Context m -> Type m -> Term m
-encodeType cx typ = setMeta (typeMeta typ) $ case typeExpr typ of
-  TypeExprApplication a -> variant _TypeExpr_application $ encodeTypeApplication cx a
-  TypeExprElement t -> variant _TypeExpr_element $ encodeType cx t
-  TypeExprFunction ft -> variant _TypeExpr_function $ encodeFunctionType cx ft
-  TypeExprLambda ut -> variant _TypeExpr_lambda $ encodeTypeLambda cx ut
-  TypeExprList t -> variant _TypeExpr_list $ encodeType cx t
-  TypeExprLiteral at -> variant _TypeExpr_literal $ encodeLiteralType at
-  TypeExprMap mt -> variant _TypeExpr_map $ encodeMapType cx mt
-  TypeExprNominal name -> variant _TypeExpr_nominal $ element name
-  TypeExprOptional t -> variant _TypeExpr_optional $ encodeType cx t
-  TypeExprRecord fields -> variant _TypeExpr_record $ list $ fmap (encodeFieldType cx) fields
-  TypeExprSet t -> variant _TypeExpr_set $ encodeType cx t
-  TypeExprUnion fields -> variant _TypeExpr_union $ list $ fmap (encodeFieldType cx) fields
-  TypeExprVariable (TypeVariable var) -> variant _TypeExpr_variable $ string var
+encodeType cx typ = case typ of
+  TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (encodeType cx t) ann)
+  TypeApplication a -> variant _Type_application $ encodeApplicationType cx a
+  TypeElement t -> variant _Type_element $ encodeType cx t
+  TypeFunction ft -> variant _Type_function $ encodeFunctionType cx ft
+  TypeLambda ut -> variant _Type_lambda $ encodeLambdaType cx ut
+  TypeList t -> variant _Type_list $ encodeType cx t
+  TypeLiteral at -> variant _Type_literal $ encodeLiteralType at
+  TypeMap mt -> variant _Type_map $ encodeMapType cx mt
+  TypeNominal name -> variant _Type_nominal $ element name
+  TypeOptional t -> variant _Type_optional $ encodeType cx t
+  TypeRecord fields -> variant _Type_record $ list $ fmap (encodeFieldType cx) fields
+  TypeSet t -> variant _Type_set $ encodeType cx t
+  TypeUnion fields -> variant _Type_union $ list $ fmap (encodeFieldType cx) fields
+  TypeVariable (VariableType var) -> variant _Type_variable $ string var
 
-encodeTypeApplication :: Default m => Context m -> TypeApplication m -> Term m
-encodeTypeApplication cx (TypeApplication lhs rhs) = nominalRecord cx _TypeApplication [
-  Field _TypeApplication_function $ encodeType cx lhs,
-  Field _TypeApplication_argument $ encodeType cx rhs]
-
-encodeTypeLambda :: Default m => Context m -> TypeLambda m -> Term m
-encodeTypeLambda cx (TypeLambda (TypeVariable var) body) = nominalRecord cx _TypeLambda [
-  Field _TypeLambda_parameter $ string var,
-  Field _TypeLambda_body $ encodeType cx body]
-  
 encodeTypeVariant :: Default m => TypeVariant -> Term m
 encodeTypeVariant tv = unitVariant $ case tv of
+  TypeVariantAnnotated -> _TypeVariant_annotated
   TypeVariantLiteral -> _TypeVariant_literal
   TypeVariantElement -> _TypeVariant_element
   TypeVariantFunction -> _TypeVariant_function
@@ -159,4 +163,3 @@ encodeTypeVariant tv = unitVariant $ case tv of
   TypeVariantUnion -> _TypeVariant_union
   TypeVariantLambda -> _TypeVariant_lambda
   TypeVariantVariable -> _TypeVariant_variable
-

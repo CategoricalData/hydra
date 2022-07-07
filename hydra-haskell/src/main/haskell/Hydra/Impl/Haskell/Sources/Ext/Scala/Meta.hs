@@ -598,7 +598,7 @@ scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
         record [
           field "tparams" $ list $ meta "Type.Param",
           field "tpe" $ meta "Type"],
---     checkParent(ParentChecks.TypeLambda)
+--     checkParent(ParentChecks.LambdaType)
 --   }
 --   @ast class Macro(body: Data) extends Type
       def "Type.Macro" $

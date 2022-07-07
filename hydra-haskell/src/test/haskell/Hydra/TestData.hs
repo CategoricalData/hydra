@@ -81,8 +81,8 @@ unionTypeForFunctions dom = Types.union [
   FieldType _Elimination_nominal Types.string,
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
-  FieldType _Elimination_union Types.string, -- TODO (TypeExprRecord cases)
+  FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
   FieldType _Function_compareTo dom,
-  FieldType _Function_lambda Types.string, -- TODO (TypeExprRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
+  FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
   FieldType _Function_primitive Types.string,
   FieldType _TermExpr_variable Types.string]

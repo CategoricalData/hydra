@@ -43,7 +43,7 @@ constructModule cx g coders pairs = do
   where
     pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
     aliases = importAliasesForGraph g
-    toSchema (el, TypedTerm typ term) = if typeExpr typ == TypeExprNominal _Type
+    toSchema (el, TypedTerm typ term) = if typeExpr typ == TypeNominal _Type
       then decodeType cx term >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
@@ -52,7 +52,7 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      r <- contextDescriptionOf cx $ termMeta $ elementData el
+      r <- contextDescription_OfTerm cx $ elementData el
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
@@ -73,13 +73,13 @@ encodeAdaptedType aliases cx typ = do
   encodeType aliases cx $ adapterTarget ad
 
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Term m -> Result ()
-encodeTerm aliases cx term@(Term expr meta) = do
+encodeTerm aliases cx term = do
     fail "not yet implemented"
 
 encodeType :: (Default m, Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases cx typ = case typeExpr typ of
-    TypeExprList lt -> Left . PDL.SchemaArray <$> encode lt
-    TypeExprLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
+    TypeList lt -> Left . PDL.SchemaArray <$> encode lt
+    TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
       LiteralTypeBoolean -> pure PDL.PrimitiveTypeBoolean
       LiteralTypeFloat ft -> case ft of
@@ -91,24 +91,24 @@ encodeType aliases cx typ = case typeExpr typ of
         IntegerTypeInt64 -> pure PDL.PrimitiveTypeLong
         _ -> fail $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
-    TypeExprMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeExprNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
-    TypeExprOptional ot -> fail $ "optionals unexpected at top level"
-    TypeExprRecord fields -> do
+    TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
+    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
+    TypeOptional ot -> fail $ "optionals unexpected at top level"
+    TypeRecord fields -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField fields
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeExprUnion fields -> if isEnum
+    TypeUnion fields -> if isEnum
         then do
           fs <- CM.mapM encodeEnumField fields
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
       where
-        isEnum = L.foldl (\b t -> b && t {typeMeta = dflt} == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && typeExpr t == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode t = case typeExpr t of
-      TypeExprRecord [] -> encode Types.int32 -- special case for the unit type
+      TypeRecord [] -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases cx t
         case res of
@@ -139,14 +139,14 @@ encodeType aliases cx typ = case typeExpr typ of
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
         PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case typeExpr typ of
-      TypeExprOptional ot -> do
+      TypeOptional ot -> do
         t <- encode ot
         return (t, True)
       _ -> do
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      r <- contextDescriptionOf cx $ typeMeta typ
+      r <- contextDescription_OfType cx typ
       return $ doc r
 
 importAliasesForGraph g = M.empty -- TODO

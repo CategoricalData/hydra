@@ -217,31 +217,28 @@ termVariant = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.universal "m" $ Types.nominal _Term) (Types.nominal _TermVariant) $
   lambda "term" $ apply
-    (matchToEnum (Types.universal "m" $ Types.nominal _TermExpr) _TermVariant [
-      _TermExpr_application     @-> _TermVariant_application,
-      _TermExpr_element         @-> _TermVariant_element,
-      _TermExpr_function        @-> _TermVariant_function,
-      _TermExpr_list            @-> _TermVariant_list,
-      _TermExpr_literal         @-> _TermVariant_literal,
-      _TermExpr_map             @-> _TermVariant_map,
-      _TermExpr_nominal         @-> _TermVariant_nominal,
-      _TermExpr_optional        @-> _TermVariant_optional,
-      _TermExpr_record          @-> _TermVariant_record,
-      _TermExpr_set             @-> _TermVariant_set,
-      _TermExpr_union           @-> _TermVariant_union,
-      _TermExpr_variable        @-> _TermVariant_variable])
-    (apply
-      (project
-        (Types.universal "m" $ Types.nominal _Term)
-        (Types.universal "m" $ Types.nominal _TermExpr)
-        _Term_expr)
-      (var "term"))
+    (matchToEnum (Types.universal "m" $ Types.nominal _Term) _TermVariant [
+      _Term_annotated       @-> _TermVariant_annotated,
+      _Term_application     @-> _TermVariant_application,
+      _Term_element         @-> _TermVariant_element,
+      _Term_function        @-> _TermVariant_function,
+      _Term_list            @-> _TermVariant_list,
+      _Term_literal         @-> _TermVariant_literal,
+      _Term_map             @-> _TermVariant_map,
+      _Term_nominal         @-> _TermVariant_nominal,
+      _Term_optional        @-> _TermVariant_optional,
+      _Term_record          @-> _TermVariant_record,
+      _Term_set             @-> _TermVariant_set,
+      _Term_union           @-> _TermVariant_union,
+      _Term_variable        @-> _TermVariant_variable])
+    (var "term")
 
 termVariants :: Element [TermVariant]
 termVariants = basics "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TermVariant) $
   list $ unitVariant _TermVariant <$> [
+    _TermVariant_annotated,
     _TermVariant_application,
     _TermVariant_literal,
     _TermVariant_element,
@@ -267,32 +264,29 @@ typeVariant = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
-    (matchToEnum (Types.universal "m" $ Types.nominal _TypeExpr) _TypeVariant [
-      _TypeExpr_application @-> _TypeVariant_application,
-      _TypeExpr_element     @-> _TypeVariant_element,
-      _TypeExpr_function    @-> _TypeVariant_function,
-      _TypeExpr_lambda      @-> _TypeVariant_lambda,
-      _TypeExpr_list        @-> _TypeVariant_list,
-      _TypeExpr_literal     @-> _TypeVariant_literal,
-      _TypeExpr_map         @-> _TypeVariant_map,
-      _TypeExpr_nominal     @-> _TypeVariant_nominal,
-      _TypeExpr_optional    @-> _TypeVariant_optional,
-      _TypeExpr_record      @-> _TypeVariant_record,
-      _TypeExpr_set         @-> _TypeVariant_set,
-      _TypeExpr_union       @-> _TypeVariant_union,
-      _TypeExpr_variable    @-> _TypeVariant_variable])
-    (apply
-      (project
-        (Types.universal "m" $ Types.nominal _Type)
-        (Types.universal "m" $ Types.nominal _TypeExpr)
-        _Type_expr)
-      (var "typ"))
+    (matchToEnum (Types.universal "m" $ Types.nominal _Type) _TypeVariant [
+      _Type_annotated   @-> _TypeVariant_annotated,
+      _Type_application @-> _TypeVariant_application,
+      _Type_element     @-> _TypeVariant_element,
+      _Type_function    @-> _TypeVariant_function,
+      _Type_lambda      @-> _TypeVariant_lambda,
+      _Type_list        @-> _TypeVariant_list,
+      _Type_literal     @-> _TypeVariant_literal,
+      _Type_map         @-> _TypeVariant_map,
+      _Type_nominal     @-> _TypeVariant_nominal,
+      _Type_optional    @-> _TypeVariant_optional,
+      _Type_record      @-> _TypeVariant_record,
+      _Type_set         @-> _TypeVariant_set,
+      _Type_union       @-> _TypeVariant_union,
+      _Type_variable    @-> _TypeVariant_variable])
+    (var "typ")
 
 typeVariants :: Element [TypeVariant]
 typeVariants = basics "typeVariants" $
   doc "All type variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [
+    _TypeVariant_annotated,
     _TypeVariant_application,
     _TypeVariant_element,
     _TypeVariant_function,

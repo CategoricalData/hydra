@@ -3,6 +3,7 @@ module Hydra.Ext.Tinkerpop.Language where
 import Hydra.Adapter
 import Hydra.Ext.Tinkerpop.Features
 import Hydra.Core
+import Hydra.Common
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -55,10 +56,10 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TypeVariantNominal],
       
     languageConstraintsTypes = \typ -> case typeExpr typ of
-      TypeExprElement et -> True
+      TypeElement et -> True
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-      TypeExprList t -> case typeExpr t of
-        TypeExprLiteral lt -> case lt of
+      TypeList t -> case typeExpr t of
+        TypeLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
           LiteralTypeFloat ft -> case ft of
             FloatTypeFloat64 -> dataTypeFeaturesSupportsDoubleArrayValues vpFeatures
@@ -72,12 +73,12 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
           LiteralTypeString -> dataTypeFeaturesSupportsStringArrayValues vpFeatures
           _ -> False
         _ -> False
-      TypeExprLiteral _ -> True
-      TypeExprMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
-      TypeExprNominal _ -> True
-      TypeExprOptional ot -> case typeExpr ot of
-        TypeExprElement _ -> True -- Note: subject to the APG taxonomy
-        TypeExprLiteral _ -> True
+      TypeLiteral _ -> True
+      TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
+      TypeNominal _ -> True
+      TypeOptional ot -> case typeExpr ot of
+        TypeElement _ -> True -- Note: subject to the APG taxonomy
+        TypeLiteral _ -> True
         _ -> False
       _ -> True}
 

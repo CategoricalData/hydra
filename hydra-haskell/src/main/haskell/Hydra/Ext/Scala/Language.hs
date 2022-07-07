@@ -27,6 +27,7 @@ language = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
     IntegerTypeInt64,
     IntegerTypeUint8],
   languageConstraintsTermVariants = S.fromList [
+    TermVariantAnnotated,
     TermVariantApplication,
     TermVariantElement,
     TermVariantFunction,
@@ -40,6 +41,7 @@ language = Language (LanguageName "hydra/ext/scala") $ LanguageConstraints {
     TermVariantUnion,
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
+    TypeVariantAnnotated,
     TypeVariantElement,
     TypeVariantFunction,
     TypeVariantList,

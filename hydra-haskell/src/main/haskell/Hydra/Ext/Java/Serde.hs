@@ -134,7 +134,7 @@ writeClassBodyDeclaration d = case d of
 writeClassBodyDeclarationWithComments :: Java.ClassBodyDeclarationWithComments -> CT.Expr
 writeClassBodyDeclarationWithComments (Java.ClassBodyDeclarationWithComments d mc) = withComments mc $
   writeClassBodyDeclaration d
-  
+
 writeClassDeclaration :: Java.ClassDeclaration -> CT.Expr
 writeClassDeclaration d = case d of
   Java.ClassDeclarationNormal nd -> writeNormalClassDeclaration nd
@@ -672,7 +672,7 @@ writeReceiverParameter _ = cst "TODO:ReceiverParameter"
 writeReferenceType :: Java.ReferenceType -> CT.Expr
 writeReferenceType rt = case rt of
   Java.ReferenceTypeClassOrInterface cit -> writeClassOrInterfaceType cit
-  Java.ReferenceTypeVariable v -> writeTypeVariable v
+  Java.ReferenceTypeVariable v -> writeVariableType v
   Java.ReferenceTypeArray at -> writeArrayType at
 
 writeRelationalExpression :: Java.RelationalExpression -> CT.Expr
@@ -825,8 +825,8 @@ writeTypeParameter (Java.TypeParameter mods id bound) = spaceSep $ Y.catMaybes [
 writeTypeParameterModifier :: Java.TypeParameterModifier -> CT.Expr
 writeTypeParameterModifier (Java.TypeParameterModifier ann) = writeAnnotation ann
 
-writeTypeVariable :: Java.TypeVariable -> CT.Expr
-writeTypeVariable (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
+writeVariableType :: Java.TypeVariable -> CT.Expr
+writeVariableType (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
   Just $ writeTypeIdentifier id]
 

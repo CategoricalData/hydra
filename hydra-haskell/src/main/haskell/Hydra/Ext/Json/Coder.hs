@@ -56,10 +56,10 @@ recordCoder sfields = do
     return $ Step (encode coders) (decode coders)
   where
     encode coders term = case termExpr term of
-      TermExprRecord fields -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+      TermRecord fields -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
-            (Type (TypeExprOptional _) _, Term (TermExprOptional Nothing) _) -> pure Nothing
+            (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> stepOut coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
@@ -75,41 +75,41 @@ recordCoder sfields = do
 
 termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) Json.Value)
 termCoder typ = case typeExpr typ of
-  TypeExprLiteral at -> do
+  TypeLiteral at -> do
     ac <- literalCoder at
     return Step {
-      stepOut = \(Term (TermExprLiteral av) _) -> stepOut ac av,
+      stepOut = \(TermLiteral av) -> stepOut ac av,
       stepIn = \n -> case n of
         s -> Terms.literal <$> stepIn ac s}
-  TypeExprList lt -> do
+  TypeList lt -> do
     lc <- termCoder lt
     return Step {
-      stepOut = \(Term (TermExprList els) _) -> Json.ValueArray <$> CM.mapM (stepOut lc) els,
+      stepOut = \(TermList els) -> Json.ValueArray <$> CM.mapM (stepOut lc) els,
       stepIn = \n -> case n of
         Json.ValueArray nodes -> Terms.list <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected "sequence" n}
-  TypeExprOptional ot -> do
+  TypeOptional ot -> do
     oc <- termCoder ot
     return Step {
-      stepOut = \(Term (TermExprOptional el) _) -> Y.maybe (pure Json.ValueNull) (stepOut oc) el,
+      stepOut = \(TermOptional el) -> Y.maybe (pure Json.ValueNull) (stepOut oc) el,
       stepIn = \n -> case n of
         Json.ValueNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> stepIn oc n}
-  TypeExprMap (MapType kt vt) -> do
+  TypeMap (MapType kt vt) -> do
       kc <- termCoder kt
       vc <- termCoder vt
       let encodeEntry (k, v) = (,) (toString k) <$> stepOut vc v
       let decodeEntry (k, v) = (,) (fromString k) <$> stepIn vc v
       return Step {
-        stepOut = \(Term (TermExprMap m) _) -> Json.ValueObject . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+        stepOut = \(TermMap m) -> Json.ValueObject . M.fromList <$> CM.mapM encodeEntry (M.toList m),
         stepIn = \n -> case n of
           Json.ValueObject m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
           _ -> unexpected "mapping" n}
     where
       toString v = if isStringKey
         then case termExpr v of
-          TermExprLiteral (LiteralString s) -> s
+          TermLiteral (LiteralString s) -> s
         else show v
       fromString s = Terms.string $ if isStringKey then s else read s
-      isStringKey = stripTypeMeta kt == Types.string
-  TypeExprRecord sfields -> recordCoder sfields
+      isStringKey = typeExpr kt == Types.string
+  TypeRecord sfields -> recordCoder sfields

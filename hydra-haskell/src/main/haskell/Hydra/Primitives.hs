@@ -3,6 +3,7 @@ module Hydra.Primitives where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
+import Hydra.Common
 import Hydra.Steps
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -11,8 +12,8 @@ import qualified Data.Maybe as Y
 
 deref :: Context m -> Term m -> Result (Term m)
 deref cx term = case termExpr term of
-  TermExprElement name -> dereferenceElement cx name >>= deref cx
-  TermExprNominal (Named _ term') -> deref cx term'
+  TermElement name -> dereferenceElement cx name >>= deref cx
+  TermNominal (Named _ term') -> deref cx term'
   _ -> ResultSuccess term
 
 dereferenceElement :: Context m -> Name -> Result (Term m)
@@ -32,7 +33,7 @@ primitiveFunctionArity :: PrimitiveFunction m -> Int
 primitiveFunctionArity = arity . primitiveFunctionType
   where
     arity (FunctionType _ cod) = 1 + case typeExpr cod of
-      TypeExprFunction ft -> arity ft
+      TypeFunction ft -> arity ft
       _ -> 0
 
 requireElement :: Maybe String -> Context m -> Name -> Result (Element m)

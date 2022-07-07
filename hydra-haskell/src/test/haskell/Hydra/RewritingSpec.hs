@@ -64,13 +64,13 @@ testFreeVariablesInTerm = do
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
         (S.fromList [Variable "x", Variable "y"])
         
---testReplaceFreeTypeVariable :: H.SpecWith ()
---testReplaceFreeTypeVariable = do
+--testReplaceFreeVariableType :: H.SpecWith ()
+--testReplaceFreeVariableType = do
 --  H.describe "Test replace free type variables" $ do
 --    
 --    H.it "Check that variable types are replaced" $ do
 --      H.shouldBe
---        (replaceFreeTypeVariable (TypeVariable "v1") Types.string $ Types.variable "v")
+--        (replaceFreeVariableType (VariableType "v1") Types.string $ Types.variable "v")
 --        ()
         
 testReplaceTerm :: H.SpecWith ()
@@ -150,20 +150,20 @@ testStripMeta = do
     H.it "Strip typ annotations" $ do
       QC.property $ \(TypedTerm typ term) -> do
         H.shouldBe
-          (contextTypeOf testContext $ termMeta term)
+          (contextType_OfTerm testContext term)
           (pure Nothing)
         H.shouldBe
-          (contextTypeOf testContext $ termMeta $ withType testContext typ term)
+          (contextType_OfTerm testContext $ withType testContext typ term)
           (pure $ Just typ)
         H.shouldBe
-          (contextTypeOf testContext $ termMeta $ stripTermMeta $ withType testContext typ term)
+          (contextType_OfTerm testContext $ stripTermMeta $ withType testContext typ term)
           (pure Nothing)
 
 spec :: H.Spec
 spec = do
   testFoldOverTerm
   testFreeVariablesInTerm
---  testReplaceFreeTypeVariable
+--  testReplaceFreeVariableType
   testReplaceTerm
   testSimplifyTerm
   testStripMeta

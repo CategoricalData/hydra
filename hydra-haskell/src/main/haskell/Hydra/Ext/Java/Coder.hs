@@ -30,17 +30,17 @@ printGraph cx g = do
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
 commentsFromElement :: Context m -> Element m -> Result (Maybe String)
-commentsFromElement cx el = contextDescriptionOf cx (termMeta $ elementData el)
+commentsFromElement cx el = contextDescription_OfTerm cx (elementData el)
 
 commentsFromFieldType :: Context m -> FieldType m -> Result (Maybe String)
-commentsFromFieldType cx (FieldType _ t) = contextDescriptionOf cx (typeMeta t)
+commentsFromFieldType cx (FieldType _ t) = contextDescription_OfType cx t
 
 addComment :: Context m -> Java.ClassBodyDeclaration -> FieldType m -> Result Java.ClassBodyDeclarationWithComments
 addComment cx decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType cx field
 
 noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
 noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
-    
+
 elementNameToFilePath :: Name -> FilePath
 elementNameToFilePath name = nameToFilePath True (FileExtension "java") $ fromQname ns (sanitizeJavaName local)
   where
@@ -275,16 +275,16 @@ declarationForUnionType aliases cx tparams elName fields = do
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] $ variantClassName elName fname
 
-declarationForTypeLambda :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
-  -> [Java.TypeParameter] -> Name -> TypeLambda m -> Result Java.ClassDeclaration
-declarationForTypeLambda aliases cx tparams elName (TypeLambda (TypeVariable v) body) =
+declarationForLambdaType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
+  -> [Java.TypeParameter] -> Name -> LambdaType m -> Result Java.ClassDeclaration
+declarationForLambdaType aliases cx tparams elName (LambdaType (VariableType v) body) =
     toClassDecl aliases cx (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
 
 encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
-encodeTerm aliases cx term@(Term expr meta) = do
+encodeTerm aliases cx term = do
   return $ javaStatementsToBlock [javaEmptyStatement] -- TODO
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
@@ -311,39 +311,39 @@ encodeLiteralType lt = case lt of
 
 encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
 encodeType aliases t = case typeExpr t of
-  TypeExprApplication (TypeApplication lhs rhs) -> do
+  TypeApplication (ApplicationType lhs rhs) -> do
     jlhs <- encode lhs
     jrhs <- encode rhs >>= javaTypeToJavaReferenceType
     addJavaTypeParameter jrhs jlhs
-  TypeExprElement et -> encode et -- Elements are simply unboxed
-  TypeExprFunction (FunctionType dom cod) -> do
+  TypeElement et -> encode et -- Elements are simply unboxed
+  TypeFunction (FunctionType dom cod) -> do
     jdom <- encode dom >>= javaTypeToJavaReferenceType
     jcod <- encode cod >>= javaTypeToJavaReferenceType
     return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
-  TypeExprLambda (TypeLambda (TypeVariable v) body) -> do
+  TypeLambda (LambdaType (VariableType v) body) -> do
     jbody <- encode body
     addJavaTypeParameter (javaTypeVariable v) jbody
-  TypeExprList et -> do
+  TypeList et -> do
     jet <- encode et
     if listsAsArrays
       then toJavaArrayType jet
       else do
         rt <- javaTypeToJavaReferenceType jet
         return $ javaRefType [rt] javaUtilPackageName "List"
-  TypeExprLiteral lt -> encodeLiteralType lt
-  TypeExprMap (MapType kt vt) -> do
+  TypeLiteral lt -> encodeLiteralType lt
+  TypeMap (MapType kt vt) -> do
     jkt <- encode kt >>= javaTypeToJavaReferenceType
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeExprNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
-  TypeExprOptional ot -> do
+  TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
+  TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
-  TypeExprSet st -> do
+  TypeSet st -> do
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeExprVariable (TypeVariable v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeExprRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
+  TypeRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
   -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
@@ -352,9 +352,9 @@ encodeType aliases t = case typeExpr t of
 toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter]
   -> Name -> Type m -> Result Java.ClassDeclaration
 toClassDecl aliases cx tparams elName t = case typeExpr t of
-    TypeExprRecord fields -> declarationForRecordType aliases cx tparams elName fields
-    TypeExprUnion fields -> declarationForUnionType aliases cx tparams elName fields
-    TypeExprLambda ut -> declarationForTypeLambda aliases cx tparams elName ut
+    TypeRecord fields -> declarationForRecordType aliases cx tparams elName fields
+    TypeUnion fields -> declarationForUnionType aliases cx tparams elName fields
+    TypeLambda ut -> declarationForLambdaType aliases cx tparams elName ut
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where

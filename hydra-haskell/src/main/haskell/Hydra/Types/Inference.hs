@@ -36,19 +36,19 @@ decodeStructuralType :: (Default m, Show m) => Context m -> Term m -> Result (Ty
 decodeStructuralType cx term = do
   typ <- decodeType cx term
   case typeExpr typ of
-    TypeExprNominal name -> do
+    TypeNominal name -> do
       scx <- schemaContext cx
       el <- requireElement (Just "decode structural type") scx name
       decodeStructuralType scx $ elementData el
     _ -> pure typ
 
-freshTypeVariable :: Default m => Infer (Type m) m
-freshTypeVariable = do
+freshVariableType :: Default m => Infer (Type m) m
+freshVariableType = do
     s <- get
     put (s + 1)
     return $ Types.variable (h $ normalVariables !! s)
   where
-    h (TypeVariable v) = v
+    h (VariableType v) = v
 
 generalize :: TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
@@ -63,170 +63,173 @@ extendEnvironment (x, sc) m = do
   local scope m
 
 infer :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
-infer cx term = case contextTypeOf cx (termMeta term) of
+infer cx term = case contextType_OfTerm cx term of
     ResultSuccess t -> case t of
       Just typ -> do
-        i <- inferInternal
-        return i { termMeta = (termMeta term, typ, [])} -- TODO: unify "suggested" types with inferred types
-      Nothing -> inferInternal
-  where
-    yield expr typ constraints = return Term {
-      termExpr = expr,
-      termMeta = (termMeta term, typ, constraints)}
+        i <- inferInternal cx term
+        return $ TermAnnotated $ Annotated i (termMeta term, typ, []) -- TODO: unify "suggested" types with inferred types
+      Nothing -> inferInternal cx term
 
-    yieldFunction fun = yield (TermExprFunction fun)
-    
-    yieldElimination e = yield (TermExprFunction $ FunctionElimination e)
+inferInternal :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
+inferInternal cx term = case termExpr term of
+    TermApplication (Application fun arg) -> do
+      ifun <- infer cx fun
+      iarg <- infer cx arg
+      v <- freshVariableType
+      let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) v)]
+      let app = TermApplication $ Application ifun iarg
+      yield app v c
 
-    inferInternal = case termExpr term of
-      TermExprApplication (Application fun arg) -> do
-        ifun <- infer cx fun
-        iarg <- infer cx arg
-        v <- freshTypeVariable
-        let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) v)]
-        let app = TermExprApplication $ Application ifun iarg
-        yield app v c
+    TermElement name -> do
+      case typeOfElement cx name of
+        -- TODO: polytyped elements will probably be allowed in the future
+        ResultSuccess et -> yield (TermElement name) (Types.element et) []
+        ResultFailure msg -> error msg
 
-      TermExprElement name -> do
-        case typeOfElement cx name of
-          -- TODO: polytyped elements will probably be allowed in the future
-          ResultSuccess et -> yield (TermExprElement name) (Types.element et) []
-          ResultFailure msg -> error msg
+    TermFunction f -> case f of
 
-      TermExprFunction f -> case f of
+      -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
+      --       For the latter, Comparison would have to be added to the literal type grammar.
+      FunctionCompareTo other -> do
+        i <- infer cx other
+        yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
 
-        -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
-        --       For the latter, Comparison would have to be added to the literal type grammar.
-        FunctionCompareTo other -> do
-          i <- infer cx other
-          yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
+      FunctionElimination e -> case e of
 
-        FunctionElimination e -> case e of
-          
-          EliminationElement -> do
-            et <- freshTypeVariable
-            yieldElimination EliminationElement (Types.function (Types.element et) et) []
+        EliminationElement -> do
+          et <- freshVariableType
+          yieldElimination EliminationElement (Types.function (Types.element et) et) []
 
-          EliminationNominal name -> do
-            case namedType "eliminate nominal" cx name of
-              ResultFailure msg -> error msg
-              ResultSuccess typ -> yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []  
-
-          EliminationOptional (OptionalCases n j) -> do
-            dom <- freshTypeVariable
-            cod <- freshTypeVariable
-            ni <- infer cx n
-            ji <- infer cx j
-            let t = Types.function (Types.optional dom) cod
-            let constraints = [(cod, termType ni), (Types.function dom cod, termType ji)]
-            yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
-
-          -- Note: type inference cannot recover complete record types from projections; type annotations are needed
-          EliminationRecord fname -> do
-            dom <- freshTypeVariable
-            cod <- freshTypeVariable
-            let ftype = Types.function (Types.record [FieldType fname dom]) cod
-            yieldElimination (EliminationRecord fname) ftype []
-
-          EliminationUnion cases -> do
-              icases <- CM.mapM (inferFieldType cx) cases
-              cod <- freshTypeVariable
-              doms <- CM.mapM (const freshTypeVariable) cases
-              let ftypes = termType . fieldTerm <$> icases
-              let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
-              let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
-              let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
-              yieldElimination (EliminationUnion icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
-
-        FunctionLambda (Lambda v body) -> do
-          tv <- freshTypeVariable
-          i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
-          yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
-
-        FunctionPrimitive name -> do
-          case typeOfPrimitiveFunction cx name of
-            ResultSuccess (FunctionType dom cod) -> yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
+        EliminationNominal name -> do
+          case namedType "eliminate nominal" cx name of
             ResultFailure msg -> error msg
+            ResultSuccess typ -> yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []
 
-      TermExprLet (Let x e1 e2) -> do
-        env <- ask
-        i1 <- infer cx e1
-        let t1 = termType i1
-        let c1 = termConstraints i1
-        case solveConstraints cx c1 of
-            Left err -> throwError err
-            Right sub -> do
-                let sc = generalize (M.map (substituteInScheme sub) env) (substituteInType sub t1)
-                i2 <- extendEnvironment (x, sc) $ local (M.map (substituteInScheme sub)) (infer cx e2)
-                let t2 = termType i2
-                let c2 = termConstraints i2
-                yield (TermExprLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
+        EliminationOptional (OptionalCases n j) -> do
+          dom <- freshVariableType
+          cod <- freshVariableType
+          ni <- infer cx n
+          ji <- infer cx j
+          let t = Types.function (Types.optional dom) cod
+          let constraints = [(cod, termType ni), (Types.function dom cod, termType ji)]
+          yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
-      TermExprList els -> do
-        v <- freshTypeVariable
-        iels <- CM.mapM (infer cx) els
-        let co = (\e -> (v, termType e)) <$> iels
-        let ci = L.concat (termConstraints <$> iels)
-        yield (TermExprList iels) (Types.list v) (co ++ ci)
+        -- Note: type inference cannot recover complete record types from projections; type annotations are needed
+        EliminationRecord fname -> do
+          dom <- freshVariableType
+          cod <- freshVariableType
+          let ftype = Types.function (Types.record [FieldType fname dom]) cod
+          yieldElimination (EliminationRecord fname) ftype []
 
-      TermExprLiteral l -> yield (TermExprLiteral l) (Types.literal $ literalType l) []
+        EliminationUnion cases -> do
+            icases <- CM.mapM (inferFieldType cx) cases
+            cod <- freshVariableType
+            doms <- CM.mapM (const freshVariableType) cases
+            let ftypes = termType . fieldTerm <$> icases
+            let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
+            let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
+            let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
+            yieldElimination (EliminationUnion icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
 
-      TermExprMap m -> do
-          kv <- freshTypeVariable
-          vv <- freshTypeVariable
-          pairs <- CM.mapM toPair $ M.toList m
-          let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
-          let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
-          yield (TermExprMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
-        where
-          toPair (k, v) = do
-            ik <- infer cx k
-            iv <- infer cx v
-            return (ik, iv)
+      FunctionLambda (Lambda v body) -> do
+        tv <- freshVariableType
+        i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
+        yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
-      TermExprNominal (Named name term1) -> do
-        case namedType "nominal" cx name of
+      FunctionPrimitive name -> do
+        case typeOfPrimitiveFunction cx name of
+          ResultSuccess (FunctionType dom cod) -> yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
           ResultFailure msg -> error msg
-          ResultSuccess typ -> do
-            i <- infer cx term1
-            let typ1 = termType i
-            let c = termConstraints i
-            yield (TermExprNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
 
-      TermExprOptional m -> do
-        v <- freshTypeVariable
-        case m of
-          Nothing -> yield (TermExprOptional Nothing) (Types.optional v) []
-          Just e -> do
-            i <- infer cx e
-            yield (TermExprOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
+    TermLet (Let x e1 e2) -> do
+      env <- ask
+      i1 <- infer cx e1
+      let t1 = termType i1
+      let c1 = termConstraints i1
+      case solveConstraints cx c1 of
+          Left err -> throwError err
+          Right sub -> do
+              let sc = generalize (M.map (substituteInScheme sub) env) (substituteInType sub t1)
+              i2 <- extendEnvironment (x, sc) $ local (M.map (substituteInScheme sub)) (infer cx e2)
+              let t2 = termType i2
+              let c2 = termConstraints i2
+              yield (TermLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
 
-      TermExprRecord fields -> do
-          (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
-          yield (TermExprRecord $ L.reverse fields0) (Types.record $ L.reverse ftypes0) c1
-        where
-          forField (typed, ftypes, c) field = do
-            i <- inferFieldType cx field
-            let ft = termType $ fieldTerm i
-            let c1 = termConstraints $ fieldTerm i
-            return (i:typed, (FieldType (fieldName field) ft):ftypes, c1 ++ c)
+    TermList els -> do
+      v <- freshVariableType
+      iels <- CM.mapM (infer cx) els
+      let co = (\e -> (v, termType e)) <$> iels
+      let ci = L.concat (termConstraints <$> iels)
+      yield (TermList iels) (Types.list v) (co ++ ci)
 
-      TermExprSet els -> do
-        v <- freshTypeVariable
-        iels <- CM.mapM (infer cx) $ S.toList els
-        let co = (\e -> (v, termType e)) <$> iels
-        let ci = L.concat (termConstraints <$> iels)
-        yield (TermExprSet $ S.fromList iels) (Types.set v) (co ++ ci)
+    TermLiteral l -> yield (TermLiteral l) (Types.literal $ literalType l) []
 
-      -- Note: type inference cannot recover complete union types from union values; type annotations are needed
-      TermExprUnion field -> do
-        ifield <- inferFieldType cx field
-        let typ = Types.union [FieldType (fieldName field) (termType $ fieldTerm ifield)]
-        yield (TermExprUnion ifield) typ (termConstraints $ fieldTerm ifield)
+    TermMap m -> do
+        kv <- freshVariableType
+        vv <- freshVariableType
+        pairs <- CM.mapM toPair $ M.toList m
+        let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
+        let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
+        yield (TermMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
+      where
+        toPair (k, v) = do
+          ik <- infer cx k
+          iv <- infer cx v
+          return (ik, iv)
 
-      TermExprVariable x -> do
-        t <- lookupTypeInEnvironment x
-        yield (TermExprVariable x) t []
+    TermNominal (Named name term1) -> do
+      case namedType "nominal" cx name of
+        ResultFailure msg -> error msg
+        ResultSuccess typ -> do
+          i <- infer cx term1
+          let typ1 = termType i
+          let c = termConstraints i
+          yield (TermNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
+
+    TermOptional m -> do
+      v <- freshVariableType
+      case m of
+        Nothing -> yield (TermOptional Nothing) (Types.optional v) []
+        Just e -> do
+          i <- infer cx e
+          yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
+
+    TermRecord fields -> do
+        (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
+        yield (TermRecord $ L.reverse fields0) (Types.record $ L.reverse ftypes0) c1
+      where
+        forField (typed, ftypes, c) field = do
+          i <- inferFieldType cx field
+          let ft = termType $ fieldTerm i
+          let c1 = termConstraints $ fieldTerm i
+          return (i:typed, (FieldType (fieldName field) ft):ftypes, c1 ++ c)
+
+    TermSet els -> do
+      v <- freshVariableType
+      iels <- CM.mapM (infer cx) $ S.toList els
+      let co = (\e -> (v, termType e)) <$> iels
+      let ci = L.concat (termConstraints <$> iels)
+      yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
+
+    -- Note: type inference cannot recover complete union types from union values; type annotations are needed
+    TermUnion field -> do
+      ifield <- inferFieldType cx field
+      let typ = Types.union [FieldType (fieldName field) (termType $ fieldTerm ifield)]
+      yield (TermUnion ifield) typ (termConstraints $ fieldTerm ifield)
+
+    TermVariable x -> do
+      t <- lookupTypeInEnvironment x
+      yield (TermVariable x) t []
+  where
+
+    yieldFunction fun = yield (TermFunction fun)
+
+    yieldElimination e = yield (TermFunction $ FunctionElimination e)
+
+yield :: Default m => Term (m, Type m, [Constraint m]) -> Type m -> [Constraint m] -> Infer (Term (m, Type m, [Constraint m])) m
+yield term typ constraints = case term of
+  TermAnnotated (Annotated term' (meta, _, _)) -> return $ TermAnnotated $ Annotated term' (meta, typ, constraints)
+  _ -> return $ TermAnnotated $ Annotated term (dflt, typ, constraints)
 
 inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
@@ -253,7 +256,7 @@ inferType cx term = case inferTop cx term of
 
 instantiate :: Default m => TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
-    vars1 <- mapM (const freshTypeVariable) vars
+    vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
 lookupTypeInEnvironment :: Default m => Variable -> Infer (Type m) m
@@ -281,10 +284,10 @@ startState :: InferenceState
 startState = 0
 
 termConstraints :: Term (m, Type m, [Constraint m]) -> [Constraint m]
-termConstraints (Term _ (_, _, constraints)) = constraints
+termConstraints (TermAnnotated (Annotated _ (_, _, constraints))) = constraints
 
 termType :: Term (m, Type m, [Constraint m]) -> Type m
-termType (Term _ (_, typ, _)) = typ
+termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
 typeOfElement :: (Default m, Show m) => Context m -> Name -> Result (Type m)
 typeOfElement cx name = do

@@ -7,8 +7,10 @@ import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
-import Hydra.Impl.Haskell.Meta
+import Hydra.Meta
 import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Impl.Haskell.Default
+import Hydra.Common
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -19,13 +21,13 @@ datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
 annotate :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
-annotate key val (Type term meta) = Type term $ setAnnotation key val meta
+annotate = setTypeAnnotation
 
 doc :: String -> Type Meta -> Type Meta
-doc s (Type term meta) = Type term $ setDescription (Just s) meta
+doc s = setTypeDescription (Just s)
 
 dataDoc :: String -> Term Meta -> Term Meta
-dataDoc s (Term term meta) = Term term $ setDescription (Just s) meta
+dataDoc s = setTermDescription (Just s)
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList t = doc "Note: list cannot be empty" $ Types.list t
@@ -47,10 +49,16 @@ standardContext = cx
       contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
       contextStrategy = EvaluationStrategy {
         evaluationStrategyOpaqueTermVariants = S.fromList []},
-      contextDescriptionOf = getDescription,
+
+      -- TODO: simplify
+      contextDescription_OfTerm = getTermDescription,
+      contextDescription_OfType = getTypeDescription,
+      contextType_OfTerm = getType cx . termMeta,
+      contextSetDescription_OfTerm = setTermDescription,
+      contextSetType_OfTerm = setTermType cx,
       contextTypeOf = getType cx,
-      contextSetDescriptionOf = \d m -> setDescription d m,
-      contextSetTypeOf = \t m -> setType cx t m}
+      contextSetTypeOf = setType cx}
+
     emptyGraphName = GraphName "empty"
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
@@ -71,9 +79,9 @@ standardGraph name els = Graph name els termExprs schemaGraph
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {
-    elementName = name,
-    elementSchema = defaultTerm $ TermExprElement _Type,
-    elementData = encodeType cx typ}
+  elementName = name,
+  elementSchema = TermElement _Type,
+  elementData = encodeType cx typ}
 
 typed :: Type Meta -> Term Meta -> Term Meta
-typed t (Term d m) = Term d (setType standardContext (Just t) m)
+typed t = setTermType standardContext (Just t)

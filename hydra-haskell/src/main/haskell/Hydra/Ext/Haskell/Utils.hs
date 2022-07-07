@@ -76,8 +76,8 @@ sanitizeHaskellName = sanitizeWithUnderscores reservedWords
 simpleName :: String -> H.Name
 simpleName = rawName . sanitizeHaskellName
 
-toApplicationType :: [H.Type] -> H.Type
-toApplicationType = app . L.reverse
+toTypeApplication :: [H.Type] -> H.Type
+toTypeApplication = app . L.reverse
   where
     app l = case l of
       [e] -> e
@@ -91,9 +91,9 @@ unionFieldReference namespaces sname (FieldName fname) = elementReference namesp
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
-unpackTypeLambda :: Type m -> ([TypeVariable], Type m)
-unpackTypeLambda t = case typeExpr t of
-  TypeExprLambda (TypeLambda v tbody) -> (v:vars, t')
+unpackLambdaType :: Type m -> ([VariableType], Type m)
+unpackLambdaType t = case typeExpr t of
+  TypeLambda (LambdaType v tbody) -> (v:vars, t')
     where
-      (vars, t') = unpackTypeLambda tbody
+      (vars, t') = unpackLambdaType tbody
   _ -> ([], t)

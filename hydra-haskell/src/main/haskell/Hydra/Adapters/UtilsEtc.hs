@@ -61,14 +61,15 @@ integerTypeIsSupported constraints it = S.member it $ languageConstraintsInteger
 typeIsSupported :: LanguageConstraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
-  && case typeExpr t of
-    TypeExprLiteral at -> literalTypeIsSupported constraints at
-    TypeExprFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
-    TypeExprList lt -> typeIsSupported constraints lt
-    TypeExprMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
-    TypeExprNominal _ -> True -- TODO: dereference the type
-    TypeExprOptional t -> typeIsSupported constraints t
-    TypeExprRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
-    TypeExprSet st -> typeIsSupported constraints st
-    TypeExprUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+  && case t of
+    TypeAnnotated (Annotated at _) -> typeIsSupported constraints at
+    TypeLiteral at -> literalTypeIsSupported constraints at
+    TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
+    TypeList lt -> typeIsSupported constraints lt
+    TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
+    TypeNominal _ -> True -- TODO: dereference the type
+    TypeOptional t -> typeIsSupported constraints t
+    TypeRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeSet st -> typeIsSupported constraints st
+    TypeUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
     _ -> True

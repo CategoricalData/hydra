@@ -8,7 +8,7 @@ module Hydra.CoreDecoding (
   decodeMapType,
   decodeString,
   decodeType,
-  decodeTypeLambda,
+  decodeLambdaType,
   ) where
 
 import Hydra.Common
@@ -24,8 +24,8 @@ import qualified Data.Map as M
 
 
 decodeElement :: Term m -> Result Name
-decodeElement term = case termExpr term of
-  TermExprElement name -> pure name
+decodeElement term = case term of
+  TermElement name -> pure name
   _ -> fail "expected an element"
 
 decodeFieldType :: (Default m, Show m) => Context m -> Term m -> Result (FieldType m)
@@ -34,8 +34,8 @@ decodeFieldType cx = matchRecord cx $ \m -> FieldType
   <*> getField m _FieldType_type (decodeType cx)
 
 decodeFieldTypes :: (Default m, Show m) => Context m -> Term m -> Result [FieldType m]
-decodeFieldTypes cx term = case termExpr term of
-  TermExprList els -> CM.mapM (decodeFieldType cx) els
+decodeFieldTypes cx term = case term of
+  TermList els -> CM.mapM (decodeFieldType cx) els
   _ -> fail "expected a list"
 
 decodeFloatType :: (Default m, Show m) => Context m -> Term m -> Result FloatType
@@ -75,39 +75,41 @@ decodeMapType cx = matchRecord cx $ \m -> MapType
   <*> getField m _MapType_values (decodeType cx)
 
 decodeString :: Term m -> Result String
-decodeString term = case termExpr term of
-  TermExprLiteral av -> case av of
+decodeString term = case term of
+  TermLiteral av -> case av of
     LiteralString s -> pure s
     _ -> fail "expected a string value"
   _ -> fail "expected a literal value"
 
 decodeType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
-decodeType cx dat = case termExpr dat of
-  TermExprElement name -> pure $ Types.nominal name
-  _ -> (\t -> Type t (termMeta dat)) <$> matchUnion cx [
-    (_TypeExpr_application, fmap TypeExprApplication . decodeTypeApplication cx),
-    (_TypeExpr_element, fmap TypeExprElement . decodeType cx),
-    (_TypeExpr_function, fmap TypeExprFunction . decodeFunctionType cx),
-    (_TypeExpr_lambda, fmap TypeExprLambda . decodeTypeLambda cx),
-    (_TypeExpr_list, fmap TypeExprList . decodeType cx),
-    (_TypeExpr_literal, fmap TypeExprLiteral . decodeLiteralType cx),
-    (_TypeExpr_map, fmap TypeExprMap . decodeMapType cx),
-    (_TypeExpr_nominal, fmap TypeExprNominal . decodeElement),
-    (_TypeExpr_optional, fmap TypeExprOptional . decodeType cx),
-    (_TypeExpr_record, fmap TypeExprRecord . decodeFieldTypes cx),
-    (_TypeExpr_set, fmap TypeExprSet . decodeType cx),
-    (_TypeExpr_union, fmap TypeExprUnion . decodeFieldTypes cx),
-    (_TypeExpr_variable, fmap (TypeExprVariable . TypeVariable) . decodeString)] dat
+decodeType cx dat = case dat of
+  TermElement name -> pure $ Types.nominal name
+  TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> decodeType cx term
+  _ -> matchUnion cx [
+--    (_Type_annotated, fmap TypeAnnotated . decodeAnnotated cx),
+    (_Type_application, fmap TypeApplication . decodeApplicationType cx),
+    (_Type_element, fmap TypeElement . decodeType cx),
+    (_Type_function, fmap TypeFunction . decodeFunctionType cx),
+    (_Type_lambda, fmap TypeLambda . decodeLambdaType cx),
+    (_Type_list, fmap TypeList . decodeType cx),
+    (_Type_literal, fmap TypeLiteral . decodeLiteralType cx),
+    (_Type_map, fmap TypeMap . decodeMapType cx),
+    (_Type_nominal, fmap TypeNominal . decodeElement),
+    (_Type_optional, fmap TypeOptional . decodeType cx),
+    (_Type_record, fmap TypeRecord . decodeFieldTypes cx),
+    (_Type_set, fmap TypeSet . decodeType cx),
+    (_Type_union, fmap TypeUnion . decodeFieldTypes cx),
+    (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
 
-decodeTypeApplication :: (Default m, Show m) => Context m -> Term m -> Result (TypeApplication m)
-decodeTypeApplication cx = matchRecord cx $ \m -> TypeApplication
-  <$> getField m _TypeApplication_function (decodeType cx)
-  <*> getField m _TypeApplication_argument (decodeType cx)
-  
-decodeTypeLambda :: (Default m, Show m) => Context m -> Term m -> Result (TypeLambda m)
-decodeTypeLambda cx = matchRecord cx $ \m -> TypeLambda
-  <$> (TypeVariable <$> getField m _TypeLambda_parameter decodeString)
-  <*> getField m _TypeLambda_body (decodeType cx)
+decodeApplicationType :: (Default m, Show m) => Context m -> Term m -> Result (ApplicationType m)
+decodeApplicationType cx = matchRecord cx $ \m -> ApplicationType
+  <$> getField m _ApplicationType_function (decodeType cx)
+  <*> getField m _ApplicationType_argument (decodeType cx)
+
+decodeLambdaType :: (Default m, Show m) => Context m -> Term m -> Result (LambdaType m)
+decodeLambdaType cx = matchRecord cx $ \m -> LambdaType
+  <$> (VariableType <$> getField m _LambdaType_parameter decodeString)
+  <*> getField m _LambdaType_body (decodeType cx)
 
 getField :: M.Map FieldName (Term m) -> FieldName -> (Term m -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
@@ -117,18 +119,18 @@ getField m fname decode = case M.lookup fname m of
 matchEnum :: (Default m, Show m) => Context m -> [(FieldName, b)] -> Term m -> Result b
 matchEnum cx = matchUnion cx . fmap (uncurry matchUnitField)
 
-matchRecord :: Context m -> (M.Map FieldName (Term m) -> Result b) -> Term m -> Result b
+matchRecord :: Show m => Context m -> (M.Map FieldName (Term m) -> Result b) -> Term m -> Result b
 matchRecord cx decode term = do
   term' <- deref cx term
   case termExpr term' of
-    TermExprRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
-    _ -> fail "expected a record"
+    TermRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
+    _ -> fail $ "expected a record; found " ++ show term'
 
 matchUnion :: (Default m, Show m) => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
 matchUnion cx pairs term = do
     term' <- deref cx term
     case termExpr term' of
-      TermExprUnion (Field fname val) -> case M.lookup fname mapping of
+      TermUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}"

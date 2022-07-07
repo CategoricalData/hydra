@@ -87,7 +87,7 @@ instance QC.Arbitrary Name
 instance Default m => QC.Arbitrary (Type m) where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typeExpr typ of
-    TypeExprLiteral at -> Types.literal <$> case at of
+    TypeLiteral at -> Types.literal <$> case at of
       LiteralTypeInteger _ -> [LiteralTypeBoolean]
       LiteralTypeFloat _ -> [LiteralTypeBoolean]
       _ -> []
@@ -129,15 +129,15 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     whenEqual = [FunctionCompareTo <$> arbitraryTerm dom n' | dom == cod]
     domainSpecific = case typeExpr dom of
-      TypeExprUnion sfields -> [FunctionElimination . EliminationUnion <$> CM.mapM arbitraryCase sfields]
+      TypeUnion sfields -> [FunctionElimination . EliminationUnion <$> CM.mapM arbitraryCase sfields]
         where
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
             return $ Field fn $ defaultTerm $ TermExprFunction term
           n2 = div n' $ L.length sfields
         -- Note: projections now require nominally-typed records
---      TypeExprRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
---      TypeExprOptional ot -> [FunctionOptionalCases <$> (
+--      TypeRecord sfields -> [FunctionProjection <$> (fieldTypeName <$> QC.elements sfields) | not (L.null sfields)]
+--      TypeOptional ot -> [FunctionOptionalCases <$> (
 --        OptionalCases <$> arbitraryTerm cod n'
 --          <*> (defaultTerm . TermExprFunction
 --          <$> arbitraryFunction (FunctionType ot cod) n'))]
@@ -176,10 +176,10 @@ arbitraryPair c g n = c <$> g n' <*> g n'
 -- Note: variables and function applications are not (currently) generated
 arbitraryTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Int -> QC.Gen (Term m)
 arbitraryTerm typ n = case typeExpr typ of
-    TypeExprLiteral at -> literal <$> arbitraryLiteral at
-    TypeExprFunction ft -> defaultTerm . TermExprFunction <$> arbitraryFunction ft n'
-    TypeExprList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
-    TypeExprMap (MapType kt vt) -> defaultTerm . TermExprMap <$> (M.fromList <$> arbitraryList False arbPair n')
+    TypeLiteral at -> literal <$> arbitraryLiteral at
+    TypeFunction ft -> defaultTerm . TermExprFunction <$> arbitraryFunction ft n'
+    TypeList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
+    TypeMap (MapType kt vt) -> defaultTerm . TermExprMap <$> (M.fromList <$> arbitraryList False arbPair n')
       where
         arbPair n = do
             k <- arbitraryTerm kt n'
@@ -187,10 +187,10 @@ arbitraryTerm typ n = case typeExpr typ of
             return (k, v)
           where
             n' = div n 2
-    TypeExprOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
-    TypeExprRecord sfields -> record <$> arbitraryFields sfields
-    TypeExprSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
-    TypeExprUnion sfields -> union <$> do
+    TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
+    TypeRecord sfields -> record <$> arbitraryFields sfields
+    TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
+    TypeUnion sfields -> union <$> do
       f <- QC.elements sfields
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
@@ -205,15 +205,15 @@ arbitraryTerm typ n = case typeExpr typ of
 
 -- Note: nominal types and element types are not currently generated, as instantiating them requires a context
 arbitraryType :: Default m => Int -> QC.Gen (Type m)
-arbitraryType n = if n == 0 then pure Types.unit else Types.defaultType <$> QC.oneof [
-    TypeExprLiteral <$> QC.arbitrary,
-    TypeExprFunction <$> arbitraryPair FunctionType arbitraryType n',
-    TypeExprList <$> arbitraryType n',
-    TypeExprMap <$> arbitraryPair MapType arbitraryType n',
-    TypeExprOptional <$> arbitraryType n',
-    TypeExprRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
-    TypeExprSet <$> arbitraryType n',
-    TypeExprUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
+arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
+    TypeLiteral <$> QC.arbitrary,
+    TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
+    TypeList <$> arbitraryType n',
+    TypeMap <$> arbitraryPair MapType arbitraryType n',
+    TypeOptional <$> arbitraryType n',
+    TypeRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
+    TypeSet <$> arbitraryType n',
+    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
 arbitraryTypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Int -> QC.Gen (TypedTerm m)
@@ -230,20 +230,20 @@ decr n = max 0 (n-1)
 -- Note: shrinking currently discards any metadata
 shrinkers :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, (Term m) -> [Term m])]
 shrinkers typ = trivialShrinker ++ case typeExpr typ of
-    TypeExprLiteral at -> case at of
+    TypeLiteral at -> case at of
       LiteralTypeBinary -> [(Types.binary, \(Term (TermExprLiteral (LiteralBinary s)) _) -> binaryTerm <$> QC.shrink s)]
       LiteralTypeBoolean -> []
       LiteralTypeFloat ft -> []
       LiteralTypeInteger it -> []
       LiteralTypeString -> [(Types.string, \(Term (TermExprLiteral (LiteralString s)) _) -> string <$> QC.shrink s)]
-  --  TypeExprElement et ->
-  --  TypeExprFunction ft ->
-    TypeExprList lt -> dropElements : promoteType : shrinkType
+  --  TypeElement et ->
+  --  TypeFunction ft ->
+    TypeList lt -> dropElements : promoteType : shrinkType
       where
         dropElements = (Types.list lt, \(Term (TermExprList els) _) -> list <$> dropAny els)
         promoteType = (lt, \(Term (TermExprList els) _) -> els)
         shrinkType = (\(t, m) -> (Types.list t, \(Term (TermExprList els) _) -> list <$> CM.mapM m els)) <$> shrinkers lt
-    TypeExprMap (MapType kt vt) -> shrinkKeys ++ shrinkValues ++ dropPairs
+    TypeMap (MapType kt vt) -> shrinkKeys ++ shrinkValues ++ dropPairs
       where
         shrinkKeys = (\(t, m) -> (Types.map t vt,
             \(Term (TermExprMap mp) _) -> defaultTerm . TermExprMap . M.fromList <$> (shrinkPair m <$> M.toList mp))) <$> shrinkers kt
@@ -254,14 +254,14 @@ shrinkers typ = trivialShrinker ++ case typeExpr typ of
           where
             shrinkPair m (km, vm) = (\vm' -> (km, vm')) <$> m vm
         dropPairs = [(Types.map kt vt, \(Term (TermExprMap m) _) -> defaultTerm . TermExprMap . M.fromList <$> dropAny (M.toList m))]
-  --  TypeExprNominal name ->
-    TypeExprOptional ot -> toNothing : promoteType : shrinkType
+  --  TypeNominal name ->
+    TypeOptional ot -> toNothing : promoteType : shrinkType
       where
         toNothing = (Types.optional ot, \(Term (TermExprOptional m) _) -> optional <$> Y.maybe [] (const [Nothing]) m)
         promoteType = (ot, \(Term (TermExprOptional m) _) -> Y.maybeToList m)
         shrinkType = (\(t, m) -> (Types.optional t,
           \(Term (TermExprOptional mb) _) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
-    TypeExprRecord sfields -> dropFields
+    TypeRecord sfields -> dropFields
         ++ shrinkFieldNames Types.record record (\(Term (TermExprRecord dfields) _) -> dfields) sfields
         ++ promoteTypes ++ shrinkTypes
       where
@@ -275,12 +275,12 @@ shrinkers typ = trivialShrinker ++ case typeExpr typ of
               -> [fieldTerm $ dfields !! i])
         shrinkTypes = [] -- TODO
         indices = [0..(L.length sfields - 1)]
-    TypeExprSet st -> dropElements : promoteType : shrinkType
+    TypeSet st -> dropElements : promoteType : shrinkType
       where
         dropElements = (Types.set st, \(Term (TermExprSet els) _) -> set . S.fromList <$> dropAny (S.toList els))
         promoteType = (st, \(Term (TermExprSet els) _) -> S.toList els)
         shrinkType = (\(t, m) -> (Types.set t, \(Term (TermExprSet els) _) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
-    TypeExprUnion sfields -> dropFields
+    TypeUnion sfields -> dropFields
         ++ shrinkFieldNames Types.union (union . L.head) (\(Term (TermExprUnion f) _) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where

@@ -3,6 +3,18 @@ module Hydra.Core where
 import Data.Map
 import Data.Set
 
+data Annotated a m 
+  = Annotated {
+    annotatedSubject :: a,
+    annotatedAnnotation :: m}
+  deriving (Eq, Ord, Read, Show)
+
+_Annotated = (Name "hydra/core.Annotated")
+
+_Annotated_subject = (FieldName "subject")
+
+_Annotated_annotation = (FieldName "annotation")
+
 -- A term which applies a function to an argument
 data Application m 
   = Application {
@@ -15,6 +27,19 @@ _Application = (Name "hydra/core.Application")
 _Application_function = (FieldName "function")
 
 _Application_argument = (FieldName "argument")
+
+-- The type-level analog of an application term
+data ApplicationType m 
+  = ApplicationType {
+    applicationTypeFunction :: (Type m),
+    applicationTypeArgument :: (Type m)}
+  deriving (Eq, Ord, Read, Show)
+
+_ApplicationType = (Name "hydra/core.ApplicationType")
+
+_ApplicationType_function = (FieldName "function")
+
+_ApplicationType_argument = (FieldName "argument")
 
 -- An equality judgement: less than, equal to, or greater than
 data Comparison 
@@ -265,6 +290,19 @@ _Lambda_parameter = (FieldName "parameter")
 
 _Lambda_body = (FieldName "body")
 
+-- A type abstraction; the type-level analog of a lambda term
+data LambdaType m 
+  = LambdaType {
+    lambdaTypeParameter :: VariableType,
+    lambdaTypeBody :: (Type m)}
+  deriving (Eq, Ord, Read, Show)
+
+_LambdaType = (Name "hydra/core.LambdaType")
+
+_LambdaType_parameter = (FieldName "parameter")
+
+_LambdaType_body = (FieldName "body")
+
 -- A 'let' binding
 data Let m 
   = Let {
@@ -428,7 +466,8 @@ _Term_meta = (FieldName "meta")
 
 -- A term expression
 data TermExpr m 
-  = TermExprApplication (Application m)
+  = TermExprAnnotated (Annotated (TermExpr m) m)
+  | TermExprApplication (Application m)
   | TermExprLiteral Literal
   | TermExprElement Name
   | TermExprFunction (Function m)
@@ -444,6 +483,8 @@ data TermExpr m
   deriving (Eq, Ord, Read, Show)
 
 _TermExpr = (Name "hydra/core.TermExpr")
+
+_TermExpr_annotated = (FieldName "annotated")
 
 _TermExpr_application = (FieldName "application")
 
@@ -473,7 +514,8 @@ _TermExpr_variable = (FieldName "variable")
 
 -- The identifier of a term expression constructor
 data TermVariant 
-  = TermVariantApplication 
+  = TermVariantAnnotated 
+  | TermVariantApplication 
   | TermVariantElement 
   | TermVariantFunction 
   | TermVariantLet 
@@ -490,6 +532,8 @@ data TermVariant
   deriving (Eq, Ord, Read, Show)
 
 _TermVariant = (Name "hydra/core.TermVariant")
+
+_TermVariant_annotated = (FieldName "annotated")
 
 _TermVariant_application = (FieldName "application")
 
@@ -521,47 +565,56 @@ _TermVariant_variable = (FieldName "variable")
 
 -- A data type
 data Type m 
-  = Type {
-    typeExpr :: (TypeExpr m),
-    typeMeta :: m}
+  = TypeAnnotated (Annotated (Type m) m)
+  | TypeApplication (ApplicationType m)
+  | TypeElement (Type m)
+  | TypeFunction (FunctionType m)
+  | TypeLambda (LambdaType m)
+  | TypeList (Type m)
+  | TypeLiteral LiteralType
+  | TypeMap (MapType m)
+  | TypeNominal Name
+  | TypeOptional (Type m)
+  | TypeRecord [FieldType m]
+  | TypeSet (Type m)
+  | TypeUnion [FieldType m]
+  | TypeVariable VariableType
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")
 
-_Type_expr = (FieldName "expr")
+_Type_annotated = (FieldName "annotated")
 
-_Type_meta = (FieldName "meta")
+_Type_application = (FieldName "application")
 
--- The type-level analog of an application term
-data TypeApplication m 
-  = TypeApplication {
-    typeApplicationFunction :: (Type m),
-    typeApplicationArgument :: (Type m)}
-  deriving (Eq, Ord, Read, Show)
+_Type_element = (FieldName "element")
 
-_TypeApplication = (Name "hydra/core.TypeApplication")
+_Type_function = (FieldName "function")
 
-_TypeApplication_function = (FieldName "function")
+_Type_lambda = (FieldName "lambda")
 
-_TypeApplication_argument = (FieldName "argument")
+_Type_list = (FieldName "list")
 
--- A type abstraction; the type-level analog of a lambda term
-data TypeLambda m 
-  = TypeLambda {
-    typeLambdaParameter :: TypeVariable,
-    typeLambdaBody :: (Type m)}
-  deriving (Eq, Ord, Read, Show)
+_Type_literal = (FieldName "literal")
 
-_TypeLambda = (Name "hydra/core.TypeLambda")
+_Type_map = (FieldName "map")
 
-_TypeLambda_parameter = (FieldName "parameter")
+_Type_nominal = (FieldName "nominal")
 
-_TypeLambda_body = (FieldName "body")
+_Type_optional = (FieldName "optional")
+
+_Type_record = (FieldName "record")
+
+_Type_set = (FieldName "set")
+
+_Type_union = (FieldName "union")
+
+_Type_variable = (FieldName "variable")
 
 -- A type expression together with free type variables occurring in the expression
 data TypeScheme m 
   = TypeScheme {
-    typeSchemeVariables :: [TypeVariable],
+    typeSchemeVariables :: [VariableType],
     typeSchemeType :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -571,62 +624,10 @@ _TypeScheme_variables = (FieldName "variables")
 
 _TypeScheme_type = (FieldName "type")
 
--- A data type
-data TypeExpr m 
-  = TypeExprApplication (TypeApplication m)
-  | TypeExprElement (Type m)
-  | TypeExprFunction (FunctionType m)
-  | TypeExprLambda (TypeLambda m)
-  | TypeExprList (Type m)
-  | TypeExprLiteral LiteralType
-  | TypeExprMap (MapType m)
-  | TypeExprNominal Name
-  | TypeExprOptional (Type m)
-  | TypeExprRecord [FieldType m]
-  | TypeExprSet (Type m)
-  | TypeExprUnion [FieldType m]
-  | TypeExprVariable TypeVariable
-  deriving (Eq, Ord, Read, Show)
-
-_TypeExpr = (Name "hydra/core.TypeExpr")
-
-_TypeExpr_application = (FieldName "application")
-
-_TypeExpr_element = (FieldName "element")
-
-_TypeExpr_function = (FieldName "function")
-
-_TypeExpr_lambda = (FieldName "lambda")
-
-_TypeExpr_list = (FieldName "list")
-
-_TypeExpr_literal = (FieldName "literal")
-
-_TypeExpr_map = (FieldName "map")
-
-_TypeExpr_nominal = (FieldName "nominal")
-
-_TypeExpr_optional = (FieldName "optional")
-
-_TypeExpr_record = (FieldName "record")
-
-_TypeExpr_set = (FieldName "set")
-
-_TypeExpr_union = (FieldName "union")
-
-_TypeExpr_variable = (FieldName "variable")
-
--- A symbol which stands in for a type
-newtype TypeVariable 
-  = TypeVariable {
-    unTypeVariable :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeVariable = (Name "hydra/core.TypeVariable")
-
 -- The identifier of a type constructor
 data TypeVariant 
-  = TypeVariantApplication 
+  = TypeVariantAnnotated 
+  | TypeVariantApplication 
   | TypeVariantElement 
   | TypeVariantFunction 
   | TypeVariantLambda 
@@ -642,6 +643,8 @@ data TypeVariant
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = (Name "hydra/core.TypeVariant")
+
+_TypeVariant_annotated = (FieldName "annotated")
 
 _TypeVariant_application = (FieldName "application")
 
@@ -689,3 +692,11 @@ newtype Variable
   deriving (Eq, Ord, Read, Show)
 
 _Variable = (Name "hydra/core.Variable")
+
+-- A symbol which stands in for a type
+newtype VariableType 
+  = VariableType {
+    unVariableType :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_VariableType = (Name "hydra/core.VariableType")

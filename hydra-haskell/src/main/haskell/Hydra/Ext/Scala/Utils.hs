@@ -14,8 +14,8 @@ import qualified Data.Maybe as Y
 
 nameOfType :: Type m -> Y.Maybe Name
 nameOfType t = case typeExpr t of
-  TypeExprNominal name -> Just name
-  TypeExprLambda (TypeLambda _ body) -> nameOfType body
+  TypeNominal name -> Just name
+  TypeLambda (LambdaType _ body) -> nameOfType body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String
@@ -60,8 +60,8 @@ stapply1 t1 t2 = stapply t1 [t2]
 stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
 stapply2 t1 t2 t3 = stapply t1 [t2, t3]
 
-stparam :: TypeVariable -> Scala.Type_Param
-stparam (TypeVariable v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
+stparam :: VariableType -> Scala.Type_Param
+stparam (VariableType v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
 
 stref :: String -> Scala.Type
 stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
