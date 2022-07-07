@@ -29,6 +29,8 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
         
       def "Dataset" $ set $ rdf "Quad",
 
+      def "Graph" $ set $ rdf "Triple",
+      
       def "Iri" string,
 
       def "IriOrLiteral" $
@@ -78,7 +80,7 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
             set $ rdf "Property"],
             
       def "Quad" $
-        doc "An RDF triple with an optional context/graph component" $
+        doc "An RDF triple with an optional named graph component" $
         record [
           field "subject" $ rdf "Resource",
           field "predicate" $ rdf "Iri",
@@ -88,4 +90,11 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
       def "Resource" $
         union [
           field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode"]]
+          field "bnode" $ rdf "BlankNode"],
+
+      def "Triple" $
+        doc "An RDF triple defined by a subject, predicate, and object" $
+        record [
+          field "subject" $ rdf "Resource",
+          field "predicate" $ rdf "Iri",
+          field "object" $ rdf "Node"]]

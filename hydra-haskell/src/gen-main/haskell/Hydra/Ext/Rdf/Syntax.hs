@@ -25,6 +25,13 @@ newtype Dataset
 
 _Dataset = (Core.Name "hydra/ext/rdf/syntax.Dataset")
 
+newtype Graph 
+  = Graph {
+    unGraph :: (Set Triple)}
+  deriving (Eq, Ord, Read, Show)
+
+_Graph = (Core.Name "hydra/ext/rdf/syntax.Graph")
+
 newtype Iri 
   = Iri {
     unIri :: String}
@@ -106,7 +113,7 @@ _Property_range = (Core.FieldName "range")
 
 _Property_subPropertyOf = (Core.FieldName "subPropertyOf")
 
--- An RDF triple with an optional context/graph component
+-- An RDF triple with an optional named graph component
 data Quad 
   = Quad {
     quadSubject :: Resource,
@@ -135,3 +142,19 @@ _Resource = (Core.Name "hydra/ext/rdf/syntax.Resource")
 _Resource_iri = (Core.FieldName "iri")
 
 _Resource_bnode = (Core.FieldName "bnode")
+
+-- An RDF triple defined by a subject, predicate, and object
+data Triple 
+  = Triple {
+    tripleSubject :: Resource,
+    triplePredicate :: Iri,
+    tripleObject :: Node}
+  deriving (Eq, Ord, Read, Show)
+
+_Triple = (Core.Name "hydra/ext/rdf/syntax.Triple")
+
+_Triple_subject = (Core.FieldName "subject")
+
+_Triple_predicate = (Core.FieldName "predicate")
+
+_Triple_object = (Core.FieldName "object")
