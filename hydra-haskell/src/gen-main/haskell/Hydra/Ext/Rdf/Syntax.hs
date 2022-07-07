@@ -11,6 +11,13 @@ newtype BlankNode
 
 _BlankNode = (Core.Name "hydra/ext/rdf/syntax.BlankNode")
 
+-- Stand-in for rdfs:Class
+data RdfsClass 
+  = RdfsClass {}
+  deriving (Eq, Ord, Read, Show)
+
+_RdfsClass = (Core.Name "hydra/ext/rdf/syntax.RdfsClass")
+
 newtype Dataset 
   = Dataset {
     unDataset :: (Set Quad)}
@@ -36,6 +43,14 @@ _IriOrLiteral = (Core.Name "hydra/ext/rdf/syntax.IriOrLiteral")
 _IriOrLiteral_iri = (Core.FieldName "iri")
 
 _IriOrLiteral_literal = (Core.FieldName "literal")
+
+-- A convenience type which provides at most one string value per language, and optionally a value without a language
+newtype LangStrings 
+  = LangStrings {
+    unLangStrings :: (Map (Maybe LanguageTag) String)}
+  deriving (Eq, Ord, Read, Show)
+
+_LangStrings = (Core.Name "hydra/ext/rdf/syntax.LangStrings")
 
 -- A BCP47 language tag
 newtype LanguageTag 
@@ -75,6 +90,22 @@ _Node_bnode = (Core.FieldName "bnode")
 
 _Node_literal = (Core.FieldName "literal")
 
+-- A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
+data Property 
+  = Property {
+    propertyDomain :: (Set RdfsClass),
+    propertyRange :: (Set RdfsClass),
+    propertySubPropertyOf :: (Set Property)}
+  deriving (Eq, Ord, Read, Show)
+
+_Property = (Core.Name "hydra/ext/rdf/syntax.Property")
+
+_Property_domain = (Core.FieldName "domain")
+
+_Property_range = (Core.FieldName "range")
+
+_Property_subPropertyOf = (Core.FieldName "subPropertyOf")
+
 -- An RDF triple with an optional context/graph component
 data Quad 
   = Quad {
@@ -104,16 +135,3 @@ _Resource = (Core.Name "hydra/ext/rdf/syntax.Resource")
 _Resource_iri = (Core.FieldName "iri")
 
 _Resource_bnode = (Core.FieldName "bnode")
-
--- A string (Literal with datatype IRI xsd:string) or a language-tagged string (rdf:langString).  This type is a convenience for downstream models like SHACL
-data StringOrLangString 
-  = StringOrLangString {
-    stringOrLangStringLexicalForm :: String,
-    stringOrLangStringLanguageTag :: (Maybe LanguageTag)}
-  deriving (Eq, Ord, Read, Show)
-
-_StringOrLangString = (Core.Name "hydra/ext/rdf/syntax.StringOrLangString")
-
-_StringOrLangString_lexicalForm = (Core.FieldName "lexicalForm")
-
-_StringOrLangString_languageTag = (Core.FieldName "languageTag")
