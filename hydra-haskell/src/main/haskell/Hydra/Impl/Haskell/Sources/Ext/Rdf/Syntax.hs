@@ -24,6 +24,9 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
 
       def "BlankNode" string,
 
+      def "RdfsClass"
+        $ doc "Stand-in for rdfs:Class" unit,
+        
       def "Dataset" $ set $ rdf "Quad",
 
       def "Iri" string,
@@ -34,6 +37,10 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
         union [
           field "iri" $ rdf "Iri",
           field "literal" $ rdf "Literal"],
+
+      def "LangStrings" $
+        doc "A convenience type which provides at most one string value per language, and optionally a value without a language" $
+        Types.map (optional $ rdf "LanguageTag") string,
 
       def "LanguageTag" $
         doc "A BCP47 language tag"
@@ -58,6 +65,18 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
           field "bnode" $ rdf "BlankNode",
           field "literal" $ rdf "Literal"],
 
+      def "Property" $
+        doc "A type representing an RDF property, and encapsulating its domain, range, and subclass relationships" $
+        record [
+          field "domain" $
+            doc "State that any resource that has a given property is an instance of one or more classes" $
+            set $ rdf "RdfsClass",
+          field "range" $
+            doc "States that the values of a property are instances of one or more classes" $
+            set $ rdf "RdfsClass",
+          field "subPropertyOf" $
+            set $ rdf "Property"],
+            
       def "Quad" $
         doc "An RDF triple with an optional context/graph component" $
         record [
@@ -69,11 +88,4 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
       def "Resource" $
         union [
           field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode"],
-
-      def "StringOrLangString" $
-        doc ("A string (Literal with datatype IRI xsd:string) or a language-tagged string (rdf:langString). " ++
-             " This type is a convenience for downstream models like SHACL") $
-        record [
-          field "lexicalForm" string,
-          field "languageTag" $ optional $ rdf "LanguageTag"]]
+          field "bnode" $ rdf "BlankNode"]]
