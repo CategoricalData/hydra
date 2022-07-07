@@ -9,7 +9,7 @@ import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Literals
-import Hydra.Impl.Haskell.Meta
+import Hydra.Meta
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Dsl.Phantoms
 import qualified Hydra.Graph as Graph
@@ -36,7 +36,7 @@ el (Element name (Data term)) cx = do
     return $ Graph.Element name schemaTerm term
   where
     cx = Standard.standardContext
-    declaredType = contextTypeOf cx $ termMeta term
+    declaredType = contextType_OfTerm cx term
 --    findType = do
 --      mt <- declaredType
 --      Y.maybe (typeSchemeType . snd <$> inferType cx term) pure mt
@@ -97,7 +97,7 @@ delta :: Data (Ref a -> a)
 delta = Data Terms.delta
 
 doc :: String -> Data a -> Data a
-doc s (Data (Term expr meta)) = Data $ Term expr $ setDescription (Just s) meta
+doc s (Data term) = Data $ setTermDescription (Just s) term
 
 element :: Element a -> Data (Ref a)
 element (Element name _) = Data $ Terms.element name
@@ -153,7 +153,7 @@ opt mc = Data $ Terms.optional (unData <$> mc)
 
 primitive :: Name -> Data a
 primitive = Data . Terms.primitive
-  
+
 project :: Type Meta -> Type Meta -> FieldName -> Data (a -> b)
 project dom cod fname = function dom cod $
   Data $ Terms.projection fname

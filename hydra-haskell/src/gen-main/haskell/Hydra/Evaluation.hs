@@ -12,9 +12,12 @@ data Context m
     contextElements :: (Map Core.Name (Graph.Element m)),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
-    contextDescriptionOf :: (m -> Result (Maybe String)),
+    contextDescription_OfTerm :: (Core.Term m -> Result (Maybe String)),
+    contextDescription_OfType :: (Core.Type m -> Result (Maybe String)),
+    contextType_OfTerm :: (Core.Term m -> Result (Maybe (Core.Type m))),
+    contextSetDescription_OfTerm :: (Maybe String -> Core.Term m -> Core.Term m),
+    contextSetType_OfTerm :: (Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
     contextTypeOf :: (m -> Result (Maybe (Core.Type m))),
-    contextSetDescriptionOf :: (Maybe String -> m -> m),
     contextSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
 
 _Context = (Core.Name "hydra/evaluation.Context")
@@ -27,11 +30,17 @@ _Context_functions = (Core.FieldName "functions")
 
 _Context_strategy = (Core.FieldName "strategy")
 
-_Context_descriptionOf = (Core.FieldName "descriptionOf")
+_Context_description_OfTerm = (Core.FieldName "description_OfTerm")
+
+_Context_description_OfType = (Core.FieldName "description_OfType")
+
+_Context_type_OfTerm = (Core.FieldName "type_OfTerm")
+
+_Context_setDescription_OfTerm = (Core.FieldName "setDescription_OfTerm")
+
+_Context_setType_OfTerm = (Core.FieldName "setType_OfTerm")
 
 _Context_typeOf = (Core.FieldName "typeOf")
-
-_Context_setDescriptionOf = (Core.FieldName "setDescriptionOf")
 
 _Context_setTypeOf = (Core.FieldName "setTypeOf")
 

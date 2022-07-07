@@ -32,15 +32,26 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           field "elements" $ Types.map (core "Name") (apply (graph "Element") (variable "m")),
           field "functions" $ Types.map (core "Name") (apply (evaluation "PrimitiveFunction") (variable "m")),
           field "strategy" $ evaluation "EvaluationStrategy",
-          field "descriptionOf" $ function
-            (variable "m")
+
+          -- TODO: simplify
+          field "description_OfTerm" $ function
+            (apply (core "Term") (variable "m"))
             (apply (evaluation "Result") (optional string)),
+          field "description_OfType" $ function
+            (apply (core "Type") (variable "m"))
+            (apply (evaluation "Result") (optional string)),
+          field "type_OfTerm" $ function
+            (apply (core "Term") (variable "m"))
+            (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m"))),
+          field "setDescription_OfTerm" $ function
+            (optional string)
+            (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m"))),
+          field "setType_OfTerm" $ function
+            (optional $ apply (core "Type") (variable "m"))
+            (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m"))),
           field "typeOf" $ function
             (variable "m")
             (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m"))),
-          field "setDescriptionOf" $ function
-            (optional string)
-            (function (variable "m") (variable "m")),
           field "setTypeOf" $ function
             (optional $ apply (core "Type") (variable "m"))
             (function (variable "m") (variable "m"))],

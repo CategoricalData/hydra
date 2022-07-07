@@ -155,6 +155,7 @@ qname ns name = (Core.Name (Strings.cat [
 -- Find the term variant (constructor) for a given term
 termVariant :: (Core.Term m -> Core.TermVariant)
 termVariant term = ((\x -> case x of
+  Core.TermExprAnnotated _ -> Core.TermVariantAnnotated
   Core.TermExprApplication _ -> Core.TermVariantApplication
   Core.TermExprElement _ -> Core.TermVariantElement
   Core.TermExprFunction _ -> Core.TermVariantFunction
@@ -171,6 +172,7 @@ termVariant term = ((\x -> case x of
 -- All term (expression) variants, in a canonical order
 termVariants :: [Core.TermVariant]
 termVariants = [
+  Core.TermVariantAnnotated,
   Core.TermVariantApplication,
   Core.TermVariantLiteral,
   Core.TermVariantElement,
@@ -191,23 +193,25 @@ testLists els = (Lists.length (Lists.concat els))
 -- Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type m -> Core.TypeVariant)
 typeVariant typ = ((\x -> case x of
-  Core.TypeExprApplication _ -> Core.TypeVariantApplication
-  Core.TypeExprElement _ -> Core.TypeVariantElement
-  Core.TypeExprFunction _ -> Core.TypeVariantFunction
-  Core.TypeExprLambda _ -> Core.TypeVariantLambda
-  Core.TypeExprList _ -> Core.TypeVariantList
-  Core.TypeExprLiteral _ -> Core.TypeVariantLiteral
-  Core.TypeExprMap _ -> Core.TypeVariantMap
-  Core.TypeExprNominal _ -> Core.TypeVariantNominal
-  Core.TypeExprOptional _ -> Core.TypeVariantOptional
-  Core.TypeExprRecord _ -> Core.TypeVariantRecord
-  Core.TypeExprSet _ -> Core.TypeVariantSet
-  Core.TypeExprUnion _ -> Core.TypeVariantUnion
-  Core.TypeExprVariable _ -> Core.TypeVariantVariable) (Core.typeExpr typ))
+  Core.TypeAnnotated _ -> Core.TypeVariantAnnotated
+  Core.TypeApplication _ -> Core.TypeVariantApplication
+  Core.TypeElement _ -> Core.TypeVariantElement
+  Core.TypeFunction _ -> Core.TypeVariantFunction
+  Core.TypeLambda _ -> Core.TypeVariantLambda
+  Core.TypeList _ -> Core.TypeVariantList
+  Core.TypeLiteral _ -> Core.TypeVariantLiteral
+  Core.TypeMap _ -> Core.TypeVariantMap
+  Core.TypeNominal _ -> Core.TypeVariantNominal
+  Core.TypeOptional _ -> Core.TypeVariantOptional
+  Core.TypeRecord _ -> Core.TypeVariantRecord
+  Core.TypeSet _ -> Core.TypeVariantSet
+  Core.TypeUnion _ -> Core.TypeVariantUnion
+  Core.TypeVariable _ -> Core.TypeVariantVariable) typ)
 
 -- All type variants, in a canonical order
 typeVariants :: [Core.TypeVariant]
 typeVariants = [
+  Core.TypeVariantAnnotated,
   Core.TypeVariantApplication,
   Core.TypeVariantElement,
   Core.TypeVariantFunction,

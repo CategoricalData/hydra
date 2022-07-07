@@ -66,32 +66,31 @@ describeType = utils "describeType" $
   doc "Display a type as a string" $
   function (Types.universal "m" $ Types.nominal _Type) Types.string $
   lambda "typ" $ apply
-    (match typeExprM Types.string [
-      Case _TypeExpr_application --> constant $ string "instances of an application type",
-      Case _TypeExpr_literal     --> ref describeLiteralType,
-      Case _TypeExpr_element     --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
-      Case _TypeExpr_function    --> lambda "ft" $ string "functions from "
+    (match typeM Types.string [
+      Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeType @@
+        (project annotatedTypeM typeM _Annotated_subject @@ var "a")),
+      Case _Type_application --> constant $ string "instances of an application type",
+      Case _Type_literal     --> ref describeLiteralType,
+      Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
+      Case _Type_function    --> lambda "ft" $ string "functions from "
         ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_domain @@ var "ft"))
         ++ string " to "
         ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_codomain @@ var "ft")),
-      Case _TypeExpr_lambda      --> constant $ string "polymorphic terms",
-      Case _TypeExpr_list        --> lambda "t" $ string "lists of " ++ (ref describeType @@ var "t"),
-      Case _TypeExpr_map         --> lambda "mt" $ string "maps from "
+      Case _Type_lambda      --> constant $ string "polymorphic terms",
+      Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeType @@ var "t"),
+      Case _Type_map         --> lambda "mt" $ string "maps from "
         ++ (ref describeType @@ (project mapTypeM typeM _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeType @@ (project mapTypeM typeM _MapType_values  @@ var "mt")),
-      Case _TypeExpr_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
-      Case _TypeExpr_optional    --> lambda "ot" $ string "optional " ++ (ref describeType @@ var "ot"),
-      Case _TypeExpr_record      --> constant $ string "records of a particular set of fields",
-      Case _TypeExpr_set         --> lambda "st" $ string "sets of " ++ (ref describeType @@ var "st"),
-      Case _TypeExpr_union       --> constant $ string "unions of a particular set of fields",
-      Case _TypeExpr_variable    --> constant $ string "unspecified/parametric terms"])
-    (project
-      (Types.universal "m" $ Types.nominal _Type)
-      (Types.universal "m" $ Types.nominal _TypeExpr)
-      _Type_expr @@ var "typ")
+      Case _Type_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
+      Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeType @@ var "ot"),
+      Case _Type_record      --> constant $ string "records of a particular set of fields",
+      Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeType @@ var "st"),
+      Case _Type_union       --> constant $ string "unions of a particular set of fields",
+      Case _Type_variable    --> constant $ string "unspecified/parametric terms"])
+    (var "typ")
   where
-    typeExprM = Types.universal "m" $ Types.nominal _TypeExpr
+    annotatedTypeM = Types.apply (Types.apply (Types.nominal _Annotated) (Types.apply (Types.nominal _Type) (Types.variable "m"))) (Types.variable "m")
     functionTypeM = Types.universal "m" $ Types.nominal _FunctionType
     typeM = Types.universal "m" $ Types.nominal _Type
     mapTypeM = Types.universal "m" $ Types.nominal _MapType
@@ -99,7 +98,7 @@ describeType = utils "describeType" $
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"
 --  "An identity adapter for a given type"
---  (Types.nominal _Type) (TypeExprLambda (TypeLambda "m" $ ())) $
+--  (Types.nominal _Type) (LambdaType (LambdaType "m" $ ())) $
 --  lambda "t" $ r_ _Adapter [
 --    Field _Adapter_isLossy (boolean False),
 --    Field _Adapter_source (var "t"),

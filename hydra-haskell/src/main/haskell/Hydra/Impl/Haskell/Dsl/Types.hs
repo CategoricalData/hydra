@@ -1,121 +1,116 @@
 module Hydra.Impl.Haskell.Dsl.Types where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Default
 
 import qualified Data.Map as M
 
 
-apply :: Default m => Type m -> Type m -> Type m
-apply lhs rhs = defaultType $ TypeExprApplication (TypeApplication lhs rhs)
+apply :: Type m -> Type m -> Type m
+apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 
-bigfloat :: Default m => Type m
+bigfloat :: Type m
 bigfloat = float FloatTypeBigfloat
 
-bigint :: Default m => Type m
+bigint :: Type m
 bigint = integer IntegerTypeBigint
 
-binary :: Default m => Type m
+binary :: Type m
 binary = literal LiteralTypeBinary
 
-boolean :: Default m => Type m
+boolean :: Type m
 boolean = literal LiteralTypeBoolean
 
-defaultType  :: Default m => TypeExpr m -> Type m
-defaultType e = Type e dflt
+element :: Type m -> Type m
+element = TypeElement
 
-element :: Default m => Type m -> Type m
-element = defaultType . TypeExprElement
-
-enum :: Default m => [String] -> Type m
+enum :: [String] -> Type m
 enum names = union $ (`field` unit) <$> names
 
-field :: Default m => String -> Type m -> FieldType m
+field :: String -> Type m -> FieldType m
 field fn = FieldType (FieldName fn)
 
-fieldsToMap :: Default m => [FieldType m] -> M.Map FieldName (Type m)
+fieldsToMap :: [FieldType m] -> M.Map FieldName (Type m)
 fieldsToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
 
-float32 :: Default m => Type m
+float32 :: Type m
 float32 = float FloatTypeFloat32
 
-float64 :: Default m => Type m
+float64 :: Type m
 float64 = float FloatTypeFloat64
 
-float :: Default m => FloatType -> Type m
+float :: FloatType -> Type m
 float = literal . LiteralTypeFloat
 
-function :: Default m => Type m -> Type m -> Type m
-function dom cod = defaultType $ TypeExprFunction $ FunctionType dom cod
+function :: Type m -> Type m -> Type m
+function dom cod = TypeFunction $ FunctionType dom cod
 
-int16 :: Default m => Type m
+int16 :: Type m
 int16 = integer IntegerTypeInt16
 
-int32 :: Default m => Type m
+int32 :: Type m
 int32 = integer IntegerTypeInt32
 
-int64 :: Default m => Type m
+int64 :: Type m
 int64 = integer IntegerTypeInt64
 
-int8 :: Default m => Type m
+int8 :: Type m
 int8 = integer IntegerTypeInt8
 
-integer :: Default m => IntegerType -> Type m
+integer :: IntegerType -> Type m
 integer = literal . LiteralTypeInteger
 
-lambda :: Default m => String -> Type m -> Type m
-lambda v body = defaultType $ TypeExprLambda $ TypeLambda (TypeVariable v) body
+lambda :: String -> Type m -> Type m
+lambda v body = TypeLambda $ LambdaType (VariableType v) body
 
-list :: Default m => Type m -> Type m
-list = defaultType . TypeExprList
+list :: Type m -> Type m
+list = TypeList
 
 isUnit :: Eq m => Type m -> Bool
-isUnit t = typeExpr t  == TypeExprRecord []
+isUnit t = t  == TypeRecord []
 
-literal :: Default m => LiteralType -> Type m
-literal = defaultType . TypeExprLiteral
+literal :: LiteralType -> Type m
+literal = TypeLiteral
 
-map :: Default m => Type m -> Type m -> Type m
-map kt vt = defaultType $ TypeExprMap $ MapType kt vt
+map :: Type m -> Type m -> Type m
+map kt vt = TypeMap $ MapType kt vt
 
-nominal :: Default m => Name -> Type m
-nominal = defaultType . TypeExprNominal
+nominal :: Name -> Type m
+nominal = TypeNominal
 
-optional :: Default m => Type m -> Type m
-optional = defaultType . TypeExprOptional
+optional :: Type m -> Type m
+optional = TypeOptional
 
-record :: Default m => [FieldType m] -> Type m
-record = defaultType . TypeExprRecord
+record :: [FieldType m] -> Type m
+record = TypeRecord
 
-set :: Default m => Type m -> Type m
-set = defaultType . TypeExprSet
+set :: Type m -> Type m
+set = TypeSet
 
-string :: Default m => Type m
+string :: Type m
 string = literal LiteralTypeString
 
-variable :: Default m => String -> Type m
-variable = defaultType . TypeExprVariable . TypeVariable
+variable :: String -> Type m
+variable = TypeVariable . VariableType
 
-uint16 :: Default m => Type m
+uint16 :: Type m
 uint16 = integer IntegerTypeUint16
 
-uint32 :: Default m => Type m
+uint32 :: Type m
 uint32 = integer IntegerTypeUint32
 
-uint64 :: Default m => Type m
+uint64 :: Type m
 uint64 = integer IntegerTypeUint64
 
-uint8 :: Default m => Type m
+uint8 :: Type m
 uint8 = integer IntegerTypeUint8
 
-union :: Default m => [FieldType m] -> Type m
-union = defaultType . TypeExprUnion
+union :: [FieldType m] -> Type m
+union = TypeUnion
 
-unit :: Default m => Type m
+unit :: Type m
 unit = record []
 
 
-
 -- TODO: deprecate and remove me
-universal :: Default m => String -> Type m -> Type m
-universal v body = defaultType $ TypeExprLambda $ TypeLambda (TypeVariable v) body
+universal :: String -> Type m -> Type m
+universal v body = TypeLambda $ LambdaType (VariableType v) body

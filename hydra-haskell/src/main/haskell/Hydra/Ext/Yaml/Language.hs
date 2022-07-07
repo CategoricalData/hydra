@@ -2,6 +2,7 @@ module Hydra.Ext.Yaml.Language where
 
 import Hydra.Core
 import Hydra.Adapter
+import Hydra.Common
 
 import qualified Data.Set as S
 
@@ -21,7 +22,7 @@ language = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
     TermVariantOptional,
     TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
+    TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
   languageConstraintsTypes = \typ -> case typeExpr typ of
-    TypeExprOptional (Type (TypeExprOptional _) _) -> False
+    TypeOptional (TypeOptional _) -> False
     _ -> True }

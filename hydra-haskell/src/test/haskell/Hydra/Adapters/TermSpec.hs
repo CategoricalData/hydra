@@ -245,8 +245,8 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral]
       stringAliasType
-      Types.string {typeMeta = Meta $
-        M.fromList [(metaDescription, Terms.string "An alias for the string type")]}
+      (TypeAnnotated $ Annotated Types.string $ Meta $
+        M.fromList [(metaDescription, Terms.string "An alias for the string type")])
       False
       (string s)
       (string s)
@@ -361,7 +361,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
       languageConstraintsTypes = \typ -> case typeExpr typ of
-        TypeExprOptional (Type (TypeExprOptional _) _) -> False
+        TypeOptional (TypeOptional _) -> False
         _ -> True }
 
     transContext = AdapterContext testContext hydraCoreLanguage testLanguage

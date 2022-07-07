@@ -2,6 +2,7 @@ module Hydra.Common where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Impl.Haskell.Default
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
@@ -50,10 +51,10 @@ graphNameOf :: Name -> GraphName
 graphNameOf = fst . toQname
 
 isEncodedType :: Eq m => Term m -> Bool
-isEncodedType term = termExpr term == TermExprElement _Type
+isEncodedType term = termExpr term == TermElement _Type
 
 isType :: Eq m => Type m -> Bool
-isType typ = typeExpr typ == TypeExprNominal _Type
+isType typ = typeExpr typ == TypeNominal _Type
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
@@ -62,3 +63,23 @@ toQname :: Name -> (GraphName, String)
 toQname (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (GraphName ns, L.intercalate "." rest)
   _ -> (GraphName "UNKNOWN", name)
+
+termExpr :: Term m -> Term m
+termExpr t = case t of
+  TermAnnotated (Annotated t' _) -> termExpr t'
+  _ -> t
+
+termMeta :: Default m => Term m -> m
+termMeta t = case t of
+  TermAnnotated a -> annotatedAnnotation a
+  _ -> dflt
+
+typeExpr :: Type m -> Type m
+typeExpr t = case t of
+  TypeAnnotated (Annotated t' _) -> typeExpr t'
+  _ -> t
+
+typeMeta :: Default m => Type m -> m
+typeMeta t = case t of
+  TypeAnnotated a -> annotatedAnnotation a
+  _ -> dflt

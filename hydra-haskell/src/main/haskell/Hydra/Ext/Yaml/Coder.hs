@@ -45,10 +45,10 @@ recordCoder sfields = do
     return $ Step (encode coders) (decode coders)
   where
     encode coders term = case termExpr term of
-      TermExprRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+      TermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
-            (Type (TypeExprOptional _) _, Term (TermExprOptional Nothing) _) -> pure Nothing
+            (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> stepOut coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
@@ -64,45 +64,45 @@ recordCoder sfields = do
 
 termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
 termCoder typ = case typeExpr typ of
-  TypeExprLiteral at -> do
+  TypeLiteral at -> do
     ac <- literalCoder at
     return Step {
       stepOut = \t -> case t of
-         Term (TermExprLiteral av) _ -> YM.NodeScalar <$> stepOut ac av
+         TermLiteral av -> YM.NodeScalar <$> stepOut ac av
          _ -> unexpected "literal" t,
       stepIn = \n -> case n of
         YM.NodeScalar s -> Terms.literal <$> stepIn ac s
         _ -> unexpected "scalar node" n}
-  TypeExprList lt -> do
+  TypeList lt -> do
     lc <- termCoder lt
     return Step {
---      stepOut = \(Term (TermExprList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
+--      stepOut = \(Term (TermList els) _) -> YM.NodeSequence <$> CM.mapM (stepOut lc) els,
       stepOut = \t -> case t of
-         Term (TermExprList els) _ -> YM.NodeSequence <$> CM.mapM (stepOut lc) els
+         TermList els -> YM.NodeSequence <$> CM.mapM (stepOut lc) els
          _ -> unexpected "list" t,
       stepIn = \n -> case n of
         YM.NodeSequence nodes -> Terms.list <$> CM.mapM (stepIn lc) nodes
         _ -> unexpected "sequence" n}
-  TypeExprOptional ot -> do
+  TypeOptional ot -> do
     oc <- termCoder ot
     return Step {
       stepOut = \t -> case t of
-         Term (TermExprOptional el) _ -> Y.maybe (pure yamlNull) (stepOut oc) el
+         TermOptional el -> Y.maybe (pure yamlNull) (stepOut oc) el
          _ -> unexpected "optional" t,
       stepIn = \n -> case n of
         YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> stepIn oc n}
-  TypeExprMap (MapType kt vt) -> do
+  TypeMap (MapType kt vt) -> do
     kc <- termCoder kt
     vc <- termCoder vt
     let encodeEntry (k, v) = (,) <$> stepOut kc k <*> stepOut vc v
     let decodeEntry (k, v) = (,) <$> stepIn kc k <*> stepIn vc v
     return Step {
-      stepOut = \(Term (TermExprMap m) _) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+      stepOut = \(TermMap m) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
       stepIn = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeExprRecord sfields -> recordCoder sfields
+  TypeRecord sfields -> recordCoder sfields
 
 yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) YM.Node)
 yamlCoder context typ = do

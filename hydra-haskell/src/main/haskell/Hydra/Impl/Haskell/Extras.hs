@@ -56,13 +56,13 @@ elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSch
 
 fieldTypes :: (Default m, Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
 fieldTypes scx t = case typeExpr t of
-    TypeExprRecord fields -> pure $ toMap fields
-    TypeExprUnion fields -> pure $ toMap fields
-    TypeExprElement et -> fieldTypes scx et
-    TypeExprNominal name -> do
+    TypeRecord fields -> pure $ toMap fields
+    TypeUnion fields -> pure $ toMap fields
+    TypeElement et -> fieldTypes scx et
+    TypeNominal name -> do
       el <- requireElement (Just "field types") scx name
       decodeType scx (elementData el) >>= fieldTypes scx
-    TypeExprLambda (TypeLambda _ body) -> fieldTypes scx body
+    TypeLambda (LambdaType _ body) -> fieldTypes scx body
     _ -> fail $ "expected record or union type, but found " ++ show t
   where
     toMap fields = M.fromList (toPair <$> fields)

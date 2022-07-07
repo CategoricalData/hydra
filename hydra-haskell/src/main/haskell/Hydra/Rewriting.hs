@@ -33,54 +33,53 @@ foldOverType order fld b0 typ = case order of
 
 freeVariablesInTerm :: Term m -> S.Set Variable
 freeVariablesInTerm term = case termExpr term of
-  TermExprFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
-  TermExprVariable v -> S.fromList [v]
+  TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
+  TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
 
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
-replaceFreeTypeVariable :: Ord m => TypeVariable -> Type m -> Type m -> Type m
-replaceFreeTypeVariable v rep = rewriteType mapExpr id
+replaceFreeVariableType :: Ord m => VariableType -> Type m -> Type m -> Type m
+replaceFreeVariableType v rep = rewriteType mapExpr id
   where
     mapExpr recurse t = case typeExpr t of
-      TypeExprLambda (TypeLambda v' body) -> if v == v'
+      TypeLambda (LambdaType v' body) -> if v == v'
         then t
-        else t {typeExpr = TypeExprLambda $ TypeLambda v' $ recurse body}
-      TypeExprVariable v' -> if v == v' then rep else t
+        else TypeLambda $ LambdaType v' $ recurse body
+      TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
-rewriteTerm :: (Ord a, Ord b) => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
+rewriteTerm :: Ord b => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
 rewriteTerm mapExpr mapMeta = replace
   where
     replace = mapExpr recurse
     replaceField f = f {fieldTerm = replace (fieldTerm f)}
-    recurse (Term expr meta) = Term expr1 $ mapMeta meta
-      where
-        expr1 = case expr of
-          TermExprApplication (Application lhs rhs) -> TermExprApplication $ Application (replace lhs) (replace rhs)
-          TermExprElement name -> TermExprElement name
-          TermExprFunction fun -> TermExprFunction $ case fun of
-            FunctionCompareTo other -> FunctionCompareTo $ replace other
-            FunctionElimination e -> FunctionElimination $ case e of
-              EliminationElement -> EliminationElement
-              EliminationNominal name -> EliminationNominal name
-              EliminationOptional (OptionalCases nothing just) -> EliminationOptional
-                (OptionalCases (replace nothing) (replace just))
-              EliminationRecord fname -> EliminationRecord fname
-              EliminationUnion fields -> EliminationUnion $ replaceField <$> fields
-            FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
-            FunctionPrimitive name -> FunctionPrimitive name
-          TermExprLet (Let v t1 t2) -> TermExprLet $ Let v (replace t1) (replace t2)
-          TermExprList els -> TermExprList $ replace <$> els
-          TermExprLiteral v -> TermExprLiteral v
-          TermExprMap m -> TermExprMap $ M.fromList $ (\(k, v) -> (replace k, replace v)) <$> M.toList m
-          TermExprNominal (Named name t) -> TermExprNominal (Named name $ replace t)
-          TermExprOptional m -> TermExprOptional $ replace <$> m
-          TermExprRecord fields -> TermExprRecord $ replaceField <$> fields
-          TermExprSet s -> TermExprSet $ S.fromList $ replace <$> S.toList s
-          TermExprUnion field -> TermExprUnion $ replaceField field
-          TermExprVariable v -> TermExprVariable v
+    recurse term = case term of
+      TermAnnotated (Annotated ex ma) -> TermAnnotated $ Annotated (replace ex) (mapMeta ma)
+      TermApplication (Application lhs rhs) -> TermApplication $ Application (replace lhs) (replace rhs)
+      TermElement name -> TermElement name
+      TermFunction fun -> TermFunction $ case fun of
+        FunctionCompareTo other -> FunctionCompareTo $ replace other
+        FunctionElimination e -> FunctionElimination $ case e of
+          EliminationElement -> EliminationElement
+          EliminationNominal name -> EliminationNominal name
+          EliminationOptional (OptionalCases nothing just) -> EliminationOptional
+            (OptionalCases (replace nothing) (replace just))
+          EliminationRecord fname -> EliminationRecord fname
+          EliminationUnion fields -> EliminationUnion $ replaceField <$> fields
+        FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
+        FunctionPrimitive name -> FunctionPrimitive name
+      TermLet (Let v t1 t2) -> TermLet $ Let v (replace t1) (replace t2)
+      TermList els -> TermList $ replace <$> els
+      TermLiteral v -> TermLiteral v
+      TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (replace k, replace v)) <$> M.toList m
+      TermNominal (Named name t) -> TermNominal (Named name $ replace t)
+      TermOptional m -> TermOptional $ replace <$> m
+      TermRecord fields -> TermRecord $ replaceField <$> fields
+      TermSet s -> TermSet $ S.fromList $ replace <$> S.toList s
+      TermUnion field -> TermUnion $ replaceField field
+      TermVariable v -> TermVariable v
 
 rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
 rewriteTermMeta mapMeta = rewriteTerm mapExpr mapMeta
@@ -92,22 +91,21 @@ rewriteType mapExpr mapMeta = replace
   where
     replace = mapExpr recurse
     replaceField f = f {fieldTypeType = replace (fieldTypeType f)}
-    recurse (Type expr meta) = Type expr1 $ mapMeta meta
-      where
-        expr1 = case expr of
-          TypeExprApplication (TypeApplication lhs rhs) -> TypeExprApplication $ TypeApplication (replace lhs) (replace rhs)
-          TypeExprElement t -> TypeExprElement $ replace t
-          TypeExprFunction (FunctionType dom cod) -> TypeExprFunction (FunctionType (replace dom) (replace cod))
-          TypeExprLambda (TypeLambda v b) -> TypeExprLambda (TypeLambda v $ replace b)
-          TypeExprList t -> TypeExprList $ replace t
-          TypeExprLiteral lt -> TypeExprLiteral lt
-          TypeExprMap (MapType kt vt) -> TypeExprMap (MapType (replace kt) (replace vt))
-          TypeExprNominal name -> TypeExprNominal name
-          TypeExprOptional t -> TypeExprOptional $ replace t
-          TypeExprRecord fields -> TypeExprRecord $ replaceField <$> fields
-          TypeExprSet t -> TypeExprSet $ replace t
-          TypeExprUnion fields -> TypeExprUnion $ replaceField <$> fields
-          TypeExprVariable v -> TypeExprVariable v
+    recurse typ = case typ of
+      TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (replace t) (mapMeta ann)
+      TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (replace lhs) (replace rhs)
+      TypeElement t -> TypeElement $ replace t
+      TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (replace dom) (replace cod))
+      TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ replace b)
+      TypeList t -> TypeList $ replace t
+      TypeLiteral lt -> TypeLiteral lt
+      TypeMap (MapType kt vt) -> TypeMap (MapType (replace kt) (replace vt))
+      TypeNominal name -> TypeNominal name
+      TypeOptional t -> TypeOptional $ replace t
+      TypeRecord fields -> TypeRecord $ replaceField <$> fields
+      TypeSet t -> TypeSet $ replace t
+      TypeUnion fields -> TypeUnion $ replaceField <$> fields
+      TypeVariable v -> TypeVariable v
 
 rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
 rewriteTypeMeta mapMeta = rewriteType mapExpr mapMeta
@@ -118,36 +116,37 @@ simplifyTerm :: (Default m, Ord m) => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case termExpr term of
-      TermExprApplication (Application lhs rhs) -> case termExpr lhs of
-        TermExprFunction (FunctionLambda (Lambda var body)) ->
+      TermApplication (Application lhs rhs) -> case termExpr lhs of
+        TermFunction (FunctionLambda (Lambda var body)) ->
           if S.member var (freeVariablesInTerm body)
             then case termExpr rhs of
-              TermExprVariable v -> simplifyTerm $ substituteVariable var v body
+              TermVariable v -> simplifyTerm $ substituteVariable var v body
               _ -> term
             else simplifyTerm body
         _ -> term
       _ -> term
 
-stripTermMeta :: (Default m, Ord m) => Term m -> Term m
-stripTermMeta = rewriteTermMeta $ const dflt
-
-stripTypeMeta :: (Default m, Ord m) => Type m -> Type m
-stripTypeMeta = rewriteTypeMeta $ const dflt
+stripTermAnnotations :: Ord m => Term m -> Term m
+stripTermAnnotations = rewriteTerm strip id
+  where
+    strip recurse term = case term of
+      TermAnnotated (Annotated t _) -> recurse t
+      _ -> recurse term
 
 substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case termExpr term of
-      TermExprVariable x -> recurse $ Term (TermExprVariable $ if x == from then to else x) $ termMeta term
-      TermExprFunction (FunctionLambda (Lambda var _)) -> if var == from
+      TermVariable x -> recurse $ (TermVariable $ if x == from then to else x)
+      TermFunction (FunctionLambda (Lambda var _)) -> if var == from
         then term
         else recurse term
       _ -> recurse term
 
 subterms :: Term m -> [Term m]
 subterms term = case termExpr term of
-  TermExprApplication (Application lhs rhs) -> [lhs, rhs]
-  TermExprFunction f -> case f of
+  TermApplication (Application lhs rhs) -> [lhs, rhs]
+  TermFunction f -> case f of
     FunctionCompareTo other -> [other]
     FunctionElimination e -> case e of
       EliminationOptional (OptionalCases nothing just) -> [nothing, just]
@@ -155,39 +154,39 @@ subterms term = case termExpr term of
       _ -> []
     FunctionLambda (Lambda _ body) -> [body]
     _ -> []
-  TermExprLet (Let _ t1 t2) -> [t1, t2]
-  TermExprList els -> els
-  TermExprMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
-  TermExprNominal (Named _ t) -> [t]
-  TermExprOptional m -> Y.maybeToList m
-  TermExprRecord fields -> fieldTerm <$> fields
-  TermExprSet s -> S.toList s
-  TermExprUnion field -> [fieldTerm field]
+  TermLet (Let _ t1 t2) -> [t1, t2]
+  TermList els -> els
+  TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
+  TermNominal (Named _ t) -> [t]
+  TermOptional m -> Y.maybeToList m
+  TermRecord fields -> fieldTerm <$> fields
+  TermSet s -> S.toList s
+  TermUnion field -> [fieldTerm field]
   _ -> []
 
 subtypes :: Type m -> [Type m]
 subtypes typ = case typeExpr typ of
-  TypeExprApplication (TypeApplication lhs rhs) -> [lhs, rhs]
-  TypeExprElement et -> [et]
-  TypeExprFunction (FunctionType dom cod) -> [dom, cod]
-  TypeExprLambda (TypeLambda v body) -> [body]
-  TypeExprList lt -> [lt]
-  TypeExprLiteral _ -> []
-  TypeExprMap (MapType kt vt) -> [kt, vt]
-  TypeExprNominal _ -> []
-  TypeExprOptional ot -> [ot]
-  TypeExprRecord fields -> fieldTypeType <$> fields
-  TypeExprSet st -> [st]
-  TypeExprUnion fields -> fieldTypeType <$> fields
-  TypeExprVariable _ -> []
+  TypeApplication (ApplicationType lhs rhs) -> [lhs, rhs]
+  TypeElement et -> [et]
+  TypeFunction (FunctionType dom cod) -> [dom, cod]
+  TypeLambda (LambdaType v body) -> [body]
+  TypeList lt -> [lt]
+  TypeLiteral _ -> []
+  TypeMap (MapType kt vt) -> [kt, vt]
+  TypeNominal _ -> []
+  TypeOptional ot -> [ot]
+  TypeRecord fields -> fieldTypeType <$> fields
+  TypeSet st -> [st]
+  TypeUnion fields -> fieldTypeType <$> fields
+  TypeVariable _ -> []
 
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
 termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case termExpr term of
-      TermExprElement name -> if withEls then S.insert name names else names
-      TermExprFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
-      TermExprNominal (Named name _) -> if withNoms then S.insert name names else names
+      TermElement name -> if withEls then S.insert name names else names
+      TermFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
+      TermNominal (Named name _) -> if withNoms then S.insert name names else names
       _ -> names
 
 topologicalSortElements :: [Element m] -> Maybe [Name]
@@ -220,5 +219,5 @@ typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
   where
     addNames names typ = case typeExpr typ of
-      TypeExprNominal name -> S.insert name names
+      TypeNominal name -> S.insert name names
       _ -> names
