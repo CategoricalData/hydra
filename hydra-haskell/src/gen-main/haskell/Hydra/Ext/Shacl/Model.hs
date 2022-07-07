@@ -48,9 +48,9 @@ _CommonConstraints_xone = (Core.FieldName "xone")
 data CommonProperties 
   = CommonProperties {
     commonPropertiesConstraints :: CommonConstraints,
-    commonPropertiesDeactivated :: (Maybe Bool),
+    commonPropertiesDeactivated :: Bool,
     commonPropertiesMessage :: Syntax.LangStrings,
-    commonPropertiesSeverity :: (Maybe Severity),
+    commonPropertiesSeverity :: Severity,
     commonPropertiesTargetClass :: (Set Syntax.RdfsClass),
     commonPropertiesTargetNode :: (Maybe Syntax.IriOrLiteral),
     commonPropertiesTargetObjectsOf :: (Set Syntax.Property),
