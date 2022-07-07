@@ -49,6 +49,9 @@ fromQname (GraphName ns) local = Name $ ns ++ "." ++ local
 graphNameOf :: Name -> GraphName
 graphNameOf = fst . toQname
 
+isEncodedType :: Eq m => Term m -> Bool
+isEncodedType term = termExpr term == TermExprElement _Type
+
 isType :: Eq m => Type m -> Bool
 isType typ = typeExpr typ == TypeExprNominal _Type
 
