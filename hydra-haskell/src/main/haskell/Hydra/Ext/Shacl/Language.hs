@@ -1,5 +1,5 @@
 module Hydra.Ext.Shacl.Language where
-  
+
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Basics
@@ -17,21 +17,21 @@ language = Language (LanguageName "hydra/ext/shacl") $ LanguageConstraints {
   languageConstraintsTermVariants = S.fromList [
     TermVariantElement,
     TermVariantList,
-    TermVariantLiteral, 
+    TermVariantLiteral,
     TermVariantMap,
-    TermVariantNominal, 
-    TermVariantOptional, 
+    TermVariantNominal,
+    TermVariantOptional,
     TermVariantRecord,
     TermVariantSet,
     TermVariantUnion],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantElement,
-    TypeVariantList, 
-    TypeVariantLiteral, 
-    TypeVariantMap, 
-    TypeVariantNominal, 
-    TypeVariantOptional, 
-    TypeVariantRecord, 
-    TypeVariantSet, 
-    TypeVariantUnion], 
+    TypeVariantList,
+    TypeVariantLiteral,
+    TypeVariantMap,
+    TypeVariantNominal,
+    TypeVariantOptional,
+    TypeVariantRecord,
+    TypeVariantSet,
+    TypeVariantUnion],
   languageConstraintsTypes = const True }

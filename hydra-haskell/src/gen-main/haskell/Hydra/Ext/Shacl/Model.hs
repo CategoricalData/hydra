@@ -7,17 +7,18 @@ import Data.Set
 
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraints 
-  = CommonConstraintsAnd [Shape]
-  | CommonConstraintsClosed Bool
-  | CommonConstraintsDatatype (Set Syntax.Iri)
-  | CommonConstraintsHasValue (Set Syntax.Node)
-  | CommonConstraintsIgnoredProperties [Syntax.Property]
-  | CommonConstraintsIn [Syntax.Node]
-  | CommonConstraintsNode (Set NodeShape)
-  | CommonConstraintsNot (Set Shape)
-  | CommonConstraintsProperty (Set PropertyShape)
-  | CommonConstraintsOr [Shape]
-  | CommonConstraintsXone [Shape]
+  = CommonConstraints {
+    commonConstraintsAnd :: [Shape],
+    commonConstraintsClosed :: Bool,
+    commonConstraintsDatatype :: (Set Syntax.Iri),
+    commonConstraintsHasValue :: (Set Syntax.Node),
+    commonConstraintsIgnoredProperties :: [Syntax.Property],
+    commonConstraintsIn :: [Syntax.Node],
+    commonConstraintsNode :: (Set NodeShape),
+    commonConstraintsNot :: (Set Shape),
+    commonConstraintsProperty :: (Set PropertyShape),
+    commonConstraintsOr :: [Shape],
+    commonConstraintsXone :: [Shape]}
   deriving (Eq, Ord, Read, Show)
 
 _CommonConstraints = (Core.Name "hydra/ext/shacl/model.CommonConstraints")
@@ -113,10 +114,11 @@ _PropertyShape_order = (Core.FieldName "order")
 
 _PropertyShape_path = (Core.FieldName "path")
 
--- Any of a number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
+-- A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
 data PropertyShapeConstraints 
-  = PropertyShapeConstraintsMaxCount Int
-  | PropertyShapeConstraintsMinCount Int
+  = PropertyShapeConstraints {
+    propertyShapeConstraintsMaxCount :: (Maybe Int),
+    propertyShapeConstraintsMinCount :: (Maybe Int)}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyShapeConstraints = (Core.Name "hydra/ext/shacl/model.PropertyShapeConstraints")
