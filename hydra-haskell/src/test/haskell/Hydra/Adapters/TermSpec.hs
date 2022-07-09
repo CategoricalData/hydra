@@ -9,7 +9,7 @@ import Hydra.CoreLanguage
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Extras
-import Hydra.Impl.Haskell.Meta
+import Hydra.Meta
 import Hydra.Steps
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
@@ -100,8 +100,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
       (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
-      (record [Field (FieldName "first") $ string a1, Field (FieldName "second") $ int8 a2])
-      (record [Field (FieldName "first") $ string a1, Field (FieldName "second") $ int16 $ fromIntegral a2])
+      (record [field "first" $ string a1, field "second" $ int8 a2])
+      (record [field "first" $ string a1, field "second" $ int16 $ fromIntegral a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkDataAdapter
@@ -203,7 +203,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       (compareTo $ string s)
-      (nominalUnion testContext _Function $ Field (FieldName "compareTo") $ string s)
+      (nominalUnion testContext _Function $ field "compareTo" $ string s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
@@ -212,7 +212,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       delta
-      (nominalUnion testContext _Function $ Field (FieldName "element") unit)
+      (nominalUnion testContext _Function $ field "element" unit)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -230,7 +230,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions Types.string)
       False
       (primitive name)
-      (nominalUnion testContext _Function $ Field (FieldName "primitive") $ string $ unName name) -- Note: the function name is not dereferenced
+      (nominalUnion testContext _Function $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
@@ -239,11 +239,11 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (unionTypeForFunctions testTypePerson)
       False
       (projection fname)
-      (nominalUnion testContext _Function $ Field (FieldName "record") $ string $ unFieldName fname) -- Note: the field name is not dereferenced
+      (nominalUnion testContext _Function $ field "record" $ string $ unFieldName fname) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral]
+      [TypeVariantLiteral, TypeVariantAnnotated]
       stringAliasType
       (TypeAnnotated $ Annotated Types.string $ Meta $
         M.fromList [(metaDescription, Terms.string "An alias for the string type")])
@@ -255,16 +255,14 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \i -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
-      (Types.record [Types.field "context" Types.string, Types.field "record" (Types.record [
+      (Types.record [
         Types.field "left" $ Types.optional Types.string,
-        Types.field "right" $ Types.optional Types.int16])])
+        Types.field "right" $ Types.optional Types.int16])
       False
-      (union $ Field (FieldName "right") $ int8 i)
+      (union $ field "right" $ int8 i)
       (record [
-        Field (FieldName "context") $ string $ unName untyped,
-        Field (FieldName "record") (record [
-          Field (FieldName "left") $ optional Nothing,
-          Field (FieldName "right") $ optional $ Just $ int16 $ fromIntegral i])])
+        field "left" $ optional Nothing,
+        field "right" $ optional $ Just $ int16 $ fromIntegral i])
 
 termsAreAdaptedRecursively :: H.SpecWith ()
 termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into subterms and transforms them appropriately" $ do
@@ -341,8 +339,8 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (Types.field "second" Types.int8)
       (Types.field "second" Types.int16)
       False
-      (Field (FieldName "second") $ int8 i)
-      (Field (FieldName "second") $ int16 $ fromIntegral i)
+      (field "second" $ int8 i)
+      (field "second" $ int16 $ fromIntegral i)
 
 roundTripIsNoop :: Type Meta -> Term Meta -> Bool
 roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
@@ -359,7 +357,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
       languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
-        TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
+        TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
       languageConstraintsTypes = \typ -> case typeExpr typ of
         TypeOptional (TypeOptional _) -> False
         _ -> True }

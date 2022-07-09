@@ -90,9 +90,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
   H.it "Unions become JSON objects (as records)" $
     QC.property $ \int -> checkJsonCoder stringOrIntType
       (variant (FieldName "right") $ int32 int)
-      (jsonMap [
-        ("context", Json.ValueString $ unName untyped),
-        ("record", jsonMap [("right", jsonInt int)])])
+      (jsonMap [("right", jsonInt int)])
 
 spec :: H.Spec
 spec = do

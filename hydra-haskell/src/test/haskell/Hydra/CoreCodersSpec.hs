@@ -5,8 +5,7 @@ import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Impl.Haskell.Meta
-import Hydra.Rewriting
+import Hydra.Meta
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestUtils
@@ -23,23 +22,23 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (stripTermMeta $ encodeLiteralType LiteralTypeString :: Term Meta)
-        (stripTermMeta $ unitVariant _LiteralType_string)
+        (strip $ encodeLiteralType LiteralTypeString :: Term Meta)
+        (strip $ unitVariant _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (stripTermMeta $ encodeType testContext Types.string)
-        (stripTermMeta $  variant _Type_literal (unitVariant _LiteralType_string))
+        (strip $ encodeType testContext Types.string)
+        (strip $  variant _Type_literal (unitVariant _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (stripTermMeta $ encodeType testContext Types.int32)
-        (stripTermMeta $ variant _Type_literal (variant _LiteralType_integer $ unitVariant _IntegerType_int32))
+        (strip $ encodeType testContext Types.int32)
+        (strip $ variant _Type_literal (variant _LiteralType_integer $ unitVariant _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
-        (stripTermMeta $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
-        (stripTermMeta $ variant _Type_record $ list [
+        (strip $ encodeType testContext (Types.record [Types.field "something" Types.string, Types.field "nothing" Types.unit]))
+        (strip $ variant _Type_record $ list [
           record [
             Field _FieldType_name $ string "something",
             Field _FieldType_type $ variant _Type_literal $ unitVariant _LiteralType_string],
@@ -98,7 +97,10 @@ testRoundTripsFromType = do
   H.describe "Check that encoding, then decoding random types is a no-op" $ do
 
     H.it "Try random types" $
-      QC.property $ \typ -> decodeType testContext (encodeType testContext typ) == pure typ
+      QC.property $ \typ -> 
+        H.shouldBe
+          (decodeType testContext (encodeType testContext typ))
+          (pure typ)
 
 spec :: H.Spec
 spec = do

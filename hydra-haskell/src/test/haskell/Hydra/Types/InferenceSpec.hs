@@ -11,6 +11,7 @@ import Hydra.TestData
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Common
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -21,7 +22,7 @@ import qualified Data.Set as S
 checkType :: Term (Meta, Type Meta, [Constraint Meta]) -> Type Meta -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
-    typeAnn (Term _ (_, typ, _)) = typ
+    typeAnn (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
 expectMonotype :: Term Meta -> Type Meta -> H.Expectation
 expectMonotype term = expectPolytype term []
@@ -30,9 +31,6 @@ expectPolytype :: Term Meta-> [VariableType] -> Type Meta -> H.Expectation
 expectPolytype term vars typ = do
     let result = inferType testContext term
     snd <$> result `H.shouldBe` ResultSuccess (TypeScheme vars typ)
---    if (snd <$> result) == ResultSuccess (TypeScheme vars typ)
---      then True `H.shouldBe` True
---      else "foo" `H.shouldBe` (show result)
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = do
@@ -224,13 +222,13 @@ checkLiterals = do
 
     H.it "Verify that type inference preserves the literal to literal type mapping" $
       QC.property $ \l -> expectMonotype
-        (defaultTerm $ TermExprLiteral l)
+        (TermLiteral l)
         (Types.literal $ literalType l)
 
 checkNominalTerms :: H.SpecWith ()
 checkNominalTerms = do
   H.describe "Check nominal introductions and eliminations" $ do
-    
+
     H.it "Check nominal introductions" $ do
       expectMonotype
         (nominal (Name "StringTypeAlias") $ string "foo")
@@ -238,7 +236,7 @@ checkNominalTerms = do
       expectMonotype
         (lambda "v" $ nominal (Name "StringTypeAlias") $ variable "v")
         (Types.function (Standard.doc "An alias for the string type" Types.string) stringAliasType)
-        
+
     H.it "Check nominal eliminations" $ do
       expectMonotype
         (eliminateNominal $ Name "StringTypeAlias")
@@ -246,7 +244,7 @@ checkNominalTerms = do
       expectMonotype
         (apply (eliminateNominal $ Name "StringTypeAlias") (nominal (Name "StringTypeAlias") $ string "foo"))
         (Standard.doc "An alias for the string type" Types.string)
-        
+
 checkPrimitiveFunctions :: H.SpecWith ()
 checkPrimitiveFunctions = do
   H.describe "Check a few hand-picked terms with primitive functions" $ do
@@ -270,16 +268,16 @@ checkTypeAnnotations = do
 
     H.it "Check literals" $
       QC.property $ \l -> do
-        let term = defaultTerm $ TermExprLiteral l
+        let term = TermLiteral l
         let (ResultSuccess term1) = fst <$> inferType testContext term
         checkType term1 (Types.literal $ literalType l)
 
     H.it "Check lists of literals" $
       QC.property $ \l -> do
-        let term = defaultTerm $ TermExprList [defaultTerm $ TermExprLiteral l]
+        let term = TermList [TermLiteral l]
         let (ResultSuccess term1) = fst <$> inferType testContext term
         checkType term1 (Types.list $ Types.literal $ literalType l)
-        let (TermExprList [term2]) = termExpr term1
+        let (TermList [term2]) = termExpr term1
         checkType term2 (Types.literal $ literalType l)
 
 checkTypedTerms :: H.SpecWith ()
