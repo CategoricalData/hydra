@@ -3,22 +3,22 @@ package hydra.core;
 /**
  * A symbol which stands in for a type
  */
-public class TypeVariable {
+public class VariableType {
   /**
    * A symbol which stands in for a type
    */
   public final String value;
   
-  public TypeVariable (String value) {
+  public VariableType (String value) {
     this.value = value;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof TypeVariable)) {
+    if (!(other instanceof VariableType)) {
       return false;
     }
-    TypeVariable o = (TypeVariable) (other);
+    VariableType o = (VariableType) (other);
     return value.equals(o.value);
   }
   
