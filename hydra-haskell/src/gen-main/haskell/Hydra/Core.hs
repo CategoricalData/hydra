@@ -453,64 +453,51 @@ _Precision_bits = (FieldName "bits")
 
 -- A data term
 data Term m 
-  = Term {
-    termExpr :: (TermExpr m),
-    termMeta :: m}
+  = TermAnnotated (Annotated (Term m) m)
+  | TermApplication (Application m)
+  | TermLiteral Literal
+  | TermElement Name
+  | TermFunction (Function m)
+  | TermLet (Let m)
+  | TermList [Term m]
+  | TermMap (Map (Term m) (Term m))
+  | TermNominal (Named m)
+  | TermOptional (Maybe (Term m))
+  | TermRecord [Field m]
+  | TermSet (Set (Term m))
+  | TermUnion (Field m)
+  | TermVariable Variable
   deriving (Eq, Ord, Read, Show)
 
 _Term = (Name "hydra/core.Term")
 
-_Term_expr = (FieldName "expr")
+_Term_annotated = (FieldName "annotated")
 
-_Term_meta = (FieldName "meta")
+_Term_application = (FieldName "application")
 
--- A term expression
-data TermExpr m 
-  = TermExprAnnotated (Annotated (TermExpr m) m)
-  | TermExprApplication (Application m)
-  | TermExprLiteral Literal
-  | TermExprElement Name
-  | TermExprFunction (Function m)
-  | TermExprLet (Let m)
-  | TermExprList [Term m]
-  | TermExprMap (Map (Term m) (Term m))
-  | TermExprNominal (Named m)
-  | TermExprOptional (Maybe (Term m))
-  | TermExprRecord [Field m]
-  | TermExprSet (Set (Term m))
-  | TermExprUnion (Field m)
-  | TermExprVariable Variable
-  deriving (Eq, Ord, Read, Show)
+_Term_literal = (FieldName "literal")
 
-_TermExpr = (Name "hydra/core.TermExpr")
+_Term_element = (FieldName "element")
 
-_TermExpr_annotated = (FieldName "annotated")
+_Term_function = (FieldName "function")
 
-_TermExpr_application = (FieldName "application")
+_Term_let = (FieldName "let")
 
-_TermExpr_literal = (FieldName "literal")
+_Term_list = (FieldName "list")
 
-_TermExpr_element = (FieldName "element")
+_Term_map = (FieldName "map")
 
-_TermExpr_function = (FieldName "function")
+_Term_nominal = (FieldName "nominal")
 
-_TermExpr_let = (FieldName "let")
+_Term_optional = (FieldName "optional")
 
-_TermExpr_list = (FieldName "list")
+_Term_record = (FieldName "record")
 
-_TermExpr_map = (FieldName "map")
+_Term_set = (FieldName "set")
 
-_TermExpr_nominal = (FieldName "nominal")
+_Term_union = (FieldName "union")
 
-_TermExpr_optional = (FieldName "optional")
-
-_TermExpr_record = (FieldName "record")
-
-_TermExpr_set = (FieldName "set")
-
-_TermExpr_union = (FieldName "union")
-
-_TermExpr_variable = (FieldName "variable")
+_Term_variable = (FieldName "variable")
 
 -- The identifier of a term expression constructor
 data TermVariant 

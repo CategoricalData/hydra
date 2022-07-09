@@ -5,6 +5,7 @@ module Hydra.TestUtils (
   checkIntegerAdapter,
   checkDataAdapter,
   isFailure,
+  strip,
   termTestContext,
   module Hydra.TestGraph,
   module Hydra.Steps,
@@ -12,6 +13,7 @@ module Hydra.TestUtils (
 
 import Hydra.ArbitraryCore()
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Errors
@@ -77,7 +79,8 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
       languageConstraintsIntegerTypes = S.fromList variants }
 
 checkDataAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
-checkDataAdapter = checkAdapter stripTermMeta termAdapter termTestContext
+--checkDataAdapter = checkAdapter id termAdapter termTestContext
+checkDataAdapter = checkAdapter termExpr termAdapter termTestContext
 
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
@@ -94,6 +97,9 @@ isFailure :: Result a -> Bool
 isFailure r = case r of
   ResultFailure _ -> True
   _ -> False
+
+strip :: Ord m => Term m -> Term m
+strip = stripTermAnnotations
 
 withConstraints :: LanguageConstraints Meta -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}

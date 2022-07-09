@@ -4,6 +4,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.TestGraph
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Data.Map as M
@@ -52,7 +53,7 @@ listOfStringsType :: Default m => Type m
 listOfStringsType = Types.list Types.string
 
 makeMap :: (Default a, Eq a, Ord a, Read a, Show a) => [(String, Int)] -> Term a
-makeMap keyvals = defaultTerm $ TermExprMap $ M.fromList $ ((\(k, v) -> (string k, int32 v)) <$> keyvals)
+makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (string k, int32 v)) <$> keyvals)
 
 mapOfStringsToIntsType :: Default m => Type m
 mapOfStringsToIntsType = Types.map Types.string Types.int32
@@ -85,4 +86,4 @@ unionTypeForFunctions dom = Types.union [
   FieldType _Function_compareTo dom,
   FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
   FieldType _Function_primitive Types.string,
-  FieldType _TermExpr_variable Types.string]
+  FieldType _Term_variable Types.string]

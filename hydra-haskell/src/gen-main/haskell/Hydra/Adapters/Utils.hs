@@ -39,6 +39,9 @@ describePrecision x = case x of
 -- Display a type as a string
 describeType :: (Core.Type m -> String)
 describeType typ = ((\x -> case x of
+  Core.TypeAnnotated v -> (Strings.cat [
+    "annotated ",
+    (describeType (Core.annotatedSubject v))])
   Core.TypeApplication _ -> "instances of an application type"
   Core.TypeLiteral v -> (describeLiteralType v)
   Core.TypeElement v -> (Strings.cat [

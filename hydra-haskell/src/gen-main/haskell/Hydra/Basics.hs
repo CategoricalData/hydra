@@ -155,19 +155,19 @@ qname ns name = (Core.Name (Strings.cat [
 -- Find the term variant (constructor) for a given term
 termVariant :: (Core.Term m -> Core.TermVariant)
 termVariant term = ((\x -> case x of
-  Core.TermExprAnnotated _ -> Core.TermVariantAnnotated
-  Core.TermExprApplication _ -> Core.TermVariantApplication
-  Core.TermExprElement _ -> Core.TermVariantElement
-  Core.TermExprFunction _ -> Core.TermVariantFunction
-  Core.TermExprList _ -> Core.TermVariantList
-  Core.TermExprLiteral _ -> Core.TermVariantLiteral
-  Core.TermExprMap _ -> Core.TermVariantMap
-  Core.TermExprNominal _ -> Core.TermVariantNominal
-  Core.TermExprOptional _ -> Core.TermVariantOptional
-  Core.TermExprRecord _ -> Core.TermVariantRecord
-  Core.TermExprSet _ -> Core.TermVariantSet
-  Core.TermExprUnion _ -> Core.TermVariantUnion
-  Core.TermExprVariable _ -> Core.TermVariantVariable) (Core.termExpr term))
+  Core.TermAnnotated _ -> Core.TermVariantAnnotated
+  Core.TermApplication _ -> Core.TermVariantApplication
+  Core.TermElement _ -> Core.TermVariantElement
+  Core.TermFunction _ -> Core.TermVariantFunction
+  Core.TermList _ -> Core.TermVariantList
+  Core.TermLiteral _ -> Core.TermVariantLiteral
+  Core.TermMap _ -> Core.TermVariantMap
+  Core.TermNominal _ -> Core.TermVariantNominal
+  Core.TermOptional _ -> Core.TermVariantOptional
+  Core.TermRecord _ -> Core.TermVariantRecord
+  Core.TermSet _ -> Core.TermVariantSet
+  Core.TermUnion _ -> Core.TermVariantUnion
+  Core.TermVariable _ -> Core.TermVariantVariable) term)
 
 -- All term (expression) variants, in a canonical order
 termVariants :: [Core.TermVariant]

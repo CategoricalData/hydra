@@ -4,6 +4,7 @@ import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
 import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Common
 
 import Hydra.TestUtils
 
@@ -33,11 +34,11 @@ testFoldOverTerm = do
           (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Meta))
         [2, 1, 2]
   where
-    addInt32s sum term = case termExpr term of
-      TermExprLiteral (LiteralInteger (IntegerValueInt32 i)) -> sum + i
+    addInt32s sum term = case term of
+      TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> sum + i
       _ -> sum
-    listLengths l term = case termExpr term of
-      TermExprList els -> L.length els:l
+    listLengths l term = case term of
+      TermList els -> L.length els:l
       _ -> l
 
 testFreeVariablesInTerm :: H.SpecWith ()
@@ -99,22 +100,22 @@ testReplaceTerm = do
 
       H.it "Check that metadata is replace recursively" $ do
         H.shouldBe
-          (rewriteTerm keepTerm replaceMeta (list [Term (TermExprLiteral $ LiteralString "foo") 42] :: Term Int))
-          (Term (TermExprList [Term (TermExprLiteral $ LiteralString "foo") "42"]) "0")
+          (rewriteTerm keepTerm replaceMeta (list [annot 42 (string "foo")] :: Term Int))
+          (list [annot "42" (string "foo")])
   where
     keepTerm recurse term = recurse term
 
     keepMeta = id
 
-    replaceInts recurse term = case termExpr term2 of
-        TermExprLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64 $ fromIntegral v
+    replaceInts recurse term = case term2 of
+        TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64 $ fromIntegral v
         _ -> term2
       where
         term2 = recurse term
 
-    replaceLists term = case termExpr term of
-      TermExprList (h:_) -> case termExpr h of
-        TermExprList [] -> list []
+    replaceLists term = case term of
+      TermList (h:_) -> case h of
+        TermList [] -> list []
         _ -> term
       _ -> term
 
@@ -147,7 +148,7 @@ testStripMeta :: H.SpecWith ()
 testStripMeta = do
   H.describe "Test stripping metadata from terms" $ do
 
-    H.it "Strip typ annotations" $ do
+    H.it "Strip type annotations" $ do
       QC.property $ \(TypedTerm typ term) -> do
         H.shouldBe
           (contextType_OfTerm testContext term)
@@ -156,7 +157,7 @@ testStripMeta = do
           (contextType_OfTerm testContext $ withType testContext typ term)
           (pure $ Just typ)
         H.shouldBe
-          (contextType_OfTerm testContext $ stripTermMeta $ withType testContext typ term)
+          (contextType_OfTerm testContext $ strip $ withType testContext typ term)
           (pure Nothing)
 
 spec :: H.Spec
