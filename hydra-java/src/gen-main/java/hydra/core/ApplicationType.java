@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * The type-level analog of an application term
  */
-public class TypeApplication<M> {
+public class ApplicationType<M> {
   /**
    * The left-hand side of the application
    */
@@ -14,17 +14,17 @@ public class TypeApplication<M> {
    */
   public final Type<M> argument;
   
-  public TypeApplication (Type<M> function, Type<M> argument) {
+  public ApplicationType (Type<M> function, Type<M> argument) {
     this.function = function;
     this.argument = argument;
   }
   
   @Override
   public boolean equals(Object other) {
-    if (!(other instanceof TypeApplication)) {
+    if (!(other instanceof ApplicationType)) {
       return false;
     }
-    TypeApplication o = (TypeApplication) (other);
+    ApplicationType o = (ApplicationType) (other);
     return function.equals(o.function) && argument.equals(o.argument);
   }
   
@@ -33,11 +33,11 @@ public class TypeApplication<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public TypeApplication withFunction(Type<M> function) {
-    return new TypeApplication(function, argument);
+  public ApplicationType withFunction(Type<M> function) {
+    return new ApplicationType(function, argument);
   }
   
-  public TypeApplication withArgument(Type<M> argument) {
-    return new TypeApplication(function, argument);
+  public ApplicationType withArgument(Type<M> argument) {
+    return new ApplicationType(function, argument);
   }
 }

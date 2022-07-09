@@ -11,6 +11,8 @@ public abstract class TypeVariant {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
+    R visit(Annotated instance) ;
+    
     R visit(Application instance) ;
     
     R visit(Element instance) ;
@@ -41,6 +43,10 @@ public abstract class TypeVariant {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TypeVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+    }
+    
+    default R visit(Annotated instance) {
+      return otherwise((instance));
     }
     
     default R visit(Application instance) {
@@ -93,6 +99,31 @@ public abstract class TypeVariant {
     
     default R visit(Variable instance) {
       return otherwise((instance));
+    }
+  }
+  
+  public static final class Annotated extends TypeVariant {
+    public Annotated () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Annotated)) {
+        return false;
+      }
+      Annotated o = (Annotated) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
   
