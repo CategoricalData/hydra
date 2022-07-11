@@ -1,6 +1,7 @@
 # Hydra
 
-Hydra is a transformation toolkit along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale), but open source, and with a more advanced type system and other new features. It is currently in an intermediate "closing the loop" stage. The primary superpower of Hydra is that it is able to map schemas and data consistently between languages. It is even able to map functional programs between selected languages, including parts of its own source code. 
+Hydra is a transformation toolkit along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale), but open source, and with a more advanced type system and other new features. It is currently in an intermediate "closing the loop" stage. The primary superpower of Hydra is that it is able to map schemas and data consistently between languages. It is even able to map functional programs between selected languages, including parts of its own source code.
+See the recent Data Day Texas presentation, "[Transpilers Gone Wild](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)".
 
 You can find a design document [here](https://bit.ly/hydra-design-doc), and a Slack channel [here](https://bit.ly/hydra-slack) (click [here](https://join.slack.com/t/graphcommunity/shared_invite/zt-1a6ohrnn9-rXIBwn3L4NSC4cH0c1DN8A) for an invite to the Graph Community workspace, or send an email to josh at fortytwo net if the link has expired).
 
@@ -30,31 +31,31 @@ One of the main objectives for Hydra is for the framework to generate its own so
 
 You can generate Hydra's sources by first entering the GHCi REPL using `stack ghci`, then:
 
-```
+```bash
 writeHaskell coreModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
 The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules), and the second is the base directory to which the generated files are to be written. For individual modules, use Haskell list syntax, e.g.
 
-```
+```bash
 writeHaskell [pure rdfSyntaxModule, pure shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
 The commands for Scala and Java generation are similar, e.g.
 
-```
+```bash
 writeScala coreModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
 ```
 
 and
 
-```
+```bash
 writeJava coreModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
 ```
 
 There is also schema-only support for PDL:
 
-```
+```bash
 writePdl coreModules "/tmp/pdl"
 ```
 
