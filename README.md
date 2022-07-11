@@ -23,3 +23,39 @@ You can compile the Scala code with `sbt compile`, run it with `sbt run`, and `s
 ### Java build
 
 Build the Java project with `./gradlew build`.
+
+## Code generation
+
+One of the main objectives for Hydra is for the framework to generate its own source code into various languages. At this time, Haskell is fully supported as a target language, while Java is supported for schemas only (i.e. Hydra type definitions map to Java classes), and Scala is supported for data only (i.e. constants and functions are mapped, but types are not yet).
+
+You can generate Hydra's sources by first entering the GHCi REPL using `stack ghci`, then:
+
+```
+writeHaskell coreModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
+```
+
+The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules), and the second is the base directory to which the generated files are to be written. For individual modules, use Haskell list syntax, e.g.
+
+```
+writeHaskell [pure rdfSyntaxModule, pure shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
+```
+
+The commands for Scala and Java generation are similar, e.g.
+
+```
+writeScala coreModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
+```
+
+and
+
+```
+writeJava coreModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
+```
+
+There is also schema-only support for PDL:
+
+```
+writePdl coreModules "/tmp/pdl"
+```
+
+For languages other than Haskell and Java, you can expect error messages from Hydra where a given coder encounters language features which are not yet fully implemented.
