@@ -36,7 +36,7 @@ el (Element name (Data term)) cx = do
     return $ Graph.Element name schemaTerm term
   where
     cx = Standard.standardContext
-    declaredType = contextType_OfTerm cx term
+    declaredType = annotationClassTermType (contextAnnotations cx) cx term
 --    findType = do
 --      mt <- declaredType
 --      Y.maybe (typeSchemeType . snd <$> inferType cx term) pure mt

@@ -64,16 +64,16 @@ testFreeVariablesInTerm = do
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
         (S.fromList [Variable "x", Variable "y"])
-        
+
 --testReplaceFreeVariableType :: H.SpecWith ()
 --testReplaceFreeVariableType = do
 --  H.describe "Test replace free type variables" $ do
---    
+--
 --    H.it "Check that variable types are replaced" $ do
 --      H.shouldBe
 --        (replaceFreeVariableType (VariableType "v1") Types.string $ Types.variable "v")
 --        ()
-        
+
 testReplaceTerm :: H.SpecWith ()
 testReplaceTerm = do
     H.describe "Test term replacement" $ do
@@ -143,7 +143,7 @@ testSimplifyTerm = do
         (simplifyTerm (apply (lambda "x"
           (apply (lambda "a" (list [string "foo", variable "a"])) (variable "x"))) (variable "y")))
         (list [string "foo", variable "y"] :: Term Meta)
-        
+
 testStripMeta :: H.SpecWith ()
 testStripMeta = do
   H.describe "Test stripping metadata from terms" $ do
@@ -151,14 +151,16 @@ testStripMeta = do
     H.it "Strip type annotations" $ do
       QC.property $ \(TypedTerm typ term) -> do
         H.shouldBe
-          (contextType_OfTerm testContext term)
+          (typeOf term)
           (pure Nothing)
         H.shouldBe
-          (contextType_OfTerm testContext $ withType testContext typ term)
+          (typeOf $ withType testContext typ term)
           (pure $ Just typ)
         H.shouldBe
-          (contextType_OfTerm testContext $ strip $ withType testContext typ term)
+          (typeOf $ strip $ withType testContext typ term)
           (pure Nothing)
+
+typeOf = annotationClassTermType (contextAnnotations testContext) testContext
 
 spec :: H.Spec
 spec = do

@@ -32,30 +32,48 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           field "elements" $ Types.map (core "Name") (apply (graph "Element") (variable "m")),
           field "functions" $ Types.map (core "Name") (apply (evaluation "PrimitiveFunction") (variable "m")),
           field "strategy" $ evaluation "EvaluationStrategy",
+          field "annotations" $ apply (evaluation "AnnotationClass") (variable "m")],
 
+      def "AnnotationClass" $
+        doc "A typeclass-like construct providing common functions for working with annotations" $
+        lambda "m" $ record [
+          field "default" $ variable "m",
+          field "equal" $ function (variable "m") (function (variable "m") boolean),
+          field "compare" $ function (variable "m") (function (variable "m") (core "Comparison")),
+          field "show" $ function (variable "m") string,
+          field "read" $ function string (optional $ variable "m"),
+          
           -- TODO: simplify
-          field "description_OfTerm" $ function
+          field "termDescription" $ function
             (apply (core "Term") (variable "m"))
             (apply (evaluation "Result") (optional string)),
-          field "description_OfType" $ function
+          field "typeDescription" $ function
             (apply (core "Type") (variable "m"))
             (apply (evaluation "Result") (optional string)),
-          field "type_OfTerm" $ function
-            (apply (core "Term") (variable "m"))
-            (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m"))),
-          field "setDescription_OfTerm" $ function
+          field "termType" $ function
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (apply (core "Term") (variable "m"))
+              (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m")))),
+          field "setTermDescription" $ function
             (optional string)
             (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m"))),
-          field "setType_OfTerm" $ function
-            (optional $ apply (core "Type") (variable "m"))
-            (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m"))),
+          field "setTermType" $ function
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (optional $ apply (core "Type") (variable "m"))
+              (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m")))),
           field "typeOf" $ function
-            (variable "m")
-            (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m"))),
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (variable "m")
+              (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m")))),
           field "setTypeOf" $ function
-            (optional $ apply (core "Type") (variable "m"))
-            (function (variable "m") (variable "m"))],
-
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (optional $ apply (core "Type") (variable "m"))
+              (function (variable "m") (variable "m")))],
+        
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
         record [

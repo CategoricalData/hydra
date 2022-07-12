@@ -100,7 +100,7 @@ toDataDeclarations coders namespaces cx (el, TypedTerm typ term) = do
     let decl = H.DeclarationTypedBinding $ H.TypedBinding
                 (H.TypeSignature hname htype)
                 (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
-    comments <- contextDescription_OfTerm cx term
+    comments <- annotationClassTermDescription (contextAnnotations cx) term
     return [H.DeclarationWithComments decl comments]
   where
     rewriteValueBinding vb = case vb of
@@ -136,7 +136,7 @@ toTypeDeclarations namespaces cx el term = do
         else do
           htype <- encodeAdaptedType namespaces cx t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- contextDescription_OfTerm cx term
+    comments <- annotationClassTermDescription (contextAnnotations cx) term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls namespaces (elementName el) t
   where
     isSerializable = do
@@ -240,7 +240,7 @@ encodeFunction namespaces cx meta fun = case fun of
           typ <- requireType scx name
           return $ Just typ
     domName = do
-        t <- contextTypeOf cx meta
+        t <- annotationClassTypeOf (contextAnnotations cx) cx meta
         case t of
           Just typ -> do
             case typeExpr typ of
@@ -310,7 +310,7 @@ encodeTerm namespaces cx term = do
   where
     encode = encodeTerm namespaces
     findSname = do
-      r <- contextTypeOf cx $ termMeta term
+      r <- annotationClassTypeOf (contextAnnotations cx) cx $ termMeta term
       return $ case typeExpr <$> r of
         Just (TypeNominal name) -> Just name
         Nothing -> Nothing

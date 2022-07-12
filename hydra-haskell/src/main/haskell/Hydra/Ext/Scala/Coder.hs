@@ -118,7 +118,7 @@ encodeFunction cx meta fun arg = case fun of
   where
     findSdom = Just <$> (findDomain >>= encodeType)
     findDomain = do
-        r <- contextTypeOf cx meta
+        r <- annotationClassTypeOf (contextAnnotations cx) cx meta
         case r of
           Nothing -> fail "expected a typed term"
           Just t -> domainOf t
@@ -194,7 +194,7 @@ encodeTerm cx term = case termExpr term of
     _ -> fail $ "unexpected term: " ++ show term
   where
     schemaName = do
-      r <- contextType_OfTerm cx term
+      r <- annotationClassTermType (contextAnnotations cx) cx term
       pure $ r >>= nameOfType
 
 encodeType :: Show m => Type m -> Result Scala.Type
@@ -240,4 +240,4 @@ encodeUntypedTerm cx term = do
     (term1, _) <- inferType cx term
     encodeTerm cx $ rewriteTermMeta annotType term1
   where
-    annotType (m, typ, _) = contextSetTypeOf cx (Just typ) m
+    annotType (m, typ, _) = annotationClassSetTypeOf (contextAnnotations cx) cx (Just typ) m
