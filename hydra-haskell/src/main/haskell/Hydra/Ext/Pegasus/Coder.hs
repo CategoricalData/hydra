@@ -52,7 +52,7 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      r <- contextDescription_OfTerm cx $ elementData el
+      r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
@@ -146,7 +146,7 @@ encodeType aliases cx typ = case typeExpr typ of
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      r <- contextDescription_OfType cx typ
+      r <- annotationClassTypeDescription (contextAnnotations cx) typ
       return $ doc r
 
 importAliasesForGraph g = M.empty -- TODO

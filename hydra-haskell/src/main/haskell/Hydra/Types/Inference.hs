@@ -63,7 +63,7 @@ extendEnvironment (x, sc) m = do
   local scope m
 
 infer :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
-infer cx term = case contextType_OfTerm cx term of
+infer cx term = case annotationClassTermType (contextAnnotations cx) cx term of
     ResultSuccess t -> case t of
       Just typ -> do
         i <- inferInternal cx term

@@ -49,17 +49,10 @@ standardContext = cx
       contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
       contextStrategy = EvaluationStrategy {
         evaluationStrategyOpaqueTermVariants = S.fromList []},
-
-      -- TODO: simplify
-      contextDescription_OfTerm = getTermDescription,
-      contextDescription_OfType = getTypeDescription,
-      contextType_OfTerm = getType cx . termMeta,
-      contextSetDescription_OfTerm = setTermDescription,
-      contextSetType_OfTerm = setTermType cx,
-      contextTypeOf = getType cx,
-      contextSetTypeOf = setType cx}
+      contextAnnotations = metaAnnotationClass}
 
     emptyGraphName = GraphName "empty"
+    
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
 standardElement :: GraphName -> String -> String -> Type Meta -> Term Meta -> Element Meta

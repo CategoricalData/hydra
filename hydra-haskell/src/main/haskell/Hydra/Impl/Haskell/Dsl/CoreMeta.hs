@@ -37,4 +37,4 @@ nominalWithVariant :: Default m => Context m -> Name -> FieldName -> Term m -> T
 nominalWithVariant cx name fname term = constFunction $ nominalVariant cx name fname term
 
 withType :: Context m -> Type m -> Term m -> Term m
-withType cx typ = contextSetType_OfTerm cx (Just typ)
+withType cx typ = annotationClassSetTermType (contextAnnotations cx) cx (Just typ)

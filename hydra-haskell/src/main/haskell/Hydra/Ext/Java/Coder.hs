@@ -30,10 +30,10 @@ printGraph cx g = do
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
 commentsFromElement :: Context m -> Element m -> Result (Maybe String)
-commentsFromElement cx el = contextDescription_OfTerm cx (elementData el)
+commentsFromElement cx el = annotationClassTermDescription (contextAnnotations cx) (elementData el)
 
 commentsFromFieldType :: Context m -> FieldType m -> Result (Maybe String)
-commentsFromFieldType cx (FieldType _ t) = contextDescription_OfType cx t
+commentsFromFieldType cx (FieldType _ t) = annotationClassTypeDescription (contextAnnotations cx) t
 
 addComment :: Context m -> Java.ClassBodyDeclaration -> FieldType m -> Result Java.ClassBodyDeclarationWithComments
 addComment cx decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType cx field

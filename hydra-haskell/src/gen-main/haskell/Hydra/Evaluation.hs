@@ -12,13 +12,7 @@ data Context m
     contextElements :: (Map Core.Name (Graph.Element m)),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
-    contextDescription_OfTerm :: (Core.Term m -> Result (Maybe String)),
-    contextDescription_OfType :: (Core.Type m -> Result (Maybe String)),
-    contextType_OfTerm :: (Core.Term m -> Result (Maybe (Core.Type m))),
-    contextSetDescription_OfTerm :: (Maybe String -> Core.Term m -> Core.Term m),
-    contextSetType_OfTerm :: (Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
-    contextTypeOf :: (m -> Result (Maybe (Core.Type m))),
-    contextSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
+    contextAnnotations :: (AnnotationClass m)}
 
 _Context = (Core.Name "hydra/evaluation.Context")
 
@@ -30,19 +24,49 @@ _Context_functions = (Core.FieldName "functions")
 
 _Context_strategy = (Core.FieldName "strategy")
 
-_Context_description_OfTerm = (Core.FieldName "description_OfTerm")
+_Context_annotations = (Core.FieldName "annotations")
 
-_Context_description_OfType = (Core.FieldName "description_OfType")
+-- A typeclass-like construct providing common functions for working with annotations
+data AnnotationClass m 
+  = AnnotationClass {
+    annotationClassDefault :: m,
+    annotationClassEqual :: (m -> m -> Bool),
+    annotationClassCompare :: (m -> m -> Core.Comparison),
+    annotationClassShow :: (m -> String),
+    annotationClassRead :: (String -> Maybe m),
+    annotationClassTermDescription :: (Core.Term m -> Result (Maybe String)),
+    annotationClassTypeDescription :: (Core.Type m -> Result (Maybe String)),
+    annotationClassTermType :: Context m -> (Core.Term m -> Result (Maybe (Core.Type m))),
+    annotationClassSetTermDescription :: (Maybe String -> Core.Term m -> Core.Term m),
+    annotationClassSetTermType :: Context m -> (Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
+    annotationClassTypeOf :: Context m -> (m -> Result (Maybe (Core.Type m))),
+    annotationClassSetTypeOf :: Context m -> (Maybe (Core.Type m) -> m -> m)}
 
-_Context_type_OfTerm = (Core.FieldName "type_OfTerm")
+_AnnotationClass = (Core.Name "hydra/evaluation.AnnotationClass")
 
-_Context_setDescription_OfTerm = (Core.FieldName "setDescription_OfTerm")
+_AnnotationClass_default = (Core.FieldName "default")
 
-_Context_setType_OfTerm = (Core.FieldName "setType_OfTerm")
+_AnnotationClass_equal = (Core.FieldName "equal")
 
-_Context_typeOf = (Core.FieldName "typeOf")
+_AnnotationClass_compare = (Core.FieldName "compare")
 
-_Context_setTypeOf = (Core.FieldName "setTypeOf")
+_AnnotationClass_show = (Core.FieldName "show")
+
+_AnnotationClass_read = (Core.FieldName "read")
+
+_AnnotationClass_termDescription = (Core.FieldName "termDescription")
+
+_AnnotationClass_typeDescription = (Core.FieldName "typeDescription")
+
+_AnnotationClass_termType = (Core.FieldName "termType")
+
+_AnnotationClass_setTermDescription = (Core.FieldName "setTermDescription")
+
+_AnnotationClass_setTermType = (Core.FieldName "setTermType")
+
+_AnnotationClass_typeOf = (Core.FieldName "typeOf")
+
+_AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
 -- Settings which determine how terms are evaluated
 data EvaluationStrategy 

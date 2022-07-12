@@ -36,6 +36,28 @@ getType cx meta = case getAnnotation metaType meta of
 getTypeDescription :: Type Meta -> Result (Y.Maybe String)
 getTypeDescription = getDescription . typeMeta
 
+metaAnnotationClass :: AnnotationClass Meta
+metaAnnotationClass = AnnotationClass {
+    annotationClassDefault = Meta M.empty,
+    annotationClassEqual = (==),
+    annotationClassCompare = \m1 m2 -> toComparison $ m1 `compare` m2,
+    annotationClassShow = show,
+    annotationClassRead = read,
+    
+    -- TODO: simplify
+    annotationClassTermDescription = getTermDescription,
+    annotationClassTypeDescription = getTypeDescription,
+    annotationClassTermType = \cx t -> getType cx $ termMeta t,
+    annotationClassSetTermDescription = setTermDescription,
+    annotationClassSetTermType = setTermType,
+    annotationClassTypeOf = getType,
+    annotationClassSetTypeOf = setType}
+  where
+    toComparison c = case c of
+      LT -> ComparisonLessThan
+      EQ -> ComparisonEqualTo
+      GT -> ComparisonGreaterThan
+
 metaDescription :: String
 metaDescription = "description"
 
