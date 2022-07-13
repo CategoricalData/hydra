@@ -27,13 +27,13 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
+printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   hsmod <- moduleToHaskellModule cx g
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(graphNameToFilePath True (FileExtension "hs") $ graphName g, s)]
 
-moduleToHaskellModule :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
+moduleToHaskellModule :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified H.Module
 moduleToHaskellModule cx g = graphToExternalModule language (encodeTerm namespaces) constructModule cx g
   where
     namespaces = namespacesForGraph g
@@ -60,7 +60,7 @@ constantDecls namespaces name@(Name nm) typ = if useCoreImport
     fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType typ)
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
-constructModule :: (Default m, Ord m, Read m, Show m)
+constructModule :: (Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
 constructModule cx g coders pairs = do
     decls <- L.concat <$> CM.mapM createDeclarations pairs
@@ -100,7 +100,7 @@ toDataDeclarations coders namespaces cx (el, TypedTerm typ term) = do
     let decl = H.DeclarationTypedBinding $ H.TypedBinding
                 (H.TypeSignature hname htype)
                 (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
-    comments <- annotationClassTermDescription (contextAnnotations cx) term
+    comments <- annotationClassTermDescription (contextAnnotations cx) cx term
     return [H.DeclarationWithComments decl comments]
   where
     rewriteValueBinding vb = case vb of
@@ -110,7 +110,7 @@ toDataDeclarations coders namespaces cx (el, TypedTerm typ term) = do
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
         _ -> vb
 
-toTypeDeclarations :: (Default m, Ord m, Read m, Show m)
+toTypeDeclarations :: (Ord m, Read m, Show m)
   => Namespaces -> Context m -> Element m -> Term m -> Result [H.DeclarationWithComments]
 toTypeDeclarations namespaces cx el term = do
     let lname = localNameOf $ elementName el
@@ -136,7 +136,7 @@ toTypeDeclarations namespaces cx el term = do
         else do
           htype <- encodeAdaptedType namespaces cx t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- annotationClassTermDescription (contextAnnotations cx) term
+    comments <- annotationClassTermDescription (contextAnnotations cx) cx term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls namespaces (elementName el) t
   where
     isSerializable = do
@@ -175,10 +175,10 @@ toTypeDeclarations namespaces cx el term = do
           return [htype]
       return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
 
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m) => Namespaces -> Context m -> Type m -> Result H.Type
+encodeAdaptedType :: (Ord m, Read m, Show m) => Namespaces -> Context m -> Type m -> Result H.Type
 encodeAdaptedType namespaces cx typ = adaptType cx language typ >>= encodeType namespaces
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> m -> Function m -> Result H.Expression
+encodeFunction :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> m -> Function m -> Result H.Expression
 encodeFunction namespaces cx meta fun = case fun of
     FunctionElimination e -> case e of
       EliminationElement -> pure $ hsvar "id"
@@ -269,14 +269,14 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> Term m -> Result H.Expression
+encodeTerm :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Context m -> Term m -> Result H.Expression
 encodeTerm namespaces cx term = do
    case termExpr term of
     TermApplication (Application fun arg) -> case termExpr fun of
        TermFunction (FunctionElimination EliminationElement) -> encode cx arg
        _ -> hsapp <$> encode cx fun <*> encode cx arg
     TermElement name -> pure $ H.ExpressionVariable $ elementReference namespaces name
-    TermFunction f -> encodeFunction namespaces cx (termMeta term) f
+    TermFunction f -> encodeFunction namespaces cx (termMeta cx term) f
     TermList els -> H.ExpressionList <$> CM.mapM (encode cx) els
     TermLiteral v -> encodeLiteral v
     TermNominal (Named tname term') -> if newtypesNotTypedefs
@@ -310,7 +310,7 @@ encodeTerm namespaces cx term = do
   where
     encode = encodeTerm namespaces
     findSname = do
-      r <- annotationClassTypeOf (contextAnnotations cx) cx $ termMeta term
+      r <- annotationClassTypeOf (contextAnnotations cx) cx $ termMeta cx term
       return $ case typeExpr <$> r of
         Just (TypeNominal name) -> Just name
         Nothing -> Nothing

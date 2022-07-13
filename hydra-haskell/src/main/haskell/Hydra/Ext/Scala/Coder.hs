@@ -25,13 +25,13 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
+printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   pkg <- moduleToScalaPackage cx g
   let s = printExpr $ parenthesize $ writePkg pkg
   return $ M.fromList [(graphNameToFilePath False (FileExtension "scala") $ graphName g, s)]
 
-moduleToScalaPackage :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
+moduleToScalaPackage :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule
 
 constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
@@ -77,7 +77,7 @@ constructModule cx g coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name $ Scala.PredefString lname
 
-encodeFunction :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Term m) -> Result Scala.Data
+encodeFunction :: (Eq m, Ord m, Read m, Show m) => Context m -> m -> Function m -> Y.Maybe (Term m) -> Result Scala.Data
 encodeFunction cx meta fun arg = case fun of
     FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeTerm cx body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name
@@ -144,7 +144,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ Scala.LitString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
+encodeTerm :: (Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
 encodeTerm cx term = case termExpr term of
     TermApplication (Application fun arg) -> case termExpr fun of
         TermFunction f -> case f of
@@ -156,13 +156,13 @@ encodeTerm cx term = case termExpr term of
               sarg <- encodeTerm cx arg
               return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
                 (Scala.Data_Name $ Scala.PredefString fname)
-            EliminationUnion _ -> encodeFunction cx (termMeta fun) f (Just arg)
+            EliminationUnion _ -> encodeFunction cx (termMeta cx fun) f (Just arg)
           _ -> fallback
         _ -> fallback
       where
         fallback = sapply <$> encodeTerm cx fun <*> ((: []) <$> encodeTerm cx arg)
     TermElement name -> pure $ sname $ localNameOf name
-    TermFunction f -> encodeFunction cx (termMeta term) f Nothing
+    TermFunction f -> encodeFunction cx (termMeta cx term) f Nothing
     TermList els -> sapply (sname "Seq") <$> CM.mapM (encodeTerm cx) els
     TermLiteral v -> Scala.DataLit <$> encodeLiteral v
     TermMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
@@ -235,7 +235,7 @@ encodeType t = case typeExpr t of
   TypeVariable (VariableType v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
-encodeUntypedTerm :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
+encodeUntypedTerm :: (Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
 encodeUntypedTerm cx term = do
     (term1, _) <- inferType cx term
     encodeTerm cx $ rewriteTermMeta annotType term1

@@ -45,19 +45,25 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           
           -- TODO: simplify
           field "termDescription" $ function
-            (apply (core "Term") (variable "m"))
-            (apply (evaluation "Result") (optional string)),
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (apply (core "Term") (variable "m"))
+              (apply (evaluation "Result") (optional string))),
           field "typeDescription" $ function
-            (apply (core "Type") (variable "m"))
-            (apply (evaluation "Result") (optional string)),
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (apply (core "Type") (variable "m"))
+              (apply (evaluation "Result") (optional string))),
           field "termType" $ function
             (apply (evaluation "Context") (variable "m"))
             (apply
               (apply (core "Term") (variable "m"))
               (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m")))),
           field "setTermDescription" $ function
-            (optional string)
-            (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m"))),
+            (apply (evaluation "Context") (variable "m"))
+            (apply
+              (optional string)
+              (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m")))),
           field "setTermType" $ function
             (apply (evaluation "Context") (variable "m"))
             (apply

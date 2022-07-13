@@ -10,7 +10,6 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils
-import Hydra.ArbitraryCore (untyped)
 
 import qualified Data.Bifunctor as BF
 import qualified Test.Hspec as H

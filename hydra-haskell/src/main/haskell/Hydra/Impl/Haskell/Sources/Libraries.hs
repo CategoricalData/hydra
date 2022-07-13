@@ -105,7 +105,7 @@ _strings_toLower = qname _hydra_lib_strings "toLower"
 _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
-hydraLibListsPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
+hydraLibListsPrimitives :: (Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
   prim1 _lists_concat (listInput (Types.list $ Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
   prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
@@ -125,12 +125,12 @@ hydraLibListsPrimitives = [
 --
   ]
 
-hydraLibLiteralsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
+hydraLibLiteralsPrimitives :: (Show a) => [PrimitiveFunction a]
 hydraLibLiteralsPrimitives = [
     prim1 _literals_showInt32 int32Input stringOutput Literals.showInt32,
     prim1 _literals_showString stringInput stringOutput Literals.showString]
 
-hydraLibMathInt32Primitives :: (Default a, Show a) => [PrimitiveFunction a]
+hydraLibMathInt32Primitives :: (Show a) => [PrimitiveFunction a]
 hydraLibMathInt32Primitives = [
     prim2 _math_add int32Input int32Input int32Output Math.add,
     prim2 _math_div int32Input int32Input int32Output Math.div,
@@ -140,7 +140,7 @@ hydraLibMathInt32Primitives = [
     prim2 _math_rem int32Input int32Input int32Output Math.rem,
     prim2 _math_sub int32Input int32Input int32Output Math.sub]
 
-hydraLibStringsPrimitives :: (Default a, Show a) => [PrimitiveFunction a]
+hydraLibStringsPrimitives :: (Show a) => [PrimitiveFunction a]
 hydraLibStringsPrimitives = [
     prim1 _strings_cat (listInput Types.string expectString) stringOutput Strings.cat,
     prim1 _strings_length stringInput int32Output Strings.length,
@@ -148,7 +148,7 @@ hydraLibStringsPrimitives = [
     prim1 _strings_toLower stringInput stringOutput Strings.toLower,
     prim1 _strings_toUpper stringInput stringOutput Strings.toUpper]
 
-standardPrimitives :: (Default m, Show m) => [PrimitiveFunction m]
+standardPrimitives :: (Show m) => [PrimitiveFunction m]
 standardPrimitives =
          hydraLibListsPrimitives
       ++ hydraLibLiteralsPrimitives

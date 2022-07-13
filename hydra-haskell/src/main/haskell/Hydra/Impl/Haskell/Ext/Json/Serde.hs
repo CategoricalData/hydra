@@ -40,7 +40,7 @@ bytesToAeson = A.decode
 bytesToValue :: BS.ByteString -> Maybe Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
-jsonSerde :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) BS.ByteString)
+jsonSerde :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) BS.ByteString)
 jsonSerde context typ = do
   coder <- jsonCoder context typ
   return Step {
@@ -49,7 +49,7 @@ jsonSerde context typ = do
         Nothing -> fail "JSON parsing failed"
         Just v -> stepIn coder v}
 
-jsonSerdeStr :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) String)
+jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) String)
 jsonSerdeStr context typ = do
   serde <- jsonSerde context typ
   return Step {

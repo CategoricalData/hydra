@@ -16,7 +16,6 @@ import Hydra.Core
 import Hydra.Steps
 import Hydra.Primitives
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Default
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -28,28 +27,28 @@ decodeElement term = case term of
   TermElement name -> pure name
   _ -> fail "expected an element"
 
-decodeFieldType :: (Default m, Show m) => Context m -> Term m -> Result (FieldType m)
+decodeFieldType :: Show m => Context m -> Term m -> Result (FieldType m)
 decodeFieldType cx = matchRecord cx $ \m -> FieldType
   <$> (FieldName <$> getField m _FieldType_name decodeString)
   <*> getField m _FieldType_type (decodeType cx)
 
-decodeFieldTypes :: (Default m, Show m) => Context m -> Term m -> Result [FieldType m]
+decodeFieldTypes :: Show m => Context m -> Term m -> Result [FieldType m]
 decodeFieldTypes cx term = case term of
   TermList els -> CM.mapM (decodeFieldType cx) els
   _ -> fail "expected a list"
 
-decodeFloatType :: (Default m, Show m) => Context m -> Term m -> Result FloatType
+decodeFloatType :: Show m => Context m -> Term m -> Result FloatType
 decodeFloatType cx = matchEnum cx [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
-decodeFunctionType :: (Default m, Show m) => Context m -> Term m -> Result (FunctionType m)
+decodeFunctionType :: Show m => Context m -> Term m -> Result (FunctionType m)
 decodeFunctionType cx = matchRecord cx $ \m -> FunctionType
   <$> getField m _FunctionType_domain (decodeType cx)
   <*> getField m _FunctionType_codomain (decodeType cx)
 
-decodeIntegerType :: (Default m, Show m) => Context m -> Term m -> Result IntegerType
+decodeIntegerType :: Show m => Context m -> Term m -> Result IntegerType
 decodeIntegerType cx = matchEnum cx [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
@@ -61,7 +60,7 @@ decodeIntegerType cx = matchEnum cx [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
-decodeLiteralType :: (Default m, Show m) => Context m -> Term m -> Result LiteralType
+decodeLiteralType :: Show m => Context m -> Term m -> Result LiteralType
 decodeLiteralType cx = matchUnion cx [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
@@ -69,7 +68,7 @@ decodeLiteralType cx = matchUnion cx [
   (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType cx),
   matchUnitField _LiteralType_string LiteralTypeString]
 
-decodeMapType :: (Default m, Show m) => Context m -> Term m -> Result (MapType m)
+decodeMapType :: Show m => Context m -> Term m -> Result (MapType m)
 decodeMapType cx = matchRecord cx $ \m -> MapType
   <$> getField m _MapType_keys (decodeType cx)
   <*> getField m _MapType_values (decodeType cx)
@@ -81,7 +80,7 @@ decodeString term = case term of
     _ -> fail "expected a string value"
   _ -> fail "expected a literal value"
 
-decodeType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
+decodeType :: Show m => Context m -> Term m -> Result (Type m)
 decodeType cx dat = case dat of
   TermElement name -> pure $ Types.nominal name
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> decodeType cx term
@@ -101,12 +100,12 @@ decodeType cx dat = case dat of
     (_Type_union, fmap TypeUnion . decodeFieldTypes cx),
     (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
 
-decodeApplicationType :: (Default m, Show m) => Context m -> Term m -> Result (ApplicationType m)
+decodeApplicationType :: Show m => Context m -> Term m -> Result (ApplicationType m)
 decodeApplicationType cx = matchRecord cx $ \m -> ApplicationType
   <$> getField m _ApplicationType_function (decodeType cx)
   <*> getField m _ApplicationType_argument (decodeType cx)
 
-decodeLambdaType :: (Default m, Show m) => Context m -> Term m -> Result (LambdaType m)
+decodeLambdaType :: Show m => Context m -> Term m -> Result (LambdaType m)
 decodeLambdaType cx = matchRecord cx $ \m -> LambdaType
   <$> (VariableType <$> getField m _LambdaType_parameter decodeString)
   <*> getField m _LambdaType_body (decodeType cx)
@@ -116,7 +115,7 @@ getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
 
-matchEnum :: (Default m, Show m) => Context m -> [(FieldName, b)] -> Term m -> Result b
+matchEnum :: Show m => Context m -> [(FieldName, b)] -> Term m -> Result b
 matchEnum cx = matchUnion cx . fmap (uncurry matchUnitField)
 
 matchRecord :: Show m => Context m -> (M.Map FieldName (Term m) -> Result b) -> Term m -> Result b
@@ -126,7 +125,7 @@ matchRecord cx decode term = do
     TermRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail $ "expected a record; found " ++ show term'
 
-matchUnion :: (Default m, Show m) => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
+matchUnion :: Show m => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
 matchUnion cx pairs term = do
     term' <- deref cx term
     case termExpr term' of

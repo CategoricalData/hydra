@@ -5,7 +5,6 @@ import Hydra.Evaluation
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Impl.Haskell.Default
 import Hydra.Common
 
 import qualified Data.Map as M
@@ -22,19 +21,19 @@ getDescription meta = case getAnnotation metaDescription meta of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show metaDescription ++ ": " ++ show term
 
-getTermAnnotation :: String -> Term Meta -> Y.Maybe (Term Meta)
-getTermAnnotation key = getAnnotation key . termMeta
+getTermAnnotation :: Context Meta -> String -> Term Meta -> Y.Maybe (Term Meta)
+getTermAnnotation cx key = getAnnotation key . termMeta cx
 
-getTermDescription :: Term Meta -> Result (Y.Maybe String)
-getTermDescription = getDescription . termMeta
+getTermDescription :: Context Meta -> Term Meta -> Result (Y.Maybe String)
+getTermDescription cx = getDescription . termMeta cx
 
 getType :: Context Meta -> Meta -> Result (Y.Maybe (Type Meta))
 getType cx meta = case getAnnotation metaType meta of
   Nothing -> pure Nothing
   Just dat -> Just <$> decodeType cx dat
 
-getTypeDescription :: Type Meta -> Result (Y.Maybe String)
-getTypeDescription = getDescription . typeMeta
+getTypeDescription :: Context Meta -> Type Meta -> Result (Y.Maybe String)
+getTypeDescription cx = getDescription . typeMeta cx
 
 metaAnnotationClass :: AnnotationClass Meta
 metaAnnotationClass = AnnotationClass {
@@ -47,7 +46,7 @@ metaAnnotationClass = AnnotationClass {
     -- TODO: simplify
     annotationClassTermDescription = getTermDescription,
     annotationClassTypeDescription = getTypeDescription,
-    annotationClassTermType = \cx t -> getType cx $ termMeta t,
+    annotationClassTermType = \cx t -> getType cx $ termMeta cx t,
     annotationClassSetTermDescription = setTermDescription,
     annotationClassSetTermType = setTermType,
     annotationClassTypeOf = getType,
@@ -70,30 +69,30 @@ setAnnotation key val (Meta m) = Meta $ M.alter (const val) key m
 setDescription :: Y.Maybe String -> Meta -> Meta
 setDescription d = setAnnotation metaDescription (string <$> d)
 
-setTermAnnotation :: String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
-setTermAnnotation key val term = if meta == dflt
+setTermAnnotation :: Context Meta -> String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
+setTermAnnotation cx key val term = if meta == annotationClassDefault (contextAnnotations cx)
     then term'
     else TermAnnotated $ Annotated term' meta
   where
     term' = termExpr term
-    meta = setAnnotation key val $ termMeta term
+    meta = setAnnotation key val $ termMeta cx term
 
-setTermDescription :: Y.Maybe String -> Term Meta -> Term Meta
-setTermDescription d = setTermAnnotation metaDescription (string <$> d)
+setTermDescription :: Context Meta -> Y.Maybe String -> Term Meta -> Term Meta
+setTermDescription cx d = setTermAnnotation cx metaDescription (string <$> d)
 
 setTermType :: Context Meta -> Y.Maybe (Type Meta) -> Term Meta -> Term Meta
-setTermType cx d = setTermAnnotation metaType (encodeType cx <$> d)
+setTermType cx d = setTermAnnotation cx metaType (encodeType cx <$> d)
 
 setType :: Context Meta -> Y.Maybe (Type Meta) -> Meta -> Meta
 setType cx d = setAnnotation metaType (encodeType cx <$> d)
 
-setTypeAnnotation :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
-setTypeAnnotation key val typ = if meta == dflt
+setTypeAnnotation :: Context Meta -> String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
+setTypeAnnotation cx key val typ = if meta == annotationClassDefault (contextAnnotations cx)
     then typ'
     else TypeAnnotated $ Annotated typ' meta
   where
     typ' = typeExpr typ
-    meta = setAnnotation key val $ typeMeta typ
+    meta = setAnnotation key val $ typeMeta cx typ
 
-setTypeDescription :: Y.Maybe String -> Type Meta -> Type Meta
-setTypeDescription d = setTypeAnnotation metaDescription (string <$> d)
+setTypeDescription :: Context Meta -> Y.Maybe String -> Type Meta -> Type Meta
+setTypeDescription cx d = setTypeAnnotation cx metaDescription (string <$> d)

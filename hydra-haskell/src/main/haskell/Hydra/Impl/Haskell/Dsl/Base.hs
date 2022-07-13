@@ -97,7 +97,7 @@ delta :: Data (Ref a -> a)
 delta = Data Terms.delta
 
 doc :: String -> Data a -> Data a
-doc s (Data term) = Data $ setTermDescription (Just s) term
+doc s (Data term) = Data $ setTermDescription Standard.standardContext (Just s) term
 
 element :: Element a -> Data (Ref a)
 element (Element name _) = Data $ Terms.element name

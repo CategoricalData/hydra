@@ -20,7 +20,7 @@ import Hydra.Util.Formatting
 
 newtype FileExtension = FileExtension String
 
-adaptType :: (Default m, Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
+adaptType :: (Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
 adaptType cx targetLang t = do
     ad <- qualifiedToResult $ termAdapter ac t
     return $ adapterTarget ad
@@ -34,7 +34,7 @@ graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNam
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
-graphToExternalModule :: (Default m, Ord m, Read m, Show m)
+graphToExternalModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Context m -> Term m -> Result e)
   -> (Context m -> Graph m -> M.Map (Type m) (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)

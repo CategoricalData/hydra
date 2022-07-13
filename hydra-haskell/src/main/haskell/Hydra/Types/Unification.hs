@@ -11,7 +11,6 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Default
 
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -40,10 +39,10 @@ bind a t | t == TypeVariable a = return M.empty
          | variableOccursInType a t = throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
 
-solveConstraints :: (Default m, Eq m, Show m) => Context m -> [Constraint m] -> Either (TypeError m) (Subst m)
+solveConstraints :: (Eq m, Show m) => Context m -> [Constraint m] -> Either (TypeError m) (Subst m)
 solveConstraints cx cs = runIdentity $ runExceptT $ unificationSolver cx (M.empty, cs)
 
-unificationSolver :: (Default m, Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
+unificationSolver :: (Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
 unificationSolver scx (su, cs) = case cs of
   [] -> return su
   ((t1, t2): cs0) -> do
@@ -52,7 +51,7 @@ unificationSolver scx (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
-unify :: (Default m, Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
+unify :: (Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
 unify cx t1 t2 = if t1 == t2
     then return M.empty
     else case (t1, t2) of
@@ -81,7 +80,7 @@ unify cx t1 t2 = if t1 == t2
   where
     unifyRowType f1 f2 = unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
 
-unifyMany :: (Default m, Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
+unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
 unifyMany _ [] [] = return M.empty
 unifyMany cx (t1 : ts1) (t2 : ts2) =
   do su1 <- unify cx t1 t2

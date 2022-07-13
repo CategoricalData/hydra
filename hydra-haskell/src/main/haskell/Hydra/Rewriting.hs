@@ -112,7 +112,7 @@ rewriteTypeMeta mapMeta = rewriteType mapExpr mapMeta
   where
     mapExpr recurse term = recurse term
 
-simplifyTerm :: (Default m, Ord m) => Term m -> Term m
+simplifyTerm :: Ord m => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case termExpr term of
@@ -194,7 +194,7 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
 
-typeDependencies :: (Default m, Show m) => Context m -> Name -> Result (M.Map Name (Type m))
+typeDependencies :: (Show m) => Context m -> Name -> Result (M.Map Name (Type m))
 typeDependencies scx name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds

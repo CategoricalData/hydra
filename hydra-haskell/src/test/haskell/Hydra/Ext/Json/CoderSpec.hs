@@ -11,7 +11,6 @@ import Hydra.Lib.Literals
 
 import Hydra.TestData
 import Hydra.TestUtils
-import Hydra.ArbitraryCore (untyped)
 
 import qualified Data.Bifunctor as BF
 import qualified Test.Hspec as H

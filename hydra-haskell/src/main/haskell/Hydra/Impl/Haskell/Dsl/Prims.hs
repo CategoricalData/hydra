@@ -10,31 +10,31 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-booleanOutput :: Default m => OutputSpec Bool m
+booleanOutput :: OutputSpec Bool m
 booleanOutput = OutputSpec Types.boolean boolean
 
-inputPoly :: Default m => String -> InputSpec (Term m) m
+inputPoly :: String -> InputSpec (Term m) m
 inputPoly v = InputSpec (Types.variable v) pure
 
-int32Input :: (Default m, Show m) => InputSpec Int m
+int32Input :: (Show m) => InputSpec Int m
 int32Input = InputSpec Types.int32 expectInt32
 
-int32Output :: Default m => OutputSpec Int m
+int32Output :: OutputSpec Int m
 int32Output = OutputSpec Types.int32 int32
 
-listInput :: (Default m, Show m) => Type m -> (Term m -> Result a) -> InputSpec [a] m
+listInput :: (Show m) => Type m -> (Term m -> Result a) -> InputSpec [a] m
 listInput lt f = InputSpec (Types.list lt) (expectList f)
 
-listOutput :: Default m => Type m -> (a -> Term m) -> OutputSpec [a] m
+listOutput :: Type m -> (a -> Term m) -> OutputSpec [a] m
 listOutput lt f = OutputSpec (Types.list lt) $ \l -> list (f <$> l)
 
-listInputPoly :: (Default m, Show m) => String -> InputSpec [Term m] m
+listInputPoly :: (Show m) => String -> InputSpec [Term m] m
 listInputPoly v = InputSpec (Types.list $ Types.variable v) expectListPoly
 
-listOutputPoly :: Default m => String -> OutputSpec [Term m] m
+listOutputPoly :: String -> OutputSpec [Term m] m
 listOutputPoly v = OutputSpec (Types.list $ Types.variable v) list
 
-outputPoly :: Default m => String -> OutputSpec (Term m) m
+outputPoly :: String -> OutputSpec (Term m) m
 outputPoly v = OutputSpec (Types.variable v) id
 
 prim1 :: Name -> InputSpec a m -> OutputSpec b m -> (a -> b) -> PrimitiveFunction m
@@ -46,7 +46,7 @@ prim1 name input1 output compute = PrimitiveFunction name ft impl
       arg1 <- inputSpecUnmarshal input1 $ L.head args
       return $ outputSpecMarshal output $ compute arg1
 
-prim2 :: Default m => Name -> InputSpec a1 m -> InputSpec a2 m -> OutputSpec b m -> (a1 -> a2 -> b) -> PrimitiveFunction m
+prim2 :: Name -> InputSpec a1 m -> InputSpec a2 m -> OutputSpec b m -> (a1 -> a2 -> b) -> PrimitiveFunction m
 prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
   where
     ft = FunctionType (inputSpecType input1) (Types.function (inputSpecType input2) $ outputSpecType output)
@@ -56,17 +56,17 @@ prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
       arg2 <- inputSpecUnmarshal input2 $ args !! 1
       return $ outputSpecMarshal output $ compute arg1 arg2
 
-setInput :: (Default m, Ord a, Show m) => (Term m -> Result a) -> String -> InputSpec (S.Set a) m
+setInput :: (Ord a, Show m) => (Term m -> Result a) -> String -> InputSpec (S.Set a) m
 setInput f v = InputSpec (Types.set $ Types.variable v) (expectSet f)
 
-setOutput :: (Default m, Ord m) => (a -> Term m) -> String -> OutputSpec (S.Set a) m
+setOutput :: (Ord m) => (a -> Term m) -> String -> OutputSpec (S.Set a) m
 setOutput f v = OutputSpec (Types.set $ Types.variable v) (\s -> set (S.fromList (f <$> S.toList s)))
 
-stringInput :: (Default m, Show m) => InputSpec String m
+stringInput :: (Show m) => InputSpec String m
 stringInput = InputSpec Types.string expectString
 
-stringListOutput :: Default m => OutputSpec [String] m
+stringListOutput :: OutputSpec [String] m
 stringListOutput = OutputSpec (Types.list Types.string) stringList
 
-stringOutput :: Default m => OutputSpec String m
+stringOutput :: OutputSpec String m
 stringOutput = OutputSpec Types.string string

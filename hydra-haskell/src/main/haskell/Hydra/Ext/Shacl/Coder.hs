@@ -20,7 +20,7 @@ import qualified Data.Set as S
 
 data Ann a = Ann a (Maybe String)
 
-shaclCoder :: (Default m, Eq m, Show m) => Context m -> Graph m -> Qualified (Shacl.ShapesGraph, Graph m -> Result Rdf.Graph)
+shaclCoder :: (Eq m, Show m) => Context m -> Graph m -> Qualified (Shacl.ShapesGraph, Graph m -> Result Rdf.Graph)
 shaclCoder cx sg = do
     pairs <- resultToQualified $ CM.mapM decode typeEls
     fail "FOO"

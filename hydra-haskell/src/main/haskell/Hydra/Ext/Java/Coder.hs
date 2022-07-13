@@ -20,7 +20,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
+printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
     units <- moduleToJavaCompilationUnit cx g
     return $ M.fromList $ forPair <$> M.toList units
@@ -30,10 +30,10 @@ printGraph cx g = do
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
 commentsFromElement :: Context m -> Element m -> Result (Maybe String)
-commentsFromElement cx el = annotationClassTermDescription (contextAnnotations cx) (elementData el)
+commentsFromElement cx el = annotationClassTermDescription (contextAnnotations cx) cx (elementData el)
 
 commentsFromFieldType :: Context m -> FieldType m -> Result (Maybe String)
-commentsFromFieldType cx (FieldType _ t) = annotationClassTypeDescription (contextAnnotations cx) t
+commentsFromFieldType cx (FieldType _ t) = annotationClassTypeDescription (contextAnnotations cx) cx t
 
 addComment :: Context m -> Java.ClassBodyDeclaration -> FieldType m -> Result Java.ClassBodyDeclarationWithComments
 addComment cx decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType cx field
@@ -46,7 +46,7 @@ elementNameToFilePath name = nameToFilePath True (FileExtension "java") $ fromQn
   where
     (ns, local) = toQname name
 
-moduleToJavaCompilationUnit :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m
+moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Context m -> Graph m
   -> Qualified (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
   where
@@ -55,7 +55,7 @@ moduleToJavaCompilationUnit cx g = graphToExternalModule language (encodeTerm al
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
-constructModule :: (Default m, Ord m, Read m, Show m)
+constructModule :: (Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
   -> Result (M.Map Name Java.CompilationUnit)
 constructModule cx g coders pairs = do
@@ -192,7 +192,7 @@ declarationForRecordType aliases cx tparams elName fields = do
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-declarationForType :: (Default m, Ord m, Read m, Show m)
+declarationForType :: (Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> (Element m, TypedTerm m) -> Result Java.TypeDeclarationWithComments
 declarationForType aliases cx (el, TypedTerm _ term) = do
     t <- decodeType cx term >>= adaptType cx language
@@ -200,7 +200,7 @@ declarationForType aliases cx (el, TypedTerm _ term) = do
     comments <- commentsFromElement cx el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
 
-declarationForUnionType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
+declarationForUnionType :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> Context m
   -> [Java.TypeParameter] -> Name -> [FieldType m] -> Result Java.ClassDeclaration
 declarationForUnionType aliases cx tparams elName fields = do
     variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
@@ -275,14 +275,14 @@ declarationForUnionType aliases cx tparams elName fields = do
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] $ variantClassName elName fname
 
-declarationForLambdaType :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m
+declarationForLambdaType :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> Context m
   -> [Java.TypeParameter] -> Name -> LambdaType m -> Result Java.ClassDeclaration
 declarationForLambdaType aliases cx tparams elName (LambdaType (VariableType v) body) =
     toClassDecl aliases cx (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
 
-encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m)
+encodeTerm :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
 encodeTerm aliases cx term = do
   return $ javaStatementsToBlock [javaEmptyStatement] -- TODO
@@ -349,7 +349,7 @@ encodeType aliases t = case typeExpr t of
   where
     encode = encodeType aliases
 
-toClassDecl :: (Show m, Default m, Eq m) => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter]
+toClassDecl :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter]
   -> Name -> Type m -> Result Java.ClassDeclaration
 toClassDecl aliases cx tparams elName t = case typeExpr t of
     TypeRecord fields -> declarationForRecordType aliases cx tparams elName fields
