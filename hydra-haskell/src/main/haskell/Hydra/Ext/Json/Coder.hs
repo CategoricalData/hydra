@@ -12,7 +12,6 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Ext.Json.Language
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Lib.Literals
-import Hydra.Rewriting
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M

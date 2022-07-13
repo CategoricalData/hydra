@@ -98,7 +98,9 @@ termCoder typ = case typeExpr typ of
     let encodeEntry (k, v) = (,) <$> stepOut kc k <*> stepOut vc v
     let decodeEntry (k, v) = (,) <$> stepIn kc k <*> stepIn vc v
     return Step {
-      stepOut = \(TermMap m) -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+      stepOut = \t -> case t of
+        TermMap m -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m)
+        _ -> unexpected "term" t,
       stepIn = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
