@@ -18,7 +18,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-jsonCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) Json.Value)
+jsonCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) Json.Value)
 jsonCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter
@@ -49,7 +49,7 @@ literalCoder at = pure $ case at of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) Json.Value)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) Json.Value)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
@@ -72,7 +72,7 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) Json.Value)
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) Json.Value)
 termCoder typ = case typeExpr typ of
   TypeLiteral at -> do
     ac <- literalCoder at

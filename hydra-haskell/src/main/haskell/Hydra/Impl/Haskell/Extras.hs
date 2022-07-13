@@ -1,5 +1,4 @@
 module Hydra.Impl.Haskell.Extras (
-  Default(..),
   debug,
   eitherToQualified,
   elementAsTypedTerm,
@@ -12,12 +11,10 @@ module Hydra.Impl.Haskell.Extras (
   unidirectionalStep,
   module Hydra.Common,
   module Hydra.Errors,
-  module Hydra.Impl.Haskell.Default
   ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Impl.Haskell.Default
 import Hydra.Errors
 import Hydra.Graph
 import Hydra.Primitives
@@ -51,10 +48,10 @@ eitherToQualified e = case e of
   ResultFailure msg -> Qualified Nothing [msg]
   ResultSuccess x -> Qualified (Just x) []
 
-elementAsTypedTerm :: (Default m, Show m) => Context m -> Element m -> Result (TypedTerm m)
+elementAsTypedTerm :: (Show m) => Context m -> Element m -> Result (TypedTerm m)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
-fieldTypes :: (Default m, Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
+fieldTypes :: (Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
 fieldTypes scx t = case typeExpr t of
     TypeRecord fields -> pure $ toMap fields
     TypeUnion fields -> pure $ toMap fields
@@ -73,7 +70,7 @@ qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
 
-requireType :: (Default m, Show m) => Context m -> Name -> Result (Type m)
+requireType :: (Show m) => Context m -> Name -> Result (Type m)
 requireType scx name = do
   el <- requireElement (Just "require type") scx name
   decodeType scx $ elementData el

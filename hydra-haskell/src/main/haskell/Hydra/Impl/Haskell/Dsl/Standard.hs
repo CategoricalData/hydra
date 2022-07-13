@@ -9,8 +9,6 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Meta
 import Hydra.Impl.Haskell.Sources.Libraries
-import Hydra.Impl.Haskell.Default
-import Hydra.Common
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -21,13 +19,13 @@ datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
 annotate :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
-annotate = setTypeAnnotation
+annotate = setTypeAnnotation standardContext
 
 doc :: String -> Type Meta -> Type Meta
-doc s = setTypeDescription (Just s)
+doc s = setTypeDescription standardContext (Just s)
 
 dataDoc :: String -> Term Meta -> Term Meta
-dataDoc s = setTermDescription (Just s)
+dataDoc s = setTermDescription standardContext (Just s)
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList t = doc "Note: list cannot be empty" $ Types.list t

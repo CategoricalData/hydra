@@ -32,7 +32,7 @@ type InferenceState = Int
 type TypingEnvironment m = M.Map Variable (TypeScheme m)
 
 -- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: (Default m, Show m) => Context m -> Term m -> Result (Type m)
+decodeStructuralType :: (Show m) => Context m -> Term m -> Result (Type m)
 decodeStructuralType cx term = do
   typ <- decodeType cx term
   case typeExpr typ of
@@ -42,7 +42,7 @@ decodeStructuralType cx term = do
       decodeStructuralType scx $ elementData el
     _ -> pure typ
 
-freshVariableType :: Default m => Infer (Type m) m
+freshVariableType :: Infer (Type m) m
 freshVariableType = do
     s <- get
     put (s + 1)
@@ -62,15 +62,15 @@ extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   local scope m
 
-infer :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
+infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
 infer cx term = case annotationClassTermType (contextAnnotations cx) cx term of
     ResultSuccess t -> case t of
       Just typ -> do
         i <- inferInternal cx term
-        return $ TermAnnotated $ Annotated i (termMeta term, typ, []) -- TODO: unify "suggested" types with inferred types
+        return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
       Nothing -> inferInternal cx term
 
-inferInternal :: (Default m, Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
+inferInternal :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
 inferInternal cx term = case termExpr term of
     TermApplication (Application fun arg) -> do
       ifun <- infer cx fun
@@ -221,21 +221,19 @@ inferInternal cx term = case termExpr term of
       t <- lookupTypeInEnvironment x
       yield (TermVariable x) t []
   where
-
     yieldFunction fun = yield (TermFunction fun)
 
     yieldElimination e = yield (TermFunction $ FunctionElimination e)
 
-yield :: Default m => Term (m, Type m, [Constraint m]) -> Type m -> [Constraint m] -> Infer (Term (m, Type m, [Constraint m])) m
-yield term typ constraints = case term of
-  TermAnnotated (Annotated term' (meta, _, _)) -> return $ TermAnnotated $ Annotated term' (meta, typ, constraints)
-  _ -> return $ TermAnnotated $ Annotated term (dflt, typ, constraints)
+    yield term typ constraints = case term of
+      TermAnnotated (Annotated term' (meta, _, _)) -> return $ TermAnnotated $ Annotated term' (meta, typ, constraints)
+      _ -> return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
 
-inferFieldType :: (Default m, Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
+inferFieldType :: (Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
 -- | Solve for the toplevel type of an expression in a given environment
-inferTop :: (Default m, Ord m, Show m)
+inferTop :: (Ord m, Show m)
   => Context m -> Term m
   -> Either (TypeError m) (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferTop cx term = do
@@ -249,24 +247,24 @@ inferTop cx term = do
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver = normalizeScheme . generalize M.empty
 
-inferType :: (Default m, Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
+inferType :: (Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferType cx term = case inferTop cx term of
     Left err -> fail $ "type inference failed: " ++ show err
     Right p -> pure p
 
-instantiate :: Default m => TypeScheme m -> Infer (Type m) m
+instantiate :: TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
-lookupTypeInEnvironment :: Default m => Variable -> Infer (Type m) m
+lookupTypeInEnvironment :: Variable -> Infer (Type m) m
 lookupTypeInEnvironment v = do
   env <- ask
   case M.lookup v env of
       Nothing   -> throwError $ UnboundVariable v
       Just s    -> instantiate s
 
-namedType :: (Default m, Show m) => String -> Context m -> Name -> Result (Type m)
+namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
 namedType debug cx name = do
   el <- requireElement (Just debug) cx name
   scx <- schemaContext cx
@@ -289,7 +287,7 @@ termConstraints (TermAnnotated (Annotated _ (_, _, constraints))) = constraints
 termType :: Term (m, Type m, [Constraint m]) -> Type m
 termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
-typeOfElement :: (Default m, Show m) => Context m -> Name -> Result (Type m)
+typeOfElement :: (Show m) => Context m -> Name -> Result (Type m)
 typeOfElement cx name = do
   el <- requireElement (Just "type of element") cx name
   decodeStructuralType cx $ elementSchema el

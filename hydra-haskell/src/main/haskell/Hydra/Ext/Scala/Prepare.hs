@@ -5,7 +5,6 @@ module Hydra.Ext.Scala.Prepare (
 
 import Hydra.Core
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Default
 import Hydra.Common
 
 import qualified Data.Set as S
@@ -47,7 +46,7 @@ prepareIntegerType it = case it of
     $ \(IntegerValueUint64 v) -> IntegerValueInt64 v
   _ -> same it
 
-prepareType :: Default m => Type m -> (Type m, Term m -> Term m, S.Set String)
+prepareType :: Type m -> (Type m, Term m -> Term m, S.Set String)
 prepareType typ = case typeExpr typ of
   TypeLiteral at -> (Types.literal rtyp, \(TermLiteral av) -> TermLiteral $ rep av, msgs)
     where

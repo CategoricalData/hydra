@@ -39,7 +39,7 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Default m, Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) YM.Node)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) YM.Node)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
     return $ Step (encode coders) (decode coders)
@@ -62,7 +62,7 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) YM.Node)
 termCoder typ = case typeExpr typ of
   TypeLiteral at -> do
     ac <- literalCoder at
@@ -106,7 +106,7 @@ termCoder typ = case typeExpr typ of
         _ -> unexpected "mapping" n}
   TypeRecord sfields -> recordCoder sfields
 
-yamlCoder :: (Default m, Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) YM.Node)
+yamlCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) YM.Node)
 yamlCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter

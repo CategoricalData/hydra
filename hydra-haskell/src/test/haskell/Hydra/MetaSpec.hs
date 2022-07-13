@@ -16,41 +16,41 @@ checkArbitraryAnnotations = do
 
     H.it "Set a single key/value pair" $
       QC.property $ \k v -> H.shouldBe
-        (setTermAnnotation k (Just $ Terms.int32 v) $ Terms.string "foo")
+        (setAnn k (Just $ Terms.int32 v) $ Terms.string "foo")
         (TermAnnotated $ Annotated (Terms.string "foo") $ Meta $ M.fromList [(k, Terms.int32 v)])
 
     H.it "Retrieve a single value" $
       QC.property $ \k v -> H.shouldBe
-        (getTermAnnotation k $ setTermAnnotation k (Just $ Terms.string v) $ Terms.int32 42)
+        (getAnn k $ setAnn k (Just $ Terms.string v) $ Terms.int32 42)
         (Just $ Terms.string v)
 
     H.it "Retrieve a null value" $
       QC.property $ \k -> H.shouldBe
-        (getTermAnnotation k $ Terms.int16 42)
+        (getAnn k $ Terms.int16 42)
         Nothing
 
     H.it "Set multiple values" $
       QC.property $ \v1 v2 -> H.shouldBe
-        (setTermAnnotation "k2" (Just $ Terms.int32 v2) $
-          setTermAnnotation "k1" (Just $ Terms.string v1) $
+        (setAnn "k2" (Just $ Terms.int32 v2) $
+          setAnn "k1" (Just $ Terms.string v1) $
           Terms.boolean True)
         (TermAnnotated $ Annotated (Terms.boolean True) $ Meta $ M.fromList [("k1", Terms.string v1), ("k2", Terms.int32 v2)])
         
     H.it "An outer annotation overrides an inner one" $
       QC.property $ \k v1 v2 -> H.shouldBe
-        (setTermAnnotation k (Just $ Terms.string v2) $ setTermAnnotation k (Just $ Terms.string v1) $ Terms.string "bar")
+        (setAnn k (Just $ Terms.string v2) $ setAnn k (Just $ Terms.string v1) $ Terms.string "bar")
         (TermAnnotated $ Annotated (Terms.string "bar") $ Meta $ M.fromList [(k, Terms.string v2)])
 
     H.it "Unset a single annotation" $
       QC.property $ \k -> H.shouldBe
-        (setTermAnnotation k Nothing $ setTermAnnotation k (Just $ Terms.string "foo") $ Terms.int64 137)
+        (setAnn k Nothing $ setAnn k (Just $ Terms.string "foo") $ Terms.int64 137)
         (Terms.int64 137)
 
     H.it "Unset one of multiple annotations" $
       QC.property $ \v1 v2 -> H.shouldBe
-        (setTermAnnotation "k1" Nothing $
-          setTermAnnotation "k2" (Just $ Terms.int32 v2) $
-          setTermAnnotation "k1" (Just $ Terms.string v1) $
+        (setAnn "k1" Nothing $
+          setAnn "k2" (Just $ Terms.int32 v2) $
+          setAnn "k1" (Just $ Terms.string v1) $
           Terms.int64 137)
         (TermAnnotated $ Annotated (Terms.int64 137) $ Meta $ M.fromList [("k2", Terms.int32 v2)])
 
@@ -60,29 +60,37 @@ checkDescriptions = do
 
     H.it "Set a single description" $
       QC.property $ \d -> H.shouldBe
-        (setTermDescription (Just d) $ Terms.string "foo")
+        (setDesc (Just d) $ Terms.string "foo")
         (TermAnnotated $ Annotated (Terms.string "foo") $ Meta $ M.fromList [("description", Terms.string d)])
 
     H.it "Retrieve a single description" $
       QC.property $ \d -> H.shouldBe
-        (getTermDescription $ setTermDescription (Just d) $ Terms.int32 42)
+        (getDesc $ setDesc (Just d) $ Terms.int32 42)
         (ResultSuccess $ Just d)
 
     H.it "Retrieve a null description" $
       QC.property $ \i -> H.shouldBe
-        (getTermDescription $ Terms.int16 i)
+        (getDesc $ Terms.int16 i)
         (ResultSuccess Nothing)
 
     H.it "An outer description overrides an inner one" $
       QC.property $ \d1 d2 -> H.shouldBe
-        (setTermDescription (Just d2) $ setTermDescription (Just d1) $ Terms.string "bar")
+        (setDesc (Just d2) $ setDesc (Just d1) $ Terms.string "bar")
         (TermAnnotated $ Annotated (Terms.string "bar") $ Meta $ M.fromList [("description", Terms.string d2)])
 
     H.it "Unset a description" $
       QC.property $ \d -> H.shouldBe
-        (setTermDescription Nothing $ setTermDescription (Just d) $ Terms.int64 137)
+        (setDesc Nothing $ setDesc (Just d) $ Terms.int64 137)
         (Terms.int64 137)
 
+getAnn = getTermAnnotation testContext
+
+getDesc = getTermDescription testContext
+
+setAnn = setTermAnnotation testContext
+
+setDesc = setTermDescription testContext
+  
 spec :: H.Spec
 spec = do
   checkArbitraryAnnotations

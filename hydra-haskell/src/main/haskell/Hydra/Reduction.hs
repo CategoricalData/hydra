@@ -19,7 +19,7 @@ import qualified Data.Set as S
 --   This function does not assume that term to be evaluated is in a normal form,
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
-betaReduceTerm :: (Ord a, Show a, Default a) => Context a -> Term a -> Result (Term a)
+betaReduceTerm :: (Ord a, Show a) => Context a -> Term a -> Result (Term a)
 betaReduceTerm context term = reduce M.empty term
   where
     reduce bindings term = if termIsOpaque (contextStrategy context) term
@@ -113,7 +113,7 @@ betaReduceTerm context term = reduce M.empty term
 
       _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 
-betaReduceType :: (Default m, Ord m, Show m) => Bool -> Context m -> Type m -> Type m
+betaReduceType :: (Ord m, Show m) => Bool -> Context m -> Type m -> Type m
 betaReduceType eager cx = rewriteType mapExpr id
   where
     mapExpr _ t = case typeExpr t of

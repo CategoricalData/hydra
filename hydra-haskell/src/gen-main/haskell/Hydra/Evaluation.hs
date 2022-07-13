@@ -34,10 +34,10 @@ data AnnotationClass m
     annotationClassCompare :: (m -> m -> Core.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
-    annotationClassTermDescription :: (Core.Term m -> Result (Maybe String)),
-    annotationClassTypeDescription :: (Core.Type m -> Result (Maybe String)),
+    annotationClassTermDescription :: Context m -> (Core.Term m -> Result (Maybe String)),
+    annotationClassTypeDescription :: Context m -> (Core.Type m -> Result (Maybe String)),
     annotationClassTermType :: Context m -> (Core.Term m -> Result (Maybe (Core.Type m))),
-    annotationClassSetTermDescription :: (Maybe String -> Core.Term m -> Core.Term m),
+    annotationClassSetTermDescription :: Context m -> (Maybe String -> Core.Term m -> Core.Term m),
     annotationClassSetTermType :: Context m -> (Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
     annotationClassTypeOf :: Context m -> (m -> Result (Maybe (Core.Type m))),
     annotationClassSetTypeOf :: Context m -> (Maybe (Core.Type m) -> m -> m)}

@@ -23,13 +23,13 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
+printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
 printGraph cx g = do
   sf <- moduleToPegasusSchema cx g
   let s = printExpr $ parenthesize $ exprSchemaFile sf
   return $ M.fromList [(graphNameToFilePath False (FileExtension "pdl") $ graphName g, s)]
 
-constructModule :: (Default m, Ord m, Read m, Show m)
+constructModule :: (Ord m, Read m, Show m)
   => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
 constructModule cx g coders pairs = do
     let ns = pdlNameForGraph g
@@ -52,11 +52,11 @@ constructModule cx g coders pairs = do
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
+      r <- annotationClassTermDescription (contextAnnotations cx) cx $ elementData el
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
-moduleToPegasusSchema :: (Default m, Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
+moduleToPegasusSchema :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
 moduleToPegasusSchema cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
   where
     aliases = importAliasesForGraph g
@@ -64,7 +64,7 @@ moduleToPegasusSchema cx g = graphToExternalModule language (encodeTerm aliases)
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
-encodeAdaptedType :: (Default m, Ord m, Read m, Show m)
+encodeAdaptedType :: (Ord m, Read m, Show m)
   => M.Map GraphName String -> Context m -> Type m
   -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases cx typ = do
@@ -72,11 +72,11 @@ encodeAdaptedType aliases cx typ = do
   ad <- qualifiedToResult $ termAdapter ac typ
   encodeType aliases cx $ adapterTarget ad
 
-encodeTerm :: (Default m, Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Term m -> Result ()
+encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Term m -> Result ()
 encodeTerm aliases cx term = do
     fail "not yet implemented"
 
-encodeType :: (Default m, Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: (Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases cx typ = case typeExpr typ of
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
@@ -146,7 +146,7 @@ encodeType aliases cx typ = case typeExpr typ of
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      r <- annotationClassTypeDescription (contextAnnotations cx) typ
+      r <- annotationClassTypeDescription (contextAnnotations cx) cx typ
       return $ doc r
 
 importAliasesForGraph g = M.empty -- TODO

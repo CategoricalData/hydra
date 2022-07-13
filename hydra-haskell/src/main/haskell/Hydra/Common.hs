@@ -1,8 +1,8 @@
 module Hydra.Common where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Default
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
@@ -69,17 +69,17 @@ termExpr t = case t of
   TermAnnotated (Annotated t' _) -> termExpr t'
   _ -> t
 
-termMeta :: Default m => Term m -> m
-termMeta t = case t of
+termMeta :: Context m -> Term m -> m
+termMeta cx t = case t of
   TermAnnotated a -> annotatedAnnotation a
-  _ -> dflt
+  _ -> annotationClassDefault $ contextAnnotations cx
 
 typeExpr :: Type m -> Type m
 typeExpr t = case t of
   TypeAnnotated (Annotated t' _) -> typeExpr t'
   _ -> t
 
-typeMeta :: Default m => Type m -> m
-typeMeta t = case t of
+typeMeta :: Context m -> Type m -> m
+typeMeta cx t = case t of
   TypeAnnotated a -> annotatedAnnotation a
-  _ -> dflt
+  _ -> annotationClassDefault $ contextAnnotations cx
