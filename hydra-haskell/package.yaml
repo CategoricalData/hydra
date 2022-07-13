@@ -16,12 +16,17 @@ dependencies:
   - containers
 
   # Hydra.Impl.Haskell dependencies
+  - aeson
+  - aeson-pretty
+  - bytestring
   - directory
   - filepath
   - HsYAML
-  - bytestring
+  - scientific
   - split
   - text
+  - unordered-containers
+  - vector
 
   # temporary, for type inference
   - mtl
