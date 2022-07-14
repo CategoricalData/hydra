@@ -117,8 +117,8 @@ spec = do
 checkJsonCoder :: Type Meta -> Term Meta -> Json.Value -> H.Expectation
 checkJsonCoder typ term node = do
     (if Y.isJust step' then [] else warnings) `H.shouldBe` []
-    stepOut step term `H.shouldBe` ResultSuccess node
-    (stepOut step term >>= stepIn step) `H.shouldBe` ResultSuccess term
+    coderEncode step term `H.shouldBe` ResultSuccess node
+    (coderEncode step term >>= coderDecode step) `H.shouldBe` ResultSuccess term
   where
     (Qualified step' warnings) = jsonCoder testContext typ
     step = Y.fromJust step'

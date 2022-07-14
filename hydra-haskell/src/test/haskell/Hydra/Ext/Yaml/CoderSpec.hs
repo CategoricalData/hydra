@@ -99,8 +99,8 @@ spec = do
 checkYamlCoder :: Type Meta -> Term Meta -> YM.Node -> H.Expectation
 checkYamlCoder typ term node = do
     (if Y.isJust step' then [] else warnings) `H.shouldBe` []
-    stepOut step term `H.shouldBe` ResultSuccess node
-    (stepOut step term >>= stepIn step) `H.shouldBe` ResultSuccess term
+    coderEncode step term `H.shouldBe` ResultSuccess node
+    (coderEncode step term >>= coderDecode step) `H.shouldBe` ResultSuccess term
   where
     (Qualified step' warnings) = yamlCoder testContext typ
     step = Y.fromJust step'

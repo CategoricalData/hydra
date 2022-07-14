@@ -10,7 +10,7 @@ data Adapter t v
     adapterIsLossy :: Bool,
     adapterSource :: t,
     adapterTarget :: t,
-    adapterStep :: (Evaluation.Step v v)}
+    adapterCoder :: (Evaluation.Coder v v)}
 
 _Adapter = (Core.Name "hydra/adapter.Adapter")
 
@@ -20,7 +20,7 @@ _Adapter_source = (Core.FieldName "source")
 
 _Adapter_target = (Core.FieldName "target")
 
-_Adapter_step = (Core.FieldName "step")
+_Adapter_coder = (Core.FieldName "coder")
 
 data AdapterContext m 
   = AdapterContext {

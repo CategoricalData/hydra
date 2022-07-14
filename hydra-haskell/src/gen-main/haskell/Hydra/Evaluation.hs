@@ -5,6 +5,18 @@ import qualified Hydra.Graph as Graph
 import Data.Map
 import Data.Set
 
+-- An encoder and decoder; a qualified bidirectional transformation between instances of two types
+data Coder a b 
+  = Coder {
+    coderEncode :: (a -> Result b),
+    coderDecode :: (b -> Result a)}
+
+_Coder = (Core.Name "hydra/evaluation.Coder")
+
+_Coder_encode = (Core.FieldName "encode")
+
+_Coder_decode = (Core.FieldName "decode")
+
 -- A pointed set of graph modules; a graph in the logical sense
 data Context m 
   = Context {
@@ -34,13 +46,13 @@ data AnnotationClass m
     annotationClassCompare :: (m -> m -> Core.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
-    annotationClassTermDescription :: Context m -> (Core.Term m -> Result (Maybe String)),
-    annotationClassTypeDescription :: Context m -> (Core.Type m -> Result (Maybe String)),
-    annotationClassTermType :: Context m -> (Core.Term m -> Result (Maybe (Core.Type m))),
-    annotationClassSetTermDescription :: Context m -> (Maybe String -> Core.Term m -> Core.Term m),
-    annotationClassSetTermType :: Context m -> (Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
-    annotationClassTypeOf :: Context m -> (m -> Result (Maybe (Core.Type m))),
-    annotationClassSetTypeOf :: Context m -> (Maybe (Core.Type m) -> m -> m)}
+    annotationClassTermDescription :: (Context m -> Core.Term m -> (Result (Maybe String))),
+    annotationClassTypeDescription :: (Context m -> Core.Type m -> (Result (Maybe String))),
+    annotationClassTermType :: (Context m -> Core.Term m -> (Result (Maybe (Core.Type m)))),
+    annotationClassSetTermDescription :: (Context m -> Maybe String -> (Core.Term m -> Core.Term m)),
+    annotationClassSetTermType :: (Context m -> Maybe (Core.Type m) -> (Core.Term m -> Core.Term m)),
+    annotationClassTypeOf :: (Context m -> m -> (Result (Maybe (Core.Type m)))),
+    annotationClassSetTypeOf :: (Context m -> Maybe (Core.Type m) -> (m -> m))}
 
 _AnnotationClass = (Core.Name "hydra/evaluation.AnnotationClass")
 
@@ -129,26 +141,14 @@ _Result_success = (Core.FieldName "success")
 
 _Result_failure = (Core.FieldName "failure")
 
--- A qualified bidirectional transformation
-data Step a b 
-  = Step {
-    stepOut :: (a -> Result b),
-    stepIn :: (b -> Result a)}
-
-_Step = (Core.Name "hydra/evaluation.Step")
-
-_Step_out = (Core.FieldName "out")
-
-_Step_in = (Core.FieldName "in")
-
--- Indicates either the 'out' or the 'in' direction of a step
-data StepDirection 
-  = StepDirectionOut 
-  | StepDirectionIn 
+-- Indicates either the 'out' or the 'in' direction of a coder
+data CoderDirection 
+  = CoderDirectionEncode 
+  | CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
-_StepDirection = (Core.Name "hydra/evaluation.StepDirection")
+_CoderDirection = (Core.Name "hydra/evaluation.CoderDirection")
 
-_StepDirection_out = (Core.FieldName "out")
+_CoderDirection_encode = (Core.FieldName "encode")
 
-_StepDirection_in = (Core.FieldName "in")
+_CoderDirection_decode = (Core.FieldName "decode")

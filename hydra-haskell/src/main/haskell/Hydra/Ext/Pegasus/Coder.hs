@@ -30,7 +30,7 @@ printGraph cx g = do
   return $ M.fromList [(graphNameToFilePath False (FileExtension "pdl") $ graphName g, s)]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
+  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
 constructModule cx g coders pairs = do
     let ns = pdlNameForGraph g
     let pkg = Nothing

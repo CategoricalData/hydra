@@ -29,7 +29,7 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "isLossy" boolean,
           field "source" $ variable "t",
           field "target" $ variable "t",
-          field "step" $ apply (apply (evaluation "Step") (variable "v")) (variable "v")],
+          field "coder" $ apply (apply (evaluation "Coder") (variable "v")) (variable "v")],
 
       def "AdapterContext" $
         lambda "m" $ record [

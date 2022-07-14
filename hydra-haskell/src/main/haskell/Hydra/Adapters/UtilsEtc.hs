@@ -27,7 +27,7 @@ chooseAdapter :: Show t =>
  -> t
  -> Qualified (Adapter t v)
 chooseAdapter alts supported describe typ = if supported typ
-  then pure $ Adapter False typ typ idStep
+  then pure $ Adapter False typ typ idCoder
   else do
     raw <- sequence (alts typ)
     let candidates = L.filter (supported . adapterTarget) raw
@@ -40,7 +40,7 @@ chooseAdapter alts supported describe typ = if supported typ
       else return $ L.head candidates
 
 idAdapter :: Type m -> Adapter (Type m) (Term m)
-idAdapter t = Adapter False t t idStep
+idAdapter t = Adapter False t t idCoder
 
 qualify :: String -> a -> Qualified a
 qualify msg x = Qualified (Just x) [msg]

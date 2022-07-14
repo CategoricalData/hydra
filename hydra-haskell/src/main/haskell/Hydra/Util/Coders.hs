@@ -37,7 +37,7 @@ graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNam
 graphToExternalModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Context m -> Term m -> Result e)
-  -> (Context m -> Graph m -> M.Map (Type m) (Step (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
+  -> (Context m -> Graph m -> M.Map (Type m) (Coder (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
   -> Context m -> Graph m -> Qualified d
 graphToExternalModule lang encodeTerm createModule cx g = do
     scx <- resultToQualified $ schemaContext cx
@@ -54,10 +54,10 @@ graphToExternalModule lang encodeTerm createModule cx g = do
     constructCoder typ = do
         adapter <- termAdapter adContext typ
         coder <- termCoder $ adapterTarget adapter
-        return $ composeSteps (adapterStep adapter) coder
+        return $ composeSteps (adapterCoder adapter) coder
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
-        termCoder _ = pure $ unidirectionalStep (encodeTerm cx)
+        termCoder _ = pure $ unidirectionalCoder (encodeTerm cx)
 
 graphNameToFilePath :: Bool -> FileExtension -> GraphName -> FilePath
 graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext

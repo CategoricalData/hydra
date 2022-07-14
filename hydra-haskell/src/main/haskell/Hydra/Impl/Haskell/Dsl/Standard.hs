@@ -50,7 +50,7 @@ standardContext = cx
       contextAnnotations = metaAnnotationClass}
 
     emptyGraphName = GraphName "empty"
-    
+
     emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
 
 standardElement :: GraphName -> String -> String -> Type Meta -> Term Meta -> Element Meta

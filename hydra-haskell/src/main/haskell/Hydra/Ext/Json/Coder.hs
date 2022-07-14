@@ -18,90 +18,92 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-jsonCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) Json.Value)
+jsonCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) Json.Value)
 jsonCoder context typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder $ adapterTarget adapter
-    return $ composeSteps (adapterStep adapter) coder
+    return $ composeSteps (adapterCoder adapter) coder
   where
     adContext = AdapterContext context hydraCoreLanguage language
 
-literalCoder :: LiteralType -> Qualified (Step Literal Json.Value)
+literalCoder :: LiteralType -> Qualified (Coder Literal Json.Value)
 literalCoder at = pure $ case at of
-  LiteralTypeBoolean -> Step {
-    stepOut = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
-    stepIn = \s -> case s of
+  LiteralTypeBoolean -> Coder {
+    coderEncode = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
+    coderDecode = \s -> case s of
       Json.ValueBoolean b -> pure $ LiteralBoolean b
       _ -> unexpected "boolean" s}
-  LiteralTypeFloat _ -> Step {
-    stepOut = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ Json.ValueNumber f,
-    stepIn = \s -> case s of
+  LiteralTypeFloat _ -> Coder {
+    coderEncode = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ Json.ValueNumber f,
+    coderDecode = \s -> case s of
       Json.ValueNumber f -> pure $ LiteralFloat $ FloatValueBigfloat f
       _ -> unexpected "number" s}
-  LiteralTypeInteger _ -> Step {
-    stepOut = \(LiteralInteger (IntegerValueBigint i)) -> pure $ Json.ValueNumber $ bigintToBigfloat i,
-    stepIn = \s -> case s of
+  LiteralTypeInteger _ -> Coder {
+    coderEncode = \(LiteralInteger (IntegerValueBigint i)) -> pure $ Json.ValueNumber $ bigintToBigfloat i,
+    coderDecode = \s -> case s of
       Json.ValueNumber f -> pure $ LiteralInteger $ IntegerValueBigint $ bigfloatToBigint f
       _ -> unexpected "number" s}
-  LiteralTypeString -> Step {
-    stepOut = \(LiteralString s) -> pure $ Json.ValueString s,
-    stepIn = \s -> case s of
+  LiteralTypeString -> Coder {
+    coderEncode = \(LiteralString s) -> pure $ Json.ValueString s,
+    coderDecode = \s -> case s of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Step (Term m) Json.Value)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Coder (Term m) Json.Value)
 recordCoder sfields = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
-    return $ Step (encode coders) (decode coders)
+    return $ Coder (encode coders) (decode coders)
   where
     encode coders term = case termExpr term of
       TermRecord fields -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
-            _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> stepOut coder fv)
+            _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> coderEncode coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
       Json.ValueObject m -> Terms.record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField m (FieldType fname _, coder) = do
-            v <- stepIn coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
+            v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
             return $ Field fname v
       _ -> unexpected "mapping" n
     getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Step (Term m) Json.Value)
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Coder (Term m) Json.Value)
 termCoder typ = case typeExpr typ of
   TypeLiteral at -> do
     ac <- literalCoder at
-    return Step {
-      stepOut = \(TermLiteral av) -> stepOut ac av,
-      stepIn = \n -> case n of
-        s -> Terms.literal <$> stepIn ac s}
+    return Coder {
+      coderEncode = \(TermLiteral av) -> coderEncode ac av,
+      coderDecode = \n -> case n of
+        s -> Terms.literal <$> coderDecode ac s}
   TypeList lt -> do
     lc <- termCoder lt
-    return Step {
-      stepOut = \(TermList els) -> Json.ValueArray <$> CM.mapM (stepOut lc) els,
-      stepIn = \n -> case n of
-        Json.ValueArray nodes -> Terms.list <$> CM.mapM (stepIn lc) nodes
+    return Coder {
+      coderEncode = \(TermList els) -> Json.ValueArray <$> CM.mapM (coderEncode lc) els,
+      coderDecode = \n -> case n of
+        Json.ValueArray nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
         _ -> unexpected "sequence" n}
   TypeOptional ot -> do
     oc <- termCoder ot
-    return Step {
-      stepOut = \(TermOptional el) -> Y.maybe (pure Json.ValueNull) (stepOut oc) el,
-      stepIn = \n -> case n of
+    return Coder {
+      coderEncode = \t -> case t of
+        TermOptional el -> Y.maybe (pure Json.ValueNull) (coderEncode oc) el
+        _ -> unexpected "optional term" t,
+      coderDecode = \n -> case n of
         Json.ValueNull -> pure $ Terms.optional Nothing
-        _ -> Terms.optional . Just <$> stepIn oc n}
+        _ -> Terms.optional . Just <$> coderDecode oc n}
   TypeMap (MapType kt vt) -> do
       kc <- termCoder kt
       vc <- termCoder vt
-      let encodeEntry (k, v) = (,) (toString k) <$> stepOut vc v
-      let decodeEntry (k, v) = (,) (fromString k) <$> stepIn vc v
-      return Step {
-        stepOut = \(TermMap m) -> Json.ValueObject . M.fromList <$> CM.mapM encodeEntry (M.toList m),
-        stepIn = \n -> case n of
+      let encodeEntry (k, v) = (,) (toString k) <$> coderEncode vc v
+      let decodeEntry (k, v) = (,) (fromString k) <$> coderDecode vc v
+      return Coder {
+        coderEncode = \(TermMap m) -> Json.ValueObject . M.fromList <$> CM.mapM encodeEntry (M.toList m),
+        coderDecode = \n -> case n of
           Json.ValueObject m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
           _ -> unexpected "mapping" n}
     where

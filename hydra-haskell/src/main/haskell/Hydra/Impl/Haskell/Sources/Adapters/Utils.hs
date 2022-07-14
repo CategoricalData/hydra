@@ -103,4 +103,4 @@ describeType = utils "describeType" $
 --    Field _Adapter_isLossy (boolean False),
 --    Field _Adapter_source (var "t"),
 --    Field _Adapter_target (var "t"),
---    Field _Adapter_step (ref idStep)]
+--    Field _Adapter_step (ref idCoder)]

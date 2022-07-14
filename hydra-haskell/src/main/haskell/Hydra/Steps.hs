@@ -1,8 +1,8 @@
 module Hydra.Steps (
-  Step(..),
+  Coder(..),
   bidirectional,
   composeSteps,
-  idStep,
+  idCoder,
   stepEither,
   module Hydra.Evaluation
 ) where
@@ -28,18 +28,18 @@ instance Monad Result where
 instance MonadFail Result where
   fail = ResultFailure
 
-composeSteps :: Step a b -> Step b c -> Step a c
-composeSteps s1 s2 = Step {
-  stepOut = stepOut s1 >=> stepOut s2,
-  stepIn = stepIn s2 >=> stepIn s1}
+composeSteps :: Coder a b -> Coder b c -> Coder a c
+composeSteps s1 s2 = Coder {
+  coderEncode = coderEncode s1 >=> coderEncode s2,
+  coderDecode = coderDecode s2 >=> coderDecode s1}
 
-bidirectional :: (StepDirection -> b -> Result b) -> Step b b
-bidirectional m = Step (m StepDirectionOut) (m StepDirectionIn)
+bidirectional :: (CoderDirection -> b -> Result b) -> Coder b b
+bidirectional m = Coder (m CoderDirectionEncode) (m CoderDirectionDecode)
 
-idStep :: Step a a
-idStep = Step pure pure
+idCoder :: Coder a a
+idCoder = Coder pure pure
 
-stepEither :: StepDirection -> Step a a -> a -> Result a
+stepEither :: CoderDirection -> Coder a a -> a -> Result a
 stepEither dir = case dir of
-  StepDirectionOut -> stepOut
-  StepDirectionIn -> stepIn
+  CoderDirectionEncode -> coderEncode
+  CoderDirectionDecode -> coderDecode

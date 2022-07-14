@@ -11,7 +11,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-encodeApplication :: (Ord m) => Context m -> Application m -> Term m
+encodeApplication :: Ord m => Context m -> Application m -> Term m
 encodeApplication cx (Application lhs rhs) = nominalRecord cx _Application [
   Field _Application_function $ encodeTerm cx lhs,
   Field _Application_argument $ encodeTerm cx rhs]
@@ -21,7 +21,7 @@ encodeApplicationType cx (ApplicationType lhs rhs) = nominalRecord cx _Applicati
   Field _ApplicationType_function $ encodeType cx lhs,
   Field _ApplicationType_argument $ encodeType cx rhs]
 
-encodeElimination :: (Ord m) => Context m -> Elimination m -> Term m
+encodeElimination :: Ord m => Context m -> Elimination m -> Term m
 encodeElimination cx e = case e of
   EliminationElement -> unitVariant _Elimination_element
   EliminationNominal (Name name) -> variant _Elimination_nominal $ string name
@@ -29,7 +29,7 @@ encodeElimination cx e = case e of
   EliminationRecord (FieldName fname) -> variant _Elimination_record $ string fname
   EliminationUnion cases -> variant _Elimination_union $ list $ encodeField cx <$> cases
 
-encodeField :: (Ord m) => Context m -> Field m -> Term m
+encodeField :: Ord m => Context m -> Field m -> Term m
 encodeField cx (Field (FieldName name) term) = nominalRecord cx _Field [
   Field _Field_name $ string name,
   Field _Field_term $ encodeTerm cx term]
@@ -45,7 +45,7 @@ encodeFloatType ft = unitVariant $ case ft of
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
-encodeFunction :: (Ord m) => Context m -> Function m -> Term m
+encodeFunction :: Ord m => Context m -> Function m -> Term m
 encodeFunction cx f = case f of
   FunctionCompareTo other -> variant _Function_compareTo $ encodeTerm cx other
   FunctionElimination e -> variant _Function_compareTo $ encodeElimination cx e
@@ -69,7 +69,7 @@ encodeIntegerType it = unitVariant $ case it of
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
 
-encodeLambda :: (Ord m) => Context m -> Lambda m -> Term m
+encodeLambda :: Ord m => Context m -> Lambda m -> Term m
 encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm cx b]
@@ -103,17 +103,17 @@ encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [
   Field _MapType_keys $ encodeType cx kt,
   Field _MapType_values $ encodeType cx vt]
 
-encodeNamed :: (Ord m) => Context m -> Named m -> Term m
+encodeNamed :: Ord m => Context m -> Named m -> Term m
 encodeNamed cx (Named (Name name) term) = nominalRecord cx _Named [
   Field _Named_typeName $ string name,
   Field _Named_term $ encodeTerm cx term]
 
-encodeOptionalCases :: (Ord m) => Context m -> OptionalCases m -> Term m
+encodeOptionalCases :: Ord m => Context m -> OptionalCases m -> Term m
 encodeOptionalCases cx (OptionalCases nothing just) = nominalRecord cx _OptionalCases [
   Field _OptionalCases_nothing $ encodeTerm cx nothing,
   Field _OptionalCases_just $ encodeTerm cx just]
 
-encodeTerm :: (Ord m) => Context m -> Term m -> Term m
+encodeTerm :: Ord m => Context m -> Term m -> Term m
 encodeTerm cx term = case term of
 --  TermAnnotated a -> variant _Term_annotated $ encodeAnnotated cx a
   TermAnnotated (Annotated t ann) -> variant _Term_annotated $ TermAnnotated $ Annotated (encodeTerm cx t) ann

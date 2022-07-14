@@ -25,14 +25,14 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
             then fallbackAdapter t
             else do
               adapter <- integerAdapter context IntegerTypeUint8
-              let step' = adapterStep adapter
-              let step = Step encode decode
+              let step' = adapterCoder adapter
+              let step = Coder encode decode
                     where
-                      encode (LiteralBoolean bv) = LiteralInteger <$> stepOut step' (toInt bv)
+                      encode (LiteralBoolean bv) = LiteralInteger <$> coderEncode step' (toInt bv)
                         where
                           toInt bv = IntegerValueUint8 $ if bv then 1 else 0
                       decode (LiteralInteger iv) = LiteralBoolean <$> do
-                        (IntegerValueUint8 v) <- stepIn step' iv
+                        (IntegerValueUint8 v) <- coderDecode step' iv
                         return $ v == 1
               return $ Adapter False t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeFloat ft -> pure $ if noFloatVars
@@ -41,7 +41,7 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- floatAdapter context ft
             let step = bidirectional
                   $ \dir (LiteralFloat fv) -> LiteralFloat
-                    <$> stepEither dir (adapterStep adapter) fv
+                    <$> stepEither dir (adapterCoder adapter) fv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeFloat $ adapterTarget adapter) step
         LiteralTypeInteger it -> pure $ if noIntegerVars
           then fallbackAdapter t
@@ -49,7 +49,7 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- integerAdapter context it
             let step = bidirectional
                   $ \dir (LiteralInteger iv) -> LiteralInteger
-                    <$> stepEither dir (adapterStep adapter) iv
+                    <$> stepEither dir (adapterCoder adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the literal string type"
     supported = literalTypeIsSupported constraints
@@ -64,7 +64,7 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
         else qualify msg $ Adapter False t LiteralTypeString step
       where
         msg = disclaimer False (describeLiteralType t) (describeLiteralType LiteralTypeString)
-        step = Step encode decode
+        step = Coder encode decode
           where
             -- TODO: this format is tied to Haskell
             encode av = pure $ LiteralString $ case av of
@@ -97,7 +97,7 @@ floatAdapter context = chooseAdapter alts supported describeFloatType
         makeAdapter source target = qualify msg $ Adapter lossy source target step
           where
             lossy = comparePrecision (floatTypePrecision source) (floatTypePrecision target) == GT
-            step = Step (pure . convertFloatValue target) (pure . convertFloatValue source)
+            step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
     supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget context
@@ -130,7 +130,7 @@ integerAdapter context = chooseAdapter alts supported describeIntegerType
         makeAdapter source target = qualify msg $ Adapter lossy source target step
           where
             lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
-            step = Step (pure . convertIntegerValue target) (pure . convertIntegerValue source)
+            step = Coder (pure . convertIntegerValue target) (pure . convertIntegerValue source)
             msg = disclaimer lossy (describeIntegerType source) (describeIntegerType target)
 
     supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget context

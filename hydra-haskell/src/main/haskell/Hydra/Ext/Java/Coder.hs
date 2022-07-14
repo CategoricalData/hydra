@@ -56,7 +56,7 @@ classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Java.Block) -> [(Element m, TypedTerm m)]
+  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) Java.Block) -> [(Element m, TypedTerm m)]
   -> Result (M.Map Name Java.CompilationUnit)
 constructModule cx g coders pairs = do
     let imports = []

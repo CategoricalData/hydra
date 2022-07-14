@@ -13,11 +13,12 @@ import qualified Data.Aeson as A
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Text as T
-import qualified Data.ByteString.Lazy.Char8 as LB
+import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HS
 import qualified Data.Scientific as SC
 import qualified Data.Char as C
+import qualified Data.String as String
 
 
 aesonToBytes :: A.Value -> BS.ByteString
@@ -37,24 +38,33 @@ aesonToValue v = case v of
 bytesToAeson :: BS.ByteString -> Maybe A.Value
 bytesToAeson = A.decode
 
+bytesToString :: BS.ByteString -> String
+bytesToString = map (C.chr . fromEnum) . BS.unpack
+
 bytesToValue :: BS.ByteString -> Maybe Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
-jsonSerde :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) BS.ByteString)
+jsonSerde :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) BS.ByteString)
 jsonSerde context typ = do
   coder <- jsonCoder context typ
-  return Step {
-    stepOut = fmap valueToBytes . stepOut coder,
-    stepIn = \bs -> case bytesToValue bs of
+  return Coder {
+    coderEncode = fmap valueToBytes . coderEncode coder,
+    coderDecode = \bs -> case bytesToValue bs of
         Nothing -> fail "JSON parsing failed"
-        Just v -> stepIn coder v}
+        Just v -> coderDecode coder v}
 
-jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Step (Term m) String)
+jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) String)
 jsonSerdeStr context typ = do
   serde <- jsonSerde context typ
-  return Step {
-    stepOut = fmap LB.unpack . stepOut serde,
-    stepIn = stepIn serde . LB.pack}
+  return Coder {
+    coderEncode = fmap L8.unpack . coderEncode serde,
+    coderDecode = coderDecode serde . L8.pack}
+
+stringToBytes :: String -> BS.ByteString
+stringToBytes = String.fromString
+
+stringToValue :: String -> Maybe Json.Value
+stringToValue = bytesToValue . stringToBytes
 
 valueToAeson :: Json.Value -> A.Value
 valueToAeson v = case v of
@@ -71,4 +81,4 @@ valueToBytes :: Json.Value -> BS.ByteString
 valueToBytes = aesonToBytes . valueToAeson
 
 valueToString :: Json.Value -> String
-valueToString = (map (C.chr . fromEnum) . BS.unpack)  . valueToBytes
+valueToString = bytesToString . valueToBytes

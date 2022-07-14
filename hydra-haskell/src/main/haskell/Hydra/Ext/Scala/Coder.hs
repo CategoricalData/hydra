@@ -34,7 +34,7 @@ printGraph cx g = do
 moduleToScalaPackage :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified Scala.Pkg
 moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule
 
-constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Step (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
+constructModule :: (Ord m, Show m) => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> Result Scala.Pkg
 constructModule cx g coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -53,7 +53,7 @@ constructModule cx g coders pairs = do
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedTerm typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders
-        rhs <- stepOut coder term
+        rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
           Scala.DataApply _ -> toVal rhs
           Scala.DataFunctionData fun -> case typeExpr typ of
