@@ -45,7 +45,6 @@ testContext = standardContext {
         (hydraCoreName, hydraCore)],
       graphSetRoot = testGraphName},
     contextElements = graphElementsMap testGraph,
-    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantLiteral,
@@ -70,6 +69,8 @@ testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTer
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
+    typeElement cx (Name "Color") testTypeColor,
+    typeElement cx (Name "Comparison") testTypeComparison,
     typeElement cx (Name "Person") testTypePerson,
     typeElement cx (Name "Timestamp") testTypeTimestamp]
   allTerms hydraCoreName
@@ -83,11 +84,23 @@ testDataArthur = nominalRecord cx (Name "Person") [
   Field (FieldName "lastName") $ string "Dent",
   Field (FieldName "age") $ int32 42]
 
+testTypeColor :: Type m
+testTypeColor = Types.union [
+  Types.field "bool" Types.boolean,
+  Types.field "string" Types.string,
+  Types.field "unit" Types.unit]
+
+testTypeComparison :: Type m
+testTypeComparison = Types.enum [
+  "lessThan",
+  "equalTo",
+  "greaterThan"]
+
 testTypePerson :: Type Meta
 testTypePerson = Types.record [
-  FieldType (FieldName "firstName") Types.string,
-  FieldType (FieldName "lastName") Types.string,
-  FieldType (FieldName "age") Types.int32]
+  Types.field "firstName" Types.string,
+  Types.field "lastName" Types.string,
+  Types.field "age" Types.int32]
 
 testTypeTimestamp :: Type Meta
 testTypeTimestamp = Types.union [

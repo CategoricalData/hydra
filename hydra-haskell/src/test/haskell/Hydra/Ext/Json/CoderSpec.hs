@@ -1,13 +1,14 @@
 module Hydra.Ext.Json.CoderSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder
 import Hydra.Impl.Haskell.Extras
 import Hydra.Steps
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Lib.Literals
+import Hydra.Impl.Haskell.Dsl.Standard
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -26,34 +27,34 @@ literalTypeConstraintsAreRespected = H.describe "Verify that JSON's literal type
   -- TODO: binary data
 
   H.it "Check booleans" $
-    QC.property $ \b -> checkJsonCoder Types.boolean (boolean b) (Json.ValueBoolean b)
+    QC.property $ \b -> checkJsonCoder Types.boolean (Terms.boolean b) (Json.ValueBoolean b)
 
   H.it "Check 32-bit floats" $
-    QC.property $ \f -> checkJsonCoder Types.float32 (float32 f) (jsonFloat $ realToFrac f)
+    QC.property $ \f -> checkJsonCoder Types.float32 (Terms.float32 f) (jsonFloat $ realToFrac f)
 
   H.it "Check 64-bit floats (doubles)" $
-    QC.property $ \d -> checkJsonCoder Types.float64 (float64 d) (jsonFloat $ realToFrac d)
+    QC.property $ \d -> checkJsonCoder Types.float64 (Terms.float64 d) (jsonFloat $ realToFrac d)
 
   -- TODO: bigfloat
 
   H.it "Check 32-bit integers" $
-    QC.property $ \i -> checkJsonCoder Types.int32 (int32 i) (jsonInt i)
+    QC.property $ \i -> checkJsonCoder Types.int32 (Terms.int32 i) (jsonInt i)
 
   H.it "Check 16-bit unsigned integers" $
-    QC.property $ \i -> checkJsonCoder Types.uint16 (uint16 i) (jsonInt i)
+    QC.property $ \i -> checkJsonCoder Types.uint16 (Terms.uint16 i) (jsonInt i)
 
   H.it "Check arbitrary-precision integers" $
-    QC.property $ \i -> checkJsonCoder Types.bigint (bigint i) (jsonInt i)
+    QC.property $ \i -> checkJsonCoder Types.bigint (Terms.bigint i) (jsonInt i)
 
   H.it "Check strings" $
-    QC.property $ \s -> checkJsonCoder Types.string (string s) (Json.ValueString s)
+    QC.property $ \s -> checkJsonCoder Types.string (Terms.string s) (Json.ValueString s)
 
 supportedTypesPassThrough :: H.SpecWith ()
 supportedTypesPassThrough = H.describe "Verify that supported types are mapped directly" $ do
 
   H.it "Lists become JSON arrays" $
     QC.property $ \strings -> checkJsonCoder listOfStringsType
-      (list $ string <$> strings) (Json.ValueArray $ Json.ValueString <$> strings)
+      (Terms.list $ Terms.string <$> strings) (Json.ValueArray $ Json.ValueString <$> strings)
 
   H.it "Maps become JSON objects" $
     QC.property $ \keyvals -> checkJsonCoder mapOfStringsToIntsType
@@ -61,7 +62,7 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
 
   H.it "Optionals become JSON null or type-specific values" $
     QC.property $ \ms -> checkJsonCoder optionalStringType
-      (optional $ string <$> ms) (Y.maybe Json.ValueNull Json.ValueString ms)
+      (Terms.optional $ Terms.string <$> ms) (Y.maybe Json.ValueNull Json.ValueString ms)
 
   H.it "Records become JSON objects" $
     QC.property $ \lat lon -> checkJsonCoder latLonType
@@ -76,26 +77,42 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkJsonCoder int32ElementType
-      (element name) (Json.ValueString $ unName name)
+      (Terms.element name)
+      (Json.ValueString $ unName name)
 
   H.it "Sets become arrays" $
     QC.property $ \strings -> checkJsonCoder setOfStringsType
-      (stringSet strings) (Json.ValueArray $ Json.ValueString <$> S.toList strings)
+      (Terms.stringSet strings)
+      (Json.ValueArray $ Json.ValueString <$> S.toList strings)
 
   H.it "Nominal types are dereferenced" $
     QC.property $ \s -> checkJsonCoder stringAliasType
-      (string s) (Json.ValueString s)
+      (Terms.string s)
+      (Json.ValueString s)
 
   H.it "Unions become JSON objects (as records)" $
     QC.property $ \int -> checkJsonCoder stringOrIntType
-      (variant (FieldName "right") $ int32 int)
+      (Terms.variant (FieldName "right") $ Terms.int32 int)
       (jsonMap [("right", jsonInt int)])
+
+nominalTypesAreSupported :: H.SpecWith ()
+nominalTypesAreSupported = H.describe "Verify that nominal types are supported" $ do
+  H.it "Nominal unions become single-attribute objects" $
+    QC.property $ \() -> checkJsonCoder (Types.nominal $ Name "Color")
+      (Terms.union $ Terms.field "bool" $ Terms.boolean True)
+      (jsonMap [("bool", jsonBool True)])
+  
+  H.it "Nominal enums become single-attribute objects with empty-object values, and type annotations are transparent" $
+    QC.property $ \() -> checkJsonCoder (Types.nominal $ Name "Comparison")
+      (Terms.union $ Terms.field "equalTo" Terms.unit)
+      (jsonMap [("equalTo", jsonMap [])])
 
 spec :: H.Spec
 spec = do
   literalTypeConstraintsAreRespected
   supportedTypesPassThrough
   unsupportedTypesAreTransformed
+  nominalTypesAreSupported
 
 checkJsonCoder :: Type Meta -> Term Meta -> Json.Value -> H.Expectation
 checkJsonCoder typ term node = do
@@ -105,6 +122,9 @@ checkJsonCoder typ term node = do
   where
     (Qualified step' warnings) = jsonCoder testContext typ
     step = Y.fromJust step'
+
+jsonBool :: Bool -> Json.Value
+jsonBool = Json.ValueBoolean
 
 jsonFloat :: Double -> Json.Value
 jsonFloat = Json.ValueNumber
