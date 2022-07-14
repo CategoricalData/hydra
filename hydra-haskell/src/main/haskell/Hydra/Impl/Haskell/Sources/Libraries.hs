@@ -4,7 +4,6 @@ import Hydra.Basics
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Prims
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -14,6 +13,15 @@ import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
 
+
+_hydra_lib_io :: GraphName
+_hydra_lib_io = GraphName "hydra/lib/io"
+
+_io_showTerm :: Name
+_io_showTerm = qname _hydra_lib_io "showTerm"
+
+_io_showType :: Name
+_io_showType = qname _hydra_lib_io "showType"
 
 _hydra_lib_lists :: GraphName
 _hydra_lib_lists = GraphName "hydra/lib/lists"
@@ -105,6 +113,10 @@ _strings_toLower = qname _hydra_lib_strings "toLower"
 _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
+--hydraIoPrimitives = [
+--  prim1 _io_showTerm termInput stringOutput 
+--  ]
+  
 hydraLibListsPrimitives :: (Show m) => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
   prim1 _lists_concat (listInput (Types.list $ Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.concat,

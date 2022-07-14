@@ -25,6 +25,12 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
     def = datatype hydraEvaluationName
     elements = [
 
+      def "Coder" $
+        doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
+        lambda "a" $ lambda "b" $ record [
+          field "encode" $ function (variable "a") (apply (evaluation "Result") (variable "b")),
+          field "decode" $ function (variable "b") (apply (evaluation "Result") (variable "a"))],
+
       def "Context" $
         doc "A pointed set of graph modules; a graph in the logical sense" $
         lambda "m" $ record [
@@ -113,14 +119,8 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           field "success" $ variable "m",
           field "failure" string],
 
-      def "Step" $
-        doc "A qualified bidirectional transformation" $
-        lambda "a" $ lambda "b" $ record [
-          field "out" $ function (variable "a") (apply (evaluation "Result") (variable "b")),
-          field "in" $ function (variable "b") (apply (evaluation "Result") (variable "a"))],
-
-      def "StepDirection" $
-        doc "Indicates either the 'out' or the 'in' direction of a step" $
+      def "CoderDirection" $
+        doc "Indicates either the 'out' or the 'in' direction of a coder" $
         enum [
-          "out",
-          "in"]]
+          "encode",
+          "decode"]]

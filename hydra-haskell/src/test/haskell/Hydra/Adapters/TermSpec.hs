@@ -342,7 +342,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (field "second" $ int16 $ fromIntegral i)
 
 roundTripIsNoop :: Type Meta -> Term Meta -> Bool
-roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
+roundTripIsNoop typ term = (step coderEncode term >>= step coderDecode) == pure term
   where
     step = adapt typ
 
@@ -367,7 +367,7 @@ roundTripIsNoop typ term = (step stepOut term >>= step stepIn) == pure term
     --       it should be created once, then applied to many terms.
     adapt typ dir term = do
       ad <- qualifiedToResult $ termAdapter transContext typ
-      dir (adapterStep ad) term
+      dir (adapterCoder ad) term
 
 spec :: H.Spec
 spec = do

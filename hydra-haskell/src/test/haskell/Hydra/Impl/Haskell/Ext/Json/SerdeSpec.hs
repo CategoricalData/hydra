@@ -102,7 +102,7 @@ checkSerialization (TypedTerm typ term) expected = do
     if Y.isNothing (qualifiedValue serde)
       then qualifiedWarnings serde `H.shouldBe` []
       else True `H.shouldBe` True
-    (normalize <$> stepOut serde' term) `H.shouldBe` ResultSuccess (normalize expected)
+    (normalize <$> coderEncode serde' term) `H.shouldBe` ResultSuccess (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines
     serde = jsonSerdeStr testContext typ
@@ -111,7 +111,7 @@ checkSerialization (TypedTerm typ term) expected = do
 checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
 checkSerdeRoundTrip (TypedTerm typ term) = do
     Y.isJust (qualifiedValue serde) `H.shouldBe` True
-    (termExpr <$> (stepOut serde' term >>= stepIn serde')) `H.shouldBe` ResultSuccess (termExpr term)
+    (termExpr <$> (coderEncode serde' term >>= coderDecode serde')) `H.shouldBe` ResultSuccess (termExpr term)
   where
     serde = jsonSerde testContext typ
     serde' = Y.fromJust $ qualifiedValue serde

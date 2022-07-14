@@ -393,7 +393,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Variable" $
         doc "A symbol which stands in for a term"
         string,
-        
+
       def "VariableType" $
         doc "A symbol which stands in for a type"
         string]

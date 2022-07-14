@@ -8,7 +8,7 @@ module Hydra.Impl.Haskell.Extras (
   resultToQualified,
   setContextElements,
   unexpected,
-  unidirectionalStep,
+  unidirectionalCoder,
   module Hydra.Common,
   module Hydra.Errors,
   ) where
@@ -87,7 +87,7 @@ setContextElements graphs cx = cx { contextElements = M.fromList $
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
-unidirectionalStep :: (a -> Result b) -> Step a b
-unidirectionalStep m = Step {
-  stepOut = m,
-  stepIn = \_ -> fail "inbound mapping is unsupported"}
+unidirectionalCoder :: (a -> Result b) -> Coder a b
+unidirectionalCoder m = Coder {
+  coderEncode = m,
+  coderDecode = \_ -> fail "inbound mapping is unsupported"}

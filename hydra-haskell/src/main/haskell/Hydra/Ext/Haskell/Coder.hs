@@ -61,7 +61,7 @@ constantDecls namespaces name@(Name nm) typ = if useCoreImport
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Step (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
+  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) H.Expression) -> [(Element m, TypedTerm m)] -> Result H.Module
 constructModule cx g coders pairs = do
     decls <- L.concat <$> CM.mapM createDeclarations pairs
     return $ H.Module (Just $ H.ModuleHead (importName $ h $ graphName g) []) imports decls
@@ -89,11 +89,11 @@ constructModule cx g coders pairs = do
             toImport name = H.Import False name Nothing Nothing
 
 toDataDeclarations :: (Ord m, Show m)
-  => M.Map (Type m) (Step (Term m) H.Expression) -> Namespaces -> Context m
+  => M.Map (Type m) (Coder (Term m) H.Expression) -> Namespaces -> Context m
   -> (Element m, TypedTerm m) -> Result [H.DeclarationWithComments]
 toDataDeclarations coders namespaces cx (el, TypedTerm typ term) = do
     let coder = Y.fromJust $ M.lookup typ coders
-    rhs <- H.RightHandSide <$> stepOut coder term
+    rhs <- H.RightHandSide <$> coderEncode coder term
     let hname = simpleName $ localNameOf $ elementName el
     let pat = H.PatternApplication $ H.Pattern_Application hname []
     htype <- encodeType namespaces typ

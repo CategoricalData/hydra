@@ -45,12 +45,12 @@ checkAdapter normalize mkAdapter context variants source target lossy vs vt = do
     adapterSource adapter `H.shouldBe` source
     adapterTarget adapter `H.shouldBe` target
     adapterIsLossy adapter `H.shouldBe` lossy
-    (normalize <$> stepOut step vs) `H.shouldBe` ResultSuccess (normalize vt)
-    if lossy then True `H.shouldBe` True else (stepOut step vs >>= stepIn step) `H.shouldBe` ResultSuccess vs
+    (normalize <$> coderEncode step vs) `H.shouldBe` ResultSuccess (normalize vt)
+    if lossy then True `H.shouldBe` True else (coderEncode step vs >>= coderDecode step) `H.shouldBe` ResultSuccess vs
   where
     Qualified adapter' warnings = mkAdapter (context variants) source
     adapter = Y.fromJust adapter'
-    step = adapterStep adapter
+    step = adapterCoder adapter
 
 checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
 checkLiteralAdapter = checkAdapter id literalAdapter context
