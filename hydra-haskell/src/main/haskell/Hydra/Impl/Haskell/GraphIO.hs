@@ -27,6 +27,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Shacl.Model
 import Hydra.Impl.Haskell.Sources.Graph
+import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
@@ -54,6 +55,7 @@ coreModules = [
   pure hydraErrorsModule,
   pure hydraEvaluationModule,
   pure hydraGraphModule,
+  pure hydraGrammarModule,
   pure javaSyntaxModule,
   pure jsonModelModule,
   pure pegasusPdlModule,
