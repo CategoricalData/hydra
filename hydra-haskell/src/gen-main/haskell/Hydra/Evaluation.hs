@@ -46,13 +46,13 @@ data AnnotationClass m
     annotationClassCompare :: (m -> m -> Core.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
-    annotationClassTermDescription :: (Context m -> Core.Term m -> (Result (Maybe String))),
-    annotationClassTypeDescription :: (Context m -> Core.Type m -> (Result (Maybe String))),
-    annotationClassTermType :: (Context m -> Core.Term m -> (Result (Maybe (Core.Type m)))),
-    annotationClassSetTermDescription :: (Context m -> Maybe String -> (Core.Term m -> Core.Term m)),
-    annotationClassSetTermType :: (Context m -> Maybe (Core.Type m) -> (Core.Term m -> Core.Term m)),
-    annotationClassTypeOf :: (Context m -> m -> (Result (Maybe (Core.Type m)))),
-    annotationClassSetTypeOf :: (Context m -> Maybe (Core.Type m) -> (m -> m))}
+    annotationClassTermDescription :: (Context m -> Core.Term m -> Result (Maybe String)),
+    annotationClassTypeDescription :: (Context m -> Core.Type m -> Result (Maybe String)),
+    annotationClassTermType :: (Context m -> Core.Term m -> Result (Maybe (Core.Type m))),
+    annotationClassSetTermDescription :: (Context m -> Maybe String -> Core.Term m -> Core.Term m),
+    annotationClassSetTermType :: (Context m -> Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
+    annotationClassTypeOf :: (Context m -> m -> Result (Maybe (Core.Type m))),
+    annotationClassSetTypeOf :: (Context m -> Maybe (Core.Type m) -> m -> m)}
 
 _AnnotationClass = (Core.Name "hydra/evaluation.AnnotationClass")
 
