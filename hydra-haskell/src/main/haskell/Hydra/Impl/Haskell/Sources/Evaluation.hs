@@ -52,37 +52,37 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           -- TODO: simplify
           field "termDescription" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (apply (core "Term") (variable "m"))
               (apply (evaluation "Result") (optional string))),
           field "typeDescription" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (apply (core "Type") (variable "m"))
               (apply (evaluation "Result") (optional string))),
           field "termType" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (apply (core "Term") (variable "m"))
               (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m")))),
           field "setTermDescription" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (optional string)
               (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m")))),
           field "setTermType" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (optional $ apply (core "Type") (variable "m"))
               (function (apply (core "Term") (variable "m")) (apply (core "Term") (variable "m")))),
           field "typeOf" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (variable "m")
               (apply (evaluation "Result") (optional $ apply (core "Type") (variable "m")))),
           field "setTypeOf" $ function
             (apply (evaluation "Context") (variable "m"))
-            (apply
+            (function
               (optional $ apply (core "Type") (variable "m"))
               (function (variable "m") (variable "m")))],
         
