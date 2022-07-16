@@ -1,0 +1,34 @@
+package hydra.ext.scala.meta;
+
+public class Type_Lambda {
+  public final java.util.List<Type_Param> tparams;
+  
+  public final Type tpe;
+  
+  public Type_Lambda (java.util.List<Type_Param> tparams, Type tpe) {
+    this.tparams = tparams;
+    this.tpe = tpe;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Type_Lambda)) {
+      return false;
+    }
+    Type_Lambda o = (Type_Lambda) (other);
+    return tparams.equals(o.tparams) && tpe.equals(o.tpe);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * tparams.hashCode() + 3 * tpe.hashCode();
+  }
+  
+  public Type_Lambda withTparams(java.util.List<Type_Param> tparams) {
+    return new Type_Lambda(tparams, tpe);
+  }
+  
+  public Type_Lambda withTpe(Type tpe) {
+    return new Type_Lambda(tparams, tpe);
+  }
+}
