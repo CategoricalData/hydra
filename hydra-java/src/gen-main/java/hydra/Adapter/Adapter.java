@@ -7,13 +7,13 @@ public class Adapter<T, V> {
   
   public final T target;
   
-  public final hydra.evaluation.Step<V, V> step;
+  public final hydra.evaluation.Coder<V, V> coder;
   
-  public Adapter (Boolean isLossy, T source, T target, hydra.evaluation.Step<V, V> step) {
+  public Adapter (Boolean isLossy, T source, T target, hydra.evaluation.Coder<V, V> coder) {
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
-    this.step = step;
+    this.coder = coder;
   }
   
   @Override
@@ -22,27 +22,27 @@ public class Adapter<T, V> {
       return false;
     }
     Adapter o = (Adapter) (other);
-    return isLossy.equals(o.isLossy) && source.equals(o.source) && target.equals(o.target) && step.equals(o.step);
+    return isLossy.equals(o.isLossy) && source.equals(o.source) && target.equals(o.target) && coder.equals(o.coder);
   }
   
   @Override
   public int hashCode() {
-    return 2 * isLossy.hashCode() + 3 * source.hashCode() + 5 * target.hashCode() + 7 * step.hashCode();
+    return 2 * isLossy.hashCode() + 3 * source.hashCode() + 5 * target.hashCode() + 7 * coder.hashCode();
   }
   
   public Adapter withIsLossy(Boolean isLossy) {
-    return new Adapter(isLossy, source, target, step);
+    return new Adapter(isLossy, source, target, coder);
   }
   
   public Adapter withSource(T source) {
-    return new Adapter(isLossy, source, target, step);
+    return new Adapter(isLossy, source, target, coder);
   }
   
   public Adapter withTarget(T target) {
-    return new Adapter(isLossy, source, target, step);
+    return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withStep(hydra.evaluation.Step<V, V> step) {
-    return new Adapter(isLossy, source, target, step);
+  public Adapter withCoder(hydra.evaluation.Coder<V, V> coder) {
+    return new Adapter(isLossy, source, target, coder);
   }
 }
