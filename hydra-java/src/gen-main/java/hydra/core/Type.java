@@ -114,7 +114,7 @@ public abstract class Type<M> {
     public Annotated (hydra.core.Annotated<Type<M>, M> value) {
       this.value = value;
     }
-    
+
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotated)) {
