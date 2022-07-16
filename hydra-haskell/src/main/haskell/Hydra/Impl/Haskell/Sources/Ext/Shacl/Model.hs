@@ -69,7 +69,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
           field "languageIn" $
             doc "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
-            list $ string,
+            optional $ list $ rdf "LanguageTag",
 
           field "nodeKind" $
             doc "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
@@ -93,7 +93,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
           field "maxLength" $
             doc "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent" $
-            optional int32,
+            optional bigint,
 
           field "minExclusive" $
             doc "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent" $
@@ -105,7 +105,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
           field "minLength" $
             doc "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent" $
-            optional int32,
+            optional bigint,
 
           field "pattern" $
             doc "See https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
@@ -200,7 +200,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
           field "order" $
             doc "See https://www.w3.org/TR/shacl/#order" $
-            optional int32,
+            optional bigint,
 
           field "path"  $ rdf "Resource"], -- TODO
           -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
@@ -220,12 +220,12 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
           field "maxCount" $
             doc ("The maximum cardinality. Node shapes cannot have any value for sh:maxCount. " ++
                  "See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent") $
-            optional int32,
+            optional bigint,
 
           field "minCount" $
             doc ("The minimum cardinality. Node shapes cannot have any value for sh:minCount. " ++
                  "See https://www.w3.org/TR/shacl/#MinCountConstraintComponent") $
-            optional int32,
+            optional bigint,
 
           field "uniqueLang" $
             doc "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent" $
@@ -239,8 +239,8 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
         doc "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
         record [
           field "shape" $ shacl "Shape",
-          field "qualifiedManCount" int32,
-          field "qualifiedMinCount" int32,
+          field "qualifiedManCount" bigint,
+          field "qualifiedMinCount" bigint,
           field "qualifiedValueShapesDisjoint" $ optional boolean],
 
       def "Severity" $ union [
