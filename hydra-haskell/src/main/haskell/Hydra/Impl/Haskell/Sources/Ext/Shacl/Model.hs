@@ -65,7 +65,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
           field "in" $
             doc ("Specifies the condition that each value node is a member of a provided SHACL list. " ++
                  "See https://www.w3.org/TR/shacl/#InConstraintComponent") $
-            list $ rdf "Node",
+            optional $ list $ rdf "Node",
 
           field "languageIn" $
             doc "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
