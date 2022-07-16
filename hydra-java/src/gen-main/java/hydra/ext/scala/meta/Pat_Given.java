@@ -1,0 +1,23 @@
+package hydra.ext.scala.meta;
+
+public class Pat_Given {
+  public final Type tpe;
+  
+  public Pat_Given (Type tpe) {
+    this.tpe = tpe;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Pat_Given)) {
+      return false;
+    }
+    Pat_Given o = (Pat_Given) (other);
+    return tpe.equals(o.tpe);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * tpe.hashCode();
+  }
+}

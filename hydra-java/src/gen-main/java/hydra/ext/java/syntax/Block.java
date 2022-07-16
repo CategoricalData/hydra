@@ -1,0 +1,23 @@
+package hydra.ext.java.syntax;
+
+public class Block {
+  public final java.util.List<BlockStatement> value;
+  
+  public Block (java.util.List<BlockStatement> value) {
+    this.value = value;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Block)) {
+      return false;
+    }
+    Block o = (Block) (other);
+    return value.equals(o.value);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * value.hashCode();
+  }
+}

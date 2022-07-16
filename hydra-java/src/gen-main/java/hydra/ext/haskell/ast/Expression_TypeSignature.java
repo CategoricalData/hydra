@@ -1,0 +1,37 @@
+package hydra.ext.haskell.ast;
+
+/**
+ * A type signature expression
+ */
+public class Expression_TypeSignature {
+  public final Expression inner;
+  
+  public final Type type;
+  
+  public Expression_TypeSignature (Expression inner, Type type) {
+    this.inner = inner;
+    this.type = type;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Expression_TypeSignature)) {
+      return false;
+    }
+    Expression_TypeSignature o = (Expression_TypeSignature) (other);
+    return inner.equals(o.inner) && type.equals(o.type);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * inner.hashCode() + 3 * type.hashCode();
+  }
+  
+  public Expression_TypeSignature withInner(Expression inner) {
+    return new Expression_TypeSignature(inner, type);
+  }
+  
+  public Expression_TypeSignature withType(Type type) {
+    return new Expression_TypeSignature(inner, type);
+  }
+}
