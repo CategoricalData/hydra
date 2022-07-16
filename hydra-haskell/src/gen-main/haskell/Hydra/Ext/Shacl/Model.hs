@@ -6,7 +6,7 @@ import Data.Map
 import Data.Set
 
 -- See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
-data Closed 
+data Closed
   = Closed {
     closedIsClosed :: Bool,
     closedIgnoredProperties :: [Syntax.Property]}
@@ -29,7 +29,7 @@ data CommonConstraints
     commonConstraintsEquals :: (Set Syntax.Property),
     commonConstraintsHasValue :: (Set Syntax.Node),
     commonConstraintsIn :: [Syntax.Node],
-    commonConstraintsLanguageIn :: [String],
+    commonConstraintsLanguageIn :: (Maybe [Syntax.LanguageTag]),
     commonConstraintsNodeKind :: (Maybe NodeKind),
     commonConstraintsNode :: (Set NodeShape),
     commonConstraintsNot :: (Set Shape),
@@ -122,13 +122,13 @@ _CommonProperties_targetObjectsOf = (Core.FieldName "targetObjectsOf")
 
 _CommonProperties_targetSubjectsOf = (Core.FieldName "targetSubjectsOf")
 
-data NodeKind 
-  = NodeKindBlankNode 
-  | NodeKindIri 
-  | NodeKindLiteral 
-  | NodeKindBlankNodeOrIri 
-  | NodeKindBlankNodeOrLiteral 
-  | NodeKindIriOrLiteral 
+data NodeKind
+  = NodeKindBlankNode
+  | NodeKindIri
+  | NodeKindLiteral
+  | NodeKindBlankNodeOrIri
+  | NodeKindBlankNodeOrLiteral
+  | NodeKindIriOrLiteral
   deriving (Eq, Ord, Read, Show)
 
 _NodeKind = (Core.Name "hydra/ext/shacl/model.NodeKind")
@@ -156,7 +156,7 @@ _NodeShape = (Core.Name "hydra/ext/shacl/model.NodeShape")
 _NodeShape_common = (Core.FieldName "common")
 
 -- A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
-data Pattern 
+data Pattern
   = Pattern {
     patternRegex :: String,
     patternFlags :: (Maybe String)}
@@ -222,7 +222,7 @@ _PropertyShapeConstraints_uniqueLang = (Core.FieldName "uniqueLang")
 _PropertyShapeConstraints_qualifiedValueShape = (Core.FieldName "qualifiedValueShape")
 
 -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
-data QualifiedValueShape 
+data QualifiedValueShape
   = QualifiedValueShape {
     qualifiedValueShapeShape :: Shape,
     qualifiedValueShapeQualifiedManCount :: Int,
@@ -240,7 +240,7 @@ _QualifiedValueShape_qualifiedMinCount = (Core.FieldName "qualifiedMinCount")
 
 _QualifiedValueShape_qualifiedValueShapesDisjoint = (Core.FieldName "qualifiedValueShapesDisjoint")
 
-data Severity 
+data Severity
   = SeverityInfo 
   | SeverityWarning 
   | SeverityViolation 
