@@ -1,46 +1,46 @@
 package hydra.evaluation;
 
 /**
- * Indicates either the 'out' or the 'in' direction of a step
+ * Indicates either the 'out' or the 'in' direction of a coder
  */
-public abstract class StepDirection {
-  private StepDirection () {
+public abstract class CoderDirection {
+  private CoderDirection () {
   
   }
   
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Out instance) ;
+    R visit(Encode instance) ;
     
-    R visit(In instance) ;
+    R visit(Decode instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(StepDirection instance) {
+    default R otherwise(CoderDirection instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Out instance) {
+    default R visit(Encode instance) {
       return otherwise((instance));
     }
     
-    default R visit(In instance) {
+    default R visit(Decode instance) {
       return otherwise((instance));
     }
   }
   
-  public static final class Out extends StepDirection {
-    public Out () {
+  public static final class Encode extends CoderDirection {
+    public Encode () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Out)) {
+      if (!(other instanceof Encode)) {
         return false;
       }
-      Out o = (Out) (other);
+      Encode o = (Encode) (other);
       return true;
     }
     
@@ -55,17 +55,17 @@ public abstract class StepDirection {
     }
   }
   
-  public static final class In extends StepDirection {
-    public In () {
+  public static final class Decode extends CoderDirection {
+    public Decode () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof In)) {
+      if (!(other instanceof Decode)) {
         return false;
       }
-      In o = (In) (other);
+      Decode o = (Decode) (other);
       return true;
     }
     
