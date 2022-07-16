@@ -6,10 +6,10 @@ import Data.Map
 import Data.Set
 
 -- See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
-data Closed
+data Closed 
   = Closed {
     closedIsClosed :: Bool,
-    closedIgnoredProperties :: [Syntax.Property]}
+    closedIgnoredProperties :: (Maybe [Syntax.Property])}
   deriving (Eq, Ord, Read, Show)
 
 _Closed = (Core.Name "hydra/ext/shacl/model.Closed")
@@ -21,28 +21,28 @@ _Closed_ignoredProperties = (Core.FieldName "ignoredProperties")
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraints 
   = CommonConstraints {
-    commonConstraintsAnd :: [Shape],
+    commonConstraintsAnd :: (Maybe [Shape]),
     commonConstraintsClosed :: (Maybe Closed),
     commonConstraintsClass :: (Set Syntax.RdfsClass),
     commonConstraintsDatatype :: (Maybe Syntax.Iri),
     commonConstraintsDisjoint :: (Set Syntax.Property),
     commonConstraintsEquals :: (Set Syntax.Property),
     commonConstraintsHasValue :: (Set Syntax.Node),
-    commonConstraintsIn :: [Syntax.Node],
+    commonConstraintsIn :: (Maybe [Syntax.Node]),
     commonConstraintsLanguageIn :: (Maybe [Syntax.LanguageTag]),
     commonConstraintsNodeKind :: (Maybe NodeKind),
     commonConstraintsNode :: (Set NodeShape),
     commonConstraintsNot :: (Set Shape),
     commonConstraintsMaxExclusive :: (Maybe Syntax.Literal),
     commonConstraintsMaxInclusive :: (Maybe Syntax.Literal),
-    commonConstraintsMaxLength :: (Maybe Int),
+    commonConstraintsMaxLength :: (Maybe Integer),
     commonConstraintsMinExclusive :: (Maybe Syntax.Literal),
     commonConstraintsMinInclusive :: (Maybe Syntax.Literal),
-    commonConstraintsMinLength :: (Maybe Int),
+    commonConstraintsMinLength :: (Maybe Integer),
     commonConstraintsPattern :: (Maybe Pattern),
     commonConstraintsProperty :: (Set PropertyShape),
-    commonConstraintsOr :: [Shape],
-    commonConstraintsXone :: [Shape]}
+    commonConstraintsOr :: (Maybe [Shape]),
+    commonConstraintsXone :: (Maybe [Shape])}
   deriving (Eq, Ord, Read, Show)
 
 _CommonConstraints = (Core.Name "hydra/ext/shacl/model.CommonConstraints")
@@ -122,13 +122,13 @@ _CommonProperties_targetObjectsOf = (Core.FieldName "targetObjectsOf")
 
 _CommonProperties_targetSubjectsOf = (Core.FieldName "targetSubjectsOf")
 
-data NodeKind
-  = NodeKindBlankNode
-  | NodeKindIri
-  | NodeKindLiteral
-  | NodeKindBlankNodeOrIri
-  | NodeKindBlankNodeOrLiteral
-  | NodeKindIriOrLiteral
+data NodeKind 
+  = NodeKindBlankNode 
+  | NodeKindIri 
+  | NodeKindLiteral 
+  | NodeKindBlankNodeOrIri 
+  | NodeKindBlankNodeOrLiteral 
+  | NodeKindIriOrLiteral 
   deriving (Eq, Ord, Read, Show)
 
 _NodeKind = (Core.Name "hydra/ext/shacl/model.NodeKind")
@@ -156,7 +156,7 @@ _NodeShape = (Core.Name "hydra/ext/shacl/model.NodeShape")
 _NodeShape_common = (Core.FieldName "common")
 
 -- A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
-data Pattern
+data Pattern 
   = Pattern {
     patternRegex :: String,
     patternFlags :: (Maybe String)}
@@ -176,7 +176,7 @@ data PropertyShape
     propertyShapeDefaultValue :: (Maybe Syntax.Node),
     propertyShapeDescription :: Syntax.LangStrings,
     propertyShapeName :: Syntax.LangStrings,
-    propertyShapeOrder :: (Maybe Int),
+    propertyShapeOrder :: (Maybe Integer),
     propertyShapePath :: Syntax.Resource}
   deriving (Eq, Ord, Read, Show)
 
@@ -201,8 +201,8 @@ data PropertyShapeConstraints
   = PropertyShapeConstraints {
     propertyShapeConstraintsLessThan :: (Set Syntax.Property),
     propertyShapeConstraintsLessThanOrEquals :: (Set Syntax.Property),
-    propertyShapeConstraintsMaxCount :: (Maybe Int),
-    propertyShapeConstraintsMinCount :: (Maybe Int),
+    propertyShapeConstraintsMaxCount :: (Maybe Integer),
+    propertyShapeConstraintsMinCount :: (Maybe Integer),
     propertyShapeConstraintsUniqueLang :: (Maybe Bool),
     propertyShapeConstraintsQualifiedValueShape :: (Maybe QualifiedValueShape)}
   deriving (Eq, Ord, Read, Show)
@@ -222,11 +222,11 @@ _PropertyShapeConstraints_uniqueLang = (Core.FieldName "uniqueLang")
 _PropertyShapeConstraints_qualifiedValueShape = (Core.FieldName "qualifiedValueShape")
 
 -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
-data QualifiedValueShape
+data QualifiedValueShape 
   = QualifiedValueShape {
     qualifiedValueShapeShape :: Shape,
-    qualifiedValueShapeQualifiedManCount :: Int,
-    qualifiedValueShapeQualifiedMinCount :: Int,
+    qualifiedValueShapeQualifiedManCount :: Integer,
+    qualifiedValueShapeQualifiedMinCount :: Integer,
     qualifiedValueShapeQualifiedValueShapesDisjoint :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
@@ -240,7 +240,7 @@ _QualifiedValueShape_qualifiedMinCount = (Core.FieldName "qualifiedMinCount")
 
 _QualifiedValueShape_qualifiedValueShapesDisjoint = (Core.FieldName "qualifiedValueShapesDisjoint")
 
-data Severity
+data Severity 
   = SeverityInfo 
   | SeverityWarning 
   | SeverityViolation 

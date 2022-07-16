@@ -27,15 +27,15 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
       def "Closed" $
         doc "See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
         record [
-          field "isClosed" $ boolean,
-          field "ignoredProperties" $ list $ element $ rdf "Property"],
+          field "isClosed" boolean,
+          field "ignoredProperties" $ optional $ list $ element $ rdf "Property"],
 
       def "CommonConstraints" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
         record [
           field "and" $
             doc "See https://www.w3.org/TR/shacl/#AndConstraintComponent" $
-            list $ shacl "Shape",
+            optional $ list $ shacl "Shape",
 
           field "closed" $
             doc "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
@@ -117,11 +117,11 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
 
           field "or" $
             doc "See https://www.w3.org/TR/shacl/#OrConstraintComponent" $
-            list $ shacl "Shape",
+            optional $ list $ shacl "Shape",
 
           field "xone" $
             doc "See https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
-            list $ shacl "Shape"],
+            optional $ list $ shacl "Shape"],
 
       def "CommonProperties" $
         doc "Common constraint parameters and other properties for SHACL shapes" $
@@ -174,7 +174,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
       def "Pattern" $
         doc "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
         record [
-          field "regex" $ string,
+          field "regex" string,
           field "flags" $ optional string],
 
       def "PropertyShape" $
