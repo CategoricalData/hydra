@@ -65,32 +65,33 @@ encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
       IntegerTypeUint64 -> xsd "unsignedLong"
     LiteralTypeString -> xsd "string"
   where
-    xsd local = pure $ defaultCommonProperties {
-      Shacl.commonPropertiesConstraints = defaultCommonConstraints {
-        Shacl.commonConstraintsDatatype = S.fromList [xmlSchemaDatatypeIri local]}}
+    xsd local = pure $ defaultCommonProperties --{
+--      Shacl.commonPropertiesConstraints = defaultCommonConstraints {
+--        Shacl.commonConstraintsDatatype = S.fromList [xmlSchemaDatatypeIri local]}
+     -- }
 
-defaultCommonConstraints :: Shacl.CommonConstraints
+--defaultCommonConstraints :: Shacl.CommonConstraints
 defaultCommonConstraints = Shacl.CommonConstraints {
-  Shacl.commonConstraintsAnd = [],
-  Shacl.commonConstraintsClosed = False,
-  Shacl.commonConstraintsDatatype = S.empty,
+  Shacl.commonConstraintsAnd = Nothing,
+--  Shacl.commonConstraintsClosed = False,
+--  Shacl.commonConstraintsDatatype = S.empty,
   Shacl.commonConstraintsHasValue = S.empty,
-  Shacl.commonConstraintsIgnoredProperties = [],
-  Shacl.commonConstraintsIn = [],
+--  Shacl.commonConstraintsIgnoredProperties = [],
+  Shacl.commonConstraintsIn = Nothing,
   Shacl.commonConstraintsNode = S.empty,
   Shacl.commonConstraintsNot = S.empty,
   Shacl.commonConstraintsProperty = S.empty,
-  Shacl.commonConstraintsOr = [],
-  Shacl.commonConstraintsXone = []}
+  Shacl.commonConstraintsOr = Nothing,
+  Shacl.commonConstraintsXone = Nothing}
 
-defaultCommonProperties :: Shacl.CommonProperties
+--defaultCommonProperties :: Shacl.CommonProperties
 defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesConstraints = defaultCommonConstraints,
-  Shacl.commonPropertiesDeactivated = False,
+--  Shacl.commonPropertiesDeactivated = False,
   Shacl.commonPropertiesMessage = defaultLangStrings,
   Shacl.commonPropertiesSeverity = Shacl.SeverityInfo,
   Shacl.commonPropertiesTargetClass = S.empty,
-  Shacl.commonPropertiesTargetNode = Nothing,
+--  Shacl.commonPropertiesTargetNode = Nothing,
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
