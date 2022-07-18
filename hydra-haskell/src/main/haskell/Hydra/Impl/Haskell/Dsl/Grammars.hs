@@ -17,6 +17,9 @@ define s pats = Production (Symbol s) pat
       [p] -> p
       _ -> alts pats
 
+ignored :: Pattern -> Pattern
+ignored = PatternIgnored
+
 list :: [Pattern] -> Pattern
 list = PatternSequence
 

@@ -39,6 +39,7 @@ _LabeledPattern_pattern = (Core.FieldName "pattern")
 
 data Pattern 
   = PatternNil 
+  | PatternIgnored Pattern
   | PatternLabeled LabeledPattern
   | PatternConstant Constant
   | PatternRegex Regex
@@ -53,6 +54,8 @@ data Pattern
 _Pattern = (Core.Name "hydra/grammar.Pattern")
 
 _Pattern_nil = (Core.FieldName "nil")
+
+_Pattern_ignored = (Core.FieldName "ignored")
 
 _Pattern_labeled = (Core.FieldName "labeled")
 
