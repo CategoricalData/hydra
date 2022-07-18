@@ -14,6 +14,7 @@ import Hydra.Impl.Haskell.Sources.Errors
 import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
+import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
@@ -48,6 +49,7 @@ coreModules = [
   pure atlasModelModule,
   pure codetreeAstModule,
   pure coqSyntaxModule,
+  pure datalogSyntaxModule,
   pure haskellAstModule,
   pure hydraAdapterModule,
   hydraBasicsModule,
@@ -75,8 +77,6 @@ testModules :: [Result (Module Meta)]
 testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
 javaTestModules :: [Result (Module Meta)]
 javaTestModules = pure <$> [jsonModelModule]
-
-tmpModule = [adapterUtilsModule]
 
 writeHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printGraph
