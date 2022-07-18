@@ -29,6 +29,9 @@ opt = PatternOption
 plus :: Pattern -> Pattern
 plus = PatternPlus
 
+regex :: String -> Pattern
+regex = PatternRegex . Regex
+
 star :: Pattern -> Pattern
 star = PatternStar
 
