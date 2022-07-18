@@ -42,6 +42,7 @@ grammarToModule cx (Grammar prods) gname = Module graph []
 
         rawName pat = case pat of
           PatternNil -> "none"
+          PatternIgnored _ -> "ignored"
           PatternLabeled (LabeledPattern (Label l) _) -> l
           PatternConstant _ -> "constant"
           PatternRegex _ -> "regex"
@@ -62,6 +63,7 @@ grammarToModule cx (Grammar prods) gname = Module graph []
       where
         forPat pat = case pat of
           PatternNil -> [(lname, Types.unit)]
+          PatternIgnored _ -> []
           PatternLabeled (LabeledPattern (Label l) p) -> forPat p
           PatternConstant _ -> []
           PatternRegex _ -> [(lname, Types.string)]
@@ -77,7 +79,7 @@ grammarToModule cx (Grammar prods) gname = Module graph []
               fieldPairs = Y.catMaybes $ L.zipWith toField (findNames pats) pats
               fields = fst <$> fieldPairs
               els = L.concat (snd <$> fieldPairs)
-              
+
         toField n p = case p of
           PatternConstant _ -> Nothing
           _ -> Just $ descend n f2 p
