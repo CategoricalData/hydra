@@ -43,13 +43,13 @@ import qualified Data.Map as M
 import qualified System.Directory as SD
 
 
+allModules :: [Result (Module Meta)]
+allModules = coreModules ++ extModules
+
 coreModules :: [Result (Module Meta)]
 coreModules = [
   adapterUtilsModule,
-  pure atlasModelModule,
   pure codetreeAstModule,
-  pure coqSyntaxModule,
-  pure datalogSyntaxModule,
   pure haskellAstModule,
   pure hydraAdapterModule,
   hydraBasicsModule,
@@ -58,8 +58,14 @@ coreModules = [
   pure hydraEvaluationModule,
   pure hydraGraphModule,
   pure hydraGrammarModule,
+  pure jsonModelModule]
+
+extModules :: [Result (Module Meta)]
+extModules = [
+  pure atlasModelModule,
+  pure coqSyntaxModule,
+  pure datalogSyntaxModule,
   pure javaSyntaxModule,
-  pure jsonModelModule,
   pure pegasusPdlModule,
   pure rdfSyntaxModule,
   pure scalaMetaModule,

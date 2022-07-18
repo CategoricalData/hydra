@@ -32,7 +32,7 @@ One of the main objectives for Hydra is for the framework to generate its own so
 You can generate Hydra's sources by first entering the GHCi REPL using `stack ghci`, then:
 
 ```bash
-writeHaskell coreModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
+writeHaskell allModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
 The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules), and the second is the base directory to which the generated files are to be written. For individual modules, use Haskell list syntax, e.g.
@@ -44,19 +44,19 @@ writeHaskell [pure rdfSyntaxModule, pure shaclModelModule] "/path/to/Categorical
 The commands for Scala and Java generation are similar, e.g.
 
 ```bash
-writeScala coreModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
+writeScala allModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
 ```
 
 and
 
 ```bash
-writeJava coreModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
+writeJava allModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
 ```
 
 There is also schema-only support for PDL:
 
 ```bash
-writePdl coreModules "/tmp/pdl"
+writePdl allModules "/tmp/pdl"
 ```
 
 For languages other than Haskell and Java, you can expect error messages from Hydra where a given coder encounters language features which are not yet fully implemented.
