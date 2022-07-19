@@ -25,7 +25,7 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
     elements = [
 
       def "Closed" $
-        doc "See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
+        see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
         record [
           field "isClosed" boolean,
           field "ignoredProperties" $ optional $ list $ element $ rdf "Property"],
@@ -34,27 +34,27 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
         record [
           field "and" $
-            doc "See https://www.w3.org/TR/shacl/#AndConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#AndConstraintComponent" $
             optional $ list $ shacl "Shape",
 
           field "closed" $
-            doc "See https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
             optional $ shacl "Closed",
 
           field "class" $
-            doc "See https://www.w3.org/TR/shacl/#ClassConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#ClassConstraintComponent" $
             set $ element $ rdf "RdfsClass",
 
           field "datatype" $
-            doc "See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#DatatypeConstraintComponent" $
             optional $ rdf "Iri",
 
           field "disjoint" $
-            doc "See https://www.w3.org/TR/shacl/#DisjointConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#DisjointConstraintComponent" $
             set $ element $ rdf "Property",
 
           field "equals" $
-            doc "See https://www.w3.org/TR/shacl/#EqualsConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#EqualsConstraintComponent" $
             set $ element $ rdf "Property",
 
           field "hasValue" $
@@ -68,59 +68,59 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
             optional $ list $ rdf "Node",
 
           field "languageIn" $
-            doc "See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
             optional $ list $ rdf "LanguageTag",
 
           field "nodeKind" $
-            doc "See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
             optional $ shacl "NodeKind",
 
           field "node" $
-            doc "See https://www.w3.org/TR/shacl/#NodeConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#NodeConstraintComponent" $
             set $ shacl "NodeShape",
 
           field "not" $
-            doc "See https://www.w3.org/TR/shacl/#NotConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#NotConstraintComponent" $
             set $ shacl "Shape",
 
           field "maxExclusive" $
-            doc "See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
           field "maxInclusive" $
-            doc "See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
           field "maxLength" $
-            doc "See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent" $
             optional bigint,
 
           field "minExclusive" $
-            doc "See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
           field "minInclusive" $
-            doc "See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
           field "minLength" $
-            doc "See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#MinLengthConstraintComponent" $
             optional bigint,
 
           field "pattern" $
-            doc "See https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
             optional $ shacl "Pattern",
 
           field "property" $
-            doc "See https://www.w3.org/TR/shacl/#PropertyConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#PropertyConstraintComponent" $
             set $ shacl "PropertyShape",
 
           field "or" $
-            doc "See https://www.w3.org/TR/shacl/#OrConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#OrConstraintComponent" $
             optional $ list $ shacl "Shape",
 
           field "xone" $
-            doc "See https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
             optional $ list $ shacl "Shape"],
 
       def "CommonProperties" $
@@ -131,31 +131,31 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
             $ shacl "CommonConstraints",
 
           field "deactivated" $
-            doc "See https://www.w3.org/TR/shacl/#deactivated" $
+            see "https://www.w3.org/TR/shacl/#deactivated" $
             optional boolean,
 
           field "message" $
-            doc "See https://www.w3.org/TR/shacl/#message" $
+            see "https://www.w3.org/TR/shacl/#message" $
             rdf "LangStrings",
 
           field "severity" $
-            doc "See https://www.w3.org/TR/shacl/#severity" $
+            see "https://www.w3.org/TR/shacl/#severity" $
             shacl "Severity",
 
           field "targetClass" $
-            doc "See https://www.w3.org/TR/shacl/#targetClass" $
+            see "https://www.w3.org/TR/shacl/#targetClass" $
             set $ element $ rdf "RdfsClass",
 
           field "targetNode" $
-            doc "See https://www.w3.org/TR/shacl/#targetNode" $
+            see "https://www.w3.org/TR/shacl/#targetNode" $
             set $ rdf "IriOrLiteral",
 
           field "targetObjectsOf" $
-            doc "See https://www.w3.org/TR/shacl/#targetObjectsOf" $
+            see "https://www.w3.org/TR/shacl/#targetObjectsOf" $
             set $ element $ rdf "Property",
 
           field "targetSubjectsOf" $
-            doc "See https://www.w3.org/TR/shacl/#targetSubjectsOf" $
+            see "https://www.w3.org/TR/shacl/#targetSubjectsOf" $
             set $ element $ rdf "Property"],
 
       def "NodeKind" $ union [
@@ -187,19 +187,19 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
             shacl "PropertyShapeConstraints",
 
           field "defaultValue" $
-            doc "See https://www.w3.org/TR/shacl/#defaultValue" $
+            see "https://www.w3.org/TR/shacl/#defaultValue" $
             optional $ rdf "Node",
 
           field "description" $
-            doc "See https://www.w3.org/TR/shacl/#name" $
+            see "https://www.w3.org/TR/shacl/#name" $
             rdf "LangStrings",
 
           field "name" $
-            doc "See https://www.w3.org/TR/shacl/#name" $
+            see "https://www.w3.org/TR/shacl/#name" $
             rdf "LangStrings",
 
           field "order" $
-            doc "See https://www.w3.org/TR/shacl/#order" $
+            see "https://www.w3.org/TR/shacl/#order" $
             optional bigint,
 
           field "path"  $ rdf "Resource"], -- TODO
@@ -210,11 +210,11 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
         record [
 
           field "lessThan" $
-            doc "See https://www.w3.org/TR/shacl/#LessThanConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#LessThanConstraintComponent" $
             set $ element $ rdf "Property",
 
           field "lessThanOrEquals" $
-            doc "See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent" $
             set $ element $ rdf "Property",
 
           field "maxCount" $
@@ -228,15 +228,15 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
             optional bigint,
 
           field "uniqueLang" $
-            doc "See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent" $
             optional boolean,
 
           field "qualifiedValueShape" $
-            doc "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
+            see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
             optional $ shacl "QualifiedValueShape"],
 
       def "QualifiedValueShape" $
-        doc "See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
+        see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
         record [
           field "shape" $ shacl "Shape",
           field "qualifiedManCount" bigint,
