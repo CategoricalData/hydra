@@ -26,8 +26,8 @@ atlasModel :: Graph Meta
 atlasModel = Graph atlasModelName elements (const True) hydraCoreName
   where
     def = datatype atlasModelName
-    atlas = nominal . qualify atlasModelName . Name
-    xsd = nominal . qualify xmlSchemaName . Name
+    atlas = nsref atlasModelName
+    xsd = nsref xmlSchemaName
 
     elements = [
 

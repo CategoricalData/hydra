@@ -16,7 +16,7 @@ hydraCoreName = GraphName "hydra/core"
 hydraCore :: Graph Meta
 hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
-    core = nominal . qualify hydraCoreName . Name
+    core = nsref hydraCoreName
     def = datatype hydraCoreName
     elements = [
 

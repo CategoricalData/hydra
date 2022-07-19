@@ -19,7 +19,7 @@ jsonModel :: Graph Meta
 jsonModel = Graph jsonModelName elements (const True) hydraCoreName
   where
     def = datatype jsonModelName
-    json = nominal . qualify jsonModelName . Name
+    json = nsref jsonModelName
 
     elements = [
 

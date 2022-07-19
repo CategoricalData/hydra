@@ -19,9 +19,9 @@ hydraAdapter :: Graph Meta
 hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
   where
     def = datatype hydraAdapterName
-    core = nominal . qualify hydraCoreName . Name
-    adapter = nominal . qualify hydraAdapterName . Name
-    evaluation = nominal . qualify hydraEvaluationName . Name
+    core = nsref hydraCoreName
+    adapter = nsref hydraAdapterName
+    evaluation = nsref hydraEvaluationName
 
     elements = [
       def "Adapter" $

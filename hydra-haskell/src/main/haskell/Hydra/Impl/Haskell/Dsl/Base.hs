@@ -16,9 +16,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
-import qualified Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Types.Inference
 
 import Prelude hiding ((++))
 

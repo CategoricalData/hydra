@@ -25,7 +25,7 @@ coqSyntax :: Graph Meta
 coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
   where
     def = datatype coqSyntaxName
-    coq = nominal . qualify coqSyntaxName . Name
+    coq = nsref coqSyntaxName
 
     elements = [
 

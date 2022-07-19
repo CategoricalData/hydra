@@ -21,7 +21,7 @@ haskellAst :: Graph Meta
 haskellAst = Graph haskellAstName elements (const True) hydraCoreName
   where
     def = datatype haskellAstName
-    ast = nominal . qualify haskellAstName . Name
+    ast = nsref haskellAstName
 
     elements = [
 
