@@ -78,5 +78,5 @@ xmlSchema = Graph xmlSchemaName elements (const True) hydraCoreName
       
     others = [
       def "ConstrainingFacet" $
-        doc "See https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
+        see "https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
         union [{-TODO: concrete facets-}] ]

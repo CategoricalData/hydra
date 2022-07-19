@@ -18,6 +18,9 @@ import qualified Data.Maybe as Y
 key_minLength :: String
 key_minLength = "minLength"
 
+dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
+dataterm gname lname = termElement standardContext (qualify gname (Name lname))
+
 datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
@@ -44,6 +47,9 @@ project dom fname cod = withType standardContext (Types.function dom cod) $ proj
 
 qualify :: GraphName -> Name -> Name
 qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname
+
+see :: String -> Type Meta -> Type Meta
+see s = doc $ "See " ++ s
 
 standardContext :: Context Meta
 standardContext = cx
@@ -79,6 +85,12 @@ standardGraph name els = Graph name els termExprs schemaGraph
 
 twoOrMoreList :: Type Meta -> Type Meta
 twoOrMoreList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 2) $ Types.list t
+
+termElement :: Context Meta -> Name -> Type Meta -> Term Meta -> Element Meta
+termElement cx name typ term = Element {
+  elementName = name,
+  elementSchema = encodeType cx typ,
+  elementData = term}
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {
