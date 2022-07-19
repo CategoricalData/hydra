@@ -22,7 +22,7 @@ javaSyntax :: Graph Meta
 javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
   where
     def = datatype javaSyntaxName
-    java = nominal . qualify javaSyntaxName . Name
+    java = nsref javaSyntaxName
 
     elements = [
 

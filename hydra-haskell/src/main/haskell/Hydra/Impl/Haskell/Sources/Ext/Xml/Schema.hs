@@ -28,8 +28,9 @@ xmlSchema = Graph xmlSchemaName elements (const True) hydraCoreName
   where
     def = datatype xmlSchemaName
 
-    elements = [
-
+    elements = datatypes ++ others
+    
+    datatypes = [
       def "AnySimpleType" string,
       def "AnyType" string,
       def "AnyURI" string,
@@ -74,3 +75,8 @@ xmlSchema = Graph xmlSchemaName elements (const True) hydraCoreName
       def "UnsignedInt" uint32,
       def "UnsignedLong" uint64,
       def "UnsignedShort" uint16]
+      
+    others = [
+      def "ConstrainingFacet" $
+        doc "See https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
+        union [{-TODO: concrete facets-}] ]

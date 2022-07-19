@@ -18,8 +18,8 @@ tinkerpopTyped :: Graph Meta
 tinkerpopTyped = Graph tinkerpopTypedName elements (const True) hydraCoreName
   where
     def = datatype tinkerpopTypedName
-    typed = nominal . qualify tinkerpopTypedName . Name
-    core = nominal . qualify hydraCoreName . Name
+    typed = nsref tinkerpopTypedName
+    core = nsref hydraCoreName
 
     elements = [
 

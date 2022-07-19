@@ -18,7 +18,7 @@ rdfSyntax :: Graph Meta
 rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
   where
     def = datatype rdfSyntaxName
-    rdf = nominal . qualify rdfSyntaxName . Name
+    rdf = nsref rdfSyntaxName
 
     elements = [
 

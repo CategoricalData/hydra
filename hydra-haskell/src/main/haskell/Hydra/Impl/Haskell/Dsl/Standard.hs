@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.CoreEncoding
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Meta
@@ -15,11 +15,17 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+key_minLength :: String
+key_minLength = "minLength"
+
 datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname = typeElement standardContext (qualify gname (Name lname))
 
-annotate :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
-annotate = setTypeAnnotation standardContext
+annotateTerm :: String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
+annotateTerm = setTermAnnotation standardContext
+
+annotateType :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
+annotateType = setTypeAnnotation standardContext
 
 doc :: String -> Type Meta -> Type Meta
 doc s = setTypeDescription standardContext (Just s)
@@ -28,7 +34,10 @@ dataDoc :: String -> Term Meta -> Term Meta
 dataDoc s = setTermDescription standardContext (Just s)
 
 nonemptyList :: Type Meta -> Type Meta
-nonemptyList t = doc "Note: list cannot be empty" $ Types.list t
+nonemptyList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 1) $ Types.list t
+
+nsref :: GraphName -> String -> Type m
+nsref ns = Types.nominal . qualify ns . Name
 
 project :: Type Meta -> FieldName -> Type Meta -> Term Meta
 project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
@@ -67,6 +76,9 @@ standardGraph name els = Graph name els termExprs schemaGraph
   where
     termExprs = const True -- TODO
     schemaGraph = GraphName "hydra/core"
+
+twoOrMoreList :: Type Meta -> Type Meta
+twoOrMoreList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 2) $ Types.list t
 
 typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
 typeElement cx name typ = Element {

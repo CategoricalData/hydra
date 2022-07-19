@@ -19,8 +19,8 @@ shaclModel :: Graph Meta
 shaclModel = Graph shaclModelName elements (const True) hydraCoreName
   where
     def = datatype shaclModelName
-    shacl = nominal . qualify shaclModelName . Name
-    rdf = nominal . qualify rdfSyntaxName . Name
+    shacl = nsref shaclModelName
+    rdf = nsref rdfSyntaxName
 
     elements = [
 

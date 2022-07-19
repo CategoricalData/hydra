@@ -5,6 +5,9 @@ import Hydra.Core
 import qualified Data.Map as M
 
 
+annot :: m -> Type m -> Type m
+annot ann t = TypeAnnotated $ Annotated t ann
+
 apply :: Type m -> Type m -> Type m
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 

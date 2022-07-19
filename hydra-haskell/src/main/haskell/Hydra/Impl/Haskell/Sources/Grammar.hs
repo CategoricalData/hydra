@@ -19,8 +19,9 @@ hydraGrammarName = GraphName "hydra/grammar"
 hydraGrammar :: Graph Meta
 hydraGrammar = Graph hydraGrammarName elements (const True) hydraCoreName
   where
-    grammar = nominal . qualify hydraGrammarName . Name
+    grammar = nsref hydraGrammarName
     def = datatype hydraGrammarName
+    
     elements = [
 
       def "Constant" string,

@@ -18,11 +18,12 @@ hydraEvaluationName = GraphName "hydra/evaluation"
 hydraEvaluation :: Graph Meta
 hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
   where
-    core = nominal . qualify hydraCoreName . Name
-    graph = nominal . qualify hydraGraphName . Name
-    evaluation = nominal . qualify hydraEvaluationName . Name
+    core = nsref hydraCoreName
+    graph = nsref hydraGraphName
+    evaluation = nsref hydraEvaluationName
 
     def = datatype hydraEvaluationName
+    
     elements = [
 
       def "Coder" $
