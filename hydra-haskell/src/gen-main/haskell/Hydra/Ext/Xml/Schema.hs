@@ -311,3 +311,147 @@ newtype UnsignedShort
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedShort = (Core.Name "hydra/ext/xml/schema.UnsignedShort")
+
+-- See https://www.w3.org/TR/xmlschema-2/#non-fundamental
+data ConstrainingFacet 
+  = ConstrainingFacet {}
+  deriving (Eq, Ord, Read, Show)
+
+_ConstrainingFacet = (Core.Name "hydra/ext/xml/schema.ConstrainingFacet")
+
+data Datatype 
+  = DatatypeAnySimpleType 
+  | DatatypeAnyType 
+  | DatatypeAnyURI 
+  | DatatypeBase64Binary 
+  | DatatypeBoolean 
+  | DatatypeByte 
+  | DatatypeDate 
+  | DatatypeDateTime 
+  | DatatypeDecimal 
+  | DatatypeDouble 
+  | DatatypeDuration 
+  | DatatypeENTITIES 
+  | DatatypeENTITY 
+  | DatatypeFloat 
+  | DatatypeGDay 
+  | DatatypeGMonth 
+  | DatatypeGMonthDay 
+  | DatatypeGYear 
+  | DatatypeGYearMonth 
+  | DatatypeHexBinary 
+  | DatatypeID 
+  | DatatypeIDREF 
+  | DatatypeIDREFS 
+  | DatatypeInt 
+  | DatatypeInteger 
+  | DatatypeLanguage 
+  | DatatypeLong 
+  | DatatypeNMTOKEN 
+  | DatatypeNOTATION 
+  | DatatypeName 
+  | DatatypeNegativeInteger 
+  | DatatypeNonNegativeInteger 
+  | DatatypeNonPositiveInteger 
+  | DatatypeNormalizedString 
+  | DatatypePositiveInteger 
+  | DatatypeQName 
+  | DatatypeShort 
+  | DatatypeString 
+  | DatatypeTime 
+  | DatatypeToken 
+  | DatatypeUnsignedByte 
+  | DatatypeUnsignedInt 
+  | DatatypeUnsignedLong 
+  | DatatypeUnsignedShort 
+  deriving (Eq, Ord, Read, Show)
+
+_Datatype = (Core.Name "hydra/ext/xml/schema.Datatype")
+
+_Datatype_anySimpleType = (Core.FieldName "anySimpleType")
+
+_Datatype_anyType = (Core.FieldName "anyType")
+
+_Datatype_anyURI = (Core.FieldName "anyURI")
+
+_Datatype_base64Binary = (Core.FieldName "base64Binary")
+
+_Datatype_boolean = (Core.FieldName "boolean")
+
+_Datatype_byte = (Core.FieldName "byte")
+
+_Datatype_date = (Core.FieldName "date")
+
+_Datatype_dateTime = (Core.FieldName "dateTime")
+
+_Datatype_decimal = (Core.FieldName "decimal")
+
+_Datatype_double = (Core.FieldName "double")
+
+_Datatype_duration = (Core.FieldName "duration")
+
+_Datatype_ENTITIES = (Core.FieldName "ENTITIES")
+
+_Datatype_ENTITY = (Core.FieldName "ENTITY")
+
+_Datatype_float = (Core.FieldName "float")
+
+_Datatype_gDay = (Core.FieldName "gDay")
+
+_Datatype_gMonth = (Core.FieldName "gMonth")
+
+_Datatype_gMonthDay = (Core.FieldName "gMonthDay")
+
+_Datatype_gYear = (Core.FieldName "gYear")
+
+_Datatype_gYearMonth = (Core.FieldName "gYearMonth")
+
+_Datatype_hexBinary = (Core.FieldName "hexBinary")
+
+_Datatype_ID = (Core.FieldName "ID")
+
+_Datatype_IDREF = (Core.FieldName "IDREF")
+
+_Datatype_IDREFS = (Core.FieldName "IDREFS")
+
+_Datatype_int = (Core.FieldName "int")
+
+_Datatype_integer = (Core.FieldName "integer")
+
+_Datatype_language = (Core.FieldName "language")
+
+_Datatype_long = (Core.FieldName "long")
+
+_Datatype_NMTOKEN = (Core.FieldName "NMTOKEN")
+
+_Datatype_NOTATION = (Core.FieldName "NOTATION")
+
+_Datatype_name = (Core.FieldName "name")
+
+_Datatype_negativeInteger = (Core.FieldName "negativeInteger")
+
+_Datatype_nonNegativeInteger = (Core.FieldName "nonNegativeInteger")
+
+_Datatype_nonPositiveInteger = (Core.FieldName "nonPositiveInteger")
+
+_Datatype_normalizedString = (Core.FieldName "normalizedString")
+
+_Datatype_positiveInteger = (Core.FieldName "positiveInteger")
+
+_Datatype_qName = (Core.FieldName "qName")
+
+_Datatype_short = (Core.FieldName "short")
+
+_Datatype_string = (Core.FieldName "string")
+
+_Datatype_time = (Core.FieldName "time")
+
+_Datatype_token = (Core.FieldName "token")
+
+_Datatype_unsignedByte = (Core.FieldName "unsignedByte")
+
+_Datatype_unsignedInt = (Core.FieldName "unsignedInt")
+
+_Datatype_unsignedLong = (Core.FieldName "unsignedLong")
+
+_Datatype_unsignedShort = (Core.FieldName "unsignedShort")
