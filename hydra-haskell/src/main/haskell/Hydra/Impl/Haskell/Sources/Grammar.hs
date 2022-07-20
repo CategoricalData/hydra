@@ -36,6 +36,7 @@ hydraGrammar = Graph hydraGrammarName elements (const True) hydraCoreName
         
       def "Pattern" $ union [
         field "nil" unit,
+        field "ignored" $ grammar "Pattern",
         field "labeled" $ grammar "LabeledPattern",
         field "constant" $ grammar "Constant",
         field "regex" $ grammar "Regex",
