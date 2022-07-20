@@ -997,7 +997,6 @@ _VariableModifier_annotation = (Core.FieldName "annotation")
 
 _VariableModifier_final = (Core.FieldName "final")
 
--- Note: list cannot be empty
 newtype Throws 
   = Throws {
     unThrows :: [ExceptionType]}
@@ -1960,7 +1959,6 @@ _ForInit_statements = (Core.FieldName "statements")
 
 _ForInit_localVariable = (Core.FieldName "localVariable")
 
--- Note: list cannot be empty
 newtype ForUpdate 
   = ForUpdate {
     unForUpdate :: [StatementExpression]}
@@ -2886,7 +2884,6 @@ _ConditionalExpression_TernaryLambda_ifTrue = (Core.FieldName "ifTrue")
 
 _ConditionalExpression_TernaryLambda_ifFalse = (Core.FieldName "ifFalse")
 
--- Note: list cannot be empty
 newtype ConditionalOrExpression 
   = ConditionalOrExpression {
     unConditionalOrExpression :: [ConditionalAndExpression]}
@@ -2894,7 +2891,6 @@ newtype ConditionalOrExpression
 
 _ConditionalOrExpression = (Core.Name "hydra/ext/java/syntax.ConditionalOrExpression")
 
--- Note: list cannot be empty
 newtype ConditionalAndExpression 
   = ConditionalAndExpression {
     unConditionalAndExpression :: [InclusiveOrExpression]}
@@ -2902,7 +2898,6 @@ newtype ConditionalAndExpression
 
 _ConditionalAndExpression = (Core.Name "hydra/ext/java/syntax.ConditionalAndExpression")
 
--- Note: list cannot be empty
 newtype InclusiveOrExpression 
   = InclusiveOrExpression {
     unInclusiveOrExpression :: [ExclusiveOrExpression]}
@@ -2910,7 +2905,6 @@ newtype InclusiveOrExpression
 
 _InclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.InclusiveOrExpression")
 
--- Note: list cannot be empty
 newtype ExclusiveOrExpression 
   = ExclusiveOrExpression {
     unExclusiveOrExpression :: [AndExpression]}
@@ -2918,7 +2912,6 @@ newtype ExclusiveOrExpression
 
 _ExclusiveOrExpression = (Core.Name "hydra/ext/java/syntax.ExclusiveOrExpression")
 
--- Note: list cannot be empty
 newtype AndExpression 
   = AndExpression {
     unAndExpression :: [EqualityExpression]}
