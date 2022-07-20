@@ -6,11 +6,8 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Extras
 import Hydra.CoreDecoding
-import Hydra.Ext.Shacl.Language
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
-import Hydra.Util.Coders
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -65,33 +62,43 @@ encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
       IntegerTypeUint64 -> xsd "unsignedLong"
     LiteralTypeString -> xsd "string"
   where
-    xsd local = pure $ defaultCommonProperties --{
---      Shacl.commonPropertiesConstraints = defaultCommonConstraints {
---        Shacl.commonConstraintsDatatype = S.fromList [xmlSchemaDatatypeIri local]}
-     -- }
+    xsd local = pure $ defaultCommonProperties {
+      Shacl.commonPropertiesConstraints = defaultCommonConstraints {
+        Shacl.commonConstraintsDatatype = Just $ xmlSchemaDatatypeIri local}}
 
---defaultCommonConstraints :: Shacl.CommonConstraints
+defaultCommonConstraints :: Shacl.CommonConstraints
 defaultCommonConstraints = Shacl.CommonConstraints {
   Shacl.commonConstraintsAnd = Nothing,
---  Shacl.commonConstraintsClosed = False,
---  Shacl.commonConstraintsDatatype = S.empty,
+  Shacl.commonConstraintsClass = S.empty,
+  Shacl.commonConstraintsClosed = Nothing,
+  Shacl.commonConstraintsDatatype = Nothing,
+  Shacl.commonConstraintsDisjoint = S.empty,
+  Shacl.commonConstraintsEquals = S.empty,
   Shacl.commonConstraintsHasValue = S.empty,
---  Shacl.commonConstraintsIgnoredProperties = [],
   Shacl.commonConstraintsIn = Nothing,
+  Shacl.commonConstraintsLanguageIn = Nothing,
+  Shacl.commonConstraintsMaxExclusive = Nothing,
+  Shacl.commonConstraintsMaxInclusive = Nothing,
+  Shacl.commonConstraintsMaxLength = Nothing,
+  Shacl.commonConstraintsMinExclusive = Nothing,
+  Shacl.commonConstraintsMinInclusive = Nothing,
+  Shacl.commonConstraintsMinLength = Nothing,
   Shacl.commonConstraintsNode = S.empty,
+  Shacl.commonConstraintsNodeKind = Nothing,
   Shacl.commonConstraintsNot = S.empty,
+  Shacl.commonConstraintsPattern = Nothing,
   Shacl.commonConstraintsProperty = S.empty,
   Shacl.commonConstraintsOr = Nothing,
   Shacl.commonConstraintsXone = Nothing}
 
---defaultCommonProperties :: Shacl.CommonProperties
+defaultCommonProperties :: Shacl.CommonProperties
 defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesConstraints = defaultCommonConstraints,
---  Shacl.commonPropertiesDeactivated = False,
+  Shacl.commonPropertiesDeactivated = Nothing,
   Shacl.commonPropertiesMessage = defaultLangStrings,
   Shacl.commonPropertiesSeverity = Shacl.SeverityInfo,
   Shacl.commonPropertiesTargetClass = S.empty,
---  Shacl.commonPropertiesTargetNode = Nothing,
+  Shacl.commonPropertiesTargetNode = S.empty,
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
