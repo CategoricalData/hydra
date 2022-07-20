@@ -39,6 +39,9 @@ dataDoc s = setTermDescription standardContext (Just s)
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 1) $ Types.list t
 
+note :: String -> Type Meta -> Type Meta
+note s = doc $ "Note: " ++ s
+
 nsref :: GraphName -> String -> Type m
 nsref ns = Types.nominal . qualify ns . Name
 
