@@ -19,6 +19,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
+import Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
@@ -67,6 +68,7 @@ extModules = [
   pure datalogSyntaxModule,
   pure javaSyntaxModule,
   pure pegasusPdlModule,
+  pure owlSyntaxModule,
   pure rdfSyntaxModule,
   pure scalaMetaModule,
   pure shaclModelModule,
