@@ -53,8 +53,8 @@ datalogGrammar = Grammar [
 
 -- <atom-list> ::= <atom> | <atom> "," <atom-list>
   define "AtomList" [
-    "single"-:-symbol "Atom",
-    "multiple"-:-list[symbol "Atom", comma, symbol "AtomList"]],
+    "single">: symbol "Atom",
+    "multiple">: list[symbol "Atom", comma, symbol "AtomList"]],
 
 -- <term> ::= <constant> | <variable>
   define "Term" [
@@ -63,10 +63,10 @@ datalogGrammar = Grammar [
   
 -- <term-list> ::= <term> | <term> "," <term-list>
   define "TermList" [
-    "single"-:-symbol "Term",
-    "multiple"-:-list[symbol "Term", comma, symbol "TermList"]],
+    "single">: symbol "Term",
+    "multiple">: list[symbol "Term", comma, symbol "TermList"]],
   
 -- <constant-list> ::= <constant> | <constant> "," <constant-list>
   define "ConstantList" [
-    "single"-:-symbol "Constant",
-    "multiple"-:-list[symbol "Constant", comma, symbol "ConstantList"]]]
+    "single">: symbol "Constant",
+    "multiple">: list[symbol "Constant", comma, symbol "ConstantList"]]]
