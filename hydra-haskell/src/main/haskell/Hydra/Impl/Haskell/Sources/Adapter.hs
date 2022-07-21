@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Adapter where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -46,7 +48,7 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
           field "integerTypes" $ Types.set $ core "IntegerType",
           field "termVariants" $ Types.set $ core "TermVariant",
           field "typeVariants" $ Types.set $ core "TypeVariant",
-          field "types" $ function (apply (core "Type") (variable "m")) boolean],
+          field "types" $ core "Type" @@ "m" --> boolean],
 
       def "LanguageName" string,
 

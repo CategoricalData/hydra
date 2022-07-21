@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Errors where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -24,5 +26,5 @@ hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName
       def "Qualified" $
         doc "An optional value qualified with a (possibly empty) list of warnings" $
         universal "m" $ record [
-          field "value" (optional $ variable "m"),
-          field "warnings" (list string)]]
+          field "value" $ optional "m",
+          field "warnings" $ list string]]

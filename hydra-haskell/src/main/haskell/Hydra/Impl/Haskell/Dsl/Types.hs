@@ -3,7 +3,17 @@ module Hydra.Impl.Haskell.Dsl.Types where
 import Hydra.Core
 
 import qualified Data.Map as M
+import Data.String(IsString(..))
 
+
+instance IsString (Type m) where fromString = variable
+
+infixr 0 -->
+(-->) :: Type m -> Type m -> Type m
+a --> b = function a b
+
+(@@) :: Type m -> Type m -> Type m
+f @@ x = apply f x
 
 annot :: m -> Type m -> Type m
 annot ann t = TypeAnnotated $ Annotated t ann
