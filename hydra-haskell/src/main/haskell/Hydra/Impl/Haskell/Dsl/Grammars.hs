@@ -3,9 +3,9 @@ module Hydra.Impl.Haskell.Dsl.Grammars where
 import Hydra.Grammar
 
 
-infixr 0 -:-
-(-:-) :: String -> Pattern -> Pattern
-l -:- p = PatternLabeled $ LabeledPattern (Label l) p
+infixr 0 >:
+(>:) :: String -> Pattern -> Pattern
+l >: p = PatternLabeled $ LabeledPattern (Label l) p
 
 alts :: [Pattern] -> Pattern
 alts = PatternAlternatives
