@@ -11,7 +11,10 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Control.Monad as CM
 import Data.Int
+import Data.String(IsString(..))
 
+
+instance IsString (Term m) where fromString = string
 
 annot :: m -> Term m -> Term m
 annot ann t = TermAnnotated $ Annotated t ann

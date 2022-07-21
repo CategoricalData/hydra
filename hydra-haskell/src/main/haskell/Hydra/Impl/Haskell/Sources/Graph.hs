@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Graph where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -37,7 +39,7 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
         universal "m" $ record [
           field "name" $ graph "GraphName",
           field "elements" $ list $ universal "m" $ graph "Element",
-          field "termExprs" $ function (universal "m" $ core "Term") boolean,
+          field "termExprs" $ universal "m" (core "Term") --> boolean,
           field "schemaGraph" $
             doc "A reference to this graph's schema graph within the provided graph set" $
             graph "GraphName"],

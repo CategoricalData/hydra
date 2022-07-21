@@ -86,9 +86,9 @@ defaultCommonConstraints = Shacl.CommonConstraints {
   Shacl.commonConstraintsNode = S.empty,
   Shacl.commonConstraintsNodeKind = Nothing,
   Shacl.commonConstraintsNot = S.empty,
+  Shacl.commonConstraintsOr = Nothing,
   Shacl.commonConstraintsPattern = Nothing,
   Shacl.commonConstraintsProperty = S.empty,
-  Shacl.commonConstraintsOr = Nothing,
   Shacl.commonConstraintsXone = Nothing}
 
 defaultCommonProperties :: Shacl.CommonProperties

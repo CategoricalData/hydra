@@ -31,6 +31,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Shacl.Model
 import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
+--import Hydra.Impl.Haskell.Sources.Monads
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Ext.Haskell.Coder as Haskell
@@ -59,6 +60,7 @@ coreModules = [
   pure hydraEvaluationModule,
   pure hydraGraphModule,
   pure hydraGrammarModule,
+--  pure hydraMonadsModule,
   pure jsonModelModule]
 
 extModules :: [Result (Module Meta)]
