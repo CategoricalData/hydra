@@ -15,8 +15,24 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-key_minLength :: String
-key_minLength = "minLength"
+key_maxSize = "maxLength"
+key_minSize = "minLength"
+
+
+bounded :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+bounded min max = annotMin . annotMax
+  where
+    annotMax t = Y.maybe t (`setMaxLength` t) max
+    annotMin t = Y.maybe t (`setMinLength` t) max
+
+boundedList :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+boundedList min max et = bounded min max $ Types.list et
+
+boundedSet :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+boundedSet min max et = bounded min max $ Types.set et
+
+boundedString :: Maybe Int -> Maybe Int -> Type Meta
+boundedString min max = bounded min max Types.string
 
 dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
 dataterm gname lname = termElement standardContext (qualify gname (Name lname))
@@ -37,7 +53,7 @@ dataDoc :: String -> Term Meta -> Term Meta
 dataDoc s = setTermDescription standardContext (Just s)
 
 nonemptyList :: Type Meta -> Type Meta
-nonemptyList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 1) $ Types.list t
+nonemptyList = boundedList (Just 1) Nothing
 
 note :: String -> Type Meta -> Type Meta
 note s = doc $ "Note: " ++ s
@@ -53,6 +69,12 @@ qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname
 
 see :: String -> Type Meta -> Type Meta
 see s = doc $ "See " ++ s
+
+setMaxLength :: Int -> Type Meta -> Type Meta
+setMaxLength m t = setTypeAnnotation standardContext key_maxSize (Just $ Terms.int32 m) $ Types.list t
+
+setMinLength :: Int -> Type Meta -> Type Meta
+setMinLength m t = setTypeAnnotation standardContext key_minSize (Just $ Terms.int32 m) $ Types.list t
 
 standardContext :: Context Meta
 standardContext = cx
@@ -87,7 +109,7 @@ standardGraph name els = Graph name els termExprs schemaGraph
     schemaGraph = GraphName "hydra/core"
 
 twoOrMoreList :: Type Meta -> Type Meta
-twoOrMoreList t = setTypeAnnotation standardContext key_minLength (Just $ Terms.int32 2) $ Types.list t
+twoOrMoreList = boundedList (Just 2) Nothing
 
 termElement :: Context Meta -> Name -> Type Meta -> Term Meta -> Element Meta
 termElement cx name typ term = Element {
