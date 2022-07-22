@@ -121,14 +121,14 @@ matchEnum cx = matchUnion cx . fmap (uncurry matchUnitField)
 matchRecord :: Show m => Context m -> (M.Map FieldName (Term m) -> Result b) -> Term m -> Result b
 matchRecord cx decode term = do
   term' <- deref cx term
-  case termExpr term' of
+  case termExpr cx term' of
     TermRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail $ "expected a record; found " ++ show term'
 
 matchUnion :: Show m => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
 matchUnion cx pairs term = do
     term' <- deref cx term
-    case termExpr term' of
+    case termExpr cx term' of
       TermUnion (Field fname val) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val

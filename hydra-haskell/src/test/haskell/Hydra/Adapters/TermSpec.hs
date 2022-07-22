@@ -357,7 +357,7 @@ roundTripIsNoop typ term = (step coderEncode term >>= step coderDecode) == pure 
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case typeExpr typ of
+      languageConstraintsTypes = \typ -> case typeExpr testContext typ of
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 

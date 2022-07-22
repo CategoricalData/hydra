@@ -8,6 +8,10 @@ import Data.String(IsString(..))
 
 instance IsString (Type m) where fromString = variable
 
+infixr 0 >:
+(>:) :: String -> Type m -> FieldType m
+n >: t = field n t
+
 infixr 0 -->
 (-->) :: Type m -> Type m -> Type m
 a --> b = function a b

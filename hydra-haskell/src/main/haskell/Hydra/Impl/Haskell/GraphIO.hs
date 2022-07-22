@@ -13,6 +13,7 @@ import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Errors
 import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
+import Hydra.Impl.Haskell.Sources.Ext.Azure.Dtld
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
@@ -68,6 +69,7 @@ extModules = [
   pure atlasModelModule,
   pure coqSyntaxModule,
   pure datalogSyntaxModule,
+  pure dtldModule,
   pure javaSyntaxModule,
   pure pegasusPdlModule,
   pure owlSyntaxModule,
@@ -110,7 +112,7 @@ generateSources printGraph modules basePath = case sequence modules of
       where
         cx = setContextElements allGraphs $ standardContext {
           contextGraphs = GraphSet allGraphsByName (graphName g),
-          contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+          contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) $ standardPrimitives cx}
         allGraphs = moduleGraph <$> M.elems allModules
         allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
         allModules = addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mod

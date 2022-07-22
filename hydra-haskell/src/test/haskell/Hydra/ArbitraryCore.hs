@@ -35,7 +35,7 @@ instance QC.Arbitrary FieldName
   where
     arbitrary = FieldName <$> QC.arbitrary
     shrink (FieldName n) = FieldName <$> QC.shrink n
-    
+
 instance QC.Arbitrary FloatType
   where
     arbitrary = QC.oneof $ pure <$> [
@@ -83,10 +83,10 @@ instance QC.Arbitrary Name
   where
     arbitrary = Name <$> QC.arbitrary
     shrink (Name name)= Name <$> QC.shrink name
-    
+
 instance QC.Arbitrary (Type m) where
   arbitrary = QC.sized arbitraryType
-  shrink typ = case typeExpr typ of
+  shrink typ = case typ of
     TypeLiteral at -> Types.literal <$> case at of
       LiteralTypeInteger _ -> [LiteralTypeBoolean]
       LiteralTypeFloat _ -> [LiteralTypeBoolean]
@@ -128,7 +128,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
       FunctionLambda <$> (Lambda (Variable "x") <$> arbitraryTerm cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     whenEqual = [FunctionCompareTo <$> arbitraryTerm dom n' | dom == cod]
-    domainSpecific = case typeExpr dom of
+    domainSpecific = case dom of
       TypeUnion sfields -> [FunctionElimination . EliminationUnion <$> CM.mapM arbitraryCase sfields]
         where
           arbitraryCase (FieldType fn dom') = do
@@ -175,7 +175,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
 
 -- Note: variables and function applications are not (currently) generated
 arbitraryTerm :: (Eq m, Ord m, Read m, Show m) => Type m -> Int -> QC.Gen (Term m)
-arbitraryTerm typ n = case typeExpr typ of
+arbitraryTerm typ n = case typ of
     TypeLiteral at -> literal <$> arbitraryLiteral at
     TypeFunction ft -> TermFunction <$> arbitraryFunction ft n'
     TypeList lt -> list <$> arbitraryList False (arbitraryTerm lt) n'
@@ -229,7 +229,7 @@ decr n = max 0 (n-1)
 
 -- Note: shrinking currently discards any metadata
 shrinkers :: (Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, (Term m) -> [Term m])]
-shrinkers typ = trivialShrinker ++ case typeExpr typ of
+shrinkers typ = trivialShrinker ++ case typ of
     TypeLiteral at -> case at of
       LiteralTypeBinary -> [(Types.binary, \(TermLiteral (LiteralBinary s)) -> binaryTerm <$> QC.shrink s)]
       LiteralTypeBoolean -> []

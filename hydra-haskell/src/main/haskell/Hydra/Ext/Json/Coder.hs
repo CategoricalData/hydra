@@ -19,12 +19,12 @@ import qualified Data.Maybe as Y
 
 
 jsonCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) Json.Value)
-jsonCoder context typ = do
+jsonCoder cx typ = do
     adapter <- termAdapter adContext typ
-    coder <- termCoder $ adapterTarget adapter
+    coder <- termCoder cx $ adapterTarget adapter
     return $ composeSteps (adapterCoder adapter) coder
   where
-    adContext = AdapterContext context hydraCoreLanguage language
+    adContext = AdapterContext cx hydraCoreLanguage (language cx)
 
 literalCoder :: LiteralType -> Qualified (Coder Literal Json.Value)
 literalCoder at = pure $ case at of
@@ -49,12 +49,12 @@ literalCoder at = pure $ case at of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Coder (Term m) Json.Value)
-recordCoder sfields = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
+recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> [FieldType m] -> Qualified (Coder (Term m) Json.Value)
+recordCoder cx sfields = do
+    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) sfields
     return $ Coder (encode coders) (decode coders)
   where
-    encode coders term = case termExpr term of
+    encode coders term = case termExpr cx term of
       TermRecord fields -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
@@ -72,8 +72,8 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Coder (Term m) Json.Value)
-termCoder typ = case typeExpr typ of
+termCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) Json.Value)
+termCoder cx typ = case typeExpr cx typ of
   TypeLiteral at -> do
     ac <- literalCoder at
     return Coder {
@@ -81,14 +81,14 @@ termCoder typ = case typeExpr typ of
       coderDecode = \n -> case n of
         s -> Terms.literal <$> coderDecode ac s}
   TypeList lt -> do
-    lc <- termCoder lt
+    lc <- termCoder cx lt
     return Coder {
       coderEncode = \(TermList els) -> Json.ValueArray <$> CM.mapM (coderEncode lc) els,
       coderDecode = \n -> case n of
         Json.ValueArray nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
         _ -> unexpected "sequence" n}
   TypeOptional ot -> do
-    oc <- termCoder ot
+    oc <- termCoder cx ot
     return Coder {
       coderEncode = \t -> case t of
         TermOptional el -> Y.maybe (pure Json.ValueNull) (coderEncode oc) el
@@ -97,8 +97,8 @@ termCoder typ = case typeExpr typ of
         Json.ValueNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}
   TypeMap (MapType kt vt) -> do
-      kc <- termCoder kt
-      vc <- termCoder vt
+      kc <- termCoder cx kt
+      vc <- termCoder cx vt
       let encodeEntry (k, v) = (,) (toString k) <$> coderEncode vc v
       let decodeEntry (k, v) = (,) (fromString k) <$> coderDecode vc v
       return Coder {
@@ -108,9 +108,9 @@ termCoder typ = case typeExpr typ of
           _ -> unexpected "mapping" n}
     where
       toString v = if isStringKey
-        then case termExpr v of
+        then case termExpr cx v of
           TermLiteral (LiteralString s) -> s
         else show v
       fromString s = Terms.string $ if isStringKey then s else read s
-      isStringKey = typeExpr kt == Types.string
-  TypeRecord sfields -> recordCoder sfields
+      isStringKey = typeExpr cx kt == Types.string
+  TypeRecord sfields -> recordCoder cx sfields

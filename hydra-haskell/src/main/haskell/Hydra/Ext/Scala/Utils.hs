@@ -2,6 +2,7 @@ module Hydra.Ext.Scala.Utils where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Evaluation
 import Hydra.Impl.Haskell.Extras
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
@@ -12,10 +13,10 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-nameOfType :: Type m -> Y.Maybe Name
-nameOfType t = case typeExpr t of
+nameOfType :: Context m -> Type m -> Y.Maybe Name
+nameOfType cx t = case typeExpr cx t of
   TypeNominal name -> Just name
-  TypeLambda (LambdaType _ body) -> nameOfType body
+  TypeLambda (LambdaType _ body) -> nameOfType cx body
   _ -> Nothing
 
 qualifyUnionFieldName :: String -> Y.Maybe Name -> FieldName -> String

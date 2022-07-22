@@ -56,7 +56,7 @@ constructModule cx g coders pairs = do
         rhs <- coderEncode coder term
         Scala.StatDefn <$> case rhs of
           Scala.DataApply _ -> toVal rhs
-          Scala.DataFunctionData fun -> case typeExpr typ of
+          Scala.DataFunctionData fun -> case typeExpr cx typ of
             TypeFunction (FunctionType _ cod) -> toDefn fun cod
             _ -> fail $ "expected function type, but found " ++ show typ
           Scala.DataLit _ -> toVal rhs
@@ -69,7 +69,7 @@ constructModule cx g coders pairs = do
 
         toDefn (Scala.Data_FunctionDataFunction (Scala.Data_Function params body)) cod = do
           let tparams = stparam <$> freeTypeVars
-          scod <- encodeType cod
+          scod <- encodeType cx cod
           return $ Scala.DefnDef $ Scala.Defn_Def []
             (Scala.Data_Name $ Scala.PredefString lname) tparams [params] (Just scod) body
 
@@ -91,7 +91,7 @@ encodeFunction cx meta fun arg = case fun of
           dom <- findDomain
           scx <- schemaContext cx
           ftypes <- fieldTypes scx dom
-          let sn = nameOfType dom
+          let sn = nameOfType cx dom
           scases <- CM.mapM (encodeCase ftypes sn cx) cases
           case arg of
             Nothing -> slambda v <$> pure (Scala.DataMatch $ Scala.Data_Match (sname v) scases) <*> findSdom
@@ -109,21 +109,21 @@ encodeFunction cx meta fun arg = case fun of
               return $ Scala.Case pat Nothing body
             where
               v = Variable "y"
-          applyVar fterm var@(Variable v) = case termExpr fterm of
+          applyVar fterm var@(Variable v) = case termExpr cx fterm of
             TermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
               then body
               else substituteVariable v1 var body
             _ -> apply fterm (variable v)
     _ -> fail $ "unexpected function: " ++ show fun
   where
-    findSdom = Just <$> (findDomain >>= encodeType)
+    findSdom = Just <$> (findDomain >>= encodeType cx)
     findDomain = do
         r <- annotationClassTypeOf (contextAnnotations cx) cx meta
         case r of
           Nothing -> fail "expected a typed term"
           Just t -> domainOf t
       where
-        domainOf t = case typeExpr t of
+        domainOf t = case typeExpr cx t of
           TypeFunction (FunctionType dom _) -> pure dom
           TypeElement et -> domainOf et
           _ -> fail $ "expected a function type, but found " ++ show t
@@ -145,8 +145,8 @@ encodeLiteral av = case av of
     _ -> unexpected "literal value" av
 
 encodeTerm :: (Eq m, Ord m, Read m, Show m) => Context m -> Term m -> Result Scala.Data
-encodeTerm cx term = case termExpr term of
-    TermApplication (Application fun arg) -> case termExpr fun of
+encodeTerm cx term = case termExpr cx term of
+    TermApplication (Application fun arg) -> case termExpr cx fun of
         TermFunction f -> case f of
           FunctionElimination e -> case e of
             EliminationElement -> encodeTerm cx arg
@@ -184,7 +184,7 @@ encodeTerm cx term = case termExpr term of
     TermUnion (Field fn ft) -> do
       sn <- schemaName
       let lhs = sname $ qualifyUnionFieldName "UNION." sn fn
-      args <- case termExpr ft of
+      args <- case termExpr cx ft of
         TermRecord [] -> pure []
         _ -> do
           arg <- encodeTerm cx ft
@@ -195,16 +195,16 @@ encodeTerm cx term = case termExpr term of
   where
     schemaName = do
       r <- annotationClassTermType (contextAnnotations cx) cx term
-      pure $ r >>= nameOfType
+      pure $ r >>= nameOfType cx
 
-encodeType :: Show m => Type m -> Result Scala.Type
-encodeType t = case typeExpr t of
+encodeType :: Show m => Context m -> Type m -> Result Scala.Type
+encodeType cx t = case typeExpr cx t of
 --  TypeElement et ->
   TypeFunction (FunctionType dom cod) -> do
-    sdom <- encodeType dom
-    scod <- encodeType cod
+    sdom <- encodeType cx dom
+    scod <- encodeType cx cod
     return $ Scala.TypeFunctionType $ Scala.Type_FunctionTypeFunction $ Scala.Type_Function [sdom] scod
-  TypeList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType lt
+  TypeList lt -> stapply1 <$> pure (stref "Seq") <*> encodeType cx lt
   TypeLiteral lt -> case lt of
 --    TypeBinary ->
     LiteralTypeBoolean -> pure $ stref "Boolean"
@@ -223,14 +223,14 @@ encodeType t = case typeExpr t of
 --      IntegerTypeUint32 ->
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
-  TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
+  TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType cx kt <*> encodeType cx vt
   TypeNominal name -> pure $ stref $ scalaTypeName True name
-  TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
+  TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType cx ot
 --  TypeRecord sfields ->
-  TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
+  TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType cx st
 --  TypeUnion sfields ->
   TypeLambda (LambdaType v body) -> do
-    sbody <- encodeType body
+    sbody <- encodeType cx body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
   TypeVariable (VariableType v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t

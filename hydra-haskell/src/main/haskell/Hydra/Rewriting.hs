@@ -32,7 +32,7 @@ foldOverType order fld b0 typ = case order of
     children = subtypes typ
 
 freeVariablesInTerm :: Term m -> S.Set Variable
-freeVariablesInTerm term = case termExpr term of
+freeVariablesInTerm term = case term of
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
@@ -43,7 +43,7 @@ isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 replaceFreeVariableType :: Ord m => VariableType -> Type m -> Type m -> Type m
 replaceFreeVariableType v rep = rewriteType mapExpr id
   where
-    mapExpr recurse t = case typeExpr t of
+    mapExpr recurse t = case t of
       TypeLambda (LambdaType v' body) -> if v == v'
         then t
         else TypeLambda $ LambdaType v' $ recurse body
@@ -115,11 +115,11 @@ rewriteTypeMeta mapMeta = rewriteType mapExpr mapMeta
 simplifyTerm :: Ord m => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
   where
-    simplify recurse term = recurse $ case termExpr term of
-      TermApplication (Application lhs rhs) -> case termExpr lhs of
+    simplify recurse term = recurse $ case term of
+      TermApplication (Application lhs rhs) -> case lhs of
         TermFunction (FunctionLambda (Lambda var body)) ->
           if S.member var (freeVariablesInTerm body)
-            then case termExpr rhs of
+            then case rhs of
               TermVariable v -> simplifyTerm $ substituteVariable var v body
               _ -> term
             else simplifyTerm body
@@ -136,7 +136,7 @@ stripTermAnnotations = rewriteTerm strip id
 substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
-    replace recurse term = case termExpr term of
+    replace recurse term = case term of
       TermVariable x -> recurse $ (TermVariable $ if x == from then to else x)
       TermFunction (FunctionLambda (Lambda var _)) -> if var == from
         then term
@@ -144,7 +144,8 @@ substituteVariable from to = rewriteTerm replace id
       _ -> recurse term
 
 subterms :: Term m -> [Term m]
-subterms term = case termExpr term of
+subterms term = case term of
+  TermAnnotated (Annotated t _) -> [t]
   TermApplication (Application lhs rhs) -> [lhs, rhs]
   TermFunction f -> case f of
     FunctionCompareTo other -> [other]
@@ -165,7 +166,8 @@ subterms term = case termExpr term of
   _ -> []
 
 subtypes :: Type m -> [Type m]
-subtypes typ = case typeExpr typ of
+subtypes typ = case typ of
+  TypeAnnotated (Annotated t _) -> [t]
   TypeApplication (ApplicationType lhs rhs) -> [lhs, rhs]
   TypeElement et -> [et]
   TypeFunction (FunctionType dom cod) -> [dom, cod]
@@ -183,7 +185,7 @@ subtypes typ = case typeExpr typ of
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
 termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
-    addNames names term = case termExpr term of
+    addNames names term = case term of
       TermElement name -> if withEls then S.insert name names else names
       TermFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
       TermNominal (Named name _) -> if withNoms then S.insert name names else names
@@ -218,6 +220,6 @@ typeDependencies scx name = deps (S.fromList [name]) M.empty
 typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
   where
-    addNames names typ = case typeExpr typ of
+    addNames names typ = case typ of
       TypeNominal name -> S.insert name names
       _ -> names

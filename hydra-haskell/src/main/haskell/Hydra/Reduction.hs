@@ -20,11 +20,11 @@ import qualified Data.Set as S
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
 betaReduceTerm :: (Ord a, Show a) => Context a -> Term a -> Result (Term a)
-betaReduceTerm context term = reduce M.empty term
+betaReduceTerm cx term = reduce M.empty term
   where
-    reduce bindings term = if termIsOpaque (contextStrategy context) term
+    reduce bindings term = if termIsOpaque (contextStrategy cx) term
       then pure term
-      else case termExpr term of
+      else case termExpr cx term of
         TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
         TermLiteral _ -> done
         TermElement _ -> done
@@ -57,7 +57,7 @@ betaReduceTerm context term = reduce M.empty term
           FunctionPrimitive _ -> done
 
     -- Assumes that the function is closed and fully reduced. The arguments may not be.
-    reduceApplication bindings args f = if L.null args then pure f else case termExpr f of
+    reduceApplication bindings args f = if L.null args then pure f else case termExpr cx f of
       TermApplication (Application func arg) -> reduce bindings func
          >>= reduceApplication bindings (arg:args)
 
@@ -65,23 +65,23 @@ betaReduceTerm context term = reduce M.empty term
         FunctionElimination e -> case e of
           EliminationElement -> do
             arg <- reduce bindings $ L.head args
-            case termExpr arg of
-              TermElement name -> dereferenceElement context name
+            case termExpr cx arg of
+              TermElement name -> dereferenceElement cx name
                 >>= reduce bindings
                 >>= reduceApplication bindings (L.tail args)
               _ -> fail "tried to apply data (delta) to a non- element reference"
 
           EliminationOptional (OptionalCases nothing just) -> do
-            arg <- (reduce bindings $ L.head args) >>= deref context
-            case termExpr arg of
+            arg <- (reduce bindings $ L.head args) >>= deref cx
+            case termExpr cx arg of
               TermOptional m -> case m of
                 Nothing -> reduce bindings nothing
                 Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
               _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
           EliminationUnion cases -> do
-            arg <- (reduce bindings $ L.head args) >>= deref context
-            case termExpr arg of
+            arg <- (reduce bindings $ L.head args) >>= deref cx
+            case termExpr cx arg of
               TermUnion (Field fname t) -> if L.null matching
                   then fail $ "no case for field named " ++ unFieldName fname
                   else reduce bindings (fieldTerm $ L.head matching)
@@ -93,8 +93,8 @@ betaReduceTerm context term = reduce M.empty term
         -- TODO: FunctionCompareTo
 
         FunctionPrimitive name -> do
-             prim <- requirePrimitiveFunction context name
-             let arity = primitiveFunctionArity prim
+             prim <- requirePrimitiveFunction cx name
+             let arity = primitiveFunctionArity cx prim
              if L.length args >= arity
                then (mapM (reduce bindings) $ L.take arity args)
                  >>= primitiveFunctionImplementation prim
@@ -116,9 +116,9 @@ betaReduceTerm context term = reduce M.empty term
 betaReduceType :: (Ord m, Show m) => Bool -> Context m -> Type m -> Type m
 betaReduceType eager cx = rewriteType mapExpr id
   where
-    mapExpr _ t = case typeExpr t of
+    mapExpr _ t = case typeExpr cx t of
         TypeAnnotated (Annotated t' ann) -> TypeAnnotated $ Annotated (recurse t') ann
-        TypeApplication (ApplicationType lhs rhs) -> case typeExpr lhs' of
+        TypeApplication (ApplicationType lhs rhs) -> case typeExpr cx lhs' of
             TypeLambda (LambdaType v body) -> recurse $ replaceFreeVariableType v rhs' body
             TypeNominal name -> recurse $ Types.apply t' rhs' -- nominal types are transparent
               where
@@ -139,35 +139,36 @@ termIsOpaque :: EvaluationStrategy -> Term a -> Bool
 termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: EvaluationStrategy -> Term a -> Bool
-termIsValue strategy term = termIsOpaque strategy term || case termExpr term of
-      TermApplication _ -> False
-      TermLiteral _ -> True
-      TermElement _ -> True
-      TermFunction f -> functionIsValue f
-      TermList els -> forList els
-      TermMap map -> L.foldl
-        (\b (k, v) -> b && termIsValue strategy k && termIsValue strategy v)
-        True $ M.toList map
-      TermOptional m -> case m of
-        Nothing -> True
-        Just term -> termIsValue strategy term
-      TermRecord fields -> checkFields fields
-      TermSet els -> forList $ S.toList els
-      TermUnion field -> checkField field
-      TermVariable _ -> False
+termIsValue :: Context m -> EvaluationStrategy -> Term m -> Bool
+termIsValue cx strategy term = termIsOpaque strategy term || case termExpr cx term of
+    TermApplication _ -> False
+    TermLiteral _ -> True
+    TermElement _ -> True
+    TermFunction f -> functionIsValue f
+    TermList els -> forList els
+    TermMap map -> L.foldl
+      (\b (k, v) -> b && termIsValue cx strategy k && termIsValue cx strategy v)
+      True $ M.toList map
+    TermOptional m -> case m of
+      Nothing -> True
+      Just term -> termIsValue cx strategy term
+    TermRecord fields -> checkFields fields
+    TermSet els -> forList $ S.toList els
+    TermUnion field -> checkField field
+    TermVariable _ -> False
   where
-    forList els = L.foldl (\b t -> b && termIsValue strategy t) True els
-    checkField = termIsValue strategy . fieldTerm
+    forList els = L.foldl (\b t -> b && termIsValue cx strategy t) True els
+    checkField = termIsValue cx strategy . fieldTerm
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of
-      FunctionCompareTo other -> termIsValue strategy other
+      FunctionCompareTo other -> termIsValue cx strategy other
       FunctionElimination e -> case e of
         EliminationElement -> True
         EliminationNominal _ -> True
-        EliminationOptional (OptionalCases nothing just) -> termIsValue strategy nothing && termIsValue strategy just
+        EliminationOptional (OptionalCases nothing just) -> termIsValue cx strategy nothing
+          && termIsValue cx strategy just
         EliminationRecord _ -> True
         EliminationUnion cases -> checkFields cases
-      FunctionLambda (Lambda _ body) -> termIsValue strategy body
+      FunctionLambda (Lambda _ body) -> termIsValue cx strategy body
       FunctionPrimitive _ -> True

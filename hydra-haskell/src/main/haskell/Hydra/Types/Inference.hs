@@ -35,7 +35,7 @@ type TypingEnvironment m = M.Map Variable (TypeScheme m)
 decodeStructuralType :: (Show m) => Context m -> Term m -> Result (Type m)
 decodeStructuralType cx term = do
   typ <- decodeType cx term
-  case typeExpr typ of
+  case typeExpr cx typ of
     TypeNominal name -> do
       scx <- schemaContext cx
       el <- requireElement (Just "decode structural type") scx name
@@ -71,7 +71,7 @@ infer cx term = case annotationClassTermType (contextAnnotations cx) cx term of
       Nothing -> inferInternal cx term
 
 inferInternal :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
-inferInternal cx term = case termExpr term of
+inferInternal cx term = case termExpr cx term of
     TermApplication (Application fun arg) -> do
       ifun <- infer cx fun
       iarg <- infer cx arg

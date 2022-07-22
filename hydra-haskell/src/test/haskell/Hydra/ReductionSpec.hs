@@ -24,7 +24,7 @@ checkLiterals = do
       QC.property $ \av -> termIsClosed (literal av :: Term Meta)
 
     H.it "Literal terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testStrategy (literal av :: Term Meta)
+      QC.property $ \av -> termIsValue testContext testStrategy (literal av :: Term Meta)
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
@@ -41,10 +41,10 @@ checkMonomorphicPrimitives = do
 
     H.it "Example primitives have the expected arity" $ do
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_toUpper)
+        (primitiveFunctionArity testContext <$> lookupPrimitiveFunction testContext _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_splitOn)
+        (primitiveFunctionArity testContext <$> lookupPrimitiveFunction testContext _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $
