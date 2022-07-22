@@ -66,10 +66,8 @@ instance ToTree H.DeclarationHead where
 
 instance ToTree H.DeclarationWithComments where
   toTree (H.DeclarationWithComments body mc) = case mc of
-      Nothing -> toTree body
-      Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
-    where
-      toHaskellComments c = L.intercalate "\n" $ (\l -> "-- " ++ l) <$> L.lines c
+    Nothing -> toTree body
+    Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
 
 instance ToTree H.Expression where
   toTree expr = case expr of
@@ -122,6 +120,11 @@ instance ToTree H.Expression_Lambda where
 
 instance ToTree H.Field where
   toTree (H.Field name typ) = spaceSep [toTree name, cst "::", toTree typ]
+
+instance ToTree H.FieldWithComments where
+  toTree (H.FieldWithComments field mc) = case mc of
+      Nothing -> toTree field
+      Just c -> newlineSep [cst $ toHaskellComments c, toTree field]
 
 instance ToTree H.Import where
   toTree (H.Import qual (H.ModuleName name) mod _) = spaceSep $ Y.catMaybes [
@@ -194,6 +197,9 @@ instance ToTree H.ValueBinding where
 
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
+
+toHaskellComments :: String -> [Char]
+toHaskellComments c = L.intercalate "\n" $ ("-- " ++) <$> L.lines c
 
 writeQualifiedName :: H.QualifiedName -> String
 writeQualifiedName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ (h <$> qualifiers) ++ [h unqual]

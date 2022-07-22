@@ -70,7 +70,7 @@ _Constructor_Ordinary_fields = (Core.FieldName "fields")
 data Constructor_Record 
   = Constructor_Record {
     constructor_RecordName :: Name,
-    constructor_RecordFields :: [Field]}
+    constructor_RecordFields :: [FieldWithComments]}
   deriving (Eq, Ord, Read, Show)
 
 _Constructor_Record = (Core.Name "hydra/ext/haskell/ast.Constructor.Record")
@@ -413,6 +413,19 @@ _Field = (Core.Name "hydra/ext/haskell/ast.Field")
 _Field_name = (Core.FieldName "name")
 
 _Field_type = (Core.FieldName "type")
+
+-- A field together with any comments
+data FieldWithComments 
+  = FieldWithComments {
+    fieldWithCommentsField :: Field,
+    fieldWithCommentsComments :: (Maybe String)}
+  deriving (Eq, Ord, Read, Show)
+
+_FieldWithComments = (Core.Name "hydra/ext/haskell/ast.FieldWithComments")
+
+_FieldWithComments_field = (Core.FieldName "field")
+
+_FieldWithComments_comments = (Core.FieldName "comments")
 
 -- A field name and value
 data FieldUpdate 

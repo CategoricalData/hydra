@@ -154,7 +154,8 @@ toTypeDeclarations namespaces cx el term = do
     newtypeCons el typ = do
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- encodeAdaptedType namespaces cx typ
-        let hfield = H.Field hname htype
+        comments <- annotationClassTypeDescription (contextAnnotations cx) cx typ
+        let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]
 
     recordCons lname fields = do
@@ -164,7 +165,8 @@ toTypeDeclarations namespaces cx el term = do
         toField (FieldType (FieldName fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- encodeAdaptedType namespaces cx ftype
-          return $ H.Field hname htype
+          comments <- annotationClassTypeDescription (contextAnnotations cx) cx ftype
+          return $ H.FieldWithComments (H.Field hname htype) comments
 
     unionCons lname (FieldType (FieldName fname) ftype) = do
       let nm = capitalize lname ++ capitalize fname
