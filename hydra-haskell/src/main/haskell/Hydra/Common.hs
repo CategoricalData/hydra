@@ -50,11 +50,11 @@ fromQname (GraphName ns) local = Name $ ns ++ "." ++ local
 graphNameOf :: Name -> GraphName
 graphNameOf = fst . toQname
 
-isEncodedType :: Eq m => Term m -> Bool
-isEncodedType term = termExpr term == TermElement _Type
+isEncodedType :: Eq m => Context m -> Term m -> Bool
+isEncodedType cx term = termExpr cx term == TermElement _Type
 
-isType :: Eq m => Type m -> Bool
-isType typ = typeExpr typ == TypeNominal _Type
+isType :: Eq m => Context m -> Type m -> Bool
+isType cx typ = typeExpr cx typ == TypeNominal _Type
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
@@ -64,22 +64,14 @@ toQname (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (GraphName ns, L.intercalate "." rest)
   _ -> (GraphName "UNKNOWN", name)
 
-termExpr :: Term m -> Term m
-termExpr t = case t of
-  TermAnnotated (Annotated t' _) -> termExpr t'
-  _ -> t
+termExpr :: Context m -> Term m -> Term m
+termExpr cx = annotationClassTermExpr $ contextAnnotations cx
 
 termMeta :: Context m -> Term m -> m
-termMeta cx t = case t of
-  TermAnnotated a -> annotatedAnnotation a
-  _ -> annotationClassDefault $ contextAnnotations cx
+termMeta cx = annotationClassTermMeta $ contextAnnotations cx
 
-typeExpr :: Type m -> Type m
-typeExpr t = case t of
-  TypeAnnotated (Annotated t' _) -> typeExpr t'
-  _ -> t
+typeExpr :: Context m -> Type m -> Type m
+typeExpr cx = annotationClassTypeExpr $ contextAnnotations cx
 
 typeMeta :: Context m -> Type m -> m
-typeMeta cx t = case t of
-  TypeAnnotated a -> annotatedAnnotation a
-  _ -> annotationClassDefault $ contextAnnotations cx
+typeMeta cx = annotationClassTypeMeta $ contextAnnotations cx

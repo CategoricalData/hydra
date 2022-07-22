@@ -16,20 +16,20 @@ booleanOutput = OutputSpec Types.boolean boolean
 inputPoly :: String -> InputSpec (Term m) m
 inputPoly v = InputSpec (Types.variable v) pure
 
-int32Input :: (Show m) => InputSpec Int m
-int32Input = InputSpec Types.int32 expectInt32
+int32Input :: (Show m) => Context m -> InputSpec Int m
+int32Input cx = InputSpec Types.int32 (expectInt32 cx)
 
 int32Output :: OutputSpec Int m
 int32Output = OutputSpec Types.int32 int32
 
-listInput :: (Show m) => Type m -> (Term m -> Result a) -> InputSpec [a] m
-listInput lt f = InputSpec (Types.list lt) (expectList f)
+listInput :: (Show m) => Context m -> Type m -> (Term m -> Result a) -> InputSpec [a] m
+listInput cx lt f = InputSpec (Types.list lt) (expectList cx f)
 
 listOutput :: Type m -> (a -> Term m) -> OutputSpec [a] m
 listOutput lt f = OutputSpec (Types.list lt) $ \l -> list (f <$> l)
 
-listInputPoly :: (Show m) => String -> InputSpec [Term m] m
-listInputPoly v = InputSpec (Types.list $ Types.variable v) expectListPoly
+listInputPoly :: (Show m) => Context m -> String -> InputSpec [Term m] m
+listInputPoly cx v = InputSpec (Types.list $ Types.variable v) (expectListPoly cx)
 
 listOutputPoly :: String -> OutputSpec [Term m] m
 listOutputPoly v = OutputSpec (Types.list $ Types.variable v) list
@@ -56,14 +56,14 @@ prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
       arg2 <- inputSpecUnmarshal input2 $ args !! 1
       return $ outputSpecMarshal output $ compute arg1 arg2
 
-setInput :: (Ord a, Show m) => (Term m -> Result a) -> String -> InputSpec (S.Set a) m
-setInput f v = InputSpec (Types.set $ Types.variable v) (expectSet f)
+setInput :: (Ord a, Show m) => Context m -> (Term m -> Result a) -> String -> InputSpec (S.Set a) m
+setInput cx f v = InputSpec (Types.set $ Types.variable v) (expectSet cx f)
 
 setOutput :: (Ord m) => (a -> Term m) -> String -> OutputSpec (S.Set a) m
 setOutput f v = OutputSpec (Types.set $ Types.variable v) (\s -> set (S.fromList (f <$> S.toList s)))
 
-stringInput :: (Show m) => InputSpec String m
-stringInput = InputSpec Types.string expectString
+stringInput :: (Show m) => Context m -> InputSpec String m
+stringInput cx = InputSpec Types.string (expectString cx)
 
 stringListOutput :: OutputSpec [String] m
 stringListOutput = OutputSpec (Types.list Types.string) stringList

@@ -11,7 +11,7 @@ import qualified Data.Maybe as Y
 
 
 deref :: Context m -> Term m -> Result (Term m)
-deref cx term = case termExpr term of
+deref cx term = case termExpr cx term of
   TermElement name -> dereferenceElement cx name >>= deref cx
   TermNominal (Named _ term') -> deref cx term'
   _ -> ResultSuccess term
@@ -29,10 +29,10 @@ graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements 
 lookupPrimitiveFunction :: Context m -> Name -> Maybe (PrimitiveFunction m)
 lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 
-primitiveFunctionArity :: PrimitiveFunction m -> Int
-primitiveFunctionArity = arity . primitiveFunctionType
+primitiveFunctionArity :: Context m -> PrimitiveFunction m -> Int
+primitiveFunctionArity cx = arity . primitiveFunctionType
   where
-    arity (FunctionType _ cod) = 1 + case typeExpr cod of
+    arity (FunctionType _ cod) = 1 + case typeExpr cx cod of
       TypeFunction ft -> arity ft
       _ -> 0
 

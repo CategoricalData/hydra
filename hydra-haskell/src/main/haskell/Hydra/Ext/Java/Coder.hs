@@ -65,7 +65,7 @@ constructModule cx g coders pairs = do
     return $ M.fromList $ typeUnits ++ dataUnits
   where
     pkg = javaPackageDeclaration $ graphName g
-    isTypePair = isType . typedTermType . snd
+    isTypePair = isType cx . typedTermType . snd
     typePairs = L.filter isTypePair pairs
     dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
@@ -99,7 +99,7 @@ declarationForRecordType aliases cx tparams elName fields = do
 
     toMemberVar (FieldType fname ft) = do
       let mods = [Java.FieldModifierPublic, Java.FieldModifierFinal]
-      jt <- encodeType aliases ft
+      jt <- encodeType cx aliases ft
       let var = fieldNameToJavaVariableDeclarator fname
       return $ javaMemberField mods jt var
 
@@ -114,7 +114,7 @@ declarationForRecordType aliases cx tparams elName fields = do
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
     fieldToFormalParam (FieldType fname ft) = do
-      jt <- encodeType aliases ft
+      jt <- encodeType cx aliases ft
       return $ javaTypeToJavaFormalParameter jt fname
 
     equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
@@ -309,8 +309,8 @@ encodeLiteralType lt = case lt of
   where
     simple n = pure $ javaRefType [] Nothing n
 
-encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
-encodeType aliases t = case typeExpr t of
+encodeType :: Show m => Context m -> M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
+encodeType cx aliases t = case typeExpr cx t of
   TypeApplication (ApplicationType lhs rhs) -> do
     jlhs <- encode lhs
     jrhs <- encode rhs >>= javaTypeToJavaReferenceType
@@ -347,11 +347,11 @@ encodeType aliases t = case typeExpr t of
   -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
-    encode = encodeType aliases
+    encode = encodeType cx aliases
 
 toClassDecl :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter]
   -> Name -> Type m -> Result Java.ClassDeclaration
-toClassDecl aliases cx tparams elName t = case typeExpr t of
+toClassDecl aliases cx tparams elName t = case typeExpr cx t of
     TypeRecord fields -> declarationForRecordType aliases cx tparams elName fields
     TypeUnion fields -> declarationForUnionType aliases cx tparams elName fields
     TypeLambda ut -> declarationForLambdaType aliases cx tparams elName ut

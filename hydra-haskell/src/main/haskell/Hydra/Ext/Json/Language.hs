@@ -3,12 +3,13 @@ module Hydra.Ext.Json.Language where
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Common
+import Hydra.Evaluation
 
 import qualified Data.Set as S
 
 
-language :: Language m
-language = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
+language :: Context m -> Language m
+language cx = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
@@ -23,6 +24,6 @@ language = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
     TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case typeExpr typ of
+  languageConstraintsTypes = \typ -> case typeExpr cx typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

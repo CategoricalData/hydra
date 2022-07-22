@@ -62,21 +62,21 @@ elementRefByName = apply delta . TermElement
 eliminateNominal :: Name -> Term m
 eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
 
-expectInt32 :: Show m => Term m -> Result Int
-expectInt32 term = case termExpr term of
+expectInt32 :: Show m => Context m -> Term m -> Result Int
+expectInt32 cx term = case termExpr cx term of
   TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
   _ -> fail $ "expected an int32, got " ++ show term
 
-expectList :: Show m => (Term m -> Result a) -> Term m -> Result [a]
-expectList f term = expectListPoly term >>= CM.mapM f
+expectList :: Show m => Context m -> (Term m -> Result a) -> Term m -> Result [a]
+expectList cx f term = expectListPoly cx term >>= CM.mapM f
 
-expectListPoly :: Show m => Term m -> Result [Term m]
-expectListPoly term = case termExpr term of
+expectListPoly :: Show m => Context m -> Term m -> Result [Term m]
+expectListPoly cx term = case termExpr cx term of
   TermList els -> pure els
   _ -> fail $ "expected a list, got " ++ show term
 
-expectLiteral :: Show m => Term m -> Result Literal
-expectLiteral term = case termExpr term of
+expectLiteral :: Show m => Context m -> Term m -> Result Literal
+expectLiteral cx term = case termExpr cx term of
   TermLiteral av -> pure av
   _ -> fail $ "expected a literal value, got " ++ show term
 
@@ -85,23 +85,23 @@ expectNArgs n args = if L.length args /= n
   then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
   else pure ()
 
-expectRecord :: Show m => Term m -> Result [Field m]
-expectRecord term = case termExpr term of
+expectRecord :: Show m => Context m -> Term m -> Result [Field m]
+expectRecord cx term = case termExpr cx term of
   TermRecord fields -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
-expectSet :: (Ord a, Show m) => (Term m -> Result a) -> Term m -> Result (S.Set a)
-expectSet f term = case termExpr term of
+expectSet :: (Ord a, Show m) => Context m -> (Term m -> Result a) -> Term m -> Result (S.Set a)
+expectSet cx f term = case termExpr cx term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> fail $ "expected a set, got " ++ show term
 
-expectString :: Show m => Term m -> Result String
-expectString term = case termExpr term of
+expectString :: Show m => Context m -> Term m -> Result String
+expectString cx term = case termExpr cx term of
   TermLiteral (LiteralString s) -> pure s
   _ -> fail $ "expected a string, got " ++ show term
 
-expectUnion :: Show m => Term m -> Result (Field m)
-expectUnion term = case termExpr term of
+expectUnion :: Show m => Context m -> Term m -> Result (Field m)
+expectUnion cx term = case termExpr cx term of
   TermUnion field -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 

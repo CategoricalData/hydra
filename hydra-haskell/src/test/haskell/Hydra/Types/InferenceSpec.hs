@@ -277,7 +277,7 @@ checkTypeAnnotations = do
         let term = TermList [TermLiteral l]
         let (ResultSuccess term1) = fst <$> inferType testContext term
         checkType term1 (Types.list $ Types.literal $ literalType l)
-        let (TermList [term2]) = termExpr term1
+        let (TermAnnotated (Annotated (TermList [term2]) _)) = term1
         checkType term2 (Types.literal $ literalType l)
 
 checkTypedTerms :: H.SpecWith ()

@@ -23,13 +23,13 @@ shaclCoder cx sg = do
     fail "FOO"
   where
     mapGraph g = fail "TODO"
-    typeEls = L.filter (isEncodedType . elementSchema) $ graphElements sg
+    typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
     decode el = do
       typ <- decodeType cx $ elementData el
       return (el, typ)
 
-encodeType :: Show m => (Element m, Type m) -> Result Shacl.Shape
-encodeType (el, typ) = case typeExpr typ of
+encodeType :: Show m => Context m -> (Element m, Type m) -> Result Shacl.Shape
+encodeType cx (el, typ) = case typeExpr cx typ of
 --  TypeElement et ->
 --  TypeList lt ->
   TypeLiteral lt -> encodeLiteralType lt

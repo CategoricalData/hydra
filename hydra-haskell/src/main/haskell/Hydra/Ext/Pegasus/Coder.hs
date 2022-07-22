@@ -43,7 +43,7 @@ constructModule cx g coders pairs = do
   where
     pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
     aliases = importAliasesForGraph g
-    toSchema (el, TypedTerm typ term) = if typeExpr typ == TypeNominal _Type
+    toSchema (el, TypedTerm typ term) = if typeExpr cx typ == TypeNominal _Type
       then decodeType cx term >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
@@ -77,7 +77,7 @@ encodeTerm aliases cx term = do
     fail "not yet implemented"
 
 encodeType :: (Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
-encodeType aliases cx typ = case typeExpr typ of
+encodeType aliases cx typ = case typeExpr cx typ of
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -104,10 +104,10 @@ encodeType aliases cx typ = case typeExpr typ of
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
       where
-        isEnum = L.foldl (\b t -> b && typeExpr t == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && typeExpr cx t == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
-    encode t = case typeExpr t of
+    encode t = case typeExpr cx t of
       TypeRecord [] -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases cx t
@@ -138,7 +138,7 @@ encodeType aliases cx typ = case typeExpr typ of
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
         PDL.enumFieldAnnotations = anns}
-    encodePossiblyOptionalType typ = case typeExpr typ of
+    encodePossiblyOptionalType typ = case typeExpr cx typ of
       TypeOptional ot -> do
         t <- encode ot
         return (t, True)

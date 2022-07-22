@@ -61,7 +61,7 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
       $ Coder (encode ad) (decode ad)
   where
     cx = adapterContextEvaluation acx
-    encode ad term = coderEncode (adapterCoder ad) $ case termExpr term of
+    encode ad term = coderEncode (adapterCoder ad) $ case termExpr cx term of
       TermFunction f -> case f of
         FunctionCompareTo other -> variant _Function_compareTo other
         FunctionElimination e -> case e of
@@ -74,7 +74,7 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
         FunctionPrimitive (Name name) -> variant _Function_primitive $ string name
       TermVariable (Variable var) -> variant _Term_variable $ string var
     decode ad term = do
-        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion
+        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion cx
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_element, forTerm fterm),
           (_Elimination_nominal, forNominal fterm),
@@ -87,15 +87,15 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ unFieldName fname
-        forCases fterm = read <$> expectString fterm -- TODO
+        forCases fterm = read <$> expectString cx fterm -- TODO
         forCompareTo fterm = pure $ compareTo fterm
         forTerm _ = pure delta
-        forLambda fterm = read <$> expectString fterm -- TODO
-        forNominal fterm = eliminateNominal . Name <$> expectString fterm
-        forOptionalCases fterm = read <$> expectString fterm -- TODO
-        forPrimitive fterm = primitive . Name <$> expectString fterm
-        forProjection fterm = projection . FieldName <$> expectString fterm
-        forVariable fterm = variable <$> expectString fterm
+        forLambda fterm = read <$> expectString cx fterm -- TODO
+        forNominal fterm = eliminateNominal . Name <$> expectString cx fterm
+        forOptionalCases fterm = read <$> expectString cx fterm -- TODO
+        forPrimitive fterm = primitive . Name <$> expectString cx fterm
+        forProjection fterm = projection . FieldName <$> expectString cx fterm
+        forVariable fterm = variable <$> expectString cx fterm
 
     unionType = do
       domAd <- termAdapter acx dom
@@ -147,11 +147,11 @@ passFunction :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualifi
 passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
     domAd <- termAdapter acx dom
     codAd <- termAdapter acx cod
-    caseAds <- case typeExpr dom of
+    caseAds <- case typeExpr cx dom of
       TypeUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
         <$> CM.mapM (fieldAdapter acx) sfields
       _ -> pure M.empty
-    optionAd <- case typeExpr dom of
+    optionAd <- case typeExpr cx dom of
       TypeOptional ot -> Just <$> termAdapter acx (Types.function ot cod)
       _ -> pure Nothing
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
@@ -171,7 +171,9 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
               --       it is not the job of this adapter to catch validation issues.
               getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
         FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterCoder codAd) body)
-
+  where
+    cx = adapterContextEvaluation acx
+    
 passLambda :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passLambda acx t@(TypeLambda (LambdaType (VariableType v) body)) = do
   ad <- termAdapter acx body

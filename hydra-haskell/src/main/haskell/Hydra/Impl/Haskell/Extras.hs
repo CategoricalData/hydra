@@ -52,7 +52,7 @@ elementAsTypedTerm :: (Show m) => Context m -> Element m -> Result (TypedTerm m)
 elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
 
 fieldTypes :: (Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
-fieldTypes scx t = case typeExpr t of
+fieldTypes scx t = case typeExpr scx t of
     TypeRecord fields -> pure $ toMap fields
     TypeUnion fields -> pure $ toMap fields
     TypeElement et -> fieldTypes scx et

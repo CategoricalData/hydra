@@ -4,6 +4,7 @@ import Hydra.Adapter
 import Hydra.Ext.Tinkerpop.Features
 import Hydra.Core
 import Hydra.Common
+import Hydra.Evaluation
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -14,8 +15,8 @@ import qualified Data.Maybe as Y
 --       for Hydra we cannot support a term or type pattern unless it is provably safe in the target environment.
 --       Otherwise, generated expressions could cause failure during runtime operations.
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
-tinkerpopLanguage :: LanguageName -> Features -> ExtraFeatures m -> Language m
-tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
+tinkerpopLanguage :: Context m -> LanguageName -> Features -> ExtraFeatures m -> Language m
+tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints {
     languageConstraintsEliminationVariants = S.empty,
 
     languageConstraintsLiteralVariants = S.fromList $ Y.catMaybes [
@@ -55,10 +56,10 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TypeVariantOptional,
       Just TypeVariantNominal],
       
-    languageConstraintsTypes = \typ -> case typeExpr typ of
+    languageConstraintsTypes = \typ -> case typeExpr cx typ of
       TypeElement et -> True
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-      TypeList t -> case typeExpr t of
+      TypeList t -> case typeExpr cx t of
         TypeLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
           LiteralTypeFloat ft -> case ft of
@@ -76,7 +77,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       TypeLiteral _ -> True
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
       TypeNominal _ -> True
-      TypeOptional ot -> case typeExpr ot of
+      TypeOptional ot -> case typeExpr cx ot of
         TypeElement _ -> True -- Note: subject to the APG taxonomy
         TypeLiteral _ -> True
         _ -> False

@@ -2,6 +2,7 @@ module Hydra.Ext.Haskell.Utils where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Evaluation
 import Hydra.Impl.Haskell.Extras
 import Hydra.Util.Coders
 import Hydra.Util.Formatting
@@ -91,9 +92,9 @@ unionFieldReference namespaces sname (FieldName fname) = elementReference namesp
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
-unpackLambdaType :: Type m -> ([VariableType], Type m)
-unpackLambdaType t = case typeExpr t of
+unpackLambdaType :: Context m -> Type m -> ([VariableType], Type m)
+unpackLambdaType cx t = case typeExpr cx t of
   TypeLambda (LambdaType v tbody) -> (v:vars, t')
     where
-      (vars, t') = unpackLambdaType tbody
+      (vars, t') = unpackLambdaType cx tbody
   _ -> ([], t)

@@ -39,12 +39,12 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => [FieldType m] -> Qualified (Coder (Term m) YM.Node)
-recordCoder sfields = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) sfields
+recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> [FieldType m] -> Qualified (Coder (Term m) YM.Node)
+recordCoder cx sfields = do
+    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) sfields
     return $ Coder (encode coders) (decode coders)
   where
-    encode coders term = case termExpr term of
+    encode coders term = case termExpr cx term of
       TermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
@@ -62,8 +62,8 @@ recordCoder sfields = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> Qualified (Coder (Term m) YM.Node)
-termCoder typ = case typeExpr typ of
+termCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) YM.Node)
+termCoder cx typ = case typeExpr cx typ of
   TypeLiteral at -> do
     ac <- literalCoder at
     return Coder {
@@ -74,7 +74,7 @@ termCoder typ = case typeExpr typ of
         YM.NodeScalar s -> Terms.literal <$> coderDecode ac s
         _ -> unexpected "scalar node" n}
   TypeList lt -> do
-    lc <- termCoder lt
+    lc <- termCoder cx lt
     return Coder {
 --      coderEncode = \(Term (TermList els) _) -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els,
       coderEncode = \t -> case t of
@@ -84,7 +84,7 @@ termCoder typ = case typeExpr typ of
         YM.NodeSequence nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
         _ -> unexpected "sequence" n}
   TypeOptional ot -> do
-    oc <- termCoder ot
+    oc <- termCoder cx ot
     return Coder {
       coderEncode = \t -> case t of
          TermOptional el -> Y.maybe (pure yamlNull) (coderEncode oc) el
@@ -93,8 +93,8 @@ termCoder typ = case typeExpr typ of
         YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}
   TypeMap (MapType kt vt) -> do
-    kc <- termCoder kt
-    vc <- termCoder vt
+    kc <- termCoder cx kt
+    vc <- termCoder cx vt
     let encodeEntry (k, v) = (,) <$> coderEncode kc k <*> coderEncode vc v
     let decodeEntry (k, v) = (,) <$> coderDecode kc k <*> coderDecode vc v
     return Coder {
@@ -104,15 +104,15 @@ termCoder typ = case typeExpr typ of
       coderDecode = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeRecord sfields -> recordCoder sfields
+  TypeRecord sfields -> recordCoder cx sfields
 
 yamlCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) YM.Node)
-yamlCoder context typ = do
+yamlCoder cx typ = do
     adapter <- termAdapter adContext typ
-    coder <- termCoder $ adapterTarget adapter
+    coder <- termCoder cx $ adapterTarget adapter
     return $ composeSteps (adapterCoder adapter) coder
   where
-    adContext = AdapterContext context hydraCoreLanguage language
+    adContext = AdapterContext cx hydraCoreLanguage (language cx)
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull

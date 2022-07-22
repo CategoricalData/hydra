@@ -117,14 +117,14 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 --  prim1 _io_showTerm termInput stringOutput 
 --  ]
   
-hydraLibListsPrimitives :: (Show m) => [PrimitiveFunction m]
-hydraLibListsPrimitives = [
-  prim1 _lists_concat (listInput (Types.list $ Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
-  prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
-  prim2 _lists_intercalate (listInputPoly "a") (listInput (Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
-  prim2 _lists_intersperse (inputPoly "a") (listInputPoly "a") (listOutputPoly "a") Lists.intersperse,
-  prim1 _lists_last (listInputPoly "a") (outputPoly "a") Lists.last,
-  prim1 _lists_length (listInputPoly "a") int32Output Lists.length
+hydraLibListsPrimitives :: Show m => Context m -> [PrimitiveFunction m]
+hydraLibListsPrimitives cx = [
+  prim1 _lists_concat (listInput cx (Types.list $ Types.variable "a") $ expectListPoly cx) (listOutputPoly "a") Lists.concat,
+  prim1 _lists_head (listInputPoly cx "a") (outputPoly "a") Lists.head,
+  prim2 _lists_intercalate (listInputPoly cx "a") (listInput cx (Types.variable "a") $ expectListPoly cx) (listOutputPoly "a") Lists.intercalate,
+  prim2 _lists_intersperse (inputPoly "a") (listInputPoly cx "a") (listOutputPoly "a") Lists.intersperse,
+  prim1 _lists_last (listInputPoly cx "a") (outputPoly "a") Lists.last,
+  prim1 _lists_length (listInputPoly cx "a") int32Output Lists.length
 --  ,
 --  PrimitiveFunction _lists_map
 --    (FunctionType
@@ -137,32 +137,32 @@ hydraLibListsPrimitives = [
 --
   ]
 
-hydraLibLiteralsPrimitives :: (Show a) => [PrimitiveFunction a]
-hydraLibLiteralsPrimitives = [
-    prim1 _literals_showInt32 int32Input stringOutput Literals.showInt32,
-    prim1 _literals_showString stringInput stringOutput Literals.showString]
+hydraLibLiteralsPrimitives :: Show m => Context m -> [PrimitiveFunction m]
+hydraLibLiteralsPrimitives cx = [
+    prim1 _literals_showInt32 (int32Input cx) stringOutput Literals.showInt32,
+    prim1 _literals_showString (stringInput cx) stringOutput Literals.showString]
 
-hydraLibMathInt32Primitives :: (Show a) => [PrimitiveFunction a]
-hydraLibMathInt32Primitives = [
-    prim2 _math_add int32Input int32Input int32Output Math.add,
-    prim2 _math_div int32Input int32Input int32Output Math.div,
-    prim2 _math_mod int32Input int32Input int32Output Math.mod,
-    prim2 _math_mul int32Input int32Input int32Output Math.mul,
-    prim1 _math_neg int32Input int32Output Math.neg,
-    prim2 _math_rem int32Input int32Input int32Output Math.rem,
-    prim2 _math_sub int32Input int32Input int32Output Math.sub]
+hydraLibMathInt32Primitives :: Show m => Context m -> [PrimitiveFunction m]
+hydraLibMathInt32Primitives cx = [
+    prim2 _math_add (int32Input cx) (int32Input cx) int32Output Math.add,
+    prim2 _math_div (int32Input cx) (int32Input cx) int32Output Math.div,
+    prim2 _math_mod (int32Input cx) (int32Input cx) int32Output Math.mod,
+    prim2 _math_mul (int32Input cx) (int32Input cx) int32Output Math.mul,
+    prim1 _math_neg (int32Input cx) int32Output Math.neg,
+    prim2 _math_rem (int32Input cx) (int32Input cx) int32Output Math.rem,
+    prim2 _math_sub (int32Input cx) (int32Input cx) int32Output Math.sub]
 
-hydraLibStringsPrimitives :: (Show a) => [PrimitiveFunction a]
-hydraLibStringsPrimitives = [
-    prim1 _strings_cat (listInput Types.string expectString) stringOutput Strings.cat,
-    prim1 _strings_length stringInput int32Output Strings.length,
-    prim2 _strings_splitOn stringInput stringInput stringListOutput Strings.splitOn,
-    prim1 _strings_toLower stringInput stringOutput Strings.toLower,
-    prim1 _strings_toUpper stringInput stringOutput Strings.toUpper]
+hydraLibStringsPrimitives :: Show m => Context m -> [PrimitiveFunction m]
+hydraLibStringsPrimitives cx = [
+    prim1 _strings_cat ((listInput cx) Types.string (expectString cx)) stringOutput Strings.cat,
+    prim1 _strings_length (stringInput cx) int32Output Strings.length,
+    prim2 _strings_splitOn (stringInput cx) (stringInput cx) stringListOutput Strings.splitOn,
+    prim1 _strings_toLower (stringInput cx) stringOutput Strings.toLower,
+    prim1 _strings_toUpper (stringInput cx) stringOutput Strings.toUpper]
 
-standardPrimitives :: (Show m) => [PrimitiveFunction m]
-standardPrimitives =
-         hydraLibListsPrimitives
-      ++ hydraLibLiteralsPrimitives
-      ++ hydraLibMathInt32Primitives
-      ++ hydraLibStringsPrimitives
+standardPrimitives :: Show m => Context m -> [PrimitiveFunction m]
+standardPrimitives cx =
+         hydraLibListsPrimitives cx
+      ++ hydraLibLiteralsPrimitives cx
+      ++ hydraLibMathInt32Primitives cx
+      ++ hydraLibStringsPrimitives cx
