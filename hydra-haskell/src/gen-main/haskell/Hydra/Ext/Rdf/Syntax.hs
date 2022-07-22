@@ -54,6 +54,7 @@ _IriOrLiteral_literal = (Core.FieldName "literal")
 -- A convenience type which provides at most one string value per language, and optionally a value without a language
 newtype LangStrings 
   = LangStrings {
+    -- A convenience type which provides at most one string value per language, and optionally a value without a language
     unLangStrings :: (Map (Maybe LanguageTag) String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -62,6 +63,7 @@ _LangStrings = (Core.Name "hydra/ext/rdf/syntax.LangStrings")
 -- A BCP47 language tag
 newtype LanguageTag 
   = LanguageTag {
+    -- A BCP47 language tag
     unLanguageTag :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -70,8 +72,11 @@ _LanguageTag = (Core.Name "hydra/ext/rdf/syntax.LanguageTag")
 -- A value such as a string, number, or date
 data Literal 
   = Literal {
+    -- a Unicode string, which should be in Normal Form C
     literalLexicalForm :: String,
+    -- an IRI identifying a datatype that determines how the lexical form maps to a literal value
     literalDatatypeIri :: Iri,
+    -- An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
     literalLanguageTag :: (Maybe LanguageTag)}
   deriving (Eq, Ord, Read, Show)
 
@@ -100,7 +105,9 @@ _Node_literal = (Core.FieldName "literal")
 -- A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
 data Property 
   = Property {
+    -- State that any resource that has a given property is an instance of one or more classes
     propertyDomain :: (Set RdfsClass),
+    -- States that the values of a property are instances of one or more classes
     propertyRange :: (Set RdfsClass),
     propertySubPropertyOf :: (Set Property)}
   deriving (Eq, Ord, Read, Show)

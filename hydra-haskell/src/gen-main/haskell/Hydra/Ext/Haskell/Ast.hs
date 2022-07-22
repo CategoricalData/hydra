@@ -36,6 +36,7 @@ _Assertion_types = (Core.FieldName "types")
 -- The right-hand side of a pattern-matching alternative
 newtype CaseRhs 
   = CaseRhs {
+    -- The right-hand side of a pattern-matching alternative
     unCaseRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
@@ -175,6 +176,7 @@ _DeclarationHead_Application_operand = (Core.FieldName "operand")
 -- A 'deriving' statement
 newtype Deriving 
   = Deriving {
+    -- A 'deriving' statement
     unDeriving :: [Name]}
   deriving (Eq, Ord, Read, Show)
 

@@ -7,14 +7,23 @@ import Data.Set
 -- A Command describes a function or operation that can be performed on any digital twin.
 data Command 
   = Command {
+    -- This must be 'Command'
     commandType :: Iri,
+    -- The 'programming' name of the command. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     commandName :: String,
+    -- The ID of the command. If no @id is provided, the digital twin interface processor will assign one.
     commandId :: (Maybe Dtmi),
+    -- A comment for model authors
     commandComment :: (Maybe String),
+    -- A localizable description for display
     commandDescription :: (Maybe String),
+    -- A localizable name for display
     commandDisplayName :: (Maybe String),
+    -- This property is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time.
     commandCommandType :: (Maybe CommandType),
+    -- A description of the input to the Command
     commandRequest :: (Maybe CommandPayload),
+    -- A description of the output of the Command
     commandResponse :: (Maybe CommandPayload)}
   deriving (Eq, Ord, Read, Show)
 
@@ -41,11 +50,17 @@ _Command_response = (Core.FieldName "response")
 -- A CommandPayload describes the inputs to or the outputs from a Command.
 data CommandPayload 
   = CommandPayload {
+    -- The 'programming' name of the payload. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     commandPayloadName :: String,
+    -- The data type of the payload
     commandPayloadSchema :: Schema,
+    -- The ID of the payload. If no @id is provided, the digital twin interface processor will assign one.
     commandPayloadId :: (Maybe Dtmi),
+    -- A comment for model authors
     commandPayloadComment :: (Maybe String),
+    -- A localizable description for display
     commandPayloadDescription :: (Maybe String),
+    -- A localizable name for display
     commandPayloadDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -78,12 +93,19 @@ _CommandType_asynchronous = (Core.FieldName "asynchronous")
 -- Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)
 data Component 
   = Component {
+    -- This must be 'Component'
     componentType :: Iri,
+    -- The 'programming' name of the component. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     componentName :: String,
+    -- The data type of the component
     componentSchema :: Interface,
+    -- The ID of the component. If no @id is provided, the digital twin interface processor will assign one.
     componentId :: (Maybe Dtmi),
+    -- A comment for model authors
     componentComment :: (Maybe String),
+    -- A localizable description for display
     componentDescription :: (Maybe String),
+    -- A localizable name for display
     componentDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -106,6 +128,7 @@ _Component_displayName = (Core.FieldName "displayName")
 -- A digital twin model identifier
 newtype Dtmi 
   = Dtmi {
+    -- A digital twin model identifier
     unDtmi :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -114,11 +137,17 @@ _Dtmi = (Core.Name "hydra/ext/azure/dtld.Dtmi")
 -- An EnumValue describes an element of an Enum.
 data EnumValue 
   = EnumValue {
+    -- The 'programming' name of the enum value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     enumValueName :: String,
+    -- The on-the-wire value that maps to the EnumValue. EnumValue may be either an integer or a string and must be unique for all enum values in this enum.
     enumValueEnumValue :: IntegerOrString,
+    -- The ID of the enum value. If no @id is provided, the digital twin interface processor will assign one.
     enumValueId :: (Maybe Dtmi),
+    -- A comment for model authors
     enumValueComment :: (Maybe String),
+    -- A localizable description for display
     enumValueDescription :: (Maybe String),
+    -- A localizable name for display
     enumValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -139,11 +168,17 @@ _EnumValue_displayName = (Core.FieldName "displayName")
 -- A Field describes a field in an Object.
 data Field 
   = Field {
+    -- The 'programming' name of the field. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     fieldName :: String,
+    -- The data type of the field
     fieldSchema :: Schema,
+    -- The ID of the field. If no @id is provided, the digital twin interface processor will assign one.
     fieldId :: (Maybe Dtmi),
+    -- A comment for model authors
     fieldComment :: (Maybe String),
+    -- A localizable description for display
     fieldDescription :: (Maybe String),
+    -- A localizable name for display
     fieldDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -174,14 +209,23 @@ _IntegerOrString_string = (Core.FieldName "string")
 
 data Interface 
   = Interface {
+    -- A digital twin model identifier for the interface
     interfaceId :: Dtmi,
+    -- This must be 'Interface'
     interfaceType :: Iri,
+    -- The context to use when processing this interface. For this version, it must be set to 'dtmi:dtdl:context;2'
     interfaceContext :: Iri,
+    -- A comment for model authors
     interfaceComment :: (Maybe String),
+    -- A set of objects that define the contents (Telemetry, Properties, Commands, Relationships, and/or Components) of this interface
     interfaceContents :: (Maybe (Set Interface_Contents)),
+    -- A localizable description for display
     interfaceDescription :: (Maybe String),
+    -- A localizable name for display
     interfaceDisplayName :: (Maybe String),
+    -- A set of DTMIs that refer to interfaces this interface inherits from. Interfaces can inherit from multiple interfaces.
     interfaceExtends :: (Maybe (Set Interface)),
+    -- A set of IRIs or objects that refer to the reusable schemas within this interface.
     interfaceSchemas :: (Maybe (Set Schema_Interface))}
   deriving (Eq, Ord, Read, Show)
 
@@ -235,11 +279,17 @@ _Iri = (Core.Name "hydra/ext/azure/dtld.Iri")
 -- A MapKey describes the key in a Map. The schema of a MapKey must be string.
 data MapKey 
   = MapKey {
+    -- The 'programming' name of the map's key. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     mapKeyName :: String,
+    -- The data type of the map's key
     mapKeySchema :: Schema,
+    -- The ID of the map key. If no @id is provided, the digital twin interface processor will assign one.
     mapKeyId :: (Maybe Dtmi),
+    -- A comment for model authors
     mapKeyComment :: (Maybe String),
+    -- A localizable description for display
     mapKeyDescription :: (Maybe String),
+    -- A localizable name for display
     mapKeyDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -260,11 +310,17 @@ _MapKey_displayName = (Core.FieldName "displayName")
 -- A MapValue describes the values in a Map.
 data MapValue 
   = MapValue {
+    -- The 'programming' name of the map's value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     mapValueName :: String,
+    -- The data type of the map's values
     mapValueSchema :: Schema,
+    -- The ID of the map value. If no @id is provided, the digital twin interface processor will assign one.
     mapValueId :: (Maybe Dtmi),
+    -- A comment for model authors
     mapValueComment :: (Maybe String),
+    -- A localizable description for display
     mapValueDescription :: (Maybe String),
+    -- A localizable name for display
     mapValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -285,14 +341,23 @@ _MapValue_displayName = (Core.FieldName "displayName")
 -- A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property.
 data Property 
   = Property {
+    -- This must at least be 'Property'. It can also include a semantic type.
     propertyType :: Iri,
+    -- The 'programming' name of the property. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$..
     propertyName :: String,
+    -- The data type of the Property
     propertySchema :: Schema,
+    -- The ID of the property. If no @id is provided, the digital twin interface processor will assign one.
     propertyId :: (Maybe Dtmi),
+    -- A comment for model authors
     propertyComment :: (Maybe String),
+    -- A localizable description for display
     propertyDescription :: (Maybe String),
+    -- A localizable name for display
     propertyDisplayName :: (Maybe String),
+    -- The unit type of the property. A semantic type is required for the unit property to be available.
     propertyUnit :: (Maybe Unit),
+    -- A boolean value that indicates whether the property is writable by an external source, such as an application, or not. The default value is false (read-only).
     propertyWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
@@ -319,16 +384,27 @@ _Property_writable = (Core.FieldName "writable")
 -- A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin.
 data Relationship 
   = Relationship {
+    -- This must be 'Relationship'
     relationshipType :: Iri,
+    -- The 'programming' name of the relationship. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.
     relationshipName :: String,
+    -- The ID of the relationship description. If no @id is provided, the digital twin interface processor will assign one.
     relationshipId :: (Maybe Dtmi),
+    -- A comment for model authors
     relationshipComment :: (Maybe String),
+    -- A localizable description for display
     relationshipDescription :: (Maybe String),
+    -- A localizable name for display
     relationshipDisplayName :: (Maybe String),
+    -- The maximum multiplicity for the target of the relationship. The default value is infinite (there may be an unlimited number of relationship instances for this relationship).
     relationshipMaxMultiplicity :: (Maybe Int),
+    -- The minimum multiplicity for the target of the relationship. The default value is 0 (this relationship is permitted to have no instances). In DTDL v2, minMultiplicity must always be 0.
     relationshipMinMultiplicity :: (Maybe Int),
+    -- A set of Properties that define relationship-specific state
     relationshipProperties :: (Maybe (Set Property)),
+    -- An interface ID. The default value (when target is not specified) is that the target may be any interface.
     relationshipTarget :: (Maybe Interface),
+    -- A boolean value that indicates whether the relationship is writable by an external source, such as an application, or not. The default value is false (read-only).
     relationshipWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
@@ -371,11 +447,17 @@ _Schema_complex = (Core.FieldName "complex")
 -- An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema.
 data Schema_Array 
   = Schema_Array {
+    -- This must be 'Array'
     schema_ArrayType :: Iri,
+    -- The data type of the array elements
     schema_ArrayElementSchema :: Schema,
+    -- The ID of the array. If no @id is provided, the digital twin interface processor will assign one.
     schema_ArrayId :: (Maybe Dtmi),
+    -- A comment for model authors
     schema_ArrayComment :: (Maybe String),
+    -- A localizable description for display
     schema_ArrayDescription :: (Maybe String),
+    -- A localizable name for display
     schema_ArrayDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -414,12 +496,19 @@ _Schema_Complex_object = (Core.FieldName "object")
 -- An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings.
 data Schema_Enum 
   = Schema_Enum {
+    -- Enum
     schema_EnumType :: Iri,
+    -- A set of enum value and label mappings
     schema_EnumEnumValues :: [EnumValue],
+    -- The data type for the enum values. All enum values must be of the same type.
     schema_EnumValueSchema :: IntegerOrString,
+    -- The ID of the enum. If no @id is provided, the digital twin interface processor will assign one.
     schema_EnumId :: (Maybe Dtmi),
+    -- A comment for model authors
     schema_EnumComment :: (Maybe String),
+    -- A localizable description for display
     schema_EnumDescription :: (Maybe String),
+    -- A localizable name for display
     schema_EnumDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -442,10 +531,15 @@ _Schema_Enum_displayName = (Core.FieldName "displayName")
 -- Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface.
 data Schema_Interface 
   = Schema_Interface {
+    -- The globally unique identifier for the schema
     schema_InterfaceId :: Dtmi,
+    -- The type of complex schema. This must refer to one of the complex schema classes (Array, Enum, Map, or Object).
     schema_InterfaceType :: Schema_Interface_Type,
+    -- A comment for model authors
     schema_InterfaceComment :: (Maybe String),
+    -- A localizable description for display
     schema_InterfaceDescription :: (Maybe String),
+    -- A localizable name for display
     schema_InterfaceDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -481,12 +575,19 @@ _Schema_Interface_Type_object = (Core.FieldName "object")
 -- A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema.
 data Schema_Map 
   = Schema_Map {
+    -- Map
     schema_MapType :: Iri,
+    -- A description of the keys in the map
     schema_MapMapKey :: MapKey,
+    -- A description of the values in the map
     schema_MapMapValue :: MapValue,
+    -- The ID of the map. If no @id is provided, the digital twin interface processor will assign one.
     schema_MapId :: (Maybe Dtmi),
+    -- A comment for model authors
     schema_MapComment :: (Maybe String),
+    -- A localizable description for display
     schema_MapDescription :: (Maybe String),
+    -- A localizable name for display
     schema_MapDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -509,11 +610,17 @@ _Schema_Map_displayName = (Core.FieldName "displayName")
 -- An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas.
 data Schema_Object 
   = Schema_Object {
+    -- Object
     schema_ObjectType :: Iri,
+    -- A set of field descriptions, one for each field in the Object
     schema_ObjectFields :: (Set Field),
+    -- The ID of the object. If no @id is provided, the digital twin interface processor will assign one.
     schema_ObjectId :: (Maybe Dtmi),
+    -- A comment for model authors
     schema_ObjectComment :: (Maybe String),
+    -- A localizable description for display
     schema_ObjectDescription :: (Maybe String),
+    -- A localizable name for display
     schema_ObjectDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -570,13 +677,21 @@ _Schema_Primitive_time = (Core.FieldName "time")
 -- Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message.
 data Telemetry 
   = Telemetry {
+    -- This must be at least 'Telemetry'. It can also include a semantic type
     telemetryType :: Iri,
+    -- The 'programming' name of the telemetry. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$..
     telemetryName :: String,
+    -- The data type of the Telemetry
     telemetrySchema :: Schema,
+    -- The ID of the telemetry. If no @id is provided, the digital twin interface processor will assign one.
     telemetryId :: (Maybe Dtmi),
+    -- A comment for model authors
     telemetryComment :: (Maybe String),
+    -- A localizable description for display
     telemetryDescription :: (Maybe String),
+    -- A localizable name for display
     telemetryDisplayName :: (Maybe String),
+    -- The unit type of the Telemetry. A semantic type is required for the unit property to be available.
     telemetryUnit :: (Maybe Unit)}
   deriving (Eq, Ord, Read, Show)
 

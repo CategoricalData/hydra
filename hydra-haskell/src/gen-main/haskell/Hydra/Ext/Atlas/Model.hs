@@ -146,8 +146,11 @@ data AtlasEntityDef
   = AtlasEntityDef {
     atlasEntityDefAsAtlasStructDef :: AtlasStructDef,
     atlasEntityDefSuperTypes :: (Set String),
+    -- the value of this field is derived from 'superTypes' specified in all AtlasEntityDef
     atlasEntityDefSubTypes :: (Set String),
+    -- the value of this field is derived from all the relationshipDefs this entityType is referenced in
     atlasEntityDefRelationshipAttributeDefs :: [AtlasRelationshipAttributeDef],
+    -- the value of this field is derived from all the businessMetadataDefs this entityType is referenced in
     atlasEntityDefBusinessAttributeDefs :: (Map String [AtlasAttributeDef])}
   deriving (Eq, Ord, Read, Show)
 

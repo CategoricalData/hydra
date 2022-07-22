@@ -26,6 +26,7 @@ data Graph m
     graphName :: GraphName,
     graphElements :: [Element m],
     graphTermExprs :: (Core.Term m -> Bool),
+    -- A reference to this graph's schema graph within the provided graph set
     graphSchemaGraph :: GraphName}
 
 _Graph = (Core.Name "hydra/graph.Graph")
@@ -41,6 +42,7 @@ _Graph_schemaGraph = (Core.FieldName "schemaGraph")
 -- A unique identifier for a graph within a graph set
 newtype GraphName 
   = GraphName {
+    -- A unique identifier for a graph within a graph set
     unGraphName :: String}
   deriving (Eq, Ord, Read, Show)
 

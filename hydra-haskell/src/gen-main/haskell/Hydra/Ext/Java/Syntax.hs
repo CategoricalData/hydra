@@ -44,6 +44,7 @@ _Literal_string = (Core.FieldName "string")
 -- Note: this is an approximation which ignores encoding
 newtype IntegerLiteral 
   = IntegerLiteral {
+    -- Note: this is an approximation which ignores encoding
     unIntegerLiteral :: Integer}
   deriving (Eq, Ord, Read, Show)
 
@@ -52,6 +53,7 @@ _IntegerLiteral = (Core.Name "hydra/ext/java/syntax.IntegerLiteral")
 -- Note: this is an approximation which ignores encoding
 newtype FloatingPointLiteral 
   = FloatingPointLiteral {
+    -- Note: this is an approximation which ignores encoding
     unFloatingPointLiteral :: Double}
   deriving (Eq, Ord, Read, Show)
 
@@ -60,6 +62,7 @@ _FloatingPointLiteral = (Core.Name "hydra/ext/java/syntax.FloatingPointLiteral")
 -- Note: this is an approximation which ignores encoding
 newtype StringLiteral 
   = StringLiteral {
+    -- Note: this is an approximation which ignores encoding
     unStringLiteral :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -586,6 +589,7 @@ _ModuleDirective_Requires_module = (Core.FieldName "module")
 data ModuleDirective_ExportsOrOpens 
   = ModuleDirective_ExportsOrOpens {
     moduleDirective_ExportsOrOpensPackage :: PackageName,
+    -- At least one module
     moduleDirective_ExportsOrOpensModules :: [ModuleName]}
   deriving (Eq, Ord, Read, Show)
 
@@ -598,6 +602,7 @@ _ModuleDirective_ExportsOrOpens_modules = (Core.FieldName "modules")
 data ModuleDirective_Provides 
   = ModuleDirective_Provides {
     moduleDirective_ProvidesTo :: TypeName,
+    -- At least one type
     moduleDirective_ProvidesWith :: [TypeName]}
   deriving (Eq, Ord, Read, Show)
 
@@ -820,6 +825,7 @@ _VariableInitializer_arrayInitializer = (Core.FieldName "arrayInitializer")
 -- A Type which does not allow annotations
 newtype UnannType 
   = UnannType {
+    -- A Type which does not allow annotations
     unUnannType :: Type}
   deriving (Eq, Ord, Read, Show)
 
@@ -828,6 +834,7 @@ _UnannType = (Core.Name "hydra/ext/java/syntax.UnannType")
 -- A ClassType which does not allow annotations
 newtype UnannClassType 
   = UnannClassType {
+    -- A ClassType which does not allow annotations
     unUnannClassType :: ClassType}
   deriving (Eq, Ord, Read, Show)
 
@@ -835,6 +842,7 @@ _UnannClassType = (Core.Name "hydra/ext/java/syntax.UnannClassType")
 
 data MethodDeclaration 
   = MethodDeclaration {
+    -- Note: simple methods cannot have annotations
     methodDeclarationAnnotations :: [Annotation],
     methodDeclarationModifiers :: [MethodModifier],
     methodDeclarationHeader :: MethodHeader,
