@@ -71,10 +71,10 @@ see :: String -> Type Meta -> Type Meta
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type Meta -> Type Meta
-setMaxLength m t = setTypeAnnotation standardContext key_maxSize (Just $ Terms.int32 m) $ Types.list t
+setMaxLength m t = setTypeAnnotation standardContext key_maxSize (Just $ Terms.int32 m) t
 
 setMinLength :: Int -> Type Meta -> Type Meta
-setMinLength m t = setTypeAnnotation standardContext key_minSize (Just $ Terms.int32 m) $ Types.list t
+setMinLength m t = setTypeAnnotation standardContext key_minSize (Just $ Terms.int32 m) t
 
 standardContext :: Context Meta
 standardContext = cx
