@@ -46,6 +46,10 @@ data AnnotationClass m
     annotationClassCompare :: (m -> m -> Core.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
+    annotationClassTermExpr :: (Core.Term m -> Core.Term m),
+    annotationClassTermMeta :: (Core.Term m -> m),
+    annotationClassTypeExpr :: (Core.Type m -> Core.Type m),
+    annotationClassTypeMeta :: (Core.Type m -> m),
     annotationClassTermDescription :: (Context m -> Core.Term m -> Result (Maybe String)),
     annotationClassTypeDescription :: (Context m -> Core.Type m -> Result (Maybe String)),
     annotationClassTermType :: (Context m -> Core.Term m -> Result (Maybe (Core.Type m))),
@@ -65,6 +69,14 @@ _AnnotationClass_compare = (Core.FieldName "compare")
 _AnnotationClass_show = (Core.FieldName "show")
 
 _AnnotationClass_read = (Core.FieldName "read")
+
+_AnnotationClass_termExpr = (Core.FieldName "termExpr")
+
+_AnnotationClass_termMeta = (Core.FieldName "termMeta")
+
+_AnnotationClass_typeExpr = (Core.FieldName "typeExpr")
+
+_AnnotationClass_typeMeta = (Core.FieldName "typeMeta")
 
 _AnnotationClass_termDescription = (Core.FieldName "termDescription")
 
