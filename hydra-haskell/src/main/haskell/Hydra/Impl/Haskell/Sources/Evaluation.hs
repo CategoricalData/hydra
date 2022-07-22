@@ -53,6 +53,14 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           field "read" $ string --> optional "m",
           
           -- TODO: simplify
+          field "termExpr" $
+            core "Term" @@ "m" --> core "Term" @@ "m",
+          field "termMeta" $
+            core "Term" @@ "m" --> "m",
+          field "typeExpr" $
+            core "Type" @@ "m" --> core "Type" @@ "m",
+          field "typeMeta" $
+            core "Type" @@ "m" --> "m",
           field "termDescription" $
             evaluation "Context" @@ "m" --> core "Term" @@ "m" --> evaluation "Result" @@ optional string,
           field "typeDescription" $
@@ -62,7 +70,7 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           field "setTermDescription" $
             evaluation "Context" @@ "m" --> optional string --> core "Term" @@ "m" --> core "Term" @@ "m",
           field "setTermType" $
-            evaluation "Context" @@ "m" --> optional $ core "Type" @@ "m" --> core "Term" @@ "m" --> core "Term" @@ "m",
+            evaluation "Context" @@ "m" --> optional (core "Type" @@ "m") --> core "Term" @@ "m" --> core "Term" @@ "m",
           field "typeOf" $
             evaluation "Context" @@ "m" --> "m" --> evaluation "Result" @@ optional (core "Type" @@ "m"),
           field "setTypeOf" $
