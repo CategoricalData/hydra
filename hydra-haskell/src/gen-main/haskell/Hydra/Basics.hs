@@ -8,7 +8,7 @@ import Data.Map
 import Data.Set
 
 -- Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination a -> Core.EliminationVariant)
+eliminationVariant :: (Core.Elimination m -> Core.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Core.EliminationVariantElement
   Core.EliminationNominal _ -> Core.EliminationVariantNominal

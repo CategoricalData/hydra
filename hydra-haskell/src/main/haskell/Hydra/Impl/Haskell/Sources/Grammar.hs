@@ -31,25 +31,25 @@ hydraGrammar = Graph hydraGrammarName elements (const True) hydraCoreName
       def "Label" string,
       
       def "LabeledPattern" $ record [
-        field "label" $ grammar "Label",
-        field "pattern" $ grammar "Pattern"],
+        "label">: grammar "Label",
+        "pattern">: grammar "Pattern"],
         
       def "Pattern" $ union [
-        field "nil" unit,
-        field "ignored" $ grammar "Pattern",
-        field "labeled" $ grammar "LabeledPattern",
-        field "constant" $ grammar "Constant",
-        field "regex" $ grammar "Regex",
-        field "nonterminal" $ grammar "Symbol",
-        field "sequence" $ list $ grammar "Pattern",
-        field "alternatives" $ list $ grammar "Pattern",
-        field "option" $ grammar "Pattern",
-        field "star" $ grammar "Pattern",
-        field "plus" $ grammar "Pattern"],
+        "nil">: unit,
+        "ignored">: grammar "Pattern",
+        "labeled">: grammar "LabeledPattern",
+        "constant">: grammar "Constant",
+        "regex">: grammar "Regex",
+        "nonterminal">: grammar "Symbol",
+        "sequence">: list $ grammar "Pattern",
+        "alternatives">: list $ grammar "Pattern",
+        "option">: grammar "Pattern",
+        "star">: grammar "Pattern",
+        "plus">: grammar "Pattern"],
         
       def "Production" $ record [
-        field "symbol" $ grammar "Symbol",
-        field "pattern" $ grammar "Pattern"],
+        "symbol">: grammar "Symbol",
+        "pattern">: grammar "Pattern"],
         
       def "Regex" string,
       

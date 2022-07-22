@@ -37,8 +37,8 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
         doc ("An IRI or a literal; " ++
              "this type is a convenience for downstream models like SHACL which may exclude blank nodes") $
         union [
-          field "iri" $ rdf "Iri",
-          field "literal" $ rdf "Literal"],
+          "iri">: rdf "Iri",
+          "literal">: rdf "Literal"],
 
       def "LangStrings" $
         doc "A convenience type which provides at most one string value per language, and optionally a value without a language" $
@@ -51,50 +51,50 @@ rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
       def "Literal" $
         doc "A value such as a string, number, or date" $
         record [
-          field "lexicalForm" $
+          "lexicalForm">:
             doc "a Unicode string, which should be in Normal Form C"
             string,
-          field "datatypeIri" $
+          "datatypeIri">:
             doc "an IRI identifying a datatype that determines how the lexical form maps to a literal value" $
             rdf "Iri",
-          field "languageTag" $
+          "languageTag">:
             doc "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString" $
             optional $ rdf "LanguageTag"],
 
       def "Node" $
         union [
-          field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode",
-          field "literal" $ rdf "Literal"],
+          "iri">: rdf "Iri",
+          "bnode">: rdf "BlankNode",
+          "literal">: rdf "Literal"],
 
       def "Property" $
         doc "A type representing an RDF property, and encapsulating its domain, range, and subclass relationships" $
         record [
-          field "domain" $
+          "domain">:
             doc "State that any resource that has a given property is an instance of one or more classes" $
             set $ rdf "RdfsClass",
-          field "range" $
+          "range">:
             doc "States that the values of a property are instances of one or more classes" $
             set $ rdf "RdfsClass",
-          field "subPropertyOf" $
+          "subPropertyOf">:
             set $ rdf "Property"],
             
       def "Quad" $
         doc "An RDF triple with an optional named graph component" $
         record [
-          field "subject" $ rdf "Resource",
-          field "predicate" $ rdf "Iri",
-          field "object" $ rdf "Node",
-          field "graph" $ optional $ rdf "Iri"],
+          "subject">: rdf "Resource",
+          "predicate">: rdf "Iri",
+          "object">: rdf "Node",
+          "graph">: optional $ rdf "Iri"],
 
       def "Resource" $
         union [
-          field "iri" $ rdf "Iri",
-          field "bnode" $ rdf "BlankNode"],
+          "iri">: rdf "Iri",
+          "bnode">: rdf "BlankNode"],
 
       def "Triple" $
         doc "An RDF triple defined by a subject, predicate, and object" $
         record [
-          field "subject" $ rdf "Resource",
-          field "predicate" $ rdf "Iri",
-          field "object" $ rdf "Node"]]
+          "subject">: rdf "Resource",
+          "predicate">: rdf "Iri",
+          "object">: rdf "Node"]]

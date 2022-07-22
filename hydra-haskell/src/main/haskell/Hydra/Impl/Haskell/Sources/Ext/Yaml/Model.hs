@@ -38,9 +38,9 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
       def "Node" $
         doc "A YAML node (value)" $
         union [
-          field "mapping" $ Types.map (model "Node") (model "Node"), -- Failsafe schema: tag:yaml.org,2002:map
-          field "scalar" $ model "Scalar",
-          field "sequence" $ list $ model "Node"], -- Failsafe schema: tag:yaml.org,2002:seq
+          "mapping">: Types.map (model "Node") (model "Node"), -- Failsafe schema: tag:yaml.org,2002:map
+          "scalar">: model "Scalar",
+          "sequence">: list $ model "Node"], -- Failsafe schema: tag:yaml.org,2002:seq
 
       def "Scalar" $
         doc "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here" $
@@ -50,7 +50,7 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
 
           JSON schema: tag:yaml.org,2002:bool
           -}
-          field "bool" $
+          "bool">:
             doc "Represents a true/false value"
             boolean,
           {-
@@ -62,7 +62,7 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
           YAML allows for three special values, which are not supported here:
           positive and negative infinity (.inf and -.inf), and "not a number (.nan)
           -}
-          field "float" $
+          "float">:
             doc "Represents an approximation to real numbers"
             bigfloat,
           {-
@@ -70,7 +70,7 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
 
           JSON schema: tag:yaml.org,2002:int
           -}
-          field "int" $
+          "int">:
             doc "Represents arbitrary sized finite mathematical integers"
             bigint,
           {-
@@ -78,12 +78,12 @@ yamlModel = Graph yamlModelName elements (const True) hydraCoreName
 
           JSON schema: tag:yaml.org,2002:null
           -}
-          field "null" $
+          "null">:
             doc "Represents the lack of a value"
             unit,
           {-
           Failsafe schema: tag:yaml.org,2002:str
           -}
-          field "str" $
+          "str">:
             doc "A string value"
             string]]

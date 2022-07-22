@@ -30,50 +30,50 @@ codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
       def "BlockStyle" $
         doc "Formatting option for code blocks" $
         record [
-          field "indent" boolean,
-          field "newlineBeforeContent" boolean,
-          field "newlineAfterContent" boolean],
+          "indent">: boolean,
+          "newlineBeforeContent">: boolean,
+          "newlineAfterContent">: boolean],
           
       def "BracketExpr" $
         doc "An expression enclosed by brackets" $
         record [
-          field "brackets" $ ast "Brackets",
-          field "enclosed" $ ast "Expr",
-          field "style" $ ast "BlockStyle"],
+          "brackets">: ast "Brackets",
+          "enclosed">: ast "Expr",
+          "style">: ast "BlockStyle"],
 
       def "Brackets" $
         doc "Matching open and close bracket symbols" $
         record [
-          field "open" $ ast "Symbol",
-          field "close" $ ast "Symbol"],
+          "open">: ast "Symbol",
+          "close">: ast "Symbol"],
 
       def "Expr" $
         doc "An abstract expression" $
         union [
-          field "const" $ ast "Symbol",
-          field "op" $ ast "OpExpr",
-          field "brackets" $ ast "BracketExpr"],
+          "const">: ast "Symbol",
+          "op">: ast "OpExpr",
+          "brackets">: ast "BracketExpr"],
 
       def "Op" $
         doc "An operator symbol" $
         record [
-          field "symbol" $ ast "Symbol",
-          field "padding" $ ast "Padding",
-          field "precedence" $ ast "Precedence",
-          field "associativity" $ ast "Associativity"],
+          "symbol">: ast "Symbol",
+          "padding">: ast "Padding",
+          "precedence">: ast "Precedence",
+          "associativity">: ast "Associativity"],
 
       def "OpExpr" $
         doc "An operator expression" $
         record [
-          field "op" $ ast "Op",
-          field "lhs" $ ast "Expr",
-          field "rhs" $ ast "Expr"],
+          "op">: ast "Op",
+          "lhs">: ast "Expr",
+          "rhs">: ast "Expr"],
 
       def "Padding" $
         doc "Left and right padding for an operator" $
         record [
-          field "left" $ ast "Ws",
-          field "right" $ ast "Ws"],
+          "left">: ast "Ws",
+          "right">: ast "Ws"],
 
       def "Precedence" $
         doc "Operator precedence" $

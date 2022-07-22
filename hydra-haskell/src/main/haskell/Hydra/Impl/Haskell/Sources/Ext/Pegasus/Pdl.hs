@@ -33,35 +33,35 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
       def "Annotations" $
         doc "Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas" $
         record [
-          field "doc" $ optional string,
-          field "deprecated" boolean],
+          "doc">: optional string,
+          "deprecated">: boolean],
 
       def "EnumField" $
         record [
-          field "name" $ pdl "EnumFieldName",
-          field "annotations" $ pdl "Annotations"],
+          "name">: pdl "EnumFieldName",
+          "annotations">: pdl "Annotations"],
 
       def "EnumFieldName"
         string,
 
       def "EnumSchema" $
         record [
-          field "fields" $ list $ pdl "EnumField"],
+          "fields">: list $ pdl "EnumField"],
 
       def "FieldName"
         string,
 
       def "NamedSchema" $
         record [
-          field "qualifiedName" $ pdl "QualifiedName",
-          field "type" $ pdl "NamedSchema.Type",
-          field "annotations" $ pdl "Annotations"],
+          "qualifiedName">: pdl "QualifiedName",
+          "type">: pdl "NamedSchema.Type",
+          "annotations">: pdl "Annotations"],
 
       def "NamedSchema.Type" $
         union [
-          field "record" $ pdl "RecordSchema",
-          field "enum" $ pdl "EnumSchema",
-          field "typeref" $ pdl "Schema"],
+          "record">: pdl "RecordSchema",
+          "enum">: pdl "EnumSchema",
+          "typeref">: pdl "Schema"],
 
       def "Name"
         string,
@@ -87,53 +87,53 @@ pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
 
       def "Property" $
         record [
-          field "key" $ pdl "PropertyKey",
-          field "value" $ optional $ json "Value"],
+          "key">: pdl "PropertyKey",
+          "value">: optional $ json "Value"],
 
       def "QualifiedName" $
         record [
-          field "name" $ pdl "Name",
-          field "namespace" $ optional $ pdl "Namespace"],
+          "name">: pdl "Name",
+          "namespace">: optional $ pdl "Namespace"],
 
       def "RecordField" $
         record [
-          field "name" $ pdl "FieldName",
-          field "value" $ pdl "Schema",
-          field "optional" boolean,
-          -- Note: the default value for an enum-valued field must be one of the enumerated string symbols
-          field "default" $ optional $ json "Value",
-          field "annotations" $ pdl "Annotations"],
+          "name">: pdl "FieldName",
+          "value">: pdl "Schema",
+          "optional">: boolean,
+          -- Note: the default value for an enum-valued must be one of the enumerated string symbols
+          "default">: optional $ json "Value",
+          "annotations">: pdl "Annotations"],
 
       def "RecordSchema" $
         record [
-          field "fields" $ list $ pdl "RecordField",
+          "fields">: list $ pdl "RecordField",
           -- Note: all included schemas must be record schemas
-          field "includes" $ list $ pdl "NamedSchema"],
+          "includes">: list $ pdl "NamedSchema"],
 
       def "Schema" $
         union [
-          field "array" $ pdl "Schema",
-          field "fixed" int32,
-          field "inline" $ pdl "NamedSchema",
-          field "map" $ pdl "Schema",
-          field "named" $ pdl "QualifiedName",
-          field "null" unit,
-          field "primitive" $ pdl "PrimitiveType",
-          field "union" $ pdl "UnionSchema"],
+          "array">: pdl "Schema",
+          "fixed">: int32,
+          "inline">: pdl "NamedSchema",
+          "map">: pdl "Schema",
+          "named">: pdl "QualifiedName",
+          "null">: unit,
+          "primitive">: pdl "PrimitiveType",
+          "union">: pdl "UnionSchema"],
 
       def "SchemaFile" $
         record [
-          field "namespace" $ pdl "Namespace",
-          field "package" $ optional $ pdl "Package",
-          field "imports" $ list $ pdl "QualifiedName",
-          field "schemas" $ list $ pdl "NamedSchema"],
+          "namespace">: pdl "Namespace",
+          "package">: optional $ pdl "Package",
+          "imports">: list $ pdl "QualifiedName",
+          "schemas">: list $ pdl "NamedSchema"],
 
       def "UnionMember" $
         record [
-          field "alias" $ optional $ pdl "FieldName",
-          field "value" $ pdl "Schema",
+          "alias">: optional $ pdl "FieldName",
+          "value">: pdl "Schema",
           -- Note: annotations are only available for aliased members
-          field "annotations" $ pdl "Annotations"],
+          "annotations">: pdl "Annotations"],
 
       -- Note: unions are not allowed as member types of other unions
       def "UnionSchema" $

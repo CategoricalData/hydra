@@ -30,196 +30,196 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
     elements = [
 
       def "AnnotatedApplication" $ record [
-        field "annot" $ coq "QualidAnnotated",
-        field "terms" $ nonemptyList $ coq "Term1"],
+        "annot">: coq "QualidAnnotated",
+        "terms">: nonemptyList $ coq "Term1"],
       
       def "Application" $ union [
-        field "normal" $ coq "NormalApplication",
-        field "annotated" $ coq "AnnotatedApplication"],
+        "normal">: coq "NormalApplication",
+        "annotated">: coq "AnnotatedApplication"],
       
       def "Arg" $ union [
-        field "ident" $ coq "IdentArg",
-        field "natural" $ coq "NaturalArg",
-        field "term" $ coq "Term1"],
+        "ident">: coq "IdentArg",
+        "natural">: coq "NaturalArg",
+        "term">: coq "Term1"],
       
       def "Binder" $ union [
-        field "name" $ coq "Name",
-        field "type" $ coq "TypeBinders",
-        field "term" $ coq "LetBinder",
-        field "implicit" $ coq "ImplicitBinders",
-        field "generalizing" $ coq "GeneralizingBinder",
+        "name">: coq "Name",
+        "type">: coq "TypeBinders",
+        "term">: coq "LetBinder",
+        "implicit">: coq "ImplicitBinders",
+        "generalizing">: coq "GeneralizingBinder",
         -- 	( name : type | term )  -- TODO
-        field "pattern" $ coq "Pattern0"],
+        "pattern">: coq "Pattern0"],
   
       def "CaseItem" $ record [
-        field "term" $ coq "Term100",
-        field "as" $ optional $ coq "Name",
-        field "in" $ optional $ coq "Pattern"],  
+        "term">: coq "Term100",
+        "as">: optional $ coq "Name",
+        "in">: optional $ coq "Pattern"],  
         
       def "Cofix" $ record [
-        field "body" $ coq "CofixBody",
-        field "qual" $ optional $ coq "CofixQual"],
+        "body">: coq "CofixBody",
+        "qual">: optional $ coq "CofixQual"],
         
       def "CofixBody" $ record [
-        field "ident" $ coq "Ident",
-        field "binders" $ list $ coq "Binder",
-        field "type" $ optional $ coq "Type",
-        field "term" $ coq "Term"],
+        "ident">: coq "Ident",
+        "binders">: list $ coq "Binder",
+        "type">: optional $ coq "Type",
+        "term">: coq "Term"],
       
       def "CofixQual" $ union [
-        field "in" $ coq "Term",
-        field "with" $ coq "CofixWith"],
+        "in">: coq "Term",
+        "with">: coq "CofixWith"],
         
       def "CofixWith" $ record [
-        field "with" $ nonemptyList $ coq "CofixBody",
-        field "for" $ optional $ coq "Ident"],
+        "with">: nonemptyList $ coq "CofixBody",
+        "for">: optional $ coq "Ident"],
 
       def "Equation" $ record [
-        field "pattern" $ nonemptyList $ nonemptyList $ coq "Pattern",
-        field "term" $ coq "Term"],
+        "pattern">: nonemptyList $ nonemptyList $ coq "Pattern",
+        "term">: coq "Term"],
 
       def "ExistentialVariable" $ record [
-        field "ident" $ coq "Ident",
-        field "variant" $ coq "ExistentialVariableVariant"],
+        "ident">: coq "Ident",
+        "variant">: coq "ExistentialVariableVariant"],
         
       def "ExistentialVariableVariant" $ union [
-        field "placeholder" unit,
-        field "inside1" unit,
-        field "inside2" unit,
-        field "outside" $ optional $ coq "IdentArg"],
+        "placeholder">: unit,
+        "inside1">: unit,
+        "inside2">: unit,
+        "outside">: optional $ coq "IdentArg"],
       
       def "FieldIdent" $ coq "Ident",
 
       def "Fix" $ union [
-        field "decl" $ coq "Fix.Decl",
-        field "qual" $ optional $ coq "Fix.Qual"],
+        "decl">: coq "Fix.Decl",
+        "qual">: optional $ coq "Fix.Qual"],
         
       def "FixAnnot" $ union [
-        field "struct" $ coq "Ident",
-        field "wf" $ coq "FixAnnot.Wf",
-        field "measure" $ coq "FixAnnot.Measure"],
+        "struct">: coq "Ident",
+        "wf">: coq "FixAnnot.Wf",
+        "measure">: coq "FixAnnot.Measure"],
       
       def "FixAnnot.Measure" $ record [
-        field "term" $ coq "OneTerm",
-        field "ident" $ optional $ coq "Ident",
-        field "term2" $ optional $ coq "OneTerm"],
+        "term">: coq "OneTerm",
+        "ident">: optional $ coq "Ident",
+        "term2">: optional $ coq "OneTerm"],
       
       def "FixAnnot.Wf" $ record [
-        field "term" $ coq "OneTerm",
-        field "ident" $ coq "Ident"],
+        "term">: coq "OneTerm",
+        "ident">: coq "Ident"],
       
       def "Fix.Decl" $ record [
-        field "ident" $ coq "Ident",
-        field "binders" $ list $ coq "Binder",
-        field "annot" $ optional $ coq "FixAnnot",
-        field "type" $ optional $ coq "Type",
-        field "term" $ coq "Term"],
+        "ident">: coq "Ident",
+        "binders">: list $ coq "Binder",
+        "annot">: optional $ coq "FixAnnot",
+        "type">: optional $ coq "Type",
+        "term">: coq "Term"],
       
       def "Fix.Qual" $ union [
-        field "in" $ coq "Term",
-        field "with" $ coq "FixWith"],
+        "in">: coq "Term",
+        "with">: coq "FixWith"],
 
       def "FixWith" $ record [
-        field "decls" $ nonemptyList $ coq "Fix.Decl",
-        field "for" $ optional $ coq "Ident"],
+        "decls">: nonemptyList $ coq "Fix.Decl",
+        "for">: optional $ coq "Ident"],
       
       def "Forall" $ record [
-        field "binders" $ coq "OpenBinders",
-        field "type" $ coq "Type"],
+        "binders">: coq "OpenBinders",
+        "type">: coq "Type"],
 
       def "ForallOrFun" $ union [
-        field "forall" $ coq "Forall",
-        field "fun" $ coq "Fun"],
+        "forall">: coq "Forall",
+        "fun">: coq "Fun"],
         
       def "Fun" $ record [
-        field "binders" $ coq "OpenBinders",
-        field "body" $ coq "Term"],
+        "binders">: coq "OpenBinders",
+        "body">: coq "Term"],
       
       def "GeneralizingBinder" $ union [
-        field "explicit" $
+        "explicit">:
           doc "Terms surrounded by `( ) introduce their free variables as explicit arguments" $
           coq "TypeclassConstraint",
           
-        field "implicitMaximallyInserted" $
+        "implicitMaximallyInserted">:
           doc "Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments" $
           coq "TypeclassConstraint",
           
-        field "implicitNonMaximallyInserted" $
+        "implicitNonMaximallyInserted">:
           doc "Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments" $
           coq "TypeclassConstraint"],
       
       def "Ident" $ coq "String",
 
       def "IdentArg" $ record [
-        field "ident" $ coq "Ident",
-        field "term" $ coq "Term"],
+        "ident">: coq "Ident",
+        "term">: coq "Term"],
         
       def "If" $
         doc "Pattern match on boolean values" $
         record [
-          field "condition" $ coq "Term",
-          field "returnAs" $ optional $ coq "ReturnAs",
-          field "then" $ coq "Term",
-          field "else" $ coq "Term"],
+          "condition">: coq "Term",
+          "returnAs">: optional $ coq "ReturnAs",
+          "then">: coq "Term",
+          "else">: coq "Term"],
         
       def "ImplicitBinders" $
         doc "In the context of a function definition, these forms specify that name is an implicit argument." $
         union [
-          field "maximallyInserted" $
+          "maximallyInserted">:
             doc "The first form, with curly braces, makes name a maximally inserted implicit argument" $
             coq "TypeBinders",
             
-          field "nonMaximallyInserted" $
+          "nonMaximallyInserted">:
             doc "The second form, with square brackets, makes name a non-maximally inserted implicit argument." $
             coq "TypeBinders"],
 
       def "Let" $
         doc "A let-in definition" $
         record [
-          field "bindings" $ coq "LetBindings",
-          field "in" $ coq "Term"],
+          "bindings">: coq "LetBindings",
+          "in">: coq "Term"],
       
       def "LetBinder" $
         doc "Some constructions allow the binding of a variable to value. This is called a “let-binder”." $
         record [
-          field "name" $ coq "Name",
-          field "type" $ optional $ coq "Type",
-          field "term" $ coq "Term"],
+          "name">: coq "Name",
+          "type">: optional $ coq "Type",
+          "term">: coq "Term"],
 
       def "LetBindings" $ union [
-        field "named" $ coq "LetNamed",
-        field "destructuring" $ coq "LetDestructuring"],
+        "named">: coq "LetNamed",
+        "destructuring">: coq "LetDestructuring"],
       
       def "LetNamed" $ record [
-        field "binder" $ coq "LetBinder",
-        field "binders" $ list $ coq "Binder"],
+        "binder">: coq "LetBinder",
+        "binders">: list $ coq "Binder"],
       
       def "LetDestructuring" $ union [
-        field "variant1" $ coq "LetDestructuring.Variant1",
-        field "variant2" $ coq "LetDestructuring.Variant2",
-        field "variant3" $ coq "LetDestructuring.Variant3"],
+        "variant1">: coq "LetDestructuring.Variant1",
+        "variant2">: coq "LetDestructuring.Variant2",
+        "variant3">: coq "LetDestructuring.Variant3"],
       
       def "LetDestructuring.Variant1" $ record [
-        field "names" $ list $ coq "Name",
-        field "returnAs" $ optional $ coq "ReturnAs",
-        field "term" $ coq "Term"],
+        "names">: list $ coq "Name",
+        "returnAs">: optional $ coq "ReturnAs",
+        "term">: coq "Term"],
       
       def "LetDestructuring.Variant2" $ record [
-        field "pattern" $ coq "Pattern",
-        field "term" $ coq "Term",
-        field "return" $ optional $ coq "Term100"],
+        "pattern">: coq "Pattern",
+        "term">: coq "Term",
+        "return">: optional $ coq "Term100"],
         
       def "LetDestructuring.Variant3" $ record [
-        field "pattern1" $ coq "Pattern",
-        field "pattern2" $ coq "Pattern",
-        field "term" $ coq "Term",
-        field "return" $ coq "Term100"],
+        "pattern1">: coq "Pattern",
+        "pattern2">: coq "Pattern",
+        "term">: coq "Term",
+        "return">: coq "Term100"],
       
       def "Match" $ record [
-        field "caseItems" $ nonemptyList $ coq "CaseItem",
-        field "return" $ optional $ coq "Term100",
-        field "pipe" boolean,
-        field "equations" $ list $ coq "Equation"],
+        "caseItems">: nonemptyList $ coq "CaseItem",
+        "return">: optional $ coq "Term100",
+        "pipe">: boolean,
+        "equations">: list $ coq "Equation"],
               
       def "Name" $ optional $ coq "Ident",
 
@@ -228,171 +228,171 @@ coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
         bigint,
 
       def "NaturalArg" $ record [
-        field "natural" $ coq "Natural",
-        field "term" $ coq "Term"],
+        "natural">: coq "Natural",
+        "term">: coq "Term"],
             
       def "NormalApplication" $ record [
-        field "lhs" $ coq "Term1",
-        field "rhs" $ nonemptyList $ coq "Arg"],
+        "lhs">: coq "Term1",
+        "rhs">: nonemptyList $ coq "Arg"],
       
       def "Number" bigfloat,
       
       def "OneTerm" $ union [
-        field "explicit" $ coq "QualidAnnotated",
-        field "term1" $ coq "Term1"],
+        "explicit">: coq "QualidAnnotated",
+        "term1">: coq "Term1"],
 
       def "OpenBinders" $ union [
-        field "type" $ coq "TypeBinders",
-        field "binders" $ list $ coq "Binder"],
+        "type">: coq "TypeBinders",
+        "binders">: list $ coq "Binder"],
 
       def "Pattern" $ union [
-        field "pattern" $ coq "Pattern10",
-        field "term" $ optional $ coq "Term"],
+        "pattern">: coq "Pattern10",
+        "term">: optional $ coq "Term"],
 
       def "Pattern0" $ union [
-        field "qualid" $ coq "Qualid",
-        field "qualIdAndPattern" $ coq "QualidAndPattern",
-        field "placeholder" unit,
-        field "parens" $ nonemptyList $ coq "Pattern",
-        field "number" $ coq "Number",
-        field "string" $ coq "String"],
+        "qualid">: coq "Qualid",
+        "qualIdAndPattern">: coq "QualidAndPattern",
+        "placeholder">: unit,
+        "parens">: nonemptyList $ coq "Pattern",
+        "number">: coq "Number",
+        "string">: coq "String"],
 
       def "Pattern1" $ record [
-        field "pattern" $ coq "Pattern0",
-        field "scope" $ optional $ coq "ScopeKey"],
+        "pattern">: coq "Pattern0",
+        "scope">: optional $ coq "ScopeKey"],
       
       def "Pattern10" $ union [
-        field "as" $ coq "Pattern10.As",
-        field "patterns" $ coq "Pattern10.Patterns",
-        field "qualiid" $ coq "Pattern10.Qualid"],
+        "as">: coq "Pattern10.As",
+        "patterns">: coq "Pattern10.Patterns",
+        "qualiid">: coq "Pattern10.Qualid"],
       
       def "Pattern10.As" $ record [
-        field "pattern" $ coq "Pattern1",
-        field "as" $ coq "Name"],
+        "pattern">: coq "Pattern1",
+        "as">: coq "Name"],
         
       def "Pattern10.Patterns" $ record [
-        field "pattern" $ coq "Pattern1",
-        field "patterns" $ list $ coq "Pattern1"],
+        "pattern">: coq "Pattern1",
+        "patterns">: list $ coq "Pattern1"],
       
       def "Pattern10.Qualid" $ record [
-        field "qualid" $ coq "Qualid",
-        field "patterns" $ list $ coq "Pattern1"],
+        "qualid">: coq "Qualid",
+        "patterns">: list $ coq "Pattern1"],
       
       def "PrimitiveNotations" $ union [
-        field "number" $ coq "Number",
-        field "string" $ coq "String"],
+        "number">: coq "Number",
+        "string">: coq "String"],
         
       def "Qualid" $
         doc "A qualified identifier" $
         record [
-          field "id" $ coq "Ident",
-          field "fieldIds" $ list $ coq "FieldIdent"],
+          "id">: coq "Ident",
+          "fieldIds">: list $ coq "FieldIdent"],
             
       def "QualidAndPattern" $ record [
-        field "qualid" $ coq "Qualid",
-        field "pattern" $ coq "Pattern"],
+        "qualid">: coq "Qualid",
+        "pattern">: coq "Pattern"],
         
       def "QualidAnnotated" $ record [
-        field "qualid" $ coq "Qualid",
-        field "univAnnot" $ optional $ coq "UnivAnnot"],
+        "qualid">: coq "Qualid",
+        "univAnnot">: optional $ coq "UnivAnnot"],
        
       def "ReturnAs" $ record [
-        field "as" $ optional $ coq "Name",
-        field "return" $ coq "Term100"],
+        "as">: optional $ coq "Name",
+        "return">: coq "Term100"],
 
       def "ScopeKey" $ coq "Ident",
 
       def "Sort" $
         doc "The types of types are called sorts." $
         union [
-          field "set" $
+          "set">:
             doc "The sort 𝖲𝖾𝗍 intends to be the type of small sets." unit,
-          field "prop" $
+          "prop">:
             doc "The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions." unit,
-          field "sProp" $
+          "sProp">:
             doc "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)." unit,
-          field "type" unit,
-          field "typeWithAnyUniverse" unit,
-          field "typeWithUniverse" $ coq "Universe"],
+          "type">: unit,
+          "typeWithAnyUniverse">: unit,
+          "typeWithUniverse">: coq "Universe"],
       
       def "String" string,
       
       def "Term" $ union [
-        field "forallOrFun" $ coq "ForallOrFun",
-        field "let" $ coq "Let",
-        field "if" $ coq "If",
-        field "fix" $ coq "Fix",
-        field "cofix" $ coq "Cofix",
-        field "term100" $ coq "Term100"],
+        "forallOrFun">: coq "ForallOrFun",
+        "let">: coq "Let",
+        "if">: coq "If",
+        "fix">: coq "Fix",
+        "cofix">: coq "Cofix",
+        "term100">: coq "Term100"],
       
       def "Term0" $ union [
-        field "qualidAnnotated" $ coq "QualidAnnotated",
-        field "sort" $ coq "Sort",
-        field "primitiveNotations" $ coq "PrimitiveNotations",
-        field "evar" $ coq "ExistentialVariable",
-        field "match" $ coq "Match",
-        field "record" unit,
-        field "generalizing" unit,
+        "qualidAnnotated">: coq "QualidAnnotated",
+        "sort">: coq "Sort",
+        "primitiveNotations">: coq "PrimitiveNotations",
+        "evar">: coq "ExistentialVariable",
+        "match">: coq "Match",
+        "record">: unit,
+        "generalizing">: unit,
         -- 	[| term*; | term : type? |] univ_annot? -- TODO
-        field "ltac" unit,
-        field "parens" $ coq "Term"],
+        "ltac">: unit,
+        "parens">: coq "Term"],
 
       def "Term1" $ union [
-        field "projection" unit,
-        field "scope" unit,
-        field "term0" $ coq "Term0"],
+        "projection">: unit,
+        "scope">: unit,
+        "term0">: coq "Term0"],
 
       def "Term10" $ union [
-        field "application" $ coq "Application",
-        field "oneTerm" $ coq "OneTerm"],
+        "application">: coq "Application",
+        "oneTerm">: coq "OneTerm"],
 
       def "Term100" $ union [
-        field "cast" $ coq "TypeCast",
-        field "term10" $ coq "Term10"],
+        "cast">: coq "TypeCast",
+        "term10">: coq "Term10"],
               
       def "Type" $ coq "Term",
 
       def "TypeCast" $ record [
-        field "term" $ coq "Term10",
-        field "type" $ coq "Type",
-        field "operator" $ coq "TypeCastOperator"],
+        "term">: coq "Term10",
+        "type">: coq "Type",
+        "operator">: coq "TypeCastOperator"],
         
       def "TypeCastOperator" $ union [
-        field "normal" $
-          doc "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type."  unit,
-        field "vmCompute" $
+        "normal">:
+          doc "The expression term10 : type is a type cast expression. It enforces the type of term10 to be type." unit,
+        "vmCompute">:
           doc "term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute)." unit,
-        field "nativeCompute" $
+        "nativeCompute">:
           doc "term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute)." unit],
       
       def "TypeBinders" $ record [
-        field "names" $ nonemptyList $ coq "Name",
-        field "type" $ coq "Type"],
+        "names">: nonemptyList $ coq "Name",
+        "type">: coq "Type"],
 
       def "TypeclassConstraint" $
         record [
-          field "name" $ optional $ coq "Name",
-          field "generalizing" boolean,
-          field "term" $ coq "Term"],
+          "name">: optional $ coq "Name",
+          "generalizing">: boolean,
+          "term">: coq "Term"],
           
       def "UnivAnnot" $ list $ coq "UniverseLevel",
       
       def "Universe" $ union [
-        field "max" $ nonemptyList $ coq "Universe.Expr",
-        field "expr" $ coq "Universe.Expr"],
+        "max">: nonemptyList $ coq "Universe.Expr",
+        "expr">: coq "Universe.Expr"],
         
       def "Universe.Expr" $ record [
-        field "name" $ coq "UniverseName",
-        field "number" $ optional $ coq "Natural"],
+        "name">: coq "UniverseName",
+        "number">: optional $ coq "Natural"],
       
       def "UniverseLevel" $ union [
-        field "set" unit,
-        field "prop" unit,
-        field "type" unit,
-        field "ignored" unit,
-        field "qualid" $ coq "Qualid"],
+        "set">: unit,
+        "prop">: unit,
+        "type">: unit,
+        "ignored">: unit,
+        "qualid">: coq "Qualid"],
         
       def "UniverseName" $ union [
-        field "qualid" $ coq "Qualid",
-        field "set" unit,
-        field "prop" unit]]
+        "qualid">: coq "Qualid",
+        "set">: unit,
+        "prop">: unit]]

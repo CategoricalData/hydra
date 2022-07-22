@@ -57,7 +57,7 @@ normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType b
       TypeRecord fields -> record (normalizeFieldType <$> fields)
       TypeSet t -> set $ normalizeType t
       TypeUnion fields -> union (normalizeFieldType <$> fields)
-      TypeLambda (LambdaType (VariableType v) t) -> universal v $ normalizeType t
+      TypeLambda (LambdaType (VariableType v) t) -> TypeLambda (LambdaType (VariableType v) $ normalizeType t)
       TypeVariable v -> case Prelude.lookup v ord of
         Just (VariableType v1) -> variable v1
         Nothing -> error "type variable not in signature"
@@ -81,7 +81,7 @@ substituteInType s typ = case typ of
     TypeSet t -> set $ subst t
     TypeUnion tfields -> union (substField <$> tfields)
     TypeLambda (LambdaType var@(VariableType v) body) -> if Y.isNothing (M.lookup var s)
-      then Types.universal v (subst body)
+      then TypeLambda (LambdaType (VariableType v) (subst body))
       else typ
     TypeVariable a -> M.findWithDefault typ a s
   where

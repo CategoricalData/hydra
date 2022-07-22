@@ -43,13 +43,13 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
     xsd = nsref xmlSchemaName
     
     objectPropertyConstraint lname = def lname $ record [
-      field "annotations" $ list $ owl "Annotation",
-      field "property" $ owl "ObjectPropertyExpression"]
+      "annotations">: list $ owl "Annotation",
+      "property">: owl "ObjectPropertyExpression"]
           
-    simpleUnion names = union $ (\n -> field (decapitalize n) $ owl n) <$> names
+    simpleUnion names = union $ (\n -> FieldType (FieldName $ decapitalize n) $ owl n) <$> names
     
     withAnns fields = record $
-      field "annotations" (list $ owl "Annotation"):fields
+      ("annotations">: list (owl "Annotation")):fields
         
     elements = generalDefinitions ++ owl2Definitions -- ++ instances
     
@@ -76,9 +76,9 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 --        axioms
 --     ')'
       def "Ontology" $ record [ -- note: omitting IRI and version
-        field "directImports" $ list $ element $ owl "Ontology",
-        field "annotations" $ list $ owl "Annotation",
-        field "axioms" $ list $ owl "Axiom"],
+        "directImports">: list $ element $ owl "Ontology",
+        "annotations">: list $ owl "Annotation",
+        "axioms">: list $ owl "Axiom"],
 
 -- ontologyIRI := IRI
 -- versionIRI := IRI
@@ -88,7 +88,7 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 
 -- Declaration := 'Declaration' '(' axiomAnnotations Entity ')'
       def "Declaration" $ withAnns [
-        field "entity" $ owl "Entity"],
+        "entity">: owl "Entity"],
 
 -- Entity :=
 --     'Class' '(' Class ')' |
@@ -107,21 +107,21 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
     
 -- AnnotationSubject := IRI | AnonymousIndividual
       def "AnnotationSubject" $ union [
-        field "iri" $ rdf "Iri",
-        field "anonymousIndividual" $ owl "AnonymousIndividual"],
+        "iri">: rdf "Iri",
+        "anonymousIndividual">: owl "AnonymousIndividual"],
         
 -- AnnotationValue := AnonymousIndividual | IRI | Literal
       def "AnnotationValue" $ union [
-        field "anonymousIndividual" $ owl "AnonymousIndividual",
-        field "iri" $ rdf "Iri",
-        field "literal" $ rdf "Literal"],
+        "anonymousIndividual">: owl "AnonymousIndividual",
+        "iri">: rdf "Iri",
+        "literal">: rdf "Literal"],
         
 -- axiomAnnotations := { Annotation }
 
 -- Annotation := 'Annotation' '(' annotationAnnotations AnnotationProperty AnnotationValue ')'
       def "Annotation" $ withAnns [
-        field "property" $ owl "AnnotationProperty",
-        field "value" $ owl "AnnotationValue"],
+        "property">: owl "AnnotationProperty",
+        "value">: owl "AnnotationValue"],
         
 -- annotationAnnotations  := { Annotation }
 
@@ -134,27 +134,27 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
             
 -- AnnotationAssertion := 'AnnotationAssertion' '(' axiomAnnotations AnnotationProperty AnnotationSubject AnnotationValue ')'
       def "AnnotationAssertion" $ withAnns [
-        field "property" $ owl "AnnotationProperty",
-        field "subject" $ owl "AnnotationSubject",
-        field "value" $ owl "AnnotationValue"],
+        "property">: owl "AnnotationProperty",
+        "subject">: owl "AnnotationSubject",
+        "value">: owl "AnnotationValue"],
 
 -- SubAnnotationPropertyOf := 'SubAnnotationPropertyOf' '(' axiomAnnotations subAnnotationProperty superAnnotationProperty ')'
       def "SubAnnotationPropertyOf" $ withAnns [
-        field "subProperty" $ owl "AnnotationProperty",
-        field "superProperty" $ owl "AnnotationProperty"],
+        "subProperty">: owl "AnnotationProperty",
+        "superProperty">: owl "AnnotationProperty"],
         
 -- subAnnotationProperty := AnnotationProperty
 -- superAnnotationProperty := AnnotationProperty
 
 -- AnnotationPropertyDomain := 'AnnotationPropertyDomain' '(' axiomAnnotations AnnotationProperty IRI ')'
       def "AnnotationPropertyDomain" $ withAnns [
-        field "property" $ owl "AnnotationProperty",
-        field "iri" $ rdf "Iri"],
+        "property">: owl "AnnotationProperty",
+        "iri">: rdf "Iri"],
         
 -- AnnotationPropertyRange := 'AnnotationPropertyRange' '(' axiomAnnotations AnnotationProperty IRI ')'
       def "AnnotationPropertyRange" $ withAnns [
-        field "property" $ owl "AnnotationProperty",
-        field "iri" $ rdf "Iri"]]
+        "property">: owl "AnnotationProperty",
+        "iri">: rdf "Iri"]]
 
     owl2Definitions = [
 -- Class := IRI
@@ -165,11 +165,11 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
       def "Datatype" $
         see "https://www.w3.org/TR/owl2-syntax/#Datatypes" $
         union [
-          field "xmlSchema" $
+          "xmlSchema">:
             note ("XML Schema datatypes are treated as a special case in this model " ++
                   "(not in the OWL 2 specification itself) because they are particularly common") $
             xsd "Datatype",
-          field "other" $ rdf "Iri"],
+          "other">: rdf "Iri"],
 
 -- ObjectProperty := IRI
       def "ObjectProperty" $
@@ -183,8 +183,8 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 
 -- Individual := NamedIndividual | AnonymousIndividual
       def "Individual" $ union [
-        field "named" $ owl "NamedIndividual",
-        field "anonymous" $ owl "AnonymousIndividual"],
+        "named">: owl "NamedIndividual",
+        "anonymous">: owl "AnonymousIndividual"],
         
 -- NamedIndividual := IRI
       def "NamedIndividual" unit,
@@ -200,8 +200,8 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 
 -- ObjectPropertyExpression := ObjectProperty | InverseObjectProperty
       def "ObjectPropertyExpression" $ union [
-        field "object" $ owl "ObjectProperty",
-        field "inverseObject" $ owl "InverseObjectProperty"],
+        "object">: owl "ObjectProperty",
+        "inverseObject">: owl "InverseObjectProperty"],
         
 -- InverseObjectProperty := 'ObjectInverseOf' '(' ObjectProperty ')'
       def "InverseObjectProperty" $ owl "ObjectProperty",
@@ -252,20 +252,20 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
       def "DatatypeRestriction" $
         see "https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions" $
         record [
-          field "datatype" $ owl "Datatype",
-          field "constraints" $ nonemptyList $ owl "DatatypeRestriction.Constraint"],
+          "datatype">: owl "Datatype",
+          "constraints">: nonemptyList $ owl "DatatypeRestriction.Constraint"],
       
       def "DatatypeRestriction.Constraint" $ record [
-        field "constrainingFacet" $ owl "DatatypeRestriction.ConstrainingFacet",
-        field "restrictionValue" $ rdf "Literal"],
+        "constrainingFacet">: owl "DatatypeRestriction.ConstrainingFacet",
+        "restrictionValue">: rdf "Literal"],
 
       def "DatatypeRestriction.ConstrainingFacet" $
         union [
-          field "xmlSchema" $
+          "xmlSchema">:
             note ("XML Schema constraining facets are treated as a special case in this model " ++
                   "(not in the OWL 2 specification itself) because they are particularly common") $
             xsd "ConstrainingFacet",
-          field "other" $ rdf "Iri"],
+          "other">: rdf "Iri"],
 
 -- ClassExpression :=
 --     Class |
@@ -307,18 +307,18 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
       
 -- ObjectSomeValuesFrom := 'ObjectSomeValuesFrom' '(' ObjectPropertyExpression ClassExpression ')'
       def "ObjectSomeValuesFrom" $ record [
-        field "property" $ owl "ObjectPropertyExpression",
-        field "class" $ owl "ClassExpression"],
+        "property">: owl "ObjectPropertyExpression",
+        "class">: owl "ClassExpression"],
         
 -- ObjectAllValuesFrom := 'ObjectAllValuesFrom' '(' ObjectPropertyExpression ClassExpression ')'
       def "ObjectAllValuesFrom" $ record [
-        field "property" $ owl "ObjectPropertyExpression",
-        field "class" $ owl "ClassExpression"],
+        "property">: owl "ObjectPropertyExpression",
+        "class">: owl "ClassExpression"],
         
 -- ObjectHasValue := 'ObjectHasValue' '(' ObjectPropertyExpression Individual ')'
       def "ObjectHasValue" $ record [
-        field "property" $ owl "ObjectPropertyExpression",
-        field "individual" $ owl "Individual"],
+        "property">: owl "ObjectPropertyExpression",
+        "individual">: owl "Individual"],
         
 -- ObjectHasSelf := 'ObjectHasSelf' '(' ObjectPropertyExpression ')'
       def "ObjectHasSelf" $ owl "ObjectPropertyExpression",
@@ -327,58 +327,58 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
       def "ObjectMinCardinality" $
         see "https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality" $
         record [
-          field "bound" nonNegativeInteger,
-          field "property" $ owl "ObjectPropertyExpression",
-          field "class" $ list $ owl "ClassExpression"],
+          "bound">: nonNegativeInteger,
+          "property">: owl "ObjectPropertyExpression",
+          "class">: list $ owl "ClassExpression"],
           
 -- ObjectMaxCardinality := 'ObjectMaxCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
       def "ObjectMaxCardinality" $
         see "https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality" $
         record [
-          field "bound" nonNegativeInteger,
-          field "property" $ owl "ObjectPropertyExpression",
-          field "class" $ list $ owl "ClassExpression"],
+          "bound">: nonNegativeInteger,
+          "property">: owl "ObjectPropertyExpression",
+          "class">: list $ owl "ClassExpression"],
         
 -- ObjectExactCardinality := 'ObjectExactCardinality' '(' nonNegativeInteger ObjectPropertyExpression [ ClassExpression ] ')'
       def "ObjectExactCardinality" $
         see "https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality" $
         record [
-          field "bound" nonNegativeInteger,
-          field "property" $ owl "ObjectPropertyExpression",
-          field "class" $ list $ owl "ClassExpression"],
+          "bound">: nonNegativeInteger,
+          "property">: owl "ObjectPropertyExpression",
+          "class">: list $ owl "ClassExpression"],
 
 -- DataSomeValuesFrom := 'DataSomeValuesFrom' '(' DataPropertyExpression { DataPropertyExpression } DataRange ')'
       def "DataSomeValuesFrom" $ record [
-        field "property" $ nonemptyList $ owl "DataPropertyExpression",
-        field "range" $ owl "DataRange"],
+        "property">: nonemptyList $ owl "DataPropertyExpression",
+        "range">: owl "DataRange"],
         
 -- DataAllValuesFrom := 'DataAllValuesFrom' '(' DataPropertyExpression { DataPropertyExpression } DataRange ')'
       def "DataAllValuesFrom" $ record [
-        field "property" $ nonemptyList $ owl "DataPropertyExpression",
-        field "range" $ owl "DataRange"],
+        "property">: nonemptyList $ owl "DataPropertyExpression",
+        "range">: owl "DataRange"],
         
 -- DataHasValue := 'DataHasValue' '(' DataPropertyExpression Literal ')'
       def "DataHasValue" $ record [
-        field "property" $ owl "DataPropertyExpression",
-        field "value" $ rdf "Literal"],
+        "property">: owl "DataPropertyExpression",
+        "value">: rdf "Literal"],
       
 -- DataMinCardinality := 'DataMinCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
       def "DataMinCardinality" $ record [
-        field "bound" nonNegativeInteger,
-        field "property" $ owl "DataPropertyExpression",
-        field "range" $ list $ owl "DataRange"],
+        "bound">: nonNegativeInteger,
+        "property">: owl "DataPropertyExpression",
+        "range">: list $ owl "DataRange"],
       
 -- DataMaxCardinality := 'DataMaxCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
       def "DataMaxCardinality" $ record [
-        field "bound" nonNegativeInteger,
-        field "property" $ owl "DataPropertyExpression",
-        field "range" $ list $ owl "DataRange"],
+        "bound">: nonNegativeInteger,
+        "property">: owl "DataPropertyExpression",
+        "range">: list $ owl "DataRange"],
         
 -- DataExactCardinality := 'DataExactCardinality' '(' nonNegativeInteger DataPropertyExpression [ DataRange ] ')'
       def "DataExactCardinality" $ record [
-        field "bound" nonNegativeInteger,
-        field "property" $ owl "DataPropertyExpression",
-        field "range" $ list $ owl "DataRange"],
+        "bound">: nonNegativeInteger,
+        "property">: owl "DataPropertyExpression",
+        "range">: list $ owl "DataRange"],
         
 -- Axiom := Declaration | ClassAxiom | ObjectPropertyAxiom | DataPropertyAxiom | DatatypeDefinition | HasKey | Assertion | AnnotationAxiom
       def "Axiom" $
@@ -404,24 +404,24 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 -- subClassExpression := ClassExpression
 -- superClassExpression := ClassExpression
       def "SubClassOf" $ withAnns [
-        field "subClass" $ owl "ClassExpression",
-        field "superClass" $ owl "ClassExpression"],
+        "subClass">: owl "ClassExpression",
+        "superClass">: owl "ClassExpression"],
       
 -- EquivalentClasses := 'EquivalentClasses' '(' axiomAnnotations ClassExpression ClassExpression { ClassExpression } ')'
       def "EquivalentClasses" $ withAnns [
-        field "classes" $ twoOrMoreList $ owl "ClassExpression"],
+        "classes">: twoOrMoreList $ owl "ClassExpression"],
         
 -- DisjointClasses := 'DisjointClasses' '(' axiomAnnotations ClassExpression ClassExpression { ClassExpression } ')'
       def "DisjointClasses" $ withAnns [
-        field "classes" $ twoOrMoreList $ owl "ClassExpression"],
+        "classes">: twoOrMoreList $ owl "ClassExpression"],
         
 -- DisjointUnion := 'DisjointUnion' '(' axiomAnnotations Class disjointClassExpressions ')'
 -- disjointClassExpressions := ClassExpression ClassExpression { ClassExpression }
       def "DisjointUnion" $
         see "https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions" $
         withAnns [
-          field "class" $ owl "Class",
-          field "classes" $ twoOrMoreList $ owl "ClassExpression"],
+          "class">: owl "Class",
+          "classes">: twoOrMoreList $ owl "ClassExpression"],
           
 -- ObjectPropertyAxiom :=
 --     SubObjectPropertyOf | EquivalentObjectProperties |
@@ -448,38 +448,38 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 
 -- SubObjectPropertyOf := 'SubObjectPropertyOf' '(' axiomAnnotations subObjectPropertyExpression superObjectPropertyExpression ')'
       def "SubObjectPropertyOf" $ withAnns [
-        field "subProperty" $ nonemptyList $ owl "ObjectPropertyExpression",
-        field "superProperty" $ owl "ObjectPropertyExpression"],
+        "subProperty">: nonemptyList $ owl "ObjectPropertyExpression",
+        "superProperty">: owl "ObjectPropertyExpression"],
 -- subObjectPropertyExpression := ObjectPropertyExpression | propertyExpressionChain
 -- propertyExpressionChain := 'ObjectPropertyChain' '(' ObjectPropertyExpression ObjectPropertyExpression { ObjectPropertyExpression } ')'
 -- superObjectPropertyExpression := ObjectPropertyExpression
 
 -- EquivalentObjectProperties := 'EquivalentObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression { ObjectPropertyExpression } ')'
       def "EquivalentObjectProperties" $ withAnns [
-        field "properties" $ twoOrMoreList $ owl "ObjectPropertyExpression"],
+        "properties">: twoOrMoreList $ owl "ObjectPropertyExpression"],
         
 -- DisjointObjectProperties := 'DisjointObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression { ObjectPropertyExpression } ')'
       def "DisjointObjectProperties" $ withAnns [
-        field "properties" $ twoOrMoreList $ owl "ObjectPropertyExpression"],
+        "properties">: twoOrMoreList $ owl "ObjectPropertyExpression"],
         
 -- ObjectPropertyDomain := 'ObjectPropertyDomain' '(' axiomAnnotations ObjectPropertyExpression ClassExpression ')'
       def "ObjectPropertyDomain" $
         see "https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain" $
         withAnns [
-          field "property" $ owl "ObjectPropertyExpression",
-          field "domain" $ owl "ClassExpression"],
+          "property">: owl "ObjectPropertyExpression",
+          "domain">: owl "ClassExpression"],
 
 -- ObjectPropertyRange := 'ObjectPropertyRange' '(' axiomAnnotations ObjectPropertyExpression ClassExpression ')'
       def "ObjectPropertyRange" $
         see "https://www.w3.org/TR/owl2-syntax/#Object_Property_Range" $
         withAnns [
-          field "property" $ owl "ObjectPropertyExpression",
-          field "range" $ owl "ClassExpression"],
+          "property">: owl "ObjectPropertyExpression",
+          "range">: owl "ClassExpression"],
 
 -- InverseObjectProperties := 'InverseObjectProperties' '(' axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression ')'
       def "InverseObjectProperties" $ withAnns [
-        field "property1" $ owl "ObjectPropertyExpression",
-        field "property2" $ owl "ObjectPropertyExpression"],
+        "property1">: owl "ObjectPropertyExpression",
+        "property2">: owl "ObjectPropertyExpression"],
         
 -- FunctionalObjectProperty := 'FunctionalObjectProperty' '(' axiomAnnotations ObjectPropertyExpression ')'
       objectPropertyConstraint "FunctionalObjectProperty",
@@ -515,45 +515,45 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 
 -- SubDataPropertyOf := 'SubDataPropertyOf' '(' axiomAnnotations subDataPropertyExpression superDataPropertyExpression ')'
       def "SubDataPropertyOf" $ withAnns [
-        field "subProperty" $ owl "DataPropertyExpression",
-        field "superProperty" $ owl "DataPropertyExpression"],
+        "subProperty">: owl "DataPropertyExpression",
+        "superProperty">: owl "DataPropertyExpression"],
 -- subDataPropertyExpression := DataPropertyExpression
 -- superDataPropertyExpression := DataPropertyExpression
 
 -- EquivalentDataProperties := 'EquivalentDataProperties' '(' axiomAnnotations DataPropertyExpression DataPropertyExpression { DataPropertyExpression } ')'
       def "EquivalentDataProperties" $ withAnns [
-        field "properties" $ twoOrMoreList $ owl "DataPropertyExpression"],
+        "properties">: twoOrMoreList $ owl "DataPropertyExpression"],
         
 -- DisjointDataProperties := 'DisjointDataProperties' '(' axiomAnnotations DataPropertyExpression DataPropertyExpression { DataPropertyExpression } ')'
       def "DisjointDataProperties" $ withAnns [
-        field "properties" $ twoOrMoreList $ owl "DataPropertyExpression"],
+        "properties">: twoOrMoreList $ owl "DataPropertyExpression"],
 
 -- DataPropertyDomain := 'DataPropertyDomain' '(' axiomAnnotations DataPropertyExpression ClassExpression ')'
       def "DataPropertyDomain" $ withAnns [
-        field "property" $ owl "DataPropertyExpression",
-        field "domain" $ owl "ClassExpression"],
+        "property">: owl "DataPropertyExpression",
+        "domain">: owl "ClassExpression"],
         
 -- DataPropertyRange := 'DataPropertyRange' '(' axiomAnnotations DataPropertyExpression DataRange ')'
       def "DataPropertyRange" $ withAnns [
-        field "property" $ owl "DataPropertyExpression",
-        field "range" $ owl "ClassExpression"],
+        "property">: owl "DataPropertyExpression",
+        "range">: owl "ClassExpression"],
         
 -- FunctionalDataProperty := 'FunctionalDataProperty' '(' axiomAnnotations DataPropertyExpression ')'
       def "FunctionalDataProperty" $ withAnns [
-        field "property" $ owl "DataPropertyExpression"],
+        "property">: owl "DataPropertyExpression"],
         
 -- DatatypeDefinition := 'DatatypeDefinition' '(' axiomAnnotations Datatype DataRange ')'
       def "DatatypeDefinition" $ withAnns [
-        field "datatype" $ owl "Datatype",
-        field "range" $ owl "DataRange"],
+        "datatype">: owl "Datatype",
+        "range">: owl "DataRange"],
         
 -- HasKey := 'HasKey' '(' axiomAnnotations ClassExpression '(' { ObjectPropertyExpression } ')' '(' { DataPropertyExpression } ')' ')'
       def "HasKey" $
         see "https://www.w3.org/TR/owl2-syntax/#Keys" $
         withAnns [
-          field "class" $ owl "ClassExpression",
-          field "objectProperties" $ list $ owl "ObjectPropertyExpression",
-          field "dataProperties" $ list $ owl "DataPropertyExpression"],
+          "class">: owl "ClassExpression",
+          "objectProperties">: list $ owl "ObjectPropertyExpression",
+          "dataProperties">: list $ owl "DataPropertyExpression"],
           
 -- Assertion :=
 --     SameIndividual | DifferentIndividuals | ClassAssertion |
@@ -573,37 +573,37 @@ owlSyntax = Graph owlSyntaxName elements (const True) hydraCoreName
 -- targetValue := Literal
 -- SameIndividual := 'SameIndividual' '(' axiomAnnotations Individual Individual { Individual } ')'
       def "SameIndividual" $ withAnns [
-        field "individuals" $ twoOrMoreList $ owl "Individual"],
+        "individuals">: twoOrMoreList $ owl "Individual"],
 
 -- DifferentIndividuals := 'DifferentIndividuals' '(' axiomAnnotations Individual Individual { Individual } ')'
       def "DifferentIndividuals" $ withAnns [
-        field "individuals" $ twoOrMoreList $ owl "Individual"],
+        "individuals">: twoOrMoreList $ owl "Individual"],
 
 -- ClassAssertion := 'ClassAssertion' '(' axiomAnnotations ClassExpression Individual ')'
       def "ClassAssertion"$ withAnns [
-        field "class" $ owl "ClassExpression",
-        field "individual" $ owl "Individual"],
+        "class">: owl "ClassExpression",
+        "individual">: owl "Individual"],
         
 -- ObjectPropertyAssertion := 'ObjectPropertyAssertion' '(' axiomAnnotations ObjectPropertyExpression sourceIndividual targetIndividual ')'
       def "ObjectPropertyAssertion" $ withAnns [
-        field "property" $ owl "ObjectPropertyExpression",
-        field "source" $ owl "Individual",
-        field "target" $ owl "Individual"],
+        "property">: owl "ObjectPropertyExpression",
+        "source">: owl "Individual",
+        "target">: owl "Individual"],
         
 -- NegativeObjectPropertyAssertion := 'NegativeObjectPropertyAssertion' '(' axiomAnnotations ObjectPropertyExpression sourceIndividual targetIndividual ')'
       def "NegativeObjectPropertyAssertion" $ withAnns [
-        field "property" $ owl "ObjectPropertyExpression",
-        field "source" $ owl "Individual",
-        field "target" $ owl "Individual"],
+        "property">: owl "ObjectPropertyExpression",
+        "source">: owl "Individual",
+        "target">: owl "Individual"],
               
 -- DataPropertyAssertion := 'DataPropertyAssertion' '(' axiomAnnotations DataPropertyExpression sourceIndividual targetValue ')'
       def "DataPropertyAssertion" $ withAnns [
-        field "property" $ owl "DataPropertyExpression",
-        field "source" $ owl "Individual",
-        field "target" $ owl "Individual"],         
+        "property">: owl "DataPropertyExpression",
+        "source">: owl "Individual",
+        "target">: owl "Individual"],         
 
 -- NegativeDataPropertyAssertion := 'NegativeDataPropertyAssertion' '(' axiomAnnotations DataPropertyExpression sourceIndividual targetValue ')'      
       def "NegativeDataPropertyAssertion" $ withAnns [
-        field "property" $ owl "DataPropertyExpression",
-        field "source" $ owl "Individual",
-        field "target" $ owl "Individual"]]
+        "property">: owl "DataPropertyExpression",
+        "source">: owl "Individual",
+        "target">: owl "Individual"]]

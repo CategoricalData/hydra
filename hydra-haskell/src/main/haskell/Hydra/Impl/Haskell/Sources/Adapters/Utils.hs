@@ -29,7 +29,6 @@ adapterUtilsName = Graph.GraphName "hydra/adapters/utils"
 utils :: String -> Data a -> Element a
 utils = Element . fromQname adapterUtilsName
 
-
 describeFloatType :: Element (FloatType -> String)
 describeFloatType = utils "describeFloatType" $
   doc "Display a floating-point type as a string" $
@@ -64,7 +63,7 @@ describePrecision = utils "describePrecision" $
 describeType :: Element (Type m -> string)
 describeType = utils "describeType" $
   doc "Display a type as a string" $
-  function (Types.universal "m" $ Types.nominal _Type) Types.string $
+  function (Types.apply (Types.nominal _Type) (Types.variable "m")) Types.string $
   lambda "typ" $ apply
     (match typeM Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeType @@
@@ -91,9 +90,9 @@ describeType = utils "describeType" $
     (var "typ")
   where
     annotatedTypeM = Types.apply (Types.apply (Types.nominal _Annotated) (Types.apply (Types.nominal _Type) (Types.variable "m"))) (Types.variable "m")
-    functionTypeM = Types.universal "m" $ Types.nominal _FunctionType
-    typeM = Types.universal "m" $ Types.nominal _Type
-    mapTypeM = Types.universal "m" $ Types.nominal _MapType
+    functionTypeM = Types.apply (Types.nominal _FunctionType) (Types.variable "m")
+    typeM = Types.apply (Types.nominal _Type) (Types.variable "m")
+    mapTypeM = Types.apply (Types.nominal _MapType) (Types.variable "m")
 
 --idAdapter :: Element Meta
 --idAdapter = standardFunction adapterUtilsName "idAdapter"

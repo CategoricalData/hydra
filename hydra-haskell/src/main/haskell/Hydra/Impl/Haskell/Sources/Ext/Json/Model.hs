@@ -26,9 +26,9 @@ jsonModel = Graph jsonModelName elements (const True) hydraCoreName
       def "Value" $
         doc "A JSON value" $
         union [
-          field "array" $ list $ json "Value",
-          field "boolean" boolean,
-          field "null" unit,
-          field "number" bigfloat, -- TODO: JSON numbers are decimal-encoded
-          field "object" $ Types.map string (json "Value"),
-          field "string" string]]
+          "array">: list $ json "Value",
+          "boolean">: boolean,
+          "null">: unit,
+          "number">: bigfloat, -- TODO: JSON numbers are decimal-encoded
+          "object">: Types.map string (json "Value"),
+          "string">: string]]
