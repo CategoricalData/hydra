@@ -28,31 +28,31 @@ hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
     elements = [
       def "Adapter" $
         lambda "t" $ lambda "v" $ record [
-          field "isLossy" boolean,
-          field "source" $ variable "t",
-          field "target" $ variable "t",
-          field "coder" $ apply (apply (evaluation "Coder") (variable "v")) (variable "v")],
+          "isLossy">: boolean,
+          "source">: variable "t",
+          "target">: variable "t",
+          "coder">: apply (apply (evaluation "Coder") (variable "v")) (variable "v")],
 
       def "AdapterContext" $
         lambda "m" $ record [
-          field "evaluation" $ apply (evaluation "Context") (variable "m"),
-          field "source" $ apply (adapter "Language") (variable "m"),
-          field "target" $ apply (adapter "Language") (variable "m")],
+          "evaluation">: apply (evaluation "Context") (variable "m"),
+          "source">: apply (adapter "Language") (variable "m"),
+          "target">: apply (adapter "Language") (variable "m")],
 
       def "LanguageConstraints" $
         lambda "m" $ record [
-          field "eliminationVariants" $ Types.set $ core "EliminationVariant",
-          field "literalVariants" $ Types.set $ core "LiteralVariant",
-          field "floatTypes" $ Types.set $ core "FloatType",
-          field "functionVariants" $ Types.set $ core "FunctionVariant",
-          field "integerTypes" $ Types.set $ core "IntegerType",
-          field "termVariants" $ Types.set $ core "TermVariant",
-          field "typeVariants" $ Types.set $ core "TypeVariant",
-          field "types" $ core "Type" @@ "m" --> boolean],
+          "eliminationVariants">: Types.set $ core "EliminationVariant",
+          "literalVariants">: Types.set $ core "LiteralVariant",
+          "floatTypes">: Types.set $ core "FloatType",
+          "functionVariants">: Types.set $ core "FunctionVariant",
+          "integerTypes">: Types.set $ core "IntegerType",
+          "termVariants">: Types.set $ core "TermVariant",
+          "typeVariants">: Types.set $ core "TypeVariant",
+          "types">: core "Type" @@ "m" --> boolean],
 
       def "LanguageName" string,
 
       def "Language" $
         lambda "m" $ record [
-          field "name" $ adapter "LanguageName",
-          field "constraints" $ apply (adapter "LanguageConstraints") (variable "m")]]
+          "name">: adapter "LanguageName",
+          "constraints">: apply (adapter "LanguageConstraints") (variable "m")]]

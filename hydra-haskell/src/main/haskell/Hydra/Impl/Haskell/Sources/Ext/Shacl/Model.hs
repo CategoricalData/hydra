@@ -27,232 +27,232 @@ shaclModel = Graph shaclModelName elements (const True) hydraCoreName
       def "Closed" $
         see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
         record [
-          field "isClosed" boolean,
-          field "ignoredProperties" $ optional $ list $ element $ rdf "Property"],
+          "isClosed">: boolean,
+          "ignoredProperties">: optional $ list $ element $ rdf "Property"],
 
       def "CommonConstraints" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
         record [
-          field "and" $
+          "and">:
             see "https://www.w3.org/TR/shacl/#AndConstraintComponent" $
             optional $ list $ shacl "Shape",
 
-          field "closed" $
+          "closed">:
             see "https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
             optional $ shacl "Closed",
 
-          field "class" $
+          "class">:
             see "https://www.w3.org/TR/shacl/#ClassConstraintComponent" $
             set $ element $ rdf "RdfsClass",
 
-          field "datatype" $
+          "datatype">:
             see "https://www.w3.org/TR/shacl/#DatatypeConstraintComponent" $
             optional $ rdf "Iri",
 
-          field "disjoint" $
+          "disjoint">:
             see "https://www.w3.org/TR/shacl/#DisjointConstraintComponent" $
             set $ element $ rdf "Property",
 
-          field "equals" $
+          "equals">:
             see "https://www.w3.org/TR/shacl/#EqualsConstraintComponent" $
             set $ element $ rdf "Property",
 
-          field "hasValue" $
+          "hasValue">:
             doc ("Specifies the condition that at least one value node is equal to the given RDF term. " ++
                  "See https://www.w3.org/TR/shacl/#HasValueConstraintComponent") $
             set $ rdf "Node",
 
-          field "in" $
+          "in">:
             doc ("Specifies the condition that each value node is a member of a provided SHACL list. " ++
                  "See https://www.w3.org/TR/shacl/#InConstraintComponent") $
             optional $ list $ rdf "Node",
 
-          field "languageIn" $
+          "languageIn">:
             see "https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
             optional $ list $ rdf "LanguageTag",
 
-          field "nodeKind" $
+          "nodeKind">:
             see "https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
             optional $ shacl "NodeKind",
 
-          field "node" $
+          "node">:
             see "https://www.w3.org/TR/shacl/#NodeConstraintComponent" $
             set $ shacl "NodeShape",
 
-          field "not" $
+          "not">:
             see "https://www.w3.org/TR/shacl/#NotConstraintComponent" $
             set $ shacl "Shape",
 
-          field "maxExclusive" $
+          "maxExclusive">:
             see "https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
-          field "maxInclusive" $
+          "maxInclusive">:
             see "https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
-          field "maxLength" $
+          "maxLength">:
             see "https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent" $
             optional bigint,
 
-          field "minExclusive" $
+          "minExclusive">:
             see "https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
-          field "minInclusive" $
+          "minInclusive">:
             see "https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent" $
             optional $ rdf "Literal",
 
-          field "minLength" $
+          "minLength">:
             see "https://www.w3.org/TR/shacl/#MinLengthConstraintComponent" $
             optional bigint,
 
-          field "pattern" $
+          "pattern">:
             see "https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
             optional $ shacl "Pattern",
 
-          field "property" $
+          "property">:
             see "https://www.w3.org/TR/shacl/#PropertyConstraintComponent" $
             set $ shacl "PropertyShape",
 
-          field "or" $
+          "or">:
             see "https://www.w3.org/TR/shacl/#OrConstraintComponent" $
             optional $ list $ shacl "Shape",
 
-          field "xone" $
+          "xone">:
             see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
             optional $ list $ shacl "Shape"],
 
       def "CommonProperties" $
         doc "Common constraint parameters and other properties for SHACL shapes" $
         record [
-          field "constraints" $
+          "constraints">:
             doc "Common constraint parameters attached to this shape"
             $ shacl "CommonConstraints",
 
-          field "deactivated" $
+          "deactivated">:
             see "https://www.w3.org/TR/shacl/#deactivated" $
             optional boolean,
 
-          field "message" $
+          "message">:
             see "https://www.w3.org/TR/shacl/#message" $
             rdf "LangStrings",
 
-          field "severity" $
+          "severity">:
             see "https://www.w3.org/TR/shacl/#severity" $
             shacl "Severity",
 
-          field "targetClass" $
+          "targetClass">:
             see "https://www.w3.org/TR/shacl/#targetClass" $
             set $ element $ rdf "RdfsClass",
 
-          field "targetNode" $
+          "targetNode">:
             see "https://www.w3.org/TR/shacl/#targetNode" $
             set $ rdf "IriOrLiteral",
 
-          field "targetObjectsOf" $
+          "targetObjectsOf">:
             see "https://www.w3.org/TR/shacl/#targetObjectsOf" $
             set $ element $ rdf "Property",
 
-          field "targetSubjectsOf" $
+          "targetSubjectsOf">:
             see "https://www.w3.org/TR/shacl/#targetSubjectsOf" $
             set $ element $ rdf "Property"],
 
       def "NodeKind" $ union [
-        field "blankNode" $ doc "A blank node" unit,
-        field "iri" $ doc "An IRI" unit,
-        field "literal" $ doc "A literal" unit,
-        field "blankNodeOrIri" $ doc "A blank node or an IRI" unit,
-        field "blankNodeOrLiteral" $ doc "A blank node or a literal" unit,
-        field "iriOrLiteral" $ doc "An IRI or a literal" unit],
+        "blankNode">: doc "A blank node" unit,
+        "iri">: doc "An IRI" unit,
+        "literal">: doc "A literal" unit,
+        "blankNodeOrIri">: doc "A blank node or an IRI" unit,
+        "blankNodeOrLiteral">: doc "A blank node or a literal" unit,
+        "iriOrLiteral">: doc "An IRI or a literal" unit],
 
       def "NodeShape" $
         doc "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes" $
         record [
-          field "common" $ shacl "CommonProperties"],
+          "common">: shacl "CommonProperties"],
 
       def "Pattern" $
         doc "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
         record [
-          field "regex" string,
-          field "flags" $ optional string],
+          "regex">: string,
+          "flags">: optional string],
 
       def "PropertyShape" $
         doc "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes" $
         record [
-          field "common" $ shacl "CommonProperties",
+          "common">: shacl "CommonProperties",
 
-          field "constraints" $
+          "constraints">:
             doc "Any property shape -specific constraint parameters" $
             shacl "PropertyShapeConstraints",
 
-          field "defaultValue" $
+          "defaultValue">:
             see "https://www.w3.org/TR/shacl/#defaultValue" $
             optional $ rdf "Node",
 
-          field "description" $
+          "description">:
             see "https://www.w3.org/TR/shacl/#name" $
             rdf "LangStrings",
 
-          field "name" $
+          "name">:
             see "https://www.w3.org/TR/shacl/#name" $
             rdf "LangStrings",
 
-          field "order" $
+          "order">:
             see "https://www.w3.org/TR/shacl/#order" $
             optional bigint,
 
-          field "path"  $ rdf "Resource"], -- TODO
+          "path">: rdf "Resource"], -- TODO
           -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
 
       def "PropertyShapeConstraints" $
         doc "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes" $
         record [
 
-          field "lessThan" $
+          "lessThan">:
             see "https://www.w3.org/TR/shacl/#LessThanConstraintComponent" $
             set $ element $ rdf "Property",
 
-          field "lessThanOrEquals" $
+          "lessThanOrEquals">:
             see "https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent" $
             set $ element $ rdf "Property",
 
-          field "maxCount" $
+          "maxCount">:
             doc ("The maximum cardinality. Node shapes cannot have any value for sh:maxCount. " ++
                  "See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent") $
             optional bigint,
 
-          field "minCount" $
+          "minCount">:
             doc ("The minimum cardinality. Node shapes cannot have any value for sh:minCount. " ++
                  "See https://www.w3.org/TR/shacl/#MinCountConstraintComponent") $
             optional bigint,
 
-          field "uniqueLang" $
+          "uniqueLang">:
             see "https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent" $
             optional boolean,
 
-          field "qualifiedValueShape" $
+          "qualifiedValueShape">:
             see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
             optional $ shacl "QualifiedValueShape"],
 
       def "QualifiedValueShape" $
         see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
         record [
-          field "shape" $ shacl "Shape",
-          field "qualifiedManCount" bigint,
-          field "qualifiedMinCount" bigint,
-          field "qualifiedValueShapesDisjoint" $ optional boolean],
+          "shape">: shacl "Shape",
+          "qualifiedManCount">: bigint,
+          "qualifiedMinCount">: bigint,
+          "qualifiedValueShapesDisjoint">: optional boolean],
 
       def "Severity" $ union [
-        field "info" $ doc "A non-critical constraint violation indicating an informative message" unit,
-        field "warning" $ doc "A non-critical constraint violation indicating a warning" unit,
-        field "violation" $ doc "A constraint violation" unit],
+        "info">: doc "A non-critical constraint violation indicating an informative message" unit,
+        "warning">: doc "A non-critical constraint violation indicating a warning" unit,
+        "violation">: doc "A constraint violation" unit],
 
       def "Shape" $
         doc "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes" $
         union [
-          field "node" $ shacl "NodeShape",
-          field "property" $ shacl "PropertyShape"],
+          "node">: shacl "NodeShape",
+          "property">: shacl "PropertyShape"],
 
       def "ShapesGraph" $
         doc ("An RDF graph containing zero or more shapes that is passed into a SHACL validation process " ++

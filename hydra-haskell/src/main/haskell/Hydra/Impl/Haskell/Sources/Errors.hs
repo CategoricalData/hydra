@@ -25,6 +25,6 @@ hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName
 
       def "Qualified" $
         doc "An optional value qualified with a (possibly empty) list of warnings" $
-        universal "m" $ record [
-          field "value" $ optional "m",
-          field "warnings" $ list string]]
+        lambda "m" $ record [
+          "value">: optional "m",
+          "warnings">: list string]]

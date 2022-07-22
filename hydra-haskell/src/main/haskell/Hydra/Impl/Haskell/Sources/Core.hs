@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Core where
 
 import Hydra.Core
@@ -23,28 +25,28 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Annotated" $
         lambda "a" $
         lambda "m" $ record [
-          field "subject" $ variable "a",
-          field "annotation" $ variable "m"],
+          "subject">: variable "a",
+          "annotation">: variable "m"],
 
       def "Application" $
         doc "A term which applies a function to an argument" $
-        universal "m" $ record [
-          field "function" $
+        lambda "m" $ record [
+          "function">:
             doc "The left-hand side of the application" $
-            universal "m" $ core "Term",
-          field "argument" $
+            core "Term" @@ "m",
+          "argument">:
             doc "The right-hand side of the application" $
-            universal "m" $ core "Term"],
+            core "Term" @@ "m"],
 
       def "ApplicationType" $
         doc "The type-level analog of an application term" $
-        universal "m" $ record [
-          field "function" $
+        lambda "m" $ record [
+          "function">:
             doc "The left-hand side of the application" $
-            universal "m" $ core "Type",
-          field "argument" $
+            core "Type" @@ "m",
+          "argument">:
             doc "The right-hand side of the application" $
-            universal "m" $ core "Type"],
+            core "Type" @@ "m"],
 
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
@@ -55,22 +57,22 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
-        universal "m" $ union [
-          field "element" $
+        lambda "m" $ union [
+          "element">:
             doc "Eliminates an element by mapping it to its data term. This is Hydra's delta function."
             unit,
-          field "nominal" $
+          "nominal">:
             doc "Eliminates a nominal term by extracting the wrapped term" $
             core "Name",
-          field "optional" $
+          "optional">:
             doc "Eliminates an optional term by matching over the two possible cases" $
-            universal "m" $ core "OptionalCases",
-          field "record" $
+            core "OptionalCases" @@ "m",
+          "record">:
             doc "Eliminates a record by projecting a given field" $
             core "FieldName",
-          field "union" $
+          "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
-            list $ universal "m" $ core "Field"],
+            list $ core "Field" @@ "m"],
 
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
@@ -83,9 +85,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Field" $
         doc "A labeled term" $
-        universal "m" $ record [
-          field "name" $ core "FieldName",
-          field "term" $ universal "m" $ core "Term"],
+        lambda "m" $ record [
+          "name">: core "FieldName",
+          "term">: core "Term" @@ "m"],
 
       def "FieldName" $
         doc "The name of a field"
@@ -93,9 +95,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "FieldType" $
         doc "The name and type of a field" $
-        universal "m" $ record [
-          field "name" $ core "FieldName",
-          field "type" $ universal "m" $ core "Type"],
+        lambda "m" $ record [
+          "name">: core "FieldName",
+          "type">: core "Type" @@ "m"],
 
       def "FloatType" $
         doc "A floating-point type" $
@@ -107,34 +109,34 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "FloatValue" $
         doc "A floating-point literal value" $
         union [
-          field "bigfloat" $
+          "bigfloat">:
             doc "An arbitrary-precision floating-point value" bigfloat,
-          field "float32" $
+          "float32">:
             doc "A 32-bit floating-point value" float32,
-          field "float64" $
+          "float64">:
             doc "A 64-bit floating-point value" float64],
 
       def "Function" $
         doc "A function" $
-        universal "m" $ union [
-          field "compareTo" $
+        lambda "m" $ union [
+          "compareTo">:
             doc "Compares a term with a given term of the same type, producing a Comparison" $
-            universal "m" $ core "Term",
-          field "elimination" $
+            core "Term" @@ "m",
+          "elimination">:
             doc "An elimination for any of a few term variants" $
-            universal "m" $ core "Elimination",
-          field "lambda" $
+            core "Elimination" @@ "m",
+          "lambda">:
             doc "A function abstraction (lambda)" $
-            universal "m" $ core "Lambda",
-          field "primitive" $
+            core "Lambda" @@ "m",
+          "primitive">:
             doc "A reference to a built-in (primitive) function" $
             core "Name"],
 
       def "FunctionType" $
         doc "A function type, also known as an arrow type" $
-        universal "m" $ record [
-          field "domain" $ universal "m" $ core "Type",
-          field "codomain" $ universal "m" $ core "Type"],
+        lambda "m" $ record [
+          "domain">: core "Type" @@ "m",
+          "codomain">: core "Type" @@ "m"],
 
       def "FunctionVariant" $
         doc "The identifier of a function constructor" $
@@ -160,75 +162,75 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "IntegerValue" $
         doc "An integer literal value" $
         union [
-          field "bigint" $
+          "bigint">:
             doc "An arbitrary-precision integer value" bigint,
-          field "int8" $
+          "int8">:
             doc "An 8-bit signed integer value" int8,
-          field "int16" $
+          "int16">:
             doc "A 16-bit signed integer value (short value)" int16,
-          field "int32" $
+          "int32">:
             doc "A 32-bit signed integer value (int value)" int32,
-          field "int64" $
+          "int64">:
             doc "A 64-bit signed integer value (long value)" int64,
-          field "uint8" $
+          "uint8">:
             doc "An 8-bit unsigned integer value (byte)" uint8,
-          field "uint16" $
+          "uint16">:
             doc "A 16-bit unsigned integer value" uint16,
-          field "uint32" $
+          "uint32">:
             doc "A 32-bit unsigned integer value (unsigned int)" uint32,
-          field "uint64" $
+          "uint64">:
             doc "A 64-bit unsigned integer value (unsigned long)" uint64],
 
       def "Lambda" $
         doc "A function abstraction (lambda)" $
-        universal "m" $ record [
-          field "parameter" $
+        lambda "m" $ record [
+          "parameter">:
             doc "The parameter of the lambda" $
             core "Variable",
-          field "body" $
+          "body">:
             doc "The body of the lambda" $
-            universal "m" $ core "Term"],
+            core "Term" @@ "m"],
 
       def "LambdaType" $
         doc "A type abstraction; the type-level analog of a lambda term" $
-        universal "m" $ record [
-          field "parameter" $
+        lambda "m" $ record [
+          "parameter">:
             doc "The parameter of the lambda" $
             core "VariableType",
-          field "body" $
+          "body">:
             doc "The body of the lambda" $
-            universal "m" $ core "Type"],
+            core "Type" @@ "m"],
 
       def "Let" $
         doc "A 'let' binding" $
-        universal "m" $ record [
-          field "key" $ core "Variable",
-          field "value" $ universal "m" $ core "Term",
-          field "environment" $ universal "m" $ core "Term"],
+        lambda "m" $ record [
+          "key">: core "Variable",
+          "value">: core "Term" @@ "m",
+          "environment">: core "Term" @@ "m"],
 
       def "Literal" $
         doc "A term constant; an instance of a literal type" $
         union [
-          field "binary" $
+          "binary">:
             doc "A binary literal" binary,
-          field "boolean" $
+          "boolean">:
             doc "A boolean literal" boolean,
-          field "float" $
+          "float">:
             doc "A floating-point literal" $ core "FloatValue",
-          field "integer" $
+          "integer">:
             doc "An integer literal" $
             core "IntegerValue",
-          field "string" $
+          "string">:
             doc "A string literal" string],
 
       def "LiteralType" $
         doc "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants" $
         union [
-          field "binary" unit,
-          field "boolean" unit,
-          field "float" $ core "FloatType",
-          field "integer" $ core "IntegerType",
-          field "string" unit],
+          "binary">: unit,
+          "boolean">: unit,
+          "float">: core "FloatType",
+          "integer">: core "IntegerType",
+          "string">: unit],
 
       def "LiteralVariant" $
         doc "The identifier of a literal constructor" $
@@ -241,16 +243,16 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "MapType" $
         doc "A map type" $
-        universal "m" $ record [
-          field "keys" $ universal "m" $ core "Type",
-          field "values" $ universal "m" $ core "Type"],
+        lambda "m" $ record [
+          "keys">: core "Type" @@ "m",
+          "values">: core "Type" @@ "m"],
 
       def "Meta" $
         doc "A built-in metadata container for terms" $
         record [
-          field "annotations" $
+          "annotations">:
             doc "A map of annotation names to annotation values" $
-            Types.map string (universal "Meta" $ core "Term")], -- TODO: the concrete type parameter is a hack
+            Types.map string (core "Term" @@ core "Meta")],
 
       def "Name" $
         doc "A unique element name"
@@ -258,66 +260,66 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "Named" $
         doc "A term annotated with a fixed, named type; an instance of a newtype" $
-        universal "m" $ record [
-          field "typeName" (core "Name"),
-          field "term" (universal "m" $ core "Term")],
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "term">: core "Term" @@ "m"],
 
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
-        universal "m" $ record [
-          field "nothing" $
+        lambda "m" $ record [
+          "nothing">:
             doc "A term provided if the optional value is nothing" $
-            universal "m" $ core "Term",
-          field "just" $
+            core "Term" @@ "m",
+          "just">:
             doc "A function which is applied of the optional value is non-nothing" $
-            universal "m" $ core "Term"],
+            core "Term" @@ "m"],
 
       def "Precision" $
         doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
         union [
-          field "arbitrary" unit,
-          field "bits" int32],
+          "arbitrary">: unit,
+          "bits">: int32],
 
       def "Term" $
         doc "A data term" $
         lambda "m" $ union [
-          field "annotated" $
+          "annotated">:
             doc "A term annotated with metadata" $
             apply (apply (core "Annotated") (apply (core "Term") (variable "m"))) (variable "m"),
-          field "application" $
+          "application">:
             doc "A function application" $
-            universal "m" $ core "Application",
-          field "literal" $
+            core "Application" @@ "m",
+          "literal">:
             doc "A literal value" $
             core "Literal",
-          field "element" $
+          "element">:
             doc "An element reference" $
             core "Name",
-          field "function" $
+          "function">:
             doc "A function term" $
-            universal "m" $ core "Function",
-          field "let" $ universal "m" $ core "Let",
-          field "list" $
+            core "Function" @@ "m",
+          "let">: core "Let" @@ "m",
+          "list">:
             doc "A list" $
-            list $ universal "m" $ core "Term",
+            list $ core "Term" @@ "m",
           -- TODO: list elimination
-          field "map" $
+          "map">:
             doc "A map of keys to values" $
-            Types.map (universal "m" $ core "Term") (universal "m" $ core "Term"),
-          field "nominal" $ universal "m" $ core "Named",
-          field "optional" $
+            Types.map (core "Term" @@ "m") (core "Term" @@ "m"),
+          "nominal">: core "Named" @@ "m",
+          "optional">:
             doc "An optional value" $
-            optional $ universal "m" $ core "Term",
-          field "record" $
+            optional $ core "Term" @@ "m",
+          "record">:
             doc "A record, or labeled tuple" $
-            list $ universal "m" $ core "Field",
-          field "set" $
+            list $ core "Field" @@ "m",
+          "set">:
             doc "A set of values" $
-            set $ universal "m" $ core "Term",
-          field "union" $
+            set $ core "Term" @@ "m",
+          "union">:
             doc "A union term, i.e. a string-indexed generalization of inl() or inr()" $
-            universal "m" $ core "Field",
-          field "variable" $
+            core "Field" @@ "m",
+          "variable">:
             doc "A variable reference" $
             core "Variable"],
 
@@ -343,28 +345,28 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Type" $
         doc "A data type" $
         lambda "m" $ union [
-          field "annotated" $
+          "annotated">:
             doc "A type annotated with metadata" $
             apply (apply (core "Annotated") (apply (core "Type") (variable "m"))) (variable "m"),
-          field "application" $ universal "m" $ core "ApplicationType",
-          field "element" $ universal "m" $ core "Type",
-          field "function" $ universal "m" $ core "FunctionType",
-          field "lambda" $ universal "m" $ core "LambdaType",
-          field "list" $ universal "m" $ core "Type",
-          field "literal" $ core "LiteralType",
-          field "map" $ universal "m" $ core "MapType",
-          field "nominal" $ core "Name",
-          field "optional" $ universal "m" $ core "Type",
-          field "record" $ list $ universal "m" $ core "FieldType",
-          field "set" $ universal "m" $ core "Type",
-          field "union" $ list $ universal "m" $ core "FieldType",
-          field "variable" $ core "VariableType"],
+          "application">: core "ApplicationType" @@ "m",
+          "element">: core "Type" @@ "m",
+          "function">: core "FunctionType" @@ "m",
+          "lambda">: core "LambdaType" @@ "m",
+          "list">: core "Type" @@ "m",
+          "literal">: core "LiteralType",
+          "map">: core "MapType" @@ "m",
+          "nominal">: core "Name",
+          "optional">: core "Type" @@ "m",
+          "record">: list $ core "FieldType" @@ "m",
+          "set">: core "Type" @@ "m",
+          "union">: list $ core "FieldType" @@ "m",
+          "variable">: core "VariableType"],
 
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $
-        universal "m" $ record [
-          field "variables" $ list $ core "VariableType",
-          field "type" $ universal "m" $ core "Type"],
+        lambda "m" $ record [
+          "variables">: list $ core "VariableType",
+          "type">: core "Type" @@ "m"],
 
       def "TypeVariant" $
         doc "The identifier of a type constructor" $
@@ -386,9 +388,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "TypedTerm" $
         doc "A type together with an instance of the type" $
-        universal "m" $ record [
-          field "type" $ universal "m" $ core "Type",
-          field "term" $ universal "m" $ core "Term"],
+        lambda "m" $ record [
+          "type">: core "Type" @@ "m",
+          "term">: core "Term" @@ "m"],
 
       def "Variable" $
         doc "A symbol which stands in for a term"

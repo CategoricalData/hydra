@@ -28,19 +28,19 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
 
       def "Element" $
         doc "A graph element, having a name, data term (value), and schema term (type)" $
-        universal "m" $ record [
-          field "name" $ core "Name",
-          field "schema" $ universal "m" $ core "Term",
-          field "data" $ universal "m" $ core "Term"],
+        lambda "m" $ record [
+          "name">: core "Name",
+          "schema">: core "Term" @@ "m",
+          "data">: core "Term" @@ "m"],
 
       def "Graph" $
         doc ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
           ++ " called the schema graph") $
-        universal "m" $ record [
-          field "name" $ graph "GraphName",
-          field "elements" $ list $ universal "m" $ graph "Element",
-          field "termExprs" $ universal "m" (core "Term") --> boolean,
-          field "schemaGraph" $
+        lambda "m" $ record [
+          "name">: graph "GraphName",
+          "elements">: list $ graph "Element" @@ "m",
+          "termExprs">: core "Term" @@ "m" --> boolean,
+          "schemaGraph">:
             doc "A reference to this graph's schema graph within the provided graph set" $
             graph "GraphName"],
 
@@ -50,12 +50,12 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
 
       def "GraphSet" $
         doc "A collection of graphs with a distinguished root graph" $
-        universal "m" $ record [
-          field "graphs" $ Types.map (graph "GraphName") (universal "m" $ graph "Graph"),
-          field "root" $ graph "GraphName"],
+        lambda "m" $ record [
+          "graphs">: Types.map (graph "GraphName") (graph "Graph" @@ "m"),
+          "root">: graph "GraphName"],
 
      def "Module" $
        doc "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
-       universal "m" $ record [
-         field "graph" $ universal "m" $ graph "Graph",
-         field "imports" $ list $ universal "m" $ graph "Module"]]
+       lambda "m" $ record [
+         "graph">: graph "Graph" @@ "m",
+         "imports">: list $ graph "Module" @@ "m"]]

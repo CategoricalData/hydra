@@ -126,8 +126,3 @@ union = TypeUnion
 
 unit :: Type m
 unit = record []
-
-
--- TODO: deprecate and remove me
-universal :: String -> Type m -> Type m
-universal v body = TypeLambda $ LambdaType (VariableType v) body

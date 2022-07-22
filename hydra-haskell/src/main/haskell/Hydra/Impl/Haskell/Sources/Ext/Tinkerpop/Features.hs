@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -30,7 +32,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
     core = nsref hydraCoreName
     features = nsref tinkerpopFeaturesName
     def = datatype tinkerpopFeaturesName
-    supports name comment = field ("supports" ++ capitalize name) $ doc comment boolean
+    supports name comment = ("supports" ++ capitalize name)>: doc comment boolean
     
     elements = [
 
@@ -59,8 +61,8 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
       def "EdgeFeatures" $
         doc "Features that are related to Edge operations." $
         record [
-          field "elementFeatures" $ features "ElementFeatures",
-          field "properties" $ features "EdgePropertyFeatures",
+          "elementFeatures">: features "ElementFeatures",
+          "properties">: features "EdgePropertyFeatures",
           supports "addEdges" "Determines if an Edge can be added to a Vertex.",
           supports "removeEdges" "Determines if an Edge can be removed from a Vertex.",
           supports "upsert" ("Determines if the Graph implementation uses upsert functionality as opposed to insert " ++
@@ -69,7 +71,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
       def "EdgePropertyFeatures" $
         doc "Features that are related to Edge Property objects." $
         record [
-          field "propertyFeatures" $ features "PropertyFeatures"],
+          "propertyFeatures">: features "PropertyFeatures"],
 
       def "ElementFeatures" $
         doc "Features that are related to Element objects." $
@@ -82,7 +84,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
           supports "stringIds" "Determines if an Element has string identifiers as their internal representation.",
           supports "userSuppliedIds" "Determines if an Element can have a user defined identifier.",
           supports "uuidIds" "Determines if an Element has UUID identifiers as their internal representation."
---          , field "willAllowId" $
+--          , "willAllowId" $
 --              doc "Determines if an identifier will be accepted by the Graph." $
 --            function (v3 "Id") boolean
             ],
@@ -90,8 +92,8 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
       def "ExtraFeatures" $
         doc ("Additional features which are needed for the complete specification of language constraints in Hydra, "
           ++ "above and beyond TinkerPop Graph.Features") $
-        universal "m" $ record [
-          field "supportsMapKey" $ function (universal "m" $ core "Type") boolean],
+        lambda "m" $ record [
+          "supportsMapKey">: function (core "Type" @@ "m") boolean],
 
       def "Features" $
         doc ("An interface that represents the capabilities of a Graph implementation. By default all methods of " ++
@@ -105,11 +107,11 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
             "these methods may be called by the TinkerPop core code to determine what operations may be " ++
             "appropriately executed which will have impact on features utilized by users.") $
         record [
-          field "edge" $ doc "Gets the features related to edge operation." $
+          "edge">: doc "Gets the features related to edge operation." $
             features "EdgeFeatures",
-          field "graph" $ doc "Gets the features related to graph operation." $
+          "graph">: doc "Gets the features related to graph operation." $
             features "GraphFeatures",
-          field "vertex" $ doc "Gets the features related to vertex operation." $
+          "vertex">: doc "Gets the features related to vertex operation." $
             features "VertexFeatures"],
         
       def "GraphFeatures" $
@@ -122,7 +124,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
           supports "persistence" "Determines if the Graph implementation supports persisting it's contents natively to disk.",
           supports "threadedTransactions" "Determines if the Graph implementation supports threaded transactions which allow a transaction to be executed across multiple threads via Transaction.createThreadedTx().",
           supports "transactions" "Determines if the Graph implementations supports transactions.",
-          field "variables" $
+          "variables">:
             doc "Gets the features related to graph sideEffects operation." $
             features "VariableFeatures"
         ],
@@ -130,21 +132,21 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
       def "PropertyFeatures" $
         doc "A base interface for Edge or Vertex Property features." $
         record [
-          field "dataTypeFeatures" $ features "DataTypeFeatures",
+          "dataTypeFeatures">: features "DataTypeFeatures",
           supports "properties" "Determines if an Element allows for the processing of at least one data type defined by the features."],
         
       def "VariableFeatures" $
         doc "Features for Graph.Variables." $
         record [
-          field "dataTypeFeatures" $ features "DataTypeFeatures",
+          "dataTypeFeatures">: features "DataTypeFeatures",
           supports "variables" "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."],
         
       def "VertexFeatures" $
         doc "Features that are related to Vertex operations." $
         record [
-          field "elementFeatures" $ features "ElementFeatures",
---          field "getCardinality" $ function (v3 "PropertyKey") (v3 "VertexProperty.Cardinality"),
-          field "properties" $ features "VertexPropertyFeatures",
+          "elementFeatures">: features "ElementFeatures",
+--          "getCardinality" $ function (v3 "PropertyKey") (v3 "VertexProperty.Cardinality"),
+          "properties">: features "VertexPropertyFeatures",
           supports "addVertices" "Determines if a Vertex can be added to the Graph.",
           supports "duplicateMultiProperties" "Determines if a Vertex can support non-unique values on the same key.",
           supports "metaProperties" "Determines if a Vertex can support properties on vertex properties.",
@@ -156,10 +158,10 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
       def "VertexPropertyFeatures" $
         doc "Features that are related to Vertex Property objects." $
         record [
-          field "dataTypeFeatures" $ features "DataTypeFeatures",
-          field "propertyFeatures" $ features "PropertyFeatures",
+          "dataTypeFeatures">: features "DataTypeFeatures",
+          "propertyFeatures">: features "PropertyFeatures",
           -- Note: re-using ElementFeatures here rather than repeating the individual features (which are identical)
-          field "elementFeatures" $ features "ElementFeatures",
+          "elementFeatures">: features "ElementFeatures",
           supports "remove" "Determines if a VertexProperty allows properties to be removed."]
           
 --          , def "VertexProperty.Cardinality" $

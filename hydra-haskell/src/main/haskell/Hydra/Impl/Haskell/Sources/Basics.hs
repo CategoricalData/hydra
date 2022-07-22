@@ -46,7 +46,7 @@ basics = Element . fromQname hydraBasicsName
 eliminationVariant :: Element (Elimination m -> EliminationVariant)
 eliminationVariant = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  matchToEnum (Types.universal "a" $ Types.nominal _Elimination) _EliminationVariant [
+  matchToEnum (Types.apply (Types.nominal _Elimination) (Types.variable "m")) _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_nominal  @-> _EliminationVariant_nominal,
     _Elimination_optional @-> _EliminationVariant_optional,
@@ -92,7 +92,7 @@ floatValueType = basics "floatValueType" $
 functionVariant :: Element (Function m -> FunctionVariant)
 functionVariant = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  matchToEnum (Types.universal "m" $ Types.nominal _Function) _FunctionVariant [
+  matchToEnum (Types.apply (Types.nominal _Function) (Types.variable "m")) _FunctionVariant [
     _Function_compareTo   @-> _FunctionVariant_compareTo,
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -215,9 +215,9 @@ qname = basics "qname" $
 termVariant :: Element (Term m -> TermVariant)
 termVariant = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function (Types.universal "m" $ Types.nominal _Term) (Types.nominal _TermVariant) $
+  function (Types.apply (Types.nominal _Term) (Types.variable "m")) (Types.nominal _TermVariant) $
   lambda "term" $ apply
-    (matchToEnum (Types.universal "m" $ Types.nominal _Term) _TermVariant [
+    (matchToEnum (Types.apply (Types.nominal _Term) (Types.variable "m")) _TermVariant [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
       _Term_element         @-> _TermVariant_element,
@@ -262,9 +262,9 @@ testLists = basics "testLists" $
 typeVariant :: Element (Type m -> TypeVariant)
 typeVariant = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function (Types.universal "m" $ Types.nominal _Type) (Types.nominal _TypeVariant) $
+  function (Types.apply (Types.nominal _Type) (Types.variable "m")) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
-    (matchToEnum (Types.universal "m" $ Types.nominal _Type) _TypeVariant [
+    (matchToEnum (Types.apply (Types.nominal _Type) (Types.variable "m")) _TypeVariant [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,
       _Type_element     @-> _TypeVariant_element,

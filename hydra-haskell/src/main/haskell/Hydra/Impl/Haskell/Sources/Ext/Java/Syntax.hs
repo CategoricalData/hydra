@@ -48,17 +48,17 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
       def "Literal" $
         union [
 --  NullLiteral
-          field "null" unit,
+          "null">: unit,
 --  IntegerLiteral
-          field "integer" $ java "IntegerLiteral",
+          "integer">: java "IntegerLiteral",
 --  FloatingPointLiteral
-          field "floatingPoint" $ java "FloatingPointLiteral",
+          "floatingPoint">: java "FloatingPointLiteral",
 --  BooleanLiteral
-          field "boolean" boolean,
+          "boolean">: boolean,
 --  CharacterLiteral
-          field "character" uint16,
+          "character">: uint16,
 --  StringLiteral
-          field "string" $ java "StringLiteral"],
+          "string">: java "StringLiteral"],
       def "IntegerLiteral" $
         doc "Note: this is an approximation which ignores encoding"
         bigint,
@@ -74,26 +74,26 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --Type:
       def "Type" $ union [
 --  PrimitiveType
-          field "primitive" $ java "PrimitiveTypeWithAnnotations",
+          "primitive">: java "PrimitiveTypeWithAnnotations",
 --  ReferenceType
-          field "reference" $ java "ReferenceType"],
+          "reference">: java "ReferenceType"],
 
 --PrimitiveType:
       def "PrimitiveTypeWithAnnotations" $ record [
-        field "type" $ java "PrimitiveType",
-        field "annotations" $ list $ java "Annotation"],
+        "type">: java "PrimitiveType",
+        "annotations">: list $ java "Annotation"],
       def "PrimitiveType" $ union [
 --  {Annotation} NumericType
-        field "numeric" $ java "NumericType",
+        "numeric">: java "NumericType",
 --  {Annotation} boolean
-        field "boolean" unit],
+        "boolean">: unit],
 
 --NumericType:
       def "NumericType" $ union [
 --  IntegralType
-        field "integral" $ java "IntegralType",
+        "integral">: java "IntegralType",
 --  FloatingPointType
-        field "floatingPoint" $ java "FloatingPointType"],
+        "floatingPoint">: java "FloatingPointType"],
 
 --IntegralType:
       def "IntegralType" $ enum [
@@ -110,32 +110,32 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ReferenceType:
       def "ReferenceType" $ union [
 --  ClassOrInterfaceType
-        field "classOrInterface" $ java "ClassOrInterfaceType",
+        "classOrInterface">: java "ClassOrInterfaceType",
 --  TypeVariable
-        field "variable" $ java "TypeVariable",
+        "variable">: java "TypeVariable",
 --  ArrayType
-        field "array" $ java "ArrayType"],
+        "array">: java "ArrayType"],
 
 --ClassOrInterfaceType:
       def "ClassOrInterfaceType" $ union [
 --  ClassType
-        field "class" $ java "ClassType",
+        "class">: java "ClassType",
 --  InterfaceType
-        field "interface" $ java "InterfaceType"],
+        "interface">: java "InterfaceType"],
 
 --ClassType:
       def "ClassType" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "qualifier" $ java "ClassTypeQualifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "arguments" $ list $ java "TypeArgument"],
+        "annotations">: list $ java "Annotation",
+        "qualifier">: java "ClassTypeQualifier",
+        "identifier">: java "TypeIdentifier",
+        "arguments">: list $ java "TypeArgument"],
       def "ClassTypeQualifier" $ union [
 --  {Annotation} TypeIdentifier [TypeArguments]
-        field "none" unit,
+        "none">: unit,
 --  PackageName . {Annotation} TypeIdentifier [TypeArguments]
-        field "package" $ java "PackageName",
+        "package">: java "PackageName",
 --  ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
-        field "parent" $ java "ClassOrInterfaceType"],
+        "parent">: java "ClassOrInterfaceType"],
 
 --InterfaceType:
 --  ClassType
@@ -144,20 +144,20 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeVariable:
 --  {Annotation} TypeIdentifier
       def "TypeVariable" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "identifier" $ java "TypeIdentifier"],
+        "annotations">: list $ java "Annotation",
+        "identifier">: java "TypeIdentifier"],
 
 --ArrayType:
       def "ArrayType" $ record [
-        field "dims" $ java "Dims",
-        field "variant" $ java "ArrayType.Variant"],
+        "dims">: java "Dims",
+        "variant">: java "ArrayType.Variant"],
       def "ArrayType.Variant" $ union [
 --  PrimitiveType Dims
-        field "primitive" $ java "PrimitiveTypeWithAnnotations",
+        "primitive">: java "PrimitiveTypeWithAnnotations",
 --  ClassOrInterfaceType Dims
-        field "classOrInterface" $ java "ClassOrInterfaceType",
+        "classOrInterface">: java "ClassOrInterfaceType",
 --  TypeVariable Dims
-        field "variable" $ java "TypeVariable"],
+        "variable">: java "TypeVariable"],
 
 --Dims:
 --  {Annotation} [ ] {{Annotation} [ ]}
@@ -166,9 +166,9 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeParameter:
 --  {TypeParameterModifier} TypeIdentifier [TypeBound]
       def "TypeParameter" $ record [
-        field "modifiers" $ list $ java "TypeParameterModifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "bound" $ optional $ java "TypeBound"],
+        "modifiers">: list $ java "TypeParameterModifier",
+        "identifier">: java "TypeIdentifier",
+        "bound">: optional $ java "TypeBound"],
 
 --TypeParameterModifier:
 --  Annotation
@@ -177,12 +177,12 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeBound:
       def "TypeBound" $ union [
 --  extends TypeVariable
-        field "variable" $ java "TypeVariable",
+        "variable">: java "TypeVariable",
 --  extends ClassOrInterfaceType {AdditionalBound}
-        field "classOrInterface" $ java "TypeBound.ClassOrInterface"],
+        "classOrInterface">: java "TypeBound.ClassOrInterface"],
       def "TypeBound.ClassOrInterface" $ record [
-        field "type" $ java "ClassOrInterfaceType",
-        field "additional" $ list $ java "AdditionalBound"],
+        "type">: java "ClassOrInterfaceType",
+        "additional">: list $ java "AdditionalBound"],
 
 --AdditionalBound:
 --  & InterfaceType
@@ -196,31 +196,31 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeArgument:
       def "TypeArgument" $ union [
 --  ReferenceType
-        field "reference" $ java "ReferenceType",
+        "reference">: java "ReferenceType",
 --  Wildcard
-        field "wildcard" $ java "Wildcard"],
+        "wildcard">: java "Wildcard"],
 
 --Wildcard:
 --  {Annotation} ? [WildcardBounds]
       def "Wildcard" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "wildcard" $ optional $ java "WildcardBounds"],
+        "annotations">: list $ java "Annotation",
+        "wildcard">: optional $ java "WildcardBounds"],
 
 --WildcardBounds:
       def "WildcardBounds" $ union [
 --  extends ReferenceType
-        field "extends" $ java "ReferenceType",
+        "extends">: java "ReferenceType",
 --  super ReferenceType
-        field "super" $ java "ReferenceType"],
+        "super">: java "ReferenceType"],
 
 --Productions from §6 (Names)
 
 --ModuleName:
       def "ModuleName" $ record [
 --  Identifier
-        field "identifier" $ java "Identifier",
+        "identifier">: java "Identifier",
 --  ModuleName . Identifier
-        field "name" $ optional $ java "ModuleName"],
+        "name">: optional $ java "ModuleName"],
 
 --PackageName:
 --  Identifier
@@ -230,16 +230,16 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeName:
       def "TypeName" $ record [
 --  TypeIdentifier
-        field "identifier" $ java "TypeIdentifier",
+        "identifier">: java "TypeIdentifier",
 --  PackageOrTypeName . TypeIdentifier
-        field "qualifier" $ optional $ java "PackageOrTypeName"],
+        "qualifier">: optional $ java "PackageOrTypeName"],
 
 --ExpressionName:
 --  Identifier
 --  AmbiguousName . Identifier
       def "ExpressionName" $ record [
-        field "qualifier" $ optional $ java "AmbiguousName",
-        field "identifier" $ java "Identifier"],
+        "qualifier">: optional $ java "AmbiguousName",
+        "identifier">: java "Identifier"],
 
 --MethodName:
 --  Identifier
@@ -260,28 +260,28 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --CompilationUnit:
       def "CompilationUnit" $ union [
 --  OrdinaryCompilationUnit
-        field "ordinary" $ java "OrdinaryCompilationUnit",
+        "ordinary">: java "OrdinaryCompilationUnit",
 --  ModularCompilationUnit
-        field "modular" $ java "ModularCompilationUnit"],
+        "modular">: java "ModularCompilationUnit"],
 
 --OrdinaryCompilationUnit:
 --  [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
       def "OrdinaryCompilationUnit" $ record [
-        field "package" $ optional $ java "PackageDeclaration",
-        field "imports" $ list $ java "ImportDeclaration",
-        field "types" $ list $ java "TypeDeclarationWithComments"],
+        "package">: optional $ java "PackageDeclaration",
+        "imports">: list $ java "ImportDeclaration",
+        "types">: list $ java "TypeDeclarationWithComments"],
 
 --ModularCompilationUnit:
 --  {ImportDeclaration} ModuleDeclaration
       def "ModularCompilationUnit" $ record [
-        field "imports" $ list $ java "ImportDeclaration",
-        field "module" $ java "ModuleDeclaration"],
+        "imports">: list $ java "ImportDeclaration",
+        "module">: java "ModuleDeclaration"],
 
 --PackageDeclaration:
 --  {PackageModifier} package Identifier {. Identifier} ;
       def "PackageDeclaration" $ record [
-        field "modifiers" $ list $ java "PackageModifier",
-        field "identifiers" $ list $ java "Identifier"],
+        "modifiers">: list $ java "PackageModifier",
+        "identifiers">: list $ java "Identifier"],
 
 --PackageModifier:
 --  Annotation
@@ -290,13 +290,13 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ImportDeclaration:
       def "ImportDeclaration" $ union [
 --  SingleTypeImportDeclaration
-        field "singleType" $ java "SingleTypeImportDeclaration",
+        "singleType">: java "SingleTypeImportDeclaration",
 --  TypeImportOnDemandDeclaration
-        field "typeImportOnDemand" $ java "TypeImportOnDemandDeclaration",
+        "typeImportOnDemand">: java "TypeImportOnDemandDeclaration",
 --  SingleStaticImportDeclaration
-        field "singleStaticImport" $ java "SingleStaticImportDeclaration",
+        "singleStaticImport">: java "SingleStaticImportDeclaration",
 --  StaticImportOnDemandDeclaration
-        field "staticImportOnDemand" $ java "StaticImportOnDemandDeclaration"],
+        "staticImportOnDemand">: java "StaticImportOnDemandDeclaration"],
 
 --SingleTypeImportDeclaration:
 --  import TypeName ;
@@ -309,8 +309,8 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --SingleStaticImportDeclaration:
 --  import static TypeName . Identifier ;
       def "SingleStaticImportDeclaration" $ record [
-        field "typeName" $ java "TypeName",
-        field "identifier" $ java "Identifier"],
+        "typeName">: java "TypeName",
+        "identifier">: java "Identifier"],
 
 --StaticImportOnDemandDeclaration:
 --  import static TypeName . * ;
@@ -319,47 +319,47 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TypeDeclaration:
       def "TypeDeclaration" $ union [
 --  ClassDeclaration
-        field "class" $ java "ClassDeclaration",
+        "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration",
+        "interface">: java "InterfaceDeclaration",
 --  ;
-        field "none" unit],
+        "none">: unit],
       def "TypeDeclarationWithComments" $
         record [
-          field "value" $ java "TypeDeclaration",
-          field "comments" $ optional string],
+          "value">: java "TypeDeclaration",
+          "comments">: optional string],
 
 --ModuleDeclaration:
 --  {Annotation} [open] module Identifier {. Identifier} { {ModuleDirective} }
       def "ModuleDeclaration" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "open" boolean,
-        field "identifiers" $ list $ java "Identifier",
-        field "directives" $ list $ list $ java "ModuleDirective"],
+        "annotations">: list $ java "Annotation",
+        "open">: boolean,
+        "identifiers">: list $ java "Identifier",
+        "directives">: list $ list $ java "ModuleDirective"],
 
 --ModuleDirective:
       def "ModuleDirective" $ union [
 --  requires {RequiresModifier} ModuleName ;
-        field "requires" $ java "ModuleDirective.Requires",
+        "requires">: java "ModuleDirective.Requires",
 --  exports PackageName [to ModuleName {, ModuleName}] ;
-        field "exports" $ java "ModuleDirective.ExportsOrOpens",
+        "exports">: java "ModuleDirective.ExportsOrOpens",
 --  opens PackageName [to ModuleName {, ModuleName}] ;
-        field "opens" $ java "ModuleDirective.ExportsOrOpens",
+        "opens">: java "ModuleDirective.ExportsOrOpens",
 --  uses TypeName ;
-        field "uses" $ java "TypeName",
+        "uses">: java "TypeName",
 --  provides TypeName with TypeName {, TypeName} ;
-        field "provides" $ java "ModuleDirective.Provides"],
+        "provides">: java "ModuleDirective.Provides"],
       def "ModuleDirective.Requires" $ record [
-        field "modifiers" $ list $ java "RequiresModifier",
-        field "module" $ java "ModuleName"],
+        "modifiers">: list $ java "RequiresModifier",
+        "module">: java "ModuleName"],
       def "ModuleDirective.ExportsOrOpens" $ record [
-        field "package" $ java "PackageName",
-        field "modules" $
+        "package">: java "PackageName",
+        "modules">:
           doc "At least one module" $
           list $ java "ModuleName"],
       def "ModuleDirective.Provides" $ record [
-        field "to" $ java "TypeName",
-        field "with" $
+        "to">: java "TypeName",
+        "with">:
           doc "At least one type" $
           list $ java "TypeName"],
 
@@ -374,33 +374,33 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ClassDeclaration:
       def "ClassDeclaration" $ union [
 --  NormalClassDeclaration
-        field "normal" $ java "NormalClassDeclaration",
+        "normal">: java "NormalClassDeclaration",
 --  EnumDeclaration
-        field "enum" $ java "EnumDeclaration"],
+        "enum">: java "EnumDeclaration"],
 
 --NormalClassDeclaration:
 --  {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
       def "NormalClassDeclaration" $ record [
-        field "modifiers" $ list $ java "ClassModifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "parameters" $ list $ java "TypeParameter",
-        field "extends" $ optional $ java "ClassType",
-        field "implements" $ list $ java "InterfaceType",
-        field "body" $ java "ClassBody"],
+        "modifiers">: list $ java "ClassModifier",
+        "identifier">: java "TypeIdentifier",
+        "parameters">: list $ java "TypeParameter",
+        "extends">: optional $ java "ClassType",
+        "implements">: list $ java "InterfaceType",
+        "body">: java "ClassBody"],
 
 --ClassModifier:
       def "ClassModifier" $ union [
 --  (one of)
 --  Annotation public protected private
 --  abstract static final strictfp
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "protected" unit,
-        field "private" unit,
-        field "abstract" unit,
-        field "static" unit,
-        field "final" unit,
-        field "strictfp" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "protected">: unit,
+        "private">: unit,
+        "abstract">: unit,
+        "static">: unit,
+        "final">: unit,
+        "strictfp">: unit],
 
 --TypeParameters:
 --  < TypeParameterList >
@@ -420,72 +420,72 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ClassBodyDeclaration:
       def "ClassBodyDeclaration" $ union [
 --  ClassMemberDeclaration
-        field "classMember" $ java "ClassMemberDeclaration",
+        "classMember">: java "ClassMemberDeclaration",
 --  InstanceInitializer
-        field "instanceInitializer" $ java "InstanceInitializer",
+        "instanceInitializer">: java "InstanceInitializer",
 --  StaticInitializer
-        field "staticInitializer" $ java "StaticInitializer",
+        "staticInitializer">: java "StaticInitializer",
 --  ConstructorDeclaration
-        field "constructorDeclaration" $ java "ConstructorDeclaration"],
+        "constructorDeclaration">: java "ConstructorDeclaration"],
       def "ClassBodyDeclarationWithComments" $
         record [
-          field "value" $ java "ClassBodyDeclaration",
-          field "comments" $ optional string],
+          "value">: java "ClassBodyDeclaration",
+          "comments">: optional string],
 
 --ClassMemberDeclaration:
       def "ClassMemberDeclaration" $ union [
 --  FieldDeclaration
-        field "field" $ java "FieldDeclaration",
+        "field">: java "FieldDeclaration",
 --  MethodDeclaration
-        field "method" $ java "MethodDeclaration",
+        "method">: java "MethodDeclaration",
 --  ClassDeclaration
-        field "class" $ java "ClassDeclaration",
+        "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration",
+        "interface">: java "InterfaceDeclaration",
 --  ;
-        field "none" unit],
+        "none">: unit],
 
 --FieldDeclaration:
 --  {FieldModifier} UnannType VariableDeclaratorList ;
       def "FieldDeclaration" $ record [
-        field "modifiers" $ list $ java "FieldModifier",
-        field "unannType" $ java "UnannType",
-        field "variableDeclarators" $ nonemptyList $ java "VariableDeclarator"],
+        "modifiers">: list $ java "FieldModifier",
+        "unannType">: java "UnannType",
+        "variableDeclarators">: nonemptyList $ java "VariableDeclarator"],
 
 --FieldModifier:
 --  (one of)
       def "FieldModifier" $ union [
 --  Annotation public protected private
 --  static final transient volatile
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "protected" unit,
-        field "private" unit,
-        field "static" unit,
-        field "final" unit,
-        field "transient" unit,
-        field "volatile" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "protected">: unit,
+        "private">: unit,
+        "static">: unit,
+        "final">: unit,
+        "transient">: unit,
+        "volatile">: unit],
 
 --VariableDeclaratorList:
 --  VariableDeclarator {, VariableDeclarator}
 --VariableDeclarator:
 --  VariableDeclaratorId [= VariableInitializer]
       def "VariableDeclarator" $ record [
-        field "id" $ java "VariableDeclaratorId",
-        field "initializer" $ optional $ java "VariableInitializer"],
+        "id">: java "VariableDeclaratorId",
+        "initializer">: optional $ java "VariableInitializer"],
 
 --VariableDeclaratorId:
 --  Identifier [Dims]
       def "VariableDeclaratorId" $ record [
-        field "identifier" $ java "Identifier",
-        field "dims" $ optional $ java "Dims"],
+        "identifier">: java "Identifier",
+        "dims">: optional $ java "Dims"],
 
 --VariableInitializer:
       def "VariableInitializer" $ union [
 --  Expression
-        field "expression" $ java "Expression",
+        "expression">: java "Expression",
 --  ArrayInitializer
-        field "arrayInitializer" $ java "ArrayInitializer"],
+        "arrayInitializer">: java "ArrayInitializer"],
 
 --UnannType:
 --  UnannPrimitiveType
@@ -522,85 +522,85 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --MethodDeclaration:
 --  {MethodModifier} MethodHeader MethodBody
       def "MethodDeclaration" $ record [
-        field "annotations" $
+        "annotations">:
           doc "Note: simple methods cannot have annotations" $
           list $ java "Annotation",
-        field "modifiers" $ list $ java "MethodModifier",
-        field "header" $ java "MethodHeader",
-        field "body" $ java "MethodBody"],
+        "modifiers">: list $ java "MethodModifier",
+        "header">: java "MethodHeader",
+        "body">: java "MethodBody"],
 
 --MethodModifier:
 --  (one of)
       def "MethodModifier" $ union [
 --  Annotation public protected private
 --  abstract static final synchronized native strictfp
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "protected" unit,
-        field "private" unit,
-        field "abstract" unit,
-        field "final" unit,
-        field "synchronized" unit,
-        field "native" unit,
-        field "strictfb" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "protected">: unit,
+        "private">: unit,
+        "abstract">: unit,
+        "final">: unit,
+        "synchronized">: unit,
+        "native">: unit,
+        "strictfb">: unit],
 
 --MethodHeader:
 --  Result MethodDeclarator [Throws]
 --  TypeParameters {Annotation} Result MethodDeclarator [Throws]
       def "MethodHeader" $ record [
-        field "parameters" $ list $ java "TypeParameter",
-        field "result" $ java "Result",
-        field "declarator" $ java "MethodDeclarator",
-        field "throws" $ optional $ java "Throws"],
+        "parameters">: list $ java "TypeParameter",
+        "result">: java "Result",
+        "declarator">: java "MethodDeclarator",
+        "throws">: optional $ java "Throws"],
 
 --Result:
       def "Result" $ union [
 --  UnannType
-        field "type" $ java "UnannType",
+        "type">: java "UnannType",
 --  void
-        field "void" unit],
+        "void">: unit],
 
 --MethodDeclarator:
 --  Identifier ( [ReceiverParameter ,] [FormalParameterList] ) [Dims]
       def "MethodDeclarator" $ record [
-        field "identifier" $ java "Identifier",
-        field "receiverParameter" $ optional $ java "ReceiverParameter",
-        field "formalParameters" $ nonemptyList $ java "FormalParameter"],
+        "identifier">: java "Identifier",
+        "receiverParameter">: optional $ java "ReceiverParameter",
+        "formalParameters">: nonemptyList $ java "FormalParameter"],
 
 --ReceiverParameter:
 --  {Annotation} UnannType [Identifier .] this
       def "ReceiverParameter" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "unannType" $ java "UnannType",
-        field "identifier" $ optional $ java "Identifier"],
+        "annotations">: list $ java "Annotation",
+        "unannType">: java "UnannType",
+        "identifier">: optional $ java "Identifier"],
 
 --FormalParameterList:
 --  FormalParameter {, FormalParameter}
 --FormalParameter:
       def "FormalParameter" $ union [
 --  {VariableModifier} UnannType VariableDeclaratorId
-        field "simple" $ java "FormalParameter.Simple",
+        "simple">: java "FormalParameter.Simple",
 --  VariableArityParameter
-        field "variableArity" $ java "VariableArityParameter"],
+        "variableArity">: java "VariableArityParameter"],
       def "FormalParameter.Simple" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "UnannType",
-        field "id" $ java "VariableDeclaratorId"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "UnannType",
+        "id">: java "VariableDeclaratorId"],
 
 --VariableArityParameter:
 --  {VariableModifier} UnannType {Annotation} ... Identifier
       def "VariableArityParameter" $ record [
-        field "modifiers" $ java "VariableModifier",
-        field "type" $ java "UnannType",
-        field "annotations" $ list $ java "Annotation",
-        field "identifier" $ java "Identifier"],
+        "modifiers">: java "VariableModifier",
+        "type">: java "UnannType",
+        "annotations">: list $ java "Annotation",
+        "identifier">: java "Identifier"],
 
 --VariableModifier:
       def "VariableModifier" $ union [
 --  Annotation
-        field "annotation" $ java "Annotation",
+        "annotation">: java "Annotation",
 --  final
-        field "final" unit],
+        "final">: unit],
 
 --Throws:
 --  throws ExceptionTypeList
@@ -611,16 +611,16 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ExceptionType:
       def "ExceptionType" $ union [
 --  ClassType
-        field "class" $ java "ClassType",
+        "class">: java "ClassType",
 --  TypeVariable
-        field "variable" $ java "TypeVariable"],
+        "variable">: java "TypeVariable"],
 
 --MethodBody:
       def "MethodBody" $ union [
 --  Block
-        field "block" $ java "Block",
+        "block">: java "Block",
 --  ;
-        field "none" unit],
+        "none">: unit],
 
 --InstanceInitializer:
 --  Block
@@ -633,27 +633,27 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ConstructorDeclaration:
 --  {ConstructorModifier} ConstructorDeclarator [Throws] ConstructorBody
       def "ConstructorDeclaration" $ record [
-        field "modifiers" $ list $ java "ConstructorModifier",
-        field "constructor" $ java "ConstructorDeclarator",
-        field "throws" $ optional $ java "Throws",
-        field "body" $ java "ConstructorBody"],
+        "modifiers">: list $ java "ConstructorModifier",
+        "constructor">: java "ConstructorDeclarator",
+        "throws">: optional $ java "Throws",
+        "body">: java "ConstructorBody"],
 
 --ConstructorModifier:
 --  (one of)
       def "ConstructorModifier" $ union [
 --  Annotation public protected private
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "protected" unit,
-        field "private" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "protected">: unit,
+        "private">: unit],
 
 --ConstructorDeclarator:
 --  [TypeParameters] SimpleTypeName ( [ReceiverParameter ,] [FormalParameterList] )
       def "ConstructorDeclarator" $ record [
-        field "parameters" $ list $ java "TypeParameter",
-        field "name" $ java "SimpleTypeName",
-        field "receiverParameter" $ optional $ java "ReceiverParameter",
-        field "formalParameters" $ nonemptyList $ java "FormalParameter"],
+        "parameters">: list $ java "TypeParameter",
+        "name">: java "SimpleTypeName",
+        "receiverParameter">: optional $ java "ReceiverParameter",
+        "formalParameters">: nonemptyList $ java "FormalParameter"],
 
 --SimpleTypeName:
 --  TypeIdentifier
@@ -662,47 +662,47 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ConstructorBody:
 --  { [ExplicitConstructorInvocation] [BlockStatements] }
       def "ConstructorBody" $ record [
-        field "invocation" $ optional $ java "ExplicitConstructorInvocation",
-        field "statements" $ list $ java "BlockStatement"],
+        "invocation">: optional $ java "ExplicitConstructorInvocation",
+        "statements">: list $ java "BlockStatement"],
 
 --ExplicitConstructorInvocation:
       def "ExplicitConstructorInvocation" $ record [
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "arguments" $ list $ java "Expression",
-        field "variant" $ java "ExplicitConstructorInvocation.Variant"],
+        "typeArguments">: list $ java "TypeArgument",
+        "arguments">: list $ java "Expression",
+        "variant">: java "ExplicitConstructorInvocation.Variant"],
       def "ExplicitConstructorInvocation.Variant" $ union [
 --  [TypeArguments] this ( [ArgumentList] ) ;
-        field "this" unit,
+        "this">: unit,
 --  [TypeArguments] super ( [ArgumentList] ) ;
 --  ExpressionName . [TypeArguments] super ( [ArgumentList] ) ;
-        field "super" $ optional $ java "ExpressionName",
+        "super">: optional $ java "ExpressionName",
 --  Primary . [TypeArguments] super ( [ArgumentList] ) ;
-        field "primary" $ java "Primary"],
+        "primary">: java "Primary"],
 
 --EnumDeclaration:
 --  {ClassModifier} enum TypeIdentifier [Superinterfaces] EnumBody
       def "EnumDeclaration" $ record [
-        field "modifiers" $ list $ java "ClassModifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "implements" $ list $ java "InterfaceType",
-        field "body" $ java "EnumBody"],
+        "modifiers">: list $ java "ClassModifier",
+        "identifier">: java "TypeIdentifier",
+        "implements">: list $ java "InterfaceType",
+        "body">: java "EnumBody"],
 
 --EnumBody:
 --  { [EnumConstantList] [,] [EnumBodyDeclarations] }
       def "EnumBody" $ list $ java "EnumBody.Element",
       def "EnumBody.Element" $ record [
-        field "constants" $ list $ java "EnumConstant",
-        field "bodyDeclarations" $ list $ java "ClassBodyDeclaration"],
+        "constants">: list $ java "EnumConstant",
+        "bodyDeclarations">: list $ java "ClassBodyDeclaration"],
 
 --EnumConstantList:
 --  EnumConstant {, EnumConstant}
 --EnumConstant:
 --  {EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody]
       def "EnumConstant" $ record [
-        field "modifiers" $ list $ java "EnumConstantModifier",
-        field "identifier" $ java "Identifier",
-        field "arguments" $ list $ list $ java "Expression",
-        field "body" $ optional $ java "ClassBody"],
+        "modifiers">: list $ java "EnumConstantModifier",
+        "identifier">: java "Identifier",
+        "arguments">: list $ list $ java "Expression",
+        "body">: optional $ java "ClassBody"],
 
 --EnumConstantModifier:
 --  Annotation
@@ -716,31 +716,31 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --InterfaceDeclaration:
       def "InterfaceDeclaration" $ union [
 --  NormalInterfaceDeclaration
-        field "normalInterface" $ java "NormalInterfaceDeclaration",
+        "normalInterface">: java "NormalInterfaceDeclaration",
 --  AnnotationTypeDeclaration
-        field "annotationType" $ java "AnnotationTypeDeclaration"],
+        "annotationType">: java "AnnotationTypeDeclaration"],
 
 --NormalInterfaceDeclaration:
 --  {InterfaceModifier} interface TypeIdentifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
       def "NormalInterfaceDeclaration" $ record [
-        field "modifiers" $ list $ java "InterfaceModifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "parameters" $ list $ java "TypeParameter",
-        field "extends" $ list $ java "InterfaceType",
-        field "body" $ java "InterfaceBody"],
+        "modifiers">: list $ java "InterfaceModifier",
+        "identifier">: java "TypeIdentifier",
+        "parameters">: list $ java "TypeParameter",
+        "extends">: list $ java "InterfaceType",
+        "body">: java "InterfaceBody"],
 
 --InterfaceModifier:
 --  (one of)
       def "InterfaceModifier" $ union [
 --  Annotation public protected private
 --  abstract static strictfp
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "protected" unit,
-        field "private" unit,
-        field "abstract" unit,
-        field "static" unit,
-        field "strictfb" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "protected">: unit,
+        "private">: unit,
+        "abstract">: unit,
+        "static">: unit,
+        "strictfb">: unit],
 
 --ExtendsInterfaces:
 --  extends InterfaceTypeList
@@ -752,58 +752,58 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --InterfaceMemberDeclaration:
       def "InterfaceMemberDeclaration" $ union [
 --  ConstantDeclaration
-        field "constant" $ java "ConstantDeclaration",
+        "constant">: java "ConstantDeclaration",
 --  InterfaceMethodDeclaration
-        field "interfaceMethod" $ java "InterfaceMethodDeclaration",
+        "interfaceMethod">: java "InterfaceMethodDeclaration",
 --  ClassDeclaration
-        field "class" $ java "ClassDeclaration",
+        "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration"],
+        "interface">: java "InterfaceDeclaration"],
 --  ;
 
 --ConstantDeclaration:
 --  {ConstantModifier} UnannType VariableDeclaratorList ;
       def "ConstantDeclaration" $ record [
-        field "modifiers" $ list $ java "ConstantModifier",
-        field "type" $ java "UnannType",
-        field "variables" $ nonemptyList $ java "VariableDeclarator"],
+        "modifiers">: list $ java "ConstantModifier",
+        "type">: java "UnannType",
+        "variables">: nonemptyList $ java "VariableDeclarator"],
 
 --ConstantModifier:
 --  (one of)
       def "ConstantModifier" $ union [
 --  Annotation public
 --  static final
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "static" unit,
-        field "final" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "static">: unit,
+        "final">: unit],
 
 --InterfaceMethodDeclaration:
 --  {InterfaceMethodModifier} MethodHeader MethodBody
       def "InterfaceMethodDeclaration" $ record [
-        field "modifiers" $ list $ java "InterfaceMethodModifier",
-        field "header" $ java "MethodHeader",
-        field "body" $ java "MethodBody"],
+        "modifiers">: list $ java "InterfaceMethodModifier",
+        "header">: java "MethodHeader",
+        "body">: java "MethodBody"],
 
 --InterfaceMethodModifier:
 --  (one of)
       def "InterfaceMethodModifier" $ union [
 --  Annotation public private
 --  abstract default static strictfp
-        field "annotation" $ java "Annotation",
-        field "public" unit,
-        field "private" unit,
-        field "abstract" unit,
-        field "default" unit,
-        field "static" unit,
-        field "strictfp" unit],
+        "annotation">: java "Annotation",
+        "public">: unit,
+        "private">: unit,
+        "abstract">: unit,
+        "default">: unit,
+        "static">: unit,
+        "strictfp">: unit],
 
 --AnnotationTypeDeclaration:
 --  {InterfaceModifier} @ interface TypeIdentifier AnnotationTypeBody
       def "AnnotationTypeDeclaration" $ record [
-        field "modifiers" $ list $ java "InterfaceModifier",
-        field "identifier" $ java "TypeIdentifier",
-        field "body" $ java "AnnotationTypeBody"],
+        "modifiers">: list $ java "InterfaceModifier",
+        "identifier">: java "TypeIdentifier",
+        "body">: java "AnnotationTypeBody"],
 
 --AnnotationTypeBody:
 --  { {AnnotationTypeMemberDeclaration} }
@@ -812,31 +812,31 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --AnnotationTypeMemberDeclaration:
       def "AnnotationTypeMemberDeclaration" $ union [
 --  AnnotationTypeElementDeclaration
-        field "annotationType" $ java "AnnotationTypeElementDeclaration",
+        "annotationType">: java "AnnotationTypeElementDeclaration",
 --  ConstantDeclaration
-        field "constant" $ java "ConstantDeclaration",
+        "constant">: java "ConstantDeclaration",
 --  ClassDeclaration
-        field "class" $ java "ClassDeclaration",
+        "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
-        field "interface" $ java "InterfaceDeclaration"],
+        "interface">: java "InterfaceDeclaration"],
 --  ;
 
 --AnnotationTypeElementDeclaration:
 --  {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
       def "AnnotationTypeElementDeclaration" $ record [
-        field "modifiers" $ list $ java "AnnotationTypeElementModifier",
-        field "type" $ java "UnannType",
-        field "identifier" $ java "Identifier",
-        field "dims" $ optional $ java "Dims",
-        field "default" $ optional $ java "DefaultValue"],
+        "modifiers">: list $ java "AnnotationTypeElementModifier",
+        "type">: java "UnannType",
+        "identifier">: java "Identifier",
+        "dims">: optional $ java "Dims",
+        "default">: optional $ java "DefaultValue"],
 
 --AnnotationTypeElementModifier:
 --  (one of)
       def "AnnotationTypeElementModifier" $ union [
 --  Annotation public
-        field "public" $ java "Annotation",
+        "public">: java "Annotation",
 --  abstract
-        field "abstract" unit],
+        "abstract">: unit],
 
 --DefaultValue:
 --  default ElementValue
@@ -845,34 +845,34 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --Annotation:
       def "Annotation" $ union [
 --  NormalAnnotation
-        field "normal" $ java "NormalAnnotation",
+        "normal">: java "NormalAnnotation",
 --  MarkerAnnotation
-        field "marker" $ java "MarkerAnnotation",
+        "marker">: java "MarkerAnnotation",
 --  SingleElementAnnotation
-        field "singleElement" $ java "SingleElementAnnotation"],
+        "singleElement">: java "SingleElementAnnotation"],
 
 --NormalAnnotation:
 --  @ TypeName ( [ElementValuePairList] )
       def "NormalAnnotation" $ record [
-        field "typeName" $ java "TypeName",
-        field "pairs" $ list $ java "ElementValuePair"],
+        "typeName">: java "TypeName",
+        "pairs">: list $ java "ElementValuePair"],
 
 --ElementValuePairList:
 --  ElementValuePair {, ElementValuePair}
 --ElementValuePair:
 --  Identifier = ElementValue
       def "ElementValuePair" $ record [
-        field "key" $ java "Identifier",
-        field "value" $ java "ElementValue"],
+        "key">: java "Identifier",
+        "value">: java "ElementValue"],
 
 --ElementValue:
       def "ElementValue" $ union [
 --  ConditionalExpression
-        field "conditionalExpression" $ java "ConditionalExpression",
+        "conditionalExpression">: java "ConditionalExpression",
 --  ElementValueArrayInitializer
-        field "elementValueArrayInitializer" $ java "ElementValueArrayInitializer",
+        "elementValueArrayInitializer">: java "ElementValueArrayInitializer",
 --  Annotation
-        field "annotation" $ java "Annotation"],
+        "annotation">: java "Annotation"],
 
 --ElementValueArrayInitializer:
 --  { [ElementValueList] [,] }
@@ -887,8 +887,8 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --SingleElementAnnotation:
       def "SingleElementAnnotation" $ record [
 --  @ TypeName ( ElementValue )
-        field "name" $ java "TypeName",
-        field "value" $ optional $ java "ElementValue"],
+        "name">: java "TypeName",
+        "value">: optional $ java "ElementValue"],
 
 --  Productions from §10 (Arrays)
 
@@ -909,11 +909,11 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --BlockStatement:
       def "BlockStatement" $ union [
 --  LocalVariableDeclarationStatement
-        field "localVariableDeclaration" $ java "LocalVariableDeclarationStatement",
+        "localVariableDeclaration">: java "LocalVariableDeclarationStatement",
 --  ClassDeclaration
-        field "class" $ java "ClassDeclaration",
+        "class">: java "ClassDeclaration",
 --  Statement
-        field "statement" $ java "Statement"],
+        "statement">: java "Statement"],
 
 --LocalVariableDeclarationStatement:
 --  LocalVariableDeclaration ;
@@ -922,71 +922,71 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --LocalVariableDeclaration:
 --  {VariableModifier} LocalVariableType VariableDeclaratorList
       def "LocalVariableDeclaration" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "LocalVariableType",
-        field "declarators" $ nonemptyList $ java "VariableDeclarator"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "LocalVariableType",
+        "declarators">: nonemptyList $ java "VariableDeclarator"],
 
 --LocalVariableType:
       def "LocalVariableType" $ union [
 --  UnannType
-        field "type" $ java "UnannType",
+        "type">: java "UnannType",
 --  var
-        field "var" unit],
+        "var">: unit],
 
 --Statement:
       def "Statement" $ union [
 --  StatementWithoutTrailingSubstatement
-        field "withoutTrailing" $ java "StatementWithoutTrailingSubstatement",
+        "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
 --  LabeledStatement
-        field "labeled" $ java "LabeledStatement",
+        "labeled">: java "LabeledStatement",
 --  IfThenStatement
-        field "ifThen" $ java "IfThenStatement",
+        "ifThen">: java "IfThenStatement",
 --  IfThenElseStatement
-        field "ifThenElse" $ java "IfThenElseStatement",
+        "ifThenElse">: java "IfThenElseStatement",
 --  WhileStatement
-        field "while" $ java "WhileStatement",
+        "while">: java "WhileStatement",
 --  ForStatement
-        field "for" $ java "ForStatement"],
+        "for">: java "ForStatement"],
 
 --StatementNoShortIf:
       def "StatementNoShortIf" $ union [
 --  StatementWithoutTrailingSubstatement
-        field "withoutTrailing" $ java "StatementWithoutTrailingSubstatement",
+        "withoutTrailing">: java "StatementWithoutTrailingSubstatement",
 --  LabeledStatementNoShortIf
-        field "labeled" $ java "LabeledStatementNoShortIf",
+        "labeled">: java "LabeledStatementNoShortIf",
 --  IfThenElseStatementNoShortIf
-        field "ifThenElse" $ java "IfThenElseStatementNoShortIf",
+        "ifThenElse">: java "IfThenElseStatementNoShortIf",
 --  WhileStatementNoShortIf
-        field "while" $ java "WhileStatementNoShortIf",
+        "while">: java "WhileStatementNoShortIf",
 --  ForStatementNoShortIf
-        field "for" $ java "ForStatementNoShortIf"],
+        "for">: java "ForStatementNoShortIf"],
 
 --StatementWithoutTrailingSubstatement:
       def "StatementWithoutTrailingSubstatement" $ union [
 --  Block
-        field "block" $ java "Block",
+        "block">: java "Block",
 --  EmptyStatement
-        field "empty" $ java "EmptyStatement",
+        "empty">: java "EmptyStatement",
 --  ExpressionStatement
-        field "expression" $ java "ExpressionStatement",
+        "expression">: java "ExpressionStatement",
 --  AssertStatement
-        field "assert" $ java "AssertStatement",
+        "assert">: java "AssertStatement",
 --  SwitchStatement
-        field "switch" $ java "SwitchStatement",
+        "switch">: java "SwitchStatement",
 --  DoStatement
-        field "do" $ java "DoStatement",
+        "do">: java "DoStatement",
 --  BreakStatement
-        field "break" $ java "BreakStatement",
+        "break">: java "BreakStatement",
 --  ContinueStatement
-        field "continue" $ java "ContinueStatement",
+        "continue">: java "ContinueStatement",
 --  ReturnStatement
-        field "return" $ java "ReturnStatement",
+        "return">: java "ReturnStatement",
 --  SynchronizedStatement
-        field "synchronized" $ java "SynchronizedStatement",
+        "synchronized">: java "SynchronizedStatement",
 --  ThrowStatement
-        field "throw" $ java "ThrowStatement",
+        "throw">: java "ThrowStatement",
 --  TryStatement
-        field "try" $ java "TryStatement"],
+        "try">: java "TryStatement"],
 
 --EmptyStatement:
 --  ;
@@ -995,14 +995,14 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --LabeledStatement:
 --  Identifier : Statement
       def "LabeledStatement" $ record [
-        field "identifier" $ java "Identifier",
-        field "statement" $ java "Statement"],
+        "identifier">: java "Identifier",
+        "statement">: java "Statement"],
 
 --LabeledStatementNoShortIf:
 --  Identifier : StatementNoShortIf
       def "LabeledStatementNoShortIf" $ record [
-        field "identifier" $ java "Identifier",
-        field "statement" $ java "StatementNoShortIf"],
+        "identifier">: java "Identifier",
+        "statement">: java "StatementNoShortIf"],
 
 --ExpressionStatement:
 --  StatementExpression ;
@@ -1011,79 +1011,79 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --StatementExpression:
       def "StatementExpression" $ union [
 --  Assignment
-        field "assignment" $ java "Assignment",
+        "assignment">: java "Assignment",
 --  PreIncrementExpression
-        field "preIncrement" $ java "PreIncrementExpression",
+        "preIncrement">: java "PreIncrementExpression",
 --  PreDecrementExpression
-        field "preDecrement" $ java "PreDecrementExpression",
+        "preDecrement">: java "PreDecrementExpression",
 --  PostIncrementExpression
-        field "postIncrement" $ java "PostIncrementExpression",
+        "postIncrement">: java "PostIncrementExpression",
 --  PostDecrementExpression
-        field "postDecrement" $ java "PostDecrementExpression",
+        "postDecrement">: java "PostDecrementExpression",
 --  MethodInvocation
-        field "methodInvocation" $ java "MethodInvocation",
+        "methodInvocation">: java "MethodInvocation",
 --  ClassInstanceCreationExpression
-        field "classInstanceCreation" $ java "ClassInstanceCreationExpression"],
+        "classInstanceCreation">: java "ClassInstanceCreationExpression"],
 
 --IfThenStatement:
 --  if ( Expression ) Statement
       def "IfThenStatement" $ record [
-        field "expression" $ java "Expression",
-        field "statement" $ java "Statement"],
+        "expression">: java "Expression",
+        "statement">: java "Statement"],
 
 --IfThenElseStatement:
 --  if ( Expression ) StatementNoShortIf else Statement
       def "IfThenElseStatement" $ record [
-        field "cond" $ optional $ java "Expression",
-        field "then" $ java "StatementNoShortIf",
-        field "else" $ java "Statement"],
+        "cond">: optional $ java "Expression",
+        "then">: java "StatementNoShortIf",
+        "else">: java "Statement"],
 
 --IfThenElseStatementNoShortIf:
 --  if ( Expression ) StatementNoShortIf else StatementNoShortIf
       def "IfThenElseStatementNoShortIf" $ record [
-        field "cond" $ optional $ java "Expression",
-        field "then" $ java "StatementNoShortIf",
-        field "else" $ java "StatementNoShortIf"],
+        "cond">: optional $ java "Expression",
+        "then">: java "StatementNoShortIf",
+        "else">: java "StatementNoShortIf"],
 
 --AssertStatement:
       def "AssertStatement" $ union [
 --  assert Expression ;
-        field "single" $ java "Expression",
+        "single">: java "Expression",
 --  assert Expression : Expression ;
-        field "pair" $ java "AssertStatement.Pair"],
+        "pair">: java "AssertStatement.Pair"],
       def "AssertStatement.Pair" $ record [
-        field "first" $ java "Expression",
-        field "second" $ java "Expression"],
+        "first">: java "Expression",
+        "second">: java "Expression"],
 
 --SwitchStatement:
 --  switch ( Expression ) SwitchBlock
       def "SwitchStatement" $ record [
-        field "cond" $ java "Expression",
-        field "block" $ java "SwitchBlock"],
+        "cond">: java "Expression",
+        "block">: java "SwitchBlock"],
 
 --SwitchBlock:
 --  { {SwitchBlockStatementGroup} {SwitchLabel} }
       def "SwitchBlock" $ list $ java "SwitchBlock.Pair",
       def "SwitchBlock.Pair" $ record [
-        field "statements" $ list $ java "SwitchBlockStatementGroup",
-        field "labels" $ list $ java "SwitchLabel"],
+        "statements">: list $ java "SwitchBlockStatementGroup",
+        "labels">: list $ java "SwitchLabel"],
 
 --SwitchBlockStatementGroup:
 --  SwitchLabels BlockStatements
       def "SwitchBlockStatementGroup" $ record [
-        field "labels" $ nonemptyList $ java "SwitchLabel",
-        field "statements" $ nonemptyList $ java "BlockStatement"],
+        "labels">: nonemptyList $ java "SwitchLabel",
+        "statements">: nonemptyList $ java "BlockStatement"],
 
 --SwitchLabels:
 --  SwitchLabel {SwitchLabel}
 --SwitchLabel:
       def "SwitchLabel" $ union [
 --  case ConstantExpression :
-        field "constant" $ java "ConstantExpression",
+        "constant">: java "ConstantExpression",
 --  case EnumConstantName :
-        field "enumConstant" $ java "EnumConstantName",
+        "enumConstant">: java "EnumConstantName",
 --  default :
-        field "default" unit],
+        "default">: unit],
 
 --EnumConstantName:
 --  Identifier
@@ -1092,56 +1092,56 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --WhileStatement:
 --  while ( Expression ) Statement
       def "WhileStatement" $ record [
-        field "cond" $ optional $ java "Expression",
-        field "body" $ java "Statement"],
+        "cond">: optional $ java "Expression",
+        "body">: java "Statement"],
 
 --WhileStatementNoShortIf:
 --  while ( Expression ) StatementNoShortIf
       def "WhileStatementNoShortIf" $ record [
-        field "cond" $ optional $ java "Expression",
-        field "body" $ java "StatementNoShortIf"],
+        "cond">: optional $ java "Expression",
+        "body">: java "StatementNoShortIf"],
 
 --DoStatement:
 --  do Statement while ( Expression ) ;
       def "DoStatement" $ record [
-        field "body" $ java "Statement",
-        field "conde" $ optional $ java "Expression"],
+        "body">: java "Statement",
+        "conde">: optional $ java "Expression"],
 
 --ForStatement:
       def "ForStatement" $ union [
 --  BasicForStatement
-        field "basic" $ java "BasicForStatement",
+        "basic">: java "BasicForStatement",
 --  EnhancedForStatement
-        field "enhanced" $ java "EnhancedForStatement"],
+        "enhanced">: java "EnhancedForStatement"],
 
 --ForStatementNoShortIf:
       def "ForStatementNoShortIf" $ union [
 --  BasicForStatementNoShortIf
-        field "basic" $ java "BasicForStatementNoShortIf",
+        "basic">: java "BasicForStatementNoShortIf",
 --  EnhancedForStatementNoShortIf
-        field "enhanced" $ java "EnhancedForStatementNoShortIf"],
+        "enhanced">: java "EnhancedForStatementNoShortIf"],
 
 --BasicForStatement:
 --  for ( [ForInit] ; [Expression] ; [ForUpdate] ) Statement
       def "BasicForStatement" $ record [
-        field "cond" $ java "ForCond",
-        field "body" $ java "Statement"],
+        "cond">: java "ForCond",
+        "body">: java "Statement"],
       def "ForCond" $ record [
-        field "init" $ optional $ java "ForInit",
-        field "cond" $ optional $ java "Expression",
-        field "update" $ optional $ java "ForUpdate"],
+        "init">: optional $ java "ForInit",
+        "cond">: optional $ java "Expression",
+        "update">: optional $ java "ForUpdate"],
 --BasicForStatementNoShortIf:
 --  for ( [ForInit] ; [Expression] ; [ForUpdate] ) StatementNoShortIf
       def "BasicForStatementNoShortIf" $ record [
-        field "cond" $ java "ForCond",
-        field "body" $ java "StatementNoShortIf"],
+        "cond">: java "ForCond",
+        "body">: java "StatementNoShortIf"],
 
 --ForInit:
       def "ForInit" $ union [
 --  StatementExpressionList
-        field "statements" $ nonemptyList $ java "StatementExpression",
+        "statements">: nonemptyList $ java "StatementExpression",
 --  LocalVariableDeclaration
-        field "localVariable" $ java "LocalVariableDeclaration"],
+        "localVariable">: java "LocalVariableDeclaration"],
 
 --ForUpdate:
 --  StatementExpressionList
@@ -1152,18 +1152,18 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --EnhancedForStatement:
       def "EnhancedForStatement" $ record [
 --  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) Statement
-        field "cond" $ java "EnhancedForCond",
-        field "body" $ java "Statement"],
+        "cond">: java "EnhancedForCond",
+        "body">: java "Statement"],
       def "EnhancedForCond" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "LocalVariableType",
-        field "id" $ java "VariableDeclaratorId",
-        field "expression" $ java "Expression"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "LocalVariableType",
+        "id">: java "VariableDeclaratorId",
+        "expression">: java "Expression"],
 --EnhancedForStatementNoShortIf:
 --  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) StatementNoShortIf
       def "EnhancedForStatementNoShortIf" $ record [
-        field "cond" $ java "EnhancedForCond",
-        field "body" $ java "StatementNoShortIf"],
+        "cond">: java "EnhancedForCond",
+        "body">: java "StatementNoShortIf"],
 
 --BreakStatement:
 --  break [Identifier] ;
@@ -1184,24 +1184,24 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --SynchronizedStatement:
 --  synchronized ( Expression ) Block
       def "SynchronizedStatement" $ record [
-        field "expression" $ java "Expression",
-        field "block" $ java "Block"],
+        "expression">: java "Expression",
+        "block">: java "Block"],
 
 --TryStatement:
       def "TryStatement" $ union [
 --  try Block Catches
-        field "simple" $ java "TryStatement.Simple",
+        "simple">: java "TryStatement.Simple",
 --  try Block [Catches] Finally
-        field "withFinally" $ java "TryStatement.WithFinally",
+        "withFinally">: java "TryStatement.WithFinally",
 --  TryWithResourcesStatement
-        field "withResources" $ java "TryWithResourcesStatement"],
+        "withResources">: java "TryWithResourcesStatement"],
       def "TryStatement.Simple" $ record [
-        field "block" $ java "Block",
-        field "catches" $ java "Catches"],
+        "block">: java "Block",
+        "catches">: java "Catches"],
       def "TryStatement.WithFinally" $ record [
-        field "block" $ java "Block",
-        field "catches" $ optional $ java "Catches",
-        field "finally" $ java "Finally"],
+        "block">: java "Block",
+        "catches">: optional $ java "Catches",
+        "finally">: java "Finally"],
 
 --Catches:
 --  CatchClause {CatchClause}
@@ -1210,21 +1210,21 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --CatchClause:
 --  catch ( CatchFormalParameter ) Block
       def "CatchClause" $ record [
-        field "parameter" $ optional $ java "CatchFormalParameter",
-        field "block" $ java "Block"],
+        "parameter">: optional $ java "CatchFormalParameter",
+        "block">: java "Block"],
 
 --CatchFormalParameter:
 --  {VariableModifier} CatchType VariableDeclaratorId
       def "CatchFormalParameter" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "CatchType",
-        field "id" $ java "VariableDeclaratorId"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "CatchType",
+        "id">: java "VariableDeclaratorId"],
 
 --CatchType:
 --  UnannClassType {| ClassType}
       def "CatchType" $ record [
-        field "type" $ java "UnannClassType",
-        field "types" $ list $ java "ClassType"],
+        "type">: java "UnannClassType",
+        "types">: list $ java "ClassType"],
 
 --Finally:
 --  finally Block
@@ -1233,10 +1233,10 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --TryWithResourcesStatement:
 --  try ResourceSpecification Block [Catches] [Finally]
       def "TryWithResourcesStatement" $ record [
-        field "resourceSpecification" $ java "ResourceSpecification",
-        field "block" $ java "Block",
-        field "catches" $ optional $ java "Catches",
-        field "finally" $ optional $ java "Finally"],
+        "resourceSpecification">: java "ResourceSpecification",
+        "block">: java "Block",
+        "catches">: optional $ java "Catches",
+        "finally">: optional $ java "Finally"],
 
 --ResourceSpecification:
 --  ( ResourceList [;] )
@@ -1247,154 +1247,154 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --Resource:
       def "Resource" $ union [
 --  {VariableModifier} LocalVariableType Identifier = Expression
-        field "local" $ java "Resource.Local",
+        "local">: java "Resource.Local",
 --  VariableAccess
-        field "variable" $ java "VariableAccess"],
+        "variable">: java "VariableAccess"],
       def "Resource.Local" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "LocalVariableType",
-        field "identifier" $ java "Identifier",
-        field "expression" $ java "Expression"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "LocalVariableType",
+        "identifier">: java "Identifier",
+        "expression">: java "Expression"],
 
 --VariableAccess:
       def "VariableAccess" $ union [
 --  ExpressionName
-        field "expressionName" $ java "ExpressionName",
+        "expressionName">: java "ExpressionName",
 --  FieldAccess
-        field "fieldAccess" $ java "FieldAccess"],
+        "fieldAccess">: java "FieldAccess"],
 
 --Productions from §15 (Expressions)
 
 --Primary:
       def "Primary" $ union [
 --  PrimaryNoNewArray
-        field "noNewArray" $ java "PrimaryNoNewArray",
+        "noNewArray">: java "PrimaryNoNewArray",
 --  ArrayCreationExpression
-        field "arrayCreation" $ java "ArrayCreationExpression"],
+        "arrayCreation">: java "ArrayCreationExpression"],
 
 --PrimaryNoNewArray:
       def "PrimaryNoNewArray" $ union [
 --  Literal
-        field "literal" $ java "Literal",
+        "literal">: java "Literal",
 --  ClassLiteral
-        field "classLiteral" $ java "ClassLiteral",
+        "classLiteral">: java "ClassLiteral",
 --  this
-        field "this" unit,
+        "this">: unit,
 --  TypeName . this
-        field "dotThis" $ java "TypeName",
+        "dotThis">: java "TypeName",
 --  ( Expression )
-        field "parens" $ java "Expression",
+        "parens">: java "Expression",
 --  ClassInstanceCreationExpression
-        field "classInstance" $ java "ClassInstanceCreationExpression",
+        "classInstance">: java "ClassInstanceCreationExpression",
 --  FieldAccess
-        field "fieldAccess" $ java "FieldAccess",
+        "fieldAccess">: java "FieldAccess",
 --  ArrayAccess
-        field "arrayAccess" $ java "ArrayAccess",
+        "arrayAccess">: java "ArrayAccess",
 --  MethodInvocation
-        field "methodInvocation" $ java "MethodInvocation",
+        "methodInvocation">: java "MethodInvocation",
 --  MethodReference
-        field "methodReference" $ java "MethodReference"],
+        "methodReference">: java "MethodReference"],
 
 --ClassLiteral:
       def "ClassLiteral" $ union [
 --  TypeName {[ ]} . class
-        field "type" $ java "TypeNameArray",
+        "type">: java "TypeNameArray",
 --  NumericType {[ ]} . class
-        field "numericType" $ java "NumericTypeArray",
+        "numericType">: java "NumericTypeArray",
 --  boolean {[ ]} . class
-        field "boolean" $ java "BooleanArray",
+        "boolean">: java "BooleanArray",
 --  void . class
-        field "void" unit],
+        "void">: unit],
       def "TypeNameArray" $ union [
-        field "simple" $ java "TypeName",
-        field "array" $ java "TypeNameArray"],
+        "simple">: java "TypeName",
+        "array">: java "TypeNameArray"],
       def "NumericTypeArray" $ union [
-        field "simple" $ java "NumericType",
-        field "array" $ java "NumericTypeArray"],
+        "simple">: java "NumericType",
+        "array">: java "NumericTypeArray"],
       def "BooleanArray" $ union [
-        field "simple" unit,
-        field "array" $ java "BooleanArray"],
+        "simple">: unit,
+        "array">: java "BooleanArray"],
 
 --ClassInstanceCreationExpression:
 --  UnqualifiedClassInstanceCreationExpression
 --  ExpressionName . UnqualifiedClassInstanceCreationExpression
 --  Primary . UnqualifiedClassInstanceCreationExpression
       def "ClassInstanceCreationExpression" $ record [
-        field "qualifier" $ optional $ java "ClassInstanceCreationExpression.Qualifier",
-        field "expression" $ java "UnqualifiedClassInstanceCreationExpression"],
+        "qualifier">: optional $ java "ClassInstanceCreationExpression.Qualifier",
+        "expression">: java "UnqualifiedClassInstanceCreationExpression"],
       def "ClassInstanceCreationExpression.Qualifier" $ union [
-        field "expression" $ java "ExpressionName",
-        field "primary" $ java "Primary"],
+        "expression">: java "ExpressionName",
+        "primary">: java "Primary"],
 
 --UnqualifiedClassInstanceCreationExpression:
 --  new [TypeArguments] ClassOrInterfaceTypeToInstantiate ( [ArgumentList] ) [ClassBody]
       def "UnqualifiedClassInstanceCreationExpression" $ record [
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "classOrInterface" $ java "ClassOrInterfaceTypeToInstantiate",
-        field "arguments" $ list $ java "Expression",
-        field "body" $ optional $ java "ClassBody"],
+        "typeArguments">: list $ java "TypeArgument",
+        "classOrInterface">: java "ClassOrInterfaceTypeToInstantiate",
+        "arguments">: list $ java "Expression",
+        "body">: optional $ java "ClassBody"],
 
 --ClassOrInterfaceTypeToInstantiate:
 --  {Annotation} Identifier {. {Annotation} Identifier} [TypeArgumentsOrDiamond]
       def "ClassOrInterfaceTypeToInstantiate" $ record [
-        field "identifiers" $ nonemptyList $ java "AnnotatedIdentifier",
-        field "typeArguments" $ optional $ java "TypeArgumentsOrDiamond"],
+        "identifiers">: nonemptyList $ java "AnnotatedIdentifier",
+        "typeArguments">: optional $ java "TypeArgumentsOrDiamond"],
       def "AnnotatedIdentifier" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "identifier" $ java "Identifier"],
+        "annotations">: list $ java "Annotation",
+        "identifier">: java "Identifier"],
 
 --TypeArgumentsOrDiamond:
       def "TypeArgumentsOrDiamond" $ union [
 --  TypeArguments
-        field "arguments" $ nonemptyList $ java "TypeArgument",
+        "arguments">: nonemptyList $ java "TypeArgument",
 --  <>
-        field "diamond" unit],
+        "diamond">: unit],
 
 --FieldAccess:
       def "FieldAccess" $ record [
-        field "qualifier" $ java "FieldAccess.Qualifier",
-        field "identifier" $ java "Identifier"],
+        "qualifier">: java "FieldAccess.Qualifier",
+        "identifier">: java "Identifier"],
       def "FieldAccess.Qualifier" $ union [
 --  Primary . Identifier
-        field "primary" $ java "Primary",
+        "primary">: java "Primary",
 --  super . Identifier
-        field "super" unit,
+        "super">: unit,
 --  TypeName . super . Identifier
-        field "typed" $ java "TypeName"],
+        "typed">: java "TypeName"],
 
 --ArrayAccess:
       def "ArrayAccess" $ record [
-        field "expression" $ optional $ java "Expression",
-        field "variant" $ java "ArrayAccess.Variant"],
+        "expression">: optional $ java "Expression",
+        "variant">: java "ArrayAccess.Variant"],
       def "ArrayAccess.Variant" $ union [
 --  ExpressionName [ Expression ]
-        field "name" $ java "ExpressionName",
+        "name">: java "ExpressionName",
 --  PrimaryNoNewArray [ Expression ]
-        field "primary" $ java "PrimaryNoNewArray"],
+        "primary">: java "PrimaryNoNewArray"],
 
 --MethodInvocation:
       def "MethodInvocation" $ record [
-        field "header" $ java "MethodInvocation.Header",
-        field "arguments" $ list $ java "Expression"],
+        "header">: java "MethodInvocation.Header",
+        "arguments">: list $ java "Expression"],
       def "MethodInvocation.Header" $ union [
 --  MethodName ( [ArgumentList] )
-        field "simple" $ java "MethodName",
-        field "complex" $ java "MethodInvocation.Complex"],
+        "simple">: java "MethodName",
+        "complex">: java "MethodInvocation.Complex"],
       def "MethodInvocation.Complex" $ record [
-        field "variant" $ java "MethodInvocation.Variant",
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier"],
+        "variant">: java "MethodInvocation.Variant",
+        "typeArguments">: list $ java "TypeArgument",
+        "identifier">: java "Identifier"],
       def "MethodInvocation.Variant" $ union [
 --  TypeName . [TypeArguments] Identifier ( [ArgumentList] )
-        field "type" $ java "TypeName",
+        "type">: java "TypeName",
 --  ExpressionName . [TypeArguments] Identifier ( [ArgumentList] )
-        field "expression" $ java "ExpressionName",
+        "expression">: java "ExpressionName",
 --  Primary . [TypeArguments] Identifier ( [ArgumentList] )
-        field "primary" $ java "Primary",
+        "primary">: java "Primary",
 --  super . [TypeArguments] Identifier ( [ArgumentList] )
-        field "super" unit,
+        "super">: unit,
 --  TypeName . super . [TypeArguments] Identifier ( [ArgumentList] )
-        field "typeSuper" $ java "TypeName"],
+        "typeSuper">: java "TypeName"],
 
 --ArgumentList:
 --  Expression {, Expression}
@@ -1402,93 +1402,93 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --MethodReference:
       def "MethodReference" $ union [
 --  ExpressionName :: [TypeArguments] Identifier
-        field "expression" $ java "MethodReference.Expression",
+        "expression">: java "MethodReference.Expression",
 --  Primary :: [TypeArguments] Identifier
-        field "primary" $ java "MethodReference.Primary",
+        "primary">: java "MethodReference.Primary",
 --  ReferenceType :: [TypeArguments] Identifier
-        field "referenceType" $ java"MethodReference.ReferenceType",
+        "referenceType">: java"MethodReference.ReferenceType",
 --  super :: [TypeArguments] Identifier
 --  TypeName . super :: [TypeArguments] Identifier
-        field "super" $ java "MethodReference.Super",
+        "super">: java "MethodReference.Super",
 --  ClassType :: [TypeArguments] new
-        field "new" $ java "MethodReference.New",
+        "new">: java "MethodReference.New",
 --  ArrayType :: new
-        field "array" $ java "MethodReference.Array"],
+        "array">: java "MethodReference.Array"],
       def "MethodReference.Expression" $ record [
-        field "name" $ java "ExpressionName",
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier"],
+        "name">: java "ExpressionName",
+        "typeArguments">: list $ java "TypeArgument",
+        "identifier">: java "Identifier"],
       def "MethodReference.Primary" $ record [
-        field "primary" $ java "Primary",
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier"],
+        "primary">: java "Primary",
+        "typeArguments">: list $ java "TypeArgument",
+        "identifier">: java "Identifier"],
       def "MethodReference.ReferenceType" $ record [
-        field "referenceType" $ java "ReferenceType",
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier"],
+        "referenceType">: java "ReferenceType",
+        "typeArguments">: list $ java "TypeArgument",
+        "identifier">: java "Identifier"],
       def "MethodReference.Super" $ record [
-        field "typeArguments" $ list $ java "TypeArgument",
-        field "identifier" $ java "Identifier",
-        field "super" boolean],
+        "typeArguments">: list $ java "TypeArgument",
+        "identifier">: java "Identifier",
+        "super">: boolean],
       def "MethodReference.New" $ record [
-        field "classType" $ java "ClassType",
-        field "typeArguments" $ list $ java "TypeArgument"],
+        "classType">: java "ClassType",
+        "typeArguments">: list $ java "TypeArgument"],
       def "MethodReference.Array" $ java "ArrayType",
 
 --ArrayCreationExpression:
       def "ArrayCreationExpression" $ union [
 --  new PrimitiveType DimExprs [Dims]
-        field "primitive" $ java "ArrayCreationExpression.Primitive",
+        "primitive">: java "ArrayCreationExpression.Primitive",
 --  new ClassOrInterfaceType DimExprs [Dims]
-        field "classOrInterface" $ java "ArrayCreationExpression.ClassOrInterface",
+        "classOrInterface">: java "ArrayCreationExpression.ClassOrInterface",
 --  new PrimitiveType Dims ArrayInitializer
-        field "primitiveArray" $ java "ArrayCreationExpression.PrimitiveArray",
+        "primitiveArray">: java "ArrayCreationExpression.PrimitiveArray",
 --  new ClassOrInterfaceType Dims ArrayInitializer
-        field "classOrInterfaceArray" $ java "ArrayCreationExpression.ClassOrInterfaceArray"],
+        "classOrInterfaceArray">: java "ArrayCreationExpression.ClassOrInterfaceArray"],
       def "ArrayCreationExpression.Primitive" $ record [
-        field "type" $ java "PrimitiveTypeWithAnnotations",
-        field "dimExprs" $ nonemptyList $ java "DimExpr",
-        field "dims" $ optional $ java "Dims"],
+        "type">: java "PrimitiveTypeWithAnnotations",
+        "dimExprs">: nonemptyList $ java "DimExpr",
+        "dims">: optional $ java "Dims"],
       def "ArrayCreationExpression.ClassOrInterface" $ record [
-        field "type" $ java "ClassOrInterfaceType",
-        field "dimExprs" $ nonemptyList $ java "DimExpr",
-        field "dims" $ optional $ java "Dims"],
+        "type">: java "ClassOrInterfaceType",
+        "dimExprs">: nonemptyList $ java "DimExpr",
+        "dims">: optional $ java "Dims"],
       def "ArrayCreationExpression.PrimitiveArray" $ record [
-        field "type" $ java "PrimitiveTypeWithAnnotations",
-        field "dims" $ nonemptyList $ java "Dims",
-        field "array" $ java "ArrayInitializer"],
+        "type">: java "PrimitiveTypeWithAnnotations",
+        "dims">: nonemptyList $ java "Dims",
+        "array">: java "ArrayInitializer"],
       def "ArrayCreationExpression.ClassOrInterfaceArray" $ record [
-        field "type" $ java "ClassOrInterfaceType",
-        field "dims" $ nonemptyList $ java "Dims",
-        field "array" $ java "ArrayInitializer"],
+        "type">: java "ClassOrInterfaceType",
+        "dims">: nonemptyList $ java "Dims",
+        "array">: java "ArrayInitializer"],
 
 --DimExprs:
 --  DimExpr {DimExpr}
 --DimExpr:
 --  {Annotation} [ Expression ]
       def "DimExpr" $ record [
-        field "annotations" $ list $ java "Annotation",
-        field "expression" $ optional $ java "Expression"],
+        "annotations">: list $ java "Annotation",
+        "expression">: optional $ java "Expression"],
 
 --Expression:
       def "Expression" $ union [
 --  LambdaExpression
-        field "lambda" $ java "LambdaExpression",
+        "lambda">: java "LambdaExpression",
 --  AssignmentExpression
-        field "assignment" $ java "AssignmentExpression"],
+        "assignment">: java "AssignmentExpression"],
 
 --LambdaExpression:
 --  LambdaParameters -> LambdaBody
       def "LambdaExpression" $ record [
-        field "parameters" $ java "LambdaParameters",
-        field "body" $ java "LambdaBody"],
+        "parameters">: java "LambdaParameters",
+        "body">: java "LambdaBody"],
 
 --LambdaParameters:
 --  ( [LambdaParameterList] )
 --  Identifier
       def "LambdaParameters" $ union [
-        field "tuple" $ list $ java "LambdaParameters",
-        field "single" $ java "Identifier"],
+        "tuple">: list $ java "LambdaParameters",
+        "single">: java "Identifier"],
 
 --LambdaParameterList:
 --  LambdaParameter {, LambdaParameter}
@@ -1496,50 +1496,50 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --LambdaParameter:
       def "LambdaParameter" $ union [
 --  {VariableModifier} LambdaParameterType VariableDeclaratorId
-        field "normal" $ java "LambdaParameter.Normal",
+        "normal">: java "LambdaParameter.Normal",
 --  VariableArityParameter
-        field "variableArity" $ java "VariableArityParameter"],
+        "variableArity">: java "VariableArityParameter"],
       def "LambdaParameter.Normal" $ record [
-        field "modifiers" $ list $ java "VariableModifier",
-        field "type" $ java "LambdaParameterType",
-        field "id" $ java "VariableDeclaratorId"],
+        "modifiers">: list $ java "VariableModifier",
+        "type">: java "LambdaParameterType",
+        "id">: java "VariableDeclaratorId"],
 
 --LambdaParameterType:
       def "LambdaParameterType" $ union [
 --  UnannType
-        field "type" $ java "UnannType",
+        "type">: java "UnannType",
 --  var
-        field "var" unit],
+        "var">: unit],
 
 --LambdaBody:
       def "LambdaBody" $ union [
 --  Expression
-        field "expression" $ java "Expression",
+        "expression">: java "Expression",
 --  Block
-        field "block" $ java "Block"],
+        "block">: java "Block"],
 
 --AssignmentExpression:
       def "AssignmentExpression" $ union [
 --  ConditionalExpression
-        field "conditional" $ java "ConditionalExpression",
+        "conditional">: java "ConditionalExpression",
 --  Assignment
-        field "assignment" $ java "Assignment"],
+        "assignment">: java "Assignment"],
 
 --Assignment:
 --  LeftHandSide AssignmentOperator Expression
       def "Assignment" $ record [
-        field "lhs" $ java "LeftHandSide",
-        field "op" $ java "AssignmentOperator",
-        field "expression" $ java "Expression"],
+        "lhs">: java "LeftHandSide",
+        "op">: java "AssignmentOperator",
+        "expression">: java "Expression"],
 
 --LeftHandSide:
       def "LeftHandSide" $ union [
 --  ExpressionName
-        field "expressionName" $ java "ExpressionName",
+        "expressionName">: java "ExpressionName",
 --  FieldAccess
-        field "fieldAccess" $ java "FieldAccess",
+        "fieldAccess">: java "FieldAccess",
 --  ArrayAccess
-        field "arrayAccess" $ java "ArrayAccess"],
+        "arrayAccess">: java "ArrayAccess"],
 
 --AssignmentOperator:
 --  (one of)
@@ -1551,19 +1551,19 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --ConditionalExpression:
       def "ConditionalExpression" $ union [
 --  ConditionalOrExpression
-        field "simple" $ java "ConditionalOrExpression",
+        "simple">: java "ConditionalOrExpression",
 --  ConditionalOrExpression ? Expression : ConditionalExpression
-        field "ternaryCond" $ java "ConditionalExpression.TernaryCond",
+        "ternaryCond">: java "ConditionalExpression.TernaryCond",
 --  ConditionalOrExpression ? Expression : LambdaExpression
-        field "ternaryLambda" $ java "ConditionalExpression.TernaryLambda"],
+        "ternaryLambda">: java "ConditionalExpression.TernaryLambda"],
       def "ConditionalExpression.TernaryCond" $ record [
-        field "cond" $ java "ConditionalOrExpression",
-        field "ifTrue" $ java "Expression",
-        field "ifFalse" $ java "ConditionalExpression"],
+        "cond">: java "ConditionalOrExpression",
+        "ifTrue">: java "Expression",
+        "ifFalse">: java "ConditionalExpression"],
       def "ConditionalExpression.TernaryLambda" $ record [
-        field "cond" $ java "ConditionalOrExpression",
-        field "ifTrue" $ java "Expression",
-        field "ifFalse" $ java "LambdaExpression"],
+        "cond">: java "ConditionalOrExpression",
+        "ifTrue">: java "Expression",
+        "ifFalse">: java "LambdaExpression"],
 
 --ConditionalOrExpression:
 --  ConditionalAndExpression
@@ -1593,97 +1593,97 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --EqualityExpression:
       def "EqualityExpression" $ union [
 --  RelationalExpression
-        field "unary" $ java "RelationalExpression",
+        "unary">: java "RelationalExpression",
 --  EqualityExpression == RelationalExpression
-        field "equal" $ java "EqualityExpression.Binary",
+        "equal">: java "EqualityExpression.Binary",
 --  EqualityExpression != RelationalExpression
-        field "notEqual" $ java "EqualityExpression.Binary"],
+        "notEqual">: java "EqualityExpression.Binary"],
       def "EqualityExpression.Binary" $ record [
-        field "lhs" $ java "EqualityExpression",
-        field "rhs" $ java "RelationalExpression"],
+        "lhs">: java "EqualityExpression",
+        "rhs">: java "RelationalExpression"],
 
 --RelationalExpression:
       def "RelationalExpression" $ union [
 --  ShiftExpression
-        field "simple" $ java "ShiftExpression",
+        "simple">: java "ShiftExpression",
 --  RelationalExpression < ShiftExpression
-        field "lessThan" $ java "RelationalExpression.LessThan",
+        "lessThan">: java "RelationalExpression.LessThan",
 --  RelationalExpression > ShiftExpression
-        field "greaterThan" $ java "RelationalExpression.GreaterThan",
+        "greaterThan">: java "RelationalExpression.GreaterThan",
 --  RelationalExpression <= ShiftExpression
-        field "lessThanEqual" $ java "RelationalExpression.LessThanEqual",
+        "lessThanEqual">: java "RelationalExpression.LessThanEqual",
 --  RelationalExpression >= ShiftExpression
-        field "greaterThanEqual" $ java "RelationalExpression.GreaterThanEqual",
+        "greaterThanEqual">: java "RelationalExpression.GreaterThanEqual",
 --  RelationalExpression instanceof ReferenceType
-        field "instanceof" $ java "RelationalExpression.InstanceOf"],
+        "instanceof">: java "RelationalExpression.InstanceOf"],
       def "RelationalExpression.LessThan" $ record [
-        field "lhs" $ java "RelationalExpression",
-        field "rhs" $ java "ShiftExpression"],
+        "lhs">: java "RelationalExpression",
+        "rhs">: java "ShiftExpression"],
       def "RelationalExpression.GreaterThan" $ record [
-        field "lhs" $ java "RelationalExpression",
-        field "rhs" $ java "ShiftExpression"],
+        "lhs">: java "RelationalExpression",
+        "rhs">: java "ShiftExpression"],
       def "RelationalExpression.LessThanEqual" $ record [
-        field "lhs" $ java "RelationalExpression",
-        field "rhs" $ java "ShiftExpression"],
+        "lhs">: java "RelationalExpression",
+        "rhs">: java "ShiftExpression"],
       def "RelationalExpression.GreaterThanEqual" $ record [
-        field "lhs" $ java "RelationalExpression",
-        field "rhs" $ java "ShiftExpression"],
+        "lhs">: java "RelationalExpression",
+        "rhs">: java "ShiftExpression"],
       def "RelationalExpression.InstanceOf" $ record [
-        field "lhs" $ java "RelationalExpression",
-        field "rhs" $ java "ReferenceType"],
+        "lhs">: java "RelationalExpression",
+        "rhs">: java "ReferenceType"],
 
 --ShiftExpression:
       def "ShiftExpression" $ union [
 --  AdditiveExpression
-        field "unary" $ java "AdditiveExpression",
+        "unary">: java "AdditiveExpression",
 --  ShiftExpression << AdditiveExpression
-        field "shiftLeft" $ java "ShiftExpression.Binary",
+        "shiftLeft">: java "ShiftExpression.Binary",
 --  ShiftExpression >> AdditiveExpression
-        field "shiftRight" $ java "ShiftExpression.Binary",
+        "shiftRight">: java "ShiftExpression.Binary",
 --  ShiftExpression >>> AdditiveExpression
-        field "shiftRightZeroFill" $ java "ShiftExpression.Binary"],
+        "shiftRightZeroFill">: java "ShiftExpression.Binary"],
       def "ShiftExpression.Binary" $ record [
-        field "lhs" $ java "ShiftExpression",
-        field "rhs" $ java "AdditiveExpression"],
+        "lhs">: java "ShiftExpression",
+        "rhs">: java "AdditiveExpression"],
 
 --AdditiveExpression:
       def "AdditiveExpression" $ union [
 --  MultiplicativeExpression
-        field "unary" $ java "MultiplicativeExpression",
+        "unary">: java "MultiplicativeExpression",
 --  AdditiveExpression + MultiplicativeExpression
-        field "plus" $ java "AdditiveExpression.Binary",
+        "plus">: java "AdditiveExpression.Binary",
 --  AdditiveExpression - MultiplicativeExpression
-        field "minus" $ java "AdditiveExpression.Binary"],
+        "minus">: java "AdditiveExpression.Binary"],
       def "AdditiveExpression.Binary" $ record [
-        field "lhs" $ java "AdditiveExpression",
-        field "rhs" $ java "MultiplicativeExpression"],
+        "lhs">: java "AdditiveExpression",
+        "rhs">: java "MultiplicativeExpression"],
 
 --MultiplicativeExpression:
       def "MultiplicativeExpression" $ union [
 --  UnaryExpression
-        field "unary" $ java "UnaryExpression",
+        "unary">: java "UnaryExpression",
 --  MultiplicativeExpression * UnaryExpression
-        field "times" $ java "MultiplicativeExpression.Binary",
+        "times">: java "MultiplicativeExpression.Binary",
 --  MultiplicativeExpression / UnaryExpression
-        field "divide" $ java "MultiplicativeExpression.Binary",
+        "divide">: java "MultiplicativeExpression.Binary",
 --  MultiplicativeExpression % UnaryExpression
-        field "mod" $ java "MultiplicativeExpression.Binary"],
+        "mod">: java "MultiplicativeExpression.Binary"],
       def "MultiplicativeExpression.Binary" $ record [
-        field "lhs" $ java "MultiplicativeExpression",
-        field "rhs" $ java "UnaryExpression"],
+        "lhs">: java "MultiplicativeExpression",
+        "rhs">: java "UnaryExpression"],
 
 --UnaryExpression:
       def "UnaryExpression" $ union [
 --  PreIncrementExpression
-        field "preIncrement" $ java "PreIncrementExpression",
+        "preIncrement">: java "PreIncrementExpression",
 --  PreDecrementExpression
-        field "preDecrement" $ java "PreDecrementExpression",
+        "preDecrement">: java "PreDecrementExpression",
 --  + UnaryExpression
-        field "plus" $ java "UnaryExpression",
+        "plus">: java "UnaryExpression",
 --  - UnaryExpression
-        field "minus" $ java "UnaryExpression",
+        "minus">: java "UnaryExpression",
 --  UnaryExpressionNotPlusMinus
-        field "other" $ java "UnaryExpressionNotPlusMinus"],
+        "other">: java "UnaryExpressionNotPlusMinus"],
 
 --PreIncrementExpression:
 --  ++ UnaryExpression
@@ -1696,24 +1696,24 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --UnaryExpressionNotPlusMinus:
       def "UnaryExpressionNotPlusMinus" $ union [
 --  PostfixExpression
-        field "postfix" $ java "PostfixExpression",
+        "postfix">: java "PostfixExpression",
 --  ~ UnaryExpression
-        field "tilde" $ java "UnaryExpression",
+        "tilde">: java "UnaryExpression",
 --  ! UnaryExpression
-        field "not" $ java "UnaryExpression",
+        "not">: java "UnaryExpression",
 --  CastExpression
-        field "cast" $ java "CastExpression"],
+        "cast">: java "CastExpression"],
 
 --PostfixExpression:
       def "PostfixExpression" $ union [
 --  Primary
-        field "primary" $ java "Primary",
+        "primary">: java "Primary",
 --  ExpressionName
-        field "name" $ java "ExpressionName",
+        "name">: java "ExpressionName",
 --  PostIncrementExpression
-        field "postIncrement" $ java "PostIncrementExpression",
+        "postIncrement">: java "PostIncrementExpression",
 --  PostDecrementExpression
-        field "postDecrement" $ java "PostDecrementExpression"],
+        "postDecrement">: java "PostDecrementExpression"],
 
 --PostIncrementExpression:
 --  PostfixExpression ++
@@ -1726,23 +1726,23 @@ javaSyntax = Graph javaSyntaxName elements (const True) hydraCoreName
 --CastExpression:
       def "CastExpression" $ union [
 --  ( PrimitiveType ) UnaryExpression
-        field "primitive" $ java "CastExpression.Primitive",
+        "primitive">: java "CastExpression.Primitive",
 --  ( ReferenceType {AdditionalBound} ) UnaryExpressionNotPlusMinus
-        field "notPlusMinus" $ java "CastExpression.NotPlusMinus",
+        "notPlusMinus">: java "CastExpression.NotPlusMinus",
 --  ( ReferenceType {AdditionalBound} ) LambdaExpression
-        field "lambda" $ java "CastExpression.Lambda"],
+        "lambda">: java "CastExpression.Lambda"],
       def "CastExpression.Primitive" $ record [
-        field "type" $ java "PrimitiveTypeWithAnnotations",
-        field "expression" $ java "UnaryExpression"],
+        "type">: java "PrimitiveTypeWithAnnotations",
+        "expression">: java "UnaryExpression"],
       def "CastExpression.NotPlusMinus" $ record [
-        field "refAndBounds" $ java "CastExpression.RefAndBounds",
-        field "expression" $ java "UnaryExpression"],
+        "refAndBounds">: java "CastExpression.RefAndBounds",
+        "expression">: java "UnaryExpression"],
       def "CastExpression.Lambda" $ record [
-        field "refAndBounds" $ java "CastExpression.RefAndBounds",
-        field "expression" $ java "LambdaExpression"],
+        "refAndBounds">: java "CastExpression.RefAndBounds",
+        "expression">: java "LambdaExpression"],
       def "CastExpression.RefAndBounds" $ record [
-        field "type" $ java "ReferenceType",
-        field "bounds" $ list $ java "AdditionalBound"],
+        "type">: java "ReferenceType",
+        "bounds">: list $ java "AdditionalBound"],
 
 --ConstantExpression:
 --  Expression
