@@ -18,7 +18,9 @@ _Annotated_annotation = (FieldName "annotation")
 -- A term which applies a function to an argument
 data Application m 
   = Application {
+    -- The left-hand side of the application
     applicationFunction :: (Term m),
+    -- The right-hand side of the application
     applicationArgument :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -31,7 +33,9 @@ _Application_argument = (FieldName "argument")
 -- The type-level analog of an application term
 data ApplicationType m 
   = ApplicationType {
+    -- The left-hand side of the application
     applicationTypeFunction :: (Type m),
+    -- The right-hand side of the application
     applicationTypeArgument :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -114,6 +118,7 @@ _Field_term = (FieldName "term")
 -- The name of a field
 newtype FieldName 
   = FieldName {
+    -- The name of a field
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -280,7 +285,9 @@ _IntegerValue_uint64 = (FieldName "uint64")
 -- A function abstraction (lambda)
 data Lambda m 
   = Lambda {
+    -- The parameter of the lambda
     lambdaParameter :: Variable,
+    -- The body of the lambda
     lambdaBody :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -293,7 +300,9 @@ _Lambda_body = (FieldName "body")
 -- A type abstraction; the type-level analog of a lambda term
 data LambdaType m 
   = LambdaType {
+    -- The parameter of the lambda
     lambdaTypeParameter :: VariableType,
+    -- The body of the lambda
     lambdaTypeBody :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -398,6 +407,7 @@ _MapType_values = (FieldName "values")
 -- A built-in metadata container for terms
 data Meta 
   = Meta {
+    -- A map of annotation names to annotation values
     metaAnnotations :: (Map String (Term Meta))}
   deriving (Eq, Ord, Read, Show)
 
@@ -408,6 +418,7 @@ _Meta_annotations = (FieldName "annotations")
 -- A unique element name
 newtype Name 
   = Name {
+    -- A unique element name
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -429,7 +440,9 @@ _Named_term = (FieldName "term")
 -- A case statement for matching optional terms
 data OptionalCases m 
   = OptionalCases {
+    -- A term provided if the optional value is nothing
     optionalCasesNothing :: (Term m),
+    -- A function which is applied of the optional value is non-nothing
     optionalCasesJust :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -675,6 +688,7 @@ _TypedTerm_term = (FieldName "term")
 -- A symbol which stands in for a term
 newtype Variable 
   = Variable {
+    -- A symbol which stands in for a term
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -683,6 +697,7 @@ _Variable = (Name "hydra/core.Variable")
 -- A symbol which stands in for a type
 newtype VariableType 
   = VariableType {
+    -- A symbol which stands in for a type
     unVariableType :: String}
   deriving (Eq, Ord, Read, Show)
 

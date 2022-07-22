@@ -21,27 +21,49 @@ _Closed_ignoredProperties = (Core.FieldName "ignoredProperties")
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraints 
   = CommonConstraints {
+    -- See https://www.w3.org/TR/shacl/#AndConstraintComponent
     commonConstraintsAnd :: (Maybe [Shape]),
+    -- See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
     commonConstraintsClosed :: (Maybe Closed),
+    -- See https://www.w3.org/TR/shacl/#ClassConstraintComponent
     commonConstraintsClass :: (Set Syntax.RdfsClass),
+    -- See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent
     commonConstraintsDatatype :: (Maybe Syntax.Iri),
+    -- See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
     commonConstraintsDisjoint :: (Set Syntax.Property),
+    -- See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
     commonConstraintsEquals :: (Set Syntax.Property),
+    -- Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
     commonConstraintsHasValue :: (Set Syntax.Node),
+    -- Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
     commonConstraintsIn :: (Maybe [Syntax.Node]),
+    -- See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
     commonConstraintsLanguageIn :: (Maybe [Syntax.LanguageTag]),
+    -- See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
     commonConstraintsNodeKind :: (Maybe NodeKind),
+    -- See https://www.w3.org/TR/shacl/#NodeConstraintComponent
     commonConstraintsNode :: (Set NodeShape),
+    -- See https://www.w3.org/TR/shacl/#NotConstraintComponent
     commonConstraintsNot :: (Set Shape),
+    -- See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
     commonConstraintsMaxExclusive :: (Maybe Syntax.Literal),
+    -- See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent
     commonConstraintsMaxInclusive :: (Maybe Syntax.Literal),
+    -- See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent
     commonConstraintsMaxLength :: (Maybe Integer),
+    -- See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent
     commonConstraintsMinExclusive :: (Maybe Syntax.Literal),
+    -- See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent
     commonConstraintsMinInclusive :: (Maybe Syntax.Literal),
+    -- See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent
     commonConstraintsMinLength :: (Maybe Integer),
+    -- See https://www.w3.org/TR/shacl/#PatternConstraintComponent
     commonConstraintsPattern :: (Maybe Pattern),
+    -- See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
     commonConstraintsProperty :: (Set PropertyShape),
+    -- See https://www.w3.org/TR/shacl/#OrConstraintComponent
     commonConstraintsOr :: (Maybe [Shape]),
+    -- See https://www.w3.org/TR/shacl/#XoneConstraintComponent
     commonConstraintsXone :: (Maybe [Shape])}
   deriving (Eq, Ord, Read, Show)
 
@@ -94,13 +116,21 @@ _CommonConstraints_xone = (Core.FieldName "xone")
 -- Common constraint parameters and other properties for SHACL shapes
 data CommonProperties 
   = CommonProperties {
+    -- Common constraint parameters attached to this shape
     commonPropertiesConstraints :: CommonConstraints,
+    -- See https://www.w3.org/TR/shacl/#deactivated
     commonPropertiesDeactivated :: (Maybe Bool),
+    -- See https://www.w3.org/TR/shacl/#message
     commonPropertiesMessage :: Syntax.LangStrings,
+    -- See https://www.w3.org/TR/shacl/#severity
     commonPropertiesSeverity :: Severity,
+    -- See https://www.w3.org/TR/shacl/#targetClass
     commonPropertiesTargetClass :: (Set Syntax.RdfsClass),
+    -- See https://www.w3.org/TR/shacl/#targetNode
     commonPropertiesTargetNode :: (Set Syntax.IriOrLiteral),
+    -- See https://www.w3.org/TR/shacl/#targetObjectsOf
     commonPropertiesTargetObjectsOf :: (Set Syntax.Property),
+    -- See https://www.w3.org/TR/shacl/#targetSubjectsOf
     commonPropertiesTargetSubjectsOf :: (Set Syntax.Property)}
   deriving (Eq, Ord, Read, Show)
 
@@ -172,10 +202,15 @@ _Pattern_flags = (Core.FieldName "flags")
 data PropertyShape 
   = PropertyShape {
     propertyShapeCommon :: CommonProperties,
+    -- Any property shape -specific constraint parameters
     propertyShapeConstraints :: PropertyShapeConstraints,
+    -- See https://www.w3.org/TR/shacl/#defaultValue
     propertyShapeDefaultValue :: (Maybe Syntax.Node),
+    -- See https://www.w3.org/TR/shacl/#name
     propertyShapeDescription :: Syntax.LangStrings,
+    -- See https://www.w3.org/TR/shacl/#name
     propertyShapeName :: Syntax.LangStrings,
+    -- See https://www.w3.org/TR/shacl/#order
     propertyShapeOrder :: (Maybe Integer),
     propertyShapePath :: Syntax.Resource}
   deriving (Eq, Ord, Read, Show)
@@ -199,11 +234,17 @@ _PropertyShape_path = (Core.FieldName "path")
 -- A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
 data PropertyShapeConstraints 
   = PropertyShapeConstraints {
+    -- See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
     propertyShapeConstraintsLessThan :: (Set Syntax.Property),
+    -- See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
     propertyShapeConstraintsLessThanOrEquals :: (Set Syntax.Property),
+    -- The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent
     propertyShapeConstraintsMaxCount :: (Maybe Integer),
+    -- The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent
     propertyShapeConstraintsMinCount :: (Maybe Integer),
+    -- See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent
     propertyShapeConstraintsUniqueLang :: (Maybe Bool),
+    -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
     propertyShapeConstraintsQualifiedValueShape :: (Maybe QualifiedValueShape)}
   deriving (Eq, Ord, Read, Show)
 
@@ -269,6 +310,7 @@ _Shape_property = (Core.FieldName "property")
 -- An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
 newtype ShapesGraph 
   = ShapesGraph {
+    -- An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
     unShapesGraph :: (Set Shape)}
   deriving (Eq, Ord, Read, Show)
 

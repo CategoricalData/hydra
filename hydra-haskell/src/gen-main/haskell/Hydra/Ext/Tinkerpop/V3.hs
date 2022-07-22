@@ -51,6 +51,7 @@ _Graph_edges = (Core.FieldName "edges")
 -- A vertex or edge id
 newtype Id 
   = Id {
+    -- A vertex or edge id
     unId :: Core.Literal}
   deriving (Eq, Ord, Read, Show)
 
@@ -59,6 +60,7 @@ _Id = (Core.Name "hydra/ext/tinkerpop/v3.Id")
 -- A map of property keys to property values
 newtype Properties 
   = Properties {
+    -- A map of property keys to property values
     unProperties :: (Map PropertyKey Core.Literal)}
   deriving (Eq, Ord, Read, Show)
 
@@ -67,6 +69,7 @@ _Properties = (Core.Name "hydra/ext/tinkerpop/v3.Properties")
 -- A property key
 newtype PropertyKey 
   = PropertyKey {
+    -- A property key
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -100,6 +103,7 @@ _Vertex_properties = (Core.FieldName "properties")
 -- A vertex id
 newtype VertexId 
   = VertexId {
+    -- A vertex id
     unVertexId :: Core.Literal}
   deriving (Eq, Ord, Read, Show)
 
