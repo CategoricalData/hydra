@@ -61,7 +61,7 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
         doc "A record-style data constructor" $
         record [
           field "name" $ ast "Name",
-          field "fields" $ list $ ast "Field"],
+          field "fields" $ list $ ast "FieldWithComments"],
 
       def "DataDeclaration" $ -- UDataDecl
         doc "A data type declaration" $
@@ -218,6 +218,12 @@ haskellAst = Graph haskellAstName elements (const True) hydraCoreName
           field "name" $ ast "Name",
           field "type" $ ast "Type"],
 
+      def "FieldWithComments" $
+        doc "A field together with any comments" $
+        record [
+          field "field" $ ast "Field",
+          field "comments" $ optional string],
+          
       def "FieldUpdate" $ -- UFieldUpdate
         doc "A field name and value" $
         -- omitted for now: pun, wildcard
