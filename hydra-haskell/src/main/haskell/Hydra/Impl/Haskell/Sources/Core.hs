@@ -25,8 +25,8 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "Annotated" $
         lambda "a" $
         lambda "m" $ record [
-          "subject">: variable "a",
-          "annotation">: variable "m"],
+          "subject">: "a",
+          "annotation">: "m"],
 
       def "Application" $
         doc "A term which applies a function to an argument" $
@@ -285,7 +285,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         lambda "m" $ union [
           "annotated">:
             doc "A term annotated with metadata" $
-            apply (apply (core "Annotated") (apply (core "Term") (variable "m"))) (variable "m"),
+            core "Annotated" @@ (core "Term" @@ "m") @@ "m",
           "application">:
             doc "A function application" $
             core "Application" @@ "m",
@@ -298,7 +298,8 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "function">:
             doc "A function term" $
             core "Function" @@ "m",
-          "let">: core "Let" @@ "m",
+          "let">:
+            core "Let" @@ "m",
           "list">:
             doc "A list" $
             list $ core "Term" @@ "m",
@@ -306,7 +307,8 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "map">:
             doc "A map of keys to values" $
             Types.map (core "Term" @@ "m") (core "Term" @@ "m"),
-          "nominal">: core "Named" @@ "m",
+          "nominal">:
+            core "Named" @@ "m",
           "optional">:
             doc "An optional value" $
             optional $ core "Term" @@ "m",
@@ -347,7 +349,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         lambda "m" $ union [
           "annotated">:
             doc "A type annotated with metadata" $
-            apply (apply (core "Annotated") (apply (core "Type") (variable "m"))) (variable "m"),
+            core "Annotated" @@ (core "Type" @@ "m") @@ "m",
           "application">: core "ApplicationType" @@ "m",
           "element">: core "Type" @@ "m",
           "function">: core "FunctionType" @@ "m",
