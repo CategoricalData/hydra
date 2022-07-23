@@ -1,7 +1,10 @@
 module Hydra.Impl.Haskell.Dsl.Grammars where
 
 import Hydra.Grammar
+import Data.String(IsString(..))
 
+
+instance IsString Pattern where fromString = symbol
 
 infixr 0 >:
 (>:) :: String -> Pattern -> Pattern

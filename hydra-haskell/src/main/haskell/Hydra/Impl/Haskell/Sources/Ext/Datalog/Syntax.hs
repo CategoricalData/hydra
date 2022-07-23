@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax where
 
 import Hydra.Core
@@ -33,40 +35,40 @@ datalogGrammar = Grammar [
 -- <program> ::= <fact> <program> | <rule> <program> | ɛ
   define "Program" [
     star (alts[
-      symbol "Fact",
-      symbol "Rule"])],
---    list[symbol "Fact", symbol "Program"],
---    list[symbol "Rule", symbol "Program"],
+      "Fact",
+      "Rule"])],
+--    list["Fact", "Program"],
+--    list["Rule", "Program"],
 --    nil],
 
 -- <fact> ::=  <relation> "(" <constant-list> ")." 
   define "Fact" [
-    list[symbol "Relation", lparen, symbol "ConstantList", rparen, period]],
+    list["Relation", lparen, "ConstantList", rparen, period]],
 
 -- <rule> ::= <atom> ":-" <atom-list> "."
   define "Rule" [
-    list[symbol "Atom", entail, symbol "AtomList", period]],
+    list["Atom", entail, "AtomList", period]],
 
 -- <atom> ::= <relation> "(" <term-list> ")"
   define "Atom" [
-    list[symbol "Relation", lparen, symbol "TermList", rparen]],
+    list["Relation", lparen, "TermList", rparen]],
 
 -- <atom-list> ::= <atom> | <atom> "," <atom-list>
   define "AtomList" [
-    "single">: symbol "Atom",
-    "multiple">: list[symbol "Atom", comma, symbol "AtomList"]],
+    "single">: "Atom",
+    "multiple">: list["Atom", comma, "AtomList"]],
 
 -- <term> ::= <constant> | <variable>
   define "Term" [
-    symbol "Constant",
-    symbol "Variable"],
+    "Constant",
+    "Variable"],
   
 -- <term-list> ::= <term> | <term> "," <term-list>
   define "TermList" [
-    "single">: symbol "Term",
-    "multiple">: list[symbol "Term", comma, symbol "TermList"]],
+    "single">: "Term",
+    "multiple">: list["Term", comma, "TermList"]],
   
 -- <constant-list> ::= <constant> | <constant> "," <constant-list>
   define "ConstantList" [
-    "single">: symbol "Constant",
-    "multiple">: list[symbol "Constant", comma, symbol "ConstantList"]]]
+    "single">: "Constant",
+    "multiple">: list["Constant", comma, "ConstantList"]]]
