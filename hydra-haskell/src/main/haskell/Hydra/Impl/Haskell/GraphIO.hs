@@ -16,6 +16,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Impl.Haskell.Sources.Ext.Azure.Dtld
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
+import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
@@ -70,6 +71,7 @@ extModules = [
   pure coqSyntaxModule,
   pure datalogSyntaxModule,
   pure dtldModule,
+  pure graphqlSyntaxModule,
   pure javaSyntaxModule,
   pure pegasusPdlModule,
   pure owlSyntaxModule,
