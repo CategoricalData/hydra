@@ -49,10 +49,10 @@ grammarToModule cx (Grammar prods) gname = Module graph []
           PatternNonterminal (Symbol s) -> decapitalize s
           PatternSequence _ -> "sequence"
           PatternAlternatives _ -> "alts"
-          PatternOption p -> "option" ++ capitalize (rawName p)
-          PatternStar p -> "star" ++ capitalize (rawName p)
-          PatternPlus p -> "plus" ++ capitalize (rawName p)
-            
+          PatternOption p -> decapitalize (rawName p)
+          PatternStar p -> "listOf" ++ capitalize (rawName p)
+          PatternPlus p -> "listOf" ++ capitalize (rawName p)
+
     isComplex pat = case pat of
       PatternLabeled (LabeledPattern _ p) -> isComplex p
       PatternSequence _ -> True
