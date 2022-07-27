@@ -24,11 +24,11 @@ grammarToModule cx (Grammar prods) gname = Module graph []
       where
         exprs = const True -- TODO: not strictly true; consider removing exprs from Graph
 
-        els = pairToElement <$> L.concat (L.zipWith makeElements (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
+        els = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
           where
             prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
             pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType cx typ)
-        
+
     toName lname = fromQname gname lname
     
     findNames pats = L.reverse $ fst (L.foldl nextName ([], M.empty) pats)
@@ -44,7 +44,7 @@ grammarToModule cx (Grammar prods) gname = Module graph []
           PatternNil -> "none"
           PatternIgnored _ -> "ignored"
           PatternLabeled (LabeledPattern (Label l) _) -> l
-          PatternConstant _ -> "constant"
+          PatternConstant (Constant c) -> decapitalize $ withCharacterAliases c
           PatternRegex _ -> "regex"
           PatternNonterminal (Symbol s) -> decapitalize s
           PatternSequence _ -> "sequence"
@@ -52,40 +52,47 @@ grammarToModule cx (Grammar prods) gname = Module graph []
           PatternOption p -> "option" ++ capitalize (rawName p)
           PatternStar p -> "star" ++ capitalize (rawName p)
           PatternPlus p -> "plus" ++ capitalize (rawName p)
-
+            
     isComplex pat = case pat of
       PatternLabeled (LabeledPattern _ p) -> isComplex p
       PatternSequence _ -> True
       PatternAlternatives _ -> True
       _ -> False
       
-    makeElements lname pat = forPat pat
+    makeElements omitTrivial lname pat = forPat pat
       where
         forPat pat = case pat of
-          PatternNil -> [(lname, Types.unit)]
+          PatternNil -> trivial
           PatternIgnored _ -> []
-          PatternLabeled (LabeledPattern (Label l) p) -> forPat p
-          PatternConstant _ -> []
+          PatternLabeled (LabeledPattern (Label _) p) -> forPat p
+          PatternConstant _ -> trivial
           PatternRegex _ -> [(lname, Types.string)]
           PatternNonterminal (Symbol other) -> [(lname, Types.nominal $ toName other)]
-          PatternSequence pats -> forRecordOrUnion Types.record pats
-          PatternAlternatives pats -> forRecordOrUnion Types.union pats
+          PatternSequence pats -> forRecordOrUnion True Types.record pats
+          PatternAlternatives pats -> forRecordOrUnion False Types.union pats
           PatternOption p -> mod "Option" Types.optional p
           PatternStar p -> mod "Elmt" Types.list p
           PatternPlus p -> mod "Elmt" nonemptyList p
 
-        forRecordOrUnion c pats = (lname, c fields):els
+        trivial = if omitTrivial then [] else [(lname, Types.unit)]
+        
+        forRecordOrUnion isRecord c pats = (lname, c fields):els
             where
-              fieldPairs = Y.catMaybes $ L.zipWith toField (findNames pats) pats
+              fieldPairs = Y.catMaybes $ L.zipWith (toField isRecord) (findNames pats) pats
               fields = fst <$> fieldPairs
               els = L.concat (snd <$> fieldPairs)
 
-        toField n p = case p of
-          PatternConstant _ -> Nothing
-          _ -> Just $ descend n f2 p
-            where
-              f2 ((lname, typ):rest) = (FieldType (FieldName n) typ, rest)
-              
+        toField isRecord n p = if ignore
+           then Nothing
+           else Just $ descend n f2 p
+         where
+            f2 ((lname, typ):rest) = (FieldType (FieldName n) typ, rest)
+            ignore = if isRecord
+              then case p of
+                PatternConstant _ -> True
+                _ -> False
+              else False
+
         mod n f p = descend n f2 p
           where
             f2 ((lname, typ):rest) = (lname, f typ):rest
@@ -96,6 +103,6 @@ grammarToModule cx (Grammar prods) gname = Module graph []
               then [(lname, Types.unit)]
               else (lname, snd (L.head cpairs)):L.tail cpairs
           where
-            cpairs = makeElements (childName lname n) p
+            cpairs = makeElements False (childName lname n) p
 
     childName lname n = lname ++ "." ++ capitalize n
