@@ -68,15 +68,15 @@ documentDefinitions = [
     star"Definition"],
    
   define "Definition" [
-    "ExecutableDefinition",
-    "TypeSystemDefinitionOrExtension"],
+    "executable">: "ExecutableDefinition",
+    "typeSystem">: "TypeSystemDefinitionOrExtension"],
  
   define "ExecutableDocument" [
     star"ExecutableDefinition"],
     
   define "ExecutableDefinition" [
-    "OperationDefinition",
-    "FragmentDefinition"],
+    "operation">: "OperationDefinition",
+    "fragment">: "FragmentDefinition"],
     
   define "OperationDefinition" [
     list["OperationType", opt"Name", opt"VariablesDefinition", opt"Directives", "SelectionSet"],
@@ -124,14 +124,14 @@ documentDefinitions = [
 
   define "Value"{- [Const] -} [
     {- [if not Const] -} "Variable",
-    "IntValue",
-    "FloatValue",
-    "StringValue",
-    "BooleanValue",
-    "NullValue",
-    "EnumValue",
-    "ListValue"{- [?Const] -},
-    "ObjectValue"{- [?Const] -}],
+    "int">: "IntValue",
+    "float">: "FloatValue",
+    "string">: "StringValue",
+    "boolean">: "BooleanValue",
+    "null">: "NullValue",
+    "enum">: "EnumValue",
+    "list">: "ListValue"{- [?Const] -},
+    "object">: "ObjectValue"{- [?Const] -}],
     
   define "BooleanValue" [
     true_,
@@ -164,9 +164,9 @@ documentDefinitions = [
     list[equal_, "Value"{- [Const] -}]],
     
   define "Type" [
-    "NamedType",
-    "ListType",
-    "NonNullType"],
+    "named">: "NamedType",
+    "list">: "ListType",
+    "nonNull">: "NonNullType"],
     
   define "NamedType" [
     "Name"],
@@ -175,8 +175,8 @@ documentDefinitions = [
     list[lbracket_, "Type", rbracket_]],
     
   define "NonNullType" [
-    list["NamedType", bang_],
-    list["ListType", bang_]],
+    "named">: list["NamedType", bang_],
+    "list">: list["ListType", bang_]],
     
   define "Directives"{- [Const] -} [
     star("Directive"{- [?Const] -})],
@@ -188,20 +188,20 @@ documentDefinitions = [
     star"TypeSystemDefinition"],
     
   define "TypeSystemDefinition" [
-    "SchemaDefinition",
-    "TypeDefinition",
-    "DirectiveDefinition"],
+    "schema">: "SchemaDefinition",
+    "type">: "TypeDefinition",
+    "directive">: "DirectiveDefinition"],
     
   define "TypeSystemExtensionDocument" [
     star"TypeSystemDefinitionOrExtension"],
     
   define "TypeSystemDefinitionOrExtension" [
-    "TypeSystemDefinition",
-    "TypeSystemExtension"],
+    "definition">: "TypeSystemDefinition",
+    "extension">: "TypeSystemExtension"],
     
   define "TypeSystemExtension" [
-    "SchemaExtension",
-    "TypeExtension"],
+    "schema">: "SchemaExtension",
+    "type">: "TypeExtension"],
     
   define "SchemaDefinition" [
     list[descriptionOpt, schema_, directivesConstOpt, lcurly_, "RootOperationTypeDefinition", rcurly_]],
@@ -217,20 +217,20 @@ documentDefinitions = [
     "StringValue"],
     
   define "TypeDefinition" [
-    "ScalarTypeDefinition",
-    "ObjectTypeDefinition",
-    "InterfaceTypeDefinition",
-    "UnionTypeDefinition",
-    "EnumTypeDefinition",
-    "InputObjectTypeDefinition"],
+    "scalar">: "ScalarTypeDefinition",
+    "object">: "ObjectTypeDefinition",
+    "interface">: "InterfaceTypeDefinition",
+    "union">: "UnionTypeDefinition",
+    "enum">: "EnumTypeDefinition",
+    "inputObject">: "InputObjectTypeDefinition"],
 
   define "TypeExtension" [
-    "ScalarTypeExtension",
-    "ObjectTypeExtension",
-    "InterfaceTypeExtension",
-    "UnionTypeExtension",
-    "EnumTypeExtension",
-    "InputObjectTypeExtension"],
+    "scalar">: "ScalarTypeExtension",
+    "object">: "ObjectTypeExtension",
+    "interface">: "InterfaceTypeExtension",
+    "union">: "UnionTypeExtension",
+    "enum">: "EnumTypeExtension",
+    "inputObject">: "InputObjectTypeExtension"],
   
   define "ScalarTypeDefinition" [
     list[descriptionOpt, scalar_, "Name", directivesConstOpt ]],
@@ -316,8 +316,8 @@ documentDefinitions = [
     list[opt(or_), "DirectiveLocation"]],
     
   define "DirectiveLocation" [
-    "ExecutableDirectiveLocation",
-    "TypeSystemDirectiveLocation"],
+    "executable">: "ExecutableDirectiveLocation",
+    "typeSystem">: "TypeSystemDirectiveLocation"],
     
   define "ExecutableDirectiveLocation" $ terminal <$> [
     "QUERY",
