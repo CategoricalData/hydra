@@ -229,7 +229,13 @@ writeConditionalOrExpression (Java.ConditionalOrExpression ands)
   = infixWsList "||" (writeConditionalAndExpression <$> ands)
 
 writeConstantDeclaration :: Java.ConstantDeclaration -> CT.Expr
-writeConstantDeclaration _ = cst "TODO:ConstantDeclaration"
+writeConstantDeclaration (Java.ConstantDeclaration mods typ vars) = suffixSemi $ spaceSep $ Y.catMaybes [
+  if L.null mods then Nothing else Just $ spaceSep (writeConstantModifier <$> mods),
+  Just $ writeUnannType typ,
+  Just $ commaSep inlineStyle (writeVariableDeclarator <$> vars)]
+
+writeConstantModifier :: Java.ConstantModifier -> CT.Expr
+writeConstantModifier _ = cst "TODO:ConstantModifier"
 
 writeConstructorBody :: Java.ConstructorBody -> CT.Expr
 writeConstructorBody (Java.ConstructorBody minvoc stmts) = curlyBlock fullBlockStyle $ doubleNewlineSep $ Y.catMaybes [

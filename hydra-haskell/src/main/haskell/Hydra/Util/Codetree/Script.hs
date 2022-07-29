@@ -26,6 +26,7 @@ commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else W
 
 commaSep :: BlockStyle -> [Expr] -> Expr
 commaSep style l = case l of
+  [] -> cst ""
   [x] -> x
   (h:r) -> ifx (commaOp newlines) h $ commaSep style r
   where

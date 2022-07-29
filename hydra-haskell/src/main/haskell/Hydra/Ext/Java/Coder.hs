@@ -14,10 +14,13 @@ import Hydra.Util.Formatting
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
+import Hydra.Impl.Haskell.Extras
+import Hydra.Basics
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Maybe as Y
 
 
 printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
@@ -56,27 +59,51 @@ classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) Java.Block) -> [(Element m, TypedTerm m)]
+  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
   -> Result (M.Map Name Java.CompilationUnit)
 constructModule cx g coders pairs = do
-    let imports = []
     typeUnits <- CM.mapM typeToClass typePairs
-    dataUnits <- CM.mapM termToClass dataPairs
-    return $ M.fromList $ typeUnits ++ dataUnits
+    dataMembers <- CM.mapM (termToInterfaceMember coders) dataPairs
+    return $ M.fromList $ typeUnits ++ ([constructElementsInterface g dataMembers | not (L.null dataMembers)])
   where
     pkg = javaPackageDeclaration $ graphName g
     isTypePair = isType cx . typedTermType . snd
     typePairs = L.filter isTypePair pairs
-    dataPairs = [] -- TODO   L.filter (not . isTypePair) pairs
+    dataPairs = L.filter (not . isTypePair) pairs
     aliases = importAliasesForGraph g
+
     typeToClass pair@(el, _) = do
-      let imports = [] -- TODO
+      let imports = []
       decl <- declarationForType aliases cx pair
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
-    termToClass pair@(el, _) = do
-      return (elementName el,
-        Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] []) -- TODO
+
+    termToInterfaceMember coders pair@(el, TypedTerm typ term) = do
+        {-
+          = InterfaceMemberDeclarationConstant ConstantDeclaration
+          | InterfaceMemberDeclarationInterfaceMethod InterfaceMethodDeclaration
+        -}
+
+        jtype <- Java.UnannType <$> encodeType cx aliases typ
+        jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
+        let mods = []
+        let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
+        return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+      where
+        isFunctionType t = case t of
+          TypeFunction _ -> True
+          _ -> False
+
+constructElementsInterface :: Graph m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
+constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl])
+  where
+    pkg = javaPackageDeclaration $ graphName g
+    mods = []
+    elName = fromQname (graphName g) "Elements"
+    body = Java.InterfaceBody members
+    itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
+      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier "Elements") [] [] body
+    decl = Java.TypeDeclarationWithComments itf Nothing
 
 declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter] -> Name
   -> [FieldType m] -> Result Java.ClassDeclaration
@@ -138,14 +165,14 @@ declarationForRecordType aliases cx tparams elName fields = do
                 javaRelationalExpressionToJavaUnaryExpression $
                 javaInstanceOf other parent
               where
-                other = javaIdentifierToJavaRelationalExpression $ Java.Identifier $ sanitizeJavaName otherName
+                other = javaIdentifierToJavaRelationalExpression $ javaIdentifier otherName
                 parent = nameToJavaReferenceType aliases False elName
 
             returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
 
         castStmt = variableDeclarationStatement aliases elName id rhs
           where
-            id = Java.Identifier $ sanitizeJavaName tmpName
+            id = javaIdentifier tmpName
             rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
               Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier $
                 sanitizeJavaName otherName
@@ -159,7 +186,7 @@ declarationForRecordType aliases cx tparams elName fields = do
                 javaMethodInvocationToJavaPostfixExpression $ Java.MethodInvocation header [arg]
               where
                 arg = javaExpressionNameToJavaExpression $
-                  fieldExpression (Java.Identifier $ sanitizeJavaName tmpName) (Java.Identifier $ sanitizeJavaName fname)
+                  fieldExpression (javaIdentifier tmpName) (javaIdentifier fname)
                 header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
                 var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing $ Java.Identifier $
                   sanitizeJavaName fname
@@ -186,7 +213,7 @@ declarationForRecordType aliases cx tparams elName fields = do
                   javaLiteralToPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
-                  methodInvocation (Just $ Java.Identifier $ sanitizeJavaName fname) (Java.Identifier "hashCode") []
+                  methodInvocation (Just $ javaIdentifier fname) (Java.Identifier "hashCode") []
 
             multipliers = L.cycle first20Primes
               where
@@ -282,10 +309,23 @@ declarationForLambdaType aliases cx tparams elName (LambdaType (VariableType v) 
   where
     param = javaTypeParameter $ capitalize v
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Block
-encodeTerm aliases cx term = do
-  return $ javaStatementsToBlock [javaEmptyStatement] -- TODO
+encodeLiteral :: Literal -> Java.Expression
+encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
+  LiteralBoolean b -> javaBoolean b
+  LiteralFloat f -> Java.LiteralFloatingPoint $ Java.FloatingPointLiteral $ case f of
+    FloatValueFloat32 v -> realToFrac v
+    FloatValueFloat64 v -> v
+  LiteralInteger i -> case i of
+      IntegerValueBigint v -> integer v -- BigInteger
+      IntegerValueInt16 v -> int v -- short
+      IntegerValueInt32 v -> int v -- int
+      IntegerValueInt64 v -> integer v -- long
+      IntegerValueUint8 v -> int v -- byte
+      IntegerValueUint16 v -> Java.LiteralCharacter $ fromIntegral v -- char
+    where
+      integer = Java.LiteralInteger . Java.IntegerLiteral
+      int = integer . fromIntegral
+  LiteralString s -> javaString s
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
 --       to build function types, parameterized types, etc.
@@ -308,6 +348,32 @@ encodeLiteralType lt = case lt of
     _ -> fail $ "unexpected literal type: " ++ show lt
   where
     simple n = pure $ javaRefType [] Nothing n
+
+encodeTerm :: (Eq m, Ord m, Read m, Show m)
+  => M.Map GraphName Java.PackageName -> Context m -> Term m -> Result Java.Expression
+encodeTerm aliases cx term = case term of
+    TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
+  --  TermApplication (Application m)
+  --  TermElement Name
+  --  TermFunction (Function m)
+    TermList els -> do
+      jels <- CM.mapM encode els
+      return $ javaMethodInvocationToJavaExpression $
+        methodInvocation (Just $ Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
+    TermLiteral l -> pure $ encodeLiteral l
+  --  TermMap (Map (Term m) (Term m))
+  --  TermNominal (Named m)
+  --  TermOptional (Maybe (Term m))
+  --  TermRecord [Field m]
+  --  TermSet (Set (Term m))
+--    TermUnion (Field (FieldName fname) v) -> do
+--      let foo = javaConstructorCall (javaConstructorName True $ localNameOf elName) fieldArgs
+    TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
+    _ -> pure $ encodeLiteral $ LiteralString $ "TODO: " ++ show (termVariant term)
+  --  _ -> unexpected "term" $ show term
+  where
+    encode = encodeTerm aliases cx
+    
 
 encodeType :: Show m => Context m -> M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
 encodeType cx aliases t = case typeExpr cx t of
