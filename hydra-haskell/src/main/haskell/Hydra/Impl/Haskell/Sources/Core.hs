@@ -280,6 +280,18 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "arbitrary">: unit,
           "bits">: int32],
 
+      def "Record" $
+        doc "A record, or labeled tuple; a map of field names to terms" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "fields">: list $ core "Field" @@ "m"],
+
+      def "RecordType" $
+        doc "A record, or labeled tuple, type" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "fields">: list $ core "FieldType" @@ "m"],
+        
       def "Term" $
         doc "A data term" $
         lambda "m" $ union [
@@ -313,14 +325,14 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
             doc "An optional value" $
             optional $ core "Term" @@ "m",
           "record">:
-            doc "A record, or labeled tuple" $
-            list $ core "Field" @@ "m",
+            doc "A record term" $
+            core "Record" @@ "m",
           "set">:
             doc "A set of values" $
             set $ core "Term" @@ "m",
           "union">:
-            doc "A union term, i.e. a string-indexed generalization of inl() or inr()" $
-            core "Field" @@ "m",
+            doc "A union term" $
+            core "Union" @@ "m",
           "variable">:
             doc "A variable reference" $
             core "Variable"],
@@ -359,9 +371,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "map">: core "MapType" @@ "m",
           "nominal">: core "Name",
           "optional">: core "Type" @@ "m",
-          "record">: list $ core "FieldType" @@ "m",
+          "record">: core "RecordType" @@ "m",
           "set">: core "Type" @@ "m",
-          "union">: list $ core "FieldType" @@ "m",
+          "union">: core "UnionType" @@ "m",
           "variable">: core "VariableType"],
 
       def "TypeScheme" $
@@ -400,4 +412,16 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "VariableType" $
         doc "A symbol which stands in for a type"
-        string]
+        string,
+        
+      def "Union" $
+        doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "field">: core "Field" @@ "m"],
+          
+      def "UnionType" $
+        doc "A union, or labeled sum, type" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "field">: core "FieldType" @@ "m"]]

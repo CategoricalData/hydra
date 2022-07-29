@@ -464,6 +464,32 @@ _Precision_arbitrary = (FieldName "arbitrary")
 
 _Precision_bits = (FieldName "bits")
 
+-- A record, or labeled tuple; a map of field names to terms
+data Record m 
+  = Record {
+    recordTypeName :: Name,
+    recordFields :: [Field m]}
+  deriving (Eq, Ord, Read, Show)
+
+_Record = (Name "hydra/core.Record")
+
+_Record_typeName = (FieldName "typeName")
+
+_Record_fields = (FieldName "fields")
+
+-- A record, or labeled tuple, type
+data RecordType m 
+  = RecordType {
+    recordTypeTypeName :: Name,
+    recordTypeFields :: [FieldType m]}
+  deriving (Eq, Ord, Read, Show)
+
+_RecordType = (Name "hydra/core.RecordType")
+
+_RecordType_typeName = (FieldName "typeName")
+
+_RecordType_fields = (FieldName "fields")
+
 -- A data term
 data Term m 
   = TermAnnotated (Annotated (Term m) m)
@@ -476,9 +502,9 @@ data Term m
   | TermMap (Map (Term m) (Term m))
   | TermNominal (Named m)
   | TermOptional (Maybe (Term m))
-  | TermRecord [Field m]
+  | TermRecord (Record m)
   | TermSet (Set (Term m))
-  | TermUnion (Field m)
+  | TermUnion (Union m)
   | TermVariable Variable
   deriving (Eq, Ord, Read, Show)
 
@@ -575,9 +601,9 @@ data Type m
   | TypeMap (MapType m)
   | TypeNominal Name
   | TypeOptional (Type m)
-  | TypeRecord [FieldType m]
+  | TypeRecord (RecordType m)
   | TypeSet (Type m)
-  | TypeUnion [FieldType m]
+  | TypeUnion (UnionType m)
   | TypeVariable VariableType
   deriving (Eq, Ord, Read, Show)
 
@@ -702,3 +728,29 @@ newtype VariableType
   deriving (Eq, Ord, Read, Show)
 
 _VariableType = (Name "hydra/core.VariableType")
+
+-- An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
+data Union m 
+  = Union {
+    unionTypeName :: Name,
+    unionField :: (Field m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Union = (Name "hydra/core.Union")
+
+_Union_typeName = (FieldName "typeName")
+
+_Union_field = (FieldName "field")
+
+-- A union, or labeled sum, type
+data UnionType m 
+  = UnionType {
+    unionTypeTypeName :: Name,
+    unionTypeField :: (FieldType m)}
+  deriving (Eq, Ord, Read, Show)
+
+_UnionType = (Name "hydra/core.UnionType")
+
+_UnionType_typeName = (FieldName "typeName")
+
+_UnionType_field = (FieldName "field")
