@@ -61,8 +61,11 @@ language = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
   languageConstraintsTypes = const True }
 
 reservedWords :: S.Set String
-reservedWords = S.fromList $ classNames ++ keywords ++ literals
+reservedWords = S.fromList $ specialNames ++ classNames ++ keywords ++ literals
   where
+    -- Special names reserved for use by Hydra
+    specialNames = ["Elements"]
+    
     -- java.lang classes as of JDK 7
     -- See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html
     classNames = [
