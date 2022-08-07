@@ -39,20 +39,21 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> [FieldType m] -> Qualified (Coder (Term m) YM.Node)
-recordCoder cx sfields = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) sfields
+recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> RowType m -> Qualified (Coder (Term m) YM.Node)
+recordCoder cx rt = do
+    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
   where
     encode coders term = case termExpr cx term of
-      TermRecord fields -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+      TermRecord (Record _ fields) -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (yamlString fn) <*> coderEncode coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
-      YM.NodeMapping m -> Terms.record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
+      YM.NodeMapping m -> Terms.record (rowTypeTypeName rt) <$>
+          CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField m (FieldType fname@(FieldName fn) ft, coder) = do
             v <- coderDecode coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
@@ -104,7 +105,7 @@ termCoder cx typ = case typeExpr cx typ of
       coderDecode = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeRecord sfields -> recordCoder cx sfields
+  TypeRecord rt -> recordCoder cx rt
 
 yamlCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) YM.Node)
 yamlCoder cx typ = do

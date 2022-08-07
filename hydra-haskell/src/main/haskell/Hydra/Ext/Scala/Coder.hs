@@ -85,8 +85,8 @@ encodeFunction cx meta fun arg = case fun of
       EliminationElement -> pure $ sname "DATA" -- TODO
       EliminationNominal name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
       EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
-      EliminationRecord fname -> fail "unapplied projection not yet supported"
-      EliminationUnion cases -> do
+      EliminationRecord p -> fail "unapplied projection not yet supported"
+      EliminationUnion (CaseStatement _ cases) -> do
           let v = "v"
           dom <- findDomain
           scx <- schemaContext cx
@@ -152,7 +152,7 @@ encodeTerm cx term = case termExpr cx term of
             EliminationElement -> encodeTerm cx arg
             EliminationNominal name -> fallback
             EliminationOptional c -> fallback
-            EliminationRecord (FieldName fname) -> do
+            EliminationRecord (Projection _ (FieldName fname)) -> do
               sarg <- encodeTerm cx arg
               return $ Scala.DataRef $ Scala.Data_RefSelect $ Scala.Data_Select sarg
                 (Scala.Data_Name $ Scala.PredefString fname)
@@ -172,7 +172,7 @@ encodeTerm cx term = case termExpr cx term of
     TermOptional m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm cx t
-    TermRecord fields -> do
+    TermRecord (Record n fields) -> do
       sn <- schemaName
       case sn of
         Nothing -> fail $ "unexpected anonymous record: " ++ show term
@@ -181,11 +181,11 @@ encodeTerm cx term = case termExpr cx term of
           args <- CM.mapM (encodeTerm cx) (fieldTerm <$> fields)
           return $ sapply (sname n) args
     TermSet s -> sapply (sname "Set") <$> CM.mapM (encodeTerm cx) (S.toList s)
-    TermUnion (Field fn ft) -> do
+    TermUnion (Union n (Field fn ft)) -> do
       sn <- schemaName
       let lhs = sname $ qualifyUnionFieldName "UNION." sn fn
       args <- case termExpr cx ft of
-        TermRecord [] -> pure []
+        TermRecord (Record _ []) -> pure []
         _ -> do
           arg <- encodeTerm cx ft
           return [arg]

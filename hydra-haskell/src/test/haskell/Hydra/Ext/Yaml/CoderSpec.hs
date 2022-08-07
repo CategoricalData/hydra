@@ -87,7 +87,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Unions become YAML mappings (as records)" $
     QC.property $ \int -> checkYamlCoder stringOrIntType
-      (variant (FieldName "right") $ int32 int)
+      (variant stringOrIntName (FieldName "right") $ int32 int)
       (yamlMap [(yamlStr "right", yamlInt int)])
 
 spec :: H.Spec

@@ -48,6 +48,11 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
             doc "The right-hand side of the application" $
             core "Type" @@ "m"],
 
+      def "CaseStatement" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "cases">: list $ core "Field" @@ "m"],
+
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
         enum [
@@ -69,10 +74,10 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
             core "OptionalCases" @@ "m",
           "record">:
             doc "Eliminates a record by projecting a given field" $
-            core "FieldName",
+            core "Projection",
           "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
-            list $ core "Field" @@ "m"],
+            core "CaseStatement" @@ "m"],
 
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
@@ -280,18 +285,24 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "arbitrary">: unit,
           "bits">: int32],
 
+      def "Projection" $
+        record [
+          "typeName">: core "Name",
+          "field">: core "FieldName"],
+          
       def "Record" $
         doc "A record, or labeled tuple; a map of field names to terms" $
         lambda "m" $ record [
           "typeName">: core "Name",
           "fields">: list $ core "Field" @@ "m"],
 
-      def "RecordType" $
-        doc "A record, or labeled tuple, type" $
+      def "RowType" $
+        doc "A labeled record or union type" $
+--        lambda "m" $ list $ core "FieldType" @@ "m",
         lambda "m" $ record [
           "typeName">: core "Name",
           "fields">: list $ core "FieldType" @@ "m"],
-        
+
       def "Term" $
         doc "A data term" $
         lambda "m" $ union [
@@ -371,9 +382,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
           "map">: core "MapType" @@ "m",
           "nominal">: core "Name",
           "optional">: core "Type" @@ "m",
-          "record">: core "RecordType" @@ "m",
+          "record">: core "RowType" @@ "m",
           "set">: core "Type" @@ "m",
-          "union">: core "UnionType" @@ "m",
+          "union">: core "RowType" @@ "m",
           "variable">: core "VariableType"],
 
       def "TypeScheme" $
@@ -413,15 +424,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
       def "VariableType" $
         doc "A symbol which stands in for a type"
         string,
-        
+
       def "Union" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
         lambda "m" $ record [
           "typeName">: core "Name",
-          "field">: core "Field" @@ "m"],
-          
-      def "UnionType" $
-        doc "A union, or labeled sum, type" $
-        lambda "m" $ record [
-          "typeName">: core "Name",
-          "field">: core "FieldType" @@ "m"]]
+          "field">: core "Field" @@ "m"]]

@@ -6,6 +6,12 @@ import qualified Data.Map as M
 import Data.String(IsString(..))
 
 
+placeholderName :: Name
+placeholderName = Name "Placeholder"
+
+unitTypeName :: Name
+unitTypeName = Name "hydra/core.unitType"
+
 instance IsString (Type m) where fromString = variable
 
 infixr 0 >:
@@ -83,7 +89,7 @@ list :: Type m -> Type m
 list = TypeList
 
 isUnit :: Eq m => Type m -> Bool
-isUnit t = t  == TypeRecord []
+isUnit t = t == TypeRecord (RowType unitTypeName [])
 
 literal :: LiteralType -> Type m
 literal = TypeLiteral
@@ -98,7 +104,7 @@ optional :: Type m -> Type m
 optional = TypeOptional
 
 record :: [FieldType m] -> Type m
-record = TypeRecord
+record fields = TypeRecord $ RowType placeholderName fields
 
 set :: Type m -> Type m
 set = TypeSet
@@ -122,7 +128,7 @@ uint8 :: Type m
 uint8 = integer IntegerTypeUint8
 
 union :: [FieldType m] -> Type m
-union = TypeUnion
+union fields = TypeUnion $ RowType placeholderName fields
 
 unit :: Type m
-unit = record []
+unit = TypeRecord $ RowType (Name "hydra/core.unitType") []

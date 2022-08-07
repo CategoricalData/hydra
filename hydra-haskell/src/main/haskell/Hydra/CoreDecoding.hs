@@ -6,6 +6,7 @@ module Hydra.CoreDecoding (
   decodeFunctionType,
   decodeIntegerType,
   decodeMapType,
+  decodeRowType,
   decodeString,
   decodeType,
   decodeLambdaType,
@@ -21,6 +22,11 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 
+
+decodeApplicationType :: Show m => Context m -> Term m -> Result (ApplicationType m)
+decodeApplicationType cx = matchRecord cx $ \m -> ApplicationType
+  <$> getField m _ApplicationType_function (decodeType cx)
+  <*> getField m _ApplicationType_argument (decodeType cx)
 
 decodeElement :: Term m -> Result Name
 decodeElement term = case term of
@@ -60,6 +66,11 @@ decodeIntegerType cx = matchEnum cx [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
+decodeLambdaType :: Show m => Context m -> Term m -> Result (LambdaType m)
+decodeLambdaType cx = matchRecord cx $ \m -> LambdaType
+  <$> (VariableType <$> getField m _LambdaType_parameter decodeString)
+  <*> getField m _LambdaType_body (decodeType cx)
+
 decodeLiteralType :: Show m => Context m -> Term m -> Result LiteralType
 decodeLiteralType cx = matchUnion cx [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
@@ -73,6 +84,11 @@ decodeMapType cx = matchRecord cx $ \m -> MapType
   <$> getField m _MapType_keys (decodeType cx)
   <*> getField m _MapType_values (decodeType cx)
 
+decodeRowType :: Show m => Context m -> Term m -> Result (RowType m)
+decodeRowType cx = matchRecord cx $ \m -> RowType
+  <$> (Name <$> getField m _RowType_typeName decodeString)
+  <*> getField m _RowType_fields (decodeFieldTypes cx)
+  
 decodeString :: Term m -> Result String
 decodeString term = case term of
   TermLiteral av -> case av of
@@ -95,20 +111,10 @@ decodeType cx dat = case dat of
     (_Type_map, fmap TypeMap . decodeMapType cx),
     (_Type_nominal, fmap TypeNominal . decodeElement),
     (_Type_optional, fmap TypeOptional . decodeType cx),
-    (_Type_record, fmap TypeRecord . decodeFieldTypes cx),
+    (_Type_record, fmap TypeRecord . decodeRowType cx),
     (_Type_set, fmap TypeSet . decodeType cx),
-    (_Type_union, fmap TypeUnion . decodeFieldTypes cx),
+    (_Type_union, fmap TypeUnion . decodeRowType cx),
     (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
-
-decodeApplicationType :: Show m => Context m -> Term m -> Result (ApplicationType m)
-decodeApplicationType cx = matchRecord cx $ \m -> ApplicationType
-  <$> getField m _ApplicationType_function (decodeType cx)
-  <*> getField m _ApplicationType_argument (decodeType cx)
-
-decodeLambdaType :: Show m => Context m -> Term m -> Result (LambdaType m)
-decodeLambdaType cx = matchRecord cx $ \m -> LambdaType
-  <$> (VariableType <$> getField m _LambdaType_parameter decodeString)
-  <*> getField m _LambdaType_body (decodeType cx)
 
 getField :: M.Map FieldName (Term m) -> FieldName -> (Term m -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
@@ -122,14 +128,14 @@ matchRecord :: Show m => Context m -> (M.Map FieldName (Term m) -> Result b) -> 
 matchRecord cx decode term = do
   term' <- deref cx term
   case termExpr cx term' of
-    TermRecord fields -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
+    TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> fail $ "expected a record; found " ++ show term'
 
 matchUnion :: Show m => Context m -> [(FieldName, Term m -> Result b)] -> Term m -> Result b
 matchUnion cx pairs term = do
     term' <- deref cx term
     case termExpr cx term' of
-      TermUnion (Field fname val) -> case M.lookup fname mapping of
+      TermUnion (Union _ (Field fname val)) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}"

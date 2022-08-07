@@ -120,27 +120,27 @@ map = Data . Terms.map . M.fromList . fmap fromData . M.toList
   where
     fromData (Data k, Data v) = (k, v)
 
-matchData :: Type Meta -> Type Meta -> [(FieldName, Data (x -> b))] -> Data (a -> b)
-matchData dom cod pairs = typed (Types.function dom cod) $ Data $ Terms.cases (toField <$> pairs)
+matchData :: Name -> Type Meta -> [(FieldName, Data (x -> b))] -> Data (a -> b)
+matchData name cod pairs = typed (Types.function (Types.nominal name) cod) $ Data $ Terms.cases name (toField <$> pairs)
   where
     toField (fname, Data term) = Field fname term
 
 matchOpt :: Data b -> Data (a -> b) -> Data (Maybe a -> b)
 matchOpt (Data n) (Data j) = Data $ Terms.matchOptional n j
 
-match :: Type Meta -> Type Meta -> [Field Meta] -> Data (u -> b)
-match dom cod fields = function dom cod $ Data $ Terms.cases fields
+match :: Name -> Type Meta -> [Field Meta] -> Data (u -> b)
+match name cod fields = function (Types.nominal name) cod $ Data $ Terms.cases name fields
 
-matchToEnum :: Type Meta -> Name -> [(FieldName, FieldName)] -> Data (a -> b)
-matchToEnum dom codName pairs = matchData dom (Types.nominal codName) (toCase <$> pairs)
+matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Data (a -> b)
+matchToEnum name codName pairs = matchData name (Types.nominal codName) (toCase <$> pairs)
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
-matchToUnion :: Type Meta -> Name -> [(FieldName, Field Meta)] -> Data (a -> b)
-matchToUnion dom codName pairs = matchData dom (Types.nominal codName) (toCase <$> pairs)
+matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Data (a -> b)
+matchToUnion name codName pairs = matchData name (Types.nominal codName) (toCase <$> pairs)
   where
     toCase (fromName, fld) = (fromName,
-      constant $ typed (Types.nominal codName) $ Data $ Terms.union fld)
+      constant $ typed (Types.nominal codName) $ Data $ Terms.union codName fld)
 
 -- Note: the phantom types provide no guarantee of type safety in this case
 nom :: Name -> Data a -> Data b
@@ -152,12 +152,12 @@ opt mc = Data $ Terms.optional (unData <$> mc)
 primitive :: Name -> Data a
 primitive = Data . Terms.primitive
 
-project :: Type Meta -> Type Meta -> FieldName -> Data (a -> b)
-project dom cod fname = function dom cod $
-  Data $ Terms.projection fname
+project :: Name -> Type Meta -> FieldName -> Data (a -> b)
+project name cod fname = function (Types.nominal name) cod $
+  Data $ Terms.projection name fname
 
-record :: [Field Meta] -> Data a
-record = Data . Terms.record
+record :: Name -> [Field Meta] -> Data a
+record name fields = Data $ Terms.record name fields
 
 ref :: Element a -> Data a
 ref e = delta @@ element e
@@ -175,20 +175,20 @@ set = Data . Terms.set . S.fromList . fmap unData . S.toList
 typed :: Type Meta -> Data a -> Data a
 typed t (Data term) = Data $ Standard.typed t term
 
-union :: FieldName -> Data a -> Data b
-union fname (Data term) = Data $ Terms.union (Field fname term)
+union :: Name -> FieldName -> Data a -> Data b
+union name fname (Data term) = Data $ Terms.union name (Field fname term)
 
 union2 :: Name -> FieldName -> Data (a -> b)
-union2 name fname = lambda "x" $ typed (Types.nominal name) $ union fname $ var "x"
+union2 name fname = lambda "x" $ typed (Types.nominal name) $ union name fname $ var "x"
 
 unit :: Data a
 unit = Data Terms.unit
 
 unitVariant :: Name -> FieldName -> Data a
-unitVariant name fname = typed (Types.nominal name) $ Data $ Terms.union $ Field fname Terms.unit
+unitVariant name fname = typed (Types.nominal name) $ Data $ Terms.union name $ Field fname Terms.unit
 
 var :: String -> Data a
 var v = Data $ Terms.variable v
 
 variant :: Name -> FieldName -> Data a -> Data b
-variant name fname (Data term) = typed (Types.nominal name) $ Data $ Terms.union $ Field fname term
+variant name fname (Data term) = typed (Types.nominal name) $ Data $ Terms.union name $ Field fname term

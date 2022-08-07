@@ -69,7 +69,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
     TypeNominal _ -> True -- TODO: dereference the type
     TypeOptional t -> typeIsSupported constraints t
-    TypeRecord sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeRecord rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     TypeSet st -> typeIsSupported constraints st
-    TypeUnion sfields -> and $ typeIsSupported constraints . fieldTypeType <$> sfields
+    TypeUnion rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     _ -> True

@@ -59,6 +59,9 @@ isType cx typ = typeExpr cx typ == TypeNominal _Type
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
+noname :: Name
+noname = Name ""
+
 toQname :: Name -> (GraphName, String)
 toQname (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (GraphName ns, L.intercalate "." rest)

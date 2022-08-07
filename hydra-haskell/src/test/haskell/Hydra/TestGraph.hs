@@ -4,10 +4,17 @@ module Hydra.TestGraph (
   testElementArthur,
   testElementFirstName,
   testGraph,
+  testGraphName,
   testStrategy,
   testDataArthur,
+  testTypeColor,
+  testTypeColorName,
+  testTypeComparison,
+  testTypeComparisonName,
   testTypePerson,
+  testTypePersonName,
   testTypeTimestamp,
+  testTypeTimestampName,
   module Hydra.Impl.Haskell.Sources.Libraries,
 ) where
 
@@ -60,8 +67,8 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType cx (Types.function (Types.nominal $ Name "Person") Types.string),
-  elementData = projection $ FieldName "firstName"}
+  elementSchema = encodeType cx (Types.function (Types.nominal testTypePersonName) Types.string),
+  elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
 testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
@@ -69,10 +76,10 @@ testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTer
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
-    typeElement cx (Name "Color") testTypeColor,
-    typeElement cx (Name "Comparison") testTypeComparison,
-    typeElement cx (Name "Person") testTypePerson,
-    typeElement cx (Name "Timestamp") testTypeTimestamp]
+    typeElement cx testTypeColorName testTypeColor,
+    typeElement cx testTypeComparisonName testTypeComparison,
+    typeElement cx testTypePersonName testTypePerson,
+    typeElement cx testTypeTimestampName testTypeTimestamp]
   allTerms hydraCoreName
 
 testStrategy :: EvaluationStrategy
@@ -85,27 +92,39 @@ testDataArthur = nominalRecord cx (Name "Person") [
   Field (FieldName "age") $ int32 42]
 
 testTypeColor :: Type m
-testTypeColor = Types.union [
+testTypeColor = TypeUnion $ RowType testTypeColorName [
   Types.field "bool" Types.boolean,
   Types.field "string" Types.string,
   Types.field "unit" Types.unit]
 
+testTypeColorName :: Name
+testTypeColorName = Name "Color"
+
 testTypeComparison :: Type m
-testTypeComparison = Types.enum [
-  "lessThan",
-  "equalTo",
-  "greaterThan"]
+testTypeComparison = TypeUnion $ RowType testTypeComparisonName [
+  Types.field "lessThan" Types.unit,
+  Types.field "equalTo" Types.unit,
+  Types.field "greaterThan" Types.unit]
+
+testTypeComparisonName :: Name
+testTypeComparisonName = Name "Comparison"
 
 testTypePerson :: Type Meta
-testTypePerson = Types.record [
+testTypePerson = TypeRecord $ RowType testTypePersonName [
   Types.field "firstName" Types.string,
   Types.field "lastName" Types.string,
   Types.field "age" Types.int32]
 
+testTypePersonName :: Name
+testTypePersonName = Name "Person"
+
 testTypeTimestamp :: Type Meta
-testTypeTimestamp = Types.union [
+testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName [
   FieldType (FieldName "unixTimeMillis") Types.uint64,
   FieldType (FieldName "date") Types.string]
+
+testTypeTimestampName :: Name
+testTypeTimestampName = Name "Timestamp"
 
 allTerms :: Term Meta -> Bool
 allTerms _ = True

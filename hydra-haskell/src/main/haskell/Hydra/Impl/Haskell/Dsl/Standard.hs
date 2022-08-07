@@ -61,8 +61,8 @@ note s = doc $ "Note: " ++ s
 nsref :: GraphName -> String -> Type m
 nsref ns = Types.nominal . qualify ns . Name
 
-project :: Type Meta -> FieldName -> Type Meta -> Term Meta
-project dom fname cod = withType standardContext (Types.function dom cod) $ projection fname
+project :: Name -> FieldName -> Type Meta -> Term Meta
+project name fname cod = withType standardContext (Types.function (Types.nominal name) cod) $ projection name fname
 
 qualify :: GraphName -> Name -> Name
 qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname

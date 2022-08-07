@@ -29,9 +29,9 @@ freeVariablesInType typ = S.fromList $ fv typ
       TypeMap (MapType kt vt) -> fv kt ++ fv vt
       TypeNominal _ -> [] -- because we do not allow names to be bound to types with free variables
       TypeOptional t -> fv t
-      TypeRecord tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeRecord rt -> L.concat (fv . fieldTypeType <$> rowTypeFields rt)
       TypeSet t -> fv t
-      TypeUnion tfields -> L.concat (fv . fieldTypeType <$> tfields)
+      TypeUnion rt -> L.concat (fv . fieldTypeType <$> rowTypeFields rt)
       TypeLambda (LambdaType v body) -> v:(fv body)
       TypeVariable v -> [v]
 
@@ -54,9 +54,9 @@ normalizeScheme (TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType b
       TypeMap (MapType kt vt) -> Types.map (normalizeType kt) (normalizeType vt)
       TypeNominal _ -> typ
       TypeOptional t -> optional $ normalizeType t
-      TypeRecord fields -> record (normalizeFieldType <$> fields)
+      TypeRecord (RowType n fields) -> TypeRecord $ RowType n (normalizeFieldType <$> fields)
       TypeSet t -> set $ normalizeType t
-      TypeUnion fields -> union (normalizeFieldType <$> fields)
+      TypeUnion (RowType n fields) -> TypeUnion $ RowType n (normalizeFieldType <$> fields)
       TypeLambda (LambdaType (VariableType v) t) -> TypeLambda (LambdaType (VariableType v) $ normalizeType t)
       TypeVariable v -> case Prelude.lookup v ord of
         Just (VariableType v1) -> variable v1
@@ -77,9 +77,9 @@ substituteInType s typ = case typ of
     TypeMap (MapType kt vt) -> Types.map (subst kt) (subst vt)
     TypeNominal _ -> typ -- because we do not allow names to be bound to types with free variables
     TypeOptional t -> optional $ subst t
-    TypeRecord tfields -> record (substField <$> tfields)
+    TypeRecord (RowType n fields) -> TypeRecord $ RowType n (substField <$> fields)
     TypeSet t -> set $ subst t
-    TypeUnion tfields -> union (substField <$> tfields)
+    TypeUnion (RowType n fields) -> TypeUnion $ RowType n (substField <$> fields)
     TypeLambda (LambdaType var@(VariableType v) body) -> if Y.isNothing (M.lookup var s)
       then TypeLambda (LambdaType (VariableType v) (subst body))
       else typ

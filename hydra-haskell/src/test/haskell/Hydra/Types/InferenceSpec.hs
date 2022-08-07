@@ -71,8 +71,8 @@ checkFunctionTerms = do
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
-        (compareTo $ record [Field (FieldName "fst") $ boolean True, Field (FieldName "snd") $ string "Betelgeuse"])
-        (Types.function (Types.record [FieldType (FieldName "fst") Types.boolean, FieldType (FieldName "snd") Types.string]) Types.int8)
+        (compareTo $ record testTypeName [Field (FieldName "fst") $ boolean True, Field (FieldName "snd") $ string "Betelgeuse"])
+        (Types.function (TypeRecord $ RowType testTypeName [FieldType (FieldName "fst") Types.boolean, FieldType (FieldName "snd") Types.string]) Types.int8)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
         [VariableType "v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
@@ -84,20 +84,20 @@ checkFunctionTerms = do
 
     H.it "Check case statements" $ do
       expectPolytype
-        (cases [
+        (cases (Name "Example") [
           Field (FieldName "left") (lambda "x" (boolean True)),
           Field (FieldName "right") (lambda "x" (boolean False))])
         [VariableType "v1", VariableType "v2"] (Types.function
-          (Types.union [
+          (TypeUnion $ RowType (Name "Example") [
             FieldType (FieldName "left") (Types.variable "v1"),
             FieldType (FieldName "right") (Types.variable "v2")])
           Types.boolean)
       expectPolytype
-        (cases [
+        (cases (Name "Example") [
           Field (FieldName "person") (apply delta (element $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
         [VariableType "v1"] (Types.function
-          (Types.union [
+          (TypeUnion $ RowType (Name "Example") [
             FieldType (FieldName "person") (Types.nominal $ Name "Person"),
             FieldType (FieldName "other") (Types.variable "v1")])
           Types.string)
@@ -143,12 +143,12 @@ checkIndividualTerms = do
 
     H.it "Check records" $ do
       expectMonotype
-        (record [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ float64 $ negate 122.4194])
-        (Types.record [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") Types.float64])
+        (record latLonName [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ float64 $ negate 122.4194])
+        (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") Types.float64])
       expectPolytype
-        (lambda "lon" (record [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ variable "lon"]))
+        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ variable "lon"]))
         [VariableType "v1"] (Types.function (Types.variable "v1")
-          (Types.record [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") $ Types.variable "v1"]))
+          (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
       expectMonotype
