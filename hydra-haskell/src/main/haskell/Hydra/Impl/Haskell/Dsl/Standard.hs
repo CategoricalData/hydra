@@ -87,7 +87,8 @@ standardContext = cx
       contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) (standardPrimitives cx),
       contextStrategy = EvaluationStrategy {
         evaluationStrategyOpaqueTermVariants = S.fromList []},
-      contextAnnotations = metaAnnotationClass}
+      contextAnnotations = metaAnnotationClass,
+      contextTrace = []}
 
     emptyGraphName = GraphName "empty"
 

@@ -41,7 +41,8 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
           "elements">: Types.map (core "Name") (graph "Element" @@ "m"),
           "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
           "strategy">: evaluation "EvaluationStrategy",
-          "annotations">: evaluation "AnnotationClass" @@ "m"],
+          "annotations">: evaluation "AnnotationClass" @@ "m",
+          "trace">: list string],
 
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
