@@ -100,30 +100,30 @@ testBetaReduceTypeRecursively = do
         latLonType
       H.shouldBe
         (reduce False app3)
-        (Types.record [Types.field "foo" Types.unit])
+        (TypeRecord $ RowType (Name "Example") [Types.field "foo" Types.unit])
         
     H.it "Try recursive application types" $ do
       H.shouldBe
         (reduce False app4)
-        (Types.record [Types.field "f1" Types.int32, Types.field "f2" Types.int64])
+        (TypeRecord $ RowType (Name "Example") [Types.field "f1" Types.int32, Types.field "f2" Types.int64])
         
     H.it "Distinguish between eager and lazy evaluation" $ do
       H.shouldBe
         (reduce False app5)
-        (Types.record [Types.field "foo" app1])
+        (TypeRecord $ RowType (Name "Example") [Types.field "foo" app1])
       H.shouldBe
         (reduce True app5)
-        (Types.record [Types.field "foo" $ Types.function Types.string Types.string])
+        (TypeRecord $ RowType (Name "Example") [Types.field "foo" $ Types.function Types.string Types.string])
   where
     ResultSuccess scx = schemaContext testContext
     reduce eager = betaReduceType eager scx 
     app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Meta
     app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Meta
-    app3 = Types.apply (Types.lambda "a" $ Types.record [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Meta
-    app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ Types.record [
+    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Meta
+    app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ TypeRecord $ RowType (Name "Example") [
       Types.field "f1" $ Types.variable "x",
       Types.field "f2" $ Types.variable "y"]) Types.int32) Types.int64 :: Type Meta
-    app5 = Types.apply (Types.lambda "a" $ Types.record [Types.field "foo" $ Types.variable "a"]) app1
+    app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") [Types.field "foo" $ Types.variable "a"]) app1
 
 eval :: Term Meta -> Result (Term Meta)
 eval = betaReduceTerm testContext

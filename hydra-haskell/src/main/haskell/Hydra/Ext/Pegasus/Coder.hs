@@ -94,11 +94,11 @@ encodeType aliases cx typ = case typeExpr cx typ of
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
-    TypeRecord fields -> do
+    TypeRecord (RowType _ fields) -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField fields
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeUnion fields -> if isEnum
+    TypeUnion (RowType _ fields) -> if isEnum
         then do
           fs <- CM.mapM encodeEnumField fields
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
@@ -108,7 +108,7 @@ encodeType aliases cx typ = case typeExpr cx typ of
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode t = case typeExpr cx t of
-      TypeRecord [] -> encode Types.int32 -- special case for the unit type
+      TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases cx t
         case res of

@@ -46,7 +46,7 @@ basics = Element . fromQname hydraBasicsName
 eliminationVariant :: Element (Elimination m -> EliminationVariant)
 eliminationVariant = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  matchToEnum (Types.apply (Types.nominal _Elimination) (Types.variable "m")) _EliminationVariant [
+  matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_nominal  @-> _EliminationVariant_nominal,
     _Elimination_optional @-> _EliminationVariant_optional,
@@ -67,7 +67,7 @@ eliminationVariants = basics "eliminationVariants" $
 floatTypePrecision :: Element (FloatType -> Precision)
 floatTypePrecision = basics "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
-  matchToUnion (Types.nominal _FloatType) _Precision [
+  matchToUnion _FloatType _Precision [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
     _FloatType_float64  @-> field _Precision_bits $ int 64]
@@ -84,7 +84,7 @@ floatTypes = basics "floatTypes" $
 floatValueType :: Element (FloatValue -> FloatType)
 floatValueType = basics "floatValueType" $
   doc "Find the float type for a given floating-point value" $
-  matchToEnum (Types.nominal _FloatValue) _FloatType [
+  matchToEnum _FloatValue _FloatType [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
@@ -92,7 +92,7 @@ floatValueType = basics "floatValueType" $
 functionVariant :: Element (Function m -> FunctionVariant)
 functionVariant = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  matchToEnum (Types.apply (Types.nominal _Function) (Types.variable "m")) _FunctionVariant [
+  matchToEnum _Function _FunctionVariant [
     _Function_compareTo   @-> _FunctionVariant_compareTo,
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -111,7 +111,7 @@ functionVariants = basics "functionVariants" $
 integerTypeIsSigned :: Element (IntegerType -> Bool)
 integerTypeIsSigned = basics "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  matchData (Types.nominal _IntegerType) Types.boolean [
+  matchData _IntegerType Types.boolean [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
     _IntegerType_int16  @-> constant true,
@@ -125,7 +125,7 @@ integerTypeIsSigned = basics "integerTypeIsSigned" $
 integerTypePrecision :: Element (IntegerType -> Precision)
 integerTypePrecision = basics "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
-  matchToUnion (Types.nominal _IntegerType) _Precision [
+  matchToUnion _IntegerType _Precision [
     _IntegerType_bigint @-> field _Precision_arbitrary unit,
     _IntegerType_int8   @-> field _Precision_bits $ int 8,
     _IntegerType_int16  @-> field _Precision_bits $ int 16,
@@ -154,7 +154,7 @@ integerTypes = basics "integerTypes" $
 integerValueType :: Element (IntegerValue -> IntegerType)
 integerValueType = basics "integerValueType" $
   doc "Find the integer type for a given integer value" $
-  matchToEnum (Types.nominal _IntegerValue) _IntegerType [
+  matchToEnum _IntegerValue _IntegerType [
     _IntegerValue_bigint @-> _IntegerType_bigint,
     _IntegerValue_int8   @-> _IntegerType_int8,
     _IntegerValue_int16  @-> _IntegerType_int16,
@@ -168,7 +168,7 @@ integerValueType = basics "integerValueType" $
 literalType :: Element (Literal -> LiteralType)
 literalType = basics "literalType" $
   doc "Find the literal type for a given literal value" $
-  match (Types.nominal _Literal) (Types.nominal _LiteralType) [
+  match _Literal (Types.nominal _LiteralType) [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
     Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueType,
@@ -178,7 +178,7 @@ literalType = basics "literalType" $
 literalTypeVariant :: Element (LiteralType -> LiteralVariant)
 literalTypeVariant = basics "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
-  matchToEnum (Types.nominal _LiteralType) _LiteralVariant [
+  matchToEnum _LiteralType _LiteralVariant [
     _LiteralType_binary  @-> _LiteralVariant_binary,
     _LiteralType_boolean @-> _LiteralVariant_boolean,
     _LiteralType_float   @-> _LiteralVariant_float,
@@ -217,7 +217,7 @@ termVariant = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.nominal _Term) (Types.variable "m")) (Types.nominal _TermVariant) $
   lambda "term" $ apply
-    (matchToEnum (Types.apply (Types.nominal _Term) (Types.variable "m")) _TermVariant [
+    (matchToEnum _Term _TermVariant [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
       _Term_element         @-> _TermVariant_element,
@@ -264,7 +264,7 @@ typeVariant = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.nominal _Type) (Types.variable "m")) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
-    (matchToEnum (Types.apply (Types.nominal _Type) (Types.variable "m")) _TypeVariant [
+    (matchToEnum _Type _TypeVariant [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,
       _Type_element     @-> _TypeVariant_element,

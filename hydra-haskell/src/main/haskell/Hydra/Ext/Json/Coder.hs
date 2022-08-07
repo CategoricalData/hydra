@@ -49,20 +49,20 @@ literalCoder at = pure $ case at of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> [FieldType m] -> Qualified (Coder (Term m) Json.Value)
-recordCoder cx sfields = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) sfields
+recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> RowType m -> Qualified (Coder (Term m) Json.Value)
+recordCoder cx rt = do
+    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
   where
     encode coders term = case termExpr cx term of
-      TermRecord fields -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
+      TermRecord (Record _ fields) -> Json.ValueObject . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field fname fv) = case (fieldTypeType ft, fv) of
             (TypeOptional _, TermOptional Nothing) -> pure Nothing
             _ -> Just <$> ((,) <$> pure (unFieldName fname) <*> coderEncode coder fv)
       _ -> unexpected "record" term
     decode coders n = case n of
-      Json.ValueObject m -> Terms.record <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
+      Json.ValueObject m -> Terms.record (rowTypeTypeName rt) <$> CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
         where
           decodeField m (FieldType fname _, coder) = do
             v <- coderDecode coder $ Y.fromMaybe Json.ValueNull $ M.lookup (unFieldName fname) m
@@ -113,4 +113,4 @@ termCoder cx typ = case typeExpr cx typ of
         else show v
       fromString s = Terms.string $ if isStringKey then s else read s
       isStringKey = typeExpr cx kt == Types.string
-  TypeRecord sfields -> recordCoder cx sfields
+  TypeRecord rt -> recordCoder cx rt

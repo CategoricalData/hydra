@@ -115,13 +115,13 @@ inferInternal cx term = case termExpr cx term of
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed
-        EliminationRecord fname -> do
+        EliminationRecord (Projection name fname) -> do
           dom <- freshVariableType
           cod <- freshVariableType
-          let ftype = Types.function (Types.record [FieldType fname dom]) cod
-          yieldElimination (EliminationRecord fname) ftype []
+          let ftype = Types.function (TypeRecord $ RowType name [FieldType fname dom]) cod
+          yieldElimination (EliminationRecord $ Projection name fname) ftype []
 
-        EliminationUnion cases -> do
+        EliminationUnion (CaseStatement name cases) -> do
             icases <- CM.mapM (inferFieldType cx) cases
             cod <- freshVariableType
             doms <- CM.mapM (const freshVariableType) cases
@@ -129,7 +129,9 @@ inferInternal cx term = case termExpr cx term of
             let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
             let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
-            yieldElimination (EliminationUnion icases) (Types.function (Types.union ftypes1) cod) (innerConstraints ++ outerConstraints)
+            yieldElimination (EliminationUnion (CaseStatement name  icases))
+              (Types.function (TypeUnion $ RowType name ftypes1) cod)
+              (innerConstraints ++ outerConstraints)
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshVariableType
@@ -194,9 +196,9 @@ inferInternal cx term = case termExpr cx term of
           i <- infer cx e
           yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
-    TermRecord fields -> do
+    TermRecord (Record n fields) -> do
         (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
-        yield (TermRecord $ L.reverse fields0) (Types.record $ L.reverse ftypes0) c1
+        yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n $ L.reverse ftypes0) c1
       where
         forField (typed, ftypes, c) field = do
           i <- inferFieldType cx field
@@ -212,10 +214,10 @@ inferInternal cx term = case termExpr cx term of
       yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
-    TermUnion field -> do
+    TermUnion (Union n field) -> do
       ifield <- inferFieldType cx field
-      let typ = Types.union [FieldType (fieldName field) (termType $ fieldTerm ifield)]
-      yield (TermUnion ifield) typ (termConstraints $ fieldTerm ifield)
+      let typ = TypeUnion $ RowType n [FieldType (fieldName field) (termType $ fieldTerm ifield)]
+      yield (TermUnion $ Union n ifield) typ (termConstraints $ fieldTerm ifield)
 
     TermVariable x -> do
       t <- lookupTypeInEnvironment x

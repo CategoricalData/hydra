@@ -409,7 +409,7 @@ encodeType cx aliases t = case typeExpr cx t of
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
   TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeRecord [] -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeRecord (RowType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
   -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
@@ -418,8 +418,8 @@ encodeType cx aliases t = case typeExpr cx t of
 toClassDecl :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> Context m -> [Java.TypeParameter]
   -> Name -> Type m -> Result Java.ClassDeclaration
 toClassDecl aliases cx tparams elName t = case typeExpr cx t of
-    TypeRecord fields -> declarationForRecordType aliases cx tparams elName fields
-    TypeUnion fields -> declarationForUnionType aliases cx tparams elName fields
+    TypeRecord rt -> declarationForRecordType aliases cx tparams elName $ rowTypeFields rt
+    TypeUnion rt -> declarationForUnionType aliases cx tparams elName $ rowTypeFields rt
     TypeLambda ut -> declarationForLambdaType aliases cx tparams elName ut
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.

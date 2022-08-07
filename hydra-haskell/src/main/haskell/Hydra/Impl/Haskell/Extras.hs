@@ -53,8 +53,8 @@ elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSch
 
 fieldTypes :: (Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
 fieldTypes scx t = case typeExpr scx t of
-    TypeRecord fields -> pure $ toMap fields
-    TypeUnion fields -> pure $ toMap fields
+    TypeRecord rt -> pure $ toMap $ rowTypeFields rt
+    TypeUnion rt -> pure $ toMap $ rowTypeFields rt
     TypeElement et -> fieldTypes scx et
     TypeNominal name -> do
       el <- requireElement (Just "field types") scx name

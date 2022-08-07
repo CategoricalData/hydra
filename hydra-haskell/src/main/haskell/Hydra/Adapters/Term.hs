@@ -1,5 +1,7 @@
 module Hydra.Adapters.Term (
   fieldAdapter,
+  functionProxyName,
+  functionProxyType,
   termAdapter,
 ) where
 
@@ -53,6 +55,21 @@ fieldAdapter acx ftyp = do
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
     $ bidirectional $ \dir (Field name term) -> Field name <$> stepEither dir (adapterCoder ad) term
 
+functionProxyName :: Name
+functionProxyName = Name "hydra/core.FunctionProxy"
+
+functionProxyType :: Type m -> Type m
+functionProxyType dom = TypeUnion $ RowType functionProxyName [
+  FieldType _Elimination_element Types.unit,
+  FieldType _Elimination_nominal Types.string,
+  FieldType _Elimination_optional Types.string,
+  FieldType _Elimination_record Types.string,
+  FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
+  FieldType _Function_compareTo dom,
+  FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
+  FieldType _Function_primitive Types.string,
+  FieldType _Term_variable Types.string]
+
 functionToUnion :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
     ut <- unionType
@@ -63,16 +80,16 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
     cx = adapterContextEvaluation acx
     encode ad term = coderEncode (adapterCoder ad) $ case termExpr cx term of
       TermFunction f -> case f of
-        FunctionCompareTo other -> variant _Function_compareTo other
+        FunctionCompareTo other -> variant functionProxyName _Function_compareTo other
         FunctionElimination e -> case e of
-          EliminationElement -> unitVariant _Elimination_element
-          EliminationNominal (Name name) -> variant _Elimination_nominal $ string name
-          EliminationOptional _ -> variant _Elimination_optional $ string $ show term -- TODO
-          EliminationRecord (FieldName fname) -> variant _Elimination_record $ string fname
-          EliminationUnion _ -> variant _Elimination_union $ string $ show term -- TODO TermRecord cases
-        FunctionLambda _ -> variant _Function_lambda $ string $ show term -- TODO
-        FunctionPrimitive (Name name) -> variant _Function_primitive $ string name
-      TermVariable (Variable var) -> variant _Term_variable $ string var
+          EliminationElement -> unitVariant functionProxyName _Elimination_element
+          EliminationNominal (Name name) -> variant functionProxyName _Elimination_nominal $ string name
+          EliminationOptional _ -> variant functionProxyName _Elimination_optional $ string $ show term -- TODO
+          EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ show term -- TODO
+          EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ show term -- TODO
+        FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
+        FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
+      TermVariable (Variable var) -> variant functionProxyName _Term_variable $ string var
     decode ad term = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion cx
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -94,12 +111,12 @@ functionToUnion acx t@(TypeFunction (FunctionType dom _)) = do
         forNominal fterm = eliminateNominal . Name <$> expectString cx fterm
         forOptionalCases fterm = read <$> expectString cx fterm -- TODO
         forPrimitive fterm = primitive . Name <$> expectString cx fterm
-        forProjection fterm = projection . FieldName <$> expectString cx fterm
+        forProjection fterm = read <$> expectString cx fterm -- TODO
         forVariable fterm = variable <$> expectString cx fterm
 
     unionType = do
       domAd <- termAdapter acx dom
-      return $ Types.union [
+      return $ TypeUnion $ RowType functionProxyName [
         FieldType _Elimination_element Types.unit,
         FieldType _Elimination_nominal Types.string,
         FieldType _Elimination_optional Types.string,
@@ -148,8 +165,8 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
     domAd <- termAdapter acx dom
     codAd <- termAdapter acx cod
     caseAds <- case typeExpr cx dom of
-      TypeUnion sfields -> M.fromList . L.zip (fieldTypeName <$> sfields)
-        <$> CM.mapM (fieldAdapter acx) sfields
+      TypeUnion rt -> M.fromList . L.zip (fieldTypeName <$> rowTypeFields rt)
+        <$> CM.mapM (fieldAdapter acx) (rowTypeFields rt)
       _ -> pure M.empty
     optionAd <- case typeExpr cx dom of
       TypeOptional ot -> Just <$> termAdapter acx (Types.function ot cod)
@@ -165,7 +182,8 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
             OptionalCases
               <$> stepEither dir (adapterCoder codAd) nothing
               <*> (stepEither dir (adapterCoder $ Y.fromJust optionAd) just))
-          EliminationUnion cases -> EliminationUnion <$> CM.mapM (\f -> stepEither dir (getCoder $ fieldName f) f) cases
+          EliminationUnion (CaseStatement n cases) -> EliminationUnion . CaseStatement n <$>
+              CM.mapM (\f -> stepEither dir (getCoder $ fieldName f) f) cases
             where
               -- Note: this causes unrecognized cases to simply be passed through;
               --       it is not the job of this adapter to catch validation issues.
@@ -173,7 +191,7 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
         FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterCoder codAd) body)
   where
     cx = adapterContextEvaluation acx
-    
+
 passLambda :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passLambda acx t@(TypeLambda (LambdaType (VariableType v) body)) = do
   ad <- termAdapter acx body
@@ -213,12 +231,12 @@ passOptional acx t@(TypeOptional ot) = do
       _ -> fail $ "expected optional term, found: " ++ show term
 
 passRecord :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passRecord acx t@(TypeRecord sfields) = do
-  adapters <- CM.mapM (fieldAdapter acx) sfields
+passRecord acx t@(TypeRecord rt) = do
+  adapters <- CM.mapM (fieldAdapter acx) (rowTypeFields rt)
   let lossy = or $ adapterIsLossy <$> adapters
   let sfields' = adapterTarget <$> adapters
-  return $ Adapter lossy t (Types.record sfields') $ bidirectional
-    $ \dir (TermRecord dfields) -> record <$> CM.zipWithM (stepEither dir . adapterCoder) adapters dfields
+  return $ Adapter lossy t (TypeRecord $ RowType (rowTypeTypeName rt) sfields') $ bidirectional
+    $ \dir (TermRecord (Record _ dfields)) -> record (rowTypeTypeName rt) <$> CM.zipWithM (stepEither dir . adapterCoder) adapters dfields
 
 passSet :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passSet acx t@(TypeSet st) = do
@@ -228,16 +246,18 @@ passSet acx t@(TypeSet st) = do
       <$> CM.mapM (stepEither dir (adapterCoder ad)) (S.toList terms)
 
 passUnion :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-passUnion acx t@(TypeUnion sfields) = do
+passUnion acx t@(TypeUnion rt) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter acx f) sfields
     let lossy = or $ adapterIsLossy <$> adapters
     let sfields' = adapterTarget . snd <$> M.toList adapters
-    return $ Adapter lossy t (Types.union sfields')
-      $ bidirectional $ \dir (TermUnion dfield) -> do
+    return $ Adapter lossy t (TypeUnion $ RowType nm sfields')
+      $ bidirectional $ \dir (TermUnion (Union _ dfield)) -> do
         ad <- getAdapter adapters dfield
-        TermUnion <$> stepEither dir (adapterCoder ad) dfield
+        TermUnion . Union nm <$> stepEither dir (adapterCoder ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
+    sfields = rowTypeFields rt
+    nm = rowTypeTypeName rt
 
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
@@ -274,16 +294,19 @@ termAdapter acx typ = chooseAdapter alts supported describeType typ
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
-unionToRecord acx t@(TypeUnion sfields) = do
-    let target = Types.record $ makeOptional <$> sfields
+unionToRecord acx t@(TypeUnion rt) = do
+    let target = TypeRecord $ RowType nm $ makeOptional <$> sfields
     ad <- termAdapter acx target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
-      coderEncode = \(TermUnion (Field fn term)) -> coderEncode (adapterCoder ad)
-        $ record (toRecordField term fn <$> sfields),
+      coderEncode = \(TermUnion (Union _ (Field fn term))) -> coderEncode (adapterCoder ad)
+        $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
-        TermRecord fields <- coderDecode (adapterCoder ad) term
-        union <$> fromRecordFields term (TermRecord fields) (adapterTarget ad) fields}
+        TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
+        union nm <$> fromRecordFields term (TermRecord (Record nm fields)) (adapterTarget ad) fields}
   where
+    nm = rowTypeTypeName rt
+    sfields = rowTypeFields rt
+
     makeOptional (FieldType fn ft) = FieldType fn $ Types.optional ft
 
     toRecordField term fn (FieldType fn' _) = Field fn' $

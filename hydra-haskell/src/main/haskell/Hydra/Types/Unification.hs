@@ -78,7 +78,9 @@ unify cx t1 t2 = if t1 == t2
       (_, TypeNominal name) -> unify cx (Types.nominal name) t1
       _ -> throwError $ UnificationFail t1 t2
   where
-    unifyRowType f1 f2 = unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
+    unifyRowType (RowType n1 f1) (RowType n2 f2) = if n1 == n2
+      then unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
+      else throwError $ UnificationFail t1 t2
 
 unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
 unifyMany _ [] [] = return M.empty

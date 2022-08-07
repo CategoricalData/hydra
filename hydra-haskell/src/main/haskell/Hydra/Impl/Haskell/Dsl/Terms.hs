@@ -12,6 +12,7 @@ import qualified Data.Maybe as Y
 import qualified Control.Monad as CM
 import Data.Int
 import Data.String(IsString(..))
+import Hydra.Common
 
 
 instance IsString (Term m) where fromString = string
@@ -34,8 +35,8 @@ binaryTerm = TermLiteral . LiteralBinary
 boolean :: Bool -> Term m
 boolean b = TermLiteral $ LiteralBoolean b
 
-cases :: [Field m] -> Term m
-cases = TermFunction . FunctionElimination . EliminationUnion
+cases :: Name -> [Field m] -> Term m
+cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields
 
 compareTo :: Term m -> Term m
 compareTo = TermFunction . FunctionCompareTo
@@ -87,7 +88,7 @@ expectNArgs n args = if L.length args /= n
 
 expectRecord :: Show m => Context m -> Term m -> Result [Field m]
 expectRecord cx term = case termExpr cx term of
-  TermRecord fields -> pure fields
+  TermRecord (Record _ fields) -> pure fields
   _ -> fail $ "expected a record, got " ++ show term
 
 expectSet :: (Ord a, Show m) => Context m -> (Term m -> Result a) -> Term m -> Result (S.Set a)
@@ -102,7 +103,7 @@ expectString cx term = case termExpr cx term of
 
 expectUnion :: Show m => Context m -> Term m -> Result (Field m)
 expectUnion cx term = case termExpr cx term of
-  TermUnion field -> pure field
+  TermUnion (Union _ field) -> pure field
   _ -> fail $ "expected a union, got " ++ show term
 
 field :: String -> Term m -> Field m
@@ -153,18 +154,18 @@ map = TermMap
 mapTerm :: M.Map (Term m) (Term m) -> Term m
 mapTerm = TermMap
 
-match :: [(FieldName, Term m)] -> Term m
-match = cases . fmap toField
+match :: Name -> [(FieldName, Term m)] -> Term m
+match n = cases n . fmap toField
   where
     toField (name, term) = Field name term
 
 matchOptional :: Term m -> Term m -> Term m
 matchOptional n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
-matchWithVariants :: [(FieldName, FieldName)] -> Term m
-matchWithVariants = cases . fmap toField
+matchWithVariants :: Name -> [(FieldName, FieldName)] -> Term m
+matchWithVariants n = cases n . fmap toField
   where
-    toField (from, to) = Field from $ constFunction $ unitVariant to
+    toField (from, to) = Field from $ constFunction $ unitVariant n to
 
 nominal :: Name -> Term m -> Term m
 nominal name term = TermNominal $ Named name term
@@ -175,11 +176,11 @@ optional = TermOptional
 primitive :: Name -> Term m
 primitive = TermFunction . FunctionPrimitive
 
-projection :: FieldName -> Term m
-projection = TermFunction . FunctionElimination . EliminationRecord
+projection :: Name -> FieldName -> Term m
+projection n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
 
-record :: [Field m] -> Term m
-record = TermRecord
+record :: Name -> [Field m] -> Term m
+record n fields = TermRecord $ Record n fields
 
 requireField :: M.Map FieldName (Term m) -> FieldName -> Result (Term m)
 requireField fields fname = Y.maybe err ResultSuccess $ M.lookup fname fields
@@ -210,24 +211,24 @@ uint64 = integer . IntegerValueUint64 . fromIntegral
 uint8 :: Integer -> Term m
 uint8 = integer . IntegerValueUint8 . fromIntegral
 
-union :: Field m -> Term m
-union = TermUnion
+union :: Name -> Field m -> Term m
+union n = TermUnion . Union n
 
 unit :: Term m
-unit = TermRecord []
+unit = TermRecord $ Record (Name "hydra/core.unitType") []
 
-unitVariant :: FieldName -> Term m
-unitVariant fname = variant fname unit
+unitVariant :: Name -> FieldName -> Term m
+unitVariant n fname = variant n fname unit
 
 variable :: String -> Term m
 variable = TermVariable . Variable
 
-variant :: FieldName -> Term m -> Term m
-variant fname term = TermUnion $ Field fname term
+variant :: Name -> FieldName -> Term m -> Term m
+variant n fname term = TermUnion $ Union n $ Field fname term
 
-withFunction :: FieldName -> Element a -> Term m
-withFunction name el = lambda var $ variant name $ apply (elementRef el) (variable var)
+withFunction :: Name -> FieldName -> Element a -> Term m
+withFunction n name el = lambda var $ variant n name $ apply (elementRef el) (variable var)
   where var = "x"
 
-withVariant :: FieldName -> Term m
-withVariant = constFunction . unitVariant
+withVariant :: Name -> FieldName -> Term m
+withVariant n = constFunction . unitVariant n

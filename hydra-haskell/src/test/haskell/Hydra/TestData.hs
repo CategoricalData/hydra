@@ -17,7 +17,11 @@ compareStringsType :: Type m
 compareStringsType = Types.function Types.string Types.string
 
 eitherStringOrInt8Type :: Type m
-eitherStringOrInt8Type = Types.union [Types.field "left" Types.string, Types.field "right" Types.int8]
+eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName
+  [Types.field "left" Types.string, Types.field "right" Types.int8]
+
+eitherStringOrInt8TypeName :: Name
+eitherStringOrInt8TypeName = fromQname testGraphName "EitherStringOrInt8"
 
 exampleProjectionType :: Type Meta
 exampleProjectionType = Types.function testTypePerson Types.string
@@ -28,11 +32,14 @@ int32ElementType = Types.element Types.int32
 int32ElementDataType :: Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
+latLonName :: Name
+latLonName = fromQname testGraphName "LatLon"
+
 latlonRecord :: (Eq m, Ord m, Read m, Show m) => Int -> Int -> Term m
-latlonRecord lat lon = record [Field (FieldName "lat") $ int32 lat, Field (FieldName "lon") $ int32 lon]
+latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ int32 lat, Field (FieldName "lon") $ int32 lon]
 
 latLonType :: Type m
-latLonType = Types.record [Types.field "lat" Types.int32, Types.field "lon" Types.int32]
+latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.int32, Types.field "lon" Types.int32]
 
 listOfInt8sType :: Type m
 listOfInt8sType = Types.list Types.int8
@@ -73,17 +80,11 @@ setOfStringsType = Types.set Types.string
 stringAliasType :: Type m
 stringAliasType = Types.nominal $ Name "StringTypeAlias"
 
-stringOrIntType :: Type m
-stringOrIntType = Types.union [Types.field "left" Types.string, Types.field "right" Types.int32]
+stringOrIntName :: Name
+stringOrIntName = Name "StringOrInt"
 
-unionTypeForFunctions :: Type m -> Type m
-unionTypeForFunctions dom = Types.union [
-  FieldType _Elimination_element Types.unit,
-  FieldType _Elimination_nominal Types.string,
-  FieldType _Elimination_optional Types.string,
-  FieldType _Elimination_record Types.string,
-  FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
-  FieldType _Function_compareTo dom,
-  FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
-  FieldType _Function_primitive Types.string,
-  FieldType _Term_variable Types.string]
+stringOrIntType :: Type m
+stringOrIntType = TypeUnion $ RowType stringOrIntName [Types.field "left" Types.string, Types.field "right" Types.int32]
+
+testTypeName :: Name
+testTypeName = fromQname testGraphName "TestType"

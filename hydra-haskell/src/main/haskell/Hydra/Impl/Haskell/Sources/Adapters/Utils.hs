@@ -45,7 +45,7 @@ describeIntegerType = utils "describeIntegerType" $
 describeLiteralType :: Element (LiteralType -> String)
 describeLiteralType = utils "describeLiteralType" $
   doc "Display a literal type as a string" $
-  match (Types.nominal _LiteralType) Types.string [
+  match _LiteralType Types.string [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
     Case _LiteralType_float   --> ref describeFloatType,
@@ -55,7 +55,7 @@ describeLiteralType = utils "describeLiteralType" $
 describePrecision :: Element (Precision -> String)
 describePrecision = utils "describePrecision" $
   doc "Display numeric precision as a string" $
-  match (Types.nominal _Precision) Types.string [
+  match _Precision Types.string [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $
       showInt32 @@ var "bits" ++ string "-bit"]
@@ -65,22 +65,22 @@ describeType = utils "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.nominal _Type) (Types.variable "m")) Types.string $
   lambda "typ" $ apply
-    (match typeM Types.string [
+    (match _Type Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeType @@
-        (project annotatedTypeM typeM _Annotated_subject @@ var "a")),
+        (project _Type typeM _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralType,
       Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
       Case _Type_function    --> lambda "ft" $ string "functions from "
-        ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_domain @@ var "ft"))
+        ++ (ref describeType @@ (project _FunctionType typeM _FunctionType_domain @@ var "ft"))
         ++ string " to "
-        ++ (ref describeType @@ (project functionTypeM typeM _FunctionType_codomain @@ var "ft")),
+        ++ (ref describeType @@ (project _FunctionType typeM _FunctionType_codomain @@ var "ft")),
       Case _Type_lambda      --> constant $ string "polymorphic terms",
       Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeType @@ var "t"),
       Case _Type_map         --> lambda "mt" $ string "maps from "
-        ++ (ref describeType @@ (project mapTypeM typeM _MapType_keys @@ var "mt"))
+        ++ (ref describeType @@ (project _MapType typeM _MapType_keys @@ var "mt"))
         ++ string " to "
-        ++ (ref describeType @@ (project mapTypeM typeM _MapType_values  @@ var "mt")),
+        ++ (ref describeType @@ (project _MapType typeM _MapType_values  @@ var "mt")),
       Case _Type_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeType @@ var "ot"),
       Case _Type_record      --> constant $ string "records of a particular set of fields",

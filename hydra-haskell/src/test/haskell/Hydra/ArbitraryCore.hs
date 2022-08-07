@@ -129,7 +129,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     whenEqual = [FunctionCompareTo <$> arbitraryTerm dom n' | dom == cod]
     domainSpecific = case dom of
-      TypeUnion sfields -> [FunctionElimination . EliminationUnion <$> CM.mapM arbitraryCase sfields]
+      TypeUnion (RowType n sfields) -> [FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM arbitraryCase sfields]
         where
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
@@ -188,9 +188,9 @@ arbitraryTerm typ n = case typ of
           where
             n' = div n 2
     TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
-    TypeRecord sfields -> record <$> arbitraryFields sfields
+    TypeRecord (RowType n sfields) -> record n <$> arbitraryFields sfields
     TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
-    TypeUnion sfields -> union <$> do
+    TypeUnion (RowType n sfields) -> union n <$> do
       f <- QC.elements sfields
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
@@ -211,9 +211,9 @@ arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
     TypeList <$> arbitraryType n',
     TypeMap <$> arbitraryPair MapType arbitraryType n',
     TypeOptional <$> arbitraryType n',
-    TypeRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
-    TypeSet <$> arbitraryType n',
-    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
+--    TypeRecord <$> arbitraryList False arbitraryFieldType n', -- TODO: avoid duplicate field names
+    TypeSet <$> arbitraryType n']
+--    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
 arbitraryTypedTerm :: (Eq m, Ord m, Read m, Show m) => Int -> QC.Gen (TypedTerm m)
@@ -228,7 +228,7 @@ decr :: Int -> Int
 decr n = max 0 (n-1)
 
 -- Note: shrinking currently discards any metadata
-shrinkers :: (Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, (Term m) -> [Term m])]
+shrinkers :: (Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, Term m -> [Term m])]
 shrinkers typ = trivialShrinker ++ case typ of
     TypeLiteral at -> case at of
       LiteralTypeBinary -> [(Types.binary, \(TermLiteral (LiteralBinary s)) -> binaryTerm <$> QC.shrink s)]
@@ -261,17 +261,17 @@ shrinkers typ = trivialShrinker ++ case typ of
         promoteType = (ot, \(TermOptional m) -> Y.maybeToList m)
         shrinkType = (\(t, m) -> (Types.optional t,
           \(TermOptional mb) -> Y.maybe [] (fmap (optional . Just) . m) mb)) <$> shrinkers ot
-    TypeRecord sfields -> dropFields
-        ++ shrinkFieldNames Types.record record (\(TermRecord dfields) -> dfields) sfields
+    TypeRecord (RowType name sfields) -> dropFields
+        ++ shrinkFieldNames (TypeRecord . RowType name) (record name) (\(TermRecord (Record _ dfields)) -> dfields) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = dropField <$> indices
           where
-            dropField i = (Types.record $ dropIth i sfields, \(TermRecord dfields)
-              -> [record $ dropIth i dfields])
+            dropField i = (TypeRecord $ RowType name $ dropIth i sfields, \(TermRecord (Record _ dfields))
+              -> [record name $ dropIth i dfields])
         promoteTypes = promoteField <$> indices
           where
-            promoteField i = (fieldTypeType $ sfields !! i, \(TermRecord dfields)
+            promoteField i = (fieldTypeType $ sfields !! i, \(TermRecord (Record _ dfields))
               -> [fieldTerm $ dfields !! i])
         shrinkTypes = [] -- TODO
         indices = [0..(L.length sfields - 1)]
@@ -280,8 +280,8 @@ shrinkers typ = trivialShrinker ++ case typ of
         dropElements = (Types.set st, \(TermSet els) -> set . S.fromList <$> dropAny (S.toList els))
         promoteType = (st, \(TermSet els) -> S.toList els)
         shrinkType = (\(t, m) -> (Types.set t, \(TermSet els) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
-    TypeUnion sfields -> dropFields
-        ++ shrinkFieldNames Types.union (union . L.head) (\(TermUnion f) -> [f]) sfields
+    TypeUnion (RowType name sfields) -> dropFields
+        ++ shrinkFieldNames (TypeUnion . RowType name) (union name . L.head) (\(TermUnion (Union _ f)) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO

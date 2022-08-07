@@ -45,6 +45,18 @@ _ApplicationType_function = (FieldName "function")
 
 _ApplicationType_argument = (FieldName "argument")
 
+data CaseStatement m 
+  = CaseStatement {
+    caseStatementTypeName :: Name,
+    caseStatementCases :: [Field m]}
+  deriving (Eq, Ord, Read, Show)
+
+_CaseStatement = (Name "hydra/core.CaseStatement")
+
+_CaseStatement_typeName = (FieldName "typeName")
+
+_CaseStatement_cases = (FieldName "cases")
+
 -- An equality judgement: less than, equal to, or greater than
 data Comparison 
   = ComparisonLessThan 
@@ -65,8 +77,8 @@ data Elimination m
   = EliminationElement 
   | EliminationNominal Name
   | EliminationOptional (OptionalCases m)
-  | EliminationRecord FieldName
-  | EliminationUnion [Field m]
+  | EliminationRecord Projection
+  | EliminationUnion (CaseStatement m)
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra/core.Elimination")
@@ -464,6 +476,18 @@ _Precision_arbitrary = (FieldName "arbitrary")
 
 _Precision_bits = (FieldName "bits")
 
+data Projection 
+  = Projection {
+    projectionTypeName :: Name,
+    projectionField :: FieldName}
+  deriving (Eq, Ord, Read, Show)
+
+_Projection = (Name "hydra/core.Projection")
+
+_Projection_typeName = (FieldName "typeName")
+
+_Projection_field = (FieldName "field")
+
 -- A record, or labeled tuple; a map of field names to terms
 data Record m 
   = Record {
@@ -477,18 +501,18 @@ _Record_typeName = (FieldName "typeName")
 
 _Record_fields = (FieldName "fields")
 
--- A record, or labeled tuple, type
-data RecordType m 
-  = RecordType {
-    recordTypeTypeName :: Name,
-    recordTypeFields :: [FieldType m]}
+-- A labeled record or union type
+data RowType m 
+  = RowType {
+    rowTypeTypeName :: Name,
+    rowTypeFields :: [FieldType m]}
   deriving (Eq, Ord, Read, Show)
 
-_RecordType = (Name "hydra/core.RecordType")
+_RowType = (Name "hydra/core.RowType")
 
-_RecordType_typeName = (FieldName "typeName")
+_RowType_typeName = (FieldName "typeName")
 
-_RecordType_fields = (FieldName "fields")
+_RowType_fields = (FieldName "fields")
 
 -- A data term
 data Term m 
@@ -601,9 +625,9 @@ data Type m
   | TypeMap (MapType m)
   | TypeNominal Name
   | TypeOptional (Type m)
-  | TypeRecord (RecordType m)
+  | TypeRecord (RowType m)
   | TypeSet (Type m)
-  | TypeUnion (UnionType m)
+  | TypeUnion (RowType m)
   | TypeVariable VariableType
   deriving (Eq, Ord, Read, Show)
 
@@ -741,16 +765,3 @@ _Union = (Name "hydra/core.Union")
 _Union_typeName = (FieldName "typeName")
 
 _Union_field = (FieldName "field")
-
--- A union, or labeled sum, type
-data UnionType m 
-  = UnionType {
-    unionTypeTypeName :: Name,
-    unionTypeField :: (FieldType m)}
-  deriving (Eq, Ord, Read, Show)
-
-_UnionType = (Name "hydra/core.UnionType")
-
-_UnionType_typeName = (FieldName "typeName")
-
-_UnionType_field = (FieldName "field")

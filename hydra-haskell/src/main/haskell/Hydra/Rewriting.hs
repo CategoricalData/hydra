@@ -66,8 +66,8 @@ rewriteTerm mapExpr mapMeta = replace
           EliminationNominal name -> EliminationNominal name
           EliminationOptional (OptionalCases nothing just) -> EliminationOptional
             (OptionalCases (replace nothing) (replace just))
-          EliminationRecord fname -> EliminationRecord fname
-          EliminationUnion fields -> EliminationUnion $ replaceField <$> fields
+          EliminationRecord p -> EliminationRecord p
+          EliminationUnion (CaseStatement n cases) -> EliminationUnion $ CaseStatement n (replaceField <$> cases)
         FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
         FunctionPrimitive name -> FunctionPrimitive name
       TermLet (Let v t1 t2) -> TermLet $ Let v (replace t1) (replace t2)
@@ -76,9 +76,9 @@ rewriteTerm mapExpr mapMeta = replace
       TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (replace k, replace v)) <$> M.toList m
       TermNominal (Named name t) -> TermNominal (Named name $ replace t)
       TermOptional m -> TermOptional $ replace <$> m
-      TermRecord fields -> TermRecord $ replaceField <$> fields
+      TermRecord (Record n fields) -> TermRecord $ Record n $ replaceField <$> fields
       TermSet s -> TermSet $ S.fromList $ replace <$> S.toList s
-      TermUnion field -> TermUnion $ replaceField field
+      TermUnion (Union n field) -> TermUnion $ Union n $ replaceField field
       TermVariable v -> TermVariable v
 
 rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
@@ -102,9 +102,9 @@ rewriteType mapExpr mapMeta = replace
       TypeMap (MapType kt vt) -> TypeMap (MapType (replace kt) (replace vt))
       TypeNominal name -> TypeNominal name
       TypeOptional t -> TypeOptional $ replace t
-      TypeRecord fields -> TypeRecord $ replaceField <$> fields
+      TypeRecord (RowType name fields) -> TypeRecord $ RowType name (replaceField <$> fields)
       TypeSet t -> TypeSet $ replace t
-      TypeUnion fields -> TypeUnion $ replaceField <$> fields
+      TypeUnion (RowType name fields) -> TypeUnion $ RowType name (replaceField <$> fields)
       TypeVariable v -> TypeVariable v
 
 rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
@@ -151,7 +151,7 @@ subterms term = case term of
     FunctionCompareTo other -> [other]
     FunctionElimination e -> case e of
       EliminationOptional (OptionalCases nothing just) -> [nothing, just]
-      EliminationUnion cases -> fieldTerm <$> cases
+      EliminationUnion (CaseStatement _ cases) -> fieldTerm <$> cases
       _ -> []
     FunctionLambda (Lambda _ body) -> [body]
     _ -> []
@@ -160,9 +160,9 @@ subterms term = case term of
   TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
   TermNominal (Named _ t) -> [t]
   TermOptional m -> Y.maybeToList m
-  TermRecord fields -> fieldTerm <$> fields
+  TermRecord (Record n fields) -> fieldTerm <$> fields
   TermSet s -> S.toList s
-  TermUnion field -> [fieldTerm field]
+  TermUnion (Union _ field) -> [fieldTerm field]
   _ -> []
 
 subtypes :: Type m -> [Type m]
@@ -177,9 +177,9 @@ subtypes typ = case typ of
   TypeMap (MapType kt vt) -> [kt, vt]
   TypeNominal _ -> []
   TypeOptional ot -> [ot]
-  TypeRecord fields -> fieldTypeType <$> fields
+  TypeRecord rt -> fieldTypeType <$> rowTypeFields rt
   TypeSet st -> [st]
-  TypeUnion fields -> fieldTypeType <$> fields
+  TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
   TypeVariable _ -> []
 
 termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name

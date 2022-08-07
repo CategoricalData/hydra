@@ -40,10 +40,10 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
 
     H.it "Records are supported if and only if each of their fields are supported" $ do
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
+        (TypeRecord $ RowType (Name "Example") [Types.field "first" Types.string, Types.field "second" Types.int16])
         `H.shouldBe` True
       typeIsSupported (context [TypeVariantLiteral, TypeVariantRecord])
-        (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
+        (TypeRecord $ RowType (Name "Example") [Types.field "first" Types.string, Types.field "second" Types.int8])
         `H.shouldBe` False
 
     H.it "Lists are supported if the list element type is supported" $ do
@@ -96,11 +96,11 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
   H.it "Records (when supported) pass through without change" $
     QC.property $ \a1 a2 -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantRecord]
-      (Types.record [Types.field "first" Types.string, Types.field "second" Types.int8])
-      (Types.record [Types.field "first" Types.string, Types.field "second" Types.int16])
+      (TypeRecord $ RowType testTypeName [Types.field "first" Types.string, Types.field "second" Types.int8])
+      (TypeRecord $ RowType testTypeName [Types.field "first" Types.string, Types.field "second" Types.int16])
       False
-      (record [field "first" $ string a1, field "second" $ int8 a2])
-      (record [field "first" $ string a1, field "second" $ int16 $ fromIntegral a2])
+      (record testTypeName [field "first" $ string a1, field "second" $ int8 a2])
+      (record testTypeName [field "first" $ string a1, field "second" $ int16 $ fromIntegral a2])
 
   H.it "Unions (when supported) pass through without change" $
     QC.property $ \int -> checkDataAdapter
@@ -108,8 +108,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       stringOrIntType
       stringOrIntType
       False
-      (variant (FieldName "right") $ int32 int)
-      (variant (FieldName "right") $ int32 int)
+      (variant stringOrIntName (FieldName "right") $ int32 int)
+      (variant stringOrIntName (FieldName "right") $ int32 int)
 
   H.it "Sets (when supported) pass through without change" $
     QC.property $ \strings -> checkDataAdapter
@@ -162,8 +162,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       exampleProjectionType
       exampleProjectionType
       False
-      (projection fname)
-      (projection fname)
+      (projection testTypePersonName fname)
+      (projection testTypePersonName fname)
 
   H.it "Nominal types (when supported) pass through without change" $
     QC.property $ \s -> checkDataAdapter
@@ -199,19 +199,19 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       compareStringsType
-      (unionTypeForFunctions Types.string)
+      (functionProxyType Types.string)
       False
       (compareTo $ string s)
-      (nominalUnion testContext _Function $ field "compareTo" $ string s)
+      (nominalUnion testContext functionProxyName $ field "compareTo" $ string s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       int32ElementDataType
-      (unionTypeForFunctions Types.string)
+      (functionProxyType Types.string)
       False
       delta
-      (nominalUnion testContext _Function $ field "element" unit)
+      (nominalUnion testContext functionProxyName $ field "element" unit)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -226,19 +226,20 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       concatType
-      (unionTypeForFunctions Types.string)
+      (functionProxyType Types.string)
       False
       (primitive name)
-      (nominalUnion testContext _Function $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
+      (nominalUnion testContext functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
       exampleProjectionType
-      (unionTypeForFunctions testTypePerson)
+      (functionProxyType testTypePerson)
       False
-      (projection fname)
-      (nominalUnion testContext _Function $ field "record" $ string $ unFieldName fname) -- Note: the field name is not dereferenced
+      (projection testTypePersonName fname)
+      (nominalUnion testContext functionProxyName $ field "record" $ string $
+        show (projection testTypePersonName fname :: Term Meta)) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
@@ -254,12 +255,12 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
     QC.property $ \i -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantOptional, TypeVariantRecord]
       eitherStringOrInt8Type
-      (Types.record [
+      (TypeRecord $ RowType eitherStringOrInt8TypeName [
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])
       False
-      (union $ field "right" $ int8 i)
-      (record [
+      (union eitherStringOrInt8TypeName $ field "right" $ int8 i)
+      (record eitherStringOrInt8TypeName [
         field "left" $ optional Nothing,
         field "right" $ optional $ Just $ int16 $ fromIntegral i])
 
@@ -318,7 +319,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)
 
   H.it "Check projection terms (which map to variants)" $
-    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (projection fname)
+    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (projection testTypePersonName fname)
 
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop stringAliasType (string s)

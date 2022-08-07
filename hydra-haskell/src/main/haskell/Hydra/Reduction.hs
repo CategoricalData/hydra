@@ -35,9 +35,9 @@ betaReduceTerm cx term = reduce M.empty term
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
         TermNominal (Named name term') -> (\t -> TermNominal (Named name t)) <$> reduce bindings term'
         TermOptional m -> TermOptional <$> CM.mapM reduceb m
-        TermRecord fields -> TermRecord <$> CM.mapM reduceField fields
+        TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
         TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-        TermUnion f -> TermUnion <$> reduceField f
+        TermUnion (Union n f) -> TermUnion <$> (Union n <$> reduceField f)
         TermVariable var@(Variable v) -> case M.lookup var bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
@@ -51,7 +51,8 @@ betaReduceTerm cx term = reduce M.empty term
             EliminationOptional (OptionalCases nothing just) -> TermFunction . FunctionElimination . EliminationOptional <$>
               (OptionalCases <$> reduceb nothing <*> reduceb just)
             EliminationRecord _ -> done
-            EliminationUnion cases -> TermFunction . FunctionElimination . EliminationUnion <$> CM.mapM reduceField cases
+            EliminationUnion (CaseStatement n cases) ->
+              TermFunction . FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM reduceField cases
           FunctionCompareTo other -> TermFunction . FunctionCompareTo <$> reduceb other
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive _ -> done
@@ -79,10 +80,10 @@ betaReduceTerm cx term = reduce M.empty term
                 Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
               _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
-          EliminationUnion cases -> do
+          EliminationUnion (CaseStatement _ cases) -> do
             arg <- (reduce bindings $ L.head args) >>= deref cx
             case termExpr cx arg of
-              TermUnion (Field fname t) -> if L.null matching
+              TermUnion (Union _ (Field fname t)) -> if L.null matching
                   then fail $ "no case for field named " ++ unFieldName fname
                   else reduce bindings (fieldTerm $ L.head matching)
                     >>= reduceApplication bindings (t:L.tail args)
@@ -152,9 +153,9 @@ termIsValue cx strategy term = termIsOpaque strategy term || case termExpr cx te
     TermOptional m -> case m of
       Nothing -> True
       Just term -> termIsValue cx strategy term
-    TermRecord fields -> checkFields fields
+    TermRecord (Record _ fields) -> checkFields fields
     TermSet els -> forList $ S.toList els
-    TermUnion field -> checkField field
+    TermUnion (Union _ field) -> checkField field
     TermVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue cx strategy t) True els
@@ -169,6 +170,6 @@ termIsValue cx strategy term = termIsOpaque strategy term || case termExpr cx te
         EliminationOptional (OptionalCases nothing just) -> termIsValue cx strategy nothing
           && termIsValue cx strategy just
         EliminationRecord _ -> True
-        EliminationUnion cases -> checkFields cases
+        EliminationUnion (CaseStatement _ cases) -> checkFields cases
       FunctionLambda (Lambda _ body) -> termIsValue cx strategy body
       FunctionPrimitive _ -> True
