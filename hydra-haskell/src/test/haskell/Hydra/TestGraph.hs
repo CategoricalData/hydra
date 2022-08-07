@@ -37,12 +37,6 @@ import qualified Data.Set  as S
 cx :: Context Meta
 cx = standardContext
 
-testGraphName :: GraphName
-testGraphName = GraphName "testGraph"
-
-testSchemaGraphName :: GraphName
-testSchemaGraphName = GraphName "testSchemaGraph"
-
 testContext :: Context Meta
 testContext = standardContext {
     contextGraphs = GraphSet {
@@ -73,6 +67,9 @@ testElementFirstName = Element {
 testGraph :: Graph Meta
 testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
 
+testGraphName :: GraphName
+testGraphName = GraphName "testGraph"
+
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
@@ -81,6 +78,9 @@ testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx testTypePersonName testTypePerson,
     typeElement cx testTypeTimestampName testTypeTimestamp]
   allTerms hydraCoreName
+
+testSchemaGraphName :: GraphName
+testSchemaGraphName = GraphName "testSchemaGraph"
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext

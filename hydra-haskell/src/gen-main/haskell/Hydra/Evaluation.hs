@@ -24,7 +24,8 @@ data Context m
     contextElements :: (Map Core.Name (Graph.Element m)),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
-    contextAnnotations :: (AnnotationClass m)}
+    contextAnnotations :: (AnnotationClass m),
+    contextTrace :: [String]}
 
 _Context = (Core.Name "hydra/evaluation.Context")
 
@@ -37,6 +38,8 @@ _Context_functions = (Core.FieldName "functions")
 _Context_strategy = (Core.FieldName "strategy")
 
 _Context_annotations = (Core.FieldName "annotations")
+
+_Context_trace = (Core.FieldName "trace")
 
 -- A typeclass-like construct providing common functions for working with annotations
 data AnnotationClass m 
