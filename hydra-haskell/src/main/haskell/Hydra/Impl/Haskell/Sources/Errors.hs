@@ -20,7 +20,7 @@ hydraErrorsName = GraphName "hydra/errors"
 hydraErrors :: Graph Meta
 hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName
   where
-    def = datatype standardContext hydraErrorsName
+    def = datatype coreContext hydraErrorsName
     elements = [
 
       def "Qualified" $

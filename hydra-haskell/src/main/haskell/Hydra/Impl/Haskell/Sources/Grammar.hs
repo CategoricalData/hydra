@@ -20,7 +20,7 @@ hydraGrammar :: Graph Meta
 hydraGrammar = Graph hydraGrammarName elements (const True) hydraCoreName
   where
     grammar = nsref hydraGrammarName
-    def = datatype standardContext hydraGrammarName
+    def = datatype coreContext hydraGrammarName
     
     elements = [
 

@@ -24,7 +24,7 @@ hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
     graph = nsref hydraGraphName
     evaluation = nsref hydraEvaluationName
 
-    def = datatype standardContext hydraEvaluationName
+    def = datatype coreContext hydraEvaluationName
     
     elements = [
 

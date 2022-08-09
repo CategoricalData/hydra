@@ -112,7 +112,7 @@ generateSources printGraph modules basePath = case sequence modules of
   where
     writeDataGraph mod@(Module g _) = writeGraph printGraph cx g basePath
       where
-        cx = setContextElements allGraphs $ standardContext {
+        cx = setContextElements allGraphs $ coreContext {
           contextGraphs = GraphSet allGraphsByName (graphName g),
           contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) $ standardPrimitives cx}
         allGraphs = moduleGraph <$> M.elems allModules

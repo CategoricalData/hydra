@@ -18,7 +18,7 @@ shaclModelName = GraphName "hydra/ext/shacl/model"
 shaclModel :: Graph Meta
 shaclModel = Graph shaclModelName elements (const True) hydraCoreName
   where
-    def = datatype standardContext shaclModelName
+    def = datatype coreContext shaclModelName
     shacl = nsref shaclModelName
     rdf = nsref rdfSyntaxName
 

@@ -17,7 +17,7 @@ scalaMetaName = GraphName "hydra/ext/scala/meta"
 scalaMeta :: Graph Meta
 scalaMeta = Graph scalaMetaName elements (const True) hydraCoreName
   where
-    def = datatype standardContext scalaMetaName
+    def = datatype coreContext scalaMetaName
     meta = nsref scalaMetaName
 
     elements = [

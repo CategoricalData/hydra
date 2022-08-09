@@ -4,8 +4,9 @@ module Hydra.Impl.Haskell.Sources.Core where
 
 import Hydra.Core
 import Hydra.Graph
+import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Dsl.Bootstrap
 
 
 hydraCoreModule :: Module Meta
@@ -22,6 +23,9 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
     
     -- Note: only hydra/core uses the bootstrap context; all other models use the core context
     def = datatype bootstrapContext hydraCoreName
+
+    doc :: String -> Type Meta -> Type Meta
+    doc s = setTypeDescription bootstrapContext (Just s)
 
     elements = [
 
@@ -432,4 +436,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
         lambda "m" $ record [
           "typeName">: core "Name",
-          "field">: core "Field" @@ "m"]]
+          "field">: core "Field" @@ "m"],
+          
+      def "unitType" $ record []]
