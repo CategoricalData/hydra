@@ -10,7 +10,7 @@ placeholderName :: Name
 placeholderName = Name "Placeholder"
 
 unitTypeName :: Name
-unitTypeName = Name "hydra/core.unitType"
+unitTypeName = Name "hydra/core.UnitType"
 
 instance IsString (Type m) where fromString = variable
 
@@ -131,4 +131,4 @@ union :: [FieldType m] -> Type m
 union fields = TypeUnion $ RowType placeholderName fields
 
 unit :: Type m
-unit = TypeRecord $ RowType (Name "hydra/core.unitType") []
+unit = TypeRecord $ RowType (Name "hydra/core.UnitType") []

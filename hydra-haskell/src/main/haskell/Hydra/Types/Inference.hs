@@ -202,16 +202,17 @@ inferInternal cx term = case termExpr cx term of
           yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
     TermRecord (Record n fields) -> do
-        sfields <- rowTypeFields <$> requireRecordType cx n
+        rt <- resultToInfer cx $ requireRecordType cx n
+        let sfields = rowTypeFields rt
         (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) $ L.zip fields sfields
         yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n $ L.reverse ftypes0) c1
       where
         forField (typed, ftypes, c) (field, sfield) = do
           i <- inferFieldType cx field
           let ft = termType $ fieldTerm i
-          let c1 = termConstraints $ fieldTerm i
-          let c2 = (ft, fieldTypeType sfield)
-          return (i:typed, (FieldType (fieldName field) ft):ftypes, c2:(c1 ++ c))
+          let cinternal = termConstraints $ fieldTerm i
+          let cnominal = (ft, fieldTypeType sfield)
+          return (i:typed, (FieldType (fieldName field) ft):ftypes, cnominal:(cinternal ++ c))
 
     TermSet els -> do
       v <- freshVariableType
@@ -222,13 +223,13 @@ inferInternal cx term = case termExpr cx term of
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do
-        sfield <- (rowTypeFields <$> requireUnionType cx n) >>= findMatchingField cx field
+        rt <- resultToInfer cx $ requireUnionType cx n
+        sfield <- findMatchingField cx field (rowTypeFields rt)
         ifield <- inferFieldType cx field
-        let ftype = termType $ fieldTerm ifield
-        let typ = TypeUnion $ RowType n [FieldType (fieldName field) ftype]
-        let c1 = termConstraints $ fieldTerm ifield
-        let c2 = (ftype, fieldTypeType sfield)
-        yield (TermUnion $ Union n ifield) typ (c2:c1)
+        let cinternal = termConstraints $ fieldTerm ifield
+        let cnominal = (termType $ fieldTerm ifield, fieldTypeType sfield)
+        let constraints = cnominal:cinternal
+        yield (TermUnion $ Union n ifield) (TypeUnion rt) constraints
 
     TermVariable x -> do
       t <- lookupTypeInEnvironment x
@@ -261,11 +262,12 @@ inferTop cx term = do
     closeOver = normalizeScheme . generalize M.empty
 
 inferType :: (Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
-inferType cx term = case inferTop cx' term of
+inferType cx0 term = case inferTop cx term of
     Left err -> fail $ "type inference failed: " ++ show err
     Right p -> pure p
   where
-    cx' = pushTrace "infer type" cx
+--    cx = pushTrace "infer type" cx0
+    cx = pushTrace ("infer type of " ++ show term) cx0
 
 instantiate :: TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
@@ -284,24 +286,6 @@ namedType debug cx name = do
   el <- requireElement (Just debug) cx name
   scx <- schemaContext cx
   decodeStructuralType scx $ elementData el
-
-requireRecordType :: Show m => Context m -> Name -> Infer (RowType m) m
-requireRecordType = requireRowType "record" $ \t -> case t of
-  TypeRecord rt -> Just rt
-  _ -> Nothing
-
-requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Context m -> Name -> Infer (RowType m) m
-requireRowType label getter cx name = resultToInfer cx $ do
-  scx <- schemaContext cx
-  t <- requireType scx name
-  case getter (typeExpr cx t) of
-    Just rt -> return rt
-    Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
-
-requireUnionType :: Show m => Context m -> Name -> Infer (RowType m) m
-requireUnionType = requireRowType "union" $ \t -> case t of
-  TypeUnion rt -> Just rt
-  _ -> Nothing
 
 resultToInfer :: Context m -> Result a -> Infer a m
 resultToInfer cx r = case r of

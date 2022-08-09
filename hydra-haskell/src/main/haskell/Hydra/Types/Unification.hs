@@ -60,31 +60,29 @@ unify cx0 t1 t2 = if t1 == t2
       (TypeAnnotated (Annotated at _), _) -> unify cx at t2
       (_, TypeAnnotated (Annotated at _)) -> unify cx t1 at
       (TypeElement et1, TypeElement et2) -> unify cx et1 et2
-      (TypeFunction (FunctionType t1 t2), TypeFunction (FunctionType t3 t4)) -> unifyMany cx [t1, t2] [t3, t4]
+      (TypeFunction (FunctionType dom cod), TypeFunction (FunctionType t3 t4)) -> unifyMany cx [dom, cod] [t3, t4]
       (TypeList lt1, TypeList lt2) -> unify cx lt1 lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany cx [k1, v1] [k2, v2]
---      (TypeNominal name, t) -> case M.lookup name (contextElements cx) of
---          Nothing -> throwError $ ElementUndefined name
---          Just (Element _ _ dat) -> case decodeType cx dat of
---            ResultFailure msg -> throwError $ InvalidTypeEncoding msg
---            ResultSuccess typ -> unify cx typ t
       (TypeOptional ot1, TypeOptional ot2) -> unify cx ot1 ot2
-      (TypeRecord f1, TypeRecord f2) -> unifyRowType f1 f2
+      (TypeRecord rt1, TypeRecord rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeSet st1, TypeSet st2) -> unify cx st1 st2
-      (TypeUnion f1, TypeUnion f2) -> unifyRowType f1 f2
+      (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) -> unifyMany cx
         [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeVariable v, _) -> bind v t2
       (_, TypeVariable v) -> bind v t1
-      (TypeNominal name, _) -> return M.empty
+      (TypeNominal n1, TypeNominal n2) -> if n1 == n2
+        then return M.empty
+        else failUnification
+      (TypeNominal _, _) -> return M.empty -- TODO
       (_, TypeNominal name) -> unify cx (Types.nominal name) t1
-      _ -> throwError $ UnificationFail (printTrace cx) t1 t2
+      _ -> failUnification
   where
+    verify b = if b then return M.empty else failUnification
+    failUnification = throwError $ UnificationFail (printTrace cx) t1 t2
+--    cx = pushTrace "unify" cx0
     cx = pushTrace ("unify (" ++ show t1 ++ ") (" ++ show t2 ++ ")") cx0
-    unifyRowType (RowType n1 f1) (RowType n2 f2) = if n1 == n2
-      then unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
-      else throwError $ UnificationFail (printTrace cx0) t1 t2
-
+    
 unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
 unifyMany _ [] [] = return M.empty
 unifyMany cx (t1 : ts1) (t2 : ts2) =

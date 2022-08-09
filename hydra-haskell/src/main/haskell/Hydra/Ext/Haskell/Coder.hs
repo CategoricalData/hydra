@@ -198,64 +198,31 @@ encodeFunction namespaces cx meta fun = case fun of
           rhs <- H.CaseRhs <$> encodeTerm namespaces cx rhsTerm
           return $ H.Alternative lhs rhs Nothing
         return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
-      EliminationRecord (Projection _ fname) -> do
-        dn <- domName
-        case dn of
-          Just n -> pure $ H.ExpressionVariable $ recordFieldReference namespaces n fname
-          Nothing -> fail $ "unqualified record elimination: " ++ show meta -- ++ show fun
-      EliminationUnion (CaseStatement _ fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
+      EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
+      EliminationUnion (CaseStatement dn fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
-            fieldMap <- fieldMapOf <$> findDomain
+            scx <- schemaContext cx -- TODO: cache this
+            rt <- requireUnionType scx dn
+            let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
             H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
           toAlt fieldMap (Field fn fun') = do
             let v0 = "v"
             let raw = apply fun' (variable v0)
             let rhsTerm = simplifyTerm raw
             let v1 = if isFreeIn (Variable v0) rhsTerm then "_" else v0
-            dn <- domName
-            hname <- case dn of
-              Just n -> pure $ unionFieldReference namespaces n fn
-              Nothing -> fail "unqualified field name"
-            args <- case fieldMap >>= M.lookup fn of
+            let hname = unionFieldReference namespaces dn fn
+            args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case typeExpr cx ft of
                 TypeRecord (RowType _ []) -> pure []
                 _ -> pure [H.PatternName $ rawName v1]
-              Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
+              Nothing -> failWithTrace cx $ "field " ++ show fn ++ " not found in " ++ show dn
             let lhs = H.PatternApplication $ H.Pattern_Application hname args
             rhs <- H.CaseRhs <$> encodeTerm namespaces cx rhsTerm
             return $ H.Alternative lhs rhs Nothing
     FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeTerm namespaces cx body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
-    _ -> fail $ "unexpected function: " ++ show fun
-  where
-    fieldMapOf typ = case typeExpr cx <$> typ of
-      Just (TypeUnion (RowType _ tfields)) -> Just $ M.fromList $ (\f -> (fieldTypeName f, f)) <$> tfields
-      Just (TypeLambda (LambdaType _ tbody)) -> fieldMapOf $ Just tbody
-      _ -> Nothing
-    findDomain = do
-      dn <- domName
-      case dn of
-        Nothing -> pure Nothing
-        Just name -> do
-          scx <- schemaContext cx -- TODO: cache this
-          typ <- requireType scx name
-          return $ Just typ
-    domName = do
-        t <- annotationClassTypeOf (contextAnnotations cx) cx meta
-        case t of
-          Just typ -> do
-            case typeExpr cx typ of
-              TypeFunction (FunctionType dom _) -> nomName dom
-              _ -> fail $ "expected function type, found: " ++ show t
-          Nothing -> fail $ "expected a type, but found none in" ++ show meta
-      where
-        nomName typ = do
-          case typeExpr cx typ of
-            TypeApplication (ApplicationType lhs _) -> nomName lhs
-            TypeNominal name -> return $ Just name
-            TypeLambda (LambdaType _ body) -> nomName body
-            _ -> pure Nothing
+    _ -> failWithTrace cx $ "unexpected function: " ++ show fun
 
 encodeLiteral :: Literal -> Result H.Expression
 encodeLiteral av = case av of
@@ -287,35 +254,24 @@ encodeTerm namespaces cx term = do
     TermOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encode cx t
-    TermRecord (Record _ fields) -> do
-      sname <- findSname
-      case sname of
-        Nothing -> case fields of
-            [] -> pure $ H.ExpressionTuple []
-            _ -> fail $ "unexpected anonymous record: " ++ show term
-        Just name -> do
-            let typeName = typeNameForRecord name
+    TermRecord (Record sname fields) -> do
+      if L.null fields -- TODO: too permissive; not all empty record types are the unit type
+        then pure $ H.ExpressionTuple []
+        else do
+            let typeName = typeNameForRecord sname
             updates <- CM.mapM toFieldUpdate fields
             return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (rawName typeName) updates
           where
-            toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces name fn) <$> encode cx ft
-    TermUnion (Union _ (Field fn ft)) -> do
-      sname <- findSname
-      lhs <- case sname of
-        Just n -> pure $ H.ExpressionVariable $ unionFieldReference namespaces n fn
-        Nothing -> fail "unqualified field"
+            toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode cx ft
+    TermUnion (Union sname (Field fn ft)) -> do
+      let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
       case termExpr cx ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode cx ft
     TermVariable (Variable v) -> pure $ hsvar v
-    _ -> fail $ "unexpected term: " ++ show term
+    _ -> failWithTrace cx $ "unexpected term: " ++ show term
   where
     encode = encodeTerm namespaces
-    findSname = do
-      r <- annotationClassTypeOf (contextAnnotations cx) cx $ termMeta cx term
-      return $ case typeExpr cx <$> r of
-        Just (TypeNominal name) -> Just name
-        Nothing -> Nothing
 
 encodeType :: Show m => Context m -> Namespaces -> Type m -> Result H.Type
 encodeType cx namespaces typ = case typeExpr cx typ of
@@ -332,26 +288,29 @@ encodeType cx namespaces typ = case typeExpr cx typ of
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure "Float"
         FloatTypeFloat64 -> pure "Double"
-        _ -> fail $ "unexpected floating-point type: " ++ show ft
+        _ -> failWithTrace cx $ "unexpected floating-point type: " ++ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeBigint -> pure "Integer"
         IntegerTypeInt32 -> pure "Int"
-        _ -> fail $ "unexpected integer type: " ++ show it
+        _ -> failWithTrace cx $ "unexpected integer type: " ++ show it
       LiteralTypeString -> pure "String"
-      _ -> fail $ "unexpected literal type: " ++ show lt
+      _ -> failWithTrace cx $ "unexpected literal type: " ++ show lt
     TypeMap (MapType kt vt) -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Map",
       encode kt,
       encode vt]
-    TypeNominal name -> pure $ H.TypeVariable $ elementReference namespaces name
+    TypeNominal name -> nominal name
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
+    TypeRecord (RowType _ []) -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
+    TypeRecord (RowType n _) -> nominal n
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
+    TypeUnion (RowType n _) -> nominal n
     TypeVariable (VariableType v) -> pure $ H.TypeVariable $ simpleName v
-    TypeRecord (RowType _ []) -> pure $ H.TypeTuple []
-    _ -> fail $ "unexpected type: " ++ show typ
+    _ -> failWithTrace cx $ "unexpected type: " ++ show typ
   where
     encode = encodeType cx namespaces
+    nominal name = pure $ H.TypeVariable $ elementReference namespaces name
