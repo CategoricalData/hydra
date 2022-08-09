@@ -39,7 +39,7 @@ import qualified Data.Set  as S
 
 
 cx :: Context Meta
-cx = standardContext
+cx = coreContext
 
 latLonName :: Name
 latLonName = Name "LatLon"
@@ -51,7 +51,7 @@ latLonType :: Type m
 latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
 testContext :: Context Meta
-testContext = standardContext {
+testContext = coreContext {
     contextGraphs = GraphSet {
       graphSetGraphs = M.fromList [
         (testGraphName, testGraph),

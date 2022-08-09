@@ -26,7 +26,7 @@ xmlSchemaName = GraphName "hydra/ext/xml/schema"
 xmlSchema :: Graph Meta
 xmlSchema = Graph xmlSchemaName elements (const True) hydraCoreName
   where
-    def = datatype standardContext xmlSchemaName
+    def = datatype coreContext xmlSchemaName
 
     elements = datatypes ++ others
     

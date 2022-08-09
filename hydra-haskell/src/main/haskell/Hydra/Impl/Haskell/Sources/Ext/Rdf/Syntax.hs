@@ -17,7 +17,7 @@ rdfSyntaxName = GraphName "hydra/ext/rdf/syntax"
 rdfSyntax :: Graph Meta
 rdfSyntax = Graph rdfSyntaxName elements (const True) hydraCoreName
   where
-    def = datatype standardContext rdfSyntaxName
+    def = datatype coreContext rdfSyntaxName
     rdf = nsref rdfSyntaxName
 
     elements = [

@@ -24,7 +24,7 @@ coqSyntaxName = GraphName "hydra/ext/coq/syntax"
 coqSyntax :: Graph Meta
 coqSyntax = Graph coqSyntaxName elements (const True) hydraCoreName
   where
-    def = datatype standardContext coqSyntaxName
+    def = datatype coreContext coqSyntaxName
     coq = nsref coqSyntaxName
 
     elements = [

@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Base (
   module Hydra.Impl.Haskell.Dsl.Base,
   module Hydra.Impl.Haskell.Dsl.Literals,
   module Hydra.Impl.Haskell.Dsl.Phantoms,
-  Standard.standardContext,
+  Standard.coreContext,
 ) where
 
 import Hydra.Common
@@ -86,7 +86,7 @@ delta :: Data (Ref a -> a)
 delta = Data Terms.delta
 
 doc :: String -> Data a -> Data a
-doc s (Data term) = Data $ setTermDescription Standard.standardContext (Just s) term
+doc s (Data term) = Data $ setTermDescription Standard.coreContext (Just s) term
 
 element :: Element a -> Data (Ref a)
 element (Element name _) = Data $ Terms.element name
@@ -156,7 +156,7 @@ set :: S.Set (Data a) -> Data (S.Set a)
 set = Data . Terms.set . S.fromList . fmap unData . S.toList
 
 typed :: Type Meta -> Data a -> Data a
-typed t (Data term) = Data $ setTermType Standard.standardContext (Just t) term
+typed t (Data term) = Data $ setTermType Standard.coreContext (Just t) term
 
 union :: Name -> FieldName -> Data a -> Data b
 union name fname (Data term) = Data $ Terms.union name (Field fname term)
