@@ -126,10 +126,10 @@ generateSources printGraph modules basePath = case sequence modules of
                 gname = graphName g'
 
 writeGraph :: (Context m -> Graph m -> Qualified (M.Map FilePath String)) -> Context m -> Graph m -> FilePath -> IO ()
-writeGraph printGraph cx g basePath = do
+writeGraph printGraph cx0 g basePath = do
   case printGraph cx g of
     Qualified Nothing warnings -> putStrLn $
-      "Transformation failed in " ++ unGraphName (graphName g) ++ ": " ++ indent (unlines warnings)
+      "Transformation failed: " ++ indent (unlines warnings)
     Qualified (Just m) warnings -> do
       if not (L.null warnings)
         then putStrLn $ "Warnings: " ++ indent (unlines warnings) ++ "\n"
@@ -140,3 +140,4 @@ writeGraph printGraph cx g basePath = do
       let fullPath = FP.combine basePath path
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
+    cx = pushTrace ("write graph " ++ unGraphName (graphName g)) cx0

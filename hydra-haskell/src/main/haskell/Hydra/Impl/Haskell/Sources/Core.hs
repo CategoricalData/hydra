@@ -20,7 +20,7 @@ hydraCore :: Graph Meta
 hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
     core = nsref hydraCoreName
-    
+
     -- Note: only hydra/core uses the bootstrap context; all other models use the core context
     def = datatype bootstrapContext hydraCoreName
 
@@ -296,7 +296,7 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         record [
           "typeName">: core "Name",
           "field">: core "FieldName"],
-          
+
       def "Record" $
         doc "A record, or labeled tuple; a map of field names to terms" $
         lambda "m" $ record [
@@ -437,5 +437,5 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
         lambda "m" $ record [
           "typeName">: core "Name",
           "field">: core "Field" @@ "m"],
-          
-      def "unitType" $ record []]
+
+      def "UnitType" $ record []]

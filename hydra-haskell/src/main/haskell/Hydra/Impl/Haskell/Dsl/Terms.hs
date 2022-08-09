@@ -215,7 +215,7 @@ union :: Name -> Field m -> Term m
 union n = TermUnion . Union n
 
 unit :: Term m
-unit = TermRecord $ Record (Name "hydra/core.unitType") []
+unit = TermRecord $ Record (Name "hydra/core.UnitType") []
 
 unitVariant :: Name -> FieldName -> Term m
 unitVariant n fname = variant n fname unit

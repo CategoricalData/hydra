@@ -4,7 +4,9 @@ module Hydra.Impl.Haskell.Extras (
   elementAsTypedTerm,
   fieldTypes,
   qualifiedToResult,
+  requireRecordType,
   requireType,
+  requireUnionType,
   resultToQualified,
   setContextElements,
   unexpected,
@@ -70,10 +72,33 @@ qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
 
+requireRecordType :: Show m => Context m -> Name -> Result (RowType m)
+requireRecordType = requireRowType "record" $ \t -> case t of
+  TypeRecord rt -> Just rt
+  _ -> Nothing
+
+requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Context m -> Name -> Result (RowType m)
+requireRowType label getter cx name = do
+  scx <- schemaContext cx
+  t <- requireType scx name
+  case getter (rawType t) of
+    Just rt -> return rt
+    Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
+  where
+    rawType t = case t of
+      TypeAnnotated (Annotated t' _) -> rawType t'
+      TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
+      _ -> t
+
 requireType :: (Show m) => Context m -> Name -> Result (Type m)
 requireType scx name = do
   el <- requireElement (Just "require type") scx name
   decodeType scx $ elementData el
+
+requireUnionType :: Show m => Context m -> Name -> Result (RowType m)
+requireUnionType = requireRowType "union" $ \t -> case t of
+  TypeUnion rt -> Just rt
+  _ -> Nothing
 
 resultToQualified :: Result m -> Qualified m
 resultToQualified r = case r of

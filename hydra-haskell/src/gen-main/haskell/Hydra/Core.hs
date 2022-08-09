@@ -765,3 +765,9 @@ _Union = (Name "hydra/core.Union")
 _Union_typeName = (FieldName "typeName")
 
 _Union_field = (FieldName "field")
+
+data UnitType 
+  = UnitType {}
+  deriving (Eq, Ord, Read, Show)
+
+_UnitType = (Name "hydra/core.UnitType")

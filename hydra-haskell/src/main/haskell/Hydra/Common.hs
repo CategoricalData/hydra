@@ -62,6 +62,8 @@ isType cx typ = typeExpr cx typ == TypeNominal _Type
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
+failWithTrace cx msg = fail $ "Error (" ++ printTrace cx ++ "): " ++ msg
+
 printTrace :: Context m -> String
 printTrace = L.intercalate " > " . L.reverse . contextTrace
 
