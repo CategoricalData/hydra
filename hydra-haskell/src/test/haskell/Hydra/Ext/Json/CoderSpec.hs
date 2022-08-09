@@ -67,8 +67,8 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
   H.it "Records become JSON objects" $
     QC.property $ \lat lon -> checkJsonCoder latLonType
       (latlonRecord lat lon) (jsonMap [
-        ("lat", jsonInt lat),
-        ("lon", jsonInt lon)])
+        ("lat", jsonFloat $ realToFrac lat),
+        ("lon", jsonFloat $ realToFrac lon)])
 
 unsupportedTypesAreTransformed :: H.SpecWith ()
 unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are transformed appropriately" $ do

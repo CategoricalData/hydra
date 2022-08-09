@@ -1,5 +1,5 @@
 module Hydra.Impl.Haskell.Extras (
-  debug,
+--  debug,
   eitherToQualified,
   elementAsTypedTerm,
   fieldTypes,
@@ -38,10 +38,10 @@ instance Monad Qualified where
 instance MonadFail Qualified where
   fail msg = Qualified Nothing [msg]
 
-debug :: String -> Result m -> Result m
-debug msg r = case r of
-  ResultSuccess _ -> r
-  ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
+--debug :: String -> Result m -> Result m
+--debug msg r = case r of
+--  ResultSuccess _ -> r
+--  ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
 
 eitherToQualified :: Result m -> Qualified m
 eitherToQualified e = case e of

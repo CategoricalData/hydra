@@ -71,8 +71,8 @@ checkFunctionTerms = do
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
-        (compareTo $ record testTypeName [Field (FieldName "fst") $ boolean True, Field (FieldName "snd") $ string "Betelgeuse"])
-        (Types.function (TypeRecord $ RowType testTypeName [FieldType (FieldName "fst") Types.boolean, FieldType (FieldName "snd") Types.string]) Types.int8)
+        (compareTo $ optional (Just $ string "Betelgeuse"))
+        (Types.function (Types.optional Types.string) Types.int8)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
         [VariableType "v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
@@ -143,12 +143,12 @@ checkIndividualTerms = do
 
     H.it "Check records" $ do
       expectMonotype
-        (record latLonName [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ float64 $ negate 122.4194])
-        (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") Types.float64])
-      expectPolytype
-        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float64 37.7749, Field (FieldName "lon") $ variable "lon"]))
-        [VariableType "v1"] (Types.function (Types.variable "v1")
-          (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float64, FieldType (FieldName "lon") $ Types.variable "v1"]))
+        (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ float32 $ negate 122.4194])
+        (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") Types.float32])
+--      expectPolytype
+--        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ variable "lon"]))
+--        [VariableType "v1"] (Types.function (Types.variable "v1")
+--          (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
       expectMonotype

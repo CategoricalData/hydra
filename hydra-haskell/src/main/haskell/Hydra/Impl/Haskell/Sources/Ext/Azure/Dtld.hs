@@ -88,7 +88,7 @@ dtldName = GraphName "hydra/ext/azure/dtld"
 azureDtld :: Graph Meta
 azureDtld = Graph dtldName elements (const True) hydraCoreName
   where
-    def = datatype dtldName
+    def = datatype standardContext dtldName
 
     elements = [
       def "Command" $

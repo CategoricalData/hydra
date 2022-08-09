@@ -56,7 +56,7 @@ schemaContext cx = do
     dgraph <- getGraph $ graphSetRoot graphs
     sgraph <- getGraph $ graphSchemaGraph dgraph
     -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
-    return cx {
+    return $ pushTrace "schema" $ cx {
       contextGraphs = graphs { graphSetRoot = graphName sgraph },
       contextElements = graphElementsMap sgraph}
   where

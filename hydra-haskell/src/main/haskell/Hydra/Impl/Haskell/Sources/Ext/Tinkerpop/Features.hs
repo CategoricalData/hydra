@@ -31,7 +31,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreN
   where
     core = nsref hydraCoreName
     features = nsref tinkerpopFeaturesName
-    def = datatype tinkerpopFeaturesName
+    def = datatype standardContext tinkerpopFeaturesName
     supports name comment = ("supports" ++ capitalize name)>: doc comment boolean
     
     elements = [

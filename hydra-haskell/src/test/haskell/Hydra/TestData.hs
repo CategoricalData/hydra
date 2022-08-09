@@ -32,15 +32,6 @@ int32ElementType = Types.element Types.int32
 int32ElementDataType :: Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
 
-latLonName :: Name
-latLonName = fromQname testGraphName "LatLon"
-
-latlonRecord :: (Eq m, Ord m, Read m, Show m) => Int -> Int -> Term m
-latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ int32 lat, Field (FieldName "lon") $ int32 lon]
-
-latLonType :: Type m
-latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.int32, Types.field "lon" Types.int32]
-
 listOfInt8sType :: Type m
 listOfInt8sType = Types.list Types.int8
 

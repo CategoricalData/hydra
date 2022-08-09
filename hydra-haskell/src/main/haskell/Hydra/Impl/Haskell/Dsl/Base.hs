@@ -5,6 +5,7 @@ module Hydra.Impl.Haskell.Dsl.Base (
   Standard.standardContext,
 ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Evaluation
@@ -16,38 +17,28 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Types.Inference
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
 
 import Prelude hiding ((++))
 
 import qualified Data.Map as M
 import qualified Data.Set as S
-import qualified Data.Maybe as Y
 
 
 el :: Element a -> Context Meta -> Result (Graph.Element Meta)
 el (Element name (Data term)) cx = do
-    dt <- declaredType
-    t <- Y.maybe (fail $ "untyped term in " <> unName name <> ": " <> show term) return dt
-    let t = Y.fromMaybe Types.unit dt
+    t <- findType
     let schemaTerm = encodeType cx t
     return $ Graph.Element name schemaTerm term
   where
-    cx = Standard.standardContext
+    cx1 = pushTrace "construct element" cx
     declaredType = annotationClassTermType (contextAnnotations cx) cx term
---    findType = do
---      mt <- declaredType
---      Y.maybe (typeSchemeType . snd <$> inferType cx term) pure mt
-
-graph :: Graph.GraphName -> [Context Meta -> Result (Graph.Element Meta)] -> Result (Graph.Graph Meta)
-graph gname cons = do
-    elements <- mapM (\f -> f cx) cons
-    return $ Graph.Graph gname elements terms schemaGraph
-  where
-    cx = Standard.standardContext
-    terms = const True
-    schemaGraph = hydraCoreName
-
+    findType = do
+      mt <- declaredType
+      case mt of
+        Just t -> return t
+        Nothing -> typeSchemeType . snd <$> inferType (pushTrace (unName name) cx1) term
 
 (<.>) :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
 f <.> g = compose f g
@@ -120,8 +111,8 @@ map = Data . Terms.map . M.fromList . fmap fromData . M.toList
   where
     fromData (Data k, Data v) = (k, v)
 
-matchData :: Name -> Type Meta -> [(FieldName, Data (x -> b))] -> Data (a -> b)
-matchData name cod pairs = typed (Types.function (Types.nominal name) cod) $ Data $ Terms.cases name (toField <$> pairs)
+matchData :: Name -> [(FieldName, Data (x -> b))] -> Data (a -> b)
+matchData name pairs = Data $ Terms.cases name (toField <$> pairs)
   where
     toField (fname, Data term) = Field fname term
 
@@ -132,15 +123,14 @@ match :: Name -> Type Meta -> [Field Meta] -> Data (u -> b)
 match name cod fields = function (Types.nominal name) cod $ Data $ Terms.cases name fields
 
 matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Data (a -> b)
-matchToEnum name codName pairs = matchData name (Types.nominal codName) (toCase <$> pairs)
+matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
 matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Data (a -> b)
-matchToUnion name codName pairs = matchData name (Types.nominal codName) (toCase <$> pairs)
+matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
   where
-    toCase (fromName, fld) = (fromName,
-      constant $ typed (Types.nominal codName) $ Data $ Terms.union codName fld)
+    toCase (fromName, fld) = (fromName, constant $ Data $ Terms.union codName fld)
 
 -- Note: the phantom types provide no guarantee of type safety in this case
 nom :: Name -> Data a -> Data b
@@ -162,18 +152,11 @@ record name fields = Data $ Terms.record name fields
 ref :: Element a -> Data a
 ref e = delta @@ element e
 
---ref :: Element a -> Data (Ref a)
---ref (Element name _) = Data $ Terms.element name
-
 set :: S.Set (Data a) -> Data (S.Set a)
 set = Data . Terms.set . S.fromList . fmap unData . S.toList
 
--- TODO: type abstraction
-
--- TODO: type application
-
 typed :: Type Meta -> Data a -> Data a
-typed t (Data term) = Data $ Standard.typed t term
+typed t (Data term) = Data $ setTermType Standard.standardContext (Just t) term
 
 union :: Name -> FieldName -> Data a -> Data b
 union name fname (Data term) = Data $ Terms.union name (Field fname term)

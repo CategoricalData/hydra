@@ -19,7 +19,10 @@ hydraCore :: Graph Meta
 hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
   where
     core = nsref hydraCoreName
-    def = datatype hydraCoreName
+    
+    -- Note: only hydra/core uses the bootstrap context; all other models use the core context
+    def = datatype bootstrapContext hydraCoreName
+
     elements = [
 
       def "Annotated" $

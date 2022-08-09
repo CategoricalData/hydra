@@ -20,7 +20,7 @@ hydraAdapterName = GraphName "hydra/adapter"
 hydraAdapter :: Graph Meta
 hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
   where
-    def = datatype hydraAdapterName
+    def = datatype standardContext hydraAdapterName
     core = nsref hydraCoreName
     adapter = nsref hydraAdapterName
     evaluation = nsref hydraEvaluationName

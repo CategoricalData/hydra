@@ -40,8 +40,9 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
           else do
             adapter <- floatAdapter context ft
             let step = bidirectional
-                  $ \dir (LiteralFloat fv) -> LiteralFloat
-                    <$> stepEither dir (adapterCoder adapter) fv
+                  $ \dir l -> case l of
+                    LiteralFloat fv -> LiteralFloat <$> stepEither dir (adapterCoder adapter) fv
+                    _ -> unexpected "floating-point literal" (show l)
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeFloat $ adapterTarget adapter) step
         LiteralTypeInteger it -> pure $ if noIntegerVars
           then fallbackAdapter t

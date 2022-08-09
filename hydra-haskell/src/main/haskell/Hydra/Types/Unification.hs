@@ -7,6 +7,7 @@ module Hydra.Types.Unification (
   unify,
 ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Types.Substitution
@@ -24,12 +25,13 @@ type Constraint m = (Type m, Type m)
 type Solve a m = ExceptT (TypeError m) Identity a
 
 data TypeError m
-  = UnificationFail (Type m) (Type m)
+  = UnificationFail String (Type m) (Type m)
   | InfiniteType VariableType (Type m)
   | UnboundVariable Variable
   | UnificationMismatch [Type m] [Type m]
   | ElementUndefined Name
-  | InvalidTypeEncoding String deriving (Eq, Show)
+  | InvalidTypeEncoding String
+  | OtherError String String deriving (Eq, Show)
 
 type Unifier m = (Subst m, [Constraint m])
 
@@ -52,7 +54,7 @@ unificationSolver scx (su, cs) = case cs of
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
 unify :: (Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
-unify cx t1 t2 = if t1 == t2
+unify cx0 t1 t2 = if t1 == t2
     then return M.empty
     else case (t1, t2) of
       (TypeAnnotated (Annotated at _), _) -> unify cx at t2
@@ -76,11 +78,12 @@ unify cx t1 t2 = if t1 == t2
       (_, TypeVariable v) -> bind v t1
       (TypeNominal name, _) -> return M.empty
       (_, TypeNominal name) -> unify cx (Types.nominal name) t1
-      _ -> throwError $ UnificationFail t1 t2
+      _ -> throwError $ UnificationFail (printTrace cx) t1 t2
   where
+    cx = pushTrace ("unify (" ++ show t1 ++ ") (" ++ show t2 ++ ")") cx0
     unifyRowType (RowType n1 f1) (RowType n2 f2) = if n1 == n2
       then unifyMany cx (fieldTypeType <$> f1) (fieldTypeType <$> f2)
-      else throwError $ UnificationFail t1 t2
+      else throwError $ UnificationFail (printTrace cx0) t1 t2
 
 unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
 unifyMany _ [] [] = return M.empty

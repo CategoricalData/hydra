@@ -1,5 +1,8 @@
 module Hydra.TestGraph (
   graphElementsMap,
+  latLonName,
+  latlonRecord,
+  latLonType,
   testContext,
   testElementArthur,
   testElementFirstName,
@@ -18,6 +21,7 @@ module Hydra.TestGraph (
   module Hydra.Impl.Haskell.Sources.Libraries,
 ) where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
@@ -36,6 +40,15 @@ import qualified Data.Set  as S
 
 cx :: Context Meta
 cx = standardContext
+
+latLonName :: Name
+latLonName = Name "LatLon"
+
+latlonRecord :: (Eq m, Ord m, Read m, Show m) => Float -> Float -> Term m
+latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat, Field (FieldName "lon") $ float32 lon]
+
+latLonType :: Type m
+latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
 testContext :: Context Meta
 testContext = standardContext {
@@ -75,6 +88,7 @@ testSchemaGraph = Graph testSchemaGraphName [
     typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
     typeElement cx testTypeColorName testTypeColor,
     typeElement cx testTypeComparisonName testTypeComparison,
+    typeElement cx latLonName latLonType,
     typeElement cx testTypePersonName testTypePerson,
     typeElement cx testTypeTimestampName testTypeTimestamp]
   allTerms hydraCoreName

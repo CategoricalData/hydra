@@ -6,6 +6,7 @@ import Hydra.Evaluation
 import qualified Hydra.Graph as Graph
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Sources.Graph
+import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
 import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
@@ -13,7 +14,7 @@ import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
 
 hydraBasicsModule :: Result (Graph.Module Meta)
 hydraBasicsModule = do
-  g <- graph hydraBasicsName [
+  g <- Standard.graph hydraBasicsName [
     el eliminationVariant,
     el eliminationVariants,
     el floatTypePrecision,
@@ -111,7 +112,7 @@ functionVariants = basics "functionVariants" $
 integerTypeIsSigned :: Element (IntegerType -> Bool)
 integerTypeIsSigned = basics "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  matchData _IntegerType Types.boolean [
+  matchData _IntegerType [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
     _IntegerType_int16  @-> constant true,
