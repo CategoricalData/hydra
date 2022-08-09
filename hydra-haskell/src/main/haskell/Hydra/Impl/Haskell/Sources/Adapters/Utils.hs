@@ -6,6 +6,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Evaluation
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
 
@@ -14,7 +15,7 @@ import Prelude hiding ((++))
 
 adapterUtilsModule :: Result (Graph.Module Meta)
 adapterUtilsModule = do
-  g <- graph adapterUtilsName [
+  g <- Standard.graph adapterUtilsName [
     el describeFloatType,
     el describeIntegerType,
     el describeLiteralType,
@@ -93,13 +94,3 @@ describeType = utils "describeType" $
     functionTypeM = Types.apply (Types.nominal _FunctionType) (Types.variable "m")
     typeM = Types.apply (Types.nominal _Type) (Types.variable "m")
     mapTypeM = Types.apply (Types.nominal _MapType) (Types.variable "m")
-
---idAdapter :: Element Meta
---idAdapter = standardFunction adapterUtilsName "idAdapter"
---  "An identity adapter for a given type"
---  (Types.nominal _Type) (LambdaType (LambdaType "m" $ ())) $
---  lambda "t" $ r_ _Adapter [
---    Field _Adapter_isLossy (boolean False),
---    Field _Adapter_source (var "t"),
---    Field _Adapter_target (var "t"),
---    Field _Adapter_step (ref idCoder)]

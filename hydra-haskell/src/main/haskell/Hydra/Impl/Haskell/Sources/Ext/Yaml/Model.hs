@@ -27,7 +27,7 @@ yamlModelName = GraphName "hydra/ext/yaml/model"
 yamlModel :: Graph Meta
 yamlModel = Graph yamlModelName elements (const True) hydraCoreName
   where
-    def = datatype yamlModelName
+    def = datatype standardContext yamlModelName
     model = nsref yamlModelName
 
     elements = [

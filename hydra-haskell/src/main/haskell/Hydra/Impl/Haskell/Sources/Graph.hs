@@ -22,7 +22,7 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
   where
     core = nsref hydraCoreName
     graph = nsref hydraGraphName
-    def = datatype hydraGraphName
+    def = datatype standardContext hydraGraphName
     
     elements = [
 

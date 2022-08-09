@@ -8,6 +8,9 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Data.List as L
 
 
+debug :: Bool
+debug = True
+
 convertFloatValue :: FloatType -> FloatValue -> FloatValue
 convertFloatValue target = encoder . decoder
   where
@@ -63,7 +66,9 @@ printTrace :: Context m -> String
 printTrace = L.intercalate " > " . L.reverse . contextTrace
 
 pushTrace :: String -> Context m -> Context m
-pushTrace msg cx = cx {contextTrace = msg:contextTrace cx}
+pushTrace msg cx = if debug
+  then cx {contextTrace = msg:contextTrace cx}
+  else cx
 
 toQname :: Name -> (GraphName, String)
 toQname (Name name) = case Strings.splitOn "." name of

@@ -62,6 +62,11 @@ extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   local scope m
 
+findMatchingField :: Context m -> Field m -> [FieldType m] -> Infer (FieldType m) m
+findMatchingField cx field sfields = case L.filter (\f -> fieldTypeName f == fieldName field) sfields of
+  []    -> throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName (fieldName field)
+  (h:_) -> return h
+
 infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
 infer cx term = case annotationClassTermType (contextAnnotations cx) cx term of
     ResultSuccess t -> case t of
@@ -197,14 +202,16 @@ inferInternal cx term = case termExpr cx term of
           yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
     TermRecord (Record n fields) -> do
-        (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) fields
+        sfields <- rowTypeFields <$> requireRecordType cx n
+        (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) $ L.zip fields sfields
         yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n $ L.reverse ftypes0) c1
       where
-        forField (typed, ftypes, c) field = do
+        forField (typed, ftypes, c) (field, sfield) = do
           i <- inferFieldType cx field
           let ft = termType $ fieldTerm i
           let c1 = termConstraints $ fieldTerm i
-          return (i:typed, (FieldType (fieldName field) ft):ftypes, c1 ++ c)
+          let c2 = (ft, fieldTypeType sfield)
+          return (i:typed, (FieldType (fieldName field) ft):ftypes, c2:(c1 ++ c))
 
     TermSet els -> do
       v <- freshVariableType
@@ -215,9 +222,13 @@ inferInternal cx term = case termExpr cx term of
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do
-      ifield <- inferFieldType cx field
-      let typ = TypeUnion $ RowType n [FieldType (fieldName field) (termType $ fieldTerm ifield)]
-      yield (TermUnion $ Union n ifield) typ (termConstraints $ fieldTerm ifield)
+        sfield <- (rowTypeFields <$> requireUnionType cx n) >>= findMatchingField cx field
+        ifield <- inferFieldType cx field
+        let ftype = termType $ fieldTerm ifield
+        let typ = TypeUnion $ RowType n [FieldType (fieldName field) ftype]
+        let c1 = termConstraints $ fieldTerm ifield
+        let c2 = (ftype, fieldTypeType sfield)
+        yield (TermUnion $ Union n ifield) typ (c2:c1)
 
     TermVariable x -> do
       t <- lookupTypeInEnvironment x
@@ -250,9 +261,11 @@ inferTop cx term = do
     closeOver = normalizeScheme . generalize M.empty
 
 inferType :: (Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
-inferType cx term = case inferTop cx term of
+inferType cx term = case inferTop cx' term of
     Left err -> fail $ "type inference failed: " ++ show err
     Right p -> pure p
+  where
+    cx' = pushTrace "infer type" cx
 
 instantiate :: TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
@@ -271,6 +284,29 @@ namedType debug cx name = do
   el <- requireElement (Just debug) cx name
   scx <- schemaContext cx
   decodeStructuralType scx $ elementData el
+
+requireRecordType :: Show m => Context m -> Name -> Infer (RowType m) m
+requireRecordType = requireRowType "record" $ \t -> case t of
+  TypeRecord rt -> Just rt
+  _ -> Nothing
+
+requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Context m -> Name -> Infer (RowType m) m
+requireRowType label getter cx name = resultToInfer cx $ do
+  scx <- schemaContext cx
+  t <- requireType scx name
+  case getter (typeExpr cx t) of
+    Just rt -> return rt
+    Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
+
+requireUnionType :: Show m => Context m -> Name -> Infer (RowType m) m
+requireUnionType = requireRowType "union" $ \t -> case t of
+  TypeUnion rt -> Just rt
+  _ -> Nothing
+
+resultToInfer :: Context m -> Result a -> Infer a m
+resultToInfer cx r = case r of
+  ResultSuccess x -> pure x
+  ResultFailure e -> throwError $ OtherError (printTrace cx) e
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite

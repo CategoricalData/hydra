@@ -18,6 +18,11 @@ import qualified Data.Maybe as Y
 key_maxSize = "maxLength"
 key_minSize = "minLength"
 
+annotateTerm :: String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
+annotateTerm = setTermAnnotation standardContext
+
+annotateType :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
+annotateType = setTypeAnnotation standardContext
 
 bounded :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
 bounded min max = annotMin . annotMax
@@ -37,20 +42,53 @@ boundedString min max = bounded min max Types.string
 dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
 dataterm gname lname = termElement standardContext (qualify gname (Name lname))
 
-datatype :: GraphName -> String -> Type Meta -> Element Meta
-datatype gname lname = typeElement standardContext (qualify gname (Name lname))
-
-annotateTerm :: String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
-annotateTerm = setTermAnnotation standardContext
-
-annotateType :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
-annotateType = setTypeAnnotation standardContext
+datatype :: Context Meta -> GraphName -> String -> Type Meta -> Element Meta
+datatype cx gname lname typ = typeElement cx elName $ replacePlaceholders typ
+  where
+    elName = qualify gname (Name lname)
+    
+    replacePlaceholders t = case t of
+      TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (replacePlaceholders t') ann)
+      TypeRecord (RowType n fields) -> if n == Types.placeholderName
+        then TypeRecord (RowType elName fields)
+        else t
+      TypeUnion (RowType n fields) -> if n == Types.placeholderName
+        then TypeUnion (RowType elName fields)
+        else t
+      _ -> t
 
 doc :: String -> Type Meta -> Type Meta
 doc s = setTypeDescription standardContext (Just s)
 
 dataDoc :: String -> Term Meta -> Term Meta
 dataDoc s = setTermDescription standardContext (Just s)
+
+bootstrapContext :: Context Meta
+bootstrapContext = cx
+  where
+    cx = Context {
+      contextGraphs = GraphSet {
+        graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
+        graphSetRoot = emptyGraphName},
+      contextElements = M.empty,
+      contextFunctions = M.empty,
+      contextStrategy = EvaluationStrategy {
+        evaluationStrategyOpaqueTermVariants = S.fromList []},
+      contextAnnotations = metaAnnotationClass,
+      contextTrace = []}
+
+    emptyGraphName = GraphName "empty"
+
+    emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
+
+graph :: GraphName -> [Context Meta -> Result (Element Meta)] -> Result (Graph Meta)
+graph gname cons = do
+    elements <- mapM (\f -> f cx) cons
+    return $ Graph gname elements terms schemaGraph
+  where
+    cx = standardContext
+    terms = const True
+    schemaGraph = GraphName "hydra/core"
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList = boundedList (Just 1) Nothing
@@ -60,9 +98,6 @@ note s = doc $ "Note: " ++ s
 
 nsref :: GraphName -> String -> Type m
 nsref ns = Types.nominal . qualify ns . Name
-
-project :: Name -> FieldName -> Type Meta -> Term Meta
-project name fname cod = withType standardContext (Types.function (Types.nominal name) cod) $ projection name fname
 
 qualify :: GraphName -> Name -> Name
 qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname
@@ -77,37 +112,8 @@ setMinLength :: Int -> Type Meta -> Type Meta
 setMinLength m t = setTypeAnnotation standardContext key_minSize (Just $ Terms.int32 m) t
 
 standardContext :: Context Meta
-standardContext = cx
-  where
-    cx = Context {
-      contextGraphs = GraphSet {
-        graphSetGraphs = M.fromList [(emptyGraphName, emptyGraph)],
-        graphSetRoot = emptyGraphName},
-      contextElements = M.empty,
-      contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) (standardPrimitives cx),
-      contextStrategy = EvaluationStrategy {
-        evaluationStrategyOpaqueTermVariants = S.fromList []},
-      contextAnnotations = metaAnnotationClass,
-      contextTrace = []}
-
-    emptyGraphName = GraphName "empty"
-
-    emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
-
-standardElement :: GraphName -> String -> String -> Type Meta -> Term Meta -> Element Meta
-standardElement (GraphName ns) name desc typ term = Element (Name $ ns ++ "." ++ name) (encodeType standardContext typ)
-  $ dataDoc desc term
-
-standardFunction :: GraphName -> String -> String -> Type Meta -> Type Meta -> Term Meta -> Element Meta
-standardFunction ns name desc dom cod = standardElement ns name desc typ
-  where
-    typ = Types.function dom cod
-
-standardGraph :: GraphName -> [Element Meta] -> Graph Meta
-standardGraph name els = Graph name els termExprs schemaGraph
-  where
-    termExprs = const True -- TODO
-    schemaGraph = GraphName "hydra/core"
+standardContext = bootstrapContext {
+  contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) (standardPrimitives bootstrapContext)}
 
 twoOrMoreList :: Type Meta -> Type Meta
 twoOrMoreList = boundedList (Just 2) Nothing
@@ -123,6 +129,3 @@ typeElement cx name typ = Element {
   elementName = name,
   elementSchema = TermElement _Type,
   elementData = encodeType cx typ}
-
-typed :: Type Meta -> Term Meta -> Term Meta
-typed t = setTermType standardContext (Just t)

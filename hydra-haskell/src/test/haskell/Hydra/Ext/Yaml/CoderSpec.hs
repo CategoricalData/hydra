@@ -65,8 +65,8 @@ supportedTypesPassThrough = H.describe "Verify that supported types are mapped d
   H.it "Records become YAML mappings" $
     QC.property $ \lat lon -> checkYamlCoder latLonType
       (latlonRecord lat lon) (yamlMap [
-        (yamlStr "lat", yamlInt lat),
-        (yamlStr "lon", yamlInt lon)])
+        (yamlStr "lat", yamlFloat $ realToFrac lat),
+        (yamlStr "lon", yamlFloat $ realToFrac lon)])
 
 unsupportedTypesAreTransformed :: H.SpecWith ()
 unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are transformed appropriately" $ do
