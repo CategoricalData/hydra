@@ -305,7 +305,6 @@ hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
 
       def "RowType" $
         doc "A labeled record or union type" $
---        lambda "m" $ list $ core "FieldType" @@ "m",
         lambda "m" $ record [
           "typeName">: core "Name",
           "fields">: list $ core "FieldType" @@ "m"],

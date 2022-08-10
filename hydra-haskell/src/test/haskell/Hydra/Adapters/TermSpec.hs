@@ -6,7 +6,6 @@ import Hydra.Adapters.UtilsEtc
 import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreLanguage
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Extras
 import Hydra.Meta
@@ -202,7 +201,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       (compareTo $ string s)
-      (nominalUnion testContext functionProxyName $ field "compareTo" $ string s)
+      (union functionProxyName $ field "compareTo" $ string s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
@@ -211,7 +210,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       delta
-      (nominalUnion testContext functionProxyName $ field "element" unit)
+      (union functionProxyName $ field "element" unit)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -229,7 +228,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       (primitive name)
-      (nominalUnion testContext functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
+      (union functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
@@ -238,7 +237,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType testTypePerson)
       False
       (projection testTypePersonName fname)
-      (nominalUnion testContext functionProxyName $ field "record" $ string $
+      (union functionProxyName $ field "record" $ string $
         show (projection testTypePersonName fname :: Term Meta)) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $

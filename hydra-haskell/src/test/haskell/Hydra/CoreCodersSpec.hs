@@ -1,7 +1,6 @@
 module Hydra.CoreCodersSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
@@ -89,7 +88,7 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      isFailure (decodeType testContext $ nominalVariant testContext untyped (FieldName "unknownField") $ list [])
+      isFailure (decodeType testContext $ variant untyped (FieldName "unknownField") $ list [])
       `H.shouldBe` True
 
     H.it "Try to decode an incomplete representation of a Type" $ do

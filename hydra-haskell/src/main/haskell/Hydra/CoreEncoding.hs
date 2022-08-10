@@ -2,7 +2,6 @@ module Hydra.CoreEncoding where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Extras
 import Hydra.Impl.Haskell.Dsl.Terms
 
@@ -12,17 +11,17 @@ import qualified Data.Set as S
 
 
 encodeApplication :: Ord m => Context m -> Application m -> Term m
-encodeApplication cx (Application lhs rhs) = nominalRecord cx _Application [
+encodeApplication cx (Application lhs rhs) = record _Application [
   Field _Application_function $ encodeTerm cx lhs,
   Field _Application_argument $ encodeTerm cx rhs]
 
 encodeApplicationType :: Context m -> ApplicationType m -> Term m
-encodeApplicationType cx (ApplicationType lhs rhs) = nominalRecord cx _ApplicationType [
+encodeApplicationType cx (ApplicationType lhs rhs) = record _ApplicationType [
   Field _ApplicationType_function $ encodeType cx lhs,
   Field _ApplicationType_argument $ encodeType cx rhs]
 
 encodeCaseStatement :: Ord m => Context m -> CaseStatement m -> Term m
-encodeCaseStatement cx (CaseStatement name cases) = nominalRecord cx _CaseStatement [
+encodeCaseStatement cx (CaseStatement name cases) = record _CaseStatement [
   Field _CaseStatement_typeName $ string (unName name),
   Field _CaseStatement_cases $ list $ encodeField cx <$> cases]
 
@@ -35,12 +34,12 @@ encodeElimination cx e = case e of
   EliminationUnion c -> variant _Elimination _Elimination_union $ encodeCaseStatement cx c
 
 encodeField :: Ord m => Context m -> Field m -> Term m
-encodeField cx (Field (FieldName name) term) = nominalRecord cx _Field [
+encodeField cx (Field (FieldName name) term) = record _Field [
   Field _Field_name $ string name,
   Field _Field_term $ encodeTerm cx term]
 
 encodeFieldType :: Context m -> FieldType m -> Term m
-encodeFieldType cx (FieldType (FieldName fname) t) = nominalRecord cx _FieldType [
+encodeFieldType cx (FieldType (FieldName fname) t) = record _FieldType [
   Field _FieldType_name $ string fname,
   Field _FieldType_type $ encodeType cx t]
 
@@ -58,7 +57,7 @@ encodeFunction cx f = case f of
   FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ string name
 
 encodeFunctionType :: Context m -> FunctionType m -> Term m
-encodeFunctionType cx (FunctionType dom cod) = nominalRecord cx _FunctionType [
+encodeFunctionType cx (FunctionType dom cod) = record _FunctionType [
   Field _FunctionType_domain $ encodeType cx dom,
   Field _FunctionType_codomain $ encodeType cx cod]
 
@@ -75,12 +74,12 @@ encodeIntegerType it = unitVariant _IntegerType $ case it of
   IntegerTypeUint64 -> _IntegerType_uint64
 
 encodeLambda :: Ord m => Context m -> Lambda m -> Term m
-encodeLambda cx (Lambda (Variable v) b) = nominalRecord cx _Lambda [
+encodeLambda cx (Lambda (Variable v) b) = record _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm cx b]
 
 encodeLambdaType :: Context m -> LambdaType m -> Term m
-encodeLambdaType cx (LambdaType (VariableType var) body) = nominalRecord cx _LambdaType [
+encodeLambdaType cx (LambdaType (VariableType var) body) = record _LambdaType [
   Field _LambdaType_parameter $ string var,
   Field _LambdaType_body $ encodeType cx body]
 
@@ -104,27 +103,27 @@ encodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
   LiteralVariantString -> _LiteralVariant_string
 
 encodeMapType :: Context m -> MapType m -> Term m
-encodeMapType cx (MapType kt vt) = nominalRecord cx _MapType [
+encodeMapType cx (MapType kt vt) = record _MapType [
   Field _MapType_keys $ encodeType cx kt,
   Field _MapType_values $ encodeType cx vt]
 
 encodeNamed :: Ord m => Context m -> Named m -> Term m
-encodeNamed cx (Named (Name name) term) = nominalRecord cx _Named [
+encodeNamed cx (Named (Name name) term) = record _Named [
   Field _Named_typeName $ string name,
   Field _Named_term $ encodeTerm cx term]
 
 encodeOptionalCases :: Ord m => Context m -> OptionalCases m -> Term m
-encodeOptionalCases cx (OptionalCases nothing just) = nominalRecord cx _OptionalCases [
+encodeOptionalCases cx (OptionalCases nothing just) = record _OptionalCases [
   Field _OptionalCases_nothing $ encodeTerm cx nothing,
   Field _OptionalCases_just $ encodeTerm cx just]
 
 encodeProjection :: Context m -> Projection -> Term m
-encodeProjection cx (Projection name fname) = nominalRecord cx _Projection [
+encodeProjection cx (Projection name fname) = record _Projection [
   Field _Projection_typeName $ string (unName name),
   Field _Projection_field $ string (unFieldName fname)]
   
 encodeRowType :: Context m -> RowType m -> Term m
-encodeRowType cx (RowType name fields) = nominalRecord cx _RowType [
+encodeRowType cx (RowType name fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
   Field _RowType_fields $ list $ encodeFieldType cx <$> fields]
 

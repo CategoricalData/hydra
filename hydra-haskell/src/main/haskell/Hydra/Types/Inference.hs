@@ -62,9 +62,9 @@ extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   local scope m
 
-findMatchingField :: Context m -> Field m -> [FieldType m] -> Infer (FieldType m) m
-findMatchingField cx field sfields = case L.filter (\f -> fieldTypeName f == fieldName field) sfields of
-  []    -> throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName (fieldName field)
+findMatchingField :: Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
+findMatchingField cx fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
+  []    -> throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
 infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
@@ -121,21 +121,25 @@ inferInternal cx term = case termExpr cx term of
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed
         EliminationRecord (Projection name fname) -> do
-          dom <- freshVariableType
-          cod <- freshVariableType
-          let ftype = Types.function (TypeRecord $ RowType name [FieldType fname dom]) cod
-          yieldElimination (EliminationRecord $ Projection name fname) ftype []
+          rt <- resultToInfer cx $ requireRecordType cx name
+          sfield <- findMatchingField cx fname (rowTypeFields rt)
+          yieldElimination (EliminationRecord $ Projection name fname)
+            (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
 
         EliminationUnion (CaseStatement name cases) -> do
+            rt <- resultToInfer cx $ requireUnionType cx name
+            let sfields = rowTypeFields rt
+        
             icases <- CM.mapM (inferFieldType cx) cases
-            cod <- freshVariableType
-            doms <- CM.mapM (const freshVariableType) cases
-            let ftypes = termType . fieldTerm <$> icases
-            let ftypes1 = L.zipWith FieldType (fieldName <$> cases) doms
             let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
-            let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) ftypes doms
+            
+            let idoms = termType . fieldTerm <$> icases
+            let sdoms = fieldTypeType <$> sfields
+            cod <- freshVariableType
+            let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
+            
             yieldElimination (EliminationUnion (CaseStatement name  icases))
-              (Types.function (TypeUnion $ RowType name ftypes1) cod)
+              (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
 
       FunctionLambda (Lambda v body) -> do
@@ -224,7 +228,7 @@ inferInternal cx term = case termExpr cx term of
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do
         rt <- resultToInfer cx $ requireUnionType cx n
-        sfield <- findMatchingField cx field (rowTypeFields rt)
+        sfield <- findMatchingField cx (fieldName field) (rowTypeFields rt)
         ifield <- inferFieldType cx field
         let cinternal = termConstraints $ fieldTerm ifield
         let cnominal = (termType $ fieldTerm ifield, fieldTypeType sfield)

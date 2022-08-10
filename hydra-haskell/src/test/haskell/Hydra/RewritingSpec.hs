@@ -1,7 +1,6 @@
 module Hydra.RewritingSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Rewriting
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Common
@@ -161,6 +160,9 @@ testStripMeta = do
           (pure Nothing)
 
 typeOf = annotationClassTermType (contextAnnotations testContext) testContext
+
+withType :: Context m -> Type m -> Term m -> Term m
+withType cx typ = annotationClassSetTermType (contextAnnotations cx) cx (Just typ)
 
 spec :: H.Spec
 spec = do

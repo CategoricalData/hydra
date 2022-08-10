@@ -1,31 +1,11 @@
 module Hydra.TestGraph (
-  graphElementsMap,
-  latLonName,
-  latlonRecord,
-  latLonType,
-  testContext,
-  testElementArthur,
-  testElementFirstName,
-  testGraph,
-  testGraphName,
-  testStrategy,
-  testDataArthur,
-  testTypeColor,
-  testTypeColorName,
-  testTypeComparison,
-  testTypeComparisonName,
-  testTypePerson,
-  testTypePersonName,
-  testTypeTimestamp,
-  testTypeTimestampName,
+  module Hydra.TestGraph,
   module Hydra.Impl.Haskell.Sources.Libraries,
 ) where
 
-import Hydra.Common
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Primitives
@@ -38,13 +18,10 @@ import qualified Data.Map  as M
 import qualified Data.Set  as S
 
 
-cx :: Context Meta
-cx = coreContext
-
 latLonName :: Name
 latLonName = Name "LatLon"
 
-latlonRecord :: (Eq m, Ord m, Read m, Show m) => Float -> Float -> Term m
+latlonRecord :: Float -> Float -> Term m
 latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat, Field (FieldName "lon") $ float32 lon]
 
 latLonType :: Type m
@@ -74,7 +51,7 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType cx (Types.function (Types.nominal testTypePersonName) Types.string),
+  elementSchema = encodeType coreContext (Types.function (Types.nominal testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
@@ -85,13 +62,16 @@ testGraphName = GraphName "testGraph"
 
 testSchemaGraph :: Graph Meta
 testSchemaGraph = Graph testSchemaGraphName [
-    typeElement cx (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
-    typeElement cx testTypeColorName testTypeColor,
-    typeElement cx testTypeComparisonName testTypeComparison,
-    typeElement cx latLonName latLonType,
-    typeElement cx testTypePersonName testTypePerson,
-    typeElement cx testTypeTimestampName testTypeTimestamp]
-  allTerms hydraCoreName
+      def (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
+      def testTypeFoobarValueName testTypeFoobarValue,
+      def testTypeComparisonName testTypeComparison,
+      def latLonName latLonType,
+      def testTypePersonName testTypePerson,
+      def testTypePersonOrSomethingName testTypePersonOrSomething,
+      def testTypeTimestampName testTypeTimestamp]
+    allTerms hydraCoreName
+  where
+    def = typeElement coreContext
 
 testSchemaGraphName :: GraphName
 testSchemaGraphName = GraphName "testSchemaGraph"
@@ -100,19 +80,10 @@ testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
 testDataArthur :: Term Meta
-testDataArthur = nominalRecord cx (Name "Person") [
+testDataArthur = record testTypePersonName [
   Field (FieldName "firstName") $ string "Arthur",
   Field (FieldName "lastName") $ string "Dent",
   Field (FieldName "age") $ int32 42]
-
-testTypeColor :: Type m
-testTypeColor = TypeUnion $ RowType testTypeColorName [
-  Types.field "bool" Types.boolean,
-  Types.field "string" Types.string,
-  Types.field "unit" Types.unit]
-
-testTypeColorName :: Name
-testTypeColorName = Name "Color"
 
 testTypeComparison :: Type m
 testTypeComparison = TypeUnion $ RowType testTypeComparisonName [
@@ -123,6 +94,15 @@ testTypeComparison = TypeUnion $ RowType testTypeComparisonName [
 testTypeComparisonName :: Name
 testTypeComparisonName = Name "Comparison"
 
+testTypeFoobarValue :: Type m
+testTypeFoobarValue = TypeUnion $ RowType testTypeFoobarValueName [
+  Types.field "bool" Types.boolean,
+  Types.field "string" Types.string,
+  Types.field "unit" Types.unit]
+
+testTypeFoobarValueName :: Name
+testTypeFoobarValueName = Name "FoobarValue"
+
 testTypePerson :: Type Meta
 testTypePerson = TypeRecord $ RowType testTypePersonName [
   Types.field "firstName" Types.string,
@@ -131,6 +111,14 @@ testTypePerson = TypeRecord $ RowType testTypePersonName [
 
 testTypePersonName :: Name
 testTypePersonName = Name "Person"
+
+testTypePersonOrSomething :: Type Meta
+testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePersonOrSomethingName [
+  Types.field "person" testTypePerson,
+  Types.field "other" $ Types.variable "a"]
+
+testTypePersonOrSomethingName :: Name
+testTypePersonOrSomethingName = Name "PersonOrSomething"
 
 testTypeTimestamp :: Type Meta
 testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName [
