@@ -8,7 +8,6 @@ import Hydra.Steps
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Lib.Literals
-import Hydra.Impl.Haskell.Dsl.Standard
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -98,8 +97,8 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 nominalTypesAreSupported :: H.SpecWith ()
 nominalTypesAreSupported = H.describe "Verify that nominal types are supported" $ do
   H.it "Nominal unions become single-attribute objects" $
-    QC.property $ \() -> checkJsonCoder (Types.nominal $ Name "Color")
-      (Terms.union testTypeColorName $ Terms.field "bool" $ Terms.boolean True)
+    QC.property $ \() -> checkJsonCoder (Types.nominal testTypeFoobarValueName)
+      (Terms.union testTypeFoobarValueName $ Terms.field "bool" $ Terms.boolean True)
       (jsonMap [("bool", jsonBool True)])
 
   H.it "Nominal enums become single-attribute objects with empty-object values, and type annotations are transparent" $

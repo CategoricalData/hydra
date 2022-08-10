@@ -2,7 +2,6 @@ module Hydra.Types.InferenceSpec where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Basics
 import Hydra.Types.Inference
@@ -11,7 +10,6 @@ import Hydra.TestData
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Common
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -79,27 +77,27 @@ checkFunctionTerms = do
 
     H.it "Check projections" $ do
       expectMonotype
-        (nominalProjection testContext (Name "Person") (FieldName "firstName") Types.string)
-        (Types.function (Types.nominal $ Name "Person") Types.string)
+        (projection testTypePersonName (FieldName "firstName"))
+        (Types.function testTypePerson Types.string)
 
     H.it "Check case statements" $ do
+      expectMonotype
+        (cases testTypeFoobarValueName [
+          Field (FieldName "bool") (lambda "x" (boolean True)),
+          Field (FieldName "string") (lambda "x" (boolean False)),
+          Field (FieldName "unit") (lambda "x" (boolean False))])
+        (Types.function testTypeFoobarValue Types.boolean)
       expectPolytype
-        (cases (Name "Example") [
-          Field (FieldName "left") (lambda "x" (boolean True)),
-          Field (FieldName "right") (lambda "x" (boolean False))])
-        [VariableType "v1", VariableType "v2"] (Types.function
-          (TypeUnion $ RowType (Name "Example") [
-            FieldType (FieldName "left") (Types.variable "v1"),
-            FieldType (FieldName "right") (Types.variable "v2")])
-          Types.boolean)
-      expectPolytype
-        (cases (Name "Example") [
+        (cases testTypePersonOrSomethingName [
           Field (FieldName "person") (apply delta (element $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
         [VariableType "v1"] (Types.function
-          (TypeUnion $ RowType (Name "Example") [
-            FieldType (FieldName "person") (Types.nominal $ Name "Person"),
-            FieldType (FieldName "other") (Types.variable "v1")])
+          (TypeUnion $ RowType testTypePersonOrSomethingName [
+            Types.field "person" $ TypeRecord $ RowType testTypePersonName [
+              Types.field "firstName" Types.string,
+              Types.field "lastName" Types.string,
+              Types.field "age" Types.int32],
+            Types.field "other" $ Types.variable "v1"])
           Types.string)
 
 checkIndividualTerms :: H.SpecWith ()
@@ -152,8 +150,8 @@ checkIndividualTerms = do
 
     H.it "Check unions" $ do
       expectMonotype
-        (nominalUnion testContext (Name "Timestamp") $ Field (FieldName "unixTimeMillis") $ uint64 1638200308368)
-        (Types.nominal $ Name "Timestamp")
+        (union testTypeTimestampName $ Field (FieldName "unixTimeMillis") $ uint64 1638200308368)
+        testTypeTimestamp
 
     H.it "Check sets" $ do
       expectMonotype

@@ -1,7 +1,6 @@
 module Hydra.ReductionSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Dsl.CoreMeta
 import Hydra.Reduction
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
