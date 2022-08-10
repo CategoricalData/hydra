@@ -7,9 +7,6 @@ public class ConstructorDeclarator {
   
   public final java.util.Optional<ReceiverParameter> receiverParameter;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<FormalParameter> formalParameters;
   
   public ConstructorDeclarator (java.util.List<TypeParameter> parameters, SimpleTypeName name, java.util.Optional<ReceiverParameter> receiverParameter, java.util.List<FormalParameter> formalParameters) {

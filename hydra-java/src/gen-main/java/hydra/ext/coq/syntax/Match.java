@@ -1,9 +1,6 @@
 package hydra.ext.coq.syntax;
 
 public class Match {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<CaseItem> caseItems;
   
   public final java.util.Optional<Term100> return_;

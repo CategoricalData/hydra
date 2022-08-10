@@ -5,9 +5,6 @@ public class FieldDeclaration {
   
   public final UnannType unannType;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<VariableDeclarator> variableDeclarators;
   
   public FieldDeclaration (java.util.List<FieldModifier> modifiers, UnannType unannType, java.util.List<VariableDeclarator> variableDeclarators) {

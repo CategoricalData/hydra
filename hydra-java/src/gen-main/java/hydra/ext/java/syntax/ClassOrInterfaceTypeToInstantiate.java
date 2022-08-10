@@ -1,9 +1,6 @@
 package hydra.ext.java.syntax;
 
 public class ClassOrInterfaceTypeToInstantiate {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<AnnotatedIdentifier> identifiers;
   
   public final java.util.Optional<TypeArgumentsOrDiamond> typeArguments;

@@ -10,6 +10,8 @@ public abstract class Pattern {
   public interface Visitor<R> {
     R visit(Nil instance) ;
     
+    R visit(Ignored instance) ;
+    
     R visit(Labeled instance) ;
     
     R visit(Constant instance) ;
@@ -35,6 +37,10 @@ public abstract class Pattern {
     }
     
     default R visit(Nil instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Ignored instance) {
       return otherwise((instance));
     }
     
@@ -92,6 +98,33 @@ public abstract class Pattern {
     @Override
     public int hashCode() {
       return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Ignored extends Pattern {
+    public final Pattern value;
+    
+    public Ignored (Pattern value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Ignored)) {
+        return false;
+      }
+      Ignored o = (Ignored) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
     }
     
     @Override

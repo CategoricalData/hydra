@@ -27,13 +27,7 @@ public abstract class ForInit {
     }
   }
   
-  /**
-   * Note: list cannot be empty
-   */
   public static final class Statements extends ForInit {
-    /**
-     * Note: list cannot be empty
-     */
     public final java.util.List<StatementExpression> value;
     
     public Statements (java.util.List<StatementExpression> value) {

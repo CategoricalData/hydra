@@ -3,9 +3,6 @@ package hydra.ext.java.syntax;
 public class ArrayCreationExpression_ClassOrInterface {
   public final ClassOrInterfaceType type;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<DimExpr> dimExprs;
   
   public final java.util.Optional<Dims> dims;

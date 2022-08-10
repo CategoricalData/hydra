@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class ForUpdate {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<StatementExpression> value;
   
   public ForUpdate (java.util.List<StatementExpression> value) {

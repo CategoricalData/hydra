@@ -3,9 +3,6 @@ package hydra.ext.java.syntax;
 public class ArrayCreationExpression_PrimitiveArray {
   public final PrimitiveTypeWithAnnotations type;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<Dims> dims;
   
   public final ArrayInitializer array;

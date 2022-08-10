@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class InclusiveOrExpression {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<ExclusiveOrExpression> value;
   
   public InclusiveOrExpression (java.util.List<ExclusiveOrExpression> value) {

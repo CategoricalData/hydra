@@ -1,14 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SwitchBlockStatementGroup {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<SwitchLabel> labels;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<BlockStatement> statements;
   
   public SwitchBlockStatementGroup (java.util.List<SwitchLabel> labels, java.util.List<BlockStatement> statements) {

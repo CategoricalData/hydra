@@ -1,9 +1,6 @@
 package hydra.ext.coq.syntax;
 
 public class CofixWith {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<CofixBody> with;
   
   public final java.util.Optional<Ident> for_;

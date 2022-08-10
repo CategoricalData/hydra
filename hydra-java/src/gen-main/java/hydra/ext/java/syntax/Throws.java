@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class Throws {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<ExceptionType> value;
   
   public Throws (java.util.List<ExceptionType> value) {

@@ -27,13 +27,7 @@ public abstract class Universe {
     }
   }
   
-  /**
-   * Note: list cannot be empty
-   */
   public static final class Max extends Universe {
-    /**
-     * Note: list cannot be empty
-     */
     public final java.util.List<Universe_Expr> value;
     
     public Max (java.util.List<Universe_Expr> value) {

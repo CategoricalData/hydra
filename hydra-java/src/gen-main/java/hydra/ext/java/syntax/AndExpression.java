@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class AndExpression {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<EqualityExpression> value;
   
   public AndExpression (java.util.List<EqualityExpression> value) {

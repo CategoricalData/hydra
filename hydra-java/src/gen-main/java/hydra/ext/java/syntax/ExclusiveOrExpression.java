@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class ExclusiveOrExpression {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<AndExpression> value;
   
   public ExclusiveOrExpression (java.util.List<AndExpression> value) {

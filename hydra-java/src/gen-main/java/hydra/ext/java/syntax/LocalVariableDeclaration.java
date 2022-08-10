@@ -5,9 +5,6 @@ public class LocalVariableDeclaration {
   
   public final LocalVariableType type;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<VariableDeclarator> declarators;
   
   public LocalVariableDeclaration (java.util.List<VariableModifier> modifiers, LocalVariableType type, java.util.List<VariableDeclarator> declarators) {

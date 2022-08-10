@@ -1,12 +1,6 @@
 package hydra.ext.java.syntax;
 
-/**
- * Note: list cannot be empty
- */
 public class ConditionalAndExpression {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<InclusiveOrExpression> value;
   
   public ConditionalAndExpression (java.util.List<InclusiveOrExpression> value) {

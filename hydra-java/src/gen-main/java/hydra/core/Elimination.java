@@ -154,9 +154,9 @@ public abstract class Elimination<M> {
     /**
      * Eliminates a record by projecting a given field
      */
-    public final FieldName value;
+    public final Projection value;
     
-    public Record (FieldName value) {
+    public Record (Projection value) {
       this.value = value;
     }
     
@@ -187,9 +187,9 @@ public abstract class Elimination<M> {
     /**
      * Eliminates a union term by matching over the fields of the union. This is a case statement.
      */
-    public final java.util.List<Field<M>> value;
+    public final CaseStatement<M> value;
     
-    public Union (java.util.List<Field<M>> value) {
+    public Union (CaseStatement<M> value) {
       this.value = value;
     }
     
