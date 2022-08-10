@@ -402,15 +402,16 @@ encodeType cx aliases t = case typeExpr cx t of
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
+  TypeRecord (RowType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeRecord (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
   TypeSet st -> do
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
+  TypeUnion (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
   TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeRecord (RowType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
-  -- Note: record (other than unit) and union types should not appear at this level
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType cx aliases
