@@ -114,22 +114,22 @@ betaReduceTerm cx term = reduce M.empty term
 
       _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 
-betaReduceType :: (Ord m, Show m) => Bool -> Context m -> Type m -> Type m
-betaReduceType eager cx = rewriteType mapExpr id
+-- Note: this is eager beta reduction, in that we always descend into subtypes,
+--       and always reduce the right-hand side of an application prior to substitution
+betaReduceType :: (Ord m, Show m) => Context m -> Type m -> Type m
+betaReduceType cx = rewriteType mapExpr id
   where
-    mapExpr _ t = case typeExpr cx t of
-        TypeAnnotated (Annotated t' ann) -> TypeAnnotated $ Annotated (recurse t') ann
-        TypeApplication (ApplicationType lhs rhs) -> case typeExpr cx lhs' of
-            TypeLambda (LambdaType v body) -> recurse $ replaceFreeVariableType v rhs' body
-            TypeNominal name -> recurse $ Types.apply t' rhs' -- nominal types are transparent
-              where
-                ResultSuccess t' = requireType cx name
-            _ -> t
-          where
-            lhs' = recurse lhs
-            rhs' = if eager then recurse rhs else rhs
-        _ -> t
-    recurse = betaReduceType eager cx
+    mapExpr rec t = case rec t of
+      TypeApplication a -> reduceApp a
+      t' -> t'
+    reduce = betaReduceType cx
+    reduceApp (ApplicationType lhs rhs) = case lhs of
+      TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
+      TypeLambda (LambdaType v body) -> reduce $ replaceFreeVariableType v rhs body
+      -- nominal types are transparent
+      TypeNominal name -> reduce $ Types.apply t' rhs
+        where
+          ResultSuccess t' = requireType cx name
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term a -> Bool
