@@ -24,7 +24,7 @@ freeVariablesInType typ = S.fromList $ fv typ
   where
     fv typ = case typ of
       -- Note: application terms should not appear here, since types are (eagerly) beta-reduced first
-      TypeApplication _ -> [] -- throwDebugException $ "unexpected application type: " ++ show typ
+      TypeApplication (ApplicationType lhs rhs) -> fv lhs ++ fv rhs -- throwDebugException $ "unexpected application type: " ++ show typ
       TypeAnnotated (Annotated t _) -> fv t
       TypeElement t -> fv t
       TypeFunction (FunctionType dom cod) -> fv dom ++ fv cod

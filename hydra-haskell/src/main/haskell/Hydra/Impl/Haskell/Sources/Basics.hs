@@ -47,6 +47,7 @@ basics = Element . fromQname hydraBasicsName
 eliminationVariant :: Element (Elimination m -> EliminationVariant)
 eliminationVariant = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
+  typed (Types.function (Types.apply (Types.nominal _Elimination) (Types.variable "m")) (Types.nominal _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_nominal  @-> _EliminationVariant_nominal,
@@ -93,6 +94,7 @@ floatValueType = basics "floatValueType" $
 functionVariant :: Element (Function m -> FunctionVariant)
 functionVariant = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
+  typed (Types.function (Types.apply (Types.nominal _Function) (Types.variable "m")) (Types.nominal _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant [
     _Function_compareTo   @-> _FunctionVariant_compareTo,
     _Function_elimination @-> _FunctionVariant_elimination,

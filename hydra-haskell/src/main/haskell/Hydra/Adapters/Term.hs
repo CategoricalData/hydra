@@ -175,20 +175,22 @@ passFunction acx t@(TypeFunction (FunctionType dom cod)) = do
     let dom' = adapterTarget domAd
     let cod' = adapterTarget codAd
     return $ Adapter lossy t (Types.function dom' cod')
-      $ bidirectional $ \dir (TermFunction f) -> TermFunction <$> case f of
-        FunctionCompareTo other -> FunctionCompareTo <$> stepEither dir (adapterCoder codAd) other
-        FunctionElimination e -> FunctionElimination <$> case e of
-          EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
-            OptionalCases
-              <$> stepEither dir (adapterCoder codAd) nothing
-              <*> (stepEither dir (adapterCoder $ Y.fromJust optionAd) just))
-          EliminationUnion (CaseStatement n cases) -> EliminationUnion . CaseStatement n <$>
-              CM.mapM (\f -> stepEither dir (getCoder $ fieldName f) f) cases
-            where
-              -- Note: this causes unrecognized cases to simply be passed through;
-              --       it is not the job of this adapter to catch validation issues.
-              getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
-        FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterCoder codAd) body)
+      $ bidirectional $ \dir term -> case termExpr cx term of
+        TermFunction f -> TermFunction <$> case f of
+          FunctionCompareTo other -> FunctionCompareTo <$> stepEither dir (adapterCoder codAd) other
+          FunctionElimination e -> FunctionElimination <$> case e of
+            EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
+              OptionalCases
+                <$> stepEither dir (adapterCoder codAd) nothing
+                <*> (stepEither dir (adapterCoder $ Y.fromJust optionAd) just))
+            EliminationUnion (CaseStatement n cases) -> EliminationUnion . CaseStatement n <$>
+                CM.mapM (\f -> stepEither dir (getCoder $ fieldName f) f) cases
+              where
+                -- Note: this causes unrecognized cases to simply be passed through;
+                --       it is not the job of this adapter to catch validation issues.
+                getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
+          FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> stepEither dir (adapterCoder codAd) body)
+        _ -> unexpected "function term" $ show term
   where
     cx = adapterContextEvaluation acx
 

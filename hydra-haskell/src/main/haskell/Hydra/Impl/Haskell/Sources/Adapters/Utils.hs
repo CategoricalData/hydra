@@ -68,7 +68,7 @@ describeType = utils "describeType" $
   lambda "typ" $ apply
     (match _Type Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeType @@
-        (project _Type typeM _Annotated_subject @@ var "a")),
+        (project _Annotated typeM _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralType,
       Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeType @@ var "t"),
