@@ -132,7 +132,7 @@ writeGraph printGraph cx0 g basePath = do
       "Transformation failed: " ++ indent (unlines warnings)
     Qualified (Just m) warnings -> do
       if not (L.null warnings)
-        then putStrLn $ "Warnings: " ++ indent (unlines warnings) ++ "\n"
+        then putStrLn $ "Warnings: " ++ indent (unlines $ L.nub warnings) ++ "\n"
         else pure ()
       mapM_ writePair $ M.toList m
   where

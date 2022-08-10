@@ -6,25 +6,28 @@ import Hydra.Graph
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Meta
+import Hydra.Rewriting
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
 datatype :: Context Meta -> GraphName -> String -> Type Meta -> Element Meta
-datatype cx gname lname typ = typeElement cx elName $ replacePlaceholders typ
+datatype cx gname lname typ = typeElement cx elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
     
-    replacePlaceholders t = case t of
-      TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (replacePlaceholders t') ann)
-      TypeRecord (RowType n fields) -> if n == Types.placeholderName
-        then TypeRecord (RowType elName fields)
-        else t
-      TypeUnion (RowType n fields) -> if n == Types.placeholderName
-        then TypeUnion (RowType elName fields)
-        else t
-      _ -> t
+    -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
+    replacePlaceholders rec t = case t' of
+        TypeRecord (RowType n fields) -> if n == Types.placeholderName
+          then TypeRecord (RowType elName fields)
+          else t'
+        TypeUnion (RowType n fields) -> if n == Types.placeholderName
+          then TypeUnion (RowType elName fields)
+          else t'
+        _ -> t'
+      where
+        t' = rec t
 
 bootstrapContext :: Context Meta
 bootstrapContext = cx

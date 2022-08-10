@@ -143,8 +143,7 @@ primitive :: Name -> Data a
 primitive = Data . Terms.primitive
 
 project :: Name -> Type Meta -> FieldName -> Data (a -> b)
-project name cod fname = function (Types.nominal name) cod $
-  Data $ Terms.projection name fname
+project name cod fname = Data $ Terms.projection name fname
 
 record :: Name -> [Field Meta] -> Data a
 record name fields = Data $ Terms.record name fields
