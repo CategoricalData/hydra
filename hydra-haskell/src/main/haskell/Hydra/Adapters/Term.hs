@@ -37,7 +37,7 @@ dereferenceNominal :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Q
 dereferenceNominal acx t@(TypeNominal name) = do
   typ <- eitherToQualified $ do
     -- TODO: precompute the schema graph; don't construct it anew for each adapter
-    scx <- schemaContext $ adapterContextEvaluation acx
+    let scx = schemaContext $ adapterContextEvaluation acx
     -- Note: we just assume the schema term is a reference to hydra/core.Type
     requireElement (Just "dereference nominal") scx name >>= decodeType (adapterContextEvaluation acx) . elementData
   ad <- termAdapter acx typ
@@ -158,7 +158,7 @@ passApplication acx t = do
     ad <- termAdapter acx reduced
     return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $ \dir term -> stepEither dir (adapterCoder ad) term
   where
-    reduced = betaReduceType True (adapterContextEvaluation acx) t
+    reduced = betaReduceType (adapterContextEvaluation acx) t
 
 passFunction :: (Ord m, Read m, Show m) => AdapterContext m -> Type m -> Qualified (Adapter (Type m) (Term m))
 passFunction acx t@(TypeFunction (FunctionType dom cod)) = do

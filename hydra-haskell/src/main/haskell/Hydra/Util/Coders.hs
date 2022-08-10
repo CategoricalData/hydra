@@ -40,7 +40,7 @@ graphToExternalModule :: (Ord m, Read m, Show m)
   -> (Context m -> Graph m -> M.Map (Type m) (Coder (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
   -> Context m -> Graph m -> Qualified d
 graphToExternalModule lang encodeTerm createModule cx g = do
-    scx <- resultToQualified $ schemaContext cx
+    let scx = schemaContext cx
     pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
     coders <- codersFor $ L.nub (typedTermType <$> pairs)
     resultToQualified $ createModule cx g coders $ L.zip els pairs

@@ -51,17 +51,13 @@ requirePrimitiveFunction cx fn = Y.maybe err ResultSuccess $ lookupPrimitiveFunc
   where
     err = ResultFailure $ "no such primitive function: " ++ unName fn
 
-schemaContext :: Context m -> Result (Context m)
-schemaContext cx = do
-    dgraph <- getGraph $ graphSetRoot graphs
-    sgraph <- getGraph $ graphSchemaGraph dgraph
-    -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
-    return $ pushTrace "schema" $ cx {
+-- Note: contexts are assumed to be valid; this function will fail if the named data or schema graph does not exist
+-- Also note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
+schemaContext :: Context m -> Context m
+schemaContext cx = pushTrace "schema" $ cx {
       contextGraphs = graphs { graphSetRoot = graphName sgraph },
       contextElements = graphElementsMap sgraph}
   where
+    sgraph = getGraph $ graphSchemaGraph $ getGraph $ graphSetRoot graphs
     graphs = contextGraphs cx
-    
-    getGraph name@(GraphName n) = Y.maybe err ResultSuccess $ M.lookup name (graphSetGraphs graphs)
-      where
-        err = ResultFailure $ "no such graph: " ++ n
+    getGraph name = Y.fromJust $ M.lookup name (graphSetGraphs graphs)

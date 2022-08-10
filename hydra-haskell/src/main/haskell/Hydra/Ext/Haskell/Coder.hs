@@ -102,7 +102,7 @@ encodeFunction namespaces cx fun = case fun of
       EliminationUnion (CaseStatement dn fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
-            scx <- schemaContext cx -- TODO: cache this
+            let scx = schemaContext cx
             rt <- requireUnionType scx dn
             let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
             H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)

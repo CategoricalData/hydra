@@ -81,12 +81,12 @@ rewriteTerm mapExpr mapMeta = replace
       TermUnion (Union n field) -> TermUnion $ Union n $ replaceField field
       TermVariable v -> TermVariable v
 
-rewriteTermMeta :: (Ord a, Ord b) => (a -> b) -> Term a -> Term b
-rewriteTermMeta mapMeta = rewriteTerm mapExpr mapMeta
+rewriteTermMeta :: Ord b => (a -> b) -> Term a -> Term b
+rewriteTermMeta = rewriteTerm mapExpr
   where
     mapExpr recurse term = recurse term
 
-rewriteType :: (Ord a, Ord b) => ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
+rewriteType :: ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
 rewriteType mapExpr mapMeta = replace
   where
     replace = mapExpr recurse
@@ -107,8 +107,8 @@ rewriteType mapExpr mapMeta = replace
       TypeUnion (RowType name fields) -> TypeUnion $ RowType name (replaceField <$> fields)
       TypeVariable v -> TypeVariable v
 
-rewriteTypeMeta :: (Ord a, Ord b) => (a -> b) -> Type a -> Type b
-rewriteTypeMeta mapMeta = rewriteType mapExpr mapMeta
+rewriteTypeMeta :: (a -> b) -> Type a -> Type b
+rewriteTypeMeta = rewriteType mapExpr
   where
     mapExpr recurse term = recurse term
 

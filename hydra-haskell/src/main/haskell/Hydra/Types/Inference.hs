@@ -14,6 +14,7 @@ import Hydra.Impl.Haskell.Extras
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 import Hydra.Rewriting
+import Hydra.Reduction
 
 import qualified Control.Monad as CM
 import Control.Monad.Except
@@ -37,7 +38,7 @@ decodeStructuralType cx term = do
   typ <- decodeType cx term
   case typeExpr cx typ of
     TypeNominal name -> do
-      scx <- schemaContext cx
+      let scx = schemaContext cx
       el <- requireElement (Just "decode structural type") scx name
       decodeStructuralType scx $ elementData el
     _ -> pure typ
@@ -50,7 +51,7 @@ freshVariableType = do
   where
     h (VariableType v) = v
 
-generalize :: TypingEnvironment m -> Type m -> TypeScheme m
+generalize :: Show m => TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
   where
     vars = S.toList $ S.difference
@@ -129,15 +130,15 @@ inferInternal cx term = case termExpr cx term of
         EliminationUnion (CaseStatement name cases) -> do
             rt <- resultToInfer cx $ requireUnionType cx name
             let sfields = rowTypeFields rt
-        
+
             icases <- CM.mapM (inferFieldType cx) cases
             let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
-            
+
             let idoms = termType . fieldTerm <$> icases
             let sdoms = fieldTypeType <$> sfields
             cod <- freshVariableType
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
-            
+
             yieldElimination (EliminationUnion (CaseStatement name  icases))
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
@@ -160,7 +161,9 @@ inferInternal cx term = case termExpr cx term of
       case solveConstraints cx c1 of
           Left err -> throwError err
           Right sub -> do
-              let sc = generalize (M.map (substituteInScheme sub) env) (substituteInType sub t1)
+              let scx = schemaContext cx
+              let t1' = reduceType scx $ substituteInType sub t1
+              let sc = generalize (M.map (substituteInScheme sub) env) t1'
               i2 <- extendEnvironment (x, sc) $ local (M.map (substituteInScheme sub)) (infer cx e2)
               let t2 = termType i2
               let c2 = termConstraints i2
@@ -256,14 +259,14 @@ inferTop :: (Ord m, Show m)
   -> Either (TypeError m) (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferTop cx term = do
     term1 <- runInference (infer cx term)
-    let (ResultSuccess scx) = schemaContext cx
+    let scx = schemaContext cx
     subst <- solveConstraints scx (termConstraints term1)
     let term2 = rewriteDataType (substituteInType subst) term1
-    let ts = closeOver $ termType term2
+    let ts = closeOver scx $ termType term2
     return (term2, ts)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
-    closeOver = normalizeScheme . generalize M.empty
+    closeOver scx = normalizeScheme . generalize M.empty . reduceType scx
 
 inferType :: (Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferType cx0 term = case inferTop cx term of
@@ -288,8 +291,11 @@ lookupTypeInEnvironment v = do
 namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
 namedType debug cx name = do
   el <- requireElement (Just debug) cx name
-  scx <- schemaContext cx
+  let scx = schemaContext cx
   decodeStructuralType scx $ elementData el
+
+reduceType :: (Ord m, Show m) => Context m -> Type m -> Type m
+reduceType cx t = t -- betaReduceType cx t
 
 resultToInfer :: Context m -> Result a -> Infer a m
 resultToInfer cx r = case r of
