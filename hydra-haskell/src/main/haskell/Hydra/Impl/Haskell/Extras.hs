@@ -79,7 +79,7 @@ requireRecordType = requireRowType "record" $ \t -> case t of
 
 requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Context m -> Name -> Result (RowType m)
 requireRowType label getter cx name = do
-  scx <- schemaContext cx
+  let scx = schemaContext cx
   t <- requireType scx name
   case getter (rawType t) of
     Just rt -> return rt

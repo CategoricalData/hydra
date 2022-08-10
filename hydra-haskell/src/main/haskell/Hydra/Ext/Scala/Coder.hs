@@ -89,7 +89,7 @@ encodeFunction cx meta fun arg = case fun of
       EliminationUnion (CaseStatement _ cases) -> do
           let v = "v"
           dom <- findDomain
-          scx <- schemaContext cx
+          let scx = schemaContext cx
           ftypes <- fieldTypes scx dom
           let sn = nameOfType cx dom
           scases <- CM.mapM (encodeCase ftypes sn cx) cases

@@ -36,7 +36,7 @@ data TypeError m
 type Unifier m = (Subst m, [Constraint m])
 
 
-bind :: Eq m => VariableType -> Type m -> Solve (Subst m) m
+bind :: (Eq m, Show m) => VariableType -> Type m -> Solve (Subst m) m
 bind a t | t == TypeVariable a = return M.empty
          | variableOccursInType a t = throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
@@ -91,5 +91,5 @@ unifyMany cx (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany _ t1 t2 = throwError $ UnificationMismatch t1 t2
 
-variableOccursInType ::  VariableType -> Type m -> Bool
+variableOccursInType ::  Show m => VariableType -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t
