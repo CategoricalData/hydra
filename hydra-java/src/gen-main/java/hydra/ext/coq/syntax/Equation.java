@@ -1,9 +1,6 @@
 package hydra.ext.coq.syntax;
 
 public class Equation {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<java.util.List<Pattern>> pattern;
   
   public final Term term;

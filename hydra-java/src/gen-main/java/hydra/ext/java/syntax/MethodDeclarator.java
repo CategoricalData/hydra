@@ -5,9 +5,6 @@ public class MethodDeclarator {
   
   public final java.util.Optional<ReceiverParameter> receiverParameter;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<FormalParameter> formalParameters;
   
   public MethodDeclarator (Identifier identifier, java.util.Optional<ReceiverParameter> receiverParameter, java.util.List<FormalParameter> formalParameters) {

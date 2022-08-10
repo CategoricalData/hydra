@@ -3,9 +3,6 @@ package hydra.ext.coq.syntax;
 public class NormalApplication {
   public final Term1 lhs;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<Arg> rhs;
   
   public NormalApplication (Term1 lhs, java.util.List<Arg> rhs) {

@@ -3,9 +3,6 @@ package hydra.ext.coq.syntax;
 public class AnnotatedApplication {
   public final QualidAnnotated annot;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<Term1> terms;
   
   public AnnotatedApplication (QualidAnnotated annot, java.util.List<Term1> terms) {

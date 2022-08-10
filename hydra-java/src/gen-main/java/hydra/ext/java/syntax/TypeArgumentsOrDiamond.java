@@ -27,13 +27,7 @@ public abstract class TypeArgumentsOrDiamond {
     }
   }
   
-  /**
-   * Note: list cannot be empty
-   */
   public static final class Arguments extends TypeArgumentsOrDiamond {
-    /**
-     * Note: list cannot be empty
-     */
     public final java.util.List<TypeArgument> value;
     
     public Arguments (java.util.List<TypeArgument> value) {

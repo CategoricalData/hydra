@@ -1,9 +1,6 @@
 package hydra.ext.coq.syntax;
 
 public class TypeBinders {
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<Name> names;
   
   public final Type type;

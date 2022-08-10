@@ -101,7 +101,7 @@ public abstract class Type<M> {
       return otherwise((instance));
     }
   }
-
+  
   /**
    * A type annotated with metadata
    */
@@ -379,9 +379,9 @@ public abstract class Type<M> {
   }
 
   public static final class Record<M> extends Type<M> {
-    public final java.util.List<FieldType<M>> value;
+    public final RowType<M> value;
 
-    public Record (java.util.List<FieldType<M>> value) {
+    public Record (RowType<M> value) {
       this.value = value;
     }
 
@@ -433,9 +433,9 @@ public abstract class Type<M> {
   }
 
   public static final class Union<M> extends Type<M> {
-    public final java.util.List<FieldType<M>> value;
+    public final RowType<M> value;
 
-    public Union (java.util.List<FieldType<M>> value) {
+    public Union (RowType<M> value) {
       this.value = value;
     }
 

@@ -130,13 +130,7 @@ public abstract class Pattern0 {
     }
   }
   
-  /**
-   * Note: list cannot be empty
-   */
   public static final class Parens extends Pattern0 {
-    /**
-     * Note: list cannot be empty
-     */
     public final java.util.List<Pattern> value;
     
     public Parens (java.util.List<Pattern> value) {

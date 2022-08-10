@@ -6,9 +6,9 @@ package hydra.ext.haskell.ast;
 public class Constructor_Record {
   public final Name name;
   
-  public final java.util.List<Field> fields;
+  public final java.util.List<FieldWithComments> fields;
   
-  public Constructor_Record (Name name, java.util.List<Field> fields) {
+  public Constructor_Record (Name name, java.util.List<FieldWithComments> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -31,7 +31,7 @@ public class Constructor_Record {
     return new Constructor_Record(name, fields);
   }
   
-  public Constructor_Record withFields(java.util.List<Field> fields) {
+  public Constructor_Record withFields(java.util.List<FieldWithComments> fields) {
     return new Constructor_Record(name, fields);
   }
 }

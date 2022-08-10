@@ -5,9 +5,6 @@ public class ConstantDeclaration {
   
   public final UnannType type;
   
-  /**
-   * Note: list cannot be empty
-   */
   public final java.util.List<VariableDeclarator> variables;
   
   public ConstantDeclaration (java.util.List<ConstantModifier> modifiers, UnannType type, java.util.List<VariableDeclarator> variables) {
