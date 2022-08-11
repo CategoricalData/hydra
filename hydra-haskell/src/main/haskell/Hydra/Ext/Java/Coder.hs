@@ -373,7 +373,7 @@ encodeTerm aliases cx term = case term of
   --  _ -> unexpected "term" $ show term
   where
     encode = encodeTerm aliases cx
-    
+
 
 encodeType :: Show m => Context m -> M.Map GraphName Java.PackageName -> Type m -> Result Java.Type
 encodeType cx aliases t = case typeExpr cx t of
@@ -402,7 +402,7 @@ encodeType cx aliases t = case typeExpr cx t of
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
-  TypeRecord (RowType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeRecord (RowType _UnitType []) -> return $ javaRefType [] javaLangPackageName "Void"
   TypeRecord (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
