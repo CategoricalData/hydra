@@ -12,7 +12,7 @@ import qualified Data.Map as M
 expectUnified :: [Constraint Meta] -> [(VariableType, Type Meta)] -> H.Expectation
 expectUnified constraints subst = H.shouldBe
   (solveConstraints testContext constraints)
-  (Right $ M.fromList subst)
+  (pure $ M.fromList subst)
 
 checkIndividualConstraints :: H.SpecWith ()
 checkIndividualConstraints = do

@@ -26,7 +26,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState (CME.Except (TypeError m))) a
+type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState (CME.Except String)) a
 
 type InferenceState = Int
 
@@ -63,9 +63,9 @@ extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
   CMR.local scope m
 
-findMatchingField :: Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
+findMatchingField :: Show m => Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
 findMatchingField cx fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
-  []    -> CME.throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName fname
+  []    -> CME.throwError $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
 infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
@@ -159,8 +159,8 @@ inferInternal cx term = case termExpr cx term of
       let t1 = termType i1
       let c1 = termConstraints i1
       case solveConstraints cx c1 of
-          Left err -> CME.throwError err
-          Right sub -> do
+          ResultFailure err -> CME.throwError err
+          ResultSuccess sub -> do
               let scx = schemaContext cx
               let t1' = reduceType scx $ substituteInType sub t1
               let sc = generalize (M.map (substituteInScheme sub) env) t1'
@@ -239,7 +239,7 @@ inferInternal cx term = case termExpr cx term of
         yield (TermUnion $ Union n ifield) (TypeUnion rt) constraints
 
     TermVariable x -> do
-      t <- lookupTypeInEnvironment x
+      t <- lookupTypeInEnvironment cx x
       yield (TermVariable x) t []
   where
     yieldFunction fun = yield (TermFunction fun)
@@ -254,38 +254,33 @@ inferFieldType :: (Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Ty
 inferFieldType cx (Field fname term) = Field fname <$> infer cx term
 
 -- | Solve for the toplevel type of an expression in a given environment
-inferTop :: (Ord m, Show m)
+inferType :: (Ord m, Show m)
   => Context m -> Term m
-  -> Either (TypeError m) (Term (m, Type m, [Constraint m]), TypeScheme m)
-inferTop cx term = do
+  -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
+inferType cx0 term = do
     term1 <- runInference (infer cx term)
-    let scx = schemaContext cx
     subst <- solveConstraints scx (termConstraints term1)
     let term2 = rewriteDataType (substituteInType subst) term1
     let ts = closeOver scx $ termType term2
     return (term2, ts)
   where
-    -- | Canonicalize and return the polymorphic toplevel type.
-    closeOver scx = normalizeScheme . generalize M.empty . reduceType scx
-
-inferType :: (Ord m, Show m) => Context m -> Term m -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
-inferType cx0 term = case inferTop cx term of
-    Left err -> fail $ "type inference failed: " ++ show err
-    Right p -> pure p
-  where
+    scx = schemaContext cx
 --    cx = pushTrace "infer type" cx0
     cx = pushTrace ("infer type of " ++ show term) cx0
+        
+    -- | Canonicalize and return the polymorphic toplevel type.
+    closeOver scx = normalizeScheme . generalize M.empty . reduceType scx
 
 instantiate :: TypeScheme m -> Infer (Type m) m
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
-lookupTypeInEnvironment :: Variable -> Infer (Type m) m
-lookupTypeInEnvironment v = do
+lookupTypeInEnvironment :: Show m => Context m -> Variable -> Infer (Type m) m
+lookupTypeInEnvironment cx v = do
   env <- CMR.ask
   case M.lookup v env of
-      Nothing   -> CME.throwError $ UnboundVariable v
+      Nothing   -> CME.throwError $ typeErrorMessage $ UnboundVariable (contextGraphs cx) v
       Just s    -> instantiate s
 
 namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
@@ -297,18 +292,20 @@ namedType debug cx name = do
 reduceType :: (Ord m, Show m) => Context m -> Type m -> Type m
 reduceType cx t = t -- betaReduceType cx t
 
-resultToInfer :: Context m -> Result a -> Infer a m
+resultToInfer :: Show m => Context m -> Result a -> Infer a m
 resultToInfer cx r = case r of
   ResultSuccess x -> pure x
-  ResultFailure e -> CME.throwError $ OtherError (printTrace cx) e
+  ResultFailure e -> CME.throwError $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) e
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Either (TypeError m) (Term (m, Type m, [Constraint m]))
-runInference term = CME.runExcept $ CMS.evalStateT (CMR.runReaderT term M.empty) startState
+runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Result (Term (m, Type m, [Constraint m]))
+runInference term = case CME.runExcept $ CMS.evalStateT (CMR.runReaderT term M.empty) startState of
+  Left msg -> ResultFailure msg
+  Right x -> pure x
 
 startState :: InferenceState
 startState = 0
@@ -326,3 +323,8 @@ typeOfElement cx name = do
 
 typeOfPrimitiveFunction :: Context m -> Name -> Result (FunctionType m)
 typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name
+
+-- TODO: temporary
+toEither r = case r of
+  ResultFailure msg -> Left msg
+  ResultSuccess x -> Right x
