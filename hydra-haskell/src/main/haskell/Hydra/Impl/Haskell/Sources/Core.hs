@@ -17,7 +17,7 @@ hydraCoreName :: GraphName
 hydraCoreName = GraphName "hydra/core"
 
 hydraCore :: Graph Meta
-hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
+hydraCore = Graph hydraCoreName elements hydraCoreName
   where
     core = nsref hydraCoreName
 

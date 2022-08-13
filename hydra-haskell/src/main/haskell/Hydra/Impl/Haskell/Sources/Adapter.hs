@@ -18,7 +18,7 @@ hydraAdapterName :: GraphName
 hydraAdapterName = GraphName "hydra/adapter"
 
 hydraAdapter :: Graph Meta
-hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
+hydraAdapter = Graph hydraAdapterName elements hydraCoreName
   where
     def = datatype coreContext hydraAdapterName
     core = nsref hydraCoreName

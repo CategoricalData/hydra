@@ -27,7 +27,7 @@ Users should check features prior to using various functions of TinkerPop to hel
 For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -}
 tinkerpopFeatures :: Graph Meta
-tinkerpopFeatures = Graph tinkerpopFeaturesName elements (const True) hydraCoreName
+tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
   where
     core = nsref hydraCoreName
     features = nsref tinkerpopFeaturesName

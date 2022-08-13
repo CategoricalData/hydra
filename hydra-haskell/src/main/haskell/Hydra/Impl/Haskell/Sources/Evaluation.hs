@@ -18,7 +18,7 @@ hydraEvaluationName :: GraphName
 hydraEvaluationName = GraphName "hydra/evaluation"
 
 hydraEvaluation :: Graph Meta
-hydraEvaluation = Graph hydraEvaluationName elements (const True) hydraCoreName
+hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
   where
     core = nsref hydraCoreName
     graph = nsref hydraGraphName

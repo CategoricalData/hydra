@@ -18,7 +18,7 @@ hydraGraphName :: GraphName
 hydraGraphName = GraphName "hydra/graph"
 
 hydraGraph :: Graph Meta
-hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
+hydraGraph = Graph hydraGraphName elements hydraCoreName
   where
     core = nsref hydraCoreName
     graph = nsref hydraGraphName
@@ -37,9 +37,12 @@ hydraGraph = Graph hydraGraphName elements (const True) hydraCoreName
         doc ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
           ++ " called the schema graph") $
         lambda "m" $ record [
-          "name">: graph "GraphName",
-          "elements">: list $ graph "Element" @@ "m",
-          "termExprs">: core "Term" @@ "m" --> boolean,
+          "name">: 
+            doc "The unique (within a given graph set) name of the graph" $
+            graph "GraphName",
+          "elements">:
+            doc "All of the elements in the graph" $
+            list $ graph "Element" @@ "m",
           "schemaGraph">:
             doc "A reference to this graph's schema graph within the provided graph set" $
             graph "GraphName"],

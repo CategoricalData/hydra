@@ -62,10 +62,9 @@ dataterm gname lname = termElement coreContext (qualify gname (Name lname))
 graph :: GraphName -> [Context Meta -> Result (Element Meta)] -> Result (Graph Meta)
 graph gname cons = do
     elements <- mapM (\f -> f cx) cons
-    return $ Graph gname elements terms schemaGraph
+    return $ Graph gname elements schemaGraph
   where
     cx = coreContext
-    terms = const True
     schemaGraph = GraphName "hydra/core"
 
 nonemptyList :: Type Meta -> Type Meta

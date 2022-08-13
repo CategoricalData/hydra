@@ -23,19 +23,19 @@ _Element_data = (Core.FieldName "data")
 -- A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph, called the schema graph
 data Graph m 
   = Graph {
+    -- The unique (within a given graph set) name of the graph
     graphName :: GraphName,
+    -- All of the elements in the graph
     graphElements :: [Element m],
-    graphTermExprs :: (Core.Term m -> Bool),
     -- A reference to this graph's schema graph within the provided graph set
     graphSchemaGraph :: GraphName}
+  deriving (Eq, Ord, Read, Show)
 
 _Graph = (Core.Name "hydra/graph.Graph")
 
 _Graph_name = (Core.FieldName "name")
 
 _Graph_elements = (Core.FieldName "elements")
-
-_Graph_termExprs = (Core.FieldName "termExprs")
 
 _Graph_schemaGraph = (Core.FieldName "schemaGraph")
 
@@ -53,6 +53,7 @@ data GraphSet m
   = GraphSet {
     graphSetGraphs :: (Map GraphName (Graph m)),
     graphSetRoot :: GraphName}
+  deriving (Eq, Ord, Read, Show)
 
 _GraphSet = (Core.Name "hydra/graph.GraphSet")
 
@@ -65,6 +66,7 @@ data Module m
   = Module {
     moduleGraph :: (Graph m),
     moduleImports :: [Module m]}
+  deriving (Eq, Ord, Read, Show)
 
 _Module = (Core.Name "hydra/graph.Module")
 
