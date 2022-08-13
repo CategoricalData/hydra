@@ -13,8 +13,8 @@ import Hydra.Evaluation
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
 
-import Control.Monad.Except
-import Control.Monad.Identity
+import qualified Control.Monad.Except as CME
+import qualified Control.Monad.Identity as CMI
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -22,7 +22,7 @@ import qualified Data.Set as S
 
 type Constraint m = (Type m, Type m)
 
-type Solve a m = ExceptT (TypeError m) Identity a
+type Solve a m = CME.ExceptT (TypeError m) CMI.Identity a
 
 data TypeError m
   = UnificationFail String (Type m) (Type m)
@@ -38,11 +38,11 @@ type Unifier m = (Subst m, [Constraint m])
 
 bind :: (Eq m, Show m) => VariableType -> Type m -> Solve (Subst m) m
 bind a t | t == TypeVariable a = return M.empty
-         | variableOccursInType a t = throwError $ InfiniteType a t
+         | variableOccursInType a t = CME.throwError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
 
 solveConstraints :: (Eq m, Show m) => Context m -> [Constraint m] -> Either (TypeError m) (Subst m)
-solveConstraints cx cs = runIdentity $ runExceptT $ unificationSolver cx (M.empty, cs)
+solveConstraints cx cs = CMI.runIdentity $ CME.runExceptT $ unificationSolver cx (M.empty, cs)
 
 unificationSolver :: (Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
 unificationSolver scx (su, cs) = case cs of
@@ -79,7 +79,7 @@ unify cx0 t1 t2 = if t1 == t2
       _ -> failUnification
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = throwError $ UnificationFail (printTrace cx) t1 t2
+    failUnification = CME.throwError $ UnificationFail (printTrace cx) t1 t2
 --    cx = pushTrace "unify" cx0
     cx = pushTrace ("unify (" ++ show t1 ++ ") (" ++ show t2 ++ ")") cx0
     
@@ -89,7 +89,7 @@ unifyMany cx (t1 : ts1) (t2 : ts2) =
   do su1 <- unify cx t1 t2
      su2 <- unifyMany cx (substituteInType su1 <$> ts1) (substituteInType su1 <$> ts2)
      return (composeSubst su2 su1)
-unifyMany _ t1 t2 = throwError $ UnificationMismatch t1 t2
+unifyMany _ t1 t2 = CME.throwError $ UnificationMismatch t1 t2
 
 variableOccursInType ::  Show m => VariableType -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t
