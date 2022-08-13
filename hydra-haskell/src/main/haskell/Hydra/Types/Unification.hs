@@ -1,20 +1,19 @@
 module Hydra.Types.Unification (
   Constraint,
-  Solve,
   Subst,
   TypeError(..),
   solveConstraints,
+  typeErrorMessage,
   unify,
 ) where
 
 import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
+import Hydra.Impl.Haskell.Extras
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
-
-import qualified Control.Monad.Except as CME
-import qualified Control.Monad.Identity as CMI
+import Hydra.Graph
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -22,29 +21,33 @@ import qualified Data.Set as S
 
 type Constraint m = (Type m, Type m)
 
-type Solve a m = CME.ExceptT (TypeError m) CMI.Identity a
-
 data TypeError m
   = UnificationFail String (Type m) (Type m)
   | InfiniteType VariableType (Type m)
-  | UnboundVariable Variable
+  | UnboundVariable (GraphSet m) Variable
   | UnificationMismatch [Type m] [Type m]
   | ElementUndefined Name
   | InvalidTypeEncoding String
-  | OtherError String String deriving (Eq, Show)
+  | OtherError (GraphSet m) String String deriving (Eq, Show)
+
+failWithTypeError :: Show m => TypeError m -> Result x
+failWithTypeError = ResultFailure . typeErrorMessage
+
+typeErrorMessage :: Show m => TypeError m -> String
+typeErrorMessage e = "type error: " ++ show e
 
 type Unifier m = (Subst m, [Constraint m])
 
 
-bind :: (Eq m, Show m) => VariableType -> Type m -> Solve (Subst m) m
+bind :: (Eq m, Show m) => VariableType -> Type m -> Result (Subst m)
 bind a t | t == TypeVariable a = return M.empty
-         | variableOccursInType a t = CME.throwError $ InfiniteType a t
+         | variableOccursInType a t = failWithTypeError $ InfiniteType a t
          | otherwise = return $ M.singleton a t
 
-solveConstraints :: (Eq m, Show m) => Context m -> [Constraint m] -> Either (TypeError m) (Subst m)
-solveConstraints cx cs = CMI.runIdentity $ CME.runExceptT $ unificationSolver cx (M.empty, cs)
+solveConstraints :: (Eq m, Show m) => Context m -> [Constraint m] -> Result (Subst m)
+solveConstraints cx cs = unificationSolver cx (M.empty, cs)
 
-unificationSolver :: (Eq m, Show m) => Context m -> Unifier m -> Solve (Subst m) m
+unificationSolver :: (Eq m, Show m) => Context m -> Unifier m -> Result (Subst m)
 unificationSolver scx (su, cs) = case cs of
   [] -> return su
   ((t1, t2): cs0) -> do
@@ -53,7 +56,7 @@ unificationSolver scx (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
 
-unify :: (Eq m, Show m) => Context m -> Type m -> Type m -> Solve (Subst m) m
+unify :: (Eq m, Show m) => Context m -> Type m -> Type m -> Result (Subst m)
 unify cx0 t1 t2 = if t1 == t2
     then return M.empty
     else case (t1, t2) of
@@ -79,17 +82,17 @@ unify cx0 t1 t2 = if t1 == t2
       _ -> failUnification
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = CME.throwError $ UnificationFail (printTrace cx) t1 t2
+    failUnification = failWithTypeError $ UnificationFail (printTrace cx) t1 t2
 --    cx = pushTrace "unify" cx0
     cx = pushTrace ("unify (" ++ show t1 ++ ") (" ++ show t2 ++ ")") cx0
     
-unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Solve (Subst m) m
+unifyMany :: (Eq m, Show m) => Context m -> [Type m] -> [Type m] -> Result (Subst m)
 unifyMany _ [] [] = return M.empty
 unifyMany cx (t1 : ts1) (t2 : ts2) =
   do su1 <- unify cx t1 t2
      su2 <- unifyMany cx (substituteInType su1 <$> ts1) (substituteInType su1 <$> ts2)
      return (composeSubst su2 su1)
-unifyMany _ t1 t2 = CME.throwError $ UnificationMismatch t1 t2
+unifyMany _ t1 t2 = failWithTypeError $ UnificationMismatch t1 t2
 
 variableOccursInType ::  Show m => VariableType -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t
