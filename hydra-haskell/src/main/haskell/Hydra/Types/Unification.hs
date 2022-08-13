@@ -2,6 +2,7 @@ module Hydra.Types.Unification (
   Constraint,
   Subst,
   TypeError(..),
+  failWithTypeError,
   solveConstraints,
   typeErrorMessage,
   unify,

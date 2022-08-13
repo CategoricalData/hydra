@@ -17,7 +17,6 @@ import Hydra.Rewriting
 import Hydra.Reduction
 
 import qualified Control.Monad as CM
-import qualified Control.Monad.Except as CME
 import qualified Control.Monad.State as CMS
 import qualified Control.Monad.Reader as CMR
 
@@ -26,7 +25,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState (CME.Except String)) a
+type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState Result) a
 
 type InferenceState = Int
 
@@ -65,7 +64,7 @@ extendEnvironment (x, sc) m = do
 
 findMatchingField :: Show m => Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
 findMatchingField cx fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
-  []    -> CME.throwError $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) $ "no such field: " ++ unFieldName fname
+  []    -> fail $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
 infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
@@ -159,7 +158,7 @@ inferInternal cx term = case termExpr cx term of
       let t1 = termType i1
       let c1 = termConstraints i1
       case solveConstraints cx c1 of
-          ResultFailure err -> CME.throwError err
+          ResultFailure err -> fail err
           ResultSuccess sub -> do
               let scx = schemaContext cx
               let t1' = reduceType scx $ substituteInType sub t1
@@ -280,7 +279,7 @@ lookupTypeInEnvironment :: Show m => Context m -> Variable -> Infer (Type m) m
 lookupTypeInEnvironment cx v = do
   env <- CMR.ask
   case M.lookup v env of
-      Nothing   -> CME.throwError $ typeErrorMessage $ UnboundVariable (contextGraphs cx) v
+      Nothing   -> fail $ typeErrorMessage $ UnboundVariable (contextGraphs cx) v
       Just s    -> instantiate s
 
 namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
@@ -295,7 +294,7 @@ reduceType cx t = t -- betaReduceType cx t
 resultToInfer :: Show m => Context m -> Result a -> Infer a m
 resultToInfer cx r = case r of
   ResultSuccess x -> pure x
-  ResultFailure e -> CME.throwError $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) e
+  ResultFailure e -> fail $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) e
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite
@@ -303,9 +302,7 @@ rewriteDataType f = rewriteTermMeta rewrite
     rewrite (x, typ, c) = (x, f typ, c)
 
 runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Result (Term (m, Type m, [Constraint m]))
-runInference term = case CME.runExcept $ CMS.evalStateT (CMR.runReaderT term M.empty) startState of
-  Left msg -> ResultFailure msg
-  Right x -> pure x
+runInference term = CMS.evalStateT (CMR.runReaderT term M.empty) startState
 
 startState :: InferenceState
 startState = 0
@@ -323,8 +320,3 @@ typeOfElement cx name = do
 
 typeOfPrimitiveFunction :: Context m -> Name -> Result (FunctionType m)
 typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name
-
--- TODO: temporary
-toEither r = case r of
-  ResultFailure msg -> Left msg
-  ResultSuccess x -> Right x
