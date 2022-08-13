@@ -17,16 +17,16 @@ import Hydra.Rewriting
 import Hydra.Reduction
 
 import qualified Control.Monad as CM
-import Control.Monad.Except
-import Control.Monad.State
-import Control.Monad.Reader
+import qualified Control.Monad.Except as CME
+import qualified Control.Monad.State as CMS
+import qualified Control.Monad.Reader as CMR
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Infer a m = ReaderT (TypingEnvironment m) (StateT InferenceState (Except (TypeError m))) a
+type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState (CME.Except (TypeError m))) a
 
 type InferenceState = Int
 
@@ -45,8 +45,8 @@ decodeStructuralType cx term = do
 
 freshVariableType :: Infer (Type m) m
 freshVariableType = do
-    s <- get
-    put (s + 1)
+    s <- CMS.get
+    CMS.put (s + 1)
     return $ Types.variable (h $ normalVariables !! s)
   where
     h (VariableType v) = v
@@ -61,11 +61,11 @@ generalize env t  = TypeScheme vars t
 extendEnvironment :: (Variable, TypeScheme m) -> Infer a m -> Infer a m
 extendEnvironment (x, sc) m = do
   let scope e = M.insert x sc $ M.delete x e
-  local scope m
+  CMR.local scope m
 
 findMatchingField :: Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
 findMatchingField cx fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
-  []    -> throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName fname
+  []    -> CME.throwError $ OtherError (printTrace cx) $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
 infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
@@ -154,17 +154,17 @@ inferInternal cx term = case termExpr cx term of
           ResultFailure msg -> error msg
 
     TermLet (Let x e1 e2) -> do
-      env <- ask
+      env <- CMR.ask
       i1 <- infer cx e1
       let t1 = termType i1
       let c1 = termConstraints i1
       case solveConstraints cx c1 of
-          Left err -> throwError err
+          Left err -> CME.throwError err
           Right sub -> do
               let scx = schemaContext cx
               let t1' = reduceType scx $ substituteInType sub t1
               let sc = generalize (M.map (substituteInScheme sub) env) t1'
-              i2 <- extendEnvironment (x, sc) $ local (M.map (substituteInScheme sub)) (infer cx e2)
+              i2 <- extendEnvironment (x, sc) $ CMR.local (M.map (substituteInScheme sub)) (infer cx e2)
               let t2 = termType i2
               let c2 = termConstraints i2
               yield (TermLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
@@ -283,9 +283,9 @@ instantiate (TypeScheme vars t) = do
 
 lookupTypeInEnvironment :: Variable -> Infer (Type m) m
 lookupTypeInEnvironment v = do
-  env <- ask
+  env <- CMR.ask
   case M.lookup v env of
-      Nothing   -> throwError $ UnboundVariable v
+      Nothing   -> CME.throwError $ UnboundVariable v
       Just s    -> instantiate s
 
 namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
@@ -300,7 +300,7 @@ reduceType cx t = t -- betaReduceType cx t
 resultToInfer :: Context m -> Result a -> Infer a m
 resultToInfer cx r = case r of
   ResultSuccess x -> pure x
-  ResultFailure e -> throwError $ OtherError (printTrace cx) e
+  ResultFailure e -> CME.throwError $ OtherError (printTrace cx) e
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite
@@ -308,7 +308,7 @@ rewriteDataType f = rewriteTermMeta rewrite
     rewrite (x, typ, c) = (x, f typ, c)
 
 runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Either (TypeError m) (Term (m, Type m, [Constraint m]))
-runInference term = runExcept $ evalStateT (runReaderT term M.empty) startState
+runInference term = CME.runExcept $ CMS.evalStateT (CMR.runReaderT term M.empty) startState
 
 startState :: InferenceState
 startState = 0
