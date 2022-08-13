@@ -45,7 +45,7 @@ bootstrapContext = cx
 
     emptyGraphName = GraphName "empty"
 
-    emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
+    emptyGraph = Graph emptyGraphName [] emptyGraphName
 
 nsref :: GraphName -> String -> Type m
 nsref ns = Types.nominal . qualify ns . Name

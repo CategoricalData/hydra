@@ -55,7 +55,7 @@ testElementFirstName = Element {
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
-testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
+testGraph = Graph testGraphName [testElementArthur, testElementFirstName] testSchemaGraphName
 
 testGraphName :: GraphName
 testGraphName = GraphName "testGraph"
@@ -69,7 +69,7 @@ testSchemaGraph = Graph testSchemaGraphName [
       def testTypePersonName testTypePerson,
       def testTypePersonOrSomethingName testTypePersonOrSomething,
       def testTypeTimestampName testTypeTimestamp]
-    allTerms hydraCoreName
+    hydraCoreName
   where
     def = typeElement coreContext
 
@@ -127,6 +127,3 @@ testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName [
 
 testTypeTimestampName :: Name
 testTypeTimestampName = Name "Timestamp"
-
-allTerms :: Term Meta -> Bool
-allTerms _ = True

@@ -18,7 +18,7 @@ hydraErrorsName :: GraphName
 hydraErrorsName = GraphName "hydra/errors"
 
 hydraErrors :: Graph Meta
-hydraErrors = Graph hydraErrorsName elements (const True) hydraCoreName
+hydraErrors = Graph hydraErrorsName elements hydraCoreName
   where
     def = datatype coreContext hydraErrorsName
     elements = [

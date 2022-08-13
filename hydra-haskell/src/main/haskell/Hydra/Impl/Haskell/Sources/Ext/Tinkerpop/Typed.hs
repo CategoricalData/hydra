@@ -15,7 +15,7 @@ tinkerpopTypedName :: GraphName
 tinkerpopTypedName = GraphName "hydra/ext/tinkerpop/typed"
 
 tinkerpopTyped :: Graph Meta
-tinkerpopTyped = Graph tinkerpopTypedName elements (const True) hydraCoreName
+tinkerpopTyped = Graph tinkerpopTypedName elements hydraCoreName
   where
     def = datatype coreContext tinkerpopTypedName
     typed = nsref tinkerpopTypedName

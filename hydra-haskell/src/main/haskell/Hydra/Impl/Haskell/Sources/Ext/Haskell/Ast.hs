@@ -18,7 +18,7 @@ haskellAstName :: GraphName
 haskellAstName = GraphName "hydra/ext/haskell/ast"
 
 haskellAst :: Graph Meta
-haskellAst = Graph haskellAstName elements (const True) hydraCoreName
+haskellAst = Graph haskellAstName elements hydraCoreName
   where
     def = datatype coreContext haskellAstName
     ast = nsref haskellAstName

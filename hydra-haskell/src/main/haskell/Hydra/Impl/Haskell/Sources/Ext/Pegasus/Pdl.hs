@@ -22,7 +22,7 @@ pegasusPdlName :: GraphName
 pegasusPdlName = GraphName "hydra/ext/pegasus/pdl"
 
 pegasusPdl :: Graph Meta
-pegasusPdl = Graph pegasusPdlName elements (const True) hydraCoreName
+pegasusPdl = Graph pegasusPdlName elements hydraCoreName
   where
     def = datatype coreContext pegasusPdlName
     pdl = nsref pegasusPdlName

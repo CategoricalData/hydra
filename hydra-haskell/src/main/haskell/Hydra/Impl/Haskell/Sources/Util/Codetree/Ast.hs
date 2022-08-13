@@ -16,7 +16,7 @@ codetreeAstName :: GraphName
 codetreeAstName = GraphName "hydra/util/codetree/ast"
 
 codetreeAst :: Graph Meta
-codetreeAst = Graph codetreeAstName elements (const True) hydraCoreName
+codetreeAst = Graph codetreeAstName elements hydraCoreName
   where
     def = datatype coreContext codetreeAstName
     ast = nsref codetreeAstName
