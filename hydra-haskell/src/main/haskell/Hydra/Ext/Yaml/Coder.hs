@@ -5,11 +5,12 @@ import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
+import Hydra.Lexical
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
@@ -111,7 +112,7 @@ yamlCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (
 yamlCoder cx typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder cx $ adapterTarget adapter
-    return $ composeSteps (adapterCoder adapter) coder
+    return $ composeCoders (adapterCoder adapter) coder
   where
     adContext = AdapterContext cx hydraCoreLanguage (language cx)
 

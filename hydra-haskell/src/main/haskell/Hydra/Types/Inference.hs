@@ -7,14 +7,15 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Basics
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.CoreDecoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 import Hydra.Rewriting
 import Hydra.Reduction
+import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Control.Monad.State as CMS

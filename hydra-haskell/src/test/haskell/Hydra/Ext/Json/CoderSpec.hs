@@ -3,8 +3,7 @@ module Hydra.Ext.Json.CoderSpec where
 import Hydra.Core
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Lib.Literals

@@ -3,20 +3,22 @@ module Hydra.Ext.Scala.Coder (printGraph) where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Primitives
+import Hydra.Lexical
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Ext.Scala.Language
 import Hydra.Ext.Scala.Utils
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Rewriting
 import Hydra.Types.Inference
 import Hydra.Types.Substitution
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Scala.Serde
+import Hydra.Lexical
+import Hydra.CoreDecoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

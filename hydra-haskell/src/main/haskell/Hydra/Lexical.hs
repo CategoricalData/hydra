@@ -1,13 +1,20 @@
-module Hydra.Primitives where
+module Hydra.Lexical (
+  module Hydra.Lexical,
+  module Hydra.Common,
+  module Hydra.Errors,
+  ) where
 
-import Hydra.Core
-import Hydra.Evaluation
-import Hydra.Graph
 import Hydra.Common
-import Hydra.Steps
+import Hydra.Core
+import Hydra.Errors
+import Hydra.Graph
+import Hydra.Evaluation
+import Hydra.Monads
+
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
+import Control.Monad
 
 
 deref :: Context m -> Term m -> Result (Term m)
@@ -61,3 +68,10 @@ schemaContext cx = pushTrace "schema" $ cx {
     sgraph = getGraph $ graphSchemaGraph $ getGraph $ graphSetRoot graphs
     graphs = contextGraphs cx
     getGraph name = Y.fromJust $ M.lookup name (graphSetGraphs graphs)
+
+setContextElements :: [Graph m] -> Context m -> Context m
+setContextElements graphs cx = cx { contextElements = M.fromList $
+  ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
+
+unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
+unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj

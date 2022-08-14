@@ -1,9 +1,9 @@
 module Hydra.Rewriting where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Graph
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Evaluation
 import Hydra.CoreDecoding
 import Hydra.Sorting
@@ -36,6 +36,13 @@ freeVariablesInTerm term = case term of
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
+
+graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
+graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
+  where
+    graphNames = S.fromList (graphNameOf <$> S.toList elNames)
+    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
+      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term

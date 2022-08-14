@@ -3,19 +3,20 @@ module Hydra.Ext.Java.Coder (printGraph) where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.CoreDecoding
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Util.Formatting
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Basics
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

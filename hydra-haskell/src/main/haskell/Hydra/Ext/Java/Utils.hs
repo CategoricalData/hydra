@@ -3,12 +3,13 @@ module Hydra.Ext.Java.Utils where
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Ext.Java.Language
 import Hydra.Util.Formatting
+import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

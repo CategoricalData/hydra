@@ -8,7 +8,7 @@ import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

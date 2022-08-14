@@ -3,12 +3,13 @@ module Hydra.Ext.Haskell.Utils where
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Extras
-import Hydra.Util.Coders
+import Hydra.Monads
+import Hydra.Adapters.Coders
 import Hydra.Util.Formatting
 import Hydra.Ext.Haskell.Language
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
+import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

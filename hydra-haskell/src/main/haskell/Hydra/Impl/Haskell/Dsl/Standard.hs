@@ -11,7 +11,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Meta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Impl.Haskell.Dsl.Bootstrap
 
 import qualified Data.Map as M

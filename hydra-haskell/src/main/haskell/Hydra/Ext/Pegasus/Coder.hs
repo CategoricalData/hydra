@@ -7,9 +7,9 @@ import Hydra.CoreDecoding
 import Hydra.CoreLanguage
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Rewriting
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Util.Formatting
 import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL

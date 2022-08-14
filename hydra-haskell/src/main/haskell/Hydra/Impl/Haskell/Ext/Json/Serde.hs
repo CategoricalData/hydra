@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Json.Coder
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
 
 import qualified Data.ByteString.Lazy as BS

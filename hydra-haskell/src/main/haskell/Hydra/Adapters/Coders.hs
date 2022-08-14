@@ -1,24 +1,23 @@
-module Hydra.Util.Coders where
+module Hydra.Adapters.Coders where
 
 import Hydra.Adapter
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
-import Hydra.Primitives
+import Hydra.Monads
+import Hydra.Lexical
 import Hydra.Rewriting
+import Hydra.Adapters.Term
+import Hydra.CoreLanguage
+import Hydra.Adapters.UtilsEtc
+import Hydra.Lexical
+import Hydra.CoreDecoding
+
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
-import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Steps
-import qualified Hydra.Lib.Strings as Strings
-import Hydra.Util.Formatting
 
-
-newtype FileExtension = FileExtension String
 
 adaptType :: (Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
 adaptType cx targetLang t = do
@@ -26,13 +25,6 @@ adaptType cx targetLang t = do
     return $ adapterTarget ad
   where
     ac = AdapterContext cx hydraCoreLanguage targetLang
-
-graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
-graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
-  where
-    graphNames = S.fromList (graphNameOf <$> S.toList elNames)
-    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
-      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
 graphToExternalModule :: (Ord m, Read m, Show m)
   => Language m
@@ -54,17 +46,7 @@ graphToExternalModule lang encodeTerm createModule cx g = do
     constructCoder typ = do
         adapter <- termAdapter adContext typ
         coder <- termCoder $ adapterTarget adapter
-        return $ composeSteps (adapterCoder adapter) coder
+        return $ composeCoders (adapterCoder adapter) coder
       where
         adContext = AdapterContext cx hydraCoreLanguage lang
         termCoder _ = pure $ unidirectionalCoder (encodeTerm cx)
-
-graphNameToFilePath :: Bool -> FileExtension -> GraphName -> FilePath
-graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
-  where
-    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
-
-nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
-nameToFilePath caps ext name = graphNameToFilePath caps ext $ GraphName $ gname ++ "/" ++ local
-  where
-    (GraphName gname, local) = toQname name

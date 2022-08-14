@@ -5,7 +5,7 @@ import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Impl.Haskell.Sources.Adapter
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
@@ -40,6 +40,7 @@ import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL
 import qualified Hydra.Ext.Scala.Coder as Scala
+import Hydra.Lexical
 
 import qualified System.FilePath as FP
 import qualified Data.List as L
