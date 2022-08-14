@@ -8,7 +8,8 @@ module Hydra.TestUtils (
   strip,
   termTestContext,
   module Hydra.TestGraph,
-  module Hydra.Steps,
+  module Hydra.Evaluation,
+  module Hydra.Monads,
 ) where
 
 import Hydra.ArbitraryCore()
@@ -17,12 +18,13 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Errors
+import Hydra.Evaluation
 import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Steps
 import Hydra.Rewriting
+import Hydra.Monads
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y

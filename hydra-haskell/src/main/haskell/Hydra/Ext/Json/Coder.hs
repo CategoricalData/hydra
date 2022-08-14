@@ -5,13 +5,14 @@ import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Ext.Json.Language
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Lib.Literals
+import Hydra.Lexical
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
@@ -22,7 +23,7 @@ jsonCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (
 jsonCoder cx typ = do
     adapter <- termAdapter adContext typ
     coder <- termCoder cx $ adapterTarget adapter
-    return $ composeSteps (adapterCoder adapter) coder
+    return $ composeCoders (adapterCoder adapter) coder
   where
     adContext = AdapterContext cx hydraCoreLanguage (language cx)
 

@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Reduction
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Primitives
+import Hydra.Lexical
 
 import Hydra.TestUtils
 

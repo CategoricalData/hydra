@@ -11,7 +11,7 @@ module Hydra.Types.Unification (
 import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Graph

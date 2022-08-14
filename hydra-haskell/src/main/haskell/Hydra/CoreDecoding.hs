@@ -10,12 +10,19 @@ module Hydra.CoreDecoding (
   decodeString,
   decodeType,
   decodeLambdaType,
+  elementAsTypedTerm,
+  fieldTypes,
+  requireRecordType,
+  requireRowType,
+  requireType,
+  requireUnionType,
   ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Steps
-import Hydra.Primitives
+import Hydra.Graph
+import Hydra.Lexical
+import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -116,6 +123,23 @@ decodeType cx dat = case dat of
     (_Type_union, fmap TypeUnion . decodeRowType cx),
     (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
 
+elementAsTypedTerm :: (Show m) => Context m -> Element m -> Result (TypedTerm m)
+elementAsTypedTerm schemaCtx el = TypedTerm <$> decodeType schemaCtx (elementSchema el) <*> pure (elementData el)
+
+fieldTypes :: (Show m) => Context m -> Type m -> Result (M.Map FieldName (Type m))
+fieldTypes scx t = case typeExpr scx t of
+    TypeRecord rt -> pure $ toMap $ rowTypeFields rt
+    TypeUnion rt -> pure $ toMap $ rowTypeFields rt
+    TypeElement et -> fieldTypes scx et
+    TypeNominal name -> do
+      el <- requireElement (Just "field types") scx name
+      decodeType scx (elementData el) >>= fieldTypes scx
+    TypeLambda (LambdaType _ body) -> fieldTypes scx body
+    _ -> fail $ "expected record or union type, but found " ++ show t
+  where
+    toMap fields = M.fromList (toPair <$> fields)
+    toPair (FieldType fname ftype) = (fname, ftype)
+
 getField :: M.Map FieldName (Term m) -> FieldName -> (Term m -> Result b) -> Result b
 getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
@@ -145,3 +169,31 @@ matchUnion cx pairs term = do
 
 matchUnitField :: FieldName -> b -> (FieldName, a -> Result b)
 matchUnitField fname x = (fname, \_ -> pure x)
+
+requireRecordType :: Show m => Context m -> Name -> Result (RowType m)
+requireRecordType = requireRowType "record" $ \t -> case t of
+  TypeRecord rt -> Just rt
+  _ -> Nothing
+
+requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Context m -> Name -> Result (RowType m)
+requireRowType label getter cx name = do
+  let scx = schemaContext cx
+  t <- requireType scx name
+  case getter (rawType t) of
+    Just rt -> return rt
+    Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
+  where
+    rawType t = case t of
+      TypeAnnotated (Annotated t' _) -> rawType t'
+      TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
+      _ -> t
+
+requireType :: (Show m) => Context m -> Name -> Result (Type m)
+requireType scx name = do
+  el <- requireElement (Just "require type") scx name
+  decodeType scx $ elementData el
+
+requireUnionType :: Show m => Context m -> Name -> Result (RowType m)
+requireUnionType = requireRowType "union" $ \t -> case t of
+  TypeUnion rt -> Just rt
+  _ -> Nothing

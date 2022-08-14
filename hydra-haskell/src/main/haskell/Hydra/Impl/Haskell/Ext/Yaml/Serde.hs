@@ -7,7 +7,7 @@ import Hydra.Core
 import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Yaml.Coder
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS

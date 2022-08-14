@@ -1,13 +1,15 @@
 module Hydra.Reduction where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Evaluation
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Rewriting
 import Hydra.Basics
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Primitives
+import Hydra.Lexical
+import Hydra.Lexical
+import Hydra.CoreDecoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

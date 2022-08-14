@@ -6,11 +6,12 @@ module Hydra.Adapters.Literal (
 
 import Hydra.Core
 import Hydra.Basics
-import Hydra.Steps
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Adapter
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
+--import Hydra.Adapters.Coders
+import Hydra.Lexical
 
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -41,7 +42,7 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- floatAdapter context ft
             let step = bidirectional
                   $ \dir l -> case l of
-                    LiteralFloat fv -> LiteralFloat <$> stepEither dir (adapterCoder adapter) fv
+                    LiteralFloat fv -> LiteralFloat <$> encodeDecode dir (adapterCoder adapter) fv
                     _ -> unexpected "floating-point literal" (show l)
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeFloat $ adapterTarget adapter) step
         LiteralTypeInteger it -> pure $ if noIntegerVars
@@ -50,7 +51,7 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
             adapter <- integerAdapter context it
             let step = bidirectional
                   $ \dir (LiteralInteger iv) -> LiteralInteger
-                    <$> stepEither dir (adapterCoder adapter) iv
+                    <$> encodeDecode dir (adapterCoder adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the literal string type"
     supported = literalTypeIsSupported constraints

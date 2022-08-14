@@ -4,7 +4,7 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 
 import qualified Data.List as L
 import qualified Data.Set as S

@@ -4,8 +4,7 @@
 module Hydra.Impl.Haskell.Ext.Json.SerdeSpec where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Ext.Json.Serde
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

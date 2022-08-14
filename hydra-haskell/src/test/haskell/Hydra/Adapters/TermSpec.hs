@@ -7,9 +7,8 @@ import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreLanguage
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Meta
-import Hydra.Steps
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import Hydra.TestData

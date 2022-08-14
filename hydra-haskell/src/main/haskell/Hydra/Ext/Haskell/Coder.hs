@@ -5,10 +5,10 @@ import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
-import Hydra.Primitives
+import Hydra.Monads
+import Hydra.Lexical
 import Hydra.Rewriting
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Util.Formatting
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
@@ -19,6 +19,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
+import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

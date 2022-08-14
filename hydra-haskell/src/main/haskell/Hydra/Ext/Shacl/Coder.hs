@@ -4,8 +4,9 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.CoreDecoding
+import Hydra.Lexical
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 
@@ -20,7 +21,7 @@ data Ann a = Ann a (Maybe String)
 shaclCoder :: (Eq m, Show m) => Context m -> Graph m -> Qualified (Shacl.ShapesGraph, Graph m -> Result Rdf.Graph)
 shaclCoder cx sg = do
     pairs <- resultToQualified $ CM.mapM decode typeEls
-    fail "FOO"
+    fail "TODO"
   where
     mapGraph g = fail "TODO"
     typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg

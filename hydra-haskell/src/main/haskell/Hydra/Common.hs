@@ -4,9 +4,13 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
 import qualified Hydra.Lib.Strings as Strings
+import Hydra.Util.Formatting
 
 import qualified Data.List as L
+import qualified Data.Set as S
 
+
+newtype FileExtension = FileExtension String
 
 debug :: Bool
 debug = True
@@ -52,6 +56,11 @@ fromQname (GraphName ns) local = Name $ ns ++ "." ++ local
 
 graphNameOf :: Name -> GraphName
 graphNameOf = fst . toQname
+
+graphNameToFilePath :: Bool -> FileExtension -> GraphName -> FilePath
+graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
+  where
+    parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
 isEncodedType :: Eq m => Context m -> Term m -> Bool
 isEncodedType cx term = termExpr cx term == TermElement _Type
