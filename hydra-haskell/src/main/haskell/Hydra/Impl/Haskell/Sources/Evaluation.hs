@@ -27,23 +27,6 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
     def = datatype coreContext hydraEvaluationName
     
     elements = [
-
-      def "Coder" $
-        doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
-        lambda "a" $ lambda "b" $ record [
-          "encode">: ("a" --> evaluation "Result" @@ "b"),
-          "decode">: ("b" --> evaluation "Result" @@ "a")],
-
-      def "Context" $
-        doc "A pointed set of graph modules; a graph in the logical sense" $
-        lambda "m" $ record [
-          "graphs">: graph "GraphSet" @@ "m",
-          "elements">: Types.map (core "Name") (graph "Element" @@ "m"),
-          "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
-          "strategy">: evaluation "EvaluationStrategy",
-          "annotations">: evaluation "AnnotationClass" @@ "m",
-          "trace">: list string],
-
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
         lambda "m" $ record [
@@ -77,10 +60,57 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "setTypeOf">:
             evaluation "Context" @@ "m" --> optional (core "Type" @@ "m") --> "m" --> "m"],
 
+      def "Box" $
+        doc "A variation on the State monad which contains a Context and provides error handling" $
+        lambda "a" $ lambda "m" $ function (evaluation "Context" @@ "m") (evaluation "BoxHelper" @@ "a" @@ "m"),
+
+      def "BoxHelper" $
+        lambda "a" $ lambda "m" $ record [
+          "value">: optional "a",
+          "context">: evaluation "Context" @@ "m",
+          "trace">: list string],
+
+      def "Coder" $
+        doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
+        lambda "a" $ lambda "b" $ record [
+          "encode">: ("a" --> evaluation "Result" @@ "b"),
+          "decode">: ("b" --> evaluation "Result" @@ "a")],
+                                                          
+      def "CoderDirection" $
+        doc "Indicates either the 'out' or the 'in' direction of a coder" $
+        enum [
+          "encode",
+          "decode"],
+
+      def "Context" $
+        doc "A pointed set of graph modules; a graph in the logical sense" $
+        lambda "m" $ record [
+          "graphs">: graph "GraphSet" @@ "m",
+          "elements">: Types.map (core "Name") (graph "Element" @@ "m"),
+          "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
+          "strategy">: evaluation "EvaluationStrategy",
+          "annotations">: evaluation "AnnotationClass" @@ "m",
+          "trace">: list string],
+
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
         record [
           "opaqueTermVariants">: set (core "TermVariant")],
+
+      def "Flow" $
+        doc "A variant of the State monad with built-in logging and error handling" $
+        lambda "s" $ lambda "a" $
+        function "s" (evaluation "Trace" --> evaluation "FlowWrapper" @@ "s" @@ "a"),
+
+      def "FlowWrapper" $
+        lambda "s" $ lambda "a" $ record [
+          "value">: optional "a",
+          "state">: "s",
+          "trace">: evaluation "Trace"],
+          
+--      def "GraphFlow" $
+--        lambda "m" $ lambda "a" $
+--        evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ "a",
 
       def "InputSpec" $
         doc "A helper object for specifying and unmarshalling an argument to a primitive function" $
@@ -108,8 +138,8 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "success">: "m",
           "failure">: string],
 
-      def "CoderDirection" $
-        doc "Indicates either the 'out' or the 'in' direction of a coder" $
-        enum [
-          "encode",
-          "decode"]]
+      def "Trace" $
+        doc "A container for logging and error information" $
+        record [
+          "stack">: list string,
+          "messages">: list (list string)]]
