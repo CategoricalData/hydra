@@ -125,7 +125,7 @@ reduce :: Type Meta -> Type Meta
 reduce = betaReduceType $ schemaContext testContext 
 
 eval :: Term Meta -> Result (Term Meta)
-eval = betaReduceTerm testContext
+eval = flowToResult testContext . betaReduceTerm
 
 spec :: H.Spec
 spec = do

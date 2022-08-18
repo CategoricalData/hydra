@@ -81,6 +81,13 @@ eitherToQualified e = case e of
 emptyTrace :: Trace
 emptyTrace = Trace [] []
 
+flowToResult :: s -> Flow s a -> Result a
+flowToResult cx f = toResult $ unFlow f cx emptyTrace
+  where
+    toResult (FlowWrapper v s t) = case v of
+      Just x -> pure x
+      Nothing -> fail $ "error: " ++ (L.intercalate " > " $ L.reverse $ traceStack t)
+
 flowWarning :: String -> Flow s a -> Flow s a
 flowWarning msg b = Flow u'
   where
@@ -107,7 +114,12 @@ qualifiedToResult (Qualified x m) = case x of
   Nothing -> fail $ L.head m
   Just x' -> pure x'
 
-resultToQualified :: Result m -> Qualified m
+resultToQualified :: Result a -> Qualified a
 resultToQualified r = case r of
   ResultSuccess x -> pure x
   ResultFailure msg -> fail msg
+
+resultToFlow :: Result a -> Flow s a
+resultToFlow r = case r of
+  ResultSuccess v -> Flow $ \cx t -> FlowWrapper (Just v) cx t
+  ResultFailure msg -> Flow $ \cx t -> FlowWrapper Nothing cx (pushTrc msg t)

@@ -5,6 +5,7 @@ module Hydra.TestUtils (
   checkIntegerAdapter,
   checkDataAdapter,
   isFailure,
+  isFailureFlow,
   strip,
   termTestContext,
   module Hydra.TestGraph,
@@ -83,6 +84,17 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
 checkDataAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
 checkDataAdapter = checkAdapter (termExpr testContext) termAdapter termTestContext
 
+isFailure :: Result a -> Bool
+isFailure r = case r of
+  ResultFailure _ -> True
+  _ -> False
+
+isFailureFlow :: Flow (Context Meta) a -> Bool
+isFailureFlow f = isFailure $ flowToResult testContext f
+
+strip :: Ord m => Term m -> Term m
+strip = stripTermAnnotations
+
 termTestContext :: [TypeVariant] -> AdapterContext Meta
 termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
     languageConstraintsTypeVariants = S.fromList variants,
@@ -93,14 +105,6 @@ termTestContext variants = withConstraints $ (languageConstraints baseLanguage) 
     literalVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
     floatVars = S.fromList [FloatTypeFloat32]
     integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
-
-isFailure :: Result a -> Bool
-isFailure r = case r of
-  ResultFailure _ -> True
-  _ -> False
-
-strip :: Ord m => Term m -> Term m
-strip = stripTermAnnotations
 
 withConstraints :: LanguageConstraints Meta -> AdapterContext Meta
 withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
