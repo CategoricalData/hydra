@@ -5,42 +5,6 @@ import qualified Hydra.Graph as Graph
 import Data.Map
 import Data.Set
 
--- An encoder and decoder; a qualified bidirectional transformation between instances of two types
-data Coder a b 
-  = Coder {
-    coderEncode :: (a -> Result b),
-    coderDecode :: (b -> Result a)}
-
-_Coder = (Core.Name "hydra/evaluation.Coder")
-
-_Coder_encode = (Core.FieldName "encode")
-
-_Coder_decode = (Core.FieldName "decode")
-
--- A pointed set of graph modules; a graph in the logical sense
-data Context m 
-  = Context {
-    contextGraphs :: (Graph.GraphSet m),
-    contextElements :: (Map Core.Name (Graph.Element m)),
-    contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
-    contextStrategy :: EvaluationStrategy,
-    contextAnnotations :: (AnnotationClass m),
-    contextTrace :: [String]}
-
-_Context = (Core.Name "hydra/evaluation.Context")
-
-_Context_graphs = (Core.FieldName "graphs")
-
-_Context_elements = (Core.FieldName "elements")
-
-_Context_functions = (Core.FieldName "functions")
-
-_Context_strategy = (Core.FieldName "strategy")
-
-_Context_annotations = (Core.FieldName "annotations")
-
-_Context_trace = (Core.FieldName "trace")
-
 -- A typeclass-like construct providing common functions for working with annotations
 data AnnotationClass m 
   = AnnotationClass {
@@ -95,6 +59,75 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
+-- A variation on the State monad which contains a Context and provides error handling
+newtype Box a m 
+  = Box {
+    unBox :: (Context m -> BoxHelper a m)}
+
+_Box = (Core.Name "hydra/evaluation.Box")
+
+data BoxHelper a m 
+  = BoxHelper {
+    boxHelperValue :: (Maybe a),
+    boxHelperContext :: (Context m),
+    boxHelperTrace :: [String]}
+
+_BoxHelper = (Core.Name "hydra/evaluation.BoxHelper")
+
+_BoxHelper_value = (Core.FieldName "value")
+
+_BoxHelper_context = (Core.FieldName "context")
+
+_BoxHelper_trace = (Core.FieldName "trace")
+
+-- An encoder and decoder; a qualified bidirectional transformation between instances of two types
+data Coder a b 
+  = Coder {
+    coderEncode :: (a -> Result b),
+    coderDecode :: (b -> Result a)}
+
+_Coder = (Core.Name "hydra/evaluation.Coder")
+
+_Coder_encode = (Core.FieldName "encode")
+
+_Coder_decode = (Core.FieldName "decode")
+
+-- Indicates either the 'out' or the 'in' direction of a coder
+data CoderDirection 
+  = CoderDirectionEncode 
+  | CoderDirectionDecode 
+  deriving (Eq, Ord, Read, Show)
+
+_CoderDirection = (Core.Name "hydra/evaluation.CoderDirection")
+
+_CoderDirection_encode = (Core.FieldName "encode")
+
+_CoderDirection_decode = (Core.FieldName "decode")
+
+-- A pointed set of graph modules; a graph in the logical sense
+data Context m 
+  = Context {
+    contextGraphs :: (Graph.GraphSet m),
+    contextElements :: (Map Core.Name (Graph.Element m)),
+    contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
+    contextStrategy :: EvaluationStrategy,
+    contextAnnotations :: (AnnotationClass m),
+    contextTrace :: [String]}
+
+_Context = (Core.Name "hydra/evaluation.Context")
+
+_Context_graphs = (Core.FieldName "graphs")
+
+_Context_elements = (Core.FieldName "elements")
+
+_Context_functions = (Core.FieldName "functions")
+
+_Context_strategy = (Core.FieldName "strategy")
+
+_Context_annotations = (Core.FieldName "annotations")
+
+_Context_trace = (Core.FieldName "trace")
+
 -- Settings which determine how terms are evaluated
 data EvaluationStrategy 
   = EvaluationStrategy {
@@ -104,6 +137,28 @@ data EvaluationStrategy
 _EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
 
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
+
+-- A variant of the State monad with built-in logging and error handling
+newtype Flow s a 
+  = Flow {
+    unFlow :: (s -> Trace -> FlowWrapper s a)}
+
+_Flow = (Core.Name "hydra/evaluation.Flow")
+
+data FlowWrapper s a 
+  = FlowWrapper {
+    flowWrapperValue :: (Maybe a),
+    flowWrapperState :: s,
+    flowWrapperTrace :: Trace}
+  deriving (Eq, Ord, Read, Show)
+
+_FlowWrapper = (Core.Name "hydra/evaluation.FlowWrapper")
+
+_FlowWrapper_value = (Core.FieldName "value")
+
+_FlowWrapper_state = (Core.FieldName "state")
+
+_FlowWrapper_trace = (Core.FieldName "trace")
 
 -- A helper object for specifying and unmarshalling an argument to a primitive function
 data InputSpec a m 
@@ -156,14 +211,15 @@ _Result_success = (Core.FieldName "success")
 
 _Result_failure = (Core.FieldName "failure")
 
--- Indicates either the 'out' or the 'in' direction of a coder
-data CoderDirection 
-  = CoderDirectionEncode 
-  | CoderDirectionDecode 
+-- A container for logging and error information
+data Trace 
+  = Trace {
+    traceStack :: [String],
+    traceMessages :: [[String]]}
   deriving (Eq, Ord, Read, Show)
 
-_CoderDirection = (Core.Name "hydra/evaluation.CoderDirection")
+_Trace = (Core.Name "hydra/evaluation.Trace")
 
-_CoderDirection_encode = (Core.FieldName "encode")
+_Trace_stack = (Core.FieldName "stack")
 
-_CoderDirection_decode = (Core.FieldName "decode")
+_Trace_messages = (Core.FieldName "messages")
