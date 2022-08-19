@@ -22,7 +22,7 @@ addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs)
   where
     add ae me = Java.AdditiveExpressionPlus $ Java.AdditiveExpression_Binary ae me
 
-addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> Result Java.Type
+addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> GraphFlow m Java.Type
 addJavaTypeParameter rt t = case t of
   Java.TypeReference (Java.ReferenceTypeClassOrInterface cit) -> case cit of
     Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
@@ -288,7 +288,7 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
 
-javaTypeToJavaReferenceType :: Java.Type -> Result Java.ReferenceType
+javaTypeToJavaReferenceType :: Java.Type -> GraphFlow m Java.ReferenceType
 javaTypeToJavaReferenceType t = case t of
   Java.TypeReference rt -> pure rt
   _ -> fail $ "expected a Java reference type. Found: " ++ show t
@@ -413,7 +413,7 @@ toAssignStmt fname = javaAssignmentStatement lhs rhs
     rhs = fieldNameToJavaExpression fname
     thisField = Java.FieldAccess $ Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
-toJavaArrayType :: Java.Type -> Result Java.Type
+toJavaArrayType :: Java.Type -> GraphFlow m Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
   Java.TypeReference rt -> case rt of
     Java.ReferenceTypeClassOrInterface cit -> pure $

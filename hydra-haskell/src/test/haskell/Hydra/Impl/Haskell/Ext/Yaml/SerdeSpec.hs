@@ -13,6 +13,7 @@ import Hydra.TestData
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H
+import qualified Test.HUnit.Lang as HL
 import qualified Data.List as L
 import qualified Test.QuickCheck as QC
 import qualified Data.Maybe as Y
@@ -22,22 +23,22 @@ checkLiterals :: H.SpecWith ()
 checkLiterals = H.describe "Test literal values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
-    QC.property $ \b -> checkSerialization
+    QC.property $ \b -> checkSerialization yamlSerdeStr
       (TypedTerm Types.boolean $ boolean b)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
-    QC.property $ \i -> checkSerialization
+    QC.property $ \i -> checkSerialization yamlSerdeStr
       (TypedTerm Types.int32 $ int32 i)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
-    QC.property $ \i -> checkSerialization
+    QC.property $ \i -> checkSerialization yamlSerdeStr
       (TypedTerm Types.uint8 $ uint8 i)
       (show i)
 
   H.it "bigints become ints" $ do
-    QC.property $ \i -> checkSerialization
+    QC.property $ \i -> checkSerialization yamlSerdeStr
       (TypedTerm Types.bigint $ bigint i)
       (show i)
 
@@ -49,21 +50,21 @@ checkOptionals :: H.SpecWith ()
 checkOptionals = H.describe "Test and document serialization of optionals" $ do
 
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
-    QC.property $ \mi -> checkSerialization
+    QC.property $ \mi -> checkSerialization yamlSerdeStr
       (TypedTerm
         (Types.optional Types.int32)
         (optional $ (Just . int32) =<< mi))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
-    QC.property $ \mi -> checkSerialization
+    QC.property $ \mi -> checkSerialization yamlSerdeStr
       (TypedTerm
         (Types.optional $ Types.optional Types.int32)
         (optional $ Just $ optional $ (Just . int32) =<< mi))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
-    QC.property $ \() -> checkSerialization
+    QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm
         (Types.optional $ Types.optional Types.int32)
         (optional Nothing))
@@ -73,22 +74,24 @@ checkRecordsAndUnions :: H.SpecWith ()
 checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
-    QC.property $ \() -> checkSerialization (TypedTerm Types.unit unit) "{}"
+    QC.property $ \() -> checkSerialization yamlSerdeStr
+      (TypedTerm Types.unit unit)
+      "{}"
 
   H.it "Simple records become simple objects" $
-    QC.property $ \() -> checkSerialization
+    QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm latLonType (latlonRecord 37.0 (negate 122.0)))
       "lat: 37.0\nlon: -122.0"
 
   H.it "Optionals are omitted from record objects if 'nothing'" $
-    QC.property $ \() -> checkSerialization
+    QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm
         (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
         (record testTypeName [Field (FieldName "one") $ optional $ Just $ string "test", Field (FieldName "two") $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
-    QC.property $ \() -> checkSerialization
+    QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm
         (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union testTypeName $ Field (FieldName "left") $ string "test"))
@@ -98,26 +101,7 @@ yamlSerdeIsInformationPreserving :: H.SpecWith ()
 yamlSerdeIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do
 
   H.it "Generate arbitrary type/term pairs, serialize the terms to YAML, deserialize them, and compare" $
-    QC.property checkSerdeRoundTrip
-
-checkSerialization :: TypedTerm Meta -> String -> H.Expectation
-checkSerialization (TypedTerm typ term) expected = do
-    if Y.isNothing (qualifiedValue serde)
-      then qualifiedWarnings serde `H.shouldBe` []
-      else True `H.shouldBe` True
-    (normalize <$> coderEncode serde' term) `H.shouldBe` ResultSuccess (normalize expected)
-  where
-    normalize = unlines . L.filter (not . L.null) . lines
-    serde = yamlSerdeStr testContext typ
-    serde' = Y.fromJust $ qualifiedValue serde
-
-checkSerdeRoundTrip :: TypedTerm Meta -> H.Expectation
-checkSerdeRoundTrip (TypedTerm typ term) = do
-    Y.isJust (qualifiedValue serde) `H.shouldBe` True
-    (termExpr testContext <$> (coderEncode serde' term >>= coderDecode serde')) `H.shouldBe` ResultSuccess (termExpr testContext term)
-  where
-    serde = yamlSerde testContext typ
-    serde' = Y.fromJust $ qualifiedValue serde
+    QC.property (checkSerdeRoundTrip yamlSerde)
 
 spec :: H.Spec
 spec = do

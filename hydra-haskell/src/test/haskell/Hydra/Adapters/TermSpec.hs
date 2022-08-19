@@ -311,7 +311,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \s -> roundTripIsNoop compareStringsType (compareTo $ string s)
 
   H.it "Check data terms (which map to variants)" $
-    roundTripIsNoop int32ElementDataType delta `H.shouldBe` True
+    roundTripIsNoop int32ElementDataType delta
 
   H.it "Check primitive function references (which map to variants)" $
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)
@@ -340,8 +340,10 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (field "second" $ int8 i)
       (field "second" $ int16 $ fromIntegral i)
 
-roundTripIsNoop :: Type Meta -> Term Meta -> Bool
-roundTripIsNoop typ term = (step coderEncode term >>= step coderDecode) == pure term
+roundTripIsNoop :: Type Meta -> Term Meta -> H.Expectation
+roundTripIsNoop typ term = shouldSucceedWith
+   (step coderEncode term >>= step coderDecode)
+   term
   where
     step = adapt typ
 
@@ -356,16 +358,16 @@ roundTripIsNoop typ term = (step coderEncode term >>= step coderDecode) == pure 
       languageConstraintsTermVariants = S.fromList termVariants,
       languageConstraintsTypeVariants = S.fromList [
         TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantRecord, TypeVariantUnion],
-      languageConstraintsTypes = \typ -> case typeExpr testContext typ of
+      languageConstraintsTypes = \typ -> case stripType typ of
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 
-    transContext = AdapterContext testContext hydraCoreLanguage testLanguage
+    acx = AdapterContext testContext hydraCoreLanguage testLanguage
 
     -- Note: in a real application, you wouldn't create the adapter just to use it once;
     --       it should be created once, then applied to many terms.
     adapt typ dir term = do
-      ad <- qualifiedToResult $ termAdapter transContext typ
+      ad <- withState acx $ termAdapter typ
       dir (adapterCoder ad) term
 
 spec :: H.Spec

@@ -1,12 +1,10 @@
 module Hydra.Lexical (
   module Hydra.Lexical,
   module Hydra.Common,
-  module Hydra.Errors,
   ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Monads
@@ -17,18 +15,18 @@ import qualified Data.Maybe as Y
 import Control.Monad
 
 
-deref :: Context m -> Term m -> Result (Term m)
-deref cx term = case termExpr cx term of
-  TermElement name -> dereferenceElement cx name >>= deref cx
-  TermNominal (Named _ term') -> deref cx term'
-  _ -> ResultSuccess term
+deref :: Term m -> GraphFlow m (Term m)
+deref term = case stripTerm term of 
+  TermElement name -> dereferenceElement name >>= deref
+  TermNominal (Named _ term') -> deref term'
+  _ -> pure term
 
-dereferenceElement :: Context m -> Name -> Result (Term m)
-dereferenceElement cx en = case M.lookup en (contextElements cx) of
-    Nothing -> ResultFailure $ "element " ++ unName en ++ " does not exist in graph " ++ h (graphSetRoot (contextGraphs cx))
-    Just e -> ResultSuccess $ elementData e
-  where
-    h (GraphName n) = n
+dereferenceElement :: Name -> GraphFlow m (Term m)
+dereferenceElement en = do
+    cx <- getState
+    case M.lookup en (contextElements cx) of
+      Nothing -> fail $ "element " ++ unName en ++ " does not exist in graph " ++ unGraphName (graphSetRoot (contextGraphs cx))
+      Just e -> pure $ elementData e
 
 graphElementsMap :: Graph m -> M.Map Name (Element m)
 graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements g
@@ -36,27 +34,31 @@ graphElementsMap g = M.fromList $ (\e -> (elementName e , e)) <$> graphElements 
 lookupPrimitiveFunction :: Context m -> Name -> Maybe (PrimitiveFunction m)
 lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 
-primitiveFunctionArity :: Context m -> PrimitiveFunction m -> Int
-primitiveFunctionArity cx = arity . primitiveFunctionType
+primitiveFunctionArity :: PrimitiveFunction m -> Int
+primitiveFunctionArity = arity . primitiveFunctionType
   where
-    arity (FunctionType _ cod) = 1 + case typeExpr cx cod of
+    arity (FunctionType _ cod) = 1 + case stripType cod of
       TypeFunction ft -> arity ft
       _ -> 0
 
-requireElement :: Maybe String -> Context m -> Name -> Result (Element m)
-requireElement debug cx name = Y.maybe err ResultSuccess $ M.lookup name $ contextElements cx
+requireElement :: Maybe String -> Name -> GraphFlow m (Element m)
+requireElement debug  name = do
+    cx <- getState
+    Y.maybe (err cx) pure $ M.lookup name $ contextElements cx
   where
-    err = ResultFailure $ "no such element: " ++ unName name
+    err cx = fail $ "no such element: " ++ unName name
         ++ " in graph " ++ h (graphSetRoot (contextGraphs cx))
         ++ Y.maybe "" (\d -> " (context: " ++ d ++ ")") debug
         ++ ". Available elements: {" ++ L.intercalate ", " (unName . elementName <$> M.elems (contextElements cx)) ++ "}"
       where
         h (GraphName n) = n
 
-requirePrimitiveFunction :: Context m -> Name -> Result (PrimitiveFunction m)
-requirePrimitiveFunction cx fn = Y.maybe err ResultSuccess $ lookupPrimitiveFunction cx fn
+requirePrimitiveFunction :: Name -> GraphFlow m (PrimitiveFunction m)
+requirePrimitiveFunction fn = do
+    cx <- getState
+    Y.maybe err pure $ lookupPrimitiveFunction cx fn
   where
-    err = ResultFailure $ "no such primitive function: " ++ unName fn
+    err = fail $ "no such primitive function: " ++ unName fn
 
 -- Note: contexts are assumed to be valid; this function will fail if the named data or schema graph does not exist
 -- Also note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
@@ -75,3 +77,8 @@ setContextElements graphs cx = cx { contextElements = M.fromList $
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
+
+withSchemaContext :: GraphFlow m a -> GraphFlow m a
+withSchemaContext f = do
+  cx <- getState
+  withState (schemaContext cx) f

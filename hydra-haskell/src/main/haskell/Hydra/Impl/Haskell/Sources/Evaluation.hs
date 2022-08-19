@@ -24,7 +24,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
     graph = nsref hydraGraphName
     evaluation = nsref hydraEvaluationName
 
-    def = datatype coreContext hydraEvaluationName
+    def = datatype hydraEvaluationName
     
     elements = [
       def "AnnotationClass" $
@@ -37,44 +37,30 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "read">: string --> optional "m",
           
           -- TODO: simplify
-          "termExpr">:
-            core "Term" @@ "m" --> core "Term" @@ "m",
           "termMeta">:
             core "Term" @@ "m" --> "m",
-          "typeExpr">:
-            core "Type" @@ "m" --> core "Type" @@ "m",
           "typeMeta">:
             core "Type" @@ "m" --> "m",
           "termDescription">:
-            evaluation "Context" @@ "m" --> core "Term" @@ "m" --> evaluation "Result" @@ optional string,
+            core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional string,
           "typeDescription">:
-            evaluation "Context" @@ "m" --> core "Type" @@ "m" --> evaluation "Result" @@ optional string,
+            core "Type" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional string,
           "termType">:
-            evaluation "Context" @@ "m" --> core "Term" @@ "m" --> evaluation "Result" @@ optional (core "Type" @@ "m"),
+            core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional (core "Type" @@ "m"),
           "setTermDescription">:
             evaluation "Context" @@ "m" --> optional string --> core "Term" @@ "m" --> core "Term" @@ "m",
           "setTermType">:
             evaluation "Context" @@ "m" --> optional (core "Type" @@ "m") --> core "Term" @@ "m" --> core "Term" @@ "m",
           "typeOf">:
-            evaluation "Context" @@ "m" --> "m" --> evaluation "Result" @@ optional (core "Type" @@ "m"),
+            "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional (core "Type" @@ "m"),
           "setTypeOf">:
-            evaluation "Context" @@ "m" --> optional (core "Type" @@ "m") --> "m" --> "m"],
-
-      def "Box" $
-        doc "A variation on the State monad which contains a Context and provides error handling" $
-        lambda "a" $ lambda "m" $ function (evaluation "Context" @@ "m") (evaluation "BoxHelper" @@ "a" @@ "m"),
-
-      def "BoxHelper" $
-        lambda "a" $ lambda "m" $ record [
-          "value">: optional "a",
-          "context">: evaluation "Context" @@ "m",
-          "trace">: list string],
+            optional (core "Type" @@ "m") --> "m" --> "m"],
 
       def "Coder" $
         doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
-        lambda "a" $ lambda "b" $ record [
-          "encode">: ("a" --> evaluation "Result" @@ "b"),
-          "decode">: ("b" --> evaluation "Result" @@ "a")],
+        lambda "s" $ lambda "a" $ lambda "b" $ record [
+          "encode">: ("a" --> evaluation "Flow" @@ "s" @@ "b"),
+          "decode">: ("b" --> evaluation "Flow" @@ "s" @@ "a")],
                                                           
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
@@ -116,7 +102,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
         doc "A helper object for specifying and unmarshalling an argument to a primitive function" $
         lambda "a" $ lambda "m" $ record [
           "type">: core "Type" @@ "m",
-          "unmarshal">: core "Term" @@ "m" --> evaluation "Result" @@ "a"],
+          "unmarshal">: core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ "a"],
 
       def "OutputSpec" $
         doc "A helper object for specifying and marshalling the output of a primitive function" $
@@ -130,13 +116,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "name">: core "Name",
           "type">: core "FunctionType" @@ "m",
           "implementation">:
-            list (core "Term" @@ "m") --> (evaluation "Result" @@ (core "Term" @@ "m"))],
-
-      def "Result" $
-        doc "A qualified result; success with a value or failure with an error message" $
-        lambda "m" $ union [
-          "success">: "m",
-          "failure">: string],
+            list (core "Term" @@ "m") --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ (core "Term" @@ "m")],
 
       def "Trace" $
         doc "A container for logging and error information" $

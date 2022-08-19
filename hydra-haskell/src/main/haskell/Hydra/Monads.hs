@@ -1,18 +1,17 @@
 module Hydra.Monads (
   module Hydra.Monads,
   module Hydra.Common,
-  module Hydra.Errors,
   module Hydra.Evaluation,
 ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Graph
 import Hydra.Evaluation
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Maybe as Y
 import Control.Monad
 
 
@@ -37,56 +36,12 @@ instance MonadFail (Flow s) where
   fail msg = Flow $ \s t -> FlowWrapper Nothing s (pushError msg t)
     where
       pushError msg t = t {traceStack = ("Error: " ++ msg):(traceStack t)}
-      
-instance Functor Qualified where
-  fmap f (Qualified x msgs) = Qualified (fmap f x) msgs
-instance Applicative Qualified where
-  pure x = Qualified (Just x) []
-  Qualified f mf <*> Qualified x mx = Qualified (f <*> x) $ mf <> mx
-instance Monad Qualified where
-  Qualified x m >>= f = case x of
-    Nothing -> Qualified Nothing m
-    Just x' -> Qualified fx $ m2 <> m
-      where Qualified fx m2 = f x'
-instance MonadFail Qualified where
-  fail msg = Qualified Nothing [msg]
-
-instance Functor Result where
-  fmap f r = case r of
-    ResultFailure msg -> ResultFailure msg
-    ResultSuccess x -> ResultSuccess $ f x 
-instance Applicative Result where
-  pure = ResultSuccess
-  rf <*> rx = case (rf, rx) of
-    (_, ResultFailure msg) -> ResultFailure msg
-    (ResultFailure msg, _) -> ResultFailure msg
-    (ResultSuccess f', ResultSuccess x') -> ResultSuccess $ f' x'
-instance Monad Result where
-  r >>= f = case r of
-    ResultFailure msg -> ResultFailure msg 
-    ResultSuccess x -> f x
-instance MonadFail Result where
-  fail = ResultFailure
-
---debug :: String -> Result m -> Result m
---debug msg r = case r of
---  ResultSuccess _ -> r
---  ResultFailure msg1 -> ResultFailure $ "failure[" ++ msg ++ "]: " ++ msg1
-
-eitherToQualified :: Result m -> Qualified m
-eitherToQualified e = case e of
-  ResultFailure msg -> Qualified Nothing [msg]
-  ResultSuccess x -> Qualified (Just x) []
 
 emptyTrace :: Trace
 emptyTrace = Trace [] []
 
-flowToResult :: s -> Flow s a -> Result a
-flowToResult cx f = toResult $ unFlow f cx emptyTrace
-  where
-    toResult (FlowWrapper v s t) = case v of
-      Just x -> pure x
-      Nothing -> fail $ "error: " ++ (L.intercalate " > " $ L.reverse $ traceStack t)
+flowSucceeds :: s -> Flow s a -> Bool
+flowSucceeds cx f = Y.isJust $ flowWrapperValue $ unFlow f cx emptyTrace
 
 flowWarning :: String -> Flow s a -> Flow s a
 flowWarning msg b = Flow u'
@@ -96,6 +51,10 @@ flowWarning msg b = Flow u'
         FlowWrapper v s1 t1 = unFlow b s0 t0
         t2 = t1 {traceMessages = (msg:(traceStack t1)):(traceMessages t1)}
 
+fromFlow :: s -> Flow s a -> a
+fromFlow cx f = case flowWrapperValue (unFlow f cx emptyTrace) of
+  Just x -> x
+     
 getState :: Flow s s
 getState = Flow q
   where
@@ -109,17 +68,30 @@ getState = Flow q
 pushTrc :: String -> Trace -> Trace
 pushTrc msg t = t {traceStack = msg:(traceStack t)}
 
-qualifiedToResult :: Qualified m -> Result m
-qualifiedToResult (Qualified x m) = case x of
-  Nothing -> fail $ L.head m
-  Just x' -> pure x'
+putState :: s -> Flow s ()
+putState cx = Flow q
+  where
+    q s0 t0 = FlowWrapper v cx t1
+      where
+        FlowWrapper v _ t1 = unFlow f s0 t0
+        f = pure ()
 
-resultToQualified :: Result a -> Qualified a
-resultToQualified r = case r of
-  ResultSuccess x -> pure x
-  ResultFailure msg -> fail msg
+traceSummary :: Trace -> String
+traceSummary (Trace stack messages) = L.intercalate "\n" (errorLine:warningLines)
+  where
+    errorLine = "Error: " ++ printStack stack
+    warningLine s = "\t" ++ printStack s
+    warningLines = if L.null messages
+      then []
+      else "Warnings:":(warningLine <$> messages)
+    printStack s = L.intercalate " > " $ L.reverse s
+    
+withState :: s1 -> Flow s1 a -> Flow s2 a
+withState cx0 f = Flow q
+  where
+    q cx1 t1 = FlowWrapper v cx1 t2
+      where
+        FlowWrapper v _ t2 = unFlow f cx0 t1
 
-resultToFlow :: Result a -> Flow s a
-resultToFlow r = case r of
-  ResultSuccess v -> Flow $ \cx t -> FlowWrapper (Just v) cx t
-  ResultFailure msg -> Flow $ \cx t -> FlowWrapper Nothing cx (pushTrc msg t)
+withWarning :: String -> a -> Flow s a
+withWarning msg x = flowWarning msg $ pure x

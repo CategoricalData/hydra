@@ -133,13 +133,6 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-stripTermAnnotations :: Ord m => Term m -> Term m
-stripTermAnnotations = rewriteTerm strip id
-  where
-    strip recurse term = case term of
-      TermAnnotated (Annotated t _) -> recurse t
-      _ -> recurse term
-
 substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
@@ -203,8 +196,8 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
 
-typeDependencies :: (Show m) => Context m -> Name -> Result (M.Map Name (Type m))
-typeDependencies scx name = deps (S.fromList [name]) M.empty
+typeDependencies :: Show m => Name -> GraphFlow m (M.Map Name (Type m))
+typeDependencies name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
         then return names
@@ -217,12 +210,12 @@ typeDependencies scx name = deps (S.fromList [name]) M.empty
           deps newSeeds newNames
       where
         toPair name = do
-          typ <- requireType scx name
+          typ <- requireType name
           return (name, typ)
 
-    requireType scx name = do
-      el <- requireElement (Just "type dependencies") scx name
-      decodeType scx (elementData el)
+    requireType name = do
+      el <- requireElement (Just "type dependencies") name
+      decodeType (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty

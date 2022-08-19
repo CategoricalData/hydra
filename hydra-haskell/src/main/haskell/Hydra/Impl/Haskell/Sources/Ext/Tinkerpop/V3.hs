@@ -19,7 +19,7 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
   where
     core = nsref hydraCoreName
     v3 = nsref tinkerpopV3Name
-    def = datatype coreContext tinkerpopV3Name
+    def = datatype tinkerpopV3Name
     elements = [
 
       def "Edge" $

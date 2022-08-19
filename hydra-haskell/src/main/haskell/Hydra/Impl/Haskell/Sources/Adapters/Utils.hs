@@ -9,11 +9,12 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
+import Hydra.Monads
 
 import Prelude hiding ((++))
 
 
-adapterUtilsModule :: Result (Graph.Module Meta)
+adapterUtilsModule :: GraphFlow Meta (Graph.Module Meta)
 adapterUtilsModule = do
   g <- Standard.graph adapterUtilsName [
     el describeFloatType,

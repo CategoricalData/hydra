@@ -24,6 +24,6 @@ language cx = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
     TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated, TypeVariantLiteral, TypeVariantList, TypeVariantMap, TypeVariantOptional, TypeVariantRecord],
-  languageConstraintsTypes = \typ -> case typeExpr cx typ of
+  languageConstraintsTypes = \typ -> case stripType typ of
     TypeOptional (TypeOptional _) -> False
     _ -> True }

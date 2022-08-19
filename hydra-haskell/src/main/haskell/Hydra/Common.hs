@@ -63,18 +63,17 @@ graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
 isEncodedType :: Eq m => Context m -> Term m -> Bool
-isEncodedType cx term = termExpr cx term == TermElement _Type
+isEncodedType cx term = stripTerm term == TermElement _Type
 
 isType :: Eq m => Context m -> Type m -> Bool
-isType cx typ = typeExpr cx typ == TypeNominal _Type
+isType cx typ = stripType typ == TypeNominal _Type
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
 failWithTrace cx msg = fail $ "Error (" ++ printTrace cx ++ "): " ++ msg
-
-printTrace :: Context m -> String
-printTrace = L.intercalate " > " . L.reverse . contextTrace
+  where
+    printTrace = L.intercalate " > " . L.reverse . contextTrace
 
 pushTrace :: String -> Context m -> Context m
 pushTrace msg cx = if debug
@@ -86,14 +85,25 @@ toQname (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (GraphName ns, L.intercalate "." rest)
   _ -> (GraphName "UNKNOWN", name)
 
-termExpr :: Context m -> Term m -> Term m
-termExpr cx = annotationClassTermExpr $ contextAnnotations cx
+skipAnnotations :: (a -> Maybe (Annotated a m)) -> a -> a
+skipAnnotations getAnn t = skip t
+  where
+    skip t = case getAnn t of
+      Nothing -> t
+      Just (Annotated t' _) -> skip t'
+      
+stripTerm :: Term m -> Term m
+stripTerm = skipAnnotations $ \t -> case t of
+  TermAnnotated a -> Just a
+  _ -> Nothing
+
+stripType :: Type m -> Type m
+stripType = skipAnnotations $ \t -> case t of
+  TypeAnnotated a -> Just a
+  _ -> Nothing
 
 termMeta :: Context m -> Term m -> m
 termMeta cx = annotationClassTermMeta $ contextAnnotations cx
-
-typeExpr :: Context m -> Type m -> Type m
-typeExpr cx = annotationClassTypeExpr $ contextAnnotations cx
 
 typeMeta :: Context m -> Type m -> m
 typeMeta cx = annotationClassTypeMeta $ contextAnnotations cx

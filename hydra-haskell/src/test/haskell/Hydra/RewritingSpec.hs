@@ -149,17 +149,17 @@ testStripMeta = do
 
     H.it "Strip type annotations" $ do
       QC.property $ \(TypedTerm typ term) -> do
-        H.shouldBe
+        shouldSucceedWith
           (typeOf term)
-          (pure Nothing)
-        H.shouldBe
+          Nothing
+        shouldSucceedWith
           (typeOf $ withType testContext typ term)
-          (pure $ Just typ)
-        H.shouldBe
+          (Just typ)
+        shouldSucceedWith
           (typeOf $ strip $ withType testContext typ term)
-          (pure Nothing)
+          Nothing
 
-typeOf = annotationClassTermType (contextAnnotations testContext) testContext
+typeOf term = annotationClassTermType (contextAnnotations testContext) term
 
 withType :: Context m -> Type m -> Term m -> Term m
 withType cx typ = annotationClassSetTermType (contextAnnotations cx) cx (Just typ)

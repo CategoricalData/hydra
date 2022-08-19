@@ -22,33 +22,32 @@ import qualified Data.Set as S
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
 betaReduceTerm :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
-betaReduceTerm term = do
-    cx <- getState
-    reduce cx M.empty term
+betaReduceTerm = reduce M.empty
   where
-    reduce cx bindings term = if termIsOpaque (contextStrategy cx) term
-      then pure term
-      else case termExpr cx term of
-        TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
-        TermLiteral _ -> done
-        TermElement _ -> done
-        TermFunction f -> reduceFunction f
-        TermList terms -> TermList <$> CM.mapM reduceb terms
-        TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
-          where
-            reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-        TermNominal (Named name term') -> (\t -> TermNominal (Named name t)) <$> reduce cx bindings term'
-        TermOptional m -> TermOptional <$> CM.mapM reduceb m
-        TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
-        TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-        TermUnion (Union n f) -> TermUnion <$> (Union n <$> reduceField f)
-        TermVariable var@(Variable v) -> case M.lookup var bindings of
-          Nothing -> fail $ "cannot reduce free variable " ++ v
-          Just t -> reduceb t
+    reduce bindings term = do
+      cx <- getState
+      if termIsOpaque (contextStrategy cx) term
+        then pure term
+        else case stripTerm term of
+          TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
+          TermLiteral _ -> done
+          TermElement _ -> done
+          TermFunction f -> reduceFunction f
+          TermList terms -> TermList <$> CM.mapM reduceb terms
+          TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
+            where
+              reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
+          TermNominal (Named name term') -> (\t -> TermNominal (Named name t)) <$> reduce bindings term'
+          TermOptional m -> TermOptional <$> CM.mapM reduceb m
+          TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
+          TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
+          TermUnion (Union n f) -> TermUnion <$> (Union n <$> reduceField f)
+          TermVariable var@(Variable v) -> case M.lookup var bindings of
+            Nothing -> fail $ "cannot reduce free variable " ++ v
+            Just t -> reduceb t
       where
         done = pure term
-        dref = resultToFlow . deref cx 
-        reduceb = reduce cx bindings
+        reduceb = reduce bindings
         reduceField (Field n t) = Field n <$> reduceb t
         reduceFunction f = case f of
           FunctionElimination el -> case el of
@@ -63,34 +62,34 @@ betaReduceTerm term = do
           FunctionPrimitive _ -> done
 
         -- Assumes that the function is closed and fully reduced. The arguments may not be.
-        reduceApplication bindings args f = if L.null args then pure f else case termExpr cx f of
-          TermApplication (Application func arg) -> reduce cx bindings func
+        reduceApplication bindings args f = if L.null args then pure f else case stripTerm f of
+          TermApplication (Application func arg) -> reduce bindings func
              >>= reduceApplication bindings (arg:args)
 
           TermFunction f -> case f of
             FunctionElimination e -> case e of
               EliminationElement -> do
-                arg <- reduce cx bindings $ L.head args
-                case termExpr cx arg of
-                  TermElement name -> (resultToFlow $ dereferenceElement cx name)
-                    >>= reduce cx bindings
+                arg <- reduce bindings $ L.head args
+                case stripTerm arg of
+                  TermElement name -> dereferenceElement name
+                    >>= reduce bindings
                     >>= reduceApplication bindings (L.tail args)
                   _ -> fail "tried to apply data (delta) to a non- element reference"
 
               EliminationOptional (OptionalCases nothing just) -> do
-                arg <- (reduce cx bindings $ L.head args) >>= dref
-                case termExpr cx arg of
+                arg <- (reduce bindings $ L.head args) >>= deref
+                case stripTerm arg of
                   TermOptional m -> case m of
-                    Nothing -> reduce cx bindings nothing
-                    Just t -> reduce cx bindings just >>= reduceApplication bindings (t:L.tail args)
+                    Nothing -> reduce bindings nothing
+                    Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
                   _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
               EliminationUnion (CaseStatement _ cases) -> do
-                arg <- (reduce cx bindings $ L.head args) >>= dref
-                case termExpr cx arg of
+                arg <- (reduce bindings $ L.head args) >>= deref
+                case stripTerm arg of
                   TermUnion (Union _ (Field fname t)) -> if L.null matching
                       then fail $ "no case for field named " ++ unFieldName fname
-                      else reduce cx bindings (fieldTerm $ L.head matching)
+                      else reduce bindings (fieldTerm $ L.head matching)
                         >>= reduceApplication bindings (t:L.tail args)
                     where
                       matching = L.filter (\c -> fieldName c == fname) cases
@@ -99,18 +98,18 @@ betaReduceTerm term = do
             -- TODO: FunctionCompareTo
 
             FunctionPrimitive name -> do
-                 prim <- resultToFlow $ requirePrimitiveFunction cx name
-                 let arity = primitiveFunctionArity cx prim
+                 prim <- requirePrimitiveFunction name
+                 let arity = primitiveFunctionArity prim
                  if L.length args >= arity
-                   then (mapM (reduce cx bindings) $ L.take arity args)
-                     >>= (\x -> resultToFlow $ primitiveFunctionImplementation prim x)
-                     >>= reduce cx bindings
+                   then (mapM (reduce bindings) $ L.take arity args)
+                     >>= (primitiveFunctionImplementation prim)
+                     >>= reduce bindings
                      >>= reduceApplication bindings (L.drop arity args)
                    else unwind
                where
                  unwind = pure $ L.foldl apply (TermFunction f) args
 
-            FunctionLambda (Lambda v body) -> reduce cx (M.insert v (L.head args) bindings) body
+            FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
               >>= reduceApplication bindings (L.tail args)
 
             -- TODO: FunctionProjection
@@ -121,20 +120,22 @@ betaReduceTerm term = do
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: (Ord m, Show m) => Context m -> Type m -> Type m
-betaReduceType cx = rewriteType mapExpr id
+betaReduceType :: (Ord m, Show m) => Type m -> GraphFlow m (Type m)
+betaReduceType typ = do
+    cx <- getState :: GraphFlow m (Context m)
+    return $ rewriteType (mapExpr cx) id typ
   where
-    mapExpr rec t = case rec t of
-      TypeApplication a -> reduceApp a
-      t' -> t'
-    reduce = betaReduceType cx
-    reduceApp (ApplicationType lhs rhs) = case lhs of
-      TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
-      TypeLambda (LambdaType v body) -> reduce $ replaceFreeVariableType v rhs body
-      -- nominal types are transparent
-      TypeNominal name -> reduce $ Types.apply t' rhs
-        where
-          ResultSuccess t' = requireType cx name
+    mapExpr cx rec t = case rec t of
+        TypeApplication a -> reduceApp a
+        t' -> t'
+      where
+        reduceApp (ApplicationType lhs rhs) = case lhs of
+          TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
+          TypeLambda (LambdaType v body) -> fromFlow cx $ betaReduceType $ replaceFreeVariableType v rhs body
+          -- nominal types are transparent
+          TypeNominal name -> fromFlow cx $ betaReduceType $ Types.apply t' rhs
+            where
+              t' = fromFlow cx $ requireType name
 
 -- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: Term a -> Bool
@@ -146,7 +147,7 @@ termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaq
 
 -- | Whether a term has been fully reduced to a "value"
 termIsValue :: Context m -> EvaluationStrategy -> Term m -> Bool
-termIsValue cx strategy term = termIsOpaque strategy term || case termExpr cx term of
+termIsValue cx strategy term = termIsOpaque strategy term || case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True
     TermElement _ -> True

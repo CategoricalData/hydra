@@ -94,7 +94,7 @@ unionFieldReference namespaces sname (FieldName fname) = elementReference namesp
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
 unpackLambdaType :: Context m -> Type m -> ([VariableType], Type m)
-unpackLambdaType cx t = case typeExpr cx t of
+unpackLambdaType cx t = case stripType t of
   TypeLambda (LambdaType v tbody) -> (v:vars, t')
     where
       (vars, t') = unpackLambdaType cx tbody

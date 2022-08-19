@@ -18,38 +18,31 @@ import Hydra.Reduction
 import Hydra.Lexical
 
 import qualified Control.Monad as CM
-import qualified Control.Monad.State as CMS
-import qualified Control.Monad.Reader as CMR
-
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Infer a m = CMR.ReaderT (TypingEnvironment m) (CMS.StateT InferenceState Result) a
-
-type InferenceState = Int
+type InferenceContext m = (Context m, Int, TypingEnvironment m)
 
 type TypingEnvironment m = M.Map Variable (TypeScheme m)
 
 -- Decode a type, eliminating nominal types for the sake of unification
-decodeStructuralType :: (Show m) => Context m -> Term m -> Result (Type m)
-decodeStructuralType cx term = do
-  typ <- decodeType cx term
-  case typeExpr cx typ of
-    TypeNominal name -> do
-      let scx = schemaContext cx
-      el <- requireElement (Just "decode structural type") scx name
-      decodeStructuralType scx $ elementData el
+decodeStructuralType :: Show m => Term m -> GraphFlow m (Type m)
+decodeStructuralType term = do
+  typ <- decodeType term
+  let typ' = stripType typ
+  case typ' of
+    TypeNominal name -> withSchemaContext $ do
+        el <- requireElement (Just "decode structural type") name
+        decodeStructuralType $ elementData el
     _ -> pure typ
 
-freshVariableType :: Infer (Type m) m
+freshVariableType :: Flow (InferenceContext m) (Type m)
 freshVariableType = do
-    s <- CMS.get
-    CMS.put (s + 1)
-    return $ Types.variable (h $ normalVariables !! s)
-  where
-    h (VariableType v) = v
+    (cx, s, e) <- getState
+    putState (cx, s + 1, e)
+    return $ Types.variable (unVariableType $ normalVariables !! s)
 
 generalize :: Show m => TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
@@ -58,46 +51,44 @@ generalize env t  = TypeScheme vars t
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-extendEnvironment :: (Variable, TypeScheme m) -> Infer a m -> Infer a m
-extendEnvironment (x, sc) m = do
-  let scope e = M.insert x sc $ M.delete x e
-  CMR.local scope m
+extendEnvironment :: Variable -> TypeScheme m -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
+extendEnvironment x sc = withEnvironment (\e -> M.insert x sc $ M.delete x e)
 
-findMatchingField :: Show m => Context m -> FieldName -> [FieldType m] -> Infer (FieldType m) m
-findMatchingField cx fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
-  []    -> fail $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) $ "no such field: " ++ unFieldName fname
+findMatchingField :: Show m => FieldName -> [FieldType m] -> Flow (InferenceContext m) (FieldType m)
+findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
+  []    -> fail $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
-infer :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
-infer cx term = case annotationClassTermType (contextAnnotations cx) cx term of
-    ResultSuccess t -> case t of
-      Just typ -> do
-        i <- inferInternal cx term
-        return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
-      Nothing -> inferInternal cx term
+infer :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
+infer term = do
+  (cx, _, _) <- getState
+  mt <- withGraphContext $ annotationClassTermType (contextAnnotations cx) term
+  case mt of
+    Just typ -> do
+      i <- inferInternal term
+      return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
+    Nothing -> inferInternal term
 
-inferInternal :: (Ord m, Show m) => Context m -> Term m -> Infer (Term (m, Type m, [Constraint m])) m
-inferInternal cx term = case termExpr cx term of
+inferInternal :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
+inferInternal term = case stripTerm term of
     TermApplication (Application fun arg) -> do
-      ifun <- infer cx fun
-      iarg <- infer cx arg
+      ifun <- infer fun
+      iarg <- infer arg
       v <- freshVariableType
       let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) v)]
       let app = TermApplication $ Application ifun iarg
       yield app v c
 
     TermElement name -> do
-      case typeOfElement cx name of
-        -- TODO: polytyped elements will probably be allowed in the future
-        ResultSuccess et -> yield (TermElement name) (Types.element et) []
-        ResultFailure msg -> error msg
+      et <- withGraphContext $ typeOfElement name
+      yield (TermElement name) (Types.element et) []
 
     TermFunction f -> case f of
 
       -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
       --       For the latter, Comparison would have to be added to the literal type grammar.
       FunctionCompareTo other -> do
-        i <- infer cx other
+        i <- infer other
         yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
 
       FunctionElimination e -> case e of
@@ -107,31 +98,30 @@ inferInternal cx term = case termExpr cx term of
           yieldElimination EliminationElement (Types.function (Types.element et) et) []
 
         EliminationNominal name -> do
-          case namedType "eliminate nominal" cx name of
-            ResultFailure msg -> error msg
-            ResultSuccess typ -> yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []
+          typ <- withGraphContext $ namedType "eliminate nominal" name
+          yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []
 
         EliminationOptional (OptionalCases n j) -> do
           dom <- freshVariableType
           cod <- freshVariableType
-          ni <- infer cx n
-          ji <- infer cx j
+          ni <- infer n
+          ji <- infer j
           let t = Types.function (Types.optional dom) cod
           let constraints = [(cod, termType ni), (Types.function dom cod, termType ji)]
           yieldElimination (EliminationOptional $ OptionalCases ni ji) t constraints
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed
         EliminationRecord (Projection name fname) -> do
-          rt <- resultToInfer cx $ requireRecordType cx name
-          sfield <- findMatchingField cx fname (rowTypeFields rt)
+          rt <- withGraphContext $ requireRecordType name
+          sfield <- findMatchingField fname (rowTypeFields rt)
           yieldElimination (EliminationRecord $ Projection name fname)
             (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
 
         EliminationUnion (CaseStatement name cases) -> do
-            rt <- resultToInfer cx $ requireUnionType cx name
+            rt <- withGraphContext $ requireUnionType name
             let sfields = rowTypeFields rt
 
-            icases <- CM.mapM (inferFieldType cx) cases
+            icases <- CM.mapM inferFieldType cases
             let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
 
             let idoms = termType . fieldTerm <$> icases
@@ -145,33 +135,29 @@ inferInternal cx term = case termExpr cx term of
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshVariableType
-        i <- extendEnvironment (v, TypeScheme [] tv) (infer cx body)
+        i <- extendEnvironment v (TypeScheme [] tv) $ infer body
         yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
       FunctionPrimitive name -> do
-        case typeOfPrimitiveFunction cx name of
-          ResultSuccess (FunctionType dom cod) -> yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
-          ResultFailure msg -> error msg
+        FunctionType dom cod <- withGraphContext $ typeOfPrimitiveFunction name
+        yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
 
     TermLet (Let x e1 e2) -> do
-      env <- CMR.ask
-      i1 <- infer cx e1
+      (_, _, env) <- getState
+      i1 <- infer e1
       let t1 = termType i1
       let c1 = termConstraints i1
-      case solveConstraints cx c1 of
-          ResultFailure err -> fail err
-          ResultSuccess sub -> do
-              let scx = schemaContext cx
-              let t1' = reduceType scx $ substituteInType sub t1
-              let sc = generalize (M.map (substituteInScheme sub) env) t1'
-              i2 <- extendEnvironment (x, sc) $ CMR.local (M.map (substituteInScheme sub)) (infer cx e2)
-              let t2 = termType i2
-              let c2 = termConstraints i2
-              yield (TermLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
+      sub <- withGraphContext $ solveConstraints c1
+      let t1' = reduceType $ substituteInType sub t1
+      let sc = generalize (M.map (substituteInScheme sub) env) t1'
+      i2 <- extendEnvironment x sc $ withEnvironment (M.map (substituteInScheme sub)) $ infer e2
+      let t2 = termType i2
+      let c2 = termConstraints i2
+      yield (TermLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
 
     TermList els -> do
       v <- freshVariableType
-      iels <- CM.mapM (infer cx) els
+      iels <- CM.mapM infer els
       let co = (\e -> (v, termType e)) <$> iels
       let ci = L.concat (termConstraints <$> iels)
       yield (TermList iels) (Types.list v) (co ++ ci)
@@ -187,35 +173,33 @@ inferInternal cx term = case termExpr cx term of
         yield (TermMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
       where
         toPair (k, v) = do
-          ik <- infer cx k
-          iv <- infer cx v
+          ik <- infer k
+          iv <- infer v
           return (ik, iv)
 
     TermNominal (Named name term1) -> do
-      case namedType "nominal" cx name of
-        ResultFailure msg -> error msg
-        ResultSuccess typ -> do
-          i <- infer cx term1
-          let typ1 = termType i
-          let c = termConstraints i
-          yield (TermNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
+      typ <- withGraphContext $ namedType "nominal" name
+      i <- infer term1
+      let typ1 = termType i
+      let c = termConstraints i
+      yield (TermNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
 
     TermOptional m -> do
       v <- freshVariableType
       case m of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
-          i <- infer cx e
+          i <- infer e
           yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
     TermRecord (Record n fields) -> do
-        rt <- resultToInfer cx $ requireRecordType cx n
+        rt <- withGraphContext $ requireRecordType n
         let sfields = rowTypeFields rt
         (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) $ L.zip fields sfields
         yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n $ L.reverse ftypes0) c1
       where
         forField (typed, ftypes, c) (field, sfield) = do
-          i <- inferFieldType cx field
+          i <- inferFieldType field
           let ft = termType $ fieldTerm i
           let cinternal = termConstraints $ fieldTerm i
           let cnominal = (ft, fieldTypeType sfield)
@@ -223,23 +207,23 @@ inferInternal cx term = case termExpr cx term of
 
     TermSet els -> do
       v <- freshVariableType
-      iels <- CM.mapM (infer cx) $ S.toList els
+      iels <- CM.mapM infer $ S.toList els
       let co = (\e -> (v, termType e)) <$> iels
       let ci = L.concat (termConstraints <$> iels)
       yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do
-        rt <- resultToInfer cx $ requireUnionType cx n
-        sfield <- findMatchingField cx (fieldName field) (rowTypeFields rt)
-        ifield <- inferFieldType cx field
+        rt <- withGraphContext $ requireUnionType n
+        sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
+        ifield <- inferFieldType field
         let cinternal = termConstraints $ fieldTerm ifield
         let cnominal = (termType $ fieldTerm ifield, fieldTypeType sfield)
         let constraints = cnominal:cinternal
         yield (TermUnion $ Union n ifield) (TypeUnion rt) constraints
 
     TermVariable x -> do
-      t <- lookupTypeInEnvironment cx x
+      t <- lookupTypeInEnvironment x
       yield (TermVariable x) t []
   where
     yieldFunction fun = yield (TermFunction fun)
@@ -248,65 +232,55 @@ inferInternal cx term = case termExpr cx term of
 
     yield term typ constraints = case term of
       TermAnnotated (Annotated term' (meta, _, _)) -> return $ TermAnnotated $ Annotated term' (meta, typ, constraints)
-      _ -> return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
+      _ -> do
+        (cx, _, _) <- getState
+        return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
 
-inferFieldType :: (Ord m, Show m) => Context m -> Field m -> Infer (Field (m, Type m, [Constraint m])) m
-inferFieldType cx (Field fname term) = Field fname <$> infer cx term
+inferFieldType :: (Ord m, Show m) => Field m -> Flow (InferenceContext m) (Field (m, Type m, [Constraint m]))
+inferFieldType (Field fname term) = Field fname <$> infer term
 
 -- | Solve for the toplevel type of an expression in a given environment
-inferType :: (Ord m, Show m)
-  => Context m -> Term m
-  -> Result (Term (m, Type m, [Constraint m]), TypeScheme m)
-inferType cx0 term = do
-    term1 <- runInference (infer cx term)
-    subst <- solveConstraints scx (termConstraints term1)
-    let term2 = rewriteDataType (substituteInType subst) term1
-    let ts = closeOver scx $ termType term2
-    return (term2, ts)
+inferType :: (Ord m, Show m) => Term m -> GraphFlow m (Term (m, Type m, [Constraint m]), TypeScheme m)
+inferType term = do
+    cx <- getState
+    withState (startContext cx) $ do
+      term1 <- infer term
+      subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
+      let term2 = rewriteDataType (substituteInType subst) term1
+      let ts = closeOver $ termType term2
+      return (term2, ts)
   where
-    scx = schemaContext cx
---    cx = pushTrace "infer type" cx0
-    cx = pushTrace ("infer type of " ++ show term) cx0
-        
     -- | Canonicalize and return the polymorphic toplevel type.
-    closeOver scx = normalizeScheme . generalize M.empty . reduceType scx
+    closeOver = normalizeScheme . generalize M.empty . reduceType
 
-instantiate :: TypeScheme m -> Infer (Type m) m
+instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
+
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
-lookupTypeInEnvironment :: Show m => Context m -> Variable -> Infer (Type m) m
-lookupTypeInEnvironment cx v = do
-  env <- CMR.ask
+lookupTypeInEnvironment :: Show m => Variable -> Flow (InferenceContext m) (Type m)
+lookupTypeInEnvironment v = do
+  (_, _, env) <- getState
   case M.lookup v env of
-      Nothing   -> fail $ typeErrorMessage $ UnboundVariable (contextGraphs cx) v
-      Just s    -> instantiate s
+    Nothing -> fail $ "unbound variable: " ++ unVariable v
+    Just s  -> instantiate s
 
-namedType :: (Show m) => String -> Context m -> Name -> Result (Type m)
-namedType debug cx name = do
-  el <- requireElement (Just debug) cx name
-  let scx = schemaContext cx
-  decodeStructuralType scx $ elementData el
+namedType :: Show m => String -> Name -> GraphFlow m (Type m)
+namedType debug name = do
+  el <- requireElement (Just debug) name
+  withSchemaContext $ decodeStructuralType $ elementData el
 
-reduceType :: (Ord m, Show m) => Context m -> Type m -> Type m
-reduceType cx t = t -- betaReduceType cx t
-
-resultToInfer :: Show m => Context m -> Result a -> Infer a m
-resultToInfer cx r = case r of
-  ResultSuccess x -> pure x
-  ResultFailure e -> fail $ typeErrorMessage $ OtherError (contextGraphs cx) (printTrace cx) e
+reduceType :: (Ord m, Show m) => Type m -> Type m
+reduceType t = t -- betaReduceType cx t
 
 rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
 rewriteDataType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-runInference :: Infer (Term (m, Type m, [Constraint m])) m -> Result (Term (m, Type m, [Constraint m]))
-runInference term = CMS.evalStateT (CMR.runReaderT term M.empty) startState
-
-startState :: InferenceState
-startState = 0
+startContext :: Context m -> InferenceContext m
+startContext cx = (cx, 0, M.empty)
 
 termConstraints :: Term (m, Type m, [Constraint m]) -> [Constraint m]
 termConstraints (TermAnnotated (Annotated _ (_, _, constraints))) = constraints
@@ -314,10 +288,20 @@ termConstraints (TermAnnotated (Annotated _ (_, _, constraints))) = constraints
 termType :: Term (m, Type m, [Constraint m]) -> Type m
 termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
-typeOfElement :: (Show m) => Context m -> Name -> Result (Type m)
-typeOfElement cx name = do
-  el <- requireElement (Just "type of element") cx name
-  decodeStructuralType cx $ elementSchema el
+typeOfElement :: Show m => Name -> GraphFlow m (Type m)
+typeOfElement name = do
+  el <- requireElement (Just "type of element") name
+  decodeStructuralType $ elementSchema el
 
-typeOfPrimitiveFunction :: Context m -> Name -> Result (FunctionType m)
-typeOfPrimitiveFunction cx name = primitiveFunctionType <$> requirePrimitiveFunction cx name
+typeOfPrimitiveFunction :: Name -> GraphFlow m (FunctionType m)
+typeOfPrimitiveFunction name = primitiveFunctionType <$> requirePrimitiveFunction name
+
+withEnvironment :: (TypingEnvironment m -> TypingEnvironment m) -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
+withEnvironment m f = do
+  (cx, i, e) <- getState
+  withState (cx, i, m e) f
+
+withGraphContext :: GraphFlow m a -> Flow (InferenceContext m) a
+withGraphContext f = do
+  (cx, _, _) <- getState
+  withState cx f

@@ -35,7 +35,7 @@ nonNegativeInteger = Types.bigint
 owlSyntax :: Graph Meta
 owlSyntax = Graph owlSyntaxName elements hydraCoreName
   where
-    def = datatype coreContext owlSyntaxName
+    def = datatype owlSyntaxName
     inst = dataterm owlSyntaxName
     
     owl = nsref owlSyntaxName
