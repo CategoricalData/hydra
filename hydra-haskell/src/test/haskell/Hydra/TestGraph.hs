@@ -51,7 +51,7 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType coreContext (Types.function (Types.nominal testTypePersonName) Types.string),
+  elementSchema = encodeType (Types.function (Types.nominal testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
@@ -71,7 +71,7 @@ testSchemaGraph = Graph testSchemaGraphName [
       def testTypeTimestampName testTypeTimestamp]
     hydraCoreName
   where
-    def = typeElement coreContext
+    def = typeElement
 
 testSchemaGraphName :: GraphName
 testSchemaGraphName = GraphName "testSchemaGraph"

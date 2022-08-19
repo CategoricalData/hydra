@@ -19,23 +19,23 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-adaptType :: (Ord m, Read m, Show m) => Context m -> Language m -> Type m -> Result (Type m)
-adaptType cx targetLang t = do
-    ad <- qualifiedToResult $ termAdapter ac t
+adaptType :: (Ord m, Read m, Show m) => Language m -> Type m -> GraphFlow m (Type m)
+adaptType targetLang t = do
+    cx <- getState
+    let acx = AdapterContext cx hydraCoreLanguage targetLang
+    ad <- withState acx $ termAdapter t
     return $ adapterTarget ad
   where
-    ac = AdapterContext cx hydraCoreLanguage targetLang
 
 graphToExternalModule :: (Ord m, Read m, Show m)
   => Language m
-  -> (Context m -> Term m -> Result e)
-  -> (Context m -> Graph m -> M.Map (Type m) (Coder (Term m) e) -> [(Element m, TypedTerm m)] -> Result d)
-  -> Context m -> Graph m -> Qualified d
-graphToExternalModule lang encodeTerm createModule cx g = do
-    let scx = schemaContext cx
-    pairs <- resultToQualified $ CM.mapM (elementAsTypedTerm scx) els
+  -> (Term m -> GraphFlow m e)
+  -> (Graph m -> M.Map (Type m) (Coder (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
+  -> Graph m -> GraphFlow m d
+graphToExternalModule lang encodeTerm createModule g = do
+    pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
     coders <- codersFor $ L.nub (typedTermType <$> pairs)
-    resultToQualified $ createModule cx g coders $ L.zip els pairs
+    createModule g coders $ L.zip els pairs
   where
     els = graphElements g
 
@@ -44,9 +44,10 @@ graphToExternalModule lang encodeTerm createModule cx g = do
       return $ M.fromList $ L.zip types cdrs
 
     constructCoder typ = do
-        adapter <- termAdapter adContext typ
+        cx <- getState
+        let acx = AdapterContext cx hydraCoreLanguage lang
+        adapter <- withState acx $ termAdapter typ
         coder <- termCoder $ adapterTarget adapter
         return $ composeCoders (adapterCoder adapter) coder
       where
-        adContext = AdapterContext cx hydraCoreLanguage lang
-        termCoder _ = pure $ unidirectionalCoder (encodeTerm cx)
+        termCoder _ = pure $ unidirectionalCoder encodeTerm

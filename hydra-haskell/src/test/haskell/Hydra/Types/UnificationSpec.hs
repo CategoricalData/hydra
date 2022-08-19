@@ -10,9 +10,9 @@ import qualified Data.Map as M
 
 
 expectUnified :: [Constraint Meta] -> [(VariableType, Type Meta)] -> H.Expectation
-expectUnified constraints subst = H.shouldBe
-  (solveConstraints testContext constraints)
-  (pure $ M.fromList subst)
+expectUnified constraints subst = shouldSucceedWith
+  (solveConstraints constraints)
+  (M.fromList subst)
 
 checkIndividualConstraints :: H.SpecWith ()
 checkIndividualConstraints = do

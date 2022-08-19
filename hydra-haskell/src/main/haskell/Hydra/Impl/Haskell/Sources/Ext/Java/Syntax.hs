@@ -21,7 +21,7 @@ javaSyntaxName = GraphName "hydra/ext/java/syntax"
 javaSyntax :: Graph Meta
 javaSyntax = Graph javaSyntaxName elements hydraCoreName
   where
-    def = datatype coreContext javaSyntaxName
+    def = datatype javaSyntaxName
     java = nsref javaSyntaxName
 
     elements = [

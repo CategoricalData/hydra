@@ -20,15 +20,15 @@ import qualified Data.Set as S
 import Control.Monad
 
 
-bidirectional :: (CoderDirection -> b -> Result b) -> Coder b b
+bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s b b
 bidirectional m = Coder (m CoderDirectionEncode) (m CoderDirectionDecode)
 
 chooseAdapter :: Show t =>
-    (t -> [Qualified (Adapter t v)])
+    (t -> [Flow so (Adapter si t v)])
  -> (t -> Bool)
  -> (t -> String)
  -> t
- -> Qualified (Adapter t v)
+ -> Flow so (Adapter si t v)
 chooseAdapter alts supported describe typ = if supported typ
   then pure $ Adapter False typ typ idCoder
   else do
@@ -41,13 +41,13 @@ chooseAdapter alts supported describe typ = if supported typ
            else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")")
         ++ ". Type definition: " ++ show typ
       else return $ L.head candidates
-      
-composeCoders :: Coder a b -> Coder b c -> Coder a c
-composeCoders s1 s2 = Coder {
-  coderEncode = coderEncode s1 >=> coderEncode s2,
-  coderDecode = coderDecode s2 >=> coderDecode s1}
 
-encodeDecode :: CoderDirection -> Coder a a -> a -> Result a
+composeCoders :: Coder s a b -> Coder s b c -> Coder s a c
+composeCoders c1 c2 = Coder {
+  coderEncode = coderEncode c1 >=> coderEncode c2,
+  coderDecode = coderDecode c2 >=> coderDecode c1}
+
+encodeDecode :: CoderDirection -> Coder s a a -> a -> Flow s a
 encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
@@ -55,10 +55,10 @@ encodeDecode dir = case dir of
 floatTypeIsSupported :: LanguageConstraints m -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
-idAdapter :: Type m -> Adapter (Type m) (Term m)
+idAdapter :: Type m -> Adapter s (Type m) (Term m)
 idAdapter t = Adapter False t t idCoder
 
-idCoder :: Coder a a
+idCoder :: Coder s a a
 idCoder = Coder pure pure
 
 integerTypeIsSupported :: LanguageConstraints m -> IntegerType -> Bool
@@ -76,9 +76,6 @@ nameToFilePath caps ext name = graphNameToFilePath caps ext $ GraphName $ gname 
   where
     (GraphName gname, local) = toQname name
 
-qualify :: String -> a -> Qualified a
-qualify msg x = Qualified (Just x) [msg]
-
 typeIsSupported :: LanguageConstraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
@@ -95,7 +92,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeUnion rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     _ -> True
 
-unidirectionalCoder :: (a -> Result b) -> Coder a b
+unidirectionalCoder :: (a -> Flow s b) -> Coder s a b
 unidirectionalCoder m = Coder {
   coderEncode = m,
   coderDecode = \_ -> fail "inbound mapping is unsupported"}

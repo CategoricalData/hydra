@@ -26,12 +26,12 @@ checkLiterals = do
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
-        H.shouldBe
+        shouldSucceedWith
           (eval (literal av))
-          (pure (literal av :: Term Meta))
+          (literal av :: Term Meta)
 
     H.it "Literal terms cannot be applied" $
-      QC.property $ \av (TypedTerm _ term) -> isFailure (eval $ apply (literal av) term)
+      QC.property $ \av (TypedTerm _ term) -> shouldFail (eval $ apply (literal av) term)
 
 checkMonomorphicPrimitives :: H.SpecWith ()
 checkMonomorphicPrimitives = do
@@ -39,33 +39,33 @@ checkMonomorphicPrimitives = do
 
     H.it "Example primitives have the expected arity" $ do
       H.shouldBe
-        (primitiveFunctionArity testContext <$> lookupPrimitiveFunction testContext _strings_toUpper)
+        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity testContext <$> lookupPrimitiveFunction testContext _strings_splitOn)
+        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $
       QC.property $ \s ->
-        H.shouldBe
+        shouldSucceedWith
           (eval (apply (primitive _strings_toUpper) $ string s))
-          (pure (string $ fmap C.toUpper s))
+          (string $ fmap C.toUpper s)
 
     H.it "Simple applications of a binary function succeed" $
       QC.property $ \i1 i2 ->
-        H.shouldBe
+        shouldSucceedWith
           (eval (apply (apply (primitive _math_add) $ int32 i1) $ int32 i2))
-          (pure (int32 $ i1 + i2))
+          (int32 $ i1 + i2)
 
     H.it "Incomplete application of a primitive function leaves the term unchanged" $
       QC.property $ \s1 ->
-        H.shouldBe
+        shouldSucceedWith
           (eval (apply (primitive _strings_splitOn) $ string s1))
-          (pure (apply (primitive _strings_splitOn) $ string s1))
+          (apply (primitive _strings_splitOn) $ string s1)
 
     H.it "Extra arguments to a primitive function cause failure" $
       QC.property $ \s1 s2 ->
-        isFailure (eval (apply (apply (primitive _strings_toUpper) $ string s1) $ string s2))
+        shouldFail (eval (apply (apply (primitive _strings_toUpper) $ string s1) $ string s2))
 
 checkPolymorphicPrimitives :: H.SpecWith ()
 checkPolymorphicPrimitives = do
@@ -73,9 +73,9 @@ checkPolymorphicPrimitives = do
 
     H.it "Test polymorphic list length" $ do
       QC.property $ \l ->
-        H.shouldBe
+        shouldSucceedWith
           (eval (apply (primitive _lists_length) $ list l))
-          (pure (int32 $ L.length l))
+          (int32 $ L.length l)
 
 testBetaReduceTypeRecursively :: H.SpecWith ()
 testBetaReduceTypeRecursively = do
@@ -122,10 +122,10 @@ testBetaReduceTypeRecursively = do
     app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") [Types.field "foo" $ Types.variable "a"]) app1
 
 reduce :: Type Meta -> Type Meta
-reduce = betaReduceType $ schemaContext testContext 
+reduce typ = fromFlow (schemaContext testContext) (betaReduceType typ)
 
-eval :: Term Meta -> Result (Term Meta)
-eval = flowToResult testContext . betaReduceTerm
+eval :: Term Meta -> GraphFlow Meta (Term Meta)
+eval = betaReduceTerm
 
 spec :: H.Spec
 spec = do

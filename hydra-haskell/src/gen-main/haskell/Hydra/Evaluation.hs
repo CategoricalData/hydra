@@ -13,17 +13,15 @@ data AnnotationClass m
     annotationClassCompare :: (m -> m -> Core.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
-    annotationClassTermExpr :: (Core.Term m -> Core.Term m),
     annotationClassTermMeta :: (Core.Term m -> m),
-    annotationClassTypeExpr :: (Core.Type m -> Core.Type m),
     annotationClassTypeMeta :: (Core.Type m -> m),
-    annotationClassTermDescription :: (Context m -> Core.Term m -> Result (Maybe String)),
-    annotationClassTypeDescription :: (Context m -> Core.Type m -> Result (Maybe String)),
-    annotationClassTermType :: (Context m -> Core.Term m -> Result (Maybe (Core.Type m))),
+    annotationClassTermDescription :: (Core.Term m -> Flow (Context m) (Maybe String)),
+    annotationClassTypeDescription :: (Core.Type m -> Flow (Context m) (Maybe String)),
+    annotationClassTermType :: (Core.Term m -> Flow (Context m) (Maybe (Core.Type m))),
     annotationClassSetTermDescription :: (Context m -> Maybe String -> Core.Term m -> Core.Term m),
     annotationClassSetTermType :: (Context m -> Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
-    annotationClassTypeOf :: (Context m -> m -> Result (Maybe (Core.Type m))),
-    annotationClassSetTypeOf :: (Context m -> Maybe (Core.Type m) -> m -> m)}
+    annotationClassTypeOf :: (m -> Flow (Context m) (Maybe (Core.Type m))),
+    annotationClassSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
 
 _AnnotationClass = (Core.Name "hydra/evaluation.AnnotationClass")
 
@@ -37,11 +35,7 @@ _AnnotationClass_show = (Core.FieldName "show")
 
 _AnnotationClass_read = (Core.FieldName "read")
 
-_AnnotationClass_termExpr = (Core.FieldName "termExpr")
-
 _AnnotationClass_termMeta = (Core.FieldName "termMeta")
-
-_AnnotationClass_typeExpr = (Core.FieldName "typeExpr")
 
 _AnnotationClass_typeMeta = (Core.FieldName "typeMeta")
 
@@ -59,32 +53,11 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
--- A variation on the State monad which contains a Context and provides error handling
-newtype Box a m 
-  = Box {
-    unBox :: (Context m -> BoxHelper a m)}
-
-_Box = (Core.Name "hydra/evaluation.Box")
-
-data BoxHelper a m 
-  = BoxHelper {
-    boxHelperValue :: (Maybe a),
-    boxHelperContext :: (Context m),
-    boxHelperTrace :: [String]}
-
-_BoxHelper = (Core.Name "hydra/evaluation.BoxHelper")
-
-_BoxHelper_value = (Core.FieldName "value")
-
-_BoxHelper_context = (Core.FieldName "context")
-
-_BoxHelper_trace = (Core.FieldName "trace")
-
 -- An encoder and decoder; a qualified bidirectional transformation between instances of two types
-data Coder a b 
+data Coder s a b 
   = Coder {
-    coderEncode :: (a -> Result b),
-    coderDecode :: (b -> Result a)}
+    coderEncode :: (a -> Flow s b),
+    coderDecode :: (b -> Flow s a)}
 
 _Coder = (Core.Name "hydra/evaluation.Coder")
 
@@ -164,7 +137,7 @@ _FlowWrapper_trace = (Core.FieldName "trace")
 data InputSpec a m 
   = InputSpec {
     inputSpecType :: (Core.Type m),
-    inputSpecUnmarshal :: (Core.Term m -> Result a)}
+    inputSpecUnmarshal :: (Core.Term m -> Flow (Context m) a)}
 
 _InputSpec = (Core.Name "hydra/evaluation.InputSpec")
 
@@ -189,7 +162,7 @@ data PrimitiveFunction m
   = PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
     primitiveFunctionType :: (Core.FunctionType m),
-    primitiveFunctionImplementation :: ([Core.Term m] -> Result (Core.Term m))}
+    primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
 
 _PrimitiveFunction = (Core.Name "hydra/evaluation.PrimitiveFunction")
 
@@ -198,18 +171,6 @@ _PrimitiveFunction_name = (Core.FieldName "name")
 _PrimitiveFunction_type = (Core.FieldName "type")
 
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
-
--- A qualified result; success with a value or failure with an error message
-data Result m 
-  = ResultSuccess m
-  | ResultFailure String
-  deriving (Eq, Ord, Read, Show)
-
-_Result = (Core.Name "hydra/evaluation.Result")
-
-_Result_success = (Core.FieldName "success")
-
-_Result_failure = (Core.FieldName "failure")
 
 -- A container for logging and error information
 data Trace 

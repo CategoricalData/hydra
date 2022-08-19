@@ -1,7 +1,6 @@
 module Hydra.Impl.Haskell.Ext.Json.Serde where
 
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Json.Coder
 import Hydra.Monads
@@ -44,18 +43,18 @@ bytesToString = map (C.chr . fromEnum) . BS.unpack
 bytesToValue :: BS.ByteString -> Maybe Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
-jsonSerde :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) BS.ByteString)
-jsonSerde context typ = do
-  coder <- jsonCoder context typ
+jsonSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) BS.ByteString)
+jsonSerde typ = do
+  coder <- jsonCoder typ
   return Coder {
     coderEncode = fmap valueToBytes . coderEncode coder,
     coderDecode = \bs -> case bytesToValue bs of
         Nothing -> fail "JSON parsing failed"
         Just v -> coderDecode coder v}
 
-jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) String)
-jsonSerdeStr context typ = do
-  serde <- jsonSerde context typ
+jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) String)
+jsonSerdeStr typ = do
+  serde <- jsonSerde typ
   return Coder {
     coderEncode = fmap L8.unpack . coderEncode serde,
     coderDecode = coderDecode serde . L8.pack}

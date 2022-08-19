@@ -66,12 +66,12 @@ checkDescriptions = do
     H.it "Retrieve a single description" $
       QC.property $ \d -> H.shouldBe
         (getDesc $ setDesc (Just d) $ Terms.int32 42)
-        (ResultSuccess $ Just d)
+        (Just d)
 
     H.it "Retrieve a null description" $
       QC.property $ \i -> H.shouldBe
         (getDesc $ Terms.int16 i)
-        (ResultSuccess Nothing)
+        Nothing
 
     H.it "An outer description overrides an inner one" $
       QC.property $ \d1 d2 -> H.shouldBe
@@ -85,12 +85,12 @@ checkDescriptions = do
 
 getAnn = getTermAnnotation testContext
 
-getDesc = getTermDescription testContext
+getDesc term = fromFlow testContext $ getTermDescription term
 
 setAnn = setTermAnnotation testContext
 
 setDesc = setTermDescription testContext
-  
+
 spec :: H.Spec
 spec = do
   checkArbitraryAnnotations

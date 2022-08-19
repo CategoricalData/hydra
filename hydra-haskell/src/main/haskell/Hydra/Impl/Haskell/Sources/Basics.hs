@@ -10,9 +10,10 @@ import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
 import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
+import Hydra.Monads
 
 
-hydraBasicsModule :: Result (Graph.Module Meta)
+hydraBasicsModule :: GraphFlow Meta (Graph.Module Meta)
 hydraBasicsModule = do
   g <- Standard.graph hydraBasicsName [
     el eliminationVariant,
