@@ -1,12 +1,12 @@
 module Hydra.Monads (
-  module Hydra.Monads,
   module Hydra.Common,
+  module Hydra.Core,
   module Hydra.Evaluation,
+  module Hydra.Monads,
 ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Graph
 import Hydra.Evaluation
 
 import qualified Data.List as L
@@ -85,7 +85,7 @@ traceSummary (Trace stack messages) = L.intercalate "\n" (errorLine:warningLines
       then []
       else "Warnings:":(warningLine <$> messages)
     printStack s = L.intercalate " > " $ L.reverse s
-    
+
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 

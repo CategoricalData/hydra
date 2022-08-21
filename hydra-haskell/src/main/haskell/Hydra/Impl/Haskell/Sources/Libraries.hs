@@ -8,6 +8,7 @@ import Hydra.Impl.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
+import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Maps as Maps
@@ -16,6 +17,21 @@ import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
+
+_hydra_lib_flows :: GraphName
+_hydra_lib_flows = GraphName "hydra/lib/flows"
+
+_flows_apply :: Name
+_flows_apply = qname _hydra_lib_flows "apply"
+
+_flows_bind :: Name
+_flows_bind = qname _hydra_lib_flows "bind"
+
+_flows_map :: Name
+_flows_map = qname _hydra_lib_flows "map"
+
+_flows_pure :: Name
+_flows_pure = qname _hydra_lib_flows "pure"
 
 _hydra_lib_io :: GraphName
 _hydra_lib_io = GraphName "hydra/lib/io"
@@ -168,6 +184,13 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 --  unaryPrimitive _io_showTerm (variable "a) string 
 --  ]
 
+hydraLibFlowsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibFlowsPrimitives = [
+  binaryPrimitive _flows_apply (flow (variable "s") (function (variable "a") (variable "b"))) (flow (variable "s") (variable "a")) (flow (variable "s") (variable "b")) Flows.apply,
+  binaryPrimitive _flows_bind (flow (variable "s") (variable "a")) (function (variable "a") (flow (variable "s") (variable "b"))) (flow (variable "s") (variable "b")) Flows.bind,
+  binaryPrimitive _flows_map (function (variable "a") (variable "b")) (flow (variable "s") (variable "a")) (flow (variable "s") (variable "b")) Flows.map,
+  unaryPrimitive _flows_pure (variable "a") (flow (variable "s") (variable "a")) Flows.pure]
+
 hydraLibListsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
   binaryPrimitive _lists_apply (list $ function (variable "a") (variable "b")) (list $ variable "a") (list $ variable "b") Lists.apply,
@@ -234,7 +257,8 @@ hydraLibStringsPrimitives = [
 
 standardPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
 standardPrimitives =
-     hydraLibListsPrimitives
+     hydraLibFlowsPrimitives
+  ++ hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
   ++ hydraLibMapsPrimitives
   ++ hydraLibMathInt32Primitives

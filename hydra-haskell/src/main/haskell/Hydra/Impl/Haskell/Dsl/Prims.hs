@@ -31,12 +31,19 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = Terms.expectBoolean
     decode = pure . Terms.boolean
 
+flow :: TermCoder m s -> TermCoder m a -> TermCoder m (Flow s a)
+flow states values = TermCoder (Types.nominal _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
+    Coder encode decode
+  where
+    encode _ = fail $ "cannot currently encode flows from terms"
+    decode _ = fail $ "cannot decode flows to terms"
+
 function :: TermCoder m a -> TermCoder m b -> TermCoder m (a -> b)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
   where
-    encode _ = fail $ "cannot currently encode functions from terms" 
+    encode _ = fail $ "cannot currently encode functions from terms"
     decode _ = fail $ "cannot decode functions to terms"
-      
+
 int32 :: Show m => TermCoder m Int
 int32 = TermCoder Types.int32 $ Coder encode decode
   where
