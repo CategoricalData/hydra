@@ -4,12 +4,13 @@ import Hydra.Basics
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Prims
+import Hydra.Impl.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Sets as Sets
@@ -67,6 +68,15 @@ _literals_showInt32 = qname _hydra_lib_literals "showInt32"
 _literals_showString :: Name
 _literals_showString = qname _hydra_lib_literals "showString"
 
+_hydra_lib_maps :: GraphName
+_hydra_lib_maps = GraphName "hydra/lib/maps"
+
+_maps_map :: Name
+_maps_map = qname _hydra_lib_maps "map"
+
+_maps_size :: Name
+_maps_size = qname _hydra_lib_maps "size"
+
 _hydra_lib_math :: GraphName
 _hydra_lib_math = GraphName "hydra/lib/math"
 
@@ -109,8 +119,8 @@ _optionals_pure = qname _hydra_lib_optionals "pure"
 _hydra_lib_sets :: GraphName
 _hydra_lib_sets = GraphName "hydra/lib/sets"
 
-_sets_add :: Name
-_sets_add = qname _hydra_lib_sets "add"
+_sets_insert :: Name
+_sets_insert = qname _hydra_lib_sets "add"
 
 _sets_contains :: Name
 _sets_contains = qname _hydra_lib_sets "contains"
@@ -129,6 +139,9 @@ _sets_remove = qname _hydra_lib_sets "remove"
 
 _sets_singleton :: Name
 _sets_singleton = qname _hydra_lib_sets "pure"
+
+_sets_size :: Name
+_sets_size = qname _hydra_lib_sets "size"
 
 _sets_toList :: Name
 _sets_toList = qname _hydra_lib_sets "toList"
@@ -173,6 +186,15 @@ hydraLibLiteralsPrimitives = [
   unaryPrimitive _literals_showInt32 int32 string Literals.showInt32,
   unaryPrimitive _literals_showString string string Literals.showString]
 
+hydraLibMapsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
+hydraLibMapsPrimitives = [
+  binaryPrimitive _optionals_map
+    (function (variable "v1") (variable "v2"))
+    (Prims.map (variable "k") (variable "v1"))
+    (Prims.map (variable "k") (variable "v2"))
+    Maps.map,
+  unaryPrimitive _sets_size (set $ variable "a") int32 Sets.size]
+
 hydraLibMathInt32Primitives :: Show m => [PrimitiveFunction m]
 hydraLibMathInt32Primitives = [
   binaryPrimitive _math_add int32 int32 int32 Math.add,
@@ -192,13 +214,14 @@ hydraLibOptionalsPrimitives = [
 
 hydraLibSetsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
 hydraLibSetsPrimitives = [
-  binaryPrimitive _sets_add (variable "a") (set $ variable "a") (set $ variable "a") Sets.add,
   binaryPrimitive _sets_contains (variable "a") (set $ variable "a") boolean Sets.contains,
   unaryPrimitive _sets_fromList (list $ variable "a") (set $ variable "a") Sets.fromList,
+  binaryPrimitive _sets_insert (variable "a") (set $ variable "a") (set $ variable "a") Sets.insert,
   unaryPrimitive _sets_isEmpty (set $ variable "a") boolean Sets.isEmpty,
   binaryPrimitive _sets_map (function (variable "a") (variable "b")) (set $ variable "a") (set $ variable "b") Sets.map,
   binaryPrimitive _sets_remove (variable "a") (set $ variable "a") (set $ variable "a") Sets.remove,
   unaryPrimitive _sets_singleton (variable "a") (set $ variable "a") Sets.singleton,
+  unaryPrimitive _sets_size (set $ variable "a") int32 Sets.size,
   unaryPrimitive _sets_toList (set $ variable "a") (list $ variable "a") Sets.toList]
 
 hydraLibStringsPrimitives :: Show m => [PrimitiveFunction m]
@@ -213,6 +236,7 @@ standardPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
 standardPrimitives =
      hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
+  ++ hydraLibMapsPrimitives
   ++ hydraLibMathInt32Primitives
   ++ hydraLibOptionalsPrimitives
   ++ hydraLibSetsPrimitives
