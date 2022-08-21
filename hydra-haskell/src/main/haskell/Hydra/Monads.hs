@@ -86,6 +86,9 @@ traceSummary (Trace stack messages) = L.intercalate "\n" (errorLine:warningLines
       else "Warnings:":(warningLine <$> messages)
     printStack s = L.intercalate " > " $ L.reverse s
     
+unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
+unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
+
 withState :: s1 -> Flow s1 a -> Flow s2 a
 withState cx0 f = Flow q
   where

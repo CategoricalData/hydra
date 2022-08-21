@@ -3,6 +3,8 @@ module Hydra.Impl.Haskell.Dsl.Terms where
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Monads
+import Hydra.Common
+
 import Prelude hiding (map)
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -11,7 +13,6 @@ import qualified Data.Maybe as Y
 import qualified Control.Monad as CM
 import Data.Int
 import Data.String(IsString(..))
-import Hydra.Common
 
 
 instance IsString (Term m) where fromString = string
@@ -62,48 +63,67 @@ elementRefByName = apply delta . TermElement
 eliminateNominal :: Name -> Term m
 eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
 
+expectBoolean :: Show m => Term m -> GraphFlow m Bool
+expectBoolean term = case stripTerm term of
+  TermLiteral (LiteralBoolean b) -> pure b
+  _ -> unexpected "boolean" term
+
 expectInt32 :: Show m => Term m -> GraphFlow m Int
 expectInt32 term = case stripTerm term of
   TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
-  _ -> fail $ "expected an int32, got " ++ show term
+  _ -> unexpected "int32" term
 
 expectList :: Show m => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m [a]
-expectList f term = expectListPoly term >>= CM.mapM f
-
-expectListPoly :: Show m => Term m -> GraphFlow m [Term m]
-expectListPoly term = case stripTerm term of
-  TermList els -> pure els
-  _ -> fail $ "expected a list, got " ++ show term
+expectList f term = case stripTerm term of
+  TermList l -> CM.mapM f l
+  _ -> unexpected "list" term
 
 expectLiteral :: Show m => Term m -> GraphFlow m Literal
 expectLiteral term = case stripTerm term of
   TermLiteral av -> pure av
-  _ -> fail $ "expected a literal value, got " ++ show term
+  _ -> unexpected "literal value" term
+
+expectMap :: (Ord k, Show m) => (Term m -> GraphFlow m k) -> (Term m -> GraphFlow m v) -> Term m -> GraphFlow m (M.Map k v)
+expectMap fk fv term = case stripTerm term of
+  TermMap m -> M.fromList <$> CM.mapM expectPair (M.toList m)
+    where
+      expectPair (kterm, vterm) = do
+        kval <- fk kterm
+        vval <- fv vterm
+        return (kval, vval)
+  _ -> unexpected "map" term
 
 expectNArgs :: Int -> [Term m] -> GraphFlow m ()
 expectNArgs n args = if L.length args /= n
-  then fail $ "expected " ++ show n ++ " arguments, but found " ++ show (L.length args)
+  then unexpected (show n ++ " arguments") (L.length args)
   else pure ()
+
+expectOptional :: Show m => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m (Y.Maybe a)
+expectOptional f term = case stripTerm term of
+  TermOptional mt -> case mt of
+    Nothing -> pure Nothing
+    Just t -> Just <$> f t
+  _ -> unexpected "optional value" term
 
 expectRecord :: Show m => Term m -> GraphFlow m [Field m]
 expectRecord term = case stripTerm term of
   TermRecord (Record _ fields) -> pure fields
-  _ -> fail $ "expected a record, got " ++ show term
+  _ -> unexpected "record" term
 
 expectSet :: (Ord a, Show m) => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m (S.Set a)
 expectSet f term = case stripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
-  _ -> fail $ "expected a set, got " ++ show term
+  _ -> unexpected "set" term
 
 expectString :: Show m => Term m -> GraphFlow m String
 expectString term = case stripTerm term of
   TermLiteral (LiteralString s) -> pure s
-  _ -> fail $ "expected a string, got " ++ show term
+  _ -> unexpected "string" term
 
 expectUnion :: Show m => Term m -> GraphFlow m (Field m)
 expectUnion term = case stripTerm term of
   TermUnion (Union _ field) -> pure field
-  _ -> fail $ "expected a union, got " ++ show term
+  _ -> unexpected "union" term
 
 field :: String -> Term m -> Field m
 field n = Field (FieldName n)
