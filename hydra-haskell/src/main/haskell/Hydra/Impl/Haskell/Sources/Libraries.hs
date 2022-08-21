@@ -11,6 +11,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
+import qualified Hydra.Lib.Optionals as Optionals
 import qualified Hydra.Lib.Strings as Strings
 
 
@@ -89,6 +90,21 @@ _math_rem = qname _hydra_lib_math "rem"
 _math_sub :: Name
 _math_sub = qname _hydra_lib_math "sub"
 
+_hydra_lib_optionals :: GraphName
+_hydra_lib_optionals = GraphName "hydra/lib/optionals"
+
+_optionals_apply :: Name
+_optionals_apply = qname _hydra_lib_optionals "apply"
+
+_optionals_bind :: Name
+_optionals_bind = qname _hydra_lib_optionals "bind"
+
+_optionals_map :: Name
+_optionals_map = qname _hydra_lib_optionals "map"
+
+_optionals_pure :: Name
+_optionals_pure = qname _hydra_lib_optionals "pure"
+
 _hydra_lib_sets :: GraphName
 _hydra_lib_sets = GraphName "hydra/lib/sets"
 
@@ -154,6 +170,13 @@ hydraLibMathInt32Primitives = [
   binaryPrimitive _math_rem int32 int32 int32 Math.rem,
   binaryPrimitive _math_sub int32 int32 int32 Math.sub]
 
+hydraLibOptionalsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibOptionalsPrimitives = [
+  binaryPrimitive _optionals_apply (optional $ function (variable "a") (variable "b")) (optional $ variable "a") (optional $ variable "b") Optionals.apply,
+  binaryPrimitive _optionals_bind (optional $ variable "a") (function (variable "a") (optional $ variable "b")) (optional $ variable "b") Optionals.bind,
+  binaryPrimitive _optionals_map (function (variable "a") (variable "b")) (optional $ variable "a") (optional $ variable "b") Optionals.map,
+  unaryPrimitive _optionals_pure (variable "a") (optional $ variable "a") Optionals.pure]
+
 hydraLibStringsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibStringsPrimitives = [
   unaryPrimitive _strings_cat (list string) string Strings.cat,
@@ -164,7 +187,8 @@ hydraLibStringsPrimitives = [
 
 standardPrimitives :: Show m => [PrimitiveFunction m]
 standardPrimitives =
-         hydraLibListsPrimitives
-      ++ hydraLibLiteralsPrimitives
-      ++ hydraLibMathInt32Primitives
-      ++ hydraLibStringsPrimitives
+     hydraLibListsPrimitives
+  ++ hydraLibLiteralsPrimitives
+  ++ hydraLibMathInt32Primitives
+  ++ hydraLibOptionalsPrimitives
+  ++ hydraLibStringsPrimitives
