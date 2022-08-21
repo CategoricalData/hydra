@@ -128,15 +128,16 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 hydraLibListsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
---  unaryPrimitive _lists_apply ...
+  binaryPrimitive _lists_apply (list $ function (variable "a") (variable "b")) (list $ variable "a") (list $ variable "b") Lists.apply,
+  binaryPrimitive _lists_bind (list $ variable "a") (function (variable "a") (list $ variable "b")) (list $ variable "b") Lists.bind,
   unaryPrimitive _lists_concat (list $ list $ variable "a") (list $ variable "a") Lists.concat,
   unaryPrimitive _lists_head (list $ variable "a") (variable "a") Lists.head,
   binaryPrimitive _lists_intercalate (list $ variable "a") (list $ list $ variable "a") (list $ variable "a") Lists.intercalate,
   binaryPrimitive _lists_intersperse (variable "a") (list $ variable "a") (list $ variable "a") Lists.intersperse,
   unaryPrimitive _lists_last (list $ variable "a") (variable "a") Lists.last,
-  unaryPrimitive _lists_length (list $ variable "a") int32 Lists.length
-  --
-  ]
+  unaryPrimitive _lists_length (list $ variable "a") int32 Lists.length,
+  binaryPrimitive _lists_map (function (variable "a") (variable "b")) (list $ variable "a") (list $ variable "b") Lists.map,
+  unaryPrimitive _lists_pure (variable "a") (list $ variable "a") Lists.pure]
 
 hydraLibLiteralsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibLiteralsPrimitives = [
