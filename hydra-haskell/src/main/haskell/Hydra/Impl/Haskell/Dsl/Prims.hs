@@ -31,6 +31,12 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     encode = Terms.expectBoolean
     decode = pure . Terms.boolean
 
+function :: TermCoder m a -> TermCoder m b -> TermCoder m (a -> b)
+function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
+  where
+    encode _ = fail $ "cannot currently encode functions from terms" 
+    decode _ = fail $ "cannot decode functions to terms"
+      
 int32 :: Show m => TermCoder m Int
 int32 = TermCoder Types.int32 $ Coder encode decode
   where
