@@ -93,22 +93,6 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "value">: optional "a",
           "state">: "s",
           "trace">: evaluation "Trace"],
-          
---      def "GraphFlow" $
---        lambda "m" $ lambda "a" $
---        evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ "a",
-
-      def "InputSpec" $
-        doc "A helper object for specifying and unmarshalling an argument to a primitive function" $
-        lambda "a" $ lambda "m" $ record [
-          "type">: core "Type" @@ "m",
-          "unmarshal">: core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ "a"],
-
-      def "OutputSpec" $
-        doc "A helper object for specifying and marshalling the output of a primitive function" $
-        lambda "a" $ lambda "m" $ record [
-          "type">: core "Type" @@ "m",
-          "marshal">: "a" --> core "Term" @@ "m"],
 
       def "PrimitiveFunction" $
         doc "A built-in function" $
@@ -117,6 +101,12 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "type">: core "FunctionType" @@ "m",
           "implementation">:
             list (core "Term" @@ "m") --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ (core "Term" @@ "m")],
+
+      def "TermCoder" $
+        doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
+        lambda "m" $ lambda "a" $ record [
+          "type">: core "Type" @@ "m",
+          "coder">: evaluation "Coder" @@ (evaluation "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
 
       def "Trace" $
         doc "A container for logging and error information" $

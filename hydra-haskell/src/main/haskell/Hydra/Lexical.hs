@@ -75,9 +75,6 @@ setContextElements :: [Graph m] -> Context m -> Context m
 setContextElements graphs cx = cx { contextElements = M.fromList $
   ((\e -> (elementName e, e)) <$> (L.concat (graphElements <$> graphs)))}
 
-unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
-unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
-
 withSchemaContext :: GraphFlow m a -> GraphFlow m a
 withSchemaContext f = do
   cx <- getState

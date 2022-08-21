@@ -48,7 +48,6 @@ f $$ x = apply f x
 
 (@@) :: Data (a -> b) -> Data a -> Data b
 f @@ x = apply f x
---Data lhs @@ Data rhs = Data $ Terms.apply lhs rhs
 
 infixr 0 @->
 (@->) :: a -> b -> (a, b)

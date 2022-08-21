@@ -133,30 +133,6 @@ _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
 
--- A helper object for specifying and unmarshalling an argument to a primitive function
-data InputSpec a m 
-  = InputSpec {
-    inputSpecType :: (Core.Type m),
-    inputSpecUnmarshal :: (Core.Term m -> Flow (Context m) a)}
-
-_InputSpec = (Core.Name "hydra/evaluation.InputSpec")
-
-_InputSpec_type = (Core.FieldName "type")
-
-_InputSpec_unmarshal = (Core.FieldName "unmarshal")
-
--- A helper object for specifying and marshalling the output of a primitive function
-data OutputSpec a m 
-  = OutputSpec {
-    outputSpecType :: (Core.Type m),
-    outputSpecMarshal :: (a -> Core.Term m)}
-
-_OutputSpec = (Core.Name "hydra/evaluation.OutputSpec")
-
-_OutputSpec_type = (Core.FieldName "type")
-
-_OutputSpec_marshal = (Core.FieldName "marshal")
-
 -- A built-in function
 data PrimitiveFunction m 
   = PrimitiveFunction {
@@ -171,6 +147,18 @@ _PrimitiveFunction_name = (Core.FieldName "name")
 _PrimitiveFunction_type = (Core.FieldName "type")
 
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
+
+-- A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
+data TermCoder m a 
+  = TermCoder {
+    termCoderType :: (Core.Type m),
+    termCoderCoder :: (Coder (Context m) (Core.Term m) a)}
+
+_TermCoder = (Core.Name "hydra/evaluation.TermCoder")
+
+_TermCoder_type = (Core.FieldName "type")
+
+_TermCoder_coder = (Core.FieldName "coder")
 
 -- A container for logging and error information
 data Trace 

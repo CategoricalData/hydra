@@ -5,7 +5,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Prims
-import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Hydra.Lib.Lists as Lists
@@ -25,6 +25,12 @@ _io_showType = qname _hydra_lib_io "showType"
 
 _hydra_lib_lists :: GraphName
 _hydra_lib_lists = GraphName "hydra/lib/lists"
+
+_lists_apply :: Name
+_lists_apply = qname _hydra_lib_lists "apply"
+
+_lists_bind :: Name
+_lists_bind = qname _hydra_lib_lists "bind"
 
 _lists_concat :: Name
 _lists_concat = qname _hydra_lib_lists "concat"
@@ -46,6 +52,9 @@ _lists_length = qname _hydra_lib_lists "length"
 
 _lists_map :: Name
 _lists_map = qname _hydra_lib_lists "map"
+
+_lists_pure :: Name
+_lists_pure = qname _hydra_lib_lists "pure"
 
 _hydra_lib_literals :: GraphName
 _hydra_lib_literals = GraphName "hydra/lib/literals"
@@ -114,51 +123,43 @@ _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 --hydraIoPrimitives = [
---  prim1 _io_showTerm termInput stringOutput 
+--  unaryPrimitive _io_showTerm (variable "a) string 
 --  ]
-  
+
 hydraLibListsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibListsPrimitives = [
-  prim1 _lists_concat (listInput (Types.list $ Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.concat,
-  prim1 _lists_head (listInputPoly "a") (outputPoly "a") Lists.head,
-  prim2 _lists_intercalate (listInputPoly "a") (listInput (Types.variable "a") expectListPoly) (listOutputPoly "a") Lists.intercalate,
-  prim2 _lists_intersperse (inputPoly "a") (listInputPoly "a") (listOutputPoly "a") Lists.intersperse,
-  prim1 _lists_last (listInputPoly "a") (outputPoly "a") Lists.last,
-  prim1 _lists_length (listInputPoly "a") int32Output Lists.length
---  ,
---  PrimitiveFunction _lists_map
---    (FunctionType
---      (functionType (Types.variable "a") (Types.variable "b"))
---      (functionType (Types.list $ Types.variable "a") (Types.list $ Types.variable "b")))
---    $ \args -> do
---      expectNArgs 2 args
---      a1 <- expectString $ L.head args
---      a2 <- expectListPoly $ args !! 1
---
+--  unaryPrimitive _lists_apply ...
+  unaryPrimitive _lists_concat (list $ list $ variable "a") (list $ variable "a") Lists.concat,
+  unaryPrimitive _lists_head (list $ variable "a") (variable "a") Lists.head,
+  binaryPrimitive _lists_intercalate (list $ variable "a") (list $ list $ variable "a") (list $ variable "a") Lists.intercalate,
+  binaryPrimitive _lists_intersperse (variable "a") (list $ variable "a") (list $ variable "a") Lists.intersperse,
+  unaryPrimitive _lists_last (list $ variable "a") (variable "a") Lists.last,
+  unaryPrimitive _lists_length (list $ variable "a") int32 Lists.length
+  --
   ]
 
 hydraLibLiteralsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibLiteralsPrimitives = [
-    prim1 _literals_showInt32 int32Input stringOutput Literals.showInt32,
-    prim1 _literals_showString stringInput stringOutput Literals.showString]
+  unaryPrimitive _literals_showInt32 int32 string Literals.showInt32,
+  unaryPrimitive _literals_showString string string Literals.showString]
 
 hydraLibMathInt32Primitives :: Show m => [PrimitiveFunction m]
 hydraLibMathInt32Primitives = [
-    prim2 _math_add int32Input int32Input int32Output Math.add,
-    prim2 _math_div int32Input int32Input int32Output Math.div,
-    prim2 _math_mod int32Input int32Input int32Output Math.mod,
-    prim2 _math_mul int32Input int32Input int32Output Math.mul,
-    prim1 _math_neg int32Input int32Output Math.neg,
-    prim2 _math_rem int32Input int32Input int32Output Math.rem,
-    prim2 _math_sub int32Input int32Input int32Output Math.sub]
+  binaryPrimitive _math_add int32 int32 int32 Math.add,
+  binaryPrimitive _math_div int32 int32 int32 Math.div,
+  binaryPrimitive _math_mod int32 int32 int32 Math.mod,
+  binaryPrimitive _math_mul int32 int32 int32 Math.mul,
+  unaryPrimitive _math_neg int32 int32 Math.neg,
+  binaryPrimitive _math_rem int32 int32 int32 Math.rem,
+  binaryPrimitive _math_sub int32 int32 int32 Math.sub]
 
 hydraLibStringsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibStringsPrimitives = [
-    prim1 _strings_cat (listInput Types.string expectString) stringOutput Strings.cat,
-    prim1 _strings_length stringInput int32Output Strings.length,
-    prim2 _strings_splitOn stringInput stringInput stringListOutput Strings.splitOn,
-    prim1 _strings_toLower stringInput stringOutput Strings.toLower,
-    prim1 _strings_toUpper stringInput stringOutput Strings.toUpper]
+  unaryPrimitive _strings_cat (list string) string Strings.cat,
+  unaryPrimitive _strings_length string int32 Strings.length,
+  binaryPrimitive _strings_splitOn string string (list string) Strings.splitOn,
+  unaryPrimitive _strings_toLower string string Strings.toLower,
+  unaryPrimitive _strings_toUpper string string Strings.toUpper]
 
 standardPrimitives :: Show m => [PrimitiveFunction m]
 standardPrimitives =
