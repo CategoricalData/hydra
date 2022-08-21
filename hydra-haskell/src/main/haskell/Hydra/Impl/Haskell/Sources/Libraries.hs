@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Optionals as Optionals
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
 
@@ -114,11 +115,23 @@ _sets_add = qname _hydra_lib_sets "add"
 _sets_contains :: Name
 _sets_contains = qname _hydra_lib_sets "contains"
 
+_sets_fromList :: Name
+_sets_fromList = qname _hydra_lib_sets "fromList"
+
 _sets_isEmpty :: Name
 _sets_isEmpty = qname _hydra_lib_sets "isEmpty"
 
+_sets_map :: Name
+_sets_map = qname _hydra_lib_sets "map"
+
 _sets_remove :: Name
 _sets_remove = qname _hydra_lib_sets "remove"
+
+_sets_singleton :: Name
+_sets_singleton = qname _hydra_lib_sets "pure"
+
+_sets_toList :: Name
+_sets_toList = qname _hydra_lib_sets "toList"
 
 _hydra_lib_strings :: GraphName
 _hydra_lib_strings = GraphName "hydra/lib/strings"
@@ -177,6 +190,17 @@ hydraLibOptionalsPrimitives = [
   binaryPrimitive _optionals_map (function (variable "a") (variable "b")) (optional $ variable "a") (optional $ variable "b") Optionals.map,
   unaryPrimitive _optionals_pure (variable "a") (optional $ variable "a") Optionals.pure]
 
+hydraLibSetsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
+hydraLibSetsPrimitives = [
+  binaryPrimitive _sets_add (variable "a") (set $ variable "a") (set $ variable "a") Sets.add,
+  binaryPrimitive _sets_contains (variable "a") (set $ variable "a") boolean Sets.contains,
+  unaryPrimitive _sets_fromList (list $ variable "a") (set $ variable "a") Sets.fromList,
+  unaryPrimitive _sets_isEmpty (set $ variable "a") boolean Sets.isEmpty,
+  binaryPrimitive _sets_map (function (variable "a") (variable "b")) (set $ variable "a") (set $ variable "b") Sets.map,
+  binaryPrimitive _sets_remove (variable "a") (set $ variable "a") (set $ variable "a") Sets.remove,
+  unaryPrimitive _sets_singleton (variable "a") (set $ variable "a") Sets.singleton,
+  unaryPrimitive _sets_toList (set $ variable "a") (list $ variable "a") Sets.toList]
+
 hydraLibStringsPrimitives :: Show m => [PrimitiveFunction m]
 hydraLibStringsPrimitives = [
   unaryPrimitive _strings_cat (list string) string Strings.cat,
@@ -185,10 +209,11 @@ hydraLibStringsPrimitives = [
   unaryPrimitive _strings_toLower string string Strings.toLower,
   unaryPrimitive _strings_toUpper string string Strings.toUpper]
 
-standardPrimitives :: Show m => [PrimitiveFunction m]
+standardPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
 standardPrimitives =
      hydraLibListsPrimitives
   ++ hydraLibLiteralsPrimitives
   ++ hydraLibMathInt32Primitives
   ++ hydraLibOptionalsPrimitives
+  ++ hydraLibSetsPrimitives
   ++ hydraLibStringsPrimitives
