@@ -5,18 +5,19 @@ import Hydra.Evaluation
 import Hydra.Adapter
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
+import Hydra.Lexical
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> Qualified (Coder Literal YM.Scalar)
+literalCoder :: LiteralType -> GraphFlow m (Coder (Context m) Literal YM.Scalar)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
@@ -39,12 +40,12 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> RowType m -> Qualified (Coder (Term m) YM.Node)
-recordCoder cx rt = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder cx (fieldTypeType f)) (rowTypeFields rt)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => RowType m -> GraphFlow m (Coder (Context m) (Term m) YM.Node)
+recordCoder rt = do
+    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
   where
-    encode coders term = case termExpr cx term of
+    encode coders term = case stripTerm term of
       TermRecord (Record _ fields) -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
         where
           encodeField (ft, coder) (Field (FieldName fn) fv) = case (fieldTypeType ft, fv) of
@@ -63,8 +64,8 @@ recordCoder cx rt = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) YM.Node)
-termCoder cx typ = case typeExpr cx typ of
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) YM.Node)
+termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at
     return Coder {
@@ -75,7 +76,7 @@ termCoder cx typ = case typeExpr cx typ of
         YM.NodeScalar s -> Terms.literal <$> coderDecode ac s
         _ -> unexpected "scalar node" n}
   TypeList lt -> do
-    lc <- termCoder cx lt
+    lc <- termCoder lt
     return Coder {
 --      coderEncode = \(Term (TermList els) _) -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els,
       coderEncode = \t -> case t of
@@ -85,7 +86,7 @@ termCoder cx typ = case typeExpr cx typ of
         YM.NodeSequence nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
         _ -> unexpected "sequence" n}
   TypeOptional ot -> do
-    oc <- termCoder cx ot
+    oc <- termCoder ot
     return Coder {
       coderEncode = \t -> case t of
          TermOptional el -> Y.maybe (pure yamlNull) (coderEncode oc) el
@@ -94,8 +95,8 @@ termCoder cx typ = case typeExpr cx typ of
         YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
         _ -> Terms.optional . Just <$> coderDecode oc n}
   TypeMap (MapType kt vt) -> do
-    kc <- termCoder cx kt
-    vc <- termCoder cx vt
+    kc <- termCoder kt
+    vc <- termCoder vt
     let encodeEntry (k, v) = (,) <$> coderEncode kc k <*> coderEncode vc v
     let decodeEntry (k, v) = (,) <$> coderDecode kc k <*> coderDecode vc v
     return Coder {
@@ -105,15 +106,16 @@ termCoder cx typ = case typeExpr cx typ of
       coderDecode = \n -> case n of
         YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
         _ -> unexpected "mapping" n}
-  TypeRecord rt -> recordCoder cx rt
+  TypeRecord rt -> recordCoder rt
 
-yamlCoder :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) YM.Node)
-yamlCoder cx typ = do
-    adapter <- termAdapter adContext typ
-    coder <- termCoder cx $ adapterTarget adapter
-    return $ composeSteps (adapterCoder adapter) coder
+yamlCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) YM.Node)
+yamlCoder typ = do
+    cx <- getState
+    let acx = AdapterContext cx hydraCoreLanguage (language cx)
+    adapter <- withState acx $ termAdapter typ
+    coder <- termCoder $ adapterTarget adapter
+    return $ composeCoders (adapterCoder adapter) coder
   where
-    adContext = AdapterContext cx hydraCoreLanguage (language cx)
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull

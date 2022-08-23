@@ -4,10 +4,9 @@ module Hydra.Impl.Haskell.Ext.Yaml.Serde (
 ) where
 
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Ext.Yaml.Coder
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
@@ -20,7 +19,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as LB
 
 
-bytesToHsYaml :: BS.ByteString -> Result (DY.Node DY.Pos)
+bytesToHsYaml :: BS.ByteString -> GraphFlow m (DY.Node DY.Pos)
 bytesToHsYaml bs = case DY.decodeNode bs of
     Left (pos, msg) -> fail $ "YAML parser failure at " ++ show pos ++ ": " ++ msg
     Right docs -> if L.null docs
@@ -30,13 +29,13 @@ bytesToHsYaml bs = case DY.decodeNode bs of
       else case L.head docs of
         (DY.Doc node) -> pure node
 
-bytesToHydraYaml :: BS.ByteString -> Result YM.Node
+bytesToHydraYaml :: BS.ByteString -> GraphFlow m YM.Node
 bytesToHydraYaml = bytesToHsYaml CM.>=> hsYamlToHydraYaml
 
 hsYamlToBytes :: DY.Node () -> BS.ByteString
 hsYamlToBytes node = DY.encodeNode [DY.Doc node]
 
-hsYamlToHydraYaml :: DY.Node a -> Result YM.Node
+hsYamlToHydraYaml :: DY.Node a -> GraphFlow m YM.Node
 hsYamlToHydraYaml hs = case hs of
   DY.Scalar _ s -> YM.NodeScalar <$> case s of
      DY.SNull -> pure YM.ScalarNull
@@ -67,16 +66,16 @@ hydraYamlToHsYaml hy = case hy of
     YM.ScalarStr s -> DY.SStr $ T.pack s
   YM.NodeSequence s -> DY.Sequence () DYE.untagged $ hydraYamlToHsYaml <$> s
 
-yamlSerde :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) BS.ByteString)
-yamlSerde context typ = do
-  coder <- yamlCoder context typ
+yamlSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) BS.ByteString)
+yamlSerde typ = do
+  coder <- yamlCoder typ
   return Coder {
     coderEncode = fmap hydraYamlToBytes . coderEncode coder,
     coderDecode = bytesToHydraYaml CM.>=> coderDecode coder}
 
-yamlSerdeStr :: (Eq m, Ord m, Read m, Show m) => Context m -> Type m -> Qualified (Coder (Term m) String)
-yamlSerdeStr context typ = do
-  serde <- yamlSerde context typ
+yamlSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) String)
+yamlSerdeStr typ = do
+  serde <- yamlSerde typ
   return Coder {
     coderEncode = fmap LB.unpack . coderEncode serde,
     coderDecode = coderDecode serde . LB.pack}

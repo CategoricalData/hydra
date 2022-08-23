@@ -3,6 +3,12 @@ module Hydra.Lib.Lists where
 import qualified Data.List as L
 
 
+apply :: [a -> b] -> [a] -> [b]
+apply = (<*>)
+
+bind :: [a] -> (a -> [b]) -> [b]
+bind = (>>=)
+
 concat :: [[a]] -> [a]
 concat = L.concat
 
@@ -23,3 +29,6 @@ length = L.length
 
 map :: (a -> b) -> [a] -> [b]
 map = fmap
+
+pure :: a -> [a]
+pure x = [x]

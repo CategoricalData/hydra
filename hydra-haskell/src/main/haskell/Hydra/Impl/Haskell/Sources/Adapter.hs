@@ -18,20 +18,20 @@ hydraAdapterName :: GraphName
 hydraAdapterName = GraphName "hydra/adapter"
 
 hydraAdapter :: Graph Meta
-hydraAdapter = Graph hydraAdapterName elements (const True) hydraCoreName
+hydraAdapter = Graph hydraAdapterName elements hydraCoreName
   where
-    def = datatype coreContext hydraAdapterName
+    def = datatype hydraAdapterName
     core = nsref hydraCoreName
     adapter = nsref hydraAdapterName
     evaluation = nsref hydraEvaluationName
 
     elements = [
       def "Adapter" $
-        lambda "t" $ lambda "v" $ record [
+        lambda "s" $ lambda "t" $ lambda "v" $ record [
           "isLossy">: boolean,
           "source">: variable "t",
           "target">: variable "t",
-          "coder">: apply (apply (evaluation "Coder") (variable "v")) (variable "v")],
+          "coder">: evaluation "Coder" @@ "s" @@ "v" @@ "v"],
 
       def "AdapterContext" $
         lambda "m" $ record [

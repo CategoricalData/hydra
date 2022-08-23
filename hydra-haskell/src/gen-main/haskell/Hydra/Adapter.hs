@@ -5,12 +5,12 @@ import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
 
-data Adapter t v 
+data Adapter s t v 
   = Adapter {
     adapterIsLossy :: Bool,
     adapterSource :: t,
     adapterTarget :: t,
-    adapterCoder :: (Evaluation.Coder v v)}
+    adapterCoder :: (Evaluation.Coder s v v)}
 
 _Adapter = (Core.Name "hydra/adapter.Adapter")
 

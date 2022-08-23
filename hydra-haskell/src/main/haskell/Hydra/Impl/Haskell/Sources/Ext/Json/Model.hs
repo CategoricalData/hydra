@@ -16,9 +16,9 @@ jsonModelName = GraphName "hydra/ext/json/model"
 
 -- | See the BNF at https://www.json.org
 jsonModel :: Graph Meta
-jsonModel = Graph jsonModelName elements (const True) hydraCoreName
+jsonModel = Graph jsonModelName elements hydraCoreName
   where
-    def = datatype coreContext jsonModelName
+    def = datatype jsonModelName
     json = nsref jsonModelName
 
     elements = [

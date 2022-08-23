@@ -56,10 +56,10 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
       Just TypeVariantOptional,
       Just TypeVariantNominal],
       
-    languageConstraintsTypes = \typ -> case typeExpr cx typ of
+    languageConstraintsTypes = \typ -> case stripType typ of
       TypeElement et -> True
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-      TypeList t -> case typeExpr cx t of
+      TypeList t -> case stripType t of
         TypeLiteral lt -> case lt of
           LiteralTypeBoolean -> dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
           LiteralTypeFloat ft -> case ft of
@@ -77,7 +77,7 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
       TypeLiteral _ -> True
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
       TypeNominal _ -> True
-      TypeOptional ot -> case typeExpr cx ot of
+      TypeOptional ot -> case stripType ot of
         TypeElement _ -> True -- Note: subject to the APG taxonomy
         TypeLiteral _ -> True
         _ -> False

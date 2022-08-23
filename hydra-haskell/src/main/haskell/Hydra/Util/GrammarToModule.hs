@@ -17,17 +17,15 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-grammarToModule :: Context Meta -> Grammar -> GraphName -> Module Meta
-grammarToModule cx (Grammar prods) gname = Module graph []
+grammarToModule :: Grammar -> GraphName -> Module Meta
+grammarToModule (Grammar prods) gname = Module graph []
   where
-    graph = Graph gname els exprs hydraCoreName
+    graph = Graph gname els hydraCoreName
       where
-        exprs = const True -- TODO: not strictly true; consider removing exprs from Graph
-
         els = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
           where
             prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
-            pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType cx typ)
+            pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType typ)
 
     toName lname = fromQname gname lname
     

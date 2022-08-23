@@ -3,8 +3,7 @@ module Hydra.Ext.Json.CoderSpec where
 import Hydra.Core
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Lib.Literals
@@ -14,6 +13,7 @@ import Hydra.TestUtils
 
 import qualified Data.Bifunctor as BF
 import qualified Test.Hspec as H
+import qualified Test.HUnit.Lang as HL
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -114,13 +114,13 @@ spec = do
   nominalTypesAreSupported
 
 checkJsonCoder :: Type Meta -> Term Meta -> Json.Value -> H.Expectation
-checkJsonCoder typ term node = do
-    (if Y.isJust step' then [] else warnings) `H.shouldBe` []
-    coderEncode step term `H.shouldBe` ResultSuccess node
-    (coderEncode step term >>= coderDecode step) `H.shouldBe` ResultSuccess term
+checkJsonCoder typ term node = case mstep of
+    Nothing -> HL.assertFailure (traceSummary trace)
+    Just step -> do
+      shouldSucceedWith (coderEncode step term) node
+      shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
-    (Qualified step' warnings) = jsonCoder testContext typ
-    step = Y.fromJust step'
+    FlowWrapper mstep _ trace = unFlow (jsonCoder typ) testContext emptyTrace
 
 jsonBool :: Bool -> Json.Value
 jsonBool = Json.ValueBoolean

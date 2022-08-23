@@ -11,8 +11,9 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Meta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Impl.Haskell.Dsl.Bootstrap
+import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -48,7 +49,7 @@ coreContext = bootstrapContext {
     graphSetGraphs = M.fromList [(hydraCoreName, hydraCore)],
     graphSetRoot = hydraCoreName},
   contextElements = graphElementsMap hydraCore,
-  contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) (standardPrimitives bootstrapContext)}
+  contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
 
 doc :: String -> Type Meta -> Type Meta
 doc s = setTypeDescription coreContext (Just s)
@@ -57,15 +58,13 @@ dataDoc :: String -> Term Meta -> Term Meta
 dataDoc s = setTermDescription coreContext (Just s)
 
 dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
-dataterm gname lname = termElement coreContext (qualify gname (Name lname))
+dataterm gname lname = termElement (qualify gname (Name lname))
 
-graph :: GraphName -> [Context Meta -> Result (Element Meta)] -> Result (Graph Meta)
+graph :: GraphName -> [GraphFlow Meta (Element Meta)] -> GraphFlow Meta (Graph Meta)
 graph gname cons = do
-    elements <- mapM (\f -> f cx) cons
-    return $ Graph gname elements terms schemaGraph
+    elements <- sequence cons
+    return $ Graph gname elements schemaGraph
   where
-    cx = coreContext
-    terms = const True
     schemaGraph = GraphName "hydra/core"
 
 nonemptyList :: Type Meta -> Type Meta

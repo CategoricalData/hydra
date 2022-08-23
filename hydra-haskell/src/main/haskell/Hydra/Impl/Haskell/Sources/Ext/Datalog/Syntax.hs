@@ -19,7 +19,7 @@ datalogSyntaxName :: GraphName
 datalogSyntaxName = GraphName "hydra/ext/datalog/syntax"
 
 datalogSyntaxModule :: Module Meta
-datalogSyntaxModule = grammarToModule Standard.coreContext datalogGrammar datalogSyntaxName
+datalogSyntaxModule = grammarToModule datalogGrammar datalogSyntaxName
 
 datalogGrammar :: Grammar
 datalogGrammar = Grammar [

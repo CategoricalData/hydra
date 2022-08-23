@@ -4,8 +4,9 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.CoreDecoding
+import Hydra.Lexical
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 
@@ -17,19 +18,20 @@ import qualified Data.Set as S
 
 data Ann a = Ann a (Maybe String)
 
-shaclCoder :: (Eq m, Show m) => Context m -> Graph m -> Qualified (Shacl.ShapesGraph, Graph m -> Result Rdf.Graph)
-shaclCoder cx sg = do
-    pairs <- resultToQualified $ CM.mapM decode typeEls
-    fail "FOO"
+shaclCoder :: (Eq m, Show m) => Graph m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
+shaclCoder sg = do
+    cx <- getState
+    let typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
+    pairs <- CM.mapM decode typeEls
+    fail "TODO"
   where
     mapGraph g = fail "TODO"
-    typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
     decode el = do
-      typ <- decodeType cx $ elementData el
+      typ <- decodeType $ elementData el
       return (el, typ)
 
-encodeType :: Show m => Context m -> (Element m, Type m) -> Result Shacl.Shape
-encodeType cx (el, typ) = case typeExpr cx typ of
+encodeType :: Show m => (Element m, Type m) -> GraphFlow m Shacl.Shape
+encodeType (el, typ) = case stripType typ of
 --  TypeElement et ->
 --  TypeList lt ->
   TypeLiteral lt -> encodeLiteralType lt
@@ -41,8 +43,7 @@ encodeType cx (el, typ) = case typeExpr cx typ of
 --  TypeUnion fields ->
   _ -> unexpected "type" typ
 
-
-encodeLiteralType :: LiteralType -> Result Shacl.Shape
+encodeLiteralType :: LiteralType -> GraphFlow m Shacl.Shape
 encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
     LiteralTypeBinary -> xsd "base64Binary"
     LiteralTypeBoolean -> xsd "boolean"

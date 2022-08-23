@@ -3,8 +3,7 @@ module Hydra.Ext.Yaml.CoderSpec where
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Ext.Yaml.Coder
-import Hydra.Impl.Haskell.Extras
-import Hydra.Steps
+import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
@@ -13,6 +12,7 @@ import Hydra.TestUtils
 
 import qualified Data.Bifunctor as BF
 import qualified Test.Hspec as H
+import qualified Test.HUnit.Lang as HL
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -97,13 +97,13 @@ spec = do
   unsupportedTypesAreTransformed
 
 checkYamlCoder :: Type Meta -> Term Meta -> YM.Node -> H.Expectation
-checkYamlCoder typ term node = do
-    (if Y.isJust step' then [] else warnings) `H.shouldBe` []
-    coderEncode step term `H.shouldBe` ResultSuccess node
-    (coderEncode step term >>= coderDecode step) `H.shouldBe` ResultSuccess term
+checkYamlCoder typ term node = case mstep of
+    Nothing -> HL.assertFailure (traceSummary trace)
+    Just step -> do
+      shouldSucceedWith (coderEncode step term) node
+      shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
-    (Qualified step' warnings) = yamlCoder testContext typ
-    step = Y.fromJust step'
+    FlowWrapper mstep _ trace = unFlow (yamlCoder typ) testContext emptyTrace
 
 yamlBool :: Bool -> YM.Node
 yamlBool = YM.NodeScalar . YM.ScalarBool

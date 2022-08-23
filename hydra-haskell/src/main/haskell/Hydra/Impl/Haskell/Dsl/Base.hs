@@ -19,6 +19,7 @@ import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Types.Inference
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
+import Hydra.Monads
 
 import Prelude hiding ((++))
 
@@ -26,19 +27,18 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-el :: Element a -> Context Meta -> Result (Graph.Element Meta)
-el (Element name (Data term)) cx = do
+el :: Element a -> GraphFlow Meta (Graph.Element Meta)
+el (Element name (Data term)) = do
     t <- findType
-    let schemaTerm = encodeType cx t
+    let schemaTerm = encodeType t
     return $ Graph.Element name schemaTerm term
   where
-    cx1 = pushTrace "construct element" cx
-    declaredType = annotationClassTermType (contextAnnotations cx) cx term
     findType = do
-      mt <- declaredType
+      cx <- getState
+      mt <- annotationClassTermType (contextAnnotations cx) term
       case mt of
         Just t -> return t
-        Nothing -> typeSchemeType . snd <$> inferType (pushTrace (unName name) cx1) term
+        Nothing -> typeSchemeType . snd <$> inferType term
 
 (<.>) :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
 f <.> g = compose f g
@@ -48,7 +48,6 @@ f $$ x = apply f x
 
 (@@) :: Data (a -> b) -> Data a -> Data b
 f @@ x = apply f x
---Data lhs @@ Data rhs = Data $ Terms.apply lhs rhs
 
 infixr 0 @->
 (@->) :: a -> b -> (a, b)

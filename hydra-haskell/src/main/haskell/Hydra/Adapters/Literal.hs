@@ -6,25 +6,30 @@ module Hydra.Adapters.Literal (
 
 import Hydra.Core
 import Hydra.Basics
-import Hydra.Steps
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Adapter
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
+import Hydra.Lexical
 
 import qualified Data.List as L
 import qualified Data.Set as S
 
 
-literalAdapter :: AdapterContext a -> LiteralType -> Qualified (Adapter LiteralType Literal)
-literalAdapter context = chooseAdapter alts supported describeLiteralType
+literalAdapter :: LiteralType -> Flow (AdapterContext m) (Adapter (Context m) LiteralType Literal)
+literalAdapter lt = do
+    acx <- getState
+    chooseAdapter (alts acx) (supported acx) describeLiteralType lt
   where
-    alts t = case t of
+    supported acx = literalTypeIsSupported (constraints acx)
+    constraints acx = languageConstraints $ adapterContextTarget acx
+
+    alts acx t = case t of
         LiteralTypeBinary -> pure $ fallbackAdapter t
         LiteralTypeBoolean -> pure $ if noIntegerVars
             then fallbackAdapter t
             else do
-              adapter <- integerAdapter context IntegerTypeUint8
+              adapter <- integerAdapter IntegerTypeUint8
               let step' = adapterCoder adapter
               let step = Coder encode decode
                     where
@@ -38,44 +43,44 @@ literalAdapter context = chooseAdapter alts supported describeLiteralType
         LiteralTypeFloat ft -> pure $ if noFloatVars
           then fallbackAdapter t
           else do
-            adapter <- floatAdapter context ft
+            adapter <- floatAdapter ft
             let step = bidirectional
                   $ \dir l -> case l of
-                    LiteralFloat fv -> LiteralFloat <$> stepEither dir (adapterCoder adapter) fv
+                    LiteralFloat fv -> LiteralFloat <$> encodeDecode dir (adapterCoder adapter) fv
                     _ -> unexpected "floating-point literal" (show l)
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeFloat $ adapterTarget adapter) step
         LiteralTypeInteger it -> pure $ if noIntegerVars
           then fallbackAdapter t
           else do
-            adapter <- integerAdapter context it
+            adapter <- integerAdapter it
             let step = bidirectional
                   $ \dir (LiteralInteger iv) -> LiteralInteger
-                    <$> stepEither dir (adapterCoder adapter) iv
+                    <$> encodeDecode dir (adapterCoder adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the literal string type"
-    supported = literalTypeIsSupported constraints
-    constraints = languageConstraints $ adapterContextTarget context
-    noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants constraints)
-      || S.null (languageConstraintsFloatTypes constraints)
-    noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants constraints)
-      || S.null (languageConstraintsIntegerTypes constraints)
-    noStrings = not $ supported LiteralTypeString
-    fallbackAdapter t = if noStrings
-        then fail "cannot serialize unsupported type; strings are unsupported"
-        else qualify msg $ Adapter False t LiteralTypeString step
-      where
-        msg = disclaimer False (describeLiteralType t) (describeLiteralType LiteralTypeString)
-        step = Coder encode decode
+      where        
+        noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants $ constraints acx)
+          || S.null (languageConstraintsFloatTypes $ constraints acx)
+        noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants $ constraints acx)
+          || S.null (languageConstraintsIntegerTypes $ constraints acx)
+        noStrings = not $ supported acx LiteralTypeString
+
+        fallbackAdapter t = if noStrings
+            then fail "cannot serialize unsupported type; strings are unsupported"
+            else withWarning msg $ Adapter False t LiteralTypeString step
           where
-            -- TODO: this format is tied to Haskell
-            encode av = pure $ LiteralString $ case av of
-              LiteralBinary s -> s
-              LiteralBoolean b -> if b then "true" else "false"
-              _ -> show av
-            decode (LiteralString s) = pure $ case t of
-              LiteralTypeBinary -> LiteralBinary s
-              LiteralTypeBoolean -> LiteralBoolean $ s == "true"
-              _ -> read s
+            msg = disclaimer False (describeLiteralType t) (describeLiteralType LiteralTypeString)
+            step = Coder encode decode
+              where
+                -- TODO: this format is tied to Haskell
+                encode av = pure $ LiteralString $ case av of
+                  LiteralBinary s -> s
+                  LiteralBoolean b -> if b then "true" else "false"
+                  _ -> show av
+                decode (LiteralString s) = pure $ case t of
+                  LiteralTypeBinary -> LiteralBinary s
+                  LiteralTypeBoolean -> LiteralBoolean $ s == "true"
+                  _ -> read s
 
 comparePrecision :: Precision -> Precision -> Ordering
 comparePrecision p1 p2 = if p1 == p2 then EQ else case (p1, p2) of
@@ -87,24 +92,28 @@ disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
   ++ if lossy then " (lossy)" else ""
 
-floatAdapter :: AdapterContext a -> FloatType -> Qualified (Adapter FloatType FloatValue)
-floatAdapter context = chooseAdapter alts supported describeFloatType
+floatAdapter :: FloatType -> Flow (AdapterContext m) (Adapter (Context m) FloatType FloatValue)
+floatAdapter ft = do
+    acx <- getState
+    let supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget acx
+    chooseAdapter alts supported describeFloatType ft
   where
     alts t = makeAdapter t <$> case t of
         FloatTypeBigfloat -> [FloatTypeFloat64, FloatTypeFloat32]
         FloatTypeFloat32 -> [FloatTypeFloat64, FloatTypeBigfloat]
         FloatTypeFloat64 -> [FloatTypeBigfloat, FloatTypeFloat32]
       where
-        makeAdapter source target = qualify msg $ Adapter lossy source target step
+        makeAdapter source target = withWarning msg $ Adapter lossy source target step
           where
             lossy = comparePrecision (floatTypePrecision source) (floatTypePrecision target) == GT
             step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
-    supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget context
-
-integerAdapter :: AdapterContext a -> IntegerType -> Qualified (Adapter IntegerType IntegerValue)
-integerAdapter context = chooseAdapter alts supported describeIntegerType
+integerAdapter :: IntegerType -> Flow (AdapterContext m) (Adapter (Context m) IntegerType IntegerValue)
+integerAdapter it = do
+    acx <- getState
+    let supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget acx
+    chooseAdapter alts supported describeIntegerType it
   where
     alts t = makeAdapter t <$> case t of
         IntegerTypeBigint -> L.reverse unsignedPref
@@ -123,15 +132,16 @@ integerAdapter context = chooseAdapter alts supported describeIntegerType
         unsignedPref = interleave unsignedOrdered signedOrdered
         signedNonPref = L.reverse unsignedPref
         unsignedNonPref = L.reverse signedPref
+        
         interleave xs ys = L.concat (L.transpose [xs, ys])
+        
         signedOrdered = L.filter
           (\v -> integerTypeIsSigned v && integerTypePrecision v /= PrecisionArbitrary) integerTypes
         unsignedOrdered = L.filter
           (\v -> not (integerTypeIsSigned v) && integerTypePrecision v /= PrecisionArbitrary) integerTypes
-        makeAdapter source target = qualify msg $ Adapter lossy source target step
+          
+        makeAdapter source target = withWarning msg $ Adapter lossy source target step
           where
             lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
             step = Coder (pure . convertIntegerValue target) (pure . convertIntegerValue source)
             msg = disclaimer lossy (describeIntegerType source) (describeIntegerType target)
-
-    supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget context
