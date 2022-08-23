@@ -8,7 +8,7 @@ import Hydra.Graph
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -51,11 +51,11 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType coreContext (Types.function (Types.nominal testTypePersonName) Types.string),
+  elementSchema = encodeType (Types.function (Types.nominal testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
-testGraph = Graph testGraphName [testElementArthur, testElementFirstName] allTerms testSchemaGraphName
+testGraph = Graph testGraphName [testElementArthur, testElementFirstName] testSchemaGraphName
 
 testGraphName :: GraphName
 testGraphName = GraphName "testGraph"
@@ -69,9 +69,9 @@ testSchemaGraph = Graph testSchemaGraphName [
       def testTypePersonName testTypePerson,
       def testTypePersonOrSomethingName testTypePersonOrSomething,
       def testTypeTimestampName testTypeTimestamp]
-    allTerms hydraCoreName
+    hydraCoreName
   where
-    def = typeElement coreContext
+    def = typeElement
 
 testSchemaGraphName :: GraphName
 testSchemaGraphName = GraphName "testSchemaGraph"
@@ -127,6 +127,3 @@ testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName [
 
 testTypeTimestampName :: Name
 testTypeTimestampName = Name "Timestamp"
-
-allTerms :: Term Meta -> Bool
-allTerms _ = True

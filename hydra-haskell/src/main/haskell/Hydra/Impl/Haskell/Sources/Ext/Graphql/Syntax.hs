@@ -50,7 +50,7 @@ graphqlSyntaxName :: GraphName
 graphqlSyntaxName = GraphName "hydra/ext/graphql/syntax"
 
 graphqlSyntaxModule :: Module Meta
-graphqlSyntaxModule = grammarToModule Standard.coreContext graphqlGrammar graphqlSyntaxName
+graphqlSyntaxModule = grammarToModule graphqlGrammar graphqlSyntaxName
 
 graphqlGrammar :: Grammar
 graphqlGrammar = Grammar $ tokenDefinitions ++ documentDefinitions

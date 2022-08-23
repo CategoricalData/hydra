@@ -2,71 +2,102 @@ module Hydra.Impl.Haskell.Dsl.Prims where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
+--import Data.String(IsString(..))
 
 
-booleanOutput :: OutputSpec Bool m
-booleanOutput = OutputSpec Types.boolean boolean
+--instance IsString (TermCoder m (Term m)) where fromString = variable
 
-inputPoly :: String -> InputSpec (Term m) m
-inputPoly v = InputSpec (Types.variable v) pure
-
-int32Input :: (Show m) => Context m -> InputSpec Int m
-int32Input cx = InputSpec Types.int32 (expectInt32 cx)
-
-int32Output :: OutputSpec Int m
-int32Output = OutputSpec Types.int32 int32
-
-listInput :: (Show m) => Context m -> Type m -> (Term m -> Result a) -> InputSpec [a] m
-listInput cx lt f = InputSpec (Types.list lt) (expectList cx f)
-
-listOutput :: Type m -> (a -> Term m) -> OutputSpec [a] m
-listOutput lt f = OutputSpec (Types.list lt) $ \l -> list (f <$> l)
-
-listInputPoly :: (Show m) => Context m -> String -> InputSpec [Term m] m
-listInputPoly cx v = InputSpec (Types.list $ Types.variable v) (expectListPoly cx)
-
-listOutputPoly :: String -> OutputSpec [Term m] m
-listOutputPoly v = OutputSpec (Types.list $ Types.variable v) list
-
-outputPoly :: String -> OutputSpec (Term m) m
-outputPoly v = OutputSpec (Types.variable v) id
-
-prim1 :: Name -> InputSpec a m -> OutputSpec b m -> (a -> b) -> PrimitiveFunction m
-prim1 name input1 output compute = PrimitiveFunction name ft impl
+binaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> TermCoder m c -> (a -> b -> c) -> PrimitiveFunction m
+binaryPrimitive name input1 input2 output compute = PrimitiveFunction name ft impl
   where
-    ft = FunctionType (inputSpecType input1) (outputSpecType output)
+    ft = FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
-      expectNArgs 1 args
-      arg1 <- inputSpecUnmarshal input1 $ L.head args
-      return $ outputSpecMarshal output $ compute arg1
+      Terms.expectNArgs 2 args
+      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
+      arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
+      coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-prim2 :: Name -> InputSpec a1 m -> InputSpec a2 m -> OutputSpec b m -> (a1 -> a2 -> b) -> PrimitiveFunction m
-prim2 name input1 input2 output compute = PrimitiveFunction name ft impl
+boolean :: Show m => TermCoder m Bool
+boolean = TermCoder Types.boolean $ Coder encode decode
   where
-    ft = FunctionType (inputSpecType input1) (Types.function (inputSpecType input2) $ outputSpecType output)
+    encode = Terms.expectBoolean
+    decode = pure . Terms.boolean
+
+flow :: TermCoder m s -> TermCoder m a -> TermCoder m (Flow s a)
+flow states values = TermCoder (Types.nominal _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
+    Coder encode decode
+  where
+    encode _ = fail $ "cannot currently encode flows from terms"
+    decode _ = fail $ "cannot decode flows to terms"
+
+function :: TermCoder m a -> TermCoder m b -> TermCoder m (a -> b)
+function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
+  where
+    encode _ = fail $ "cannot currently encode functions from terms"
+    decode _ = fail $ "cannot decode functions to terms"
+
+int32 :: Show m => TermCoder m Int
+int32 = TermCoder Types.int32 $ Coder encode decode
+  where
+    encode = Terms.expectInt32
+    decode = pure . Terms.int32
+
+list :: Show m => TermCoder m a -> TermCoder m [a]
+list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
+  where
+    encode = Terms.expectList (coderEncode $ termCoderCoder els)
+    decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
+
+map :: (Ord k, Ord m, Show m) => TermCoder m k -> TermCoder m v -> TermCoder m (M.Map k v)
+map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
+  where
+    encode = Terms.expectMap (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
+    decode m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
+      where
+        decodePair (k, v) = do
+          ke <- (coderDecode $ termCoderCoder keys) k
+          ve <- (coderDecode $ termCoderCoder values) v
+          return (ke, ve)
+
+optional :: Show m => TermCoder m a -> TermCoder m (Y.Maybe a)
+optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode decode
+  where
+    encode = Terms.expectOptional (coderEncode $ termCoderCoder mel)
+    decode mv = Terms.optional <$> case mv of
+      Nothing -> pure Nothing
+      Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
+
+set :: (Ord a, Ord m, Show m) => TermCoder m a -> TermCoder m (S.Set a)
+set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
+  where
+    encode = Terms.expectSet (coderEncode $ termCoderCoder els)
+    decode s = Terms.set . S.fromList <$> mapM (coderDecode $ termCoderCoder els) (S.toList s)
+
+string :: Show m => TermCoder m String
+string = TermCoder Types.string $ Coder encode decode
+  where
+    encode = Terms.expectString
+    decode = pure . Terms.string
+
+unaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> (a -> b) -> PrimitiveFunction m
+unaryPrimitive name input1 output compute = PrimitiveFunction name ft impl
+  where
+    ft = FunctionType (termCoderType input1) $ termCoderType output
     impl args = do
-      expectNArgs 2 args
-      arg1 <- inputSpecUnmarshal input1 $ L.head args
-      arg2 <- inputSpecUnmarshal input2 $ args !! 1
-      return $ outputSpecMarshal output $ compute arg1 arg2
+      Terms.expectNArgs 1 args
+      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
+      coderDecode (termCoderCoder output) $ compute arg1
 
-setInput :: (Ord a, Show m) => Context m -> (Term m -> Result a) -> String -> InputSpec (S.Set a) m
-setInput cx f v = InputSpec (Types.set $ Types.variable v) (expectSet cx f)
-
-setOutput :: (Ord m) => (a -> Term m) -> String -> OutputSpec (S.Set a) m
-setOutput f v = OutputSpec (Types.set $ Types.variable v) (\s -> set (S.fromList (f <$> S.toList s)))
-
-stringInput :: (Show m) => Context m -> InputSpec String m
-stringInput cx = InputSpec Types.string (expectString cx)
-
-stringListOutput :: OutputSpec [String] m
-stringListOutput = OutputSpec (Types.list Types.string) stringList
-
-stringOutput :: OutputSpec String m
-stringOutput = OutputSpec Types.string string
+variable :: String -> TermCoder m (Term m)
+variable v = TermCoder (Types.variable v) $ Coder encode decode
+  where
+    encode = pure
+    decode = pure

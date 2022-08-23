@@ -1,16 +1,14 @@
 module Hydra.Impl.Haskell.GraphIO where
 
 import Hydra.Core
-import Hydra.Errors
 import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Impl.Haskell.Sources.Adapter
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Errors
 import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Impl.Haskell.Sources.Ext.Azure.Dtld
@@ -40,17 +38,19 @@ import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL
 import qualified Hydra.Ext.Scala.Coder as Scala
+import Hydra.Lexical
 
 import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified System.Directory as SD
+import qualified Data.Maybe as Y
 
 
-allModules :: [Result (Module Meta)]
+allModules :: [GraphFlow Meta (Module Meta)]
 allModules = coreModules ++ extModules
 
-coreModules :: [Result (Module Meta)]
+coreModules :: [GraphFlow Meta (Module Meta)]
 coreModules = [
   adapterUtilsModule,
   pure codetreeAstModule,
@@ -58,14 +58,13 @@ coreModules = [
   pure hydraAdapterModule,
   hydraBasicsModule,
   pure hydraCoreModule,
-  pure hydraErrorsModule,
   pure hydraEvaluationModule,
   pure hydraGraphModule,
   pure hydraGrammarModule,
 --  pure hydraMonadsModule,
   pure jsonModelModule]
 
-extModules :: [Result (Module Meta)]
+extModules :: [GraphFlow Meta (Module Meta)]
 extModules = [
   pure atlasModelModule,
   pure coqSyntaxModule,
@@ -85,59 +84,71 @@ extModules = [
   pure yamlModelModule]
 
 -- TODO: remove these eventually. They are handy for debugging.
-singleModule :: [Result (Module Meta)]
+singleModule :: [GraphFlow Meta (Module Meta)]
 singleModule = [pure hydraCoreModule, pure hydraAdapterModule, hydraBasicsModule]
-testModules :: [Result (Module Meta)]
+testModules :: [GraphFlow Meta (Module Meta)]
 testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
-javaTestModules :: [Result (Module Meta)]
+javaTestModules :: [GraphFlow Meta (Module Meta)]
 javaTestModules = pure <$> [jsonModelModule]
 
-writeHaskell :: [Result (Module Meta)] -> FilePath -> IO ()
+writeHaskell :: [GraphFlow Meta (Module Meta)] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printGraph
 
-writeJava :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writeJava :: [GraphFlow Meta (Module Meta)] -> FP.FilePath -> IO ()
 writeJava = generateSources Java.printGraph
 
-writePdl :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writePdl :: [GraphFlow Meta (Module Meta)] -> FP.FilePath -> IO ()
 writePdl = generateSources PDL.printGraph
 
-writeScala :: [Result (Module Meta)] -> FP.FilePath -> IO ()
+writeScala :: [GraphFlow Meta (Module Meta)] -> FP.FilePath -> IO ()
 writeScala = generateSources Scala.printGraph
 
-generateSources ::
-  (Context Meta -> Graph Meta -> Qualified (M.Map FilePath String)) -> [Result (Module Meta)] -> FilePath -> IO ()
-generateSources printGraph modules basePath = case sequence modules of
-    ResultFailure msg -> fail msg
-    ResultSuccess mods -> mapM_ writeDataGraph mods
+generateSources :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> [GraphFlow Meta (Module Meta)] -> FilePath -> IO ()
+generateSources printGraph modules basePath = do
+    mfiles <- runFlow coreContext generateFiles
+    case mfiles of
+      Nothing -> fail "Transformation failed"
+      Just files -> mapM_ writePair files
   where
-    writeDataGraph mod@(Module g _) = writeGraph printGraph cx g basePath
-      where
-        cx = setContextElements allGraphs $ coreContext {
-          contextGraphs = GraphSet allGraphsByName (graphName g),
-          contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) $ standardPrimitives cx}
-        allGraphs = moduleGraph <$> M.elems allModules
-        allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
-        allModules = addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mod
-          where
-            addModule m mod@(Module g' deps) = if M.member gname m
-                then m
-                else L.foldl addModule (M.insert gname mod m) deps
-              where
-                gname = graphName g'
+    generateFiles = do
+      mods <- sequence modules
+      maps <- mapM (moduleToFiles printGraph) mods
+      return $ L.concat (M.toList <$> maps)
 
-writeGraph :: (Context m -> Graph m -> Qualified (M.Map FilePath String)) -> Context m -> Graph m -> FilePath -> IO ()
-writeGraph printGraph cx0 g basePath = do
-  case printGraph cx g of
-    Qualified Nothing warnings -> putStrLn $
-      "Transformation failed: " ++ indent (unlines warnings)
-    Qualified (Just m) warnings -> do
-      if not (L.null warnings)
-        then putStrLn $ "Warnings: " ++ indent (unlines $ L.nub warnings) ++ "\n"
-        else pure ()
-      mapM_ writePair $ M.toList m
-  where
     writePair (path, s) = do
       let fullPath = FP.combine basePath path
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
-    cx = pushTrace ("write graph " ++ unGraphName (graphName g)) cx0
+
+moduleToFiles :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> Module Meta -> GraphFlow Meta (M.Map FilePath String)
+moduleToFiles printGraph mod@(Module g _) = withState cx $ printGraph g
+  where
+    cx = setContextElements allGraphs $ coreContext {
+      contextGraphs = GraphSet allGraphsByName (graphName g),
+      contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+    allGraphs = moduleGraph <$> M.elems allModules
+    allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
+    allModules = addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mod
+      where
+        addModule m mod@(Module g' deps) = if M.member gname m
+            then m
+            else L.foldl addModule (M.insert gname mod m) deps
+          where
+            gname = graphName g'
+
+printTrace :: Bool -> Trace -> IO ()
+printTrace isError (Trace stack messages) = do
+    if (isError && not (L.null stack))
+      then putStrLn $ "Error trace: " ++ L.intercalate " > " (L.reverse stack)
+      else pure ()
+    if not (L.null warnings)
+      then putStrLn $ "Warnings: " ++ indent (unlines $ L.nub warnings) ++ "\n"
+      else pure ()
+  where
+    warnings = L.nub (L.head <$> messages)
+
+runFlow :: s -> Flow s a -> IO (Maybe a)
+runFlow cx f = do
+  let FlowWrapper v _ t = unFlow f cx emptyTrace
+  printTrace (Y.isNothing v) t
+  return v

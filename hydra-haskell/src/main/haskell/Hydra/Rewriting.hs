@@ -1,9 +1,9 @@
 module Hydra.Rewriting where
 
 import Hydra.Core
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Graph
-import Hydra.Primitives
+import Hydra.Lexical
 import Hydra.Evaluation
 import Hydra.CoreDecoding
 import Hydra.Sorting
@@ -36,6 +36,13 @@ freeVariablesInTerm term = case term of
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
+
+graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
+graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
+  where
+    graphNames = S.fromList (graphNameOf <$> S.toList elNames)
+    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
+      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
 
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
@@ -126,13 +133,6 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-stripTermAnnotations :: Ord m => Term m -> Term m
-stripTermAnnotations = rewriteTerm strip id
-  where
-    strip recurse term = case term of
-      TermAnnotated (Annotated t _) -> recurse t
-      _ -> recurse term
-
 substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
@@ -196,8 +196,8 @@ topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
 
-typeDependencies :: (Show m) => Context m -> Name -> Result (M.Map Name (Type m))
-typeDependencies scx name = deps (S.fromList [name]) M.empty
+typeDependencies :: Show m => Name -> GraphFlow m (M.Map Name (Type m))
+typeDependencies name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
         then return names
@@ -210,12 +210,12 @@ typeDependencies scx name = deps (S.fromList [name]) M.empty
           deps newSeeds newNames
       where
         toPair name = do
-          typ <- requireType scx name
+          typ <- requireType name
           return (name, typ)
 
-    requireType scx name = do
-      el <- requireElement (Just "type dependencies") scx name
-      decodeType scx (elementData el)
+    requireType name = do
+      el <- requireElement (Just "type dependencies") name
+      decodeType (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty

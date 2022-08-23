@@ -17,10 +17,10 @@ hydraGrammarName :: GraphName
 hydraGrammarName = GraphName "hydra/grammar"
 
 hydraGrammar :: Graph Meta
-hydraGrammar = Graph hydraGrammarName elements (const True) hydraCoreName
+hydraGrammar = Graph hydraGrammarName elements hydraCoreName
   where
     grammar = nsref hydraGrammarName
-    def = datatype coreContext hydraGrammarName
+    def = datatype hydraGrammarName
     
     elements = [
 

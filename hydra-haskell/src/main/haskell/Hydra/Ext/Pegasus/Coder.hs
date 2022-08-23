@@ -7,9 +7,9 @@ import Hydra.CoreDecoding
 import Hydra.CoreLanguage
 import Hydra.Evaluation
 import Hydra.Graph
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import Hydra.Rewriting
-import Hydra.Util.Coders
+import Hydra.Adapters.Coders
 import Hydra.Util.Formatting
 import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
@@ -23,15 +23,18 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified (M.Map FilePath String)
-printGraph cx g = do
-  sf <- moduleToPegasusSchema cx g
+printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
+printGraph g = do
+  sf <- moduleToPegasusSchema g
   let s = printExpr $ parenthesize $ exprSchemaFile sf
   return $ M.fromList [(graphNameToFilePath False (FileExtension "pdl") $ graphName g, s)]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Context m -> Graph m -> M.Map (Type m) (Coder (Term m) ()) -> [(Element m, TypedTerm m)] -> Result PDL.SchemaFile
-constructModule cx g coders pairs = do
+  => Graph m
+  -> M.Map (Type m) (Coder (Context m) (Term m) ())
+  -> [(Element m, TypedTerm m)]
+  -> GraphFlow m PDL.SchemaFile
+constructModule g coders pairs = do
     let ns = pdlNameForGraph g
     let pkg = Nothing
     let imports = [] -- TODO
@@ -43,21 +46,22 @@ constructModule cx g coders pairs = do
   where
     pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
     aliases = importAliasesForGraph g
-    toSchema (el, TypedTerm typ term) = if typeExpr cx typ == TypeNominal _Type
-      then decodeType cx term >>= typeToSchema el
+    toSchema (el, TypedTerm typ term) = if stripType typ == TypeNominal _Type
+      then decodeType term >>= typeToSchema el
       else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
     typeToSchema el typ = do
       let qname = pdlNameForElement aliases False $ elementName el
-      res <- encodeAdaptedType aliases cx typ
+      res <- encodeAdaptedType aliases typ
       let ptype = case res of
             Left schema -> PDL.NamedSchema_TypeTyperef schema
             Right t -> t
-      r <- annotationClassTermDescription (contextAnnotations cx) cx $ elementData el
+      cx <- getState
+      r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
-moduleToPegasusSchema :: (Ord m, Read m, Show m) => Context m -> Graph m -> Qualified PDL.SchemaFile
-moduleToPegasusSchema cx g = graphToExternalModule language (encodeTerm aliases) constructModule cx g
+moduleToPegasusSchema :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m PDL.SchemaFile
+moduleToPegasusSchema g = graphToExternalModule language (encodeTerm aliases) constructModule g
   where
     aliases = importAliasesForGraph g
 
@@ -65,19 +69,19 @@ doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
 encodeAdaptedType :: (Ord m, Read m, Show m)
-  => M.Map GraphName String -> Context m -> Type m
-  -> Result (Either PDL.Schema PDL.NamedSchema_Type)
-encodeAdaptedType aliases cx typ = do
-  let ac = AdapterContext cx hydraCoreLanguage language
-  ad <- qualifiedToResult $ termAdapter ac typ
-  encodeType aliases cx $ adapterTarget ad
+  => M.Map GraphName String -> Type m
+  -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
+encodeAdaptedType aliases typ = do
+  cx <- getState
+  let acx = AdapterContext cx hydraCoreLanguage language
+  ad <- withState acx $ termAdapter typ
+  encodeType aliases $ adapterTarget ad
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Context m -> Term m -> Result ()
-encodeTerm aliases cx term = do
-    fail "not yet implemented"
+encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Term m -> GraphFlow m ()
+encodeTerm aliases term = fail "not yet implemented"
 
-encodeType :: (Eq m, Show m) => M.Map GraphName String -> Context m -> Type m -> Result (Either PDL.Schema PDL.NamedSchema_Type)
-encodeType aliases cx typ = case typeExpr cx typ of
+encodeType :: (Eq m, Show m) => M.Map GraphName String -> Type m -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType aliases typ = case stripType typ of
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -104,13 +108,13 @@ encodeType aliases cx typ = case typeExpr cx typ of
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
       where
-        isEnum = L.foldl (\b t -> b && typeExpr cx t == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType fields
     _ -> fail $ "unexpected type: " ++ show typ
   where
-    encode t = case typeExpr cx t of
+    encode t = case stripType t of
       TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
       _ -> do
-        res <- encodeType aliases cx t
+        res <- encodeType aliases t
         case res of
           Left schema -> pure schema
           Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
@@ -138,7 +142,7 @@ encodeType aliases cx typ = case typeExpr cx typ of
       return PDL.EnumField {
         PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
         PDL.enumFieldAnnotations = anns}
-    encodePossiblyOptionalType typ = case typeExpr cx typ of
+    encodePossiblyOptionalType typ = case stripType typ of
       TypeOptional ot -> do
         t <- encode ot
         return (t, True)
@@ -146,7 +150,8 @@ encodeType aliases cx typ = case typeExpr cx typ of
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      r <- annotationClassTypeDescription (contextAnnotations cx) cx typ
+      cx <- getState
+      r <- annotationClassTypeDescription (contextAnnotations cx) typ
       return $ doc r
 
 importAliasesForGraph g = M.empty -- TODO

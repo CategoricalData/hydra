@@ -10,25 +10,24 @@ import Hydra.Ext.Json.Coder
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Impl.Haskell.Dsl.Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Errors
 import Hydra.Impl.Haskell.Ext.Json.Serde
 import Hydra.Rewriting
 import Hydra.CoreEncoding
+import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
 showTerm :: Ord m => Term m -> String
-showTerm term = case coderEncode termStringCoder encoded of
-    ResultSuccess s -> s
+showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
   where
-    encoded = encodeTerm coreContext $ rewriteTermMeta (const $ Meta M.empty) term
+    encoded = encodeTerm $ rewriteTermMeta (const $ Meta M.empty) term
 
-termJsonCoder :: Coder (Term Meta) Json.Value
-termJsonCoder = Y.fromJust $ qualifiedValue $ jsonCoder coreContext $ Types.nominal _Term
+termJsonCoder :: Coder (Context Meta) (Term Meta) Json.Value
+termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.nominal _Term
 
-termStringCoder :: Coder (Term Meta) String
+termStringCoder :: Coder (Context Meta) (Term Meta) String
 termStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode termJsonCoder term
@@ -37,15 +36,14 @@ termStringCoder = Coder mout min
       Just v -> coderDecode termJsonCoder v
 
 showType :: Ord m => Type m -> String
-showType typ = case coderEncode typeStringCoder encoded of
-  ResultSuccess s -> s
+showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
   where
-    encoded = encodeType coreContext $ rewriteTypeMeta (const $ Meta M.empty) typ
+    encoded = encodeType $ rewriteTypeMeta (const $ Meta M.empty) typ
 
-typeJsonCoder :: Coder (Term Meta) Json.Value
-typeJsonCoder = Y.fromJust $ qualifiedValue $ jsonCoder coreContext $ Types.nominal _Type
+typeJsonCoder :: Coder (Context Meta) (Term Meta) Json.Value
+typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.nominal _Type
 
-typeStringCoder :: Coder (Term Meta) String
+typeStringCoder :: Coder (Context Meta) (Term Meta) String
 typeStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode typeJsonCoder term

@@ -17,12 +17,12 @@ hydraCoreName :: GraphName
 hydraCoreName = GraphName "hydra/core"
 
 hydraCore :: Graph Meta
-hydraCore = Graph hydraCoreName elements (const True) hydraCoreName
+hydraCore = Graph hydraCoreName elements hydraCoreName
   where
     core = nsref hydraCoreName
 
     -- Note: only hydra/core uses the bootstrap context; all other models use the core context
-    def = datatype bootstrapContext hydraCoreName
+    def = datatype hydraCoreName
 
     doc :: String -> Type Meta -> Type Meta
     doc s = setTypeDescription bootstrapContext (Just s)

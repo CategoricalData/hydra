@@ -3,7 +3,7 @@ module Hydra.Ext.Scala.Utils where
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Extras
+import Hydra.Monads
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Ext.Scala.Language
@@ -14,7 +14,7 @@ import qualified Data.Maybe as Y
 
 
 nameOfType :: Context m -> Type m -> Y.Maybe Name
-nameOfType cx t = case typeExpr cx t of
+nameOfType cx t = case stripType t of
   TypeNominal name -> Just name
   TypeLambda (LambdaType _ body) -> nameOfType cx body
   _ -> Nothing

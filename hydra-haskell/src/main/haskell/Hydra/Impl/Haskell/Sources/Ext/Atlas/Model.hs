@@ -23,9 +23,9 @@ atlasModelName :: GraphName
 atlasModelName = GraphName "hydra/ext/atlas/model"
 
 atlasModel :: Graph Meta
-atlasModel = Graph atlasModelName elements (const True) hydraCoreName
+atlasModel = Graph atlasModelName elements hydraCoreName
   where
-    def = datatype coreContext atlasModelName
+    def = datatype atlasModelName
     atlas = nsref atlasModelName
     xsd = nsref xmlSchemaName
 

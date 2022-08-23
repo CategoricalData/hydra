@@ -7,13 +7,14 @@ import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Meta
 import Hydra.Rewriting
+import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-datatype :: Context Meta -> GraphName -> String -> Type Meta -> Element Meta
-datatype cx gname lname typ = typeElement cx elName $ rewriteType replacePlaceholders id typ
+datatype :: GraphName -> String -> Type Meta -> Element Meta
+datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
     
@@ -45,7 +46,7 @@ bootstrapContext = cx
 
     emptyGraphName = GraphName "empty"
 
-    emptyGraph = Graph emptyGraphName [] (const True) emptyGraphName
+    emptyGraph = Graph emptyGraphName [] emptyGraphName
 
 nsref :: GraphName -> String -> Type m
 nsref ns = Types.nominal . qualify ns . Name
@@ -53,14 +54,14 @@ nsref ns = Types.nominal . qualify ns . Name
 qualify :: GraphName -> Name -> Name
 qualify (GraphName gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-termElement :: Context Meta -> Name -> Type Meta -> Term Meta -> Element Meta
-termElement cx name typ term = Element {
+termElement :: Name -> Type Meta -> Term Meta -> Element Meta
+termElement name typ term = Element {
   elementName = name,
-  elementSchema = encodeType cx typ,
+  elementSchema = encodeType typ,
   elementData = term}
 
-typeElement :: Context Meta -> Name -> Type Meta -> Element Meta
-typeElement cx name typ = Element {
+typeElement :: Name -> Type Meta -> Element Meta
+typeElement name typ = Element {
   elementName = name,
   elementSchema = TermElement _Type,
-  elementData = encodeType cx typ}
+  elementData = encodeType typ}
