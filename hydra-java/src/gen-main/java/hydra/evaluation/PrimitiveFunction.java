@@ -8,9 +8,9 @@ public class PrimitiveFunction<M> {
   
   public final hydra.core.FunctionType<M> type;
   
-  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, Result<hydra.core.Term<M>>> implementation;
+  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, Flow<Context<M>, hydra.core.Term<M>>> implementation;
   
-  public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, Result<hydra.core.Term<M>>> implementation) {
+  public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, Flow<Context<M>, hydra.core.Term<M>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -38,7 +38,7 @@ public class PrimitiveFunction<M> {
     return new PrimitiveFunction(name, type, implementation);
   }
   
-  public PrimitiveFunction withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, Result<hydra.core.Term<M>>> implementation) {
+  public PrimitiveFunction withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, Flow<Context<M>, hydra.core.Term<M>>> implementation) {
     return new PrimitiveFunction(name, type, implementation);
   }
 }

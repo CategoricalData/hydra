@@ -1,15 +1,15 @@
 package hydra.adapter;
 
-public class Adapter<T, V> {
+public class Adapter<S, T, V> {
   public final Boolean isLossy;
   
   public final T source;
   
   public final T target;
   
-  public final hydra.evaluation.Coder<V, V> coder;
+  public final hydra.evaluation.Coder<S, V, V> coder;
   
-  public Adapter (Boolean isLossy, T source, T target, hydra.evaluation.Coder<V, V> coder) {
+  public Adapter (Boolean isLossy, T source, T target, hydra.evaluation.Coder<S, V, V> coder) {
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
@@ -42,7 +42,7 @@ public class Adapter<T, V> {
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withCoder(hydra.evaluation.Coder<V, V> coder) {
+  public Adapter withCoder(hydra.evaluation.Coder<S, V, V> coder) {
     return new Adapter(isLossy, source, target, coder);
   }
 }
