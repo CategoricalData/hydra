@@ -44,6 +44,9 @@ dereferenceNominal t@(TypeNominal name) = do
   ad <- termAdapter typ
   return ad { adapterSource = t }
 
+dropAnnotation :: TypeAdapter m
+dropAnnotation t@(TypeAnnotated (Annotated t' _)) = pure $ idAdapter t'
+
 elementToString :: TypeAdapter m
 elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder encode decode
   where
@@ -283,6 +286,7 @@ termAdapter typ = do
         TypeVariantUnion -> pure passUnion
         _ -> []
       else case typeVariant t of
+        TypeVariantAnnotated -> [dropAnnotation]
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
         TypeVariantNominal -> [dereferenceNominal]
