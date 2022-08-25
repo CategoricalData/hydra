@@ -181,7 +181,7 @@ _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 --hydraIoPrimitives = [
---  unaryPrimitive _io_showTerm (variable "a) string
+--  unaryPrimitive _io_showTerm (variable "a) string 
 --  ]
 
 hydraLibFlowsPrimitives :: Show m => [PrimitiveFunction m]
