@@ -38,22 +38,26 @@ decapitalize s = case s of
   [] -> []
   (h:r) -> C.toLower h : r
 
-dotsToUnderscores :: String -> String
-dotsToUnderscores s = if preserve
-  then s
-  else fmap (\c -> if c == '.' then '_' else c) s
-  where
-    -- TODO: hack
-    preserve = L.isInfixOf " " s
-
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
 
 javaStyleComment :: String -> String
 javaStyleComment s = "/**\n" ++ " * " ++ s ++ "\n */"
 
+nonAlnumToUnderscores :: String -> String
+nonAlnumToUnderscores = L.reverse . fst . L.foldl replace ([], False)
+  where
+    replace (s, b) c = if isAlnum c
+      then (c:s, False)
+      else if b
+        then (s, True)
+        else ('_':s, True)
+    isAlnum c = (c >= 'A' && c <= 'Z')
+      || (c >= 'a' && c <= 'z')
+      || (c >= '0' && c <= '9') 
+
 sanitizeWithUnderscores :: S.Set String -> String -> String
-sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . dotsToUnderscores
+sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . nonAlnumToUnderscores
 
 toLower :: String -> String
 toLower = fmap C.toLower
@@ -63,7 +67,7 @@ toUpper = fmap C.toLower
 
 withCharacterAliases :: String -> String
 withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> original
-  where    
+  where
     alias c = Y.maybe [c] capitalize $ M.lookup (C.ord c) aliases
 
     -- Taken from: https://cs.stanford.edu/people/miles/iso8859.html
