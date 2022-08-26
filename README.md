@@ -23,7 +23,7 @@ You can compile the Scala code with `sbt compile`, run it with `sbt run`, and `s
 
 ### Java build
 
-Build the Java project with `./gradlew build`.
+Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`.
 
 ## Code generation
 

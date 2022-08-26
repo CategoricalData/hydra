@@ -1,12 +1,17 @@
 plugins {
   id 'java-library'
+  id 'maven-publish'
 }
 
-repositories {
-  mavenCentral()
-  maven {
-    url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
-  }
+group 'hydra'
+version '0.1'
+
+sourceCompatibility = 8
+targetCompatibility = 8
+
+dependencies {
+  implementation 'com.linkedin.pegasus:generator:29.22.13'
+  testImplementation 'junit:junit:4.13.2'
 }
 
 sourceSets {
@@ -18,7 +23,21 @@ sourceSets {
   }
 }
 
-dependencies {
-  implementation 'com.linkedin.pegasus:generator:29.22.13'
-  testImplementation 'junit:junit:4.13.2'
+repositories {
+  mavenCentral()
+  mavenLocal()
+  maven {
+    url "https://linkedin.jfrog.io/artifactory/open-source/" // For Pegasus dependencies
+  }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+  repositories {
+    mavenLocal()
+  }
 }
