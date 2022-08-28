@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class Dims {
-  public final java.util.List<java.util.List<Annotation>> value;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.Annotation>> value;
   
-  public Dims (java.util.List<java.util.List<Annotation>> value) {
+  public Dims (java.util.List<java.util.List<hydra.ext.java.syntax.Annotation>> value) {
     this.value = value;
   }
   

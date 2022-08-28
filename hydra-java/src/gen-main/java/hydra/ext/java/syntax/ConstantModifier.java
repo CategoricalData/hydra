@@ -39,10 +39,10 @@ public abstract class ConstantModifier {
     }
   }
   
-  public static final class Annotation extends ConstantModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.ConstantModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -66,7 +66,7 @@ public abstract class ConstantModifier {
     }
   }
   
-  public static final class Public extends ConstantModifier {
+  public static final class Public extends hydra.ext.java.syntax.ConstantModifier {
     public Public () {
     
     }
@@ -91,7 +91,7 @@ public abstract class ConstantModifier {
     }
   }
   
-  public static final class Static extends ConstantModifier {
+  public static final class Static extends hydra.ext.java.syntax.ConstantModifier {
     public Static () {
     
     }
@@ -116,7 +116,7 @@ public abstract class ConstantModifier {
     }
   }
   
-  public static final class Final extends ConstantModifier {
+  public static final class Final extends hydra.ext.java.syntax.ConstantModifier {
     public Final () {
     
     }

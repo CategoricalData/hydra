@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class Assignment {
-  public final LeftHandSide lhs;
+  public final hydra.ext.java.syntax.LeftHandSide lhs;
   
-  public final AssignmentOperator op;
+  public final hydra.ext.java.syntax.AssignmentOperator op;
   
-  public final Expression expression;
+  public final hydra.ext.java.syntax.Expression expression;
   
-  public Assignment (LeftHandSide lhs, AssignmentOperator op, Expression expression) {
+  public Assignment (hydra.ext.java.syntax.LeftHandSide lhs, hydra.ext.java.syntax.AssignmentOperator op, hydra.ext.java.syntax.Expression expression) {
     this.lhs = lhs;
     this.op = op;
     this.expression = expression;
@@ -27,15 +27,15 @@ public class Assignment {
     return 2 * lhs.hashCode() + 3 * op.hashCode() + 5 * expression.hashCode();
   }
   
-  public Assignment withLhs(LeftHandSide lhs) {
+  public Assignment withLhs(hydra.ext.java.syntax.LeftHandSide lhs) {
     return new Assignment(lhs, op, expression);
   }
   
-  public Assignment withOp(AssignmentOperator op) {
+  public Assignment withOp(hydra.ext.java.syntax.AssignmentOperator op) {
     return new Assignment(lhs, op, expression);
   }
   
-  public Assignment withExpression(Expression expression) {
+  public Assignment withExpression(hydra.ext.java.syntax.Expression expression) {
     return new Assignment(lhs, op, expression);
   }
 }

@@ -57,10 +57,10 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Annotation extends InterfaceModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.InterfaceModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -84,7 +84,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Public extends InterfaceModifier {
+  public static final class Public extends hydra.ext.java.syntax.InterfaceModifier {
     public Public () {
     
     }
@@ -109,7 +109,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Protected extends InterfaceModifier {
+  public static final class Protected extends hydra.ext.java.syntax.InterfaceModifier {
     public Protected () {
     
     }
@@ -134,7 +134,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Private extends InterfaceModifier {
+  public static final class Private extends hydra.ext.java.syntax.InterfaceModifier {
     public Private () {
     
     }
@@ -159,7 +159,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Abstract extends InterfaceModifier {
+  public static final class Abstract extends hydra.ext.java.syntax.InterfaceModifier {
     public Abstract () {
     
     }
@@ -184,7 +184,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Static extends InterfaceModifier {
+  public static final class Static extends hydra.ext.java.syntax.InterfaceModifier {
     public Static () {
     
     }
@@ -209,7 +209,7 @@ public abstract class InterfaceModifier {
     }
   }
   
-  public static final class Strictfb extends InterfaceModifier {
+  public static final class Strictfb extends hydra.ext.java.syntax.InterfaceModifier {
     public Strictfb () {
     
     }

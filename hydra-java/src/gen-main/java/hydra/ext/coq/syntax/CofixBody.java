@@ -1,15 +1,15 @@
 package hydra.ext.coq.syntax;
 
 public class CofixBody {
-  public final Ident ident;
+  public final hydra.ext.coq.syntax.Ident ident;
   
-  public final java.util.List<Binder> binders;
+  public final java.util.List<hydra.ext.coq.syntax.Binder> binders;
   
-  public final java.util.Optional<Type> type;
+  public final java.util.Optional<hydra.ext.coq.syntax.Type> type;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public CofixBody (Ident ident, java.util.List<Binder> binders, java.util.Optional<Type> type, Term term) {
+  public CofixBody (hydra.ext.coq.syntax.Ident ident, java.util.List<hydra.ext.coq.syntax.Binder> binders, java.util.Optional<hydra.ext.coq.syntax.Type> type, hydra.ext.coq.syntax.Term term) {
     this.ident = ident;
     this.binders = binders;
     this.type = type;
@@ -30,19 +30,19 @@ public class CofixBody {
     return 2 * ident.hashCode() + 3 * binders.hashCode() + 5 * type.hashCode() + 7 * term.hashCode();
   }
   
-  public CofixBody withIdent(Ident ident) {
+  public CofixBody withIdent(hydra.ext.coq.syntax.Ident ident) {
     return new CofixBody(ident, binders, type, term);
   }
   
-  public CofixBody withBinders(java.util.List<Binder> binders) {
+  public CofixBody withBinders(java.util.List<hydra.ext.coq.syntax.Binder> binders) {
     return new CofixBody(ident, binders, type, term);
   }
   
-  public CofixBody withType(java.util.Optional<Type> type) {
+  public CofixBody withType(java.util.Optional<hydra.ext.coq.syntax.Type> type) {
     return new CofixBody(ident, binders, type, term);
   }
   
-  public CofixBody withTerm(Term term) {
+  public CofixBody withTerm(hydra.ext.coq.syntax.Term term) {
     return new CofixBody(ident, binders, type, term);
   }
 }

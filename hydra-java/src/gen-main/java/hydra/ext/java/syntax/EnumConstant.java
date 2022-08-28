@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class EnumConstant {
-  public final java.util.List<EnumConstantModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final java.util.List<java.util.List<Expression>> arguments;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments;
   
-  public final java.util.Optional<ClassBody> body;
+  public final java.util.Optional<hydra.ext.java.syntax.ClassBody> body;
   
-  public EnumConstant (java.util.List<EnumConstantModifier> modifiers, Identifier identifier, java.util.List<java.util.List<Expression>> arguments, java.util.Optional<ClassBody> body) {
+  public EnumConstant (java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers, hydra.ext.java.syntax.Identifier identifier, java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments, java.util.Optional<hydra.ext.java.syntax.ClassBody> body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.arguments = arguments;
@@ -30,19 +30,19 @@ public class EnumConstant {
     return 2 * modifiers.hashCode() + 3 * identifier.hashCode() + 5 * arguments.hashCode() + 7 * body.hashCode();
   }
   
-  public EnumConstant withModifiers(java.util.List<EnumConstantModifier> modifiers) {
+  public EnumConstant withModifiers(java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
-  public EnumConstant withIdentifier(Identifier identifier) {
+  public EnumConstant withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
-  public EnumConstant withArguments(java.util.List<java.util.List<Expression>> arguments) {
+  public EnumConstant withArguments(java.util.List<java.util.List<hydra.ext.java.syntax.Expression>> arguments) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
   
-  public EnumConstant withBody(java.util.Optional<ClassBody> body) {
+  public EnumConstant withBody(java.util.Optional<hydra.ext.java.syntax.ClassBody> body) {
     return new EnumConstant(modifiers, identifier, arguments, body);
   }
 }

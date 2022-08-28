@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class AnnotationTypeBody {
-  public final java.util.List<java.util.List<AnnotationTypeMemberDeclaration>> value;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value;
   
-  public AnnotationTypeBody (java.util.List<java.util.List<AnnotationTypeMemberDeclaration>> value) {
+  public AnnotationTypeBody (java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value) {
     this.value = value;
   }
   

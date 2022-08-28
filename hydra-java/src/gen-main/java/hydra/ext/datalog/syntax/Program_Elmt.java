@@ -27,10 +27,10 @@ public abstract class Program_Elmt {
     }
   }
   
-  public static final class Fact extends Program_Elmt {
-    public final Fact value;
+  public static final class Fact extends hydra.ext.datalog.syntax.Program_Elmt {
+    public final hydra.ext.datalog.syntax.Fact value;
     
-    public Fact (Fact value) {
+    public Fact (hydra.ext.datalog.syntax.Fact value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Program_Elmt {
     }
   }
   
-  public static final class Rule extends Program_Elmt {
-    public final Rule value;
+  public static final class Rule extends hydra.ext.datalog.syntax.Program_Elmt {
+    public final hydra.ext.datalog.syntax.Rule value;
     
-    public Rule (Rule value) {
+    public Rule (hydra.ext.datalog.syntax.Rule value) {
       this.value = value;
     }
     

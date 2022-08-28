@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ConstantDeclaration {
-  public final java.util.List<ConstantModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers;
   
-  public final UnannType type;
+  public final hydra.ext.java.syntax.UnannType type;
   
-  public final java.util.List<VariableDeclarator> variables;
+  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables;
   
-  public ConstantDeclaration (java.util.List<ConstantModifier> modifiers, UnannType type, java.util.List<VariableDeclarator> variables) {
+  public ConstantDeclaration (java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
     this.modifiers = modifiers;
     this.type = type;
     this.variables = variables;
@@ -27,15 +27,15 @@ public class ConstantDeclaration {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * variables.hashCode();
   }
   
-  public ConstantDeclaration withModifiers(java.util.List<ConstantModifier> modifiers) {
+  public ConstantDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
-  public ConstantDeclaration withType(UnannType type) {
+  public ConstantDeclaration withType(hydra.ext.java.syntax.UnannType type) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
-  public ConstantDeclaration withVariables(java.util.List<VariableDeclarator> variables) {
+  public ConstantDeclaration withVariables(java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
 }

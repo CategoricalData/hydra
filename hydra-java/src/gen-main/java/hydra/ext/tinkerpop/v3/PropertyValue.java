@@ -30,7 +30,7 @@ public abstract class PropertyValue {
     }
   }
   
-  public static final class Literal extends PropertyValue {
+  public static final class Literal extends hydra.ext.tinkerpop.v3.PropertyValue {
     public final hydra.core.Literal value;
     
     public Literal (hydra.core.Literal value) {
@@ -57,10 +57,10 @@ public abstract class PropertyValue {
     }
   }
   
-  public static final class List extends PropertyValue {
-    public final java.util.List<PropertyValue> value;
+  public static final class List extends hydra.ext.tinkerpop.v3.PropertyValue {
+    public final java.util.List<hydra.ext.tinkerpop.v3.PropertyValue> value;
     
-    public List (java.util.List<PropertyValue> value) {
+    public List (java.util.List<hydra.ext.tinkerpop.v3.PropertyValue> value) {
       this.value = value;
     }
     

@@ -1,11 +1,11 @@
 package hydra.ext.datalog.syntax;
 
 public class ConstantList_Multiple {
-  public final Constant constant;
+  public final hydra.ext.datalog.syntax.Constant constant;
   
-  public final ConstantList constantList;
+  public final hydra.ext.datalog.syntax.ConstantList constantList;
   
-  public ConstantList_Multiple (Constant constant, ConstantList constantList) {
+  public ConstantList_Multiple (hydra.ext.datalog.syntax.Constant constant, hydra.ext.datalog.syntax.ConstantList constantList) {
     this.constant = constant;
     this.constantList = constantList;
   }
@@ -24,11 +24,11 @@ public class ConstantList_Multiple {
     return 2 * constant.hashCode() + 3 * constantList.hashCode();
   }
   
-  public ConstantList_Multiple withConstant(Constant constant) {
+  public ConstantList_Multiple withConstant(hydra.ext.datalog.syntax.Constant constant) {
     return new ConstantList_Multiple(constant, constantList);
   }
   
-  public ConstantList_Multiple withConstantList(ConstantList constantList) {
+  public ConstantList_Multiple withConstantList(hydra.ext.datalog.syntax.ConstantList constantList) {
     return new ConstantList_Multiple(constant, constantList);
   }
 }

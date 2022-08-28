@@ -225,10 +225,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Lit extends Data {
-    public final Lit value;
+  public static final class Lit extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Lit value;
     
-    public Lit (Lit value) {
+    public Lit (hydra.ext.scala.meta.Lit value) {
       this.value = value;
     }
     
@@ -252,10 +252,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Ref extends Data {
-    public final Data_Ref value;
+  public static final class Ref extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Ref value;
     
-    public Ref (Data_Ref value) {
+    public Ref (hydra.ext.scala.meta.Data_Ref value) {
       this.value = value;
     }
     
@@ -279,10 +279,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Interpolate extends Data {
-    public final Data_Interpolate value;
+  public static final class Interpolate extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Interpolate value;
     
-    public Interpolate (Data_Interpolate value) {
+    public Interpolate (hydra.ext.scala.meta.Data_Interpolate value) {
       this.value = value;
     }
     
@@ -306,10 +306,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Xml extends Data {
-    public final Data_Xml value;
+  public static final class Xml extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Xml value;
     
-    public Xml (Data_Xml value) {
+    public Xml (hydra.ext.scala.meta.Data_Xml value) {
       this.value = value;
     }
     
@@ -333,10 +333,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Apply extends Data {
-    public final Data_Apply value;
+  public static final class Apply extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Apply value;
     
-    public Apply (Data_Apply value) {
+    public Apply (hydra.ext.scala.meta.Data_Apply value) {
       this.value = value;
     }
     
@@ -360,10 +360,10 @@ public abstract class Data {
     }
   }
   
-  public static final class ApplyUsing extends Data {
-    public final Data_ApplyUsing value;
+  public static final class ApplyUsing extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_ApplyUsing value;
     
-    public ApplyUsing (Data_ApplyUsing value) {
+    public ApplyUsing (hydra.ext.scala.meta.Data_ApplyUsing value) {
       this.value = value;
     }
     
@@ -387,10 +387,10 @@ public abstract class Data {
     }
   }
   
-  public static final class ApplyType extends Data {
-    public final Data_ApplyType value;
+  public static final class ApplyType extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_ApplyType value;
     
-    public ApplyType (Data_ApplyType value) {
+    public ApplyType (hydra.ext.scala.meta.Data_ApplyType value) {
       this.value = value;
     }
     
@@ -414,10 +414,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Assign extends Data {
-    public final Data_Assign value;
+  public static final class Assign extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Assign value;
     
-    public Assign (Data_Assign value) {
+    public Assign (hydra.ext.scala.meta.Data_Assign value) {
       this.value = value;
     }
     
@@ -441,10 +441,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Return extends Data {
-    public final Data_Return value;
+  public static final class Return extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Return value;
     
-    public Return (Data_Return value) {
+    public Return (hydra.ext.scala.meta.Data_Return value) {
       this.value = value;
     }
     
@@ -468,10 +468,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Throw extends Data {
-    public final Data_Throw value;
+  public static final class Throw extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Throw value;
     
-    public Throw (Data_Throw value) {
+    public Throw (hydra.ext.scala.meta.Data_Throw value) {
       this.value = value;
     }
     
@@ -495,10 +495,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Ascribe extends Data {
-    public final Data_Ascribe value;
+  public static final class Ascribe extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Ascribe value;
     
-    public Ascribe (Data_Ascribe value) {
+    public Ascribe (hydra.ext.scala.meta.Data_Ascribe value) {
       this.value = value;
     }
     
@@ -522,10 +522,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Annotate extends Data {
-    public final Data_Annotate value;
+  public static final class Annotate extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Annotate value;
     
-    public Annotate (Data_Annotate value) {
+    public Annotate (hydra.ext.scala.meta.Data_Annotate value) {
       this.value = value;
     }
     
@@ -549,10 +549,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Tuple extends Data {
-    public final Data_Tuple value;
+  public static final class Tuple extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Tuple value;
     
-    public Tuple (Data_Tuple value) {
+    public Tuple (hydra.ext.scala.meta.Data_Tuple value) {
       this.value = value;
     }
     
@@ -576,10 +576,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Block extends Data {
-    public final Data_Block value;
+  public static final class Block extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Block value;
     
-    public Block (Data_Block value) {
+    public Block (hydra.ext.scala.meta.Data_Block value) {
       this.value = value;
     }
     
@@ -603,10 +603,10 @@ public abstract class Data {
     }
   }
   
-  public static final class EndMarker extends Data {
-    public final Data_EndMarker value;
+  public static final class EndMarker extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_EndMarker value;
     
-    public EndMarker (Data_EndMarker value) {
+    public EndMarker (hydra.ext.scala.meta.Data_EndMarker value) {
       this.value = value;
     }
     
@@ -630,10 +630,10 @@ public abstract class Data {
     }
   }
   
-  public static final class If extends Data {
-    public final Data_If value;
+  public static final class If extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_If value;
     
-    public If (Data_If value) {
+    public If (hydra.ext.scala.meta.Data_If value) {
       this.value = value;
     }
     
@@ -657,10 +657,10 @@ public abstract class Data {
     }
   }
   
-  public static final class QuotedMacroExpr extends Data {
-    public final Data_QuotedMacroExpr value;
+  public static final class QuotedMacroExpr extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_QuotedMacroExpr value;
     
-    public QuotedMacroExpr (Data_QuotedMacroExpr value) {
+    public QuotedMacroExpr (hydra.ext.scala.meta.Data_QuotedMacroExpr value) {
       this.value = value;
     }
     
@@ -684,10 +684,10 @@ public abstract class Data {
     }
   }
   
-  public static final class QuotedMacroType extends Data {
-    public final Data_QuotedMacroType value;
+  public static final class QuotedMacroType extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_QuotedMacroType value;
     
-    public QuotedMacroType (Data_QuotedMacroType value) {
+    public QuotedMacroType (hydra.ext.scala.meta.Data_QuotedMacroType value) {
       this.value = value;
     }
     
@@ -711,10 +711,10 @@ public abstract class Data {
     }
   }
   
-  public static final class SplicedMacroExpr extends Data {
-    public final Data_SplicedMacroExpr value;
+  public static final class SplicedMacroExpr extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_SplicedMacroExpr value;
     
-    public SplicedMacroExpr (Data_SplicedMacroExpr value) {
+    public SplicedMacroExpr (hydra.ext.scala.meta.Data_SplicedMacroExpr value) {
       this.value = value;
     }
     
@@ -738,10 +738,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Match extends Data {
-    public final Data_Match value;
+  public static final class Match extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Match value;
     
-    public Match (Data_Match value) {
+    public Match (hydra.ext.scala.meta.Data_Match value) {
       this.value = value;
     }
     
@@ -765,10 +765,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Try extends Data {
-    public final Data_Try value;
+  public static final class Try extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Try value;
     
-    public Try (Data_Try value) {
+    public Try (hydra.ext.scala.meta.Data_Try value) {
       this.value = value;
     }
     
@@ -792,10 +792,10 @@ public abstract class Data {
     }
   }
   
-  public static final class TryWithHandler extends Data {
-    public final Data_TryWithHandler value;
+  public static final class TryWithHandler extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_TryWithHandler value;
     
-    public TryWithHandler (Data_TryWithHandler value) {
+    public TryWithHandler (hydra.ext.scala.meta.Data_TryWithHandler value) {
       this.value = value;
     }
     
@@ -819,10 +819,10 @@ public abstract class Data {
     }
   }
   
-  public static final class FunctionData extends Data {
-    public final Data_FunctionData value;
+  public static final class FunctionData extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_FunctionData value;
     
-    public FunctionData (Data_FunctionData value) {
+    public FunctionData (hydra.ext.scala.meta.Data_FunctionData value) {
       this.value = value;
     }
     
@@ -846,10 +846,10 @@ public abstract class Data {
     }
   }
   
-  public static final class PolyFunction extends Data {
-    public final Data_PolyFunction value;
+  public static final class PolyFunction extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_PolyFunction value;
     
-    public PolyFunction (Data_PolyFunction value) {
+    public PolyFunction (hydra.ext.scala.meta.Data_PolyFunction value) {
       this.value = value;
     }
     
@@ -873,10 +873,10 @@ public abstract class Data {
     }
   }
   
-  public static final class PartialFunction extends Data {
-    public final Data_PartialFunction value;
+  public static final class PartialFunction extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_PartialFunction value;
     
-    public PartialFunction (Data_PartialFunction value) {
+    public PartialFunction (hydra.ext.scala.meta.Data_PartialFunction value) {
       this.value = value;
     }
     
@@ -900,10 +900,10 @@ public abstract class Data {
     }
   }
   
-  public static final class While extends Data {
-    public final Data_While value;
+  public static final class While extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_While value;
     
-    public While (Data_While value) {
+    public While (hydra.ext.scala.meta.Data_While value) {
       this.value = value;
     }
     
@@ -927,10 +927,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Do extends Data {
-    public final Data_Do value;
+  public static final class Do extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Do value;
     
-    public Do (Data_Do value) {
+    public Do (hydra.ext.scala.meta.Data_Do value) {
       this.value = value;
     }
     
@@ -954,10 +954,10 @@ public abstract class Data {
     }
   }
   
-  public static final class For extends Data {
-    public final Data_For value;
+  public static final class For extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_For value;
     
-    public For (Data_For value) {
+    public For (hydra.ext.scala.meta.Data_For value) {
       this.value = value;
     }
     
@@ -981,10 +981,10 @@ public abstract class Data {
     }
   }
   
-  public static final class ForYield extends Data {
-    public final Data_ForYield value;
+  public static final class ForYield extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_ForYield value;
     
-    public ForYield (Data_ForYield value) {
+    public ForYield (hydra.ext.scala.meta.Data_ForYield value) {
       this.value = value;
     }
     
@@ -1008,10 +1008,10 @@ public abstract class Data {
     }
   }
   
-  public static final class New extends Data {
-    public final Data_New value;
+  public static final class New extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_New value;
     
-    public New (Data_New value) {
+    public New (hydra.ext.scala.meta.Data_New value) {
       this.value = value;
     }
     
@@ -1035,10 +1035,10 @@ public abstract class Data {
     }
   }
   
-  public static final class NewAnonymous extends Data {
-    public final Data_NewAnonymous value;
+  public static final class NewAnonymous extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_NewAnonymous value;
     
-    public NewAnonymous (Data_NewAnonymous value) {
+    public NewAnonymous (hydra.ext.scala.meta.Data_NewAnonymous value) {
       this.value = value;
     }
     
@@ -1062,10 +1062,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Placeholder extends Data {
-    public final Data_Placeholder value;
+  public static final class Placeholder extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Placeholder value;
     
-    public Placeholder (Data_Placeholder value) {
+    public Placeholder (hydra.ext.scala.meta.Data_Placeholder value) {
       this.value = value;
     }
     
@@ -1089,10 +1089,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Eta extends Data {
-    public final Data_Eta value;
+  public static final class Eta extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Eta value;
     
-    public Eta (Data_Eta value) {
+    public Eta (hydra.ext.scala.meta.Data_Eta value) {
       this.value = value;
     }
     
@@ -1116,10 +1116,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Repeated extends Data {
-    public final Data_Repeated value;
+  public static final class Repeated extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Repeated value;
     
-    public Repeated (Data_Repeated value) {
+    public Repeated (hydra.ext.scala.meta.Data_Repeated value) {
       this.value = value;
     }
     
@@ -1143,10 +1143,10 @@ public abstract class Data {
     }
   }
   
-  public static final class Param extends Data {
-    public final Data_Param value;
+  public static final class Param extends hydra.ext.scala.meta.Data {
+    public final hydra.ext.scala.meta.Data_Param value;
     
-    public Param (Data_Param value) {
+    public Param (hydra.ext.scala.meta.Data_Param value) {
       this.value = value;
     }
     

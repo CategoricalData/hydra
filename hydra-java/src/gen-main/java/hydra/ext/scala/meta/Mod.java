@@ -141,10 +141,10 @@ public abstract class Mod {
     }
   }
   
-  public static final class Annot extends Mod {
-    public final Mod_Annot value;
+  public static final class Annot extends hydra.ext.scala.meta.Mod {
+    public final hydra.ext.scala.meta.Mod_Annot value;
     
-    public Annot (Mod_Annot value) {
+    public Annot (hydra.ext.scala.meta.Mod_Annot value) {
       this.value = value;
     }
     
@@ -168,10 +168,10 @@ public abstract class Mod {
     }
   }
   
-  public static final class Private extends Mod {
-    public final Mod_Private value;
+  public static final class Private extends hydra.ext.scala.meta.Mod {
+    public final hydra.ext.scala.meta.Mod_Private value;
     
-    public Private (Mod_Private value) {
+    public Private (hydra.ext.scala.meta.Mod_Private value) {
       this.value = value;
     }
     
@@ -195,10 +195,10 @@ public abstract class Mod {
     }
   }
   
-  public static final class Protected extends Mod {
-    public final Mod_Protected value;
+  public static final class Protected extends hydra.ext.scala.meta.Mod {
+    public final hydra.ext.scala.meta.Mod_Protected value;
     
-    public Protected (Mod_Protected value) {
+    public Protected (hydra.ext.scala.meta.Mod_Protected value) {
       this.value = value;
     }
     
@@ -222,7 +222,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Implicit extends Mod {
+  public static final class Implicit extends hydra.ext.scala.meta.Mod {
     public Implicit () {
     
     }
@@ -247,7 +247,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Final extends Mod {
+  public static final class Final extends hydra.ext.scala.meta.Mod {
     public Final () {
     
     }
@@ -272,7 +272,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Sealed extends Mod {
+  public static final class Sealed extends hydra.ext.scala.meta.Mod {
     public Sealed () {
     
     }
@@ -297,7 +297,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Open extends Mod {
+  public static final class Open extends hydra.ext.scala.meta.Mod {
     public Open () {
     
     }
@@ -322,7 +322,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Super extends Mod {
+  public static final class Super extends hydra.ext.scala.meta.Mod {
     public Super () {
     
     }
@@ -347,7 +347,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Override_ extends Mod {
+  public static final class Override_ extends hydra.ext.scala.meta.Mod {
     public Override_ () {
     
     }
@@ -372,7 +372,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Case extends Mod {
+  public static final class Case extends hydra.ext.scala.meta.Mod {
     public Case () {
     
     }
@@ -397,7 +397,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Abstract extends Mod {
+  public static final class Abstract extends hydra.ext.scala.meta.Mod {
     public Abstract () {
     
     }
@@ -422,7 +422,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Covariant extends Mod {
+  public static final class Covariant extends hydra.ext.scala.meta.Mod {
     public Covariant () {
     
     }
@@ -447,7 +447,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Contravariant extends Mod {
+  public static final class Contravariant extends hydra.ext.scala.meta.Mod {
     public Contravariant () {
     
     }
@@ -472,7 +472,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Lazy extends Mod {
+  public static final class Lazy extends hydra.ext.scala.meta.Mod {
     public Lazy () {
     
     }
@@ -497,7 +497,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class ValParam extends Mod {
+  public static final class ValParam extends hydra.ext.scala.meta.Mod {
     public ValParam () {
     
     }
@@ -522,7 +522,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class VarParam extends Mod {
+  public static final class VarParam extends hydra.ext.scala.meta.Mod {
     public VarParam () {
     
     }
@@ -547,7 +547,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Infix extends Mod {
+  public static final class Infix extends hydra.ext.scala.meta.Mod {
     public Infix () {
     
     }
@@ -572,7 +572,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Inline extends Mod {
+  public static final class Inline extends hydra.ext.scala.meta.Mod {
     public Inline () {
     
     }
@@ -597,7 +597,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Using extends Mod {
+  public static final class Using extends hydra.ext.scala.meta.Mod {
     public Using () {
     
     }
@@ -622,7 +622,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Opaque extends Mod {
+  public static final class Opaque extends hydra.ext.scala.meta.Mod {
     public Opaque () {
     
     }
@@ -647,7 +647,7 @@ public abstract class Mod {
     }
   }
   
-  public static final class Transparent extends Mod {
+  public static final class Transparent extends hydra.ext.scala.meta.Mod {
     public Transparent () {
     
     }

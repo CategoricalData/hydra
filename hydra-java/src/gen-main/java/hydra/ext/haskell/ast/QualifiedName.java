@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class QualifiedName {
-  public final java.util.List<NamePart> qualifiers;
+  public final java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers;
   
-  public final NamePart unqualified;
+  public final hydra.ext.haskell.ast.NamePart unqualified;
   
-  public QualifiedName (java.util.List<NamePart> qualifiers, NamePart unqualified) {
+  public QualifiedName (java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers, hydra.ext.haskell.ast.NamePart unqualified) {
     this.qualifiers = qualifiers;
     this.unqualified = unqualified;
   }
@@ -24,11 +24,11 @@ public class QualifiedName {
     return 2 * qualifiers.hashCode() + 3 * unqualified.hashCode();
   }
   
-  public QualifiedName withQualifiers(java.util.List<NamePart> qualifiers) {
+  public QualifiedName withQualifiers(java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers) {
     return new QualifiedName(qualifiers, unqualified);
   }
   
-  public QualifiedName withUnqualified(NamePart unqualified) {
+  public QualifiedName withUnqualified(hydra.ext.haskell.ast.NamePart unqualified) {
     return new QualifiedName(qualifiers, unqualified);
   }
 }

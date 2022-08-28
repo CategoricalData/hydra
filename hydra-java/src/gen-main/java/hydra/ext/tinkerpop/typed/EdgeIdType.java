@@ -7,9 +7,9 @@ public class EdgeIdType {
   /**
    * The type of a reference to an edge by id
    */
-  public final EdgeType value;
+  public final hydra.ext.tinkerpop.typed.EdgeType value;
   
-  public EdgeIdType (EdgeType value) {
+  public EdgeIdType (hydra.ext.tinkerpop.typed.EdgeType value) {
     this.value = value;
   }
   

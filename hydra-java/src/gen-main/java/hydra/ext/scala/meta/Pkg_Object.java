@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Pkg_Object {
-  public final java.util.List<Mod> mods;
+  public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public final Template template;
+  public final hydra.ext.scala.meta.Template template;
   
-  public Pkg_Object (java.util.List<Mod> mods, Data_Name name, Template template) {
+  public Pkg_Object (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Data_Name name, hydra.ext.scala.meta.Template template) {
     this.mods = mods;
     this.name = name;
     this.template = template;
@@ -27,15 +27,15 @@ public class Pkg_Object {
     return 2 * mods.hashCode() + 3 * name.hashCode() + 5 * template.hashCode();
   }
   
-  public Pkg_Object withMods(java.util.List<Mod> mods) {
+  public Pkg_Object withMods(java.util.List<hydra.ext.scala.meta.Mod> mods) {
     return new Pkg_Object(mods, name, template);
   }
   
-  public Pkg_Object withName(Data_Name name) {
+  public Pkg_Object withName(hydra.ext.scala.meta.Data_Name name) {
     return new Pkg_Object(mods, name, template);
   }
   
-  public Pkg_Object withTemplate(Template template) {
+  public Pkg_Object withTemplate(hydra.ext.scala.meta.Template template) {
     return new Pkg_Object(mods, name, template);
   }
 }

@@ -36,7 +36,7 @@ public abstract class FloatType {
     }
   }
   
-  public static final class Bigfloat extends FloatType {
+  public static final class Bigfloat extends hydra.core.FloatType {
     public Bigfloat () {
     
     }
@@ -61,7 +61,7 @@ public abstract class FloatType {
     }
   }
   
-  public static final class Float32 extends FloatType {
+  public static final class Float32 extends hydra.core.FloatType {
     public Float32 () {
     
     }
@@ -86,7 +86,7 @@ public abstract class FloatType {
     }
   }
   
-  public static final class Float64 extends FloatType {
+  public static final class Float64 extends hydra.core.FloatType {
     public Float64 () {
     
     }

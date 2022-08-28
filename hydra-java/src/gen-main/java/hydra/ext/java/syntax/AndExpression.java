@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class AndExpression {
-  public final java.util.List<EqualityExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.EqualityExpression> value;
   
-  public AndExpression (java.util.List<EqualityExpression> value) {
+  public AndExpression (java.util.List<hydra.ext.java.syntax.EqualityExpression> value) {
     this.value = value;
   }
   

@@ -4,13 +4,13 @@ package hydra.util.codetree.ast;
  * An operator expression
  */
 public class OpExpr {
-  public final Op op;
+  public final hydra.util.codetree.ast.Op op;
   
-  public final Expr lhs;
+  public final hydra.util.codetree.ast.Expr lhs;
   
-  public final Expr rhs;
+  public final hydra.util.codetree.ast.Expr rhs;
   
-  public OpExpr (Op op, Expr lhs, Expr rhs) {
+  public OpExpr (hydra.util.codetree.ast.Op op, hydra.util.codetree.ast.Expr lhs, hydra.util.codetree.ast.Expr rhs) {
     this.op = op;
     this.lhs = lhs;
     this.rhs = rhs;
@@ -30,15 +30,15 @@ public class OpExpr {
     return 2 * op.hashCode() + 3 * lhs.hashCode() + 5 * rhs.hashCode();
   }
   
-  public OpExpr withOp(Op op) {
+  public OpExpr withOp(hydra.util.codetree.ast.Op op) {
     return new OpExpr(op, lhs, rhs);
   }
   
-  public OpExpr withLhs(Expr lhs) {
+  public OpExpr withLhs(hydra.util.codetree.ast.Expr lhs) {
     return new OpExpr(op, lhs, rhs);
   }
   
-  public OpExpr withRhs(Expr rhs) {
+  public OpExpr withRhs(hydra.util.codetree.ast.Expr rhs) {
     return new OpExpr(op, lhs, rhs);
   }
 }

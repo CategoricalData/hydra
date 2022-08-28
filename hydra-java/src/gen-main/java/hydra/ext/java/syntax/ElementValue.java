@@ -33,10 +33,10 @@ public abstract class ElementValue {
     }
   }
   
-  public static final class ConditionalExpression extends ElementValue {
-    public final ConditionalExpression value;
+  public static final class ConditionalExpression extends hydra.ext.java.syntax.ElementValue {
+    public final hydra.ext.java.syntax.ConditionalExpression value;
     
-    public ConditionalExpression (ConditionalExpression value) {
+    public ConditionalExpression (hydra.ext.java.syntax.ConditionalExpression value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class ElementValue {
     }
   }
   
-  public static final class ElementValueArrayInitializer extends ElementValue {
-    public final ElementValueArrayInitializer value;
+  public static final class ElementValueArrayInitializer extends hydra.ext.java.syntax.ElementValue {
+    public final hydra.ext.java.syntax.ElementValueArrayInitializer value;
     
-    public ElementValueArrayInitializer (ElementValueArrayInitializer value) {
+    public ElementValueArrayInitializer (hydra.ext.java.syntax.ElementValueArrayInitializer value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class ElementValue {
     }
   }
   
-  public static final class Annotation extends ElementValue {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.ElementValue {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     

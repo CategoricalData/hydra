@@ -27,10 +27,10 @@ public abstract class AssignmentExpression {
     }
   }
   
-  public static final class Conditional extends AssignmentExpression {
-    public final ConditionalExpression value;
+  public static final class Conditional extends hydra.ext.java.syntax.AssignmentExpression {
+    public final hydra.ext.java.syntax.ConditionalExpression value;
     
-    public Conditional (ConditionalExpression value) {
+    public Conditional (hydra.ext.java.syntax.ConditionalExpression value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class AssignmentExpression {
     }
   }
   
-  public static final class Assignment extends AssignmentExpression {
-    public final Assignment value;
+  public static final class Assignment extends hydra.ext.java.syntax.AssignmentExpression {
+    public final hydra.ext.java.syntax.Assignment value;
     
-    public Assignment (Assignment value) {
+    public Assignment (hydra.ext.java.syntax.Assignment value) {
       this.value = value;
     }
     

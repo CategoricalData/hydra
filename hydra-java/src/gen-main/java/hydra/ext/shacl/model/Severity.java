@@ -36,7 +36,7 @@ public abstract class Severity {
   /**
    * A non-critical constraint violation indicating an informative message
    */
-  public static final class Info extends Severity {
+  public static final class Info extends hydra.ext.shacl.model.Severity {
     /**
      * A non-critical constraint violation indicating an informative message
      */
@@ -69,7 +69,7 @@ public abstract class Severity {
   /**
    * A non-critical constraint violation indicating a warning
    */
-  public static final class Warning extends Severity {
+  public static final class Warning extends hydra.ext.shacl.model.Severity {
     /**
      * A non-critical constraint violation indicating a warning
      */
@@ -102,7 +102,7 @@ public abstract class Severity {
   /**
    * A constraint violation
    */
-  public static final class Violation extends Severity {
+  public static final class Violation extends hydra.ext.shacl.model.Severity {
     /**
      * A constraint violation
      */

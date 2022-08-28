@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Array {
-  public final ArrayType value;
+  public final hydra.ext.java.syntax.ArrayType value;
   
-  public MethodReference_Array (ArrayType value) {
+  public MethodReference_Array (hydra.ext.java.syntax.ArrayType value) {
     this.value = value;
   }
   

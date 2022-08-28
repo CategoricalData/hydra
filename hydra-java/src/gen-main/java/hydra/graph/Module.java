@@ -4,11 +4,11 @@ package hydra.graph;
  * A logical collection of elements; a graph subset with dependencies on zero or more other subsets
  */
 public class Module<M> {
-  public final Graph<M> graph;
+  public final hydra.graph.Graph<M> graph;
   
-  public final java.util.List<Module<M>> imports;
+  public final java.util.List<hydra.graph.Module<M>> imports;
   
-  public Module (Graph<M> graph, java.util.List<Module<M>> imports) {
+  public Module (hydra.graph.Graph<M> graph, java.util.List<hydra.graph.Module<M>> imports) {
     this.graph = graph;
     this.imports = imports;
   }
@@ -27,11 +27,11 @@ public class Module<M> {
     return 2 * graph.hashCode() + 3 * imports.hashCode();
   }
   
-  public Module withGraph(Graph<M> graph) {
+  public Module withGraph(hydra.graph.Graph<M> graph) {
     return new Module(graph, imports);
   }
   
-  public Module withImports(java.util.List<Module<M>> imports) {
+  public Module withImports(java.util.List<hydra.graph.Module<M>> imports) {
     return new Module(graph, imports);
   }
 }

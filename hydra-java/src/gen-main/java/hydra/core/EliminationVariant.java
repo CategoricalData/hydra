@@ -48,7 +48,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Element extends EliminationVariant {
+  public static final class Element extends hydra.core.EliminationVariant {
     public Element () {
     
     }
@@ -73,7 +73,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Nominal extends EliminationVariant {
+  public static final class Nominal extends hydra.core.EliminationVariant {
     public Nominal () {
     
     }
@@ -98,7 +98,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Optional extends EliminationVariant {
+  public static final class Optional extends hydra.core.EliminationVariant {
     public Optional () {
     
     }
@@ -123,7 +123,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Record extends EliminationVariant {
+  public static final class Record extends hydra.core.EliminationVariant {
     public Record () {
     
     }
@@ -148,7 +148,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Union extends EliminationVariant {
+  public static final class Union extends hydra.core.EliminationVariant {
     public Union () {
     
     }

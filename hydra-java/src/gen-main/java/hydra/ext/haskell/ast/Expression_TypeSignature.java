@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A type signature expression
  */
 public class Expression_TypeSignature {
-  public final Expression inner;
+  public final hydra.ext.haskell.ast.Expression inner;
   
-  public final Type type;
+  public final hydra.ext.haskell.ast.Type type;
   
-  public Expression_TypeSignature (Expression inner, Type type) {
+  public Expression_TypeSignature (hydra.ext.haskell.ast.Expression inner, hydra.ext.haskell.ast.Type type) {
     this.inner = inner;
     this.type = type;
   }
@@ -27,11 +27,11 @@ public class Expression_TypeSignature {
     return 2 * inner.hashCode() + 3 * type.hashCode();
   }
   
-  public Expression_TypeSignature withInner(Expression inner) {
+  public Expression_TypeSignature withInner(hydra.ext.haskell.ast.Expression inner) {
     return new Expression_TypeSignature(inner, type);
   }
   
-  public Expression_TypeSignature withType(Type type) {
+  public Expression_TypeSignature withType(hydra.ext.haskell.ast.Type type) {
     return new Expression_TypeSignature(inner, type);
   }
 }

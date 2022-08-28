@@ -27,10 +27,10 @@ public abstract class Term100 {
     }
   }
   
-  public static final class Cast extends Term100 {
-    public final TypeCast value;
+  public static final class Cast extends hydra.ext.coq.syntax.Term100 {
+    public final hydra.ext.coq.syntax.TypeCast value;
     
-    public Cast (TypeCast value) {
+    public Cast (hydra.ext.coq.syntax.TypeCast value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Term100 {
     }
   }
   
-  public static final class Term10 extends Term100 {
-    public final Term10 value;
+  public static final class Term10 extends hydra.ext.coq.syntax.Term100 {
+    public final hydra.ext.coq.syntax.Term10 value;
     
-    public Term10 (Term10 value) {
+    public Term10 (hydra.ext.coq.syntax.Term10 value) {
       this.value = value;
     }
     

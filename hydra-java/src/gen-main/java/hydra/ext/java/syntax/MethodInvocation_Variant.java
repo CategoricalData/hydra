@@ -45,10 +45,10 @@ public abstract class MethodInvocation_Variant {
     }
   }
   
-  public static final class Type extends MethodInvocation_Variant {
-    public final TypeName value;
+  public static final class Type extends hydra.ext.java.syntax.MethodInvocation_Variant {
+    public final hydra.ext.java.syntax.TypeName value;
     
-    public Type (TypeName value) {
+    public Type (hydra.ext.java.syntax.TypeName value) {
       this.value = value;
     }
     
@@ -72,10 +72,10 @@ public abstract class MethodInvocation_Variant {
     }
   }
   
-  public static final class Expression extends MethodInvocation_Variant {
-    public final ExpressionName value;
+  public static final class Expression extends hydra.ext.java.syntax.MethodInvocation_Variant {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public Expression (ExpressionName value) {
+    public Expression (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -99,10 +99,10 @@ public abstract class MethodInvocation_Variant {
     }
   }
   
-  public static final class Primary extends MethodInvocation_Variant {
-    public final Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.MethodInvocation_Variant {
+    public final hydra.ext.java.syntax.Primary value;
     
-    public Primary (Primary value) {
+    public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
     
@@ -126,7 +126,7 @@ public abstract class MethodInvocation_Variant {
     }
   }
   
-  public static final class Super extends MethodInvocation_Variant {
+  public static final class Super extends hydra.ext.java.syntax.MethodInvocation_Variant {
     public Super () {
     
     }
@@ -151,10 +151,10 @@ public abstract class MethodInvocation_Variant {
     }
   }
   
-  public static final class TypeSuper extends MethodInvocation_Variant {
-    public final TypeName value;
+  public static final class TypeSuper extends hydra.ext.java.syntax.MethodInvocation_Variant {
+    public final hydra.ext.java.syntax.TypeName value;
     
-    public TypeSuper (TypeName value) {
+    public TypeSuper (hydra.ext.java.syntax.TypeName value) {
       this.value = value;
     }
     

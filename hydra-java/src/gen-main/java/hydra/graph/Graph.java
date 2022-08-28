@@ -7,19 +7,19 @@ public class Graph<M> {
   /**
    * The unique (within a given graph set) name of the graph
    */
-  public final GraphName name;
+  public final hydra.graph.GraphName name;
   
   /**
    * All of the elements in the graph
    */
-  public final java.util.List<Element<M>> elements;
+  public final java.util.List<hydra.graph.Element<M>> elements;
   
   /**
    * A reference to this graph's schema graph within the provided graph set
    */
-  public final GraphName schemaGraph;
+  public final hydra.graph.GraphName schemaGraph;
   
-  public Graph (GraphName name, java.util.List<Element<M>> elements, GraphName schemaGraph) {
+  public Graph (hydra.graph.GraphName name, java.util.List<hydra.graph.Element<M>> elements, hydra.graph.GraphName schemaGraph) {
     this.name = name;
     this.elements = elements;
     this.schemaGraph = schemaGraph;
@@ -39,15 +39,15 @@ public class Graph<M> {
     return 2 * name.hashCode() + 3 * elements.hashCode() + 5 * schemaGraph.hashCode();
   }
   
-  public Graph withName(GraphName name) {
+  public Graph withName(hydra.graph.GraphName name) {
     return new Graph(name, elements, schemaGraph);
   }
   
-  public Graph withElements(java.util.List<Element<M>> elements) {
+  public Graph withElements(java.util.List<hydra.graph.Element<M>> elements) {
     return new Graph(name, elements, schemaGraph);
   }
   
-  public Graph withSchemaGraph(GraphName schemaGraph) {
+  public Graph withSchemaGraph(hydra.graph.GraphName schemaGraph) {
     return new Graph(name, elements, schemaGraph);
   }
 }

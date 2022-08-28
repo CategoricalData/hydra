@@ -1,17 +1,17 @@
 package hydra.ext.java.syntax;
 
 public class NormalInterfaceDeclaration {
-  public final java.util.List<InterfaceModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
   
-  public final TypeIdentifier identifier;
+  public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<TypeParameter> parameters;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
   
-  public final java.util.List<InterfaceType> extends_;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceType> extends_;
   
-  public final InterfaceBody body;
+  public final hydra.ext.java.syntax.InterfaceBody body;
   
-  public NormalInterfaceDeclaration (java.util.List<InterfaceModifier> modifiers, TypeIdentifier identifier, java.util.List<TypeParameter> parameters, java.util.List<InterfaceType> extends_, InterfaceBody body) {
+  public NormalInterfaceDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, java.util.List<hydra.ext.java.syntax.InterfaceType> extends_, hydra.ext.java.syntax.InterfaceBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -33,23 +33,23 @@ public class NormalInterfaceDeclaration {
     return 2 * modifiers.hashCode() + 3 * identifier.hashCode() + 5 * parameters.hashCode() + 7 * extends_.hashCode() + 11 * body.hashCode();
   }
   
-  public NormalInterfaceDeclaration withModifiers(java.util.List<InterfaceModifier> modifiers) {
+  public NormalInterfaceDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withIdentifier(TypeIdentifier identifier) {
+  public NormalInterfaceDeclaration withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withParameters(java.util.List<TypeParameter> parameters) {
+  public NormalInterfaceDeclaration withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withExtends(java.util.List<InterfaceType> extends_) {
+  public NormalInterfaceDeclaration withExtends(java.util.List<hydra.ext.java.syntax.InterfaceType> extends_) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withBody(InterfaceBody body) {
+  public NormalInterfaceDeclaration withBody(hydra.ext.java.syntax.InterfaceBody body) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
 }

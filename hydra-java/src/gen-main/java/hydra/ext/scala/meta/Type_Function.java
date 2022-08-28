@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Function {
-  public final java.util.List<Type> params;
+  public final java.util.List<hydra.ext.scala.meta.Type> params;
   
-  public final Type res;
+  public final hydra.ext.scala.meta.Type res;
   
-  public Type_Function (java.util.List<Type> params, Type res) {
+  public Type_Function (java.util.List<hydra.ext.scala.meta.Type> params, hydra.ext.scala.meta.Type res) {
     this.params = params;
     this.res = res;
   }
@@ -24,11 +24,11 @@ public class Type_Function {
     return 2 * params.hashCode() + 3 * res.hashCode();
   }
   
-  public Type_Function withParams(java.util.List<Type> params) {
+  public Type_Function withParams(java.util.List<hydra.ext.scala.meta.Type> params) {
     return new Type_Function(params, res);
   }
   
-  public Type_Function withRes(Type res) {
+  public Type_Function withRes(hydra.ext.scala.meta.Type res) {
     return new Type_Function(params, res);
   }
 }

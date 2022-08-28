@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Case {
-  public final Pat pat;
+  public final hydra.ext.scala.meta.Pat pat;
   
-  public final java.util.Optional<Data> cond;
+  public final java.util.Optional<hydra.ext.scala.meta.Data> cond;
   
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Case (Pat pat, java.util.Optional<Data> cond, Data body) {
+  public Case (hydra.ext.scala.meta.Pat pat, java.util.Optional<hydra.ext.scala.meta.Data> cond, hydra.ext.scala.meta.Data body) {
     this.pat = pat;
     this.cond = cond;
     this.body = body;
@@ -27,15 +27,15 @@ public class Case {
     return 2 * pat.hashCode() + 3 * cond.hashCode() + 5 * body.hashCode();
   }
   
-  public Case withPat(Pat pat) {
+  public Case withPat(hydra.ext.scala.meta.Pat pat) {
     return new Case(pat, cond, body);
   }
   
-  public Case withCond(java.util.Optional<Data> cond) {
+  public Case withCond(java.util.Optional<hydra.ext.scala.meta.Data> cond) {
     return new Case(pat, cond, body);
   }
   
-  public Case withBody(Data body) {
+  public Case withBody(hydra.ext.scala.meta.Data body) {
     return new Case(pat, cond, body);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Var {
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public Pat_Var (Data_Name name) {
+  public Pat_Var (hydra.ext.scala.meta.Data_Name name) {
     this.name = name;
   }
   

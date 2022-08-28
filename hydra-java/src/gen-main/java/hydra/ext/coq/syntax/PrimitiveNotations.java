@@ -27,10 +27,10 @@ public abstract class PrimitiveNotations {
     }
   }
   
-  public static final class Number_ extends PrimitiveNotations {
-    public final Number_ value;
+  public static final class Number_ extends hydra.ext.coq.syntax.PrimitiveNotations {
+    public final hydra.ext.coq.syntax.Number_ value;
     
-    public Number_ (Number_ value) {
+    public Number_ (hydra.ext.coq.syntax.Number_ value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class PrimitiveNotations {
     }
   }
   
-  public static final class String_ extends PrimitiveNotations {
-    public final String_ value;
+  public static final class String_ extends hydra.ext.coq.syntax.PrimitiveNotations {
+    public final hydra.ext.coq.syntax.String_ value;
     
-    public String_ (String_ value) {
+    public String_ (hydra.ext.coq.syntax.String_ value) {
       this.value = value;
     }
     

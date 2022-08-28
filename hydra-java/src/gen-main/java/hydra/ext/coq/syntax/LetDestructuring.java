@@ -33,10 +33,10 @@ public abstract class LetDestructuring {
     }
   }
   
-  public static final class Variant1 extends LetDestructuring {
-    public final LetDestructuring_Variant1 value;
+  public static final class Variant1 extends hydra.ext.coq.syntax.LetDestructuring {
+    public final hydra.ext.coq.syntax.LetDestructuring_Variant1 value;
     
-    public Variant1 (LetDestructuring_Variant1 value) {
+    public Variant1 (hydra.ext.coq.syntax.LetDestructuring_Variant1 value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class LetDestructuring {
     }
   }
   
-  public static final class Variant2 extends LetDestructuring {
-    public final LetDestructuring_Variant2 value;
+  public static final class Variant2 extends hydra.ext.coq.syntax.LetDestructuring {
+    public final hydra.ext.coq.syntax.LetDestructuring_Variant2 value;
     
-    public Variant2 (LetDestructuring_Variant2 value) {
+    public Variant2 (hydra.ext.coq.syntax.LetDestructuring_Variant2 value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class LetDestructuring {
     }
   }
   
-  public static final class Variant3 extends LetDestructuring {
-    public final LetDestructuring_Variant3 value;
+  public static final class Variant3 extends hydra.ext.coq.syntax.LetDestructuring {
+    public final hydra.ext.coq.syntax.LetDestructuring_Variant3 value;
     
-    public Variant3 (LetDestructuring_Variant3 value) {
+    public Variant3 (hydra.ext.coq.syntax.LetDestructuring_Variant3 value) {
       this.value = value;
     }
     

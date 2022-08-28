@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class WhileStatementNoShortIf {
-  public final java.util.Optional<Expression> cond;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;
   
-  public final StatementNoShortIf body;
+  public final hydra.ext.java.syntax.StatementNoShortIf body;
   
-  public WhileStatementNoShortIf (java.util.Optional<Expression> cond, StatementNoShortIf body) {
+  public WhileStatementNoShortIf (java.util.Optional<hydra.ext.java.syntax.Expression> cond, hydra.ext.java.syntax.StatementNoShortIf body) {
     this.cond = cond;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class WhileStatementNoShortIf {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public WhileStatementNoShortIf withCond(java.util.Optional<Expression> cond) {
+  public WhileStatementNoShortIf withCond(java.util.Optional<hydra.ext.java.syntax.Expression> cond) {
     return new WhileStatementNoShortIf(cond, body);
   }
   
-  public WhileStatementNoShortIf withBody(StatementNoShortIf body) {
+  public WhileStatementNoShortIf withBody(hydra.ext.java.syntax.StatementNoShortIf body) {
     return new WhileStatementNoShortIf(cond, body);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.datalog.syntax;
 
 public class Program {
-  public final java.util.List<Program_Elmt> value;
+  public final java.util.List<hydra.ext.datalog.syntax.Program_Elmt> value;
   
-  public Program (java.util.List<Program_Elmt> value) {
+  public Program (java.util.List<hydra.ext.datalog.syntax.Program_Elmt> value) {
     this.value = value;
   }
   

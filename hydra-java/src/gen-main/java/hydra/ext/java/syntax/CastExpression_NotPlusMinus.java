@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class CastExpression_NotPlusMinus {
-  public final CastExpression_RefAndBounds refAndBounds;
+  public final hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds;
   
-  public final UnaryExpression expression;
+  public final hydra.ext.java.syntax.UnaryExpression expression;
   
-  public CastExpression_NotPlusMinus (CastExpression_RefAndBounds refAndBounds, UnaryExpression expression) {
+  public CastExpression_NotPlusMinus (hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds, hydra.ext.java.syntax.UnaryExpression expression) {
     this.refAndBounds = refAndBounds;
     this.expression = expression;
   }
@@ -24,11 +24,11 @@ public class CastExpression_NotPlusMinus {
     return 2 * refAndBounds.hashCode() + 3 * expression.hashCode();
   }
   
-  public CastExpression_NotPlusMinus withRefAndBounds(CastExpression_RefAndBounds refAndBounds) {
+  public CastExpression_NotPlusMinus withRefAndBounds(hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds) {
     return new CastExpression_NotPlusMinus(refAndBounds, expression);
   }
   
-  public CastExpression_NotPlusMinus withExpression(UnaryExpression expression) {
+  public CastExpression_NotPlusMinus withExpression(hydra.ext.java.syntax.UnaryExpression expression) {
     return new CastExpression_NotPlusMinus(refAndBounds, expression);
   }
 }

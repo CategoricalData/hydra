@@ -27,10 +27,10 @@ public abstract class TypeArgumentsOrDiamond {
     }
   }
   
-  public static final class Arguments extends TypeArgumentsOrDiamond {
-    public final java.util.List<TypeArgument> value;
+  public static final class Arguments extends hydra.ext.java.syntax.TypeArgumentsOrDiamond {
+    public final java.util.List<hydra.ext.java.syntax.TypeArgument> value;
     
-    public Arguments (java.util.List<TypeArgument> value) {
+    public Arguments (java.util.List<hydra.ext.java.syntax.TypeArgument> value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class TypeArgumentsOrDiamond {
     }
   }
   
-  public static final class Diamond extends TypeArgumentsOrDiamond {
+  public static final class Diamond extends hydra.ext.java.syntax.TypeArgumentsOrDiamond {
     public Diamond () {
     
     }

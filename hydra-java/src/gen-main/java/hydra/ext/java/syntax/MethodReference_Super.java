@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Super {
-  public final java.util.List<TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
   public final Boolean super_;
   
-  public MethodReference_Super (java.util.List<TypeArgument> typeArguments, Identifier identifier, Boolean super_) {
+  public MethodReference_Super (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier, Boolean super_) {
     this.typeArguments = typeArguments;
     this.identifier = identifier;
     this.super_ = super_;
@@ -27,11 +27,11 @@ public class MethodReference_Super {
     return 2 * typeArguments.hashCode() + 3 * identifier.hashCode() + 5 * super_.hashCode();
   }
   
-  public MethodReference_Super withTypeArguments(java.util.List<TypeArgument> typeArguments) {
+  public MethodReference_Super withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   
-  public MethodReference_Super withIdentifier(Identifier identifier) {
+  public MethodReference_Super withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_Super(typeArguments, identifier, super_);
   }
   

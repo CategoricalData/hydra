@@ -4,7 +4,7 @@ package hydra.ext.atlas.model;
  * class that captures details of a entity-type.
  */
 public class AtlasEntityDef {
-  public final AtlasStructDef asAtlasStructDef;
+  public final hydra.ext.atlas.model.AtlasStructDef asAtlasStructDef;
   
   public final java.util.Set<String> superTypes;
   
@@ -16,14 +16,14 @@ public class AtlasEntityDef {
   /**
    * the value of this field is derived from all the relationshipDefs this entityType is referenced in
    */
-  public final java.util.List<AtlasRelationshipAttributeDef> relationshipAttributeDefs;
+  public final java.util.List<hydra.ext.atlas.model.AtlasRelationshipAttributeDef> relationshipAttributeDefs;
   
   /**
    * the value of this field is derived from all the businessMetadataDefs this entityType is referenced in
    */
-  public final java.util.Map<String, java.util.List<AtlasAttributeDef>> businessAttributeDefs;
+  public final java.util.Map<String, java.util.List<hydra.ext.atlas.model.AtlasAttributeDef>> businessAttributeDefs;
   
-  public AtlasEntityDef (AtlasStructDef asAtlasStructDef, java.util.Set<String> superTypes, java.util.Set<String> subTypes, java.util.List<AtlasRelationshipAttributeDef> relationshipAttributeDefs, java.util.Map<String, java.util.List<AtlasAttributeDef>> businessAttributeDefs) {
+  public AtlasEntityDef (hydra.ext.atlas.model.AtlasStructDef asAtlasStructDef, java.util.Set<String> superTypes, java.util.Set<String> subTypes, java.util.List<hydra.ext.atlas.model.AtlasRelationshipAttributeDef> relationshipAttributeDefs, java.util.Map<String, java.util.List<hydra.ext.atlas.model.AtlasAttributeDef>> businessAttributeDefs) {
     this.asAtlasStructDef = asAtlasStructDef;
     this.superTypes = superTypes;
     this.subTypes = subTypes;
@@ -45,7 +45,7 @@ public class AtlasEntityDef {
     return 2 * asAtlasStructDef.hashCode() + 3 * superTypes.hashCode() + 5 * subTypes.hashCode() + 7 * relationshipAttributeDefs.hashCode() + 11 * businessAttributeDefs.hashCode();
   }
   
-  public AtlasEntityDef withAsAtlasStructDef(AtlasStructDef asAtlasStructDef) {
+  public AtlasEntityDef withAsAtlasStructDef(hydra.ext.atlas.model.AtlasStructDef asAtlasStructDef) {
     return new AtlasEntityDef(asAtlasStructDef, superTypes, subTypes, relationshipAttributeDefs, businessAttributeDefs);
   }
   
@@ -57,11 +57,11 @@ public class AtlasEntityDef {
     return new AtlasEntityDef(asAtlasStructDef, superTypes, subTypes, relationshipAttributeDefs, businessAttributeDefs);
   }
   
-  public AtlasEntityDef withRelationshipAttributeDefs(java.util.List<AtlasRelationshipAttributeDef> relationshipAttributeDefs) {
+  public AtlasEntityDef withRelationshipAttributeDefs(java.util.List<hydra.ext.atlas.model.AtlasRelationshipAttributeDef> relationshipAttributeDefs) {
     return new AtlasEntityDef(asAtlasStructDef, superTypes, subTypes, relationshipAttributeDefs, businessAttributeDefs);
   }
   
-  public AtlasEntityDef withBusinessAttributeDefs(java.util.Map<String, java.util.List<AtlasAttributeDef>> businessAttributeDefs) {
+  public AtlasEntityDef withBusinessAttributeDefs(java.util.Map<String, java.util.List<hydra.ext.atlas.model.AtlasAttributeDef>> businessAttributeDefs) {
     return new AtlasEntityDef(asAtlasStructDef, superTypes, subTypes, relationshipAttributeDefs, businessAttributeDefs);
   }
 }

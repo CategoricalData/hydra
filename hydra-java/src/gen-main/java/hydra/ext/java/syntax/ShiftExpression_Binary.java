@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ShiftExpression_Binary {
-  public final ShiftExpression lhs;
+  public final hydra.ext.java.syntax.ShiftExpression lhs;
   
-  public final AdditiveExpression rhs;
+  public final hydra.ext.java.syntax.AdditiveExpression rhs;
   
-  public ShiftExpression_Binary (ShiftExpression lhs, AdditiveExpression rhs) {
+  public ShiftExpression_Binary (hydra.ext.java.syntax.ShiftExpression lhs, hydra.ext.java.syntax.AdditiveExpression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class ShiftExpression_Binary {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public ShiftExpression_Binary withLhs(ShiftExpression lhs) {
+  public ShiftExpression_Binary withLhs(hydra.ext.java.syntax.ShiftExpression lhs) {
     return new ShiftExpression_Binary(lhs, rhs);
   }
   
-  public ShiftExpression_Binary withRhs(AdditiveExpression rhs) {
+  public ShiftExpression_Binary withRhs(hydra.ext.java.syntax.AdditiveExpression rhs) {
     return new ShiftExpression_Binary(lhs, rhs);
   }
 }

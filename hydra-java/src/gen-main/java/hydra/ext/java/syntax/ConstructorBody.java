@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ConstructorBody {
-  public final java.util.Optional<ExplicitConstructorInvocation> invocation;
+  public final java.util.Optional<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation;
   
-  public final java.util.List<BlockStatement> statements;
+  public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;
   
-  public ConstructorBody (java.util.Optional<ExplicitConstructorInvocation> invocation, java.util.List<BlockStatement> statements) {
+  public ConstructorBody (java.util.Optional<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
     this.invocation = invocation;
     this.statements = statements;
   }
@@ -24,11 +24,11 @@ public class ConstructorBody {
     return 2 * invocation.hashCode() + 3 * statements.hashCode();
   }
   
-  public ConstructorBody withInvocation(java.util.Optional<ExplicitConstructorInvocation> invocation) {
+  public ConstructorBody withInvocation(java.util.Optional<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation) {
     return new ConstructorBody(invocation, statements);
   }
   
-  public ConstructorBody withStatements(java.util.List<BlockStatement> statements) {
+  public ConstructorBody withStatements(java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
     return new ConstructorBody(invocation, statements);
   }
 }

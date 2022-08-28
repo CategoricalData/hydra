@@ -4,11 +4,11 @@ package hydra.ext.coq.syntax;
  * A qualified identifier
  */
 public class Qualid {
-  public final Ident id;
+  public final hydra.ext.coq.syntax.Ident id;
   
-  public final java.util.List<FieldIdent> fieldIds;
+  public final java.util.List<hydra.ext.coq.syntax.FieldIdent> fieldIds;
   
-  public Qualid (Ident id, java.util.List<FieldIdent> fieldIds) {
+  public Qualid (hydra.ext.coq.syntax.Ident id, java.util.List<hydra.ext.coq.syntax.FieldIdent> fieldIds) {
     this.id = id;
     this.fieldIds = fieldIds;
   }
@@ -27,11 +27,11 @@ public class Qualid {
     return 2 * id.hashCode() + 3 * fieldIds.hashCode();
   }
   
-  public Qualid withId(Ident id) {
+  public Qualid withId(hydra.ext.coq.syntax.Ident id) {
     return new Qualid(id, fieldIds);
   }
   
-  public Qualid withFieldIds(java.util.List<FieldIdent> fieldIds) {
+  public Qualid withFieldIds(java.util.List<hydra.ext.coq.syntax.FieldIdent> fieldIds) {
     return new Qualid(id, fieldIds);
   }
 }

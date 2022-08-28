@@ -57,10 +57,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class Assignment extends StatementExpression {
-    public final Assignment value;
+  public static final class Assignment extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.Assignment value;
     
-    public Assignment (Assignment value) {
+    public Assignment (hydra.ext.java.syntax.Assignment value) {
       this.value = value;
     }
     
@@ -84,10 +84,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class PreIncrement extends StatementExpression {
-    public final PreIncrementExpression value;
+  public static final class PreIncrement extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.PreIncrementExpression value;
     
-    public PreIncrement (PreIncrementExpression value) {
+    public PreIncrement (hydra.ext.java.syntax.PreIncrementExpression value) {
       this.value = value;
     }
     
@@ -111,10 +111,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class PreDecrement extends StatementExpression {
-    public final PreDecrementExpression value;
+  public static final class PreDecrement extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.PreDecrementExpression value;
     
-    public PreDecrement (PreDecrementExpression value) {
+    public PreDecrement (hydra.ext.java.syntax.PreDecrementExpression value) {
       this.value = value;
     }
     
@@ -138,10 +138,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class PostIncrement extends StatementExpression {
-    public final PostIncrementExpression value;
+  public static final class PostIncrement extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.PostIncrementExpression value;
     
-    public PostIncrement (PostIncrementExpression value) {
+    public PostIncrement (hydra.ext.java.syntax.PostIncrementExpression value) {
       this.value = value;
     }
     
@@ -165,10 +165,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class PostDecrement extends StatementExpression {
-    public final PostDecrementExpression value;
+  public static final class PostDecrement extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.PostDecrementExpression value;
     
-    public PostDecrement (PostDecrementExpression value) {
+    public PostDecrement (hydra.ext.java.syntax.PostDecrementExpression value) {
       this.value = value;
     }
     
@@ -192,10 +192,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class MethodInvocation extends StatementExpression {
-    public final MethodInvocation value;
+  public static final class MethodInvocation extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.MethodInvocation value;
     
-    public MethodInvocation (MethodInvocation value) {
+    public MethodInvocation (hydra.ext.java.syntax.MethodInvocation value) {
       this.value = value;
     }
     
@@ -219,10 +219,10 @@ public abstract class StatementExpression {
     }
   }
   
-  public static final class ClassInstanceCreation extends StatementExpression {
-    public final ClassInstanceCreationExpression value;
+  public static final class ClassInstanceCreation extends hydra.ext.java.syntax.StatementExpression {
+    public final hydra.ext.java.syntax.ClassInstanceCreationExpression value;
     
-    public ClassInstanceCreation (ClassInstanceCreationExpression value) {
+    public ClassInstanceCreation (hydra.ext.java.syntax.ClassInstanceCreationExpression value) {
       this.value = value;
     }
     

@@ -33,7 +33,7 @@ public abstract class ExplicitConstructorInvocation_Variant {
     }
   }
   
-  public static final class This extends ExplicitConstructorInvocation_Variant {
+  public static final class This extends hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant {
     public This () {
     
     }
@@ -58,10 +58,10 @@ public abstract class ExplicitConstructorInvocation_Variant {
     }
   }
   
-  public static final class Super extends ExplicitConstructorInvocation_Variant {
-    public final java.util.Optional<ExpressionName> value;
+  public static final class Super extends hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant {
+    public final java.util.Optional<hydra.ext.java.syntax.ExpressionName> value;
     
-    public Super (java.util.Optional<ExpressionName> value) {
+    public Super (java.util.Optional<hydra.ext.java.syntax.ExpressionName> value) {
       this.value = value;
     }
     
@@ -85,10 +85,10 @@ public abstract class ExplicitConstructorInvocation_Variant {
     }
   }
   
-  public static final class Primary extends ExplicitConstructorInvocation_Variant {
-    public final Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant {
+    public final hydra.ext.java.syntax.Primary value;
     
-    public Primary (Primary value) {
+    public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
     

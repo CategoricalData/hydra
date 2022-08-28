@@ -69,10 +69,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class QualidAnnotated extends Term0 {
-    public final QualidAnnotated value;
+  public static final class QualidAnnotated extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.QualidAnnotated value;
     
-    public QualidAnnotated (QualidAnnotated value) {
+    public QualidAnnotated (hydra.ext.coq.syntax.QualidAnnotated value) {
       this.value = value;
     }
     
@@ -96,10 +96,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Sort extends Term0 {
-    public final Sort value;
+  public static final class Sort extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.Sort value;
     
-    public Sort (Sort value) {
+    public Sort (hydra.ext.coq.syntax.Sort value) {
       this.value = value;
     }
     
@@ -123,10 +123,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class PrimitiveNotations extends Term0 {
-    public final PrimitiveNotations value;
+  public static final class PrimitiveNotations extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.PrimitiveNotations value;
     
-    public PrimitiveNotations (PrimitiveNotations value) {
+    public PrimitiveNotations (hydra.ext.coq.syntax.PrimitiveNotations value) {
       this.value = value;
     }
     
@@ -150,10 +150,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Evar extends Term0 {
-    public final ExistentialVariable value;
+  public static final class Evar extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.ExistentialVariable value;
     
-    public Evar (ExistentialVariable value) {
+    public Evar (hydra.ext.coq.syntax.ExistentialVariable value) {
       this.value = value;
     }
     
@@ -177,10 +177,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Match extends Term0 {
-    public final Match value;
+  public static final class Match extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.Match value;
     
-    public Match (Match value) {
+    public Match (hydra.ext.coq.syntax.Match value) {
       this.value = value;
     }
     
@@ -204,7 +204,7 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Record extends Term0 {
+  public static final class Record extends hydra.ext.coq.syntax.Term0 {
     public Record () {
     
     }
@@ -229,7 +229,7 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Generalizing extends Term0 {
+  public static final class Generalizing extends hydra.ext.coq.syntax.Term0 {
     public Generalizing () {
     
     }
@@ -254,7 +254,7 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Ltac extends Term0 {
+  public static final class Ltac extends hydra.ext.coq.syntax.Term0 {
     public Ltac () {
     
     }
@@ -279,10 +279,10 @@ public abstract class Term0 {
     }
   }
   
-  public static final class Parens extends Term0 {
-    public final Term value;
+  public static final class Parens extends hydra.ext.coq.syntax.Term0 {
+    public final hydra.ext.coq.syntax.Term value;
     
-    public Parens (Term value) {
+    public Parens (hydra.ext.coq.syntax.Term value) {
       this.value = value;
     }
     

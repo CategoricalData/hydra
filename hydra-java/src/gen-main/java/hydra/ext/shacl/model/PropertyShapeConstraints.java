@@ -32,9 +32,9 @@ public class PropertyShapeConstraints {
   /**
    * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
    */
-  public final java.util.Optional<QualifiedValueShape> qualifiedValueShape;
+  public final java.util.Optional<hydra.ext.shacl.model.QualifiedValueShape> qualifiedValueShape;
   
-  public PropertyShapeConstraints (java.util.Set<hydra.ext.rdf.syntax.Property> lessThan, java.util.Set<hydra.ext.rdf.syntax.Property> lessThanOrEquals, java.util.Optional<java.math.BigInteger> maxCount, java.util.Optional<java.math.BigInteger> minCount, java.util.Optional<Boolean> uniqueLang, java.util.Optional<QualifiedValueShape> qualifiedValueShape) {
+  public PropertyShapeConstraints (java.util.Set<hydra.ext.rdf.syntax.Property> lessThan, java.util.Set<hydra.ext.rdf.syntax.Property> lessThanOrEquals, java.util.Optional<java.math.BigInteger> maxCount, java.util.Optional<java.math.BigInteger> minCount, java.util.Optional<Boolean> uniqueLang, java.util.Optional<hydra.ext.shacl.model.QualifiedValueShape> qualifiedValueShape) {
     this.lessThan = lessThan;
     this.lessThanOrEquals = lessThanOrEquals;
     this.maxCount = maxCount;
@@ -77,7 +77,7 @@ public class PropertyShapeConstraints {
     return new PropertyShapeConstraints(lessThan, lessThanOrEquals, maxCount, minCount, uniqueLang, qualifiedValueShape);
   }
   
-  public PropertyShapeConstraints withQualifiedValueShape(java.util.Optional<QualifiedValueShape> qualifiedValueShape) {
+  public PropertyShapeConstraints withQualifiedValueShape(java.util.Optional<hydra.ext.shacl.model.QualifiedValueShape> qualifiedValueShape) {
     return new PropertyShapeConstraints(lessThan, lessThanOrEquals, maxCount, minCount, uniqueLang, qualifiedValueShape);
   }
 }

@@ -7,7 +7,7 @@ public class CommonProperties {
   /**
    * Common constraint parameters attached to this shape
    */
-  public final CommonConstraints constraints;
+  public final hydra.ext.shacl.model.CommonConstraints constraints;
   
   /**
    * See https://www.w3.org/TR/shacl/#deactivated
@@ -22,7 +22,7 @@ public class CommonProperties {
   /**
    * See https://www.w3.org/TR/shacl/#severity
    */
-  public final Severity severity;
+  public final hydra.ext.shacl.model.Severity severity;
   
   /**
    * See https://www.w3.org/TR/shacl/#targetClass
@@ -44,7 +44,7 @@ public class CommonProperties {
    */
   public final java.util.Set<hydra.ext.rdf.syntax.Property> targetSubjectsOf;
   
-  public CommonProperties (CommonConstraints constraints, java.util.Optional<Boolean> deactivated, hydra.ext.rdf.syntax.LangStrings message, Severity severity, java.util.Set<hydra.ext.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.ext.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.ext.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.ext.rdf.syntax.Property> targetSubjectsOf) {
+  public CommonProperties (hydra.ext.shacl.model.CommonConstraints constraints, java.util.Optional<Boolean> deactivated, hydra.ext.rdf.syntax.LangStrings message, hydra.ext.shacl.model.Severity severity, java.util.Set<hydra.ext.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.ext.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.ext.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.ext.rdf.syntax.Property> targetSubjectsOf) {
     this.constraints = constraints;
     this.deactivated = deactivated;
     this.message = message;
@@ -69,7 +69,7 @@ public class CommonProperties {
     return 2 * constraints.hashCode() + 3 * deactivated.hashCode() + 5 * message.hashCode() + 7 * severity.hashCode() + 11 * targetClass.hashCode() + 13 * targetNode.hashCode() + 17 * targetObjectsOf.hashCode() + 19 * targetSubjectsOf.hashCode();
   }
   
-  public CommonProperties withConstraints(CommonConstraints constraints) {
+  public CommonProperties withConstraints(hydra.ext.shacl.model.CommonConstraints constraints) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
@@ -81,7 +81,7 @@ public class CommonProperties {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withSeverity(Severity severity) {
+  public CommonProperties withSeverity(hydra.ext.shacl.model.Severity severity) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   

@@ -7,9 +7,9 @@ public class UnannClassType {
   /**
    * A ClassType which does not allow annotations
    */
-  public final ClassType value;
+  public final hydra.ext.java.syntax.ClassType value;
   
-  public UnannClassType (ClassType value) {
+  public UnannClassType (hydra.ext.java.syntax.ClassType value) {
     this.value = value;
   }
   

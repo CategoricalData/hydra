@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_Tuple {
-  public final java.util.List<Data> args;
+  public final java.util.List<hydra.ext.scala.meta.Data> args;
   
-  public Data_Tuple (java.util.List<Data> args) {
+  public Data_Tuple (java.util.List<hydra.ext.scala.meta.Data> args) {
     this.args = args;
   }
   

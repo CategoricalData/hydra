@@ -33,7 +33,7 @@ public abstract class ClassTypeQualifier {
     }
   }
   
-  public static final class None extends ClassTypeQualifier {
+  public static final class None extends hydra.ext.java.syntax.ClassTypeQualifier {
     public None () {
     
     }
@@ -58,10 +58,10 @@ public abstract class ClassTypeQualifier {
     }
   }
   
-  public static final class Package_ extends ClassTypeQualifier {
-    public final PackageName value;
+  public static final class Package_ extends hydra.ext.java.syntax.ClassTypeQualifier {
+    public final hydra.ext.java.syntax.PackageName value;
     
-    public Package_ (PackageName value) {
+    public Package_ (hydra.ext.java.syntax.PackageName value) {
       this.value = value;
     }
     
@@ -85,10 +85,10 @@ public abstract class ClassTypeQualifier {
     }
   }
   
-  public static final class Parent extends ClassTypeQualifier {
-    public final ClassOrInterfaceType value;
+  public static final class Parent extends hydra.ext.java.syntax.ClassTypeQualifier {
+    public final hydra.ext.java.syntax.ClassOrInterfaceType value;
     
-    public Parent (ClassOrInterfaceType value) {
+    public Parent (hydra.ext.java.syntax.ClassOrInterfaceType value) {
       this.value = value;
     }
     

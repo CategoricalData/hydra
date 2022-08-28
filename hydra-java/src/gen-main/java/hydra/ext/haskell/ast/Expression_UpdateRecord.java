@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * An update record expression
  */
 public class Expression_UpdateRecord {
-  public final Expression inner;
+  public final hydra.ext.haskell.ast.Expression inner;
   
-  public final java.util.List<FieldUpdate> fields;
+  public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;
   
-  public Expression_UpdateRecord (Expression inner, java.util.List<FieldUpdate> fields) {
+  public Expression_UpdateRecord (hydra.ext.haskell.ast.Expression inner, java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
     this.inner = inner;
     this.fields = fields;
   }
@@ -27,11 +27,11 @@ public class Expression_UpdateRecord {
     return 2 * inner.hashCode() + 3 * fields.hashCode();
   }
   
-  public Expression_UpdateRecord withInner(Expression inner) {
+  public Expression_UpdateRecord withInner(hydra.ext.haskell.ast.Expression inner) {
     return new Expression_UpdateRecord(inner, fields);
   }
   
-  public Expression_UpdateRecord withFields(java.util.List<FieldUpdate> fields) {
+  public Expression_UpdateRecord withFields(java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
     return new Expression_UpdateRecord(inner, fields);
   }
 }

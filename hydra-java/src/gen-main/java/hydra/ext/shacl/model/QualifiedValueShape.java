@@ -4,7 +4,7 @@ package hydra.ext.shacl.model;
  * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
  */
 public class QualifiedValueShape {
-  public final Shape shape;
+  public final hydra.ext.shacl.model.Shape shape;
   
   public final java.math.BigInteger qualifiedManCount;
   
@@ -12,7 +12,7 @@ public class QualifiedValueShape {
   
   public final java.util.Optional<Boolean> qualifiedValueShapesDisjoint;
   
-  public QualifiedValueShape (Shape shape, java.math.BigInteger qualifiedManCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+  public QualifiedValueShape (hydra.ext.shacl.model.Shape shape, java.math.BigInteger qualifiedManCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
     this.shape = shape;
     this.qualifiedManCount = qualifiedManCount;
     this.qualifiedMinCount = qualifiedMinCount;
@@ -33,7 +33,7 @@ public class QualifiedValueShape {
     return 2 * shape.hashCode() + 3 * qualifiedManCount.hashCode() + 5 * qualifiedMinCount.hashCode() + 7 * qualifiedValueShapesDisjoint.hashCode();
   }
   
-  public QualifiedValueShape withShape(Shape shape) {
+  public QualifiedValueShape withShape(hydra.ext.shacl.model.Shape shape) {
     return new QualifiedValueShape(shape, qualifiedManCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   

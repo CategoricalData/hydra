@@ -6,13 +6,13 @@ package hydra.ext.haskell.ast;
 public class Import {
   public final Boolean qualified;
   
-  public final ModuleName module;
+  public final hydra.ext.haskell.ast.ModuleName module;
   
-  public final java.util.Optional<ModuleName> as;
+  public final java.util.Optional<hydra.ext.haskell.ast.ModuleName> as;
   
-  public final java.util.Optional<Import_Spec> spec;
+  public final java.util.Optional<hydra.ext.haskell.ast.Import_Spec> spec;
   
-  public Import (Boolean qualified, ModuleName module, java.util.Optional<ModuleName> as, java.util.Optional<Import_Spec> spec) {
+  public Import (Boolean qualified, hydra.ext.haskell.ast.ModuleName module, java.util.Optional<hydra.ext.haskell.ast.ModuleName> as, java.util.Optional<hydra.ext.haskell.ast.Import_Spec> spec) {
     this.qualified = qualified;
     this.module = module;
     this.as = as;
@@ -37,15 +37,15 @@ public class Import {
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withModule(ModuleName module) {
+  public Import withModule(hydra.ext.haskell.ast.ModuleName module) {
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withAs(java.util.Optional<ModuleName> as) {
+  public Import withAs(java.util.Optional<hydra.ext.haskell.ast.ModuleName> as) {
     return new Import(qualified, module, as, spec);
   }
   
-  public Import withSpec(java.util.Optional<Import_Spec> spec) {
+  public Import withSpec(java.util.Optional<hydra.ext.haskell.ast.Import_Spec> spec) {
     return new Import(qualified, module, as, spec);
   }
 }

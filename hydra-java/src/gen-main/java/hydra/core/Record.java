@@ -4,11 +4,11 @@ package hydra.core;
  * A record, or labeled tuple; a map of field names to terms
  */
 public class Record<M> {
-  public final Name typeName;
+  public final hydra.core.Name typeName;
   
-  public final java.util.List<Field<M>> fields;
+  public final java.util.List<hydra.core.Field<M>> fields;
   
-  public Record (Name typeName, java.util.List<Field<M>> fields) {
+  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field<M>> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -27,11 +27,11 @@ public class Record<M> {
     return 2 * typeName.hashCode() + 3 * fields.hashCode();
   }
   
-  public Record withTypeName(Name typeName) {
+  public Record withTypeName(hydra.core.Name typeName) {
     return new Record(typeName, fields);
   }
   
-  public Record withFields(java.util.List<Field<M>> fields) {
+  public Record withFields(java.util.List<hydra.core.Field<M>> fields) {
     return new Record(typeName, fields);
   }
 }

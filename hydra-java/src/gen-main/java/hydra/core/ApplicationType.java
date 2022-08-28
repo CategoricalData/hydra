@@ -7,14 +7,14 @@ public class ApplicationType<M> {
   /**
    * The left-hand side of the application
    */
-  public final Type<M> function;
+  public final hydra.core.Type<M> function;
   
   /**
    * The right-hand side of the application
    */
-  public final Type<M> argument;
+  public final hydra.core.Type<M> argument;
   
-  public ApplicationType (Type<M> function, Type<M> argument) {
+  public ApplicationType (hydra.core.Type<M> function, hydra.core.Type<M> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -33,11 +33,11 @@ public class ApplicationType<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public ApplicationType withFunction(Type<M> function) {
+  public ApplicationType withFunction(hydra.core.Type<M> function) {
     return new ApplicationType(function, argument);
   }
   
-  public ApplicationType withArgument(Type<M> argument) {
+  public ApplicationType withArgument(hydra.core.Type<M> argument) {
     return new ApplicationType(function, argument);
   }
 }

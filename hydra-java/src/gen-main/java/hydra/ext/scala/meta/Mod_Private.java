@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Mod_Private {
-  public final Ref within;
+  public final hydra.ext.scala.meta.Ref within;
   
-  public Mod_Private (Ref within) {
+  public Mod_Private (hydra.ext.scala.meta.Ref within) {
     this.within = within;
   }
   

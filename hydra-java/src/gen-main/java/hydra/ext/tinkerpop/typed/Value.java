@@ -36,7 +36,7 @@ public abstract class Value {
     }
   }
   
-  public static final class Literal extends Value {
+  public static final class Literal extends hydra.ext.tinkerpop.typed.Value {
     public final hydra.core.Literal value;
     
     public Literal (hydra.core.Literal value) {
@@ -63,10 +63,10 @@ public abstract class Value {
     }
   }
   
-  public static final class Collection extends Value {
-    public final CollectionValue value;
+  public static final class Collection extends hydra.ext.tinkerpop.typed.Value {
+    public final hydra.ext.tinkerpop.typed.CollectionValue value;
     
-    public Collection (CollectionValue value) {
+    public Collection (hydra.ext.tinkerpop.typed.CollectionValue value) {
       this.value = value;
     }
     
@@ -90,10 +90,10 @@ public abstract class Value {
     }
   }
   
-  public static final class Element extends Value {
-    public final Id value;
+  public static final class Element extends hydra.ext.tinkerpop.typed.Value {
+    public final hydra.ext.tinkerpop.typed.Id value;
     
-    public Element (Id value) {
+    public Element (hydra.ext.tinkerpop.typed.Id value) {
       this.value = value;
     }
     

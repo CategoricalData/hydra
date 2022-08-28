@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class EnumDeclaration {
-  public final java.util.List<ClassModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
   
-  public final TypeIdentifier identifier;
+  public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<InterfaceType> implements_;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
   
-  public final EnumBody body;
+  public final hydra.ext.java.syntax.EnumBody body;
   
-  public EnumDeclaration (java.util.List<ClassModifier> modifiers, TypeIdentifier identifier, java.util.List<InterfaceType> implements_, EnumBody body) {
+  public EnumDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.EnumBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.implements_ = implements_;
@@ -30,19 +30,19 @@ public class EnumDeclaration {
     return 2 * modifiers.hashCode() + 3 * identifier.hashCode() + 5 * implements_.hashCode() + 7 * body.hashCode();
   }
   
-  public EnumDeclaration withModifiers(java.util.List<ClassModifier> modifiers) {
+  public EnumDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
-  public EnumDeclaration withIdentifier(TypeIdentifier identifier) {
+  public EnumDeclaration withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
-  public EnumDeclaration withImplements(java.util.List<InterfaceType> implements_) {
+  public EnumDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
-  public EnumDeclaration withBody(EnumBody body) {
+  public EnumDeclaration withBody(hydra.ext.java.syntax.EnumBody body) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
 }

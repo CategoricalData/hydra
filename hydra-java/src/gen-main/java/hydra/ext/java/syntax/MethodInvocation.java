@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class MethodInvocation {
-  public final MethodInvocation_Header header;
+  public final hydra.ext.java.syntax.MethodInvocation_Header header;
   
-  public final java.util.List<Expression> arguments;
+  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
   
-  public MethodInvocation (MethodInvocation_Header header, java.util.List<Expression> arguments) {
+  public MethodInvocation (hydra.ext.java.syntax.MethodInvocation_Header header, java.util.List<hydra.ext.java.syntax.Expression> arguments) {
     this.header = header;
     this.arguments = arguments;
   }
@@ -24,11 +24,11 @@ public class MethodInvocation {
     return 2 * header.hashCode() + 3 * arguments.hashCode();
   }
   
-  public MethodInvocation withHeader(MethodInvocation_Header header) {
+  public MethodInvocation withHeader(hydra.ext.java.syntax.MethodInvocation_Header header) {
     return new MethodInvocation(header, arguments);
   }
   
-  public MethodInvocation withArguments(java.util.List<Expression> arguments) {
+  public MethodInvocation withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
     return new MethodInvocation(header, arguments);
   }
 }

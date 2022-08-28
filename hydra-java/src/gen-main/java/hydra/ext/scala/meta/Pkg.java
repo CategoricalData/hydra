@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Pkg {
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public final Data_Ref ref;
+  public final hydra.ext.scala.meta.Data_Ref ref;
   
-  public final java.util.List<Stat> stats;
+  public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
-  public Pkg (Data_Name name, Data_Ref ref, java.util.List<Stat> stats) {
+  public Pkg (hydra.ext.scala.meta.Data_Name name, hydra.ext.scala.meta.Data_Ref ref, java.util.List<hydra.ext.scala.meta.Stat> stats) {
     this.name = name;
     this.ref = ref;
     this.stats = stats;
@@ -27,15 +27,15 @@ public class Pkg {
     return 2 * name.hashCode() + 3 * ref.hashCode() + 5 * stats.hashCode();
   }
   
-  public Pkg withName(Data_Name name) {
+  public Pkg withName(hydra.ext.scala.meta.Data_Name name) {
     return new Pkg(name, ref, stats);
   }
   
-  public Pkg withRef(Data_Ref ref) {
+  public Pkg withRef(hydra.ext.scala.meta.Data_Ref ref) {
     return new Pkg(name, ref, stats);
   }
   
-  public Pkg withStats(java.util.List<Stat> stats) {
+  public Pkg withStats(java.util.List<hydra.ext.scala.meta.Stat> stats) {
     return new Pkg(name, ref, stats);
   }
 }

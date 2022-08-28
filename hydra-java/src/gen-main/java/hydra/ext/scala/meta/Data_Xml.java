@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Xml {
-  public final java.util.List<Lit> parts;
+  public final java.util.List<hydra.ext.scala.meta.Lit> parts;
   
-  public final java.util.List<Data> args;
+  public final java.util.List<hydra.ext.scala.meta.Data> args;
   
-  public Data_Xml (java.util.List<Lit> parts, java.util.List<Data> args) {
+  public Data_Xml (java.util.List<hydra.ext.scala.meta.Lit> parts, java.util.List<hydra.ext.scala.meta.Data> args) {
     this.parts = parts;
     this.args = args;
   }
@@ -24,11 +24,11 @@ public class Data_Xml {
     return 2 * parts.hashCode() + 3 * args.hashCode();
   }
   
-  public Data_Xml withParts(java.util.List<Lit> parts) {
+  public Data_Xml withParts(java.util.List<hydra.ext.scala.meta.Lit> parts) {
     return new Data_Xml(parts, args);
   }
   
-  public Data_Xml withArgs(java.util.List<Data> args) {
+  public Data_Xml withArgs(java.util.List<hydra.ext.scala.meta.Data> args) {
     return new Data_Xml(parts, args);
   }
 }

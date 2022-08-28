@@ -99,10 +99,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Val extends Defn {
-    public final Defn_Val value;
+  public static final class Val extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Val value;
     
-    public Val (Defn_Val value) {
+    public Val (hydra.ext.scala.meta.Defn_Val value) {
       this.value = value;
     }
     
@@ -126,10 +126,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Var extends Defn {
-    public final Defn_Var value;
+  public static final class Var extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Var value;
     
-    public Var (Defn_Var value) {
+    public Var (hydra.ext.scala.meta.Defn_Var value) {
       this.value = value;
     }
     
@@ -153,10 +153,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Given extends Defn {
-    public final Defn_Given value;
+  public static final class Given extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Given value;
     
-    public Given (Defn_Given value) {
+    public Given (hydra.ext.scala.meta.Defn_Given value) {
       this.value = value;
     }
     
@@ -180,10 +180,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Enum_ extends Defn {
-    public final Defn_Enum value;
+  public static final class Enum_ extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Enum value;
     
-    public Enum_ (Defn_Enum value) {
+    public Enum_ (hydra.ext.scala.meta.Defn_Enum value) {
       this.value = value;
     }
     
@@ -207,10 +207,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class EnumCase extends Defn {
-    public final Defn_EnumCase value;
+  public static final class EnumCase extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_EnumCase value;
     
-    public EnumCase (Defn_EnumCase value) {
+    public EnumCase (hydra.ext.scala.meta.Defn_EnumCase value) {
       this.value = value;
     }
     
@@ -234,10 +234,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class RepeatedEnumCase extends Defn {
-    public final Defn_RepeatedEnumCase value;
+  public static final class RepeatedEnumCase extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_RepeatedEnumCase value;
     
-    public RepeatedEnumCase (Defn_RepeatedEnumCase value) {
+    public RepeatedEnumCase (hydra.ext.scala.meta.Defn_RepeatedEnumCase value) {
       this.value = value;
     }
     
@@ -261,10 +261,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class GivenAlias extends Defn {
-    public final Defn_GivenAlias value;
+  public static final class GivenAlias extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_GivenAlias value;
     
-    public GivenAlias (Defn_GivenAlias value) {
+    public GivenAlias (hydra.ext.scala.meta.Defn_GivenAlias value) {
       this.value = value;
     }
     
@@ -288,10 +288,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class ExtensionGroup extends Defn {
-    public final Defn_ExtensionGroup value;
+  public static final class ExtensionGroup extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_ExtensionGroup value;
     
-    public ExtensionGroup (Defn_ExtensionGroup value) {
+    public ExtensionGroup (hydra.ext.scala.meta.Defn_ExtensionGroup value) {
       this.value = value;
     }
     
@@ -315,10 +315,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Def extends Defn {
-    public final Defn_Def value;
+  public static final class Def extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Def value;
     
-    public Def (Defn_Def value) {
+    public Def (hydra.ext.scala.meta.Defn_Def value) {
       this.value = value;
     }
     
@@ -342,10 +342,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Macro extends Defn {
-    public final Defn_Macro value;
+  public static final class Macro extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Macro value;
     
-    public Macro (Defn_Macro value) {
+    public Macro (hydra.ext.scala.meta.Defn_Macro value) {
       this.value = value;
     }
     
@@ -369,10 +369,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Type extends Defn {
-    public final Defn_Type value;
+  public static final class Type extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Type value;
     
-    public Type (Defn_Type value) {
+    public Type (hydra.ext.scala.meta.Defn_Type value) {
       this.value = value;
     }
     
@@ -396,10 +396,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Class_ extends Defn {
-    public final Defn_Class value;
+  public static final class Class_ extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Class value;
     
-    public Class_ (Defn_Class value) {
+    public Class_ (hydra.ext.scala.meta.Defn_Class value) {
       this.value = value;
     }
     
@@ -423,10 +423,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Trait extends Defn {
-    public final Defn_Trait value;
+  public static final class Trait extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Trait value;
     
-    public Trait (Defn_Trait value) {
+    public Trait (hydra.ext.scala.meta.Defn_Trait value) {
       this.value = value;
     }
     
@@ -450,10 +450,10 @@ public abstract class Defn {
     }
   }
   
-  public static final class Object_ extends Defn {
-    public final Defn_Object value;
+  public static final class Object_ extends hydra.ext.scala.meta.Defn {
+    public final hydra.ext.scala.meta.Defn_Object value;
     
-    public Object_ (Defn_Object value) {
+    public Object_ (hydra.ext.scala.meta.Defn_Object value) {
       this.value = value;
     }
     

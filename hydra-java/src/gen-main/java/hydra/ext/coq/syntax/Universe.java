@@ -27,10 +27,10 @@ public abstract class Universe {
     }
   }
   
-  public static final class Max extends Universe {
-    public final java.util.List<Universe_Expr> value;
+  public static final class Max extends hydra.ext.coq.syntax.Universe {
+    public final java.util.List<hydra.ext.coq.syntax.Universe_Expr> value;
     
-    public Max (java.util.List<Universe_Expr> value) {
+    public Max (java.util.List<hydra.ext.coq.syntax.Universe_Expr> value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Universe {
     }
   }
   
-  public static final class Expr extends Universe {
-    public final Universe_Expr value;
+  public static final class Expr extends hydra.ext.coq.syntax.Universe {
+    public final hydra.ext.coq.syntax.Universe_Expr value;
     
-    public Expr (Universe_Expr value) {
+    public Expr (hydra.ext.coq.syntax.Universe_Expr value) {
       this.value = value;
     }
     

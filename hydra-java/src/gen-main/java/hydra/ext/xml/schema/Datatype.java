@@ -279,7 +279,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class AnySimpleType extends Datatype {
+  public static final class AnySimpleType extends hydra.ext.xml.schema.Datatype {
     public AnySimpleType () {
     
     }
@@ -304,7 +304,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class AnyType extends Datatype {
+  public static final class AnyType extends hydra.ext.xml.schema.Datatype {
     public AnyType () {
     
     }
@@ -329,7 +329,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class AnyURI extends Datatype {
+  public static final class AnyURI extends hydra.ext.xml.schema.Datatype {
     public AnyURI () {
     
     }
@@ -354,7 +354,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Base64Binary extends Datatype {
+  public static final class Base64Binary extends hydra.ext.xml.schema.Datatype {
     public Base64Binary () {
     
     }
@@ -379,7 +379,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Boolean_ extends Datatype {
+  public static final class Boolean_ extends hydra.ext.xml.schema.Datatype {
     public Boolean_ () {
     
     }
@@ -404,7 +404,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Byte_ extends Datatype {
+  public static final class Byte_ extends hydra.ext.xml.schema.Datatype {
     public Byte_ () {
     
     }
@@ -429,7 +429,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Date extends Datatype {
+  public static final class Date extends hydra.ext.xml.schema.Datatype {
     public Date () {
     
     }
@@ -454,7 +454,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class DateTime extends Datatype {
+  public static final class DateTime extends hydra.ext.xml.schema.Datatype {
     public DateTime () {
     
     }
@@ -479,7 +479,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Decimal extends Datatype {
+  public static final class Decimal extends hydra.ext.xml.schema.Datatype {
     public Decimal () {
     
     }
@@ -504,7 +504,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Double_ extends Datatype {
+  public static final class Double_ extends hydra.ext.xml.schema.Datatype {
     public Double_ () {
     
     }
@@ -529,7 +529,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Duration extends Datatype {
+  public static final class Duration extends hydra.ext.xml.schema.Datatype {
     public Duration () {
     
     }
@@ -554,7 +554,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class ENTITIES extends Datatype {
+  public static final class ENTITIES extends hydra.ext.xml.schema.Datatype {
     public ENTITIES () {
     
     }
@@ -579,7 +579,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class ENTITY extends Datatype {
+  public static final class ENTITY extends hydra.ext.xml.schema.Datatype {
     public ENTITY () {
     
     }
@@ -604,7 +604,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Float_ extends Datatype {
+  public static final class Float_ extends hydra.ext.xml.schema.Datatype {
     public Float_ () {
     
     }
@@ -629,7 +629,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class GDay extends Datatype {
+  public static final class GDay extends hydra.ext.xml.schema.Datatype {
     public GDay () {
     
     }
@@ -654,7 +654,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class GMonth extends Datatype {
+  public static final class GMonth extends hydra.ext.xml.schema.Datatype {
     public GMonth () {
     
     }
@@ -679,7 +679,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class GMonthDay extends Datatype {
+  public static final class GMonthDay extends hydra.ext.xml.schema.Datatype {
     public GMonthDay () {
     
     }
@@ -704,7 +704,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class GYear extends Datatype {
+  public static final class GYear extends hydra.ext.xml.schema.Datatype {
     public GYear () {
     
     }
@@ -729,7 +729,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class GYearMonth extends Datatype {
+  public static final class GYearMonth extends hydra.ext.xml.schema.Datatype {
     public GYearMonth () {
     
     }
@@ -754,7 +754,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class HexBinary extends Datatype {
+  public static final class HexBinary extends hydra.ext.xml.schema.Datatype {
     public HexBinary () {
     
     }
@@ -779,7 +779,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class ID extends Datatype {
+  public static final class ID extends hydra.ext.xml.schema.Datatype {
     public ID () {
     
     }
@@ -804,7 +804,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class IDREF extends Datatype {
+  public static final class IDREF extends hydra.ext.xml.schema.Datatype {
     public IDREF () {
     
     }
@@ -829,7 +829,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class IDREFS extends Datatype {
+  public static final class IDREFS extends hydra.ext.xml.schema.Datatype {
     public IDREFS () {
     
     }
@@ -854,7 +854,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Int extends Datatype {
+  public static final class Int extends hydra.ext.xml.schema.Datatype {
     public Int () {
     
     }
@@ -879,7 +879,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Integer_ extends Datatype {
+  public static final class Integer_ extends hydra.ext.xml.schema.Datatype {
     public Integer_ () {
     
     }
@@ -904,7 +904,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Language extends Datatype {
+  public static final class Language extends hydra.ext.xml.schema.Datatype {
     public Language () {
     
     }
@@ -929,7 +929,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Long_ extends Datatype {
+  public static final class Long_ extends hydra.ext.xml.schema.Datatype {
     public Long_ () {
     
     }
@@ -954,7 +954,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NMTOKEN extends Datatype {
+  public static final class NMTOKEN extends hydra.ext.xml.schema.Datatype {
     public NMTOKEN () {
     
     }
@@ -979,7 +979,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NOTATION extends Datatype {
+  public static final class NOTATION extends hydra.ext.xml.schema.Datatype {
     public NOTATION () {
     
     }
@@ -1004,7 +1004,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Name extends Datatype {
+  public static final class Name extends hydra.ext.xml.schema.Datatype {
     public Name () {
     
     }
@@ -1029,7 +1029,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NegativeInteger extends Datatype {
+  public static final class NegativeInteger extends hydra.ext.xml.schema.Datatype {
     public NegativeInteger () {
     
     }
@@ -1054,7 +1054,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NonNegativeInteger extends Datatype {
+  public static final class NonNegativeInteger extends hydra.ext.xml.schema.Datatype {
     public NonNegativeInteger () {
     
     }
@@ -1079,7 +1079,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NonPositiveInteger extends Datatype {
+  public static final class NonPositiveInteger extends hydra.ext.xml.schema.Datatype {
     public NonPositiveInteger () {
     
     }
@@ -1104,7 +1104,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class NormalizedString extends Datatype {
+  public static final class NormalizedString extends hydra.ext.xml.schema.Datatype {
     public NormalizedString () {
     
     }
@@ -1129,7 +1129,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class PositiveInteger extends Datatype {
+  public static final class PositiveInteger extends hydra.ext.xml.schema.Datatype {
     public PositiveInteger () {
     
     }
@@ -1154,7 +1154,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class QName extends Datatype {
+  public static final class QName extends hydra.ext.xml.schema.Datatype {
     public QName () {
     
     }
@@ -1179,7 +1179,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Short_ extends Datatype {
+  public static final class Short_ extends hydra.ext.xml.schema.Datatype {
     public Short_ () {
     
     }
@@ -1204,7 +1204,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class String_ extends Datatype {
+  public static final class String_ extends hydra.ext.xml.schema.Datatype {
     public String_ () {
     
     }
@@ -1229,7 +1229,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Time extends Datatype {
+  public static final class Time extends hydra.ext.xml.schema.Datatype {
     public Time () {
     
     }
@@ -1254,7 +1254,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class Token extends Datatype {
+  public static final class Token extends hydra.ext.xml.schema.Datatype {
     public Token () {
     
     }
@@ -1279,7 +1279,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class UnsignedByte extends Datatype {
+  public static final class UnsignedByte extends hydra.ext.xml.schema.Datatype {
     public UnsignedByte () {
     
     }
@@ -1304,7 +1304,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class UnsignedInt extends Datatype {
+  public static final class UnsignedInt extends hydra.ext.xml.schema.Datatype {
     public UnsignedInt () {
     
     }
@@ -1329,7 +1329,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class UnsignedLong extends Datatype {
+  public static final class UnsignedLong extends hydra.ext.xml.schema.Datatype {
     public UnsignedLong () {
     
     }
@@ -1354,7 +1354,7 @@ public abstract class Datatype {
     }
   }
   
-  public static final class UnsignedShort extends Datatype {
+  public static final class UnsignedShort extends hydra.ext.xml.schema.Datatype {
     public UnsignedShort () {
     
     }

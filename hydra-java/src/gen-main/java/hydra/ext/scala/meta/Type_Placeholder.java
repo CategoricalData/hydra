@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Type_Placeholder {
-  public final Type_Bounds bounds;
+  public final hydra.ext.scala.meta.Type_Bounds bounds;
   
-  public Type_Placeholder (Type_Bounds bounds) {
+  public Type_Placeholder (hydra.ext.scala.meta.Type_Bounds bounds) {
     this.bounds = bounds;
   }
   

@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ConditionalExpression_TernaryCond {
-  public final ConditionalOrExpression cond;
+  public final hydra.ext.java.syntax.ConditionalOrExpression cond;
   
-  public final Expression ifTrue;
+  public final hydra.ext.java.syntax.Expression ifTrue;
   
-  public final ConditionalExpression ifFalse;
+  public final hydra.ext.java.syntax.ConditionalExpression ifFalse;
   
-  public ConditionalExpression_TernaryCond (ConditionalOrExpression cond, Expression ifTrue, ConditionalExpression ifFalse) {
+  public ConditionalExpression_TernaryCond (hydra.ext.java.syntax.ConditionalOrExpression cond, hydra.ext.java.syntax.Expression ifTrue, hydra.ext.java.syntax.ConditionalExpression ifFalse) {
     this.cond = cond;
     this.ifTrue = ifTrue;
     this.ifFalse = ifFalse;
@@ -27,15 +27,15 @@ public class ConditionalExpression_TernaryCond {
     return 2 * cond.hashCode() + 3 * ifTrue.hashCode() + 5 * ifFalse.hashCode();
   }
   
-  public ConditionalExpression_TernaryCond withCond(ConditionalOrExpression cond) {
+  public ConditionalExpression_TernaryCond withCond(hydra.ext.java.syntax.ConditionalOrExpression cond) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
   
-  public ConditionalExpression_TernaryCond withIfTrue(Expression ifTrue) {
+  public ConditionalExpression_TernaryCond withIfTrue(hydra.ext.java.syntax.Expression ifTrue) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
   
-  public ConditionalExpression_TernaryCond withIfFalse(ConditionalExpression ifFalse) {
+  public ConditionalExpression_TernaryCond withIfFalse(hydra.ext.java.syntax.ConditionalExpression ifFalse) {
     return new ConditionalExpression_TernaryCond(cond, ifTrue, ifFalse);
   }
 }

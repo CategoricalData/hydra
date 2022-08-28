@@ -39,10 +39,10 @@ public abstract class ShiftExpression {
     }
   }
   
-  public static final class Unary extends ShiftExpression {
-    public final AdditiveExpression value;
+  public static final class Unary extends hydra.ext.java.syntax.ShiftExpression {
+    public final hydra.ext.java.syntax.AdditiveExpression value;
     
-    public Unary (AdditiveExpression value) {
+    public Unary (hydra.ext.java.syntax.AdditiveExpression value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class ShiftExpression {
     }
   }
   
-  public static final class ShiftLeft extends ShiftExpression {
-    public final ShiftExpression_Binary value;
+  public static final class ShiftLeft extends hydra.ext.java.syntax.ShiftExpression {
+    public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
-    public ShiftLeft (ShiftExpression_Binary value) {
+    public ShiftLeft (hydra.ext.java.syntax.ShiftExpression_Binary value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class ShiftExpression {
     }
   }
   
-  public static final class ShiftRight extends ShiftExpression {
-    public final ShiftExpression_Binary value;
+  public static final class ShiftRight extends hydra.ext.java.syntax.ShiftExpression {
+    public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
-    public ShiftRight (ShiftExpression_Binary value) {
+    public ShiftRight (hydra.ext.java.syntax.ShiftExpression_Binary value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class ShiftExpression {
     }
   }
   
-  public static final class ShiftRightZeroFill extends ShiftExpression {
-    public final ShiftExpression_Binary value;
+  public static final class ShiftRightZeroFill extends hydra.ext.java.syntax.ShiftExpression {
+    public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
-    public ShiftRightZeroFill (ShiftExpression_Binary value) {
+    public ShiftRightZeroFill (hydra.ext.java.syntax.ShiftExpression_Binary value) {
       this.value = value;
     }
     

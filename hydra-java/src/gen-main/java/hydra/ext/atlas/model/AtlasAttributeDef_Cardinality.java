@@ -33,7 +33,7 @@ public abstract class AtlasAttributeDef_Cardinality {
     }
   }
   
-  public static final class Single extends AtlasAttributeDef_Cardinality {
+  public static final class Single extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
     public Single () {
     
     }
@@ -58,7 +58,7 @@ public abstract class AtlasAttributeDef_Cardinality {
     }
   }
   
-  public static final class List extends AtlasAttributeDef_Cardinality {
+  public static final class List extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
     public List () {
     
     }
@@ -83,7 +83,7 @@ public abstract class AtlasAttributeDef_Cardinality {
     }
   }
   
-  public static final class Set extends AtlasAttributeDef_Cardinality {
+  public static final class Set extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
     public Set () {
     
     }

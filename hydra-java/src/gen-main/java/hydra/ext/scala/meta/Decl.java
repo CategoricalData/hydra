@@ -45,10 +45,10 @@ public abstract class Decl {
     }
   }
   
-  public static final class Val extends Decl {
-    public final Decl_Val value;
+  public static final class Val extends hydra.ext.scala.meta.Decl {
+    public final hydra.ext.scala.meta.Decl_Val value;
     
-    public Val (Decl_Val value) {
+    public Val (hydra.ext.scala.meta.Decl_Val value) {
       this.value = value;
     }
     
@@ -72,10 +72,10 @@ public abstract class Decl {
     }
   }
   
-  public static final class Var extends Decl {
-    public final Decl_Var value;
+  public static final class Var extends hydra.ext.scala.meta.Decl {
+    public final hydra.ext.scala.meta.Decl_Var value;
     
-    public Var (Decl_Var value) {
+    public Var (hydra.ext.scala.meta.Decl_Var value) {
       this.value = value;
     }
     
@@ -99,10 +99,10 @@ public abstract class Decl {
     }
   }
   
-  public static final class Def extends Decl {
-    public final Decl_Def value;
+  public static final class Def extends hydra.ext.scala.meta.Decl {
+    public final hydra.ext.scala.meta.Decl_Def value;
     
-    public Def (Decl_Def value) {
+    public Def (hydra.ext.scala.meta.Decl_Def value) {
       this.value = value;
     }
     
@@ -126,10 +126,10 @@ public abstract class Decl {
     }
   }
   
-  public static final class Type extends Decl {
-    public final Decl_Type value;
+  public static final class Type extends hydra.ext.scala.meta.Decl {
+    public final hydra.ext.scala.meta.Decl_Type value;
     
-    public Type (Decl_Type value) {
+    public Type (hydra.ext.scala.meta.Decl_Type value) {
       this.value = value;
     }
     
@@ -153,10 +153,10 @@ public abstract class Decl {
     }
   }
   
-  public static final class Given extends Decl {
-    public final Decl_Given value;
+  public static final class Given extends hydra.ext.scala.meta.Decl {
+    public final hydra.ext.scala.meta.Decl_Given value;
     
-    public Given (Decl_Given value) {
+    public Given (hydra.ext.scala.meta.Decl_Given value) {
       this.value = value;
     }
     

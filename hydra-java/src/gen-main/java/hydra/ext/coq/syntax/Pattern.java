@@ -27,10 +27,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Pattern_ extends Pattern {
-    public final Pattern10 value;
+  public static final class Pattern_ extends hydra.ext.coq.syntax.Pattern {
+    public final hydra.ext.coq.syntax.Pattern10 value;
     
-    public Pattern_ (Pattern10 value) {
+    public Pattern_ (hydra.ext.coq.syntax.Pattern10 value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Term extends Pattern {
-    public final java.util.Optional<Term> value;
+  public static final class Term extends hydra.ext.coq.syntax.Pattern {
+    public final java.util.Optional<hydra.ext.coq.syntax.Term> value;
     
-    public Term (java.util.Optional<Term> value) {
+    public Term (java.util.Optional<hydra.ext.coq.syntax.Term> value) {
       this.value = value;
     }
     

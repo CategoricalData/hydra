@@ -27,10 +27,10 @@ public abstract class ClassOrInterfaceType {
     }
   }
   
-  public static final class Class_ extends ClassOrInterfaceType {
-    public final ClassType value;
+  public static final class Class_ extends hydra.ext.java.syntax.ClassOrInterfaceType {
+    public final hydra.ext.java.syntax.ClassType value;
     
-    public Class_ (ClassType value) {
+    public Class_ (hydra.ext.java.syntax.ClassType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ClassOrInterfaceType {
     }
   }
   
-  public static final class Interface extends ClassOrInterfaceType {
-    public final InterfaceType value;
+  public static final class Interface extends hydra.ext.java.syntax.ClassOrInterfaceType {
+    public final hydra.ext.java.syntax.InterfaceType value;
     
-    public Interface (InterfaceType value) {
+    public Interface (hydra.ext.java.syntax.InterfaceType value) {
       this.value = value;
     }
     

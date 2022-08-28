@@ -27,10 +27,10 @@ public abstract class NumericType {
     }
   }
   
-  public static final class Integral extends NumericType {
-    public final IntegralType value;
+  public static final class Integral extends hydra.ext.java.syntax.NumericType {
+    public final hydra.ext.java.syntax.IntegralType value;
     
-    public Integral (IntegralType value) {
+    public Integral (hydra.ext.java.syntax.IntegralType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class NumericType {
     }
   }
   
-  public static final class FloatingPoint extends NumericType {
-    public final FloatingPointType value;
+  public static final class FloatingPoint extends hydra.ext.java.syntax.NumericType {
+    public final hydra.ext.java.syntax.FloatingPointType value;
     
-    public FloatingPoint (FloatingPointType value) {
+    public FloatingPoint (hydra.ext.java.syntax.FloatingPointType value) {
       this.value = value;
     }
     

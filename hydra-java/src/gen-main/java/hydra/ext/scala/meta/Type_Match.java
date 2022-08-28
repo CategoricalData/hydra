@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Match {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public final java.util.List<TypeCase> cases;
+  public final java.util.List<hydra.ext.scala.meta.TypeCase> cases;
   
-  public Type_Match (Type tpe, java.util.List<TypeCase> cases) {
+  public Type_Match (hydra.ext.scala.meta.Type tpe, java.util.List<hydra.ext.scala.meta.TypeCase> cases) {
     this.tpe = tpe;
     this.cases = cases;
   }
@@ -24,11 +24,11 @@ public class Type_Match {
     return 2 * tpe.hashCode() + 3 * cases.hashCode();
   }
   
-  public Type_Match withTpe(Type tpe) {
+  public Type_Match withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Type_Match(tpe, cases);
   }
   
-  public Type_Match withCases(java.util.List<TypeCase> cases) {
+  public Type_Match withCases(java.util.List<hydra.ext.scala.meta.TypeCase> cases) {
     return new Type_Match(tpe, cases);
   }
 }

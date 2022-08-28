@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Data_Interpolate {
-  public final Data_Name prefix;
+  public final hydra.ext.scala.meta.Data_Name prefix;
   
-  public final java.util.List<Lit> parts;
+  public final java.util.List<hydra.ext.scala.meta.Lit> parts;
   
-  public final java.util.List<Data> args;
+  public final java.util.List<hydra.ext.scala.meta.Data> args;
   
-  public Data_Interpolate (Data_Name prefix, java.util.List<Lit> parts, java.util.List<Data> args) {
+  public Data_Interpolate (hydra.ext.scala.meta.Data_Name prefix, java.util.List<hydra.ext.scala.meta.Lit> parts, java.util.List<hydra.ext.scala.meta.Data> args) {
     this.prefix = prefix;
     this.parts = parts;
     this.args = args;
@@ -27,15 +27,15 @@ public class Data_Interpolate {
     return 2 * prefix.hashCode() + 3 * parts.hashCode() + 5 * args.hashCode();
   }
   
-  public Data_Interpolate withPrefix(Data_Name prefix) {
+  public Data_Interpolate withPrefix(hydra.ext.scala.meta.Data_Name prefix) {
     return new Data_Interpolate(prefix, parts, args);
   }
   
-  public Data_Interpolate withParts(java.util.List<Lit> parts) {
+  public Data_Interpolate withParts(java.util.List<hydra.ext.scala.meta.Lit> parts) {
     return new Data_Interpolate(prefix, parts, args);
   }
   
-  public Data_Interpolate withArgs(java.util.List<Data> args) {
+  public Data_Interpolate withArgs(java.util.List<hydra.ext.scala.meta.Data> args) {
     return new Data_Interpolate(prefix, parts, args);
   }
 }

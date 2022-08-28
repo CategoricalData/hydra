@@ -102,7 +102,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Annotated extends TypeVariant {
+  public static final class Annotated extends hydra.core.TypeVariant {
     public Annotated () {
     
     }
@@ -127,7 +127,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Application extends TypeVariant {
+  public static final class Application extends hydra.core.TypeVariant {
     public Application () {
     
     }
@@ -152,7 +152,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Element extends TypeVariant {
+  public static final class Element extends hydra.core.TypeVariant {
     public Element () {
     
     }
@@ -177,7 +177,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Function extends TypeVariant {
+  public static final class Function extends hydra.core.TypeVariant {
     public Function () {
     
     }
@@ -202,7 +202,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Lambda extends TypeVariant {
+  public static final class Lambda extends hydra.core.TypeVariant {
     public Lambda () {
     
     }
@@ -227,7 +227,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class List extends TypeVariant {
+  public static final class List extends hydra.core.TypeVariant {
     public List () {
     
     }
@@ -252,7 +252,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Literal extends TypeVariant {
+  public static final class Literal extends hydra.core.TypeVariant {
     public Literal () {
     
     }
@@ -277,7 +277,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Map extends TypeVariant {
+  public static final class Map extends hydra.core.TypeVariant {
     public Map () {
     
     }
@@ -302,7 +302,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Nominal extends TypeVariant {
+  public static final class Nominal extends hydra.core.TypeVariant {
     public Nominal () {
     
     }
@@ -327,7 +327,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Optional extends TypeVariant {
+  public static final class Optional extends hydra.core.TypeVariant {
     public Optional () {
     
     }
@@ -352,7 +352,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Record extends TypeVariant {
+  public static final class Record extends hydra.core.TypeVariant {
     public Record () {
     
     }
@@ -377,7 +377,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Set extends TypeVariant {
+  public static final class Set extends hydra.core.TypeVariant {
     public Set () {
     
     }
@@ -402,7 +402,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Union extends TypeVariant {
+  public static final class Union extends hydra.core.TypeVariant {
     public Union () {
     
     }
@@ -427,7 +427,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Variable extends TypeVariant {
+  public static final class Variable extends hydra.core.TypeVariant {
     public Variable () {
     
     }

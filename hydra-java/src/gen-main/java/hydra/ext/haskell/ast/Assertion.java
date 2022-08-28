@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A type assertion
  */
 public class Assertion {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final java.util.List<Type> types;
+  public final java.util.List<hydra.ext.haskell.ast.Type> types;
   
-  public Assertion (Name name, java.util.List<Type> types) {
+  public Assertion (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Type> types) {
     this.name = name;
     this.types = types;
   }
@@ -27,11 +27,11 @@ public class Assertion {
     return 2 * name.hashCode() + 3 * types.hashCode();
   }
   
-  public Assertion withName(Name name) {
+  public Assertion withName(hydra.ext.haskell.ast.Name name) {
     return new Assertion(name, types);
   }
   
-  public Assertion withTypes(java.util.List<Type> types) {
+  public Assertion withTypes(java.util.List<hydra.ext.haskell.ast.Type> types) {
     return new Assertion(name, types);
   }
 }

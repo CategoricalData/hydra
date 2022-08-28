@@ -30,10 +30,10 @@ public abstract class Id {
     }
   }
   
-  public static final class Vertex extends Id {
-    public final VertexId value;
+  public static final class Vertex extends hydra.ext.tinkerpop.typed.Id {
+    public final hydra.ext.tinkerpop.typed.VertexId value;
     
-    public Vertex (VertexId value) {
+    public Vertex (hydra.ext.tinkerpop.typed.VertexId value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class Id {
     }
   }
   
-  public static final class Edge extends Id {
-    public final EdgeId value;
+  public static final class Edge extends hydra.ext.tinkerpop.typed.Id {
+    public final hydra.ext.tinkerpop.typed.EdgeId value;
     
-    public Edge (EdgeId value) {
+    public Edge (hydra.ext.tinkerpop.typed.EdgeId value) {
       this.value = value;
     }
     

@@ -1,11 +1,11 @@
 package hydra.grammar;
 
 public class Production {
-  public final Symbol symbol;
+  public final hydra.grammar.Symbol symbol;
   
-  public final Pattern pattern;
+  public final hydra.grammar.Pattern pattern;
   
-  public Production (Symbol symbol, Pattern pattern) {
+  public Production (hydra.grammar.Symbol symbol, hydra.grammar.Pattern pattern) {
     this.symbol = symbol;
     this.pattern = pattern;
   }
@@ -24,11 +24,11 @@ public class Production {
     return 2 * symbol.hashCode() + 3 * pattern.hashCode();
   }
   
-  public Production withSymbol(Symbol symbol) {
+  public Production withSymbol(hydra.grammar.Symbol symbol) {
     return new Production(symbol, pattern);
   }
   
-  public Production withPattern(Pattern pattern) {
+  public Production withPattern(hydra.grammar.Pattern pattern) {
     return new Production(symbol, pattern);
   }
 }

@@ -27,7 +27,7 @@ public abstract class ImportExportSpec_Subspec {
     }
   }
   
-  public static final class All extends ImportExportSpec_Subspec {
+  public static final class All extends hydra.ext.haskell.ast.ImportExportSpec_Subspec {
     public All () {
     
     }
@@ -52,10 +52,10 @@ public abstract class ImportExportSpec_Subspec {
     }
   }
   
-  public static final class List extends ImportExportSpec_Subspec {
-    public final java.util.List<Name> value;
+  public static final class List extends hydra.ext.haskell.ast.ImportExportSpec_Subspec {
+    public final java.util.List<hydra.ext.haskell.ast.Name> value;
     
-    public List (java.util.List<Name> value) {
+    public List (java.util.List<hydra.ext.haskell.ast.Name> value) {
       this.value = value;
     }
     

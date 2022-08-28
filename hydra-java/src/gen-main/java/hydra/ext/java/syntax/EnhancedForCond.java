@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class EnhancedForCond {
-  public final java.util.List<VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
   
-  public final LocalVariableType type;
+  public final hydra.ext.java.syntax.LocalVariableType type;
   
-  public final VariableDeclaratorId id;
+  public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public final Expression expression;
+  public final hydra.ext.java.syntax.Expression expression;
   
-  public EnhancedForCond (java.util.List<VariableModifier> modifiers, LocalVariableType type, VariableDeclaratorId id, Expression expression) {
+  public EnhancedForCond (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.VariableDeclaratorId id, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -30,19 +30,19 @@ public class EnhancedForCond {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * id.hashCode() + 7 * expression.hashCode();
   }
   
-  public EnhancedForCond withModifiers(java.util.List<VariableModifier> modifiers) {
+  public EnhancedForCond withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
-  public EnhancedForCond withType(LocalVariableType type) {
+  public EnhancedForCond withType(hydra.ext.java.syntax.LocalVariableType type) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
-  public EnhancedForCond withId(VariableDeclaratorId id) {
+  public EnhancedForCond withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   
-  public EnhancedForCond withExpression(Expression expression) {
+  public EnhancedForCond withExpression(hydra.ext.java.syntax.Expression expression) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
 }

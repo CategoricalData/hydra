@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_TypedParam {
-  public final Name name;
+  public final hydra.ext.scala.meta.Name name;
   
-  public final Type typ;
+  public final hydra.ext.scala.meta.Type typ;
   
-  public Type_TypedParam (Name name, Type typ) {
+  public Type_TypedParam (hydra.ext.scala.meta.Name name, hydra.ext.scala.meta.Type typ) {
     this.name = name;
     this.typ = typ;
   }
@@ -24,11 +24,11 @@ public class Type_TypedParam {
     return 2 * name.hashCode() + 3 * typ.hashCode();
   }
   
-  public Type_TypedParam withName(Name name) {
+  public Type_TypedParam withName(hydra.ext.scala.meta.Name name) {
     return new Type_TypedParam(name, typ);
   }
   
-  public Type_TypedParam withTyp(Type typ) {
+  public Type_TypedParam withTyp(hydra.ext.scala.meta.Type typ) {
     return new Type_TypedParam(name, typ);
   }
 }

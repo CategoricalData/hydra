@@ -36,10 +36,10 @@ public abstract class Expr {
     }
   }
   
-  public static final class Const extends Expr {
-    public final Symbol value;
+  public static final class Const extends hydra.util.codetree.ast.Expr {
+    public final hydra.util.codetree.ast.Symbol value;
     
-    public Const (Symbol value) {
+    public Const (hydra.util.codetree.ast.Symbol value) {
       this.value = value;
     }
     
@@ -63,10 +63,10 @@ public abstract class Expr {
     }
   }
   
-  public static final class Op extends Expr {
-    public final OpExpr value;
+  public static final class Op extends hydra.util.codetree.ast.Expr {
+    public final hydra.util.codetree.ast.OpExpr value;
     
-    public Op (OpExpr value) {
+    public Op (hydra.util.codetree.ast.OpExpr value) {
       this.value = value;
     }
     
@@ -90,10 +90,10 @@ public abstract class Expr {
     }
   }
   
-  public static final class Brackets extends Expr {
-    public final BracketExpr value;
+  public static final class Brackets extends hydra.util.codetree.ast.Expr {
+    public final hydra.util.codetree.ast.BracketExpr value;
     
-    public Brackets (BracketExpr value) {
+    public Brackets (hydra.util.codetree.ast.BracketExpr value) {
       this.value = value;
     }
     

@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class PackageModifier {
-  public final Annotation value;
+  public final hydra.ext.java.syntax.Annotation value;
   
-  public PackageModifier (Annotation value) {
+  public PackageModifier (hydra.ext.java.syntax.Annotation value) {
     this.value = value;
   }
   

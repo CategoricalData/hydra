@@ -1,9 +1,9 @@
 package hydra.ext.pegasus.pdl;
 
 public class EnumSchema {
-  public final java.util.List<EnumField> fields;
+  public final java.util.List<hydra.ext.pegasus.pdl.EnumField> fields;
   
-  public EnumSchema (java.util.List<EnumField> fields) {
+  public EnumSchema (java.util.List<hydra.ext.pegasus.pdl.EnumField> fields) {
     this.fields = fields;
   }
   

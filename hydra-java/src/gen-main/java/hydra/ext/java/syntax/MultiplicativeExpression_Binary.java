@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class MultiplicativeExpression_Binary {
-  public final MultiplicativeExpression lhs;
+  public final hydra.ext.java.syntax.MultiplicativeExpression lhs;
   
-  public final UnaryExpression rhs;
+  public final hydra.ext.java.syntax.UnaryExpression rhs;
   
-  public MultiplicativeExpression_Binary (MultiplicativeExpression lhs, UnaryExpression rhs) {
+  public MultiplicativeExpression_Binary (hydra.ext.java.syntax.MultiplicativeExpression lhs, hydra.ext.java.syntax.UnaryExpression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class MultiplicativeExpression_Binary {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public MultiplicativeExpression_Binary withLhs(MultiplicativeExpression lhs) {
+  public MultiplicativeExpression_Binary withLhs(hydra.ext.java.syntax.MultiplicativeExpression lhs) {
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
   
-  public MultiplicativeExpression_Binary withRhs(UnaryExpression rhs) {
+  public MultiplicativeExpression_Binary withRhs(hydra.ext.java.syntax.UnaryExpression rhs) {
     return new MultiplicativeExpression_Binary(lhs, rhs);
   }
 }

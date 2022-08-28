@@ -27,10 +27,10 @@ public abstract class ConstantList {
     }
   }
   
-  public static final class Single extends ConstantList {
-    public final Constant value;
+  public static final class Single extends hydra.ext.datalog.syntax.ConstantList {
+    public final hydra.ext.datalog.syntax.Constant value;
     
-    public Single (Constant value) {
+    public Single (hydra.ext.datalog.syntax.Constant value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ConstantList {
     }
   }
   
-  public static final class Multiple extends ConstantList {
-    public final ConstantList_Multiple value;
+  public static final class Multiple extends hydra.ext.datalog.syntax.ConstantList {
+    public final hydra.ext.datalog.syntax.ConstantList_Multiple value;
     
-    public Multiple (ConstantList_Multiple value) {
+    public Multiple (hydra.ext.datalog.syntax.ConstantList_Multiple value) {
       this.value = value;
     }
     

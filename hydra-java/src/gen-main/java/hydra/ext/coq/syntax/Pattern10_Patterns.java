@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern10_Patterns {
-  public final Pattern1 pattern;
+  public final hydra.ext.coq.syntax.Pattern1 pattern;
   
-  public final java.util.List<Pattern1> patterns;
+  public final java.util.List<hydra.ext.coq.syntax.Pattern1> patterns;
   
-  public Pattern10_Patterns (Pattern1 pattern, java.util.List<Pattern1> patterns) {
+  public Pattern10_Patterns (hydra.ext.coq.syntax.Pattern1 pattern, java.util.List<hydra.ext.coq.syntax.Pattern1> patterns) {
     this.pattern = pattern;
     this.patterns = patterns;
   }
@@ -24,11 +24,11 @@ public class Pattern10_Patterns {
     return 2 * pattern.hashCode() + 3 * patterns.hashCode();
   }
   
-  public Pattern10_Patterns withPattern(Pattern1 pattern) {
+  public Pattern10_Patterns withPattern(hydra.ext.coq.syntax.Pattern1 pattern) {
     return new Pattern10_Patterns(pattern, patterns);
   }
   
-  public Pattern10_Patterns withPatterns(java.util.List<Pattern1> patterns) {
+  public Pattern10_Patterns withPatterns(java.util.List<hydra.ext.coq.syntax.Pattern1> patterns) {
     return new Pattern10_Patterns(pattern, patterns);
   }
 }

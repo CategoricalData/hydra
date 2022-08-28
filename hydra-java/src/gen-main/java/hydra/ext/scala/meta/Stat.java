@@ -39,10 +39,10 @@ public abstract class Stat {
     }
   }
   
-  public static final class Term extends Stat {
-    public final Data value;
+  public static final class Term extends hydra.ext.scala.meta.Stat {
+    public final hydra.ext.scala.meta.Data value;
     
-    public Term (Data value) {
+    public Term (hydra.ext.scala.meta.Data value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class Stat {
     }
   }
   
-  public static final class Decl extends Stat {
-    public final Decl value;
+  public static final class Decl extends hydra.ext.scala.meta.Stat {
+    public final hydra.ext.scala.meta.Decl value;
     
-    public Decl (Decl value) {
+    public Decl (hydra.ext.scala.meta.Decl value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class Stat {
     }
   }
   
-  public static final class Defn extends Stat {
-    public final Defn value;
+  public static final class Defn extends hydra.ext.scala.meta.Stat {
+    public final hydra.ext.scala.meta.Defn value;
     
-    public Defn (Defn value) {
+    public Defn (hydra.ext.scala.meta.Defn value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class Stat {
     }
   }
   
-  public static final class ImportExport extends Stat {
-    public final ImportExportStat value;
+  public static final class ImportExport extends hydra.ext.scala.meta.Stat {
+    public final hydra.ext.scala.meta.ImportExportStat value;
     
-    public ImportExport (ImportExportStat value) {
+    public ImportExport (hydra.ext.scala.meta.ImportExportStat value) {
       this.value = value;
     }
     

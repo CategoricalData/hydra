@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class Block {
-  public final java.util.List<BlockStatement> value;
+  public final java.util.List<hydra.ext.java.syntax.BlockStatement> value;
   
-  public Block (java.util.List<BlockStatement> value) {
+  public Block (java.util.List<hydra.ext.java.syntax.BlockStatement> value) {
     this.value = value;
   }
   

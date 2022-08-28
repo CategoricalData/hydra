@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class SwitchStatement {
-  public final Expression cond;
+  public final hydra.ext.java.syntax.Expression cond;
   
-  public final SwitchBlock block;
+  public final hydra.ext.java.syntax.SwitchBlock block;
   
-  public SwitchStatement (Expression cond, SwitchBlock block) {
+  public SwitchStatement (hydra.ext.java.syntax.Expression cond, hydra.ext.java.syntax.SwitchBlock block) {
     this.cond = cond;
     this.block = block;
   }
@@ -24,11 +24,11 @@ public class SwitchStatement {
     return 2 * cond.hashCode() + 3 * block.hashCode();
   }
   
-  public SwitchStatement withCond(Expression cond) {
+  public SwitchStatement withCond(hydra.ext.java.syntax.Expression cond) {
     return new SwitchStatement(cond, block);
   }
   
-  public SwitchStatement withBlock(SwitchBlock block) {
+  public SwitchStatement withBlock(hydra.ext.java.syntax.SwitchBlock block) {
     return new SwitchStatement(cond, block);
   }
 }

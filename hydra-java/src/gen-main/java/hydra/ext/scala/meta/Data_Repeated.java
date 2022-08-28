@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_Repeated {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public Data_Repeated (Data expr) {
+  public Data_Repeated (hydra.ext.scala.meta.Data expr) {
     this.expr = expr;
   }
   

@@ -4,11 +4,11 @@ package hydra.core;
  * A labeled record or union type
  */
 public class RowType<M> {
-  public final Name typeName;
+  public final hydra.core.Name typeName;
   
-  public final java.util.List<FieldType<M>> fields;
+  public final java.util.List<hydra.core.FieldType<M>> fields;
   
-  public RowType (Name typeName, java.util.List<FieldType<M>> fields) {
+  public RowType (hydra.core.Name typeName, java.util.List<hydra.core.FieldType<M>> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -27,11 +27,11 @@ public class RowType<M> {
     return 2 * typeName.hashCode() + 3 * fields.hashCode();
   }
   
-  public RowType withTypeName(Name typeName) {
+  public RowType withTypeName(hydra.core.Name typeName) {
     return new RowType(typeName, fields);
   }
   
-  public RowType withFields(java.util.List<FieldType<M>> fields) {
+  public RowType withFields(java.util.List<hydra.core.FieldType<M>> fields) {
     return new RowType(typeName, fields);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class LabeledStatementNoShortIf {
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final StatementNoShortIf statement;
+  public final hydra.ext.java.syntax.StatementNoShortIf statement;
   
-  public LabeledStatementNoShortIf (Identifier identifier, StatementNoShortIf statement) {
+  public LabeledStatementNoShortIf (hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.StatementNoShortIf statement) {
     this.identifier = identifier;
     this.statement = statement;
   }
@@ -24,11 +24,11 @@ public class LabeledStatementNoShortIf {
     return 2 * identifier.hashCode() + 3 * statement.hashCode();
   }
   
-  public LabeledStatementNoShortIf withIdentifier(Identifier identifier) {
+  public LabeledStatementNoShortIf withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new LabeledStatementNoShortIf(identifier, statement);
   }
   
-  public LabeledStatementNoShortIf withStatement(StatementNoShortIf statement) {
+  public LabeledStatementNoShortIf withStatement(hydra.ext.java.syntax.StatementNoShortIf statement) {
     return new LabeledStatementNoShortIf(identifier, statement);
   }
 }

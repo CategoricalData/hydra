@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class InterfaceBody {
-  public final java.util.List<InterfaceMemberDeclaration> value;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
   
-  public InterfaceBody (java.util.List<InterfaceMemberDeclaration> value) {
+  public InterfaceBody (java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {
     this.value = value;
   }
   

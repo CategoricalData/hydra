@@ -45,7 +45,7 @@ public abstract class UniverseLevel {
     }
   }
   
-  public static final class Set extends UniverseLevel {
+  public static final class Set extends hydra.ext.coq.syntax.UniverseLevel {
     public Set () {
     
     }
@@ -70,7 +70,7 @@ public abstract class UniverseLevel {
     }
   }
   
-  public static final class Prop extends UniverseLevel {
+  public static final class Prop extends hydra.ext.coq.syntax.UniverseLevel {
     public Prop () {
     
     }
@@ -95,7 +95,7 @@ public abstract class UniverseLevel {
     }
   }
   
-  public static final class Type extends UniverseLevel {
+  public static final class Type extends hydra.ext.coq.syntax.UniverseLevel {
     public Type () {
     
     }
@@ -120,7 +120,7 @@ public abstract class UniverseLevel {
     }
   }
   
-  public static final class Ignored extends UniverseLevel {
+  public static final class Ignored extends hydra.ext.coq.syntax.UniverseLevel {
     public Ignored () {
     
     }
@@ -145,10 +145,10 @@ public abstract class UniverseLevel {
     }
   }
   
-  public static final class Qualid extends UniverseLevel {
-    public final Qualid value;
+  public static final class Qualid extends hydra.ext.coq.syntax.UniverseLevel {
+    public final hydra.ext.coq.syntax.Qualid value;
     
-    public Qualid (Qualid value) {
+    public Qualid (hydra.ext.coq.syntax.Qualid value) {
       this.value = value;
     }
     

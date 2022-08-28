@@ -4,11 +4,11 @@ package hydra.ext.coq.syntax;
  * A let-in definition
  */
 public class Let {
-  public final LetBindings bindings;
+  public final hydra.ext.coq.syntax.LetBindings bindings;
   
-  public final Term in;
+  public final hydra.ext.coq.syntax.Term in;
   
-  public Let (LetBindings bindings, Term in) {
+  public Let (hydra.ext.coq.syntax.LetBindings bindings, hydra.ext.coq.syntax.Term in) {
     this.bindings = bindings;
     this.in = in;
   }
@@ -27,11 +27,11 @@ public class Let {
     return 2 * bindings.hashCode() + 3 * in.hashCode();
   }
   
-  public Let withBindings(LetBindings bindings) {
+  public Let withBindings(hydra.ext.coq.syntax.LetBindings bindings) {
     return new Let(bindings, in);
   }
   
-  public Let withIn(Term in) {
+  public Let withIn(hydra.ext.coq.syntax.Term in) {
     return new Let(bindings, in);
   }
 }

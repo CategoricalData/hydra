@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class BreakStatement {
-  public final java.util.Optional<Identifier> value;
+  public final java.util.Optional<hydra.ext.java.syntax.Identifier> value;
   
-  public BreakStatement (java.util.Optional<Identifier> value) {
+  public BreakStatement (java.util.Optional<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

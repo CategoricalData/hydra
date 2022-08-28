@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_EndMarker {
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public Data_EndMarker (Data_Name name) {
+  public Data_EndMarker (hydra.ext.scala.meta.Data_Name name) {
     this.name = name;
   }
   

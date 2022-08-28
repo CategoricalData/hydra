@@ -39,10 +39,10 @@ public abstract class InterfaceMemberDeclaration {
     }
   }
   
-  public static final class Constant extends InterfaceMemberDeclaration {
-    public final ConstantDeclaration value;
+  public static final class Constant extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
+    public final hydra.ext.java.syntax.ConstantDeclaration value;
     
-    public Constant (ConstantDeclaration value) {
+    public Constant (hydra.ext.java.syntax.ConstantDeclaration value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class InterfaceMemberDeclaration {
     }
   }
   
-  public static final class InterfaceMethod extends InterfaceMemberDeclaration {
-    public final InterfaceMethodDeclaration value;
+  public static final class InterfaceMethod extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
+    public final hydra.ext.java.syntax.InterfaceMethodDeclaration value;
     
-    public InterfaceMethod (InterfaceMethodDeclaration value) {
+    public InterfaceMethod (hydra.ext.java.syntax.InterfaceMethodDeclaration value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class InterfaceMemberDeclaration {
     }
   }
   
-  public static final class Class_ extends InterfaceMemberDeclaration {
-    public final ClassDeclaration value;
+  public static final class Class_ extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
+    public final hydra.ext.java.syntax.ClassDeclaration value;
     
-    public Class_ (ClassDeclaration value) {
+    public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class InterfaceMemberDeclaration {
     }
   }
   
-  public static final class Interface extends InterfaceMemberDeclaration {
-    public final InterfaceDeclaration value;
+  public static final class Interface extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
+    public final hydra.ext.java.syntax.InterfaceDeclaration value;
     
-    public Interface (InterfaceDeclaration value) {
+    public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
     

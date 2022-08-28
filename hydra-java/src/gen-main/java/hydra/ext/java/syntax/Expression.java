@@ -27,10 +27,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Lambda extends Expression {
-    public final LambdaExpression value;
+  public static final class Lambda extends hydra.ext.java.syntax.Expression {
+    public final hydra.ext.java.syntax.LambdaExpression value;
     
-    public Lambda (LambdaExpression value) {
+    public Lambda (hydra.ext.java.syntax.LambdaExpression value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Assignment extends Expression {
-    public final AssignmentExpression value;
+  public static final class Assignment extends hydra.ext.java.syntax.Expression {
+    public final hydra.ext.java.syntax.AssignmentExpression value;
     
-    public Assignment (AssignmentExpression value) {
+    public Assignment (hydra.ext.java.syntax.AssignmentExpression value) {
       this.value = value;
     }
     

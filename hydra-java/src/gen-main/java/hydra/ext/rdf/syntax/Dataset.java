@@ -1,9 +1,9 @@
 package hydra.ext.rdf.syntax;
 
 public class Dataset {
-  public final java.util.Set<Quad> value;
+  public final java.util.Set<hydra.ext.rdf.syntax.Quad> value;
   
-  public Dataset (java.util.Set<Quad> value) {
+  public Dataset (java.util.Set<hydra.ext.rdf.syntax.Quad> value) {
     this.value = value;
   }
   

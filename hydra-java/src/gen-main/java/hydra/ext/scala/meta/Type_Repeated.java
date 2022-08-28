@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Type_Repeated {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Type_Repeated (Type tpe) {
+  public Type_Repeated (hydra.ext.scala.meta.Type tpe) {
     this.tpe = tpe;
   }
   

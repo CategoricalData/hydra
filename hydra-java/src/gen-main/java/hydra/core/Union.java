@@ -4,11 +4,11 @@ package hydra.core;
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
 public class Union<M> {
-  public final Name typeName;
+  public final hydra.core.Name typeName;
   
-  public final Field<M> field;
+  public final hydra.core.Field<M> field;
   
-  public Union (Name typeName, Field<M> field) {
+  public Union (hydra.core.Name typeName, hydra.core.Field<M> field) {
     this.typeName = typeName;
     this.field = field;
   }
@@ -27,11 +27,11 @@ public class Union<M> {
     return 2 * typeName.hashCode() + 3 * field.hashCode();
   }
   
-  public Union withTypeName(Name typeName) {
+  public Union withTypeName(hydra.core.Name typeName) {
     return new Union(typeName, field);
   }
   
-  public Union withField(Field<M> field) {
+  public Union withField(hydra.core.Field<M> field) {
     return new Union(typeName, field);
   }
 }

@@ -33,10 +33,10 @@ public abstract class UniverseName {
     }
   }
   
-  public static final class Qualid extends UniverseName {
-    public final Qualid value;
+  public static final class Qualid extends hydra.ext.coq.syntax.UniverseName {
+    public final hydra.ext.coq.syntax.Qualid value;
     
-    public Qualid (Qualid value) {
+    public Qualid (hydra.ext.coq.syntax.Qualid value) {
       this.value = value;
     }
     
@@ -60,7 +60,7 @@ public abstract class UniverseName {
     }
   }
   
-  public static final class Set extends UniverseName {
+  public static final class Set extends hydra.ext.coq.syntax.UniverseName {
     public Set () {
     
     }
@@ -85,7 +85,7 @@ public abstract class UniverseName {
     }
   }
   
-  public static final class Prop extends UniverseName {
+  public static final class Prop extends hydra.ext.coq.syntax.UniverseName {
     public Prop () {
     
     }

@@ -45,10 +45,10 @@ public abstract class UnaryExpression {
     }
   }
   
-  public static final class PreIncrement extends UnaryExpression {
-    public final PreIncrementExpression value;
+  public static final class PreIncrement extends hydra.ext.java.syntax.UnaryExpression {
+    public final hydra.ext.java.syntax.PreIncrementExpression value;
     
-    public PreIncrement (PreIncrementExpression value) {
+    public PreIncrement (hydra.ext.java.syntax.PreIncrementExpression value) {
       this.value = value;
     }
     
@@ -72,10 +72,10 @@ public abstract class UnaryExpression {
     }
   }
   
-  public static final class PreDecrement extends UnaryExpression {
-    public final PreDecrementExpression value;
+  public static final class PreDecrement extends hydra.ext.java.syntax.UnaryExpression {
+    public final hydra.ext.java.syntax.PreDecrementExpression value;
     
-    public PreDecrement (PreDecrementExpression value) {
+    public PreDecrement (hydra.ext.java.syntax.PreDecrementExpression value) {
       this.value = value;
     }
     
@@ -99,10 +99,10 @@ public abstract class UnaryExpression {
     }
   }
   
-  public static final class Plus extends UnaryExpression {
-    public final UnaryExpression value;
+  public static final class Plus extends hydra.ext.java.syntax.UnaryExpression {
+    public final hydra.ext.java.syntax.UnaryExpression value;
     
-    public Plus (UnaryExpression value) {
+    public Plus (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
     
@@ -126,10 +126,10 @@ public abstract class UnaryExpression {
     }
   }
   
-  public static final class Minus extends UnaryExpression {
-    public final UnaryExpression value;
+  public static final class Minus extends hydra.ext.java.syntax.UnaryExpression {
+    public final hydra.ext.java.syntax.UnaryExpression value;
     
-    public Minus (UnaryExpression value) {
+    public Minus (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
     
@@ -153,10 +153,10 @@ public abstract class UnaryExpression {
     }
   }
   
-  public static final class Other extends UnaryExpression {
-    public final UnaryExpressionNotPlusMinus value;
+  public static final class Other extends hydra.ext.java.syntax.UnaryExpression {
+    public final hydra.ext.java.syntax.UnaryExpressionNotPlusMinus value;
     
-    public Other (UnaryExpressionNotPlusMinus value) {
+    public Other (hydra.ext.java.syntax.UnaryExpressionNotPlusMinus value) {
       this.value = value;
     }
     

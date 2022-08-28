@@ -27,10 +27,10 @@ public abstract class CompilationUnit {
     }
   }
   
-  public static final class Ordinary extends CompilationUnit {
-    public final OrdinaryCompilationUnit value;
+  public static final class Ordinary extends hydra.ext.java.syntax.CompilationUnit {
+    public final hydra.ext.java.syntax.OrdinaryCompilationUnit value;
     
-    public Ordinary (OrdinaryCompilationUnit value) {
+    public Ordinary (hydra.ext.java.syntax.OrdinaryCompilationUnit value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class CompilationUnit {
     }
   }
   
-  public static final class Modular extends CompilationUnit {
-    public final ModularCompilationUnit value;
+  public static final class Modular extends hydra.ext.java.syntax.CompilationUnit {
+    public final hydra.ext.java.syntax.ModularCompilationUnit value;
     
-    public Modular (ModularCompilationUnit value) {
+    public Modular (hydra.ext.java.syntax.ModularCompilationUnit value) {
       this.value = value;
     }
     

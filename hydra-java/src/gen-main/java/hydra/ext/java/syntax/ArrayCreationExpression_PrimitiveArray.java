@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ArrayCreationExpression_PrimitiveArray {
-  public final PrimitiveTypeWithAnnotations type;
+  public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
-  public final java.util.List<Dims> dims;
+  public final java.util.List<hydra.ext.java.syntax.Dims> dims;
   
-  public final ArrayInitializer array;
+  public final hydra.ext.java.syntax.ArrayInitializer array;
   
-  public ArrayCreationExpression_PrimitiveArray (PrimitiveTypeWithAnnotations type, java.util.List<Dims> dims, ArrayInitializer array) {
+  public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -27,15 +27,15 @@ public class ArrayCreationExpression_PrimitiveArray {
     return 2 * type.hashCode() + 3 * dims.hashCode() + 5 * array.hashCode();
   }
   
-  public ArrayCreationExpression_PrimitiveArray withType(PrimitiveTypeWithAnnotations type) {
+  public ArrayCreationExpression_PrimitiveArray withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   
-  public ArrayCreationExpression_PrimitiveArray withDims(java.util.List<Dims> dims) {
+  public ArrayCreationExpression_PrimitiveArray withDims(java.util.List<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   
-  public ArrayCreationExpression_PrimitiveArray withArray(ArrayInitializer array) {
+  public ArrayCreationExpression_PrimitiveArray withArray(hydra.ext.java.syntax.ArrayInitializer array) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
 }

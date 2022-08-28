@@ -48,7 +48,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Binary extends LiteralVariant {
+  public static final class Binary extends hydra.core.LiteralVariant {
     public Binary () {
     
     }
@@ -73,7 +73,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Boolean_ extends LiteralVariant {
+  public static final class Boolean_ extends hydra.core.LiteralVariant {
     public Boolean_ () {
     
     }
@@ -98,7 +98,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Float_ extends LiteralVariant {
+  public static final class Float_ extends hydra.core.LiteralVariant {
     public Float_ () {
     
     }
@@ -123,7 +123,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Integer_ extends LiteralVariant {
+  public static final class Integer_ extends hydra.core.LiteralVariant {
     public Integer_ () {
     
     }
@@ -148,7 +148,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class String_ extends LiteralVariant {
+  public static final class String_ extends hydra.core.LiteralVariant {
     public String_ () {
     
     }

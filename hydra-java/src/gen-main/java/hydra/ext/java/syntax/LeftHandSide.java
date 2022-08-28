@@ -33,10 +33,10 @@ public abstract class LeftHandSide {
     }
   }
   
-  public static final class ExpressionName extends LeftHandSide {
-    public final ExpressionName value;
+  public static final class ExpressionName extends hydra.ext.java.syntax.LeftHandSide {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public ExpressionName (ExpressionName value) {
+    public ExpressionName (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class LeftHandSide {
     }
   }
   
-  public static final class FieldAccess extends LeftHandSide {
-    public final FieldAccess value;
+  public static final class FieldAccess extends hydra.ext.java.syntax.LeftHandSide {
+    public final hydra.ext.java.syntax.FieldAccess value;
     
-    public FieldAccess (FieldAccess value) {
+    public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class LeftHandSide {
     }
   }
   
-  public static final class ArrayAccess extends LeftHandSide {
-    public final ArrayAccess value;
+  public static final class ArrayAccess extends hydra.ext.java.syntax.LeftHandSide {
+    public final hydra.ext.java.syntax.ArrayAccess value;
     
-    public ArrayAccess (ArrayAccess value) {
+    public ArrayAccess (hydra.ext.java.syntax.ArrayAccess value) {
       this.value = value;
     }
     

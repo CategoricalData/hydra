@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class NormalApplication {
-  public final Term1 lhs;
+  public final hydra.ext.coq.syntax.Term1 lhs;
   
-  public final java.util.List<Arg> rhs;
+  public final java.util.List<hydra.ext.coq.syntax.Arg> rhs;
   
-  public NormalApplication (Term1 lhs, java.util.List<Arg> rhs) {
+  public NormalApplication (hydra.ext.coq.syntax.Term1 lhs, java.util.List<hydra.ext.coq.syntax.Arg> rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class NormalApplication {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public NormalApplication withLhs(Term1 lhs) {
+  public NormalApplication withLhs(hydra.ext.coq.syntax.Term1 lhs) {
     return new NormalApplication(lhs, rhs);
   }
   
-  public NormalApplication withRhs(java.util.List<Arg> rhs) {
+  public NormalApplication withRhs(java.util.List<hydra.ext.coq.syntax.Arg> rhs) {
     return new NormalApplication(lhs, rhs);
   }
 }

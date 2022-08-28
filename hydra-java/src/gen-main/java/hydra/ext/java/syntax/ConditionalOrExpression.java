@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ConditionalOrExpression {
-  public final java.util.List<ConditionalAndExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.ConditionalAndExpression> value;
   
-  public ConditionalOrExpression (java.util.List<ConditionalAndExpression> value) {
+  public ConditionalOrExpression (java.util.List<hydra.ext.java.syntax.ConditionalAndExpression> value) {
     this.value = value;
   }
   

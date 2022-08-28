@@ -39,10 +39,10 @@ public abstract class PostfixExpression {
     }
   }
   
-  public static final class Primary extends PostfixExpression {
-    public final Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.PostfixExpression {
+    public final hydra.ext.java.syntax.Primary value;
     
-    public Primary (Primary value) {
+    public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class PostfixExpression {
     }
   }
   
-  public static final class Name extends PostfixExpression {
-    public final ExpressionName value;
+  public static final class Name extends hydra.ext.java.syntax.PostfixExpression {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public Name (ExpressionName value) {
+    public Name (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class PostfixExpression {
     }
   }
   
-  public static final class PostIncrement extends PostfixExpression {
-    public final PostIncrementExpression value;
+  public static final class PostIncrement extends hydra.ext.java.syntax.PostfixExpression {
+    public final hydra.ext.java.syntax.PostIncrementExpression value;
     
-    public PostIncrement (PostIncrementExpression value) {
+    public PostIncrement (hydra.ext.java.syntax.PostIncrementExpression value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class PostfixExpression {
     }
   }
   
-  public static final class PostDecrement extends PostfixExpression {
-    public final PostDecrementExpression value;
+  public static final class PostDecrement extends hydra.ext.java.syntax.PostfixExpression {
+    public final hydra.ext.java.syntax.PostDecrementExpression value;
     
-    public PostDecrement (PostDecrementExpression value) {
+    public PostDecrement (hydra.ext.java.syntax.PostDecrementExpression value) {
       this.value = value;
     }
     

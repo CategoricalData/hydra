@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class AnnotatedApplication {
-  public final QualidAnnotated annot;
+  public final hydra.ext.coq.syntax.QualidAnnotated annot;
   
-  public final java.util.List<Term1> terms;
+  public final java.util.List<hydra.ext.coq.syntax.Term1> terms;
   
-  public AnnotatedApplication (QualidAnnotated annot, java.util.List<Term1> terms) {
+  public AnnotatedApplication (hydra.ext.coq.syntax.QualidAnnotated annot, java.util.List<hydra.ext.coq.syntax.Term1> terms) {
     this.annot = annot;
     this.terms = terms;
   }
@@ -24,11 +24,11 @@ public class AnnotatedApplication {
     return 2 * annot.hashCode() + 3 * terms.hashCode();
   }
   
-  public AnnotatedApplication withAnnot(QualidAnnotated annot) {
+  public AnnotatedApplication withAnnot(hydra.ext.coq.syntax.QualidAnnotated annot) {
     return new AnnotatedApplication(annot, terms);
   }
   
-  public AnnotatedApplication withTerms(java.util.List<Term1> terms) {
+  public AnnotatedApplication withTerms(java.util.List<hydra.ext.coq.syntax.Term1> terms) {
     return new AnnotatedApplication(annot, terms);
   }
 }

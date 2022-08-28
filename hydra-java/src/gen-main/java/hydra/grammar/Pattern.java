@@ -81,7 +81,7 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Nil extends Pattern {
+  public static final class Nil extends hydra.grammar.Pattern {
     public Nil () {
     
     }
@@ -106,10 +106,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Ignored extends Pattern {
-    public final Pattern value;
+  public static final class Ignored extends hydra.grammar.Pattern {
+    public final hydra.grammar.Pattern value;
     
-    public Ignored (Pattern value) {
+    public Ignored (hydra.grammar.Pattern value) {
       this.value = value;
     }
     
@@ -133,10 +133,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Labeled extends Pattern {
-    public final LabeledPattern value;
+  public static final class Labeled extends hydra.grammar.Pattern {
+    public final hydra.grammar.LabeledPattern value;
     
-    public Labeled (LabeledPattern value) {
+    public Labeled (hydra.grammar.LabeledPattern value) {
       this.value = value;
     }
     
@@ -160,10 +160,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Constant extends Pattern {
-    public final Constant value;
+  public static final class Constant extends hydra.grammar.Pattern {
+    public final hydra.grammar.Constant value;
     
-    public Constant (Constant value) {
+    public Constant (hydra.grammar.Constant value) {
       this.value = value;
     }
     
@@ -187,10 +187,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Regex extends Pattern {
-    public final Regex value;
+  public static final class Regex extends hydra.grammar.Pattern {
+    public final hydra.grammar.Regex value;
     
-    public Regex (Regex value) {
+    public Regex (hydra.grammar.Regex value) {
       this.value = value;
     }
     
@@ -214,10 +214,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Nonterminal extends Pattern {
-    public final Symbol value;
+  public static final class Nonterminal extends hydra.grammar.Pattern {
+    public final hydra.grammar.Symbol value;
     
-    public Nonterminal (Symbol value) {
+    public Nonterminal (hydra.grammar.Symbol value) {
       this.value = value;
     }
     
@@ -241,10 +241,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Sequence extends Pattern {
-    public final java.util.List<Pattern> value;
+  public static final class Sequence extends hydra.grammar.Pattern {
+    public final java.util.List<hydra.grammar.Pattern> value;
     
-    public Sequence (java.util.List<Pattern> value) {
+    public Sequence (java.util.List<hydra.grammar.Pattern> value) {
       this.value = value;
     }
     
@@ -268,10 +268,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Alternatives extends Pattern {
-    public final java.util.List<Pattern> value;
+  public static final class Alternatives extends hydra.grammar.Pattern {
+    public final java.util.List<hydra.grammar.Pattern> value;
     
-    public Alternatives (java.util.List<Pattern> value) {
+    public Alternatives (java.util.List<hydra.grammar.Pattern> value) {
       this.value = value;
     }
     
@@ -295,10 +295,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Option extends Pattern {
-    public final Pattern value;
+  public static final class Option extends hydra.grammar.Pattern {
+    public final hydra.grammar.Pattern value;
     
-    public Option (Pattern value) {
+    public Option (hydra.grammar.Pattern value) {
       this.value = value;
     }
     
@@ -322,10 +322,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Star extends Pattern {
-    public final Pattern value;
+  public static final class Star extends hydra.grammar.Pattern {
+    public final hydra.grammar.Pattern value;
     
-    public Star (Pattern value) {
+    public Star (hydra.grammar.Pattern value) {
       this.value = value;
     }
     
@@ -349,10 +349,10 @@ public abstract class Pattern {
     }
   }
   
-  public static final class Plus extends Pattern {
-    public final Pattern value;
+  public static final class Plus extends hydra.grammar.Pattern {
+    public final hydra.grammar.Pattern value;
     
-    public Plus (Pattern value) {
+    public Plus (hydra.grammar.Pattern value) {
       this.value = value;
     }
     

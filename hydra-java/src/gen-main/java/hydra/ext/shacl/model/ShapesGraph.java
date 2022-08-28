@@ -7,9 +7,9 @@ public class ShapesGraph {
   /**
    * An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
    */
-  public final java.util.Set<Shape> value;
+  public final java.util.Set<hydra.ext.shacl.model.Shape> value;
   
-  public ShapesGraph (java.util.Set<Shape> value) {
+  public ShapesGraph (java.util.Set<hydra.ext.shacl.model.Shape> value) {
     this.value = value;
   }
   

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class FieldAccess {
-  public final FieldAccess_Qualifier qualifier;
+  public final hydra.ext.java.syntax.FieldAccess_Qualifier qualifier;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public FieldAccess (FieldAccess_Qualifier qualifier, Identifier identifier) {
+  public FieldAccess (hydra.ext.java.syntax.FieldAccess_Qualifier qualifier, hydra.ext.java.syntax.Identifier identifier) {
     this.qualifier = qualifier;
     this.identifier = identifier;
   }
@@ -24,11 +24,11 @@ public class FieldAccess {
     return 2 * qualifier.hashCode() + 3 * identifier.hashCode();
   }
   
-  public FieldAccess withQualifier(FieldAccess_Qualifier qualifier) {
+  public FieldAccess withQualifier(hydra.ext.java.syntax.FieldAccess_Qualifier qualifier) {
     return new FieldAccess(qualifier, identifier);
   }
   
-  public FieldAccess withIdentifier(Identifier identifier) {
+  public FieldAccess withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new FieldAccess(qualifier, identifier);
   }
 }

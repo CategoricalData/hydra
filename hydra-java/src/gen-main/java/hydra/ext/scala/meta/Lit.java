@@ -87,7 +87,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Boolean_ extends Lit {
+  public static final class Boolean_ extends hydra.ext.scala.meta.Lit {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -114,7 +114,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Byte_ extends Lit {
+  public static final class Byte_ extends hydra.ext.scala.meta.Lit {
     public final Short value;
     
     public Byte_ (Short value) {
@@ -141,7 +141,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Char extends Lit {
+  public static final class Char extends hydra.ext.scala.meta.Lit {
     public final Character value;
     
     public Char (Character value) {
@@ -168,7 +168,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Double_ extends Lit {
+  public static final class Double_ extends hydra.ext.scala.meta.Lit {
     public final Double value;
     
     public Double_ (Double value) {
@@ -195,7 +195,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Float_ extends Lit {
+  public static final class Float_ extends hydra.ext.scala.meta.Lit {
     public final Float value;
     
     public Float_ (Float value) {
@@ -222,7 +222,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Int extends Lit {
+  public static final class Int extends hydra.ext.scala.meta.Lit {
     public final Integer value;
     
     public Int (Integer value) {
@@ -249,7 +249,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Long_ extends Lit {
+  public static final class Long_ extends hydra.ext.scala.meta.Lit {
     public final Long value;
     
     public Long_ (Long value) {
@@ -276,7 +276,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Null extends Lit {
+  public static final class Null extends hydra.ext.scala.meta.Lit {
     public Null () {
     
     }
@@ -301,7 +301,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Short_ extends Lit {
+  public static final class Short_ extends hydra.ext.scala.meta.Lit {
     public final Short value;
     
     public Short_ (Short value) {
@@ -328,7 +328,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class String_ extends Lit {
+  public static final class String_ extends hydra.ext.scala.meta.Lit {
     public final String value;
     
     public String_ (String value) {
@@ -355,10 +355,10 @@ public abstract class Lit {
     }
   }
   
-  public static final class Symbol extends Lit {
-    public final ScalaSymbol value;
+  public static final class Symbol extends hydra.ext.scala.meta.Lit {
+    public final hydra.ext.scala.meta.ScalaSymbol value;
     
-    public Symbol (ScalaSymbol value) {
+    public Symbol (hydra.ext.scala.meta.ScalaSymbol value) {
       this.value = value;
     }
     
@@ -382,7 +382,7 @@ public abstract class Lit {
     }
   }
   
-  public static final class Unit extends Lit {
+  public static final class Unit extends hydra.ext.scala.meta.Lit {
     public Unit () {
     
     }

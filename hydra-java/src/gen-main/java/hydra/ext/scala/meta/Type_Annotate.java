@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Annotate {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public final java.util.List<Mod_Annot> annots;
+  public final java.util.List<hydra.ext.scala.meta.Mod_Annot> annots;
   
-  public Type_Annotate (Type tpe, java.util.List<Mod_Annot> annots) {
+  public Type_Annotate (hydra.ext.scala.meta.Type tpe, java.util.List<hydra.ext.scala.meta.Mod_Annot> annots) {
     this.tpe = tpe;
     this.annots = annots;
   }
@@ -24,11 +24,11 @@ public class Type_Annotate {
     return 2 * tpe.hashCode() + 3 * annots.hashCode();
   }
   
-  public Type_Annotate withTpe(Type tpe) {
+  public Type_Annotate withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Type_Annotate(tpe, annots);
   }
   
-  public Type_Annotate withAnnots(java.util.List<Mod_Annot> annots) {
+  public Type_Annotate withAnnots(java.util.List<hydra.ext.scala.meta.Mod_Annot> annots) {
     return new Type_Annotate(tpe, annots);
   }
 }

@@ -69,10 +69,10 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Annotation extends MethodModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.MethodModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -96,7 +96,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Public extends MethodModifier {
+  public static final class Public extends hydra.ext.java.syntax.MethodModifier {
     public Public () {
     
     }
@@ -121,7 +121,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Protected extends MethodModifier {
+  public static final class Protected extends hydra.ext.java.syntax.MethodModifier {
     public Protected () {
     
     }
@@ -146,7 +146,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Private extends MethodModifier {
+  public static final class Private extends hydra.ext.java.syntax.MethodModifier {
     public Private () {
     
     }
@@ -171,7 +171,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Abstract extends MethodModifier {
+  public static final class Abstract extends hydra.ext.java.syntax.MethodModifier {
     public Abstract () {
     
     }
@@ -196,7 +196,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Final extends MethodModifier {
+  public static final class Final extends hydra.ext.java.syntax.MethodModifier {
     public Final () {
     
     }
@@ -221,7 +221,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Synchronized extends MethodModifier {
+  public static final class Synchronized extends hydra.ext.java.syntax.MethodModifier {
     public Synchronized () {
     
     }
@@ -246,7 +246,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Native extends MethodModifier {
+  public static final class Native extends hydra.ext.java.syntax.MethodModifier {
     public Native () {
     
     }
@@ -271,7 +271,7 @@ public abstract class MethodModifier {
     }
   }
   
-  public static final class Strictfb extends MethodModifier {
+  public static final class Strictfb extends hydra.ext.java.syntax.MethodModifier {
     public Strictfb () {
     
     }
