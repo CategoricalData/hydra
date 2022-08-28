@@ -1,9 +1,9 @@
 package hydra.ext.haskell.ast;
 
 public class LocalBindings {
-  public final java.util.List<LocalBinding> value;
+  public final java.util.List<hydra.ext.haskell.ast.LocalBinding> value;
   
-  public LocalBindings (java.util.List<LocalBinding> value) {
+  public LocalBindings (java.util.List<hydra.ext.haskell.ast.LocalBinding> value) {
     this.value = value;
   }
   

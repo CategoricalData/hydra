@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ArrayType {
-  public final Dims dims;
+  public final hydra.ext.java.syntax.Dims dims;
   
-  public final ArrayType_Variant variant;
+  public final hydra.ext.java.syntax.ArrayType_Variant variant;
   
-  public ArrayType (Dims dims, ArrayType_Variant variant) {
+  public ArrayType (hydra.ext.java.syntax.Dims dims, hydra.ext.java.syntax.ArrayType_Variant variant) {
     this.dims = dims;
     this.variant = variant;
   }
@@ -24,11 +24,11 @@ public class ArrayType {
     return 2 * dims.hashCode() + 3 * variant.hashCode();
   }
   
-  public ArrayType withDims(Dims dims) {
+  public ArrayType withDims(hydra.ext.java.syntax.Dims dims) {
     return new ArrayType(dims, variant);
   }
   
-  public ArrayType withVariant(ArrayType_Variant variant) {
+  public ArrayType withVariant(hydra.ext.java.syntax.ArrayType_Variant variant) {
     return new ArrayType(dims, variant);
   }
 }

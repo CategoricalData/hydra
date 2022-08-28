@@ -30,7 +30,7 @@ public abstract class DataDeclaration_Keyword {
     }
   }
   
-  public static final class Data extends DataDeclaration_Keyword {
+  public static final class Data extends hydra.ext.haskell.ast.DataDeclaration_Keyword {
     public Data () {
     
     }
@@ -55,7 +55,7 @@ public abstract class DataDeclaration_Keyword {
     }
   }
   
-  public static final class Newtype extends DataDeclaration_Keyword {
+  public static final class Newtype extends hydra.ext.haskell.ast.DataDeclaration_Keyword {
     public Newtype () {
     
     }

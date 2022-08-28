@@ -42,10 +42,10 @@ public abstract class CollectionType {
     }
   }
   
-  public static final class List extends CollectionType {
-    public final Type value;
+  public static final class List extends hydra.ext.tinkerpop.typed.CollectionType {
+    public final hydra.ext.tinkerpop.typed.Type value;
     
-    public List (Type value) {
+    public List (hydra.ext.tinkerpop.typed.Type value) {
       this.value = value;
     }
     
@@ -69,10 +69,10 @@ public abstract class CollectionType {
     }
   }
   
-  public static final class Map extends CollectionType {
-    public final Type value;
+  public static final class Map extends hydra.ext.tinkerpop.typed.CollectionType {
+    public final hydra.ext.tinkerpop.typed.Type value;
     
-    public Map (Type value) {
+    public Map (hydra.ext.tinkerpop.typed.Type value) {
       this.value = value;
     }
     
@@ -96,10 +96,10 @@ public abstract class CollectionType {
     }
   }
   
-  public static final class Optional extends CollectionType {
-    public final Type value;
+  public static final class Optional extends hydra.ext.tinkerpop.typed.CollectionType {
+    public final hydra.ext.tinkerpop.typed.Type value;
     
-    public Optional (Type value) {
+    public Optional (hydra.ext.tinkerpop.typed.Type value) {
       this.value = value;
     }
     
@@ -123,10 +123,10 @@ public abstract class CollectionType {
     }
   }
   
-  public static final class Set extends CollectionType {
-    public final Type value;
+  public static final class Set extends hydra.ext.tinkerpop.typed.CollectionType {
+    public final hydra.ext.tinkerpop.typed.Type value;
     
-    public Set (Type value) {
+    public Set (hydra.ext.tinkerpop.typed.Type value) {
       this.value = value;
     }
     

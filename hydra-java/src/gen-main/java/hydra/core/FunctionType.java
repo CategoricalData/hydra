@@ -4,11 +4,11 @@ package hydra.core;
  * A function type, also known as an arrow type
  */
 public class FunctionType<M> {
-  public final Type<M> domain;
+  public final hydra.core.Type<M> domain;
   
-  public final Type<M> codomain;
+  public final hydra.core.Type<M> codomain;
   
-  public FunctionType (Type<M> domain, Type<M> codomain) {
+  public FunctionType (hydra.core.Type<M> domain, hydra.core.Type<M> codomain) {
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -27,11 +27,11 @@ public class FunctionType<M> {
     return 2 * domain.hashCode() + 3 * codomain.hashCode();
   }
   
-  public FunctionType withDomain(Type<M> domain) {
+  public FunctionType withDomain(hydra.core.Type<M> domain) {
     return new FunctionType(domain, codomain);
   }
   
-  public FunctionType withCodomain(Type<M> codomain) {
+  public FunctionType withCodomain(hydra.core.Type<M> codomain) {
     return new FunctionType(domain, codomain);
   }
 }

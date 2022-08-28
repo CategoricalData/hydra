@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Or {
-  public final Type lhs;
+  public final hydra.ext.scala.meta.Type lhs;
   
-  public final Type rhs;
+  public final hydra.ext.scala.meta.Type rhs;
   
-  public Type_Or (Type lhs, Type rhs) {
+  public Type_Or (hydra.ext.scala.meta.Type lhs, hydra.ext.scala.meta.Type rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Type_Or {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Type_Or withLhs(Type lhs) {
+  public Type_Or withLhs(hydra.ext.scala.meta.Type lhs) {
     return new Type_Or(lhs, rhs);
   }
   
-  public Type_Or withRhs(Type rhs) {
+  public Type_Or withRhs(hydra.ext.scala.meta.Type rhs) {
     return new Type_Or(lhs, rhs);
   }
 }

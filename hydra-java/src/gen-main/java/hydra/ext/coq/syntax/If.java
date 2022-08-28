@@ -4,15 +4,15 @@ package hydra.ext.coq.syntax;
  * Pattern match on boolean values
  */
 public class If {
-  public final Term condition;
+  public final hydra.ext.coq.syntax.Term condition;
   
-  public final java.util.Optional<ReturnAs> returnAs;
+  public final java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs;
   
-  public final Term then;
+  public final hydra.ext.coq.syntax.Term then;
   
-  public final Term else_;
+  public final hydra.ext.coq.syntax.Term else_;
   
-  public If (Term condition, java.util.Optional<ReturnAs> returnAs, Term then, Term else_) {
+  public If (hydra.ext.coq.syntax.Term condition, java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs, hydra.ext.coq.syntax.Term then, hydra.ext.coq.syntax.Term else_) {
     this.condition = condition;
     this.returnAs = returnAs;
     this.then = then;
@@ -33,19 +33,19 @@ public class If {
     return 2 * condition.hashCode() + 3 * returnAs.hashCode() + 5 * then.hashCode() + 7 * else_.hashCode();
   }
   
-  public If withCondition(Term condition) {
+  public If withCondition(hydra.ext.coq.syntax.Term condition) {
     return new If(condition, returnAs, then, else_);
   }
   
-  public If withReturnAs(java.util.Optional<ReturnAs> returnAs) {
+  public If withReturnAs(java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs) {
     return new If(condition, returnAs, then, else_);
   }
   
-  public If withThen(Term then) {
+  public If withThen(hydra.ext.coq.syntax.Term then) {
     return new If(condition, returnAs, then, else_);
   }
   
-  public If withElse(Term else_) {
+  public If withElse(hydra.ext.coq.syntax.Term else_) {
     return new If(condition, returnAs, then, else_);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class VariableDeclarator {
-  public final VariableDeclaratorId id;
+  public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public final java.util.Optional<VariableInitializer> initializer;
+  public final java.util.Optional<hydra.ext.java.syntax.VariableInitializer> initializer;
   
-  public VariableDeclarator (VariableDeclaratorId id, java.util.Optional<VariableInitializer> initializer) {
+  public VariableDeclarator (hydra.ext.java.syntax.VariableDeclaratorId id, java.util.Optional<hydra.ext.java.syntax.VariableInitializer> initializer) {
     this.id = id;
     this.initializer = initializer;
   }
@@ -24,11 +24,11 @@ public class VariableDeclarator {
     return 2 * id.hashCode() + 3 * initializer.hashCode();
   }
   
-  public VariableDeclarator withId(VariableDeclaratorId id) {
+  public VariableDeclarator withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new VariableDeclarator(id, initializer);
   }
   
-  public VariableDeclarator withInitializer(java.util.Optional<VariableInitializer> initializer) {
+  public VariableDeclarator withInitializer(java.util.Optional<hydra.ext.java.syntax.VariableInitializer> initializer) {
     return new VariableDeclarator(id, initializer);
   }
 }

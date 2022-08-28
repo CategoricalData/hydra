@@ -27,10 +27,10 @@ public abstract class ForInit {
     }
   }
   
-  public static final class Statements extends ForInit {
-    public final java.util.List<StatementExpression> value;
+  public static final class Statements extends hydra.ext.java.syntax.ForInit {
+    public final java.util.List<hydra.ext.java.syntax.StatementExpression> value;
     
-    public Statements (java.util.List<StatementExpression> value) {
+    public Statements (java.util.List<hydra.ext.java.syntax.StatementExpression> value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ForInit {
     }
   }
   
-  public static final class LocalVariable extends ForInit {
-    public final LocalVariableDeclaration value;
+  public static final class LocalVariable extends hydra.ext.java.syntax.ForInit {
+    public final hydra.ext.java.syntax.LocalVariableDeclaration value;
     
-    public LocalVariable (LocalVariableDeclaration value) {
+    public LocalVariable (hydra.ext.java.syntax.LocalVariableDeclaration value) {
       this.value = value;
     }
     

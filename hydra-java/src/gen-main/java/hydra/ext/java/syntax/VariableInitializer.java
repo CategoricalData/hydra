@@ -27,10 +27,10 @@ public abstract class VariableInitializer {
     }
   }
   
-  public static final class Expression extends VariableInitializer {
-    public final Expression value;
+  public static final class Expression extends hydra.ext.java.syntax.VariableInitializer {
+    public final hydra.ext.java.syntax.Expression value;
     
-    public Expression (Expression value) {
+    public Expression (hydra.ext.java.syntax.Expression value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class VariableInitializer {
     }
   }
   
-  public static final class ArrayInitializer extends VariableInitializer {
-    public final ArrayInitializer value;
+  public static final class ArrayInitializer extends hydra.ext.java.syntax.VariableInitializer {
+    public final hydra.ext.java.syntax.ArrayInitializer value;
     
-    public ArrayInitializer (ArrayInitializer value) {
+    public ArrayInitializer (hydra.ext.java.syntax.ArrayInitializer value) {
       this.value = value;
     }
     

@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ArrayCreationExpression_ClassOrInterface {
-  public final ClassOrInterfaceType type;
+  public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
-  public final java.util.List<DimExpr> dimExprs;
+  public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;
   
-  public final java.util.Optional<Dims> dims;
+  public final java.util.Optional<hydra.ext.java.syntax.Dims> dims;
   
-  public ArrayCreationExpression_ClassOrInterface (ClassOrInterfaceType type, java.util.List<DimExpr> dimExprs, java.util.Optional<Dims> dims) {
+  public ArrayCreationExpression_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs, java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -27,15 +27,15 @@ public class ArrayCreationExpression_ClassOrInterface {
     return 2 * type.hashCode() + 3 * dimExprs.hashCode() + 5 * dims.hashCode();
   }
   
-  public ArrayCreationExpression_ClassOrInterface withType(ClassOrInterfaceType type) {
+  public ArrayCreationExpression_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_ClassOrInterface withDimExprs(java.util.List<DimExpr> dimExprs) {
+  public ArrayCreationExpression_ClassOrInterface withDimExprs(java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_ClassOrInterface withDims(java.util.Optional<Dims> dims) {
+  public ArrayCreationExpression_ClassOrInterface withDims(java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
 }

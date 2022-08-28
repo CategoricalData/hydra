@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class ClassType {
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final ClassTypeQualifier qualifier;
+  public final hydra.ext.java.syntax.ClassTypeQualifier qualifier;
   
-  public final TypeIdentifier identifier;
+  public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<TypeArgument> arguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> arguments;
   
-  public ClassType (java.util.List<Annotation> annotations, ClassTypeQualifier qualifier, TypeIdentifier identifier, java.util.List<TypeArgument> arguments) {
+  public ClassType (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.ClassTypeQualifier qualifier, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeArgument> arguments) {
     this.annotations = annotations;
     this.qualifier = qualifier;
     this.identifier = identifier;
@@ -30,19 +30,19 @@ public class ClassType {
     return 2 * annotations.hashCode() + 3 * qualifier.hashCode() + 5 * identifier.hashCode() + 7 * arguments.hashCode();
   }
   
-  public ClassType withAnnotations(java.util.List<Annotation> annotations) {
+  public ClassType withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
-  public ClassType withQualifier(ClassTypeQualifier qualifier) {
+  public ClassType withQualifier(hydra.ext.java.syntax.ClassTypeQualifier qualifier) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
-  public ClassType withIdentifier(TypeIdentifier identifier) {
+  public ClassType withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
   
-  public ClassType withArguments(java.util.List<TypeArgument> arguments) {
+  public ClassType withArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> arguments) {
     return new ClassType(annotations, qualifier, identifier, arguments);
   }
 }

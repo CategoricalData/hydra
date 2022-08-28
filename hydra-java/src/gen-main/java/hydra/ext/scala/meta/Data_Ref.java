@@ -51,10 +51,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class This extends Data_Ref {
-    public final Data_This value;
+  public static final class This extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_This value;
     
-    public This (Data_This value) {
+    public This (hydra.ext.scala.meta.Data_This value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class Super extends Data_Ref {
-    public final Data_Super value;
+  public static final class Super extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_Super value;
     
-    public Super (Data_Super value) {
+    public Super (hydra.ext.scala.meta.Data_Super value) {
       this.value = value;
     }
     
@@ -105,10 +105,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class Name extends Data_Ref {
-    public final Data_Name value;
+  public static final class Name extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_Name value;
     
-    public Name (Data_Name value) {
+    public Name (hydra.ext.scala.meta.Data_Name value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class Anonymous extends Data_Ref {
-    public final Data_Anonymous value;
+  public static final class Anonymous extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_Anonymous value;
     
-    public Anonymous (Data_Anonymous value) {
+    public Anonymous (hydra.ext.scala.meta.Data_Anonymous value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class Select extends Data_Ref {
-    public final Data_Select value;
+  public static final class Select extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_Select value;
     
-    public Select (Data_Select value) {
+    public Select (hydra.ext.scala.meta.Data_Select value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class Data_Ref {
     }
   }
   
-  public static final class ApplyUnary extends Data_Ref {
-    public final Data_ApplyUnary value;
+  public static final class ApplyUnary extends hydra.ext.scala.meta.Data_Ref {
+    public final hydra.ext.scala.meta.Data_ApplyUnary value;
     
-    public ApplyUnary (Data_ApplyUnary value) {
+    public ApplyUnary (hydra.ext.scala.meta.Data_ApplyUnary value) {
       this.value = value;
     }
     

@@ -4,11 +4,11 @@ package hydra.graph;
  * A collection of graphs with a distinguished root graph
  */
 public class GraphSet<M> {
-  public final java.util.Map<GraphName, Graph<M>> graphs;
+  public final java.util.Map<hydra.graph.GraphName, hydra.graph.Graph<M>> graphs;
   
-  public final GraphName root;
+  public final hydra.graph.GraphName root;
   
-  public GraphSet (java.util.Map<GraphName, Graph<M>> graphs, GraphName root) {
+  public GraphSet (java.util.Map<hydra.graph.GraphName, hydra.graph.Graph<M>> graphs, hydra.graph.GraphName root) {
     this.graphs = graphs;
     this.root = root;
   }
@@ -27,11 +27,11 @@ public class GraphSet<M> {
     return 2 * graphs.hashCode() + 3 * root.hashCode();
   }
   
-  public GraphSet withGraphs(java.util.Map<GraphName, Graph<M>> graphs) {
+  public GraphSet withGraphs(java.util.Map<hydra.graph.GraphName, hydra.graph.Graph<M>> graphs) {
     return new GraphSet(graphs, root);
   }
   
-  public GraphSet withRoot(GraphName root) {
+  public GraphSet withRoot(hydra.graph.GraphName root) {
     return new GraphSet(graphs, root);
   }
 }

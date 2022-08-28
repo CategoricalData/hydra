@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class TypeParameterModifier {
-  public final Annotation value;
+  public final hydra.ext.java.syntax.Annotation value;
   
-  public TypeParameterModifier (Annotation value) {
+  public TypeParameterModifier (hydra.ext.java.syntax.Annotation value) {
     this.value = value;
   }
   

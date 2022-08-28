@@ -51,7 +51,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Null extends Literal {
+  public static final class Null extends hydra.ext.java.syntax.Literal {
     public Null () {
     
     }
@@ -76,10 +76,10 @@ public abstract class Literal {
     }
   }
   
-  public static final class Integer_ extends Literal {
-    public final IntegerLiteral value;
+  public static final class Integer_ extends hydra.ext.java.syntax.Literal {
+    public final hydra.ext.java.syntax.IntegerLiteral value;
     
-    public Integer_ (IntegerLiteral value) {
+    public Integer_ (hydra.ext.java.syntax.IntegerLiteral value) {
       this.value = value;
     }
     
@@ -103,10 +103,10 @@ public abstract class Literal {
     }
   }
   
-  public static final class FloatingPoint extends Literal {
-    public final FloatingPointLiteral value;
+  public static final class FloatingPoint extends hydra.ext.java.syntax.Literal {
+    public final hydra.ext.java.syntax.FloatingPointLiteral value;
     
-    public FloatingPoint (FloatingPointLiteral value) {
+    public FloatingPoint (hydra.ext.java.syntax.FloatingPointLiteral value) {
       this.value = value;
     }
     
@@ -130,7 +130,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Boolean_ extends Literal {
+  public static final class Boolean_ extends hydra.ext.java.syntax.Literal {
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -157,7 +157,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Character_ extends Literal {
+  public static final class Character_ extends hydra.ext.java.syntax.Literal {
     public final Character value;
     
     public Character_ (Character value) {
@@ -184,10 +184,10 @@ public abstract class Literal {
     }
   }
   
-  public static final class String_ extends Literal {
-    public final StringLiteral value;
+  public static final class String_ extends hydra.ext.java.syntax.Literal {
+    public final hydra.ext.java.syntax.StringLiteral value;
     
-    public String_ (StringLiteral value) {
+    public String_ (hydra.ext.java.syntax.StringLiteral value) {
       this.value = value;
     }
     

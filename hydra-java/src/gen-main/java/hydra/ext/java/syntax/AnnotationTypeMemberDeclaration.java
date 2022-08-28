@@ -39,10 +39,10 @@ public abstract class AnnotationTypeMemberDeclaration {
     }
   }
   
-  public static final class AnnotationType extends AnnotationTypeMemberDeclaration {
-    public final AnnotationTypeElementDeclaration value;
+  public static final class AnnotationType extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration {
+    public final hydra.ext.java.syntax.AnnotationTypeElementDeclaration value;
     
-    public AnnotationType (AnnotationTypeElementDeclaration value) {
+    public AnnotationType (hydra.ext.java.syntax.AnnotationTypeElementDeclaration value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class AnnotationTypeMemberDeclaration {
     }
   }
   
-  public static final class Constant extends AnnotationTypeMemberDeclaration {
-    public final ConstantDeclaration value;
+  public static final class Constant extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration {
+    public final hydra.ext.java.syntax.ConstantDeclaration value;
     
-    public Constant (ConstantDeclaration value) {
+    public Constant (hydra.ext.java.syntax.ConstantDeclaration value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class AnnotationTypeMemberDeclaration {
     }
   }
   
-  public static final class Class_ extends AnnotationTypeMemberDeclaration {
-    public final ClassDeclaration value;
+  public static final class Class_ extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration {
+    public final hydra.ext.java.syntax.ClassDeclaration value;
     
-    public Class_ (ClassDeclaration value) {
+    public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class AnnotationTypeMemberDeclaration {
     }
   }
   
-  public static final class Interface extends AnnotationTypeMemberDeclaration {
-    public final InterfaceDeclaration value;
+  public static final class Interface extends hydra.ext.java.syntax.AnnotationTypeMemberDeclaration {
+    public final hydra.ext.java.syntax.InterfaceDeclaration value;
     
-    public Interface (InterfaceDeclaration value) {
+    public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
     

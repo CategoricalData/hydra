@@ -42,10 +42,10 @@ public abstract class Declaration {
     }
   }
   
-  public static final class Data extends Declaration {
-    public final DataDeclaration value;
+  public static final class Data extends hydra.ext.haskell.ast.Declaration {
+    public final hydra.ext.haskell.ast.DataDeclaration value;
     
-    public Data (DataDeclaration value) {
+    public Data (hydra.ext.haskell.ast.DataDeclaration value) {
       this.value = value;
     }
     
@@ -69,10 +69,10 @@ public abstract class Declaration {
     }
   }
   
-  public static final class Type extends Declaration {
-    public final TypeDeclaration value;
+  public static final class Type extends hydra.ext.haskell.ast.Declaration {
+    public final hydra.ext.haskell.ast.TypeDeclaration value;
     
-    public Type (TypeDeclaration value) {
+    public Type (hydra.ext.haskell.ast.TypeDeclaration value) {
       this.value = value;
     }
     
@@ -96,10 +96,10 @@ public abstract class Declaration {
     }
   }
   
-  public static final class ValueBinding extends Declaration {
-    public final ValueBinding value;
+  public static final class ValueBinding extends hydra.ext.haskell.ast.Declaration {
+    public final hydra.ext.haskell.ast.ValueBinding value;
     
-    public ValueBinding (ValueBinding value) {
+    public ValueBinding (hydra.ext.haskell.ast.ValueBinding value) {
       this.value = value;
     }
     
@@ -123,10 +123,10 @@ public abstract class Declaration {
     }
   }
   
-  public static final class TypedBinding extends Declaration {
-    public final TypedBinding value;
+  public static final class TypedBinding extends hydra.ext.haskell.ast.Declaration {
+    public final hydra.ext.haskell.ast.TypedBinding value;
     
-    public TypedBinding (TypedBinding value) {
+    public TypedBinding (hydra.ext.haskell.ast.TypedBinding value) {
       this.value = value;
     }
     

@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A field together with any comments
  */
 public class FieldWithComments {
-  public final Field field;
+  public final hydra.ext.haskell.ast.Field field;
   
   public final java.util.Optional<String> comments;
   
-  public FieldWithComments (Field field, java.util.Optional<String> comments) {
+  public FieldWithComments (hydra.ext.haskell.ast.Field field, java.util.Optional<String> comments) {
     this.field = field;
     this.comments = comments;
   }
@@ -27,7 +27,7 @@ public class FieldWithComments {
     return 2 * field.hashCode() + 3 * comments.hashCode();
   }
   
-  public FieldWithComments withField(Field field) {
+  public FieldWithComments withField(hydra.ext.haskell.ast.Field field) {
     return new FieldWithComments(field, comments);
   }
   

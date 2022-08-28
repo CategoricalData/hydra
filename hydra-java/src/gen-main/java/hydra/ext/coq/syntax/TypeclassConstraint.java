@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class TypeclassConstraint {
-  public final java.util.Optional<Name> name;
+  public final java.util.Optional<hydra.ext.coq.syntax.Name> name;
   
   public final Boolean generalizing;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public TypeclassConstraint (java.util.Optional<Name> name, Boolean generalizing, Term term) {
+  public TypeclassConstraint (java.util.Optional<hydra.ext.coq.syntax.Name> name, Boolean generalizing, hydra.ext.coq.syntax.Term term) {
     this.name = name;
     this.generalizing = generalizing;
     this.term = term;
@@ -27,7 +27,7 @@ public class TypeclassConstraint {
     return 2 * name.hashCode() + 3 * generalizing.hashCode() + 5 * term.hashCode();
   }
   
-  public TypeclassConstraint withName(java.util.Optional<Name> name) {
+  public TypeclassConstraint withName(java.util.Optional<hydra.ext.coq.syntax.Name> name) {
     return new TypeclassConstraint(name, generalizing, term);
   }
   
@@ -35,7 +35,7 @@ public class TypeclassConstraint {
     return new TypeclassConstraint(name, generalizing, term);
   }
   
-  public TypeclassConstraint withTerm(Term term) {
+  public TypeclassConstraint withTerm(hydra.ext.coq.syntax.Term term) {
     return new TypeclassConstraint(name, generalizing, term);
   }
 }

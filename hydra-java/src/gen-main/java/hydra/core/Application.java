@@ -7,14 +7,14 @@ public class Application<M> {
   /**
    * The left-hand side of the application
    */
-  public final Term<M> function;
+  public final hydra.core.Term<M> function;
   
   /**
    * The right-hand side of the application
    */
-  public final Term<M> argument;
+  public final hydra.core.Term<M> argument;
   
-  public Application (Term<M> function, Term<M> argument) {
+  public Application (hydra.core.Term<M> function, hydra.core.Term<M> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -33,11 +33,11 @@ public class Application<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public Application withFunction(Term<M> function) {
+  public Application withFunction(hydra.core.Term<M> function) {
     return new Application(function, argument);
   }
   
-  public Application withArgument(Term<M> argument) {
+  public Application withArgument(hydra.core.Term<M> argument) {
     return new Application(function, argument);
   }
 }

@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Defn_ExtensionGroup {
-  public final java.util.List<Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final java.util.List<java.util.List<Data_Param>> parmss;
+  public final java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> parmss;
   
-  public final Stat body;
+  public final hydra.ext.scala.meta.Stat body;
   
-  public Defn_ExtensionGroup (java.util.List<Type_Param> tparams, java.util.List<java.util.List<Data_Param>> parmss, Stat body) {
+  public Defn_ExtensionGroup (java.util.List<hydra.ext.scala.meta.Type_Param> tparams, java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> parmss, hydra.ext.scala.meta.Stat body) {
     this.tparams = tparams;
     this.parmss = parmss;
     this.body = body;
@@ -27,15 +27,15 @@ public class Defn_ExtensionGroup {
     return 2 * tparams.hashCode() + 3 * parmss.hashCode() + 5 * body.hashCode();
   }
   
-  public Defn_ExtensionGroup withTparams(java.util.List<Type_Param> tparams) {
+  public Defn_ExtensionGroup withTparams(java.util.List<hydra.ext.scala.meta.Type_Param> tparams) {
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
   
-  public Defn_ExtensionGroup withParmss(java.util.List<java.util.List<Data_Param>> parmss) {
+  public Defn_ExtensionGroup withParmss(java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> parmss) {
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
   
-  public Defn_ExtensionGroup withBody(Stat body) {
+  public Defn_ExtensionGroup withBody(hydra.ext.scala.meta.Stat body) {
     return new Defn_ExtensionGroup(tparams, parmss, body);
   }
 }

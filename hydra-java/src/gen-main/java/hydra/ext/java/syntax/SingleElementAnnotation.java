@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class SingleElementAnnotation {
-  public final TypeName name;
+  public final hydra.ext.java.syntax.TypeName name;
   
-  public final java.util.Optional<ElementValue> value;
+  public final java.util.Optional<hydra.ext.java.syntax.ElementValue> value;
   
-  public SingleElementAnnotation (TypeName name, java.util.Optional<ElementValue> value) {
+  public SingleElementAnnotation (hydra.ext.java.syntax.TypeName name, java.util.Optional<hydra.ext.java.syntax.ElementValue> value) {
     this.name = name;
     this.value = value;
   }
@@ -24,11 +24,11 @@ public class SingleElementAnnotation {
     return 2 * name.hashCode() + 3 * value.hashCode();
   }
   
-  public SingleElementAnnotation withName(TypeName name) {
+  public SingleElementAnnotation withName(hydra.ext.java.syntax.TypeName name) {
     return new SingleElementAnnotation(name, value);
   }
   
-  public SingleElementAnnotation withValue(java.util.Optional<ElementValue> value) {
+  public SingleElementAnnotation withValue(java.util.Optional<hydra.ext.java.syntax.ElementValue> value) {
     return new SingleElementAnnotation(name, value);
   }
 }

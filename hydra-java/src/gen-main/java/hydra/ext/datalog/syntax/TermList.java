@@ -27,10 +27,10 @@ public abstract class TermList {
     }
   }
   
-  public static final class Single extends TermList {
-    public final Term value;
+  public static final class Single extends hydra.ext.datalog.syntax.TermList {
+    public final hydra.ext.datalog.syntax.Term value;
     
-    public Single (Term value) {
+    public Single (hydra.ext.datalog.syntax.Term value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class TermList {
     }
   }
   
-  public static final class Multiple extends TermList {
-    public final TermList_Multiple value;
+  public static final class Multiple extends hydra.ext.datalog.syntax.TermList {
+    public final hydra.ext.datalog.syntax.TermList_Multiple value;
     
-    public Multiple (TermList_Multiple value) {
+    public Multiple (hydra.ext.datalog.syntax.TermList_Multiple value) {
       this.value = value;
     }
     

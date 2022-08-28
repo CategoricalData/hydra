@@ -7,9 +7,9 @@ public class VertexIdType {
   /**
    * The type of a reference to a vertex by id
    */
-  public final VertexType value;
+  public final hydra.ext.tinkerpop.typed.VertexType value;
   
-  public VertexIdType (VertexType value) {
+  public VertexIdType (hydra.ext.tinkerpop.typed.VertexType value) {
     this.value = value;
   }
   

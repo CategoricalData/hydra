@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Function {
-  public final java.util.List<Data_Param> params;
+  public final java.util.List<hydra.ext.scala.meta.Data_Param> params;
   
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Data_Function (java.util.List<Data_Param> params, Data body) {
+  public Data_Function (java.util.List<hydra.ext.scala.meta.Data_Param> params, hydra.ext.scala.meta.Data body) {
     this.params = params;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class Data_Function {
     return 2 * params.hashCode() + 3 * body.hashCode();
   }
   
-  public Data_Function withParams(java.util.List<Data_Param> params) {
+  public Data_Function withParams(java.util.List<hydra.ext.scala.meta.Data_Param> params) {
     return new Data_Function(params, body);
   }
   
-  public Data_Function withBody(Data body) {
+  public Data_Function withBody(hydra.ext.scala.meta.Data body) {
     return new Data_Function(params, body);
   }
 }

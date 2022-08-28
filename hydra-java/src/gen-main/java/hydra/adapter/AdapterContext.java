@@ -3,11 +3,11 @@ package hydra.adapter;
 public class AdapterContext<M> {
   public final hydra.evaluation.Context<M> evaluation;
   
-  public final Language<M> source;
+  public final hydra.adapter.Language<M> source;
   
-  public final Language<M> target;
+  public final hydra.adapter.Language<M> target;
   
-  public AdapterContext (hydra.evaluation.Context<M> evaluation, Language<M> source, Language<M> target) {
+  public AdapterContext (hydra.evaluation.Context<M> evaluation, hydra.adapter.Language<M> source, hydra.adapter.Language<M> target) {
     this.evaluation = evaluation;
     this.source = source;
     this.target = target;
@@ -31,11 +31,11 @@ public class AdapterContext<M> {
     return new AdapterContext(evaluation, source, target);
   }
   
-  public AdapterContext withSource(Language<M> source) {
+  public AdapterContext withSource(hydra.adapter.Language<M> source) {
     return new AdapterContext(evaluation, source, target);
   }
   
-  public AdapterContext withTarget(Language<M> target) {
+  public AdapterContext withTarget(hydra.adapter.Language<M> target) {
     return new AdapterContext(evaluation, source, target);
   }
 }

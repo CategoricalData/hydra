@@ -51,10 +51,10 @@ public abstract class Term {
     }
   }
   
-  public static final class ForallOrFun extends Term {
-    public final ForallOrFun value;
+  public static final class ForallOrFun extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.ForallOrFun value;
     
-    public ForallOrFun (ForallOrFun value) {
+    public ForallOrFun (hydra.ext.coq.syntax.ForallOrFun value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Let extends Term {
-    public final Let value;
+  public static final class Let extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.Let value;
     
-    public Let (Let value) {
+    public Let (hydra.ext.coq.syntax.Let value) {
       this.value = value;
     }
     
@@ -105,10 +105,10 @@ public abstract class Term {
     }
   }
   
-  public static final class If extends Term {
-    public final If value;
+  public static final class If extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.If value;
     
-    public If (If value) {
+    public If (hydra.ext.coq.syntax.If value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Fix extends Term {
-    public final Fix value;
+  public static final class Fix extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.Fix value;
     
-    public Fix (Fix value) {
+    public Fix (hydra.ext.coq.syntax.Fix value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Cofix extends Term {
-    public final Cofix value;
+  public static final class Cofix extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.Cofix value;
     
-    public Cofix (Cofix value) {
+    public Cofix (hydra.ext.coq.syntax.Cofix value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Term100 extends Term {
-    public final Term100 value;
+  public static final class Term100 extends hydra.ext.coq.syntax.Term {
+    public final hydra.ext.coq.syntax.Term100 value;
     
-    public Term100 (Term100 value) {
+    public Term100 (hydra.ext.coq.syntax.Term100 value) {
       this.value = value;
     }
     

@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ArrayCreationExpression_Primitive {
-  public final PrimitiveTypeWithAnnotations type;
+  public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
-  public final java.util.List<DimExpr> dimExprs;
+  public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;
   
-  public final java.util.Optional<Dims> dims;
+  public final java.util.Optional<hydra.ext.java.syntax.Dims> dims;
   
-  public ArrayCreationExpression_Primitive (PrimitiveTypeWithAnnotations type, java.util.List<DimExpr> dimExprs, java.util.Optional<Dims> dims) {
+  public ArrayCreationExpression_Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs, java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -27,15 +27,15 @@ public class ArrayCreationExpression_Primitive {
     return 2 * type.hashCode() + 3 * dimExprs.hashCode() + 5 * dims.hashCode();
   }
   
-  public ArrayCreationExpression_Primitive withType(PrimitiveTypeWithAnnotations type) {
+  public ArrayCreationExpression_Primitive withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_Primitive withDimExprs(java.util.List<DimExpr> dimExprs) {
+  public ArrayCreationExpression_Primitive withDimExprs(java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs) {
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_Primitive withDims(java.util.Optional<Dims> dims) {
+  public ArrayCreationExpression_Primitive withDims(java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
 }

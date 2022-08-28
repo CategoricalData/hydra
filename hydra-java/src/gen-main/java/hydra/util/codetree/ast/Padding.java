@@ -4,11 +4,11 @@ package hydra.util.codetree.ast;
  * Left and right padding for an operator
  */
 public class Padding {
-  public final Ws left;
+  public final hydra.util.codetree.ast.Ws left;
   
-  public final Ws right;
+  public final hydra.util.codetree.ast.Ws right;
   
-  public Padding (Ws left, Ws right) {
+  public Padding (hydra.util.codetree.ast.Ws left, hydra.util.codetree.ast.Ws right) {
     this.left = left;
     this.right = right;
   }
@@ -27,11 +27,11 @@ public class Padding {
     return 2 * left.hashCode() + 3 * right.hashCode();
   }
   
-  public Padding withLeft(Ws left) {
+  public Padding withLeft(hydra.util.codetree.ast.Ws left) {
     return new Padding(left, right);
   }
   
-  public Padding withRight(Ws right) {
+  public Padding withRight(hydra.util.codetree.ast.Ws right) {
     return new Padding(left, right);
   }
 }

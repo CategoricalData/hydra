@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class ReceiverParameter {
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final UnannType unannType;
+  public final hydra.ext.java.syntax.UnannType unannType;
   
-  public final java.util.Optional<Identifier> identifier;
+  public final java.util.Optional<hydra.ext.java.syntax.Identifier> identifier;
   
-  public ReceiverParameter (java.util.List<Annotation> annotations, UnannType unannType, java.util.Optional<Identifier> identifier) {
+  public ReceiverParameter (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, java.util.Optional<hydra.ext.java.syntax.Identifier> identifier) {
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
@@ -27,15 +27,15 @@ public class ReceiverParameter {
     return 2 * annotations.hashCode() + 3 * unannType.hashCode() + 5 * identifier.hashCode();
   }
   
-  public ReceiverParameter withAnnotations(java.util.List<Annotation> annotations) {
+  public ReceiverParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
-  public ReceiverParameter withUnannType(UnannType unannType) {
+  public ReceiverParameter withUnannType(hydra.ext.java.syntax.UnannType unannType) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   
-  public ReceiverParameter withIdentifier(java.util.Optional<Identifier> identifier) {
+  public ReceiverParameter withIdentifier(java.util.Optional<hydra.ext.java.syntax.Identifier> identifier) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
 }

@@ -36,10 +36,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Mapping extends Node {
-    public final java.util.Map<Node, Node> value;
+  public static final class Mapping extends hydra.ext.yaml.model.Node {
+    public final java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value;
     
-    public Mapping (java.util.Map<Node, Node> value) {
+    public Mapping (java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value) {
       this.value = value;
     }
     
@@ -63,10 +63,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Scalar extends Node {
-    public final Scalar value;
+  public static final class Scalar extends hydra.ext.yaml.model.Node {
+    public final hydra.ext.yaml.model.Scalar value;
     
-    public Scalar (Scalar value) {
+    public Scalar (hydra.ext.yaml.model.Scalar value) {
       this.value = value;
     }
     
@@ -90,10 +90,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Sequence extends Node {
-    public final java.util.List<Node> value;
+  public static final class Sequence extends hydra.ext.yaml.model.Node {
+    public final java.util.List<hydra.ext.yaml.model.Node> value;
     
-    public Sequence (java.util.List<Node> value) {
+    public Sequence (java.util.List<hydra.ext.yaml.model.Node> value) {
       this.value = value;
     }
     

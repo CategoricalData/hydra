@@ -33,10 +33,10 @@ public abstract class ReferenceType {
     }
   }
   
-  public static final class ClassOrInterface extends ReferenceType {
-    public final ClassOrInterfaceType value;
+  public static final class ClassOrInterface extends hydra.ext.java.syntax.ReferenceType {
+    public final hydra.ext.java.syntax.ClassOrInterfaceType value;
     
-    public ClassOrInterface (ClassOrInterfaceType value) {
+    public ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class ReferenceType {
     }
   }
   
-  public static final class Variable extends ReferenceType {
-    public final TypeVariable value;
+  public static final class Variable extends hydra.ext.java.syntax.ReferenceType {
+    public final hydra.ext.java.syntax.TypeVariable value;
     
-    public Variable (TypeVariable value) {
+    public Variable (hydra.ext.java.syntax.TypeVariable value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class ReferenceType {
     }
   }
   
-  public static final class Array extends ReferenceType {
-    public final ArrayType value;
+  public static final class Array extends hydra.ext.java.syntax.ReferenceType {
+    public final hydra.ext.java.syntax.ArrayType value;
     
-    public Array (ArrayType value) {
+    public Array (hydra.ext.java.syntax.ArrayType value) {
       this.value = value;
     }
     

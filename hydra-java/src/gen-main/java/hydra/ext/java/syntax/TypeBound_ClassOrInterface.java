@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class TypeBound_ClassOrInterface {
-  public final ClassOrInterfaceType type;
+  public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
-  public final java.util.List<AdditionalBound> additional;
+  public final java.util.List<hydra.ext.java.syntax.AdditionalBound> additional;
   
-  public TypeBound_ClassOrInterface (ClassOrInterfaceType type, java.util.List<AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
     this.type = type;
     this.additional = additional;
   }
@@ -24,11 +24,11 @@ public class TypeBound_ClassOrInterface {
     return 2 * type.hashCode() + 3 * additional.hashCode();
   }
   
-  public TypeBound_ClassOrInterface withType(ClassOrInterfaceType type) {
+  public TypeBound_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {
     return new TypeBound_ClassOrInterface(type, additional);
   }
   
-  public TypeBound_ClassOrInterface withAdditional(java.util.List<AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface withAdditional(java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
     return new TypeBound_ClassOrInterface(type, additional);
   }
 }

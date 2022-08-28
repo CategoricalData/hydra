@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern10_Qualid {
-  public final Qualid qualid;
+  public final hydra.ext.coq.syntax.Qualid qualid;
   
-  public final java.util.List<Pattern1> patterns;
+  public final java.util.List<hydra.ext.coq.syntax.Pattern1> patterns;
   
-  public Pattern10_Qualid (Qualid qualid, java.util.List<Pattern1> patterns) {
+  public Pattern10_Qualid (hydra.ext.coq.syntax.Qualid qualid, java.util.List<hydra.ext.coq.syntax.Pattern1> patterns) {
     this.qualid = qualid;
     this.patterns = patterns;
   }
@@ -24,11 +24,11 @@ public class Pattern10_Qualid {
     return 2 * qualid.hashCode() + 3 * patterns.hashCode();
   }
   
-  public Pattern10_Qualid withQualid(Qualid qualid) {
+  public Pattern10_Qualid withQualid(hydra.ext.coq.syntax.Qualid qualid) {
     return new Pattern10_Qualid(qualid, patterns);
   }
   
-  public Pattern10_Qualid withPatterns(java.util.List<Pattern1> patterns) {
+  public Pattern10_Qualid withPatterns(java.util.List<hydra.ext.coq.syntax.Pattern1> patterns) {
     return new Pattern10_Qualid(qualid, patterns);
   }
 }

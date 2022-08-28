@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class Name {
-  public final java.util.Optional<Ident> value;
+  public final java.util.Optional<hydra.ext.coq.syntax.Ident> value;
   
-  public Name (java.util.Optional<Ident> value) {
+  public Name (java.util.Optional<hydra.ext.coq.syntax.Ident> value) {
     this.value = value;
   }
   

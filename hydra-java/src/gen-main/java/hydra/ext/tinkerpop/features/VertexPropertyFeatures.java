@@ -4,18 +4,18 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Vertex Property objects.
  */
 public class VertexPropertyFeatures {
-  public final DataTypeFeatures dataTypeFeatures;
+  public final hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
-  public final PropertyFeatures propertyFeatures;
+  public final hydra.ext.tinkerpop.features.PropertyFeatures propertyFeatures;
   
-  public final ElementFeatures elementFeatures;
+  public final hydra.ext.tinkerpop.features.ElementFeatures elementFeatures;
   
   /**
    * Determines if a VertexProperty allows properties to be removed.
    */
   public final Boolean supportsRemove;
   
-  public VertexPropertyFeatures (DataTypeFeatures dataTypeFeatures, PropertyFeatures propertyFeatures, ElementFeatures elementFeatures, Boolean supportsRemove) {
+  public VertexPropertyFeatures (hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures, hydra.ext.tinkerpop.features.PropertyFeatures propertyFeatures, hydra.ext.tinkerpop.features.ElementFeatures elementFeatures, Boolean supportsRemove) {
     this.dataTypeFeatures = dataTypeFeatures;
     this.propertyFeatures = propertyFeatures;
     this.elementFeatures = elementFeatures;
@@ -36,15 +36,15 @@ public class VertexPropertyFeatures {
     return 2 * dataTypeFeatures.hashCode() + 3 * propertyFeatures.hashCode() + 5 * elementFeatures.hashCode() + 7 * supportsRemove.hashCode();
   }
   
-  public VertexPropertyFeatures withDataTypeFeatures(DataTypeFeatures dataTypeFeatures) {
+  public VertexPropertyFeatures withDataTypeFeatures(hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   
-  public VertexPropertyFeatures withPropertyFeatures(PropertyFeatures propertyFeatures) {
+  public VertexPropertyFeatures withPropertyFeatures(hydra.ext.tinkerpop.features.PropertyFeatures propertyFeatures) {
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   
-  public VertexPropertyFeatures withElementFeatures(ElementFeatures elementFeatures) {
+  public VertexPropertyFeatures withElementFeatures(hydra.ext.tinkerpop.features.ElementFeatures elementFeatures) {
     return new VertexPropertyFeatures(dataTypeFeatures, propertyFeatures, elementFeatures, supportsRemove);
   }
   

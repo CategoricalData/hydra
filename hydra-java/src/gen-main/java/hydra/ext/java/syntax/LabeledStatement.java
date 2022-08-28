@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class LabeledStatement {
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final Statement statement;
+  public final hydra.ext.java.syntax.Statement statement;
   
-  public LabeledStatement (Identifier identifier, Statement statement) {
+  public LabeledStatement (hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Statement statement) {
     this.identifier = identifier;
     this.statement = statement;
   }
@@ -24,11 +24,11 @@ public class LabeledStatement {
     return 2 * identifier.hashCode() + 3 * statement.hashCode();
   }
   
-  public LabeledStatement withIdentifier(Identifier identifier) {
+  public LabeledStatement withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new LabeledStatement(identifier, statement);
   }
   
-  public LabeledStatement withStatement(Statement statement) {
+  public LabeledStatement withStatement(hydra.ext.java.syntax.Statement statement) {
     return new LabeledStatement(identifier, statement);
   }
 }

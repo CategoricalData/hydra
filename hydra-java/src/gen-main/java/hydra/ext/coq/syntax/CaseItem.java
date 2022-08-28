@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class CaseItem {
-  public final Term100 term;
+  public final hydra.ext.coq.syntax.Term100 term;
   
-  public final java.util.Optional<Name> as;
+  public final java.util.Optional<hydra.ext.coq.syntax.Name> as;
   
-  public final java.util.Optional<Pattern> in;
+  public final java.util.Optional<hydra.ext.coq.syntax.Pattern> in;
   
-  public CaseItem (Term100 term, java.util.Optional<Name> as, java.util.Optional<Pattern> in) {
+  public CaseItem (hydra.ext.coq.syntax.Term100 term, java.util.Optional<hydra.ext.coq.syntax.Name> as, java.util.Optional<hydra.ext.coq.syntax.Pattern> in) {
     this.term = term;
     this.as = as;
     this.in = in;
@@ -27,15 +27,15 @@ public class CaseItem {
     return 2 * term.hashCode() + 3 * as.hashCode() + 5 * in.hashCode();
   }
   
-  public CaseItem withTerm(Term100 term) {
+  public CaseItem withTerm(hydra.ext.coq.syntax.Term100 term) {
     return new CaseItem(term, as, in);
   }
   
-  public CaseItem withAs(java.util.Optional<Name> as) {
+  public CaseItem withAs(java.util.Optional<hydra.ext.coq.syntax.Name> as) {
     return new CaseItem(term, as, in);
   }
   
-  public CaseItem withIn(java.util.Optional<Pattern> in) {
+  public CaseItem withIn(java.util.Optional<hydra.ext.coq.syntax.Pattern> in) {
     return new CaseItem(term, as, in);
   }
 }

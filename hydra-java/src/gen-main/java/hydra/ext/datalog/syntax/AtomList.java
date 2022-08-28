@@ -27,10 +27,10 @@ public abstract class AtomList {
     }
   }
   
-  public static final class Single extends AtomList {
-    public final Atom value;
+  public static final class Single extends hydra.ext.datalog.syntax.AtomList {
+    public final hydra.ext.datalog.syntax.Atom value;
     
-    public Single (Atom value) {
+    public Single (hydra.ext.datalog.syntax.Atom value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class AtomList {
     }
   }
   
-  public static final class Multiple extends AtomList {
-    public final AtomList_Multiple value;
+  public static final class Multiple extends hydra.ext.datalog.syntax.AtomList {
+    public final hydra.ext.datalog.syntax.AtomList_Multiple value;
     
-    public Multiple (AtomList_Multiple value) {
+    public Multiple (hydra.ext.datalog.syntax.AtomList_Multiple value) {
       this.value = value;
     }
     

@@ -27,10 +27,10 @@ public abstract class ForStatement {
     }
   }
   
-  public static final class Basic extends ForStatement {
-    public final BasicForStatement value;
+  public static final class Basic extends hydra.ext.java.syntax.ForStatement {
+    public final hydra.ext.java.syntax.BasicForStatement value;
     
-    public Basic (BasicForStatement value) {
+    public Basic (hydra.ext.java.syntax.BasicForStatement value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ForStatement {
     }
   }
   
-  public static final class Enhanced extends ForStatement {
-    public final EnhancedForStatement value;
+  public static final class Enhanced extends hydra.ext.java.syntax.ForStatement {
+    public final hydra.ext.java.syntax.EnhancedForStatement value;
     
-    public Enhanced (EnhancedForStatement value) {
+    public Enhanced (hydra.ext.java.syntax.EnhancedForStatement value) {
       this.value = value;
     }
     

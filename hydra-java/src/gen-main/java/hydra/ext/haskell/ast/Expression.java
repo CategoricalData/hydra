@@ -126,10 +126,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Application extends Expression {
-    public final Expression_Application value;
+  public static final class Application extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Application value;
     
-    public Application (Expression_Application value) {
+    public Application (hydra.ext.haskell.ast.Expression_Application value) {
       this.value = value;
     }
     
@@ -153,10 +153,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Case extends Expression {
-    public final Expression_Case value;
+  public static final class Case extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Case value;
     
-    public Case (Expression_Case value) {
+    public Case (hydra.ext.haskell.ast.Expression_Case value) {
       this.value = value;
     }
     
@@ -180,10 +180,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class ConstructRecord extends Expression {
-    public final Expression_ConstructRecord value;
+  public static final class ConstructRecord extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_ConstructRecord value;
     
-    public ConstructRecord (Expression_ConstructRecord value) {
+    public ConstructRecord (hydra.ext.haskell.ast.Expression_ConstructRecord value) {
       this.value = value;
     }
     
@@ -207,10 +207,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Do extends Expression {
-    public final java.util.List<Statement> value;
+  public static final class Do extends hydra.ext.haskell.ast.Expression {
+    public final java.util.List<hydra.ext.haskell.ast.Statement> value;
     
-    public Do (java.util.List<Statement> value) {
+    public Do (java.util.List<hydra.ext.haskell.ast.Statement> value) {
       this.value = value;
     }
     
@@ -234,10 +234,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class If extends Expression {
-    public final Expression_If value;
+  public static final class If extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_If value;
     
-    public If (Expression_If value) {
+    public If (hydra.ext.haskell.ast.Expression_If value) {
       this.value = value;
     }
     
@@ -261,10 +261,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class InfixApplication extends Expression {
-    public final Expression_InfixApplication value;
+  public static final class InfixApplication extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_InfixApplication value;
     
-    public InfixApplication (Expression_InfixApplication value) {
+    public InfixApplication (hydra.ext.haskell.ast.Expression_InfixApplication value) {
       this.value = value;
     }
     
@@ -288,10 +288,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Literal extends Expression {
-    public final Literal value;
+  public static final class Literal extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Literal value;
     
-    public Literal (Literal value) {
+    public Literal (hydra.ext.haskell.ast.Literal value) {
       this.value = value;
     }
     
@@ -315,10 +315,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Lambda extends Expression {
-    public final Expression_Lambda value;
+  public static final class Lambda extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Lambda value;
     
-    public Lambda (Expression_Lambda value) {
+    public Lambda (hydra.ext.haskell.ast.Expression_Lambda value) {
       this.value = value;
     }
     
@@ -342,10 +342,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class LeftSection extends Expression {
-    public final Expression_Section value;
+  public static final class LeftSection extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Section value;
     
-    public LeftSection (Expression_Section value) {
+    public LeftSection (hydra.ext.haskell.ast.Expression_Section value) {
       this.value = value;
     }
     
@@ -369,10 +369,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Let extends Expression {
-    public final Expression_Let value;
+  public static final class Let extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Let value;
     
-    public Let (Expression_Let value) {
+    public Let (hydra.ext.haskell.ast.Expression_Let value) {
       this.value = value;
     }
     
@@ -396,10 +396,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class List extends Expression {
-    public final java.util.List<Expression> value;
+  public static final class List extends hydra.ext.haskell.ast.Expression {
+    public final java.util.List<hydra.ext.haskell.ast.Expression> value;
     
-    public List (java.util.List<Expression> value) {
+    public List (java.util.List<hydra.ext.haskell.ast.Expression> value) {
       this.value = value;
     }
     
@@ -423,10 +423,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Parens extends Expression {
-    public final Expression value;
+  public static final class Parens extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression value;
     
-    public Parens (Expression value) {
+    public Parens (hydra.ext.haskell.ast.Expression value) {
       this.value = value;
     }
     
@@ -450,10 +450,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class PrefixApplication extends Expression {
-    public final Expression_PrefixApplication value;
+  public static final class PrefixApplication extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_PrefixApplication value;
     
-    public PrefixApplication (Expression_PrefixApplication value) {
+    public PrefixApplication (hydra.ext.haskell.ast.Expression_PrefixApplication value) {
       this.value = value;
     }
     
@@ -477,10 +477,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class RightSection extends Expression {
-    public final Expression_Section value;
+  public static final class RightSection extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_Section value;
     
-    public RightSection (Expression_Section value) {
+    public RightSection (hydra.ext.haskell.ast.Expression_Section value) {
       this.value = value;
     }
     
@@ -504,10 +504,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Tuple extends Expression {
-    public final java.util.List<Expression> value;
+  public static final class Tuple extends hydra.ext.haskell.ast.Expression {
+    public final java.util.List<hydra.ext.haskell.ast.Expression> value;
     
-    public Tuple (java.util.List<Expression> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.ast.Expression> value) {
       this.value = value;
     }
     
@@ -531,10 +531,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class TypeSignature extends Expression {
-    public final Expression_TypeSignature value;
+  public static final class TypeSignature extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_TypeSignature value;
     
-    public TypeSignature (Expression_TypeSignature value) {
+    public TypeSignature (hydra.ext.haskell.ast.Expression_TypeSignature value) {
       this.value = value;
     }
     
@@ -558,10 +558,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class UpdateRecord extends Expression {
-    public final Expression_UpdateRecord value;
+  public static final class UpdateRecord extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Expression_UpdateRecord value;
     
-    public UpdateRecord (Expression_UpdateRecord value) {
+    public UpdateRecord (hydra.ext.haskell.ast.Expression_UpdateRecord value) {
       this.value = value;
     }
     
@@ -585,10 +585,10 @@ public abstract class Expression {
     }
   }
   
-  public static final class Variable extends Expression {
-    public final Name value;
+  public static final class Variable extends hydra.ext.haskell.ast.Expression {
+    public final hydra.ext.haskell.ast.Name value;
     
-    public Variable (Name value) {
+    public Variable (hydra.ext.haskell.ast.Name value) {
       this.value = value;
     }
     

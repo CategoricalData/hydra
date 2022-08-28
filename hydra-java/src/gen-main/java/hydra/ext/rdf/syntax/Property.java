@@ -7,16 +7,16 @@ public class Property {
   /**
    * State that any resource that has a given property is an instance of one or more classes
    */
-  public final java.util.Set<RdfsClass> domain;
+  public final java.util.Set<hydra.ext.rdf.syntax.RdfsClass> domain;
   
   /**
    * States that the values of a property are instances of one or more classes
    */
-  public final java.util.Set<RdfsClass> range;
+  public final java.util.Set<hydra.ext.rdf.syntax.RdfsClass> range;
   
-  public final java.util.Set<Property> subPropertyOf;
+  public final java.util.Set<hydra.ext.rdf.syntax.Property> subPropertyOf;
   
-  public Property (java.util.Set<RdfsClass> domain, java.util.Set<RdfsClass> range, java.util.Set<Property> subPropertyOf) {
+  public Property (java.util.Set<hydra.ext.rdf.syntax.RdfsClass> domain, java.util.Set<hydra.ext.rdf.syntax.RdfsClass> range, java.util.Set<hydra.ext.rdf.syntax.Property> subPropertyOf) {
     this.domain = domain;
     this.range = range;
     this.subPropertyOf = subPropertyOf;
@@ -36,15 +36,15 @@ public class Property {
     return 2 * domain.hashCode() + 3 * range.hashCode() + 5 * subPropertyOf.hashCode();
   }
   
-  public Property withDomain(java.util.Set<RdfsClass> domain) {
+  public Property withDomain(java.util.Set<hydra.ext.rdf.syntax.RdfsClass> domain) {
     return new Property(domain, range, subPropertyOf);
   }
   
-  public Property withRange(java.util.Set<RdfsClass> range) {
+  public Property withRange(java.util.Set<hydra.ext.rdf.syntax.RdfsClass> range) {
     return new Property(domain, range, subPropertyOf);
   }
   
-  public Property withSubPropertyOf(java.util.Set<Property> subPropertyOf) {
+  public Property withSubPropertyOf(java.util.Set<hydra.ext.rdf.syntax.Property> subPropertyOf) {
     return new Property(domain, range, subPropertyOf);
   }
 }

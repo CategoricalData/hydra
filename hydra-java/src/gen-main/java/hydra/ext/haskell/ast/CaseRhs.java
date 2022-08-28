@@ -7,9 +7,9 @@ public class CaseRhs {
   /**
    * The right-hand side of a pattern-matching alternative
    */
-  public final Expression value;
+  public final hydra.ext.haskell.ast.Expression value;
   
-  public CaseRhs (Expression value) {
+  public CaseRhs (hydra.ext.haskell.ast.Expression value) {
     this.value = value;
   }
   

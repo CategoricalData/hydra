@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ExclusiveOrExpression {
-  public final java.util.List<AndExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.AndExpression> value;
   
-  public ExclusiveOrExpression (java.util.List<AndExpression> value) {
+  public ExclusiveOrExpression (java.util.List<hydra.ext.java.syntax.AndExpression> value) {
     this.value = value;
   }
   

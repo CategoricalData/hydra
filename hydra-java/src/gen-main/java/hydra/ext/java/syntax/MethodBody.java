@@ -27,10 +27,10 @@ public abstract class MethodBody {
     }
   }
   
-  public static final class Block extends MethodBody {
-    public final Block value;
+  public static final class Block extends hydra.ext.java.syntax.MethodBody {
+    public final hydra.ext.java.syntax.Block value;
     
-    public Block (Block value) {
+    public Block (hydra.ext.java.syntax.Block value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class MethodBody {
     }
   }
   
-  public static final class None extends MethodBody {
+  public static final class None extends hydra.ext.java.syntax.MethodBody {
     public None () {
     
     }

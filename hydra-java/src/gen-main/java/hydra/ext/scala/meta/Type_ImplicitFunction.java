@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_ImplicitFunction {
-  public final java.util.List<Type> params;
+  public final java.util.List<hydra.ext.scala.meta.Type> params;
   
-  public final Type res;
+  public final hydra.ext.scala.meta.Type res;
   
-  public Type_ImplicitFunction (java.util.List<Type> params, Type res) {
+  public Type_ImplicitFunction (java.util.List<hydra.ext.scala.meta.Type> params, hydra.ext.scala.meta.Type res) {
     this.params = params;
     this.res = res;
   }
@@ -24,11 +24,11 @@ public class Type_ImplicitFunction {
     return 2 * params.hashCode() + 3 * res.hashCode();
   }
   
-  public Type_ImplicitFunction withParams(java.util.List<Type> params) {
+  public Type_ImplicitFunction withParams(java.util.List<hydra.ext.scala.meta.Type> params) {
     return new Type_ImplicitFunction(params, res);
   }
   
-  public Type_ImplicitFunction withRes(Type res) {
+  public Type_ImplicitFunction withRes(hydra.ext.scala.meta.Type res) {
     return new Type_ImplicitFunction(params, res);
   }
 }

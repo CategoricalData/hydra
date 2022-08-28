@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class WhileStatement {
-  public final java.util.Optional<Expression> cond;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;
   
-  public final Statement body;
+  public final hydra.ext.java.syntax.Statement body;
   
-  public WhileStatement (java.util.Optional<Expression> cond, Statement body) {
+  public WhileStatement (java.util.Optional<hydra.ext.java.syntax.Expression> cond, hydra.ext.java.syntax.Statement body) {
     this.cond = cond;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class WhileStatement {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public WhileStatement withCond(java.util.Optional<Expression> cond) {
+  public WhileStatement withCond(java.util.Optional<hydra.ext.java.syntax.Expression> cond) {
     return new WhileStatement(cond, body);
   }
   
-  public WhileStatement withBody(Statement body) {
+  public WhileStatement withBody(hydra.ext.java.syntax.Statement body) {
     return new WhileStatement(cond, body);
   }
 }

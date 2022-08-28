@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class Ident {
-  public final String_ value;
+  public final hydra.ext.coq.syntax.String_ value;
   
-  public Ident (String_ value) {
+  public Ident (hydra.ext.coq.syntax.String_ value) {
     this.value = value;
   }
   

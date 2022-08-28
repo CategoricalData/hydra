@@ -18,21 +18,21 @@ public class AnnotationClass<M> {
   
   public final java.util.function.Function<hydra.core.Type<M>, M> typeMeta;
   
-  public final java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<String>>> termDescription;
+  public final java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> termDescription;
   
-  public final java.util.function.Function<hydra.core.Type<M>, Flow<Context<M>, java.util.Optional<String>>> typeDescription;
+  public final java.util.function.Function<hydra.core.Type<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> typeDescription;
   
-  public final java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType;
+  public final java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType;
   
-  public final java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription;
+  public final java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription;
   
-  public final java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType;
+  public final java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType;
   
-  public final java.util.function.Function<M, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf;
+  public final java.util.function.Function<M, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf;
   
   public final java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf;
   
-  public AnnotationClass (M default_, java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal, java.util.function.Function<M, java.util.function.Function<M, hydra.core.Comparison>> compare, java.util.function.Function<M, String> show, java.util.function.Function<String, java.util.Optional<M>> read, java.util.function.Function<hydra.core.Term<M>, M> termMeta, java.util.function.Function<hydra.core.Type<M>, M> typeMeta, java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<M>, Flow<Context<M>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType, java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription, java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType, java.util.function.Function<M, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf) {
+  public AnnotationClass (M default_, java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal, java.util.function.Function<M, java.util.function.Function<M, hydra.core.Comparison>> compare, java.util.function.Function<M, String> show, java.util.function.Function<String, java.util.Optional<M>> read, java.util.function.Function<hydra.core.Term<M>, M> termMeta, java.util.function.Function<hydra.core.Type<M>, M> typeMeta, java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType, java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription, java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType, java.util.function.Function<M, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf) {
     this.default_ = default_;
     this.equal = equal;
     this.compare = compare;
@@ -91,27 +91,27 @@ public class AnnotationClass<M> {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withTermDescription(java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<String>>> termDescription) {
+  public AnnotationClass withTermDescription(java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> termDescription) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withTypeDescription(java.util.function.Function<hydra.core.Type<M>, Flow<Context<M>, java.util.Optional<String>>> typeDescription) {
+  public AnnotationClass withTypeDescription(java.util.function.Function<hydra.core.Type<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<String>>> typeDescription) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withTermType(java.util.function.Function<hydra.core.Term<M>, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType) {
+  public AnnotationClass withTermType(java.util.function.Function<hydra.core.Term<M>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withSetTermDescription(java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription) {
+  public AnnotationClass withSetTermDescription(java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withSetTermType(java.util.function.Function<Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType) {
+  public AnnotationClass withSetTermType(java.util.function.Function<hydra.evaluation.Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withTypeOf(java.util.function.Function<M, Flow<Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf) {
+  public AnnotationClass withTypeOf(java.util.function.Function<M, hydra.evaluation.Flow<hydra.evaluation.Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   

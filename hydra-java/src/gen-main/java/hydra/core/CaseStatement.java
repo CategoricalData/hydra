@@ -1,11 +1,11 @@
 package hydra.core;
 
 public class CaseStatement<M> {
-  public final Name typeName;
+  public final hydra.core.Name typeName;
   
-  public final java.util.List<Field<M>> cases;
+  public final java.util.List<hydra.core.Field<M>> cases;
   
-  public CaseStatement (Name typeName, java.util.List<Field<M>> cases) {
+  public CaseStatement (hydra.core.Name typeName, java.util.List<hydra.core.Field<M>> cases) {
     this.typeName = typeName;
     this.cases = cases;
   }
@@ -24,11 +24,11 @@ public class CaseStatement<M> {
     return 2 * typeName.hashCode() + 3 * cases.hashCode();
   }
   
-  public CaseStatement withTypeName(Name typeName) {
+  public CaseStatement withTypeName(hydra.core.Name typeName) {
     return new CaseStatement(typeName, cases);
   }
   
-  public CaseStatement withCases(java.util.List<Field<M>> cases) {
+  public CaseStatement withCases(java.util.List<hydra.core.Field<M>> cases) {
     return new CaseStatement(typeName, cases);
   }
 }

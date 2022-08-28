@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ElementValuePair {
-  public final Identifier key;
+  public final hydra.ext.java.syntax.Identifier key;
   
-  public final ElementValue value;
+  public final hydra.ext.java.syntax.ElementValue value;
   
-  public ElementValuePair (Identifier key, ElementValue value) {
+  public ElementValuePair (hydra.ext.java.syntax.Identifier key, hydra.ext.java.syntax.ElementValue value) {
     this.key = key;
     this.value = value;
   }
@@ -24,11 +24,11 @@ public class ElementValuePair {
     return 2 * key.hashCode() + 3 * value.hashCode();
   }
   
-  public ElementValuePair withKey(Identifier key) {
+  public ElementValuePair withKey(hydra.ext.java.syntax.Identifier key) {
     return new ElementValuePair(key, value);
   }
   
-  public ElementValuePair withValue(ElementValue value) {
+  public ElementValuePair withValue(hydra.ext.java.syntax.ElementValue value) {
     return new ElementValuePair(key, value);
   }
 }

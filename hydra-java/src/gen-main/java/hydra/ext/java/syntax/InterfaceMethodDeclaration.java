@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class InterfaceMethodDeclaration {
-  public final java.util.List<InterfaceMethodModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
   
-  public final MethodHeader header;
+  public final hydra.ext.java.syntax.MethodHeader header;
   
-  public final MethodBody body;
+  public final hydra.ext.java.syntax.MethodBody body;
   
-  public InterfaceMethodDeclaration (java.util.List<InterfaceMethodModifier> modifiers, MethodHeader header, MethodBody body) {
+  public InterfaceMethodDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
@@ -27,15 +27,15 @@ public class InterfaceMethodDeclaration {
     return 2 * modifiers.hashCode() + 3 * header.hashCode() + 5 * body.hashCode();
   }
   
-  public InterfaceMethodDeclaration withModifiers(java.util.List<InterfaceMethodModifier> modifiers) {
+  public InterfaceMethodDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
-  public InterfaceMethodDeclaration withHeader(MethodHeader header) {
+  public InterfaceMethodDeclaration withHeader(hydra.ext.java.syntax.MethodHeader header) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   
-  public InterfaceMethodDeclaration withBody(MethodBody body) {
+  public InterfaceMethodDeclaration withBody(hydra.ext.java.syntax.MethodBody body) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
 }

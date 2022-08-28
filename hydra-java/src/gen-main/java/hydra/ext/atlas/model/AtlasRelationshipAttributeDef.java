@@ -4,13 +4,13 @@ package hydra.ext.atlas.model;
  * class that captures details of a struct-attribute.
  */
 public class AtlasRelationshipAttributeDef {
-  public final AtlasAttributeDef asAtlasAttributeDef;
+  public final hydra.ext.atlas.model.AtlasAttributeDef asAtlasAttributeDef;
   
   public final java.util.Optional<String> relationshipTypeName;
   
   public final Boolean isLegacyAttribute;
   
-  public AtlasRelationshipAttributeDef (AtlasAttributeDef asAtlasAttributeDef, java.util.Optional<String> relationshipTypeName, Boolean isLegacyAttribute) {
+  public AtlasRelationshipAttributeDef (hydra.ext.atlas.model.AtlasAttributeDef asAtlasAttributeDef, java.util.Optional<String> relationshipTypeName, Boolean isLegacyAttribute) {
     this.asAtlasAttributeDef = asAtlasAttributeDef;
     this.relationshipTypeName = relationshipTypeName;
     this.isLegacyAttribute = isLegacyAttribute;
@@ -30,7 +30,7 @@ public class AtlasRelationshipAttributeDef {
     return 2 * asAtlasAttributeDef.hashCode() + 3 * relationshipTypeName.hashCode() + 5 * isLegacyAttribute.hashCode();
   }
   
-  public AtlasRelationshipAttributeDef withAsAtlasAttributeDef(AtlasAttributeDef asAtlasAttributeDef) {
+  public AtlasRelationshipAttributeDef withAsAtlasAttributeDef(hydra.ext.atlas.model.AtlasAttributeDef asAtlasAttributeDef) {
     return new AtlasRelationshipAttributeDef(asAtlasAttributeDef, relationshipTypeName, isLegacyAttribute);
   }
   

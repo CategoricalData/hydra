@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class ModuleHead {
-  public final ModuleName name;
+  public final hydra.ext.haskell.ast.ModuleName name;
   
-  public final java.util.List<Export> exports;
+  public final java.util.List<hydra.ext.haskell.ast.Export> exports;
   
-  public ModuleHead (ModuleName name, java.util.List<Export> exports) {
+  public ModuleHead (hydra.ext.haskell.ast.ModuleName name, java.util.List<hydra.ext.haskell.ast.Export> exports) {
     this.name = name;
     this.exports = exports;
   }
@@ -24,11 +24,11 @@ public class ModuleHead {
     return 2 * name.hashCode() + 3 * exports.hashCode();
   }
   
-  public ModuleHead withName(ModuleName name) {
+  public ModuleHead withName(hydra.ext.haskell.ast.ModuleName name) {
     return new ModuleHead(name, exports);
   }
   
-  public ModuleHead withExports(java.util.List<Export> exports) {
+  public ModuleHead withExports(java.util.List<hydra.ext.haskell.ast.Export> exports) {
     return new ModuleHead(name, exports);
   }
 }

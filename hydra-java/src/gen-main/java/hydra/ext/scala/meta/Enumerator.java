@@ -39,10 +39,10 @@ public abstract class Enumerator {
     }
   }
   
-  public static final class Generator extends Enumerator {
-    public final Enumerator_Generator value;
+  public static final class Generator extends hydra.ext.scala.meta.Enumerator {
+    public final hydra.ext.scala.meta.Enumerator_Generator value;
     
-    public Generator (Enumerator_Generator value) {
+    public Generator (hydra.ext.scala.meta.Enumerator_Generator value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class Enumerator {
     }
   }
   
-  public static final class CaseGenerator extends Enumerator {
-    public final Enumerator_CaseGenerator value;
+  public static final class CaseGenerator extends hydra.ext.scala.meta.Enumerator {
+    public final hydra.ext.scala.meta.Enumerator_CaseGenerator value;
     
-    public CaseGenerator (Enumerator_CaseGenerator value) {
+    public CaseGenerator (hydra.ext.scala.meta.Enumerator_CaseGenerator value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class Enumerator {
     }
   }
   
-  public static final class Val extends Enumerator {
-    public final Enumerator_Val value;
+  public static final class Val extends hydra.ext.scala.meta.Enumerator {
+    public final hydra.ext.scala.meta.Enumerator_Val value;
     
-    public Val (Enumerator_Val value) {
+    public Val (hydra.ext.scala.meta.Enumerator_Val value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class Enumerator {
     }
   }
   
-  public static final class Guard extends Enumerator {
-    public final Enumerator_Guard value;
+  public static final class Guard extends hydra.ext.scala.meta.Enumerator {
+    public final hydra.ext.scala.meta.Enumerator_Guard value;
     
-    public Guard (Enumerator_Guard value) {
+    public Guard (hydra.ext.scala.meta.Enumerator_Guard value) {
       this.value = value;
     }
     

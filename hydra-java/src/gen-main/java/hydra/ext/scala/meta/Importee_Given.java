@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Given {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Importee_Given (Type tpe) {
+  public Importee_Given (hydra.ext.scala.meta.Type tpe) {
     this.tpe = tpe;
   }
   

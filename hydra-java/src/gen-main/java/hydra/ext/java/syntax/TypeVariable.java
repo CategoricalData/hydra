@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class TypeVariable {
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final TypeIdentifier identifier;
+  public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public TypeVariable (java.util.List<Annotation> annotations, TypeIdentifier identifier) {
+  public TypeVariable (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.TypeIdentifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -24,11 +24,11 @@ public class TypeVariable {
     return 2 * annotations.hashCode() + 3 * identifier.hashCode();
   }
   
-  public TypeVariable withAnnotations(java.util.List<Annotation> annotations) {
+  public TypeVariable withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new TypeVariable(annotations, identifier);
   }
   
-  public TypeVariable withIdentifier(TypeIdentifier identifier) {
+  public TypeVariable withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new TypeVariable(annotations, identifier);
   }
 }

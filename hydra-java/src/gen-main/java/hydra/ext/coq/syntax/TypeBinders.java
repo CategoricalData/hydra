@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class TypeBinders {
-  public final java.util.List<Name> names;
+  public final java.util.List<hydra.ext.coq.syntax.Name> names;
   
-  public final Type type;
+  public final hydra.ext.coq.syntax.Type type;
   
-  public TypeBinders (java.util.List<Name> names, Type type) {
+  public TypeBinders (java.util.List<hydra.ext.coq.syntax.Name> names, hydra.ext.coq.syntax.Type type) {
     this.names = names;
     this.type = type;
   }
@@ -24,11 +24,11 @@ public class TypeBinders {
     return 2 * names.hashCode() + 3 * type.hashCode();
   }
   
-  public TypeBinders withNames(java.util.List<Name> names) {
+  public TypeBinders withNames(java.util.List<hydra.ext.coq.syntax.Name> names) {
     return new TypeBinders(names, type);
   }
   
-  public TypeBinders withType(Type type) {
+  public TypeBinders withType(hydra.ext.coq.syntax.Type type) {
     return new TypeBinders(names, type);
   }
 }

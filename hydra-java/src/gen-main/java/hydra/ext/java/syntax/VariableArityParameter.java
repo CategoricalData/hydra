@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class VariableArityParameter {
-  public final VariableModifier modifiers;
+  public final hydra.ext.java.syntax.VariableModifier modifiers;
   
-  public final UnannType type;
+  public final hydra.ext.java.syntax.UnannType type;
   
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public VariableArityParameter (VariableModifier modifiers, UnannType type, java.util.List<Annotation> annotations, Identifier identifier) {
+  public VariableArityParameter (hydra.ext.java.syntax.VariableModifier modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.modifiers = modifiers;
     this.type = type;
     this.annotations = annotations;
@@ -30,19 +30,19 @@ public class VariableArityParameter {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * annotations.hashCode() + 7 * identifier.hashCode();
   }
   
-  public VariableArityParameter withModifiers(VariableModifier modifiers) {
+  public VariableArityParameter withModifiers(hydra.ext.java.syntax.VariableModifier modifiers) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
-  public VariableArityParameter withType(UnannType type) {
+  public VariableArityParameter withType(hydra.ext.java.syntax.UnannType type) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
-  public VariableArityParameter withAnnotations(java.util.List<Annotation> annotations) {
+  public VariableArityParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
-  public VariableArityParameter withIdentifier(Identifier identifier) {
+  public VariableArityParameter withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
 }

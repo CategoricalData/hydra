@@ -4,12 +4,12 @@ package hydra.ext.shacl.model;
  * A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes
  */
 public class PropertyShape {
-  public final CommonProperties common;
+  public final hydra.ext.shacl.model.CommonProperties common;
   
   /**
    * Any property shape -specific constraint parameters
    */
-  public final PropertyShapeConstraints constraints;
+  public final hydra.ext.shacl.model.PropertyShapeConstraints constraints;
   
   /**
    * See https://www.w3.org/TR/shacl/#defaultValue
@@ -33,7 +33,7 @@ public class PropertyShape {
   
   public final hydra.ext.rdf.syntax.Resource path;
   
-  public PropertyShape (CommonProperties common, PropertyShapeConstraints constraints, java.util.Optional<hydra.ext.rdf.syntax.Node> defaultValue, hydra.ext.rdf.syntax.LangStrings description, hydra.ext.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.ext.rdf.syntax.Resource path) {
+  public PropertyShape (hydra.ext.shacl.model.CommonProperties common, hydra.ext.shacl.model.PropertyShapeConstraints constraints, java.util.Optional<hydra.ext.rdf.syntax.Node> defaultValue, hydra.ext.rdf.syntax.LangStrings description, hydra.ext.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.ext.rdf.syntax.Resource path) {
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -57,11 +57,11 @@ public class PropertyShape {
     return 2 * common.hashCode() + 3 * constraints.hashCode() + 5 * defaultValue.hashCode() + 7 * description.hashCode() + 11 * name.hashCode() + 13 * order.hashCode() + 17 * path.hashCode();
   }
   
-  public PropertyShape withCommon(CommonProperties common) {
+  public PropertyShape withCommon(hydra.ext.shacl.model.CommonProperties common) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
-  public PropertyShape withConstraints(PropertyShapeConstraints constraints) {
+  public PropertyShape withConstraints(hydra.ext.shacl.model.PropertyShapeConstraints constraints) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   

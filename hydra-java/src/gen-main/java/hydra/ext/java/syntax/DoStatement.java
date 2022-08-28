@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class DoStatement {
-  public final Statement body;
+  public final hydra.ext.java.syntax.Statement body;
   
-  public final java.util.Optional<Expression> conde;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> conde;
   
-  public DoStatement (Statement body, java.util.Optional<Expression> conde) {
+  public DoStatement (hydra.ext.java.syntax.Statement body, java.util.Optional<hydra.ext.java.syntax.Expression> conde) {
     this.body = body;
     this.conde = conde;
   }
@@ -24,11 +24,11 @@ public class DoStatement {
     return 2 * body.hashCode() + 3 * conde.hashCode();
   }
   
-  public DoStatement withBody(Statement body) {
+  public DoStatement withBody(hydra.ext.java.syntax.Statement body) {
     return new DoStatement(body, conde);
   }
   
-  public DoStatement withConde(java.util.Optional<Expression> conde) {
+  public DoStatement withConde(java.util.Optional<hydra.ext.java.syntax.Expression> conde) {
     return new DoStatement(body, conde);
   }
 }

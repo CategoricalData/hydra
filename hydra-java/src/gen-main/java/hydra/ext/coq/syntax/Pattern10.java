@@ -33,10 +33,10 @@ public abstract class Pattern10 {
     }
   }
   
-  public static final class As extends Pattern10 {
-    public final Pattern10_As value;
+  public static final class As extends hydra.ext.coq.syntax.Pattern10 {
+    public final hydra.ext.coq.syntax.Pattern10_As value;
     
-    public As (Pattern10_As value) {
+    public As (hydra.ext.coq.syntax.Pattern10_As value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class Pattern10 {
     }
   }
   
-  public static final class Patterns extends Pattern10 {
-    public final Pattern10_Patterns value;
+  public static final class Patterns extends hydra.ext.coq.syntax.Pattern10 {
+    public final hydra.ext.coq.syntax.Pattern10_Patterns value;
     
-    public Patterns (Pattern10_Patterns value) {
+    public Patterns (hydra.ext.coq.syntax.Pattern10_Patterns value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class Pattern10 {
     }
   }
   
-  public static final class Qualiid extends Pattern10 {
-    public final Pattern10_Qualid value;
+  public static final class Qualiid extends hydra.ext.coq.syntax.Pattern10 {
+    public final hydra.ext.coq.syntax.Pattern10_Qualid value;
     
-    public Qualiid (Pattern10_Qualid value) {
+    public Qualiid (hydra.ext.coq.syntax.Pattern10_Qualid value) {
       this.value = value;
     }
     

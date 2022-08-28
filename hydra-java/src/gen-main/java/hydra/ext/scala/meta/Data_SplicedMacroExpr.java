@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_SplicedMacroExpr {
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Data_SplicedMacroExpr (Data body) {
+  public Data_SplicedMacroExpr (hydra.ext.scala.meta.Data body) {
     this.body = body;
   }
   

@@ -27,10 +27,10 @@ public abstract class Resource {
     }
   }
   
-  public static final class Local extends Resource {
-    public final Resource_Local value;
+  public static final class Local extends hydra.ext.java.syntax.Resource {
+    public final hydra.ext.java.syntax.Resource_Local value;
     
-    public Local (Resource_Local value) {
+    public Local (hydra.ext.java.syntax.Resource_Local value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Resource {
     }
   }
   
-  public static final class Variable extends Resource {
-    public final VariableAccess value;
+  public static final class Variable extends hydra.ext.java.syntax.Resource {
+    public final hydra.ext.java.syntax.VariableAccess value;
     
-    public Variable (VariableAccess value) {
+    public Variable (hydra.ext.java.syntax.VariableAccess value) {
       this.value = value;
     }
     

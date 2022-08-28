@@ -27,10 +27,10 @@ public abstract class LambdaParameterType {
     }
   }
   
-  public static final class Type extends LambdaParameterType {
-    public final UnannType value;
+  public static final class Type extends hydra.ext.java.syntax.LambdaParameterType {
+    public final hydra.ext.java.syntax.UnannType value;
     
-    public Type (UnannType value) {
+    public Type (hydra.ext.java.syntax.UnannType value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class LambdaParameterType {
     }
   }
   
-  public static final class Var extends LambdaParameterType {
+  public static final class Var extends hydra.ext.java.syntax.LambdaParameterType {
     public Var () {
     
     }

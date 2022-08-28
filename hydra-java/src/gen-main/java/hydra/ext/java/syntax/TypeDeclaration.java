@@ -33,10 +33,10 @@ public abstract class TypeDeclaration {
     }
   }
   
-  public static final class Class_ extends TypeDeclaration {
-    public final ClassDeclaration value;
+  public static final class Class_ extends hydra.ext.java.syntax.TypeDeclaration {
+    public final hydra.ext.java.syntax.ClassDeclaration value;
     
-    public Class_ (ClassDeclaration value) {
+    public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class TypeDeclaration {
     }
   }
   
-  public static final class Interface extends TypeDeclaration {
-    public final InterfaceDeclaration value;
+  public static final class Interface extends hydra.ext.java.syntax.TypeDeclaration {
+    public final hydra.ext.java.syntax.InterfaceDeclaration value;
     
-    public Interface (InterfaceDeclaration value) {
+    public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
     
@@ -87,7 +87,7 @@ public abstract class TypeDeclaration {
     }
   }
   
-  public static final class None extends TypeDeclaration {
+  public static final class None extends hydra.ext.java.syntax.TypeDeclaration {
     public None () {
     
     }

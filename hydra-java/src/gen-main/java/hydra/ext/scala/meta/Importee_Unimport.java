@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Unimport {
-  public final Name name;
+  public final hydra.ext.scala.meta.Name name;
   
-  public Importee_Unimport (Name name) {
+  public Importee_Unimport (hydra.ext.scala.meta.Name name) {
     this.name = name;
   }
   

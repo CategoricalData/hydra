@@ -27,10 +27,10 @@ public abstract class ForallOrFun {
     }
   }
   
-  public static final class Forall extends ForallOrFun {
-    public final Forall value;
+  public static final class Forall extends hydra.ext.coq.syntax.ForallOrFun {
+    public final hydra.ext.coq.syntax.Forall value;
     
-    public Forall (Forall value) {
+    public Forall (hydra.ext.coq.syntax.Forall value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ForallOrFun {
     }
   }
   
-  public static final class Fun extends ForallOrFun {
-    public final Fun value;
+  public static final class Fun extends hydra.ext.coq.syntax.ForallOrFun {
+    public final hydra.ext.coq.syntax.Fun value;
     
-    public Fun (Fun value) {
+    public Fun (hydra.ext.coq.syntax.Fun value) {
       this.value = value;
     }
     

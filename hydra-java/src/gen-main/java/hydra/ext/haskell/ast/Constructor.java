@@ -30,10 +30,10 @@ public abstract class Constructor {
     }
   }
   
-  public static final class Ordinary extends Constructor {
-    public final Constructor_Ordinary value;
+  public static final class Ordinary extends hydra.ext.haskell.ast.Constructor {
+    public final hydra.ext.haskell.ast.Constructor_Ordinary value;
     
-    public Ordinary (Constructor_Ordinary value) {
+    public Ordinary (hydra.ext.haskell.ast.Constructor_Ordinary value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class Constructor {
     }
   }
   
-  public static final class Record extends Constructor {
-    public final Constructor_Record value;
+  public static final class Record extends hydra.ext.haskell.ast.Constructor {
+    public final hydra.ext.haskell.ast.Constructor_Record value;
     
-    public Record (Constructor_Record value) {
+    public Record (hydra.ext.haskell.ast.Constructor_Record value) {
       this.value = value;
     }
     

@@ -27,10 +27,10 @@ public abstract class Fix_Qual {
     }
   }
   
-  public static final class In extends Fix_Qual {
-    public final Term value;
+  public static final class In extends hydra.ext.coq.syntax.Fix_Qual {
+    public final hydra.ext.coq.syntax.Term value;
     
-    public In (Term value) {
+    public In (hydra.ext.coq.syntax.Term value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Fix_Qual {
     }
   }
   
-  public static final class With extends Fix_Qual {
-    public final FixWith value;
+  public static final class With extends hydra.ext.coq.syntax.Fix_Qual {
+    public final hydra.ext.coq.syntax.FixWith value;
     
-    public With (FixWith value) {
+    public With (hydra.ext.coq.syntax.FixWith value) {
       this.value = value;
     }
     

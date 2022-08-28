@@ -33,10 +33,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Iri extends Node {
-    public final Iri value;
+  public static final class Iri extends hydra.ext.rdf.syntax.Node {
+    public final hydra.ext.rdf.syntax.Iri value;
     
-    public Iri (Iri value) {
+    public Iri (hydra.ext.rdf.syntax.Iri value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Bnode extends Node {
-    public final BlankNode value;
+  public static final class Bnode extends hydra.ext.rdf.syntax.Node {
+    public final hydra.ext.rdf.syntax.BlankNode value;
     
-    public Bnode (BlankNode value) {
+    public Bnode (hydra.ext.rdf.syntax.BlankNode value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class Node {
     }
   }
   
-  public static final class Literal extends Node {
-    public final Literal value;
+  public static final class Literal extends hydra.ext.rdf.syntax.Node {
+    public final hydra.ext.rdf.syntax.Literal value;
     
-    public Literal (Literal value) {
+    public Literal (hydra.ext.rdf.syntax.Literal value) {
       this.value = value;
     }
     

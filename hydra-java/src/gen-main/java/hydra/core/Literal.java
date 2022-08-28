@@ -48,7 +48,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Binary extends Literal {
+  public static final class Binary extends hydra.core.Literal {
     public final String value;
     
     public Binary (String value) {
@@ -78,7 +78,7 @@ public abstract class Literal {
   /**
    * A boolean literal
    */
-  public static final class Boolean_ extends Literal {
+  public static final class Boolean_ extends hydra.core.Literal {
     /**
      * A boolean literal
      */
@@ -111,13 +111,13 @@ public abstract class Literal {
   /**
    * A floating-point literal
    */
-  public static final class Float_ extends Literal {
+  public static final class Float_ extends hydra.core.Literal {
     /**
      * A floating-point literal
      */
-    public final FloatValue value;
+    public final hydra.core.FloatValue value;
     
-    public Float_ (FloatValue value) {
+    public Float_ (hydra.core.FloatValue value) {
       this.value = value;
     }
     
@@ -144,13 +144,13 @@ public abstract class Literal {
   /**
    * An integer literal
    */
-  public static final class Integer_ extends Literal {
+  public static final class Integer_ extends hydra.core.Literal {
     /**
      * An integer literal
      */
-    public final IntegerValue value;
+    public final hydra.core.IntegerValue value;
     
-    public Integer_ (IntegerValue value) {
+    public Integer_ (hydra.core.IntegerValue value) {
       this.value = value;
     }
     
@@ -177,7 +177,7 @@ public abstract class Literal {
   /**
    * A string literal
    */
-  public static final class String_ extends Literal {
+  public static final class String_ extends hydra.core.Literal {
     /**
      * A string literal
      */

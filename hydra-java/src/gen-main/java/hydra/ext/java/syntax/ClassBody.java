@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ClassBody {
-  public final java.util.List<ClassBodyDeclarationWithComments> value;
+  public final java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value;
   
-  public ClassBody (java.util.List<ClassBodyDeclarationWithComments> value) {
+  public ClassBody (java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value) {
     this.value = value;
   }
   

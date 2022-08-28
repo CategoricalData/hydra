@@ -1,11 +1,11 @@
 package hydra.ext.pegasus.pdl;
 
 public class RecordSchema {
-  public final java.util.List<RecordField> fields;
+  public final java.util.List<hydra.ext.pegasus.pdl.RecordField> fields;
   
-  public final java.util.List<NamedSchema> includes;
+  public final java.util.List<hydra.ext.pegasus.pdl.NamedSchema> includes;
   
-  public RecordSchema (java.util.List<RecordField> fields, java.util.List<NamedSchema> includes) {
+  public RecordSchema (java.util.List<hydra.ext.pegasus.pdl.RecordField> fields, java.util.List<hydra.ext.pegasus.pdl.NamedSchema> includes) {
     this.fields = fields;
     this.includes = includes;
   }
@@ -24,11 +24,11 @@ public class RecordSchema {
     return 2 * fields.hashCode() + 3 * includes.hashCode();
   }
   
-  public RecordSchema withFields(java.util.List<RecordField> fields) {
+  public RecordSchema withFields(java.util.List<hydra.ext.pegasus.pdl.RecordField> fields) {
     return new RecordSchema(fields, includes);
   }
   
-  public RecordSchema withIncludes(java.util.List<NamedSchema> includes) {
+  public RecordSchema withIncludes(java.util.List<hydra.ext.pegasus.pdl.NamedSchema> includes) {
     return new RecordSchema(fields, includes);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class ScopeKey {
-  public final Ident value;
+  public final hydra.ext.coq.syntax.Ident value;
   
-  public ScopeKey (Ident value) {
+  public ScopeKey (hydra.ext.coq.syntax.Ident value) {
     this.value = value;
   }
   

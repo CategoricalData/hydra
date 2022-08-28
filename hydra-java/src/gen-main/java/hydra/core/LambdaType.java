@@ -7,14 +7,14 @@ public class LambdaType<M> {
   /**
    * The parameter of the lambda
    */
-  public final VariableType parameter;
+  public final hydra.core.VariableType parameter;
   
   /**
    * The body of the lambda
    */
-  public final Type<M> body;
+  public final hydra.core.Type<M> body;
   
-  public LambdaType (VariableType parameter, Type<M> body) {
+  public LambdaType (hydra.core.VariableType parameter, hydra.core.Type<M> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -33,11 +33,11 @@ public class LambdaType<M> {
     return 2 * parameter.hashCode() + 3 * body.hashCode();
   }
   
-  public LambdaType withParameter(VariableType parameter) {
+  public LambdaType withParameter(hydra.core.VariableType parameter) {
     return new LambdaType(parameter, body);
   }
   
-  public LambdaType withBody(Type<M> body) {
+  public LambdaType withBody(hydra.core.Type<M> body) {
     return new LambdaType(parameter, body);
   }
 }

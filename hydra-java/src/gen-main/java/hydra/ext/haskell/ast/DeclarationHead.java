@@ -36,10 +36,10 @@ public abstract class DeclarationHead {
     }
   }
   
-  public static final class Application extends DeclarationHead {
-    public final DeclarationHead_Application value;
+  public static final class Application extends hydra.ext.haskell.ast.DeclarationHead {
+    public final hydra.ext.haskell.ast.DeclarationHead_Application value;
     
-    public Application (DeclarationHead_Application value) {
+    public Application (hydra.ext.haskell.ast.DeclarationHead_Application value) {
       this.value = value;
     }
     
@@ -63,10 +63,10 @@ public abstract class DeclarationHead {
     }
   }
   
-  public static final class Parens extends DeclarationHead {
-    public final DeclarationHead value;
+  public static final class Parens extends hydra.ext.haskell.ast.DeclarationHead {
+    public final hydra.ext.haskell.ast.DeclarationHead value;
     
-    public Parens (DeclarationHead value) {
+    public Parens (hydra.ext.haskell.ast.DeclarationHead value) {
       this.value = value;
     }
     
@@ -90,10 +90,10 @@ public abstract class DeclarationHead {
     }
   }
   
-  public static final class Simple extends DeclarationHead {
-    public final Name value;
+  public static final class Simple extends hydra.ext.haskell.ast.DeclarationHead {
+    public final hydra.ext.haskell.ast.Name value;
     
-    public Simple (Name value) {
+    public Simple (hydra.ext.haskell.ast.Name value) {
       this.value = value;
     }
     

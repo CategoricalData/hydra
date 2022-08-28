@@ -39,10 +39,10 @@ public abstract class ClassBodyDeclaration {
     }
   }
   
-  public static final class ClassMember extends ClassBodyDeclaration {
-    public final ClassMemberDeclaration value;
+  public static final class ClassMember extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public final hydra.ext.java.syntax.ClassMemberDeclaration value;
     
-    public ClassMember (ClassMemberDeclaration value) {
+    public ClassMember (hydra.ext.java.syntax.ClassMemberDeclaration value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class ClassBodyDeclaration {
     }
   }
   
-  public static final class InstanceInitializer extends ClassBodyDeclaration {
-    public final InstanceInitializer value;
+  public static final class InstanceInitializer extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public final hydra.ext.java.syntax.InstanceInitializer value;
     
-    public InstanceInitializer (InstanceInitializer value) {
+    public InstanceInitializer (hydra.ext.java.syntax.InstanceInitializer value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class ClassBodyDeclaration {
     }
   }
   
-  public static final class StaticInitializer extends ClassBodyDeclaration {
-    public final StaticInitializer value;
+  public static final class StaticInitializer extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public final hydra.ext.java.syntax.StaticInitializer value;
     
-    public StaticInitializer (StaticInitializer value) {
+    public StaticInitializer (hydra.ext.java.syntax.StaticInitializer value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class ClassBodyDeclaration {
     }
   }
   
-  public static final class ConstructorDeclaration extends ClassBodyDeclaration {
-    public final ConstructorDeclaration value;
+  public static final class ConstructorDeclaration extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public final hydra.ext.java.syntax.ConstructorDeclaration value;
     
-    public ConstructorDeclaration (ConstructorDeclaration value) {
+    public ConstructorDeclaration (hydra.ext.java.syntax.ConstructorDeclaration value) {
       this.value = value;
     }
     

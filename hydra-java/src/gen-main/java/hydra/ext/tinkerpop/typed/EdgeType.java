@@ -6,13 +6,13 @@ package hydra.ext.tinkerpop.typed;
 public class EdgeType {
   public final hydra.core.LiteralType id;
   
-  public final VertexIdType out;
+  public final hydra.ext.tinkerpop.typed.VertexIdType out;
   
-  public final VertexIdType in;
+  public final hydra.ext.tinkerpop.typed.VertexIdType in;
   
-  public final java.util.Map<Key, Type> properties;
+  public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Type> properties;
   
-  public EdgeType (hydra.core.LiteralType id, VertexIdType out, VertexIdType in, java.util.Map<Key, Type> properties) {
+  public EdgeType (hydra.core.LiteralType id, hydra.ext.tinkerpop.typed.VertexIdType out, hydra.ext.tinkerpop.typed.VertexIdType in, java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Type> properties) {
     this.id = id;
     this.out = out;
     this.in = in;
@@ -37,15 +37,15 @@ public class EdgeType {
     return new EdgeType(id, out, in, properties);
   }
   
-  public EdgeType withOut(VertexIdType out) {
+  public EdgeType withOut(hydra.ext.tinkerpop.typed.VertexIdType out) {
     return new EdgeType(id, out, in, properties);
   }
   
-  public EdgeType withIn(VertexIdType in) {
+  public EdgeType withIn(hydra.ext.tinkerpop.typed.VertexIdType in) {
     return new EdgeType(id, out, in, properties);
   }
   
-  public EdgeType withProperties(java.util.Map<Key, Type> properties) {
+  public EdgeType withProperties(java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Type> properties) {
     return new EdgeType(id, out, in, properties);
   }
 }

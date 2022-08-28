@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_Throw {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public Data_Throw (Data expr) {
+  public Data_Throw (hydra.ext.scala.meta.Data expr) {
     this.expr = expr;
   }
   

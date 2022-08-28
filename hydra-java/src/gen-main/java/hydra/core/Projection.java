@@ -1,11 +1,11 @@
 package hydra.core;
 
 public class Projection {
-  public final Name typeName;
+  public final hydra.core.Name typeName;
   
-  public final FieldName field;
+  public final hydra.core.FieldName field;
   
-  public Projection (Name typeName, FieldName field) {
+  public Projection (hydra.core.Name typeName, hydra.core.FieldName field) {
     this.typeName = typeName;
     this.field = field;
   }
@@ -24,11 +24,11 @@ public class Projection {
     return 2 * typeName.hashCode() + 3 * field.hashCode();
   }
   
-  public Projection withTypeName(Name typeName) {
+  public Projection withTypeName(hydra.core.Name typeName) {
     return new Projection(typeName, field);
   }
   
-  public Projection withField(FieldName field) {
+  public Projection withField(hydra.core.FieldName field) {
     return new Projection(typeName, field);
   }
 }

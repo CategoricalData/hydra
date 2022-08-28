@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class CastExpression_Primitive {
-  public final PrimitiveTypeWithAnnotations type;
+  public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
-  public final UnaryExpression expression;
+  public final hydra.ext.java.syntax.UnaryExpression expression;
   
-  public CastExpression_Primitive (PrimitiveTypeWithAnnotations type, UnaryExpression expression) {
+  public CastExpression_Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.ext.java.syntax.UnaryExpression expression) {
     this.type = type;
     this.expression = expression;
   }
@@ -24,11 +24,11 @@ public class CastExpression_Primitive {
     return 2 * type.hashCode() + 3 * expression.hashCode();
   }
   
-  public CastExpression_Primitive withType(PrimitiveTypeWithAnnotations type) {
+  public CastExpression_Primitive withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {
     return new CastExpression_Primitive(type, expression);
   }
   
-  public CastExpression_Primitive withExpression(UnaryExpression expression) {
+  public CastExpression_Primitive withExpression(hydra.ext.java.syntax.UnaryExpression expression) {
     return new CastExpression_Primitive(type, expression);
   }
 }

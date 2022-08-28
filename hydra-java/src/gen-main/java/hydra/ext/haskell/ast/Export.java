@@ -30,10 +30,10 @@ public abstract class Export {
     }
   }
   
-  public static final class Declaration extends Export {
-    public final ImportExportSpec value;
+  public static final class Declaration extends hydra.ext.haskell.ast.Export {
+    public final hydra.ext.haskell.ast.ImportExportSpec value;
     
-    public Declaration (ImportExportSpec value) {
+    public Declaration (hydra.ext.haskell.ast.ImportExportSpec value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class Export {
     }
   }
   
-  public static final class Module extends Export {
-    public final ModuleName value;
+  public static final class Module extends hydra.ext.haskell.ast.Export {
+    public final hydra.ext.haskell.ast.ModuleName value;
     
-    public Module (ModuleName value) {
+    public Module (hydra.ext.haskell.ast.ModuleName value) {
       this.value = value;
     }
     

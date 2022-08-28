@@ -45,13 +45,13 @@ public abstract class Function<M> {
   /**
    * Compares a term with a given term of the same type, producing a Comparison
    */
-  public static final class CompareTo<M> extends Function<M> {
+  public static final class CompareTo<M> extends hydra.core.Function<M> {
     /**
      * Compares a term with a given term of the same type, producing a Comparison
      */
-    public final Term<M> value;
+    public final hydra.core.Term<M> value;
     
-    public CompareTo (Term<M> value) {
+    public CompareTo (hydra.core.Term<M> value) {
       this.value = value;
     }
     
@@ -78,7 +78,7 @@ public abstract class Function<M> {
   /**
    * An elimination for any of a few term variants
    */
-  public static final class Elimination<M> extends Function<M> {
+  public static final class Elimination<M> extends hydra.core.Function<M> {
     /**
      * An elimination for any of a few term variants
      */
@@ -111,7 +111,7 @@ public abstract class Function<M> {
   /**
    * A function abstraction (lambda)
    */
-  public static final class Lambda<M> extends Function<M> {
+  public static final class Lambda<M> extends hydra.core.Function<M> {
     /**
      * A function abstraction (lambda)
      */
@@ -144,13 +144,13 @@ public abstract class Function<M> {
   /**
    * A reference to a built-in (primitive) function
    */
-  public static final class Primitive<M> extends Function<M> {
+  public static final class Primitive<M> extends hydra.core.Function<M> {
     /**
      * A reference to a built-in (primitive) function
      */
-    public final Name value;
+    public final hydra.core.Name value;
     
-    public Primitive (Name value) {
+    public Primitive (hydra.core.Name value) {
       this.value = value;
     }
     

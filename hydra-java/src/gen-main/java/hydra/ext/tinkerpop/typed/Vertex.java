@@ -4,13 +4,13 @@ package hydra.ext.tinkerpop.typed;
  * A vertex, comprised of an id and zero or more properties
  */
 public class Vertex {
-  public final VertexId id;
+  public final hydra.ext.tinkerpop.typed.VertexId id;
   
-  public final Label label;
+  public final hydra.ext.tinkerpop.typed.Label label;
   
-  public final java.util.Map<Key, Value> properties;
+  public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties;
   
-  public Vertex (VertexId id, Label label, java.util.Map<Key, Value> properties) {
+  public Vertex (hydra.ext.tinkerpop.typed.VertexId id, hydra.ext.tinkerpop.typed.Label label, java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties) {
     this.id = id;
     this.label = label;
     this.properties = properties;
@@ -30,15 +30,15 @@ public class Vertex {
     return 2 * id.hashCode() + 3 * label.hashCode() + 5 * properties.hashCode();
   }
   
-  public Vertex withId(VertexId id) {
+  public Vertex withId(hydra.ext.tinkerpop.typed.VertexId id) {
     return new Vertex(id, label, properties);
   }
   
-  public Vertex withLabel(Label label) {
+  public Vertex withLabel(hydra.ext.tinkerpop.typed.Label label) {
     return new Vertex(id, label, properties);
   }
   
-  public Vertex withProperties(java.util.Map<Key, Value> properties) {
+  public Vertex withProperties(java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties) {
     return new Vertex(id, label, properties);
   }
 }

@@ -27,10 +27,10 @@ public abstract class LambdaParameter {
     }
   }
   
-  public static final class Normal extends LambdaParameter {
-    public final LambdaParameter_Normal value;
+  public static final class Normal extends hydra.ext.java.syntax.LambdaParameter {
+    public final hydra.ext.java.syntax.LambdaParameter_Normal value;
     
-    public Normal (LambdaParameter_Normal value) {
+    public Normal (hydra.ext.java.syntax.LambdaParameter_Normal value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class LambdaParameter {
     }
   }
   
-  public static final class VariableArity extends LambdaParameter {
-    public final VariableArityParameter value;
+  public static final class VariableArity extends hydra.ext.java.syntax.LambdaParameter {
+    public final hydra.ext.java.syntax.VariableArityParameter value;
     
-    public VariableArity (VariableArityParameter value) {
+    public VariableArity (hydra.ext.java.syntax.VariableArityParameter value) {
       this.value = value;
     }
     

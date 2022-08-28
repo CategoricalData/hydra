@@ -33,10 +33,10 @@ public abstract class ConditionalExpression {
     }
   }
   
-  public static final class Simple extends ConditionalExpression {
-    public final ConditionalOrExpression value;
+  public static final class Simple extends hydra.ext.java.syntax.ConditionalExpression {
+    public final hydra.ext.java.syntax.ConditionalOrExpression value;
     
-    public Simple (ConditionalOrExpression value) {
+    public Simple (hydra.ext.java.syntax.ConditionalOrExpression value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class ConditionalExpression {
     }
   }
   
-  public static final class TernaryCond extends ConditionalExpression {
-    public final ConditionalExpression_TernaryCond value;
+  public static final class TernaryCond extends hydra.ext.java.syntax.ConditionalExpression {
+    public final hydra.ext.java.syntax.ConditionalExpression_TernaryCond value;
     
-    public TernaryCond (ConditionalExpression_TernaryCond value) {
+    public TernaryCond (hydra.ext.java.syntax.ConditionalExpression_TernaryCond value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class ConditionalExpression {
     }
   }
   
-  public static final class TernaryLambda extends ConditionalExpression {
-    public final ConditionalExpression_TernaryLambda value;
+  public static final class TernaryLambda extends hydra.ext.java.syntax.ConditionalExpression {
+    public final hydra.ext.java.syntax.ConditionalExpression_TernaryLambda value;
     
-    public TernaryLambda (ConditionalExpression_TernaryLambda value) {
+    public TernaryLambda (hydra.ext.java.syntax.ConditionalExpression_TernaryLambda value) {
       this.value = value;
     }
     

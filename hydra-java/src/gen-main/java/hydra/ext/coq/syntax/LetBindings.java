@@ -27,10 +27,10 @@ public abstract class LetBindings {
     }
   }
   
-  public static final class Named extends LetBindings {
-    public final LetNamed value;
+  public static final class Named extends hydra.ext.coq.syntax.LetBindings {
+    public final hydra.ext.coq.syntax.LetNamed value;
     
-    public Named (LetNamed value) {
+    public Named (hydra.ext.coq.syntax.LetNamed value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class LetBindings {
     }
   }
   
-  public static final class Destructuring extends LetBindings {
-    public final LetDestructuring value;
+  public static final class Destructuring extends hydra.ext.coq.syntax.LetBindings {
+    public final hydra.ext.coq.syntax.LetDestructuring value;
     
-    public Destructuring (LetDestructuring value) {
+    public Destructuring (hydra.ext.coq.syntax.LetDestructuring value) {
       this.value = value;
     }
     

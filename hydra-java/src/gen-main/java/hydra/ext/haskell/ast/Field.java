@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A field (name/type pair)
  */
 public class Field {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final Type type;
+  public final hydra.ext.haskell.ast.Type type;
   
-  public Field (Name name, Type type) {
+  public Field (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Type type) {
     this.name = name;
     this.type = type;
   }
@@ -27,11 +27,11 @@ public class Field {
     return 2 * name.hashCode() + 3 * type.hashCode();
   }
   
-  public Field withName(Name name) {
+  public Field withName(hydra.ext.haskell.ast.Name name) {
     return new Field(name, type);
   }
   
-  public Field withType(Type type) {
+  public Field withType(hydra.ext.haskell.ast.Type type) {
     return new Field(name, type);
   }
 }

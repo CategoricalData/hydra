@@ -27,10 +27,10 @@ public abstract class LocalBinding {
     }
   }
   
-  public static final class Signature extends LocalBinding {
-    public final TypeSignature value;
+  public static final class Signature extends hydra.ext.haskell.ast.LocalBinding {
+    public final hydra.ext.haskell.ast.TypeSignature value;
     
-    public Signature (TypeSignature value) {
+    public Signature (hydra.ext.haskell.ast.TypeSignature value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class LocalBinding {
     }
   }
   
-  public static final class Value extends LocalBinding {
-    public final ValueBinding value;
+  public static final class Value extends hydra.ext.haskell.ast.LocalBinding {
+    public final hydra.ext.haskell.ast.ValueBinding value;
     
-    public Value (ValueBinding value) {
+    public Value (hydra.ext.haskell.ast.ValueBinding value) {
       this.value = value;
     }
     

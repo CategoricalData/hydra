@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Export {
-  public final java.util.List<Importer> importers;
+  public final java.util.List<hydra.ext.scala.meta.Importer> importers;
   
-  public Export (java.util.List<Importer> importers) {
+  public Export (java.util.List<hydra.ext.scala.meta.Importer> importers) {
     this.importers = importers;
   }
   

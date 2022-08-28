@@ -27,10 +27,10 @@ public abstract class Resource {
     }
   }
   
-  public static final class Iri extends Resource {
-    public final Iri value;
+  public static final class Iri extends hydra.ext.rdf.syntax.Resource {
+    public final hydra.ext.rdf.syntax.Iri value;
     
-    public Iri (Iri value) {
+    public Iri (hydra.ext.rdf.syntax.Iri value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Resource {
     }
   }
   
-  public static final class Bnode extends Resource {
-    public final BlankNode value;
+  public static final class Bnode extends hydra.ext.rdf.syntax.Resource {
+    public final hydra.ext.rdf.syntax.BlankNode value;
     
-    public Bnode (BlankNode value) {
+    public Bnode (hydra.ext.rdf.syntax.BlankNode value) {
       this.value = value;
     }
     

@@ -4,15 +4,15 @@ package hydra.ext.rdf.syntax;
  * An RDF triple with an optional named graph component
  */
 public class Quad {
-  public final Resource subject;
+  public final hydra.ext.rdf.syntax.Resource subject;
   
-  public final Iri predicate;
+  public final hydra.ext.rdf.syntax.Iri predicate;
   
-  public final Node object;
+  public final hydra.ext.rdf.syntax.Node object;
   
-  public final java.util.Optional<Iri> graph;
+  public final java.util.Optional<hydra.ext.rdf.syntax.Iri> graph;
   
-  public Quad (Resource subject, Iri predicate, Node object, java.util.Optional<Iri> graph) {
+  public Quad (hydra.ext.rdf.syntax.Resource subject, hydra.ext.rdf.syntax.Iri predicate, hydra.ext.rdf.syntax.Node object, java.util.Optional<hydra.ext.rdf.syntax.Iri> graph) {
     this.subject = subject;
     this.predicate = predicate;
     this.object = object;
@@ -33,19 +33,19 @@ public class Quad {
     return 2 * subject.hashCode() + 3 * predicate.hashCode() + 5 * object.hashCode() + 7 * graph.hashCode();
   }
   
-  public Quad withSubject(Resource subject) {
+  public Quad withSubject(hydra.ext.rdf.syntax.Resource subject) {
     return new Quad(subject, predicate, object, graph);
   }
   
-  public Quad withPredicate(Iri predicate) {
+  public Quad withPredicate(hydra.ext.rdf.syntax.Iri predicate) {
     return new Quad(subject, predicate, object, graph);
   }
   
-  public Quad withObject(Node object) {
+  public Quad withObject(hydra.ext.rdf.syntax.Node object) {
     return new Quad(subject, predicate, object, graph);
   }
   
-  public Quad withGraph(java.util.Optional<Iri> graph) {
+  public Quad withGraph(java.util.Optional<hydra.ext.rdf.syntax.Iri> graph) {
     return new Quad(subject, predicate, object, graph);
   }
 }

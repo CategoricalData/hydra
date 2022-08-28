@@ -36,7 +36,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class LessThan extends Comparison {
+  public static final class LessThan extends hydra.core.Comparison {
     public LessThan () {
     
     }
@@ -61,7 +61,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class EqualTo extends Comparison {
+  public static final class EqualTo extends hydra.core.Comparison {
     public EqualTo () {
     
     }
@@ -86,7 +86,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class GreaterThan extends Comparison {
+  public static final class GreaterThan extends hydra.core.Comparison {
     public GreaterThan () {
     
     }

@@ -1,9 +1,9 @@
 package hydra.ext.pegasus.pdl;
 
 public class UnionSchema {
-  public final java.util.List<UnionMember> value;
+  public final java.util.List<hydra.ext.pegasus.pdl.UnionMember> value;
   
-  public UnionSchema (java.util.List<UnionMember> value) {
+  public UnionSchema (java.util.List<hydra.ext.pegasus.pdl.UnionMember> value) {
     this.value = value;
   }
   

@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class DefaultValue {
-  public final ElementValue value;
+  public final hydra.ext.java.syntax.ElementValue value;
   
-  public DefaultValue (ElementValue value) {
+  public DefaultValue (hydra.ext.java.syntax.ElementValue value) {
     this.value = value;
   }
   

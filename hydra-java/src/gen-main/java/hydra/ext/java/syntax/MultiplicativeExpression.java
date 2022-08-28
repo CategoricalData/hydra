@@ -39,10 +39,10 @@ public abstract class MultiplicativeExpression {
     }
   }
   
-  public static final class Unary extends MultiplicativeExpression {
-    public final UnaryExpression value;
+  public static final class Unary extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public final hydra.ext.java.syntax.UnaryExpression value;
     
-    public Unary (UnaryExpression value) {
+    public Unary (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class MultiplicativeExpression {
     }
   }
   
-  public static final class Times extends MultiplicativeExpression {
-    public final MultiplicativeExpression_Binary value;
+  public static final class Times extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
-    public Times (MultiplicativeExpression_Binary value) {
+    public Times (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class MultiplicativeExpression {
     }
   }
   
-  public static final class Divide extends MultiplicativeExpression {
-    public final MultiplicativeExpression_Binary value;
+  public static final class Divide extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
-    public Divide (MultiplicativeExpression_Binary value) {
+    public Divide (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class MultiplicativeExpression {
     }
   }
   
-  public static final class Mod extends MultiplicativeExpression {
-    public final MultiplicativeExpression_Binary value;
+  public static final class Mod extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
-    public Mod (MultiplicativeExpression_Binary value) {
+    public Mod (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
       this.value = value;
     }
     

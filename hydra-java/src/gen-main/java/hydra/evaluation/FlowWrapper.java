@@ -5,9 +5,9 @@ public class FlowWrapper<S, A> {
   
   public final S state;
   
-  public final Trace trace;
+  public final hydra.evaluation.Trace trace;
   
-  public FlowWrapper (java.util.Optional<A> value, S state, Trace trace) {
+  public FlowWrapper (java.util.Optional<A> value, S state, hydra.evaluation.Trace trace) {
     this.value = value;
     this.state = state;
     this.trace = trace;
@@ -35,7 +35,7 @@ public class FlowWrapper<S, A> {
     return new FlowWrapper(value, state, trace);
   }
   
-  public FlowWrapper withTrace(Trace trace) {
+  public FlowWrapper withTrace(hydra.evaluation.Trace trace) {
     return new FlowWrapper(value, state, trace);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class Type {
-  public final Term value;
+  public final hydra.ext.coq.syntax.Term value;
   
-  public Type (Term value) {
+  public Type (hydra.ext.coq.syntax.Term value) {
     this.value = value;
   }
   

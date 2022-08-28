@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class LetDestructuring_Variant2 {
-  public final Pattern pattern;
+  public final hydra.ext.coq.syntax.Pattern pattern;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public final java.util.Optional<Term100> return_;
+  public final java.util.Optional<hydra.ext.coq.syntax.Term100> return_;
   
-  public LetDestructuring_Variant2 (Pattern pattern, Term term, java.util.Optional<Term100> return_) {
+  public LetDestructuring_Variant2 (hydra.ext.coq.syntax.Pattern pattern, hydra.ext.coq.syntax.Term term, java.util.Optional<hydra.ext.coq.syntax.Term100> return_) {
     this.pattern = pattern;
     this.term = term;
     this.return_ = return_;
@@ -27,15 +27,15 @@ public class LetDestructuring_Variant2 {
     return 2 * pattern.hashCode() + 3 * term.hashCode() + 5 * return_.hashCode();
   }
   
-  public LetDestructuring_Variant2 withPattern(Pattern pattern) {
+  public LetDestructuring_Variant2 withPattern(hydra.ext.coq.syntax.Pattern pattern) {
     return new LetDestructuring_Variant2(pattern, term, return_);
   }
   
-  public LetDestructuring_Variant2 withTerm(Term term) {
+  public LetDestructuring_Variant2 withTerm(hydra.ext.coq.syntax.Term term) {
     return new LetDestructuring_Variant2(pattern, term, return_);
   }
   
-  public LetDestructuring_Variant2 withReturn(java.util.Optional<Term100> return_) {
+  public LetDestructuring_Variant2 withReturn(java.util.Optional<hydra.ext.coq.syntax.Term100> return_) {
     return new LetDestructuring_Variant2(pattern, term, return_);
   }
 }

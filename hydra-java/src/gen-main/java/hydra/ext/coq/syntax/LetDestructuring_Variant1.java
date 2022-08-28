@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class LetDestructuring_Variant1 {
-  public final java.util.List<Name> names;
+  public final java.util.List<hydra.ext.coq.syntax.Name> names;
   
-  public final java.util.Optional<ReturnAs> returnAs;
+  public final java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public LetDestructuring_Variant1 (java.util.List<Name> names, java.util.Optional<ReturnAs> returnAs, Term term) {
+  public LetDestructuring_Variant1 (java.util.List<hydra.ext.coq.syntax.Name> names, java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs, hydra.ext.coq.syntax.Term term) {
     this.names = names;
     this.returnAs = returnAs;
     this.term = term;
@@ -27,15 +27,15 @@ public class LetDestructuring_Variant1 {
     return 2 * names.hashCode() + 3 * returnAs.hashCode() + 5 * term.hashCode();
   }
   
-  public LetDestructuring_Variant1 withNames(java.util.List<Name> names) {
+  public LetDestructuring_Variant1 withNames(java.util.List<hydra.ext.coq.syntax.Name> names) {
     return new LetDestructuring_Variant1(names, returnAs, term);
   }
   
-  public LetDestructuring_Variant1 withReturnAs(java.util.Optional<ReturnAs> returnAs) {
+  public LetDestructuring_Variant1 withReturnAs(java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs) {
     return new LetDestructuring_Variant1(names, returnAs, term);
   }
   
-  public LetDestructuring_Variant1 withTerm(Term term) {
+  public LetDestructuring_Variant1 withTerm(hydra.ext.coq.syntax.Term term) {
     return new LetDestructuring_Variant1(names, returnAs, term);
   }
 }

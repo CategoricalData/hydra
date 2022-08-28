@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class Catches {
-  public final java.util.List<CatchClause> value;
+  public final java.util.List<hydra.ext.java.syntax.CatchClause> value;
   
-  public Catches (java.util.List<CatchClause> value) {
+  public Catches (java.util.List<hydra.ext.java.syntax.CatchClause> value) {
     this.value = value;
   }
   

@@ -6,9 +6,9 @@ package hydra.ext.tinkerpop.typed;
 public class VertexType {
   public final hydra.core.LiteralType id;
   
-  public final java.util.Map<Key, Value> properties;
+  public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties;
   
-  public VertexType (hydra.core.LiteralType id, java.util.Map<Key, Value> properties) {
+  public VertexType (hydra.core.LiteralType id, java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties) {
     this.id = id;
     this.properties = properties;
   }
@@ -31,7 +31,7 @@ public class VertexType {
     return new VertexType(id, properties);
   }
   
-  public VertexType withProperties(java.util.Map<Key, Value> properties) {
+  public VertexType withProperties(java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties) {
     return new VertexType(id, properties);
   }
 }

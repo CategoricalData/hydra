@@ -27,10 +27,10 @@ public abstract class Application {
     }
   }
   
-  public static final class Normal extends Application {
-    public final NormalApplication value;
+  public static final class Normal extends hydra.ext.coq.syntax.Application {
+    public final hydra.ext.coq.syntax.NormalApplication value;
     
-    public Normal (NormalApplication value) {
+    public Normal (hydra.ext.coq.syntax.NormalApplication value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Application {
     }
   }
   
-  public static final class Annotated extends Application {
-    public final AnnotatedApplication value;
+  public static final class Annotated extends hydra.ext.coq.syntax.Application {
+    public final hydra.ext.coq.syntax.AnnotatedApplication value;
     
-    public Annotated (AnnotatedApplication value) {
+    public Annotated (hydra.ext.coq.syntax.AnnotatedApplication value) {
       this.value = value;
     }
     

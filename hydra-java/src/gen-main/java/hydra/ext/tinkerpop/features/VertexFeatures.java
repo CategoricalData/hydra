@@ -4,9 +4,9 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Vertex operations.
  */
 public class VertexFeatures {
-  public final ElementFeatures elementFeatures;
+  public final hydra.ext.tinkerpop.features.ElementFeatures elementFeatures;
   
-  public final VertexPropertyFeatures properties;
+  public final hydra.ext.tinkerpop.features.VertexPropertyFeatures properties;
   
   /**
    * Determines if a Vertex can be added to the Graph.
@@ -38,7 +38,7 @@ public class VertexFeatures {
    */
   public final Boolean supportsUpsert;
   
-  public VertexFeatures (ElementFeatures elementFeatures, VertexPropertyFeatures properties, Boolean supportsAddVertices, Boolean supportsDuplicateMultiProperties, Boolean supportsMetaProperties, Boolean supportsMultiProperties, Boolean supportsRemoveVertices, Boolean supportsUpsert) {
+  public VertexFeatures (hydra.ext.tinkerpop.features.ElementFeatures elementFeatures, hydra.ext.tinkerpop.features.VertexPropertyFeatures properties, Boolean supportsAddVertices, Boolean supportsDuplicateMultiProperties, Boolean supportsMetaProperties, Boolean supportsMultiProperties, Boolean supportsRemoveVertices, Boolean supportsUpsert) {
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddVertices = supportsAddVertices;
@@ -63,11 +63,11 @@ public class VertexFeatures {
     return 2 * elementFeatures.hashCode() + 3 * properties.hashCode() + 5 * supportsAddVertices.hashCode() + 7 * supportsDuplicateMultiProperties.hashCode() + 11 * supportsMetaProperties.hashCode() + 13 * supportsMultiProperties.hashCode() + 17 * supportsRemoveVertices.hashCode() + 19 * supportsUpsert.hashCode();
   }
   
-  public VertexFeatures withElementFeatures(ElementFeatures elementFeatures) {
+  public VertexFeatures withElementFeatures(hydra.ext.tinkerpop.features.ElementFeatures elementFeatures) {
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   
-  public VertexFeatures withProperties(VertexPropertyFeatures properties) {
+  public VertexFeatures withProperties(hydra.ext.tinkerpop.features.VertexPropertyFeatures properties) {
     return new VertexFeatures(elementFeatures, properties, supportsAddVertices, supportsDuplicateMultiProperties, supportsMetaProperties, supportsMultiProperties, supportsRemoveVertices, supportsUpsert);
   }
   

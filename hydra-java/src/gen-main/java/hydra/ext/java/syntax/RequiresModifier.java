@@ -27,7 +27,7 @@ public abstract class RequiresModifier {
     }
   }
   
-  public static final class Transitive extends RequiresModifier {
+  public static final class Transitive extends hydra.ext.java.syntax.RequiresModifier {
     public Transitive () {
     
     }
@@ -52,7 +52,7 @@ public abstract class RequiresModifier {
     }
   }
   
-  public static final class Static extends RequiresModifier {
+  public static final class Static extends hydra.ext.java.syntax.RequiresModifier {
     public Static () {
     
     }

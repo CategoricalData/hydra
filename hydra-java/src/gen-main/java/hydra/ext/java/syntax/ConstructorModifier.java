@@ -39,10 +39,10 @@ public abstract class ConstructorModifier {
     }
   }
   
-  public static final class Annotation extends ConstructorModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.ConstructorModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -66,7 +66,7 @@ public abstract class ConstructorModifier {
     }
   }
   
-  public static final class Public extends ConstructorModifier {
+  public static final class Public extends hydra.ext.java.syntax.ConstructorModifier {
     public Public () {
     
     }
@@ -91,7 +91,7 @@ public abstract class ConstructorModifier {
     }
   }
   
-  public static final class Protected extends ConstructorModifier {
+  public static final class Protected extends hydra.ext.java.syntax.ConstructorModifier {
     public Protected () {
     
     }
@@ -116,7 +116,7 @@ public abstract class ConstructorModifier {
     }
   }
   
-  public static final class Private extends ConstructorModifier {
+  public static final class Private extends hydra.ext.java.syntax.ConstructorModifier {
     public Private () {
     
     }

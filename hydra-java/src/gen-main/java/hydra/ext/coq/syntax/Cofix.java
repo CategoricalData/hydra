@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Cofix {
-  public final CofixBody body;
+  public final hydra.ext.coq.syntax.CofixBody body;
   
-  public final java.util.Optional<CofixQual> qual;
+  public final java.util.Optional<hydra.ext.coq.syntax.CofixQual> qual;
   
-  public Cofix (CofixBody body, java.util.Optional<CofixQual> qual) {
+  public Cofix (hydra.ext.coq.syntax.CofixBody body, java.util.Optional<hydra.ext.coq.syntax.CofixQual> qual) {
     this.body = body;
     this.qual = qual;
   }
@@ -24,11 +24,11 @@ public class Cofix {
     return 2 * body.hashCode() + 3 * qual.hashCode();
   }
   
-  public Cofix withBody(CofixBody body) {
+  public Cofix withBody(hydra.ext.coq.syntax.CofixBody body) {
     return new Cofix(body, qual);
   }
   
-  public Cofix withQual(java.util.Optional<CofixQual> qual) {
+  public Cofix withQual(java.util.Optional<hydra.ext.coq.syntax.CofixQual> qual) {
     return new Cofix(body, qual);
   }
 }

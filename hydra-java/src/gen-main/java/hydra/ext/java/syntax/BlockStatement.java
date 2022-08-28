@@ -33,10 +33,10 @@ public abstract class BlockStatement {
     }
   }
   
-  public static final class LocalVariableDeclaration extends BlockStatement {
-    public final LocalVariableDeclarationStatement value;
+  public static final class LocalVariableDeclaration extends hydra.ext.java.syntax.BlockStatement {
+    public final hydra.ext.java.syntax.LocalVariableDeclarationStatement value;
     
-    public LocalVariableDeclaration (LocalVariableDeclarationStatement value) {
+    public LocalVariableDeclaration (hydra.ext.java.syntax.LocalVariableDeclarationStatement value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class BlockStatement {
     }
   }
   
-  public static final class Class_ extends BlockStatement {
-    public final ClassDeclaration value;
+  public static final class Class_ extends hydra.ext.java.syntax.BlockStatement {
+    public final hydra.ext.java.syntax.ClassDeclaration value;
     
-    public Class_ (ClassDeclaration value) {
+    public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class BlockStatement {
     }
   }
   
-  public static final class Statement extends BlockStatement {
-    public final Statement value;
+  public static final class Statement extends hydra.ext.java.syntax.BlockStatement {
+    public final hydra.ext.java.syntax.Statement value;
     
-    public Statement (Statement value) {
+    public Statement (hydra.ext.java.syntax.Statement value) {
       this.value = value;
     }
     

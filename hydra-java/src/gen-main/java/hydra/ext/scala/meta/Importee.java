@@ -51,7 +51,7 @@ public abstract class Importee {
     }
   }
   
-  public static final class Wildcard extends Importee {
+  public static final class Wildcard extends hydra.ext.scala.meta.Importee {
     public Wildcard () {
     
     }
@@ -76,10 +76,10 @@ public abstract class Importee {
     }
   }
   
-  public static final class Given extends Importee {
-    public final Importee_Given value;
+  public static final class Given extends hydra.ext.scala.meta.Importee {
+    public final hydra.ext.scala.meta.Importee_Given value;
     
-    public Given (Importee_Given value) {
+    public Given (hydra.ext.scala.meta.Importee_Given value) {
       this.value = value;
     }
     
@@ -103,7 +103,7 @@ public abstract class Importee {
     }
   }
   
-  public static final class GivenAll extends Importee {
+  public static final class GivenAll extends hydra.ext.scala.meta.Importee {
     public GivenAll () {
     
     }
@@ -128,10 +128,10 @@ public abstract class Importee {
     }
   }
   
-  public static final class Name extends Importee {
-    public final Importee_Name value;
+  public static final class Name extends hydra.ext.scala.meta.Importee {
+    public final hydra.ext.scala.meta.Importee_Name value;
     
-    public Name (Importee_Name value) {
+    public Name (hydra.ext.scala.meta.Importee_Name value) {
       this.value = value;
     }
     
@@ -155,10 +155,10 @@ public abstract class Importee {
     }
   }
   
-  public static final class Rename extends Importee {
-    public final Importee_Rename value;
+  public static final class Rename extends hydra.ext.scala.meta.Importee {
+    public final hydra.ext.scala.meta.Importee_Rename value;
     
-    public Rename (Importee_Rename value) {
+    public Rename (hydra.ext.scala.meta.Importee_Rename value) {
       this.value = value;
     }
     
@@ -182,10 +182,10 @@ public abstract class Importee {
     }
   }
   
-  public static final class Unimport extends Importee {
-    public final Importee_Unimport value;
+  public static final class Unimport extends hydra.ext.scala.meta.Importee {
+    public final hydra.ext.scala.meta.Importee_Unimport value;
     
-    public Unimport (Importee_Unimport value) {
+    public Unimport (hydra.ext.scala.meta.Importee_Unimport value) {
       this.value = value;
     }
     

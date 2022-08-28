@@ -45,7 +45,7 @@ public abstract class IntegralType {
     }
   }
   
-  public static final class Byte_ extends IntegralType {
+  public static final class Byte_ extends hydra.ext.java.syntax.IntegralType {
     public Byte_ () {
     
     }
@@ -70,7 +70,7 @@ public abstract class IntegralType {
     }
   }
   
-  public static final class Short_ extends IntegralType {
+  public static final class Short_ extends hydra.ext.java.syntax.IntegralType {
     public Short_ () {
     
     }
@@ -95,7 +95,7 @@ public abstract class IntegralType {
     }
   }
   
-  public static final class Int extends IntegralType {
+  public static final class Int extends hydra.ext.java.syntax.IntegralType {
     public Int () {
     
     }
@@ -120,7 +120,7 @@ public abstract class IntegralType {
     }
   }
   
-  public static final class Long_ extends IntegralType {
+  public static final class Long_ extends hydra.ext.java.syntax.IntegralType {
     public Long_ () {
     
     }
@@ -145,7 +145,7 @@ public abstract class IntegralType {
     }
   }
   
-  public static final class Char extends IntegralType {
+  public static final class Char extends hydra.ext.java.syntax.IntegralType {
     public Char () {
     
     }

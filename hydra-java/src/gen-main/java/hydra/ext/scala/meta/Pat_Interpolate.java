@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Interpolate {
-  public final Data_Name prefix;
+  public final hydra.ext.scala.meta.Data_Name prefix;
   
-  public final java.util.List<Lit> parts;
+  public final java.util.List<hydra.ext.scala.meta.Lit> parts;
   
-  public Pat_Interpolate (Data_Name prefix, java.util.List<Lit> parts) {
+  public Pat_Interpolate (hydra.ext.scala.meta.Data_Name prefix, java.util.List<hydra.ext.scala.meta.Lit> parts) {
     this.prefix = prefix;
     this.parts = parts;
   }
@@ -24,11 +24,11 @@ public class Pat_Interpolate {
     return 2 * prefix.hashCode() + 3 * parts.hashCode();
   }
   
-  public Pat_Interpolate withPrefix(Data_Name prefix) {
+  public Pat_Interpolate withPrefix(hydra.ext.scala.meta.Data_Name prefix) {
     return new Pat_Interpolate(prefix, parts);
   }
   
-  public Pat_Interpolate withParts(java.util.List<Lit> parts) {
+  public Pat_Interpolate withParts(java.util.List<hydra.ext.scala.meta.Lit> parts) {
     return new Pat_Interpolate(prefix, parts);
   }
 }

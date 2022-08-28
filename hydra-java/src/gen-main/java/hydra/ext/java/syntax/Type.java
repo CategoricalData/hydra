@@ -27,10 +27,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Primitive extends Type {
-    public final PrimitiveTypeWithAnnotations value;
+  public static final class Primitive extends hydra.ext.java.syntax.Type {
+    public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value;
     
-    public Primitive (PrimitiveTypeWithAnnotations value) {
+    public Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Reference extends Type {
-    public final ReferenceType value;
+  public static final class Reference extends hydra.ext.java.syntax.Type {
+    public final hydra.ext.java.syntax.ReferenceType value;
     
-    public Reference (ReferenceType value) {
+    public Reference (hydra.ext.java.syntax.ReferenceType value) {
       this.value = value;
     }
     

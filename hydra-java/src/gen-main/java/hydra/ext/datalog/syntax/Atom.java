@@ -1,11 +1,11 @@
 package hydra.ext.datalog.syntax;
 
 public class Atom {
-  public final Relation relation;
+  public final hydra.ext.datalog.syntax.Relation relation;
   
-  public final TermList termList;
+  public final hydra.ext.datalog.syntax.TermList termList;
   
-  public Atom (Relation relation, TermList termList) {
+  public Atom (hydra.ext.datalog.syntax.Relation relation, hydra.ext.datalog.syntax.TermList termList) {
     this.relation = relation;
     this.termList = termList;
   }
@@ -24,11 +24,11 @@ public class Atom {
     return 2 * relation.hashCode() + 3 * termList.hashCode();
   }
   
-  public Atom withRelation(Relation relation) {
+  public Atom withRelation(hydra.ext.datalog.syntax.Relation relation) {
     return new Atom(relation, termList);
   }
   
-  public Atom withTermList(TermList termList) {
+  public Atom withTermList(hydra.ext.datalog.syntax.TermList termList) {
     return new Atom(relation, termList);
   }
 }

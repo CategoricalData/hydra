@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ForUpdate {
-  public final java.util.List<StatementExpression> value;
+  public final java.util.List<hydra.ext.java.syntax.StatementExpression> value;
   
-  public ForUpdate (java.util.List<StatementExpression> value) {
+  public ForUpdate (java.util.List<hydra.ext.java.syntax.StatementExpression> value) {
     this.value = value;
   }
   

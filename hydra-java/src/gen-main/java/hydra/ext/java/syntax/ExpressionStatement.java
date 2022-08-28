@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ExpressionStatement {
-  public final StatementExpression value;
+  public final hydra.ext.java.syntax.StatementExpression value;
   
-  public ExpressionStatement (StatementExpression value) {
+  public ExpressionStatement (hydra.ext.java.syntax.StatementExpression value) {
     this.value = value;
   }
   
