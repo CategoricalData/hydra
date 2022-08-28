@@ -82,9 +82,9 @@ public abstract class Function<M> {
     /**
      * An elimination for any of a few term variants
      */
-    public final Elimination<M> value;
+    public final hydra.core.Elimination<M> value;
     
-    public Elimination (Elimination<M> value) {
+    public Elimination (hydra.core.Elimination<M> value) {
       this.value = value;
     }
     
@@ -115,9 +115,9 @@ public abstract class Function<M> {
     /**
      * A function abstraction (lambda)
      */
-    public final Lambda<M> value;
+    public final hydra.core.Lambda<M> value;
     
-    public Lambda (Lambda<M> value) {
+    public Lambda (hydra.core.Lambda<M> value) {
       this.value = value;
     }
     

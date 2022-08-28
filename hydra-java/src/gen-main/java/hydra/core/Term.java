@@ -142,9 +142,9 @@ public abstract class Term<M> {
     /**
      * A function application
      */
-    public final Application<M> value;
+    public final hydra.core.Application<M> value;
 
-    public Application (Application<M> value) {
+    public Application (hydra.core.Application<M> value) {
       this.value = value;
     }
 
@@ -175,9 +175,9 @@ public abstract class Term<M> {
     /**
      * A literal value
      */
-    public final Literal value;
+    public final hydra.core.Literal value;
 
-    public Literal (Literal value) {
+    public Literal (hydra.core.Literal value) {
       this.value = value;
     }
 
@@ -241,9 +241,9 @@ public abstract class Term<M> {
     /**
      * A function term
      */
-    public final Function<M> value;
+    public final hydra.core.Function<M> value;
 
-    public Function (Function<M> value) {
+    public Function (hydra.core.Function<M> value) {
       this.value = value;
     }
 
@@ -268,9 +268,9 @@ public abstract class Term<M> {
   }
 
   public static final class Let<M> extends Term<M> {
-    public final Let<M> value;
+    public final hydra.core.Let<M> value;
 
-    public Let (Let<M> value) {
+    public Let (hydra.core.Let<M> value) {
       this.value = value;
     }
 
@@ -427,9 +427,9 @@ public abstract class Term<M> {
     /**
      * A record term
      */
-    public final Record<M> value;
+    public final hydra.core.Record<M> value;
 
-    public Record (Record<M> value) {
+    public Record (hydra.core.Record<M> value) {
       this.value = value;
     }
 
@@ -493,9 +493,9 @@ public abstract class Term<M> {
     /**
      * A union term
      */
-    public final Union<M> value;
+    public final hydra.core.Union<M> value;
 
-    public Union (Union<M> value) {
+    public Union (hydra.core.Union<M> value) {
       this.value = value;
     }
 
@@ -526,9 +526,9 @@ public abstract class Term<M> {
     /**
      * A variable reference
      */
-    public final Variable value;
+    public final hydra.core.Variable value;
 
-    public Variable (Variable value) {
+    public Variable (hydra.core.Variable value) {
       this.value = value;
     }
 
