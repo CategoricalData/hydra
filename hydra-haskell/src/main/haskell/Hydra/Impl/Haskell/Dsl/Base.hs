@@ -27,8 +27,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-el :: Element a -> GraphFlow Meta (Graph.Element Meta)
-el (Element name (Data term)) = do
+el :: Definition a -> GraphFlow Meta (Graph.Element Meta)
+el (Definition name (Datum term)) = do
     t <- findType
     let schemaTerm = encodeType t
     return $ Graph.Element name schemaTerm term
@@ -40,13 +40,13 @@ el (Element name (Data term)) = do
         Just t -> return t
         Nothing -> typeSchemeType . snd <$> inferType term
 
-(<.>) :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
+(<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
 
-($$) :: Data (a -> b) -> Data a -> Data b
+($$) :: Datum (a -> b) -> Datum a -> Datum b
 f $$ x = apply f x
 
-(@@) :: Data (a -> b) -> Data a -> Data b
+(@@) :: Datum (a -> b) -> Datum a -> Datum b
 f @@ x = apply f x
 
 infixr 0 @->
@@ -54,122 +54,122 @@ infixr 0 @->
 x @-> y = (x, y)
 
 infixr 0 -->
-(-->) :: Case a -> Data (a -> b) -> Field Meta
+(-->) :: Case a -> Datum (a -> b) -> Field Meta
 c --> t = caseField c t
 
-(++) :: Data String -> Data String -> Data String
+(++) :: Datum String -> Datum String -> Datum String
 l ++ r = Strings.cat @@ list [l, r]
 
-apply :: Data (a -> b) -> Data a -> Data b
-apply (Data lhs) (Data rhs) = Data $ Terms.apply lhs rhs
+apply :: Datum (a -> b) -> Datum a -> Datum b
+apply (Datum lhs) (Datum rhs) = Datum $ Terms.apply lhs rhs
 
-apply2 :: Data (a -> b -> c) -> Data a -> Data b -> Data c
-apply2 (Data f) (Data a1) (Data a2) = Data $ Terms.apply (Terms.apply f a1) a2
+apply2 :: Datum (a -> b -> c) -> Datum a -> Datum b -> Datum c
+apply2 (Datum f) (Datum a1) (Datum a2) = Datum $ Terms.apply (Terms.apply f a1) a2
 
-caseField :: Case a -> Data (a -> b) -> Field Meta -- Data (u -> b)
-caseField (Case fname) (Data f) = Field fname $ Terms.lambda "x" $ Terms.apply f (Terms.variable "x")
+caseField :: Case a -> Datum (a -> b) -> Field Meta -- Datum (u -> b)
+caseField (Case fname) (Datum f) = Field fname $ Terms.lambda "x" $ Terms.apply f (Terms.variable "x")
 
-compareTo :: Data a -> Data (a -> Bool)
-compareTo (Data term) = Data $ Terms.compareTo term
+compareTo :: Datum a -> Datum (a -> Bool)
+compareTo (Datum term) = Datum $ Terms.compareTo term
 
-compose :: Data (b -> c) -> Data (a -> b) -> Data (a -> c)
-compose (Data f) (Data g) = Data $ Terms.lambda "x" $ Terms.apply f (Terms.apply g $ Terms.variable "x")
+compose :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
+compose (Datum f) (Datum g) = Datum $ Terms.lambda "x" $ Terms.apply f (Terms.apply g $ Terms.variable "x")
 
-constant :: Data a -> Data (b -> a)
-constant (Data term) = Data $ Terms.lambda "_" term
+constant :: Datum a -> Datum (b -> a)
+constant (Datum term) = Datum $ Terms.lambda "_" term
 
-denom :: Name -> Data (a -> b)
-denom = Data . Terms.eliminateNominal
+denom :: Name -> Datum (a -> b)
+denom = Datum . Terms.eliminateNominal
 
-delta :: Data (Ref a -> a)
-delta = Data Terms.delta
+delta :: Datum (Reference a -> a)
+delta = Datum Terms.delta
 
-doc :: String -> Data a -> Data a
-doc s (Data term) = Data $ setTermDescription Standard.coreContext (Just s) term
+doc :: String -> Datum a -> Datum a
+doc s (Datum term) = Datum $ setTermDescription Standard.coreContext (Just s) term
 
-element :: Element a -> Data (Ref a)
-element (Element name _) = Data $ Terms.element name
+element :: Definition a -> Datum (Reference a)
+element (Definition name _) = Datum $ Terms.element name
 
-field :: FieldName -> Data a -> Field Meta
-field fname (Data val) = Field fname val
+field :: FieldName -> Datum a -> Field Meta
+field fname (Datum val) = Field fname val
 
-function :: Type Meta -> Type Meta -> Data a -> Data a
+function :: Type Meta -> Type Meta -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
-lambda :: String -> Data x -> Data (a -> b)
-lambda v (Data body) = Data $ Terms.lambda v body
+lambda :: String -> Datum x -> Datum (a -> b)
+lambda v (Datum body) = Datum $ Terms.lambda v body
 
---letTerm :: Var a -> Data a -> Data b -> Data b
---letTerm (Var k) (Data v) (Data env) = Data $ Terms.letTerm (Variable k) v env
+--letTerm :: Var a -> Datum a -> Datum b -> Datum b
+--letTerm (Var k) (Datum v) (Datum env) = Datum $ Terms.letTerm (Variable k) v env
 
-list :: [Data a] -> Data [a]
-list els = Data $ Terms.list (unData <$> els)
+list :: [Datum a] -> Datum [a]
+list els = Datum $ Terms.list (unDatum <$> els)
 
-map :: M.Map (Data a) (Data b) -> Data (M.Map a b)
-map = Data . Terms.map . M.fromList . fmap fromData . M.toList
+map :: M.Map (Datum a) (Datum b) -> Datum (M.Map a b)
+map = Datum . Terms.map . M.fromList . fmap fromDatum . M.toList
   where
-    fromData (Data k, Data v) = (k, v)
+    fromDatum (Datum k, Datum v) = (k, v)
 
-matchData :: Name -> [(FieldName, Data (x -> b))] -> Data (a -> b)
-matchData name pairs = Data $ Terms.cases name (toField <$> pairs)
+matchData :: Name -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
+matchData name pairs = Datum $ Terms.cases name (toField <$> pairs)
   where
-    toField (fname, Data term) = Field fname term
+    toField (fname, Datum term) = Field fname term
 
-matchOpt :: Data b -> Data (a -> b) -> Data (Maybe a -> b)
-matchOpt (Data n) (Data j) = Data $ Terms.matchOptional n j
+matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
+matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
-match :: Name -> Type Meta -> [Field Meta] -> Data (u -> b)
-match name cod fields = function (Types.nominal name) cod $ Data $ Terms.cases name fields
+match :: Name -> Type Meta -> [Field Meta] -> Datum (u -> b)
+match name cod fields = function (Types.nominal name) cod $ Datum $ Terms.cases name fields
 
-matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Data (a -> b)
+matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Datum (a -> b)
 matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
-matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Data (a -> b)
+matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Datum (a -> b)
 matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
   where
-    toCase (fromName, fld) = (fromName, constant $ Data $ Terms.union codName fld)
+    toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.union codName fld)
 
 -- Note: the phantom types provide no guarantee of type safety in this case
-nom :: Name -> Data a -> Data b
-nom name (Data term) = Data $ Terms.nominal name term
+nom :: Name -> Datum a -> Datum b
+nom name (Datum term) = Datum $ Terms.nominal name term
 
-opt :: Maybe (Data a) -> Data (Maybe a)
-opt mc = Data $ Terms.optional (unData <$> mc)
+opt :: Maybe (Datum a) -> Datum (Maybe a)
+opt mc = Datum $ Terms.optional (unDatum <$> mc)
 
-primitive :: Name -> Data a
-primitive = Data . Terms.primitive
+primitive :: Name -> Datum a
+primitive = Datum . Terms.primitive
 
-project :: Name -> Type Meta -> FieldName -> Data (a -> b)
-project name cod fname = Data $ Terms.projection name fname
+project :: Name -> Type Meta -> FieldName -> Datum (a -> b)
+project name cod fname = Datum $ Terms.projection name fname
 
-record :: Name -> [Field Meta] -> Data a
-record name fields = Data $ Terms.record name fields
+record :: Name -> [Field Meta] -> Datum a
+record name fields = Datum $ Terms.record name fields
 
-ref :: Element a -> Data a
+ref :: Definition a -> Datum a
 ref e = delta @@ element e
 
-set :: S.Set (Data a) -> Data (S.Set a)
-set = Data . Terms.set . S.fromList . fmap unData . S.toList
+set :: S.Set (Datum a) -> Datum (S.Set a)
+set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
 
-typed :: Type Meta -> Data a -> Data a
-typed t (Data term) = Data $ setTermType Standard.coreContext (Just t) term
+typed :: Type Meta -> Datum a -> Datum a
+typed t (Datum term) = Datum $ setTermType Standard.coreContext (Just t) term
 
-union :: Name -> FieldName -> Data a -> Data b
-union name fname (Data term) = Data $ Terms.union name (Field fname term)
+union :: Name -> FieldName -> Datum a -> Datum b
+union name fname (Datum term) = Datum $ Terms.union name (Field fname term)
 
-union2 :: Name -> FieldName -> Data (a -> b)
+union2 :: Name -> FieldName -> Datum (a -> b)
 union2 name fname = lambda "x" $ typed (Types.nominal name) $ union name fname $ var "x"
 
-unit :: Data a
-unit = Data Terms.unit
+unit :: Datum a
+unit = Datum Terms.unit
 
-unitVariant :: Name -> FieldName -> Data a
-unitVariant name fname = typed (Types.nominal name) $ Data $ Terms.union name $ Field fname Terms.unit
+unitVariant :: Name -> FieldName -> Datum a
+unitVariant name fname = typed (Types.nominal name) $ Datum $ Terms.union name $ Field fname Terms.unit
 
-var :: String -> Data a
-var v = Data $ Terms.variable v
+var :: String -> Datum a
+var v = Datum $ Terms.variable v
 
-variant :: Name -> FieldName -> Data a -> Data b
-variant name fname (Data term) = typed (Types.nominal name) $ Data $ Terms.union name $ Field fname term
+variant :: Name -> FieldName -> Datum a -> Datum b
+variant name fname (Datum term) = typed (Types.nominal name) $ Datum $ Terms.union name $ Field fname term

@@ -5,23 +5,23 @@ import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Sources.Libraries
 
 
-add :: Data (Int -> Int -> Int)
-add = Data $ Terms.primitive _math_add
+add :: Datum (Int -> Int -> Int)
+add = Datum $ Terms.primitive _math_add
 
-div :: Data (Int -> Int -> Int)
-div = Data $ Terms.primitive _math_div
+div :: Datum (Int -> Int -> Int)
+div = Datum $ Terms.primitive _math_div
 
-mod :: Data (Int -> Int -> Int)
-mod = Data $ Terms.primitive _math_mod
+mod :: Datum (Int -> Int -> Int)
+mod = Datum $ Terms.primitive _math_mod
 
-mul :: Data (Int -> Int -> Int)
-mul = Data $ Terms.primitive _math_mul
+mul :: Datum (Int -> Int -> Int)
+mul = Datum $ Terms.primitive _math_mul
 
-neg :: Data (Int -> Int)
-neg = Data $ Terms.primitive _math_neg
+neg :: Datum (Int -> Int)
+neg = Datum $ Terms.primitive _math_neg
 
-rem :: Data (Int -> Int -> Int)
-rem = Data $ Terms.primitive _math_rem
+rem :: Datum (Int -> Int -> Int)
+rem = Datum $ Terms.primitive _math_rem
 
-sub :: Data (Int -> Int -> Int)
-sub = Data $ Terms.primitive _math_sub
+sub :: Datum (Int -> Int -> Int)
+sub = Datum $ Terms.primitive _math_sub
