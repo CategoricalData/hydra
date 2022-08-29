@@ -112,9 +112,6 @@ set = TypeSet
 string :: Type m
 string = literal LiteralTypeString
 
-variable :: String -> Type m
-variable = TypeVariable . VariableType
-
 uint16 :: Type m
 uint16 = integer IntegerTypeUint16
 
@@ -132,3 +129,6 @@ union fields = TypeUnion $ RowType placeholderName fields
 
 unit :: Type m
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") []
+
+variable :: String -> Type m
+variable = TypeVariable . VariableType
