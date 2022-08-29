@@ -5,23 +5,23 @@ import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Sources.Libraries
 
 
-concat :: Data ([a] -> a)
-concat = Data $ Terms.primitive _lists_concat
+concat :: Datum ([a] -> a)
+concat = Datum $ Terms.primitive _lists_concat
 
-head :: Data ([a] -> a)
-head = Data $ Terms.primitive _lists_head
+head :: Datum ([a] -> a)
+head = Datum $ Terms.primitive _lists_head
 
-intercalate :: Data ([a] -> [a] -> [a])
-intercalate = Data $ Terms.primitive _lists_intercalate
+intercalate :: Datum ([a] -> [a] -> [a])
+intercalate = Datum $ Terms.primitive _lists_intercalate
 
-intersperse :: Data ([a] -> a -> [a])
-intersperse = Data $ Terms.primitive _lists_intersperse
+intersperse :: Datum ([a] -> a -> [a])
+intersperse = Datum $ Terms.primitive _lists_intersperse
 
-last :: Data ([a] -> a)
-last = Data $ Terms.primitive _lists_last
+last :: Datum ([a] -> a)
+last = Datum $ Terms.primitive _lists_last
 
-length :: Data ([a] -> Int)
-length = Data $ Terms.primitive _lists_length
+length :: Datum ([a] -> Int)
+length = Datum $ Terms.primitive _lists_length
 
---map :: Data ((a -> b) -> [a] -> [b])
---map = Data $ Terms.primitive _lists_map
+--map :: Datum ((a -> b) -> [a] -> [b])
+--map = Datum $ Terms.primitive _lists_map

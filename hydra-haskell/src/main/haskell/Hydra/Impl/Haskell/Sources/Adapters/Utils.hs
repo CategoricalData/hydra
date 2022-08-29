@@ -28,23 +28,23 @@ adapterUtilsModule = do
 adapterUtilsName :: Graph.GraphName
 adapterUtilsName = Graph.GraphName "hydra/adapters/utils"
 
-utils :: String -> Data a -> Element a
-utils = Element . fromQname adapterUtilsName
+utils :: String -> Datum a -> Definition a
+utils = Definition . fromQname adapterUtilsName
 
-describeFloatType :: Element (FloatType -> String)
+describeFloatType :: Definition (FloatType -> String)
 describeFloatType = utils "describeFloatType" $
   doc "Display a floating-point type as a string" $
   function (Types.nominal _FloatType) Types.string $
   lambda "t" $ (ref describePrecision <.> ref floatTypePrecision @@ var "t") ++ string " floating-point numbers"
 
-describeIntegerType :: Element (IntegerType -> String)
+describeIntegerType :: Definition (IntegerType -> String)
 describeIntegerType = utils "describeIntegerType" $
   doc "Display an integer type as a string" $
   function (Types.nominal _IntegerType) Types.string $
   lambda "t" $ (ref describePrecision <.> ref integerTypePrecision @@ var "t")
     ++ string " integers"
 
-describeLiteralType :: Element (LiteralType -> String)
+describeLiteralType :: Definition (LiteralType -> String)
 describeLiteralType = utils "describeLiteralType" $
   doc "Display a literal type as a string" $
   match _LiteralType Types.string [
@@ -54,7 +54,7 @@ describeLiteralType = utils "describeLiteralType" $
     Case _LiteralType_integer --> ref describeIntegerType,
     Case _LiteralType_string  --> constant $ string "character strings"]
 
-describePrecision :: Element (Precision -> String)
+describePrecision :: Definition (Precision -> String)
 describePrecision = utils "describePrecision" $
   doc "Display numeric precision as a string" $
   match _Precision Types.string [
@@ -62,7 +62,7 @@ describePrecision = utils "describePrecision" $
     Case _Precision_bits      --> lambda "bits" $
       showInt32 @@ var "bits" ++ string "-bit"]
 
-describeType :: Element (Type m -> string)
+describeType :: Definition (Type m -> string)
 describeType = utils "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.nominal _Type) (Types.variable "m")) Types.string $
