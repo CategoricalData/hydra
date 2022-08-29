@@ -42,10 +42,10 @@ hydraBasicsModule = do
 hydraBasicsName :: Graph.GraphName
 hydraBasicsName = Graph.GraphName "hydra/basics"
 
-basics :: String -> Data a -> Element a
-basics = Element . fromQname hydraBasicsName
+basics :: String -> Datum a -> Definition a
+basics = Definition . fromQname hydraBasicsName
 
-eliminationVariant :: Element (Elimination m -> EliminationVariant)
+eliminationVariant :: Definition (Elimination m -> EliminationVariant)
 eliminationVariant = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   typed (Types.function (Types.apply (Types.nominal _Elimination) (Types.variable "m")) (Types.nominal _EliminationVariant)) $
@@ -56,7 +56,7 @@ eliminationVariant = basics "eliminationVariant" $
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union]
 
-eliminationVariants :: Element [EliminationVariant]
+eliminationVariants :: Definition [EliminationVariant]
 eliminationVariants = basics "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   typed (Types.list $ Types.nominal _EliminationVariant) $
@@ -67,7 +67,7 @@ eliminationVariants = basics "eliminationVariants" $
     _EliminationVariant_record,
     _EliminationVariant_union]
 
-floatTypePrecision :: Element (FloatType -> Precision)
+floatTypePrecision :: Definition (FloatType -> Precision)
 floatTypePrecision = basics "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   matchToUnion _FloatType _Precision [
@@ -75,7 +75,7 @@ floatTypePrecision = basics "floatTypePrecision" $
     _FloatType_float32  @-> field _Precision_bits $ int 32,
     _FloatType_float64  @-> field _Precision_bits $ int 64]
 
-floatTypes :: Element [FloatType]
+floatTypes :: Definition [FloatType]
 floatTypes = basics "floatTypes" $
   doc "All floating-point types in a canonical order" $
   typed (Types.list $ Types.nominal _FloatType) $
@@ -84,7 +84,7 @@ floatTypes = basics "floatTypes" $
     _FloatType_float32,
     _FloatType_float64]
 
-floatValueType :: Element (FloatValue -> FloatType)
+floatValueType :: Definition (FloatValue -> FloatType)
 floatValueType = basics "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   matchToEnum _FloatValue _FloatType [
@@ -92,7 +92,7 @@ floatValueType = basics "floatValueType" $
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
 
-functionVariant :: Element (Function m -> FunctionVariant)
+functionVariant :: Definition (Function m -> FunctionVariant)
 functionVariant = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   typed (Types.function (Types.apply (Types.nominal _Function) (Types.variable "m")) (Types.nominal _FunctionVariant)) $
@@ -102,7 +102,7 @@ functionVariant = basics "functionVariant" $
     _Function_lambda      @-> _FunctionVariant_lambda,
     _Function_primitive   @-> _FunctionVariant_primitive]
 
-functionVariants :: Element [FunctionVariant]
+functionVariants :: Definition [FunctionVariant]
 functionVariants = basics "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
     typed (Types.list $ Types.nominal _FunctionVariant) $
@@ -112,7 +112,7 @@ functionVariants = basics "functionVariants" $
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
 
-integerTypeIsSigned :: Element (IntegerType -> Bool)
+integerTypeIsSigned :: Definition (IntegerType -> Bool)
 integerTypeIsSigned = basics "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   matchData _IntegerType [
@@ -126,7 +126,7 @@ integerTypeIsSigned = basics "integerTypeIsSigned" $
     _IntegerType_uint32 @-> constant false,
     _IntegerType_uint64 @-> constant false]
 
-integerTypePrecision :: Element (IntegerType -> Precision)
+integerTypePrecision :: Definition (IntegerType -> Precision)
 integerTypePrecision = basics "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   matchToUnion _IntegerType _Precision [
@@ -140,7 +140,7 @@ integerTypePrecision = basics "integerTypePrecision" $
     _IntegerType_uint32 @-> field _Precision_bits $ int 32,
     _IntegerType_uint64 @-> field _Precision_bits $ int 64]
 
-integerTypes :: Element [IntegerType]
+integerTypes :: Definition [IntegerType]
 integerTypes = basics "integerTypes" $
     doc "All integer types, in a canonical order" $
     typed (Types.list $ Types.nominal _IntegerType) $
@@ -155,7 +155,7 @@ integerTypes = basics "integerTypes" $
       _IntegerType_uint32,
       _IntegerType_uint64]
 
-integerValueType :: Element (IntegerValue -> IntegerType)
+integerValueType :: Definition (IntegerValue -> IntegerType)
 integerValueType = basics "integerValueType" $
   doc "Find the integer type for a given integer value" $
   matchToEnum _IntegerValue _IntegerType [
@@ -169,7 +169,7 @@ integerValueType = basics "integerValueType" $
     _IntegerValue_uint32 @-> _IntegerType_uint32,
     _IntegerValue_uint64 @-> _IntegerType_uint64]
 
-literalType :: Element (Literal -> LiteralType)
+literalType :: Definition (Literal -> LiteralType)
 literalType = basics "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal (Types.nominal _LiteralType) [
@@ -179,7 +179,7 @@ literalType = basics "literalType" $
     Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueType,
     Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
-literalTypeVariant :: Element (LiteralType -> LiteralVariant)
+literalTypeVariant :: Definition (LiteralType -> LiteralVariant)
 literalTypeVariant = basics "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   matchToEnum _LiteralType _LiteralVariant [
@@ -189,13 +189,13 @@ literalTypeVariant = basics "literalTypeVariant" $
     _LiteralType_integer @-> _LiteralVariant_integer,
     _LiteralType_string  @-> _LiteralVariant_string]
 
-literalVariant :: Element (Literal -> LiteralVariant)
+literalVariant :: Definition (Literal -> LiteralVariant)
 literalVariant = basics "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
   function (Types.nominal _Literal) (Types.nominal _LiteralVariant) $
   ref literalTypeVariant <.> ref literalType
 
-literalVariants :: Element [LiteralVariant]
+literalVariants :: Definition [LiteralVariant]
 literalVariants = basics "literalVariants" $
   doc "All literal variants, in a canonical order" $
   typed (Types.list $ Types.nominal _LiteralVariant) $
@@ -206,7 +206,7 @@ literalVariants = basics "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-qname :: Element (Graph.GraphName -> String -> Name)
+qname :: Definition (Graph.GraphName -> String -> Name)
 qname = basics "qname" $
   doc "Construct a qualified (dot-separated) name" $
   function (Types.nominal Graph._GraphName) (Types.function Types.string $ Types.nominal _Name) $
@@ -216,7 +216,7 @@ qname = basics "qname" $
         apply cat $
           list [apply (denom Graph._GraphName) (var "ns"), string ".", var "name"]
 
-termVariant :: Element (Term m -> TermVariant)
+termVariant :: Definition (Term m -> TermVariant)
 termVariant = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.nominal _Term) (Types.variable "m")) (Types.nominal _TermVariant) $
@@ -237,7 +237,7 @@ termVariant = basics "termVariant" $
       _Term_variable        @-> _TermVariant_variable])
     (var "term")
 
-termVariants :: Element [TermVariant]
+termVariants :: Definition [TermVariant]
 termVariants = basics "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TermVariant) $
@@ -257,13 +257,13 @@ termVariants = basics "termVariants" $
     _TermVariant_variable]
 
 -- TODO: remove once there are other polymorphic functions in use
-testLists :: Element ([[a]] -> Int)
+testLists :: Definition ([[a]] -> Int)
 testLists = basics "testLists" $
   doc "TODO: temporary. Just a token polymorphic function for testing" $
   function (Types.list $ Types.list $ Types.variable "a") Types.int32 $
   (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
 
-typeVariant :: Element (Type m -> TypeVariant)
+typeVariant :: Definition (Type m -> TypeVariant)
 typeVariant = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.nominal _Type) (Types.variable "m")) (Types.nominal _TypeVariant) $
@@ -285,7 +285,7 @@ typeVariant = basics "typeVariant" $
       _Type_variable    @-> _TypeVariant_variable])
     (var "typ")
 
-typeVariants :: Element [TypeVariant]
+typeVariants :: Definition [TypeVariant]
 typeVariants = basics "typeVariants" $
   doc "All type variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TypeVariant) $

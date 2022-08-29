@@ -99,10 +99,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Var extends Pat {
-    public final Pat_Var value;
+  public static final class Var extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Var value;
     
-    public Var (Pat_Var value) {
+    public Var (hydra.ext.scala.meta.Pat_Var value) {
       this.value = value;
     }
     
@@ -126,7 +126,7 @@ public abstract class Pat {
     }
   }
   
-  public static final class Wildcard extends Pat {
+  public static final class Wildcard extends hydra.ext.scala.meta.Pat {
     public Wildcard () {
     
     }
@@ -151,7 +151,7 @@ public abstract class Pat {
     }
   }
   
-  public static final class SeqWildcard extends Pat {
+  public static final class SeqWildcard extends hydra.ext.scala.meta.Pat {
     public SeqWildcard () {
     
     }
@@ -176,10 +176,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Bind extends Pat {
-    public final Pat_Bind value;
+  public static final class Bind extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Bind value;
     
-    public Bind (Pat_Bind value) {
+    public Bind (hydra.ext.scala.meta.Pat_Bind value) {
       this.value = value;
     }
     
@@ -203,10 +203,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Alternative extends Pat {
-    public final Pat_Alternative value;
+  public static final class Alternative extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Alternative value;
     
-    public Alternative (Pat_Alternative value) {
+    public Alternative (hydra.ext.scala.meta.Pat_Alternative value) {
       this.value = value;
     }
     
@@ -230,10 +230,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Tuple extends Pat {
-    public final Pat_Tuple value;
+  public static final class Tuple extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Tuple value;
     
-    public Tuple (Pat_Tuple value) {
+    public Tuple (hydra.ext.scala.meta.Pat_Tuple value) {
       this.value = value;
     }
     
@@ -257,10 +257,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Repeated extends Pat {
-    public final Pat_Repeated value;
+  public static final class Repeated extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Repeated value;
     
-    public Repeated (Pat_Repeated value) {
+    public Repeated (hydra.ext.scala.meta.Pat_Repeated value) {
       this.value = value;
     }
     
@@ -284,10 +284,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Extract extends Pat {
-    public final Pat_Extract value;
+  public static final class Extract extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Extract value;
     
-    public Extract (Pat_Extract value) {
+    public Extract (hydra.ext.scala.meta.Pat_Extract value) {
       this.value = value;
     }
     
@@ -311,10 +311,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class ExtractInfix extends Pat {
-    public final Pat_ExtractInfix value;
+  public static final class ExtractInfix extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_ExtractInfix value;
     
-    public ExtractInfix (Pat_ExtractInfix value) {
+    public ExtractInfix (hydra.ext.scala.meta.Pat_ExtractInfix value) {
       this.value = value;
     }
     
@@ -338,10 +338,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Interpolate extends Pat {
-    public final Pat_Interpolate value;
+  public static final class Interpolate extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Interpolate value;
     
-    public Interpolate (Pat_Interpolate value) {
+    public Interpolate (hydra.ext.scala.meta.Pat_Interpolate value) {
       this.value = value;
     }
     
@@ -365,10 +365,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Xml extends Pat {
-    public final Pat_Xml value;
+  public static final class Xml extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Xml value;
     
-    public Xml (Pat_Xml value) {
+    public Xml (hydra.ext.scala.meta.Pat_Xml value) {
       this.value = value;
     }
     
@@ -392,10 +392,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Typed extends Pat {
-    public final Pat_Typed value;
+  public static final class Typed extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Typed value;
     
-    public Typed (Pat_Typed value) {
+    public Typed (hydra.ext.scala.meta.Pat_Typed value) {
       this.value = value;
     }
     
@@ -419,10 +419,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Macro extends Pat {
-    public final Pat_Macro value;
+  public static final class Macro extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Macro value;
     
-    public Macro (Pat_Macro value) {
+    public Macro (hydra.ext.scala.meta.Pat_Macro value) {
       this.value = value;
     }
     
@@ -446,10 +446,10 @@ public abstract class Pat {
     }
   }
   
-  public static final class Given extends Pat {
-    public final Pat_Given value;
+  public static final class Given extends hydra.ext.scala.meta.Pat {
+    public final hydra.ext.scala.meta.Pat_Given value;
     
-    public Given (Pat_Given value) {
+    public Given (hydra.ext.scala.meta.Pat_Given value) {
       this.value = value;
     }
     

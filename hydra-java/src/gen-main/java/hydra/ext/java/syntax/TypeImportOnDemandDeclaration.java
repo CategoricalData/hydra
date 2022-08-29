@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class TypeImportOnDemandDeclaration {
-  public final PackageOrTypeName value;
+  public final hydra.ext.java.syntax.PackageOrTypeName value;
   
-  public TypeImportOnDemandDeclaration (PackageOrTypeName value) {
+  public TypeImportOnDemandDeclaration (hydra.ext.java.syntax.PackageOrTypeName value) {
     this.value = value;
   }
   

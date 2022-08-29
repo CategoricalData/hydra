@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class Resource_Local {
-  public final java.util.List<VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
   
-  public final LocalVariableType type;
+  public final hydra.ext.java.syntax.LocalVariableType type;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final Expression expression;
+  public final hydra.ext.java.syntax.Expression expression;
   
-  public Resource_Local (java.util.List<VariableModifier> modifiers, LocalVariableType type, Identifier identifier, Expression expression) {
+  public Resource_Local (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -30,19 +30,19 @@ public class Resource_Local {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * identifier.hashCode() + 7 * expression.hashCode();
   }
   
-  public Resource_Local withModifiers(java.util.List<VariableModifier> modifiers) {
+  public Resource_Local withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
-  public Resource_Local withType(LocalVariableType type) {
+  public Resource_Local withType(hydra.ext.java.syntax.LocalVariableType type) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
-  public Resource_Local withIdentifier(Identifier identifier) {
+  public Resource_Local withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   
-  public Resource_Local withExpression(Expression expression) {
+  public Resource_Local withExpression(hydra.ext.java.syntax.Expression expression) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
 }

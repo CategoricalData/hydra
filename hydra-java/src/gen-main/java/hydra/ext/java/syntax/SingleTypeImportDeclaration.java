@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class SingleTypeImportDeclaration {
-  public final TypeName value;
+  public final hydra.ext.java.syntax.TypeName value;
   
-  public SingleTypeImportDeclaration (TypeName value) {
+  public SingleTypeImportDeclaration (hydra.ext.java.syntax.TypeName value) {
     this.value = value;
   }
   

@@ -57,10 +57,10 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Annotation extends InterfaceMethodModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -84,7 +84,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Public extends InterfaceMethodModifier {
+  public static final class Public extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Public () {
     
     }
@@ -109,7 +109,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Private extends InterfaceMethodModifier {
+  public static final class Private extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Private () {
     
     }
@@ -134,7 +134,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Abstract extends InterfaceMethodModifier {
+  public static final class Abstract extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Abstract () {
     
     }
@@ -159,7 +159,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Default extends InterfaceMethodModifier {
+  public static final class Default extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Default () {
     
     }
@@ -184,7 +184,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Static extends InterfaceMethodModifier {
+  public static final class Static extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Static () {
     
     }
@@ -209,7 +209,7 @@ public abstract class InterfaceMethodModifier {
     }
   }
   
-  public static final class Strictfp extends InterfaceMethodModifier {
+  public static final class Strictfp extends hydra.ext.java.syntax.InterfaceMethodModifier {
     public Strictfp () {
     
     }

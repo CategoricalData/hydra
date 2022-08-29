@@ -27,10 +27,10 @@ public abstract class Operator {
     }
   }
   
-  public static final class Backtick extends Operator {
-    public final QualifiedName value;
+  public static final class Backtick extends hydra.ext.haskell.ast.Operator {
+    public final hydra.ext.haskell.ast.QualifiedName value;
     
-    public Backtick (QualifiedName value) {
+    public Backtick (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Operator {
     }
   }
   
-  public static final class Normal extends Operator {
-    public final QualifiedName value;
+  public static final class Normal extends hydra.ext.haskell.ast.Operator {
+    public final hydra.ext.haskell.ast.QualifiedName value;
     
-    public Normal (QualifiedName value) {
+    public Normal (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
     

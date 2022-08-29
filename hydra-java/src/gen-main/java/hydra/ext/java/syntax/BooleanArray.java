@@ -27,7 +27,7 @@ public abstract class BooleanArray {
     }
   }
   
-  public static final class Simple extends BooleanArray {
+  public static final class Simple extends hydra.ext.java.syntax.BooleanArray {
     public Simple () {
     
     }
@@ -52,10 +52,10 @@ public abstract class BooleanArray {
     }
   }
   
-  public static final class Array extends BooleanArray {
-    public final BooleanArray value;
+  public static final class Array extends hydra.ext.java.syntax.BooleanArray {
+    public final hydra.ext.java.syntax.BooleanArray value;
     
-    public Array (BooleanArray value) {
+    public Array (hydra.ext.java.syntax.BooleanArray value) {
       this.value = value;
     }
     

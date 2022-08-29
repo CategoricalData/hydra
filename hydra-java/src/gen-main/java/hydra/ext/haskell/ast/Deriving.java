@@ -7,9 +7,9 @@ public class Deriving {
   /**
    * A 'deriving' statement
    */
-  public final java.util.List<Name> value;
+  public final java.util.List<hydra.ext.haskell.ast.Name> value;
   
-  public Deriving (java.util.List<Name> value) {
+  public Deriving (java.util.List<hydra.ext.haskell.ast.Name> value) {
     this.value = value;
   }
   

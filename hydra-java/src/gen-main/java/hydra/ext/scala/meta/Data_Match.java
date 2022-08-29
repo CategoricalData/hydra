@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Match {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public final java.util.List<Case> cases;
+  public final java.util.List<hydra.ext.scala.meta.Case> cases;
   
-  public Data_Match (Data expr, java.util.List<Case> cases) {
+  public Data_Match (hydra.ext.scala.meta.Data expr, java.util.List<hydra.ext.scala.meta.Case> cases) {
     this.expr = expr;
     this.cases = cases;
   }
@@ -24,11 +24,11 @@ public class Data_Match {
     return 2 * expr.hashCode() + 3 * cases.hashCode();
   }
   
-  public Data_Match withExpr(Data expr) {
+  public Data_Match withExpr(hydra.ext.scala.meta.Data expr) {
     return new Data_Match(expr, cases);
   }
   
-  public Data_Match withCases(java.util.List<Case> cases) {
+  public Data_Match withCases(java.util.List<hydra.ext.scala.meta.Case> cases) {
     return new Data_Match(expr, cases);
   }
 }

@@ -51,10 +51,10 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class Qualid extends Pattern0 {
-    public final Qualid value;
+  public static final class Qualid extends hydra.ext.coq.syntax.Pattern0 {
+    public final hydra.ext.coq.syntax.Qualid value;
     
-    public Qualid (Qualid value) {
+    public Qualid (hydra.ext.coq.syntax.Qualid value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class QualIdAndPattern extends Pattern0 {
-    public final QualidAndPattern value;
+  public static final class QualIdAndPattern extends hydra.ext.coq.syntax.Pattern0 {
+    public final hydra.ext.coq.syntax.QualidAndPattern value;
     
-    public QualIdAndPattern (QualidAndPattern value) {
+    public QualIdAndPattern (hydra.ext.coq.syntax.QualidAndPattern value) {
       this.value = value;
     }
     
@@ -105,7 +105,7 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class Placeholder extends Pattern0 {
+  public static final class Placeholder extends hydra.ext.coq.syntax.Pattern0 {
     public Placeholder () {
     
     }
@@ -130,10 +130,10 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class Parens extends Pattern0 {
-    public final java.util.List<Pattern> value;
+  public static final class Parens extends hydra.ext.coq.syntax.Pattern0 {
+    public final java.util.List<hydra.ext.coq.syntax.Pattern> value;
     
-    public Parens (java.util.List<Pattern> value) {
+    public Parens (java.util.List<hydra.ext.coq.syntax.Pattern> value) {
       this.value = value;
     }
     
@@ -157,10 +157,10 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class Number_ extends Pattern0 {
-    public final Number_ value;
+  public static final class Number_ extends hydra.ext.coq.syntax.Pattern0 {
+    public final hydra.ext.coq.syntax.Number_ value;
     
-    public Number_ (Number_ value) {
+    public Number_ (hydra.ext.coq.syntax.Number_ value) {
       this.value = value;
     }
     
@@ -184,10 +184,10 @@ public abstract class Pattern0 {
     }
   }
   
-  public static final class String_ extends Pattern0 {
-    public final String_ value;
+  public static final class String_ extends hydra.ext.coq.syntax.Pattern0 {
+    public final hydra.ext.coq.syntax.String_ value;
     
-    public String_ (String_ value) {
+    public String_ (hydra.ext.coq.syntax.String_ value) {
       this.value = value;
     }
     

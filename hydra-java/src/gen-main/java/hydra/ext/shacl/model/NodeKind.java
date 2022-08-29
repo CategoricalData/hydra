@@ -54,7 +54,7 @@ public abstract class NodeKind {
   /**
    * A blank node
    */
-  public static final class BlankNode extends NodeKind {
+  public static final class BlankNode extends hydra.ext.shacl.model.NodeKind {
     /**
      * A blank node
      */
@@ -87,7 +87,7 @@ public abstract class NodeKind {
   /**
    * An IRI
    */
-  public static final class Iri extends NodeKind {
+  public static final class Iri extends hydra.ext.shacl.model.NodeKind {
     /**
      * An IRI
      */
@@ -120,7 +120,7 @@ public abstract class NodeKind {
   /**
    * A literal
    */
-  public static final class Literal extends NodeKind {
+  public static final class Literal extends hydra.ext.shacl.model.NodeKind {
     /**
      * A literal
      */
@@ -153,7 +153,7 @@ public abstract class NodeKind {
   /**
    * A blank node or an IRI
    */
-  public static final class BlankNodeOrIri extends NodeKind {
+  public static final class BlankNodeOrIri extends hydra.ext.shacl.model.NodeKind {
     /**
      * A blank node or an IRI
      */
@@ -186,7 +186,7 @@ public abstract class NodeKind {
   /**
    * A blank node or a literal
    */
-  public static final class BlankNodeOrLiteral extends NodeKind {
+  public static final class BlankNodeOrLiteral extends hydra.ext.shacl.model.NodeKind {
     /**
      * A blank node or a literal
      */
@@ -219,7 +219,7 @@ public abstract class NodeKind {
   /**
    * An IRI or a literal
    */
-  public static final class IriOrLiteral extends NodeKind {
+  public static final class IriOrLiteral extends hydra.ext.shacl.model.NodeKind {
     /**
      * An IRI or a literal
      */

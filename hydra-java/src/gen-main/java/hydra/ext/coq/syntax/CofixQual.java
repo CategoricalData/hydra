@@ -27,10 +27,10 @@ public abstract class CofixQual {
     }
   }
   
-  public static final class In extends CofixQual {
-    public final Term value;
+  public static final class In extends hydra.ext.coq.syntax.CofixQual {
+    public final hydra.ext.coq.syntax.Term value;
     
-    public In (Term value) {
+    public In (hydra.ext.coq.syntax.Term value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class CofixQual {
     }
   }
   
-  public static final class With extends CofixQual {
-    public final CofixWith value;
+  public static final class With extends hydra.ext.coq.syntax.CofixQual {
+    public final hydra.ext.coq.syntax.CofixWith value;
     
-    public With (CofixWith value) {
+    public With (hydra.ext.coq.syntax.CofixWith value) {
       this.value = value;
     }
     

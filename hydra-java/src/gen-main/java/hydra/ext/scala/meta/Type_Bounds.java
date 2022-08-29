@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Bounds {
-  public final java.util.Optional<Type> lo;
+  public final java.util.Optional<hydra.ext.scala.meta.Type> lo;
   
-  public final java.util.Optional<Type> hi;
+  public final java.util.Optional<hydra.ext.scala.meta.Type> hi;
   
-  public Type_Bounds (java.util.Optional<Type> lo, java.util.Optional<Type> hi) {
+  public Type_Bounds (java.util.Optional<hydra.ext.scala.meta.Type> lo, java.util.Optional<hydra.ext.scala.meta.Type> hi) {
     this.lo = lo;
     this.hi = hi;
   }
@@ -24,11 +24,11 @@ public class Type_Bounds {
     return 2 * lo.hashCode() + 3 * hi.hashCode();
   }
   
-  public Type_Bounds withLo(java.util.Optional<Type> lo) {
+  public Type_Bounds withLo(java.util.Optional<hydra.ext.scala.meta.Type> lo) {
     return new Type_Bounds(lo, hi);
   }
   
-  public Type_Bounds withHi(java.util.Optional<Type> hi) {
+  public Type_Bounds withHi(java.util.Optional<hydra.ext.scala.meta.Type> hi) {
     return new Type_Bounds(lo, hi);
   }
 }

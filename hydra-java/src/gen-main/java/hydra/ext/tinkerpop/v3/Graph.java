@@ -4,11 +4,11 @@ package hydra.ext.tinkerpop.v3;
  * A graph; a self-contained collection of vertices and edges
  */
 public class Graph {
-  public final java.util.Set<Vertex> vertices;
+  public final java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices;
   
-  public final java.util.Set<Edge> edges;
+  public final java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges;
   
-  public Graph (java.util.Set<Vertex> vertices, java.util.Set<Edge> edges) {
+  public Graph (java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices, java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -27,11 +27,11 @@ public class Graph {
     return 2 * vertices.hashCode() + 3 * edges.hashCode();
   }
   
-  public Graph withVertices(java.util.Set<Vertex> vertices) {
+  public Graph withVertices(java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices) {
     return new Graph(vertices, edges);
   }
   
-  public Graph withEdges(java.util.Set<Edge> edges) {
+  public Graph withEdges(java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges) {
     return new Graph(vertices, edges);
   }
 }

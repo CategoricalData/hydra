@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class TypeCast {
-  public final Term10 term;
+  public final hydra.ext.coq.syntax.Term10 term;
   
-  public final Type type;
+  public final hydra.ext.coq.syntax.Type type;
   
-  public final TypeCastOperator operator;
+  public final hydra.ext.coq.syntax.TypeCastOperator operator;
   
-  public TypeCast (Term10 term, Type type, TypeCastOperator operator) {
+  public TypeCast (hydra.ext.coq.syntax.Term10 term, hydra.ext.coq.syntax.Type type, hydra.ext.coq.syntax.TypeCastOperator operator) {
     this.term = term;
     this.type = type;
     this.operator = operator;
@@ -27,15 +27,15 @@ public class TypeCast {
     return 2 * term.hashCode() + 3 * type.hashCode() + 5 * operator.hashCode();
   }
   
-  public TypeCast withTerm(Term10 term) {
+  public TypeCast withTerm(hydra.ext.coq.syntax.Term10 term) {
     return new TypeCast(term, type, operator);
   }
   
-  public TypeCast withType(Type type) {
+  public TypeCast withType(hydra.ext.coq.syntax.Type type) {
     return new TypeCast(term, type, operator);
   }
   
-  public TypeCast withOperator(TypeCastOperator operator) {
+  public TypeCast withOperator(hydra.ext.coq.syntax.TypeCastOperator operator) {
     return new TypeCast(term, type, operator);
   }
 }

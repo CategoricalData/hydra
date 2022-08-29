@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_Block {
-  public final java.util.List<Stat> stats;
+  public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
-  public Data_Block (java.util.List<Stat> stats) {
+  public Data_Block (java.util.List<hydra.ext.scala.meta.Stat> stats) {
     this.stats = stats;
   }
   

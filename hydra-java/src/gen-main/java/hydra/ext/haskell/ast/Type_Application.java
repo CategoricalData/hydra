@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Application {
-  public final Type context;
+  public final hydra.ext.haskell.ast.Type context;
   
-  public final Type argument;
+  public final hydra.ext.haskell.ast.Type argument;
   
-  public Type_Application (Type context, Type argument) {
+  public Type_Application (hydra.ext.haskell.ast.Type context, hydra.ext.haskell.ast.Type argument) {
     this.context = context;
     this.argument = argument;
   }
@@ -24,11 +24,11 @@ public class Type_Application {
     return 2 * context.hashCode() + 3 * argument.hashCode();
   }
   
-  public Type_Application withContext(Type context) {
+  public Type_Application withContext(hydra.ext.haskell.ast.Type context) {
     return new Type_Application(context, argument);
   }
   
-  public Type_Application withArgument(Type argument) {
+  public Type_Application withArgument(hydra.ext.haskell.ast.Type argument) {
     return new Type_Application(context, argument);
   }
 }

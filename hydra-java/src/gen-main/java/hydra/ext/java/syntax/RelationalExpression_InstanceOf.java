@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class RelationalExpression_InstanceOf {
-  public final RelationalExpression lhs;
+  public final hydra.ext.java.syntax.RelationalExpression lhs;
   
-  public final ReferenceType rhs;
+  public final hydra.ext.java.syntax.ReferenceType rhs;
   
-  public RelationalExpression_InstanceOf (RelationalExpression lhs, ReferenceType rhs) {
+  public RelationalExpression_InstanceOf (hydra.ext.java.syntax.RelationalExpression lhs, hydra.ext.java.syntax.ReferenceType rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class RelationalExpression_InstanceOf {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public RelationalExpression_InstanceOf withLhs(RelationalExpression lhs) {
+  public RelationalExpression_InstanceOf withLhs(hydra.ext.java.syntax.RelationalExpression lhs) {
     return new RelationalExpression_InstanceOf(lhs, rhs);
   }
   
-  public RelationalExpression_InstanceOf withRhs(ReferenceType rhs) {
+  public RelationalExpression_InstanceOf withRhs(hydra.ext.java.syntax.ReferenceType rhs) {
     return new RelationalExpression_InstanceOf(lhs, rhs);
   }
 }

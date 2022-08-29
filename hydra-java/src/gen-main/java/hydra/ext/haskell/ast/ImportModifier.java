@@ -30,7 +30,7 @@ public abstract class ImportModifier {
     }
   }
   
-  public static final class Pattern extends ImportModifier {
+  public static final class Pattern extends hydra.ext.haskell.ast.ImportModifier {
     public Pattern () {
     
     }
@@ -55,7 +55,7 @@ public abstract class ImportModifier {
     }
   }
   
-  public static final class Type extends ImportModifier {
+  public static final class Type extends hydra.ext.haskell.ast.ImportModifier {
     public Type () {
     
     }

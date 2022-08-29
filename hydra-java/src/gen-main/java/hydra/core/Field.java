@@ -4,11 +4,11 @@ package hydra.core;
  * A labeled term
  */
 public class Field<M> {
-  public final FieldName name;
+  public final hydra.core.FieldName name;
   
-  public final Term<M> term;
+  public final hydra.core.Term<M> term;
   
-  public Field (FieldName name, Term<M> term) {
+  public Field (hydra.core.FieldName name, hydra.core.Term<M> term) {
     this.name = name;
     this.term = term;
   }
@@ -27,11 +27,11 @@ public class Field<M> {
     return 2 * name.hashCode() + 3 * term.hashCode();
   }
   
-  public Field withName(FieldName name) {
+  public Field withName(hydra.core.FieldName name) {
     return new Field(name, term);
   }
   
-  public Field withTerm(Term<M> term) {
+  public Field withTerm(hydra.core.Term<M> term) {
     return new Field(name, term);
   }
 }

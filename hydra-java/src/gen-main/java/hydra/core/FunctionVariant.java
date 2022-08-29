@@ -42,7 +42,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class CompareTo extends FunctionVariant {
+  public static final class CompareTo extends hydra.core.FunctionVariant {
     public CompareTo () {
     
     }
@@ -67,7 +67,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Elimination extends FunctionVariant {
+  public static final class Elimination extends hydra.core.FunctionVariant {
     public Elimination () {
     
     }
@@ -92,7 +92,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Lambda extends FunctionVariant {
+  public static final class Lambda extends hydra.core.FunctionVariant {
     public Lambda () {
     
     }
@@ -117,7 +117,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Primitive extends FunctionVariant {
+  public static final class Primitive extends hydra.core.FunctionVariant {
     public Primitive () {
     
     }

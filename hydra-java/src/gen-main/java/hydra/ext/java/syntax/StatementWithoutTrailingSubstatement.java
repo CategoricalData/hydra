@@ -87,10 +87,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Block extends StatementWithoutTrailingSubstatement {
-    public final Block value;
+  public static final class Block extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.Block value;
     
-    public Block (Block value) {
+    public Block (hydra.ext.java.syntax.Block value) {
       this.value = value;
     }
     
@@ -114,10 +114,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Empty extends StatementWithoutTrailingSubstatement {
-    public final EmptyStatement value;
+  public static final class Empty extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.EmptyStatement value;
     
-    public Empty (EmptyStatement value) {
+    public Empty (hydra.ext.java.syntax.EmptyStatement value) {
       this.value = value;
     }
     
@@ -141,10 +141,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Expression extends StatementWithoutTrailingSubstatement {
-    public final ExpressionStatement value;
+  public static final class Expression extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.ExpressionStatement value;
     
-    public Expression (ExpressionStatement value) {
+    public Expression (hydra.ext.java.syntax.ExpressionStatement value) {
       this.value = value;
     }
     
@@ -168,10 +168,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Assert extends StatementWithoutTrailingSubstatement {
-    public final AssertStatement value;
+  public static final class Assert extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.AssertStatement value;
     
-    public Assert (AssertStatement value) {
+    public Assert (hydra.ext.java.syntax.AssertStatement value) {
       this.value = value;
     }
     
@@ -195,10 +195,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Switch extends StatementWithoutTrailingSubstatement {
-    public final SwitchStatement value;
+  public static final class Switch extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.SwitchStatement value;
     
-    public Switch (SwitchStatement value) {
+    public Switch (hydra.ext.java.syntax.SwitchStatement value) {
       this.value = value;
     }
     
@@ -222,10 +222,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Do extends StatementWithoutTrailingSubstatement {
-    public final DoStatement value;
+  public static final class Do extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.DoStatement value;
     
-    public Do (DoStatement value) {
+    public Do (hydra.ext.java.syntax.DoStatement value) {
       this.value = value;
     }
     
@@ -249,10 +249,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Break extends StatementWithoutTrailingSubstatement {
-    public final BreakStatement value;
+  public static final class Break extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.BreakStatement value;
     
-    public Break (BreakStatement value) {
+    public Break (hydra.ext.java.syntax.BreakStatement value) {
       this.value = value;
     }
     
@@ -276,10 +276,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Continue extends StatementWithoutTrailingSubstatement {
-    public final ContinueStatement value;
+  public static final class Continue extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.ContinueStatement value;
     
-    public Continue (ContinueStatement value) {
+    public Continue (hydra.ext.java.syntax.ContinueStatement value) {
       this.value = value;
     }
     
@@ -303,10 +303,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Return extends StatementWithoutTrailingSubstatement {
-    public final ReturnStatement value;
+  public static final class Return extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.ReturnStatement value;
     
-    public Return (ReturnStatement value) {
+    public Return (hydra.ext.java.syntax.ReturnStatement value) {
       this.value = value;
     }
     
@@ -330,10 +330,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Synchronized extends StatementWithoutTrailingSubstatement {
-    public final SynchronizedStatement value;
+  public static final class Synchronized extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.SynchronizedStatement value;
     
-    public Synchronized (SynchronizedStatement value) {
+    public Synchronized (hydra.ext.java.syntax.SynchronizedStatement value) {
       this.value = value;
     }
     
@@ -357,10 +357,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Throw extends StatementWithoutTrailingSubstatement {
-    public final ThrowStatement value;
+  public static final class Throw extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.ThrowStatement value;
     
-    public Throw (ThrowStatement value) {
+    public Throw (hydra.ext.java.syntax.ThrowStatement value) {
       this.value = value;
     }
     
@@ -384,10 +384,10 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
   }
   
-  public static final class Try extends StatementWithoutTrailingSubstatement {
-    public final TryStatement value;
+  public static final class Try extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public final hydra.ext.java.syntax.TryStatement value;
     
-    public Try (TryStatement value) {
+    public Try (hydra.ext.java.syntax.TryStatement value) {
       this.value = value;
     }
     

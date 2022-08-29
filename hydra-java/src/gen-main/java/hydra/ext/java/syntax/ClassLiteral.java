@@ -39,10 +39,10 @@ public abstract class ClassLiteral {
     }
   }
   
-  public static final class Type extends ClassLiteral {
-    public final TypeNameArray value;
+  public static final class Type extends hydra.ext.java.syntax.ClassLiteral {
+    public final hydra.ext.java.syntax.TypeNameArray value;
     
-    public Type (TypeNameArray value) {
+    public Type (hydra.ext.java.syntax.TypeNameArray value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class ClassLiteral {
     }
   }
   
-  public static final class NumericType extends ClassLiteral {
-    public final NumericTypeArray value;
+  public static final class NumericType extends hydra.ext.java.syntax.ClassLiteral {
+    public final hydra.ext.java.syntax.NumericTypeArray value;
     
-    public NumericType (NumericTypeArray value) {
+    public NumericType (hydra.ext.java.syntax.NumericTypeArray value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class ClassLiteral {
     }
   }
   
-  public static final class Boolean_ extends ClassLiteral {
-    public final BooleanArray value;
+  public static final class Boolean_ extends hydra.ext.java.syntax.ClassLiteral {
+    public final hydra.ext.java.syntax.BooleanArray value;
     
-    public Boolean_ (BooleanArray value) {
+    public Boolean_ (hydra.ext.java.syntax.BooleanArray value) {
       this.value = value;
     }
     
@@ -120,7 +120,7 @@ public abstract class ClassLiteral {
     }
   }
   
-  public static final class Void_ extends ClassLiteral {
+  public static final class Void_ extends hydra.ext.java.syntax.ClassLiteral {
     public Void_ () {
     
     }

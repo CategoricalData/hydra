@@ -57,7 +57,7 @@ public abstract class Sort {
   /**
    * The sort 𝖲𝖾𝗍 intends to be the type of small sets.
    */
-  public static final class Set extends Sort {
+  public static final class Set extends hydra.ext.coq.syntax.Sort {
     /**
      * The sort 𝖲𝖾𝗍 intends to be the type of small sets.
      */
@@ -90,7 +90,7 @@ public abstract class Sort {
   /**
    * The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions.
    */
-  public static final class Prop extends Sort {
+  public static final class Prop extends hydra.ext.coq.syntax.Sort {
     /**
      * The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions.
      */
@@ -123,7 +123,7 @@ public abstract class Sort {
   /**
    * The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal).
    */
-  public static final class SProp extends Sort {
+  public static final class SProp extends hydra.ext.coq.syntax.Sort {
     /**
      * The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal).
      */
@@ -153,7 +153,7 @@ public abstract class Sort {
     }
   }
   
-  public static final class Type extends Sort {
+  public static final class Type extends hydra.ext.coq.syntax.Sort {
     public Type () {
     
     }
@@ -178,7 +178,7 @@ public abstract class Sort {
     }
   }
   
-  public static final class TypeWithAnyUniverse extends Sort {
+  public static final class TypeWithAnyUniverse extends hydra.ext.coq.syntax.Sort {
     public TypeWithAnyUniverse () {
     
     }
@@ -203,10 +203,10 @@ public abstract class Sort {
     }
   }
   
-  public static final class TypeWithUniverse extends Sort {
-    public final Universe value;
+  public static final class TypeWithUniverse extends hydra.ext.coq.syntax.Sort {
+    public final hydra.ext.coq.syntax.Universe value;
     
-    public TypeWithUniverse (Universe value) {
+    public TypeWithUniverse (hydra.ext.coq.syntax.Universe value) {
       this.value = value;
     }
     

@@ -51,10 +51,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Name extends Binder {
-    public final Name value;
+  public static final class Name extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.Name value;
     
-    public Name (Name value) {
+    public Name (hydra.ext.coq.syntax.Name value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Type extends Binder {
-    public final TypeBinders value;
+  public static final class Type extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.TypeBinders value;
     
-    public Type (TypeBinders value) {
+    public Type (hydra.ext.coq.syntax.TypeBinders value) {
       this.value = value;
     }
     
@@ -105,10 +105,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Term extends Binder {
-    public final LetBinder value;
+  public static final class Term extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.LetBinder value;
     
-    public Term (LetBinder value) {
+    public Term (hydra.ext.coq.syntax.LetBinder value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Implicit extends Binder {
-    public final ImplicitBinders value;
+  public static final class Implicit extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.ImplicitBinders value;
     
-    public Implicit (ImplicitBinders value) {
+    public Implicit (hydra.ext.coq.syntax.ImplicitBinders value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Generalizing extends Binder {
-    public final GeneralizingBinder value;
+  public static final class Generalizing extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.GeneralizingBinder value;
     
-    public Generalizing (GeneralizingBinder value) {
+    public Generalizing (hydra.ext.coq.syntax.GeneralizingBinder value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class Binder {
     }
   }
   
-  public static final class Pattern extends Binder {
-    public final Pattern0 value;
+  public static final class Pattern extends hydra.ext.coq.syntax.Binder {
+    public final hydra.ext.coq.syntax.Pattern0 value;
     
-    public Pattern (Pattern0 value) {
+    public Pattern (hydra.ext.coq.syntax.Pattern0 value) {
       this.value = value;
     }
     

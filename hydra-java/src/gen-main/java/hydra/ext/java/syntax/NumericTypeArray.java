@@ -27,10 +27,10 @@ public abstract class NumericTypeArray {
     }
   }
   
-  public static final class Simple extends NumericTypeArray {
-    public final NumericType value;
+  public static final class Simple extends hydra.ext.java.syntax.NumericTypeArray {
+    public final hydra.ext.java.syntax.NumericType value;
     
-    public Simple (NumericType value) {
+    public Simple (hydra.ext.java.syntax.NumericType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class NumericTypeArray {
     }
   }
   
-  public static final class Array extends NumericTypeArray {
-    public final NumericTypeArray value;
+  public static final class Array extends hydra.ext.java.syntax.NumericTypeArray {
+    public final hydra.ext.java.syntax.NumericTypeArray value;
     
-    public Array (NumericTypeArray value) {
+    public Array (hydra.ext.java.syntax.NumericTypeArray value) {
       this.value = value;
     }
     

@@ -4,9 +4,9 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Edge operations.
  */
 public class EdgeFeatures {
-  public final ElementFeatures elementFeatures;
+  public final hydra.ext.tinkerpop.features.ElementFeatures elementFeatures;
   
-  public final EdgePropertyFeatures properties;
+  public final hydra.ext.tinkerpop.features.EdgePropertyFeatures properties;
   
   /**
    * Determines if an Edge can be added to a Vertex.
@@ -23,7 +23,7 @@ public class EdgeFeatures {
    */
   public final Boolean supportsUpsert;
   
-  public EdgeFeatures (ElementFeatures elementFeatures, EdgePropertyFeatures properties, Boolean supportsAddEdges, Boolean supportsRemoveEdges, Boolean supportsUpsert) {
+  public EdgeFeatures (hydra.ext.tinkerpop.features.ElementFeatures elementFeatures, hydra.ext.tinkerpop.features.EdgePropertyFeatures properties, Boolean supportsAddEdges, Boolean supportsRemoveEdges, Boolean supportsUpsert) {
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddEdges = supportsAddEdges;
@@ -45,11 +45,11 @@ public class EdgeFeatures {
     return 2 * elementFeatures.hashCode() + 3 * properties.hashCode() + 5 * supportsAddEdges.hashCode() + 7 * supportsRemoveEdges.hashCode() + 11 * supportsUpsert.hashCode();
   }
   
-  public EdgeFeatures withElementFeatures(ElementFeatures elementFeatures) {
+  public EdgeFeatures withElementFeatures(hydra.ext.tinkerpop.features.ElementFeatures elementFeatures) {
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
-  public EdgeFeatures withProperties(EdgePropertyFeatures properties) {
+  public EdgeFeatures withProperties(hydra.ext.tinkerpop.features.EdgePropertyFeatures properties) {
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   

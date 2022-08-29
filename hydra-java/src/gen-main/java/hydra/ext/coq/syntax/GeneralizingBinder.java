@@ -36,13 +36,13 @@ public abstract class GeneralizingBinder {
   /**
    * Terms surrounded by `( ) introduce their free variables as explicit arguments
    */
-  public static final class Explicit extends GeneralizingBinder {
+  public static final class Explicit extends hydra.ext.coq.syntax.GeneralizingBinder {
     /**
      * Terms surrounded by `( ) introduce their free variables as explicit arguments
      */
-    public final TypeclassConstraint value;
+    public final hydra.ext.coq.syntax.TypeclassConstraint value;
     
-    public Explicit (TypeclassConstraint value) {
+    public Explicit (hydra.ext.coq.syntax.TypeclassConstraint value) {
       this.value = value;
     }
     
@@ -69,13 +69,13 @@ public abstract class GeneralizingBinder {
   /**
    * Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments
    */
-  public static final class ImplicitMaximallyInserted extends GeneralizingBinder {
+  public static final class ImplicitMaximallyInserted extends hydra.ext.coq.syntax.GeneralizingBinder {
     /**
      * Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments
      */
-    public final TypeclassConstraint value;
+    public final hydra.ext.coq.syntax.TypeclassConstraint value;
     
-    public ImplicitMaximallyInserted (TypeclassConstraint value) {
+    public ImplicitMaximallyInserted (hydra.ext.coq.syntax.TypeclassConstraint value) {
       this.value = value;
     }
     
@@ -102,13 +102,13 @@ public abstract class GeneralizingBinder {
   /**
    * Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments
    */
-  public static final class ImplicitNonMaximallyInserted extends GeneralizingBinder {
+  public static final class ImplicitNonMaximallyInserted extends hydra.ext.coq.syntax.GeneralizingBinder {
     /**
      * Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments
      */
-    public final TypeclassConstraint value;
+    public final hydra.ext.coq.syntax.TypeclassConstraint value;
     
-    public ImplicitNonMaximallyInserted (TypeclassConstraint value) {
+    public ImplicitNonMaximallyInserted (hydra.ext.coq.syntax.TypeclassConstraint value) {
       this.value = value;
     }
     

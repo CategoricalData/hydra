@@ -1,9 +1,9 @@
 package hydra.ext.rdf.syntax;
 
 public class Graph {
-  public final java.util.Set<Triple> value;
+  public final java.util.Set<hydra.ext.rdf.syntax.Triple> value;
   
-  public Graph (java.util.Set<Triple> value) {
+  public Graph (java.util.Set<hydra.ext.rdf.syntax.Triple> value) {
     this.value = value;
   }
   

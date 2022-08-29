@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Do {
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public Data_Do (Data body, Data expr) {
+  public Data_Do (hydra.ext.scala.meta.Data body, hydra.ext.scala.meta.Data expr) {
     this.body = body;
     this.expr = expr;
   }
@@ -24,11 +24,11 @@ public class Data_Do {
     return 2 * body.hashCode() + 3 * expr.hashCode();
   }
   
-  public Data_Do withBody(Data body) {
+  public Data_Do withBody(hydra.ext.scala.meta.Data body) {
     return new Data_Do(body, expr);
   }
   
-  public Data_Do withExpr(Data expr) {
+  public Data_Do withExpr(hydra.ext.scala.meta.Data expr) {
     return new Data_Do(body, expr);
   }
 }

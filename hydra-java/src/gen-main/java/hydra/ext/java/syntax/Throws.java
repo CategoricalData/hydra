@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class Throws {
-  public final java.util.List<ExceptionType> value;
+  public final java.util.List<hydra.ext.java.syntax.ExceptionType> value;
   
-  public Throws (java.util.List<ExceptionType> value) {
+  public Throws (java.util.List<hydra.ext.java.syntax.ExceptionType> value) {
     this.value = value;
   }
   

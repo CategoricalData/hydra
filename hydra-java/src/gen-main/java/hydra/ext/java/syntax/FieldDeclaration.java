@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class FieldDeclaration {
-  public final java.util.List<FieldModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers;
   
-  public final UnannType unannType;
+  public final hydra.ext.java.syntax.UnannType unannType;
   
-  public final java.util.List<VariableDeclarator> variableDeclarators;
+  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators;
   
-  public FieldDeclaration (java.util.List<FieldModifier> modifiers, UnannType unannType, java.util.List<VariableDeclarator> variableDeclarators) {
+  public FieldDeclaration (java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers, hydra.ext.java.syntax.UnannType unannType, java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
     this.modifiers = modifiers;
     this.unannType = unannType;
     this.variableDeclarators = variableDeclarators;
@@ -27,15 +27,15 @@ public class FieldDeclaration {
     return 2 * modifiers.hashCode() + 3 * unannType.hashCode() + 5 * variableDeclarators.hashCode();
   }
   
-  public FieldDeclaration withModifiers(java.util.List<FieldModifier> modifiers) {
+  public FieldDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers) {
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
-  public FieldDeclaration withUnannType(UnannType unannType) {
+  public FieldDeclaration withUnannType(hydra.ext.java.syntax.UnannType unannType) {
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
-  public FieldDeclaration withVariableDeclarators(java.util.List<VariableDeclarator> variableDeclarators) {
+  public FieldDeclaration withVariableDeclarators(java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
 }

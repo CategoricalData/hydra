@@ -48,7 +48,7 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Binary extends LiteralType {
+  public static final class Binary extends hydra.core.LiteralType {
     public Binary () {
     
     }
@@ -73,7 +73,7 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Boolean_ extends LiteralType {
+  public static final class Boolean_ extends hydra.core.LiteralType {
     public Boolean_ () {
     
     }
@@ -98,10 +98,10 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Float_ extends LiteralType {
-    public final FloatType value;
+  public static final class Float_ extends hydra.core.LiteralType {
+    public final hydra.core.FloatType value;
     
-    public Float_ (FloatType value) {
+    public Float_ (hydra.core.FloatType value) {
       this.value = value;
     }
     
@@ -125,10 +125,10 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class Integer_ extends LiteralType {
-    public final IntegerType value;
+  public static final class Integer_ extends hydra.core.LiteralType {
+    public final hydra.core.IntegerType value;
     
-    public Integer_ (IntegerType value) {
+    public Integer_ (hydra.core.IntegerType value) {
       this.value = value;
     }
     
@@ -152,7 +152,7 @@ public abstract class LiteralType {
     }
   }
   
-  public static final class String_ extends LiteralType {
+  public static final class String_ extends hydra.core.LiteralType {
     public String_ () {
     
     }

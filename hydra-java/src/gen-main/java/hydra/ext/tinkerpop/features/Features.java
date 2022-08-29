@@ -9,19 +9,19 @@ public class Features {
   /**
    * Gets the features related to edge operation.
    */
-  public final EdgeFeatures edge;
+  public final hydra.ext.tinkerpop.features.EdgeFeatures edge;
   
   /**
    * Gets the features related to graph operation.
    */
-  public final GraphFeatures graph;
+  public final hydra.ext.tinkerpop.features.GraphFeatures graph;
   
   /**
    * Gets the features related to vertex operation.
    */
-  public final VertexFeatures vertex;
+  public final hydra.ext.tinkerpop.features.VertexFeatures vertex;
   
-  public Features (EdgeFeatures edge, GraphFeatures graph, VertexFeatures vertex) {
+  public Features (hydra.ext.tinkerpop.features.EdgeFeatures edge, hydra.ext.tinkerpop.features.GraphFeatures graph, hydra.ext.tinkerpop.features.VertexFeatures vertex) {
     this.edge = edge;
     this.graph = graph;
     this.vertex = vertex;
@@ -41,15 +41,15 @@ public class Features {
     return 2 * edge.hashCode() + 3 * graph.hashCode() + 5 * vertex.hashCode();
   }
   
-  public Features withEdge(EdgeFeatures edge) {
+  public Features withEdge(hydra.ext.tinkerpop.features.EdgeFeatures edge) {
     return new Features(edge, graph, vertex);
   }
   
-  public Features withGraph(GraphFeatures graph) {
+  public Features withGraph(hydra.ext.tinkerpop.features.GraphFeatures graph) {
     return new Features(edge, graph, vertex);
   }
   
-  public Features withVertex(VertexFeatures vertex) {
+  public Features withVertex(hydra.ext.tinkerpop.features.VertexFeatures vertex) {
     return new Features(edge, graph, vertex);
   }
 }

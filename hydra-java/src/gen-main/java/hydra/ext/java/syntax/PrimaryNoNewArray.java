@@ -75,10 +75,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class Literal extends PrimaryNoNewArray {
-    public final Literal value;
+  public static final class Literal extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.Literal value;
     
-    public Literal (Literal value) {
+    public Literal (hydra.ext.java.syntax.Literal value) {
       this.value = value;
     }
     
@@ -102,10 +102,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class ClassLiteral extends PrimaryNoNewArray {
-    public final ClassLiteral value;
+  public static final class ClassLiteral extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.ClassLiteral value;
     
-    public ClassLiteral (ClassLiteral value) {
+    public ClassLiteral (hydra.ext.java.syntax.ClassLiteral value) {
       this.value = value;
     }
     
@@ -129,7 +129,7 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class This extends PrimaryNoNewArray {
+  public static final class This extends hydra.ext.java.syntax.PrimaryNoNewArray {
     public This () {
     
     }
@@ -154,10 +154,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class DotThis extends PrimaryNoNewArray {
-    public final TypeName value;
+  public static final class DotThis extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.TypeName value;
     
-    public DotThis (TypeName value) {
+    public DotThis (hydra.ext.java.syntax.TypeName value) {
       this.value = value;
     }
     
@@ -181,10 +181,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class Parens extends PrimaryNoNewArray {
-    public final Expression value;
+  public static final class Parens extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.Expression value;
     
-    public Parens (Expression value) {
+    public Parens (hydra.ext.java.syntax.Expression value) {
       this.value = value;
     }
     
@@ -208,10 +208,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class ClassInstance extends PrimaryNoNewArray {
-    public final ClassInstanceCreationExpression value;
+  public static final class ClassInstance extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.ClassInstanceCreationExpression value;
     
-    public ClassInstance (ClassInstanceCreationExpression value) {
+    public ClassInstance (hydra.ext.java.syntax.ClassInstanceCreationExpression value) {
       this.value = value;
     }
     
@@ -235,10 +235,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class FieldAccess extends PrimaryNoNewArray {
-    public final FieldAccess value;
+  public static final class FieldAccess extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.FieldAccess value;
     
-    public FieldAccess (FieldAccess value) {
+    public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {
       this.value = value;
     }
     
@@ -262,10 +262,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class ArrayAccess extends PrimaryNoNewArray {
-    public final ArrayAccess value;
+  public static final class ArrayAccess extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.ArrayAccess value;
     
-    public ArrayAccess (ArrayAccess value) {
+    public ArrayAccess (hydra.ext.java.syntax.ArrayAccess value) {
       this.value = value;
     }
     
@@ -289,10 +289,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class MethodInvocation extends PrimaryNoNewArray {
-    public final MethodInvocation value;
+  public static final class MethodInvocation extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.MethodInvocation value;
     
-    public MethodInvocation (MethodInvocation value) {
+    public MethodInvocation (hydra.ext.java.syntax.MethodInvocation value) {
       this.value = value;
     }
     
@@ -316,10 +316,10 @@ public abstract class PrimaryNoNewArray {
     }
   }
   
-  public static final class MethodReference extends PrimaryNoNewArray {
-    public final MethodReference value;
+  public static final class MethodReference extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public final hydra.ext.java.syntax.MethodReference value;
     
-    public MethodReference (MethodReference value) {
+    public MethodReference (hydra.ext.java.syntax.MethodReference value) {
       this.value = value;
     }
     

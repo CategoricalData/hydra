@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Expression {
-  public final ExpressionName name;
+  public final hydra.ext.java.syntax.ExpressionName name;
   
-  public final java.util.List<TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public MethodReference_Expression (ExpressionName name, java.util.List<TypeArgument> typeArguments, Identifier identifier) {
+  public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.name = name;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -27,15 +27,15 @@ public class MethodReference_Expression {
     return 2 * name.hashCode() + 3 * typeArguments.hashCode() + 5 * identifier.hashCode();
   }
   
-  public MethodReference_Expression withName(ExpressionName name) {
+  public MethodReference_Expression withName(hydra.ext.java.syntax.ExpressionName name) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   
-  public MethodReference_Expression withTypeArguments(java.util.List<TypeArgument> typeArguments) {
+  public MethodReference_Expression withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   
-  public MethodReference_Expression withIdentifier(Identifier identifier) {
+  public MethodReference_Expression withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
 }

@@ -33,13 +33,13 @@ public abstract class ImplicitBinders {
   /**
    * The first form, with curly braces, makes name a maximally inserted implicit argument
    */
-  public static final class MaximallyInserted extends ImplicitBinders {
+  public static final class MaximallyInserted extends hydra.ext.coq.syntax.ImplicitBinders {
     /**
      * The first form, with curly braces, makes name a maximally inserted implicit argument
      */
-    public final TypeBinders value;
+    public final hydra.ext.coq.syntax.TypeBinders value;
     
-    public MaximallyInserted (TypeBinders value) {
+    public MaximallyInserted (hydra.ext.coq.syntax.TypeBinders value) {
       this.value = value;
     }
     
@@ -66,13 +66,13 @@ public abstract class ImplicitBinders {
   /**
    * The second form, with square brackets, makes name a non-maximally inserted implicit argument.
    */
-  public static final class NonMaximallyInserted extends ImplicitBinders {
+  public static final class NonMaximallyInserted extends hydra.ext.coq.syntax.ImplicitBinders {
     /**
      * The second form, with square brackets, makes name a non-maximally inserted implicit argument.
      */
-    public final TypeBinders value;
+    public final hydra.ext.coq.syntax.TypeBinders value;
     
-    public NonMaximallyInserted (TypeBinders value) {
+    public NonMaximallyInserted (hydra.ext.coq.syntax.TypeBinders value) {
       this.value = value;
     }
     

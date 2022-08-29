@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class StaticInitializer {
-  public final Block value;
+  public final hydra.ext.java.syntax.Block value;
   
-  public StaticInitializer (Block value) {
+  public StaticInitializer (hydra.ext.java.syntax.Block value) {
     this.value = value;
   }
   

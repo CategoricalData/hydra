@@ -27,10 +27,10 @@ public abstract class Data_FunctionData {
     }
   }
   
-  public static final class ContextFunction extends Data_FunctionData {
-    public final Data_ContextFunction value;
+  public static final class ContextFunction extends hydra.ext.scala.meta.Data_FunctionData {
+    public final hydra.ext.scala.meta.Data_ContextFunction value;
     
-    public ContextFunction (Data_ContextFunction value) {
+    public ContextFunction (hydra.ext.scala.meta.Data_ContextFunction value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Data_FunctionData {
     }
   }
   
-  public static final class Function extends Data_FunctionData {
-    public final Data_Function value;
+  public static final class Function extends hydra.ext.scala.meta.Data_FunctionData {
+    public final hydra.ext.scala.meta.Data_Function value;
     
-    public Function (Data_Function value) {
+    public Function (hydra.ext.scala.meta.Data_Function value) {
       this.value = value;
     }
     

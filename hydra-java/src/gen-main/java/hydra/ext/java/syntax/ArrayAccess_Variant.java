@@ -27,10 +27,10 @@ public abstract class ArrayAccess_Variant {
     }
   }
   
-  public static final class Name extends ArrayAccess_Variant {
-    public final ExpressionName value;
+  public static final class Name extends hydra.ext.java.syntax.ArrayAccess_Variant {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public Name (ExpressionName value) {
+    public Name (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ArrayAccess_Variant {
     }
   }
   
-  public static final class Primary extends ArrayAccess_Variant {
-    public final PrimaryNoNewArray value;
+  public static final class Primary extends hydra.ext.java.syntax.ArrayAccess_Variant {
+    public final hydra.ext.java.syntax.PrimaryNoNewArray value;
     
-    public Primary (PrimaryNoNewArray value) {
+    public Primary (hydra.ext.java.syntax.PrimaryNoNewArray value) {
       this.value = value;
     }
     

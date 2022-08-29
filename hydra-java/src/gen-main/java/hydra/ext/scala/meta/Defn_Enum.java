@@ -1,17 +1,17 @@
 package hydra.ext.scala.meta;
 
 public class Defn_Enum {
-  public final java.util.List<Mod> mods;
+  public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
-  public final Type_Name name;
+  public final hydra.ext.scala.meta.Type_Name name;
   
-  public final java.util.List<Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final Ctor_Primary ctor;
+  public final hydra.ext.scala.meta.Ctor_Primary ctor;
   
-  public final Template template;
+  public final hydra.ext.scala.meta.Template template;
   
-  public Defn_Enum (java.util.List<Mod> mods, Type_Name name, java.util.List<Type_Param> tparams, Ctor_Primary ctor, Template template) {
+  public Defn_Enum (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Type_Name name, java.util.List<hydra.ext.scala.meta.Type_Param> tparams, hydra.ext.scala.meta.Ctor_Primary ctor, hydra.ext.scala.meta.Template template) {
     this.mods = mods;
     this.name = name;
     this.tparams = tparams;
@@ -33,23 +33,23 @@ public class Defn_Enum {
     return 2 * mods.hashCode() + 3 * name.hashCode() + 5 * tparams.hashCode() + 7 * ctor.hashCode() + 11 * template.hashCode();
   }
   
-  public Defn_Enum withMods(java.util.List<Mod> mods) {
+  public Defn_Enum withMods(java.util.List<hydra.ext.scala.meta.Mod> mods) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
   
-  public Defn_Enum withName(Type_Name name) {
+  public Defn_Enum withName(hydra.ext.scala.meta.Type_Name name) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
   
-  public Defn_Enum withTparams(java.util.List<Type_Param> tparams) {
+  public Defn_Enum withTparams(java.util.List<hydra.ext.scala.meta.Type_Param> tparams) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
   
-  public Defn_Enum withCtor(Ctor_Primary ctor) {
+  public Defn_Enum withCtor(hydra.ext.scala.meta.Ctor_Primary ctor) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
   
-  public Defn_Enum withTemplate(Template template) {
+  public Defn_Enum withTemplate(hydra.ext.scala.meta.Template template) {
     return new Defn_Enum(mods, name, tparams, ctor, template);
   }
 }

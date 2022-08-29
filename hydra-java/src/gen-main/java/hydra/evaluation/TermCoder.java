@@ -6,9 +6,9 @@ package hydra.evaluation;
 public class TermCoder<M, A> {
   public final hydra.core.Type<M> type;
   
-  public final Coder<Context<M>, hydra.core.Term<M>, A> coder;
+  public final hydra.evaluation.Coder<hydra.evaluation.Context<M>, hydra.core.Term<M>, A> coder;
   
-  public TermCoder (hydra.core.Type<M> type, Coder<Context<M>, hydra.core.Term<M>, A> coder) {
+  public TermCoder (hydra.core.Type<M> type, hydra.evaluation.Coder<hydra.evaluation.Context<M>, hydra.core.Term<M>, A> coder) {
     this.type = type;
     this.coder = coder;
   }
@@ -31,7 +31,7 @@ public class TermCoder<M, A> {
     return new TermCoder(type, coder);
   }
   
-  public TermCoder withCoder(Coder<Context<M>, hydra.core.Term<M>, A> coder) {
+  public TermCoder withCoder(hydra.evaluation.Coder<hydra.evaluation.Context<M>, hydra.core.Term<M>, A> coder) {
     return new TermCoder(type, coder);
   }
 }

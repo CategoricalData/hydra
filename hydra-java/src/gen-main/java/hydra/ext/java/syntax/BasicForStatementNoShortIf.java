@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class BasicForStatementNoShortIf {
-  public final ForCond cond;
+  public final hydra.ext.java.syntax.ForCond cond;
   
-  public final StatementNoShortIf body;
+  public final hydra.ext.java.syntax.StatementNoShortIf body;
   
-  public BasicForStatementNoShortIf (ForCond cond, StatementNoShortIf body) {
+  public BasicForStatementNoShortIf (hydra.ext.java.syntax.ForCond cond, hydra.ext.java.syntax.StatementNoShortIf body) {
     this.cond = cond;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class BasicForStatementNoShortIf {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public BasicForStatementNoShortIf withCond(ForCond cond) {
+  public BasicForStatementNoShortIf withCond(hydra.ext.java.syntax.ForCond cond) {
     return new BasicForStatementNoShortIf(cond, body);
   }
   
-  public BasicForStatementNoShortIf withBody(StatementNoShortIf body) {
+  public BasicForStatementNoShortIf withBody(hydra.ext.java.syntax.StatementNoShortIf body) {
     return new BasicForStatementNoShortIf(cond, body);
   }
 }

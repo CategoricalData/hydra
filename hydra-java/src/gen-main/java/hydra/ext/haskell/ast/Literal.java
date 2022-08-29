@@ -54,7 +54,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Char extends Literal {
+  public static final class Char extends hydra.ext.haskell.ast.Literal {
     public final Character value;
     
     public Char (Character value) {
@@ -81,7 +81,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Double_ extends Literal {
+  public static final class Double_ extends hydra.ext.haskell.ast.Literal {
     public final Double value;
     
     public Double_ (Double value) {
@@ -108,7 +108,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Float_ extends Literal {
+  public static final class Float_ extends hydra.ext.haskell.ast.Literal {
     public final Float value;
     
     public Float_ (Float value) {
@@ -135,7 +135,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Int extends Literal {
+  public static final class Int extends hydra.ext.haskell.ast.Literal {
     public final Integer value;
     
     public Int (Integer value) {
@@ -162,7 +162,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class Integer_ extends Literal {
+  public static final class Integer_ extends hydra.ext.haskell.ast.Literal {
     public final java.math.BigInteger value;
     
     public Integer_ (java.math.BigInteger value) {
@@ -189,7 +189,7 @@ public abstract class Literal {
     }
   }
   
-  public static final class String_ extends Literal {
+  public static final class String_ extends hydra.ext.haskell.ast.Literal {
     public final String value;
     
     public String_ (String value) {

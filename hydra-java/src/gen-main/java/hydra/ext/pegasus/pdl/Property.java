@@ -1,11 +1,11 @@
 package hydra.ext.pegasus.pdl;
 
 public class Property {
-  public final PropertyKey key;
+  public final hydra.ext.pegasus.pdl.PropertyKey key;
   
   public final java.util.Optional<hydra.ext.json.model.Value> value;
   
-  public Property (PropertyKey key, java.util.Optional<hydra.ext.json.model.Value> value) {
+  public Property (hydra.ext.pegasus.pdl.PropertyKey key, java.util.Optional<hydra.ext.json.model.Value> value) {
     this.key = key;
     this.value = value;
   }
@@ -24,7 +24,7 @@ public class Property {
     return 2 * key.hashCode() + 3 * value.hashCode();
   }
   
-  public Property withKey(PropertyKey key) {
+  public Property withKey(hydra.ext.pegasus.pdl.PropertyKey key) {
     return new Property(key, value);
   }
   

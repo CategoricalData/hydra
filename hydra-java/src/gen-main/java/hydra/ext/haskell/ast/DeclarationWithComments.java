@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A data declaration together with any comments
  */
 public class DeclarationWithComments {
-  public final Declaration body;
+  public final hydra.ext.haskell.ast.Declaration body;
   
   public final java.util.Optional<String> comments;
   
-  public DeclarationWithComments (Declaration body, java.util.Optional<String> comments) {
+  public DeclarationWithComments (hydra.ext.haskell.ast.Declaration body, java.util.Optional<String> comments) {
     this.body = body;
     this.comments = comments;
   }
@@ -27,7 +27,7 @@ public class DeclarationWithComments {
     return 2 * body.hashCode() + 3 * comments.hashCode();
   }
   
-  public DeclarationWithComments withBody(Declaration body) {
+  public DeclarationWithComments withBody(hydra.ext.haskell.ast.Declaration body) {
     return new DeclarationWithComments(body, comments);
   }
   

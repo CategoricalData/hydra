@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class QualidAnnotated {
-  public final Qualid qualid;
+  public final hydra.ext.coq.syntax.Qualid qualid;
   
-  public final java.util.Optional<UnivAnnot> univAnnot;
+  public final java.util.Optional<hydra.ext.coq.syntax.UnivAnnot> univAnnot;
   
-  public QualidAnnotated (Qualid qualid, java.util.Optional<UnivAnnot> univAnnot) {
+  public QualidAnnotated (hydra.ext.coq.syntax.Qualid qualid, java.util.Optional<hydra.ext.coq.syntax.UnivAnnot> univAnnot) {
     this.qualid = qualid;
     this.univAnnot = univAnnot;
   }
@@ -24,11 +24,11 @@ public class QualidAnnotated {
     return 2 * qualid.hashCode() + 3 * univAnnot.hashCode();
   }
   
-  public QualidAnnotated withQualid(Qualid qualid) {
+  public QualidAnnotated withQualid(hydra.ext.coq.syntax.Qualid qualid) {
     return new QualidAnnotated(qualid, univAnnot);
   }
   
-  public QualidAnnotated withUnivAnnot(java.util.Optional<UnivAnnot> univAnnot) {
+  public QualidAnnotated withUnivAnnot(java.util.Optional<hydra.ext.coq.syntax.UnivAnnot> univAnnot) {
     return new QualidAnnotated(qualid, univAnnot);
   }
 }

@@ -4,13 +4,13 @@ package hydra.ext.haskell.ast;
  * An 'if' expression
  */
 public class Expression_If {
-  public final Expression condition;
+  public final hydra.ext.haskell.ast.Expression condition;
   
-  public final Expression then;
+  public final hydra.ext.haskell.ast.Expression then;
   
-  public final Expression else_;
+  public final hydra.ext.haskell.ast.Expression else_;
   
-  public Expression_If (Expression condition, Expression then, Expression else_) {
+  public Expression_If (hydra.ext.haskell.ast.Expression condition, hydra.ext.haskell.ast.Expression then, hydra.ext.haskell.ast.Expression else_) {
     this.condition = condition;
     this.then = then;
     this.else_ = else_;
@@ -30,15 +30,15 @@ public class Expression_If {
     return 2 * condition.hashCode() + 3 * then.hashCode() + 5 * else_.hashCode();
   }
   
-  public Expression_If withCondition(Expression condition) {
+  public Expression_If withCondition(hydra.ext.haskell.ast.Expression condition) {
     return new Expression_If(condition, then, else_);
   }
   
-  public Expression_If withThen(Expression then) {
+  public Expression_If withThen(hydra.ext.haskell.ast.Expression then) {
     return new Expression_If(condition, then, else_);
   }
   
-  public Expression_If withElse(Expression else_) {
+  public Expression_If withElse(hydra.ext.haskell.ast.Expression else_) {
     return new Expression_If(condition, then, else_);
   }
 }

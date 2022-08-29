@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class SingleStaticImportDeclaration {
-  public final TypeName typeName;
+  public final hydra.ext.java.syntax.TypeName typeName;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public SingleStaticImportDeclaration (TypeName typeName, Identifier identifier) {
+  public SingleStaticImportDeclaration (hydra.ext.java.syntax.TypeName typeName, hydra.ext.java.syntax.Identifier identifier) {
     this.typeName = typeName;
     this.identifier = identifier;
   }
@@ -24,11 +24,11 @@ public class SingleStaticImportDeclaration {
     return 2 * typeName.hashCode() + 3 * identifier.hashCode();
   }
   
-  public SingleStaticImportDeclaration withTypeName(TypeName typeName) {
+  public SingleStaticImportDeclaration withTypeName(hydra.ext.java.syntax.TypeName typeName) {
     return new SingleStaticImportDeclaration(typeName, identifier);
   }
   
-  public SingleStaticImportDeclaration withIdentifier(Identifier identifier) {
+  public SingleStaticImportDeclaration withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new SingleStaticImportDeclaration(typeName, identifier);
   }
 }

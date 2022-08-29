@@ -33,10 +33,10 @@ public abstract class FixAnnot {
     }
   }
   
-  public static final class Struct extends FixAnnot {
-    public final Ident value;
+  public static final class Struct extends hydra.ext.coq.syntax.FixAnnot {
+    public final hydra.ext.coq.syntax.Ident value;
     
-    public Struct (Ident value) {
+    public Struct (hydra.ext.coq.syntax.Ident value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class FixAnnot {
     }
   }
   
-  public static final class Wf extends FixAnnot {
-    public final FixAnnot_Wf value;
+  public static final class Wf extends hydra.ext.coq.syntax.FixAnnot {
+    public final hydra.ext.coq.syntax.FixAnnot_Wf value;
     
-    public Wf (FixAnnot_Wf value) {
+    public Wf (hydra.ext.coq.syntax.FixAnnot_Wf value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class FixAnnot {
     }
   }
   
-  public static final class Measure extends FixAnnot {
-    public final FixAnnot_Measure value;
+  public static final class Measure extends hydra.ext.coq.syntax.FixAnnot {
+    public final hydra.ext.coq.syntax.FixAnnot_Measure value;
     
-    public Measure (FixAnnot_Measure value) {
+    public Measure (hydra.ext.coq.syntax.FixAnnot_Measure value) {
       this.value = value;
     }
     

@@ -33,10 +33,10 @@ public abstract class NamedSchema_Type {
     }
   }
   
-  public static final class Record extends NamedSchema_Type {
-    public final RecordSchema value;
+  public static final class Record extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public final hydra.ext.pegasus.pdl.RecordSchema value;
     
-    public Record (RecordSchema value) {
+    public Record (hydra.ext.pegasus.pdl.RecordSchema value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class NamedSchema_Type {
     }
   }
   
-  public static final class Enum_ extends NamedSchema_Type {
-    public final EnumSchema value;
+  public static final class Enum_ extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public final hydra.ext.pegasus.pdl.EnumSchema value;
     
-    public Enum_ (EnumSchema value) {
+    public Enum_ (hydra.ext.pegasus.pdl.EnumSchema value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class NamedSchema_Type {
     }
   }
   
-  public static final class Typeref extends NamedSchema_Type {
-    public final Schema value;
+  public static final class Typeref extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public final hydra.ext.pegasus.pdl.Schema value;
     
-    public Typeref (Schema value) {
+    public Typeref (hydra.ext.pegasus.pdl.Schema value) {
       this.value = value;
     }
     

@@ -1,15 +1,15 @@
 package hydra.ext.scala.meta;
 
 public class Data_ApplyType {
-  public final Data lhs;
+  public final hydra.ext.scala.meta.Data lhs;
   
-  public final Data_Name op;
+  public final hydra.ext.scala.meta.Data_Name op;
   
-  public final java.util.List<Type> targs;
+  public final java.util.List<hydra.ext.scala.meta.Type> targs;
   
-  public final java.util.List<Data> args;
+  public final java.util.List<hydra.ext.scala.meta.Data> args;
   
-  public Data_ApplyType (Data lhs, Data_Name op, java.util.List<Type> targs, java.util.List<Data> args) {
+  public Data_ApplyType (hydra.ext.scala.meta.Data lhs, hydra.ext.scala.meta.Data_Name op, java.util.List<hydra.ext.scala.meta.Type> targs, java.util.List<hydra.ext.scala.meta.Data> args) {
     this.lhs = lhs;
     this.op = op;
     this.targs = targs;
@@ -30,19 +30,19 @@ public class Data_ApplyType {
     return 2 * lhs.hashCode() + 3 * op.hashCode() + 5 * targs.hashCode() + 7 * args.hashCode();
   }
   
-  public Data_ApplyType withLhs(Data lhs) {
+  public Data_ApplyType withLhs(hydra.ext.scala.meta.Data lhs) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
-  public Data_ApplyType withOp(Data_Name op) {
+  public Data_ApplyType withOp(hydra.ext.scala.meta.Data_Name op) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
-  public Data_ApplyType withTargs(java.util.List<Type> targs) {
+  public Data_ApplyType withTargs(java.util.List<hydra.ext.scala.meta.Type> targs) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
   
-  public Data_ApplyType withArgs(java.util.List<Data> args) {
+  public Data_ApplyType withArgs(java.util.List<hydra.ext.scala.meta.Data> args) {
     return new Data_ApplyType(lhs, op, targs, args);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class EnhancedForStatement {
-  public final EnhancedForCond cond;
+  public final hydra.ext.java.syntax.EnhancedForCond cond;
   
-  public final Statement body;
+  public final hydra.ext.java.syntax.Statement body;
   
-  public EnhancedForStatement (EnhancedForCond cond, Statement body) {
+  public EnhancedForStatement (hydra.ext.java.syntax.EnhancedForCond cond, hydra.ext.java.syntax.Statement body) {
     this.cond = cond;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class EnhancedForStatement {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public EnhancedForStatement withCond(EnhancedForCond cond) {
+  public EnhancedForStatement withCond(hydra.ext.java.syntax.EnhancedForCond cond) {
     return new EnhancedForStatement(cond, body);
   }
   
-  public EnhancedForStatement withBody(Statement body) {
+  public EnhancedForStatement withBody(hydra.ext.java.syntax.Statement body) {
     return new EnhancedForStatement(cond, body);
   }
 }

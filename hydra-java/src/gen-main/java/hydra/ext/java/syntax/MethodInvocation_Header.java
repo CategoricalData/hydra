@@ -27,10 +27,10 @@ public abstract class MethodInvocation_Header {
     }
   }
   
-  public static final class Simple extends MethodInvocation_Header {
-    public final MethodName value;
+  public static final class Simple extends hydra.ext.java.syntax.MethodInvocation_Header {
+    public final hydra.ext.java.syntax.MethodName value;
     
-    public Simple (MethodName value) {
+    public Simple (hydra.ext.java.syntax.MethodName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class MethodInvocation_Header {
     }
   }
   
-  public static final class Complex extends MethodInvocation_Header {
-    public final MethodInvocation_Complex value;
+  public static final class Complex extends hydra.ext.java.syntax.MethodInvocation_Header {
+    public final hydra.ext.java.syntax.MethodInvocation_Complex value;
     
-    public Complex (MethodInvocation_Complex value) {
+    public Complex (hydra.ext.java.syntax.MethodInvocation_Complex value) {
       this.value = value;
     }
     

@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class FixAnnot_Wf {
-  public final OneTerm term;
+  public final hydra.ext.coq.syntax.OneTerm term;
   
-  public final Ident ident;
+  public final hydra.ext.coq.syntax.Ident ident;
   
-  public FixAnnot_Wf (OneTerm term, Ident ident) {
+  public FixAnnot_Wf (hydra.ext.coq.syntax.OneTerm term, hydra.ext.coq.syntax.Ident ident) {
     this.term = term;
     this.ident = ident;
   }
@@ -24,11 +24,11 @@ public class FixAnnot_Wf {
     return 2 * term.hashCode() + 3 * ident.hashCode();
   }
   
-  public FixAnnot_Wf withTerm(OneTerm term) {
+  public FixAnnot_Wf withTerm(hydra.ext.coq.syntax.OneTerm term) {
     return new FixAnnot_Wf(term, ident);
   }
   
-  public FixAnnot_Wf withIdent(Ident ident) {
+  public FixAnnot_Wf withIdent(hydra.ext.coq.syntax.Ident ident) {
     return new FixAnnot_Wf(term, ident);
   }
 }

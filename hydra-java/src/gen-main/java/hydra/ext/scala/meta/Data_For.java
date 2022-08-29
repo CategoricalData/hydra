@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_For {
-  public final java.util.List<Enumerator> enums;
+  public final java.util.List<hydra.ext.scala.meta.Enumerator> enums;
   
-  public Data_For (java.util.List<Enumerator> enums) {
+  public Data_For (java.util.List<hydra.ext.scala.meta.Enumerator> enums) {
     this.enums = enums;
   }
   

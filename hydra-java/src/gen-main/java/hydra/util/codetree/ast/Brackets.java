@@ -4,11 +4,11 @@ package hydra.util.codetree.ast;
  * Matching open and close bracket symbols
  */
 public class Brackets {
-  public final Symbol open;
+  public final hydra.util.codetree.ast.Symbol open;
   
-  public final Symbol close;
+  public final hydra.util.codetree.ast.Symbol close;
   
-  public Brackets (Symbol open, Symbol close) {
+  public Brackets (hydra.util.codetree.ast.Symbol open, hydra.util.codetree.ast.Symbol close) {
     this.open = open;
     this.close = close;
   }
@@ -27,11 +27,11 @@ public class Brackets {
     return 2 * open.hashCode() + 3 * close.hashCode();
   }
   
-  public Brackets withOpen(Symbol open) {
+  public Brackets withOpen(hydra.util.codetree.ast.Symbol open) {
     return new Brackets(open, close);
   }
   
-  public Brackets withClose(Symbol close) {
+  public Brackets withClose(hydra.util.codetree.ast.Symbol close) {
     return new Brackets(open, close);
   }
 }

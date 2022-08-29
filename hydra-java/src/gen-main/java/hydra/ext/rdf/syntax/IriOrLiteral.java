@@ -30,10 +30,10 @@ public abstract class IriOrLiteral {
     }
   }
   
-  public static final class Iri extends IriOrLiteral {
-    public final Iri value;
+  public static final class Iri extends hydra.ext.rdf.syntax.IriOrLiteral {
+    public final hydra.ext.rdf.syntax.Iri value;
     
-    public Iri (Iri value) {
+    public Iri (hydra.ext.rdf.syntax.Iri value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class IriOrLiteral {
     }
   }
   
-  public static final class Literal extends IriOrLiteral {
-    public final Literal value;
+  public static final class Literal extends hydra.ext.rdf.syntax.IriOrLiteral {
+    public final hydra.ext.rdf.syntax.Literal value;
     
-    public Literal (Literal value) {
+    public Literal (hydra.ext.rdf.syntax.Literal value) {
       this.value = value;
     }
     

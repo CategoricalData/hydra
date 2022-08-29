@@ -1,11 +1,11 @@
 package hydra.grammar;
 
 public class LabeledPattern {
-  public final Label label;
+  public final hydra.grammar.Label label;
   
-  public final Pattern pattern;
+  public final hydra.grammar.Pattern pattern;
   
-  public LabeledPattern (Label label, Pattern pattern) {
+  public LabeledPattern (hydra.grammar.Label label, hydra.grammar.Pattern pattern) {
     this.label = label;
     this.pattern = pattern;
   }
@@ -24,11 +24,11 @@ public class LabeledPattern {
     return 2 * label.hashCode() + 3 * pattern.hashCode();
   }
   
-  public LabeledPattern withLabel(Label label) {
+  public LabeledPattern withLabel(hydra.grammar.Label label) {
     return new LabeledPattern(label, pattern);
   }
   
-  public LabeledPattern withPattern(Pattern pattern) {
+  public LabeledPattern withPattern(hydra.grammar.Pattern pattern) {
     return new LabeledPattern(label, pattern);
   }
 }

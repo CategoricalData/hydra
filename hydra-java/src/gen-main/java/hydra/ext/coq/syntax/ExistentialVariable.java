@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class ExistentialVariable {
-  public final Ident ident;
+  public final hydra.ext.coq.syntax.Ident ident;
   
-  public final ExistentialVariableVariant variant;
+  public final hydra.ext.coq.syntax.ExistentialVariableVariant variant;
   
-  public ExistentialVariable (Ident ident, ExistentialVariableVariant variant) {
+  public ExistentialVariable (hydra.ext.coq.syntax.Ident ident, hydra.ext.coq.syntax.ExistentialVariableVariant variant) {
     this.ident = ident;
     this.variant = variant;
   }
@@ -24,11 +24,11 @@ public class ExistentialVariable {
     return 2 * ident.hashCode() + 3 * variant.hashCode();
   }
   
-  public ExistentialVariable withIdent(Ident ident) {
+  public ExistentialVariable withIdent(hydra.ext.coq.syntax.Ident ident) {
     return new ExistentialVariable(ident, variant);
   }
   
-  public ExistentialVariable withVariant(ExistentialVariableVariant variant) {
+  public ExistentialVariable withVariant(hydra.ext.coq.syntax.ExistentialVariableVariant variant) {
     return new ExistentialVariable(ident, variant);
   }
 }

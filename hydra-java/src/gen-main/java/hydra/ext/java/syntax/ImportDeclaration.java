@@ -39,10 +39,10 @@ public abstract class ImportDeclaration {
     }
   }
   
-  public static final class SingleType extends ImportDeclaration {
-    public final SingleTypeImportDeclaration value;
+  public static final class SingleType extends hydra.ext.java.syntax.ImportDeclaration {
+    public final hydra.ext.java.syntax.SingleTypeImportDeclaration value;
     
-    public SingleType (SingleTypeImportDeclaration value) {
+    public SingleType (hydra.ext.java.syntax.SingleTypeImportDeclaration value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class ImportDeclaration {
     }
   }
   
-  public static final class TypeImportOnDemand extends ImportDeclaration {
-    public final TypeImportOnDemandDeclaration value;
+  public static final class TypeImportOnDemand extends hydra.ext.java.syntax.ImportDeclaration {
+    public final hydra.ext.java.syntax.TypeImportOnDemandDeclaration value;
     
-    public TypeImportOnDemand (TypeImportOnDemandDeclaration value) {
+    public TypeImportOnDemand (hydra.ext.java.syntax.TypeImportOnDemandDeclaration value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class ImportDeclaration {
     }
   }
   
-  public static final class SingleStaticImport extends ImportDeclaration {
-    public final SingleStaticImportDeclaration value;
+  public static final class SingleStaticImport extends hydra.ext.java.syntax.ImportDeclaration {
+    public final hydra.ext.java.syntax.SingleStaticImportDeclaration value;
     
-    public SingleStaticImport (SingleStaticImportDeclaration value) {
+    public SingleStaticImport (hydra.ext.java.syntax.SingleStaticImportDeclaration value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class ImportDeclaration {
     }
   }
   
-  public static final class StaticImportOnDemand extends ImportDeclaration {
-    public final StaticImportOnDemandDeclaration value;
+  public static final class StaticImportOnDemand extends hydra.ext.java.syntax.ImportDeclaration {
+    public final hydra.ext.java.syntax.StaticImportOnDemandDeclaration value;
     
-    public StaticImportOnDemand (StaticImportOnDemandDeclaration value) {
+    public StaticImportOnDemand (hydra.ext.java.syntax.StaticImportOnDemandDeclaration value) {
       this.value = value;
     }
     

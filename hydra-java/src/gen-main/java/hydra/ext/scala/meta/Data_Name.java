@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_Name {
-  public final PredefString value;
+  public final hydra.ext.scala.meta.PredefString value;
   
-  public Data_Name (PredefString value) {
+  public Data_Name (hydra.ext.scala.meta.PredefString value) {
     this.value = value;
   }
   

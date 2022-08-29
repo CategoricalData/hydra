@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class PackageName {
-  public final java.util.List<Identifier> value;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> value;
   
-  public PackageName (java.util.List<Identifier> value) {
+  public PackageName (java.util.List<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

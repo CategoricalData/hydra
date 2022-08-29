@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class CatchFormalParameter {
-  public final java.util.List<VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
   
-  public final CatchType type;
+  public final hydra.ext.java.syntax.CatchType type;
   
-  public final VariableDeclaratorId id;
+  public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public CatchFormalParameter (java.util.List<VariableModifier> modifiers, CatchType type, VariableDeclaratorId id) {
+  public CatchFormalParameter (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -27,15 +27,15 @@ public class CatchFormalParameter {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * id.hashCode();
   }
   
-  public CatchFormalParameter withModifiers(java.util.List<VariableModifier> modifiers) {
+  public CatchFormalParameter withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new CatchFormalParameter(modifiers, type, id);
   }
   
-  public CatchFormalParameter withType(CatchType type) {
+  public CatchFormalParameter withType(hydra.ext.java.syntax.CatchType type) {
     return new CatchFormalParameter(modifiers, type, id);
   }
   
-  public CatchFormalParameter withId(VariableDeclaratorId id) {
+  public CatchFormalParameter withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new CatchFormalParameter(modifiers, type, id);
   }
 }

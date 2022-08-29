@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class FormalParameter_Simple {
-  public final java.util.List<VariableModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
   
-  public final UnannType type;
+  public final hydra.ext.java.syntax.UnannType type;
   
-  public final VariableDeclaratorId id;
+  public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public FormalParameter_Simple (java.util.List<VariableModifier> modifiers, UnannType type, VariableDeclaratorId id) {
+  public FormalParameter_Simple (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -27,15 +27,15 @@ public class FormalParameter_Simple {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * id.hashCode();
   }
   
-  public FormalParameter_Simple withModifiers(java.util.List<VariableModifier> modifiers) {
+  public FormalParameter_Simple withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new FormalParameter_Simple(modifiers, type, id);
   }
   
-  public FormalParameter_Simple withType(UnannType type) {
+  public FormalParameter_Simple withType(hydra.ext.java.syntax.UnannType type) {
     return new FormalParameter_Simple(modifiers, type, id);
   }
   
-  public FormalParameter_Simple withId(VariableDeclaratorId id) {
+  public FormalParameter_Simple withId(hydra.ext.java.syntax.VariableDeclaratorId id) {
     return new FormalParameter_Simple(modifiers, type, id);
   }
 }

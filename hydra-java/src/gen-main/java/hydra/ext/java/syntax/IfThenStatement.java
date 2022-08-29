@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class IfThenStatement {
-  public final Expression expression;
+  public final hydra.ext.java.syntax.Expression expression;
   
-  public final Statement statement;
+  public final hydra.ext.java.syntax.Statement statement;
   
-  public IfThenStatement (Expression expression, Statement statement) {
+  public IfThenStatement (hydra.ext.java.syntax.Expression expression, hydra.ext.java.syntax.Statement statement) {
     this.expression = expression;
     this.statement = statement;
   }
@@ -24,11 +24,11 @@ public class IfThenStatement {
     return 2 * expression.hashCode() + 3 * statement.hashCode();
   }
   
-  public IfThenStatement withExpression(Expression expression) {
+  public IfThenStatement withExpression(hydra.ext.java.syntax.Expression expression) {
     return new IfThenStatement(expression, statement);
   }
   
-  public IfThenStatement withStatement(Statement statement) {
+  public IfThenStatement withStatement(hydra.ext.java.syntax.Statement statement) {
     return new IfThenStatement(expression, statement);
   }
 }

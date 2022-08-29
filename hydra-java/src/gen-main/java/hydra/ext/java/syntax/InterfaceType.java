@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class InterfaceType {
-  public final ClassType value;
+  public final hydra.ext.java.syntax.ClassType value;
   
-  public InterfaceType (ClassType value) {
+  public InterfaceType (hydra.ext.java.syntax.ClassType value) {
     this.value = value;
   }
   

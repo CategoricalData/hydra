@@ -8,15 +8,15 @@ public class Context<M> {
   
   public final java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements;
   
-  public final java.util.Map<hydra.core.Name, PrimitiveFunction<M>> functions;
+  public final java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions;
   
-  public final EvaluationStrategy strategy;
+  public final hydra.evaluation.EvaluationStrategy strategy;
   
-  public final AnnotationClass<M> annotations;
+  public final hydra.evaluation.AnnotationClass<M> annotations;
   
   public final java.util.List<String> trace;
   
-  public Context (hydra.graph.GraphSet<M> graphs, java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements, java.util.Map<hydra.core.Name, PrimitiveFunction<M>> functions, EvaluationStrategy strategy, AnnotationClass<M> annotations, java.util.List<String> trace) {
+  public Context (hydra.graph.GraphSet<M> graphs, java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements, java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions, hydra.evaluation.EvaluationStrategy strategy, hydra.evaluation.AnnotationClass<M> annotations, java.util.List<String> trace) {
     this.graphs = graphs;
     this.elements = elements;
     this.functions = functions;
@@ -47,15 +47,15 @@ public class Context<M> {
     return new Context(graphs, elements, functions, strategy, annotations, trace);
   }
   
-  public Context withFunctions(java.util.Map<hydra.core.Name, PrimitiveFunction<M>> functions) {
+  public Context withFunctions(java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions) {
     return new Context(graphs, elements, functions, strategy, annotations, trace);
   }
   
-  public Context withStrategy(EvaluationStrategy strategy) {
+  public Context withStrategy(hydra.evaluation.EvaluationStrategy strategy) {
     return new Context(graphs, elements, functions, strategy, annotations, trace);
   }
   
-  public Context withAnnotations(AnnotationClass<M> annotations) {
+  public Context withAnnotations(hydra.evaluation.AnnotationClass<M> annotations) {
     return new Context(graphs, elements, functions, strategy, annotations, trace);
   }
   

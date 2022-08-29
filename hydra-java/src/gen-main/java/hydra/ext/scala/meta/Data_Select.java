@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Select {
-  public final Data qual;
+  public final hydra.ext.scala.meta.Data qual;
   
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public Data_Select (Data qual, Data_Name name) {
+  public Data_Select (hydra.ext.scala.meta.Data qual, hydra.ext.scala.meta.Data_Name name) {
     this.qual = qual;
     this.name = name;
   }
@@ -24,11 +24,11 @@ public class Data_Select {
     return 2 * qual.hashCode() + 3 * name.hashCode();
   }
   
-  public Data_Select withQual(Data qual) {
+  public Data_Select withQual(hydra.ext.scala.meta.Data qual) {
     return new Data_Select(qual, name);
   }
   
-  public Data_Select withName(Data_Name name) {
+  public Data_Select withName(hydra.ext.scala.meta.Data_Name name) {
     return new Data_Select(qual, name);
   }
 }

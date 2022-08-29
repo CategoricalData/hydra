@@ -1,17 +1,17 @@
 package hydra.ext.coq.syntax;
 
 public class Fix_Decl {
-  public final Ident ident;
+  public final hydra.ext.coq.syntax.Ident ident;
   
-  public final java.util.List<Binder> binders;
+  public final java.util.List<hydra.ext.coq.syntax.Binder> binders;
   
-  public final java.util.Optional<FixAnnot> annot;
+  public final java.util.Optional<hydra.ext.coq.syntax.FixAnnot> annot;
   
-  public final java.util.Optional<Type> type;
+  public final java.util.Optional<hydra.ext.coq.syntax.Type> type;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public Fix_Decl (Ident ident, java.util.List<Binder> binders, java.util.Optional<FixAnnot> annot, java.util.Optional<Type> type, Term term) {
+  public Fix_Decl (hydra.ext.coq.syntax.Ident ident, java.util.List<hydra.ext.coq.syntax.Binder> binders, java.util.Optional<hydra.ext.coq.syntax.FixAnnot> annot, java.util.Optional<hydra.ext.coq.syntax.Type> type, hydra.ext.coq.syntax.Term term) {
     this.ident = ident;
     this.binders = binders;
     this.annot = annot;
@@ -33,23 +33,23 @@ public class Fix_Decl {
     return 2 * ident.hashCode() + 3 * binders.hashCode() + 5 * annot.hashCode() + 7 * type.hashCode() + 11 * term.hashCode();
   }
   
-  public Fix_Decl withIdent(Ident ident) {
+  public Fix_Decl withIdent(hydra.ext.coq.syntax.Ident ident) {
     return new Fix_Decl(ident, binders, annot, type, term);
   }
   
-  public Fix_Decl withBinders(java.util.List<Binder> binders) {
+  public Fix_Decl withBinders(java.util.List<hydra.ext.coq.syntax.Binder> binders) {
     return new Fix_Decl(ident, binders, annot, type, term);
   }
   
-  public Fix_Decl withAnnot(java.util.Optional<FixAnnot> annot) {
+  public Fix_Decl withAnnot(java.util.Optional<hydra.ext.coq.syntax.FixAnnot> annot) {
     return new Fix_Decl(ident, binders, annot, type, term);
   }
   
-  public Fix_Decl withType(java.util.Optional<Type> type) {
+  public Fix_Decl withType(java.util.Optional<hydra.ext.coq.syntax.Type> type) {
     return new Fix_Decl(ident, binders, annot, type, term);
   }
   
-  public Fix_Decl withTerm(Term term) {
+  public Fix_Decl withTerm(hydra.ext.coq.syntax.Term term) {
     return new Fix_Decl(ident, binders, annot, type, term);
   }
 }

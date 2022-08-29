@@ -4,13 +4,13 @@ package hydra.ext.haskell.ast;
  * An infix application expression
  */
 public class Expression_InfixApplication {
-  public final Expression lhs;
+  public final hydra.ext.haskell.ast.Expression lhs;
   
-  public final Operator operator;
+  public final hydra.ext.haskell.ast.Operator operator;
   
-  public final Expression rhs;
+  public final hydra.ext.haskell.ast.Expression rhs;
   
-  public Expression_InfixApplication (Expression lhs, Operator operator, Expression rhs) {
+  public Expression_InfixApplication (hydra.ext.haskell.ast.Expression lhs, hydra.ext.haskell.ast.Operator operator, hydra.ext.haskell.ast.Expression rhs) {
     this.lhs = lhs;
     this.operator = operator;
     this.rhs = rhs;
@@ -30,15 +30,15 @@ public class Expression_InfixApplication {
     return 2 * lhs.hashCode() + 3 * operator.hashCode() + 5 * rhs.hashCode();
   }
   
-  public Expression_InfixApplication withLhs(Expression lhs) {
+  public Expression_InfixApplication withLhs(hydra.ext.haskell.ast.Expression lhs) {
     return new Expression_InfixApplication(lhs, operator, rhs);
   }
   
-  public Expression_InfixApplication withOperator(Operator operator) {
+  public Expression_InfixApplication withOperator(hydra.ext.haskell.ast.Operator operator) {
     return new Expression_InfixApplication(lhs, operator, rhs);
   }
   
-  public Expression_InfixApplication withRhs(Expression rhs) {
+  public Expression_InfixApplication withRhs(hydra.ext.haskell.ast.Expression rhs) {
     return new Expression_InfixApplication(lhs, operator, rhs);
   }
 }

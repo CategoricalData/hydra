@@ -1,13 +1,13 @@
 package hydra.ext.coq.syntax;
 
 public class FixAnnot_Measure {
-  public final OneTerm term;
+  public final hydra.ext.coq.syntax.OneTerm term;
   
-  public final java.util.Optional<Ident> ident;
+  public final java.util.Optional<hydra.ext.coq.syntax.Ident> ident;
   
-  public final java.util.Optional<OneTerm> term2;
+  public final java.util.Optional<hydra.ext.coq.syntax.OneTerm> term2;
   
-  public FixAnnot_Measure (OneTerm term, java.util.Optional<Ident> ident, java.util.Optional<OneTerm> term2) {
+  public FixAnnot_Measure (hydra.ext.coq.syntax.OneTerm term, java.util.Optional<hydra.ext.coq.syntax.Ident> ident, java.util.Optional<hydra.ext.coq.syntax.OneTerm> term2) {
     this.term = term;
     this.ident = ident;
     this.term2 = term2;
@@ -27,15 +27,15 @@ public class FixAnnot_Measure {
     return 2 * term.hashCode() + 3 * ident.hashCode() + 5 * term2.hashCode();
   }
   
-  public FixAnnot_Measure withTerm(OneTerm term) {
+  public FixAnnot_Measure withTerm(hydra.ext.coq.syntax.OneTerm term) {
     return new FixAnnot_Measure(term, ident, term2);
   }
   
-  public FixAnnot_Measure withIdent(java.util.Optional<Ident> ident) {
+  public FixAnnot_Measure withIdent(java.util.Optional<hydra.ext.coq.syntax.Ident> ident) {
     return new FixAnnot_Measure(term, ident, term2);
   }
   
-  public FixAnnot_Measure withTerm2(java.util.Optional<OneTerm> term2) {
+  public FixAnnot_Measure withTerm2(java.util.Optional<hydra.ext.coq.syntax.OneTerm> term2) {
     return new FixAnnot_Measure(term, ident, term2);
   }
 }

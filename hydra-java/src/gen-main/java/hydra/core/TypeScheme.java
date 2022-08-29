@@ -4,11 +4,11 @@ package hydra.core;
  * A type expression together with free type variables occurring in the expression
  */
 public class TypeScheme<M> {
-  public final java.util.List<VariableType> variables;
+  public final java.util.List<hydra.core.VariableType> variables;
   
-  public final Type<M> type;
+  public final hydra.core.Type<M> type;
   
-  public TypeScheme (java.util.List<VariableType> variables, Type<M> type) {
+  public TypeScheme (java.util.List<hydra.core.VariableType> variables, hydra.core.Type<M> type) {
     this.variables = variables;
     this.type = type;
   }
@@ -27,11 +27,11 @@ public class TypeScheme<M> {
     return 2 * variables.hashCode() + 3 * type.hashCode();
   }
   
-  public TypeScheme withVariables(java.util.List<VariableType> variables) {
+  public TypeScheme withVariables(java.util.List<hydra.core.VariableType> variables) {
     return new TypeScheme(variables, type);
   }
   
-  public TypeScheme withType(Type<M> type) {
+  public TypeScheme withType(hydra.core.Type<M> type) {
     return new TypeScheme(variables, type);
   }
 }

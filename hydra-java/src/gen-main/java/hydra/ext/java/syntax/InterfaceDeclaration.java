@@ -27,10 +27,10 @@ public abstract class InterfaceDeclaration {
     }
   }
   
-  public static final class NormalInterface extends InterfaceDeclaration {
-    public final NormalInterfaceDeclaration value;
+  public static final class NormalInterface extends hydra.ext.java.syntax.InterfaceDeclaration {
+    public final hydra.ext.java.syntax.NormalInterfaceDeclaration value;
     
-    public NormalInterface (NormalInterfaceDeclaration value) {
+    public NormalInterface (hydra.ext.java.syntax.NormalInterfaceDeclaration value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class InterfaceDeclaration {
     }
   }
   
-  public static final class AnnotationType extends InterfaceDeclaration {
-    public final AnnotationTypeDeclaration value;
+  public static final class AnnotationType extends hydra.ext.java.syntax.InterfaceDeclaration {
+    public final hydra.ext.java.syntax.AnnotationTypeDeclaration value;
     
-    public AnnotationType (AnnotationTypeDeclaration value) {
+    public AnnotationType (hydra.ext.java.syntax.AnnotationTypeDeclaration value) {
       this.value = value;
     }
     

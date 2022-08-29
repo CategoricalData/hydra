@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Apply {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public final java.util.List<Type> args;
+  public final java.util.List<hydra.ext.scala.meta.Type> args;
   
-  public Type_Apply (Type tpe, java.util.List<Type> args) {
+  public Type_Apply (hydra.ext.scala.meta.Type tpe, java.util.List<hydra.ext.scala.meta.Type> args) {
     this.tpe = tpe;
     this.args = args;
   }
@@ -24,11 +24,11 @@ public class Type_Apply {
     return 2 * tpe.hashCode() + 3 * args.hashCode();
   }
   
-  public Type_Apply withTpe(Type tpe) {
+  public Type_Apply withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Type_Apply(tpe, args);
   }
   
-  public Type_Apply withArgs(java.util.List<Type> args) {
+  public Type_Apply withArgs(java.util.List<hydra.ext.scala.meta.Type> args) {
     return new Type_Apply(tpe, args);
   }
 }

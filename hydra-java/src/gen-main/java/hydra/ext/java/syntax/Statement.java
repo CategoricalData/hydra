@@ -51,10 +51,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class WithoutTrailing extends Statement {
-    public final StatementWithoutTrailingSubstatement value;
+  public static final class WithoutTrailing extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value;
     
-    public WithoutTrailing (StatementWithoutTrailingSubstatement value) {
+    public WithoutTrailing (hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class Labeled extends Statement {
-    public final LabeledStatement value;
+  public static final class Labeled extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.LabeledStatement value;
     
-    public Labeled (LabeledStatement value) {
+    public Labeled (hydra.ext.java.syntax.LabeledStatement value) {
       this.value = value;
     }
     
@@ -105,10 +105,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class IfThen extends Statement {
-    public final IfThenStatement value;
+  public static final class IfThen extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.IfThenStatement value;
     
-    public IfThen (IfThenStatement value) {
+    public IfThen (hydra.ext.java.syntax.IfThenStatement value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class IfThenElse extends Statement {
-    public final IfThenElseStatement value;
+  public static final class IfThenElse extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.IfThenElseStatement value;
     
-    public IfThenElse (IfThenElseStatement value) {
+    public IfThenElse (hydra.ext.java.syntax.IfThenElseStatement value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class While extends Statement {
-    public final WhileStatement value;
+  public static final class While extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.WhileStatement value;
     
-    public While (WhileStatement value) {
+    public While (hydra.ext.java.syntax.WhileStatement value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class Statement {
     }
   }
   
-  public static final class For extends Statement {
-    public final ForStatement value;
+  public static final class For extends hydra.ext.java.syntax.Statement {
+    public final hydra.ext.java.syntax.ForStatement value;
     
-    public For (ForStatement value) {
+    public For (hydra.ext.java.syntax.ForStatement value) {
       this.value = value;
     }
     

@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_Application {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final java.util.List<Pattern> args;
+  public final java.util.List<hydra.ext.haskell.ast.Pattern> args;
   
-  public Pattern_Application (Name name, java.util.List<Pattern> args) {
+  public Pattern_Application (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Pattern> args) {
     this.name = name;
     this.args = args;
   }
@@ -24,11 +24,11 @@ public class Pattern_Application {
     return 2 * name.hashCode() + 3 * args.hashCode();
   }
   
-  public Pattern_Application withName(Name name) {
+  public Pattern_Application withName(hydra.ext.haskell.ast.Name name) {
     return new Pattern_Application(name, args);
   }
   
-  public Pattern_Application withArgs(java.util.List<Pattern> args) {
+  public Pattern_Application withArgs(java.util.List<hydra.ext.haskell.ast.Pattern> args) {
     return new Pattern_Application(name, args);
   }
 }

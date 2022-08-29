@@ -27,10 +27,10 @@ public abstract class OpenBinders {
     }
   }
   
-  public static final class Type extends OpenBinders {
-    public final TypeBinders value;
+  public static final class Type extends hydra.ext.coq.syntax.OpenBinders {
+    public final hydra.ext.coq.syntax.TypeBinders value;
     
-    public Type (TypeBinders value) {
+    public Type (hydra.ext.coq.syntax.TypeBinders value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class OpenBinders {
     }
   }
   
-  public static final class Binders extends OpenBinders {
-    public final java.util.List<Binder> value;
+  public static final class Binders extends hydra.ext.coq.syntax.OpenBinders {
+    public final java.util.List<hydra.ext.coq.syntax.Binder> value;
     
-    public Binders (java.util.List<Binder> value) {
+    public Binders (java.util.List<hydra.ext.coq.syntax.Binder> value) {
       this.value = value;
     }
     

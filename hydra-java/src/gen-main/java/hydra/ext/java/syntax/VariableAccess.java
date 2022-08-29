@@ -27,10 +27,10 @@ public abstract class VariableAccess {
     }
   }
   
-  public static final class ExpressionName extends VariableAccess {
-    public final ExpressionName value;
+  public static final class ExpressionName extends hydra.ext.java.syntax.VariableAccess {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public ExpressionName (ExpressionName value) {
+    public ExpressionName (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class VariableAccess {
     }
   }
   
-  public static final class FieldAccess extends VariableAccess {
-    public final FieldAccess value;
+  public static final class FieldAccess extends hydra.ext.java.syntax.VariableAccess {
+    public final hydra.ext.java.syntax.FieldAccess value;
     
-    public FieldAccess (FieldAccess value) {
+    public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {
       this.value = value;
     }
     

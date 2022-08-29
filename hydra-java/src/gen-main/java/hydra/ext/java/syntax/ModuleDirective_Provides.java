@@ -1,14 +1,14 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_Provides {
-  public final TypeName to;
+  public final hydra.ext.java.syntax.TypeName to;
   
   /**
    * At least one type
    */
-  public final java.util.List<TypeName> with;
+  public final java.util.List<hydra.ext.java.syntax.TypeName> with;
   
-  public ModuleDirective_Provides (TypeName to, java.util.List<TypeName> with) {
+  public ModuleDirective_Provides (hydra.ext.java.syntax.TypeName to, java.util.List<hydra.ext.java.syntax.TypeName> with) {
     this.to = to;
     this.with = with;
   }
@@ -27,11 +27,11 @@ public class ModuleDirective_Provides {
     return 2 * to.hashCode() + 3 * with.hashCode();
   }
   
-  public ModuleDirective_Provides withTo(TypeName to) {
+  public ModuleDirective_Provides withTo(hydra.ext.java.syntax.TypeName to) {
     return new ModuleDirective_Provides(to, with);
   }
   
-  public ModuleDirective_Provides withWith(java.util.List<TypeName> with) {
+  public ModuleDirective_Provides withWith(java.util.List<hydra.ext.java.syntax.TypeName> with) {
     return new ModuleDirective_Provides(to, with);
   }
 }

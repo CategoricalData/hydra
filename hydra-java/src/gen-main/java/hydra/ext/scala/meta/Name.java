@@ -33,7 +33,7 @@ public abstract class Name {
     }
   }
   
-  public static final class Value extends Name {
+  public static final class Value extends hydra.ext.scala.meta.Name {
     public final String value;
     
     public Value (String value) {
@@ -60,7 +60,7 @@ public abstract class Name {
     }
   }
   
-  public static final class Anonymous extends Name {
+  public static final class Anonymous extends hydra.ext.scala.meta.Name {
     public Anonymous () {
     
     }
@@ -85,10 +85,10 @@ public abstract class Name {
     }
   }
   
-  public static final class Indeterminate extends Name {
-    public final PredefString value;
+  public static final class Indeterminate extends hydra.ext.scala.meta.Name {
+    public final hydra.ext.scala.meta.PredefString value;
     
-    public Indeterminate (PredefString value) {
+    public Indeterminate (hydra.ext.scala.meta.PredefString value) {
       this.value = value;
     }
     

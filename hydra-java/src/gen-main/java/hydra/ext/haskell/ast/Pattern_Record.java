@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_Record {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final java.util.List<PatternField> fields;
+  public final java.util.List<hydra.ext.haskell.ast.PatternField> fields;
   
-  public Pattern_Record (Name name, java.util.List<PatternField> fields) {
+  public Pattern_Record (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.PatternField> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -24,11 +24,11 @@ public class Pattern_Record {
     return 2 * name.hashCode() + 3 * fields.hashCode();
   }
   
-  public Pattern_Record withName(Name name) {
+  public Pattern_Record withName(hydra.ext.haskell.ast.Name name) {
     return new Pattern_Record(name, fields);
   }
   
-  public Pattern_Record withFields(java.util.List<PatternField> fields) {
+  public Pattern_Record withFields(java.util.List<hydra.ext.haskell.ast.PatternField> fields) {
     return new Pattern_Record(name, fields);
   }
 }

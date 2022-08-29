@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class LambdaExpression {
-  public final LambdaParameters parameters;
+  public final hydra.ext.java.syntax.LambdaParameters parameters;
   
-  public final LambdaBody body;
+  public final hydra.ext.java.syntax.LambdaBody body;
   
-  public LambdaExpression (LambdaParameters parameters, LambdaBody body) {
+  public LambdaExpression (hydra.ext.java.syntax.LambdaParameters parameters, hydra.ext.java.syntax.LambdaBody body) {
     this.parameters = parameters;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class LambdaExpression {
     return 2 * parameters.hashCode() + 3 * body.hashCode();
   }
   
-  public LambdaExpression withParameters(LambdaParameters parameters) {
+  public LambdaExpression withParameters(hydra.ext.java.syntax.LambdaParameters parameters) {
     return new LambdaExpression(parameters, body);
   }
   
-  public LambdaExpression withBody(LambdaBody body) {
+  public LambdaExpression withBody(hydra.ext.java.syntax.LambdaBody body) {
     return new LambdaExpression(parameters, body);
   }
 }

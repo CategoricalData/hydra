@@ -27,10 +27,10 @@ public abstract class ExceptionType {
     }
   }
   
-  public static final class Class_ extends ExceptionType {
-    public final ClassType value;
+  public static final class Class_ extends hydra.ext.java.syntax.ExceptionType {
+    public final hydra.ext.java.syntax.ClassType value;
     
-    public Class_ (ClassType value) {
+    public Class_ (hydra.ext.java.syntax.ClassType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ExceptionType {
     }
   }
   
-  public static final class Variable extends ExceptionType {
-    public final TypeVariable value;
+  public static final class Variable extends hydra.ext.java.syntax.ExceptionType {
+    public final hydra.ext.java.syntax.TypeVariable value;
     
-    public Variable (TypeVariable value) {
+    public Variable (hydra.ext.java.syntax.TypeVariable value) {
       this.value = value;
     }
     

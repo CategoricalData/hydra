@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class NormalAnnotation {
-  public final TypeName typeName;
+  public final hydra.ext.java.syntax.TypeName typeName;
   
-  public final java.util.List<ElementValuePair> pairs;
+  public final java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs;
   
-  public NormalAnnotation (TypeName typeName, java.util.List<ElementValuePair> pairs) {
+  public NormalAnnotation (hydra.ext.java.syntax.TypeName typeName, java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
     this.typeName = typeName;
     this.pairs = pairs;
   }
@@ -24,11 +24,11 @@ public class NormalAnnotation {
     return 2 * typeName.hashCode() + 3 * pairs.hashCode();
   }
   
-  public NormalAnnotation withTypeName(TypeName typeName) {
+  public NormalAnnotation withTypeName(hydra.ext.java.syntax.TypeName typeName) {
     return new NormalAnnotation(typeName, pairs);
   }
   
-  public NormalAnnotation withPairs(java.util.List<ElementValuePair> pairs) {
+  public NormalAnnotation withPairs(java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
     return new NormalAnnotation(typeName, pairs);
   }
 }

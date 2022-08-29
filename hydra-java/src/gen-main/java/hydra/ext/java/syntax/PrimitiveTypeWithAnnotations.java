@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class PrimitiveTypeWithAnnotations {
-  public final PrimitiveType type;
+  public final hydra.ext.java.syntax.PrimitiveType type;
   
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public PrimitiveTypeWithAnnotations (PrimitiveType type, java.util.List<Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     this.type = type;
     this.annotations = annotations;
   }
@@ -24,11 +24,11 @@ public class PrimitiveTypeWithAnnotations {
     return 2 * type.hashCode() + 3 * annotations.hashCode();
   }
   
-  public PrimitiveTypeWithAnnotations withType(PrimitiveType type) {
+  public PrimitiveTypeWithAnnotations withType(hydra.ext.java.syntax.PrimitiveType type) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
   
-  public PrimitiveTypeWithAnnotations withAnnotations(java.util.List<Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
 }

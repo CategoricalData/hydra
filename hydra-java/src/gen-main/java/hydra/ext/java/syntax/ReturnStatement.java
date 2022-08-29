@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ReturnStatement {
-  public final java.util.Optional<Expression> value;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> value;
   
-  public ReturnStatement (java.util.Optional<Expression> value) {
+  public ReturnStatement (java.util.Optional<hydra.ext.java.syntax.Expression> value) {
     this.value = value;
   }
   

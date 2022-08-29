@@ -4,11 +4,11 @@ package hydra.core;
  * A type together with an instance of the type
  */
 public class TypedTerm<M> {
-  public final Type<M> type;
+  public final hydra.core.Type<M> type;
   
-  public final Term<M> term;
+  public final hydra.core.Term<M> term;
   
-  public TypedTerm (Type<M> type, Term<M> term) {
+  public TypedTerm (hydra.core.Type<M> type, hydra.core.Term<M> term) {
     this.type = type;
     this.term = term;
   }
@@ -27,11 +27,11 @@ public class TypedTerm<M> {
     return 2 * type.hashCode() + 3 * term.hashCode();
   }
   
-  public TypedTerm withType(Type<M> type) {
+  public TypedTerm withType(hydra.core.Type<M> type) {
     return new TypedTerm(type, term);
   }
   
-  public TypedTerm withTerm(Term<M> term) {
+  public TypedTerm withTerm(hydra.core.Term<M> term) {
     return new TypedTerm(type, term);
   }
 }

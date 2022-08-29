@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class TypeCase {
-  public final Type pat;
+  public final hydra.ext.scala.meta.Type pat;
   
-  public final Type body;
+  public final hydra.ext.scala.meta.Type body;
   
-  public TypeCase (Type pat, Type body) {
+  public TypeCase (hydra.ext.scala.meta.Type pat, hydra.ext.scala.meta.Type body) {
     this.pat = pat;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class TypeCase {
     return 2 * pat.hashCode() + 3 * body.hashCode();
   }
   
-  public TypeCase withPat(Type pat) {
+  public TypeCase withPat(hydra.ext.scala.meta.Type pat) {
     return new TypeCase(pat, body);
   }
   
-  public TypeCase withBody(Type body) {
+  public TypeCase withBody(hydra.ext.scala.meta.Type body) {
     return new TypeCase(pat, body);
   }
 }

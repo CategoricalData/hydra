@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ConstantExpression {
-  public final Expression value;
+  public final hydra.ext.java.syntax.Expression value;
   
-  public ConstantExpression (Expression value) {
+  public ConstantExpression (hydra.ext.java.syntax.Expression value) {
     this.value = value;
   }
   

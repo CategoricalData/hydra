@@ -1,9 +1,9 @@
 package hydra.ext.haskell.ast;
 
 public class Variable {
-  public final Name value;
+  public final hydra.ext.haskell.ast.Name value;
   
-  public Variable (Name value) {
+  public Variable (hydra.ext.haskell.ast.Name value) {
     this.value = value;
   }
   

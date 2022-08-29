@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Assign {
-  public final Data lhs;
+  public final hydra.ext.scala.meta.Data lhs;
   
-  public final Data rhs;
+  public final hydra.ext.scala.meta.Data rhs;
   
-  public Data_Assign (Data lhs, Data rhs) {
+  public Data_Assign (hydra.ext.scala.meta.Data lhs, hydra.ext.scala.meta.Data rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Data_Assign {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Data_Assign withLhs(Data lhs) {
+  public Data_Assign withLhs(hydra.ext.scala.meta.Data lhs) {
     return new Data_Assign(lhs, rhs);
   }
   
-  public Data_Assign withRhs(Data rhs) {
+  public Data_Assign withRhs(hydra.ext.scala.meta.Data rhs) {
     return new Data_Assign(lhs, rhs);
   }
 }

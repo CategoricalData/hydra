@@ -30,7 +30,7 @@ public abstract class CoderDirection {
     }
   }
   
-  public static final class Encode extends CoderDirection {
+  public static final class Encode extends hydra.evaluation.CoderDirection {
     public Encode () {
     
     }
@@ -55,7 +55,7 @@ public abstract class CoderDirection {
     }
   }
   
-  public static final class Decode extends CoderDirection {
+  public static final class Decode extends hydra.evaluation.CoderDirection {
     public Decode () {
     
     }

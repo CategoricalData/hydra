@@ -39,10 +39,10 @@ public abstract class ArrayCreationExpression {
     }
   }
   
-  public static final class Primitive extends ArrayCreationExpression {
-    public final ArrayCreationExpression_Primitive value;
+  public static final class Primitive extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public final hydra.ext.java.syntax.ArrayCreationExpression_Primitive value;
     
-    public Primitive (ArrayCreationExpression_Primitive value) {
+    public Primitive (hydra.ext.java.syntax.ArrayCreationExpression_Primitive value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class ArrayCreationExpression {
     }
   }
   
-  public static final class ClassOrInterface extends ArrayCreationExpression {
-    public final ArrayCreationExpression_ClassOrInterface value;
+  public static final class ClassOrInterface extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public final hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface value;
     
-    public ClassOrInterface (ArrayCreationExpression_ClassOrInterface value) {
+    public ClassOrInterface (hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class ArrayCreationExpression {
     }
   }
   
-  public static final class PrimitiveArray extends ArrayCreationExpression {
-    public final ArrayCreationExpression_PrimitiveArray value;
+  public static final class PrimitiveArray extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public final hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray value;
     
-    public PrimitiveArray (ArrayCreationExpression_PrimitiveArray value) {
+    public PrimitiveArray (hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class ArrayCreationExpression {
     }
   }
   
-  public static final class ClassOrInterfaceArray extends ArrayCreationExpression {
-    public final ArrayCreationExpression_ClassOrInterfaceArray value;
+  public static final class ClassOrInterfaceArray extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public final hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value;
     
-    public ClassOrInterfaceArray (ArrayCreationExpression_ClassOrInterfaceArray value) {
+    public ClassOrInterfaceArray (hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value) {
       this.value = value;
     }
     

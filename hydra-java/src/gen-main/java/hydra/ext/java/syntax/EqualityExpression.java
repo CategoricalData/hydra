@@ -33,10 +33,10 @@ public abstract class EqualityExpression {
     }
   }
   
-  public static final class Unary extends EqualityExpression {
-    public final RelationalExpression value;
+  public static final class Unary extends hydra.ext.java.syntax.EqualityExpression {
+    public final hydra.ext.java.syntax.RelationalExpression value;
     
-    public Unary (RelationalExpression value) {
+    public Unary (hydra.ext.java.syntax.RelationalExpression value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class EqualityExpression {
     }
   }
   
-  public static final class Equal extends EqualityExpression {
-    public final EqualityExpression_Binary value;
+  public static final class Equal extends hydra.ext.java.syntax.EqualityExpression {
+    public final hydra.ext.java.syntax.EqualityExpression_Binary value;
     
-    public Equal (EqualityExpression_Binary value) {
+    public Equal (hydra.ext.java.syntax.EqualityExpression_Binary value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class EqualityExpression {
     }
   }
   
-  public static final class NotEqual extends EqualityExpression {
-    public final EqualityExpression_Binary value;
+  public static final class NotEqual extends hydra.ext.java.syntax.EqualityExpression {
+    public final hydra.ext.java.syntax.EqualityExpression_Binary value;
     
-    public NotEqual (EqualityExpression_Binary value) {
+    public NotEqual (hydra.ext.java.syntax.EqualityExpression_Binary value) {
       this.value = value;
     }
     

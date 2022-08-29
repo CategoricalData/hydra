@@ -57,7 +57,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Boolean_ extends PrimitiveType {
+  public static final class Boolean_ extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Boolean_ () {
     
     }
@@ -82,7 +82,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Bytes extends PrimitiveType {
+  public static final class Bytes extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Bytes () {
     
     }
@@ -107,7 +107,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Double_ extends PrimitiveType {
+  public static final class Double_ extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Double_ () {
     
     }
@@ -132,7 +132,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Float_ extends PrimitiveType {
+  public static final class Float_ extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Float_ () {
     
     }
@@ -157,7 +157,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Int extends PrimitiveType {
+  public static final class Int extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Int () {
     
     }
@@ -182,7 +182,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Long_ extends PrimitiveType {
+  public static final class Long_ extends hydra.ext.pegasus.pdl.PrimitiveType {
     public Long_ () {
     
     }
@@ -207,7 +207,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class String_ extends PrimitiveType {
+  public static final class String_ extends hydra.ext.pegasus.pdl.PrimitiveType {
     public String_ () {
     
     }

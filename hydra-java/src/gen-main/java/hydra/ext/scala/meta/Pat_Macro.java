@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Macro {
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Pat_Macro (Data body) {
+  public Pat_Macro (hydra.ext.scala.meta.Data body) {
     this.body = body;
   }
   

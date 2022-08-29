@@ -63,10 +63,10 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Annotation extends FieldModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.FieldModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -90,7 +90,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Public extends FieldModifier {
+  public static final class Public extends hydra.ext.java.syntax.FieldModifier {
     public Public () {
     
     }
@@ -115,7 +115,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Protected extends FieldModifier {
+  public static final class Protected extends hydra.ext.java.syntax.FieldModifier {
     public Protected () {
     
     }
@@ -140,7 +140,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Private extends FieldModifier {
+  public static final class Private extends hydra.ext.java.syntax.FieldModifier {
     public Private () {
     
     }
@@ -165,7 +165,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Static extends FieldModifier {
+  public static final class Static extends hydra.ext.java.syntax.FieldModifier {
     public Static () {
     
     }
@@ -190,7 +190,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Final extends FieldModifier {
+  public static final class Final extends hydra.ext.java.syntax.FieldModifier {
     public Final () {
     
     }
@@ -215,7 +215,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Transient extends FieldModifier {
+  public static final class Transient extends hydra.ext.java.syntax.FieldModifier {
     public Transient () {
     
     }
@@ -240,7 +240,7 @@ public abstract class FieldModifier {
     }
   }
   
-  public static final class Volatile extends FieldModifier {
+  public static final class Volatile extends hydra.ext.java.syntax.FieldModifier {
     public Volatile () {
     
     }

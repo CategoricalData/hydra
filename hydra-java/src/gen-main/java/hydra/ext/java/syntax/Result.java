@@ -27,10 +27,10 @@ public abstract class Result {
     }
   }
   
-  public static final class Type extends Result {
-    public final UnannType value;
+  public static final class Type extends hydra.ext.java.syntax.Result {
+    public final hydra.ext.java.syntax.UnannType value;
     
-    public Type (UnannType value) {
+    public Type (hydra.ext.java.syntax.UnannType value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class Result {
     }
   }
   
-  public static final class Void_ extends Result {
+  public static final class Void_ extends hydra.ext.java.syntax.Result {
     public Void_ () {
     
     }

@@ -1,9 +1,9 @@
 package hydra.ext.haskell.ast;
 
 public class Statement {
-  public final Expression value;
+  public final hydra.ext.haskell.ast.Expression value;
   
-  public Statement (Expression value) {
+  public Statement (hydra.ext.haskell.ast.Expression value) {
     this.value = value;
   }
   

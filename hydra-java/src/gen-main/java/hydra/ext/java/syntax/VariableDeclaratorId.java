@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class VariableDeclaratorId {
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final java.util.Optional<Dims> dims;
+  public final java.util.Optional<hydra.ext.java.syntax.Dims> dims;
   
-  public VariableDeclaratorId (Identifier identifier, java.util.Optional<Dims> dims) {
+  public VariableDeclaratorId (hydra.ext.java.syntax.Identifier identifier, java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     this.identifier = identifier;
     this.dims = dims;
   }
@@ -24,11 +24,11 @@ public class VariableDeclaratorId {
     return 2 * identifier.hashCode() + 3 * dims.hashCode();
   }
   
-  public VariableDeclaratorId withIdentifier(Identifier identifier) {
+  public VariableDeclaratorId withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new VariableDeclaratorId(identifier, dims);
   }
   
-  public VariableDeclaratorId withDims(java.util.Optional<Dims> dims) {
+  public VariableDeclaratorId withDims(java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     return new VariableDeclaratorId(identifier, dims);
   }
 }

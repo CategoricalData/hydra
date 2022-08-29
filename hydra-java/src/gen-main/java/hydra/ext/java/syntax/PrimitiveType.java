@@ -27,10 +27,10 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Numeric extends PrimitiveType {
-    public final NumericType value;
+  public static final class Numeric extends hydra.ext.java.syntax.PrimitiveType {
+    public final hydra.ext.java.syntax.NumericType value;
     
-    public Numeric (NumericType value) {
+    public Numeric (hydra.ext.java.syntax.NumericType value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class PrimitiveType {
     }
   }
   
-  public static final class Boolean_ extends PrimitiveType {
+  public static final class Boolean_ extends hydra.ext.java.syntax.PrimitiveType {
     public Boolean_ () {
     
     }

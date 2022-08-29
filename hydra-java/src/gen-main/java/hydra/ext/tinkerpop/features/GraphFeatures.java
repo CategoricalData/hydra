@@ -42,9 +42,9 @@ public class GraphFeatures {
   /**
    * Gets the features related to graph sideEffects operation.
    */
-  public final VariableFeatures variables;
+  public final hydra.ext.tinkerpop.features.VariableFeatures variables;
   
-  public GraphFeatures (Boolean supportsComputer, Boolean supportsConcurrentAccess, Boolean supportsIoRead, Boolean supportsIoWrite, Boolean supportsPersistence, Boolean supportsThreadedTransactions, Boolean supportsTransactions, VariableFeatures variables) {
+  public GraphFeatures (Boolean supportsComputer, Boolean supportsConcurrentAccess, Boolean supportsIoRead, Boolean supportsIoWrite, Boolean supportsPersistence, Boolean supportsThreadedTransactions, Boolean supportsTransactions, hydra.ext.tinkerpop.features.VariableFeatures variables) {
     this.supportsComputer = supportsComputer;
     this.supportsConcurrentAccess = supportsConcurrentAccess;
     this.supportsIoRead = supportsIoRead;
@@ -97,7 +97,7 @@ public class GraphFeatures {
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
-  public GraphFeatures withVariables(VariableFeatures variables) {
+  public GraphFeatures withVariables(hydra.ext.tinkerpop.features.VariableFeatures variables) {
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
 }

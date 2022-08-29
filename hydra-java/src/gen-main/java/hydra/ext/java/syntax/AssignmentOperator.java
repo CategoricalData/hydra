@@ -87,7 +87,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Simple extends AssignmentOperator {
+  public static final class Simple extends hydra.ext.java.syntax.AssignmentOperator {
     public Simple () {
     
     }
@@ -112,7 +112,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Times extends AssignmentOperator {
+  public static final class Times extends hydra.ext.java.syntax.AssignmentOperator {
     public Times () {
     
     }
@@ -137,7 +137,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Div extends AssignmentOperator {
+  public static final class Div extends hydra.ext.java.syntax.AssignmentOperator {
     public Div () {
     
     }
@@ -162,7 +162,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Mod extends AssignmentOperator {
+  public static final class Mod extends hydra.ext.java.syntax.AssignmentOperator {
     public Mod () {
     
     }
@@ -187,7 +187,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Plus extends AssignmentOperator {
+  public static final class Plus extends hydra.ext.java.syntax.AssignmentOperator {
     public Plus () {
     
     }
@@ -212,7 +212,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Minus extends AssignmentOperator {
+  public static final class Minus extends hydra.ext.java.syntax.AssignmentOperator {
     public Minus () {
     
     }
@@ -237,7 +237,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class ShiftLeft extends AssignmentOperator {
+  public static final class ShiftLeft extends hydra.ext.java.syntax.AssignmentOperator {
     public ShiftLeft () {
     
     }
@@ -262,7 +262,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class ShiftRight extends AssignmentOperator {
+  public static final class ShiftRight extends hydra.ext.java.syntax.AssignmentOperator {
     public ShiftRight () {
     
     }
@@ -287,7 +287,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class ShiftRightZeroFill extends AssignmentOperator {
+  public static final class ShiftRightZeroFill extends hydra.ext.java.syntax.AssignmentOperator {
     public ShiftRightZeroFill () {
     
     }
@@ -312,7 +312,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class And extends AssignmentOperator {
+  public static final class And extends hydra.ext.java.syntax.AssignmentOperator {
     public And () {
     
     }
@@ -337,7 +337,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Xor extends AssignmentOperator {
+  public static final class Xor extends hydra.ext.java.syntax.AssignmentOperator {
     public Xor () {
     
     }
@@ -362,7 +362,7 @@ public abstract class AssignmentOperator {
     }
   }
   
-  public static final class Or extends AssignmentOperator {
+  public static final class Or extends hydra.ext.java.syntax.AssignmentOperator {
     public Or () {
     
     }

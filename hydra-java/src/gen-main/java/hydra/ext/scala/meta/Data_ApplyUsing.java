@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_ApplyUsing {
-  public final Data fun;
+  public final hydra.ext.scala.meta.Data fun;
   
-  public final java.util.List<Data> targs;
+  public final java.util.List<hydra.ext.scala.meta.Data> targs;
   
-  public Data_ApplyUsing (Data fun, java.util.List<Data> targs) {
+  public Data_ApplyUsing (hydra.ext.scala.meta.Data fun, java.util.List<hydra.ext.scala.meta.Data> targs) {
     this.fun = fun;
     this.targs = targs;
   }
@@ -24,11 +24,11 @@ public class Data_ApplyUsing {
     return 2 * fun.hashCode() + 3 * targs.hashCode();
   }
   
-  public Data_ApplyUsing withFun(Data fun) {
+  public Data_ApplyUsing withFun(hydra.ext.scala.meta.Data fun) {
     return new Data_ApplyUsing(fun, targs);
   }
   
-  public Data_ApplyUsing withTargs(java.util.List<Data> targs) {
+  public Data_ApplyUsing withTargs(java.util.List<hydra.ext.scala.meta.Data> targs) {
     return new Data_ApplyUsing(fun, targs);
   }
 }

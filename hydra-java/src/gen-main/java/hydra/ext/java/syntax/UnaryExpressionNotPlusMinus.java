@@ -39,10 +39,10 @@ public abstract class UnaryExpressionNotPlusMinus {
     }
   }
   
-  public static final class Postfix extends UnaryExpressionNotPlusMinus {
-    public final PostfixExpression value;
+  public static final class Postfix extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public final hydra.ext.java.syntax.PostfixExpression value;
     
-    public Postfix (PostfixExpression value) {
+    public Postfix (hydra.ext.java.syntax.PostfixExpression value) {
       this.value = value;
     }
     
@@ -66,10 +66,10 @@ public abstract class UnaryExpressionNotPlusMinus {
     }
   }
   
-  public static final class Tilde extends UnaryExpressionNotPlusMinus {
-    public final UnaryExpression value;
+  public static final class Tilde extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public final hydra.ext.java.syntax.UnaryExpression value;
     
-    public Tilde (UnaryExpression value) {
+    public Tilde (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
     
@@ -93,10 +93,10 @@ public abstract class UnaryExpressionNotPlusMinus {
     }
   }
   
-  public static final class Not extends UnaryExpressionNotPlusMinus {
-    public final UnaryExpression value;
+  public static final class Not extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public final hydra.ext.java.syntax.UnaryExpression value;
     
-    public Not (UnaryExpression value) {
+    public Not (hydra.ext.java.syntax.UnaryExpression value) {
       this.value = value;
     }
     
@@ -120,10 +120,10 @@ public abstract class UnaryExpressionNotPlusMinus {
     }
   }
   
-  public static final class Cast extends UnaryExpressionNotPlusMinus {
-    public final CastExpression value;
+  public static final class Cast extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public final hydra.ext.java.syntax.CastExpression value;
     
-    public Cast (CastExpression value) {
+    public Cast (hydra.ext.java.syntax.CastExpression value) {
       this.value = value;
     }
     

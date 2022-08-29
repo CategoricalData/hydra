@@ -27,10 +27,10 @@ public abstract class FormalParameter {
     }
   }
   
-  public static final class Simple extends FormalParameter {
-    public final FormalParameter_Simple value;
+  public static final class Simple extends hydra.ext.java.syntax.FormalParameter {
+    public final hydra.ext.java.syntax.FormalParameter_Simple value;
     
-    public Simple (FormalParameter_Simple value) {
+    public Simple (hydra.ext.java.syntax.FormalParameter_Simple value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class FormalParameter {
     }
   }
   
-  public static final class VariableArity extends FormalParameter {
-    public final VariableArityParameter value;
+  public static final class VariableArity extends hydra.ext.java.syntax.FormalParameter {
+    public final hydra.ext.java.syntax.VariableArityParameter value;
     
-    public VariableArity (VariableArityParameter value) {
+    public VariableArity (hydra.ext.java.syntax.VariableArityParameter value) {
       this.value = value;
     }
     

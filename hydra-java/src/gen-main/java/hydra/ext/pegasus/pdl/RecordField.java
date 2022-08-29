@@ -1,17 +1,17 @@
 package hydra.ext.pegasus.pdl;
 
 public class RecordField {
-  public final FieldName name;
+  public final hydra.ext.pegasus.pdl.FieldName name;
   
-  public final Schema value;
+  public final hydra.ext.pegasus.pdl.Schema value;
   
   public final Boolean optional;
   
   public final java.util.Optional<hydra.ext.json.model.Value> default_;
   
-  public final Annotations annotations;
+  public final hydra.ext.pegasus.pdl.Annotations annotations;
   
-  public RecordField (FieldName name, Schema value, Boolean optional, java.util.Optional<hydra.ext.json.model.Value> default_, Annotations annotations) {
+  public RecordField (hydra.ext.pegasus.pdl.FieldName name, hydra.ext.pegasus.pdl.Schema value, Boolean optional, java.util.Optional<hydra.ext.json.model.Value> default_, hydra.ext.pegasus.pdl.Annotations annotations) {
     this.name = name;
     this.value = value;
     this.optional = optional;
@@ -33,11 +33,11 @@ public class RecordField {
     return 2 * name.hashCode() + 3 * value.hashCode() + 5 * optional.hashCode() + 7 * default_.hashCode() + 11 * annotations.hashCode();
   }
   
-  public RecordField withName(FieldName name) {
+  public RecordField withName(hydra.ext.pegasus.pdl.FieldName name) {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
-  public RecordField withValue(Schema value) {
+  public RecordField withValue(hydra.ext.pegasus.pdl.Schema value) {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
@@ -49,7 +49,7 @@ public class RecordField {
     return new RecordField(name, value, optional, default_, annotations);
   }
   
-  public RecordField withAnnotations(Annotations annotations) {
+  public RecordField withAnnotations(hydra.ext.pegasus.pdl.Annotations annotations) {
     return new RecordField(name, value, optional, default_, annotations);
   }
 }

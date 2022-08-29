@@ -42,7 +42,7 @@ public abstract class Ws {
     }
   }
   
-  public static final class None extends Ws {
+  public static final class None extends hydra.util.codetree.ast.Ws {
     public None () {
     
     }
@@ -67,7 +67,7 @@ public abstract class Ws {
     }
   }
   
-  public static final class Space extends Ws {
+  public static final class Space extends hydra.util.codetree.ast.Ws {
     public Space () {
     
     }
@@ -92,7 +92,7 @@ public abstract class Ws {
     }
   }
   
-  public static final class Break extends Ws {
+  public static final class Break extends hydra.util.codetree.ast.Ws {
     public Break () {
     
     }
@@ -117,7 +117,7 @@ public abstract class Ws {
     }
   }
   
-  public static final class BreakAndIndent extends Ws {
+  public static final class BreakAndIndent extends hydra.util.codetree.ast.Ws {
     public BreakAndIndent () {
     
     }

@@ -10,7 +10,7 @@ public class AtlasAttributeDef {
   
   public final Boolean isOptional;
   
-  public final java.util.Optional<AtlasAttributeDef_Cardinality> cardinality;
+  public final java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_Cardinality> cardinality;
   
   public final Integer valuesMinCount;
   
@@ -28,15 +28,15 @@ public class AtlasAttributeDef {
   
   public final Integer searchWeight;
   
-  public final java.util.Optional<AtlasAttributeDef_IndexType> indexType;
+  public final java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_IndexType> indexType;
   
-  public final java.util.List<AtlasConstraintDef> constraints;
+  public final java.util.List<hydra.ext.atlas.model.AtlasConstraintDef> constraints;
   
   public final java.util.Map<String, String> options;
   
   public final java.util.Optional<String> displayName;
   
-  public AtlasAttributeDef (java.util.Optional<String> name, java.util.Optional<String> typeName, Boolean isOptional, java.util.Optional<AtlasAttributeDef_Cardinality> cardinality, Integer valuesMinCount, Integer valuesMaxCount, Boolean isUnique, Boolean isIndexable, Boolean includeInNotification, java.util.Optional<String> defaultValue, java.util.Optional<String> description, Integer searchWeight, java.util.Optional<AtlasAttributeDef_IndexType> indexType, java.util.List<AtlasConstraintDef> constraints, java.util.Map<String, String> options, java.util.Optional<String> displayName) {
+  public AtlasAttributeDef (java.util.Optional<String> name, java.util.Optional<String> typeName, Boolean isOptional, java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_Cardinality> cardinality, Integer valuesMinCount, Integer valuesMaxCount, Boolean isUnique, Boolean isIndexable, Boolean includeInNotification, java.util.Optional<String> defaultValue, java.util.Optional<String> description, Integer searchWeight, java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_IndexType> indexType, java.util.List<hydra.ext.atlas.model.AtlasConstraintDef> constraints, java.util.Map<String, String> options, java.util.Optional<String> displayName) {
     this.name = name;
     this.typeName = typeName;
     this.isOptional = isOptional;
@@ -81,7 +81,7 @@ public class AtlasAttributeDef {
     return new AtlasAttributeDef(name, typeName, isOptional, cardinality, valuesMinCount, valuesMaxCount, isUnique, isIndexable, includeInNotification, defaultValue, description, searchWeight, indexType, constraints, options, displayName);
   }
   
-  public AtlasAttributeDef withCardinality(java.util.Optional<AtlasAttributeDef_Cardinality> cardinality) {
+  public AtlasAttributeDef withCardinality(java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_Cardinality> cardinality) {
     return new AtlasAttributeDef(name, typeName, isOptional, cardinality, valuesMinCount, valuesMaxCount, isUnique, isIndexable, includeInNotification, defaultValue, description, searchWeight, indexType, constraints, options, displayName);
   }
   
@@ -117,11 +117,11 @@ public class AtlasAttributeDef {
     return new AtlasAttributeDef(name, typeName, isOptional, cardinality, valuesMinCount, valuesMaxCount, isUnique, isIndexable, includeInNotification, defaultValue, description, searchWeight, indexType, constraints, options, displayName);
   }
   
-  public AtlasAttributeDef withIndexType(java.util.Optional<AtlasAttributeDef_IndexType> indexType) {
+  public AtlasAttributeDef withIndexType(java.util.Optional<hydra.ext.atlas.model.AtlasAttributeDef_IndexType> indexType) {
     return new AtlasAttributeDef(name, typeName, isOptional, cardinality, valuesMinCount, valuesMaxCount, isUnique, isIndexable, includeInNotification, defaultValue, description, searchWeight, indexType, constraints, options, displayName);
   }
   
-  public AtlasAttributeDef withConstraints(java.util.List<AtlasConstraintDef> constraints) {
+  public AtlasAttributeDef withConstraints(java.util.List<hydra.ext.atlas.model.AtlasConstraintDef> constraints) {
     return new AtlasAttributeDef(name, typeName, isOptional, cardinality, valuesMinCount, valuesMaxCount, isUnique, isIndexable, includeInNotification, defaultValue, description, searchWeight, indexType, constraints, options, displayName);
   }
   

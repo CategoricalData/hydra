@@ -1,13 +1,13 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Infix {
-  public final Type lhs;
+  public final hydra.ext.haskell.ast.Type lhs;
   
-  public final Operator operator;
+  public final hydra.ext.haskell.ast.Operator operator;
   
-  public final Operator rhs;
+  public final hydra.ext.haskell.ast.Operator rhs;
   
-  public Type_Infix (Type lhs, Operator operator, Operator rhs) {
+  public Type_Infix (hydra.ext.haskell.ast.Type lhs, hydra.ext.haskell.ast.Operator operator, hydra.ext.haskell.ast.Operator rhs) {
     this.lhs = lhs;
     this.operator = operator;
     this.rhs = rhs;
@@ -27,15 +27,15 @@ public class Type_Infix {
     return 2 * lhs.hashCode() + 3 * operator.hashCode() + 5 * rhs.hashCode();
   }
   
-  public Type_Infix withLhs(Type lhs) {
+  public Type_Infix withLhs(hydra.ext.haskell.ast.Type lhs) {
     return new Type_Infix(lhs, operator, rhs);
   }
   
-  public Type_Infix withOperator(Operator operator) {
+  public Type_Infix withOperator(hydra.ext.haskell.ast.Operator operator) {
     return new Type_Infix(lhs, operator, rhs);
   }
   
-  public Type_Infix withRhs(Operator rhs) {
+  public Type_Infix withRhs(hydra.ext.haskell.ast.Operator rhs) {
     return new Type_Infix(lhs, operator, rhs);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class EnumConstantModifier {
-  public final Annotation value;
+  public final hydra.ext.java.syntax.Annotation value;
   
-  public EnumConstantModifier (Annotation value) {
+  public EnumConstantModifier (hydra.ext.java.syntax.Annotation value) {
     this.value = value;
   }
   

@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Typed {
-  public final Pat lhs;
+  public final hydra.ext.scala.meta.Pat lhs;
   
-  public final Type rhs;
+  public final hydra.ext.scala.meta.Type rhs;
   
-  public Pat_Typed (Pat lhs, Type rhs) {
+  public Pat_Typed (hydra.ext.scala.meta.Pat lhs, hydra.ext.scala.meta.Type rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Pat_Typed {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Pat_Typed withLhs(Pat lhs) {
+  public Pat_Typed withLhs(hydra.ext.scala.meta.Pat lhs) {
     return new Pat_Typed(lhs, rhs);
   }
   
-  public Pat_Typed withRhs(Type rhs) {
+  public Pat_Typed withRhs(hydra.ext.scala.meta.Type rhs) {
     return new Pat_Typed(lhs, rhs);
   }
 }

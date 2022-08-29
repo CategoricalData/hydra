@@ -33,10 +33,10 @@ public abstract class AdditiveExpression {
     }
   }
   
-  public static final class Unary extends AdditiveExpression {
-    public final MultiplicativeExpression value;
+  public static final class Unary extends hydra.ext.java.syntax.AdditiveExpression {
+    public final hydra.ext.java.syntax.MultiplicativeExpression value;
     
-    public Unary (MultiplicativeExpression value) {
+    public Unary (hydra.ext.java.syntax.MultiplicativeExpression value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class AdditiveExpression {
     }
   }
   
-  public static final class Plus extends AdditiveExpression {
-    public final AdditiveExpression_Binary value;
+  public static final class Plus extends hydra.ext.java.syntax.AdditiveExpression {
+    public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
     
-    public Plus (AdditiveExpression_Binary value) {
+    public Plus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class AdditiveExpression {
     }
   }
   
-  public static final class Minus extends AdditiveExpression {
-    public final AdditiveExpression_Binary value;
+  public static final class Minus extends hydra.ext.java.syntax.AdditiveExpression {
+    public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
     
-    public Minus (AdditiveExpression_Binary value) {
+    public Minus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {
       this.value = value;
     }
     

@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A lambda expression
  */
 public class Expression_Lambda {
-  public final java.util.List<Pattern> bindings;
+  public final java.util.List<hydra.ext.haskell.ast.Pattern> bindings;
   
-  public final Expression inner;
+  public final hydra.ext.haskell.ast.Expression inner;
   
-  public Expression_Lambda (java.util.List<Pattern> bindings, Expression inner) {
+  public Expression_Lambda (java.util.List<hydra.ext.haskell.ast.Pattern> bindings, hydra.ext.haskell.ast.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -27,11 +27,11 @@ public class Expression_Lambda {
     return 2 * bindings.hashCode() + 3 * inner.hashCode();
   }
   
-  public Expression_Lambda withBindings(java.util.List<Pattern> bindings) {
+  public Expression_Lambda withBindings(java.util.List<hydra.ext.haskell.ast.Pattern> bindings) {
     return new Expression_Lambda(bindings, inner);
   }
   
-  public Expression_Lambda withInner(Expression inner) {
+  public Expression_Lambda withInner(hydra.ext.haskell.ast.Expression inner) {
     return new Expression_Lambda(bindings, inner);
   }
 }

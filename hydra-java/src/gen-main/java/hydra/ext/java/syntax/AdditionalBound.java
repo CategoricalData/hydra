@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class AdditionalBound {
-  public final InterfaceType value;
+  public final hydra.ext.java.syntax.InterfaceType value;
   
-  public AdditionalBound (InterfaceType value) {
+  public AdditionalBound (hydra.ext.java.syntax.InterfaceType value) {
     this.value = value;
   }
   

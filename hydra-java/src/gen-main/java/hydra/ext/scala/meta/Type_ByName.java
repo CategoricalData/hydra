@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Type_ByName {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Type_ByName (Type tpe) {
+  public Type_ByName (hydra.ext.scala.meta.Type tpe) {
     this.tpe = tpe;
   }
   

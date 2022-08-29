@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * An ordinary (positional) data constructor
  */
 public class Constructor_Ordinary {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final java.util.List<Type> fields;
+  public final java.util.List<hydra.ext.haskell.ast.Type> fields;
   
-  public Constructor_Ordinary (Name name, java.util.List<Type> fields) {
+  public Constructor_Ordinary (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Type> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -27,11 +27,11 @@ public class Constructor_Ordinary {
     return 2 * name.hashCode() + 3 * fields.hashCode();
   }
   
-  public Constructor_Ordinary withName(Name name) {
+  public Constructor_Ordinary withName(hydra.ext.haskell.ast.Name name) {
     return new Constructor_Ordinary(name, fields);
   }
   
-  public Constructor_Ordinary withFields(java.util.List<Type> fields) {
+  public Constructor_Ordinary withFields(java.util.List<hydra.ext.haskell.ast.Type> fields) {
     return new Constructor_Ordinary(name, fields);
   }
 }

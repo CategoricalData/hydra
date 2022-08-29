@@ -30,7 +30,7 @@ public abstract class Precision {
     }
   }
   
-  public static final class Arbitrary extends Precision {
+  public static final class Arbitrary extends hydra.core.Precision {
     public Arbitrary () {
     
     }
@@ -55,7 +55,7 @@ public abstract class Precision {
     }
   }
   
-  public static final class Bits extends Precision {
+  public static final class Bits extends hydra.core.Precision {
     public final Integer value;
     
     public Bits (Integer value) {

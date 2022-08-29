@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ClassOrInterfaceTypeToInstantiate {
-  public final java.util.List<AnnotatedIdentifier> identifiers;
+  public final java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers;
   
-  public final java.util.Optional<TypeArgumentsOrDiamond> typeArguments;
+  public final java.util.Optional<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments;
   
-  public ClassOrInterfaceTypeToInstantiate (java.util.List<AnnotatedIdentifier> identifiers, java.util.Optional<TypeArgumentsOrDiamond> typeArguments) {
+  public ClassOrInterfaceTypeToInstantiate (java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers, java.util.Optional<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
     this.identifiers = identifiers;
     this.typeArguments = typeArguments;
   }
@@ -24,11 +24,11 @@ public class ClassOrInterfaceTypeToInstantiate {
     return 2 * identifiers.hashCode() + 3 * typeArguments.hashCode();
   }
   
-  public ClassOrInterfaceTypeToInstantiate withIdentifiers(java.util.List<AnnotatedIdentifier> identifiers) {
+  public ClassOrInterfaceTypeToInstantiate withIdentifiers(java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers) {
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
   
-  public ClassOrInterfaceTypeToInstantiate withTypeArguments(java.util.Optional<TypeArgumentsOrDiamond> typeArguments) {
+  public ClassOrInterfaceTypeToInstantiate withTypeArguments(java.util.Optional<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments) {
     return new ClassOrInterfaceTypeToInstantiate(identifiers, typeArguments);
   }
 }

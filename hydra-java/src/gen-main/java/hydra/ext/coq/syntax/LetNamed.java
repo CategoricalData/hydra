@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class LetNamed {
-  public final LetBinder binder;
+  public final hydra.ext.coq.syntax.LetBinder binder;
   
-  public final java.util.List<Binder> binders;
+  public final java.util.List<hydra.ext.coq.syntax.Binder> binders;
   
-  public LetNamed (LetBinder binder, java.util.List<Binder> binders) {
+  public LetNamed (hydra.ext.coq.syntax.LetBinder binder, java.util.List<hydra.ext.coq.syntax.Binder> binders) {
     this.binder = binder;
     this.binders = binders;
   }
@@ -24,11 +24,11 @@ public class LetNamed {
     return 2 * binder.hashCode() + 3 * binders.hashCode();
   }
   
-  public LetNamed withBinder(LetBinder binder) {
+  public LetNamed withBinder(hydra.ext.coq.syntax.LetBinder binder) {
     return new LetNamed(binder, binders);
   }
   
-  public LetNamed withBinders(java.util.List<Binder> binders) {
+  public LetNamed withBinders(java.util.List<hydra.ext.coq.syntax.Binder> binders) {
     return new LetNamed(binder, binders);
   }
 }

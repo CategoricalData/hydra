@@ -27,7 +27,7 @@ public abstract class AtlasAttributeDef_IndexType {
     }
   }
   
-  public static final class Default extends AtlasAttributeDef_IndexType {
+  public static final class Default extends hydra.ext.atlas.model.AtlasAttributeDef_IndexType {
     public Default () {
     
     }
@@ -52,7 +52,7 @@ public abstract class AtlasAttributeDef_IndexType {
     }
   }
   
-  public static final class String_ extends AtlasAttributeDef_IndexType {
+  public static final class String_ extends hydra.ext.atlas.model.AtlasAttributeDef_IndexType {
     public String_ () {
     
     }

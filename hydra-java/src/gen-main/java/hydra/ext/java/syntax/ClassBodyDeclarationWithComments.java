@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ClassBodyDeclarationWithComments {
-  public final ClassBodyDeclaration value;
+  public final hydra.ext.java.syntax.ClassBodyDeclaration value;
   
   public final java.util.Optional<String> comments;
   
-  public ClassBodyDeclarationWithComments (ClassBodyDeclaration value, java.util.Optional<String> comments) {
+  public ClassBodyDeclarationWithComments (hydra.ext.java.syntax.ClassBodyDeclaration value, java.util.Optional<String> comments) {
     this.value = value;
     this.comments = comments;
   }
@@ -24,7 +24,7 @@ public class ClassBodyDeclarationWithComments {
     return 2 * value.hashCode() + 3 * comments.hashCode();
   }
   
-  public ClassBodyDeclarationWithComments withValue(ClassBodyDeclaration value) {
+  public ClassBodyDeclarationWithComments withValue(hydra.ext.java.syntax.ClassBodyDeclaration value) {
     return new ClassBodyDeclarationWithComments(value, comments);
   }
   

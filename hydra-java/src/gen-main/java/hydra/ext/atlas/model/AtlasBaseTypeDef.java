@@ -4,7 +4,7 @@ package hydra.ext.atlas.model;
  * Base class that captures common-attributes for all Atlas types.
  */
 public class AtlasBaseTypeDef {
-  public final java.util.Optional<TypeCategory> category;
+  public final java.util.Optional<hydra.ext.atlas.model.TypeCategory> category;
   
   public final java.util.Optional<String> guid;
   
@@ -28,7 +28,7 @@ public class AtlasBaseTypeDef {
   
   public final java.util.Map<String, String> options;
   
-  public AtlasBaseTypeDef (java.util.Optional<TypeCategory> category, java.util.Optional<String> guid, java.util.Optional<String> createdBy, java.util.Optional<String> updatedBy, java.util.Optional<hydra.ext.xml.schema.DateTime> createTime, java.util.Optional<hydra.ext.xml.schema.DateTime> updateTime, java.util.Optional<Long> version, java.util.Optional<String> name, java.util.Optional<String> description, java.util.Optional<String> typeVersion, java.util.Optional<String> serviceType, java.util.Map<String, String> options) {
+  public AtlasBaseTypeDef (java.util.Optional<hydra.ext.atlas.model.TypeCategory> category, java.util.Optional<String> guid, java.util.Optional<String> createdBy, java.util.Optional<String> updatedBy, java.util.Optional<hydra.ext.xml.schema.DateTime> createTime, java.util.Optional<hydra.ext.xml.schema.DateTime> updateTime, java.util.Optional<Long> version, java.util.Optional<String> name, java.util.Optional<String> description, java.util.Optional<String> typeVersion, java.util.Optional<String> serviceType, java.util.Map<String, String> options) {
     this.category = category;
     this.guid = guid;
     this.createdBy = createdBy;
@@ -57,7 +57,7 @@ public class AtlasBaseTypeDef {
     return 2 * category.hashCode() + 3 * guid.hashCode() + 5 * createdBy.hashCode() + 7 * updatedBy.hashCode() + 11 * createTime.hashCode() + 13 * updateTime.hashCode() + 17 * version.hashCode() + 19 * name.hashCode() + 23 * description.hashCode() + 29 * typeVersion.hashCode() + 31 * serviceType.hashCode() + 37 * options.hashCode();
   }
   
-  public AtlasBaseTypeDef withCategory(java.util.Optional<TypeCategory> category) {
+  public AtlasBaseTypeDef withCategory(java.util.Optional<hydra.ext.atlas.model.TypeCategory> category) {
     return new AtlasBaseTypeDef(category, guid, createdBy, updatedBy, createTime, updateTime, version, name, description, typeVersion, serviceType, options);
   }
   

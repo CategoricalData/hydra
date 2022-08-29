@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Xml {
-  public final java.util.List<Lit> parts;
+  public final java.util.List<hydra.ext.scala.meta.Lit> parts;
   
-  public final java.util.List<Pat> args;
+  public final java.util.List<hydra.ext.scala.meta.Pat> args;
   
-  public Pat_Xml (java.util.List<Lit> parts, java.util.List<Pat> args) {
+  public Pat_Xml (java.util.List<hydra.ext.scala.meta.Lit> parts, java.util.List<hydra.ext.scala.meta.Pat> args) {
     this.parts = parts;
     this.args = args;
   }
@@ -24,11 +24,11 @@ public class Pat_Xml {
     return 2 * parts.hashCode() + 3 * args.hashCode();
   }
   
-  public Pat_Xml withParts(java.util.List<Lit> parts) {
+  public Pat_Xml withParts(java.util.List<hydra.ext.scala.meta.Lit> parts) {
     return new Pat_Xml(parts, args);
   }
   
-  public Pat_Xml withArgs(java.util.List<Pat> args) {
+  public Pat_Xml withArgs(java.util.List<hydra.ext.scala.meta.Pat> args) {
     return new Pat_Xml(parts, args);
   }
 }

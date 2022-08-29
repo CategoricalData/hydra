@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class InstanceInitializer {
-  public final Block value;
+  public final hydra.ext.java.syntax.Block value;
   
-  public InstanceInitializer (Block value) {
+  public InstanceInitializer (hydra.ext.java.syntax.Block value) {
     this.value = value;
   }
   

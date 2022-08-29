@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class TypeIdentifier {
-  public final Identifier value;
+  public final hydra.ext.java.syntax.Identifier value;
   
-  public TypeIdentifier (Identifier value) {
+  public TypeIdentifier (hydra.ext.java.syntax.Identifier value) {
     this.value = value;
   }
   

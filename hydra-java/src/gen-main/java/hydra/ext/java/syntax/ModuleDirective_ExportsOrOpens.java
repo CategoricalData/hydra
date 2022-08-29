@@ -1,14 +1,14 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_ExportsOrOpens {
-  public final PackageName package_;
+  public final hydra.ext.java.syntax.PackageName package_;
   
   /**
    * At least one module
    */
-  public final java.util.List<ModuleName> modules;
+  public final java.util.List<hydra.ext.java.syntax.ModuleName> modules;
   
-  public ModuleDirective_ExportsOrOpens (PackageName package_, java.util.List<ModuleName> modules) {
+  public ModuleDirective_ExportsOrOpens (hydra.ext.java.syntax.PackageName package_, java.util.List<hydra.ext.java.syntax.ModuleName> modules) {
     this.package_ = package_;
     this.modules = modules;
   }
@@ -27,11 +27,11 @@ public class ModuleDirective_ExportsOrOpens {
     return 2 * package_.hashCode() + 3 * modules.hashCode();
   }
   
-  public ModuleDirective_ExportsOrOpens withPackage(PackageName package_) {
+  public ModuleDirective_ExportsOrOpens withPackage(hydra.ext.java.syntax.PackageName package_) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
   
-  public ModuleDirective_ExportsOrOpens withModules(java.util.List<ModuleName> modules) {
+  public ModuleDirective_ExportsOrOpens withModules(java.util.List<hydra.ext.java.syntax.ModuleName> modules) {
     return new ModuleDirective_ExportsOrOpens(package_, modules);
   }
 }

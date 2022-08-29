@@ -30,10 +30,10 @@ public abstract class Shape {
     }
   }
   
-  public static final class Node extends Shape {
-    public final NodeShape value;
+  public static final class Node extends hydra.ext.shacl.model.Shape {
+    public final hydra.ext.shacl.model.NodeShape value;
     
-    public Node (NodeShape value) {
+    public Node (hydra.ext.shacl.model.NodeShape value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class Shape {
     }
   }
   
-  public static final class Property extends Shape {
-    public final PropertyShape value;
+  public static final class Property extends hydra.ext.shacl.model.Shape {
+    public final hydra.ext.shacl.model.PropertyShape value;
     
-    public Property (PropertyShape value) {
+    public Property (hydra.ext.shacl.model.PropertyShape value) {
       this.value = value;
     }
     

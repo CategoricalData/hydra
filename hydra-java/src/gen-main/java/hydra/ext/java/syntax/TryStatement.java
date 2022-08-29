@@ -33,10 +33,10 @@ public abstract class TryStatement {
     }
   }
   
-  public static final class Simple extends TryStatement {
-    public final TryStatement_Simple value;
+  public static final class Simple extends hydra.ext.java.syntax.TryStatement {
+    public final hydra.ext.java.syntax.TryStatement_Simple value;
     
-    public Simple (TryStatement_Simple value) {
+    public Simple (hydra.ext.java.syntax.TryStatement_Simple value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class TryStatement {
     }
   }
   
-  public static final class WithFinally extends TryStatement {
-    public final TryStatement_WithFinally value;
+  public static final class WithFinally extends hydra.ext.java.syntax.TryStatement {
+    public final hydra.ext.java.syntax.TryStatement_WithFinally value;
     
-    public WithFinally (TryStatement_WithFinally value) {
+    public WithFinally (hydra.ext.java.syntax.TryStatement_WithFinally value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class TryStatement {
     }
   }
   
-  public static final class WithResources extends TryStatement {
-    public final TryWithResourcesStatement value;
+  public static final class WithResources extends hydra.ext.java.syntax.TryStatement {
+    public final hydra.ext.java.syntax.TryWithResourcesStatement value;
     
-    public WithResources (TryWithResourcesStatement value) {
+    public WithResources (hydra.ext.java.syntax.TryWithResourcesStatement value) {
       this.value = value;
     }
     

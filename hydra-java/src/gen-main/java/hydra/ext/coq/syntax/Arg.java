@@ -33,10 +33,10 @@ public abstract class Arg {
     }
   }
   
-  public static final class Ident extends Arg {
-    public final IdentArg value;
+  public static final class Ident extends hydra.ext.coq.syntax.Arg {
+    public final hydra.ext.coq.syntax.IdentArg value;
     
-    public Ident (IdentArg value) {
+    public Ident (hydra.ext.coq.syntax.IdentArg value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class Arg {
     }
   }
   
-  public static final class Natural extends Arg {
-    public final NaturalArg value;
+  public static final class Natural extends hydra.ext.coq.syntax.Arg {
+    public final hydra.ext.coq.syntax.NaturalArg value;
     
-    public Natural (NaturalArg value) {
+    public Natural (hydra.ext.coq.syntax.NaturalArg value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class Arg {
     }
   }
   
-  public static final class Term extends Arg {
-    public final Term1 value;
+  public static final class Term extends hydra.ext.coq.syntax.Arg {
+    public final hydra.ext.coq.syntax.Term1 value;
     
-    public Term (Term1 value) {
+    public Term (hydra.ext.coq.syntax.Term1 value) {
       this.value = value;
     }
     

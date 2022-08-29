@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class SwitchBlock {
-  public final java.util.List<SwitchBlock_Pair> value;
+  public final java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value;
   
-  public SwitchBlock (java.util.List<SwitchBlock_Pair> value) {
+  public SwitchBlock (java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value) {
     this.value = value;
   }
   

@@ -4,13 +4,13 @@ package hydra.ext.coq.syntax;
  * Some constructions allow the binding of a variable to value. This is called a “let-binder”.
  */
 public class LetBinder {
-  public final Name name;
+  public final hydra.ext.coq.syntax.Name name;
   
-  public final java.util.Optional<Type> type;
+  public final java.util.Optional<hydra.ext.coq.syntax.Type> type;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public LetBinder (Name name, java.util.Optional<Type> type, Term term) {
+  public LetBinder (hydra.ext.coq.syntax.Name name, java.util.Optional<hydra.ext.coq.syntax.Type> type, hydra.ext.coq.syntax.Term term) {
     this.name = name;
     this.type = type;
     this.term = term;
@@ -30,15 +30,15 @@ public class LetBinder {
     return 2 * name.hashCode() + 3 * type.hashCode() + 5 * term.hashCode();
   }
   
-  public LetBinder withName(Name name) {
+  public LetBinder withName(hydra.ext.coq.syntax.Name name) {
     return new LetBinder(name, type, term);
   }
   
-  public LetBinder withType(java.util.Optional<Type> type) {
+  public LetBinder withType(java.util.Optional<hydra.ext.coq.syntax.Type> type) {
     return new LetBinder(name, type, term);
   }
   
-  public LetBinder withTerm(Term term) {
+  public LetBinder withTerm(hydra.ext.coq.syntax.Term term) {
     return new LetBinder(name, type, term);
   }
 }

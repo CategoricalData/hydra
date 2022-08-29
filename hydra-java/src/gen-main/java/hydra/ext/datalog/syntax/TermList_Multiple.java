@@ -1,11 +1,11 @@
 package hydra.ext.datalog.syntax;
 
 public class TermList_Multiple {
-  public final Term term;
+  public final hydra.ext.datalog.syntax.Term term;
   
-  public final TermList termList;
+  public final hydra.ext.datalog.syntax.TermList termList;
   
-  public TermList_Multiple (Term term, TermList termList) {
+  public TermList_Multiple (hydra.ext.datalog.syntax.Term term, hydra.ext.datalog.syntax.TermList termList) {
     this.term = term;
     this.termList = termList;
   }
@@ -24,11 +24,11 @@ public class TermList_Multiple {
     return 2 * term.hashCode() + 3 * termList.hashCode();
   }
   
-  public TermList_Multiple withTerm(Term term) {
+  public TermList_Multiple withTerm(hydra.ext.datalog.syntax.Term term) {
     return new TermList_Multiple(term, termList);
   }
   
-  public TermList_Multiple withTermList(TermList termList) {
+  public TermList_Multiple withTermList(hydra.ext.datalog.syntax.TermList termList) {
     return new TermList_Multiple(term, termList);
   }
 }

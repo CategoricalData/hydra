@@ -27,10 +27,10 @@ public abstract class TypeNameArray {
     }
   }
   
-  public static final class Simple extends TypeNameArray {
-    public final TypeName value;
+  public static final class Simple extends hydra.ext.java.syntax.TypeNameArray {
+    public final hydra.ext.java.syntax.TypeName value;
     
-    public Simple (TypeName value) {
+    public Simple (hydra.ext.java.syntax.TypeName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class TypeNameArray {
     }
   }
   
-  public static final class Array extends TypeNameArray {
-    public final TypeNameArray value;
+  public static final class Array extends hydra.ext.java.syntax.TypeNameArray {
+    public final hydra.ext.java.syntax.TypeNameArray value;
     
-    public Array (TypeNameArray value) {
+    public Array (hydra.ext.java.syntax.TypeNameArray value) {
       this.value = value;
     }
     

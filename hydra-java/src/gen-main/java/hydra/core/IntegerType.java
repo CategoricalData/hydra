@@ -72,7 +72,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Bigint extends IntegerType {
+  public static final class Bigint extends hydra.core.IntegerType {
     public Bigint () {
     
     }
@@ -97,7 +97,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Int8 extends IntegerType {
+  public static final class Int8 extends hydra.core.IntegerType {
     public Int8 () {
     
     }
@@ -122,7 +122,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Int16 extends IntegerType {
+  public static final class Int16 extends hydra.core.IntegerType {
     public Int16 () {
     
     }
@@ -147,7 +147,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Int32 extends IntegerType {
+  public static final class Int32 extends hydra.core.IntegerType {
     public Int32 () {
     
     }
@@ -172,7 +172,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Int64 extends IntegerType {
+  public static final class Int64 extends hydra.core.IntegerType {
     public Int64 () {
     
     }
@@ -197,7 +197,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Uint8 extends IntegerType {
+  public static final class Uint8 extends hydra.core.IntegerType {
     public Uint8 () {
     
     }
@@ -222,7 +222,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Uint16 extends IntegerType {
+  public static final class Uint16 extends hydra.core.IntegerType {
     public Uint16 () {
     
     }
@@ -247,7 +247,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Uint32 extends IntegerType {
+  public static final class Uint32 extends hydra.core.IntegerType {
     public Uint32 () {
     
     }
@@ -272,7 +272,7 @@ public abstract class IntegerType {
     }
   }
   
-  public static final class Uint64 extends IntegerType {
+  public static final class Uint64 extends hydra.core.IntegerType {
     public Uint64 () {
     
     }

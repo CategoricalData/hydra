@@ -33,10 +33,10 @@ public abstract class CastExpression {
     }
   }
   
-  public static final class Primitive extends CastExpression {
-    public final CastExpression_Primitive value;
+  public static final class Primitive extends hydra.ext.java.syntax.CastExpression {
+    public final hydra.ext.java.syntax.CastExpression_Primitive value;
     
-    public Primitive (CastExpression_Primitive value) {
+    public Primitive (hydra.ext.java.syntax.CastExpression_Primitive value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class CastExpression {
     }
   }
   
-  public static final class NotPlusMinus extends CastExpression {
-    public final CastExpression_NotPlusMinus value;
+  public static final class NotPlusMinus extends hydra.ext.java.syntax.CastExpression {
+    public final hydra.ext.java.syntax.CastExpression_NotPlusMinus value;
     
-    public NotPlusMinus (CastExpression_NotPlusMinus value) {
+    public NotPlusMinus (hydra.ext.java.syntax.CastExpression_NotPlusMinus value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class CastExpression {
     }
   }
   
-  public static final class Lambda extends CastExpression {
-    public final CastExpression_Lambda value;
+  public static final class Lambda extends hydra.ext.java.syntax.CastExpression {
+    public final hydra.ext.java.syntax.CastExpression_Lambda value;
     
-    public Lambda (CastExpression_Lambda value) {
+    public Lambda (hydra.ext.java.syntax.CastExpression_Lambda value) {
       this.value = value;
     }
     
