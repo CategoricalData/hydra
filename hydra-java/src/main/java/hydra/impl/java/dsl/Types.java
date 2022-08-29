@@ -31,19 +31,19 @@ public interface Types {
     }
 
     static <M> Type<M> bigfloat() {
-        return float_(new FloatType.Bigfloat());
+        return literal(LiteralTypes.bigfloat());
     }
 
     static <M> Type<M> bigint() {
-        return integer(new IntegerType.Bigint());
+        return literal(LiteralTypes.bigint());
     }
 
     static <M> Type<M> binary() {
-        return literal(new LiteralType.Binary());
+        return literal(LiteralTypes.binary());
     }
 
     static <M> Type<M> boolean_() {
-        return literal(new LiteralType.Boolean_());
+        return literal(LiteralTypes.boolean_());
     }
 
     static <M> Type<M> element(final Type<M> other) {
@@ -68,15 +68,15 @@ public interface Types {
     }
 
     static <M> Type<M> float32() {
-        return float_(new FloatType.Float32());
+        return literal(LiteralTypes.float32());
     }
 
     static <M> Type<M> float64() {
-        return float_(new FloatType.Float64());
+        return literal(LiteralTypes.float64());
     }
 
     static <M> Type<M> float_(final FloatType ftype) {
-        return literal(new LiteralType.Float_(ftype));
+        return literal(LiteralTypes.float_(ftype));
     }
 
     static <M> Type<M> function(final Type<M> dom, final Type<M> cod) {
@@ -84,23 +84,23 @@ public interface Types {
     }
 
     static <M> Type<M> int16() {
-        return integer(new IntegerType.Int16());
+        return literal(LiteralTypes.int16());
     }
 
     static <M> Type<M> int32() {
-        return integer(new IntegerType.Int32());
+        return literal(LiteralTypes.int32());
     }
 
     static <M> Type<M> int64() {
-        return integer(new IntegerType.Int64());
+        return literal(LiteralTypes.int64());
     }
 
     static <M> Type<M> int8() {
-        return integer(new IntegerType.Int8());
+        return literal(LiteralTypes.int8());
     }
 
     static <M> Type<M> integer(final IntegerType itype) {
-        return literal(new LiteralType.Integer_(itype));
+        return literal(LiteralTypes.integer(itype));
     }
 
     static <M> Type<M> lambda(final String var, final Type<M> body) {
@@ -152,19 +152,19 @@ public interface Types {
     }
 
     static <M> Type<M> uint16() {
-        return integer(new IntegerType.Uint16());
+        return literal(LiteralTypes.uint16());
     }
 
     static <M> Type<M> uint32() {
-        return integer(new IntegerType.Uint32());
+        return literal(LiteralTypes.uint32());
     }
 
     static <M> Type<M> uint64() {
-        return integer(new IntegerType.Uint64());
+        return literal(LiteralTypes.uint64());
     }
 
     static <M> Type<M> uint8() {
-        return integer(new IntegerType.Uint8());
+        return literal(LiteralTypes.uint8());
     }
 
     static <M> Type<M> unit() {
