@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * An application expression
  */
 public class Expression_Application {
-  public final Expression function;
+  public final hydra.ext.haskell.ast.Expression function;
   
-  public final Expression argument;
+  public final hydra.ext.haskell.ast.Expression argument;
   
-  public Expression_Application (Expression function, Expression argument) {
+  public Expression_Application (hydra.ext.haskell.ast.Expression function, hydra.ext.haskell.ast.Expression argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -27,11 +27,11 @@ public class Expression_Application {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public Expression_Application withFunction(Expression function) {
+  public Expression_Application withFunction(hydra.ext.haskell.ast.Expression function) {
     return new Expression_Application(function, argument);
   }
   
-  public Expression_Application withArgument(Expression argument) {
+  public Expression_Application withArgument(hydra.ext.haskell.ast.Expression argument) {
     return new Expression_Application(function, argument);
   }
 }

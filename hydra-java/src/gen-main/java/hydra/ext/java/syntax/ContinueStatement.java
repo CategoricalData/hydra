@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ContinueStatement {
-  public final java.util.Optional<Identifier> value;
+  public final java.util.Optional<hydra.ext.java.syntax.Identifier> value;
   
-  public ContinueStatement (java.util.Optional<Identifier> value) {
+  public ContinueStatement (java.util.Optional<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

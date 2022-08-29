@@ -33,10 +33,10 @@ public abstract class FieldAccess_Qualifier {
     }
   }
   
-  public static final class Primary extends FieldAccess_Qualifier {
-    public final Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.FieldAccess_Qualifier {
+    public final hydra.ext.java.syntax.Primary value;
     
-    public Primary (Primary value) {
+    public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
     
@@ -60,7 +60,7 @@ public abstract class FieldAccess_Qualifier {
     }
   }
   
-  public static final class Super extends FieldAccess_Qualifier {
+  public static final class Super extends hydra.ext.java.syntax.FieldAccess_Qualifier {
     public Super () {
     
     }
@@ -85,10 +85,10 @@ public abstract class FieldAccess_Qualifier {
     }
   }
   
-  public static final class Typed extends FieldAccess_Qualifier {
-    public final TypeName value;
+  public static final class Typed extends hydra.ext.java.syntax.FieldAccess_Qualifier {
+    public final hydra.ext.java.syntax.TypeName value;
     
-    public Typed (TypeName value) {
+    public Typed (hydra.ext.java.syntax.TypeName value) {
       this.value = value;
     }
     

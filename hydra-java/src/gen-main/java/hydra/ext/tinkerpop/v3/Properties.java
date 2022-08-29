@@ -7,9 +7,9 @@ public class Properties {
   /**
    * A map of property keys to property values
    */
-  public final java.util.Map<PropertyKey, hydra.core.Literal> value;
+  public final java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, hydra.core.Literal> value;
   
-  public Properties (java.util.Map<PropertyKey, hydra.core.Literal> value) {
+  public Properties (java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, hydra.core.Literal> value) {
     this.value = value;
   }
   

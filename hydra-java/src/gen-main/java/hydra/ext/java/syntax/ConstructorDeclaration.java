@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class ConstructorDeclaration {
-  public final java.util.List<ConstructorModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers;
   
-  public final ConstructorDeclarator constructor;
+  public final hydra.ext.java.syntax.ConstructorDeclarator constructor;
   
-  public final java.util.Optional<Throws> throws_;
+  public final java.util.Optional<hydra.ext.java.syntax.Throws> throws_;
   
-  public final ConstructorBody body;
+  public final hydra.ext.java.syntax.ConstructorBody body;
   
-  public ConstructorDeclaration (java.util.List<ConstructorModifier> modifiers, ConstructorDeclarator constructor, java.util.Optional<Throws> throws_, ConstructorBody body) {
+  public ConstructorDeclaration (java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers, hydra.ext.java.syntax.ConstructorDeclarator constructor, java.util.Optional<hydra.ext.java.syntax.Throws> throws_, hydra.ext.java.syntax.ConstructorBody body) {
     this.modifiers = modifiers;
     this.constructor = constructor;
     this.throws_ = throws_;
@@ -30,19 +30,19 @@ public class ConstructorDeclaration {
     return 2 * modifiers.hashCode() + 3 * constructor.hashCode() + 5 * throws_.hashCode() + 7 * body.hashCode();
   }
   
-  public ConstructorDeclaration withModifiers(java.util.List<ConstructorModifier> modifiers) {
+  public ConstructorDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
-  public ConstructorDeclaration withConstructor(ConstructorDeclarator constructor) {
+  public ConstructorDeclaration withConstructor(hydra.ext.java.syntax.ConstructorDeclarator constructor) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
-  public ConstructorDeclaration withThrows(java.util.Optional<Throws> throws_) {
+  public ConstructorDeclaration withThrows(java.util.Optional<hydra.ext.java.syntax.Throws> throws_) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   
-  public ConstructorDeclaration withBody(ConstructorBody body) {
+  public ConstructorDeclaration withBody(hydra.ext.java.syntax.ConstructorBody body) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
 }

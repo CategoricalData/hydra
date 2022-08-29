@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Data_TryWithHandler {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public final Data catchp;
+  public final hydra.ext.scala.meta.Data catchp;
   
-  public final java.util.Optional<Data> finallyp;
+  public final java.util.Optional<hydra.ext.scala.meta.Data> finallyp;
   
-  public Data_TryWithHandler (Data expr, Data catchp, java.util.Optional<Data> finallyp) {
+  public Data_TryWithHandler (hydra.ext.scala.meta.Data expr, hydra.ext.scala.meta.Data catchp, java.util.Optional<hydra.ext.scala.meta.Data> finallyp) {
     this.expr = expr;
     this.catchp = catchp;
     this.finallyp = finallyp;
@@ -27,15 +27,15 @@ public class Data_TryWithHandler {
     return 2 * expr.hashCode() + 3 * catchp.hashCode() + 5 * finallyp.hashCode();
   }
   
-  public Data_TryWithHandler withExpr(Data expr) {
+  public Data_TryWithHandler withExpr(hydra.ext.scala.meta.Data expr) {
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
   
-  public Data_TryWithHandler withCatchp(Data catchp) {
+  public Data_TryWithHandler withCatchp(hydra.ext.scala.meta.Data catchp) {
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
   
-  public Data_TryWithHandler withFinallyp(java.util.Optional<Data> finallyp) {
+  public Data_TryWithHandler withFinallyp(java.util.Optional<hydra.ext.scala.meta.Data> finallyp) {
     return new Data_TryWithHandler(expr, catchp, finallyp);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Ascribe {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Data_Ascribe (Data expr, Type tpe) {
+  public Data_Ascribe (hydra.ext.scala.meta.Data expr, hydra.ext.scala.meta.Type tpe) {
     this.expr = expr;
     this.tpe = tpe;
   }
@@ -24,11 +24,11 @@ public class Data_Ascribe {
     return 2 * expr.hashCode() + 3 * tpe.hashCode();
   }
   
-  public Data_Ascribe withExpr(Data expr) {
+  public Data_Ascribe withExpr(hydra.ext.scala.meta.Data expr) {
     return new Data_Ascribe(expr, tpe);
   }
   
-  public Data_Ascribe withTpe(Type tpe) {
+  public Data_Ascribe withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Data_Ascribe(expr, tpe);
   }
 }

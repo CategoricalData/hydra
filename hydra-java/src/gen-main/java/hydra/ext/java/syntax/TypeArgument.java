@@ -27,10 +27,10 @@ public abstract class TypeArgument {
     }
   }
   
-  public static final class Reference extends TypeArgument {
-    public final ReferenceType value;
+  public static final class Reference extends hydra.ext.java.syntax.TypeArgument {
+    public final hydra.ext.java.syntax.ReferenceType value;
     
-    public Reference (ReferenceType value) {
+    public Reference (hydra.ext.java.syntax.ReferenceType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class TypeArgument {
     }
   }
   
-  public static final class Wildcard extends TypeArgument {
-    public final Wildcard value;
+  public static final class Wildcard extends hydra.ext.java.syntax.TypeArgument {
+    public final hydra.ext.java.syntax.Wildcard value;
     
-    public Wildcard (Wildcard value) {
+    public Wildcard (hydra.ext.java.syntax.Wildcard value) {
       this.value = value;
     }
     

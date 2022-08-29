@@ -36,7 +36,7 @@ public abstract class TypeCastOperator {
   /**
    * The expression term10 : type is a type cast expression. It enforces the type of term10 to be type.
    */
-  public static final class Normal extends TypeCastOperator {
+  public static final class Normal extends hydra.ext.coq.syntax.TypeCastOperator {
     /**
      * The expression term10 : type is a type cast expression. It enforces the type of term10 to be type.
      */
@@ -69,7 +69,7 @@ public abstract class TypeCastOperator {
   /**
    * term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute).
    */
-  public static final class VmCompute extends TypeCastOperator {
+  public static final class VmCompute extends hydra.ext.coq.syntax.TypeCastOperator {
     /**
      * term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute).
      */
@@ -102,7 +102,7 @@ public abstract class TypeCastOperator {
   /**
    * term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute).
    */
-  public static final class NativeCompute extends TypeCastOperator {
+  public static final class NativeCompute extends hydra.ext.coq.syntax.TypeCastOperator {
     /**
      * term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute).
      */

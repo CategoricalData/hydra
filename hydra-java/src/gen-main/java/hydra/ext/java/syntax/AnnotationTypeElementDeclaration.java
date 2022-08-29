@@ -1,17 +1,17 @@
 package hydra.ext.java.syntax;
 
 public class AnnotationTypeElementDeclaration {
-  public final java.util.List<AnnotationTypeElementModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
   
-  public final UnannType type;
+  public final hydra.ext.java.syntax.UnannType type;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public final java.util.Optional<Dims> dims;
+  public final java.util.Optional<hydra.ext.java.syntax.Dims> dims;
   
-  public final java.util.Optional<DefaultValue> default_;
+  public final java.util.Optional<hydra.ext.java.syntax.DefaultValue> default_;
   
-  public AnnotationTypeElementDeclaration (java.util.List<AnnotationTypeElementModifier> modifiers, UnannType type, Identifier identifier, java.util.Optional<Dims> dims, java.util.Optional<DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration (java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, java.util.Optional<hydra.ext.java.syntax.Dims> dims, java.util.Optional<hydra.ext.java.syntax.DefaultValue> default_) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -33,23 +33,23 @@ public class AnnotationTypeElementDeclaration {
     return 2 * modifiers.hashCode() + 3 * type.hashCode() + 5 * identifier.hashCode() + 7 * dims.hashCode() + 11 * default_.hashCode();
   }
   
-  public AnnotationTypeElementDeclaration withModifiers(java.util.List<AnnotationTypeElementModifier> modifiers) {
+  public AnnotationTypeElementDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withType(UnannType type) {
+  public AnnotationTypeElementDeclaration withType(hydra.ext.java.syntax.UnannType type) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withIdentifier(Identifier identifier) {
+  public AnnotationTypeElementDeclaration withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withDims(java.util.Optional<Dims> dims) {
+  public AnnotationTypeElementDeclaration withDims(java.util.Optional<hydra.ext.java.syntax.Dims> dims) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   
-  public AnnotationTypeElementDeclaration withDefault(java.util.Optional<DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration withDefault(java.util.Optional<hydra.ext.java.syntax.DefaultValue> default_) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
 }

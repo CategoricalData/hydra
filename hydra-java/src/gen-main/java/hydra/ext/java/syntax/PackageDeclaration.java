@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class PackageDeclaration {
-  public final java.util.List<PackageModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers;
   
-  public final java.util.List<Identifier> identifiers;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> identifiers;
   
-  public PackageDeclaration (java.util.List<PackageModifier> modifiers, java.util.List<Identifier> identifiers) {
+  public PackageDeclaration (java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers, java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
     this.modifiers = modifiers;
     this.identifiers = identifiers;
   }
@@ -24,11 +24,11 @@ public class PackageDeclaration {
     return 2 * modifiers.hashCode() + 3 * identifiers.hashCode();
   }
   
-  public PackageDeclaration withModifiers(java.util.List<PackageModifier> modifiers) {
+  public PackageDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
   
-  public PackageDeclaration withIdentifiers(java.util.List<Identifier> identifiers) {
+  public PackageDeclaration withIdentifiers(java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
 }

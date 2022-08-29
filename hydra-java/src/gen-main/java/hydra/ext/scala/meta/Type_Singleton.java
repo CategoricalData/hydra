@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Type_Singleton {
-  public final Data_Ref ref;
+  public final hydra.ext.scala.meta.Data_Ref ref;
   
-  public Type_Singleton (Data_Ref ref) {
+  public Type_Singleton (hydra.ext.scala.meta.Data_Ref ref) {
     this.ref = ref;
   }
   

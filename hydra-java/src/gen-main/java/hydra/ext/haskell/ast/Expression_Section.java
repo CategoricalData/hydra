@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A section expression
  */
 public class Expression_Section {
-  public final Operator operator;
+  public final hydra.ext.haskell.ast.Operator operator;
   
-  public final Expression expression;
+  public final hydra.ext.haskell.ast.Expression expression;
   
-  public Expression_Section (Operator operator, Expression expression) {
+  public Expression_Section (hydra.ext.haskell.ast.Operator operator, hydra.ext.haskell.ast.Expression expression) {
     this.operator = operator;
     this.expression = expression;
   }
@@ -27,11 +27,11 @@ public class Expression_Section {
     return 2 * operator.hashCode() + 3 * expression.hashCode();
   }
   
-  public Expression_Section withOperator(Operator operator) {
+  public Expression_Section withOperator(hydra.ext.haskell.ast.Operator operator) {
     return new Expression_Section(operator, expression);
   }
   
-  public Expression_Section withExpression(Expression expression) {
+  public Expression_Section withExpression(hydra.ext.haskell.ast.Expression expression) {
     return new Expression_Section(operator, expression);
   }
 }

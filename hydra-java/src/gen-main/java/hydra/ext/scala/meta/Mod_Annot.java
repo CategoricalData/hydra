@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Mod_Annot {
-  public final Init init;
+  public final hydra.ext.scala.meta.Init init;
   
-  public Mod_Annot (Init init) {
+  public Mod_Annot (hydra.ext.scala.meta.Init init) {
     this.init = init;
   }
   

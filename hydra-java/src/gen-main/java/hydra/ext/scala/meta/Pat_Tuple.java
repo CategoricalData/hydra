@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Tuple {
-  public final java.util.List<Pat> args;
+  public final java.util.List<hydra.ext.scala.meta.Pat> args;
   
-  public Pat_Tuple (java.util.List<Pat> args) {
+  public Pat_Tuple (java.util.List<hydra.ext.scala.meta.Pat> args) {
     this.args = args;
   }
   

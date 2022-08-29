@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Enumerator_CaseGenerator {
-  public final Pat pat;
+  public final hydra.ext.scala.meta.Pat pat;
   
-  public final Data rhs;
+  public final hydra.ext.scala.meta.Data rhs;
   
-  public Enumerator_CaseGenerator (Pat pat, Data rhs) {
+  public Enumerator_CaseGenerator (hydra.ext.scala.meta.Pat pat, hydra.ext.scala.meta.Data rhs) {
     this.pat = pat;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Enumerator_CaseGenerator {
     return 2 * pat.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Enumerator_CaseGenerator withPat(Pat pat) {
+  public Enumerator_CaseGenerator withPat(hydra.ext.scala.meta.Pat pat) {
     return new Enumerator_CaseGenerator(pat, rhs);
   }
   
-  public Enumerator_CaseGenerator withRhs(Data rhs) {
+  public Enumerator_CaseGenerator withRhs(hydra.ext.scala.meta.Data rhs) {
     return new Enumerator_CaseGenerator(pat, rhs);
   }
 }

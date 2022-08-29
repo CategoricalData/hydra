@@ -27,10 +27,10 @@ public abstract class ForStatementNoShortIf {
     }
   }
   
-  public static final class Basic extends ForStatementNoShortIf {
-    public final BasicForStatementNoShortIf value;
+  public static final class Basic extends hydra.ext.java.syntax.ForStatementNoShortIf {
+    public final hydra.ext.java.syntax.BasicForStatementNoShortIf value;
     
-    public Basic (BasicForStatementNoShortIf value) {
+    public Basic (hydra.ext.java.syntax.BasicForStatementNoShortIf value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ForStatementNoShortIf {
     }
   }
   
-  public static final class Enhanced extends ForStatementNoShortIf {
-    public final EnhancedForStatementNoShortIf value;
+  public static final class Enhanced extends hydra.ext.java.syntax.ForStatementNoShortIf {
+    public final hydra.ext.java.syntax.EnhancedForStatementNoShortIf value;
     
-    public Enhanced (EnhancedForStatementNoShortIf value) {
+    public Enhanced (hydra.ext.java.syntax.EnhancedForStatementNoShortIf value) {
       this.value = value;
     }
     

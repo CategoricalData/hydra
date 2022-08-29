@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Enumerator_Generator {
-  public final Pat pat;
+  public final hydra.ext.scala.meta.Pat pat;
   
-  public final Data rhs;
+  public final hydra.ext.scala.meta.Data rhs;
   
-  public Enumerator_Generator (Pat pat, Data rhs) {
+  public Enumerator_Generator (hydra.ext.scala.meta.Pat pat, hydra.ext.scala.meta.Data rhs) {
     this.pat = pat;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Enumerator_Generator {
     return 2 * pat.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Enumerator_Generator withPat(Pat pat) {
+  public Enumerator_Generator withPat(hydra.ext.scala.meta.Pat pat) {
     return new Enumerator_Generator(pat, rhs);
   }
   
-  public Enumerator_Generator withRhs(Data rhs) {
+  public Enumerator_Generator withRhs(hydra.ext.scala.meta.Data rhs) {
     return new Enumerator_Generator(pat, rhs);
   }
 }

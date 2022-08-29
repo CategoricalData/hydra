@@ -27,10 +27,10 @@ public abstract class WildcardBounds {
     }
   }
   
-  public static final class Extends extends WildcardBounds {
-    public final ReferenceType value;
+  public static final class Extends extends hydra.ext.java.syntax.WildcardBounds {
+    public final hydra.ext.java.syntax.ReferenceType value;
     
-    public Extends (ReferenceType value) {
+    public Extends (hydra.ext.java.syntax.ReferenceType value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class WildcardBounds {
     }
   }
   
-  public static final class Super extends WildcardBounds {
-    public final ReferenceType value;
+  public static final class Super extends hydra.ext.java.syntax.WildcardBounds {
+    public final hydra.ext.java.syntax.ReferenceType value;
     
-    public Super (ReferenceType value) {
+    public Super (hydra.ext.java.syntax.ReferenceType value) {
       this.value = value;
     }
     

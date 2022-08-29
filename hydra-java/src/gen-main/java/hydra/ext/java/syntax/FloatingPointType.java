@@ -27,7 +27,7 @@ public abstract class FloatingPointType {
     }
   }
   
-  public static final class Float_ extends FloatingPointType {
+  public static final class Float_ extends hydra.ext.java.syntax.FloatingPointType {
     public Float_ () {
     
     }
@@ -52,7 +52,7 @@ public abstract class FloatingPointType {
     }
   }
   
-  public static final class Double_ extends FloatingPointType {
+  public static final class Double_ extends hydra.ext.java.syntax.FloatingPointType {
     public Double_ () {
     
     }

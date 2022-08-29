@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Function {
-  public final Type domain;
+  public final hydra.ext.haskell.ast.Type domain;
   
-  public final Type codomain;
+  public final hydra.ext.haskell.ast.Type codomain;
   
-  public Type_Function (Type domain, Type codomain) {
+  public Type_Function (hydra.ext.haskell.ast.Type domain, hydra.ext.haskell.ast.Type codomain) {
     this.domain = domain;
     this.codomain = codomain;
   }
@@ -24,11 +24,11 @@ public class Type_Function {
     return 2 * domain.hashCode() + 3 * codomain.hashCode();
   }
   
-  public Type_Function withDomain(Type domain) {
+  public Type_Function withDomain(hydra.ext.haskell.ast.Type domain) {
     return new Type_Function(domain, codomain);
   }
   
-  public Type_Function withCodomain(Type codomain) {
+  public Type_Function withCodomain(hydra.ext.haskell.ast.Type codomain) {
     return new Type_Function(domain, codomain);
   }
 }

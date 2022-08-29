@@ -27,10 +27,10 @@ public abstract class Primary {
     }
   }
   
-  public static final class NoNewArray extends Primary {
-    public final PrimaryNoNewArray value;
+  public static final class NoNewArray extends hydra.ext.java.syntax.Primary {
+    public final hydra.ext.java.syntax.PrimaryNoNewArray value;
     
-    public NoNewArray (PrimaryNoNewArray value) {
+    public NoNewArray (hydra.ext.java.syntax.PrimaryNoNewArray value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Primary {
     }
   }
   
-  public static final class ArrayCreation extends Primary {
-    public final ArrayCreationExpression value;
+  public static final class ArrayCreation extends hydra.ext.java.syntax.Primary {
+    public final hydra.ext.java.syntax.ArrayCreationExpression value;
     
-    public ArrayCreation (ArrayCreationExpression value) {
+    public ArrayCreation (hydra.ext.java.syntax.ArrayCreationExpression value) {
       this.value = value;
     }
     

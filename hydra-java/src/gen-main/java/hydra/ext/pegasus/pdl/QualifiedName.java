@@ -1,11 +1,11 @@
 package hydra.ext.pegasus.pdl;
 
 public class QualifiedName {
-  public final Name name;
+  public final hydra.ext.pegasus.pdl.Name name;
   
-  public final java.util.Optional<Namespace> namespace;
+  public final java.util.Optional<hydra.ext.pegasus.pdl.Namespace> namespace;
   
-  public QualifiedName (Name name, java.util.Optional<Namespace> namespace) {
+  public QualifiedName (hydra.ext.pegasus.pdl.Name name, java.util.Optional<hydra.ext.pegasus.pdl.Namespace> namespace) {
     this.name = name;
     this.namespace = namespace;
   }
@@ -24,11 +24,11 @@ public class QualifiedName {
     return 2 * name.hashCode() + 3 * namespace.hashCode();
   }
   
-  public QualifiedName withName(Name name) {
+  public QualifiedName withName(hydra.ext.pegasus.pdl.Name name) {
     return new QualifiedName(name, namespace);
   }
   
-  public QualifiedName withNamespace(java.util.Optional<Namespace> namespace) {
+  public QualifiedName withNamespace(java.util.Optional<hydra.ext.pegasus.pdl.Namespace> namespace) {
     return new QualifiedName(name, namespace);
   }
 }

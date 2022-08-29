@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class IfThenElseStatementNoShortIf {
-  public final java.util.Optional<Expression> cond;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;
   
-  public final StatementNoShortIf then;
+  public final hydra.ext.java.syntax.StatementNoShortIf then;
   
-  public final StatementNoShortIf else_;
+  public final hydra.ext.java.syntax.StatementNoShortIf else_;
   
-  public IfThenElseStatementNoShortIf (java.util.Optional<Expression> cond, StatementNoShortIf then, StatementNoShortIf else_) {
+  public IfThenElseStatementNoShortIf (java.util.Optional<hydra.ext.java.syntax.Expression> cond, hydra.ext.java.syntax.StatementNoShortIf then, hydra.ext.java.syntax.StatementNoShortIf else_) {
     this.cond = cond;
     this.then = then;
     this.else_ = else_;
@@ -27,15 +27,15 @@ public class IfThenElseStatementNoShortIf {
     return 2 * cond.hashCode() + 3 * then.hashCode() + 5 * else_.hashCode();
   }
   
-  public IfThenElseStatementNoShortIf withCond(java.util.Optional<Expression> cond) {
+  public IfThenElseStatementNoShortIf withCond(java.util.Optional<hydra.ext.java.syntax.Expression> cond) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
   
-  public IfThenElseStatementNoShortIf withThen(StatementNoShortIf then) {
+  public IfThenElseStatementNoShortIf withThen(hydra.ext.java.syntax.StatementNoShortIf then) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
   
-  public IfThenElseStatementNoShortIf withElse(StatementNoShortIf else_) {
+  public IfThenElseStatementNoShortIf withElse(hydra.ext.java.syntax.StatementNoShortIf else_) {
     return new IfThenElseStatementNoShortIf(cond, then, else_);
   }
 }

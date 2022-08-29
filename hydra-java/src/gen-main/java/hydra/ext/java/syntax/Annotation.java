@@ -33,10 +33,10 @@ public abstract class Annotation {
     }
   }
   
-  public static final class Normal extends Annotation {
-    public final NormalAnnotation value;
+  public static final class Normal extends hydra.ext.java.syntax.Annotation {
+    public final hydra.ext.java.syntax.NormalAnnotation value;
     
-    public Normal (NormalAnnotation value) {
+    public Normal (hydra.ext.java.syntax.NormalAnnotation value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class Annotation {
     }
   }
   
-  public static final class Marker extends Annotation {
-    public final MarkerAnnotation value;
+  public static final class Marker extends hydra.ext.java.syntax.Annotation {
+    public final hydra.ext.java.syntax.MarkerAnnotation value;
     
-    public Marker (MarkerAnnotation value) {
+    public Marker (hydra.ext.java.syntax.MarkerAnnotation value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class Annotation {
     }
   }
   
-  public static final class SingleElement extends Annotation {
-    public final SingleElementAnnotation value;
+  public static final class SingleElement extends hydra.ext.java.syntax.Annotation {
+    public final hydra.ext.java.syntax.SingleElementAnnotation value;
     
-    public SingleElement (SingleElementAnnotation value) {
+    public SingleElement (hydra.ext.java.syntax.SingleElementAnnotation value) {
       this.value = value;
     }
     

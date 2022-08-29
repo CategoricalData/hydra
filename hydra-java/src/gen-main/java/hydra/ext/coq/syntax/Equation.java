@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Equation {
-  public final java.util.List<java.util.List<Pattern>> pattern;
+  public final java.util.List<java.util.List<hydra.ext.coq.syntax.Pattern>> pattern;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public Equation (java.util.List<java.util.List<Pattern>> pattern, Term term) {
+  public Equation (java.util.List<java.util.List<hydra.ext.coq.syntax.Pattern>> pattern, hydra.ext.coq.syntax.Term term) {
     this.pattern = pattern;
     this.term = term;
   }
@@ -24,11 +24,11 @@ public class Equation {
     return 2 * pattern.hashCode() + 3 * term.hashCode();
   }
   
-  public Equation withPattern(java.util.List<java.util.List<Pattern>> pattern) {
+  public Equation withPattern(java.util.List<java.util.List<hydra.ext.coq.syntax.Pattern>> pattern) {
     return new Equation(pattern, term);
   }
   
-  public Equation withTerm(Term term) {
+  public Equation withTerm(hydra.ext.coq.syntax.Term term) {
     return new Equation(pattern, term);
   }
 }

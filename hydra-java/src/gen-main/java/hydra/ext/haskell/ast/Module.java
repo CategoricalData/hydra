@@ -1,13 +1,13 @@
 package hydra.ext.haskell.ast;
 
 public class Module {
-  public final java.util.Optional<ModuleHead> head;
+  public final java.util.Optional<hydra.ext.haskell.ast.ModuleHead> head;
   
-  public final java.util.List<Import> imports;
+  public final java.util.List<hydra.ext.haskell.ast.Import> imports;
   
-  public final java.util.List<DeclarationWithComments> declarations;
+  public final java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations;
   
-  public Module (java.util.Optional<ModuleHead> head, java.util.List<Import> imports, java.util.List<DeclarationWithComments> declarations) {
+  public Module (java.util.Optional<hydra.ext.haskell.ast.ModuleHead> head, java.util.List<hydra.ext.haskell.ast.Import> imports, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
     this.head = head;
     this.imports = imports;
     this.declarations = declarations;
@@ -27,15 +27,15 @@ public class Module {
     return 2 * head.hashCode() + 3 * imports.hashCode() + 5 * declarations.hashCode();
   }
   
-  public Module withHead(java.util.Optional<ModuleHead> head) {
+  public Module withHead(java.util.Optional<hydra.ext.haskell.ast.ModuleHead> head) {
     return new Module(head, imports, declarations);
   }
   
-  public Module withImports(java.util.List<Import> imports) {
+  public Module withImports(java.util.List<hydra.ext.haskell.ast.Import> imports) {
     return new Module(head, imports, declarations);
   }
   
-  public Module withDeclarations(java.util.List<DeclarationWithComments> declarations) {
+  public Module withDeclarations(java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
     return new Module(head, imports, declarations);
   }
 }

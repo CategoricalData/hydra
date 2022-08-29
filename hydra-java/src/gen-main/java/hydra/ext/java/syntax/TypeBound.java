@@ -27,10 +27,10 @@ public abstract class TypeBound {
     }
   }
   
-  public static final class Variable extends TypeBound {
-    public final TypeVariable value;
+  public static final class Variable extends hydra.ext.java.syntax.TypeBound {
+    public final hydra.ext.java.syntax.TypeVariable value;
     
-    public Variable (TypeVariable value) {
+    public Variable (hydra.ext.java.syntax.TypeVariable value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class TypeBound {
     }
   }
   
-  public static final class ClassOrInterface extends TypeBound {
-    public final TypeBound_ClassOrInterface value;
+  public static final class ClassOrInterface extends hydra.ext.java.syntax.TypeBound {
+    public final hydra.ext.java.syntax.TypeBound_ClassOrInterface value;
     
-    public ClassOrInterface (TypeBound_ClassOrInterface value) {
+    public ClassOrInterface (hydra.ext.java.syntax.TypeBound_ClassOrInterface value) {
       this.value = value;
     }
     

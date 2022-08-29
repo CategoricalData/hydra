@@ -33,10 +33,10 @@ public abstract class ArrayType_Variant {
     }
   }
   
-  public static final class Primitive extends ArrayType_Variant {
-    public final PrimitiveTypeWithAnnotations value;
+  public static final class Primitive extends hydra.ext.java.syntax.ArrayType_Variant {
+    public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value;
     
-    public Primitive (PrimitiveTypeWithAnnotations value) {
+    public Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class ArrayType_Variant {
     }
   }
   
-  public static final class ClassOrInterface extends ArrayType_Variant {
-    public final ClassOrInterfaceType value;
+  public static final class ClassOrInterface extends hydra.ext.java.syntax.ArrayType_Variant {
+    public final hydra.ext.java.syntax.ClassOrInterfaceType value;
     
-    public ClassOrInterface (ClassOrInterfaceType value) {
+    public ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class ArrayType_Variant {
     }
   }
   
-  public static final class Variable extends ArrayType_Variant {
-    public final TypeVariable value;
+  public static final class Variable extends hydra.ext.java.syntax.ArrayType_Variant {
+    public final hydra.ext.java.syntax.TypeVariable value;
     
-    public Variable (TypeVariable value) {
+    public Variable (hydra.ext.java.syntax.TypeVariable value) {
       this.value = value;
     }
     

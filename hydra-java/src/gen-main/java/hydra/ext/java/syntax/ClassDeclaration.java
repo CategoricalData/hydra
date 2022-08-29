@@ -27,10 +27,10 @@ public abstract class ClassDeclaration {
     }
   }
   
-  public static final class Normal extends ClassDeclaration {
-    public final NormalClassDeclaration value;
+  public static final class Normal extends hydra.ext.java.syntax.ClassDeclaration {
+    public final hydra.ext.java.syntax.NormalClassDeclaration value;
     
-    public Normal (NormalClassDeclaration value) {
+    public Normal (hydra.ext.java.syntax.NormalClassDeclaration value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ClassDeclaration {
     }
   }
   
-  public static final class Enum_ extends ClassDeclaration {
-    public final EnumDeclaration value;
+  public static final class Enum_ extends hydra.ext.java.syntax.ClassDeclaration {
+    public final hydra.ext.java.syntax.EnumDeclaration value;
     
-    public Enum_ (EnumDeclaration value) {
+    public Enum_ (hydra.ext.java.syntax.EnumDeclaration value) {
       this.value = value;
     }
     

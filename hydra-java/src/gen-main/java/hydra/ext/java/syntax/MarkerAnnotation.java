@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class MarkerAnnotation {
-  public final TypeName value;
+  public final hydra.ext.java.syntax.TypeName value;
   
-  public MarkerAnnotation (TypeName value) {
+  public MarkerAnnotation (hydra.ext.java.syntax.TypeName value) {
     this.value = value;
   }
   

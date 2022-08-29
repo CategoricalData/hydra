@@ -45,10 +45,10 @@ public abstract class Member {
     }
   }
   
-  public static final class Term extends Member {
-    public final Member_Data value;
+  public static final class Term extends hydra.ext.scala.meta.Member {
+    public final hydra.ext.scala.meta.Member_Data value;
     
-    public Term (Member_Data value) {
+    public Term (hydra.ext.scala.meta.Member_Data value) {
       this.value = value;
     }
     
@@ -72,10 +72,10 @@ public abstract class Member {
     }
   }
   
-  public static final class Type extends Member {
-    public final Member_Type value;
+  public static final class Type extends hydra.ext.scala.meta.Member {
+    public final hydra.ext.scala.meta.Member_Type value;
     
-    public Type (Member_Type value) {
+    public Type (hydra.ext.scala.meta.Member_Type value) {
       this.value = value;
     }
     
@@ -99,10 +99,10 @@ public abstract class Member {
     }
   }
   
-  public static final class TermParam extends Member {
-    public final Data_Param value;
+  public static final class TermParam extends hydra.ext.scala.meta.Member {
+    public final hydra.ext.scala.meta.Data_Param value;
     
-    public TermParam (Data_Param value) {
+    public TermParam (hydra.ext.scala.meta.Data_Param value) {
       this.value = value;
     }
     
@@ -126,10 +126,10 @@ public abstract class Member {
     }
   }
   
-  public static final class TypeParam extends Member {
-    public final Type_Param value;
+  public static final class TypeParam extends hydra.ext.scala.meta.Member {
+    public final hydra.ext.scala.meta.Type_Param value;
     
-    public TypeParam (Type_Param value) {
+    public TypeParam (hydra.ext.scala.meta.Type_Param value) {
       this.value = value;
     }
     
@@ -153,10 +153,10 @@ public abstract class Member {
     }
   }
   
-  public static final class Self extends Member {
-    public final Self value;
+  public static final class Self extends hydra.ext.scala.meta.Member {
+    public final hydra.ext.scala.meta.Self value;
     
-    public Self (Self value) {
+    public Self (hydra.ext.scala.meta.Self value) {
       this.value = value;
     }
     

@@ -1,15 +1,15 @@
 package hydra.ext.coq.syntax;
 
 public class LetDestructuring_Variant3 {
-  public final Pattern pattern1;
+  public final hydra.ext.coq.syntax.Pattern pattern1;
   
-  public final Pattern pattern2;
+  public final hydra.ext.coq.syntax.Pattern pattern2;
   
-  public final Term term;
+  public final hydra.ext.coq.syntax.Term term;
   
-  public final Term100 return_;
+  public final hydra.ext.coq.syntax.Term100 return_;
   
-  public LetDestructuring_Variant3 (Pattern pattern1, Pattern pattern2, Term term, Term100 return_) {
+  public LetDestructuring_Variant3 (hydra.ext.coq.syntax.Pattern pattern1, hydra.ext.coq.syntax.Pattern pattern2, hydra.ext.coq.syntax.Term term, hydra.ext.coq.syntax.Term100 return_) {
     this.pattern1 = pattern1;
     this.pattern2 = pattern2;
     this.term = term;
@@ -30,19 +30,19 @@ public class LetDestructuring_Variant3 {
     return 2 * pattern1.hashCode() + 3 * pattern2.hashCode() + 5 * term.hashCode() + 7 * return_.hashCode();
   }
   
-  public LetDestructuring_Variant3 withPattern1(Pattern pattern1) {
+  public LetDestructuring_Variant3 withPattern1(hydra.ext.coq.syntax.Pattern pattern1) {
     return new LetDestructuring_Variant3(pattern1, pattern2, term, return_);
   }
   
-  public LetDestructuring_Variant3 withPattern2(Pattern pattern2) {
+  public LetDestructuring_Variant3 withPattern2(hydra.ext.coq.syntax.Pattern pattern2) {
     return new LetDestructuring_Variant3(pattern1, pattern2, term, return_);
   }
   
-  public LetDestructuring_Variant3 withTerm(Term term) {
+  public LetDestructuring_Variant3 withTerm(hydra.ext.coq.syntax.Term term) {
     return new LetDestructuring_Variant3(pattern1, pattern2, term, return_);
   }
   
-  public LetDestructuring_Variant3 withReturn(Term100 return_) {
+  public LetDestructuring_Variant3 withReturn(hydra.ext.coq.syntax.Term100 return_) {
     return new LetDestructuring_Variant3(pattern1, pattern2, term, return_);
   }
 }

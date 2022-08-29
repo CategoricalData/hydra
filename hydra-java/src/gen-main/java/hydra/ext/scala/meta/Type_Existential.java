@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Existential {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public final java.util.List<Stat> stats;
+  public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
-  public Type_Existential (Type tpe, java.util.List<Stat> stats) {
+  public Type_Existential (hydra.ext.scala.meta.Type tpe, java.util.List<hydra.ext.scala.meta.Stat> stats) {
     this.tpe = tpe;
     this.stats = stats;
   }
@@ -24,11 +24,11 @@ public class Type_Existential {
     return 2 * tpe.hashCode() + 3 * stats.hashCode();
   }
   
-  public Type_Existential withTpe(Type tpe) {
+  public Type_Existential withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Type_Existential(tpe, stats);
   }
   
-  public Type_Existential withStats(java.util.List<Stat> stats) {
+  public Type_Existential withStats(java.util.List<hydra.ext.scala.meta.Stat> stats) {
     return new Type_Existential(tpe, stats);
   }
 }

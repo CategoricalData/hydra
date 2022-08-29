@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class UnivAnnot {
-  public final java.util.List<UniverseLevel> value;
+  public final java.util.List<hydra.ext.coq.syntax.UniverseLevel> value;
   
-  public UnivAnnot (java.util.List<UniverseLevel> value) {
+  public UnivAnnot (java.util.List<hydra.ext.coq.syntax.UniverseLevel> value) {
     this.value = value;
   }
   

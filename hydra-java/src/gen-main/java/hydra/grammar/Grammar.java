@@ -1,9 +1,9 @@
 package hydra.grammar;
 
 public class Grammar {
-  public final java.util.List<Production> value;
+  public final java.util.List<hydra.grammar.Production> value;
   
-  public Grammar (java.util.List<Production> value) {
+  public Grammar (java.util.List<hydra.grammar.Production> value) {
     this.value = value;
   }
   

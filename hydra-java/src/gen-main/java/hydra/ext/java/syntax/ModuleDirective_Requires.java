@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_Requires {
-  public final java.util.List<RequiresModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers;
   
-  public final ModuleName module;
+  public final hydra.ext.java.syntax.ModuleName module;
   
-  public ModuleDirective_Requires (java.util.List<RequiresModifier> modifiers, ModuleName module) {
+  public ModuleDirective_Requires (java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers, hydra.ext.java.syntax.ModuleName module) {
     this.modifiers = modifiers;
     this.module = module;
   }
@@ -24,11 +24,11 @@ public class ModuleDirective_Requires {
     return 2 * modifiers.hashCode() + 3 * module.hashCode();
   }
   
-  public ModuleDirective_Requires withModifiers(java.util.List<RequiresModifier> modifiers) {
+  public ModuleDirective_Requires withModifiers(java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers) {
     return new ModuleDirective_Requires(modifiers, module);
   }
   
-  public ModuleDirective_Requires withModule(ModuleName module) {
+  public ModuleDirective_Requires withModule(hydra.ext.java.syntax.ModuleName module) {
     return new ModuleDirective_Requires(modifiers, module);
   }
 }

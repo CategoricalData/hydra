@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class Finally {
-  public final Block value;
+  public final hydra.ext.java.syntax.Block value;
   
-  public Finally (Block value) {
+  public Finally (hydra.ext.java.syntax.Block value) {
     this.value = value;
   }
   

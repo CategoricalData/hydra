@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_Typed {
-  public final Pattern inner;
+  public final hydra.ext.haskell.ast.Pattern inner;
   
-  public final Type type;
+  public final hydra.ext.haskell.ast.Type type;
   
-  public Pattern_Typed (Pattern inner, Type type) {
+  public Pattern_Typed (hydra.ext.haskell.ast.Pattern inner, hydra.ext.haskell.ast.Type type) {
     this.inner = inner;
     this.type = type;
   }
@@ -24,11 +24,11 @@ public class Pattern_Typed {
     return 2 * inner.hashCode() + 3 * type.hashCode();
   }
   
-  public Pattern_Typed withInner(Pattern inner) {
+  public Pattern_Typed withInner(hydra.ext.haskell.ast.Pattern inner) {
     return new Pattern_Typed(inner, type);
   }
   
-  public Pattern_Typed withType(Type type) {
+  public Pattern_Typed withType(hydra.ext.haskell.ast.Type type) {
     return new Pattern_Typed(inner, type);
   }
 }

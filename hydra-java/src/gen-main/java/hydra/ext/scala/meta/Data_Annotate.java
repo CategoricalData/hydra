@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_Annotate {
-  public final Data expr;
+  public final hydra.ext.scala.meta.Data expr;
   
-  public final java.util.List<Mod_Annot> annots;
+  public final java.util.List<hydra.ext.scala.meta.Mod_Annot> annots;
   
-  public Data_Annotate (Data expr, java.util.List<Mod_Annot> annots) {
+  public Data_Annotate (hydra.ext.scala.meta.Data expr, java.util.List<hydra.ext.scala.meta.Mod_Annot> annots) {
     this.expr = expr;
     this.annots = annots;
   }
@@ -24,11 +24,11 @@ public class Data_Annotate {
     return 2 * expr.hashCode() + 3 * annots.hashCode();
   }
   
-  public Data_Annotate withExpr(Data expr) {
+  public Data_Annotate withExpr(hydra.ext.scala.meta.Data expr) {
     return new Data_Annotate(expr, annots);
   }
   
-  public Data_Annotate withAnnots(java.util.List<Mod_Annot> annots) {
+  public Data_Annotate withAnnots(java.util.List<hydra.ext.scala.meta.Mod_Annot> annots) {
     return new Data_Annotate(expr, annots);
   }
 }

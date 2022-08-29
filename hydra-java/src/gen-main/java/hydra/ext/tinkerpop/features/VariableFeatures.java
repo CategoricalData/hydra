@@ -4,14 +4,14 @@ package hydra.ext.tinkerpop.features;
  * Features for Graph.Variables.
  */
 public class VariableFeatures {
-  public final DataTypeFeatures dataTypeFeatures;
+  public final hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
   /**
    * If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
    */
   public final Boolean supportsVariables;
   
-  public VariableFeatures (DataTypeFeatures dataTypeFeatures, Boolean supportsVariables) {
+  public VariableFeatures (hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsVariables) {
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsVariables = supportsVariables;
   }
@@ -30,7 +30,7 @@ public class VariableFeatures {
     return 2 * dataTypeFeatures.hashCode() + 3 * supportsVariables.hashCode();
   }
   
-  public VariableFeatures withDataTypeFeatures(DataTypeFeatures dataTypeFeatures) {
+  public VariableFeatures withDataTypeFeatures(hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
     return new VariableFeatures(dataTypeFeatures, supportsVariables);
   }
   

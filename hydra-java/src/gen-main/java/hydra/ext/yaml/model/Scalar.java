@@ -51,7 +51,7 @@ public abstract class Scalar {
   /**
    * Represents a true/false value
    */
-  public static final class Bool extends Scalar {
+  public static final class Bool extends hydra.ext.yaml.model.Scalar {
     /**
      * Represents a true/false value
      */
@@ -81,7 +81,7 @@ public abstract class Scalar {
     }
   }
   
-  public static final class Float_ extends Scalar {
+  public static final class Float_ extends hydra.ext.yaml.model.Scalar {
     public final Double value;
     
     public Float_ (Double value) {
@@ -111,7 +111,7 @@ public abstract class Scalar {
   /**
    * Represents arbitrary sized finite mathematical integers
    */
-  public static final class Int extends Scalar {
+  public static final class Int extends hydra.ext.yaml.model.Scalar {
     /**
      * Represents arbitrary sized finite mathematical integers
      */
@@ -144,7 +144,7 @@ public abstract class Scalar {
   /**
    * Represents the lack of a value
    */
-  public static final class Null extends Scalar {
+  public static final class Null extends hydra.ext.yaml.model.Scalar {
     /**
      * Represents the lack of a value
      */
@@ -177,7 +177,7 @@ public abstract class Scalar {
   /**
    * A string value
    */
-  public static final class Str extends Scalar {
+  public static final class Str extends hydra.ext.yaml.model.Scalar {
     /**
      * A string value
      */

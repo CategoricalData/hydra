@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Universe_Expr {
-  public final UniverseName name;
+  public final hydra.ext.coq.syntax.UniverseName name;
   
-  public final java.util.Optional<Natural> number;
+  public final java.util.Optional<hydra.ext.coq.syntax.Natural> number;
   
-  public Universe_Expr (UniverseName name, java.util.Optional<Natural> number) {
+  public Universe_Expr (hydra.ext.coq.syntax.UniverseName name, java.util.Optional<hydra.ext.coq.syntax.Natural> number) {
     this.name = name;
     this.number = number;
   }
@@ -24,11 +24,11 @@ public class Universe_Expr {
     return 2 * name.hashCode() + 3 * number.hashCode();
   }
   
-  public Universe_Expr withName(UniverseName name) {
+  public Universe_Expr withName(hydra.ext.coq.syntax.UniverseName name) {
     return new Universe_Expr(name, number);
   }
   
-  public Universe_Expr withNumber(java.util.Optional<Natural> number) {
+  public Universe_Expr withNumber(java.util.Optional<hydra.ext.coq.syntax.Natural> number) {
     return new Universe_Expr(name, number);
   }
 }

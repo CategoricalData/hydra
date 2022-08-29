@@ -27,10 +27,10 @@ public abstract class LambdaParameters {
     }
   }
   
-  public static final class Tuple extends LambdaParameters {
-    public final java.util.List<LambdaParameters> value;
+  public static final class Tuple extends hydra.ext.java.syntax.LambdaParameters {
+    public final java.util.List<hydra.ext.java.syntax.LambdaParameters> value;
     
-    public Tuple (java.util.List<LambdaParameters> value) {
+    public Tuple (java.util.List<hydra.ext.java.syntax.LambdaParameters> value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class LambdaParameters {
     }
   }
   
-  public static final class Single extends LambdaParameters {
-    public final Identifier value;
+  public static final class Single extends hydra.ext.java.syntax.LambdaParameters {
+    public final hydra.ext.java.syntax.Identifier value;
     
-    public Single (Identifier value) {
+    public Single (hydra.ext.java.syntax.Identifier value) {
       this.value = value;
     }
     

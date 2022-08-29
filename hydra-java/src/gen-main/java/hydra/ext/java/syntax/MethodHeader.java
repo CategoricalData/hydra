@@ -1,15 +1,15 @@
 package hydra.ext.java.syntax;
 
 public class MethodHeader {
-  public final java.util.List<TypeParameter> parameters;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
   
-  public final Result result;
+  public final hydra.ext.java.syntax.Result result;
   
-  public final MethodDeclarator declarator;
+  public final hydra.ext.java.syntax.MethodDeclarator declarator;
   
-  public final java.util.Optional<Throws> throws_;
+  public final java.util.Optional<hydra.ext.java.syntax.Throws> throws_;
   
-  public MethodHeader (java.util.List<TypeParameter> parameters, Result result, MethodDeclarator declarator, java.util.Optional<Throws> throws_) {
+  public MethodHeader (java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.Result result, hydra.ext.java.syntax.MethodDeclarator declarator, java.util.Optional<hydra.ext.java.syntax.Throws> throws_) {
     this.parameters = parameters;
     this.result = result;
     this.declarator = declarator;
@@ -30,19 +30,19 @@ public class MethodHeader {
     return 2 * parameters.hashCode() + 3 * result.hashCode() + 5 * declarator.hashCode() + 7 * throws_.hashCode();
   }
   
-  public MethodHeader withParameters(java.util.List<TypeParameter> parameters) {
+  public MethodHeader withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
-  public MethodHeader withResult(Result result) {
+  public MethodHeader withResult(hydra.ext.java.syntax.Result result) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
-  public MethodHeader withDeclarator(MethodDeclarator declarator) {
+  public MethodHeader withDeclarator(hydra.ext.java.syntax.MethodDeclarator declarator) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   
-  public MethodHeader withThrows(java.util.Optional<Throws> throws_) {
+  public MethodHeader withThrows(java.util.Optional<hydra.ext.java.syntax.Throws> throws_) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
 }

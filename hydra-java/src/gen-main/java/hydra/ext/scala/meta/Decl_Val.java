@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Decl_Val {
-  public final java.util.List<Mod> mods;
+  public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
-  public final java.util.List<Pat> pats;
+  public final java.util.List<hydra.ext.scala.meta.Pat> pats;
   
-  public final Type decltpe;
+  public final hydra.ext.scala.meta.Type decltpe;
   
-  public Decl_Val (java.util.List<Mod> mods, java.util.List<Pat> pats, Type decltpe) {
+  public Decl_Val (java.util.List<hydra.ext.scala.meta.Mod> mods, java.util.List<hydra.ext.scala.meta.Pat> pats, hydra.ext.scala.meta.Type decltpe) {
     this.mods = mods;
     this.pats = pats;
     this.decltpe = decltpe;
@@ -27,15 +27,15 @@ public class Decl_Val {
     return 2 * mods.hashCode() + 3 * pats.hashCode() + 5 * decltpe.hashCode();
   }
   
-  public Decl_Val withMods(java.util.List<Mod> mods) {
+  public Decl_Val withMods(java.util.List<hydra.ext.scala.meta.Mod> mods) {
     return new Decl_Val(mods, pats, decltpe);
   }
   
-  public Decl_Val withPats(java.util.List<Pat> pats) {
+  public Decl_Val withPats(java.util.List<hydra.ext.scala.meta.Pat> pats) {
     return new Decl_Val(mods, pats, decltpe);
   }
   
-  public Decl_Val withDecltpe(Type decltpe) {
+  public Decl_Val withDecltpe(hydra.ext.scala.meta.Type decltpe) {
     return new Decl_Val(mods, pats, decltpe);
   }
 }

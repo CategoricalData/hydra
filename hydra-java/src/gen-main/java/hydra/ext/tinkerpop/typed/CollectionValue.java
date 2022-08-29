@@ -42,10 +42,10 @@ public abstract class CollectionValue {
     }
   }
   
-  public static final class List extends CollectionValue {
-    public final java.util.List<Value> value;
+  public static final class List extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public final java.util.List<hydra.ext.tinkerpop.typed.Value> value;
     
-    public List (java.util.List<Value> value) {
+    public List (java.util.List<hydra.ext.tinkerpop.typed.Value> value) {
       this.value = value;
     }
     
@@ -69,10 +69,10 @@ public abstract class CollectionValue {
     }
   }
   
-  public static final class Map extends CollectionValue {
-    public final java.util.Map<Key, Value> value;
+  public static final class Map extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> value;
     
-    public Map (java.util.Map<Key, Value> value) {
+    public Map (java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> value) {
       this.value = value;
     }
     
@@ -96,10 +96,10 @@ public abstract class CollectionValue {
     }
   }
   
-  public static final class Optional extends CollectionValue {
-    public final java.util.Optional<Value> value;
+  public static final class Optional extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public final java.util.Optional<hydra.ext.tinkerpop.typed.Value> value;
     
-    public Optional (java.util.Optional<Value> value) {
+    public Optional (java.util.Optional<hydra.ext.tinkerpop.typed.Value> value) {
       this.value = value;
     }
     
@@ -123,10 +123,10 @@ public abstract class CollectionValue {
     }
   }
   
-  public static final class Set extends CollectionValue {
-    public final java.util.Set<Value> value;
+  public static final class Set extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public final java.util.Set<hydra.ext.tinkerpop.typed.Value> value;
     
-    public Set (java.util.Set<Value> value) {
+    public Set (java.util.Set<hydra.ext.tinkerpop.typed.Value> value) {
       this.value = value;
     }
     

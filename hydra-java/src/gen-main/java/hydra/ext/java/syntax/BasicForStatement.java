@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class BasicForStatement {
-  public final ForCond cond;
+  public final hydra.ext.java.syntax.ForCond cond;
   
-  public final Statement body;
+  public final hydra.ext.java.syntax.Statement body;
   
-  public BasicForStatement (ForCond cond, Statement body) {
+  public BasicForStatement (hydra.ext.java.syntax.ForCond cond, hydra.ext.java.syntax.Statement body) {
     this.cond = cond;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class BasicForStatement {
     return 2 * cond.hashCode() + 3 * body.hashCode();
   }
   
-  public BasicForStatement withCond(ForCond cond) {
+  public BasicForStatement withCond(hydra.ext.java.syntax.ForCond cond) {
     return new BasicForStatement(cond, body);
   }
   
-  public BasicForStatement withBody(Statement body) {
+  public BasicForStatement withBody(hydra.ext.java.syntax.Statement body) {
     return new BasicForStatement(cond, body);
   }
 }

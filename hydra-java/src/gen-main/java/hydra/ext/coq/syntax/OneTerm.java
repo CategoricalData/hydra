@@ -27,10 +27,10 @@ public abstract class OneTerm {
     }
   }
   
-  public static final class Explicit extends OneTerm {
-    public final QualidAnnotated value;
+  public static final class Explicit extends hydra.ext.coq.syntax.OneTerm {
+    public final hydra.ext.coq.syntax.QualidAnnotated value;
     
-    public Explicit (QualidAnnotated value) {
+    public Explicit (hydra.ext.coq.syntax.QualidAnnotated value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class OneTerm {
     }
   }
   
-  public static final class Term1 extends OneTerm {
-    public final Term1 value;
+  public static final class Term1 extends hydra.ext.coq.syntax.OneTerm {
+    public final hydra.ext.coq.syntax.Term1 value;
     
-    public Term1 (Term1 value) {
+    public Term1 (hydra.ext.coq.syntax.Term1 value) {
       this.value = value;
     }
     

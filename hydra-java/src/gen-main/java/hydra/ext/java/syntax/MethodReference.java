@@ -51,10 +51,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class Expression extends MethodReference {
-    public final MethodReference_Expression value;
+  public static final class Expression extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_Expression value;
     
-    public Expression (MethodReference_Expression value) {
+    public Expression (hydra.ext.java.syntax.MethodReference_Expression value) {
       this.value = value;
     }
     
@@ -78,10 +78,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class Primary extends MethodReference {
-    public final MethodReference_Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_Primary value;
     
-    public Primary (MethodReference_Primary value) {
+    public Primary (hydra.ext.java.syntax.MethodReference_Primary value) {
       this.value = value;
     }
     
@@ -105,10 +105,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class ReferenceType extends MethodReference {
-    public final MethodReference_ReferenceType value;
+  public static final class ReferenceType extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_ReferenceType value;
     
-    public ReferenceType (MethodReference_ReferenceType value) {
+    public ReferenceType (hydra.ext.java.syntax.MethodReference_ReferenceType value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class Super extends MethodReference {
-    public final MethodReference_Super value;
+  public static final class Super extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_Super value;
     
-    public Super (MethodReference_Super value) {
+    public Super (hydra.ext.java.syntax.MethodReference_Super value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class New extends MethodReference {
-    public final MethodReference_New value;
+  public static final class New extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_New value;
     
-    public New (MethodReference_New value) {
+    public New (hydra.ext.java.syntax.MethodReference_New value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class MethodReference {
     }
   }
   
-  public static final class Array extends MethodReference {
-    public final MethodReference_Array value;
+  public static final class Array extends hydra.ext.java.syntax.MethodReference {
+    public final hydra.ext.java.syntax.MethodReference_Array value;
     
-    public Array (MethodReference_Array value) {
+    public Array (hydra.ext.java.syntax.MethodReference_Array value) {
       this.value = value;
     }
     

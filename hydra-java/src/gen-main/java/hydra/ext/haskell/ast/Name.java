@@ -33,10 +33,10 @@ public abstract class Name {
     }
   }
   
-  public static final class Implicit extends Name {
-    public final QualifiedName value;
+  public static final class Implicit extends hydra.ext.haskell.ast.Name {
+    public final hydra.ext.haskell.ast.QualifiedName value;
     
-    public Implicit (QualifiedName value) {
+    public Implicit (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
     
@@ -60,10 +60,10 @@ public abstract class Name {
     }
   }
   
-  public static final class Normal extends Name {
-    public final QualifiedName value;
+  public static final class Normal extends hydra.ext.haskell.ast.Name {
+    public final hydra.ext.haskell.ast.QualifiedName value;
     
-    public Normal (QualifiedName value) {
+    public Normal (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
     
@@ -87,10 +87,10 @@ public abstract class Name {
     }
   }
   
-  public static final class Parens extends Name {
-    public final QualifiedName value;
+  public static final class Parens extends hydra.ext.haskell.ast.Name {
+    public final hydra.ext.haskell.ast.QualifiedName value;
     
-    public Parens (QualifiedName value) {
+    public Parens (hydra.ext.haskell.ast.QualifiedName value) {
       this.value = value;
     }
     

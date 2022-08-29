@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class AnnotatedIdentifier {
-  public final java.util.List<Annotation> annotations;
+  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public AnnotatedIdentifier (java.util.List<Annotation> annotations, Identifier identifier) {
+  public AnnotatedIdentifier (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -24,11 +24,11 @@ public class AnnotatedIdentifier {
     return 2 * annotations.hashCode() + 3 * identifier.hashCode();
   }
   
-  public AnnotatedIdentifier withAnnotations(java.util.List<Annotation> annotations) {
+  public AnnotatedIdentifier withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
     return new AnnotatedIdentifier(annotations, identifier);
   }
   
-  public AnnotatedIdentifier withIdentifier(Identifier identifier) {
+  public AnnotatedIdentifier withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new AnnotatedIdentifier(annotations, identifier);
   }
 }

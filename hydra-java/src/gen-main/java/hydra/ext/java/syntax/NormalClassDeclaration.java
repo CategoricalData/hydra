@@ -1,19 +1,19 @@
 package hydra.ext.java.syntax;
 
 public class NormalClassDeclaration {
-  public final java.util.List<ClassModifier> modifiers;
+  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
   
-  public final TypeIdentifier identifier;
+  public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<TypeParameter> parameters;
+  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
   
-  public final java.util.Optional<ClassType> extends_;
+  public final java.util.Optional<hydra.ext.java.syntax.ClassType> extends_;
   
-  public final java.util.List<InterfaceType> implements_;
+  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
   
-  public final ClassBody body;
+  public final hydra.ext.java.syntax.ClassBody body;
   
-  public NormalClassDeclaration (java.util.List<ClassModifier> modifiers, TypeIdentifier identifier, java.util.List<TypeParameter> parameters, java.util.Optional<ClassType> extends_, java.util.List<InterfaceType> implements_, ClassBody body) {
+  public NormalClassDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, java.util.Optional<hydra.ext.java.syntax.ClassType> extends_, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.ClassBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -36,27 +36,27 @@ public class NormalClassDeclaration {
     return 2 * modifiers.hashCode() + 3 * identifier.hashCode() + 5 * parameters.hashCode() + 7 * extends_.hashCode() + 11 * implements_.hashCode() + 13 * body.hashCode();
   }
   
-  public NormalClassDeclaration withModifiers(java.util.List<ClassModifier> modifiers) {
+  public NormalClassDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withIdentifier(TypeIdentifier identifier) {
+  public NormalClassDeclaration withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withParameters(java.util.List<TypeParameter> parameters) {
+  public NormalClassDeclaration withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withExtends(java.util.Optional<ClassType> extends_) {
+  public NormalClassDeclaration withExtends(java.util.Optional<hydra.ext.java.syntax.ClassType> extends_) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withImplements(java.util.List<InterfaceType> implements_) {
+  public NormalClassDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withBody(ClassBody body) {
+  public NormalClassDeclaration withBody(hydra.ext.java.syntax.ClassBody body) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class RelationalExpression_GreaterThanEqual {
-  public final RelationalExpression lhs;
+  public final hydra.ext.java.syntax.RelationalExpression lhs;
   
-  public final ShiftExpression rhs;
+  public final hydra.ext.java.syntax.ShiftExpression rhs;
   
-  public RelationalExpression_GreaterThanEqual (RelationalExpression lhs, ShiftExpression rhs) {
+  public RelationalExpression_GreaterThanEqual (hydra.ext.java.syntax.RelationalExpression lhs, hydra.ext.java.syntax.ShiftExpression rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class RelationalExpression_GreaterThanEqual {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public RelationalExpression_GreaterThanEqual withLhs(RelationalExpression lhs) {
+  public RelationalExpression_GreaterThanEqual withLhs(hydra.ext.java.syntax.RelationalExpression lhs) {
     return new RelationalExpression_GreaterThanEqual(lhs, rhs);
   }
   
-  public RelationalExpression_GreaterThanEqual withRhs(ShiftExpression rhs) {
+  public RelationalExpression_GreaterThanEqual withRhs(hydra.ext.java.syntax.ShiftExpression rhs) {
     return new RelationalExpression_GreaterThanEqual(lhs, rhs);
   }
 }

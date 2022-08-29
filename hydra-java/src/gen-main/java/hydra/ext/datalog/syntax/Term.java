@@ -27,10 +27,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Constant extends Term {
-    public final Constant value;
+  public static final class Constant extends hydra.ext.datalog.syntax.Term {
+    public final hydra.ext.datalog.syntax.Constant value;
     
-    public Constant (Constant value) {
+    public Constant (hydra.ext.datalog.syntax.Constant value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Term {
     }
   }
   
-  public static final class Variable extends Term {
-    public final Variable value;
+  public static final class Variable extends hydra.ext.datalog.syntax.Term {
+    public final hydra.ext.datalog.syntax.Variable value;
     
-    public Variable (Variable value) {
+    public Variable (hydra.ext.datalog.syntax.Variable value) {
       this.value = value;
     }
     

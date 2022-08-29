@@ -48,7 +48,7 @@ fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForGraph :: Graph m -> M.Map GraphName Java.PackageName
-importAliasesForGraph g = L.foldl addName M.empty $ S.toList deps
+importAliasesForGraph g = addName (L.foldl addName M.empty $ S.toList deps) $ graphName g
   where
     deps = graphDependencies True True True g
     addName m name = M.insert name (graphNameToPackageName name) m
@@ -358,7 +358,7 @@ nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name
 nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJavaName local, pkg)
   where
     (gname, local) = toQname name
-    pkg = if qualify || S.member local reservedWords
+    pkg = if qualify
       then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname aliases
       else none
     none = Java.ClassTypeQualifierNone

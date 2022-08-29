@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class PatternField {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final Pattern pattern;
+  public final hydra.ext.haskell.ast.Pattern pattern;
   
-  public PatternField (Name name, Pattern pattern) {
+  public PatternField (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Pattern pattern) {
     this.name = name;
     this.pattern = pattern;
   }
@@ -24,11 +24,11 @@ public class PatternField {
     return 2 * name.hashCode() + 3 * pattern.hashCode();
   }
   
-  public PatternField withName(Name name) {
+  public PatternField withName(hydra.ext.haskell.ast.Name name) {
     return new PatternField(name, pattern);
   }
   
-  public PatternField withPattern(Pattern pattern) {
+  public PatternField withPattern(hydra.ext.haskell.ast.Pattern pattern) {
     return new PatternField(name, pattern);
   }
 }

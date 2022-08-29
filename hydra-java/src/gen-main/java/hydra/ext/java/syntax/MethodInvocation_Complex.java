@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class MethodInvocation_Complex {
-  public final MethodInvocation_Variant variant;
+  public final hydra.ext.java.syntax.MethodInvocation_Variant variant;
   
-  public final java.util.List<TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public final Identifier identifier;
+  public final hydra.ext.java.syntax.Identifier identifier;
   
-  public MethodInvocation_Complex (MethodInvocation_Variant variant, java.util.List<TypeArgument> typeArguments, Identifier identifier) {
+  public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.variant = variant;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -27,15 +27,15 @@ public class MethodInvocation_Complex {
     return 2 * variant.hashCode() + 3 * typeArguments.hashCode() + 5 * identifier.hashCode();
   }
   
-  public MethodInvocation_Complex withVariant(MethodInvocation_Variant variant) {
+  public MethodInvocation_Complex withVariant(hydra.ext.java.syntax.MethodInvocation_Variant variant) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   
-  public MethodInvocation_Complex withTypeArguments(java.util.List<TypeArgument> typeArguments) {
+  public MethodInvocation_Complex withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   
-  public MethodInvocation_Complex withIdentifier(Identifier identifier) {
+  public MethodInvocation_Complex withIdentifier(hydra.ext.java.syntax.Identifier identifier) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
 }

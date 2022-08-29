@@ -105,10 +105,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Ref extends Tree {
-    public final Ref value;
+  public static final class Ref extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Ref value;
     
-    public Ref (Ref value) {
+    public Ref (hydra.ext.scala.meta.Ref value) {
       this.value = value;
     }
     
@@ -132,10 +132,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Stat extends Tree {
-    public final Stat value;
+  public static final class Stat extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Stat value;
     
-    public Stat (Stat value) {
+    public Stat (hydra.ext.scala.meta.Stat value) {
       this.value = value;
     }
     
@@ -159,10 +159,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Type extends Tree {
-    public final Type value;
+  public static final class Type extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Type value;
     
-    public Type (Type value) {
+    public Type (hydra.ext.scala.meta.Type value) {
       this.value = value;
     }
     
@@ -186,10 +186,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Bounds extends Tree {
-    public final Type_Bounds value;
+  public static final class Bounds extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Type_Bounds value;
     
-    public Bounds (Type_Bounds value) {
+    public Bounds (hydra.ext.scala.meta.Type_Bounds value) {
       this.value = value;
     }
     
@@ -213,10 +213,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Pat extends Tree {
-    public final Pat value;
+  public static final class Pat extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Pat value;
     
-    public Pat (Pat value) {
+    public Pat (hydra.ext.scala.meta.Pat value) {
       this.value = value;
     }
     
@@ -240,10 +240,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Member extends Tree {
-    public final Member value;
+  public static final class Member extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Member value;
     
-    public Member (Member value) {
+    public Member (hydra.ext.scala.meta.Member value) {
       this.value = value;
     }
     
@@ -267,10 +267,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Ctor extends Tree {
-    public final Ctor value;
+  public static final class Ctor extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Ctor value;
     
-    public Ctor (Ctor value) {
+    public Ctor (hydra.ext.scala.meta.Ctor value) {
       this.value = value;
     }
     
@@ -294,10 +294,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Template extends Tree {
-    public final Template value;
+  public static final class Template extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Template value;
     
-    public Template (Template value) {
+    public Template (hydra.ext.scala.meta.Template value) {
       this.value = value;
     }
     
@@ -321,10 +321,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Mod extends Tree {
-    public final Mod value;
+  public static final class Mod extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Mod value;
     
-    public Mod (Mod value) {
+    public Mod (hydra.ext.scala.meta.Mod value) {
       this.value = value;
     }
     
@@ -348,10 +348,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Enumerator extends Tree {
-    public final Enumerator value;
+  public static final class Enumerator extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Enumerator value;
     
-    public Enumerator (Enumerator value) {
+    public Enumerator (hydra.ext.scala.meta.Enumerator value) {
       this.value = value;
     }
     
@@ -375,10 +375,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Importer extends Tree {
-    public final Importer value;
+  public static final class Importer extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Importer value;
     
-    public Importer (Importer value) {
+    public Importer (hydra.ext.scala.meta.Importer value) {
       this.value = value;
     }
     
@@ -402,10 +402,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Importee extends Tree {
-    public final Importee value;
+  public static final class Importee extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Importee value;
     
-    public Importee (Importee value) {
+    public Importee (hydra.ext.scala.meta.Importee value) {
       this.value = value;
     }
     
@@ -429,10 +429,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class CaseTree extends Tree {
-    public final CaseTree value;
+  public static final class CaseTree extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.CaseTree value;
     
-    public CaseTree (CaseTree value) {
+    public CaseTree (hydra.ext.scala.meta.CaseTree value) {
       this.value = value;
     }
     
@@ -456,10 +456,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Source extends Tree {
-    public final Source value;
+  public static final class Source extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Source value;
     
-    public Source (Source value) {
+    public Source (hydra.ext.scala.meta.Source value) {
       this.value = value;
     }
     
@@ -483,10 +483,10 @@ public abstract class Tree {
     }
   }
   
-  public static final class Quasi extends Tree {
-    public final Quasi value;
+  public static final class Quasi extends hydra.ext.scala.meta.Tree {
+    public final hydra.ext.scala.meta.Quasi value;
     
-    public Quasi (Quasi value) {
+    public Quasi (hydra.ext.scala.meta.Quasi value) {
       this.value = value;
     }
     

@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_New {
-  public final ClassType classType;
+  public final hydra.ext.java.syntax.ClassType classType;
   
-  public final java.util.List<TypeArgument> typeArguments;
+  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public MethodReference_New (ClassType classType, java.util.List<TypeArgument> typeArguments) {
+  public MethodReference_New (hydra.ext.java.syntax.ClassType classType, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     this.classType = classType;
     this.typeArguments = typeArguments;
   }
@@ -24,11 +24,11 @@ public class MethodReference_New {
     return 2 * classType.hashCode() + 3 * typeArguments.hashCode();
   }
   
-  public MethodReference_New withClassType(ClassType classType) {
+  public MethodReference_New withClassType(hydra.ext.java.syntax.ClassType classType) {
     return new MethodReference_New(classType, typeArguments);
   }
   
-  public MethodReference_New withTypeArguments(java.util.List<TypeArgument> typeArguments) {
+  public MethodReference_New withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_New(classType, typeArguments);
   }
 }

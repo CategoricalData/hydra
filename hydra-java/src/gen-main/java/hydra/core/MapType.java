@@ -4,11 +4,11 @@ package hydra.core;
  * A map type
  */
 public class MapType<M> {
-  public final Type<M> keys;
+  public final hydra.core.Type<M> keys;
   
-  public final Type<M> values;
+  public final hydra.core.Type<M> values;
   
-  public MapType (Type<M> keys, Type<M> values) {
+  public MapType (hydra.core.Type<M> keys, hydra.core.Type<M> values) {
     this.keys = keys;
     this.values = values;
   }
@@ -27,11 +27,11 @@ public class MapType<M> {
     return 2 * keys.hashCode() + 3 * values.hashCode();
   }
   
-  public MapType withKeys(Type<M> keys) {
+  public MapType withKeys(hydra.core.Type<M> keys) {
     return new MapType(keys, values);
   }
   
-  public MapType withValues(Type<M> values) {
+  public MapType withValues(hydra.core.Type<M> values) {
     return new MapType(keys, values);
   }
 }

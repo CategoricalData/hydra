@@ -27,10 +27,10 @@ public abstract class Ctor {
     }
   }
   
-  public static final class Primary extends Ctor {
-    public final Ctor_Primary value;
+  public static final class Primary extends hydra.ext.scala.meta.Ctor {
+    public final hydra.ext.scala.meta.Ctor_Primary value;
     
-    public Primary (Ctor_Primary value) {
+    public Primary (hydra.ext.scala.meta.Ctor_Primary value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Ctor {
     }
   }
   
-  public static final class Secondary extends Ctor {
-    public final Ctor_Secondary value;
+  public static final class Secondary extends hydra.ext.scala.meta.Ctor {
+    public final hydra.ext.scala.meta.Ctor_Secondary value;
     
-    public Secondary (Ctor_Secondary value) {
+    public Secondary (hydra.ext.scala.meta.Ctor_Secondary value) {
       this.value = value;
     }
     

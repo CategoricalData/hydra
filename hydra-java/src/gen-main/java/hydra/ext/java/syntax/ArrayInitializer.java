@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ArrayInitializer {
-  public final java.util.List<java.util.List<VariableInitializer>> value;
+  public final java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>> value;
   
-  public ArrayInitializer (java.util.List<java.util.List<VariableInitializer>> value) {
+  public ArrayInitializer (java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>> value) {
     this.value = value;
   }
   

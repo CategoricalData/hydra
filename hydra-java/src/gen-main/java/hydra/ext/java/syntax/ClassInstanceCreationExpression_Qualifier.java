@@ -27,10 +27,10 @@ public abstract class ClassInstanceCreationExpression_Qualifier {
     }
   }
   
-  public static final class Expression extends ClassInstanceCreationExpression_Qualifier {
-    public final ExpressionName value;
+  public static final class Expression extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier {
+    public final hydra.ext.java.syntax.ExpressionName value;
     
-    public Expression (ExpressionName value) {
+    public Expression (hydra.ext.java.syntax.ExpressionName value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ClassInstanceCreationExpression_Qualifier {
     }
   }
   
-  public static final class Primary extends ClassInstanceCreationExpression_Qualifier {
-    public final Primary value;
+  public static final class Primary extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier {
+    public final hydra.ext.java.syntax.Primary value;
     
-    public Primary (Primary value) {
+    public Primary (hydra.ext.java.syntax.Primary value) {
       this.value = value;
     }
     

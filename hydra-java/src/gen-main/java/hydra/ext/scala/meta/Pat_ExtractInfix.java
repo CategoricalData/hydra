@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Pat_ExtractInfix {
-  public final Pat lhs;
+  public final hydra.ext.scala.meta.Pat lhs;
   
-  public final Data_Name op;
+  public final hydra.ext.scala.meta.Data_Name op;
   
-  public final java.util.List<Pat> rhs;
+  public final java.util.List<hydra.ext.scala.meta.Pat> rhs;
   
-  public Pat_ExtractInfix (Pat lhs, Data_Name op, java.util.List<Pat> rhs) {
+  public Pat_ExtractInfix (hydra.ext.scala.meta.Pat lhs, hydra.ext.scala.meta.Data_Name op, java.util.List<hydra.ext.scala.meta.Pat> rhs) {
     this.lhs = lhs;
     this.op = op;
     this.rhs = rhs;
@@ -27,15 +27,15 @@ public class Pat_ExtractInfix {
     return 2 * lhs.hashCode() + 3 * op.hashCode() + 5 * rhs.hashCode();
   }
   
-  public Pat_ExtractInfix withLhs(Pat lhs) {
+  public Pat_ExtractInfix withLhs(hydra.ext.scala.meta.Pat lhs) {
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
   
-  public Pat_ExtractInfix withOp(Data_Name op) {
+  public Pat_ExtractInfix withOp(hydra.ext.scala.meta.Data_Name op) {
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
   
-  public Pat_ExtractInfix withRhs(java.util.List<Pat> rhs) {
+  public Pat_ExtractInfix withRhs(java.util.List<hydra.ext.scala.meta.Pat> rhs) {
     return new Pat_ExtractInfix(lhs, op, rhs);
   }
 }

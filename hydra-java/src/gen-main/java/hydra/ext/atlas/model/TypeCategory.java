@@ -75,7 +75,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Primitive extends TypeCategory {
+  public static final class Primitive extends hydra.ext.atlas.model.TypeCategory {
     public Primitive () {
     
     }
@@ -100,7 +100,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class ObjectIdType extends TypeCategory {
+  public static final class ObjectIdType extends hydra.ext.atlas.model.TypeCategory {
     public ObjectIdType () {
     
     }
@@ -125,7 +125,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Enum_ extends TypeCategory {
+  public static final class Enum_ extends hydra.ext.atlas.model.TypeCategory {
     public Enum_ () {
     
     }
@@ -150,7 +150,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Struct extends TypeCategory {
+  public static final class Struct extends hydra.ext.atlas.model.TypeCategory {
     public Struct () {
     
     }
@@ -175,7 +175,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Classification extends TypeCategory {
+  public static final class Classification extends hydra.ext.atlas.model.TypeCategory {
     public Classification () {
     
     }
@@ -200,7 +200,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Entity extends TypeCategory {
+  public static final class Entity extends hydra.ext.atlas.model.TypeCategory {
     public Entity () {
     
     }
@@ -225,7 +225,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Array extends TypeCategory {
+  public static final class Array extends hydra.ext.atlas.model.TypeCategory {
     public Array () {
     
     }
@@ -250,7 +250,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Map extends TypeCategory {
+  public static final class Map extends hydra.ext.atlas.model.TypeCategory {
     public Map () {
     
     }
@@ -275,7 +275,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class Relationship extends TypeCategory {
+  public static final class Relationship extends hydra.ext.atlas.model.TypeCategory {
     public Relationship () {
     
     }
@@ -300,7 +300,7 @@ public abstract class TypeCategory {
     }
   }
   
-  public static final class BusinessMetadata extends TypeCategory {
+  public static final class BusinessMetadata extends hydra.ext.atlas.model.TypeCategory {
     public BusinessMetadata () {
     
     }

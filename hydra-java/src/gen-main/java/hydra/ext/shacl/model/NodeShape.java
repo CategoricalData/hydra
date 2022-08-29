@@ -4,9 +4,9 @@ package hydra.ext.shacl.model;
  * A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes
  */
 public class NodeShape {
-  public final CommonProperties common;
+  public final hydra.ext.shacl.model.CommonProperties common;
   
-  public NodeShape (CommonProperties common) {
+  public NodeShape (hydra.ext.shacl.model.CommonProperties common) {
     this.common = common;
   }
   

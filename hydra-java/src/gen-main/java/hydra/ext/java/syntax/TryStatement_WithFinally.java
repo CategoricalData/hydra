@@ -1,13 +1,13 @@
 package hydra.ext.java.syntax;
 
 public class TryStatement_WithFinally {
-  public final Block block;
+  public final hydra.ext.java.syntax.Block block;
   
-  public final java.util.Optional<Catches> catches;
+  public final java.util.Optional<hydra.ext.java.syntax.Catches> catches;
   
-  public final Finally finally_;
+  public final hydra.ext.java.syntax.Finally finally_;
   
-  public TryStatement_WithFinally (Block block, java.util.Optional<Catches> catches, Finally finally_) {
+  public TryStatement_WithFinally (hydra.ext.java.syntax.Block block, java.util.Optional<hydra.ext.java.syntax.Catches> catches, hydra.ext.java.syntax.Finally finally_) {
     this.block = block;
     this.catches = catches;
     this.finally_ = finally_;
@@ -27,15 +27,15 @@ public class TryStatement_WithFinally {
     return 2 * block.hashCode() + 3 * catches.hashCode() + 5 * finally_.hashCode();
   }
   
-  public TryStatement_WithFinally withBlock(Block block) {
+  public TryStatement_WithFinally withBlock(hydra.ext.java.syntax.Block block) {
     return new TryStatement_WithFinally(block, catches, finally_);
   }
   
-  public TryStatement_WithFinally withCatches(java.util.Optional<Catches> catches) {
+  public TryStatement_WithFinally withCatches(java.util.Optional<hydra.ext.java.syntax.Catches> catches) {
     return new TryStatement_WithFinally(block, catches, finally_);
   }
   
-  public TryStatement_WithFinally withFinally(Finally finally_) {
+  public TryStatement_WithFinally withFinally(hydra.ext.java.syntax.Finally finally_) {
     return new TryStatement_WithFinally(block, catches, finally_);
   }
 }

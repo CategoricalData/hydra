@@ -27,10 +27,10 @@ public abstract class ImportExportStat {
     }
   }
   
-  public static final class Import extends ImportExportStat {
-    public final Import value;
+  public static final class Import extends hydra.ext.scala.meta.ImportExportStat {
+    public final hydra.ext.scala.meta.Import value;
     
-    public Import (Import value) {
+    public Import (hydra.ext.scala.meta.Import value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class ImportExportStat {
     }
   }
   
-  public static final class Export extends ImportExportStat {
-    public final Export value;
+  public static final class Export extends hydra.ext.scala.meta.ImportExportStat {
+    public final hydra.ext.scala.meta.Export value;
     
-    public Export (Export value) {
+    public Export (hydra.ext.scala.meta.Export value) {
       this.value = value;
     }
     

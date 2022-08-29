@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class LocalVariableDeclarationStatement {
-  public final LocalVariableDeclaration value;
+  public final hydra.ext.java.syntax.LocalVariableDeclaration value;
   
-  public LocalVariableDeclarationStatement (LocalVariableDeclaration value) {
+  public LocalVariableDeclarationStatement (hydra.ext.java.syntax.LocalVariableDeclaration value) {
     this.value = value;
   }
   

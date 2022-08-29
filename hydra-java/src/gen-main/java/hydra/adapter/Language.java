@@ -1,11 +1,11 @@
 package hydra.adapter;
 
 public class Language<M> {
-  public final LanguageName name;
+  public final hydra.adapter.LanguageName name;
   
-  public final LanguageConstraints<M> constraints;
+  public final hydra.adapter.LanguageConstraints<M> constraints;
   
-  public Language (LanguageName name, LanguageConstraints<M> constraints) {
+  public Language (hydra.adapter.LanguageName name, hydra.adapter.LanguageConstraints<M> constraints) {
     this.name = name;
     this.constraints = constraints;
   }
@@ -24,11 +24,11 @@ public class Language<M> {
     return 2 * name.hashCode() + 3 * constraints.hashCode();
   }
   
-  public Language withName(LanguageName name) {
+  public Language withName(hydra.adapter.LanguageName name) {
     return new Language(name, constraints);
   }
   
-  public Language withConstraints(LanguageConstraints<M> constraints) {
+  public Language withConstraints(hydra.adapter.LanguageConstraints<M> constraints) {
     return new Language(name, constraints);
   }
 }

@@ -27,10 +27,10 @@ public abstract class AnnotationTypeElementModifier {
     }
   }
   
-  public static final class Public extends AnnotationTypeElementModifier {
-    public final Annotation value;
+  public static final class Public extends hydra.ext.java.syntax.AnnotationTypeElementModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Public (Annotation value) {
+    public Public (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -54,7 +54,7 @@ public abstract class AnnotationTypeElementModifier {
     }
   }
   
-  public static final class Abstract extends AnnotationTypeElementModifier {
+  public static final class Abstract extends hydra.ext.java.syntax.AnnotationTypeElementModifier {
     public Abstract () {
     
     }

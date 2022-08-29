@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_New {
-  public final Init init;
+  public final hydra.ext.scala.meta.Init init;
   
-  public Data_New (Init init) {
+  public Data_New (hydra.ext.scala.meta.Init init) {
     this.init = init;
   }
   

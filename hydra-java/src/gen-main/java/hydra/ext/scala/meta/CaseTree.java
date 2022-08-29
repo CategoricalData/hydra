@@ -27,10 +27,10 @@ public abstract class CaseTree {
     }
   }
   
-  public static final class Case extends CaseTree {
-    public final Case value;
+  public static final class Case extends hydra.ext.scala.meta.CaseTree {
+    public final hydra.ext.scala.meta.Case value;
     
-    public Case (Case value) {
+    public Case (hydra.ext.scala.meta.Case value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class CaseTree {
     }
   }
   
-  public static final class TypeCase extends CaseTree {
-    public final TypeCase value;
+  public static final class TypeCase extends hydra.ext.scala.meta.CaseTree {
+    public final hydra.ext.scala.meta.TypeCase value;
     
-    public TypeCase (TypeCase value) {
+    public TypeCase (hydra.ext.scala.meta.TypeCase value) {
       this.value = value;
     }
     

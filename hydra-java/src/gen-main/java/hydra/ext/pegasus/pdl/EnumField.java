@@ -1,11 +1,11 @@
 package hydra.ext.pegasus.pdl;
 
 public class EnumField {
-  public final EnumFieldName name;
+  public final hydra.ext.pegasus.pdl.EnumFieldName name;
   
-  public final Annotations annotations;
+  public final hydra.ext.pegasus.pdl.Annotations annotations;
   
-  public EnumField (EnumFieldName name, Annotations annotations) {
+  public EnumField (hydra.ext.pegasus.pdl.EnumFieldName name, hydra.ext.pegasus.pdl.Annotations annotations) {
     this.name = name;
     this.annotations = annotations;
   }
@@ -24,11 +24,11 @@ public class EnumField {
     return 2 * name.hashCode() + 3 * annotations.hashCode();
   }
   
-  public EnumField withName(EnumFieldName name) {
+  public EnumField withName(hydra.ext.pegasus.pdl.EnumFieldName name) {
     return new EnumField(name, annotations);
   }
   
-  public EnumField withAnnotations(Annotations annotations) {
+  public EnumField withAnnotations(hydra.ext.pegasus.pdl.Annotations annotations) {
     return new EnumField(name, annotations);
   }
 }

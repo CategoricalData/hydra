@@ -57,10 +57,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Application extends Type {
-    public final Type_Application value;
+  public static final class Application extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Type_Application value;
     
-    public Application (Type_Application value) {
+    public Application (hydra.ext.haskell.ast.Type_Application value) {
       this.value = value;
     }
     
@@ -84,10 +84,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Function extends Type {
-    public final Type_Function value;
+  public static final class Function extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Type_Function value;
     
-    public Function (Type_Function value) {
+    public Function (hydra.ext.haskell.ast.Type_Function value) {
       this.value = value;
     }
     
@@ -111,10 +111,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Infix extends Type {
-    public final Type_Infix value;
+  public static final class Infix extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Type_Infix value;
     
-    public Infix (Type_Infix value) {
+    public Infix (hydra.ext.haskell.ast.Type_Infix value) {
       this.value = value;
     }
     
@@ -138,10 +138,10 @@ public abstract class Type {
     }
   }
   
-  public static final class List extends Type {
-    public final Type value;
+  public static final class List extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Type value;
     
-    public List (Type value) {
+    public List (hydra.ext.haskell.ast.Type value) {
       this.value = value;
     }
     
@@ -165,10 +165,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Parens extends Type {
-    public final Type value;
+  public static final class Parens extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Type value;
     
-    public Parens (Type value) {
+    public Parens (hydra.ext.haskell.ast.Type value) {
       this.value = value;
     }
     
@@ -192,10 +192,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Tuple extends Type {
-    public final java.util.List<Type> value;
+  public static final class Tuple extends hydra.ext.haskell.ast.Type {
+    public final java.util.List<hydra.ext.haskell.ast.Type> value;
     
-    public Tuple (java.util.List<Type> value) {
+    public Tuple (java.util.List<hydra.ext.haskell.ast.Type> value) {
       this.value = value;
     }
     
@@ -219,10 +219,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Variable extends Type {
-    public final Name value;
+  public static final class Variable extends hydra.ext.haskell.ast.Type {
+    public final hydra.ext.haskell.ast.Name value;
     
-    public Variable (Name value) {
+    public Variable (hydra.ext.haskell.ast.Name value) {
       this.value = value;
     }
     

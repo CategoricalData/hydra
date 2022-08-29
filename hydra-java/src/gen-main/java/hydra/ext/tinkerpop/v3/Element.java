@@ -30,10 +30,10 @@ public abstract class Element {
     }
   }
   
-  public static final class Vertex extends Element {
-    public final Vertex value;
+  public static final class Vertex extends hydra.ext.tinkerpop.v3.Element {
+    public final hydra.ext.tinkerpop.v3.Vertex value;
     
-    public Vertex (Vertex value) {
+    public Vertex (hydra.ext.tinkerpop.v3.Vertex value) {
       this.value = value;
     }
     
@@ -57,10 +57,10 @@ public abstract class Element {
     }
   }
   
-  public static final class Edge extends Element {
-    public final Edge value;
+  public static final class Edge extends hydra.ext.tinkerpop.v3.Element {
+    public final hydra.ext.tinkerpop.v3.Edge value;
     
-    public Edge (Edge value) {
+    public Edge (hydra.ext.tinkerpop.v3.Edge value) {
       this.value = value;
     }
     

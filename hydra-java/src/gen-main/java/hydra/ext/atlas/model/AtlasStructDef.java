@@ -4,11 +4,11 @@ package hydra.ext.atlas.model;
  * class that captures details of a struct-type.
  */
 public class AtlasStructDef {
-  public final AtlasBaseTypeDef asAtlasBaseTypeDef;
+  public final hydra.ext.atlas.model.AtlasBaseTypeDef asAtlasBaseTypeDef;
   
-  public final java.util.List<AtlasAttributeDef> attributeDefs;
+  public final java.util.List<hydra.ext.atlas.model.AtlasAttributeDef> attributeDefs;
   
-  public AtlasStructDef (AtlasBaseTypeDef asAtlasBaseTypeDef, java.util.List<AtlasAttributeDef> attributeDefs) {
+  public AtlasStructDef (hydra.ext.atlas.model.AtlasBaseTypeDef asAtlasBaseTypeDef, java.util.List<hydra.ext.atlas.model.AtlasAttributeDef> attributeDefs) {
     this.asAtlasBaseTypeDef = asAtlasBaseTypeDef;
     this.attributeDefs = attributeDefs;
   }
@@ -27,11 +27,11 @@ public class AtlasStructDef {
     return 2 * asAtlasBaseTypeDef.hashCode() + 3 * attributeDefs.hashCode();
   }
   
-  public AtlasStructDef withAsAtlasBaseTypeDef(AtlasBaseTypeDef asAtlasBaseTypeDef) {
+  public AtlasStructDef withAsAtlasBaseTypeDef(hydra.ext.atlas.model.AtlasBaseTypeDef asAtlasBaseTypeDef) {
     return new AtlasStructDef(asAtlasBaseTypeDef, attributeDefs);
   }
   
-  public AtlasStructDef withAttributeDefs(java.util.List<AtlasAttributeDef> attributeDefs) {
+  public AtlasStructDef withAttributeDefs(java.util.List<hydra.ext.atlas.model.AtlasAttributeDef> attributeDefs) {
     return new AtlasStructDef(asAtlasBaseTypeDef, attributeDefs);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_As {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final Pattern inner;
+  public final hydra.ext.haskell.ast.Pattern inner;
   
-  public Pattern_As (Name name, Pattern inner) {
+  public Pattern_As (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Pattern inner) {
     this.name = name;
     this.inner = inner;
   }
@@ -24,11 +24,11 @@ public class Pattern_As {
     return 2 * name.hashCode() + 3 * inner.hashCode();
   }
   
-  public Pattern_As withName(Name name) {
+  public Pattern_As withName(hydra.ext.haskell.ast.Name name) {
     return new Pattern_As(name, inner);
   }
   
-  public Pattern_As withInner(Pattern inner) {
+  public Pattern_As withInner(hydra.ext.haskell.ast.Pattern inner) {
     return new Pattern_As(name, inner);
   }
 }

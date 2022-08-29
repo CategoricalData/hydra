@@ -4,11 +4,11 @@ package hydra.ext.tinkerpop.v3;
  * A vertex
  */
 public class Vertex {
-  public final Id id;
+  public final hydra.ext.tinkerpop.v3.Id id;
   
-  public final Properties properties;
+  public final hydra.ext.tinkerpop.v3.Properties properties;
   
-  public Vertex (Id id, Properties properties) {
+  public Vertex (hydra.ext.tinkerpop.v3.Id id, hydra.ext.tinkerpop.v3.Properties properties) {
     this.id = id;
     this.properties = properties;
   }
@@ -27,11 +27,11 @@ public class Vertex {
     return 2 * id.hashCode() + 3 * properties.hashCode();
   }
   
-  public Vertex withId(Id id) {
+  public Vertex withId(hydra.ext.tinkerpop.v3.Id id) {
     return new Vertex(id, properties);
   }
   
-  public Vertex withProperties(Properties properties) {
+  public Vertex withProperties(hydra.ext.tinkerpop.v3.Properties properties) {
     return new Vertex(id, properties);
   }
 }

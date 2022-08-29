@@ -12,14 +12,14 @@ public class Literal {
   /**
    * an IRI identifying a datatype that determines how the lexical form maps to a literal value
    */
-  public final Iri datatypeIri;
+  public final hydra.ext.rdf.syntax.Iri datatypeIri;
   
   /**
    * An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
    */
-  public final java.util.Optional<LanguageTag> languageTag;
+  public final java.util.Optional<hydra.ext.rdf.syntax.LanguageTag> languageTag;
   
-  public Literal (String lexicalForm, Iri datatypeIri, java.util.Optional<LanguageTag> languageTag) {
+  public Literal (String lexicalForm, hydra.ext.rdf.syntax.Iri datatypeIri, java.util.Optional<hydra.ext.rdf.syntax.LanguageTag> languageTag) {
     this.lexicalForm = lexicalForm;
     this.datatypeIri = datatypeIri;
     this.languageTag = languageTag;
@@ -43,11 +43,11 @@ public class Literal {
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
-  public Literal withDatatypeIri(Iri datatypeIri) {
+  public Literal withDatatypeIri(hydra.ext.rdf.syntax.Iri datatypeIri) {
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
   
-  public Literal withLanguageTag(java.util.Optional<LanguageTag> languageTag) {
+  public Literal withLanguageTag(java.util.Optional<hydra.ext.rdf.syntax.LanguageTag> languageTag) {
     return new Literal(lexicalForm, datatypeIri, languageTag);
   }
 }

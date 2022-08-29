@@ -39,7 +39,7 @@ public abstract class ExistentialVariableVariant {
     }
   }
   
-  public static final class Placeholder extends ExistentialVariableVariant {
+  public static final class Placeholder extends hydra.ext.coq.syntax.ExistentialVariableVariant {
     public Placeholder () {
     
     }
@@ -64,7 +64,7 @@ public abstract class ExistentialVariableVariant {
     }
   }
   
-  public static final class Inside1 extends ExistentialVariableVariant {
+  public static final class Inside1 extends hydra.ext.coq.syntax.ExistentialVariableVariant {
     public Inside1 () {
     
     }
@@ -89,7 +89,7 @@ public abstract class ExistentialVariableVariant {
     }
   }
   
-  public static final class Inside2 extends ExistentialVariableVariant {
+  public static final class Inside2 extends hydra.ext.coq.syntax.ExistentialVariableVariant {
     public Inside2 () {
     
     }
@@ -114,10 +114,10 @@ public abstract class ExistentialVariableVariant {
     }
   }
   
-  public static final class Outside extends ExistentialVariableVariant {
-    public final java.util.Optional<IdentArg> value;
+  public static final class Outside extends hydra.ext.coq.syntax.ExistentialVariableVariant {
+    public final java.util.Optional<hydra.ext.coq.syntax.IdentArg> value;
     
-    public Outside (java.util.Optional<IdentArg> value) {
+    public Outside (java.util.Optional<hydra.ext.coq.syntax.IdentArg> value) {
       this.value = value;
     }
     

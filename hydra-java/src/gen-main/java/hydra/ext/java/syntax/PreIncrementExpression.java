@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class PreIncrementExpression {
-  public final UnaryExpression value;
+  public final hydra.ext.java.syntax.UnaryExpression value;
   
-  public PreIncrementExpression (UnaryExpression value) {
+  public PreIncrementExpression (hydra.ext.java.syntax.UnaryExpression value) {
     this.value = value;
   }
   

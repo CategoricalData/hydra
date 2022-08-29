@@ -7,12 +7,12 @@ public class CommonConstraints {
   /**
    * See https://www.w3.org/TR/shacl/#AndConstraintComponent
    */
-  public final java.util.Optional<java.util.List<Shape>> and;
+  public final java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> and;
   
   /**
    * See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
    */
-  public final java.util.Optional<Closed> closed;
+  public final java.util.Optional<hydra.ext.shacl.model.Closed> closed;
   
   /**
    * See https://www.w3.org/TR/shacl/#ClassConstraintComponent
@@ -52,17 +52,17 @@ public class CommonConstraints {
   /**
    * See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
    */
-  public final java.util.Optional<NodeKind> nodeKind;
+  public final java.util.Optional<hydra.ext.shacl.model.NodeKind> nodeKind;
   
   /**
    * See https://www.w3.org/TR/shacl/#NodeConstraintComponent
    */
-  public final java.util.Set<NodeShape> node;
+  public final java.util.Set<hydra.ext.shacl.model.NodeShape> node;
   
   /**
    * See https://www.w3.org/TR/shacl/#NotConstraintComponent
    */
-  public final java.util.Set<Shape> not;
+  public final java.util.Set<hydra.ext.shacl.model.Shape> not;
   
   /**
    * See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
@@ -97,24 +97,24 @@ public class CommonConstraints {
   /**
    * See https://www.w3.org/TR/shacl/#PatternConstraintComponent
    */
-  public final java.util.Optional<Pattern> pattern;
+  public final java.util.Optional<hydra.ext.shacl.model.Pattern> pattern;
   
   /**
    * See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
    */
-  public final java.util.Set<PropertyShape> property;
+  public final java.util.Set<hydra.ext.shacl.model.PropertyShape> property;
   
   /**
    * See https://www.w3.org/TR/shacl/#OrConstraintComponent
    */
-  public final java.util.Optional<java.util.List<Shape>> or;
+  public final java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> or;
   
   /**
    * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
    */
-  public final java.util.Optional<java.util.List<Shape>> xone;
+  public final java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> xone;
   
-  public CommonConstraints (java.util.Optional<java.util.List<Shape>> and, java.util.Optional<Closed> closed, java.util.Set<hydra.ext.rdf.syntax.RdfsClass> class_, java.util.Optional<hydra.ext.rdf.syntax.Iri> datatype, java.util.Set<hydra.ext.rdf.syntax.Property> disjoint, java.util.Set<hydra.ext.rdf.syntax.Property> equals, java.util.Set<hydra.ext.rdf.syntax.Node> hasValue, java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Node>> in, java.util.Optional<java.util.List<hydra.ext.rdf.syntax.LanguageTag>> languageIn, java.util.Optional<NodeKind> nodeKind, java.util.Set<NodeShape> node, java.util.Set<Shape> not, java.util.Optional<hydra.ext.rdf.syntax.Literal> maxExclusive, java.util.Optional<hydra.ext.rdf.syntax.Literal> maxInclusive, java.util.Optional<java.math.BigInteger> maxLength, java.util.Optional<hydra.ext.rdf.syntax.Literal> minExclusive, java.util.Optional<hydra.ext.rdf.syntax.Literal> minInclusive, java.util.Optional<java.math.BigInteger> minLength, java.util.Optional<Pattern> pattern, java.util.Set<PropertyShape> property, java.util.Optional<java.util.List<Shape>> or, java.util.Optional<java.util.List<Shape>> xone) {
+  public CommonConstraints (java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> and, java.util.Optional<hydra.ext.shacl.model.Closed> closed, java.util.Set<hydra.ext.rdf.syntax.RdfsClass> class_, java.util.Optional<hydra.ext.rdf.syntax.Iri> datatype, java.util.Set<hydra.ext.rdf.syntax.Property> disjoint, java.util.Set<hydra.ext.rdf.syntax.Property> equals, java.util.Set<hydra.ext.rdf.syntax.Node> hasValue, java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Node>> in, java.util.Optional<java.util.List<hydra.ext.rdf.syntax.LanguageTag>> languageIn, java.util.Optional<hydra.ext.shacl.model.NodeKind> nodeKind, java.util.Set<hydra.ext.shacl.model.NodeShape> node, java.util.Set<hydra.ext.shacl.model.Shape> not, java.util.Optional<hydra.ext.rdf.syntax.Literal> maxExclusive, java.util.Optional<hydra.ext.rdf.syntax.Literal> maxInclusive, java.util.Optional<java.math.BigInteger> maxLength, java.util.Optional<hydra.ext.rdf.syntax.Literal> minExclusive, java.util.Optional<hydra.ext.rdf.syntax.Literal> minInclusive, java.util.Optional<java.math.BigInteger> minLength, java.util.Optional<hydra.ext.shacl.model.Pattern> pattern, java.util.Set<hydra.ext.shacl.model.PropertyShape> property, java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> or, java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> xone) {
     this.and = and;
     this.closed = closed;
     this.class_ = class_;
@@ -153,11 +153,11 @@ public class CommonConstraints {
     return 2 * and.hashCode() + 3 * closed.hashCode() + 5 * class_.hashCode() + 7 * datatype.hashCode() + 11 * disjoint.hashCode() + 13 * equals.hashCode() + 17 * hasValue.hashCode() + 19 * in.hashCode() + 23 * languageIn.hashCode() + 29 * nodeKind.hashCode() + 31 * node.hashCode() + 37 * not.hashCode() + 41 * maxExclusive.hashCode() + 43 * maxInclusive.hashCode() + 47 * maxLength.hashCode() + 53 * minExclusive.hashCode() + 59 * minInclusive.hashCode() + 61 * minLength.hashCode() + 67 * pattern.hashCode() + 71 * property.hashCode() + 2 * or.hashCode() + 3 * xone.hashCode();
   }
   
-  public CommonConstraints withAnd(java.util.Optional<java.util.List<Shape>> and) {
+  public CommonConstraints withAnd(java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> and) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withClosed(java.util.Optional<Closed> closed) {
+  public CommonConstraints withClosed(java.util.Optional<hydra.ext.shacl.model.Closed> closed) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
@@ -189,15 +189,15 @@ public class CommonConstraints {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withNodeKind(java.util.Optional<NodeKind> nodeKind) {
+  public CommonConstraints withNodeKind(java.util.Optional<hydra.ext.shacl.model.NodeKind> nodeKind) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withNode(java.util.Set<NodeShape> node) {
+  public CommonConstraints withNode(java.util.Set<hydra.ext.shacl.model.NodeShape> node) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withNot(java.util.Set<Shape> not) {
+  public CommonConstraints withNot(java.util.Set<hydra.ext.shacl.model.Shape> not) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
@@ -225,19 +225,19 @@ public class CommonConstraints {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withPattern(java.util.Optional<Pattern> pattern) {
+  public CommonConstraints withPattern(java.util.Optional<hydra.ext.shacl.model.Pattern> pattern) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withProperty(java.util.Set<PropertyShape> property) {
+  public CommonConstraints withProperty(java.util.Set<hydra.ext.shacl.model.PropertyShape> property) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withOr(java.util.Optional<java.util.List<Shape>> or) {
+  public CommonConstraints withOr(java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> or) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
   
-  public CommonConstraints withXone(java.util.Optional<java.util.List<Shape>> xone) {
+  public CommonConstraints withXone(java.util.Optional<java.util.List<hydra.ext.shacl.model.Shape>> xone) {
     return new CommonConstraints(and, closed, class_, datatype, disjoint, equals, hasValue, in, languageIn, nodeKind, node, not, maxExclusive, maxInclusive, maxLength, minExclusive, minInclusive, minLength, pattern, property, or, xone);
   }
 }

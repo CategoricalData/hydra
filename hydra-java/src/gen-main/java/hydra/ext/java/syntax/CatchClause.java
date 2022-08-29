@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class CatchClause {
-  public final java.util.Optional<CatchFormalParameter> parameter;
+  public final java.util.Optional<hydra.ext.java.syntax.CatchFormalParameter> parameter;
   
-  public final Block block;
+  public final hydra.ext.java.syntax.Block block;
   
-  public CatchClause (java.util.Optional<CatchFormalParameter> parameter, Block block) {
+  public CatchClause (java.util.Optional<hydra.ext.java.syntax.CatchFormalParameter> parameter, hydra.ext.java.syntax.Block block) {
     this.parameter = parameter;
     this.block = block;
   }
@@ -24,11 +24,11 @@ public class CatchClause {
     return 2 * parameter.hashCode() + 3 * block.hashCode();
   }
   
-  public CatchClause withParameter(java.util.Optional<CatchFormalParameter> parameter) {
+  public CatchClause withParameter(java.util.Optional<hydra.ext.java.syntax.CatchFormalParameter> parameter) {
     return new CatchClause(parameter, block);
   }
   
-  public CatchClause withBlock(Block block) {
+  public CatchClause withBlock(hydra.ext.java.syntax.Block block) {
     return new CatchClause(parameter, block);
   }
 }

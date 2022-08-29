@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_PolyFunction {
-  public final java.util.List<Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Data_PolyFunction (java.util.List<Type_Param> tparams, Data body) {
+  public Data_PolyFunction (java.util.List<hydra.ext.scala.meta.Type_Param> tparams, hydra.ext.scala.meta.Data body) {
     this.tparams = tparams;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class Data_PolyFunction {
     return 2 * tparams.hashCode() + 3 * body.hashCode();
   }
   
-  public Data_PolyFunction withTparams(java.util.List<Type_Param> tparams) {
+  public Data_PolyFunction withTparams(java.util.List<hydra.ext.scala.meta.Type_Param> tparams) {
     return new Data_PolyFunction(tparams, body);
   }
   
-  public Data_PolyFunction withBody(Data body) {
+  public Data_PolyFunction withBody(hydra.ext.scala.meta.Data body) {
     return new Data_PolyFunction(tparams, body);
   }
 }

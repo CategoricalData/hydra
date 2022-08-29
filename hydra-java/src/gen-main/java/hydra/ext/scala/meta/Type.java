@@ -153,10 +153,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Ref extends Type {
-    public final Type_Ref value;
+  public static final class Ref extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Ref value;
     
-    public Ref (Type_Ref value) {
+    public Ref (hydra.ext.scala.meta.Type_Ref value) {
       this.value = value;
     }
     
@@ -180,10 +180,10 @@ public abstract class Type {
     }
   }
   
-  public static final class AnonymousName extends Type {
-    public final Type_AnonymousName value;
+  public static final class AnonymousName extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_AnonymousName value;
     
-    public AnonymousName (Type_AnonymousName value) {
+    public AnonymousName (hydra.ext.scala.meta.Type_AnonymousName value) {
       this.value = value;
     }
     
@@ -207,10 +207,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Apply extends Type {
-    public final Type_Apply value;
+  public static final class Apply extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Apply value;
     
-    public Apply (Type_Apply value) {
+    public Apply (hydra.ext.scala.meta.Type_Apply value) {
       this.value = value;
     }
     
@@ -234,10 +234,10 @@ public abstract class Type {
     }
   }
   
-  public static final class ApplyInfix extends Type {
-    public final Type_ApplyInfix value;
+  public static final class ApplyInfix extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_ApplyInfix value;
     
-    public ApplyInfix (Type_ApplyInfix value) {
+    public ApplyInfix (hydra.ext.scala.meta.Type_ApplyInfix value) {
       this.value = value;
     }
     
@@ -261,10 +261,10 @@ public abstract class Type {
     }
   }
   
-  public static final class FunctionType extends Type {
-    public final Type_FunctionType value;
+  public static final class FunctionType extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_FunctionType value;
     
-    public FunctionType (Type_FunctionType value) {
+    public FunctionType (hydra.ext.scala.meta.Type_FunctionType value) {
       this.value = value;
     }
     
@@ -288,10 +288,10 @@ public abstract class Type {
     }
   }
   
-  public static final class PolyFunction extends Type {
-    public final Type_PolyFunction value;
+  public static final class PolyFunction extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_PolyFunction value;
     
-    public PolyFunction (Type_PolyFunction value) {
+    public PolyFunction (hydra.ext.scala.meta.Type_PolyFunction value) {
       this.value = value;
     }
     
@@ -315,10 +315,10 @@ public abstract class Type {
     }
   }
   
-  public static final class ImplicitFunction extends Type {
-    public final Type_ImplicitFunction value;
+  public static final class ImplicitFunction extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_ImplicitFunction value;
     
-    public ImplicitFunction (Type_ImplicitFunction value) {
+    public ImplicitFunction (hydra.ext.scala.meta.Type_ImplicitFunction value) {
       this.value = value;
     }
     
@@ -342,10 +342,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Tuple extends Type {
-    public final Type_Tuple value;
+  public static final class Tuple extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Tuple value;
     
-    public Tuple (Type_Tuple value) {
+    public Tuple (hydra.ext.scala.meta.Type_Tuple value) {
       this.value = value;
     }
     
@@ -369,10 +369,10 @@ public abstract class Type {
     }
   }
   
-  public static final class With extends Type {
-    public final Type_With value;
+  public static final class With extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_With value;
     
-    public With (Type_With value) {
+    public With (hydra.ext.scala.meta.Type_With value) {
       this.value = value;
     }
     
@@ -396,10 +396,10 @@ public abstract class Type {
     }
   }
   
-  public static final class And extends Type {
-    public final Type_And value;
+  public static final class And extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_And value;
     
-    public And (Type_And value) {
+    public And (hydra.ext.scala.meta.Type_And value) {
       this.value = value;
     }
     
@@ -423,10 +423,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Or extends Type {
-    public final Type_Or value;
+  public static final class Or extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Or value;
     
-    public Or (Type_Or value) {
+    public Or (hydra.ext.scala.meta.Type_Or value) {
       this.value = value;
     }
     
@@ -450,10 +450,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Refine extends Type {
-    public final Type_Refine value;
+  public static final class Refine extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Refine value;
     
-    public Refine (Type_Refine value) {
+    public Refine (hydra.ext.scala.meta.Type_Refine value) {
       this.value = value;
     }
     
@@ -477,10 +477,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Existential extends Type {
-    public final Type_Existential value;
+  public static final class Existential extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Existential value;
     
-    public Existential (Type_Existential value) {
+    public Existential (hydra.ext.scala.meta.Type_Existential value) {
       this.value = value;
     }
     
@@ -504,10 +504,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Annotate extends Type {
-    public final Type_Annotate value;
+  public static final class Annotate extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Annotate value;
     
-    public Annotate (Type_Annotate value) {
+    public Annotate (hydra.ext.scala.meta.Type_Annotate value) {
       this.value = value;
     }
     
@@ -531,10 +531,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Lambda extends Type {
-    public final Type_Lambda value;
+  public static final class Lambda extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Lambda value;
     
-    public Lambda (Type_Lambda value) {
+    public Lambda (hydra.ext.scala.meta.Type_Lambda value) {
       this.value = value;
     }
     
@@ -558,10 +558,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Macro extends Type {
-    public final Type_Macro value;
+  public static final class Macro extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Macro value;
     
-    public Macro (Type_Macro value) {
+    public Macro (hydra.ext.scala.meta.Type_Macro value) {
       this.value = value;
     }
     
@@ -585,10 +585,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Method extends Type {
-    public final Type_Method value;
+  public static final class Method extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Method value;
     
-    public Method (Type_Method value) {
+    public Method (hydra.ext.scala.meta.Type_Method value) {
       this.value = value;
     }
     
@@ -612,10 +612,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Placeholder extends Type {
-    public final Type_Placeholder value;
+  public static final class Placeholder extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Placeholder value;
     
-    public Placeholder (Type_Placeholder value) {
+    public Placeholder (hydra.ext.scala.meta.Type_Placeholder value) {
       this.value = value;
     }
     
@@ -639,10 +639,10 @@ public abstract class Type {
     }
   }
   
-  public static final class ByName extends Type {
-    public final Type_ByName value;
+  public static final class ByName extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_ByName value;
     
-    public ByName (Type_ByName value) {
+    public ByName (hydra.ext.scala.meta.Type_ByName value) {
       this.value = value;
     }
     
@@ -666,10 +666,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Repeated extends Type {
-    public final Type_Repeated value;
+  public static final class Repeated extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Repeated value;
     
-    public Repeated (Type_Repeated value) {
+    public Repeated (hydra.ext.scala.meta.Type_Repeated value) {
       this.value = value;
     }
     
@@ -693,10 +693,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Var extends Type {
-    public final Type_Var value;
+  public static final class Var extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Var value;
     
-    public Var (Type_Var value) {
+    public Var (hydra.ext.scala.meta.Type_Var value) {
       this.value = value;
     }
     
@@ -720,10 +720,10 @@ public abstract class Type {
     }
   }
   
-  public static final class TypedParam extends Type {
-    public final Type_TypedParam value;
+  public static final class TypedParam extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_TypedParam value;
     
-    public TypedParam (Type_TypedParam value) {
+    public TypedParam (hydra.ext.scala.meta.Type_TypedParam value) {
       this.value = value;
     }
     
@@ -747,10 +747,10 @@ public abstract class Type {
     }
   }
   
-  public static final class Match extends Type {
-    public final Type_Match value;
+  public static final class Match extends hydra.ext.scala.meta.Type {
+    public final hydra.ext.scala.meta.Type_Match value;
     
-    public Match (Type_Match value) {
+    public Match (hydra.ext.scala.meta.Type_Match value) {
       this.value = value;
     }
     

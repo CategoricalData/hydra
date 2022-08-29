@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class ResourceSpecification {
-  public final java.util.List<Resource> value;
+  public final java.util.List<hydra.ext.java.syntax.Resource> value;
   
-  public ResourceSpecification (java.util.List<Resource> value) {
+  public ResourceSpecification (java.util.List<hydra.ext.java.syntax.Resource> value) {
     this.value = value;
   }
   

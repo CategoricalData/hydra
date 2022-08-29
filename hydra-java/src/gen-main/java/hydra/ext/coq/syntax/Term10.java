@@ -27,10 +27,10 @@ public abstract class Term10 {
     }
   }
   
-  public static final class Application extends Term10 {
-    public final Application value;
+  public static final class Application extends hydra.ext.coq.syntax.Term10 {
+    public final hydra.ext.coq.syntax.Application value;
     
-    public Application (Application value) {
+    public Application (hydra.ext.coq.syntax.Application value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Term10 {
     }
   }
   
-  public static final class OneTerm extends Term10 {
-    public final OneTerm value;
+  public static final class OneTerm extends hydra.ext.coq.syntax.Term10 {
+    public final hydra.ext.coq.syntax.OneTerm value;
     
-    public OneTerm (OneTerm value) {
+    public OneTerm (hydra.ext.coq.syntax.OneTerm value) {
       this.value = value;
     }
     

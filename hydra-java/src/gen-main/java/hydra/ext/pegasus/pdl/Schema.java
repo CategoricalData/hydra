@@ -63,10 +63,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Array extends Schema {
-    public final Schema value;
+  public static final class Array extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.Schema value;
     
-    public Array (Schema value) {
+    public Array (hydra.ext.pegasus.pdl.Schema value) {
       this.value = value;
     }
     
@@ -90,7 +90,7 @@ public abstract class Schema {
     }
   }
   
-  public static final class Fixed extends Schema {
+  public static final class Fixed extends hydra.ext.pegasus.pdl.Schema {
     public final Integer value;
     
     public Fixed (Integer value) {
@@ -117,10 +117,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Inline extends Schema {
-    public final NamedSchema value;
+  public static final class Inline extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.NamedSchema value;
     
-    public Inline (NamedSchema value) {
+    public Inline (hydra.ext.pegasus.pdl.NamedSchema value) {
       this.value = value;
     }
     
@@ -144,10 +144,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Map extends Schema {
-    public final Schema value;
+  public static final class Map extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.Schema value;
     
-    public Map (Schema value) {
+    public Map (hydra.ext.pegasus.pdl.Schema value) {
       this.value = value;
     }
     
@@ -171,10 +171,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Named extends Schema {
-    public final QualifiedName value;
+  public static final class Named extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.QualifiedName value;
     
-    public Named (QualifiedName value) {
+    public Named (hydra.ext.pegasus.pdl.QualifiedName value) {
       this.value = value;
     }
     
@@ -198,7 +198,7 @@ public abstract class Schema {
     }
   }
   
-  public static final class Null extends Schema {
+  public static final class Null extends hydra.ext.pegasus.pdl.Schema {
     public Null () {
     
     }
@@ -223,10 +223,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Primitive extends Schema {
-    public final PrimitiveType value;
+  public static final class Primitive extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.PrimitiveType value;
     
-    public Primitive (PrimitiveType value) {
+    public Primitive (hydra.ext.pegasus.pdl.PrimitiveType value) {
       this.value = value;
     }
     
@@ -250,10 +250,10 @@ public abstract class Schema {
     }
   }
   
-  public static final class Union extends Schema {
-    public final UnionSchema value;
+  public static final class Union extends hydra.ext.pegasus.pdl.Schema {
+    public final hydra.ext.pegasus.pdl.UnionSchema value;
     
-    public Union (UnionSchema value) {
+    public Union (hydra.ext.pegasus.pdl.UnionSchema value) {
       this.value = value;
     }
     

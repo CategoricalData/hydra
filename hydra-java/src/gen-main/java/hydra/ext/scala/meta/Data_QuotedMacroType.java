@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_QuotedMacroType {
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Data_QuotedMacroType (Type tpe) {
+  public Data_QuotedMacroType (hydra.ext.scala.meta.Type tpe) {
     this.tpe = tpe;
   }
   

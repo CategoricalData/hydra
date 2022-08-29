@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Data_NewAnonymous {
-  public final Template templ;
+  public final hydra.ext.scala.meta.Template templ;
   
-  public Data_NewAnonymous (Template templ) {
+  public Data_NewAnonymous (hydra.ext.scala.meta.Template templ) {
     this.templ = templ;
   }
   

@@ -27,10 +27,10 @@ public abstract class Member_Data {
     }
   }
   
-  public static final class Pkg extends Member_Data {
-    public final Pkg value;
+  public static final class Pkg extends hydra.ext.scala.meta.Member_Data {
+    public final hydra.ext.scala.meta.Pkg value;
     
-    public Pkg (Pkg value) {
+    public Pkg (hydra.ext.scala.meta.Pkg value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Member_Data {
     }
   }
   
-  public static final class Object_ extends Member_Data {
-    public final Pkg_Object value;
+  public static final class Object_ extends hydra.ext.scala.meta.Member_Data {
+    public final hydra.ext.scala.meta.Pkg_Object value;
     
-    public Object_ (Pkg_Object value) {
+    public Object_ (hydra.ext.scala.meta.Pkg_Object value) {
       this.value = value;
     }
     

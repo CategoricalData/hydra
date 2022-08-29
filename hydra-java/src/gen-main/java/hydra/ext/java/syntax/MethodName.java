@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class MethodName {
-  public final Identifier value;
+  public final hydra.ext.java.syntax.Identifier value;
   
-  public MethodName (Identifier value) {
+  public MethodName (hydra.ext.java.syntax.Identifier value) {
     this.value = value;
   }
   

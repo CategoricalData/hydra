@@ -1,13 +1,13 @@
 package hydra.ext.scala.meta;
 
 public class Ctor_Primary {
-  public final java.util.List<Mod> mods;
+  public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
-  public final Name name;
+  public final hydra.ext.scala.meta.Name name;
   
-  public final java.util.List<java.util.List<Data_Param>> paramss;
+  public final java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> paramss;
   
-  public Ctor_Primary (java.util.List<Mod> mods, Name name, java.util.List<java.util.List<Data_Param>> paramss) {
+  public Ctor_Primary (java.util.List<hydra.ext.scala.meta.Mod> mods, hydra.ext.scala.meta.Name name, java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> paramss) {
     this.mods = mods;
     this.name = name;
     this.paramss = paramss;
@@ -27,15 +27,15 @@ public class Ctor_Primary {
     return 2 * mods.hashCode() + 3 * name.hashCode() + 5 * paramss.hashCode();
   }
   
-  public Ctor_Primary withMods(java.util.List<Mod> mods) {
+  public Ctor_Primary withMods(java.util.List<hydra.ext.scala.meta.Mod> mods) {
     return new Ctor_Primary(mods, name, paramss);
   }
   
-  public Ctor_Primary withName(Name name) {
+  public Ctor_Primary withName(hydra.ext.scala.meta.Name name) {
     return new Ctor_Primary(mods, name, paramss);
   }
   
-  public Ctor_Primary withParamss(java.util.List<java.util.List<Data_Param>> paramss) {
+  public Ctor_Primary withParamss(java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> paramss) {
     return new Ctor_Primary(mods, name, paramss);
   }
 }

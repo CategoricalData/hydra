@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Defn_Object {
-  public final Data_Name name;
+  public final hydra.ext.scala.meta.Data_Name name;
   
-  public Defn_Object (Data_Name name) {
+  public Defn_Object (hydra.ext.scala.meta.Data_Name name) {
     this.name = name;
   }
   

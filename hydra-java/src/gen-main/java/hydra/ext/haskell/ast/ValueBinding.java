@@ -21,10 +21,10 @@ public abstract class ValueBinding {
     }
   }
   
-  public static final class Simple extends ValueBinding {
-    public final ValueBinding_Simple value;
+  public static final class Simple extends hydra.ext.haskell.ast.ValueBinding {
+    public final hydra.ext.haskell.ast.ValueBinding_Simple value;
     
-    public Simple (ValueBinding_Simple value) {
+    public Simple (hydra.ext.haskell.ast.ValueBinding_Simple value) {
       this.value = value;
     }
     

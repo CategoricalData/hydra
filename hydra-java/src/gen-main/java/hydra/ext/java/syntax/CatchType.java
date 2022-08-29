@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class CatchType {
-  public final UnannClassType type;
+  public final hydra.ext.java.syntax.UnannClassType type;
   
-  public final java.util.List<ClassType> types;
+  public final java.util.List<hydra.ext.java.syntax.ClassType> types;
   
-  public CatchType (UnannClassType type, java.util.List<ClassType> types) {
+  public CatchType (hydra.ext.java.syntax.UnannClassType type, java.util.List<hydra.ext.java.syntax.ClassType> types) {
     this.type = type;
     this.types = types;
   }
@@ -24,11 +24,11 @@ public class CatchType {
     return 2 * type.hashCode() + 3 * types.hashCode();
   }
   
-  public CatchType withType(UnannClassType type) {
+  public CatchType withType(hydra.ext.java.syntax.UnannClassType type) {
     return new CatchType(type, types);
   }
   
-  public CatchType withTypes(java.util.List<ClassType> types) {
+  public CatchType withTypes(java.util.List<hydra.ext.java.syntax.ClassType> types) {
     return new CatchType(type, types);
   }
 }

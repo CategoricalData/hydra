@@ -27,10 +27,10 @@ public abstract class LambdaBody {
     }
   }
   
-  public static final class Expression extends LambdaBody {
-    public final Expression value;
+  public static final class Expression extends hydra.ext.java.syntax.LambdaBody {
+    public final hydra.ext.java.syntax.Expression value;
     
-    public Expression (Expression value) {
+    public Expression (hydra.ext.java.syntax.Expression value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class LambdaBody {
     }
   }
   
-  public static final class Block extends LambdaBody {
-    public final Block value;
+  public static final class Block extends hydra.ext.java.syntax.LambdaBody {
+    public final hydra.ext.java.syntax.Block value;
     
-    public Block (Block value) {
+    public Block (hydra.ext.java.syntax.Block value) {
       this.value = value;
     }
     

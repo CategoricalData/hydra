@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A record constructor expression
  */
 public class Expression_ConstructRecord {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final java.util.List<FieldUpdate> fields;
+  public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;
   
-  public Expression_ConstructRecord (Name name, java.util.List<FieldUpdate> fields) {
+  public Expression_ConstructRecord (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -27,11 +27,11 @@ public class Expression_ConstructRecord {
     return 2 * name.hashCode() + 3 * fields.hashCode();
   }
   
-  public Expression_ConstructRecord withName(Name name) {
+  public Expression_ConstructRecord withName(hydra.ext.haskell.ast.Name name) {
     return new Expression_ConstructRecord(name, fields);
   }
   
-  public Expression_ConstructRecord withFields(java.util.List<FieldUpdate> fields) {
+  public Expression_ConstructRecord withFields(java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
     return new Expression_ConstructRecord(name, fields);
   }
 }

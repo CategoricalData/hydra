@@ -1,15 +1,15 @@
 package hydra.ext.coq.syntax;
 
 public class Match {
-  public final java.util.List<CaseItem> caseItems;
+  public final java.util.List<hydra.ext.coq.syntax.CaseItem> caseItems;
   
-  public final java.util.Optional<Term100> return_;
+  public final java.util.Optional<hydra.ext.coq.syntax.Term100> return_;
   
   public final Boolean pipe;
   
-  public final java.util.List<Equation> equations;
+  public final java.util.List<hydra.ext.coq.syntax.Equation> equations;
   
-  public Match (java.util.List<CaseItem> caseItems, java.util.Optional<Term100> return_, Boolean pipe, java.util.List<Equation> equations) {
+  public Match (java.util.List<hydra.ext.coq.syntax.CaseItem> caseItems, java.util.Optional<hydra.ext.coq.syntax.Term100> return_, Boolean pipe, java.util.List<hydra.ext.coq.syntax.Equation> equations) {
     this.caseItems = caseItems;
     this.return_ = return_;
     this.pipe = pipe;
@@ -30,11 +30,11 @@ public class Match {
     return 2 * caseItems.hashCode() + 3 * return_.hashCode() + 5 * pipe.hashCode() + 7 * equations.hashCode();
   }
   
-  public Match withCaseItems(java.util.List<CaseItem> caseItems) {
+  public Match withCaseItems(java.util.List<hydra.ext.coq.syntax.CaseItem> caseItems) {
     return new Match(caseItems, return_, pipe, equations);
   }
   
-  public Match withReturn(java.util.Optional<Term100> return_) {
+  public Match withReturn(java.util.Optional<hydra.ext.coq.syntax.Term100> return_) {
     return new Match(caseItems, return_, pipe, equations);
   }
   
@@ -42,7 +42,7 @@ public class Match {
     return new Match(caseItems, return_, pipe, equations);
   }
   
-  public Match withEquations(java.util.List<Equation> equations) {
+  public Match withEquations(java.util.List<hydra.ext.coq.syntax.Equation> equations) {
     return new Match(caseItems, return_, pipe, equations);
   }
 }

@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Bind {
-  public final Pat lhs;
+  public final hydra.ext.scala.meta.Pat lhs;
   
-  public final Pat rhs;
+  public final hydra.ext.scala.meta.Pat rhs;
   
-  public Pat_Bind (Pat lhs, Pat rhs) {
+  public Pat_Bind (hydra.ext.scala.meta.Pat lhs, hydra.ext.scala.meta.Pat rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Pat_Bind {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Pat_Bind withLhs(Pat lhs) {
+  public Pat_Bind withLhs(hydra.ext.scala.meta.Pat lhs) {
     return new Pat_Bind(lhs, rhs);
   }
   
-  public Pat_Bind withRhs(Pat rhs) {
+  public Pat_Bind withRhs(hydra.ext.scala.meta.Pat rhs) {
     return new Pat_Bind(lhs, rhs);
   }
 }

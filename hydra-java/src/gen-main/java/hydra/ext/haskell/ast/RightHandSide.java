@@ -1,9 +1,9 @@
 package hydra.ext.haskell.ast;
 
 public class RightHandSide {
-  public final Expression value;
+  public final hydra.ext.haskell.ast.Expression value;
   
-  public RightHandSide (Expression value) {
+  public RightHandSide (hydra.ext.haskell.ast.Expression value) {
     this.value = value;
   }
   

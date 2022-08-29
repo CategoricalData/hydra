@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class EnumConstantName {
-  public final Identifier value;
+  public final hydra.ext.java.syntax.Identifier value;
   
-  public EnumConstantName (Identifier value) {
+  public EnumConstantName (hydra.ext.java.syntax.Identifier value) {
     this.value = value;
   }
   

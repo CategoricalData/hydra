@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class TypeDeclarationWithComments {
-  public final TypeDeclaration value;
+  public final hydra.ext.java.syntax.TypeDeclaration value;
   
   public final java.util.Optional<String> comments;
   
-  public TypeDeclarationWithComments (TypeDeclaration value, java.util.Optional<String> comments) {
+  public TypeDeclarationWithComments (hydra.ext.java.syntax.TypeDeclaration value, java.util.Optional<String> comments) {
     this.value = value;
     this.comments = comments;
   }
@@ -24,7 +24,7 @@ public class TypeDeclarationWithComments {
     return 2 * value.hashCode() + 3 * comments.hashCode();
   }
   
-  public TypeDeclarationWithComments withValue(TypeDeclaration value) {
+  public TypeDeclarationWithComments withValue(hydra.ext.java.syntax.TypeDeclaration value) {
     return new TypeDeclarationWithComments(value, comments);
   }
   

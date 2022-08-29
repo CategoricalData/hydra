@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Source {
-  public final java.util.List<Stat> stats;
+  public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
-  public Source (java.util.List<Stat> stats) {
+  public Source (java.util.List<hydra.ext.scala.meta.Stat> stats) {
     this.stats = stats;
   }
   

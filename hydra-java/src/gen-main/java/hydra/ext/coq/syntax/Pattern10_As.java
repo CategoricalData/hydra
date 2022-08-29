@@ -1,11 +1,11 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern10_As {
-  public final Pattern1 pattern;
+  public final hydra.ext.coq.syntax.Pattern1 pattern;
   
-  public final Name as;
+  public final hydra.ext.coq.syntax.Name as;
   
-  public Pattern10_As (Pattern1 pattern, Name as) {
+  public Pattern10_As (hydra.ext.coq.syntax.Pattern1 pattern, hydra.ext.coq.syntax.Name as) {
     this.pattern = pattern;
     this.as = as;
   }
@@ -24,11 +24,11 @@ public class Pattern10_As {
     return 2 * pattern.hashCode() + 3 * as.hashCode();
   }
   
-  public Pattern10_As withPattern(Pattern1 pattern) {
+  public Pattern10_As withPattern(hydra.ext.coq.syntax.Pattern1 pattern) {
     return new Pattern10_As(pattern, as);
   }
   
-  public Pattern10_As withAs(Name as) {
+  public Pattern10_As withAs(hydra.ext.coq.syntax.Name as) {
     return new Pattern10_As(pattern, as);
   }
 }

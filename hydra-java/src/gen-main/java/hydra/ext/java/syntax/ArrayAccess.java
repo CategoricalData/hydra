@@ -1,11 +1,11 @@
 package hydra.ext.java.syntax;
 
 public class ArrayAccess {
-  public final java.util.Optional<Expression> expression;
+  public final java.util.Optional<hydra.ext.java.syntax.Expression> expression;
   
-  public final ArrayAccess_Variant variant;
+  public final hydra.ext.java.syntax.ArrayAccess_Variant variant;
   
-  public ArrayAccess (java.util.Optional<Expression> expression, ArrayAccess_Variant variant) {
+  public ArrayAccess (java.util.Optional<hydra.ext.java.syntax.Expression> expression, hydra.ext.java.syntax.ArrayAccess_Variant variant) {
     this.expression = expression;
     this.variant = variant;
   }
@@ -24,11 +24,11 @@ public class ArrayAccess {
     return 2 * expression.hashCode() + 3 * variant.hashCode();
   }
   
-  public ArrayAccess withExpression(java.util.Optional<Expression> expression) {
+  public ArrayAccess withExpression(java.util.Optional<hydra.ext.java.syntax.Expression> expression) {
     return new ArrayAccess(expression, variant);
   }
   
-  public ArrayAccess withVariant(ArrayAccess_Variant variant) {
+  public ArrayAccess withVariant(hydra.ext.java.syntax.ArrayAccess_Variant variant) {
     return new ArrayAccess(expression, variant);
   }
 }

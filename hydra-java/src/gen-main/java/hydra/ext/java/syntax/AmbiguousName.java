@@ -1,9 +1,9 @@
 package hydra.ext.java.syntax;
 
 public class AmbiguousName {
-  public final java.util.List<Identifier> value;
+  public final java.util.List<hydra.ext.java.syntax.Identifier> value;
   
-  public AmbiguousName (java.util.List<Identifier> value) {
+  public AmbiguousName (java.util.List<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

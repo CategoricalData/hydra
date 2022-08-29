@@ -27,10 +27,10 @@ public abstract class Ref {
     }
   }
   
-  public static final class Name extends Ref {
-    public final Name value;
+  public static final class Name extends hydra.ext.scala.meta.Ref {
+    public final hydra.ext.scala.meta.Name value;
     
-    public Name (Name value) {
+    public Name (hydra.ext.scala.meta.Name value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class Ref {
     }
   }
   
-  public static final class Init extends Ref {
-    public final Init value;
+  public static final class Init extends hydra.ext.scala.meta.Ref {
+    public final hydra.ext.scala.meta.Init value;
     
-    public Init (Init value) {
+    public Init (hydra.ext.scala.meta.Init value) {
       this.value = value;
     }
     

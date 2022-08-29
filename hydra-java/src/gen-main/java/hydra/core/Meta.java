@@ -7,9 +7,9 @@ public class Meta {
   /**
    * A map of annotation names to annotation values
    */
-  public final java.util.Map<String, Term<Meta>> annotations;
+  public final java.util.Map<String, hydra.core.Term<hydra.core.Meta>> annotations;
   
-  public Meta (java.util.Map<String, Term<Meta>> annotations) {
+  public Meta (java.util.Map<String, hydra.core.Term<hydra.core.Meta>> annotations) {
     this.annotations = annotations;
   }
   

@@ -45,10 +45,10 @@ public abstract class ClassMemberDeclaration {
     }
   }
   
-  public static final class Field extends ClassMemberDeclaration {
-    public final FieldDeclaration value;
+  public static final class Field extends hydra.ext.java.syntax.ClassMemberDeclaration {
+    public final hydra.ext.java.syntax.FieldDeclaration value;
     
-    public Field (FieldDeclaration value) {
+    public Field (hydra.ext.java.syntax.FieldDeclaration value) {
       this.value = value;
     }
     
@@ -72,10 +72,10 @@ public abstract class ClassMemberDeclaration {
     }
   }
   
-  public static final class Method extends ClassMemberDeclaration {
-    public final MethodDeclaration value;
+  public static final class Method extends hydra.ext.java.syntax.ClassMemberDeclaration {
+    public final hydra.ext.java.syntax.MethodDeclaration value;
     
-    public Method (MethodDeclaration value) {
+    public Method (hydra.ext.java.syntax.MethodDeclaration value) {
       this.value = value;
     }
     
@@ -99,10 +99,10 @@ public abstract class ClassMemberDeclaration {
     }
   }
   
-  public static final class Class_ extends ClassMemberDeclaration {
-    public final ClassDeclaration value;
+  public static final class Class_ extends hydra.ext.java.syntax.ClassMemberDeclaration {
+    public final hydra.ext.java.syntax.ClassDeclaration value;
     
-    public Class_ (ClassDeclaration value) {
+    public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
       this.value = value;
     }
     
@@ -126,10 +126,10 @@ public abstract class ClassMemberDeclaration {
     }
   }
   
-  public static final class Interface extends ClassMemberDeclaration {
-    public final InterfaceDeclaration value;
+  public static final class Interface extends hydra.ext.java.syntax.ClassMemberDeclaration {
+    public final hydra.ext.java.syntax.InterfaceDeclaration value;
     
-    public Interface (InterfaceDeclaration value) {
+    public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {
       this.value = value;
     }
     
@@ -153,7 +153,7 @@ public abstract class ClassMemberDeclaration {
     }
   }
   
-  public static final class None extends ClassMemberDeclaration {
+  public static final class None extends hydra.ext.java.syntax.ClassMemberDeclaration {
     public None () {
     
     }

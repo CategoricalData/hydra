@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_With {
-  public final Type lhs;
+  public final hydra.ext.scala.meta.Type lhs;
   
-  public final Type rhs;
+  public final hydra.ext.scala.meta.Type rhs;
   
-  public Type_With (Type lhs, Type rhs) {
+  public Type_With (hydra.ext.scala.meta.Type lhs, hydra.ext.scala.meta.Type rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -24,11 +24,11 @@ public class Type_With {
     return 2 * lhs.hashCode() + 3 * rhs.hashCode();
   }
   
-  public Type_With withLhs(Type lhs) {
+  public Type_With withLhs(hydra.ext.scala.meta.Type lhs) {
     return new Type_With(lhs, rhs);
   }
   
-  public Type_With withRhs(Type rhs) {
+  public Type_With withRhs(hydra.ext.scala.meta.Type rhs) {
     return new Type_With(lhs, rhs);
   }
 }

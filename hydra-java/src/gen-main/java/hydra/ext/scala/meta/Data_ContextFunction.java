@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Data_ContextFunction {
-  public final java.util.List<Data_Param> params;
+  public final java.util.List<hydra.ext.scala.meta.Data_Param> params;
   
-  public final Data body;
+  public final hydra.ext.scala.meta.Data body;
   
-  public Data_ContextFunction (java.util.List<Data_Param> params, Data body) {
+  public Data_ContextFunction (java.util.List<hydra.ext.scala.meta.Data_Param> params, hydra.ext.scala.meta.Data body) {
     this.params = params;
     this.body = body;
   }
@@ -24,11 +24,11 @@ public class Data_ContextFunction {
     return 2 * params.hashCode() + 3 * body.hashCode();
   }
   
-  public Data_ContextFunction withParams(java.util.List<Data_Param> params) {
+  public Data_ContextFunction withParams(java.util.List<hydra.ext.scala.meta.Data_Param> params) {
     return new Data_ContextFunction(params, body);
   }
   
-  public Data_ContextFunction withBody(Data body) {
+  public Data_ContextFunction withBody(hydra.ext.scala.meta.Data body) {
     return new Data_ContextFunction(params, body);
   }
 }

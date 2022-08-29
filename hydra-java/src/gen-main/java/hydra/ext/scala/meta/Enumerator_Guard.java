@@ -1,9 +1,9 @@
 package hydra.ext.scala.meta;
 
 public class Enumerator_Guard {
-  public final Data cond;
+  public final hydra.ext.scala.meta.Data cond;
   
-  public Enumerator_Guard (Data cond) {
+  public Enumerator_Guard (hydra.ext.scala.meta.Data cond) {
     this.cond = cond;
   }
   

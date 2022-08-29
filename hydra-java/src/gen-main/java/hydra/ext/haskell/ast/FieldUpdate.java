@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A field name and value
  */
 public class FieldUpdate {
-  public final Name name;
+  public final hydra.ext.haskell.ast.Name name;
   
-  public final Expression value;
+  public final hydra.ext.haskell.ast.Expression value;
   
-  public FieldUpdate (Name name, Expression value) {
+  public FieldUpdate (hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Expression value) {
     this.name = name;
     this.value = value;
   }
@@ -27,11 +27,11 @@ public class FieldUpdate {
     return 2 * name.hashCode() + 3 * value.hashCode();
   }
   
-  public FieldUpdate withName(Name name) {
+  public FieldUpdate withName(hydra.ext.haskell.ast.Name name) {
     return new FieldUpdate(name, value);
   }
   
-  public FieldUpdate withValue(Expression value) {
+  public FieldUpdate withValue(hydra.ext.haskell.ast.Expression value) {
     return new FieldUpdate(name, value);
   }
 }

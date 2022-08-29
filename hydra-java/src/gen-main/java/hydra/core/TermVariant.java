@@ -108,7 +108,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Annotated extends TermVariant {
+  public static final class Annotated extends hydra.core.TermVariant {
     public Annotated () {
     
     }
@@ -133,7 +133,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Application extends TermVariant {
+  public static final class Application extends hydra.core.TermVariant {
     public Application () {
     
     }
@@ -158,7 +158,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Element extends TermVariant {
+  public static final class Element extends hydra.core.TermVariant {
     public Element () {
     
     }
@@ -183,7 +183,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Function extends TermVariant {
+  public static final class Function extends hydra.core.TermVariant {
     public Function () {
     
     }
@@ -208,7 +208,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Let extends TermVariant {
+  public static final class Let extends hydra.core.TermVariant {
     public Let () {
     
     }
@@ -233,7 +233,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class List extends TermVariant {
+  public static final class List extends hydra.core.TermVariant {
     public List () {
     
     }
@@ -258,7 +258,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Literal extends TermVariant {
+  public static final class Literal extends hydra.core.TermVariant {
     public Literal () {
     
     }
@@ -283,7 +283,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Map extends TermVariant {
+  public static final class Map extends hydra.core.TermVariant {
     public Map () {
     
     }
@@ -308,7 +308,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Nominal extends TermVariant {
+  public static final class Nominal extends hydra.core.TermVariant {
     public Nominal () {
     
     }
@@ -333,7 +333,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Optional extends TermVariant {
+  public static final class Optional extends hydra.core.TermVariant {
     public Optional () {
     
     }
@@ -358,7 +358,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Record extends TermVariant {
+  public static final class Record extends hydra.core.TermVariant {
     public Record () {
     
     }
@@ -383,7 +383,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Set extends TermVariant {
+  public static final class Set extends hydra.core.TermVariant {
     public Set () {
     
     }
@@ -408,7 +408,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Union extends TermVariant {
+  public static final class Union extends hydra.core.TermVariant {
     public Union () {
     
     }
@@ -433,7 +433,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Universal extends TermVariant {
+  public static final class Universal extends hydra.core.TermVariant {
     public Universal () {
     
     }
@@ -458,7 +458,7 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Variable extends TermVariant {
+  public static final class Variable extends hydra.core.TermVariant {
     public Variable () {
     
     }

@@ -4,11 +4,11 @@ package hydra.ext.haskell.ast;
  * A case expression
  */
 public class Expression_Case {
-  public final Expression case_;
+  public final hydra.ext.haskell.ast.Expression case_;
   
-  public final java.util.List<Alternative> alternatives;
+  public final java.util.List<hydra.ext.haskell.ast.Alternative> alternatives;
   
-  public Expression_Case (Expression case_, java.util.List<Alternative> alternatives) {
+  public Expression_Case (hydra.ext.haskell.ast.Expression case_, java.util.List<hydra.ext.haskell.ast.Alternative> alternatives) {
     this.case_ = case_;
     this.alternatives = alternatives;
   }
@@ -27,11 +27,11 @@ public class Expression_Case {
     return 2 * case_.hashCode() + 3 * alternatives.hashCode();
   }
   
-  public Expression_Case withCase(Expression case_) {
+  public Expression_Case withCase(hydra.ext.haskell.ast.Expression case_) {
     return new Expression_Case(case_, alternatives);
   }
   
-  public Expression_Case withAlternatives(java.util.List<Alternative> alternatives) {
+  public Expression_Case withAlternatives(java.util.List<hydra.ext.haskell.ast.Alternative> alternatives) {
     return new Expression_Case(case_, alternatives);
   }
 }

@@ -1,9 +1,9 @@
 package hydra.ext.coq.syntax;
 
 public class FieldIdent {
-  public final Ident value;
+  public final hydra.ext.coq.syntax.Ident value;
   
-  public FieldIdent (Ident value) {
+  public FieldIdent (hydra.ext.coq.syntax.Ident value) {
     this.value = value;
   }
   

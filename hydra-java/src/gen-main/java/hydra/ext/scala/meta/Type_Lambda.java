@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Type_Lambda {
-  public final java.util.List<Type_Param> tparams;
+  public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
-  public final Type tpe;
+  public final hydra.ext.scala.meta.Type tpe;
   
-  public Type_Lambda (java.util.List<Type_Param> tparams, Type tpe) {
+  public Type_Lambda (java.util.List<hydra.ext.scala.meta.Type_Param> tparams, hydra.ext.scala.meta.Type tpe) {
     this.tparams = tparams;
     this.tpe = tpe;
   }
@@ -24,11 +24,11 @@ public class Type_Lambda {
     return 2 * tparams.hashCode() + 3 * tpe.hashCode();
   }
   
-  public Type_Lambda withTparams(java.util.List<Type_Param> tparams) {
+  public Type_Lambda withTparams(java.util.List<hydra.ext.scala.meta.Type_Param> tparams) {
     return new Type_Lambda(tparams, tpe);
   }
   
-  public Type_Lambda withTpe(Type tpe) {
+  public Type_Lambda withTpe(hydra.ext.scala.meta.Type tpe) {
     return new Type_Lambda(tparams, tpe);
   }
 }

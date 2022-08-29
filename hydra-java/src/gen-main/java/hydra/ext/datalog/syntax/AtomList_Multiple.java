@@ -1,11 +1,11 @@
 package hydra.ext.datalog.syntax;
 
 public class AtomList_Multiple {
-  public final Atom atom;
+  public final hydra.ext.datalog.syntax.Atom atom;
   
-  public final AtomList atomList;
+  public final hydra.ext.datalog.syntax.AtomList atomList;
   
-  public AtomList_Multiple (Atom atom, AtomList atomList) {
+  public AtomList_Multiple (hydra.ext.datalog.syntax.Atom atom, hydra.ext.datalog.syntax.AtomList atomList) {
     this.atom = atom;
     this.atomList = atomList;
   }
@@ -24,11 +24,11 @@ public class AtomList_Multiple {
     return 2 * atom.hashCode() + 3 * atomList.hashCode();
   }
   
-  public AtomList_Multiple withAtom(Atom atom) {
+  public AtomList_Multiple withAtom(hydra.ext.datalog.syntax.Atom atom) {
     return new AtomList_Multiple(atom, atomList);
   }
   
-  public AtomList_Multiple withAtomList(AtomList atomList) {
+  public AtomList_Multiple withAtomList(hydra.ext.datalog.syntax.AtomList atomList) {
     return new AtomList_Multiple(atom, atomList);
   }
 }

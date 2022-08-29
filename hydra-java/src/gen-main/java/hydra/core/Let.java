@@ -4,13 +4,13 @@ package hydra.core;
  * A 'let' binding
  */
 public class Let<M> {
-  public final Variable key;
+  public final hydra.core.Variable key;
   
-  public final Term<M> value;
+  public final hydra.core.Term<M> value;
   
-  public final Term<M> environment;
+  public final hydra.core.Term<M> environment;
   
-  public Let (Variable key, Term<M> value, Term<M> environment) {
+  public Let (hydra.core.Variable key, hydra.core.Term<M> value, hydra.core.Term<M> environment) {
     this.key = key;
     this.value = value;
     this.environment = environment;
@@ -30,15 +30,15 @@ public class Let<M> {
     return 2 * key.hashCode() + 3 * value.hashCode() + 5 * environment.hashCode();
   }
   
-  public Let withKey(Variable key) {
+  public Let withKey(hydra.core.Variable key) {
     return new Let(key, value, environment);
   }
   
-  public Let withValue(Term<M> value) {
+  public Let withValue(hydra.core.Term<M> value) {
     return new Let(key, value, environment);
   }
   
-  public Let withEnvironment(Term<M> environment) {
+  public Let withEnvironment(hydra.core.Term<M> environment) {
     return new Let(key, value, environment);
   }
 }

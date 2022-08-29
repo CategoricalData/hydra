@@ -63,10 +63,10 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Annotation extends ClassModifier {
-    public final Annotation value;
+  public static final class Annotation extends hydra.ext.java.syntax.ClassModifier {
+    public final hydra.ext.java.syntax.Annotation value;
     
-    public Annotation (Annotation value) {
+    public Annotation (hydra.ext.java.syntax.Annotation value) {
       this.value = value;
     }
     
@@ -90,7 +90,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Public extends ClassModifier {
+  public static final class Public extends hydra.ext.java.syntax.ClassModifier {
     public Public () {
     
     }
@@ -115,7 +115,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Protected extends ClassModifier {
+  public static final class Protected extends hydra.ext.java.syntax.ClassModifier {
     public Protected () {
     
     }
@@ -140,7 +140,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Private extends ClassModifier {
+  public static final class Private extends hydra.ext.java.syntax.ClassModifier {
     public Private () {
     
     }
@@ -165,7 +165,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Abstract extends ClassModifier {
+  public static final class Abstract extends hydra.ext.java.syntax.ClassModifier {
     public Abstract () {
     
     }
@@ -190,7 +190,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Static extends ClassModifier {
+  public static final class Static extends hydra.ext.java.syntax.ClassModifier {
     public Static () {
     
     }
@@ -215,7 +215,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Final extends ClassModifier {
+  public static final class Final extends hydra.ext.java.syntax.ClassModifier {
     public Final () {
     
     }
@@ -240,7 +240,7 @@ public abstract class ClassModifier {
     }
   }
   
-  public static final class Strictfp extends ClassModifier {
+  public static final class Strictfp extends hydra.ext.java.syntax.ClassModifier {
     public Strictfp () {
     
     }

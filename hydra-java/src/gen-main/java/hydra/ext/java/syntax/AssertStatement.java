@@ -27,10 +27,10 @@ public abstract class AssertStatement {
     }
   }
   
-  public static final class Single extends AssertStatement {
-    public final Expression value;
+  public static final class Single extends hydra.ext.java.syntax.AssertStatement {
+    public final hydra.ext.java.syntax.Expression value;
     
-    public Single (Expression value) {
+    public Single (hydra.ext.java.syntax.Expression value) {
       this.value = value;
     }
     
@@ -54,10 +54,10 @@ public abstract class AssertStatement {
     }
   }
   
-  public static final class Pair extends AssertStatement {
-    public final AssertStatement_Pair value;
+  public static final class Pair extends hydra.ext.java.syntax.AssertStatement {
+    public final hydra.ext.java.syntax.AssertStatement_Pair value;
     
-    public Pair (AssertStatement_Pair value) {
+    public Pair (hydra.ext.java.syntax.AssertStatement_Pair value) {
       this.value = value;
     }
     

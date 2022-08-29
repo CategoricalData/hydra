@@ -1,11 +1,11 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Rename {
-  public final Name name;
+  public final hydra.ext.scala.meta.Name name;
   
-  public final Name rename;
+  public final hydra.ext.scala.meta.Name rename;
   
-  public Importee_Rename (Name name, Name rename) {
+  public Importee_Rename (hydra.ext.scala.meta.Name name, hydra.ext.scala.meta.Name rename) {
     this.name = name;
     this.rename = rename;
   }
@@ -24,11 +24,11 @@ public class Importee_Rename {
     return 2 * name.hashCode() + 3 * rename.hashCode();
   }
   
-  public Importee_Rename withName(Name name) {
+  public Importee_Rename withName(hydra.ext.scala.meta.Name name) {
     return new Importee_Rename(name, rename);
   }
   
-  public Importee_Rename withRename(Name rename) {
+  public Importee_Rename withRename(hydra.ext.scala.meta.Name rename) {
     return new Importee_Rename(name, rename);
   }
 }
