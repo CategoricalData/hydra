@@ -10,6 +10,7 @@ import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Evaluation
+import Hydra.Impl.Haskell.Sources.Phantoms
 import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
 import Hydra.Impl.Haskell.Sources.Ext.Azure.Dtld
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
@@ -62,6 +63,7 @@ coreModules = [
   pure hydraGraphModule,
   pure hydraGrammarModule,
 --  pure hydraMonadsModule,
+  pure hydraPhantomsModule,
   pure jsonModelModule]
 
 extModules :: [GraphFlow Meta (Module Meta)]
