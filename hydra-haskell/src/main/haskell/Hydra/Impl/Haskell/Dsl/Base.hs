@@ -13,7 +13,7 @@ import Hydra.Impl.Haskell.Dsl.Literals
 import Hydra.Meta
 import Hydra.Phantoms
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import qualified Hydra.Graph as Graph
+import Hydra.Graph
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
@@ -27,11 +27,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-el :: Definition a -> GraphFlow Meta (Graph.Element Meta)
+el :: Definition a -> GraphFlow Meta (Element Meta)
 el (Definition name (Datum term)) = do
     t <- findType
     let schemaTerm = encodeType t
-    return $ Graph.Element name schemaTerm term
+    return $ Element name schemaTerm term
   where
     findType = do
       cx <- getState

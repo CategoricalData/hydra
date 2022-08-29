@@ -5,7 +5,7 @@ import Hydra.Core
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Evaluation
-import qualified Hydra.Graph as Graph
+import Hydra.Graph
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
@@ -14,7 +14,7 @@ import Hydra.Monads
 import Prelude hiding ((++))
 
 
-adapterUtilsModule :: GraphFlow Meta (Graph.Module Meta)
+adapterUtilsModule :: GraphFlow Meta (Module Meta)
 adapterUtilsModule = do
   g <- Standard.graph adapterUtilsName [
     el describeFloatType,
@@ -23,10 +23,10 @@ adapterUtilsModule = do
     el describePrecision,
     el describeType]
   deps <- sequence [hydraBasicsModule]
-  return $ Graph.Module g deps
+  return $ Module g deps
 
-adapterUtilsName :: Graph.GraphName
-adapterUtilsName = Graph.GraphName "hydra/adapters/utils"
+adapterUtilsName :: GraphName
+adapterUtilsName = GraphName "hydra/adapters/utils"
 
 utils :: String -> Datum a -> Definition a
 utils = Definition . fromQname adapterUtilsName
