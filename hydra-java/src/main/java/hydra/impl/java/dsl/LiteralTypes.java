@@ -54,6 +54,10 @@ public interface LiteralTypes {
     return new LiteralType.Integer_(itype);
   }
 
+  static LiteralType string() {
+    return new LiteralType.String_();
+  }
+
   static LiteralType uint16() {
     return integer(new IntegerType.Uint16());
   }
