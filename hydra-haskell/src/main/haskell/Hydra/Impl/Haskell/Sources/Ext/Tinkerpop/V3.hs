@@ -50,6 +50,12 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
         doc "A map of property keys to property values" $
         Types.map (v3 "PropertyKey") (core "Literal"),
 
+      def "Property" $
+        doc "A key/value property" $
+        record [
+          "key">: v3 "PropertyKey",
+          "value">: core "Literal"],
+        
       def "PropertyKey" $
         doc "A property key"
         string,
