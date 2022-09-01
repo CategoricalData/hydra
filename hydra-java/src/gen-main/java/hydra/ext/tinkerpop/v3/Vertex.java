@@ -3,12 +3,12 @@ package hydra.ext.tinkerpop.v3;
 /**
  * A vertex
  */
-public class Vertex {
-  public final hydra.ext.tinkerpop.v3.Id id;
+public class Vertex<V, P> {
+  public final V id;
   
-  public final hydra.ext.tinkerpop.v3.Properties properties;
+  public final java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties;
   
-  public Vertex (hydra.ext.tinkerpop.v3.Id id, hydra.ext.tinkerpop.v3.Properties properties) {
+  public Vertex (V id, java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties) {
     this.id = id;
     this.properties = properties;
   }
@@ -27,11 +27,11 @@ public class Vertex {
     return 2 * id.hashCode() + 3 * properties.hashCode();
   }
   
-  public Vertex withId(hydra.ext.tinkerpop.v3.Id id) {
+  public Vertex withId(V id) {
     return new Vertex(id, properties);
   }
   
-  public Vertex withProperties(hydra.ext.tinkerpop.v3.Properties properties) {
+  public Vertex withProperties(java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties) {
     return new Vertex(id, properties);
   }
 }

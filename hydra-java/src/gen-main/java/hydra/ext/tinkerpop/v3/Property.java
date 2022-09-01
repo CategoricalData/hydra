@@ -3,12 +3,12 @@ package hydra.ext.tinkerpop.v3;
 /**
  * A key/value property
  */
-public class Property {
+public class Property<P> {
   public final hydra.ext.tinkerpop.v3.PropertyKey key;
   
-  public final hydra.core.Literal value;
+  public final P value;
   
-  public Property (hydra.ext.tinkerpop.v3.PropertyKey key, hydra.core.Literal value) {
+  public Property (hydra.ext.tinkerpop.v3.PropertyKey key, P value) {
     this.key = key;
     this.value = value;
   }
@@ -31,7 +31,7 @@ public class Property {
     return new Property(key, value);
   }
   
-  public Property withValue(hydra.core.Literal value) {
+  public Property withValue(P value) {
     return new Property(key, value);
   }
 }
