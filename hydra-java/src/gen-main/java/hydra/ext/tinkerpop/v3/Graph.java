@@ -3,12 +3,12 @@ package hydra.ext.tinkerpop.v3;
 /**
  * A graph; a self-contained collection of vertices and edges
  */
-public class Graph {
-  public final java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices;
+public class Graph<V, E, P> {
+  public final java.util.Set<hydra.ext.tinkerpop.v3.Vertex<V, P>> vertices;
   
-  public final java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges;
+  public final java.util.Set<hydra.ext.tinkerpop.v3.Edge<V, E, P>> edges;
   
-  public Graph (java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices, java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges) {
+  public Graph (java.util.Set<hydra.ext.tinkerpop.v3.Vertex<V, P>> vertices, java.util.Set<hydra.ext.tinkerpop.v3.Edge<V, E, P>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -27,11 +27,11 @@ public class Graph {
     return 2 * vertices.hashCode() + 3 * edges.hashCode();
   }
   
-  public Graph withVertices(java.util.Set<hydra.ext.tinkerpop.v3.Vertex> vertices) {
+  public Graph withVertices(java.util.Set<hydra.ext.tinkerpop.v3.Vertex<V, P>> vertices) {
     return new Graph(vertices, edges);
   }
   
-  public Graph withEdges(java.util.Set<hydra.ext.tinkerpop.v3.Edge> edges) {
+  public Graph withEdges(java.util.Set<hydra.ext.tinkerpop.v3.Edge<V, E, P>> edges) {
     return new Graph(vertices, edges);
   }
 }
