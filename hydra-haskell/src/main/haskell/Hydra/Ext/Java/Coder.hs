@@ -142,8 +142,9 @@ declarationForRecordType aliases tparams elName fields = do
       param <- fieldToFormalParam field
       let anns = [] -- TODO
       let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
+      let consId = Java.Identifier $ sanitizeJavaName $ localNameOf elName
       let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-            javaConstructorCall (javaConstructorName True $ localNameOf elName) fieldArgs
+            javaConstructorCall (javaConstructorName consId) fieldArgs
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
     fieldToFormalParam (FieldType fname ft) = do
@@ -284,7 +285,7 @@ declarationForUnionType aliases tparams elName fields = do
           where
             throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
                 Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
-                javaConstructorCall (javaConstructorName False "IllegalStateException") args
+                javaConstructorCall (javaConstructorName $ Java.Identifier "IllegalStateException") args
               where
                 args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
                   javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
@@ -317,6 +318,18 @@ declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) bod
     toClassDecl aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
+
+encodeFunction :: (Eq m, Ord m, Read m, Show m)
+  => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
+encodeFunction aliases fun = case fun of
+--  FunctionCompareTo other ->
+--  FunctionElimination el ->
+  FunctionLambda (Lambda var body) -> do
+    jbody <- encodeTerm aliases body
+    let params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
+    return $ Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyExpression jbody)
+--  FunctionPrimitive name ->
+  _ -> pure $ encodeLiteral $ LiteralString $ "Unimplemented function variant: " ++ show (functionVariant fun)
 
 encodeLiteral :: Literal -> Java.Expression
 encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
@@ -364,7 +377,7 @@ encodeTerm aliases term = case term of
     TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
   --  TermApplication (Application m)
   --  TermElement Name
-  --  TermFunction (Function m)
+    TermFunction fun -> encodeFunction aliases fun
     TermList els -> do
       jels <- CM.mapM encode els
       return $ javaMethodInvocationToJavaExpression $
@@ -372,17 +385,28 @@ encodeTerm aliases term = case term of
     TermLiteral l -> pure $ encodeLiteral l
   --  TermMap (Map (Term m) (Term m))
   --  TermNominal (Named m)
-  --  TermOptional (Maybe (Term m))
-  --  TermRecord [Field m]
+    TermOptional mt -> case mt of
+      Nothing -> pure $ javaMethodInvocationToJavaExpression $
+        methodInvocation (Just $ javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
+      Just term1 -> do
+        expr <- encodeTerm aliases term1
+        return $ javaMethodInvocationToJavaExpression $
+          methodInvocation (Just $ javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
+    TermRecord (Record name fields) -> do
+      fieldExprs <- CM.mapM (encodeTerm aliases) (fieldTerm <$> fields)
+      let consId = nameToJavaName aliases name
+      return $ javaConstructorCall (javaConstructorName consId) fieldExprs
   --  TermSet (Set (Term m))
---    TermUnion (Field (FieldName fname) v) -> do
---      let foo = javaConstructorCall (javaConstructorName True $ localNameOf elName) fieldArgs
+    TermUnion (Union name (Field (FieldName fname) v)) -> do
+      fieldExpr <- encodeTerm aliases v
+      let (Java.Identifier typeId) = nameToJavaName aliases name
+      let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
+      return $ javaConstructorCall (javaConstructorName consId) [fieldExpr]
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
-    _ -> pure $ encodeLiteral $ LiteralString $ "TODO: " ++ show (termVariant term)
+    _ -> pure $ encodeLiteral $ LiteralString $ "Unimplemented term variant: " ++ show (termVariant term)
   --  _ -> unexpected "term" $ show term
   where
     encode = encodeTerm aliases
-    
 
 encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> GraphFlow m Java.Type
 encodeType aliases t = case stripType t of
