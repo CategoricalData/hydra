@@ -143,6 +143,10 @@ public interface Types {
         return new Type.Record<>(row(name, fields));
     }
 
+    static <M> Type<M> string() {
+      return literal(LiteralTypes.string());
+    }
+    
     static <M> Type<M> union(final FieldType<M>... fields) {
         return union(PLACEHOLDER_NAME, fields);
     }
