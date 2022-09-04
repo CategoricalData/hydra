@@ -115,10 +115,8 @@ javaConstructorCall ci args = javaPrimaryToJavaExpression $
   Java.ClassInstanceCreationExpression Nothing $
   Java.UnqualifiedClassInstanceCreationExpression [] ci args Nothing
 
-javaConstructorName :: Bool -> String -> Java.ClassOrInterfaceTypeToInstantiate
-javaConstructorName escape local = Java.ClassOrInterfaceTypeToInstantiate [id] Nothing
-  where
-    id = Java.AnnotatedIdentifier [] $ Java.Identifier $ if escape then sanitizeJavaName local else local
+javaConstructorName :: Java.Identifier -> Java.ClassOrInterfaceTypeToInstantiate
+javaConstructorName id = Java.ClassOrInterfaceTypeToInstantiate [Java.AnnotatedIdentifier [] id] Nothing
 
 javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = Java.TypeIdentifier . javaVariableName
@@ -363,6 +361,13 @@ nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJav
       else none
     none = Java.ClassTypeQualifierNone
 
+nameToJavaName :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier
+nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
+    Nothing -> local
+    Just (Java.PackageName parts) -> L.intercalate "." $ (Java.unIdentifier <$> parts) ++ [sanitizeJavaName local]
+  where
+    (gname, local) = toQname name
+
 nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   nameToJavaClassType aliases qualify [] name
@@ -436,6 +441,9 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
     vdec = javaVariableDeclarator id (Just init)
       where
         init = Java.VariableInitializerExpression rhs
+
+variableToJavaIdentifier :: Variable -> Java.Identifier
+variableToJavaIdentifier (Variable var) = Java.Identifier var -- TODO: escape
 
 variantClassName :: Name -> FieldName -> Name
 variantClassName elName (FieldName fname) = fromQname gname $ if flocal == local then flocal ++ "_" else flocal
