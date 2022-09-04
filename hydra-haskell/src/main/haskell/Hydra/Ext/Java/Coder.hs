@@ -21,6 +21,7 @@ import Hydra.Adapters.UtilsEtc
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -220,7 +221,7 @@ declarationForRecordType aliases tparams elName fields = do
                   javaLiteralToPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
-                  methodInvocation (Just $ javaIdentifier fname) (Java.Identifier "hashCode") []
+                  methodInvocationStatic (javaIdentifier fname) (Java.Identifier "hashCode") []
 
             multipliers = L.cycle first20Primes
               where
@@ -381,22 +382,29 @@ encodeTerm aliases term = case term of
     TermList els -> do
       jels <- CM.mapM encode els
       return $ javaMethodInvocationToJavaExpression $
-        methodInvocation (Just $ Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
+        methodInvocationStatic (Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
     TermLiteral l -> pure $ encodeLiteral l
   --  TermMap (Map (Term m) (Term m))
   --  TermNominal (Named m)
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
-        methodInvocation (Just $ javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
+        methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
       Just term1 -> do
         expr <- encodeTerm aliases term1
         return $ javaMethodInvocationToJavaExpression $
-          methodInvocation (Just $ javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
+          methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
     TermRecord (Record name fields) -> do
       fieldExprs <- CM.mapM (encodeTerm aliases) (fieldTerm <$> fields)
       let consId = nameToJavaName aliases name
       return $ javaConstructorCall (javaConstructorName consId) fieldExprs
-  --  TermSet (Set (Term m))
+    TermSet s -> do
+      jels <- CM.mapM encode $ S.toList s
+      let prim = javaMethodInvocationToJavaPrimary $
+                 methodInvocationStatic (Java.Identifier "java.util.Stream") (Java.Identifier "of") jels
+      let coll = javaMethodInvocationToJavaExpression $
+                 methodInvocationStatic (javaIdentifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
+      return $ javaMethodInvocationToJavaExpression $
+        methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
     TermUnion (Union name (Field (FieldName fname) v)) -> do
       fieldExpr <- encodeTerm aliases v
       let (Java.Identifier typeId) = nameToJavaName aliases name
