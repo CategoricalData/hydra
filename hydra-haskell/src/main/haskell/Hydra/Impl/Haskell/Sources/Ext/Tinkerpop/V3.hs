@@ -28,11 +28,16 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
         doc "An edge" $
         lambda "v" $ lambda "e" $ lambda "p" $
         record [
+          "label">: v3 "EdgeLabel",
           "id">: "e",
           "out">: "v",
           "in">: "v",
           "properties">: Types.map (v3 "PropertyKey") "p"],
 
+      def "EdgeLabel" $
+        doc "The (required) label of an edge" $
+        string,
+        
       def "Element" $
         doc "Either a vertex or an edge" $
         lambda "v" $ lambda "e" $ lambda "p" $
@@ -62,5 +67,10 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
         doc "A vertex" $
         lambda "v" $ lambda "p" $
         record [
+          "label">: v3 "VertexLabel",
           "id">: "v",
-          "properties">: Types.map (v3 "PropertyKey") "p"]]
+          "properties">: Types.map (v3 "PropertyKey") "p"],
+          
+      def "VertexLabel" $
+        doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
+        string]
