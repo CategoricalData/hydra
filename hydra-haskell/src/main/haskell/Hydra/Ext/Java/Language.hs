@@ -1,5 +1,5 @@
 module Hydra.Ext.Java.Language where
-  
+
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Basics
@@ -10,7 +10,7 @@ import qualified Data.Set as S
 language :: Language m
 language = Language (LanguageName "hydra/ext/java") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
-  
+
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, -- boolean
     LiteralVariantFloat, -- (see float types)
@@ -64,7 +64,7 @@ reservedWords = S.fromList $ specialNames ++ classNames ++ keywords ++ literals
   where
     -- Special names reserved for use by Hydra
     specialNames = ["Elements"]
-    
+
     -- java.lang classes as of JDK 7
     -- See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html
     classNames = [

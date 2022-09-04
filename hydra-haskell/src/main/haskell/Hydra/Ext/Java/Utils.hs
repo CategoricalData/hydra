@@ -181,11 +181,14 @@ javaMethodDeclarationToJavaClassBodyDeclaration :: Java.MethodDeclaration -> Jav
 javaMethodDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationMethod
 
 javaMethodInvocationToJavaExpression :: Java.MethodInvocation -> Java.Expression
-javaMethodInvocationToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNewArray .
-  Java.PrimaryNoNewArrayMethodInvocation
-  
+javaMethodInvocationToJavaExpression = javaPrimaryToJavaExpression . javaMethodInvocationToJavaPrimary
+
 javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
 javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
+  Java.PrimaryNoNewArrayMethodInvocation
+
+javaMethodInvocationToJavaPrimary :: Java.MethodInvocation -> Java.Primary
+javaMethodInvocationToJavaPrimary = Java.PrimaryNoNewArray .
   Java.PrimaryNoNewArrayMethodInvocation
 
 javaMultiplicativeExpressionToJavaRelationalExpression :: Java.MultiplicativeExpression -> Java.RelationalExpression
@@ -336,15 +339,22 @@ methodDeclaration mods tparams anns methodName params result stmts =
     decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
     mthrows = Nothing
 
-methodInvocation :: Y.Maybe Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
-methodInvocation self methodName = Java.MethodInvocation header
+methodInvocation :: Y.Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
+methodInvocation lhs methodName = Java.MethodInvocation header
   where
-    header = case self of
+    header = case lhs of
       Nothing -> Java.MethodInvocation_HeaderSimple $ Java.MethodName methodName
-      Just s -> Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
+      Just either -> Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex variant targs methodName
         where
           targs = []
-          variant = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing s
+          variant = case either of
+            Left name -> Java.MethodInvocation_VariantExpression name
+            Right prim -> Java.MethodInvocation_VariantPrimary prim
+
+methodInvocationStatic :: Java.Identifier -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
+methodInvocationStatic self methodName = methodInvocation (Just $ Left name) methodName
+  where
+    name = Java.ExpressionName Nothing self
 
 nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Java.ClassType
 nameToJavaClassType aliases qualify args name = Java.ClassType [] pkg id args
@@ -407,7 +417,7 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
       then Nothing
       else Just [Java.BlockStatementStatement $ javaReturnStatement $ Just returnExpr]
     returnExpr = javaMethodInvocationToJavaExpression $
-        methodInvocation (Just $ Java.Identifier varName) visitMethodName [javaThis]
+        methodInvocationStatic (Java.Identifier varName) visitMethodName [javaThis]
 
 toAssignStmt :: FieldName -> Java.Statement
 toAssignStmt fname = javaAssignmentStatement lhs rhs
