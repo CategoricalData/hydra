@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * An edge
  */
 public class Edge<V, E, P> {
+  public final hydra.ext.tinkerpop.v3.EdgeLabel label;
+  
   public final E id;
   
   public final V out;
@@ -12,7 +14,8 @@ public class Edge<V, E, P> {
   
   public final java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties;
   
-  public Edge (E id, V out, V in, java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties) {
+  public Edge (hydra.ext.tinkerpop.v3.EdgeLabel label, E id, V out, V in, java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties) {
+    this.label = label;
     this.id = id;
     this.out = out;
     this.in = in;
@@ -25,27 +28,31 @@ public class Edge<V, E, P> {
       return false;
     }
     Edge o = (Edge) (other);
-    return id.equals(o.id) && out.equals(o.out) && in.equals(o.in) && properties.equals(o.properties);
+    return label.equals(o.label) && id.equals(o.id) && out.equals(o.out) && in.equals(o.in) && properties.equals(o.properties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * id.hashCode() + 3 * out.hashCode() + 5 * in.hashCode() + 7 * properties.hashCode();
+    return 2 * label.hashCode() + 3 * id.hashCode() + 5 * out.hashCode() + 7 * in.hashCode() + 11 * properties.hashCode();
+  }
+  
+  public Edge withLabel(hydra.ext.tinkerpop.v3.EdgeLabel label) {
+    return new Edge(label, id, out, in, properties);
   }
   
   public Edge withId(E id) {
-    return new Edge(id, out, in, properties);
+    return new Edge(label, id, out, in, properties);
   }
   
   public Edge withOut(V out) {
-    return new Edge(id, out, in, properties);
+    return new Edge(label, id, out, in, properties);
   }
   
   public Edge withIn(V in) {
-    return new Edge(id, out, in, properties);
+    return new Edge(label, id, out, in, properties);
   }
   
   public Edge withProperties(java.util.Map<hydra.ext.tinkerpop.v3.PropertyKey, P> properties) {
-    return new Edge(id, out, in, properties);
+    return new Edge(label, id, out, in, properties);
   }
 }

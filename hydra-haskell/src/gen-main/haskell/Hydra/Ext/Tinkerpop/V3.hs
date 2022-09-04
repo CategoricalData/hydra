@@ -7,6 +7,7 @@ import Data.Set
 -- An edge
 data Edge v e p 
   = Edge {
+    edgeLabel :: EdgeLabel,
     edgeId :: e,
     edgeOut :: v,
     edgeIn :: v,
@@ -15,6 +16,8 @@ data Edge v e p
 
 _Edge = (Core.Name "hydra/ext/tinkerpop/v3.Edge")
 
+_Edge_label = (Core.FieldName "label")
+
 _Edge_id = (Core.FieldName "id")
 
 _Edge_out = (Core.FieldName "out")
@@ -22,6 +25,15 @@ _Edge_out = (Core.FieldName "out")
 _Edge_in = (Core.FieldName "in")
 
 _Edge_properties = (Core.FieldName "properties")
+
+-- The (required) label of an edge
+newtype EdgeLabel 
+  = EdgeLabel {
+    -- The (required) label of an edge
+    unEdgeLabel :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_EdgeLabel = (Core.Name "hydra/ext/tinkerpop/v3.EdgeLabel")
 
 -- Either a vertex or an edge
 data Element v e p 
@@ -73,12 +85,24 @@ _PropertyKey = (Core.Name "hydra/ext/tinkerpop/v3.PropertyKey")
 -- A vertex
 data Vertex v p 
   = Vertex {
+    vertexLabel :: VertexLabel,
     vertexId :: v,
     vertexProperties :: (Map PropertyKey p)}
   deriving (Eq, Ord, Read, Show)
 
 _Vertex = (Core.Name "hydra/ext/tinkerpop/v3.Vertex")
 
+_Vertex_label = (Core.FieldName "label")
+
 _Vertex_id = (Core.FieldName "id")
 
 _Vertex_properties = (Core.FieldName "properties")
+
+-- The label of a vertex. The default (null) vertex is represented by the empty string
+newtype VertexLabel 
+  = VertexLabel {
+    -- The label of a vertex. The default (null) vertex is represented by the empty string
+    unVertexLabel :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_VertexLabel = (Core.Name "hydra/ext/tinkerpop/v3.VertexLabel")
