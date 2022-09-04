@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3 where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -24,48 +26,51 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
 
       def "Edge" $
         doc "An edge" $
+        lambda "v" $ lambda "e" $ lambda "p" $
         record [
-          "id">: v3 "Id",
-          "properties">: v3 "Properties",
-          "out">: v3 "Id",
-          "in">: v3 "Id"],
+          "label">: v3 "EdgeLabel",
+          "id">: "e",
+          "out">: "v",
+          "in">: "v",
+          "properties">: Types.map (v3 "PropertyKey") "p"],
 
+      def "EdgeLabel" $
+        doc "The (required) label of an edge" $
+        string,
+        
       def "Element" $
         doc "Either a vertex or an edge" $
+        lambda "v" $ lambda "e" $ lambda "p" $
         union [
-          "vertex">: v3 "Vertex",
-          "edge">: v3 "Edge"],
+          "vertex">: v3 "Vertex" @@ "v" @@ "p",
+          "edge">: v3 "Edge" @@ "v" @@ "e" @@ "p"],
 
       def "Graph" $
         doc "A graph; a self-contained collection of vertices and edges" $
+        lambda "v" $ lambda "e" $ lambda "p" $
         record [
-          "vertices">: Types.set $ v3 "Vertex",
-          "edges">: Types.set $ v3 "Edge"],
+          "vertices">: Types.set $ v3 "Vertex" @@ "v" @@ "p",
+          "edges">: Types.set $ v3 "Edge" @@ "v" @@ "e" @@ "p"],
 
-      def "Id" $
-        doc "A vertex or edge id" $
-        core "Literal",
-
-      def "Properties" $
-        doc "A map of property keys to property values" $
-        Types.map (v3 "PropertyKey") (core "Literal"),
+      def "Property" $
+        doc "A key/value property" $
+        lambda "p" $
+        record [
+          "key">: v3 "PropertyKey",
+          "value">: "p"],
 
       def "PropertyKey" $
         doc "A property key"
         string,
 
-      def "PropertyValue" $
-        doc "A property value" $
-        union [
-          "literal">: core "Literal",
-          "list">: list $ v3 "PropertyValue"],
-
       def "Vertex" $
         doc "A vertex" $
+        lambda "v" $ lambda "p" $
         record [
-          "id">: v3 "Id",
-          "properties">: v3 "Properties"],
-
-      def "VertexId" $
-        doc "A vertex id" $
-        core "Literal"]
+          "label">: v3 "VertexLabel",
+          "id">: "v",
+          "properties">: Types.map (v3 "PropertyKey") "p"],
+          
+      def "VertexLabel" $
+        doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
+        string]
