@@ -55,13 +55,8 @@ public abstract class NodeKind {
    * A blank node
    */
   public static final class BlankNode extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * A blank node
-     */
-    public final java.lang.Void value;
+    public BlankNode () {
     
-    public BlankNode (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -70,12 +65,12 @@ public abstract class NodeKind {
         return false;
       }
       BlankNode o = (BlankNode) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -88,13 +83,8 @@ public abstract class NodeKind {
    * An IRI
    */
   public static final class Iri extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * An IRI
-     */
-    public final java.lang.Void value;
+    public Iri () {
     
-    public Iri (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -103,12 +93,12 @@ public abstract class NodeKind {
         return false;
       }
       Iri o = (Iri) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -121,13 +111,8 @@ public abstract class NodeKind {
    * A literal
    */
   public static final class Literal extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * A literal
-     */
-    public final java.lang.Void value;
+    public Literal () {
     
-    public Literal (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -136,12 +121,12 @@ public abstract class NodeKind {
         return false;
       }
       Literal o = (Literal) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -154,13 +139,8 @@ public abstract class NodeKind {
    * A blank node or an IRI
    */
   public static final class BlankNodeOrIri extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * A blank node or an IRI
-     */
-    public final java.lang.Void value;
+    public BlankNodeOrIri () {
     
-    public BlankNodeOrIri (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -169,12 +149,12 @@ public abstract class NodeKind {
         return false;
       }
       BlankNodeOrIri o = (BlankNodeOrIri) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -187,13 +167,8 @@ public abstract class NodeKind {
    * A blank node or a literal
    */
   public static final class BlankNodeOrLiteral extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * A blank node or a literal
-     */
-    public final java.lang.Void value;
+    public BlankNodeOrLiteral () {
     
-    public BlankNodeOrLiteral (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -202,12 +177,12 @@ public abstract class NodeKind {
         return false;
       }
       BlankNodeOrLiteral o = (BlankNodeOrLiteral) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -220,13 +195,8 @@ public abstract class NodeKind {
    * An IRI or a literal
    */
   public static final class IriOrLiteral extends hydra.ext.shacl.model.NodeKind {
-    /**
-     * An IRI or a literal
-     */
-    public final java.lang.Void value;
+    public IriOrLiteral () {
     
-    public IriOrLiteral (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -235,12 +205,12 @@ public abstract class NodeKind {
         return false;
       }
       IriOrLiteral o = (IriOrLiteral) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override

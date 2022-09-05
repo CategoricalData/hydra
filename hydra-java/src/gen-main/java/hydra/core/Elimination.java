@@ -52,13 +52,8 @@ public abstract class Elimination<M> {
    * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
    */
   public static final class Element<M> extends hydra.core.Elimination<M> {
-    /**
-     * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
-     */
-    public final java.lang.Void value;
+    public Element () {
     
-    public Element (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -67,12 +62,12 @@ public abstract class Elimination<M> {
         return false;
       }
       Element o = (Element) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override

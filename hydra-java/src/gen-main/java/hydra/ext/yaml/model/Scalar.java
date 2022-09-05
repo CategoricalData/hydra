@@ -145,13 +145,8 @@ public abstract class Scalar {
    * Represents the lack of a value
    */
   public static final class Null extends hydra.ext.yaml.model.Scalar {
-    /**
-     * Represents the lack of a value
-     */
-    public final java.lang.Void value;
+    public Null () {
     
-    public Null (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -160,12 +155,12 @@ public abstract class Scalar {
         return false;
       }
       Null o = (Null) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override

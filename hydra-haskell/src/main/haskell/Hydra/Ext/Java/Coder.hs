@@ -436,10 +436,14 @@ encodeTerm aliases term = case term of
       return $ javaMethodInvocationToJavaExpression $
         methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
     TermUnion (Union name (Field (FieldName fname) v)) -> do
-      fieldExpr <- encodeTerm aliases v
+      args <- if Terms.isUnit v
+        then return []
+        else do
+          ex <- encodeTerm aliases v
+          return [ex]
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-      return $ javaConstructorCall (javaConstructorName consId) [fieldExpr]
+      return $ javaConstructorCall (javaConstructorName consId) args
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
     _ -> pure $ encodeLiteral $ LiteralString $
       "Unimplemented term variant: " ++ show (termVariant term) -- TODO: temporary

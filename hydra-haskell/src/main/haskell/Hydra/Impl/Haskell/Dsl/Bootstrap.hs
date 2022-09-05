@@ -1,5 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Bootstrap where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Graph
@@ -20,10 +21,10 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
     
     -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
     replacePlaceholders rec t = case t' of
-        TypeRecord (RowType n fields) -> if n == Types.placeholderName
+        TypeRecord (RowType n fields) -> if n == placeholderName
           then TypeRecord (RowType elName fields)
           else t'
-        TypeUnion (RowType n fields) -> if n == Types.placeholderName
+        TypeUnion (RowType n fields) -> if n == placeholderName
           then TypeUnion (RowType elName fields)
           else t'
         _ -> t'

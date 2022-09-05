@@ -37,13 +37,8 @@ public abstract class Severity {
    * A non-critical constraint violation indicating an informative message
    */
   public static final class Info extends hydra.ext.shacl.model.Severity {
-    /**
-     * A non-critical constraint violation indicating an informative message
-     */
-    public final java.lang.Void value;
+    public Info () {
     
-    public Info (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -52,12 +47,12 @@ public abstract class Severity {
         return false;
       }
       Info o = (Info) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -70,13 +65,8 @@ public abstract class Severity {
    * A non-critical constraint violation indicating a warning
    */
   public static final class Warning extends hydra.ext.shacl.model.Severity {
-    /**
-     * A non-critical constraint violation indicating a warning
-     */
-    public final java.lang.Void value;
+    public Warning () {
     
-    public Warning (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -85,12 +75,12 @@ public abstract class Severity {
         return false;
       }
       Warning o = (Warning) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -103,13 +93,8 @@ public abstract class Severity {
    * A constraint violation
    */
   public static final class Violation extends hydra.ext.shacl.model.Severity {
-    /**
-     * A constraint violation
-     */
-    public final java.lang.Void value;
+    public Violation () {
     
-    public Violation (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -118,12 +103,12 @@ public abstract class Severity {
         return false;
       }
       Violation o = (Violation) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
