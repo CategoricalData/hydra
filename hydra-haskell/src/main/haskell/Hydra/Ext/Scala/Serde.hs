@@ -30,7 +30,7 @@ writeDefn def = case def of
       nameAndParams = noSep $ Y.catMaybes [
         Just $ writeData_Name name,
         if L.null tparams then Nothing else Just $ bracketList inlineStyle (writeType_Param <$> tparams),
-        Just $ parenList (writeData_Param <$> params),
+        Just $ parenList False (writeData_Param <$> params),
         fmap (\t -> spaceSep [cst ":", writeType t]) scod]
   Scala.DefnVal (Scala.Defn_Val _ [Scala.PatVar (Scala.Pat_Var (Scala.Data_Name (Scala.PredefString name)))] typ term) -> spaceSep [
       cst "val", nameAndType, cst "=", writeTerm term]
@@ -76,7 +76,7 @@ writeName name = case name of
 
 writePat :: Scala.Pat -> CT.Expr
 writePat pat = case pat of
-  Scala.PatExtract (Scala.Pat_Extract fun args) -> noSep [writeTerm fun, parenList (writePat <$> args)]
+  Scala.PatExtract (Scala.Pat_Extract fun args) -> noSep [writeTerm fun, parenList False (writePat <$> args)]
   Scala.PatVar (Scala.Pat_Var tname) -> writeData_Name tname
 
 writePkg :: Scala.Pkg -> CT.Expr
@@ -95,16 +95,16 @@ writeTerm :: Scala.Data -> CT.Expr
 writeTerm term = case term of
   Scala.DataLit lit -> writeLit lit
   Scala.DataRef ref -> writeData_Ref ref
-  Scala.DataApply (Scala.Data_Apply fun args) -> noSep [writeTerm fun, parenList (writeTerm <$> args)]
+  Scala.DataApply (Scala.Data_Apply fun args) -> noSep [writeTerm fun, parenList False (writeTerm <$> args)]
   Scala.DataAssign assign -> cst ">ASSIGN"
-  Scala.DataTuple (Scala.Data_Tuple args) -> parenList (writeTerm <$> args)
+  Scala.DataTuple (Scala.Data_Tuple args) -> parenList False (writeTerm <$> args)
   Scala.DataMatch (Scala.Data_Match expr cases) -> ifx matchOp (writeTerm expr) $ newlineSep (writeCase <$> cases)
   Scala.DataFunctionData ft -> writeData_FunctionData ft
 
 writeData_FunctionData :: Scala.Data_FunctionData -> CT.Expr
 writeData_FunctionData ft = case ft of
   Scala.Data_FunctionDataFunction (Scala.Data_Function params body) ->
-    spaceSep [parenList (writeData_Param <$> params), cst "=>", writeTerm body]
+    spaceSep [parenList False (writeData_Param <$> params), cst "=>", writeTerm body]
 
 writeData_Name :: Scala.Data_Name -> CT.Expr
 writeData_Name (Scala.Data_Name (Scala.PredefString name)) = cst name

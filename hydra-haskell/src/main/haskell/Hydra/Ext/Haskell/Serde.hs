@@ -43,7 +43,7 @@ instance ToTree H.Declaration where
   toTree decl = case decl of
     H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd]) $
         consLines
-        ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList (toTree <$> derivCat)]]
+        ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (toTree <$> derivCat)]]
       where
         derivCat = L.concat $ h <$> deriv
           where
@@ -85,7 +85,7 @@ instance ToTree H.Expression where
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Term_PrefixApplication
     --  H.ExpressionRightSection Term_Section
-      H.ExpressionTuple exprs -> parenList $ toTree <$> exprs
+      H.ExpressionTuple exprs -> parenList False $ toTree <$> exprs
     --  H.ExpressionTypeSignature Term_TypeSignature
     --  H.ExpressionUpdateRecord Term_UpdateRecord
       H.ExpressionVariable name -> toTree name
@@ -168,7 +168,7 @@ instance ToTree H.Pattern where
       H.PatternName name -> toTree name
       H.PatternParens pat -> parenthesize $ toTree pat
 --      H.PatternRecord (H.Pattern_Record ) ->
-      H.PatternTuple pats -> parenList $ toTree <$> pats
+      H.PatternTuple pats -> parenList False $ toTree <$> pats
 --      H.PatternTyped (H.Pattern_Typed ) ->
       H.PatternWildcard -> cst "_"
 
@@ -188,7 +188,7 @@ instance ToTree H.Type where
 --  H.TypeInfix Type_Infix
     H.TypeList htype -> bracketList inlineStyle [toTree htype]
 --  H.TypeParens Type
-    H.TypeTuple types -> parenList $ toTree <$> types
+    H.TypeTuple types -> parenList False $ toTree <$> types
     H.TypeVariable name -> toTree name
 
 instance ToTree H.ValueBinding where

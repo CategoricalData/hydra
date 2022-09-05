@@ -110,7 +110,7 @@ writeCastExpression_NotPlusMinus (Java.CastExpression_NotPlusMinus rb ex) = spac
   writeUnaryExpression ex]
 
 writeCastExpression_RefAndBounds :: Java.CastExpression_RefAndBounds -> CT.Expr
-writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = parenList [spaceSep $ Y.catMaybes [
+writeCastExpression_RefAndBounds (Java.CastExpression_RefAndBounds rt adds) = parenList False [spaceSep $ Y.catMaybes [
   Just $ writeReferenceType rt,
   if L.null adds then Nothing else Just $ spaceSep (writeAdditionalBound <$> adds)]]
 
@@ -254,7 +254,7 @@ writeConstructorDeclarator (Java.ConstructorDeclarator tparams name mrecparam fp
   if L.null tparams then Nothing else Just $ angleBracesList inlineStyle (writeTypeParameter <$> tparams),
   Just $ writeSimpleTypeName name,
   writeReceiverParameter <$> mrecparam,
-  Just $ parenList (writeFormalParameter <$> fparams)]
+  Just $ parenList False (writeFormalParameter <$> fparams)]
 
 writeConstructorModifier :: Java.ConstructorModifier -> CT.Expr
 writeConstructorModifier m = case m of
@@ -366,7 +366,7 @@ writeIdentifier (Java.Identifier s) = cst s
 writeIfThenStatement :: Java.IfThenStatement -> CT.Expr
 writeIfThenStatement (Java.IfThenStatement cond thn) = spaceSep [
   cst "if",
-  parenList [writeExpression cond],
+  parenList False [writeExpression cond],
   writeBlock (Java.Block [Java.BlockStatementStatement thn])]
 
 writeIfThenElseStatement :: Java.IfThenElseStatement -> CT.Expr
@@ -456,7 +456,7 @@ writeLambdaExpression (Java.LambdaExpression params body) =
 
 writeLambdaParameters :: Java.LambdaParameters -> CT.Expr
 writeLambdaParameters p = case p of
-  Java.LambdaParametersTuple l -> parenList (writeLambdaParameters <$> l)
+  Java.LambdaParametersTuple l -> parenList False (writeLambdaParameters <$> l)
   Java.LambdaParametersSingle id -> writeIdentifier id
 
 writeLeftHandSide :: Java.LeftHandSide -> CT.Expr
@@ -510,7 +510,7 @@ writeMethodDeclarator :: Java.MethodDeclarator -> CT.Expr
 writeMethodDeclarator (Java.MethodDeclarator id rparam params) = noSep [
   writeIdentifier id,
   -- Note: ignoring receiver param for now
-  parenList (writeFormalParameter <$> params)]
+  parenList False (writeFormalParameter <$> params)]
 
 writeMethodHeader :: Java.MethodHeader -> CT.Expr
 writeMethodHeader (Java.MethodHeader params result decl mthrows) = spaceSep $ Y.catMaybes [
@@ -522,7 +522,7 @@ writeMethodHeader (Java.MethodHeader params result decl mthrows) = spaceSep $ Y.
 writeMethodInvocation :: Java.MethodInvocation -> CT.Expr
 writeMethodInvocation (Java.MethodInvocation header args) = noSep [headerSec, argSec]
   where
-    argSec = parenList (writeExpression <$> args)
+    argSec = parenList True (writeExpression <$> args)
     headerSec = case header of
       Java.MethodInvocation_HeaderSimple mname -> writeMethodName mname
       Java.MethodInvocation_HeaderComplex (Java.MethodInvocation_Complex var targs id) -> case var of
@@ -655,7 +655,7 @@ writePrimaryNoNewArray p = case p of
   Java.PrimaryNoNewArrayClassLiteral cl -> writeClassLiteral cl
   Java.PrimaryNoNewArrayThis -> cst "this"
   Java.PrimaryNoNewArrayDotThis n -> dotSep [writeTypeName n, cst "this"]
-  Java.PrimaryNoNewArrayParens e -> parenList [writeExpression e]
+  Java.PrimaryNoNewArrayParens e -> parenList False [writeExpression e]
   Java.PrimaryNoNewArrayClassInstance ci -> writeClassInstanceCreationExpression ci
   Java.PrimaryNoNewArrayFieldAccess fa -> writeFieldAccess fa
   Java.PrimaryNoNewArrayArrayAccess aa -> writeArrayAccess aa
@@ -732,7 +732,7 @@ writeSimpleTypeName (Java.SimpleTypeName tid) = writeTypeIdentifier tid
 writeSingleElementAnnotation :: Java.SingleElementAnnotation -> CT.Expr
 writeSingleElementAnnotation (Java.SingleElementAnnotation tname mv) = case mv of
   Nothing -> writeMarkerAnnotation (Java.MarkerAnnotation tname)
-  Just v -> prefixAt $ noSep [writeTypeName tname, parenList [writeElementValue v]]
+  Just v -> prefixAt $ noSep [writeTypeName tname, parenList False [writeElementValue v]]
 
 writeStatement :: Java.Statement -> CT.Expr
 writeStatement s = case s of
@@ -859,7 +859,7 @@ writeUnqualifiedClassInstanceCreationExpression (Java.UnqualifiedClassInstanceCr
   = spaceSep $ Y.catMaybes [
     Just $ cst "new",
     if L.null targs then Nothing else Just $ angleBracesList inlineStyle (writeTypeArgument <$> targs),
-    Just $ noSep [writeClassOrInterfaceTypeToInstantiate cit, parenList (writeExpression <$> args)],
+    Just $ noSep [writeClassOrInterfaceTypeToInstantiate cit, parenList False (writeExpression <$> args)],
     writeClassBody <$> mbody]
 
 writeVariableArityParameter :: Java.VariableArityParameter -> CT.Expr
