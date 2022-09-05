@@ -155,6 +155,9 @@ int8 = integer . IntegerValueInt8 . fromIntegral
 integer :: IntegerValue -> Term m
 integer = TermLiteral . LiteralInteger
 
+isUnit :: Eq m => Term m -> Bool
+isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
+
 lambda :: String -> Term m -> Term m
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Variable param) body
 

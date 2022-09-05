@@ -58,13 +58,8 @@ public abstract class Sort {
    * The sort 𝖲𝖾𝗍 intends to be the type of small sets.
    */
   public static final class Set extends hydra.ext.coq.syntax.Sort {
-    /**
-     * The sort 𝖲𝖾𝗍 intends to be the type of small sets.
-     */
-    public final java.lang.Void value;
+    public Set () {
     
-    public Set (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -73,12 +68,12 @@ public abstract class Sort {
         return false;
       }
       Set o = (Set) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -91,13 +86,8 @@ public abstract class Sort {
    * The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions.
    */
   public static final class Prop extends hydra.ext.coq.syntax.Sort {
-    /**
-     * The sort 𝖯𝗋𝗈𝗉 intends to be the type of logical propositions.
-     */
-    public final java.lang.Void value;
+    public Prop () {
     
-    public Prop (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -106,12 +96,12 @@ public abstract class Sort {
         return false;
       }
       Prop o = (Prop) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -124,13 +114,8 @@ public abstract class Sort {
    * The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal).
    */
   public static final class SProp extends hydra.ext.coq.syntax.Sort {
-    /**
-     * The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal).
-     */
-    public final java.lang.Void value;
+    public SProp () {
     
-    public SProp (java.lang.Void value) {
-      this.value = value;
     }
     
     @Override
@@ -139,12 +124,12 @@ public abstract class Sort {
         return false;
       }
       SProp o = (SProp) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override

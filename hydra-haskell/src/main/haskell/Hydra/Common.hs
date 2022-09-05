@@ -75,6 +75,9 @@ failWithTrace cx msg = fail $ "Error (" ++ printTrace cx ++ "): " ++ msg
   where
     printTrace = L.intercalate " > " . L.reverse . contextTrace
 
+placeholderName :: Name
+placeholderName = Name "Placeholder"
+
 pushTrace :: String -> Context m -> Context m
 pushTrace msg cx = if debug
   then cx {contextTrace = msg:contextTrace cx}
@@ -107,3 +110,6 @@ termMeta cx = annotationClassTermMeta $ contextAnnotations cx
 
 typeMeta :: Context m -> Type m -> m
 typeMeta cx = annotationClassTypeMeta $ contextAnnotations cx
+
+unitTypeName :: Name
+unitTypeName = Name "hydra/core.UnitType"

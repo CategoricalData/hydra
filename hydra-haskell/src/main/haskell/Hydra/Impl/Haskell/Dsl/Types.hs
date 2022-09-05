@@ -1,16 +1,11 @@
 module Hydra.Impl.Haskell.Dsl.Types where
 
+import Hydra.Common
 import Hydra.Core
 
 import qualified Data.Map as M
 import Data.String(IsString(..))
 
-
-placeholderName :: Name
-placeholderName = Name "Placeholder"
-
-unitTypeName :: Name
-unitTypeName = Name "hydra/core.UnitType"
 
 instance IsString (Type m) where fromString = variable
 
@@ -89,7 +84,7 @@ list :: Type m -> Type m
 list = TypeList
 
 isUnit :: Eq m => Type m -> Bool
-isUnit t = t == TypeRecord (RowType unitTypeName [])
+isUnit t = stripType t == TypeRecord (RowType unitTypeName [])
 
 literal :: LiteralType -> Type m
 literal = TypeLiteral
