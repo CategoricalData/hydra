@@ -108,7 +108,7 @@ constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ J
     elName = fromQname (graphName g) "Elements"
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
-      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier "Elements") [] [] body
+      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body
     decl = Java.TypeDeclarationWithComments itf Nothing
 
 declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name
@@ -320,6 +320,15 @@ declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) bod
   where
     param = javaTypeParameter $ capitalize v
 
+elementsClassName = "Elements"
+
+elementJavaIdentifier :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier
+elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
+  where
+    (gname, local) = toQname name
+    elementsName = fromQname gname elementsClassName
+    Java.Identifier jname = nameToJavaName aliases name
+  
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
 encodeFunction aliases fun = case fun of
@@ -377,7 +386,7 @@ encodeTerm :: (Eq m, Ord m, Read m, Show m)
 encodeTerm aliases term = case term of
     TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
   --  TermApplication (Application m)
-  --  TermElement Name
+    TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
     TermFunction fun -> encodeFunction aliases fun
     TermList els -> do
       jels <- CM.mapM encode els
@@ -411,7 +420,8 @@ encodeTerm aliases term = case term of
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
       return $ javaConstructorCall (javaConstructorName consId) [fieldExpr]
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
-    _ -> pure $ encodeLiteral $ LiteralString $ "Unimplemented term variant: " ++ show (termVariant term)
+    _ -> pure $ encodeLiteral $ LiteralString $
+      "Unimplemented term variant: " ++ show (termVariant term) -- TODO: temporary
   --  _ -> unexpected "term" $ show term
   where
     encode = encodeTerm aliases
