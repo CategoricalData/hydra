@@ -86,11 +86,6 @@ constructModule g coders pairs = do
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
     termToInterfaceMember coders pair@(el, TypedTerm typ term) = do
-        {-
-          = InterfaceMemberDeclarationConstant ConstantDeclaration
-          | InterfaceMemberDeclarationInterfaceMethod InterfaceMethodDeclaration
-        -}
-
         jtype <- Java.UnannType <$> encodeType aliases typ
         jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
         let mods = []
@@ -106,7 +101,7 @@ constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ J
   where
     pkg = javaPackageDeclaration $ graphName g
     mods = []
-    elName = fromQname (graphName g) "Elements"
+    elName = fromQname (graphName g) elementsClassName
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body
@@ -321,14 +316,14 @@ declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) bod
   where
     param = javaTypeParameter $ capitalize v
 
-elementsClassName = "Elements"
+elementsClassName = "Elements_"
 
 elementJavaIdentifier :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier
 elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
   where
     (gname, local) = toQname name
     elementsName = fromQname gname elementsClassName
-    Java.Identifier jname = nameToJavaName aliases name
+    Java.Identifier jname = nameToJavaName aliases elementsName
 
 encodeElimination :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Elimination m -> GraphFlow m Java.Expression
@@ -349,7 +344,7 @@ encodeElimination aliases elm = case elm of
         fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
 --  EliminationUnion (CaseStatement m)
   _ -> pure $ encodeLiteral $ LiteralString $
-    "Unimplemented elimenation variant: " ++ show (eliminationVariant elm) -- TODO: temporary
+    "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
@@ -407,7 +402,11 @@ encodeTerm :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Term m -> GraphFlow m Java.Expression
 encodeTerm aliases term = case term of
     TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
-  --  TermApplication (Application m)
+    TermApplication (Application fun arg) -> do
+      jfun <- encodeTerm aliases fun
+      jarg <- encodeTerm aliases arg
+      let prim = javaExpressionToJavaPrimary jfun
+      return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
     TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
     TermFunction fun -> encodeFunction aliases fun
     TermList els -> do

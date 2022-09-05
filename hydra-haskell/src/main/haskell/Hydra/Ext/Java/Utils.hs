@@ -131,6 +131,9 @@ javaEqualityExpressionToJavaInclusiveOrExpression eq = Java.InclusiveOrExpressio
 javaExpressionNameToJavaExpression :: Java.ExpressionName -> Java.Expression
 javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Java.PostfixExpressionName
 
+javaExpressionToJavaPrimary :: Java.Expression -> Java.Primary
+javaExpressionToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayParens
+
 javaIdentifier :: String -> Java.Identifier
 javaIdentifier = Java.Identifier . sanitizeJavaName
 
@@ -211,9 +214,8 @@ javaPostfixExpressionToJavaEqualityExpression = Java.EqualityExpressionUnary .
   javaUnaryExpressionToJavaRelationalExpression . Java.UnaryExpressionOther . Java.UnaryExpressionNotPlusMinusPostfix
 
 javaPostfixExpressionToJavaExpression :: Java.PostfixExpression -> Java.Expression
-javaPostfixExpressionToJavaExpression pe = javaRelationalExpressionToJavaExpression relEx
-  where
-    relEx = javaPostfixExpressionToJavaRelationalExpression pe
+javaPostfixExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
+  javaPostfixExpressionToJavaRelationalExpression
 
 javaPostfixExpressionToJavaInclusiveOrExpression :: Java.PostfixExpression -> Java.InclusiveOrExpression
 javaPostfixExpressionToJavaInclusiveOrExpression = javaEqualityExpressionToJavaInclusiveOrExpression .
