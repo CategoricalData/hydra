@@ -134,6 +134,9 @@ javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Jav
 javaExpressionToJavaPrimary :: Java.Expression -> Java.Primary
 javaExpressionToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayParens
 
+javaFieldAccessToJavaExpression :: Java.FieldAccess -> Java.Expression
+javaFieldAccessToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayFieldAccess
+
 javaIdentifier :: String -> Java.Identifier
 javaIdentifier = Java.Identifier . sanitizeJavaName
 
