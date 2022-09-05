@@ -160,6 +160,11 @@ javaInterfaceDeclarationToJavaClassBodyDeclaration :: Java.NormalInterfaceDeclar
 javaInterfaceDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember .
   Java.ClassMemberDeclarationInterface . Java.InterfaceDeclarationNormalInterface
 
+javaLambda :: Variable -> Java.Expression -> Java.Expression
+javaLambda var jbody = Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyExpression jbody)
+  where
+    params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
+
 javaLangPackageName :: Maybe Java.PackageName
 javaLangPackageName = Just $ javaPackageName ["java", "lang"]
 

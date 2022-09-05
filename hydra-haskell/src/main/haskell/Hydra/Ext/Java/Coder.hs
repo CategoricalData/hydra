@@ -7,6 +7,7 @@ import Hydra.Monads
 import Hydra.CoreDecoding
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
 import Hydra.Adapters.Coders
@@ -328,18 +329,39 @@ elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
     (gname, local) = toQname name
     elementsName = fromQname gname elementsClassName
     Java.Identifier jname = nameToJavaName aliases name
-  
+
+encodeElimination :: (Eq m, Ord m, Read m, Show m)
+  => M.Map GraphName Java.PackageName -> Elimination m -> GraphFlow m Java.Expression
+encodeElimination aliases elm = case elm of
+  EliminationElement -> encodeFunction aliases $ FunctionLambda $ Lambda var $ TermVariable var
+    where
+      var = Variable "v"
+  EliminationNominal name -> pure $ javaLambda var jbody
+    where
+      var = Variable "v"
+      arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
+      jbody = javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [arg]
+--  EliminationOptional (OptionalCases m)
+  EliminationRecord (Projection _ fname) -> pure $ javaLambda var jbody
+    where
+      var = Variable "v"
+      jbody = javaExpressionNameToJavaExpression $
+        fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
+--  EliminationUnion (CaseStatement m)
+  _ -> pure $ encodeLiteral $ LiteralString $
+    "Unimplemented elimenation variant: " ++ show (eliminationVariant elm) -- TODO: temporary
+
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
 encodeFunction aliases fun = case fun of
 --  FunctionCompareTo other ->
---  FunctionElimination el ->
+  FunctionElimination elm -> encodeElimination aliases elm
   FunctionLambda (Lambda var body) -> do
     jbody <- encodeTerm aliases body
-    let params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
-    return $ Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyExpression jbody)
+    return $ javaLambda var jbody
 --  FunctionPrimitive name ->
-  _ -> pure $ encodeLiteral $ LiteralString $ "Unimplemented function variant: " ++ show (functionVariant fun)
+  _ -> pure $ encodeLiteral $ LiteralString $
+    "Unimplemented function variant: " ++ show (functionVariant fun) -- TODO: temporary
 
 encodeLiteral :: Literal -> Java.Expression
 encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
