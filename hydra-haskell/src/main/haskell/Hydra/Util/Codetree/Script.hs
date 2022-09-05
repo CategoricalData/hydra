@@ -100,10 +100,12 @@ num = cst . show
 op :: String -> Int -> Associativity -> Op
 op s p = Op (Symbol s) (Padding WsSpace WsSpace) (Precedence p)
 
-parenList :: [Expr] -> Expr
-parenList els = case els of
-  [] -> cst "()"
-  _ -> brackets parentheses inlineStyle $ commaSep inlineStyle els
+parenList :: Bool -> [Expr] -> Expr
+parenList newlines els = case els of
+    [] -> cst "()"
+    _ -> brackets parentheses style $ commaSep style els
+  where
+    style = if newlines && L.length els > 1 then halfBlockStyle else inlineStyle
 
 parens :: Expr -> Expr
 parens = brackets parentheses inlineStyle
