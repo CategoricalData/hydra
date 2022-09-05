@@ -247,7 +247,7 @@ declarationForUnionType aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName "value") ftype]
+      let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName valueFieldName) ftype]
       toClassDecl aliases [] (variantClassName elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -342,6 +342,11 @@ encodeElimination aliases elm = case elm of
       var = Variable "v"
       jbody = javaExpressionNameToJavaExpression $
         fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
+        
+        
+        
+        
+        
 --  EliminationUnion (CaseStatement m)
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
@@ -402,11 +407,32 @@ encodeTerm :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Term m -> GraphFlow m Java.Expression
 encodeTerm aliases term = case term of
     TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
-    TermApplication (Application fun arg) -> do
-      jfun <- encodeTerm aliases fun
-      jarg <- encodeTerm aliases arg
-      let prim = javaExpressionToJavaPrimary jfun
-      return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
+    TermApplication (Application fun arg) -> case stripTerm fun of
+        TermFunction f -> case f of
+--          FunctionCompareTo (Term m)
+          FunctionElimination elm -> case elm of
+            EliminationElement -> encodeTerm aliases arg
+            EliminationNominal name -> do
+              jarg <- encodeTerm aliases arg
+              let qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+              return $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
+--            EliminationOptional (OptionalCases m)
+            EliminationRecord (Projection _ fname) -> do
+              jarg <- encodeTerm aliases arg
+              let qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+              return $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
+--            EliminationUnion (CaseStatement m)
+            _ -> defaultExpression
+--          FunctionLambda (Lambda m)
+--          FunctionPrimitive Name
+          _ -> defaultExpression
+        _ -> defaultExpression
+      where
+        defaultExpression = do
+          jfun <- encodeTerm aliases fun
+          jarg <- encodeTerm aliases arg
+          let prim = javaExpressionToJavaPrimary jfun
+          return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
     TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
     TermFunction fun -> encodeFunction aliases fun
     TermList els -> do
@@ -415,7 +441,9 @@ encodeTerm aliases term = case term of
         methodInvocationStatic (Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
     TermLiteral l -> pure $ encodeLiteral l
   --  TermMap (Map (Term m) (Term m))
-  --  TermNominal (Named m)
+    TermNominal (Named name arg) -> do
+      jarg <- encodeTerm aliases arg
+      return $ javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [jarg]
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
         methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
@@ -501,8 +529,11 @@ toClassDecl aliases tparams elName t = case stripType t of
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where
-    wrap t' = declarationForRecordType aliases tparams elName [Types.field "value" t']
+    wrap t' = declarationForRecordType aliases tparams elName [Types.field valueFieldName t']
 
 toDataDeclaration :: M.Map GraphName Java.PackageName -> (a, TypedTerm m) -> GraphFlow m a
 toDataDeclaration aliases (el, TypedTerm typ term) = do
   fail "not implemented" -- TODO
+
+valueFieldName :: String
+valueFieldName = "value"
