@@ -61,7 +61,7 @@ public interface Terms {
     }
 
     static <M> Term<M> delta() {
-        return elimination(new Elimination.Element<>(null));
+        return elimination(new Elimination.Element<>());
     }
 
     static <M> Term<M> element(final Name elName) {
