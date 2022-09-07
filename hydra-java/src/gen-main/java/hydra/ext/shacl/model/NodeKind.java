@@ -57,8 +57,6 @@ public abstract class NodeKind {
    * A blank node
    */
   public static final class BlankNode extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.BlankNode");
-    
     public BlankNode () {
     
     }
@@ -87,8 +85,6 @@ public abstract class NodeKind {
    * An IRI
    */
   public static final class Iri extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Iri");
-    
     public Iri () {
     
     }
@@ -117,8 +113,6 @@ public abstract class NodeKind {
    * A literal
    */
   public static final class Literal extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Literal");
-    
     public Literal () {
     
     }
@@ -147,8 +141,6 @@ public abstract class NodeKind {
    * A blank node or an IRI
    */
   public static final class BlankNodeOrIri extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.BlankNodeOrIri");
-    
     public BlankNodeOrIri () {
     
     }
@@ -177,8 +169,6 @@ public abstract class NodeKind {
    * A blank node or a literal
    */
   public static final class BlankNodeOrLiteral extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.BlankNodeOrLiteral");
-    
     public BlankNodeOrLiteral () {
     
     }
@@ -207,8 +197,6 @@ public abstract class NodeKind {
    * An IRI or a literal
    */
   public static final class IriOrLiteral extends hydra.ext.shacl.model.NodeKind {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.IriOrLiteral");
-    
     public IriOrLiteral () {
     
     }

@@ -33,8 +33,6 @@ public abstract class IdType {
   }
   
   public static final class Vertex extends hydra.ext.tinkerpop.typed.IdType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Vertex");
-    
     public final hydra.ext.tinkerpop.typed.VertexType value;
     
     public Vertex (hydra.ext.tinkerpop.typed.VertexType value) {
@@ -62,8 +60,6 @@ public abstract class IdType {
   }
   
   public static final class Edge extends hydra.ext.tinkerpop.typed.IdType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Edge");
-    
     public final hydra.ext.tinkerpop.typed.EdgeType value;
     
     public Edge (hydra.ext.tinkerpop.typed.EdgeType value) {

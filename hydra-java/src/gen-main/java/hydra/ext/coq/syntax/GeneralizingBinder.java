@@ -39,8 +39,6 @@ public abstract class GeneralizingBinder {
    * Terms surrounded by `( ) introduce their free variables as explicit arguments
    */
   public static final class Explicit extends hydra.ext.coq.syntax.GeneralizingBinder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Explicit");
-    
     /**
      * Terms surrounded by `( ) introduce their free variables as explicit arguments
      */
@@ -74,8 +72,6 @@ public abstract class GeneralizingBinder {
    * Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments
    */
   public static final class ImplicitMaximallyInserted extends hydra.ext.coq.syntax.GeneralizingBinder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ImplicitMaximallyInserted");
-    
     /**
      * Terms surrounded by `{ } introduce their free variables as maximally inserted implicit arguments
      */
@@ -109,8 +105,6 @@ public abstract class GeneralizingBinder {
    * Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments
    */
   public static final class ImplicitNonMaximallyInserted extends hydra.ext.coq.syntax.GeneralizingBinder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ImplicitNonMaximallyInserted");
-    
     /**
      * Terms surrounded by `[ ] introduce them as non-maximally inserted implicit arguments
      */

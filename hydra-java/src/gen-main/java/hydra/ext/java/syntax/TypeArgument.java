@@ -30,8 +30,6 @@ public abstract class TypeArgument {
   }
   
   public static final class Reference extends hydra.ext.java.syntax.TypeArgument {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Reference");
-    
     public final hydra.ext.java.syntax.ReferenceType value;
     
     public Reference (hydra.ext.java.syntax.ReferenceType value) {
@@ -59,8 +57,6 @@ public abstract class TypeArgument {
   }
   
   public static final class Wildcard extends hydra.ext.java.syntax.TypeArgument {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Wildcard");
-    
     public final hydra.ext.java.syntax.Wildcard value;
     
     public Wildcard (hydra.ext.java.syntax.Wildcard value) {

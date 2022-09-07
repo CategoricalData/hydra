@@ -24,8 +24,6 @@ public abstract class ValueBinding {
   }
   
   public static final class Simple extends hydra.ext.haskell.ast.ValueBinding {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Simple");
-    
     public final hydra.ext.haskell.ast.ValueBinding_Simple value;
     
     public Simple (hydra.ext.haskell.ast.ValueBinding_Simple value) {

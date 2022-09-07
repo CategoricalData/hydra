@@ -54,8 +54,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
-    
     public final hydra.ext.java.syntax.ShiftExpression value;
     
     public Simple (hydra.ext.java.syntax.ShiftExpression value) {
@@ -83,8 +81,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class LessThan extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LessThan");
-    
     public final hydra.ext.java.syntax.RelationalExpression_LessThan value;
     
     public LessThan (hydra.ext.java.syntax.RelationalExpression_LessThan value) {
@@ -112,8 +108,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class GreaterThan extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.GreaterThan");
-    
     public final hydra.ext.java.syntax.RelationalExpression_GreaterThan value;
     
     public GreaterThan (hydra.ext.java.syntax.RelationalExpression_GreaterThan value) {
@@ -141,8 +135,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class LessThanEqual extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LessThanEqual");
-    
     public final hydra.ext.java.syntax.RelationalExpression_LessThanEqual value;
     
     public LessThanEqual (hydra.ext.java.syntax.RelationalExpression_LessThanEqual value) {
@@ -170,8 +162,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class GreaterThanEqual extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.GreaterThanEqual");
-    
     public final hydra.ext.java.syntax.RelationalExpression_GreaterThanEqual value;
     
     public GreaterThanEqual (hydra.ext.java.syntax.RelationalExpression_GreaterThanEqual value) {
@@ -199,8 +189,6 @@ public abstract class RelationalExpression {
   }
   
   public static final class Instanceof extends hydra.ext.java.syntax.RelationalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Instanceof");
-    
     public final hydra.ext.java.syntax.RelationalExpression_InstanceOf value;
     
     public Instanceof (hydra.ext.java.syntax.RelationalExpression_InstanceOf value) {

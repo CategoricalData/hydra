@@ -30,8 +30,6 @@ public abstract class OneTerm {
   }
   
   public static final class Explicit extends hydra.ext.coq.syntax.OneTerm {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Explicit");
-    
     public final hydra.ext.coq.syntax.QualidAnnotated value;
     
     public Explicit (hydra.ext.coq.syntax.QualidAnnotated value) {
@@ -59,8 +57,6 @@ public abstract class OneTerm {
   }
   
   public static final class Term1 extends hydra.ext.coq.syntax.OneTerm {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term1");
-    
     public final hydra.ext.coq.syntax.Term1 value;
     
     public Term1 (hydra.ext.coq.syntax.Term1 value) {

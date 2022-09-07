@@ -42,8 +42,6 @@ public abstract class ClassLiteral {
   }
   
   public static final class Type extends hydra.ext.java.syntax.ClassLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Type");
-    
     public final hydra.ext.java.syntax.TypeNameArray value;
     
     public Type (hydra.ext.java.syntax.TypeNameArray value) {
@@ -71,8 +69,6 @@ public abstract class ClassLiteral {
   }
   
   public static final class NumericType extends hydra.ext.java.syntax.ClassLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.NumericType");
-    
     public final hydra.ext.java.syntax.NumericTypeArray value;
     
     public NumericType (hydra.ext.java.syntax.NumericTypeArray value) {
@@ -100,8 +96,6 @@ public abstract class ClassLiteral {
   }
   
   public static final class Boolean_ extends hydra.ext.java.syntax.ClassLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Boolean");
-    
     public final hydra.ext.java.syntax.BooleanArray value;
     
     public Boolean_ (hydra.ext.java.syntax.BooleanArray value) {
@@ -129,8 +123,6 @@ public abstract class ClassLiteral {
   }
   
   public static final class Void_ extends hydra.ext.java.syntax.ClassLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Void");
-    
     public Void_ () {
     
     }

@@ -30,8 +30,6 @@ public abstract class CompilationUnit {
   }
   
   public static final class Ordinary extends hydra.ext.java.syntax.CompilationUnit {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Ordinary");
-    
     public final hydra.ext.java.syntax.OrdinaryCompilationUnit value;
     
     public Ordinary (hydra.ext.java.syntax.OrdinaryCompilationUnit value) {
@@ -59,8 +57,6 @@ public abstract class CompilationUnit {
   }
   
   public static final class Modular extends hydra.ext.java.syntax.CompilationUnit {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Modular");
-    
     public final hydra.ext.java.syntax.ModularCompilationUnit value;
     
     public Modular (hydra.ext.java.syntax.ModularCompilationUnit value) {

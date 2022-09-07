@@ -36,8 +36,6 @@ public abstract class ImplicitBinders {
    * The first form, with curly braces, makes name a maximally inserted implicit argument
    */
   public static final class MaximallyInserted extends hydra.ext.coq.syntax.ImplicitBinders {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.MaximallyInserted");
-    
     /**
      * The first form, with curly braces, makes name a maximally inserted implicit argument
      */
@@ -71,8 +69,6 @@ public abstract class ImplicitBinders {
    * The second form, with square brackets, makes name a non-maximally inserted implicit argument.
    */
   public static final class NonMaximallyInserted extends hydra.ext.coq.syntax.ImplicitBinders {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.NonMaximallyInserted");
-    
     /**
      * The second form, with square brackets, makes name a non-maximally inserted implicit argument.
      */

@@ -48,8 +48,6 @@ public abstract class Decl {
   }
   
   public static final class Val extends hydra.ext.scala.meta.Decl {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Val");
-    
     public final hydra.ext.scala.meta.Decl_Val value;
     
     public Val (hydra.ext.scala.meta.Decl_Val value) {
@@ -77,8 +75,6 @@ public abstract class Decl {
   }
   
   public static final class Var extends hydra.ext.scala.meta.Decl {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Var");
-    
     public final hydra.ext.scala.meta.Decl_Var value;
     
     public Var (hydra.ext.scala.meta.Decl_Var value) {
@@ -106,8 +102,6 @@ public abstract class Decl {
   }
   
   public static final class Def extends hydra.ext.scala.meta.Decl {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Def");
-    
     public final hydra.ext.scala.meta.Decl_Def value;
     
     public Def (hydra.ext.scala.meta.Decl_Def value) {
@@ -135,8 +129,6 @@ public abstract class Decl {
   }
   
   public static final class Type extends hydra.ext.scala.meta.Decl {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type");
-    
     public final hydra.ext.scala.meta.Decl_Type value;
     
     public Type (hydra.ext.scala.meta.Decl_Type value) {
@@ -164,8 +156,6 @@ public abstract class Decl {
   }
   
   public static final class Given extends hydra.ext.scala.meta.Decl {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Given");
-    
     public final hydra.ext.scala.meta.Decl_Given value;
     
     public Given (hydra.ext.scala.meta.Decl_Given value) {

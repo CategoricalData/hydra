@@ -30,8 +30,6 @@ public abstract class Fix {
   }
   
   public static final class Decl extends hydra.ext.coq.syntax.Fix {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Decl");
-    
     public final hydra.ext.coq.syntax.Fix_Decl value;
     
     public Decl (hydra.ext.coq.syntax.Fix_Decl value) {
@@ -59,8 +57,6 @@ public abstract class Fix {
   }
   
   public static final class Qual extends hydra.ext.coq.syntax.Fix {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Qual");
-    
     public final java.util.Optional<hydra.ext.coq.syntax.Fix_Qual> value;
     
     public Qual (java.util.Optional<hydra.ext.coq.syntax.Fix_Qual> value) {

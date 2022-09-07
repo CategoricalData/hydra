@@ -108,8 +108,6 @@ public abstract class Tree {
   }
   
   public static final class Ref extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ref");
-    
     public final hydra.ext.scala.meta.Ref value;
     
     public Ref (hydra.ext.scala.meta.Ref value) {
@@ -137,8 +135,6 @@ public abstract class Tree {
   }
   
   public static final class Stat extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Stat");
-    
     public final hydra.ext.scala.meta.Stat value;
     
     public Stat (hydra.ext.scala.meta.Stat value) {
@@ -166,8 +162,6 @@ public abstract class Tree {
   }
   
   public static final class Type extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type");
-    
     public final hydra.ext.scala.meta.Type value;
     
     public Type (hydra.ext.scala.meta.Type value) {
@@ -195,8 +189,6 @@ public abstract class Tree {
   }
   
   public static final class Bounds extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Bounds");
-    
     public final hydra.ext.scala.meta.Type_Bounds value;
     
     public Bounds (hydra.ext.scala.meta.Type_Bounds value) {
@@ -224,8 +216,6 @@ public abstract class Tree {
   }
   
   public static final class Pat extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat");
-    
     public final hydra.ext.scala.meta.Pat value;
     
     public Pat (hydra.ext.scala.meta.Pat value) {
@@ -253,8 +243,6 @@ public abstract class Tree {
   }
   
   public static final class Member extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Member");
-    
     public final hydra.ext.scala.meta.Member value;
     
     public Member (hydra.ext.scala.meta.Member value) {
@@ -282,8 +270,6 @@ public abstract class Tree {
   }
   
   public static final class Ctor extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ctor");
-    
     public final hydra.ext.scala.meta.Ctor value;
     
     public Ctor (hydra.ext.scala.meta.Ctor value) {
@@ -311,8 +297,6 @@ public abstract class Tree {
   }
   
   public static final class Template extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Template");
-    
     public final hydra.ext.scala.meta.Template value;
     
     public Template (hydra.ext.scala.meta.Template value) {
@@ -340,8 +324,6 @@ public abstract class Tree {
   }
   
   public static final class Mod extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Mod");
-    
     public final hydra.ext.scala.meta.Mod value;
     
     public Mod (hydra.ext.scala.meta.Mod value) {
@@ -369,8 +351,6 @@ public abstract class Tree {
   }
   
   public static final class Enumerator extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Enumerator");
-    
     public final hydra.ext.scala.meta.Enumerator value;
     
     public Enumerator (hydra.ext.scala.meta.Enumerator value) {
@@ -398,8 +378,6 @@ public abstract class Tree {
   }
   
   public static final class Importer extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Importer");
-    
     public final hydra.ext.scala.meta.Importer value;
     
     public Importer (hydra.ext.scala.meta.Importer value) {
@@ -427,8 +405,6 @@ public abstract class Tree {
   }
   
   public static final class Importee extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Importee");
-    
     public final hydra.ext.scala.meta.Importee value;
     
     public Importee (hydra.ext.scala.meta.Importee value) {
@@ -456,8 +432,6 @@ public abstract class Tree {
   }
   
   public static final class CaseTree extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.CaseTree");
-    
     public final hydra.ext.scala.meta.CaseTree value;
     
     public CaseTree (hydra.ext.scala.meta.CaseTree value) {
@@ -485,8 +459,6 @@ public abstract class Tree {
   }
   
   public static final class Source extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Source");
-    
     public final hydra.ext.scala.meta.Source value;
     
     public Source (hydra.ext.scala.meta.Source value) {
@@ -514,8 +486,6 @@ public abstract class Tree {
   }
   
   public static final class Quasi extends hydra.ext.scala.meta.Tree {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Quasi");
-    
     public final hydra.ext.scala.meta.Quasi value;
     
     public Quasi (hydra.ext.scala.meta.Quasi value) {

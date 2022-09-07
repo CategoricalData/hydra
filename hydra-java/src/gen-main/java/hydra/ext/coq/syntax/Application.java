@@ -30,8 +30,6 @@ public abstract class Application {
   }
   
   public static final class Normal extends hydra.ext.coq.syntax.Application {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Normal");
-    
     public final hydra.ext.coq.syntax.NormalApplication value;
     
     public Normal (hydra.ext.coq.syntax.NormalApplication value) {
@@ -59,8 +57,6 @@ public abstract class Application {
   }
   
   public static final class Annotated extends hydra.ext.coq.syntax.Application {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Annotated");
-    
     public final hydra.ext.coq.syntax.AnnotatedApplication value;
     
     public Annotated (hydra.ext.coq.syntax.AnnotatedApplication value) {

@@ -30,8 +30,6 @@ public abstract class Ref {
   }
   
   public static final class Name extends hydra.ext.scala.meta.Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Name");
-    
     public final hydra.ext.scala.meta.Name value;
     
     public Name (hydra.ext.scala.meta.Name value) {
@@ -59,8 +57,6 @@ public abstract class Ref {
   }
   
   public static final class Init extends hydra.ext.scala.meta.Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Init");
-    
     public final hydra.ext.scala.meta.Init value;
     
     public Init (hydra.ext.scala.meta.Init value) {

@@ -30,8 +30,6 @@ public abstract class Result {
   }
   
   public static final class Type extends hydra.ext.java.syntax.Result {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Type");
-    
     public final hydra.ext.java.syntax.UnannType value;
     
     public Type (hydra.ext.java.syntax.UnannType value) {
@@ -59,8 +57,6 @@ public abstract class Result {
   }
   
   public static final class Void_ extends hydra.ext.java.syntax.Result {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Void");
-    
     public Void_ () {
     
     }

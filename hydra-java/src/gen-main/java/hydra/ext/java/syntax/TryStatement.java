@@ -36,8 +36,6 @@ public abstract class TryStatement {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.TryStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
-    
     public final hydra.ext.java.syntax.TryStatement_Simple value;
     
     public Simple (hydra.ext.java.syntax.TryStatement_Simple value) {
@@ -65,8 +63,6 @@ public abstract class TryStatement {
   }
   
   public static final class WithFinally extends hydra.ext.java.syntax.TryStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WithFinally");
-    
     public final hydra.ext.java.syntax.TryStatement_WithFinally value;
     
     public WithFinally (hydra.ext.java.syntax.TryStatement_WithFinally value) {
@@ -94,8 +90,6 @@ public abstract class TryStatement {
   }
   
   public static final class WithResources extends hydra.ext.java.syntax.TryStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WithResources");
-    
     public final hydra.ext.java.syntax.TryWithResourcesStatement value;
     
     public WithResources (hydra.ext.java.syntax.TryWithResourcesStatement value) {

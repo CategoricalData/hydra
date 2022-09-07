@@ -78,8 +78,6 @@ public abstract class Pattern {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Application");
-    
     public final hydra.ext.haskell.ast.Pattern_Application value;
     
     public Application (hydra.ext.haskell.ast.Pattern_Application value) {
@@ -107,8 +105,6 @@ public abstract class Pattern {
   }
   
   public static final class As extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.As");
-    
     public final hydra.ext.haskell.ast.Pattern_As value;
     
     public As (hydra.ext.haskell.ast.Pattern_As value) {
@@ -136,8 +132,6 @@ public abstract class Pattern {
   }
   
   public static final class List extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.List");
-    
     public final java.util.List<hydra.ext.haskell.ast.Pattern> value;
     
     public List (java.util.List<hydra.ext.haskell.ast.Pattern> value) {
@@ -165,8 +159,6 @@ public abstract class Pattern {
   }
   
   public static final class Literal extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Literal");
-    
     public final hydra.ext.haskell.ast.Literal value;
     
     public Literal (hydra.ext.haskell.ast.Literal value) {
@@ -194,8 +186,6 @@ public abstract class Pattern {
   }
   
   public static final class Name extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Name");
-    
     public final hydra.ext.haskell.ast.Name value;
     
     public Name (hydra.ext.haskell.ast.Name value) {
@@ -223,8 +213,6 @@ public abstract class Pattern {
   }
   
   public static final class Parens extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Parens");
-    
     public final hydra.ext.haskell.ast.Pattern value;
     
     public Parens (hydra.ext.haskell.ast.Pattern value) {
@@ -252,8 +240,6 @@ public abstract class Pattern {
   }
   
   public static final class Record extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Record");
-    
     public final hydra.ext.haskell.ast.Pattern_Record value;
     
     public Record (hydra.ext.haskell.ast.Pattern_Record value) {
@@ -281,8 +267,6 @@ public abstract class Pattern {
   }
   
   public static final class Tuple extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Tuple");
-    
     public final java.util.List<hydra.ext.haskell.ast.Pattern> value;
     
     public Tuple (java.util.List<hydra.ext.haskell.ast.Pattern> value) {
@@ -310,8 +294,6 @@ public abstract class Pattern {
   }
   
   public static final class Typed extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Typed");
-    
     public final hydra.ext.haskell.ast.Pattern_Typed value;
     
     public Typed (hydra.ext.haskell.ast.Pattern_Typed value) {
@@ -339,8 +321,6 @@ public abstract class Pattern {
   }
   
   public static final class Wildcard extends hydra.ext.haskell.ast.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Wildcard");
-    
     public Wildcard () {
     
     }

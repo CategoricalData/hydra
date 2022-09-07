@@ -45,8 +45,6 @@ public abstract class Declaration {
   }
   
   public static final class Data extends hydra.ext.haskell.ast.Declaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Data");
-    
     public final hydra.ext.haskell.ast.DataDeclaration value;
     
     public Data (hydra.ext.haskell.ast.DataDeclaration value) {
@@ -74,8 +72,6 @@ public abstract class Declaration {
   }
   
   public static final class Type extends hydra.ext.haskell.ast.Declaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type");
-    
     public final hydra.ext.haskell.ast.TypeDeclaration value;
     
     public Type (hydra.ext.haskell.ast.TypeDeclaration value) {
@@ -103,8 +99,6 @@ public abstract class Declaration {
   }
   
   public static final class ValueBinding extends hydra.ext.haskell.ast.Declaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ValueBinding");
-    
     public final hydra.ext.haskell.ast.ValueBinding value;
     
     public ValueBinding (hydra.ext.haskell.ast.ValueBinding value) {
@@ -132,8 +126,6 @@ public abstract class Declaration {
   }
   
   public static final class TypedBinding extends hydra.ext.haskell.ast.Declaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypedBinding");
-    
     public final hydra.ext.haskell.ast.TypedBinding value;
     
     public TypedBinding (hydra.ext.haskell.ast.TypedBinding value) {

@@ -60,8 +60,6 @@ public abstract class Type {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Application");
-    
     public final hydra.ext.haskell.ast.Type_Application value;
     
     public Application (hydra.ext.haskell.ast.Type_Application value) {
@@ -89,8 +87,6 @@ public abstract class Type {
   }
   
   public static final class Function extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Function");
-    
     public final hydra.ext.haskell.ast.Type_Function value;
     
     public Function (hydra.ext.haskell.ast.Type_Function value) {
@@ -118,8 +114,6 @@ public abstract class Type {
   }
   
   public static final class Infix extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Infix");
-    
     public final hydra.ext.haskell.ast.Type_Infix value;
     
     public Infix (hydra.ext.haskell.ast.Type_Infix value) {
@@ -147,8 +141,6 @@ public abstract class Type {
   }
   
   public static final class List extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.List");
-    
     public final hydra.ext.haskell.ast.Type value;
     
     public List (hydra.ext.haskell.ast.Type value) {
@@ -176,8 +168,6 @@ public abstract class Type {
   }
   
   public static final class Parens extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Parens");
-    
     public final hydra.ext.haskell.ast.Type value;
     
     public Parens (hydra.ext.haskell.ast.Type value) {
@@ -205,8 +195,6 @@ public abstract class Type {
   }
   
   public static final class Tuple extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Tuple");
-    
     public final java.util.List<hydra.ext.haskell.ast.Type> value;
     
     public Tuple (java.util.List<hydra.ext.haskell.ast.Type> value) {
@@ -234,8 +222,6 @@ public abstract class Type {
   }
   
   public static final class Variable extends hydra.ext.haskell.ast.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Variable");
-    
     public final hydra.ext.haskell.ast.Name value;
     
     public Variable (hydra.ext.haskell.ast.Name value) {

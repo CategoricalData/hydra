@@ -30,8 +30,6 @@ public abstract class LambdaBody {
   }
   
   public static final class Expression extends hydra.ext.java.syntax.LambdaBody {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
-    
     public final hydra.ext.java.syntax.Expression value;
     
     public Expression (hydra.ext.java.syntax.Expression value) {
@@ -59,8 +57,6 @@ public abstract class LambdaBody {
   }
   
   public static final class Block extends hydra.ext.java.syntax.LambdaBody {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Block");
-    
     public final hydra.ext.java.syntax.Block value;
     
     public Block (hydra.ext.java.syntax.Block value) {

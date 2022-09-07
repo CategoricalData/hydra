@@ -54,8 +54,6 @@ public abstract class Binder {
   }
   
   public static final class Name extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Name");
-    
     public final hydra.ext.coq.syntax.Name value;
     
     public Name (hydra.ext.coq.syntax.Name value) {
@@ -83,8 +81,6 @@ public abstract class Binder {
   }
   
   public static final class Type extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Type");
-    
     public final hydra.ext.coq.syntax.TypeBinders value;
     
     public Type (hydra.ext.coq.syntax.TypeBinders value) {
@@ -112,8 +108,6 @@ public abstract class Binder {
   }
   
   public static final class Term extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term");
-    
     public final hydra.ext.coq.syntax.LetBinder value;
     
     public Term (hydra.ext.coq.syntax.LetBinder value) {
@@ -141,8 +135,6 @@ public abstract class Binder {
   }
   
   public static final class Implicit extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Implicit");
-    
     public final hydra.ext.coq.syntax.ImplicitBinders value;
     
     public Implicit (hydra.ext.coq.syntax.ImplicitBinders value) {
@@ -170,8 +162,6 @@ public abstract class Binder {
   }
   
   public static final class Generalizing extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Generalizing");
-    
     public final hydra.ext.coq.syntax.GeneralizingBinder value;
     
     public Generalizing (hydra.ext.coq.syntax.GeneralizingBinder value) {
@@ -199,8 +189,6 @@ public abstract class Binder {
   }
   
   public static final class Pattern extends hydra.ext.coq.syntax.Binder {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Pattern");
-    
     public final hydra.ext.coq.syntax.Pattern0 value;
     
     public Pattern (hydra.ext.coq.syntax.Pattern0 value) {

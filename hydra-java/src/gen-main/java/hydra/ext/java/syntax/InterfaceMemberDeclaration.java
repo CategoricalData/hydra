@@ -42,8 +42,6 @@ public abstract class InterfaceMemberDeclaration {
   }
   
   public static final class Constant extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Constant");
-    
     public final hydra.ext.java.syntax.ConstantDeclaration value;
     
     public Constant (hydra.ext.java.syntax.ConstantDeclaration value) {
@@ -71,8 +69,6 @@ public abstract class InterfaceMemberDeclaration {
   }
   
   public static final class InterfaceMethod extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceMethod");
-    
     public final hydra.ext.java.syntax.InterfaceMethodDeclaration value;
     
     public InterfaceMethod (hydra.ext.java.syntax.InterfaceMethodDeclaration value) {
@@ -100,8 +96,6 @@ public abstract class InterfaceMemberDeclaration {
   }
   
   public static final class Class_ extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Class");
-    
     public final hydra.ext.java.syntax.ClassDeclaration value;
     
     public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
@@ -129,8 +123,6 @@ public abstract class InterfaceMemberDeclaration {
   }
   
   public static final class Interface extends hydra.ext.java.syntax.InterfaceMemberDeclaration {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Interface");
-    
     public final hydra.ext.java.syntax.InterfaceDeclaration value;
     
     public Interface (hydra.ext.java.syntax.InterfaceDeclaration value) {

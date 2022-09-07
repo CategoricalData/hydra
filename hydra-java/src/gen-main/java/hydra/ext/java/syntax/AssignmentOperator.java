@@ -90,8 +90,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
-    
     public Simple () {
     
     }
@@ -117,8 +115,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Times extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Times");
-    
     public Times () {
     
     }
@@ -144,8 +140,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Div extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Div");
-    
     public Div () {
     
     }
@@ -171,8 +165,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Mod extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Mod");
-    
     public Mod () {
     
     }
@@ -198,8 +190,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Plus extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Plus");
-    
     public Plus () {
     
     }
@@ -225,8 +215,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Minus extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Minus");
-    
     public Minus () {
     
     }
@@ -252,8 +240,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class ShiftLeft extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftLeft");
-    
     public ShiftLeft () {
     
     }
@@ -279,8 +265,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class ShiftRight extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftRight");
-    
     public ShiftRight () {
     
     }
@@ -306,8 +290,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class ShiftRightZeroFill extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftRightZeroFill");
-    
     public ShiftRightZeroFill () {
     
     }
@@ -333,8 +315,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class And extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.And");
-    
     public And () {
     
     }
@@ -360,8 +340,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Xor extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Xor");
-    
     public Xor () {
     
     }
@@ -387,8 +365,6 @@ public abstract class AssignmentOperator {
   }
   
   public static final class Or extends hydra.ext.java.syntax.AssignmentOperator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Or");
-    
     public Or () {
     
     }

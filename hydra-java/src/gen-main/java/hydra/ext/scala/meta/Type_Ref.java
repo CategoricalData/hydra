@@ -42,8 +42,6 @@ public abstract class Type_Ref {
   }
   
   public static final class Name extends hydra.ext.scala.meta.Type_Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Name");
-    
     public final hydra.ext.scala.meta.Type_Name value;
     
     public Name (hydra.ext.scala.meta.Type_Name value) {
@@ -71,8 +69,6 @@ public abstract class Type_Ref {
   }
   
   public static final class Select extends hydra.ext.scala.meta.Type_Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Select");
-    
     public final hydra.ext.scala.meta.Type_Select value;
     
     public Select (hydra.ext.scala.meta.Type_Select value) {
@@ -100,8 +96,6 @@ public abstract class Type_Ref {
   }
   
   public static final class Project extends hydra.ext.scala.meta.Type_Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Project");
-    
     public final hydra.ext.scala.meta.Type_Project value;
     
     public Project (hydra.ext.scala.meta.Type_Project value) {
@@ -129,8 +123,6 @@ public abstract class Type_Ref {
   }
   
   public static final class Singleton extends hydra.ext.scala.meta.Type_Ref {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Singleton");
-    
     public final hydra.ext.scala.meta.Type_Singleton value;
     
     public Singleton (hydra.ext.scala.meta.Type_Singleton value) {

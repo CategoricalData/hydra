@@ -30,8 +30,6 @@ public abstract class Primary {
   }
   
   public static final class NoNewArray extends hydra.ext.java.syntax.Primary {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.NoNewArray");
-    
     public final hydra.ext.java.syntax.PrimaryNoNewArray value;
     
     public NoNewArray (hydra.ext.java.syntax.PrimaryNoNewArray value) {
@@ -59,8 +57,6 @@ public abstract class Primary {
   }
   
   public static final class ArrayCreation extends hydra.ext.java.syntax.Primary {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayCreation");
-    
     public final hydra.ext.java.syntax.ArrayCreationExpression value;
     
     public ArrayCreation (hydra.ext.java.syntax.ArrayCreationExpression value) {

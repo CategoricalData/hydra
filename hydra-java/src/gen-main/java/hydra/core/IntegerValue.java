@@ -78,8 +78,6 @@ public abstract class IntegerValue {
    * An arbitrary-precision integer value
    */
   public static final class Bigint extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Bigint");
-    
     /**
      * An arbitrary-precision integer value
      */
@@ -113,8 +111,6 @@ public abstract class IntegerValue {
    * A 16-bit signed integer value (short value)
    */
   public static final class Int16 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int16");
-    
     /**
      * A 16-bit signed integer value (short value)
      */
@@ -148,8 +144,6 @@ public abstract class IntegerValue {
    * A 32-bit signed integer value (int value)
    */
   public static final class Int32 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int32");
-    
     /**
      * A 32-bit signed integer value (int value)
      */
@@ -183,8 +177,6 @@ public abstract class IntegerValue {
    * A 64-bit signed integer value (long value)
    */
   public static final class Int64 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int64");
-    
     /**
      * A 64-bit signed integer value (long value)
      */
@@ -215,8 +207,6 @@ public abstract class IntegerValue {
   }
   
   public static final class Int8 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int8");
-    
     public final Short value;
     
     public Int8 (Short value) {
@@ -247,8 +237,6 @@ public abstract class IntegerValue {
    * A 16-bit unsigned integer value
    */
   public static final class Uint16 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint16");
-    
     /**
      * A 16-bit unsigned integer value
      */
@@ -279,8 +267,6 @@ public abstract class IntegerValue {
   }
   
   public static final class Uint32 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint32");
-    
     public final Long value;
     
     public Uint32 (Long value) {
@@ -308,8 +294,6 @@ public abstract class IntegerValue {
   }
   
   public static final class Uint64 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint64");
-    
     public final java.math.BigInteger value;
     
     public Uint64 (java.math.BigInteger value) {
@@ -340,8 +324,6 @@ public abstract class IntegerValue {
    * An 8-bit unsigned integer value (byte)
    */
   public static final class Uint8 extends hydra.core.IntegerValue {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint8");
-    
     /**
      * An 8-bit unsigned integer value (byte)
      */

@@ -51,8 +51,6 @@ public abstract class EliminationVariant {
   }
   
   public static final class Element extends hydra.core.EliminationVariant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
-    
     public Element () {
     
     }
@@ -78,8 +76,6 @@ public abstract class EliminationVariant {
   }
   
   public static final class Nominal extends hydra.core.EliminationVariant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
-    
     public Nominal () {
     
     }
@@ -105,8 +101,6 @@ public abstract class EliminationVariant {
   }
   
   public static final class Optional extends hydra.core.EliminationVariant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Optional");
-    
     public Optional () {
     
     }
@@ -132,8 +126,6 @@ public abstract class EliminationVariant {
   }
   
   public static final class Record extends hydra.core.EliminationVariant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
-    
     public Record () {
     
     }
@@ -159,8 +151,6 @@ public abstract class EliminationVariant {
   }
   
   public static final class Union extends hydra.core.EliminationVariant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
-    
     public Union () {
     
     }

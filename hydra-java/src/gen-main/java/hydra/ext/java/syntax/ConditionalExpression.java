@@ -36,8 +36,6 @@ public abstract class ConditionalExpression {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.ConditionalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
-    
     public final hydra.ext.java.syntax.ConditionalOrExpression value;
     
     public Simple (hydra.ext.java.syntax.ConditionalOrExpression value) {
@@ -65,8 +63,6 @@ public abstract class ConditionalExpression {
   }
   
   public static final class TernaryCond extends hydra.ext.java.syntax.ConditionalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TernaryCond");
-    
     public final hydra.ext.java.syntax.ConditionalExpression_TernaryCond value;
     
     public TernaryCond (hydra.ext.java.syntax.ConditionalExpression_TernaryCond value) {
@@ -94,8 +90,6 @@ public abstract class ConditionalExpression {
   }
   
   public static final class TernaryLambda extends hydra.ext.java.syntax.ConditionalExpression {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TernaryLambda");
-    
     public final hydra.ext.java.syntax.ConditionalExpression_TernaryLambda value;
     
     public TernaryLambda (hydra.ext.java.syntax.ConditionalExpression_TernaryLambda value) {

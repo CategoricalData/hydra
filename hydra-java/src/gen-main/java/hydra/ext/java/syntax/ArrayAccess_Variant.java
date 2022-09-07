@@ -30,8 +30,6 @@ public abstract class ArrayAccess_Variant {
   }
   
   public static final class Name extends hydra.ext.java.syntax.ArrayAccess_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Name");
-    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public Name (hydra.ext.java.syntax.ExpressionName value) {
@@ -59,8 +57,6 @@ public abstract class ArrayAccess_Variant {
   }
   
   public static final class Primary extends hydra.ext.java.syntax.ArrayAccess_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primary");
-    
     public final hydra.ext.java.syntax.PrimaryNoNewArray value;
     
     public Primary (hydra.ext.java.syntax.PrimaryNoNewArray value) {
