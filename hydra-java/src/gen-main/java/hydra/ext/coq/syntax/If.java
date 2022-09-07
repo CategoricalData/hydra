@@ -4,6 +4,8 @@ package hydra.ext.coq.syntax;
  * Pattern match on boolean values
  */
 public class If {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.If");
+  
   public final hydra.ext.coq.syntax.Term condition;
   
   public final java.util.Optional<hydra.ext.coq.syntax.ReturnAs> returnAs;

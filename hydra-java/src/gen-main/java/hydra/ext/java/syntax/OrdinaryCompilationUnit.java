@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class OrdinaryCompilationUnit {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.OrdinaryCompilationUnit");
+  
   public final java.util.Optional<hydra.ext.java.syntax.PackageDeclaration> package_;
   
   public final java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports;

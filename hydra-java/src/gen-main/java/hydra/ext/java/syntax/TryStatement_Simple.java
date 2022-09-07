@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TryStatement_Simple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TryStatement.Simple");
+  
   public final hydra.ext.java.syntax.Block block;
   
   public final hydra.ext.java.syntax.Catches catches;

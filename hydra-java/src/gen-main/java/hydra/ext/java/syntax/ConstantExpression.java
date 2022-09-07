@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConstantExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstantExpression");
+  
   public final hydra.ext.java.syntax.Expression value;
   
   public ConstantExpression (hydra.ext.java.syntax.Expression value) {

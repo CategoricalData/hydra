@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A literal value representing an edge id
  */
 public class EdgeId {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.EdgeId");
+  
   /**
    * A literal value representing an edge id
    */

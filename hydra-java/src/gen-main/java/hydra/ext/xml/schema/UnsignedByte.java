@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class UnsignedByte {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedByte");
+  
   public final Byte value;
   
   public UnsignedByte (Byte value) {

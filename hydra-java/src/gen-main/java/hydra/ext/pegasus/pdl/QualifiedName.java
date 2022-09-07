@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class QualifiedName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.QualifiedName");
+  
   public final hydra.ext.pegasus.pdl.Name name;
   
   public final java.util.Optional<hydra.ext.pegasus.pdl.Namespace> namespace;

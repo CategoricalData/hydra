@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Defn_Object {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn.Object");
+  
   public final hydra.ext.scala.meta.Data_Name name;
   
   public Defn_Object (hydra.ext.scala.meta.Data_Name name) {

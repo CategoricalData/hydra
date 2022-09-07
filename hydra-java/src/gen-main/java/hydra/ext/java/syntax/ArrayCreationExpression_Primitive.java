@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ArrayCreationExpression_Primitive {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayCreationExpression.Primitive");
+  
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
   public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;

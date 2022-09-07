@@ -4,6 +4,8 @@ package hydra.core;
  * An equality judgement: less than, equal to, or greater than
  */
 public abstract class Comparison {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Comparison");
+  
   private Comparison () {
   
   }
@@ -37,6 +39,8 @@ public abstract class Comparison {
   }
   
   public static final class LessThan extends hydra.core.Comparison {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LessThan");
+    
     public LessThan () {
     
     }
@@ -62,6 +66,8 @@ public abstract class Comparison {
   }
   
   public static final class EqualTo extends hydra.core.Comparison {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.EqualTo");
+    
     public EqualTo () {
     
     }
@@ -87,6 +93,8 @@ public abstract class Comparison {
   }
   
   public static final class GreaterThan extends hydra.core.Comparison {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.GreaterThan");
+    
     public GreaterThan () {
     
     }

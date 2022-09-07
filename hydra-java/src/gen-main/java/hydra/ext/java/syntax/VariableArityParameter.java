@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class VariableArityParameter {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableArityParameter");
+  
   public final hydra.ext.java.syntax.VariableModifier modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;

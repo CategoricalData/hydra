@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A vertex, comprised of an id and zero or more properties
  */
 public class Vertex {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Vertex");
+  
   public final hydra.ext.tinkerpop.typed.VertexId id;
   
   public final hydra.ext.tinkerpop.typed.Label label;

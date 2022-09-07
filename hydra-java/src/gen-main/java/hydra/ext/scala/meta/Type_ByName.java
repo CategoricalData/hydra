@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_ByName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.ByName");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public Type_ByName (hydra.ext.scala.meta.Type tpe) {

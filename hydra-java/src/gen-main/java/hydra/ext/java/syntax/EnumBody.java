@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class EnumBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EnumBody");
+  
   public final java.util.List<hydra.ext.java.syntax.EnumBody_Element> value;
   
   public EnumBody (java.util.List<hydra.ext.java.syntax.EnumBody_Element> value) {

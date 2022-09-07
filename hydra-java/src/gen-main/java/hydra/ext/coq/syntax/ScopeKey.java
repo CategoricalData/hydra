@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class ScopeKey {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ScopeKey");
+  
   public final hydra.ext.coq.syntax.Ident value;
   
   public ScopeKey (hydra.ext.coq.syntax.Ident value) {

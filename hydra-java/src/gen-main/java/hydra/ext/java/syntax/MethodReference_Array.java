@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Array {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodReference.Array");
+  
   public final hydra.ext.java.syntax.ArrayType value;
   
   public MethodReference_Array (hydra.ext.java.syntax.ArrayType value) {

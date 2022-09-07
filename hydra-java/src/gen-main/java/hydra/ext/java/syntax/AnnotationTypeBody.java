@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AnnotationTypeBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationTypeBody");
+  
   public final java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value;
   
   public AnnotationTypeBody (java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value) {

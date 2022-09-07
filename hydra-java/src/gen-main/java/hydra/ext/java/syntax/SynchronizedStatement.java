@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SynchronizedStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SynchronizedStatement");
+  
   public final hydra.ext.java.syntax.Expression expression;
   
   public final hydra.ext.java.syntax.Block block;

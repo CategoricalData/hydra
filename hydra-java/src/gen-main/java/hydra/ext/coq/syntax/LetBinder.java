@@ -4,6 +4,8 @@ package hydra.ext.coq.syntax;
  * Some constructions allow the binding of a variable to value. This is called a “let-binder”.
  */
 public class LetBinder {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.LetBinder");
+  
   public final hydra.ext.coq.syntax.Name name;
   
   public final java.util.Optional<hydra.ext.coq.syntax.Type> type;

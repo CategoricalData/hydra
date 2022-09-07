@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Name {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Name");
+  
   public final java.util.Optional<hydra.ext.coq.syntax.Ident> value;
   
   public Name (java.util.Optional<hydra.ext.coq.syntax.Ident> value) {

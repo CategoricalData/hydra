@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class TypeNameArray {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeNameArray");
+  
   private TypeNameArray () {
   
   }
@@ -28,6 +30,8 @@ public abstract class TypeNameArray {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.TypeNameArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
+    
     public final hydra.ext.java.syntax.TypeName value;
     
     public Simple (hydra.ext.java.syntax.TypeName value) {
@@ -55,6 +59,8 @@ public abstract class TypeNameArray {
   }
   
   public static final class Array extends hydra.ext.java.syntax.TypeNameArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Array");
+    
     public final hydra.ext.java.syntax.TypeNameArray value;
     
     public Array (hydra.ext.java.syntax.TypeNameArray value) {

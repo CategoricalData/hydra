@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ElementValuePair {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ElementValuePair");
+  
   public final hydra.ext.java.syntax.Identifier key;
   
   public final hydra.ext.java.syntax.ElementValue value;

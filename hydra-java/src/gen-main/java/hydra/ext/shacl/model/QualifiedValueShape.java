@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
  */
 public class QualifiedValueShape {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.QualifiedValueShape");
+  
   public final hydra.ext.shacl.model.Shape shape;
   
   public final java.math.BigInteger qualifiedManCount;

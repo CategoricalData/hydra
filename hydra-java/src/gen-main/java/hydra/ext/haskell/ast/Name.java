@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public abstract class Name {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Name");
+  
   private Name () {
   
   }
@@ -34,6 +36,8 @@ public abstract class Name {
   }
   
   public static final class Implicit extends hydra.ext.haskell.ast.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Implicit");
+    
     public final hydra.ext.haskell.ast.QualifiedName value;
     
     public Implicit (hydra.ext.haskell.ast.QualifiedName value) {
@@ -61,6 +65,8 @@ public abstract class Name {
   }
   
   public static final class Normal extends hydra.ext.haskell.ast.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Normal");
+    
     public final hydra.ext.haskell.ast.QualifiedName value;
     
     public Normal (hydra.ext.haskell.ast.QualifiedName value) {
@@ -88,6 +94,8 @@ public abstract class Name {
   }
   
   public static final class Parens extends hydra.ext.haskell.ast.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Parens");
+    
     public final hydra.ext.haskell.ast.QualifiedName value;
     
     public Parens (hydra.ext.haskell.ast.QualifiedName value) {

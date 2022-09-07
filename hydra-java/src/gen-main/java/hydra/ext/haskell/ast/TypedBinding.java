@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class TypedBinding {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypedBinding");
+  
   public final hydra.ext.haskell.ast.TypeSignature typeSignature;
   
   public final hydra.ext.haskell.ast.ValueBinding valueBinding;

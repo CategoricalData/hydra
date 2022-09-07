@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A case expression
  */
 public class Expression_Case {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.Case");
+  
   public final hydra.ext.haskell.ast.Expression case_;
   
   public final java.util.List<hydra.ext.haskell.ast.Alternative> alternatives;

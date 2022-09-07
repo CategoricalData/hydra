@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class IDREFS {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.IDREFS");
+  
   public final String value;
   
   public IDREFS (String value) {

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class NaturalArg {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.NaturalArg");
+  
   public final hydra.ext.coq.syntax.Natural natural;
   
   public final hydra.ext.coq.syntax.Term term;

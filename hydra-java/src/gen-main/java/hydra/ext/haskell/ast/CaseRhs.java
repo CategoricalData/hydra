@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * The right-hand side of a pattern-matching alternative
  */
 public class CaseRhs {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.CaseRhs");
+  
   /**
    * The right-hand side of a pattern-matching alternative
    */

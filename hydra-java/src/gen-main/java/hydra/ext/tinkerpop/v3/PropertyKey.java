@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * A property key
  */
 public class PropertyKey {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.PropertyKey");
+  
   /**
    * A property key
    */

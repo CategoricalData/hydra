@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class VariableAccess {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableAccess");
+  
   private VariableAccess () {
   
   }
@@ -28,6 +30,8 @@ public abstract class VariableAccess {
   }
   
   public static final class ExpressionName extends hydra.ext.java.syntax.VariableAccess {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ExpressionName");
+    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public ExpressionName (hydra.ext.java.syntax.ExpressionName value) {
@@ -55,6 +59,8 @@ public abstract class VariableAccess {
   }
   
   public static final class FieldAccess extends hydra.ext.java.syntax.VariableAccess {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess");
+    
     public final hydra.ext.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class DefaultValue {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.DefaultValue");
+  
   public final hydra.ext.java.syntax.ElementValue value;
   
   public DefaultValue (hydra.ext.java.syntax.ElementValue value) {

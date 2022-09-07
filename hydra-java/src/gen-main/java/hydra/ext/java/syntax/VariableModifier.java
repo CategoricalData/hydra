@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class VariableModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableModifier");
+  
   private VariableModifier () {
   
   }
@@ -28,6 +30,8 @@ public abstract class VariableModifier {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.VariableModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {
@@ -55,6 +59,8 @@ public abstract class VariableModifier {
   }
   
   public static final class Final extends hydra.ext.java.syntax.VariableModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Final");
+    
     public Final () {
     
     }

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Resource {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Resource");
+  
   private Resource () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Resource {
   }
   
   public static final class Local extends hydra.ext.java.syntax.Resource {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Local");
+    
     public final hydra.ext.java.syntax.Resource_Local value;
     
     public Local (hydra.ext.java.syntax.Resource_Local value) {
@@ -55,6 +59,8 @@ public abstract class Resource {
   }
   
   public static final class Variable extends hydra.ext.java.syntax.Resource {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Variable");
+    
     public final hydra.ext.java.syntax.VariableAccess value;
     
     public Variable (hydra.ext.java.syntax.VariableAccess value) {

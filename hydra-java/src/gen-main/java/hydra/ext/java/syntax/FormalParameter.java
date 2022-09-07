@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class FormalParameter {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FormalParameter");
+  
   private FormalParameter () {
   
   }
@@ -28,6 +30,8 @@ public abstract class FormalParameter {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.FormalParameter {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
+    
     public final hydra.ext.java.syntax.FormalParameter_Simple value;
     
     public Simple (hydra.ext.java.syntax.FormalParameter_Simple value) {
@@ -55,6 +59,8 @@ public abstract class FormalParameter {
   }
   
   public static final class VariableArity extends hydra.ext.java.syntax.FormalParameter {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableArity");
+    
     public final hydra.ext.java.syntax.VariableArityParameter value;
     
     public VariableArity (hydra.ext.java.syntax.VariableArityParameter value) {

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Match {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Match");
+  
   public final java.util.List<hydra.ext.coq.syntax.CaseItem> caseItems;
   
   public final java.util.Optional<hydra.ext.coq.syntax.Term100> return_;

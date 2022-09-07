@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class Label {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Label");
+  
   public final String value;
   
   public Label (String value) {

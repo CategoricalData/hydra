@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class LetNamed {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.LetNamed");
+  
   public final hydra.ext.coq.syntax.LetBinder binder;
   
   public final java.util.List<hydra.ext.coq.syntax.Binder> binders;

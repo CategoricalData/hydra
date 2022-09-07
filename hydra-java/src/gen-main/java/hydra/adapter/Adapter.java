@@ -1,6 +1,8 @@
 package hydra.adapter;
 
 public class Adapter<S, T, V> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.Adapter");
+  
   public final Boolean isLossy;
   
   public final T source;

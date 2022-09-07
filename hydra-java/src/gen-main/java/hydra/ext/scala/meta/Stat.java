@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Stat {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Stat");
+  
   private Stat () {
   
   }
@@ -40,6 +42,8 @@ public abstract class Stat {
   }
   
   public static final class Term extends hydra.ext.scala.meta.Stat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Term");
+    
     public final hydra.ext.scala.meta.Data value;
     
     public Term (hydra.ext.scala.meta.Data value) {
@@ -67,6 +71,8 @@ public abstract class Stat {
   }
   
   public static final class Decl extends hydra.ext.scala.meta.Stat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Decl");
+    
     public final hydra.ext.scala.meta.Decl value;
     
     public Decl (hydra.ext.scala.meta.Decl value) {
@@ -94,6 +100,8 @@ public abstract class Stat {
   }
   
   public static final class Defn extends hydra.ext.scala.meta.Stat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn");
+    
     public final hydra.ext.scala.meta.Defn value;
     
     public Defn (hydra.ext.scala.meta.Defn value) {
@@ -121,6 +129,8 @@ public abstract class Stat {
   }
   
   public static final class ImportExport extends hydra.ext.scala.meta.Stat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ImportExport");
+    
     public final hydra.ext.scala.meta.ImportExportStat value;
     
     public ImportExport (hydra.ext.scala.meta.ImportExportStat value) {

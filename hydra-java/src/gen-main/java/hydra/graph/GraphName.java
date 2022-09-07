@@ -4,6 +4,8 @@ package hydra.graph;
  * A unique identifier for a graph within a graph set
  */
 public class GraphName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.GraphName");
+  
   /**
    * A unique identifier for a graph within a graph set
    */

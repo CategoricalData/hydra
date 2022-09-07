@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Annotate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Annotate");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public final java.util.List<hydra.ext.scala.meta.Mod_Annot> annots;

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Singleton {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Singleton");
+  
   public final hydra.ext.scala.meta.Data_Ref ref;
   
   public Type_Singleton (hydra.ext.scala.meta.Data_Ref ref) {

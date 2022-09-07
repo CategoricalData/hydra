@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class TypeCase {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TypeCase");
+  
   public final hydra.ext.scala.meta.Type pat;
   
   public final hydra.ext.scala.meta.Type body;

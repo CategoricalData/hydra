@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * The type of a reference to an edge by id
  */
 public class EdgeIdType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.EdgeIdType");
+  
   /**
    * The type of a reference to an edge by id
    */

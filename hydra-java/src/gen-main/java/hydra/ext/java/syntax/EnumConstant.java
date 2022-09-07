@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class EnumConstant {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EnumConstant");
+  
   public final java.util.List<hydra.ext.java.syntax.EnumConstantModifier> modifiers;
   
   public final hydra.ext.java.syntax.Identifier identifier;

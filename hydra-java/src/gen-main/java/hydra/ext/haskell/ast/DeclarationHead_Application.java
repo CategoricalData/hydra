@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An application-style declaration head
  */
 public class DeclarationHead_Application {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.DeclarationHead.Application");
+  
   public final hydra.ext.haskell.ast.DeclarationHead function;
   
   public final hydra.ext.haskell.ast.Variable operand;

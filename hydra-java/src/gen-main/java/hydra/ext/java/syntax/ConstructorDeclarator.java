@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConstructorDeclarator {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstructorDeclarator");
+  
   public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
   
   public final hydra.ext.java.syntax.SimpleTypeName name;

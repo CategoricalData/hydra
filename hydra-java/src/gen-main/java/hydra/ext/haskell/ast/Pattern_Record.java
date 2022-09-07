@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_Record {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Pattern.Record");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final java.util.List<hydra.ext.haskell.ast.PatternField> fields;

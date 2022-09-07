@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_ApplyInfix {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.ApplyInfix");
+  
   public final hydra.ext.scala.meta.Type lhs;
   
   public final hydra.ext.scala.meta.Type_Name op;

@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * A graph; a self-contained collection of vertices and edges
  */
 public class Graph<V, E, P> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.Graph");
+  
   public final java.util.Set<hydra.ext.tinkerpop.v3.Vertex<V, P>> vertices;
   
   public final java.util.Set<hydra.ext.tinkerpop.v3.Edge<V, E, P>> edges;

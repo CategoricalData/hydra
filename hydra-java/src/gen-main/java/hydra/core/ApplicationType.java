@@ -4,6 +4,8 @@ package hydra.core;
  * The type-level analog of an application term
  */
 public class ApplicationType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.ApplicationType");
+  
   /**
    * The left-hand side of the application
    */

@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * The type of a reference to a vertex by id
  */
 public class VertexIdType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.VertexIdType");
+  
   /**
    * The type of a reference to a vertex by id
    */

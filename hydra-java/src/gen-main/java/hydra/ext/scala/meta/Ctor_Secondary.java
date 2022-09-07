@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Ctor_Secondary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ctor.Secondary");
+  
   public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
   public final hydra.ext.scala.meta.Name name;

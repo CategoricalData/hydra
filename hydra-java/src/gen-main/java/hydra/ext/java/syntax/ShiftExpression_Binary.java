@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ShiftExpression_Binary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftExpression.Binary");
+  
   public final hydra.ext.java.syntax.ShiftExpression lhs;
   
   public final hydra.ext.java.syntax.AdditiveExpression rhs;

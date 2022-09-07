@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class ValueBinding_Simple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ValueBinding.Simple");
+  
   public final hydra.ext.haskell.ast.Pattern pattern;
   
   public final hydra.ext.haskell.ast.RightHandSide rhs;

@@ -4,6 +4,8 @@ package hydra.core;
  * A labeled record or union type
  */
 public class RowType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.RowType");
+  
   public final hydra.core.Name typeName;
   
   public final java.util.List<hydra.core.FieldType<M>> fields;

@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A property key or map key
  */
 public class Key {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Key");
+  
   /**
    * A property key or map key
    */

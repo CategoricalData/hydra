@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Literal {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Literal");
+  
   private Literal () {
   
   }
@@ -52,6 +54,8 @@ public abstract class Literal {
   }
   
   public static final class Null extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Null");
+    
     public Null () {
     
     }
@@ -77,6 +81,8 @@ public abstract class Literal {
   }
   
   public static final class Integer_ extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Integer");
+    
     public final hydra.ext.java.syntax.IntegerLiteral value;
     
     public Integer_ (hydra.ext.java.syntax.IntegerLiteral value) {
@@ -104,6 +110,8 @@ public abstract class Literal {
   }
   
   public static final class FloatingPoint extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FloatingPoint");
+    
     public final hydra.ext.java.syntax.FloatingPointLiteral value;
     
     public FloatingPoint (hydra.ext.java.syntax.FloatingPointLiteral value) {
@@ -131,6 +139,8 @@ public abstract class Literal {
   }
   
   public static final class Boolean_ extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Boolean");
+    
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -158,6 +168,8 @@ public abstract class Literal {
   }
   
   public static final class Character_ extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Character");
+    
     public final Character value;
     
     public Character_ (Character value) {
@@ -185,6 +197,8 @@ public abstract class Literal {
   }
   
   public static final class String_ extends hydra.ext.java.syntax.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.String");
+    
     public final hydra.ext.java.syntax.StringLiteral value;
     
     public String_ (hydra.ext.java.syntax.StringLiteral value) {

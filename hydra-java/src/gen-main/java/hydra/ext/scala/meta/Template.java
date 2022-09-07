@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Template {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Template");
+  
   public final java.util.List<hydra.ext.scala.meta.Stat> early;
   
   public final java.util.List<hydra.ext.scala.meta.Init> inits;

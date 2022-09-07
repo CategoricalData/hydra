@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class PostfixExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostfixExpression");
+  
   private PostfixExpression () {
   
   }
@@ -40,6 +42,8 @@ public abstract class PostfixExpression {
   }
   
   public static final class Primary extends hydra.ext.java.syntax.PostfixExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primary");
+    
     public final hydra.ext.java.syntax.Primary value;
     
     public Primary (hydra.ext.java.syntax.Primary value) {
@@ -67,6 +71,8 @@ public abstract class PostfixExpression {
   }
   
   public static final class Name extends hydra.ext.java.syntax.PostfixExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Name");
+    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public Name (hydra.ext.java.syntax.ExpressionName value) {
@@ -94,6 +100,8 @@ public abstract class PostfixExpression {
   }
   
   public static final class PostIncrement extends hydra.ext.java.syntax.PostfixExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostIncrement");
+    
     public final hydra.ext.java.syntax.PostIncrementExpression value;
     
     public PostIncrement (hydra.ext.java.syntax.PostIncrementExpression value) {
@@ -121,6 +129,8 @@ public abstract class PostfixExpression {
   }
   
   public static final class PostDecrement extends hydra.ext.java.syntax.PostfixExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostDecrement");
+    
     public final hydra.ext.java.syntax.PostDecrementExpression value;
     
     public PostDecrement (hydra.ext.java.syntax.PostDecrementExpression value) {

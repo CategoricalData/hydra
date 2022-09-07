@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class CastExpression_Lambda {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.CastExpression.Lambda");
+  
   public final hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds;
   
   public final hydra.ext.java.syntax.LambdaExpression expression;

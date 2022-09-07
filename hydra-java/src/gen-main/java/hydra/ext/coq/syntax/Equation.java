@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Equation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Equation");
+  
   public final java.util.List<java.util.List<hydra.ext.coq.syntax.Pattern>> pattern;
   
   public final hydra.ext.coq.syntax.Term term;

@@ -1,6 +1,8 @@
 package hydra.phantoms;
 
 public class Definition<A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Definition");
+  
   public final hydra.core.Name name;
   
   public final hydra.phantoms.Datum<A> datum;

@@ -4,6 +4,8 @@ package hydra.core;
  * The name of a field
  */
 public class FieldName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldName");
+  
   /**
    * The name of a field
    */

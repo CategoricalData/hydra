@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Features specific to a operations of a graph.
  */
 public class GraphFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.GraphFeatures");
+  
   /**
    * Determines if the Graph implementation supports GraphComputer based processing.
    */

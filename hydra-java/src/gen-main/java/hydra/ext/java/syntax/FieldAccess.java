@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class FieldAccess {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess");
+  
   public final hydra.ext.java.syntax.FieldAccess_Qualifier qualifier;
   
   public final hydra.ext.java.syntax.Identifier identifier;

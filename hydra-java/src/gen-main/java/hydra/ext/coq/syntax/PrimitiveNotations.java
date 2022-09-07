@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class PrimitiveNotations {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.PrimitiveNotations");
+  
   private PrimitiveNotations () {
   
   }
@@ -28,6 +30,8 @@ public abstract class PrimitiveNotations {
   }
   
   public static final class Number_ extends hydra.ext.coq.syntax.PrimitiveNotations {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Number");
+    
     public final hydra.ext.coq.syntax.Number_ value;
     
     public Number_ (hydra.ext.coq.syntax.Number_ value) {
@@ -55,6 +59,8 @@ public abstract class PrimitiveNotations {
   }
   
   public static final class String_ extends hydra.ext.coq.syntax.PrimitiveNotations {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.String");
+    
     public final hydra.ext.coq.syntax.String_ value;
     
     public String_ (hydra.ext.coq.syntax.String_ value) {

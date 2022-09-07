@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class IntegralType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IntegralType");
+  
   private IntegralType () {
   
   }
@@ -46,6 +48,8 @@ public abstract class IntegralType {
   }
   
   public static final class Byte_ extends hydra.ext.java.syntax.IntegralType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Byte");
+    
     public Byte_ () {
     
     }
@@ -71,6 +75,8 @@ public abstract class IntegralType {
   }
   
   public static final class Short_ extends hydra.ext.java.syntax.IntegralType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Short");
+    
     public Short_ () {
     
     }
@@ -96,6 +102,8 @@ public abstract class IntegralType {
   }
   
   public static final class Int extends hydra.ext.java.syntax.IntegralType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Int");
+    
     public Int () {
     
     }
@@ -121,6 +129,8 @@ public abstract class IntegralType {
   }
   
   public static final class Long_ extends hydra.ext.java.syntax.IntegralType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Long");
+    
     public Long_ () {
     
     }
@@ -146,6 +156,8 @@ public abstract class IntegralType {
   }
   
   public static final class Char extends hydra.ext.java.syntax.IntegralType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Char");
+    
     public Char () {
     
     }

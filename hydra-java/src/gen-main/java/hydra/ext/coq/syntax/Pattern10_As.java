@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern10_As {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Pattern10.As");
+  
   public final hydra.ext.coq.syntax.Pattern1 pattern;
   
   public final hydra.ext.coq.syntax.Name as;

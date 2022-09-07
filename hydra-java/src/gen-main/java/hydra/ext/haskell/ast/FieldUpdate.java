@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A field name and value
  */
 public class FieldUpdate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.FieldUpdate");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final hydra.ext.haskell.ast.Expression value;

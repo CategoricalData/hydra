@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Unimport {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Importee.Unimport");
+  
   public final hydra.ext.scala.meta.Name name;
   
   public Importee_Unimport (hydra.ext.scala.meta.Name name) {

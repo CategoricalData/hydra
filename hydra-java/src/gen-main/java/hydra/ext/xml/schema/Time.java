@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Time {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Time");
+  
   public final String value;
   
   public Time (String value) {

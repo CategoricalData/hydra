@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An update record expression
  */
 public class Expression_UpdateRecord {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.UpdateRecord");
+  
   public final hydra.ext.haskell.ast.Expression inner;
   
   public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;

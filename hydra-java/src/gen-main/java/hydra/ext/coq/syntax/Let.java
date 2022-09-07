@@ -4,6 +4,8 @@ package hydra.ext.coq.syntax;
  * A let-in definition
  */
 public class Let {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Let");
+  
   public final hydra.ext.coq.syntax.LetBindings bindings;
   
   public final hydra.ext.coq.syntax.Term in;

@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class NamePart {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.NamePart");
+  
   public final String value;
   
   public NamePart (String value) {

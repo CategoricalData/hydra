@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ClassBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassBody");
+  
   public final java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value;
   
   public ClassBody (java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value) {

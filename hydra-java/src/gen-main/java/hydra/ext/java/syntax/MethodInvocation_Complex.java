@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodInvocation_Complex {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodInvocation.Complex");
+  
   public final hydra.ext.java.syntax.MethodInvocation_Variant variant;
   
   public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;

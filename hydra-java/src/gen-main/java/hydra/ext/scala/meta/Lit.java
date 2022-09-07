@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Lit {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Lit");
+  
   private Lit () {
   
   }
@@ -88,6 +90,8 @@ public abstract class Lit {
   }
   
   public static final class Boolean_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Boolean");
+    
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -115,6 +119,8 @@ public abstract class Lit {
   }
   
   public static final class Byte_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Byte");
+    
     public final Short value;
     
     public Byte_ (Short value) {
@@ -142,6 +148,8 @@ public abstract class Lit {
   }
   
   public static final class Char extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Char");
+    
     public final Character value;
     
     public Char (Character value) {
@@ -169,6 +177,8 @@ public abstract class Lit {
   }
   
   public static final class Double_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Double");
+    
     public final Double value;
     
     public Double_ (Double value) {
@@ -196,6 +206,8 @@ public abstract class Lit {
   }
   
   public static final class Float_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Float");
+    
     public final Float value;
     
     public Float_ (Float value) {
@@ -223,6 +235,8 @@ public abstract class Lit {
   }
   
   public static final class Int extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Int");
+    
     public final Integer value;
     
     public Int (Integer value) {
@@ -250,6 +264,8 @@ public abstract class Lit {
   }
   
   public static final class Long_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Long");
+    
     public final Long value;
     
     public Long_ (Long value) {
@@ -277,6 +293,8 @@ public abstract class Lit {
   }
   
   public static final class Null extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Null");
+    
     public Null () {
     
     }
@@ -302,6 +320,8 @@ public abstract class Lit {
   }
   
   public static final class Short_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Short");
+    
     public final Short value;
     
     public Short_ (Short value) {
@@ -329,6 +349,8 @@ public abstract class Lit {
   }
   
   public static final class String_ extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.String");
+    
     public final String value;
     
     public String_ (String value) {
@@ -356,6 +378,8 @@ public abstract class Lit {
   }
   
   public static final class Symbol extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Symbol");
+    
     public final hydra.ext.scala.meta.ScalaSymbol value;
     
     public Symbol (hydra.ext.scala.meta.ScalaSymbol value) {
@@ -383,6 +407,8 @@ public abstract class Lit {
   }
   
   public static final class Unit extends hydra.ext.scala.meta.Lit {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Unit");
+    
     public Unit () {
     
     }

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class EnhancedForStatementNoShortIf {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EnhancedForStatementNoShortIf");
+  
   public final hydra.ext.java.syntax.EnhancedForCond cond;
   
   public final hydra.ext.java.syntax.StatementNoShortIf body;

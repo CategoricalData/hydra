@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes
  */
 public class NodeShape {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.NodeShape");
+  
   public final hydra.ext.shacl.model.CommonProperties common;
   
   public NodeShape (hydra.ext.shacl.model.CommonProperties common) {

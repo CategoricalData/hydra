@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Catches {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Catches");
+  
   public final java.util.List<hydra.ext.java.syntax.CatchClause> value;
   
   public Catches (java.util.List<hydra.ext.java.syntax.CatchClause> value) {

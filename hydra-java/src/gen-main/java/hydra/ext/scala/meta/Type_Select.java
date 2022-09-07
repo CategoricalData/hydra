@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Select {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Select");
+  
   public final hydra.ext.scala.meta.Data_Ref qual;
   
   public final hydra.ext.scala.meta.Type_Name name;

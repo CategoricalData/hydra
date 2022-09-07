@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AdditiveExpression_Binary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AdditiveExpression.Binary");
+  
   public final hydra.ext.java.syntax.AdditiveExpression lhs;
   
   public final hydra.ext.java.syntax.MultiplicativeExpression rhs;

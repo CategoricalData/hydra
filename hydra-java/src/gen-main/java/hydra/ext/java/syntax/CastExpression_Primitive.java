@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class CastExpression_Primitive {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.CastExpression.Primitive");
+  
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
   public final hydra.ext.java.syntax.UnaryExpression expression;

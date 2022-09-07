@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Annotate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Annotate");
+  
   public final hydra.ext.scala.meta.Data expr;
   
   public final java.util.List<hydra.ext.scala.meta.Mod_Annot> annots;

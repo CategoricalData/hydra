@@ -1,6 +1,8 @@
 package hydra.ext.rdf.syntax;
 
 public class Iri {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Iri");
+  
   public final String value;
   
   public Iri (String value) {

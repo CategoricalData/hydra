@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Expression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
+  
   private Expression () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Expression {
   }
   
   public static final class Lambda extends hydra.ext.java.syntax.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Lambda");
+    
     public final hydra.ext.java.syntax.LambdaExpression value;
     
     public Lambda (hydra.ext.java.syntax.LambdaExpression value) {
@@ -55,6 +59,8 @@ public abstract class Expression {
   }
   
   public static final class Assignment extends hydra.ext.java.syntax.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Assignment");
+    
     public final hydra.ext.java.syntax.AssignmentExpression value;
     
     public Assignment (hydra.ext.java.syntax.AssignmentExpression value) {

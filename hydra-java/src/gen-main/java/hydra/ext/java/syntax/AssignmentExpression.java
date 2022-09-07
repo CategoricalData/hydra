@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class AssignmentExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AssignmentExpression");
+  
   private AssignmentExpression () {
   
   }
@@ -28,6 +30,8 @@ public abstract class AssignmentExpression {
   }
   
   public static final class Conditional extends hydra.ext.java.syntax.AssignmentExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Conditional");
+    
     public final hydra.ext.java.syntax.ConditionalExpression value;
     
     public Conditional (hydra.ext.java.syntax.ConditionalExpression value) {
@@ -55,6 +59,8 @@ public abstract class AssignmentExpression {
   }
   
   public static final class Assignment extends hydra.ext.java.syntax.AssignmentExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Assignment");
+    
     public final hydra.ext.java.syntax.Assignment value;
     
     public Assignment (hydra.ext.java.syntax.Assignment value) {

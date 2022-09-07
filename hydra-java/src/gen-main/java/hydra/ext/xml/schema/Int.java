@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Int {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Int");
+  
   public final Integer value;
   
   public Int (Integer value) {

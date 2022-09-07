@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class MethodInvocation_Header {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodInvocation.Header");
+  
   private MethodInvocation_Header () {
   
   }
@@ -28,6 +30,8 @@ public abstract class MethodInvocation_Header {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.MethodInvocation_Header {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
+    
     public final hydra.ext.java.syntax.MethodName value;
     
     public Simple (hydra.ext.java.syntax.MethodName value) {
@@ -55,6 +59,8 @@ public abstract class MethodInvocation_Header {
   }
   
   public static final class Complex extends hydra.ext.java.syntax.MethodInvocation_Header {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Complex");
+    
     public final hydra.ext.java.syntax.MethodInvocation_Complex value;
     
     public Complex (hydra.ext.java.syntax.MethodInvocation_Complex value) {

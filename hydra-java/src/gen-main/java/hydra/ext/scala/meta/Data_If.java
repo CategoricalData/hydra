@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_If {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.If");
+  
   public final hydra.ext.scala.meta.Data cond;
   
   public final hydra.ext.scala.meta.Data thenp;

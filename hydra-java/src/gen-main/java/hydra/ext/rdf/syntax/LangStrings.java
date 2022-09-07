@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * A convenience type which provides at most one string value per language, and optionally a value without a language
  */
 public class LangStrings {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.LangStrings");
+  
   /**
    * A convenience type which provides at most one string value per language, and optionally a value without a language
    */

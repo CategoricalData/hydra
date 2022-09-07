@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class RecordSchema {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.RecordSchema");
+  
   public final java.util.List<hydra.ext.pegasus.pdl.RecordField> fields;
   
   public final java.util.List<hydra.ext.pegasus.pdl.NamedSchema> includes;

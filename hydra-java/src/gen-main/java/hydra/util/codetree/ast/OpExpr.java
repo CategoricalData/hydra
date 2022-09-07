@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * An operator expression
  */
 public class OpExpr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.OpExpr");
+  
   public final hydra.util.codetree.ast.Op op;
   
   public final hydra.util.codetree.ast.Expr lhs;

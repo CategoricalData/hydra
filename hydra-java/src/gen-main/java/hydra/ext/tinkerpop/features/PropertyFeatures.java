@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * A base interface for Edge or Vertex Property features.
  */
 public class PropertyFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.PropertyFeatures");
+  
   public final hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
   /**

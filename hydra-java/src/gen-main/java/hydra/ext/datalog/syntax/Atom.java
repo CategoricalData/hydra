@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Atom {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Atom");
+  
   public final hydra.ext.datalog.syntax.Relation relation;
   
   public final hydra.ext.datalog.syntax.TermList termList;

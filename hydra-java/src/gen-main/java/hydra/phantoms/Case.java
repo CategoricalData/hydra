@@ -1,6 +1,8 @@
 package hydra.phantoms;
 
 public class Case<A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Case");
+  
   public final hydra.core.FieldName value;
   
   public Case (hydra.core.FieldName value) {

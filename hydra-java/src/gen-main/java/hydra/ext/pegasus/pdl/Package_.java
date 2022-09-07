@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class Package_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Package");
+  
   public final String value;
   
   public Package_ (String value) {

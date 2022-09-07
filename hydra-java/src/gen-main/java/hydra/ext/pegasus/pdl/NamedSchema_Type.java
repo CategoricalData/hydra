@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public abstract class NamedSchema_Type {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.NamedSchema.Type");
+  
   private NamedSchema_Type () {
   
   }
@@ -34,6 +36,8 @@ public abstract class NamedSchema_Type {
   }
   
   public static final class Record extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Record");
+    
     public final hydra.ext.pegasus.pdl.RecordSchema value;
     
     public Record (hydra.ext.pegasus.pdl.RecordSchema value) {
@@ -61,6 +65,8 @@ public abstract class NamedSchema_Type {
   }
   
   public static final class Enum_ extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Enum");
+    
     public final hydra.ext.pegasus.pdl.EnumSchema value;
     
     public Enum_ (hydra.ext.pegasus.pdl.EnumSchema value) {
@@ -88,6 +94,8 @@ public abstract class NamedSchema_Type {
   }
   
   public static final class Typeref extends hydra.ext.pegasus.pdl.NamedSchema_Type {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Typeref");
+    
     public final hydra.ext.pegasus.pdl.Schema value;
     
     public Typeref (hydra.ext.pegasus.pdl.Schema value) {

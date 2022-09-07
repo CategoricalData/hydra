@@ -1,6 +1,8 @@
 package hydra.core;
 
 public class CaseStatement<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.CaseStatement");
+  
   public final hydra.core.Name typeName;
   
   public final java.util.List<hydra.core.Field<M>> cases;

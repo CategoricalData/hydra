@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Forall {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Forall");
+  
   public final hydra.ext.coq.syntax.OpenBinders binders;
   
   public final hydra.ext.coq.syntax.Type type;

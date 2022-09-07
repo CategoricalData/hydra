@@ -4,6 +4,8 @@ package hydra.core;
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
 public class Union<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
+  
   public final hydra.core.Name typeName;
   
   public final hydra.core.Field<M> field;

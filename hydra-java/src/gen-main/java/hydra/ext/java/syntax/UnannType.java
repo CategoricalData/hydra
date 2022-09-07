@@ -4,6 +4,8 @@ package hydra.ext.java.syntax;
  * A Type which does not allow annotations
  */
 public class UnannType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.UnannType");
+  
   /**
    * A Type which does not allow annotations
    */

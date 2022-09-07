@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Assign {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Assign");
+  
   public final hydra.ext.scala.meta.Data lhs;
   
   public final hydra.ext.scala.meta.Data rhs;

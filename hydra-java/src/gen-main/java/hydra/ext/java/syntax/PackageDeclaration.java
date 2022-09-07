@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PackageDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PackageDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers;
   
   public final java.util.List<hydra.ext.java.syntax.Identifier> identifiers;

@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public abstract class LocalBinding {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.LocalBinding");
+  
   private LocalBinding () {
   
   }
@@ -28,6 +30,8 @@ public abstract class LocalBinding {
   }
   
   public static final class Signature extends hydra.ext.haskell.ast.LocalBinding {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Signature");
+    
     public final hydra.ext.haskell.ast.TypeSignature value;
     
     public Signature (hydra.ext.haskell.ast.TypeSignature value) {
@@ -55,6 +59,8 @@ public abstract class LocalBinding {
   }
   
   public static final class Value extends hydra.ext.haskell.ast.LocalBinding {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Value");
+    
     public final hydra.ext.haskell.ast.ValueBinding value;
     
     public Value (hydra.ext.haskell.ast.ValueBinding value) {

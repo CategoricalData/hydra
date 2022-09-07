@@ -1,6 +1,8 @@
 package hydra.ext.atlas.model;
 
 public abstract class TypeCategory {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.TypeCategory");
+  
   private TypeCategory () {
   
   }
@@ -76,6 +78,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Primitive extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Primitive");
+    
     public Primitive () {
     
     }
@@ -101,6 +105,8 @@ public abstract class TypeCategory {
   }
   
   public static final class ObjectIdType extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.ObjectIdType");
+    
     public ObjectIdType () {
     
     }
@@ -126,6 +132,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Enum_ extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Enum");
+    
     public Enum_ () {
     
     }
@@ -151,6 +159,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Struct extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Struct");
+    
     public Struct () {
     
     }
@@ -176,6 +186,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Classification extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Classification");
+    
     public Classification () {
     
     }
@@ -201,6 +213,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Entity extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Entity");
+    
     public Entity () {
     
     }
@@ -226,6 +240,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Array extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Array");
+    
     public Array () {
     
     }
@@ -251,6 +267,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Map extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Map");
+    
     public Map () {
     
     }
@@ -276,6 +294,8 @@ public abstract class TypeCategory {
   }
   
   public static final class Relationship extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Relationship");
+    
     public Relationship () {
     
     }
@@ -301,6 +321,8 @@ public abstract class TypeCategory {
   }
   
   public static final class BusinessMetadata extends hydra.ext.atlas.model.TypeCategory {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.BusinessMetadata");
+    
     public BusinessMetadata () {
     
     }

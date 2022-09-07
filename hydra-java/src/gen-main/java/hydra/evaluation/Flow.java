@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A variant of the State monad with built-in logging and error handling
  */
 public class Flow<S, A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Flow");
+  
   public final java.util.function.Function<S, java.util.function.Function<hydra.evaluation.Trace, hydra.evaluation.FlowWrapper<S, A>>> value;
   
   public Flow (java.util.function.Function<S, java.util.function.Function<hydra.evaluation.Trace, hydra.evaluation.FlowWrapper<S, A>>> value) {

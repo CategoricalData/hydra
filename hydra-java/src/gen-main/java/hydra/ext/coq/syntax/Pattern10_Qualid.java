@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern10_Qualid {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Pattern10.Qualid");
+  
   public final hydra.ext.coq.syntax.Qualid qualid;
   
   public final java.util.List<hydra.ext.coq.syntax.Pattern1> patterns;

@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
  */
 public class PropertyShapeConstraints {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.PropertyShapeConstraints");
+  
   /**
    * See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
    */

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class OpenBinders {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.OpenBinders");
+  
   private OpenBinders () {
   
   }
@@ -28,6 +30,8 @@ public abstract class OpenBinders {
   }
   
   public static final class Type extends hydra.ext.coq.syntax.OpenBinders {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Type");
+    
     public final hydra.ext.coq.syntax.TypeBinders value;
     
     public Type (hydra.ext.coq.syntax.TypeBinders value) {
@@ -55,6 +59,8 @@ public abstract class OpenBinders {
   }
   
   public static final class Binders extends hydra.ext.coq.syntax.OpenBinders {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Binders");
+    
     public final java.util.List<hydra.ext.coq.syntax.Binder> value;
     
     public Binders (java.util.List<hydra.ext.coq.syntax.Binder> value) {

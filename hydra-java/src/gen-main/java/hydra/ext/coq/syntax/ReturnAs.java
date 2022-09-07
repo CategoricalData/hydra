@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class ReturnAs {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ReturnAs");
+  
   public final java.util.Optional<hydra.ext.coq.syntax.Name> as;
   
   public final hydra.ext.coq.syntax.Term100 return_;

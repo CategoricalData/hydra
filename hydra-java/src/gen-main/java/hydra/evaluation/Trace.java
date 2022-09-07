@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A container for logging and error information
  */
 public class Trace {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Trace");
+  
   public final java.util.List<String> stack;
   
   public final java.util.List<java.util.List<String>> messages;

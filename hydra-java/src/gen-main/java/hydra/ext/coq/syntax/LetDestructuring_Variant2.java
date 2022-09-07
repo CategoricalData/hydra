@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class LetDestructuring_Variant2 {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.LetDestructuring.Variant2");
+  
   public final hydra.ext.coq.syntax.Pattern pattern;
   
   public final hydra.ext.coq.syntax.Term term;

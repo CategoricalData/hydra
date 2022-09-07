@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * An RDF triple defined by a subject, predicate, and object
  */
 public class Triple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Triple");
+  
   public final hydra.ext.rdf.syntax.Resource subject;
   
   public final hydra.ext.rdf.syntax.Iri predicate;

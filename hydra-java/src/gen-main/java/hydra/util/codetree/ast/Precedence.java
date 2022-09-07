@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * Operator precedence
  */
 public class Precedence {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Precedence");
+  
   /**
    * Operator precedence
    */

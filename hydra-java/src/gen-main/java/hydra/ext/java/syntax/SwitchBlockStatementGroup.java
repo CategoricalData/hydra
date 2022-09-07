@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SwitchBlockStatementGroup {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SwitchBlockStatementGroup");
+  
   public final java.util.List<hydra.ext.java.syntax.SwitchLabel> labels;
   
   public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;

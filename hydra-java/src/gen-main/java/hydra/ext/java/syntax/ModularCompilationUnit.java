@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ModularCompilationUnit {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ModularCompilationUnit");
+  
   public final java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports;
   
   public final hydra.ext.java.syntax.ModuleDeclaration module;

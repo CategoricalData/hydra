@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class InterfaceType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceType");
+  
   public final hydra.ext.java.syntax.ClassType value;
   
   public InterfaceType (hydra.ext.java.syntax.ClassType value) {

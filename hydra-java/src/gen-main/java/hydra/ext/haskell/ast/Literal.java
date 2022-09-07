@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A literal value
  */
 public abstract class Literal {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Literal");
+  
   private Literal () {
   
   }
@@ -55,6 +57,8 @@ public abstract class Literal {
   }
   
   public static final class Char extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Char");
+    
     public final Character value;
     
     public Char (Character value) {
@@ -82,6 +86,8 @@ public abstract class Literal {
   }
   
   public static final class Double_ extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Double");
+    
     public final Double value;
     
     public Double_ (Double value) {
@@ -109,6 +115,8 @@ public abstract class Literal {
   }
   
   public static final class Float_ extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Float");
+    
     public final Float value;
     
     public Float_ (Float value) {
@@ -136,6 +144,8 @@ public abstract class Literal {
   }
   
   public static final class Int extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Int");
+    
     public final Integer value;
     
     public Int (Integer value) {
@@ -163,6 +173,8 @@ public abstract class Literal {
   }
   
   public static final class Integer_ extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Integer");
+    
     public final java.math.BigInteger value;
     
     public Integer_ (java.math.BigInteger value) {
@@ -190,6 +202,8 @@ public abstract class Literal {
   }
   
   public static final class String_ extends hydra.ext.haskell.ast.Literal {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.String");
+    
     public final String value;
     
     public String_ (String value) {

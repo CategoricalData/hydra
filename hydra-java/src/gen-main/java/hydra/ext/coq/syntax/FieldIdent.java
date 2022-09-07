@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class FieldIdent {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.FieldIdent");
+  
   public final hydra.ext.coq.syntax.Ident value;
   
   public FieldIdent (hydra.ext.coq.syntax.Ident value) {

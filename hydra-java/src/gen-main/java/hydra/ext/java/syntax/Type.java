@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Type {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Type");
+  
   private Type () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Type {
   }
   
   public static final class Primitive extends hydra.ext.java.syntax.Type {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primitive");
+    
     public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value;
     
     public Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations value) {
@@ -55,6 +59,8 @@ public abstract class Type {
   }
   
   public static final class Reference extends hydra.ext.java.syntax.Type {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Reference");
+    
     public final hydra.ext.java.syntax.ReferenceType value;
     
     public Reference (hydra.ext.java.syntax.ReferenceType value) {

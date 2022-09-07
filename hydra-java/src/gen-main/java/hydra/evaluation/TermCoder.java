@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
  */
 public class TermCoder<M, A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.TermCoder");
+  
   public final hydra.core.Type<M> type;
   
   public final hydra.evaluation.Coder<hydra.evaluation.Context<M>, hydra.core.Term<M>, A> coder;

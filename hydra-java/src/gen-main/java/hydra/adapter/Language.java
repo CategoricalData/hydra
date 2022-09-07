@@ -1,6 +1,8 @@
 package hydra.adapter;
 
 public class Language<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.Language");
+  
   public final hydra.adapter.LanguageName name;
   
   public final hydra.adapter.LanguageConstraints<M> constraints;

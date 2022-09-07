@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * An RDF triple with an optional named graph component
  */
 public class Quad {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Quad");
+  
   public final hydra.ext.rdf.syntax.Resource subject;
   
   public final hydra.ext.rdf.syntax.Iri predicate;

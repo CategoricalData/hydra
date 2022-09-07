@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class BooleanArray {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.BooleanArray");
+  
   private BooleanArray () {
   
   }
@@ -28,6 +30,8 @@ public abstract class BooleanArray {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.BooleanArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
+    
     public Simple () {
     
     }
@@ -53,6 +57,8 @@ public abstract class BooleanArray {
   }
   
   public static final class Array extends hydra.ext.java.syntax.BooleanArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Array");
+    
     public final hydra.ext.java.syntax.BooleanArray value;
     
     public Array (hydra.ext.java.syntax.BooleanArray value) {

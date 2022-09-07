@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class EmptyStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EmptyStatement");
+  
   public EmptyStatement () {
   
   }

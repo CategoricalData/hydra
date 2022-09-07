@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Element objects.
  */
 public class ElementFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.ElementFeatures");
+  
   /**
    * Determines if an Element allows properties to be added.
    */

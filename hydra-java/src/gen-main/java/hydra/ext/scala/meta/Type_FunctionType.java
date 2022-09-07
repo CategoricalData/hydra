@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Type_FunctionType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.FunctionType");
+  
   private Type_FunctionType () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Type_FunctionType {
   }
   
   public static final class Function extends hydra.ext.scala.meta.Type_FunctionType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Function");
+    
     public final hydra.ext.scala.meta.Type_Function value;
     
     public Function (hydra.ext.scala.meta.Type_Function value) {
@@ -55,6 +59,8 @@ public abstract class Type_FunctionType {
   }
   
   public static final class ContextFunction extends hydra.ext.scala.meta.Type_FunctionType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ContextFunction");
+    
     public final hydra.ext.scala.meta.Type_ContextFunction value;
     
     public ContextFunction (hydra.ext.scala.meta.Type_ContextFunction value) {

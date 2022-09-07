@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Primary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodReference.Primary");
+  
   public final hydra.ext.java.syntax.Primary primary;
   
   public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;

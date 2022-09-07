@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * A BCP47 language tag
  */
 public class LanguageTag {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.LanguageTag");
+  
   /**
    * A BCP47 language tag
    */

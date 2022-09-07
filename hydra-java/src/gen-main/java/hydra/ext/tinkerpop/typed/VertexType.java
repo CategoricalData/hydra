@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * The type of a vertex, with characteristic id and property types
  */
 public class VertexType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.VertexType");
+  
   public final hydra.core.LiteralType id;
   
   public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> properties;

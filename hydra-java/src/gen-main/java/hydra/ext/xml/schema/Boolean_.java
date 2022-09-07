@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Boolean_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Boolean");
+  
   public final Boolean value;
   
   public Boolean_ (Boolean value) {

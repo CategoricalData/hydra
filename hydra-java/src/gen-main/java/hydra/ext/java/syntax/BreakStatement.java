@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class BreakStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.BreakStatement");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Identifier> value;
   
   public BreakStatement (java.util.Optional<hydra.ext.java.syntax.Identifier> value) {

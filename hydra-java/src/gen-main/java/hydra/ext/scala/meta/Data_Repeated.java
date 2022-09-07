@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Repeated {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Repeated");
+  
   public final hydra.ext.scala.meta.Data expr;
   
   public Data_Repeated (hydra.ext.scala.meta.Data expr) {

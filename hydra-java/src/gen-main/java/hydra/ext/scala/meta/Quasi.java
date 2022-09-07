@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Quasi {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Quasi");
+  
   public Quasi () {
   
   }

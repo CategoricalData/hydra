@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class ConstantList_Multiple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.ConstantList.Multiple");
+  
   public final hydra.ext.datalog.syntax.Constant constant;
   
   public final hydra.ext.datalog.syntax.ConstantList constantList;

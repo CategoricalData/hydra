@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class GDay {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GDay");
+  
   public final String value;
   
   public GDay (String value) {

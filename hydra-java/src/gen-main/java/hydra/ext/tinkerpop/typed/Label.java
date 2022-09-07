@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A vertex or edge label
  */
 public class Label {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Label");
+  
   /**
    * A vertex or edge label
    */

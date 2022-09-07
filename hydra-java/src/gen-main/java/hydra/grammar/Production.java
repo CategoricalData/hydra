@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class Production {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Production");
+  
   public final hydra.grammar.Symbol symbol;
   
   public final hydra.grammar.Pattern pattern;

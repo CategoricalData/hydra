@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Typed {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.Typed");
+  
   public final hydra.ext.scala.meta.Pat lhs;
   
   public final hydra.ext.scala.meta.Type rhs;

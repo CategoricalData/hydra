@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class SchemaFile {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.SchemaFile");
+  
   public final hydra.ext.pegasus.pdl.Namespace namespace;
   
   public final java.util.Optional<hydra.ext.pegasus.pdl.Package_> package_;

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class FloatingPointType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FloatingPointType");
+  
   private FloatingPointType () {
   
   }
@@ -28,6 +30,8 @@ public abstract class FloatingPointType {
   }
   
   public static final class Float_ extends hydra.ext.java.syntax.FloatingPointType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Float");
+    
     public Float_ () {
     
     }
@@ -53,6 +57,8 @@ public abstract class FloatingPointType {
   }
   
   public static final class Double_ extends hydra.ext.java.syntax.FloatingPointType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Double");
+    
     public Double_ () {
     
     }

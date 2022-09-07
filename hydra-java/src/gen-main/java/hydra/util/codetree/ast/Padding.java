@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * Left and right padding for an operator
  */
 public class Padding {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Padding");
+  
   public final hydra.util.codetree.ast.Ws left;
   
   public final hydra.util.codetree.ast.Ws right;

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Enumerator_Guard {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Enumerator.Guard");
+  
   public final hydra.ext.scala.meta.Data cond;
   
   public Enumerator_Guard (hydra.ext.scala.meta.Data cond) {

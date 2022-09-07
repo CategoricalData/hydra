@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Name {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Name");
+  
   private Name () {
   
   }
@@ -34,6 +36,8 @@ public abstract class Name {
   }
   
   public static final class Value extends hydra.ext.scala.meta.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Value");
+    
     public final String value;
     
     public Value (String value) {
@@ -61,6 +65,8 @@ public abstract class Name {
   }
   
   public static final class Anonymous extends hydra.ext.scala.meta.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Anonymous");
+    
     public Anonymous () {
     
     }
@@ -86,6 +92,8 @@ public abstract class Name {
   }
   
   public static final class Indeterminate extends hydra.ext.scala.meta.Name {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Indeterminate");
+    
     public final hydra.ext.scala.meta.PredefString value;
     
     public Indeterminate (hydra.ext.scala.meta.PredefString value) {

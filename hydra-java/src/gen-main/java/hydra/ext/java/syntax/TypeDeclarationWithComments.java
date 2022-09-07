@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TypeDeclarationWithComments {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeDeclarationWithComments");
+  
   public final hydra.ext.java.syntax.TypeDeclaration value;
   
   public final java.util.Optional<String> comments;

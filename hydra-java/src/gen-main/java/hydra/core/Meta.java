@@ -4,6 +4,8 @@ package hydra.core;
  * A built-in metadata container for terms
  */
 public class Meta {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Meta");
+  
   /**
    * A map of annotation names to annotation values
    */

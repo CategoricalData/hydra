@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ClassDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassDeclaration");
+  
   private ClassDeclaration () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ClassDeclaration {
   }
   
   public static final class Normal extends hydra.ext.java.syntax.ClassDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Normal");
+    
     public final hydra.ext.java.syntax.NormalClassDeclaration value;
     
     public Normal (hydra.ext.java.syntax.NormalClassDeclaration value) {
@@ -55,6 +59,8 @@ public abstract class ClassDeclaration {
   }
   
   public static final class Enum_ extends hydra.ext.java.syntax.ClassDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Enum");
+    
     public final hydra.ext.java.syntax.EnumDeclaration value;
     
     public Enum_ (hydra.ext.java.syntax.EnumDeclaration value) {

@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A data declaration together with any comments
  */
 public class DeclarationWithComments {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.DeclarationWithComments");
+  
   public final hydra.ext.haskell.ast.Declaration body;
   
   public final java.util.Optional<String> comments;

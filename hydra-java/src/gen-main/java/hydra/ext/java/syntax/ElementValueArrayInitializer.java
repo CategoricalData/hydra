@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ElementValueArrayInitializer {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ElementValueArrayInitializer");
+  
   public final java.util.List<hydra.ext.java.syntax.ElementValue> value;
   
   public ElementValueArrayInitializer (java.util.List<hydra.ext.java.syntax.ElementValue> value) {

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PostIncrementExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostIncrementExpression");
+  
   public final hydra.ext.java.syntax.PostfixExpression value;
   
   public PostIncrementExpression (hydra.ext.java.syntax.PostfixExpression value) {

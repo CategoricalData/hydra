@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TypeParameterModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeParameterModifier");
+  
   public final hydra.ext.java.syntax.Annotation value;
   
   public TypeParameterModifier (hydra.ext.java.syntax.Annotation value) {

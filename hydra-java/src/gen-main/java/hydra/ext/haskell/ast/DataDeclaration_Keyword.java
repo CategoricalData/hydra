@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * The 'data' versus 'newtype keyword
  */
 public abstract class DataDeclaration_Keyword {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.DataDeclaration.Keyword");
+  
   private DataDeclaration_Keyword () {
   
   }
@@ -31,6 +33,8 @@ public abstract class DataDeclaration_Keyword {
   }
   
   public static final class Data extends hydra.ext.haskell.ast.DataDeclaration_Keyword {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Data");
+    
     public Data () {
     
     }
@@ -56,6 +60,8 @@ public abstract class DataDeclaration_Keyword {
   }
   
   public static final class Newtype extends hydra.ext.haskell.ast.DataDeclaration_Keyword {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Newtype");
+    
     public Newtype () {
     
     }

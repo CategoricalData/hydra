@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Edge Property objects.
  */
 public class EdgePropertyFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.EdgePropertyFeatures");
+  
   public final hydra.ext.tinkerpop.features.PropertyFeatures propertyFeatures;
   
   public EdgePropertyFeatures (hydra.ext.tinkerpop.features.PropertyFeatures propertyFeatures) {

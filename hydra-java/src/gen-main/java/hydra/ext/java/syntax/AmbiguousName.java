@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AmbiguousName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AmbiguousName");
+  
   public final java.util.List<hydra.ext.java.syntax.Identifier> value;
   
   public AmbiguousName (java.util.List<hydra.ext.java.syntax.Identifier> value) {

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Param {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Param");
+  
   public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
   public final hydra.ext.scala.meta.Name name;

@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class QualifiedName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.QualifiedName");
+  
   public final java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers;
   
   public final hydra.ext.haskell.ast.NamePart unqualified;

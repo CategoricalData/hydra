@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * An edge, comprised of an id, an out-vertex and in-vertex id, and zero or more properties
  */
 public class Edge {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Edge");
+  
   public final hydra.ext.tinkerpop.typed.EdgeId id;
   
   public final hydra.ext.tinkerpop.typed.Label label;

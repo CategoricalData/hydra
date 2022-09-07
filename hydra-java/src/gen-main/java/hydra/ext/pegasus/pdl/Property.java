@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class Property {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Property");
+  
   public final hydra.ext.pegasus.pdl.PropertyKey key;
   
   public final java.util.Optional<hydra.ext.json.model.Value> value;

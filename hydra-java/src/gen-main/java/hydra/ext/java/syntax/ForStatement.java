@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ForStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ForStatement");
+  
   private ForStatement () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ForStatement {
   }
   
   public static final class Basic extends hydra.ext.java.syntax.ForStatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Basic");
+    
     public final hydra.ext.java.syntax.BasicForStatement value;
     
     public Basic (hydra.ext.java.syntax.BasicForStatement value) {
@@ -55,6 +59,8 @@ public abstract class ForStatement {
   }
   
   public static final class Enhanced extends hydra.ext.java.syntax.ForStatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Enhanced");
+    
     public final hydra.ext.java.syntax.EnhancedForStatement value;
     
     public Enhanced (hydra.ext.java.syntax.EnhancedForStatement value) {

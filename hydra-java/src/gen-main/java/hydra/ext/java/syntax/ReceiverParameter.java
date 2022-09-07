@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ReceiverParameter {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ReceiverParameter");
+  
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
   public final hydra.ext.java.syntax.UnannType unannType;

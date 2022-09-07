@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Fact {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Fact");
+  
   public final hydra.ext.datalog.syntax.Relation relation;
   
   public final hydra.ext.datalog.syntax.ConstantList constantList;

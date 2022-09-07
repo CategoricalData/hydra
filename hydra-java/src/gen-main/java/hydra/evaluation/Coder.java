@@ -4,6 +4,8 @@ package hydra.evaluation;
  * An encoder and decoder; a qualified bidirectional transformation between instances of two types
  */
 public class Coder<S, A, B> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Coder");
+  
   public final java.util.function.Function<A, hydra.evaluation.Flow<S, B>> encode;
   
   public final java.util.function.Function<B, hydra.evaluation.Flow<S, A>> decode;

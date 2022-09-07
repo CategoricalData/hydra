@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class AtomList_Multiple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.AtomList.Multiple");
+  
   public final hydra.ext.datalog.syntax.Atom atom;
   
   public final hydra.ext.datalog.syntax.AtomList atomList;

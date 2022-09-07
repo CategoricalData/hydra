@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Data {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data");
+  
   private Data () {
   
   }
@@ -226,6 +228,8 @@ public abstract class Data {
   }
   
   public static final class Lit extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Lit");
+    
     public final hydra.ext.scala.meta.Lit value;
     
     public Lit (hydra.ext.scala.meta.Lit value) {
@@ -253,6 +257,8 @@ public abstract class Data {
   }
   
   public static final class Ref extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ref");
+    
     public final hydra.ext.scala.meta.Data_Ref value;
     
     public Ref (hydra.ext.scala.meta.Data_Ref value) {
@@ -280,6 +286,8 @@ public abstract class Data {
   }
   
   public static final class Interpolate extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Interpolate");
+    
     public final hydra.ext.scala.meta.Data_Interpolate value;
     
     public Interpolate (hydra.ext.scala.meta.Data_Interpolate value) {
@@ -307,6 +315,8 @@ public abstract class Data {
   }
   
   public static final class Xml extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Xml");
+    
     public final hydra.ext.scala.meta.Data_Xml value;
     
     public Xml (hydra.ext.scala.meta.Data_Xml value) {
@@ -334,6 +344,8 @@ public abstract class Data {
   }
   
   public static final class Apply extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Apply");
+    
     public final hydra.ext.scala.meta.Data_Apply value;
     
     public Apply (hydra.ext.scala.meta.Data_Apply value) {
@@ -361,6 +373,8 @@ public abstract class Data {
   }
   
   public static final class ApplyUsing extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ApplyUsing");
+    
     public final hydra.ext.scala.meta.Data_ApplyUsing value;
     
     public ApplyUsing (hydra.ext.scala.meta.Data_ApplyUsing value) {
@@ -388,6 +402,8 @@ public abstract class Data {
   }
   
   public static final class ApplyType extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ApplyType");
+    
     public final hydra.ext.scala.meta.Data_ApplyType value;
     
     public ApplyType (hydra.ext.scala.meta.Data_ApplyType value) {
@@ -415,6 +431,8 @@ public abstract class Data {
   }
   
   public static final class Assign extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Assign");
+    
     public final hydra.ext.scala.meta.Data_Assign value;
     
     public Assign (hydra.ext.scala.meta.Data_Assign value) {
@@ -442,6 +460,8 @@ public abstract class Data {
   }
   
   public static final class Return extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Return");
+    
     public final hydra.ext.scala.meta.Data_Return value;
     
     public Return (hydra.ext.scala.meta.Data_Return value) {
@@ -469,6 +489,8 @@ public abstract class Data {
   }
   
   public static final class Throw extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Throw");
+    
     public final hydra.ext.scala.meta.Data_Throw value;
     
     public Throw (hydra.ext.scala.meta.Data_Throw value) {
@@ -496,6 +518,8 @@ public abstract class Data {
   }
   
   public static final class Ascribe extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ascribe");
+    
     public final hydra.ext.scala.meta.Data_Ascribe value;
     
     public Ascribe (hydra.ext.scala.meta.Data_Ascribe value) {
@@ -523,6 +547,8 @@ public abstract class Data {
   }
   
   public static final class Annotate extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Annotate");
+    
     public final hydra.ext.scala.meta.Data_Annotate value;
     
     public Annotate (hydra.ext.scala.meta.Data_Annotate value) {
@@ -550,6 +576,8 @@ public abstract class Data {
   }
   
   public static final class Tuple extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Tuple");
+    
     public final hydra.ext.scala.meta.Data_Tuple value;
     
     public Tuple (hydra.ext.scala.meta.Data_Tuple value) {
@@ -577,6 +605,8 @@ public abstract class Data {
   }
   
   public static final class Block extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Block");
+    
     public final hydra.ext.scala.meta.Data_Block value;
     
     public Block (hydra.ext.scala.meta.Data_Block value) {
@@ -604,6 +634,8 @@ public abstract class Data {
   }
   
   public static final class EndMarker extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.EndMarker");
+    
     public final hydra.ext.scala.meta.Data_EndMarker value;
     
     public EndMarker (hydra.ext.scala.meta.Data_EndMarker value) {
@@ -631,6 +663,8 @@ public abstract class Data {
   }
   
   public static final class If extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.If");
+    
     public final hydra.ext.scala.meta.Data_If value;
     
     public If (hydra.ext.scala.meta.Data_If value) {
@@ -658,6 +692,8 @@ public abstract class Data {
   }
   
   public static final class QuotedMacroExpr extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.QuotedMacroExpr");
+    
     public final hydra.ext.scala.meta.Data_QuotedMacroExpr value;
     
     public QuotedMacroExpr (hydra.ext.scala.meta.Data_QuotedMacroExpr value) {
@@ -685,6 +721,8 @@ public abstract class Data {
   }
   
   public static final class QuotedMacroType extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.QuotedMacroType");
+    
     public final hydra.ext.scala.meta.Data_QuotedMacroType value;
     
     public QuotedMacroType (hydra.ext.scala.meta.Data_QuotedMacroType value) {
@@ -712,6 +750,8 @@ public abstract class Data {
   }
   
   public static final class SplicedMacroExpr extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.SplicedMacroExpr");
+    
     public final hydra.ext.scala.meta.Data_SplicedMacroExpr value;
     
     public SplicedMacroExpr (hydra.ext.scala.meta.Data_SplicedMacroExpr value) {
@@ -739,6 +779,8 @@ public abstract class Data {
   }
   
   public static final class Match extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Match");
+    
     public final hydra.ext.scala.meta.Data_Match value;
     
     public Match (hydra.ext.scala.meta.Data_Match value) {
@@ -766,6 +808,8 @@ public abstract class Data {
   }
   
   public static final class Try extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Try");
+    
     public final hydra.ext.scala.meta.Data_Try value;
     
     public Try (hydra.ext.scala.meta.Data_Try value) {
@@ -793,6 +837,8 @@ public abstract class Data {
   }
   
   public static final class TryWithHandler extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TryWithHandler");
+    
     public final hydra.ext.scala.meta.Data_TryWithHandler value;
     
     public TryWithHandler (hydra.ext.scala.meta.Data_TryWithHandler value) {
@@ -820,6 +866,8 @@ public abstract class Data {
   }
   
   public static final class FunctionData extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.FunctionData");
+    
     public final hydra.ext.scala.meta.Data_FunctionData value;
     
     public FunctionData (hydra.ext.scala.meta.Data_FunctionData value) {
@@ -847,6 +895,8 @@ public abstract class Data {
   }
   
   public static final class PolyFunction extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.PolyFunction");
+    
     public final hydra.ext.scala.meta.Data_PolyFunction value;
     
     public PolyFunction (hydra.ext.scala.meta.Data_PolyFunction value) {
@@ -874,6 +924,8 @@ public abstract class Data {
   }
   
   public static final class PartialFunction extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.PartialFunction");
+    
     public final hydra.ext.scala.meta.Data_PartialFunction value;
     
     public PartialFunction (hydra.ext.scala.meta.Data_PartialFunction value) {
@@ -901,6 +953,8 @@ public abstract class Data {
   }
   
   public static final class While extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.While");
+    
     public final hydra.ext.scala.meta.Data_While value;
     
     public While (hydra.ext.scala.meta.Data_While value) {
@@ -928,6 +982,8 @@ public abstract class Data {
   }
   
   public static final class Do extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Do");
+    
     public final hydra.ext.scala.meta.Data_Do value;
     
     public Do (hydra.ext.scala.meta.Data_Do value) {
@@ -955,6 +1011,8 @@ public abstract class Data {
   }
   
   public static final class For extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.For");
+    
     public final hydra.ext.scala.meta.Data_For value;
     
     public For (hydra.ext.scala.meta.Data_For value) {
@@ -982,6 +1040,8 @@ public abstract class Data {
   }
   
   public static final class ForYield extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ForYield");
+    
     public final hydra.ext.scala.meta.Data_ForYield value;
     
     public ForYield (hydra.ext.scala.meta.Data_ForYield value) {
@@ -1009,6 +1069,8 @@ public abstract class Data {
   }
   
   public static final class New extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.New");
+    
     public final hydra.ext.scala.meta.Data_New value;
     
     public New (hydra.ext.scala.meta.Data_New value) {
@@ -1036,6 +1098,8 @@ public abstract class Data {
   }
   
   public static final class NewAnonymous extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.NewAnonymous");
+    
     public final hydra.ext.scala.meta.Data_NewAnonymous value;
     
     public NewAnonymous (hydra.ext.scala.meta.Data_NewAnonymous value) {
@@ -1063,6 +1127,8 @@ public abstract class Data {
   }
   
   public static final class Placeholder extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Placeholder");
+    
     public final hydra.ext.scala.meta.Data_Placeholder value;
     
     public Placeholder (hydra.ext.scala.meta.Data_Placeholder value) {
@@ -1090,6 +1156,8 @@ public abstract class Data {
   }
   
   public static final class Eta extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Eta");
+    
     public final hydra.ext.scala.meta.Data_Eta value;
     
     public Eta (hydra.ext.scala.meta.Data_Eta value) {
@@ -1117,6 +1185,8 @@ public abstract class Data {
   }
   
   public static final class Repeated extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Repeated");
+    
     public final hydra.ext.scala.meta.Data_Repeated value;
     
     public Repeated (hydra.ext.scala.meta.Data_Repeated value) {
@@ -1144,6 +1214,8 @@ public abstract class Data {
   }
   
   public static final class Param extends hydra.ext.scala.meta.Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Param");
+    
     public final hydra.ext.scala.meta.Data_Param value;
     
     public Param (hydra.ext.scala.meta.Data_Param value) {

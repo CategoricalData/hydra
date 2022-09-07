@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class FixAnnot_Measure {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.FixAnnot.Measure");
+  
   public final hydra.ext.coq.syntax.OneTerm term;
   
   public final java.util.Optional<hydra.ext.coq.syntax.Ident> ident;

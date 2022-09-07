@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Init {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Init");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public final hydra.ext.scala.meta.Name name;

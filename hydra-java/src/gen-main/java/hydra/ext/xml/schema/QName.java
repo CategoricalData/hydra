@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class QName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.QName");
+  
   public final String value;
   
   public QName (String value) {

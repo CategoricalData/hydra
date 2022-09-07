@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Defn_RepeatedEnumCase {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn.RepeatedEnumCase");
+  
   public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
   public final java.util.List<hydra.ext.scala.meta.Data_Name> cases;

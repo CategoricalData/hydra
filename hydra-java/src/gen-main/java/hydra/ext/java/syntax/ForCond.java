@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ForCond {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ForCond");
+  
   public final java.util.Optional<hydra.ext.java.syntax.ForInit> init;
   
   public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;

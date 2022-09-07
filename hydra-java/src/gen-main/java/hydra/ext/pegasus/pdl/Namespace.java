@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class Namespace {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Namespace");
+  
   public final String value;
   
   public Namespace (String value) {

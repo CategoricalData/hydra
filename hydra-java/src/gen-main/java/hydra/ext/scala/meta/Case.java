@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Case {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Case");
+  
   public final hydra.ext.scala.meta.Pat pat;
   
   public final java.util.Optional<hydra.ext.scala.meta.Data> cond;

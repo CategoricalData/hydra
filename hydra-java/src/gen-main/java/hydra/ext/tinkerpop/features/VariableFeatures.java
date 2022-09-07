@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Features for Graph.Variables.
  */
 public class VariableFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.VariableFeatures");
+  
   public final hydra.ext.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
   /**

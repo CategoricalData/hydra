@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ExpressionName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ExpressionName");
+  
   public final java.util.Optional<hydra.ext.java.syntax.AmbiguousName> qualifier;
   
   public final hydra.ext.java.syntax.Identifier identifier;

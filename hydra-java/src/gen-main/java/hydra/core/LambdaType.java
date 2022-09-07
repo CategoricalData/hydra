@@ -4,6 +4,8 @@ package hydra.core;
  * A type abstraction; the type-level analog of a lambda term
  */
 public class LambdaType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LambdaType");
+  
   /**
    * The parameter of the lambda
    */

@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Relation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Relation");
+  
   public final String value;
   
   public Relation (String value) {

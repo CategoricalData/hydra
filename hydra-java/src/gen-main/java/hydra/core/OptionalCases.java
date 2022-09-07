@@ -4,6 +4,8 @@ package hydra.core;
  * A case statement for matching optional terms
  */
 public class OptionalCases<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.OptionalCases");
+  
   /**
    * A term provided if the optional value is nothing
    */

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class PrimaryNoNewArray {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PrimaryNoNewArray");
+  
   private PrimaryNoNewArray () {
   
   }
@@ -76,6 +78,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class Literal extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Literal");
+    
     public final hydra.ext.java.syntax.Literal value;
     
     public Literal (hydra.ext.java.syntax.Literal value) {
@@ -103,6 +107,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class ClassLiteral extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassLiteral");
+    
     public final hydra.ext.java.syntax.ClassLiteral value;
     
     public ClassLiteral (hydra.ext.java.syntax.ClassLiteral value) {
@@ -130,6 +136,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class This extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.This");
+    
     public This () {
     
     }
@@ -155,6 +163,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class DotThis extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.DotThis");
+    
     public final hydra.ext.java.syntax.TypeName value;
     
     public DotThis (hydra.ext.java.syntax.TypeName value) {
@@ -182,6 +192,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class Parens extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Parens");
+    
     public final hydra.ext.java.syntax.Expression value;
     
     public Parens (hydra.ext.java.syntax.Expression value) {
@@ -209,6 +221,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class ClassInstance extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassInstance");
+    
     public final hydra.ext.java.syntax.ClassInstanceCreationExpression value;
     
     public ClassInstance (hydra.ext.java.syntax.ClassInstanceCreationExpression value) {
@@ -236,6 +250,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class FieldAccess extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess");
+    
     public final hydra.ext.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {
@@ -263,6 +279,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class ArrayAccess extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayAccess");
+    
     public final hydra.ext.java.syntax.ArrayAccess value;
     
     public ArrayAccess (hydra.ext.java.syntax.ArrayAccess value) {
@@ -290,6 +308,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class MethodInvocation extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodInvocation");
+    
     public final hydra.ext.java.syntax.MethodInvocation value;
     
     public MethodInvocation (hydra.ext.java.syntax.MethodInvocation value) {
@@ -317,6 +337,8 @@ public abstract class PrimaryNoNewArray {
   }
   
   public static final class MethodReference extends hydra.ext.java.syntax.PrimaryNoNewArray {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodReference");
+    
     public final hydra.ext.java.syntax.MethodReference value;
     
     public MethodReference (hydra.ext.java.syntax.MethodReference value) {

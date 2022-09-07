@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Export {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Export");
+  
   public final java.util.List<hydra.ext.scala.meta.Importer> importers;
   
   public Export (java.util.List<hydra.ext.scala.meta.Importer> importers) {

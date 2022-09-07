@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Block {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Block");
+  
   public final java.util.List<hydra.ext.java.syntax.BlockStatement> value;
   
   public Block (java.util.List<hydra.ext.java.syntax.BlockStatement> value) {

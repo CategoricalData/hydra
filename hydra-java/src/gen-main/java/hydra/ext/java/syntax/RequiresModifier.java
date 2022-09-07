@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class RequiresModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.RequiresModifier");
+  
   private RequiresModifier () {
   
   }
@@ -28,6 +30,8 @@ public abstract class RequiresModifier {
   }
   
   public static final class Transitive extends hydra.ext.java.syntax.RequiresModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Transitive");
+    
     public Transitive () {
     
     }
@@ -53,6 +57,8 @@ public abstract class RequiresModifier {
   }
   
   public static final class Static extends hydra.ext.java.syntax.RequiresModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Static");
+    
     public Static () {
     
     }

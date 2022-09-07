@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Enumerator_Val {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Enumerator.Val");
+  
   public final hydra.ext.scala.meta.Pat pat;
   
   public final hydra.ext.scala.meta.Data rhs;

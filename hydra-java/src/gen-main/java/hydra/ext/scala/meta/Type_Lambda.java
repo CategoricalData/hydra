@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Lambda {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Lambda");
+  
   public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
   public final hydra.ext.scala.meta.Type tpe;

@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An ordinary (positional) data constructor
  */
 public class Constructor_Ordinary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Constructor.Ordinary");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final java.util.List<hydra.ext.haskell.ast.Type> fields;

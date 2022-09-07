@@ -6,6 +6,8 @@ package hydra.ext.tinkerpop.features;
  * As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
  */
 public class Features {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.Features");
+  
   /**
    * Gets the features related to edge operation.
    */

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Statement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Statement");
+  
   private Statement () {
   
   }
@@ -52,6 +54,8 @@ public abstract class Statement {
   }
   
   public static final class WithoutTrailing extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WithoutTrailing");
+    
     public final hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value;
     
     public WithoutTrailing (hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value) {
@@ -79,6 +83,8 @@ public abstract class Statement {
   }
   
   public static final class Labeled extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Labeled");
+    
     public final hydra.ext.java.syntax.LabeledStatement value;
     
     public Labeled (hydra.ext.java.syntax.LabeledStatement value) {
@@ -106,6 +112,8 @@ public abstract class Statement {
   }
   
   public static final class IfThen extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IfThen");
+    
     public final hydra.ext.java.syntax.IfThenStatement value;
     
     public IfThen (hydra.ext.java.syntax.IfThenStatement value) {
@@ -133,6 +141,8 @@ public abstract class Statement {
   }
   
   public static final class IfThenElse extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IfThenElse");
+    
     public final hydra.ext.java.syntax.IfThenElseStatement value;
     
     public IfThenElse (hydra.ext.java.syntax.IfThenElseStatement value) {
@@ -160,6 +170,8 @@ public abstract class Statement {
   }
   
   public static final class While extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.While");
+    
     public final hydra.ext.java.syntax.WhileStatement value;
     
     public While (hydra.ext.java.syntax.WhileStatement value) {
@@ -187,6 +199,8 @@ public abstract class Statement {
   }
   
   public static final class For extends hydra.ext.java.syntax.Statement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.For");
+    
     public final hydra.ext.java.syntax.ForStatement value;
     
     public For (hydra.ext.java.syntax.ForStatement value) {

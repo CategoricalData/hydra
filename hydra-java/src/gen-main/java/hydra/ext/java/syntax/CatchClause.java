@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class CatchClause {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.CatchClause");
+  
   public final java.util.Optional<hydra.ext.java.syntax.CatchFormalParameter> parameter;
   
   public final hydra.ext.java.syntax.Block block;

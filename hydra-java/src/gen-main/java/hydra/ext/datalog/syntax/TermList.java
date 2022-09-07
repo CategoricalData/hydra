@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public abstract class TermList {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.TermList");
+  
   private TermList () {
   
   }
@@ -28,6 +30,8 @@ public abstract class TermList {
   }
   
   public static final class Single extends hydra.ext.datalog.syntax.TermList {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Single");
+    
     public final hydra.ext.datalog.syntax.Term value;
     
     public Single (hydra.ext.datalog.syntax.Term value) {
@@ -55,6 +59,8 @@ public abstract class TermList {
   }
   
   public static final class Multiple extends hydra.ext.datalog.syntax.TermList {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Multiple");
+    
     public final hydra.ext.datalog.syntax.TermList_Multiple value;
     
     public Multiple (hydra.ext.datalog.syntax.TermList_Multiple value) {

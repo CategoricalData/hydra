@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_ApplyUsing {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.ApplyUsing");
+  
   public final hydra.ext.scala.meta.Data fun;
   
   public final java.util.List<hydra.ext.scala.meta.Data> targs;

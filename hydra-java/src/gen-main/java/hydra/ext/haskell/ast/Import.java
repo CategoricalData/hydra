@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An import statement
  */
 public class Import {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Import");
+  
   public final Boolean qualified;
   
   public final hydra.ext.haskell.ast.ModuleName module;

@@ -1,6 +1,8 @@
 package hydra.ext.rdf.syntax;
 
 public class Graph {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Graph");
+  
   public final java.util.Set<hydra.ext.rdf.syntax.Triple> value;
   
   public Graph (java.util.Set<hydra.ext.rdf.syntax.Triple> value) {

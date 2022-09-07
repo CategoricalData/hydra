@@ -4,6 +4,8 @@ package hydra.evaluation;
  * Settings which determine how terms are evaluated
  */
 public class EvaluationStrategy {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.EvaluationStrategy");
+  
   public final java.util.Set<hydra.core.TermVariant> opaqueTermVariants;
   
   public EvaluationStrategy (java.util.Set<hydra.core.TermVariant> opaqueTermVariants) {

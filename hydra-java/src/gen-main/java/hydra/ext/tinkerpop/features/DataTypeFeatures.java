@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Base interface for features that relate to supporting different data types.
  */
 public class DataTypeFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.DataTypeFeatures");
+  
   /**
    * Supports setting of an array of boolean values.
    */

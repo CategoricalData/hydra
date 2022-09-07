@@ -4,6 +4,8 @@ package hydra.core;
  * A term which applies a function to an argument
  */
 public class Application<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Application");
+  
   /**
    * The left-hand side of the application
    */

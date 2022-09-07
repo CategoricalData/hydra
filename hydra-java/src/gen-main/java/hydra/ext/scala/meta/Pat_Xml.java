@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Xml {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.Xml");
+  
   public final java.util.List<hydra.ext.scala.meta.Lit> parts;
   
   public final java.util.List<hydra.ext.scala.meta.Pat> args;

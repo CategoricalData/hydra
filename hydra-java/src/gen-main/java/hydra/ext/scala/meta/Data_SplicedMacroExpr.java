@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_SplicedMacroExpr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.SplicedMacroExpr");
+  
   public final hydra.ext.scala.meta.Data body;
   
   public Data_SplicedMacroExpr (hydra.ext.scala.meta.Data body) {

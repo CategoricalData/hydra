@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class BasicForStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.BasicForStatement");
+  
   public final hydra.ext.java.syntax.ForCond cond;
   
   public final hydra.ext.java.syntax.Statement body;

@@ -1,6 +1,8 @@
 package hydra.ext.rdf.syntax;
 
 public class BlankNode {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.BlankNode");
+  
   public final String value;
   
   public BlankNode (String value) {

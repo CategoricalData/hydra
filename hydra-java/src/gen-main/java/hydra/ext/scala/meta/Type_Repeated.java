@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Repeated {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Repeated");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public Type_Repeated (hydra.ext.scala.meta.Type tpe) {

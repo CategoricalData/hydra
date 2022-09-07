@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class TypeCast {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.TypeCast");
+  
   public final hydra.ext.coq.syntax.Term10 term;
   
   public final hydra.ext.coq.syntax.Type type;

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Super {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Super");
+  
   public final hydra.ext.scala.meta.Name thisp;
   
   public final hydra.ext.scala.meta.Name superp;

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConstantDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstantDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;

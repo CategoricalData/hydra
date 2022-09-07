@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A field together with any comments
  */
 public class FieldWithComments {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.FieldWithComments");
+  
   public final hydra.ext.haskell.ast.Field field;
   
   public final java.util.Optional<String> comments;

@@ -4,6 +4,8 @@ package hydra.core;
  * Numeric precision: arbitrary precision, or precision to a specified number of bits
  */
 public abstract class Precision {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Precision");
+  
   private Precision () {
   
   }
@@ -31,6 +33,8 @@ public abstract class Precision {
   }
   
   public static final class Arbitrary extends hydra.core.Precision {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Arbitrary");
+    
     public Arbitrary () {
     
     }
@@ -56,6 +60,8 @@ public abstract class Precision {
   }
   
   public static final class Bits extends hydra.core.Precision {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Bits");
+    
     public final Integer value;
     
     public Bits (Integer value) {

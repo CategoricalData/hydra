@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Source {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Source");
+  
   public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
   public Source (java.util.List<hydra.ext.scala.meta.Stat> stats) {

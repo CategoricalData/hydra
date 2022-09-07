@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.features;
  * Features that are related to Vertex operations.
  */
 public class VertexFeatures {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/features.VertexFeatures");
+  
   public final hydra.ext.tinkerpop.features.ElementFeatures elementFeatures;
   
   public final hydra.ext.tinkerpop.features.VertexPropertyFeatures properties;

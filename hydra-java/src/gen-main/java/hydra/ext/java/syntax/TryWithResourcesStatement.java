@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TryWithResourcesStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TryWithResourcesStatement");
+  
   public final hydra.ext.java.syntax.ResourceSpecification resourceSpecification;
   
   public final hydra.ext.java.syntax.Block block;

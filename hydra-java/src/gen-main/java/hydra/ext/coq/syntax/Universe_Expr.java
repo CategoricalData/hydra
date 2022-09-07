@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Universe_Expr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Universe.Expr");
+  
   public final hydra.ext.coq.syntax.UniverseName name;
   
   public final java.util.Optional<hydra.ext.coq.syntax.Natural> number;

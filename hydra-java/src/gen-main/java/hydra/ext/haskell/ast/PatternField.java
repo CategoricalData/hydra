@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class PatternField {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.PatternField");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final hydra.ext.haskell.ast.Pattern pattern;

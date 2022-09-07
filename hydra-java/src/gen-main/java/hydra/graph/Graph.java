@@ -4,6 +4,8 @@ package hydra.graph;
  * A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph, called the schema graph
  */
 public class Graph<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Graph");
+  
   /**
    * The unique (within a given graph set) name of the graph
    */

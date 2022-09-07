@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class NormalClassDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.NormalClassDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;

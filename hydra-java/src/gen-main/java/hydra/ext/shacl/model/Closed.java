@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * See https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent
  */
 public class Closed {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Closed");
+  
   public final Boolean isClosed;
   
   public final java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Property>> ignoredProperties;

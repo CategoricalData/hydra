@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class EnumField {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.EnumField");
+  
   public final hydra.ext.pegasus.pdl.EnumFieldName name;
   
   public final hydra.ext.pegasus.pdl.Annotations annotations;

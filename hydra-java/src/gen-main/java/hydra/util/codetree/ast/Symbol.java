@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * Any symbol
  */
 public class Symbol {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Symbol");
+  
   /**
    * Any symbol
    */

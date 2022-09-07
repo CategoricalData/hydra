@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class UnsignedInt {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedInt");
+  
   public final Long value;
   
   public UnsignedInt (Long value) {

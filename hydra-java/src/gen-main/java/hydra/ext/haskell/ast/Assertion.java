@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A type assertion
  */
 public class Assertion {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Assertion");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final java.util.List<hydra.ext.haskell.ast.Type> types;

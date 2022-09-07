@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ContinueStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ContinueStatement");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Identifier> value;
   
   public ContinueStatement (java.util.Optional<hydra.ext.java.syntax.Identifier> value) {

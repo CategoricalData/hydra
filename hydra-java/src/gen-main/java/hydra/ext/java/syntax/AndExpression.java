@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AndExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AndExpression");
+  
   public final java.util.List<hydra.ext.java.syntax.EqualityExpression> value;
   
   public AndExpression (java.util.List<hydra.ext.java.syntax.EqualityExpression> value) {

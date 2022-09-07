@@ -4,6 +4,8 @@ package hydra.graph;
  * A logical collection of elements; a graph subset with dependencies on zero or more other subsets
  */
 public class Module<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Module");
+  
   public final hydra.graph.Graph<M> graph;
   
   public final java.util.List<hydra.graph.Module<M>> imports;

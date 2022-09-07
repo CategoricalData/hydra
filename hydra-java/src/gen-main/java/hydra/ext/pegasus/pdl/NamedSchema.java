@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class NamedSchema {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.NamedSchema");
+  
   public final hydra.ext.pegasus.pdl.QualifiedName qualifiedName;
   
   public final hydra.ext.pegasus.pdl.NamedSchema_Type type;

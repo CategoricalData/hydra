@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public abstract class Program_Elmt {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Program.Elmt");
+  
   private Program_Elmt () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Program_Elmt {
   }
   
   public static final class Fact extends hydra.ext.datalog.syntax.Program_Elmt {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Fact");
+    
     public final hydra.ext.datalog.syntax.Fact value;
     
     public Fact (hydra.ext.datalog.syntax.Fact value) {
@@ -55,6 +59,8 @@ public abstract class Program_Elmt {
   }
   
   public static final class Rule extends hydra.ext.datalog.syntax.Program_Elmt {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Rule");
+    
     public final hydra.ext.datalog.syntax.Rule value;
     
     public Rule (hydra.ext.datalog.syntax.Rule value) {

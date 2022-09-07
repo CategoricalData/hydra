@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SwitchBlock {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SwitchBlock");
+  
   public final java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value;
   
   public SwitchBlock (java.util.List<hydra.ext.java.syntax.SwitchBlock_Pair> value) {

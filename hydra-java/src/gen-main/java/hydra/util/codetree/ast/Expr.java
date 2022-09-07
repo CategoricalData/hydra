@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * An abstract expression
  */
 public abstract class Expr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Expr");
+  
   private Expr () {
   
   }
@@ -37,6 +39,8 @@ public abstract class Expr {
   }
   
   public static final class Const extends hydra.util.codetree.ast.Expr {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Const");
+    
     public final hydra.util.codetree.ast.Symbol value;
     
     public Const (hydra.util.codetree.ast.Symbol value) {
@@ -64,6 +68,8 @@ public abstract class Expr {
   }
   
   public static final class Op extends hydra.util.codetree.ast.Expr {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Op");
+    
     public final hydra.util.codetree.ast.OpExpr value;
     
     public Op (hydra.util.codetree.ast.OpExpr value) {
@@ -91,6 +97,8 @@ public abstract class Expr {
   }
   
   public static final class Brackets extends hydra.util.codetree.ast.Expr {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Brackets");
+    
     public final hydra.util.codetree.ast.BracketExpr value;
     
     public Brackets (hydra.util.codetree.ast.BracketExpr value) {

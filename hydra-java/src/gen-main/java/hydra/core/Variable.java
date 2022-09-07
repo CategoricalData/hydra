@@ -4,6 +4,8 @@ package hydra.core;
  * A symbol which stands in for a term
  */
 public class Variable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Variable");
+  
   /**
    * A symbol which stands in for a term
    */

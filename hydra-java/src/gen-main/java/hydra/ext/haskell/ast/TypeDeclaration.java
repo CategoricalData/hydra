@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class TypeDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypeDeclaration");
+  
   public final hydra.ext.haskell.ast.DeclarationHead name;
   
   public final hydra.ext.haskell.ast.Type type;

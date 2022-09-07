@@ -1,6 +1,8 @@
 package hydra.ext.rdf.syntax;
 
 public class Dataset {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Dataset");
+  
   public final java.util.Set<hydra.ext.rdf.syntax.Quad> value;
   
   public Dataset (java.util.Set<hydra.ext.rdf.syntax.Quad> value) {

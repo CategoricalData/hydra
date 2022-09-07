@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Decl_Def {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Decl.Def");
+  
   public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
   public final hydra.ext.scala.meta.Data_Name name;
