@@ -326,28 +326,33 @@ elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
     Java.Identifier jname = nameToJavaName aliases elementsName
 
 encodeElimination :: (Eq m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Elimination m -> GraphFlow m Java.Expression
-encodeElimination aliases elm = case elm of
-  EliminationElement -> encodeFunction aliases $ FunctionLambda $ Lambda var $ TermVariable var
-    where
-      var = Variable "v"
-  EliminationNominal name -> pure $ javaLambda var jbody
-    where
-      var = Variable "v"
-      arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
-      jbody = javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [arg]
---  EliminationOptional (OptionalCases m)
-  EliminationRecord (Projection _ fname) -> pure $ javaLambda var jbody
-    where
-      var = Variable "v"
-      jbody = javaExpressionNameToJavaExpression $
-        fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
-        
-        
-        
-        
-        
---  EliminationUnion (CaseStatement m)
+  => M.Map GraphName Java.PackageName -> Maybe Java.Expression -> Elimination m -> GraphFlow m Java.Expression
+encodeElimination aliases marg elm = case elm of
+  EliminationElement -> case marg of
+    Nothing -> encodeFunction aliases $ FunctionLambda $ Lambda var $ TermVariable var
+      where
+        var = Variable "v"
+    Just jarg -> pure jarg
+  EliminationNominal name -> case marg of
+    Nothing -> pure $ javaLambda var jbody
+      where
+        var = Variable "v"
+        arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
+        jbody = javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [arg]
+    Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
+      where
+        qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+--  EliminationOptional (OptionalCases nothing just) ->
+  EliminationRecord (Projection _ fname) -> case marg of
+    Nothing -> pure $ javaLambda var jbody
+      where
+        var = Variable "v"
+        jbody = javaExpressionNameToJavaExpression $
+          fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
+    Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
+      where
+        qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+--  EliminationUnion (CaseStatement tname fields) ->
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
@@ -355,7 +360,7 @@ encodeFunction :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
 encodeFunction aliases fun = case fun of
 --  FunctionCompareTo other ->
-  FunctionElimination elm -> encodeElimination aliases elm
+  FunctionElimination elm -> encodeElimination aliases Nothing elm
   FunctionLambda (Lambda var body) -> do
     jbody <- encodeTerm aliases body
     return $ javaLambda var jbody
@@ -410,19 +415,9 @@ encodeTerm aliases term = case term of
     TermApplication (Application fun arg) -> case stripTerm fun of
         TermFunction f -> case f of
 --          FunctionCompareTo (Term m)
-          FunctionElimination elm -> case elm of
-            EliminationElement -> encodeTerm aliases arg
-            EliminationNominal name -> do
+          FunctionElimination elm -> do
               jarg <- encodeTerm aliases arg
-              let qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
-              return $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
---            EliminationOptional (OptionalCases m)
-            EliminationRecord (Projection _ fname) -> do
-              jarg <- encodeTerm aliases arg
-              let qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
-              return $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
---            EliminationUnion (CaseStatement m)
-            _ -> defaultExpression
+              encodeElimination aliases (Just jarg) elm
 --          FunctionLambda (Lambda m)
 --          FunctionPrimitive Name
           _ -> defaultExpression
