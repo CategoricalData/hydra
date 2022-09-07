@@ -107,7 +107,14 @@ constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ J
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body
     decl = Java.TypeDeclarationWithComments itf Nothing
 
-declarationForRecordType :: Show m => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name
+declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName Java.PackageName
+  -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
+declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) body) =
+    toClassDecl aliases (tparams ++ [param]) elName body
+  where
+    param = javaTypeParameter $ capitalize v
+
+declarationForRecordType :: (Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name
   -> [FieldType m] -> GraphFlow m Java.ClassDeclaration
 declarationForRecordType aliases tparams elName fields = do
     memberVars <- CM.mapM toMemberVar fields
@@ -117,7 +124,8 @@ declarationForRecordType aliases tparams elName fields = do
       then CM.mapM toWithMethod fields
       else pure []
     cons <- constructor
-    let bodyDecls = memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
+    tn <- typeNameDecl aliases elName
+    let bodyDecls = [tn] ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
     return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing bodyDecls
   where
     constructor = do
@@ -232,7 +240,7 @@ declarationForType aliases (el, TypedTerm _ term) = do
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
 
-declarationForUnionType :: (Show m, Eq m)
+declarationForUnionType :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName
   -> [Java.TypeParameter] -> Name -> [FieldType m] -> GraphFlow m Java.ClassDeclaration
 declarationForUnionType aliases tparams elName fields = do
@@ -241,7 +249,8 @@ declarationForUnionType aliases tparams elName fields = do
     cx <- getState
     variantDecls' <- CM.zipWithM addComment variantDecls fields
     let otherDecls = noComment <$> [privateConstructor, toAcceptMethod True, visitor, partialVisitor]
-    let bodyDecls = otherDecls ++ variantDecls'
+    tn <- typeNameDecl aliases elName
+    let bodyDecls = [tn] ++ otherDecls ++ variantDecls'
     let mods = classModsPublic ++ [Java.ClassModifierAbstract]
     return $ javaClassDeclaration aliases tparams elName mods Nothing bodyDecls
   where
@@ -308,13 +317,6 @@ declarationForUnionType aliases tparams elName fields = do
       where
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] $ variantClassName elName fname
-
-declarationForLambdaType :: (Show m, Eq m) => M.Map GraphName Java.PackageName
-  -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
-declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) body) =
-    toClassDecl aliases (tparams ++ [param]) elName body
-  where
-    param = javaTypeParameter $ capitalize v
 
 elementsClassName = "Elements_"
 
@@ -515,7 +517,7 @@ encodeType aliases t = case stripType t of
   where
     encode = encodeType aliases
 
-toClassDecl :: (Show m, Eq m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
+toClassDecl :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
   -> Name -> Type m -> GraphFlow m Java.ClassDeclaration
 toClassDecl aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType aliases tparams elName $ rowTypeFields rt
@@ -529,6 +531,17 @@ toClassDecl aliases tparams elName t = case stripType t of
 toDataDeclaration :: M.Map GraphName Java.PackageName -> (a, TypedTerm m) -> GraphFlow m a
 toDataDeclaration aliases (el, TypedTerm typ term) = do
   fail "not implemented" -- TODO
+
+typeNameDecl :: (Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> Name -> GraphFlow m Java.ClassBodyDeclarationWithComments
+typeNameDecl aliases name = do
+  jt <- encodeType aliases $ Types.nominal _Name
+  arg <- encodeTerm aliases $ Terms.string $ unName name
+  let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName) [arg]
+  let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)
+  return $ noComment $ javaMemberField mods jt var
+  where
+    mods = [Java.FieldModifierPublic, Java.FieldModifierStatic, Java.FieldModifierFinal]
+    nameName = nameToJavaName aliases _Name
 
 valueFieldName :: String
 valueFieldName = "value"
