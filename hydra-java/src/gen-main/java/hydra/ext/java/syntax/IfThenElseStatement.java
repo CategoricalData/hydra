@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class IfThenElseStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IfThenElseStatement");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;
   
   public final hydra.ext.java.syntax.StatementNoShortIf then;

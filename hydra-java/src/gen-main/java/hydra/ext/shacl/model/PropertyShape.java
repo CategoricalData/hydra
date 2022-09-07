@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes
  */
 public class PropertyShape {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.PropertyShape");
+  
   public final hydra.ext.shacl.model.CommonProperties common;
   
   /**

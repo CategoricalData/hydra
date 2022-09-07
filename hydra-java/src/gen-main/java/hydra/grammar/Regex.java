@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class Regex {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Regex");
+  
   public final String value;
   
   public Regex (String value) {

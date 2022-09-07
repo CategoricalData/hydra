@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Bounds {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Bounds");
+  
   public final java.util.Optional<hydra.ext.scala.meta.Type> lo;
   
   public final java.util.Optional<hydra.ext.scala.meta.Type> hi;

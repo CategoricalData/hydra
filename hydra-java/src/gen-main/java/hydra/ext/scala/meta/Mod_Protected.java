@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Mod_Protected {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Mod.Protected");
+  
   public final hydra.ext.scala.meta.Ref within;
   
   public Mod_Protected (hydra.ext.scala.meta.Ref within) {

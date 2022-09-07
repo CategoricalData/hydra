@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ForStatementNoShortIf {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ForStatementNoShortIf");
+  
   private ForStatementNoShortIf () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ForStatementNoShortIf {
   }
   
   public static final class Basic extends hydra.ext.java.syntax.ForStatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Basic");
+    
     public final hydra.ext.java.syntax.BasicForStatementNoShortIf value;
     
     public Basic (hydra.ext.java.syntax.BasicForStatementNoShortIf value) {
@@ -55,6 +59,8 @@ public abstract class ForStatementNoShortIf {
   }
   
   public static final class Enhanced extends hydra.ext.java.syntax.ForStatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Enhanced");
+    
     public final hydra.ext.java.syntax.EnhancedForStatementNoShortIf value;
     
     public Enhanced (hydra.ext.java.syntax.EnhancedForStatementNoShortIf value) {

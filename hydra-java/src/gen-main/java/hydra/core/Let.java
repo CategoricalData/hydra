@@ -4,6 +4,8 @@ package hydra.core;
  * A 'let' binding
  */
 public class Let<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
+  
   public final hydra.core.Variable key;
   
   public final hydra.core.Term<M> value;

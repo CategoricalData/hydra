@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodDeclarator {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodDeclarator");
+  
   public final hydra.ext.java.syntax.Identifier identifier;
   
   public final java.util.Optional<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;

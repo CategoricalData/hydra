@@ -4,6 +4,8 @@ package hydra.core;
  * An integer type
  */
 public abstract class IntegerType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.IntegerType");
+  
   private IntegerType () {
   
   }
@@ -73,6 +75,8 @@ public abstract class IntegerType {
   }
   
   public static final class Bigint extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Bigint");
+    
     public Bigint () {
     
     }
@@ -98,6 +102,8 @@ public abstract class IntegerType {
   }
   
   public static final class Int8 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int8");
+    
     public Int8 () {
     
     }
@@ -123,6 +129,8 @@ public abstract class IntegerType {
   }
   
   public static final class Int16 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int16");
+    
     public Int16 () {
     
     }
@@ -148,6 +156,8 @@ public abstract class IntegerType {
   }
   
   public static final class Int32 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int32");
+    
     public Int32 () {
     
     }
@@ -173,6 +183,8 @@ public abstract class IntegerType {
   }
   
   public static final class Int64 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Int64");
+    
     public Int64 () {
     
     }
@@ -198,6 +210,8 @@ public abstract class IntegerType {
   }
   
   public static final class Uint8 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint8");
+    
     public Uint8 () {
     
     }
@@ -223,6 +237,8 @@ public abstract class IntegerType {
   }
   
   public static final class Uint16 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint16");
+    
     public Uint16 () {
     
     }
@@ -248,6 +264,8 @@ public abstract class IntegerType {
   }
   
   public static final class Uint32 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint32");
+    
     public Uint32 () {
     
     }
@@ -273,6 +291,8 @@ public abstract class IntegerType {
   }
   
   public static final class Uint64 extends hydra.core.IntegerType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Uint64");
+    
     public Uint64 () {
     
     }

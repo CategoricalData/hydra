@@ -4,6 +4,8 @@ package hydra.graph;
  * A graph element, having a name, data term (value), and schema term (type)
  */
 public class Element<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Element");
+  
   public final hydra.core.Name name;
   
   public final hydra.core.Term<M> schema;

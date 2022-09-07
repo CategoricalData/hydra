@@ -4,6 +4,8 @@ package hydra.core;
  * A term annotated with a fixed, named type; an instance of a newtype
  */
 public class Named<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Named");
+  
   public final hydra.core.Name typeName;
   
   public final hydra.core.Term<M> term;

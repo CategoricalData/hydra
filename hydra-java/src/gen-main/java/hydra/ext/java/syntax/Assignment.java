@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Assignment {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Assignment");
+  
   public final hydra.ext.java.syntax.LeftHandSide lhs;
   
   public final hydra.ext.java.syntax.AssignmentOperator op;

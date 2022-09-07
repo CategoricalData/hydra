@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PostDecrementExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostDecrementExpression");
+  
   public final hydra.ext.java.syntax.PostfixExpression value;
   
   public PostDecrementExpression (hydra.ext.java.syntax.PostfixExpression value) {

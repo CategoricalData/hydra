@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Pattern1 {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Pattern1");
+  
   public final hydra.ext.coq.syntax.Pattern0 pattern;
   
   public final java.util.Optional<hydra.ext.coq.syntax.ScopeKey> scope;

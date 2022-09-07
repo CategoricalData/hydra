@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Integer_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Integer");
+  
   public final java.math.BigInteger value;
   
   public Integer_ (java.math.BigInteger value) {

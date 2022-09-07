@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A data constructor
  */
 public abstract class Constructor {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Constructor");
+  
   private Constructor () {
   
   }
@@ -31,6 +33,8 @@ public abstract class Constructor {
   }
   
   public static final class Ordinary extends hydra.ext.haskell.ast.Constructor {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Ordinary");
+    
     public final hydra.ext.haskell.ast.Constructor_Ordinary value;
     
     public Ordinary (hydra.ext.haskell.ast.Constructor_Ordinary value) {
@@ -58,6 +62,8 @@ public abstract class Constructor {
   }
   
   public static final class Record extends hydra.ext.haskell.ast.Constructor {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Record");
+    
     public final hydra.ext.haskell.ast.Constructor_Record value;
     
     public Record (hydra.ext.haskell.ast.Constructor_Record value) {

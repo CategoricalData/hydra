@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class DateTime {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.DateTime");
+  
   public final String value;
   
   public DateTime (String value) {

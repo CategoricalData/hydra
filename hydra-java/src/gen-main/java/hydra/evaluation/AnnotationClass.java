@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A typeclass-like construct providing common functions for working with annotations
  */
 public class AnnotationClass<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.AnnotationClass");
+  
   public final M default_;
   
   public final java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal;

@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class TermList_Multiple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.TermList.Multiple");
+  
   public final hydra.ext.datalog.syntax.Term term;
   
   public final hydra.ext.datalog.syntax.TermList termList;

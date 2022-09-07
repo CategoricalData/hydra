@@ -1,6 +1,8 @@
 package hydra.ext.atlas.model;
 
 public abstract class AtlasAttributeDef_IndexType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.AtlasAttributeDef.IndexType");
+  
   private AtlasAttributeDef_IndexType () {
   
   }
@@ -28,6 +30,8 @@ public abstract class AtlasAttributeDef_IndexType {
   }
   
   public static final class Default extends hydra.ext.atlas.model.AtlasAttributeDef_IndexType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Default");
+    
     public Default () {
     
     }
@@ -53,6 +57,8 @@ public abstract class AtlasAttributeDef_IndexType {
   }
   
   public static final class String_ extends hydra.ext.atlas.model.AtlasAttributeDef_IndexType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.String");
+    
     public String_ () {
     
     }

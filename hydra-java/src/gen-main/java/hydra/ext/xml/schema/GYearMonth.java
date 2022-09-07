@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class GYearMonth {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GYearMonth");
+  
   public final String value;
   
   public GYearMonth (String value) {

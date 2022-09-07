@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TypeBound_ClassOrInterface {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeBound.ClassOrInterface");
+  
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
   public final java.util.List<hydra.ext.java.syntax.AdditionalBound> additional;

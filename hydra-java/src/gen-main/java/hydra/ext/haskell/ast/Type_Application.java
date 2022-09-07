@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Application {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type.Application");
+  
   public final hydra.ext.haskell.ast.Type context;
   
   public final hydra.ext.haskell.ast.Type argument;

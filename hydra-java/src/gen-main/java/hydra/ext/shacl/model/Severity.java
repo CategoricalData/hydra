@@ -1,6 +1,8 @@
 package hydra.ext.shacl.model;
 
 public abstract class Severity {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Severity");
+  
   private Severity () {
   
   }
@@ -37,6 +39,8 @@ public abstract class Severity {
    * A non-critical constraint violation indicating an informative message
    */
   public static final class Info extends hydra.ext.shacl.model.Severity {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Info");
+    
     public Info () {
     
     }
@@ -65,6 +69,8 @@ public abstract class Severity {
    * A non-critical constraint violation indicating a warning
    */
   public static final class Warning extends hydra.ext.shacl.model.Severity {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Warning");
+    
     public Warning () {
     
     }
@@ -93,6 +99,8 @@ public abstract class Severity {
    * A constraint violation
    */
   public static final class Violation extends hydra.ext.shacl.model.Severity {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Violation");
+    
     public Violation () {
     
     }

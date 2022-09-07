@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A pointed set of graph modules; a graph in the logical sense
  */
 public class Context<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Context");
+  
   public final hydra.graph.GraphSet<M> graphs;
   
   public final java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements;

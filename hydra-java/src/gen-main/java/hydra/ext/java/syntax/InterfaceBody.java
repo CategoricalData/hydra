@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class InterfaceBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceBody");
+  
   public final java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
   
   public InterfaceBody (java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {

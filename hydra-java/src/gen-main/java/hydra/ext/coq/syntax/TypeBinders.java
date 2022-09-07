@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class TypeBinders {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.TypeBinders");
+  
   public final java.util.List<hydra.ext.coq.syntax.Name> names;
   
   public final hydra.ext.coq.syntax.Type type;

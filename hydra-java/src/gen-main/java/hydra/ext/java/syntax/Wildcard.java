@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Wildcard {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Wildcard");
+  
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
   public final java.util.Optional<hydra.ext.java.syntax.WildcardBounds> wildcard;

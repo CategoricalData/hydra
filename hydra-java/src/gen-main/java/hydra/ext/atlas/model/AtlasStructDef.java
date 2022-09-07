@@ -4,6 +4,8 @@ package hydra.ext.atlas.model;
  * class that captures details of a struct-type.
  */
 public class AtlasStructDef {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.AtlasStructDef");
+  
   public final hydra.ext.atlas.model.AtlasBaseTypeDef asAtlasBaseTypeDef;
   
   public final java.util.List<hydra.ext.atlas.model.AtlasAttributeDef> attributeDefs;

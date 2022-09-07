@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ForUpdate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ForUpdate");
+  
   public final java.util.List<hydra.ext.java.syntax.StatementExpression> value;
   
   public ForUpdate (java.util.List<hydra.ext.java.syntax.StatementExpression> value) {

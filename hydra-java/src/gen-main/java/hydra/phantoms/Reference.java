@@ -1,6 +1,8 @@
 package hydra.phantoms;
 
 public class Reference<A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Reference");
+  
   public Reference () {
   
   }

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class WildcardBounds {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WildcardBounds");
+  
   private WildcardBounds () {
   
   }
@@ -28,6 +30,8 @@ public abstract class WildcardBounds {
   }
   
   public static final class Extends extends hydra.ext.java.syntax.WildcardBounds {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Extends");
+    
     public final hydra.ext.java.syntax.ReferenceType value;
     
     public Extends (hydra.ext.java.syntax.ReferenceType value) {
@@ -55,6 +59,8 @@ public abstract class WildcardBounds {
   }
   
   public static final class Super extends hydra.ext.java.syntax.WildcardBounds {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Super");
+    
     public final hydra.ext.java.syntax.ReferenceType value;
     
     public Super (hydra.ext.java.syntax.ReferenceType value) {

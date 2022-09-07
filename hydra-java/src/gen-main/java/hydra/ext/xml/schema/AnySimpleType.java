@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class AnySimpleType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.AnySimpleType");
+  
   public final String value;
   
   public AnySimpleType (String value) {

@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An 'if' expression
  */
 public class Expression_If {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.If");
+  
   public final hydra.ext.haskell.ast.Expression condition;
   
   public final hydra.ext.haskell.ast.Expression then;

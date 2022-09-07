@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_ContextFunction {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.ContextFunction");
+  
   public final java.util.List<hydra.ext.scala.meta.Type> params;
   
   public final hydra.ext.scala.meta.Type res;

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class InclusiveOrExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InclusiveOrExpression");
+  
   public final java.util.List<hydra.ext.java.syntax.ExclusiveOrExpression> value;
   
   public InclusiveOrExpression (java.util.List<hydra.ext.java.syntax.ExclusiveOrExpression> value) {

@@ -4,6 +4,8 @@ package hydra.core;
  * A data term
  */
 public abstract class Term<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Term");
+  
   private Term () {
   
   }
@@ -106,6 +108,8 @@ public abstract class Term<M> {
    * A term annotated with metadata
    */
   public static final class Annotated<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
+    
     /**
      * A term annotated with metadata
      */
@@ -139,6 +143,8 @@ public abstract class Term<M> {
    * A function application
    */
   public static final class Application<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Application");
+    
     /**
      * A function application
      */
@@ -172,6 +178,8 @@ public abstract class Term<M> {
    * A literal value
    */
   public static final class Literal<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Literal");
+    
     /**
      * A literal value
      */
@@ -205,6 +213,8 @@ public abstract class Term<M> {
    * An element reference
    */
   public static final class Element<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
+    
     /**
      * An element reference
      */
@@ -238,6 +248,8 @@ public abstract class Term<M> {
    * A function term
    */
   public static final class Function<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
+    
     /**
      * A function term
      */
@@ -268,6 +280,8 @@ public abstract class Term<M> {
   }
   
   public static final class Let<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
+    
     public final hydra.core.Let<M> value;
     
     public Let (hydra.core.Let<M> value) {
@@ -298,6 +312,8 @@ public abstract class Term<M> {
    * A list
    */
   public static final class List<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.List");
+    
     /**
      * A list
      */
@@ -331,6 +347,8 @@ public abstract class Term<M> {
    * A map of keys to values
    */
   public static final class Map<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Map");
+    
     /**
      * A map of keys to values
      */
@@ -361,6 +379,8 @@ public abstract class Term<M> {
   }
   
   public static final class Nominal<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
+    
     public final hydra.core.Named<M> value;
     
     public Nominal (hydra.core.Named<M> value) {
@@ -391,6 +411,8 @@ public abstract class Term<M> {
    * An optional value
    */
   public static final class Optional<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Optional");
+    
     /**
      * An optional value
      */
@@ -424,6 +446,8 @@ public abstract class Term<M> {
    * A record term
    */
   public static final class Record<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
+    
     /**
      * A record term
      */
@@ -457,6 +481,8 @@ public abstract class Term<M> {
    * A set of values
    */
   public static final class Set<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Set");
+    
     /**
      * A set of values
      */
@@ -490,6 +516,8 @@ public abstract class Term<M> {
    * A union term
    */
   public static final class Union<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
+    
     /**
      * A union term
      */
@@ -523,6 +551,8 @@ public abstract class Term<M> {
    * A variable reference
    */
   public static final class Variable<M> extends hydra.core.Term<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Variable");
+    
     /**
      * A variable reference
      */

@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A 'deriving' statement
  */
 public class Deriving {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Deriving");
+  
   /**
    * A 'deriving' statement
    */

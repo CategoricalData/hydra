@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class NormalApplication {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.NormalApplication");
+  
   public final hydra.ext.coq.syntax.Term1 lhs;
   
   public final java.util.List<hydra.ext.coq.syntax.Arg> rhs;

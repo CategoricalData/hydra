@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class FixWith {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.FixWith");
+  
   public final java.util.List<hydra.ext.coq.syntax.Fix_Decl> decls;
   
   public final java.util.Optional<hydra.ext.coq.syntax.Ident> for_;

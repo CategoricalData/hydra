@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * An expression enclosed by brackets
  */
 public class BracketExpr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.BracketExpr");
+  
   public final hydra.util.codetree.ast.Brackets brackets;
   
   public final hydra.util.codetree.ast.Expr enclosed;

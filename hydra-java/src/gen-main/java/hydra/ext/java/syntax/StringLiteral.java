@@ -4,6 +4,8 @@ package hydra.ext.java.syntax;
  * Note: this is an approximation which ignores encoding
  */
 public class StringLiteral {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StringLiteral");
+  
   /**
    * Note: this is an approximation which ignores encoding
    */

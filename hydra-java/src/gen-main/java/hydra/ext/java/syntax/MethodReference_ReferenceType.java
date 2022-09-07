@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_ReferenceType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodReference.ReferenceType");
+  
   public final hydra.ext.java.syntax.ReferenceType referenceType;
   
   public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;

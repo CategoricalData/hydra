@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Rule {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Rule");
+  
   public final hydra.ext.datalog.syntax.Atom atom;
   
   public final hydra.ext.datalog.syntax.AtomList atomList;

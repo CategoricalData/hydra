@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Placeholder {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Placeholder");
+  
   public final hydra.ext.scala.meta.Type_Bounds bounds;
   
   public Type_Placeholder (hydra.ext.scala.meta.Type_Bounds bounds) {

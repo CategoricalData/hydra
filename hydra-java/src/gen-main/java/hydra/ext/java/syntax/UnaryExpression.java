@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class UnaryExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.UnaryExpression");
+  
   private UnaryExpression () {
   
   }
@@ -46,6 +48,8 @@ public abstract class UnaryExpression {
   }
   
   public static final class PreIncrement extends hydra.ext.java.syntax.UnaryExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PreIncrement");
+    
     public final hydra.ext.java.syntax.PreIncrementExpression value;
     
     public PreIncrement (hydra.ext.java.syntax.PreIncrementExpression value) {
@@ -73,6 +77,8 @@ public abstract class UnaryExpression {
   }
   
   public static final class PreDecrement extends hydra.ext.java.syntax.UnaryExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PreDecrement");
+    
     public final hydra.ext.java.syntax.PreDecrementExpression value;
     
     public PreDecrement (hydra.ext.java.syntax.PreDecrementExpression value) {
@@ -100,6 +106,8 @@ public abstract class UnaryExpression {
   }
   
   public static final class Plus extends hydra.ext.java.syntax.UnaryExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Plus");
+    
     public final hydra.ext.java.syntax.UnaryExpression value;
     
     public Plus (hydra.ext.java.syntax.UnaryExpression value) {
@@ -127,6 +135,8 @@ public abstract class UnaryExpression {
   }
   
   public static final class Minus extends hydra.ext.java.syntax.UnaryExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Minus");
+    
     public final hydra.ext.java.syntax.UnaryExpression value;
     
     public Minus (hydra.ext.java.syntax.UnaryExpression value) {
@@ -154,6 +164,8 @@ public abstract class UnaryExpression {
   }
   
   public static final class Other extends hydra.ext.java.syntax.UnaryExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Other");
+    
     public final hydra.ext.java.syntax.UnaryExpressionNotPlusMinus value;
     
     public Other (hydra.ext.java.syntax.UnaryExpressionNotPlusMinus value) {

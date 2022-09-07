@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class UniverseLevel {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.UniverseLevel");
+  
   private UniverseLevel () {
   
   }
@@ -46,6 +48,8 @@ public abstract class UniverseLevel {
   }
   
   public static final class Set extends hydra.ext.coq.syntax.UniverseLevel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Set");
+    
     public Set () {
     
     }
@@ -71,6 +75,8 @@ public abstract class UniverseLevel {
   }
   
   public static final class Prop extends hydra.ext.coq.syntax.UniverseLevel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Prop");
+    
     public Prop () {
     
     }
@@ -96,6 +102,8 @@ public abstract class UniverseLevel {
   }
   
   public static final class Type extends hydra.ext.coq.syntax.UniverseLevel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Type");
+    
     public Type () {
     
     }
@@ -121,6 +129,8 @@ public abstract class UniverseLevel {
   }
   
   public static final class Ignored extends hydra.ext.coq.syntax.UniverseLevel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Ignored");
+    
     public Ignored () {
     
     }
@@ -146,6 +156,8 @@ public abstract class UniverseLevel {
   }
   
   public static final class Qualid extends hydra.ext.coq.syntax.UniverseLevel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Qualid");
+    
     public final hydra.ext.coq.syntax.Qualid value;
     
     public Qualid (hydra.ext.coq.syntax.Qualid value) {

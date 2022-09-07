@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ClassOrInterfaceTypeToInstantiate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassOrInterfaceTypeToInstantiate");
+  
   public final java.util.List<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers;
   
   public final java.util.Optional<hydra.ext.java.syntax.TypeArgumentsOrDiamond> typeArguments;

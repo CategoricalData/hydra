@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Infix {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type.Infix");
+  
   public final hydra.ext.haskell.ast.Type lhs;
   
   public final hydra.ext.haskell.ast.Operator operator;

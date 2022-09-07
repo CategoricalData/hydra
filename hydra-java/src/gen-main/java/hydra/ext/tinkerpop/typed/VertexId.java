@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A literal value representing a vertex id
  */
 public class VertexId {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.VertexId");
+  
   /**
    * A literal value representing a vertex id
    */

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class InterfaceDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceDeclaration");
+  
   private InterfaceDeclaration () {
   
   }
@@ -28,6 +30,8 @@ public abstract class InterfaceDeclaration {
   }
   
   public static final class NormalInterface extends hydra.ext.java.syntax.InterfaceDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.NormalInterface");
+    
     public final hydra.ext.java.syntax.NormalInterfaceDeclaration value;
     
     public NormalInterface (hydra.ext.java.syntax.NormalInterfaceDeclaration value) {
@@ -55,6 +59,8 @@ public abstract class InterfaceDeclaration {
   }
   
   public static final class AnnotationType extends hydra.ext.java.syntax.InterfaceDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationType");
+    
     public final hydra.ext.java.syntax.AnnotationTypeDeclaration value;
     
     public AnnotationType (hydra.ext.java.syntax.AnnotationTypeDeclaration value) {

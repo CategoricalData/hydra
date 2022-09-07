@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Ctor {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ctor");
+  
   private Ctor () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Ctor {
   }
   
   public static final class Primary extends hydra.ext.scala.meta.Ctor {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Primary");
+    
     public final hydra.ext.scala.meta.Ctor_Primary value;
     
     public Primary (hydra.ext.scala.meta.Ctor_Primary value) {
@@ -55,6 +59,8 @@ public abstract class Ctor {
   }
   
   public static final class Secondary extends hydra.ext.scala.meta.Ctor {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Secondary");
+    
     public final hydra.ext.scala.meta.Ctor_Secondary value;
     
     public Secondary (hydra.ext.scala.meta.Ctor_Secondary value) {

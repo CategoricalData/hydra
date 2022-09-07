@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_NewAnonymous {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.NewAnonymous");
+  
   public final hydra.ext.scala.meta.Template templ;
   
   public Data_NewAnonymous (hydra.ext.scala.meta.Template templ) {

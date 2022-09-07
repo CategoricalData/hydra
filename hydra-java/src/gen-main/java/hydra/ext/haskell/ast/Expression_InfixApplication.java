@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An infix application expression
  */
 public class Expression_InfixApplication {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.InfixApplication");
+  
   public final hydra.ext.haskell.ast.Expression lhs;
   
   public final hydra.ext.haskell.ast.Operator operator;

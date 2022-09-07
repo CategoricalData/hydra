@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_ExportsOrOpens {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ModuleDirective.ExportsOrOpens");
+  
   public final hydra.ext.java.syntax.PackageName package_;
   
   /**

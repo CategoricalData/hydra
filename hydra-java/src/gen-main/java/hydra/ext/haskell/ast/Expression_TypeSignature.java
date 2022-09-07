@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A type signature expression
  */
 public class Expression_TypeSignature {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.TypeSignature");
+  
   public final hydra.ext.haskell.ast.Expression inner;
   
   public final hydra.ext.haskell.ast.Type type;

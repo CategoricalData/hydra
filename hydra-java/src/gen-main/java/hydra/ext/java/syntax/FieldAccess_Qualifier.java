@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class FieldAccess_Qualifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess.Qualifier");
+  
   private FieldAccess_Qualifier () {
   
   }
@@ -34,6 +36,8 @@ public abstract class FieldAccess_Qualifier {
   }
   
   public static final class Primary extends hydra.ext.java.syntax.FieldAccess_Qualifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primary");
+    
     public final hydra.ext.java.syntax.Primary value;
     
     public Primary (hydra.ext.java.syntax.Primary value) {
@@ -61,6 +65,8 @@ public abstract class FieldAccess_Qualifier {
   }
   
   public static final class Super extends hydra.ext.java.syntax.FieldAccess_Qualifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Super");
+    
     public Super () {
     
     }
@@ -86,6 +92,8 @@ public abstract class FieldAccess_Qualifier {
   }
   
   public static final class Typed extends hydra.ext.java.syntax.FieldAccess_Qualifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Typed");
+    
     public final hydra.ext.java.syntax.TypeName value;
     
     public Typed (hydra.ext.java.syntax.TypeName value) {

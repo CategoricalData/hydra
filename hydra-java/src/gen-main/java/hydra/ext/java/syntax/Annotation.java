@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class Annotation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+  
   private Annotation () {
   
   }
@@ -34,6 +36,8 @@ public abstract class Annotation {
   }
   
   public static final class Normal extends hydra.ext.java.syntax.Annotation {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Normal");
+    
     public final hydra.ext.java.syntax.NormalAnnotation value;
     
     public Normal (hydra.ext.java.syntax.NormalAnnotation value) {
@@ -61,6 +65,8 @@ public abstract class Annotation {
   }
   
   public static final class Marker extends hydra.ext.java.syntax.Annotation {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Marker");
+    
     public final hydra.ext.java.syntax.MarkerAnnotation value;
     
     public Marker (hydra.ext.java.syntax.MarkerAnnotation value) {
@@ -88,6 +94,8 @@ public abstract class Annotation {
   }
   
   public static final class SingleElement extends hydra.ext.java.syntax.Annotation {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SingleElement");
+    
     public final hydra.ext.java.syntax.SingleElementAnnotation value;
     
     public SingleElement (hydra.ext.java.syntax.SingleElementAnnotation value) {

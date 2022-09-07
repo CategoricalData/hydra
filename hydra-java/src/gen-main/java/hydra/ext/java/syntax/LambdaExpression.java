@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class LambdaExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LambdaExpression");
+  
   public final hydra.ext.java.syntax.LambdaParameters parameters;
   
   public final hydra.ext.java.syntax.LambdaBody body;

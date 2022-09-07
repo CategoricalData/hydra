@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Member_Type {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Member.Type");
+  
   public final hydra.ext.scala.meta.Type_Name name;
   
   public Member_Type (hydra.ext.scala.meta.Type_Name name) {

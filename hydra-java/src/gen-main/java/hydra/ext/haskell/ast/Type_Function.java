@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Type_Function {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type.Function");
+  
   public final hydra.ext.haskell.ast.Type domain;
   
   public final hydra.ext.haskell.ast.Type codomain;

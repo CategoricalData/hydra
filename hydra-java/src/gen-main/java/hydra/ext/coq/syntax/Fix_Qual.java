@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class Fix_Qual {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Fix.Qual");
+  
   private Fix_Qual () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Fix_Qual {
   }
   
   public static final class In extends hydra.ext.coq.syntax.Fix_Qual {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.In");
+    
     public final hydra.ext.coq.syntax.Term value;
     
     public In (hydra.ext.coq.syntax.Term value) {
@@ -55,6 +59,8 @@ public abstract class Fix_Qual {
   }
   
   public static final class With extends hydra.ext.coq.syntax.Fix_Qual {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.With");
+    
     public final hydra.ext.coq.syntax.FixWith value;
     
     public With (hydra.ext.coq.syntax.FixWith value) {

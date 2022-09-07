@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * Matching open and close bracket symbols
  */
 public class Brackets {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Brackets");
+  
   public final hydra.util.codetree.ast.Symbol open;
   
   public final hydra.util.codetree.ast.Symbol close;

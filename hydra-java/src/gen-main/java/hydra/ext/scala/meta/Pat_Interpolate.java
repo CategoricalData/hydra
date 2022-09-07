@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Interpolate {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.Interpolate");
+  
   public final hydra.ext.scala.meta.Data_Name prefix;
   
   public final java.util.List<hydra.ext.scala.meta.Lit> parts;

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class QualidAndPattern {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.QualidAndPattern");
+  
   public final hydra.ext.coq.syntax.Qualid qualid;
   
   public final hydra.ext.coq.syntax.Pattern pattern;

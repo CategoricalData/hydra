@@ -1,6 +1,8 @@
 package hydra.adapter;
 
 public class LanguageName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.LanguageName");
+  
   public final String value;
   
   public LanguageName (String value) {

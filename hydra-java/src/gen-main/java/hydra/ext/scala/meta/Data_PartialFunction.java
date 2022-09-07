@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_PartialFunction {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.PartialFunction");
+  
   public final java.util.List<hydra.ext.scala.meta.Case> cases;
   
   public Data_PartialFunction (java.util.List<hydra.ext.scala.meta.Case> cases) {

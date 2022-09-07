@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * A collection of values, such as a list of strings or an optional integer value
  */
 public abstract class CollectionValue {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.CollectionValue");
+  
   private CollectionValue () {
   
   }
@@ -43,6 +45,8 @@ public abstract class CollectionValue {
   }
   
   public static final class List extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.List");
+    
     public final java.util.List<hydra.ext.tinkerpop.typed.Value> value;
     
     public List (java.util.List<hydra.ext.tinkerpop.typed.Value> value) {
@@ -70,6 +74,8 @@ public abstract class CollectionValue {
   }
   
   public static final class Map extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Map");
+    
     public final java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> value;
     
     public Map (java.util.Map<hydra.ext.tinkerpop.typed.Key, hydra.ext.tinkerpop.typed.Value> value) {
@@ -97,6 +103,8 @@ public abstract class CollectionValue {
   }
   
   public static final class Optional extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Optional");
+    
     public final java.util.Optional<hydra.ext.tinkerpop.typed.Value> value;
     
     public Optional (java.util.Optional<hydra.ext.tinkerpop.typed.Value> value) {
@@ -124,6 +132,8 @@ public abstract class CollectionValue {
   }
   
   public static final class Set extends hydra.ext.tinkerpop.typed.CollectionValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Set");
+    
     public final java.util.Set<hydra.ext.tinkerpop.typed.Value> value;
     
     public Set (java.util.Set<hydra.ext.tinkerpop.typed.Value> value) {

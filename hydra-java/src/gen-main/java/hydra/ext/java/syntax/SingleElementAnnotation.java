@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SingleElementAnnotation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SingleElementAnnotation");
+  
   public final hydra.ext.java.syntax.TypeName name;
   
   public final java.util.Optional<hydra.ext.java.syntax.ElementValue> value;

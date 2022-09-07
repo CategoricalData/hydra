@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Identifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Identifier");
+  
   public final String value;
   
   public Identifier (String value) {

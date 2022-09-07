@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ShiftExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftExpression");
+  
   private ShiftExpression () {
   
   }
@@ -40,6 +42,8 @@ public abstract class ShiftExpression {
   }
   
   public static final class Unary extends hydra.ext.java.syntax.ShiftExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Unary");
+    
     public final hydra.ext.java.syntax.AdditiveExpression value;
     
     public Unary (hydra.ext.java.syntax.AdditiveExpression value) {
@@ -67,6 +71,8 @@ public abstract class ShiftExpression {
   }
   
   public static final class ShiftLeft extends hydra.ext.java.syntax.ShiftExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftLeft");
+    
     public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
     public ShiftLeft (hydra.ext.java.syntax.ShiftExpression_Binary value) {
@@ -94,6 +100,8 @@ public abstract class ShiftExpression {
   }
   
   public static final class ShiftRight extends hydra.ext.java.syntax.ShiftExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftRight");
+    
     public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
     public ShiftRight (hydra.ext.java.syntax.ShiftExpression_Binary value) {
@@ -121,6 +129,8 @@ public abstract class ShiftExpression {
   }
   
   public static final class ShiftRightZeroFill extends hydra.ext.java.syntax.ShiftExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ShiftRightZeroFill");
+    
     public final hydra.ext.java.syntax.ShiftExpression_Binary value;
     
     public ShiftRightZeroFill (hydra.ext.java.syntax.ShiftExpression_Binary value) {

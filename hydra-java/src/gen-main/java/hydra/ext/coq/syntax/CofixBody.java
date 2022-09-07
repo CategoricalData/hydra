@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class CofixBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.CofixBody");
+  
   public final hydra.ext.coq.syntax.Ident ident;
   
   public final java.util.List<hydra.ext.coq.syntax.Binder> binders;

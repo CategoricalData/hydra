@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_ExtractInfix {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.ExtractInfix");
+  
   public final hydra.ext.scala.meta.Pat lhs;
   
   public final hydra.ext.scala.meta.Data_Name op;

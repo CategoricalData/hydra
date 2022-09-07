@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ClassInstanceCreationExpression_Qualifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassInstanceCreationExpression.Qualifier");
+  
   private ClassInstanceCreationExpression_Qualifier () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ClassInstanceCreationExpression_Qualifier {
   }
   
   public static final class Expression extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
+    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public Expression (hydra.ext.java.syntax.ExpressionName value) {
@@ -55,6 +59,8 @@ public abstract class ClassInstanceCreationExpression_Qualifier {
   }
   
   public static final class Primary extends hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primary");
+    
     public final hydra.ext.java.syntax.Primary value;
     
     public Primary (hydra.ext.java.syntax.Primary value) {

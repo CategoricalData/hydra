@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * One of several classes of whitespace
  */
 public abstract class Ws {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Ws");
+  
   private Ws () {
   
   }
@@ -43,6 +45,8 @@ public abstract class Ws {
   }
   
   public static final class None extends hydra.util.codetree.ast.Ws {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.None");
+    
     public None () {
     
     }
@@ -68,6 +72,8 @@ public abstract class Ws {
   }
   
   public static final class Space extends hydra.util.codetree.ast.Ws {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Space");
+    
     public Space () {
     
     }
@@ -93,6 +99,8 @@ public abstract class Ws {
   }
   
   public static final class Break extends hydra.util.codetree.ast.Ws {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Break");
+    
     public Break () {
     
     }
@@ -118,6 +126,8 @@ public abstract class Ws {
   }
   
   public static final class BreakAndIndent extends hydra.util.codetree.ast.Ws {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.BreakAndIndent");
+    
     public BreakAndIndent () {
     
     }

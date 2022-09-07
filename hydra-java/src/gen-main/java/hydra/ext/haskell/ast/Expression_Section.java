@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A section expression
  */
 public class Expression_Section {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.Section");
+  
   public final hydra.ext.haskell.ast.Operator operator;
   
   public final hydra.ext.haskell.ast.Expression expression;

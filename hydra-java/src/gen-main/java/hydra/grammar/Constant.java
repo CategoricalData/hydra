@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class Constant {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Constant");
+  
   public final String value;
   
   public Constant (String value) {

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Member_Data {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Member.Data");
+  
   private Member_Data () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Member_Data {
   }
   
   public static final class Pkg extends hydra.ext.scala.meta.Member_Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pkg");
+    
     public final hydra.ext.scala.meta.Pkg value;
     
     public Pkg (hydra.ext.scala.meta.Pkg value) {
@@ -55,6 +59,8 @@ public abstract class Member_Data {
   }
   
   public static final class Object_ extends hydra.ext.scala.meta.Member_Data {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Object");
+    
     public final hydra.ext.scala.meta.Pkg_Object value;
     
     public Object_ (hydra.ext.scala.meta.Pkg_Object value) {

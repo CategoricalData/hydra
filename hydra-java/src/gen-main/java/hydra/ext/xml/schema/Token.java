@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Token {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Token");
+  
   public final String value;
   
   public Token (String value) {

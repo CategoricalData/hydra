@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class FieldName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.FieldName");
+  
   public final String value;
   
   public FieldName (String value) {

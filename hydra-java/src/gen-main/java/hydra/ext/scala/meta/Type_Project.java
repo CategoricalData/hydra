@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Project {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Project");
+  
   public final hydra.ext.scala.meta.Type qual;
   
   public final hydra.ext.scala.meta.Type_Name name;

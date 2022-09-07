@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class LeftHandSide {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LeftHandSide");
+  
   private LeftHandSide () {
   
   }
@@ -34,6 +36,8 @@ public abstract class LeftHandSide {
   }
   
   public static final class ExpressionName extends hydra.ext.java.syntax.LeftHandSide {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ExpressionName");
+    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public ExpressionName (hydra.ext.java.syntax.ExpressionName value) {
@@ -61,6 +65,8 @@ public abstract class LeftHandSide {
   }
   
   public static final class FieldAccess extends hydra.ext.java.syntax.LeftHandSide {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldAccess");
+    
     public final hydra.ext.java.syntax.FieldAccess value;
     
     public FieldAccess (hydra.ext.java.syntax.FieldAccess value) {
@@ -88,6 +94,8 @@ public abstract class LeftHandSide {
   }
   
   public static final class ArrayAccess extends hydra.ext.java.syntax.LeftHandSide {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayAccess");
+    
     public final hydra.ext.java.syntax.ArrayAccess value;
     
     public ArrayAccess (hydra.ext.java.syntax.ArrayAccess value) {

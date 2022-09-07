@@ -4,6 +4,8 @@ package hydra.ext.yaml.model;
  * A YAML node (value)
  */
 public abstract class Node {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/yaml/model.Node");
+  
   private Node () {
   
   }
@@ -37,6 +39,8 @@ public abstract class Node {
   }
   
   public static final class Mapping extends hydra.ext.yaml.model.Node {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/yaml/model.Mapping");
+    
     public final java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value;
     
     public Mapping (java.util.Map<hydra.ext.yaml.model.Node, hydra.ext.yaml.model.Node> value) {
@@ -64,6 +68,8 @@ public abstract class Node {
   }
   
   public static final class Scalar extends hydra.ext.yaml.model.Node {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/yaml/model.Scalar");
+    
     public final hydra.ext.yaml.model.Scalar value;
     
     public Scalar (hydra.ext.yaml.model.Scalar value) {
@@ -91,6 +97,8 @@ public abstract class Node {
   }
   
   public static final class Sequence extends hydra.ext.yaml.model.Node {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/yaml/model.Sequence");
+    
     public final java.util.List<hydra.ext.yaml.model.Node> value;
     
     public Sequence (java.util.List<hydra.ext.yaml.model.Node> value) {

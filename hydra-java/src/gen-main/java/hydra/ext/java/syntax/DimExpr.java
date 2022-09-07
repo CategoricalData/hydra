@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class DimExpr {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.DimExpr");
+  
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   
   public final java.util.Optional<hydra.ext.java.syntax.Expression> expression;

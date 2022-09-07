@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class ExistentialVariable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ExistentialVariable");
+  
   public final hydra.ext.coq.syntax.Ident ident;
   
   public final hydra.ext.coq.syntax.ExistentialVariableVariant variant;

@@ -4,6 +4,8 @@ package hydra.graph;
  * A collection of graphs with a distinguished root graph
  */
 public class GraphSet<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.GraphSet");
+  
   public final java.util.Map<hydra.graph.GraphName, hydra.graph.Graph<M>> graphs;
   
   public final hydra.graph.GraphName root;

@@ -4,6 +4,8 @@ package hydra.core;
  * A record, or labeled tuple; a map of field names to terms
  */
 public class Record<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
+  
   public final hydra.core.Name typeName;
   
   public final java.util.List<hydra.core.Field<M>> fields;

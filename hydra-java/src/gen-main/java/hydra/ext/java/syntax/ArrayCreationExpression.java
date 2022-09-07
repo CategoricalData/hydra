@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ArrayCreationExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayCreationExpression");
+  
   private ArrayCreationExpression () {
   
   }
@@ -40,6 +42,8 @@ public abstract class ArrayCreationExpression {
   }
   
   public static final class Primitive extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primitive");
+    
     public final hydra.ext.java.syntax.ArrayCreationExpression_Primitive value;
     
     public Primitive (hydra.ext.java.syntax.ArrayCreationExpression_Primitive value) {
@@ -67,6 +71,8 @@ public abstract class ArrayCreationExpression {
   }
   
   public static final class ClassOrInterface extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassOrInterface");
+    
     public final hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface value;
     
     public ClassOrInterface (hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface value) {
@@ -94,6 +100,8 @@ public abstract class ArrayCreationExpression {
   }
   
   public static final class PrimitiveArray extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PrimitiveArray");
+    
     public final hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray value;
     
     public PrimitiveArray (hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray value) {
@@ -121,6 +129,8 @@ public abstract class ArrayCreationExpression {
   }
   
   public static final class ClassOrInterfaceArray extends hydra.ext.java.syntax.ArrayCreationExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassOrInterfaceArray");
+    
     public final hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value;
     
     public ClassOrInterfaceArray (hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray value) {

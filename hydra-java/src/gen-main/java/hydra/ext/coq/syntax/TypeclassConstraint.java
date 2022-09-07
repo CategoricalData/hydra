@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class TypeclassConstraint {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.TypeclassConstraint");
+  
   public final java.util.Optional<hydra.ext.coq.syntax.Name> name;
   
   public final Boolean generalizing;

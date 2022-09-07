@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_Provides {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ModuleDirective.Provides");
+  
   public final hydra.ext.java.syntax.TypeName to;
   
   /**

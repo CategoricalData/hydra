@@ -4,6 +4,8 @@ package hydra.core;
  * The name and type of a field
  */
 public class FieldType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldType");
+  
   public final hydra.core.FieldName name;
   
   public final hydra.core.Type<M> type;

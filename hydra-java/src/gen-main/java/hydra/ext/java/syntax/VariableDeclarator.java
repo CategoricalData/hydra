@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class VariableDeclarator {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableDeclarator");
+  
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
   public final java.util.Optional<hydra.ext.java.syntax.VariableInitializer> initializer;

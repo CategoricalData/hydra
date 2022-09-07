@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class RightHandSide {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.RightHandSide");
+  
   public final hydra.ext.haskell.ast.Expression value;
   
   public RightHandSide (hydra.ext.haskell.ast.Expression value) {

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Fun {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Fun");
+  
   public final hydra.ext.coq.syntax.OpenBinders binders;
   
   public final hydra.ext.coq.syntax.Term body;

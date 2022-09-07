@@ -4,6 +4,8 @@ package hydra.ext.xml.schema;
  * See https://www.w3.org/TR/xmlschema-2/#non-fundamental
  */
 public class ConstrainingFacet {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.ConstrainingFacet");
+  
   public ConstrainingFacet () {
   
   }

@@ -4,6 +4,8 @@ package hydra.ext.coq.syntax;
  * A non-negative arbitrary-precision integer
  */
 public class Natural {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Natural");
+  
   /**
    * A non-negative arbitrary-precision integer
    */

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Method {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Method");
+  
   public final java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> paramss;
   
   public final hydra.ext.scala.meta.Type tpe;

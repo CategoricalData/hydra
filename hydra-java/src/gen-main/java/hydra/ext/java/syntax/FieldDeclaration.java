@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class FieldDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FieldDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType unannType;

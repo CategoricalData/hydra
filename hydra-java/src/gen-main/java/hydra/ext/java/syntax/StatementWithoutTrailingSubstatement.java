@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class StatementWithoutTrailingSubstatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StatementWithoutTrailingSubstatement");
+  
   private StatementWithoutTrailingSubstatement () {
   
   }
@@ -88,6 +90,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Block extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Block");
+    
     public final hydra.ext.java.syntax.Block value;
     
     public Block (hydra.ext.java.syntax.Block value) {
@@ -115,6 +119,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Empty extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Empty");
+    
     public final hydra.ext.java.syntax.EmptyStatement value;
     
     public Empty (hydra.ext.java.syntax.EmptyStatement value) {
@@ -142,6 +148,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Expression extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
+    
     public final hydra.ext.java.syntax.ExpressionStatement value;
     
     public Expression (hydra.ext.java.syntax.ExpressionStatement value) {
@@ -169,6 +177,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Assert extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Assert");
+    
     public final hydra.ext.java.syntax.AssertStatement value;
     
     public Assert (hydra.ext.java.syntax.AssertStatement value) {
@@ -196,6 +206,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Switch extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Switch");
+    
     public final hydra.ext.java.syntax.SwitchStatement value;
     
     public Switch (hydra.ext.java.syntax.SwitchStatement value) {
@@ -223,6 +235,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Do extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Do");
+    
     public final hydra.ext.java.syntax.DoStatement value;
     
     public Do (hydra.ext.java.syntax.DoStatement value) {
@@ -250,6 +264,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Break extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Break");
+    
     public final hydra.ext.java.syntax.BreakStatement value;
     
     public Break (hydra.ext.java.syntax.BreakStatement value) {
@@ -277,6 +293,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Continue extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Continue");
+    
     public final hydra.ext.java.syntax.ContinueStatement value;
     
     public Continue (hydra.ext.java.syntax.ContinueStatement value) {
@@ -304,6 +322,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Return extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Return");
+    
     public final hydra.ext.java.syntax.ReturnStatement value;
     
     public Return (hydra.ext.java.syntax.ReturnStatement value) {
@@ -331,6 +351,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Synchronized extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Synchronized");
+    
     public final hydra.ext.java.syntax.SynchronizedStatement value;
     
     public Synchronized (hydra.ext.java.syntax.SynchronizedStatement value) {
@@ -358,6 +380,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Throw extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Throw");
+    
     public final hydra.ext.java.syntax.ThrowStatement value;
     
     public Throw (hydra.ext.java.syntax.ThrowStatement value) {
@@ -385,6 +409,8 @@ public abstract class StatementWithoutTrailingSubstatement {
   }
   
   public static final class Try extends hydra.ext.java.syntax.StatementWithoutTrailingSubstatement {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Try");
+    
     public final hydra.ext.java.syntax.TryStatement value;
     
     public Try (hydra.ext.java.syntax.TryStatement value) {

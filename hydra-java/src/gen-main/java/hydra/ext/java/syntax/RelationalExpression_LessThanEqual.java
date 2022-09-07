@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class RelationalExpression_LessThanEqual {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.RelationalExpression.LessThanEqual");
+  
   public final hydra.ext.java.syntax.RelationalExpression lhs;
   
   public final hydra.ext.java.syntax.ShiftExpression rhs;

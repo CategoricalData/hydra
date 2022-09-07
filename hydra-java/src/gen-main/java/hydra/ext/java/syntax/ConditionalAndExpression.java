@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConditionalAndExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConditionalAndExpression");
+  
   public final java.util.List<hydra.ext.java.syntax.InclusiveOrExpression> value;
   
   public ConditionalAndExpression (java.util.List<hydra.ext.java.syntax.InclusiveOrExpression> value) {

@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A data expression
  */
 public abstract class Expression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression");
+  
   private Expression () {
   
   }
@@ -127,6 +129,8 @@ public abstract class Expression {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Application");
+    
     public final hydra.ext.haskell.ast.Expression_Application value;
     
     public Application (hydra.ext.haskell.ast.Expression_Application value) {
@@ -154,6 +158,8 @@ public abstract class Expression {
   }
   
   public static final class Case extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Case");
+    
     public final hydra.ext.haskell.ast.Expression_Case value;
     
     public Case (hydra.ext.haskell.ast.Expression_Case value) {
@@ -181,6 +187,8 @@ public abstract class Expression {
   }
   
   public static final class ConstructRecord extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ConstructRecord");
+    
     public final hydra.ext.haskell.ast.Expression_ConstructRecord value;
     
     public ConstructRecord (hydra.ext.haskell.ast.Expression_ConstructRecord value) {
@@ -208,6 +216,8 @@ public abstract class Expression {
   }
   
   public static final class Do extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Do");
+    
     public final java.util.List<hydra.ext.haskell.ast.Statement> value;
     
     public Do (java.util.List<hydra.ext.haskell.ast.Statement> value) {
@@ -235,6 +245,8 @@ public abstract class Expression {
   }
   
   public static final class If extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.If");
+    
     public final hydra.ext.haskell.ast.Expression_If value;
     
     public If (hydra.ext.haskell.ast.Expression_If value) {
@@ -262,6 +274,8 @@ public abstract class Expression {
   }
   
   public static final class InfixApplication extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.InfixApplication");
+    
     public final hydra.ext.haskell.ast.Expression_InfixApplication value;
     
     public InfixApplication (hydra.ext.haskell.ast.Expression_InfixApplication value) {
@@ -289,6 +303,8 @@ public abstract class Expression {
   }
   
   public static final class Literal extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Literal");
+    
     public final hydra.ext.haskell.ast.Literal value;
     
     public Literal (hydra.ext.haskell.ast.Literal value) {
@@ -316,6 +332,8 @@ public abstract class Expression {
   }
   
   public static final class Lambda extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Lambda");
+    
     public final hydra.ext.haskell.ast.Expression_Lambda value;
     
     public Lambda (hydra.ext.haskell.ast.Expression_Lambda value) {
@@ -343,6 +361,8 @@ public abstract class Expression {
   }
   
   public static final class LeftSection extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.LeftSection");
+    
     public final hydra.ext.haskell.ast.Expression_Section value;
     
     public LeftSection (hydra.ext.haskell.ast.Expression_Section value) {
@@ -370,6 +390,8 @@ public abstract class Expression {
   }
   
   public static final class Let extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Let");
+    
     public final hydra.ext.haskell.ast.Expression_Let value;
     
     public Let (hydra.ext.haskell.ast.Expression_Let value) {
@@ -397,6 +419,8 @@ public abstract class Expression {
   }
   
   public static final class List extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.List");
+    
     public final java.util.List<hydra.ext.haskell.ast.Expression> value;
     
     public List (java.util.List<hydra.ext.haskell.ast.Expression> value) {
@@ -424,6 +448,8 @@ public abstract class Expression {
   }
   
   public static final class Parens extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Parens");
+    
     public final hydra.ext.haskell.ast.Expression value;
     
     public Parens (hydra.ext.haskell.ast.Expression value) {
@@ -451,6 +477,8 @@ public abstract class Expression {
   }
   
   public static final class PrefixApplication extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.PrefixApplication");
+    
     public final hydra.ext.haskell.ast.Expression_PrefixApplication value;
     
     public PrefixApplication (hydra.ext.haskell.ast.Expression_PrefixApplication value) {
@@ -478,6 +506,8 @@ public abstract class Expression {
   }
   
   public static final class RightSection extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.RightSection");
+    
     public final hydra.ext.haskell.ast.Expression_Section value;
     
     public RightSection (hydra.ext.haskell.ast.Expression_Section value) {
@@ -505,6 +535,8 @@ public abstract class Expression {
   }
   
   public static final class Tuple extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Tuple");
+    
     public final java.util.List<hydra.ext.haskell.ast.Expression> value;
     
     public Tuple (java.util.List<hydra.ext.haskell.ast.Expression> value) {
@@ -532,6 +564,8 @@ public abstract class Expression {
   }
   
   public static final class TypeSignature extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypeSignature");
+    
     public final hydra.ext.haskell.ast.Expression_TypeSignature value;
     
     public TypeSignature (hydra.ext.haskell.ast.Expression_TypeSignature value) {
@@ -559,6 +593,8 @@ public abstract class Expression {
   }
   
   public static final class UpdateRecord extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.UpdateRecord");
+    
     public final hydra.ext.haskell.ast.Expression_UpdateRecord value;
     
     public UpdateRecord (hydra.ext.haskell.ast.Expression_UpdateRecord value) {
@@ -586,6 +622,8 @@ public abstract class Expression {
   }
   
   public static final class Variable extends hydra.ext.haskell.ast.Expression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Variable");
+    
     public final hydra.ext.haskell.ast.Name value;
     
     public Variable (hydra.ext.haskell.ast.Name value) {

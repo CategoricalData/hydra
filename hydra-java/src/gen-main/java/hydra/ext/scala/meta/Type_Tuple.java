@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Tuple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Tuple");
+  
   public final java.util.List<hydra.ext.scala.meta.Type> args;
   
   public Type_Tuple (java.util.List<hydra.ext.scala.meta.Type> args) {

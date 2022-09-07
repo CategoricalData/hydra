@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodDeclaration");
+  
   /**
    * Note: simple methods cannot have annotations
    */

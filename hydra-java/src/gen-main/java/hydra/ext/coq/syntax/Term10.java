@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class Term10 {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term10");
+  
   private Term10 () {
   
   }
@@ -28,6 +30,8 @@ public abstract class Term10 {
   }
   
   public static final class Application extends hydra.ext.coq.syntax.Term10 {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Application");
+    
     public final hydra.ext.coq.syntax.Application value;
     
     public Application (hydra.ext.coq.syntax.Application value) {
@@ -55,6 +59,8 @@ public abstract class Term10 {
   }
   
   public static final class OneTerm extends hydra.ext.coq.syntax.Term10 {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.OneTerm");
+    
     public final hydra.ext.coq.syntax.OneTerm value;
     
     public OneTerm (hydra.ext.coq.syntax.OneTerm value) {

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Select {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Select");
+  
   public final hydra.ext.scala.meta.Data qual;
   
   public final hydra.ext.scala.meta.Data_Name name;

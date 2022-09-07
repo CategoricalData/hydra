@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConditionalExpression_TernaryLambda {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConditionalExpression.TernaryLambda");
+  
   public final hydra.ext.java.syntax.ConditionalOrExpression cond;
   
   public final hydra.ext.java.syntax.Expression ifTrue;

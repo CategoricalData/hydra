@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A field (name/type pair)
  */
 public class Field {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Field");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final hydra.ext.haskell.ast.Type type;

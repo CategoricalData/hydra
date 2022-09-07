@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class StaticImportOnDemandDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StaticImportOnDemandDeclaration");
+  
   public final hydra.ext.java.syntax.TypeName value;
   
   public StaticImportOnDemandDeclaration (hydra.ext.java.syntax.TypeName value) {

@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class NMTOKEN {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NMTOKEN");
+  
   public final String value;
   
   public NMTOKEN (String value) {

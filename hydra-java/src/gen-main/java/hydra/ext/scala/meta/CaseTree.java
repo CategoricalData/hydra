@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class CaseTree {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.CaseTree");
+  
   private CaseTree () {
   
   }
@@ -28,6 +30,8 @@ public abstract class CaseTree {
   }
   
   public static final class Case extends hydra.ext.scala.meta.CaseTree {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Case");
+    
     public final hydra.ext.scala.meta.Case value;
     
     public Case (hydra.ext.scala.meta.Case value) {
@@ -55,6 +59,8 @@ public abstract class CaseTree {
   }
   
   public static final class TypeCase extends hydra.ext.scala.meta.CaseTree {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TypeCase");
+    
     public final hydra.ext.scala.meta.TypeCase value;
     
     public TypeCase (hydra.ext.scala.meta.TypeCase value) {

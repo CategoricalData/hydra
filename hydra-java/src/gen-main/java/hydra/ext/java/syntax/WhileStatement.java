@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class WhileStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WhileStatement");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Expression> cond;
   
   public final hydra.ext.java.syntax.Statement body;

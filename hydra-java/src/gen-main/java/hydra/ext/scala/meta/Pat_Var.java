@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Var {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.Var");
+  
   public final hydra.ext.scala.meta.Data_Name name;
   
   public Pat_Var (hydra.ext.scala.meta.Data_Name name) {

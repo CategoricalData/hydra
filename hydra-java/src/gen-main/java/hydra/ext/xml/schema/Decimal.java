@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Decimal {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Decimal");
+  
   public final String value;
   
   public Decimal (String value) {

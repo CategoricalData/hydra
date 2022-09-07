@@ -4,6 +4,8 @@ package hydra.core;
  * A labeled term
  */
 public class Field<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Field");
+  
   public final hydra.core.FieldName name;
   
   public final hydra.core.Term<M> term;

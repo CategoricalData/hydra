@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * A value such as a string, number, or date
  */
 public class Literal {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Literal");
+  
   /**
    * a Unicode string, which should be in Normal Form C
    */

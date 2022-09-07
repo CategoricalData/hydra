@@ -4,6 +4,8 @@ package hydra.evaluation;
  * A built-in function
  */
 public class PrimitiveFunction<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.PrimitiveFunction");
+  
   public final hydra.core.Name name;
   
   public final hydra.core.FunctionType<M> type;

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Defn {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn");
+  
   private Defn () {
   
   }
@@ -100,6 +102,8 @@ public abstract class Defn {
   }
   
   public static final class Val extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Val");
+    
     public final hydra.ext.scala.meta.Defn_Val value;
     
     public Val (hydra.ext.scala.meta.Defn_Val value) {
@@ -127,6 +131,8 @@ public abstract class Defn {
   }
   
   public static final class Var extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Var");
+    
     public final hydra.ext.scala.meta.Defn_Var value;
     
     public Var (hydra.ext.scala.meta.Defn_Var value) {
@@ -154,6 +160,8 @@ public abstract class Defn {
   }
   
   public static final class Given extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Given");
+    
     public final hydra.ext.scala.meta.Defn_Given value;
     
     public Given (hydra.ext.scala.meta.Defn_Given value) {
@@ -181,6 +189,8 @@ public abstract class Defn {
   }
   
   public static final class Enum_ extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Enum");
+    
     public final hydra.ext.scala.meta.Defn_Enum value;
     
     public Enum_ (hydra.ext.scala.meta.Defn_Enum value) {
@@ -208,6 +218,8 @@ public abstract class Defn {
   }
   
   public static final class EnumCase extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.EnumCase");
+    
     public final hydra.ext.scala.meta.Defn_EnumCase value;
     
     public EnumCase (hydra.ext.scala.meta.Defn_EnumCase value) {
@@ -235,6 +247,8 @@ public abstract class Defn {
   }
   
   public static final class RepeatedEnumCase extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.RepeatedEnumCase");
+    
     public final hydra.ext.scala.meta.Defn_RepeatedEnumCase value;
     
     public RepeatedEnumCase (hydra.ext.scala.meta.Defn_RepeatedEnumCase value) {
@@ -262,6 +276,8 @@ public abstract class Defn {
   }
   
   public static final class GivenAlias extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.GivenAlias");
+    
     public final hydra.ext.scala.meta.Defn_GivenAlias value;
     
     public GivenAlias (hydra.ext.scala.meta.Defn_GivenAlias value) {
@@ -289,6 +305,8 @@ public abstract class Defn {
   }
   
   public static final class ExtensionGroup extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ExtensionGroup");
+    
     public final hydra.ext.scala.meta.Defn_ExtensionGroup value;
     
     public ExtensionGroup (hydra.ext.scala.meta.Defn_ExtensionGroup value) {
@@ -316,6 +334,8 @@ public abstract class Defn {
   }
   
   public static final class Def extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Def");
+    
     public final hydra.ext.scala.meta.Defn_Def value;
     
     public Def (hydra.ext.scala.meta.Defn_Def value) {
@@ -343,6 +363,8 @@ public abstract class Defn {
   }
   
   public static final class Macro extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Macro");
+    
     public final hydra.ext.scala.meta.Defn_Macro value;
     
     public Macro (hydra.ext.scala.meta.Defn_Macro value) {
@@ -370,6 +392,8 @@ public abstract class Defn {
   }
   
   public static final class Type extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type");
+    
     public final hydra.ext.scala.meta.Defn_Type value;
     
     public Type (hydra.ext.scala.meta.Defn_Type value) {
@@ -397,6 +421,8 @@ public abstract class Defn {
   }
   
   public static final class Class_ extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Class");
+    
     public final hydra.ext.scala.meta.Defn_Class value;
     
     public Class_ (hydra.ext.scala.meta.Defn_Class value) {
@@ -424,6 +450,8 @@ public abstract class Defn {
   }
   
   public static final class Trait extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Trait");
+    
     public final hydra.ext.scala.meta.Defn_Trait value;
     
     public Trait (hydra.ext.scala.meta.Defn_Trait value) {
@@ -451,6 +479,8 @@ public abstract class Defn {
   }
   
   public static final class Object_ extends hydra.ext.scala.meta.Defn {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Object");
+    
     public final hydra.ext.scala.meta.Defn_Object value;
     
     public Object_ (hydra.ext.scala.meta.Defn_Object value) {

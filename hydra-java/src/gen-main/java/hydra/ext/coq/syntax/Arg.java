@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class Arg {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Arg");
+  
   private Arg () {
   
   }
@@ -34,6 +36,8 @@ public abstract class Arg {
   }
   
   public static final class Ident extends hydra.ext.coq.syntax.Arg {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Ident");
+    
     public final hydra.ext.coq.syntax.IdentArg value;
     
     public Ident (hydra.ext.coq.syntax.IdentArg value) {
@@ -61,6 +65,8 @@ public abstract class Arg {
   }
   
   public static final class Natural extends hydra.ext.coq.syntax.Arg {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Natural");
+    
     public final hydra.ext.coq.syntax.NaturalArg value;
     
     public Natural (hydra.ext.coq.syntax.NaturalArg value) {
@@ -88,6 +94,8 @@ public abstract class Arg {
   }
   
   public static final class Term extends hydra.ext.coq.syntax.Arg {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term");
+    
     public final hydra.ext.coq.syntax.Term1 value;
     
     public Term (hydra.ext.coq.syntax.Term1 value) {

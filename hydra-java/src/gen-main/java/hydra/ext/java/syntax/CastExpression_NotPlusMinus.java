@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class CastExpression_NotPlusMinus {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.CastExpression.NotPlusMinus");
+  
   public final hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds;
   
   public final hydra.ext.java.syntax.UnaryExpression expression;

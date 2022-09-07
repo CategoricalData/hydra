@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_ApplyUnary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.ApplyUnary");
+  
   public final hydra.ext.scala.meta.Data_Name op;
   
   public final hydra.ext.scala.meta.Data arg;

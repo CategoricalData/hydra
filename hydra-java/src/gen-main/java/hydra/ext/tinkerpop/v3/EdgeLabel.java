@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * The (required) label of an edge
  */
 public class EdgeLabel {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.EdgeLabel");
+  
   /**
    * The (required) label of an edge
    */

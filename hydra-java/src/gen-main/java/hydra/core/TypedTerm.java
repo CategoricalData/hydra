@@ -4,6 +4,8 @@ package hydra.core;
  * A type together with an instance of the type
  */
 public class TypedTerm<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypedTerm");
+  
   public final hydra.core.Type<M> type;
   
   public final hydra.core.Term<M> term;

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class PrimitiveType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PrimitiveType");
+  
   private PrimitiveType () {
   
   }
@@ -28,6 +30,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Numeric extends hydra.ext.java.syntax.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Numeric");
+    
     public final hydra.ext.java.syntax.NumericType value;
     
     public Numeric (hydra.ext.java.syntax.NumericType value) {
@@ -55,6 +59,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Boolean_ extends hydra.ext.java.syntax.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Boolean");
+    
     public Boolean_ () {
     
     }

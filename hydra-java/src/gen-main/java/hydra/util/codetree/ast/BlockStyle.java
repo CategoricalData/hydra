@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * Formatting option for code blocks
  */
 public class BlockStyle {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.BlockStyle");
+  
   public final Boolean indent;
   
   public final Boolean newlineBeforeContent;

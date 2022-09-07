@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class EqualityExpression_Binary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EqualityExpression.Binary");
+  
   public final hydra.ext.java.syntax.EqualityExpression lhs;
   
   public final hydra.ext.java.syntax.RelationalExpression rhs;

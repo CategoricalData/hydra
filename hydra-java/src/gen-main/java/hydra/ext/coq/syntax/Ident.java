@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class Ident {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Ident");
+  
   public final hydra.ext.coq.syntax.String_ value;
   
   public Ident (hydra.ext.coq.syntax.String_ value) {

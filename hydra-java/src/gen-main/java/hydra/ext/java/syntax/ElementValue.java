@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ElementValue {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ElementValue");
+  
   private ElementValue () {
   
   }
@@ -34,6 +36,8 @@ public abstract class ElementValue {
   }
   
   public static final class ConditionalExpression extends hydra.ext.java.syntax.ElementValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConditionalExpression");
+    
     public final hydra.ext.java.syntax.ConditionalExpression value;
     
     public ConditionalExpression (hydra.ext.java.syntax.ConditionalExpression value) {
@@ -61,6 +65,8 @@ public abstract class ElementValue {
   }
   
   public static final class ElementValueArrayInitializer extends hydra.ext.java.syntax.ElementValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ElementValueArrayInitializer");
+    
     public final hydra.ext.java.syntax.ElementValueArrayInitializer value;
     
     public ElementValueArrayInitializer (hydra.ext.java.syntax.ElementValueArrayInitializer value) {
@@ -88,6 +94,8 @@ public abstract class ElementValue {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.ElementValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {

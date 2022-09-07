@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ClassOrInterfaceType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassOrInterfaceType");
+  
   private ClassOrInterfaceType () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ClassOrInterfaceType {
   }
   
   public static final class Class_ extends hydra.ext.java.syntax.ClassOrInterfaceType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Class");
+    
     public final hydra.ext.java.syntax.ClassType value;
     
     public Class_ (hydra.ext.java.syntax.ClassType value) {
@@ -55,6 +59,8 @@ public abstract class ClassOrInterfaceType {
   }
   
   public static final class Interface extends hydra.ext.java.syntax.ClassOrInterfaceType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Interface");
+    
     public final hydra.ext.java.syntax.InterfaceType value;
     
     public Interface (hydra.ext.java.syntax.InterfaceType value) {

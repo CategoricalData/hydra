@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class FixAnnot_Wf {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.FixAnnot.Wf");
+  
   public final hydra.ext.coq.syntax.OneTerm term;
   
   public final hydra.ext.coq.syntax.Ident ident;

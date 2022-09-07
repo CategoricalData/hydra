@@ -1,6 +1,8 @@
 package hydra.adapter;
 
 public class AdapterContext<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.AdapterContext");
+  
   public final hydra.evaluation.Context<M> evaluation;
   
   public final hydra.adapter.Language<M> source;

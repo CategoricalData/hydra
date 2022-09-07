@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ArrayCreationExpression_ClassOrInterfaceArray {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayCreationExpression.ClassOrInterfaceArray");
+  
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
   public final java.util.List<hydra.ext.java.syntax.Dims> dims;

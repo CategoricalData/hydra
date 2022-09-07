@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ModuleDirective_Requires {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ModuleDirective.Requires");
+  
   public final java.util.List<hydra.ext.java.syntax.RequiresModifier> modifiers;
   
   public final hydra.ext.java.syntax.ModuleName module;

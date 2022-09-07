@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class ENTITY {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.ENTITY");
+  
   public final String value;
   
   public ENTITY (String value) {

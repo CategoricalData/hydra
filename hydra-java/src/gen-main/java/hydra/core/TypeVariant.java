@@ -4,6 +4,8 @@ package hydra.core;
  * The identifier of a type constructor
  */
 public abstract class TypeVariant {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypeVariant");
+  
   private TypeVariant () {
   
   }
@@ -103,6 +105,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Annotated extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
+    
     public Annotated () {
     
     }
@@ -128,6 +132,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Application extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Application");
+    
     public Application () {
     
     }
@@ -153,6 +159,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Element extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
+    
     public Element () {
     
     }
@@ -178,6 +186,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Function extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
+    
     public Function () {
     
     }
@@ -203,6 +213,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Lambda extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Lambda");
+    
     public Lambda () {
     
     }
@@ -228,6 +240,8 @@ public abstract class TypeVariant {
   }
   
   public static final class List extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.List");
+    
     public List () {
     
     }
@@ -253,6 +267,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Literal extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Literal");
+    
     public Literal () {
     
     }
@@ -278,6 +294,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Map extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Map");
+    
     public Map () {
     
     }
@@ -303,6 +321,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Nominal extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
+    
     public Nominal () {
     
     }
@@ -328,6 +348,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Optional extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Optional");
+    
     public Optional () {
     
     }
@@ -353,6 +375,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Record extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
+    
     public Record () {
     
     }
@@ -378,6 +402,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Set extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Set");
+    
     public Set () {
     
     }
@@ -403,6 +429,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Union extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
+    
     public Union () {
     
     }
@@ -428,6 +456,8 @@ public abstract class TypeVariant {
   }
   
   public static final class Variable extends hydra.core.TypeVariant {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Variable");
+    
     public Variable () {
     
     }

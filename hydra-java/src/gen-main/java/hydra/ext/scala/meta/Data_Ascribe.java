@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Ascribe {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Ascribe");
+  
   public final hydra.ext.scala.meta.Data expr;
   
   public final hydra.ext.scala.meta.Type tpe;

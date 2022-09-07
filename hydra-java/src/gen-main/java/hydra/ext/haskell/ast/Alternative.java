@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A pattern-matching alternative
  */
 public class Alternative {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Alternative");
+  
   public final hydra.ext.haskell.ast.Pattern pattern;
   
   public final hydra.ext.haskell.ast.CaseRhs rhs;

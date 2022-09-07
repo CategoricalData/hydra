@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class SwitchLabel {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SwitchLabel");
+  
   private SwitchLabel () {
   
   }
@@ -34,6 +36,8 @@ public abstract class SwitchLabel {
   }
   
   public static final class Constant extends hydra.ext.java.syntax.SwitchLabel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Constant");
+    
     public final hydra.ext.java.syntax.ConstantExpression value;
     
     public Constant (hydra.ext.java.syntax.ConstantExpression value) {
@@ -61,6 +65,8 @@ public abstract class SwitchLabel {
   }
   
   public static final class EnumConstant extends hydra.ext.java.syntax.SwitchLabel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.EnumConstant");
+    
     public final hydra.ext.java.syntax.EnumConstantName value;
     
     public EnumConstant (hydra.ext.java.syntax.EnumConstantName value) {
@@ -88,6 +94,8 @@ public abstract class SwitchLabel {
   }
   
   public static final class Default extends hydra.ext.java.syntax.SwitchLabel {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Default");
+    
     public Default () {
     
     }

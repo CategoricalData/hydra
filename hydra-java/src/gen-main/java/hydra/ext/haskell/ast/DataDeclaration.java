@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A data type declaration
  */
 public class DataDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.DataDeclaration");
+  
   public final hydra.ext.haskell.ast.DataDeclaration_Keyword keyword;
   
   public final java.util.List<hydra.ext.haskell.ast.Assertion> context;

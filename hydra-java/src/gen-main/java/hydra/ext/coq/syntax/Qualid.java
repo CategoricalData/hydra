@@ -4,6 +4,8 @@ package hydra.ext.coq.syntax;
  * A qualified identifier
  */
 public class Qualid {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Qualid");
+  
   public final hydra.ext.coq.syntax.Ident id;
   
   public final java.util.List<hydra.ext.coq.syntax.FieldIdent> fieldIds;

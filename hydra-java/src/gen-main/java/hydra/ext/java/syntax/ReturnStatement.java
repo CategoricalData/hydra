@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ReturnStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ReturnStatement");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Expression> value;
   
   public ReturnStatement (java.util.Optional<hydra.ext.java.syntax.Expression> value) {

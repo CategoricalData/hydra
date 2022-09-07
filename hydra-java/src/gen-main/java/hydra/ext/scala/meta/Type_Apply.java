@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Apply {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Apply");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public final java.util.List<hydra.ext.scala.meta.Type> args;

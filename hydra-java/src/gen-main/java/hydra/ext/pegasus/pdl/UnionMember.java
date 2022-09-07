@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class UnionMember {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.UnionMember");
+  
   public final java.util.Optional<hydra.ext.pegasus.pdl.FieldName> alias;
   
   public final hydra.ext.pegasus.pdl.Schema value;

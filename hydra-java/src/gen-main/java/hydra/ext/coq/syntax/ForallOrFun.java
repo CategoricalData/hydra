@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class ForallOrFun {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.ForallOrFun");
+  
   private ForallOrFun () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ForallOrFun {
   }
   
   public static final class Forall extends hydra.ext.coq.syntax.ForallOrFun {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Forall");
+    
     public final hydra.ext.coq.syntax.Forall value;
     
     public Forall (hydra.ext.coq.syntax.Forall value) {
@@ -55,6 +59,8 @@ public abstract class ForallOrFun {
   }
   
   public static final class Fun extends hydra.ext.coq.syntax.ForallOrFun {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Fun");
+    
     public final hydra.ext.coq.syntax.Fun value;
     
     public Fun (hydra.ext.coq.syntax.Fun value) {

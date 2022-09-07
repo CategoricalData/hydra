@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class NormalAnnotation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.NormalAnnotation");
+  
   public final hydra.ext.java.syntax.TypeName typeName;
   
   public final java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs;

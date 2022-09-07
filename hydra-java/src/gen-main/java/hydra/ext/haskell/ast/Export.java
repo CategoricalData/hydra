@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An export statement
  */
 public abstract class Export {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Export");
+  
   private Export () {
   
   }
@@ -31,6 +33,8 @@ public abstract class Export {
   }
   
   public static final class Declaration extends hydra.ext.haskell.ast.Export {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Declaration");
+    
     public final hydra.ext.haskell.ast.ImportExportSpec value;
     
     public Declaration (hydra.ext.haskell.ast.ImportExportSpec value) {
@@ -58,6 +62,8 @@ public abstract class Export {
   }
   
   public static final class Module extends hydra.ext.haskell.ast.Export {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Module");
+    
     public final hydra.ext.haskell.ast.ModuleName value;
     
     public Module (hydra.ext.haskell.ast.ModuleName value) {

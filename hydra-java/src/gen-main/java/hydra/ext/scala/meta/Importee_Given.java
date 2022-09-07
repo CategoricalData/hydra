@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Given {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Importee.Given");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public Importee_Given (hydra.ext.scala.meta.Type tpe) {

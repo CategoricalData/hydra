@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Mod_Private {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Mod.Private");
+  
   public final hydra.ext.scala.meta.Ref within;
   
   public Mod_Private (hydra.ext.scala.meta.Ref within) {

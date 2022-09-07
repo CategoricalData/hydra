@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An application expression
  */
 public class Expression_Application {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.Application");
+  
   public final hydra.ext.haskell.ast.Expression function;
   
   public final hydra.ext.haskell.ast.Expression argument;

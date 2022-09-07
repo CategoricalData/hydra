@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SwitchStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SwitchStatement");
+  
   public final hydra.ext.java.syntax.Expression cond;
   
   public final hydra.ext.java.syntax.SwitchBlock block;

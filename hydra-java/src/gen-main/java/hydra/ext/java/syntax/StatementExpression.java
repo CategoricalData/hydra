@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class StatementExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StatementExpression");
+  
   private StatementExpression () {
   
   }
@@ -58,6 +60,8 @@ public abstract class StatementExpression {
   }
   
   public static final class Assignment extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Assignment");
+    
     public final hydra.ext.java.syntax.Assignment value;
     
     public Assignment (hydra.ext.java.syntax.Assignment value) {
@@ -85,6 +89,8 @@ public abstract class StatementExpression {
   }
   
   public static final class PreIncrement extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PreIncrement");
+    
     public final hydra.ext.java.syntax.PreIncrementExpression value;
     
     public PreIncrement (hydra.ext.java.syntax.PreIncrementExpression value) {
@@ -112,6 +118,8 @@ public abstract class StatementExpression {
   }
   
   public static final class PreDecrement extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PreDecrement");
+    
     public final hydra.ext.java.syntax.PreDecrementExpression value;
     
     public PreDecrement (hydra.ext.java.syntax.PreDecrementExpression value) {
@@ -139,6 +147,8 @@ public abstract class StatementExpression {
   }
   
   public static final class PostIncrement extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostIncrement");
+    
     public final hydra.ext.java.syntax.PostIncrementExpression value;
     
     public PostIncrement (hydra.ext.java.syntax.PostIncrementExpression value) {
@@ -166,6 +176,8 @@ public abstract class StatementExpression {
   }
   
   public static final class PostDecrement extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PostDecrement");
+    
     public final hydra.ext.java.syntax.PostDecrementExpression value;
     
     public PostDecrement (hydra.ext.java.syntax.PostDecrementExpression value) {
@@ -193,6 +205,8 @@ public abstract class StatementExpression {
   }
   
   public static final class MethodInvocation extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodInvocation");
+    
     public final hydra.ext.java.syntax.MethodInvocation value;
     
     public MethodInvocation (hydra.ext.java.syntax.MethodInvocation value) {
@@ -220,6 +234,8 @@ public abstract class StatementExpression {
   }
   
   public static final class ClassInstanceCreation extends hydra.ext.java.syntax.StatementExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassInstanceCreation");
+    
     public final hydra.ext.java.syntax.ClassInstanceCreationExpression value;
     
     public ClassInstanceCreation (hydra.ext.java.syntax.ClassInstanceCreationExpression value) {

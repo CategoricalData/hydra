@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class FixAnnot {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.FixAnnot");
+  
   private FixAnnot () {
   
   }
@@ -34,6 +36,8 @@ public abstract class FixAnnot {
   }
   
   public static final class Struct extends hydra.ext.coq.syntax.FixAnnot {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Struct");
+    
     public final hydra.ext.coq.syntax.Ident value;
     
     public Struct (hydra.ext.coq.syntax.Ident value) {
@@ -61,6 +65,8 @@ public abstract class FixAnnot {
   }
   
   public static final class Wf extends hydra.ext.coq.syntax.FixAnnot {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Wf");
+    
     public final hydra.ext.coq.syntax.FixAnnot_Wf value;
     
     public Wf (hydra.ext.coq.syntax.FixAnnot_Wf value) {
@@ -88,6 +94,8 @@ public abstract class FixAnnot {
   }
   
   public static final class Measure extends hydra.ext.coq.syntax.FixAnnot {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Measure");
+    
     public final hydra.ext.coq.syntax.FixAnnot_Measure value;
     
     public Measure (hydra.ext.coq.syntax.FixAnnot_Measure value) {

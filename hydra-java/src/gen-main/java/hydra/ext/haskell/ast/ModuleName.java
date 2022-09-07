@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class ModuleName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ModuleName");
+  
   public final String value;
   
   public ModuleName (String value) {

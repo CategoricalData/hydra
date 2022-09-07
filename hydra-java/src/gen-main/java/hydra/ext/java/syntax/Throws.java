@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class Throws {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Throws");
+  
   public final java.util.List<hydra.ext.java.syntax.ExceptionType> value;
   
   public Throws (java.util.List<hydra.ext.java.syntax.ExceptionType> value) {

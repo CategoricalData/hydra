@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class TypeArgumentsOrDiamond {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeArgumentsOrDiamond");
+  
   private TypeArgumentsOrDiamond () {
   
   }
@@ -28,6 +30,8 @@ public abstract class TypeArgumentsOrDiamond {
   }
   
   public static final class Arguments extends hydra.ext.java.syntax.TypeArgumentsOrDiamond {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Arguments");
+    
     public final java.util.List<hydra.ext.java.syntax.TypeArgument> value;
     
     public Arguments (java.util.List<hydra.ext.java.syntax.TypeArgument> value) {
@@ -55,6 +59,8 @@ public abstract class TypeArgumentsOrDiamond {
   }
   
   public static final class Diamond extends hydra.ext.java.syntax.TypeArgumentsOrDiamond {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Diamond");
+    
     public Diamond () {
     
     }

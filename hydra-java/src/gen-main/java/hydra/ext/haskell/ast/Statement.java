@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Statement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Statement");
+  
   public final hydra.ext.haskell.ast.Expression value;
   
   public Statement (hydra.ext.haskell.ast.Expression value) {

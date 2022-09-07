@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PrimitiveTypeWithAnnotations {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PrimitiveTypeWithAnnotations");
+  
   public final hydra.ext.java.syntax.PrimitiveType type;
   
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;

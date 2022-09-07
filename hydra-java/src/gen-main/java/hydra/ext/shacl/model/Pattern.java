@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent
  */
 public class Pattern {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.Pattern");
+  
   public final String regex;
   
   public final java.util.Optional<String> flags;

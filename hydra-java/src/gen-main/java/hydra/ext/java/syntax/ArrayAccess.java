@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ArrayAccess {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayAccess");
+  
   public final java.util.Optional<hydra.ext.java.syntax.Expression> expression;
   
   public final hydra.ext.java.syntax.ArrayAccess_Variant variant;

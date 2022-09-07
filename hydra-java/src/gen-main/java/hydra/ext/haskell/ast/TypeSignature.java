@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class TypeSignature {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.TypeSignature");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final hydra.ext.haskell.ast.Type type;

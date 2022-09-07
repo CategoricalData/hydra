@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * Any of a number of constraint parameters which can be applied either to node or property shapes
  */
 public class CommonConstraints {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.CommonConstraints");
+  
   /**
    * See https://www.w3.org/TR/shacl/#AndConstraintComponent
    */

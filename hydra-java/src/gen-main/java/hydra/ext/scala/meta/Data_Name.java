@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Name {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Name");
+  
   public final hydra.ext.scala.meta.PredefString value;
   
   public Data_Name (hydra.ext.scala.meta.PredefString value) {

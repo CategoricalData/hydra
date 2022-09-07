@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * A vertex
  */
 public class Vertex<V, P> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.Vertex");
+  
   public final hydra.ext.tinkerpop.v3.VertexLabel label;
   
   public final V id;

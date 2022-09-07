@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class String_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.String");
+  
   public final String value;
   
   public String_ (String value) {

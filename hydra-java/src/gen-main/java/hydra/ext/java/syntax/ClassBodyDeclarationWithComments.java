@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ClassBodyDeclarationWithComments {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassBodyDeclarationWithComments");
+  
   public final hydra.ext.java.syntax.ClassBodyDeclaration value;
   
   public final java.util.Optional<String> comments;

@@ -4,6 +4,8 @@ package hydra.core;
  * A data type
  */
 public abstract class Type<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Type");
+  
   private Type () {
   
   }
@@ -106,6 +108,8 @@ public abstract class Type<M> {
    * A type annotated with metadata
    */
   public static final class Annotated<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
+    
     /**
      * A type annotated with metadata
      */
@@ -136,6 +140,8 @@ public abstract class Type<M> {
   }
   
   public static final class Application<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Application");
+    
     public final hydra.core.ApplicationType<M> value;
     
     public Application (hydra.core.ApplicationType<M> value) {
@@ -163,6 +169,8 @@ public abstract class Type<M> {
   }
   
   public static final class Element<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
+    
     public final hydra.core.Type<M> value;
     
     public Element (hydra.core.Type<M> value) {
@@ -190,6 +198,8 @@ public abstract class Type<M> {
   }
   
   public static final class Function<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
+    
     public final hydra.core.FunctionType<M> value;
     
     public Function (hydra.core.FunctionType<M> value) {
@@ -217,6 +227,8 @@ public abstract class Type<M> {
   }
   
   public static final class Lambda<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Lambda");
+    
     public final hydra.core.LambdaType<M> value;
     
     public Lambda (hydra.core.LambdaType<M> value) {
@@ -244,6 +256,8 @@ public abstract class Type<M> {
   }
   
   public static final class List<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.List");
+    
     public final hydra.core.Type<M> value;
     
     public List (hydra.core.Type<M> value) {
@@ -271,6 +285,8 @@ public abstract class Type<M> {
   }
   
   public static final class Literal<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Literal");
+    
     public final hydra.core.LiteralType value;
     
     public Literal (hydra.core.LiteralType value) {
@@ -298,6 +314,8 @@ public abstract class Type<M> {
   }
   
   public static final class Map<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Map");
+    
     public final hydra.core.MapType<M> value;
     
     public Map (hydra.core.MapType<M> value) {
@@ -325,6 +343,8 @@ public abstract class Type<M> {
   }
   
   public static final class Nominal<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
+    
     public final hydra.core.Name value;
     
     public Nominal (hydra.core.Name value) {
@@ -352,6 +372,8 @@ public abstract class Type<M> {
   }
   
   public static final class Optional<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Optional");
+    
     public final hydra.core.Type<M> value;
     
     public Optional (hydra.core.Type<M> value) {
@@ -379,6 +401,8 @@ public abstract class Type<M> {
   }
   
   public static final class Record<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
+    
     public final hydra.core.RowType<M> value;
     
     public Record (hydra.core.RowType<M> value) {
@@ -406,6 +430,8 @@ public abstract class Type<M> {
   }
   
   public static final class Set<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Set");
+    
     public final hydra.core.Type<M> value;
     
     public Set (hydra.core.Type<M> value) {
@@ -433,6 +459,8 @@ public abstract class Type<M> {
   }
   
   public static final class Union<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
+    
     public final hydra.core.RowType<M> value;
     
     public Union (hydra.core.RowType<M> value) {
@@ -460,6 +488,8 @@ public abstract class Type<M> {
   }
   
   public static final class Variable<M> extends hydra.core.Type<M> {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Variable");
+    
     public final hydra.core.VariableType value;
     
     public Variable (hydra.core.VariableType value) {

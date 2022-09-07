@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * An import or export specification
  */
 public class ImportExportSpec {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ImportExportSpec");
+  
   public final java.util.Optional<hydra.ext.haskell.ast.ImportModifier> modifier;
   
   public final hydra.ext.haskell.ast.Name name;

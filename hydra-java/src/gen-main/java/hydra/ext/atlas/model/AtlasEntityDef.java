@@ -4,6 +4,8 @@ package hydra.ext.atlas.model;
  * class that captures details of a entity-type.
  */
 public class AtlasEntityDef {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.AtlasEntityDef");
+  
   public final hydra.ext.atlas.model.AtlasStructDef asAtlasStructDef;
   
   public final java.util.Set<String> superTypes;

@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public abstract class Datatype {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Datatype");
+  
   private Datatype () {
   
   }
@@ -280,6 +282,8 @@ public abstract class Datatype {
   }
   
   public static final class AnySimpleType extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.AnySimpleType");
+    
     public AnySimpleType () {
     
     }
@@ -305,6 +309,8 @@ public abstract class Datatype {
   }
   
   public static final class AnyType extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.AnyType");
+    
     public AnyType () {
     
     }
@@ -330,6 +336,8 @@ public abstract class Datatype {
   }
   
   public static final class AnyURI extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.AnyURI");
+    
     public AnyURI () {
     
     }
@@ -355,6 +363,8 @@ public abstract class Datatype {
   }
   
   public static final class Base64Binary extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Base64Binary");
+    
     public Base64Binary () {
     
     }
@@ -380,6 +390,8 @@ public abstract class Datatype {
   }
   
   public static final class Boolean_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Boolean");
+    
     public Boolean_ () {
     
     }
@@ -405,6 +417,8 @@ public abstract class Datatype {
   }
   
   public static final class Byte_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Byte");
+    
     public Byte_ () {
     
     }
@@ -430,6 +444,8 @@ public abstract class Datatype {
   }
   
   public static final class Date extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Date");
+    
     public Date () {
     
     }
@@ -455,6 +471,8 @@ public abstract class Datatype {
   }
   
   public static final class DateTime extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.DateTime");
+    
     public DateTime () {
     
     }
@@ -480,6 +498,8 @@ public abstract class Datatype {
   }
   
   public static final class Decimal extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Decimal");
+    
     public Decimal () {
     
     }
@@ -505,6 +525,8 @@ public abstract class Datatype {
   }
   
   public static final class Double_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Double");
+    
     public Double_ () {
     
     }
@@ -530,6 +552,8 @@ public abstract class Datatype {
   }
   
   public static final class Duration extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Duration");
+    
     public Duration () {
     
     }
@@ -555,6 +579,8 @@ public abstract class Datatype {
   }
   
   public static final class ENTITIES extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.ENTITIES");
+    
     public ENTITIES () {
     
     }
@@ -580,6 +606,8 @@ public abstract class Datatype {
   }
   
   public static final class ENTITY extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.ENTITY");
+    
     public ENTITY () {
     
     }
@@ -605,6 +633,8 @@ public abstract class Datatype {
   }
   
   public static final class Float_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Float");
+    
     public Float_ () {
     
     }
@@ -630,6 +660,8 @@ public abstract class Datatype {
   }
   
   public static final class GDay extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GDay");
+    
     public GDay () {
     
     }
@@ -655,6 +687,8 @@ public abstract class Datatype {
   }
   
   public static final class GMonth extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GMonth");
+    
     public GMonth () {
     
     }
@@ -680,6 +714,8 @@ public abstract class Datatype {
   }
   
   public static final class GMonthDay extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GMonthDay");
+    
     public GMonthDay () {
     
     }
@@ -705,6 +741,8 @@ public abstract class Datatype {
   }
   
   public static final class GYear extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GYear");
+    
     public GYear () {
     
     }
@@ -730,6 +768,8 @@ public abstract class Datatype {
   }
   
   public static final class GYearMonth extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.GYearMonth");
+    
     public GYearMonth () {
     
     }
@@ -755,6 +795,8 @@ public abstract class Datatype {
   }
   
   public static final class HexBinary extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.HexBinary");
+    
     public HexBinary () {
     
     }
@@ -780,6 +822,8 @@ public abstract class Datatype {
   }
   
   public static final class ID extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.ID");
+    
     public ID () {
     
     }
@@ -805,6 +849,8 @@ public abstract class Datatype {
   }
   
   public static final class IDREF extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.IDREF");
+    
     public IDREF () {
     
     }
@@ -830,6 +876,8 @@ public abstract class Datatype {
   }
   
   public static final class IDREFS extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.IDREFS");
+    
     public IDREFS () {
     
     }
@@ -855,6 +903,8 @@ public abstract class Datatype {
   }
   
   public static final class Int extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Int");
+    
     public Int () {
     
     }
@@ -880,6 +930,8 @@ public abstract class Datatype {
   }
   
   public static final class Integer_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Integer");
+    
     public Integer_ () {
     
     }
@@ -905,6 +957,8 @@ public abstract class Datatype {
   }
   
   public static final class Language extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Language");
+    
     public Language () {
     
     }
@@ -930,6 +984,8 @@ public abstract class Datatype {
   }
   
   public static final class Long_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Long");
+    
     public Long_ () {
     
     }
@@ -955,6 +1011,8 @@ public abstract class Datatype {
   }
   
   public static final class NMTOKEN extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NMTOKEN");
+    
     public NMTOKEN () {
     
     }
@@ -980,6 +1038,8 @@ public abstract class Datatype {
   }
   
   public static final class NOTATION extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NOTATION");
+    
     public NOTATION () {
     
     }
@@ -1005,6 +1065,8 @@ public abstract class Datatype {
   }
   
   public static final class Name extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Name");
+    
     public Name () {
     
     }
@@ -1030,6 +1092,8 @@ public abstract class Datatype {
   }
   
   public static final class NegativeInteger extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NegativeInteger");
+    
     public NegativeInteger () {
     
     }
@@ -1055,6 +1119,8 @@ public abstract class Datatype {
   }
   
   public static final class NonNegativeInteger extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NonNegativeInteger");
+    
     public NonNegativeInteger () {
     
     }
@@ -1080,6 +1146,8 @@ public abstract class Datatype {
   }
   
   public static final class NonPositiveInteger extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NonPositiveInteger");
+    
     public NonPositiveInteger () {
     
     }
@@ -1105,6 +1173,8 @@ public abstract class Datatype {
   }
   
   public static final class NormalizedString extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NormalizedString");
+    
     public NormalizedString () {
     
     }
@@ -1130,6 +1200,8 @@ public abstract class Datatype {
   }
   
   public static final class PositiveInteger extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.PositiveInteger");
+    
     public PositiveInteger () {
     
     }
@@ -1155,6 +1227,8 @@ public abstract class Datatype {
   }
   
   public static final class QName extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.QName");
+    
     public QName () {
     
     }
@@ -1180,6 +1254,8 @@ public abstract class Datatype {
   }
   
   public static final class Short_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Short");
+    
     public Short_ () {
     
     }
@@ -1205,6 +1281,8 @@ public abstract class Datatype {
   }
   
   public static final class String_ extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.String");
+    
     public String_ () {
     
     }
@@ -1230,6 +1308,8 @@ public abstract class Datatype {
   }
   
   public static final class Time extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Time");
+    
     public Time () {
     
     }
@@ -1255,6 +1335,8 @@ public abstract class Datatype {
   }
   
   public static final class Token extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Token");
+    
     public Token () {
     
     }
@@ -1280,6 +1362,8 @@ public abstract class Datatype {
   }
   
   public static final class UnsignedByte extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedByte");
+    
     public UnsignedByte () {
     
     }
@@ -1305,6 +1389,8 @@ public abstract class Datatype {
   }
   
   public static final class UnsignedInt extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedInt");
+    
     public UnsignedInt () {
     
     }
@@ -1330,6 +1416,8 @@ public abstract class Datatype {
   }
   
   public static final class UnsignedLong extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedLong");
+    
     public UnsignedLong () {
     
     }
@@ -1355,6 +1443,8 @@ public abstract class Datatype {
   }
   
   public static final class UnsignedShort extends hydra.ext.xml.schema.Datatype {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.UnsignedShort");
+    
     public UnsignedShort () {
     
     }

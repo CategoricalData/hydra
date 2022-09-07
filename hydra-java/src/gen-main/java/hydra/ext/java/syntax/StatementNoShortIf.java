@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class StatementNoShortIf {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StatementNoShortIf");
+  
   private StatementNoShortIf () {
   
   }
@@ -46,6 +48,8 @@ public abstract class StatementNoShortIf {
   }
   
   public static final class WithoutTrailing extends hydra.ext.java.syntax.StatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.WithoutTrailing");
+    
     public final hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value;
     
     public WithoutTrailing (hydra.ext.java.syntax.StatementWithoutTrailingSubstatement value) {
@@ -73,6 +77,8 @@ public abstract class StatementNoShortIf {
   }
   
   public static final class Labeled extends hydra.ext.java.syntax.StatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Labeled");
+    
     public final hydra.ext.java.syntax.LabeledStatementNoShortIf value;
     
     public Labeled (hydra.ext.java.syntax.LabeledStatementNoShortIf value) {
@@ -100,6 +106,8 @@ public abstract class StatementNoShortIf {
   }
   
   public static final class IfThenElse extends hydra.ext.java.syntax.StatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IfThenElse");
+    
     public final hydra.ext.java.syntax.IfThenElseStatementNoShortIf value;
     
     public IfThenElse (hydra.ext.java.syntax.IfThenElseStatementNoShortIf value) {
@@ -127,6 +135,8 @@ public abstract class StatementNoShortIf {
   }
   
   public static final class While extends hydra.ext.java.syntax.StatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.While");
+    
     public final hydra.ext.java.syntax.WhileStatementNoShortIf value;
     
     public While (hydra.ext.java.syntax.WhileStatementNoShortIf value) {
@@ -154,6 +164,8 @@ public abstract class StatementNoShortIf {
   }
   
   public static final class For extends hydra.ext.java.syntax.StatementNoShortIf {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.For");
+    
     public final hydra.ext.java.syntax.ForStatementNoShortIf value;
     
     public For (hydra.ext.java.syntax.ForStatementNoShortIf value) {

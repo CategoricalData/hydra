@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class InterfaceMethodModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InterfaceMethodModifier");
+  
   private InterfaceMethodModifier () {
   
   }
@@ -58,6 +60,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {
@@ -85,6 +89,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Public extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Public");
+    
     public Public () {
     
     }
@@ -110,6 +116,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Private extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Private");
+    
     public Private () {
     
     }
@@ -135,6 +143,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Abstract extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Abstract");
+    
     public Abstract () {
     
     }
@@ -160,6 +170,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Default extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Default");
+    
     public Default () {
     
     }
@@ -185,6 +197,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Static extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Static");
+    
     public Static () {
     
     }
@@ -210,6 +224,8 @@ public abstract class InterfaceMethodModifier {
   }
   
   public static final class Strictfp extends hydra.ext.java.syntax.InterfaceMethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Strictfp");
+    
     public Strictfp () {
     
     }

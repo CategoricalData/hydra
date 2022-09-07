@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Defn_Class {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn.Class");
+  
   public final java.util.List<hydra.ext.scala.meta.Mod> mods;
   
   public final hydra.ext.scala.meta.Type_Name name;

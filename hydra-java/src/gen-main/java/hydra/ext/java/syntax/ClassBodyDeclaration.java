@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ClassBodyDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassBodyDeclaration");
+  
   private ClassBodyDeclaration () {
   
   }
@@ -40,6 +42,8 @@ public abstract class ClassBodyDeclaration {
   }
   
   public static final class ClassMember extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassMember");
+    
     public final hydra.ext.java.syntax.ClassMemberDeclaration value;
     
     public ClassMember (hydra.ext.java.syntax.ClassMemberDeclaration value) {
@@ -67,6 +71,8 @@ public abstract class ClassBodyDeclaration {
   }
   
   public static final class InstanceInitializer extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.InstanceInitializer");
+    
     public final hydra.ext.java.syntax.InstanceInitializer value;
     
     public InstanceInitializer (hydra.ext.java.syntax.InstanceInitializer value) {
@@ -94,6 +100,8 @@ public abstract class ClassBodyDeclaration {
   }
   
   public static final class StaticInitializer extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StaticInitializer");
+    
     public final hydra.ext.java.syntax.StaticInitializer value;
     
     public StaticInitializer (hydra.ext.java.syntax.StaticInitializer value) {
@@ -121,6 +129,8 @@ public abstract class ClassBodyDeclaration {
   }
   
   public static final class ConstructorDeclaration extends hydra.ext.java.syntax.ClassBodyDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstructorDeclaration");
+    
     public final hydra.ext.java.syntax.ConstructorDeclaration value;
     
     public ConstructorDeclaration (hydra.ext.java.syntax.ConstructorDeclaration value) {

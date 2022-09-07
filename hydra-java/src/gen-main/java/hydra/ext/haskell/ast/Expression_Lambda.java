@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A lambda expression
  */
 public class Expression_Lambda {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.Lambda");
+  
   public final java.util.List<hydra.ext.haskell.ast.Pattern> bindings;
   
   public final hydra.ext.haskell.ast.Expression inner;

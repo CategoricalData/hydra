@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_TypedParam {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.TypedParam");
+  
   public final hydra.ext.scala.meta.Name name;
   
   public final hydra.ext.scala.meta.Type typ;

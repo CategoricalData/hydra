@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class QualidAnnotated {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.QualidAnnotated");
+  
   public final hydra.ext.coq.syntax.Qualid qualid;
   
   public final java.util.Optional<hydra.ext.coq.syntax.UnivAnnot> univAnnot;

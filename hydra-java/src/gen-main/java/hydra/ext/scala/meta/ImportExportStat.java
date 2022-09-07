@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class ImportExportStat {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ImportExportStat");
+  
   private ImportExportStat () {
   
   }
@@ -28,6 +30,8 @@ public abstract class ImportExportStat {
   }
   
   public static final class Import extends hydra.ext.scala.meta.ImportExportStat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Import");
+    
     public final hydra.ext.scala.meta.Import value;
     
     public Import (hydra.ext.scala.meta.Import value) {
@@ -55,6 +59,8 @@ public abstract class ImportExportStat {
   }
   
   public static final class Export extends hydra.ext.scala.meta.ImportExportStat {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Export");
+    
     public final hydra.ext.scala.meta.Export value;
     
     public Export (hydra.ext.scala.meta.Export value) {

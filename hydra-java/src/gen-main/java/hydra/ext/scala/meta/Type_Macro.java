@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Macro {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Macro");
+  
   public final hydra.ext.scala.meta.Data body;
   
   public Type_Macro (hydra.ext.scala.meta.Data body) {

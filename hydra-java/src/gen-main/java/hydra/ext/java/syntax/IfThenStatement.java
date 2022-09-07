@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class IfThenStatement {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.IfThenStatement");
+  
   public final hydra.ext.java.syntax.Expression expression;
   
   public final hydra.ext.java.syntax.Statement statement;

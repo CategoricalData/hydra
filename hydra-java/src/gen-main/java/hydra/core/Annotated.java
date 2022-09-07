@@ -1,6 +1,8 @@
 package hydra.core;
 
 public class Annotated<A, M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
+  
   public final A subject;
   
   public final M annotation;

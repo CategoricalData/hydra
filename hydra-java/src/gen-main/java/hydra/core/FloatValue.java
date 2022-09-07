@@ -4,6 +4,8 @@ package hydra.core;
  * A floating-point literal value
  */
 public abstract class FloatValue {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FloatValue");
+  
   private FloatValue () {
   
   }
@@ -37,6 +39,8 @@ public abstract class FloatValue {
   }
   
   public static final class Bigfloat extends hydra.core.FloatValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Bigfloat");
+    
     public final Double value;
     
     public Bigfloat (Double value) {
@@ -67,6 +71,8 @@ public abstract class FloatValue {
    * A 32-bit floating-point value
    */
   public static final class Float32 extends hydra.core.FloatValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Float32");
+    
     /**
      * A 32-bit floating-point value
      */
@@ -100,6 +106,8 @@ public abstract class FloatValue {
    * A 64-bit floating-point value
    */
   public static final class Float64 extends hydra.core.FloatValue {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Float64");
+    
     /**
      * A 64-bit floating-point value
      */

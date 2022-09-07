@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodName");
+  
   public final hydra.ext.java.syntax.Identifier value;
   
   public MethodName (hydra.ext.java.syntax.Identifier value) {

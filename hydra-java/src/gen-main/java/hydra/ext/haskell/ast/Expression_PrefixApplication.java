@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A prefix expression
  */
 public class Expression_PrefixApplication {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.PrefixApplication");
+  
   public final hydra.ext.haskell.ast.Operator operator;
   
   public final hydra.ext.haskell.ast.Expression rhs;

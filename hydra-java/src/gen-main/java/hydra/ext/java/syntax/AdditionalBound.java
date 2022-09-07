@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AdditionalBound {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AdditionalBound");
+  
   public final hydra.ext.java.syntax.InterfaceType value;
   
   public AdditionalBound (hydra.ext.java.syntax.InterfaceType value) {

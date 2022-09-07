@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_This {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.This");
+  
   public Data_This () {
   
   }

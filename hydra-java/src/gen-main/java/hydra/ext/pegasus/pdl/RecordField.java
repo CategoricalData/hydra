@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class RecordField {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.RecordField");
+  
   public final hydra.ext.pegasus.pdl.FieldName name;
   
   public final hydra.ext.pegasus.pdl.Schema value;

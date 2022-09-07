@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pat_Tuple {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pat.Tuple");
+  
   public final java.util.List<hydra.ext.scala.meta.Pat> args;
   
   public Pat_Tuple (java.util.List<hydra.ext.scala.meta.Pat> args) {

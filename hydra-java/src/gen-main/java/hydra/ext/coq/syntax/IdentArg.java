@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public class IdentArg {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.IdentArg");
+  
   public final hydra.ext.coq.syntax.Ident ident;
   
   public final hydra.ext.coq.syntax.Term term;

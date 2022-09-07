@@ -4,6 +4,8 @@ package hydra.ext.shacl.model;
  * Common constraint parameters and other properties for SHACL shapes
  */
 public class CommonProperties {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.CommonProperties");
+  
   /**
    * Common constraint parameters attached to this shape
    */

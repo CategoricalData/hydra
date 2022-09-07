@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_QuotedMacroType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.QuotedMacroType");
+  
   public final hydra.ext.scala.meta.Type tpe;
   
   public Data_QuotedMacroType (hydra.ext.scala.meta.Type tpe) {

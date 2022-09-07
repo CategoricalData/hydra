@@ -4,6 +4,8 @@ package hydra.util.codetree.ast;
  * An operator symbol
  */
 public class Op {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Op");
+  
   public final hydra.util.codetree.ast.Symbol symbol;
   
   public final hydra.util.codetree.ast.Padding padding;

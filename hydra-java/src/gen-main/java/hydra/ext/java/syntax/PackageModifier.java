@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PackageModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PackageModifier");
+  
   public final hydra.ext.java.syntax.Annotation value;
   
   public PackageModifier (hydra.ext.java.syntax.Annotation value) {

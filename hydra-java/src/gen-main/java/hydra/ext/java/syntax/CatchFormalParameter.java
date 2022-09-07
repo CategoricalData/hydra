@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class CatchFormalParameter {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.CatchFormalParameter");
+  
   public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.CatchType type;

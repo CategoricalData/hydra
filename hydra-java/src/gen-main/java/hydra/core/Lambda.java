@@ -4,6 +4,8 @@ package hydra.core;
  * A function abstraction (lambda)
  */
 public class Lambda<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Lambda");
+  
   /**
    * The parameter of the lambda
    */

@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.typed;
  * The type of an edge, with characteristic id, out-vertex, in-vertex, and property types
  */
 public class EdgeType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.EdgeType");
+  
   public final hydra.core.LiteralType id;
   
   public final hydra.ext.tinkerpop.typed.VertexIdType out;

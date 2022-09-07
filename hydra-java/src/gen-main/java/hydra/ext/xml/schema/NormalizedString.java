@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class NormalizedString {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NormalizedString");
+  
   public final String value;
   
   public NormalizedString (String value) {

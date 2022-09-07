@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * Stand-in for rdfs:Class
  */
 public class RdfsClass {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.RdfsClass");
+  
   public RdfsClass () {
   
   }

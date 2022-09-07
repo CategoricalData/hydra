@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class StaticInitializer {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StaticInitializer");
+  
   public final hydra.ext.java.syntax.Block value;
   
   public StaticInitializer (hydra.ext.java.syntax.Block value) {

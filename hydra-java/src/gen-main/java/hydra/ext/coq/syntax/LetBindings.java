@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class LetBindings {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.LetBindings");
+  
   private LetBindings () {
   
   }
@@ -28,6 +30,8 @@ public abstract class LetBindings {
   }
   
   public static final class Named extends hydra.ext.coq.syntax.LetBindings {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Named");
+    
     public final hydra.ext.coq.syntax.LetNamed value;
     
     public Named (hydra.ext.coq.syntax.LetNamed value) {
@@ -55,6 +59,8 @@ public abstract class LetBindings {
   }
   
   public static final class Destructuring extends hydra.ext.coq.syntax.LetBindings {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Destructuring");
+    
     public final hydra.ext.coq.syntax.LetDestructuring value;
     
     public Destructuring (hydra.ext.coq.syntax.LetDestructuring value) {

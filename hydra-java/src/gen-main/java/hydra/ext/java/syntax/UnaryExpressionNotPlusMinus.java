@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class UnaryExpressionNotPlusMinus {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.UnaryExpressionNotPlusMinus");
+  
   private UnaryExpressionNotPlusMinus () {
   
   }
@@ -40,6 +42,8 @@ public abstract class UnaryExpressionNotPlusMinus {
   }
   
   public static final class Postfix extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Postfix");
+    
     public final hydra.ext.java.syntax.PostfixExpression value;
     
     public Postfix (hydra.ext.java.syntax.PostfixExpression value) {
@@ -67,6 +71,8 @@ public abstract class UnaryExpressionNotPlusMinus {
   }
   
   public static final class Tilde extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Tilde");
+    
     public final hydra.ext.java.syntax.UnaryExpression value;
     
     public Tilde (hydra.ext.java.syntax.UnaryExpression value) {
@@ -94,6 +100,8 @@ public abstract class UnaryExpressionNotPlusMinus {
   }
   
   public static final class Not extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Not");
+    
     public final hydra.ext.java.syntax.UnaryExpression value;
     
     public Not (hydra.ext.java.syntax.UnaryExpression value) {
@@ -121,6 +129,8 @@ public abstract class UnaryExpressionNotPlusMinus {
   }
   
   public static final class Cast extends hydra.ext.java.syntax.UnaryExpressionNotPlusMinus {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Cast");
+    
     public final hydra.ext.java.syntax.CastExpression value;
     
     public Cast (hydra.ext.java.syntax.CastExpression value) {

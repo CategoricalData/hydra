@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Byte_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Byte");
+  
   public final Short value;
   
   public Byte_ (Short value) {

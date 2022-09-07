@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class ScalaSymbol {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ScalaSymbol");
+  
   public final String name;
   
   public ScalaSymbol (String name) {

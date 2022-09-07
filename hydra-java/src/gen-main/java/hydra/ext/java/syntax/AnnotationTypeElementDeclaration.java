@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AnnotationTypeElementDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationTypeElementDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ConstructorBody {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstructorBody");
+  
   public final java.util.Optional<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation;
   
   public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;

@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public class PropertyKey {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.PropertyKey");
+  
   public final String value;
   
   public PropertyKey (String value) {

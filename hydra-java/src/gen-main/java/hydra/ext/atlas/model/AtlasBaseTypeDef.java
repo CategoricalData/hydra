@@ -4,6 +4,8 @@ package hydra.ext.atlas.model;
  * Base class that captures common-attributes for all Atlas types.
  */
 public class AtlasBaseTypeDef {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.AtlasBaseTypeDef");
+  
   public final java.util.Optional<hydra.ext.atlas.model.TypeCategory> category;
   
   public final java.util.Optional<String> guid;

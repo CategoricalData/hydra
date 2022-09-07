@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class MethodModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodModifier");
+  
   private MethodModifier () {
   
   }
@@ -70,6 +72,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {
@@ -97,6 +101,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Public extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Public");
+    
     public Public () {
     
     }
@@ -122,6 +128,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Protected extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Protected");
+    
     public Protected () {
     
     }
@@ -147,6 +155,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Private extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Private");
+    
     public Private () {
     
     }
@@ -172,6 +182,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Abstract extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Abstract");
+    
     public Abstract () {
     
     }
@@ -197,6 +209,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Final extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Final");
+    
     public Final () {
     
     }
@@ -222,6 +236,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Synchronized extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Synchronized");
+    
     public Synchronized () {
     
     }
@@ -247,6 +263,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Native extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Native");
+    
     public Native () {
     
     }
@@ -272,6 +290,8 @@ public abstract class MethodModifier {
   }
   
   public static final class Strictfb extends hydra.ext.java.syntax.MethodModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Strictfb");
+    
     public Strictfb () {
     
     }

@@ -4,6 +4,8 @@ package hydra.ext.json.model;
  * A JSON value
  */
 public abstract class Value {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Value");
+  
   private Value () {
   
   }
@@ -55,6 +57,8 @@ public abstract class Value {
   }
   
   public static final class Array extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Array");
+    
     public final java.util.List<hydra.ext.json.model.Value> value;
     
     public Array (java.util.List<hydra.ext.json.model.Value> value) {
@@ -82,6 +86,8 @@ public abstract class Value {
   }
   
   public static final class Boolean_ extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Boolean");
+    
     public final Boolean value;
     
     public Boolean_ (Boolean value) {
@@ -109,6 +115,8 @@ public abstract class Value {
   }
   
   public static final class Null extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Null");
+    
     public Null () {
     
     }
@@ -134,6 +142,8 @@ public abstract class Value {
   }
   
   public static final class Number_ extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Number");
+    
     public final Double value;
     
     public Number_ (Double value) {
@@ -161,6 +171,8 @@ public abstract class Value {
   }
   
   public static final class Object_ extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.Object");
+    
     public final java.util.Map<String, hydra.ext.json.model.Value> value;
     
     public Object_ (java.util.Map<String, hydra.ext.json.model.Value> value) {
@@ -188,6 +200,8 @@ public abstract class Value {
   }
   
   public static final class String_ extends hydra.ext.json.model.Value {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/json/model.String");
+    
     public final String value;
     
     public String_ (String value) {

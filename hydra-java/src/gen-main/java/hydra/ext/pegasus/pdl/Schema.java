@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public abstract class Schema {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Schema");
+  
   private Schema () {
   
   }
@@ -64,6 +66,8 @@ public abstract class Schema {
   }
   
   public static final class Array extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Array");
+    
     public final hydra.ext.pegasus.pdl.Schema value;
     
     public Array (hydra.ext.pegasus.pdl.Schema value) {
@@ -91,6 +95,8 @@ public abstract class Schema {
   }
   
   public static final class Fixed extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Fixed");
+    
     public final Integer value;
     
     public Fixed (Integer value) {
@@ -118,6 +124,8 @@ public abstract class Schema {
   }
   
   public static final class Inline extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Inline");
+    
     public final hydra.ext.pegasus.pdl.NamedSchema value;
     
     public Inline (hydra.ext.pegasus.pdl.NamedSchema value) {
@@ -145,6 +153,8 @@ public abstract class Schema {
   }
   
   public static final class Map extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Map");
+    
     public final hydra.ext.pegasus.pdl.Schema value;
     
     public Map (hydra.ext.pegasus.pdl.Schema value) {
@@ -172,6 +182,8 @@ public abstract class Schema {
   }
   
   public static final class Named extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Named");
+    
     public final hydra.ext.pegasus.pdl.QualifiedName value;
     
     public Named (hydra.ext.pegasus.pdl.QualifiedName value) {
@@ -199,6 +211,8 @@ public abstract class Schema {
   }
   
   public static final class Null extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Null");
+    
     public Null () {
     
     }
@@ -224,6 +238,8 @@ public abstract class Schema {
   }
   
   public static final class Primitive extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Primitive");
+    
     public final hydra.ext.pegasus.pdl.PrimitiveType value;
     
     public Primitive (hydra.ext.pegasus.pdl.PrimitiveType value) {
@@ -251,6 +267,8 @@ public abstract class Schema {
   }
   
   public static final class Union extends hydra.ext.pegasus.pdl.Schema {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Union");
+    
     public final hydra.ext.pegasus.pdl.UnionSchema value;
     
     public Union (hydra.ext.pegasus.pdl.UnionSchema value) {

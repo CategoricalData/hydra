@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class AnyURI {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.AnyURI");
+  
   public final String value;
   
   public AnyURI (String value) {

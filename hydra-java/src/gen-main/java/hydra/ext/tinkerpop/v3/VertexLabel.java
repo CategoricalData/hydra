@@ -4,6 +4,8 @@ package hydra.ext.tinkerpop.v3;
  * The label of a vertex. The default (null) vertex is represented by the empty string
  */
 public class VertexLabel {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.VertexLabel");
+  
   /**
    * The label of a vertex. The default (null) vertex is represented by the empty string
    */

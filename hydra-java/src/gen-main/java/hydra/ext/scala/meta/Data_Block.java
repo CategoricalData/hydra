@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Data_Block {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Block");
+  
   public final java.util.List<hydra.ext.scala.meta.Stat> stats;
   
   public Data_Block (java.util.List<hydra.ext.scala.meta.Stat> stats) {

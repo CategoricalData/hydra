@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class LambdaParameter {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LambdaParameter");
+  
   private LambdaParameter () {
   
   }
@@ -28,6 +30,8 @@ public abstract class LambdaParameter {
   }
   
   public static final class Normal extends hydra.ext.java.syntax.LambdaParameter {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Normal");
+    
     public final hydra.ext.java.syntax.LambdaParameter_Normal value;
     
     public Normal (hydra.ext.java.syntax.LambdaParameter_Normal value) {
@@ -55,6 +59,8 @@ public abstract class LambdaParameter {
   }
   
   public static final class VariableArity extends hydra.ext.java.syntax.LambdaParameter {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.VariableArity");
+    
     public final hydra.ext.java.syntax.VariableArityParameter value;
     
     public VariableArity (hydra.ext.java.syntax.VariableArityParameter value) {

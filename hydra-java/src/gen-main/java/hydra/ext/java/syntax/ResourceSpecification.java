@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ResourceSpecification {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ResourceSpecification");
+  
   public final java.util.List<hydra.ext.java.syntax.Resource> value;
   
   public ResourceSpecification (java.util.List<hydra.ext.java.syntax.Resource> value) {

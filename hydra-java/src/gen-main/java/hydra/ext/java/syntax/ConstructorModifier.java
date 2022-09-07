@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ConstructorModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ConstructorModifier");
+  
   private ConstructorModifier () {
   
   }
@@ -40,6 +42,8 @@ public abstract class ConstructorModifier {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.ConstructorModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {
@@ -67,6 +71,8 @@ public abstract class ConstructorModifier {
   }
   
   public static final class Public extends hydra.ext.java.syntax.ConstructorModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Public");
+    
     public Public () {
     
     }
@@ -92,6 +98,8 @@ public abstract class ConstructorModifier {
   }
   
   public static final class Protected extends hydra.ext.java.syntax.ConstructorModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Protected");
+    
     public Protected () {
     
     }
@@ -117,6 +125,8 @@ public abstract class ConstructorModifier {
   }
   
   public static final class Private extends hydra.ext.java.syntax.ConstructorModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Private");
+    
     public Private () {
     
     }

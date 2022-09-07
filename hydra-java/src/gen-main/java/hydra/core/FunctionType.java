@@ -4,6 +4,8 @@ package hydra.core;
  * A function type, also known as an arrow type
  */
 public class FunctionType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FunctionType");
+  
   public final hydra.core.Type<M> domain;
   
   public final hydra.core.Type<M> codomain;

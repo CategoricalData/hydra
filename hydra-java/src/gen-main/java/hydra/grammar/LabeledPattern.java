@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class LabeledPattern {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.LabeledPattern");
+  
   public final hydra.grammar.Label label;
   
   public final hydra.grammar.Pattern pattern;

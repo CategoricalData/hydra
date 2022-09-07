@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ArrayType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayType");
+  
   public final hydra.ext.java.syntax.Dims dims;
   
   public final hydra.ext.java.syntax.ArrayType_Variant variant;

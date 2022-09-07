@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Base64Binary {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Base64Binary");
+  
   public final String value;
   
   public Base64Binary (String value) {

@@ -1,6 +1,8 @@
 package hydra.ext.coq.syntax;
 
 public abstract class CofixQual {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.CofixQual");
+  
   private CofixQual () {
   
   }
@@ -28,6 +30,8 @@ public abstract class CofixQual {
   }
   
   public static final class In extends hydra.ext.coq.syntax.CofixQual {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.In");
+    
     public final hydra.ext.coq.syntax.Term value;
     
     public In (hydra.ext.coq.syntax.Term value) {
@@ -55,6 +59,8 @@ public abstract class CofixQual {
   }
   
   public static final class With extends hydra.ext.coq.syntax.CofixQual {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.With");
+    
     public final hydra.ext.coq.syntax.CofixWith value;
     
     public With (hydra.ext.coq.syntax.CofixWith value) {

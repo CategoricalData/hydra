@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class NonNegativeInteger {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.NonNegativeInteger");
+  
   public final java.math.BigInteger value;
   
   public NonNegativeInteger (java.math.BigInteger value) {

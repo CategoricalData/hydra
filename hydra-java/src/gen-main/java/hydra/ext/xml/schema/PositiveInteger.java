@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class PositiveInteger {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.PositiveInteger");
+  
   public final java.math.BigInteger value;
   
   public PositiveInteger (java.math.BigInteger value) {

@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public class Grammar {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Grammar");
+  
   public final java.util.List<hydra.grammar.Production> value;
   
   public Grammar (java.util.List<hydra.grammar.Production> value) {

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class AnnotationTypeDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationTypeDeclaration");
+  
   public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;

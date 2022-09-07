@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodInvocation {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodInvocation");
+  
   public final hydra.ext.java.syntax.MethodInvocation_Header header;
   
   public final java.util.List<hydra.ext.java.syntax.Expression> arguments;

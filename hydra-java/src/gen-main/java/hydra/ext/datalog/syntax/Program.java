@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Program {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Program");
+  
   public final java.util.List<hydra.ext.datalog.syntax.Program_Elmt> value;
   
   public Program (java.util.List<hydra.ext.datalog.syntax.Program_Elmt> value) {

@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Variable {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Variable");
+  
   public final String value;
   
   public Variable (String value) {

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class AnnotationTypeElementModifier {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AnnotationTypeElementModifier");
+  
   private AnnotationTypeElementModifier () {
   
   }
@@ -28,6 +30,8 @@ public abstract class AnnotationTypeElementModifier {
   }
   
   public static final class Public extends hydra.ext.java.syntax.AnnotationTypeElementModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Public");
+    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Public (hydra.ext.java.syntax.Annotation value) {
@@ -55,6 +59,8 @@ public abstract class AnnotationTypeElementModifier {
   }
   
   public static final class Abstract extends hydra.ext.java.syntax.AnnotationTypeElementModifier {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Abstract");
+    
     public Abstract () {
     
     }

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class PreIncrementExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.PreIncrementExpression");
+  
   public final hydra.ext.java.syntax.UnaryExpression value;
   
   public PreIncrementExpression (hydra.ext.java.syntax.UnaryExpression value) {

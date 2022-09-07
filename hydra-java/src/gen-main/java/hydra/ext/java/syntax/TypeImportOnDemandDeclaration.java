@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class TypeImportOnDemandDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeImportOnDemandDeclaration");
+  
   public final hydra.ext.java.syntax.PackageOrTypeName value;
   
   public TypeImportOnDemandDeclaration (hydra.ext.java.syntax.PackageOrTypeName value) {

@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Module {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Module");
+  
   public final java.util.Optional<hydra.ext.haskell.ast.ModuleHead> head;
   
   public final java.util.List<hydra.ext.haskell.ast.Import> imports;

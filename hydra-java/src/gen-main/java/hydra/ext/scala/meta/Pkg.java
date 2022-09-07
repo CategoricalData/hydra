@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Pkg {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Pkg");
+  
   public final hydra.ext.scala.meta.Data_Name name;
   
   public final hydra.ext.scala.meta.Data_Ref ref;

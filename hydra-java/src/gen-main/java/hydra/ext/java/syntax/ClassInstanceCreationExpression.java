@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class ClassInstanceCreationExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassInstanceCreationExpression");
+  
   public final java.util.Optional<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier;
   
   public final hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression expression;

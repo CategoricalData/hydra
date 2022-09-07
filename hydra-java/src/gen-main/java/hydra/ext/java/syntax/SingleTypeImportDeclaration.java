@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class SingleTypeImportDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SingleTypeImportDeclaration");
+  
   public final hydra.ext.java.syntax.TypeName value;
   
   public SingleTypeImportDeclaration (hydra.ext.java.syntax.TypeName value) {

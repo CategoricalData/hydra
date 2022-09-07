@@ -4,6 +4,8 @@ package hydra.core;
  * A map type
  */
 public class MapType<M> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.MapType");
+  
   public final hydra.core.Type<M> keys;
   
   public final hydra.core.Type<M> values;

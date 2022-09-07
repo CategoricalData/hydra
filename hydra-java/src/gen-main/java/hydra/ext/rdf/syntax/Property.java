@@ -4,6 +4,8 @@ package hydra.ext.rdf.syntax;
  * A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
  */
 public class Property {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Property");
+  
   /**
    * State that any resource that has a given property is an instance of one or more classes
    */

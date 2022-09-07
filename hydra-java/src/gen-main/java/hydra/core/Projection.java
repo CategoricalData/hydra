@@ -1,6 +1,8 @@
 package hydra.core;
 
 public class Projection {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Projection");
+  
   public final hydra.core.Name typeName;
   
   public final hydra.core.FieldName field;

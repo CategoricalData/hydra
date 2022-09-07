@@ -1,6 +1,8 @@
 package hydra.ext.datalog.syntax;
 
 public class Constant {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Constant");
+  
   public final String value;
   
   public Constant (String value) {

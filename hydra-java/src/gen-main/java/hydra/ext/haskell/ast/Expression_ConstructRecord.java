@@ -4,6 +4,8 @@ package hydra.ext.haskell.ast;
  * A record constructor expression
  */
 public class Expression_ConstructRecord {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Expression.ConstructRecord");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;

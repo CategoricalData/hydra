@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public class MethodReference_Expression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MethodReference.Expression");
+  
   public final hydra.ext.java.syntax.ExpressionName name;
   
   public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;

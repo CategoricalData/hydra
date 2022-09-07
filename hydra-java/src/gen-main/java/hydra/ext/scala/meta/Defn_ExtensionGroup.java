@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Defn_ExtensionGroup {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Defn.ExtensionGroup");
+  
   public final java.util.List<hydra.ext.scala.meta.Type_Param> tparams;
   
   public final java.util.List<java.util.List<hydra.ext.scala.meta.Data_Param>> parmss;

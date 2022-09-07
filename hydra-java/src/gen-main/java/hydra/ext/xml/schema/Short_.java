@@ -1,6 +1,8 @@
 package hydra.ext.xml.schema;
 
 public class Short_ {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/xml/schema.Short");
+  
   public final Short value;
   
   public Short_ (Short value) {

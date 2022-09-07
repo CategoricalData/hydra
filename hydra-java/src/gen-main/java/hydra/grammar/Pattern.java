@@ -1,6 +1,8 @@
 package hydra.grammar;
 
 public abstract class Pattern {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Pattern");
+  
   private Pattern () {
   
   }
@@ -82,6 +84,8 @@ public abstract class Pattern {
   }
   
   public static final class Nil extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Nil");
+    
     public Nil () {
     
     }
@@ -107,6 +111,8 @@ public abstract class Pattern {
   }
   
   public static final class Ignored extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Ignored");
+    
     public final hydra.grammar.Pattern value;
     
     public Ignored (hydra.grammar.Pattern value) {
@@ -134,6 +140,8 @@ public abstract class Pattern {
   }
   
   public static final class Labeled extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Labeled");
+    
     public final hydra.grammar.LabeledPattern value;
     
     public Labeled (hydra.grammar.LabeledPattern value) {
@@ -161,6 +169,8 @@ public abstract class Pattern {
   }
   
   public static final class Constant extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Constant");
+    
     public final hydra.grammar.Constant value;
     
     public Constant (hydra.grammar.Constant value) {
@@ -188,6 +198,8 @@ public abstract class Pattern {
   }
   
   public static final class Regex extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Regex");
+    
     public final hydra.grammar.Regex value;
     
     public Regex (hydra.grammar.Regex value) {
@@ -215,6 +227,8 @@ public abstract class Pattern {
   }
   
   public static final class Nonterminal extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Nonterminal");
+    
     public final hydra.grammar.Symbol value;
     
     public Nonterminal (hydra.grammar.Symbol value) {
@@ -242,6 +256,8 @@ public abstract class Pattern {
   }
   
   public static final class Sequence extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Sequence");
+    
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Sequence (java.util.List<hydra.grammar.Pattern> value) {
@@ -269,6 +285,8 @@ public abstract class Pattern {
   }
   
   public static final class Alternatives extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Alternatives");
+    
     public final java.util.List<hydra.grammar.Pattern> value;
     
     public Alternatives (java.util.List<hydra.grammar.Pattern> value) {
@@ -296,6 +314,8 @@ public abstract class Pattern {
   }
   
   public static final class Option extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Option");
+    
     public final hydra.grammar.Pattern value;
     
     public Option (hydra.grammar.Pattern value) {
@@ -323,6 +343,8 @@ public abstract class Pattern {
   }
   
   public static final class Star extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Star");
+    
     public final hydra.grammar.Pattern value;
     
     public Star (hydra.grammar.Pattern value) {
@@ -350,6 +372,8 @@ public abstract class Pattern {
   }
   
   public static final class Plus extends hydra.grammar.Pattern {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Plus");
+    
     public final hydra.grammar.Pattern value;
     
     public Plus (hydra.grammar.Pattern value) {

@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class LambdaParameters {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LambdaParameters");
+  
   private LambdaParameters () {
   
   }
@@ -28,6 +30,8 @@ public abstract class LambdaParameters {
   }
   
   public static final class Tuple extends hydra.ext.java.syntax.LambdaParameters {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Tuple");
+    
     public final java.util.List<hydra.ext.java.syntax.LambdaParameters> value;
     
     public Tuple (java.util.List<hydra.ext.java.syntax.LambdaParameters> value) {
@@ -55,6 +59,8 @@ public abstract class LambdaParameters {
   }
   
   public static final class Single extends hydra.ext.java.syntax.LambdaParameters {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Single");
+    
     public final hydra.ext.java.syntax.Identifier value;
     
     public Single (hydra.ext.java.syntax.Identifier value) {

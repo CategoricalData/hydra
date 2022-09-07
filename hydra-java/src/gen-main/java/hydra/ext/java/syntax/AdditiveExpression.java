@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class AdditiveExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.AdditiveExpression");
+  
   private AdditiveExpression () {
   
   }
@@ -34,6 +36,8 @@ public abstract class AdditiveExpression {
   }
   
   public static final class Unary extends hydra.ext.java.syntax.AdditiveExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Unary");
+    
     public final hydra.ext.java.syntax.MultiplicativeExpression value;
     
     public Unary (hydra.ext.java.syntax.MultiplicativeExpression value) {
@@ -61,6 +65,8 @@ public abstract class AdditiveExpression {
   }
   
   public static final class Plus extends hydra.ext.java.syntax.AdditiveExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Plus");
+    
     public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
     
     public Plus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {
@@ -88,6 +94,8 @@ public abstract class AdditiveExpression {
   }
   
   public static final class Minus extends hydra.ext.java.syntax.AdditiveExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Minus");
+    
     public final hydra.ext.java.syntax.AdditiveExpression_Binary value;
     
     public Minus (hydra.ext.java.syntax.AdditiveExpression_Binary value) {

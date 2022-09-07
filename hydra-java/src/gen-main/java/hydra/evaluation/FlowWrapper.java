@@ -1,6 +1,8 @@
 package hydra.evaluation;
 
 public class FlowWrapper<S, A> {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.FlowWrapper");
+  
   public final java.util.Optional<A> value;
   
   public final S state;

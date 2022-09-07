@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class MultiplicativeExpression {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.MultiplicativeExpression");
+  
   private MultiplicativeExpression () {
   
   }
@@ -40,6 +42,8 @@ public abstract class MultiplicativeExpression {
   }
   
   public static final class Unary extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Unary");
+    
     public final hydra.ext.java.syntax.UnaryExpression value;
     
     public Unary (hydra.ext.java.syntax.UnaryExpression value) {
@@ -67,6 +71,8 @@ public abstract class MultiplicativeExpression {
   }
   
   public static final class Times extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Times");
+    
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
     public Times (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
@@ -94,6 +100,8 @@ public abstract class MultiplicativeExpression {
   }
   
   public static final class Divide extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Divide");
+    
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
     public Divide (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {
@@ -121,6 +129,8 @@ public abstract class MultiplicativeExpression {
   }
   
   public static final class Mod extends hydra.ext.java.syntax.MultiplicativeExpression {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Mod");
+    
     public final hydra.ext.java.syntax.MultiplicativeExpression_Binary value;
     
     public Mod (hydra.ext.java.syntax.MultiplicativeExpression_Binary value) {

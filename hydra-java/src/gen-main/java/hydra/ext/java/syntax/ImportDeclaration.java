@@ -1,6 +1,8 @@
 package hydra.ext.java.syntax;
 
 public abstract class ImportDeclaration {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ImportDeclaration");
+  
   private ImportDeclaration () {
   
   }
@@ -40,6 +42,8 @@ public abstract class ImportDeclaration {
   }
   
   public static final class SingleType extends hydra.ext.java.syntax.ImportDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SingleType");
+    
     public final hydra.ext.java.syntax.SingleTypeImportDeclaration value;
     
     public SingleType (hydra.ext.java.syntax.SingleTypeImportDeclaration value) {
@@ -67,6 +71,8 @@ public abstract class ImportDeclaration {
   }
   
   public static final class TypeImportOnDemand extends hydra.ext.java.syntax.ImportDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeImportOnDemand");
+    
     public final hydra.ext.java.syntax.TypeImportOnDemandDeclaration value;
     
     public TypeImportOnDemand (hydra.ext.java.syntax.TypeImportOnDemandDeclaration value) {
@@ -94,6 +100,8 @@ public abstract class ImportDeclaration {
   }
   
   public static final class SingleStaticImport extends hydra.ext.java.syntax.ImportDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.SingleStaticImport");
+    
     public final hydra.ext.java.syntax.SingleStaticImportDeclaration value;
     
     public SingleStaticImport (hydra.ext.java.syntax.SingleStaticImportDeclaration value) {
@@ -121,6 +129,8 @@ public abstract class ImportDeclaration {
   }
   
   public static final class StaticImportOnDemand extends hydra.ext.java.syntax.ImportDeclaration {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.StaticImportOnDemand");
+    
     public final hydra.ext.java.syntax.StaticImportOnDemandDeclaration value;
     
     public StaticImportOnDemand (hydra.ext.java.syntax.StaticImportOnDemandDeclaration value) {

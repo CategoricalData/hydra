@@ -1,6 +1,8 @@
 package hydra.ext.haskell.ast;
 
 public class Pattern_As {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Pattern.As");
+  
   public final hydra.ext.haskell.ast.Name name;
   
   public final hydra.ext.haskell.ast.Pattern inner;

@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Importee_Rename {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Importee.Rename");
+  
   public final hydra.ext.scala.meta.Name name;
   
   public final hydra.ext.scala.meta.Name rename;

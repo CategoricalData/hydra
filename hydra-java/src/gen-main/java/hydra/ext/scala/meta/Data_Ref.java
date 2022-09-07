@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public abstract class Data_Ref {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Data.Ref");
+  
   private Data_Ref () {
   
   }
@@ -52,6 +54,8 @@ public abstract class Data_Ref {
   }
   
   public static final class This extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.This");
+    
     public final hydra.ext.scala.meta.Data_This value;
     
     public This (hydra.ext.scala.meta.Data_This value) {
@@ -79,6 +83,8 @@ public abstract class Data_Ref {
   }
   
   public static final class Super extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Super");
+    
     public final hydra.ext.scala.meta.Data_Super value;
     
     public Super (hydra.ext.scala.meta.Data_Super value) {
@@ -106,6 +112,8 @@ public abstract class Data_Ref {
   }
   
   public static final class Name extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Name");
+    
     public final hydra.ext.scala.meta.Data_Name value;
     
     public Name (hydra.ext.scala.meta.Data_Name value) {
@@ -133,6 +141,8 @@ public abstract class Data_Ref {
   }
   
   public static final class Anonymous extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Anonymous");
+    
     public final hydra.ext.scala.meta.Data_Anonymous value;
     
     public Anonymous (hydra.ext.scala.meta.Data_Anonymous value) {
@@ -160,6 +170,8 @@ public abstract class Data_Ref {
   }
   
   public static final class Select extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Select");
+    
     public final hydra.ext.scala.meta.Data_Select value;
     
     public Select (hydra.ext.scala.meta.Data_Select value) {
@@ -187,6 +199,8 @@ public abstract class Data_Ref {
   }
   
   public static final class ApplyUnary extends hydra.ext.scala.meta.Data_Ref {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ApplyUnary");
+    
     public final hydra.ext.scala.meta.Data_ApplyUnary value;
     
     public ApplyUnary (hydra.ext.scala.meta.Data_ApplyUnary value) {

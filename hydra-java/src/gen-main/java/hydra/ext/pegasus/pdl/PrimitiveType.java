@@ -1,6 +1,8 @@
 package hydra.ext.pegasus.pdl;
 
 public abstract class PrimitiveType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.PrimitiveType");
+  
   private PrimitiveType () {
   
   }
@@ -58,6 +60,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Boolean_ extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Boolean");
+    
     public Boolean_ () {
     
     }
@@ -83,6 +87,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Bytes extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Bytes");
+    
     public Bytes () {
     
     }
@@ -108,6 +114,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Double_ extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Double");
+    
     public Double_ () {
     
     }
@@ -133,6 +141,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Float_ extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Float");
+    
     public Float_ () {
     
     }
@@ -158,6 +168,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Int extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Int");
+    
     public Int () {
     
     }
@@ -183,6 +195,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class Long_ extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.Long");
+    
     public Long_ () {
     
     }
@@ -208,6 +222,8 @@ public abstract class PrimitiveType {
   }
   
   public static final class String_ extends hydra.ext.pegasus.pdl.PrimitiveType {
+    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/pegasus/pdl.String");
+    
     public String_ () {
     
     }

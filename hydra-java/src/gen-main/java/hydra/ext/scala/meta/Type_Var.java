@@ -1,6 +1,8 @@
 package hydra.ext.scala.meta;
 
 public class Type_Var {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type.Var");
+  
   public final hydra.ext.scala.meta.Type_Name name;
   
   public Type_Var (hydra.ext.scala.meta.Type_Name name) {
