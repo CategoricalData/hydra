@@ -33,8 +33,6 @@ public abstract class ImportModifier {
   }
   
   public static final class Pattern extends hydra.ext.haskell.ast.ImportModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Pattern");
-    
     public Pattern () {
     
     }
@@ -60,8 +58,6 @@ public abstract class ImportModifier {
   }
   
   public static final class Type extends hydra.ext.haskell.ast.ImportModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Type");
-    
     public Type () {
     
     }

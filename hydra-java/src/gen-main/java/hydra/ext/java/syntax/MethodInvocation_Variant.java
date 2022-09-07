@@ -48,8 +48,6 @@ public abstract class MethodInvocation_Variant {
   }
   
   public static final class Type extends hydra.ext.java.syntax.MethodInvocation_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Type");
-    
     public final hydra.ext.java.syntax.TypeName value;
     
     public Type (hydra.ext.java.syntax.TypeName value) {
@@ -77,8 +75,6 @@ public abstract class MethodInvocation_Variant {
   }
   
   public static final class Expression extends hydra.ext.java.syntax.MethodInvocation_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
-    
     public final hydra.ext.java.syntax.ExpressionName value;
     
     public Expression (hydra.ext.java.syntax.ExpressionName value) {
@@ -106,8 +102,6 @@ public abstract class MethodInvocation_Variant {
   }
   
   public static final class Primary extends hydra.ext.java.syntax.MethodInvocation_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Primary");
-    
     public final hydra.ext.java.syntax.Primary value;
     
     public Primary (hydra.ext.java.syntax.Primary value) {
@@ -135,8 +129,6 @@ public abstract class MethodInvocation_Variant {
   }
   
   public static final class Super extends hydra.ext.java.syntax.MethodInvocation_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Super");
-    
     public Super () {
     
     }
@@ -162,8 +154,6 @@ public abstract class MethodInvocation_Variant {
   }
   
   public static final class TypeSuper extends hydra.ext.java.syntax.MethodInvocation_Variant {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.TypeSuper");
-    
     public final hydra.ext.java.syntax.TypeName value;
     
     public TypeSuper (hydra.ext.java.syntax.TypeName value) {

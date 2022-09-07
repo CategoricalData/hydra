@@ -30,8 +30,6 @@ public abstract class Operator {
   }
   
   public static final class Backtick extends hydra.ext.haskell.ast.Operator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Backtick");
-    
     public final hydra.ext.haskell.ast.QualifiedName value;
     
     public Backtick (hydra.ext.haskell.ast.QualifiedName value) {
@@ -59,8 +57,6 @@ public abstract class Operator {
   }
   
   public static final class Normal extends hydra.ext.haskell.ast.Operator {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Normal");
-    
     public final hydra.ext.haskell.ast.QualifiedName value;
     
     public Normal (hydra.ext.haskell.ast.QualifiedName value) {

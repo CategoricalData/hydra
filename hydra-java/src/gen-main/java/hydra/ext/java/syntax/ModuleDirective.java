@@ -48,8 +48,6 @@ public abstract class ModuleDirective {
   }
   
   public static final class Requires extends hydra.ext.java.syntax.ModuleDirective {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Requires");
-    
     public final hydra.ext.java.syntax.ModuleDirective_Requires value;
     
     public Requires (hydra.ext.java.syntax.ModuleDirective_Requires value) {
@@ -77,8 +75,6 @@ public abstract class ModuleDirective {
   }
   
   public static final class Exports extends hydra.ext.java.syntax.ModuleDirective {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Exports");
-    
     public final hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens value;
     
     public Exports (hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens value) {
@@ -106,8 +102,6 @@ public abstract class ModuleDirective {
   }
   
   public static final class Opens extends hydra.ext.java.syntax.ModuleDirective {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Opens");
-    
     public final hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens value;
     
     public Opens (hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens value) {
@@ -135,8 +129,6 @@ public abstract class ModuleDirective {
   }
   
   public static final class Uses extends hydra.ext.java.syntax.ModuleDirective {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Uses");
-    
     public final hydra.ext.java.syntax.TypeName value;
     
     public Uses (hydra.ext.java.syntax.TypeName value) {
@@ -164,8 +156,6 @@ public abstract class ModuleDirective {
   }
   
   public static final class Provides extends hydra.ext.java.syntax.ModuleDirective {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Provides");
-    
     public final hydra.ext.java.syntax.ModuleDirective_Provides value;
     
     public Provides (hydra.ext.java.syntax.ModuleDirective_Provides value) {

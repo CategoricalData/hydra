@@ -54,8 +54,6 @@ public abstract class Elimination<M> {
    * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
    */
   public static final class Element<M> extends hydra.core.Elimination<M> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
-    
     public Element () {
     
     }
@@ -84,8 +82,6 @@ public abstract class Elimination<M> {
    * Eliminates a nominal term by extracting the wrapped term
    */
   public static final class Nominal<M> extends hydra.core.Elimination<M> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
-    
     /**
      * Eliminates a nominal term by extracting the wrapped term
      */
@@ -119,8 +115,6 @@ public abstract class Elimination<M> {
    * Eliminates an optional term by matching over the two possible cases
    */
   public static final class Optional<M> extends hydra.core.Elimination<M> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Optional");
-    
     /**
      * Eliminates an optional term by matching over the two possible cases
      */
@@ -154,8 +148,6 @@ public abstract class Elimination<M> {
    * Eliminates a record by projecting a given field
    */
   public static final class Record<M> extends hydra.core.Elimination<M> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
-    
     /**
      * Eliminates a record by projecting a given field
      */
@@ -189,8 +181,6 @@ public abstract class Elimination<M> {
    * Eliminates a union term by matching over the fields of the union. This is a case statement.
    */
   public static final class Union<M> extends hydra.core.Elimination<M> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Union");
-    
     /**
      * Eliminates a union term by matching over the fields of the union. This is a case statement.
      */

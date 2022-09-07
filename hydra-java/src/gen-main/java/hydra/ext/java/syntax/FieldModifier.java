@@ -66,8 +66,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Annotation extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Annotation");
-    
     public final hydra.ext.java.syntax.Annotation value;
     
     public Annotation (hydra.ext.java.syntax.Annotation value) {
@@ -95,8 +93,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Public extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Public");
-    
     public Public () {
     
     }
@@ -122,8 +118,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Protected extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Protected");
-    
     public Protected () {
     
     }
@@ -149,8 +143,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Private extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Private");
-    
     public Private () {
     
     }
@@ -176,8 +168,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Static extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Static");
-    
     public Static () {
     
     }
@@ -203,8 +193,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Final extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Final");
-    
     public Final () {
     
     }
@@ -230,8 +218,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Transient extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Transient");
-    
     public Transient () {
     
     }
@@ -257,8 +243,6 @@ public abstract class FieldModifier {
   }
   
   public static final class Volatile extends hydra.ext.java.syntax.FieldModifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Volatile");
-    
     public Volatile () {
     
     }

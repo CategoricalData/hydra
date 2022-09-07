@@ -30,8 +30,6 @@ public abstract class Data_FunctionData {
   }
   
   public static final class ContextFunction extends hydra.ext.scala.meta.Data_FunctionData {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ContextFunction");
-    
     public final hydra.ext.scala.meta.Data_ContextFunction value;
     
     public ContextFunction (hydra.ext.scala.meta.Data_ContextFunction value) {
@@ -59,8 +57,6 @@ public abstract class Data_FunctionData {
   }
   
   public static final class Function extends hydra.ext.scala.meta.Data_FunctionData {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Function");
-    
     public final hydra.ext.scala.meta.Data_Function value;
     
     public Function (hydra.ext.scala.meta.Data_Function value) {

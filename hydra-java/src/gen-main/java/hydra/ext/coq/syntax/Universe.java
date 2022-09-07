@@ -30,8 +30,6 @@ public abstract class Universe {
   }
   
   public static final class Max extends hydra.ext.coq.syntax.Universe {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Max");
-    
     public final java.util.List<hydra.ext.coq.syntax.Universe_Expr> value;
     
     public Max (java.util.List<hydra.ext.coq.syntax.Universe_Expr> value) {
@@ -59,8 +57,6 @@ public abstract class Universe {
   }
   
   public static final class Expr extends hydra.ext.coq.syntax.Universe {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Expr");
-    
     public final hydra.ext.coq.syntax.Universe_Expr value;
     
     public Expr (hydra.ext.coq.syntax.Universe_Expr value) {

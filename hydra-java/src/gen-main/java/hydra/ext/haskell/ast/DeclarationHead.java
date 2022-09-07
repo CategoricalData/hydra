@@ -39,8 +39,6 @@ public abstract class DeclarationHead {
   }
   
   public static final class Application extends hydra.ext.haskell.ast.DeclarationHead {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Application");
-    
     public final hydra.ext.haskell.ast.DeclarationHead_Application value;
     
     public Application (hydra.ext.haskell.ast.DeclarationHead_Application value) {
@@ -68,8 +66,6 @@ public abstract class DeclarationHead {
   }
   
   public static final class Parens extends hydra.ext.haskell.ast.DeclarationHead {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Parens");
-    
     public final hydra.ext.haskell.ast.DeclarationHead value;
     
     public Parens (hydra.ext.haskell.ast.DeclarationHead value) {
@@ -97,8 +93,6 @@ public abstract class DeclarationHead {
   }
   
   public static final class Simple extends hydra.ext.haskell.ast.DeclarationHead {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Simple");
-    
     public final hydra.ext.haskell.ast.Name value;
     
     public Simple (hydra.ext.haskell.ast.Name value) {

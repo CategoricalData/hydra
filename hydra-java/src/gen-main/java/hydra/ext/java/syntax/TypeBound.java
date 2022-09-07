@@ -30,8 +30,6 @@ public abstract class TypeBound {
   }
   
   public static final class Variable extends hydra.ext.java.syntax.TypeBound {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Variable");
-    
     public final hydra.ext.java.syntax.TypeVariable value;
     
     public Variable (hydra.ext.java.syntax.TypeVariable value) {
@@ -59,8 +57,6 @@ public abstract class TypeBound {
   }
   
   public static final class ClassOrInterface extends hydra.ext.java.syntax.TypeBound {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ClassOrInterface");
-    
     public final hydra.ext.java.syntax.TypeBound_ClassOrInterface value;
     
     public ClassOrInterface (hydra.ext.java.syntax.TypeBound_ClassOrInterface value) {

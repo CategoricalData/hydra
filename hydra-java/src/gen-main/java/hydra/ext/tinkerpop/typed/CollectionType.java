@@ -45,8 +45,6 @@ public abstract class CollectionType {
   }
   
   public static final class List extends hydra.ext.tinkerpop.typed.CollectionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.List");
-    
     public final hydra.ext.tinkerpop.typed.Type value;
     
     public List (hydra.ext.tinkerpop.typed.Type value) {
@@ -74,8 +72,6 @@ public abstract class CollectionType {
   }
   
   public static final class Map extends hydra.ext.tinkerpop.typed.CollectionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Map");
-    
     public final hydra.ext.tinkerpop.typed.Type value;
     
     public Map (hydra.ext.tinkerpop.typed.Type value) {
@@ -103,8 +99,6 @@ public abstract class CollectionType {
   }
   
   public static final class Optional extends hydra.ext.tinkerpop.typed.CollectionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Optional");
-    
     public final hydra.ext.tinkerpop.typed.Type value;
     
     public Optional (hydra.ext.tinkerpop.typed.Type value) {
@@ -132,8 +126,6 @@ public abstract class CollectionType {
   }
   
   public static final class Set extends hydra.ext.tinkerpop.typed.CollectionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/typed.Set");
-    
     public final hydra.ext.tinkerpop.typed.Type value;
     
     public Set (hydra.ext.tinkerpop.typed.Type value) {

@@ -33,8 +33,6 @@ public abstract class IriOrLiteral {
   }
   
   public static final class Iri extends hydra.ext.rdf.syntax.IriOrLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Iri");
-    
     public final hydra.ext.rdf.syntax.Iri value;
     
     public Iri (hydra.ext.rdf.syntax.Iri value) {
@@ -62,8 +60,6 @@ public abstract class IriOrLiteral {
   }
   
   public static final class Literal extends hydra.ext.rdf.syntax.IriOrLiteral {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Literal");
-    
     public final hydra.ext.rdf.syntax.Literal value;
     
     public Literal (hydra.ext.rdf.syntax.Literal value) {

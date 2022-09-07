@@ -30,8 +30,6 @@ public abstract class ConstantList {
   }
   
   public static final class Single extends hydra.ext.datalog.syntax.ConstantList {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Single");
-    
     public final hydra.ext.datalog.syntax.Constant value;
     
     public Single (hydra.ext.datalog.syntax.Constant value) {
@@ -59,8 +57,6 @@ public abstract class ConstantList {
   }
   
   public static final class Multiple extends hydra.ext.datalog.syntax.ConstantList {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Multiple");
-    
     public final hydra.ext.datalog.syntax.ConstantList_Multiple value;
     
     public Multiple (hydra.ext.datalog.syntax.ConstantList_Multiple value) {

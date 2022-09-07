@@ -30,8 +30,6 @@ public abstract class ImportExportSpec_Subspec {
   }
   
   public static final class All extends hydra.ext.haskell.ast.ImportExportSpec_Subspec {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.All");
-    
     public All () {
     
     }
@@ -57,8 +55,6 @@ public abstract class ImportExportSpec_Subspec {
   }
   
   public static final class List extends hydra.ext.haskell.ast.ImportExportSpec_Subspec {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.List");
-    
     public final java.util.List<hydra.ext.haskell.ast.Name> value;
     
     public List (java.util.List<hydra.ext.haskell.ast.Name> value) {

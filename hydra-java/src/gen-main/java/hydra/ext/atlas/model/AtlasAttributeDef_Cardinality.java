@@ -36,8 +36,6 @@ public abstract class AtlasAttributeDef_Cardinality {
   }
   
   public static final class Single extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Single");
-    
     public Single () {
     
     }
@@ -63,8 +61,6 @@ public abstract class AtlasAttributeDef_Cardinality {
   }
   
   public static final class List extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.List");
-    
     public List () {
     
     }
@@ -90,8 +86,6 @@ public abstract class AtlasAttributeDef_Cardinality {
   }
   
   public static final class Set extends hydra.ext.atlas.model.AtlasAttributeDef_Cardinality {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/atlas/model.Set");
-    
     public Set () {
     
     }

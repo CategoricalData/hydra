@@ -30,8 +30,6 @@ public abstract class Resource {
   }
   
   public static final class Iri extends hydra.ext.rdf.syntax.Resource {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Iri");
-    
     public final hydra.ext.rdf.syntax.Iri value;
     
     public Iri (hydra.ext.rdf.syntax.Iri value) {
@@ -59,8 +57,6 @@ public abstract class Resource {
   }
   
   public static final class Bnode extends hydra.ext.rdf.syntax.Resource {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Bnode");
-    
     public final hydra.ext.rdf.syntax.BlankNode value;
     
     public Bnode (hydra.ext.rdf.syntax.BlankNode value) {

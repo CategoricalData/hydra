@@ -45,8 +45,6 @@ public abstract class Associativity {
   }
   
   public static final class None extends hydra.util.codetree.ast.Associativity {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.None");
-    
     public None () {
     
     }
@@ -72,8 +70,6 @@ public abstract class Associativity {
   }
   
   public static final class Left extends hydra.util.codetree.ast.Associativity {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Left");
-    
     public Left () {
     
     }
@@ -99,8 +95,6 @@ public abstract class Associativity {
   }
   
   public static final class Right extends hydra.util.codetree.ast.Associativity {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Right");
-    
     public Right () {
     
     }
@@ -126,8 +120,6 @@ public abstract class Associativity {
   }
   
   public static final class Both extends hydra.util.codetree.ast.Associativity {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/util/codetree/ast.Both");
-    
     public Both () {
     
     }

@@ -51,8 +51,6 @@ public abstract class LiteralType {
   }
   
   public static final class Binary extends hydra.core.LiteralType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Binary");
-    
     public Binary () {
     
     }
@@ -78,8 +76,6 @@ public abstract class LiteralType {
   }
   
   public static final class Boolean_ extends hydra.core.LiteralType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Boolean");
-    
     public Boolean_ () {
     
     }
@@ -105,8 +101,6 @@ public abstract class LiteralType {
   }
   
   public static final class Float_ extends hydra.core.LiteralType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Float");
-    
     public final hydra.core.FloatType value;
     
     public Float_ (hydra.core.FloatType value) {
@@ -134,8 +128,6 @@ public abstract class LiteralType {
   }
   
   public static final class Integer_ extends hydra.core.LiteralType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Integer");
-    
     public final hydra.core.IntegerType value;
     
     public Integer_ (hydra.core.IntegerType value) {
@@ -163,8 +155,6 @@ public abstract class LiteralType {
   }
   
   public static final class String_ extends hydra.core.LiteralType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.String");
-    
     public String_ () {
     
     }

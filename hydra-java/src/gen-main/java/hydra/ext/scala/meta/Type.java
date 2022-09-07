@@ -156,8 +156,6 @@ public abstract class Type {
   }
   
   public static final class Ref extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Ref");
-    
     public final hydra.ext.scala.meta.Type_Ref value;
     
     public Ref (hydra.ext.scala.meta.Type_Ref value) {
@@ -185,8 +183,6 @@ public abstract class Type {
   }
   
   public static final class AnonymousName extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.AnonymousName");
-    
     public final hydra.ext.scala.meta.Type_AnonymousName value;
     
     public AnonymousName (hydra.ext.scala.meta.Type_AnonymousName value) {
@@ -214,8 +210,6 @@ public abstract class Type {
   }
   
   public static final class Apply extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Apply");
-    
     public final hydra.ext.scala.meta.Type_Apply value;
     
     public Apply (hydra.ext.scala.meta.Type_Apply value) {
@@ -243,8 +237,6 @@ public abstract class Type {
   }
   
   public static final class ApplyInfix extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ApplyInfix");
-    
     public final hydra.ext.scala.meta.Type_ApplyInfix value;
     
     public ApplyInfix (hydra.ext.scala.meta.Type_ApplyInfix value) {
@@ -272,8 +264,6 @@ public abstract class Type {
   }
   
   public static final class FunctionType extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.FunctionType");
-    
     public final hydra.ext.scala.meta.Type_FunctionType value;
     
     public FunctionType (hydra.ext.scala.meta.Type_FunctionType value) {
@@ -301,8 +291,6 @@ public abstract class Type {
   }
   
   public static final class PolyFunction extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.PolyFunction");
-    
     public final hydra.ext.scala.meta.Type_PolyFunction value;
     
     public PolyFunction (hydra.ext.scala.meta.Type_PolyFunction value) {
@@ -330,8 +318,6 @@ public abstract class Type {
   }
   
   public static final class ImplicitFunction extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ImplicitFunction");
-    
     public final hydra.ext.scala.meta.Type_ImplicitFunction value;
     
     public ImplicitFunction (hydra.ext.scala.meta.Type_ImplicitFunction value) {
@@ -359,8 +345,6 @@ public abstract class Type {
   }
   
   public static final class Tuple extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Tuple");
-    
     public final hydra.ext.scala.meta.Type_Tuple value;
     
     public Tuple (hydra.ext.scala.meta.Type_Tuple value) {
@@ -388,8 +372,6 @@ public abstract class Type {
   }
   
   public static final class With extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.With");
-    
     public final hydra.ext.scala.meta.Type_With value;
     
     public With (hydra.ext.scala.meta.Type_With value) {
@@ -417,8 +399,6 @@ public abstract class Type {
   }
   
   public static final class And extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.And");
-    
     public final hydra.ext.scala.meta.Type_And value;
     
     public And (hydra.ext.scala.meta.Type_And value) {
@@ -446,8 +426,6 @@ public abstract class Type {
   }
   
   public static final class Or extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Or");
-    
     public final hydra.ext.scala.meta.Type_Or value;
     
     public Or (hydra.ext.scala.meta.Type_Or value) {
@@ -475,8 +453,6 @@ public abstract class Type {
   }
   
   public static final class Refine extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Refine");
-    
     public final hydra.ext.scala.meta.Type_Refine value;
     
     public Refine (hydra.ext.scala.meta.Type_Refine value) {
@@ -504,8 +480,6 @@ public abstract class Type {
   }
   
   public static final class Existential extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Existential");
-    
     public final hydra.ext.scala.meta.Type_Existential value;
     
     public Existential (hydra.ext.scala.meta.Type_Existential value) {
@@ -533,8 +507,6 @@ public abstract class Type {
   }
   
   public static final class Annotate extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Annotate");
-    
     public final hydra.ext.scala.meta.Type_Annotate value;
     
     public Annotate (hydra.ext.scala.meta.Type_Annotate value) {
@@ -562,8 +534,6 @@ public abstract class Type {
   }
   
   public static final class Lambda extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Lambda");
-    
     public final hydra.ext.scala.meta.Type_Lambda value;
     
     public Lambda (hydra.ext.scala.meta.Type_Lambda value) {
@@ -591,8 +561,6 @@ public abstract class Type {
   }
   
   public static final class Macro extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Macro");
-    
     public final hydra.ext.scala.meta.Type_Macro value;
     
     public Macro (hydra.ext.scala.meta.Type_Macro value) {
@@ -620,8 +588,6 @@ public abstract class Type {
   }
   
   public static final class Method extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Method");
-    
     public final hydra.ext.scala.meta.Type_Method value;
     
     public Method (hydra.ext.scala.meta.Type_Method value) {
@@ -649,8 +615,6 @@ public abstract class Type {
   }
   
   public static final class Placeholder extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Placeholder");
-    
     public final hydra.ext.scala.meta.Type_Placeholder value;
     
     public Placeholder (hydra.ext.scala.meta.Type_Placeholder value) {
@@ -678,8 +642,6 @@ public abstract class Type {
   }
   
   public static final class ByName extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ByName");
-    
     public final hydra.ext.scala.meta.Type_ByName value;
     
     public ByName (hydra.ext.scala.meta.Type_ByName value) {
@@ -707,8 +669,6 @@ public abstract class Type {
   }
   
   public static final class Repeated extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Repeated");
-    
     public final hydra.ext.scala.meta.Type_Repeated value;
     
     public Repeated (hydra.ext.scala.meta.Type_Repeated value) {
@@ -736,8 +696,6 @@ public abstract class Type {
   }
   
   public static final class Var extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Var");
-    
     public final hydra.ext.scala.meta.Type_Var value;
     
     public Var (hydra.ext.scala.meta.Type_Var value) {
@@ -765,8 +723,6 @@ public abstract class Type {
   }
   
   public static final class TypedParam extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TypedParam");
-    
     public final hydra.ext.scala.meta.Type_TypedParam value;
     
     public TypedParam (hydra.ext.scala.meta.Type_TypedParam value) {
@@ -794,8 +750,6 @@ public abstract class Type {
   }
   
   public static final class Match extends hydra.ext.scala.meta.Type {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Match");
-    
     public final hydra.ext.scala.meta.Type_Match value;
     
     public Match (hydra.ext.scala.meta.Type_Match value) {

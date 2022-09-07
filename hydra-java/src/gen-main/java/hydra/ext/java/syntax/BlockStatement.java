@@ -36,8 +36,6 @@ public abstract class BlockStatement {
   }
   
   public static final class LocalVariableDeclaration extends hydra.ext.java.syntax.BlockStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.LocalVariableDeclaration");
-    
     public final hydra.ext.java.syntax.LocalVariableDeclarationStatement value;
     
     public LocalVariableDeclaration (hydra.ext.java.syntax.LocalVariableDeclarationStatement value) {
@@ -65,8 +63,6 @@ public abstract class BlockStatement {
   }
   
   public static final class Class_ extends hydra.ext.java.syntax.BlockStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Class");
-    
     public final hydra.ext.java.syntax.ClassDeclaration value;
     
     public Class_ (hydra.ext.java.syntax.ClassDeclaration value) {
@@ -94,8 +90,6 @@ public abstract class BlockStatement {
   }
   
   public static final class Statement extends hydra.ext.java.syntax.BlockStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Statement");
-    
     public final hydra.ext.java.syntax.Statement value;
     
     public Statement (hydra.ext.java.syntax.Statement value) {

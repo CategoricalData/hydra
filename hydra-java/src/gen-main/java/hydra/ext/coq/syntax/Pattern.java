@@ -30,8 +30,6 @@ public abstract class Pattern {
   }
   
   public static final class Pattern_ extends hydra.ext.coq.syntax.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Pattern_");
-    
     public final hydra.ext.coq.syntax.Pattern10 value;
     
     public Pattern_ (hydra.ext.coq.syntax.Pattern10 value) {
@@ -59,8 +57,6 @@ public abstract class Pattern {
   }
   
   public static final class Term extends hydra.ext.coq.syntax.Pattern {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term");
-    
     public final java.util.Optional<hydra.ext.coq.syntax.Term> value;
     
     public Term (java.util.Optional<hydra.ext.coq.syntax.Term> value) {

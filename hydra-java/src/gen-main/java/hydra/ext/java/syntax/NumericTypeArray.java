@@ -30,8 +30,6 @@ public abstract class NumericTypeArray {
   }
   
   public static final class Simple extends hydra.ext.java.syntax.NumericTypeArray {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Simple");
-    
     public final hydra.ext.java.syntax.NumericType value;
     
     public Simple (hydra.ext.java.syntax.NumericType value) {
@@ -59,8 +57,6 @@ public abstract class NumericTypeArray {
   }
   
   public static final class Array extends hydra.ext.java.syntax.NumericTypeArray {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Array");
-    
     public final hydra.ext.java.syntax.NumericTypeArray value;
     
     public Array (hydra.ext.java.syntax.NumericTypeArray value) {

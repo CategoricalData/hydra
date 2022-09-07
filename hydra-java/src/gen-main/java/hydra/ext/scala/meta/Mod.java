@@ -144,8 +144,6 @@ public abstract class Mod {
   }
   
   public static final class Annot extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Annot");
-    
     public final hydra.ext.scala.meta.Mod_Annot value;
     
     public Annot (hydra.ext.scala.meta.Mod_Annot value) {
@@ -173,8 +171,6 @@ public abstract class Mod {
   }
   
   public static final class Private extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Private");
-    
     public final hydra.ext.scala.meta.Mod_Private value;
     
     public Private (hydra.ext.scala.meta.Mod_Private value) {
@@ -202,8 +198,6 @@ public abstract class Mod {
   }
   
   public static final class Protected extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Protected");
-    
     public final hydra.ext.scala.meta.Mod_Protected value;
     
     public Protected (hydra.ext.scala.meta.Mod_Protected value) {
@@ -231,8 +225,6 @@ public abstract class Mod {
   }
   
   public static final class Implicit extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Implicit");
-    
     public Implicit () {
     
     }
@@ -258,8 +250,6 @@ public abstract class Mod {
   }
   
   public static final class Final extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Final");
-    
     public Final () {
     
     }
@@ -285,8 +275,6 @@ public abstract class Mod {
   }
   
   public static final class Sealed extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Sealed");
-    
     public Sealed () {
     
     }
@@ -312,8 +300,6 @@ public abstract class Mod {
   }
   
   public static final class Open extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Open");
-    
     public Open () {
     
     }
@@ -339,8 +325,6 @@ public abstract class Mod {
   }
   
   public static final class Super extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Super");
-    
     public Super () {
     
     }
@@ -366,8 +350,6 @@ public abstract class Mod {
   }
   
   public static final class Override_ extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Override");
-    
     public Override_ () {
     
     }
@@ -393,8 +375,6 @@ public abstract class Mod {
   }
   
   public static final class Case extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Case");
-    
     public Case () {
     
     }
@@ -420,8 +400,6 @@ public abstract class Mod {
   }
   
   public static final class Abstract extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Abstract");
-    
     public Abstract () {
     
     }
@@ -447,8 +425,6 @@ public abstract class Mod {
   }
   
   public static final class Covariant extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Covariant");
-    
     public Covariant () {
     
     }
@@ -474,8 +450,6 @@ public abstract class Mod {
   }
   
   public static final class Contravariant extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Contravariant");
-    
     public Contravariant () {
     
     }
@@ -501,8 +475,6 @@ public abstract class Mod {
   }
   
   public static final class Lazy extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Lazy");
-    
     public Lazy () {
     
     }
@@ -528,8 +500,6 @@ public abstract class Mod {
   }
   
   public static final class ValParam extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.ValParam");
-    
     public ValParam () {
     
     }
@@ -555,8 +525,6 @@ public abstract class Mod {
   }
   
   public static final class VarParam extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.VarParam");
-    
     public VarParam () {
     
     }
@@ -582,8 +550,6 @@ public abstract class Mod {
   }
   
   public static final class Infix extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Infix");
-    
     public Infix () {
     
     }
@@ -609,8 +575,6 @@ public abstract class Mod {
   }
   
   public static final class Inline extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Inline");
-    
     public Inline () {
     
     }
@@ -636,8 +600,6 @@ public abstract class Mod {
   }
   
   public static final class Using extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Using");
-    
     public Using () {
     
     }
@@ -663,8 +625,6 @@ public abstract class Mod {
   }
   
   public static final class Opaque extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Opaque");
-    
     public Opaque () {
     
     }
@@ -690,8 +650,6 @@ public abstract class Mod {
   }
   
   public static final class Transparent extends hydra.ext.scala.meta.Mod {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Transparent");
-    
     public Transparent () {
     
     }

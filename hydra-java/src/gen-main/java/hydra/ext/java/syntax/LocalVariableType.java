@@ -30,8 +30,6 @@ public abstract class LocalVariableType {
   }
   
   public static final class Type extends hydra.ext.java.syntax.LocalVariableType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Type");
-    
     public final hydra.ext.java.syntax.UnannType value;
     
     public Type (hydra.ext.java.syntax.UnannType value) {
@@ -59,8 +57,6 @@ public abstract class LocalVariableType {
   }
   
   public static final class Var extends hydra.ext.java.syntax.LocalVariableType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Var");
-    
     public Var () {
     
     }

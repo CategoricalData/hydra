@@ -33,8 +33,6 @@ public abstract class CoderDirection {
   }
   
   public static final class Encode extends hydra.evaluation.CoderDirection {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Encode");
-    
     public Encode () {
     
     }
@@ -60,8 +58,6 @@ public abstract class CoderDirection {
   }
   
   public static final class Decode extends hydra.evaluation.CoderDirection {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Decode");
-    
     public Decode () {
     
     }

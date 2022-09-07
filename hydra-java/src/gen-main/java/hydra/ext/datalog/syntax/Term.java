@@ -30,8 +30,6 @@ public abstract class Term {
   }
   
   public static final class Constant extends hydra.ext.datalog.syntax.Term {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Constant");
-    
     public final hydra.ext.datalog.syntax.Constant value;
     
     public Constant (hydra.ext.datalog.syntax.Constant value) {
@@ -59,8 +57,6 @@ public abstract class Term {
   }
   
   public static final class Variable extends hydra.ext.datalog.syntax.Term {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Variable");
-    
     public final hydra.ext.datalog.syntax.Variable value;
     
     public Variable (hydra.ext.datalog.syntax.Variable value) {

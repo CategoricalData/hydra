@@ -30,8 +30,6 @@ public abstract class ExceptionType {
   }
   
   public static final class Class_ extends hydra.ext.java.syntax.ExceptionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Class");
-    
     public final hydra.ext.java.syntax.ClassType value;
     
     public Class_ (hydra.ext.java.syntax.ClassType value) {
@@ -59,8 +57,6 @@ public abstract class ExceptionType {
   }
   
   public static final class Variable extends hydra.ext.java.syntax.ExceptionType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Variable");
-    
     public final hydra.ext.java.syntax.TypeVariable value;
     
     public Variable (hydra.ext.java.syntax.TypeVariable value) {

@@ -36,8 +36,6 @@ public abstract class Term1 {
   }
   
   public static final class Projection extends hydra.ext.coq.syntax.Term1 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Projection");
-    
     public Projection () {
     
     }
@@ -63,8 +61,6 @@ public abstract class Term1 {
   }
   
   public static final class Scope extends hydra.ext.coq.syntax.Term1 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Scope");
-    
     public Scope () {
     
     }
@@ -90,8 +86,6 @@ public abstract class Term1 {
   }
   
   public static final class Term0 extends hydra.ext.coq.syntax.Term1 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term0");
-    
     public final hydra.ext.coq.syntax.Term0 value;
     
     public Term0 (hydra.ext.coq.syntax.Term0 value) {

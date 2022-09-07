@@ -30,8 +30,6 @@ public abstract class AssertStatement {
   }
   
   public static final class Single extends hydra.ext.java.syntax.AssertStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Single");
-    
     public final hydra.ext.java.syntax.Expression value;
     
     public Single (hydra.ext.java.syntax.Expression value) {
@@ -59,8 +57,6 @@ public abstract class AssertStatement {
   }
   
   public static final class Pair extends hydra.ext.java.syntax.AssertStatement {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Pair");
-    
     public final hydra.ext.java.syntax.AssertStatement_Pair value;
     
     public Pair (hydra.ext.java.syntax.AssertStatement_Pair value) {

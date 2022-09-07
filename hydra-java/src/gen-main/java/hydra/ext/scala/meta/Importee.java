@@ -54,8 +54,6 @@ public abstract class Importee {
   }
   
   public static final class Wildcard extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Wildcard");
-    
     public Wildcard () {
     
     }
@@ -81,8 +79,6 @@ public abstract class Importee {
   }
   
   public static final class Given extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Given");
-    
     public final hydra.ext.scala.meta.Importee_Given value;
     
     public Given (hydra.ext.scala.meta.Importee_Given value) {
@@ -110,8 +106,6 @@ public abstract class Importee {
   }
   
   public static final class GivenAll extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.GivenAll");
-    
     public GivenAll () {
     
     }
@@ -137,8 +131,6 @@ public abstract class Importee {
   }
   
   public static final class Name extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Name");
-    
     public final hydra.ext.scala.meta.Importee_Name value;
     
     public Name (hydra.ext.scala.meta.Importee_Name value) {
@@ -166,8 +158,6 @@ public abstract class Importee {
   }
   
   public static final class Rename extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Rename");
-    
     public final hydra.ext.scala.meta.Importee_Rename value;
     
     public Rename (hydra.ext.scala.meta.Importee_Rename value) {
@@ -195,8 +185,6 @@ public abstract class Importee {
   }
   
   public static final class Unimport extends hydra.ext.scala.meta.Importee {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Unimport");
-    
     public final hydra.ext.scala.meta.Importee_Unimport value;
     
     public Unimport (hydra.ext.scala.meta.Importee_Unimport value) {

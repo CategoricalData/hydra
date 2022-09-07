@@ -30,8 +30,6 @@ public abstract class AtomList {
   }
   
   public static final class Single extends hydra.ext.datalog.syntax.AtomList {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Single");
-    
     public final hydra.ext.datalog.syntax.Atom value;
     
     public Single (hydra.ext.datalog.syntax.Atom value) {
@@ -59,8 +57,6 @@ public abstract class AtomList {
   }
   
   public static final class Multiple extends hydra.ext.datalog.syntax.AtomList {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/datalog/syntax.Multiple");
-    
     public final hydra.ext.datalog.syntax.AtomList_Multiple value;
     
     public Multiple (hydra.ext.datalog.syntax.AtomList_Multiple value) {

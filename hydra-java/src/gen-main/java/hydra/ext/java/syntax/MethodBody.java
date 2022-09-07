@@ -30,8 +30,6 @@ public abstract class MethodBody {
   }
   
   public static final class Block extends hydra.ext.java.syntax.MethodBody {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Block");
-    
     public final hydra.ext.java.syntax.Block value;
     
     public Block (hydra.ext.java.syntax.Block value) {
@@ -59,8 +57,6 @@ public abstract class MethodBody {
   }
   
   public static final class None extends hydra.ext.java.syntax.MethodBody {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.None");
-    
     public None () {
     
     }

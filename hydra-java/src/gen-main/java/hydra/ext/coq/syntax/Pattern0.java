@@ -54,8 +54,6 @@ public abstract class Pattern0 {
   }
   
   public static final class Qualid extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Qualid");
-    
     public final hydra.ext.coq.syntax.Qualid value;
     
     public Qualid (hydra.ext.coq.syntax.Qualid value) {
@@ -83,8 +81,6 @@ public abstract class Pattern0 {
   }
   
   public static final class QualIdAndPattern extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.QualIdAndPattern");
-    
     public final hydra.ext.coq.syntax.QualidAndPattern value;
     
     public QualIdAndPattern (hydra.ext.coq.syntax.QualidAndPattern value) {
@@ -112,8 +108,6 @@ public abstract class Pattern0 {
   }
   
   public static final class Placeholder extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Placeholder");
-    
     public Placeholder () {
     
     }
@@ -139,8 +133,6 @@ public abstract class Pattern0 {
   }
   
   public static final class Parens extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Parens");
-    
     public final java.util.List<hydra.ext.coq.syntax.Pattern> value;
     
     public Parens (java.util.List<hydra.ext.coq.syntax.Pattern> value) {
@@ -168,8 +160,6 @@ public abstract class Pattern0 {
   }
   
   public static final class Number_ extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Number");
-    
     public final hydra.ext.coq.syntax.Number_ value;
     
     public Number_ (hydra.ext.coq.syntax.Number_ value) {
@@ -197,8 +187,6 @@ public abstract class Pattern0 {
   }
   
   public static final class String_ extends hydra.ext.coq.syntax.Pattern0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.String");
-    
     public final hydra.ext.coq.syntax.String_ value;
     
     public String_ (hydra.ext.coq.syntax.String_ value) {

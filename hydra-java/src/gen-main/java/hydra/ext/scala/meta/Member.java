@@ -48,8 +48,6 @@ public abstract class Member {
   }
   
   public static final class Term extends hydra.ext.scala.meta.Member {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Term");
-    
     public final hydra.ext.scala.meta.Member_Data value;
     
     public Term (hydra.ext.scala.meta.Member_Data value) {
@@ -77,8 +75,6 @@ public abstract class Member {
   }
   
   public static final class Type extends hydra.ext.scala.meta.Member {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Type");
-    
     public final hydra.ext.scala.meta.Member_Type value;
     
     public Type (hydra.ext.scala.meta.Member_Type value) {
@@ -106,8 +102,6 @@ public abstract class Member {
   }
   
   public static final class TermParam extends hydra.ext.scala.meta.Member {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TermParam");
-    
     public final hydra.ext.scala.meta.Data_Param value;
     
     public TermParam (hydra.ext.scala.meta.Data_Param value) {
@@ -135,8 +129,6 @@ public abstract class Member {
   }
   
   public static final class TypeParam extends hydra.ext.scala.meta.Member {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.TypeParam");
-    
     public final hydra.ext.scala.meta.Type_Param value;
     
     public TypeParam (hydra.ext.scala.meta.Type_Param value) {
@@ -164,8 +156,6 @@ public abstract class Member {
   }
   
   public static final class Self extends hydra.ext.scala.meta.Member {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/scala/meta.Self");
-    
     public final hydra.ext.scala.meta.Self value;
     
     public Self (hydra.ext.scala.meta.Self value) {

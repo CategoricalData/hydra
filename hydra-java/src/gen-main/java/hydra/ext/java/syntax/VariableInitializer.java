@@ -30,8 +30,6 @@ public abstract class VariableInitializer {
   }
   
   public static final class Expression extends hydra.ext.java.syntax.VariableInitializer {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Expression");
-    
     public final hydra.ext.java.syntax.Expression value;
     
     public Expression (hydra.ext.java.syntax.Expression value) {
@@ -59,8 +57,6 @@ public abstract class VariableInitializer {
   }
   
   public static final class ArrayInitializer extends hydra.ext.java.syntax.VariableInitializer {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.ArrayInitializer");
-    
     public final hydra.ext.java.syntax.ArrayInitializer value;
     
     public ArrayInitializer (hydra.ext.java.syntax.ArrayInitializer value) {

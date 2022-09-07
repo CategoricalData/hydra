@@ -30,8 +30,6 @@ public abstract class Term100 {
   }
   
   public static final class Cast extends hydra.ext.coq.syntax.Term100 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Cast");
-    
     public final hydra.ext.coq.syntax.TypeCast value;
     
     public Cast (hydra.ext.coq.syntax.TypeCast value) {
@@ -59,8 +57,6 @@ public abstract class Term100 {
   }
   
   public static final class Term10 extends hydra.ext.coq.syntax.Term100 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Term10");
-    
     public final hydra.ext.coq.syntax.Term10 value;
     
     public Term10 (hydra.ext.coq.syntax.Term10 value) {

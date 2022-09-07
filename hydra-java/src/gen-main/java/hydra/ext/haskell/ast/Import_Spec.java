@@ -33,8 +33,6 @@ public abstract class Import_Spec {
   }
   
   public static final class List extends hydra.ext.haskell.ast.Import_Spec {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.List");
-    
     public final java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value;
     
     public List (java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value) {
@@ -62,8 +60,6 @@ public abstract class Import_Spec {
   }
   
   public static final class Hiding extends hydra.ext.haskell.ast.Import_Spec {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.Hiding");
-    
     public final java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value;
     
     public Hiding (java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value) {

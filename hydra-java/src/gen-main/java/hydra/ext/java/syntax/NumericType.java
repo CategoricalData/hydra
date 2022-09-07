@@ -30,8 +30,6 @@ public abstract class NumericType {
   }
   
   public static final class Integral extends hydra.ext.java.syntax.NumericType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Integral");
-    
     public final hydra.ext.java.syntax.IntegralType value;
     
     public Integral (hydra.ext.java.syntax.IntegralType value) {
@@ -59,8 +57,6 @@ public abstract class NumericType {
   }
   
   public static final class FloatingPoint extends hydra.ext.java.syntax.NumericType {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.FloatingPoint");
-    
     public final hydra.ext.java.syntax.FloatingPointType value;
     
     public FloatingPoint (hydra.ext.java.syntax.FloatingPointType value) {

@@ -36,8 +36,6 @@ public abstract class ClassTypeQualifier {
   }
   
   public static final class None extends hydra.ext.java.syntax.ClassTypeQualifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.None");
-    
     public None () {
     
     }
@@ -63,8 +61,6 @@ public abstract class ClassTypeQualifier {
   }
   
   public static final class Package_ extends hydra.ext.java.syntax.ClassTypeQualifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Package");
-    
     public final hydra.ext.java.syntax.PackageName value;
     
     public Package_ (hydra.ext.java.syntax.PackageName value) {
@@ -92,8 +88,6 @@ public abstract class ClassTypeQualifier {
   }
   
   public static final class Parent extends hydra.ext.java.syntax.ClassTypeQualifier {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/java/syntax.Parent");
-    
     public final hydra.ext.java.syntax.ClassOrInterfaceType value;
     
     public Parent (hydra.ext.java.syntax.ClassOrInterfaceType value) {

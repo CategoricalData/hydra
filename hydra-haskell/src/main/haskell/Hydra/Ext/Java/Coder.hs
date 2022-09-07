@@ -110,13 +110,13 @@ constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ J
 declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName Java.PackageName
   -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
 declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) body) =
-    toClassDecl aliases (tparams ++ [param]) elName body
+    toClassDecl False aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
 
-declarationForRecordType :: (Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name
+declarationForRecordType :: (Ord m, Read m, Show m) => Bool -> M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name
   -> [FieldType m] -> GraphFlow m Java.ClassDeclaration
-declarationForRecordType aliases tparams elName fields = do
+declarationForRecordType isInner aliases tparams elName fields = do
     memberVars <- CM.mapM toMemberVar fields
     cx <- getState
     memberVars' <- CM.zipWithM addComment memberVars fields
@@ -124,8 +124,10 @@ declarationForRecordType aliases tparams elName fields = do
       then CM.mapM toWithMethod fields
       else pure []
     cons <- constructor
-    tn <- typeNameDecl aliases elName
-    let bodyDecls = [tn] ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
+    tn <- if isInner then pure [] else do
+      d <- typeNameDecl aliases elName
+      return [d]
+    let bodyDecls = tn ++ memberVars' ++ (noComment <$> [cons, equalsMethod, hashCodeMethod] ++ withMethods)
     return $ javaClassDeclaration aliases tparams elName classModsPublic Nothing bodyDecls
   where
     constructor = do
@@ -235,7 +237,7 @@ declarationForType :: (Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> (Element m, TypedTerm m) -> GraphFlow m Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = do
     t <- decodeType term >>= adaptType language
-    cd <- toClassDecl aliases [] (elementName el) t
+    cd <- toClassDecl False aliases [] (elementName el) t
     cx <- getState
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
@@ -257,7 +259,7 @@ declarationForUnionType aliases tparams elName fields = do
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
       let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName valueFieldName) ftype]
-      toClassDecl aliases [] (variantClassName elName fname) rtype
+      toClassDecl True aliases [] (variantClassName elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
         Java.normalClassDeclarationExtends = Just $ nameToJavaClassType aliases True args elName,
@@ -517,16 +519,16 @@ encodeType aliases t = case stripType t of
   where
     encode = encodeType aliases
 
-toClassDecl :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> [Java.TypeParameter]
+toClassDecl :: (Eq m, Ord m, Read m, Show m) => Bool -> M.Map GraphName Java.PackageName -> [Java.TypeParameter]
   -> Name -> Type m -> GraphFlow m Java.ClassDeclaration
-toClassDecl aliases tparams elName t = case stripType t of
-    TypeRecord rt -> declarationForRecordType aliases tparams elName $ rowTypeFields rt
+toClassDecl isInner aliases tparams elName t = case stripType t of
+    TypeRecord rt -> declarationForRecordType isInner aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType aliases tparams elName $ rowTypeFields rt
     TypeLambda ut -> declarationForLambdaType aliases tparams elName ut
     -- Other types are not supported as class declarations, so we wrap them as record types.
     _ -> wrap t -- TODO: wrap and unwrap the corresponding terms as record terms.
   where
-    wrap t' = declarationForRecordType aliases tparams elName [Types.field valueFieldName t']
+    wrap t' = declarationForRecordType isInner aliases tparams elName [Types.field valueFieldName t']
 
 toDataDeclaration :: M.Map GraphName Java.PackageName -> (a, TypedTerm m) -> GraphFlow m a
 toDataDeclaration aliases (el, TypedTerm typ term) = do

@@ -33,8 +33,6 @@ public abstract class Element<V, E, P> {
   }
   
   public static final class Vertex<V, E, P> extends hydra.ext.tinkerpop.v3.Element<V, E, P> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.Vertex");
-    
     public final hydra.ext.tinkerpop.v3.Vertex<V, P> value;
     
     public Vertex (hydra.ext.tinkerpop.v3.Vertex<V, P> value) {
@@ -62,8 +60,6 @@ public abstract class Element<V, E, P> {
   }
   
   public static final class Edge<V, E, P> extends hydra.ext.tinkerpop.v3.Element<V, E, P> {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/tinkerpop/v3.Edge");
-    
     public final hydra.ext.tinkerpop.v3.Edge<V, E, P> value;
     
     public Edge (hydra.ext.tinkerpop.v3.Edge<V, E, P> value) {

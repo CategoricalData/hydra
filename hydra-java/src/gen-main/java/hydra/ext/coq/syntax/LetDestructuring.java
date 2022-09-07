@@ -36,8 +36,6 @@ public abstract class LetDestructuring {
   }
   
   public static final class Variant1 extends hydra.ext.coq.syntax.LetDestructuring {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Variant1");
-    
     public final hydra.ext.coq.syntax.LetDestructuring_Variant1 value;
     
     public Variant1 (hydra.ext.coq.syntax.LetDestructuring_Variant1 value) {
@@ -65,8 +63,6 @@ public abstract class LetDestructuring {
   }
   
   public static final class Variant2 extends hydra.ext.coq.syntax.LetDestructuring {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Variant2");
-    
     public final hydra.ext.coq.syntax.LetDestructuring_Variant2 value;
     
     public Variant2 (hydra.ext.coq.syntax.LetDestructuring_Variant2 value) {
@@ -94,8 +90,6 @@ public abstract class LetDestructuring {
   }
   
   public static final class Variant3 extends hydra.ext.coq.syntax.LetDestructuring {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Variant3");
-    
     public final hydra.ext.coq.syntax.LetDestructuring_Variant3 value;
     
     public Variant3 (hydra.ext.coq.syntax.LetDestructuring_Variant3 value) {

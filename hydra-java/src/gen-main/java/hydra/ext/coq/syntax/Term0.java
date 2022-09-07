@@ -72,8 +72,6 @@ public abstract class Term0 {
   }
   
   public static final class QualidAnnotated extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.QualidAnnotated");
-    
     public final hydra.ext.coq.syntax.QualidAnnotated value;
     
     public QualidAnnotated (hydra.ext.coq.syntax.QualidAnnotated value) {
@@ -101,8 +99,6 @@ public abstract class Term0 {
   }
   
   public static final class Sort extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Sort");
-    
     public final hydra.ext.coq.syntax.Sort value;
     
     public Sort (hydra.ext.coq.syntax.Sort value) {
@@ -130,8 +126,6 @@ public abstract class Term0 {
   }
   
   public static final class PrimitiveNotations extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.PrimitiveNotations");
-    
     public final hydra.ext.coq.syntax.PrimitiveNotations value;
     
     public PrimitiveNotations (hydra.ext.coq.syntax.PrimitiveNotations value) {
@@ -159,8 +153,6 @@ public abstract class Term0 {
   }
   
   public static final class Evar extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Evar");
-    
     public final hydra.ext.coq.syntax.ExistentialVariable value;
     
     public Evar (hydra.ext.coq.syntax.ExistentialVariable value) {
@@ -188,8 +180,6 @@ public abstract class Term0 {
   }
   
   public static final class Match extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Match");
-    
     public final hydra.ext.coq.syntax.Match value;
     
     public Match (hydra.ext.coq.syntax.Match value) {
@@ -217,8 +207,6 @@ public abstract class Term0 {
   }
   
   public static final class Record extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Record");
-    
     public Record () {
     
     }
@@ -244,8 +232,6 @@ public abstract class Term0 {
   }
   
   public static final class Generalizing extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Generalizing");
-    
     public Generalizing () {
     
     }
@@ -271,8 +257,6 @@ public abstract class Term0 {
   }
   
   public static final class Ltac extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Ltac");
-    
     public Ltac () {
     
     }
@@ -298,8 +282,6 @@ public abstract class Term0 {
   }
   
   public static final class Parens extends hydra.ext.coq.syntax.Term0 {
-    public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/coq/syntax.Parens");
-    
     public final hydra.ext.coq.syntax.Term value;
     
     public Parens (hydra.ext.coq.syntax.Term value) {
