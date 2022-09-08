@@ -151,7 +151,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
       let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName
       let consId = Java.Identifier $ sanitizeJavaName $ localNameOf elName
       let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
-            javaConstructorCall (javaConstructorName consId) fieldArgs
+            javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
     fieldToFormalParam (FieldType fname ft) = do
@@ -273,33 +273,33 @@ declarationForUnionType aliases tparams elName fields = do
         Java.NormalInterfaceDeclaration mods ti tparams extends body
       where
         mods = [Java.InterfaceModifierPublic]
-        ti = Java.TypeIdentifier $ Java.Identifier "Visitor"
+        ti = Java.TypeIdentifier $ Java.Identifier visitorName
         tparams = [javaTypeParameter "R"]
         extends = []
         body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
           where
-            toVisitMethod fname = interfaceMethodDeclaration [] [] "visit" [variantInstanceParam fname] resultR Nothing
+            toVisitMethod fname = interfaceMethodDeclaration [] [] visitMethodName [variantInstanceParam fname] resultR Nothing
 
     partialVisitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
         Java.NormalInterfaceDeclaration {
             Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
-            Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier "PartialVisitor",
+            Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier partialVisitorName,
             Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
             Java.normalInterfaceDeclarationExtends =
-              [Java.InterfaceType $ javaClassType [visitorTypeVariable] Nothing "Visitor"],
+              [Java.InterfaceType $ javaClassType [visitorTypeVariable] Nothing visitorName],
             Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
       where
         otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
           where
             throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
                 Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
-                javaConstructorCall (javaConstructorName $ Java.Identifier "IllegalStateException") args
+                javaConstructorCall (javaConstructorName (Java.Identifier "IllegalStateException") Nothing) args Nothing
               where
                 args = [javaAdditiveExpressionToJavaExpression $ addExpressions [
                   javaStringMultiplicativeExpression "Non-exhaustive patterns when matching: ",
                   Java.MultiplicativeExpressionUnary $ javaIdentifierToJavaUnaryExpression $ Java.Identifier "instance"]]
 
-        toVisitMethod fname = interfaceMethodDeclaration defaultMod [] "visit" [variantInstanceParam fname] resultR $
+        toVisitMethod fname = interfaceMethodDeclaration defaultMod [] visitMethodName [variantInstanceParam fname] resultR $
             Just [returnOtherwise]
           where
             returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
@@ -342,7 +342,7 @@ encodeElimination aliases marg elm = case elm of
       where
         var = Variable "v"
         arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
-        jbody = javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [arg]
+        jbody = javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [arg] Nothing
     Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
       where
         qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
@@ -356,7 +356,25 @@ encodeElimination aliases marg elm = case elm of
     Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
       where
         qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
---  EliminationUnion (CaseStatement tname fields) ->
+  EliminationUnion (CaseStatement tname fields) -> case marg of
+      Nothing -> encodeTerm aliases $ Terms.lambda "v" $ Terms.apply (Terms.elimination elm) (Terms.variable "v")
+      Just jarg -> applyElimination jarg
+    where
+      applyElimination jarg = do
+          let prim = javaExpressionToJavaPrimary jarg
+          let consId = innerClassRef aliases tname visitorName
+          let targs = Java.TypeArgumentsOrDiamondDiamond
+--          bodyDecls <- CM.mapM bodyDecl fields
+          let bodyDecls = [] -- TODO
+          let body = Java.ClassBody bodyDecls
+          let visitor = javaConstructorCall (javaConstructorName consId $ Just targs) [] (Just body)
+          return $ javaMethodInvocationToJavaExpression $
+            methodInvocation (Just $ Right prim) (Java.Identifier "accept") [visitor]
+--        where
+--          bodyDecl field = do
+--            let mods = [Java.MethodModifierPublic]
+--            let anns = [overrideAnnotation]
+--            return $ noComment $ mods [] anns visitMethodName [param] result (Just [returnStmt])
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
@@ -442,7 +460,7 @@ encodeTerm aliases term = case term of
   --  TermMap (Map (Term m) (Term m))
     TermNominal (Named name arg) -> do
       jarg <- encodeTerm aliases arg
-      return $ javaConstructorCall (javaConstructorName $ nameToJavaName aliases name) [jarg]
+      return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
         methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
@@ -453,7 +471,7 @@ encodeTerm aliases term = case term of
     TermRecord (Record name fields) -> do
       fieldExprs <- CM.mapM (encodeTerm aliases) (fieldTerm <$> fields)
       let consId = nameToJavaName aliases name
-      return $ javaConstructorCall (javaConstructorName consId) fieldExprs
+      return $ javaConstructorCall (javaConstructorName consId Nothing) fieldExprs Nothing
     TermSet s -> do
       jels <- CM.mapM encode $ S.toList s
       let prim = javaMethodInvocationToJavaPrimary $
@@ -470,7 +488,7 @@ encodeTerm aliases term = case term of
           return [ex]
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-      return $ javaConstructorCall (javaConstructorName consId) args
+      return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
     _ -> pure $ encodeLiteral $ LiteralString $
       "Unimplemented term variant: " ++ show (termVariant term) -- TODO: temporary
@@ -519,6 +537,14 @@ encodeType aliases t = case stripType t of
   where
     encode = encodeType aliases
 
+innerClassRef :: M.Map GraphName Java.PackageName -> Name -> String -> Java.Identifier
+innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
+  where
+    Java.Identifier id = nameToJavaName aliases name
+
+partialVisitorName :: String
+partialVisitorName = "PartialVisitor"
+
 toClassDecl :: (Eq m, Ord m, Read m, Show m) => Bool -> M.Map GraphName Java.PackageName -> [Java.TypeParameter]
   -> Name -> Type m -> GraphFlow m Java.ClassDeclaration
 toClassDecl isInner aliases tparams elName t = case stripType t of
@@ -538,7 +564,7 @@ typeNameDecl :: (Ord m, Read m, Show m) => M.Map GraphName Java.PackageName -> N
 typeNameDecl aliases name = do
   jt <- encodeType aliases $ Types.nominal _Name
   arg <- encodeTerm aliases $ Terms.string $ unName name
-  let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName) [arg]
+  let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
   let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)
   return $ noComment $ javaMemberField mods jt var
   where
@@ -547,3 +573,9 @@ typeNameDecl aliases name = do
 
 valueFieldName :: String
 valueFieldName = "value"
+
+visitMethodName :: String
+visitMethodName = "visit"
+
+visitorName :: String
+visitorName = "Visitor"

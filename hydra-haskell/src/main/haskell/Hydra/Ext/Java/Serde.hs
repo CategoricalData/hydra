@@ -800,7 +800,9 @@ writeTypeArgument a = case a of
   Java.TypeArgumentWildcard w -> writeWildcard w
 
 writeTypeArgumentsOrDiamond :: Java.TypeArgumentsOrDiamond -> CT.Expr
-writeTypeArgumentsOrDiamond _ = cst "TODO:TypeArgumentsOrDiamond"
+writeTypeArgumentsOrDiamond targs = case targs of
+  Java.TypeArgumentsOrDiamondArguments args -> angleBracesList inlineStyle (writeTypeArgument <$> args)
+  Java.TypeArgumentsOrDiamondDiamond -> cst "<>"
 
 writeTypeBound :: Java.TypeBound -> CT.Expr
 writeTypeBound _ = cst "TODO:TypeBound"

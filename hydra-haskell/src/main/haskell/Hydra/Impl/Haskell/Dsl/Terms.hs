@@ -63,6 +63,9 @@ elementRefByName = apply delta . TermElement
 eliminateNominal :: Name -> Term m
 eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
 
+elimination :: Elimination m -> Term m
+elimination = TermFunction . FunctionElimination
+
 expectBoolean :: Show m => Term m -> GraphFlow m Bool
 expectBoolean term = case stripTerm term of
   TermLiteral (LiteralBoolean b) -> pure b

@@ -108,15 +108,15 @@ javaConditionalAndExpressionToJavaExpression :: Java.ConditionalAndExpression ->
 javaConditionalAndExpressionToJavaExpression condAndEx = Java.ExpressionAssignment $
   Java.AssignmentExpressionConditional $ Java.ConditionalExpressionSimple $ Java.ConditionalOrExpression [condAndEx]
 
-javaConstructorCall :: Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Java.Expression
-javaConstructorCall ci args = javaPrimaryToJavaExpression $
+javaConstructorCall :: Java.ClassOrInterfaceTypeToInstantiate -> [Java.Expression] -> Maybe Java.ClassBody -> Java.Expression
+javaConstructorCall ci args mbody = javaPrimaryToJavaExpression $
   Java.PrimaryNoNewArray $
   Java.PrimaryNoNewArrayClassInstance $
   Java.ClassInstanceCreationExpression Nothing $
-  Java.UnqualifiedClassInstanceCreationExpression [] ci args Nothing
+  Java.UnqualifiedClassInstanceCreationExpression [] ci args mbody
 
-javaConstructorName :: Java.Identifier -> Java.ClassOrInterfaceTypeToInstantiate
-javaConstructorName id = Java.ClassOrInterfaceTypeToInstantiate [Java.AnnotatedIdentifier [] id] Nothing
+javaConstructorName :: Java.Identifier -> Maybe Java.TypeArgumentsOrDiamond -> Java.ClassOrInterfaceTypeToInstantiate
+javaConstructorName id targs = Java.ClassOrInterfaceTypeToInstantiate [Java.AnnotatedIdentifier [] id] targs
 
 javaDeclName :: Name -> Java.TypeIdentifier
 javaDeclName = Java.TypeIdentifier . javaVariableName
@@ -338,7 +338,7 @@ makeConstructor aliases elName private params stmts = Java.ClassBodyDeclarationC
     mods = [if private then Java.ConstructorModifierPrivate else Java.ConstructorModifierPublic]
     body = Java.ConstructorBody Nothing stmts
 
-methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> [Char]
+methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Annotation] -> String
   -> [Java.FormalParameter] -> Java.Result -> Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration
 methodDeclaration mods tparams anns methodName params result stmts =
     javaMethodDeclarationToJavaClassBodyDeclaration $
