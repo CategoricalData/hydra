@@ -1,5 +1,7 @@
 package hydra.impl.java;
 
+import hydra.core.FloatType;
+import hydra.core.IntegerType;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
@@ -78,5 +80,25 @@ public class TypesTest {
     assertEquals(2, latLonType.accept(countFields));
     assertEquals(2, locationType.accept(countFields));
     assertEquals(0, stringToIntType.accept(countFields));
+  }
+
+  public void ignoreMe() {
+      hydra.core.FloatType it = new hydra.core.FloatType.Float32();
+      String s = it.accept(new hydra.core.FloatType.Visitor<String>() {
+          @Override
+          public String visit(FloatType.Bigfloat instance) {
+              return instance.toString();
+          }
+
+          @Override
+          public String visit(FloatType.Float32 instance) {
+              return instance.toString();
+          }
+
+          @Override
+          public String visit(FloatType.Float64 instance) {
+              return instance.toString();
+          }
+      });
   }
 }
