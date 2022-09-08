@@ -35,10 +35,10 @@ public class StringsTest {
 
         assertEquals(Arrays.asList("", "a"), splitOn("aa", "aaa"));
 
-        assertEquals(Arrays.asList(""), splitOn("a", ""));
+        assertEquals(Collections.singletonList(""), splitOn("a", ""));
 
         assertEquals(Arrays.asList("", "a", "b", "c"), splitOn("", "abc"));
-        assertEquals(Arrays.asList(""), splitOn("", ""));
+        assertEquals(Collections.singletonList(""), splitOn("", ""));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class StringsTest {
     }
 
     @Test
-    // TODO: test the behavior of toLower for extended characters. Currently, the implementation just inherits Java's String.toUpper()
+    // TODO: test the behavior of toUpper for extended characters. Currently, the implementation just inherits Java's String.toUpper()
     public void toUpperIsCorrect() {
         assertEquals("ONE TWO THREE", toUpper("One TWO threE"));
         assertEquals("ABC123", toUpper("AbC123"));

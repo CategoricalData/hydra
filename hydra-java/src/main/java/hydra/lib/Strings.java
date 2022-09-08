@@ -56,6 +56,6 @@ public interface Strings {
     }
 
     static String toUpper(String lower) {
-        return lower.toUpperCase(); // TODO: TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
+        return lower.toUpperCase(); // TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
     }
 }
