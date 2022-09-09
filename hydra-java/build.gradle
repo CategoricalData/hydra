@@ -6,6 +6,10 @@ plugins {
 group 'hydra'
 version '0.1'
 
+// Temporary; currently needed for LinkedIn applications of Hydra
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 dependencies {
 //  implementation 'com.linkedin.pegasus:generator:29.22.13'
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
