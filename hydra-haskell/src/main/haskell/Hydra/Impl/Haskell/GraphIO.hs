@@ -5,14 +5,26 @@ import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Monads
+import Hydra.Util.Codetree.Script
+import Hydra.Lexical
+
+import qualified Hydra.Ext.Haskell.Coder as Haskell
+import qualified Hydra.Ext.Java.Coder as Java
+import qualified Hydra.Ext.Pegasus.Coder as PDL
+import qualified Hydra.Ext.Scala.Coder as Scala
+
 import Hydra.Impl.Haskell.Sources.Adapter
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Evaluation
 import Hydra.Impl.Haskell.Sources.Phantoms
-import Hydra.Impl.Haskell.Sources.Ext.Atlas.Model
-import Hydra.Impl.Haskell.Sources.Ext.Azure.Dtld
+import Hydra.Impl.Haskell.Sources.Graph
+import Hydra.Impl.Haskell.Sources.Grammar
+import Hydra.Impl.Haskell.Sources.Libraries
+--import Hydra.Impl.Haskell.Sources.Monads
+
+import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
@@ -29,17 +41,6 @@ import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Shacl.Model
-import Hydra.Impl.Haskell.Sources.Graph
-import Hydra.Impl.Haskell.Sources.Grammar
-import Hydra.Impl.Haskell.Sources.Libraries
---import Hydra.Impl.Haskell.Sources.Monads
-import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
-import Hydra.Util.Codetree.Script
-import qualified Hydra.Ext.Haskell.Coder as Haskell
-import qualified Hydra.Ext.Java.Coder as Java
-import qualified Hydra.Ext.Pegasus.Coder as PDL
-import qualified Hydra.Ext.Scala.Coder as Scala
-import Hydra.Lexical
 
 import qualified System.FilePath as FP
 import qualified Data.List as L
@@ -68,10 +69,8 @@ coreModules = [
 
 extModules :: [GraphFlow Meta (Module Meta)]
 extModules = [
-  pure atlasModelModule,
   pure coqSyntaxModule,
   pure datalogSyntaxModule,
-  pure dtldModule,
   pure graphqlSyntaxModule,
   pure javaSyntaxModule,
   pure pegasusPdlModule,
@@ -84,14 +83,6 @@ extModules = [
   pure tinkerpopV3Module,
   pure xmlSchemaModule,
   pure yamlModelModule]
-
--- TODO: remove these eventually. They are handy for debugging.
-singleModule :: [GraphFlow Meta (Module Meta)]
-singleModule = [pure hydraCoreModule, pure hydraAdapterModule, hydraBasicsModule]
-testModules :: [GraphFlow Meta (Module Meta)]
-testModules = pure <$> [javaSyntaxModule, xmlSchemaModule, atlasModelModule, coqSyntaxModule]
-javaTestModules :: [GraphFlow Meta (Module Meta)]
-javaTestModules = pure <$> [jsonModelModule]
 
 writeHaskell :: [GraphFlow Meta (Module Meta)] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printGraph
