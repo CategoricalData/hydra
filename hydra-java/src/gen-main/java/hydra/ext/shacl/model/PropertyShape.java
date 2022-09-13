@@ -11,7 +11,7 @@ public class PropertyShape {
   /**
    * Any property shape -specific constraint parameters
    */
-  public final hydra.ext.shacl.model.PropertyShapeConstraints constraints;
+  public final java.util.List<hydra.ext.shacl.model.PropertyShapeConstraint> constraints;
   
   /**
    * See https://www.w3.org/TR/shacl/#defaultValue
@@ -35,7 +35,7 @@ public class PropertyShape {
   
   public final hydra.ext.rdf.syntax.Resource path;
   
-  public PropertyShape (hydra.ext.shacl.model.CommonProperties common, hydra.ext.shacl.model.PropertyShapeConstraints constraints, java.util.Optional<hydra.ext.rdf.syntax.Node> defaultValue, hydra.ext.rdf.syntax.LangStrings description, hydra.ext.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.ext.rdf.syntax.Resource path) {
+  public PropertyShape (hydra.ext.shacl.model.CommonProperties common, java.util.List<hydra.ext.shacl.model.PropertyShapeConstraint> constraints, java.util.Optional<hydra.ext.rdf.syntax.Node> defaultValue, hydra.ext.rdf.syntax.LangStrings description, hydra.ext.rdf.syntax.LangStrings name, java.util.Optional<java.math.BigInteger> order, hydra.ext.rdf.syntax.Resource path) {
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -63,7 +63,7 @@ public class PropertyShape {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
-  public PropertyShape withConstraints(hydra.ext.shacl.model.PropertyShapeConstraints constraints) {
+  public PropertyShape withConstraints(java.util.List<hydra.ext.shacl.model.PropertyShapeConstraint> constraints) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   

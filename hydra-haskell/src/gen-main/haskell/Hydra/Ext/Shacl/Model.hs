@@ -19,105 +19,82 @@ _Closed_isClosed = (Core.FieldName "isClosed")
 _Closed_ignoredProperties = (Core.FieldName "ignoredProperties")
 
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
-data CommonConstraints 
-  = CommonConstraints {
-    -- See https://www.w3.org/TR/shacl/#AndConstraintComponent
-    commonConstraintsAnd :: (Maybe [Shape]),
-    -- See https://www.w3.org/TR/shacl/#ClosedConstraintComponent
-    commonConstraintsClosed :: (Maybe Closed),
-    -- See https://www.w3.org/TR/shacl/#ClassConstraintComponent
-    commonConstraintsClass :: (Set Syntax.RdfsClass),
-    -- See https://www.w3.org/TR/shacl/#DatatypeConstraintComponent
-    commonConstraintsDatatype :: (Maybe Syntax.Iri),
-    -- See https://www.w3.org/TR/shacl/#DisjointConstraintComponent
-    commonConstraintsDisjoint :: (Set Syntax.Property),
-    -- See https://www.w3.org/TR/shacl/#EqualsConstraintComponent
-    commonConstraintsEquals :: (Set Syntax.Property),
-    -- Specifies the condition that at least one value node is equal to the given RDF term. See https://www.w3.org/TR/shacl/#HasValueConstraintComponent
-    commonConstraintsHasValue :: (Set Syntax.Node),
-    -- Specifies the condition that each value node is a member of a provided SHACL list. See https://www.w3.org/TR/shacl/#InConstraintComponent
-    commonConstraintsIn :: (Maybe [Syntax.Node]),
-    -- See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
-    commonConstraintsLanguageIn :: (Maybe [Syntax.LanguageTag]),
-    -- See https://www.w3.org/TR/shacl/#NodeKindConstraintComponent
-    commonConstraintsNodeKind :: (Maybe NodeKind),
-    -- See https://www.w3.org/TR/shacl/#NodeConstraintComponent
-    commonConstraintsNode :: (Set NodeShape),
-    -- See https://www.w3.org/TR/shacl/#NotConstraintComponent
-    commonConstraintsNot :: (Set Shape),
-    -- See https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent
-    commonConstraintsMaxExclusive :: (Maybe Syntax.Literal),
-    -- See https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent
-    commonConstraintsMaxInclusive :: (Maybe Syntax.Literal),
-    -- See https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent
-    commonConstraintsMaxLength :: (Maybe Integer),
-    -- See https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent
-    commonConstraintsMinExclusive :: (Maybe Syntax.Literal),
-    -- See https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent
-    commonConstraintsMinInclusive :: (Maybe Syntax.Literal),
-    -- See https://www.w3.org/TR/shacl/#MinLengthConstraintComponent
-    commonConstraintsMinLength :: (Maybe Integer),
-    -- See https://www.w3.org/TR/shacl/#PatternConstraintComponent
-    commonConstraintsPattern :: (Maybe Pattern),
-    -- See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
-    commonConstraintsProperty :: (Set PropertyShape),
-    -- See https://www.w3.org/TR/shacl/#OrConstraintComponent
-    commonConstraintsOr :: (Maybe [Shape]),
-    -- See https://www.w3.org/TR/shacl/#XoneConstraintComponent
-    commonConstraintsXone :: (Maybe [Shape])}
+data CommonConstraint 
+  = CommonConstraintAnd [Shape]
+  | CommonConstraintClosed Closed
+  | CommonConstraintClass (Set Syntax.RdfsClass)
+  | CommonConstraintDatatype Syntax.Iri
+  | CommonConstraintDisjoint (Set Syntax.Property)
+  | CommonConstraintEquals (Set Syntax.Property)
+  | CommonConstraintHasValue (Set Syntax.Node)
+  | CommonConstraintIn [Syntax.Node]
+  | CommonConstraintLanguageIn [Syntax.LanguageTag]
+  | CommonConstraintNodeKind NodeKind
+  | CommonConstraintNode (Set NodeShape)
+  | CommonConstraintNot (Set Shape)
+  | CommonConstraintMaxExclusive Syntax.Literal
+  | CommonConstraintMaxInclusive Syntax.Literal
+  | CommonConstraintMaxLength Integer
+  | CommonConstraintMinExclusive Syntax.Literal
+  | CommonConstraintMinInclusive Syntax.Literal
+  | CommonConstraintMinLength Integer
+  | CommonConstraintPattern Pattern
+  | CommonConstraintProperty (Set PropertyShape)
+  | CommonConstraintOr [Shape]
+  | CommonConstraintXone [Shape]
   deriving (Eq, Ord, Read, Show)
 
-_CommonConstraints = (Core.Name "hydra/ext/shacl/model.CommonConstraints")
+_CommonConstraint = (Core.Name "hydra/ext/shacl/model.CommonConstraint")
 
-_CommonConstraints_and = (Core.FieldName "and")
+_CommonConstraint_and = (Core.FieldName "and")
 
-_CommonConstraints_closed = (Core.FieldName "closed")
+_CommonConstraint_closed = (Core.FieldName "closed")
 
-_CommonConstraints_class = (Core.FieldName "class")
+_CommonConstraint_class = (Core.FieldName "class")
 
-_CommonConstraints_datatype = (Core.FieldName "datatype")
+_CommonConstraint_datatype = (Core.FieldName "datatype")
 
-_CommonConstraints_disjoint = (Core.FieldName "disjoint")
+_CommonConstraint_disjoint = (Core.FieldName "disjoint")
 
-_CommonConstraints_equals = (Core.FieldName "equals")
+_CommonConstraint_equals = (Core.FieldName "equals")
 
-_CommonConstraints_hasValue = (Core.FieldName "hasValue")
+_CommonConstraint_hasValue = (Core.FieldName "hasValue")
 
-_CommonConstraints_in = (Core.FieldName "in")
+_CommonConstraint_in = (Core.FieldName "in")
 
-_CommonConstraints_languageIn = (Core.FieldName "languageIn")
+_CommonConstraint_languageIn = (Core.FieldName "languageIn")
 
-_CommonConstraints_nodeKind = (Core.FieldName "nodeKind")
+_CommonConstraint_nodeKind = (Core.FieldName "nodeKind")
 
-_CommonConstraints_node = (Core.FieldName "node")
+_CommonConstraint_node = (Core.FieldName "node")
 
-_CommonConstraints_not = (Core.FieldName "not")
+_CommonConstraint_not = (Core.FieldName "not")
 
-_CommonConstraints_maxExclusive = (Core.FieldName "maxExclusive")
+_CommonConstraint_maxExclusive = (Core.FieldName "maxExclusive")
 
-_CommonConstraints_maxInclusive = (Core.FieldName "maxInclusive")
+_CommonConstraint_maxInclusive = (Core.FieldName "maxInclusive")
 
-_CommonConstraints_maxLength = (Core.FieldName "maxLength")
+_CommonConstraint_maxLength = (Core.FieldName "maxLength")
 
-_CommonConstraints_minExclusive = (Core.FieldName "minExclusive")
+_CommonConstraint_minExclusive = (Core.FieldName "minExclusive")
 
-_CommonConstraints_minInclusive = (Core.FieldName "minInclusive")
+_CommonConstraint_minInclusive = (Core.FieldName "minInclusive")
 
-_CommonConstraints_minLength = (Core.FieldName "minLength")
+_CommonConstraint_minLength = (Core.FieldName "minLength")
 
-_CommonConstraints_pattern = (Core.FieldName "pattern")
+_CommonConstraint_pattern = (Core.FieldName "pattern")
 
-_CommonConstraints_property = (Core.FieldName "property")
+_CommonConstraint_property = (Core.FieldName "property")
 
-_CommonConstraints_or = (Core.FieldName "or")
+_CommonConstraint_or = (Core.FieldName "or")
 
-_CommonConstraints_xone = (Core.FieldName "xone")
+_CommonConstraint_xone = (Core.FieldName "xone")
 
 -- Common constraint parameters and other properties for SHACL shapes
 data CommonProperties 
   = CommonProperties {
     -- Common constraint parameters attached to this shape
-    commonPropertiesConstraints :: CommonConstraints,
+    commonPropertiesConstraints :: [CommonConstraint],
     -- See https://www.w3.org/TR/shacl/#deactivated
     commonPropertiesDeactivated :: (Maybe Bool),
     -- See https://www.w3.org/TR/shacl/#message
@@ -203,7 +180,7 @@ data PropertyShape
   = PropertyShape {
     propertyShapeCommon :: CommonProperties,
     -- Any property shape -specific constraint parameters
-    propertyShapeConstraints :: PropertyShapeConstraints,
+    propertyShapeConstraints :: [PropertyShapeConstraint],
     -- See https://www.w3.org/TR/shacl/#defaultValue
     propertyShapeDefaultValue :: (Maybe Syntax.Node),
     -- See https://www.w3.org/TR/shacl/#name
@@ -232,35 +209,28 @@ _PropertyShape_order = (Core.FieldName "order")
 _PropertyShape_path = (Core.FieldName "path")
 
 -- A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes
-data PropertyShapeConstraints 
-  = PropertyShapeConstraints {
-    -- See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
-    propertyShapeConstraintsLessThan :: (Set Syntax.Property),
-    -- See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
-    propertyShapeConstraintsLessThanOrEquals :: (Set Syntax.Property),
-    -- The maximum cardinality. Node shapes cannot have any value for sh:maxCount. See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent
-    propertyShapeConstraintsMaxCount :: (Maybe Integer),
-    -- The minimum cardinality. Node shapes cannot have any value for sh:minCount. See https://www.w3.org/TR/shacl/#MinCountConstraintComponent
-    propertyShapeConstraintsMinCount :: (Maybe Integer),
-    -- See https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent
-    propertyShapeConstraintsUniqueLang :: (Maybe Bool),
-    -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
-    propertyShapeConstraintsQualifiedValueShape :: (Maybe QualifiedValueShape)}
+data PropertyShapeConstraint 
+  = PropertyShapeConstraintLessThan (Set Syntax.Property)
+  | PropertyShapeConstraintLessThanOrEquals (Set Syntax.Property)
+  | PropertyShapeConstraintMaxCount Integer
+  | PropertyShapeConstraintMinCount Integer
+  | PropertyShapeConstraintUniqueLang Bool
+  | PropertyShapeConstraintQualifiedValueShape QualifiedValueShape
   deriving (Eq, Ord, Read, Show)
 
-_PropertyShapeConstraints = (Core.Name "hydra/ext/shacl/model.PropertyShapeConstraints")
+_PropertyShapeConstraint = (Core.Name "hydra/ext/shacl/model.PropertyShapeConstraint")
 
-_PropertyShapeConstraints_lessThan = (Core.FieldName "lessThan")
+_PropertyShapeConstraint_lessThan = (Core.FieldName "lessThan")
 
-_PropertyShapeConstraints_lessThanOrEquals = (Core.FieldName "lessThanOrEquals")
+_PropertyShapeConstraint_lessThanOrEquals = (Core.FieldName "lessThanOrEquals")
 
-_PropertyShapeConstraints_maxCount = (Core.FieldName "maxCount")
+_PropertyShapeConstraint_maxCount = (Core.FieldName "maxCount")
 
-_PropertyShapeConstraints_minCount = (Core.FieldName "minCount")
+_PropertyShapeConstraint_minCount = (Core.FieldName "minCount")
 
-_PropertyShapeConstraints_uniqueLang = (Core.FieldName "uniqueLang")
+_PropertyShapeConstraint_uniqueLang = (Core.FieldName "uniqueLang")
 
-_PropertyShapeConstraints_qualifiedValueShape = (Core.FieldName "qualifiedValueShape")
+_PropertyShapeConstraint_qualifiedValueShape = (Core.FieldName "qualifiedValueShape")
 
 -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
 data QualifiedValueShape 
