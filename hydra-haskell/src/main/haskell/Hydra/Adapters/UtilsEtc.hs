@@ -38,8 +38,8 @@ chooseAdapter alts supported describe typ = if supported typ
       then fail $ "no adapters found for " ++ describe typ
         ++ (if L.null raw
            then ""
-           else " (discarded " ++ show (L.length raw) ++ " unsupported types: " ++ show (adapterTarget <$> raw) ++ ")")
-        ++ ". Type definition: " ++ show typ
+           else " (discarded " ++ show (L.length raw) ++ " unsupported candidate types: " ++ show (adapterTarget <$> raw) ++ ")")
+        ++ ". Original type: " ++ show typ
       else return $ L.head candidates
 
 composeCoders :: Coder s a b -> Coder s b c -> Coder s a c

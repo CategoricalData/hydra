@@ -34,7 +34,8 @@ decodeStructuralType term = do
   let typ' = stripType typ
   case typ' of
     TypeNominal name -> withSchemaContext $ do
-        el <- requireElement (Just "decode structural type") name
+        pushTrc "decode structural type"
+        el <- requireElement name
         decodeStructuralType $ elementData el
     _ -> pure typ
 
@@ -268,7 +269,8 @@ lookupTypeInEnvironment v = do
 
 namedType :: Show m => String -> Name -> GraphFlow m (Type m)
 namedType debug name = do
-  el <- requireElement (Just debug) name
+  pushTrc debug
+  el <- requireElement name
   withSchemaContext $ decodeStructuralType $ elementData el
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
@@ -290,7 +292,8 @@ termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
 typeOfElement :: Show m => Name -> GraphFlow m (Type m)
 typeOfElement name = do
-  el <- requireElement (Just "type of element") name
+  pushTrc "type of element"
+  el <- requireElement name
   decodeStructuralType $ elementSchema el
 
 typeOfPrimitiveFunction :: Name -> GraphFlow m (FunctionType m)
