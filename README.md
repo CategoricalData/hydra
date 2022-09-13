@@ -75,7 +75,7 @@ Types, terms, graphs, elements, and many other things are parameterized by an an
 
 ### Transformations
 
-Transformations in Hydra take the form of simple functions or, more commonly, expressions involving the `Flow` monad (a close relative of the better-known [State](https://wiki.haskell.org/State_Monad) monad which has been implemented in many programming languages) and the special case of a bidirectional flow, called `Coder`. Both are provided in the generated [Hydra.Evaluation](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Evaluation.hs) module in Haskell, along with the `Context` type which you will see almost everywhere in Hydra; a `Context` provides a set of graphs and their elements, a set of primitive functions, an evaluation strategy, and other constructs which are needed for computation in Hydra. A context is part of the state which flows through a graph transformation as it is being applied.
+Transformations in Hydra take the form of simple functions or, more commonly, expressions involving the `Flow` monad (a close relative of the [State](https://wiki.haskell.org/State_Monad) monad, which has been implemented in many programming languages) and the special case of a bidirectional flow, called `Coder`. Both are provided in the generated [Hydra.Evaluation](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Evaluation.hs) module in Haskell, along with the `Context` type which you will see almost everywhere in Hydra; a `Context` provides a set of graphs and their elements, a set of primitive functions, an evaluation strategy, and other constructs which are needed for computation in Hydra. A context is part of the state which flows through a graph transformation as it is being applied.
 
 In Haskell, you will most often see `Flow` and `Context` combined as the `GraphFlow` alias:
 
@@ -85,7 +85,7 @@ type GraphFlow m = Flow (Context m)
 
 There are two helper types, `FlowWrapper` and `Trace`, which are used together with `Flow`; a `FlowWrapper` is the result of evaluating a `Flow`, while `Trace` encapsulates a stack trace and error or logger messages.
 Since `Flow` is a monad, you can create a `GraphFlow` with `f = pure x`, where `x` is anything you would like to enter into a transformation pipeline.
-The transformation is actually applied when you call `unFlow` and pass in a graph context and , i.e.
+The transformation is actually applied when you call `unFlow` and pass in a graph context and a trace, i.e.
 
 ```haskell
 unFlow f cx emptyTrace
@@ -94,6 +94,21 @@ unFlow f cx emptyTrace
 This gives you a flow wrapper, which you can think of as the exit point of a transformation.
 Inside the wrapper is either a concrete value (if the transformation succeeded) or `Nothing` (if the transformation failed), a stack trace, and a list of messages.
 You will always find at least one message if the transformation failed; this is analogous to an exception in mainstream programming languages.
+
+A `Coder`, as mentioned above, is a construct which has a `Flow` in either direction between two types.
+As a trivial example, consider this coder which serializes integers to strings using Haskell's built-in `show` function, then reads the strings back to integers using `read`:
+
+```haskell
+intStringCoder :: Coder () Int String
+intStringCoder = Coder {
+  coderEncode = pure . show,
+  coderDecode = pure . read}
+```
+
+The `()` indicates that this coder has no state, which makes the use of `Coder` overkill in this case.
+For a more realistic, but still simple example, see the [JSON coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Json/Coder.hs), which makes use of state for error propagation.
+For a more sophisticated example, see the [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Haskell/Coder.hs) or the [Java coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Java/Coder.hs); these ones make use of all of the facilities of a graph flow,
+including lexical lookups, type decoding, annotations, etc.
 
 ### DSLs
 
