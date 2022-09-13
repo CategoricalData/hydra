@@ -30,16 +30,16 @@ shaclModel = Graph shaclModelName elements hydraCoreName
           "isClosed">: boolean,
           "ignoredProperties">: optional $ list $ element $ rdf "Property"],
 
-      def "CommonConstraints" $
+      def "CommonConstraint" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
-        record [
+        union [
           "and">:
             see "https://www.w3.org/TR/shacl/#AndConstraintComponent" $
-            optional $ list $ shacl "Shape",
+            list $ shacl "Shape",
 
           "closed">:
             see "https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
-            optional $ shacl "Closed",
+            shacl "Closed",
 
           "class">:
             see "https://www.w3.org/TR/shacl/#ClassConstraintComponent" $
@@ -47,7 +47,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "datatype">:
             see "https://www.w3.org/TR/shacl/#DatatypeConstraintComponent" $
-            optional $ rdf "Iri",
+            rdf "Iri",
 
           "disjoint">:
             see "https://www.w3.org/TR/shacl/#DisjointConstraintComponent" $
@@ -65,15 +65,15 @@ shaclModel = Graph shaclModelName elements hydraCoreName
           "in">:
             doc ("Specifies the condition that each value node is a member of a provided SHACL list. " ++
                  "See https://www.w3.org/TR/shacl/#InConstraintComponent") $
-            optional $ list $ rdf "Node",
+            list $ rdf "Node",
 
           "languageIn">:
             see "https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
-            optional $ list $ rdf "LanguageTag",
+            list $ rdf "LanguageTag",
 
           "nodeKind">:
             see "https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
-            optional $ shacl "NodeKind",
+            shacl "NodeKind",
 
           "node">:
             see "https://www.w3.org/TR/shacl/#NodeConstraintComponent" $
@@ -85,31 +85,31 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "maxExclusive">:
             see "https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent" $
-            optional $ rdf "Literal",
+            rdf "Literal",
 
           "maxInclusive">:
             see "https://www.w3.org/TR/shacl/#MaxInclusiveConstraintComponent" $
-            optional $ rdf "Literal",
+            rdf "Literal",
 
           "maxLength">:
             see "https://www.w3.org/TR/shacl/#MaxLengthConstraintComponent" $
-            optional bigint,
+            bigint,
 
           "minExclusive">:
             see "https://www.w3.org/TR/shacl/#MinExclusiveConstraintComponent" $
-            optional $ rdf "Literal",
+            rdf "Literal",
 
           "minInclusive">:
             see "https://www.w3.org/TR/shacl/#MinInclusiveConstraintComponent" $
-            optional $ rdf "Literal",
+            rdf "Literal",
 
           "minLength">:
             see "https://www.w3.org/TR/shacl/#MinLengthConstraintComponent" $
-            optional bigint,
+            bigint,
 
           "pattern">:
             see "https://www.w3.org/TR/shacl/#PatternConstraintComponent" $
-            optional $ shacl "Pattern",
+            shacl "Pattern",
 
           "property">:
             see "https://www.w3.org/TR/shacl/#PropertyConstraintComponent" $
@@ -117,18 +117,18 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "or">:
             see "https://www.w3.org/TR/shacl/#OrConstraintComponent" $
-            optional $ list $ shacl "Shape",
+            list $ shacl "Shape",
 
           "xone">:
             see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
-            optional $ list $ shacl "Shape"],
+            list $ shacl "Shape"],
 
       def "CommonProperties" $
         doc "Common constraint parameters and other properties for SHACL shapes" $
         record [
           "constraints">:
             doc "Common constraint parameters attached to this shape"
-            $ shacl "CommonConstraints",
+            $ list $ shacl "CommonConstraint",
 
           "deactivated">:
             see "https://www.w3.org/TR/shacl/#deactivated" $
@@ -184,7 +184,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "constraints">:
             doc "Any property shape -specific constraint parameters" $
-            shacl "PropertyShapeConstraints",
+            list $ shacl "PropertyShapeConstraint",
 
           "defaultValue">:
             see "https://www.w3.org/TR/shacl/#defaultValue" $
@@ -205,9 +205,9 @@ shaclModel = Graph shaclModelName elements hydraCoreName
           "path">: rdf "Resource"], -- TODO
           -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
 
-      def "PropertyShapeConstraints" $
+      def "PropertyShapeConstraint" $
         doc "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes" $
-        record [
+        union [
 
           "lessThan">:
             see "https://www.w3.org/TR/shacl/#LessThanConstraintComponent" $
@@ -220,20 +220,20 @@ shaclModel = Graph shaclModelName elements hydraCoreName
           "maxCount">:
             doc ("The maximum cardinality. Node shapes cannot have any value for sh:maxCount. " ++
                  "See https://www.w3.org/TR/shacl/#MaxCountConstraintComponent") $
-            optional bigint,
+            bigint,
 
           "minCount">:
             doc ("The minimum cardinality. Node shapes cannot have any value for sh:minCount. " ++
                  "See https://www.w3.org/TR/shacl/#MinCountConstraintComponent") $
-            optional bigint,
+            bigint,
 
           "uniqueLang">:
             see "https://www.w3.org/TR/shacl/#UniqueLangConstraintComponent" $
-            optional boolean,
+            boolean,
 
           "qualifiedValueShape">:
             see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
-            optional $ shacl "QualifiedValueShape"],
+            shacl "QualifiedValueShape"],
 
       def "QualifiedValueShape" $
         see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $

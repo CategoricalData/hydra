@@ -64,37 +64,11 @@ encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
     LiteralTypeString -> xsd "string"
   where
     xsd local = pure $ defaultCommonProperties {
-      Shacl.commonPropertiesConstraints = defaultCommonConstraints {
-        Shacl.commonConstraintsDatatype = Just $ xmlSchemaDatatypeIri local}}
-
-defaultCommonConstraints :: Shacl.CommonConstraints
-defaultCommonConstraints = Shacl.CommonConstraints {
-  Shacl.commonConstraintsAnd = Nothing,
-  Shacl.commonConstraintsClass = S.empty,
-  Shacl.commonConstraintsClosed = Nothing,
-  Shacl.commonConstraintsDatatype = Nothing,
-  Shacl.commonConstraintsDisjoint = S.empty,
-  Shacl.commonConstraintsEquals = S.empty,
-  Shacl.commonConstraintsHasValue = S.empty,
-  Shacl.commonConstraintsIn = Nothing,
-  Shacl.commonConstraintsLanguageIn = Nothing,
-  Shacl.commonConstraintsMaxExclusive = Nothing,
-  Shacl.commonConstraintsMaxInclusive = Nothing,
-  Shacl.commonConstraintsMaxLength = Nothing,
-  Shacl.commonConstraintsMinExclusive = Nothing,
-  Shacl.commonConstraintsMinInclusive = Nothing,
-  Shacl.commonConstraintsMinLength = Nothing,
-  Shacl.commonConstraintsNode = S.empty,
-  Shacl.commonConstraintsNodeKind = Nothing,
-  Shacl.commonConstraintsNot = S.empty,
-  Shacl.commonConstraintsOr = Nothing,
-  Shacl.commonConstraintsPattern = Nothing,
-  Shacl.commonConstraintsProperty = S.empty,
-  Shacl.commonConstraintsXone = Nothing}
+      Shacl.commonPropertiesConstraints = [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]}
 
 defaultCommonProperties :: Shacl.CommonProperties
 defaultCommonProperties = Shacl.CommonProperties {
-  Shacl.commonPropertiesConstraints = defaultCommonConstraints,
+  Shacl.commonPropertiesConstraints = [],
   Shacl.commonPropertiesDeactivated = Nothing,
   Shacl.commonPropertiesMessage = defaultLangStrings,
   Shacl.commonPropertiesSeverity = Shacl.SeverityInfo,
