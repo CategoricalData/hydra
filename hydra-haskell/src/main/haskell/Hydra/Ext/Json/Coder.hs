@@ -26,7 +26,6 @@ jsonCoder typ = do
     adapter <- withState acx $ termAdapter typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder
-  where
 
 literalCoder :: LiteralType -> GraphFlow m (Coder (Context m) Literal Json.Value)
 literalCoder at = pure $ case at of
