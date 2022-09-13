@@ -16,7 +16,7 @@ import Control.Monad
 
 
 deref :: Term m -> GraphFlow m (Term m)
-deref term = case stripTerm term of 
+deref term = case stripTerm term of
   TermElement name -> dereferenceElement name >>= deref
   TermNominal (Named _ term') -> deref term'
   _ -> pure term
@@ -41,14 +41,13 @@ primitiveFunctionArity = arity . primitiveFunctionType
       TypeFunction ft -> arity ft
       _ -> 0
 
-requireElement :: Maybe String -> Name -> GraphFlow m (Element m)
-requireElement debug  name = do
+requireElement :: Name -> GraphFlow m (Element m)
+requireElement name = do
     cx <- getState
     Y.maybe (err cx) pure $ M.lookup name $ contextElements cx
   where
     err cx = fail $ "no such element: " ++ unName name
         ++ " in graph " ++ h (graphSetRoot (contextGraphs cx))
-        ++ Y.maybe "" (\d -> " (context: " ++ d ++ ")") debug
         ++ ". Available elements: {" ++ L.intercalate ", " (unName . elementName <$> M.elems (contextElements cx)) ++ "}"
       where
         h (GraphName n) = n

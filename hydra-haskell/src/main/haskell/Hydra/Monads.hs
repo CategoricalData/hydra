@@ -73,8 +73,8 @@ getState = Flow q
       where
         FlowWrapper v1 s1 t1 = unFlow f s0 t0
 
-pushTrc :: String -> Trace -> Trace
-pushTrc msg t = t {traceStack = msg:(traceStack t)}
+pushTrc :: String -> Flow s String
+pushTrc msg = Flow $ \s0 t0 -> FlowWrapper (Just msg) s0 (t0 {traceStack = msg:(traceStack t0)})
 
 putState :: s -> Flow s ()
 putState cx = Flow q

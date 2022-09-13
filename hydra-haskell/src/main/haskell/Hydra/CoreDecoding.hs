@@ -132,7 +132,8 @@ fieldTypes t = case stripType t of
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
     TypeElement et -> fieldTypes et
     TypeNominal name -> do
-      el <- requireElement (Just "field types") name
+      pushTrc "field types"
+      el <- requireElement name
       decodeType (elementData el) >>= fieldTypes
     TypeLambda (LambdaType _ body) -> fieldTypes body
     _ -> fail $ "expected record or union type, but found " ++ show t
@@ -191,7 +192,8 @@ requireRowType label getter name = do
 
 requireType :: Show m => Name -> GraphFlow m (Type m)
 requireType name = do
-  el <- requireElement (Just "require type") name
+  pushTrc "require type"
+  el <- requireElement name
   decodeType $ elementData el
 
 requireUnionType :: Show m => Name -> GraphFlow m (RowType m)

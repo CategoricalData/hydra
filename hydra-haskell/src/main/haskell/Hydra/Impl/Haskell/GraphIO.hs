@@ -114,7 +114,7 @@ generateSources printGraph modules basePath = do
       writeFile fullPath s
 
 moduleToContext :: Module Meta -> Context Meta
-moduleToContext mod@(Module g _) =  setContextElements allGraphs $ coreContext {
+moduleToContext mod@(Module g _) = setContextElements allGraphs $ coreContext {
     contextGraphs = GraphSet allGraphsByName (graphName g),
     contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
   where
@@ -127,6 +127,14 @@ moduleToContext mod@(Module g _) =  setContextElements allGraphs $ coreContext {
             else L.foldl addModule (M.insert gname mod m) deps
           where
             gname = graphName g'
+
+emptyInstanceContext :: GraphName -> Context Meta -> Context Meta
+emptyInstanceContext gname scx = scx {
+    contextElements = M.empty,
+    contextGraphs = GraphSet allGraphs gname}
+  where
+    allGraphs = M.insert gname elGraph $ (graphSetGraphs $ contextGraphs scx)
+    elGraph = Graph gname [] (graphSetRoot $ contextGraphs scx)
 
 moduleToFiles :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> Module Meta -> GraphFlow Meta (M.Map FilePath String)
 moduleToFiles printGraph mod = withState (moduleToContext mod) $ printGraph $ moduleGraph mod

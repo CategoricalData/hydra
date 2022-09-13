@@ -214,7 +214,8 @@ typeDependencies name = deps (S.fromList [name]) M.empty
           return (name, typ)
 
     requireType name = do
-      el <- requireElement (Just "type dependencies") name
+      pushTrc "type dependencies"
+      el <- requireElement name
       decodeType (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name
