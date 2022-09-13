@@ -13,6 +13,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 import Control.Monad
+import qualified System.IO as IO
 
 
 type GraphFlow m = Flow (Context m)
@@ -54,7 +55,14 @@ flowWarning msg b = Flow u'
 fromFlow :: s -> Flow s a -> a
 fromFlow cx f = case flowWrapperValue (unFlow f cx emptyTrace) of
   Just x -> x
-     
+
+fromFlowIo :: s -> Flow s a -> IO.IO a
+fromFlowIo cx f = case mv of
+    Just v -> pure v
+    Nothing -> fail $ traceSummary trace
+  where
+    FlowWrapper mv _ trace = unFlow f cx emptyTrace
+
 getState :: Flow s s
 getState = Flow q
   where

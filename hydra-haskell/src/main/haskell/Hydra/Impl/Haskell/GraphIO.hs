@@ -113,12 +113,11 @@ generateSources printGraph modules basePath = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
 
-moduleToFiles :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> Module Meta -> GraphFlow Meta (M.Map FilePath String)
-moduleToFiles printGraph mod@(Module g _) = withState cx $ printGraph g
+moduleToContext :: Module Meta -> Context Meta
+moduleToContext mod@(Module g _) =  setContextElements allGraphs $ coreContext {
+    contextGraphs = GraphSet allGraphsByName (graphName g),
+    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
   where
-    cx = setContextElements allGraphs $ coreContext {
-      contextGraphs = GraphSet allGraphsByName (graphName g),
-      contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
     allGraphs = moduleGraph <$> M.elems allModules
     allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
     allModules = addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mod
@@ -128,6 +127,9 @@ moduleToFiles printGraph mod@(Module g _) = withState cx $ printGraph g
             else L.foldl addModule (M.insert gname mod m) deps
           where
             gname = graphName g'
+
+moduleToFiles :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> Module Meta -> GraphFlow Meta (M.Map FilePath String)
+moduleToFiles printGraph mod = withState (moduleToContext mod) $ printGraph $ moduleGraph mod
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError (Trace stack messages) = do
