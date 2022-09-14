@@ -140,7 +140,7 @@ moduleToFiles :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> Modul
 moduleToFiles printGraph mod = withState (moduleToContext mod) $ printGraph $ moduleGraph mod
 
 printTrace :: Bool -> Trace -> IO ()
-printTrace isError (Trace stack messages) = do
+printTrace isError (Trace stack messages _) = do
     if (isError && not (L.null stack))
       then putStrLn $ "Error trace: " ++ L.intercalate " > " (L.reverse stack)
       else pure ()

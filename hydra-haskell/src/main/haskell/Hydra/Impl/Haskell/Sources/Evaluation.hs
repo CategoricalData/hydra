@@ -111,4 +111,5 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
         doc "A container for logging and error information" $
         record [
           "stack">: list string,
-          "messages">: list (list string)]]
+          "messages">: list $ list string,
+          "other">: Types.map string (core "Literal")]]

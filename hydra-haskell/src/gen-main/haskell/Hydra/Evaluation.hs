@@ -161,7 +161,8 @@ _TermCoder_coder = (Core.FieldName "coder")
 data Trace 
   = Trace {
     traceStack :: [String],
-    traceMessages :: [[String]]}
+    traceMessages :: [[String]],
+    traceOther :: (Map String Core.Literal)}
   deriving (Eq, Ord, Read, Show)
 
 _Trace = (Core.Name "hydra/evaluation.Trace")
@@ -169,3 +170,5 @@ _Trace = (Core.Name "hydra/evaluation.Trace")
 _Trace_stack = (Core.FieldName "stack")
 
 _Trace_messages = (Core.FieldName "messages")
+
+_Trace_other = (Core.FieldName "other")
