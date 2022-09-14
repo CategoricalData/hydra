@@ -27,7 +27,6 @@ shaclCoder sg = do
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
     let termFlow = \g -> do
-        putAttr nodeCount $ Literals.int32 0
         fail "not implemented"
     return (sg, termFlow)
   where
@@ -170,6 +169,16 @@ encodeLiteralType lt = case lt of
 
 nameToIri :: Name -> Rdf.Iri
 nameToIri = Rdf.Iri . unName
+
+nextBlankNode :: Show m => GraphFlow m Rdf.Node
+nextBlankNode = do
+  c <- getAttr nodeCount
+  count <- case c of
+    Nothing -> pure 0
+    Just lit -> Literals.expectInt32 lit
+  let node = Rdf.NodeBnode $ Rdf.BlankNode $ "b" ++ show count
+  putAttr nodeCount (Literals.int32 $ count + 1)
+  return node
 
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common
