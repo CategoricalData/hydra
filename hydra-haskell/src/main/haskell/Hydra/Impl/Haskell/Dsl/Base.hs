@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Base (
   module Hydra.Impl.Haskell.Dsl.Base,
-  module Hydra.Impl.Haskell.Dsl.Literals,
+  module Hydra.Impl.Haskell.Dsl.PhantomLiterals,
   module Hydra.Phantoms,
   Standard.coreContext,
 ) where
@@ -9,7 +9,7 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.CoreEncoding
 import Hydra.Evaluation
-import Hydra.Impl.Haskell.Dsl.Literals
+import Hydra.Impl.Haskell.Dsl.PhantomLiterals
 import Hydra.Meta
 import Hydra.Phantoms
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard

@@ -9,6 +9,7 @@ import Hydra.CoreDecoding
 import Hydra.Lexical
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
+import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -17,13 +18,17 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+nodeCount = "nodeCount"
+
 shaclCoder :: (Eq m, Show m) => Graph m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
 shaclCoder sg = do
     cx <- getState
     let typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
-    let termFlow = \g -> fail "not implemented"
+    let termFlow = \g -> do
+        putAttr nodeCount $ Literals.int32 0
+        fail "not implemented"
     return (sg, termFlow)
   where
     toShape el = do
