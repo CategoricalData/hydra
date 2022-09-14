@@ -1,75 +1,74 @@
 module Hydra.Impl.Haskell.Dsl.Literals where
 
-import Hydra.Phantoms
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import Hydra.Core
+import Hydra.Graph
+import Hydra.Monads
+
 import Data.Int
 
 
--- Note: does not yet properly capture arbitrary-precision floating-point numbers,
---       because code generation does not.
-type Bigfloat = Double
+bigfloat :: Double -> Literal
+bigfloat = float . FloatValueBigfloat
 
--- Note: does not distinguish Binary from String, because code generation does not.
-type Binary = String
+bigint :: Integer -> Literal
+bigint = integer . IntegerValueBigint . fromIntegral
 
-bigfloat :: Bigfloat -> Datum Bigfloat
-bigfloat = Datum . Terms.bigfloat
+binary :: String -> Literal
+binary = LiteralBinary
 
-bigint :: Integer -> Datum Integer
-bigint = Datum . Terms.bigint
+boolean :: Bool -> Literal
+boolean = LiteralBoolean
 
-binary :: Binary -> Datum Binary
-binary = Datum . Terms.binaryTerm
+expectBoolean :: Show m => Literal -> GraphFlow m Bool
+expectBoolean v = case v of
+  LiteralBoolean b -> pure b
+  _ -> unexpected "boolean" v
 
-bool :: Bool -> Datum Bool
-bool = Datum . Terms.boolean
+expectInt32 :: Show m => Literal -> GraphFlow m Int
+expectInt32 v = case v of
+  LiteralInteger (IntegerValueInt32 i) -> pure i
+  _ -> unexpected "int32" v
 
-boolean :: Bool -> Datum Bool
-boolean = bool
+expectString :: Show m => Literal -> GraphFlow m String
+expectString v = case v of
+  LiteralString s -> pure s
+  _ -> unexpected "string" v
 
-double :: Double -> Datum Double
-double = float64
+float32 :: Float -> Literal
+float32 = float . FloatValueFloat32
 
-false :: Datum Bool
-false = bool False
+float64 :: Double -> Literal
+float64 = float . FloatValueFloat64
 
-float :: Float -> Datum Float
-float = float32
+float :: FloatValue -> Literal
+float = LiteralFloat
 
-float32 :: Float -> Datum Float
-float32 = Datum . Terms.float32
+int16 :: Int16 -> Literal
+int16 = integer . IntegerValueInt16 . fromIntegral
 
-float64 :: Double -> Datum Double
-float64 = Datum . Terms.float64
+int32 :: Int -> Literal
+int32 = integer . IntegerValueInt32
 
-int :: Int -> Datum Int
-int = int32
+int64 :: Int64 -> Literal
+int64 = integer . IntegerValueInt64 . fromIntegral
 
-int8 :: Int8 -> Datum Int8
-int8 = Datum . Terms.int8
+int8 :: Int8 -> Literal
+int8 = integer . IntegerValueInt8 . fromIntegral
 
-int16 :: Int16 -> Datum Int16
-int16 = Datum . Terms.int16
+integer :: IntegerValue -> Literal
+integer = LiteralInteger
 
-int32 :: Int -> Datum Int
-int32 = Datum . Terms.int32
+string :: String -> Literal
+string = LiteralString
 
-int64 :: Int64 -> Datum Int64
-int64 = Datum . Terms.int64
+uint16 :: Integer -> Literal
+uint16 = integer . IntegerValueUint16 . fromIntegral
 
-string :: String -> Datum String
-string = Datum . Terms.string
+uint32 :: Integer -> Literal
+uint32 = integer . IntegerValueUint32 . fromIntegral
 
-true :: Datum Bool
-true = bool True
+uint64 :: Integer -> Literal
+uint64 = integer . IntegerValueUint64 . fromIntegral
 
--- Note: untyped integers are not yet properly supported by the DSL,
---       because they are not properly supported by code generation.
-uint8 :: Int8 -> Datum Int8
-uint8 = int8
-uint16 :: Int16 -> Datum Int16
-uint16 = int16
-uint32 :: Int -> Datum Int
-uint32 = int
-uint64 :: Int64 -> Datum Int64
-uint64 = int64
+uint8 :: Integer -> Literal
+uint8 = integer . IntegerValueUint8 . fromIntegral

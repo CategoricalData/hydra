@@ -4,6 +4,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Monads
 import Hydra.Common
+import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 
 import Prelude hiding (map)
 import qualified Data.List as L
@@ -24,16 +25,16 @@ apply :: Term m -> Term m -> Term m
 apply func arg = TermApplication $ Application func arg
 
 bigfloat :: Double -> Term m
-bigfloat = float . FloatValueBigfloat
+bigfloat = literal . Literals.bigfloat
 
 bigint :: Integer -> Term m
-bigint = integer . IntegerValueBigint . fromIntegral
+bigint = literal . Literals.bigint
 
-binaryTerm :: String -> Term m
-binaryTerm = TermLiteral . LiteralBinary
+binary :: String -> Term m
+binary = literal . Literals.binary
 
 boolean :: Bool -> Term m
-boolean b = TermLiteral $ LiteralBoolean b
+boolean = literal . Literals.boolean
 
 cases :: Name -> [Field m] -> Term m
 cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields
@@ -67,24 +68,20 @@ elimination :: Elimination m -> Term m
 elimination = TermFunction . FunctionElimination
 
 expectBoolean :: Show m => Term m -> GraphFlow m Bool
-expectBoolean term = case stripTerm term of
-  TermLiteral (LiteralBoolean b) -> pure b
-  _ -> unexpected "boolean" term
+expectBoolean = expectLiteral Literals.expectBoolean
 
 expectInt32 :: Show m => Term m -> GraphFlow m Int
-expectInt32 term = case stripTerm term of
-  TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> pure v
-  _ -> unexpected "int32" term
+expectInt32 = expectLiteral Literals.expectInt32
 
 expectList :: Show m => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m [a]
 expectList f term = case stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
 
-expectLiteral :: Show m => Term m -> GraphFlow m Literal
-expectLiteral term = case stripTerm term of
-  TermLiteral av -> pure av
-  _ -> unexpected "literal value" term
+expectLiteral :: Show m => (Literal -> GraphFlow m a) -> Term m -> GraphFlow m a
+expectLiteral expect term = case stripTerm term of
+  TermLiteral lit -> expect lit
+  _ -> unexpected "literal" term
 
 expectMap :: (Ord k, Show m) => (Term m -> GraphFlow m k) -> (Term m -> GraphFlow m v) -> Term m -> GraphFlow m (M.Map k v)
 expectMap fk fv term = case stripTerm term of
@@ -119,9 +116,7 @@ expectSet f term = case stripTerm term of
   _ -> unexpected "set" term
 
 expectString :: Show m => Term m -> GraphFlow m String
-expectString term = case stripTerm term of
-  TermLiteral (LiteralString s) -> pure s
-  _ -> unexpected "string" term
+expectString = expectLiteral Literals.expectString
 
 expectUnion :: Show m => Term m -> GraphFlow m (Field m)
 expectUnion term = case stripTerm term of
@@ -135,28 +130,28 @@ fieldsToMap :: [Field m] -> M.Map FieldName (Term m)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
 float32 :: Float -> Term m
-float32 = float . FloatValueFloat32
+float32 = literal . Literals.float32
 
 float64 :: Double -> Term m
-float64 = float . FloatValueFloat64
+float64 = literal . Literals.float64
 
 float :: FloatValue -> Term m
-float = TermLiteral . LiteralFloat
+float = literal . Literals.float
 
 int16 :: Int16 -> Term m
-int16 = integer . IntegerValueInt16 . fromIntegral
+int16 = literal . Literals.int16
 
 int32 :: Int -> Term m
-int32 = integer . IntegerValueInt32
+int32 = literal . Literals.int32
 
 int64 :: Int64 -> Term m
-int64 = integer . IntegerValueInt64 . fromIntegral
+int64 = literal . Literals.int64
 
 int8 :: Int8 -> Term m
-int8 = integer . IntegerValueInt8 . fromIntegral
+int8 = literal . Literals.int8
 
 integer :: IntegerValue -> Term m
-integer = TermLiteral . LiteralInteger
+integer = literal . Literals.integer
 
 isUnit :: Eq m => Term m -> Bool
 isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
@@ -225,16 +220,16 @@ string :: String -> Term m
 string = TermLiteral . LiteralString
 
 uint16 :: Integer -> Term m
-uint16 = integer . IntegerValueUint16 . fromIntegral
+uint16 = literal . Literals.uint16
 
 uint32 :: Integer -> Term m
-uint32 = integer . IntegerValueUint32 . fromIntegral
+uint32 = literal . Literals.uint32
 
 uint64 :: Integer -> Term m
-uint64 = integer . IntegerValueUint64 . fromIntegral
+uint64 = literal . Literals.uint64
 
 uint8 :: Integer -> Term m
-uint8 = integer . IntegerValueUint8 . fromIntegral
+uint8 = literal . Literals.uint8
 
 union :: Name -> Field m -> Term m
 union n = TermUnion . Union n

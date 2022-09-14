@@ -231,7 +231,7 @@ decr n = max 0 (n-1)
 shrinkers :: (Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, Term m -> [Term m])]
 shrinkers typ = trivialShrinker ++ case typ of
     TypeLiteral at -> case at of
-      LiteralTypeBinary -> [(Types.binary, \(TermLiteral (LiteralBinary s)) -> binaryTerm <$> QC.shrink s)]
+      LiteralTypeBinary -> [(Types.binary, \(TermLiteral (LiteralBinary s)) -> binary <$> QC.shrink s)]
       LiteralTypeBoolean -> []
       LiteralTypeFloat ft -> []
       LiteralTypeInteger it -> []
