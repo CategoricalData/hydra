@@ -62,7 +62,7 @@ requirePrimitiveFunction fn = do
 -- Note: contexts are assumed to be valid; this function will fail if the named data or schema graph does not exist
 -- Also note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
 schemaContext :: Context m -> Context m
-schemaContext cx = pushTrace "schema" $ cx {
+schemaContext cx = cx {
       contextGraphs = graphs { graphSetRoot = graphName sgraph },
       contextElements = graphElementsMap sgraph}
   where

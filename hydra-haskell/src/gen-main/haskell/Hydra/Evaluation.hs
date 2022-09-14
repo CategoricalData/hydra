@@ -84,8 +84,7 @@ data Context m
     contextElements :: (Map Core.Name (Graph.Element m)),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
-    contextAnnotations :: (AnnotationClass m),
-    contextTrace :: [String]}
+    contextAnnotations :: (AnnotationClass m)}
 
 _Context = (Core.Name "hydra/evaluation.Context")
 
@@ -98,8 +97,6 @@ _Context_functions = (Core.FieldName "functions")
 _Context_strategy = (Core.FieldName "strategy")
 
 _Context_annotations = (Core.FieldName "annotations")
-
-_Context_trace = (Core.FieldName "trace")
 
 -- Settings which determine how terms are evaluated
 data EvaluationStrategy 

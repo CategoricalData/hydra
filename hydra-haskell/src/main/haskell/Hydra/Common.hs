@@ -71,17 +71,8 @@ isType cx typ = stripType typ == TypeNominal _Type
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
-failWithTrace cx msg = fail $ "Error (" ++ printTrace cx ++ "): " ++ msg
-  where
-    printTrace = L.intercalate " > " . L.reverse . contextTrace
-
 placeholderName :: Name
 placeholderName = Name "Placeholder"
-
-pushTrace :: String -> Context m -> Context m
-pushTrace msg cx = if debug
-  then cx {contextTrace = msg:contextTrace cx}
-  else cx
 
 toQname :: Name -> (GraphName, String)
 toQname (Name name) = case Strings.splitOn "." name of
@@ -94,7 +85,7 @@ skipAnnotations getAnn t = skip t
     skip t = case getAnn t of
       Nothing -> t
       Just (Annotated t' _) -> skip t'
-      
+
 stripTerm :: Term m -> Term m
 stripTerm = skipAnnotations $ \t -> case t of
   TermAnnotated a -> Just a

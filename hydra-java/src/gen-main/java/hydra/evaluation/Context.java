@@ -16,15 +16,12 @@ public class Context<M> {
   
   public final hydra.evaluation.AnnotationClass<M> annotations;
   
-  public final java.util.List<String> trace;
-  
-  public Context (hydra.graph.GraphSet<M> graphs, java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements, java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions, hydra.evaluation.EvaluationStrategy strategy, hydra.evaluation.AnnotationClass<M> annotations, java.util.List<String> trace) {
+  public Context (hydra.graph.GraphSet<M> graphs, java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements, java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions, hydra.evaluation.EvaluationStrategy strategy, hydra.evaluation.AnnotationClass<M> annotations) {
     this.graphs = graphs;
     this.elements = elements;
     this.functions = functions;
     this.strategy = strategy;
     this.annotations = annotations;
-    this.trace = trace;
   }
   
   @Override
@@ -33,35 +30,31 @@ public class Context<M> {
       return false;
     }
     Context o = (Context) (other);
-    return graphs.equals(o.graphs) && elements.equals(o.elements) && functions.equals(o.functions) && strategy.equals(o.strategy) && annotations.equals(o.annotations) && trace.equals(o.trace);
+    return graphs.equals(o.graphs) && elements.equals(o.elements) && functions.equals(o.functions) && strategy.equals(o.strategy) && annotations.equals(o.annotations);
   }
   
   @Override
   public int hashCode() {
-    return 2 * graphs.hashCode() + 3 * elements.hashCode() + 5 * functions.hashCode() + 7 * strategy.hashCode() + 11 * annotations.hashCode() + 13 * trace.hashCode();
+    return 2 * graphs.hashCode() + 3 * elements.hashCode() + 5 * functions.hashCode() + 7 * strategy.hashCode() + 11 * annotations.hashCode();
   }
   
   public Context withGraphs(hydra.graph.GraphSet<M> graphs) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
+    return new Context(graphs, elements, functions, strategy, annotations);
   }
   
   public Context withElements(java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
+    return new Context(graphs, elements, functions, strategy, annotations);
   }
   
   public Context withFunctions(java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
+    return new Context(graphs, elements, functions, strategy, annotations);
   }
   
   public Context withStrategy(hydra.evaluation.EvaluationStrategy strategy) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
+    return new Context(graphs, elements, functions, strategy, annotations);
   }
   
   public Context withAnnotations(hydra.evaluation.AnnotationClass<M> annotations) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
-  }
-  
-  public Context withTrace(java.util.List<String> trace) {
-    return new Context(graphs, elements, functions, strategy, annotations, trace);
+    return new Context(graphs, elements, functions, strategy, annotations);
   }
 }
