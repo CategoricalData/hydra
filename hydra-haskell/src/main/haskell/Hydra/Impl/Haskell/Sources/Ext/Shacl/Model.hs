@@ -28,14 +28,14 @@ shaclModel = Graph shaclModelName elements hydraCoreName
         see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
         record [
           "isClosed">: boolean,
-          "ignoredProperties">: optional $ list $ element $ rdf "Property"],
+          "ignoredProperties">: optional $ set $ element $ rdf "Property"],
 
       def "CommonConstraint" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
         union [
           "and">:
             see "https://www.w3.org/TR/shacl/#AndConstraintComponent" $
-            list $ shacl "Shape",
+            set $ shacl "Shape",
 
           "closed">:
             see "https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
@@ -69,7 +69,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "languageIn">:
             see "https://www.w3.org/TR/shacl/#LanguageInConstraintComponent" $
-            list $ rdf "LanguageTag",
+            set $ rdf "LanguageTag",
 
           "nodeKind">:
             see "https://www.w3.org/TR/shacl/#NodeKindConstraintComponent" $
@@ -117,18 +117,18 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "or">:
             see "https://www.w3.org/TR/shacl/#OrConstraintComponent" $
-            list $ shacl "Shape",
+            set $ shacl "Shape",
 
           "xone">:
             see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
-            list $ shacl "Shape"],
+            set $ shacl "Shape"],
 
       def "CommonProperties" $
         doc "Common constraint parameters and other properties for SHACL shapes" $
         record [
           "constraints">:
             doc "Common constraint parameters attached to this shape"
-            $ list $ shacl "CommonConstraint",
+            $ set $ shacl "CommonConstraint",
 
           "deactivated">:
             see "https://www.w3.org/TR/shacl/#deactivated" $
@@ -184,7 +184,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "constraints">:
             doc "Any property shape -specific constraint parameters" $
-            list $ shacl "PropertyShapeConstraint",
+            set $ shacl "PropertyShapeConstraint",
 
           "defaultValue">:
             see "https://www.w3.org/TR/shacl/#defaultValue" $
@@ -202,7 +202,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
             see "https://www.w3.org/TR/shacl/#order" $
             optional bigint,
 
-          "path">: rdf "Resource"], -- TODO
+          "path">: rdf "Iri"], -- TODO
           -- Note: sh:group is omitted for now, for lack of a clear definition of PropertyGroup
 
       def "PropertyShapeConstraint" $
@@ -238,8 +238,8 @@ shaclModel = Graph shaclModelName elements hydraCoreName
       def "QualifiedValueShape" $
         see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
         record [
-          "shape">: shacl "Shape",
-          "qualifiedManCount">: bigint,
+          "qualifiedValueShape">: shacl "Shape",
+          "qualifiedMaxCount">: bigint,
           "qualifiedMinCount">: bigint,
           "qualifiedValueShapesDisjoint">: optional boolean],
 

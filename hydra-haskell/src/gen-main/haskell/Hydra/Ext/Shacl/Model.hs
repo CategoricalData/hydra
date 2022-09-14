@@ -9,7 +9,7 @@ import Data.Set
 data Closed 
   = Closed {
     closedIsClosed :: Bool,
-    closedIgnoredProperties :: (Maybe [Syntax.Property])}
+    closedIgnoredProperties :: (Maybe (Set Syntax.Property))}
   deriving (Eq, Ord, Read, Show)
 
 _Closed = (Core.Name "hydra/ext/shacl/model.Closed")
@@ -20,7 +20,7 @@ _Closed_ignoredProperties = (Core.FieldName "ignoredProperties")
 
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraint 
-  = CommonConstraintAnd [Shape]
+  = CommonConstraintAnd (Set Shape)
   | CommonConstraintClosed Closed
   | CommonConstraintClass (Set Syntax.RdfsClass)
   | CommonConstraintDatatype Syntax.Iri
@@ -28,7 +28,7 @@ data CommonConstraint
   | CommonConstraintEquals (Set Syntax.Property)
   | CommonConstraintHasValue (Set Syntax.Node)
   | CommonConstraintIn [Syntax.Node]
-  | CommonConstraintLanguageIn [Syntax.LanguageTag]
+  | CommonConstraintLanguageIn (Set Syntax.LanguageTag)
   | CommonConstraintNodeKind NodeKind
   | CommonConstraintNode (Set NodeShape)
   | CommonConstraintNot (Set Shape)
@@ -40,8 +40,8 @@ data CommonConstraint
   | CommonConstraintMinLength Integer
   | CommonConstraintPattern Pattern
   | CommonConstraintProperty (Set PropertyShape)
-  | CommonConstraintOr [Shape]
-  | CommonConstraintXone [Shape]
+  | CommonConstraintOr (Set Shape)
+  | CommonConstraintXone (Set Shape)
   deriving (Eq, Ord, Read, Show)
 
 _CommonConstraint = (Core.Name "hydra/ext/shacl/model.CommonConstraint")
@@ -94,7 +94,7 @@ _CommonConstraint_xone = (Core.FieldName "xone")
 data CommonProperties 
   = CommonProperties {
     -- Common constraint parameters attached to this shape
-    commonPropertiesConstraints :: [CommonConstraint],
+    commonPropertiesConstraints :: (Set CommonConstraint),
     -- See https://www.w3.org/TR/shacl/#deactivated
     commonPropertiesDeactivated :: (Maybe Bool),
     -- See https://www.w3.org/TR/shacl/#message
@@ -180,7 +180,7 @@ data PropertyShape
   = PropertyShape {
     propertyShapeCommon :: CommonProperties,
     -- Any property shape -specific constraint parameters
-    propertyShapeConstraints :: [PropertyShapeConstraint],
+    propertyShapeConstraints :: (Set PropertyShapeConstraint),
     -- See https://www.w3.org/TR/shacl/#defaultValue
     propertyShapeDefaultValue :: (Maybe Syntax.Node),
     -- See https://www.w3.org/TR/shacl/#name
@@ -189,7 +189,7 @@ data PropertyShape
     propertyShapeName :: Syntax.LangStrings,
     -- See https://www.w3.org/TR/shacl/#order
     propertyShapeOrder :: (Maybe Integer),
-    propertyShapePath :: Syntax.Resource}
+    propertyShapePath :: Syntax.Iri}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyShape = (Core.Name "hydra/ext/shacl/model.PropertyShape")
@@ -235,17 +235,17 @@ _PropertyShapeConstraint_qualifiedValueShape = (Core.FieldName "qualifiedValueSh
 -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
 data QualifiedValueShape 
   = QualifiedValueShape {
-    qualifiedValueShapeShape :: Shape,
-    qualifiedValueShapeQualifiedManCount :: Integer,
+    qualifiedValueShapeQualifiedValueShape :: Shape,
+    qualifiedValueShapeQualifiedMaxCount :: Integer,
     qualifiedValueShapeQualifiedMinCount :: Integer,
     qualifiedValueShapeQualifiedValueShapesDisjoint :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
 _QualifiedValueShape = (Core.Name "hydra/ext/shacl/model.QualifiedValueShape")
 
-_QualifiedValueShape_shape = (Core.FieldName "shape")
+_QualifiedValueShape_qualifiedValueShape = (Core.FieldName "qualifiedValueShape")
 
-_QualifiedValueShape_qualifiedManCount = (Core.FieldName "qualifiedManCount")
+_QualifiedValueShape_qualifiedMaxCount = (Core.FieldName "qualifiedMaxCount")
 
 _QualifiedValueShape_qualifiedMinCount = (Core.FieldName "qualifiedMinCount")
 
