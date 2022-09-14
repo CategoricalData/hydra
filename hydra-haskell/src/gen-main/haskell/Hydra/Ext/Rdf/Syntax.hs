@@ -25,6 +25,19 @@ newtype Dataset
 
 _Dataset = (Core.Name "hydra/ext/rdf/syntax.Dataset")
 
+-- A graph of RDF statements together with a distinguished subject
+data Description 
+  = Description {
+    descriptionSubject :: Node,
+    descriptionTriples :: Graph}
+  deriving (Eq, Ord, Read, Show)
+
+_Description = (Core.Name "hydra/ext/rdf/syntax.Description")
+
+_Description_subject = (Core.FieldName "subject")
+
+_Description_triples = (Core.FieldName "triples")
+
 newtype Graph 
   = Graph {
     unGraph :: (Set Triple)}

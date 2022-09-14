@@ -26,11 +26,17 @@ rdfSyntax = Graph rdfSyntaxName elements hydraCoreName
 
       def "RdfsClass"
         $ doc "Stand-in for rdfs:Class" unit,
-        
+
       def "Dataset" $ set $ rdf "Quad",
 
+      def "Description" $
+        doc "A graph of RDF statements together with a distinguished subject" $
+        record [
+          "subject">: rdf "Node",
+          "triples">: rdf "Graph"],
+
       def "Graph" $ set $ rdf "Triple",
-      
+
       def "Iri" string,
 
       def "IriOrLiteral" $
@@ -78,7 +84,7 @@ rdfSyntax = Graph rdfSyntaxName elements hydraCoreName
             set $ rdf "RdfsClass",
           "subPropertyOf">:
             set $ rdf "Property"],
-            
+
       def "Quad" $
         doc "An RDF triple with an optional named graph component" $
         record [
