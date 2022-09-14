@@ -17,8 +17,6 @@ public abstract class Term<M> {
     
     R visit(Application instance) ;
     
-    R visit(Literal instance) ;
-    
     R visit(Element instance) ;
     
     R visit(Function instance) ;
@@ -26,6 +24,8 @@ public abstract class Term<M> {
     R visit(Let instance) ;
     
     R visit(List instance) ;
+    
+    R visit(Literal instance) ;
     
     R visit(Map instance) ;
     
@@ -55,10 +55,6 @@ public abstract class Term<M> {
       return otherwise((instance));
     }
     
-    default R visit(Literal instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Element instance) {
       return otherwise((instance));
     }
@@ -72,6 +68,10 @@ public abstract class Term<M> {
     }
     
     default R visit(List instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Literal instance) {
       return otherwise((instance));
     }
     
@@ -156,39 +156,6 @@ public abstract class Term<M> {
         return false;
       }
       Application o = (Application) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * A literal value
-   */
-  public static final class Literal<M> extends hydra.core.Term<M> {
-    /**
-     * A literal value
-     */
-    public final hydra.core.Literal value;
-    
-    public Literal (hydra.core.Literal value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Literal)) {
-        return false;
-      }
-      Literal o = (Literal) (other);
       return value.equals(o.value);
     }
     
@@ -315,6 +282,39 @@ public abstract class Term<M> {
         return false;
       }
       List o = (List) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A literal value
+   */
+  public static final class Literal<M> extends hydra.core.Term<M> {
+    /**
+     * A literal value
+     */
+    public final hydra.core.Literal value;
+    
+    public Literal (hydra.core.Literal value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Literal)) {
+        return false;
+      }
+      Literal o = (Literal) (other);
       return value.equals(o.value);
     }
     

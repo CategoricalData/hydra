@@ -518,11 +518,11 @@ _RowType_fields = (FieldName "fields")
 data Term m 
   = TermAnnotated (Annotated (Term m) m)
   | TermApplication (Application m)
-  | TermLiteral Literal
   | TermElement Name
   | TermFunction (Function m)
   | TermLet (Let m)
   | TermList [Term m]
+  | TermLiteral Literal
   | TermMap (Map (Term m) (Term m))
   | TermNominal (Named m)
   | TermOptional (Maybe (Term m))
@@ -538,8 +538,6 @@ _Term_annotated = (FieldName "annotated")
 
 _Term_application = (FieldName "application")
 
-_Term_literal = (FieldName "literal")
-
 _Term_element = (FieldName "element")
 
 _Term_function = (FieldName "function")
@@ -547,6 +545,8 @@ _Term_function = (FieldName "function")
 _Term_let = (FieldName "let")
 
 _Term_list = (FieldName "list")
+
+_Term_literal = (FieldName "literal")
 
 _Term_map = (FieldName "map")
 
@@ -577,7 +577,6 @@ data TermVariant
   | TermVariantRecord 
   | TermVariantSet 
   | TermVariantUnion 
-  | TermVariantUniversal 
   | TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
@@ -608,8 +607,6 @@ _TermVariant_record = (FieldName "record")
 _TermVariant_set = (FieldName "set")
 
 _TermVariant_union = (FieldName "union")
-
-_TermVariant_universal = (FieldName "universal")
 
 _TermVariant_variable = (FieldName "variable")
 

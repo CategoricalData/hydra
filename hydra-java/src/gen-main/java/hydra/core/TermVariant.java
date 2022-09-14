@@ -39,8 +39,6 @@ public abstract class TermVariant {
     
     R visit(Union instance) ;
     
-    R visit(Universal instance) ;
-    
     R visit(Variable instance) ;
   }
   
@@ -98,10 +96,6 @@ public abstract class TermVariant {
     }
     
     default R visit(Union instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Universal instance) {
       return otherwise((instance));
     }
     
@@ -421,31 +415,6 @@ public abstract class TermVariant {
         return false;
       }
       Union o = (Union) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Universal extends hydra.core.TermVariant {
-    public Universal () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Universal)) {
-        return false;
-      }
-      Universal o = (Universal) (other);
       return true;
     }
     
