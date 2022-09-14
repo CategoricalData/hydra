@@ -14,37 +14,89 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
-
-data Ann a = Ann a (Maybe String)
 
 shaclCoder :: (Eq m, Show m) => Graph m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
 shaclCoder sg = do
     cx <- getState
     let typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
-    pairs <- CM.mapM decode typeEls
-    fail "TODO"
+    shapes <- CM.mapM toShape typeEls
+    let sg = Shacl.ShapesGraph $ S.fromList shapes
+    let termFlow = \g -> fail "not implemented"
+    return (sg, termFlow)
   where
-    mapGraph g = fail "TODO"
-    decode el = do
+    toShape el = do
       typ <- decodeType $ elementData el
-      return (el, typ)
+      common <- encodeType typ
+      return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 
-encodeType :: Show m => (Element m, Type m) -> GraphFlow m Shacl.Shape
-encodeType (el, typ) = case stripType typ of
---  TypeElement et ->
---  TypeList lt ->
-  TypeLiteral lt -> encodeLiteralType lt
---  TypeMap (MapType kt vt) ->
---  TypeNominal name ->
---  TypeOptional ot ->
---  TypeRecord fields ->
---  TypeSet st ->
---  TypeUnion fields ->
-  _ -> unexpected "type" typ
+common :: [Shacl.CommonConstraint] -> Shacl.CommonProperties
+common constraints = defaultCommonProperties {
+  Shacl.commonPropertiesConstraints = S.fromList constraints}
 
-encodeLiteralType :: LiteralType -> GraphFlow m Shacl.Shape
-encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
+defaultCommonProperties :: Shacl.CommonProperties
+defaultCommonProperties = Shacl.CommonProperties {
+  Shacl.commonPropertiesConstraints = S.empty,
+  Shacl.commonPropertiesDeactivated = Nothing,
+  Shacl.commonPropertiesMessage = emptyLangStrings,
+  Shacl.commonPropertiesSeverity = Shacl.SeverityInfo,
+  Shacl.commonPropertiesTargetClass = S.empty,
+  Shacl.commonPropertiesTargetNode = S.empty,
+  Shacl.commonPropertiesTargetObjectsOf = S.empty,
+  Shacl.commonPropertiesTargetSubjectsOf = S.empty}
+
+elementIri :: Element m -> Rdf.Iri
+elementIri el = Rdf.Iri $ unName $ elementName el
+
+emptyLangStrings :: Rdf.LangStrings
+emptyLangStrings = Rdf.LangStrings M.empty
+
+encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
+encodeType typ = case stripType typ of
+    TypeElement et -> encodeType et
+    TypeList _ -> any
+    TypeLiteral lt -> encodeLiteralType lt
+    TypeMap _ -> any
+    TypeNominal name -> any -- TODO: include name
+    TypeRecord (RowType rname fields) -> do
+      props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
+      return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
+    TypeSet _ -> any
+    TypeUnion (RowType rname fields) -> do
+        props <- CM.mapM (encodeFieldType rname Nothing) fields
+        let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
+        return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
+      where
+        toShape prop = node [Shacl.CommonConstraintProperty $ S.fromList [Shacl.ReferenceDefinition prop]]
+    _ -> unexpected "type" typ
+  where
+    -- SHACL's built-in vocabulary is less expressive than Hydra's type system, so for now, SHACL validation simply ends
+    -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using
+    -- secondary structures. For example, see shsh:ListShape in the SHACL documentation. TODO: explore these constructions.
+    any = pure $ common []
+
+encodeFieldType :: Show m => Name -> Maybe Integer -> FieldType m -> GraphFlow m (Shacl.Definition Shacl.PropertyShape)
+encodeFieldType rname order (FieldType fname ft) = do
+    shape <- forType (Just 1) (Just 1) ft
+    return $ Shacl.Definition iri shape
+  where
+    iri = propertyIri rname fname
+    forType mn mx t = case stripType t of
+      TypeOptional ot -> forType (Just 0) mx ot
+      TypeSet st -> forType mn Nothing st
+      _ -> do
+        cp <- encodeType t
+        let baseProp = property iri
+        return $ baseProp {
+          Shacl.propertyShapeCommon = cp,
+          Shacl.propertyShapeConstraints = S.fromList $ Y.catMaybes [
+            Shacl.PropertyShapeConstraintMinCount <$> mn,
+            Shacl.PropertyShapeConstraintMaxCount <$> mx],
+          Shacl.propertyShapeOrder = order}
+
+encodeLiteralType :: LiteralType -> GraphFlow m Shacl.CommonProperties
+encodeLiteralType lt = pure $ case lt of
     LiteralTypeBinary -> xsd "base64Binary"
     LiteralTypeBoolean -> xsd "boolean"
     LiteralTypeFloat ft -> case ft of
@@ -63,22 +115,23 @@ encodeLiteralType lt = Shacl.ShapeNode . Shacl.NodeShape <$> case lt of
       IntegerTypeUint64 -> xsd "unsignedLong"
     LiteralTypeString -> xsd "string"
   where
-    xsd local = pure $ defaultCommonProperties {
-      Shacl.commonPropertiesConstraints = [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]}
+    xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
-defaultCommonProperties :: Shacl.CommonProperties
-defaultCommonProperties = Shacl.CommonProperties {
-  Shacl.commonPropertiesConstraints = [],
-  Shacl.commonPropertiesDeactivated = Nothing,
-  Shacl.commonPropertiesMessage = defaultLangStrings,
-  Shacl.commonPropertiesSeverity = Shacl.SeverityInfo,
-  Shacl.commonPropertiesTargetClass = S.empty,
-  Shacl.commonPropertiesTargetNode = S.empty,
-  Shacl.commonPropertiesTargetObjectsOf = S.empty,
-  Shacl.commonPropertiesTargetSubjectsOf = S.empty}
+node :: [Shacl.CommonConstraint] -> Shacl.Shape
+node = Shacl.ShapeNode . Shacl.NodeShape . common
 
-defaultLangStrings :: Rdf.LangStrings
-defaultLangStrings = Rdf.LangStrings M.empty
+property :: Rdf.Iri -> Shacl.PropertyShape
+property iri = Shacl.PropertyShape {
+    Shacl.propertyShapeCommon = defaultCommonProperties,
+    Shacl.propertyShapeConstraints = S.empty,
+    Shacl.propertyShapeDefaultValue = Nothing,
+    Shacl.propertyShapeDescription = emptyLangStrings,
+    Shacl.propertyShapeName = emptyLangStrings,
+    Shacl.propertyShapeOrder = Nothing,
+    Shacl.propertyShapePath = iri}
+
+propertyIri :: Name -> FieldName -> Rdf.Iri
+propertyIri rname fname = Rdf.Iri $ (unName rname) ++ "#" ++ (unFieldName fname)
 
 xmlSchemaDatatypeIri :: String -> Rdf.Iri
 xmlSchemaDatatypeIri local = Rdf.Iri $ "http://www.w3.org/2001/XMLSchema#" ++ local
