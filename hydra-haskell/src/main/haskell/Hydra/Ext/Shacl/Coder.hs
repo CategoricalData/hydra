@@ -47,7 +47,13 @@ defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
 elementIri :: Element m -> Rdf.Iri
-elementIri el = Rdf.Iri $ unName $ elementName el
+elementIri = nameToIri . elementName
+
+emptyDescription :: Rdf.Node -> Rdf.Description
+emptyDescription node = Rdf.Description node emptyGraph
+
+emptyGraph :: Rdf.Graph
+emptyGraph = Rdf.Graph S.empty
 
 emptyLangStrings :: Rdf.LangStrings
 emptyLangStrings = Rdf.LangStrings M.empty
@@ -56,7 +62,7 @@ encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
 encodeType typ = case stripType typ of
     TypeElement et -> encodeType et
     TypeList _ -> any
-    TypeLiteral lt -> encodeLiteralType lt
+    TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any
     TypeNominal name -> any -- TODO: include name
     TypeRecord (RowType rname fields) -> do
@@ -95,8 +101,31 @@ encodeFieldType rname order (FieldType fname ft) = do
             Shacl.PropertyShapeConstraintMaxCount <$> mx],
           Shacl.propertyShapeOrder = order}
 
-encodeLiteralType :: LiteralType -> GraphFlow m Shacl.CommonProperties
-encodeLiteralType lt = pure $ case lt of
+encodeLiteral :: Literal -> GraphFlow m Rdf.Node
+encodeLiteral lit = Rdf.NodeLiteral <$> case lit of
+    LiteralBinary s -> fail "base 64 encoding not yet implemented"
+    LiteralBoolean b -> pure $ xsd (\b -> if b then "true" else "false") b "boolean"
+    LiteralFloat f -> pure $ case f of
+      FloatValueBigfloat v -> xsd show v "decimal"
+      FloatValueFloat32 v -> xsd show v "float"
+      FloatValueFloat64 v -> xsd show v "double"
+    LiteralInteger i -> pure $ case i of
+      IntegerValueBigint v -> xsd show v "integer"
+      IntegerValueInt8 v   -> xsd show v "byte"
+      IntegerValueInt16 v  -> xsd show v "short"
+      IntegerValueInt32 v  -> xsd show v "int"
+      IntegerValueInt64 v  -> xsd show v "long"
+      IntegerValueUint8 v  -> xsd show v "unsignedByte"
+      IntegerValueUint16 v -> xsd show v "unsignedShort"
+      IntegerValueUint32 v -> xsd show v "unsignedInt"
+      IntegerValueUint64 v -> xsd show v "unsignedLong"
+    LiteralString s -> pure $ xsd id s "string"
+  where
+    -- TODO: using Haskell's built-in show function is a cheat, and may not be correct/optimal in all cases
+    xsd ser x local = Rdf.Literal (ser x) (xmlSchemaDatatypeIri local) Nothing
+
+encodeLiteralType :: LiteralType -> Shacl.CommonProperties
+encodeLiteralType lt = case lt of
     LiteralTypeBinary -> xsd "base64Binary"
     LiteralTypeBoolean -> xsd "boolean"
     LiteralTypeFloat ft -> case ft of
@@ -116,6 +145,26 @@ encodeLiteralType lt = pure $ case lt of
     LiteralTypeString -> xsd "string"
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
+
+--encodeTerm :: Term m -> GraphFlow m Rdf.Description
+--encodeTerm term = case term of
+--  TermAnnotated (Annotated term' ann) -> encodeTerm term' -- TODO: extract an rdfs:comment
+----  TermApplication
+--  TermElement name -> pure $ emptyDescription $ Rdf.NodeIri $ nameToIri name
+----  TermFunction
+----  TermLet
+----  TermList
+--  TermLiteral lit -> emptyDescription <$> encodeLiteral lit
+----  TermMap
+----  TermNominal
+----  TermOptional
+--  TermRecord (Record rname fields) ->
+----  TermSet
+----  TermUnion
+----  TermVariable
+
+nameToIri :: Name -> Rdf.Iri
+nameToIri = Rdf.Iri . unName
 
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common
