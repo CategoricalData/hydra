@@ -28,9 +28,6 @@ dependencies:
   - unordered-containers
   - vector
 
-  # temporary, for type inference
-  - mtl
-
 library:
   source-dirs:
     - src/main/haskell
