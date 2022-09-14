@@ -39,7 +39,7 @@ instance MonadFail (Flow s) where
       pushError msg t = t {traceStack = ("Error: " ++ msg):(traceStack t)}
 
 emptyTrace :: Trace
-emptyTrace = Trace [] []
+emptyTrace = Trace [] [] M.empty
 
 flowSucceeds :: s -> Flow s a -> Bool
 flowSucceeds cx f = Y.isJust $ flowWrapperValue $ unFlow f cx emptyTrace
@@ -63,6 +63,11 @@ fromFlowIo cx f = case mv of
   where
     FlowWrapper mv _ trace = unFlow f cx emptyTrace
 
+getAttr :: String -> Flow s (Maybe Literal)
+getAttr key = Flow q
+  where
+    q s0 t0 = FlowWrapper (Just $ M.lookup key $ traceOther t0) s0 t0
+
 getState :: Flow s s
 getState = Flow q
   where
@@ -76,6 +81,11 @@ getState = Flow q
 pushTrc :: String -> Flow s String
 pushTrc msg = Flow $ \s0 t0 -> FlowWrapper (Just msg) s0 (t0 {traceStack = msg:(traceStack t0)})
 
+putAttr :: String -> Literal -> Flow s ()
+putAttr key val = Flow q
+  where
+    q s0 t0 = FlowWrapper (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
+
 putState :: s -> Flow s ()
 putState cx = Flow q
   where
@@ -85,7 +95,7 @@ putState cx = Flow q
         f = pure ()
 
 traceSummary :: Trace -> String
-traceSummary (Trace stack messages) = L.intercalate "\n" (errorLine:warningLines)
+traceSummary (Trace stack messages _) = L.intercalate "\n" (errorLine:warningLines)
   where
     errorLine = "Error: " ++ printStack stack
     warningLine s = "\t" ++ printStack s

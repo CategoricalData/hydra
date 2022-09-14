@@ -10,9 +10,12 @@ public class Trace {
   
   public final java.util.List<java.util.List<String>> messages;
   
-  public Trace (java.util.List<String> stack, java.util.List<java.util.List<String>> messages) {
+  public final java.util.Map<String, hydra.core.Literal> other;
+  
+  public Trace (java.util.List<String> stack, java.util.List<java.util.List<String>> messages, java.util.Map<String, hydra.core.Literal> other) {
     this.stack = stack;
     this.messages = messages;
+    this.other = other;
   }
   
   @Override
@@ -21,19 +24,23 @@ public class Trace {
       return false;
     }
     Trace o = (Trace) (other);
-    return stack.equals(o.stack) && messages.equals(o.messages);
+    return stack.equals(o.stack) && messages.equals(o.messages) && other.equals(o.other);
   }
   
   @Override
   public int hashCode() {
-    return 2 * stack.hashCode() + 3 * messages.hashCode();
+    return 2 * stack.hashCode() + 3 * messages.hashCode() + 5 * other.hashCode();
   }
   
   public Trace withStack(java.util.List<String> stack) {
-    return new Trace(stack, messages);
+    return new Trace(stack, messages, other);
   }
   
   public Trace withMessages(java.util.List<java.util.List<String>> messages) {
-    return new Trace(stack, messages);
+    return new Trace(stack, messages, other);
+  }
+  
+  public Trace withOther(java.util.Map<String, hydra.core.Literal> other) {
+    return new Trace(stack, messages, other);
   }
 }
