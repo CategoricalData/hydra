@@ -30,10 +30,10 @@ rdfSyntax = Graph rdfSyntaxName elements hydraCoreName
       def "Dataset" $ set $ rdf "Quad",
 
       def "Description" $
-        doc "A graph of RDF statements together with a distinguished subject" $
+        doc "A graph of RDF statements together with a distinguished subject and/or object node" $
         record [
           "subject">: rdf "Node",
-          "triples">: rdf "Graph"],
+          "graph">: rdf "Graph"],
 
       def "Graph" $ set $ rdf "Triple",
 
