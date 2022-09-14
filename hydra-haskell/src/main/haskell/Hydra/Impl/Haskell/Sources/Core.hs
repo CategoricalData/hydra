@@ -318,9 +318,6 @@ hydraCore = Graph hydraCoreName elements hydraCoreName
           "application">:
             doc "A function application" $
             core "Application" @@ "m",
-          "literal">:
-            doc "A literal value" $
-            core "Literal",
           "element">:
             doc "An element reference" $
             core "Name",
@@ -333,6 +330,9 @@ hydraCore = Graph hydraCoreName elements hydraCoreName
             doc "A list" $
             list $ core "Term" @@ "m",
           -- TODO: list elimination
+          "literal">:
+            doc "A literal value" $
+            core "Literal",
           "map">:
             doc "A map of keys to values" $
             Types.map (core "Term" @@ "m") (core "Term" @@ "m"),
@@ -370,7 +370,6 @@ hydraCore = Graph hydraCoreName elements hydraCoreName
           "record",
           "set",
           "union",
-          "universal",
           "variable"],
 
       def "Type" $
