@@ -6,7 +6,7 @@ package hydra.ext.shacl.model;
 public class QualifiedValueShape {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.QualifiedValueShape");
   
-  public final hydra.ext.shacl.model.Shape qualifiedValueShape;
+  public final hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape> qualifiedValueShape;
   
   public final java.math.BigInteger qualifiedMaxCount;
   
@@ -14,7 +14,7 @@ public class QualifiedValueShape {
   
   public final java.util.Optional<Boolean> qualifiedValueShapesDisjoint;
   
-  public QualifiedValueShape (hydra.ext.shacl.model.Shape qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+  public QualifiedValueShape (hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape> qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
     this.qualifiedValueShape = qualifiedValueShape;
     this.qualifiedMaxCount = qualifiedMaxCount;
     this.qualifiedMinCount = qualifiedMinCount;
@@ -35,7 +35,7 @@ public class QualifiedValueShape {
     return 2 * qualifiedValueShape.hashCode() + 3 * qualifiedMaxCount.hashCode() + 5 * qualifiedMinCount.hashCode() + 7 * qualifiedValueShapesDisjoint.hashCode();
   }
   
-  public QualifiedValueShape withQualifiedValueShape(hydra.ext.shacl.model.Shape qualifiedValueShape) {
+  public QualifiedValueShape withQualifiedValueShape(hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape> qualifiedValueShape) {
     return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
