@@ -25,7 +25,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
     evaluation = nsref hydraEvaluationName
 
     def = datatype hydraEvaluationName
-    
+
     elements = [
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
@@ -35,7 +35,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "compare">: "m" --> "m" --> core "Comparison",
           "show">: "m" --> string,
           "read">: string --> optional "m",
-          
+
           -- TODO: simplify
           "termMeta">:
             core "Term" @@ "m" --> "m",
@@ -61,7 +61,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
         lambda "s" $ lambda "a" $ lambda "b" $ record [
           "encode">: ("a" --> evaluation "Flow" @@ "s" @@ "b"),
           "decode">: ("b" --> evaluation "Flow" @@ "s" @@ "a")],
-                                                          
+
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
         enum [
@@ -75,8 +75,7 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "elements">: Types.map (core "Name") (graph "Element" @@ "m"),
           "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
           "strategy">: evaluation "EvaluationStrategy",
-          "annotations">: evaluation "AnnotationClass" @@ "m",
-          "trace">: list string],
+          "annotations">: evaluation "AnnotationClass" @@ "m"],
 
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $

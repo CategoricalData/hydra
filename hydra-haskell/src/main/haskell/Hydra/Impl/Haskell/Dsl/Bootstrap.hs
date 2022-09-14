@@ -18,7 +18,7 @@ datatype :: GraphName -> String -> Type Meta -> Element Meta
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
-    
+
     -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
     replacePlaceholders rec t = case t' of
         TypeRecord (RowType n fields) -> if n == placeholderName
@@ -42,8 +42,7 @@ bootstrapContext = cx
       contextFunctions = M.empty,
       contextStrategy = EvaluationStrategy {
         evaluationStrategyOpaqueTermVariants = S.fromList []},
-      contextAnnotations = metaAnnotationClass,
-      contextTrace = []}
+      contextAnnotations = metaAnnotationClass}
 
     emptyGraphName = GraphName "empty"
 
