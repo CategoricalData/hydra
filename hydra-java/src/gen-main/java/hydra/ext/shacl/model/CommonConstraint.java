@@ -159,9 +159,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#AndConstraintComponent
      */
-    public final java.util.List<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
     
-    public And (java.util.List<hydra.ext.shacl.model.Shape> value) {
+    public And (java.util.Set<hydra.ext.shacl.model.Shape> value) {
       this.value = value;
     }
     
@@ -423,9 +423,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#LanguageInConstraintComponent
      */
-    public final java.util.List<hydra.ext.rdf.syntax.LanguageTag> value;
+    public final java.util.Set<hydra.ext.rdf.syntax.LanguageTag> value;
     
-    public LanguageIn (java.util.List<hydra.ext.rdf.syntax.LanguageTag> value) {
+    public LanguageIn (java.util.Set<hydra.ext.rdf.syntax.LanguageTag> value) {
       this.value = value;
     }
     
@@ -819,9 +819,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#OrConstraintComponent
      */
-    public final java.util.List<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
     
-    public Or (java.util.List<hydra.ext.shacl.model.Shape> value) {
+    public Or (java.util.Set<hydra.ext.shacl.model.Shape> value) {
       this.value = value;
     }
     
@@ -852,9 +852,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
      */
-    public final java.util.List<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
     
-    public Xone (java.util.List<hydra.ext.shacl.model.Shape> value) {
+    public Xone (java.util.Set<hydra.ext.shacl.model.Shape> value) {
       this.value = value;
     }
     

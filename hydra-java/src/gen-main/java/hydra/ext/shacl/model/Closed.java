@@ -8,9 +8,9 @@ public class Closed {
   
   public final Boolean isClosed;
   
-  public final java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Property>> ignoredProperties;
+  public final java.util.Optional<java.util.Set<hydra.ext.rdf.syntax.Property>> ignoredProperties;
   
-  public Closed (Boolean isClosed, java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Property>> ignoredProperties) {
+  public Closed (Boolean isClosed, java.util.Optional<java.util.Set<hydra.ext.rdf.syntax.Property>> ignoredProperties) {
     this.isClosed = isClosed;
     this.ignoredProperties = ignoredProperties;
   }
@@ -33,7 +33,7 @@ public class Closed {
     return new Closed(isClosed, ignoredProperties);
   }
   
-  public Closed withIgnoredProperties(java.util.Optional<java.util.List<hydra.ext.rdf.syntax.Property>> ignoredProperties) {
+  public Closed withIgnoredProperties(java.util.Optional<java.util.Set<hydra.ext.rdf.syntax.Property>> ignoredProperties) {
     return new Closed(isClosed, ignoredProperties);
   }
 }

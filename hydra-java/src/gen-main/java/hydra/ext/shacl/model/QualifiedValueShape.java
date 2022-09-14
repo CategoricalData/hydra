@@ -6,17 +6,17 @@ package hydra.ext.shacl.model;
 public class QualifiedValueShape {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shacl/model.QualifiedValueShape");
   
-  public final hydra.ext.shacl.model.Shape shape;
+  public final hydra.ext.shacl.model.Shape qualifiedValueShape;
   
-  public final java.math.BigInteger qualifiedManCount;
+  public final java.math.BigInteger qualifiedMaxCount;
   
   public final java.math.BigInteger qualifiedMinCount;
   
   public final java.util.Optional<Boolean> qualifiedValueShapesDisjoint;
   
-  public QualifiedValueShape (hydra.ext.shacl.model.Shape shape, java.math.BigInteger qualifiedManCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
-    this.shape = shape;
-    this.qualifiedManCount = qualifiedManCount;
+  public QualifiedValueShape (hydra.ext.shacl.model.Shape qualifiedValueShape, java.math.BigInteger qualifiedMaxCount, java.math.BigInteger qualifiedMinCount, java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
+    this.qualifiedValueShape = qualifiedValueShape;
+    this.qualifiedMaxCount = qualifiedMaxCount;
     this.qualifiedMinCount = qualifiedMinCount;
     this.qualifiedValueShapesDisjoint = qualifiedValueShapesDisjoint;
   }
@@ -27,27 +27,27 @@ public class QualifiedValueShape {
       return false;
     }
     QualifiedValueShape o = (QualifiedValueShape) (other);
-    return shape.equals(o.shape) && qualifiedManCount.equals(o.qualifiedManCount) && qualifiedMinCount.equals(o.qualifiedMinCount) && qualifiedValueShapesDisjoint.equals(o.qualifiedValueShapesDisjoint);
+    return qualifiedValueShape.equals(o.qualifiedValueShape) && qualifiedMaxCount.equals(o.qualifiedMaxCount) && qualifiedMinCount.equals(o.qualifiedMinCount) && qualifiedValueShapesDisjoint.equals(o.qualifiedValueShapesDisjoint);
   }
   
   @Override
   public int hashCode() {
-    return 2 * shape.hashCode() + 3 * qualifiedManCount.hashCode() + 5 * qualifiedMinCount.hashCode() + 7 * qualifiedValueShapesDisjoint.hashCode();
+    return 2 * qualifiedValueShape.hashCode() + 3 * qualifiedMaxCount.hashCode() + 5 * qualifiedMinCount.hashCode() + 7 * qualifiedValueShapesDisjoint.hashCode();
   }
   
-  public QualifiedValueShape withShape(hydra.ext.shacl.model.Shape shape) {
-    return new QualifiedValueShape(shape, qualifiedManCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
+  public QualifiedValueShape withQualifiedValueShape(hydra.ext.shacl.model.Shape qualifiedValueShape) {
+    return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
-  public QualifiedValueShape withQualifiedManCount(java.math.BigInteger qualifiedManCount) {
-    return new QualifiedValueShape(shape, qualifiedManCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
+  public QualifiedValueShape withQualifiedMaxCount(java.math.BigInteger qualifiedMaxCount) {
+    return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedMinCount(java.math.BigInteger qualifiedMinCount) {
-    return new QualifiedValueShape(shape, qualifiedManCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
+    return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedValueShapesDisjoint(java.util.Optional<Boolean> qualifiedValueShapesDisjoint) {
-    return new QualifiedValueShape(shape, qualifiedManCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
+    return new QualifiedValueShape(qualifiedValueShape, qualifiedMaxCount, qualifiedMinCount, qualifiedValueShapesDisjoint);
   }
 }
