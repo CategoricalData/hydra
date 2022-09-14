@@ -20,7 +20,7 @@ _Closed_ignoredProperties = (Core.FieldName "ignoredProperties")
 
 -- Any of a number of constraint parameters which can be applied either to node or property shapes
 data CommonConstraint 
-  = CommonConstraintAnd (Set Shape)
+  = CommonConstraintAnd (Set (Reference Shape))
   | CommonConstraintClosed Closed
   | CommonConstraintClass (Set Syntax.RdfsClass)
   | CommonConstraintDatatype Syntax.Iri
@@ -30,8 +30,8 @@ data CommonConstraint
   | CommonConstraintIn [Syntax.Node]
   | CommonConstraintLanguageIn (Set Syntax.LanguageTag)
   | CommonConstraintNodeKind NodeKind
-  | CommonConstraintNode (Set NodeShape)
-  | CommonConstraintNot (Set Shape)
+  | CommonConstraintNode (Set (Reference NodeShape))
+  | CommonConstraintNot (Set (Reference Shape))
   | CommonConstraintMaxExclusive Syntax.Literal
   | CommonConstraintMaxInclusive Syntax.Literal
   | CommonConstraintMaxLength Integer
@@ -39,9 +39,9 @@ data CommonConstraint
   | CommonConstraintMinInclusive Syntax.Literal
   | CommonConstraintMinLength Integer
   | CommonConstraintPattern Pattern
-  | CommonConstraintProperty (Set PropertyShape)
-  | CommonConstraintOr (Set Shape)
-  | CommonConstraintXone (Set Shape)
+  | CommonConstraintProperty (Set (Reference PropertyShape))
+  | CommonConstraintOr (Set (Reference Shape))
+  | CommonConstraintXone (Set (Reference Shape))
   deriving (Eq, Ord, Read, Show)
 
 _CommonConstraint = (Core.Name "hydra/ext/shacl/model.CommonConstraint")
@@ -128,6 +128,19 @@ _CommonProperties_targetNode = (Core.FieldName "targetNode")
 _CommonProperties_targetObjectsOf = (Core.FieldName "targetObjectsOf")
 
 _CommonProperties_targetSubjectsOf = (Core.FieldName "targetSubjectsOf")
+
+-- An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance
+data Definition a 
+  = Definition {
+    definitionIri :: Syntax.Iri,
+    definitionTarget :: a}
+  deriving (Eq, Ord, Read, Show)
+
+_Definition = (Core.Name "hydra/ext/shacl/model.Definition")
+
+_Definition_iri = (Core.FieldName "iri")
+
+_Definition_target = (Core.FieldName "target")
 
 data NodeKind 
   = NodeKindBlankNode 
@@ -235,7 +248,7 @@ _PropertyShapeConstraint_qualifiedValueShape = (Core.FieldName "qualifiedValueSh
 -- See https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent
 data QualifiedValueShape 
   = QualifiedValueShape {
-    qualifiedValueShapeQualifiedValueShape :: Shape,
+    qualifiedValueShapeQualifiedValueShape :: (Reference Shape),
     qualifiedValueShapeQualifiedMaxCount :: Integer,
     qualifiedValueShapeQualifiedMinCount :: Integer,
     qualifiedValueShapeQualifiedValueShapesDisjoint :: (Maybe Bool)}
@@ -250,6 +263,21 @@ _QualifiedValueShape_qualifiedMaxCount = (Core.FieldName "qualifiedMaxCount")
 _QualifiedValueShape_qualifiedMinCount = (Core.FieldName "qualifiedMinCount")
 
 _QualifiedValueShape_qualifiedValueShapesDisjoint = (Core.FieldName "qualifiedValueShapesDisjoint")
+
+-- Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type
+data Reference a 
+  = ReferenceNamed Syntax.Iri
+  | ReferenceAnonymous a
+  | ReferenceDefinition (Definition a)
+  deriving (Eq, Ord, Read, Show)
+
+_Reference = (Core.Name "hydra/ext/shacl/model.Reference")
+
+_Reference_named = (Core.FieldName "named")
+
+_Reference_anonymous = (Core.FieldName "anonymous")
+
+_Reference_definition = (Core.FieldName "definition")
 
 data Severity 
   = SeverityInfo 
@@ -281,7 +309,7 @@ _Shape_property = (Core.FieldName "property")
 newtype ShapesGraph 
   = ShapesGraph {
     -- An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes
-    unShapesGraph :: (Set Shape)}
+    unShapesGraph :: (Set (Definition Shape))}
   deriving (Eq, Ord, Read, Show)
 
 _ShapesGraph = (Core.Name "hydra/ext/shacl/model.ShapesGraph")

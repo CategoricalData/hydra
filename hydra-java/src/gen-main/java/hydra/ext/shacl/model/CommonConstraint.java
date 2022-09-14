@@ -159,9 +159,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#AndConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value;
     
-    public And (java.util.Set<hydra.ext.shacl.model.Shape> value) {
+    public And (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value) {
       this.value = value;
     }
     
@@ -489,9 +489,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#NodeConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.NodeShape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.NodeShape>> value;
     
-    public Node (java.util.Set<hydra.ext.shacl.model.NodeShape> value) {
+    public Node (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.NodeShape>> value) {
       this.value = value;
     }
     
@@ -522,9 +522,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#NotConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value;
     
-    public Not (java.util.Set<hydra.ext.shacl.model.Shape> value) {
+    public Not (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value) {
       this.value = value;
     }
     
@@ -786,9 +786,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#PropertyConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.PropertyShape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.PropertyShape>> value;
     
-    public Property (java.util.Set<hydra.ext.shacl.model.PropertyShape> value) {
+    public Property (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.PropertyShape>> value) {
       this.value = value;
     }
     
@@ -819,9 +819,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#OrConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value;
     
-    public Or (java.util.Set<hydra.ext.shacl.model.Shape> value) {
+    public Or (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value) {
       this.value = value;
     }
     
@@ -852,9 +852,9 @@ public abstract class CommonConstraint {
     /**
      * See https://www.w3.org/TR/shacl/#XoneConstraintComponent
      */
-    public final java.util.Set<hydra.ext.shacl.model.Shape> value;
+    public final java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value;
     
-    public Xone (java.util.Set<hydra.ext.shacl.model.Shape> value) {
+    public Xone (java.util.Set<hydra.ext.shacl.model.Reference<hydra.ext.shacl.model.Shape>> value) {
       this.value = value;
     }
     

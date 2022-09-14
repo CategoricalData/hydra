@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Impl.Haskell.Sources.Ext.Shacl.Model where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -35,7 +37,7 @@ shaclModel = Graph shaclModelName elements hydraCoreName
         union [
           "and">:
             see "https://www.w3.org/TR/shacl/#AndConstraintComponent" $
-            set $ shacl "Shape",
+            set $ shacl "Reference" @@ shacl "Shape",
 
           "closed">:
             see "https://www.w3.org/TR/shacl/#ClosedConstraintComponent" $
@@ -77,11 +79,11 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "node">:
             see "https://www.w3.org/TR/shacl/#NodeConstraintComponent" $
-            set $ shacl "NodeShape",
+            set $ shacl "Reference" @@ shacl "NodeShape",
 
           "not">:
             see "https://www.w3.org/TR/shacl/#NotConstraintComponent" $
-            set $ shacl "Shape",
+            set $ shacl "Reference" @@ shacl "Shape",
 
           "maxExclusive">:
             see "https://www.w3.org/TR/shacl/#MaxExclusiveConstraintComponent" $
@@ -113,15 +115,15 @@ shaclModel = Graph shaclModelName elements hydraCoreName
 
           "property">:
             see "https://www.w3.org/TR/shacl/#PropertyConstraintComponent" $
-            set $ shacl "PropertyShape",
+            set $ shacl "Reference" @@ shacl "PropertyShape",
 
           "or">:
             see "https://www.w3.org/TR/shacl/#OrConstraintComponent" $
-            set $ shacl "Shape",
+            set $ shacl "Reference" @@ shacl "Shape",
 
           "xone">:
             see "https://www.w3.org/TR/shacl/#XoneConstraintComponent" $
-            set $ shacl "Shape"],
+            set $ shacl "Reference" @@ shacl "Shape"],
 
       def "CommonProperties" $
         doc "Common constraint parameters and other properties for SHACL shapes" $
@@ -157,6 +159,12 @@ shaclModel = Graph shaclModelName elements hydraCoreName
           "targetSubjectsOf">:
             see "https://www.w3.org/TR/shacl/#targetSubjectsOf" $
             set $ element $ rdf "Property"],
+
+      def "Definition" $
+        doc "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance" $
+        lambda "a" $ record [
+          "iri">: rdf "Iri",
+          "target">: "a"],
 
       def "NodeKind" $ union [
         "blankNode">: doc "A blank node" unit,
@@ -238,10 +246,21 @@ shaclModel = Graph shaclModelName elements hydraCoreName
       def "QualifiedValueShape" $
         see "https://www.w3.org/TR/shacl/#QualifiedValueShapeConstraintComponent" $
         record [
-          "qualifiedValueShape">: shacl "Shape",
+          "qualifiedValueShape">: shacl "Reference" @@ shacl "Shape",
           "qualifiedMaxCount">: bigint,
           "qualifiedMinCount">: bigint,
           "qualifiedValueShapesDisjoint">: optional boolean],
+
+      def "Reference" $
+        doc "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type" $
+        lambda "a" $ union [
+          "named">: rdf "Iri",
+          "anonymous">:
+            doc "An anonymous instance"
+            "a",
+          "definition">:
+            doc "An inline definition" $
+            shacl "Definition" @@ "a"],
 
       def "Severity" $ union [
         "info">: doc "A non-critical constraint violation indicating an informative message" unit,
@@ -257,4 +276,4 @@ shaclModel = Graph shaclModelName elements hydraCoreName
       def "ShapesGraph" $
         doc ("An RDF graph containing zero or more shapes that is passed into a SHACL validation process " ++
              "so that a data graph can be validated against the shapes") $
-        set $ shacl "Shape"]
+        set $ shacl "Definition" @@ shacl "Shape"]
