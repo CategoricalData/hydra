@@ -10,6 +10,7 @@ import Hydra.Lexical
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -27,7 +28,7 @@ shaclCoder sg = do
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
     let termFlow = \g -> do
-        fail "not implemented"
+          fail "not implemented"
     return (sg, termFlow)
   where
     toShape el = do
@@ -85,6 +86,12 @@ encodeType typ = case stripType typ of
     -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using
     -- secondary structures. For example, see shsh:ListShape in the SHACL documentation. TODO: explore these constructions.
     any = pure $ common []
+
+encodeField :: Show m => Name -> Rdf.Resource -> Field m -> GraphFlow m [Rdf.Triple]
+encodeField rname subject field = do
+  descs <- encodeTerm (fieldTerm field)
+  return $ triplesOf descs ++
+    forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs)
 
 encodeFieldType :: Show m => Name -> Maybe Integer -> FieldType m -> GraphFlow m (Shacl.Definition Shacl.PropertyShape)
 encodeFieldType rname order (FieldType fname ft) = do
@@ -150,33 +157,76 @@ encodeLiteralType lt = case lt of
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
---encodeTerm :: Term m -> GraphFlow m Rdf.Description
---encodeTerm term = case term of
---  TermAnnotated (Annotated term' ann) -> encodeTerm term' -- TODO: extract an rdfs:comment
-----  TermApplication
---  TermElement name -> pure $ emptyDescription $ Rdf.NodeIri $ nameToIri name
-----  TermFunction
-----  TermLet
-----  TermList
---  TermLiteral lit -> emptyDescription <$> encodeLiteral lit
-----  TermMap
-----  TermNominal
-----  TermOptional
---  TermRecord (Record rname fields) ->
-----  TermSet
-----  TermUnion
-----  TermVariable
+encodeTerm :: Show m => Term m -> GraphFlow m [Rdf.Description]
+encodeTerm term = case term of
+  TermAnnotated (Annotated inner ann) -> encodeTerm inner -- TODO: extract an rdfs:comment
+  TermElement name -> pure [emptyDescription $ Rdf.NodeIri $ nameToIri name]
+  TermList terms -> encodeList terms
+    where
+      encodeList terms = if L.null terms
+        then pure [emptyDescription $ (Rdf.NodeIri $ rdfIri "nil")]
+          else do
+            node <- nextBlankNode
+            fdescs <- encodeTerm $ L.head terms
+            let firstTriples = triplesOf fdescs ++
+                  forObjects (Rdf.ResourceBnode node) (rdfIri "first") (subjectsOf fdescs)
+            rdescs <- encodeList $ L.tail terms
+            let restTriples = triplesOf rdescs ++
+                  forObjects (Rdf.ResourceBnode node) (rdfIri "rest") (subjectsOf rdescs)
+            return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)]
+  TermLiteral lit -> do
+    node <- encodeLiteral lit
+    return [emptyDescription node]
+  TermMap m -> do
+      bnode <- nextBlankNode
+      triples <- L.concat <$> (CM.mapM (forKeyVal $ Rdf.ResourceBnode bnode) $ M.toList m)
+      return [Rdf.Description (Rdf.NodeBnode bnode) $ Rdf.Graph $ S.fromList triples]
+    where
+      forKeyVal subj (k, v) = do
+        -- Note: only string-valued keys are supported
+        ks <- Terms.expectString $ stripTerm k
+        descs <- encodeTerm v
+        let pred = keyIri ks
+        let objs = subjectsOf descs
+        let triples = forObjects subj pred objs
+        return $ triples ++ triplesOf descs
+  TermNominal (Named _ inner) -> encodeTerm inner
+  TermOptional mterm -> case mterm of
+    Nothing -> pure []
+    Just inner -> encodeTerm inner
+  TermRecord (Record rname fields) -> do
+    node <- nextBlankNode
+    tripless <- CM.mapM (encodeField rname (Rdf.ResourceBnode node)) fields
+    return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList $ L.concat tripless)]
+  TermSet terms -> L.concat <$> CM.mapM encodeTerm (S.toList terms)
+  TermUnion (Union rname field) -> do
+    node <- nextBlankNode
+    triples <- encodeField rname (Rdf.ResourceBnode node) field
+    return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList triples)]
+  _ -> unexpected "RDF-compatible term" term
+
+forObjects :: Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple]
+forObjects subj pred objs = (Rdf.Triple subj pred) <$> objs
+
+iri :: String -> String -> Rdf.Iri
+iri ns local = Rdf.Iri $ ns ++ local
+
+keyIri :: String -> Rdf.Iri
+keyIri = iri "urn:key:" -- Note: not an official URN scheme
+
+mergeGraphs :: [Rdf.Graph] -> Rdf.Graph
+mergeGraphs graphs = Rdf.Graph $ L.foldl S.union S.empty (Rdf.unGraph <$> graphs)
 
 nameToIri :: Name -> Rdf.Iri
 nameToIri = Rdf.Iri . unName
 
-nextBlankNode :: Show m => GraphFlow m Rdf.Node
+nextBlankNode :: Show m => GraphFlow m Rdf.BlankNode
 nextBlankNode = do
   c <- getAttr nodeCount
   count <- case c of
     Nothing -> pure 0
     Just lit -> Literals.expectInt32 lit
-  let node = Rdf.NodeBnode $ Rdf.BlankNode $ "b" ++ show count
+  let node = Rdf.BlankNode $ "b" ++ show count
   putAttr nodeCount (Literals.int32 $ count + 1)
   return node
 
@@ -196,5 +246,14 @@ property iri = Shacl.PropertyShape {
 propertyIri :: Name -> FieldName -> Rdf.Iri
 propertyIri rname fname = Rdf.Iri $ (unName rname) ++ "#" ++ (unFieldName fname)
 
+rdfIri :: String -> Rdf.Iri
+rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+
+subjectsOf :: [Rdf.Description] -> [Rdf.Node]
+subjectsOf descs = Rdf.descriptionSubject <$> descs
+
+triplesOf :: [Rdf.Description] -> [Rdf.Triple]
+triplesOf descs = L.concat ((S.toList . Rdf.unGraph . Rdf.descriptionGraph) <$> descs)
+
 xmlSchemaDatatypeIri :: String -> Rdf.Iri
-xmlSchemaDatatypeIri local = Rdf.Iri $ "http://www.w3.org/2001/XMLSchema#" ++ local
+xmlSchemaDatatypeIri = iri "http://www.w3.org/2001/XMLSchema#"
