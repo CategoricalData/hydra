@@ -51,6 +51,9 @@ defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
+descriptionsToGraph :: [Rdf.Description] -> Rdf.Graph
+descriptionsToGraph ds = Rdf.Graph $ S.fromList $ triplesOf ds
+
 elementIri :: Element m -> Rdf.Iri
 elementIri = nameToIri . elementName
 
@@ -62,30 +65,6 @@ emptyGraph = Rdf.Graph S.empty
 
 emptyLangStrings :: Rdf.LangStrings
 emptyLangStrings = Rdf.LangStrings M.empty
-
-encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
-encodeType typ = case stripType typ of
-    TypeElement et -> encodeType et
-    TypeList _ -> any
-    TypeLiteral lt -> pure $ encodeLiteralType lt
-    TypeMap _ -> any
-    TypeNominal name -> any -- TODO: include name
-    TypeRecord (RowType rname fields) -> do
-      props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
-      return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
-    TypeSet _ -> any
-    TypeUnion (RowType rname fields) -> do
-        props <- CM.mapM (encodeFieldType rname Nothing) fields
-        let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
-        return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
-      where
-        toShape prop = node [Shacl.CommonConstraintProperty $ S.fromList [Shacl.ReferenceDefinition prop]]
-    _ -> unexpected "type" typ
-  where
-    -- SHACL's built-in vocabulary is less expressive than Hydra's type system, so for now, SHACL validation simply ends
-    -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using
-    -- secondary structures. For example, see shsh:ListShape in the SHACL documentation. TODO: explore these constructions.
-    any = pure $ common []
 
 encodeField :: Show m => Name -> Rdf.Resource -> Field m -> GraphFlow m [Rdf.Triple]
 encodeField rname subject field = do
@@ -205,6 +184,30 @@ encodeTerm term = case term of
     return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList triples)]
   _ -> unexpected "RDF-compatible term" term
 
+encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
+encodeType typ = case stripType typ of
+    TypeElement et -> encodeType et
+    TypeList _ -> any
+    TypeLiteral lt -> pure $ encodeLiteralType lt
+    TypeMap _ -> any
+    TypeNominal name -> any -- TODO: include name
+    TypeRecord (RowType rname fields) -> do
+      props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
+      return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
+    TypeSet _ -> any
+    TypeUnion (RowType rname fields) -> do
+        props <- CM.mapM (encodeFieldType rname Nothing) fields
+        let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
+        return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
+      where
+        toShape prop = node [Shacl.CommonConstraintProperty $ S.fromList [Shacl.ReferenceDefinition prop]]
+    _ -> unexpected "type" typ
+  where
+    -- SHACL's built-in vocabulary is less expressive than Hydra's type system, so for now, SHACL validation simply ends
+    -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using
+    -- secondary structures. For example, see shsh:ListShape in the SHACL documentation. TODO: explore these constructions.
+    any = pure $ common []
+
 forObjects :: Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple]
 forObjects subj pred objs = (Rdf.Triple subj pred) <$> objs
 
@@ -243,8 +246,9 @@ property iri = Shacl.PropertyShape {
     Shacl.propertyShapeOrder = Nothing,
     Shacl.propertyShapePath = iri}
 
+-- Note: these are not "proper" URNs, as they do not use an established URN scheme
 propertyIri :: Name -> FieldName -> Rdf.Iri
-propertyIri rname fname = Rdf.Iri $ (unName rname) ++ "#" ++ (unFieldName fname)
+propertyIri rname fname = Rdf.Iri $ "urn:" ++ (unName rname) ++ "#" ++ (unFieldName fname)
 
 rdfIri :: String -> Rdf.Iri
 rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"

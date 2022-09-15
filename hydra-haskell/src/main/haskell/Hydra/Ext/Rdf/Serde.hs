@@ -1,4 +1,4 @@
--- | Serialize RDF using the N-triples format
+-- | Serialize RDF using an approximation (because it does not yet support Unicode escape sequences) of the N-triples format
 
 module Hydra.Ext.Rdf.Serde (
   rdfGraphToString,
@@ -8,8 +8,33 @@ import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import Hydra.Util.Codetree.Script
 import qualified Hydra.Util.Codetree.Ast as CT
 
+import qualified Data.List as L
 import qualified Data.Set as S
 
+
+-- IRIREF ::= '<' ([^#x00-#x20<>"{}|^`\] | UCHAR)* '>'
+-- TODO: Unicode escape sequences
+escapeIriStr :: String -> String
+escapeIriStr s = L.concat (esc <$> s)
+  where
+    esc c = if c >= '\128' || c <= '\32' || S.member c others
+      then "?"
+      else [c]
+    others = S.fromList $ "<>\"{}|^`\\"
+
+-- STRING_LITERAL_QUOTE ::= '"' ([^#x22#x5C#xA#xD] | ECHAR | UCHAR)* '"'
+-- TODO: Unicode escape sequences
+escapeLiteralString :: String -> String
+escapeLiteralString s = L.concat (esc <$> s)
+  where
+    esc c = if c >= '\128'
+      then "?"
+      else case c of
+        '\"' -> "\\\""
+        '\\' -> "\\\\"
+        '\n' -> "\\n"
+        '\r' -> "\\r"
+        _ -> [c]
 
 rdfGraphToString :: Rdf.Graph -> String
 rdfGraphToString = printExpr . writeGraph
@@ -21,16 +46,21 @@ writeGraph :: Rdf.Graph -> CT.Expr
 writeGraph g = newlineSep (writeTriple <$> (S.toList $ Rdf.unGraph g))
 
 writeIri :: Rdf.Iri -> CT.Expr
-writeIri iri = noSep [cst "<", cst $ Rdf.unIri iri, cst ">"]
+writeIri iri = noSep [cst "<", cst $ escapeIriStr $ Rdf.unIri iri, cst ">"]
+
+-- LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
+writeLanguageTag :: Rdf.LanguageTag -> CT.Expr
+writeLanguageTag lang = noSep [cst "@", cst $ Rdf.unLanguageTag lang]
 
 -- | Caution: no support for escaping or extended characters at this time
 writeLiteral :: Rdf.Literal -> CT.Expr
-writeLiteral lit = noSep [cst "\"", cst lex, suffix, cst "\""]
+writeLiteral lit = noSep [cst lex, suffix]
   where
     suffix = case Rdf.literalLanguageTag lit of
       Nothing -> noSep [cst "^^", writeIri dt]
-      Just lang -> noSep [cst "@", cst $ Rdf.unLanguageTag lang]
-    lex = Rdf.literalLexicalForm lit
+      -- Note: we simply trust language tags to be valid (
+      Just lang -> writeLanguageTag lang
+    lex = "\"" ++ (escapeLiteralString $ Rdf.literalLexicalForm lit) ++ "\""
     dt = Rdf.literalDatatypeIri lit
 
 writeNode :: Rdf.Node -> CT.Expr
