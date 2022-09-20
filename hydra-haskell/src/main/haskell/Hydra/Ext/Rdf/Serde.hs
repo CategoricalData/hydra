@@ -49,16 +49,15 @@ writeIri :: Rdf.Iri -> CT.Expr
 writeIri iri = noSep [cst "<", cst $ escapeIriStr $ Rdf.unIri iri, cst ">"]
 
 -- LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
+-- Note: we simply trust language tags to be valid
 writeLanguageTag :: Rdf.LanguageTag -> CT.Expr
 writeLanguageTag lang = noSep [cst "@", cst $ Rdf.unLanguageTag lang]
 
--- | Caution: no support for escaping or extended characters at this time
 writeLiteral :: Rdf.Literal -> CT.Expr
 writeLiteral lit = noSep [cst lex, suffix]
   where
     suffix = case Rdf.literalLanguageTag lit of
       Nothing -> noSep [cst "^^", writeIri dt]
-      -- Note: we simply trust language tags to be valid (
       Just lang -> writeLanguageTag lang
     lex = "\"" ++ (escapeLiteralString $ Rdf.literalLexicalForm lit) ++ "\""
     dt = Rdf.literalDatatypeIri lit

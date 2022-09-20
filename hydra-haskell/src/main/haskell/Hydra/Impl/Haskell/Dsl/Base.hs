@@ -29,6 +29,7 @@ import qualified Data.Set as S
 
 el :: Definition a -> GraphFlow Meta (Element Meta)
 el (Definition name (Datum term)) = do
+    pushTrc $ "infer type of " <> unName name
     t <- findType
     let schemaTerm = encodeType t
     return $ Element name schemaTerm term

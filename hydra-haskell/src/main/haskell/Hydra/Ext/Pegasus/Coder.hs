@@ -44,7 +44,7 @@ constructModule g coders pairs = do
     schemas <- CM.mapM toSchema sortedPairs
     return $ PDL.SchemaFile ns pkg imports schemas
   where
-    pairByName = L.foldl (\m p@(el, tt) -> M.insert (elementName el) p m) M.empty pairs
+    pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     aliases = importAliasesForGraph g
     toSchema (el, TypedTerm typ term) = if stripType typ == TypeNominal _Type
       then decodeType term >>= typeToSchema el
