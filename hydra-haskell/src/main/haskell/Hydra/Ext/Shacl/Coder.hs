@@ -11,6 +11,7 @@ import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import Hydra.Util.Formatting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -238,17 +239,19 @@ node = Shacl.ShapeNode . Shacl.NodeShape . common
 
 property :: Rdf.Iri -> Shacl.PropertyShape
 property iri = Shacl.PropertyShape {
-    Shacl.propertyShapeCommon = defaultCommonProperties,
-    Shacl.propertyShapeConstraints = S.empty,
-    Shacl.propertyShapeDefaultValue = Nothing,
-    Shacl.propertyShapeDescription = emptyLangStrings,
-    Shacl.propertyShapeName = emptyLangStrings,
-    Shacl.propertyShapeOrder = Nothing,
-    Shacl.propertyShapePath = iri}
+  Shacl.propertyShapeCommon = defaultCommonProperties,
+  Shacl.propertyShapeConstraints = S.empty,
+  Shacl.propertyShapeDefaultValue = Nothing,
+  Shacl.propertyShapeDescription = emptyLangStrings,
+  Shacl.propertyShapeName = emptyLangStrings,
+  Shacl.propertyShapeOrder = Nothing,
+  Shacl.propertyShapePath = iri}
 
 -- Note: these are not "proper" URNs, as they do not use an established URN scheme
 propertyIri :: Name -> FieldName -> Rdf.Iri
-propertyIri rname fname = Rdf.Iri $ "urn:" ++ (unName rname) ++ "#" ++ (unFieldName fname)
+propertyIri rname fname = Rdf.Iri $ "urn:" ++ unGraphName gname ++ "#" ++ decapitalize local ++ capitalize (unFieldName fname)
+  where
+    (gname, local) = toQname rname
 
 rdfIri :: String -> Rdf.Iri
 rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
