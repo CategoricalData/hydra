@@ -244,8 +244,4 @@ encodeType t = case stripType t of
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedTerm :: (Eq m, Ord m, Read m, Show m) => Term m -> GraphFlow m Scala.Data
-encodeUntypedTerm term = do
-    (term1, _) <- inferType term
-    cx <- getState
-    let annotType (m, typ, _) = annotationClassSetTypeOf (contextAnnotations cx) (Just typ) m
-    encodeTerm $ rewriteTermMeta annotType term1
+encodeUntypedTerm term = annotateTermWithTypes term >>= encodeTerm

@@ -28,18 +28,33 @@ import qualified Data.Set as S
 
 
 el :: Definition a -> GraphFlow Meta (Element Meta)
-el (Definition name (Datum term)) = do
-    pushTrc $ "infer type of " <> unName name
-    t <- findType
+el (Definition name (Datum term0)) = do
+    pushTrc $ "construct element " <> unName name
+    term1 <- annotateTermWithTypes term0
+    t <- findType term1
     let schemaTerm = encodeType t
-    return $ Element name schemaTerm term
+    return $ Element name schemaTerm term1
   where
-    findType = do
+    findType term = do
       cx <- getState
       mt <- annotationClassTermType (contextAnnotations cx) term
       case mt of
         Just t -> return t
-        Nothing -> typeSchemeType . snd <$> inferType term
+        Nothing -> fail "expected a type annotation"
+
+--el :: Definition a -> GraphFlow Meta (Element Meta)
+--el (Definition name (Datum term)) = do
+--    pushTrc $ "infer type of " <> unName name
+--    t <- findType
+--    let schemaTerm = encodeType t
+--    return $ Element name schemaTerm term
+--  where
+--    findType = do
+--      cx <- getState
+--      mt <- annotationClassTermType (contextAnnotations cx) term
+--      case mt of
+--        Just t -> return t
+--        Nothing -> typeSchemeType . snd <$> inferType term
 
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g

@@ -1,4 +1,5 @@
 module Hydra.Types.Inference (
+  annotateTermWithTypes,
   inferType,
   Constraint,
 ) where
@@ -26,6 +27,13 @@ import qualified Data.Set as S
 type InferenceContext m = (Context m, Int, TypingEnvironment m)
 
 type TypingEnvironment m = M.Map Variable (TypeScheme m)
+
+annotateTermWithTypes :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
+annotateTermWithTypes term0 = do
+  (term1, _) <- inferType term0
+  anns <- contextAnnotations <$> getState
+  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just typ) ann
+  return $ rewriteTermMeta annotType term1
 
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Term m -> GraphFlow m (Type m)
