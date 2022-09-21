@@ -28,6 +28,7 @@ import qualified Data.Maybe as Y
 
 printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
 printGraph g = do
+    pushTrc "encode in Java"
     units <- moduleToJavaCompilationUnit g
     return $ M.fromList $ forPair <$> M.toList units
   where

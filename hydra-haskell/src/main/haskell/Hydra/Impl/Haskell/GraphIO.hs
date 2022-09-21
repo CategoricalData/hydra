@@ -104,6 +104,7 @@ generateSources printGraph modules basePath = do
       Just files -> mapM_ writePair files
   where
     generateFiles = do
+      pushTrc "generate files"
       mods <- sequence modules
       maps <- mapM (moduleToFiles printGraph) mods
       return $ L.concat (M.toList <$> maps)
