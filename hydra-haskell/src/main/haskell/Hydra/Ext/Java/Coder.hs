@@ -331,10 +331,10 @@ elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
     Java.Identifier jname = nameToJavaName aliases elementsName
 
 encodeElimination :: (Eq m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Maybe Java.Expression -> Elimination m -> GraphFlow m Java.Expression
-encodeElimination aliases marg elm = case elm of
+  => M.Map GraphName Java.PackageName -> Maybe Java.Expression -> Type m -> Elimination m -> GraphFlow m Java.Expression
+encodeElimination aliases marg cod elm = case elm of
   EliminationElement -> case marg of
-    Nothing -> encodeFunction aliases $ FunctionLambda $ Lambda var $ TermVariable var
+    Nothing -> encodeFunction aliases cod $ FunctionLambda $ Lambda var $ TermVariable var
       where
         var = Variable "v"
     Just jarg -> pure jarg
@@ -364,7 +364,8 @@ encodeElimination aliases marg elm = case elm of
       applyElimination jarg = do
           let prim = javaExpressionToJavaPrimary jarg
           let consId = innerClassRef aliases tname visitorName
-          let targs = Java.TypeArgumentsOrDiamondDiamond
+          jcod <- javaTypeToJavaTypeArgument <$> encodeType aliases cod
+          let targs = Java.TypeArgumentsOrDiamondArguments [jcod]
 --          bodyDecls <- CM.mapM bodyDecl fields
           let bodyDecls = [] -- TODO
           let body = Java.ClassBody bodyDecls
@@ -380,10 +381,10 @@ encodeElimination aliases marg elm = case elm of
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
-  => M.Map GraphName Java.PackageName -> Function m -> GraphFlow m Java.Expression
-encodeFunction aliases fun = case fun of
+  => M.Map GraphName Java.PackageName -> Type m -> Function m -> GraphFlow m Java.Expression
+encodeFunction aliases cod fun = case fun of
 --  FunctionCompareTo other ->
-  FunctionElimination elm -> encodeElimination aliases Nothing elm
+  FunctionElimination elm -> encodeElimination aliases Nothing cod elm
   FunctionLambda (Lambda var body) -> do
     jbody <- encodeTerm aliases body
     return $ javaLambda var jbody
@@ -434,13 +435,18 @@ encodeLiteralType lt = case lt of
 encodeTerm :: (Eq m, Ord m, Read m, Show m)
   => M.Map GraphName Java.PackageName -> Term m -> GraphFlow m Java.Expression
 encodeTerm aliases term = case term of
-    TermAnnotated (Annotated term' _) -> encode term' -- TODO: annotations to comments where possible
-    TermApplication (Application fun arg) -> case stripTerm fun of
-        TermFunction f -> case f of
+    TermAnnotated (Annotated term' ann) -> case term' of
+      TermFunction fun -> do
+        cod <- getCodomain ann
+        encodeFunction aliases cod fun
+      _ -> encode term' -- TODO: annotations to comments where possible
+    TermApplication (Application fun arg) -> case fun of
+        TermAnnotated (Annotated (TermFunction f) ann) -> case f of
 --          FunctionCompareTo (Term m)
           FunctionElimination elm -> do
               jarg <- encodeTerm aliases arg
-              encodeElimination aliases (Just jarg) elm
+              cod <- getCodomain ann
+              encodeElimination aliases (Just jarg) cod elm
 --          FunctionLambda (Lambda m)
 --          FunctionPrimitive Name
           _ -> defaultExpression
@@ -452,7 +458,6 @@ encodeTerm aliases term = case term of
           let prim = javaExpressionToJavaPrimary jfun
           return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
     TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
-    TermFunction fun -> encodeFunction aliases fun
     TermList els -> do
       jels <- CM.mapM encode els
       return $ javaMethodInvocationToJavaExpression $
@@ -496,6 +501,15 @@ encodeTerm aliases term = case term of
   --  _ -> unexpected "term" $ show term
   where
     encode = encodeTerm aliases
+
+    getCodomain ann = do
+      cx <- getState
+      mt <- annotationClassTypeOf (contextAnnotations cx) ann
+      case mt of
+        Nothing -> fail "type annotation is required for function and elimination terms in Java"
+        Just t -> case t of
+          TypeFunction (FunctionType _ cod) -> return cod
+          _ -> unexpected "function type" t
 
 encodeType :: Show m => M.Map GraphName Java.PackageName -> Type m -> GraphFlow m Java.Type
 encodeType aliases t = case stripType t of
