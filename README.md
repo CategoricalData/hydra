@@ -38,7 +38,7 @@ writeHaskell allModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-ma
 The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules), and the second is the base directory to which the generated files are to be written. For individual modules, use Haskell list syntax, e.g.
 
 ```bash
-writeHaskell [pure rdfSyntaxModule, pure shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
+writeHaskell [rdfSyntaxModule, shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
 The commands for Scala and Java generation are similar, e.g.

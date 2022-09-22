@@ -35,10 +35,10 @@ decodeApplicationType = matchRecord $ \m -> ApplicationType
   <$> getField m _ApplicationType_function decodeType
   <*> getField m _ApplicationType_argument decodeType
 
-decodeElement :: Term m -> GraphFlow m Name
-decodeElement term = case term of
+decodeElement :: Show m => Term m -> GraphFlow m Name
+decodeElement term = case stripTerm term of
   TermElement name -> pure name
-  _ -> fail "expected an element"
+  _ -> unexpected "element" term
 
 decodeFieldType :: Show m => Term m -> GraphFlow m (FieldType m)
 decodeFieldType = matchRecord $ \m -> FieldType
@@ -46,9 +46,9 @@ decodeFieldType = matchRecord $ \m -> FieldType
   <*> getField m _FieldType_type decodeType
 
 decodeFieldTypes :: Show m => Term m -> GraphFlow m [FieldType m]
-decodeFieldTypes term = case term of
+decodeFieldTypes term = case stripTerm term of
   TermList els -> CM.mapM decodeFieldType els
-  _ -> fail "expected a list"
+  _ -> unexpected "list" term
 
 decodeFloatType :: Show m => Term m -> GraphFlow m FloatType
 decodeFloatType = matchEnum [
@@ -96,12 +96,12 @@ decodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName decodeString)
   <*> getField m _RowType_fields decodeFieldTypes
 
-decodeString :: Term m -> GraphFlow m String
-decodeString term = case term of
-  TermLiteral av -> case av of
+decodeString :: Show m => Term m -> GraphFlow m String
+decodeString term = case stripTerm term of
+  TermLiteral l -> case l of
     LiteralString s -> pure s
-    _ -> fail "expected a string value"
-  _ -> fail "expected a literal value"
+    _ -> unexpected "string value" l
+  _ -> unexpected "literal value" term
 
 decodeType :: Show m => Term m -> GraphFlow m (Type m)
 decodeType dat = case dat of
@@ -136,7 +136,7 @@ fieldTypes t = case stripType t of
         el <- requireElement name
         decodeType (elementData el) >>= fieldTypes
     TypeLambda (LambdaType _ body) -> fieldTypes body
-    _ -> fail $ "expected record or union type, but found " ++ show t
+    _ -> unexpected "record or union type" t
   where
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
@@ -152,21 +152,18 @@ matchEnum = matchUnion . fmap (uncurry matchUnitField)
 matchRecord :: Show m => (M.Map FieldName (Term m) -> GraphFlow m b) -> Term m -> GraphFlow m b
 matchRecord decode term = do
   term1 <- deref term
-  let term2 = stripTerm term1
-  case term2 of
+  case stripTerm term1 of
     TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
-    _ -> fail $ "expected a record; found " ++ show term1
+    _ -> unexpected "record" term1
 
 matchUnion :: Show m => [(FieldName, Term m -> GraphFlow m b)] -> Term m -> GraphFlow m b
 matchUnion pairs term = do
     term1 <- deref term
-    let term2 = stripTerm term1
-    case term2 of
+    case stripTerm term1 of
       TermUnion (Union _ (Field fname val)) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
-      _ -> fail $ "expected a union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}"
-        ++ ". Got: " ++ show term
+      _ -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") term
   where
     mapping = M.fromList pairs
 
