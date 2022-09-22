@@ -66,7 +66,11 @@ isEncodedType :: Eq m => Context m -> Term m -> Bool
 isEncodedType cx term = stripTerm term == TermElement _Type
 
 isType :: Eq m => Context m -> Type m -> Bool
-isType cx typ = stripType typ == TypeNominal _Type
+isType cx typ = case stripType typ of
+  TypeNominal _Type -> True
+  TypeUnion (RowType _Type _) -> True
+  TypeApplication (ApplicationType lhs _) -> isType cx lhs
+  _ -> False
 
 localNameOf :: Name -> String
 localNameOf = snd . toQname

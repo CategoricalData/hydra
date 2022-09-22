@@ -14,16 +14,15 @@ import Hydra.Monads
 import Prelude hiding ((++))
 
 
-adapterUtilsModule :: GraphFlow Meta (Module Meta)
-adapterUtilsModule = do
-  g <- Standard.graph adapterUtilsName [
-    el describeFloatType,
-    el describeIntegerType,
-    el describeLiteralType,
-    el describePrecision,
-    el describeType]
-  deps <- sequence [hydraBasicsModule]
-  return $ Module g deps
+adapterUtilsModule :: Module Meta
+adapterUtilsModule = Module g [hydraBasicsModule]
+  where
+   g = Standard.graph adapterUtilsName [
+     el describeFloatType,
+     el describeIntegerType,
+     el describeLiteralType,
+     el describePrecision,
+     el describeType]
 
 adapterUtilsName :: GraphName
 adapterUtilsName = GraphName "hydra/adapters/utils"

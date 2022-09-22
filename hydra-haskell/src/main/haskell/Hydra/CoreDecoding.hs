@@ -127,14 +127,14 @@ elementAsTypedTerm :: (Show m) => Element m -> GraphFlow m (TypedTerm m)
 elementAsTypedTerm el = TypedTerm <$> decodeType (elementSchema el) <*> pure (elementData el)
 
 fieldTypes :: Show m => Type m -> GraphFlow m (M.Map FieldName (Type m))
-fieldTypes t = case stripType t of 
+fieldTypes t = case stripType t of
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
     TypeElement et -> fieldTypes et
     TypeNominal name -> do
-      pushTrc "field types"
-      el <- requireElement name
-      decodeType (elementData el) >>= fieldTypes
+      withTrace ("field types of " ++ unName name) $ do
+        el <- requireElement name
+        decodeType (elementData el) >>= fieldTypes
     TypeLambda (LambdaType _ body) -> fieldTypes body
     _ -> fail $ "expected record or union type, but found " ++ show t
   where
@@ -191,8 +191,7 @@ requireRowType label getter name = do
       _ -> t
 
 requireType :: Show m => Name -> GraphFlow m (Type m)
-requireType name = do
-  pushTrc "require type"
+requireType name = withTrace "require type" $ do
   el <- requireElement name
   decodeType $ elementData el
 

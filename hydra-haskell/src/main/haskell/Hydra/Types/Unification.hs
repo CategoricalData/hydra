@@ -1,11 +1,6 @@
 module Hydra.Types.Unification (
   Constraint,
-  Subst,
-  TypeError(..),
-  failWithTypeError,
   solveConstraints,
-  typeErrorMessage,
-  unify,
 ) where
 
 import Hydra.Common
@@ -22,25 +17,11 @@ import qualified Data.Set as S
 
 type Constraint m = (Type m, Type m)
 
-data TypeError m
-  = UnificationFail (Type m) (Type m)
-  | InfiniteType VariableType (Type m)
-  | UnificationMismatch [Type m] [Type m]
-  | ElementUndefined Name
-  | InvalidTypeEncoding String deriving (Eq, Show)
-
-failWithTypeError :: Show m => TypeError m -> GraphFlow m x
-failWithTypeError = fail . typeErrorMessage
-
-typeErrorMessage :: Show m => TypeError m -> String
-typeErrorMessage e = "type error: " ++ show e
-
 type Unifier m = (Subst m, [Constraint m])
-
 
 bind :: (Eq m, Show m) => VariableType -> Type m -> GraphFlow m (Subst m)
 bind a t | t == TypeVariable a = return M.empty
-         | variableOccursInType a t = failWithTypeError $ InfiniteType a t
+         | variableOccursInType a t = fail $ "infinite type for ?" ++ unVariableType a ++ ": " ++ show t
          | otherwise = return $ M.singleton a t
 
 solveConstraints :: (Eq m, Show m) => [Constraint m] -> GraphFlow m (Subst m)
@@ -59,6 +40,10 @@ unify :: (Eq m, Show m) => Type m -> Type m -> GraphFlow m (Subst m)
 unify t1 t2 = if t1 == t2
     then return M.empty
     else case (t1, t2) of
+      -- Temporary; type parameters are ignored
+      (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
+      (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
+
       (TypeAnnotated (Annotated at _), _) -> unify at t2
       (_, TypeAnnotated (Annotated at _)) -> unify t1 at
       (TypeElement et1, TypeElement et2) -> unify et1 et2
@@ -81,15 +66,15 @@ unify t1 t2 = if t1 == t2
       _ -> failUnification
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = failWithTypeError $ UnificationFail t1 t2
-    
+    failUnification = fail $ "could not unify type " ++ show t1 ++ " with " ++ show t2
+
 unifyMany :: (Eq m, Show m) => [Type m] -> [Type m] -> GraphFlow m (Subst m)
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
      su2 <- unifyMany (substituteInType su1 <$> ts1) (substituteInType su1 <$> ts2)
      return (composeSubst su2 su1)
-unifyMany t1 t2 = failWithTypeError $ UnificationMismatch t1 t2
+unifyMany t1 t2 = fail $ "unification mismatch between " ++ show t1 ++ " and " ++ show t2
 
 variableOccursInType ::  Show m => VariableType -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t
