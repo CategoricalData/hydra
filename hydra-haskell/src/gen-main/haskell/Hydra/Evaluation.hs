@@ -6,7 +6,7 @@ import Data.Map
 import Data.Set
 
 -- A typeclass-like construct providing common functions for working with annotations
-data AnnotationClass m 
+data AnnotationClass m
   = AnnotationClass {
     annotationClassDefault :: m,
     annotationClassEqual :: (m -> m -> Bool),
@@ -54,7 +54,7 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
 -- An encoder and decoder; a qualified bidirectional transformation between instances of two types
-data Coder s a b 
+data Coder s a b
   = Coder {
     coderEncode :: (a -> Flow s b),
     coderDecode :: (b -> Flow s a)}
@@ -66,9 +66,9 @@ _Coder_encode = (Core.FieldName "encode")
 _Coder_decode = (Core.FieldName "decode")
 
 -- Indicates either the 'out' or the 'in' direction of a coder
-data CoderDirection 
-  = CoderDirectionEncode 
-  | CoderDirectionDecode 
+data CoderDirection
+  = CoderDirectionEncode
+  | CoderDirectionDecode
   deriving (Eq, Ord, Read, Show)
 
 _CoderDirection = (Core.Name "hydra/evaluation.CoderDirection")
@@ -78,7 +78,7 @@ _CoderDirection_encode = (Core.FieldName "encode")
 _CoderDirection_decode = (Core.FieldName "decode")
 
 -- A pointed set of graph modules; a graph in the logical sense
-data Context m 
+data Context m
   = Context {
     contextGraphs :: (Graph.GraphSet m),
     contextElements :: (Map Core.Name (Graph.Element m)),
@@ -99,7 +99,7 @@ _Context_strategy = (Core.FieldName "strategy")
 _Context_annotations = (Core.FieldName "annotations")
 
 -- Settings which determine how terms are evaluated
-data EvaluationStrategy 
+data EvaluationStrategy
   = EvaluationStrategy {
     evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
   deriving (Eq, Ord, Read, Show)
@@ -109,13 +109,13 @@ _EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
 -- A variant of the State monad with built-in logging and error handling
-newtype Flow s a 
+newtype Flow s a
   = Flow {
     unFlow :: (s -> Trace -> FlowWrapper s a)}
 
 _Flow = (Core.Name "hydra/evaluation.Flow")
 
-data FlowWrapper s a 
+data FlowWrapper s a
   = FlowWrapper {
     flowWrapperValue :: (Maybe a),
     flowWrapperState :: s,
@@ -131,7 +131,7 @@ _FlowWrapper_state = (Core.FieldName "state")
 _FlowWrapper_trace = (Core.FieldName "trace")
 
 -- A built-in function
-data PrimitiveFunction m 
+data PrimitiveFunction m
   = PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
     primitiveFunctionType :: (Core.FunctionType m),
@@ -146,7 +146,7 @@ _PrimitiveFunction_type = (Core.FieldName "type")
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
 
 -- A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
-data TermCoder m a 
+data TermCoder m a
   = TermCoder {
     termCoderType :: (Core.Type m),
     termCoderCoder :: (Coder (Context m) (Core.Term m) a)}
@@ -158,10 +158,10 @@ _TermCoder_type = (Core.FieldName "type")
 _TermCoder_coder = (Core.FieldName "coder")
 
 -- A container for logging and error information
-data Trace 
+data Trace
   = Trace {
     traceStack :: [String],
-    traceMessages :: [[String]],
+    traceMessages :: [String],
     traceOther :: (Map String Core.Literal)}
   deriving (Eq, Ord, Read, Show)
 
