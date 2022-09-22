@@ -125,9 +125,9 @@ generateSources printGraph mods0 basePath = do
       withTrace "generate files" $ do
         mods1 <- CM.mapM (assignSchemas False) mods0
         withState (modulesToContext mods1) $ do
--- TODO         mods2 <- CM.mapM addDeepTypeAnnotations mods1
+          mods2 <- CM.mapM addDeepTypeAnnotations mods1
 --          let mods2 = mods1
-          mods2 <- CM.mapM (assignSchemas True) mods1
+--          mods2 <- CM.mapM (assignSchemas True) mods1
           maps <- CM.mapM (printGraph . moduleGraph) mods2
           return $ L.concat (M.toList <$> maps)
 

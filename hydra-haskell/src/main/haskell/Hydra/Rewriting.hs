@@ -122,11 +122,11 @@ rewriteTypeMeta = rewriteType mapExpr
 simplifyTerm :: Ord m => Term m -> Term m
 simplifyTerm = rewriteTerm simplify id
   where
-    simplify recurse term = recurse $ case term of
-      TermApplication (Application lhs rhs) -> case lhs of
+    simplify recurse term = recurse $ case stripTerm term of
+      TermApplication (Application lhs rhs) -> case stripTerm lhs of
         TermFunction (FunctionLambda (Lambda var body)) ->
           if S.member var (freeVariablesInTerm body)
-            then case rhs of
+            then case stripTerm rhs of
               TermVariable v -> simplifyTerm $ substituteVariable var v body
               _ -> term
             else simplifyTerm body

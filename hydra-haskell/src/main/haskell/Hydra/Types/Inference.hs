@@ -24,6 +24,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 type InferenceContext m = (Context m, Int, TypingEnvironment m)
@@ -50,7 +51,8 @@ annotateTermWithTypes :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferType term0
   anns <- contextAnnotations <$> getState
-  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just typ) ann
+  mt <- annotationClassTermType anns term0 -- Use a provided type, if available, rather than the inferred type
+  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just $ Y.fromMaybe typ mt) ann
   return $ rewriteTermMeta annotType term1
 
 -- Decode a type, eliminating nominal types for the sake of unification
@@ -96,7 +98,13 @@ infer term = do
     Nothing -> inferInternal term
 
 inferInternal :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
-inferInternal term = case stripTerm term of
+inferInternal term = case term of
+    TermAnnotated (Annotated term1 ann) -> do
+      iterm <- infer term1
+      return $ case iterm of
+        -- `yield` produces the default annotation, which can just be replaced
+        TermAnnotated (Annotated trm (_, t, c)) -> TermAnnotated (Annotated trm (ann, t, c))
+
     TermApplication (Application fun arg) -> do
       ifun <- infer fun
       iarg <- infer arg
@@ -256,11 +264,9 @@ inferInternal term = case stripTerm term of
 
     yieldElimination e = yield (TermFunction $ FunctionElimination e)
 
-    yield term typ constraints = case term of
-      TermAnnotated (Annotated term' (meta, _, _)) -> return $ TermAnnotated $ Annotated term' (meta, typ, constraints)
-      _ -> do
-        (cx, _, _) <- getState
-        return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
+    yield term typ constraints = do
+      (cx, _, _) <- getState
+      return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
 
 inferFieldType :: (Ord m, Show m) => Field m -> Flow (InferenceContext m) (Field (m, Type m, [Constraint m]))
 inferFieldType (Field fname term) = Field fname <$> infer term
