@@ -307,6 +307,11 @@ javaTypeToJavaReferenceType t = case t of
 javaTypeToJavaResult :: Java.Type -> Java.Result
 javaTypeToJavaResult = Java.ResultType . Java.UnannType
 
+javaTypeToJavaTypeArgument :: Java.Type -> Java.TypeArgument
+javaTypeToJavaTypeArgument t = case t of
+  Java.TypeReference rt -> Java.TypeArgumentReference rt
+  _ -> Java.TypeArgumentWildcard $ Java.Wildcard [] Nothing -- TODO
+
 javaUnaryExpressionToJavaExpression :: Java.UnaryExpression -> Java.Expression
 javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaUnaryExpressionToJavaRelationalExpression
