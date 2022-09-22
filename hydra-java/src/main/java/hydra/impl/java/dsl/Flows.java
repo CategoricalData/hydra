@@ -11,7 +11,8 @@ public final class Flows {
   private Flows() {
   }
 
-  private static final Trace EMPTY_TRACE = new Trace(Collections.emptyList(), Collections.emptyList());
+  private static final Trace EMPTY_TRACE
+      = new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
 
   public static <S, A> A fromFlow(Flow<S, A> flow) throws FlowException {
     FlowWrapper<S, A> wrapper = flow.value.apply(null).apply(EMPTY_TRACE);

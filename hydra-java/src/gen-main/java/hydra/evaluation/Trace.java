@@ -8,11 +8,11 @@ public class Trace {
   
   public final java.util.List<String> stack;
   
-  public final java.util.List<java.util.List<String>> messages;
+  public final java.util.List<String> messages;
   
   public final java.util.Map<String, hydra.core.Literal> other;
   
-  public Trace (java.util.List<String> stack, java.util.List<java.util.List<String>> messages, java.util.Map<String, hydra.core.Literal> other) {
+  public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Literal> other) {
     this.stack = stack;
     this.messages = messages;
     this.other = other;
@@ -36,7 +36,7 @@ public class Trace {
     return new Trace(stack, messages, other);
   }
   
-  public Trace withMessages(java.util.List<java.util.List<String>> messages) {
+  public Trace withMessages(java.util.List<String> messages) {
     return new Trace(stack, messages, other);
   }
   
