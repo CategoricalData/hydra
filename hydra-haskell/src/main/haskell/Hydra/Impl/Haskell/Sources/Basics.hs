@@ -13,31 +13,31 @@ import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
 import Hydra.Monads
 
 
-hydraBasicsModule :: GraphFlow Meta (Module Meta)
-hydraBasicsModule = do
-  g <- Standard.graph hydraBasicsName [
-    el eliminationVariant,
-    el eliminationVariants,
-    el floatTypePrecision,
-    el floatTypes,
-    el floatValueType,
-    el functionVariant,
-    el functionVariants,
-    el integerTypeIsSigned,
-    el integerTypePrecision,
-    el integerTypes,
-    el integerValueType,
-    el literalType,
-    el literalTypeVariant,
-    el literalVariant,
-    el literalVariants,
-    el qname,
-    el termVariant,
-    el termVariants,
-    el testLists,
-    el typeVariant,
-    el typeVariants]
-  return $ Module g [hydraGraphModule]
+hydraBasicsModule :: Module Meta
+hydraBasicsModule = Module g [hydraGraphModule]
+  where
+    g = Standard.graph hydraBasicsName [
+      el eliminationVariant,
+      el eliminationVariants,
+      el floatTypePrecision,
+      el floatTypes,
+      el floatValueType,
+      el functionVariant,
+      el functionVariants,
+      el integerTypeIsSigned,
+      el integerTypePrecision,
+      el integerTypes,
+      el integerValueType,
+      el literalType,
+      el literalTypeVariant,
+      el literalVariant,
+      el literalVariants,
+      el qname,
+      el termVariant,
+      el termVariants,
+      el testLists,
+      el typeVariant,
+      el typeVariants]
 
 hydraBasicsName :: GraphName
 hydraBasicsName = GraphName "hydra/basics"

@@ -41,6 +41,11 @@ decapitalize s = case s of
 escapeWithUnderscore :: S.Set String -> String -> String
 escapeWithUnderscore reserved s = if S.member s reserved then s ++ "_" else s
 
+indentLines :: String -> String
+indentLines s = unlines (indent <$> lines s)
+  where
+    indent l = "    " ++ l
+
 javaStyleComment :: String -> String
 javaStyleComment s = "/**\n" ++ " * " ++ s ++ "\n */"
 
@@ -54,7 +59,7 @@ nonAlnumToUnderscores = L.reverse . fst . L.foldl replace ([], False)
         else ('_':s, True)
     isAlnum c = (c >= 'A' && c <= 'Z')
       || (c >= 'a' && c <= 'z')
-      || (c >= '0' && c <= '9') 
+      || (c >= '0' && c <= '9')
 
 sanitizeWithUnderscores :: S.Set String -> String -> String
 sanitizeWithUnderscores reserved = escapeWithUnderscore reserved . nonAlnumToUnderscores

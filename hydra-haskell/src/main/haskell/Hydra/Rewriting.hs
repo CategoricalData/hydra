@@ -214,9 +214,9 @@ typeDependencies name = deps (S.fromList [name]) M.empty
           return (name, typ)
 
     requireType name = do
-      pushTrc "type dependencies"
-      el <- requireElement name
-      decodeType (elementData el)
+      withTrace ("type dependencies of " ++ unName name) $ do
+        el <- requireElement name
+        decodeType (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty

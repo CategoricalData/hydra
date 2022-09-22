@@ -1,4 +1,5 @@
 module Hydra.Types.Inference (
+  annotateElementWithTypes,
   annotateTermWithTypes,
   inferType,
   Constraint,
@@ -10,6 +11,7 @@ import Hydra.Graph
 import Hydra.Basics
 import Hydra.Lexical
 import Hydra.CoreDecoding
+import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Monads
 import Hydra.Types.Substitution
@@ -28,6 +30,22 @@ type InferenceContext m = (Context m, Int, TypingEnvironment m)
 
 type TypingEnvironment m = M.Map Variable (TypeScheme m)
 
+annotateElementWithTypes :: (Ord m, Show m) => Element m -> GraphFlow m (Element m)
+annotateElementWithTypes el = do
+    withTrace ("annotate element " ++ unName (elementName el)) $ do
+      term <- annotateTermWithTypes $ elementData el
+      typ <- findType term
+      return $ el {
+        elementData = term,
+        elementSchema = encodeType typ}
+  where
+    findType term = do
+      cx <- getState
+      mt <- annotationClassTermType (contextAnnotations cx) term
+      case mt of
+        Just t -> return t
+        Nothing -> fail "expected a type annotation"
+
 annotateTermWithTypes :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferType term0
@@ -41,10 +59,9 @@ decodeStructuralType term = do
   typ <- decodeType term
   let typ' = stripType typ
   case typ' of
-    TypeNominal name -> withSchemaContext $ do
-        pushTrc "decode structural type"
-        el <- requireElement name
-        decodeStructuralType $ elementData el
+    TypeNominal name -> withSchemaContext $ withTrace "decode structural type" $ do
+      el <- requireElement name
+      decodeStructuralType $ elementData el
     _ -> pure typ
 
 freshVariableType :: Flow (InferenceContext m) (Type m)
@@ -251,13 +268,15 @@ inferFieldType (Field fname term) = Field fname <$> infer term
 -- | Solve for the toplevel type of an expression in a given environment
 inferType :: (Ord m, Show m) => Term m -> GraphFlow m (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferType term = do
-    cx <- getState
-    withState (startContext cx) $ do
-      term1 <- infer term
-      subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
-      let term2 = rewriteDataType (substituteInType subst) term1
-      let ts = closeOver $ termType term2
-      return (term2, ts)
+    withTrace ("infer type") $ do
+--    withTrace ("infer type of " ++ show term) $ do
+      cx <- getState
+      withState (startContext cx) $ do
+        term1 <- infer term
+        withTrace ("original term: " ++ show term ++ " ### inferred term: " ++ show term1) $ do
+          subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
+          let term2 = rewriteDataType (substituteInType subst) term1
+          return (term2, closeOver $ termType term2)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
@@ -277,9 +296,9 @@ lookupTypeInEnvironment v = do
 
 namedType :: Show m => String -> Name -> GraphFlow m (Type m)
 namedType debug name = do
-  pushTrc debug
-  el <- requireElement name
-  withSchemaContext $ decodeStructuralType $ elementData el
+  withTrace (debug ++ ": " ++ unName name) $ do
+    el <- requireElement name
+    withSchemaContext $ decodeStructuralType $ elementData el
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t
@@ -299,8 +318,7 @@ termType :: Term (m, Type m, [Constraint m]) -> Type m
 termType (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
 typeOfElement :: Show m => Name -> GraphFlow m (Type m)
-typeOfElement name = do
-  pushTrc "type of element"
+typeOfElement name = withTrace "type of element" $ do
   el <- requireElement name
   decodeStructuralType $ elementSchema el
 

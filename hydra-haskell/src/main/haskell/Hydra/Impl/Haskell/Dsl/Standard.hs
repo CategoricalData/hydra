@@ -60,12 +60,8 @@ dataDoc s = setTermDescription coreContext (Just s)
 dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
 dataterm gname lname = termElement (qualify gname (Name lname))
 
-graph :: GraphName -> [GraphFlow Meta (Element Meta)] -> GraphFlow Meta (Graph Meta)
-graph gname cons = do
-    elements <- sequence cons
-    return $ Graph gname elements schemaGraph
-  where
-    schemaGraph = GraphName "hydra/core"
+graph :: GraphName -> [Element Meta] -> Graph Meta
+graph gname elements = Graph gname elements (GraphName "hydra/core")
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList = boundedList (Just 1) Nothing

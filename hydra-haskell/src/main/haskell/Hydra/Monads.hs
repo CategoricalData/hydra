@@ -36,7 +36,9 @@ instance Monad (Flow s) where
 instance MonadFail (Flow s) where
   fail msg = Flow $ \s t -> FlowWrapper Nothing s (pushError msg t)
     where
-      pushError msg t = t {traceStack = ("Error: " ++ msg):(traceStack t)}
+      pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
+        where
+          errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
 
 emptyTrace :: Trace
 emptyTrace = Trace [] [] M.empty
@@ -50,7 +52,7 @@ flowWarning msg b = Flow u'
     u' s0 t0 = FlowWrapper v s1 t2
       where
         FlowWrapper v s1 t1 = unFlow b s0 t0
-        t2 = t1 {traceMessages = (msg:(traceStack t1)):(traceMessages t1)}
+        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
 
 fromFlow :: s -> Flow s a -> a
 fromFlow cx f = case flowWrapperValue (unFlow f cx emptyTrace) of
@@ -78,9 +80,6 @@ getState = Flow q
       where
         FlowWrapper v1 s1 t1 = unFlow f s0 t0
 
-pushTrc :: String -> Flow s String
-pushTrc msg = Flow $ \s0 t0 -> FlowWrapper (Just msg) s0 (t0 {traceStack = msg:(traceStack t0)})
-
 putAttr :: String -> Literal -> Flow s ()
 putAttr key val = Flow q
   where
@@ -95,14 +94,7 @@ putState cx = Flow q
         f = pure ()
 
 traceSummary :: Trace -> String
-traceSummary (Trace stack messages _) = L.intercalate "\n" (errorLine:warningLines)
-  where
-    errorLine = "Error: " ++ printStack stack
-    warningLine s = "\t" ++ printStack s
-    warningLines = if L.null messages
-      then []
-      else "Warnings:":(warningLine <$> messages)
-    printStack s = L.intercalate " > " $ L.reverse s
+traceSummary t = L.intercalate "\n" (L.nub $ traceMessages t)
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
@@ -113,6 +105,15 @@ withState cx0 f = Flow q
     q cx1 t1 = FlowWrapper v cx1 t2
       where
         FlowWrapper v _ t2 = unFlow f cx0 t1
+
+withTrace :: String -> Flow s a -> Flow s a
+withTrace msg f = Flow q
+  where
+    q s0 t0 = FlowWrapper v s1 t3
+      where
+        FlowWrapper v s1 t2 = unFlow f s0 t1
+        t1 = t0 {traceStack = msg:(traceStack t0)}
+        t3 = t2 {traceStack = traceStack t0}
 
 withWarning :: String -> a -> Flow s a
 withWarning msg x = flowWarning msg $ pure x

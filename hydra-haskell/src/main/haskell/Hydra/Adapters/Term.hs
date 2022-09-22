@@ -39,9 +39,9 @@ dereferenceNominal :: (Ord m, Read m, Show m) => TypeAdapter m
 dereferenceNominal t@(TypeNominal name) = do
   typ <- withEvaluationContext $ do
     -- Note: we just assume the schema term is a reference to hydra/core.Type
-    pushTrc $ "dereference nominal type " ++ unName name
-    el <- withSchemaContext $ requireElement name
-    decodeType $ elementData el
+    withTrace ("dereference nominal type " ++ unName name) $ do
+      el <- withSchemaContext $ requireElement name
+      decodeType $ elementData el
   ad <- termAdapter typ
   return ad { adapterSource = t }
 
