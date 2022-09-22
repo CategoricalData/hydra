@@ -28,13 +28,13 @@ public class FlowException extends Exception {
     if (!trace.messages.isEmpty()) {
       sb.append(": ");
       first = true;
-      for (List<String> m : trace.messages) {
+      for (String m : trace.messages) {
         if (first) {
           first = false;
         } else {
           sb.append(", ");
         }
-        sb.append(m.get(0));
+        sb.append(m);
       }
     }
 
