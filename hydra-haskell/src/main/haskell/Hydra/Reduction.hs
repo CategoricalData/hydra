@@ -137,12 +137,47 @@ betaReduceType typ = do
             where
               t' = fromFlow cx $ requireType name
 
+-- | Apply the special rule ((\x.e1) e2) == e1 where x does not appear free in e1. This is a limited form of beta reduction.
+contractTerm :: Term m -> Term m
+contractTerm term = case term of
+    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (contractTerm term1) ann)
+    TermApplication a -> contract a
+      where
+        contract (Application lhs rhs) = case contractTerm (stripTerm lhs) of
+          TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
+            then contractTerm body
+            else noChange
+          _ -> noChange
+    _ -> noChange
+  where
+    noChange = term
+
+-- Note: unused / untested
+etaReduceTerm :: Term m -> Term m
+etaReduceTerm term = case term of
+    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (etaReduceTerm term1) ann)
+    TermFunction (FunctionLambda l) -> reduceLambda l
+    _ -> noChange
+  where
+    reduceLambda (Lambda v body) = case etaReduceTerm body of
+      TermAnnotated (Annotated body1 ann) -> reduceLambda (Lambda v body1)
+      TermApplication a -> reduceApplication a
+        where
+          reduceApplication (Application lhs rhs) = case etaReduceTerm rhs of
+            TermAnnotated (Annotated rhs1 ann) -> reduceApplication (Application lhs rhs1)
+            TermVariable v1 -> if v == v1 && isFreeIn v lhs
+              then etaReduceTerm lhs
+              else noChange
+            _ -> noChange
+      _ -> noChange
+    noChange = term
+
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term a -> Bool
+termIsClosed :: Term m -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term is opaque to reduction, i.e. need not be reduced
-termIsOpaque :: EvaluationStrategy -> Term a -> Bool
+termIsOpaque :: EvaluationStrategy -> Term m -> Bool
 termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
 
 -- | Whether a term has been fully reduced to a "value"

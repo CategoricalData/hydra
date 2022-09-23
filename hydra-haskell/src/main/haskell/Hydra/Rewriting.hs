@@ -33,6 +33,7 @@ foldOverType order fld b0 typ = case order of
 
 freeVariablesInTerm :: Term m -> S.Set Variable
 freeVariablesInTerm term = case term of
+  TermAnnotated (Annotated term1 _) -> freeVariablesInTerm term1
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
