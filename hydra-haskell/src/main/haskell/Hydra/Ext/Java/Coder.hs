@@ -18,6 +18,7 @@ import Hydra.Ext.Java.Settings
 import Hydra.Monads
 import Hydra.Basics
 import Hydra.Adapters.UtilsEtc
+import Hydra.Reduction
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -377,7 +378,9 @@ encodeElimination aliases marg cod elm = case elm of
             let param = javaTypeToJavaFormalParameter jdom instanceFieldName
             let result = Java.ResultType $ Java.UnannType jcod
 
-            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement Nothing -- TODO
+            jret <- encodeTerm aliases $ contractTerm $ Terms.apply (fieldTerm field) (Terms.variable "instance")
+--            jret <- encodeTerm aliases $ Terms.apply term (Terms.variable "instance")
+            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
 
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
   _ -> pure $ encodeLiteral $ LiteralString $
@@ -450,7 +453,6 @@ encodeTerm aliases term = case term of
               jarg <- encodeTerm aliases arg
               cod <- getCodomain ann
               encodeElimination aliases (Just jarg) cod elm
---          FunctionLambda (Lambda m)
 --          FunctionPrimitive Name
           _ -> defaultExpression
         _ -> defaultExpression
@@ -499,11 +501,14 @@ encodeTerm aliases term = case term of
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
       return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
-    _ -> pure $ encodeLiteral $ LiteralString $
+    TermFunction f -> failAsLiteral $ "unannotated function: " ++ show f
+    _ -> failAsLiteral $
       "Unimplemented term variant: " ++ show (termVariant term) -- TODO: temporary
   --  _ -> unexpected "term" $ show term
   where
     encode = encodeTerm aliases
+
+    failAsLiteral msg = pure $ encodeLiteral $ LiteralString msg
 
 encodeType :: Show m => Aliases -> Type m -> GraphFlow m Java.Type
 encodeType aliases t = case stripType t of
