@@ -54,7 +54,7 @@ importAliasesForGraph g = addName (L.foldl addName M.empty $ S.toList deps) $ gr
     addName m name = M.insert name (graphNameToPackageName name) m
     graphNameToPackageName (GraphName n) = javaPackageName $ Strings.splitOn "/" n
 
-interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> [Char] -> [Java.FormalParameter]
+interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
 interfaceMethodDeclaration mods tparams methodName params result stmts = Java.InterfaceMemberDeclarationInterfaceMethod $
     Java.InterfaceMethodDeclaration mods header $
@@ -83,7 +83,7 @@ javaCastExpression :: M.Map GraphName Java.PackageName -> Name -> Java.Identifie
 javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb $
     javaIdentifierToJavaUnaryExpression var
   where
-    rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName) []
+    rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName Nothing) []
 
 javaClassDeclaration :: M.Map GraphName Java.PackageName -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
    -> Maybe Name -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration
@@ -91,7 +91,7 @@ javaClassDeclaration aliases tparams elName mods supname bodyDecls = Java.ClassD
   Java.normalClassDeclarationModifiers = mods,
   Java.normalClassDeclarationIdentifier = javaDeclName elName,
   Java.normalClassDeclarationParameters = tparams,
-  Java.normalClassDeclarationExtends = fmap (nameToJavaClassType aliases True []) supname,
+  Java.normalClassDeclarationExtends = fmap (\n -> nameToJavaClassType aliases True [] n Nothing) supname,
   Java.normalClassDeclarationImplements = [],
   Java.normalClassDeclarationBody = Java.ClassBody bodyDecls}
 
@@ -371,20 +371,23 @@ methodInvocationStatic self methodName = methodInvocation (Just $ Left name) met
   where
     name = Java.ExpressionName Nothing self
 
-nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Java.ClassType
-nameToJavaClassType aliases qualify args name = Java.ClassType [] pkg id args
+nameToJavaClassType :: M.Map GraphName Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType
+nameToJavaClassType aliases qualify args name mlocal = Java.ClassType [] pkg id args
   where
-    (id, pkg) = nameToQualifiedJavaName aliases qualify name
+    (id, pkg) = nameToQualifiedJavaName aliases qualify name mlocal
 
-nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name
+nameToQualifiedJavaName :: M.Map GraphName Java.PackageName -> Bool -> Name -> Maybe String
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
-nameToQualifiedJavaName aliases qualify name = (javaTypeIdentifier $ sanitizeJavaName local, pkg)
+nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
   where
     (gname, local) = toQname name
     pkg = if qualify
       then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname aliases
       else none
     none = Java.ClassTypeQualifierNone
+    jid = javaTypeIdentifier $ case mlocal of
+      Nothing -> sanitizeJavaName local
+      Just l -> sanitizeJavaName local ++ "." ++ sanitizeJavaName l
 
 nameToJavaName :: M.Map GraphName Java.PackageName -> Name -> Java.Identifier
 nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
@@ -393,12 +396,12 @@ nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
   where
     (gname, local) = toQname name
 
-nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.ReferenceType
-nameToJavaReferenceType aliases qualify name = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
-  nameToJavaClassType aliases qualify [] name
+nameToJavaReferenceType :: M.Map GraphName Java.PackageName -> Bool -> Name -> Maybe String -> Java.ReferenceType
+nameToJavaReferenceType aliases qualify name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+  nameToJavaClassType aliases qualify [] name mlocal
 
 nameToJavaTypeIdentifier :: M.Map GraphName Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
-nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name
+nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name Nothing
 
 overrideAnnotation :: Java.Annotation
 overrideAnnotation = Java.AnnotationMarker $ Java.MarkerAnnotation $ javaTypeName $ Java.Identifier "Override"
@@ -470,11 +473,14 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
 variableToJavaIdentifier :: Variable -> Java.Identifier
 variableToJavaIdentifier (Variable var) = Java.Identifier var -- TODO: escape
 
-variantClassName :: Name -> FieldName -> Name
-variantClassName elName (FieldName fname) = fromQname gname $ if flocal == local then flocal ++ "_" else flocal
+variantClassName :: Bool -> Name -> FieldName -> Name
+variantClassName qualify elName (FieldName fname) = fromQname gname local1
   where
     (gname, local) = toQname elName
     flocal = capitalize fname
+    local1 = if qualify
+      then local ++ "." ++ flocal
+      else if flocal == local then flocal ++ "_" else flocal
 
 visitorTypeVariable :: Java.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"
