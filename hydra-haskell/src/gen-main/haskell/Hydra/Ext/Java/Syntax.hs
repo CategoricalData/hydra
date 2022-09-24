@@ -865,6 +865,7 @@ data MethodModifier
   | MethodModifierProtected 
   | MethodModifierPrivate 
   | MethodModifierAbstract 
+  | MethodModifierStatic 
   | MethodModifierFinal 
   | MethodModifierSynchronized 
   | MethodModifierNative 
@@ -882,6 +883,8 @@ _MethodModifier_protected = (Core.FieldName "protected")
 _MethodModifier_private = (Core.FieldName "private")
 
 _MethodModifier_abstract = (Core.FieldName "abstract")
+
+_MethodModifier_static = (Core.FieldName "static")
 
 _MethodModifier_final = (Core.FieldName "final")
 

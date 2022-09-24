@@ -539,6 +539,7 @@ javaSyntax = Graph javaSyntaxName elements hydraCoreName
         "protected">: unit,
         "private">: unit,
         "abstract">: unit,
+        "static">: unit,
         "final">: unit,
         "synchronized">: unit,
         "native">: unit,
