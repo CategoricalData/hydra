@@ -20,6 +20,8 @@ public abstract class MethodModifier {
     
     R visit(Abstract instance) ;
     
+    R visit(Static instance) ;
+    
     R visit(Final instance) ;
     
     R visit(Synchronized instance) ;
@@ -51,6 +53,10 @@ public abstract class MethodModifier {
     }
     
     default R visit(Abstract instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Static instance) {
       return otherwise((instance));
     }
     
@@ -184,6 +190,31 @@ public abstract class MethodModifier {
         return false;
       }
       Abstract o = (Abstract) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Static extends hydra.ext.java.syntax.MethodModifier {
+    public Static () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Static)) {
+        return false;
+      }
+      Static o = (Static) (other);
       return true;
     }
     

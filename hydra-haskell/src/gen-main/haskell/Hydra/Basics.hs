@@ -159,6 +159,7 @@ termVariant term = ((\x -> case x of
   Core.TermApplication _ -> Core.TermVariantApplication
   Core.TermElement _ -> Core.TermVariantElement
   Core.TermFunction _ -> Core.TermVariantFunction
+  Core.TermLet _ -> Core.TermVariantLet
   Core.TermList _ -> Core.TermVariantList
   Core.TermLiteral _ -> Core.TermVariantLiteral
   Core.TermMap _ -> Core.TermVariantMap

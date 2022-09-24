@@ -226,6 +226,7 @@ termVariant = basics "termVariant" $
       _Term_application     @-> _TermVariant_application,
       _Term_element         @-> _TermVariant_element,
       _Term_function        @-> _TermVariant_function,
+      _Term_let             @-> _TermVariant_let,
       _Term_list            @-> _TermVariant_list,
       _Term_literal         @-> _TermVariant_literal,
       _Term_map             @-> _TermVariant_map,
