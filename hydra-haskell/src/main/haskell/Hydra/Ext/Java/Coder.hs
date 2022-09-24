@@ -18,6 +18,7 @@ import Hydra.Ext.Java.Settings
 import Hydra.Monads
 import Hydra.Basics
 import Hydra.Adapters.UtilsEtc
+import Hydra.Rewriting
 import Hydra.Reduction
 
 import qualified Control.Monad as CM
@@ -38,6 +39,12 @@ printGraph g = do
     forPair (name, unit) = (
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
+
+boundTypeVariables :: Type m -> [VariableType]
+boundTypeVariables typ = case typ of
+  TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
+  TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
+  _ -> []
 
 commentsFromElement :: Element m -> GraphFlow m (Maybe String)
 commentsFromElement el = do
@@ -89,16 +96,39 @@ constructModule g coders pairs = do
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
-    termToInterfaceMember coders pair@(el, TypedTerm typ term) = do
-        jtype <- Java.UnannType <$> encodeType aliases typ
-        jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
-        let mods = []
-        let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
-        return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+    termToInterfaceMember coders pair =
+        if isLambda (typedTermTerm $ snd pair)
+          then termToMethod coders pair
+          else termToConstant coders pair
       where
-        isFunctionType t = case t of
-          TypeFunction _ -> True
+        isLambda t = case stripTerm t of
+          TermFunction (FunctionLambda _) -> True
           _ -> False
+
+    termToConstant coders pair@(el, TypedTerm typ term) = do
+      jtype <- Java.UnannType <$> encodeType aliases typ
+      jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
+      let mods = []
+      let var = javaVariableDeclarator (javaVariableName $ elementName el) $ Just $ Java.VariableInitializerExpression jterm
+      return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
+
+    -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
+    termToMethod coders pair@(el, TypedTerm typ term) = case stripType typ of
+      TypeFunction (FunctionType dom cod) -> case stripTerm term of
+        TermFunction (FunctionLambda (Lambda v body)) -> do
+          jdom <- encodeType aliases dom
+          jcod <- encodeType aliases cod
+          let mods = [Java.InterfaceMethodModifierStatic]
+          let anns = []
+          let mname = sanitizeJavaName $ decapitalize $ localNameOf $ elementName el
+          let param = javaTypeToJavaFormalParameter jdom (FieldName $ unVariable v)
+          let result = javaTypeToJavaResult jcod
+          jbody <- encodeTerm aliases body
+          let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
+          let tparams = javaTypeParametersForType typ
+          return $ interfaceMethodDeclaration mods tparams mname [param] result (Just [returnSt])
+        _ -> unexpected "function term" term
+      _ -> unexpected "function type" typ
 
 constructElementsInterface :: Graph m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl])
@@ -379,7 +409,6 @@ encodeElimination aliases marg cod elm = case elm of
             let result = Java.ResultType $ Java.UnannType jcod
 
             jret <- encodeTerm aliases $ contractTerm $ Terms.apply (fieldTerm field) (Terms.variable "instance")
---            jret <- encodeTerm aliases $ Terms.apply term (Terms.variable "instance")
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
 
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
@@ -450,7 +479,7 @@ encodeTerm aliases term = case term of
         TermAnnotated (Annotated (TermFunction f) ann) -> case f of
 --          FunctionCompareTo (Term m)
           FunctionElimination elm -> do
-              jarg <- encodeTerm aliases arg
+              jarg <- encode arg
               cod <- getCodomain ann
               encodeElimination aliases (Just jarg) cod elm
 --          FunctionPrimitive Name
@@ -458,8 +487,8 @@ encodeTerm aliases term = case term of
         _ -> defaultExpression
       where
         defaultExpression = do
-          jfun <- encodeTerm aliases fun
-          jarg <- encodeTerm aliases arg
+          jfun <- encode fun
+          jarg <- encode arg
           let prim = javaExpressionToJavaPrimary jfun
           return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
     TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
@@ -470,17 +499,17 @@ encodeTerm aliases term = case term of
     TermLiteral l -> pure $ encodeLiteral l
   --  TermMap (Map (Term m) (Term m))
     TermNominal (Named name arg) -> do
-      jarg <- encodeTerm aliases arg
+      jarg <- encode arg
       return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
         methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
       Just term1 -> do
-        expr <- encodeTerm aliases term1
+        expr <- encode term1
         return $ javaMethodInvocationToJavaExpression $
           methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
     TermRecord (Record name fields) -> do
-      fieldExprs <- CM.mapM (encodeTerm aliases) (fieldTerm <$> fields)
+      fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
       let consId = nameToJavaName aliases name
       return $ javaConstructorCall (javaConstructorName consId Nothing) fieldExprs Nothing
     TermSet s -> do
@@ -495,7 +524,7 @@ encodeTerm aliases term = case term of
       args <- if Terms.isUnit v
         then return []
         else do
-          ex <- encodeTerm aliases v
+          ex <- encode v
           return [ex]
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
@@ -572,6 +601,13 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
     Java.Identifier id = nameToJavaName aliases name
 
 instanceFieldName = FieldName "instance"
+
+javaTypeParametersForType :: Type m -> [Java.TypeParameter]
+javaTypeParametersForType typ = toParam <$> vars
+  where
+    toParam (VariableType v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
+--    vars = boundTypeVariables typ
+    vars = S.toList $ freeVariablesInType typ -- TODO: the fact that the variables are free is a bug, not a feature
 
 partialVisitorName :: String
 partialVisitorName = "PartialVisitor"

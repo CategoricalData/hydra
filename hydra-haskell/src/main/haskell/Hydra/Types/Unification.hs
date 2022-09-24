@@ -10,6 +10,7 @@ import Hydra.Monads
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Graph
+import Hydra.Rewriting
 
 import qualified Data.Map as M
 import qualified Data.Set as S
