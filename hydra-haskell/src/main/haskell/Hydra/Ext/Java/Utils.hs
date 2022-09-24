@@ -57,12 +57,10 @@ importAliasesForGraph g = addName (L.foldl addName M.empty $ S.toList deps) $ gr
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
 interfaceMethodDeclaration mods tparams methodName params result stmts = Java.InterfaceMemberDeclarationInterfaceMethod $
-    Java.InterfaceMethodDeclaration mods header $
-    Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
+    Java.InterfaceMethodDeclaration mods header body
   where
-    header = Java.MethodHeader tparams result decl mthrows
-    decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
-    mthrows = Nothing
+    header = javaMethodHeader tparams methodName params result
+    body = javaMethodBody stmts
 
 javaAssignmentStatement :: Java.LeftHandSide -> Java.Expression -> Java.Statement
 javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementExpression $
@@ -188,8 +186,17 @@ javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator 
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $
   Java.FieldDeclaration mods (Java.UnannType jt) [var]
 
+javaMethodBody :: Maybe [Java.BlockStatement] -> Java.MethodBody
+javaMethodBody stmts = Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
+
 javaMethodDeclarationToJavaClassBodyDeclaration :: Java.MethodDeclaration -> Java.ClassBodyDeclaration
 javaMethodDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationMethod
+
+javaMethodHeader :: [Java.TypeParameter] -> String -> [Java.FormalParameter] -> Java.Result -> Java.MethodHeader
+javaMethodHeader tparams methodName params result = Java.MethodHeader tparams result decl mthrows
+  where
+    decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
+    mthrows = Nothing
 
 javaMethodInvocationToJavaExpression :: Java.MethodInvocation -> Java.Expression
 javaMethodInvocationToJavaExpression = javaPrimaryToJavaExpression . javaMethodInvocationToJavaPrimary
@@ -347,12 +354,10 @@ methodDeclaration :: [Java.MethodModifier] -> [Java.TypeParameter] -> [Java.Anno
   -> [Java.FormalParameter] -> Java.Result -> Maybe [Java.BlockStatement] -> Java.ClassBodyDeclaration
 methodDeclaration mods tparams anns methodName params result stmts =
     javaMethodDeclarationToJavaClassBodyDeclaration $
-    Java.MethodDeclaration anns mods header $
-    Y.maybe Java.MethodBodyNone (Java.MethodBodyBlock . Java.Block) stmts
+    Java.MethodDeclaration anns mods header body
   where
-    header = Java.MethodHeader tparams result decl mthrows
-    decl = Java.MethodDeclarator (Java.Identifier methodName) Nothing params
-    mthrows = Nothing
+    header = javaMethodHeader tparams methodName params result
+    body = javaMethodBody stmts
 
 methodInvocation :: Y.Maybe (Either Java.ExpressionName Java.Primary) -> Java.Identifier -> [Java.Expression] -> Java.MethodInvocation
 methodInvocation lhs methodName = Java.MethodInvocation header

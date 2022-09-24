@@ -31,12 +31,22 @@ foldOverType order fld b0 typ = case order of
   where
     children = subtypes typ
 
+freeVariablesInScheme :: Show m => TypeScheme m -> S.Set VariableType
+freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
+
 freeVariablesInTerm :: Term m -> S.Set Variable
 freeVariablesInTerm term = case term of
   TermAnnotated (Annotated term1 _) -> freeVariablesInTerm term1
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
+
+freeVariablesInType :: Type m -> S.Set VariableType
+freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
+  where
+    fld vars typ = case typ of
+      TypeVariable v -> S.insert v vars
+      _ -> vars
 
 graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
 graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames

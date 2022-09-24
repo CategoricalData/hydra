@@ -141,13 +141,11 @@ betaReduceType typ = do
 contractTerm :: Term m -> Term m
 contractTerm term = case term of
     TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (contractTerm term1) ann)
-    TermApplication a -> contract a
-      where
-        contract (Application lhs rhs) = case contractTerm (stripTerm lhs) of
-          TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
-            then contractTerm body
-            else noChange
-          _ -> noChange
+    TermApplication (Application lhs rhs) -> case contractTerm (stripTerm lhs) of
+      TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
+        then contractTerm body
+        else noChange
+      _ -> noChange
     _ -> noChange
   where
     noChange = term
