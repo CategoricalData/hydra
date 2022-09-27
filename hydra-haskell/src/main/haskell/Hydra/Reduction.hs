@@ -3,6 +3,7 @@ module Hydra.Reduction where
 import Hydra.Core
 import Hydra.Monads
 import Hydra.Evaluation
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Rewriting
 import Hydra.Basics
