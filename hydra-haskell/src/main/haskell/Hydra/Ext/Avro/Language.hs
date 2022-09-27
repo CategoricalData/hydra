@@ -1,4 +1,4 @@
-module Hydra.Ext.Json.Language where
+module Hydra.Ext.Avro.Language where
 
 import Hydra.Core
 import Hydra.Adapter
@@ -9,13 +9,13 @@ import qualified Data.Set as S
 
 
 language :: Context m -> Language m
-language cx = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
+language cx = Language (LanguageName "hydra/ext/avro") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
-    LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
-  languageConstraintsFloatTypes = S.fromList [FloatTypeBigfloat],
+    LiteralVariantBinary, LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],
+  languageConstraintsFloatTypes = S.fromList [FloatTypeFloat32, FloatTypeFloat64],
   languageConstraintsFunctionVariants = S.empty,
-  languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint],
+  languageConstraintsIntegerTypes = S.fromList [IntegerTypeInt32, IntegerTypeInt64],
   languageConstraintsTermVariants = S.fromList [
     TermVariantList,
     TermVariantLiteral,
@@ -23,9 +23,11 @@ language cx = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
     TermVariantOptional,
     TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
+    TypeVariantAnnotated,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,
+    TypeVariantNominal,
     TypeVariantOptional,
     TypeVariantRecord],
   languageConstraintsTypes = \typ -> case stripType typ of
