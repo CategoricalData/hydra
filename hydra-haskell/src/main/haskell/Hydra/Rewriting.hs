@@ -99,6 +99,44 @@ rewriteTerm mapExpr mapMeta = replace
       TermUnion (Union n field) -> TermUnion $ Union n $ replaceField field
       TermVariable v -> TermVariable v
 
+rewriteTermFlow :: Ord b => ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) -> (a -> Flow s b) -> Term a -> Flow s (Term b)
+rewriteTermFlow mapExpr mapMeta = replace
+  where
+    replace = mapExpr recurse
+    replaceField f = do
+      trm <- replace (fieldTerm f)
+      return f {fieldTerm = trm}
+    recurse term = case term of
+      TermAnnotated (Annotated ex ma) -> TermAnnotated <$> (Annotated <$> replace ex <*> mapMeta ma)
+      TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> replace lhs <*> replace rhs)
+      TermElement name -> pure $ TermElement name
+      TermFunction fun -> TermFunction <$> case fun of
+        FunctionCompareTo other -> FunctionCompareTo <$> replace other
+        FunctionElimination e -> FunctionElimination <$> case e of
+          EliminationElement -> pure EliminationElement
+          EliminationNominal name -> pure $ EliminationNominal name
+          EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
+            (OptionalCases <$> replace nothing <*> replace just)
+          EliminationRecord p -> pure $ EliminationRecord p
+          EliminationUnion (CaseStatement n cases) -> EliminationUnion <$> (CaseStatement n <$> (CM.mapM replaceField cases))
+        FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> replace body)
+        FunctionPrimitive name -> pure $ FunctionPrimitive name
+      TermLet (Let v t1 t2) -> TermLet <$> (Let v <$> replace t1 <*> replace t2)
+      TermList els -> TermList <$> (CM.mapM replace els)
+      TermLiteral v -> pure $ TermLiteral v
+      TermMap m -> TermMap <$> (M.fromList <$> CM.mapM replacePair (M.toList m))
+        where
+          replacePair (k, v) = do
+            km <- replace k
+            vm <- replace v
+            return (km, vm)
+      TermNominal (Named name t) -> TermNominal <$> (Named name <$> replace t)
+      TermOptional m -> TermOptional <$> (CM.mapM replace m)
+      TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM replaceField fields))
+      TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM replace $ S.toList s))
+      TermUnion (Union n field) -> TermUnion <$> (Union n <$> replaceField field)
+      TermVariable v -> pure $ TermVariable v
+
 rewriteTermMeta :: Ord b => (a -> b) -> Term a -> Term b
 rewriteTermMeta = rewriteTerm mapExpr
   where

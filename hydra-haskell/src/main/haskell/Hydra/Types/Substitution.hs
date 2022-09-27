@@ -17,26 +17,6 @@ type Subst m = M.Map VariableType (Type m)
 composeSubst :: Subst m -> Subst m -> Subst m
 composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
 
---freeVariablesInType :: Show m => Type m -> S.Set VariableType
---freeVariablesInType typ = S.fromList $ fv typ
---  where
---    fv typ = case typ of
---      -- Note: application terms should not appear here, since types are (eagerly) beta-reduced first
---      TypeApplication (ApplicationType lhs rhs) -> fv lhs ++ fv rhs -- throwDebugException $ "unexpected application type: " ++ show typ
---      TypeAnnotated (Annotated t _) -> fv t
---      TypeElement t -> fv t
---      TypeFunction (FunctionType dom cod) -> fv dom ++ fv cod
---      TypeLambda (LambdaType v body) -> v:(fv body)
---      TypeList t -> fv t
---      TypeLiteral _ -> []
---      TypeMap (MapType kt vt) -> fv kt ++ fv vt
---      TypeNominal _ -> [] -- because we do not allow names to be bound to types with free variables
---      TypeOptional t -> fv t
---      TypeRecord rt -> L.concat (fv . fieldTypeType <$> rowTypeFields rt)
---      TypeSet t -> fv t
---      TypeUnion rt -> L.concat (fv . fieldTypeType <$> rowTypeFields rt)
---      TypeVariable v -> [v]
-
 normalVariables :: [VariableType]
 normalVariables = (\n -> VariableType $ "v" ++ show n) <$> [1..]
 
