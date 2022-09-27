@@ -49,7 +49,7 @@ language = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
   languageConstraintsTypes = const True }
 
 reservedWords :: S.Set String
-reservedWords = S.fromList preludeSymbols
+reservedWords = S.fromList $ preludeSymbols ++ extSymbols
   where
     -- See: https://www.haskell.org/onlinereport/standard-prelude.html
     -- List created on 2022-06-01. Symbols not containing at least one alphanumeric character are excluded.
@@ -66,3 +66,5 @@ reservedWords = S.fromList preludeSymbols
       "quotRem", "realToFrac", "recip", "rem", "return", "round", "scaleFloat", "seq", "sequence", "sequence_",
       "significand", "signum", "sin", "sinh", "snd", "sqrt", "subtract", "succ", "tan", "tanh", "toEnum", "toInteger",
       "toRational", "truncate", "uncurry", "undefined", "until"]
+    -- Additional symbols which need to be reserved, as the Haskell coder uses them in their unqualified form
+    extSymbols = ["Map", "Set"]
