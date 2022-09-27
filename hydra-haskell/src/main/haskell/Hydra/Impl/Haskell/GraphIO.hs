@@ -26,6 +26,7 @@ import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
 
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
+import Hydra.Impl.Haskell.Sources.Ext.Avro.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
@@ -96,6 +97,7 @@ coreModules = [
 
 extModules :: [Module Meta]
 extModules = [
+  avroSchemaModule,
   coqSyntaxModule,
   datalogSyntaxModule,
   graphqlSyntaxModule,
