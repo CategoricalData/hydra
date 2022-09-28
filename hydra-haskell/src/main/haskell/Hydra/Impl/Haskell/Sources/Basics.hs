@@ -13,10 +13,12 @@ import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
 import Hydra.Monads
 
 
+basicsNs = Namespace "hydra/basics"
+
 hydraBasicsModule :: Module Meta
-hydraBasicsModule = Module g [hydraGraphModule]
+hydraBasicsModule = Module basicsNs elements [hydraGraphModule]
   where
-    g = Standard.graph hydraBasicsName [
+    elements = [
       el eliminationVariant,
       el eliminationVariants,
       el floatTypePrecision,
@@ -39,11 +41,8 @@ hydraBasicsModule = Module g [hydraGraphModule]
       el typeVariant,
       el typeVariants]
 
-hydraBasicsName :: GraphName
-hydraBasicsName = GraphName "hydra/basics"
-
 basics :: String -> Datum a -> Definition a
-basics = Definition . fromQname hydraBasicsName
+basics = Definition . fromQname basicsNs
 
 eliminationVariant :: Definition (Elimination m -> EliminationVariant)
 eliminationVariant = basics "eliminationVariant" $
@@ -206,15 +205,15 @@ literalVariants = basics "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-qname :: Definition (GraphName -> String -> Name)
+qname :: Definition (Namespace -> String -> Name)
 qname = basics "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  function (Types.nominal _GraphName) (Types.function Types.string $ Types.nominal _Name) $
+  function (Types.nominal _Namespace) (Types.function Types.string $ Types.nominal _Name) $
   lambda "ns" $
     lambda "name" $
       nom _Name $
         apply cat $
-          list [apply (denom _GraphName) (var "ns"), string ".", var "name"]
+          list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
 
 termVariant :: Definition (Term m -> TermVariant)
 termVariant = basics "termVariant" $

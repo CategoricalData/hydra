@@ -12,17 +12,12 @@ import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 
 
 shaclModelModule :: Module Meta
-shaclModelModule = Module shaclModel [rdfSyntaxModule]
-
-shaclModelName :: GraphName
-shaclModelName = GraphName "hydra/ext/shacl/model"
-
-shaclModel :: Graph Meta
-shaclModel = Graph shaclModelName elements hydraCoreName
+shaclModelModule = Module ns elements [rdfSyntaxModule]
   where
-    def = datatype shaclModelName
-    shacl = nsref shaclModelName
-    rdf = nsref rdfSyntaxName
+    ns = Namespace "hydra/ext/shacl/model"
+    def = datatype ns
+    shacl = nsref ns
+    rdf = nsref $ moduleNamespace rdfSyntaxModule
 
     elements = [
 

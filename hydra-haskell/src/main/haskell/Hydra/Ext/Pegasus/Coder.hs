@@ -1,4 +1,4 @@
-module Hydra.Ext.Pegasus.Coder (printGraph) where
+module Hydra.Ext.Pegasus.Coder (printModule) where
 
 import Hydra.Adapter
 import Hydra.Adapters.Term
@@ -23,19 +23,19 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
-printGraph g = do
-  sf <- moduleToPegasusSchema g
+printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule mod = do
+  sf <- moduleToPegasusSchema mod
   let s = printExpr $ parenthesize $ exprSchemaFile sf
-  return $ M.fromList [(graphNameToFilePath False (FileExtension "pdl") $ graphName g, s)]
+  return $ M.fromList [(namespaceToFilePath False (FileExtension "pdl") $ moduleNamespace mod, s)]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Graph m
+  => Module m
   -> M.Map (Type m) (Coder (Context m) (Term m) ())
   -> [(Element m, TypedTerm m)]
   -> GraphFlow m PDL.SchemaFile
-constructModule g coders pairs = do
-    let ns = pdlNameForGraph g
+constructModule mod coders pairs = do
+    let ns = pdlNameForModule mod
     let pkg = Nothing
     let imports = [] -- TODO
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
@@ -45,7 +45,7 @@ constructModule g coders pairs = do
     return $ PDL.SchemaFile ns pkg imports schemas
   where
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
-    aliases = importAliasesForGraph g
+    aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
       cx <- getState
       if isType cx typ
@@ -62,16 +62,16 @@ constructModule g coders pairs = do
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
-moduleToPegasusSchema :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m PDL.SchemaFile
-moduleToPegasusSchema g = graphToExternalModule language (encodeTerm aliases) constructModule g
+moduleToPegasusSchema :: (Ord m, Read m, Show m) => Module m -> GraphFlow m PDL.SchemaFile
+moduleToPegasusSchema mod = transformModule language (encodeTerm aliases) constructModule mod
   where
-    aliases = importAliasesForGraph g
+    aliases = importAliasesForModule mod
 
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
 encodeAdaptedType :: (Ord m, Read m, Show m)
-  => M.Map GraphName String -> Type m
+  => M.Map Namespace String -> Type m
   -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
   cx <- getState
@@ -79,10 +79,10 @@ encodeAdaptedType aliases typ = do
   ad <- withState acx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Term m -> GraphFlow m ()
+encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map Namespace String -> Term m -> GraphFlow m ()
 encodeTerm aliases term = fail "not yet implemented"
 
-encodeType :: (Eq m, Show m) => M.Map GraphName String -> Type m -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
+encodeType :: (Eq m, Show m) => M.Map Namespace String -> Type m -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
 encodeType aliases typ = case typ of
     TypeAnnotated (Annotated typ' _) -> encodeType aliases typ'
     TypeElement et -> pure $ Left $ PDL.SchemaPrimitive PDL.PrimitiveTypeString
@@ -158,12 +158,12 @@ encodeType aliases typ = case typ of
       r <- annotationClassTypeDescription (contextAnnotations cx) typ
       return $ doc r
 
-importAliasesForGraph g = M.empty -- TODO
+importAliasesForModule g = M.empty -- TODO
 
 noAnnotations :: PDL.Annotations
 noAnnotations = PDL.Annotations Nothing False
 
-pdlNameForElement :: M.Map GraphName String -> Bool -> Name -> PDL.QualifiedName
+pdlNameForElement :: M.Map Namespace String -> Bool -> Name -> PDL.QualifiedName
 pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     $ if withNs
       then PDL.Namespace . slashesToDots <$> alias
@@ -172,10 +172,10 @@ pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     (ns, local) = toQname name
     alias = M.lookup ns aliases
 
-pdlNameForGraph :: Graph m -> PDL.Namespace
-pdlNameForGraph = PDL.Namespace . slashesToDots . h . graphName
+pdlNameForModule :: Module m -> PDL.Namespace
+pdlNameForModule = PDL.Namespace . slashesToDots . h . moduleNamespace
   where
-    h (GraphName n) = n
+    h (Namespace n) = n
 
 simpleUnionMember :: PDL.Schema -> PDL.UnionMember
 simpleUnionMember schema = PDL.UnionMember Nothing schema noAnnotations

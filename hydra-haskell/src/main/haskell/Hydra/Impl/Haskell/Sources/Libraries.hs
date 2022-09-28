@@ -18,8 +18,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
 
-_hydra_lib_flows :: GraphName
-_hydra_lib_flows = GraphName "hydra/lib/flows"
+_hydra_lib_flows :: Namespace
+_hydra_lib_flows = Namespace "hydra/lib/flows"
 
 _flows_apply :: Name
 _flows_apply = qname _hydra_lib_flows "apply"
@@ -33,8 +33,8 @@ _flows_map = qname _hydra_lib_flows "map"
 _flows_pure :: Name
 _flows_pure = qname _hydra_lib_flows "pure"
 
-_hydra_lib_io :: GraphName
-_hydra_lib_io = GraphName "hydra/lib/io"
+_hydra_lib_io :: Namespace
+_hydra_lib_io = Namespace "hydra/lib/io"
 
 _io_showTerm :: Name
 _io_showTerm = qname _hydra_lib_io "showTerm"
@@ -42,8 +42,8 @@ _io_showTerm = qname _hydra_lib_io "showTerm"
 _io_showType :: Name
 _io_showType = qname _hydra_lib_io "showType"
 
-_hydra_lib_lists :: GraphName
-_hydra_lib_lists = GraphName "hydra/lib/lists"
+_hydra_lib_lists :: Namespace
+_hydra_lib_lists = Namespace "hydra/lib/lists"
 
 _lists_apply :: Name
 _lists_apply = qname _hydra_lib_lists "apply"
@@ -75,8 +75,8 @@ _lists_map = qname _hydra_lib_lists "map"
 _lists_pure :: Name
 _lists_pure = qname _hydra_lib_lists "pure"
 
-_hydra_lib_literals :: GraphName
-_hydra_lib_literals = GraphName "hydra/lib/literals"
+_hydra_lib_literals :: Namespace
+_hydra_lib_literals = Namespace "hydra/lib/literals"
 
 _literals_showInt32 :: Name
 _literals_showInt32 = qname _hydra_lib_literals "showInt32"
@@ -84,8 +84,8 @@ _literals_showInt32 = qname _hydra_lib_literals "showInt32"
 _literals_showString :: Name
 _literals_showString = qname _hydra_lib_literals "showString"
 
-_hydra_lib_maps :: GraphName
-_hydra_lib_maps = GraphName "hydra/lib/maps"
+_hydra_lib_maps :: Namespace
+_hydra_lib_maps = Namespace "hydra/lib/maps"
 
 _maps_map :: Name
 _maps_map = qname _hydra_lib_maps "map"
@@ -93,8 +93,8 @@ _maps_map = qname _hydra_lib_maps "map"
 _maps_size :: Name
 _maps_size = qname _hydra_lib_maps "size"
 
-_hydra_lib_math :: GraphName
-_hydra_lib_math = GraphName "hydra/lib/math"
+_hydra_lib_math :: Namespace
+_hydra_lib_math = Namespace "hydra/lib/math"
 
 _math_add :: Name
 _math_add = qname _hydra_lib_math "add"
@@ -117,8 +117,8 @@ _math_rem = qname _hydra_lib_math "rem"
 _math_sub :: Name
 _math_sub = qname _hydra_lib_math "sub"
 
-_hydra_lib_optionals :: GraphName
-_hydra_lib_optionals = GraphName "hydra/lib/optionals"
+_hydra_lib_optionals :: Namespace
+_hydra_lib_optionals = Namespace "hydra/lib/optionals"
 
 _optionals_apply :: Name
 _optionals_apply = qname _hydra_lib_optionals "apply"
@@ -132,8 +132,8 @@ _optionals_map = qname _hydra_lib_optionals "map"
 _optionals_pure :: Name
 _optionals_pure = qname _hydra_lib_optionals "pure"
 
-_hydra_lib_sets :: GraphName
-_hydra_lib_sets = GraphName "hydra/lib/sets"
+_hydra_lib_sets :: Namespace
+_hydra_lib_sets = Namespace "hydra/lib/sets"
 
 _sets_insert :: Name
 _sets_insert = qname _hydra_lib_sets "add"
@@ -162,8 +162,8 @@ _sets_size = qname _hydra_lib_sets "size"
 _sets_toList :: Name
 _sets_toList = qname _hydra_lib_sets "toList"
 
-_hydra_lib_strings :: GraphName
-_hydra_lib_strings = GraphName "hydra/lib/strings"
+_hydra_lib_strings :: Namespace
+_hydra_lib_strings = Namespace "hydra/lib/strings"
 
 _strings_cat :: Name
 _strings_cat = qname _hydra_lib_strings "cat"

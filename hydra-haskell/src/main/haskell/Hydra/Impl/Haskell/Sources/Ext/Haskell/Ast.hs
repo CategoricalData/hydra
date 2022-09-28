@@ -12,16 +12,11 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 haskellAstModule :: Module Meta
-haskellAstModule = Module haskellAst []
-
-haskellAstName :: GraphName
-haskellAstName = GraphName "hydra/ext/haskell/ast"
-
-haskellAst :: Graph Meta
-haskellAst = Graph haskellAstName elements hydraCoreName
+haskellAstModule = Module ns elements []
   where
-    def = datatype haskellAstName
-    ast = nsref haskellAstName
+    ns = Namespace "hydra/ext/haskell/ast"
+    def = datatype ns
+    ast = nsref ns
 
     elements = [
 
@@ -223,7 +218,7 @@ haskellAst = Graph haskellAstName elements hydraCoreName
         record [
           "field">: ast "Field",
           "comments">: optional string],
-          
+
       def "FieldUpdate" $ -- UFieldUpdate
         doc "A field name and value" $
         -- omitted for now: pun, wildcard
@@ -417,7 +412,7 @@ haskellAst = Graph haskellAstName elements hydraCoreName
           "pattern">: ast "Pattern",
           "rhs">: ast "RightHandSide",
           "localBindings">: optional $ ast "LocalBindings"],
-          
+
       def "Variable" $
         -- omitted for now: kind constraints
         ast "Name"]

@@ -1,4 +1,4 @@
-module Hydra.Ext.Haskell.Coder (printGraph) where
+module Hydra.Ext.Haskell.Coder (printModule) where
 
 import Hydra.Basics
 import Hydra.Core
@@ -51,31 +51,31 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Ord m, Read m, Show m)
-  => Graph m
+  => Module m
   -> M.Map (Type m) (Coder (Context m) (Term m) H.Expression)
   -> [(Element m, TypedTerm m)] -> GraphFlow m H.Module
-constructModule g coders pairs = do
+constructModule mod coders pairs = do
     cx <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations cx) pairs
-    return $ H.Module (Just $ H.ModuleHead (importName $ h $ graphName g) []) imports decls
+    return $ H.Module (Just $ H.ModuleHead (importName $ h $ moduleNamespace mod) []) imports decls
   where
-    h (GraphName name) = name
+    h (Namespace name) = name
 
     createDeclarations cx pair@(el, TypedTerm typ term) = if isType cx typ
       then toTypeDeclarations namespaces el term
       else toDataDeclarations coders namespaces pair
 
-    namespaces = namespacesForGraph g
+    namespaces = namespacesForModule mod
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
     imports = domainImports ++ standardImports
       where
         domainImports = toImport <$> M.toList (namespacesMapping namespaces)
           where
-            toImport (GraphName name, alias) = H.Import True (importName name) (Just alias) Nothing
+            toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport . H.ModuleName <$> Y.catMaybes [
             Just "Data.Map",
             Just "Data.Set"{-,
-            if useCoreImport && graphName g /= GraphName "hydra/core"
+            if useCoreImport && moduleNamespace g /= Namespace "hydra/core"
               then Just "Hydra.Core"
               else Nothing-}]
           where
@@ -89,7 +89,7 @@ encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationElement -> pure $ hsvar "id"
       EliminationNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
-        qname (graphNameOf name) $ newtypeAccessorName name
+        qname (namespaceOf name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
         let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
@@ -218,16 +218,16 @@ encodeType namespaces typ = case stripType typ of
     encode = encodeType namespaces
     nominal name = pure $ H.TypeVariable $ elementReference namespaces name
 
-moduleToHaskellModule :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m H.Module
-moduleToHaskellModule g = graphToExternalModule language (encodeTerm namespaces) constructModule g
+moduleToHaskellModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m H.Module
+moduleToHaskellModule mod = transformModule language (encodeTerm namespaces) constructModule mod
   where
-    namespaces = namespacesForGraph g
+    namespaces = namespacesForModule mod
 
-printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
-printGraph g = do
-  hsmod <- moduleToHaskellModule g
+printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule mod = do
+  hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
-  return $ M.fromList [(graphNameToFilePath True (FileExtension "hs") $ graphName g, s)]
+  return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
 toDataDeclarations :: (Ord m, Show m)
   => M.Map (Type m) (Coder (Context m) (Term m) H.Expression) -> Namespaces

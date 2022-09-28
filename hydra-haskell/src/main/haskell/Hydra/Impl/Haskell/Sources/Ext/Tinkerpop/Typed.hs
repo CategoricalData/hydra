@@ -9,17 +9,12 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 tinkerpopTypedModule :: Module Meta
-tinkerpopTypedModule = Module tinkerpopTyped [hydraCoreModule]
-
-tinkerpopTypedName :: GraphName
-tinkerpopTypedName = GraphName "hydra/ext/tinkerpop/typed"
-
-tinkerpopTyped :: Graph Meta
-tinkerpopTyped = Graph tinkerpopTypedName elements hydraCoreName
+tinkerpopTypedModule = Module ns elements [hydraCoreModule]
   where
-    def = datatype tinkerpopTypedName
-    typed = nsref tinkerpopTypedName
-    core = nsref hydraCoreName
+    ns = Namespace "hydra/ext/tinkerpop/typed"
+    def = datatype ns
+    typed = nsref ns
+    core = nsref $ moduleNamespace hydraCoreModule
 
     elements = [
 

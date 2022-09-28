@@ -17,8 +17,8 @@ import qualified Data.Set as S
 
 
 data Namespaces = Namespaces {
-  namespacesFocus :: (GraphName, H.ModuleName),
-  namespacesMapping :: M.Map GraphName H.ModuleName}
+  namespacesFocus :: (Namespace, H.ModuleName),
+  namespacesMapping :: M.Map Namespace H.ModuleName}
 
 elementReference :: Namespaces -> Name -> H.Name
 elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case alias of
@@ -43,19 +43,19 @@ hslit = H.ExpressionLiteral
 hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
-    (GraphName ns, local) = toQname name
+    (Namespace ns, local) = toQname name
     prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
 
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
 
-namespacesForGraph :: Graph m -> Namespaces
-namespacesForGraph g = Namespaces focusPair mapping
+namespacesForModule :: Module m -> Namespaces
+namespacesForModule mod = Namespaces focusPair mapping
   where
-    gname = graphName g
-    focusPair = toPair gname
-    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (graphDependencies True True True g))
-    toModuleName (GraphName n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
+    ns = moduleNamespace mod
+    focusPair = toPair ns
+    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (moduleDependencyNamespaces True True True mod))
+    toModuleName (Namespace n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
     toPair name = (name, toModuleName name)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
       then addPair (m, s) (name, H.ModuleName $ aliasStr ++ "_")

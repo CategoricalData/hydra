@@ -19,19 +19,13 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 yamlModelModule :: Module Meta
-yamlModelModule = Module yamlModel []
-
-yamlModelName :: GraphName
-yamlModelName = GraphName "hydra/ext/yaml/model"
-
-yamlModel :: Graph Meta
-yamlModel = Graph yamlModelName elements hydraCoreName
+yamlModelModule = Module ns elements []
   where
-    def = datatype yamlModelName
-    model = nsref yamlModelName
+    ns = Namespace "hydra/ext/yaml/model"
+    def = datatype ns
+    model = nsref ns
 
     elements = [
-
       {-
       Every YAML node has an optional scalar tag or non-specific tag (omitted from this model)
       -}

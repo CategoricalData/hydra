@@ -21,7 +21,7 @@ eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName
   [Types.field "left" Types.string, Types.field "right" Types.int8]
 
 eitherStringOrInt8TypeName :: Name
-eitherStringOrInt8TypeName = fromQname testGraphName "EitherStringOrInt8"
+eitherStringOrInt8TypeName = fromQname testNamespace "EitherStringOrInt8"
 
 exampleProjectionType :: Type Meta
 exampleProjectionType = Types.function testTypePerson Types.string
@@ -78,4 +78,4 @@ stringOrIntType :: Type m
 stringOrIntType = TypeUnion $ RowType stringOrIntName [Types.field "left" Types.string, Types.field "right" Types.int32]
 
 testTypeName :: Name
-testTypeName = fromQname testGraphName "TestType"
+testTypeName = fromQname testNamespace "TestType"

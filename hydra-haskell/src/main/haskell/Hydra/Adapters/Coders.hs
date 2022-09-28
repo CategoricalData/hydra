@@ -27,17 +27,17 @@ adaptType targetLang t = do
     return $ adapterTarget ad
   where
 
-graphToExternalModule :: (Ord m, Read m, Show m)
+transformModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Term m -> GraphFlow m e)
-  -> (Graph m -> M.Map (Type m) (Coder (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
-  -> Graph m -> GraphFlow m d
-graphToExternalModule lang encodeTerm createModule g = do
+  -> (Module m -> M.Map (Type m) (Coder (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
+  -> Module m -> GraphFlow m d
+transformModule lang encodeTerm createModule mod = do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
     coders <- codersFor $ L.nub (typedTermType <$> pairs)
-    createModule g coders $ L.zip els pairs
+    createModule mod coders $ L.zip els pairs
   where
-    els = graphElements g
+    els = moduleElements mod
 
     codersFor types = do
       cdrs <- CM.mapM constructCoder types

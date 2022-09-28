@@ -11,17 +11,13 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 tinkerpopV3Module :: Module Meta
-tinkerpopV3Module = Module tinkerpopV3 [hydraCoreModule]
-
-tinkerpopV3Name :: GraphName
-tinkerpopV3Name = GraphName "hydra/ext/tinkerpop/v3"
-
-tinkerpopV3 :: Graph Meta
-tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
+tinkerpopV3Module = Module ns elements [hydraCoreModule]
   where
-    core = nsref hydraCoreName
-    v3 = nsref tinkerpopV3Name
-    def = datatype tinkerpopV3Name
+    ns = Namespace "hydra/ext/tinkerpop/v3"
+    core = nsref $ moduleNamespace hydraCoreModule
+    v3 = nsref ns
+    def = datatype ns
+
     elements = [
 
       def "Edge" $
@@ -37,7 +33,7 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
       def "EdgeLabel" $
         doc "The (required) label of an edge" $
         string,
-        
+
       def "Element" $
         doc "Either a vertex or an edge" $
         lambda "v" $ lambda "e" $ lambda "p" $
@@ -70,7 +66,7 @@ tinkerpopV3 = Graph tinkerpopV3Name elements hydraCoreName
           "label">: v3 "VertexLabel",
           "id">: "v",
           "properties">: Types.map (v3 "PropertyKey") "p"],
-          
+
       def "VertexLabel" $
         doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
         string]

@@ -45,10 +45,7 @@ boundedString min max = bounded min max Types.string
 
 coreContext :: Context Meta
 coreContext = bootstrapContext {
-  contextGraphs = GraphSet {
-    graphSetGraphs = M.fromList [(hydraCoreName, hydraCore)],
-    graphSetRoot = hydraCoreName},
-  contextElements = graphElementsMap hydraCore,
+  contextGraph = hydraCore,
   contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
 
 doc :: String -> Type Meta -> Type Meta
@@ -57,11 +54,8 @@ doc s = setTypeDescription coreContext (Just s)
 dataDoc :: String -> Term Meta -> Term Meta
 dataDoc s = setTermDescription coreContext (Just s)
 
-dataterm :: GraphName -> String -> Type Meta -> Term Meta -> Element Meta
+dataterm :: Namespace -> String -> Type Meta -> Term Meta -> Element Meta
 dataterm gname lname = termElement (qualify gname (Name lname))
-
-graph :: GraphName -> [Element Meta] -> Graph Meta
-graph gname elements = Graph gname elements (GraphName "hydra/core")
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList = boundedList (Just 1) Nothing
@@ -77,6 +71,9 @@ setMaxLength m = setTypeAnnotation coreContext key_maxSize (Just $ Terms.int32 m
 
 setMinLength :: Int -> Type Meta -> Type Meta
 setMinLength m = setTypeAnnotation coreContext key_minSize (Just $ Terms.int32 m)
+
+standardGraph :: [Element Meta] -> Graph Meta
+standardGraph = elementsToGraph (Just hydraCore)
 
 twoOrMoreList :: Type Meta -> Type Meta
 twoOrMoreList = boundedList (Just 2) Nothing

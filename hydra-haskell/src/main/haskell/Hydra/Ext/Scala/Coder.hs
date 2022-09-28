@@ -1,4 +1,4 @@
-module Hydra.Ext.Scala.Coder (printGraph) where
+module Hydra.Ext.Scala.Coder (printModule) where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -27,31 +27,31 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
-printGraph g = do
-  pkg <- moduleToScalaPackage g
+printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule mod = do
+  pkg <- moduleToScalaPackage mod
   let s = printExpr $ parenthesize $ writePkg pkg
-  return $ M.fromList [(graphNameToFilePath False (FileExtension "scala") $ graphName g, s)]
+  return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
 
-moduleToScalaPackage :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m Scala.Pkg
-moduleToScalaPackage = graphToExternalModule language encodeUntypedTerm constructModule
+moduleToScalaPackage :: (Ord m, Read m, Show m) => Module m -> GraphFlow m Scala.Pkg
+moduleToScalaPackage = transformModule language encodeUntypedTerm constructModule
 
-constructModule :: (Ord m, Show m) => Graph m -> M.Map (Type m) (Coder (Context m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
+constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Context m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> GraphFlow m Scala.Pkg
-constructModule g coders pairs = do
+constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
-    let pname = toScalaName $ h $ graphName g
+    let pname = toScalaName $ h $ moduleNamespace mod
     let pref = Scala.Data_RefName pname
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
-    h (GraphName n) = n
-    imports = (toElImport <$> S.toList (graphDependencies True False True g))
-        ++ (toPrimImport <$> S.toList (graphDependencies False True False g))
+    h (Namespace n) = n
+    imports = (toElImport <$> S.toList (moduleDependencyNamespaces True False True mod))
+        ++ (toPrimImport <$> S.toList (moduleDependencyNamespaces False True False mod))
       where
-        toElImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
-          Scala.Importer (Scala.Data_RefName $ toScalaName gname) [Scala.ImporteeWildcard]]
-        toPrimImport (GraphName gname) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
-          Scala.Importer (Scala.Data_RefName $ toScalaName gname) []]
+        toElImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+          Scala.Importer (Scala.Data_RefName $ toScalaName ns) [Scala.ImporteeWildcard]]
+        toPrimImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
+          Scala.Importer (Scala.Data_RefName $ toScalaName ns) []]
     toScalaName name = Scala.Data_Name $ Scala.PredefString $ L.intercalate "." $ Strings.splitOn "/" name
     toDef (el, TypedTerm typ term) = do
         let coder = Y.fromJust $ M.lookup typ coders

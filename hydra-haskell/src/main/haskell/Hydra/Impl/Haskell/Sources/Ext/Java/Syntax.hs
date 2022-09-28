@@ -13,16 +13,11 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 javaSyntaxModule :: Module Meta
-javaSyntaxModule = Module javaSyntax []
-
-javaSyntaxName :: GraphName
-javaSyntaxName = GraphName "hydra/ext/java/syntax"
-
-javaSyntax :: Graph Meta
-javaSyntax = Graph javaSyntaxName elements hydraCoreName
+javaSyntaxModule = Module ns elements []
   where
-    def = datatype javaSyntaxName
-    java = nsref javaSyntaxName
+    ns = Namespace "hydra/ext/java/syntax"
+    def = datatype ns
+    java = nsref ns
 
     elements = [
 

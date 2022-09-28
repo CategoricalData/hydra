@@ -7,6 +7,7 @@ import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting
 
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
 
 
@@ -51,14 +52,18 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-fromQname :: GraphName -> String -> Name
-fromQname (GraphName ns) local = Name $ ns ++ "." ++ local
+elementsToGraph :: Maybe (Graph m) -> [Element m] -> Graph m
+elementsToGraph msg els = Graph elementMap msg
+  where
+    elementMap = M.fromList (toPair <$> els)
+      where
+        toPair el = (elementName el, el)
 
-graphNameOf :: Name -> GraphName
-graphNameOf = fst . toQname
+fromQname :: Namespace -> String -> Name
+fromQname (Namespace ns) local = Name $ ns ++ "." ++ local
 
-graphNameToFilePath :: Bool -> FileExtension -> GraphName -> FilePath
-graphNameToFilePath caps (FileExtension ext) (GraphName name) = L.intercalate "/" parts ++ "." ++ ext
+namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
+namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/" parts ++ "." ++ ext
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
@@ -75,13 +80,16 @@ isType cx typ = case stripType typ of
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
+namespaceOf :: Name -> Namespace
+namespaceOf = fst . toQname
+
 placeholderName :: Name
 placeholderName = Name "Placeholder"
 
-toQname :: Name -> (GraphName, String)
+toQname :: Name -> (Namespace, String)
 toQname (Name name) = case Strings.splitOn "." name of
-  (ns:rest) -> (GraphName ns, L.intercalate "." rest)
-  _ -> (GraphName "UNKNOWN", name)
+  (ns:rest) -> (Namespace ns, L.intercalate "." rest)
+  _ -> (Namespace "UNKNOWN", name)
 
 skipAnnotations :: (a -> Maybe (Annotated a m)) -> a -> a
 skipAnnotations getAnn t = skip t

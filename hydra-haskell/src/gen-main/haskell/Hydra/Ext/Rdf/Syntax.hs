@@ -45,8 +45,10 @@ newtype Graph
 
 _Graph = (Core.Name "hydra/ext/rdf/syntax.Graph")
 
+-- An Internationalized Resource Identifier
 newtype Iri 
   = Iri {
+    -- An Internationalized Resource Identifier
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 

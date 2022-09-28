@@ -12,18 +12,13 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraAdapterModule :: Module Meta
-hydraAdapterModule = Module hydraAdapter [hydraEvaluationModule]
-
-hydraAdapterName :: GraphName
-hydraAdapterName = GraphName "hydra/adapter"
-
-hydraAdapter :: Graph Meta
-hydraAdapter = Graph hydraAdapterName elements hydraCoreName
+hydraAdapterModule = Module ns elements [hydraEvaluationModule]
   where
-    def = datatype hydraAdapterName
-    core = nsref hydraCoreName
-    adapter = nsref hydraAdapterName
-    evaluation = nsref hydraEvaluationName
+    ns = Namespace "hydra/adapter"
+    def = datatype ns
+    core = nsref $ moduleNamespace hydraCoreModule
+    adapter = nsref ns
+    evaluation = nsref $ moduleNamespace hydraEvaluationModule
 
     elements = [
       def "Adapter" $

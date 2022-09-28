@@ -72,6 +72,22 @@ _Comparison_equalTo = (FieldName "equalTo")
 
 _Comparison_greaterThan = (FieldName "greaterThan")
 
+-- A graph element, having a name, data term (value), and schema term (type)
+data Element m 
+  = Element {
+    elementName :: Name,
+    elementSchema :: (Term m),
+    elementData :: (Term m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Element = (Name "hydra/core.Element")
+
+_Element_name = (FieldName "name")
+
+_Element_schema = (FieldName "schema")
+
+_Element_data = (FieldName "data")
+
 -- A corresponding elimination for an introduction term
 data Elimination m 
   = EliminationElement 
@@ -227,6 +243,21 @@ _FunctionVariant_elimination = (FieldName "elimination")
 _FunctionVariant_lambda = (FieldName "lambda")
 
 _FunctionVariant_primitive = (FieldName "primitive")
+
+-- A graph, or set of named terms, together with its schema graph
+data Graph m 
+  = Graph {
+    -- All of the elements in the graph
+    graphElements :: (Map Name (Element m)),
+    -- The schema graph to this graph. If omitted, the graph is its own schema graph.
+    graphSchema :: (Maybe (Graph m))}
+  deriving (Eq, Ord, Read, Show)
+
+_Graph = (Name "hydra/core.Graph")
+
+_Graph_elements = (FieldName "elements")
+
+_Graph_schema = (FieldName "schema")
 
 -- An integer type
 data IntegerType 
