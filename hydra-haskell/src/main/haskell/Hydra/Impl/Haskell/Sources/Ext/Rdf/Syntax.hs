@@ -37,7 +37,9 @@ rdfSyntax = Graph rdfSyntaxName elements hydraCoreName
 
       def "Graph" $ set $ rdf "Triple",
 
-      def "Iri" string,
+      def "Iri" $
+        doc "An Internationalized Resource Identifier"
+        string,
 
       def "IriOrLiteral" $
         doc ("An IRI or a literal; " ++
