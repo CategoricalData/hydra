@@ -267,6 +267,11 @@ passUnion t@(TypeUnion rt) = do
     sfields = rowTypeFields rt
     nm = rowTypeTypeName rt
 
+simplifyApplication :: (Ord m, Read m, Show m) => TypeAdapter m
+simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
+  ad <- termAdapter lhs
+  return $ Adapter False t (adapterTarget ad) $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
+
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Ord m, Read m, Show m) => TypeAdapter m
@@ -290,6 +295,7 @@ termAdapter typ = do
         _ -> []
       else case typeVariant t of
         TypeVariantAnnotated -> [dropAnnotation]
+        TypeVariantApplication -> [simplifyApplication]
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
         TypeVariantNominal -> [dereferenceNominal]

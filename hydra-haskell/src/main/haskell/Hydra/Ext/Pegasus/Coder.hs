@@ -46,9 +46,11 @@ constructModule g coders pairs = do
   where
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     aliases = importAliasesForGraph g
-    toSchema (el, TypedTerm typ term) = if stripType typ == TypeNominal _Type
-      then decodeType term >>= typeToSchema el
-      else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ show typ
+    toSchema (el, TypedTerm typ term) = do
+      cx <- getState
+      if isType cx typ
+        then decodeType term >>= typeToSchema el
+        else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     typeToSchema el typ = do
       let qname = pdlNameForElement aliases False $ elementName el
       res <- encodeAdaptedType aliases typ
@@ -81,7 +83,9 @@ encodeTerm :: (Eq m, Ord m, Read m, Show m) => M.Map GraphName String -> Term m 
 encodeTerm aliases term = fail "not yet implemented"
 
 encodeType :: (Eq m, Show m) => M.Map GraphName String -> Type m -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
-encodeType aliases typ = case stripType typ of
+encodeType aliases typ = case typ of
+    TypeAnnotated (Annotated typ' _) -> encodeType aliases typ'
+    TypeElement et -> pure $ Left $ PDL.SchemaPrimitive PDL.PrimitiveTypeString
     TypeList lt -> Left . PDL.SchemaArray <$> encode lt
     TypeLiteral lt -> Left . PDL.SchemaPrimitive <$> case lt of
       LiteralTypeBinary -> pure PDL.PrimitiveTypeBytes
@@ -89,11 +93,11 @@ encodeType aliases typ = case stripType typ of
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure PDL.PrimitiveTypeFloat
         FloatTypeFloat64 -> pure PDL.PrimitiveTypeDouble
-        _ -> fail $ "unexpected floating-point type: " ++ show ft
+        _ -> unexpected "float32 or float64" ft
       LiteralTypeInteger it -> case it of
         IntegerTypeInt32 -> pure PDL.PrimitiveTypeInt
         IntegerTypeInt64 -> pure PDL.PrimitiveTypeLong
-        _ -> fail $ "unexpected integer type: " ++ show it
+        _ -> unexpected "int32 or int64" it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
@@ -109,7 +113,7 @@ encodeType aliases typ = case stripType typ of
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
       where
         isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType fields
-    _ -> fail $ "unexpected type: " ++ show typ
+    _ -> unexpected "PDL-supported type" typ
   where
     encode t = case stripType t of
       TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
