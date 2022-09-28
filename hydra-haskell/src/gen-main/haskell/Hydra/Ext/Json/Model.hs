@@ -1,10 +1,12 @@
+-- | A JSON syntax model. See the BNF at https://www.json.org
+
 module Hydra.Ext.Json.Model where
 
 import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- A JSON value
+-- | A JSON value
 data Value 
   = ValueArray [Value]
   | ValueBoolean Bool

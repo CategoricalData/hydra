@@ -1,3 +1,6 @@
+-- | A model for Avro schemas. Based on the Avro 1.11.1 specification:
+-- |   https://avro.apache.org/docs/1.11.1/specification)
+
 module Hydra.Ext.Avro.Schema where
 
 import qualified Hydra.Core as Core
@@ -16,9 +19,9 @@ _Array_items = (Core.FieldName "items")
 
 data Enum_ 
   = Enum_ {
-    -- a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)
+    -- | a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)
     enumSymbols :: [String],
-    -- A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn’t defined in the reader’s schema. The value provided here must be a JSON string that’s a member of the symbols array
+    -- | A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn’t defined in the reader’s schema. The value provided here must be a JSON string that’s a member of the symbols array
     enumDefault :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
@@ -30,17 +33,17 @@ _Enum_default = (Core.FieldName "default")
 
 data Field 
   = Field {
-    -- a JSON string providing the name of the field
+    -- | a JSON string providing the name of the field
     fieldName :: String,
-    -- a JSON string describing this field for users
+    -- | a JSON string describing this field for users
     fieldDoc :: (Maybe String),
-    -- a schema
+    -- | a schema
     fieldType :: Schema,
-    -- default value for this field, only used when reading instances that lack the field for schema evolution purposes
+    -- | default value for this field, only used when reading instances that lack the field for schema evolution purposes
     fieldDefault :: (Maybe Model.Value),
-    -- specifies how this field impacts sort ordering of this record
+    -- | specifies how this field impacts sort ordering of this record
     fieldOrder :: (Maybe Order),
-    -- a JSON array of strings, providing alternate names for this field
+    -- | a JSON array of strings, providing alternate names for this field
     fieldAliases :: (Maybe [String])}
   deriving (Eq, Ord, Read, Show)
 
@@ -60,7 +63,7 @@ _Field_aliases = (Core.FieldName "aliases")
 
 data Fixed 
   = Fixed {
-    -- an integer, specifying the number of bytes per value
+    -- | an integer, specifying the number of bytes per value
     fixedSize :: Int}
   deriving (Eq, Ord, Read, Show)
 
@@ -79,13 +82,13 @@ _Map_values = (Core.FieldName "values")
 
 data Named 
   = Named {
-    -- a string naming this schema
+    -- | a string naming this schema
     namedName :: String,
-    -- a string that qualifies the name
+    -- | a string that qualifies the name
     namedNamespace :: (Maybe String),
-    -- a JSON array of strings, providing alternate names for this schema
+    -- | a JSON array of strings, providing alternate names for this schema
     namedAliases :: (Maybe [String]),
-    -- a JSON string providing documentation to the user of this schema
+    -- | a JSON string providing documentation to the user of this schema
     namedDoc :: (Maybe String),
     namedType :: Named}
   deriving (Eq, Ord, Read, Show)
@@ -147,7 +150,7 @@ _Primitive_string = (Core.FieldName "string")
 
 data Record 
   = Record {
-    -- a JSON array, listing fields
+    -- | a JSON array, listing fields
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
 

@@ -1,3 +1,6 @@
+-- | A model for Coq core and extensions. Based on the Coq 8.15 grammar:
+-- |   https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary
+
 module Hydra.Ext.Coq.Syntax where
 
 import qualified Hydra.Core as Core
@@ -344,7 +347,7 @@ _IdentArg_ident = (Core.FieldName "ident")
 
 _IdentArg_term = (Core.FieldName "term")
 
--- Pattern match on boolean values
+-- | Pattern match on boolean values
 data If 
   = If {
     ifCondition :: Term,
@@ -363,7 +366,7 @@ _If_then = (Core.FieldName "then")
 
 _If_else = (Core.FieldName "else")
 
--- In the context of a function definition, these forms specify that name is an implicit argument.
+-- | In the context of a function definition, these forms specify that name is an implicit argument.
 data ImplicitBinders 
   = ImplicitBindersMaximallyInserted TypeBinders
   | ImplicitBindersNonMaximallyInserted TypeBinders
@@ -375,7 +378,7 @@ _ImplicitBinders_maximallyInserted = (Core.FieldName "maximallyInserted")
 
 _ImplicitBinders_nonMaximallyInserted = (Core.FieldName "nonMaximallyInserted")
 
--- A let-in definition
+-- | A let-in definition
 data Let 
   = Let {
     letBindings :: LetBindings,
@@ -388,7 +391,7 @@ _Let_bindings = (Core.FieldName "bindings")
 
 _Let_in = (Core.FieldName "in")
 
--- Some constructions allow the binding of a variable to value. This is called a “let-binder”.
+-- | Some constructions allow the binding of a variable to value. This is called a “let-binder”.
 data LetBinder 
   = LetBinder {
     letBinderName :: Name,
@@ -514,10 +517,10 @@ newtype Name
 
 _Name = (Core.Name "hydra/ext/coq/syntax.Name")
 
--- A non-negative arbitrary-precision integer
+-- | A non-negative arbitrary-precision integer
 newtype Natural 
   = Natural {
-    -- A non-negative arbitrary-precision integer
+    -- | A non-negative arbitrary-precision integer
     unNatural :: Integer}
   deriving (Eq, Ord, Read, Show)
 
@@ -683,7 +686,7 @@ _PrimitiveNotations_number = (Core.FieldName "number")
 
 _PrimitiveNotations_string = (Core.FieldName "string")
 
--- A qualified identifier
+-- | A qualified identifier
 data Qualid 
   = Qualid {
     qualidId :: Ident,
@@ -739,7 +742,7 @@ newtype ScopeKey
 
 _ScopeKey = (Core.Name "hydra/ext/coq/syntax.ScopeKey")
 
--- The types of types are called sorts.
+-- | The types of types are called sorts.
 data Sort 
   = SortSet 
   | SortProp 

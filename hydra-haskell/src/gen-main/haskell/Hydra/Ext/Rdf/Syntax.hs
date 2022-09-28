@@ -1,3 +1,5 @@
+-- | An RDF 1.1 syntax model
+
 module Hydra.Ext.Rdf.Syntax where
 
 import qualified Hydra.Core as Core
@@ -11,7 +13,7 @@ newtype BlankNode
 
 _BlankNode = (Core.Name "hydra/ext/rdf/syntax.BlankNode")
 
--- Stand-in for rdfs:Class
+-- | Stand-in for rdfs:Class
 data RdfsClass 
   = RdfsClass {}
   deriving (Eq, Ord, Read, Show)
@@ -25,7 +27,7 @@ newtype Dataset
 
 _Dataset = (Core.Name "hydra/ext/rdf/syntax.Dataset")
 
--- A graph of RDF statements together with a distinguished subject and/or object node
+-- | A graph of RDF statements together with a distinguished subject and/or object node
 data Description 
   = Description {
     descriptionSubject :: Node,
@@ -45,16 +47,16 @@ newtype Graph
 
 _Graph = (Core.Name "hydra/ext/rdf/syntax.Graph")
 
--- An Internationalized Resource Identifier
+-- | An Internationalized Resource Identifier
 newtype Iri 
   = Iri {
-    -- An Internationalized Resource Identifier
+    -- | An Internationalized Resource Identifier
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Iri = (Core.Name "hydra/ext/rdf/syntax.Iri")
 
--- An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes
+-- | An IRI or a literal; this type is a convenience for downstream models like SHACL which may exclude blank nodes
 data IriOrLiteral 
   = IriOrLiteralIri Iri
   | IriOrLiteralLiteral Literal
@@ -66,32 +68,32 @@ _IriOrLiteral_iri = (Core.FieldName "iri")
 
 _IriOrLiteral_literal = (Core.FieldName "literal")
 
--- A convenience type which provides at most one string value per language, and optionally a value without a language
+-- | A convenience type which provides at most one string value per language, and optionally a value without a language
 newtype LangStrings 
   = LangStrings {
-    -- A convenience type which provides at most one string value per language, and optionally a value without a language
+    -- | A convenience type which provides at most one string value per language, and optionally a value without a language
     unLangStrings :: (Map (Maybe LanguageTag) String)}
   deriving (Eq, Ord, Read, Show)
 
 _LangStrings = (Core.Name "hydra/ext/rdf/syntax.LangStrings")
 
--- A BCP47 language tag
+-- | A BCP47 language tag
 newtype LanguageTag 
   = LanguageTag {
-    -- A BCP47 language tag
+    -- | A BCP47 language tag
     unLanguageTag :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LanguageTag = (Core.Name "hydra/ext/rdf/syntax.LanguageTag")
 
--- A value such as a string, number, or date
+-- | A value such as a string, number, or date
 data Literal 
   = Literal {
-    -- a Unicode string, which should be in Normal Form C
+    -- | a Unicode string, which should be in Normal Form C
     literalLexicalForm :: String,
-    -- an IRI identifying a datatype that determines how the lexical form maps to a literal value
+    -- | an IRI identifying a datatype that determines how the lexical form maps to a literal value
     literalDatatypeIri :: Iri,
-    -- An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
+    -- | An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString
     literalLanguageTag :: (Maybe LanguageTag)}
   deriving (Eq, Ord, Read, Show)
 
@@ -117,12 +119,12 @@ _Node_bnode = (Core.FieldName "bnode")
 
 _Node_literal = (Core.FieldName "literal")
 
--- A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
+-- | A type representing an RDF property, and encapsulating its domain, range, and subclass relationships
 data Property 
   = Property {
-    -- State that any resource that has a given property is an instance of one or more classes
+    -- | State that any resource that has a given property is an instance of one or more classes
     propertyDomain :: (Set RdfsClass),
-    -- States that the values of a property are instances of one or more classes
+    -- | States that the values of a property are instances of one or more classes
     propertyRange :: (Set RdfsClass),
     propertySubPropertyOf :: (Set Property)}
   deriving (Eq, Ord, Read, Show)
@@ -135,7 +137,7 @@ _Property_range = (Core.FieldName "range")
 
 _Property_subPropertyOf = (Core.FieldName "subPropertyOf")
 
--- An RDF triple with an optional named graph component
+-- | An RDF triple with an optional named graph component
 data Quad 
   = Quad {
     quadSubject :: Resource,
@@ -165,7 +167,7 @@ _Resource_iri = (Core.FieldName "iri")
 
 _Resource_bnode = (Core.FieldName "bnode")
 
--- An RDF triple defined by a subject, predicate, and object
+-- | An RDF triple defined by a subject, predicate, and object
 data Triple 
   = Triple {
     tripleSubject :: Resource,

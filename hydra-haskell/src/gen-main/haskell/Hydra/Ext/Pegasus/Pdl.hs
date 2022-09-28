@@ -1,3 +1,6 @@
+-- | A model for PDL (Pegasus Data Language) schemas. Based on the specification at:
+-- |   https://linkedin.github.io/rest.li/pdl_schema
+
 module Hydra.Ext.Pegasus.Pdl where
 
 import qualified Hydra.Core as Core
@@ -5,7 +8,7 @@ import qualified Hydra.Ext.Json.Model as Model
 import Data.Map
 import Data.Set
 
--- Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
+-- | Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
 data Annotations 
   = Annotations {
     annotationsDoc :: (Maybe String),

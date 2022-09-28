@@ -1,3 +1,5 @@
+-- | Utilities for use in transformations
+
 module Hydra.Adapters.Utils where
 
 import qualified Hydra.Basics as Basics
@@ -7,19 +9,19 @@ import qualified Hydra.Lib.Strings as Strings
 import Data.Map
 import Data.Set
 
--- Display a floating-point type as a string
+-- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)
 describeFloatType t = (Strings.cat [
   (\x -> describePrecision (Basics.floatTypePrecision x)) t,
   " floating-point numbers"])
 
--- Display an integer type as a string
+-- | Display an integer type as a string
 describeIntegerType :: (Core.IntegerType -> String)
 describeIntegerType t = (Strings.cat [
   (\x -> describePrecision (Basics.integerTypePrecision x)) t,
   " integers"])
 
--- Display a literal type as a string
+-- | Display a literal type as a string
 describeLiteralType :: (Core.LiteralType -> String)
 describeLiteralType x = case x of
   Core.LiteralTypeBinary -> "binary strings"
@@ -28,7 +30,7 @@ describeLiteralType x = case x of
   Core.LiteralTypeInteger v -> (describeIntegerType v)
   Core.LiteralTypeString -> "character strings"
 
--- Display numeric precision as a string
+-- | Display numeric precision as a string
 describePrecision :: (Core.Precision -> String)
 describePrecision x = case x of
   Core.PrecisionArbitrary -> "arbitrary-precision"
@@ -36,7 +38,7 @@ describePrecision x = case x of
     Literals.showInt32 v,
     "-bit"])
 
--- Display a type as a string
+-- | Display a type as a string
 describeType :: (Core.Type m -> String)
 describeType typ = ((\x -> case x of
   Core.TypeAnnotated v -> (Strings.cat [

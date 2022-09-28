@@ -24,7 +24,7 @@ instance ToTree H.Alternative where
 
 instance ToTree H.CaseRhs where
   toTree (H.CaseRhs expr) = toTree expr
-  
+
 instance ToTree H.Constructor where
   toTree cons = case cons of
     H.ConstructorOrdinary (H.Constructor_Ordinary name types) -> spaceSep [
@@ -157,7 +157,11 @@ instance ToTree H.Name where
     H.NameParens qn -> "(" ++ writeQualifiedName qn ++ ")"
 
 instance ToTree H.ModuleHead where
-  toTree (H.ModuleHead (H.ModuleName mname) _) = spaceSep [cst "module", cst mname, cst "where"]
+  toTree (H.ModuleHead mc (H.ModuleName mname) _) = case mc of
+    Nothing -> head
+    Just c -> newlineSep [cst $ toHaskellComments c, cst "", head]
+    where
+      head = spaceSep [cst "module", cst mname, cst "where"]
 
 instance ToTree H.Pattern where
   toTree pat = case pat of
@@ -180,7 +184,7 @@ instance ToTree H.RightHandSide where
 
 instance ToTree H.Statement where
   toTree (H.Statement expr) = toTree expr
-  
+
 instance ToTree H.Type where
   toTree htype = case htype of
     H.TypeApplication (H.Type_Application lhs rhs) -> ifx appOp (toTree lhs) (toTree rhs)
@@ -199,7 +203,7 @@ instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
 
 toHaskellComments :: String -> [Char]
-toHaskellComments c = L.intercalate "\n" $ ("-- " ++) <$> L.lines c
+toHaskellComments c = L.intercalate "\n" $ ("-- | " ++) <$> L.lines c
 
 writeQualifiedName :: H.QualifiedName -> String
 writeQualifiedName (H.QualifiedName qualifiers unqual) = L.intercalate "." $ (h <$> qualifiers) ++ [h unqual]

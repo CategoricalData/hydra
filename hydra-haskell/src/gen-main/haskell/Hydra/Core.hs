@@ -1,3 +1,5 @@
+-- | Hydra's core data model, defining the structure of types and terms
+
 module Hydra.Core where
 
 import Data.Map
@@ -15,12 +17,12 @@ _Annotated_subject = (FieldName "subject")
 
 _Annotated_annotation = (FieldName "annotation")
 
--- A term which applies a function to an argument
+-- | A term which applies a function to an argument
 data Application m 
   = Application {
-    -- The left-hand side of the application
+    -- | The left-hand side of the application
     applicationFunction :: (Term m),
-    -- The right-hand side of the application
+    -- | The right-hand side of the application
     applicationArgument :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -30,12 +32,12 @@ _Application_function = (FieldName "function")
 
 _Application_argument = (FieldName "argument")
 
--- The type-level analog of an application term
+-- | The type-level analog of an application term
 data ApplicationType m 
   = ApplicationType {
-    -- The left-hand side of the application
+    -- | The left-hand side of the application
     applicationTypeFunction :: (Type m),
-    -- The right-hand side of the application
+    -- | The right-hand side of the application
     applicationTypeArgument :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -57,7 +59,7 @@ _CaseStatement_typeName = (FieldName "typeName")
 
 _CaseStatement_cases = (FieldName "cases")
 
--- An equality judgement: less than, equal to, or greater than
+-- | An equality judgement: less than, equal to, or greater than
 data Comparison 
   = ComparisonLessThan 
   | ComparisonEqualTo 
@@ -72,7 +74,7 @@ _Comparison_equalTo = (FieldName "equalTo")
 
 _Comparison_greaterThan = (FieldName "greaterThan")
 
--- A corresponding elimination for an introduction term
+-- | A corresponding elimination for an introduction term
 data Elimination m 
   = EliminationElement 
   | EliminationNominal Name
@@ -93,7 +95,7 @@ _Elimination_record = (FieldName "record")
 
 _Elimination_union = (FieldName "union")
 
--- The identifier of an elimination constructor
+-- | The identifier of an elimination constructor
 data EliminationVariant 
   = EliminationVariantElement 
   | EliminationVariantNominal 
@@ -114,7 +116,7 @@ _EliminationVariant_record = (FieldName "record")
 
 _EliminationVariant_union = (FieldName "union")
 
--- A labeled term
+-- | A labeled term
 data Field m 
   = Field {
     fieldName :: FieldName,
@@ -127,16 +129,16 @@ _Field_name = (FieldName "name")
 
 _Field_term = (FieldName "term")
 
--- The name of a field
+-- | The name of a field
 newtype FieldName 
   = FieldName {
-    -- The name of a field
+    -- | The name of a field
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = (Name "hydra/core.FieldName")
 
--- The name and type of a field
+-- | The name and type of a field
 data FieldType m 
   = FieldType {
     fieldTypeName :: FieldName,
@@ -149,7 +151,7 @@ _FieldType_name = (FieldName "name")
 
 _FieldType_type = (FieldName "type")
 
--- A floating-point type
+-- | A floating-point type
 data FloatType 
   = FloatTypeBigfloat 
   | FloatTypeFloat32 
@@ -164,7 +166,7 @@ _FloatType_float32 = (FieldName "float32")
 
 _FloatType_float64 = (FieldName "float64")
 
--- A floating-point literal value
+-- | A floating-point literal value
 data FloatValue 
   = FloatValueBigfloat Double
   | FloatValueFloat32 Float
@@ -179,7 +181,7 @@ _FloatValue_float32 = (FieldName "float32")
 
 _FloatValue_float64 = (FieldName "float64")
 
--- A function
+-- | A function
 data Function m 
   = FunctionCompareTo (Term m)
   | FunctionElimination (Elimination m)
@@ -197,7 +199,7 @@ _Function_lambda = (FieldName "lambda")
 
 _Function_primitive = (FieldName "primitive")
 
--- A function type, also known as an arrow type
+-- | A function type, also known as an arrow type
 data FunctionType m 
   = FunctionType {
     functionTypeDomain :: (Type m),
@@ -210,7 +212,7 @@ _FunctionType_domain = (FieldName "domain")
 
 _FunctionType_codomain = (FieldName "codomain")
 
--- The identifier of a function constructor
+-- | The identifier of a function constructor
 data FunctionVariant 
   = FunctionVariantCompareTo 
   | FunctionVariantElimination 
@@ -228,7 +230,7 @@ _FunctionVariant_lambda = (FieldName "lambda")
 
 _FunctionVariant_primitive = (FieldName "primitive")
 
--- An integer type
+-- | An integer type
 data IntegerType 
   = IntegerTypeBigint 
   | IntegerTypeInt8 
@@ -261,7 +263,7 @@ _IntegerType_uint32 = (FieldName "uint32")
 
 _IntegerType_uint64 = (FieldName "uint64")
 
--- An integer literal value
+-- | An integer literal value
 data IntegerValue 
   = IntegerValueBigint Integer
   | IntegerValueInt8 Int
@@ -294,12 +296,12 @@ _IntegerValue_uint32 = (FieldName "uint32")
 
 _IntegerValue_uint64 = (FieldName "uint64")
 
--- A function abstraction (lambda)
+-- | A function abstraction (lambda)
 data Lambda m 
   = Lambda {
-    -- The parameter of the lambda
+    -- | The parameter of the lambda
     lambdaParameter :: Variable,
-    -- The body of the lambda
+    -- | The body of the lambda
     lambdaBody :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -309,12 +311,12 @@ _Lambda_parameter = (FieldName "parameter")
 
 _Lambda_body = (FieldName "body")
 
--- A type abstraction; the type-level analog of a lambda term
+-- | A type abstraction; the type-level analog of a lambda term
 data LambdaType m 
   = LambdaType {
-    -- The parameter of the lambda
+    -- | The parameter of the lambda
     lambdaTypeParameter :: VariableType,
-    -- The body of the lambda
+    -- | The body of the lambda
     lambdaTypeBody :: (Type m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -324,7 +326,7 @@ _LambdaType_parameter = (FieldName "parameter")
 
 _LambdaType_body = (FieldName "body")
 
--- A 'let' binding
+-- | A 'let' binding
 data Let m 
   = Let {
     letKey :: Variable,
@@ -340,7 +342,7 @@ _Let_value = (FieldName "value")
 
 _Let_environment = (FieldName "environment")
 
--- A term constant; an instance of a literal type
+-- | A term constant; an instance of a literal type
 data Literal 
   = LiteralBinary String
   | LiteralBoolean Bool
@@ -361,7 +363,7 @@ _Literal_integer = (FieldName "integer")
 
 _Literal_string = (FieldName "string")
 
--- Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
+-- | Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
 data LiteralType 
   = LiteralTypeBinary 
   | LiteralTypeBoolean 
@@ -382,7 +384,7 @@ _LiteralType_integer = (FieldName "integer")
 
 _LiteralType_string = (FieldName "string")
 
--- The identifier of a literal constructor
+-- | The identifier of a literal constructor
 data LiteralVariant 
   = LiteralVariantBinary 
   | LiteralVariantBoolean 
@@ -403,7 +405,7 @@ _LiteralVariant_integer = (FieldName "integer")
 
 _LiteralVariant_string = (FieldName "string")
 
--- A map type
+-- | A map type
 data MapType m 
   = MapType {
     mapTypeKeys :: (Type m),
@@ -416,10 +418,10 @@ _MapType_keys = (FieldName "keys")
 
 _MapType_values = (FieldName "values")
 
--- A built-in metadata container for terms
+-- | A built-in metadata container for terms
 data Meta 
   = Meta {
-    -- A map of annotation names to annotation values
+    -- | A map of annotation names to annotation values
     metaAnnotations :: (Map String (Term Meta))}
   deriving (Eq, Ord, Read, Show)
 
@@ -427,16 +429,16 @@ _Meta = (Name "hydra/core.Meta")
 
 _Meta_annotations = (FieldName "annotations")
 
--- A unique element name
+-- | A unique element name
 newtype Name 
   = Name {
-    -- A unique element name
+    -- | A unique element name
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Name "hydra/core.Name")
 
--- A term annotated with a fixed, named type; an instance of a newtype
+-- | A term annotated with a fixed, named type; an instance of a newtype
 data Named m 
   = Named {
     namedTypeName :: Name,
@@ -449,12 +451,12 @@ _Named_typeName = (FieldName "typeName")
 
 _Named_term = (FieldName "term")
 
--- A case statement for matching optional terms
+-- | A case statement for matching optional terms
 data OptionalCases m 
   = OptionalCases {
-    -- A term provided if the optional value is nothing
+    -- | A term provided if the optional value is nothing
     optionalCasesNothing :: (Term m),
-    -- A function which is applied of the optional value is non-nothing
+    -- | A function which is applied of the optional value is non-nothing
     optionalCasesJust :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -464,7 +466,7 @@ _OptionalCases_nothing = (FieldName "nothing")
 
 _OptionalCases_just = (FieldName "just")
 
--- Numeric precision: arbitrary precision, or precision to a specified number of bits
+-- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision 
   = PrecisionArbitrary 
   | PrecisionBits Int
@@ -488,7 +490,7 @@ _Projection_typeName = (FieldName "typeName")
 
 _Projection_field = (FieldName "field")
 
--- A record, or labeled tuple; a map of field names to terms
+-- | A record, or labeled tuple; a map of field names to terms
 data Record m 
   = Record {
     recordTypeName :: Name,
@@ -501,7 +503,7 @@ _Record_typeName = (FieldName "typeName")
 
 _Record_fields = (FieldName "fields")
 
--- A labeled record or union type
+-- | A labeled record or union type
 data RowType m 
   = RowType {
     rowTypeTypeName :: Name,
@@ -514,7 +516,7 @@ _RowType_typeName = (FieldName "typeName")
 
 _RowType_fields = (FieldName "fields")
 
--- A data term
+-- | A data term
 data Term m 
   = TermAnnotated (Annotated (Term m) m)
   | TermApplication (Application m)
@@ -562,7 +564,7 @@ _Term_union = (FieldName "union")
 
 _Term_variable = (FieldName "variable")
 
--- The identifier of a term expression constructor
+-- | The identifier of a term expression constructor
 data TermVariant 
   = TermVariantAnnotated 
   | TermVariantApplication 
@@ -610,7 +612,7 @@ _TermVariant_union = (FieldName "union")
 
 _TermVariant_variable = (FieldName "variable")
 
--- A data type
+-- | A data type
 data Type m 
   = TypeAnnotated (Annotated (Type m) m)
   | TypeApplication (ApplicationType m)
@@ -658,7 +660,7 @@ _Type_union = (FieldName "union")
 
 _Type_variable = (FieldName "variable")
 
--- A type expression together with free type variables occurring in the expression
+-- | A type expression together with free type variables occurring in the expression
 data TypeScheme m 
   = TypeScheme {
     typeSchemeVariables :: [VariableType],
@@ -671,7 +673,7 @@ _TypeScheme_variables = (FieldName "variables")
 
 _TypeScheme_type = (FieldName "type")
 
--- The identifier of a type constructor
+-- | The identifier of a type constructor
 data TypeVariant 
   = TypeVariantAnnotated 
   | TypeVariantApplication 
@@ -719,7 +721,7 @@ _TypeVariant_union = (FieldName "union")
 
 _TypeVariant_variable = (FieldName "variable")
 
--- A type together with an instance of the type
+-- | A type together with an instance of the type
 data TypedTerm m 
   = TypedTerm {
     typedTermType :: (Type m),
@@ -732,25 +734,25 @@ _TypedTerm_type = (FieldName "type")
 
 _TypedTerm_term = (FieldName "term")
 
--- A symbol which stands in for a term
+-- | A symbol which stands in for a term
 newtype Variable 
   = Variable {
-    -- A symbol which stands in for a term
+    -- | A symbol which stands in for a term
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Variable = (Name "hydra/core.Variable")
 
--- A symbol which stands in for a type
+-- | A symbol which stands in for a type
 newtype VariableType 
   = VariableType {
-    -- A symbol which stands in for a type
+    -- | A symbol which stands in for a type
     unVariableType :: String}
   deriving (Eq, Ord, Read, Show)
 
 _VariableType = (Name "hydra/core.VariableType")
 
--- An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
+-- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 data Union m 
   = Union {
     unionTypeName :: Name,

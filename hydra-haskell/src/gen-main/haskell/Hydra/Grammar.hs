@@ -1,3 +1,5 @@
+-- | A common API for BNF-based grammars
+
 module Hydra.Grammar where
 
 import qualified Hydra.Core as Core

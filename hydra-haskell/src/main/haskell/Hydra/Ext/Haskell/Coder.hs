@@ -57,7 +57,8 @@ constructModule :: (Ord m, Read m, Show m)
 constructModule mod coders pairs = do
     cx <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations cx) pairs
-    return $ H.Module (Just $ H.ModuleHead (importName $ h $ moduleNamespace mod) []) imports decls
+    let mc = moduleDescription mod
+    return $ H.Module (Just $ H.ModuleHead mc (importName $ h $ moduleNamespace mod) []) imports decls
   where
     h (Namespace name) = name
 

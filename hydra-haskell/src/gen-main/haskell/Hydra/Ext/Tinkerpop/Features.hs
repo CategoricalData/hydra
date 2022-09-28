@@ -1,47 +1,55 @@
+-- | A model derived from TinkerPop's Graph.Features. See
+-- |   https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html
+-- | 
+-- | An interface that represents the capabilities of a Graph implementation.
+-- | By default all methods of features return true and it is up to implementers to disable feature they don't support.
+-- | Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.
+-- | For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
+
 module Hydra.Ext.Tinkerpop.Features where
 
 import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- Base interface for features that relate to supporting different data types.
+-- | Base interface for features that relate to supporting different data types.
 data DataTypeFeatures 
   = DataTypeFeatures {
-    -- Supports setting of an array of boolean values.
+    -- | Supports setting of an array of boolean values.
     dataTypeFeaturesSupportsBooleanArrayValues :: Bool,
-    -- Supports setting of a boolean value.
+    -- | Supports setting of a boolean value.
     dataTypeFeaturesSupportsBooleanValues :: Bool,
-    -- Supports setting of an array of byte values.
+    -- | Supports setting of an array of byte values.
     dataTypeFeaturesSupportsByteArrayValues :: Bool,
-    -- Supports setting of a byte value.
+    -- | Supports setting of a byte value.
     dataTypeFeaturesSupportsByteValues :: Bool,
-    -- Supports setting of an array of double values.
+    -- | Supports setting of an array of double values.
     dataTypeFeaturesSupportsDoubleArrayValues :: Bool,
-    -- Supports setting of a double value.
+    -- | Supports setting of a double value.
     dataTypeFeaturesSupportsDoubleValues :: Bool,
-    -- Supports setting of an array of float values.
+    -- | Supports setting of an array of float values.
     dataTypeFeaturesSupportsFloatArrayValues :: Bool,
-    -- Supports setting of a float value.
+    -- | Supports setting of a float value.
     dataTypeFeaturesSupportsFloatValues :: Bool,
-    -- Supports setting of an array of integer values.
+    -- | Supports setting of an array of integer values.
     dataTypeFeaturesSupportsIntegerArrayValues :: Bool,
-    -- Supports setting of a integer value.
+    -- | Supports setting of a integer value.
     dataTypeFeaturesSupportsIntegerValues :: Bool,
-    -- Supports setting of an array of long values.
+    -- | Supports setting of an array of long values.
     dataTypeFeaturesSupportsLongArrayValues :: Bool,
-    -- Supports setting of a long value.
+    -- | Supports setting of a long value.
     dataTypeFeaturesSupportsLongValues :: Bool,
-    -- Supports setting of a Map value.
+    -- | Supports setting of a Map value.
     dataTypeFeaturesSupportsMapValues :: Bool,
-    -- Supports setting of a List value.
+    -- | Supports setting of a List value.
     dataTypeFeaturesSupportsMixedListValues :: Bool,
-    -- Supports setting of a Java serializable value.
+    -- | Supports setting of a Java serializable value.
     dataTypeFeaturesSupportsSerializableValues :: Bool,
-    -- Supports setting of an array of string values.
+    -- | Supports setting of an array of string values.
     dataTypeFeaturesSupportsStringArrayValues :: Bool,
-    -- Supports setting of a string value.
+    -- | Supports setting of a string value.
     dataTypeFeaturesSupportsStringValues :: Bool,
-    -- Supports setting of a List value.
+    -- | Supports setting of a List value.
     dataTypeFeaturesSupportsUniformListValues :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -83,16 +91,16 @@ _DataTypeFeatures_supportsStringValues = (Core.FieldName "supportsStringValues")
 
 _DataTypeFeatures_supportsUniformListValues = (Core.FieldName "supportsUniformListValues")
 
--- Features that are related to Edge operations.
+-- | Features that are related to Edge operations.
 data EdgeFeatures 
   = EdgeFeatures {
     edgeFeaturesElementFeatures :: ElementFeatures,
     edgeFeaturesProperties :: EdgePropertyFeatures,
-    -- Determines if an Edge can be added to a Vertex.
+    -- | Determines if an Edge can be added to a Vertex.
     edgeFeaturesSupportsAddEdges :: Bool,
-    -- Determines if an Edge can be removed from a Vertex.
+    -- | Determines if an Edge can be removed from a Vertex.
     edgeFeaturesSupportsRemoveEdges :: Bool,
-    -- Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...).
+    -- | Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...).
     edgeFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -108,7 +116,7 @@ _EdgeFeatures_supportsRemoveEdges = (Core.FieldName "supportsRemoveEdges")
 
 _EdgeFeatures_supportsUpsert = (Core.FieldName "supportsUpsert")
 
--- Features that are related to Edge Property objects.
+-- | Features that are related to Edge Property objects.
 data EdgePropertyFeatures 
   = EdgePropertyFeatures {
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
@@ -118,24 +126,24 @@ _EdgePropertyFeatures = (Core.Name "hydra/ext/tinkerpop/features.EdgePropertyFea
 
 _EdgePropertyFeatures_propertyFeatures = (Core.FieldName "propertyFeatures")
 
--- Features that are related to Element objects.
+-- | Features that are related to Element objects.
 data ElementFeatures 
   = ElementFeatures {
-    -- Determines if an Element allows properties to be added.
+    -- | Determines if an Element allows properties to be added.
     elementFeaturesSupportsAddProperty :: Bool,
-    -- Determines if an Element any Java object is a suitable identifier.
+    -- | Determines if an Element any Java object is a suitable identifier.
     elementFeaturesSupportsAnyIds :: Bool,
-    -- Determines if an Element has a specific custom object as their internal representation.
+    -- | Determines if an Element has a specific custom object as their internal representation.
     elementFeaturesSupportsCustomIds :: Bool,
-    -- Determines if an Element has numeric identifiers as their internal representation.
+    -- | Determines if an Element has numeric identifiers as their internal representation.
     elementFeaturesSupportsNumericIds :: Bool,
-    -- Determines if an Element allows properties to be removed.
+    -- | Determines if an Element allows properties to be removed.
     elementFeaturesSupportsRemoveProperty :: Bool,
-    -- Determines if an Element has string identifiers as their internal representation.
+    -- | Determines if an Element has string identifiers as their internal representation.
     elementFeaturesSupportsStringIds :: Bool,
-    -- Determines if an Element can have a user defined identifier.
+    -- | Determines if an Element can have a user defined identifier.
     elementFeaturesSupportsUserSuppliedIds :: Bool,
-    -- Determines if an Element has UUID identifiers as their internal representation.
+    -- | Determines if an Element has UUID identifiers as their internal representation.
     elementFeaturesSupportsUuidIds :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -157,7 +165,7 @@ _ElementFeatures_supportsUserSuppliedIds = (Core.FieldName "supportsUserSupplied
 
 _ElementFeatures_supportsUuidIds = (Core.FieldName "supportsUuidIds")
 
--- Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
+-- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures m 
   = ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type m -> Bool)}
@@ -166,16 +174,16 @@ _ExtraFeatures = (Core.Name "hydra/ext/tinkerpop/features.ExtraFeatures")
 
 _ExtraFeatures_supportsMapKey = (Core.FieldName "supportsMapKey")
 
--- An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
--- 
--- As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
+-- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
+-- | 
+-- | As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
 data Features 
   = Features {
-    -- Gets the features related to edge operation.
+    -- | Gets the features related to edge operation.
     featuresEdge :: EdgeFeatures,
-    -- Gets the features related to graph operation.
+    -- | Gets the features related to graph operation.
     featuresGraph :: GraphFeatures,
-    -- Gets the features related to vertex operation.
+    -- | Gets the features related to vertex operation.
     featuresVertex :: VertexFeatures}
   deriving (Eq, Ord, Read, Show)
 
@@ -187,24 +195,24 @@ _Features_graph = (Core.FieldName "graph")
 
 _Features_vertex = (Core.FieldName "vertex")
 
--- Features specific to a operations of a graph.
+-- | Features specific to a operations of a graph.
 data GraphFeatures 
   = GraphFeatures {
-    -- Determines if the Graph implementation supports GraphComputer based processing.
+    -- | Determines if the Graph implementation supports GraphComputer based processing.
     graphFeaturesSupportsComputer :: Bool,
-    -- Determines if the Graph implementation supports more than one connection to the same instance at the same time.
+    -- | Determines if the Graph implementation supports more than one connection to the same instance at the same time.
     graphFeaturesSupportsConcurrentAccess :: Bool,
-    -- Determines if the Graph implementations supports read operations as executed with the GraphTraversalSource.io(String) step.
+    -- | Determines if the Graph implementations supports read operations as executed with the GraphTraversalSource.io(String) step.
     graphFeaturesSupportsIoRead :: Bool,
-    -- Determines if the Graph implementations supports write operations as executed with the GraphTraversalSource.io(String) step.
+    -- | Determines if the Graph implementations supports write operations as executed with the GraphTraversalSource.io(String) step.
     graphFeaturesSupportsIoWrite :: Bool,
-    -- Determines if the Graph implementation supports persisting it's contents natively to disk.
+    -- | Determines if the Graph implementation supports persisting it's contents natively to disk.
     graphFeaturesSupportsPersistence :: Bool,
-    -- Determines if the Graph implementation supports threaded transactions which allow a transaction to be executed across multiple threads via Transaction.createThreadedTx().
+    -- | Determines if the Graph implementation supports threaded transactions which allow a transaction to be executed across multiple threads via Transaction.createThreadedTx().
     graphFeaturesSupportsThreadedTransactions :: Bool,
-    -- Determines if the Graph implementations supports transactions.
+    -- | Determines if the Graph implementations supports transactions.
     graphFeaturesSupportsTransactions :: Bool,
-    -- Gets the features related to graph sideEffects operation.
+    -- | Gets the features related to graph sideEffects operation.
     graphFeaturesVariables :: VariableFeatures}
   deriving (Eq, Ord, Read, Show)
 
@@ -226,11 +234,11 @@ _GraphFeatures_supportsTransactions = (Core.FieldName "supportsTransactions")
 
 _GraphFeatures_variables = (Core.FieldName "variables")
 
--- A base interface for Edge or Vertex Property features.
+-- | A base interface for Edge or Vertex Property features.
 data PropertyFeatures 
   = PropertyFeatures {
     propertyFeaturesDataTypeFeatures :: DataTypeFeatures,
-    -- Determines if an Element allows for the processing of at least one data type defined by the features.
+    -- | Determines if an Element allows for the processing of at least one data type defined by the features.
     propertyFeaturesSupportsProperties :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -240,11 +248,11 @@ _PropertyFeatures_dataTypeFeatures = (Core.FieldName "dataTypeFeatures")
 
 _PropertyFeatures_supportsProperties = (Core.FieldName "supportsProperties")
 
--- Features for Graph.Variables.
+-- | Features for Graph.Variables.
 data VariableFeatures 
   = VariableFeatures {
     variableFeaturesDataTypeFeatures :: DataTypeFeatures,
-    -- If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
+    -- | If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
     variableFeaturesSupportsVariables :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -254,22 +262,22 @@ _VariableFeatures_dataTypeFeatures = (Core.FieldName "dataTypeFeatures")
 
 _VariableFeatures_supportsVariables = (Core.FieldName "supportsVariables")
 
--- Features that are related to Vertex operations.
+-- | Features that are related to Vertex operations.
 data VertexFeatures 
   = VertexFeatures {
     vertexFeaturesElementFeatures :: ElementFeatures,
     vertexFeaturesProperties :: VertexPropertyFeatures,
-    -- Determines if a Vertex can be added to the Graph.
+    -- | Determines if a Vertex can be added to the Graph.
     vertexFeaturesSupportsAddVertices :: Bool,
-    -- Determines if a Vertex can support non-unique values on the same key.
+    -- | Determines if a Vertex can support non-unique values on the same key.
     vertexFeaturesSupportsDuplicateMultiProperties :: Bool,
-    -- Determines if a Vertex can support properties on vertex properties.
+    -- | Determines if a Vertex can support properties on vertex properties.
     vertexFeaturesSupportsMetaProperties :: Bool,
-    -- Determines if a Vertex can support multiple properties with the same key.
+    -- | Determines if a Vertex can support multiple properties with the same key.
     vertexFeaturesSupportsMultiProperties :: Bool,
-    -- Determines if a Vertex can be removed from the Graph.
+    -- | Determines if a Vertex can be removed from the Graph.
     vertexFeaturesSupportsRemoveVertices :: Bool,
-    -- Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Graph.addVertex(String).
+    -- | Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Graph.addVertex(String).
     vertexFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
@@ -291,13 +299,13 @@ _VertexFeatures_supportsRemoveVertices = (Core.FieldName "supportsRemoveVertices
 
 _VertexFeatures_supportsUpsert = (Core.FieldName "supportsUpsert")
 
--- Features that are related to Vertex Property objects.
+-- | Features that are related to Vertex Property objects.
 data VertexPropertyFeatures 
   = VertexPropertyFeatures {
     vertexPropertyFeaturesDataTypeFeatures :: DataTypeFeatures,
     vertexPropertyFeaturesPropertyFeatures :: PropertyFeatures,
     vertexPropertyFeaturesElementFeatures :: ElementFeatures,
-    -- Determines if a VertexProperty allows properties to be removed.
+    -- | Determines if a VertexProperty allows properties to be removed.
     vertexPropertyFeaturesSupportsRemove :: Bool}
   deriving (Eq, Ord, Read, Show)
 

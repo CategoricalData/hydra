@@ -285,6 +285,7 @@ haskellAstModule = Module ns elements [] $
       def "ModuleHead" $ -- UModuleHead
         -- omitted for now: pragma
         record [
+          "comments">: optional string,
           "name">: ast "ModuleName",
           "exports">: list $ ast "Export"], -- UExportSpecs
 
