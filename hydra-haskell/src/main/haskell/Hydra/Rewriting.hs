@@ -48,12 +48,12 @@ freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
       TypeVariable v -> S.insert v vars
       _ -> vars
 
-graphDependencies :: Bool -> Bool -> Bool -> Graph m -> S.Set GraphName
-graphDependencies withEls withPrims withNoms g = S.delete (graphName g) graphNames
+moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Module m -> S.Set Namespace
+moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
   where
-    graphNames = S.fromList (graphNameOf <$> S.toList elNames)
+    names = S.fromList (namespaceOf <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
-      (elementData <$> graphElements g) ++ (elementSchema <$> graphElements g)
+      (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
 
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term

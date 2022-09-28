@@ -1,8 +1,14 @@
 package hydra.ext.rdf.syntax;
 
+/**
+ * An Internationalized Resource Identifier
+ */
 public class Iri {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/rdf/syntax.Iri");
   
+  /**
+   * An Internationalized Resource Identifier
+   */
   public final String value;
   
   public Iri (String value) {

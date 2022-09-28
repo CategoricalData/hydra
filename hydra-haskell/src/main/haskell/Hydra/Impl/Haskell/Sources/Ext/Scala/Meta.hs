@@ -9,16 +9,11 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 scalaMetaModule :: Module Meta
-scalaMetaModule = Module scalaMeta []
-
-scalaMetaName :: GraphName
-scalaMetaName = GraphName "hydra/ext/scala/meta"
-
-scalaMeta :: Graph Meta
-scalaMeta = Graph scalaMetaName elements hydraCoreName
+scalaMetaModule = Module ns elements []
   where
-    def = datatype scalaMetaName
-    meta = nsref scalaMetaName
+    ns = Namespace "hydra/ext/scala/meta"
+    def = datatype ns
+    meta = nsref ns
 
     elements = [
 

@@ -11,54 +11,28 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraGraphModule :: Module Meta
-hydraGraphModule = Module hydraGraph [hydraCoreModule]
-
--- Note: here, the element namespace doubles as a graph name
-hydraGraphName :: GraphName
-hydraGraphName = GraphName "hydra/graph"
-
-hydraGraph :: Graph Meta
-hydraGraph = Graph hydraGraphName elements hydraCoreName
+hydraGraphModule = Module ns elements [hydraCoreModule]
   where
-    core = nsref hydraCoreName
-    graph = nsref hydraGraphName
-    def = datatype hydraGraphName
-    
+    ns = Namespace "hydra/graph"
+    core = nsref $ moduleNamespace hydraCoreModule
+    graph = nsref ns
+    def = datatype ns
+
     elements = [
 
-      def "Element" $
-        doc "A graph element, having a name, data term (value), and schema term (type)" $
+      def "Module" $
+        doc "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
         lambda "m" $ record [
-          "name">: core "Name",
-          "schema">: core "Term" @@ "m",
-          "data">: core "Term" @@ "m"],
-
-      def "Graph" $
-        doc ("A graph, or set of legal terms combined with a set of elements over those terms, as well as another graph,"
-          ++ " called the schema graph") $
-        lambda "m" $ record [
-          "name">: 
-            doc "The unique (within a given graph set) name of the graph" $
-            graph "GraphName",
+          "namespace">:
+            doc "A common prefix for all element names in the module" $
+            graph "Namespace",
           "elements">:
-            doc "All of the elements in the graph" $
-            list $ graph "Element" @@ "m",
-          "schemaGraph">:
-            doc "A reference to this graph's schema graph within the provided graph set" $
-            graph "GraphName"],
+            doc "The elements defined in this module" $
+            list $ core "Element" @@ "m",
+          "dependencies">:
+            doc "Any additional modules this one has a direct dependency upon" $
+            list $ graph "Module" @@ "m"],
 
-      def "GraphName" $
-        doc "A unique identifier for a graph within a graph set"
-        string,
-
-      def "GraphSet" $
-        doc "A collection of graphs with a distinguished root graph" $
-        lambda "m" $ record [
-          "graphs">: Types.map (graph "GraphName") (graph "Graph" @@ "m"),
-          "root">: graph "GraphName"],
-
-     def "Module" $
-       doc "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
-       lambda "m" $ record [
-         "graph">: graph "Graph" @@ "m",
-         "imports">: list $ graph "Module" @@ "m"]]
+      def "Namespace" $
+        doc "A prefix for element names"
+        string]

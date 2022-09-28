@@ -11,29 +11,24 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraPhantomsModule :: Module Meta
-hydraPhantomsModule = Module hydraPhantoms [hydraCoreModule]
-
-hydraPhantomsName :: GraphName
-hydraPhantomsName = GraphName "hydra/phantoms"
-
-hydraPhantoms :: Graph Meta
-hydraPhantoms = Graph hydraPhantomsName elements hydraCoreName
+hydraPhantomsModule = Module ns elements [hydraCoreModule]
   where
-    core = nsref hydraCoreName
-    phantoms = nsref hydraPhantomsName
-    def = datatype hydraPhantomsName
-    
+    ns = Namespace "hydra/phantoms"
+    core = nsref $ moduleNamespace hydraCoreModule
+    phantoms = nsref ns
+    def = datatype ns
+
     elements = [
       def "Case" $
         lambda "a" $ core "FieldName",
-        
+
      def "Datum" $
        lambda "a" $ (core "Term") @@ (core "Meta"),
-       
+
       def "Definition" $
         lambda "a" $ record [
           "name">: core "Name",
           "datum">: phantoms "Datum" @@ "a"],
-          
+
      def "Reference" $
        lambda "a" $ unit]

@@ -5,7 +5,6 @@ import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Grammar
 import Hydra.Graph
-import Hydra.Impl.Haskell.Sources.Core (hydraCoreName)
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Dsl.Standard
@@ -17,18 +16,16 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-grammarToModule :: Grammar -> GraphName -> Module Meta
-grammarToModule (Grammar prods) gname = Module graph []
+grammarToModule :: Namespace -> Grammar -> Module Meta
+grammarToModule ns (Grammar prods) = Module ns elements []
   where
-    graph = Graph gname els hydraCoreName
+    elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where
-        els = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
-          where
-            prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
-            pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType typ)
+        prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
+        pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType typ)
 
-    toName lname = fromQname gname lname
-    
+    toName lname = fromQname ns lname
+
     findNames pats = L.reverse $ fst (L.foldl nextName ([], M.empty) pats)
       where
         nextName (names, nameMap) pat = (nn:names, M.insert rn ni nameMap)
@@ -56,7 +53,7 @@ grammarToModule (Grammar prods) gname = Module graph []
       PatternSequence _ -> True
       PatternAlternatives _ -> True
       _ -> False
-      
+
     makeElements omitTrivial lname pat = forPat pat
       where
         forPat pat = case pat of
@@ -73,7 +70,7 @@ grammarToModule (Grammar prods) gname = Module graph []
           PatternPlus p -> mod "Elmt" nonemptyList p
 
         trivial = if omitTrivial then [] else [(lname, Types.unit)]
-        
+
         forRecordOrUnion isRecord c pats = (lname, c fields):els
             where
               fieldPairs = Y.catMaybes $ L.zipWith (toField isRecord) (findNames pats) pats
@@ -94,7 +91,7 @@ grammarToModule (Grammar prods) gname = Module graph []
         mod n f p = descend n f2 p
           where
             f2 ((lname, typ):rest) = (lname, f typ):rest
-            
+
         descend n f p = f $ if isComplex p
             then (lname, Types.nominal (toName $ fst $ L.head cpairs)):cpairs
             else if L.null cpairs

@@ -2,6 +2,7 @@
 
 module Hydra.Impl.Haskell.Sources.Core where
 
+import Hydra.Common
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Meta
@@ -9,22 +10,15 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Bootstrap
 
 
-hydraCoreModule :: Module Meta
-hydraCoreModule = Module hydraCore []
-
--- Note: here, the element namespace doubles as a graph name
-hydraCoreName :: GraphName
-hydraCoreName = GraphName "hydra/core"
-
 hydraCore :: Graph Meta
-hydraCore = Graph hydraCoreName elements hydraCoreName
+hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
+
+hydraCoreModule :: Module Meta
+hydraCoreModule = Module ns elements []
   where
-    core = nsref hydraCoreName
-
-    -- Note: only hydra/core uses the bootstrap context; all other models use the core context
-    def = datatype hydraCoreName
-
-    doc :: String -> Type Meta -> Type Meta
+    ns = Namespace "hydra/core"
+    core = nsref ns
+    def = datatype ns
     doc s = setTypeDescription bootstrapContext (Just s)
 
     elements = [
@@ -66,6 +60,13 @@ hydraCore = Graph hydraCoreName elements hydraCoreName
           "lessThan",
           "equalTo",
           "greaterThan"],
+
+      def "Element" $
+        doc "A graph element, having a name, data term (value), and schema term (type)" $
+        lambda "m" $ record [
+          "name">: core "Name",
+          "schema">: core "Term" @@ "m",
+          "data">: core "Term" @@ "m"],
 
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
@@ -157,6 +158,16 @@ hydraCore = Graph hydraCoreName elements hydraCoreName
           "elimination",
           "lambda",
           "primitive"],
+
+      def "Graph" $
+        doc ("A graph, or set of named terms, together with its schema graph") $
+        lambda "m" $ record [
+          "elements">:
+            doc "All of the elements in the graph" $
+            Types.map (core "Name") (core "Element" @@ "m"),
+          "schema">:
+            doc "The schema graph to this graph. If omitted, the graph is its own schema graph." $
+            optional $ core "Graph" @@ "m"],
 
       def "IntegerType" $
         doc "An integer type" $

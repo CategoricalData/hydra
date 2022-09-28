@@ -1,4 +1,4 @@
-module Hydra.Ext.Java.Coder (printGraph) where
+module Hydra.Ext.Java.Coder (printModule) where
 
 import Hydra.Core
 import Hydra.Evaluation
@@ -28,12 +28,12 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type Aliases = M.Map GraphName Java.PackageName
+type Aliases = M.Map Namespace Java.PackageName
 
-printGraph :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map FilePath String)
-printGraph g = do
+printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule mod = do
     withTrace "encode in Java" $ do
-      units <- moduleToJavaCompilationUnit g
+      units <- moduleToJavaCompilationUnit mod
       return $ M.fromList $ forPair <$> M.toList units
   where
     forPair (name, unit) = (
@@ -67,28 +67,28 @@ elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQ
   where
     (ns, local) = toQname name
 
-moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Graph m -> GraphFlow m (M.Map Name Java.CompilationUnit)
-moduleToJavaCompilationUnit g = graphToExternalModule language (encodeTerm aliases) constructModule g
+moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
+moduleToJavaCompilationUnit mod = transformModule language (encodeTerm aliases) constructModule mod
   where
-    aliases = importAliasesForGraph g
+    aliases = importAliasesForModule mod
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Graph m -> M.Map (Type m) (Coder (Context m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
+  => Module m -> M.Map (Type m) (Coder (Context m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
   -> GraphFlow m (M.Map Name Java.CompilationUnit)
-constructModule g coders pairs = do
+constructModule mod coders pairs = do
     cx <- getState
     let isTypePair = isType cx . typedTermType . snd
     let typePairs = L.filter isTypePair pairs
     let dataPairs = L.filter (not . isTypePair) pairs
     typeUnits <- CM.mapM typeToClass typePairs
     dataMembers <- CM.mapM (termToInterfaceMember coders) dataPairs
-    return $ M.fromList $ typeUnits ++ ([constructElementsInterface g dataMembers | not (L.null dataMembers)])
+    return $ M.fromList $ typeUnits ++ ([constructElementsInterface mod dataMembers | not (L.null dataMembers)])
   where
-    pkg = javaPackageDeclaration $ graphName g
-    aliases = importAliasesForGraph g
+    pkg = javaPackageDeclaration $ moduleNamespace mod
+    aliases = importAliasesForModule mod
 
     typeToClass pair@(el, _) = do
       let imports = []
@@ -130,12 +130,12 @@ constructModule g coders pairs = do
         _ -> unexpected "function term" term
       _ -> unexpected "function type" typ
 
-constructElementsInterface :: Graph m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
-constructElementsInterface g members = (elName, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl])
+constructElementsInterface :: Module m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
+constructElementsInterface mod members = (elName, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl])
   where
-    pkg = javaPackageDeclaration $ graphName g
+    pkg = javaPackageDeclaration $ moduleNamespace mod
     mods = []
-    elName = fromQname (graphName g) elementsClassName
+    elName = fromQname (moduleNamespace mod) elementsClassName
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body

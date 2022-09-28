@@ -29,13 +29,7 @@ latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.float32, T
 
 testContext :: Context Meta
 testContext = coreContext {
-    contextGraphs = GraphSet {
-      graphSetGraphs = M.fromList [
-        (testGraphName, testGraph),
-        (testSchemaGraphName, testSchemaGraph),
-        (hydraCoreName, hydraCore)],
-      graphSetRoot = testGraphName},
-    contextElements = graphElementsMap testGraph,
+    contextGraph = testGraph,
     contextStrategy = EvaluationStrategy {
       evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
         TermVariantLiteral,
@@ -55,26 +49,25 @@ testElementFirstName = Element {
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta
-testGraph = Graph testGraphName [testElementArthur, testElementFirstName] testSchemaGraphName
+testGraph = elementsToGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
-testGraphName :: GraphName
-testGraphName = GraphName "testGraph"
+testNamespace :: Namespace
+testNamespace = Namespace "testGraph"
 
 testSchemaGraph :: Graph Meta
-testSchemaGraph = Graph testSchemaGraphName [
-      def (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
-      def testTypeFoobarValueName testTypeFoobarValue,
-      def testTypeComparisonName testTypeComparison,
-      def latLonName latLonType,
-      def testTypePersonName testTypePerson,
-      def testTypePersonOrSomethingName testTypePersonOrSomething,
-      def testTypeTimestampName testTypeTimestamp]
-    hydraCoreName
+testSchemaGraph = standardGraph [
+    def (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
+    def testTypeFoobarValueName testTypeFoobarValue,
+    def testTypeComparisonName testTypeComparison,
+    def latLonName latLonType,
+    def testTypePersonName testTypePerson,
+    def testTypePersonOrSomethingName testTypePersonOrSomething,
+    def testTypeTimestampName testTypeTimestamp]
   where
     def = typeElement
 
-testSchemaGraphName :: GraphName
-testSchemaGraphName = GraphName "testSchemaGraph"
+testSchemaNamespace :: Namespace
+testSchemaNamespace = Namespace "testSchemaGraph"
 
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext

@@ -14,17 +14,12 @@ import Hydra.Impl.Haskell.Sources.Ext.Json.Model
 
 
 avroSchemaModule :: Module Meta
-avroSchemaModule = Module avroSchema [jsonModelModule]
-
-avroSchemaName :: GraphName
-avroSchemaName = GraphName "hydra/ext/avro/schema"
-
-avroSchema :: Graph Meta
-avroSchema = Graph avroSchemaName elements hydraCoreName
+avroSchemaModule = Module ns elements [jsonModelModule]
   where
-    def = datatype avroSchemaName
-    avro = nsref avroSchemaName
-    json = nsref jsonModelName
+    ns = Namespace "hydra/ext/avro/schema"
+    def = datatype ns
+    avro = nsref ns
+    json = nsref $ moduleNamespace jsonModelModule
 
     elements = [
       def "Array" $

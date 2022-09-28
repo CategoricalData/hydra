@@ -11,12 +11,6 @@ import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Util.Formatting
 
 
-tinkerpopFeaturesModule :: Module Meta
-tinkerpopFeaturesModule = Module tinkerpopFeatures [hydraCoreModule]
-
-tinkerpopFeaturesName :: GraphName
-tinkerpopFeaturesName = GraphName "hydra/ext/tinkerpop/features"
-
 {-
 Derived from TinkerPop's Graph.Features.
 See: https://tinkerpop.apache.org/javadocs/current/core/org/apache/tinkerpop/gremlin/structure/Graph.Features.html
@@ -26,14 +20,15 @@ By default all methods of features return true and it is up to implementers to d
 Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations.
 For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -}
-tinkerpopFeatures :: Graph Meta
-tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
+tinkerpopFeaturesModule :: Module Meta
+tinkerpopFeaturesModule = Module ns elements [hydraCoreModule]
   where
-    core = nsref hydraCoreName
-    features = nsref tinkerpopFeaturesName
-    def = datatype tinkerpopFeaturesName
+    ns = Namespace "hydra/ext/tinkerpop/features"
+    core = nsref $ moduleNamespace hydraCoreModule
+    features = nsref ns
+    def = datatype ns
     supports name comment = ("supports" ++ capitalize name)>: doc comment boolean
-    
+
     elements = [
 
       def "DataTypeFeatures" $
@@ -57,7 +52,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
           supports "stringArrayValues" "Supports setting of an array of string values.",
           supports "stringValues" "Supports setting of a string value.",
           supports "uniformListValues" "Supports setting of a List value."],
-        
+
       def "EdgeFeatures" $
         doc "Features that are related to Edge operations." $
         record [
@@ -67,7 +62,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
           supports "removeEdges" "Determines if an Edge can be removed from a Vertex.",
           supports "upsert" ("Determines if the Graph implementation uses upsert functionality as opposed to insert " ++
             "functionality for Vertex.addEdge(String, Vertex, Object...).")],
-        
+
       def "EdgePropertyFeatures" $
         doc "Features that are related to Edge Property objects." $
         record [
@@ -113,7 +108,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
             features "GraphFeatures",
           "vertex">: doc "Gets the features related to vertex operation." $
             features "VertexFeatures"],
-        
+
       def "GraphFeatures" $
         doc "Features specific to a operations of a graph." $
         record [
@@ -134,13 +129,13 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
         record [
           "dataTypeFeatures">: features "DataTypeFeatures",
           supports "properties" "Determines if an Element allows for the processing of at least one data type defined by the features."],
-        
+
       def "VariableFeatures" $
         doc "Features for Graph.Variables." $
         record [
           "dataTypeFeatures">: features "DataTypeFeatures",
           supports "variables" "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."],
-        
+
       def "VertexFeatures" $
         doc "Features that are related to Vertex operations." $
         record [
@@ -154,7 +149,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
           supports "removeVertices" "Determines if a Vertex can be removed from the Graph.",
           supports "upsert" ("Determines if the Graph implementation uses upsert functionality as opposed to insert " ++
             "functionality for Graph.addVertex(String).")],
-          
+
       def "VertexPropertyFeatures" $
         doc "Features that are related to Vertex Property objects." $
         record [
@@ -163,7 +158,7 @@ tinkerpopFeatures = Graph tinkerpopFeaturesName elements hydraCoreName
           -- Note: re-using ElementFeatures here rather than repeating the individual features (which are identical)
           "elementFeatures">: features "ElementFeatures",
           supports "remove" "Determines if a VertexProperty allows properties to be removed."]
-          
+
 --          , def "VertexProperty.Cardinality" $
 --            enum ["list", "set", "single"]
       ]

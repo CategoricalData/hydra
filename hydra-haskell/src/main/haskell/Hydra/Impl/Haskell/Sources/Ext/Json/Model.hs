@@ -8,18 +8,13 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-jsonModelModule :: Module Meta
-jsonModelModule = Module jsonModel []
-
-jsonModelName :: GraphName
-jsonModelName = GraphName "hydra/ext/json/model"
-
 -- | See the BNF at https://www.json.org
-jsonModel :: Graph Meta
-jsonModel = Graph jsonModelName elements hydraCoreName
+jsonModelModule :: Module Meta
+jsonModelModule = Module ns elements []
   where
-    def = datatype jsonModelName
-    json = nsref jsonModelName
+    ns = Namespace "hydra/ext/json/model"
+    def = datatype ns
+    json = nsref ns
 
     elements = [
 

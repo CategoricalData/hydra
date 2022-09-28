@@ -22,10 +22,10 @@ import qualified Data.Maybe as Y
 
 nodeCount = "nodeCount"
 
-shaclCoder :: (Eq m, Show m) => Graph m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
-shaclCoder sg = do
+shaclCoder :: (Eq m, Show m) => Module m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
+shaclCoder mod = do
     cx <- getState
-    let typeEls = L.filter (isEncodedType cx . elementSchema) $ graphElements sg
+    let typeEls = L.filter (isEncodedType cx . elementSchema) $ moduleElements mod
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
     let termFlow = \g -> do
@@ -249,7 +249,7 @@ property iri = Shacl.PropertyShape {
 
 -- Note: these are not "proper" URNs, as they do not use an established URN scheme
 propertyIri :: Name -> FieldName -> Rdf.Iri
-propertyIri rname fname = Rdf.Iri $ "urn:" ++ unGraphName gname ++ "#" ++ decapitalize local ++ capitalize (unFieldName fname)
+propertyIri rname fname = Rdf.Iri $ "urn:" ++ unNamespace gname ++ "#" ++ decapitalize local ++ capitalize (unFieldName fname)
   where
     (gname, local) = toQname rname
 

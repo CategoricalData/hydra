@@ -49,7 +49,7 @@ sname = Scala.DataRef . Scala.Data_RefName . Scala.Data_Name . Scala.PredefStrin
 sprim :: Name -> Scala.Data
 sprim name = sname $ prefix ++ "." ++ local
   where
-    (GraphName ns, local) = toQname name
+    (Namespace ns, local) = toQname name
     prefix = L.last $ Strings.splitOn "/" ns
 
 stapply :: Scala.Type -> [Scala.Type] -> Scala.Type

@@ -9,16 +9,11 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 rdfSyntaxModule :: Module Meta
-rdfSyntaxModule = Module rdfSyntax []
-
-rdfSyntaxName :: GraphName
-rdfSyntaxName = GraphName "hydra/ext/rdf/syntax"
-
-rdfSyntax :: Graph Meta
-rdfSyntax = Graph rdfSyntaxName elements hydraCoreName
+rdfSyntaxModule = Module ns elements []
   where
-    def = datatype rdfSyntaxName
-    rdf = nsref rdfSyntaxName
+    ns = Namespace "hydra/ext/rdf/syntax"
+    def = datatype ns
+    rdf = nsref ns
 
     elements = [
 

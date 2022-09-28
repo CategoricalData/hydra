@@ -16,17 +16,12 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 pegasusPdlModule :: Module Meta
-pegasusPdlModule = Module pegasusPdl [jsonModelModule]
-
-pegasusPdlName :: GraphName
-pegasusPdlName = GraphName "hydra/ext/pegasus/pdl"
-
-pegasusPdl :: Graph Meta
-pegasusPdl = Graph pegasusPdlName elements hydraCoreName
+pegasusPdlModule = Module ns elements [jsonModelModule]
   where
-    def = datatype pegasusPdlName
-    pdl = nsref pegasusPdlName
-    json = nsref jsonModelName
+    ns = Namespace "hydra/ext/pegasus/pdl"
+    def = datatype ns
+    pdl = nsref ns
+    json = nsref $ moduleNamespace jsonModelModule
 
     elements = [
 

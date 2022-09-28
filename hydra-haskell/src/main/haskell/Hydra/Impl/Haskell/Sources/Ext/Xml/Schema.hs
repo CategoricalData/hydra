@@ -18,18 +18,13 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 xmlSchemaModule :: Module Meta
-xmlSchemaModule = Module xmlSchema []
-
-xmlSchemaName :: GraphName
-xmlSchemaName = GraphName "hydra/ext/xml/schema"
-
-xmlSchema :: Graph Meta
-xmlSchema = Graph xmlSchemaName elements hydraCoreName
+xmlSchemaModule = Module ns elements []
   where
-    def = datatype xmlSchemaName
+    ns = Namespace "hydra/ext/xml/schema"
+    def = datatype ns
 
     elements = datatypes ++ others
-    
+
     datatypes = [
       def "AnySimpleType" string,
       def "AnyType" string,
@@ -75,12 +70,12 @@ xmlSchema = Graph xmlSchemaName elements hydraCoreName
       def "UnsignedInt" uint32,
       def "UnsignedLong" uint64,
       def "UnsignedShort" uint16]
-      
+
     others = [
       def "ConstrainingFacet" $
         see "https://www.w3.org/TR/xmlschema-2/#non-fundamental" $
         unit, -- TODO: concrete facets
-        
+
       def "Datatype" $ enum [
         "anySimpleType",
         "anyType",

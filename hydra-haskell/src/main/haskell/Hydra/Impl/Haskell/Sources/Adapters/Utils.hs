@@ -14,21 +14,20 @@ import Hydra.Monads
 import Prelude hiding ((++))
 
 
+utilsNs = Namespace "hydra/adapters/utils"
+
 adapterUtilsModule :: Module Meta
-adapterUtilsModule = Module g [hydraBasicsModule]
+adapterUtilsModule = Module utilsNs elements [hydraBasicsModule]
   where
-   g = Standard.graph adapterUtilsName [
+   elements = [
      el describeFloatType,
      el describeIntegerType,
      el describeLiteralType,
      el describePrecision,
      el describeType]
 
-adapterUtilsName :: GraphName
-adapterUtilsName = GraphName "hydra/adapters/utils"
-
 utils :: String -> Datum a -> Definition a
-utils = Definition . fromQname adapterUtilsName
+utils = Definition . fromQname utilsNs
 
 describeFloatType :: Definition (FloatType -> String)
 describeFloatType = utils "describeFloatType" $

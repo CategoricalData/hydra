@@ -12,19 +12,13 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraEvaluationModule :: Module Meta
-hydraEvaluationModule = Module hydraEvaluation [hydraGraphModule]
-
-hydraEvaluationName :: GraphName
-hydraEvaluationName = GraphName "hydra/evaluation"
-
-hydraEvaluation :: Graph Meta
-hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
+hydraEvaluationModule = Module ns elements [hydraCoreModule]
   where
-    core = nsref hydraCoreName
-    graph = nsref hydraGraphName
-    evaluation = nsref hydraEvaluationName
+    ns = Namespace "hydra/evaluation"
+    core = nsref $ moduleNamespace hydraCoreModule
+    evaluation = nsref ns
 
-    def = datatype hydraEvaluationName
+    def = datatype ns
 
     elements = [
       def "AnnotationClass" $
@@ -69,10 +63,9 @@ hydraEvaluation = Graph hydraEvaluationName elements hydraCoreName
           "decode"],
 
       def "Context" $
-        doc "A pointed set of graph modules; a graph in the logical sense" $
+        doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
-          "graphs">: graph "GraphSet" @@ "m",
-          "elements">: Types.map (core "Name") (graph "Element" @@ "m"),
+          "graph">: core "Graph" @@ "m",
           "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
           "strategy">: evaluation "EvaluationStrategy",
           "annotations">: evaluation "AnnotationClass" @@ "m"],

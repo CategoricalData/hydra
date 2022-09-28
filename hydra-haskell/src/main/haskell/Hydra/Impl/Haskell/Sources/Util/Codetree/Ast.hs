@@ -9,17 +9,11 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 codetreeAstModule :: Module Meta
-codetreeAstModule = Module codetreeAst []
-
--- Note: here, the element namespace doubles as a graph name
-codetreeAstName :: GraphName
-codetreeAstName = GraphName "hydra/util/codetree/ast"
-
-codetreeAst :: Graph Meta
-codetreeAst = Graph codetreeAstName elements hydraCoreName
+codetreeAstModule = Module ns elements []
   where
-    def = datatype codetreeAstName
-    ast = nsref codetreeAstName
+    ns = Namespace "hydra/util/codetree/ast"
+    def = datatype ns
+    ast = nsref ns
 
     elements = [
 
@@ -33,7 +27,7 @@ codetreeAst = Graph codetreeAstName elements hydraCoreName
           "indent">: boolean,
           "newlineBeforeContent">: boolean,
           "newlineAfterContent">: boolean],
-          
+
       def "BracketExpr" $
         doc "An expression enclosed by brackets" $
         record [

@@ -54,10 +54,8 @@ import qualified Data.Maybe as Y
 
 addDeepTypeAnnotations :: Module Meta -> GraphFlow Meta (Module Meta)
 addDeepTypeAnnotations mod = do
-    els <- CM.mapM annotateElementWithTypes $ graphElements g
-    return $ mod {moduleGraph = g {graphElements = els}}
-  where
-    g = moduleGraph mod
+    els <- CM.mapM annotateElementWithTypes $ moduleElements mod
+    return $ mod {moduleElements = els}
 
 allModules :: [Module Meta]
 allModules = coreModules ++ extModules
@@ -65,11 +63,9 @@ allModules = coreModules ++ extModules
 assignSchemas :: Bool -> Module Meta -> GraphFlow Meta (Module Meta)
 assignSchemas doInfer mod = do
     cx <- getState
-    els <- CM.mapM (annotate cx) $ graphElements g
-    return $ mod {moduleGraph = g {graphElements = els}}
+    els <- CM.mapM (annotate cx) $ moduleElements mod
+    return $ mod {moduleElements = els}
   where
-    g = moduleGraph mod
-
     annotate cx el = do
       typ <- findType cx (elementData el)
       case typ of
@@ -116,8 +112,8 @@ extModules = [
 findType :: Context Meta -> Term Meta -> GraphFlow Meta (Maybe (Type Meta))
 findType cx term = annotationClassTermType (contextAnnotations cx) term
 
-generateSources :: (Graph Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
-generateSources printGraph mods0 basePath = do
+generateSources :: (Module Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
+generateSources printModule mods0 basePath = do
     mfiles <- runFlow coreContext generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
@@ -128,9 +124,7 @@ generateSources printGraph mods0 basePath = do
         mods1 <- CM.mapM (assignSchemas False) mods0
         withState (modulesToContext mods1) $ do
           mods2 <- CM.mapM addDeepTypeAnnotations mods1
---          let mods2 = mods1
---          mods2 <- CM.mapM (assignSchemas True) mods1
-          maps <- CM.mapM (printGraph . moduleGraph) mods2
+          maps <- CM.mapM printModule mods2
           return $ L.concat (M.toList <$> maps)
 
     writePair (path, s) = do
@@ -139,20 +133,12 @@ generateSources printGraph mods0 basePath = do
       writeFile fullPath s
 
 modulesToContext :: [Module Meta] -> Context Meta
-modulesToContext mods = setContextElements allGraphs $ coreContext {
-    contextGraphs = GraphSet allGraphsByName rootGraphName,
-    contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
+modulesToContext mods = coreContext {contextGraph = standardGraph elements}
   where
-    rootGraphName = hydraCoreName -- Note: this assumes that all schema graphs are the same
-    allGraphs = moduleGraph <$> M.elems allModules
-    allGraphsByName = M.fromList $ (\g -> (graphName g, g)) <$> allGraphs
-    allModules = L.foldl addModule (M.fromList [(hydraCoreName, hydraCoreModule)]) mods
+    elements = L.concat (moduleElements <$> allModules)
+    allModules = L.concat (close <$> mods)
       where
-        addModule m mod@(Module g' deps) = if M.member gname m
-            then m
-            else L.foldl addModule (M.insert gname mod m) deps
-          where
-            gname = graphName g'
+        close mod = mod:(L.concat (close <$> moduleDependencies mod))
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do
@@ -169,13 +155,13 @@ runFlow cx f = do
   return v
 
 writeHaskell :: [Module Meta] -> FilePath -> IO ()
-writeHaskell = generateSources Haskell.printGraph
+writeHaskell = generateSources Haskell.printModule
 
 writeJava :: [Module Meta] -> FP.FilePath -> IO ()
-writeJava = generateSources Java.printGraph
+writeJava = generateSources Java.printModule
 
 writePdl :: [Module Meta] -> FP.FilePath -> IO ()
-writePdl = generateSources PDL.printGraph
+writePdl = generateSources PDL.printModule
 
 writeScala :: [Module Meta] -> FP.FilePath -> IO ()
-writeScala = generateSources Scala.printGraph
+writeScala = generateSources Scala.printModule
