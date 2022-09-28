@@ -20,6 +20,23 @@ hydraGraphModule = Module ns elements [hydraCoreModule]
 
     elements = [
 
+      def "Element" $
+        doc "A graph element, having a name, data term (value), and schema term (type)" $
+        lambda "m" $ record [
+          "name">: core "Name",
+          "schema">: core "Term" @@ "m",
+          "data">: core "Term" @@ "m"],
+
+      def "Graph" $
+        doc ("A graph, or set of named terms, together with its schema graph") $
+        lambda "m" $ record [
+          "elements">:
+            doc "All of the elements in the graph" $
+            Types.map (core "Name") (graph "Element" @@ "m"),
+          "schema">:
+            doc "The schema graph to this graph. If omitted, the graph is its own schema graph." $
+            optional $ graph "Graph" @@ "m"],
+
       def "Module" $
         doc "A logical collection of elements; a graph subset with dependencies on zero or more other subsets" $
         lambda "m" $ record [
@@ -28,7 +45,7 @@ hydraGraphModule = Module ns elements [hydraCoreModule]
             graph "Namespace",
           "elements">:
             doc "The elements defined in this module" $
-            list $ core "Element" @@ "m",
+            list $ graph "Element" @@ "m",
           "dependencies">:
             doc "Any additional modules this one has a direct dependency upon" $
             list $ graph "Module" @@ "m"],

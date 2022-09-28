@@ -1,6 +1,7 @@
 module Hydra.Evaluation where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import Data.Map
 import Data.Set
 
@@ -79,7 +80,7 @@ _CoderDirection_decode = (Core.FieldName "decode")
 -- An environment containing a graph together with primitive functions and other necessary components for evaluation
 data Context m 
   = Context {
-    contextGraph :: (Core.Graph m),
+    contextGraph :: (Graph.Graph m),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
     contextAnnotations :: (AnnotationClass m)}

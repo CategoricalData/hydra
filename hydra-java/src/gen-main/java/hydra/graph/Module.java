@@ -14,14 +14,14 @@ public class Module<M> {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.core.Element<M>> elements;
+  public final java.util.List<hydra.graph.Element<M>> elements;
   
   /**
    * Any additional modules this one has a direct dependency upon
    */
   public final java.util.List<hydra.graph.Module<M>> dependencies;
   
-  public Module (hydra.graph.Namespace namespace, java.util.List<hydra.core.Element<M>> elements, java.util.List<hydra.graph.Module<M>> dependencies) {
+  public Module (hydra.graph.Namespace namespace, java.util.List<hydra.graph.Element<M>> elements, java.util.List<hydra.graph.Module<M>> dependencies) {
     this.namespace = namespace;
     this.elements = elements;
     this.dependencies = dependencies;
@@ -45,7 +45,7 @@ public class Module<M> {
     return new Module(namespace, elements, dependencies);
   }
   
-  public Module withElements(java.util.List<hydra.core.Element<M>> elements) {
+  public Module withElements(java.util.List<hydra.graph.Element<M>> elements) {
     return new Module(namespace, elements, dependencies);
   }
   
