@@ -1,10 +1,3 @@
-{-|
-Model for Coq core and extensions
-
-Based on the Coq 8.15 grammar provided here:
-  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary
--}
-
 module Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -16,7 +9,9 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 coqSyntaxModule :: Module Meta
-coqSyntaxModule = Module ns elements []
+coqSyntaxModule = Module ns elements [] $
+    Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
+      "  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary")
   where
     ns = Namespace "hydra/ext/coq/syntax"
     def = datatype ns

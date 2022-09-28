@@ -11,7 +11,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraPhantomsModule :: Module Meta
-hydraPhantomsModule = Module ns elements [hydraCoreModule]
+hydraPhantomsModule = Module ns elements [hydraCoreModule] $
+    Just "Phantom types for use in model definitions"
   where
     ns = Namespace "hydra/phantoms"
     core = nsref $ moduleNamespace hydraCoreModule

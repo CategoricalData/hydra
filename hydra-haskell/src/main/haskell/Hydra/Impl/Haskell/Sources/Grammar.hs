@@ -11,7 +11,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraGrammarModule :: Module Meta
-hydraGrammarModule = Module ns elements []
+hydraGrammarModule = Module ns elements [] $
+    Just "A common API for BNF-based grammars"
   where
     ns = Namespace "hydra/grammar"
     grammar = nsref ns

@@ -9,7 +9,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 codetreeAstModule :: Module Meta
-codetreeAstModule = Module ns elements []
+codetreeAstModule = Module ns elements [] $
+    Just "A model which provides a common syntax tree for Hydra serializers"
   where
     ns = Namespace "hydra/util/codetree/ast"
     def = datatype ns

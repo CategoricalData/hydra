@@ -16,8 +16,8 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-grammarToModule :: Namespace -> Grammar -> Module Meta
-grammarToModule ns (Grammar prods) = Module ns elements []
+grammarToModule :: Namespace -> Grammar -> Maybe String -> Module Meta
+grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
   where
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where

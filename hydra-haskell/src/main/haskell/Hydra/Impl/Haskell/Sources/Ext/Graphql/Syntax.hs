@@ -1,5 +1,3 @@
--- | GraphQL model based on the (extended) BNF at https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary
-
 {-# LANGUAGE OverloadedStrings #-}
 
 module Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax where
@@ -47,7 +45,9 @@ directivesConst = "Directives" -- Directives_[Const]
 directivesConstOpt = opt"Directives" -- Directives_[Const]opt
 
 graphqlSyntaxModule :: Module Meta
-graphqlSyntaxModule = grammarToModule ns graphqlGrammar
+graphqlSyntaxModule = grammarToModule ns graphqlGrammar $
+    Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
+      "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")
   where
     ns = Namespace "hydra/ext/graphql/syntax"
 

@@ -12,7 +12,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraAdapterModule :: Module Meta
-hydraAdapterModule = Module ns elements [hydraEvaluationModule]
+hydraAdapterModule = Module ns elements [hydraEvaluationModule] $
+    Just "A model capturing basic abstractions for mappings between languages"
   where
     ns = Namespace "hydra/adapter"
     def = datatype ns

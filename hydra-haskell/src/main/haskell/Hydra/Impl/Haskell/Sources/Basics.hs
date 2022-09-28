@@ -16,7 +16,8 @@ import Hydra.Monads
 basicsNs = Namespace "hydra/basics"
 
 hydraBasicsModule :: Module Meta
-hydraBasicsModule = Module basicsNs elements [hydraGraphModule]
+hydraBasicsModule = Module basicsNs elements [hydraGraphModule] $
+    Just "Basic functions for working with types and terms"
   where
     elements = [
       el eliminationVariant,

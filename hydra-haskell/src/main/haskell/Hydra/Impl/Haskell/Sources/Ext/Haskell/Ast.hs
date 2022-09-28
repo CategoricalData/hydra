@@ -1,6 +1,3 @@
--- Note: this model is loosely based on Language.Haskell.Tools.AST.
---       References to corresponding symbols from that package can be found in comments.
-
 module Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -12,7 +9,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 haskellAstModule :: Module Meta
-haskellAstModule = Module ns elements []
+haskellAstModule = Module ns elements [] $
+    Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where
     ns = Namespace "hydra/ext/haskell/ast"
     def = datatype ns

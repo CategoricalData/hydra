@@ -9,7 +9,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 scalaMetaModule :: Module Meta
-scalaMetaModule = Module ns elements []
+scalaMetaModule = Module ns elements [] $
+    Just "A Scala syntax model based on Scalameta (https://scalameta.org)"
   where
     ns = Namespace "hydra/ext/scala/meta"
     def = datatype ns

@@ -17,7 +17,8 @@ rparen = terminal ")"
 
 
 datalogSyntaxModule :: Module Meta
-datalogSyntaxModule = grammarToModule ns datalogGrammar
+datalogSyntaxModule = grammarToModule ns datalogGrammar $
+    Just "A basic Datalog model"
   where
     ns = Namespace "hydra/ext/datalog/syntax"
 
