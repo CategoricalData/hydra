@@ -1,10 +1,12 @@
+-- | A model which provides a common syntax tree for Hydra serializers
+
 module Hydra.Util.Codetree.Ast where
 
 import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- Operator associativity
+-- | Operator associativity
 data Associativity 
   = AssociativityNone 
   | AssociativityLeft 
@@ -22,7 +24,7 @@ _Associativity_right = (Core.FieldName "right")
 
 _Associativity_both = (Core.FieldName "both")
 
--- Formatting option for code blocks
+-- | Formatting option for code blocks
 data BlockStyle 
   = BlockStyle {
     blockStyleIndent :: Bool,
@@ -38,7 +40,7 @@ _BlockStyle_newlineBeforeContent = (Core.FieldName "newlineBeforeContent")
 
 _BlockStyle_newlineAfterContent = (Core.FieldName "newlineAfterContent")
 
--- An expression enclosed by brackets
+-- | An expression enclosed by brackets
 data BracketExpr 
   = BracketExpr {
     bracketExprBrackets :: Brackets,
@@ -54,7 +56,7 @@ _BracketExpr_enclosed = (Core.FieldName "enclosed")
 
 _BracketExpr_style = (Core.FieldName "style")
 
--- Matching open and close bracket symbols
+-- | Matching open and close bracket symbols
 data Brackets 
   = Brackets {
     bracketsOpen :: Symbol,
@@ -67,7 +69,7 @@ _Brackets_open = (Core.FieldName "open")
 
 _Brackets_close = (Core.FieldName "close")
 
--- An abstract expression
+-- | An abstract expression
 data Expr 
   = ExprConst Symbol
   | ExprOp OpExpr
@@ -82,7 +84,7 @@ _Expr_op = (Core.FieldName "op")
 
 _Expr_brackets = (Core.FieldName "brackets")
 
--- An operator symbol
+-- | An operator symbol
 data Op 
   = Op {
     opSymbol :: Symbol,
@@ -101,7 +103,7 @@ _Op_precedence = (Core.FieldName "precedence")
 
 _Op_associativity = (Core.FieldName "associativity")
 
--- An operator expression
+-- | An operator expression
 data OpExpr 
   = OpExpr {
     opExprOp :: Op,
@@ -117,7 +119,7 @@ _OpExpr_lhs = (Core.FieldName "lhs")
 
 _OpExpr_rhs = (Core.FieldName "rhs")
 
--- Left and right padding for an operator
+-- | Left and right padding for an operator
 data Padding 
   = Padding {
     paddingLeft :: Ws,
@@ -130,25 +132,25 @@ _Padding_left = (Core.FieldName "left")
 
 _Padding_right = (Core.FieldName "right")
 
--- Operator precedence
+-- | Operator precedence
 newtype Precedence 
   = Precedence {
-    -- Operator precedence
+    -- | Operator precedence
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
 
--- Any symbol
+-- | Any symbol
 newtype Symbol 
   = Symbol {
-    -- Any symbol
+    -- | Any symbol
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")
 
--- One of several classes of whitespace
+-- | One of several classes of whitespace
 data Ws 
   = WsNone 
   | WsSpace 

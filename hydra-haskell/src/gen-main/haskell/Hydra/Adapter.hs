@@ -1,3 +1,5 @@
+-- | A model capturing basic abstractions for mappings between languages
+
 module Hydra.Adapter where
 
 import qualified Hydra.Core as Core

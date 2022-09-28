@@ -1,3 +1,5 @@
+-- | A basic Datalog model
+
 module Hydra.Ext.Datalog.Syntax where
 
 import qualified Hydra.Core as Core

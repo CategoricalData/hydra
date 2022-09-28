@@ -1,3 +1,5 @@
+-- | Phantom types for use in model definitions
+
 module Hydra.Phantoms where
 
 import qualified Hydra.Core as Core

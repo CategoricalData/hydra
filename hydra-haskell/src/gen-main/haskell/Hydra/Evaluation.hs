@@ -1,3 +1,5 @@
+-- | Abstractions for evaluation and transformations
+
 module Hydra.Evaluation where
 
 import qualified Hydra.Core as Core
@@ -5,7 +7,7 @@ import qualified Hydra.Graph as Graph
 import Data.Map
 import Data.Set
 
--- A typeclass-like construct providing common functions for working with annotations
+-- | A typeclass-like construct providing common functions for working with annotations
 data AnnotationClass m 
   = AnnotationClass {
     annotationClassDefault :: m,
@@ -53,7 +55,7 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
--- An encoder and decoder; a qualified bidirectional transformation between instances of two types
+-- | An encoder and decoder; a qualified bidirectional transformation between instances of two types
 data Coder s a b 
   = Coder {
     coderEncode :: (a -> Flow s b),
@@ -65,7 +67,7 @@ _Coder_encode = (Core.FieldName "encode")
 
 _Coder_decode = (Core.FieldName "decode")
 
--- Indicates either the 'out' or the 'in' direction of a coder
+-- | Indicates either the 'out' or the 'in' direction of a coder
 data CoderDirection 
   = CoderDirectionEncode 
   | CoderDirectionDecode 
@@ -77,7 +79,7 @@ _CoderDirection_encode = (Core.FieldName "encode")
 
 _CoderDirection_decode = (Core.FieldName "decode")
 
--- An environment containing a graph together with primitive functions and other necessary components for evaluation
+-- | An environment containing a graph together with primitive functions and other necessary components for evaluation
 data Context m 
   = Context {
     contextGraph :: (Graph.Graph m),
@@ -95,7 +97,7 @@ _Context_strategy = (Core.FieldName "strategy")
 
 _Context_annotations = (Core.FieldName "annotations")
 
--- Settings which determine how terms are evaluated
+-- | Settings which determine how terms are evaluated
 data EvaluationStrategy 
   = EvaluationStrategy {
     evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
@@ -105,7 +107,7 @@ _EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
 
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
--- A variant of the State monad with built-in logging and error handling
+-- | A variant of the State monad with built-in logging and error handling
 newtype Flow s a 
   = Flow {
     unFlow :: (s -> Trace -> FlowWrapper s a)}
@@ -127,7 +129,7 @@ _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
 
--- A built-in function
+-- | A built-in function
 data PrimitiveFunction m 
   = PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
@@ -142,7 +144,7 @@ _PrimitiveFunction_type = (Core.FieldName "type")
 
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
 
--- A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
+-- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
 data TermCoder m a 
   = TermCoder {
     termCoderType :: (Core.Type m),
@@ -154,7 +156,7 @@ _TermCoder_type = (Core.FieldName "type")
 
 _TermCoder_coder = (Core.FieldName "coder")
 
--- A container for logging and error information
+-- | A container for logging and error information
 data Trace 
   = Trace {
     traceStack :: [String],

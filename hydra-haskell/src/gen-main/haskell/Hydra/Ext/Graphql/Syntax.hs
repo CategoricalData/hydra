@@ -1,3 +1,6 @@
+-- | A GraphQL model. Based on the (extended) BNF at:
+-- |   https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary
+
 module Hydra.Ext.Graphql.Syntax where
 
 import qualified Hydra.Core as Core

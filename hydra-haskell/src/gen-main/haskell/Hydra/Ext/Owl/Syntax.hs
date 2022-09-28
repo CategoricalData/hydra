@@ -1,3 +1,5 @@
+-- | An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax
+
 module Hydra.Ext.Owl.Syntax where
 
 import qualified Hydra.Core as Core
@@ -176,14 +178,14 @@ _AnnotationPropertyRange_property = (Core.FieldName "property")
 
 _AnnotationPropertyRange_iri = (Core.FieldName "iri")
 
--- See https://www.w3.org/TR/owl2-syntax/#Classes
+-- | See https://www.w3.org/TR/owl2-syntax/#Classes
 data Class 
   = Class {}
   deriving (Eq, Ord, Read, Show)
 
 _Class = (Core.Name "hydra/ext/owl/syntax.Class")
 
--- See https://www.w3.org/TR/owl2-syntax/#Datatypes
+-- | See https://www.w3.org/TR/owl2-syntax/#Datatypes
 data Datatype 
   = DatatypeXmlSchema Schema.Datatype
   | DatatypeOther Syntax.Iri
@@ -195,7 +197,7 @@ _Datatype_xmlSchema = (Core.FieldName "xmlSchema")
 
 _Datatype_other = (Core.FieldName "other")
 
--- See https://www.w3.org/TR/owl2-syntax/#Object_Properties
+-- | See https://www.w3.org/TR/owl2-syntax/#Object_Properties
 data ObjectProperty 
   = ObjectProperty {}
   deriving (Eq, Ord, Read, Show)
@@ -262,7 +264,7 @@ newtype DataPropertyExpression
 
 _DataPropertyExpression = (Core.Name "hydra/ext/owl/syntax.DataPropertyExpression")
 
--- See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
+-- | See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
 data DataRange 
   = DataRangeDataComplementOf DataComplementOf
   | DataRangeDataIntersectionOf DataIntersectionOf
@@ -286,43 +288,43 @@ _DataRange_datatype = (Core.FieldName "datatype")
 
 _DataRange_datatypeRestriction = (Core.FieldName "datatypeRestriction")
 
--- See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
+-- | See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
 newtype DataIntersectionOf 
   = DataIntersectionOf {
-    -- See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
+    -- | See https://www.w3.org/TR/owl2-syntax/#Intersection_of_Data_Ranges
     unDataIntersectionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
 _DataIntersectionOf = (Core.Name "hydra/ext/owl/syntax.DataIntersectionOf")
 
--- See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
+-- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
 newtype DataUnionOf 
   = DataUnionOf {
-    -- See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
+    -- | See https://www.w3.org/TR/owl2-syntax/#Union_of_Data_Ranges
     unDataUnionOf :: [DataRange]}
   deriving (Eq, Ord, Read, Show)
 
 _DataUnionOf = (Core.Name "hydra/ext/owl/syntax.DataUnionOf")
 
--- See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
+-- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
 newtype DataComplementOf 
   = DataComplementOf {
-    -- See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
+    -- | See https://www.w3.org/TR/owl2-syntax/#Complement_of_Data_Ranges
     unDataComplementOf :: DataRange}
   deriving (Eq, Ord, Read, Show)
 
 _DataComplementOf = (Core.Name "hydra/ext/owl/syntax.DataComplementOf")
 
--- See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
+-- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
 newtype DataOneOf 
   = DataOneOf {
-    -- See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
+    -- | See https://www.w3.org/TR/owl2-syntax/#Enumeration_of_Literals
     unDataOneOf :: [Syntax.Literal]}
   deriving (Eq, Ord, Read, Show)
 
 _DataOneOf = (Core.Name "hydra/ext/owl/syntax.DataOneOf")
 
--- See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions
+-- | See https://www.w3.org/TR/owl2-syntax/#Datatype_Restrictions
 data DatatypeRestriction 
   = DatatypeRestriction {
     datatypeRestrictionDatatype :: Datatype,
@@ -485,7 +487,7 @@ newtype ObjectHasSelf
 
 _ObjectHasSelf = (Core.Name "hydra/ext/owl/syntax.ObjectHasSelf")
 
--- See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality
+-- | See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality
 data ObjectMinCardinality 
   = ObjectMinCardinality {
     objectMinCardinalityBound :: Integer,
@@ -501,7 +503,7 @@ _ObjectMinCardinality_property = (Core.FieldName "property")
 
 _ObjectMinCardinality_class = (Core.FieldName "class")
 
--- See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality
+-- | See https://www.w3.org/TR/owl2-syntax/#Maximum_Cardinality
 data ObjectMaxCardinality 
   = ObjectMaxCardinality {
     objectMaxCardinalityBound :: Integer,
@@ -517,7 +519,7 @@ _ObjectMaxCardinality_property = (Core.FieldName "property")
 
 _ObjectMaxCardinality_class = (Core.FieldName "class")
 
--- See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality
+-- | See https://www.w3.org/TR/owl2-syntax/#Exact_Cardinality
 data ObjectExactCardinality 
   = ObjectExactCardinality {
     objectExactCardinalityBound :: Integer,
@@ -614,7 +616,7 @@ _DataExactCardinality_property = (Core.FieldName "property")
 
 _DataExactCardinality_range = (Core.FieldName "range")
 
--- See https://www.w3.org/TR/owl2-syntax/#Axioms
+-- | See https://www.w3.org/TR/owl2-syntax/#Axioms
 data Axiom 
   = AxiomAnnotationAxiom AnnotationAxiom
   | AxiomAssertion Assertion
@@ -700,7 +702,7 @@ _DisjointClasses_annotations = (Core.FieldName "annotations")
 
 _DisjointClasses_classes = (Core.FieldName "classes")
 
--- See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions
+-- | See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions
 data DisjointUnion 
   = DisjointUnion {
     disjointUnionAnnotations :: [Annotation],
@@ -799,7 +801,7 @@ _DisjointObjectProperties_annotations = (Core.FieldName "annotations")
 
 _DisjointObjectProperties_properties = (Core.FieldName "properties")
 
--- See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain
+-- | See https://www.w3.org/TR/owl2-syntax/#Object_Property_Domain
 data ObjectPropertyDomain 
   = ObjectPropertyDomain {
     objectPropertyDomainAnnotations :: [Annotation],
@@ -815,7 +817,7 @@ _ObjectPropertyDomain_property = (Core.FieldName "property")
 
 _ObjectPropertyDomain_domain = (Core.FieldName "domain")
 
--- See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range
+-- | See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range
 data ObjectPropertyRange 
   = ObjectPropertyRange {
     objectPropertyRangeAnnotations :: [Annotation],
@@ -1049,7 +1051,7 @@ _DatatypeDefinition_datatype = (Core.FieldName "datatype")
 
 _DatatypeDefinition_range = (Core.FieldName "range")
 
--- See https://www.w3.org/TR/owl2-syntax/#Keys
+-- | See https://www.w3.org/TR/owl2-syntax/#Keys
 data HasKey 
   = HasKey {
     hasKeyAnnotations :: [Annotation],

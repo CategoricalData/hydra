@@ -1,10 +1,12 @@
+-- | A Haskell syntax model, loosely based on Language.Haskell.Tools.AST
+
 module Hydra.Ext.Haskell.Ast where
 
 import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- A pattern-matching alternative
+-- | A pattern-matching alternative
 data Alternative 
   = Alternative {
     alternativePattern :: Pattern,
@@ -20,7 +22,7 @@ _Alternative_rhs = (Core.FieldName "rhs")
 
 _Alternative_binds = (Core.FieldName "binds")
 
--- A type assertion
+-- | A type assertion
 data Assertion 
   = Assertion {
     assertionName :: Name,
@@ -33,16 +35,16 @@ _Assertion_name = (Core.FieldName "name")
 
 _Assertion_types = (Core.FieldName "types")
 
--- The right-hand side of a pattern-matching alternative
+-- | The right-hand side of a pattern-matching alternative
 newtype CaseRhs 
   = CaseRhs {
-    -- The right-hand side of a pattern-matching alternative
+    -- | The right-hand side of a pattern-matching alternative
     unCaseRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
 
 _CaseRhs = (Core.Name "hydra/ext/haskell/ast.CaseRhs")
 
--- A data constructor
+-- | A data constructor
 data Constructor 
   = ConstructorOrdinary Constructor_Ordinary
   | ConstructorRecord Constructor_Record
@@ -54,7 +56,7 @@ _Constructor_ordinary = (Core.FieldName "ordinary")
 
 _Constructor_record = (Core.FieldName "record")
 
--- An ordinary (positional) data constructor
+-- | An ordinary (positional) data constructor
 data Constructor_Ordinary 
   = Constructor_Ordinary {
     constructor_OrdinaryName :: Name,
@@ -67,7 +69,7 @@ _Constructor_Ordinary_name = (Core.FieldName "name")
 
 _Constructor_Ordinary_fields = (Core.FieldName "fields")
 
--- A record-style data constructor
+-- | A record-style data constructor
 data Constructor_Record 
   = Constructor_Record {
     constructor_RecordName :: Name,
@@ -80,7 +82,7 @@ _Constructor_Record_name = (Core.FieldName "name")
 
 _Constructor_Record_fields = (Core.FieldName "fields")
 
--- A data type declaration
+-- | A data type declaration
 data DataDeclaration 
   = DataDeclaration {
     dataDeclarationKeyword :: DataDeclaration_Keyword,
@@ -102,7 +104,7 @@ _DataDeclaration_constructors = (Core.FieldName "constructors")
 
 _DataDeclaration_deriving = (Core.FieldName "deriving")
 
--- The 'data' versus 'newtype keyword
+-- | The 'data' versus 'newtype keyword
 data DataDeclaration_Keyword 
   = DataDeclaration_KeywordData 
   | DataDeclaration_KeywordNewtype 
@@ -114,7 +116,7 @@ _DataDeclaration_Keyword_data = (Core.FieldName "data")
 
 _DataDeclaration_Keyword_newtype = (Core.FieldName "newtype")
 
--- A data declaration together with any comments
+-- | A data declaration together with any comments
 data DeclarationWithComments 
   = DeclarationWithComments {
     declarationWithCommentsBody :: Declaration,
@@ -127,7 +129,7 @@ _DeclarationWithComments_body = (Core.FieldName "body")
 
 _DeclarationWithComments_comments = (Core.FieldName "comments")
 
--- A data or value declaration
+-- | A data or value declaration
 data Declaration 
   = DeclarationData DataDeclaration
   | DeclarationType TypeDeclaration
@@ -145,7 +147,7 @@ _Declaration_valueBinding = (Core.FieldName "valueBinding")
 
 _Declaration_typedBinding = (Core.FieldName "typedBinding")
 
--- The left-hand side of a declaration
+-- | The left-hand side of a declaration
 data DeclarationHead 
   = DeclarationHeadApplication DeclarationHead_Application
   | DeclarationHeadParens DeclarationHead
@@ -160,7 +162,7 @@ _DeclarationHead_parens = (Core.FieldName "parens")
 
 _DeclarationHead_simple = (Core.FieldName "simple")
 
--- An application-style declaration head
+-- | An application-style declaration head
 data DeclarationHead_Application 
   = DeclarationHead_Application {
     declarationHead_ApplicationFunction :: DeclarationHead,
@@ -173,16 +175,16 @@ _DeclarationHead_Application_function = (Core.FieldName "function")
 
 _DeclarationHead_Application_operand = (Core.FieldName "operand")
 
--- A 'deriving' statement
+-- | A 'deriving' statement
 newtype Deriving 
   = Deriving {
-    -- A 'deriving' statement
+    -- | A 'deriving' statement
     unDeriving :: [Name]}
   deriving (Eq, Ord, Read, Show)
 
 _Deriving = (Core.Name "hydra/ext/haskell/ast.Deriving")
 
--- An export statement
+-- | An export statement
 data Export 
   = ExportDeclaration ImportExportSpec
   | ExportModule ModuleName
@@ -194,7 +196,7 @@ _Export_declaration = (Core.FieldName "declaration")
 
 _Export_module = (Core.FieldName "module")
 
--- A data expression
+-- | A data expression
 data Expression 
   = ExpressionApplication Expression_Application
   | ExpressionCase Expression_Case
@@ -254,7 +256,7 @@ _Expression_updateRecord = (Core.FieldName "updateRecord")
 
 _Expression_variable = (Core.FieldName "variable")
 
--- An application expression
+-- | An application expression
 data Expression_Application 
   = Expression_Application {
     expression_ApplicationFunction :: Expression,
@@ -267,7 +269,7 @@ _Expression_Application_function = (Core.FieldName "function")
 
 _Expression_Application_argument = (Core.FieldName "argument")
 
--- A case expression
+-- | A case expression
 data Expression_Case 
   = Expression_Case {
     expression_CaseCase :: Expression,
@@ -280,7 +282,7 @@ _Expression_Case_case = (Core.FieldName "case")
 
 _Expression_Case_alternatives = (Core.FieldName "alternatives")
 
--- A record constructor expression
+-- | A record constructor expression
 data Expression_ConstructRecord 
   = Expression_ConstructRecord {
     expression_ConstructRecordName :: Name,
@@ -293,7 +295,7 @@ _Expression_ConstructRecord_name = (Core.FieldName "name")
 
 _Expression_ConstructRecord_fields = (Core.FieldName "fields")
 
--- An 'if' expression
+-- | An 'if' expression
 data Expression_If 
   = Expression_If {
     expression_IfCondition :: Expression,
@@ -309,7 +311,7 @@ _Expression_If_then = (Core.FieldName "then")
 
 _Expression_If_else = (Core.FieldName "else")
 
--- An infix application expression
+-- | An infix application expression
 data Expression_InfixApplication 
   = Expression_InfixApplication {
     expression_InfixApplicationLhs :: Expression,
@@ -325,7 +327,7 @@ _Expression_InfixApplication_operator = (Core.FieldName "operator")
 
 _Expression_InfixApplication_rhs = (Core.FieldName "rhs")
 
--- A lambda expression
+-- | A lambda expression
 data Expression_Lambda 
   = Expression_Lambda {
     expression_LambdaBindings :: [Pattern],
@@ -338,7 +340,7 @@ _Expression_Lambda_bindings = (Core.FieldName "bindings")
 
 _Expression_Lambda_inner = (Core.FieldName "inner")
 
--- A 'let' expression
+-- | A 'let' expression
 data Expression_Let 
   = Expression_Let {
     expression_LetBindings :: [Pattern],
@@ -351,7 +353,7 @@ _Expression_Let_bindings = (Core.FieldName "bindings")
 
 _Expression_Let_inner = (Core.FieldName "inner")
 
--- A prefix expression
+-- | A prefix expression
 data Expression_PrefixApplication 
   = Expression_PrefixApplication {
     expression_PrefixApplicationOperator :: Operator,
@@ -364,7 +366,7 @@ _Expression_PrefixApplication_operator = (Core.FieldName "operator")
 
 _Expression_PrefixApplication_rhs = (Core.FieldName "rhs")
 
--- A section expression
+-- | A section expression
 data Expression_Section 
   = Expression_Section {
     expression_SectionOperator :: Operator,
@@ -377,7 +379,7 @@ _Expression_Section_operator = (Core.FieldName "operator")
 
 _Expression_Section_expression = (Core.FieldName "expression")
 
--- A type signature expression
+-- | A type signature expression
 data Expression_TypeSignature 
   = Expression_TypeSignature {
     expression_TypeSignatureInner :: Expression,
@@ -390,7 +392,7 @@ _Expression_TypeSignature_inner = (Core.FieldName "inner")
 
 _Expression_TypeSignature_type = (Core.FieldName "type")
 
--- An update record expression
+-- | An update record expression
 data Expression_UpdateRecord 
   = Expression_UpdateRecord {
     expression_UpdateRecordInner :: Expression,
@@ -403,7 +405,7 @@ _Expression_UpdateRecord_inner = (Core.FieldName "inner")
 
 _Expression_UpdateRecord_fields = (Core.FieldName "fields")
 
--- A field (name/type pair)
+-- | A field (name/type pair)
 data Field 
   = Field {
     fieldName :: Name,
@@ -416,7 +418,7 @@ _Field_name = (Core.FieldName "name")
 
 _Field_type = (Core.FieldName "type")
 
--- A field together with any comments
+-- | A field together with any comments
 data FieldWithComments 
   = FieldWithComments {
     fieldWithCommentsField :: Field,
@@ -429,7 +431,7 @@ _FieldWithComments_field = (Core.FieldName "field")
 
 _FieldWithComments_comments = (Core.FieldName "comments")
 
--- A field name and value
+-- | A field name and value
 data FieldUpdate 
   = FieldUpdate {
     fieldUpdateName :: Name,
@@ -442,7 +444,7 @@ _FieldUpdate_name = (Core.FieldName "name")
 
 _FieldUpdate_value = (Core.FieldName "value")
 
--- An import statement
+-- | An import statement
 data Import 
   = Import {
     importQualified :: Bool,
@@ -461,7 +463,7 @@ _Import_as = (Core.FieldName "as")
 
 _Import_spec = (Core.FieldName "spec")
 
--- An import specification
+-- | An import specification
 data Import_Spec 
   = Import_SpecList [ImportExportSpec]
   | Import_SpecHiding [ImportExportSpec]
@@ -473,7 +475,7 @@ _Import_Spec_list = (Core.FieldName "list")
 
 _Import_Spec_hiding = (Core.FieldName "hiding")
 
--- An import modifier ('pattern' or 'type')
+-- | An import modifier ('pattern' or 'type')
 data ImportModifier 
   = ImportModifierPattern 
   | ImportModifierType 
@@ -485,7 +487,7 @@ _ImportModifier_pattern = (Core.FieldName "pattern")
 
 _ImportModifier_type = (Core.FieldName "type")
 
--- An import or export specification
+-- | An import or export specification
 data ImportExportSpec 
   = ImportExportSpec {
     importExportSpecModifier :: (Maybe ImportModifier),
@@ -512,7 +514,7 @@ _ImportExportSpec_Subspec_all = (Core.FieldName "all")
 
 _ImportExportSpec_Subspec_list = (Core.FieldName "list")
 
--- A literal value
+-- | A literal value
 data Literal 
   = LiteralChar Int
   | LiteralDouble Double
@@ -571,11 +573,14 @@ _Module_declarations = (Core.FieldName "declarations")
 
 data ModuleHead 
   = ModuleHead {
+    moduleHeadComments :: (Maybe String),
     moduleHeadName :: ModuleName,
     moduleHeadExports :: [Export]}
   deriving (Eq, Ord, Read, Show)
 
 _ModuleHead = (Core.Name "hydra/ext/haskell/ast.ModuleHead")
+
+_ModuleHead_comments = (Core.FieldName "comments")
 
 _ModuleHead_name = (Core.FieldName "name")
 

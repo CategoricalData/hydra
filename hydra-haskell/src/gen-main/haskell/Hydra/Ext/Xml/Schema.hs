@@ -1,3 +1,9 @@
+-- | A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.
+-- | See: https://www.w3.org/TR/xmlschema-2
+-- | Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply
+-- |       the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly
+-- |       corresponding Hydra literal type.
+
 module Hydra.Ext.Xml.Schema where
 
 import qualified Hydra.Core as Core
@@ -312,7 +318,7 @@ newtype UnsignedShort
 
 _UnsignedShort = (Core.Name "hydra/ext/xml/schema.UnsignedShort")
 
--- See https://www.w3.org/TR/xmlschema-2/#non-fundamental
+-- | See https://www.w3.org/TR/xmlschema-2/#non-fundamental
 data ConstrainingFacet 
   = ConstrainingFacet {}
   deriving (Eq, Ord, Read, Show)

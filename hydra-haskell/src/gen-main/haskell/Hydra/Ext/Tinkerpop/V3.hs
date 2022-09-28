@@ -1,10 +1,12 @@
+-- | A simple TinkerPop version 3 syntax model
+
 module Hydra.Ext.Tinkerpop.V3 where
 
 import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
--- An edge
+-- | An edge
 data Edge v e p 
   = Edge {
     edgeLabel :: EdgeLabel,
@@ -26,16 +28,16 @@ _Edge_in = (Core.FieldName "in")
 
 _Edge_properties = (Core.FieldName "properties")
 
--- The (required) label of an edge
+-- | The (required) label of an edge
 newtype EdgeLabel 
   = EdgeLabel {
-    -- The (required) label of an edge
+    -- | The (required) label of an edge
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeLabel = (Core.Name "hydra/ext/tinkerpop/v3.EdgeLabel")
 
--- Either a vertex or an edge
+-- | Either a vertex or an edge
 data Element v e p 
   = ElementVertex (Vertex v p)
   | ElementEdge (Edge v e p)
@@ -47,7 +49,7 @@ _Element_vertex = (Core.FieldName "vertex")
 
 _Element_edge = (Core.FieldName "edge")
 
--- A graph; a self-contained collection of vertices and edges
+-- | A graph; a self-contained collection of vertices and edges
 data Graph v e p 
   = Graph {
     graphVertices :: (Set (Vertex v p)),
@@ -60,7 +62,7 @@ _Graph_vertices = (Core.FieldName "vertices")
 
 _Graph_edges = (Core.FieldName "edges")
 
--- A key/value property
+-- | A key/value property
 data Property p 
   = Property {
     propertyKey :: PropertyKey,
@@ -73,16 +75,16 @@ _Property_key = (Core.FieldName "key")
 
 _Property_value = (Core.FieldName "value")
 
--- A property key
+-- | A property key
 newtype PropertyKey 
   = PropertyKey {
-    -- A property key
+    -- | A property key
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = (Core.Name "hydra/ext/tinkerpop/v3.PropertyKey")
 
--- A vertex
+-- | A vertex
 data Vertex v p 
   = Vertex {
     vertexLabel :: VertexLabel,
@@ -98,10 +100,10 @@ _Vertex_id = (Core.FieldName "id")
 
 _Vertex_properties = (Core.FieldName "properties")
 
--- The label of a vertex. The default (null) vertex is represented by the empty string
+-- | The label of a vertex. The default (null) vertex is represented by the empty string
 newtype VertexLabel 
   = VertexLabel {
-    -- The label of a vertex. The default (null) vertex is represented by the empty string
+    -- | The label of a vertex. The default (null) vertex is represented by the empty string
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
