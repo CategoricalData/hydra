@@ -12,7 +12,8 @@ import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 
 
 shaclModelModule :: Module Meta
-shaclModelModule = Module ns elements [rdfSyntaxModule]
+shaclModelModule = Module ns elements [rdfSyntaxModule] $
+    Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where
     ns = Namespace "hydra/ext/shacl/model"
     def = datatype ns

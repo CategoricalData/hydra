@@ -1,13 +1,3 @@
-{-
-A basic YAML representation model
-
-Based on https://yaml.org/spec/1.2/spec.html
-
-The Serialization and Presentation properties of YAML,
-including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.
-In addition, tags are omitted from this model, and non-standard scalars are unsupported.
--}
-
 module Hydra.Impl.Haskell.Sources.Ext.Yaml.Model where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -19,7 +9,12 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 yamlModelModule :: Module Meta
-yamlModelModule = Module ns elements []
+yamlModelModule = Module ns elements [] $
+    Just ("A basic YAML representation model. Based on:\n" ++
+      "  https://yaml.org/spec/1.2/spec.html\n" ++
+      "The Serialization and Presentation properties of YAML,\n" ++
+      "including directives, comments, anchors, style, formatting, and aliases, are not supported by this model.\n" ++
+      "In addition, tags are omitted from this model, and non-standard scalars are unsupported.")
   where
     ns = Namespace "hydra/ext/yaml/model"
     def = datatype ns

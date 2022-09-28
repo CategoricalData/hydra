@@ -1,9 +1,3 @@
-{-|
-Model for PDL (Pegasus Data Language) schemas
-
-Based on the specification at https://linkedin.github.io/rest.li/pdl_schema
--}
-
 module Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -16,7 +10,9 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 pegasusPdlModule :: Module Meta
-pegasusPdlModule = Module ns elements [jsonModelModule]
+pegasusPdlModule = Module ns elements [jsonModelModule] $
+    Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++
+      "  https://linkedin.github.io/rest.li/pdl_schema")
   where
     ns = Namespace "hydra/ext/pegasus/pdl"
     def = datatype ns

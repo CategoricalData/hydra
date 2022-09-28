@@ -43,7 +43,9 @@ data Module m
     -- The elements defined in this module
     moduleElements :: [Element m],
     -- Any additional modules this one has a direct dependency upon
-    moduleDependencies :: [Module m]}
+    moduleDependencies :: [Module m],
+    -- An optional human-readable description of the module
+    moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
 _Module = (Core.Name "hydra/graph.Module")
@@ -53,6 +55,8 @@ _Module_namespace = (Core.FieldName "namespace")
 _Module_elements = (Core.FieldName "elements")
 
 _Module_dependencies = (Core.FieldName "dependencies")
+
+_Module_description = (Core.FieldName "description")
 
 -- A prefix for element names
 newtype Namespace 

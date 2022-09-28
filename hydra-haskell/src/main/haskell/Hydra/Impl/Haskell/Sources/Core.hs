@@ -14,7 +14,8 @@ hydraCore :: Graph Meta
 hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module Meta
-hydraCoreModule = Module ns elements []
+hydraCoreModule = Module ns elements [] $
+    Just "Hydra's core data model, defining the structure of types and terms"
   where
     ns = Namespace "hydra/core"
     core = nsref ns

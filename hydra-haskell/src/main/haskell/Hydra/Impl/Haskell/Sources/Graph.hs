@@ -11,7 +11,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraGraphModule :: Module Meta
-hydraGraphModule = Module ns elements [hydraCoreModule]
+hydraGraphModule = Module ns elements [hydraCoreModule] $
+    Just "Abstractions for graphs, elements, and modules"
   where
     ns = Namespace "hydra/graph"
     core = nsref $ moduleNamespace hydraCoreModule
@@ -48,7 +49,10 @@ hydraGraphModule = Module ns elements [hydraCoreModule]
             list $ graph "Element" @@ "m",
           "dependencies">:
             doc "Any additional modules this one has a direct dependency upon" $
-            list $ graph "Module" @@ "m"],
+            list $ graph "Module" @@ "m",
+          "description">:
+            doc "An optional human-readable description of the module" $
+            optional string],
 
       def "Namespace" $
         doc "A prefix for element names"

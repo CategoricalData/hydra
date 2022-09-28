@@ -12,7 +12,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraEvaluationModule :: Module Meta
-hydraEvaluationModule = Module ns elements [hydraGraphModule]
+hydraEvaluationModule = Module ns elements [hydraGraphModule] $
+    Just "Abstractions for evaluation and transformations"
   where
     ns = Namespace "hydra/evaluation"
     core = nsref $ moduleNamespace hydraCoreModule

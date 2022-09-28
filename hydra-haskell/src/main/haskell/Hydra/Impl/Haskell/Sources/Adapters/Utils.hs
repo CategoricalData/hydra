@@ -17,7 +17,8 @@ import Prelude hiding ((++))
 utilsNs = Namespace "hydra/adapters/utils"
 
 adapterUtilsModule :: Module Meta
-adapterUtilsModule = Module utilsNs elements [hydraBasicsModule]
+adapterUtilsModule = Module utilsNs elements [hydraBasicsModule] $
+    Just "Utilities for use in transformations"
   where
    elements = [
      el describeFloatType,

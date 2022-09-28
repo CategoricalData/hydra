@@ -1,5 +1,3 @@
--- | OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax
-
 module Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -27,7 +25,8 @@ owlIri :: [Char] -> Type Meta -> Type Meta
 owlIri local = withIri $ "http://www.w3.org/2002/07/owl#" ++ local
 
 owlSyntaxModule :: Module Meta
-owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule]
+owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
+    Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where
     ns = Namespace "hydra/ext/owl/syntax"
     def = datatype ns

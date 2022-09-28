@@ -11,7 +11,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 tinkerpopV3Module :: Module Meta
-tinkerpopV3Module = Module ns elements [hydraCoreModule]
+tinkerpopV3Module = Module ns elements [hydraCoreModule] $
+    Just "A simple TinkerPop version 3 syntax model"
   where
     ns = Namespace "hydra/ext/tinkerpop/v3"
     core = nsref $ moduleNamespace hydraCoreModule

@@ -1,12 +1,3 @@
-{-|
-Partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.
-See: https://www.w3.org/TR/xmlschema-2
-
-Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply
-      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly
-      corresponding Hydra literal type.
--}
-
 module Hydra.Impl.Haskell.Sources.Ext.Xml.Schema where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -18,7 +9,12 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 xmlSchemaModule :: Module Meta
-xmlSchemaModule = Module ns elements []
+xmlSchemaModule = Module ns elements [] $
+    Just ("A partial XML Schema model, focusing on datatypes. All simple datatypes (i.e. xsd:anySimpleType and below) are included.\n" ++
+      "See: https://www.w3.org/TR/xmlschema-2\n" ++
+      "Note: for most of the XML Schema datatype definitions included here, the associated Hydra type is simply\n" ++
+      "      the string type. Exceptions are made for xsd:boolean and most of the numeric types, where there is a clearly\n" ++
+      "      corresponding Hydra literal type.")
   where
     ns = Namespace "hydra/ext/xml/schema"
     def = datatype ns

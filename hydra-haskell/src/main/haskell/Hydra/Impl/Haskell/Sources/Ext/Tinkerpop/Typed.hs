@@ -9,7 +9,7 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 tinkerpopTypedModule :: Module Meta
-tinkerpopTypedModule = Module ns elements [hydraCoreModule]
+tinkerpopTypedModule = Module ns elements [hydraCoreModule] Nothing
   where
     ns = Namespace "hydra/ext/tinkerpop/typed"
     def = datatype ns

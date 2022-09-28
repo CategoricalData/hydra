@@ -9,7 +9,8 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 rdfSyntaxModule :: Module Meta
-rdfSyntaxModule = Module ns elements []
+rdfSyntaxModule = Module ns elements [] $
+    Just "An RDF 1.1 syntax model"
   where
     ns = Namespace "hydra/ext/rdf/syntax"
     def = datatype ns

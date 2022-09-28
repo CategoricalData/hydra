@@ -1,7 +1,3 @@
--- Based on the Oracle Java SE 12 BNF.
--- See https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html
--- Note: all "WithComments" types were added manually, rather than derived from the BNF, which does not allow for comments.
-
 module Hydra.Impl.Haskell.Sources.Ext.Java.Syntax where
 
 import Hydra.Impl.Haskell.Sources.Core
@@ -13,7 +9,10 @@ import Hydra.Impl.Haskell.Dsl.Standard
 
 
 javaSyntaxModule :: Module Meta
-javaSyntaxModule = Module ns elements []
+javaSyntaxModule = Module ns elements [] $
+    Just ("A Java syntax module. Based on the Oracle Java SE 12 BNF:\n" ++
+      "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++
+      "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")
   where
     ns = Namespace "hydra/ext/java/syntax"
     def = datatype ns

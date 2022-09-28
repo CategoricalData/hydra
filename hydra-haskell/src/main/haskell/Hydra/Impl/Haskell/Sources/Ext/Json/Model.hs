@@ -8,9 +8,9 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
--- | See the BNF at https://www.json.org
 jsonModelModule :: Module Meta
-jsonModelModule = Module ns elements []
+jsonModelModule = Module ns elements [] $
+    Just "A JSON syntax model. See the BNF at https://www.json.org"
   where
     ns = Namespace "hydra/ext/json/model"
     def = datatype ns
