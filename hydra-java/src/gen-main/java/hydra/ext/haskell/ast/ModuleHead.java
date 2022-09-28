@@ -3,11 +3,14 @@ package hydra.ext.haskell.ast;
 public class ModuleHead {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/haskell/ast.ModuleHead");
   
+  public final java.util.Optional<String> comments;
+  
   public final hydra.ext.haskell.ast.ModuleName name;
   
   public final java.util.List<hydra.ext.haskell.ast.Export> exports;
   
-  public ModuleHead (hydra.ext.haskell.ast.ModuleName name, java.util.List<hydra.ext.haskell.ast.Export> exports) {
+  public ModuleHead (java.util.Optional<String> comments, hydra.ext.haskell.ast.ModuleName name, java.util.List<hydra.ext.haskell.ast.Export> exports) {
+    this.comments = comments;
     this.name = name;
     this.exports = exports;
   }
@@ -18,19 +21,23 @@ public class ModuleHead {
       return false;
     }
     ModuleHead o = (ModuleHead) (other);
-    return name.equals(o.name) && exports.equals(o.exports);
+    return comments.equals(o.comments) && name.equals(o.name) && exports.equals(o.exports);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * exports.hashCode();
+    return 2 * comments.hashCode() + 3 * name.hashCode() + 5 * exports.hashCode();
+  }
+  
+  public ModuleHead withComments(java.util.Optional<String> comments) {
+    return new ModuleHead(comments, name, exports);
   }
   
   public ModuleHead withName(hydra.ext.haskell.ast.ModuleName name) {
-    return new ModuleHead(name, exports);
+    return new ModuleHead(comments, name, exports);
   }
   
   public ModuleHead withExports(java.util.List<hydra.ext.haskell.ast.Export> exports) {
-    return new ModuleHead(name, exports);
+    return new ModuleHead(comments, name, exports);
   }
 }

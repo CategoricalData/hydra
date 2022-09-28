@@ -131,15 +131,16 @@ constructModule mod coders pairs = do
       _ -> unexpected "function type" typ
 
 constructElementsInterface :: Module m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
-constructElementsInterface mod members = (elName, Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl])
+constructElementsInterface mod members = (elName, cu)
   where
+    cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
     pkg = javaPackageDeclaration $ moduleNamespace mod
     mods = []
     elName = fromQname (moduleNamespace mod) elementsClassName
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body
-    decl = Java.TypeDeclarationWithComments itf Nothing
+    decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => Aliases
   -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
