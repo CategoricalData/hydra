@@ -1,13 +1,13 @@
-package hydra.adapter;
+package hydra.compute;
 
 public class Language<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.Language");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Language");
   
-  public final hydra.adapter.LanguageName name;
+  public final hydra.compute.LanguageName name;
   
-  public final hydra.adapter.LanguageConstraints<M> constraints;
+  public final hydra.compute.LanguageConstraints<M> constraints;
   
-  public Language (hydra.adapter.LanguageName name, hydra.adapter.LanguageConstraints<M> constraints) {
+  public Language (hydra.compute.LanguageName name, hydra.compute.LanguageConstraints<M> constraints) {
     this.name = name;
     this.constraints = constraints;
   }
@@ -26,11 +26,11 @@ public class Language<M> {
     return 2 * name.hashCode() + 3 * constraints.hashCode();
   }
   
-  public Language withName(hydra.adapter.LanguageName name) {
+  public Language withName(hydra.compute.LanguageName name) {
     return new Language(name, constraints);
   }
   
-  public Language withConstraints(hydra.adapter.LanguageConstraints<M> constraints) {
+  public Language withConstraints(hydra.compute.LanguageConstraints<M> constraints) {
     return new Language(name, constraints);
   }
 }

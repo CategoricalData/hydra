@@ -6,6 +6,37 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
+data Adapter s t v 
+  = Adapter {
+    adapterIsLossy :: Bool,
+    adapterSource :: t,
+    adapterTarget :: t,
+    adapterCoder :: (Coder s v v)}
+
+_Adapter = (Core.Name "hydra/compute.Adapter")
+
+_Adapter_isLossy = (Core.FieldName "isLossy")
+
+_Adapter_source = (Core.FieldName "source")
+
+_Adapter_target = (Core.FieldName "target")
+
+_Adapter_coder = (Core.FieldName "coder")
+
+data AdapterContext m 
+  = AdapterContext {
+    adapterContextEvaluation :: (Context m),
+    adapterContextSource :: (Language m),
+    adapterContextTarget :: (Language m)}
+
+_AdapterContext = (Core.Name "hydra/compute.AdapterContext")
+
+_AdapterContext_evaluation = (Core.FieldName "evaluation")
+
+_AdapterContext_source = (Core.FieldName "source")
+
+_AdapterContext_target = (Core.FieldName "target")
+
 -- | A typeclass-like construct providing common functions for working with annotations
 data AnnotationClass m 
   = AnnotationClass {
@@ -127,6 +158,53 @@ _FlowWrapper_value = (Core.FieldName "value")
 _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
+
+data Language m 
+  = Language {
+    languageName :: LanguageName,
+    languageConstraints :: (LanguageConstraints m)}
+
+_Language = (Core.Name "hydra/compute.Language")
+
+_Language_name = (Core.FieldName "name")
+
+_Language_constraints = (Core.FieldName "constraints")
+
+data LanguageConstraints m 
+  = LanguageConstraints {
+    languageConstraintsEliminationVariants :: (Set Core.EliminationVariant),
+    languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
+    languageConstraintsFloatTypes :: (Set Core.FloatType),
+    languageConstraintsFunctionVariants :: (Set Core.FunctionVariant),
+    languageConstraintsIntegerTypes :: (Set Core.IntegerType),
+    languageConstraintsTermVariants :: (Set Core.TermVariant),
+    languageConstraintsTypeVariants :: (Set Core.TypeVariant),
+    languageConstraintsTypes :: (Core.Type m -> Bool)}
+
+_LanguageConstraints = (Core.Name "hydra/compute.LanguageConstraints")
+
+_LanguageConstraints_eliminationVariants = (Core.FieldName "eliminationVariants")
+
+_LanguageConstraints_literalVariants = (Core.FieldName "literalVariants")
+
+_LanguageConstraints_floatTypes = (Core.FieldName "floatTypes")
+
+_LanguageConstraints_functionVariants = (Core.FieldName "functionVariants")
+
+_LanguageConstraints_integerTypes = (Core.FieldName "integerTypes")
+
+_LanguageConstraints_termVariants = (Core.FieldName "termVariants")
+
+_LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
+
+_LanguageConstraints_types = (Core.FieldName "types")
+
+newtype LanguageName 
+  = LanguageName {
+    unLanguageName :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_LanguageName = (Core.Name "hydra/compute.LanguageName")
 
 -- | A built-in metadata container for terms
 data Meta 

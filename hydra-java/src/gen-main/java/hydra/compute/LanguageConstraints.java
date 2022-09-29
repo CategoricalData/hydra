@@ -1,7 +1,7 @@
-package hydra.adapter;
+package hydra.compute;
 
 public class LanguageConstraints<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.LanguageConstraints");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageConstraints");
   
   public final java.util.Set<hydra.core.EliminationVariant> eliminationVariants;
   

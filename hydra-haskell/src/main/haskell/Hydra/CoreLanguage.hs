@@ -1,6 +1,6 @@
 module Hydra.CoreLanguage where
 
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Basics
 
 import qualified Data.Set as S

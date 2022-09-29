@@ -1,7 +1,6 @@
 module Hydra.Ext.Json.Language where
 
 import Hydra.Core
-import Hydra.Adapter
 import Hydra.Common
 import Hydra.Compute
 

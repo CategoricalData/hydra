@@ -1,15 +1,15 @@
-package hydra.adapter;
+package hydra.compute;
 
 public class AdapterContext<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.AdapterContext");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.AdapterContext");
   
   public final hydra.compute.Context<M> evaluation;
   
-  public final hydra.adapter.Language<M> source;
+  public final hydra.compute.Language<M> source;
   
-  public final hydra.adapter.Language<M> target;
+  public final hydra.compute.Language<M> target;
   
-  public AdapterContext (hydra.compute.Context<M> evaluation, hydra.adapter.Language<M> source, hydra.adapter.Language<M> target) {
+  public AdapterContext (hydra.compute.Context<M> evaluation, hydra.compute.Language<M> source, hydra.compute.Language<M> target) {
     this.evaluation = evaluation;
     this.source = source;
     this.target = target;
@@ -33,11 +33,11 @@ public class AdapterContext<M> {
     return new AdapterContext(evaluation, source, target);
   }
   
-  public AdapterContext withSource(hydra.adapter.Language<M> source) {
+  public AdapterContext withSource(hydra.compute.Language<M> source) {
     return new AdapterContext(evaluation, source, target);
   }
   
-  public AdapterContext withTarget(hydra.adapter.Language<M> target) {
+  public AdapterContext withTarget(hydra.compute.Language<M> target) {
     return new AdapterContext(evaluation, source, target);
   }
 }

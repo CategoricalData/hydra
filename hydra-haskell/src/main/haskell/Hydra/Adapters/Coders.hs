@@ -1,6 +1,5 @@
 module Hydra.Adapters.Coders where
 
-import Hydra.Adapter
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Module

@@ -1,6 +1,6 @@
 module Hydra.Ext.Pegasus.Language where
 
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Core
 
 import qualified Data.Set as S
