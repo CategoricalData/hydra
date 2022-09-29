@@ -19,7 +19,6 @@ import Hydra.ArbitraryCore()
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Adapter
 import Hydra.Compute
 import Hydra.TestGraph
 import Hydra.Adapters.Literal

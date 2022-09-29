@@ -1,7 +1,7 @@
 module Hydra.Ext.Java.Language where
 
 import Hydra.Core
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Basics
 
 import qualified Data.Set as S

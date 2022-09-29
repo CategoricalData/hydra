@@ -7,7 +7,7 @@ module Hydra.Adapters.Term (
 
 import Hydra.Core
 import Hydra.Module
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Adapters.Literal
 import Hydra.Basics
 import Hydra.Monads

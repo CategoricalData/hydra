@@ -17,11 +17,24 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
   where
     ns = Namespace "hydra/compute"
     core = nsref $ moduleNamespace hydraCoreModule
-    evaluation = nsref ns
+    compute = nsref ns
 
     def = datatype ns
 
     elements = [
+      def "Adapter" $
+        lambda "s" $ lambda "t" $ lambda "v" $ record [
+          "isLossy">: boolean,
+          "source">: variable "t",
+          "target">: variable "t",
+          "coder">: compute "Coder" @@ "s" @@ "v" @@ "v"],
+
+      def "AdapterContext" $
+        lambda "m" $ record [
+          "evaluation">: apply (compute "Context") (variable "m"),
+          "source">: apply (compute "Language") (variable "m"),
+          "target">: apply (compute "Language") (variable "m")],
+
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
         lambda "m" $ record [
@@ -37,25 +50,25 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
           "typeMeta">:
             core "Type" @@ "m" --> "m",
           "termDescription">:
-            core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional string,
+            core "Term" @@ "m" --> compute "Flow" @@ (compute "Context" @@ "m") @@ optional string,
           "typeDescription">:
-            core "Type" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional string,
+            core "Type" @@ "m" --> compute "Flow" @@ (compute "Context" @@ "m") @@ optional string,
           "termType">:
-            core "Term" @@ "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional (core "Type" @@ "m"),
+            core "Term" @@ "m" --> compute "Flow" @@ (compute "Context" @@ "m") @@ optional (core "Type" @@ "m"),
           "setTermDescription">:
-            evaluation "Context" @@ "m" --> optional string --> core "Term" @@ "m" --> core "Term" @@ "m",
+            compute "Context" @@ "m" --> optional string --> core "Term" @@ "m" --> core "Term" @@ "m",
           "setTermType">:
-            evaluation "Context" @@ "m" --> optional (core "Type" @@ "m") --> core "Term" @@ "m" --> core "Term" @@ "m",
+            compute "Context" @@ "m" --> optional (core "Type" @@ "m") --> core "Term" @@ "m" --> core "Term" @@ "m",
           "typeOf">:
-            "m" --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ optional (core "Type" @@ "m"),
+            "m" --> compute "Flow" @@ (compute "Context" @@ "m") @@ optional (core "Type" @@ "m"),
           "setTypeOf">:
             optional (core "Type" @@ "m") --> "m" --> "m"],
 
       def "Coder" $
         doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
         lambda "s" $ lambda "a" $ lambda "b" $ record [
-          "encode">: ("a" --> evaluation "Flow" @@ "s" @@ "b"),
-          "decode">: ("b" --> evaluation "Flow" @@ "s" @@ "a")],
+          "encode">: ("a" --> compute "Flow" @@ "s" @@ "b"),
+          "decode">: ("b" --> compute "Flow" @@ "s" @@ "a")],
 
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
@@ -67,9 +80,9 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
         doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
           "graph">: core "Graph" @@ "m",
-          "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
-          "strategy">: evaluation "EvaluationStrategy",
-          "annotations">: evaluation "AnnotationClass" @@ "m"],
+          "functions">: Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
+          "strategy">: compute "EvaluationStrategy",
+          "annotations">: compute "AnnotationClass" @@ "m"],
 
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
@@ -79,20 +92,38 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
       def "Flow" $
         doc "A variant of the State monad with built-in logging and error handling" $
         lambda "s" $ lambda "a" $
-        function "s" (evaluation "Trace" --> evaluation "FlowWrapper" @@ "s" @@ "a"),
+        function "s" (compute "Trace" --> compute "FlowWrapper" @@ "s" @@ "a"),
 
       def "FlowWrapper" $
         lambda "s" $ lambda "a" $ record [
           "value">: optional "a",
           "state">: "s",
-          "trace">: evaluation "Trace"],
+          "trace">: compute "Trace"],
+
+      def "Language" $
+        lambda "m" $ record [
+          "name">: compute "LanguageName",
+          "constraints">: apply (compute "LanguageConstraints") (variable "m")],
+
+      def "LanguageConstraints" $
+        lambda "m" $ record [
+          "eliminationVariants">: Types.set $ core "EliminationVariant",
+          "literalVariants">: Types.set $ core "LiteralVariant",
+          "floatTypes">: Types.set $ core "FloatType",
+          "functionVariants">: Types.set $ core "FunctionVariant",
+          "integerTypes">: Types.set $ core "IntegerType",
+          "termVariants">: Types.set $ core "TermVariant",
+          "typeVariants">: Types.set $ core "TypeVariant",
+          "types">: core "Type" @@ "m" --> boolean],
+
+      def "LanguageName" string,
 
       def "Meta" $
         doc "A built-in metadata container for terms" $
         record [
           "annotations">:
             doc "A map of annotation names to annotation values" $
-            Types.map string (core "Term" @@ evaluation "Meta")],
+            Types.map string (core "Term" @@ compute "Meta")],
 
       def "PrimitiveFunction" $
         doc "A built-in function" $
@@ -100,13 +131,13 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
           "name">: core "Name",
           "type">: core "FunctionType" @@ "m",
           "implementation">:
-            list (core "Term" @@ "m") --> evaluation "Flow" @@ (evaluation "Context" @@ "m") @@ (core "Term" @@ "m")],
+            list (core "Term" @@ "m") --> compute "Flow" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m")],
 
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         lambda "m" $ lambda "a" $ record [
           "type">: core "Type" @@ "m",
-          "coder">: evaluation "Coder" @@ (evaluation "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
+          "coder">: compute "Coder" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
 
       def "Trace" $
         doc "A container for logging and error information" $

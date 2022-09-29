@@ -9,7 +9,7 @@ import Hydra.Core
 import Hydra.Basics
 import Hydra.Module
 import Hydra.Monads
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Adapters.Utils
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting

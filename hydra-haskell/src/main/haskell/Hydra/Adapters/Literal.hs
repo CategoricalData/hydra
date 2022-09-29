@@ -7,7 +7,7 @@ module Hydra.Adapters.Literal (
 import Hydra.Core
 import Hydra.Basics
 import Hydra.Monads
-import Hydra.Adapter
+import Hydra.Compute
 import Hydra.Adapters.Utils
 import Hydra.Adapters.UtilsEtc
 import Hydra.Lexical

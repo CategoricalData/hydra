@@ -1,6 +1,5 @@
 module Hydra.Ext.Tinkerpop.Language where
 
-import Hydra.Adapter
 import Hydra.Ext.Tinkerpop.Features
 import Hydra.Core
 import Hydra.Common

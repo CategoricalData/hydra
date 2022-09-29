@@ -2,7 +2,6 @@ module Hydra.Ext.Json.Coder (jsonCoder) where
 
 import Hydra.Core
 import Hydra.Compute
-import Hydra.Adapter
 import Hydra.Adapters.Term
 import Hydra.CoreLanguage
 import Hydra.Monads

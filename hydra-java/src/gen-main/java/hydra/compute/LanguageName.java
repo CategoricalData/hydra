@@ -1,7 +1,7 @@
-package hydra.adapter;
+package hydra.compute;
 
 public class LanguageName {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.LanguageName");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageName");
   
   public final String value;
   
