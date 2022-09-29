@@ -27,7 +27,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type TypeAdapter m = Type m -> Flow (AdapterContext m) (Adapter (Context m) (Type m) (Term m))
+type TypeAdapter m = Type m -> Flow (AdapterContext m) (SymmetricAdapter (Context m) (Type m) (Term m))
 
 _context :: FieldName
 _context = FieldName "context"
@@ -56,7 +56,7 @@ elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder 
     encode (TermElement (Name name)) = pure $ string name
     decode (TermLiteral (LiteralString name)) = pure $ TermElement $ Name name
 
-fieldAdapter :: (Ord m, Read m, Show m) => FieldType m -> Flow (AdapterContext m) (Adapter (Context m) (FieldType m) (Field m))
+fieldAdapter :: (Ord m, Read m, Show m) => FieldType m -> Flow (AdapterContext m) (SymmetricAdapter (Context m) (FieldType m) (Field m))
 fieldAdapter ftyp = do
   ad <- termAdapter $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
@@ -156,7 +156,7 @@ optionalToList t@(TypeOptional ot) = do
       pure Nothing
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
-passAnnotated :: (Ord m, Read m, Show m) => Type m -> Flow (AdapterContext m) (Adapter (Context m) (Type m) v)
+passAnnotated :: (Ord m, Read m, Show m) => Type m -> Flow (AdapterContext m) (SymmetricAdapter (Context m) (Type m) v)
 passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
   ad <- termAdapter at
   return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $ \dir term -> pure term

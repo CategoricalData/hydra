@@ -16,7 +16,7 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-literalAdapter :: LiteralType -> Flow (AdapterContext m) (Adapter (Context m) LiteralType Literal)
+literalAdapter :: LiteralType -> Flow (AdapterContext m) (SymmetricAdapter (Context m) LiteralType Literal)
 literalAdapter lt = do
     acx <- getState
     chooseAdapter (alts acx) (supported acx) describeLiteralType lt
@@ -58,7 +58,7 @@ literalAdapter lt = do
                     <$> encodeDecode dir (adapterCoder adapter) iv
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the literal string type"
-      where        
+      where
         noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants $ constraints acx)
           || S.null (languageConstraintsFloatTypes $ constraints acx)
         noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants $ constraints acx)
@@ -92,7 +92,7 @@ disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
   ++ if lossy then " (lossy)" else ""
 
-floatAdapter :: FloatType -> Flow (AdapterContext m) (Adapter (Context m) FloatType FloatValue)
+floatAdapter :: FloatType -> Flow (AdapterContext m) (SymmetricAdapter (Context m) FloatType FloatValue)
 floatAdapter ft = do
     acx <- getState
     let supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget acx
@@ -109,7 +109,7 @@ floatAdapter ft = do
             step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
-integerAdapter :: IntegerType -> Flow (AdapterContext m) (Adapter (Context m) IntegerType IntegerValue)
+integerAdapter :: IntegerType -> Flow (AdapterContext m) (SymmetricAdapter (Context m) IntegerType IntegerValue)
 integerAdapter it = do
     acx <- getState
     let supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget acx
@@ -132,14 +132,14 @@ integerAdapter it = do
         unsignedPref = interleave unsignedOrdered signedOrdered
         signedNonPref = L.reverse unsignedPref
         unsignedNonPref = L.reverse signedPref
-        
+
         interleave xs ys = L.concat (L.transpose [xs, ys])
-        
+
         signedOrdered = L.filter
           (\v -> integerTypeIsSigned v && integerTypePrecision v /= PrecisionArbitrary) integerTypes
         unsignedOrdered = L.filter
           (\v -> not (integerTypeIsSigned v) && integerTypePrecision v /= PrecisionArbitrary) integerTypes
-          
+
         makeAdapter source target = withWarning msg $ Adapter lossy source target step
           where
             lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
