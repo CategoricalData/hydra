@@ -52,7 +52,7 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
 
 constructModule :: (Ord m, Read m, Show m)
   => Module m
-  -> M.Map (Type m) (Coder (Context m) (Term m) H.Expression)
+  -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) H.Expression)
   -> [(Element m, TypedTerm m)] -> GraphFlow m H.Module
 constructModule mod coders pairs = do
     cx <- getState
@@ -231,7 +231,7 @@ printModule mod = do
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
 toDataDeclarations :: (Ord m, Show m)
-  => M.Map (Type m) (Coder (Context m) (Term m) H.Expression) -> Namespaces
+  => M.Map (Type m) (Coder (Context m) (Context m) (Term m) H.Expression) -> Namespaces
   -> (Element m, TypedTerm m) -> GraphFlow m [H.DeclarationWithComments]
 toDataDeclarations coders namespaces (el, TypedTerm typ term) = do
     let coder = Y.fromJust $ M.lookup typ coders

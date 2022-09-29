@@ -8,9 +8,9 @@ public class TermCoder<M, A> {
   
   public final hydra.core.Type<M> type;
   
-  public final hydra.compute.Coder<hydra.compute.Context<M>, hydra.core.Term<M>, A> coder;
+  public final hydra.compute.Coder<hydra.compute.Context<M>, hydra.compute.Context<M>, hydra.core.Term<M>, A> coder;
   
-  public TermCoder (hydra.core.Type<M> type, hydra.compute.Coder<hydra.compute.Context<M>, hydra.core.Term<M>, A> coder) {
+  public TermCoder (hydra.core.Type<M> type, hydra.compute.Coder<hydra.compute.Context<M>, hydra.compute.Context<M>, hydra.core.Term<M>, A> coder) {
     this.type = type;
     this.coder = coder;
   }
@@ -33,7 +33,7 @@ public class TermCoder<M, A> {
     return new TermCoder(type, coder);
   }
   
-  public TermCoder withCoder(hydra.compute.Coder<hydra.compute.Context<M>, hydra.core.Term<M>, A> coder) {
+  public TermCoder withCoder(hydra.compute.Coder<hydra.compute.Context<M>, hydra.compute.Context<M>, hydra.core.Term<M>, A> coder) {
     return new TermCoder(type, coder);
   }
 }

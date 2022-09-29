@@ -29,7 +29,7 @@ adaptType targetLang t = do
 transformModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Term m -> GraphFlow m e)
-  -> (Module m -> M.Map (Type m) (Coder (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
+  -> (Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
   -> Module m -> GraphFlow m d
 transformModule lang encodeTerm createModule mod = do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els

@@ -30,7 +30,7 @@ printModule mod = do
 
 constructModule :: (Ord m, Read m, Show m)
   => Module m
-  -> M.Map (Type m) (Coder (Context m) (Term m) ())
+  -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) ())
   -> [(Element m, TypedTerm m)]
   -> GraphFlow m PDL.SchemaFile
 constructModule mod coders pairs = do

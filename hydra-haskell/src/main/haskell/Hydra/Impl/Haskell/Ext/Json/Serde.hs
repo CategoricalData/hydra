@@ -43,7 +43,7 @@ bytesToString = map (C.chr . fromEnum) . BS.unpack
 bytesToValue :: BS.ByteString -> Maybe Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
-jsonSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) BS.ByteString)
+jsonSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) BS.ByteString)
 jsonSerde typ = do
   coder <- jsonCoder typ
   return Coder {
@@ -52,7 +52,7 @@ jsonSerde typ = do
         Nothing -> fail "JSON parsing failed"
         Just v -> coderDecode coder v}
 
-jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) String)
+jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) String)
 jsonSerdeStr typ = do
   serde <- jsonSerde typ
   return Coder {

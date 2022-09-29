@@ -9,9 +9,9 @@ public class Adapter<S, T, V> {
   
   public final T target;
   
-  public final hydra.compute.Coder<S, V, V> coder;
+  public final hydra.compute.Coder<S, S, V, V> coder;
   
-  public Adapter (Boolean isLossy, T source, T target, hydra.compute.Coder<S, V, V> coder) {
+  public Adapter (Boolean isLossy, T source, T target, hydra.compute.Coder<S, S, V, V> coder) {
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
@@ -44,7 +44,7 @@ public class Adapter<S, T, V> {
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withCoder(hydra.compute.Coder<S, V, V> coder) {
+  public Adapter withCoder(hydra.compute.Coder<S, S, V, V> coder) {
     return new Adapter(isLossy, source, target, coder);
   }
 }

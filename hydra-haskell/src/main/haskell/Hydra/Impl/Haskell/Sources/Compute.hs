@@ -27,7 +27,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
           "isLossy">: boolean,
           "source">: variable "t",
           "target">: variable "t",
-          "coder">: compute "Coder" @@ "s" @@ "v" @@ "v"],
+          "coder">: compute "Coder" @@ "s" @@ "s" @@ "v" @@ "v"],
 
       def "AdapterContext" $
         lambda "m" $ record [
@@ -65,10 +65,10 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
             optional (core "Type" @@ "m") --> "m" --> "m"],
 
       def "Coder" $
-        doc "An encoder and decoder; a qualified bidirectional transformation between instances of two types" $
-        lambda "s" $ lambda "a" $ lambda "b" $ record [
-          "encode">: ("a" --> compute "Flow" @@ "s" @@ "b"),
-          "decode">: ("b" --> compute "Flow" @@ "s" @@ "a")],
+        doc "An encoder and decoder; a bidirectional flow between two types" $
+        lambda "s1" $ lambda "s2" $ lambda "v1" $ lambda "v2" $ record [
+          "encode">: ("v1" --> compute "Flow" @@ "s1" @@ "v2"),
+          "decode">: ("v2" --> compute "Flow" @@ "s2" @@ "v1")],
 
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
@@ -137,7 +137,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         lambda "m" $ lambda "a" $ record [
           "type">: core "Type" @@ "m",
-          "coder">: compute "Coder" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
+          "coder">: compute "Coder" @@ (compute "Context" @@ "m") @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
 
       def "Trace" $
         doc "A container for logging and error information" $

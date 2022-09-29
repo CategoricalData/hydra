@@ -66,14 +66,14 @@ hydraYamlToHsYaml hy = case hy of
     YM.ScalarStr s -> DY.SStr $ T.pack s
   YM.NodeSequence s -> DY.Sequence () DYE.untagged $ hydraYamlToHsYaml <$> s
 
-yamlSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) BS.ByteString)
+yamlSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) BS.ByteString)
 yamlSerde typ = do
   coder <- yamlCoder typ
   return Coder {
     coderEncode = fmap hydraYamlToBytes . coderEncode coder,
     coderDecode = bytesToHydraYaml CM.>=> coderDecode coder}
 
-yamlSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) String)
+yamlSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) String)
 yamlSerdeStr typ = do
   serde <- yamlSerde typ
   return Coder {
