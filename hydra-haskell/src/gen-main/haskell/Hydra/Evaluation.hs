@@ -129,6 +129,17 @@ _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
 
+-- | A built-in metadata container for terms
+data Meta 
+  = Meta {
+    -- | A map of annotation names to annotation values
+    metaAnnotations :: (Map String (Core.Term Meta))}
+  deriving (Eq, Ord, Read, Show)
+
+_Meta = (Core.Name "hydra/evaluation.Meta")
+
+_Meta_annotations = (Core.FieldName "annotations")
+
 -- | A built-in function
 data PrimitiveFunction m 
   = PrimitiveFunction {

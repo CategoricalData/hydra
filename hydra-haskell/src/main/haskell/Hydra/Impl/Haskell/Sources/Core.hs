@@ -4,6 +4,7 @@ module Hydra.Impl.Haskell.Sources.Core where
 
 import Hydra.Common
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types
@@ -253,13 +254,6 @@ hydraCoreModule = Module ns elements [] $
         lambda "m" $ record [
           "keys">: core "Type" @@ "m",
           "values">: core "Type" @@ "m"],
-
-      def "Meta" $
-        doc "A built-in metadata container for terms" $
-        record [
-          "annotations">:
-            doc "A map of annotation names to annotation values" $
-            Types.map string (core "Term" @@ core "Meta")],
 
       def "Name" $
         doc "A unique element name"

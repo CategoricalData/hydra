@@ -3,6 +3,7 @@
 module Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax where
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Grammar
 import Hydra.Impl.Haskell.Dsl.Grammars

@@ -3,19 +3,22 @@
 module Hydra.Impl.Haskell.Sources.Phantoms where
 
 import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Impl.Haskell.Sources.Evaluation
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraPhantomsModule :: Module Meta
-hydraPhantomsModule = Module ns elements [hydraCoreModule] $
+hydraPhantomsModule = Module ns elements [hydraEvaluationModule] $
     Just "Phantom types for use in model definitions"
   where
     ns = Namespace "hydra/phantoms"
     core = nsref $ moduleNamespace hydraCoreModule
+    evaluation = nsref $ moduleNamespace hydraEvaluationModule
     phantoms = nsref ns
     def = datatype ns
 
@@ -24,7 +27,7 @@ hydraPhantomsModule = Module ns elements [hydraCoreModule] $
         lambda "a" $ core "FieldName",
 
      def "Datum" $
-       lambda "a" $ (core "Term") @@ (core "Meta"),
+       lambda "a" $ (core "Term") @@ (evaluation "Meta"),
 
       def "Definition" $
         lambda "a" $ record [

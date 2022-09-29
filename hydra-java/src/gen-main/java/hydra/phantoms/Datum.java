@@ -3,9 +3,9 @@ package hydra.phantoms;
 public class Datum<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Datum");
   
-  public final hydra.core.Term<hydra.core.Meta> value;
+  public final hydra.core.Term<hydra.evaluation.Meta> value;
   
-  public Datum (hydra.core.Term<hydra.core.Meta> value) {
+  public Datum (hydra.core.Term<hydra.evaluation.Meta> value) {
     this.value = value;
   }
   

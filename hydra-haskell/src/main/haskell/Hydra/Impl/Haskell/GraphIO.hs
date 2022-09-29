@@ -52,7 +52,7 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-addDeepTypeAnnotations :: Module Meta -> GraphFlow Meta (Module Meta)
+addDeepTypeAnnotations :: (Ord m, Show m) => Module m -> GraphFlow m (Module m)
 addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
@@ -60,7 +60,7 @@ addDeepTypeAnnotations mod = do
 allModules :: [Module Meta]
 allModules = coreModules ++ extModules
 
-assignSchemas :: Bool -> Module Meta -> GraphFlow Meta (Module Meta)
+assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
 assignSchemas doInfer mod = do
     cx <- getState
     els <- CM.mapM (annotate cx) $ moduleElements mod
@@ -78,38 +78,38 @@ assignSchemas doInfer mod = do
 
 coreModules :: [Module Meta]
 coreModules = [
-  adapterUtilsModule,
-  codetreeAstModule,
-  haskellAstModule,
-  hydraAdapterModule,
-  hydraBasicsModule,
-  hydraCoreModule,
-  hydraEvaluationModule,
-  hydraGraphModule,
-  hydraGrammarModule,
---  hydraMonadsModule,
-  hydraPhantomsModule,
+--  adapterUtilsModule,
+--  codetreeAstModule,
+--  haskellAstModule,
+--  hydraAdapterModule,
+--  hydraBasicsModule,
+--  hydraCoreModule,
+--  hydraEvaluationModule,
+--  hydraGraphModule,
+--  hydraGrammarModule,
+----  hydraMonadsModule,
+--  hydraPhantomsModule,
   jsonModelModule]
 
 extModules :: [Module Meta]
 extModules = [
-  avroSchemaModule,
-  coqSyntaxModule,
-  datalogSyntaxModule,
-  graphqlSyntaxModule,
-  javaSyntaxModule,
-  pegasusPdlModule,
-  owlSyntaxModule,
-  rdfSyntaxModule,
-  scalaMetaModule,
-  shaclModelModule,
-  tinkerpopFeaturesModule,
-  tinkerpopTypedModule,
-  tinkerpopV3Module,
-  xmlSchemaModule,
+--  avroSchemaModule,
+--  coqSyntaxModule,
+--  datalogSyntaxModule,
+--  graphqlSyntaxModule,
+--  javaSyntaxModule,
+--  pegasusPdlModule,
+--  owlSyntaxModule,
+--  rdfSyntaxModule,
+--  scalaMetaModule,
+--  shaclModelModule,
+--  tinkerpopFeaturesModule,
+--  tinkerpopTypedModule,
+--  tinkerpopV3Module,
+--  xmlSchemaModule,
   yamlModelModule]
 
-findType :: Context Meta -> Term Meta -> GraphFlow Meta (Maybe (Type Meta))
+findType :: Context m -> Term m -> GraphFlow m (Maybe (Type m))
 findType cx term = annotationClassTermType (contextAnnotations cx) term
 
 generateSources :: (Module Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
