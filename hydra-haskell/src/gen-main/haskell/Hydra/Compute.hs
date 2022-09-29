@@ -6,12 +6,12 @@ import qualified Hydra.Core as Core
 import Data.Map
 import Data.Set
 
-data Adapter s t v
+data Adapter s1 s2 t1 t2 v1 v2 
   = Adapter {
     adapterIsLossy :: Bool,
-    adapterSource :: t,
-    adapterTarget :: t,
-    adapterCoder :: (Coder s s v v)}
+    adapterSource :: t1,
+    adapterTarget :: t2,
+    adapterCoder :: (Coder s1 s2 v1 v2)}
 
 _Adapter = (Core.Name "hydra/compute.Adapter")
 
@@ -23,7 +23,7 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_coder = (Core.FieldName "coder")
 
-data AdapterContext m
+data AdapterContext m 
   = AdapterContext {
     adapterContextEvaluation :: (Context m),
     adapterContextSource :: (Language m),
@@ -38,7 +38,7 @@ _AdapterContext_source = (Core.FieldName "source")
 _AdapterContext_target = (Core.FieldName "target")
 
 -- | A typeclass-like construct providing common functions for working with annotations
-data AnnotationClass m
+data AnnotationClass m 
   = AnnotationClass {
     annotationClassDefault :: m,
     annotationClassEqual :: (m -> m -> Bool),
@@ -86,7 +86,7 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
 -- | An encoder and decoder; a bidirectional flow between two types
-data Coder s1 s2 v1 v2
+data Coder s1 s2 v1 v2 
   = Coder {
     coderEncode :: (v1 -> Flow s1 v2),
     coderDecode :: (v2 -> Flow s2 v1)}
@@ -98,9 +98,9 @@ _Coder_encode = (Core.FieldName "encode")
 _Coder_decode = (Core.FieldName "decode")
 
 -- | Indicates either the 'out' or the 'in' direction of a coder
-data CoderDirection
-  = CoderDirectionEncode
-  | CoderDirectionDecode
+data CoderDirection 
+  = CoderDirectionEncode 
+  | CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
 _CoderDirection = (Core.Name "hydra/compute.CoderDirection")
@@ -110,7 +110,7 @@ _CoderDirection_encode = (Core.FieldName "encode")
 _CoderDirection_decode = (Core.FieldName "decode")
 
 -- | An environment containing a graph together with primitive functions and other necessary components for evaluation
-data Context m
+data Context m 
   = Context {
     contextGraph :: (Core.Graph m),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
@@ -128,7 +128,7 @@ _Context_strategy = (Core.FieldName "strategy")
 _Context_annotations = (Core.FieldName "annotations")
 
 -- | Settings which determine how terms are evaluated
-data EvaluationStrategy
+data EvaluationStrategy 
   = EvaluationStrategy {
     evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
   deriving (Eq, Ord, Read, Show)
@@ -138,13 +138,13 @@ _EvaluationStrategy = (Core.Name "hydra/compute.EvaluationStrategy")
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
 -- | A variant of the State monad with built-in logging and error handling
-newtype Flow s a
+newtype Flow s a 
   = Flow {
     unFlow :: (s -> Trace -> FlowWrapper s a)}
 
 _Flow = (Core.Name "hydra/compute.Flow")
 
-data FlowWrapper s a
+data FlowWrapper s a 
   = FlowWrapper {
     flowWrapperValue :: (Maybe a),
     flowWrapperState :: s,
@@ -159,7 +159,7 @@ _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
 
-data Language m
+data Language m 
   = Language {
     languageName :: LanguageName,
     languageConstraints :: (LanguageConstraints m)}
@@ -170,7 +170,7 @@ _Language_name = (Core.FieldName "name")
 
 _Language_constraints = (Core.FieldName "constraints")
 
-data LanguageConstraints m
+data LanguageConstraints m 
   = LanguageConstraints {
     languageConstraintsEliminationVariants :: (Set Core.EliminationVariant),
     languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
@@ -199,7 +199,7 @@ _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 
 _LanguageConstraints_types = (Core.FieldName "types")
 
-newtype LanguageName
+newtype LanguageName 
   = LanguageName {
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -207,7 +207,7 @@ newtype LanguageName
 _LanguageName = (Core.Name "hydra/compute.LanguageName")
 
 -- | A built-in metadata container for terms
-data Meta
+data Meta 
   = Meta {
     -- | A map of annotation names to annotation values
     metaAnnotations :: (Map String (Core.Term Meta))}
@@ -218,7 +218,7 @@ _Meta = (Core.Name "hydra/compute.Meta")
 _Meta_annotations = (Core.FieldName "annotations")
 
 -- | A built-in function
-data PrimitiveFunction m
+data PrimitiveFunction m 
   = PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
     primitiveFunctionType :: (Core.FunctionType m),
@@ -233,7 +233,7 @@ _PrimitiveFunction_type = (Core.FieldName "type")
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
-data TermCoder m a
+data TermCoder m a 
   = TermCoder {
     termCoderType :: (Core.Type m),
     termCoderCoder :: (Coder (Context m) (Context m) (Core.Term m) a)}
@@ -245,7 +245,7 @@ _TermCoder_type = (Core.FieldName "type")
 _TermCoder_coder = (Core.FieldName "coder")
 
 -- | A container for logging and error information
-data Trace
+data Trace 
   = Trace {
     traceStack :: [String],
     traceMessages :: [String],

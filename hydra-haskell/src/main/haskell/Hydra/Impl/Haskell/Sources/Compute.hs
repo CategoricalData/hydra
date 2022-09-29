@@ -23,11 +23,11 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
 
     elements = [
       def "Adapter" $
-        lambda "s" $ lambda "t" $ lambda "v" $ record [
+        lambda "s1" $ lambda "s2" $ lambda "t1" $ lambda "t2" $ lambda "v1" $ lambda "v2" $ record [
           "isLossy">: boolean,
-          "source">: variable "t",
-          "target">: variable "t",
-          "coder">: compute "Coder" @@ "s" @@ "s" @@ "v" @@ "v"],
+          "source">: variable "t1",
+          "target">: variable "t2",
+          "coder">: compute "Coder" @@ "s1" @@ "s2" @@ "v1" @@ "v2"],
 
       def "AdapterContext" $
         lambda "m" $ record [

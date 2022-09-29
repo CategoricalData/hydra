@@ -20,15 +20,17 @@ import qualified Data.Set as S
 import Control.Monad
 
 
+type SymmetricAdapter s t v = Adapter s s t t v v
+
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
 
 chooseAdapter :: Show t =>
-    (t -> [Flow so (Adapter si t v)])
+    (t -> [Flow so (SymmetricAdapter si t v)])
  -> (t -> Bool)
  -> (t -> String)
  -> t
- -> Flow so (Adapter si t v)
+ -> Flow so (SymmetricAdapter si t v)
 chooseAdapter alts supported describe typ = if supported typ
   then pure $ Adapter False typ typ idCoder
   else do
@@ -55,7 +57,7 @@ encodeDecode dir = case dir of
 floatTypeIsSupported :: LanguageConstraints m -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
-idAdapter :: Type m -> Adapter s (Type m) (Term m)
+idAdapter :: Type m -> SymmetricAdapter s (Type m) (Term m)
 idAdapter t = Adapter False t t idCoder
 
 idCoder :: Coder s s a a
