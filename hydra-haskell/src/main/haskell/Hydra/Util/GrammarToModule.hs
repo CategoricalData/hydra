@@ -4,7 +4,7 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
 import Hydra.Grammar
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Dsl.Standard

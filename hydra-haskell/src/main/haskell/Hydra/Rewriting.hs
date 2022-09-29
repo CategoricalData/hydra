@@ -2,7 +2,7 @@ module Hydra.Rewriting where
 
 import Hydra.Core
 import Hydra.Monads
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Lexical
 import Hydra.Evaluation
 import Hydra.CoreDecoding

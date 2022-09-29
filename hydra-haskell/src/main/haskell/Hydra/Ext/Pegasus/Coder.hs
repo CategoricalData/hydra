@@ -6,7 +6,7 @@ import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.CoreLanguage
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Rewriting
 import Hydra.Adapters.Coders

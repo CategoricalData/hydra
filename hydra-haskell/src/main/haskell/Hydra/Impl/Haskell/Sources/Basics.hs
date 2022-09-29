@@ -3,9 +3,9 @@ module Hydra.Impl.Haskell.Sources.Basics where
 import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Base as Base
-import Hydra.Impl.Haskell.Sources.Graph
+import Hydra.Impl.Haskell.Sources.Module
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
@@ -16,7 +16,7 @@ import Hydra.Monads
 basicsNs = Namespace "hydra/basics"
 
 hydraBasicsModule :: Module Meta
-hydraBasicsModule = Module basicsNs elements [hydraGraphModule] $
+hydraBasicsModule = Module basicsNs elements [hydraModuleModule] $
     Just "Basic functions for working with types and terms"
   where
     elements = [

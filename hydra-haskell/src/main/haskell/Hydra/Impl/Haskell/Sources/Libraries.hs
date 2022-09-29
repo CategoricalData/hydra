@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Sources.Libraries where
 
 import Hydra.Basics
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms

@@ -7,7 +7,7 @@ module Hydra.Adapters.UtilsEtc (
 import Hydra.Common
 import Hydra.Core
 import Hydra.Basics
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Adapter
 import Hydra.Adapters.Utils

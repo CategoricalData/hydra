@@ -5,7 +5,7 @@ module Hydra.Lexical (
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Evaluation
 import Hydra.Monads
 

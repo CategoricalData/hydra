@@ -3,7 +3,7 @@ module Hydra.Ext.Shacl.Coder where
 import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.CoreDecoding
 import Hydra.Lexical

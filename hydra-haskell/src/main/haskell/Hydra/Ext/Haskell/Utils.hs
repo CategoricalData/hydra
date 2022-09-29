@@ -1,7 +1,7 @@
 module Hydra.Ext.Haskell.Utils where
 
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Evaluation
 import Hydra.Monads
 import Hydra.Adapters.Coders

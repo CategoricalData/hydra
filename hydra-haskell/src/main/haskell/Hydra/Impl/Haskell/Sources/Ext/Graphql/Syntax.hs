@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Grammar
 import Hydra.Impl.Haskell.Dsl.Grammars
 import Hydra.Util.GrammarToModule

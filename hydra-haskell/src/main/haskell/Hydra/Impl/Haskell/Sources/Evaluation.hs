@@ -3,23 +3,21 @@
 module Hydra.Impl.Haskell.Sources.Evaluation where
 
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Graph
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraEvaluationModule :: Module Meta
-hydraEvaluationModule = Module ns elements [hydraGraphModule] $
+hydraEvaluationModule = Module ns elements [hydraCoreModule] $
     Just "Abstractions for evaluation and transformations"
   where
     ns = Namespace "hydra/evaluation"
     core = nsref $ moduleNamespace hydraCoreModule
     evaluation = nsref ns
-    graph = nsref $ moduleNamespace hydraGraphModule
 
     def = datatype ns
 
@@ -68,7 +66,7 @@ hydraEvaluationModule = Module ns elements [hydraGraphModule] $
       def "Context" $
         doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
-          "graph">: graph "Graph" @@ "m",
+          "graph">: core "Graph" @@ "m",
           "functions">: Types.map (core "Name") (evaluation "PrimitiveFunction" @@ "m"),
           "strategy">: evaluation "EvaluationStrategy",
           "annotations">: evaluation "AnnotationClass" @@ "m"],

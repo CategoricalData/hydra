@@ -3,9 +3,9 @@
 module Hydra.Basics where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Module as Module
 import Data.Map
 import Data.Set
 
@@ -148,9 +148,9 @@ literalVariants = [
   Core.LiteralVariantString]
 
 -- | Construct a qualified (dot-separated) name
-qname :: (Graph.Namespace -> String -> Core.Name)
+qname :: (Module.Namespace -> String -> Core.Name)
 qname ns name = (Core.Name (Strings.cat [
-  Graph.unNamespace ns,
+  Module.unNamespace ns,
   ".",
   name]))
 

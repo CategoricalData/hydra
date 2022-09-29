@@ -4,7 +4,7 @@ import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreDecoding
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Lexical
 import Hydra.Rewriting
