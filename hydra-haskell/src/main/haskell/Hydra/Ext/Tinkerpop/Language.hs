@@ -4,7 +4,7 @@ import Hydra.Adapter
 import Hydra.Ext.Tinkerpop.Features
 import Hydra.Core
 import Hydra.Common
-import Hydra.Evaluation
+import Hydra.Compute
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y

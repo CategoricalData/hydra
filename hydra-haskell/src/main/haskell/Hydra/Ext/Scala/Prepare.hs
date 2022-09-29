@@ -4,7 +4,7 @@ module Hydra.Ext.Scala.Prepare (
 ) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Common
 

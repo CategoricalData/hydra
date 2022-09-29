@@ -3,24 +3,24 @@
 module Hydra.Impl.Haskell.Sources.Adapter where
 
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Evaluation
+import Hydra.Impl.Haskell.Sources.Compute
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
 hydraAdapterModule :: Module Meta
-hydraAdapterModule = Module ns elements [hydraEvaluationModule] $
+hydraAdapterModule = Module ns elements [hydraComputeModule] $
     Just "A model capturing basic abstractions for mappings between languages"
   where
     ns = Namespace "hydra/adapter"
     def = datatype ns
     core = nsref $ moduleNamespace hydraCoreModule
     adapter = nsref ns
-    evaluation = nsref $ moduleNamespace hydraEvaluationModule
+    evaluation = nsref $ moduleNamespace hydraComputeModule
 
     elements = [
       def "Adapter" $

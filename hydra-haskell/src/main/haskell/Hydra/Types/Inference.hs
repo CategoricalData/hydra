@@ -6,7 +6,7 @@ module Hydra.Types.Inference (
 ) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Basics
 import Hydra.Lexical

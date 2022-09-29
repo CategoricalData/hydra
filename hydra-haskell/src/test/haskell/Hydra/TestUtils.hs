@@ -11,7 +11,7 @@ module Hydra.TestUtils (
   strip,
   termTestContext,
   module Hydra.TestGraph,
-  module Hydra.Evaluation,
+  module Hydra.Compute,
   module Hydra.Monads,
 ) where
 
@@ -20,7 +20,7 @@ import Hydra.ArbitraryCore()
 import Hydra.Common
 import Hydra.Core
 import Hydra.Adapter
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term

@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Dsl.Standard (
 ) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

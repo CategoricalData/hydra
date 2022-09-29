@@ -1,13 +1,13 @@
 module Hydra.Monads (
   module Hydra.Common,
   module Hydra.Core,
-  module Hydra.Evaluation,
+  module Hydra.Compute,
   module Hydra.Monads,
 ) where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 
 import qualified Data.List as L
 import qualified Data.Map as M

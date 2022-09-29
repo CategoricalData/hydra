@@ -8,7 +8,7 @@ module Hydra.Impl.Haskell.Dsl.Base (
 import Hydra.Common
 import Hydra.Core
 import Hydra.CoreEncoding
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Impl.Haskell.Dsl.PhantomLiterals
 import Hydra.Meta
 import Hydra.Phantoms

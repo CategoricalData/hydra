@@ -1,7 +1,7 @@
 module Hydra.Impl.Haskell.GraphIO where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Monads
@@ -19,7 +19,7 @@ import Hydra.Impl.Haskell.Sources.Adapter
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Evaluation
+import Hydra.Impl.Haskell.Sources.Compute
 import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Module
@@ -84,7 +84,7 @@ coreModules = [
   hydraAdapterModule,
   hydraBasicsModule,
   hydraCoreModule,
-  hydraEvaluationModule,
+  hydraComputeModule,
   hydraModuleModule,
   hydraGrammarModule,
 --  hydraMonadsModule,

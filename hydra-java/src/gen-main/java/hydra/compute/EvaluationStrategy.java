@@ -1,10 +1,10 @@
-package hydra.evaluation;
+package hydra.compute;
 
 /**
  * Settings which determine how terms are evaluated
  */
 public class EvaluationStrategy {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.EvaluationStrategy");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.EvaluationStrategy");
   
   public final java.util.Set<hydra.core.TermVariant> opaqueTermVariants;
   

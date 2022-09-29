@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Sources.Basics where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Sources.Module

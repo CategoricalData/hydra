@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Dsl.Bootstrap where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

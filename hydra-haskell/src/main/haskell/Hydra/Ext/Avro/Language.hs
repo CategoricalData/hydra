@@ -3,7 +3,7 @@ module Hydra.Ext.Avro.Language where
 import Hydra.Core
 import Hydra.Adapter
 import Hydra.Common
-import Hydra.Evaluation
+import Hydra.Compute
 
 import qualified Data.Set as S
 

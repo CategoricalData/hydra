@@ -1,21 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Impl.Haskell.Sources.Evaluation where
+module Hydra.Impl.Haskell.Sources.Compute where
 
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 
 
-hydraEvaluationModule :: Module Meta
-hydraEvaluationModule = Module ns elements [hydraCoreModule] $
+hydraComputeModule :: Module Meta
+hydraComputeModule = Module ns elements [hydraCoreModule] $
     Just "Abstractions for evaluation and transformations"
   where
-    ns = Namespace "hydra/evaluation"
+    ns = Namespace "hydra/compute"
     core = nsref $ moduleNamespace hydraCoreModule
     evaluation = nsref ns
 

@@ -1,8 +1,8 @@
 package hydra.impl.java.dsl;
 
-import hydra.evaluation.Flow;
-import hydra.evaluation.FlowWrapper;
-import hydra.evaluation.Trace;
+import hydra.compute.Flow;
+import hydra.compute.FlowWrapper;
+import hydra.compute.Trace;
 import hydra.impl.java.FlowException;
 import java.util.Collections;
 
