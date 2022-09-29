@@ -7,7 +7,7 @@ module Hydra.Types.Inference (
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Basics
 import Hydra.Lexical
 import Hydra.CoreDecoding

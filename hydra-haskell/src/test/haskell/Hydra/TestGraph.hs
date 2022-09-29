@@ -4,7 +4,7 @@ module Hydra.TestGraph (
 ) where
 
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Evaluation
 import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core

@@ -9,7 +9,7 @@ import Hydra.Evaluation
 import Hydra.Monads
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Rewriting
 
 import qualified Data.Map as M

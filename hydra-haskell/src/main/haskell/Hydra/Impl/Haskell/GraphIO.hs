@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.GraphIO where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Monads
 import Hydra.Lexical
@@ -20,10 +20,10 @@ import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Evaluation
-import Hydra.Impl.Haskell.Sources.Phantoms
-import Hydra.Impl.Haskell.Sources.Graph
 import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Impl.Haskell.Sources.Module
+import Hydra.Impl.Haskell.Sources.Phantoms
 
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Avro.Schema
@@ -78,35 +78,35 @@ assignSchemas doInfer mod = do
 
 coreModules :: [Module Meta]
 coreModules = [
---  adapterUtilsModule,
---  codetreeAstModule,
---  haskellAstModule,
---  hydraAdapterModule,
---  hydraBasicsModule,
---  hydraCoreModule,
---  hydraEvaluationModule,
---  hydraGraphModule,
---  hydraGrammarModule,
-----  hydraMonadsModule,
---  hydraPhantomsModule,
+  adapterUtilsModule,
+  codetreeAstModule,
+  haskellAstModule,
+  hydraAdapterModule,
+  hydraBasicsModule,
+  hydraCoreModule,
+  hydraEvaluationModule,
+  hydraModuleModule,
+  hydraGrammarModule,
+--  hydraMonadsModule,
+  hydraPhantomsModule,
   jsonModelModule]
 
 extModules :: [Module Meta]
 extModules = [
---  avroSchemaModule,
---  coqSyntaxModule,
---  datalogSyntaxModule,
---  graphqlSyntaxModule,
---  javaSyntaxModule,
---  pegasusPdlModule,
---  owlSyntaxModule,
---  rdfSyntaxModule,
---  scalaMetaModule,
---  shaclModelModule,
---  tinkerpopFeaturesModule,
---  tinkerpopTypedModule,
---  tinkerpopV3Module,
---  xmlSchemaModule,
+  avroSchemaModule,
+  coqSyntaxModule,
+  datalogSyntaxModule,
+  graphqlSyntaxModule,
+  javaSyntaxModule,
+  pegasusPdlModule,
+  owlSyntaxModule,
+  rdfSyntaxModule,
+  scalaMetaModule,
+  shaclModelModule,
+  tinkerpopFeaturesModule,
+  tinkerpopTypedModule,
+  tinkerpopV3Module,
+  xmlSchemaModule,
   yamlModelModule]
 
 findType :: Context m -> Term m -> GraphFlow m (Maybe (Type m))

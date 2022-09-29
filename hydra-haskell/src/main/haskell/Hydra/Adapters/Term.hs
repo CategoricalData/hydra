@@ -6,7 +6,7 @@ module Hydra.Adapters.Term (
 ) where
 
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Adapter
 import Hydra.Adapters.Literal
 import Hydra.Basics

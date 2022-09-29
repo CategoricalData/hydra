@@ -13,7 +13,7 @@ import Hydra.Impl.Haskell.Dsl.PhantomLiterals
 import Hydra.Meta
 import Hydra.Phantoms
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import Hydra.Graph
+import Hydra.Module
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core

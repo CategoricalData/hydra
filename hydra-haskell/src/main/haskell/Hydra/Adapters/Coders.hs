@@ -3,7 +3,7 @@ module Hydra.Adapters.Coders where
 import Hydra.Adapter
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Lexical
 import Hydra.Rewriting

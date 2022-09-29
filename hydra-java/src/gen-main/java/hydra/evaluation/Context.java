@@ -6,7 +6,7 @@ package hydra.evaluation;
 public class Context<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Context");
   
-  public final hydra.graph.Graph<M> graph;
+  public final hydra.core.Graph<M> graph;
   
   public final java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions;
   
@@ -14,7 +14,7 @@ public class Context<M> {
   
   public final hydra.evaluation.AnnotationClass<M> annotations;
   
-  public Context (hydra.graph.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions, hydra.evaluation.EvaluationStrategy strategy, hydra.evaluation.AnnotationClass<M> annotations) {
+  public Context (hydra.core.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.evaluation.PrimitiveFunction<M>> functions, hydra.evaluation.EvaluationStrategy strategy, hydra.evaluation.AnnotationClass<M> annotations) {
     this.graph = graph;
     this.functions = functions;
     this.strategy = strategy;
@@ -35,7 +35,7 @@ public class Context<M> {
     return 2 * graph.hashCode() + 3 * functions.hashCode() + 5 * strategy.hashCode() + 7 * annotations.hashCode();
   }
   
-  public Context withGraph(hydra.graph.Graph<M> graph) {
+  public Context withGraph(hydra.core.Graph<M> graph) {
     return new Context(graph, functions, strategy, annotations);
   }
   

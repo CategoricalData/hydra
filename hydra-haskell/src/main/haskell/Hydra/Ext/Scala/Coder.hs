@@ -2,7 +2,7 @@ module Hydra.Ext.Scala.Coder (printModule) where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

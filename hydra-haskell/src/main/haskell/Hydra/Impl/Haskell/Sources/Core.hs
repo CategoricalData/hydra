@@ -5,7 +5,7 @@ module Hydra.Impl.Haskell.Sources.Core where
 import Hydra.Common
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Bootstrap
@@ -16,7 +16,7 @@ hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module Meta
 hydraCoreModule = Module ns elements [] $
-    Just "Hydra's core data model, defining the structure of types and terms"
+    Just "Hydra's core data model, defining the structure of types, terms, and graphs"
   where
     ns = Namespace "hydra/core"
     core = nsref ns
@@ -62,6 +62,13 @@ hydraCoreModule = Module ns elements [] $
           "lessThan",
           "equalTo",
           "greaterThan"],
+
+      def "Element" $
+        doc "A graph element, having a name, data term (value), and schema term (type)" $
+        lambda "m" $ record [
+          "name">: core "Name",
+          "schema">: core "Term" @@ "m",
+          "data">: core "Term" @@ "m"],
 
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
@@ -153,6 +160,16 @@ hydraCoreModule = Module ns elements [] $
           "elimination",
           "lambda",
           "primitive"],
+
+      def "Graph" $
+        doc ("A graph, or set of named terms, together with its schema graph") $
+        lambda "m" $ record [
+          "elements">:
+            doc "All of the elements in the graph" $
+            Types.map (core "Name") (core "Element" @@ "m"),
+          "schema">:
+            doc "The schema graph to this graph. If omitted, the graph is its own schema graph." $
+            optional $ core "Graph" @@ "m"],
 
       def "IntegerType" $
         doc "An integer type" $

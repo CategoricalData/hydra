@@ -20,7 +20,7 @@ module Hydra.CoreDecoding (
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Lexical
 import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

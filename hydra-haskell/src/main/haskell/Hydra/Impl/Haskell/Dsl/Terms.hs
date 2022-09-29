@@ -1,7 +1,7 @@
 module Hydra.Impl.Haskell.Dsl.Terms where
 
 import Hydra.Core
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import Hydra.Common
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals

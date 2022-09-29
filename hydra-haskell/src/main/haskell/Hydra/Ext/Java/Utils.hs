@@ -2,7 +2,7 @@ module Hydra.Ext.Java.Utils where
 
 import Hydra.Core
 import Hydra.Evaluation
-import Hydra.Graph
+import Hydra.Module
 import Hydra.Monads
 import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings

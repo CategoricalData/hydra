@@ -1,10 +1,10 @@
-package hydra.graph;
+package hydra.module;
 
 /**
  * A prefix for element names
  */
 public class Namespace {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Namespace");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.Namespace");
   
   /**
    * A prefix for element names
