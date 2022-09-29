@@ -5,6 +5,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features where
 import Hydra.Impl.Haskell.Sources.Core
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard

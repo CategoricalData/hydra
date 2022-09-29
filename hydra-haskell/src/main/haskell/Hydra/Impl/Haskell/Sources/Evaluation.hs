@@ -6,6 +6,7 @@ import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Graph
 
 import Hydra.Core
+import Hydra.Evaluation
 import Hydra.Graph
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
@@ -87,6 +88,13 @@ hydraEvaluationModule = Module ns elements [hydraGraphModule] $
           "value">: optional "a",
           "state">: "s",
           "trace">: evaluation "Trace"],
+
+      def "Meta" $
+        doc "A built-in metadata container for terms" $
+        record [
+          "annotations">:
+            doc "A map of annotation names to annotation values" $
+            Types.map string (core "Term" @@ evaluation "Meta")],
 
       def "PrimitiveFunction" $
         doc "A built-in function" $

@@ -44,9 +44,11 @@ requireElement name = do
     Y.maybe (err cx) pure $ M.lookup name $ graphElements $ contextGraph cx
   where
     err cx = fail $ "no such element: " ++ unName name
-        ++ ". Available elements: {" ++ L.intercalate ", " (unName . elementName <$> M.elems (graphElements $ contextGraph cx)) ++ "}"
+        ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements $ contextGraph cx))) ++ "}"
       where
-        h (Namespace n) = n
+        ellipsis strings = if L.length strings > 3
+          then L.take 3 strings ++ ["..."]
+          else strings
 
 requirePrimitiveFunction :: Name -> GraphFlow m (PrimitiveFunction m)
 requirePrimitiveFunction fn = do

@@ -418,17 +418,6 @@ _MapType_keys = (FieldName "keys")
 
 _MapType_values = (FieldName "values")
 
--- | A built-in metadata container for terms
-data Meta 
-  = Meta {
-    -- | A map of annotation names to annotation values
-    metaAnnotations :: (Map String (Term Meta))}
-  deriving (Eq, Ord, Read, Show)
-
-_Meta = (Name "hydra/core.Meta")
-
-_Meta_annotations = (FieldName "annotations")
-
 -- | A unique element name
 newtype Name 
   = Name {

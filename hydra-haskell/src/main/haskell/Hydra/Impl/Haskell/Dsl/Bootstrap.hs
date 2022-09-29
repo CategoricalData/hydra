@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-datatype :: Namespace -> String -> Type Meta -> Element Meta
+datatype :: Namespace -> String -> Type m -> Element m
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
@@ -46,13 +46,13 @@ nsref ns = Types.nominal . qualify ns . Name
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-termElement :: Name -> Type Meta -> Term Meta -> Element Meta
+termElement :: Name -> Type m -> Term m -> Element m
 termElement name typ term = Element {
   elementName = name,
   elementSchema = encodeType typ,
   elementData = term}
 
-typeElement :: Name -> Type Meta -> Element Meta
+typeElement :: Name -> Type m -> Element m
 typeElement name typ = Element {
   elementName = name,
   elementSchema = TermElement _Type,
