@@ -2,8 +2,8 @@
 
 module Hydra.Phantoms where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
 
@@ -16,7 +16,7 @@ _Case = (Core.Name "hydra/phantoms.Case")
 
 newtype Datum a 
   = Datum {
-    unDatum :: (Core.Term Evaluation.Meta)}
+    unDatum :: (Core.Term Compute.Meta)}
   deriving (Eq, Ord, Read, Show)
 
 _Datum = (Core.Name "hydra/phantoms.Datum")

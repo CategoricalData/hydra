@@ -1,7 +1,7 @@
 module Hydra.Common where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting

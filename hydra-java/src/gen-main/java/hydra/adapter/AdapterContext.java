@@ -3,13 +3,13 @@ package hydra.adapter;
 public class AdapterContext<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/adapter.AdapterContext");
   
-  public final hydra.evaluation.Context<M> evaluation;
+  public final hydra.compute.Context<M> evaluation;
   
   public final hydra.adapter.Language<M> source;
   
   public final hydra.adapter.Language<M> target;
   
-  public AdapterContext (hydra.evaluation.Context<M> evaluation, hydra.adapter.Language<M> source, hydra.adapter.Language<M> target) {
+  public AdapterContext (hydra.compute.Context<M> evaluation, hydra.adapter.Language<M> source, hydra.adapter.Language<M> target) {
     this.evaluation = evaluation;
     this.source = source;
     this.target = target;
@@ -29,7 +29,7 @@ public class AdapterContext<M> {
     return 2 * evaluation.hashCode() + 3 * source.hashCode() + 5 * target.hashCode();
   }
   
-  public AdapterContext withEvaluation(hydra.evaluation.Context<M> evaluation) {
+  public AdapterContext withEvaluation(hydra.compute.Context<M> evaluation) {
     return new AdapterContext(evaluation, source, target);
   }
   

@@ -5,7 +5,7 @@ module Hydra.Lib.Io (
 ) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Ext.Json.Coder
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Impl.Haskell.Dsl.Standard

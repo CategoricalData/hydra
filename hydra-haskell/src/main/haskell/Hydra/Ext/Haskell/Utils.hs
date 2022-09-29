@@ -2,7 +2,7 @@ module Hydra.Ext.Haskell.Utils where
 
 import Hydra.Core
 import Hydra.Module
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Monads
 import Hydra.Adapters.Coders
 import Hydra.Util.Formatting

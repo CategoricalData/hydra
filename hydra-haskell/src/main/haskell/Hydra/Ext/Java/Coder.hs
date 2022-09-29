@@ -1,7 +1,7 @@
 module Hydra.Ext.Java.Coder (printModule) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Monads
 import Hydra.CoreDecoding

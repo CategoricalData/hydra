@@ -1,6 +1,6 @@
 package hydra.impl.java;
 
-import hydra.evaluation.Trace;
+import hydra.compute.Trace;
 import java.util.List;
 
 

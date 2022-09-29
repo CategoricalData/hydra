@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Sources.Core where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types

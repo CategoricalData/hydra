@@ -1,10 +1,10 @@
-package hydra.evaluation;
+package hydra.compute;
 
 /**
  * Indicates either the 'out' or the 'in' direction of a coder
  */
 public abstract class CoderDirection {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.CoderDirection");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.CoderDirection");
   
   private CoderDirection () {
   
@@ -32,7 +32,7 @@ public abstract class CoderDirection {
     }
   }
   
-  public static final class Encode extends hydra.evaluation.CoderDirection {
+  public static final class Encode extends hydra.compute.CoderDirection {
     public Encode () {
     
     }
@@ -57,7 +57,7 @@ public abstract class CoderDirection {
     }
   }
   
-  public static final class Decode extends hydra.evaluation.CoderDirection {
+  public static final class Decode extends hydra.compute.CoderDirection {
     public Decode () {
     
     }

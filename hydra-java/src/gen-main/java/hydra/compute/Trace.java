@@ -1,10 +1,10 @@
-package hydra.evaluation;
+package hydra.compute;
 
 /**
  * A container for logging and error information
  */
 public class Trace {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.Trace");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Trace");
   
   public final java.util.List<String> stack;
   

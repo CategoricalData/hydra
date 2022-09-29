@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Ext.Yaml.Serde (
 ) where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Ext.Yaml.Coder
 import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM

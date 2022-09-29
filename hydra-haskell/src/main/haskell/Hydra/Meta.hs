@@ -1,7 +1,7 @@
 module Hydra.Meta where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.Terms

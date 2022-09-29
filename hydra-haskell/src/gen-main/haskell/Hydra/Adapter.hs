@@ -2,8 +2,8 @@
 
 module Hydra.Adapter where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Evaluation as Evaluation
 import Data.Map
 import Data.Set
 
@@ -12,7 +12,7 @@ data Adapter s t v
     adapterIsLossy :: Bool,
     adapterSource :: t,
     adapterTarget :: t,
-    adapterCoder :: (Evaluation.Coder s v v)}
+    adapterCoder :: (Compute.Coder s v v)}
 
 _Adapter = (Core.Name "hydra/adapter.Adapter")
 
@@ -26,7 +26,7 @@ _Adapter_coder = (Core.FieldName "coder")
 
 data AdapterContext m 
   = AdapterContext {
-    adapterContextEvaluation :: (Evaluation.Context m),
+    adapterContextEvaluation :: (Compute.Context m),
     adapterContextSource :: (Language m),
     adapterContextTarget :: (Language m)}
 

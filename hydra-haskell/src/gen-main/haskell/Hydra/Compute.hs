@@ -1,6 +1,6 @@
 -- | Abstractions for evaluation and transformations
 
-module Hydra.Evaluation where
+module Hydra.Compute where
 
 import qualified Hydra.Core as Core
 import Data.Map
@@ -24,7 +24,7 @@ data AnnotationClass m
     annotationClassTypeOf :: (m -> Flow (Context m) (Maybe (Core.Type m))),
     annotationClassSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
 
-_AnnotationClass = (Core.Name "hydra/evaluation.AnnotationClass")
+_AnnotationClass = (Core.Name "hydra/compute.AnnotationClass")
 
 _AnnotationClass_default = (Core.FieldName "default")
 
@@ -60,7 +60,7 @@ data Coder s a b
     coderEncode :: (a -> Flow s b),
     coderDecode :: (b -> Flow s a)}
 
-_Coder = (Core.Name "hydra/evaluation.Coder")
+_Coder = (Core.Name "hydra/compute.Coder")
 
 _Coder_encode = (Core.FieldName "encode")
 
@@ -72,7 +72,7 @@ data CoderDirection
   | CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
-_CoderDirection = (Core.Name "hydra/evaluation.CoderDirection")
+_CoderDirection = (Core.Name "hydra/compute.CoderDirection")
 
 _CoderDirection_encode = (Core.FieldName "encode")
 
@@ -86,7 +86,7 @@ data Context m
     contextStrategy :: EvaluationStrategy,
     contextAnnotations :: (AnnotationClass m)}
 
-_Context = (Core.Name "hydra/evaluation.Context")
+_Context = (Core.Name "hydra/compute.Context")
 
 _Context_graph = (Core.FieldName "graph")
 
@@ -102,7 +102,7 @@ data EvaluationStrategy
     evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
   deriving (Eq, Ord, Read, Show)
 
-_EvaluationStrategy = (Core.Name "hydra/evaluation.EvaluationStrategy")
+_EvaluationStrategy = (Core.Name "hydra/compute.EvaluationStrategy")
 
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
@@ -111,7 +111,7 @@ newtype Flow s a
   = Flow {
     unFlow :: (s -> Trace -> FlowWrapper s a)}
 
-_Flow = (Core.Name "hydra/evaluation.Flow")
+_Flow = (Core.Name "hydra/compute.Flow")
 
 data FlowWrapper s a 
   = FlowWrapper {
@@ -120,7 +120,7 @@ data FlowWrapper s a
     flowWrapperTrace :: Trace}
   deriving (Eq, Ord, Read, Show)
 
-_FlowWrapper = (Core.Name "hydra/evaluation.FlowWrapper")
+_FlowWrapper = (Core.Name "hydra/compute.FlowWrapper")
 
 _FlowWrapper_value = (Core.FieldName "value")
 
@@ -135,7 +135,7 @@ data Meta
     metaAnnotations :: (Map String (Core.Term Meta))}
   deriving (Eq, Ord, Read, Show)
 
-_Meta = (Core.Name "hydra/evaluation.Meta")
+_Meta = (Core.Name "hydra/compute.Meta")
 
 _Meta_annotations = (Core.FieldName "annotations")
 
@@ -146,7 +146,7 @@ data PrimitiveFunction m
     primitiveFunctionType :: (Core.FunctionType m),
     primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
 
-_PrimitiveFunction = (Core.Name "hydra/evaluation.PrimitiveFunction")
+_PrimitiveFunction = (Core.Name "hydra/compute.PrimitiveFunction")
 
 _PrimitiveFunction_name = (Core.FieldName "name")
 
@@ -160,7 +160,7 @@ data TermCoder m a
     termCoderType :: (Core.Type m),
     termCoderCoder :: (Coder (Context m) (Core.Term m) a)}
 
-_TermCoder = (Core.Name "hydra/evaluation.TermCoder")
+_TermCoder = (Core.Name "hydra/compute.TermCoder")
 
 _TermCoder_type = (Core.FieldName "type")
 
@@ -174,7 +174,7 @@ data Trace
     traceOther :: (Map String Core.Literal)}
   deriving (Eq, Ord, Read, Show)
 
-_Trace = (Core.Name "hydra/evaluation.Trace")
+_Trace = (Core.Name "hydra/compute.Trace")
 
 _Trace_stack = (Core.FieldName "stack")
 

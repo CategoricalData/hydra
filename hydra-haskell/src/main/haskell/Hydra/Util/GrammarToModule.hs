@@ -2,7 +2,7 @@ module Hydra.Util.GrammarToModule where
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Grammar
 import Hydra.Module
 import Hydra.Impl.Haskell.Dsl.Types as Types

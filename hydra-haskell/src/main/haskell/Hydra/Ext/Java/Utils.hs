@@ -1,7 +1,7 @@
 module Hydra.Ext.Java.Utils where
 
 import Hydra.Core
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Monads
 import qualified Hydra.Ext.Java.Syntax as Java

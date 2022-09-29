@@ -3,7 +3,7 @@ module Hydra.Ext.Haskell.Coder (printModule) where
 import Hydra.Basics
 import Hydra.Core
 import Hydra.CoreDecoding
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Module
 import Hydra.Monads
 import Hydra.Lexical

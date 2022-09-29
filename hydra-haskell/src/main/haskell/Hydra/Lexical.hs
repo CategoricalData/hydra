@@ -6,7 +6,7 @@ module Hydra.Lexical (
 import Hydra.Common
 import Hydra.Core
 import Hydra.Module
-import Hydra.Evaluation
+import Hydra.Compute
 import Hydra.Monads
 
 import qualified Data.List as L

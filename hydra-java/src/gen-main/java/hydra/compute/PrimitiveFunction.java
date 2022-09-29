@@ -1,18 +1,18 @@
-package hydra.evaluation;
+package hydra.compute;
 
 /**
  * A built-in function
  */
 public class PrimitiveFunction<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/evaluation.PrimitiveFunction");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.PrimitiveFunction");
   
   public final hydra.core.Name name;
   
   public final hydra.core.FunctionType<M> type;
   
-  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, hydra.core.Term<M>>> implementation;
+  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation;
   
-  public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, hydra.core.Term<M>>> implementation) {
+  public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -40,7 +40,7 @@ public class PrimitiveFunction<M> {
     return new PrimitiveFunction(name, type, implementation);
   }
   
-  public PrimitiveFunction withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.evaluation.Flow<hydra.evaluation.Context<M>, hydra.core.Term<M>>> implementation) {
+  public PrimitiveFunction withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
     return new PrimitiveFunction(name, type, implementation);
   }
 }
