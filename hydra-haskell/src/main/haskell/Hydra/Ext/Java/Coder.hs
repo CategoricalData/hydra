@@ -76,7 +76,7 @@ classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Module m -> M.Map (Type m) (Coder (Context m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
+  => Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
   -> GraphFlow m (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
     cx <- getState

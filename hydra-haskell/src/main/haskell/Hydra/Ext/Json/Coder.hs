@@ -18,7 +18,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-jsonCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) Json.Value)
+jsonCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) Json.Value)
 jsonCoder typ = do
     cx <- getState
     let acx = AdapterContext cx hydraCoreLanguage (language cx)
@@ -26,7 +26,7 @@ jsonCoder typ = do
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder
 
-literalCoder :: LiteralType -> GraphFlow m (Coder (Context m) Literal Json.Value)
+literalCoder :: LiteralType -> GraphFlow m (Coder (Context m) (Context m) Literal Json.Value)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
@@ -49,7 +49,7 @@ literalCoder at = pure $ case at of
       Json.ValueString s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => RowType m -> GraphFlow m (Coder (Context m) (Term m) Json.Value)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => RowType m -> GraphFlow m (Coder (Context m) (Context m) (Term m) Json.Value)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -72,7 +72,7 @@ recordCoder rt = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Term m) Json.Value)
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) Json.Value)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at

@@ -20,8 +20,8 @@ import qualified Data.Set as S
 import Control.Monad
 
 
-bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s b b
-bidirectional m = Coder (m CoderDirectionEncode) (m CoderDirectionDecode)
+bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
+bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
 
 chooseAdapter :: Show t =>
     (t -> [Flow so (Adapter si t v)])
@@ -42,12 +42,12 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ ". Original type: " ++ show typ
       else return $ L.head candidates
 
-composeCoders :: Coder s a b -> Coder s b c -> Coder s a c
+composeCoders :: Coder s s a b -> Coder s s b c -> Coder s s a c
 composeCoders c1 c2 = Coder {
   coderEncode = coderEncode c1 >=> coderEncode c2,
   coderDecode = coderDecode c2 >=> coderDecode c1}
 
-encodeDecode :: CoderDirection -> Coder s a a -> a -> Flow s a
+encodeDecode :: CoderDirection -> Coder s s a a -> a -> Flow s a
 encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
@@ -58,7 +58,7 @@ floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatType
 idAdapter :: Type m -> Adapter s (Type m) (Term m)
 idAdapter t = Adapter False t t idCoder
 
-idCoder :: Coder s a a
+idCoder :: Coder s s a a
 idCoder = Coder pure pure
 
 integerTypeIsSupported :: LanguageConstraints m -> IntegerType -> Bool
@@ -92,7 +92,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeUnion rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     _ -> True
 
-unidirectionalCoder :: (a -> Flow s b) -> Coder s a b
+unidirectionalCoder :: (a -> Flow s b) -> Coder s s a b
 unidirectionalCoder m = Coder {
   coderEncode = m,
   coderDecode = \_ -> fail "inbound mapping is unsupported"}

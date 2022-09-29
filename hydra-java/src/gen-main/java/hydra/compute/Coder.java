@@ -1,16 +1,16 @@
 package hydra.compute;
 
 /**
- * An encoder and decoder; a qualified bidirectional transformation between instances of two types
+ * An encoder and decoder; a bidirectional flow between two types
  */
-public class Coder<S, A, B> {
+public class Coder<S1, S2, V1, V2> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Coder");
   
-  public final java.util.function.Function<A, hydra.compute.Flow<S, B>> encode;
+  public final java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode;
   
-  public final java.util.function.Function<B, hydra.compute.Flow<S, A>> decode;
+  public final java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode;
   
-  public Coder (java.util.function.Function<A, hydra.compute.Flow<S, B>> encode, java.util.function.Function<B, hydra.compute.Flow<S, A>> decode) {
+  public Coder (java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode, java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
@@ -29,11 +29,11 @@ public class Coder<S, A, B> {
     return 2 * encode.hashCode() + 3 * decode.hashCode();
   }
   
-  public Coder withEncode(java.util.function.Function<A, hydra.compute.Flow<S, B>> encode) {
+  public Coder withEncode(java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode) {
     return new Coder(encode, decode);
   }
   
-  public Coder withDecode(java.util.function.Function<B, hydra.compute.Flow<S, A>> decode) {
+  public Coder withDecode(java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
     return new Coder(encode, decode);
   }
 }
