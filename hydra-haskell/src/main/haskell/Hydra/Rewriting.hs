@@ -151,7 +151,7 @@ rewriteType :: ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a ->
 rewriteType f mf = rewrite fsub f
   where
     fsub recurse typ = case typ of
-        TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (recurse t) (mapMeta ann)
+        TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (recurse t) (mf ann)
         TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (recurse lhs) (recurse rhs)
         TypeElement t -> TypeElement $ recurse t
         TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (recurse dom) (recurse cod))
