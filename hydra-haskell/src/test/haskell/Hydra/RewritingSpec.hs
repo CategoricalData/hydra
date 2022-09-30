@@ -13,6 +13,23 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
+data Quux a = QuuxUnit | QuuxValue a | QuuxPair (Quux a) (Quux a) deriving (Eq, Ord, Show)
+
+fsubQuux :: (a -> b) -> (Quux a -> Quux b) -> Quux a -> Quux b
+fsubQuux mf recurse q = case q of
+  QuuxUnit -> QuuxUnit
+  QuuxValue x -> QuuxValue $ mf x
+  QuuxPair left right -> QuuxPair (recurse left) (recurse right)
+
+rewriteQuux :: (a -> b) -> ((Quux a -> Quux b) -> Quux a -> Quux b) -> Quux a -> Quux b
+rewriteQuux mf f = rewrite (fsubQuux mf) f
+
+myQuuxRewriter :: Quux String -> Quux Int
+myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
+  QuuxPair left right -> QuuxPair QuuxUnit right
+  _ -> q
+
+
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
   H.describe "Test folding over terms" $ do
@@ -124,6 +141,18 @@ testReplaceTerm = do
 
     replaceMeta i = show i
 
+testRewriteExampleType :: H.SpecWith ()
+testRewriteExampleType = do
+    H.describe "Test rewriting of a made-up recursive type" $ do
+
+      H.it "Rewrite a hand-picked expression" $ do
+        H.shouldBe
+          quux2
+          (myQuuxRewriter quux1)
+  where
+    quux1 = QuuxPair QuuxUnit (QuuxPair (QuuxValue "abc") (QuuxValue "12345"))
+    quux2 = QuuxPair QuuxUnit (QuuxPair QuuxUnit (QuuxValue 5))
+
 testSimplifyTerm :: H.SpecWith ()
 testSimplifyTerm = do
   H.describe "Test term simplifation (optimization)" $ do
@@ -170,5 +199,6 @@ spec = do
   testFreeVariablesInTerm
 --  testReplaceFreeVariableType
   testReplaceTerm
+  testRewriteExampleType
   testSimplifyTerm
   testStripMeta
