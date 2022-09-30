@@ -12,12 +12,6 @@ import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Util.Formatting
 
 
-{-
-
-See:
-
-
--}
 tinkerpopFeaturesModule :: Module Meta
 tinkerpopFeaturesModule = Module ns elements [hydraCoreModule] $
     Just ("A model derived from TinkerPop's Graph.Features. See\n" ++
