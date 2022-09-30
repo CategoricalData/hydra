@@ -209,7 +209,7 @@ _VertexIdType = (Core.Name "hydra/ext/tinkerpop/typed.VertexIdType")
 data VertexType 
   = VertexType {
     vertexTypeId :: Core.LiteralType,
-    vertexTypeProperties :: (Map Key Value)}
+    vertexTypeProperties :: (Map Key Type)}
   deriving (Eq, Ord, Read, Show)
 
 _VertexType = (Core.Name "hydra/ext/tinkerpop/typed.VertexType")

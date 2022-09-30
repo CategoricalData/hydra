@@ -113,4 +113,4 @@ tinkerpopTypedModule = Module ns elements [hydraCoreModule] Nothing
         doc "The type of a vertex, with characteristic id and property types" $
         record [
           "id">: core "LiteralType",
-          "properties">: Types.map (typed "Key") (typed "Value")]]
+          "properties">: Types.map (typed "Key") (typed "Type")]]
