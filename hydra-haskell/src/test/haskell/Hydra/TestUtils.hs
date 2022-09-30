@@ -23,6 +23,7 @@ import Hydra.Compute
 import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
+import Hydra.Adapters.UtilsEtc
 import Hydra.CoreLanguage
 import Hydra.Rewriting
 import Hydra.Monads
@@ -43,7 +44,7 @@ baseContext = AdapterContext testContext baseLanguage baseLanguage
 
 checkAdapter :: (Eq t, Eq v, Show t, Show v)
   => (v -> v)
-  -> (t -> Flow (AdapterContext Meta) (Adapter (Context Meta) t v))
+  -> (t -> Flow (AdapterContext Meta) (SymmetricAdapter (Context Meta) t v))
   -> ([r] -> AdapterContext Meta)
   -> [r] -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
@@ -90,7 +91,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
 checkDataAdapter :: [TypeVariant] -> Type Meta -> Type Meta -> Bool -> Term Meta -> Term Meta -> H.Expectation
 checkDataAdapter = checkAdapter stripTerm termAdapter termTestContext
 
-checkSerdeRoundTrip :: (Type Meta -> GraphFlow Meta (Coder (Context Meta) (Term Meta) BS.ByteString))
+checkSerdeRoundTrip :: (Type Meta -> GraphFlow Meta (Coder (Context Meta) (Context Meta) (Term Meta) BS.ByteString))
   -> TypedTerm Meta -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
     case mserde of
@@ -101,7 +102,7 @@ checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
   where
     FlowWrapper mserde _ trace = unFlow (mkSerde typ) testContext emptyTrace
 
-checkSerialization :: (Type Meta -> GraphFlow Meta (Coder (Context Meta) (Term Meta) String))
+checkSerialization :: (Type Meta -> GraphFlow Meta (Coder (Context Meta) (Context Meta) (Term Meta) String))
   -> TypedTerm Meta -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
     case mserde of
@@ -129,7 +130,7 @@ shouldSucceedWith f x = case my of
     Just y -> y `H.shouldBe` x
   where
     FlowWrapper my _ trace = unFlow f testContext emptyTrace
-    
+
 strip :: Ord m => Term m -> Term m
 strip = stripTerm
 
