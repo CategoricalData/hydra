@@ -2,6 +2,7 @@
 
 module Hydra.Impl.Haskell.Dsl.TypesSpec where
 
+import Hydra.Compute
 import Hydra.Core
 import Hydra.Impl.Haskell.Dsl.Types
 
@@ -22,7 +23,7 @@ checkFunctionSyntax = do
       check
         (string --> int32)
         (function string int32)
-        
+
     H.it "Function arrows are right-associative" $ do
       check
         ("a" --> "b" --> "c")
@@ -32,7 +33,7 @@ checkFunctionSyntax = do
       check
         ("a" @@ "b" --> "c" @@ "d")
         (("a" @@ "b") --> ("c" @@ "d"))
-        
+
 spec :: H.Spec
 spec = do
   checkFunctionSyntax
