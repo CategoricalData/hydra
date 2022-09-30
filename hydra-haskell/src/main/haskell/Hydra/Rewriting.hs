@@ -68,74 +68,79 @@ replaceFreeVariableType v rep = rewriteType mapExpr id
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
-rewriteTerm :: Ord b => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
-rewriteTerm mapExpr mapMeta = replace
+rewrite :: ((a -> b) -> a -> b) -> ((a -> b) -> a -> b) -> a -> b
+rewrite fsub f = recurse
   where
-    replace = mapExpr recurse
-    replaceField f = f {fieldTerm = replace (fieldTerm f)}
-    recurse term = case term of
-      TermAnnotated (Annotated ex ma) -> TermAnnotated $ Annotated (replace ex) (mapMeta ma)
-      TermApplication (Application lhs rhs) -> TermApplication $ Application (replace lhs) (replace rhs)
-      TermElement name -> TermElement name
-      TermFunction fun -> TermFunction $ case fun of
-        FunctionCompareTo other -> FunctionCompareTo $ replace other
-        FunctionElimination e -> FunctionElimination $ case e of
-          EliminationElement -> EliminationElement
-          EliminationNominal name -> EliminationNominal name
-          EliminationOptional (OptionalCases nothing just) -> EliminationOptional
-            (OptionalCases (replace nothing) (replace just))
-          EliminationRecord p -> EliminationRecord p
-          EliminationUnion (CaseStatement n cases) -> EliminationUnion $ CaseStatement n (replaceField <$> cases)
-        FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ replace body
-        FunctionPrimitive name -> FunctionPrimitive name
-      TermLet (Let v t1 t2) -> TermLet $ Let v (replace t1) (replace t2)
-      TermList els -> TermList $ replace <$> els
-      TermLiteral v -> TermLiteral v
-      TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (replace k, replace v)) <$> M.toList m
-      TermNominal (Named name t) -> TermNominal (Named name $ replace t)
-      TermOptional m -> TermOptional $ replace <$> m
-      TermRecord (Record n fields) -> TermRecord $ Record n $ replaceField <$> fields
-      TermSet s -> TermSet $ S.fromList $ replace <$> S.toList s
-      TermUnion (Union n field) -> TermUnion $ Union n $ replaceField field
-      TermVariable v -> TermVariable v
+    recurse = f (fsub recurse)
 
-rewriteTermFlow :: Ord b => ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) -> (a -> Flow s b) -> Term a -> Flow s (Term b)
-rewriteTermFlow mapExpr mapMeta = replace
+rewriteTerm :: Ord b => ((Term a -> Term b) -> Term a -> Term b) -> (a -> b) -> Term a -> Term b
+rewriteTerm f mf = rewrite fsub f
   where
-    replace = mapExpr recurse
-    replaceField f = do
-      trm <- replace (fieldTerm f)
-      return f {fieldTerm = trm}
-    recurse term = case term of
-      TermAnnotated (Annotated ex ma) -> TermAnnotated <$> (Annotated <$> replace ex <*> mapMeta ma)
-      TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> replace lhs <*> replace rhs)
-      TermElement name -> pure $ TermElement name
-      TermFunction fun -> TermFunction <$> case fun of
-        FunctionCompareTo other -> FunctionCompareTo <$> replace other
-        FunctionElimination e -> FunctionElimination <$> case e of
-          EliminationElement -> pure EliminationElement
-          EliminationNominal name -> pure $ EliminationNominal name
-          EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
-            (OptionalCases <$> replace nothing <*> replace just)
-          EliminationRecord p -> pure $ EliminationRecord p
-          EliminationUnion (CaseStatement n cases) -> EliminationUnion <$> (CaseStatement n <$> (CM.mapM replaceField cases))
-        FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> replace body)
-        FunctionPrimitive name -> pure $ FunctionPrimitive name
-      TermLet (Let v t1 t2) -> TermLet <$> (Let v <$> replace t1 <*> replace t2)
-      TermList els -> TermList <$> (CM.mapM replace els)
-      TermLiteral v -> pure $ TermLiteral v
-      TermMap m -> TermMap <$> (M.fromList <$> CM.mapM replacePair (M.toList m))
-        where
-          replacePair (k, v) = do
-            km <- replace k
-            vm <- replace v
-            return (km, vm)
-      TermNominal (Named name t) -> TermNominal <$> (Named name <$> replace t)
-      TermOptional m -> TermOptional <$> (CM.mapM replace m)
-      TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM replaceField fields))
-      TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM replace $ S.toList s))
-      TermUnion (Union n field) -> TermUnion <$> (Union n <$> replaceField field)
-      TermVariable v -> pure $ TermVariable v
+    fsub recurse term = case term of
+        TermAnnotated (Annotated ex ann) -> TermAnnotated $ Annotated (recurse ex) (mf ann)
+        TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
+        TermElement name -> TermElement name
+        TermFunction fun -> TermFunction $ case fun of
+          FunctionCompareTo other -> FunctionCompareTo $ recurse other
+          FunctionElimination e -> FunctionElimination $ case e of
+            EliminationElement -> EliminationElement
+            EliminationNominal name -> EliminationNominal name
+            EliminationOptional (OptionalCases nothing just) -> EliminationOptional
+              (OptionalCases (recurse nothing) (recurse just))
+            EliminationRecord p -> EliminationRecord p
+            EliminationUnion (CaseStatement n cases) -> EliminationUnion $ CaseStatement n (forField <$> cases)
+          FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
+          FunctionPrimitive name -> FunctionPrimitive name
+        TermLet (Let v t1 t2) -> TermLet $ Let v (recurse t1) (recurse t2)
+        TermList els -> TermList $ recurse <$> els
+        TermLiteral v -> TermLiteral v
+        TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
+        TermNominal (Named name t) -> TermNominal (Named name $ recurse t)
+        TermOptional m -> TermOptional $ recurse <$> m
+        TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
+        TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
+        TermUnion (Union n field) -> TermUnion $ Union n $ forField field
+        TermVariable v -> TermVariable v
+      where
+        forField f = f {fieldTerm = recurse (fieldTerm f)}
+
+rewriteTermM :: Ord b => ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) -> (a -> Flow s b) -> Term a -> Flow s (Term b)
+rewriteTermM f mf = rewrite fsub f
+  where
+    fsub recurse term = case term of
+        TermAnnotated (Annotated ex ma) -> TermAnnotated <$> (Annotated <$> recurse ex <*> mf ma)
+        TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
+        TermElement name -> pure $ TermElement name
+        TermFunction fun -> TermFunction <$> case fun of
+          FunctionCompareTo other -> FunctionCompareTo <$> recurse other
+          FunctionElimination e -> FunctionElimination <$> case e of
+            EliminationElement -> pure EliminationElement
+            EliminationNominal name -> pure $ EliminationNominal name
+            EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
+              (OptionalCases <$> recurse nothing <*> recurse just)
+            EliminationRecord p -> pure $ EliminationRecord p
+            EliminationUnion (CaseStatement n cases) -> EliminationUnion <$> (CaseStatement n <$> (CM.mapM forField cases))
+          FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
+          FunctionPrimitive name -> pure $ FunctionPrimitive name
+        TermLet (Let v t1 t2) -> TermLet <$> (Let v <$> recurse t1 <*> recurse t2)
+        TermList els -> TermList <$> (CM.mapM recurse els)
+        TermLiteral v -> pure $ TermLiteral v
+        TermMap m -> TermMap <$> (M.fromList <$> CM.mapM forPair (M.toList m))
+          where
+            forPair (k, v) = do
+              km <- recurse k
+              vm <- recurse v
+              return (km, vm)
+        TermNominal (Named name t) -> TermNominal <$> (Named name <$> recurse t)
+        TermOptional m -> TermOptional <$> (CM.mapM recurse m)
+        TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
+        TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
+        TermUnion (Union n field) -> TermUnion <$> (Union n <$> forField field)
+        TermVariable v -> pure $ TermVariable v
+      where
+        forField f = do
+          t <- recurse (fieldTerm f)
+          return f {fieldTerm = t}
 
 rewriteTermMeta :: Ord b => (a -> b) -> Term a -> Term b
 rewriteTermMeta = rewriteTerm mapExpr
@@ -143,25 +148,25 @@ rewriteTermMeta = rewriteTerm mapExpr
     mapExpr recurse term = recurse term
 
 rewriteType :: ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
-rewriteType mapExpr mapMeta = replace
+rewriteType f mf = rewrite fsub f
   where
-    replace = mapExpr recurse
-    replaceField f = f {fieldTypeType = replace (fieldTypeType f)}
-    recurse typ = case typ of
-      TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (replace t) (mapMeta ann)
-      TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (replace lhs) (replace rhs)
-      TypeElement t -> TypeElement $ replace t
-      TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (replace dom) (replace cod))
-      TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ replace b)
-      TypeList t -> TypeList $ replace t
-      TypeLiteral lt -> TypeLiteral lt
-      TypeMap (MapType kt vt) -> TypeMap (MapType (replace kt) (replace vt))
-      TypeNominal name -> TypeNominal name
-      TypeOptional t -> TypeOptional $ replace t
-      TypeRecord (RowType name fields) -> TypeRecord $ RowType name (replaceField <$> fields)
-      TypeSet t -> TypeSet $ replace t
-      TypeUnion (RowType name fields) -> TypeUnion $ RowType name (replaceField <$> fields)
-      TypeVariable v -> TypeVariable v
+    fsub recurse typ = case typ of
+        TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (recurse t) (mapMeta ann)
+        TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (recurse lhs) (recurse rhs)
+        TypeElement t -> TypeElement $ recurse t
+        TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (recurse dom) (recurse cod))
+        TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ recurse b)
+        TypeList t -> TypeList $ recurse t
+        TypeLiteral lt -> TypeLiteral lt
+        TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
+        TypeNominal name -> TypeNominal name
+        TypeOptional t -> TypeOptional $ recurse t
+        TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forfield <$> fields)
+        TypeSet t -> TypeSet $ recurse t
+        TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forfield <$> fields)
+        TypeVariable v -> TypeVariable v
+      where
+        forfield f = f {fieldTypeType = recurse (fieldTypeType f)}
 
 rewriteTypeMeta :: (a -> b) -> Type a -> Type b
 rewriteTypeMeta = rewriteType mapExpr
