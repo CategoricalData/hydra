@@ -19,17 +19,17 @@ binary = LiteralBinary
 boolean :: Bool -> Literal
 boolean = LiteralBoolean
 
-expectBoolean :: Show m => Literal -> GraphFlow m Bool
+expectBoolean :: Literal -> Flow s Bool
 expectBoolean v = case v of
   LiteralBoolean b -> pure b
   _ -> unexpected "boolean" v
 
-expectInt32 :: Show m => Literal -> GraphFlow m Int
+expectInt32 :: Literal -> Flow s Int
 expectInt32 v = case v of
   LiteralInteger (IntegerValueInt32 i) -> pure i
   _ -> unexpected "int32" v
 
-expectString :: Show m => Literal -> GraphFlow m String
+expectString :: Literal -> Flow s String
 expectString v = case v of
   LiteralString s -> pure s
   _ -> unexpected "string" v
