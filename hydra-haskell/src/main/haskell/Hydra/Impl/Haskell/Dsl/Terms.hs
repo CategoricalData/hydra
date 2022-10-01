@@ -67,11 +67,23 @@ eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
 elimination :: Elimination m -> Term m
 elimination = TermFunction . FunctionElimination
 
+expectBinary :: Show m => Term m -> Flow s String
+expectBinary = expectLiteral Literals.expectBinary
+
 expectBoolean :: Show m => Term m -> Flow s Bool
 expectBoolean = expectLiteral Literals.expectBoolean
 
+expectFloat32 :: Show m => Term m -> Flow s Float
+expectFloat32 = expectLiteral Literals.expectFloat32
+
+expectFloat64 :: Show m => Term m -> Flow s Double
+expectFloat64 = expectLiteral Literals.expectFloat64
+
 expectInt32 :: Show m => Term m -> Flow s Int
 expectInt32 = expectLiteral Literals.expectInt32
+
+expectInt64 :: Show m => Term m -> Flow s Integer
+expectInt64 = expectLiteral Literals.expectInt64
 
 expectList :: Show m => (Term m -> Flow s a) -> Term m -> Flow s [a]
 expectList f term = case stripTerm term of
