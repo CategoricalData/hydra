@@ -19,15 +19,35 @@ binary = LiteralBinary
 boolean :: Bool -> Literal
 boolean = LiteralBoolean
 
+expectBinary :: Literal -> Flow s String
+expectBinary v = case v of
+  LiteralBinary b -> pure b
+  _ -> unexpected "binary" v
+
 expectBoolean :: Literal -> Flow s Bool
 expectBoolean v = case v of
   LiteralBoolean b -> pure b
   _ -> unexpected "boolean" v
 
+expectFloat32 :: Literal -> Flow s Float
+expectFloat32 v = case v of
+  LiteralFloat (FloatValueFloat32 f) -> pure f
+  _ -> unexpected "float32" v
+
+expectFloat64 :: Literal -> Flow s Double
+expectFloat64 v = case v of
+  LiteralFloat (FloatValueFloat64 f) -> pure f
+  _ -> unexpected "float64" v
+
 expectInt32 :: Literal -> Flow s Int
 expectInt32 v = case v of
   LiteralInteger (IntegerValueInt32 i) -> pure i
   _ -> unexpected "int32" v
+
+expectInt64 :: Literal -> Flow s Integer
+expectInt64 v = case v of
+  LiteralInteger (IntegerValueInt64 i) -> pure i
+  _ -> unexpected "int64" v
 
 expectString :: Literal -> Flow s String
 expectString v = case v of
