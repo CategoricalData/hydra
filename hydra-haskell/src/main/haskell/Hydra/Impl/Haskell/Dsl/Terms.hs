@@ -67,23 +67,23 @@ eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
 elimination :: Elimination m -> Term m
 elimination = TermFunction . FunctionElimination
 
-expectBoolean :: Show m => Term m -> GraphFlow m Bool
+expectBoolean :: Show m => Term m -> Flow s Bool
 expectBoolean = expectLiteral Literals.expectBoolean
 
-expectInt32 :: Show m => Term m -> GraphFlow m Int
+expectInt32 :: Show m => Term m -> Flow s Int
 expectInt32 = expectLiteral Literals.expectInt32
 
-expectList :: Show m => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m [a]
+expectList :: Show m => (Term m -> Flow s a) -> Term m -> Flow s [a]
 expectList f term = case stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
 
-expectLiteral :: Show m => (Literal -> GraphFlow m a) -> Term m -> GraphFlow m a
+expectLiteral :: Show m => (Literal -> Flow s a) -> Term m -> Flow s a
 expectLiteral expect term = case stripTerm term of
   TermLiteral lit -> expect lit
   _ -> unexpected "literal" term
 
-expectMap :: (Ord k, Show m) => (Term m -> GraphFlow m k) -> (Term m -> GraphFlow m v) -> Term m -> GraphFlow m (M.Map k v)
+expectMap :: (Ord k, Show m) => (Term m -> Flow s k) -> (Term m -> Flow s v) -> Term m -> Flow s (M.Map k v)
 expectMap fk fv term = case stripTerm term of
   TermMap m -> M.fromList <$> CM.mapM expectPair (M.toList m)
     where
@@ -93,32 +93,32 @@ expectMap fk fv term = case stripTerm term of
         return (kval, vval)
   _ -> unexpected "map" term
 
-expectNArgs :: Int -> [Term m] -> GraphFlow m ()
+expectNArgs :: Int -> [Term m] -> Flow s ()
 expectNArgs n args = if L.length args /= n
   then unexpected (show n ++ " arguments") (L.length args)
   else pure ()
 
-expectOptional :: Show m => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m (Y.Maybe a)
+expectOptional :: Show m => (Term m -> Flow s a) -> Term m -> Flow s (Y.Maybe a)
 expectOptional f term = case stripTerm term of
   TermOptional mt -> case mt of
     Nothing -> pure Nothing
     Just t -> Just <$> f t
   _ -> unexpected "optional value" term
 
-expectRecord :: Show m => Term m -> GraphFlow m [Field m]
+expectRecord :: Show m => Term m -> Flow s [Field m]
 expectRecord term = case stripTerm term of
   TermRecord (Record _ fields) -> pure fields
   _ -> unexpected "record" term
 
-expectSet :: (Ord a, Show m) => (Term m -> GraphFlow m a) -> Term m -> GraphFlow m (S.Set a)
+expectSet :: (Ord a, Show m) => (Term m -> Flow s a) -> Term m -> Flow s (S.Set a)
 expectSet f term = case stripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> unexpected "set" term
 
-expectString :: Show m => Term m -> GraphFlow m String
+expectString :: Show m => Term m -> Flow s String
 expectString = expectLiteral Literals.expectString
 
-expectUnion :: Show m => Term m -> GraphFlow m (Field m)
+expectUnion :: Show m => Term m -> Flow s (Field m)
 expectUnion term = case stripTerm term of
   TermUnion (Union _ field) -> pure field
   _ -> unexpected "union" term
