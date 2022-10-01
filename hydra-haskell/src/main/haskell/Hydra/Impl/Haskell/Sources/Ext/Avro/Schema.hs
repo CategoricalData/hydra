@@ -87,11 +87,15 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
           "doc">:
             doc "a JSON string providing documentation to the user of this schema" $
             optional string,
-          "type">:
-            union [
-              "enum">: avro "Enum",
-              "fixed">: avro "Fixed",
-              "record">: avro "Record"]],
+          "type">: avro "NamedType"],
+
+      def "NamedType" $
+        union [
+          "reference">: -- Note: "reference" is not described in the Avro specification; this has been added
+            doc "A reference to a previously defined type" unit,
+          "enum">: avro "Enum",
+          "fixed">: avro "Fixed",
+          "record">: avro "Record"],
 
       def "Order" $
         enum ["ascending", "descending", "ignore"],

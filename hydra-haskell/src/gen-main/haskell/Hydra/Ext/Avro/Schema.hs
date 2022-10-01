@@ -90,7 +90,7 @@ data Named
     namedAliases :: (Maybe [String]),
     -- | a JSON string providing documentation to the user of this schema
     namedDoc :: (Maybe String),
-    namedType :: Named}
+    namedType :: NamedType}
   deriving (Eq, Ord, Read, Show)
 
 _Named = (Core.Name "hydra/ext/avro/schema.Named")
@@ -104,6 +104,23 @@ _Named_aliases = (Core.FieldName "aliases")
 _Named_doc = (Core.FieldName "doc")
 
 _Named_type = (Core.FieldName "type")
+
+data NamedType 
+  = NamedTypeReference 
+  | NamedTypeEnum Enum_
+  | NamedTypeFixed Fixed
+  | NamedTypeRecord Record
+  deriving (Eq, Ord, Read, Show)
+
+_NamedType = (Core.Name "hydra/ext/avro/schema.NamedType")
+
+_NamedType_reference = (Core.FieldName "reference")
+
+_NamedType_enum = (Core.FieldName "enum")
+
+_NamedType_fixed = (Core.FieldName "fixed")
+
+_NamedType_record = (Core.FieldName "record")
 
 data Order 
   = OrderAscending 
