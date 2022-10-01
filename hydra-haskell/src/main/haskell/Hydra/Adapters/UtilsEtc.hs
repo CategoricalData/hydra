@@ -57,7 +57,7 @@ encodeDecode dir = case dir of
 floatTypeIsSupported :: LanguageConstraints m -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
-idAdapter :: Type m -> SymmetricAdapter s (Type m) (Term m)
+idAdapter :: t -> SymmetricAdapter s t v
 idAdapter t = Adapter False t t idCoder
 
 idCoder :: Coder s s a a
