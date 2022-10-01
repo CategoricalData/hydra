@@ -69,7 +69,10 @@ avroHydraAdapter schema = case schema of
                   encode (Json.ValueString s) = pure $ TermUnion (Union hydraName $ Field (FieldName s) Terms.unit)
                   -- Note: we simply trust that data coming from the Hydra side is correct
                   decode (TermUnion (Union _ (Field fn _))) = return $ Json.ValueString $ unFieldName fn
-              Avro.NamedTypeFixed (Avro.Fixed size) -> fail "fixed types are not yet supported"
+              Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
+                where
+                  encode (Json.ValueString s) = pure $ Terms.binary s
+                  decode term = Json.ValueString <$> Terms.expectBinary term
               Avro.NamedTypeRecord r -> do
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField $ Avro.recordFields r)
                   let encodePair (k, v) = case M.lookup k adaptersByFieldName of
