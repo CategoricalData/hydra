@@ -33,9 +33,13 @@ public abstract class Term<M> {
     
     R visit(Optional instance) ;
     
+    R visit(Product instance) ;
+    
     R visit(Record instance) ;
     
     R visit(Set instance) ;
+    
+    R visit(Sum instance) ;
     
     R visit(Union instance) ;
     
@@ -87,11 +91,19 @@ public abstract class Term<M> {
       return otherwise((instance));
     }
     
+    default R visit(Product instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Record instance) {
       return otherwise((instance));
     }
     
     default R visit(Set instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Sum instance) {
       return otherwise((instance));
     }
     
@@ -423,6 +435,39 @@ public abstract class Term<M> {
   }
   
   /**
+   * A tuple
+   */
+  public static final class Product<M> extends hydra.core.Term<M> {
+    /**
+     * A tuple
+     */
+    public final java.util.List<hydra.core.Term<M>> value;
+    
+    public Product (java.util.List<hydra.core.Term<M>> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Product)) {
+        return false;
+      }
+      Product o = (Product) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
    * A record term
    */
   public static final class Record<M> extends hydra.core.Term<M> {
@@ -474,6 +519,39 @@ public abstract class Term<M> {
         return false;
       }
       Set o = (Set) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A variant tuple
+   */
+  public static final class Sum<M> extends hydra.core.Term<M> {
+    /**
+     * A variant tuple
+     */
+    public final hydra.core.Sum<M> value;
+    
+    public Sum (hydra.core.Sum<M> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Sum)) {
+        return false;
+      }
+      Sum o = (Sum) (other);
       return value.equals(o.value);
     }
     

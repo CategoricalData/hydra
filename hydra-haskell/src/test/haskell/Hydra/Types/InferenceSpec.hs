@@ -9,7 +9,7 @@ import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
@@ -25,11 +25,11 @@ checkType term typ = typeAnn term `H.shouldBe` typ
 expectMonotype :: Term Meta -> Type Meta -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term Meta-> [VariableType] -> Type Meta -> H.Expectation
+expectPolytype :: Term Meta-> [String] -> Type Meta -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
       (snd <$> inferType term)
-      (TypeScheme vars typ)
+      (TypeScheme (VariableType <$> vars) typ)
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = do
@@ -63,10 +63,10 @@ checkFunctionTerms = do
     H.it "Check lambdas" $ do
       expectPolytype
         (lambda "x" (variable "x"))
-        [VariableType "v1"] (Types.function (Types.variable "v1") (Types.variable "v1"))
+        ["v1"] (Types.function (Types.variable "v1") (Types.variable "v1"))
       expectPolytype
         (lambda "x" (int16 137))
-        [VariableType "v1"] (Types.function (Types.variable "v1") Types.int16)
+        ["v1"] (Types.function (Types.variable "v1") Types.int16)
 
     H.it "Check 'compareTo' terms" $ do
       expectMonotype
@@ -74,7 +74,7 @@ checkFunctionTerms = do
         (Types.function (Types.optional Types.string) Types.int8)
       expectPolytype
         (lambda "x" $ compareTo (variable "x"))
-        [VariableType "v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
+        ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
 
     H.it "Check projections" $ do
       expectMonotype
@@ -92,7 +92,7 @@ checkFunctionTerms = do
         (cases testTypePersonOrSomethingName [
           Field (FieldName "person") (apply delta (element $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
-        [VariableType "v1"] (Types.function
+        ["v1"] (Types.function
           (TypeUnion $ RowType testTypePersonOrSomethingName [
             Types.field "person" $ TypeRecord $ RowType testTypePersonName [
               Types.field "firstName" Types.string,
@@ -122,7 +122,7 @@ checkIndividualTerms = do
     H.it "Check let terms" $ do
       expectPolytype
         (letTerm (Variable "x") (float32 42.0) (lambda "y" (lambda "z" (variable "x"))))
-        [VariableType "v1", VariableType "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
+        ["v1", "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
 
     H.it "Check elements" $ do
       expectMonotype
@@ -138,7 +138,7 @@ checkIndividualTerms = do
         (Types.optional Types.int32)
       expectPolytype
         (optional Nothing)
-        [VariableType "v1"] (Types.optional $ Types.variable "v1")
+        ["v1"] (Types.optional $ Types.variable "v1")
 
     H.it "Check records" $ do
       expectMonotype
@@ -146,7 +146,7 @@ checkIndividualTerms = do
         (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") Types.float32])
 --      expectPolytype
 --        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ variable "lon"]))
---        [VariableType "v1"] (Types.function (Types.variable "v1")
+--        ["v1"] (Types.function (Types.variable "v1")
 --          (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
@@ -160,7 +160,7 @@ checkIndividualTerms = do
         (Types.set Types.boolean)
       expectPolytype
         (set $ S.fromList [set S.empty])
-        [VariableType "v1"] (Types.set $ Types.set $ Types.variable "v1")
+        ["v1"] (Types.set $ Types.set $ Types.variable "v1")
 
     H.it "Check maps" $ do
       expectMonotype
@@ -168,11 +168,11 @@ checkIndividualTerms = do
         (Types.map Types.string Types.string)
       expectPolytype
         (mapTerm M.empty)
-        [VariableType "v1", VariableType "v2"] (Types.map (Types.variable "v1") (Types.variable "v2"))
+        ["v1", "v2"] (Types.map (Types.variable "v1") (Types.variable "v2"))
       expectPolytype
         (lambda "x" (lambda "y" (mapTerm $ M.fromList
           [(variable "x", float64 0.1), (variable "y", float64 0.2)])))
-        [VariableType "v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") (Types.map (Types.variable "v1") Types.float64)))
+        ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") (Types.map (Types.variable "v1") Types.float64)))
 
     -- TODO: restore me, and add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
 --    H.it "Check nominal (newtype) terms" $ do
@@ -201,11 +201,11 @@ checkLists = do
     H.it "Check empty list" $ do
       expectPolytype
         (list [])
-        [VariableType "v1"] (Types.list $ Types.variable "v1")
+        ["v1"] (Types.list $ Types.variable "v1")
     H.it "Check list containing an empty list" $ do
       expectPolytype
         (list [list []])
-        [VariableType "v1"] (Types.list $ Types.list $ Types.variable "v1")
+        ["v1"] (Types.list $ Types.list $ Types.variable "v1")
     H.it "Check lambda producing a list of integers" $ do
       expectMonotype
         (lambda "x" (list [variable "x", int32 42]))
@@ -259,7 +259,49 @@ checkPrimitiveFunctions = do
     H.it "Check polymorphic primitive functions" $ do
       expectPolytype
         (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
-        [VariableType "v1"] (Types.function (Types.list $ Types.list $ Types.variable "v1") Types.int32)
+        ["v1"] (Types.function (Types.list $ Types.list $ Types.variable "v1") Types.int32)
+
+checkProducts :: H.SpecWith ()
+checkProducts = do
+  H.describe "Check a few hand-picked product terms" $ do
+
+    H.it "Check empty product" $ do
+      expectMonotype
+        (Terms.product [])
+        (Types.product [])
+
+    H.it "Check non-empty, monotyped products" $ do
+      expectMonotype
+        (Terms.product [string "foo", int32 42])
+        (Types.product [Types.string, Types.int32])
+      expectMonotype
+        (Terms.product [string "foo", list [float32 42.0, float32 137.0]])
+        (Types.product [Types.string, Types.list Types.float32])
+
+    H.it "Check polytyped products" $ do
+      expectPolytype
+        (Terms.product [list [], string "foo"])
+        ["v1"] (Types.product [Types.list $ Types.variable "v1", Types.string])
+
+checkSums :: H.SpecWith ()
+checkSums = do
+  H.describe "Check a few hand-picked sum terms" $ do
+
+    H.it "Check singleton sum terms" $ do
+      expectMonotype
+        (Terms.sum 0 1 $ string "foo")
+        (Types.sum [Types.string])
+      expectPolytype
+        (Terms.sum 0 1 $ list [])
+        ["v1"] (Types.sum [Types.list $ Types.variable "v1"])
+
+    H.it "Check non-singleton sum terms" $ do
+      expectPolytype
+        (Terms.sum 0 2 $ string "foo")
+        ["v1"] (Types.sum [Types.string, Types.variable "v1"])
+      expectPolytype
+        (Terms.sum 1 2 $ string "foo")
+        ["v1"] (Types.sum [Types.variable "v1", Types.string])
 
 checkTypeAnnotations :: H.SpecWith ()
 checkTypeAnnotations = do
@@ -295,5 +337,7 @@ spec = do
   checkLiterals
   checkNominalTerms
   checkPrimitiveFunctions
+  checkProducts
+  checkSums
   checkTypeAnnotations
 --  checkTypedTerms

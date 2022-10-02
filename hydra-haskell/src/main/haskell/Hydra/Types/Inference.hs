@@ -226,6 +226,10 @@ inferInternal term = case term of
           i <- infer e
           yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
 
+    TermProduct tuple -> do
+      is <- CM.mapM infer tuple
+      yield (TermProduct is) (TypeProduct $ fmap termType is) (L.concat $ fmap termConstraints is)
+
     TermRecord (Record n fields) -> do
         rt <- withGraphContext $ requireRecordType n
         let sfields = rowTypeFields rt
@@ -245,6 +249,15 @@ inferInternal term = case term of
       let co = (\e -> (v, termType e)) <$> iels
       let ci = L.concat (termConstraints <$> iels)
       yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
+
+    TermSum (Sum i s trm) -> do
+        it <- infer trm
+        types <- CM.sequence (varOrTerm it <$> [0..(s-1)])
+        yield (TermSum $ Sum i s it) (TypeSum types) (termConstraints it)
+      where
+        varOrTerm it j = if i == j
+          then pure $ termType it
+          else freshVariableType
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do

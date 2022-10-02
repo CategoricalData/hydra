@@ -118,8 +118,10 @@ decodeType dat = case dat of
     (_Type_map, fmap TypeMap . decodeMapType),
     (_Type_nominal, fmap TypeNominal . decodeElement),
     (_Type_optional, fmap TypeOptional . decodeType),
+    (_Type_product, \(TermList types) -> TypeProduct <$> (CM.mapM decodeType types)),
     (_Type_record, fmap TypeRecord . decodeRowType),
     (_Type_set, fmap TypeSet . decodeType),
+    (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM decodeType types)),
     (_Type_union, fmap TypeUnion . decodeRowType),
     (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
 
