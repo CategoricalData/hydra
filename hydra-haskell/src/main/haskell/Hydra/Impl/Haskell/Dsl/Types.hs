@@ -98,6 +98,9 @@ nominal = TypeNominal
 optional :: Type m -> Type m
 optional = TypeOptional
 
+product :: [Type m] -> Type m
+product = TypeProduct
+
 record :: [FieldType m] -> Type m
 record fields = TypeRecord $ RowType placeholderName fields
 
@@ -106,6 +109,9 @@ set = TypeSet
 
 string :: Type m
 string = literal LiteralTypeString
+
+sum :: [Type m] -> Type m
+sum = TypeSum
 
 uint16 :: Type m
 uint16 = integer IntegerTypeUint16

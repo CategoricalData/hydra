@@ -3,6 +3,7 @@ module Hydra.Types.Unification (
   solveConstraints,
 ) where
 
+import Hydra.Basics
 import Hydra.Common
 import Hydra.Core
 import Hydra.Compute
@@ -52,11 +53,13 @@ unify t1 t2 = if t1 == t2
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
       (TypeOptional ot1, TypeOptional ot2) -> unify ot1 ot2
+      (TypeProduct types1, TypeProduct types2) -> unifyMany types1 types2
       (TypeRecord rt1, TypeRecord rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
       (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) -> unifyMany
         [Types.variable v1, body1] [Types.variable v2, body2]
+      (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
       (TypeVariable v, _) -> bind v t2
       (_, TypeVariable v) -> bind v t1
       (TypeNominal n1, TypeNominal n2) -> if n1 == n2
@@ -64,7 +67,7 @@ unify t1 t2 = if t1 == t2
         else failUnification
       (TypeNominal _, _) -> return M.empty -- TODO
       (_, TypeNominal name) -> unify (Types.nominal name) t1
-      _ -> failUnification
+      (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r)
   where
     verify b = if b then return M.empty else failUnification
     failUnification = fail $ "could not unify type " ++ show t1 ++ " with " ++ show t2

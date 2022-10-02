@@ -33,9 +33,13 @@ public abstract class TypeVariant {
     
     R visit(Optional instance) ;
     
+    R visit(Product instance) ;
+    
     R visit(Record instance) ;
     
     R visit(Set instance) ;
+    
+    R visit(Sum instance) ;
     
     R visit(Union instance) ;
     
@@ -87,11 +91,19 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
+    default R visit(Product instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Record instance) {
       return otherwise((instance));
     }
     
     default R visit(Set instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Sum instance) {
       return otherwise((instance));
     }
     
@@ -354,6 +366,31 @@ public abstract class TypeVariant {
     }
   }
   
+  public static final class Product extends hydra.core.TypeVariant {
+    public Product () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Product)) {
+        return false;
+      }
+      Product o = (Product) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
   public static final class Record extends hydra.core.TypeVariant {
     public Record () {
     
@@ -390,6 +427,31 @@ public abstract class TypeVariant {
         return false;
       }
       Set o = (Set) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Sum extends hydra.core.TypeVariant {
+    public Sum () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Sum)) {
+        return false;
+      }
+      Sum o = (Sum) (other);
       return true;
     }
     

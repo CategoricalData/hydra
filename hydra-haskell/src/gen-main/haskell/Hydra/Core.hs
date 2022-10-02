@@ -536,6 +536,22 @@ _RowType_typeName = (FieldName "typeName")
 
 _RowType_fields = (FieldName "fields")
 
+-- | The unlabeled equivalent of a Union term
+data Sum m 
+  = Sum {
+    sumIndex :: Int,
+    sumSize :: Int,
+    sumTerm :: (Term m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Sum = (Name "hydra/core.Sum")
+
+_Sum_index = (FieldName "index")
+
+_Sum_size = (FieldName "size")
+
+_Sum_term = (FieldName "term")
+
 -- | A data term
 data Term m 
   = TermAnnotated (Annotated (Term m) m)
@@ -548,8 +564,10 @@ data Term m
   | TermMap (Map (Term m) (Term m))
   | TermNominal (Named m)
   | TermOptional (Maybe (Term m))
+  | TermProduct [Term m]
   | TermRecord (Record m)
   | TermSet (Set (Term m))
+  | TermSum (Sum m)
   | TermUnion (Union m)
   | TermVariable Variable
   deriving (Eq, Ord, Read, Show)
@@ -576,9 +594,13 @@ _Term_nominal = (FieldName "nominal")
 
 _Term_optional = (FieldName "optional")
 
+_Term_product = (FieldName "product")
+
 _Term_record = (FieldName "record")
 
 _Term_set = (FieldName "set")
+
+_Term_sum = (FieldName "sum")
 
 _Term_union = (FieldName "union")
 
@@ -596,8 +618,10 @@ data TermVariant
   | TermVariantMap 
   | TermVariantNominal 
   | TermVariantOptional 
+  | TermVariantProduct 
   | TermVariantRecord 
   | TermVariantSet 
+  | TermVariantSum 
   | TermVariantUnion 
   | TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
@@ -624,9 +648,13 @@ _TermVariant_nominal = (FieldName "nominal")
 
 _TermVariant_optional = (FieldName "optional")
 
+_TermVariant_product = (FieldName "product")
+
 _TermVariant_record = (FieldName "record")
 
 _TermVariant_set = (FieldName "set")
+
+_TermVariant_sum = (FieldName "sum")
 
 _TermVariant_union = (FieldName "union")
 
@@ -644,8 +672,10 @@ data Type m
   | TypeMap (MapType m)
   | TypeNominal Name
   | TypeOptional (Type m)
+  | TypeProduct [Type m]
   | TypeRecord (RowType m)
   | TypeSet (Type m)
+  | TypeSum [Type m]
   | TypeUnion (RowType m)
   | TypeVariable VariableType
   deriving (Eq, Ord, Read, Show)
@@ -672,9 +702,13 @@ _Type_nominal = (FieldName "nominal")
 
 _Type_optional = (FieldName "optional")
 
+_Type_product = (FieldName "product")
+
 _Type_record = (FieldName "record")
 
 _Type_set = (FieldName "set")
+
+_Type_sum = (FieldName "sum")
 
 _Type_union = (FieldName "union")
 
@@ -705,8 +739,10 @@ data TypeVariant
   | TypeVariantMap 
   | TypeVariantNominal 
   | TypeVariantOptional 
+  | TypeVariantProduct 
   | TypeVariantRecord 
   | TypeVariantSet 
+  | TypeVariantSum 
   | TypeVariantUnion 
   | TypeVariantVariable 
   deriving (Eq, Ord, Read, Show)
@@ -733,9 +769,13 @@ _TypeVariant_nominal = (FieldName "nominal")
 
 _TypeVariant_optional = (FieldName "optional")
 
+_TypeVariant_product = (FieldName "product")
+
 _TypeVariant_record = (FieldName "record")
 
 _TypeVariant_set = (FieldName "set")
+
+_TypeVariant_sum = (FieldName "sum")
 
 _TypeVariant_union = (FieldName "union")
 

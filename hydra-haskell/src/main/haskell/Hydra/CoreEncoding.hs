@@ -15,6 +15,12 @@ encodeApplication (Application lhs rhs) = record _Application [
   Field _Application_function $ encodeTerm lhs,
   Field _Application_argument $ encodeTerm rhs]
 
+encodeSum :: Ord m => Sum m -> Term m
+encodeSum (Sum i l term) = record _Sum [
+  Field _Sum_index $ int32 i,
+  Field _Sum_size $ int32 l,
+  Field _Sum_term $ encodeTerm term]
+
 encodeApplicationType :: ApplicationType m -> Term m
 encodeApplicationType (ApplicationType lhs rhs) = record _ApplicationType [
   Field _ApplicationType_function $ encodeType lhs,
@@ -121,7 +127,7 @@ encodeProjection :: Projection -> Term m
 encodeProjection (Projection name fname) = record _Projection [
   Field _Projection_typeName $ string (unName name),
   Field _Projection_field $ string (unFieldName fname)]
-  
+
 encodeRowType :: RowType m -> Term m
 encodeRowType (RowType name fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
@@ -139,8 +145,10 @@ encodeTerm term = case term of
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
   TermNominal ntt -> variant _Term _Term_nominal $ encodeNamed ntt
   TermOptional m -> variant _Term _Term_optional $ optional $ encodeTerm <$> m
+  TermProduct terms -> variant _Term _Term_product $ list (encodeTerm <$> terms)
   TermRecord (Record _ fields) -> variant _Term _Term_record $ list $ encodeField <$> fields
   TermSet terms -> variant _Term _Term_set $ set $ S.fromList $ encodeTerm <$> S.toList terms
+  TermSum s -> variant _Term _Term_sum $ encodeSum s
   TermUnion (Union _ field) -> variant _Term _Term_union $ encodeField field
   TermVariable (Variable var) -> variant _Term _Term_variable $ string var
 
@@ -156,8 +164,10 @@ encodeType typ = case typ of
   TypeMap mt -> variant _Type _Type_map $ encodeMapType mt
   TypeNominal name -> variant _Type _Type_nominal $ element name
   TypeOptional t -> variant _Type _Type_optional $ encodeType t
+  TypeProduct types -> variant _Type _Type_product $ list (encodeType <$> types)
   TypeRecord rt -> variant _Type _Type_record $ encodeRowType rt
   TypeSet t -> variant _Type _Type_set $ encodeType t
+  TypeSum types -> variant _Type _Type_sum $ list (encodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ encodeRowType rt
   TypeVariable (VariableType var) -> variant _Type _Type_variable $ string var
 
@@ -171,8 +181,10 @@ encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
   TypeVariantMap -> _TypeVariant_map
   TypeVariantNominal -> _TypeVariant_nominal
   TypeVariantOptional -> _TypeVariant_optional
+  TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record
   TypeVariantSet -> _TypeVariant_set
+  TypeVariantSum -> _TypeVariant_sum
   TypeVariantUnion -> _TypeVariant_union
   TypeVariantLambda -> _TypeVariant_lambda
   TypeVariantVariable -> _TypeVariant_variable

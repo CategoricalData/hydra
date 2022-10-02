@@ -167,8 +167,10 @@ termVariant term = ((\x -> case x of
   Core.TermMap _ -> Core.TermVariantMap
   Core.TermNominal _ -> Core.TermVariantNominal
   Core.TermOptional _ -> Core.TermVariantOptional
+  Core.TermProduct _ -> Core.TermVariantProduct
   Core.TermRecord _ -> Core.TermVariantRecord
   Core.TermSet _ -> Core.TermVariantSet
+  Core.TermSum _ -> Core.TermVariantSum
   Core.TermUnion _ -> Core.TermVariantUnion
   Core.TermVariable _ -> Core.TermVariantVariable) term)
 
@@ -184,8 +186,10 @@ termVariants = [
   Core.TermVariantMap,
   Core.TermVariantNominal,
   Core.TermVariantOptional,
+  Core.TermVariantProduct,
   Core.TermVariantRecord,
   Core.TermVariantSet,
+  Core.TermVariantSum,
   Core.TermVariantUnion,
   Core.TermVariantVariable]
 
@@ -206,8 +210,10 @@ typeVariant typ = ((\x -> case x of
   Core.TypeMap _ -> Core.TypeVariantMap
   Core.TypeNominal _ -> Core.TypeVariantNominal
   Core.TypeOptional _ -> Core.TypeVariantOptional
+  Core.TypeProduct _ -> Core.TypeVariantProduct
   Core.TypeRecord _ -> Core.TypeVariantRecord
   Core.TypeSet _ -> Core.TypeVariantSet
+  Core.TypeSum _ -> Core.TypeVariantSum
   Core.TypeUnion _ -> Core.TypeVariantUnion
   Core.TypeVariable _ -> Core.TypeVariantVariable) typ)
 
@@ -224,7 +230,9 @@ typeVariants = [
   Core.TypeVariantMap,
   Core.TypeVariantNominal,
   Core.TypeVariantOptional,
+  Core.TypeVariantProduct,
   Core.TypeVariantRecord,
   Core.TypeVariantSet,
+  Core.TypeVariantSum,
   Core.TypeVariantUnion,
   Core.TypeVariantVariable]

@@ -97,8 +97,10 @@ rewriteTerm f mf = rewrite fsub f
         TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
         TermNominal (Named name t) -> TermNominal (Named name $ recurse t)
         TermOptional m -> TermOptional $ recurse <$> m
+        TermProduct tuple -> TermProduct (recurse <$> tuple)
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
         TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
+        TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
         TermUnion (Union n field) -> TermUnion $ Union n $ forField field
         TermVariable v -> TermVariable v
       where
@@ -133,8 +135,10 @@ rewriteTermM f mf = rewrite fsub f
               return (km, vm)
         TermNominal (Named name t) -> TermNominal <$> (Named name <$> recurse t)
         TermOptional m -> TermOptional <$> (CM.mapM recurse m)
+        TermProduct tuple -> TermProduct <$> (CM.mapM recurse tuple)
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
         TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
+        TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
         TermUnion (Union n field) -> TermUnion <$> (Union n <$> forField field)
         TermVariable v -> pure $ TermVariable v
       where
@@ -161,8 +165,10 @@ rewriteType f mf = rewrite fsub f
         TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
         TypeNominal name -> TypeNominal name
         TypeOptional t -> TypeOptional $ recurse t
+        TypeProduct types -> TypeProduct (recurse <$> types)
         TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forfield <$> fields)
         TypeSet t -> TypeSet $ recurse t
+        TypeSum types -> TypeSum (recurse <$> types)
         TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forfield <$> fields)
         TypeVariable v -> TypeVariable v
       where
@@ -214,8 +220,10 @@ subterms term = case term of
   TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
   TermNominal (Named _ t) -> [t]
   TermOptional m -> Y.maybeToList m
+  TermProduct tuple -> tuple
   TermRecord (Record n fields) -> fieldTerm <$> fields
   TermSet s -> S.toList s
+  TermSum (Sum _ _ trm) -> [trm]
   TermUnion (Union _ field) -> [fieldTerm field]
   _ -> []
 
@@ -231,8 +239,10 @@ subtypes typ = case typ of
   TypeMap (MapType kt vt) -> [kt, vt]
   TypeNominal _ -> []
   TypeOptional ot -> [ot]
+  TypeProduct types -> types
   TypeRecord rt -> fieldTypeType <$> rowTypeFields rt
   TypeSet st -> [st]
+  TypeSum types -> types
   TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
   TypeVariable _ -> []
 

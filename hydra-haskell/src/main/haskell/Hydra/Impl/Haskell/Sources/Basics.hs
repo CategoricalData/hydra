@@ -232,8 +232,10 @@ termVariant = basics "termVariant" $
       _Term_map             @-> _TermVariant_map,
       _Term_nominal         @-> _TermVariant_nominal,
       _Term_optional        @-> _TermVariant_optional,
+      _Term_product         @-> _TermVariant_product,
       _Term_record          @-> _TermVariant_record,
       _Term_set             @-> _TermVariant_set,
+      _Term_sum             @-> _TermVariant_sum,
       _Term_union           @-> _TermVariant_union,
       _Term_variable        @-> _TermVariant_variable])
     (var "term")
@@ -252,8 +254,10 @@ termVariants = basics "termVariants" $
     _TermVariant_map,
     _TermVariant_nominal,
     _TermVariant_optional,
+    _TermVariant_product,
     _TermVariant_record,
     _TermVariant_set,
+    _TermVariant_sum,
     _TermVariant_union,
     _TermVariant_variable]
 
@@ -280,8 +284,10 @@ typeVariant = basics "typeVariant" $
       _Type_map         @-> _TypeVariant_map,
       _Type_nominal     @-> _TypeVariant_nominal,
       _Type_optional    @-> _TypeVariant_optional,
+      _Type_product     @-> _TypeVariant_product,
       _Type_record      @-> _TypeVariant_record,
       _Type_set         @-> _TypeVariant_set,
+      _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
       _Type_variable    @-> _TypeVariant_variable])
     (var "typ")
@@ -301,7 +307,9 @@ typeVariants = basics "typeVariants" $
     _TypeVariant_map,
     _TypeVariant_nominal,
     _TypeVariant_optional,
+    _TypeVariant_product,
     _TypeVariant_record,
     _TypeVariant_set,
+    _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]

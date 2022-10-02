@@ -238,6 +238,13 @@ passOptional t@(TypeOptional ot) = do
         Just term' -> Just <$> encodeDecode dir (adapterCoder ad) term'
       _ -> fail $ "expected optional term, found: " ++ show term
 
+passProduct :: (Ord m, Read m, Show m) => TypeAdapter m
+passProduct t@(TypeProduct types) = do
+  ads <- CM.mapM termAdapter types
+  let lossy = L.foldl (\b ad -> b || adapterIsLossy ad) False ads
+  return $ Adapter lossy t (Types.product (adapterTarget <$> ads))
+    $ bidirectional $ \dir (TermProduct tuple) -> TermProduct <$> (CM.zipWithM (\term ad -> encodeDecode dir (adapterCoder ad) term) tuple ads)
+
 passRecord :: (Ord m, Read m, Show m) => TypeAdapter m
 passRecord t@(TypeRecord rt) = do
   adapters <- CM.mapM fieldAdapter (rowTypeFields rt)
@@ -252,6 +259,13 @@ passSet t@(TypeSet st) = do
   return $ Adapter (adapterIsLossy ad) t (Types.set $ adapterTarget ad)
     $ bidirectional $ \dir (TermSet terms) -> set . S.fromList
       <$> CM.mapM (encodeDecode dir (adapterCoder ad)) (S.toList terms)
+
+passSum :: (Ord m, Read m, Show m) => TypeAdapter m
+passSum t@(TypeSum types) = do
+  ads <- CM.mapM termAdapter types
+  let lossy = L.foldl (\b ad -> b || adapterIsLossy ad) False ads
+  return $ Adapter lossy t (Types.sum (adapterTarget <$> ads))
+    $ bidirectional $ \dir (TermSum (Sum i n term)) -> TermSum . Sum i n <$> encodeDecode dir (adapterCoder $ ads !! i) term
 
 passUnion :: (Ord m, Read m, Show m) => TypeAdapter m
 passUnion t@(TypeUnion rt) = do
@@ -289,8 +303,10 @@ termAdapter typ = do
         TypeVariantLiteral -> pure passLiteral
         TypeVariantMap -> pure passMap
         TypeVariantOptional -> [passOptional, optionalToList]
+        TypeVariantProduct -> pure passProduct
         TypeVariantRecord -> pure passRecord
         TypeVariantSet -> pure passSet
+        TypeVariantSum -> pure passSum
         TypeVariantUnion -> pure passUnion
         _ -> []
       else case typeVariant t of

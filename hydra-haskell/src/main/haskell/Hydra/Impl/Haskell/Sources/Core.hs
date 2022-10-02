@@ -315,6 +315,13 @@ hydraCoreModule = Module ns elements [] $
           "typeName">: core "Name",
           "fields">: list $ core "FieldType" @@ "m"],
 
+      def "Sum" $
+        doc "The unlabeled equivalent of a Union term" $
+        lambda "m" $ record [
+          "index">: int32,
+          "size">: int32,
+          "term">: core "Term" @@ "m"],
+
       def "Term" $
         doc "A data term" $
         lambda "m" $ union [
@@ -347,12 +354,18 @@ hydraCoreModule = Module ns elements [] $
           "optional">:
             doc "An optional value" $
             optional $ core "Term" @@ "m",
+          "product">:
+            doc "A tuple" $
+            list (core "Term" @@ "m"),
           "record">:
             doc "A record term" $
             core "Record" @@ "m",
           "set">:
             doc "A set of values" $
             set $ core "Term" @@ "m",
+          "sum">:
+            doc "A variant tuple" $
+            core "Sum" @@ "m",
           "union">:
             doc "A union term" $
             core "Union" @@ "m",
@@ -373,8 +386,10 @@ hydraCoreModule = Module ns elements [] $
           "map",
           "nominal",
           "optional",
+          "product",
           "record",
           "set",
+          "sum",
           "union",
           "variable"],
 
@@ -393,8 +408,10 @@ hydraCoreModule = Module ns elements [] $
           "map">: core "MapType" @@ "m",
           "nominal">: core "Name",
           "optional">: core "Type" @@ "m",
+          "product">: list (core "Type" @@ "m"),
           "record">: core "RowType" @@ "m",
           "set">: core "Type" @@ "m",
+          "sum">: list (core "Type" @@ "m"),
           "union">: core "RowType" @@ "m",
           "variable">: core "VariableType"],
 
@@ -417,8 +434,10 @@ hydraCoreModule = Module ns elements [] $
           "map",
           "nominal",
           "optional",
+          "product",
           "record",
           "set",
+          "sum",
           "union",
           "variable"],
 

@@ -23,9 +23,9 @@ public class Named {
    */
   public final java.util.Optional<String> doc;
   
-  public final hydra.ext.avro.schema.Named type;
+  public final hydra.ext.avro.schema.NamedType type;
   
-  public Named (String name, java.util.Optional<String> namespace, java.util.Optional<java.util.List<String>> aliases, java.util.Optional<String> doc, hydra.ext.avro.schema.Named type) {
+  public Named (String name, java.util.Optional<String> namespace, java.util.Optional<java.util.List<String>> aliases, java.util.Optional<String> doc, hydra.ext.avro.schema.NamedType type) {
     this.name = name;
     this.namespace = namespace;
     this.aliases = aliases;
@@ -63,7 +63,7 @@ public class Named {
     return new Named(name, namespace, aliases, doc, type);
   }
   
-  public Named withType(hydra.ext.avro.schema.Named type) {
+  public Named withType(hydra.ext.avro.schema.NamedType type) {
     return new Named(name, namespace, aliases, doc, type);
   }
 }

@@ -208,6 +208,9 @@ optional = TermOptional
 primitive :: Name -> Term m
 primitive = TermFunction . FunctionPrimitive
 
+product :: [Term m] -> Term m
+product = TermProduct
+
 projection :: Name -> FieldName -> Term m
 projection n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
 
@@ -230,6 +233,9 @@ stringSet strings = set $ S.fromList $ string <$> S.toList strings
 
 string :: String -> Term m
 string = TermLiteral . LiteralString
+
+sum :: Int -> Int -> Term m -> Term m
+sum i s term = TermSum $ Sum i s term
 
 uint16 :: Integer -> Term m
 uint16 = literal . Literals.uint16
