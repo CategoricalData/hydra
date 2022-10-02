@@ -24,25 +24,30 @@ import qualified Data.Maybe as Y
 
 printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
 printModule mod = do
-  sf <- moduleToPegasusSchema mod
-  let s = printExpr $ parenthesize $ exprSchemaFile sf
-  return $ M.fromList [(namespaceToFilePath False (FileExtension "pdl") $ moduleNamespace mod, s)]
+    files <- moduleToPegasusSchemas mod
+    return $ M.fromList (mapPair <$> M.toList files)
+  where
+    mapPair (path, sf) = (path, printExpr $ parenthesize $ exprSchemaFile sf)
 
 constructModule :: (Ord m, Read m, Show m)
   => Module m
   -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) ())
   -> [(Element m, TypedTerm m)]
-  -> GraphFlow m PDL.SchemaFile
+  -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
 constructModule mod coders pairs = do
-    let ns = pdlNameForModule mod
-    let pkg = Nothing
-    let imports = [] -- TODO
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
       Nothing -> fail $ "types form a cycle (unsupported in PDL)"
       Just sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
     schemas <- CM.mapM toSchema sortedPairs
-    return $ PDL.SchemaFile ns pkg imports schemas
+    return $ M.fromList (toPair <$> schemas)
   where
+    ns = pdlNameForModule mod
+    pkg = Nothing
+    imports = [] -- TODO
+    toPair schema = (path, PDL.SchemaFile ns pkg imports [schema])
+      where
+        path = namespaceToFilePath False (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
+        local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
@@ -61,8 +66,8 @@ constructModule mod coders pairs = do
       let anns = doc r
       return $ PDL.NamedSchema qname ptype anns
 
-moduleToPegasusSchema :: (Ord m, Read m, Show m) => Module m -> GraphFlow m PDL.SchemaFile
-moduleToPegasusSchema mod = transformModule language (encodeTerm aliases) constructModule mod
+moduleToPegasusSchemas :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
+moduleToPegasusSchemas mod = transformModule language (encodeTerm aliases) constructModule mod
   where
     aliases = importAliasesForModule mod
 
