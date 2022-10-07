@@ -134,7 +134,7 @@ avroHydraAdapter schema = case schema of
               [field] -> do
                   s <- termToString $ fieldTerm field
                   let name = constr s
-                  let el = Element name term (encodeType typ)
+                  let el = Element name (encodeType typ) term
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()
