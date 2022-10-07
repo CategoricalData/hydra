@@ -33,6 +33,7 @@ avro_long = "long"
 avro_map = "map"
 avro_name = "name"
 avro_namespace = "namespace"
+avro_null = "null"
 avro_order = "order"
 avro_record = "record"
 avro_size = "size"
@@ -153,6 +154,7 @@ decodeSchema v = case v of
         (avro_float, Avro.PrimitiveFloat),
         (avro_int, Avro.PrimitiveInt),
         (avro_long, Avro.PrimitiveLong),
+        (avro_null, Avro.PrimitiveNull),
         (avro_string, Avro.PrimitiveString)]
   Json.ValueNull -> pure $ Avro.SchemaPrimitive $ Avro.PrimitiveNull
   _ -> unexpected "JSON array, object, or string" v
