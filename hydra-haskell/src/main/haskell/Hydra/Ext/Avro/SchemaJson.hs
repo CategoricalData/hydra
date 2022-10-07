@@ -8,6 +8,7 @@ import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Ext.Json.Eliminate
 
 import qualified Control.Monad as CM
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
@@ -78,7 +79,8 @@ decodeField m = do
     Nothing -> pure Nothing
     Just o -> Just <$> (expectString o >>= decodeOrder)
   aliases <- decodeAliases m
-  return $ Avro.Field fname doc typ dflt order aliases
+  let anns = getAnnotations m
+  return $ Avro.Field fname doc typ dflt order aliases anns
 
 decodeFixed :: M.Map String Json.Value -> Flow s Avro.NamedType
 decodeFixed m = do
@@ -98,7 +100,8 @@ decodeNamedSchema value = do
     Just d -> d m
   aliases <- decodeAliases m
   doc <- optString avro_doc m
-  return $ Avro.SchemaNamed $ Avro.Named name ns aliases doc nt
+  let anns = getAnnotations m
+  return $ Avro.SchemaNamed $ Avro.Named name ns aliases doc nt anns
   where
     decoders = M.fromList [
       (avro_enum, decodeEnum),
@@ -153,3 +156,8 @@ decodeSchema v = case v of
         (avro_string, Avro.PrimitiveString)]
   Json.ValueNull -> pure $ Avro.SchemaPrimitive $ Avro.PrimitiveNull
   _ -> unexpected "JSON array, object, or string" v
+
+getAnnotations :: M.Map String Json.Value -> M.Map String Json.Value
+getAnnotations = M.fromList . L.filter isAnnotation . M.toList
+  where
+    isAnnotation (k, _) = L.take 1 k == "@"
