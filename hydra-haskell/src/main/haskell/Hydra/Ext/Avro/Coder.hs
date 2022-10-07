@@ -64,12 +64,19 @@ avroHydraAdapter schema = case schema of
             coderDecode = \m -> Json.ValueObject <$> Terms.expectMap Terms.expectString (coderDecode (adapterCoder ad)) m}
       return $ Adapter (adapterIsLossy ad) schema (Types.map Types.string $ adapterTarget ad) coder
     Avro.SchemaNamed n -> do
-        let qname = AvroQualifiedName (Avro.namedNamespace n) (Avro.namedName n)
-        let hydraName = avroNameToHydraName qname
+        let ns = Avro.namedNamespace n
         env <- getState
+        let lastNs = avroEnvironmentNamespace env
+        let nextNs = Y.maybe lastNs Just ns
+        putState $ env {avroEnvironmentNamespace = nextNs}
+
+        let qname = AvroQualifiedName nextNs (Avro.namedName n)
+        let hydraName = avroNameToHydraName qname
+        
         -- Note: if a named type is redefined (an illegal state for which the Avro spec does not provide a resolution),
         --       we just take the first definition and ignore the second.
-        case getAvroHydraAdapter qname env of
+        ad <- case getAvroHydraAdapter qname env of
+          Just ad -> fail $ "Avro named type defined more than once: " ++ show qname
           Nothing -> do
             ad <- case Avro.namedType n of
               Avro.NamedTypeEnum (Avro.Enum_ syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
@@ -112,9 +119,13 @@ avroHydraAdapter schema = case schema of
                   return $ Adapter lossy schema target coder
                 where
                   toHydraField (f, ad) = FieldType (FieldName $ Avro.fieldName f) $ adapterTarget ad
+            env <- getState
             putState $ putAvroHydraAdapter qname ad env
             return ad
-          Just ad -> fail $ "Avro named type defined more than once: " ++ show qname
+
+        env2 <- getState
+        putState $ env2 {avroEnvironmentNamespace = lastNs}
+        return ad
       where
         addElement term typ pk fields = case pk of
           Nothing -> pure ()
@@ -184,12 +195,25 @@ avroHydraAdapter schema = case schema of
       where
         doubleToInt d = if d < 0 then ceiling d else floor d
     Avro.SchemaReference name -> do
-      let qname = parseAvroName name
       env <- getState
+      let qname = parseAvroName (avroEnvironmentNamespace env) name
       case getAvroHydraAdapter qname env of
         Nothing -> fail $ "Referenced Avro type has not been defined: " ++ show qname
+         ++ ". Defined types: " ++ show (M.keys $ avroEnvironmentNamedAdapters env)
         Just ad -> pure ad
-    Avro.SchemaUnion u -> fail "Avro unions are not yet supported"
+    Avro.SchemaUnion (Avro.Union schemas) -> case schemas of
+      [Avro.SchemaPrimitive (Avro.PrimitiveNull), s] -> do
+        ad <- avroHydraAdapter s
+        let coder = Coder {
+              coderDecode = \(TermOptional ot) -> case ot of
+                Nothing -> pure $ Json.ValueNull
+                Just term -> coderDecode (adapterCoder ad) term,
+              coderEncode = \v -> case v of
+                Json.ValueNull -> pure $ TermOptional Nothing
+                _ -> TermOptional . Just <$> coderEncode (adapterCoder ad) v}
+        return $ Adapter (adapterIsLossy ad) schema (Types.optional $ adapterTarget ad) coder
+      _ -> fail $ "general-purpose unions are not yet supported: " ++ show schema
+
   where
     simpleAdapter typ encode decode = pure $ Adapter False schema typ $ Coder encode decode
 
@@ -222,9 +246,9 @@ primaryKey f = do
       s <- expectString v
       return $ Just $ PrimaryKey (FieldName $ Avro.fieldName f) $ patternToNameConstructor s
 
-parseAvroName :: String -> AvroQualifiedName
-parseAvroName name = case L.reverse $ Strings.splitOn "." name of
-  [local] -> AvroQualifiedName Nothing local
+parseAvroName :: Maybe String -> String -> AvroQualifiedName
+parseAvroName mns name = case L.reverse $ Strings.splitOn "." name of
+  [local] -> AvroQualifiedName mns local
   (local:rest) -> AvroQualifiedName (Just $ L.intercalate "." $ L.reverse rest) local
 
 putAvroHydraAdapter :: AvroQualifiedName -> AvroHydraAdapter m -> AvroEnvironment m -> AvroEnvironment m
