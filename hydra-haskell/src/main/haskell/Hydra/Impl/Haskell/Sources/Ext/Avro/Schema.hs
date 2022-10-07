@@ -91,8 +91,6 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
 
       def "NamedType" $
         union [
-          "reference">: -- Note: "reference" is not described in the Avro specification; this has been added
-            doc "A reference to a previously defined type" unit,
           "enum">: avro "Enum",
           "fixed">: avro "Fixed",
           "record">: avro "Record"],
@@ -131,6 +129,8 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
           "map">: avro "Map",
           "named">: avro "Named",
           "primitive">: avro "Primitive",
+          "reference">: -- Note: "reference" is not described in the Avro specification; this has been added
+            doc "A reference by name to a previously defined type" string,
           "union">: avro "Union"
         ],
 

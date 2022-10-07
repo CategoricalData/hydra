@@ -34,13 +34,13 @@ aesonToValue v = case v of
   A.Bool b -> Json.ValueBoolean b
   A.Null -> Json.ValueNull
 
-bytesToAeson :: BS.ByteString -> Maybe A.Value
-bytesToAeson = A.decode
+bytesToAeson :: BS.ByteString -> Either String A.Value
+bytesToAeson = A.eitherDecode
 
 bytesToString :: BS.ByteString -> String
 bytesToString = map (C.chr . fromEnum) . BS.unpack
 
-bytesToValue :: BS.ByteString -> Maybe Json.Value
+bytesToValue :: BS.ByteString -> Either String Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
 jsonSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) BS.ByteString)
@@ -49,8 +49,8 @@ jsonSerde typ = do
   return Coder {
     coderEncode = fmap valueToBytes . coderEncode coder,
     coderDecode = \bs -> case bytesToValue bs of
-        Nothing -> fail "JSON parsing failed"
-        Just v -> coderDecode coder v}
+        Left msg -> fail $ "JSON parsing failed: " ++ msg
+        Right v -> coderDecode coder v}
 
 jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) String)
 jsonSerdeStr typ = do
@@ -62,7 +62,7 @@ jsonSerdeStr typ = do
 stringToBytes :: String -> BS.ByteString
 stringToBytes = String.fromString
 
-stringToValue :: String -> Maybe Json.Value
+stringToValue :: String -> Either String Json.Value
 stringToValue = bytesToValue . stringToBytes
 
 valueToAeson :: Json.Value -> A.Value
