@@ -69,7 +69,8 @@ emptyLangStrings = Rdf.LangStrings M.empty
 
 encodeField :: Show m => Name -> Rdf.Resource -> Field m -> GraphFlow m [Rdf.Triple]
 encodeField rname subject field = do
-  descs <- encodeTerm (fieldTerm field)
+  node <- nextBlankNode
+  descs <- encodeTerm node (fieldTerm field)
   return $ triplesOf descs ++
     forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs)
 
@@ -137,52 +138,55 @@ encodeLiteralType lt = case lt of
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
-encodeTerm :: Show m => Term m -> GraphFlow m [Rdf.Description]
-encodeTerm term = case term of
-  TermAnnotated (Annotated inner ann) -> encodeTerm inner -- TODO: extract an rdfs:comment
+encodeTerm :: Show m => Rdf.Resource -> Term m -> GraphFlow m [Rdf.Description]
+encodeTerm subject term = case term of
+  TermAnnotated (Annotated inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
   TermElement name -> pure [emptyDescription $ Rdf.NodeIri $ nameToIri name]
-  TermList terms -> encodeList terms
+  TermList terms -> encodeList subject terms
     where
-      encodeList terms = if L.null terms
+      encodeList subj terms = if L.null terms
         then pure [emptyDescription $ (Rdf.NodeIri $ rdfIri "nil")]
           else do
             node <- nextBlankNode
-            fdescs <- encodeTerm $ L.head terms
+            fdescs <- encodeTerm node $ L.head terms
             let firstTriples = triplesOf fdescs ++
-                  forObjects (Rdf.ResourceBnode node) (rdfIri "first") (subjectsOf fdescs)
-            rdescs <- encodeList $ L.tail terms
+                  forObjects subj (rdfIri "first") (subjectsOf fdescs)
+            next <- nextBlankNode
+            rdescs <- encodeList next $ L.tail terms
             let restTriples = triplesOf rdescs ++
-                  forObjects (Rdf.ResourceBnode node) (rdfIri "rest") (subjectsOf rdescs)
-            return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)]
+                  forObjects subj (rdfIri "rest") (subjectsOf rdescs)
+            return [Rdf.Description (resourceToNode subj) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)]
   TermLiteral lit -> do
     node <- encodeLiteral lit
     return [emptyDescription node]
   TermMap m -> do
-      bnode <- nextBlankNode
-      triples <- L.concat <$> (CM.mapM (forKeyVal $ Rdf.ResourceBnode bnode) $ M.toList m)
-      return [Rdf.Description (Rdf.NodeBnode bnode) $ Rdf.Graph $ S.fromList triples]
+      triples <- L.concat <$> (CM.mapM (forKeyVal subject) $ M.toList m)
+      return [Rdf.Description (resourceToNode subject) $ Rdf.Graph $ S.fromList triples]
     where
       forKeyVal subj (k, v) = do
         -- Note: only string-valued keys are supported
         ks <- Terms.expectString $ stripTerm k
-        descs <- encodeTerm v
+        node <- nextBlankNode
+        descs <- encodeTerm node v
         let pred = keyIri ks
         let objs = subjectsOf descs
         let triples = forObjects subj pred objs
         return $ triples ++ triplesOf descs
-  TermNominal (Named _ inner) -> encodeTerm inner
+  TermNominal (Named _ inner) -> encodeTerm subject inner
   TermOptional mterm -> case mterm of
     Nothing -> pure []
-    Just inner -> encodeTerm inner
+    Just inner -> encodeTerm subject inner
   TermRecord (Record rname fields) -> do
-    node <- nextBlankNode
-    tripless <- CM.mapM (encodeField rname (Rdf.ResourceBnode node)) fields
-    return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList $ L.concat tripless)]
-  TermSet terms -> L.concat <$> CM.mapM encodeTerm (S.toList terms)
+    tripless <- CM.mapM (encodeField rname subject) fields
+    return [Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList $ L.concat tripless)]
+  TermSet terms -> L.concat <$> CM.mapM encodeEl (S.toList terms)
+    where
+      encodeEl term = do
+        node <- nextBlankNode
+        encodeTerm node term
   TermUnion (Union rname field) -> do
-    node <- nextBlankNode
-    triples <- encodeField rname (Rdf.ResourceBnode node) field
-    return [Rdf.Description (Rdf.NodeBnode node) (Rdf.Graph $ S.fromList triples)]
+    triples <- encodeField rname subject field
+    return [Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
   _ -> unexpected "RDF-compatible term" term
 
 encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
@@ -224,7 +228,7 @@ mergeGraphs graphs = Rdf.Graph $ L.foldl S.union S.empty (Rdf.unGraph <$> graphs
 nameToIri :: Name -> Rdf.Iri
 nameToIri = Rdf.Iri . unName
 
-nextBlankNode :: Show m => GraphFlow m Rdf.BlankNode
+nextBlankNode :: Show m => GraphFlow m Rdf.Resource
 nextBlankNode = do
   c <- getAttr nodeCount
   count <- case c of
@@ -232,7 +236,7 @@ nextBlankNode = do
     Just lit -> Literals.expectInt32 lit
   let node = Rdf.BlankNode $ "b" ++ show count
   putAttr nodeCount (Literals.int32 $ count + 1)
-  return node
+  return $ Rdf.ResourceBnode node
 
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common
@@ -255,6 +259,11 @@ propertyIri rname fname = Rdf.Iri $ "urn:" ++ unNamespace gname ++ "#" ++ decapi
 
 rdfIri :: String -> Rdf.Iri
 rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+
+resourceToNode :: Rdf.Resource -> Rdf.Node
+resourceToNode r = case r of
+  Rdf.ResourceIri i -> Rdf.NodeIri i
+  Rdf.ResourceBnode b -> Rdf.NodeBnode b
 
 subjectsOf :: [Rdf.Description] -> [Rdf.Node]
 subjectsOf descs = Rdf.descriptionSubject <$> descs
