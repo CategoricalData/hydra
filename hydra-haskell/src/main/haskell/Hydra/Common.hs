@@ -87,8 +87,8 @@ placeholderName :: Name
 placeholderName = Name "Placeholder"
 
 toQname :: Name -> (Namespace, String)
-toQname (Name name) = case Strings.splitOn "." name of
-  (ns:rest) -> (Namespace ns, L.intercalate "." rest)
+toQname (Name name) = case L.reverse $ Strings.splitOn "." name of
+  (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
   _ -> (Namespace "UNKNOWN", name)
 
 skipAnnotations :: (a -> Maybe (Annotated a m)) -> a -> a
