@@ -72,7 +72,7 @@ avroHydraAdapter schema = case schema of
 
         let qname = AvroQualifiedName nextNs (Avro.namedName n)
         let hydraName = avroNameToHydraName qname
-        
+
         -- Note: if a named type is redefined (an illegal state for which the Avro spec does not provide a resolution),
         --       we just take the first definition and ignore the second.
         ad <- case getAvroHydraAdapter qname env of
@@ -156,7 +156,7 @@ avroHydraAdapter schema = case schema of
                 coder = Coder {
                   coderDecode = \(TermElement name) -> pure $ Json.ValueString $ unName name, -- TODO: not symmetrical
                   coderEncode = \json -> do
-                    s <- expectString json
+                    s <- jsonToString json
                     return $ TermElement $ constr s}
           return (Avro.fieldName f, (f, ad))
     Avro.SchemaPrimitive p -> case p of
@@ -271,6 +271,15 @@ rewriteAvroSchemaM f = rewrite fsub f
         forField f = do
           t <- recurse $ Avro.fieldType f
           return f {Avro.fieldType = t}
+
+jsonToString :: Json.Value -> Flow s String
+jsonToString v = case v of
+  Json.ValueBoolean b -> pure $ if b then "true" else "false"
+  Json.ValueString s -> pure s
+  Json.ValueNumber d -> pure $ if fromIntegral (round d) == d
+    then show (round d)
+    else show d
+  _ -> unexpected "string, number, or boolean" v
 
 termToString :: Show m => Term m -> Flow s String
 termToString term = case stripTerm term of
