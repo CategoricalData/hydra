@@ -12,12 +12,13 @@ import qualified Data.Aeson as A
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Text as T
-import qualified Data.ByteString.Lazy.Char8 as L8
+import qualified Data.Text.Lazy as TL
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HS
 import qualified Data.Scientific as SC
 import qualified Data.Char as C
 import qualified Data.String as String
+import qualified Data.Text.Lazy.Encoding as DTE
 
 
 aesonToBytes :: A.Value -> BS.ByteString
@@ -38,7 +39,7 @@ bytesToAeson :: BS.ByteString -> Either String A.Value
 bytesToAeson = A.eitherDecode
 
 bytesToString :: BS.ByteString -> String
-bytesToString = map (C.chr . fromEnum) . BS.unpack
+bytesToString = TL.unpack . DTE.decodeUtf8
 
 bytesToValue :: BS.ByteString -> Either String Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
@@ -56,11 +57,11 @@ jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (C
 jsonSerdeStr typ = do
   serde <- jsonSerde typ
   return Coder {
-    coderEncode = fmap L8.unpack . coderEncode serde,
-    coderDecode = coderDecode serde . L8.pack}
+    coderEncode = fmap bytesToString . coderEncode serde,
+    coderDecode = coderDecode serde . stringToBytes}
 
 stringToBytes :: String -> BS.ByteString
-stringToBytes = String.fromString
+stringToBytes = DTE.encodeUtf8 . TL.pack
 
 stringToValue :: String -> Either String Json.Value
 stringToValue = bytesToValue . stringToBytes
