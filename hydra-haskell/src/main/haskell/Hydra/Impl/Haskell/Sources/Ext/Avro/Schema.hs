@@ -61,7 +61,10 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
             optional $ avro "Order",
           "aliases">:
             doc "a JSON array of strings, providing alternate names for this field" $
-            optional $ list string],
+            optional $ list string,
+          "annotations">:
+            doc "Any additional key/value pairs attached to the field" $
+            Types.map string $ json "Value"],
 
       def "Fixed" $
         record [
@@ -87,7 +90,10 @@ avroSchemaModule = Module ns elements [jsonModelModule] $
           "doc">:
             doc "a JSON string providing documentation to the user of this schema" $
             optional string,
-          "type">: avro "NamedType"],
+          "type">: avro "NamedType",
+          "annotations">:
+            doc "Any additional key/value pairs attached to the type" $
+            Types.map string $ json "Value"],
 
       def "NamedType" $
         union [

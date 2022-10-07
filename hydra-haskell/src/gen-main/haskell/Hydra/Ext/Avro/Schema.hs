@@ -44,7 +44,9 @@ data Field
     -- | specifies how this field impacts sort ordering of this record
     fieldOrder :: (Maybe Order),
     -- | a JSON array of strings, providing alternate names for this field
-    fieldAliases :: (Maybe [String])}
+    fieldAliases :: (Maybe [String]),
+    -- | Any additional key/value pairs attached to the field
+    fieldAnnotations :: (Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Field = (Core.Name "hydra/ext/avro/schema.Field")
@@ -60,6 +62,8 @@ _Field_default = (Core.FieldName "default")
 _Field_order = (Core.FieldName "order")
 
 _Field_aliases = (Core.FieldName "aliases")
+
+_Field_annotations = (Core.FieldName "annotations")
 
 data Fixed 
   = Fixed {
@@ -90,7 +94,9 @@ data Named
     namedAliases :: (Maybe [String]),
     -- | a JSON string providing documentation to the user of this schema
     namedDoc :: (Maybe String),
-    namedType :: NamedType}
+    namedType :: NamedType,
+    -- | Any additional key/value pairs attached to the type
+    namedAnnotations :: (Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
 _Named = (Core.Name "hydra/ext/avro/schema.Named")
@@ -104,6 +110,8 @@ _Named_aliases = (Core.FieldName "aliases")
 _Named_doc = (Core.FieldName "doc")
 
 _Named_type = (Core.FieldName "type")
+
+_Named_annotations = (Core.FieldName "annotations")
 
 data NamedType 
   = NamedTypeEnum Enum_

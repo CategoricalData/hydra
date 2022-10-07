@@ -15,12 +15,6 @@ encodeApplication (Application lhs rhs) = record _Application [
   Field _Application_function $ encodeTerm lhs,
   Field _Application_argument $ encodeTerm rhs]
 
-encodeSum :: Ord m => Sum m -> Term m
-encodeSum (Sum i l term) = record _Sum [
-  Field _Sum_index $ int32 i,
-  Field _Sum_size $ int32 l,
-  Field _Sum_term $ encodeTerm term]
-
 encodeApplicationType :: ApplicationType m -> Term m
 encodeApplicationType (ApplicationType lhs rhs) = record _ApplicationType [
   Field _ApplicationType_function $ encodeType lhs,
@@ -132,6 +126,12 @@ encodeRowType :: RowType m -> Term m
 encodeRowType (RowType name fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
   Field _RowType_fields $ list $ encodeFieldType <$> fields]
+
+encodeSum :: Ord m => Sum m -> Term m
+encodeSum (Sum i l term) = record _Sum [
+  Field _Sum_index $ int32 i,
+  Field _Sum_size $ int32 l,
+  Field _Sum_term $ encodeTerm term]
 
 encodeTerm :: Ord m => Term m -> Term m
 encodeTerm term = case term of
