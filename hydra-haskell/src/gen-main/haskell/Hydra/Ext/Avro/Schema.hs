@@ -106,15 +106,12 @@ _Named_doc = (Core.FieldName "doc")
 _Named_type = (Core.FieldName "type")
 
 data NamedType 
-  = NamedTypeReference 
-  | NamedTypeEnum Enum_
+  = NamedTypeEnum Enum_
   | NamedTypeFixed Fixed
   | NamedTypeRecord Record
   deriving (Eq, Ord, Read, Show)
 
 _NamedType = (Core.Name "hydra/ext/avro/schema.NamedType")
-
-_NamedType_reference = (Core.FieldName "reference")
 
 _NamedType_enum = (Core.FieldName "enum")
 
@@ -180,6 +177,7 @@ data Schema
   | SchemaMap Map_
   | SchemaNamed Named
   | SchemaPrimitive Primitive
+  | SchemaReference String
   | SchemaUnion Union
   deriving (Eq, Ord, Read, Show)
 
@@ -192,6 +190,8 @@ _Schema_map = (Core.FieldName "map")
 _Schema_named = (Core.FieldName "named")
 
 _Schema_primitive = (Core.FieldName "primitive")
+
+_Schema_reference = (Core.FieldName "reference")
 
 _Schema_union = (Core.FieldName "union")
 

@@ -32,8 +32,8 @@ termStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode termJsonCoder term
     min s = case stringToValue s of
-      Nothing -> fail $ "failed to parse as JSON value: " ++ s
-      Just v -> coderDecode termJsonCoder v
+      Left msg -> fail $ "failed to parse JSON value: " ++ msg
+      Right v -> coderDecode termJsonCoder v
 
 showType :: Ord m => Type m -> String
 showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
@@ -48,5 +48,5 @@ typeStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode typeJsonCoder term
     min s = case stringToValue s of
-      Nothing -> fail $ "failed to parse as JSON value: " ++ s
-      Just v -> coderDecode typeJsonCoder v
+      Left msg -> fail $ "failed to parse as JSON value: " ++ msg
+      Right v -> coderDecode typeJsonCoder v

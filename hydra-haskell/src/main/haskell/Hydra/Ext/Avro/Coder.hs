@@ -60,7 +60,6 @@ avroHydraAdapter schema = case schema of
         case getAvroHydraAdapter qname env of
           Nothing -> do
             ad <- case Avro.namedType n of
-              Avro.NamedTypeReference -> fail $ "Referenced Avro type has not been defined: " ++ show qname
               Avro.NamedTypeEnum (Avro.Enum_ syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
                 where
                   typ = TypeUnion (RowType hydraName $ toField <$> syms)
@@ -96,9 +95,7 @@ avroHydraAdapter schema = case schema of
                   toHydraField (f, ad) = FieldType (FieldName $ Avro.fieldName f) $ adapterTarget ad
             putState $ putAvroHydraAdapter qname ad env
             return ad
-          Just ad -> case Avro.namedType n of
-            Avro.NamedTypeReference -> return ad
-            _ -> fail $ "Avro named type defined more than once: " ++ show qname
+          Just ad -> fail $ "Avro named type defined more than once: " ++ show qname
       where
         prepareField f = do
           ad <- avroHydraAdapter $ Avro.fieldType f
@@ -138,6 +135,12 @@ avroHydraAdapter schema = case schema of
             decode term = Json.ValueString <$> Terms.expectString term
       where
         doubleToInt d = if d < 0 then ceiling d else floor d
+    Avro.SchemaReference name -> do
+      let qname = parseAvroName name
+      env <- getState
+      case getAvroHydraAdapter qname env of
+        Nothing -> fail $ "Referenced Avro type has not been defined: " ++ show qname
+        Just ad -> pure ad
     Avro.SchemaUnion u -> fail "Avro unions are not yet supported"
   where
     simpleAdapter typ encode decode = pure $ Adapter False schema typ $ Coder encode decode
@@ -147,6 +150,11 @@ avroNameToHydraName (AvroQualifiedName mns local) = fromQname (Namespace $ Y.fro
 
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment m -> Y.Maybe (AvroHydraAdapter m)
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
+
+parseAvroName :: String -> AvroQualifiedName
+parseAvroName name = case L.reverse $ Strings.splitOn "." name of
+  [local] -> AvroQualifiedName Nothing local
+  (local:rest) -> AvroQualifiedName (Just $ L.intercalate "." $ L.reverse rest) local
 
 putAvroHydraAdapter :: AvroQualifiedName -> AvroHydraAdapter m -> AvroEnvironment m -> AvroEnvironment m
 putAvroHydraAdapter qname ad env = env {avroEnvironmentNamedAdapters = M.insert qname ad $ avroEnvironmentNamedAdapters env}
