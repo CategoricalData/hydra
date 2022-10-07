@@ -37,7 +37,13 @@ type AvroHydraAdapter m = Adapter (AvroEnvironment m) (AvroEnvironment m) Avro.S
 
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
-avro_foreignKeyOf = "@foreignKeyOf"
+data ForeignKey = ForeignKey Name (String -> Name)
+
+data PrimaryKey = PrimaryKey FieldName (String -> Name)
+
+emptyEnvironment = AvroEnvironment M.empty Nothing M.empty
+
+avro_foreignKey = "@foreignKey"
 avro_primaryKey = "@primaryKey"
 
 avroHydraAdapter :: (Ord m, Show m) => Avro.Schema -> Flow (AvroEnvironment m) (AvroHydraAdapter m)
@@ -112,34 +118,35 @@ avroHydraAdapter schema = case schema of
       where
         addElement term typ pk fields = case pk of
           Nothing -> pure ()
-          Just f -> case L.filter isPkField fields of
+          Just (PrimaryKey fname constr) -> case L.filter isPkField fields of
               [] -> pure ()
-              [field] -> case fieldTerm field of
-                TermLiteral (LiteralString s) -> do
-                  let name = Name s
+              [field] -> do
+                  s <- termToString $ fieldTerm field
+                  let name = constr s
                   let el = Element name term (encodeType typ)
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()
-                trm -> unexpected ("string value for the primary key field " ++ Avro.fieldName f) trm
-              _ -> fail $ "multiple fields named " ++ Avro.fieldName f
+              _ -> fail $ "multiple fields named " ++ unFieldName fname
             where
-              isPkField field = (unFieldName $ fieldName field) == Avro.fieldName f
-        findPrimaryKeyField qname avroFields = case L.filter isPrimaryKeyField avroFields of
-          [] -> pure Nothing
-          [f] -> pure $ Just f
-          _ -> fail $ "multiple primary key fields for " ++ show qname
+              isPkField field = fieldName field == fname
+        findPrimaryKeyField qname avroFields = do
+          keys <- Y.catMaybes <$> CM.mapM primaryKey avroFields
+          case keys of
+            [] -> pure Nothing
+            [k] -> pure $ Just k
+            _ -> fail $ "multiple primary key fields for " ++ show qname
         prepareField f = do
-          fk <- foreignKeyOf f
+          fk <- foreignKey f
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
-            Just name -> pure $ Adapter False (Avro.fieldType f) (Types.element $ Types.nominal name) coder
+            Just (ForeignKey name constr) -> pure $ Adapter False (Avro.fieldType f) (Types.element $ Types.nominal name) coder
               where
                 coder = Coder {
-                  coderDecode = \(TermElement name) -> pure $ Json.ValueString $ unName name,
+                  coderDecode = \(TermElement name) -> pure $ Json.ValueString $ unName name, -- TODO: not symmetrical
                   coderEncode = \json -> do
                     s <- expectString json
-                    return $ TermElement $ Name s}
+                    return $ TermElement $ constr s}
           return (Avro.fieldName f, (f, ad))
     Avro.SchemaPrimitive p -> case p of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode
@@ -192,13 +199,28 @@ avroNameToHydraName (AvroQualifiedName mns local) = fromQname (Namespace $ Y.fro
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment m -> Y.Maybe (AvroHydraAdapter m)
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
 
-foreignKeyOf :: Avro.Field -> Flow s (Maybe Name)
-foreignKeyOf f = case M.lookup avro_foreignKeyOf $ Avro.fieldAnnotations f of
-  Nothing -> pure Nothing
-  Just v -> Just . Name <$> expectString v
+foreignKey :: Avro.Field -> Flow s (Maybe ForeignKey)
+foreignKey f = case M.lookup avro_foreignKey (Avro.fieldAnnotations f) of
+    Nothing -> pure Nothing
+    Just v -> do
+      m <- expectObject v
+      tname <- Name <$> requireString "type" m
+      pattern <- optString "pattern" m
+      let constr = case pattern of
+            Nothing -> Name
+            Just pat -> patternToNameConstructor pat
+      return $ Just $ ForeignKey tname constr
 
-isPrimaryKeyField :: Avro.Field -> Bool
-isPrimaryKeyField f = M.member avro_primaryKey $ Avro.fieldAnnotations f
+patternToNameConstructor :: String -> String -> Name
+patternToNameConstructor pat = \s -> Name $ L.intercalate s $ Strings.splitOn "${}" pat
+
+primaryKey :: Avro.Field -> Flow s (Maybe PrimaryKey)
+primaryKey f = do
+  case M.lookup avro_primaryKey $ Avro.fieldAnnotations f of
+    Nothing -> pure Nothing
+    Just v -> do
+      s <- expectString v
+      return $ Just $ PrimaryKey (FieldName $ Avro.fieldName f) $ patternToNameConstructor s
 
 parseAvroName :: String -> AvroQualifiedName
 parseAvroName name = case L.reverse $ Strings.splitOn "." name of
@@ -225,3 +247,21 @@ rewriteAvroSchemaM f = rewrite fsub f
         forField f = do
           t <- recurse $ Avro.fieldType f
           return f {Avro.fieldType = t}
+
+termToString :: Show m => Term m -> Flow s String
+termToString term = case stripTerm term of
+  TermLiteral l -> case l of
+    LiteralBoolean b -> pure $ show b
+    LiteralInteger iv -> pure $ case iv of
+      IntegerValueBigint i -> show i
+      IntegerValueInt8 i -> show i
+      IntegerValueInt16 i -> show i
+      IntegerValueInt32 i -> show i
+      IntegerValueInt64 i -> show i
+      IntegerValueUint8 i -> show i
+      IntegerValueUint16 i -> show i
+      IntegerValueUint32 i -> show i
+      IntegerValueUint64 i -> show i
+    LiteralString s -> pure s
+    _ -> unexpected "boolean, integer, or string" l
+  _ -> unexpected "literal value" term
