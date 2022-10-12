@@ -96,12 +96,12 @@ avroHydraAdapter schema = case schema of
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
                   pk <- findPrimaryKeyField qname avroFields
                   let encodePair (k, v) = case M.lookup k adaptersByFieldName of
-                        Nothing -> fail $ "unrecognized field for " ++ show qname ++ ": " ++ show k
+                        Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
                         Just (f, ad) -> do
                           v' <- coderEncode (adapterCoder ad) v
                           return $ Field (FieldName k) v'
                   let decodeField (Field (FieldName k) v) = case M.lookup k adaptersByFieldName of
-                        Nothing -> fail $ "unrecognized field for " ++ show qname ++ ": " ++ show k
+                        Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
                         Just (f, ad) -> do
                           v' <- coderDecode (adapterCoder ad) v
                           return (k, v')
@@ -201,19 +201,31 @@ avroHydraAdapter schema = case schema of
         Nothing -> fail $ "Referenced Avro type has not been defined: " ++ show qname
          ++ ". Defined types: " ++ show (M.keys $ avroEnvironmentNamedAdapters env)
         Just ad -> pure ad
-    Avro.SchemaUnion (Avro.Union schemas) -> case schemas of
-      [Avro.SchemaPrimitive (Avro.PrimitiveNull), s] -> do
-        ad <- avroHydraAdapter s
-        let coder = Coder {
-              coderDecode = \(TermOptional ot) -> case ot of
-                Nothing -> pure $ Json.ValueNull
-                Just term -> coderDecode (adapterCoder ad) term,
-              coderEncode = \v -> case v of
-                Json.ValueNull -> pure $ TermOptional Nothing
-                _ -> TermOptional . Just <$> coderEncode (adapterCoder ad) v}
-        return $ Adapter (adapterIsLossy ad) schema (Types.optional $ adapterTarget ad) coder
-      _ -> fail $ "general-purpose unions are not yet supported: " ++ show schema
-
+    Avro.SchemaUnion (Avro.Union schemas) -> if L.length nonNulls > 1
+        then fail $ "general-purpose unions are not yet supported: " ++ show schema
+        else if L.null nonNulls
+        then fail $ "cannot generate the empty type"
+        else if hasNull
+        then forOptional $ L.head nonNulls
+        else do
+          ad <- avroHydraAdapter $ L.head nonNulls
+          return $ Adapter (adapterIsLossy ad) schema (adapterTarget ad) (adapterCoder ad)
+      where
+        hasNull = (not . L.null . L.filter isNull) schemas
+        nonNulls = L.filter (not . isNull) schemas
+        isNull schema = case schema of
+          Avro.SchemaPrimitive Avro.PrimitiveNull -> True
+          _ -> False
+        forOptional s = do
+          ad <- avroHydraAdapter s
+          let coder = Coder {
+                coderDecode = \(TermOptional ot) -> case ot of
+                  Nothing -> pure $ Json.ValueNull
+                  Just term -> coderDecode (adapterCoder ad) term,
+                coderEncode = \v -> case v of
+                  Json.ValueNull -> pure $ TermOptional Nothing
+                  _ -> TermOptional . Just <$> coderEncode (adapterCoder ad) v}
+          return $ Adapter (adapterIsLossy ad) schema (Types.optional $ adapterTarget ad) coder
   where
     simpleAdapter typ encode decode = pure $ Adapter False schema typ $ Coder encode decode
 
@@ -280,6 +292,9 @@ jsonToString v = case v of
     then show (round d)
     else show d
   _ -> unexpected "string, number, or boolean" v
+
+showQname :: AvroQualifiedName -> String
+showQname (AvroQualifiedName mns local) = (Y.maybe "" (\ns -> ns ++ ".") mns) ++ local
 
 termToString :: Show m => Term m -> Flow s String
 termToString term = case stripTerm term of
