@@ -26,6 +26,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Text.Read as TR
 
 
 data AvroEnvironment m = AvroEnvironment {
@@ -95,6 +96,7 @@ avroHydraAdapter schema = case schema of
                   let avroFields = Avro.recordFields r
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
                   pk <- findPrimaryKeyField qname avroFields
+                  -- TODO: Nothing values for optional fields
                   let encodePair (k, v) = case M.lookup k adaptersByFieldName of
                         Nothing -> fail $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k
                         Just (f, ad) -> do
@@ -151,13 +153,35 @@ avroHydraAdapter schema = case schema of
           fk <- foreignKey f
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
-            Just (ForeignKey name constr) -> pure $ Adapter False (Avro.fieldType f) (Types.element $ Types.nominal name) coder
+            Just (ForeignKey name constr) -> do
+                ad <- avroHydraAdapter $ Avro.fieldType f
+                let decodeTerm = \(TermElement name) -> do -- TODO: not symmetrical
+                      term <- stringToTerm (adapterTarget ad) $ unName name
+                      coderDecode (adapterCoder ad) term
+                let encodeValue v = do
+                      s <- coderEncode (adapterCoder ad) v >>= termToString
+                      return $ TermElement $ constr s
+                -- Support three special cases of foreign key types: plain, optional, and list
+                case stripType (adapterTarget ad) of
+                  TypeOptional (TypeLiteral lit) -> forTypeAndCoder ad (Types.optional elTyp) coder
+                    where
+                      coder = Coder {
+                        coderEncode = \json -> (TermOptional . Just) <$> encodeValue json,
+                        coderDecode = decodeTerm}
+                  TypeList (TypeLiteral lit) -> forTypeAndCoder ad (Types.list elTyp) coder
+                    where
+                      coder = Coder {
+                        coderEncode = \json -> TermList <$> (expectArray json >>= CM.mapM encodeValue),
+                        coderDecode = decodeTerm}
+                  TypeLiteral lit -> forTypeAndCoder ad elTyp coder
+                    where
+                      coder = Coder {
+                        coderEncode = encodeValue,
+                        coderDecode = decodeTerm}
+                  _ -> fail $ "unsupported type annotated as foreign key: " ++ (show $ typeVariant $ adapterTarget ad)
               where
-                coder = Coder {
-                  coderDecode = \(TermElement name) -> pure $ Json.ValueString $ unName name, -- TODO: not symmetrical
-                  coderEncode = \json -> do
-                    s <- jsonToString json
-                    return $ TermElement $ constr s}
+                forTypeAndCoder ad typ coder = pure $ Adapter (adapterIsLossy ad) (Avro.fieldType f) typ coder
+                elTyp = Types.element $ Types.nominal name
           return (Avro.fieldName f, (f, ad))
     Avro.SchemaPrimitive p -> case p of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode
@@ -295,6 +319,27 @@ jsonToString v = case v of
 
 showQname :: AvroQualifiedName -> String
 showQname (AvroQualifiedName mns local) = (Y.maybe "" (\ns -> ns ++ ".") mns) ++ local
+
+stringToTerm :: Show m => Type m -> String -> Flow s (Term m)
+stringToTerm typ s = case stripType typ of
+    TypeLiteral lt -> TermLiteral <$> case lt of
+      LiteralTypeBoolean -> LiteralBoolean <$> doRead s
+      LiteralTypeInteger it -> LiteralInteger <$> case it of
+        IntegerTypeBigint -> IntegerValueBigint <$> doRead s
+        IntegerTypeInt8 -> IntegerValueInt8 <$> doRead s
+        IntegerTypeInt16 -> IntegerValueInt16 <$> doRead s
+        IntegerTypeInt32 -> IntegerValueInt32 <$> doRead s
+        IntegerTypeInt64 -> IntegerValueInt64 <$> doRead s
+        IntegerTypeUint8 -> IntegerValueUint8 <$> doRead s
+        IntegerTypeUint16 -> IntegerValueUint16 <$> doRead s
+        IntegerTypeUint32 -> IntegerValueUint32 <$> doRead s
+        IntegerTypeUint64 -> IntegerValueUint64 <$> doRead s
+      LiteralTypeString -> LiteralString <$> pure s
+      _ -> unexpected "literal type" lt
+  where
+    doRead s = case TR.readEither s of
+      Left msg -> fail $ "failed to read value: " ++ msg
+      Right term -> pure term
 
 termToString :: Show m => Term m -> Flow s String
 termToString term = case stripTerm term of
