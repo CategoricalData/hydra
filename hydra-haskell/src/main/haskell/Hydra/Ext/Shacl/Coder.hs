@@ -172,13 +172,15 @@ encodeTerm subject term = case term of
         let objs = subjectsOf descs
         let triples = forObjects subj pred objs
         return $ triples ++ triplesOf descs
-  TermNominal (Named _ inner) -> encodeTerm subject inner
+  TermNominal (Named name inner) -> do
+    descs <- encodeTerm subject inner
+    return $ (withType name $ L.head descs):(L.tail descs)
   TermOptional mterm -> case mterm of
     Nothing -> pure []
     Just inner -> encodeTerm subject inner
   TermRecord (Record rname fields) -> do
     tripless <- CM.mapM (encodeField rname subject) fields
-    return [Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList $ L.concat tripless)]
+    return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList $ L.concat tripless)]
   TermSet terms -> L.concat <$> CM.mapM encodeEl (S.toList terms)
     where
       encodeEl term = do
@@ -186,7 +188,7 @@ encodeTerm subject term = case term of
         encodeTerm node term
   TermUnion (Union rname field) -> do
     triples <- encodeField rname subject field
-    return [Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
+    return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
   _ -> unexpected "RDF-compatible term" term
 
 encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
@@ -270,6 +272,14 @@ subjectsOf descs = Rdf.descriptionSubject <$> descs
 
 triplesOf :: [Rdf.Description] -> [Rdf.Triple]
 triplesOf descs = L.concat ((S.toList . Rdf.unGraph . Rdf.descriptionGraph) <$> descs)
+
+withType :: Name -> Rdf.Description -> Rdf.Description
+withType name (Rdf.Description subj (Rdf.Graph triples)) = Rdf.Description subj (Rdf.Graph $ S.insert triple triples)
+  where
+    subjRes = case subj of
+      Rdf.NodeIri iri -> Rdf.ResourceIri iri
+      Rdf.NodeBnode bnode -> Rdf.ResourceBnode bnode
+    triple = Rdf.Triple subjRes (rdfIri "type") (Rdf.NodeIri $ nameToIri name)
 
 xmlSchemaDatatypeIri :: String -> Rdf.Iri
 xmlSchemaDatatypeIri = iri "http://www.w3.org/2001/XMLSchema#"
