@@ -198,7 +198,7 @@ avroHydraAdapter schema = case schema of
             decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt32 term
         Avro.PrimitiveLong -> simpleAdapter Types.int64 encode decode
           where
-            encode (Json.ValueNumber d) = pure $ Terms.int32 $ doubleToInt d
+            encode (Json.ValueNumber d) = pure $ Terms.int64 $ doubleToInt d
             decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt64 term
         Avro.PrimitiveFloat -> simpleAdapter Types.float32 encode decode
           where
