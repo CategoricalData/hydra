@@ -64,7 +64,7 @@ public abstract class TypeCastOperator {
   }
   
   /**
-   * term10 <: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute).
+   * term10 &lt;: type specifies that the virtual machine will be used to type check that term10 has type type (see vm_compute).
    */
   public static final class VmCompute extends hydra.ext.coq.syntax.TypeCastOperator {
     public VmCompute () {
@@ -92,7 +92,7 @@ public abstract class TypeCastOperator {
   }
   
   /**
-   * term10 <<: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute).
+   * term10 &lt;&lt;: type specifies that compilation to OCaml will be used to type check that term10 has type type (see native_compute).
    */
   public static final class NativeCompute extends hydra.ext.coq.syntax.TypeCastOperator {
     public NativeCompute () {
