@@ -33,13 +33,19 @@ public class Field {
    */
   public final java.util.Optional<java.util.List<String>> aliases;
   
-  public Field (String name, java.util.Optional<String> doc, hydra.ext.avro.schema.Schema type, java.util.Optional<hydra.ext.json.model.Value> default_, java.util.Optional<hydra.ext.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases) {
+  /**
+   * Any additional key/value pairs attached to the field
+   */
+  public final java.util.Map<String, hydra.ext.json.model.Value> annotations;
+  
+  public Field (String name, java.util.Optional<String> doc, hydra.ext.avro.schema.Schema type, java.util.Optional<hydra.ext.json.model.Value> default_, java.util.Optional<hydra.ext.avro.schema.Order> order, java.util.Optional<java.util.List<String>> aliases, java.util.Map<String, hydra.ext.json.model.Value> annotations) {
     this.name = name;
     this.doc = doc;
     this.type = type;
     this.default_ = default_;
     this.order = order;
     this.aliases = aliases;
+    this.annotations = annotations;
   }
   
   @Override
@@ -48,35 +54,39 @@ public class Field {
       return false;
     }
     Field o = (Field) (other);
-    return name.equals(o.name) && doc.equals(o.doc) && type.equals(o.type) && default_.equals(o.default_) && order.equals(o.order) && aliases.equals(o.aliases);
+    return name.equals(o.name) && doc.equals(o.doc) && type.equals(o.type) && default_.equals(o.default_) && order.equals(o.order) && aliases.equals(o.aliases) && annotations.equals(o.annotations);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * doc.hashCode() + 5 * type.hashCode() + 7 * default_.hashCode() + 11 * order.hashCode() + 13 * aliases.hashCode();
+    return 2 * name.hashCode() + 3 * doc.hashCode() + 5 * type.hashCode() + 7 * default_.hashCode() + 11 * order.hashCode() + 13 * aliases.hashCode() + 17 * annotations.hashCode();
   }
   
   public Field withName(String name) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDoc(java.util.Optional<String> doc) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withType(hydra.ext.avro.schema.Schema type) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withDefault(java.util.Optional<hydra.ext.json.model.Value> default_) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withOrder(java.util.Optional<hydra.ext.avro.schema.Order> order) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
   
   public Field withAliases(java.util.Optional<java.util.List<String>> aliases) {
-    return new Field(name, doc, type, default_, order, aliases);
+    return new Field(name, doc, type, default_, order, aliases, annotations);
+  }
+  
+  public Field withAnnotations(java.util.Map<String, hydra.ext.json.model.Value> annotations) {
+    return new Field(name, doc, type, default_, order, aliases, annotations);
   }
 }
