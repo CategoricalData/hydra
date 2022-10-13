@@ -13,9 +13,15 @@ withComments mc expr = case mc of
     Nothing -> expr
     Just c -> newlineSep [writeComments c, expr]
   where
-    writeComments c = cst $ "/**\n" ++ unlines (toLine <$> lines c) ++ " */"
+    writeComments c = cst $ "/**\n" ++ unlines (toLine <$> (lines $ sanitizeJavaComment c)) ++ " */"
       where
         toLine l = " * " ++ l
+    sanitizeJavaComment s = L.concat (fromChar <$> s)
+      where
+        fromChar c = case c of
+          '<' -> "&lt;"
+          '>' -> "&gt;"
+          _ -> [c]
 
 writeAdditionalBound :: Java.AdditionalBound -> CT.Expr
 writeAdditionalBound _ = cst "TODO:AdditionalBound"

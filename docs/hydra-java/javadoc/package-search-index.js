@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"hydra.core"},{"l":"hydra.ext.tinkerpop.v3"},{"l":"hydra.graph"}]

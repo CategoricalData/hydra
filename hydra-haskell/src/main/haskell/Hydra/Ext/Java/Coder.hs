@@ -65,7 +65,7 @@ noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 elementNameToFilePath :: Name -> FilePath
 elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQname ns (sanitizeJavaName local)
   where
-    (ns, local) = toQname name
+    (ns, local) = toQnameEager name
 
 moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit mod = transformModule language (encodeTerm aliases) constructModule mod
@@ -120,7 +120,7 @@ constructModule mod coders pairs = do
           jcod <- encodeType aliases cod
           let mods = [Java.InterfaceMethodModifierStatic]
           let anns = []
-          let mname = sanitizeJavaName $ decapitalize $ localNameOf $ elementName el
+          let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
           let param = javaTypeToJavaFormalParameter jdom (FieldName $ unVariable v)
           let result = javaTypeToJavaResult jcod
           jbody <- encodeTerm aliases body
@@ -184,7 +184,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
       param <- fieldTypeToFormalParam aliases field
       let anns = [] -- TODO
       let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName Nothing
-      let consId = Java.Identifier $ sanitizeJavaName $ localNameOf elName
+      let consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
       let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
             javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
@@ -356,7 +356,7 @@ elementsClassName = "Elements_"
 elementJavaIdentifier :: Aliases -> Name -> Java.Identifier
 elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
   where
-    (gname, local) = toQname name
+    (gname, local) = toQnameEager name
     elementsName = fromQname gname elementsClassName
     Java.Identifier jname = nameToJavaName aliases elementsName
 

@@ -80,16 +80,14 @@ isType cx typ = case stripType typ of
 localNameOf :: Name -> String
 localNameOf = snd . toQname
 
+localNameOfEager :: Name -> String
+localNameOfEager = snd . toQnameEager
+
 namespaceOf :: Name -> Namespace
 namespaceOf = fst . toQname
 
 placeholderName :: Name
 placeholderName = Name "Placeholder"
-
-toQname :: Name -> (Namespace, String)
-toQname (Name name) = case L.reverse $ Strings.splitOn "." name of
-  (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
-  _ -> (Namespace "UNKNOWN", name)
 
 skipAnnotations :: (a -> Maybe (Annotated a m)) -> a -> a
 skipAnnotations getAnn t = skip t
@@ -110,6 +108,16 @@ stripType = skipAnnotations $ \t -> case t of
 
 termMeta :: Context m -> Term m -> m
 termMeta cx = annotationClassTermMeta $ contextAnnotations cx
+
+toQname :: Name -> (Namespace, String)
+toQname (Name name) = case L.reverse $ Strings.splitOn "." name of
+  (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
+  _ -> (Namespace "UNKNOWN", name)
+
+toQnameEager :: Name -> (Namespace, String)
+toQnameEager (Name name) = case Strings.splitOn "." name of
+  (ns:rest) -> (Namespace ns, L.intercalate "." rest)
+  _ -> (Namespace "UNKNOWN", name)
 
 typeMeta :: Context m -> Type m -> m
 typeMeta cx = annotationClassTypeMeta $ contextAnnotations cx
