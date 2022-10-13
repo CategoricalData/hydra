@@ -228,7 +228,7 @@ mergeGraphs :: [Rdf.Graph] -> Rdf.Graph
 mergeGraphs graphs = Rdf.Graph $ L.foldl S.union S.empty (Rdf.unGraph <$> graphs)
 
 nameToIri :: Name -> Rdf.Iri
-nameToIri = Rdf.Iri . unName
+nameToIri name = Rdf.Iri $ "urn:" ++ unName name
 
 nextBlankNode :: Show m => GraphFlow m Rdf.Resource
 nextBlankNode = do
