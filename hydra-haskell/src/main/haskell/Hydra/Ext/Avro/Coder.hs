@@ -357,4 +357,5 @@ termToString term = case stripTerm term of
       IntegerValueUint64 i -> show i
     LiteralString s -> pure s
     _ -> unexpected "boolean, integer, or string" l
+  TermOptional (Just term') -> termToString term'
   _ -> unexpected "literal value" term
