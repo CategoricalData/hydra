@@ -10,8 +10,6 @@ public abstract class NamedType {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Reference instance) ;
-    
     R visit(Enum_ instance) ;
     
     R visit(Fixed instance) ;
@@ -24,10 +22,6 @@ public abstract class NamedType {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Reference instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Enum_ instance) {
       return otherwise((instance));
     }
@@ -38,34 +32,6 @@ public abstract class NamedType {
     
     default R visit(Record instance) {
       return otherwise((instance));
-    }
-  }
-  
-  /**
-   * A reference to a previously defined type
-   */
-  public static final class Reference extends hydra.ext.avro.schema.NamedType {
-    public Reference () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Reference)) {
-        return false;
-      }
-      Reference o = (Reference) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
   }
   

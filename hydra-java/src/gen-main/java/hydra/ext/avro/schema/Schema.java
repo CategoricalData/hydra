@@ -18,6 +18,8 @@ public abstract class Schema {
     
     R visit(Primitive instance) ;
     
+    R visit(Reference instance) ;
+    
     R visit(Union instance) ;
   }
   
@@ -39,6 +41,10 @@ public abstract class Schema {
     }
     
     default R visit(Primitive instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Reference instance) {
       return otherwise((instance));
     }
     
@@ -141,6 +147,39 @@ public abstract class Schema {
         return false;
       }
       Primitive o = (Primitive) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A reference by name to a previously defined type
+   */
+  public static final class Reference extends hydra.ext.avro.schema.Schema {
+    /**
+     * A reference by name to a previously defined type
+     */
+    public final String value;
+    
+    public Reference (String value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Reference)) {
+        return false;
+      }
+      Reference o = (Reference) (other);
       return value.equals(o.value);
     }
     

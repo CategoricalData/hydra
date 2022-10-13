@@ -338,7 +338,7 @@ javaVariableDeclaratorId :: Java.Identifier -> Java.VariableDeclaratorId
 javaVariableDeclaratorId id = Java.VariableDeclaratorId id Nothing
 
 javaVariableName :: Name -> Java.Identifier
-javaVariableName = javaIdentifier . localNameOf
+javaVariableName = javaIdentifier . localNameOfEager
 
 makeConstructor :: M.Map Namespace Java.PackageName -> Name -> Bool -> [Java.FormalParameter]
   -> [Java.BlockStatement] -> Java.ClassBodyDeclaration
@@ -385,7 +385,7 @@ nameToQualifiedJavaName :: M.Map Namespace Java.PackageName -> Bool -> Name -> M
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
   where
-    (gname, local) = toQname name
+    (gname, local) = toQnameEager name
     pkg = if qualify
       then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname aliases
       else none
@@ -399,7 +399,7 @@ nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
     Nothing -> local
     Just (Java.PackageName parts) -> L.intercalate "." $ (Java.unIdentifier <$> parts) ++ [sanitizeJavaName local]
   where
-    (gname, local) = toQname name
+    (gname, local) = toQnameEager name
 
 nameToJavaReferenceType :: M.Map Namespace Java.PackageName -> Bool -> Name -> Maybe String -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
@@ -481,7 +481,7 @@ variableToJavaIdentifier (Variable var) = Java.Identifier var -- TODO: escape
 variantClassName :: Bool -> Name -> FieldName -> Name
 variantClassName qualify elName (FieldName fname) = fromQname gname local1
   where
-    (gname, local) = toQname elName
+    (gname, local) = toQnameEager elName
     flocal = capitalize fname
     local1 = if qualify
       then local ++ "." ++ flocal
