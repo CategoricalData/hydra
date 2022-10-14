@@ -158,6 +158,7 @@ encodeTerm namespaces term = do
     TermOptional m -> case m of
       Nothing -> pure $ hsvar "Nothing"
       Just t -> hsapp (hsvar "Just") <$> encode t
+    TermProduct terms -> H.ExpressionTuple <$> (CM.mapM encode terms)
     TermRecord (Record sname fields) -> do
       if L.null fields -- TODO: too permissive; not all empty record types are the unit type
         then pure $ H.ExpressionTuple []
@@ -207,8 +208,10 @@ encodeType namespaces typ = case stripType typ of
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
-    TypeRecord (RowType _ []) -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
-    TypeRecord (RowType n _) -> nominal n
+    TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
+    TypeRecord (RowType n fields) -> case fields of
+      [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
+      _ -> nominal n
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
