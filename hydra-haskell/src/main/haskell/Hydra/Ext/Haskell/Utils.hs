@@ -27,7 +27,7 @@ elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case 
       then simpleName escLocal
       else rawName $ a ++ "." ++ escLocal
   where
-    (ns, local) = toQname name
+    (ns, local) = toQnameEager name
     alias = M.lookup ns namespaces
     escLocal = sanitizeHaskellName local
 
@@ -43,7 +43,7 @@ hslit = H.ExpressionLiteral
 hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
-    (Namespace ns, local) = toQname name
+    (Namespace ns, local) = toQnameEager name
     prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
 
 hsvar :: String -> H.Expression
@@ -62,13 +62,13 @@ namespacesForModule mod = Namespaces focusPair mapping
       else (M.insert name alias m, S.insert alias s)
 
 newtypeAccessorName :: Name -> String
-newtypeAccessorName name = "un" ++ localNameOf name
+newtypeAccessorName name = "un" ++ localNameOfEager name
 
 rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
 recordFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-recordFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQname sname) nm
+recordFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQnameEager sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
@@ -89,7 +89,7 @@ typeNameForRecord :: Name -> String
 typeNameForRecord (Name sname) = L.last (Strings.splitOn "." sname)
 
 unionFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-unionFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQname sname) nm
+unionFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQnameEager sname) nm
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 

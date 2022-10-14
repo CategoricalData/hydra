@@ -33,7 +33,7 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
   where
-    lname = localNameOf name
+    lname = localNameOfEager name
     toDecl n (k, v) = H.DeclarationWithComments decl Nothing
       where
         decl = H.DeclarationValueBinding $
@@ -90,7 +90,7 @@ encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationElement -> pure $ hsvar "id"
       EliminationNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
-        qname (namespaceOf name) $ newtypeAccessorName name
+        qname (namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
         let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
@@ -239,7 +239,7 @@ toDataDeclarations :: (Ord m, Show m)
 toDataDeclarations coders namespaces (el, TypedTerm typ term) = do
     let coder = Y.fromJust $ M.lookup typ coders
     rhs <- H.RightHandSide <$> coderEncode coder term
-    let hname = simpleName $ localNameOf $ elementName el
+    let hname = simpleName $ localNameOfEager $ elementName el
     let pat = H.PatternApplication $ H.Pattern_Application hname []
     htype <- encodeType namespaces typ
     let decl = H.DeclarationTypedBinding $ H.TypedBinding
@@ -260,7 +260,7 @@ toTypeDeclarations :: (Ord m, Read m, Show m)
   => Namespaces -> Element m -> Term m -> GraphFlow m [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = do
     cx <- getState
-    let lname = localNameOf $ elementName el
+    let lname = localNameOfEager $ elementName el
     let hname = simpleName lname
     t <- decodeType term
     isSer <- isSerializable
@@ -304,7 +304,7 @@ toTypeDeclarations namespaces el term = do
         htype <- encodeAdaptedType namespaces typ
         comments <- annotationClassTypeDescription (contextAnnotations cx) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
-        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOf $ elementName el) [hfield]
+        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]
 
     recordCons lname fields = do
         hFields <- CM.mapM toField fields

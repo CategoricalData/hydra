@@ -144,4 +144,9 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
         record [
           "stack">: list string,
           "messages">: list string,
-          "other">: Types.map string (core "Literal")]]
+          "other">: Types.map string (core "Literal")],
+
+      def "TraversalOrder" $
+        union [
+          "pre">: doc "Pre-order traversal" unit,
+          "post">: doc "Post-order traversal" unit]]

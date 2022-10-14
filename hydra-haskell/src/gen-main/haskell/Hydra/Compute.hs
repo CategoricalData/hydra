@@ -259,3 +259,14 @@ _Trace_stack = (Core.FieldName "stack")
 _Trace_messages = (Core.FieldName "messages")
 
 _Trace_other = (Core.FieldName "other")
+
+data TraversalOrder 
+  = TraversalOrderPre 
+  | TraversalOrderPost 
+  deriving (Eq, Ord, Read, Show)
+
+_TraversalOrder = (Core.Name "hydra/compute.TraversalOrder")
+
+_TraversalOrder_pre = (Core.FieldName "pre")
+
+_TraversalOrder_post = (Core.FieldName "post")

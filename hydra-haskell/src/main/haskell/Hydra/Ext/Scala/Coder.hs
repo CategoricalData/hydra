@@ -65,7 +65,7 @@ constructModule mod coders pairs = do
           Scala.DataRef _ -> toVal rhs -- TODO
           _ -> fail $ "unexpected RHS: " ++ show rhs
       where
-        lname = localNameOf $ elementName el
+        lname = localNameOfEager $ elementName el
 
         freeTypeVars = S.toList $ freeVariablesInType typ
 
@@ -166,7 +166,7 @@ encodeTerm term = case stripTerm term of
         _ -> fallback
       where
         fallback = sapply <$> encodeTerm fun <*> ((: []) <$> encodeTerm arg)
-    TermElement name -> pure $ sname $ localNameOf name
+    TermElement name -> pure $ sname $ localNameOfEager name
     TermFunction f -> do
       cx <- getState
       encodeFunction (termMeta cx term) f Nothing

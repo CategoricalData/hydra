@@ -15,8 +15,6 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data TraversalOrder = TraversalOrderPre | TraversalOrderPost
-
 foldOverTerm :: TraversalOrder -> (a -> Term m -> a) -> a -> Term m -> a
 foldOverTerm order fld b0 term = case order of
     TraversalOrderPre -> L.foldl (foldOverTerm order fld) (fld b0 term) children
@@ -51,7 +49,7 @@ freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
 moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Module m -> S.Set Namespace
 moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
   where
-    names = S.fromList (namespaceOf <$> S.toList elNames)
+    names = S.fromList (namespaceOfEager <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
 
