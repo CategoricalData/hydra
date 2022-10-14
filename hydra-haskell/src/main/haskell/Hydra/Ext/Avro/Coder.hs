@@ -198,7 +198,7 @@ avroHydraAdapter schema = case schema of
             decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt32 term
         Avro.PrimitiveLong -> simpleAdapter Types.int64 encode decode
           where
-            encode (Json.ValueNumber d) = pure $ Terms.int32 $ doubleToInt d
+            encode (Json.ValueNumber d) = pure $ Terms.int64 $ doubleToInt d
             decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt64 term
         Avro.PrimitiveFloat -> simpleAdapter Types.float32 encode decode
           where
@@ -357,4 +357,5 @@ termToString term = case stripTerm term of
       IntegerValueUint64 i -> show i
     LiteralString s -> pure s
     _ -> unexpected "boolean, integer, or string" l
+  TermOptional (Just term') -> termToString term'
   _ -> unexpected "literal value" term
