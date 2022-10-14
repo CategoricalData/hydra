@@ -60,7 +60,7 @@ elementsToGraph msg els = Graph elementMap msg
         toPair el = (elementName el, el)
 
 fromQname :: Namespace -> String -> Name
-fromQname (Namespace ns) local = Name $ ns ++ "." ++ local
+fromQname ns local = Name $ unNamespace ns ++ "." ++ local
 
 namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
 namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/" parts ++ "." ++ ext
@@ -77,14 +77,17 @@ isType cx typ = case stripType typ of
   TypeApplication (ApplicationType lhs _) -> isType cx lhs
   _ -> False
 
-localNameOf :: Name -> String
-localNameOf = snd . toQname
+localNameOfLazy :: Name -> String
+localNameOfLazy = snd . toQnameLazy
 
 localNameOfEager :: Name -> String
 localNameOfEager = snd . toQnameEager
 
-namespaceOf :: Name -> Namespace
-namespaceOf = fst . toQname
+namespaceOfLazy :: Name -> Namespace
+namespaceOfLazy = fst . toQnameLazy
+
+namespaceOfEager :: Name -> Namespace
+namespaceOfEager = fst . toQnameEager
 
 placeholderName :: Name
 placeholderName = Name "Placeholder"
@@ -109,8 +112,8 @@ stripType = skipAnnotations $ \t -> case t of
 termMeta :: Context m -> Term m -> m
 termMeta cx = annotationClassTermMeta $ contextAnnotations cx
 
-toQname :: Name -> (Namespace, String)
-toQname (Name name) = case L.reverse $ Strings.splitOn "." name of
+toQnameLazy :: Name -> (Namespace, String)
+toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
   (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
   _ -> (Namespace "UNKNOWN", name)
 

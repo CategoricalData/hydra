@@ -76,7 +76,7 @@ literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (langua
 nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
 nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ gname ++ "/" ++ local
   where
-    (Namespace gname, local) = toQname name
+    (Namespace gname, local) = toQnameEager name
 
 typeIsSupported :: LanguageConstraints m -> Type m -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
