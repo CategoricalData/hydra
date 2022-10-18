@@ -15,6 +15,36 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+-- | Turn arbitrary terms like 'compareTo 42' into terms like '\x.compareTo 42 x',
+--   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
+--   This function leaves application terms intact, simply rewriting their left and right subterms.
+expandLambdas :: Ord m => Term m -> GraphFlow m (Term m)
+expandLambdas = rewriteTermM (expand []) (pure . id)
+  where
+    expand args recurse term = case term of
+        TermAnnotated (Annotated term' ann) -> TermAnnotated <$> (Annotated <$> expand args recurse term' <*> pure ann)
+        TermApplication (Application lhs rhs) -> do
+          rhs' <- expandLambdas rhs
+          expand (rhs':args) recurse lhs
+        TermFunction f -> case f of
+          FunctionCompareTo _ -> pad args 1 <$> recurse term
+          FunctionElimination _ -> pad args 1 <$> recurse term
+          FunctionLambda _ -> passThrough
+          FunctionPrimitive name -> do
+            prim <- requirePrimitiveFunction name
+            return $ pad args (primitiveFunctionArity prim) term
+        _ -> passThrough
+      where
+        passThrough = pad args 0 <$> recurse term
+
+    pad args arity term = L.foldl lam (L.foldl app term args') $ L.reverse variables
+      where
+        variables = L.take (max 0 (arity - L.length args)) ((\i -> Variable $ "v" ++ show i) <$> [1..])
+        args' = args ++ (TermVariable <$> variables)
+
+        app lhs rhs = TermApplication $ Application lhs rhs
+        lam body v = TermFunction $ FunctionLambda $ Lambda v body
+
 foldOverTerm :: TraversalOrder -> (a -> Term m -> a) -> a -> Term m -> a
 foldOverTerm order fld b0 term = case order of
     TraversalOrderPre -> L.foldl (foldOverTerm order fld) (fld b0 term) children

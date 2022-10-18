@@ -96,16 +96,17 @@ constructModule mod coders pairs = do
       return (elementName el,
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
-    termToInterfaceMember coders pair =
+    termToInterfaceMember coders pair = do
+        expanded <- expandLambdas $ typedTermTerm $ snd pair
         if isLambda (typedTermTerm $ snd pair)
-          then termToMethod coders pair
-          else termToConstant coders pair
+          then termToMethod coders (fst pair) (typedTermType $ snd pair) expanded
+          else termToConstant coders (fst pair) (typedTermType $ snd pair) expanded
       where
         isLambda t = case stripTerm t of
           TermFunction (FunctionLambda _) -> True
           _ -> False
 
-    termToConstant coders pair@(el, TypedTerm typ term) = do
+    termToConstant coders el typ term = do
       jtype <- Java.UnannType <$> encodeType aliases typ
       jterm <- coderEncode (Y.fromJust $ M.lookup typ coders) term
       let mods = []
@@ -113,7 +114,7 @@ constructModule mod coders pairs = do
       return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
 
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
-    termToMethod coders pair@(el, TypedTerm typ term) = case stripType typ of
+    termToMethod coders el typ term = case stripType typ of
       TypeFunction (FunctionType dom cod) -> case stripTerm term of
         TermFunction (FunctionLambda (Lambda v body)) -> do
           jdom <- encodeType aliases dom
