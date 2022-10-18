@@ -42,10 +42,6 @@ cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseSta
 compareTo :: Term m -> Term m
 compareTo = TermFunction . FunctionCompareTo
 
-compose :: Term m -> Term m -> Term m
-compose f2 f1 = lambda var $ apply f2 (apply f1 (variable var))
-  where var = "x"
-
 constFunction :: Term m -> Term m
 constFunction = lambda "_"
 
@@ -263,10 +259,6 @@ variable = TermVariable . Variable
 
 variant :: Name -> FieldName -> Term m -> Term m
 variant n fname term = TermUnion $ Union n $ Field fname term
-
-withFunction :: Name -> FieldName -> Element a -> Term m
-withFunction n name el = lambda var $ variant n name $ apply (elementRef el) (variable var)
-  where var = "x"
 
 withVariant :: Name -> FieldName -> Term m
 withVariant n = constFunction . unitVariant n
