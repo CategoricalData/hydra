@@ -163,7 +163,7 @@ inferInternal term = case term of
             cod <- freshVariableType
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
 
-            yieldElimination (EliminationUnion (CaseStatement name  icases))
+            yieldElimination (EliminationUnion (CaseStatement name icases))
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
 

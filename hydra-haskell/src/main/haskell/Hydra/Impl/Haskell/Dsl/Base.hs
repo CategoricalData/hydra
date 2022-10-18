@@ -58,14 +58,14 @@ apply (Datum lhs) (Datum rhs) = Datum $ Terms.apply lhs rhs
 apply2 :: Datum (a -> b -> c) -> Datum a -> Datum b -> Datum c
 apply2 (Datum f) (Datum a1) (Datum a2) = Datum $ Terms.apply (Terms.apply f a1) a2
 
-caseField :: Case a -> Datum (a -> b) -> Field Meta -- Datum (u -> b)
-caseField (Case fname) (Datum f) = Field fname $ Terms.lambda "x" $ Terms.apply f (Terms.variable "x")
+caseField :: Case a -> Datum (a -> b) -> Field Meta
+caseField (Case fname) (Datum f) = Field fname f
 
 compareTo :: Datum a -> Datum (a -> Bool)
 compareTo (Datum term) = Datum $ Terms.compareTo term
 
 compose :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
-compose (Datum f) (Datum g) = Datum $ Terms.lambda "x" $ Terms.apply f (Terms.apply g $ Terms.variable "x")
+compose (Datum f) (Datum g) = Datum $ Terms.lambda "x1" $ Terms.apply f (Terms.apply g $ Terms.variable "x1")
 
 constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.lambda "_" term
@@ -152,7 +152,7 @@ union :: Name -> FieldName -> Datum a -> Datum b
 union name fname (Datum term) = Datum $ Terms.union name (Field fname term)
 
 union2 :: Name -> FieldName -> Datum (a -> b)
-union2 name fname = lambda "x" $ typed (Types.nominal name) $ union name fname $ var "x"
+union2 name fname = lambda "x2" $ typed (Types.nominal name) $ union name fname $ var "x2"
 
 unit :: Datum a
 unit = Datum Terms.unit
