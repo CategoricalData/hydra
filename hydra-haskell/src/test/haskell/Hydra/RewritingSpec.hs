@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.RewritingSpec where
 
 import Hydra.Core
@@ -29,6 +31,74 @@ myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
   QuuxPair left right -> QuuxPair QuuxUnit right
   _ -> q
 
+
+
+
+--lambda "v1" $ apply
+--
+--  (matchOptional
+--    (int32 42)
+--    (lambda "v1" $ apply length (variable "v1")))
+--
+--  (variable "v1")
+
+
+
+
+testExpandLambdas :: H.SpecWith ()
+testExpandLambdas = do
+  H.describe "Test expanding to lambda terms" $ do
+
+    H.it "Try some terms which do not expand" $ do
+      noChange (int32 42)
+      noChange (list ["foo", "bar"])
+      noChange
+        (apply (apply splitOn "foo") "bar")
+      noChange
+        (lambda "x" $ int32 42)
+
+    H.it "Expand bare function terms" $ do
+      expandsTo
+        toLower
+        (lambda "v1" $ apply toLower (variable "v1"))
+      expandsTo
+        splitOn
+        (lambda "v1" $ lambda "v2" $ apply (apply splitOn (variable "v1")) (variable "v2"))
+      expandsTo
+        (compareTo $ int32 42)
+        (lambda "v1" $ apply (compareTo $ int32 42) (variable "v1"))
+      expandsTo
+        (matchOptional (int32 42) length)
+        -- Note two levels of lambda expansion
+        (lambda "v1" $ apply (matchOptional (int32 42) (lambda "v1" $ apply length $ variable "v1")) (variable "v1"))
+
+    H.it "Expand subterms within applications" $ do
+      expandsTo
+        (apply splitOn "bar")
+        (lambda "v1" $ apply (apply splitOn "bar") (variable "v1"))
+      expandsTo
+        (apply (lambda "x" $ variable "x") length)
+        (apply (lambda "x" $ variable "x") (lambda "v1" $ apply length $ variable "v1"))
+
+    H.it "Expand arbitrary subterms" $ do
+      expandsTo
+        (list [lambda "x" "foo", apply splitOn "bar"])
+        (list [lambda "x" "foo", lambda "v1" $ apply (apply splitOn "bar") $ variable "v1"])
+
+    H.it "Check that lambda expansion is idempotent" $ do
+      QC.property $ \term -> do
+        once <- fromFlowIo testContext $ expandLambdas term
+        twice <- fromFlowIo testContext $ expandLambdas once
+        H.shouldBe once twice
+  where
+    length = primitive $ Name "hydra/lib/strings.length"
+    splitOn = primitive $ Name "hydra/lib/strings.splitOn"
+    toLower = primitive $ Name "hydra/lib/strings.toLower"
+    expandsTo termBefore termAfter = do
+      result <- fromFlowIo testContext $ expandLambdas termBefore
+      H.shouldBe result termAfter
+
+    noChange term = expandsTo term term
 
 testFoldOverTerm :: H.SpecWith ()
 testFoldOverTerm = do
@@ -195,6 +265,7 @@ withType cx typ = annotationClassSetTermType (contextAnnotations cx) cx (Just ty
 
 spec :: H.Spec
 spec = do
+  testExpandLambdas
   testFoldOverTerm
   testFreeVariablesInTerm
 --  testReplaceFreeVariableType
