@@ -31,20 +31,6 @@ myQuuxRewriter = rewriteQuux L.length $ \fsub q -> fsub $ case q of
   QuuxPair left right -> QuuxPair QuuxUnit right
   _ -> q
 
-
-
-
---lambda "v1" $ apply
---
---  (matchOptional
---    (int32 42)
---    (lambda "v1" $ apply length (variable "v1")))
---
---  (variable "v1")
-
-
-
-
 testExpandLambdas :: H.SpecWith ()
 testExpandLambdas = do
   H.describe "Test expanding to lambda terms" $ do
