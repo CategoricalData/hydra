@@ -6,6 +6,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
+import Data.List
 import Data.Map
 import Data.Set
 
@@ -13,6 +14,7 @@ import Data.Set
 eliminationVariant :: (Core.Elimination m -> Core.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Core.EliminationVariantElement
+  Core.EliminationList _ -> Core.EliminationVariantList
   Core.EliminationNominal _ -> Core.EliminationVariantNominal
   Core.EliminationOptional _ -> Core.EliminationVariantOptional
   Core.EliminationRecord _ -> Core.EliminationVariantRecord
@@ -22,6 +24,7 @@ eliminationVariant x = case x of
 eliminationVariants :: [Core.EliminationVariant]
 eliminationVariants = [
   Core.EliminationVariantElement,
+  Core.EliminationVariantList,
   Core.EliminationVariantNominal,
   Core.EliminationVariantOptional,
   Core.EliminationVariantRecord,
@@ -121,8 +124,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v -> ((\x -> Core.LiteralTypeFloat x) (floatValueType v))
-  Core.LiteralInteger v -> ((\x -> Core.LiteralTypeInteger x) (integerValueType v))
+  Core.LiteralFloat v -> ((\x2 -> Core.LiteralTypeFloat x2) (floatValueType v))
+  Core.LiteralInteger v -> ((\x2 -> Core.LiteralTypeInteger x2) (integerValueType v))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type variant (constructor) for a given literal value
@@ -136,7 +139,7 @@ literalTypeVariant x = case x of
 
 -- | Find the literal variant (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Core.LiteralVariant)
-literalVariant x = (literalTypeVariant (literalType x))
+literalVariant x1 = (literalTypeVariant (literalType x1))
 
 -- | All literal variants, in a canonical order
 literalVariants :: [Core.LiteralVariant]

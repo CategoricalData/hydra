@@ -3,6 +3,7 @@
 module Hydra.Ext.Tinkerpop.V3 where
 
 import qualified Hydra.Core as Core
+import Data.List
 import Data.Map
 import Data.Set
 

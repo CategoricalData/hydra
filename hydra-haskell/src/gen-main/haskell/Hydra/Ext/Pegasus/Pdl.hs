@@ -5,6 +5,7 @@ module Hydra.Ext.Pegasus.Pdl where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Json.Model as Model
+import Data.List
 import Data.Map
 import Data.Set
 

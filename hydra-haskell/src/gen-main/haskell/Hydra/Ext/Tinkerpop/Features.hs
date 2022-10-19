@@ -9,6 +9,7 @@
 module Hydra.Ext.Tinkerpop.Features where
 
 import qualified Hydra.Core as Core
+import Data.List
 import Data.Map
 import Data.Set
 
