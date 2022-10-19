@@ -5,6 +5,7 @@ import Hydra.Compute
 import Hydra.Ext.Json.Coder
 import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
+import Hydra.Impl.Haskell.Ext.Bytestrings
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Control.Monad as CM
@@ -12,13 +13,11 @@ import qualified Data.Aeson as A
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Text as T
-import qualified Data.Text.Lazy as TL
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HS
 import qualified Data.Scientific as SC
 import qualified Data.Char as C
 import qualified Data.String as String
-import qualified Data.Text.Lazy.Encoding as DTE
 
 
 aesonToBytes :: A.Value -> BS.ByteString
@@ -38,9 +37,6 @@ aesonToValue v = case v of
 bytesToAeson :: BS.ByteString -> Either String A.Value
 bytesToAeson = A.eitherDecode
 
-bytesToString :: BS.ByteString -> String
-bytesToString = TL.unpack . DTE.decodeUtf8
-
 bytesToValue :: BS.ByteString -> Either String Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
@@ -59,9 +55,6 @@ jsonSerdeStr typ = do
   return Coder {
     coderEncode = fmap bytesToString . coderEncode serde,
     coderDecode = coderDecode serde . stringToBytes}
-
-stringToBytes :: String -> BS.ByteString
-stringToBytes = DTE.encodeUtf8 . TL.pack
 
 stringToValue :: String -> Either String Json.Value
 stringToValue = bytesToValue . stringToBytes
