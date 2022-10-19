@@ -6,19 +6,20 @@ import qualified Hydra.Basics as Basics
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
+import Data.List
 import Data.Map
 import Data.Set
 
 -- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)
 describeFloatType t = (Strings.cat [
-  (\x -> describePrecision (Basics.floatTypePrecision x)) t,
+  (\x1 -> describePrecision (Basics.floatTypePrecision x1)) t,
   " floating-point numbers"])
 
 -- | Display an integer type as a string
 describeIntegerType :: (Core.IntegerType -> String)
 describeIntegerType t = (Strings.cat [
-  (\x -> describePrecision (Basics.integerTypePrecision x)) t,
+  (\x1 -> describePrecision (Basics.integerTypePrecision x1)) t,
   " integers"])
 
 -- | Display a literal type as a string

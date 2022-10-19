@@ -5,6 +5,7 @@ module Hydra.Ext.Owl.Syntax where
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Rdf.Syntax as Syntax
 import qualified Hydra.Ext.Xml.Schema as Schema
+import Data.List
 import Data.Map
 import Data.Set
 

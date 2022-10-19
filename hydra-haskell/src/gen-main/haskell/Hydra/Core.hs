@@ -2,6 +2,7 @@
 
 module Hydra.Core where
 
+import Data.List
 import Data.Map
 import Data.Set
 
@@ -93,6 +94,7 @@ _Element_data = (FieldName "data")
 -- | A corresponding elimination for an introduction term
 data Elimination m 
   = EliminationElement 
+  | EliminationList (Term m)
   | EliminationNominal Name
   | EliminationOptional (OptionalCases m)
   | EliminationRecord Projection
@@ -102,6 +104,8 @@ data Elimination m
 _Elimination = (Name "hydra/core.Elimination")
 
 _Elimination_element = (FieldName "element")
+
+_Elimination_list = (FieldName "list")
 
 _Elimination_nominal = (FieldName "nominal")
 
@@ -114,6 +118,7 @@ _Elimination_union = (FieldName "union")
 -- | The identifier of an elimination constructor
 data EliminationVariant 
   = EliminationVariantElement 
+  | EliminationVariantList 
   | EliminationVariantNominal 
   | EliminationVariantOptional 
   | EliminationVariantRecord 
@@ -123,6 +128,8 @@ data EliminationVariant
 _EliminationVariant = (Name "hydra/core.EliminationVariant")
 
 _EliminationVariant_element = (FieldName "element")
+
+_EliminationVariant_list = (FieldName "list")
 
 _EliminationVariant_nominal = (FieldName "nominal")
 
