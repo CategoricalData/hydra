@@ -14,6 +14,7 @@ import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL
 import qualified Hydra.Ext.Scala.Coder as Scala
+import qualified Hydra.Ext.Yaml.Modules as Yaml
 
 import Hydra.Impl.Haskell.Sources.Adapters.Utils
 import Hydra.Impl.Haskell.Sources.Basics
@@ -163,3 +164,6 @@ writePdl = generateSources PDL.printModule
 
 writeScala :: [Module Meta] -> FP.FilePath -> IO ()
 writeScala = generateSources Scala.printModule
+
+writeYaml :: [Module Meta] -> FP.FilePath -> IO ()
+writeYaml = generateSources Yaml.printModule
