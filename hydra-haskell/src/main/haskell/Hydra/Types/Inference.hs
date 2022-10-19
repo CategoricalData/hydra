@@ -131,6 +131,14 @@ inferInternal term = case term of
           et <- freshVariableType
           yieldElimination EliminationElement (Types.function (Types.element et) et) []
 
+        EliminationList fun -> do
+          a <- freshVariableType
+          b <- freshVariableType
+          let expected = Types.functionN [b, a] b
+          i <- infer fun
+          let elim = Types.functionN [b, Types.list a] b
+          yieldElimination (EliminationList i) elim [(expected, termType i)]
+
         EliminationNominal name -> do
           typ <- withGraphContext $ namedType "eliminate nominal" name
           yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []

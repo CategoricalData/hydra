@@ -146,6 +146,9 @@ float64 = literal . Literals.float64
 float :: FloatValue -> Term m
 float = literal . Literals.float
 
+fold :: Term m -> Term m
+fold = TermFunction . FunctionElimination . EliminationList
+
 int16 :: Int16 -> Term m
 int16 = literal . Literals.int16
 

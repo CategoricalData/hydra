@@ -74,6 +74,7 @@ constructModule mod coders pairs = do
           where
             toImport (Namespace name, alias) = H.Import True (importName name) (Just alias) Nothing
         standardImports = toImport . H.ModuleName <$> Y.catMaybes [
+            Just "Data.List",
             Just "Data.Map",
             Just "Data.Set"{-,
             if useCoreImport && moduleNamespace g /= Namespace "hydra/core"
@@ -89,6 +90,10 @@ encodeFunction :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Function m -> G
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationElement -> pure $ hsvar "id"
+      EliminationList fun -> do
+        let lhs = hsvar "foldl"
+        rhs <- encodeTerm namespaces fun
+        return $ hsapp lhs rhs
       EliminationNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
