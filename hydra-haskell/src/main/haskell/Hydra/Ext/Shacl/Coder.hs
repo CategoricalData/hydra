@@ -12,6 +12,7 @@ import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Util.Formatting
+import Hydra.Util.Context
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -19,8 +20,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
-nodeCount = "nodeCount"
 
 shaclCoder :: (Eq m, Show m) => Module m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
 shaclCoder mod = do
@@ -232,13 +231,8 @@ nameToIri name = Rdf.Iri $ "urn:" ++ unName name
 
 nextBlankNode :: Show m => GraphFlow m Rdf.Resource
 nextBlankNode = do
-  c <- getAttr nodeCount
-  count <- case c of
-    Nothing -> pure 0
-    Just lit -> Literals.expectInt32 lit
-  let node = Rdf.BlankNode $ "b" ++ show count
-  putAttr nodeCount (Literals.int32 $ count + 1)
-  return $ Rdf.ResourceBnode node
+  count <- nextCount "shaclBlankNodeCounter"
+  return $ Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count
 
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common
