@@ -76,6 +76,9 @@ hydraCoreModule = Module ns elements [] $
           "element">:
             doc "Eliminates an element by mapping it to its data term. This is Hydra's delta function."
             unit,
+          "list">:
+            doc "Eliminates a list using a fold function; this function has the signature b -> [a] -> b" $
+            core "Term" @@ "m",
           "nominal">:
             doc "Eliminates a nominal term by extracting the wrapped term" $
             core "Name",
@@ -93,6 +96,7 @@ hydraCoreModule = Module ns elements [] $
         doc "The identifier of an elimination constructor" $
         enum [
           "element",
+          "list",
           "nominal",
           "optional",
           "record",

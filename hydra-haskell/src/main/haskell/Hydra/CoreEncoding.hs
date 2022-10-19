@@ -28,6 +28,7 @@ encodeCaseStatement (CaseStatement name cases) = record _CaseStatement [
 encodeElimination :: Ord m => Elimination m -> Term m
 encodeElimination e = case e of
   EliminationElement -> unitVariant _Elimination _Elimination_element
+  EliminationList f -> variant _Elimination _Elimination_list $ encodeTerm f
   EliminationNominal (Name name) -> variant _Elimination _Elimination_nominal $ string name
   EliminationOptional cases -> variant _Elimination _Elimination_optional $ encodeOptionalCases cases
   EliminationRecord p -> variant _Elimination _Elimination_record $ encodeProjection p

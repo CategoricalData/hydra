@@ -34,6 +34,19 @@ checkFunctionSyntax = do
         ("a" @@ "b" --> "c" @@ "d")
         (("a" @@ "b") --> ("c" @@ "d"))
 
+checkHelperFunctions :: H.SpecWith ()
+checkHelperFunctions = do
+  H.describe "Check helper functions" $ do
+
+    H.it "Check n-ary functions" $ do
+      check
+        (functionN ["a"] "b")
+        (function "a" "b")
+      check
+        (functionN [int32, string] boolean)
+        (function int32 $ function string boolean)
+
 spec :: H.Spec
 spec = do
   checkFunctionSyntax
+  checkHelperFunctions

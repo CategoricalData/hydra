@@ -51,6 +51,7 @@ eliminationVariant = basics "eliminationVariant" $
   typed (Types.function (Types.apply (Types.nominal _Elimination) (Types.variable "m")) (Types.nominal _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
+    _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_nominal  @-> _EliminationVariant_nominal,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
@@ -62,6 +63,7 @@ eliminationVariants = basics "eliminationVariants" $
   typed (Types.list $ Types.nominal _EliminationVariant) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_element,
+    _EliminationVariant_list,
     _EliminationVariant_nominal,
     _EliminationVariant_optional,
     _EliminationVariant_record,

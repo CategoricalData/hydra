@@ -3,6 +3,7 @@ module Hydra.Impl.Haskell.Dsl.Types where
 import Hydra.Common
 import Hydra.Core
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import Data.String(IsString(..))
 
@@ -61,6 +62,11 @@ float = literal . LiteralTypeFloat
 
 function :: Type m -> Type m -> Type m
 function dom cod = TypeFunction $ FunctionType dom cod
+
+functionN :: [Type m] -> Type m -> Type m
+functionN doms cod = if L.null doms
+  then cod
+  else function (L.head doms) $ functionN (L.tail doms) cod
 
 int16 :: Type m
 int16 = integer IntegerTypeInt16
