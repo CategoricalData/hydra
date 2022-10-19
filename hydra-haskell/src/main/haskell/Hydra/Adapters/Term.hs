@@ -24,6 +24,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
 
@@ -295,31 +296,31 @@ termAdapter typ = do
   where
     alts acx t = (\c -> c t) <$> if variantIsSupported acx t
       then case typeVariant t of
-        TypeVariantAnnotated -> pure passAnnotated
-        TypeVariantApplication -> pure passApplication
-        TypeVariantFunction ->  pure passFunction
-        TypeVariantLambda -> pure passLambda
-        TypeVariantList -> pure passList
-        TypeVariantLiteral -> pure passLiteral
-        TypeVariantMap -> pure passMap
+        TypeVariantAnnotated -> [passAnnotated]
+        TypeVariantApplication -> [passApplication]
+        TypeVariantFunction ->  [passFunction]
+        TypeVariantLambda -> [passLambda]
+        TypeVariantList -> [passList]
+        TypeVariantLiteral -> [passLiteral]
+        TypeVariantMap -> [passMap]
         TypeVariantOptional -> [passOptional, optionalToList]
-        TypeVariantProduct -> pure passProduct
-        TypeVariantRecord -> pure passRecord
-        TypeVariantSet -> pure passSet
-        TypeVariantSum -> pure passSum
-        TypeVariantUnion -> pure passUnion
+        TypeVariantProduct -> [passProduct]
+        TypeVariantRecord -> [passRecord]
+        TypeVariantSet -> [passSet]
+        TypeVariantSum -> [passSum]
+        TypeVariantUnion -> [passUnion]
         _ -> []
       else case typeVariant t of
         TypeVariantAnnotated -> [dropAnnotation]
         TypeVariantApplication -> [simplifyApplication]
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
+        TypeVariantLambda -> [lambdaToMonotype]
         TypeVariantNominal -> [dereferenceNominal]
         TypeVariantOptional -> [optionalToList]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]
-        TypeVariantLambda -> [lambdaToMonotype]
-        _ -> []
+        _ -> [unsupportedToString]
 
     constraints acx = languageConstraints $ adapterContextTarget acx
     supported acx = typeIsSupported (constraints acx)
@@ -351,6 +352,17 @@ unionToRecord t@(TypeUnion rt) = do
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
+
+unsupportedToString :: (Ord m, Read m, Show m) => TypeAdapter m
+unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
+  where
+    -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
+    encode = pure . string . show
+    decode term = do
+      s <- expectString term
+      case TR.readEither s of
+        Left msg -> fail $ "could not decode unsupported term: " ++ s
+        Right t -> pure t
 
 withEvaluationContext :: GraphFlow m a -> Flow (AdapterContext m) a
 withEvaluationContext f = do
