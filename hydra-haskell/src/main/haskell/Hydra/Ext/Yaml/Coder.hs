@@ -110,7 +110,7 @@ termCoder typ = case stripType typ of
 yamlCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) YM.Node)
 yamlCoder typ = do
     cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage (language cx)
+    let acx = AdapterContext cx hydraCoreLanguage language
     adapter <- withState acx $ termAdapter typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder
