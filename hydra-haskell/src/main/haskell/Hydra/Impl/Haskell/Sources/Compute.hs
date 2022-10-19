@@ -144,7 +144,9 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
         record [
           "stack">: list string,
           "messages">: list string,
-          "other">: Types.map string (core "Literal")],
+          "other">:
+            doc "A map of string keys to arbitrary terms as values, for application-specific use" $
+            Types.map string (core "Term" @@ compute "Meta")],
 
       def "TraversalOrder" $
         union [

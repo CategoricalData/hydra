@@ -65,11 +65,6 @@ fromFlowIo cx f = case mv of
   where
     FlowWrapper mv _ trace = unFlow f cx emptyTrace
 
-getAttr :: String -> Flow s (Maybe Literal)
-getAttr key = Flow q
-  where
-    q s0 t0 = FlowWrapper (Just $ M.lookup key $ traceOther t0) s0 t0
-
 getState :: Flow s s
 getState = Flow q
   where
@@ -79,11 +74,6 @@ getState = Flow q
         Just _ -> FlowWrapper (Just s1) s1 t1
       where
         FlowWrapper v1 s1 t1 = unFlow f s0 t0
-
-putAttr :: String -> Literal -> Flow s ()
-putAttr key val = Flow q
-  where
-    q s0 t0 = FlowWrapper (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
 
 putState :: s -> Flow s ()
 putState cx = Flow q
