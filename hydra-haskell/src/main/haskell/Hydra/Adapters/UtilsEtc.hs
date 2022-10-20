@@ -14,6 +14,8 @@ import Hydra.Adapters.Utils
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting
 import Hydra.Rewriting
+import Hydra.Util.Context
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Set as S
@@ -25,7 +27,7 @@ type SymmetricAdapter s t v = Adapter s s t t v v
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
 
-chooseAdapter :: Show t =>
+chooseAdapter :: (Eq t, Ord t, Show t) =>
     (t -> [Flow so (SymmetricAdapter si t v)])
  -> (t -> Bool)
  -> (t -> String)
@@ -34,6 +36,9 @@ chooseAdapter :: Show t =>
 chooseAdapter alts supported describe typ = if supported typ
   then pure $ Adapter False typ typ idCoder
   else do
+    -- Uncomment to debug adapter cycles
+    --debugCheckType typ
+
     raw <- sequence (alts typ)
     let candidates = L.filter (supported . adapterTarget) raw
     if L.null candidates
@@ -42,12 +47,32 @@ chooseAdapter alts supported describe typ = if supported typ
            then ""
            else " (discarded " ++ show (L.length raw) ++ " unsupported candidate types: " ++ show (adapterTarget <$> raw) ++ ")")
         ++ ". Original type: " ++ show typ
-      else return $ L.head candidates
+      else do
+        -- Uncomment to debug adapter cycles
+        --debugRemoveType typ
+
+        return $ L.head candidates
 
 composeCoders :: Coder s s a b -> Coder s s b c -> Coder s s a c
 composeCoders c1 c2 = Coder {
   coderEncode = coderEncode c1 >=> coderEncode c2,
   coderDecode = coderDecode c2 >=> coderDecode c1}
+
+debugCheckType :: (Eq t, Ord t, Show t) => t -> Flow s ()
+debugCheckType typ = do
+  let s = show typ
+  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Terms.expectSet Terms.expectString
+  if S.member s types
+    then fail $ "detected a cycle; type has already been encountered: " ++ show typ
+    else putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types))
+  return ()
+
+debugRemoveType :: (Eq t, Ord t, Show t) => t -> Flow s ()
+debugRemoveType typ = do
+  let s = show typ
+  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Terms.expectSet Terms.expectString
+  let types' = S.delete s types
+  putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
 
 encodeDecode :: CoderDirection -> Coder s s a a -> a -> Flow s a
 encodeDecode dir = case dir of
