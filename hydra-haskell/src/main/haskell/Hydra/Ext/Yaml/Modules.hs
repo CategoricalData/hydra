@@ -22,13 +22,10 @@ constructModule :: (Ord m, Read m, Show m)
   -> [(Element m, TypedTerm m)]
   -> GraphFlow m YM.Node
 constructModule mod coders pairs = do
---    typeEncoder <- withTrace "constructing encoder" (coderEncode <$> yamlCoder (Types.nominal _Type))
-    cx <- getState
-    let pairs = []
-    keyvals <- withTrace "encoding terms" (CM.mapM (toYaml cx) pairs)
+    keyvals <- withTrace "encoding terms" (CM.mapM toYaml pairs)
     return $ YM.NodeMapping $ M.fromList keyvals
   where
-    toYaml cx (el, (TypedTerm typ term)) = withTrace ("element " ++ unName (elementName el)) $ do
+    toYaml (el, (TypedTerm typ term)) = withTrace ("element " ++ unName (elementName el)) $ do
       encode <- case M.lookup typ coders of
         Nothing -> fail $ "no coder found for type " ++ show typ
         Just coder -> pure $ coderEncode coder
@@ -38,9 +35,8 @@ constructModule mod coders pairs = do
     localNameOf name = L.drop (1 + L.length ns) $ unName name
 
 printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
-printModule mod = do
-    node <- withTrace ("transforming module " ++ (unNamespace $ moduleNamespace mod)) $
-      transformModule language encodeTerm constructModule mod
+printModule mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace mod)) $ do
+    node <- transformModule language encodeTerm constructModule mod
     return $ M.fromList [(path, hydraYamlToString node)]
   where
     path = namespaceToFilePath False (FileExtension "yaml") $ moduleNamespace mod
