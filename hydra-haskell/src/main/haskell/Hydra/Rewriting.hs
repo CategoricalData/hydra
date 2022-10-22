@@ -194,10 +194,10 @@ rewriteType f mf = rewrite fsub f
         TypeNominal name -> TypeNominal name
         TypeOptional t -> TypeOptional $ recurse t
         TypeProduct types -> TypeProduct (recurse <$> types)
-        TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forfield <$> fields)
+        TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forfield <$> fields)
         TypeSet t -> TypeSet $ recurse t
         TypeSum types -> TypeSum (recurse <$> types)
-        TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forfield <$> fields)
+        TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forfield <$> fields)
         TypeVariable v -> TypeVariable v
       where
         forfield f = f {fieldTypeType = recurse (fieldTypeType f)}
