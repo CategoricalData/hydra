@@ -154,13 +154,13 @@ inferInternal term = case term of
 
         -- Note: type inference cannot recover complete record types from projections; type annotations are needed
         EliminationRecord (Projection name fname) -> do
-          rt <- withGraphContext $ requireRecordType name
+          rt <- withGraphContext $ requireRecordType True name
           sfield <- findMatchingField fname (rowTypeFields rt)
           yieldElimination (EliminationRecord $ Projection name fname)
             (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
 
         EliminationUnion (CaseStatement name cases) -> do
-            rt <- withGraphContext $ requireUnionType name
+            rt <- withGraphContext $ requireUnionType True name
             let sfields = rowTypeFields rt
 
             icases <- CM.mapM inferFieldType cases
@@ -239,10 +239,10 @@ inferInternal term = case term of
       yield (TermProduct is) (TypeProduct $ fmap termType is) (L.concat $ fmap termConstraints is)
 
     TermRecord (Record n fields) -> do
-        rt <- withGraphContext $ requireRecordType n
+        rt <- withGraphContext $ requireRecordType True n
         let sfields = rowTypeFields rt
         (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) $ L.zip fields sfields
-        yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n $ L.reverse ftypes0) c1
+        yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n (rowTypeExtends rt) $ L.reverse ftypes0) c1
       where
         forField (typed, ftypes, c) (field, sfield) = do
           i <- inferFieldType field
@@ -269,7 +269,7 @@ inferInternal term = case term of
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
     TermUnion (Union n field) -> do
-        rt <- withGraphContext $ requireUnionType n
+        rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         ifield <- inferFieldType field
         let cinternal = termConstraints $ fieldTerm ifield

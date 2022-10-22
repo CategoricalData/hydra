@@ -106,21 +106,21 @@ encodeType aliases typ = case typ of
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
-    TypeRecord (RowType _ fields) -> do
+    TypeRecord rt -> do
       let includes = []
-      rfields <- CM.mapM encodeRecordField fields
+      rfields <- CM.mapM encodeRecordField $ rowTypeFields rt
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeUnion (RowType _ fields) -> if isEnum
+    TypeUnion rt -> if isEnum
         then do
-          fs <- CM.mapM encodeEnumField fields
+          fs <- CM.mapM encodeEnumField $ rowTypeFields rt
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
-        else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
+        else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
-        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
     _ -> unexpected "PDL-supported type" typ
   where
     encode t = case stripType t of
-      TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
+      TypeRecord (RowType _ Nothing []) -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases t
         case res of

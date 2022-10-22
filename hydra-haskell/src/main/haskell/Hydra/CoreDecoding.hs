@@ -13,7 +13,6 @@ module Hydra.CoreDecoding (
   elementAsTypedTerm,
   fieldTypes,
   requireRecordType,
-  requireRowType,
   requireType,
   requireUnionType,
   ) where
@@ -23,6 +22,7 @@ import Hydra.Core
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Monads
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -94,14 +94,11 @@ decodeMapType = matchRecord $ \m -> MapType
 decodeRowType :: Show m => Term m -> GraphFlow m (RowType m)
 decodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName decodeString)
+  <*> getField m _RowType_extends (Terms.expectOptional (\term -> Name <$> Terms.expectString term))
   <*> getField m _RowType_fields decodeFieldTypes
 
 decodeString :: Show m => Term m -> GraphFlow m String
-decodeString term = case stripTerm term of
-  TermLiteral l -> case l of
-    LiteralString s -> pure s
-    _ -> unexpected "string value" l
-  _ -> unexpected "literal value" term
+decodeString = Terms.expectString . stripTerm
 
 decodeType :: Show m => Term m -> GraphFlow m (Type m)
 decodeType dat = case dat of
@@ -172,16 +169,22 @@ matchUnion pairs term = do
 matchUnitField :: FieldName -> b -> (FieldName, a -> GraphFlow m b)
 matchUnitField fname x = (fname, \_ -> pure x)
 
-requireRecordType :: Show m => Name -> GraphFlow m (RowType m)
-requireRecordType = requireRowType "record" $ \t -> case t of
+requireRecordType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
+requireRecordType infer = requireRowType "record" infer $ \t -> case t of
   TypeRecord rt -> Just rt
   _ -> Nothing
 
-requireRowType :: Show m => String -> (Type m -> Maybe (RowType m)) -> Name -> GraphFlow m (RowType m)
-requireRowType label getter name = do
+requireRowType :: Show m => String -> Bool -> (Type m -> Maybe (RowType m)) -> Name -> GraphFlow m (RowType m)
+requireRowType label infer getter name = do
   t <- withSchemaContext $ requireType name
   case getter (rawType t) of
-    Just rt -> return rt
+    Just rt -> if infer
+      then case rowTypeExtends rt of
+        Nothing -> return rt
+        Just name' -> do
+          rt' <- requireRowType label True getter name'
+          return $ RowType name Nothing (rowTypeFields rt' ++ rowTypeFields rt)
+      else return rt
     Nothing -> fail $ show name ++ " does not resolve to a " ++ label ++ " type: " ++ show t
   where
     rawType t = case t of
@@ -194,7 +197,7 @@ requireType name = withTrace "require type" $ do
   el <- requireElement name
   decodeType $ elementData el
 
-requireUnionType :: Show m => Name -> GraphFlow m (RowType m)
-requireUnionType = requireRowType "union" $ \t -> case t of
+requireUnionType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
+requireUnionType infer = requireRowType "union" infer $ \t -> case t of
   TypeUnion rt -> Just rt
   _ -> Nothing

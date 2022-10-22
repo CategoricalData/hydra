@@ -30,7 +30,7 @@ import qualified Data.Set as S
 el :: Definition a -> Element Meta
 el (Definition name (Datum term)) = Element name (encodeType dummyType) term
   where
-    dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") [])
+    dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
 
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
