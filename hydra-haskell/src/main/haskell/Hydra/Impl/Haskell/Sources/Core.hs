@@ -88,6 +88,11 @@ hydraCoreModule = Module ns elements [] $
           "record">:
             doc "Eliminates a record by projecting a given field" $
             core "Projection",
+          "stream">:
+            doc "Eliminates a stream by decomposing it into head and tail" $
+            ...
+
+
           "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
             core "CaseStatement" @@ "m"],
@@ -100,6 +105,7 @@ hydraCoreModule = Module ns elements [] $
           "nominal",
           "optional",
           "record",
+          "stream",
           "union"],
 
       def "Field" $
@@ -319,6 +325,14 @@ hydraCoreModule = Module ns elements [] $
           "typeName">: core "Name",
           "fields">: list $ core "FieldType" @@ "m"],
 
+      def "Stream" $
+        lambda "m" $ core "Term" @@ "m" --> tuple [core "Term" @@ "m", core "Stream" @@ "m"],
+
+      def "StreamType" $
+        lambda "m" $ record [
+          "elements">: core "Type" @@ "m",
+          "carrier">: core "Type" @@ "m"],
+
       def "Sum" $
         doc "The unlabeled equivalent of a Union term" $
         lambda "m" $ record [
@@ -367,6 +381,9 @@ hydraCoreModule = Module ns elements [] $
           "set">:
             doc "A set of values" $
             set $ core "Term" @@ "m",
+          "stream">:
+            doc "An infinite stream of terms" $
+            core "Stream" @@ "m",
           "sum">:
             doc "A variant tuple" $
             core "Sum" @@ "m",
@@ -393,6 +410,7 @@ hydraCoreModule = Module ns elements [] $
           "product",
           "record",
           "set",
+          "stream",
           "sum",
           "union",
           "variable"],
@@ -415,6 +433,7 @@ hydraCoreModule = Module ns elements [] $
           "product">: list (core "Type" @@ "m"),
           "record">: core "RowType" @@ "m",
           "set">: core "Type" @@ "m",
+          "stream">: core "StreamType" @@ "m",
           "sum">: list (core "Type" @@ "m"),
           "union">: core "RowType" @@ "m",
           "variable">: core "VariableType"],
@@ -441,6 +460,7 @@ hydraCoreModule = Module ns elements [] $
           "product",
           "record",
           "set",
+          "stream",
           "sum",
           "union",
           "variable"],
