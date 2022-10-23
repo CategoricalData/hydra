@@ -1,18 +1,12 @@
 module Hydra.Ext.Shacl.Coder where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Lexical
+import Hydra.Util.Context
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import Hydra.Util.Formatting
-import Hydra.Util.Context
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

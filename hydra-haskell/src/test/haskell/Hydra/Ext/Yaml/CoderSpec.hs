@@ -1,9 +1,8 @@
 module Hydra.Ext.Yaml.CoderSpec where
 
-import Hydra.Core
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Ext.Yaml.Coder
-import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 

@@ -1,8 +1,6 @@
 module Hydra.Util.Context where
 
-import Hydra.Compute
-import Hydra.Core
-import Hydra.Monads
+import Hydra.All
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Data.Map as M

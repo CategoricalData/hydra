@@ -1,10 +1,8 @@
 module Hydra.ReductionSpec where
 
-import Hydra.Core
-import Hydra.Reduction
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Lexical
 
 import Hydra.TestUtils
 
@@ -80,7 +78,7 @@ checkPolymorphicPrimitives = do
 testBetaReduceTypeRecursively :: H.SpecWith ()
 testBetaReduceTypeRecursively = do
   H.describe "Beta reduce types recursively" $ do
-    
+
     H.it "Try non-application types" $ do
       H.shouldBe
         (reduce Types.unit)
@@ -99,12 +97,12 @@ testBetaReduceTypeRecursively = do
       H.shouldBe
         (reduce app3)
         (TypeRecord $ RowType (Name "Example") [Types.field "foo" Types.unit])
-        
+
     H.it "Try recursive application types" $ do
       H.shouldBe
         (reduce app4)
         (TypeRecord $ RowType (Name "Example") [Types.field "f1" Types.int32, Types.field "f2" Types.int64])
-        
+
 --    H.it "Distinguish between eager and lazy evaluation" $ do
 --      H.shouldBe
 --        (reduce False app5)

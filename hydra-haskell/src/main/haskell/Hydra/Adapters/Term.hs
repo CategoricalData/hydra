@@ -5,20 +5,12 @@ module Hydra.Adapters.Term (
   termAdapter,
 ) where
 
-import Hydra.Core
-import Hydra.Module
-import Hydra.Compute
-import Hydra.Adapters.Literal
-import Hydra.Basics
-import Hydra.Monads
-import Hydra.Lexical
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Adapters.Utils
+import Hydra.Adapters.Literal
 import Hydra.Adapters.UtilsEtc
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Reduction
-import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

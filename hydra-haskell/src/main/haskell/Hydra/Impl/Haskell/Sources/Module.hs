@@ -2,22 +2,19 @@
 
 module Hydra.Impl.Haskell.Sources.Module where
 
-import Hydra.Impl.Haskell.Sources.Core
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Sources.Mantle
 
 
 hydraModuleModule :: Module Meta
-hydraModuleModule = Module ns elements [hydraCoreModule] $
+hydraModuleModule = Module ns elements [hydraMantleModule] $
     Just "A model for Hydra namespaces and modules (collections of elements in the same namespace)"
   where
     ns = Namespace "hydra/module"
-    core = nsref $ moduleNamespace hydraCoreModule
-    graph = nsref ns
+    mantle = nsref $ moduleNamespace hydraMantleModule
+    mod = nsref ns
     def = datatype ns
 
     elements = [
@@ -27,13 +24,13 @@ hydraModuleModule = Module ns elements [hydraCoreModule] $
         lambda "m" $ record [
           "namespace">:
             doc "A common prefix for all element names in the module" $
-            graph "Namespace",
+            mod "Namespace",
           "elements">:
             doc "The elements defined in this module" $
-            list $ core "Element" @@ "m",
+            list $ mantle "Element" @@ "m",
           "dependencies">:
             doc "Any additional modules this one has a direct dependency upon" $
-            list $ graph "Module" @@ "m",
+            list $ mod "Module" @@ "m",
           "description">:
             doc "An optional human-readable description of the module" $
             optional string],

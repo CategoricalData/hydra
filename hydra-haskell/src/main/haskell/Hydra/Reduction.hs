@@ -3,11 +3,8 @@ module Hydra.Reduction where
 import Hydra.Core
 import Hydra.Monads
 import Hydra.Compute
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Rewriting
 import Hydra.Basics
-import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Lexical
 import Hydra.Lexical
 import Hydra.CoreDecoding
@@ -108,7 +105,7 @@ betaReduceTerm = reduce M.empty
                      >>= reduceApplication bindings (L.drop arity args)
                    else unwind
                where
-                 unwind = pure $ L.foldl apply (TermFunction f) args
+                 unwind = pure $ L.foldl (\l r -> TermApplication $ Application l r) (TermFunction f) args
 
             FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
               >>= reduceApplication bindings (L.tail args)
@@ -134,7 +131,7 @@ betaReduceType typ = do
           TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
           TypeLambda (LambdaType v body) -> fromFlow cx $ betaReduceType $ replaceFreeVariableType v rhs body
           -- nominal types are transparent
-          TypeNominal name -> fromFlow cx $ betaReduceType $ Types.apply t' rhs
+          TypeNominal name -> fromFlow cx $ betaReduceType $ TypeApplication $ ApplicationType t' rhs
             where
               t' = fromFlow cx $ requireType name
 

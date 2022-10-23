@@ -6,6 +6,7 @@ import Hydra.Module
 import Hydra.Lexical
 import Hydra.Compute
 import Hydra.CoreDecoding
+import Hydra.Mantle
 import Hydra.Sorting
 
 import qualified Control.Monad as CM

@@ -1,17 +1,9 @@
 module Hydra.Adapters.Coders where
 
-import Hydra.Basics
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
-import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Adapters.UtilsEtc
-import Hydra.Lexical
+import Hydra.All
 import Hydra.CoreDecoding
+import Hydra.Adapters.Term
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

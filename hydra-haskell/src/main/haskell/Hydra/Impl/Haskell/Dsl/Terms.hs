@@ -1,9 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Terms where
 
-import Hydra.Core
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Common
+import Hydra.All
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 
 import Prelude hiding (map)

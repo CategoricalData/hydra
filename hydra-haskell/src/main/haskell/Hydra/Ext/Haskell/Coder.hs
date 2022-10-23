@@ -1,15 +1,8 @@
 module Hydra.Ext.Haskell.Coder (printModule) where
 
-import Hydra.Basics
-import Hydra.Core
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import qualified Hydra.Ext.Haskell.Ast as H
@@ -19,7 +12,6 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
-import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

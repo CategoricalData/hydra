@@ -1,10 +1,8 @@
 module Hydra.Impl.Haskell.Dsl.Prims where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Monads
 
 import qualified Data.List as L
 import qualified Data.Map as M

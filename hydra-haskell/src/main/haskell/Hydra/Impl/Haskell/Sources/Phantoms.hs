@@ -2,14 +2,11 @@
 
 module Hydra.Impl.Haskell.Sources.Phantoms where
 
-import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Compute
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Impl.Haskell.Sources.Compute
 
 
 hydraPhantomsModule :: Module Meta

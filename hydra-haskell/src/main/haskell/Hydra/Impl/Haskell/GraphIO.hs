@@ -1,14 +1,9 @@
 module Hydra.Impl.Haskell.GraphIO where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Monads
-import Hydra.Lexical
 import Hydra.CoreEncoding
 import Hydra.Types.Inference
-import Hydra.Util.Formatting
 
 import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
@@ -22,6 +17,7 @@ import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Compute
 import Hydra.Impl.Haskell.Sources.Grammar
 import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Impl.Haskell.Sources.Mantle
 import Hydra.Impl.Haskell.Sources.Module
 import Hydra.Impl.Haskell.Sources.Phantoms
 
@@ -84,6 +80,7 @@ coreModules = [
   hydraBasicsModule,
   hydraCoreModule,
   hydraComputeModule,
+  hydraMantleModule,
   hydraModuleModule,
   hydraGrammarModule,
 --  hydraMonadsModule,
@@ -113,7 +110,7 @@ findType cx term = annotationClassTermType (contextAnnotations cx) term
 
 generateSources :: (Module Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
 generateSources printModule mods0 basePath = do
-    mfiles <- runFlow coreContext generateFiles
+    mfiles <- runFlow mantleContext generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -131,8 +128,10 @@ generateSources printModule mods0 basePath = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
 
+mantleContext = graphContext hydraMantle
+
 modulesToContext :: [Module Meta] -> Context Meta
-modulesToContext mods = coreContext {contextGraph = standardGraph elements}
+modulesToContext mods = mantleContext {contextGraph = elementsToGraph (Just hydraMantle) elements}
   where
     elements = L.concat (moduleElements <$> allModules)
     allModules = L.concat (close <$> mods)

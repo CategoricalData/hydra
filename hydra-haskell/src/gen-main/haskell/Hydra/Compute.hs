@@ -3,6 +3,7 @@
 module Hydra.Compute where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Mantle as Mantle
 import Data.List
 import Data.Map
 import Data.Set
@@ -43,7 +44,7 @@ data AnnotationClass m
   = AnnotationClass {
     annotationClassDefault :: m,
     annotationClassEqual :: (m -> m -> Bool),
-    annotationClassCompare :: (m -> m -> Core.Comparison),
+    annotationClassCompare :: (m -> m -> Mantle.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
     annotationClassTermMeta :: (Core.Term m -> m),
@@ -113,7 +114,7 @@ _CoderDirection_decode = (Core.FieldName "decode")
 -- | An environment containing a graph together with primitive functions and other necessary components for evaluation
 data Context m 
   = Context {
-    contextGraph :: (Core.Graph m),
+    contextGraph :: (Mantle.Graph m),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
     contextAnnotations :: (AnnotationClass m)}
@@ -131,7 +132,7 @@ _Context_annotations = (Core.FieldName "annotations")
 -- | Settings which determine how terms are evaluated
 data EvaluationStrategy 
   = EvaluationStrategy {
-    evaluationStrategyOpaqueTermVariants :: (Set Core.TermVariant)}
+    evaluationStrategyOpaqueTermVariants :: (Set Mantle.TermVariant)}
   deriving (Eq, Ord, Read, Show)
 
 _EvaluationStrategy = (Core.Name "hydra/compute.EvaluationStrategy")
@@ -173,13 +174,13 @@ _Language_constraints = (Core.FieldName "constraints")
 
 data LanguageConstraints m 
   = LanguageConstraints {
-    languageConstraintsEliminationVariants :: (Set Core.EliminationVariant),
-    languageConstraintsLiteralVariants :: (Set Core.LiteralVariant),
+    languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
+    languageConstraintsLiteralVariants :: (Set Mantle.LiteralVariant),
     languageConstraintsFloatTypes :: (Set Core.FloatType),
-    languageConstraintsFunctionVariants :: (Set Core.FunctionVariant),
+    languageConstraintsFunctionVariants :: (Set Mantle.FunctionVariant),
     languageConstraintsIntegerTypes :: (Set Core.IntegerType),
-    languageConstraintsTermVariants :: (Set Core.TermVariant),
-    languageConstraintsTypeVariants :: (Set Core.TypeVariant),
+    languageConstraintsTermVariants :: (Set Mantle.TermVariant),
+    languageConstraintsTypeVariants :: (Set Mantle.TypeVariant),
     languageConstraintsTypes :: (Core.Type m -> Bool)}
 
 _LanguageConstraints = (Core.Name "hydra/compute.LanguageConstraints")

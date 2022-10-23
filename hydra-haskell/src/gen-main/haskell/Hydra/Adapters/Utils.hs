@@ -6,6 +6,7 @@ import qualified Hydra.Basics as Basics
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Mantle as Mantle
 import Data.List
 import Data.Map
 import Data.Set
@@ -32,10 +33,10 @@ describeLiteralType x = case x of
   Core.LiteralTypeString -> "character strings"
 
 -- | Display numeric precision as a string
-describePrecision :: (Core.Precision -> String)
+describePrecision :: (Mantle.Precision -> String)
 describePrecision x = case x of
-  Core.PrecisionArbitrary -> "arbitrary-precision"
-  Core.PrecisionBits v -> (Strings.cat [
+  Mantle.PrecisionArbitrary -> "arbitrary-precision"
+  Mantle.PrecisionBits v -> (Strings.cat [
     Literals.showInt32 v,
     "-bit"])
 

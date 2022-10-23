@@ -5,20 +5,12 @@ module Hydra.Types.Inference (
   Constraint,
 ) where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Basics
-import Hydra.Lexical
+import Hydra.All
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Monads
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
-import Hydra.Rewriting
-import Hydra.Reduction
-import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

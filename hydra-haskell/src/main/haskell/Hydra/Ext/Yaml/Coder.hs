@@ -1,14 +1,10 @@
 module Hydra.Ext.Yaml.Coder (yamlCoder) where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM

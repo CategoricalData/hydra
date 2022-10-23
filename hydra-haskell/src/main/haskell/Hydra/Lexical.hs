@@ -7,6 +7,7 @@ import Hydra.Common
 import Hydra.Core
 import Hydra.Module
 import Hydra.Compute
+import Hydra.Mantle
 import Hydra.Monads
 
 import qualified Data.List as L
@@ -47,6 +48,7 @@ requireElement name = do
         ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements $ contextGraph cx))) ++ "}"
       where
         ellipsis strings = if L.length strings > 3
+--        ellipsis strings = if L.length strings < 0
           then L.take 3 strings ++ ["..."]
           else strings
 

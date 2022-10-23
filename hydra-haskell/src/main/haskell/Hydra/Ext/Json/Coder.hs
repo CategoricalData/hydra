@@ -1,16 +1,12 @@
 module Hydra.Ext.Json.Coder (jsonCoder) where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Ext.Json.Language
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Lib.Literals
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM

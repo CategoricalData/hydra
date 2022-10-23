@@ -20,10 +20,10 @@ module Hydra.CoreDecoding (
 
 import Hydra.Common
 import Hydra.Core
+import Hydra.Mantle
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Monads
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -105,7 +105,7 @@ decodeString term = case stripTerm term of
 
 decodeType :: Show m => Term m -> GraphFlow m (Type m)
 decodeType dat = case dat of
-  TermElement name -> pure $ Types.nominal name
+  TermElement name -> pure $ TypeNominal name
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> decodeType term
   _ -> matchUnion [
 --    (_Type_annotated, fmap TypeAnnotated . decodeAnnotated),

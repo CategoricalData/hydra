@@ -2,21 +2,20 @@
 
 module Hydra.Impl.Haskell.Sources.Compute where
 
-import Hydra.Impl.Haskell.Sources.Core
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Impl.Haskell.Sources.Mantle
 
 
 hydraComputeModule :: Module Meta
-hydraComputeModule = Module ns elements [hydraCoreModule] $
+hydraComputeModule = Module ns elements [hydraMantleModule] $
     Just "Abstractions for evaluation and transformations"
   where
     ns = Namespace "hydra/compute"
     core = nsref $ moduleNamespace hydraCoreModule
+    mantle = nsref $ moduleNamespace hydraMantleModule
     compute = nsref ns
 
     def = datatype ns
@@ -40,7 +39,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
         lambda "m" $ record [
           "default">: "m",
           "equal">: "m" --> "m" --> boolean,
-          "compare">: "m" --> "m" --> core "Comparison",
+          "compare">: "m" --> "m" --> mantle "Comparison",
           "show">: "m" --> string,
           "read">: string --> optional "m",
 
@@ -79,7 +78,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
       def "Context" $
         doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
-          "graph">: core "Graph" @@ "m",
+          "graph">: mantle "Graph" @@ "m",
           "functions">: Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
           "strategy">: compute "EvaluationStrategy",
           "annotations">: compute "AnnotationClass" @@ "m"],
@@ -87,7 +86,7 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
         record [
-          "opaqueTermVariants">: set (core "TermVariant")],
+          "opaqueTermVariants">: set (mantle "TermVariant")],
 
       def "Flow" $
         doc "A variant of the State monad with built-in logging and error handling" $
@@ -107,13 +106,13 @@ hydraComputeModule = Module ns elements [hydraCoreModule] $
 
       def "LanguageConstraints" $
         lambda "m" $ record [
-          "eliminationVariants">: Types.set $ core "EliminationVariant",
-          "literalVariants">: Types.set $ core "LiteralVariant",
+          "eliminationVariants">: Types.set $ mantle "EliminationVariant",
+          "literalVariants">: Types.set $ mantle "LiteralVariant",
           "floatTypes">: Types.set $ core "FloatType",
-          "functionVariants">: Types.set $ core "FunctionVariant",
+          "functionVariants">: Types.set $ mantle "FunctionVariant",
           "integerTypes">: Types.set $ core "IntegerType",
-          "termVariants">: Types.set $ core "TermVariant",
-          "typeVariants">: Types.set $ core "TypeVariant",
+          "termVariants">: Types.set $ mantle "TermVariant",
+          "typeVariants">: Types.set $ mantle "TypeVariant",
           "types">: core "Type" @@ "m" --> boolean],
 
       def "LanguageName" string,

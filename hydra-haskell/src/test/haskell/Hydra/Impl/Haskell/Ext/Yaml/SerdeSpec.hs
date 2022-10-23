@@ -3,8 +3,7 @@
 
 module Hydra.Impl.Haskell.Ext.Yaml.SerdeSpec where
 
-import Hydra.Core
-import Hydra.Monads
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Impl.Haskell.Ext.Yaml.Serde
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
