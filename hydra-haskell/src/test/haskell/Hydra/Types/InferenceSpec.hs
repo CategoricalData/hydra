@@ -103,8 +103,8 @@ checkFunctionTerms = do
           Field (FieldName "person") (apply delta (element $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
         ["v1"] (Types.function
-          (TypeUnion $ RowType testTypePersonOrSomethingName [
-            Types.field "person" $ TypeRecord $ RowType testTypePersonName [
+          (TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
+            Types.field "person" $ TypeRecord $ RowType testTypePersonName Nothing [
               Types.field "firstName" Types.string,
               Types.field "lastName" Types.string,
               Types.field "age" Types.int32],
@@ -153,11 +153,11 @@ checkIndividualTerms = do
     H.it "Check records" $ do
       expectMonotype
         (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") Types.float32])
+        (TypeRecord $ RowType latLonName Nothing [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") Types.float32])
 --      expectPolytype
 --        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ variable "lon"]))
 --        ["v1"] (Types.function (Types.variable "v1")
---          (TypeRecord $ RowType latLonName [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") $ Types.variable "v1"]))
+--          (TypeRecord $ RowType latLonName Nothing [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
       expectMonotype
