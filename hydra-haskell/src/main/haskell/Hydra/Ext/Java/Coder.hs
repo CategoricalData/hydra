@@ -2,6 +2,7 @@ module Hydra.Ext.Java.Coder (printModule) where
 
 import Hydra.All
 import Hydra.CoreDecoding
+import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
@@ -580,15 +581,15 @@ encodeType aliases t = case stripType t of
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
-  TypeRecord (RowType _UnitType []) -> return $ javaRefType [] javaLangPackageName "Void"
-  TypeRecord (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeRecord (RowType _UnitType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
   TypeSet st -> do
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeUnion (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where

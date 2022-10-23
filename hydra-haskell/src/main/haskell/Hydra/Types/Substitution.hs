@@ -37,10 +37,10 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
       TypeNominal _ -> typ
       TypeOptional t -> optional $ normalizeType t
       TypeProduct types -> TypeProduct (normalizeType <$> types)
-      TypeRecord (RowType n fields) -> TypeRecord $ RowType n (normalizeFieldType <$> fields)
+      TypeRecord (RowType n e fields) -> TypeRecord $ RowType n e (normalizeFieldType <$> fields)
       TypeSet t -> set $ normalizeType t
       TypeSum types -> TypeSum (normalizeType <$> types)
-      TypeUnion (RowType n fields) -> TypeUnion $ RowType n (normalizeFieldType <$> fields)
+      TypeUnion (RowType n e fields) -> TypeUnion $ RowType n e (normalizeFieldType <$> fields)
       TypeLambda (LambdaType (VariableType v) t) -> TypeLambda (LambdaType (VariableType v) $ normalizeType t)
       TypeVariable v -> case Prelude.lookup v ord of
         Just (VariableType v1) -> variable v1
@@ -63,10 +63,10 @@ substituteInType s typ = case typ of
     TypeNominal _ -> typ -- because we do not allow names to be bound to types with free variables
     TypeOptional t -> optional $ subst t
     TypeProduct types -> TypeProduct (subst <$> types)
-    TypeRecord (RowType n fields) -> TypeRecord $ RowType n (substField <$> fields)
+    TypeRecord (RowType n e fields) -> TypeRecord $ RowType n e (substField <$> fields)
     TypeSet t -> set $ subst t
     TypeSum types -> TypeSum (subst <$> types)
-    TypeUnion (RowType n fields) -> TypeUnion $ RowType n (substField <$> fields)
+    TypeUnion (RowType n e fields) -> TypeUnion $ RowType n e (substField <$> fields)
     TypeLambda (LambdaType var@(VariableType v) body) -> if Y.isNothing (M.lookup var s)
       then TypeLambda (LambdaType (VariableType v) (subst body))
       else typ

@@ -191,11 +191,11 @@ encodeType typ = case stripType typ of
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any
     TypeNominal name -> any -- TODO: include name
-    TypeRecord (RowType rname fields) -> do
+    TypeRecord (RowType rname _ fields) -> do
       props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
       return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
     TypeSet _ -> any
-    TypeUnion (RowType rname fields) -> do
+    TypeUnion (RowType rname _ fields) -> do
         props <- CM.mapM (encodeFieldType rname Nothing) fields
         let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
         return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]

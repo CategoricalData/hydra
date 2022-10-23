@@ -104,7 +104,7 @@ encodeFunction namespaces fun = case fun of
       EliminationUnion (CaseStatement dn fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
-            rt <- withSchemaContext $ requireUnionType dn
+            rt <- withSchemaContext $ requireUnionType False dn
             let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
             H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
           toAlt fieldMap (Field fn fun') = do
@@ -115,7 +115,7 @@ encodeFunction namespaces fun = case fun of
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of
-                TypeRecord (RowType _ []) -> pure []
+                TypeRecord (RowType _ Nothing []) -> pure []
                 _ -> pure [H.PatternName $ rawName v1]
               Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
             let lhs = H.PatternApplication $ H.Pattern_Application hname args
@@ -206,13 +206,13 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
     TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
-    TypeRecord (RowType n fields) -> case fields of
+    TypeRecord rt -> case rowTypeFields rt of
       [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
-      _ -> nominal n
+      _ -> nominal $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeUnion (RowType n _) -> nominal n
+    TypeUnion rt -> nominal $ rowTypeTypeName rt
     TypeVariable (VariableType v) -> pure $ H.TypeVariable $ simpleName v
     _ -> fail $ "unexpected type: " ++ show typ
   where
@@ -267,11 +267,11 @@ toTypeDeclarations namespaces el term = do
     let (vars, t') = unpackLambdaType cx t
     let hd = declHead hname $ L.reverse vars
     decl <- case stripType t' of
-      TypeRecord (RowType _ fields) -> do
-        cons <- recordCons lname fields
+      TypeRecord rt -> do
+        cons <- recordCons lname $ rowTypeFields rt
         return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
-      TypeUnion (RowType _ fields) -> do
-        cons <- CM.mapM (unionCons lname) fields
+      TypeUnion rt -> do
+        cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
         return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
       _ -> if newtypesNotTypedefs
         then do

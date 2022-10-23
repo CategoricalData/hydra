@@ -89,7 +89,7 @@ list :: Type m -> Type m
 list = TypeList
 
 isUnit :: Eq m => Type m -> Bool
-isUnit t = stripType t == TypeRecord (RowType unitTypeName [])
+isUnit t = stripType t == TypeRecord (RowType unitTypeName Nothing [])
 
 literal :: LiteralType -> Type m
 literal = TypeLiteral
@@ -107,7 +107,7 @@ product :: [Type m] -> Type m
 product = TypeProduct
 
 record :: [FieldType m] -> Type m
-record fields = TypeRecord $ RowType placeholderName fields
+record fields = TypeRecord $ RowType placeholderName Nothing fields
 
 set :: Type m -> Type m
 set = TypeSet
@@ -131,10 +131,10 @@ uint8 :: Type m
 uint8 = integer IntegerTypeUint8
 
 union :: [FieldType m] -> Type m
-union fields = TypeUnion $ RowType placeholderName fields
+union fields = TypeUnion $ RowType placeholderName Nothing fields
 
 unit :: Type m
-unit = TypeRecord $ RowType (Name "hydra/core.UnitType") []
+unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
 variable :: String -> Type m
 variable = TypeVariable . VariableType
