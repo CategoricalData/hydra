@@ -1,6 +1,6 @@
 module Hydra.MetaSpec where
 
-import Hydra.Core
+import Hydra.All
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Meta
 import Hydra.TestUtils
@@ -35,7 +35,7 @@ checkArbitraryAnnotations = do
           setAnn "k1" (Just $ Terms.string v1) $
           Terms.boolean True)
         (TermAnnotated $ Annotated (Terms.boolean True) $ Meta $ M.fromList [("k1", Terms.string v1), ("k2", Terms.int32 v2)])
-        
+
     H.it "An outer annotation overrides an inner one" $
       QC.property $ \k v1 v2 -> H.shouldBe
         (setAnn k (Just $ Terms.string v2) $ setAnn k (Just $ Terms.string v1) $ Terms.string "bar")

@@ -1,9 +1,7 @@
 module Hydra.Types.InferenceSpec where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Impl.Haskell.Sources.Libraries
-import Hydra.Basics
 import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.TestData

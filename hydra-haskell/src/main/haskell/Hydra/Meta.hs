@@ -4,9 +4,10 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Common
 import Hydra.Monads
+import Hydra.Mantle
+import Hydra.Impl.Haskell.Dsl.Terms
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -18,7 +19,7 @@ aggregateAnnotations getAnn t = Meta $ M.fromList $ addMeta [] t
     addMeta m t = case getAnn t of
       Nothing -> m
       Just (Annotated t' (Meta other)) -> addMeta (m ++ M.toList other) t'
-      
+
 getAnnotation :: String -> Meta -> Maybe (Term Meta)
 getAnnotation key (Meta m) = M.lookup key m
 
@@ -50,7 +51,7 @@ metaAnnotationClass = AnnotationClass {
     annotationClassCompare = \m1 m2 -> toComparison $ m1 `compare` m2,
     annotationClassShow = show,
     annotationClassRead = read,
-    
+
     -- TODO: simplify
     annotationClassTermMeta = termMetaInternal,
     annotationClassTypeMeta = typeMetaInternal,

@@ -1,8 +1,7 @@
 module Hydra.Types.Substitution where
 
-import Hydra.Core
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

@@ -3,15 +3,9 @@ module Hydra.Types.Unification (
   solveConstraints,
 ) where
 
-import Hydra.Basics
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Monads
+import Hydra.All
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Module
-import Hydra.Rewriting
 
 import qualified Data.Map as M
 import qualified Data.Set as S

@@ -3,17 +3,13 @@ module Hydra.Impl.Haskell.Dsl.Standard (
   module Hydra.Impl.Haskell.Dsl.Bootstrap
 ) where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
+import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Meta
 import Hydra.Impl.Haskell.Sources.Libraries
 import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Lexical
 import Hydra.Impl.Haskell.Dsl.Bootstrap
-import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -56,6 +52,9 @@ dataDoc s = setTermDescription coreContext (Just s)
 
 dataterm :: Namespace -> String -> Type Meta -> Term Meta -> Element Meta
 dataterm gname lname = termElement (qualify gname (Name lname))
+
+graphContext :: Graph Meta -> Context Meta
+graphContext g = coreContext {contextGraph = g}
 
 nonemptyList :: Type Meta -> Type Meta
 nonemptyList = boundedList (Just 1) Nothing

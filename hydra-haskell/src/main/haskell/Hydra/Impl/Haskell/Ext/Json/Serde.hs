@@ -1,9 +1,7 @@
 module Hydra.Impl.Haskell.Ext.Json.Serde where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Ext.Json.Coder
-import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Impl.Haskell.Ext.Bytestrings
 

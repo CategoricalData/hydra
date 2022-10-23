@@ -11,22 +11,15 @@ module Hydra.TestUtils (
   strip,
   termTestContext,
   module Hydra.TestGraph,
-  module Hydra.Compute,
-  module Hydra.Monads,
 ) where
 
 import Hydra.ArbitraryCore()
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
-import Hydra.CoreLanguage
-import Hydra.Rewriting
-import Hydra.Monads
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL

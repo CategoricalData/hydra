@@ -1,7 +1,6 @@
 module Hydra.Ext.Json.Eliminate where
 
-import Hydra.Compute
-import Hydra.Monads
+import Hydra.All
 import qualified Hydra.Ext.Json.Model as Json
 
 import qualified Data.Map as M

@@ -1,14 +1,9 @@
 module Hydra.Impl.Haskell.Dsl.Bootstrap where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
+import Hydra.Meta
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Meta
-import Hydra.Rewriting
-import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Set as S

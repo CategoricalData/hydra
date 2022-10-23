@@ -1,4 +1,4 @@
--- | Hydra's core data model, defining the structure of types, terms, and graphs
+-- | Hydra's core data model, defining types, terms, and their dependencies
 
 module Hydra.Core where
 
@@ -60,37 +60,6 @@ _CaseStatement_typeName = (FieldName "typeName")
 
 _CaseStatement_cases = (FieldName "cases")
 
--- | An equality judgement: less than, equal to, or greater than
-data Comparison 
-  = ComparisonLessThan 
-  | ComparisonEqualTo 
-  | ComparisonGreaterThan 
-  deriving (Eq, Ord, Read, Show)
-
-_Comparison = (Name "hydra/core.Comparison")
-
-_Comparison_lessThan = (FieldName "lessThan")
-
-_Comparison_equalTo = (FieldName "equalTo")
-
-_Comparison_greaterThan = (FieldName "greaterThan")
-
--- | A graph element, having a name, data term (value), and schema term (type)
-data Element m 
-  = Element {
-    elementName :: Name,
-    elementSchema :: (Term m),
-    elementData :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_Element = (Name "hydra/core.Element")
-
-_Element_name = (FieldName "name")
-
-_Element_schema = (FieldName "schema")
-
-_Element_data = (FieldName "data")
-
 -- | A corresponding elimination for an introduction term
 data Elimination m 
   = EliminationElement 
@@ -114,30 +83,6 @@ _Elimination_optional = (FieldName "optional")
 _Elimination_record = (FieldName "record")
 
 _Elimination_union = (FieldName "union")
-
--- | The identifier of an elimination constructor
-data EliminationVariant 
-  = EliminationVariantElement 
-  | EliminationVariantList 
-  | EliminationVariantNominal 
-  | EliminationVariantOptional 
-  | EliminationVariantRecord 
-  | EliminationVariantUnion 
-  deriving (Eq, Ord, Read, Show)
-
-_EliminationVariant = (Name "hydra/core.EliminationVariant")
-
-_EliminationVariant_element = (FieldName "element")
-
-_EliminationVariant_list = (FieldName "list")
-
-_EliminationVariant_nominal = (FieldName "nominal")
-
-_EliminationVariant_optional = (FieldName "optional")
-
-_EliminationVariant_record = (FieldName "record")
-
-_EliminationVariant_union = (FieldName "union")
 
 -- | A labeled term
 data Field m 
@@ -234,39 +179,6 @@ _FunctionType = (Name "hydra/core.FunctionType")
 _FunctionType_domain = (FieldName "domain")
 
 _FunctionType_codomain = (FieldName "codomain")
-
--- | The identifier of a function constructor
-data FunctionVariant 
-  = FunctionVariantCompareTo 
-  | FunctionVariantElimination 
-  | FunctionVariantLambda 
-  | FunctionVariantPrimitive 
-  deriving (Eq, Ord, Read, Show)
-
-_FunctionVariant = (Name "hydra/core.FunctionVariant")
-
-_FunctionVariant_compareTo = (FieldName "compareTo")
-
-_FunctionVariant_elimination = (FieldName "elimination")
-
-_FunctionVariant_lambda = (FieldName "lambda")
-
-_FunctionVariant_primitive = (FieldName "primitive")
-
--- | A graph, or set of named terms, together with its schema graph
-data Graph m 
-  = Graph {
-    -- | All of the elements in the graph
-    graphElements :: (Map Name (Element m)),
-    -- | The schema graph to this graph. If omitted, the graph is its own schema graph.
-    graphSchema :: (Maybe (Graph m))}
-  deriving (Eq, Ord, Read, Show)
-
-_Graph = (Name "hydra/core.Graph")
-
-_Graph_elements = (FieldName "elements")
-
-_Graph_schema = (FieldName "schema")
 
 -- | An integer type
 data IntegerType 
@@ -422,27 +334,6 @@ _LiteralType_integer = (FieldName "integer")
 
 _LiteralType_string = (FieldName "string")
 
--- | The identifier of a literal constructor
-data LiteralVariant 
-  = LiteralVariantBinary 
-  | LiteralVariantBoolean 
-  | LiteralVariantFloat 
-  | LiteralVariantInteger 
-  | LiteralVariantString 
-  deriving (Eq, Ord, Read, Show)
-
-_LiteralVariant = (Name "hydra/core.LiteralVariant")
-
-_LiteralVariant_binary = (FieldName "binary")
-
-_LiteralVariant_boolean = (FieldName "boolean")
-
-_LiteralVariant_float = (FieldName "float")
-
-_LiteralVariant_integer = (FieldName "integer")
-
-_LiteralVariant_string = (FieldName "string")
-
 -- | A map type
 data MapType m 
   = MapType {
@@ -492,18 +383,6 @@ _OptionalCases = (Name "hydra/core.OptionalCases")
 _OptionalCases_nothing = (FieldName "nothing")
 
 _OptionalCases_just = (FieldName "just")
-
--- | Numeric precision: arbitrary precision, or precision to a specified number of bits
-data Precision 
-  = PrecisionArbitrary 
-  | PrecisionBits Int
-  deriving (Eq, Ord, Read, Show)
-
-_Precision = (Name "hydra/core.Precision")
-
-_Precision_arbitrary = (FieldName "arbitrary")
-
-_Precision_bits = (FieldName "bits")
 
 data Projection 
   = Projection {
@@ -613,60 +492,6 @@ _Term_union = (FieldName "union")
 
 _Term_variable = (FieldName "variable")
 
--- | The identifier of a term expression constructor
-data TermVariant 
-  = TermVariantAnnotated 
-  | TermVariantApplication 
-  | TermVariantElement 
-  | TermVariantFunction 
-  | TermVariantLet 
-  | TermVariantList 
-  | TermVariantLiteral 
-  | TermVariantMap 
-  | TermVariantNominal 
-  | TermVariantOptional 
-  | TermVariantProduct 
-  | TermVariantRecord 
-  | TermVariantSet 
-  | TermVariantSum 
-  | TermVariantUnion 
-  | TermVariantVariable 
-  deriving (Eq, Ord, Read, Show)
-
-_TermVariant = (Name "hydra/core.TermVariant")
-
-_TermVariant_annotated = (FieldName "annotated")
-
-_TermVariant_application = (FieldName "application")
-
-_TermVariant_element = (FieldName "element")
-
-_TermVariant_function = (FieldName "function")
-
-_TermVariant_let = (FieldName "let")
-
-_TermVariant_list = (FieldName "list")
-
-_TermVariant_literal = (FieldName "literal")
-
-_TermVariant_map = (FieldName "map")
-
-_TermVariant_nominal = (FieldName "nominal")
-
-_TermVariant_optional = (FieldName "optional")
-
-_TermVariant_product = (FieldName "product")
-
-_TermVariant_record = (FieldName "record")
-
-_TermVariant_set = (FieldName "set")
-
-_TermVariant_sum = (FieldName "sum")
-
-_TermVariant_union = (FieldName "union")
-
-_TermVariant_variable = (FieldName "variable")
-
 -- | A data type
 data Type m 
   = TypeAnnotated (Annotated (Type m) m)
@@ -720,86 +545,6 @@ _Type_sum = (FieldName "sum")
 _Type_union = (FieldName "union")
 
 _Type_variable = (FieldName "variable")
-
--- | A type expression together with free type variables occurring in the expression
-data TypeScheme m 
-  = TypeScheme {
-    typeSchemeVariables :: [VariableType],
-    typeSchemeType :: (Type m)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeScheme = (Name "hydra/core.TypeScheme")
-
-_TypeScheme_variables = (FieldName "variables")
-
-_TypeScheme_type = (FieldName "type")
-
--- | The identifier of a type constructor
-data TypeVariant 
-  = TypeVariantAnnotated 
-  | TypeVariantApplication 
-  | TypeVariantElement 
-  | TypeVariantFunction 
-  | TypeVariantLambda 
-  | TypeVariantList 
-  | TypeVariantLiteral 
-  | TypeVariantMap 
-  | TypeVariantNominal 
-  | TypeVariantOptional 
-  | TypeVariantProduct 
-  | TypeVariantRecord 
-  | TypeVariantSet 
-  | TypeVariantSum 
-  | TypeVariantUnion 
-  | TypeVariantVariable 
-  deriving (Eq, Ord, Read, Show)
-
-_TypeVariant = (Name "hydra/core.TypeVariant")
-
-_TypeVariant_annotated = (FieldName "annotated")
-
-_TypeVariant_application = (FieldName "application")
-
-_TypeVariant_element = (FieldName "element")
-
-_TypeVariant_function = (FieldName "function")
-
-_TypeVariant_lambda = (FieldName "lambda")
-
-_TypeVariant_list = (FieldName "list")
-
-_TypeVariant_literal = (FieldName "literal")
-
-_TypeVariant_map = (FieldName "map")
-
-_TypeVariant_nominal = (FieldName "nominal")
-
-_TypeVariant_optional = (FieldName "optional")
-
-_TypeVariant_product = (FieldName "product")
-
-_TypeVariant_record = (FieldName "record")
-
-_TypeVariant_set = (FieldName "set")
-
-_TypeVariant_sum = (FieldName "sum")
-
-_TypeVariant_union = (FieldName "union")
-
-_TypeVariant_variable = (FieldName "variable")
-
--- | A type together with an instance of the type
-data TypedTerm m 
-  = TypedTerm {
-    typedTermType :: (Type m),
-    typedTermTerm :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypedTerm = (Name "hydra/core.TypedTerm")
-
-_TypedTerm_type = (FieldName "type")
-
-_TypedTerm_term = (FieldName "term")
 
 -- | A symbol which stands in for a term
 newtype Variable 

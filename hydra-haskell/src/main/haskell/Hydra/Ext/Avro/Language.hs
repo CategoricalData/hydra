@@ -1,8 +1,6 @@
 module Hydra.Ext.Avro.Language where
 
-import Hydra.Core
-import Hydra.Common
-import Hydra.Compute
+import Hydra.All
 
 import qualified Data.Set as S
 

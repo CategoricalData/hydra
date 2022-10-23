@@ -1,20 +1,11 @@
 module Hydra.Ext.Avro.Coder where
 
-import Hydra.Basics
-import Hydra.Core
-import Hydra.CoreDecoding
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
+import Hydra.All
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Util.Codetree.Script
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json

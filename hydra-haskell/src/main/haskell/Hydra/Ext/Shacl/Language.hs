@@ -1,8 +1,6 @@
 module Hydra.Ext.Shacl.Language where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Basics
+import Hydra.All
 
 import qualified Data.Set as S
 

@@ -1,25 +1,19 @@
 module Hydra.Impl.Haskell.Dsl.Base (
   module Hydra.Impl.Haskell.Dsl.Base,
   module Hydra.Impl.Haskell.Dsl.PhantomLiterals,
-  module Hydra.Phantoms,
   Standard.coreContext,
 ) where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.CoreEncoding
-import Hydra.Compute
-import Hydra.Impl.Haskell.Dsl.PhantomLiterals
+import Hydra.All
 import Hydra.Meta
-import Hydra.Phantoms
+import Hydra.CoreEncoding
+import Hydra.Impl.Haskell.Dsl.PhantomLiterals
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import Hydra.Module
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Types.Inference
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Monads
 
 import Prelude hiding ((++))
 

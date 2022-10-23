@@ -2,10 +2,7 @@
 
 module Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Grammar
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Grammars
 import Hydra.Util.GrammarToModule
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard

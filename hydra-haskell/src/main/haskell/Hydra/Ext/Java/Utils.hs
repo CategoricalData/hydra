@@ -1,15 +1,10 @@
 module Hydra.Ext.Java.Utils where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
 import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Adapters.Coders
 import Hydra.Ext.Java.Language
-import Hydra.Util.Formatting
-import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

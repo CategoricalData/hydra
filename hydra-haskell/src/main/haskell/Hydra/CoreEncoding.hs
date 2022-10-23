@@ -2,6 +2,7 @@ module Hydra.CoreEncoding where
 
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Mantle
 import Hydra.Monads
 import Hydra.Impl.Haskell.Dsl.Terms
 

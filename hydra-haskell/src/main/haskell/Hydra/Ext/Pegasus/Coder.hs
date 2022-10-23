@@ -1,15 +1,9 @@
 module Hydra.Ext.Pegasus.Coder (printModule) where
 
-import Hydra.Adapters.Term
-import Hydra.Core
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.CoreLanguage
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Rewriting
+import Hydra.Adapters.Term
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -148,7 +142,7 @@ encodeType aliases typ = case typ of
     encodeEnumField (FieldType (FieldName name) typ) = do
       anns <- getAnns typ
       return PDL.EnumField {
-        PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
+        PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseConventionCamel CaseConventionUpperSnake name,
         PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case stripType typ of
       TypeOptional ot -> do

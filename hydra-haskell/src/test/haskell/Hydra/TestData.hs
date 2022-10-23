@@ -1,8 +1,7 @@
 module Hydra.TestData where
 
-import Hydra.Core
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Terms
-import Hydra.Monads
 import Hydra.TestGraph
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
