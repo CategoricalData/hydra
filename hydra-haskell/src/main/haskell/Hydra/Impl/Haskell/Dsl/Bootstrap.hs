@@ -16,11 +16,11 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
 
     -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
     replacePlaceholders rec t = case t' of
-        TypeRecord (RowType n fields) -> if n == placeholderName
-          then TypeRecord (RowType elName fields)
+        TypeRecord (RowType n e fields) -> if n == placeholderName
+          then TypeRecord (RowType elName e fields)
           else t'
-        TypeUnion (RowType n fields) -> if n == placeholderName
-          then TypeUnion (RowType elName fields)
+        TypeUnion (RowType n e fields) -> if n == placeholderName
+          then TypeUnion (RowType elName e fields)
           else t'
         _ -> t'
       where

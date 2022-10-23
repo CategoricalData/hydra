@@ -256,8 +256,16 @@ hydraCoreModule = Module ns elements [] $
       def "RowType" $
         doc "A labeled record or union type" $
         lambda "m" $ record [
-          "typeName">: core "Name",
-          "fields">: list $ core "FieldType" @@ "m"],
+          "typeName">:
+            doc "The name of the row type, which must correspond to the name of a Type element" $
+            core "Name",
+          "extends">:
+            doc ("Optionally, the name of another row type which this one extends. To the extent that field order " ++
+                 "is preserved, the inherited fields of the extended type precede those of the extension.") $
+            optional $ core "Name",
+          "fields">:
+            doc "The fields of this row type, excluding any inherited fields" $
+            list $ core "FieldType" @@ "m"],
 
       def "Sum" $
         doc "The unlabeled equivalent of a Union term" $

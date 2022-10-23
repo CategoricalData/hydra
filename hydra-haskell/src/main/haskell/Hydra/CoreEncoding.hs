@@ -125,8 +125,9 @@ encodeProjection (Projection name fname) = record _Projection [
   Field _Projection_field $ string (unFieldName fname)]
 
 encodeRowType :: RowType m -> Term m
-encodeRowType (RowType name fields) = record _RowType [
+encodeRowType (RowType name extends fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
+  Field _RowType_extends $ optional (string . unName <$> extends),
   Field _RowType_fields $ list $ encodeFieldType <$> fields]
 
 encodeSum :: Ord m => Sum m -> Term m
