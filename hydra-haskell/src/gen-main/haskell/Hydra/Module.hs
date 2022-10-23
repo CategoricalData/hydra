@@ -8,6 +8,13 @@ import Data.List
 import Data.Map
 import Data.Set
 
+newtype FileExtension 
+  = FileExtension {
+    unFileExtension :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_FileExtension = (Core.Name "hydra/module.FileExtension")
+
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module m 
   = Module {

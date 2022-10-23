@@ -23,13 +23,16 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] $
       def "Case" $
         lambda "a" $ core "FieldName",
 
-     def "Datum" $
-       lambda "a" $ (core "Term") @@ (evaluation "Meta"),
+      def "Datum" $
+        lambda "a" $ (core "Term") @@ (evaluation "Meta"),
 
       def "Definition" $
         lambda "a" $ record [
           "name">: core "Name",
           "datum">: phantoms "Datum" @@ "a"],
 
-     def "Reference" $
-       lambda "a" $ unit]
+      def "Fld" $
+        lambda "a" $ (core "Field") @@ (evaluation "Meta"),
+
+      def "Reference" $
+        lambda "a" $ unit]

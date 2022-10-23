@@ -130,8 +130,8 @@ primitive = Datum . Terms.primitive
 project :: Name -> Type Meta -> FieldName -> Datum (a -> b)
 project name cod fname = Datum $ Terms.projection name fname
 
-record :: Name -> [Field Meta] -> Datum a
-record name fields = Datum $ Terms.record name fields
+record :: Name -> [Fld a] -> Datum a
+record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
 ref e = delta @@ element e

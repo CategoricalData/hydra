@@ -12,6 +12,9 @@ import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
 
 basicsNs = Namespace "hydra/basics"
 
+basics :: String -> Datum a -> Definition a
+basics = Definition . fromQname basicsNs
+
 hydraBasicsModule :: Module Meta
 hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
     Just "Basic functions for working with types and terms"
@@ -38,9 +41,6 @@ hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
       el testListsSource,
       el typeVariantSource,
       el typeVariantsSource]
-
-basics :: String -> Datum a -> Definition a
-basics = Definition . fromQname basicsNs
 
 eliminationVariantSource :: Definition (Elimination m -> EliminationVariant)
 eliminationVariantSource = basics "eliminationVariant" $

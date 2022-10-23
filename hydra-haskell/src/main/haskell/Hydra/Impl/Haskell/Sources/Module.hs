@@ -19,6 +19,8 @@ hydraModuleModule = Module ns elements [hydraMantleModule] $
 
     elements = [
 
+      def "FileExtension" string,
+      
       def "Module" $
         doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
         lambda "m" $ record [

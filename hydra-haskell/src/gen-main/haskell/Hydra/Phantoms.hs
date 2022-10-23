@@ -34,6 +34,13 @@ _Definition_name = (Core.FieldName "name")
 
 _Definition_datum = (Core.FieldName "datum")
 
+newtype Fld a 
+  = Fld {
+    unFld :: (Core.Field Compute.Meta)}
+  deriving (Eq, Ord, Read, Show)
+
+_Fld = (Core.Name "hydra/phantoms.Fld")
+
 data Reference a 
   = Reference {}
   deriving (Eq, Ord, Read, Show)
