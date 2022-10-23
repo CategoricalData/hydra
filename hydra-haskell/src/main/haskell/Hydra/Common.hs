@@ -12,8 +12,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-newtype FileExtension = FileExtension String
-
 debug :: Bool
 debug = True
 
