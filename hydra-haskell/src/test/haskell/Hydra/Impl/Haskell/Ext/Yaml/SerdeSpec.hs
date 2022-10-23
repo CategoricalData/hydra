@@ -85,14 +85,14 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
   H.it "Optionals are omitted from record objects if 'nothing'" $
     QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm
-        (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
+        (TypeRecord $ RowType testTypeName Nothing [Types.field "one" $ Types.optional Types.string, Types.field "two" $ Types.optional Types.int32])
         (record testTypeName [Field (FieldName "one") $ optional $ Just $ string "test", Field (FieldName "two") $ optional Nothing]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
     QC.property $ \() -> checkSerialization yamlSerdeStr
       (TypedTerm
-        (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32])
+        (TypeUnion $ RowType testTypeName Nothing [Types.field "left" Types.string, Types.field "right" Types.int32])
         (union testTypeName $ Field (FieldName "left") $ string "test"))
       "left: test\n"
 

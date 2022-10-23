@@ -22,7 +22,7 @@ latlonRecord :: Float -> Float -> Term m
 latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat, Field (FieldName "lon") $ float32 lon]
 
 latLonType :: Type m
-latLonType = TypeRecord $ RowType latLonName [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
+latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
 testContext :: Context Meta
 testContext = coreContext {
@@ -76,7 +76,7 @@ testDataArthur = record testTypePersonName [
   Field (FieldName "age") $ int32 42]
 
 testTypeComparison :: Type m
-testTypeComparison = TypeUnion $ RowType testTypeComparisonName [
+testTypeComparison = TypeUnion $ RowType testTypeComparisonName Nothing [
   Types.field "lessThan" Types.unit,
   Types.field "equalTo" Types.unit,
   Types.field "greaterThan" Types.unit]
@@ -85,7 +85,7 @@ testTypeComparisonName :: Name
 testTypeComparisonName = Name "Comparison"
 
 testTypeFoobarValue :: Type m
-testTypeFoobarValue = TypeUnion $ RowType testTypeFoobarValueName [
+testTypeFoobarValue = TypeUnion $ RowType testTypeFoobarValueName Nothing [
   Types.field "bool" Types.boolean,
   Types.field "string" Types.string,
   Types.field "unit" Types.unit]
@@ -94,7 +94,7 @@ testTypeFoobarValueName :: Name
 testTypeFoobarValueName = Name "FoobarValue"
 
 testTypePerson :: Type Meta
-testTypePerson = TypeRecord $ RowType testTypePersonName [
+testTypePerson = TypeRecord $ RowType testTypePersonName Nothing [
   Types.field "firstName" Types.string,
   Types.field "lastName" Types.string,
   Types.field "age" Types.int32]
@@ -103,7 +103,7 @@ testTypePersonName :: Name
 testTypePersonName = Name "Person"
 
 testTypePersonOrSomething :: Type Meta
-testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePersonOrSomethingName [
+testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
   Types.field "person" testTypePerson,
   Types.field "other" $ Types.variable "a"]
 
@@ -111,7 +111,7 @@ testTypePersonOrSomethingName :: Name
 testTypePersonOrSomethingName = Name "PersonOrSomething"
 
 testTypeTimestamp :: Type Meta
-testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName [
+testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName Nothing [
   FieldType (FieldName "unixTimeMillis") Types.uint64,
   FieldType (FieldName "date") Types.string]
 
