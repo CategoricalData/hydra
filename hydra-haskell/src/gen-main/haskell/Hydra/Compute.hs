@@ -8,8 +8,8 @@ import Data.List
 import Data.Map
 import Data.Set
 
-data Adapter s1 s2 t1 t2 v1 v2 
-  = Adapter {
+data Adapter s1 s2 t1 t2 v1 v2 = 
+  Adapter {
     adapterIsLossy :: Bool,
     adapterSource :: t1,
     adapterTarget :: t2,
@@ -25,8 +25,8 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_coder = (Core.FieldName "coder")
 
-data AdapterContext m 
-  = AdapterContext {
+data AdapterContext m = 
+  AdapterContext {
     adapterContextEvaluation :: (Context m),
     adapterContextSource :: (Language m),
     adapterContextTarget :: (Language m)}
@@ -40,8 +40,8 @@ _AdapterContext_source = (Core.FieldName "source")
 _AdapterContext_target = (Core.FieldName "target")
 
 -- | A typeclass-like construct providing common functions for working with annotations
-data AnnotationClass m 
-  = AnnotationClass {
+data AnnotationClass m = 
+  AnnotationClass {
     annotationClassDefault :: m,
     annotationClassEqual :: (m -> m -> Bool),
     annotationClassCompare :: (m -> m -> Mantle.Comparison),
@@ -88,8 +88,8 @@ _AnnotationClass_typeOf = (Core.FieldName "typeOf")
 _AnnotationClass_setTypeOf = (Core.FieldName "setTypeOf")
 
 -- | An encoder and decoder; a bidirectional flow between two types
-data Coder s1 s2 v1 v2 
-  = Coder {
+data Coder s1 s2 v1 v2 = 
+  Coder {
     coderEncode :: (v1 -> Flow s1 v2),
     coderDecode :: (v2 -> Flow s2 v1)}
 
@@ -100,9 +100,9 @@ _Coder_encode = (Core.FieldName "encode")
 _Coder_decode = (Core.FieldName "decode")
 
 -- | Indicates either the 'out' or the 'in' direction of a coder
-data CoderDirection 
-  = CoderDirectionEncode 
-  | CoderDirectionDecode 
+data CoderDirection = 
+  CoderDirectionEncode  |
+  CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
 _CoderDirection = (Core.Name "hydra/compute.CoderDirection")
@@ -112,8 +112,8 @@ _CoderDirection_encode = (Core.FieldName "encode")
 _CoderDirection_decode = (Core.FieldName "decode")
 
 -- | An environment containing a graph together with primitive functions and other necessary components for evaluation
-data Context m 
-  = Context {
+data Context m = 
+  Context {
     contextGraph :: (Mantle.Graph m),
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
     contextStrategy :: EvaluationStrategy,
@@ -130,8 +130,8 @@ _Context_strategy = (Core.FieldName "strategy")
 _Context_annotations = (Core.FieldName "annotations")
 
 -- | Settings which determine how terms are evaluated
-data EvaluationStrategy 
-  = EvaluationStrategy {
+data EvaluationStrategy = 
+  EvaluationStrategy {
     evaluationStrategyOpaqueTermVariants :: (Set Mantle.TermVariant)}
   deriving (Eq, Ord, Read, Show)
 
@@ -140,14 +140,14 @@ _EvaluationStrategy = (Core.Name "hydra/compute.EvaluationStrategy")
 _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
 -- | A variant of the State monad with built-in logging and error handling
-newtype Flow s a 
-  = Flow {
+newtype Flow s a = 
+  Flow {
     unFlow :: (s -> Trace -> FlowWrapper s a)}
 
 _Flow = (Core.Name "hydra/compute.Flow")
 
-data FlowWrapper s a 
-  = FlowWrapper {
+data FlowWrapper s a = 
+  FlowWrapper {
     flowWrapperValue :: (Maybe a),
     flowWrapperState :: s,
     flowWrapperTrace :: Trace}
@@ -161,8 +161,8 @@ _FlowWrapper_state = (Core.FieldName "state")
 
 _FlowWrapper_trace = (Core.FieldName "trace")
 
-data Language m 
-  = Language {
+data Language m = 
+  Language {
     languageName :: LanguageName,
     languageConstraints :: (LanguageConstraints m)}
 
@@ -172,8 +172,8 @@ _Language_name = (Core.FieldName "name")
 
 _Language_constraints = (Core.FieldName "constraints")
 
-data LanguageConstraints m 
-  = LanguageConstraints {
+data LanguageConstraints m = 
+  LanguageConstraints {
     languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
     languageConstraintsLiteralVariants :: (Set Mantle.LiteralVariant),
     languageConstraintsFloatTypes :: (Set Core.FloatType),
@@ -201,16 +201,16 @@ _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 
 _LanguageConstraints_types = (Core.FieldName "types")
 
-newtype LanguageName 
-  = LanguageName {
+newtype LanguageName = 
+  LanguageName {
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _LanguageName = (Core.Name "hydra/compute.LanguageName")
 
 -- | A built-in metadata container for terms
-data Meta 
-  = Meta {
+data Meta = 
+  Meta {
     -- | A map of annotation names to annotation values
     metaAnnotations :: (Map String (Core.Term Meta))}
   deriving (Eq, Ord, Read, Show)
@@ -220,8 +220,8 @@ _Meta = (Core.Name "hydra/compute.Meta")
 _Meta_annotations = (Core.FieldName "annotations")
 
 -- | A built-in function
-data PrimitiveFunction m 
-  = PrimitiveFunction {
+data PrimitiveFunction m = 
+  PrimitiveFunction {
     primitiveFunctionName :: Core.Name,
     primitiveFunctionType :: (Core.FunctionType m),
     primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
@@ -235,8 +235,8 @@ _PrimitiveFunction_type = (Core.FieldName "type")
 _PrimitiveFunction_implementation = (Core.FieldName "implementation")
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
-data TermCoder m a 
-  = TermCoder {
+data TermCoder m a = 
+  TermCoder {
     termCoderType :: (Core.Type m),
     termCoderCoder :: (Coder (Context m) (Context m) (Core.Term m) a)}
 
@@ -247,8 +247,8 @@ _TermCoder_type = (Core.FieldName "type")
 _TermCoder_coder = (Core.FieldName "coder")
 
 -- | A container for logging and error information
-data Trace 
-  = Trace {
+data Trace = 
+  Trace {
     traceStack :: [String],
     traceMessages :: [String],
     -- | A map of string keys to arbitrary terms as values, for application-specific use
@@ -263,9 +263,11 @@ _Trace_messages = (Core.FieldName "messages")
 
 _Trace_other = (Core.FieldName "other")
 
-data TraversalOrder 
-  = TraversalOrderPre 
-  | TraversalOrderPost 
+data TraversalOrder = 
+  -- | Pre-order traversal
+  TraversalOrderPre  |
+  -- | Post-order traversal
+  TraversalOrderPost 
   deriving (Eq, Ord, Read, Show)
 
 _TraversalOrder = (Core.Name "hydra/compute.TraversalOrder")

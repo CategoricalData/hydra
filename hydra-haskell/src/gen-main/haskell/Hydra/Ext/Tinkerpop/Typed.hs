@@ -6,11 +6,11 @@ import Data.Map
 import Data.Set
 
 -- | The type of a collection, such as a list of strings or an optional integer value
-data CollectionType 
-  = CollectionTypeList Type
-  | CollectionTypeMap Type
-  | CollectionTypeOptional Type
-  | CollectionTypeSet Type
+data CollectionType = 
+  CollectionTypeList Type |
+  CollectionTypeMap Type |
+  CollectionTypeOptional Type |
+  CollectionTypeSet Type
   deriving (Eq, Ord, Read, Show)
 
 _CollectionType = (Core.Name "hydra/ext/tinkerpop/typed.CollectionType")
@@ -24,11 +24,11 @@ _CollectionType_optional = (Core.FieldName "optional")
 _CollectionType_set = (Core.FieldName "set")
 
 -- | A collection of values, such as a list of strings or an optional integer value
-data CollectionValue 
-  = CollectionValueList [Value]
-  | CollectionValueMap (Map Key Value)
-  | CollectionValueOptional (Maybe Value)
-  | CollectionValueSet (Set Value)
+data CollectionValue = 
+  CollectionValueList [Value] |
+  CollectionValueMap (Map Key Value) |
+  CollectionValueOptional (Maybe Value) |
+  CollectionValueSet (Set Value)
   deriving (Eq, Ord, Read, Show)
 
 _CollectionValue = (Core.Name "hydra/ext/tinkerpop/typed.CollectionValue")
@@ -42,8 +42,8 @@ _CollectionValue_optional = (Core.FieldName "optional")
 _CollectionValue_set = (Core.FieldName "set")
 
 -- | An edge, comprised of an id, an out-vertex and in-vertex id, and zero or more properties
-data Edge 
-  = Edge {
+data Edge = 
+  Edge {
     edgeId :: EdgeId,
     edgeLabel :: Label,
     edgeOut :: VertexId,
@@ -64,8 +64,8 @@ _Edge_in = (Core.FieldName "in")
 _Edge_properties = (Core.FieldName "properties")
 
 -- | A literal value representing an edge id
-newtype EdgeId 
-  = EdgeId {
+newtype EdgeId = 
+  EdgeId {
     -- | A literal value representing an edge id
     unEdgeId :: Core.Literal}
   deriving (Eq, Ord, Read, Show)
@@ -73,8 +73,8 @@ newtype EdgeId
 _EdgeId = (Core.Name "hydra/ext/tinkerpop/typed.EdgeId")
 
 -- | The type of a reference to an edge by id
-newtype EdgeIdType 
-  = EdgeIdType {
+newtype EdgeIdType = 
+  EdgeIdType {
     -- | The type of a reference to an edge by id
     unEdgeIdType :: EdgeType}
   deriving (Eq, Ord, Read, Show)
@@ -82,8 +82,8 @@ newtype EdgeIdType
 _EdgeIdType = (Core.Name "hydra/ext/tinkerpop/typed.EdgeIdType")
 
 -- | The type of an edge, with characteristic id, out-vertex, in-vertex, and property types
-data EdgeType 
-  = EdgeType {
+data EdgeType = 
+  EdgeType {
     edgeTypeId :: Core.LiteralType,
     edgeTypeOut :: VertexIdType,
     edgeTypeIn :: VertexIdType,
@@ -101,9 +101,9 @@ _EdgeType_in = (Core.FieldName "in")
 _EdgeType_properties = (Core.FieldName "properties")
 
 -- | A vertex or edge id
-data Id 
-  = IdVertex VertexId
-  | IdEdge EdgeId
+data Id = 
+  IdVertex VertexId |
+  IdEdge EdgeId
   deriving (Eq, Ord, Read, Show)
 
 _Id = (Core.Name "hydra/ext/tinkerpop/typed.Id")
@@ -113,9 +113,9 @@ _Id_vertex = (Core.FieldName "vertex")
 _Id_edge = (Core.FieldName "edge")
 
 -- | The type of a reference to a strongly-typed element (vertex or edge) by id
-data IdType 
-  = IdTypeVertex VertexType
-  | IdTypeEdge EdgeType
+data IdType = 
+  IdTypeVertex VertexType |
+  IdTypeEdge EdgeType
   deriving (Eq, Ord, Read, Show)
 
 _IdType = (Core.Name "hydra/ext/tinkerpop/typed.IdType")
@@ -125,8 +125,8 @@ _IdType_vertex = (Core.FieldName "vertex")
 _IdType_edge = (Core.FieldName "edge")
 
 -- | A property key or map key
-newtype Key 
-  = Key {
+newtype Key = 
+  Key {
     -- | A property key or map key
     unKey :: String}
   deriving (Eq, Ord, Read, Show)
@@ -134,8 +134,8 @@ newtype Key
 _Key = (Core.Name "hydra/ext/tinkerpop/typed.Key")
 
 -- | A vertex or edge label
-newtype Label 
-  = Label {
+newtype Label = 
+  Label {
     -- | A vertex or edge label
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
@@ -143,10 +143,10 @@ newtype Label
 _Label = (Core.Name "hydra/ext/tinkerpop/typed.Label")
 
 -- | The type of a value, such as a property value
-data Type 
-  = TypeLiteral Core.LiteralType
-  | TypeCollection CollectionType
-  | TypeElement IdType
+data Type = 
+  TypeLiteral Core.LiteralType |
+  TypeCollection CollectionType |
+  TypeElement IdType
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Core.Name "hydra/ext/tinkerpop/typed.Type")
@@ -158,10 +158,10 @@ _Type_collection = (Core.FieldName "collection")
 _Type_element = (Core.FieldName "element")
 
 -- | A concrete value such as a number or string, a collection of other values, or an element reference
-data Value 
-  = ValueLiteral Core.Literal
-  | ValueCollection CollectionValue
-  | ValueElement Id
+data Value = 
+  ValueLiteral Core.Literal |
+  ValueCollection CollectionValue |
+  ValueElement Id
   deriving (Eq, Ord, Read, Show)
 
 _Value = (Core.Name "hydra/ext/tinkerpop/typed.Value")
@@ -173,8 +173,8 @@ _Value_collection = (Core.FieldName "collection")
 _Value_element = (Core.FieldName "element")
 
 -- | A vertex, comprised of an id and zero or more properties
-data Vertex 
-  = Vertex {
+data Vertex = 
+  Vertex {
     vertexId :: VertexId,
     vertexLabel :: Label,
     vertexProperties :: (Map Key Value)}
@@ -189,8 +189,8 @@ _Vertex_label = (Core.FieldName "label")
 _Vertex_properties = (Core.FieldName "properties")
 
 -- | A literal value representing a vertex id
-newtype VertexId 
-  = VertexId {
+newtype VertexId = 
+  VertexId {
     -- | A literal value representing a vertex id
     unVertexId :: Core.Literal}
   deriving (Eq, Ord, Read, Show)
@@ -198,8 +198,8 @@ newtype VertexId
 _VertexId = (Core.Name "hydra/ext/tinkerpop/typed.VertexId")
 
 -- | The type of a reference to a vertex by id
-newtype VertexIdType 
-  = VertexIdType {
+newtype VertexIdType = 
+  VertexIdType {
     -- | The type of a reference to a vertex by id
     unVertexIdType :: VertexType}
   deriving (Eq, Ord, Read, Show)
@@ -207,8 +207,8 @@ newtype VertexIdType
 _VertexIdType = (Core.Name "hydra/ext/tinkerpop/typed.VertexIdType")
 
 -- | The type of a vertex, with characteristic id and property types
-data VertexType 
-  = VertexType {
+data VertexType = 
+  VertexType {
     vertexTypeId :: Core.LiteralType,
     vertexTypeProperties :: (Map Key Type)}
   deriving (Eq, Ord, Read, Show)

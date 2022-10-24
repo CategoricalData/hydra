@@ -9,8 +9,8 @@ import Data.Map
 import Data.Set
 
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
-data Module m 
-  = Module {
+data Module m = 
+  Module {
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
     -- | The elements defined in this module
@@ -32,8 +32,8 @@ _Module_dependencies = (Core.FieldName "dependencies")
 _Module_description = (Core.FieldName "description")
 
 -- | A prefix for element names
-newtype Namespace 
-  = Namespace {
+newtype Namespace = 
+  Namespace {
     -- | A prefix for element names
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)

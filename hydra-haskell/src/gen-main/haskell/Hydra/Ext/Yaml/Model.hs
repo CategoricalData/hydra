@@ -12,10 +12,10 @@ import Data.Map
 import Data.Set
 
 -- | A YAML node (value)
-data Node 
-  = NodeMapping (Map Node Node)
-  | NodeScalar Scalar
-  | NodeSequence [Node]
+data Node = 
+  NodeMapping (Map Node Node) |
+  NodeScalar Scalar |
+  NodeSequence [Node]
   deriving (Eq, Ord, Read, Show)
 
 _Node = (Core.Name "hydra/ext/yaml/model.Node")
@@ -27,12 +27,17 @@ _Node_scalar = (Core.FieldName "scalar")
 _Node_sequence = (Core.FieldName "sequence")
 
 -- | A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
-data Scalar 
-  = ScalarBool Bool
-  | ScalarFloat Double
-  | ScalarInt Integer
-  | ScalarNull 
-  | ScalarStr String
+data Scalar = 
+  -- | Represents a true/false value
+  ScalarBool Bool |
+  -- | Represents an approximation to real numbers
+  ScalarFloat Double |
+  -- | Represents arbitrary sized finite mathematical integers
+  ScalarInt Integer |
+  -- | Represents the lack of a value
+  ScalarNull  |
+  -- | A string value
+  ScalarStr String
   deriving (Eq, Ord, Read, Show)
 
 _Scalar = (Core.Name "hydra/ext/yaml/model.Scalar")
