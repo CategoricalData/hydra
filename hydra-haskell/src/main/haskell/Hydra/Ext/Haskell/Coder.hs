@@ -269,14 +269,14 @@ toTypeDeclarations namespaces el term = do
     decl <- case stripType t' of
       TypeRecord rt -> do
         cons <- recordCons lname $ rowTypeFields rt
-        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
+        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv]
       TypeUnion rt -> do
         cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
-        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
+        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
       _ -> if newtypesNotTypedefs
         then do
           cons <- newtypeCons el t'
-          return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv])
+          return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
         else do
           htype <- encodeAdaptedType namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
@@ -301,11 +301,12 @@ toTypeDeclarations namespaces el term = do
         htype <- encodeAdaptedType namespaces typ
         comments <- annotationClassTypeDescription (contextAnnotations cx) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
-        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]
+        return $ H.ConstructorWithComments
+          (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
 
     recordCons lname fields = do
         hFields <- CM.mapM toField fields
-        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
+        return $ H.ConstructorWithComments (H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields) Nothing
       where
         toField (FieldType (FieldName fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
@@ -316,10 +317,11 @@ toTypeDeclarations namespaces el term = do
 
     unionCons lname (FieldType (FieldName fname) ftype) = do
       cx <- getState
+      comments <- annotationClassTypeDescription (contextAnnotations cx) ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []
         else do
           htype <- encodeAdaptedType namespaces ftype
           return [htype]
-      return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
+      return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments

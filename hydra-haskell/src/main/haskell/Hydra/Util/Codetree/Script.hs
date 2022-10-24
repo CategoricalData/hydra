@@ -100,6 +100,17 @@ num = cst . show
 op :: String -> Int -> Associativity -> Op
 op s p = Op (Symbol s) (Padding WsSpace WsSpace) (Precedence p)
 
+orOp :: Bool -> Op
+orOp newlines = Op (sym "|") (Padding WsSpace (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
+
+orSep :: BlockStyle -> [Expr] -> Expr
+orSep style l = case l of
+  [] -> cst ""
+  [x] -> x
+  (h:r) -> ifx (orOp newlines) h $ orSep style r
+  where
+    newlines = blockStyleNewlineBeforeContent style
+
 parenList :: Bool -> [Expr] -> Expr
 parenList newlines els = case els of
     [] -> cst "()"
