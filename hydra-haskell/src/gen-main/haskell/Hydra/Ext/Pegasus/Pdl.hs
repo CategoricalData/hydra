@@ -10,8 +10,8 @@ import Data.Map
 import Data.Set
 
 -- | Annotations which can be applied to record fields, aliased union members, enum symbols, or named schemas
-data Annotations 
-  = Annotations {
+data Annotations = 
+  Annotations {
     annotationsDoc :: (Maybe String),
     annotationsDeprecated :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -22,8 +22,8 @@ _Annotations_doc = (Core.FieldName "doc")
 
 _Annotations_deprecated = (Core.FieldName "deprecated")
 
-data EnumField 
-  = EnumField {
+data EnumField = 
+  EnumField {
     enumFieldName :: EnumFieldName,
     enumFieldAnnotations :: Annotations}
   deriving (Eq, Ord, Read, Show)
@@ -34,15 +34,15 @@ _EnumField_name = (Core.FieldName "name")
 
 _EnumField_annotations = (Core.FieldName "annotations")
 
-newtype EnumFieldName 
-  = EnumFieldName {
+newtype EnumFieldName = 
+  EnumFieldName {
     unEnumFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _EnumFieldName = (Core.Name "hydra/ext/pegasus/pdl.EnumFieldName")
 
-data EnumSchema 
-  = EnumSchema {
+data EnumSchema = 
+  EnumSchema {
     enumSchemaFields :: [EnumField]}
   deriving (Eq, Ord, Read, Show)
 
@@ -50,15 +50,15 @@ _EnumSchema = (Core.Name "hydra/ext/pegasus/pdl.EnumSchema")
 
 _EnumSchema_fields = (Core.FieldName "fields")
 
-newtype FieldName 
-  = FieldName {
+newtype FieldName = 
+  FieldName {
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _FieldName = (Core.Name "hydra/ext/pegasus/pdl.FieldName")
 
-data NamedSchema 
-  = NamedSchema {
+data NamedSchema = 
+  NamedSchema {
     namedSchemaQualifiedName :: QualifiedName,
     namedSchemaType :: NamedSchema_Type,
     namedSchemaAnnotations :: Annotations}
@@ -72,10 +72,10 @@ _NamedSchema_type = (Core.FieldName "type")
 
 _NamedSchema_annotations = (Core.FieldName "annotations")
 
-data NamedSchema_Type 
-  = NamedSchema_TypeRecord RecordSchema
-  | NamedSchema_TypeEnum EnumSchema
-  | NamedSchema_TypeTyperef Schema
+data NamedSchema_Type = 
+  NamedSchema_TypeRecord RecordSchema |
+  NamedSchema_TypeEnum EnumSchema |
+  NamedSchema_TypeTyperef Schema
   deriving (Eq, Ord, Read, Show)
 
 _NamedSchema_Type = (Core.Name "hydra/ext/pegasus/pdl.NamedSchema.Type")
@@ -86,35 +86,35 @@ _NamedSchema_Type_enum = (Core.FieldName "enum")
 
 _NamedSchema_Type_typeref = (Core.FieldName "typeref")
 
-newtype Name 
-  = Name {
+newtype Name = 
+  Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Core.Name "hydra/ext/pegasus/pdl.Name")
 
-newtype Namespace 
-  = Namespace {
+newtype Namespace = 
+  Namespace {
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Namespace = (Core.Name "hydra/ext/pegasus/pdl.Namespace")
 
-newtype Package 
-  = Package {
+newtype Package = 
+  Package {
     unPackage :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Package = (Core.Name "hydra/ext/pegasus/pdl.Package")
 
-data PrimitiveType 
-  = PrimitiveTypeBoolean 
-  | PrimitiveTypeBytes 
-  | PrimitiveTypeDouble 
-  | PrimitiveTypeFloat 
-  | PrimitiveTypeInt 
-  | PrimitiveTypeLong 
-  | PrimitiveTypeString 
+data PrimitiveType = 
+  PrimitiveTypeBoolean  |
+  PrimitiveTypeBytes  |
+  PrimitiveTypeDouble  |
+  PrimitiveTypeFloat  |
+  PrimitiveTypeInt  |
+  PrimitiveTypeLong  |
+  PrimitiveTypeString 
   deriving (Eq, Ord, Read, Show)
 
 _PrimitiveType = (Core.Name "hydra/ext/pegasus/pdl.PrimitiveType")
@@ -133,15 +133,15 @@ _PrimitiveType_long = (Core.FieldName "long")
 
 _PrimitiveType_string = (Core.FieldName "string")
 
-newtype PropertyKey 
-  = PropertyKey {
+newtype PropertyKey = 
+  PropertyKey {
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PropertyKey = (Core.Name "hydra/ext/pegasus/pdl.PropertyKey")
 
-data Property 
-  = Property {
+data Property = 
+  Property {
     propertyKey :: PropertyKey,
     propertyValue :: (Maybe Model.Value)}
   deriving (Eq, Ord, Read, Show)
@@ -152,8 +152,8 @@ _Property_key = (Core.FieldName "key")
 
 _Property_value = (Core.FieldName "value")
 
-data QualifiedName 
-  = QualifiedName {
+data QualifiedName = 
+  QualifiedName {
     qualifiedNameName :: Name,
     qualifiedNameNamespace :: (Maybe Namespace)}
   deriving (Eq, Ord, Read, Show)
@@ -164,8 +164,8 @@ _QualifiedName_name = (Core.FieldName "name")
 
 _QualifiedName_namespace = (Core.FieldName "namespace")
 
-data RecordField 
-  = RecordField {
+data RecordField = 
+  RecordField {
     recordFieldName :: FieldName,
     recordFieldValue :: Schema,
     recordFieldOptional :: Bool,
@@ -185,8 +185,8 @@ _RecordField_default = (Core.FieldName "default")
 
 _RecordField_annotations = (Core.FieldName "annotations")
 
-data RecordSchema 
-  = RecordSchema {
+data RecordSchema = 
+  RecordSchema {
     recordSchemaFields :: [RecordField],
     recordSchemaIncludes :: [NamedSchema]}
   deriving (Eq, Ord, Read, Show)
@@ -197,15 +197,15 @@ _RecordSchema_fields = (Core.FieldName "fields")
 
 _RecordSchema_includes = (Core.FieldName "includes")
 
-data Schema 
-  = SchemaArray Schema
-  | SchemaFixed Int
-  | SchemaInline NamedSchema
-  | SchemaMap Schema
-  | SchemaNamed QualifiedName
-  | SchemaNull 
-  | SchemaPrimitive PrimitiveType
-  | SchemaUnion UnionSchema
+data Schema = 
+  SchemaArray Schema |
+  SchemaFixed Int |
+  SchemaInline NamedSchema |
+  SchemaMap Schema |
+  SchemaNamed QualifiedName |
+  SchemaNull  |
+  SchemaPrimitive PrimitiveType |
+  SchemaUnion UnionSchema
   deriving (Eq, Ord, Read, Show)
 
 _Schema = (Core.Name "hydra/ext/pegasus/pdl.Schema")
@@ -226,8 +226,8 @@ _Schema_primitive = (Core.FieldName "primitive")
 
 _Schema_union = (Core.FieldName "union")
 
-data SchemaFile 
-  = SchemaFile {
+data SchemaFile = 
+  SchemaFile {
     schemaFileNamespace :: Namespace,
     schemaFilePackage :: (Maybe Package),
     schemaFileImports :: [QualifiedName],
@@ -244,8 +244,8 @@ _SchemaFile_imports = (Core.FieldName "imports")
 
 _SchemaFile_schemas = (Core.FieldName "schemas")
 
-data UnionMember 
-  = UnionMember {
+data UnionMember = 
+  UnionMember {
     unionMemberAlias :: (Maybe FieldName),
     unionMemberValue :: Schema,
     unionMemberAnnotations :: Annotations}
@@ -259,8 +259,8 @@ _UnionMember_value = (Core.FieldName "value")
 
 _UnionMember_annotations = (Core.FieldName "annotations")
 
-newtype UnionSchema 
-  = UnionSchema {
+newtype UnionSchema = 
+  UnionSchema {
     unUnionSchema :: [UnionMember]}
   deriving (Eq, Ord, Read, Show)
 

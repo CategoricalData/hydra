@@ -8,13 +8,13 @@ import Data.Map
 import Data.Set
 
 -- | A JSON value
-data Value 
-  = ValueArray [Value]
-  | ValueBoolean Bool
-  | ValueNull 
-  | ValueNumber Double
-  | ValueObject (Map String Value)
-  | ValueString String
+data Value = 
+  ValueArray [Value] |
+  ValueBoolean Bool |
+  ValueNull  |
+  ValueNumber Double |
+  ValueObject (Map String Value) |
+  ValueString String
   deriving (Eq, Ord, Read, Show)
 
 _Value = (Core.Name "hydra/ext/json/model.Value")
