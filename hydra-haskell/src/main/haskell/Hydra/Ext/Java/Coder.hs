@@ -61,7 +61,7 @@ elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQ
     (ns, local) = toQnameEager name
 
 moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
-moduleToJavaCompilationUnit mod = transformModule language (encodeTerm aliases Nothing) constructModule mod
+moduleToJavaCompilationUnit mod = transformModule javaLanguage (encodeTerm aliases Nothing) constructModule mod
   where
     aliases = importAliasesForModule mod
 
@@ -261,7 +261,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
 declarationForType :: (Ord m, Read m, Show m)
   => Aliases -> (Element m, TypedTerm m) -> GraphFlow m Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = do
-    t <- decodeType term >>= adaptType language
+    t <- decodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False aliases [] (elementName el) t
     cx <- getState
     comments <- commentsFromElement el

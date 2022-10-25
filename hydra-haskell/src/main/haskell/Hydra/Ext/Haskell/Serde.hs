@@ -54,10 +54,6 @@ instance ToTree H.Declaration where
           where
             h (H.Deriving names) = names
         constructors = orSep halfBlockStyle (toTree <$> cons)
---        consLines = L.zipWith consLine cons [0..]
---        consLine c i = spaceSep [symb, toTree c]
---          where
---            symb = cst $ if i == 0 then "=" else "|"
     H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", toTree hd, cst "=", toTree typ]
     H.DeclarationValueBinding vb -> toTree vb
     H.DeclarationTypedBinding (H.TypedBinding (H.TypeSignature name htype) vb) -> newlineSep [ -- TODO: local bindings
@@ -208,7 +204,7 @@ instance ToTree H.ValueBinding where
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
 
-toHaskellComments :: String -> [Char]
+toHaskellComments :: String -> String
 toHaskellComments c = L.intercalate "\n" $ ("-- | " ++) <$> L.lines c
 
 writeQualifiedName :: H.QualifiedName -> String

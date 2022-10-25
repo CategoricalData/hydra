@@ -28,7 +28,7 @@ printModule mod = do
   return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
 
 moduleToScalaPackage :: (Ord m, Read m, Show m) => Module m -> GraphFlow m Scala.Pkg
-moduleToScalaPackage = transformModule language encodeUntypedTerm constructModule
+moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
 
 constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> GraphFlow m Scala.Pkg

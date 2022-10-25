@@ -76,7 +76,7 @@ constructModule mod coders pairs = do
             toImport name = H.Import False name Nothing Nothing
 
 encodeAdaptedType :: (Ord m, Read m, Show m) => Namespaces -> Type m -> GraphFlow m H.Type
-encodeAdaptedType namespaces typ = adaptType language typ >>= encodeType namespaces
+encodeAdaptedType namespaces typ = adaptType haskellLanguage typ >>= encodeType namespaces
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Function m -> GraphFlow m H.Expression
 encodeFunction namespaces fun = case fun of
@@ -220,7 +220,7 @@ encodeType namespaces typ = case stripType typ of
     nominal name = pure $ H.TypeVariable $ elementReference namespaces name
 
 moduleToHaskellModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m H.Module
-moduleToHaskellModule mod = transformModule language (encodeTerm namespaces) constructModule mod
+moduleToHaskellModule mod = transformModule haskellLanguage (encodeTerm namespaces) constructModule mod
   where
     namespaces = namespacesForModule mod
 

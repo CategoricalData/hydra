@@ -61,7 +61,7 @@ constructModule mod coders pairs = do
       return $ PDL.NamedSchema qname ptype anns
 
 moduleToPegasusSchemas :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
-moduleToPegasusSchemas mod = transformModule language (encodeTerm aliases) constructModule mod
+moduleToPegasusSchemas mod = transformModule pdlLanguage (encodeTerm aliases) constructModule mod
   where
     aliases = importAliasesForModule mod
 
@@ -73,7 +73,7 @@ encodeAdaptedType :: (Ord m, Read m, Show m)
   -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
   cx <- getState
-  let acx = AdapterContext cx hydraCoreLanguage language
+  let acx = AdapterContext cx hydraCoreLanguage pdlLanguage
   ad <- withState acx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
