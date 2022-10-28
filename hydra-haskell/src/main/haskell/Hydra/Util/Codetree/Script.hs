@@ -21,16 +21,17 @@ bracketList style els = case els of
 brackets :: Brackets -> BlockStyle -> Expr -> Expr
 brackets br style e = ExprBrackets $ BracketExpr br e style
 
-commaOp :: Bool -> Op
-commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
-
 commaSep :: BlockStyle -> [Expr] -> Expr
 commaSep style l = case l of
-  [] -> cst ""
-  [x] -> x
-  (h:r) -> ifx (commaOp newlines) h $ commaSep style r
+    [] -> cst ""
+    [x] -> x
+    (h:r) -> ifx commaOp h $ commaSep style r
   where
-    newlines = blockStyleNewlineBeforeContent style
+    break = case L.length $ L.filter id [blockStyleNewlineBeforeContent style, blockStyleNewlineAfterContent style] of
+      0 -> WsSpace
+      1 -> WsBreak
+      2 -> WsDoubleBreak
+    commaOp = Op (sym ",") (Padding WsNone break) (Precedence 0) AssociativityNone -- No source
 
 curlyBlock :: BlockStyle -> Expr -> Expr
 curlyBlock style e = curlyBracesList style [e]
@@ -169,6 +170,7 @@ printExpr e = case e of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
+        WsDoubleBreak -> "\n\n"
   ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e style) ->
       l ++ pre ++ ibody ++ suf ++ r
     where
