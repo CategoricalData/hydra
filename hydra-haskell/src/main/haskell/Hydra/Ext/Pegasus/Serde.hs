@@ -45,8 +45,8 @@ exprQualifiedName (PDL.QualifiedName (PDL.Name name) ns) = cst $ L.intercalate "
 exprRecordField :: PDL.RecordField -> CT.Expr
 exprRecordField (PDL.RecordField (PDL.FieldName name) schema optional def anns) = withAnnotations anns $
   spaceSep $ Y.catMaybes [ -- TODO: default
-    if optional then Just (cst "optional") else Nothing,
     Just $ cst $ name ++ ":",
+    if optional then Just (cst "optional") else Nothing,
     Just $ exprSchema schema]
 
 exprSchema :: PDL.Schema -> CT.Expr

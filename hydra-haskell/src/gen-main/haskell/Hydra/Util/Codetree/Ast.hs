@@ -156,7 +156,8 @@ data Ws =
   WsNone  |
   WsSpace  |
   WsBreak  |
-  WsBreakAndIndent 
+  WsBreakAndIndent  |
+  WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 
 _Ws = (Core.Name "hydra/util/codetree/ast.Ws")
@@ -168,3 +169,5 @@ _Ws_space = (Core.FieldName "space")
 _Ws_break = (Core.FieldName "break")
 
 _Ws_breakAndIndent = (Core.FieldName "breakAndIndent")
+
+_Ws_doubleBreak = (Core.FieldName "doubleBreak")
