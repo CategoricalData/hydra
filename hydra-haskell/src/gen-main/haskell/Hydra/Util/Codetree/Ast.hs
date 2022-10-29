@@ -8,11 +8,11 @@ import Data.Map
 import Data.Set
 
 -- | Operator associativity
-data Associativity 
-  = AssociativityNone 
-  | AssociativityLeft 
-  | AssociativityRight 
-  | AssociativityBoth 
+data Associativity = 
+  AssociativityNone  |
+  AssociativityLeft  |
+  AssociativityRight  |
+  AssociativityBoth 
   deriving (Eq, Ord, Read, Show)
 
 _Associativity = (Core.Name "hydra/util/codetree/ast.Associativity")
@@ -26,8 +26,8 @@ _Associativity_right = (Core.FieldName "right")
 _Associativity_both = (Core.FieldName "both")
 
 -- | Formatting option for code blocks
-data BlockStyle 
-  = BlockStyle {
+data BlockStyle = 
+  BlockStyle {
     blockStyleIndent :: Bool,
     blockStyleNewlineBeforeContent :: Bool,
     blockStyleNewlineAfterContent :: Bool}
@@ -42,8 +42,8 @@ _BlockStyle_newlineBeforeContent = (Core.FieldName "newlineBeforeContent")
 _BlockStyle_newlineAfterContent = (Core.FieldName "newlineAfterContent")
 
 -- | An expression enclosed by brackets
-data BracketExpr 
-  = BracketExpr {
+data BracketExpr = 
+  BracketExpr {
     bracketExprBrackets :: Brackets,
     bracketExprEnclosed :: Expr,
     bracketExprStyle :: BlockStyle}
@@ -58,8 +58,8 @@ _BracketExpr_enclosed = (Core.FieldName "enclosed")
 _BracketExpr_style = (Core.FieldName "style")
 
 -- | Matching open and close bracket symbols
-data Brackets 
-  = Brackets {
+data Brackets = 
+  Brackets {
     bracketsOpen :: Symbol,
     bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
@@ -71,10 +71,10 @@ _Brackets_open = (Core.FieldName "open")
 _Brackets_close = (Core.FieldName "close")
 
 -- | An abstract expression
-data Expr 
-  = ExprConst Symbol
-  | ExprOp OpExpr
-  | ExprBrackets BracketExpr
+data Expr = 
+  ExprConst Symbol |
+  ExprOp OpExpr |
+  ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
 
 _Expr = (Core.Name "hydra/util/codetree/ast.Expr")
@@ -86,8 +86,8 @@ _Expr_op = (Core.FieldName "op")
 _Expr_brackets = (Core.FieldName "brackets")
 
 -- | An operator symbol
-data Op 
-  = Op {
+data Op = 
+  Op {
     opSymbol :: Symbol,
     opPadding :: Padding,
     opPrecedence :: Precedence,
@@ -105,8 +105,8 @@ _Op_precedence = (Core.FieldName "precedence")
 _Op_associativity = (Core.FieldName "associativity")
 
 -- | An operator expression
-data OpExpr 
-  = OpExpr {
+data OpExpr = 
+  OpExpr {
     opExprOp :: Op,
     opExprLhs :: Expr,
     opExprRhs :: Expr}
@@ -121,8 +121,8 @@ _OpExpr_lhs = (Core.FieldName "lhs")
 _OpExpr_rhs = (Core.FieldName "rhs")
 
 -- | Left and right padding for an operator
-data Padding 
-  = Padding {
+data Padding = 
+  Padding {
     paddingLeft :: Ws,
     paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
@@ -134,8 +134,8 @@ _Padding_left = (Core.FieldName "left")
 _Padding_right = (Core.FieldName "right")
 
 -- | Operator precedence
-newtype Precedence 
-  = Precedence {
+newtype Precedence = 
+  Precedence {
     -- | Operator precedence
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
@@ -143,8 +143,8 @@ newtype Precedence
 _Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
 
 -- | Any symbol
-newtype Symbol 
-  = Symbol {
+newtype Symbol = 
+  Symbol {
     -- | Any symbol
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
@@ -152,11 +152,12 @@ newtype Symbol
 _Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")
 
 -- | One of several classes of whitespace
-data Ws 
-  = WsNone 
-  | WsSpace 
-  | WsBreak 
-  | WsBreakAndIndent 
+data Ws = 
+  WsNone  |
+  WsSpace  |
+  WsBreak  |
+  WsBreakAndIndent  |
+  WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 
 _Ws = (Core.Name "hydra/util/codetree/ast.Ws")
@@ -168,3 +169,5 @@ _Ws_space = (Core.FieldName "space")
 _Ws_break = (Core.FieldName "break")
 
 _Ws_breakAndIndent = (Core.FieldName "breakAndIndent")
+
+_Ws_doubleBreak = (Core.FieldName "doubleBreak")

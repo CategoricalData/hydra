@@ -7,29 +7,29 @@ import Data.List
 import Data.Map
 import Data.Set
 
-newtype Constant 
-  = Constant {
+newtype Constant = 
+  Constant {
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Constant = (Core.Name "hydra/grammar.Constant")
 
-newtype Grammar 
-  = Grammar {
+newtype Grammar = 
+  Grammar {
     unGrammar :: [Production]}
   deriving (Eq, Ord, Read, Show)
 
 _Grammar = (Core.Name "hydra/grammar.Grammar")
 
-newtype Label 
-  = Label {
+newtype Label = 
+  Label {
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Label = (Core.Name "hydra/grammar.Label")
 
-data LabeledPattern 
-  = LabeledPattern {
+data LabeledPattern = 
+  LabeledPattern {
     labeledPatternLabel :: Label,
     labeledPatternPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
@@ -40,18 +40,18 @@ _LabeledPattern_label = (Core.FieldName "label")
 
 _LabeledPattern_pattern = (Core.FieldName "pattern")
 
-data Pattern 
-  = PatternNil 
-  | PatternIgnored Pattern
-  | PatternLabeled LabeledPattern
-  | PatternConstant Constant
-  | PatternRegex Regex
-  | PatternNonterminal Symbol
-  | PatternSequence [Pattern]
-  | PatternAlternatives [Pattern]
-  | PatternOption Pattern
-  | PatternStar Pattern
-  | PatternPlus Pattern
+data Pattern = 
+  PatternNil  |
+  PatternIgnored Pattern |
+  PatternLabeled LabeledPattern |
+  PatternConstant Constant |
+  PatternRegex Regex |
+  PatternNonterminal Symbol |
+  PatternSequence [Pattern] |
+  PatternAlternatives [Pattern] |
+  PatternOption Pattern |
+  PatternStar Pattern |
+  PatternPlus Pattern
   deriving (Eq, Ord, Read, Show)
 
 _Pattern = (Core.Name "hydra/grammar.Pattern")
@@ -78,8 +78,8 @@ _Pattern_star = (Core.FieldName "star")
 
 _Pattern_plus = (Core.FieldName "plus")
 
-data Production 
-  = Production {
+data Production = 
+  Production {
     productionSymbol :: Symbol,
     productionPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
@@ -90,15 +90,15 @@ _Production_symbol = (Core.FieldName "symbol")
 
 _Production_pattern = (Core.FieldName "pattern")
 
-newtype Regex 
-  = Regex {
+newtype Regex = 
+  Regex {
     unRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Regex = (Core.Name "hydra/grammar.Regex")
 
-newtype Symbol 
-  = Symbol {
+newtype Symbol = 
+  Symbol {
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 

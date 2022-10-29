@@ -10,7 +10,7 @@ import qualified Data.Maybe as Y
 getAttr :: String -> Flow s (Maybe (Term Meta))
 getAttr key = Flow q
   where
-    q s0 t0 = FlowWrapper (Just $ M.lookup key $ traceOther t0) s0 t0
+    q s0 t0 = FlowState (Just $ M.lookup key $ traceOther t0) s0 t0
 
 getAttrWithDefault :: String -> Term Meta -> Flow s (Term Meta)
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
@@ -24,4 +24,4 @@ nextCount attrName = do
 putAttr :: String -> Term Meta -> Flow s ()
 putAttr key val = Flow q
   where
-    q s0 t0 = FlowWrapper (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
+    q s0 t0 = FlowState (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
