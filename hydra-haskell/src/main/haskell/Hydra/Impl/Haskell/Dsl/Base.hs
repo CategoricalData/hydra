@@ -26,6 +26,10 @@ el (Definition name (Datum term)) = Element name (encodeType dummyType) term
   where
     dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
 
+infixr 0 >:
+(>:) :: String -> Datum a -> Fld a
+n >: d = Fld $ Field (FieldName n) (unDatum d)
+
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
 
