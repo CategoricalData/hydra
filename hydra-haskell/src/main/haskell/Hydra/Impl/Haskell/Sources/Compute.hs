@@ -91,9 +91,9 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "Flow" $
         doc "A variant of the State monad with built-in logging and error handling" $
         lambda "s" $ lambda "a" $
-        function "s" (compute "Trace" --> compute "FlowWrapper" @@ "s" @@ "a"),
+        function "s" (compute "Trace" --> compute "FlowState" @@ "s" @@ "a"),
 
-      def "FlowWrapper" $
+      def "FlowState" $
         lambda "s" $ lambda "a" $ record [
           "value">: optional "a",
           "state">: "s",

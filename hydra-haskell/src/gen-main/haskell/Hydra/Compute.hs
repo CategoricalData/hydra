@@ -142,24 +142,24 @@ _EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 -- | A variant of the State monad with built-in logging and error handling
 newtype Flow s a = 
   Flow {
-    unFlow :: (s -> Trace -> FlowWrapper s a)}
+    unFlow :: (s -> Trace -> FlowState s a)}
 
 _Flow = (Core.Name "hydra/compute.Flow")
 
-data FlowWrapper s a = 
-  FlowWrapper {
-    flowWrapperValue :: (Maybe a),
-    flowWrapperState :: s,
-    flowWrapperTrace :: Trace}
+data FlowState s a = 
+  FlowState {
+    flowStateValue :: (Maybe a),
+    flowStateState :: s,
+    flowStateTrace :: Trace}
   deriving (Eq, Ord, Read, Show)
 
-_FlowWrapper = (Core.Name "hydra/compute.FlowWrapper")
+_FlowState = (Core.Name "hydra/compute.FlowState")
 
-_FlowWrapper_value = (Core.FieldName "value")
+_FlowState_value = (Core.FieldName "value")
 
-_FlowWrapper_state = (Core.FieldName "state")
+_FlowState_state = (Core.FieldName "state")
 
-_FlowWrapper_trace = (Core.FieldName "trace")
+_FlowState_trace = (Core.FieldName "trace")
 
 data Language m = 
   Language {

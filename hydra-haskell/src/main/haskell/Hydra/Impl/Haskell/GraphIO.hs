@@ -148,7 +148,7 @@ printTrace isError t = do
 
 runFlow :: s -> Flow s a -> IO (Maybe a)
 runFlow cx f = do
-  let FlowWrapper v _ t = unFlow f cx emptyTrace
+  let FlowState v _ t = unFlow f cx emptyTrace
   printTrace (Y.isNothing v) t
   return v
 

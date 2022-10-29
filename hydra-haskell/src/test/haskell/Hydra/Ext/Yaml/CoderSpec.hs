@@ -102,7 +102,7 @@ checkYamlCoder typ term node = case mstep of
       shouldSucceedWith (coderEncode step term) node
       shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
-    FlowWrapper mstep _ trace = unFlow (yamlCoder typ) testContext emptyTrace
+    FlowState mstep _ trace = unFlow (yamlCoder typ) testContext emptyTrace
 
 yamlBool :: Bool -> YM.Node
 yamlBool = YM.NodeScalar . YM.ScalarBool
