@@ -55,13 +55,19 @@ haskellAstModule = Module ns elements [] $
           "name">: ast "Name",
           "fields">: list $ ast "FieldWithComments"],
 
+      def "ConstructorWithComments" $
+        doc "A data constructor together with any comments" $
+        record [
+          "body">: ast "Constructor",
+          "comments">: optional string],
+
       def "DataDeclaration" $ -- UDataDecl
         doc "A data type declaration" $
         record [
           "keyword">: ast "DataDeclaration.Keyword",
           "context">: list $ ast "Assertion",
           "head">: ast "DeclarationHead",
-          "constructors">: list $ ast "Constructor",
+          "constructors">: list $ ast "ConstructorWithComments",
           "deriving">: list $ ast "Deriving"],
 
       def "DataDeclaration.Keyword" $

@@ -8,10 +8,10 @@ import Data.Map
 import Data.Set
 
 -- | An equality judgement: less than, equal to, or greater than
-data Comparison 
-  = ComparisonLessThan 
-  | ComparisonEqualTo 
-  | ComparisonGreaterThan 
+data Comparison = 
+  ComparisonLessThan  |
+  ComparisonEqualTo  |
+  ComparisonGreaterThan 
   deriving (Eq, Ord, Read, Show)
 
 _Comparison = (Core.Name "hydra/mantle.Comparison")
@@ -23,8 +23,8 @@ _Comparison_equalTo = (Core.FieldName "equalTo")
 _Comparison_greaterThan = (Core.FieldName "greaterThan")
 
 -- | A graph element, having a name, data term (value), and schema term (type)
-data Element m 
-  = Element {
+data Element m = 
+  Element {
     elementName :: Core.Name,
     elementSchema :: (Core.Term m),
     elementData :: (Core.Term m)}
@@ -39,13 +39,13 @@ _Element_schema = (Core.FieldName "schema")
 _Element_data = (Core.FieldName "data")
 
 -- | The identifier of an elimination constructor
-data EliminationVariant 
-  = EliminationVariantElement 
-  | EliminationVariantList 
-  | EliminationVariantNominal 
-  | EliminationVariantOptional 
-  | EliminationVariantRecord 
-  | EliminationVariantUnion 
+data EliminationVariant = 
+  EliminationVariantElement  |
+  EliminationVariantList  |
+  EliminationVariantNominal  |
+  EliminationVariantOptional  |
+  EliminationVariantRecord  |
+  EliminationVariantUnion 
   deriving (Eq, Ord, Read, Show)
 
 _EliminationVariant = (Core.Name "hydra/mantle.EliminationVariant")
@@ -63,11 +63,11 @@ _EliminationVariant_record = (Core.FieldName "record")
 _EliminationVariant_union = (Core.FieldName "union")
 
 -- | The identifier of a function constructor
-data FunctionVariant 
-  = FunctionVariantCompareTo 
-  | FunctionVariantElimination 
-  | FunctionVariantLambda 
-  | FunctionVariantPrimitive 
+data FunctionVariant = 
+  FunctionVariantCompareTo  |
+  FunctionVariantElimination  |
+  FunctionVariantLambda  |
+  FunctionVariantPrimitive 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = (Core.Name "hydra/mantle.FunctionVariant")
@@ -81,8 +81,8 @@ _FunctionVariant_lambda = (Core.FieldName "lambda")
 _FunctionVariant_primitive = (Core.FieldName "primitive")
 
 -- | A graph, or set of named terms, together with its schema graph
-data Graph m 
-  = Graph {
+data Graph m = 
+  Graph {
     -- | All of the elements in the graph
     graphElements :: (Map Core.Name (Element m)),
     -- | The schema graph to this graph. If omitted, the graph is its own schema graph.
@@ -96,12 +96,12 @@ _Graph_elements = (Core.FieldName "elements")
 _Graph_schema = (Core.FieldName "schema")
 
 -- | The identifier of a literal constructor
-data LiteralVariant 
-  = LiteralVariantBinary 
-  | LiteralVariantBoolean 
-  | LiteralVariantFloat 
-  | LiteralVariantInteger 
-  | LiteralVariantString 
+data LiteralVariant = 
+  LiteralVariantBinary  |
+  LiteralVariantBoolean  |
+  LiteralVariantFloat  |
+  LiteralVariantInteger  |
+  LiteralVariantString 
   deriving (Eq, Ord, Read, Show)
 
 _LiteralVariant = (Core.Name "hydra/mantle.LiteralVariant")
@@ -117,9 +117,9 @@ _LiteralVariant_integer = (Core.FieldName "integer")
 _LiteralVariant_string = (Core.FieldName "string")
 
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
-data Precision 
-  = PrecisionArbitrary 
-  | PrecisionBits Int
+data Precision = 
+  PrecisionArbitrary  |
+  PrecisionBits Int
   deriving (Eq, Ord, Read, Show)
 
 _Precision = (Core.Name "hydra/mantle.Precision")
@@ -129,23 +129,23 @@ _Precision_arbitrary = (Core.FieldName "arbitrary")
 _Precision_bits = (Core.FieldName "bits")
 
 -- | The identifier of a term expression constructor
-data TermVariant 
-  = TermVariantAnnotated 
-  | TermVariantApplication 
-  | TermVariantElement 
-  | TermVariantFunction 
-  | TermVariantLet 
-  | TermVariantList 
-  | TermVariantLiteral 
-  | TermVariantMap 
-  | TermVariantNominal 
-  | TermVariantOptional 
-  | TermVariantProduct 
-  | TermVariantRecord 
-  | TermVariantSet 
-  | TermVariantSum 
-  | TermVariantUnion 
-  | TermVariantVariable 
+data TermVariant = 
+  TermVariantAnnotated  |
+  TermVariantApplication  |
+  TermVariantElement  |
+  TermVariantFunction  |
+  TermVariantLet  |
+  TermVariantList  |
+  TermVariantLiteral  |
+  TermVariantMap  |
+  TermVariantNominal  |
+  TermVariantOptional  |
+  TermVariantProduct  |
+  TermVariantRecord  |
+  TermVariantSet  |
+  TermVariantSum  |
+  TermVariantUnion  |
+  TermVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
 _TermVariant = (Core.Name "hydra/mantle.TermVariant")
@@ -183,8 +183,8 @@ _TermVariant_union = (Core.FieldName "union")
 _TermVariant_variable = (Core.FieldName "variable")
 
 -- | A type expression together with free type variables occurring in the expression
-data TypeScheme m 
-  = TypeScheme {
+data TypeScheme m = 
+  TypeScheme {
     typeSchemeVariables :: [Core.VariableType],
     typeSchemeType :: (Core.Type m)}
   deriving (Eq, Ord, Read, Show)
@@ -196,23 +196,23 @@ _TypeScheme_variables = (Core.FieldName "variables")
 _TypeScheme_type = (Core.FieldName "type")
 
 -- | The identifier of a type constructor
-data TypeVariant 
-  = TypeVariantAnnotated 
-  | TypeVariantApplication 
-  | TypeVariantElement 
-  | TypeVariantFunction 
-  | TypeVariantLambda 
-  | TypeVariantList 
-  | TypeVariantLiteral 
-  | TypeVariantMap 
-  | TypeVariantNominal 
-  | TypeVariantOptional 
-  | TypeVariantProduct 
-  | TypeVariantRecord 
-  | TypeVariantSet 
-  | TypeVariantSum 
-  | TypeVariantUnion 
-  | TypeVariantVariable 
+data TypeVariant = 
+  TypeVariantAnnotated  |
+  TypeVariantApplication  |
+  TypeVariantElement  |
+  TypeVariantFunction  |
+  TypeVariantLambda  |
+  TypeVariantList  |
+  TypeVariantLiteral  |
+  TypeVariantMap  |
+  TypeVariantNominal  |
+  TypeVariantOptional  |
+  TypeVariantProduct  |
+  TypeVariantRecord  |
+  TypeVariantSet  |
+  TypeVariantSum  |
+  TypeVariantUnion  |
+  TypeVariantVariable 
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = (Core.Name "hydra/mantle.TypeVariant")
@@ -250,8 +250,8 @@ _TypeVariant_union = (Core.FieldName "union")
 _TypeVariant_variable = (Core.FieldName "variable")
 
 -- | A type together with an instance of the type
-data TypedTerm m 
-  = TypedTerm {
+data TypedTerm m = 
+  TypedTerm {
     typedTermType :: (Core.Type m),
     typedTermTerm :: (Core.Term m)}
   deriving (Eq, Ord, Read, Show)

@@ -78,4 +78,4 @@ codetreeAstModule = Module ns elements [] $
 
       def "Ws" $
         doc "One of several classes of whitespace" $
-        enum ["none", "space", "break", "breakAndIndent"]]
+        enum ["none", "space", "break", "breakAndIndent", "doubleBreak"]]

@@ -33,7 +33,7 @@ constructModule mod coders pairs = do
 
 printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
 printModule mod = withTrace ("print module " ++ (unNamespace $ moduleNamespace mod)) $ do
-    node <- transformModule language encodeTerm constructModule mod
+    node <- transformModule yamlLanguage encodeTerm constructModule mod
     return $ M.fromList [(path, hydraYamlToString node)]
   where
     path = namespaceToFilePath False (FileExtension "yaml") $ moduleNamespace mod

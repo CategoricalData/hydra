@@ -14,8 +14,8 @@ import Data.Map
 import Data.Set
 
 -- | Base interface for features that relate to supporting different data types.
-data DataTypeFeatures 
-  = DataTypeFeatures {
+data DataTypeFeatures = 
+  DataTypeFeatures {
     -- | Supports setting of an array of boolean values.
     dataTypeFeaturesSupportsBooleanArrayValues :: Bool,
     -- | Supports setting of a boolean value.
@@ -93,8 +93,8 @@ _DataTypeFeatures_supportsStringValues = (Core.FieldName "supportsStringValues")
 _DataTypeFeatures_supportsUniformListValues = (Core.FieldName "supportsUniformListValues")
 
 -- | Features that are related to Edge operations.
-data EdgeFeatures 
-  = EdgeFeatures {
+data EdgeFeatures = 
+  EdgeFeatures {
     edgeFeaturesElementFeatures :: ElementFeatures,
     edgeFeaturesProperties :: EdgePropertyFeatures,
     -- | Determines if an Edge can be added to a Vertex.
@@ -118,8 +118,8 @@ _EdgeFeatures_supportsRemoveEdges = (Core.FieldName "supportsRemoveEdges")
 _EdgeFeatures_supportsUpsert = (Core.FieldName "supportsUpsert")
 
 -- | Features that are related to Edge Property objects.
-data EdgePropertyFeatures 
-  = EdgePropertyFeatures {
+data EdgePropertyFeatures = 
+  EdgePropertyFeatures {
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
 
@@ -128,8 +128,8 @@ _EdgePropertyFeatures = (Core.Name "hydra/ext/tinkerpop/features.EdgePropertyFea
 _EdgePropertyFeatures_propertyFeatures = (Core.FieldName "propertyFeatures")
 
 -- | Features that are related to Element objects.
-data ElementFeatures 
-  = ElementFeatures {
+data ElementFeatures = 
+  ElementFeatures {
     -- | Determines if an Element allows properties to be added.
     elementFeaturesSupportsAddProperty :: Bool,
     -- | Determines if an Element any Java object is a suitable identifier.
@@ -167,8 +167,8 @@ _ElementFeatures_supportsUserSuppliedIds = (Core.FieldName "supportsUserSupplied
 _ElementFeatures_supportsUuidIds = (Core.FieldName "supportsUuidIds")
 
 -- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
-data ExtraFeatures m 
-  = ExtraFeatures {
+data ExtraFeatures m = 
+  ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type m -> Bool)}
 
 _ExtraFeatures = (Core.Name "hydra/ext/tinkerpop/features.ExtraFeatures")
@@ -178,8 +178,8 @@ _ExtraFeatures_supportsMapKey = (Core.FieldName "supportsMapKey")
 -- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -- | 
 -- | As an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users.
-data Features 
-  = Features {
+data Features = 
+  Features {
     -- | Gets the features related to edge operation.
     featuresEdge :: EdgeFeatures,
     -- | Gets the features related to graph operation.
@@ -197,8 +197,8 @@ _Features_graph = (Core.FieldName "graph")
 _Features_vertex = (Core.FieldName "vertex")
 
 -- | Features specific to a operations of a graph.
-data GraphFeatures 
-  = GraphFeatures {
+data GraphFeatures = 
+  GraphFeatures {
     -- | Determines if the Graph implementation supports GraphComputer based processing.
     graphFeaturesSupportsComputer :: Bool,
     -- | Determines if the Graph implementation supports more than one connection to the same instance at the same time.
@@ -236,8 +236,8 @@ _GraphFeatures_supportsTransactions = (Core.FieldName "supportsTransactions")
 _GraphFeatures_variables = (Core.FieldName "variables")
 
 -- | A base interface for Edge or Vertex Property features.
-data PropertyFeatures 
-  = PropertyFeatures {
+data PropertyFeatures = 
+  PropertyFeatures {
     propertyFeaturesDataTypeFeatures :: DataTypeFeatures,
     -- | Determines if an Element allows for the processing of at least one data type defined by the features.
     propertyFeaturesSupportsProperties :: Bool}
@@ -250,8 +250,8 @@ _PropertyFeatures_dataTypeFeatures = (Core.FieldName "dataTypeFeatures")
 _PropertyFeatures_supportsProperties = (Core.FieldName "supportsProperties")
 
 -- | Features for Graph.Variables.
-data VariableFeatures 
-  = VariableFeatures {
+data VariableFeatures = 
+  VariableFeatures {
     variableFeaturesDataTypeFeatures :: DataTypeFeatures,
     -- | If any of the features on Graph.Features.VariableFeatures is true then this value must be true.
     variableFeaturesSupportsVariables :: Bool}
@@ -264,8 +264,8 @@ _VariableFeatures_dataTypeFeatures = (Core.FieldName "dataTypeFeatures")
 _VariableFeatures_supportsVariables = (Core.FieldName "supportsVariables")
 
 -- | Features that are related to Vertex operations.
-data VertexFeatures 
-  = VertexFeatures {
+data VertexFeatures = 
+  VertexFeatures {
     vertexFeaturesElementFeatures :: ElementFeatures,
     vertexFeaturesProperties :: VertexPropertyFeatures,
     -- | Determines if a Vertex can be added to the Graph.
@@ -301,8 +301,8 @@ _VertexFeatures_supportsRemoveVertices = (Core.FieldName "supportsRemoveVertices
 _VertexFeatures_supportsUpsert = (Core.FieldName "supportsUpsert")
 
 -- | Features that are related to Vertex Property objects.
-data VertexPropertyFeatures 
-  = VertexPropertyFeatures {
+data VertexPropertyFeatures = 
+  VertexPropertyFeatures {
     vertexPropertyFeaturesDataTypeFeatures :: DataTypeFeatures,
     vertexPropertyFeaturesPropertyFeatures :: PropertyFeatures,
     vertexPropertyFeaturesElementFeatures :: ElementFeatures,
