@@ -1,8 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Literals where
 
-import Hydra.Core
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
 
 import Data.Int
 

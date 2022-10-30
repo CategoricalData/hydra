@@ -5,7 +5,8 @@ import Hydra.Monads
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Compute
-import Hydra.CoreDecoding
+--import Hydra.CoreDecoding
+import Hydra.Mantle
 import Hydra.Sorting
 
 import qualified Control.Monad as CM
@@ -194,10 +195,10 @@ rewriteType f mf = rewrite fsub f
         TypeNominal name -> TypeNominal name
         TypeOptional t -> TypeOptional $ recurse t
         TypeProduct types -> TypeProduct (recurse <$> types)
-        TypeRecord (RowType name fields) -> TypeRecord $ RowType name (forfield <$> fields)
+        TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forfield <$> fields)
         TypeSet t -> TypeSet $ recurse t
         TypeSum types -> TypeSum (recurse <$> types)
-        TypeUnion (RowType name fields) -> TypeUnion $ RowType name (forfield <$> fields)
+        TypeUnion (RowType name extends fields) -> TypeUnion $ RowType name extends (forfield <$> fields)
         TypeVariable v -> TypeVariable v
       where
         forfield f = f {fieldTypeType = recurse (fieldTypeType f)}
@@ -287,32 +288,3 @@ topologicalSortElements :: [Element m] -> Maybe [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
-
-typeDependencies :: Show m => Name -> GraphFlow m (M.Map Name (Type m))
-typeDependencies name = deps (S.fromList [name]) M.empty
-  where
-    deps seeds names = if S.null seeds
-        then return names
-        else do
-          pairs <- CM.mapM toPair $ S.toList seeds
-          let newNames = M.union names (M.fromList pairs)
-          let refs = L.foldl S.union S.empty (typeDependencyNames <$> (snd <$> pairs))
-          let visited = S.fromList $ M.keys names
-          let newSeeds = S.difference refs visited
-          deps newSeeds newNames
-      where
-        toPair name = do
-          typ <- requireType name
-          return (name, typ)
-
-    requireType name = do
-      withTrace ("type dependencies of " ++ unName name) $ do
-        el <- requireElement name
-        decodeType (elementData el)
-
-typeDependencyNames :: Type m -> S.Set Name
-typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
-  where
-    addNames names typ = case typ of
-      TypeNominal name -> S.insert name names
-      _ -> names

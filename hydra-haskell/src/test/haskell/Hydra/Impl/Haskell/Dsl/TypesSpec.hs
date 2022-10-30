@@ -2,8 +2,7 @@
 
 module Hydra.Impl.Haskell.Dsl.TypesSpec where
 
-import Hydra.Compute
-import Hydra.Core
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types
 
 import qualified Test.Hspec as H

@@ -1,12 +1,11 @@
 module Hydra.Ext.Json.CoderSpec where
 
-import Hydra.Core
+import Hydra.All
+import Hydra.Lib.Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder
-import Hydra.Monads
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Lib.Literals
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -120,7 +119,7 @@ checkJsonCoder typ term node = case mstep of
       shouldSucceedWith (coderEncode step term) node
       shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
-    FlowWrapper mstep _ trace = unFlow (jsonCoder typ) testContext emptyTrace
+    FlowState mstep _ trace = unFlow (jsonCoder typ) testContext emptyTrace
 
 jsonBool :: Bool -> Json.Value
 jsonBool = Json.ValueBoolean

@@ -1,9 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Libraries where
 
-import Hydra.Basics
-import Hydra.Core
-import Hydra.Module
-import Hydra.Compute
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -181,7 +178,7 @@ _strings_toUpper :: Name
 _strings_toUpper = qname _hydra_lib_strings "toUpper"
 
 --hydraIoPrimitives = [
---  unaryPrimitive _io_showTerm (variable "a) string 
+--  unaryPrimitive _io_showTerm (variable "a) string
 --  ]
 
 hydraLibFlowsPrimitives :: Show m => [PrimitiveFunction m]

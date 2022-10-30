@@ -1,13 +1,9 @@
-module Hydra.Impl.Haskell.Ext.Yaml.Serde (
-  yamlSerde,
-  yamlSerdeStr,
-) where
+module Hydra.Impl.Haskell.Ext.Yaml.Serde where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Ext.Yaml.Coder
-import Hydra.Monads
 import qualified Hydra.Ext.Yaml.Model as YM
+import Hydra.Impl.Haskell.Ext.Bytestrings
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Control.Monad as CM
@@ -65,6 +61,9 @@ hydraYamlToHsYaml hy = case hy of
     YM.ScalarNull -> DY.SNull
     YM.ScalarStr s -> DY.SStr $ T.pack s
   YM.NodeSequence s -> DY.Sequence () DYE.untagged $ hydraYamlToHsYaml <$> s
+
+hydraYamlToString :: YM.Node -> String
+hydraYamlToString = bytesToString . hydraYamlToBytes
 
 yamlSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) BS.ByteString)
 yamlSerde typ = do

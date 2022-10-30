@@ -1,14 +1,9 @@
 module Hydra.Impl.Haskell.Dsl.Bootstrap where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
+import Hydra.Meta
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Meta
-import Hydra.Rewriting
-import Hydra.Monads
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -21,11 +16,11 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
 
     -- Note: placeholders are only expected at the top level, or beneath annotations and/or type lambdas
     replacePlaceholders rec t = case t' of
-        TypeRecord (RowType n fields) -> if n == placeholderName
-          then TypeRecord (RowType elName fields)
+        TypeRecord (RowType n e fields) -> if n == placeholderName
+          then TypeRecord (RowType elName e fields)
           else t'
-        TypeUnion (RowType n fields) -> if n == placeholderName
-          then TypeUnion (RowType elName fields)
+        TypeUnion (RowType n e fields) -> if n == placeholderName
+          then TypeUnion (RowType elName e fields)
           else t'
         _ -> t'
       where

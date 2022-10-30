@@ -2,10 +2,7 @@
 
 module Hydra.Impl.Haskell.Sources.Core where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Bootstrap
@@ -16,7 +13,7 @@ hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module Meta
 hydraCoreModule = Module ns elements [] $
-    Just "Hydra's core data model, defining the structure of types, terms, and graphs"
+    Just "Hydra's core data model, defining types, terms, and their dependencies"
   where
     ns = Namespace "hydra/core"
     core = nsref ns
@@ -56,20 +53,6 @@ hydraCoreModule = Module ns elements [] $
           "typeName">: core "Name",
           "cases">: list $ core "Field" @@ "m"],
 
-      def "Comparison" $
-        doc "An equality judgement: less than, equal to, or greater than" $
-        enum [
-          "lessThan",
-          "equalTo",
-          "greaterThan"],
-
-      def "Element" $
-        doc "A graph element, having a name, data term (value), and schema term (type)" $
-        lambda "m" $ record [
-          "name">: core "Name",
-          "schema">: core "Term" @@ "m",
-          "data">: core "Term" @@ "m"],
-
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         lambda "m" $ union [
@@ -88,25 +71,9 @@ hydraCoreModule = Module ns elements [] $
           "record">:
             doc "Eliminates a record by projecting a given field" $
             core "Projection",
-          "stream">:
-            doc "Eliminates a stream by decomposing it into head and tail" $
-            ...
-
-
           "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
             core "CaseStatement" @@ "m"],
-
-      def "EliminationVariant" $
-        doc "The identifier of an elimination constructor" $
-        enum [
-          "element",
-          "list",
-          "nominal",
-          "optional",
-          "record",
-          "stream",
-          "union"],
 
       def "Field" $
         doc "A labeled term" $
@@ -162,24 +129,6 @@ hydraCoreModule = Module ns elements [] $
         lambda "m" $ record [
           "domain">: core "Type" @@ "m",
           "codomain">: core "Type" @@ "m"],
-
-      def "FunctionVariant" $
-        doc "The identifier of a function constructor" $
-        enum [
-          "compareTo",
-          "elimination",
-          "lambda",
-          "primitive"],
-
-      def "Graph" $
-        doc ("A graph, or set of named terms, together with its schema graph") $
-        lambda "m" $ record [
-          "elements">:
-            doc "All of the elements in the graph" $
-            Types.map (core "Name") (core "Element" @@ "m"),
-          "schema">:
-            doc "The schema graph to this graph. If omitted, the graph is its own schema graph." $
-            optional $ core "Graph" @@ "m"],
 
       def "IntegerType" $
         doc "An integer type" $
@@ -267,15 +216,6 @@ hydraCoreModule = Module ns elements [] $
           "integer">: core "IntegerType",
           "string">: unit],
 
-      def "LiteralVariant" $
-        doc "The identifier of a literal constructor" $
-        enum [
-          "binary",
-          "boolean",
-          "float",
-          "integer",
-          "string"],
-
       def "MapType" $
         doc "A map type" $
         lambda "m" $ record [
@@ -302,12 +242,6 @@ hydraCoreModule = Module ns elements [] $
             doc "A function which is applied of the optional value is non-nothing" $
             core "Term" @@ "m"],
 
-      def "Precision" $
-        doc "Numeric precision: arbitrary precision, or precision to a specified number of bits" $
-        union [
-          "arbitrary">: unit,
-          "bits">: int32],
-
       def "Projection" $
         record [
           "typeName">: core "Name",
@@ -322,17 +256,23 @@ hydraCoreModule = Module ns elements [] $
       def "RowType" $
         doc "A labeled record or union type" $
         lambda "m" $ record [
-          "typeName">: core "Name",
-          "fields">: list $ core "FieldType" @@ "m"],
+          "typeName">:
+            doc "The name of the row type, which must correspond to the name of a Type element" $
+            core "Name",
+          "extends">:
+            doc ("Optionally, the name of another row type which this one extends. To the extent that field order " ++
+                 "is preserved, the inherited fields of the extended type precede those of the extension.") $
+            optional $ core "Name",
+          "fields">:
+            doc "The fields of this row type, excluding any inherited fields" $
+            list $ core "FieldType" @@ "m"],
 
       def "Stream" $
-        lambda "m" $ core "Term" @@ "m" --> tuple [core "Term" @@ "m", core "Stream" @@ "m"],
-
-      def "StreamType" $
+        doc "An infinite stream of terms" $
         lambda "m" $ record [
-          "elements">: core "Type" @@ "m",
-          "carrier">: core "Type" @@ "m"],
-
+          "first">: core "Term" @@ "m",
+          "rest">: core "Stream" @@ "m"],
+      
       def "Sum" $
         doc "The unlabeled equivalent of a Union term" $
         lambda "m" $ record [
@@ -394,27 +334,6 @@ hydraCoreModule = Module ns elements [] $
             doc "A variable reference" $
             core "Variable"],
 
-      def "TermVariant" $
-        doc "The identifier of a term expression constructor" $
-        enum [
-          "annotated",
-          "application",
-          "element",
-          "function",
-          "let",
-          "list",
-          "literal",
-          "map",
-          "nominal",
-          "optional",
-          "product",
-          "record",
-          "set",
-          "stream",
-          "sum",
-          "union",
-          "variable"],
-
       def "Type" $
         doc "A data type" $
         lambda "m" $ union [
@@ -433,43 +352,10 @@ hydraCoreModule = Module ns elements [] $
           "product">: list (core "Type" @@ "m"),
           "record">: core "RowType" @@ "m",
           "set">: core "Type" @@ "m",
-          "stream">: core "StreamType" @@ "m",
+          "stream">: core "Type" @@ "m",
           "sum">: list (core "Type" @@ "m"),
           "union">: core "RowType" @@ "m",
           "variable">: core "VariableType"],
-
-      def "TypeScheme" $
-        doc "A type expression together with free type variables occurring in the expression" $
-        lambda "m" $ record [
-          "variables">: list $ core "VariableType",
-          "type">: core "Type" @@ "m"],
-
-      def "TypeVariant" $
-        doc "The identifier of a type constructor" $
-        enum [
-          "annotated",
-          "application",
-          "element",
-          "function",
-          "lambda",
-          "list",
-          "literal",
-          "map",
-          "nominal",
-          "optional",
-          "product",
-          "record",
-          "set",
-          "stream",
-          "sum",
-          "union",
-          "variable"],
-
-      def "TypedTerm" $
-        doc "A type together with an instance of the type" $
-        lambda "m" $ record [
-          "type">: core "Type" @@ "m",
-          "term">: core "Term" @@ "m"],
 
       def "Variable" $
         doc "A symbol which stands in for a term"

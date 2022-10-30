@@ -1,25 +1,19 @@
 module Hydra.Impl.Haskell.Dsl.Base (
   module Hydra.Impl.Haskell.Dsl.Base,
   module Hydra.Impl.Haskell.Dsl.PhantomLiterals,
-  module Hydra.Phantoms,
   Standard.coreContext,
 ) where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.CoreEncoding
-import Hydra.Compute
-import Hydra.Impl.Haskell.Dsl.PhantomLiterals
+import Hydra.All
 import Hydra.Meta
-import Hydra.Phantoms
+import Hydra.CoreEncoding
+import Hydra.Impl.Haskell.Dsl.PhantomLiterals
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import Hydra.Module
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Types.Inference
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Monads
 
 import Prelude hiding ((++))
 
@@ -30,7 +24,11 @@ import qualified Data.Set as S
 el :: Definition a -> Element Meta
 el (Definition name (Datum term)) = Element name (encodeType dummyType) term
   where
-    dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") [])
+    dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
+
+infixr 0 >:
+(>:) :: String -> Datum a -> Fld a
+n >: d = Fld $ Field (FieldName n) (unDatum d)
 
 (<.>) :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 f <.> g = compose f g
@@ -136,8 +134,8 @@ primitive = Datum . Terms.primitive
 project :: Name -> Type Meta -> FieldName -> Datum (a -> b)
 project name cod fname = Datum $ Terms.projection name fname
 
-record :: Name -> [Field Meta] -> Datum a
-record name fields = Datum $ Terms.record name fields
+record :: Name -> [Fld a] -> Datum a
+record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
 ref e = delta @@ element e

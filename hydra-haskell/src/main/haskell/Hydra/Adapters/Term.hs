@@ -5,25 +5,19 @@ module Hydra.Adapters.Term (
   termAdapter,
 ) where
 
-import Hydra.Core
-import Hydra.Module
-import Hydra.Compute
-import Hydra.Adapters.Literal
-import Hydra.Basics
-import Hydra.Monads
-import Hydra.Lexical
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Adapters.Utils
+import Hydra.Reduction
+import Hydra.Adapters.Literal
 import Hydra.Adapters.UtilsEtc
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Reduction
-import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
 
@@ -66,7 +60,7 @@ functionProxyName :: Name
 functionProxyName = Name "hydra/core.FunctionProxy"
 
 functionProxyType :: Type m -> Type m
-functionProxyType dom = TypeUnion $ RowType functionProxyName [
+functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Elimination_element Types.unit,
   FieldType _Elimination_nominal Types.string,
   FieldType _Elimination_optional Types.string,
@@ -121,7 +115,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
 
     unionType = do
       domAd <- termAdapter dom
-      return $ TypeUnion $ RowType functionProxyName [
+      return $ TypeUnion $ RowType functionProxyName Nothing [
         FieldType _Elimination_element Types.unit,
         FieldType _Elimination_nominal Types.string,
         FieldType _Elimination_optional Types.string,
@@ -250,7 +244,7 @@ passRecord t@(TypeRecord rt) = do
   adapters <- CM.mapM fieldAdapter (rowTypeFields rt)
   let lossy = or $ adapterIsLossy <$> adapters
   let sfields' = adapterTarget <$> adapters
-  return $ Adapter lossy t (TypeRecord $ RowType (rowTypeTypeName rt) sfields') $ bidirectional
+  return $ Adapter lossy t (TypeRecord $ rt {rowTypeFields = sfields'}) $ bidirectional
     $ \dir (TermRecord (Record _ dfields)) -> record (rowTypeTypeName rt) <$> CM.zipWithM (encodeDecode dir . adapterCoder) adapters dfields
 
 passSet :: (Ord m, Read m, Show m) => TypeAdapter m
@@ -272,7 +266,7 @@ passUnion t@(TypeUnion rt) = do
     adapters <- M.fromList <$> CM.mapM (\f -> pure ((,) (fieldTypeName f)) <*> fieldAdapter f) sfields
     let lossy = or $ adapterIsLossy <$> adapters
     let sfields' = adapterTarget . snd <$> M.toList adapters
-    return $ Adapter lossy t (TypeUnion $ RowType nm sfields')
+    return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir (TermUnion (Union _ dfield)) -> do
         ad <- getAdapter adapters dfield
         TermUnion . Union nm <$> encodeDecode dir (adapterCoder ad) dfield
@@ -295,31 +289,31 @@ termAdapter typ = do
   where
     alts acx t = (\c -> c t) <$> if variantIsSupported acx t
       then case typeVariant t of
-        TypeVariantAnnotated -> pure passAnnotated
-        TypeVariantApplication -> pure passApplication
-        TypeVariantFunction ->  pure passFunction
-        TypeVariantLambda -> pure passLambda
-        TypeVariantList -> pure passList
-        TypeVariantLiteral -> pure passLiteral
-        TypeVariantMap -> pure passMap
+        TypeVariantAnnotated -> [passAnnotated]
+        TypeVariantApplication -> [passApplication]
+        TypeVariantFunction ->  [passFunction]
+        TypeVariantLambda -> [passLambda]
+        TypeVariantList -> [passList]
+        TypeVariantLiteral -> [passLiteral]
+        TypeVariantMap -> [passMap]
         TypeVariantOptional -> [passOptional, optionalToList]
-        TypeVariantProduct -> pure passProduct
-        TypeVariantRecord -> pure passRecord
-        TypeVariantSet -> pure passSet
-        TypeVariantSum -> pure passSum
-        TypeVariantUnion -> pure passUnion
+        TypeVariantProduct -> [passProduct]
+        TypeVariantRecord -> [passRecord]
+        TypeVariantSet -> [passSet]
+        TypeVariantSum -> [passSum]
+        TypeVariantUnion -> [passUnion]
         _ -> []
       else case typeVariant t of
         TypeVariantAnnotated -> [dropAnnotation]
         TypeVariantApplication -> [simplifyApplication]
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
+        TypeVariantLambda -> [lambdaToMonotype]
         TypeVariantNominal -> [dereferenceNominal]
         TypeVariantOptional -> [optionalToList]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]
-        TypeVariantLambda -> [lambdaToMonotype]
-        _ -> []
+        _ -> [unsupportedToString]
 
     constraints acx = languageConstraints $ adapterContextTarget acx
     supported acx = typeIsSupported (constraints acx)
@@ -328,7 +322,7 @@ termAdapter typ = do
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Ord m, Read m, Show m) => TypeAdapter m
 unionToRecord t@(TypeUnion rt) = do
-    let target = TypeRecord $ RowType nm $ makeOptional <$> sfields
+    let target = TypeRecord $ rt {rowTypeFields = makeOptional <$> sfields}
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
       coderEncode = \(TermUnion (Union _ (Field fn term))) -> coderEncode (adapterCoder ad)
@@ -351,6 +345,17 @@ unionToRecord t@(TypeUnion rt) = do
         else pure $ L.head matches
       where
         matches = Y.mapMaybe (\(Field fn (TermOptional opt)) -> (Just . Field fn) =<< opt) fields
+
+unsupportedToString :: (Ord m, Read m, Show m) => TypeAdapter m
+unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decode
+  where
+    -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
+    encode = pure . string . show
+    decode term = do
+      s <- expectString term
+      case TR.readEither s of
+        Left msg -> fail $ "could not decode unsupported term: " ++ s
+        Right t -> pure t
 
 withEvaluationContext :: GraphFlow m a -> Flow (AdapterContext m) a
 withEvaluationContext f = do

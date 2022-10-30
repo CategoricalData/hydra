@@ -3,15 +3,9 @@ module Hydra.Types.Unification (
   solveConstraints,
 ) where
 
-import Hydra.Basics
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Monads
+import Hydra.All
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Module
-import Hydra.Rewriting
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -67,7 +61,8 @@ unify t1 t2 = if t1 == t2
         else failUnification
       (TypeNominal _, _) -> return M.empty -- TODO
       (_, TypeNominal name) -> unify (Types.nominal name) t1
-      (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r)
+      (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
+        ":\n  " ++ show l ++ "\n  " ++ show r
   where
     verify b = if b then return M.empty else failUnification
     failUnification = fail $ "could not unify type " ++ show t1 ++ " with " ++ show t2

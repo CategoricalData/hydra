@@ -1,6 +1,6 @@
 module Hydra.CoreCodersSpec where
 
-import Hydra.Core
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
@@ -37,11 +37,12 @@ individualEncoderTestCases = do
 
     H.it "record type" $ do
       H.shouldBe
-        (strip $ encodeType (TypeRecord $ RowType (Name "Example")
+        (strip $ encodeType (TypeRecord $ RowType (Name "Example") Nothing
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Meta)
         (strip $ variant _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ string "Example",
+            Field _RowType_extends $ optional Nothing,
             Field _RowType_fields $ list [
               record _FieldType [
                 Field _FieldType_name $ string "something",
@@ -50,6 +51,7 @@ individualEncoderTestCases = do
                 Field _FieldType_name $ string "nothing",
                 Field _FieldType_type $ variant _Type _Type_record $ record _RowType [
                   Field _RowType_typeName $ string "hydra/core.UnitType",
+                  Field _RowType_extends $ optional Nothing,
                   Field _RowType_fields $ list []]]]])
 
 individualDecoderTestCases :: H.SpecWith ()
@@ -73,6 +75,7 @@ individualDecoderTestCases = do
         (decodeType $
           variant _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ string (unName testTypeName),
+            Field _RowType_extends $ optional Nothing,
             Field _RowType_fields $
               list [
                 record _FieldType [
@@ -83,7 +86,7 @@ individualDecoderTestCases = do
                   Field _FieldType_name $ string "right",
                   Field _FieldType_type $ variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $
                     unitVariant _FloatType _FloatType_float64]]])
-          (TypeUnion $ RowType testTypeName [
+          (TypeUnion $ RowType testTypeName Nothing [
             Types.field "left" Types.int64,
             Types.field "right" Types.float64])
 

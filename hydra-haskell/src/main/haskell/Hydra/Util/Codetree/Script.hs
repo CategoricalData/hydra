@@ -21,16 +21,17 @@ bracketList style els = case els of
 brackets :: Brackets -> BlockStyle -> Expr -> Expr
 brackets br style e = ExprBrackets $ BracketExpr br e style
 
-commaOp :: Bool -> Op
-commaOp newlines = Op (sym ",") (Padding WsNone (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
-
 commaSep :: BlockStyle -> [Expr] -> Expr
 commaSep style l = case l of
-  [] -> cst ""
-  [x] -> x
-  (h:r) -> ifx (commaOp newlines) h $ commaSep style r
+    [] -> cst ""
+    [x] -> x
+    (h:r) -> ifx commaOp h $ commaSep style r
   where
-    newlines = blockStyleNewlineBeforeContent style
+    break = case L.length $ L.filter id [blockStyleNewlineBeforeContent style, blockStyleNewlineAfterContent style] of
+      0 -> WsSpace
+      1 -> WsBreak
+      2 -> WsDoubleBreak
+    commaOp = Op (sym ",") (Padding WsNone break) (Precedence 0) AssociativityNone -- No source
 
 curlyBlock :: BlockStyle -> Expr -> Expr
 curlyBlock style e = curlyBracesList style [e]
@@ -100,6 +101,17 @@ num = cst . show
 op :: String -> Int -> Associativity -> Op
 op s p = Op (Symbol s) (Padding WsSpace WsSpace) (Precedence p)
 
+orOp :: Bool -> Op
+orOp newlines = Op (sym "|") (Padding WsSpace (if newlines then WsBreak else WsSpace)) (Precedence 0) AssociativityNone -- No source
+
+orSep :: BlockStyle -> [Expr] -> Expr
+orSep style l = case l of
+  [] -> cst ""
+  [x] -> x
+  (h:r) -> ifx (orOp newlines) h $ orSep style r
+  where
+    newlines = blockStyleNewlineBeforeContent style
+
 parenList :: Bool -> [Expr] -> Expr
 parenList newlines els = case els of
     [] -> cst "()"
@@ -158,6 +170,7 @@ printExpr e = case e of
         WsSpace -> " "
         WsBreak -> "\n"
         WsBreakAndIndent -> "\n"
+        WsDoubleBreak -> "\n\n"
   ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e style) ->
       l ++ pre ++ ibody ++ suf ++ r
     where

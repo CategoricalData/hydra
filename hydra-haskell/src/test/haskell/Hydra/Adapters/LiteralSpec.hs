@@ -1,6 +1,6 @@
 module Hydra.Adapters.LiteralSpec where
 
-import Hydra.Core
+import Hydra.All
 
 import Hydra.TestUtils
 
@@ -28,7 +28,7 @@ testFloatAdapter = H.describe "Test floating-point adapter" $ do
       [FloatTypeFloat32]
       FloatTypeBigfloat FloatTypeFloat32 True
       (FloatValueBigfloat d) (FloatValueFloat32 $ realToFrac d)
-  
+
   H.it "bigfloat is supported and remains unchanged" $
     QC.property $ \d -> checkFloatAdapter
       [FloatTypeFloat32, FloatTypeBigfloat]

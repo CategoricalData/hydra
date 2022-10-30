@@ -1,17 +1,12 @@
 module Hydra.Ext.Shacl.Coder where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Lexical
+import Hydra.Util.Context
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import Hydra.Util.Formatting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -19,8 +14,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-
-nodeCount = "nodeCount"
 
 shaclCoder :: (Eq m, Show m) => Module m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
 shaclCoder mod = do
@@ -198,11 +191,11 @@ encodeType typ = case stripType typ of
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any
     TypeNominal name -> any -- TODO: include name
-    TypeRecord (RowType rname fields) -> do
+    TypeRecord (RowType rname _ fields) -> do
       props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
       return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
     TypeSet _ -> any
-    TypeUnion (RowType rname fields) -> do
+    TypeUnion (RowType rname _ fields) -> do
         props <- CM.mapM (encodeFieldType rname Nothing) fields
         let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
         return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
@@ -232,13 +225,8 @@ nameToIri name = Rdf.Iri $ "urn:" ++ unName name
 
 nextBlankNode :: Show m => GraphFlow m Rdf.Resource
 nextBlankNode = do
-  c <- getAttr nodeCount
-  count <- case c of
-    Nothing -> pure 0
-    Just lit -> Literals.expectInt32 lit
-  let node = Rdf.BlankNode $ "b" ++ show count
-  putAttr nodeCount (Literals.int32 $ count + 1)
-  return $ Rdf.ResourceBnode node
+  count <- nextCount "shaclBlankNodeCounter"
+  return $ Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count
 
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common

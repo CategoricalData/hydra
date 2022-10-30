@@ -1,12 +1,9 @@
 module Hydra.Ext.Scala.Prepare (
   prepareType,
-  module Hydra.Core,
 ) where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Common
 
 import qualified Data.Set as S
 

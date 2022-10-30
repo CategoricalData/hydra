@@ -4,9 +4,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3 where
 
 import Hydra.Impl.Haskell.Sources.Core
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 

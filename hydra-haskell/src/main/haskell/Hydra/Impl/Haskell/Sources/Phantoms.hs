@@ -2,14 +2,11 @@
 
 module Hydra.Impl.Haskell.Sources.Phantoms where
 
-import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Compute
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Impl.Haskell.Sources.Compute
 
 
 hydraPhantomsModule :: Module Meta
@@ -26,13 +23,16 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] $
       def "Case" $
         lambda "a" $ core "FieldName",
 
-     def "Datum" $
-       lambda "a" $ (core "Term") @@ (evaluation "Meta"),
+      def "Datum" $
+        lambda "a" $ (core "Term") @@ (evaluation "Meta"),
 
       def "Definition" $
         lambda "a" $ record [
           "name">: core "Name",
           "datum">: phantoms "Datum" @@ "a"],
 
-     def "Reference" $
-       lambda "a" $ unit]
+      def "Fld" $
+        lambda "a" $ (core "Field") @@ (evaluation "Meta"),
+
+      def "Reference" $
+        lambda "a" $ unit]

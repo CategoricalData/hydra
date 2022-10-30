@@ -9,8 +9,8 @@ import Data.List
 import Data.Map
 import Data.Set
 
-data Array 
-  = Array {
+data Array = 
+  Array {
     arrayItems :: Schema}
   deriving (Eq, Ord, Read, Show)
 
@@ -18,8 +18,8 @@ _Array = (Core.Name "hydra/ext/avro/schema.Array")
 
 _Array_items = (Core.FieldName "items")
 
-data Enum_ 
-  = Enum_ {
+data Enum_ = 
+  Enum_ {
     -- | a JSON array, listing symbols, as JSON strings. All symbols in an enum must be unique; duplicates are prohibited. Every symbol must match the regular expression [A-Za-z_][A-Za-z0-9_]* (the same requirement as for names)
     enumSymbols :: [String],
     -- | A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn’t defined in the reader’s schema. The value provided here must be a JSON string that’s a member of the symbols array
@@ -32,8 +32,8 @@ _Enum_symbols = (Core.FieldName "symbols")
 
 _Enum_default = (Core.FieldName "default")
 
-data Field 
-  = Field {
+data Field = 
+  Field {
     -- | a JSON string providing the name of the field
     fieldName :: String,
     -- | a JSON string describing this field for users
@@ -66,8 +66,8 @@ _Field_aliases = (Core.FieldName "aliases")
 
 _Field_annotations = (Core.FieldName "annotations")
 
-data Fixed 
-  = Fixed {
+data Fixed = 
+  Fixed {
     -- | an integer, specifying the number of bytes per value
     fixedSize :: Int}
   deriving (Eq, Ord, Read, Show)
@@ -76,8 +76,8 @@ _Fixed = (Core.Name "hydra/ext/avro/schema.Fixed")
 
 _Fixed_size = (Core.FieldName "size")
 
-data Map_ 
-  = Map_ {
+data Map_ = 
+  Map_ {
     mapValues :: Schema}
   deriving (Eq, Ord, Read, Show)
 
@@ -85,8 +85,8 @@ _Map = (Core.Name "hydra/ext/avro/schema.Map")
 
 _Map_values = (Core.FieldName "values")
 
-data Named 
-  = Named {
+data Named = 
+  Named {
     -- | a string naming this schema
     namedName :: String,
     -- | a string that qualifies the name
@@ -114,10 +114,10 @@ _Named_type = (Core.FieldName "type")
 
 _Named_annotations = (Core.FieldName "annotations")
 
-data NamedType 
-  = NamedTypeEnum Enum_
-  | NamedTypeFixed Fixed
-  | NamedTypeRecord Record
+data NamedType = 
+  NamedTypeEnum Enum_ |
+  NamedTypeFixed Fixed |
+  NamedTypeRecord Record
   deriving (Eq, Ord, Read, Show)
 
 _NamedType = (Core.Name "hydra/ext/avro/schema.NamedType")
@@ -128,10 +128,10 @@ _NamedType_fixed = (Core.FieldName "fixed")
 
 _NamedType_record = (Core.FieldName "record")
 
-data Order 
-  = OrderAscending 
-  | OrderDescending 
-  | OrderIgnore 
+data Order = 
+  OrderAscending  |
+  OrderDescending  |
+  OrderIgnore 
   deriving (Eq, Ord, Read, Show)
 
 _Order = (Core.Name "hydra/ext/avro/schema.Order")
@@ -142,15 +142,23 @@ _Order_descending = (Core.FieldName "descending")
 
 _Order_ignore = (Core.FieldName "ignore")
 
-data Primitive 
-  = PrimitiveNull 
-  | PrimitiveBoolean 
-  | PrimitiveInt 
-  | PrimitiveLong 
-  | PrimitiveFloat 
-  | PrimitiveDouble 
-  | PrimitiveBytes 
-  | PrimitiveString 
+data Primitive = 
+  -- | no value
+  PrimitiveNull  |
+  -- | A binary value
+  PrimitiveBoolean  |
+  -- | 32-bit signed integer
+  PrimitiveInt  |
+  -- | 64-bit signed integer
+  PrimitiveLong  |
+  -- | single precision (32-bit) IEEE 754 floating-point number
+  PrimitiveFloat  |
+  -- | double precision (64-bit) IEEE 754 floating-point number
+  PrimitiveDouble  |
+  -- | sequence of 8-bit unsigned bytes
+  PrimitiveBytes  |
+  -- | unicode character sequence
+  PrimitiveString 
   deriving (Eq, Ord, Read, Show)
 
 _Primitive = (Core.Name "hydra/ext/avro/schema.Primitive")
@@ -171,8 +179,8 @@ _Primitive_bytes = (Core.FieldName "bytes")
 
 _Primitive_string = (Core.FieldName "string")
 
-data Record 
-  = Record {
+data Record = 
+  Record {
     -- | a JSON array, listing fields
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
@@ -181,13 +189,14 @@ _Record = (Core.Name "hydra/ext/avro/schema.Record")
 
 _Record_fields = (Core.FieldName "fields")
 
-data Schema 
-  = SchemaArray Array
-  | SchemaMap Map_
-  | SchemaNamed Named
-  | SchemaPrimitive Primitive
-  | SchemaReference String
-  | SchemaUnion Union
+data Schema = 
+  SchemaArray Array |
+  SchemaMap Map_ |
+  SchemaNamed Named |
+  SchemaPrimitive Primitive |
+  -- | A reference by name to a previously defined type
+  SchemaReference String |
+  SchemaUnion Union
   deriving (Eq, Ord, Read, Show)
 
 _Schema = (Core.Name "hydra/ext/avro/schema.Schema")
@@ -204,8 +213,8 @@ _Schema_reference = (Core.FieldName "reference")
 
 _Schema_union = (Core.FieldName "union")
 
-newtype Union 
-  = Union {
+newtype Union = 
+  Union {
     unUnion :: [Schema]}
   deriving (Eq, Ord, Read, Show)
 

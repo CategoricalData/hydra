@@ -2,16 +2,12 @@
 
 module Hydra.Impl.Haskell.Sources.Ext.Avro.Schema where
 
-import Hydra.Impl.Haskell.Sources.Core
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
-
+import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
+import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 
 
 avroSchemaModule :: Module Meta

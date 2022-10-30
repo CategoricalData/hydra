@@ -1,14 +1,12 @@
 module Hydra.Ext.Haskell.Language where
 
-import Hydra.Basics
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 
 import qualified Data.Set as S
 
 
-language :: Language m
-language = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
+haskellLanguage :: Language m
+haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

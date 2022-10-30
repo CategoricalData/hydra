@@ -34,6 +34,11 @@ instance ToTree H.Constructor where
       toTree name,
       curlyBracesList halfBlockStyle (toTree <$> fields)]
 
+instance ToTree H.ConstructorWithComments where
+  toTree (H.ConstructorWithComments body mc) = case mc of
+    Nothing -> toTree body
+    Just c -> newlineSep [cst $ toHaskellComments c, toTree body]
+
 instance ToTree H.DataDeclaration_Keyword where
   toTree kw = case kw of
     H.DataDeclaration_KeywordData -> cst "data"
@@ -41,17 +46,14 @@ instance ToTree H.DataDeclaration_Keyword where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd]) $
-        consLines
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd, cst "="]) $
+        [constructors]
         ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (toTree <$> derivCat)]]
       where
         derivCat = L.concat $ h <$> deriv
           where
             h (H.Deriving names) = names
-        consLines = L.zipWith consLine cons [0..]
-        consLine c i = spaceSep [symb, toTree c]
-          where
-            symb = cst $ if i == 0 then "=" else "|"
+        constructors = orSep halfBlockStyle (toTree <$> cons)
     H.DeclarationType (H.TypeDeclaration hd typ) -> spaceSep [cst "type", toTree hd, cst "=", toTree typ]
     H.DeclarationValueBinding vb -> toTree vb
     H.DeclarationTypedBinding (H.TypedBinding (H.TypeSignature name htype) vb) -> newlineSep [ -- TODO: local bindings
@@ -202,7 +204,7 @@ instance ToTree H.ValueBinding where
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v
 
-toHaskellComments :: String -> [Char]
+toHaskellComments :: String -> String
 toHaskellComments c = L.intercalate "\n" $ ("-- | " ++) <$> L.lines c
 
 writeQualifiedName :: H.QualifiedName -> String

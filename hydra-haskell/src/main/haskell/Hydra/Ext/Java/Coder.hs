@@ -1,25 +1,18 @@
 module Hydra.Ext.Java.Coder (printModule) where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
 import Hydra.CoreDecoding
+import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.Monads
-import Hydra.Basics
 import Hydra.Adapters.UtilsEtc
-import Hydra.Rewriting
-import Hydra.Reduction
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -68,7 +61,7 @@ elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQ
     (ns, local) = toQnameEager name
 
 moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
-moduleToJavaCompilationUnit mod = transformModule language (encodeTerm aliases Nothing) constructModule mod
+moduleToJavaCompilationUnit mod = transformModule javaLanguage (encodeTerm aliases Nothing) constructModule mod
   where
     aliases = importAliasesForModule mod
 
@@ -268,7 +261,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
 declarationForType :: (Ord m, Read m, Show m)
   => Aliases -> (Element m, TypedTerm m) -> GraphFlow m Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = do
-    t <- decodeType term >>= adaptType language
+    t <- decodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False aliases [] (elementName el) t
     cx <- getState
     comments <- commentsFromElement el
@@ -588,15 +581,15 @@ encodeType aliases t = case stripType t of
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
-  TypeRecord (RowType _UnitType []) -> return $ javaRefType [] javaLangPackageName "Void"
-  TypeRecord (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeRecord (RowType _UnitType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
   TypeSet st -> do
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeUnion (RowType name _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
