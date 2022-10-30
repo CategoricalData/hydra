@@ -301,7 +301,6 @@ inferType term = do
     closeOver = normalizeScheme . generalize M.empty . reduceType
 
 instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
-
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
