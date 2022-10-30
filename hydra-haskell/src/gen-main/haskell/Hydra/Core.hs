@@ -455,6 +455,19 @@ _RowType_extends = (FieldName "extends")
 
 _RowType_fields = (FieldName "fields")
 
+-- | An infinite stream of terms
+data Stream m = 
+  Stream {
+    streamFirst :: (Term m),
+    streamRest :: (Stream m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Stream = (Name "hydra/core.Stream")
+
+_Stream_first = (FieldName "first")
+
+_Stream_rest = (FieldName "rest")
+
 -- | The unlabeled equivalent of a Union term
 data Sum m = 
   Sum {
@@ -497,6 +510,8 @@ data Term m =
   TermRecord (Record m) |
   -- | A set of values
   TermSet (Set (Term m)) |
+  -- | An infinite stream of terms
+  TermStream (Stream m) |
   -- | A variant tuple
   TermSum (Sum m) |
   -- | A union term
@@ -533,6 +548,8 @@ _Term_record = (FieldName "record")
 
 _Term_set = (FieldName "set")
 
+_Term_stream = (FieldName "stream")
+
 _Term_sum = (FieldName "sum")
 
 _Term_union = (FieldName "union")
@@ -555,6 +572,7 @@ data Type m =
   TypeProduct [Type m] |
   TypeRecord (RowType m) |
   TypeSet (Type m) |
+  TypeStream (Type m) |
   TypeSum [Type m] |
   TypeUnion (RowType m) |
   TypeVariable VariableType
@@ -587,6 +605,8 @@ _Type_product = (FieldName "product")
 _Type_record = (FieldName "record")
 
 _Type_set = (FieldName "set")
+
+_Type_stream = (FieldName "stream")
 
 _Type_sum = (FieldName "sum")
 

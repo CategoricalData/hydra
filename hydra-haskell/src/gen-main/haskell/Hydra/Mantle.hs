@@ -143,6 +143,7 @@ data TermVariant =
   TermVariantProduct  |
   TermVariantRecord  |
   TermVariantSet  |
+  TermVariantStream  |
   TermVariantSum  |
   TermVariantUnion  |
   TermVariantVariable 
@@ -175,6 +176,8 @@ _TermVariant_product = (Core.FieldName "product")
 _TermVariant_record = (Core.FieldName "record")
 
 _TermVariant_set = (Core.FieldName "set")
+
+_TermVariant_stream = (Core.FieldName "stream")
 
 _TermVariant_sum = (Core.FieldName "sum")
 
@@ -210,6 +213,7 @@ data TypeVariant =
   TypeVariantProduct  |
   TypeVariantRecord  |
   TypeVariantSet  |
+  TypeVariantStream  |
   TypeVariantSum  |
   TypeVariantUnion  |
   TypeVariantVariable 
@@ -242,6 +246,8 @@ _TypeVariant_product = (Core.FieldName "product")
 _TypeVariant_record = (Core.FieldName "record")
 
 _TypeVariant_set = (Core.FieldName "set")
+
+_TypeVariant_stream = (Core.FieldName "stream")
 
 _TypeVariant_sum = (Core.FieldName "sum")
 
