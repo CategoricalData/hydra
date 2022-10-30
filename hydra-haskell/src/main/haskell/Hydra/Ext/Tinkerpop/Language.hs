@@ -1,9 +1,7 @@
 module Hydra.Ext.Tinkerpop.Language where
 
+import Hydra.All
 import Hydra.Ext.Tinkerpop.Features
-import Hydra.Core
-import Hydra.Common
-import Hydra.Compute
 
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -14,8 +12,8 @@ import qualified Data.Maybe as Y
 --       for Hydra we cannot support a term or type pattern unless it is provably safe in the target environment.
 --       Otherwise, generated expressions could cause failure during runtime operations.
 -- Also note that extra features are required on top of Graph.Features, again for reasons of completeness.
-tinkerpopLanguage :: Context m -> LanguageName -> Features -> ExtraFeatures m -> Language m
-tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints {
+tinkerpopLanguage :: LanguageName -> Features -> ExtraFeatures m -> Language m
+tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
     languageConstraintsEliminationVariants = S.empty,
 
     languageConstraintsLiteralVariants = S.fromList $ Y.catMaybes [
@@ -27,13 +25,13 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
       cond LiteralVariantInteger (dataTypeFeaturesSupportsIntegerValues vpFeatures
         || dataTypeFeaturesSupportsLongValues vpFeatures),
       cond LiteralVariantString (dataTypeFeaturesSupportsStringValues vpFeatures)],
-      
+
     languageConstraintsFloatTypes = S.fromList $ Y.catMaybes [
       cond FloatTypeFloat32 (dataTypeFeaturesSupportsFloatValues vpFeatures),
       cond FloatTypeFloat64 (dataTypeFeaturesSupportsDoubleValues vpFeatures)],
-      
+
     languageConstraintsFunctionVariants = S.empty,
-    
+
     languageConstraintsIntegerTypes = S.fromList $ Y.catMaybes [
       cond IntegerTypeInt32 (dataTypeFeaturesSupportsIntegerValues vpFeatures),
       cond IntegerTypeInt64 (dataTypeFeaturesSupportsLongValues vpFeatures)],
@@ -54,7 +52,7 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
       cond TypeVariantMap supportsMaps,
       Just TypeVariantOptional,
       Just TypeVariantNominal],
-      
+
     languageConstraintsTypes = \typ -> case stripType typ of
       TypeElement et -> True
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
@@ -84,9 +82,9 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
 
   where
     cond v b = if b then Just v else Nothing
-    
+
     vpFeatures = vertexPropertyFeaturesDataTypeFeatures $ vertexFeaturesProperties $ featuresVertex features
-    
+
     supportsLists = dataTypeFeaturesSupportsBooleanArrayValues vpFeatures
       || dataTypeFeaturesSupportsByteArrayValues vpFeatures
       || dataTypeFeaturesSupportsDoubleArrayValues vpFeatures
@@ -94,9 +92,9 @@ tinkerpopLanguage cx name features extras = Language name $ LanguageConstraints 
       || dataTypeFeaturesSupportsIntegerArrayValues vpFeatures
       || dataTypeFeaturesSupportsLongArrayValues vpFeatures
       || dataTypeFeaturesSupportsStringArrayValues vpFeatures
-      
+
       -- Support for at least one of the Graph.Features literal types is assumed.
     supportsLiterals = True
-    
+
     -- Note: additional constraints are required, beyond Graph.Features, if maps are supported
     supportsMaps = dataTypeFeaturesSupportsMapValues vpFeatures

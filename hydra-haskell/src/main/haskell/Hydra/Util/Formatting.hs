@@ -9,25 +9,25 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data Case = CaseCamel | CasePascal | CaseLowerSnake | CaseUpperSnake
+data CaseConvention = CaseConventionCamel | CaseConventionPascal | CaseConventionLowerSnake | CaseConventionUpperSnake
 
 capitalize :: String -> String
 capitalize s = case s of
   [] -> []
   (h:r) -> C.toUpper h : r
 
-convertCase :: Case -> Case -> String -> String
+convertCase :: CaseConvention -> CaseConvention -> String -> String
 convertCase from to original = case to of
-    CaseCamel -> decapitalize $ L.concat (capitalize . fmap C.toLower <$> parts)
-    CasePascal -> L.concat (capitalize . fmap C.toLower <$> parts)
-    CaseLowerSnake -> L.intercalate "_" (fmap C.toLower <$> parts)
-    CaseUpperSnake -> L.intercalate "_" (fmap C.toUpper <$> parts)
+    CaseConventionCamel -> decapitalize $ L.concat (capitalize . fmap C.toLower <$> parts)
+    CaseConventionPascal -> L.concat (capitalize . fmap C.toLower <$> parts)
+    CaseConventionLowerSnake -> L.intercalate "_" (fmap C.toLower <$> parts)
+    CaseConventionUpperSnake -> L.intercalate "_" (fmap C.toUpper <$> parts)
   where
     parts = case from of
-      CaseCamel -> byCaps
-      CasePascal -> byCaps
-      CaseLowerSnake -> byUnderscores
-      CaseUpperSnake -> byUnderscores
+      CaseConventionCamel -> byCaps
+      CaseConventionPascal -> byCaps
+      CaseConventionLowerSnake -> byUnderscores
+      CaseConventionUpperSnake -> byUnderscores
     byUnderscores = Strings.splitOn "_" original
     byCaps = L.foldl helper [""] $ L.reverse $ decapitalize original
       where

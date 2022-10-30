@@ -1,16 +1,9 @@
 module Hydra.Adapters.Coders where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
-import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Adapters.UtilsEtc
-import Hydra.Lexical
+import Hydra.All
 import Hydra.CoreDecoding
+import Hydra.Adapters.Term
+import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -33,7 +26,8 @@ transformModule :: (Ord m, Read m, Show m)
   -> Module m -> GraphFlow m d
 transformModule lang encodeTerm createModule mod = do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
-    coders <- codersFor $ L.nub (typedTermType <$> pairs)
+    let types = L.nub (typedTermType <$> pairs)
+    coders <- codersFor types
     createModule mod coders $ L.zip els pairs
   where
     els = moduleElements mod
@@ -42,7 +36,7 @@ transformModule lang encodeTerm createModule mod = do
       cdrs <- CM.mapM constructCoder types
       return $ M.fromList $ L.zip types cdrs
 
-    constructCoder typ = do
+    constructCoder typ = withTrace ("coder for " ++ describeType typ) $ do
         cx <- getState
         let acx = AdapterContext cx hydraCoreLanguage lang
         adapter <- withState acx $ termAdapter typ

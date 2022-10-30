@@ -1,4 +1,4 @@
--- | Hydra's core data model, defining the structure of types, terms, and graphs
+-- | Hydra's core data model, defining types, terms, and their dependencies
 
 module Hydra.Core where
 
@@ -6,8 +6,8 @@ import Data.List
 import Data.Map
 import Data.Set
 
-data Annotated a m 
-  = Annotated {
+data Annotated a m = 
+  Annotated {
     annotatedSubject :: a,
     annotatedAnnotation :: m}
   deriving (Eq, Ord, Read, Show)
@@ -19,8 +19,8 @@ _Annotated_subject = (FieldName "subject")
 _Annotated_annotation = (FieldName "annotation")
 
 -- | A term which applies a function to an argument
-data Application m 
-  = Application {
+data Application m = 
+  Application {
     -- | The left-hand side of the application
     applicationFunction :: (Term m),
     -- | The right-hand side of the application
@@ -34,8 +34,8 @@ _Application_function = (FieldName "function")
 _Application_argument = (FieldName "argument")
 
 -- | The type-level analog of an application term
-data ApplicationType m 
-  = ApplicationType {
+data ApplicationType m = 
+  ApplicationType {
     -- | The left-hand side of the application
     applicationTypeFunction :: (Type m),
     -- | The right-hand side of the application
@@ -48,8 +48,8 @@ _ApplicationType_function = (FieldName "function")
 
 _ApplicationType_argument = (FieldName "argument")
 
-data CaseStatement m 
-  = CaseStatement {
+data CaseStatement m = 
+  CaseStatement {
     caseStatementTypeName :: Name,
     caseStatementCases :: [Field m]}
   deriving (Eq, Ord, Read, Show)
@@ -60,45 +60,20 @@ _CaseStatement_typeName = (FieldName "typeName")
 
 _CaseStatement_cases = (FieldName "cases")
 
--- | An equality judgement: less than, equal to, or greater than
-data Comparison 
-  = ComparisonLessThan 
-  | ComparisonEqualTo 
-  | ComparisonGreaterThan 
-  deriving (Eq, Ord, Read, Show)
-
-_Comparison = (Name "hydra/core.Comparison")
-
-_Comparison_lessThan = (FieldName "lessThan")
-
-_Comparison_equalTo = (FieldName "equalTo")
-
-_Comparison_greaterThan = (FieldName "greaterThan")
-
--- | A graph element, having a name, data term (value), and schema term (type)
-data Element m 
-  = Element {
-    elementName :: Name,
-    elementSchema :: (Term m),
-    elementData :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_Element = (Name "hydra/core.Element")
-
-_Element_name = (FieldName "name")
-
-_Element_schema = (FieldName "schema")
-
-_Element_data = (FieldName "data")
-
 -- | A corresponding elimination for an introduction term
-data Elimination m 
-  = EliminationElement 
-  | EliminationList (Term m)
-  | EliminationNominal Name
-  | EliminationOptional (OptionalCases m)
-  | EliminationRecord Projection
-  | EliminationUnion (CaseStatement m)
+data Elimination m = 
+  -- | Eliminates an element by mapping it to its data term. This is Hydra's delta function.
+  EliminationElement  |
+  -- | Eliminates a list using a fold function; this function has the signature b -> [a] -> b
+  EliminationList (Term m) |
+  -- | Eliminates a nominal term by extracting the wrapped term
+  EliminationNominal Name |
+  -- | Eliminates an optional term by matching over the two possible cases
+  EliminationOptional (OptionalCases m) |
+  -- | Eliminates a record by projecting a given field
+  EliminationRecord Projection |
+  -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
+  EliminationUnion (CaseStatement m)
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra/core.Elimination")
@@ -115,33 +90,9 @@ _Elimination_record = (FieldName "record")
 
 _Elimination_union = (FieldName "union")
 
--- | The identifier of an elimination constructor
-data EliminationVariant 
-  = EliminationVariantElement 
-  | EliminationVariantList 
-  | EliminationVariantNominal 
-  | EliminationVariantOptional 
-  | EliminationVariantRecord 
-  | EliminationVariantUnion 
-  deriving (Eq, Ord, Read, Show)
-
-_EliminationVariant = (Name "hydra/core.EliminationVariant")
-
-_EliminationVariant_element = (FieldName "element")
-
-_EliminationVariant_list = (FieldName "list")
-
-_EliminationVariant_nominal = (FieldName "nominal")
-
-_EliminationVariant_optional = (FieldName "optional")
-
-_EliminationVariant_record = (FieldName "record")
-
-_EliminationVariant_union = (FieldName "union")
-
 -- | A labeled term
-data Field m 
-  = Field {
+data Field m = 
+  Field {
     fieldName :: FieldName,
     fieldTerm :: (Term m)}
   deriving (Eq, Ord, Read, Show)
@@ -153,8 +104,8 @@ _Field_name = (FieldName "name")
 _Field_term = (FieldName "term")
 
 -- | The name of a field
-newtype FieldName 
-  = FieldName {
+newtype FieldName = 
+  FieldName {
     -- | The name of a field
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -162,8 +113,8 @@ newtype FieldName
 _FieldName = (Name "hydra/core.FieldName")
 
 -- | The name and type of a field
-data FieldType m 
-  = FieldType {
+data FieldType m = 
+  FieldType {
     fieldTypeName :: FieldName,
     fieldTypeType :: (Type m)}
   deriving (Eq, Ord, Read, Show)
@@ -175,10 +126,10 @@ _FieldType_name = (FieldName "name")
 _FieldType_type = (FieldName "type")
 
 -- | A floating-point type
-data FloatType 
-  = FloatTypeBigfloat 
-  | FloatTypeFloat32 
-  | FloatTypeFloat64 
+data FloatType = 
+  FloatTypeBigfloat  |
+  FloatTypeFloat32  |
+  FloatTypeFloat64 
   deriving (Eq, Ord, Read, Show)
 
 _FloatType = (Name "hydra/core.FloatType")
@@ -190,10 +141,13 @@ _FloatType_float32 = (FieldName "float32")
 _FloatType_float64 = (FieldName "float64")
 
 -- | A floating-point literal value
-data FloatValue 
-  = FloatValueBigfloat Double
-  | FloatValueFloat32 Float
-  | FloatValueFloat64 Double
+data FloatValue = 
+  -- | An arbitrary-precision floating-point value
+  FloatValueBigfloat Double |
+  -- | A 32-bit floating-point value
+  FloatValueFloat32 Float |
+  -- | A 64-bit floating-point value
+  FloatValueFloat64 Double
   deriving (Eq, Ord, Read, Show)
 
 _FloatValue = (Name "hydra/core.FloatValue")
@@ -205,11 +159,15 @@ _FloatValue_float32 = (FieldName "float32")
 _FloatValue_float64 = (FieldName "float64")
 
 -- | A function
-data Function m 
-  = FunctionCompareTo (Term m)
-  | FunctionElimination (Elimination m)
-  | FunctionLambda (Lambda m)
-  | FunctionPrimitive Name
+data Function m = 
+  -- | Compares a term with a given term of the same type, producing a Comparison
+  FunctionCompareTo (Term m) |
+  -- | An elimination for any of a few term variants
+  FunctionElimination (Elimination m) |
+  -- | A function abstraction (lambda)
+  FunctionLambda (Lambda m) |
+  -- | A reference to a built-in (primitive) function
+  FunctionPrimitive Name
   deriving (Eq, Ord, Read, Show)
 
 _Function = (Name "hydra/core.Function")
@@ -223,8 +181,8 @@ _Function_lambda = (FieldName "lambda")
 _Function_primitive = (FieldName "primitive")
 
 -- | A function type, also known as an arrow type
-data FunctionType m 
-  = FunctionType {
+data FunctionType m = 
+  FunctionType {
     functionTypeDomain :: (Type m),
     functionTypeCodomain :: (Type m)}
   deriving (Eq, Ord, Read, Show)
@@ -235,50 +193,17 @@ _FunctionType_domain = (FieldName "domain")
 
 _FunctionType_codomain = (FieldName "codomain")
 
--- | The identifier of a function constructor
-data FunctionVariant 
-  = FunctionVariantCompareTo 
-  | FunctionVariantElimination 
-  | FunctionVariantLambda 
-  | FunctionVariantPrimitive 
-  deriving (Eq, Ord, Read, Show)
-
-_FunctionVariant = (Name "hydra/core.FunctionVariant")
-
-_FunctionVariant_compareTo = (FieldName "compareTo")
-
-_FunctionVariant_elimination = (FieldName "elimination")
-
-_FunctionVariant_lambda = (FieldName "lambda")
-
-_FunctionVariant_primitive = (FieldName "primitive")
-
--- | A graph, or set of named terms, together with its schema graph
-data Graph m 
-  = Graph {
-    -- | All of the elements in the graph
-    graphElements :: (Map Name (Element m)),
-    -- | The schema graph to this graph. If omitted, the graph is its own schema graph.
-    graphSchema :: (Maybe (Graph m))}
-  deriving (Eq, Ord, Read, Show)
-
-_Graph = (Name "hydra/core.Graph")
-
-_Graph_elements = (FieldName "elements")
-
-_Graph_schema = (FieldName "schema")
-
 -- | An integer type
-data IntegerType 
-  = IntegerTypeBigint 
-  | IntegerTypeInt8 
-  | IntegerTypeInt16 
-  | IntegerTypeInt32 
-  | IntegerTypeInt64 
-  | IntegerTypeUint8 
-  | IntegerTypeUint16 
-  | IntegerTypeUint32 
-  | IntegerTypeUint64 
+data IntegerType = 
+  IntegerTypeBigint  |
+  IntegerTypeInt8  |
+  IntegerTypeInt16  |
+  IntegerTypeInt32  |
+  IntegerTypeInt64  |
+  IntegerTypeUint8  |
+  IntegerTypeUint16  |
+  IntegerTypeUint32  |
+  IntegerTypeUint64 
   deriving (Eq, Ord, Read, Show)
 
 _IntegerType = (Name "hydra/core.IntegerType")
@@ -302,16 +227,25 @@ _IntegerType_uint32 = (FieldName "uint32")
 _IntegerType_uint64 = (FieldName "uint64")
 
 -- | An integer literal value
-data IntegerValue 
-  = IntegerValueBigint Integer
-  | IntegerValueInt8 Int
-  | IntegerValueInt16 Int
-  | IntegerValueInt32 Int
-  | IntegerValueInt64 Integer
-  | IntegerValueUint8 Int
-  | IntegerValueUint16 Int
-  | IntegerValueUint32 Integer
-  | IntegerValueUint64 Integer
+data IntegerValue = 
+  -- | An arbitrary-precision integer value
+  IntegerValueBigint Integer |
+  -- | An 8-bit signed integer value
+  IntegerValueInt8 Int |
+  -- | A 16-bit signed integer value (short value)
+  IntegerValueInt16 Int |
+  -- | A 32-bit signed integer value (int value)
+  IntegerValueInt32 Int |
+  -- | A 64-bit signed integer value (long value)
+  IntegerValueInt64 Integer |
+  -- | An 8-bit unsigned integer value (byte)
+  IntegerValueUint8 Int |
+  -- | A 16-bit unsigned integer value
+  IntegerValueUint16 Int |
+  -- | A 32-bit unsigned integer value (unsigned int)
+  IntegerValueUint32 Integer |
+  -- | A 64-bit unsigned integer value (unsigned long)
+  IntegerValueUint64 Integer
   deriving (Eq, Ord, Read, Show)
 
 _IntegerValue = (Name "hydra/core.IntegerValue")
@@ -335,8 +269,8 @@ _IntegerValue_uint32 = (FieldName "uint32")
 _IntegerValue_uint64 = (FieldName "uint64")
 
 -- | A function abstraction (lambda)
-data Lambda m 
-  = Lambda {
+data Lambda m = 
+  Lambda {
     -- | The parameter of the lambda
     lambdaParameter :: Variable,
     -- | The body of the lambda
@@ -350,8 +284,8 @@ _Lambda_parameter = (FieldName "parameter")
 _Lambda_body = (FieldName "body")
 
 -- | A type abstraction; the type-level analog of a lambda term
-data LambdaType m 
-  = LambdaType {
+data LambdaType m = 
+  LambdaType {
     -- | The parameter of the lambda
     lambdaTypeParameter :: VariableType,
     -- | The body of the lambda
@@ -365,8 +299,8 @@ _LambdaType_parameter = (FieldName "parameter")
 _LambdaType_body = (FieldName "body")
 
 -- | A 'let' binding
-data Let m 
-  = Let {
+data Let m = 
+  Let {
     letKey :: Variable,
     letValue :: (Term m),
     letEnvironment :: (Term m)}
@@ -381,12 +315,17 @@ _Let_value = (FieldName "value")
 _Let_environment = (FieldName "environment")
 
 -- | A term constant; an instance of a literal type
-data Literal 
-  = LiteralBinary String
-  | LiteralBoolean Bool
-  | LiteralFloat FloatValue
-  | LiteralInteger IntegerValue
-  | LiteralString String
+data Literal = 
+  -- | A binary literal
+  LiteralBinary String |
+  -- | A boolean literal
+  LiteralBoolean Bool |
+  -- | A floating-point literal
+  LiteralFloat FloatValue |
+  -- | An integer literal
+  LiteralInteger IntegerValue |
+  -- | A string literal
+  LiteralString String
   deriving (Eq, Ord, Read, Show)
 
 _Literal = (Name "hydra/core.Literal")
@@ -402,12 +341,12 @@ _Literal_integer = (FieldName "integer")
 _Literal_string = (FieldName "string")
 
 -- | Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
-data LiteralType 
-  = LiteralTypeBinary 
-  | LiteralTypeBoolean 
-  | LiteralTypeFloat FloatType
-  | LiteralTypeInteger IntegerType
-  | LiteralTypeString 
+data LiteralType = 
+  LiteralTypeBinary  |
+  LiteralTypeBoolean  |
+  LiteralTypeFloat FloatType |
+  LiteralTypeInteger IntegerType |
+  LiteralTypeString 
   deriving (Eq, Ord, Read, Show)
 
 _LiteralType = (Name "hydra/core.LiteralType")
@@ -422,30 +361,9 @@ _LiteralType_integer = (FieldName "integer")
 
 _LiteralType_string = (FieldName "string")
 
--- | The identifier of a literal constructor
-data LiteralVariant 
-  = LiteralVariantBinary 
-  | LiteralVariantBoolean 
-  | LiteralVariantFloat 
-  | LiteralVariantInteger 
-  | LiteralVariantString 
-  deriving (Eq, Ord, Read, Show)
-
-_LiteralVariant = (Name "hydra/core.LiteralVariant")
-
-_LiteralVariant_binary = (FieldName "binary")
-
-_LiteralVariant_boolean = (FieldName "boolean")
-
-_LiteralVariant_float = (FieldName "float")
-
-_LiteralVariant_integer = (FieldName "integer")
-
-_LiteralVariant_string = (FieldName "string")
-
 -- | A map type
-data MapType m 
-  = MapType {
+data MapType m = 
+  MapType {
     mapTypeKeys :: (Type m),
     mapTypeValues :: (Type m)}
   deriving (Eq, Ord, Read, Show)
@@ -457,8 +375,8 @@ _MapType_keys = (FieldName "keys")
 _MapType_values = (FieldName "values")
 
 -- | A unique element name
-newtype Name 
-  = Name {
+newtype Name = 
+  Name {
     -- | A unique element name
     unName :: String}
   deriving (Eq, Ord, Read, Show)
@@ -466,8 +384,8 @@ newtype Name
 _Name = (Name "hydra/core.Name")
 
 -- | A term annotated with a fixed, named type; an instance of a newtype
-data Named m 
-  = Named {
+data Named m = 
+  Named {
     namedTypeName :: Name,
     namedTerm :: (Term m)}
   deriving (Eq, Ord, Read, Show)
@@ -479,8 +397,8 @@ _Named_typeName = (FieldName "typeName")
 _Named_term = (FieldName "term")
 
 -- | A case statement for matching optional terms
-data OptionalCases m 
-  = OptionalCases {
+data OptionalCases m = 
+  OptionalCases {
     -- | A term provided if the optional value is nothing
     optionalCasesNothing :: (Term m),
     -- | A function which is applied of the optional value is non-nothing
@@ -493,20 +411,8 @@ _OptionalCases_nothing = (FieldName "nothing")
 
 _OptionalCases_just = (FieldName "just")
 
--- | Numeric precision: arbitrary precision, or precision to a specified number of bits
-data Precision 
-  = PrecisionArbitrary 
-  | PrecisionBits Int
-  deriving (Eq, Ord, Read, Show)
-
-_Precision = (Name "hydra/core.Precision")
-
-_Precision_arbitrary = (FieldName "arbitrary")
-
-_Precision_bits = (FieldName "bits")
-
-data Projection 
-  = Projection {
+data Projection = 
+  Projection {
     projectionTypeName :: Name,
     projectionField :: FieldName}
   deriving (Eq, Ord, Read, Show)
@@ -518,8 +424,8 @@ _Projection_typeName = (FieldName "typeName")
 _Projection_field = (FieldName "field")
 
 -- | A record, or labeled tuple; a map of field names to terms
-data Record m 
-  = Record {
+data Record m = 
+  Record {
     recordTypeName :: Name,
     recordFields :: [Field m]}
   deriving (Eq, Ord, Read, Show)
@@ -531,9 +437,13 @@ _Record_typeName = (FieldName "typeName")
 _Record_fields = (FieldName "fields")
 
 -- | A labeled record or union type
-data RowType m 
-  = RowType {
+data RowType m = 
+  RowType {
+    -- | The name of the row type, which must correspond to the name of a Type element
     rowTypeTypeName :: Name,
+    -- | Optionally, the name of another row type which this one extends. To the extent that field order is preserved, the inherited fields of the extended type precede those of the extension.
+    rowTypeExtends :: (Maybe Name),
+    -- | The fields of this row type, excluding any inherited fields
     rowTypeFields :: [FieldType m]}
   deriving (Eq, Ord, Read, Show)
 
@@ -541,11 +451,26 @@ _RowType = (Name "hydra/core.RowType")
 
 _RowType_typeName = (FieldName "typeName")
 
+_RowType_extends = (FieldName "extends")
+
 _RowType_fields = (FieldName "fields")
 
+-- | An infinite stream of terms
+data Stream m = 
+  Stream {
+    streamFirst :: (Term m),
+    streamRest :: (Stream m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Stream = (Name "hydra/core.Stream")
+
+_Stream_first = (FieldName "first")
+
+_Stream_rest = (FieldName "rest")
+
 -- | The unlabeled equivalent of a Union term
-data Sum m 
-  = Sum {
+data Sum m = 
+  Sum {
     sumIndex :: Int,
     sumSize :: Int,
     sumTerm :: (Term m)}
@@ -560,23 +485,39 @@ _Sum_size = (FieldName "size")
 _Sum_term = (FieldName "term")
 
 -- | A data term
-data Term m 
-  = TermAnnotated (Annotated (Term m) m)
-  | TermApplication (Application m)
-  | TermElement Name
-  | TermFunction (Function m)
-  | TermLet (Let m)
-  | TermList [Term m]
-  | TermLiteral Literal
-  | TermMap (Map (Term m) (Term m))
-  | TermNominal (Named m)
-  | TermOptional (Maybe (Term m))
-  | TermProduct [Term m]
-  | TermRecord (Record m)
-  | TermSet (Set (Term m))
-  | TermSum (Sum m)
-  | TermUnion (Union m)
-  | TermVariable Variable
+data Term m = 
+  -- | A term annotated with metadata
+  TermAnnotated (Annotated (Term m) m) |
+  -- | A function application
+  TermApplication (Application m) |
+  -- | An element reference
+  TermElement Name |
+  -- | A function term
+  TermFunction (Function m) |
+  TermLet (Let m) |
+  -- | A list
+  TermList [Term m] |
+  -- | A literal value
+  TermLiteral Literal |
+  -- | A map of keys to values
+  TermMap (Map (Term m) (Term m)) |
+  TermNominal (Named m) |
+  -- | An optional value
+  TermOptional (Maybe (Term m)) |
+  -- | A tuple
+  TermProduct [Term m] |
+  -- | A record term
+  TermRecord (Record m) |
+  -- | A set of values
+  TermSet (Set (Term m)) |
+  -- | An infinite stream of terms
+  TermStream (Stream m) |
+  -- | A variant tuple
+  TermSum (Sum m) |
+  -- | A union term
+  TermUnion (Union m) |
+  -- | A variable reference
+  TermVariable Variable
   deriving (Eq, Ord, Read, Show)
 
 _Term = (Name "hydra/core.Term")
@@ -607,84 +548,34 @@ _Term_record = (FieldName "record")
 
 _Term_set = (FieldName "set")
 
+_Term_stream = (FieldName "stream")
+
 _Term_sum = (FieldName "sum")
 
 _Term_union = (FieldName "union")
 
 _Term_variable = (FieldName "variable")
 
--- | The identifier of a term expression constructor
-data TermVariant 
-  = TermVariantAnnotated 
-  | TermVariantApplication 
-  | TermVariantElement 
-  | TermVariantFunction 
-  | TermVariantLet 
-  | TermVariantList 
-  | TermVariantLiteral 
-  | TermVariantMap 
-  | TermVariantNominal 
-  | TermVariantOptional 
-  | TermVariantProduct 
-  | TermVariantRecord 
-  | TermVariantSet 
-  | TermVariantSum 
-  | TermVariantUnion 
-  | TermVariantVariable 
-  deriving (Eq, Ord, Read, Show)
-
-_TermVariant = (Name "hydra/core.TermVariant")
-
-_TermVariant_annotated = (FieldName "annotated")
-
-_TermVariant_application = (FieldName "application")
-
-_TermVariant_element = (FieldName "element")
-
-_TermVariant_function = (FieldName "function")
-
-_TermVariant_let = (FieldName "let")
-
-_TermVariant_list = (FieldName "list")
-
-_TermVariant_literal = (FieldName "literal")
-
-_TermVariant_map = (FieldName "map")
-
-_TermVariant_nominal = (FieldName "nominal")
-
-_TermVariant_optional = (FieldName "optional")
-
-_TermVariant_product = (FieldName "product")
-
-_TermVariant_record = (FieldName "record")
-
-_TermVariant_set = (FieldName "set")
-
-_TermVariant_sum = (FieldName "sum")
-
-_TermVariant_union = (FieldName "union")
-
-_TermVariant_variable = (FieldName "variable")
-
 -- | A data type
-data Type m 
-  = TypeAnnotated (Annotated (Type m) m)
-  | TypeApplication (ApplicationType m)
-  | TypeElement (Type m)
-  | TypeFunction (FunctionType m)
-  | TypeLambda (LambdaType m)
-  | TypeList (Type m)
-  | TypeLiteral LiteralType
-  | TypeMap (MapType m)
-  | TypeNominal Name
-  | TypeOptional (Type m)
-  | TypeProduct [Type m]
-  | TypeRecord (RowType m)
-  | TypeSet (Type m)
-  | TypeSum [Type m]
-  | TypeUnion (RowType m)
-  | TypeVariable VariableType
+data Type m = 
+  -- | A type annotated with metadata
+  TypeAnnotated (Annotated (Type m) m) |
+  TypeApplication (ApplicationType m) |
+  TypeElement (Type m) |
+  TypeFunction (FunctionType m) |
+  TypeLambda (LambdaType m) |
+  TypeList (Type m) |
+  TypeLiteral LiteralType |
+  TypeMap (MapType m) |
+  TypeNominal Name |
+  TypeOptional (Type m) |
+  TypeProduct [Type m] |
+  TypeRecord (RowType m) |
+  TypeSet (Type m) |
+  TypeStream (Type m) |
+  TypeSum [Type m] |
+  TypeUnion (RowType m) |
+  TypeVariable VariableType
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")
@@ -715,95 +606,17 @@ _Type_record = (FieldName "record")
 
 _Type_set = (FieldName "set")
 
+_Type_stream = (FieldName "stream")
+
 _Type_sum = (FieldName "sum")
 
 _Type_union = (FieldName "union")
 
 _Type_variable = (FieldName "variable")
 
--- | A type expression together with free type variables occurring in the expression
-data TypeScheme m 
-  = TypeScheme {
-    typeSchemeVariables :: [VariableType],
-    typeSchemeType :: (Type m)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypeScheme = (Name "hydra/core.TypeScheme")
-
-_TypeScheme_variables = (FieldName "variables")
-
-_TypeScheme_type = (FieldName "type")
-
--- | The identifier of a type constructor
-data TypeVariant 
-  = TypeVariantAnnotated 
-  | TypeVariantApplication 
-  | TypeVariantElement 
-  | TypeVariantFunction 
-  | TypeVariantLambda 
-  | TypeVariantList 
-  | TypeVariantLiteral 
-  | TypeVariantMap 
-  | TypeVariantNominal 
-  | TypeVariantOptional 
-  | TypeVariantProduct 
-  | TypeVariantRecord 
-  | TypeVariantSet 
-  | TypeVariantSum 
-  | TypeVariantUnion 
-  | TypeVariantVariable 
-  deriving (Eq, Ord, Read, Show)
-
-_TypeVariant = (Name "hydra/core.TypeVariant")
-
-_TypeVariant_annotated = (FieldName "annotated")
-
-_TypeVariant_application = (FieldName "application")
-
-_TypeVariant_element = (FieldName "element")
-
-_TypeVariant_function = (FieldName "function")
-
-_TypeVariant_lambda = (FieldName "lambda")
-
-_TypeVariant_list = (FieldName "list")
-
-_TypeVariant_literal = (FieldName "literal")
-
-_TypeVariant_map = (FieldName "map")
-
-_TypeVariant_nominal = (FieldName "nominal")
-
-_TypeVariant_optional = (FieldName "optional")
-
-_TypeVariant_product = (FieldName "product")
-
-_TypeVariant_record = (FieldName "record")
-
-_TypeVariant_set = (FieldName "set")
-
-_TypeVariant_sum = (FieldName "sum")
-
-_TypeVariant_union = (FieldName "union")
-
-_TypeVariant_variable = (FieldName "variable")
-
--- | A type together with an instance of the type
-data TypedTerm m 
-  = TypedTerm {
-    typedTermType :: (Type m),
-    typedTermTerm :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_TypedTerm = (Name "hydra/core.TypedTerm")
-
-_TypedTerm_type = (FieldName "type")
-
-_TypedTerm_term = (FieldName "term")
-
 -- | A symbol which stands in for a term
-newtype Variable 
-  = Variable {
+newtype Variable = 
+  Variable {
     -- | A symbol which stands in for a term
     unVariable :: String}
   deriving (Eq, Ord, Read, Show)
@@ -811,8 +624,8 @@ newtype Variable
 _Variable = (Name "hydra/core.Variable")
 
 -- | A symbol which stands in for a type
-newtype VariableType 
-  = VariableType {
+newtype VariableType = 
+  VariableType {
     -- | A symbol which stands in for a type
     unVariableType :: String}
   deriving (Eq, Ord, Read, Show)
@@ -820,8 +633,8 @@ newtype VariableType
 _VariableType = (Name "hydra/core.VariableType")
 
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
-data Union m 
-  = Union {
+data Union m = 
+  Union {
     unionTypeName :: Name,
     unionField :: (Field m)}
   deriving (Eq, Ord, Read, Show)
@@ -832,8 +645,8 @@ _Union_typeName = (FieldName "typeName")
 
 _Union_field = (FieldName "field")
 
-data UnitType 
-  = UnitType {}
+data UnitType = 
+  UnitType {}
   deriving (Eq, Ord, Read, Show)
 
 _UnitType = (Name "hydra/core.UnitType")

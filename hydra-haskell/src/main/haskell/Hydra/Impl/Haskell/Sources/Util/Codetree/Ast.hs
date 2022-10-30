@@ -1,12 +1,9 @@
 module Hydra.Impl.Haskell.Sources.Util.Codetree.Ast where
 
-import Hydra.Impl.Haskell.Sources.Core
-
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Impl.Haskell.Sources.Core
 
 
 codetreeAstModule :: Module Meta
@@ -81,4 +78,4 @@ codetreeAstModule = Module ns elements [] $
 
       def "Ws" $
         doc "One of several classes of whitespace" $
-        enum ["none", "space", "break", "breakAndIndent"]]
+        enum ["none", "space", "break", "breakAndIndent", "doubleBreak"]]

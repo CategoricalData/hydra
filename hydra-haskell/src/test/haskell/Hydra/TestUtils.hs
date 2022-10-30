@@ -11,22 +11,15 @@ module Hydra.TestUtils (
   strip,
   termTestContext,
   module Hydra.TestGraph,
-  module Hydra.Compute,
-  module Hydra.Monads,
 ) where
 
 import Hydra.ArbitraryCore()
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
-import Hydra.CoreLanguage
-import Hydra.Rewriting
-import Hydra.Monads
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
@@ -50,7 +43,7 @@ checkAdapter :: (Eq t, Eq v, Show t, Show v)
 checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
     let acx = mkContext variants :: AdapterContext Meta
     let cx = adapterContextEvaluation acx
-    let FlowWrapper adapter' _ trace = unFlow (mkAdapter source) acx emptyTrace
+    let FlowState adapter' _ trace = unFlow (mkAdapter source) acx emptyTrace
     if Y.isNothing adapter' then HL.assertFailure (traceSummary trace) else pure ()
     let adapter = Y.fromJust adapter'
     let step = adapterCoder adapter
@@ -100,7 +93,7 @@ checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
         (stripTerm <$> (coderEncode serde term >>= coderDecode serde))
         (stripTerm term)
   where
-    FlowWrapper mserde _ trace = unFlow (mkSerde typ) testContext emptyTrace
+    FlowState mserde _ trace = unFlow (mkSerde typ) testContext emptyTrace
 
 checkSerialization :: (Type Meta -> GraphFlow Meta (Coder (Context Meta) (Context Meta) (Term Meta) String))
   -> TypedTerm Meta -> String -> H.Expectation
@@ -112,24 +105,24 @@ checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
         (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines
-    FlowWrapper mserde _ trace = unFlow (mkSerdeStr typ) testContext emptyTrace
+    FlowState mserde _ trace = unFlow (mkSerdeStr typ) testContext emptyTrace
 
 shouldFail :: GraphFlow Meta a -> H.Expectation
-shouldFail f = H.shouldBe True (Y.isNothing $ flowWrapperValue $ unFlow f testContext emptyTrace)
+shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testContext emptyTrace)
 
 shouldSucceed :: GraphFlow Meta a -> H.Expectation
 shouldSucceed f = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> True `H.shouldBe` True
   where
-    FlowWrapper my _ trace = unFlow f testContext emptyTrace
+    FlowState my _ trace = unFlow f testContext emptyTrace
 
 shouldSucceedWith :: (Eq a, Show a) => GraphFlow Meta a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> y `H.shouldBe` x
   where
-    FlowWrapper my _ trace = unFlow f testContext emptyTrace
+    FlowState my _ trace = unFlow f testContext emptyTrace
 
 strip :: Ord m => Term m -> Term m
 strip = stripTerm

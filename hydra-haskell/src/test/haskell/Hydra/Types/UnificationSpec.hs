@@ -1,6 +1,6 @@
 module Hydra.Types.UnificationSpec where
 
-import Hydra.Core
+import Hydra.All
 import Hydra.Types.Unification
 import Hydra.TestUtils
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

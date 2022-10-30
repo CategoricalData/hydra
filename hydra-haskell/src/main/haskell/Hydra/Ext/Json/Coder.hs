@@ -1,16 +1,12 @@
 module Hydra.Ext.Json.Coder (jsonCoder) where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Ext.Json.Language
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Lib.Literals
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
@@ -21,7 +17,7 @@ import qualified Data.Maybe as Y
 jsonCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) Json.Value)
 jsonCoder typ = do
     cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage (language cx)
+    let acx = AdapterContext cx hydraCoreLanguage jsonLanguage
     adapter <- withState acx $ termAdapter typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder

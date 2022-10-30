@@ -1,15 +1,8 @@
 module Hydra.Ext.Haskell.Coder (printModule) where
 
-import Hydra.Basics
-import Hydra.Core
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import qualified Hydra.Ext.Haskell.Ast as H
@@ -19,7 +12,6 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
-import Hydra.Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -84,7 +76,7 @@ constructModule mod coders pairs = do
             toImport name = H.Import False name Nothing Nothing
 
 encodeAdaptedType :: (Ord m, Read m, Show m) => Namespaces -> Type m -> GraphFlow m H.Type
-encodeAdaptedType namespaces typ = adaptType language typ >>= encodeType namespaces
+encodeAdaptedType namespaces typ = adaptType haskellLanguage typ >>= encodeType namespaces
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Function m -> GraphFlow m H.Expression
 encodeFunction namespaces fun = case fun of
@@ -112,7 +104,7 @@ encodeFunction namespaces fun = case fun of
       EliminationUnion (CaseStatement dn fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
-            rt <- withSchemaContext $ requireUnionType dn
+            rt <- withSchemaContext $ requireUnionType False dn
             let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
             H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
           toAlt fieldMap (Field fn fun') = do
@@ -123,7 +115,7 @@ encodeFunction namespaces fun = case fun of
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of
-                TypeRecord (RowType _ []) -> pure []
+                TypeRecord (RowType _ Nothing []) -> pure []
                 _ -> pure [H.PatternName $ rawName v1]
               Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
             let lhs = H.PatternApplication $ H.Pattern_Application hname args
@@ -214,13 +206,13 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
     TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
-    TypeRecord (RowType n fields) -> case fields of
+    TypeRecord rt -> case rowTypeFields rt of
       [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
-      _ -> nominal n
+      _ -> nominal $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeUnion (RowType n _) -> nominal n
+    TypeUnion rt -> nominal $ rowTypeTypeName rt
     TypeVariable (VariableType v) -> pure $ H.TypeVariable $ simpleName v
     _ -> fail $ "unexpected type: " ++ show typ
   where
@@ -228,7 +220,7 @@ encodeType namespaces typ = case stripType typ of
     nominal name = pure $ H.TypeVariable $ elementReference namespaces name
 
 moduleToHaskellModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m H.Module
-moduleToHaskellModule mod = transformModule language (encodeTerm namespaces) constructModule mod
+moduleToHaskellModule mod = transformModule haskellLanguage (encodeTerm namespaces) constructModule mod
   where
     namespaces = namespacesForModule mod
 
@@ -275,16 +267,16 @@ toTypeDeclarations namespaces el term = do
     let (vars, t') = unpackLambdaType cx t
     let hd = declHead hname $ L.reverse vars
     decl <- case stripType t' of
-      TypeRecord (RowType _ fields) -> do
-        cons <- recordCons lname fields
-        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv])
-      TypeUnion (RowType _ fields) -> do
-        cons <- CM.mapM (unionCons lname) fields
-        return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv])
+      TypeRecord rt -> do
+        cons <- recordCons lname $ rowTypeFields rt
+        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd [cons] [deriv]
+      TypeUnion rt -> do
+        cons <- CM.mapM (unionCons lname) $ rowTypeFields rt
+        return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordData [] hd cons [deriv]
       _ -> if newtypesNotTypedefs
         then do
           cons <- newtypeCons el t'
-          return $ H.DeclarationData (H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv])
+          return $ H.DeclarationData $ H.DataDeclaration H.DataDeclaration_KeywordNewtype [] hd [cons] [deriv]
         else do
           htype <- encodeAdaptedType namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
@@ -309,11 +301,12 @@ toTypeDeclarations namespaces el term = do
         htype <- encodeAdaptedType namespaces typ
         comments <- annotationClassTypeDescription (contextAnnotations cx) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
-        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]
+        return $ H.ConstructorWithComments
+          (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
 
     recordCons lname fields = do
         hFields <- CM.mapM toField fields
-        return $ H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields
+        return $ H.ConstructorWithComments (H.ConstructorRecord $ H.Constructor_Record (simpleName lname) hFields) Nothing
       where
         toField (FieldType (FieldName fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
@@ -324,10 +317,11 @@ toTypeDeclarations namespaces el term = do
 
     unionCons lname (FieldType (FieldName fname) ftype) = do
       cx <- getState
+      comments <- annotationClassTypeDescription (contextAnnotations cx) ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []
         else do
           htype <- encodeAdaptedType namespaces ftype
           return [htype]
-      return $ H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList
+      return $ H.ConstructorWithComments (H.ConstructorOrdinary $ H.Constructor_Ordinary (simpleName nm) typeList) comments

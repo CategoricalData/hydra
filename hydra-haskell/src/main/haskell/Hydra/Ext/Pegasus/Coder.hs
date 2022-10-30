@@ -1,15 +1,9 @@
 module Hydra.Ext.Pegasus.Coder (printModule) where
 
-import Hydra.Adapters.Term
-import Hydra.Core
+import Hydra.All
 import Hydra.CoreDecoding
-import Hydra.CoreLanguage
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Rewriting
+import Hydra.Adapters.Term
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Ext.Pegasus.Language
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
@@ -67,7 +61,7 @@ constructModule mod coders pairs = do
       return $ PDL.NamedSchema qname ptype anns
 
 moduleToPegasusSchemas :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
-moduleToPegasusSchemas mod = transformModule language (encodeTerm aliases) constructModule mod
+moduleToPegasusSchemas mod = transformModule pdlLanguage (encodeTerm aliases) constructModule mod
   where
     aliases = importAliasesForModule mod
 
@@ -79,7 +73,7 @@ encodeAdaptedType :: (Ord m, Read m, Show m)
   -> GraphFlow m (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
   cx <- getState
-  let acx = AdapterContext cx hydraCoreLanguage language
+  let acx = AdapterContext cx hydraCoreLanguage pdlLanguage
   ad <- withState acx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
@@ -106,21 +100,21 @@ encodeType aliases typ = case typ of
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
-    TypeRecord (RowType _ fields) -> do
+    TypeRecord rt -> do
       let includes = []
-      rfields <- CM.mapM encodeRecordField fields
+      rfields <- CM.mapM encodeRecordField $ rowTypeFields rt
       return $ Right $ PDL.NamedSchema_TypeRecord $ PDL.RecordSchema rfields includes
-    TypeUnion (RowType _ fields) -> if isEnum
+    TypeUnion rt -> if isEnum
         then do
-          fs <- CM.mapM encodeEnumField fields
+          fs <- CM.mapM encodeEnumField $ rowTypeFields rt
           return $ Right $ PDL.NamedSchema_TypeEnum $ PDL.EnumSchema fs
-        else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField fields
+        else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
-        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType fields
+        isEnum = L.foldl (\b t -> b && stripType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
     _ -> unexpected "PDL-supported type" typ
   where
     encode t = case stripType t of
-      TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
+      TypeRecord (RowType _ Nothing []) -> encode Types.int32 -- special case for the unit type
       _ -> do
         res <- encodeType aliases t
         case res of
@@ -148,7 +142,7 @@ encodeType aliases typ = case typ of
     encodeEnumField (FieldType (FieldName name) typ) = do
       anns <- getAnns typ
       return PDL.EnumField {
-        PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseCamel CaseUpperSnake name,
+        PDL.enumFieldName = PDL.EnumFieldName $ convertCase CaseConventionCamel CaseConventionUpperSnake name,
         PDL.enumFieldAnnotations = anns}
     encodePossiblyOptionalType typ = case stripType typ of
       TypeOptional ot -> do

@@ -1,24 +1,18 @@
 module Hydra.Ext.Scala.Coder (printModule) where
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
+import Hydra.All
+import Hydra.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Lexical
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Ext.Scala.Language
 import Hydra.Ext.Scala.Utils
 import Hydra.Adapters.Coders
-import Hydra.Rewriting
 import Hydra.Types.Inference
 import Hydra.Types.Substitution
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Scala.Serde
-import Hydra.Lexical
-import Hydra.CoreDecoding
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -34,7 +28,7 @@ printModule mod = do
   return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
 
 moduleToScalaPackage :: (Ord m, Read m, Show m) => Module m -> GraphFlow m Scala.Pkg
-moduleToScalaPackage = transformModule language encodeUntypedTerm constructModule
+moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
 
 constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> GraphFlow m Scala.Pkg

@@ -1,14 +1,9 @@
 module Hydra.Util.GrammarToModule where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Grammar
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Util.Formatting
 import Hydra.CoreEncoding
 
 import qualified Data.List as L

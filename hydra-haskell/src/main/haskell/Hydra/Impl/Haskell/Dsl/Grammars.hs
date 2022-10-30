@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Grammars where
 
-import Hydra.Grammar
+import Hydra.All
 import Data.String(IsString(..))
 
 

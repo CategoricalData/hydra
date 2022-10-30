@@ -1,20 +1,11 @@
 module Hydra.Ext.Avro.Coder where
 
-import Hydra.Basics
-import Hydra.Core
-import Hydra.CoreDecoding
-import Hydra.Compute
-import Hydra.Module
-import Hydra.Monads
-import Hydra.Lexical
-import Hydra.Rewriting
+import Hydra.All
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Util.Codetree.Script
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
@@ -82,7 +73,7 @@ avroHydraAdapter schema = case schema of
             ad <- case Avro.namedType n of
               Avro.NamedTypeEnum (Avro.Enum_ syms mdefault) -> simpleAdapter typ encode decode  -- TODO: use default value
                 where
-                  typ = TypeUnion (RowType hydraName $ toField <$> syms)
+                  typ = TypeUnion (RowType hydraName Nothing $ toField <$> syms)
                     where
                       toField s = FieldType (FieldName s) Types.unit
                   encode (Json.ValueString s) = pure $ TermUnion (Union hydraName $ Field (FieldName s) Terms.unit)
@@ -109,7 +100,7 @@ avroHydraAdapter schema = case schema of
                           return (k, v')
                   let lossy = L.foldl (\b (_, ad) -> b || adapterIsLossy ad) False $ M.elems adaptersByFieldName
                   let hfields = toHydraField <$> M.elems adaptersByFieldName
-                  let target = TypeRecord $ RowType hydraName hfields
+                  let target = TypeRecord $ RowType hydraName Nothing hfields
                   let coder = Coder {
                     -- Note: the order of the fields is changed
                     coderEncode = \(Json.ValueObject m) -> do

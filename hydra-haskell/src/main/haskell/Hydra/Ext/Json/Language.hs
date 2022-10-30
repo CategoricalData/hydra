@@ -1,14 +1,12 @@
 module Hydra.Ext.Json.Language where
 
-import Hydra.Core
-import Hydra.Common
-import Hydra.Compute
+import Hydra.All
 
 import qualified Data.Set as S
 
 
-language :: Context m -> Language m
-language cx = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
+jsonLanguage :: Language m
+jsonLanguage = Language (LanguageName "hydra/ext/json") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

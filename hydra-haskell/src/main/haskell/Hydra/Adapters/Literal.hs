@@ -4,13 +4,8 @@ module Hydra.Adapters.Literal (
   integerAdapter,
 ) where
 
-import Hydra.Core
-import Hydra.Basics
-import Hydra.Monads
-import Hydra.Compute
-import Hydra.Adapters.Utils
+import Hydra.All
 import Hydra.Adapters.UtilsEtc
-import Hydra.Lexical
 
 import qualified Data.List as L
 import qualified Data.Set as S

@@ -1,14 +1,12 @@
 module Hydra.Ext.Avro.Language where
 
-import Hydra.Core
-import Hydra.Common
-import Hydra.Compute
+import Hydra.All
 
 import qualified Data.Set as S
 
 
-language :: Context m -> Language m
-language cx = Language (LanguageName "hydra/ext/avro") $ LanguageConstraints {
+avroLanguage :: Language m
+avroLanguage = Language (LanguageName "hydra/ext/avro") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBinary, LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

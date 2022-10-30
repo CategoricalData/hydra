@@ -1,14 +1,10 @@
 module Hydra.Ext.Yaml.Coder (yamlCoder) where
 
-import Hydra.Core
-import Hydra.Compute
+import Hydra.All
 import Hydra.Adapters.Term
-import Hydra.CoreLanguage
-import Hydra.Monads
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
-import Hydra.Lexical
 import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
@@ -77,7 +73,6 @@ termCoder typ = case stripType typ of
   TypeList lt -> do
     lc <- termCoder lt
     return Coder {
---      coderEncode = \(Term (TermList els) _) -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els,
       coderEncode = \t -> case t of
          TermList els -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els
          _ -> unexpected "list" t,
@@ -110,11 +105,10 @@ termCoder typ = case stripType typ of
 yamlCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) YM.Node)
 yamlCoder typ = do
     cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage (language cx)
+    let acx = AdapterContext cx hydraCoreLanguage yamlLanguage
     adapter <- withState acx $ termAdapter typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder
-  where
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull

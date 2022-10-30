@@ -1,52 +1,49 @@
 module Hydra.Impl.Haskell.Sources.Basics where
 
-import Hydra.Common
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Sources.Module
+import Hydra.Impl.Haskell.Sources.Mantle
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
 import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Monads
 
 
 basicsNs = Namespace "hydra/basics"
 
-hydraBasicsModule :: Module Meta
-hydraBasicsModule = Module basicsNs elements [hydraModuleModule] $
-    Just "Basic functions for working with types and terms"
-  where
-    elements = [
-      el eliminationVariant,
-      el eliminationVariants,
-      el floatTypePrecision,
-      el floatTypes,
-      el floatValueType,
-      el functionVariant,
-      el functionVariants,
-      el integerTypeIsSigned,
-      el integerTypePrecision,
-      el integerTypes,
-      el integerValueType,
-      el literalType,
-      el literalTypeVariant,
-      el literalVariant,
-      el literalVariants,
-      el qname,
-      el termVariant,
-      el termVariants,
-      el testLists,
-      el typeVariant,
-      el typeVariants]
-
 basics :: String -> Datum a -> Definition a
 basics = Definition . fromQname basicsNs
 
-eliminationVariant :: Definition (Elimination m -> EliminationVariant)
-eliminationVariant = basics "eliminationVariant" $
+hydraBasicsModule :: Module Meta
+hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
+    Just "Basic functions for working with types and terms"
+  where
+    elements = [
+      el eliminationVariantSource,
+      el eliminationVariantsSource,
+      el floatTypePrecisionSource,
+      el floatTypesSource,
+      el floatValueTypeSource,
+      el functionVariantSource,
+      el functionVariantsSource,
+      el integerTypeIsSignedSource,
+      el integerTypePrecisionSource,
+      el integerTypesSource,
+      el integerValueTypeSource,
+      el literalTypeSource,
+      el literalTypeVariantSource,
+      el literalVariantSource,
+      el literalVariantsSource,
+      el qnameSource,
+      el termVariantSource,
+      el termVariantsSource,
+      el testListsSource,
+      el typeVariantSource,
+      el typeVariantsSource]
+
+eliminationVariantSource :: Definition (Elimination m -> EliminationVariant)
+eliminationVariantSource = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   typed (Types.function (Types.apply (Types.nominal _Elimination) (Types.variable "m")) (Types.nominal _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant [
@@ -57,8 +54,8 @@ eliminationVariant = basics "eliminationVariant" $
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union]
 
-eliminationVariants :: Definition [EliminationVariant]
-eliminationVariants = basics "eliminationVariants" $
+eliminationVariantsSource :: Definition [EliminationVariant]
+eliminationVariantsSource = basics "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   typed (Types.list $ Types.nominal _EliminationVariant) $
   list $ unitVariant _EliminationVariant <$> [
@@ -69,16 +66,16 @@ eliminationVariants = basics "eliminationVariants" $
     _EliminationVariant_record,
     _EliminationVariant_union]
 
-floatTypePrecision :: Definition (FloatType -> Precision)
-floatTypePrecision = basics "floatTypePrecision" $
+floatTypePrecisionSource :: Definition (FloatType -> Precision)
+floatTypePrecisionSource = basics "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   matchToUnion _FloatType _Precision [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
     _FloatType_float64  @-> field _Precision_bits $ int 64]
 
-floatTypes :: Definition [FloatType]
-floatTypes = basics "floatTypes" $
+floatTypesSource :: Definition [FloatType]
+floatTypesSource = basics "floatTypes" $
   doc "All floating-point types in a canonical order" $
   typed (Types.list $ Types.nominal _FloatType) $
   list $ unitVariant _FloatType <$> [
@@ -86,16 +83,16 @@ floatTypes = basics "floatTypes" $
     _FloatType_float32,
     _FloatType_float64]
 
-floatValueType :: Definition (FloatValue -> FloatType)
-floatValueType = basics "floatValueType" $
+floatValueTypeSource :: Definition (FloatValue -> FloatType)
+floatValueTypeSource = basics "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   matchToEnum _FloatValue _FloatType [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
 
-functionVariant :: Definition (Function m -> FunctionVariant)
-functionVariant = basics "functionVariant" $
+functionVariantSource :: Definition (Function m -> FunctionVariant)
+functionVariantSource = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   typed (Types.function (Types.apply (Types.nominal _Function) (Types.variable "m")) (Types.nominal _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant [
@@ -104,8 +101,8 @@ functionVariant = basics "functionVariant" $
     _Function_lambda      @-> _FunctionVariant_lambda,
     _Function_primitive   @-> _FunctionVariant_primitive]
 
-functionVariants :: Definition [FunctionVariant]
-functionVariants = basics "functionVariants" $
+functionVariantsSource :: Definition [FunctionVariant]
+functionVariantsSource = basics "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
     typed (Types.list $ Types.nominal _FunctionVariant) $
   list $ unitVariant _FunctionVariant <$> [
@@ -114,8 +111,8 @@ functionVariants = basics "functionVariants" $
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]
 
-integerTypeIsSigned :: Definition (IntegerType -> Bool)
-integerTypeIsSigned = basics "integerTypeIsSigned" $
+integerTypeIsSignedSource :: Definition (IntegerType -> Bool)
+integerTypeIsSignedSource = basics "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
   matchData _IntegerType [
     _IntegerType_bigint @-> constant true,
@@ -128,8 +125,8 @@ integerTypeIsSigned = basics "integerTypeIsSigned" $
     _IntegerType_uint32 @-> constant false,
     _IntegerType_uint64 @-> constant false]
 
-integerTypePrecision :: Definition (IntegerType -> Precision)
-integerTypePrecision = basics "integerTypePrecision" $
+integerTypePrecisionSource :: Definition (IntegerType -> Precision)
+integerTypePrecisionSource = basics "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
   matchToUnion _IntegerType _Precision [
     _IntegerType_bigint @-> field _Precision_arbitrary unit,
@@ -142,8 +139,8 @@ integerTypePrecision = basics "integerTypePrecision" $
     _IntegerType_uint32 @-> field _Precision_bits $ int 32,
     _IntegerType_uint64 @-> field _Precision_bits $ int 64]
 
-integerTypes :: Definition [IntegerType]
-integerTypes = basics "integerTypes" $
+integerTypesSource :: Definition [IntegerType]
+integerTypesSource = basics "integerTypes" $
     doc "All integer types, in a canonical order" $
     typed (Types.list $ Types.nominal _IntegerType) $
     list $ unitVariant _IntegerType <$> [
@@ -157,8 +154,8 @@ integerTypes = basics "integerTypes" $
       _IntegerType_uint32,
       _IntegerType_uint64]
 
-integerValueType :: Definition (IntegerValue -> IntegerType)
-integerValueType = basics "integerValueType" $
+integerValueTypeSource :: Definition (IntegerValue -> IntegerType)
+integerValueTypeSource = basics "integerValueType" $
   doc "Find the integer type for a given integer value" $
   matchToEnum _IntegerValue _IntegerType [
     _IntegerValue_bigint @-> _IntegerType_bigint,
@@ -171,18 +168,18 @@ integerValueType = basics "integerValueType" $
     _IntegerValue_uint32 @-> _IntegerType_uint32,
     _IntegerValue_uint64 @-> _IntegerType_uint64]
 
-literalType :: Definition (Literal -> LiteralType)
-literalType = basics "literalType" $
+literalTypeSource :: Definition (Literal -> LiteralType)
+literalTypeSource = basics "literalType" $
   doc "Find the literal type for a given literal value" $
   match _Literal (Types.nominal _LiteralType) [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
-    Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueType,
-    Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueType,
+    Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueTypeSource,
+    Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueTypeSource,
     Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
-literalTypeVariant :: Definition (LiteralType -> LiteralVariant)
-literalTypeVariant = basics "literalTypeVariant" $
+literalTypeVariantSource :: Definition (LiteralType -> LiteralVariant)
+literalTypeVariantSource = basics "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
   matchToEnum _LiteralType _LiteralVariant [
     _LiteralType_binary  @-> _LiteralVariant_binary,
@@ -191,14 +188,14 @@ literalTypeVariant = basics "literalTypeVariant" $
     _LiteralType_integer @-> _LiteralVariant_integer,
     _LiteralType_string  @-> _LiteralVariant_string]
 
-literalVariant :: Definition (Literal -> LiteralVariant)
-literalVariant = basics "literalVariant" $
+literalVariantSource :: Definition (Literal -> LiteralVariant)
+literalVariantSource = basics "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
   function (Types.nominal _Literal) (Types.nominal _LiteralVariant) $
-  ref literalTypeVariant <.> ref literalType
+  ref literalTypeVariantSource <.> ref literalTypeSource
 
-literalVariants :: Definition [LiteralVariant]
-literalVariants = basics "literalVariants" $
+literalVariantsSource :: Definition [LiteralVariant]
+literalVariantsSource = basics "literalVariants" $
   doc "All literal variants, in a canonical order" $
   typed (Types.list $ Types.nominal _LiteralVariant) $
   list $ unitVariant _LiteralVariant <$> [
@@ -208,8 +205,8 @@ literalVariants = basics "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-qname :: Definition (Namespace -> String -> Name)
-qname = basics "qname" $
+qnameSource :: Definition (Namespace -> String -> Name)
+qnameSource = basics "qname" $
   doc "Construct a qualified (dot-separated) name" $
   function (Types.nominal _Namespace) (Types.function Types.string $ Types.nominal _Name) $
   lambda "ns" $
@@ -218,8 +215,8 @@ qname = basics "qname" $
         apply cat $
           list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
 
-termVariant :: Definition (Term m -> TermVariant)
-termVariant = basics "termVariant" $
+termVariantSource :: Definition (Term m -> TermVariant)
+termVariantSource = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.nominal _Term) (Types.variable "m")) (Types.nominal _TermVariant) $
   lambda "term" $ apply
@@ -242,8 +239,8 @@ termVariant = basics "termVariant" $
       _Term_variable        @-> _TermVariant_variable])
     (var "term")
 
-termVariants :: Definition [TermVariant]
-termVariants = basics "termVariants" $
+termVariantsSource :: Definition [TermVariant]
+termVariantsSource = basics "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TermVariant) $
   list $ unitVariant _TermVariant <$> [
@@ -264,14 +261,14 @@ termVariants = basics "termVariants" $
     _TermVariant_variable]
 
 -- TODO: remove once there are other polymorphic functions in use
-testLists :: Definition ([[a]] -> Int)
-testLists = basics "testLists" $
+testListsSource :: Definition ([[a]] -> Int)
+testListsSource = basics "testLists" $
   doc "TODO: temporary. Just a token polymorphic function for testing" $
   function (Types.list $ Types.list $ Types.variable "a") Types.int32 $
   (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
 
-typeVariant :: Definition (Type m -> TypeVariant)
-typeVariant = basics "typeVariant" $
+typeVariantSource :: Definition (Type m -> TypeVariant)
+typeVariantSource = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.nominal _Type) (Types.variable "m")) (Types.nominal _TypeVariant) $
   lambda "typ" $ apply
@@ -294,8 +291,8 @@ typeVariant = basics "typeVariant" $
       _Type_variable    @-> _TypeVariant_variable])
     (var "typ")
 
-typeVariants :: Definition [TypeVariant]
-typeVariants = basics "typeVariants" $
+typeVariantsSource :: Definition [TypeVariant]
+typeVariantsSource = basics "typeVariants" $
   doc "All type variants, in a canonical order" $
   typed (Types.list $ Types.nominal _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [

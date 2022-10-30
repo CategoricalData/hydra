@@ -1,15 +1,10 @@
 module Hydra.Ext.Haskell.Utils where
 
-import Hydra.Core
-import Hydra.Module
-import Hydra.Compute
-import Hydra.Monads
+import Hydra.All
 import Hydra.Adapters.Coders
-import Hydra.Util.Formatting
 import Hydra.Ext.Haskell.Language
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
-import Hydra.Rewriting
 
 import qualified Data.List as L
 import qualified Data.Map as M

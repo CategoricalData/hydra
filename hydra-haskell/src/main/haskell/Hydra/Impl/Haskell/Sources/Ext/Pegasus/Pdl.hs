@@ -3,9 +3,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl where
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
 
-import Hydra.Core
-import Hydra.Compute
-import Hydra.Module
+import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 

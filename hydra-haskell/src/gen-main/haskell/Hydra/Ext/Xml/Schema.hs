@@ -11,366 +11,366 @@ import Data.List
 import Data.Map
 import Data.Set
 
-newtype AnySimpleType 
-  = AnySimpleType {
+newtype AnySimpleType = 
+  AnySimpleType {
     unAnySimpleType :: String}
   deriving (Eq, Ord, Read, Show)
 
 _AnySimpleType = (Core.Name "hydra/ext/xml/schema.AnySimpleType")
 
-newtype AnyType 
-  = AnyType {
+newtype AnyType = 
+  AnyType {
     unAnyType :: String}
   deriving (Eq, Ord, Read, Show)
 
 _AnyType = (Core.Name "hydra/ext/xml/schema.AnyType")
 
-newtype AnyURI 
-  = AnyURI {
+newtype AnyURI = 
+  AnyURI {
     unAnyURI :: String}
   deriving (Eq, Ord, Read, Show)
 
 _AnyURI = (Core.Name "hydra/ext/xml/schema.AnyURI")
 
-newtype Base64Binary 
-  = Base64Binary {
+newtype Base64Binary = 
+  Base64Binary {
     unBase64Binary :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Base64Binary = (Core.Name "hydra/ext/xml/schema.Base64Binary")
 
-newtype Boolean 
-  = Boolean {
+newtype Boolean = 
+  Boolean {
     unBoolean :: Bool}
   deriving (Eq, Ord, Read, Show)
 
 _Boolean = (Core.Name "hydra/ext/xml/schema.Boolean")
 
-newtype Byte 
-  = Byte {
+newtype Byte = 
+  Byte {
     unByte :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Byte = (Core.Name "hydra/ext/xml/schema.Byte")
 
-newtype Date 
-  = Date {
+newtype Date = 
+  Date {
     unDate :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Date = (Core.Name "hydra/ext/xml/schema.Date")
 
-newtype DateTime 
-  = DateTime {
+newtype DateTime = 
+  DateTime {
     unDateTime :: String}
   deriving (Eq, Ord, Read, Show)
 
 _DateTime = (Core.Name "hydra/ext/xml/schema.DateTime")
 
-newtype Decimal 
-  = Decimal {
+newtype Decimal = 
+  Decimal {
     unDecimal :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Decimal = (Core.Name "hydra/ext/xml/schema.Decimal")
 
-newtype Double_ 
-  = Double_ {
+newtype Double_ = 
+  Double_ {
     unDouble :: Double}
   deriving (Eq, Ord, Read, Show)
 
 _Double = (Core.Name "hydra/ext/xml/schema.Double")
 
-newtype Duration 
-  = Duration {
+newtype Duration = 
+  Duration {
     unDuration :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Duration = (Core.Name "hydra/ext/xml/schema.Duration")
 
-newtype ENTITIES 
-  = ENTITIES {
+newtype ENTITIES = 
+  ENTITIES {
     unENTITIES :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ENTITIES = (Core.Name "hydra/ext/xml/schema.ENTITIES")
 
-newtype ENTITY 
-  = ENTITY {
+newtype ENTITY = 
+  ENTITY {
     unENTITY :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ENTITY = (Core.Name "hydra/ext/xml/schema.ENTITY")
 
-newtype Float_ 
-  = Float_ {
+newtype Float_ = 
+  Float_ {
     unFloat :: Float}
   deriving (Eq, Ord, Read, Show)
 
 _Float = (Core.Name "hydra/ext/xml/schema.Float")
 
-newtype GDay 
-  = GDay {
+newtype GDay = 
+  GDay {
     unGDay :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GDay = (Core.Name "hydra/ext/xml/schema.GDay")
 
-newtype GMonth 
-  = GMonth {
+newtype GMonth = 
+  GMonth {
     unGMonth :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GMonth = (Core.Name "hydra/ext/xml/schema.GMonth")
 
-newtype GMonthDay 
-  = GMonthDay {
+newtype GMonthDay = 
+  GMonthDay {
     unGMonthDay :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GMonthDay = (Core.Name "hydra/ext/xml/schema.GMonthDay")
 
-newtype GYear 
-  = GYear {
+newtype GYear = 
+  GYear {
     unGYear :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GYear = (Core.Name "hydra/ext/xml/schema.GYear")
 
-newtype GYearMonth 
-  = GYearMonth {
+newtype GYearMonth = 
+  GYearMonth {
     unGYearMonth :: String}
   deriving (Eq, Ord, Read, Show)
 
 _GYearMonth = (Core.Name "hydra/ext/xml/schema.GYearMonth")
 
-newtype HexBinary 
-  = HexBinary {
+newtype HexBinary = 
+  HexBinary {
     unHexBinary :: String}
   deriving (Eq, Ord, Read, Show)
 
 _HexBinary = (Core.Name "hydra/ext/xml/schema.HexBinary")
 
-newtype ID 
-  = ID {
+newtype ID = 
+  ID {
     unID :: String}
   deriving (Eq, Ord, Read, Show)
 
 _ID = (Core.Name "hydra/ext/xml/schema.ID")
 
-newtype IDREF 
-  = IDREF {
+newtype IDREF = 
+  IDREF {
     unIDREF :: String}
   deriving (Eq, Ord, Read, Show)
 
 _IDREF = (Core.Name "hydra/ext/xml/schema.IDREF")
 
-newtype IDREFS 
-  = IDREFS {
+newtype IDREFS = 
+  IDREFS {
     unIDREFS :: String}
   deriving (Eq, Ord, Read, Show)
 
 _IDREFS = (Core.Name "hydra/ext/xml/schema.IDREFS")
 
-newtype Int_ 
-  = Int_ {
+newtype Int_ = 
+  Int_ {
     unInt :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Int = (Core.Name "hydra/ext/xml/schema.Int")
 
-newtype Integer_ 
-  = Integer_ {
+newtype Integer_ = 
+  Integer_ {
     unInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _Integer = (Core.Name "hydra/ext/xml/schema.Integer")
 
-newtype Language 
-  = Language {
+newtype Language = 
+  Language {
     unLanguage :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Language = (Core.Name "hydra/ext/xml/schema.Language")
 
-newtype Long 
-  = Long {
+newtype Long = 
+  Long {
     unLong :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _Long = (Core.Name "hydra/ext/xml/schema.Long")
 
-newtype NMTOKEN 
-  = NMTOKEN {
+newtype NMTOKEN = 
+  NMTOKEN {
     unNMTOKEN :: String}
   deriving (Eq, Ord, Read, Show)
 
 _NMTOKEN = (Core.Name "hydra/ext/xml/schema.NMTOKEN")
 
-newtype NOTATION 
-  = NOTATION {
+newtype NOTATION = 
+  NOTATION {
     unNOTATION :: String}
   deriving (Eq, Ord, Read, Show)
 
 _NOTATION = (Core.Name "hydra/ext/xml/schema.NOTATION")
 
-newtype Name 
-  = Name {
+newtype Name = 
+  Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Name = (Core.Name "hydra/ext/xml/schema.Name")
 
-newtype NegativeInteger 
-  = NegativeInteger {
+newtype NegativeInteger = 
+  NegativeInteger {
     unNegativeInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _NegativeInteger = (Core.Name "hydra/ext/xml/schema.NegativeInteger")
 
-newtype NonNegativeInteger 
-  = NonNegativeInteger {
+newtype NonNegativeInteger = 
+  NonNegativeInteger {
     unNonNegativeInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _NonNegativeInteger = (Core.Name "hydra/ext/xml/schema.NonNegativeInteger")
 
-newtype NonPositiveInteger 
-  = NonPositiveInteger {
+newtype NonPositiveInteger = 
+  NonPositiveInteger {
     unNonPositiveInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _NonPositiveInteger = (Core.Name "hydra/ext/xml/schema.NonPositiveInteger")
 
-newtype NormalizedString 
-  = NormalizedString {
+newtype NormalizedString = 
+  NormalizedString {
     unNormalizedString :: String}
   deriving (Eq, Ord, Read, Show)
 
 _NormalizedString = (Core.Name "hydra/ext/xml/schema.NormalizedString")
 
-newtype PositiveInteger 
-  = PositiveInteger {
+newtype PositiveInteger = 
+  PositiveInteger {
     unPositiveInteger :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _PositiveInteger = (Core.Name "hydra/ext/xml/schema.PositiveInteger")
 
-newtype QName 
-  = QName {
+newtype QName = 
+  QName {
     unQName :: String}
   deriving (Eq, Ord, Read, Show)
 
 _QName = (Core.Name "hydra/ext/xml/schema.QName")
 
-newtype Short 
-  = Short {
+newtype Short = 
+  Short {
     unShort :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _Short = (Core.Name "hydra/ext/xml/schema.Short")
 
-newtype String_ 
-  = String_ {
+newtype String_ = 
+  String_ {
     unString :: String}
   deriving (Eq, Ord, Read, Show)
 
 _String = (Core.Name "hydra/ext/xml/schema.String")
 
-newtype Time 
-  = Time {
+newtype Time = 
+  Time {
     unTime :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Time = (Core.Name "hydra/ext/xml/schema.Time")
 
-newtype Token 
-  = Token {
+newtype Token = 
+  Token {
     unToken :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Token = (Core.Name "hydra/ext/xml/schema.Token")
 
-newtype UnsignedByte 
-  = UnsignedByte {
+newtype UnsignedByte = 
+  UnsignedByte {
     unUnsignedByte :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedByte = (Core.Name "hydra/ext/xml/schema.UnsignedByte")
 
-newtype UnsignedInt 
-  = UnsignedInt {
+newtype UnsignedInt = 
+  UnsignedInt {
     unUnsignedInt :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedInt = (Core.Name "hydra/ext/xml/schema.UnsignedInt")
 
-newtype UnsignedLong 
-  = UnsignedLong {
+newtype UnsignedLong = 
+  UnsignedLong {
     unUnsignedLong :: Integer}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedLong = (Core.Name "hydra/ext/xml/schema.UnsignedLong")
 
-newtype UnsignedShort 
-  = UnsignedShort {
+newtype UnsignedShort = 
+  UnsignedShort {
     unUnsignedShort :: Int}
   deriving (Eq, Ord, Read, Show)
 
 _UnsignedShort = (Core.Name "hydra/ext/xml/schema.UnsignedShort")
 
 -- | See https://www.w3.org/TR/xmlschema-2/#non-fundamental
-data ConstrainingFacet 
-  = ConstrainingFacet {}
+data ConstrainingFacet = 
+  ConstrainingFacet {}
   deriving (Eq, Ord, Read, Show)
 
 _ConstrainingFacet = (Core.Name "hydra/ext/xml/schema.ConstrainingFacet")
 
-data Datatype 
-  = DatatypeAnySimpleType 
-  | DatatypeAnyType 
-  | DatatypeAnyURI 
-  | DatatypeBase64Binary 
-  | DatatypeBoolean 
-  | DatatypeByte 
-  | DatatypeDate 
-  | DatatypeDateTime 
-  | DatatypeDecimal 
-  | DatatypeDouble 
-  | DatatypeDuration 
-  | DatatypeENTITIES 
-  | DatatypeENTITY 
-  | DatatypeFloat 
-  | DatatypeGDay 
-  | DatatypeGMonth 
-  | DatatypeGMonthDay 
-  | DatatypeGYear 
-  | DatatypeGYearMonth 
-  | DatatypeHexBinary 
-  | DatatypeID 
-  | DatatypeIDREF 
-  | DatatypeIDREFS 
-  | DatatypeInt 
-  | DatatypeInteger 
-  | DatatypeLanguage 
-  | DatatypeLong 
-  | DatatypeNMTOKEN 
-  | DatatypeNOTATION 
-  | DatatypeName 
-  | DatatypeNegativeInteger 
-  | DatatypeNonNegativeInteger 
-  | DatatypeNonPositiveInteger 
-  | DatatypeNormalizedString 
-  | DatatypePositiveInteger 
-  | DatatypeQName 
-  | DatatypeShort 
-  | DatatypeString 
-  | DatatypeTime 
-  | DatatypeToken 
-  | DatatypeUnsignedByte 
-  | DatatypeUnsignedInt 
-  | DatatypeUnsignedLong 
-  | DatatypeUnsignedShort 
+data Datatype = 
+  DatatypeAnySimpleType  |
+  DatatypeAnyType  |
+  DatatypeAnyURI  |
+  DatatypeBase64Binary  |
+  DatatypeBoolean  |
+  DatatypeByte  |
+  DatatypeDate  |
+  DatatypeDateTime  |
+  DatatypeDecimal  |
+  DatatypeDouble  |
+  DatatypeDuration  |
+  DatatypeENTITIES  |
+  DatatypeENTITY  |
+  DatatypeFloat  |
+  DatatypeGDay  |
+  DatatypeGMonth  |
+  DatatypeGMonthDay  |
+  DatatypeGYear  |
+  DatatypeGYearMonth  |
+  DatatypeHexBinary  |
+  DatatypeID  |
+  DatatypeIDREF  |
+  DatatypeIDREFS  |
+  DatatypeInt  |
+  DatatypeInteger  |
+  DatatypeLanguage  |
+  DatatypeLong  |
+  DatatypeNMTOKEN  |
+  DatatypeNOTATION  |
+  DatatypeName  |
+  DatatypeNegativeInteger  |
+  DatatypeNonNegativeInteger  |
+  DatatypeNonPositiveInteger  |
+  DatatypeNormalizedString  |
+  DatatypePositiveInteger  |
+  DatatypeQName  |
+  DatatypeShort  |
+  DatatypeString  |
+  DatatypeTime  |
+  DatatypeToken  |
+  DatatypeUnsignedByte  |
+  DatatypeUnsignedInt  |
+  DatatypeUnsignedLong  |
+  DatatypeUnsignedShort 
   deriving (Eq, Ord, Read, Show)
 
 _Datatype = (Core.Name "hydra/ext/xml/schema.Datatype")

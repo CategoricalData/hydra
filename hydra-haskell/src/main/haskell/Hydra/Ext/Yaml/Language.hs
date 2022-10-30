@@ -1,14 +1,12 @@
 module Hydra.Ext.Yaml.Language where
 
-import Hydra.Core
-import Hydra.Common
-import Hydra.Compute
+import Hydra.All
 
 import qualified Data.Set as S
 
 
-language :: Context m -> Language m
-language cx = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
+yamlLanguage :: Language m
+yamlLanguage = Language (LanguageName "hydra/ext/yaml") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean, LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString],

@@ -1,7 +1,6 @@
 module Hydra.Lib.Flows where
 
-import Hydra.Core
-import Hydra.Monads as Flow
+import Hydra.All
 
 
 apply :: Flow s (a -> b) -> Flow s a -> Flow s b
