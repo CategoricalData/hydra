@@ -84,7 +84,14 @@ putState cx = Flow q
         f = pure ()
 
 traceSummary :: Trace -> String
-traceSummary t = L.intercalate "\n" (L.nub $ traceMessages t)
+traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
+  where
+    messageLines = L.nub $ traceMessages t
+    keyvalLines = if M.null (traceOther t)
+        then []
+        else ("key/value pairs:"):(toLine <$> M.toList (traceOther t))
+      where
+        toLine (k, v) = "\t" ++ k ++ ": " ++ show v
 
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
