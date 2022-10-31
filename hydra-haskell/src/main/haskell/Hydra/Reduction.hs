@@ -8,12 +8,17 @@ import Hydra.Basics
 import Hydra.Lexical
 import Hydra.Lexical
 import Hydra.CoreDecoding
+import Hydra.Util.Context
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+
+-- For demo purposes. This should be generalized to enable additional side effects of interest.
+countPrimitiveFunctionInvocations :: Bool
+countPrimitiveFunctionInvocations = True
 
 -- | A beta reduction function which is designed for safety, not speed.
 --   This function does not assume that term to be evaluated is in a normal form,
@@ -99,8 +104,12 @@ betaReduceTerm = reduce M.empty
                  prim <- requirePrimitiveFunction name
                  let arity = primitiveFunctionArity prim
                  if L.length args >= arity
-                   then (mapM (reduce bindings) $ L.take arity args)
-                     >>= (primitiveFunctionImplementation prim)
+                   then do
+                     if countPrimitiveFunctionInvocations
+                       then nextCount ("count_" ++ unName name)
+                       else pure 0
+                     (mapM (reduce bindings) $ L.take arity args)
+                     >>= primitiveFunctionImplementation prim
                      >>= reduce bindings
                      >>= reduceApplication bindings (L.drop arity args)
                    else unwind
