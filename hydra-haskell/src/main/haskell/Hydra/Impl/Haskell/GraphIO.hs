@@ -43,6 +43,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Yaml.Model
 import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Shacl.Model
+import Hydra.Impl.Haskell.Sources.Ext.Shex.Syntax
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -102,6 +103,7 @@ extModules = [
   rdfSyntaxModule,
   scalaMetaModule,
   shaclModelModule,
+  shexSyntaxModule,
   tinkerpopFeaturesModule,
   tinkerpopTypedModule,
   tinkerpopV3Module,
