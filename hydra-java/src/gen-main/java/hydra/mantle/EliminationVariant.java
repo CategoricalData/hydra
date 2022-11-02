@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * The identifier of an elimination constructor
  */
 public abstract class EliminationVariant {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.EliminationVariant");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.EliminationVariant");
   
   private EliminationVariant () {
   
@@ -14,6 +14,8 @@ public abstract class EliminationVariant {
   
   public interface Visitor<R> {
     R visit(Element instance) ;
+    
+    R visit(List instance) ;
     
     R visit(Nominal instance) ;
     
@@ -30,6 +32,10 @@ public abstract class EliminationVariant {
     }
     
     default R visit(Element instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(List instance) {
       return otherwise((instance));
     }
     
@@ -50,7 +56,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Element extends hydra.core.EliminationVariant {
+  public static final class Element extends hydra.mantle.EliminationVariant {
     public Element () {
     
     }
@@ -75,7 +81,32 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Nominal extends hydra.core.EliminationVariant {
+  public static final class List extends hydra.mantle.EliminationVariant {
+    public List () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof List)) {
+        return false;
+      }
+      List o = (List) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Nominal extends hydra.mantle.EliminationVariant {
     public Nominal () {
     
     }
@@ -100,7 +131,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Optional extends hydra.core.EliminationVariant {
+  public static final class Optional extends hydra.mantle.EliminationVariant {
     public Optional () {
     
     }
@@ -125,7 +156,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Record extends hydra.core.EliminationVariant {
+  public static final class Record extends hydra.mantle.EliminationVariant {
     public Record () {
     
     }
@@ -150,7 +181,7 @@ public abstract class EliminationVariant {
     }
   }
   
-  public static final class Union extends hydra.core.EliminationVariant {
+  public static final class Union extends hydra.mantle.EliminationVariant {
     public Union () {
     
     }

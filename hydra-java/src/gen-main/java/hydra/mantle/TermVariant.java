@@ -1,12 +1,12 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
- * The identifier of a type constructor
+ * The identifier of a term expression constructor
  */
-public abstract class TypeVariant {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypeVariant");
+public abstract class TermVariant {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TermVariant");
   
-  private TypeVariant () {
+  private TermVariant () {
   
   }
   
@@ -21,7 +21,7 @@ public abstract class TypeVariant {
     
     R visit(Function instance) ;
     
-    R visit(Lambda instance) ;
+    R visit(Let instance) ;
     
     R visit(List instance) ;
     
@@ -39,6 +39,8 @@ public abstract class TypeVariant {
     
     R visit(Set instance) ;
     
+    R visit(Stream instance) ;
+    
     R visit(Sum instance) ;
     
     R visit(Union instance) ;
@@ -47,7 +49,7 @@ public abstract class TypeVariant {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(TypeVariant instance) {
+    default R otherwise(TermVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -67,7 +69,7 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
-    default R visit(Lambda instance) {
+    default R visit(Let instance) {
       return otherwise((instance));
     }
     
@@ -103,6 +105,10 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
+    default R visit(Stream instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Sum instance) {
       return otherwise((instance));
     }
@@ -116,7 +122,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Annotated extends hydra.core.TypeVariant {
+  public static final class Annotated extends hydra.mantle.TermVariant {
     public Annotated () {
     
     }
@@ -141,7 +147,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Application extends hydra.core.TypeVariant {
+  public static final class Application extends hydra.mantle.TermVariant {
     public Application () {
     
     }
@@ -166,7 +172,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Element extends hydra.core.TypeVariant {
+  public static final class Element extends hydra.mantle.TermVariant {
     public Element () {
     
     }
@@ -191,7 +197,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Function extends hydra.core.TypeVariant {
+  public static final class Function extends hydra.mantle.TermVariant {
     public Function () {
     
     }
@@ -216,17 +222,17 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Lambda extends hydra.core.TypeVariant {
-    public Lambda () {
+  public static final class Let extends hydra.mantle.TermVariant {
+    public Let () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Lambda)) {
+      if (!(other instanceof Let)) {
         return false;
       }
-      Lambda o = (Lambda) (other);
+      Let o = (Let) (other);
       return true;
     }
     
@@ -241,7 +247,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class List extends hydra.core.TypeVariant {
+  public static final class List extends hydra.mantle.TermVariant {
     public List () {
     
     }
@@ -266,7 +272,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Literal extends hydra.core.TypeVariant {
+  public static final class Literal extends hydra.mantle.TermVariant {
     public Literal () {
     
     }
@@ -291,7 +297,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Map extends hydra.core.TypeVariant {
+  public static final class Map extends hydra.mantle.TermVariant {
     public Map () {
     
     }
@@ -316,7 +322,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Nominal extends hydra.core.TypeVariant {
+  public static final class Nominal extends hydra.mantle.TermVariant {
     public Nominal () {
     
     }
@@ -341,7 +347,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Optional extends hydra.core.TypeVariant {
+  public static final class Optional extends hydra.mantle.TermVariant {
     public Optional () {
     
     }
@@ -366,7 +372,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Product extends hydra.core.TypeVariant {
+  public static final class Product extends hydra.mantle.TermVariant {
     public Product () {
     
     }
@@ -391,7 +397,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Record extends hydra.core.TypeVariant {
+  public static final class Record extends hydra.mantle.TermVariant {
     public Record () {
     
     }
@@ -416,7 +422,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Set extends hydra.core.TypeVariant {
+  public static final class Set extends hydra.mantle.TermVariant {
     public Set () {
     
     }
@@ -441,7 +447,32 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Sum extends hydra.core.TypeVariant {
+  public static final class Stream extends hydra.mantle.TermVariant {
+    public Stream () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Stream)) {
+        return false;
+      }
+      Stream o = (Stream) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Sum extends hydra.mantle.TermVariant {
     public Sum () {
     
     }
@@ -466,7 +497,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Union extends hydra.core.TypeVariant {
+  public static final class Union extends hydra.mantle.TermVariant {
     public Union () {
     
     }
@@ -491,7 +522,7 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Variable extends hydra.core.TypeVariant {
+  public static final class Variable extends hydra.mantle.TermVariant {
     public Variable () {
     
     }

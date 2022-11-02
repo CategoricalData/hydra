@@ -14,7 +14,7 @@ public class Module<M> {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.core.Element<M>> elements;
+  public final java.util.List<hydra.mantle.Element<M>> elements;
   
   /**
    * Any additional modules this one has a direct dependency upon
@@ -26,7 +26,7 @@ public class Module<M> {
    */
   public final java.util.Optional<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Element<M>> elements, java.util.List<hydra.module.Module<M>> dependencies, java.util.Optional<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.mantle.Element<M>> elements, java.util.List<hydra.module.Module<M>> dependencies, java.util.Optional<String> description) {
     this.namespace = namespace;
     this.elements = elements;
     this.dependencies = dependencies;
@@ -51,7 +51,7 @@ public class Module<M> {
     return new Module(namespace, elements, dependencies, description);
   }
   
-  public Module withElements(java.util.List<hydra.core.Element<M>> elements) {
+  public Module withElements(java.util.List<hydra.mantle.Element<M>> elements) {
     return new Module(namespace, elements, dependencies, description);
   }
   

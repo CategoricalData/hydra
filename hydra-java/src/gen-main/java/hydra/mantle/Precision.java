@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * Numeric precision: arbitrary precision, or precision to a specified number of bits
  */
 public abstract class Precision {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Precision");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.Precision");
   
   private Precision () {
   
@@ -32,7 +32,7 @@ public abstract class Precision {
     }
   }
   
-  public static final class Arbitrary extends hydra.core.Precision {
+  public static final class Arbitrary extends hydra.mantle.Precision {
     public Arbitrary () {
     
     }
@@ -57,7 +57,7 @@ public abstract class Precision {
     }
   }
   
-  public static final class Bits extends hydra.core.Precision {
+  public static final class Bits extends hydra.mantle.Precision {
     public final Integer value;
     
     public Bits (Integer value) {

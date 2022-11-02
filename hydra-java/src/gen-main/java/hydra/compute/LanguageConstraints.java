@@ -3,23 +3,23 @@ package hydra.compute;
 public class LanguageConstraints<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageConstraints");
   
-  public final java.util.Set<hydra.core.EliminationVariant> eliminationVariants;
+  public final java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants;
   
-  public final java.util.Set<hydra.core.LiteralVariant> literalVariants;
+  public final java.util.Set<hydra.mantle.LiteralVariant> literalVariants;
   
   public final java.util.Set<hydra.core.FloatType> floatTypes;
   
-  public final java.util.Set<hydra.core.FunctionVariant> functionVariants;
+  public final java.util.Set<hydra.mantle.FunctionVariant> functionVariants;
   
   public final java.util.Set<hydra.core.IntegerType> integerTypes;
   
-  public final java.util.Set<hydra.core.TermVariant> termVariants;
+  public final java.util.Set<hydra.mantle.TermVariant> termVariants;
   
-  public final java.util.Set<hydra.core.TypeVariant> typeVariants;
+  public final java.util.Set<hydra.mantle.TypeVariant> typeVariants;
   
   public final java.util.function.Function<hydra.core.Type<M>, Boolean> types;
   
-  public LanguageConstraints (java.util.Set<hydra.core.EliminationVariant> eliminationVariants, java.util.Set<hydra.core.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.core.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.core.TermVariant> termVariants, java.util.Set<hydra.core.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<M>, Boolean> types) {
+  public LanguageConstraints (java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants, java.util.Set<hydra.mantle.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.mantle.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.mantle.TermVariant> termVariants, java.util.Set<hydra.mantle.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<M>, Boolean> types) {
     this.eliminationVariants = eliminationVariants;
     this.literalVariants = literalVariants;
     this.floatTypes = floatTypes;
@@ -44,11 +44,11 @@ public class LanguageConstraints<M> {
     return 2 * eliminationVariants.hashCode() + 3 * literalVariants.hashCode() + 5 * floatTypes.hashCode() + 7 * functionVariants.hashCode() + 11 * integerTypes.hashCode() + 13 * termVariants.hashCode() + 17 * typeVariants.hashCode() + 19 * types.hashCode();
   }
   
-  public LanguageConstraints withEliminationVariants(java.util.Set<hydra.core.EliminationVariant> eliminationVariants) {
+  public LanguageConstraints withEliminationVariants(java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withLiteralVariants(java.util.Set<hydra.core.LiteralVariant> literalVariants) {
+  public LanguageConstraints withLiteralVariants(java.util.Set<hydra.mantle.LiteralVariant> literalVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
@@ -56,7 +56,7 @@ public class LanguageConstraints<M> {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withFunctionVariants(java.util.Set<hydra.core.FunctionVariant> functionVariants) {
+  public LanguageConstraints withFunctionVariants(java.util.Set<hydra.mantle.FunctionVariant> functionVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
@@ -64,11 +64,11 @@ public class LanguageConstraints<M> {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withTermVariants(java.util.Set<hydra.core.TermVariant> termVariants) {
+  public LanguageConstraints withTermVariants(java.util.Set<hydra.mantle.TermVariant> termVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withTypeVariants(java.util.Set<hydra.core.TypeVariant> typeVariants) {
+  public LanguageConstraints withTypeVariants(java.util.Set<hydra.mantle.TypeVariant> typeVariants) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   

@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
 public class Element<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Element");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.Element");
   
   public final hydra.core.Name name;
   

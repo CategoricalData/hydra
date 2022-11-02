@@ -17,6 +17,7 @@ import hydra.core.UnitType;
 import hydra.core.VariableType;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static hydra.impl.java.dsl.Core.*;
 
@@ -154,7 +155,7 @@ public interface Types {
   }
 
   static <M> RowType<M> row(final Name name, final FieldType<M>... fields) {
-    return new RowType<>(name, Arrays.asList(fields));
+    return new RowType<>(name, Optional.empty(), Arrays.asList(fields));
   }
 
   static <M> Type<M> set(final Type<M> elements) {
