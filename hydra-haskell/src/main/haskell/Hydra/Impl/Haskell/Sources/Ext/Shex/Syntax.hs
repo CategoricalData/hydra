@@ -71,449 +71,454 @@ shexSyntaxModule = grammarToModule ns shexGrammar $
 shexGrammar :: Grammar
 shexGrammar = Grammar [
 
--- [1] shexDoc ::= directive* ((notStartAction | startActions) statement*)?
-  define "shexDoc" [
-    list[star"directive", opt(list[ alts["notStartAction", "startActions"], star "statement" ]), "prefixDecl"]],
+-- [1] ShexDoc ::= Directive* ((NotStartAction | StartActions) Statement*)?
+  define "ShexDoc" [
+    list[star"Directive", opt(list[ alts["NotStartAction", "StartActions"], star "Statement" ]), "PrefixDecl"]],
 
--- [2] directive ::= baseDecl | prefixDecl
--- [3] baseDecl ::= "BASE" IRIREF
--- [4] prefixDecl ::= "PREFIX" PNAME_NS IRIREF
-  define "directive" [
-     "baseDecl" >: list[base_, "IRIREF"],
-     "prefixDecl" >: list[prefix_, "PNAME_NS", "IRIREF"]],
+-- [2] Directive ::= BaseDecl | PrefixDecl
+  define "Directive" [
+     "BaseDecl", "PrefixDecl"],
 
--- [5] notStartAction ::= start | shapeExprDecl
--- [6] start ::= "start" '=' shapeExpression
--- [9] shapeExprDecl ::= shapeExprLabel (shapeExpression|"EXTERNAL")
-  define "notStartAction" [
-    "start">: list[start_, equal_, "shapeExpression"],
-    "shapeExprDecl">: list["shapeExprLabel", alts["shapeExpression", external_]]],
+-- [3] BaseDecl ::= "BASE" IriRef
+ define "BaseDecl" [
+     list[base_, "IriRef"]],
 
--- [7] startActions ::= codeDecl+
-  define "startActions" [
-    plus("codeDecl")],
+-- [4] PrefixDecl ::= "PREFIX" PnameNs IriRef
+ define "PrefixDecl" [
+     list[prefix_, "PnameNs", "IriRef"]],
 
--- [8] statement ::= directive | notStartAction
-  define "statement" [
-    alts[ "directive", "notStartAction"]],
+-- [5] NotStartAction ::= start | shapeExprDecl
+-- [6] start ::= "start" '=' ShapeExpression
+-- [9] shapeExprDecl ::= ShapeExprLabel (ShapeExpression|"EXTERNAL")
+  define "NotStartAction" [
+    "start">: list[start_, equal_, "ShapeExpression"],
+    "shapeExprDecl">: list["ShapeExprLabel", alts["ShapeExpression", external_]]],
 
--- [10] shapeExpression ::= shapeOr
-  define "shapeExpression" [
-    "shapeOr"],
+-- [7] StartActions ::= CodeDecl+
+  define "StartActions" [
+    plus("CodeDecl")],
 
--- [11] inlineShapeExpression ::= inlineShapeOr
-  define "inlineShapeExpression" [
-    "inlineShapeOr"],
+-- [8] Statement ::= Directive | NotStartAction
+  define "Statement" [
+    alts[ "Directive", "NotStartAction"]],
 
--- [12] shapeOr ::= shapeAnd ("OR" shapeAnd)*
-  define "shapeOr" [
-    list["shapeAnd", star(list[or_, "shapeAnd"])]],
+-- [10] ShapeExpression ::= ShapeOr
+  define "ShapeExpression" [
+    "ShapeOr"],
 
--- [13] inlineShapeOr ::= inlineShapeAnd ("OR" inlineShapeAnd)*
-  define "inlineShapeOr" [
-    list["shapeAnd", star(list[or_, "inlineShapeAnd"])]],
+-- [11] InlineShapeExpression ::= InlineShapeOr
+  define "InlineShapeExpression" [
+    "InlineShapeOr"],
 
--- [14] shapeAnd ::= shapeNot ("AND" shapeNot)*
-  define "shapeAnd" [
-    list["shapeNot", star(list[and_, "shapeNot"])]],
+-- [12] ShapeOr ::= ShapeAnd ("OR" ShapeAnd)*
+  define "ShapeOr" [
+    list["ShapeAnd", star(list[or_, "ShapeAnd"])]],
 
--- [15] inlineShapeAnd ::= inlineShapeNot ("AND" inlineShapeNot)*
-  define "inlineShapeAnd" [
-    list["inlineShapeNot", star(list[and_, "inlineShapeNot"])]],
+-- [13] InlineShapeOr ::= InlineShapeAnd ("OR" InlineShapeAnd)*
+  define "InlineShapeOr" [
+    list["ShapeAnd", star(list[or_, "InlineShapeAnd"])]],
 
--- [16] shapeNot ::= "NOT"? shapeAtom
-  define "shapeNot" [
-    list[opt (not_), "shapeAtom"]],
+-- [14] ShapeAnd ::= ShapeNot ("AND" ShapeNot)*
+  define "ShapeAnd" [
+    list["ShapeNot", star(list[and_, "ShapeNot"])]],
 
--- [17] inlineShapeNot ::= "NOT"? inlineShapeAtom
-  define "inlineShapeNot" [
-    list[opt(not_), "inlineShapeAtom"]],
+-- [15] InlineShapeAnd ::= InlineShapeNot ("AND" InlineShapeNot)*
+  define "InlineShapeAnd" [
+    list["InlineShapeNot", star(list[and_, "InlineShapeNot"])]],
 
--- [18] shapeAtom ::= nodeConstraint shapeOrRef?
---                                   | shapeOrRef
---                                   | "(" shapeExpression ")"
+-- [16] ShapeNot ::= "NOT"? ShapeAtom
+  define "ShapeNot" [
+    list[opt (not_), "ShapeAtom"]],
+
+-- [17] InlineShapeNot ::= "NOT"? InlineShapeAtom
+  define "InlineShapeNot" [
+    list[opt(not_), "InlineShapeAtom"]],
+
+-- [18] ShapeAtom ::= NodeConstraint ShapeOrRef?
+--                                   | ShapeOrRef
+--                                   | "(" ShapeExpression ")"
 --                                   | '.'  # no constraint
-  define "shapeAtom" [
-    list["nodeConstraint", opt("shapeOrRef")],
-    "shapeOrRef",
-    list[parenOpen_, "shapeExpression", parenClose_],
+  define "ShapeAtom" [
+    list["NodeConstraint", opt("ShapeOrRef")],
+    "ShapeOrRef",
+    list[parenOpen_, "ShapeExpression", parenClose_],
     period_],
 
--- [19] inlineShapeAtom ::= nodeConstraint inlineShapeOrRef?
---                                   | inlineShapeOrRef nodeConstraint?
---                                   | "(" shapeExpression ")"
+-- [19] InlineShapeAtom ::= NodeConstraint InlineShapeOrRef?
+--                                   | InlineShapeOrRef NodeConstraint?
+--                                   | "(" ShapeExpression ")"
 --                                   | '.'  # no constraint
-  define "inlineShapeAtom" [
-    list["nodeConstraint", opt("inlineShapeOrRef")],
-    list["inlineShapeOrRef", opt("nodeConstraint")],
-    list[parenOpen_, "shapeExpression", parenClose_],
+  define "InlineShapeAtom" [
+    list["NodeConstraint", opt("InlineShapeOrRef")],
+    list["InlineShapeOrRef", opt("NodeConstraint")],
+    list[parenOpen_, "ShapeExpression", parenClose_],
     period_],
 
--- [20] shapeOrRef ::= shapeDefinition
---                                   | ATPNAME_LN | ATPNAME_NS | '@' shapeExprLabel
-  define "shapeOrRef" [
-    "shapeDefinition",
-    "ATPNAME_LN",
-    "ATPNAME_NS",
-    list[at_,"shapeExprLabel"]],
+-- [20] ShapeOrRef ::= ShapeDefinition
+--                                   | AtpNameLn | AtpNameNs | '@' ShapeExprLabel
+  define "ShapeOrRef" [
+    "ShapeDefinition",
+    "AtpNameLn",
+    "AtpNameNs",
+    list[at_,"ShapeExprLabel"]],
 
--- [21] inlineShapeOrRef ::= inlineShapeDefinition
---                                   | ATPNAME_LN | ATPNAME_NS | '@' shapeExprLabel
-  define "inlineShapeOrRef" [
-    "inlineShapeDefinition",
-    "ATPNAME_LN",
-    "ATPNAME_NS",
-    list[at_,"shapeExprLabel"]],
+-- [21] InlineShapeOrRef ::= InlineShapeDefinition
+--                                   | AtpNameLn | AtpNameNs | '@' ShapeExprLabel
+  define "InlineShapeOrRef" [
+    "InlineShapeDefinition",
+    "AtpNameLn",
+    "AtpNameNs",
+    list[at_,"ShapeExprLabel"]],
 
--- [22] nodeConstraint ::= "LITERAL" xsFacet*
---                                   | nonLiteralKind stringFacet*
---                                   | datatype xsFacet*
---                                   | valueSet xsFacet*
---                                   | xsFacet+
-  define "nodeConstraint" [
-    list[literal_, star("xsFacet")],
-    list["nonLiteralKind", star("stringFacet")],
-    list["datatype", star("xsFacet")],
-    list["valueSet", star("xsFacet")],
-    list["valueSet", star("xsFacet")],
-    plus("xsFacet")],
+-- [22] NodeConstraint ::= "LITERAL" XsFacet*
+--                                   | NonLiteralKind StringFacet*
+--                                   | Datatype XsFacet*
+--                                   | ValueSet XsFacet*
+--                                   | XsFacet+
+  define "NodeConstraint" [
+    list[literal_, star("XsFacet")],
+    list["NonLiteralKind", star("StringFacet")],
+    list["Datatype", star("XsFacet")],
+    list["ValueSet", star("XsFacet")],
+    list["ValueSet", star("XsFacet")],
+    plus("XsFacet")],
 
--- [23] nonLiteralKind ::= "IRI" | "BNODE" | "NONLITERAL"
-  define "nonLiteralKind" [iri_, bnode_, nonLiteral_],
+-- [23] NonLiteralKind ::= "IRI" | "BNODE" | "NONLITERAL"
+  define "NonLiteralKind" [iri_, bnode_, nonLiteral_],
 
--- [24] xsFacet ::= stringFacet | numericFacet
-  define "xsFacet" ["stringFacet", "numericFacet"],
+-- [24] XsFacet ::= StringFacet | NumericFacet
+  define "XsFacet" ["StringFacet", "NumericFacet"],
 
--- [25] stringFacet ::= stringLength INTEGER | REGEXP
-  define "stringFacet" [
-    list ["stringLength", "INTEGER"],
-    "REGEXP" ],
+-- [25] StringFacet ::= StringLength Integer | Regexp
+  define "StringFacet" [
+    list ["StringLength", "Integer"],
+    "Regexp" ],
 
--- [26] stringLength ::= "LENGTH" | "MINLENGTH" | "MAXLENGTH"
-  define "stringLength" [
+-- [26] StringLength ::= "LENGTH" | "MINLENGTH" | "MAXLENGTH"
+  define "StringLength" [
     length_, minLength_, maxLength_],
 
--- [27] numericFacet ::= numericRange numericLiteral
---                                   | numericLength INTEGER
-  define "numericFacet" [
-    list ["numericRange", "numericLiteral"],
-    list ["numericLength", "INTEGER"]],
+-- [27] NumericFacet ::= NumericRange NumericLiteral
+--                                   | NumericLength Integer
+  define "NumericFacet" [
+    list ["NumericRange", "NumericLiteral"],
+    list ["NumericLength", "Integer"]],
 
--- [28] numericRange ::= "MININCLUSIVE" | "MINEXCLUSIVE" | "MAXINCLUSIVE" | "MAXEXCLUSIVE"
-  define "numericRange" [
+-- [28] NumericRange ::= "MININCLUSIVE" | "MINEXCLUSIVE" | "MAXINCLUSIVE" | "MAXEXCLUSIVE"
+  define "NumericRange" [
     minInclusive_, minExclusive_, maxInclusive_, maxExclusive_],
 
--- [29] numericLength ::= "TOTALDIGITS" | "FRACTIONDIGITS"
-  define "numericLength" [
+-- [29] NumericLength ::= "TOTALDIGITS" | "FRACTIONDIGITS"
+  define "NumericLength" [
     totalDigits_, fractionDigits_],
 
--- [30] shapeDefinition ::= (includeSet | extraPropertySet | "CLOSED")* '{' tripleExpression? '}' annotation* semanticActions
-  define "shapeDefinition" [
-    list[star(alts["includeSet", "extraPropertySet", closed_]),
-        braceOpen_, opt("tripleExpression"), braceClose_,
-        star("annotation"), "semanticActions"]],
+-- [30] ShapeDefinition ::= (IncludeSet | ExtraPropertySet | "CLOSED")* '{' TripleExpression? '}' Annotation* SemanticActions
+  define "ShapeDefinition" [
+    list[star(alts["IncludeSet", "ExtraPropertySet", closed_]),
+        braceOpen_, opt("TripleExpression"), braceClose_,
+        star("Annotation"), "SemanticActions"]],
 
--- [31] inlineShapeDefinition ::= (includeSet | extraPropertySet | "CLOSED")* '{' tripleExpression? '}'
-  define "inlineShapeDefinition" [
-    list[star(alts["includeSet", "extraPropertySet", closed_]), braceOpen_, opt("tripleExpression"), braceClose_]],
+-- [31] InlineShapeDefinition ::= (IncludeSet | ExtraPropertySet | "CLOSED")* '{' TripleExpression? '}'
+  define "InlineShapeDefinition" [
+    list[star(alts["IncludeSet", "ExtraPropertySet", closed_]), braceOpen_, opt("TripleExpression"), braceClose_]],
 
--- [32] extraPropertySet ::= "EXTRA" predicate+
-  define "extraPropertySet" [
-    list[extra_, plus"predicate"]],
+-- [32] ExtraPropertySet ::= "EXTRA" Predicate+
+  define "ExtraPropertySet" [
+    list[extra_, plus"Predicate"]],
 
--- [33] tripleExpression ::= oneOfTripleExpr
-  define "tripleExpression" [
-    "oneOfTripleExpr"],
+-- [33] TripleExpression ::= OneOfTripleExpr
+  define "TripleExpression" [
+    "OneOfTripleExpr"],
 
--- [34] oneOfTripleExpr ::= groupTripleExpr | multiElementOneOf
-  define "oneOfTripleExpr" [
-    "groupTripleExpr",
-    "multiElementOneOf"],
+-- [34] OneOfTripleExpr ::= GroupTripleExpr | MultiElementOneOf
+  define "OneOfTripleExpr" [
+    "GroupTripleExpr",
+    "MultiElementOneOf"],
 
--- [35] multiElementOneOf ::= groupTripleExpr ('|' groupTripleExpr)+
-  define "multiElementOneOf" [
-    list["groupTripleExpr", plus(list[pipe_, "groupTripleExpr"])]],
+-- [35] MultiElementOneOf ::= GroupTripleExpr ('|' GroupTripleExpr)+
+  define "MultiElementOneOf" [
+    list["GroupTripleExpr", plus(list[pipe_, "GroupTripleExpr"])]],
 
--- [36] innerTripleExpr ::= multiElementGroup | multiElementOneOf
-  define "innerTripleExpr" [
-    "multiElementGroup",
-    "multiElementOneOf"],
+-- [36] InnerTripleExpr ::= MultiElementGroup | MultiElementOneOf
+  define "InnerTripleExpr" [
+    "MultiElementGroup",
+    "MultiElementOneOf"],
 
--- [37] groupTripleExpr ::= singleElementGroup | multiElementGroup
-  define "groupTripleExpr" [
-    "singleElementGroup",
-    "multiElementGroup"],
+-- [37] GroupTripleExpr ::= SingleElementGroup | MultiElementGroup
+  define "GroupTripleExpr" [
+    "SingleElementGroup",
+    "MultiElementGroup"],
 
--- [38] singleElementGroup ::= unaryTripleExpr ';'?
-  define "singleElementGroup" [
-    list["unaryTripleExpr", opt(semicolon_)]],
+-- [38] SingleElementGroup ::= UnaryTripleExpr ';'?
+  define "SingleElementGroup" [
+    list["UnaryTripleExpr", opt(semicolon_)]],
 
--- [39] multiElementGroup ::= unaryTripleExpr (';' unaryTripleExpr)+ ';'?
-  define "multiElementGroup" [
-    list["unaryTripleExpr", plus(list[semicolon_, "unaryTripleExpr"]), opt(semicolon_)]],
+-- [39] MultiElementGroup ::= UnaryTripleExpr (';' UnaryTripleExpr)+ ';'?
+  define "MultiElementGroup" [
+    list["UnaryTripleExpr", plus(list[semicolon_, "UnaryTripleExpr"]), opt(semicolon_)]],
 
--- [40] unaryTripleExpr ::= ('$' tripleExprLabel)? (tripleConstraint | bracketedTripleExpr) | include
-  define "unaryTripleExpr" [
-    list[opt(list[dollar_, "tripleExprLabel"]), alts["tripleConstraint", "bracketedTripleExpr"]],
-    "include"],
+-- [40] UnaryTripleExpr ::= ('$' TripleExprLabel)? (TripleConstraint | BracketedTripleExpr) | Include
+  define "UnaryTripleExpr" [
+    list[opt(list[dollar_, "TripleExprLabel"]), alts["TripleConstraint", "BracketedTripleExpr"]],
+    "Include"],
 
--- [41] bracketedTripleExpr ::= '(' innerTripleExpr ')' cardinality? annotation* semanticActions
-  define "bracketedTripleExpr" [
-    list[parenOpen_, "innerTripleExpr", parenClose_, opt"cardinality", star"annotation", "semanticActions"]],
+-- [41] BracketedTripleExpr ::= '(' InnerTripleExpr ')' Cardinality? Annotation* SemanticActions
+  define "BracketedTripleExpr" [
+    list[parenOpen_, "InnerTripleExpr", parenClose_, opt"Cardinality", star"Annotation", "SemanticActions"]],
 
--- [43] tripleConstraint ::= senseFlags? predicate inlineShapeExpression cardinality? annotation* semanticActions
-  define "tripleConstraint" [
-    list[opt"senseFlags", "predicate", "inlineShapeExpression", opt"cardinality", star"annotation", "semanticActions"]],
+-- [43] TripleConstraint ::= SenseFlags? Predicate InlineShapeExpression Cardinality? Annotation* SemanticActions
+  define "TripleConstraint" [
+    list[opt"SenseFlags", "Predicate", "InlineShapeExpression", opt"Cardinality", star"Annotation", "SemanticActions"]],
 
--- [44] cardinality ::= '*' | '+' | '?' | REPEAT_RANGE
-  define "cardinality" [
-    star_, plus_, question_, "REPEAT_RANGE"],
+-- [44] Cardinality ::= '*' | '+' | '?' | RepeatRange
+  define "Cardinality" [
+    star_, plus_, question_, "RepeatRange"],
 
 
--- [45] senseFlags ::= '^'
-  define "senseFlags" [
+-- [45] SenseFlags ::= '^'
+  define "SenseFlags" [
     terminal "^"],
 
--- [46] valueSet ::= '[' valueSetValue* ']'
-  define "valueSet" [
-    list[terminal "[", star"valueSetValue", terminal "]"]],
+-- [46] ValueSet ::= '[' ValueSetValue* ']'
+  define "ValueSet" [
+    list[terminal "[", star"ValueSetValue", terminal "]"]],
 
--- [47] valueSetValue ::= iriRange | literal
-  define "valueSetValue" [
-    "iriRange",
-    "literal"],
+-- [47] ValueSetValue ::= IriRange | Literal
+  define "ValueSetValue" [
+    "IriRange",
+    "Literal"],
 
--- [48] iriRange ::= iri ('~' exclusion*)? | '.' exclusion+
-  define "iriRange" [
-    list["iri", opt(list[tilde_, star"exclusion"])],
-    list[period_, plus"exclusion"]],
+-- [48] IriRange ::= Iri ('~' Exclusion*)? | '.' Exclusion+
+  define "IriRange" [
+    list["Iri", opt(list[tilde_, star"Exclusion"])],
+    list[period_, plus"Exclusion"]],
 
--- [49] exclusion ::= '-' iri '~'?
-  define "exclusion" [
-    list[dash_, "iri", tilde_]],
+-- [49] Exclusion ::= '-' Iri '~'?
+  define "Exclusion" [
+    list[dash_, "Iri", tilde_]],
 
--- [50] include ::= '&' tripleExprLabel
-  define "include" [
-    list[ampersand_, "tripleExprLabel"]],
+-- [50] Include ::= '&' TripleExprLabel
+  define "Include" [
+    list[ampersand_, "TripleExprLabel"]],
 
--- [51] annotation ::= '//' predicate (iri | literal)
-  define "annotation" [
-    list[terminal "//", "predicate", alts["iri", "literal"]]],
+-- [51] Annotation ::= '//' Predicate (Iri | Literal)
+  define "Annotation" [
+    list[terminal "//", "Predicate", alts["Iri", "Literal"]]],
 
--- [52] semanticActions ::= codeDecl*
-  define "semanticActions" [
-    star"codeDecl"],
+-- [52] SemanticActions ::= CodeDecl*
+  define "SemanticActions" [
+    star"CodeDecl"],
 
--- [53] codeDecl ::= '%' iri (CODE | "%")
-  define "codeDecl" [
-    list[percent_, "iri", alts["CODE", percent_]]],
+-- [53] CodeDecl ::= '%' Iri (Code | "%")
+  define "CodeDecl" [
+    list[percent_, "Iri", alts["Code", percent_]]],
 
--- [13t] literal ::= rdfLiteral | numericLiteral | booleanLiteral
-  define "literal" [
-    "rdfLiteral",
-    "numericLiteral",
-    "booleanLiteral"],
+-- [13t] Literal ::= RdfLiteral | NumericLiteral | BooleanLiteral
+  define "Literal" [
+    "RdfLiteral",
+    "NumericLiteral",
+    "BooleanLiteral"],
 
--- [54] predicate ::= iri | RDF_TYPE
-  define "predicate" [
-    "iri",
-    "RDF_TYPE"],
+-- [54] Predicate ::= Iri | RdfType
+  define "Predicate" [
+    "Iri",
+    "RdfType"],
 
--- [55] datatype ::= iri
-  define "datatype" [
-    "iri"],
+-- [55] Datatype ::= Iri
+  define "Datatype" [
+    "Iri"],
 
--- [56] shapeExprLabel ::= iri | blankNode
-  define "shapeExprLabel" [
-    "iri",
-    "blankNode"],
+-- [56] ShapeExprLabel ::= Iri | BlankNode
+  define "ShapeExprLabel" [
+    "Iri",
+    "BlankNode"],
 
--- [42] tripleExprLabel ::= '$' (iri | blankNode)
-  define "tripleExprLabel" [
-    list[dollar_, alts["iri", "blankNode"]]],
+-- [42] TripleExprLabel ::= '$' (Iri | BlankNode)
+  define "TripleExprLabel" [
+    list[dollar_, alts["Iri", "BlankNode"]]],
 
--- [16t] numericLiteral ::= INTEGER | DECIMAL | DOUBLE
-  define "numericLiteral" [
-    "INTEGER", "DECIMAL", "DOUBLE"],
+-- [16t] NumericLiteral ::= Integer | Decimal | Double
+  define "NumericLiteral" [
+    "Integer", "Decimal", "Double"],
 
--- [129s] rdfLiteral ::= string (LANGTAG | '^^' datatype)?
-  define "rdfLiteral" [
-    list["string", opt(alts["LANGTAG", list[terminal "^^", "datatype"]])]],
+-- [129s] RdfLiteral ::= String (LangTag | '^^' Datatype)?
+  define "RdfLiteral" [
+    list["String", opt(alts["LangTag", list[terminal "^^", "Datatype"]])]],
 
--- [134s] booleanLiteral ::= 'true' | 'false'
-  define "booleanLiteral" [
+-- [134s] BooleanLiteral ::= 'true' | 'false'
+  define "BooleanLiteral" [
     true_, false_],
 
--- [135s] string ::= STRING_LITERAL1 | STRING_LITERAL_LONG1
---                 | STRING_LITERAL2 | STRING_LITERAL_LONG2
-  define "string" [
-    "STRING_LITERAL1",
-    "STRING_LITERAL_LONG1",
-    "STRING_LITERAL2",
-    "STRING_LITERAL_LONG2"],
+-- [135s] String ::= StringLiteral1 | StringLiteralLong1
+--                 | StringLiteral2 | StringLiteralLong2
+  define "String" [
+    "StringLiteral1",
+    "StringLiteralLong1",
+    "StringLiteral2",
+    "StringLiteralLong2"],
 
--- [136s] iri ::= IRIREF | prefixedName
-  define "iri" [
-    "IRIREF",
-    "prefixedName"],
+-- [136s] Iri ::= IriRef | PrefixedName
+  define "Iri" [
+    "IriRef",
+    "PrefixedName"],
 
--- [137s] prefixedName ::= PNAME_LN | PNAME_NS
-  define "prefixedName" [
-    "PNAME_LN",
-    "PNAME_NS"],
+-- [137s] PrefixedName ::= PnameLn | PnameNs
+  define "PrefixedName" [
+    "PnameLn",
+    "PnameNs"],
 
--- [138s] blankNode ::= BLANK_NODE_LABEL
-  define "blankNode" [
-    "BLANK_NODE_LABEL"],
+-- [138s] BlankNode ::= BlankNodeLabel
+  define "BlankNode" [
+    "BlankNodeLabel"],
 
 --   # Reserved for future use
--- [57] includeSet ::= '&' shapeExprLabel+
-  define "includeSet" [
-    list[ampersand_, plus"shapeExprLabel"]],
+-- [57] IncludeSet ::= '&' ShapeExprLabel+
+  define "IncludeSet" [
+    list[ampersand_, plus"ShapeExprLabel"]],
 
--- [58] CODE ::= '{' ([^%\\] | '\\' [%\\] | UCHAR)* '%' '}'
-  define "CODE" [
-    list[braceOpen_, star(alts[ regex "[^%\\]", list[doubleFrwSlash_, regex "[%\\]"], "UCHAR" ]), percent_, braceClose_]],
+-- [58] Code ::= '{' ([^%\\] | '\\' [%\\] | Uchar)* '%' '}'
+  define "Code" [
+    list[braceOpen_, star(alts[ regex "[^%\\]", list[doubleFrwSlash_, regex "[%\\]"], "Uchar" ]), percent_, braceClose_]],
 
--- [59] REPEAT_RANGE ::= '{' INTEGER (',' (INTEGER | '*')?)? '}'
-  define "REPEAT_RANGE" [
-    list[braceOpen_, "INTEGER", opt(list[coma_, opt(opt(alts["INTEGER", star_]))]), braceClose_]],
+-- [59] RepeatRange ::= '{' Integer (',' (Integer | '*')?)? '}'
+  define "RepeatRange" [
+    list[braceOpen_, "Integer", opt(list[coma_, opt(opt(alts["Integer", star_]))]), braceClose_]],
 
--- [60] RDF_TYPE ::= 'a'
-  define "RDF_TYPE" [
+-- [60] RdfType ::= 'a'
+  define "RdfType" [
     terminal "a"],
 
--- [18t] IRIREF ::= '<' ([^#x00-#x20<>\"{}|^`\\] | UCHAR)* '>' /* #x00=NULL #01-#x1F=control codes #x20=space */
-  define "IRIREF" [
-    list[terminal "<", star(alts[ regex "[^#x00-#x20<>\"{}|^`\\]", "UCHAR"]), terminal ">"]],
+-- [18t] IriRef ::= '<' ([^#x00-#x20<>\"{}|^`\\] | Uchar)* '>' /* #x00=NULL #01-#x1F=control codes #x20=space */
+  define "IriRef" [
+    list[terminal "<", star(alts[ regex "[^#x00-#x20<>\"{}|^`\\]", "Uchar"]), terminal ">"]],
 
--- [140s] PNAME_NS ::= PN_PREFIX? ':'
-  define "PNAME_NS" [
-    list[opt"PN_PREFIX", semicolon_]],
+-- [140s] PnameNs ::= PnPrefix? ':'
+  define "PnameNs" [
+    list[opt"PnPrefix", semicolon_]],
 
--- [141s] PNAME_LN ::= PNAME_NS PN_LOCAL
-  define "PNAME_LN" [
-    list["PNAME_NS", "PN_LOCAL"]],
+-- [141s] PnameLn ::= PnameNs PnLocal
+  define "PnameLn" [
+    list["PnameNs", "PnLocal"]],
 
--- [61] ATPNAME_NS ::= '@' PN_PREFIX? ':'
-  define "ATPNAME_NS" [
-    list[at_, opt"PN_PREFIX", colon_]],
+-- [61] AtpNameNs ::= '@' PnPrefix? ':'
+  define "AtpNameNs" [
+    list[at_, opt"PnPrefix", colon_]],
 
--- [62] ATPNAME_LN ::= '@' PNAME_NS PN_LOCAL
-  define "ATPNAME_LN" [
-    list[at_, "PNAME_NS", "PN_LOCAL"]],
+-- [62] AtpNameLn ::= '@' PnameNs PnLocal
+  define "AtpNameLn" [
+    list[at_, "PnameNs", "PnLocal"]],
 
--- [63] REGEXP ::= '~/' ([^#x2f#x5C#xA#xD] | '\\' [tbnrf\\/] | UCHAR)* '/' [smix]*
-  define "REGEXP" [
+-- [63] Regexp ::= '~/' ([^#x2f#x5C#xA#xD] | '\\' [tbnrf\\/] | Uchar)* '/' [smix]*
+  define "Regexp" [
     list[terminal "~/", star(alts[
         regex "[^#x2f#x5C#xA#xD]",
-        list[terminal "\\", regex "[tbnrf\\/]"], "UCHAR"]),
+        list[terminal "\\", regex "[tbnrf\\/]"], "Uchar"]),
         terminal "/", star( regex "[smix]")
     ]],
 
--- [142s] BLANK_NODE_LABEL ::= '_:' (PN_CHARS_U | [0-9]) ((PN_CHARS | '.')* PN_CHARS)?
-  define "BLANK_NODE_LABEL" [
-    list[terminal "_:", alts["PN_CHARS_U", regex "[0-9]"], opt(star(alts["PN_CHARS", period_])),"PN_CHARS"]],
+-- [142s] BlankNodeLabel ::= '_:' (PnCharsU | [0-9]) ((PnChars | '.')* PnChars)?
+  define "BlankNodeLabel" [
+    list[terminal "_:", alts["PnCharsU", regex "[0-9]"], opt(star(alts["PnChars", period_])),"PnChars"]],
 
--- [145s] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
-  define "LANGTAG" [
+-- [145s] LangTag ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
+  define "LangTag" [
     regex "@[a-zA-Z]+('-'[a-zA-Z0-9]+)*"],
 
--- [19t] INTEGER ::= [+-]? [0-9]+
-  define "INTEGER" [
+-- [19t] Integer ::= [+-]? [0-9]+
+  define "Integer" [
     regex "[+-]? [0-9]+"],
 
--- [20t] DECIMAL ::= [+-]? [0-9]* '.' [0-9]+
-  define "DECIMAL" [
+-- [20t] Decimal ::= [+-]? [0-9]* '.' [0-9]+
+  define "Decimal" [
     regex "[+-]? [0-9]*\\.[0-9]+"],
 
--- [21t] DOUBLE ::= [+-]? ([0-9]+ '.' [0-9]* EXPONENT | '.'? [0-9]+ EXPONENT)
+-- [21t] Double ::= [+-]? ([0-9]+ '.' [0-9]* EXPONENT | '.'? [0-9]+ EXPONENT)
 -- [155s] EXPONENT ::= [eE] [+-]? [0-9]+
-  define "DOUBLE" [
+  define "Double" [
     regex "([+-]?([0-9]+)?\\.[0-9]*[eE][+-]?[0-9]+"],
 
--- [156s] STRING_LITERAL1 ::= "'" ([^#x27#x5C#xA#xD] | ECHAR | UCHAR)* "'" /* #x27=' #x5C=\ #xA=new line #xD=carriage return */
-  define "STRING_LITERAL1" [
-    list[singleQuote_, star(alts[regex "[^#x27#x5C#xA#xD]", "ECHAR", "UCHAR"]), singleQuote_]],
+-- [156s] StringLiteral1 ::= "'" ([^#x27#x5C#xA#xD] | Echar | Uchar)* "'" /* #x27=' #x5C=\ #xA=new line #xD=carriage return */
+  define "StringLiteral1" [
+    list[singleQuote_, star(alts[regex "[^#x27#x5C#xA#xD]", "Echar", "Uchar"]), singleQuote_]],
 
--- [157s] STRING_LITERAL2 ::= '"' ([^#x22#x5C#xA#xD] | ECHAR | UCHAR)* '"' /* #x22=" #x5C=\ #xA=new line #xD=carriage return */
-  define "STRING_LITERAL2" [
-    list[doubleQuote_, star(alts[regex "[^#x22#x5C#xA#xD]", "ECHAR", "UCHAR"]), doubleQuote_]],
+-- [157s] StringLiteral2 ::= '"' ([^#x22#x5C#xA#xD] | Echar | Uchar)* '"' /* #x22=" #x5C=\ #xA=new line #xD=carriage return */
+  define "StringLiteral2" [
+    list[doubleQuote_, star(alts[regex "[^#x22#x5C#xA#xD]", "Echar", "Uchar"]), doubleQuote_]],
 
--- [158s] STRING_LITERAL_LONG1 ::= "'''" (("'" | "''")? ([^\'\\] | ECHAR | UCHAR))* "'''"
-  define "STRING_LITERAL_LONG1" [
+-- [158s] StringLiteralLong1 ::= "'''" (("'" | "''")? ([^\'\\] | Echar | Uchar))* "'''"
+  define "StringLiteralLong1" [
     list[singleQuote_, singleQuote_, singleQuote_,
-        star(alts[list[ opt(alts[singleQuote_, list[singleQuote_,singleQuote_]]), regex "[^\'\\]"], "ECHAR", "UCHAR"]),
+        star(alts[list[ opt(alts[singleQuote_, list[singleQuote_,singleQuote_]]), regex "[^\'\\]"], "Echar", "Uchar"]),
         singleQuote_, singleQuote_, singleQuote_]],
 
--- [159s] STRING_LITERAL_LONG2 ::= '"""' (('"' | '""')? ([^\"\\] | ECHAR | UCHAR))* '"""'
-  define "STRING_LITERAL_LONG2" [
+-- [159s] StringLiteralLong2 ::= '"""' (('"' | '""')? ([^\"\\] | Echar | Uchar))* '"""'
+  define "StringLiteralLong2" [
     list[doubleQuote_, doubleQuote_, doubleQuote_,
-        star(alts[list[ opt(alts[doubleQuote_, list[doubleQuote_,doubleQuote_]]), regex "[^\"\\]"], "ECHAR", "UCHAR"]),
+        star(alts[list[ opt(alts[doubleQuote_, list[doubleQuote_,doubleQuote_]]), regex "[^\"\\]"], "Echar", "Uchar"]),
         doubleQuote_, doubleQuote_, doubleQuote_]],
 
--- [26t] UCHAR ::= '\\u' HEX HEX HEX HEX
---                                   | '\\U' HEX HEX HEX HEX HEX HEX HEX HEX
-  define "UCHAR" [
-    list["\\u", "HEX", "HEX", "HEX", "HEX"],
-    list["\\U", "HEX", "HEX", "HEX", "HEX", "HEX", "HEX", "HEX", "HEX"]],
+-- [26t] Uchar ::= '\\u' Hex Hex Hex Hex
+--                                   | '\\U' Hex Hex Hex Hex Hex Hex Hex Hex
+  define "Uchar" [
+    list[terminal "\\u", "Hex", "Hex", "Hex", "Hex"],
+    list[terminal "\\U", "Hex", "Hex", "Hex", "Hex", "Hex", "Hex", "Hex", "Hex"]],
 
--- [160s] ECHAR ::= '\\' [tbnrf\\\"\']
-  define "ECHAR" [
+-- [160s] Echar ::= '\\' [tbnrf\\\"\']
+  define "Echar" [
     list[doubleFrwSlash_, regex "[tbnrf\\\"\']"]],
 
--- [164s] PN_CHARS_BASE ::= [A-Z] | [a-z]
+-- [164s] PnCharsBase ::= [A-Z] | [a-z]
 --                                   | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF]
 --                                   | [#x0370-#x037D] | [#x037F-#x1FFF]
 --                                   | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF]
 --                                   | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD]
 --                                   | [#x10000-#xEFFFF]
-  define "PN_CHARS_BASE" [
+  define "PnCharsBase" [
     regex "[A-Z]",
     regex "[a-z]"], -- TODO other chars
 
 
--- [165s] PN_CHARS_U ::= PN_CHARS_BASE | '_'
-  define "PN_CHARS_U" [
-    "PN_CHARS_BASE",
+-- [165s] PnCharsU ::= PnCharsBase | '_'
+  define "PnCharsU" [
+    "PnCharsBase",
     underscore_],
 
--- [167s] PN_CHARS ::= PN_CHARS_U | '-' | [0-9]
+-- [167s] PnChars ::= PnCharsU | '-' | [0-9]
 --                                   | [#x00B7] | [#x0300-#x036F] | [#x203F-#x2040]
-  define "PN_CHARS" [
-    "PN_CHARS_U",
+  define "PnChars" [
+    "PnCharsU",
     dash_,
     regex "0-9"], -- TODO other chars
 
--- [168s] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS | '.')* PN_CHARS)?
-  define "PN_PREFIX" [
-    list["PN_CHARS_BASE",
-    opt(list[alts["PN_CHARS", period_],"PN_CHARS"])]],
+-- [168s] PnPrefix ::= PnCharsBase ((PnChars | '.')* PnChars)?
+  define "PnPrefix" [
+    list["PnCharsBase",
+    opt(list[alts["PnChars", period_],"PnChars"])]],
 
--- [169s] PN_LOCAL ::= (PN_CHARS_U | ':' | [0-9] | PLX) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX))?
-  define "PN_LOCAL" [
+-- [169s] PnLocal ::= (PnCharsU | ':' | [0-9] | Plx) ((PnChars | '.' | ':' | Plx)* (PnChars | ':' | Plx))?
+  define "PnLocal" [
     list[
-      alts["PN_CHARS_U", colon_, regex "0-9", "PLX"],
+      alts["PnCharsU", colon_, regex "0-9", "Plx"],
       opt(list[
-        star(alts["PN_CHARS", period_, colon_, "PLX"]),
-        alts["PN_CHARS", colon_, "PLX"]]
+        star(alts["PnChars", period_, colon_, "Plx"]),
+        alts["PnChars", colon_, "Plx"]]
       )]],
 
--- [170s] PLX ::= PERCENT | PN_LOCAL_ESC
-  define "PLX" [
-    "PERCENT",
-    "PN_LOCAL_ESC"],
+-- [170s] Plx ::= Percent | PnLocalEsc
+  define "Plx" [
+    "Percent",
+    "PnLocalEsc"],
 
--- [171s] PERCENT ::= '%' HEX HEX
-  define "PERCENT" [
-    list[percent_, "HEX", "HEX"]],
+-- [171s] Percent ::= '%' Hex Hex
+  define "Percent" [
+    list[percent_, "Hex", "Hex"]],
 
--- [172s] HEX ::= [0-9] | [A-F] | [a-f]
-  define "HEX" [regex "[0-9][A-F][a-f]"],
+-- [172s] Hex ::= [0-9] | [A-F] | [a-f]
+  define "Hex" [regex "[0-9][A-F][a-f]"],
 
 
--- [173s] PN_LOCAL_ESC ::= '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
-  define "PN_LOCAL_ESC" [
+-- [173s] PnLocalEsc ::= '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
+  define "PnLocalEsc" [
     list[doubleFrwSlash_, regex "[_~\\.-!$&'\\(\\)\\*+,;=/\\?#@%]"]]]
 
 --   @pass ::= [ \t\r\n]+ -- TODO
