@@ -39,6 +39,8 @@ public abstract class Term<M> {
     
     R visit(Set instance) ;
     
+    R visit(Stream instance) ;
+    
     R visit(Sum instance) ;
     
     R visit(Union instance) ;
@@ -100,6 +102,10 @@ public abstract class Term<M> {
     }
     
     default R visit(Set instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Stream instance) {
       return otherwise((instance));
     }
     
@@ -519,6 +525,39 @@ public abstract class Term<M> {
         return false;
       }
       Set o = (Set) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * An infinite stream of terms
+   */
+  public static final class Stream<M> extends hydra.core.Term<M> {
+    /**
+     * An infinite stream of terms
+     */
+    public final hydra.core.Stream<M> value;
+    
+    public Stream (hydra.core.Stream<M> value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Stream)) {
+        return false;
+      }
+      Stream o = (Stream) (other);
       return value.equals(o.value);
     }
     

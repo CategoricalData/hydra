@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * The identifier of a literal constructor
  */
 public abstract class LiteralVariant {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LiteralVariant");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.LiteralVariant");
   
   private LiteralVariant () {
   
@@ -50,7 +50,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Binary extends hydra.core.LiteralVariant {
+  public static final class Binary extends hydra.mantle.LiteralVariant {
     public Binary () {
     
     }
@@ -75,7 +75,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Boolean_ extends hydra.core.LiteralVariant {
+  public static final class Boolean_ extends hydra.mantle.LiteralVariant {
     public Boolean_ () {
     
     }
@@ -100,7 +100,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Float_ extends hydra.core.LiteralVariant {
+  public static final class Float_ extends hydra.mantle.LiteralVariant {
     public Float_ () {
     
     }
@@ -125,7 +125,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class Integer_ extends hydra.core.LiteralVariant {
+  public static final class Integer_ extends hydra.mantle.LiteralVariant {
     public Integer_ () {
     
     }
@@ -150,7 +150,7 @@ public abstract class LiteralVariant {
     }
   }
   
-  public static final class String_ extends hydra.core.LiteralVariant {
+  public static final class String_ extends hydra.mantle.LiteralVariant {
     public String_ () {
     
     }

@@ -6,9 +6,9 @@ package hydra.compute;
 public class EvaluationStrategy {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.EvaluationStrategy");
   
-  public final java.util.Set<hydra.core.TermVariant> opaqueTermVariants;
+  public final java.util.Set<hydra.mantle.TermVariant> opaqueTermVariants;
   
-  public EvaluationStrategy (java.util.Set<hydra.core.TermVariant> opaqueTermVariants) {
+  public EvaluationStrategy (java.util.Set<hydra.mantle.TermVariant> opaqueTermVariants) {
     this.opaqueTermVariants = opaqueTermVariants;
   }
   

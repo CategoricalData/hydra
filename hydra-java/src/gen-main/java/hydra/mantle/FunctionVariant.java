@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * The identifier of a function constructor
  */
 public abstract class FunctionVariant {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FunctionVariant");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.FunctionVariant");
   
   private FunctionVariant () {
   
@@ -44,7 +44,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class CompareTo extends hydra.core.FunctionVariant {
+  public static final class CompareTo extends hydra.mantle.FunctionVariant {
     public CompareTo () {
     
     }
@@ -69,7 +69,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Elimination extends hydra.core.FunctionVariant {
+  public static final class Elimination extends hydra.mantle.FunctionVariant {
     public Elimination () {
     
     }
@@ -94,7 +94,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Lambda extends hydra.core.FunctionVariant {
+  public static final class Lambda extends hydra.mantle.FunctionVariant {
     public Lambda () {
     
     }
@@ -119,7 +119,7 @@ public abstract class FunctionVariant {
     }
   }
   
-  public static final class Primitive extends hydra.core.FunctionVariant {
+  public static final class Primitive extends hydra.mantle.FunctionVariant {
     public Primitive () {
     
     }

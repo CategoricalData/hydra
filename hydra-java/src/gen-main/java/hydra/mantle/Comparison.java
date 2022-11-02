@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * An equality judgement: less than, equal to, or greater than
  */
 public abstract class Comparison {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Comparison");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.Comparison");
   
   private Comparison () {
   
@@ -38,7 +38,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class LessThan extends hydra.core.Comparison {
+  public static final class LessThan extends hydra.mantle.Comparison {
     public LessThan () {
     
     }
@@ -63,7 +63,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class EqualTo extends hydra.core.Comparison {
+  public static final class EqualTo extends hydra.mantle.Comparison {
     public EqualTo () {
     
     }
@@ -88,7 +88,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class GreaterThan extends hydra.core.Comparison {
+  public static final class GreaterThan extends hydra.mantle.Comparison {
     public GreaterThan () {
     
     }

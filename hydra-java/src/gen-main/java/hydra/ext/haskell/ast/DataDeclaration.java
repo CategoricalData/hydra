@@ -12,11 +12,11 @@ public class DataDeclaration {
   
   public final hydra.ext.haskell.ast.DeclarationHead head;
   
-  public final java.util.List<hydra.ext.haskell.ast.Constructor> constructors;
+  public final java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors;
   
   public final java.util.List<hydra.ext.haskell.ast.Deriving> deriving;
   
-  public DataDeclaration (hydra.ext.haskell.ast.DataDeclaration_Keyword keyword, java.util.List<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, java.util.List<hydra.ext.haskell.ast.Constructor> constructors, java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
+  public DataDeclaration (hydra.ext.haskell.ast.DataDeclaration_Keyword keyword, java.util.List<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors, java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
     this.keyword = keyword;
     this.context = context;
     this.head = head;
@@ -50,7 +50,7 @@ public class DataDeclaration {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
-  public DataDeclaration withConstructors(java.util.List<hydra.ext.haskell.ast.Constructor> constructors) {
+  public DataDeclaration withConstructors(java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   

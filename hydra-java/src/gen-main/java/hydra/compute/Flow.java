@@ -6,9 +6,9 @@ package hydra.compute;
 public class Flow<S, A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Flow");
   
-  public final java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowWrapper<S, A>>> value;
+  public final java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<S, A>>> value;
   
-  public Flow (java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowWrapper<S, A>>> value) {
+  public Flow (java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<S, A>>> value) {
     this.value = value;
   }
   

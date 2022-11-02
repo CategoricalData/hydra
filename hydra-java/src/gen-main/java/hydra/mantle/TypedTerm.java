@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * A type together with an instance of the type
  */
 public class TypedTerm<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypedTerm");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypedTerm");
   
   public final hydra.core.Type<M> type;
   

@@ -20,6 +20,8 @@ public abstract class Ws {
     R visit(Break instance) ;
     
     R visit(BreakAndIndent instance) ;
+    
+    R visit(DoubleBreak instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -40,6 +42,10 @@ public abstract class Ws {
     }
     
     default R visit(BreakAndIndent instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(DoubleBreak instance) {
       return otherwise((instance));
     }
   }
@@ -130,6 +136,31 @@ public abstract class Ws {
         return false;
       }
       BreakAndIndent o = (BreakAndIndent) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class DoubleBreak extends hydra.util.codetree.ast.Ws {
+    public DoubleBreak () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof DoubleBreak)) {
+        return false;
+      }
+      DoubleBreak o = (DoubleBreak) (other);
       return true;
     }
     

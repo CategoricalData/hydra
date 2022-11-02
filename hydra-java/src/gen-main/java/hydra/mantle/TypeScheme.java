@@ -1,10 +1,10 @@
-package hydra.core;
+package hydra.mantle;
 
 /**
  * A type expression together with free type variables occurring in the expression
  */
 public class TypeScheme<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.TypeScheme");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypeScheme");
   
   public final java.util.List<hydra.core.VariableType> variables;
   

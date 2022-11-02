@@ -10,7 +10,7 @@ public class AnnotationClass<M> {
   
   public final java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal;
   
-  public final java.util.function.Function<M, java.util.function.Function<M, hydra.core.Comparison>> compare;
+  public final java.util.function.Function<M, java.util.function.Function<M, hydra.mantle.Comparison>> compare;
   
   public final java.util.function.Function<M, String> show;
   
@@ -34,7 +34,7 @@ public class AnnotationClass<M> {
   
   public final java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf;
   
-  public AnnotationClass (M default_, java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal, java.util.function.Function<M, java.util.function.Function<M, hydra.core.Comparison>> compare, java.util.function.Function<M, String> show, java.util.function.Function<String, java.util.Optional<M>> read, java.util.function.Function<hydra.core.Term<M>, M> termMeta, java.util.function.Function<hydra.core.Type<M>, M> typeMeta, java.util.function.Function<hydra.core.Term<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType, java.util.function.Function<hydra.compute.Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription, java.util.function.Function<hydra.compute.Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType, java.util.function.Function<M, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf) {
+  public AnnotationClass (M default_, java.util.function.Function<M, java.util.function.Function<M, Boolean>> equal, java.util.function.Function<M, java.util.function.Function<M, hydra.mantle.Comparison>> compare, java.util.function.Function<M, String> show, java.util.function.Function<String, java.util.Optional<M>> read, java.util.function.Function<hydra.core.Term<M>, M> termMeta, java.util.function.Function<hydra.core.Type<M>, M> typeMeta, java.util.function.Function<hydra.core.Term<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<String>>> termDescription, java.util.function.Function<hydra.core.Type<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<String>>> typeDescription, java.util.function.Function<hydra.core.Term<M>, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<hydra.core.Type<M>>>> termType, java.util.function.Function<hydra.compute.Context<M>, java.util.function.Function<java.util.Optional<String>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermDescription, java.util.function.Function<hydra.compute.Context<M>, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<hydra.core.Term<M>, hydra.core.Term<M>>>> setTermType, java.util.function.Function<M, hydra.compute.Flow<hydra.compute.Context<M>, java.util.Optional<hydra.core.Type<M>>>> typeOf, java.util.function.Function<java.util.Optional<hydra.core.Type<M>>, java.util.function.Function<M, M>> setTypeOf) {
     this.default_ = default_;
     this.equal = equal;
     this.compare = compare;
@@ -73,7 +73,7 @@ public class AnnotationClass<M> {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
-  public AnnotationClass withCompare(java.util.function.Function<M, java.util.function.Function<M, hydra.core.Comparison>> compare) {
+  public AnnotationClass withCompare(java.util.function.Function<M, java.util.function.Function<M, hydra.mantle.Comparison>> compare) {
     return new AnnotationClass(default_, equal, compare, show, read, termMeta, typeMeta, termDescription, typeDescription, termType, setTermDescription, setTermType, typeOf, setTypeOf);
   }
   
