@@ -1,4 +1,4 @@
--- | Utilities for transforming OSV JSON to RDF. See https://osv.dev
+-- | A utility for transforming OSV JSON to RDF. See https://osv.dev
 
 module Hydra.Tools.OsvToRdf (osvJsonDirectoryToNtriples) where
 
