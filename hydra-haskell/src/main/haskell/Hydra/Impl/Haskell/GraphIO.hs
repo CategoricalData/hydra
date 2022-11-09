@@ -23,8 +23,6 @@ import Hydra.Impl.Haskell.Sources.Phantoms
 
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Avro.Schema
-import Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax
-import Hydra.Impl.Haskell.Sources.Ext.Datalog.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
@@ -91,8 +89,6 @@ coreModules = [
 extModules :: [Module Meta]
 extModules = [
   avroSchemaModule,
-  coqSyntaxModule,
-  datalogSyntaxModule,
   graphqlSyntaxModule,
   javaSyntaxModule,
   pegasusPdlModule,

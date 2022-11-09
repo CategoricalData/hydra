@@ -1,4 +1,4 @@
-module Hydra.Impl.Haskell.Sources.Ext.Coq.Syntax where
+module Hydra.Models.Coq where
 
 import Hydra.All
 import Hydra.Impl.Haskell.Dsl.Types as Types
