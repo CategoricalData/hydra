@@ -1,0 +1,34 @@
+name:       hydra-extensions
+version:    0.1.0
+maintainer: josh@fortytwo.net
+license:    Apache-2.0
+category:   Data
+synopsis:   Built-in extensions to Hydra, including additional models and utilities
+github:     CategoricalData/hydra
+
+extra-source-files:
+  - stack.yaml
+
+dependencies:
+  - base
+  - containers
+
+  # Hydra.Impl.Haskell dependencies
+  - aeson
+  - aeson-pretty
+  - bytestring
+  - directory
+  - filepath
+  - HsYAML
+  - scientific
+  - split
+  - text
+  - unordered-containers
+  - vector
+
+library:
+  source-dirs:
+    - src/main/haskell
+    - src/gen-main/haskell
+    - ../hydra-haskell/src/main/haskell
+    - ../hydra-haskell/src/gen-main/haskell

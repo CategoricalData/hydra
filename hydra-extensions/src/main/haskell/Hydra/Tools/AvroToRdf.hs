@@ -1,7 +1,7 @@
 -- | A utility for transforming Avro-compliant JSON to RDF
 
 module Hydra.Tools.AvroToRdf (
-  AvroToRdfWorkflow(..),
+  TransformWorkflow(..),
   JsonPayloadFormat(..),
   avroJsonDirectoryToNtriples,
   executeAvroToRdfWorkflow,
@@ -34,7 +34,7 @@ import System.Directory
 
 data JsonPayloadFormat = OnePerFile | OnePerLine
 
-data AvroToRdfWorkflow = AvroToRdfWorkflow {
+data TransformWorkflow = TransformWorkflow {
   workflowName :: String,
   workflowSchemaPath :: FilePath,
   workflowSrcDir :: FilePath,
@@ -106,8 +106,8 @@ emptyEnv :: AvroEnvironment Meta
 emptyEnv = emptyEnvironment
 
 -- | A convenience for avroJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
-executeAvroToRdfWorkflow :: AvroToRdfWorkflow -> IO ()
-executeAvroToRdfWorkflow (AvroToRdfWorkflow name schemaPath srcDir destDir) = do
+executeAvroToRdfWorkflow :: TransformWorkflow -> IO ()
+executeAvroToRdfWorkflow (TransformWorkflow name schemaPath srcDir destDir) = do
   putStrLn $ "Executing workflow " ++ show name ++ ":"
   avroJsonDirectoryToNtriples OnePerLine schemaPath srcDir destDir
 
