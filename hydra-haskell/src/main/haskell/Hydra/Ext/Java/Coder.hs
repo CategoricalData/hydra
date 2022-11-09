@@ -16,6 +16,7 @@ import Hydra.Adapters.UtilsEtc
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
+import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
@@ -130,10 +131,11 @@ constructElementsInterface mod members = (elName, cu)
     cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
     pkg = javaPackageDeclaration $ moduleNamespace mod
     mods = []
-    elName = fromQname (moduleNamespace mod) elementsClassName
+    className = elementsClassName $ moduleNamespace mod
+    elName = fromQname (moduleNamespace mod) className
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
-      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier elementsClassName) [] [] body
+      Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
 declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => Aliases
@@ -345,14 +347,14 @@ declarationForUnionType aliases tparams elName fields = do
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] (variantClassName False elName fname) Nothing
 
-elementsClassName = "Elements_"
-
 elementJavaIdentifier :: Aliases -> Name -> Java.Identifier
 elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
   where
     (gname, local) = toQnameEager name
-    elementsName = fromQname gname elementsClassName
-    Java.Identifier jname = nameToJavaName aliases elementsName
+    Java.Identifier jname = nameToJavaName aliases $ fromQname gname $ elementsClassName gname
+
+elementsClassName :: Namespace -> String
+elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
 
 encodeElimination :: (Eq m, Ord m, Read m, Show m)
   => Aliases -> Maybe Java.Expression -> Type m -> Elimination m -> GraphFlow m Java.Expression

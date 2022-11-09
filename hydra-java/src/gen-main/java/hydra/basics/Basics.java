@@ -6,7 +6,7 @@ import hydra.core.LiteralType;
 /**
  * Basic functions for working with types and terms
  */
-interface Basics_ {
+interface Basics {
   static <M> hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination<M> v1) {
     return ((v1)).accept(new hydra.core.Elimination.Visitor<hydra.mantle.EliminationVariant>() {
       @Override
@@ -294,12 +294,12 @@ interface Basics_ {
 
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Float_ instance) {
-        return new hydra.core.LiteralType.Float_(Basics_.floatValueType(instance.value));
+        return new hydra.core.LiteralType.Float_(Basics.floatValueType(instance.value));
       }
 
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Integer_ instance) {
-        return new LiteralType.Integer_(Basics_.integerValueType(instance.value));
+        return new LiteralType.Integer_(Basics.integerValueType(instance.value));
       }
 
       @Override
@@ -339,7 +339,7 @@ interface Basics_ {
   }
 
   static hydra.mantle.LiteralVariant literalVariant(hydra.core.Literal x1) {
-    return Basics_.literalTypeVariant(Basics_.literalType(x1));
+    return Basics.literalTypeVariant(Basics.literalType(x1));
   }
 
   java.util.List<hydra.mantle.LiteralVariant> literalVariants = java.util.Arrays.asList(
