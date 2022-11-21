@@ -1,6 +1,6 @@
 # Hydra-Haskell
 
-Hydra is a data transformation toolkit which aims to be highly flexible and portable.
+Hydra is a type-aware data transformation toolkit which aims to be highly flexible and portable.
 It has its roots in graph databases and type theory, and provides APIs in Haskell and Java.
 See the main Hydra [README](https://github.com/CategoricalData/hydra) for more details.
 This Haskell package contains Hydra's Haskell API and Haskell sources specifically.
