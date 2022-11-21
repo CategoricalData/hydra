@@ -1,18 +1,20 @@
-name:       hydra
-version:    0.1.0
-maintainer: josh@fortytwo.net
-license:    Apache-2.0
-category:   Data
-synopsis:   An experimental framework for data integration
-github:     CategoricalData/hydra
+name:         hydra
+version:      0.1.0
+maintainer:   josh@fortytwo.net
+license:      Apache-2.0
+license-file: LICENSE
+category:     Data
+synopsis:     An experimental framework for data integration
+github:       CategoricalData/hydra
+description:  A type-safe data transformation toolkit
 
 extra-source-files:
-  - ../LICENSE
-  - ../README.md
+  - LICENSE
+  - README.md
   - stack.yaml
 
 dependencies:
-  - base
+  - base < 4.15
   - containers
 
   # Hydra.Impl.Haskell dependencies
