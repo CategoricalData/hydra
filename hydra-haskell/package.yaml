@@ -1,12 +1,16 @@
 name:         hydra
 version:      0.1.0
-maintainer:   josh@fortytwo.net
+maintainer:   Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
 category:     Data
-synopsis:     An experimental framework for data integration
+synopsis:     Type-aware transformations for data and functional programs
+description:  >
+  Hydra is a transformation toolkit along the lines of Dragon (Uber), but open source,
+  and with a more advanced type system and other new features.
+  Hydra maps data and schemas between languages in a way which maintains type conformance.
+  It will even map functional programs between selected languages, including parts of its own source code.
 github:       CategoricalData/hydra
-description:  A type-safe data transformation toolkit
 
 extra-source-files:
   - LICENSE

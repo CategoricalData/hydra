@@ -8,7 +8,7 @@ in a way which maintains type conformance.
 It is even able to map functional programs between selected languages, including parts of its own source code.
 See the recent Data Day Texas presentation, "[Transpilers Gone Wild](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)".
 
-See [hydra-haskell](https://github.com/CategoricalData/hydra/hydra-haskell) for more information the Haskell implementation,
+See [hydra-haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell) for more information the Haskell implementation,
 which is the most mature at this time.
 
 You can find a design document [here](https://bit.ly/hydra-design-doc),
