@@ -16,6 +16,16 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+alphaConvert :: Ord m => Variable -> Variable -> Term m -> Term m
+alphaConvert vold vnew = rewriteTerm rewrite id
+  where
+    rewrite recurse term = case term of
+      TermFunction (FunctionLambda (Lambda v body)) -> if v == vold
+        then term
+        else recurse term
+      TermVariable v -> TermVariable $ if v == vold then vnew else v
+      _ -> recurse term
+
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
 countPrimitiveFunctionInvocations :: Bool
 countPrimitiveFunctionInvocations = True
@@ -144,18 +154,41 @@ betaReduceType typ = do
             where
               t' = fromFlow cx $ requireType name
 
--- | Apply the special rule ((\x.e1) e2) == e1 where x does not appear free in e1. This is a limited form of beta reduction.
-contractTerm :: Term m -> Term m
-contractTerm term = case term of
-    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (contractTerm term1) ann)
-    TermApplication (Application lhs rhs) -> case contractTerm (stripTerm lhs) of
-      TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
-        then contractTerm body
-        else noChange
-      _ -> noChange
-    _ -> noChange
+-- | Apply the special rules:
+--     ((\x.e1) e2) == e1, where x does not appear free in e1
+--   and
+--     ((\x.e) v) = e[x/v], where v is a variable term
+--  These are both limited forms of beta reduction which help to "clean up" an expression without fully evaluating it.
+contractTerm :: Ord m => Term m -> Term m
+contractTerm = rewriteTerm rewrite id
   where
-    noChange = term
+    rewrite recurse term = case rec of
+        TermApplication (Application lhs rhs) -> case stripTerm lhs of
+          TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
+            then body
+            else case stripTerm rhs of
+              TermVariable v' -> alphaConvert v v' body
+              _ -> rec
+          _ -> rec
+        _ -> rec
+      where
+        rec = recurse term
+
+--contractTerm term = case term of
+--    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (contractTerm term1) ann)
+--    TermApplication (Application lhs rhs) -> case contractTerm (stripTerm lhs) of
+--      TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
+--        then contractTerm body
+--        else case stripTerm rhs of
+--          TermVariable v' -> alphaConvert v v' body
+--          _ -> noChange
+--      _ -> noChange
+--    _ -> noChange
+--  where
+--    noChange = term
+
+
+
 
 -- Note: unused / untested
 etaReduceTerm :: Term m -> Term m
