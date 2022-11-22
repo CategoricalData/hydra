@@ -18,18 +18,18 @@ checkAlphaConversion = do
   H.describe "Tests for alpha conversion" $ do
     H.it "Variables are substituted at the top level" $
       QC.property $ \v ->
-        alphaConvert (Variable v) (Variable $ v ++ "'") (variable v) == (variable (v ++ "'") :: Term Meta)
+        alphaConvert (Variable v) (variable $ v ++ "'") (variable v) == (variable (v ++ "'") :: Term Meta)
     H.it "Variables are substituted within subexpressions" $
       QC.property $ \v ->
-        alphaConvert (Variable v) (Variable $ v ++ "'") (list [int32 42, variable v])
+        alphaConvert (Variable v) (variable $ v ++ "'") (list [int32 42, variable v])
           == (list [int32 42, variable (v ++ "'")] :: Term Meta)
     H.it "Lambdas with unrelated variables are transparent to alpha conversion" $
       QC.property $ \v ->
-        alphaConvert (Variable v) (Variable $ v ++ "1") (lambda (v ++ "2") $ list [int32 42, variable v, variable (v ++ "2")])
+        alphaConvert (Variable v) (variable $ v ++ "1") (lambda (v ++ "2") $ list [int32 42, variable v, variable (v ++ "2")])
           == (lambda (v ++ "2") $ list [int32 42, variable (v ++ "1"), variable (v ++ "2")] :: Term Meta)
     H.it "Lambdas of the same variable are opaque to alpha conversion" $
       QC.property $ \v ->
-        alphaConvert (Variable v) (Variable $ v ++ "1") (lambda v $ list [int32 42, variable v, variable (v ++ "2")])
+        alphaConvert (Variable v) (variable $ v ++ "1") (lambda v $ list [int32 42, variable v, variable (v ++ "2")])
           == (lambda v $ list [int32 42, variable v, variable (v ++ "2")] :: Term Meta)
 
 checkLiterals :: H.SpecWith ()
