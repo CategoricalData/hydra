@@ -16,14 +16,14 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-alphaConvert :: Ord m => Variable -> Variable -> Term m -> Term m
-alphaConvert vold vnew = rewriteTerm rewrite id
+alphaConvert :: Ord m => Variable -> Term m -> Term m -> Term m
+alphaConvert vold tnew = rewriteTerm rewrite id
   where
     rewrite recurse term = case term of
       TermFunction (FunctionLambda (Lambda v body)) -> if v == vold
         then term
         else recurse term
-      TermVariable v -> TermVariable $ if v == vold then vnew else v
+      TermVariable v -> if v == vold then tnew else TermVariable v
       _ -> recurse term
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
@@ -157,8 +157,8 @@ betaReduceType typ = do
 -- | Apply the special rules:
 --     ((\x.e1) e2) == e1, where x does not appear free in e1
 --   and
---     ((\x.e) v) = e[x/v], where v is a variable term
---  These are both limited forms of beta reduction which help to "clean up" an expression without fully evaluating it.
+--     ((\x.e1) e2) = e1[x/e2]
+--  These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
 contractTerm :: Ord m => Term m -> Term m
 contractTerm = rewriteTerm rewrite id
   where
@@ -166,29 +166,11 @@ contractTerm = rewriteTerm rewrite id
         TermApplication (Application lhs rhs) -> case stripTerm lhs of
           TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
             then body
-            else case stripTerm rhs of
-              TermVariable v' -> alphaConvert v v' body
-              _ -> rec
+            else alphaConvert v rhs body
           _ -> rec
         _ -> rec
       where
         rec = recurse term
-
---contractTerm term = case term of
---    TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (contractTerm term1) ann)
---    TermApplication (Application lhs rhs) -> case contractTerm (stripTerm lhs) of
---      TermFunction (FunctionLambda (Lambda v body)) -> if isFreeIn v body
---        then contractTerm body
---        else case stripTerm rhs of
---          TermVariable v' -> alphaConvert v v' body
---          _ -> noChange
---      _ -> noChange
---    _ -> noChange
---  where
---    noChange = term
-
-
-
 
 -- Note: unused / untested
 etaReduceTerm :: Term m -> Term m
