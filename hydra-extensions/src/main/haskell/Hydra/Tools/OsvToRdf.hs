@@ -1,6 +1,9 @@
 -- | A utility for transforming OSV JSON to RDF. See https://osv.dev
 
-module Hydra.Tools.OsvToRdf (osvJsonDirectoryToNtriples) where
+module Hydra.Tools.OsvToRdf (
+  executeOsvToRdfWorkflow,
+  osvJsonDirectoryToNtriples,
+) where
 
 import Hydra.All
 import Hydra.Impl.Haskell.Ext.Json.Serde
@@ -11,6 +14,7 @@ import Hydra.Util.Formatting
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import Hydra.Ext.Rdf.Serde
+import Hydra.Workflow
 
 import Hydra.Models.Osv
 import qualified Dev.Osv.Schema as Osv
@@ -27,6 +31,15 @@ import System.Directory
 
 emptyInstanceContext :: Context Meta -> Context Meta
 emptyInstanceContext scx = scx {contextGraph = Graph M.empty (Just $ contextGraph scx)}
+
+-- | A convenience for osvJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
+executeOsvToRdfWorkflow :: TransformWorkflow -> IO ()
+executeOsvToRdfWorkflow (TransformWorkflow name schemaSpec srcDir destDir) = do
+    case schemaSpec of
+      SchemaSpecProvided -> pure ()
+      _ -> fail "unsupported schema spec"
+    putStrLn $ "Executing workflow " ++ show name ++ ":"
+    osvJsonDirectoryToNtriples srcDir destDir
 
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance
