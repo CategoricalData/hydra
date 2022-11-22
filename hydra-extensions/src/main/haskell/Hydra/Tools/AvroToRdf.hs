@@ -20,6 +20,7 @@ import Hydra.Rewriting
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import Hydra.Ext.Rdf.Serde
+import Hydra.Workflow
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -33,13 +34,6 @@ import System.Directory
 
 
 data JsonPayloadFormat = OnePerFile | OnePerLine
-
-data TransformWorkflow = TransformWorkflow {
-  workflowName :: String,
-  workflowSchemaPath :: FilePath,
-  workflowSrcDir :: FilePath,
-  workflowDestDir :: FilePath}
-
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,
@@ -107,9 +101,12 @@ emptyEnv = emptyEnvironment
 
 -- | A convenience for avroJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
 executeAvroToRdfWorkflow :: TransformWorkflow -> IO ()
-executeAvroToRdfWorkflow (TransformWorkflow name schemaPath srcDir destDir) = do
-  putStrLn $ "Executing workflow " ++ show name ++ ":"
-  avroJsonDirectoryToNtriples OnePerLine schemaPath srcDir destDir
+executeAvroToRdfWorkflow (TransformWorkflow name schemaSpec srcDir destDir) = do
+    schemaPath <- case schemaSpec of
+      SchemaSpecFile p -> pure p
+      _ -> fail "unsupported schema spec"
+    putStrLn $ "Executing workflow " ++ show name ++ ":"
+    avroJsonDirectoryToNtriples OnePerLine schemaPath srcDir destDir
 
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance
