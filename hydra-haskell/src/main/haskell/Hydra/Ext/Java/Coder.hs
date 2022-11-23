@@ -36,11 +36,6 @@ printModule mod = do
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
---addTermType :: Type m -> Term m -> GraphFlow m (Term m)
---addTermType typ term = do
---  cx <- getState
---  annotationClassSetTermType cx (Just typ) term
-
 boundTypeVariables :: Type m -> [VariableType]
 boundTypeVariables typ = case typ of
   TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
@@ -138,7 +133,7 @@ constructElementsInterface mod members = (elName, cu)
   where
     cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
     pkg = javaPackageDeclaration $ moduleNamespace mod
-    mods = []
+    mods = [Java.InterfaceModifierPublic]
     className = elementsClassName $ moduleNamespace mod
     elName = fromQname (moduleNamespace mod) className
     body = Java.InterfaceBody members
