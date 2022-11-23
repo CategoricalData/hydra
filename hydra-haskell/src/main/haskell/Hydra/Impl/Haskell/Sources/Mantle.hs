@@ -8,9 +8,6 @@ import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Core
 
 
-hydraMantle :: Graph Meta
-hydraMantle = elementsToGraph Nothing (moduleElements hydraCoreModule ++ moduleElements hydraMantleModule)
-
 hydraMantleModule :: Module Meta
 hydraMantleModule = Module ns elements [] $
     Just "A set of types which supplement hydra/core with type variants, graphs, and elements"

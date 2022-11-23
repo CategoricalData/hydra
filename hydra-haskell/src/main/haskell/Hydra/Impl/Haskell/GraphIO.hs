@@ -108,7 +108,7 @@ findType cx term = annotationClassTermType (contextAnnotations cx) term
 
 generateSources :: (Module Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
 generateSources printModule mods0 basePath = do
-    mfiles <- runFlow mantleContext generateFiles
+    mfiles <- runFlow kernelContext generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -126,10 +126,13 @@ generateSources printModule mods0 basePath = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
 
-mantleContext = graphContext hydraMantle
+hydraKernel :: Graph Meta
+hydraKernel = elementsToGraph Nothing $ L.concat (moduleElements <$> [hydraCoreModule, hydraMantleModule, hydraModuleModule])
+
+kernelContext = graphContext hydraKernel
 
 modulesToContext :: [Module Meta] -> Context Meta
-modulesToContext mods = mantleContext {contextGraph = elementsToGraph (Just hydraMantle) elements}
+modulesToContext mods = kernelContext {contextGraph = elementsToGraph (Just hydraKernel) elements}
   where
     elements = L.concat (moduleElements <$> allModules)
     allModules = L.concat (close <$> mods)

@@ -86,6 +86,9 @@ field fname (Datum val) = Field fname val
 function :: Type Meta -> Type Meta -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
+functionN :: [Type Meta] -> Type Meta -> Datum a -> Datum a
+functionN doms cod = typed $ Types.functionN doms cod
+
 lambda :: String -> Datum x -> Datum (a -> b)
 lambda v (Datum body) = Datum $ Terms.lambda v body
 

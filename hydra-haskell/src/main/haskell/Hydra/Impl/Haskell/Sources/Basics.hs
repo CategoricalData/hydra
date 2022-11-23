@@ -208,7 +208,7 @@ literalVariantsSource = basics "literalVariants" $
 qnameSource :: Definition (Namespace -> String -> Name)
 qnameSource = basics "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  function (Types.nominal _Namespace) (Types.function Types.string $ Types.nominal _Name) $
+  functionN [Types.nominal _Namespace, Types.string] (Types.nominal _Name) $
   lambda "ns" $
     lambda "name" $
       nom _Name $
