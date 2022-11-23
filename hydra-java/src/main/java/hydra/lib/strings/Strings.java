@@ -1,4 +1,4 @@
-package hydra.lib;
+package hydra.lib.strings;
 
 import java.util.ArrayList;
 import java.util.List;
