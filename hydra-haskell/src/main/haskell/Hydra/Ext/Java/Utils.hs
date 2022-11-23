@@ -410,7 +410,10 @@ referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
 
 sanitizeJavaName :: String -> String
-sanitizeJavaName = sanitizeWithUnderscores reservedWords
+sanitizeJavaName name = if L.head name == '$'
+  -- The '$' prefix allows names to be excluded from sanitization
+  then L.tail name
+  else sanitizeWithUnderscores reservedWords name
 
 toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
 toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body
