@@ -8,6 +8,6 @@ public interface Literals {
     }
 
     static String showString(String value) {
-      return StringEscapeUtils.escapeJava(value);
+      return "\"" + StringEscapeUtils.escapeJava(value) + "\"";
     }
 }
