@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static hydra.lib.Strings.*;
+import static hydra.lib.strings.Strings.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StringsTest {
