@@ -14,6 +14,7 @@ import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.Adapters.UtilsEtc
 import Hydra.Types.Inference
+import Hydra.Util.Context
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -68,9 +69,10 @@ elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQ
     (ns, local) = toQnameEager name
 
 moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
-moduleToJavaCompilationUnit mod = transformModule javaLanguage (encodeTerm aliases Nothing) constructModule mod
+moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
   where
     aliases = importAliasesForModule mod
+    encode = encodeTerm aliases Nothing . contractTerm
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
@@ -97,7 +99,7 @@ constructModule mod coders pairs = do
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
     termToInterfaceMember coders pair = do
-        expanded <- expandLambdas $ typedTermTerm $ snd pair
+        expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
         if isLambda expanded
           then termToMethod coders (fst pair) (typedTermType $ snd pair) expanded
           else termToConstant coders (fst pair) (typedTermType $ snd pair) expanded
@@ -480,11 +482,21 @@ encodeTerm aliases mtype term = case term of
         cx <- getState
         mt <- annotationClassTypeOf (contextAnnotations cx) ann
         encodeTerm aliases mt term'
+
     TermApplication a -> case stripTerm fun of
-        TermFunction (FunctionPrimitive name) -> forNamedFunction name args
-        TermElement name -> forNamedFunction name args
-        _ -> forApplication mtype a
+        TermFunction f -> case f of
+          FunctionPrimitive name -> forNamedFunction name args
+          FunctionElimination EliminationElement -> if L.length args > 0
+            then case stripTerm (L.head args) of
+              TermElement name -> do
+                forNamedFunction name (L.tail args)
+              _ -> fallback
+            else fallback
+          _ -> fallback
+        _ -> fallback
       where
+        fallback = forApplication mtype a
+
         forNamedFunction name args = do
           jargs <- CM.mapM encode args
           let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier aliases name
@@ -495,7 +507,7 @@ encodeTerm aliases mtype term = case term of
             uncurry args term = case term of
               TermAnnotated (Annotated body _) -> uncurry args body
               TermApplication (Application lhs rhs) -> uncurry (rhs:args) lhs
-              _ -> (term, L.reverse args)
+              _ -> (term, args)
 
         forApplication mtype (Application fun arg) = case fun of
             TermAnnotated (Annotated fun' ann) -> do
@@ -530,20 +542,26 @@ encodeTerm aliases mtype term = case term of
               return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
 
     TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
+
     TermFunction f -> case mtype of
       Just t -> case stripType t of
         TypeFunction (FunctionType _ cod) -> encodeFunction aliases cod f
         _ -> unexpected "function type" $ t
       Nothing -> failAsLiteral $ "unannotated function: " ++ show f
+
     TermList els -> do
       jels <- CM.mapM encode els
       return $ javaMethodInvocationToJavaExpression $
         methodInvocationStatic (Java.Identifier "java.util.Arrays") (Java.Identifier "asList") jels
+
     TermLiteral l -> pure $ encodeLiteral l
+
   --  TermMap (Map (Term m) (Term m))
+
     TermNominal (Named name arg) -> do
       jarg <- encode arg
       return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
+
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
         methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
@@ -551,10 +569,12 @@ encodeTerm aliases mtype term = case term of
         expr <- encode term1
         return $ javaMethodInvocationToJavaExpression $
           methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
+
     TermRecord (Record name fields) -> do
       fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
       let consId = nameToJavaName aliases name
       return $ javaConstructorCall (javaConstructorName consId Nothing) fieldExprs Nothing
+
     TermSet s -> do
       jels <- CM.mapM encode $ S.toList s
       let prim = javaMethodInvocationToJavaPrimary $
@@ -563,16 +583,19 @@ encodeTerm aliases mtype term = case term of
                  methodInvocationStatic (javaIdentifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
       return $ javaMethodInvocationToJavaExpression $
         methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
+
     TermUnion (Union name (Field (FieldName fname) v)) -> do
+      let (Java.Identifier typeId) = nameToJavaName aliases name
+      let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
       args <- if Terms.isUnit v
         then return []
         else do
           ex <- encode v
           return [ex]
-      let (Java.Identifier typeId) = nameToJavaName aliases name
-      let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
       return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
+
     TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
+
     _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
   where
     encode = encodeTerm aliases Nothing
