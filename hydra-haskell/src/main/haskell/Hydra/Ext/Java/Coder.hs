@@ -13,6 +13,7 @@ import Hydra.Util.Codetree.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.Adapters.UtilsEtc
+import Hydra.Types.Inference
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -33,6 +34,11 @@ printModule mod = do
     forPair (name, unit) = (
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
+
+--addTermType :: Type m -> Term m -> GraphFlow m (Term m)
+--addTermType typ term = do
+--  cx <- getState
+--  annotationClassSetTermType cx (Just typ) term
 
 boundTypeVariables :: Type m -> [VariableType]
 boundTypeVariables typ = case typ of
@@ -337,12 +343,12 @@ declarationForUnionType aliases tparams elName fields = do
 
     resultR = javaTypeToJavaResult $ Java.TypeReference visitorTypeVariable
 
-    mainInstanceParam = javaTypeToJavaFormalParameter classRef instanceFieldName
+    mainInstanceParam = javaTypeToJavaFormalParameter classRef $ FieldName instanceName
       where
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] elName Nothing
 
-    variantInstanceParam fname = javaTypeToJavaFormalParameter classRef instanceFieldName
+    variantInstanceParam fname = javaTypeToJavaFormalParameter classRef $ FieldName instanceName
       where
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] (variantClassName False elName fname) Nothing
@@ -401,9 +407,11 @@ encodeElimination aliases marg cod elm = case elm of
             let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname (Just $ capitalize $ unFieldName $ fieldName field)
             let mods = [Java.MethodModifierPublic]
             let anns = [overrideAnnotation]
-            let param = javaTypeToJavaFormalParameter jdom instanceFieldName
+            let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
             let result = Java.ResultType $ Java.UnannType jcod
-            jret <- encodeTerm aliases (Just cod) $ contractTerm $ Terms.apply (fieldTerm field) (Terms.variable "instance")
+            -- Note: the escaping is necessary because the instance.value field reference does not correspond to an actual Hydra projection term
+            let value = Terms.variable ("$" ++ instanceName ++ "." ++ valueFieldName)
+            jret <- encodeTerm aliases (Just cod) $ contractTerm $ Terms.apply (fieldTerm field) value
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
 
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
@@ -619,7 +627,7 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
   where
     Java.Identifier id = nameToJavaName aliases name
 
-instanceFieldName = FieldName "instance"
+instanceName = "instance"
 
 javaTypeParametersForType :: Type m -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars

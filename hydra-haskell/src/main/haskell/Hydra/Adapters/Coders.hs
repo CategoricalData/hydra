@@ -17,7 +17,6 @@ adaptType targetLang t = do
     let acx = AdapterContext cx hydraCoreLanguage targetLang
     ad <- withState acx $ termAdapter t
     return $ adapterTarget ad
-  where
 
 transformModule :: (Ord m, Read m, Show m)
   => Language m
