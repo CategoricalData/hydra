@@ -234,6 +234,7 @@ termVariantSource = basics "termVariant" $
       _Term_product         @-> _TermVariant_product,
       _Term_record          @-> _TermVariant_record,
       _Term_set             @-> _TermVariant_set,
+      _Term_stream          @-> _TermVariant_stream,
       _Term_sum             @-> _TermVariant_sum,
       _Term_union           @-> _TermVariant_union,
       _Term_variable        @-> _TermVariant_variable])
@@ -256,6 +257,7 @@ termVariantsSource = basics "termVariants" $
     _TermVariant_product,
     _TermVariant_record,
     _TermVariant_set,
+    _TermVariant_stream,
     _TermVariant_sum,
     _TermVariant_union,
     _TermVariant_variable]
@@ -286,6 +288,7 @@ typeVariantSource = basics "typeVariant" $
       _Type_product     @-> _TypeVariant_product,
       _Type_record      @-> _TypeVariant_record,
       _Type_set         @-> _TypeVariant_set,
+      _Type_stream      @-> _TypeVariant_stream,
       _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
       _Type_variable    @-> _TypeVariant_variable])
@@ -309,6 +312,7 @@ typeVariantsSource = basics "typeVariants" $
     _TypeVariant_product,
     _TypeVariant_record,
     _TypeVariant_set,
+    _TypeVariant_stream,
     _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]
