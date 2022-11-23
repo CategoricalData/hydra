@@ -80,9 +80,12 @@ describeTypeSource = utils "describeType" $
         ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_values  @@ var "mt")),
       Case _Type_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeSource @@ var "ot"),
-      Case _Type_record      --> constant $ string "records of a particular set of fields",
+      Case _Type_product     --> constant $ string "tuples",
+      Case _Type_record      --> constant $ string "records",
       Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeSource @@ var "st"),
-      Case _Type_union       --> constant $ string "unions of a particular set of fields",
+      Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeSource @@ var "t"),
+      Case _Type_sum         --> constant $ string "variant tuples",
+      Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "unspecified/parametric terms"])
     (var "typ")
   where
