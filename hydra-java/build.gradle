@@ -11,6 +11,8 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
+  implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+
 //  implementation 'com.linkedin.pegasus:generator:29.22.13'
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
