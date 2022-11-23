@@ -75,9 +75,14 @@ describeType typ = ((\x -> case x of
   Core.TypeOptional v -> (Strings.cat [
     "optional ",
     (describeType v)])
-  Core.TypeRecord _ -> "records of a particular set of fields"
+  Core.TypeProduct _ -> "tuples"
+  Core.TypeRecord _ -> "records"
   Core.TypeSet v -> (Strings.cat [
     "sets of ",
     (describeType v)])
-  Core.TypeUnion _ -> "unions of a particular set of fields"
+  Core.TypeStream v -> (Strings.cat [
+    "streams of ",
+    (describeType v)])
+  Core.TypeSum _ -> "variant tuples"
+  Core.TypeUnion _ -> "unions"
   Core.TypeVariable _ -> "unspecified/parametric terms") typ)
