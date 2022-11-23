@@ -480,8 +480,23 @@ encodeTerm aliases mtype term = case term of
         cx <- getState
         mt <- annotationClassTypeOf (contextAnnotations cx) ann
         encodeTerm aliases mt term'
-    TermApplication a -> forApplication mtype a
+    TermApplication a -> case stripTerm fun of
+        TermFunction (FunctionPrimitive name) -> forNamedFunction name args
+        TermElement name -> forNamedFunction name args
+        _ -> forApplication mtype a
       where
+        forNamedFunction name args = do
+          jargs <- CM.mapM encode args
+          let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier aliases name
+          return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+
+        (fun, args) = uncurry [] term
+          where
+            uncurry args term = case term of
+              TermAnnotated (Annotated body _) -> uncurry args body
+              TermApplication (Application lhs rhs) -> uncurry (rhs:args) lhs
+              _ -> (term, L.reverse args)
+
         forApplication mtype (Application fun arg) = case fun of
             TermAnnotated (Annotated fun' ann) -> do
               mcod <- case mtype of
