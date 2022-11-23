@@ -1,5 +1,6 @@
 package hydra.impl.java;
 
+import hydra.compute.Meta;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test illustrating the use of the Types API in Java, which is used for constructing type definitions.
  *
- * Note: for simplicity, these types are annotated using the String class. A more typical annotation class is {@link hydra.core.Meta}
+ * Note: for simplicity, these types are annotated using the String class. A more typical annotation class is {@link hydra.compute.Meta}
  */
 @SuppressWarnings("unchecked")
 public class TypesTest {
@@ -59,19 +60,19 @@ public class TypesTest {
 
   @Test
   public void demonstrateVisitor() {
-    Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
+    Type.PartialVisitor<Integer, String> countFields = new Type.PartialVisitor<Integer, String>() {
       @Override
-      public Integer visit(Type.Record instance) {
+      public Integer visit(Type.Record<String> instance) {
         return instance.value.fields.size();
       }
 
       @Override
-      public Integer visit(Type.Union instance) {
+      public Integer visit(Type.Union<String> instance) {
         return instance.value.fields.size();
       }
 
       @Override
-      public Integer otherwise(Type ignored) {
+      public Integer otherwise(Type<String> ignored) {
         return 0;
       }
     };
