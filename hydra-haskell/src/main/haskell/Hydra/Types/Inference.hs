@@ -315,8 +315,9 @@ lookupTypeInEnvironment v = do
 namedType :: Show m => String -> Name -> GraphFlow m (Type m)
 namedType debug name = do
   withTrace (debug ++ ": " ++ unName name) $ do
-    el <- requireElement name
-    withSchemaContext $ decodeStructuralType $ elementData el
+    withSchemaContext $ do
+      el <- requireElement name
+      decodeStructuralType $ elementData el
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t

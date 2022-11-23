@@ -244,7 +244,7 @@ checkNominalTerms = do
         stringAliasType
       expectMonotype
         (lambda "v" $ nominal (Name "StringTypeAlias") $ variable "v")
-        (Types.function (Standard.doc "An alias for the string type" Types.string) stringAliasType)
+        (Types.function Types.string stringAliasType)
 
     H.it "Check nominal eliminations" $ do
       expectMonotype
@@ -252,7 +252,7 @@ checkNominalTerms = do
         (Types.function stringAliasType (Standard.doc "An alias for the string type" Types.string))
       expectMonotype
         (apply (eliminateNominal $ Name "StringTypeAlias") (nominal (Name "StringTypeAlias") $ string "foo"))
-        (Standard.doc "An alias for the string type" Types.string)
+        Types.string
 
 checkPrimitiveFunctions :: H.SpecWith ()
 checkPrimitiveFunctions = do
