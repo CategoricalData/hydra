@@ -174,6 +174,7 @@ termVariant term = ((\x -> case x of
   Core.TermProduct _ -> Mantle.TermVariantProduct
   Core.TermRecord _ -> Mantle.TermVariantRecord
   Core.TermSet _ -> Mantle.TermVariantSet
+  Core.TermStream _ -> Mantle.TermVariantStream
   Core.TermSum _ -> Mantle.TermVariantSum
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermVariable _ -> Mantle.TermVariantVariable) term)
@@ -193,6 +194,7 @@ termVariants = [
   Mantle.TermVariantProduct,
   Mantle.TermVariantRecord,
   Mantle.TermVariantSet,
+  Mantle.TermVariantStream,
   Mantle.TermVariantSum,
   Mantle.TermVariantUnion,
   Mantle.TermVariantVariable]
@@ -217,6 +219,7 @@ typeVariant typ = ((\x -> case x of
   Core.TypeProduct _ -> Mantle.TypeVariantProduct
   Core.TypeRecord _ -> Mantle.TypeVariantRecord
   Core.TypeSet _ -> Mantle.TypeVariantSet
+  Core.TypeStream _ -> Mantle.TypeVariantStream
   Core.TypeSum _ -> Mantle.TypeVariantSum
   Core.TypeUnion _ -> Mantle.TypeVariantUnion
   Core.TypeVariable _ -> Mantle.TypeVariantVariable) typ)
@@ -237,6 +240,7 @@ typeVariants = [
   Mantle.TypeVariantProduct,
   Mantle.TypeVariantRecord,
   Mantle.TypeVariantSet,
+  Mantle.TypeVariantStream,
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
