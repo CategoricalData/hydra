@@ -11,6 +11,17 @@ Haskell is the current source-of-truth language for Hydra, which means that most
 You can find the DSL-based sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources);
 anything written in the DSL is also mapped into the generated Scala and Java sources.
 You can find the generated Haskell sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell).
+To build Hydra and enter the GHCi REPL, use:
+
+```bash
+stack ghci
+```
+
+To run tests, use:
+
+```bash
+stack test
+```
 
 ## Code generation
 
@@ -19,7 +30,7 @@ producing nearly-complete Hydra implementations in those languages.
 At this time, Haskell is fully supported as a target language, while Java is supported for schemas only (i.e. Hydra type definitions map to Java classes),
 and Scala is supported for data only (i.e. constants and functions are mapped, but types are not yet).
 
-You can generate Hydra's sources by first entering the GHCi REPL using `stack ghci`, then:
+You can generate Hydra's sources by first entering the GHCi REPL as above, then:
 
 ```bash
 writeHaskell allModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
@@ -107,7 +118,7 @@ intStringCoder = Coder {
   coderDecode = pure . read}
 ```
 
-The `()`'s indicates that this coder is stateless in both directions, which makes the use of `Coder` overkill in this case.
+The `()`'s indicate that this coder is stateless in both directions, which makes the use of `Coder` overkill in this case.
 For a more realistic, but still simple example, see the [JSON coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Json/Coder.hs), which makes use of state for error propagation.
 For a more sophisticated example, see the [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Haskell/Coder.hs)
 or the [Java coder](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Ext/Java/Coder.hs);
