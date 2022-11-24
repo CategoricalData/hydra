@@ -5,123 +5,123 @@ package hydra.core;
  */
 public abstract class Type<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Type");
-
+  
   private Type () {
-
+  
   }
-
-  public abstract <R> R accept(Visitor<R, M> visitor) ;
-
-  public interface Visitor<R, M> {
-    R visit(Annotated<M> instance) ;
-
-    R visit(Application<M> instance) ;
-
-    R visit(Element<M> instance) ;
-
-    R visit(Function<M> instance) ;
-
-    R visit(Lambda<M> instance) ;
-
-    R visit(List<M> instance) ;
-
-    R visit(Literal<M> instance) ;
-
-    R visit(Map<M> instance) ;
-
-    R visit(Nominal<M> instance) ;
-
-    R visit(Optional<M> instance) ;
-
-    R visit(Product<M> instance) ;
-
-    R visit(Record<M> instance) ;
-
-    R visit(Set<M> instance) ;
-
-    R visit(Stream<M> instance) ;
-
-    R visit(Sum<M> instance) ;
-
-    R visit(Union<M> instance) ;
-
-    R visit(Variable<M> instance) ;
+  
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Annotated instance) ;
+    
+    R visit(Application instance) ;
+    
+    R visit(Element instance) ;
+    
+    R visit(Function instance) ;
+    
+    R visit(Lambda instance) ;
+    
+    R visit(List instance) ;
+    
+    R visit(Literal instance) ;
+    
+    R visit(Map instance) ;
+    
+    R visit(Nominal instance) ;
+    
+    R visit(Optional instance) ;
+    
+    R visit(Product instance) ;
+    
+    R visit(Record instance) ;
+    
+    R visit(Set instance) ;
+    
+    R visit(Stream instance) ;
+    
+    R visit(Sum instance) ;
+    
+    R visit(Union instance) ;
+    
+    R visit(Variable instance) ;
   }
-
-  public interface PartialVisitor<R, M> extends Visitor<R, M> {
-    default R otherwise(Type<M> instance) {
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(Type instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
-
-    default R visit(Annotated<M> instance) {
+    
+    default R visit(Annotated instance) {
       return otherwise((instance));
     }
-
-    default R visit(Application<M> instance) {
+    
+    default R visit(Application instance) {
       return otherwise((instance));
     }
-
-    default R visit(Element<M> instance) {
+    
+    default R visit(Element instance) {
       return otherwise((instance));
     }
-
-    default R visit(Function<M> instance) {
+    
+    default R visit(Function instance) {
       return otherwise((instance));
     }
-
-    default R visit(Lambda<M> instance) {
+    
+    default R visit(Lambda instance) {
       return otherwise((instance));
     }
-
-    default R visit(List<M> instance) {
+    
+    default R visit(List instance) {
       return otherwise((instance));
     }
-
-    default R visit(Literal<M> instance) {
+    
+    default R visit(Literal instance) {
       return otherwise((instance));
     }
-
-    default R visit(Map<M> instance) {
+    
+    default R visit(Map instance) {
       return otherwise((instance));
     }
-
-    default R visit(Nominal<M> instance) {
+    
+    default R visit(Nominal instance) {
       return otherwise((instance));
     }
-
-    default R visit(Optional<M> instance) {
+    
+    default R visit(Optional instance) {
       return otherwise((instance));
     }
-
-    default R visit(Product<M> instance) {
+    
+    default R visit(Product instance) {
       return otherwise((instance));
     }
-
-    default R visit(Record<M> instance) {
+    
+    default R visit(Record instance) {
       return otherwise((instance));
     }
-
-    default R visit(Set<M> instance) {
+    
+    default R visit(Set instance) {
       return otherwise((instance));
     }
-
-    default R visit(Stream<M> instance) {
+    
+    default R visit(Stream instance) {
       return otherwise((instance));
     }
-
-    default R visit(Sum<M> instance) {
+    
+    default R visit(Sum instance) {
       return otherwise((instance));
     }
-
-    default R visit(Union<M> instance) {
+    
+    default R visit(Union instance) {
       return otherwise((instance));
     }
-
-    default R visit(Variable<M> instance) {
+    
+    default R visit(Variable instance) {
       return otherwise((instance));
     }
   }
-
+  
   /**
    * A type annotated with metadata
    */
@@ -130,11 +130,11 @@ public abstract class Type<M> {
      * A type annotated with metadata
      */
     public final hydra.core.Annotated<hydra.core.Type<M>, M> value;
-
+    
     public Annotated (hydra.core.Annotated<hydra.core.Type<M>, M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Annotated)) {
@@ -143,25 +143,25 @@ public abstract class Type<M> {
       Annotated o = (Annotated) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Application<M> extends hydra.core.Type<M> {
     public final hydra.core.ApplicationType<M> value;
-
+    
     public Application (hydra.core.ApplicationType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Application)) {
@@ -170,25 +170,25 @@ public abstract class Type<M> {
       Application o = (Application) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Element<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
-
+    
     public Element (hydra.core.Type<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Element)) {
@@ -197,25 +197,25 @@ public abstract class Type<M> {
       Element o = (Element) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Function<M> extends hydra.core.Type<M> {
     public final hydra.core.FunctionType<M> value;
-
+    
     public Function (hydra.core.FunctionType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Function)) {
@@ -224,25 +224,25 @@ public abstract class Type<M> {
       Function o = (Function) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Lambda<M> extends hydra.core.Type<M> {
     public final hydra.core.LambdaType<M> value;
-
+    
     public Lambda (hydra.core.LambdaType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Lambda)) {
@@ -251,25 +251,25 @@ public abstract class Type<M> {
       Lambda o = (Lambda) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class List<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
-
+    
     public List (hydra.core.Type<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof List)) {
@@ -278,25 +278,25 @@ public abstract class Type<M> {
       List o = (List) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Literal<M> extends hydra.core.Type<M> {
     public final hydra.core.LiteralType value;
-
+    
     public Literal (hydra.core.LiteralType value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Literal)) {
@@ -305,25 +305,25 @@ public abstract class Type<M> {
       Literal o = (Literal) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Map<M> extends hydra.core.Type<M> {
     public final hydra.core.MapType<M> value;
-
+    
     public Map (hydra.core.MapType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Map)) {
@@ -332,25 +332,25 @@ public abstract class Type<M> {
       Map o = (Map) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Nominal<M> extends hydra.core.Type<M> {
     public final hydra.core.Name value;
-
+    
     public Nominal (hydra.core.Name value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Nominal)) {
@@ -359,25 +359,25 @@ public abstract class Type<M> {
       Nominal o = (Nominal) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Optional<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
-
+    
     public Optional (hydra.core.Type<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Optional)) {
@@ -386,25 +386,25 @@ public abstract class Type<M> {
       Optional o = (Optional) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Product<M> extends hydra.core.Type<M> {
     public final java.util.List<hydra.core.Type<M>> value;
-
+    
     public Product (java.util.List<hydra.core.Type<M>> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Product)) {
@@ -413,25 +413,25 @@ public abstract class Type<M> {
       Product o = (Product) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Record<M> extends hydra.core.Type<M> {
     public final hydra.core.RowType<M> value;
-
+    
     public Record (hydra.core.RowType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Record)) {
@@ -440,25 +440,25 @@ public abstract class Type<M> {
       Record o = (Record) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Set<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
-
+    
     public Set (hydra.core.Type<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Set)) {
@@ -467,25 +467,25 @@ public abstract class Type<M> {
       Set o = (Set) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Stream<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
-
+    
     public Stream (hydra.core.Type<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Stream)) {
@@ -494,25 +494,25 @@ public abstract class Type<M> {
       Stream o = (Stream) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Sum<M> extends hydra.core.Type<M> {
     public final java.util.List<hydra.core.Type<M>> value;
-
+    
     public Sum (java.util.List<hydra.core.Type<M>> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Sum)) {
@@ -521,25 +521,25 @@ public abstract class Type<M> {
       Sum o = (Sum) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Union<M> extends hydra.core.Type<M> {
     public final hydra.core.RowType<M> value;
-
+    
     public Union (hydra.core.RowType<M> value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Union)) {
@@ -548,25 +548,25 @@ public abstract class Type<M> {
       Union o = (Union) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }
-
+  
   public static final class Variable<M> extends hydra.core.Type<M> {
     public final hydra.core.VariableType value;
-
+    
     public Variable (hydra.core.VariableType value) {
       this.value = value;
     }
-
+    
     @Override
     public boolean equals(Object other) {
       if (!(other instanceof Variable)) {
@@ -575,14 +575,14 @@ public abstract class Type<M> {
       Variable o = (Variable) (other);
       return value.equals(o.value);
     }
-
+    
     @Override
     public int hashCode() {
       return 2 * value.hashCode();
     }
-
+    
     @Override
-    public <R> R accept(Visitor<R, M> visitor) {
+    public <R> R accept(Visitor<R> visitor) {
       return visitor.visit(this);
     }
   }

@@ -94,11 +94,13 @@ constructModule mod coders pairs = do
         Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) imports [decl])
 
     termToInterfaceMember coders pair = do
-        expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair)
-        if isLambda expanded
-          then termToMethod coders (fst pair) (typedTermType $ snd pair) expanded
-          else termToConstant coders (fst pair) (typedTermType $ snd pair) expanded
+        withTrace ("element " ++ unName (elementName el)) $ do
+          expanded <- contractTerm <$> (expandLambdas $ typedTermTerm $ snd pair) >>= annotateTermWithTypes
+          if isLambda expanded
+            then termToMethod coders el (typedTermType $ snd pair) expanded
+            else termToConstant coders el (typedTermType $ snd pair) expanded
       where
+        el = fst pair
         isLambda t = case stripTerm t of
           TermFunction (FunctionLambda _) -> True
           _ -> False
@@ -217,9 +219,9 @@ declarationForRecordType isInner aliases tparams elName fields = do
         castStmt = variableDeclarationStatement aliases elName id rhs
           where
             id = javaIdentifier tmpName
-            rhs = javaUnaryExpressionToJavaExpression $ Java.UnaryExpressionOther $
-              Java.UnaryExpressionNotPlusMinusCast $ javaCastExpression aliases elName $ Java.Identifier $
-                sanitizeJavaName otherName
+            rhs = javaCastExpressionToJavaExpression $ javaCastExpression aliases rt var
+            var = javaIdentifierToJavaUnaryExpression $ Java.Identifier $ sanitizeJavaName otherName
+            rt = nameToJavaReferenceType aliases False elName Nothing
 
         returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
             then javaBooleanExpression True
@@ -360,10 +362,10 @@ elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
 
 encodeElimination :: (Eq m, Ord m, Read m, Show m)
-  => Aliases -> Maybe Java.Expression -> Type m -> Elimination m -> GraphFlow m Java.Expression
-encodeElimination aliases marg cod elm = case elm of
+  => Aliases -> Maybe Java.Expression -> Type m -> Type m -> Elimination m -> GraphFlow m Java.Expression
+encodeElimination aliases marg dom cod elm = case elm of
   EliminationElement -> case marg of
-    Nothing -> encodeFunction aliases cod $ FunctionLambda $ Lambda var $ TermVariable var
+    Nothing -> encodeFunction aliases dom cod $ FunctionLambda $ Lambda var $ TermVariable var
       where
         var = Variable "v"
     Just jarg -> pure jarg
@@ -377,17 +379,24 @@ encodeElimination aliases marg cod elm = case elm of
       where
         qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
 --  EliminationOptional (OptionalCases nothing just) ->
-  EliminationRecord (Projection _ fname) -> case marg of
-    Nothing -> pure $ javaLambda var jbody
-      where
-        var = Variable "v"
-        jbody = javaExpressionNameToJavaExpression $
-          fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
-    Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
-      where
-        qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+  EliminationRecord (Projection _ fname) -> do
+    jdomr <- encodeType aliases dom >>= javaTypeToJavaReferenceType
+    jexp <- case marg of
+      Nothing -> pure $ javaLambda var jbody
+        where
+          var = Variable "v"
+          jbody = javaExpressionNameToJavaExpression $
+            fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
+      Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
+        where
+          qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
+    return $ javaCastExpressionToJavaExpression $ javaCastExpression aliases jdomr $ javaExpressionToJavaUnaryExpression jexp
   EliminationUnion (CaseStatement tname fields) -> case marg of
-      Nothing -> encodeTerm aliases Nothing $ Terms.lambda "v" $ Terms.apply (Terms.elimination elm) (Terms.variable "v")
+      Nothing -> do
+        cx <- getState
+        let anns = contextAnnotations cx
+        let lhs = annotationClassSetTermType anns cx (Just $ Types.function (Types.nominal tname) cod) $ Terms.elimination elm
+        encodeTerm aliases Nothing $ Terms.lambda "v" $ Terms.apply lhs (Terms.variable "v")
       Just jarg -> applyElimination jarg
     where
       applyElimination jarg = do
@@ -416,10 +425,10 @@ encodeElimination aliases marg cod elm = case elm of
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
-  => Aliases -> Type m -> Function m -> GraphFlow m Java.Expression
-encodeFunction aliases cod fun = case fun of
+  => Aliases -> Type m -> Type m -> Function m -> GraphFlow m Java.Expression
+encodeFunction aliases dom cod fun = case fun of
 --  FunctionCompareTo other ->
-  FunctionElimination elm -> encodeElimination aliases Nothing cod elm
+  FunctionElimination elm -> encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
     jbody <- encodeTerm aliases Nothing body
     return $ javaLambda var jbody
@@ -490,8 +499,6 @@ encodeTerm aliases mtype term = case term of
           _ -> fallback
         _ -> fallback
       where
-        fallback = forApplication mtype a
-
         forNamedFunction name args = do
           jargs <- CM.mapM encode args
           let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier aliases name
@@ -504,35 +511,30 @@ encodeTerm aliases mtype term = case term of
               TermApplication (Application lhs rhs) -> uncurry (rhs:args) lhs
               _ -> (term, args)
 
-        forApplication mtype (Application fun arg) = case fun of
-            TermAnnotated (Annotated fun' ann) -> do
-              mcod <- case mtype of
-                Just t -> pure $ Just t
-                Nothing -> do
-                  cx <- getState
-                  mt <- annotationClassTypeOf (contextAnnotations cx) ann
-                  case mt of
-                    Nothing -> pure Nothing
-                    Just t -> case stripType t of
-                      TypeFunction (FunctionType _ cod) -> pure $ Just cod
-                      _ -> unexpected "function type" t
-              forApplication mcod (Application fun' arg)
-            TermFunction f -> case f of
-              FunctionElimination elm -> case elm of
-                EliminationElement -> encodeTerm aliases Nothing arg
-                _ -> do
-                  cod <- case mtype of
-                    Nothing -> fail $ "expected a type annotation on function: " ++ show f
-                    Just c -> pure c
-                  jarg <- encode arg
-                  encodeElimination aliases (Just jarg) cod elm
-              _ -> defaultExpression
-            _ -> defaultExpression
+        fallback = forApplication a
+        forApplication (Application lhs rhs) = do
+            cx <- getState
+            mt <- annotationClassTermType (contextAnnotations cx) lhs
+            t <- case mt of
+              Just t' -> pure t'
+              Nothing -> fail $ "expected a type annotation on function " ++ show lhs
+            (dom, cod) <- case stripType t of
+                TypeFunction (FunctionType dom cod) -> pure (dom, cod)
+                _ -> fail $ "expected a function type on function " ++ show lhs
+            case stripTerm lhs of
+              TermFunction f -> case f of
+                FunctionElimination e -> case e of
+                  EliminationElement -> encodeTerm aliases Nothing rhs
+                  _ -> do
+                    jarg <- encode rhs
+                    encodeElimination aliases (Just jarg) dom cod e
+                _ -> defaultExpression dom cod
+              _ -> defaultExpression dom cod
           where
-            defaultExpression = do
+            defaultExpression dom cod = do
               -- Note: the domain type will not be used, so we just substitute the unit type
-              jfun <- encodeTerm aliases ((\t -> TypeFunction $ FunctionType Types.unit t) <$> mtype) fun
-              jarg <- encode arg
+              jfun <- encodeTerm aliases (Just $ Types.function dom cod) lhs
+              jarg <- encodeTerm aliases (Just dom) rhs
               let prim = javaExpressionToJavaPrimary jfun
               return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
 
@@ -540,7 +542,7 @@ encodeTerm aliases mtype term = case term of
 
     TermFunction f -> case mtype of
       Just t -> case stripType t of
-        TypeFunction (FunctionType _ cod) -> encodeFunction aliases cod f
+        TypeFunction (FunctionType dom cod) -> encodeFunction aliases dom cod f
         _ -> unexpected "function type" $ t
       Nothing -> failAsLiteral $ "unannotated function: " ++ show f
 

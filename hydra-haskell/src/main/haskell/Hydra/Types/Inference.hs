@@ -214,9 +214,7 @@ inferInternal term = case term of
     TermNominal (Named name term1) -> do
       typ <- withGraphContext $ namedType "nominal" name
       i <- infer term1
-      let typ1 = termType i
-      let c = termConstraints i
-      yield (TermNominal $ Named name i) (Types.nominal name) (c ++ [(typ, typ1)])
+      yield (TermNominal $ Named name i) (Types.nominal name) (termConstraints i ++ [(typ, termType i)])
 
     TermOptional m -> do
       v <- freshVariableType
@@ -292,7 +290,7 @@ inferType term = do
       cx <- getState
       withState (startContext cx) $ do
         term1 <- infer term
-        withTrace ("original term: " ++ show term ++ " ### inferred term: " ++ show term1) $ do
+        withTrace ("original term (without annotations): " ++ show (removeTermAnnotations term) ++ " ### inferred term: " ++ show term1) $ do
           subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
           let term2 = rewriteDataType (substituteInType subst) term1
           return (term2, closeOver $ termType term2)

@@ -60,19 +60,19 @@ public class TypesTest {
 
   @Test
   public void demonstrateVisitor() {
-    Type.PartialVisitor<Integer, String> countFields = new Type.PartialVisitor<Integer, String>() {
+    Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
       @Override
-      public Integer visit(Type.Record<String> instance) {
+      public Integer visit(Type.Record instance) {
         return instance.value.fields.size();
       }
 
       @Override
-      public Integer visit(Type.Union<String> instance) {
+      public Integer visit(Type.Union instance) {
         return instance.value.fields.size();
       }
 
       @Override
-      public Integer otherwise(Type<String> ignored) {
+      public Integer otherwise(Type ignored) {
         return 0;
       }
     };

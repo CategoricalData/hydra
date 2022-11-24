@@ -72,11 +72,14 @@ javaBooleanExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . jav
 javaBooleanType :: Java.Type
 javaBooleanType = javaPrimitiveTypeToJavaType Java.PrimitiveTypeBoolean
 
-javaCastExpression :: M.Map Namespace Java.PackageName -> Name -> Java.Identifier -> Java.CastExpression
-javaCastExpression aliases elName var = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb $
-    javaIdentifierToJavaUnaryExpression var
+javaCastExpression :: M.Map Namespace Java.PackageName -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression
+javaCastExpression aliases rt expr = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb expr
   where
-    rb = Java.CastExpression_RefAndBounds (nameToJavaReferenceType aliases False elName Nothing) []
+    rb = Java.CastExpression_RefAndBounds rt []
+
+javaCastExpressionToJavaExpression :: Java.CastExpression -> Java.Expression
+javaCastExpressionToJavaExpression = javaUnaryExpressionToJavaExpression . Java.UnaryExpressionOther .
+  Java.UnaryExpressionNotPlusMinusCast
 
 javaClassDeclaration :: M.Map Namespace Java.PackageName -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
    -> Maybe Name -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration
@@ -126,6 +129,9 @@ javaExpressionNameToJavaExpression = javaPostfixExpressionToJavaExpression . Jav
 
 javaExpressionToJavaPrimary :: Java.Expression -> Java.Primary
 javaExpressionToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayParens
+
+javaExpressionToJavaUnaryExpression :: Java.Expression -> Java.UnaryExpression
+javaExpressionToJavaUnaryExpression = javaPrimaryToJavaUnaryExpression . javaExpressionToJavaPrimary
 
 javaFieldAccessToJavaExpression :: Java.FieldAccess -> Java.Expression
 javaFieldAccessToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayFieldAccess
