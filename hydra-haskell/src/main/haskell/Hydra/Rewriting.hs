@@ -87,6 +87,22 @@ moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleName
 isFreeIn :: Variable -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
+-- | Recursively remove term annotations, including within subterms
+removeTermAnnotations :: Ord m => Term m -> Term m
+removeTermAnnotations = rewriteTerm remove id
+  where
+    remove recurse term = case term of
+      TermAnnotated (Annotated term' _) -> remove recurse term'
+      _ -> recurse term
+
+-- | Recursively remove type annotations, including within subtypes
+removeTypeAnnotations :: Ord m => Type m -> Type m
+removeTypeAnnotations = rewriteType remove id
+  where
+    remove recurse typ = case recurse typ of
+      TypeAnnotated (Annotated typ' _) -> remove recurse typ'
+      _ -> recurse typ
+
 replaceFreeVariableType :: Ord m => VariableType -> Type m -> Type m -> Type m
 replaceFreeVariableType v rep = rewriteType mapExpr id
   where
