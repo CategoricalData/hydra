@@ -141,7 +141,7 @@ record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
-ref e = delta @@ element e
+ref (Definition name _) = Datum (Terms.apply Terms.delta $ Terms.element name) 
 
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
