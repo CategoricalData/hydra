@@ -1,6 +1,6 @@
 module Hydra.Ext.Haskell.Utils where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.Coders
 import Hydra.Ext.Haskell.Language
 import qualified Hydra.Ext.Haskell.Ast as H

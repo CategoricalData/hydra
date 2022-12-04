@@ -1,6 +1,6 @@
 module Hydra.Ext.Avro.Coder where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.Coders
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

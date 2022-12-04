@@ -2,7 +2,7 @@
 
 module Hydra.Impl.Haskell.Sources.Core where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Meta
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Bootstrap

@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Ext.Yaml.Serde where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Ext.Yaml.Coder
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Impl.Haskell.Ext.Bytestrings

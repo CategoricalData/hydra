@@ -1,6 +1,6 @@
 module Hydra.Ext.Java.Utils where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Adapters.Coders

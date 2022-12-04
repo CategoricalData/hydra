@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.GraphIO where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.CoreEncoding
 import Hydra.Types.Inference

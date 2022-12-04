@@ -2,7 +2,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax where
 
 import Hydra.Impl.Haskell.Sources.Core
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Dsl.Standard

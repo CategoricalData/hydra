@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Adapters.Utils where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Sources.Basics
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard

@@ -3,7 +3,7 @@ module Hydra.TestGraph (
   module Hydra.Impl.Haskell.Sources.Libraries,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Standard as Standard
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Libraries

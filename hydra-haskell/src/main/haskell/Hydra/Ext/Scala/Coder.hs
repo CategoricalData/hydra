@@ -1,6 +1,6 @@
 module Hydra.Ext.Scala.Coder (printModule) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Impl.Haskell.Dsl.Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

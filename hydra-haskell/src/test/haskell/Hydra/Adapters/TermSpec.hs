@@ -1,6 +1,6 @@
 module Hydra.Adapters.TermSpec where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
 import Hydra.Impl.Haskell.Dsl.Terms as Terms

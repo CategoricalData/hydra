@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.PhantomLiterals where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Data.Int
 

@@ -1,6 +1,6 @@
 module Hydra.Ext.Haskell.Coder (printModule) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Adapters.Coders
 import Hydra.Ext.Haskell.Language

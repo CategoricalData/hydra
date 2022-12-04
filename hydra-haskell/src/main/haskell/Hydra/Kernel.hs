@@ -1,8 +1,10 @@
--- | Provides in Haskell most modules in the top-level Hydra.* namespace.
---   Additionally, some Hydra.Util.* modules are included.
---   Hydra.CoreDecoding and Hydra.CoreEncoding, Hydra.Meta, and Hydra.Reduction are excluded due to their dependencies on the Hydra DSLs
+-- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation.
+--   This includes most modules in the top-level Hydra.* namespace, as well as some Hydra.Util.* modules.
+--   Hydra.CoreDecoding and Hydra.CoreEncoding, Hydra.Meta, and Hydra.Reduction are logically part of the kernel,
+--   but are excluded for now due to their dependencies on the Hydra DSLs.
+--   The adapter and inference frameworks are currently excluded so as to avoid circular dependencies.
 
-module Hydra.All (
+module Hydra.Kernel (
   module Hydra.Adapters.Utils,
   module Hydra.Basics,
   module Hydra.Common,

@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Sources.Ext.Shacl.Model where
 
 import Hydra.Impl.Haskell.Sources.Core
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax

@@ -1,6 +1,6 @@
 module Hydra.Ext.Shacl.Coder where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Meta
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
