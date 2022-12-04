@@ -9,7 +9,7 @@ import Hydra.CoreEncoding
 import Hydra.Common
 import Hydra.Monads
 import Hydra.Mantle
-import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
@@ -24,6 +24,14 @@ aggregateAnnotations getAnn t = Meta $ M.fromList $ addMeta [] t
 
 getAnnotation :: String -> Meta -> Maybe (Term Meta)
 getAnnotation key (Meta m) = M.lookup key m
+
+getAttr :: String -> Flow s (Maybe (Term Meta))
+getAttr key = Flow q
+  where
+    q s0 t0 = FlowState (Just $ M.lookup key $ traceOther t0) s0 t0
+
+getAttrWithDefault :: String -> Term Meta -> Flow s (Term Meta)
+getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
 getDescription :: Meta -> GraphFlow Meta (Y.Maybe String)
 getDescription meta = case getAnnotation metaDescription meta of
@@ -76,11 +84,22 @@ metaDescription = "description"
 metaType :: String
 metaType = "type"
 
+nextCount :: String -> Flow s Int
+nextCount attrName = do
+  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Terms.expectInt32
+  putAttr attrName (Terms.int32 $ count + 1)
+  return count
+
+putAttr :: String -> Term Meta -> Flow s ()
+putAttr key val = Flow q
+  where
+    q s0 t0 = FlowState (Just ()) s0 (t0 {traceOther = M.insert key val $ traceOther t0})
+
 setAnnotation :: String -> Y.Maybe (Term Meta) -> Meta -> Meta
 setAnnotation key val (Meta m) = Meta $ M.alter (const val) key m
 
 setDescription :: Y.Maybe String -> Meta -> Meta
-setDescription d = setAnnotation metaDescription (string <$> d)
+setDescription d = setAnnotation metaDescription (Terms.string <$> d)
 
 setTermAnnotation :: Context Meta -> String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
 setTermAnnotation cx key val term = if meta == annotationClassDefault (contextAnnotations cx)
@@ -91,7 +110,7 @@ setTermAnnotation cx key val term = if meta == annotationClassDefault (contextAn
     meta = setAnnotation key val $ termMetaInternal term
 
 setTermDescription :: Context Meta -> Y.Maybe String -> Term Meta -> Term Meta
-setTermDescription cx d = setTermAnnotation cx metaDescription (string <$> d)
+setTermDescription cx d = setTermAnnotation cx metaDescription (Terms.string <$> d)
 
 setTermType :: Context Meta -> Y.Maybe (Type Meta) -> Term Meta -> Term Meta
 setTermType cx d = setTermAnnotation cx metaType (encodeType <$> d)
@@ -108,7 +127,7 @@ setTypeAnnotation cx key val typ = if meta == annotationClassDefault (contextAnn
     meta = setAnnotation key val $ typeMetaInternal typ
 
 setTypeDescription :: Context Meta -> Y.Maybe String -> Type Meta -> Type Meta
-setTypeDescription cx d = setTypeAnnotation cx metaDescription (string <$> d)
+setTypeDescription cx d = setTypeAnnotation cx metaDescription (Terms.string <$> d)
 
 termMetaInternal :: Term Meta -> Meta
 termMetaInternal = aggregateAnnotations $ \t -> case t of

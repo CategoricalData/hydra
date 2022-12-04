@@ -14,7 +14,7 @@ import Hydra.Adapters.Utils
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting
 import Hydra.Rewriting
-import Hydra.Util.Context
+import Hydra.Meta
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 
 import qualified Data.List as L

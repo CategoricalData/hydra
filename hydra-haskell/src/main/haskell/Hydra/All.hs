@@ -22,7 +22,6 @@ module Hydra.All (
   module Hydra.Rewriting,
   module Hydra.Util.Sorting,
   module Hydra.Util.Formatting,
---  module Hydra.Util.Context,
   module Hydra.Util.Debug,
 --  module Hydra.Util.GrammarToModule,
 ) where
@@ -46,6 +45,5 @@ import Hydra.Phantoms
 import Hydra.Rewriting
 import Hydra.Util.Sorting
 import Hydra.Util.Formatting
---import Hydra.Util.Context
 import Hydra.Util.Debug
 --import Hydra.Util.GrammarToModule
