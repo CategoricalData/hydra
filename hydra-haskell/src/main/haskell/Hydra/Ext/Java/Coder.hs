@@ -14,7 +14,7 @@ import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.Adapters.UtilsEtc
 import Hydra.Types.Inference
-import Hydra.Util.Context
+import Hydra.Meta
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
