@@ -1,5 +1,8 @@
 package hydra.grammar;
 
+/**
+ * A pattern which matches valid expressions in the language
+ */
 public abstract class Pattern {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Pattern");
   

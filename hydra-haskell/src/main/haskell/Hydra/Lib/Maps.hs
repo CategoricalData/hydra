@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/maps primitives
+
 module Hydra.Lib.Maps where
 
 import qualified Data.Map as M

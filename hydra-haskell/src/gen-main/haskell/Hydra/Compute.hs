@@ -8,6 +8,7 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | A two-level bidirectional encoder which adapts types to types and terms to terms
 data Adapter s1 s2 t1 t2 v1 v2 = 
   Adapter {
     adapterIsLossy :: Bool,
@@ -25,6 +26,7 @@ _Adapter_target = (Core.FieldName "target")
 
 _Adapter_coder = (Core.FieldName "coder")
 
+-- | An evaluation context together with a source language and a target language
 data AdapterContext m = 
   AdapterContext {
     adapterContextEvaluation :: (Context m),
@@ -146,6 +148,7 @@ newtype Flow s a =
 
 _Flow = (Core.Name "hydra/compute.Flow")
 
+-- | The result of evaluating a Flow
 data FlowState s a = 
   FlowState {
     flowStateValue :: (Maybe a),
@@ -161,6 +164,7 @@ _FlowState_state = (Core.FieldName "state")
 
 _FlowState_trace = (Core.FieldName "trace")
 
+-- | A named language together with language-specific constraints
 data Language m = 
   Language {
     languageName :: LanguageName,
@@ -172,6 +176,7 @@ _Language_name = (Core.FieldName "name")
 
 _Language_constraints = (Core.FieldName "constraints")
 
+-- | A set of constraints on valid type and term expressions, characterizing a language
 data LanguageConstraints m = 
   LanguageConstraints {
     languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
@@ -201,8 +206,10 @@ _LanguageConstraints_typeVariants = (Core.FieldName "typeVariants")
 
 _LanguageConstraints_types = (Core.FieldName "types")
 
+-- | The unique name of a language
 newtype LanguageName = 
   LanguageName {
+    -- | The unique name of a language
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -263,6 +270,7 @@ _Trace_messages = (Core.FieldName "messages")
 
 _Trace_other = (Core.FieldName "other")
 
+-- | Specifies either a pre-order or post-order traversal
 data TraversalOrder = 
   -- | Pre-order traversal
   TraversalOrderPre  |

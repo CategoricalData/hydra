@@ -1,3 +1,5 @@
+-- | String formatting utilities
+
 module Hydra.Util.Formatting where
 
 import qualified Hydra.Lib.Strings as Strings

@@ -23,8 +23,8 @@ hydraCoreModule = Module ns elements [] $
     elements = [
 
       def "Annotated" $
-        lambda "a" $
-        lambda "m" $ record [
+        doc "An object, such as a type or term, together with an annotation" $
+        lambda "a" $ lambda "m" $ record [
           "subject">: "a",
           "annotation">: "m"],
 
@@ -49,6 +49,7 @@ hydraCoreModule = Module ns elements [] $
             core "Type" @@ "m"],
 
       def "CaseStatement" $
+        doc "A union elimination; a case statement" $
         lambda "m" $ record [
           "typeName">: core "Name",
           "cases">: list $ core "Field" @@ "m"],
@@ -82,7 +83,7 @@ hydraCoreModule = Module ns elements [] $
           "term">: core "Term" @@ "m"],
 
       def "FieldName" $
-        doc "The name of a field"
+        doc "The name of a field, unique within a record or union type"
         string,
 
       def "FieldType" $
@@ -243,6 +244,7 @@ hydraCoreModule = Module ns elements [] $
             core "Term" @@ "m"],
 
       def "Projection" $
+        doc "A record elimination; a projection" $
         record [
           "typeName">: core "Name",
           "field">: core "FieldName"],
@@ -371,4 +373,6 @@ hydraCoreModule = Module ns elements [] $
           "typeName">: core "Name",
           "field">: core "Field" @@ "m"],
 
-      def "UnitType" $ record []]
+      def "UnitType" $
+        doc "An empty record type as a canonical unit type" $
+        record []]

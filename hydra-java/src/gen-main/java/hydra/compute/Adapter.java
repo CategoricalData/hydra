@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * A two-level bidirectional encoder which adapts types to types and terms to terms
+ */
 public class Adapter<S1, S2, T1, T2, V1, V2> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Adapter");
   

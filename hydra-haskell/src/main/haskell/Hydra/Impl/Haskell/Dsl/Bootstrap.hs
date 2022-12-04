@@ -1,3 +1,5 @@
+-- | A bootstrapping DSL, used for Hydra's inner core models
+
 module Hydra.Impl.Haskell.Dsl.Bootstrap where
 
 import Hydra.Kernel

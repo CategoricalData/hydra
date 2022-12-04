@@ -1,3 +1,5 @@
+-- | A DSL for constructing primitive function definitions
+
 module Hydra.Impl.Haskell.Dsl.Prims where
 
 import Hydra.Kernel

@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/lists primitives
+
 module Hydra.Lib.Lists where
 
 import qualified Data.List as L

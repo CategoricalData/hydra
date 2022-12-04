@@ -6,6 +6,7 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | An object, such as a type or term, together with an annotation
 data Annotated a m = 
   Annotated {
     annotatedSubject :: a,
@@ -48,6 +49,7 @@ _ApplicationType_function = (FieldName "function")
 
 _ApplicationType_argument = (FieldName "argument")
 
+-- | A union elimination; a case statement
 data CaseStatement m = 
   CaseStatement {
     caseStatementTypeName :: Name,
@@ -103,10 +105,10 @@ _Field_name = (FieldName "name")
 
 _Field_term = (FieldName "term")
 
--- | The name of a field
+-- | The name of a field, unique within a record or union type
 newtype FieldName = 
   FieldName {
-    -- | The name of a field
+    -- | The name of a field, unique within a record or union type
     unFieldName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -411,6 +413,7 @@ _OptionalCases_nothing = (FieldName "nothing")
 
 _OptionalCases_just = (FieldName "just")
 
+-- | A record elimination; a projection
 data Projection = 
   Projection {
     projectionTypeName :: Name,
@@ -645,6 +648,7 @@ _Union_typeName = (FieldName "typeName")
 
 _Union_field = (FieldName "field")
 
+-- | An empty record type as a canonical unit type
 data UnitType = 
   UnitType {}
   deriving (Eq, Ord, Read, Show)

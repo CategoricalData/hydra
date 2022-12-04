@@ -22,6 +22,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
 
     elements = [
       def "Adapter" $
+        doc "A two-level bidirectional encoder which adapts types to types and terms to terms" $
         lambda "s1" $ lambda "s2" $ lambda "t1" $ lambda "t2" $ lambda "v1" $ lambda "v2" $ record [
           "isLossy">: boolean,
           "source">: variable "t1",
@@ -29,6 +30,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "coder">: compute "Coder" @@ "s1" @@ "s2" @@ "v1" @@ "v2"],
 
       def "AdapterContext" $
+        doc "An evaluation context together with a source language and a target language" $
         lambda "m" $ record [
           "evaluation">: apply (compute "Context") (variable "m"),
           "source">: apply (compute "Language") (variable "m"),
@@ -94,17 +96,20 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
         function "s" (compute "Trace" --> compute "FlowState" @@ "s" @@ "a"),
 
       def "FlowState" $
+        doc "The result of evaluating a Flow" $
         lambda "s" $ lambda "a" $ record [
           "value">: optional "a",
           "state">: "s",
           "trace">: compute "Trace"],
 
       def "Language" $
+        doc "A named language together with language-specific constraints" $
         lambda "m" $ record [
           "name">: compute "LanguageName",
           "constraints">: apply (compute "LanguageConstraints") (variable "m")],
 
       def "LanguageConstraints" $
+        doc "A set of constraints on valid type and term expressions, characterizing a language" $
         lambda "m" $ record [
           "eliminationVariants">: Types.set $ mantle "EliminationVariant",
           "literalVariants">: Types.set $ mantle "LiteralVariant",
@@ -115,7 +120,8 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "typeVariants">: Types.set $ mantle "TypeVariant",
           "types">: core "Type" @@ "m" --> boolean],
 
-      def "LanguageName" string,
+      def "LanguageName" $
+        doc "The unique name of a language" string,
 
       def "Meta" $
         doc "A built-in metadata container for terms" $
@@ -148,6 +154,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
             Types.map string (core "Term" @@ compute "Meta")],
 
       def "TraversalOrder" $
+        doc "Specifies either a pre-order or post-order traversal" $
         union [
           "pre">: doc "Pre-order traversal" unit,
           "post">: doc "Post-order traversal" unit]]

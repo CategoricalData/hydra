@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * A set of constraints on valid type and term expressions, characterizing a language
+ */
 public class LanguageConstraints<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageConstraints");
   

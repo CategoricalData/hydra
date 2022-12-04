@@ -1,3 +1,5 @@
+-- | Debugging utilities
+
 module Hydra.Util.Debug where
 
 import Control.Exception

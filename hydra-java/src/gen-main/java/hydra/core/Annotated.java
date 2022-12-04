@@ -1,5 +1,8 @@
 package hydra.core;
 
+/**
+ * An object, such as a type or term, together with an annotation
+ */
 public class Annotated<A, M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
   

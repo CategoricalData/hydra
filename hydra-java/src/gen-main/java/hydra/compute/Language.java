@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * A named language together with language-specific constraints
+ */
 public class Language<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Language");
   

@@ -1,3 +1,5 @@
+-- | A DSL for constructing Hydra terms
+
 module Hydra.Impl.Haskell.Dsl.Terms where
 
 import Hydra.Kernel

@@ -1,3 +1,5 @@
+-- | Entry point for Hydra's variation on Hindley-Milner type inference
+
 module Hydra.Types.Inference (
   annotateElementWithTypes,
   annotateTermWithTypes,

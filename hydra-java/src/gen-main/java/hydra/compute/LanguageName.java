@@ -1,8 +1,14 @@
 package hydra.compute;
 
+/**
+ * The unique name of a language
+ */
 public class LanguageName {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageName");
   
+  /**
+   * The unique name of a language
+   */
   public final String value;
   
   public LanguageName (String value) {

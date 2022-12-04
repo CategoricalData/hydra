@@ -1,3 +1,5 @@
+-- | Adapter framework for literal types and terms
+
 module Hydra.Adapters.Literal (
   literalAdapter,
   floatAdapter,

@@ -1,3 +1,5 @@
+-- | A DSL which is used as a basis for some of the other DSLs
+
 module Hydra.Impl.Haskell.Dsl.Standard (
   module Hydra.Impl.Haskell.Dsl.Standard,
   module Hydra.Impl.Haskell.Dsl.Bootstrap

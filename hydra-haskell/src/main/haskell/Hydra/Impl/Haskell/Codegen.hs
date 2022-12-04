@@ -1,4 +1,6 @@
-module Hydra.Impl.Haskell.GraphIO where
+-- | Entry point for Hydra code generation utilities
+
+module Hydra.Impl.Haskell.Codegen where
 
 import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Standard

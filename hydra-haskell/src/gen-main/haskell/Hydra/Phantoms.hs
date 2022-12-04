@@ -8,6 +8,7 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | An association of a field name (as in a case statement) with a phantom type
 newtype Case a = 
   Case {
     unCase :: Core.FieldName}
@@ -15,6 +16,7 @@ newtype Case a =
 
 _Case = (Core.Name "hydra/phantoms.Case")
 
+-- | An association of a term with a phantom type
 newtype Datum a = 
   Datum {
     unDatum :: (Core.Term Compute.Meta)}
@@ -22,6 +24,7 @@ newtype Datum a =
 
 _Datum = (Core.Name "hydra/phantoms.Datum")
 
+-- | An association with a named term with a phantom type
 data Definition a = 
   Definition {
     definitionName :: Core.Name,
@@ -34,6 +37,7 @@ _Definition_name = (Core.FieldName "name")
 
 _Definition_datum = (Core.FieldName "datum")
 
+-- | An association with a term-level field with a phantom type
 newtype Fld a = 
   Fld {
     unFld :: (Core.Field Compute.Meta)}
@@ -41,6 +45,7 @@ newtype Fld a =
 
 _Fld = (Core.Name "hydra/phantoms.Fld")
 
+-- | A pure association with a phantom type
 data Reference a = 
   Reference {}
   deriving (Eq, Ord, Read, Show)

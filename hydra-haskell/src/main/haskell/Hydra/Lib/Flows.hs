@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/flows primitives
+
 module Hydra.Lib.Flows where
 
 import Hydra.Kernel

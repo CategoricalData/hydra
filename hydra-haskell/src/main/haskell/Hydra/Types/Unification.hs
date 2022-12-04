@@ -1,3 +1,5 @@
+-- | Hindley-Milner style type unification
+
 module Hydra.Types.Unification (
   Constraint,
   solveConstraints,

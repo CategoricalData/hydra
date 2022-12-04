@@ -1,3 +1,5 @@
+-- | A DSL for constructing literal types and terms
+
 module Hydra.Impl.Haskell.Dsl.Literals where
 
 import Hydra.Kernel

@@ -1,8 +1,14 @@
 package hydra.grammar;
 
+/**
+ * A regular expression
+ */
 public class Regex {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Regex");
   
+  /**
+   * A regular expression
+   */
   public final String value;
   
   public Regex (String value) {

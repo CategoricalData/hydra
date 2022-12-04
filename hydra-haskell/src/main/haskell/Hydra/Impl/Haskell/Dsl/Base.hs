@@ -1,3 +1,5 @@
+-- | Base DSL which makes use of phantom types. Use this DSL for defining programs as opposed to data type definitions.
+
 module Hydra.Impl.Haskell.Dsl.Base (
   module Hydra.Impl.Haskell.Dsl.Base,
   module Hydra.Impl.Haskell.Dsl.PhantomLiterals,

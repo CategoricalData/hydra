@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * Specifies either a pre-order or post-order traversal
+ */
 public abstract class TraversalOrder {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.TraversalOrder");
   

@@ -1,3 +1,7 @@
+-- | Entry point for Hydra's adapter (type/term rewriting) framework.
+--   An adapter takes a type expression which is supported in a source language, and rewrites it to a type which is supported by a target language.
+--   In parallel, terms conforming to the original type are rewritten. Both levels of the transformation are bidirectional.
+
 module Hydra.Adapters.Coders where
 
 import Hydra.Kernel

@@ -1,5 +1,8 @@
 package hydra.phantoms;
 
+/**
+ * An association of a term with a phantom type
+ */
 public class Datum<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Datum");
   

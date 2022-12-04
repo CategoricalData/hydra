@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/optionals primitives
+
 module Hydra.Lib.Optionals where
 
 import qualified Data.Maybe as Y

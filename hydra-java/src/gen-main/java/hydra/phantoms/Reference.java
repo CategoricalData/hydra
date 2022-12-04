@@ -1,5 +1,8 @@
 package hydra.phantoms;
 
+/**
+ * A pure association with a phantom type
+ */
 public class Reference<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Reference");
   
