@@ -53,7 +53,7 @@ addDeepTypeAnnotations mod = do
     return $ mod {moduleElements = els}
 
 allModules :: [Module Meta]
-allModules = coreModules ++ extModules
+allModules = coreModules ++ utilModules ++ extModules
 
 assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
 assignSchemas doInfer mod = do
@@ -73,10 +73,8 @@ assignSchemas doInfer mod = do
 
 coreModules :: [Module Meta]
 coreModules = [
-  adapterUtilsModule,
   codetreeAstModule,
   haskellAstModule,
-  hydraBasicsModule,
   hydraCoreModule,
   hydraComputeModule,
   hydraMantleModule,
@@ -85,6 +83,10 @@ coreModules = [
 --  hydraMonadsModule,
   hydraPhantomsModule,
   jsonModelModule]
+
+utilModules = [
+  adapterUtilsModule,
+  hydraBasicsModule]
 
 extModules :: [Module Meta]
 extModules = [
