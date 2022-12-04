@@ -25,10 +25,10 @@ stack test
 
 ## Code generation
 
-One of the main objectives for Hydra is for the framework to generate its own source code into various languages,
+It is a long-term goal for Hydra to generate its own source code into various languages,
 producing nearly-complete Hydra implementations in those languages.
-At this time, Haskell is fully supported as a target language, while Java is supported for schemas only (i.e. Hydra type definitions map to Java classes),
-and Scala is supported for data only (i.e. constants and functions are mapped, but types are not yet).
+At this time, Haskell and Java are fully supported as target languages,
+while Scala is supported for data only (i.e. constants and functions are mapped, but types are not yet).
 
 You can generate Hydra's sources by first entering the GHCi REPL as above, then:
 
@@ -44,16 +44,16 @@ For individual modules, use Haskell list syntax, e.g.
 writeHaskell [rdfSyntaxModule, shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
-The commands for Scala and Java generation are similar, e.g.
+The commands for Java and Scala generation are similar, e.g.
 
 ```bash
-writeScala allModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
+writeJava allModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
 ```
 
 and
 
 ```bash
-writeJava allModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
+writeScala allModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
 ```
 
 There is also schema-only support for PDL:
@@ -68,7 +68,8 @@ For languages other than Haskell and Java, you can expect error messages from Hy
 
 ### Structures
 
-The most important structural types in Hydra are `Type` and `Term` (provided in the generated [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs) module in Haskell), and `Graph` and `Element` (provided in the generated [Hydra.Graph](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Graph.hs) module).
+The most important structural types in Hydra are `Type` and `Term` (provided in the generated [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs) module in Haskell),
+and `Graph` and `Element` (provided in the generated [Hydra.Mantle](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Mantle.hs) module).
 `Type` provides a datatype, and a `Term` is an instance of a known `Type`.
 An `Element` is a named term together with its type, and a `Graph` is a collection of elements.
 A `Module` is a collection of elements in the same logical namespace, sometimes called a "model" if most of the elements represent type definitions.
