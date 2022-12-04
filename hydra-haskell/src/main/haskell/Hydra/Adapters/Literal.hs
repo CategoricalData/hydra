@@ -4,7 +4,7 @@ module Hydra.Adapters.Literal (
   integerAdapter,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.UtilsEtc
 
 import qualified Data.List as L

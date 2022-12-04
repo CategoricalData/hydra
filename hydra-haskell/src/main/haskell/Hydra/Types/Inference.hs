@@ -5,7 +5,7 @@ module Hydra.Types.Inference (
   Constraint,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

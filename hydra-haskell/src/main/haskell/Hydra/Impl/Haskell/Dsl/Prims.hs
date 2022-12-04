@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Prims where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 

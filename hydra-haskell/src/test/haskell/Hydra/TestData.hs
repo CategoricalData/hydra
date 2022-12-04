@@ -1,6 +1,6 @@
 module Hydra.TestData where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.TestGraph
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms

@@ -3,7 +3,7 @@ module Hydra.Types.Unification (
   solveConstraints,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Types.Substitution
 import Hydra.Impl.Haskell.Dsl.Types as Types
 

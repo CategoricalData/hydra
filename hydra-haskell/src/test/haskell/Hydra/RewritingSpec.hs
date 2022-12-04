@@ -2,7 +2,7 @@
 
 module Hydra.RewritingSpec where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Terms
 
 import Hydra.TestUtils

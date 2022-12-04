@@ -1,6 +1,6 @@
 module Hydra.MetaSpec where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Meta
 import Hydra.TestUtils

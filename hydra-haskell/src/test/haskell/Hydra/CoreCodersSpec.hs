@@ -1,6 +1,6 @@
 module Hydra.CoreCodersSpec where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding

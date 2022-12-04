@@ -4,7 +4,7 @@ module Hydra.Lib.Io (
   coreContext,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Ext.Json.Coder
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Impl.Haskell.Dsl.Standard

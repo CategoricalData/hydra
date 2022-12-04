@@ -1,6 +1,6 @@
 module Hydra.CommonSpec where
 
-import Hydra.All
+import Hydra.Kernel
 
 import Hydra.TestUtils
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms

@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Dsl.Types where
 
-import Hydra.All
+import Hydra.Kernel
 
 import qualified Data.List as L
 import qualified Data.Map as M

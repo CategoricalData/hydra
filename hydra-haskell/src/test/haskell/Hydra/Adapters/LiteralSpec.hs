@@ -1,6 +1,6 @@
 module Hydra.Adapters.LiteralSpec where
 
-import Hydra.All
+import Hydra.Kernel
 
 import Hydra.TestUtils
 

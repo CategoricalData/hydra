@@ -1,6 +1,6 @@
 module Hydra.Ext.Haskell.Language where
 
-import Hydra.All
+import Hydra.Kernel
 
 import qualified Data.Set as S
 

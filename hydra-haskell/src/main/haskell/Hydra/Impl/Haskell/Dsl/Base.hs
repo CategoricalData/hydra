@@ -4,7 +4,7 @@ module Hydra.Impl.Haskell.Dsl.Base (
   Standard.coreContext,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Meta
 import Hydra.CoreEncoding
 import Hydra.Impl.Haskell.Dsl.PhantomLiterals

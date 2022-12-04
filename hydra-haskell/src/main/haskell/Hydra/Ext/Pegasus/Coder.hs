@@ -1,6 +1,6 @@
 module Hydra.Ext.Pegasus.Coder (printModule) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Adapters.Term
 import Hydra.Adapters.Coders

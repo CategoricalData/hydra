@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Basics where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Sources.Module
 import Hydra.Impl.Haskell.Sources.Mantle

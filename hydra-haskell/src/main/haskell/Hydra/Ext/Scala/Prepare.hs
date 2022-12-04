@@ -2,7 +2,7 @@ module Hydra.Ext.Scala.Prepare (
   prepareType,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 
 import qualified Data.Set as S

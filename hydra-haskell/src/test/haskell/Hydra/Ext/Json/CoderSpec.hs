@@ -1,6 +1,6 @@
 module Hydra.Ext.Json.CoderSpec where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Lib.Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder

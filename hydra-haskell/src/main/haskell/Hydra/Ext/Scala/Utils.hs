@@ -1,6 +1,6 @@
 module Hydra.Ext.Scala.Utils where
 
-import Hydra.All
+import Hydra.Kernel
 import qualified Hydra.Ext.Scala.Meta as Scala
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Ext.Scala.Language

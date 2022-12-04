@@ -2,7 +2,7 @@
 
 module Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Grammars
 import Hydra.Util.GrammarToModule
 import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard

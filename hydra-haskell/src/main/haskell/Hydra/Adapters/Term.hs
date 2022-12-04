@@ -5,7 +5,7 @@ module Hydra.Adapters.Term (
   termAdapter,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Reduction
 import Hydra.Adapters.Literal

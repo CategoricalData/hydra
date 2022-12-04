@@ -1,6 +1,6 @@
 module Hydra.Ext.Json.Coder (jsonCoder) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.Term
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types

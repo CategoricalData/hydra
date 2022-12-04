@@ -1,6 +1,6 @@
 module Hydra.Ext.Yaml.Modules (printModule) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Adapters.Coders
 import Hydra.Impl.Haskell.Ext.Yaml.Serde
 import Hydra.Ext.Yaml.Coder

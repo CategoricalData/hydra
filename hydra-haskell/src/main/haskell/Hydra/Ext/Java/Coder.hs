@@ -1,6 +1,6 @@
 module Hydra.Ext.Java.Coder (printModule) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.Reduction
 import Hydra.Ext.Java.Utils

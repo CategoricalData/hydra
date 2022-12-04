@@ -1,6 +1,6 @@
 module Hydra.Impl.Haskell.Sources.Util.Codetree.Ast where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Core
