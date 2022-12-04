@@ -27,10 +27,11 @@ stack test
 
 One of the main objectives for Hydra is for the framework to generate its own source code into various languages,
 producing nearly-complete Hydra implementations in those languages.
-At this time, Haskell is fully supported as a target language, while Java is supported for schemas only (i.e. Hydra type definitions map to Java classes),
-and Scala is supported for data only (i.e. constants and functions are mapped, but types are not yet).
+Both Haskell are fully supported as target languages,
+which means that all of Hydra's type and programs currently specified in the Haskell DSL are mapped correctly to both Haskell and Java.
+Scala support, on the other hand, is partial and experimental at this time.
 
-You can generate Hydra's sources by first entering the GHCi REPL as above, then:
+You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
 
 ```bash
 writeHaskell allModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
@@ -38,31 +39,29 @@ writeHaskell allModules "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-ma
 
 The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules),
 and the second is the base directory to which the generated files are to be written.
-For individual modules, use Haskell list syntax, e.g.
+For individual modules, use list syntax, e.g.
 
 ```bash
 writeHaskell [rdfSyntaxModule, shaclModelModule] "/path/to/CategoricalData/hydra/hydra-haskell/src/gen-main/haskell"
 ```
 
-The commands for Scala and Java generation are similar, e.g.
-
-```bash
-writeScala allModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
-```
-
-and
+Java generation is similar, e.g.
 
 ```bash
 writeJava allModules "/path/to/CategoricalData/hydra/hydra-java/src/gen-main/java"
 ```
 
+Scala generation has known bugs, but you can try it out with:
+
+```bash
+writeScala coreModules "/path/to/CategoricalData/hydra/hydra-scala/src/gen-main/scala"
+```
+
 There is also schema-only support for PDL:
 
 ```bash
-writePdl allModules "/tmp/pdl"
+writePdl coreModules "/tmp/pdl"
 ```
-
-For languages other than Haskell and Java, you can expect error messages from Hydra where a given coder encounters language features which are not yet fully implemented.
 
 ## Haskell API
 
