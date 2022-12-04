@@ -1,3 +1,5 @@
+-- | Common functions for working with terms, types, and names
+
 module Hydra.Common where
 
 import Hydra.Core

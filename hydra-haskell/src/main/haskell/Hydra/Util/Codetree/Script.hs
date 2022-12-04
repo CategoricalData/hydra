@@ -1,3 +1,5 @@
+-- | Utilities for constructing Hydra code trees
+
 module Hydra.Util.Codetree.Script where
 
 import Hydra.Util.Codetree.Ast

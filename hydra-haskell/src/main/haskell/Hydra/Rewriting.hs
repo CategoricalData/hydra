@@ -1,3 +1,5 @@
+-- | Functions for type and term rewriting
+
 module Hydra.Rewriting where
 
 import Hydra.Core
@@ -5,9 +7,8 @@ import Hydra.Monads
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Compute
---import Hydra.CoreDecoding
 import Hydra.Mantle
-import Hydra.Sorting
+import Hydra.Util.Sorting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

@@ -1,3 +1,5 @@
+-- | Functions for reducing terms and types, i.e. performing computations
+
 module Hydra.Reduction where
 
 import Hydra.Core
