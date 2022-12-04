@@ -282,18 +282,16 @@ inferInternal term = case term of
 inferFieldType :: (Ord m, Show m) => Field m -> Flow (InferenceContext m) (Field (m, Type m, [Constraint m]))
 inferFieldType (Field fname term) = Field fname <$> infer term
 
--- | Solve for the toplevel type of an expression in a given environment
+-- | Solve for the top-level type of an expression in a given environment
 inferType :: (Ord m, Show m) => Term m -> GraphFlow m (Term (m, Type m, [Constraint m]), TypeScheme m)
 inferType term = do
     withTrace ("infer type") $ do
---    withTrace ("infer type of " ++ show term) $ do
       cx <- getState
       withState (startContext cx) $ do
         term1 <- infer term
-        withTrace ("original term (without annotations): " ++ show (removeTermAnnotations term) ++ " ### inferred term: " ++ show term1) $ do
-          subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
-          let term2 = rewriteDataType (substituteInType subst) term1
-          return (term2, closeOver $ termType term2)
+        subst <- withGraphContext $ withSchemaContext $ solveConstraints (termConstraints term1)
+        let term2 = rewriteDataType (substituteInType subst) term1
+        return (term2, closeOver $ termType term2)
   where
     -- | Canonicalize and return the polymorphic toplevel type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
