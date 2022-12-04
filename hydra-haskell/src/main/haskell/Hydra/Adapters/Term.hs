@@ -267,7 +267,8 @@ passUnion t@(TypeUnion rt) = do
     let lossy = or $ adapterIsLossy <$> adapters
     let sfields' = adapterTarget . snd <$> M.toList adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
-      $ bidirectional $ \dir (TermUnion (Union _ dfield)) -> do
+      $ bidirectional $ \dir term -> do
+        dfield <- expectUnion term
         ad <- getAdapter adapters dfield
         TermUnion . Union nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
