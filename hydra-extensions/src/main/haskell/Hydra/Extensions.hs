@@ -1,6 +1,6 @@
 module Hydra.Extensions where
 
-import Hydra.All
+import Hydra.Kernel
 
 import Hydra.Models.Atlas
 import Hydra.Models.AzureDtld

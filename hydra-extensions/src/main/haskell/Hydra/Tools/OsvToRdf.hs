@@ -5,11 +5,11 @@ module Hydra.Tools.OsvToRdf (
   osvJsonDirectoryToNtriples,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Ext.Json.Serde
 import Hydra.Ext.Json.Coder
 import Hydra.CoreDecoding
-import Hydra.Impl.Haskell.GraphIO
+import Hydra.Impl.Haskell.Codegen
 import Hydra.Util.Formatting
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Ext.Shacl.Coder as Shacl
