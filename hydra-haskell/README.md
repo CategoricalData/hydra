@@ -25,7 +25,7 @@ stack test
 
 ## Code generation
 
-One of the main objectives for Hydra is for the framework to generate its own source code into various languages,
+It is a long-term goal for Hydra to generate its own source code into various languages,
 producing nearly-complete Hydra implementations in those languages.
 Both Haskell are fully supported as target languages,
 which means that all of Hydra's type and programs currently specified in the Haskell DSL are mapped correctly to both Haskell and Java.
@@ -67,7 +67,8 @@ writePdl coreModules "/tmp/pdl"
 
 ### Structures
 
-The most important structural types in Hydra are `Type` and `Term` (provided in the generated [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs) module in Haskell), and `Graph` and `Element` (provided in the generated [Hydra.Graph](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Graph.hs) module).
+The most important structural types in Hydra are `Type` and `Term` (provided in the generated [Hydra.Core](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Core.hs) module in Haskell),
+and `Graph` and `Element` (provided in the generated [Hydra.Mantle](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Mantle.hs) module).
 `Type` provides a datatype, and a `Term` is an instance of a known `Type`.
 An `Element` is a named term together with its type, and a `Graph` is a collection of elements.
 A `Module` is a collection of elements in the same logical namespace, sometimes called a "model" if most of the elements represent type definitions.
