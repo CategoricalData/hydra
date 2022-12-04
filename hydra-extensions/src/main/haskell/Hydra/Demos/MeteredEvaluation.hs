@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Base as Base
 import Hydra.Impl.Haskell.Sources.Module
 import Hydra.Impl.Haskell.Sources.Mantle
@@ -12,9 +12,8 @@ import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
 import qualified Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
 import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Impl.Haskell.GraphIO
+import Hydra.Impl.Haskell.Codegen
 import Hydra.Reduction
-import Hydra.Impl.Haskell.GraphIO
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Math as Math
 import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings

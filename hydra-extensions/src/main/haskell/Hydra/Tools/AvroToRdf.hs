@@ -7,7 +7,7 @@ module Hydra.Tools.AvroToRdf (
   executeAvroToRdfWorkflow,
 ) where
 
-import Hydra.All
+import Hydra.Kernel
 import Hydra.Impl.Haskell.Dsl.Standard
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
 import Hydra.Impl.Haskell.Ext.Json.Serde

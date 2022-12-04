@@ -1,6 +1,6 @@
 module Hydra.Workflow where
 
-import Hydra.All
+import Hydra.Kernel
 
 import System.FilePath.Posix
 
