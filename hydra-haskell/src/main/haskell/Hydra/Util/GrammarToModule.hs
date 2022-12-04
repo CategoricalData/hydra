@@ -1,3 +1,5 @@
+-- | A utility for converting a BNF grammar to a Hydra module
+
 module Hydra.Util.GrammarToModule where
 
 import Hydra.Kernel

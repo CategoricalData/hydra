@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/sets primitives
+
 module Hydra.Lib.Sets where
 
 import qualified Data.Set as S

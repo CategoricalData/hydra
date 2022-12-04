@@ -1,5 +1,8 @@
 package hydra.phantoms;
 
+/**
+ * An association with a named term with a phantom type
+ */
 public class Definition<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Definition");
   

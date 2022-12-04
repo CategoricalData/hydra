@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * The result of evaluating a Flow
+ */
 public class FlowState<S, A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.FlowState");
   

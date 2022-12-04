@@ -1,3 +1,5 @@
+-- | Adapter framework for types and terms
+
 module Hydra.Adapters.Term (
   fieldAdapter,
   functionProxyName,

@@ -1,5 +1,8 @@
 package hydra.core;
 
+/**
+ * A union elimination; a case statement
+ */
 public class CaseStatement<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.CaseStatement");
   

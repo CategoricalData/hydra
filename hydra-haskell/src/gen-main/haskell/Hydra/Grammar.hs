@@ -1,4 +1,4 @@
--- | A common API for BNF-based grammars
+-- | A common API for BNF-based grammars, specifying context-free languages
 
 module Hydra.Grammar where
 
@@ -7,27 +7,34 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | A constant pattern
 newtype Constant = 
   Constant {
+    -- | A constant pattern
     unConstant :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Constant = (Core.Name "hydra/grammar.Constant")
 
+-- | An enhanced Backus-Naur form (BNF) grammar
 newtype Grammar = 
   Grammar {
+    -- | An enhanced Backus-Naur form (BNF) grammar
     unGrammar :: [Production]}
   deriving (Eq, Ord, Read, Show)
 
 _Grammar = (Core.Name "hydra/grammar.Grammar")
 
+-- | A name for a pattern
 newtype Label = 
   Label {
+    -- | A name for a pattern
     unLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Label = (Core.Name "hydra/grammar.Label")
 
+-- | A pattern together with a name (label)
 data LabeledPattern = 
   LabeledPattern {
     labeledPatternLabel :: Label,
@@ -40,6 +47,7 @@ _LabeledPattern_label = (Core.FieldName "label")
 
 _LabeledPattern_pattern = (Core.FieldName "pattern")
 
+-- | A pattern which matches valid expressions in the language
 data Pattern = 
   PatternNil  |
   PatternIgnored Pattern |
@@ -78,6 +86,7 @@ _Pattern_star = (Core.FieldName "star")
 
 _Pattern_plus = (Core.FieldName "plus")
 
+-- | A BNF production
 data Production = 
   Production {
     productionSymbol :: Symbol,
@@ -90,15 +99,19 @@ _Production_symbol = (Core.FieldName "symbol")
 
 _Production_pattern = (Core.FieldName "pattern")
 
+-- | A regular expression
 newtype Regex = 
   Regex {
+    -- | A regular expression
     unRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Regex = (Core.Name "hydra/grammar.Regex")
 
+-- | A nonterminal symbol
 newtype Symbol = 
   Symbol {
+    -- | A nonterminal symbol
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 

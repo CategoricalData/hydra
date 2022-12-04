@@ -1,5 +1,8 @@
 package hydra.grammar;
 
+/**
+ * A BNF production
+ */
 public class Production {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Production");
   

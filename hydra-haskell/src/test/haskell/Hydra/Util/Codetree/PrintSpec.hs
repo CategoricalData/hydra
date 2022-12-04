@@ -86,7 +86,7 @@ checkLists = do
 
 checkPrecedence :: H.SpecWith ()
 checkPrecedence = do
-  H.describe "Unit tests for verify that operator precedence is respected" $ do
+  H.describe "Unit tests to verify that operator precedence is respected" $ do
 
     H.it "Check expressions with operators of different precedence" $ do
       check

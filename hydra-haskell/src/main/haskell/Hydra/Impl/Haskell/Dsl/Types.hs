@@ -1,3 +1,5 @@
+-- | A DSL for constructing Hydra types
+
 module Hydra.Impl.Haskell.Dsl.Types where
 
 import Hydra.Kernel

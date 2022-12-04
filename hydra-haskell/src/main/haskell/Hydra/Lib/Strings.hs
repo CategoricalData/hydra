@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/strings primitives
+
 module Hydra.Lib.Strings where
 
 import qualified Data.Char as C

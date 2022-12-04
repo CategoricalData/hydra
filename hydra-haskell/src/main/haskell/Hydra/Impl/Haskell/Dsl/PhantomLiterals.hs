@@ -1,3 +1,5 @@
+-- | A DSL for constructing literal terms using Haskell's built-in datatypes
+
 module Hydra.Impl.Haskell.Dsl.PhantomLiterals where
 
 import Hydra.Kernel

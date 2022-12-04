@@ -1,3 +1,5 @@
+-- | A DSL for building BNF grammars
+
 module Hydra.Impl.Haskell.Dsl.Grammars where
 
 import Hydra.Kernel

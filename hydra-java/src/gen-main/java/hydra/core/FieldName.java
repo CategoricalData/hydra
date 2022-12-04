@@ -1,13 +1,13 @@
 package hydra.core;
 
 /**
- * The name of a field
+ * The name of a field, unique within a record or union type
  */
 public class FieldName {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldName");
   
   /**
-   * The name of a field
+   * The name of a field, unique within a record or union type
    */
   public final String value;
   

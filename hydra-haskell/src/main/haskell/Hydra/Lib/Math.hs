@@ -1,3 +1,5 @@
+-- | Haskell implementations of hydra/lib/math primitives
+
 module Hydra.Lib.Math where
 
 

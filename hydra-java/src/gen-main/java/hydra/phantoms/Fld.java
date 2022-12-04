@@ -1,5 +1,8 @@
 package hydra.phantoms;
 
+/**
+ * An association with a term-level field with a phantom type
+ */
 public class Fld<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Fld");
   

@@ -1,8 +1,14 @@
 package hydra.grammar;
 
+/**
+ * A name for a pattern
+ */
 public class Label {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Label");
   
+  /**
+   * A name for a pattern
+   */
   public final String value;
   
   public Label (String value) {

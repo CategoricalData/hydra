@@ -1,3 +1,5 @@
+-- | Additional adapter utilities, above and beyond the generated ones
+
 module Hydra.Adapters.UtilsEtc (
   module Hydra.Adapters.UtilsEtc,
   module Hydra.Adapters.Utils,

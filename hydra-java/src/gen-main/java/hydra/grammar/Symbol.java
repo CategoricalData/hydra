@@ -1,8 +1,14 @@
 package hydra.grammar;
 
+/**
+ * A nonterminal symbol
+ */
 public class Symbol {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/grammar.Symbol");
   
+  /**
+   * A nonterminal symbol
+   */
   public final String value;
   
   public Symbol (String value) {

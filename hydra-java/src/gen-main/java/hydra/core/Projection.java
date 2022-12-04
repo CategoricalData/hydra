@@ -1,5 +1,8 @@
 package hydra.core;
 
+/**
+ * A record elimination; a projection
+ */
 public class Projection {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Projection");
   

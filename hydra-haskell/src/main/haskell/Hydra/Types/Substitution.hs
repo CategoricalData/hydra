@@ -1,3 +1,5 @@
+-- | Variable substitution and normalization of type expressions
+
 module Hydra.Types.Substitution where
 
 import Hydra.Kernel

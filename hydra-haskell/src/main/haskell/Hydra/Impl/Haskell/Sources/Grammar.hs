@@ -10,7 +10,7 @@ import Hydra.Impl.Haskell.Sources.Core
 
 hydraGrammarModule :: Module Meta
 hydraGrammarModule = Module ns elements [] $
-    Just "A common API for BNF-based grammars"
+    Just "A common API for BNF-based grammars, specifying context-free languages"
   where
     ns = Namespace "hydra/grammar"
     grammar = nsref ns
@@ -18,33 +18,49 @@ hydraGrammarModule = Module ns elements [] $
 
     elements = [
 
-      def "Constant" string,
+      def "Constant" $
+        doc "A constant pattern"
+        string,
 
-      def "Grammar" $ list $ grammar "Production",
+      def "Grammar" $
+        doc "An enhanced Backus-Naur form (BNF) grammar" $
+        list $ grammar "Production",
 
-      def "Label" string,
+      def "Label" $
+        doc "A name for a pattern"
+        string,
 
-      def "LabeledPattern" $ record [
+      def "LabeledPattern" $
+        doc "A pattern together with a name (label)" $
+        record [
         "label">: grammar "Label",
         "pattern">: grammar "Pattern"],
 
-      def "Pattern" $ union [
-        "nil">: unit,
-        "ignored">: grammar "Pattern",
-        "labeled">: grammar "LabeledPattern",
-        "constant">: grammar "Constant",
-        "regex">: grammar "Regex",
-        "nonterminal">: grammar "Symbol",
-        "sequence">: list $ grammar "Pattern",
-        "alternatives">: list $ grammar "Pattern",
-        "option">: grammar "Pattern",
-        "star">: grammar "Pattern",
-        "plus">: grammar "Pattern"],
+      def "Pattern" $
+        doc "A pattern which matches valid expressions in the language" $
+        union [
+          "nil">: unit,
+          "ignored">: grammar "Pattern",
+          "labeled">: grammar "LabeledPattern",
+          "constant">: grammar "Constant",
+          "regex">: grammar "Regex",
+          "nonterminal">: grammar "Symbol",
+          "sequence">: list $ grammar "Pattern",
+          "alternatives">: list $ grammar "Pattern",
+          "option">: grammar "Pattern",
+          "star">: grammar "Pattern",
+          "plus">: grammar "Pattern"],
 
-      def "Production" $ record [
-        "symbol">: grammar "Symbol",
-        "pattern">: grammar "Pattern"],
+      def "Production" $
+        doc "A BNF production" $
+        record [
+          "symbol">: grammar "Symbol",
+          "pattern">: grammar "Pattern"],
 
-      def "Regex" string,
+      def "Regex" $
+        doc "A regular expression"
+        string,
 
-      def "Symbol" string]
+      def "Symbol" $
+        doc "A nonterminal symbol"
+        string]

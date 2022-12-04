@@ -1,5 +1,8 @@
 package hydra.compute;
 
+/**
+ * An evaluation context together with a source language and a target language
+ */
 public class AdapterContext<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.AdapterContext");
   
