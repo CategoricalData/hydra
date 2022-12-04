@@ -173,18 +173,13 @@ encodeTerm term = case stripTerm term of
     TermOptional m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm t
-    TermRecord (Record n fields) -> do
-      sn <- schemaName
-      case sn of
-        Nothing -> fail $ "unexpected anonymous record: " ++ show term
-        Just name -> do
-          let n = scalaTypeName False name
-          args <- CM.mapM encodeTerm (fieldTerm <$> fields)
-          return $ sapply (sname n) args
+    TermRecord (Record name fields) -> do
+      let n = scalaTypeName False name
+      args <- CM.mapM encodeTerm (fieldTerm <$> fields)
+      return $ sapply (sname n) args
     TermSet s -> sapply (sname "Set") <$> CM.mapM encodeTerm (S.toList s)
-    TermUnion (Union n (Field fn ft)) -> do
-      sn <- schemaName
-      let lhs = sname $ qualifyUnionFieldName "UNION." sn fn
+    TermUnion (Union sn (Field fn ft)) -> do
+      let lhs = sname $ qualifyUnionFieldName "UNION." (Just sn) fn
       args <- case stripTerm ft of
         TermRecord (Record _ []) -> pure []
         _ -> do
@@ -193,11 +188,7 @@ encodeTerm term = case stripTerm term of
       return $ sapply lhs args
     TermVariable (Variable v) -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
-  where
-    schemaName = do
-      cx <- getState
-      r <- annotationClassTermType (contextAnnotations cx) term
-      pure $ r >>= nameOfType cx
+
 
 encodeType :: Show m => Type m -> GraphFlow m Scala.Type
 encodeType t = case stripType t of
