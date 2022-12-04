@@ -1,4 +1,4 @@
--- | Provides in Haskell all modules which are either generated and/or are in the top-level Hydra.* namespace.
+-- | Provides in Haskell most modules in the top-level Hydra.* namespace.
 --   Additionally, some Hydra.Util.* modules are included.
 --   Hydra.CoreDecoding and Hydra.CoreEncoding, Hydra.Meta, and Hydra.Reduction are excluded due to their dependencies on the Hydra DSLs
 
@@ -20,7 +20,7 @@ module Hydra.All (
   module Hydra.Phantoms,
 --  module Hydra.Reduction,
   module Hydra.Rewriting,
-  module Hydra.Sorting,
+  module Hydra.Util.Sorting,
   module Hydra.Util.Formatting,
 --  module Hydra.Util.Context,
   module Hydra.Util.Debug,
@@ -44,7 +44,7 @@ import Hydra.Monads
 import Hydra.Phantoms
 --import Hydra.Reduction
 import Hydra.Rewriting
-import Hydra.Sorting
+import Hydra.Util.Sorting
 import Hydra.Util.Formatting
 --import Hydra.Util.Context
 import Hydra.Util.Debug

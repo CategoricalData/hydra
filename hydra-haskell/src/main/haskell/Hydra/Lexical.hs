@@ -1,3 +1,5 @@
+-- | Functions for retrieving elements and primitive functions from a graph context
+
 module Hydra.Lexical (
   module Hydra.Lexical,
   module Hydra.Common,

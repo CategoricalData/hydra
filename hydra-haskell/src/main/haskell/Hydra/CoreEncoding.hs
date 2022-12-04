@@ -1,3 +1,5 @@
+-- | Encoding of types as terms
+
 module Hydra.CoreEncoding where
 
 import Hydra.Core

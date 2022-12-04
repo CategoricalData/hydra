@@ -1,3 +1,5 @@
+-- | Core language constraints of Hydra. These constraints are trivial; all types and all terms are supported.
+
 module Hydra.CoreLanguage where
 
 import Hydra.Compute

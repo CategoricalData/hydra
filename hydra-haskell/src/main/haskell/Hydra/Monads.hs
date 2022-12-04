@@ -1,3 +1,5 @@
+-- | Functions and type class implementations for working with Hydra's built-in Flow monad
+
 module Hydra.Monads (
   module Hydra.Common,
   module Hydra.Core,

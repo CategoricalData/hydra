@@ -1,3 +1,5 @@
+-- | Decoding of encoded types (as terms) back to types
+
 module Hydra.CoreDecoding (
   decodeLiteralType,
   decodeFieldType,

@@ -1,3 +1,5 @@
+-- | Functions for working with Meta, the default annotation type in Hydra
+
 module Hydra.Meta where
 
 import Hydra.Core
