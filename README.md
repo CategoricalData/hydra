@@ -14,9 +14,9 @@ and a Slack channel [here](https://bit.ly/hydra-slack)
 This repository currently contains a [hydra-haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell),
 a [hydra-java](https://github.com/CategoricalData/hydra/tree/main/hydra-java),
 and an experimental [hydra-scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) directory with language-specific builds,
-as well as generated [docs](https://github.com/CategoricalData/hydra/tree/main/docs) and [hydra-extensions](https://github.com/CategoricalData/hydra/tree/main/hydra-extensions) Haskell project.
-The hydra-extensions project is a collection of less-essential, and less thoroughly documented, Hydra models and tools, which nonetheless can be useful for building applications.
-For example, there is a GeoJson model, a Coq model, and an AvroToRdf tool which has been used at LinkedIn for ingestion of Avro-formatted data into RDF triple stores).
+as well as generated [docs](https://github.com/CategoricalData/hydra/tree/main/docs) and the [hydra-extensions](https://github.com/CategoricalData/hydra/tree/main/hydra-extensions) Haskell project.
+The extensions are a collection of less-essential, and less thoroughly documented, Hydra models and tools, which nonetheless can be useful for building applications.
+For example, there is a GeoJson model, a Coq model, and an AvroToRdf tool which has been used at LinkedIn for ingestion of Avro-formatted data into RDF triple stores.
 
 In addition to Haskell, Java, and Scala, there are Hydra coders (type-aware encoders/decoders) for
 [Avro](https://avro.apache.org),

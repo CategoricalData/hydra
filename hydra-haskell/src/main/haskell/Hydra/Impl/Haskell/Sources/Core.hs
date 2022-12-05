@@ -240,7 +240,7 @@ hydraCoreModule = Module ns elements [] $
             doc "A term provided if the optional value is nothing" $
             core "Term" @@ "m",
           "just">:
-            doc "A function which is applied of the optional value is non-nothing" $
+            doc "A function which is applied if the optional value is non-nothing" $
             core "Term" @@ "m"],
 
       def "Projection" $
@@ -262,7 +262,7 @@ hydraCoreModule = Module ns elements [] $
             doc "The name of the row type, which must correspond to the name of a Type element" $
             core "Name",
           "extends">:
-            doc ("Optionally, the name of another row type which this one extends. To the extent that field order " ++
+            doc ("Optionally, the name of another row type which this one extends. If/when field order " ++
                  "is preserved, the inherited fields of the extended type precede those of the extension.") $
             optional $ core "Name",
           "fields">:

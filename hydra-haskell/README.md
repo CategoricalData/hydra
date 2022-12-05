@@ -9,9 +9,9 @@ This Haskell package contains Hydra's Haskell API and Haskell sources specifical
 
 Haskell is the current source-of-truth language for Hydra, which means that most of the Hydra implementation is written either in "raw" Haskell or in a Haskell-based DSL.
 You can find the DSL-based sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources);
-anything written in the DSL is also mapped into the generated Scala and Java sources.
+anything written in the DSL is also mapped into the generated Java and Scala sources.
 You can find the generated Haskell sources [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell).
-To build Hydra and enter the GHCi REPL, use:
+To build Hydra-Haskell and enter the GHCi REPL, use:
 
 ```bash
 stack ghci
@@ -27,8 +27,8 @@ stack test
 
 It is a long-term goal for Hydra to generate its own source code into various languages,
 producing nearly-complete Hydra implementations in those languages.
-Both Haskell are fully supported as target languages,
-which means that all of Hydra's type and programs currently specified in the Haskell DSL are mapped correctly to both Haskell and Java.
+Both Haskell and Java are fully supported as target languages,
+which means that all of Hydra's types and programs currently specified in the Haskell DSL are mapped correctly to both Haskell and Java.
 Scala support, on the other hand, is partial and experimental at this time.
 
 You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
@@ -73,20 +73,20 @@ and `Graph` and `Element` (provided in the generated [Hydra.Mantle](https://gith
 An `Element` is a named term together with its type, and a `Graph` is a collection of elements.
 A `Module` is a collection of elements in the same logical namespace, sometimes called a "model" if most of the elements represent type definitions.
 The main purpose of Hydra is to define and carry out transformations between graphs,
-where those graphs may be almost anything which fits into Hydra's type system -- data, schemas, source code, transformations themselves, etc.
+where those graphs may be almost anything which fits into Hydra's type system -- data, schemas, source code, other transformations, etc.
 "Graphs" in the traditional sense are partially supported at this time, including property graphs and RDF graphs.
 
-Types, terms, graphs, elements, and many other things are parameterized by an annotation type, so you will usually see `Type m`, `Term m`, `Context m`, etc.
+Types, terms, graphs, elements, and many other entities are parameterized by an annotation type, so you will usually see `Type m`, `Term m`, `Context m`, etc. in the code.
 The most common annotation type is called `Meta` (which is just a map of string-valued keys to terms), so you will also encounter `Type Meta`, etc.
 
 ### Transformations
 
 Transformations in Hydra take the form of simple functions or, more commonly, expressions involving the `Flow` monad
 (a special case of the [State](https://wiki.haskell.org/State_Monad) monad, which has been implemented in many programming languages)
-as well as a bidirectional flow, called `Coder` and a two-level transformation (types and terms) called `Adapter`.
-All of these constructs are provided in the generated [Hydra.Evaluation](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Evaluation.hs) module in Haskell,
+as well as a bidirectional flow called `Coder` and a two-level transformation (types and terms) called `Adapter`.
+All of these constructs are provided in the generated [Hydra.Compute](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Compute.hs) module in Haskell,
 along with the `Context` type which you will see almost everywhere in Hydra;
-a `Context` provides a set of graphs and their elements, a set of primitive functions, an evaluation strategy, and other constructs which are needed for computation.
+a `Context` provides a graph, the schema of that graph (which is itself a graph), a set of primitive functions, an evaluation strategy, and other constructs which are needed for computation.
 A context is part of the state which flows through a graph transformation as it is being applied.
 
 In Haskell, you will often see `Flow` and `Context` combined as the `GraphFlow` alias:
@@ -95,7 +95,7 @@ In Haskell, you will often see `Flow` and `Context` combined as the `GraphFlow` 
 type GraphFlow m = Flow (Context m)
 ```
 
-There are two helper types, `FlowWrapper` and `Trace`, which are used together with `Flow`; a `FlowWrapper` is the result of evaluating a `Flow`,
+There are two helper types, `FlowState` and `Trace`, which are used together with `Flow`; a `FlowState` is the result of evaluating a `Flow`,
 while `Trace` encapsulates a stack trace and error or logger messages.
 Since `Flow` is a monad, you can create a `GraphFlow` with `f = pure x`, where `x` is anything you would like to enter into a transformation pipeline.
 The transformation is actually applied when you call `unFlow` and pass in a graph context and a trace, i.e.
@@ -104,8 +104,8 @@ The transformation is actually applied when you call `unFlow` and pass in a grap
 unFlow f cx emptyTrace
 ```
 
-This gives you a flow wrapper, which you can think of as the exit point of a transformation.
-Inside the wrapper is either a concrete value (if the transformation succeeded) or `Nothing` (if the transformation failed), a stack trace, and a list of messages.
+This gives you a flow state, which you can think of as the exit point of a transformation.
+Inside the state object is either a concrete value (if the transformation succeeded) or `Nothing` (if the transformation failed), a stack trace, and a list of messages.
 You will always find at least one message if the transformation failed; this is analogous to an exception in mainstream programming languages.
 
 A `Coder`, as mentioned above, is a construct which has a `Flow` in either direction between two types.
@@ -133,8 +133,8 @@ and a specific instance of that type (a term) may be expressed as `TermList [Ter
 Since all of the work of defining transformations in Hydra consists of specifying types and terms, we make the task (much) easier using domain-specific languages (DSLs).
 These DSLs are specific to the host language, so we have Haskell DSLs in hydra-haskell, and (similar, but distinct) Java DSLs in hydra-java.
 For example, the type of a list of strings is just `list string` if you include the [Types](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Dsl/Types.hs) DSL,
-and the specific list of strings we mentioned is just `list [string "foo", string "bar"]`, or (better yet) `list ["foo", "bar"]`.
-There is additional syntactic sugar in Haskell which aim to make defining models and transformations as easy as possible;
+and the specific list of strings we mentioned is just `list [string "foo", string "bar"]`, or (better yet) `list ["foo", "bar"]` if you include the [Terms](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Dsl/Terms.hs) DSL.
+There is additional syntactic sugar in Hydra-Haskell which aims to make defining models and transformations as easy as possible;
 see the [Sources](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Impl/Haskell/Sources) directory for many examples.
 
 ### Phantom types
