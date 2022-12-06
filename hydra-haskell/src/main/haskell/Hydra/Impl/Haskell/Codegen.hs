@@ -29,6 +29,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
+import Hydra.Impl.Haskell.Sources.Ext.Parquet.Format
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
@@ -95,8 +96,9 @@ extModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
   javaSyntaxModule,
-  pegasusPdlModule,
   owlSyntaxModule,
+  parquetFormatModule,
+  pegasusPdlModule,
   rdfSyntaxModule,
   scalaMetaModule,
   shaclModelModule,
