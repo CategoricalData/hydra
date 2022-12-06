@@ -403,7 +403,7 @@ data OptionalCases m =
   OptionalCases {
     -- | A term provided if the optional value is nothing
     optionalCasesNothing :: (Term m),
-    -- | A function which is applied of the optional value is non-nothing
+    -- | A function which is applied if the optional value is non-nothing
     optionalCasesJust :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -444,7 +444,7 @@ data RowType m =
   RowType {
     -- | The name of the row type, which must correspond to the name of a Type element
     rowTypeTypeName :: Name,
-    -- | Optionally, the name of another row type which this one extends. To the extent that field order is preserved, the inherited fields of the extended type precede those of the extension.
+    -- | Optionally, the name of another row type which this one extends. If/when field order is preserved, the inherited fields of the extended type precede those of the extension.
     rowTypeExtends :: (Maybe Name),
     -- | The fields of this row type, excluding any inherited fields
     rowTypeFields :: [FieldType m]}

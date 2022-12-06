@@ -7,13 +7,12 @@ import Hydra.Impl.Haskell.Dsl.Types as Types
 import Hydra.Impl.Haskell.Dsl.Standard
 import Hydra.Impl.Haskell.Sources.Core
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
-import Hydra.Impl.Haskell.Sources.Ext.Rdf.Syntax
 
 
 avroSchemaModule :: Module Meta
 avroSchemaModule = Module ns elements [jsonModelModule] $
     Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
-      "  https://avro.apache.org/docs/1.11.1/specification)")
+      "  https://avro.apache.org/docs/1.11.1/specification")
   where
     ns = Namespace "hydra/ext/avro/schema"
     def = datatype ns
