@@ -12,7 +12,7 @@ public class OptionalCases<M> {
   public final hydra.core.Term<M> nothing;
   
   /**
-   * A function which is applied of the optional value is non-nothing
+   * A function which is applied if the optional value is non-nothing
    */
   public final hydra.core.Term<M> just;
   

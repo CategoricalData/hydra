@@ -12,7 +12,7 @@ public class RowType<M> {
   public final hydra.core.Name typeName;
   
   /**
-   * Optionally, the name of another row type which this one extends. To the extent that field order is preserved, the inherited fields of the extended type precede those of the extension.
+   * Optionally, the name of another row type which this one extends. If/when field order is preserved, the inherited fields of the extended type precede those of the extension.
    */
   public final java.util.Optional<hydra.core.Name> extends_;
   
