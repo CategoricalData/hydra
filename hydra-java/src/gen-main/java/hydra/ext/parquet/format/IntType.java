@@ -1,0 +1,39 @@
+package hydra.ext.parquet.format;
+
+/**
+ * Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64
+ */
+public class IntType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/parquet/format.IntType");
+  
+  public final Byte bitWidth;
+  
+  public final Boolean isSigned;
+  
+  public IntType (Byte bitWidth, Boolean isSigned) {
+    this.bitWidth = bitWidth;
+    this.isSigned = isSigned;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof IntType)) {
+      return false;
+    }
+    IntType o = (IntType) (other);
+    return bitWidth.equals(o.bitWidth) && isSigned.equals(o.isSigned);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * bitWidth.hashCode() + 3 * isSigned.hashCode();
+  }
+  
+  public IntType withBitWidth(Byte bitWidth) {
+    return new IntType(bitWidth, isSigned);
+  }
+  
+  public IntType withIsSigned(Boolean isSigned) {
+    return new IntType(bitWidth, isSigned);
+  }
+}
