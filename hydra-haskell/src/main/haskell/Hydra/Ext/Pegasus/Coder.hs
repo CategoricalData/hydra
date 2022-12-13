@@ -13,6 +13,7 @@ import Hydra.Ext.Pegasus.Serde
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
@@ -37,11 +38,11 @@ constructModule mod coders pairs = do
   where
     ns = pdlNameForModule mod
     pkg = Nothing
-    imports = [] -- TODO
-    toPair schema = (path, PDL.SchemaFile ns pkg imports [schema])
+    toPair (schema, imports) = (path, PDL.SchemaFile ns pkg imports [schema])
       where
         path = namespaceToFilePath False (FileExtension "pdl") (Namespace $ (unNamespace $ moduleNamespace mod) ++ "/" ++ local)
         local = PDL.unName $ PDL.qualifiedNameName $ PDL.namedSchemaQualifiedName schema
+
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
@@ -50,15 +51,21 @@ constructModule mod coders pairs = do
         then decodeType term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     typeToSchema el typ = do
-      let qname = pdlNameForElement aliases False $ elementName el
-      res <- encodeAdaptedType aliases typ
-      let ptype = case res of
-            Left schema -> PDL.NamedSchema_TypeTyperef schema
-            Right t -> t
-      cx <- getState
-      r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
-      let anns = doc r
-      return $ PDL.NamedSchema qname ptype anns
+        res <- encodeAdaptedType aliases typ
+        let ptype = case res of
+              Left schema -> PDL.NamedSchema_TypeTyperef schema
+              Right t -> t
+        cx <- getState
+        r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
+        let anns = doc r
+        return (PDL.NamedSchema qname ptype anns, imports)
+      where
+        qname = pdlNameForElement aliases False $ elementName el
+        imports = []
+--        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
+--          where
+--            deps = S.toList $ termDependencyNames True False False $ elementData el
+--            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
 moduleToPegasusSchemas :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
 moduleToPegasusSchemas mod = transformModule pdlLanguage (encodeTerm aliases) constructModule mod
@@ -156,7 +163,10 @@ encodeType aliases typ = case typ of
       r <- annotationClassTypeDescription (contextAnnotations cx) typ
       return $ doc r
 
-importAliasesForModule g = M.empty -- TODO
+importAliasesForModule mod = M.fromList (toPair <$> deps)
+  where
+    deps = S.toList $ moduleDependencyNamespaces True True True mod
+    toPair ns = (ns, slashesToDots $ unNamespace ns)
 
 noAnnotations :: PDL.Annotations
 noAnnotations = PDL.Annotations Nothing False
@@ -164,7 +174,7 @@ noAnnotations = PDL.Annotations Nothing False
 pdlNameForElement :: M.Map Namespace String -> Bool -> Name -> PDL.QualifiedName
 pdlNameForElement aliases withNs name = PDL.QualifiedName (PDL.Name local)
     $ if withNs
-      then PDL.Namespace . slashesToDots <$> alias
+      then PDL.Namespace <$> alias
       else Nothing
   where
     (ns, local) = toQnameEager name
