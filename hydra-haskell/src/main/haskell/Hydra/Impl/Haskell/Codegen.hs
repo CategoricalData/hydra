@@ -24,6 +24,7 @@ import Hydra.Impl.Haskell.Sources.Module
 import Hydra.Impl.Haskell.Sources.Phantoms
 
 import Hydra.Impl.Haskell.Sources.Util.Codetree.Ast
+import Hydra.Impl.Haskell.Sources.Ext.RelationalModel
 import Hydra.Impl.Haskell.Sources.Ext.Avro.Schema
 import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
@@ -100,6 +101,7 @@ extModules = [
   parquetFormatModule,
   pegasusPdlModule,
   rdfSyntaxModule,
+  relationalModelModule,
   scalaMetaModule,
   shaclModelModule,
   shexSyntaxModule,
