@@ -20,6 +20,7 @@ haskellLanguage = Language (LanguageName "hydra/ext/haskell") $ LanguageConstrai
     TermVariantApplication,
     TermVariantElement,
     TermVariantFunction,
+    TermVariantLet,
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,

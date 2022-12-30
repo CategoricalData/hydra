@@ -22,6 +22,20 @@ adaptType targetLang t = do
     ad <- withState acx $ termAdapter t
     return $ adapterTarget ad
 
+constructCoder :: (Ord m, Read m, Show m)
+  => Language m
+  -> (Term m -> GraphFlow m c)
+  -> Type m
+  -> GraphFlow m (Coder (Context m) (Context m) (Term m) c)
+constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ) $ do
+    cx <- getState
+    let acx = AdapterContext cx hydraCoreLanguage lang
+    adapter <- withState acx $ termAdapter typ
+    coder <- termCoder $ adapterTarget adapter
+    return $ composeCoders (adapterCoder adapter) coder
+  where
+    termCoder _ = pure $ unidirectionalCoder encodeTerm
+
 transformModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Term m -> GraphFlow m e)
@@ -36,14 +50,5 @@ transformModule lang encodeTerm createModule mod = do
     els = moduleElements mod
 
     codersFor types = do
-      cdrs <- CM.mapM constructCoder types
+      cdrs <- CM.mapM (constructCoder lang encodeTerm) types
       return $ M.fromList $ L.zip types cdrs
-
-    constructCoder typ = withTrace ("coder for " ++ describeType typ) $ do
-        cx <- getState
-        let acx = AdapterContext cx hydraCoreLanguage lang
-        adapter <- withState acx $ termAdapter typ
-        coder <- termCoder $ adapterTarget adapter
-        return $ composeCoders (adapterCoder adapter) coder
-      where
-        termCoder _ = pure $ unidirectionalCoder encodeTerm

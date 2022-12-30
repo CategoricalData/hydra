@@ -4,6 +4,7 @@ module Hydra.Types.Inference (
   annotateElementWithTypes,
   annotateTermWithTypes,
   inferType,
+  inferTypeScheme,
   Constraint,
 ) where
 
@@ -295,8 +296,11 @@ inferType term = do
         let term2 = rewriteDataType (substituteInType subst) term1
         return (term2, closeOver $ termType term2)
   where
-    -- | Canonicalize and return the polymorphic toplevel type.
+    -- | Canonicalize and return the polymorphic top-level type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
+
+inferTypeScheme :: (Ord m, Show m) => Term m -> GraphFlow m (TypeScheme m)
+inferTypeScheme term = snd <$> inferType term
 
 instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
 instantiate (TypeScheme vars t) = do
