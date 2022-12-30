@@ -12,6 +12,7 @@ import Hydra.Impl.Haskell.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
+import Hydra.Types.Inference
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -56,7 +57,9 @@ constructModule mod coders pairs = do
 
     createDeclarations cx pair@(el, TypedTerm typ term) = if isType cx typ
       then toTypeDeclarations namespaces el term
-      else toDataDeclarations coders namespaces pair
+      else do
+        d <- toDataDeclaration coders namespaces pair
+        return [d]
 
     namespaces = namespacesForModule mod
     importName name = H.ModuleName $ L.intercalate "." (capitalize <$> Strings.splitOn "/" name)
@@ -147,6 +150,7 @@ encodeTerm namespaces term = do
        _ -> hsapp <$> encode fun <*> encode arg
     TermElement name -> pure $ H.ExpressionVariable $ elementReference namespaces name
     TermFunction f -> encodeFunction namespaces f
+    TermLet l -> fail $ "unexpected 'let' term nested within a non-let term"
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
     TermNominal (Named tname term') -> if newtypesNotTypedefs
@@ -230,28 +234,43 @@ printModule mod = do
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
-toDataDeclarations :: (Ord m, Show m)
+toDataDeclaration :: (Ord m, Read m, Show m)
   => M.Map (Type m) (Coder (Context m) (Context m) (Term m) H.Expression) -> Namespaces
-  -> (Element m, TypedTerm m) -> GraphFlow m [H.DeclarationWithComments]
-toDataDeclarations coders namespaces (el, TypedTerm typ term) = do
-    let coder = Y.fromJust $ M.lookup typ coders
-    rhs <- H.RightHandSide <$> coderEncode coder term
-    let hname = simpleName $ localNameOfEager $ elementName el
-    let pat = H.PatternApplication $ H.Pattern_Application hname []
-    htype <- encodeType namespaces typ
-    let decl = H.DeclarationTypedBinding $ H.TypedBinding
-                (H.TypeSignature hname htype)
-                (H.ValueBindingSimple $ rewriteValueBinding $ H.ValueBinding_Simple pat rhs Nothing)
-    cx <- getState
-    comments <- annotationClassTermDescription (contextAnnotations cx) term
-    return [H.DeclarationWithComments decl comments]
+  -> (Element m, TypedTerm m) -> GraphFlow m H.DeclarationWithComments
+toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
   where
+    coder = Y.fromJust $ M.lookup typ coders
+    hname = simpleName $ localNameOfEager $ elementName el
+
     rewriteValueBinding vb = case vb of
-      H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings -> case rhs of
+      H.ValueBindingSimple (H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings) -> case rhs of
         H.RightHandSide (H.ExpressionLambda (H.Expression_Lambda vars body)) -> rewriteValueBinding $
-          H.ValueBinding_Simple
+          H.ValueBindingSimple $ H.ValueBinding_Simple
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
         _ -> vb
+
+    toDecl hname term coder bindings = case stripTerm term of
+      TermLet (Let (Variable key) val env) -> do
+        -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
+        -- This makes program code with "let" terms more expensive to transform than simple data.
+        typ <- typeSchemeType <$> inferTypeScheme val
+        coder' <- constructCoder haskellLanguage (encodeTerm namespaces) typ
+        let hname' = simpleName key        
+        hterm' <- coderEncode coder' val
+        
+        let vb = simpleValueBinding hname' hterm' Nothing
+        let bindings = H.LocalBindings [H.LocalBindingValue vb]
+        toDecl hname env coder (Just bindings)
+      _ -> do
+        hterm <- coderEncode coder term
+        let vb = simpleValueBinding hname hterm bindings
+        htype <- encodeType namespaces typ
+        let decl = H.DeclarationTypedBinding $ H.TypedBinding
+                    (H.TypeSignature hname htype)
+                    (rewriteValueBinding vb)
+        cx <- getState
+        comments <- annotationClassTermDescription (contextAnnotations cx) term
+        return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord m, Read m, Show m)
   => Namespaces -> Element m -> Term m -> GraphFlow m [H.DeclarationWithComments]

@@ -73,6 +73,11 @@ sanitizeHaskellName = sanitizeWithUnderscores reservedWords
 simpleName :: String -> H.Name
 simpleName = rawName . sanitizeHaskellName
 
+simpleValueBinding :: H.Name -> H.Expression -> Maybe H.LocalBindings -> H.ValueBinding
+simpleValueBinding hname rhs bindings = H.ValueBindingSimple $ H.ValueBinding_Simple pat (H.RightHandSide rhs) bindings
+  where
+    pat = H.PatternApplication $ H.Pattern_Application hname []
+
 toTypeApplication :: [H.Type] -> H.Type
 toTypeApplication = app . L.reverse
   where
