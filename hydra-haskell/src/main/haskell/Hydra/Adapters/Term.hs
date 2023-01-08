@@ -152,17 +152,25 @@ optionalToList t@(TypeOptional ot) = do
       pure Nothing
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
+--passAnnotated :: (Ord m, Read m, Show m) => Type m -> TypeAdapter m
 passAnnotated :: (Ord m, Read m, Show m) => Type m -> Flow (AdapterContext m) (SymmetricAdapter (Context m) (Type m) v)
 passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
   ad <- termAdapter at
   return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $ \dir term -> pure term
+
+--passAnnotated :: (Ord m, Read m, Show m) => Type m -> TypeAdapter m
+--passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
+--  ad <- termAdapter at
+--  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
+--    \dir term -> encodeDecode dir (adapterCoder ad) term
 
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: (Ord m, Read m, Show m) => TypeAdapter m
 passApplication t = do
     reduced <- withEvaluationContext $ betaReduceType t
     ad <- termAdapter reduced
-    return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
+    return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
+      \dir term -> encodeDecode dir (adapterCoder ad) term
 
 passFunction :: (Ord m, Read m, Show m) => TypeAdapter m
 passFunction t@(TypeFunction (FunctionType dom cod)) = do

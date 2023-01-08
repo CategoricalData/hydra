@@ -187,10 +187,9 @@ hydraCoreModule = Module ns elements [] $
             core "Type" @@ "m"],
 
       def "Let" $
-        doc "A 'let' binding" $
+        doc "A set of (possibly recursive) 'let' bindings" $
         lambda "m" $ record [
-          "key">: core "Variable",
-          "value">: core "Term" @@ "m",
+          "bindings">: Types.map (core "Variable") (core "Term" @@ "m"),
           "environment">: core "Term" @@ "m"],
 
       def "Literal" $
@@ -274,7 +273,7 @@ hydraCoreModule = Module ns elements [] $
         lambda "m" $ record [
           "first">: core "Term" @@ "m",
           "rest">: core "Stream" @@ "m"],
-      
+
       def "Sum" $
         doc "The unlabeled equivalent of a Union term" $
         lambda "m" $ record [

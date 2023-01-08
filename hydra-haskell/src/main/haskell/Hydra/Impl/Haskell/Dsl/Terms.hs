@@ -169,8 +169,9 @@ isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
 lambda :: String -> Term m -> Term m
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Variable param) body
 
+-- Construct a 'let' term with a single binding
 letTerm :: Variable -> Term m -> Term m -> Term m
-letTerm v t1 t2 = TermLet $ Let v t1 t2
+letTerm v t1 t2 = TermLet $ Let (M.fromList [(v, t1)]) t2
 
 list :: [Term m] -> Term m
 list = TermList
