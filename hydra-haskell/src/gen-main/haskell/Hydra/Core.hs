@@ -300,19 +300,16 @@ _LambdaType_parameter = (FieldName "parameter")
 
 _LambdaType_body = (FieldName "body")
 
--- | A 'let' binding
+-- | A set of (possibly recursive) 'let' bindings
 data Let m = 
   Let {
-    letKey :: Variable,
-    letValue :: (Term m),
+    letBindings :: (Map Variable (Term m)),
     letEnvironment :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
 _Let = (Name "hydra/core.Let")
 
-_Let_key = (FieldName "key")
-
-_Let_value = (FieldName "value")
+_Let_bindings = (FieldName "bindings")
 
 _Let_environment = (FieldName "environment")
 

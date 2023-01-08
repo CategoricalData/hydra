@@ -179,18 +179,24 @@ inferInternal term = case term of
         FunctionType dom cod <- withGraphContext $ typeOfPrimitiveFunction name
         yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
 
-    TermLet (Let x e1 e2) -> do
-      (_, _, env) <- getState
-      i1 <- infer e1
-      let t1 = termType i1
-      let c1 = termConstraints i1
-      sub <- withGraphContext $ solveConstraints c1
-      let t1' = reduceType $ substituteInType sub t1
-      let sc = generalize (M.map (substituteInScheme sub) env) t1'
-      i2 <- extendEnvironment x sc $ withEnvironment (M.map (substituteInScheme sub)) $ infer e2
-      let t2 = termType i2
-      let c2 = termConstraints i2
-      yield (TermLet $ Let x i1 i2) t2 (c1 ++ c2) -- TODO: is x constant?
+    TermLet (Let bindings env) -> do
+        (_, _, cs) <- getState
+
+        let bl = M.toList bindings
+        is <- CM.mapM infer (snd <$> bl)
+        let tc = L.concat (termConstraints <$> is)
+        sub <- withGraphContext $ solveConstraints tc
+        let ts = (reduceType . substituteInType sub . termType) <$> is
+        let te = M.map (substituteInScheme sub) cs
+        let sc = generalize te <$> ts
+
+        let tenv = withEnvironment (M.map (substituteInScheme sub)) $ infer env
+        i2 <- L.foldl (\t (x, s) -> extendEnvironment x s t) tenv $ L.zip (fst <$> bl) sc
+
+        let t2 = termType i2
+        let c2 = termConstraints i2
+
+        yield (TermLet $ Let (M.fromList $ L.zip (fst <$> bl) is) i2) t2 (tc ++ c2)
 
     TermList els -> do
       v <- freshVariableType

@@ -28,11 +28,11 @@ solveConstraints cs = unificationSolver (M.empty, cs)
 unificationSolver :: (Eq m, Show m) => Unifier m -> GraphFlow m (Subst m)
 unificationSolver (su, cs) = case cs of
   [] -> return su
-  ((t1, t2): cs0) -> do
+  ((t1, t2):rest) -> do
     su1  <- unify t1 t2
     unificationSolver (
       composeSubst su1 su,
-      (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> cs0)
+      (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
 unify :: (Eq m, Show m) => Type m -> Type m -> GraphFlow m (Subst m)
 unify t1 t2 = if t1 == t2

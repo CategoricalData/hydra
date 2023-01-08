@@ -137,7 +137,9 @@ rewriteTerm f mf = rewrite fsub f
             EliminationUnion (CaseStatement n cases) -> EliminationUnion $ CaseStatement n (forField <$> cases)
           FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
           FunctionPrimitive name -> FunctionPrimitive name
-        TermLet (Let v t1 t2) -> TermLet $ Let v (recurse t1) (recurse t2)
+        TermLet (Let bindings env) -> TermLet $ Let (M.fromList (mapBinding <$> M.toList bindings)) (recurse env)
+          where
+            mapBinding (k, t) = (k, recurse t)
         TermList els -> TermList $ recurse <$> els
         TermLiteral v -> TermLiteral v
         TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
@@ -170,7 +172,11 @@ rewriteTermM f mf = rewrite fsub f
             EliminationUnion (CaseStatement n cases) -> EliminationUnion <$> (CaseStatement n <$> (CM.mapM forField cases))
           FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
-        TermLet (Let v t1 t2) -> TermLet <$> (Let v <$> recurse t1 <*> recurse t2)
+        TermLet (Let bindings env) -> TermLet <$> (Let <$> (M.fromList <$> (CM.mapM mapBinding $ M.toList bindings)) <*> recurse env)
+          where
+            mapBinding (k, t) = do
+              t' <- recurse t
+              return (k, t')
         TermList els -> TermList <$> (CM.mapM recurse els)
         TermLiteral v -> pure $ TermLiteral v
         TermMap m -> TermMap <$> (M.fromList <$> CM.mapM forPair (M.toList m))
@@ -261,7 +267,7 @@ subterms term = case term of
       _ -> []
     FunctionLambda (Lambda _ body) -> [body]
     _ -> []
-  TermLet (Let _ t1 t2) -> [t1, t2]
+  TermLet (Let bindings env) -> (snd <$> M.toList bindings) ++ [env]
   TermList els -> els
   TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
   TermNominal (Named _ t) -> [t]
