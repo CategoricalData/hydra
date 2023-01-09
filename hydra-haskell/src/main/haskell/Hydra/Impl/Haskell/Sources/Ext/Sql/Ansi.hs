@@ -103,9 +103,9 @@ productions = [
        --     |     REAL
        --     |     DOUBLE PRECISION
   define "ApproximateNumericType" [
-    list[float_, opt(parens["Precision"])],
-    real_,
-    double_precision_],
+    "float">: list[float_, opt(parens["Precision"])],
+    "real">: real_,
+    "double">: double_precision_],
 
   -- <array type>    ::=   <data type> ARRAY [ <left bracket or trigraph> <unsigned integer> <right bracket or trigraph> ]
   define "ArrayType" unsupported,
@@ -117,8 +117,8 @@ productions = [
   --         BINARY LARGE OBJECT [ <left paren> <large object length> <right paren> ]
   --     |     BLOB [ <left paren> <large object length> <right paren> ]
   define "BinaryLargeObjectStringType" [
-    list[binary_large_object_, opt(parens["LargeObjectLength"])],
-    list[blob_, opt(parens["LargeObjectLength"])]],
+    "binary">: list[binary_large_object_, opt(parens["LargeObjectLength"])],
+    "blob">: list[blob_, opt(parens["LargeObjectLength"])]],
 
   -- <boolean type>    ::=   BOOLEAN
   define "BooleanType" [
@@ -140,22 +140,22 @@ productions = [
   --     |     CHAR LARGE OBJECT [ <left paren> <large object length> <right paren> ]
   --     |     CLOB [ <left paren> <large object length> <right paren> ]
   define "CharacterStringType" [
-    list[character_, opt(parens["Length"])],
-    list[char_, opt(parens["Length"])],
-    list[character_varying_, left_paren_, "Length", right_paren_],
-    list[char_varying_, left_paren_, "Length", right_paren_],
-    list[varchar_, left_paren_, "Length", right_paren_],
-    list[character_large_object_, opt(parens["LargeObjectLength"])],
-    list[char_large_object_, opt(parens["LargeObjectLength"])],
-    list[clob_, opt(parens["LargeObjectLength"])]],
+    "character">: list[character_, opt(parens["Length"])],
+    "char">: list[char_, opt(parens["Length"])],
+    "characterVarying">: list[character_varying_, left_paren_, "Length", right_paren_],
+    "charVarying">: list[char_varying_, left_paren_, "Length", right_paren_],
+    "varchar">: list[varchar_, left_paren_, "Length", right_paren_],
+    "characterLargeObject">: list[character_large_object_, opt(parens["LargeObjectLength"])],
+    "charLargeObject">: list[char_large_object_, opt(parens["LargeObjectLength"])],
+    "clob">: list[clob_, opt(parens["LargeObjectLength"])]],
 
   -- <collate clause>    ::=   COLLATE <collation name>
   define "CollateClause" unsupported,
 
   -- <collection type>    ::=   <array type> | <multiset type>
   define "CollectionType" [
-    "ArrayType",
-    "MultisetType"],
+    "array">: "ArrayType",
+    "multiset">: "MultisetType"],
 
   -- <column constraint definition>    ::=   [ <constraint name definition> ] <column constraint> [ <constraint characteristics> ]
   define "ColumnConstraintDefinition" unsupported,
@@ -164,13 +164,14 @@ productions = [
   --         <column name> [ <data type> | <domain name> ] [ <reference scope check> ]
   --         [ <default clause> | <identity column specification> | <generation clause> ]
   --         [ <column constraint definition> ... ] [ <collate clause> ]
-  define "ColumnDefinition" [list[
-    "ColumnName",
-    opt(alts["DataType", "DomainName"]),
-    opt"ReferenceScopeCheck",
-    opt(alts["DefaultClause", "IdentityColumnSpecification", "GenerationClause"]),
-    star"ColumnConstraintDefinition",
-    opt"CollateClause"]],
+  define "ColumnDefinition" [
+    list[
+      "ColumnName",
+      opt(alts["DataType", "DomainName"]),
+      opt"ReferenceScopeCheck",
+      opt(alts["DefaultClause", "IdentityColumnSpecification", "GenerationClause"]),
+      star"ColumnConstraintDefinition",
+      opt"CollateClause"]],
 
   -- <column options>    ::=   <column name> WITH OPTIONS <column option list>
   define "ColumnOptions" unsupported,
@@ -182,11 +183,11 @@ productions = [
   --     |     <reference type>
   --     |     <collection type>
   define "DataType" [
-    "PredefinedType",
-    "RowType",
-    "PathResolvedUserDefinedTypeName",
-    "ReferenceType",
-    "CollectionType"],
+    "predefined">: "PredefinedType",
+    "row">: "RowType",
+    "named">: "PathResolvedUserDefinedTypeName",
+    "reference">: "ReferenceType",
+    "collection">: "CollectionType"],
 
   -- <datetime type>    ::=
   --         DATE
@@ -206,21 +207,21 @@ productions = [
   --     |     INT
   --     |     BIGINT
   define "ExactNumericType" [
-    list[numeric_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
-    list[decimal_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
-    list[dec_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
-    smallint_,
-    integer_,
-    int_,
-    bigint_],
+    "numeric">: list[numeric_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
+    "decimal">: list[decimal_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
+    "dec">: list[dec_, opt(parens["Precision", opt(list[comma_, "Scale"])])],
+    "smallint">: smallint_,
+    "integer">: integer_,
+    "int">: int_,
+    "bigint">: bigint_],
 
   -- <generation clause>    ::=   <generation rule> AS <generation expression>
   define "GenerationClause" unsupported,
 
   -- <global or local>    ::=   GLOBAL | LOCAL
   define "GlobalOrLocal" [
-    global_,
-    local_],
+    "global">: global_,
+    "local">: local_],
 
   -- <identity column specification>    ::=
   --         GENERATED { ALWAYS | BY DEFAULT } AS IDENTITY
@@ -260,8 +261,8 @@ productions = [
 
   -- <numeric type>    ::=   <exact numeric type> | <approximate numeric type>
   define "NumericType" [
-    "ExactNumericType",
-    "ApproximateNumericType"],
+    "exact">: "ExactNumericType",
+    "approximate">: "ApproximateNumericType"],
 
   -- <precision>    ::=   <unsigned integer>
   define "Precision" [
@@ -276,13 +277,13 @@ productions = [
   --     |     <datetime type>
   --     |     <interval type>
   define "PredefinedType" [
-    list["CharacterStringType", opt(list[character_set_, "CharacterSetSpecification"]), opt"CollateClause"],
-    list["NationalCharacterStringType", opt"CollateClause"],
-    "BinaryLargeObjectStringType",
-    "NumericType",
-    "BooleanType",
-    "DatetimeType",
-    "IntervalType"],
+    "characterString">: list["CharacterStringType", opt(list[character_set_, "CharacterSetSpecification"]), opt"CollateClause"],
+    "nationalCharacterString">: list["NationalCharacterStringType", opt"CollateClause"],
+    "blob">: "BinaryLargeObjectStringType",
+    "numeric">: "NumericType",
+    "boolean">: "BooleanType",
+    "datetime">: "DatetimeType",
+    "interval">: "IntervalType"],
 
   -- <reference scope check>    ::=   REFERENCES ARE [ NOT ] CHECKED [ ON DELETE <reference scope check action> ]
   define "ReferenceScopeCheck" unsupported,
@@ -316,9 +317,9 @@ productions = [
   --     |     OF <path-resolved user-defined type name> [ <subtable clause> ] [ <table element list> ]
   --     |     <as subquery clause>
   define "TableContentsSource" [
-    "TableElementList",
-    list [of_, "PathResolvedUserDefinedTypeName", opt"SubtableClause", opt"TableElementList"],
-    "AsSubqueryClause"],
+    "list">: "TableElementList",
+    "subtable">: list [of_, "PathResolvedUserDefinedTypeName", opt"SubtableClause", opt"TableElementList"],
+    "subquery">: "AsSubqueryClause"],
 
   -- <table definition>    ::=
   --          CREATE [ <table scope> ] TABLE <table name> <table contents source>
@@ -334,11 +335,11 @@ productions = [
   --     |     <self-referencing column specification>
   --     |     <column options>
   define "TableElement" [
-    "ColumnDefinition",
-    "TableConstraintDefinition",
-    "LikeClause",
-    "SelfReferencingColumnSpecification",
-    "ColumnOptions"],
+    "column">: "ColumnDefinition",
+    "tableConstraint">: "TableConstraintDefinition",
+    "like">: "LikeClause",
+    "selfReferencingColumn">: "SelfReferencingColumnSpecification",
+    "columOptions">: "ColumnOptions"],
 
   -- <table element list>    ::=   <left paren> <table element> [ { <comma> <table element> }... ] <right paren>
   define "TableElementList" [

@@ -43,36 +43,36 @@ newtype UnsignedInteger =
 _UnsignedInteger = (Core.Name "hydra/ext/sql/ansi.UnsignedInteger")
 
 data ApproximateNumericType = 
-  ApproximateNumericTypeSequence ApproximateNumericType_Sequence |
-  ApproximateNumericTypeREAL  |
-  ApproximateNumericTypeDOUBLESpPRECISION 
+  ApproximateNumericTypeFloat ApproximateNumericType_Float |
+  ApproximateNumericTypeReal  |
+  ApproximateNumericTypeDouble 
   deriving (Eq, Ord, Read, Show)
 
 _ApproximateNumericType = (Core.Name "hydra/ext/sql/ansi.ApproximateNumericType")
 
-_ApproximateNumericType_sequence = (Core.FieldName "sequence")
+_ApproximateNumericType_float = (Core.FieldName "float")
 
-_ApproximateNumericType_rEAL = (Core.FieldName "rEAL")
+_ApproximateNumericType_real = (Core.FieldName "real")
 
-_ApproximateNumericType_dOUBLESpPRECISION = (Core.FieldName "dOUBLESpPRECISION")
+_ApproximateNumericType_double = (Core.FieldName "double")
 
-data ApproximateNumericType_Sequence = 
-  ApproximateNumericType_Sequence {
-    approximateNumericType_SequenceSequence :: (Maybe ApproximateNumericType_Sequence_Sequence_Option)}
+data ApproximateNumericType_Float = 
+  ApproximateNumericType_Float {
+    approximateNumericType_FloatSequence :: (Maybe ApproximateNumericType_Float_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ApproximateNumericType_Sequence = (Core.Name "hydra/ext/sql/ansi.ApproximateNumericType.Sequence")
+_ApproximateNumericType_Float = (Core.Name "hydra/ext/sql/ansi.ApproximateNumericType.Float")
 
-_ApproximateNumericType_Sequence_sequence = (Core.FieldName "sequence")
+_ApproximateNumericType_Float_sequence = (Core.FieldName "sequence")
 
-data ApproximateNumericType_Sequence_Sequence_Option = 
-  ApproximateNumericType_Sequence_Sequence_Option {
-    approximateNumericType_Sequence_Sequence_OptionPrecision :: Precision}
+data ApproximateNumericType_Float_Sequence_Option = 
+  ApproximateNumericType_Float_Sequence_Option {
+    approximateNumericType_Float_Sequence_OptionPrecision :: Precision}
   deriving (Eq, Ord, Read, Show)
 
-_ApproximateNumericType_Sequence_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ApproximateNumericType.Sequence.Sequence.Option")
+_ApproximateNumericType_Float_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ApproximateNumericType.Float.Sequence.Option")
 
-_ApproximateNumericType_Sequence_Sequence_Option_precision = (Core.FieldName "precision")
+_ApproximateNumericType_Float_Sequence_Option_precision = (Core.FieldName "precision")
 
 data ArrayType = 
   
@@ -87,51 +87,51 @@ data AsSubqueryClause =
 _AsSubqueryClause = (Core.Name "hydra/ext/sql/ansi.AsSubqueryClause")
 
 data BinaryLargeObjectStringType = 
-  BinaryLargeObjectStringTypeSequence BinaryLargeObjectStringType_Sequence |
-  BinaryLargeObjectStringTypeSequence2 BinaryLargeObjectStringType_Sequence2
+  BinaryLargeObjectStringTypeBinary BinaryLargeObjectStringType_Binary |
+  BinaryLargeObjectStringTypeBlob BinaryLargeObjectStringType_Blob
   deriving (Eq, Ord, Read, Show)
 
 _BinaryLargeObjectStringType = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType")
 
-_BinaryLargeObjectStringType_sequence = (Core.FieldName "sequence")
+_BinaryLargeObjectStringType_binary = (Core.FieldName "binary")
 
-_BinaryLargeObjectStringType_sequence2 = (Core.FieldName "sequence2")
+_BinaryLargeObjectStringType_blob = (Core.FieldName "blob")
 
-data BinaryLargeObjectStringType_Sequence = 
-  BinaryLargeObjectStringType_Sequence {
-    binaryLargeObjectStringType_SequenceSequence :: (Maybe BinaryLargeObjectStringType_Sequence_Sequence_Option)}
+data BinaryLargeObjectStringType_Binary = 
+  BinaryLargeObjectStringType_Binary {
+    binaryLargeObjectStringType_BinarySequence :: (Maybe BinaryLargeObjectStringType_Binary_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryLargeObjectStringType_Sequence = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Sequence")
+_BinaryLargeObjectStringType_Binary = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Binary")
 
-_BinaryLargeObjectStringType_Sequence_sequence = (Core.FieldName "sequence")
+_BinaryLargeObjectStringType_Binary_sequence = (Core.FieldName "sequence")
 
-data BinaryLargeObjectStringType_Sequence_Sequence_Option = 
-  BinaryLargeObjectStringType_Sequence_Sequence_Option {
-    binaryLargeObjectStringType_Sequence_Sequence_OptionLargeObjectLength :: LargeObjectLength}
+data BinaryLargeObjectStringType_Binary_Sequence_Option = 
+  BinaryLargeObjectStringType_Binary_Sequence_Option {
+    binaryLargeObjectStringType_Binary_Sequence_OptionLargeObjectLength :: LargeObjectLength}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryLargeObjectStringType_Sequence_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Sequence.Sequence.Option")
+_BinaryLargeObjectStringType_Binary_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Binary.Sequence.Option")
 
-_BinaryLargeObjectStringType_Sequence_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
+_BinaryLargeObjectStringType_Binary_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
 
-data BinaryLargeObjectStringType_Sequence2 = 
-  BinaryLargeObjectStringType_Sequence2 {
-    binaryLargeObjectStringType_Sequence2Sequence :: (Maybe BinaryLargeObjectStringType_Sequence2_Sequence_Option)}
+data BinaryLargeObjectStringType_Blob = 
+  BinaryLargeObjectStringType_Blob {
+    binaryLargeObjectStringType_BlobSequence :: (Maybe BinaryLargeObjectStringType_Blob_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryLargeObjectStringType_Sequence2 = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Sequence2")
+_BinaryLargeObjectStringType_Blob = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Blob")
 
-_BinaryLargeObjectStringType_Sequence2_sequence = (Core.FieldName "sequence")
+_BinaryLargeObjectStringType_Blob_sequence = (Core.FieldName "sequence")
 
-data BinaryLargeObjectStringType_Sequence2_Sequence_Option = 
-  BinaryLargeObjectStringType_Sequence2_Sequence_Option {
-    binaryLargeObjectStringType_Sequence2_Sequence_OptionLargeObjectLength :: LargeObjectLength}
+data BinaryLargeObjectStringType_Blob_Sequence_Option = 
+  BinaryLargeObjectStringType_Blob_Sequence_Option {
+    binaryLargeObjectStringType_Blob_Sequence_OptionLargeObjectLength :: LargeObjectLength}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryLargeObjectStringType_Sequence2_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Sequence2.Sequence.Option")
+_BinaryLargeObjectStringType_Blob_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.BinaryLargeObjectStringType.Blob.Sequence.Option")
 
-_BinaryLargeObjectStringType_Sequence2_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
+_BinaryLargeObjectStringType_Blob_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
 
 data BooleanType = 
   BooleanType {}
@@ -146,150 +146,150 @@ data CharacterSetSpecification =
 _CharacterSetSpecification = (Core.Name "hydra/ext/sql/ansi.CharacterSetSpecification")
 
 data CharacterStringType = 
-  CharacterStringTypeSequence CharacterStringType_Sequence |
-  CharacterStringTypeSequence2 CharacterStringType_Sequence2 |
-  CharacterStringTypeSequence3 CharacterStringType_Sequence3 |
-  CharacterStringTypeSequence4 CharacterStringType_Sequence4 |
-  CharacterStringTypeSequence5 CharacterStringType_Sequence5 |
-  CharacterStringTypeSequence6 CharacterStringType_Sequence6 |
-  CharacterStringTypeSequence7 CharacterStringType_Sequence7 |
-  CharacterStringTypeSequence8 CharacterStringType_Sequence8
+  CharacterStringTypeCharacter CharacterStringType_Character |
+  CharacterStringTypeChar CharacterStringType_Char |
+  CharacterStringTypeCharacterVarying CharacterStringType_CharacterVarying |
+  CharacterStringTypeCharVarying CharacterStringType_CharVarying |
+  CharacterStringTypeVarchar CharacterStringType_Varchar |
+  CharacterStringTypeCharacterLargeObject CharacterStringType_CharacterLargeObject |
+  CharacterStringTypeCharLargeObject CharacterStringType_CharLargeObject |
+  CharacterStringTypeClob CharacterStringType_Clob
   deriving (Eq, Ord, Read, Show)
 
 _CharacterStringType = (Core.Name "hydra/ext/sql/ansi.CharacterStringType")
 
-_CharacterStringType_sequence = (Core.FieldName "sequence")
+_CharacterStringType_character = (Core.FieldName "character")
 
-_CharacterStringType_sequence2 = (Core.FieldName "sequence2")
+_CharacterStringType_char = (Core.FieldName "char")
 
-_CharacterStringType_sequence3 = (Core.FieldName "sequence3")
+_CharacterStringType_characterVarying = (Core.FieldName "characterVarying")
 
-_CharacterStringType_sequence4 = (Core.FieldName "sequence4")
+_CharacterStringType_charVarying = (Core.FieldName "charVarying")
 
-_CharacterStringType_sequence5 = (Core.FieldName "sequence5")
+_CharacterStringType_varchar = (Core.FieldName "varchar")
 
-_CharacterStringType_sequence6 = (Core.FieldName "sequence6")
+_CharacterStringType_characterLargeObject = (Core.FieldName "characterLargeObject")
 
-_CharacterStringType_sequence7 = (Core.FieldName "sequence7")
+_CharacterStringType_charLargeObject = (Core.FieldName "charLargeObject")
 
-_CharacterStringType_sequence8 = (Core.FieldName "sequence8")
+_CharacterStringType_clob = (Core.FieldName "clob")
 
-data CharacterStringType_Sequence = 
-  CharacterStringType_Sequence {
-    characterStringType_SequenceSequence :: (Maybe CharacterStringType_Sequence_Sequence_Option)}
+data CharacterStringType_Character = 
+  CharacterStringType_Character {
+    characterStringType_CharacterSequence :: (Maybe CharacterStringType_Character_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence")
+_CharacterStringType_Character = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Character")
 
-_CharacterStringType_Sequence_sequence = (Core.FieldName "sequence")
+_CharacterStringType_Character_sequence = (Core.FieldName "sequence")
 
-data CharacterStringType_Sequence_Sequence_Option = 
-  CharacterStringType_Sequence_Sequence_Option {
-    characterStringType_Sequence_Sequence_OptionLength :: Length}
+data CharacterStringType_Character_Sequence_Option = 
+  CharacterStringType_Character_Sequence_Option {
+    characterStringType_Character_Sequence_OptionLength :: Length}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence.Sequence.Option")
+_CharacterStringType_Character_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Character.Sequence.Option")
 
-_CharacterStringType_Sequence_Sequence_Option_length = (Core.FieldName "length")
+_CharacterStringType_Character_Sequence_Option_length = (Core.FieldName "length")
 
-data CharacterStringType_Sequence2 = 
-  CharacterStringType_Sequence2 {
-    characterStringType_Sequence2Sequence :: (Maybe CharacterStringType_Sequence2_Sequence_Option)}
+data CharacterStringType_Char = 
+  CharacterStringType_Char {
+    characterStringType_CharSequence :: (Maybe CharacterStringType_Char_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence2 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence2")
+_CharacterStringType_Char = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Char")
 
-_CharacterStringType_Sequence2_sequence = (Core.FieldName "sequence")
+_CharacterStringType_Char_sequence = (Core.FieldName "sequence")
 
-data CharacterStringType_Sequence2_Sequence_Option = 
-  CharacterStringType_Sequence2_Sequence_Option {
-    characterStringType_Sequence2_Sequence_OptionLength :: Length}
+data CharacterStringType_Char_Sequence_Option = 
+  CharacterStringType_Char_Sequence_Option {
+    characterStringType_Char_Sequence_OptionLength :: Length}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence2_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence2.Sequence.Option")
+_CharacterStringType_Char_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Char.Sequence.Option")
 
-_CharacterStringType_Sequence2_Sequence_Option_length = (Core.FieldName "length")
+_CharacterStringType_Char_Sequence_Option_length = (Core.FieldName "length")
 
-data CharacterStringType_Sequence3 = 
-  CharacterStringType_Sequence3 {
-    characterStringType_Sequence3Length :: Length}
+data CharacterStringType_CharacterVarying = 
+  CharacterStringType_CharacterVarying {
+    characterStringType_CharacterVaryingLength :: Length}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence3 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence3")
+_CharacterStringType_CharacterVarying = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharacterVarying")
 
-_CharacterStringType_Sequence3_length = (Core.FieldName "length")
+_CharacterStringType_CharacterVarying_length = (Core.FieldName "length")
 
-data CharacterStringType_Sequence4 = 
-  CharacterStringType_Sequence4 {
-    characterStringType_Sequence4Length :: Length}
+data CharacterStringType_CharVarying = 
+  CharacterStringType_CharVarying {
+    characterStringType_CharVaryingLength :: Length}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence4 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence4")
+_CharacterStringType_CharVarying = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharVarying")
 
-_CharacterStringType_Sequence4_length = (Core.FieldName "length")
+_CharacterStringType_CharVarying_length = (Core.FieldName "length")
 
-data CharacterStringType_Sequence5 = 
-  CharacterStringType_Sequence5 {
-    characterStringType_Sequence5Length :: Length}
+data CharacterStringType_Varchar = 
+  CharacterStringType_Varchar {
+    characterStringType_VarcharLength :: Length}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence5 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence5")
+_CharacterStringType_Varchar = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Varchar")
 
-_CharacterStringType_Sequence5_length = (Core.FieldName "length")
+_CharacterStringType_Varchar_length = (Core.FieldName "length")
 
-data CharacterStringType_Sequence6 = 
-  CharacterStringType_Sequence6 {
-    characterStringType_Sequence6Sequence :: (Maybe CharacterStringType_Sequence6_Sequence_Option)}
+data CharacterStringType_CharacterLargeObject = 
+  CharacterStringType_CharacterLargeObject {
+    characterStringType_CharacterLargeObjectSequence :: (Maybe CharacterStringType_CharacterLargeObject_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence6 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence6")
+_CharacterStringType_CharacterLargeObject = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharacterLargeObject")
 
-_CharacterStringType_Sequence6_sequence = (Core.FieldName "sequence")
+_CharacterStringType_CharacterLargeObject_sequence = (Core.FieldName "sequence")
 
-data CharacterStringType_Sequence6_Sequence_Option = 
-  CharacterStringType_Sequence6_Sequence_Option {
-    characterStringType_Sequence6_Sequence_OptionLargeObjectLength :: LargeObjectLength}
+data CharacterStringType_CharacterLargeObject_Sequence_Option = 
+  CharacterStringType_CharacterLargeObject_Sequence_Option {
+    characterStringType_CharacterLargeObject_Sequence_OptionLargeObjectLength :: LargeObjectLength}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence6_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence6.Sequence.Option")
+_CharacterStringType_CharacterLargeObject_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharacterLargeObject.Sequence.Option")
 
-_CharacterStringType_Sequence6_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
+_CharacterStringType_CharacterLargeObject_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
 
-data CharacterStringType_Sequence7 = 
-  CharacterStringType_Sequence7 {
-    characterStringType_Sequence7Sequence :: (Maybe CharacterStringType_Sequence7_Sequence_Option)}
+data CharacterStringType_CharLargeObject = 
+  CharacterStringType_CharLargeObject {
+    characterStringType_CharLargeObjectSequence :: (Maybe CharacterStringType_CharLargeObject_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence7 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence7")
+_CharacterStringType_CharLargeObject = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharLargeObject")
 
-_CharacterStringType_Sequence7_sequence = (Core.FieldName "sequence")
+_CharacterStringType_CharLargeObject_sequence = (Core.FieldName "sequence")
 
-data CharacterStringType_Sequence7_Sequence_Option = 
-  CharacterStringType_Sequence7_Sequence_Option {
-    characterStringType_Sequence7_Sequence_OptionLargeObjectLength :: LargeObjectLength}
+data CharacterStringType_CharLargeObject_Sequence_Option = 
+  CharacterStringType_CharLargeObject_Sequence_Option {
+    characterStringType_CharLargeObject_Sequence_OptionLargeObjectLength :: LargeObjectLength}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence7_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence7.Sequence.Option")
+_CharacterStringType_CharLargeObject_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.CharLargeObject.Sequence.Option")
 
-_CharacterStringType_Sequence7_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
+_CharacterStringType_CharLargeObject_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
 
-data CharacterStringType_Sequence8 = 
-  CharacterStringType_Sequence8 {
-    characterStringType_Sequence8Sequence :: (Maybe CharacterStringType_Sequence8_Sequence_Option)}
+data CharacterStringType_Clob = 
+  CharacterStringType_Clob {
+    characterStringType_ClobSequence :: (Maybe CharacterStringType_Clob_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence8 = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence8")
+_CharacterStringType_Clob = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Clob")
 
-_CharacterStringType_Sequence8_sequence = (Core.FieldName "sequence")
+_CharacterStringType_Clob_sequence = (Core.FieldName "sequence")
 
-data CharacterStringType_Sequence8_Sequence_Option = 
-  CharacterStringType_Sequence8_Sequence_Option {
-    characterStringType_Sequence8_Sequence_OptionLargeObjectLength :: LargeObjectLength}
+data CharacterStringType_Clob_Sequence_Option = 
+  CharacterStringType_Clob_Sequence_Option {
+    characterStringType_Clob_Sequence_OptionLargeObjectLength :: LargeObjectLength}
   deriving (Eq, Ord, Read, Show)
 
-_CharacterStringType_Sequence8_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Sequence8.Sequence.Option")
+_CharacterStringType_Clob_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.CharacterStringType.Clob.Sequence.Option")
 
-_CharacterStringType_Sequence8_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
+_CharacterStringType_Clob_Sequence_Option_largeObjectLength = (Core.FieldName "largeObjectLength")
 
 data CollateClause = 
   
@@ -298,15 +298,15 @@ data CollateClause =
 _CollateClause = (Core.Name "hydra/ext/sql/ansi.CollateClause")
 
 data CollectionType = 
-  CollectionTypeArrayType ArrayType |
-  CollectionTypeMultisetType MultisetType
+  CollectionTypeArray ArrayType |
+  CollectionTypeMultiset MultisetType
   deriving (Eq, Ord, Read, Show)
 
 _CollectionType = (Core.Name "hydra/ext/sql/ansi.CollectionType")
 
-_CollectionType_arrayType = (Core.FieldName "arrayType")
+_CollectionType_array = (Core.FieldName "array")
 
-_CollectionType_multisetType = (Core.FieldName "multisetType")
+_CollectionType_multiset = (Core.FieldName "multiset")
 
 data ColumnConstraintDefinition = 
   
@@ -370,24 +370,24 @@ data ColumnOptions =
 _ColumnOptions = (Core.Name "hydra/ext/sql/ansi.ColumnOptions")
 
 data DataType = 
-  DataTypePredefinedType PredefinedType |
-  DataTypeRowType RowType |
-  DataTypePathResolvedUserDefinedTypeName PathResolvedUserDefinedTypeName |
-  DataTypeReferenceType ReferenceType |
-  DataTypeCollectionType CollectionType
+  DataTypePredefined PredefinedType |
+  DataTypeRow RowType |
+  DataTypeNamed PathResolvedUserDefinedTypeName |
+  DataTypeReference ReferenceType |
+  DataTypeCollection CollectionType
   deriving (Eq, Ord, Read, Show)
 
 _DataType = (Core.Name "hydra/ext/sql/ansi.DataType")
 
-_DataType_predefinedType = (Core.FieldName "predefinedType")
+_DataType_predefined = (Core.FieldName "predefined")
 
-_DataType_rowType = (Core.FieldName "rowType")
+_DataType_row = (Core.FieldName "row")
 
-_DataType_pathResolvedUserDefinedTypeName = (Core.FieldName "pathResolvedUserDefinedTypeName")
+_DataType_named = (Core.FieldName "named")
 
-_DataType_referenceType = (Core.FieldName "referenceType")
+_DataType_reference = (Core.FieldName "reference")
 
-_DataType_collectionType = (Core.FieldName "collectionType")
+_DataType_collection = (Core.FieldName "collection")
 
 data DatetimeType = 
   
@@ -402,120 +402,120 @@ data DefaultClause =
 _DefaultClause = (Core.Name "hydra/ext/sql/ansi.DefaultClause")
 
 data ExactNumericType = 
-  ExactNumericTypeSequence ExactNumericType_Sequence |
-  ExactNumericTypeSequence2 ExactNumericType_Sequence2 |
-  ExactNumericTypeSequence3 ExactNumericType_Sequence3 |
-  ExactNumericTypeSMALLINT  |
-  ExactNumericTypeINTEGER  |
-  ExactNumericTypeINT  |
-  ExactNumericTypeBIGINT 
+  ExactNumericTypeNumeric ExactNumericType_Numeric |
+  ExactNumericTypeDecimal ExactNumericType_Decimal |
+  ExactNumericTypeDec ExactNumericType_Dec |
+  ExactNumericTypeSmallint  |
+  ExactNumericTypeInteger  |
+  ExactNumericTypeInt  |
+  ExactNumericTypeBigint 
   deriving (Eq, Ord, Read, Show)
 
 _ExactNumericType = (Core.Name "hydra/ext/sql/ansi.ExactNumericType")
 
-_ExactNumericType_sequence = (Core.FieldName "sequence")
+_ExactNumericType_numeric = (Core.FieldName "numeric")
 
-_ExactNumericType_sequence2 = (Core.FieldName "sequence2")
+_ExactNumericType_decimal = (Core.FieldName "decimal")
 
-_ExactNumericType_sequence3 = (Core.FieldName "sequence3")
+_ExactNumericType_dec = (Core.FieldName "dec")
 
-_ExactNumericType_sMALLINT = (Core.FieldName "sMALLINT")
+_ExactNumericType_smallint = (Core.FieldName "smallint")
 
-_ExactNumericType_iNTEGER = (Core.FieldName "iNTEGER")
+_ExactNumericType_integer = (Core.FieldName "integer")
 
-_ExactNumericType_iNT = (Core.FieldName "iNT")
+_ExactNumericType_int = (Core.FieldName "int")
 
-_ExactNumericType_bIGINT = (Core.FieldName "bIGINT")
+_ExactNumericType_bigint = (Core.FieldName "bigint")
 
-data ExactNumericType_Sequence = 
-  ExactNumericType_Sequence {
-    exactNumericType_SequenceSequence :: (Maybe ExactNumericType_Sequence_Sequence_Option)}
+data ExactNumericType_Numeric = 
+  ExactNumericType_Numeric {
+    exactNumericType_NumericSequence :: (Maybe ExactNumericType_Numeric_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence")
+_ExactNumericType_Numeric = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Numeric")
 
-_ExactNumericType_Sequence_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Numeric_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence_Sequence_Option = 
-  ExactNumericType_Sequence_Sequence_Option {
-    exactNumericType_Sequence_Sequence_OptionPrecision :: Precision,
-    exactNumericType_Sequence_Sequence_OptionSequence :: (Maybe ExactNumericType_Sequence_Sequence_Option_Sequence_Option)}
+data ExactNumericType_Numeric_Sequence_Option = 
+  ExactNumericType_Numeric_Sequence_Option {
+    exactNumericType_Numeric_Sequence_OptionPrecision :: Precision,
+    exactNumericType_Numeric_Sequence_OptionSequence :: (Maybe ExactNumericType_Numeric_Sequence_Option_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence.Sequence.Option")
+_ExactNumericType_Numeric_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Numeric.Sequence.Option")
 
-_ExactNumericType_Sequence_Sequence_Option_precision = (Core.FieldName "precision")
+_ExactNumericType_Numeric_Sequence_Option_precision = (Core.FieldName "precision")
 
-_ExactNumericType_Sequence_Sequence_Option_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Numeric_Sequence_Option_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence_Sequence_Option_Sequence_Option = 
-  ExactNumericType_Sequence_Sequence_Option_Sequence_Option {
-    exactNumericType_Sequence_Sequence_Option_Sequence_OptionScale :: Scale}
+data ExactNumericType_Numeric_Sequence_Option_Sequence_Option = 
+  ExactNumericType_Numeric_Sequence_Option_Sequence_Option {
+    exactNumericType_Numeric_Sequence_Option_Sequence_OptionScale :: Scale}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence.Sequence.Option.Sequence.Option")
+_ExactNumericType_Numeric_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Numeric.Sequence.Option.Sequence.Option")
 
-_ExactNumericType_Sequence_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
+_ExactNumericType_Numeric_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
 
-data ExactNumericType_Sequence2 = 
-  ExactNumericType_Sequence2 {
-    exactNumericType_Sequence2Sequence :: (Maybe ExactNumericType_Sequence2_Sequence_Option)}
+data ExactNumericType_Decimal = 
+  ExactNumericType_Decimal {
+    exactNumericType_DecimalSequence :: (Maybe ExactNumericType_Decimal_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence2 = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence2")
+_ExactNumericType_Decimal = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Decimal")
 
-_ExactNumericType_Sequence2_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Decimal_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence2_Sequence_Option = 
-  ExactNumericType_Sequence2_Sequence_Option {
-    exactNumericType_Sequence2_Sequence_OptionPrecision :: Precision,
-    exactNumericType_Sequence2_Sequence_OptionSequence :: (Maybe ExactNumericType_Sequence2_Sequence_Option_Sequence_Option)}
+data ExactNumericType_Decimal_Sequence_Option = 
+  ExactNumericType_Decimal_Sequence_Option {
+    exactNumericType_Decimal_Sequence_OptionPrecision :: Precision,
+    exactNumericType_Decimal_Sequence_OptionSequence :: (Maybe ExactNumericType_Decimal_Sequence_Option_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence2_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence2.Sequence.Option")
+_ExactNumericType_Decimal_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Decimal.Sequence.Option")
 
-_ExactNumericType_Sequence2_Sequence_Option_precision = (Core.FieldName "precision")
+_ExactNumericType_Decimal_Sequence_Option_precision = (Core.FieldName "precision")
 
-_ExactNumericType_Sequence2_Sequence_Option_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Decimal_Sequence_Option_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence2_Sequence_Option_Sequence_Option = 
-  ExactNumericType_Sequence2_Sequence_Option_Sequence_Option {
-    exactNumericType_Sequence2_Sequence_Option_Sequence_OptionScale :: Scale}
+data ExactNumericType_Decimal_Sequence_Option_Sequence_Option = 
+  ExactNumericType_Decimal_Sequence_Option_Sequence_Option {
+    exactNumericType_Decimal_Sequence_Option_Sequence_OptionScale :: Scale}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence2_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence2.Sequence.Option.Sequence.Option")
+_ExactNumericType_Decimal_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Decimal.Sequence.Option.Sequence.Option")
 
-_ExactNumericType_Sequence2_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
+_ExactNumericType_Decimal_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
 
-data ExactNumericType_Sequence3 = 
-  ExactNumericType_Sequence3 {
-    exactNumericType_Sequence3Sequence :: (Maybe ExactNumericType_Sequence3_Sequence_Option)}
+data ExactNumericType_Dec = 
+  ExactNumericType_Dec {
+    exactNumericType_DecSequence :: (Maybe ExactNumericType_Dec_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence3 = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence3")
+_ExactNumericType_Dec = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Dec")
 
-_ExactNumericType_Sequence3_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Dec_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence3_Sequence_Option = 
-  ExactNumericType_Sequence3_Sequence_Option {
-    exactNumericType_Sequence3_Sequence_OptionPrecision :: Precision,
-    exactNumericType_Sequence3_Sequence_OptionSequence :: (Maybe ExactNumericType_Sequence3_Sequence_Option_Sequence_Option)}
+data ExactNumericType_Dec_Sequence_Option = 
+  ExactNumericType_Dec_Sequence_Option {
+    exactNumericType_Dec_Sequence_OptionPrecision :: Precision,
+    exactNumericType_Dec_Sequence_OptionSequence :: (Maybe ExactNumericType_Dec_Sequence_Option_Sequence_Option)}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence3_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence3.Sequence.Option")
+_ExactNumericType_Dec_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Dec.Sequence.Option")
 
-_ExactNumericType_Sequence3_Sequence_Option_precision = (Core.FieldName "precision")
+_ExactNumericType_Dec_Sequence_Option_precision = (Core.FieldName "precision")
 
-_ExactNumericType_Sequence3_Sequence_Option_sequence = (Core.FieldName "sequence")
+_ExactNumericType_Dec_Sequence_Option_sequence = (Core.FieldName "sequence")
 
-data ExactNumericType_Sequence3_Sequence_Option_Sequence_Option = 
-  ExactNumericType_Sequence3_Sequence_Option_Sequence_Option {
-    exactNumericType_Sequence3_Sequence_Option_Sequence_OptionScale :: Scale}
+data ExactNumericType_Dec_Sequence_Option_Sequence_Option = 
+  ExactNumericType_Dec_Sequence_Option_Sequence_Option {
+    exactNumericType_Dec_Sequence_Option_Sequence_OptionScale :: Scale}
   deriving (Eq, Ord, Read, Show)
 
-_ExactNumericType_Sequence3_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Sequence3.Sequence.Option.Sequence.Option")
+_ExactNumericType_Dec_Sequence_Option_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.ExactNumericType.Dec.Sequence.Option.Sequence.Option")
 
-_ExactNumericType_Sequence3_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
+_ExactNumericType_Dec_Sequence_Option_Sequence_Option_scale = (Core.FieldName "scale")
 
 data GenerationClause = 
   
@@ -524,15 +524,15 @@ data GenerationClause =
 _GenerationClause = (Core.Name "hydra/ext/sql/ansi.GenerationClause")
 
 data GlobalOrLocal = 
-  GlobalOrLocalGLOBAL  |
-  GlobalOrLocalLOCAL 
+  GlobalOrLocalGlobal  |
+  GlobalOrLocalLocal 
   deriving (Eq, Ord, Read, Show)
 
 _GlobalOrLocal = (Core.Name "hydra/ext/sql/ansi.GlobalOrLocal")
 
-_GlobalOrLocal_gLOBAL = (Core.FieldName "gLOBAL")
+_GlobalOrLocal_global = (Core.FieldName "global")
 
-_GlobalOrLocal_lOCAL = (Core.FieldName "lOCAL")
+_GlobalOrLocal_local = (Core.FieldName "local")
 
 data IdentityColumnSpecification = 
   
@@ -581,15 +581,15 @@ data NationalCharacterStringType =
 _NationalCharacterStringType = (Core.Name "hydra/ext/sql/ansi.NationalCharacterStringType")
 
 data NumericType = 
-  NumericTypeExactNumericType ExactNumericType |
-  NumericTypeApproximateNumericType ApproximateNumericType
+  NumericTypeExact ExactNumericType |
+  NumericTypeApproximate ApproximateNumericType
   deriving (Eq, Ord, Read, Show)
 
 _NumericType = (Core.Name "hydra/ext/sql/ansi.NumericType")
 
-_NumericType_exactNumericType = (Core.FieldName "exactNumericType")
+_NumericType_exact = (Core.FieldName "exact")
 
-_NumericType_approximateNumericType = (Core.FieldName "approximateNumericType")
+_NumericType_approximate = (Core.FieldName "approximate")
 
 newtype Precision = 
   Precision {
@@ -599,66 +599,66 @@ newtype Precision =
 _Precision = (Core.Name "hydra/ext/sql/ansi.Precision")
 
 data PredefinedType = 
-  PredefinedTypeSequence PredefinedType_Sequence |
-  PredefinedTypeSequence2 PredefinedType_Sequence2 |
-  PredefinedTypeBinaryLargeObjectStringType BinaryLargeObjectStringType |
-  PredefinedTypeNumericType NumericType |
-  PredefinedTypeBooleanType BooleanType |
-  PredefinedTypeDatetimeType DatetimeType |
-  PredefinedTypeIntervalType IntervalType
+  PredefinedTypeCharacterString PredefinedType_CharacterString |
+  PredefinedTypeNationalCharacterString PredefinedType_NationalCharacterString |
+  PredefinedTypeBlob BinaryLargeObjectStringType |
+  PredefinedTypeNumeric NumericType |
+  PredefinedTypeBoolean BooleanType |
+  PredefinedTypeDatetime DatetimeType |
+  PredefinedTypeInterval IntervalType
   deriving (Eq, Ord, Read, Show)
 
 _PredefinedType = (Core.Name "hydra/ext/sql/ansi.PredefinedType")
 
-_PredefinedType_sequence = (Core.FieldName "sequence")
+_PredefinedType_characterString = (Core.FieldName "characterString")
 
-_PredefinedType_sequence2 = (Core.FieldName "sequence2")
+_PredefinedType_nationalCharacterString = (Core.FieldName "nationalCharacterString")
 
-_PredefinedType_binaryLargeObjectStringType = (Core.FieldName "binaryLargeObjectStringType")
+_PredefinedType_blob = (Core.FieldName "blob")
 
-_PredefinedType_numericType = (Core.FieldName "numericType")
+_PredefinedType_numeric = (Core.FieldName "numeric")
 
-_PredefinedType_booleanType = (Core.FieldName "booleanType")
+_PredefinedType_boolean = (Core.FieldName "boolean")
 
-_PredefinedType_datetimeType = (Core.FieldName "datetimeType")
+_PredefinedType_datetime = (Core.FieldName "datetime")
 
-_PredefinedType_intervalType = (Core.FieldName "intervalType")
+_PredefinedType_interval = (Core.FieldName "interval")
 
-data PredefinedType_Sequence = 
-  PredefinedType_Sequence {
-    predefinedType_SequenceCharacterStringType :: CharacterStringType,
-    predefinedType_SequenceSequence :: (Maybe PredefinedType_Sequence_Sequence_Option),
-    predefinedType_SequenceCollateClause :: (Maybe CollateClause)}
+data PredefinedType_CharacterString = 
+  PredefinedType_CharacterString {
+    predefinedType_CharacterStringCharacterStringType :: CharacterStringType,
+    predefinedType_CharacterStringSequence :: (Maybe PredefinedType_CharacterString_Sequence_Option),
+    predefinedType_CharacterStringCollateClause :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_Sequence = (Core.Name "hydra/ext/sql/ansi.PredefinedType.Sequence")
+_PredefinedType_CharacterString = (Core.Name "hydra/ext/sql/ansi.PredefinedType.CharacterString")
 
-_PredefinedType_Sequence_characterStringType = (Core.FieldName "characterStringType")
+_PredefinedType_CharacterString_characterStringType = (Core.FieldName "characterStringType")
 
-_PredefinedType_Sequence_sequence = (Core.FieldName "sequence")
+_PredefinedType_CharacterString_sequence = (Core.FieldName "sequence")
 
-_PredefinedType_Sequence_collateClause = (Core.FieldName "collateClause")
+_PredefinedType_CharacterString_collateClause = (Core.FieldName "collateClause")
 
-data PredefinedType_Sequence_Sequence_Option = 
-  PredefinedType_Sequence_Sequence_Option {
-    predefinedType_Sequence_Sequence_OptionCharacterSetSpecification :: CharacterSetSpecification}
+data PredefinedType_CharacterString_Sequence_Option = 
+  PredefinedType_CharacterString_Sequence_Option {
+    predefinedType_CharacterString_Sequence_OptionCharacterSetSpecification :: CharacterSetSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_Sequence_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.PredefinedType.Sequence.Sequence.Option")
+_PredefinedType_CharacterString_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.PredefinedType.CharacterString.Sequence.Option")
 
-_PredefinedType_Sequence_Sequence_Option_characterSetSpecification = (Core.FieldName "characterSetSpecification")
+_PredefinedType_CharacterString_Sequence_Option_characterSetSpecification = (Core.FieldName "characterSetSpecification")
 
-data PredefinedType_Sequence2 = 
-  PredefinedType_Sequence2 {
-    predefinedType_Sequence2NationalCharacterStringType :: NationalCharacterStringType,
-    predefinedType_Sequence2CollateClause :: (Maybe CollateClause)}
+data PredefinedType_NationalCharacterString = 
+  PredefinedType_NationalCharacterString {
+    predefinedType_NationalCharacterStringNationalCharacterStringType :: NationalCharacterStringType,
+    predefinedType_NationalCharacterStringCollateClause :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_Sequence2 = (Core.Name "hydra/ext/sql/ansi.PredefinedType.Sequence2")
+_PredefinedType_NationalCharacterString = (Core.Name "hydra/ext/sql/ansi.PredefinedType.NationalCharacterString")
 
-_PredefinedType_Sequence2_nationalCharacterStringType = (Core.FieldName "nationalCharacterStringType")
+_PredefinedType_NationalCharacterString_nationalCharacterStringType = (Core.FieldName "nationalCharacterStringType")
 
-_PredefinedType_Sequence2_collateClause = (Core.FieldName "collateClause")
+_PredefinedType_NationalCharacterString_collateClause = (Core.FieldName "collateClause")
 
 data ReferenceScopeCheck = 
   
@@ -715,33 +715,33 @@ data TableConstraintDefinition =
 _TableConstraintDefinition = (Core.Name "hydra/ext/sql/ansi.TableConstraintDefinition")
 
 data TableContentsSource = 
-  TableContentsSourceTableElementList TableElementList |
-  TableContentsSourceSequence TableContentsSource_Sequence |
-  TableContentsSourceAsSubqueryClause AsSubqueryClause
+  TableContentsSourceList TableElementList |
+  TableContentsSourceSubtable TableContentsSource_Subtable |
+  TableContentsSourceSubquery AsSubqueryClause
   deriving (Eq, Ord, Read, Show)
 
 _TableContentsSource = (Core.Name "hydra/ext/sql/ansi.TableContentsSource")
 
-_TableContentsSource_tableElementList = (Core.FieldName "tableElementList")
+_TableContentsSource_list = (Core.FieldName "list")
 
-_TableContentsSource_sequence = (Core.FieldName "sequence")
+_TableContentsSource_subtable = (Core.FieldName "subtable")
 
-_TableContentsSource_asSubqueryClause = (Core.FieldName "asSubqueryClause")
+_TableContentsSource_subquery = (Core.FieldName "subquery")
 
-data TableContentsSource_Sequence = 
-  TableContentsSource_Sequence {
-    tableContentsSource_SequencePathResolvedUserDefinedTypeName :: PathResolvedUserDefinedTypeName,
-    tableContentsSource_SequenceSubtableClause :: (Maybe SubtableClause),
-    tableContentsSource_SequenceTableElementList :: (Maybe TableElementList)}
+data TableContentsSource_Subtable = 
+  TableContentsSource_Subtable {
+    tableContentsSource_SubtablePathResolvedUserDefinedTypeName :: PathResolvedUserDefinedTypeName,
+    tableContentsSource_SubtableSubtableClause :: (Maybe SubtableClause),
+    tableContentsSource_SubtableTableElementList :: (Maybe TableElementList)}
   deriving (Eq, Ord, Read, Show)
 
-_TableContentsSource_Sequence = (Core.Name "hydra/ext/sql/ansi.TableContentsSource.Sequence")
+_TableContentsSource_Subtable = (Core.Name "hydra/ext/sql/ansi.TableContentsSource.Subtable")
 
-_TableContentsSource_Sequence_pathResolvedUserDefinedTypeName = (Core.FieldName "pathResolvedUserDefinedTypeName")
+_TableContentsSource_Subtable_pathResolvedUserDefinedTypeName = (Core.FieldName "pathResolvedUserDefinedTypeName")
 
-_TableContentsSource_Sequence_subtableClause = (Core.FieldName "subtableClause")
+_TableContentsSource_Subtable_subtableClause = (Core.FieldName "subtableClause")
 
-_TableContentsSource_Sequence_tableElementList = (Core.FieldName "tableElementList")
+_TableContentsSource_Subtable_tableElementList = (Core.FieldName "tableElementList")
 
 data TableDefinition = 
   TableDefinition {
@@ -771,24 +771,24 @@ _TableDefinition_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.TableDefinitio
 _TableDefinition_Sequence_Option_tableCommitAction = (Core.FieldName "tableCommitAction")
 
 data TableElement = 
-  TableElementColumnDefinition ColumnDefinition |
-  TableElementTableConstraintDefinition TableConstraintDefinition |
-  TableElementLikeClause LikeClause |
-  TableElementSelfReferencingColumnSpecification SelfReferencingColumnSpecification |
-  TableElementColumnOptions ColumnOptions
+  TableElementColumn ColumnDefinition |
+  TableElementTableConstraint TableConstraintDefinition |
+  TableElementLike LikeClause |
+  TableElementSelfReferencingColumn SelfReferencingColumnSpecification |
+  TableElementColumOptions ColumnOptions
   deriving (Eq, Ord, Read, Show)
 
 _TableElement = (Core.Name "hydra/ext/sql/ansi.TableElement")
 
-_TableElement_columnDefinition = (Core.FieldName "columnDefinition")
+_TableElement_column = (Core.FieldName "column")
 
-_TableElement_tableConstraintDefinition = (Core.FieldName "tableConstraintDefinition")
+_TableElement_tableConstraint = (Core.FieldName "tableConstraint")
 
-_TableElement_likeClause = (Core.FieldName "likeClause")
+_TableElement_like = (Core.FieldName "like")
 
-_TableElement_selfReferencingColumnSpecification = (Core.FieldName "selfReferencingColumnSpecification")
+_TableElement_selfReferencingColumn = (Core.FieldName "selfReferencingColumn")
 
-_TableElement_columnOptions = (Core.FieldName "columnOptions")
+_TableElement_columOptions = (Core.FieldName "columOptions")
 
 data TableElementList = 
   TableElementList {
