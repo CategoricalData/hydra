@@ -316,52 +316,52 @@ _ColumnConstraintDefinition = (Core.Name "hydra/ext/sql/ansi.ColumnConstraintDef
 
 data ColumnDefinition = 
   ColumnDefinition {
-    columnDefinitionColumnName :: ColumnName,
-    columnDefinitionAlts :: (Maybe ColumnDefinition_Alts_Option),
-    columnDefinitionReferenceScopeCheck :: (Maybe ReferenceScopeCheck),
-    columnDefinitionAlts2 :: (Maybe ColumnDefinition_Alts2_Option),
-    columnDefinitionListOfColumnConstraintDefinition :: [ColumnConstraintDefinition],
-    columnDefinitionCollateClause :: (Maybe CollateClause)}
+    columnDefinitionName :: ColumnName,
+    columnDefinitionTypeOrDomain :: (Maybe ColumnDefinition_TypeOrDomain_Option),
+    columnDefinitionRefScope :: (Maybe ReferenceScopeCheck),
+    columnDefinitionDefaultOrIdentityOrGeneration :: (Maybe ColumnDefinition_DefaultOrIdentityOrGeneration_Option),
+    columnDefinitionConstraints :: [ColumnConstraintDefinition],
+    columnDefinitionCollate :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
 _ColumnDefinition = (Core.Name "hydra/ext/sql/ansi.ColumnDefinition")
 
-_ColumnDefinition_columnName = (Core.FieldName "columnName")
+_ColumnDefinition_name = (Core.FieldName "name")
 
-_ColumnDefinition_alts = (Core.FieldName "alts")
+_ColumnDefinition_typeOrDomain = (Core.FieldName "typeOrDomain")
 
-_ColumnDefinition_referenceScopeCheck = (Core.FieldName "referenceScopeCheck")
+_ColumnDefinition_refScope = (Core.FieldName "refScope")
 
-_ColumnDefinition_alts2 = (Core.FieldName "alts2")
+_ColumnDefinition_defaultOrIdentityOrGeneration = (Core.FieldName "defaultOrIdentityOrGeneration")
 
-_ColumnDefinition_listOfColumnConstraintDefinition = (Core.FieldName "listOfColumnConstraintDefinition")
+_ColumnDefinition_constraints = (Core.FieldName "constraints")
 
-_ColumnDefinition_collateClause = (Core.FieldName "collateClause")
+_ColumnDefinition_collate = (Core.FieldName "collate")
 
-data ColumnDefinition_Alts_Option = 
-  ColumnDefinition_Alts_OptionDataType DataType |
-  ColumnDefinition_Alts_OptionDomainName DomainName
+data ColumnDefinition_TypeOrDomain_Option = 
+  ColumnDefinition_TypeOrDomain_OptionDataType DataType |
+  ColumnDefinition_TypeOrDomain_OptionDomainName DomainName
   deriving (Eq, Ord, Read, Show)
 
-_ColumnDefinition_Alts_Option = (Core.Name "hydra/ext/sql/ansi.ColumnDefinition.Alts.Option")
+_ColumnDefinition_TypeOrDomain_Option = (Core.Name "hydra/ext/sql/ansi.ColumnDefinition.TypeOrDomain.Option")
 
-_ColumnDefinition_Alts_Option_dataType = (Core.FieldName "dataType")
+_ColumnDefinition_TypeOrDomain_Option_dataType = (Core.FieldName "dataType")
 
-_ColumnDefinition_Alts_Option_domainName = (Core.FieldName "domainName")
+_ColumnDefinition_TypeOrDomain_Option_domainName = (Core.FieldName "domainName")
 
-data ColumnDefinition_Alts2_Option = 
-  ColumnDefinition_Alts2_OptionDefaultClause DefaultClause |
-  ColumnDefinition_Alts2_OptionIdentityColumnSpecification IdentityColumnSpecification |
-  ColumnDefinition_Alts2_OptionGenerationClause GenerationClause
+data ColumnDefinition_DefaultOrIdentityOrGeneration_Option = 
+  ColumnDefinition_DefaultOrIdentityOrGeneration_OptionDefaultClause DefaultClause |
+  ColumnDefinition_DefaultOrIdentityOrGeneration_OptionIdentityColumnSpecification IdentityColumnSpecification |
+  ColumnDefinition_DefaultOrIdentityOrGeneration_OptionGenerationClause GenerationClause
   deriving (Eq, Ord, Read, Show)
 
-_ColumnDefinition_Alts2_Option = (Core.Name "hydra/ext/sql/ansi.ColumnDefinition.Alts2.Option")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option = (Core.Name "hydra/ext/sql/ansi.ColumnDefinition.DefaultOrIdentityOrGeneration.Option")
 
-_ColumnDefinition_Alts2_Option_defaultClause = (Core.FieldName "defaultClause")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_defaultClause = (Core.FieldName "defaultClause")
 
-_ColumnDefinition_Alts2_Option_identityColumnSpecification = (Core.FieldName "identityColumnSpecification")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_identityColumnSpecification = (Core.FieldName "identityColumnSpecification")
 
-_ColumnDefinition_Alts2_Option_generationClause = (Core.FieldName "generationClause")
+_ColumnDefinition_DefaultOrIdentityOrGeneration_Option_generationClause = (Core.FieldName "generationClause")
 
 data ColumnOptions = 
   
@@ -626,39 +626,39 @@ _PredefinedType_interval = (Core.FieldName "interval")
 
 data PredefinedType_CharacterString = 
   PredefinedType_CharacterString {
-    predefinedType_CharacterStringCharacterStringType :: CharacterStringType,
-    predefinedType_CharacterStringSequence :: (Maybe PredefinedType_CharacterString_Sequence_Option),
-    predefinedType_CharacterStringCollateClause :: (Maybe CollateClause)}
+    predefinedType_CharacterStringType :: CharacterStringType,
+    predefinedType_CharacterStringCharacters :: (Maybe PredefinedType_CharacterString_Characters_Option),
+    predefinedType_CharacterStringCollate :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
 _PredefinedType_CharacterString = (Core.Name "hydra/ext/sql/ansi.PredefinedType.CharacterString")
 
-_PredefinedType_CharacterString_characterStringType = (Core.FieldName "characterStringType")
+_PredefinedType_CharacterString_type = (Core.FieldName "type")
 
-_PredefinedType_CharacterString_sequence = (Core.FieldName "sequence")
+_PredefinedType_CharacterString_characters = (Core.FieldName "characters")
 
-_PredefinedType_CharacterString_collateClause = (Core.FieldName "collateClause")
+_PredefinedType_CharacterString_collate = (Core.FieldName "collate")
 
-data PredefinedType_CharacterString_Sequence_Option = 
-  PredefinedType_CharacterString_Sequence_Option {
-    predefinedType_CharacterString_Sequence_OptionCharacterSetSpecification :: CharacterSetSpecification}
+data PredefinedType_CharacterString_Characters_Option = 
+  PredefinedType_CharacterString_Characters_Option {
+    predefinedType_CharacterString_Characters_OptionCharacterSetSpecification :: CharacterSetSpecification}
   deriving (Eq, Ord, Read, Show)
 
-_PredefinedType_CharacterString_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.PredefinedType.CharacterString.Sequence.Option")
+_PredefinedType_CharacterString_Characters_Option = (Core.Name "hydra/ext/sql/ansi.PredefinedType.CharacterString.Characters.Option")
 
-_PredefinedType_CharacterString_Sequence_Option_characterSetSpecification = (Core.FieldName "characterSetSpecification")
+_PredefinedType_CharacterString_Characters_Option_characterSetSpecification = (Core.FieldName "characterSetSpecification")
 
 data PredefinedType_NationalCharacterString = 
   PredefinedType_NationalCharacterString {
-    predefinedType_NationalCharacterStringNationalCharacterStringType :: NationalCharacterStringType,
-    predefinedType_NationalCharacterStringCollateClause :: (Maybe CollateClause)}
+    predefinedType_NationalCharacterStringType :: NationalCharacterStringType,
+    predefinedType_NationalCharacterStringCollate :: (Maybe CollateClause)}
   deriving (Eq, Ord, Read, Show)
 
 _PredefinedType_NationalCharacterString = (Core.Name "hydra/ext/sql/ansi.PredefinedType.NationalCharacterString")
 
-_PredefinedType_NationalCharacterString_nationalCharacterStringType = (Core.FieldName "nationalCharacterStringType")
+_PredefinedType_NationalCharacterString_type = (Core.FieldName "type")
 
-_PredefinedType_NationalCharacterString_collateClause = (Core.FieldName "collateClause")
+_PredefinedType_NationalCharacterString_collate = (Core.FieldName "collate")
 
 data ReferenceScopeCheck = 
   
@@ -698,15 +698,15 @@ data SubtableClause =
 _SubtableClause = (Core.Name "hydra/ext/sql/ansi.SubtableClause")
 
 data TableCommitAction = 
-  TableCommitActionPRESERVE  |
-  TableCommitActionDELETE 
+  TableCommitActionPreserve  |
+  TableCommitActionDelete 
   deriving (Eq, Ord, Read, Show)
 
 _TableCommitAction = (Core.Name "hydra/ext/sql/ansi.TableCommitAction")
 
-_TableCommitAction_pRESERVE = (Core.FieldName "pRESERVE")
+_TableCommitAction_preserve = (Core.FieldName "preserve")
 
-_TableCommitAction_dELETE = (Core.FieldName "dELETE")
+_TableCommitAction_delete = (Core.FieldName "delete")
 
 data TableConstraintDefinition = 
   
@@ -730,45 +730,45 @@ _TableContentsSource_subquery = (Core.FieldName "subquery")
 
 data TableContentsSource_Subtable = 
   TableContentsSource_Subtable {
-    tableContentsSource_SubtablePathResolvedUserDefinedTypeName :: PathResolvedUserDefinedTypeName,
-    tableContentsSource_SubtableSubtableClause :: (Maybe SubtableClause),
-    tableContentsSource_SubtableTableElementList :: (Maybe TableElementList)}
+    tableContentsSource_SubtableType :: PathResolvedUserDefinedTypeName,
+    tableContentsSource_SubtableSubtable :: (Maybe SubtableClause),
+    tableContentsSource_SubtableElements :: (Maybe TableElementList)}
   deriving (Eq, Ord, Read, Show)
 
 _TableContentsSource_Subtable = (Core.Name "hydra/ext/sql/ansi.TableContentsSource.Subtable")
 
-_TableContentsSource_Subtable_pathResolvedUserDefinedTypeName = (Core.FieldName "pathResolvedUserDefinedTypeName")
+_TableContentsSource_Subtable_type = (Core.FieldName "type")
 
-_TableContentsSource_Subtable_subtableClause = (Core.FieldName "subtableClause")
+_TableContentsSource_Subtable_subtable = (Core.FieldName "subtable")
 
-_TableContentsSource_Subtable_tableElementList = (Core.FieldName "tableElementList")
+_TableContentsSource_Subtable_elements = (Core.FieldName "elements")
 
 data TableDefinition = 
   TableDefinition {
-    tableDefinitionTableScope :: (Maybe TableScope),
-    tableDefinitionTableName :: TableName,
-    tableDefinitionTableContentsSource :: TableContentsSource,
-    tableDefinitionSequence :: (Maybe TableDefinition_Sequence_Option)}
+    tableDefinitionScope :: (Maybe TableScope),
+    tableDefinitionName :: TableName,
+    tableDefinitionSource :: TableContentsSource,
+    tableDefinitionCommitActions :: (Maybe TableDefinition_CommitActions_Option)}
   deriving (Eq, Ord, Read, Show)
 
 _TableDefinition = (Core.Name "hydra/ext/sql/ansi.TableDefinition")
 
-_TableDefinition_tableScope = (Core.FieldName "tableScope")
+_TableDefinition_scope = (Core.FieldName "scope")
 
-_TableDefinition_tableName = (Core.FieldName "tableName")
+_TableDefinition_name = (Core.FieldName "name")
 
-_TableDefinition_tableContentsSource = (Core.FieldName "tableContentsSource")
+_TableDefinition_source = (Core.FieldName "source")
 
-_TableDefinition_sequence = (Core.FieldName "sequence")
+_TableDefinition_commitActions = (Core.FieldName "commitActions")
 
-data TableDefinition_Sequence_Option = 
-  TableDefinition_Sequence_Option {
-    tableDefinition_Sequence_OptionTableCommitAction :: TableCommitAction}
+data TableDefinition_CommitActions_Option = 
+  TableDefinition_CommitActions_Option {
+    tableDefinition_CommitActions_OptionTableCommitAction :: TableCommitAction}
   deriving (Eq, Ord, Read, Show)
 
-_TableDefinition_Sequence_Option = (Core.Name "hydra/ext/sql/ansi.TableDefinition.Sequence.Option")
+_TableDefinition_CommitActions_Option = (Core.Name "hydra/ext/sql/ansi.TableDefinition.CommitActions.Option")
 
-_TableDefinition_Sequence_Option_tableCommitAction = (Core.FieldName "tableCommitAction")
+_TableDefinition_CommitActions_Option_tableCommitAction = (Core.FieldName "tableCommitAction")
 
 data TableElement = 
   TableElementColumn ColumnDefinition |
@@ -792,24 +792,24 @@ _TableElement_columOptions = (Core.FieldName "columOptions")
 
 data TableElementList = 
   TableElementList {
-    tableElementListTableElement :: TableElement,
-    tableElementListListOfSequence :: [TableElementList_ListOfSequence_Elmt]}
+    tableElementListFirst :: TableElement,
+    tableElementListRest :: [TableElementList_Rest_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _TableElementList = (Core.Name "hydra/ext/sql/ansi.TableElementList")
 
-_TableElementList_tableElement = (Core.FieldName "tableElement")
+_TableElementList_first = (Core.FieldName "first")
 
-_TableElementList_listOfSequence = (Core.FieldName "listOfSequence")
+_TableElementList_rest = (Core.FieldName "rest")
 
-data TableElementList_ListOfSequence_Elmt = 
-  TableElementList_ListOfSequence_Elmt {
-    tableElementList_ListOfSequence_ElmtTableElement :: TableElement}
+data TableElementList_Rest_Elmt = 
+  TableElementList_Rest_Elmt {
+    tableElementList_Rest_ElmtTableElement :: TableElement}
   deriving (Eq, Ord, Read, Show)
 
-_TableElementList_ListOfSequence_Elmt = (Core.Name "hydra/ext/sql/ansi.TableElementList.ListOfSequence.Elmt")
+_TableElementList_Rest_Elmt = (Core.Name "hydra/ext/sql/ansi.TableElementList.Rest.Elmt")
 
-_TableElementList_ListOfSequence_Elmt_tableElement = (Core.FieldName "tableElement")
+_TableElementList_Rest_Elmt_tableElement = (Core.FieldName "tableElement")
 
 data TableScope = 
   TableScope {

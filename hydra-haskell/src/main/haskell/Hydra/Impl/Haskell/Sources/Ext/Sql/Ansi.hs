@@ -166,12 +166,12 @@ productions = [
   --         [ <column constraint definition> ... ] [ <collate clause> ]
   define "ColumnDefinition" [
     list[
-      "ColumnName",
-      opt(alts["DataType", "DomainName"]),
-      opt"ReferenceScopeCheck",
-      opt(alts["DefaultClause", "IdentityColumnSpecification", "GenerationClause"]),
-      star"ColumnConstraintDefinition",
-      opt"CollateClause"]],
+      "name">: "ColumnName",
+      "typeOrDomain">: opt(alts["DataType", "DomainName"]),
+      "refScope">: opt"ReferenceScopeCheck",
+      "defaultOrIdentityOrGeneration">: opt(alts["DefaultClause", "IdentityColumnSpecification", "GenerationClause"]),
+      "constraints">: star"ColumnConstraintDefinition",
+      "collate">: opt"CollateClause"]],
 
   -- <column options>    ::=   <column name> WITH OPTIONS <column option list>
   define "ColumnOptions" unsupported,
@@ -277,8 +277,13 @@ productions = [
   --     |     <datetime type>
   --     |     <interval type>
   define "PredefinedType" [
-    "characterString">: list["CharacterStringType", opt(list[character_set_, "CharacterSetSpecification"]), opt"CollateClause"],
-    "nationalCharacterString">: list["NationalCharacterStringType", opt"CollateClause"],
+    "characterString">: list[
+      "type">: "CharacterStringType",
+      "characters">: opt(list[character_set_, "CharacterSetSpecification"]),
+      "collate">: opt"CollateClause"],
+    "nationalCharacterString">: list[
+      "type">: "NationalCharacterStringType",
+      "collate">: opt"CollateClause"],
     "blob">: "BinaryLargeObjectStringType",
     "numeric">: "NumericType",
     "boolean">: "BooleanType",
@@ -306,8 +311,8 @@ productions = [
 
   -- <table commit action>    ::=   PRESERVE | DELETE
   define "TableCommitAction" [
-    preserve_,
-    delete_],
+    "preserve">: preserve_,
+    "delete">: delete_],
 
   -- <table constraint definition>    ::=   [ <constraint name definition> ] <table constraint> [ <constraint characteristics> ]
   define "TableConstraintDefinition" unsupported,
@@ -318,15 +323,24 @@ productions = [
   --     |     <as subquery clause>
   define "TableContentsSource" [
     "list">: "TableElementList",
-    "subtable">: list [of_, "PathResolvedUserDefinedTypeName", opt"SubtableClause", opt"TableElementList"],
+    "subtable">: list [
+      of_,
+      "type">: "PathResolvedUserDefinedTypeName",
+      "subtable">: opt"SubtableClause",
+      "elements">: opt"TableElementList"],
     "subquery">: "AsSubqueryClause"],
 
   -- <table definition>    ::=
   --          CREATE [ <table scope> ] TABLE <table name> <table contents source>
   --          [ ON COMMIT <table commit action> ROWS ]
   define "TableDefinition" [
-    list[create_, opt"TableScope", table_, "TableName", "TableContentsSource",
-      opt(list[on_commit_, "TableCommitAction", rows_])]],
+    list[
+      create_,
+      "scope">: opt"TableScope",
+      table_,
+      "name">: "TableName",
+      "source">: "TableContentsSource",
+      "commitActions">: opt(list[on_commit_, "TableCommitAction", rows_])]],
 
   -- <table element>    ::=
   --         <column definition>
@@ -343,7 +357,9 @@ productions = [
 
   -- <table element list>    ::=   <left paren> <table element> [ { <comma> <table element> }... ] <right paren>
   define "TableElementList" [
-    parens["TableElement", star(list[comma_, "TableElement"])]],
+    parens[
+      "first">: "TableElement",
+      "rest">: star(list[comma_, "TableElement"])]],
 
   -- <table scope>    ::=   <global or local> TEMPORARY
   define "TableScope" [
