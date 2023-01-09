@@ -57,14 +57,12 @@ _Directive_baseDecl = (Core.FieldName "baseDecl")
 
 _Directive_prefixDecl = (Core.FieldName "prefixDecl")
 
-data BaseDecl = 
+newtype BaseDecl = 
   BaseDecl {
-    baseDeclIriRef :: IriRef}
+    unBaseDecl :: IriRef}
   deriving (Eq, Ord, Read, Show)
 
 _BaseDecl = (Core.Name "hydra/ext/shex/syntax.BaseDecl")
-
-_BaseDecl_iriRef = (Core.FieldName "iriRef")
 
 data PrefixDecl = 
   PrefixDecl {
@@ -79,7 +77,7 @@ _PrefixDecl_pnameNs = (Core.FieldName "pnameNs")
 _PrefixDecl_iriRef = (Core.FieldName "iriRef")
 
 data NotStartAction = 
-  NotStartActionStart NotStartAction_Start |
+  NotStartActionStart ShapeExpression |
   NotStartActionShapeExprDecl NotStartAction_ShapeExprDecl
   deriving (Eq, Ord, Read, Show)
 
@@ -88,15 +86,6 @@ _NotStartAction = (Core.Name "hydra/ext/shex/syntax.NotStartAction")
 _NotStartAction_start = (Core.FieldName "start")
 
 _NotStartAction_shapeExprDecl = (Core.FieldName "shapeExprDecl")
-
-data NotStartAction_Start = 
-  NotStartAction_Start {
-    notStartAction_StartShapeExpression :: ShapeExpression}
-  deriving (Eq, Ord, Read, Show)
-
-_NotStartAction_Start = (Core.Name "hydra/ext/shex/syntax.NotStartAction.Start")
-
-_NotStartAction_Start_shapeExpression = (Core.FieldName "shapeExpression")
 
 data NotStartAction_ShapeExprDecl = 
   NotStartAction_ShapeExprDecl {
@@ -156,7 +145,7 @@ _InlineShapeExpression = (Core.Name "hydra/ext/shex/syntax.InlineShapeExpression
 data ShapeOr = 
   ShapeOr {
     shapeOrShapeAnd :: ShapeAnd,
-    shapeOrListOfSequence :: [ShapeOr_ListOfSequence_Elmt]}
+    shapeOrListOfSequence :: [ShapeAnd]}
   deriving (Eq, Ord, Read, Show)
 
 _ShapeOr = (Core.Name "hydra/ext/shex/syntax.ShapeOr")
@@ -165,19 +154,10 @@ _ShapeOr_shapeAnd = (Core.FieldName "shapeAnd")
 
 _ShapeOr_listOfSequence = (Core.FieldName "listOfSequence")
 
-data ShapeOr_ListOfSequence_Elmt = 
-  ShapeOr_ListOfSequence_Elmt {
-    shapeOr_ListOfSequence_ElmtShapeAnd :: ShapeAnd}
-  deriving (Eq, Ord, Read, Show)
-
-_ShapeOr_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.ShapeOr.ListOfSequence.Elmt")
-
-_ShapeOr_ListOfSequence_Elmt_shapeAnd = (Core.FieldName "shapeAnd")
-
 data InlineShapeOr = 
   InlineShapeOr {
     inlineShapeOrShapeAnd :: ShapeAnd,
-    inlineShapeOrListOfSequence :: [InlineShapeOr_ListOfSequence_Elmt]}
+    inlineShapeOrListOfSequence :: [InlineShapeAnd]}
   deriving (Eq, Ord, Read, Show)
 
 _InlineShapeOr = (Core.Name "hydra/ext/shex/syntax.InlineShapeOr")
@@ -186,19 +166,10 @@ _InlineShapeOr_shapeAnd = (Core.FieldName "shapeAnd")
 
 _InlineShapeOr_listOfSequence = (Core.FieldName "listOfSequence")
 
-data InlineShapeOr_ListOfSequence_Elmt = 
-  InlineShapeOr_ListOfSequence_Elmt {
-    inlineShapeOr_ListOfSequence_ElmtInlineShapeAnd :: InlineShapeAnd}
-  deriving (Eq, Ord, Read, Show)
-
-_InlineShapeOr_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.InlineShapeOr.ListOfSequence.Elmt")
-
-_InlineShapeOr_ListOfSequence_Elmt_inlineShapeAnd = (Core.FieldName "inlineShapeAnd")
-
 data ShapeAnd = 
   ShapeAnd {
     shapeAndShapeNot :: ShapeNot,
-    shapeAndListOfSequence :: [ShapeAnd_ListOfSequence_Elmt]}
+    shapeAndListOfSequence :: [ShapeNot]}
   deriving (Eq, Ord, Read, Show)
 
 _ShapeAnd = (Core.Name "hydra/ext/shex/syntax.ShapeAnd")
@@ -207,19 +178,10 @@ _ShapeAnd_shapeNot = (Core.FieldName "shapeNot")
 
 _ShapeAnd_listOfSequence = (Core.FieldName "listOfSequence")
 
-data ShapeAnd_ListOfSequence_Elmt = 
-  ShapeAnd_ListOfSequence_Elmt {
-    shapeAnd_ListOfSequence_ElmtShapeNot :: ShapeNot}
-  deriving (Eq, Ord, Read, Show)
-
-_ShapeAnd_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.ShapeAnd.ListOfSequence.Elmt")
-
-_ShapeAnd_ListOfSequence_Elmt_shapeNot = (Core.FieldName "shapeNot")
-
 data InlineShapeAnd = 
   InlineShapeAnd {
     inlineShapeAndInlineShapeNot :: InlineShapeNot,
-    inlineShapeAndListOfSequence :: [InlineShapeAnd_ListOfSequence_Elmt]}
+    inlineShapeAndListOfSequence :: [InlineShapeNot]}
   deriving (Eq, Ord, Read, Show)
 
 _InlineShapeAnd = (Core.Name "hydra/ext/shex/syntax.InlineShapeAnd")
@@ -227,15 +189,6 @@ _InlineShapeAnd = (Core.Name "hydra/ext/shex/syntax.InlineShapeAnd")
 _InlineShapeAnd_inlineShapeNot = (Core.FieldName "inlineShapeNot")
 
 _InlineShapeAnd_listOfSequence = (Core.FieldName "listOfSequence")
-
-data InlineShapeAnd_ListOfSequence_Elmt = 
-  InlineShapeAnd_ListOfSequence_Elmt {
-    inlineShapeAnd_ListOfSequence_ElmtInlineShapeNot :: InlineShapeNot}
-  deriving (Eq, Ord, Read, Show)
-
-_InlineShapeAnd_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.InlineShapeAnd.ListOfSequence.Elmt")
-
-_InlineShapeAnd_ListOfSequence_Elmt_inlineShapeNot = (Core.FieldName "inlineShapeNot")
 
 data ShapeNot = 
   ShapeNot {
@@ -264,7 +217,7 @@ _InlineShapeNot_inlineShapeAtom = (Core.FieldName "inlineShapeAtom")
 data ShapeAtom = 
   ShapeAtomSequence ShapeAtom_Sequence |
   ShapeAtomShapeOrRef ShapeOrRef |
-  ShapeAtomSequence2 ShapeAtom_Sequence2 |
+  ShapeAtomSequence2 ShapeExpression |
   ShapeAtomPeriod 
   deriving (Eq, Ord, Read, Show)
 
@@ -290,19 +243,10 @@ _ShapeAtom_Sequence_nodeConstraint = (Core.FieldName "nodeConstraint")
 
 _ShapeAtom_Sequence_shapeOrRef = (Core.FieldName "shapeOrRef")
 
-data ShapeAtom_Sequence2 = 
-  ShapeAtom_Sequence2 {
-    shapeAtom_Sequence2ShapeExpression :: ShapeExpression}
-  deriving (Eq, Ord, Read, Show)
-
-_ShapeAtom_Sequence2 = (Core.Name "hydra/ext/shex/syntax.ShapeAtom.Sequence2")
-
-_ShapeAtom_Sequence2_shapeExpression = (Core.FieldName "shapeExpression")
-
 data InlineShapeAtom = 
   InlineShapeAtomSequence InlineShapeAtom_Sequence |
   InlineShapeAtomSequence2 InlineShapeAtom_Sequence2 |
-  InlineShapeAtomSequence3 InlineShapeAtom_Sequence3 |
+  InlineShapeAtomSequence3 ShapeExpression |
   InlineShapeAtomPeriod 
   deriving (Eq, Ord, Read, Show)
 
@@ -340,20 +284,11 @@ _InlineShapeAtom_Sequence2_inlineShapeOrRef = (Core.FieldName "inlineShapeOrRef"
 
 _InlineShapeAtom_Sequence2_nodeConstraint = (Core.FieldName "nodeConstraint")
 
-data InlineShapeAtom_Sequence3 = 
-  InlineShapeAtom_Sequence3 {
-    inlineShapeAtom_Sequence3ShapeExpression :: ShapeExpression}
-  deriving (Eq, Ord, Read, Show)
-
-_InlineShapeAtom_Sequence3 = (Core.Name "hydra/ext/shex/syntax.InlineShapeAtom.Sequence3")
-
-_InlineShapeAtom_Sequence3_shapeExpression = (Core.FieldName "shapeExpression")
-
 data ShapeOrRef = 
   ShapeOrRefShapeDefinition ShapeDefinition |
   ShapeOrRefAtpNameLn AtpNameLn |
   ShapeOrRefAtpNameNs AtpNameNs |
-  ShapeOrRefSequence ShapeOrRef_Sequence
+  ShapeOrRefSequence ShapeExprLabel
   deriving (Eq, Ord, Read, Show)
 
 _ShapeOrRef = (Core.Name "hydra/ext/shex/syntax.ShapeOrRef")
@@ -366,20 +301,11 @@ _ShapeOrRef_atpNameNs = (Core.FieldName "atpNameNs")
 
 _ShapeOrRef_sequence = (Core.FieldName "sequence")
 
-data ShapeOrRef_Sequence = 
-  ShapeOrRef_Sequence {
-    shapeOrRef_SequenceShapeExprLabel :: ShapeExprLabel}
-  deriving (Eq, Ord, Read, Show)
-
-_ShapeOrRef_Sequence = (Core.Name "hydra/ext/shex/syntax.ShapeOrRef.Sequence")
-
-_ShapeOrRef_Sequence_shapeExprLabel = (Core.FieldName "shapeExprLabel")
-
 data InlineShapeOrRef = 
   InlineShapeOrRefInlineShapeDefinition InlineShapeDefinition |
   InlineShapeOrRefAtpNameLn AtpNameLn |
   InlineShapeOrRefAtpNameNs AtpNameNs |
-  InlineShapeOrRefSequence InlineShapeOrRef_Sequence
+  InlineShapeOrRefSequence ShapeExprLabel
   deriving (Eq, Ord, Read, Show)
 
 _InlineShapeOrRef = (Core.Name "hydra/ext/shex/syntax.InlineShapeOrRef")
@@ -392,17 +318,8 @@ _InlineShapeOrRef_atpNameNs = (Core.FieldName "atpNameNs")
 
 _InlineShapeOrRef_sequence = (Core.FieldName "sequence")
 
-data InlineShapeOrRef_Sequence = 
-  InlineShapeOrRef_Sequence {
-    inlineShapeOrRef_SequenceShapeExprLabel :: ShapeExprLabel}
-  deriving (Eq, Ord, Read, Show)
-
-_InlineShapeOrRef_Sequence = (Core.Name "hydra/ext/shex/syntax.InlineShapeOrRef.Sequence")
-
-_InlineShapeOrRef_Sequence_shapeExprLabel = (Core.FieldName "shapeExprLabel")
-
 data NodeConstraint = 
-  NodeConstraintSequence NodeConstraint_Sequence |
+  NodeConstraintSequence [XsFacet] |
   NodeConstraintSequence2 NodeConstraint_Sequence2 |
   NodeConstraintSequence3 NodeConstraint_Sequence3 |
   NodeConstraintSequence4 NodeConstraint_Sequence4 |
@@ -423,15 +340,6 @@ _NodeConstraint_sequence4 = (Core.FieldName "sequence4")
 _NodeConstraint_sequence5 = (Core.FieldName "sequence5")
 
 _NodeConstraint_listOfXsFacet = (Core.FieldName "listOfXsFacet")
-
-data NodeConstraint_Sequence = 
-  NodeConstraint_Sequence {
-    nodeConstraint_SequenceListOfXsFacet :: [XsFacet]}
-  deriving (Eq, Ord, Read, Show)
-
-_NodeConstraint_Sequence = (Core.Name "hydra/ext/shex/syntax.NodeConstraint.Sequence")
-
-_NodeConstraint_Sequence_listOfXsFacet = (Core.FieldName "listOfXsFacet")
 
 data NodeConstraint_Sequence2 = 
   NodeConstraint_Sequence2 {
@@ -664,14 +572,12 @@ _InlineShapeDefinition_ListOfAlts_Elmt_extraPropertySet = (Core.FieldName "extra
 
 _InlineShapeDefinition_ListOfAlts_Elmt_cLOSED = (Core.FieldName "cLOSED")
 
-data ExtraPropertySet = 
+newtype ExtraPropertySet = 
   ExtraPropertySet {
-    extraPropertySetListOfPredicate :: [Predicate]}
+    unExtraPropertySet :: [Predicate]}
   deriving (Eq, Ord, Read, Show)
 
 _ExtraPropertySet = (Core.Name "hydra/ext/shex/syntax.ExtraPropertySet")
-
-_ExtraPropertySet_listOfPredicate = (Core.FieldName "listOfPredicate")
 
 newtype TripleExpression = 
   TripleExpression {
@@ -694,7 +600,7 @@ _OneOfTripleExpr_multiElementOneOf = (Core.FieldName "multiElementOneOf")
 data MultiElementOneOf = 
   MultiElementOneOf {
     multiElementOneOfGroupTripleExpr :: GroupTripleExpr,
-    multiElementOneOfListOfSequence :: [MultiElementOneOf_ListOfSequence_Elmt]}
+    multiElementOneOfListOfSequence :: [GroupTripleExpr]}
   deriving (Eq, Ord, Read, Show)
 
 _MultiElementOneOf = (Core.Name "hydra/ext/shex/syntax.MultiElementOneOf")
@@ -702,15 +608,6 @@ _MultiElementOneOf = (Core.Name "hydra/ext/shex/syntax.MultiElementOneOf")
 _MultiElementOneOf_groupTripleExpr = (Core.FieldName "groupTripleExpr")
 
 _MultiElementOneOf_listOfSequence = (Core.FieldName "listOfSequence")
-
-data MultiElementOneOf_ListOfSequence_Elmt = 
-  MultiElementOneOf_ListOfSequence_Elmt {
-    multiElementOneOf_ListOfSequence_ElmtGroupTripleExpr :: GroupTripleExpr}
-  deriving (Eq, Ord, Read, Show)
-
-_MultiElementOneOf_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.MultiElementOneOf.ListOfSequence.Elmt")
-
-_MultiElementOneOf_ListOfSequence_Elmt_groupTripleExpr = (Core.FieldName "groupTripleExpr")
 
 data InnerTripleExpr = 
   InnerTripleExprMultiElementGroup MultiElementGroup |
@@ -749,7 +646,7 @@ _SingleElementGroup_semi = (Core.FieldName "semi")
 data MultiElementGroup = 
   MultiElementGroup {
     multiElementGroupUnaryTripleExpr :: UnaryTripleExpr,
-    multiElementGroupListOfSequence :: [MultiElementGroup_ListOfSequence_Elmt],
+    multiElementGroupListOfSequence :: [UnaryTripleExpr],
     multiElementGroupSemi :: (Maybe ())}
   deriving (Eq, Ord, Read, Show)
 
@@ -760,15 +657,6 @@ _MultiElementGroup_unaryTripleExpr = (Core.FieldName "unaryTripleExpr")
 _MultiElementGroup_listOfSequence = (Core.FieldName "listOfSequence")
 
 _MultiElementGroup_semi = (Core.FieldName "semi")
-
-data MultiElementGroup_ListOfSequence_Elmt = 
-  MultiElementGroup_ListOfSequence_Elmt {
-    multiElementGroup_ListOfSequence_ElmtUnaryTripleExpr :: UnaryTripleExpr}
-  deriving (Eq, Ord, Read, Show)
-
-_MultiElementGroup_ListOfSequence_Elmt = (Core.Name "hydra/ext/shex/syntax.MultiElementGroup.ListOfSequence.Elmt")
-
-_MultiElementGroup_ListOfSequence_Elmt_unaryTripleExpr = (Core.FieldName "unaryTripleExpr")
 
 data UnaryTripleExpr = 
   UnaryTripleExprSequence UnaryTripleExpr_Sequence |
@@ -783,7 +671,7 @@ _UnaryTripleExpr_include = (Core.FieldName "include")
 
 data UnaryTripleExpr_Sequence = 
   UnaryTripleExpr_Sequence {
-    unaryTripleExpr_SequenceSequence :: (Maybe UnaryTripleExpr_Sequence_Sequence_Option),
+    unaryTripleExpr_SequenceSequence :: (Maybe TripleExprLabel),
     unaryTripleExpr_SequenceAlts :: UnaryTripleExpr_Sequence_Alts}
   deriving (Eq, Ord, Read, Show)
 
@@ -792,15 +680,6 @@ _UnaryTripleExpr_Sequence = (Core.Name "hydra/ext/shex/syntax.UnaryTripleExpr.Se
 _UnaryTripleExpr_Sequence_sequence = (Core.FieldName "sequence")
 
 _UnaryTripleExpr_Sequence_alts = (Core.FieldName "alts")
-
-data UnaryTripleExpr_Sequence_Sequence_Option = 
-  UnaryTripleExpr_Sequence_Sequence_Option {
-    unaryTripleExpr_Sequence_Sequence_OptionTripleExprLabel :: TripleExprLabel}
-  deriving (Eq, Ord, Read, Show)
-
-_UnaryTripleExpr_Sequence_Sequence_Option = (Core.Name "hydra/ext/shex/syntax.UnaryTripleExpr.Sequence.Sequence.Option")
-
-_UnaryTripleExpr_Sequence_Sequence_Option_tripleExprLabel = (Core.FieldName "tripleExprLabel")
 
 data UnaryTripleExpr_Sequence_Alts = 
   UnaryTripleExpr_Sequence_AltsTripleConstraint TripleConstraint |
@@ -878,14 +757,12 @@ data SenseFlags =
 
 _SenseFlags = (Core.Name "hydra/ext/shex/syntax.SenseFlags")
 
-data ValueSet = 
+newtype ValueSet = 
   ValueSet {
-    valueSetListOfValueSetValue :: [ValueSetValue]}
+    unValueSet :: [ValueSetValue]}
   deriving (Eq, Ord, Read, Show)
 
 _ValueSet = (Core.Name "hydra/ext/shex/syntax.ValueSet")
-
-_ValueSet_listOfValueSetValue = (Core.FieldName "listOfValueSetValue")
 
 data ValueSetValue = 
   ValueSetValueIriRange IriRange |
@@ -900,7 +777,7 @@ _ValueSetValue_literal = (Core.FieldName "literal")
 
 data IriRange = 
   IriRangeSequence IriRange_Sequence |
-  IriRangeSequence2 IriRange_Sequence2
+  IriRangeSequence2 [Exclusion]
   deriving (Eq, Ord, Read, Show)
 
 _IriRange = (Core.Name "hydra/ext/shex/syntax.IriRange")
@@ -912,7 +789,7 @@ _IriRange_sequence2 = (Core.FieldName "sequence2")
 data IriRange_Sequence = 
   IriRange_Sequence {
     iriRange_SequenceIri :: Iri,
-    iriRange_SequenceSequence :: (Maybe IriRange_Sequence_Sequence_Option)}
+    iriRange_SequenceSequence :: (Maybe [Exclusion])}
   deriving (Eq, Ord, Read, Show)
 
 _IriRange_Sequence = (Core.Name "hydra/ext/shex/syntax.IriRange.Sequence")
@@ -921,41 +798,19 @@ _IriRange_Sequence_iri = (Core.FieldName "iri")
 
 _IriRange_Sequence_sequence = (Core.FieldName "sequence")
 
-data IriRange_Sequence_Sequence_Option = 
-  IriRange_Sequence_Sequence_Option {
-    iriRange_Sequence_Sequence_OptionListOfExclusion :: [Exclusion]}
-  deriving (Eq, Ord, Read, Show)
-
-_IriRange_Sequence_Sequence_Option = (Core.Name "hydra/ext/shex/syntax.IriRange.Sequence.Sequence.Option")
-
-_IriRange_Sequence_Sequence_Option_listOfExclusion = (Core.FieldName "listOfExclusion")
-
-data IriRange_Sequence2 = 
-  IriRange_Sequence2 {
-    iriRange_Sequence2ListOfExclusion :: [Exclusion]}
-  deriving (Eq, Ord, Read, Show)
-
-_IriRange_Sequence2 = (Core.Name "hydra/ext/shex/syntax.IriRange.Sequence2")
-
-_IriRange_Sequence2_listOfExclusion = (Core.FieldName "listOfExclusion")
-
-data Exclusion = 
+newtype Exclusion = 
   Exclusion {
-    exclusionIri :: Iri}
+    unExclusion :: Iri}
   deriving (Eq, Ord, Read, Show)
 
 _Exclusion = (Core.Name "hydra/ext/shex/syntax.Exclusion")
 
-_Exclusion_iri = (Core.FieldName "iri")
-
-data Include = 
+newtype Include = 
   Include {
-    includeTripleExprLabel :: TripleExprLabel}
+    unInclude :: TripleExprLabel}
   deriving (Eq, Ord, Read, Show)
 
 _Include = (Core.Name "hydra/ext/shex/syntax.Include")
-
-_Include_tripleExprLabel = (Core.FieldName "tripleExprLabel")
 
 data Annotation = 
   Annotation {
@@ -1054,24 +909,15 @@ _ShapeExprLabel_iri = (Core.FieldName "iri")
 _ShapeExprLabel_blankNode = (Core.FieldName "blankNode")
 
 data TripleExprLabel = 
-  TripleExprLabel {
-    tripleExprLabelAlts :: TripleExprLabel_Alts}
+  TripleExprLabelIri Iri |
+  TripleExprLabelBlankNode BlankNode
   deriving (Eq, Ord, Read, Show)
 
 _TripleExprLabel = (Core.Name "hydra/ext/shex/syntax.TripleExprLabel")
 
-_TripleExprLabel_alts = (Core.FieldName "alts")
+_TripleExprLabel_iri = (Core.FieldName "iri")
 
-data TripleExprLabel_Alts = 
-  TripleExprLabel_AltsIri Iri |
-  TripleExprLabel_AltsBlankNode BlankNode
-  deriving (Eq, Ord, Read, Show)
-
-_TripleExprLabel_Alts = (Core.Name "hydra/ext/shex/syntax.TripleExprLabel.Alts")
-
-_TripleExprLabel_Alts_iri = (Core.FieldName "iri")
-
-_TripleExprLabel_Alts_blankNode = (Core.FieldName "blankNode")
+_TripleExprLabel_blankNode = (Core.FieldName "blankNode")
 
 data NumericLiteral = 
   NumericLiteralInteger Integer_ |
@@ -1101,7 +947,7 @@ _RdfLiteral_alts = (Core.FieldName "alts")
 
 data RdfLiteral_Alts_Option = 
   RdfLiteral_Alts_OptionLangTag LangTag |
-  RdfLiteral_Alts_OptionSequence RdfLiteral_Alts_Option_Sequence
+  RdfLiteral_Alts_OptionSequence Datatype
   deriving (Eq, Ord, Read, Show)
 
 _RdfLiteral_Alts_Option = (Core.Name "hydra/ext/shex/syntax.RdfLiteral.Alts.Option")
@@ -1109,15 +955,6 @@ _RdfLiteral_Alts_Option = (Core.Name "hydra/ext/shex/syntax.RdfLiteral.Alts.Opti
 _RdfLiteral_Alts_Option_langTag = (Core.FieldName "langTag")
 
 _RdfLiteral_Alts_Option_sequence = (Core.FieldName "sequence")
-
-data RdfLiteral_Alts_Option_Sequence = 
-  RdfLiteral_Alts_Option_Sequence {
-    rdfLiteral_Alts_Option_SequenceDatatype :: Datatype}
-  deriving (Eq, Ord, Read, Show)
-
-_RdfLiteral_Alts_Option_Sequence = (Core.Name "hydra/ext/shex/syntax.RdfLiteral.Alts.Option.Sequence")
-
-_RdfLiteral_Alts_Option_Sequence_datatype = (Core.FieldName "datatype")
 
 data BooleanLiteral = 
   BooleanLiteralTrue  |
@@ -1176,51 +1013,38 @@ newtype BlankNode =
 
 _BlankNode = (Core.Name "hydra/ext/shex/syntax.BlankNode")
 
-data IncludeSet = 
+newtype IncludeSet = 
   IncludeSet {
-    includeSetListOfShapeExprLabel :: [ShapeExprLabel]}
+    unIncludeSet :: [ShapeExprLabel]}
   deriving (Eq, Ord, Read, Show)
 
 _IncludeSet = (Core.Name "hydra/ext/shex/syntax.IncludeSet")
 
-_IncludeSet_listOfShapeExprLabel = (Core.FieldName "listOfShapeExprLabel")
-
-data Code = 
+newtype Code = 
   Code {
-    codeListOfAlts :: [Code_ListOfAlts_Elmt]}
+    unCode :: [Code_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _Code = (Core.Name "hydra/ext/shex/syntax.Code")
 
-_Code_listOfAlts = (Core.FieldName "listOfAlts")
-
-data Code_ListOfAlts_Elmt = 
-  Code_ListOfAlts_ElmtRegex String |
-  Code_ListOfAlts_ElmtSequence Code_ListOfAlts_Elmt_Sequence |
-  Code_ListOfAlts_ElmtUchar Uchar
+data Code_Elmt = 
+  Code_ElmtRegex String |
+  Code_ElmtSequence String |
+  Code_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_Code_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.Code.ListOfAlts.Elmt")
+_Code_Elmt = (Core.Name "hydra/ext/shex/syntax.Code.Elmt")
 
-_Code_ListOfAlts_Elmt_regex = (Core.FieldName "regex")
+_Code_Elmt_regex = (Core.FieldName "regex")
 
-_Code_ListOfAlts_Elmt_sequence = (Core.FieldName "sequence")
+_Code_Elmt_sequence = (Core.FieldName "sequence")
 
-_Code_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
-
-data Code_ListOfAlts_Elmt_Sequence = 
-  Code_ListOfAlts_Elmt_Sequence {
-    code_ListOfAlts_Elmt_SequenceRegex :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_Code_ListOfAlts_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.Code.ListOfAlts.Elmt.Sequence")
-
-_Code_ListOfAlts_Elmt_Sequence_regex = (Core.FieldName "regex")
+_Code_Elmt_uchar = (Core.FieldName "uchar")
 
 data RepeatRange = 
   RepeatRange {
     repeatRangeInteger :: Integer_,
-    repeatRangeSequence :: (Maybe RepeatRange_Sequence_Option)}
+    repeatRangeSequence :: (Maybe (Maybe (Maybe RepeatRange_Sequence_Option_Option_Option)))}
   deriving (Eq, Ord, Read, Show)
 
 _RepeatRange = (Core.Name "hydra/ext/shex/syntax.RepeatRange")
@@ -1229,25 +1053,16 @@ _RepeatRange_integer = (Core.FieldName "integer")
 
 _RepeatRange_sequence = (Core.FieldName "sequence")
 
-data RepeatRange_Sequence_Option = 
-  RepeatRange_Sequence_Option {
-    repeatRange_Sequence_OptionAlts :: (Maybe (Maybe RepeatRange_Sequence_Option_Alts_Option_Option))}
+data RepeatRange_Sequence_Option_Option_Option = 
+  RepeatRange_Sequence_Option_Option_OptionInteger Integer_ |
+  RepeatRange_Sequence_Option_Option_OptionAst 
   deriving (Eq, Ord, Read, Show)
 
-_RepeatRange_Sequence_Option = (Core.Name "hydra/ext/shex/syntax.RepeatRange.Sequence.Option")
+_RepeatRange_Sequence_Option_Option_Option = (Core.Name "hydra/ext/shex/syntax.RepeatRange.Sequence.Option.Option.Option")
 
-_RepeatRange_Sequence_Option_alts = (Core.FieldName "alts")
+_RepeatRange_Sequence_Option_Option_Option_integer = (Core.FieldName "integer")
 
-data RepeatRange_Sequence_Option_Alts_Option_Option = 
-  RepeatRange_Sequence_Option_Alts_Option_OptionInteger Integer_ |
-  RepeatRange_Sequence_Option_Alts_Option_OptionAst 
-  deriving (Eq, Ord, Read, Show)
-
-_RepeatRange_Sequence_Option_Alts_Option_Option = (Core.Name "hydra/ext/shex/syntax.RepeatRange.Sequence.Option.Alts.Option.Option")
-
-_RepeatRange_Sequence_Option_Alts_Option_Option_integer = (Core.FieldName "integer")
-
-_RepeatRange_Sequence_Option_Alts_Option_Option_ast = (Core.FieldName "ast")
+_RepeatRange_Sequence_Option_Option_Option_ast = (Core.FieldName "ast")
 
 data RdfType = 
   RdfType {}
@@ -1255,34 +1070,30 @@ data RdfType =
 
 _RdfType = (Core.Name "hydra/ext/shex/syntax.RdfType")
 
-data IriRef = 
+newtype IriRef = 
   IriRef {
-    iriRefListOfAlts :: [IriRef_ListOfAlts_Elmt]}
+    unIriRef :: [IriRef_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _IriRef = (Core.Name "hydra/ext/shex/syntax.IriRef")
 
-_IriRef_listOfAlts = (Core.FieldName "listOfAlts")
-
-data IriRef_ListOfAlts_Elmt = 
-  IriRef_ListOfAlts_ElmtRegex String |
-  IriRef_ListOfAlts_ElmtUchar Uchar
+data IriRef_Elmt = 
+  IriRef_ElmtRegex String |
+  IriRef_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_IriRef_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.IriRef.ListOfAlts.Elmt")
+_IriRef_Elmt = (Core.Name "hydra/ext/shex/syntax.IriRef.Elmt")
 
-_IriRef_ListOfAlts_Elmt_regex = (Core.FieldName "regex")
+_IriRef_Elmt_regex = (Core.FieldName "regex")
 
-_IriRef_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
+_IriRef_Elmt_uchar = (Core.FieldName "uchar")
 
-data PnameNs = 
+newtype PnameNs = 
   PnameNs {
-    pnameNsPnPrefix :: (Maybe PnPrefix)}
+    unPnameNs :: (Maybe PnPrefix)}
   deriving (Eq, Ord, Read, Show)
 
 _PnameNs = (Core.Name "hydra/ext/shex/syntax.PnameNs")
-
-_PnameNs_pnPrefix = (Core.FieldName "pnPrefix")
 
 data PnameLn = 
   PnameLn {
@@ -1296,14 +1107,12 @@ _PnameLn_pnameNs = (Core.FieldName "pnameNs")
 
 _PnameLn_pnLocal = (Core.FieldName "pnLocal")
 
-data AtpNameNs = 
+newtype AtpNameNs = 
   AtpNameNs {
-    atpNameNsPnPrefix :: (Maybe PnPrefix)}
+    unAtpNameNs :: (Maybe PnPrefix)}
   deriving (Eq, Ord, Read, Show)
 
 _AtpNameNs = (Core.Name "hydra/ext/shex/syntax.AtpNameNs")
-
-_AtpNameNs_pnPrefix = (Core.FieldName "pnPrefix")
 
 data AtpNameLn = 
   AtpNameLn {
@@ -1331,7 +1140,7 @@ _Regexp_listOfRegex = (Core.FieldName "listOfRegex")
 
 data Regexp_ListOfAlts_Elmt = 
   Regexp_ListOfAlts_ElmtRegex String |
-  Regexp_ListOfAlts_ElmtSequence Regexp_ListOfAlts_Elmt_Sequence |
+  Regexp_ListOfAlts_ElmtSequence String |
   Regexp_ListOfAlts_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
@@ -1342,15 +1151,6 @@ _Regexp_ListOfAlts_Elmt_regex = (Core.FieldName "regex")
 _Regexp_ListOfAlts_Elmt_sequence = (Core.FieldName "sequence")
 
 _Regexp_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
-
-data Regexp_ListOfAlts_Elmt_Sequence = 
-  Regexp_ListOfAlts_Elmt_Sequence {
-    regexp_ListOfAlts_Elmt_SequenceRegex :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_Regexp_ListOfAlts_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.Regexp.ListOfAlts.Elmt.Sequence")
-
-_Regexp_ListOfAlts_Elmt_Sequence_regex = (Core.FieldName "regex")
 
 data BlankNodeLabel = 
   BlankNodeLabel {
@@ -1417,155 +1217,147 @@ newtype Double_ =
 
 _Double = (Core.Name "hydra/ext/shex/syntax.Double")
 
-data StringLiteral1 = 
+newtype StringLiteral1 = 
   StringLiteral1 {
-    stringLiteral1ListOfAlts :: [StringLiteral1_ListOfAlts_Elmt]}
+    unStringLiteral1 :: [StringLiteral1_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteral1 = (Core.Name "hydra/ext/shex/syntax.StringLiteral1")
 
-_StringLiteral1_listOfAlts = (Core.FieldName "listOfAlts")
-
-data StringLiteral1_ListOfAlts_Elmt = 
-  StringLiteral1_ListOfAlts_ElmtRegex String |
-  StringLiteral1_ListOfAlts_ElmtEchar Echar |
-  StringLiteral1_ListOfAlts_ElmtUchar Uchar
+data StringLiteral1_Elmt = 
+  StringLiteral1_ElmtRegex String |
+  StringLiteral1_ElmtEchar Echar |
+  StringLiteral1_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteral1_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteral1.ListOfAlts.Elmt")
+_StringLiteral1_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteral1.Elmt")
 
-_StringLiteral1_ListOfAlts_Elmt_regex = (Core.FieldName "regex")
+_StringLiteral1_Elmt_regex = (Core.FieldName "regex")
 
-_StringLiteral1_ListOfAlts_Elmt_echar = (Core.FieldName "echar")
+_StringLiteral1_Elmt_echar = (Core.FieldName "echar")
 
-_StringLiteral1_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
+_StringLiteral1_Elmt_uchar = (Core.FieldName "uchar")
 
-data StringLiteral2 = 
+newtype StringLiteral2 = 
   StringLiteral2 {
-    stringLiteral2ListOfAlts :: [StringLiteral2_ListOfAlts_Elmt]}
+    unStringLiteral2 :: [StringLiteral2_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteral2 = (Core.Name "hydra/ext/shex/syntax.StringLiteral2")
 
-_StringLiteral2_listOfAlts = (Core.FieldName "listOfAlts")
-
-data StringLiteral2_ListOfAlts_Elmt = 
-  StringLiteral2_ListOfAlts_ElmtRegex String |
-  StringLiteral2_ListOfAlts_ElmtEchar Echar |
-  StringLiteral2_ListOfAlts_ElmtUchar Uchar
+data StringLiteral2_Elmt = 
+  StringLiteral2_ElmtRegex String |
+  StringLiteral2_ElmtEchar Echar |
+  StringLiteral2_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteral2_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteral2.ListOfAlts.Elmt")
+_StringLiteral2_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteral2.Elmt")
 
-_StringLiteral2_ListOfAlts_Elmt_regex = (Core.FieldName "regex")
+_StringLiteral2_Elmt_regex = (Core.FieldName "regex")
 
-_StringLiteral2_ListOfAlts_Elmt_echar = (Core.FieldName "echar")
+_StringLiteral2_Elmt_echar = (Core.FieldName "echar")
 
-_StringLiteral2_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
+_StringLiteral2_Elmt_uchar = (Core.FieldName "uchar")
 
-data StringLiteralLong1 = 
+newtype StringLiteralLong1 = 
   StringLiteralLong1 {
-    stringLiteralLong1ListOfAlts :: [StringLiteralLong1_ListOfAlts_Elmt]}
+    unStringLiteralLong1 :: [StringLiteralLong1_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteralLong1 = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1")
 
-_StringLiteralLong1_listOfAlts = (Core.FieldName "listOfAlts")
-
-data StringLiteralLong1_ListOfAlts_Elmt = 
-  StringLiteralLong1_ListOfAlts_ElmtSequence StringLiteralLong1_ListOfAlts_Elmt_Sequence |
-  StringLiteralLong1_ListOfAlts_ElmtEchar Echar |
-  StringLiteralLong1_ListOfAlts_ElmtUchar Uchar
+data StringLiteralLong1_Elmt = 
+  StringLiteralLong1_ElmtSequence StringLiteralLong1_Elmt_Sequence |
+  StringLiteralLong1_ElmtEchar Echar |
+  StringLiteralLong1_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.ListOfAlts.Elmt")
+_StringLiteralLong1_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.Elmt")
 
-_StringLiteralLong1_ListOfAlts_Elmt_sequence = (Core.FieldName "sequence")
+_StringLiteralLong1_Elmt_sequence = (Core.FieldName "sequence")
 
-_StringLiteralLong1_ListOfAlts_Elmt_echar = (Core.FieldName "echar")
+_StringLiteralLong1_Elmt_echar = (Core.FieldName "echar")
 
-_StringLiteralLong1_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
+_StringLiteralLong1_Elmt_uchar = (Core.FieldName "uchar")
 
-data StringLiteralLong1_ListOfAlts_Elmt_Sequence = 
-  StringLiteralLong1_ListOfAlts_Elmt_Sequence {
-    stringLiteralLong1_ListOfAlts_Elmt_SequenceAlts :: (Maybe StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option),
-    stringLiteralLong1_ListOfAlts_Elmt_SequenceRegex :: String}
+data StringLiteralLong1_Elmt_Sequence = 
+  StringLiteralLong1_Elmt_Sequence {
+    stringLiteralLong1_Elmt_SequenceAlts :: (Maybe StringLiteralLong1_Elmt_Sequence_Alts_Option),
+    stringLiteralLong1_Elmt_SequenceRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.ListOfAlts.Elmt.Sequence")
+_StringLiteralLong1_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.Elmt.Sequence")
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_alts = (Core.FieldName "alts")
+_StringLiteralLong1_Elmt_Sequence_alts = (Core.FieldName "alts")
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_regex = (Core.FieldName "regex")
+_StringLiteralLong1_Elmt_Sequence_regex = (Core.FieldName "regex")
 
-data StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option = 
-  StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_OptionApos  |
-  StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_OptionSequence StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence
+data StringLiteralLong1_Elmt_Sequence_Alts_Option = 
+  StringLiteralLong1_Elmt_Sequence_Alts_OptionApos  |
+  StringLiteralLong1_Elmt_Sequence_Alts_OptionSequence StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.ListOfAlts.Elmt.Sequence.Alts.Option")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.Elmt.Sequence.Alts.Option")
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_apos = (Core.FieldName "apos")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option_apos = (Core.FieldName "apos")
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_sequence = (Core.FieldName "sequence")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option_sequence = (Core.FieldName "sequence")
 
-data StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence = 
-  StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence {}
+data StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence = 
+  StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong1_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.ListOfAlts.Elmt.Sequence.Alts.Option.Sequence")
+_StringLiteralLong1_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong1.Elmt.Sequence.Alts.Option.Sequence")
 
-data StringLiteralLong2 = 
+newtype StringLiteralLong2 = 
   StringLiteralLong2 {
-    stringLiteralLong2ListOfAlts :: [StringLiteralLong2_ListOfAlts_Elmt]}
+    unStringLiteralLong2 :: [StringLiteralLong2_Elmt]}
   deriving (Eq, Ord, Read, Show)
 
 _StringLiteralLong2 = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2")
 
-_StringLiteralLong2_listOfAlts = (Core.FieldName "listOfAlts")
-
-data StringLiteralLong2_ListOfAlts_Elmt = 
-  StringLiteralLong2_ListOfAlts_ElmtSequence StringLiteralLong2_ListOfAlts_Elmt_Sequence |
-  StringLiteralLong2_ListOfAlts_ElmtEchar Echar |
-  StringLiteralLong2_ListOfAlts_ElmtUchar Uchar
+data StringLiteralLong2_Elmt = 
+  StringLiteralLong2_ElmtSequence StringLiteralLong2_Elmt_Sequence |
+  StringLiteralLong2_ElmtEchar Echar |
+  StringLiteralLong2_ElmtUchar Uchar
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_ListOfAlts_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.ListOfAlts.Elmt")
+_StringLiteralLong2_Elmt = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.Elmt")
 
-_StringLiteralLong2_ListOfAlts_Elmt_sequence = (Core.FieldName "sequence")
+_StringLiteralLong2_Elmt_sequence = (Core.FieldName "sequence")
 
-_StringLiteralLong2_ListOfAlts_Elmt_echar = (Core.FieldName "echar")
+_StringLiteralLong2_Elmt_echar = (Core.FieldName "echar")
 
-_StringLiteralLong2_ListOfAlts_Elmt_uchar = (Core.FieldName "uchar")
+_StringLiteralLong2_Elmt_uchar = (Core.FieldName "uchar")
 
-data StringLiteralLong2_ListOfAlts_Elmt_Sequence = 
-  StringLiteralLong2_ListOfAlts_Elmt_Sequence {
-    stringLiteralLong2_ListOfAlts_Elmt_SequenceAlts :: (Maybe StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option),
-    stringLiteralLong2_ListOfAlts_Elmt_SequenceRegex :: String}
+data StringLiteralLong2_Elmt_Sequence = 
+  StringLiteralLong2_Elmt_Sequence {
+    stringLiteralLong2_Elmt_SequenceAlts :: (Maybe StringLiteralLong2_Elmt_Sequence_Alts_Option),
+    stringLiteralLong2_Elmt_SequenceRegex :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.ListOfAlts.Elmt.Sequence")
+_StringLiteralLong2_Elmt_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.Elmt.Sequence")
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_alts = (Core.FieldName "alts")
+_StringLiteralLong2_Elmt_Sequence_alts = (Core.FieldName "alts")
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_regex = (Core.FieldName "regex")
+_StringLiteralLong2_Elmt_Sequence_regex = (Core.FieldName "regex")
 
-data StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option = 
-  StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_OptionQuot  |
-  StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_OptionSequence StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence
+data StringLiteralLong2_Elmt_Sequence_Alts_Option = 
+  StringLiteralLong2_Elmt_Sequence_Alts_OptionQuot  |
+  StringLiteralLong2_Elmt_Sequence_Alts_OptionSequence StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.ListOfAlts.Elmt.Sequence.Alts.Option")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.Elmt.Sequence.Alts.Option")
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_quot = (Core.FieldName "quot")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option_quot = (Core.FieldName "quot")
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_sequence = (Core.FieldName "sequence")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option_sequence = (Core.FieldName "sequence")
 
-data StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence = 
-  StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence {}
+data StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence = 
+  StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence {}
   deriving (Eq, Ord, Read, Show)
 
-_StringLiteralLong2_ListOfAlts_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.ListOfAlts.Elmt.Sequence.Alts.Option.Sequence")
+_StringLiteralLong2_Elmt_Sequence_Alts_Option_Sequence = (Core.Name "hydra/ext/shex/syntax.StringLiteralLong2.Elmt.Sequence.Alts.Option.Sequence")
 
 data Uchar = 
   UcharSequence Uchar_Sequence |
@@ -1626,14 +1418,12 @@ _Uchar_Sequence2_hex7 = (Core.FieldName "hex7")
 
 _Uchar_Sequence2_hex8 = (Core.FieldName "hex8")
 
-data Echar = 
+newtype Echar = 
   Echar {
-    echarRegex :: String}
+    unEchar :: String}
   deriving (Eq, Ord, Read, Show)
 
 _Echar = (Core.Name "hydra/ext/shex/syntax.Echar")
-
-_Echar_regex = (Core.FieldName "regex")
 
 data PnCharsBase = 
   PnCharsBaseRegex String |
@@ -1808,11 +1598,9 @@ newtype Hex =
 
 _Hex = (Core.Name "hydra/ext/shex/syntax.Hex")
 
-data PnLocalEsc = 
+newtype PnLocalEsc = 
   PnLocalEsc {
-    pnLocalEscRegex :: String}
+    unPnLocalEsc :: String}
   deriving (Eq, Ord, Read, Show)
 
 _PnLocalEsc = (Core.Name "hydra/ext/shex/syntax.PnLocalEsc")
-
-_PnLocalEsc_regex = (Core.FieldName "regex")

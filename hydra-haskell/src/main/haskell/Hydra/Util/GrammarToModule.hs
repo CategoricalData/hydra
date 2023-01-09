@@ -47,9 +47,24 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
 
     isComplex pat = case pat of
       PatternLabeled (LabeledPattern _ p) -> isComplex p
-      PatternSequence _ -> True
-      PatternAlternatives _ -> True
+      PatternSequence pats -> isNontrivial True pats
+      PatternAlternatives pats -> isNontrivial False pats
       _ -> False
+
+    isNontrivial isRecord pats = if L.length minPats == 1
+        then case L.head minPats of
+          PatternLabeled _ -> True
+          _ -> False
+        else True
+      where
+        minPats = simplify isRecord pats
+
+    -- Remove trivial patterns from records
+    simplify isRecord pats = if isRecord then L.filter (not . isConstant) pats else pats
+      where
+        isConstant p = case p of
+          PatternConstant _ -> True
+          _ -> False
 
     makeElements omitTrivial lname pat = forPat pat
       where
@@ -68,22 +83,19 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
 
         trivial = if omitTrivial then [] else [(lname, Types.unit)]
 
-        forRecordOrUnion isRecord c pats = (lname, c fields):els
-            where
-              fieldPairs = Y.catMaybes $ L.zipWith (toField isRecord) (findNames pats) pats
-              fields = fst <$> fieldPairs
-              els = L.concat (snd <$> fieldPairs)
+        forRecordOrUnion isRecord construct pats = if isNontrivial isRecord pats
+            then (lname, construct fields):els
+            -- Eliminate single-field record and union types, unless the field has a user-defined name
+            else forPat $ L.head minPats
+          where
+            fieldPairs = L.zipWith toField (findNames minPats) minPats
+            fields = fst <$> fieldPairs
+            els = L.concat (snd <$> fieldPairs)
+            minPats = simplify isRecord pats
 
-        toField isRecord n p = if ignore
-           then Nothing
-           else Just $ descend n f2 p
-         where
+        toField n p = descend n f2 p
+          where
             f2 ((lname, typ):rest) = (FieldType (FieldName n) typ, rest)
-            ignore = if isRecord
-              then case p of
-                PatternConstant _ -> True
-                _ -> False
-              else False
 
         mod n f p = descend n f2 p
           where
