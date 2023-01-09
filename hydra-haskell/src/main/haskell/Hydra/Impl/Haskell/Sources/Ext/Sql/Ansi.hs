@@ -403,4 +403,4 @@ temporary_ = terminal "TEMPORARY"
 varchar_ = terminal "VARCHAR"
 
 parens ps = list $ [left_paren_] ++ ps ++ [right_paren_]
-unsupported = []
+unsupported = [terminal "unsupported"]

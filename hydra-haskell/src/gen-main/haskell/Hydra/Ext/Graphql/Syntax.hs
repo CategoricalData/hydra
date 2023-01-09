@@ -118,14 +118,12 @@ _OperationType_mutation = (Core.FieldName "mutation")
 
 _OperationType_subscription = (Core.FieldName "subscription")
 
-data SelectionSet = 
+newtype SelectionSet = 
   SelectionSet {
-    selectionSetListOfSelection :: [Selection]}
+    unSelectionSet :: [Selection]}
   deriving (Eq, Ord, Read, Show)
 
 _SelectionSet = (Core.Name "hydra/ext/graphql/syntax.SelectionSet")
-
-_SelectionSet_listOfSelection = (Core.FieldName "listOfSelection")
 
 data Selection = 
   SelectionField Field |
@@ -173,14 +171,12 @@ _Alias_name = (Core.FieldName "name")
 
 _Alias_colon = (Core.FieldName "colon")
 
-data Arguments = 
+newtype Arguments = 
   Arguments {
-    argumentsListOfArgument :: [Argument]}
+    unArguments :: [Argument]}
   deriving (Eq, Ord, Read, Show)
 
 _Arguments = (Core.Name "hydra/ext/graphql/syntax.Arguments")
-
-_Arguments_listOfArgument = (Core.FieldName "listOfArgument")
 
 data Argument = 
   Argument {
@@ -306,18 +302,16 @@ data NullValue =
 
 _NullValue = (Core.Name "hydra/ext/graphql/syntax.NullValue")
 
-data EnumValue = 
+newtype EnumValue = 
   EnumValue {
-    enumValueName :: Name}
+    unEnumValue :: Name}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValue = (Core.Name "hydra/ext/graphql/syntax.EnumValue")
 
-_EnumValue_name = (Core.FieldName "name")
-
 data ListValue = 
   ListValueSequence ListValue_Sequence |
-  ListValueSequence2 ListValue_Sequence2
+  ListValueSequence2 [Value]
   deriving (Eq, Ord, Read, Show)
 
 _ListValue = (Core.Name "hydra/ext/graphql/syntax.ListValue")
@@ -332,18 +326,9 @@ data ListValue_Sequence =
 
 _ListValue_Sequence = (Core.Name "hydra/ext/graphql/syntax.ListValue.Sequence")
 
-data ListValue_Sequence2 = 
-  ListValue_Sequence2 {
-    listValue_Sequence2ListOfValue :: [Value]}
-  deriving (Eq, Ord, Read, Show)
-
-_ListValue_Sequence2 = (Core.Name "hydra/ext/graphql/syntax.ListValue.Sequence2")
-
-_ListValue_Sequence2_listOfValue = (Core.FieldName "listOfValue")
-
 data ObjectValue = 
   ObjectValueSequence ObjectValue_Sequence |
-  ObjectValueSequence2 ObjectValue_Sequence2
+  ObjectValueSequence2 [ObjectField]
   deriving (Eq, Ord, Read, Show)
 
 _ObjectValue = (Core.Name "hydra/ext/graphql/syntax.ObjectValue")
@@ -357,15 +342,6 @@ data ObjectValue_Sequence =
   deriving (Eq, Ord, Read, Show)
 
 _ObjectValue_Sequence = (Core.Name "hydra/ext/graphql/syntax.ObjectValue.Sequence")
-
-data ObjectValue_Sequence2 = 
-  ObjectValue_Sequence2 {
-    objectValue_Sequence2ListOfObjectField :: [ObjectField]}
-  deriving (Eq, Ord, Read, Show)
-
-_ObjectValue_Sequence2 = (Core.Name "hydra/ext/graphql/syntax.ObjectValue.Sequence2")
-
-_ObjectValue_Sequence2_listOfObjectField = (Core.FieldName "listOfObjectField")
 
 data ObjectField = 
   ObjectField {
@@ -404,14 +380,12 @@ newtype Variable =
 
 _Variable = (Core.Name "hydra/ext/graphql/syntax.Variable")
 
-data DefaultValue = 
+newtype DefaultValue = 
   DefaultValue {
-    defaultValueValue :: Value}
+    unDefaultValue :: Value}
   deriving (Eq, Ord, Read, Show)
 
 _DefaultValue = (Core.Name "hydra/ext/graphql/syntax.DefaultValue")
-
-_DefaultValue_value = (Core.FieldName "value")
 
 data Type = 
   TypeNamed NamedType |
@@ -434,18 +408,16 @@ newtype NamedType =
 
 _NamedType = (Core.Name "hydra/ext/graphql/syntax.NamedType")
 
-data ListType = 
+newtype ListType = 
   ListType {
-    listTypeType :: Type}
+    unListType :: Type}
   deriving (Eq, Ord, Read, Show)
 
 _ListType = (Core.Name "hydra/ext/graphql/syntax.ListType")
 
-_ListType_type = (Core.FieldName "type")
-
 data NonNullType = 
-  NonNullTypeNamed NonNullType_Named |
-  NonNullTypeList NonNullType_List
+  NonNullTypeNamed NamedType |
+  NonNullTypeList ListType
   deriving (Eq, Ord, Read, Show)
 
 _NonNullType = (Core.Name "hydra/ext/graphql/syntax.NonNullType")
@@ -453,24 +425,6 @@ _NonNullType = (Core.Name "hydra/ext/graphql/syntax.NonNullType")
 _NonNullType_named = (Core.FieldName "named")
 
 _NonNullType_list = (Core.FieldName "list")
-
-data NonNullType_Named = 
-  NonNullType_Named {
-    nonNullType_NamedNamedType :: NamedType}
-  deriving (Eq, Ord, Read, Show)
-
-_NonNullType_Named = (Core.Name "hydra/ext/graphql/syntax.NonNullType.Named")
-
-_NonNullType_Named_namedType = (Core.FieldName "namedType")
-
-data NonNullType_List = 
-  NonNullType_List {
-    nonNullType_ListListType :: ListType}
-  deriving (Eq, Ord, Read, Show)
-
-_NonNullType_List = (Core.Name "hydra/ext/graphql/syntax.NonNullType.List")
-
-_NonNullType_List_listType = (Core.FieldName "listType")
 
 newtype Directives = 
   Directives {
@@ -558,7 +512,7 @@ _SchemaDefinition_rootOperationTypeDefinition = (Core.FieldName "rootOperationTy
 
 data SchemaExtension = 
   SchemaExtensionSequence SchemaExtension_Sequence |
-  SchemaExtensionSequence2 SchemaExtension_Sequence2
+  SchemaExtensionSequence2 Directives
   deriving (Eq, Ord, Read, Show)
 
 _SchemaExtension = (Core.Name "hydra/ext/graphql/syntax.SchemaExtension")
@@ -578,15 +532,6 @@ _SchemaExtension_Sequence = (Core.Name "hydra/ext/graphql/syntax.SchemaExtension
 _SchemaExtension_Sequence_directives = (Core.FieldName "directives")
 
 _SchemaExtension_Sequence_rootOperationTypeDefinition = (Core.FieldName "rootOperationTypeDefinition")
-
-data SchemaExtension_Sequence2 = 
-  SchemaExtension_Sequence2 {
-    schemaExtension_Sequence2Directives :: Directives}
-  deriving (Eq, Ord, Read, Show)
-
-_SchemaExtension_Sequence2 = (Core.Name "hydra/ext/graphql/syntax.SchemaExtension.Sequence2")
-
-_SchemaExtension_Sequence2_directives = (Core.FieldName "directives")
 
 data RootOperationTypeDefinition = 
   RootOperationTypeDefinition {
@@ -824,14 +769,12 @@ _ImplementsInterfaces_Sequence2_amp = (Core.FieldName "amp")
 
 _ImplementsInterfaces_Sequence2_namedType = (Core.FieldName "namedType")
 
-data FieldsDefinition = 
+newtype FieldsDefinition = 
   FieldsDefinition {
-    fieldsDefinitionListOfFieldDefinition :: [FieldDefinition]}
+    unFieldsDefinition :: [FieldDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _FieldsDefinition = (Core.Name "hydra/ext/graphql/syntax.FieldsDefinition")
-
-_FieldsDefinition_listOfFieldDefinition = (Core.FieldName "listOfFieldDefinition")
 
 data FieldDefinition = 
   FieldDefinition {
@@ -854,14 +797,12 @@ _FieldDefinition_type = (Core.FieldName "type")
 
 _FieldDefinition_directives = (Core.FieldName "directives")
 
-data ArgumentsDefinition = 
+newtype ArgumentsDefinition = 
   ArgumentsDefinition {
-    argumentsDefinitionListOfInputValueDefinition :: [InputValueDefinition]}
+    unArgumentsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _ArgumentsDefinition = (Core.Name "hydra/ext/graphql/syntax.ArgumentsDefinition")
-
-_ArgumentsDefinition_listOfInputValueDefinition = (Core.FieldName "listOfInputValueDefinition")
 
 data InputValueDefinition = 
   InputValueDefinition {
@@ -1125,14 +1066,12 @@ _EnumTypeDefinition_Sequence2_description = (Core.FieldName "description")
 
 _EnumTypeDefinition_Sequence2_directives = (Core.FieldName "directives")
 
-data EnumValuesDefinition = 
+newtype EnumValuesDefinition = 
   EnumValuesDefinition {
-    enumValuesDefinitionListOfEnumValueDefinition :: [EnumValueDefinition]}
+    unEnumValuesDefinition :: [EnumValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _EnumValuesDefinition = (Core.Name "hydra/ext/graphql/syntax.EnumValuesDefinition")
-
-_EnumValuesDefinition_listOfEnumValueDefinition = (Core.FieldName "listOfEnumValueDefinition")
 
 data EnumValueDefinition = 
   EnumValueDefinition {
@@ -1231,14 +1170,12 @@ _InputObjectTypeDefinition_Sequence2_name = (Core.FieldName "name")
 
 _InputObjectTypeDefinition_Sequence2_directives = (Core.FieldName "directives")
 
-data InputFieldsDefinition = 
+newtype InputFieldsDefinition = 
   InputFieldsDefinition {
-    inputFieldsDefinitionListOfInputValueDefinition :: [InputValueDefinition]}
+    unInputFieldsDefinition :: [InputValueDefinition]}
   deriving (Eq, Ord, Read, Show)
 
 _InputFieldsDefinition = (Core.Name "hydra/ext/graphql/syntax.InputFieldsDefinition")
-
-_InputFieldsDefinition_listOfInputValueDefinition = (Core.FieldName "listOfInputValueDefinition")
 
 data InputObjectTypeExtension = 
   InputObjectTypeExtensionSequence InputObjectTypeExtension_Sequence |
