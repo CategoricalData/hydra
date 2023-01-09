@@ -34,6 +34,7 @@ import Hydra.Impl.Haskell.Sources.Ext.Parquet.Format
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
 import Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
+import Hydra.Impl.Haskell.Sources.Ext.Sql.Ansi
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Typed
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.V3
@@ -105,6 +106,7 @@ extModules = [
   scalaMetaModule,
   shaclModelModule,
   shexSyntaxModule,
+  sqlModule,
   tinkerpopFeaturesModule,
   tinkerpopTypedModule,
   tinkerpopV3Module,
