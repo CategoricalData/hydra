@@ -63,9 +63,6 @@ hydraCoreModule = Module ns elements [] $
           "list">:
             doc "Eliminates a list using a fold function; this function has the signature b -> [a] -> b" $
             core "Term" @@ "m",
-          "nominal">:
-            doc "Eliminates a nominal term by extracting the wrapped term" $
-            core "Name",
           "optional">:
             doc "Eliminates an optional term by matching over the two possible cases" $
             core "OptionalCases" @@ "m",
@@ -74,8 +71,11 @@ hydraCoreModule = Module ns elements [] $
             core "Projection",
           "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
-            core "CaseStatement" @@ "m"],
-
+            core "CaseStatement" @@ "m",
+          "wrapped">:
+            doc "Unwrap a wrapped term" $
+            core "Name"],
+            
       def "Field" $
         doc "A labeled term" $
         lambda "m" $ record [
@@ -226,12 +226,6 @@ hydraCoreModule = Module ns elements [] $
         doc "A unique element name"
         string,
 
-      def "Named" $
-        doc "A term annotated with a fixed, named type; an instance of a newtype" $
-        lambda "m" $ record [
-          "typeName">: core "Name",
-          "term">: core "Term" @@ "m"],
-
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
         lambda "m" $ record [
@@ -308,8 +302,6 @@ hydraCoreModule = Module ns elements [] $
           "map">:
             doc "A map of keys to values" $
             Types.map (core "Term" @@ "m") (core "Term" @@ "m"),
-          "nominal">:
-            core "Named" @@ "m",
           "optional">:
             doc "An optional value" $
             optional $ core "Term" @@ "m",
@@ -333,7 +325,9 @@ hydraCoreModule = Module ns elements [] $
             core "Union" @@ "m",
           "variable">:
             doc "A variable reference" $
-            core "Variable"],
+            core "Variable",
+          "wrapped">:
+            core "Wrapper" @@ "m"],
 
       def "Type" $
         doc "A data type" $
@@ -348,7 +342,6 @@ hydraCoreModule = Module ns elements [] $
           "list">: core "Type" @@ "m",
           "literal">: core "LiteralType",
           "map">: core "MapType" @@ "m",
-          "nominal">: core "Name",
           "optional">: core "Type" @@ "m",
           "product">: list (core "Type" @@ "m"),
           "record">: core "RowType" @@ "m",
@@ -356,7 +349,8 @@ hydraCoreModule = Module ns elements [] $
           "stream">: core "Type" @@ "m",
           "sum">: list (core "Type" @@ "m"),
           "union">: core "RowType" @@ "m",
-          "variable">: core "VariableType"],
+          "variable">: core "VariableType",
+          "wrapped">: core "Name"],
 
       def "Variable" $
         doc "A symbol which stands in for a term"
@@ -374,4 +368,10 @@ hydraCoreModule = Module ns elements [] $
 
       def "UnitType" $
         doc "An empty record type as a canonical unit type" $
-        record []]
+        record [],
+
+      def "Wrapper" $
+        doc "A term wrapped in a type name; an instance of a newtype" $
+        lambda "m" $ record [
+          "typeName">: core "Name",
+          "term">: core "Term" @@ "m"]]

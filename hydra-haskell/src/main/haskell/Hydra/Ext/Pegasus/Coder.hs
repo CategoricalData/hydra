@@ -105,7 +105,7 @@ encodeType aliases typ = case typ of
         _ -> unexpected "int32 or int64" it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
-    TypeNominal name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
+    TypeWrapped name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
     TypeOptional ot -> fail $ "optionals unexpected at top level"
     TypeRecord rt -> do
       let includes = []

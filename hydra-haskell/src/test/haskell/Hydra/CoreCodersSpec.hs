@@ -112,7 +112,7 @@ metadataIsPreserved = do
     annotatedStringType :: Type Meta
     annotatedStringType = TypeAnnotated $ Annotated Types.string $ Meta $ M.fromList [
       (metaDescription, Terms.string "The string literal type"),
-      (metaType, encodeType $ Types.nominal _Type)]
+      (metaType, encodeType $ Types.wrap _Type)]
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do

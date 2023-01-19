@@ -68,7 +68,7 @@ setOfStringsType :: Type m
 setOfStringsType = Types.set Types.string
 
 stringAliasType :: Type m
-stringAliasType = Types.nominal $ Name "StringTypeAlias"
+stringAliasType = Types.wrap $ Name "StringTypeAlias"
 
 stringOrIntName :: Name
 stringOrIntName = Name "StringOrInt"

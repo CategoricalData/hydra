@@ -369,7 +369,7 @@ encodeElimination aliases marg dom cod elm = case elm of
       where
         var = Variable "v"
     Just jarg -> pure jarg
-  EliminationNominal name -> case marg of
+  EliminationWrapped name -> case marg of
     Nothing -> pure $ javaLambda var jbody
       where
         var = Variable "v"
@@ -395,7 +395,7 @@ encodeElimination aliases marg dom cod elm = case elm of
       Nothing -> do
         cx <- getState
         let anns = contextAnnotations cx
-        let lhs = annotationClassSetTermType anns cx (Just $ Types.function (Types.nominal tname) cod) $ Terms.elimination elm
+        let lhs = annotationClassSetTermType anns cx (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
         encodeTerm aliases Nothing $ Terms.lambda "v" $ Terms.apply lhs (Terms.variable "v")
       Just jarg -> applyElimination jarg
     where
@@ -555,7 +555,7 @@ encodeTerm aliases mtype term = case term of
 
   --  TermMap (Map (Term m) (Term m))
 
-    TermNominal (Named name arg) -> do
+    TermWrapped (Wrapper name arg) -> do
       jarg <- encode arg
       return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
 
@@ -625,7 +625,7 @@ encodeType aliases t = case stripType t of
     jkt <- encode kt >>= javaTypeToJavaReferenceType
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeNominal name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeWrapped name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeRecord (RowType _UnitType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
   TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeOptional ot -> do
@@ -691,7 +691,7 @@ toDataDeclaration aliases (el, TypedTerm typ term) = do
 
 typeNameDecl :: (Ord m, Read m, Show m) => Aliases -> Name -> GraphFlow m Java.ClassBodyDeclarationWithComments
 typeNameDecl aliases name = do
-  jt <- encodeType aliases $ Types.nominal _Name
+  jt <- encodeType aliases $ Types.wrap _Name
   arg <- encodeTerm aliases Nothing $ Terms.string $ unName name
   let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
   let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)

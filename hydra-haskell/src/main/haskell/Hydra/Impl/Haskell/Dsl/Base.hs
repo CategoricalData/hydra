@@ -71,7 +71,7 @@ constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.lambda "_" term
 
 denom :: Name -> Datum (a -> b)
-denom = Datum . Terms.eliminateNominal
+denom = Datum . Terms.unwrap
 
 delta :: Datum (Reference a -> a)
 delta = Datum Terms.delta
@@ -114,7 +114,7 @@ matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
 matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
 match :: Name -> Type Meta -> [Field Meta] -> Datum (u -> b)
-match name cod fields = function (Types.nominal name) cod $ Datum $ Terms.cases name fields
+match name cod fields = function (Types.wrap name) cod $ Datum $ Terms.cases name fields
 
 matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Datum (a -> b)
 matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
@@ -128,7 +128,7 @@ matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
 
 -- Note: the phantom types provide no guarantee of type safety in this case
 nom :: Name -> Datum a -> Datum b
-nom name (Datum term) = Datum $ Terms.nominal name term
+nom name (Datum term) = Datum $ Terms.wrap name term
 
 opt :: Maybe (Datum a) -> Datum (Maybe a)
 opt mc = Datum $ Terms.optional (unDatum <$> mc)
@@ -155,16 +155,16 @@ union :: Name -> FieldName -> Datum a -> Datum b
 union name fname (Datum term) = Datum $ Terms.union name (Field fname term)
 
 union2 :: Name -> FieldName -> Datum (a -> b)
-union2 name fname = lambda "x2" $ typed (Types.nominal name) $ union name fname $ var "x2"
+union2 name fname = lambda "x2" $ typed (Types.wrap name) $ union name fname $ var "x2"
 
 unit :: Datum a
 unit = Datum Terms.unit
 
 unitVariant :: Name -> FieldName -> Datum a
-unitVariant name fname = typed (Types.nominal name) $ Datum $ Terms.union name $ Field fname Terms.unit
+unitVariant name fname = typed (Types.wrap name) $ Datum $ Terms.union name $ Field fname Terms.unit
 
 var :: String -> Datum a
 var v = Datum $ Terms.variable v
 
 variant :: Name -> FieldName -> Datum a -> Datum b
-variant name fname (Datum term) = typed (Types.nominal name) $ Datum $ Terms.union name $ Field fname term
+variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.union name $ Field fname term

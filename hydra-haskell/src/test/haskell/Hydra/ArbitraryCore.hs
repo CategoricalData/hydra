@@ -253,7 +253,7 @@ shrinkers typ = trivialShrinker ++ case typ of
           where
             shrinkPair m (km, vm) = (\vm' -> (km, vm')) <$> m vm
         dropPairs = [(Types.map kt vt, \(TermMap m) -> TermMap . M.fromList <$> dropAny (M.toList m))]
-  --  TypeNominal name ->
+  --  TypeWrapped name ->
     TypeOptional ot -> toNothing : promoteType : shrinkType
       where
         toNothing = (Types.optional ot, \(TermOptional m) -> optional <$> Y.maybe [] (const [Nothing]) m)

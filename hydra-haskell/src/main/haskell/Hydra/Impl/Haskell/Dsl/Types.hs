@@ -99,9 +99,6 @@ literal = TypeLiteral
 map :: Type m -> Type m -> Type m
 map kt vt = TypeMap $ MapType kt vt
 
-nominal :: Name -> Type m
-nominal = TypeNominal
-
 optional :: Type m -> Type m
 optional = TypeOptional
 
@@ -140,3 +137,6 @@ unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
 variable :: String -> Type m
 variable = TypeVariable . VariableType
+
+wrap :: Name -> Type m
+wrap = TypeWrapped

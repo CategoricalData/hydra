@@ -24,7 +24,7 @@ showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
     encoded = encodeTerm $ rewriteTermMeta (const $ Meta M.empty) term
 
 termJsonCoder :: Coder (Context Meta) (Context Meta) (Term Meta) Json.Value
-termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.nominal _Term
+termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Term
 
 termStringCoder :: Coder (Context Meta) (Context Meta) (Term Meta) String
 termStringCoder = Coder mout min
@@ -40,7 +40,7 @@ showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
     encoded = encodeType $ rewriteTypeMeta (const $ Meta M.empty) typ
 
 typeJsonCoder :: Coder (Context Meta) (Context Meta) (Term Meta) Json.Value
-typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.nominal _Type
+typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Type
 
 typeStringCoder :: Coder (Context Meta) (Context Meta) (Term Meta) String
 typeStringCoder = Coder mout min

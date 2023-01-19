@@ -42,7 +42,7 @@ _Element_data = (Core.FieldName "data")
 data EliminationVariant = 
   EliminationVariantElement  |
   EliminationVariantList  |
-  EliminationVariantNominal  |
+  EliminationVariantWrapped  |
   EliminationVariantOptional  |
   EliminationVariantRecord  |
   EliminationVariantUnion 
@@ -54,7 +54,7 @@ _EliminationVariant_element = (Core.FieldName "element")
 
 _EliminationVariant_list = (Core.FieldName "list")
 
-_EliminationVariant_nominal = (Core.FieldName "nominal")
+_EliminationVariant_wrapped = (Core.FieldName "wrapped")
 
 _EliminationVariant_optional = (Core.FieldName "optional")
 
@@ -138,7 +138,7 @@ data TermVariant =
   TermVariantList  |
   TermVariantLiteral  |
   TermVariantMap  |
-  TermVariantNominal  |
+  TermVariantWrapped  |
   TermVariantOptional  |
   TermVariantProduct  |
   TermVariantRecord  |
@@ -167,7 +167,7 @@ _TermVariant_literal = (Core.FieldName "literal")
 
 _TermVariant_map = (Core.FieldName "map")
 
-_TermVariant_nominal = (Core.FieldName "nominal")
+_TermVariant_wrapped = (Core.FieldName "wrapped")
 
 _TermVariant_optional = (Core.FieldName "optional")
 
@@ -208,7 +208,7 @@ data TypeVariant =
   TypeVariantList  |
   TypeVariantLiteral  |
   TypeVariantMap  |
-  TypeVariantNominal  |
+  TypeVariantWrapped  |
   TypeVariantOptional  |
   TypeVariantProduct  |
   TypeVariantRecord  |
@@ -237,7 +237,7 @@ _TypeVariant_literal = (Core.FieldName "literal")
 
 _TypeVariant_map = (Core.FieldName "map")
 
-_TypeVariant_nominal = (Core.FieldName "nominal")
+_TypeVariant_wrapped = (Core.FieldName "wrapped")
 
 _TypeVariant_optional = (Core.FieldName "optional")
 

@@ -44,7 +44,7 @@ checkApplicationTerms = do
         testTypePerson
 --      expectMonotype
 --        (apply termExpr describeType)
---        (Types.function (Types.nominal _Type) Types.string)
+--        (Types.function (Types.wrap _Type) Types.string)
 
     H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
       expectMonotype
@@ -140,7 +140,7 @@ checkIndividualTerms = do
         (Types.element testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
       expectMonotype
         (element $ Name "firstName")
-        (Types.element (Types.function (Types.nominal $ Name "Person") Types.string))
+        (Types.element (Types.function (Types.wrap $ Name "Person") Types.string))
 
     H.it "Check optionals" $ do
       expectMonotype
@@ -188,7 +188,7 @@ checkIndividualTerms = do
 --    H.it "Check nominal (newtype) terms" $ do
 --      expectMonotype
 --        testDataArthur
---        (Types.nominal "Person")
+--        (Types.wrap "Person")
 --      expectMonotype
 --        (lambda "x" (record [
 --          Field "firstName" $ variable "x",
@@ -234,24 +234,24 @@ checkLiterals = do
         (TermLiteral l)
         (Types.literal $ literalType l)
 
-checkNominalTerms :: H.SpecWith ()
-checkNominalTerms = do
+checkWrappedTerms :: H.SpecWith ()
+checkWrappedTerms = do
   H.describe "Check nominal introductions and eliminations" $ do
 
     H.it "Check nominal introductions" $ do
       expectMonotype
-        (nominal (Name "StringTypeAlias") $ string "foo")
+        (wrap (Name "StringTypeAlias") $ string "foo")
         stringAliasType
       expectMonotype
-        (lambda "v" $ nominal (Name "StringTypeAlias") $ variable "v")
+        (lambda "v" $ wrap (Name "StringTypeAlias") $ variable "v")
         (Types.function Types.string stringAliasType)
 
     H.it "Check nominal eliminations" $ do
       expectMonotype
-        (eliminateNominal $ Name "StringTypeAlias")
+        (unwrap $ Name "StringTypeAlias")
         (Types.function stringAliasType (Standard.doc "An alias for the string type" Types.string))
       expectMonotype
-        (apply (eliminateNominal $ Name "StringTypeAlias") (nominal (Name "StringTypeAlias") $ string "foo"))
+        (apply (unwrap $ Name "StringTypeAlias") (wrap (Name "StringTypeAlias") $ string "foo"))
         Types.string
 
 checkPrimitiveFunctions :: H.SpecWith ()
@@ -345,7 +345,7 @@ spec = do
   checkIndividualTerms
   checkLists
   checkLiterals
-  checkNominalTerms
+  checkWrappedTerms
   checkPrimitiveFunctions
   checkProducts
   checkSums

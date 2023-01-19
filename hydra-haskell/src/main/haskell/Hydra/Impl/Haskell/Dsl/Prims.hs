@@ -32,7 +32,7 @@ boolean = TermCoder Types.boolean $ Coder encode decode
     decode = pure . Terms.boolean
 
 flow :: TermCoder m s -> TermCoder m a -> TermCoder m (Flow s a)
-flow states values = TermCoder (Types.nominal _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
+flow states values = TermCoder (Types.wrap _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
     Coder encode decode
   where
     encode _ = fail $ "cannot currently encode flows from terms"
