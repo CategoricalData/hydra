@@ -581,7 +581,7 @@ encodeTerm aliases mtype term = case term of
       return $ javaMethodInvocationToJavaExpression $
         methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
-    TermUnion (Union name (Field (FieldName fname) v)) -> do
+    TermUnion (Injection name (Field (FieldName fname) v)) -> do
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
       args <- if Terms.isUnit v

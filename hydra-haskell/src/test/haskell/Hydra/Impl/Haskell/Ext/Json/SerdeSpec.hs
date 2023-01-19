@@ -88,7 +88,7 @@ checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. 
     QC.property $ \() -> checkSerialization jsonSerdeStr
       (TypedTerm
         (TypeUnion $ RowType testTypeName Nothing [Types.field "left" Types.string, Types.field "right" Types.int32])
-        (union testTypeName $ Field (FieldName "left") $ string "test"))
+        (inject testTypeName $ Field (FieldName "left") $ string "test"))
       "{\"left\":\"test\"}"
 
 jsonSerdeIsInformationPreserving :: H.SpecWith ()

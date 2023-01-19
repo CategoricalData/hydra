@@ -269,7 +269,7 @@ hydraCoreModule = Module ns elements [] $
           "rest">: core "Stream" @@ "m"],
 
       def "Sum" $
-        doc "The unlabeled equivalent of a Union term" $
+        doc "The unlabeled equivalent of an Injection term" $
         lambda "m" $ record [
           "index">: int32,
           "size">: int32,
@@ -321,8 +321,8 @@ hydraCoreModule = Module ns elements [] $
             doc "A variant tuple" $
             core "Sum" @@ "m",
           "union">:
-            doc "A union term" $
-            core "Union" @@ "m",
+            doc "An injection; an instance of a union type" $
+            core "Injection" @@ "m",
           "variable">:
             doc "A variable reference" $
             core "Variable",
@@ -360,7 +360,7 @@ hydraCoreModule = Module ns elements [] $
         doc "A symbol which stands in for a type"
         string,
 
-      def "Union" $
+      def "Injection" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
         lambda "m" $ record [
           "typeName">: core "Name",

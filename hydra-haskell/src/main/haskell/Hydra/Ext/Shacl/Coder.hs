@@ -179,7 +179,7 @@ encodeTerm subject term = case term of
       encodeEl term = do
         node <- nextBlankNode
         encodeTerm node term
-  TermUnion (Union rname field) -> do
+  TermUnion (Injection rname field) -> do
     triples <- encodeField rname subject field
     return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
   _ -> unexpected "RDF-compatible term" term

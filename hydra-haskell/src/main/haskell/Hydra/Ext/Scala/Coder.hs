@@ -178,7 +178,7 @@ encodeTerm term = case stripTerm term of
       args <- CM.mapM encodeTerm (fieldTerm <$> fields)
       return $ sapply (sname n) args
     TermSet s -> sapply (sname "Set") <$> CM.mapM encodeTerm (S.toList s)
-    TermUnion (Union sn (Field fn ft)) -> do
+    TermUnion (Injection sn (Field fn ft)) -> do
       let lhs = sname $ qualifyUnionFieldName "UNION." (Just sn) fn
       args <- case stripTerm ft of
         TermRecord (Record _ []) -> pure []

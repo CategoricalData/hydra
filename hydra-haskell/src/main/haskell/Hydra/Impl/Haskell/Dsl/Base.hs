@@ -124,7 +124,7 @@ matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
 matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Datum (a -> b)
 matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
   where
-    toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.union codName fld)
+    toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.inject codName fld)
 
 -- Note: the phantom types provide no guarantee of type safety in this case
 nom :: Name -> Datum a -> Datum b
@@ -152,7 +152,7 @@ typed :: Type Meta -> Datum a -> Datum a
 typed t (Datum term) = Datum $ setTermType Standard.coreContext (Just t) term
 
 union :: Name -> FieldName -> Datum a -> Datum b
-union name fname (Datum term) = Datum $ Terms.union name (Field fname term)
+union name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
 
 union2 :: Name -> FieldName -> Datum (a -> b)
 union2 name fname = lambda "x2" $ typed (Types.wrap name) $ union name fname $ var "x2"
@@ -161,10 +161,10 @@ unit :: Datum a
 unit = Datum Terms.unit
 
 unitVariant :: Name -> FieldName -> Datum a
-unitVariant name fname = typed (Types.wrap name) $ Datum $ Terms.union name $ Field fname Terms.unit
+unitVariant name fname = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname Terms.unit
 
 var :: String -> Datum a
 var v = Datum $ Terms.variable v
 
 variant :: Name -> FieldName -> Datum a -> Datum b
-variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.union name $ Field fname term
+variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname term

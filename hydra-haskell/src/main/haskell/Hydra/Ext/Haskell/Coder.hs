@@ -169,7 +169,7 @@ encodeTerm namespaces term = do
             return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (rawName typeName) updates
           where
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
-    TermUnion (Union sname (Field fn ft)) -> do
+    TermUnion (Injection sname (Field fn ft)) -> do
       let lhs = H.ExpressionVariable $ unionFieldReference namespaces sname fn
       case stripTerm ft of
         TermRecord (Record _ []) -> pure lhs

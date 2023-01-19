@@ -154,7 +154,7 @@ encodeTerm term = case term of
   TermRecord (Record _ fields) -> variant _Term _Term_record $ list $ encodeField <$> fields
   TermSet terms -> variant _Term _Term_set $ set $ S.fromList $ encodeTerm <$> S.toList terms
   TermSum s -> variant _Term _Term_sum $ encodeSum s
-  TermUnion (Union _ field) -> variant _Term _Term_union $ encodeField field
+  TermUnion (Injection _ field) -> variant _Term _Term_union $ encodeField field
   TermVariable (Variable var) -> variant _Term _Term_variable $ string var
 
 encodeType :: Type m -> Term m

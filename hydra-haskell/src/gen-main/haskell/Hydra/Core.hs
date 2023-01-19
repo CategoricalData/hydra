@@ -382,19 +382,6 @@ newtype Name =
 
 _Name = (Name "hydra/core.Name")
 
--- | A term wrapped in a type name; an instance of a newtype
-data Wrapper m = 
-  Wrapper {
-    wrapperTypeName :: Name,
-    wrapperTerm :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_Wrapper = (Name "hydra/core.Wrapper")
-
-_Wrapper_typeName = (FieldName "typeName")
-
-_Wrapper_term = (FieldName "term")
-
 -- | A case statement for matching optional terms
 data OptionalCases m = 
   OptionalCases {
@@ -468,7 +455,7 @@ _Stream_first = (FieldName "first")
 
 _Stream_rest = (FieldName "rest")
 
--- | The unlabeled equivalent of a Union term
+-- | The unlabeled equivalent of an Injection term
 data Sum m = 
   Sum {
     sumIndex :: Int,
@@ -513,8 +500,8 @@ data Term m =
   TermStream (Stream m) |
   -- | A variant tuple
   TermSum (Sum m) |
-  -- | A union term
-  TermUnion (Union m) |
+  -- | An injection; an instance of a union type
+  TermUnion (Injection m) |
   -- | A variable reference
   TermVariable Variable |
   TermWrapped (Wrapper m)
@@ -633,17 +620,17 @@ newtype VariableType =
 _VariableType = (Name "hydra/core.VariableType")
 
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
-data Union m = 
-  Union {
-    unionTypeName :: Name,
-    unionField :: (Field m)}
+data Injection m = 
+  Injection {
+    injectionTypeName :: Name,
+    injectionField :: (Field m)}
   deriving (Eq, Ord, Read, Show)
 
-_Union = (Name "hydra/core.Union")
+_Injection = (Name "hydra/core.Injection")
 
-_Union_typeName = (FieldName "typeName")
+_Injection_typeName = (FieldName "typeName")
 
-_Union_field = (FieldName "field")
+_Injection_field = (FieldName "field")
 
 -- | An empty record type as a canonical unit type
 data UnitType = 
@@ -651,3 +638,16 @@ data UnitType =
   deriving (Eq, Ord, Read, Show)
 
 _UnitType = (Name "hydra/core.UnitType")
+
+-- | A term wrapped in a type name; an instance of a newtype
+data Wrapper m = 
+  Wrapper {
+    wrapperTypeName :: Name,
+    wrapperTerm :: (Term m)}
+  deriving (Eq, Ord, Read, Show)
+
+_Wrapper = (Name "hydra/core.Wrapper")
+
+_Wrapper_typeName = (FieldName "typeName")
+
+_Wrapper_term = (FieldName "term")

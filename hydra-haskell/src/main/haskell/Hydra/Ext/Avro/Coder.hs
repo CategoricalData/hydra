@@ -76,9 +76,9 @@ avroHydraAdapter schema = case schema of
                   typ = TypeUnion (RowType hydraName Nothing $ toField <$> syms)
                     where
                       toField s = FieldType (FieldName s) Types.unit
-                  encode (Json.ValueString s) = pure $ TermUnion (Union hydraName $ Field (FieldName s) Terms.unit)
+                  encode (Json.ValueString s) = pure $ TermUnion (Injection hydraName $ Field (FieldName s) Terms.unit)
                   -- Note: we simply trust that data coming from the Hydra side is correct
-                  decode (TermUnion (Union _ (Field fn _))) = return $ Json.ValueString $ unFieldName fn
+                  decode (TermUnion (Injection _ (Field fn _))) = return $ Json.ValueString $ unFieldName fn
               Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
                 where
                   encode (Json.ValueString s) = pure $ Terms.binary s

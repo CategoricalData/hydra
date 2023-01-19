@@ -267,14 +267,14 @@ inferInternal term = case term of
           else freshVariableType
 
     -- Note: type inference cannot recover complete union types from union values; type annotations are needed
-    TermUnion (Union n field) -> do
+    TermUnion (Injection n field) -> do
         rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         ifield <- inferFieldType field
         let cinternal = termConstraints $ fieldTerm ifield
         let cnominal = (termType $ fieldTerm ifield, fieldTypeType sfield)
         let constraints = cnominal:cinternal
-        yield (TermUnion $ Union n ifield) (TypeUnion rt) constraints
+        yield (TermUnion $ Injection n ifield) (TypeUnion rt) constraints
 
     TermVariable x -> do
       t <- lookupTypeInEnvironment x

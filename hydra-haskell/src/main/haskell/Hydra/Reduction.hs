@@ -56,7 +56,7 @@ betaReduceTerm = reduce M.empty
           TermOptional m -> TermOptional <$> CM.mapM reduceb m
           TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
           TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-          TermUnion (Union n f) -> TermUnion <$> (Union n <$> reduceField f)
+          TermUnion (Injection n f) -> TermUnion <$> (Injection n <$> reduceField f)
           TermVariable var@(Variable v) -> case M.lookup var bindings of
             Nothing -> fail $ "cannot reduce free variable " ++ v
             Just t -> reduceb t
@@ -102,7 +102,7 @@ betaReduceTerm = reduce M.empty
               EliminationUnion (CaseStatement _ cases) -> do
                 arg <- (reduce bindings $ L.head args) >>= deref
                 case stripTerm arg of
-                  TermUnion (Union _ (Field fname t)) -> if L.null matching
+                  TermUnion (Injection _ (Field fname t)) -> if L.null matching
                       then fail $ "no case for field named " ++ unFieldName fname
                       else reduce bindings (fieldTerm $ L.head matching)
                         >>= reduceApplication bindings (t:L.tail args)
@@ -218,7 +218,7 @@ termIsValue cx strategy term = termIsOpaque strategy term || case stripTerm term
       Just term -> termIsValue cx strategy term
     TermRecord (Record _ fields) -> checkFields fields
     TermSet els -> forList $ S.toList els
-    TermUnion (Union _ field) -> checkField field
+    TermUnion (Injection _ field) -> checkField field
     TermVariable _ -> False
   where
     forList els = L.foldl (\b t -> b && termIsValue cx strategy t) True els
