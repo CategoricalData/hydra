@@ -38,7 +38,7 @@ bootstrapContext = cx
       contextAnnotations = metaAnnotationClass}
 
 nsref :: Namespace -> String -> Type m
-nsref ns = Types.nominal . qualify ns . Name
+nsref ns = Types.wrap . qualify ns . Name
 
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname

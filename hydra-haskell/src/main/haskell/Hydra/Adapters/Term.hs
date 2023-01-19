@@ -32,7 +32,7 @@ _record :: FieldName
 _record = FieldName "record"
 
 dereferenceNominal :: (Ord m, Read m, Show m) => TypeAdapter m
-dereferenceNominal t@(TypeNominal name) = do
+dereferenceNominal t@(TypeWrapped name) = do
   typ <- withEvaluationContext $ do
     -- Note: we just assume the schema term is a reference to hydra/core.Type
     withTrace ("dereference nominal type " ++ unName name) $ do
@@ -64,7 +64,7 @@ functionProxyName = Name "hydra/core.FunctionProxy"
 functionProxyType :: Type m -> Type m
 functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Elimination_element Types.unit,
-  FieldType _Elimination_nominal Types.string,
+  FieldType _Elimination_wrapped Types.string,
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
   FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
@@ -84,7 +84,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FunctionCompareTo other -> variant functionProxyName _Function_compareTo other
         FunctionElimination e -> case e of
           EliminationElement -> unitVariant functionProxyName _Elimination_element
-          EliminationNominal (Name name) -> variant functionProxyName _Elimination_nominal $ string name
+          EliminationWrapped (Name name) -> variant functionProxyName _Elimination_wrapped $ string name
           EliminationOptional _ -> variant functionProxyName _Elimination_optional $ string $ show term -- TODO
           EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ show term -- TODO
           EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ show term -- TODO
@@ -95,7 +95,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_element, forTerm fterm),
-          (_Elimination_nominal, forNominal fterm),
+          (_Elimination_wrapped, forWrapped fterm),
           (_Elimination_optional, forOptionalCases fterm),
           (_Elimination_record, forProjection fterm),
           (_Elimination_union, forCases fterm),
@@ -109,7 +109,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         forCompareTo fterm = pure $ compareTo fterm
         forTerm _ = pure delta
         forLambda fterm = read <$> expectString fterm -- TODO
-        forNominal fterm = eliminateNominal . Name <$> expectString fterm
+        forWrapped fterm = unwrap . Name <$> expectString fterm
         forOptionalCases fterm = read <$> expectString fterm -- TODO
         forPrimitive fterm = primitive . Name <$> expectString fterm
         forProjection fterm = read <$> expectString fterm -- TODO
@@ -119,7 +119,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       domAd <- termAdapter dom
       return $ TypeUnion $ RowType functionProxyName Nothing [
         FieldType _Elimination_element Types.unit,
-        FieldType _Elimination_nominal Types.string,
+        FieldType _Elimination_wrapped Types.string,
         FieldType _Elimination_optional Types.string,
         FieldType _Elimination_record Types.string,
         FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
@@ -320,7 +320,7 @@ termAdapter typ = do
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
         TypeVariantLambda -> [lambdaToMonotype]
-        TypeVariantNominal -> [dereferenceNominal]
+        TypeVariantWrapped -> [dereferenceNominal]
         TypeVariantOptional -> [optionalToList]
         TypeVariantSet ->  [listToSet]
         TypeVariantUnion -> [unionToRecord]

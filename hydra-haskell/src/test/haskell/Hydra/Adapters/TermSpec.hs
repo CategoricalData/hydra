@@ -161,7 +161,7 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
 
   H.it "Nominal types (when supported) pass through without change" $
     QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantNominal]
+      [TypeVariantLiteral, TypeVariantWrapped]
       stringAliasType
       stringAliasType
       False

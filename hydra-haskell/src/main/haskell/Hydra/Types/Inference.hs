@@ -56,7 +56,7 @@ decodeStructuralType term = do
   typ <- decodeType term
   let typ' = stripType typ
   case typ' of
-    TypeNominal name -> withSchemaContext $ withTrace "decode structural type" $ do
+    TypeWrapped name -> withSchemaContext $ withTrace "decode structural type" $ do
       el <- requireElement name
       decodeStructuralType $ elementData el
     _ -> pure typ
@@ -134,9 +134,9 @@ inferInternal term = case term of
           let elim = Types.functionN [b, Types.list a] b
           yieldElimination (EliminationList i) elim [(expected, termType i)]
 
-        EliminationNominal name -> do
+        EliminationWrapped name -> do
           typ <- withGraphContext $ namedType "eliminate nominal" name
-          yieldElimination (EliminationNominal name) (Types.function (Types.nominal name) typ) []
+          yieldElimination (EliminationWrapped name) (Types.function (Types.wrap name) typ) []
 
         EliminationOptional (OptionalCases n j) -> do
           dom <- freshVariableType
@@ -220,10 +220,10 @@ inferInternal term = case term of
           iv <- infer v
           return (ik, iv)
 
-    TermNominal (Named name term1) -> do
-      typ <- withGraphContext $ namedType "nominal" name
+    TermWrapped (Wrapper name term1) -> do
+      typ <- withGraphContext $ namedType "wrapped" name
       i <- infer term1
-      yield (TermNominal $ Named name i) (Types.nominal name) (termConstraints i ++ [(typ, termType i)])
+      yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
 
     TermOptional m -> do
       v <- freshVariableType

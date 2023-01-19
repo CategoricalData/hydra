@@ -79,7 +79,7 @@ encodeFunction meta fun arg = case fun of
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationElement -> pure $ sname "DATA" -- TODO
-      EliminationNominal name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
+      EliminationWrapped name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
       EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
       EliminationRecord p -> fail "unapplied projection not yet supported"
       EliminationUnion (CaseStatement _ cases) -> do
@@ -147,7 +147,7 @@ encodeTerm term = case stripTerm term of
         TermFunction f -> case f of
           FunctionElimination e -> case e of
             EliminationElement -> encodeTerm arg
-            EliminationNominal name -> fallback
+            EliminationWrapped name -> fallback
             EliminationOptional c -> fallback
             EliminationRecord (Projection _ (FieldName fname)) -> do
               sarg <- encodeTerm arg
@@ -169,7 +169,7 @@ encodeTerm term = case stripTerm term of
     TermMap m -> sapply (sname "Map") <$> CM.mapM toPair (M.toList m)
       where
         toPair (k, v) = sassign <$> encodeTerm k <*> encodeTerm v
-    TermNominal (Named _ term') -> encodeTerm term'
+    TermWrapped (Wrapper _ term') -> encodeTerm term'
     TermOptional m -> case m of
       Nothing -> pure $ sname "None"
       Just t -> (\s -> sapply (sname "Some") [s]) <$> encodeTerm t
@@ -217,7 +217,7 @@ encodeType t = case stripType t of
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
   TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeNominal name -> pure $ stref $ scalaTypeName True name
+  TypeWrapped name -> pure $ stref $ scalaTypeName True name
   TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
 --  TypeRecord sfields ->
   TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st

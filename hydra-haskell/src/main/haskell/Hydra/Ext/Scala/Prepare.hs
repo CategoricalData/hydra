@@ -53,7 +53,7 @@ prepareType cx typ = case stripType typ of
 --  TypeFunction (FunctionType dom cod) ->
 --  TypeList lt ->
 --  TypeMap (MapType kt vt) ->
---  TypeNominal name ->
+--  TypeWrapped name ->
 --  TypeRecord fields ->
 --  TypeSet st ->
 --  TypeUnion fields ->

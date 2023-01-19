@@ -58,11 +58,11 @@ unify t1 t2 = if t1 == t2
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
       (TypeVariable v, _) -> bind v t2
       (_, TypeVariable v) -> bind v t1
-      (TypeNominal n1, TypeNominal n2) -> if n1 == n2
+      (TypeWrapped n1, TypeWrapped n2) -> if n1 == n2
         then return M.empty
         else failUnification
-      (TypeNominal _, _) -> return M.empty -- TODO
-      (_, TypeNominal name) -> unify (Types.nominal name) t1
+      (TypeWrapped _, _) -> return M.empty -- TODO
+      (_, TypeWrapped name) -> unify (Types.wrap name) t1
       (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
         ":\n  " ++ show l ++ "\n  " ++ show r
   where

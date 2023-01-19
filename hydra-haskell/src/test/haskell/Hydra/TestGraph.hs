@@ -42,7 +42,7 @@ testElementArthur = Element {
 testElementFirstName :: Element Meta
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType (Types.function (Types.nominal testTypePersonName) Types.string),
+  elementSchema = encodeType (Types.function (Types.wrap testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Meta

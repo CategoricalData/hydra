@@ -21,7 +21,7 @@ import Control.Monad
 deref :: Term m -> GraphFlow m (Term m)
 deref term = case stripTerm term of
   TermElement name -> dereferenceElement name >>= deref
-  TermNominal (Named _ term') -> deref term'
+  TermWrapped (Wrapper _ term') -> deref term'
   _ -> pure term
 
 dereferenceElement :: Name -> GraphFlow m (Term m)

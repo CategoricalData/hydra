@@ -32,7 +32,7 @@ encodeElimination :: Ord m => Elimination m -> Term m
 encodeElimination e = case e of
   EliminationElement -> unitVariant _Elimination _Elimination_element
   EliminationList f -> variant _Elimination _Elimination_list $ encodeTerm f
-  EliminationNominal (Name name) -> variant _Elimination _Elimination_nominal $ string name
+  EliminationWrapped (Name name) -> variant _Elimination _Elimination_wrapped $ string name
   EliminationOptional cases -> variant _Elimination _Elimination_optional $ encodeOptionalCases cases
   EliminationRecord p -> variant _Elimination _Elimination_record $ encodeProjection p
   EliminationUnion c -> variant _Elimination _Elimination_union $ encodeCaseStatement c
@@ -111,10 +111,10 @@ encodeMapType (MapType kt vt) = record _MapType [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
 
-encodeNamed :: Ord m => Named m -> Term m
-encodeNamed (Named (Name name) term) = record _Named [
-  Field _Named_typeName $ string name,
-  Field _Named_term $ encodeTerm term]
+encodeWrapper :: Ord m => Wrapper m -> Term m
+encodeWrapper (Wrapper (Name name) term) = record _Wrapper [
+  Field _Wrapper_typeName $ string name,
+  Field _Wrapper_term $ encodeTerm term]
 
 encodeOptionalCases :: Ord m => OptionalCases m -> Term m
 encodeOptionalCases (OptionalCases nothing just) = record _OptionalCases [
@@ -148,7 +148,7 @@ encodeTerm term = case term of
   TermList terms -> variant _Term _Term_list $ list $ encodeTerm <$> terms
   TermMap m -> variant _Term _Term_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
-  TermNominal ntt -> variant _Term _Term_nominal $ encodeNamed ntt
+  TermWrapped ntt -> variant _Term _Term_wrapped $ encodeWrapper ntt
   TermOptional m -> variant _Term _Term_optional $ optional $ encodeTerm <$> m
   TermProduct terms -> variant _Term _Term_product $ list (encodeTerm <$> terms)
   TermRecord (Record _ fields) -> variant _Term _Term_record $ list $ encodeField <$> fields
@@ -167,7 +167,7 @@ encodeType typ = case typ of
   TypeList t -> variant _Type _Type_list $ encodeType t
   TypeLiteral at -> variant _Type _Type_literal $ encodeLiteralType at
   TypeMap mt -> variant _Type _Type_map $ encodeMapType mt
-  TypeNominal name -> variant _Type _Type_nominal $ element name
+  TypeWrapped name -> variant _Type _Type_wrapped $ element name
   TypeOptional t -> variant _Type _Type_optional $ encodeType t
   TypeProduct types -> variant _Type _Type_product $ list (encodeType <$> types)
   TypeRecord rt -> variant _Type _Type_record $ encodeRowType rt
@@ -184,7 +184,7 @@ encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
   TypeVariantFunction -> _TypeVariant_function
   TypeVariantList -> _TypeVariant_list
   TypeVariantMap -> _TypeVariant_map
-  TypeVariantNominal -> _TypeVariant_nominal
+  TypeVariantWrapped -> _TypeVariant_wrapped
   TypeVariantOptional -> _TypeVariant_optional
   TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record

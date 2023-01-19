@@ -29,13 +29,13 @@ utils = Definition . fromQname utilsNs
 describeFloatTypeSource :: Definition (FloatType -> String)
 describeFloatTypeSource = utils "describeFloatType" $
   doc "Display a floating-point type as a string" $
-  function (Types.nominal _FloatType) Types.string $
+  function (Types.wrap _FloatType) Types.string $
   lambda "t" $ (ref describePrecisionSource <.> ref floatTypePrecisionSource @@ var "t") ++ string " floating-point numbers"
 
 describeIntegerTypeSource :: Definition (IntegerType -> String)
 describeIntegerTypeSource = utils "describeIntegerType" $
   doc "Display an integer type as a string" $
-  function (Types.nominal _IntegerType) Types.string $
+  function (Types.wrap _IntegerType) Types.string $
   lambda "t" $ (ref describePrecisionSource <.> ref integerTypePrecisionSource @@ var "t")
     ++ string " integers"
 
@@ -60,7 +60,7 @@ describePrecisionSource = utils "describePrecision" $
 describeTypeSource :: Definition (Type m -> string)
 describeTypeSource = utils "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (Types.nominal _Type) (Types.variable "m")) Types.string $
+  function (Types.apply (Types.wrap _Type) (Types.variable "m")) Types.string $
   lambda "typ" $ apply
     (match _Type Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeSource @@
@@ -78,7 +78,7 @@ describeTypeSource = utils "describeType" $
         ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_values  @@ var "mt")),
-      Case _Type_nominal     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
+      Case _Type_wrapped     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeSource @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",
@@ -89,7 +89,7 @@ describeTypeSource = utils "describeType" $
       Case _Type_variable    --> constant $ string "unspecified/parametric terms"])
     (var "typ")
   where
-    annotatedTypeM = Types.apply (Types.apply (Types.nominal _Annotated) (Types.apply (Types.nominal _Type) (Types.variable "m"))) (Types.variable "m")
-    functionTypeM = Types.apply (Types.nominal _FunctionType) (Types.variable "m")
-    typeM = Types.apply (Types.nominal _Type) (Types.variable "m")
-    mapTypeM = Types.apply (Types.nominal _MapType) (Types.variable "m")
+    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "m"))) (Types.variable "m")
+    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "m")
+    typeM = Types.apply (Types.wrap _Type) (Types.variable "m")
+    mapTypeM = Types.apply (Types.wrap _MapType) (Types.variable "m")

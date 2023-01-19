@@ -56,9 +56,6 @@ elementRef = apply delta . TermElement . elementName
 elementRefByName :: Name -> Term m
 elementRefByName = apply delta . TermElement
 
-eliminateNominal :: Name -> Term m
-eliminateNominal = TermFunction . FunctionElimination . EliminationNominal
-
 elimination :: Elimination m -> Term m
 elimination = TermFunction . FunctionElimination
 
@@ -198,9 +195,6 @@ matchWithVariants n = cases n . fmap toField
   where
     toField (from, to) = Field from $ constFunction $ unitVariant n to
 
-nominal :: Name -> Term m -> Term m
-nominal name term = TermNominal $ Named name term
-
 optional :: Y.Maybe (Term m) -> Term m
 optional = TermOptional
 
@@ -257,6 +251,9 @@ unit = TermRecord $ Record (Name "hydra/core.UnitType") []
 unitVariant :: Name -> FieldName -> Term m
 unitVariant n fname = variant n fname unit
 
+unwrap :: Name -> Term m
+unwrap = TermFunction . FunctionElimination . EliminationWrapped
+
 variable :: String -> Term m
 variable = TermVariable . Variable
 
@@ -265,3 +262,6 @@ variant n fname term = TermUnion $ Union n $ Field fname term
 
 withVariant :: Name -> FieldName -> Term m
 withVariant n = constFunction . unitVariant n
+
+wrap :: Name -> Term m -> Term m
+wrap name term = TermWrapped $ Wrapper name term

@@ -130,7 +130,7 @@ rewriteTerm f mf = rewrite fsub f
           FunctionCompareTo other -> FunctionCompareTo $ recurse other
           FunctionElimination e -> FunctionElimination $ case e of
             EliminationElement -> EliminationElement
-            EliminationNominal name -> EliminationNominal name
+            EliminationWrapped name -> EliminationWrapped name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional
               (OptionalCases (recurse nothing) (recurse just))
             EliminationRecord p -> EliminationRecord p
@@ -143,7 +143,7 @@ rewriteTerm f mf = rewrite fsub f
         TermList els -> TermList $ recurse <$> els
         TermLiteral v -> TermLiteral v
         TermMap m -> TermMap $ M.fromList $ (\(k, v) -> (recurse k, recurse v)) <$> M.toList m
-        TermNominal (Named name t) -> TermNominal (Named name $ recurse t)
+        TermWrapped (Wrapper name t) -> TermWrapped (Wrapper name $ recurse t)
         TermOptional m -> TermOptional $ recurse <$> m
         TermProduct tuple -> TermProduct (recurse <$> tuple)
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
@@ -165,7 +165,7 @@ rewriteTermM f mf = rewrite fsub f
           FunctionCompareTo other -> FunctionCompareTo <$> recurse other
           FunctionElimination e -> FunctionElimination <$> case e of
             EliminationElement -> pure EliminationElement
-            EliminationNominal name -> pure $ EliminationNominal name
+            EliminationWrapped name -> pure $ EliminationWrapped name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
               (OptionalCases <$> recurse nothing <*> recurse just)
             EliminationRecord p -> pure $ EliminationRecord p
@@ -185,7 +185,7 @@ rewriteTermM f mf = rewrite fsub f
               km <- recurse k
               vm <- recurse v
               return (km, vm)
-        TermNominal (Named name t) -> TermNominal <$> (Named name <$> recurse t)
+        TermWrapped (Wrapper name t) -> TermWrapped <$> (Wrapper name <$> recurse t)
         TermOptional m -> TermOptional <$> (CM.mapM recurse m)
         TermProduct tuple -> TermProduct <$> (CM.mapM recurse tuple)
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
@@ -215,7 +215,7 @@ rewriteType f mf = rewrite fsub f
         TypeList t -> TypeList $ recurse t
         TypeLiteral lt -> TypeLiteral lt
         TypeMap (MapType kt vt) -> TypeMap (MapType (recurse kt) (recurse vt))
-        TypeNominal name -> TypeNominal name
+        TypeWrapped name -> TypeWrapped name
         TypeOptional t -> TypeOptional $ recurse t
         TypeProduct types -> TypeProduct (recurse <$> types)
         TypeRecord (RowType name extends fields) -> TypeRecord $ RowType name extends (forfield <$> fields)
@@ -270,7 +270,7 @@ subterms term = case term of
   TermLet (Let bindings env) -> (snd <$> M.toList bindings) ++ [env]
   TermList els -> els
   TermMap m -> L.concat ((\(k, v) -> [k, v]) <$> M.toList m)
-  TermNominal (Named _ t) -> [t]
+  TermWrapped (Wrapper _ t) -> [t]
   TermOptional m -> Y.maybeToList m
   TermProduct tuple -> tuple
   TermRecord (Record n fields) -> fieldTerm <$> fields
@@ -289,7 +289,7 @@ subtypes typ = case typ of
   TypeList lt -> [lt]
   TypeLiteral _ -> []
   TypeMap (MapType kt vt) -> [kt, vt]
-  TypeNominal _ -> []
+  TypeWrapped _ -> []
   TypeOptional ot -> [ot]
   TypeProduct types -> types
   TypeRecord rt -> fieldTypeType <$> rowTypeFields rt
@@ -304,7 +304,7 @@ termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre 
     addNames names term = case term of
       TermElement name -> if withEls then S.insert name names else names
       TermFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
-      TermNominal (Named name _) -> if withNoms then S.insert name names else names
+      TermWrapped (Wrapper name _) -> if withNoms then S.insert name names else names
       _ -> names
 
 topologicalSortElements :: [Element m] -> Maybe [Name]

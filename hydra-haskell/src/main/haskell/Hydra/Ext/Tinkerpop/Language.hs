@@ -51,7 +51,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       cond TypeVariantLiteral supportsLiterals,
       cond TypeVariantMap supportsMaps,
       Just TypeVariantOptional,
-      Just TypeVariantNominal],
+      Just TypeVariantWrapped],
 
     languageConstraintsTypes = \typ -> case stripType typ of
       TypeElement et -> True
@@ -73,7 +73,7 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
         _ -> False
       TypeLiteral _ -> True
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
-      TypeNominal _ -> True
+      TypeWrapped _ -> True
       TypeOptional ot -> case stripType ot of
         TypeElement _ -> True -- Note: subject to the APG taxonomy
         TypeLiteral _ -> True

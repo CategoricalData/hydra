@@ -45,11 +45,11 @@ hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
 eliminationVariantSource :: Definition (Elimination m -> EliminationVariant)
 eliminationVariantSource = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  typed (Types.function (Types.apply (Types.nominal _Elimination) (Types.variable "m")) (Types.nominal _EliminationVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "m")) (Types.wrap _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
-    _Elimination_nominal  @-> _EliminationVariant_nominal,
+    _Elimination_wrapped  @-> _EliminationVariant_wrapped,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union]
@@ -57,11 +57,11 @@ eliminationVariantSource = basics "eliminationVariant" $
 eliminationVariantsSource :: Definition [EliminationVariant]
 eliminationVariantsSource = basics "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  typed (Types.list $ Types.nominal _EliminationVariant) $
+  typed (Types.list $ Types.wrap _EliminationVariant) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_element,
     _EliminationVariant_list,
-    _EliminationVariant_nominal,
+    _EliminationVariant_wrapped,
     _EliminationVariant_optional,
     _EliminationVariant_record,
     _EliminationVariant_union]
@@ -77,7 +77,7 @@ floatTypePrecisionSource = basics "floatTypePrecision" $
 floatTypesSource :: Definition [FloatType]
 floatTypesSource = basics "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  typed (Types.list $ Types.nominal _FloatType) $
+  typed (Types.list $ Types.wrap _FloatType) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -94,7 +94,7 @@ floatValueTypeSource = basics "floatValueType" $
 functionVariantSource :: Definition (Function m -> FunctionVariant)
 functionVariantSource = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  typed (Types.function (Types.apply (Types.nominal _Function) (Types.variable "m")) (Types.nominal _FunctionVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "m")) (Types.wrap _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant [
     _Function_compareTo   @-> _FunctionVariant_compareTo,
     _Function_elimination @-> _FunctionVariant_elimination,
@@ -104,7 +104,7 @@ functionVariantSource = basics "functionVariant" $
 functionVariantsSource :: Definition [FunctionVariant]
 functionVariantsSource = basics "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-    typed (Types.list $ Types.nominal _FunctionVariant) $
+    typed (Types.list $ Types.wrap _FunctionVariant) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_compareTo,
     _FunctionVariant_elimination,
@@ -142,7 +142,7 @@ integerTypePrecisionSource = basics "integerTypePrecision" $
 integerTypesSource :: Definition [IntegerType]
 integerTypesSource = basics "integerTypes" $
     doc "All integer types, in a canonical order" $
-    typed (Types.list $ Types.nominal _IntegerType) $
+    typed (Types.list $ Types.wrap _IntegerType) $
     list $ unitVariant _IntegerType <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -171,7 +171,7 @@ integerValueTypeSource = basics "integerValueType" $
 literalTypeSource :: Definition (Literal -> LiteralType)
 literalTypeSource = basics "literalType" $
   doc "Find the literal type for a given literal value" $
-  match _Literal (Types.nominal _LiteralType) [
+  match _Literal (Types.wrap _LiteralType) [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
     Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueTypeSource,
@@ -191,13 +191,13 @@ literalTypeVariantSource = basics "literalTypeVariant" $
 literalVariantSource :: Definition (Literal -> LiteralVariant)
 literalVariantSource = basics "literalVariant" $
   doc "Find the literal variant (constructor) for a given literal value" $
-  function (Types.nominal _Literal) (Types.nominal _LiteralVariant) $
+  function (Types.wrap _Literal) (Types.wrap _LiteralVariant) $
   ref literalTypeVariantSource <.> ref literalTypeSource
 
 literalVariantsSource :: Definition [LiteralVariant]
 literalVariantsSource = basics "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  typed (Types.list $ Types.nominal _LiteralVariant) $
+  typed (Types.list $ Types.wrap _LiteralVariant) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -208,7 +208,7 @@ literalVariantsSource = basics "literalVariants" $
 qnameSource :: Definition (Namespace -> String -> Name)
 qnameSource = basics "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  functionN [Types.nominal _Namespace, Types.string] (Types.nominal _Name) $
+  functionN [Types.wrap _Namespace, Types.string] (Types.wrap _Name) $
   lambda "ns" $
     lambda "name" $
       nom _Name $
@@ -218,7 +218,7 @@ qnameSource = basics "qname" $
 termVariantSource :: Definition (Term m -> TermVariant)
 termVariantSource = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function (Types.apply (Types.nominal _Term) (Types.variable "m")) (Types.nominal _TermVariant) $
+  function (Types.apply (Types.wrap _Term) (Types.variable "m")) (Types.wrap _TermVariant) $
   lambda "term" $ apply
     (matchToEnum _Term _TermVariant [
       _Term_annotated       @-> _TermVariant_annotated,
@@ -229,7 +229,7 @@ termVariantSource = basics "termVariant" $
       _Term_list            @-> _TermVariant_list,
       _Term_literal         @-> _TermVariant_literal,
       _Term_map             @-> _TermVariant_map,
-      _Term_nominal         @-> _TermVariant_nominal,
+      _Term_wrapped         @-> _TermVariant_wrapped,
       _Term_optional        @-> _TermVariant_optional,
       _Term_product         @-> _TermVariant_product,
       _Term_record          @-> _TermVariant_record,
@@ -243,7 +243,7 @@ termVariantSource = basics "termVariant" $
 termVariantsSource :: Definition [TermVariant]
 termVariantsSource = basics "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  typed (Types.list $ Types.nominal _TermVariant) $
+  typed (Types.list $ Types.wrap _TermVariant) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -252,7 +252,7 @@ termVariantsSource = basics "termVariants" $
     _TermVariant_function,
     _TermVariant_list,
     _TermVariant_map,
-    _TermVariant_nominal,
+    _TermVariant_wrapped,
     _TermVariant_optional,
     _TermVariant_product,
     _TermVariant_record,
@@ -272,7 +272,7 @@ testListsSource = basics "testLists" $
 typeVariantSource :: Definition (Type m -> TypeVariant)
 typeVariantSource = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function (Types.apply (Types.nominal _Type) (Types.variable "m")) (Types.nominal _TypeVariant) $
+  function (Types.apply (Types.wrap _Type) (Types.variable "m")) (Types.wrap _TypeVariant) $
   lambda "typ" $ apply
     (matchToEnum _Type _TypeVariant [
       _Type_annotated   @-> _TypeVariant_annotated,
@@ -283,7 +283,7 @@ typeVariantSource = basics "typeVariant" $
       _Type_list        @-> _TypeVariant_list,
       _Type_literal     @-> _TypeVariant_literal,
       _Type_map         @-> _TypeVariant_map,
-      _Type_nominal     @-> _TypeVariant_nominal,
+      _Type_wrapped     @-> _TypeVariant_wrapped,
       _Type_optional    @-> _TypeVariant_optional,
       _Type_product     @-> _TypeVariant_product,
       _Type_record      @-> _TypeVariant_record,
@@ -297,7 +297,7 @@ typeVariantSource = basics "typeVariant" $
 typeVariantsSource :: Definition [TypeVariant]
 typeVariantsSource = basics "typeVariants" $
   doc "All type variants, in a canonical order" $
-  typed (Types.list $ Types.nominal _TypeVariant) $
+  typed (Types.list $ Types.wrap _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
@@ -307,7 +307,7 @@ typeVariantsSource = basics "typeVariants" $
     _TypeVariant_list,
     _TypeVariant_literal,
     _TypeVariant_map,
-    _TypeVariant_nominal,
+    _TypeVariant_wrapped,
     _TypeVariant_optional,
     _TypeVariant_product,
     _TypeVariant_record,

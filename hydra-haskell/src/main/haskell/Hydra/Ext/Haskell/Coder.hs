@@ -89,7 +89,7 @@ encodeFunction namespaces fun = case fun of
         let lhs = hsvar "foldl"
         rhs <- encodeTerm namespaces fun
         return $ hsapp lhs rhs
-      EliminationNominal name -> pure $ H.ExpressionVariable $ elementReference namespaces $
+      EliminationWrapped name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
@@ -153,7 +153,7 @@ encodeTerm namespaces term = do
     TermLet l -> fail $ "unexpected 'let' term nested within a non-let term"
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
-    TermNominal (Named tname term') -> if newtypesNotTypedefs
+    TermWrapped (Wrapper tname term') -> if newtypesNotTypedefs
       then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
       else encode term'
     TermOptional m -> case m of
@@ -205,23 +205,23 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Map",
       encode kt,
       encode vt]
-    TypeNominal name -> nominal name
+    TypeWrapped name -> wrap name
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
     TypeProduct types -> H.TypeTuple <$> (CM.mapM encode types)
     TypeRecord rt -> case rowTypeFields rt of
       [] -> pure $ H.TypeTuple []  -- TODO: too permissive; not all empty record types are the unit type
-      _ -> nominal $ rowTypeTypeName rt
+      _ -> wrap $ rowTypeTypeName rt
     TypeSet st -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
-    TypeUnion rt -> nominal $ rowTypeTypeName rt
+    TypeUnion rt -> wrap $ rowTypeTypeName rt
     TypeVariable (VariableType v) -> pure $ H.TypeVariable $ simpleName v
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
-    nominal name = pure $ H.TypeVariable $ elementReference namespaces name
+    wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
 moduleToHaskellModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m H.Module
 moduleToHaskellModule mod = transformModule haskellLanguage (encodeTerm namespaces) constructModule mod

@@ -165,7 +165,7 @@ encodeTerm subject term = case term of
         let objs = subjectsOf descs
         let triples = forObjects subj pred objs
         return $ triples ++ triplesOf descs
-  TermNominal (Named name inner) -> do
+  TermWrapped (Wrapper name inner) -> do
     descs <- encodeTerm subject inner
     return $ (withType name $ L.head descs):(L.tail descs)
   TermOptional mterm -> case mterm of
@@ -190,7 +190,7 @@ encodeType typ = case stripType typ of
     TypeList _ -> any
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any
-    TypeNominal name -> any -- TODO: include name
+    TypeWrapped name -> any -- TODO: include name
     TypeRecord (RowType rname _ fields) -> do
       props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
       return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]

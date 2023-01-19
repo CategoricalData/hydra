@@ -68,14 +68,14 @@ data Elimination m =
   EliminationElement  |
   -- | Eliminates a list using a fold function; this function has the signature b -> [a] -> b
   EliminationList (Term m) |
-  -- | Eliminates a nominal term by extracting the wrapped term
-  EliminationNominal Name |
   -- | Eliminates an optional term by matching over the two possible cases
   EliminationOptional (OptionalCases m) |
   -- | Eliminates a record by projecting a given field
   EliminationRecord Projection |
   -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
-  EliminationUnion (CaseStatement m)
+  EliminationUnion (CaseStatement m) |
+  -- | Unwrap a wrapped term
+  EliminationWrapped Name
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra/core.Elimination")
@@ -84,13 +84,13 @@ _Elimination_element = (FieldName "element")
 
 _Elimination_list = (FieldName "list")
 
-_Elimination_nominal = (FieldName "nominal")
-
 _Elimination_optional = (FieldName "optional")
 
 _Elimination_record = (FieldName "record")
 
 _Elimination_union = (FieldName "union")
+
+_Elimination_wrapped = (FieldName "wrapped")
 
 -- | A labeled term
 data Field m = 
@@ -382,18 +382,18 @@ newtype Name =
 
 _Name = (Name "hydra/core.Name")
 
--- | A term annotated with a fixed, named type; an instance of a newtype
-data Named m = 
-  Named {
-    namedTypeName :: Name,
-    namedTerm :: (Term m)}
+-- | A term wrapped in a type name; an instance of a newtype
+data Wrapper m = 
+  Wrapper {
+    wrapperTypeName :: Name,
+    wrapperTerm :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
-_Named = (Name "hydra/core.Named")
+_Wrapper = (Name "hydra/core.Wrapper")
 
-_Named_typeName = (FieldName "typeName")
+_Wrapper_typeName = (FieldName "typeName")
 
-_Named_term = (FieldName "term")
+_Wrapper_term = (FieldName "term")
 
 -- | A case statement for matching optional terms
 data OptionalCases m = 
@@ -501,7 +501,6 @@ data Term m =
   TermLiteral Literal |
   -- | A map of keys to values
   TermMap (Map (Term m) (Term m)) |
-  TermNominal (Named m) |
   -- | An optional value
   TermOptional (Maybe (Term m)) |
   -- | A tuple
@@ -517,7 +516,8 @@ data Term m =
   -- | A union term
   TermUnion (Union m) |
   -- | A variable reference
-  TermVariable Variable
+  TermVariable Variable |
+  TermWrapped (Wrapper m)
   deriving (Eq, Ord, Read, Show)
 
 _Term = (Name "hydra/core.Term")
@@ -538,8 +538,6 @@ _Term_literal = (FieldName "literal")
 
 _Term_map = (FieldName "map")
 
-_Term_nominal = (FieldName "nominal")
-
 _Term_optional = (FieldName "optional")
 
 _Term_product = (FieldName "product")
@@ -556,6 +554,8 @@ _Term_union = (FieldName "union")
 
 _Term_variable = (FieldName "variable")
 
+_Term_wrapped = (FieldName "wrapped")
+
 -- | A data type
 data Type m = 
   -- | A type annotated with metadata
@@ -567,7 +567,6 @@ data Type m =
   TypeList (Type m) |
   TypeLiteral LiteralType |
   TypeMap (MapType m) |
-  TypeNominal Name |
   TypeOptional (Type m) |
   TypeProduct [Type m] |
   TypeRecord (RowType m) |
@@ -575,7 +574,8 @@ data Type m =
   TypeStream (Type m) |
   TypeSum [Type m] |
   TypeUnion (RowType m) |
-  TypeVariable VariableType
+  TypeVariable VariableType |
+  TypeWrapped Name
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")
@@ -596,8 +596,6 @@ _Type_literal = (FieldName "literal")
 
 _Type_map = (FieldName "map")
 
-_Type_nominal = (FieldName "nominal")
-
 _Type_optional = (FieldName "optional")
 
 _Type_product = (FieldName "product")
@@ -613,6 +611,8 @@ _Type_sum = (FieldName "sum")
 _Type_union = (FieldName "union")
 
 _Type_variable = (FieldName "variable")
+
+_Type_wrapped = (FieldName "wrapped")
 
 -- | A symbol which stands in for a term
 newtype Variable = 
