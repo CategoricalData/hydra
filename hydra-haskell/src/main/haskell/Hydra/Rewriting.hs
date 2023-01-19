@@ -149,7 +149,7 @@ rewriteTerm f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord $ Record n $ forField <$> fields
         TermSet s -> TermSet $ S.fromList $ recurse <$> S.toList s
         TermSum (Sum i s trm) -> TermSum $ Sum i s $ recurse trm
-        TermUnion (Union n field) -> TermUnion $ Union n $ forField field
+        TermUnion (Injection n field) -> TermUnion $ Injection n $ forField field
         TermVariable v -> TermVariable v
       where
         forField f = f {fieldTerm = recurse (fieldTerm f)}
@@ -191,7 +191,7 @@ rewriteTermM f mf = rewrite fsub f
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
         TermSet s -> TermSet <$> (S.fromList <$> (CM.mapM recurse $ S.toList s))
         TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
-        TermUnion (Union n field) -> TermUnion <$> (Union n <$> forField field)
+        TermUnion (Injection n field) -> TermUnion <$> (Injection n <$> forField field)
         TermVariable v -> pure $ TermVariable v
       where
         forField f = do
@@ -276,7 +276,7 @@ subterms term = case term of
   TermRecord (Record n fields) -> fieldTerm <$> fields
   TermSet s -> S.toList s
   TermSum (Sum _ _ trm) -> [trm]
-  TermUnion (Union _ field) -> [fieldTerm field]
+  TermUnion (Injection _ field) -> [fieldTerm field]
   _ -> []
 
 subtypes :: Type m -> [Type m]

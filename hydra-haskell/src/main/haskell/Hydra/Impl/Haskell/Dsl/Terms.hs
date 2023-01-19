@@ -124,7 +124,7 @@ expectString = expectLiteral Literals.expectString
 
 expectUnion :: Show m => Term m -> Flow s (Field m)
 expectUnion term = case stripTerm term of
-  TermUnion (Union _ field) -> pure field
+  TermUnion (Injection _ field) -> pure field
   _ -> unexpected "union" term
 
 field :: String -> Term m -> Field m
@@ -144,6 +144,9 @@ float = literal . Literals.float
 
 fold :: Term m -> Term m
 fold = TermFunction . FunctionElimination . EliminationList
+
+inject :: Name -> Field m -> Term m
+inject n = TermUnion . Injection n
 
 int16 :: Int16 -> Term m
 int16 = literal . Literals.int16
@@ -242,9 +245,6 @@ uint64 = literal . Literals.uint64
 uint8 :: Integer -> Term m
 uint8 = literal . Literals.uint8
 
-union :: Name -> Field m -> Term m
-union n = TermUnion . Union n
-
 unit :: Term m
 unit = TermRecord $ Record (Name "hydra/core.UnitType") []
 
@@ -258,7 +258,7 @@ variable :: String -> Term m
 variable = TermVariable . Variable
 
 variant :: Name -> FieldName -> Term m -> Term m
-variant n fname term = TermUnion $ Union n $ Field fname term
+variant n fname term = TermUnion $ Injection n $ Field fname term
 
 withVariant :: Name -> FieldName -> Term m
 withVariant n = constFunction . unitVariant n

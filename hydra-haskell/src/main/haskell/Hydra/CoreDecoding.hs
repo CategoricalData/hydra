@@ -165,7 +165,7 @@ matchUnion :: Show m => [(FieldName, Term m -> GraphFlow m b)] -> Term m -> Grap
 matchUnion pairs term = do
     term1 <- deref term
     case stripTerm term1 of
-      TermUnion (Union _ (Field fname val)) -> case M.lookup fname mapping of
+      TermUnion (Injection _ (Field fname val)) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val
       _ -> unexpected ("union with one of {" ++ L.intercalate ", " (unFieldName . fst <$> pairs) ++ "}") term

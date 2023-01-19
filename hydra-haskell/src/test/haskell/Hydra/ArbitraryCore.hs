@@ -189,7 +189,7 @@ arbitraryTerm typ n = case typ of
     TypeOptional ot -> optional <$> arbitraryOptional (arbitraryTerm ot) n'
     TypeRecord (RowType n _ sfields) -> record n <$> arbitraryFields sfields
     TypeSet st -> set <$> (S.fromList <$> arbitraryList False (arbitraryTerm st) n')
-    TypeUnion (RowType n _ sfields) -> union n <$> do
+    TypeUnion (RowType n _ sfields) -> inject n <$> do
       f <- QC.elements sfields
       let fn = fieldTypeName f
       ft <- arbitraryTerm (fieldTypeType f) n'
@@ -280,7 +280,7 @@ shrinkers typ = trivialShrinker ++ case typ of
         promoteType = (st, \(TermSet els) -> S.toList els)
         shrinkType = (\(t, m) -> (Types.set t, \(TermSet els) -> set . S.fromList <$> CM.mapM m (S.toList els))) <$> shrinkers st
     TypeUnion (RowType name _ sfields) -> dropFields
-        ++ shrinkFieldNames (TypeUnion . RowType name Nothing) (union name . L.head) (\(TermUnion (Union _ f)) -> [f]) sfields
+        ++ shrinkFieldNames (TypeUnion . RowType name Nothing) (inject name . L.head) (\(TermUnion (Injection _ f)) -> [f]) sfields
         ++ promoteTypes ++ shrinkTypes
       where
         dropFields = [] -- TODO

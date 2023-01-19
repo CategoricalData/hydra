@@ -280,7 +280,7 @@ passUnion t@(TypeUnion rt) = do
       $ bidirectional $ \dir term -> do
         dfield <- expectUnion term
         ad <- getAdapter adapters dfield
-        TermUnion . Union nm <$> encodeDecode dir (adapterCoder ad) dfield
+        TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
     getAdapter adapters f = Y.maybe (fail $ "no such field: " ++ unFieldName (fieldName f)) pure $ M.lookup (fieldName f) adapters
     sfields = rowTypeFields rt
@@ -336,11 +336,11 @@ unionToRecord t@(TypeUnion rt) = do
     let target = TypeRecord $ rt {rowTypeFields = makeOptional <$> sfields}
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
-      coderEncode = \(TermUnion (Union _ (Field fn term))) -> coderEncode (adapterCoder ad)
+      coderEncode = \(TermUnion (Injection _ (Field fn term))) -> coderEncode (adapterCoder ad)
         $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
         TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
-        union nm <$> fromRecordFields term (TermRecord (Record nm fields)) (adapterTarget ad) fields}
+        inject nm <$> fromRecordFields term (TermRecord (Record nm fields)) (adapterTarget ad) fields}
   where
     nm = rowTypeTypeName rt
     sfields = rowTypeFields rt

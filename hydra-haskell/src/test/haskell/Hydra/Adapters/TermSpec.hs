@@ -196,7 +196,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       (compareTo $ string s)
-      (union functionProxyName $ field "compareTo" $ string s)
+      (inject functionProxyName $ field "compareTo" $ string s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
@@ -205,7 +205,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       delta
-      (union functionProxyName $ field "element" unit)
+      (inject functionProxyName $ field "element" unit)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -223,7 +223,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType Types.string)
       False
       (primitive name)
-      (union functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
+      (inject functionProxyName $ field "primitive" $ string $ unName name) -- Note: the function name is not dereferenced
 
   H.it "Projections (when unsupported) become variant terms" $
     QC.property $ \fname -> checkDataAdapter
@@ -232,7 +232,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (functionProxyType testTypePerson)
       False
       (projection testTypePersonName fname)
-      (union functionProxyName $ field "record" $ string $
+      (inject functionProxyName $ field "record" $ string $
         show (projection testTypePersonName fname :: Term Meta)) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
@@ -253,7 +253,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
         Types.field "left" $ Types.optional Types.string,
         Types.field "right" $ Types.optional Types.int16])
       False
-      (union eitherStringOrInt8TypeName $ field "right" $ int8 i)
+      (inject eitherStringOrInt8TypeName $ field "right" $ int8 i)
       (record eitherStringOrInt8TypeName [
         field "left" $ optional Nothing,
         field "right" $ optional $ Just $ int16 $ fromIntegral i])

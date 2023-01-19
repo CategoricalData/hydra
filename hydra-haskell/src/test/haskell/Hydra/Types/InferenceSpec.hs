@@ -161,7 +161,7 @@ checkIndividualTerms = do
 
     H.it "Check unions" $ do
       expectMonotype
-        (union testTypeTimestampName $ Field (FieldName "unixTimeMillis") $ uint64 1638200308368)
+        (inject testTypeTimestampName $ Field (FieldName "unixTimeMillis") $ uint64 1638200308368)
         testTypeTimestamp
 
     H.it "Check sets" $ do
