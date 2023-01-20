@@ -35,39 +35,41 @@ unificationSolver (su, cs) = case cs of
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
 unify :: (Eq m, Show m) => Type m -> Type m -> GraphFlow m (Subst m)
-unify t1 t2 = if t1 == t2
-    then return M.empty
-    else case (t1, t2) of
-      -- Temporary; type parameters are ignored
-      (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
-      (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
-
-      (TypeAnnotated (Annotated at _), _) -> unify at t2
-      (_, TypeAnnotated (Annotated at _)) -> unify t1 at
+unify t1' t2' = case (stripType t1', stripType t2') of
+       -- Symmetric patterns
+      (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
+        unifyMany [lhs1, rhs1] [lhs2, rhs2]
       (TypeElement et1, TypeElement et2) -> unify et1 et2
       (TypeFunction (FunctionType dom cod), TypeFunction (FunctionType t3 t4)) -> unifyMany [dom, cod] [t3, t4]
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
+      (TypeLiteral lt1, TypeLiteral lt2) -> verify $ lt1 == lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
       (TypeOptional ot1, TypeOptional ot2) -> unify ot1 ot2
       (TypeProduct types1, TypeProduct types2) -> unifyMany types1 types2
       (TypeRecord rt1, TypeRecord rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
       (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
-      (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) -> unifyMany
-        [Types.variable v1, body1] [Types.variable v2, body2]
+      (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) ->
+        unifyMany [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
-      (TypeVariable v, _) -> bind v t2
-      (_, TypeVariable v) -> bind v t1
-      (TypeWrapped n1, TypeWrapped n2) -> if n1 == n2
-        then return M.empty
-        else failUnification
+      (TypeWrapped n1, TypeWrapped n2) -> verify $ n1 == n2
+
+      -- Asymmetric patterns
+      (TypeVariable v, t2) -> bind v t2
+      (t1, TypeVariable v) -> bind v t1
+
+      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "m")
+      (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
+      (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
+      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")
       (TypeWrapped _, _) -> return M.empty -- TODO
-      (_, TypeWrapped name) -> unify (Types.wrap name) t1
+      (_, TypeWrapped name) -> return M.empty -- TODO
+      
       (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
         ":\n  " ++ show l ++ "\n  " ++ show r
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = fail $ "could not unify type " ++ show t1 ++ " with " ++ show t2
+    failUnification = fail $ "could not unify type " ++ show (stripType t1') ++ " with " ++ show (stripType t2')
 
 unifyMany :: (Eq m, Show m) => [Type m] -> [Type m] -> GraphFlow m (Subst m)
 unifyMany [] [] = return M.empty
