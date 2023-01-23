@@ -8,6 +8,7 @@ import hydra.core.Field;
 import hydra.core.FieldName;
 import hydra.core.FloatValue;
 import hydra.core.Function;
+import hydra.core.Injection;
 import hydra.core.IntegerValue;
 import hydra.core.Lambda;
 import hydra.core.Let;
@@ -21,8 +22,10 @@ import hydra.core.Union;
 import hydra.core.UnitType;
 import hydra.core.Variable;
 
+import hydra.core.Wrapper;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -120,7 +123,9 @@ public interface Terms {
   }
 
   static <M> Term<M> let(final String var, final Term<M> defined, final Term<M> definedIn) {
-    return new Term.Let<>(new Let<>(new Variable(var), defined, definedIn));
+    Map<Variable, Term<M>> bindings = new HashMap<>();
+    bindings.put(new Variable(var), defined);
+    return new Term.Let<>(new Let<>(bindings, definedIn));
   }
 
   static <M> Term<M> list(final Term<M>... elements) {
@@ -141,10 +146,6 @@ public interface Terms {
       fields[i] = field(casePairs[i].getKey(), casePairs[i].getValue());
     }
     return cases(name, fields);
-  }
-
-  static <M> Term<M> nominal(final Name name, final Term<M> term) {
-    return new Term.Nominal<>(new Named<>(name, term));
   }
 
   static <M> Term<M> optional(final Optional<Term<M>> maybeTerm) {
@@ -200,7 +201,7 @@ public interface Terms {
   }
 
   static <M> Term<M> union(final Name unionName, final Field<M> field) {
-    return new Term.Union<>(new Union<>(unionName, field));
+    return new Term.Union<>(new Injection<>(unionName, field));
   }
 
   static <M> Term<M> union(final String unionName, final Field<M> field) {
@@ -213,5 +214,9 @@ public interface Terms {
 
   static <M> Term<M> variable(final String var) {
     return new Term.Variable<>(new Variable(var));
+  }
+
+  static <M> Term<M> wrap(final Name name, final Term<M> term) {
+    return new Term.Wrapped<>(new Wrapper<>(name, term));
   }
 }

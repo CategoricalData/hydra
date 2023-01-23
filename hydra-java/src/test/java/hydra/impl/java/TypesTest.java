@@ -1,6 +1,5 @@
 package hydra.impl.java;
 
-import hydra.compute.Meta;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
@@ -24,13 +23,13 @@ public class TypesTest {
 
   private final Type<String> locationType = union("Location",
       field("name", string()),
-      field("latlon", nominal("LatLon"))); // refer to named types using nominal(name)
+      field("latlon", wrap("LatLon"))); // refer to named types using nominal(name)
 
   private final Type<String> stringToIntType = function(
       string(), int32());
 
   private final Type<String> pairOfLatLonsToFloatType = function(
-      nominal("LatLon"), nominal("LatLon"), float32());
+      wrap("LatLon"), wrap("LatLon"), float32());
 
   private final Type<String> annotatedType = annot("this is a string-annotated double type", float64());
 
@@ -49,8 +48,8 @@ public class TypesTest {
     assertEquals(int32(), ((Type.Function<String>) stringToIntType).value.codomain);
 
     assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
-    assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Nominal);
-    assertEquals(name("LatLon"), ((Type.Nominal<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
+    assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrapped);
+    assertEquals(name("LatLon"), ((Type.Wrapped<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
 
     assertTrue(annotatedType instanceof Type.Annotated);
     // Notice that annotations, here, are String-valued
