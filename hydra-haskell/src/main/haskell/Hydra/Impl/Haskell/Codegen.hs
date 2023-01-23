@@ -30,9 +30,12 @@ import Hydra.Impl.Haskell.Sources.Ext.Graphql.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Haskell.Ast
 import Hydra.Impl.Haskell.Sources.Ext.Java.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Json.Model
+import Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax
 import Hydra.Impl.Haskell.Sources.Ext.Parquet.Format
 import Hydra.Impl.Haskell.Sources.Ext.Pegasus.Pdl
-import Hydra.Impl.Haskell.Sources.Ext.Owl.Syntax
+import Hydra.Impl.Haskell.Sources.Ext.Protobuf.Any
+import Hydra.Impl.Haskell.Sources.Ext.Protobuf.SourceContext
+import Hydra.Impl.Haskell.Sources.Ext.Protobuf.Type
 import Hydra.Impl.Haskell.Sources.Ext.Scala.Meta
 import Hydra.Impl.Haskell.Sources.Ext.Sql.Ansi
 import Hydra.Impl.Haskell.Sources.Ext.Tinkerpop.Features
@@ -101,6 +104,9 @@ extModules = [
   owlSyntaxModule,
   parquetFormatModule,
   pegasusPdlModule,
+  protobufAnyModule,
+  protobufSourceContextModule,
+  protobufTypeModule,
   rdfSyntaxModule,
   relationalModelModule,
   scalaMetaModule,
