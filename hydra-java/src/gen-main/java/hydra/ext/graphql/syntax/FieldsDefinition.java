@@ -3,10 +3,10 @@ package hydra.ext.graphql.syntax;
 public class FieldsDefinition {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/graphql/syntax.FieldsDefinition");
   
-  public final java.util.List<hydra.ext.graphql.syntax.FieldDefinition> listOfFieldDefinition;
+  public final java.util.List<hydra.ext.graphql.syntax.FieldDefinition> value;
   
-  public FieldsDefinition (java.util.List<hydra.ext.graphql.syntax.FieldDefinition> listOfFieldDefinition) {
-    this.listOfFieldDefinition = listOfFieldDefinition;
+  public FieldsDefinition (java.util.List<hydra.ext.graphql.syntax.FieldDefinition> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class FieldsDefinition {
       return false;
     }
     FieldsDefinition o = (FieldsDefinition) (other);
-    return listOfFieldDefinition.equals(o.listOfFieldDefinition);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfFieldDefinition.hashCode();
+    return 2 * value.hashCode();
   }
 }

@@ -63,9 +63,9 @@ public abstract class Regexp_ListOfAlts_Elmt {
   }
   
   public static final class Sequence extends hydra.ext.shex.syntax.Regexp_ListOfAlts_Elmt {
-    public final hydra.ext.shex.syntax.Regexp_ListOfAlts_Elmt_Sequence value;
+    public final String value;
     
-    public Sequence (hydra.ext.shex.syntax.Regexp_ListOfAlts_Elmt_Sequence value) {
+    public Sequence (String value) {
       this.value = value;
     }
     

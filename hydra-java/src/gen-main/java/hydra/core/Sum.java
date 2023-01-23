@@ -1,7 +1,7 @@
 package hydra.core;
 
 /**
- * The unlabeled equivalent of a Union term
+ * The unlabeled equivalent of an Injection term
  */
 public class Sum<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Sum");

@@ -57,9 +57,9 @@ public abstract class ListValue {
   }
   
   public static final class Sequence2 extends hydra.ext.graphql.syntax.ListValue {
-    public final hydra.ext.graphql.syntax.ListValue_Sequence2 value;
+    public final java.util.List<hydra.ext.graphql.syntax.Value> value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.ListValue_Sequence2 value) {
+    public Sequence2 (java.util.List<hydra.ext.graphql.syntax.Value> value) {
       this.value = value;
     }
     

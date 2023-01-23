@@ -30,9 +30,9 @@ public abstract class NonNullType {
   }
   
   public static final class Named extends hydra.ext.graphql.syntax.NonNullType {
-    public final hydra.ext.graphql.syntax.NonNullType_Named value;
+    public final hydra.ext.graphql.syntax.NamedType value;
     
-    public Named (hydra.ext.graphql.syntax.NonNullType_Named value) {
+    public Named (hydra.ext.graphql.syntax.NamedType value) {
       this.value = value;
     }
     
@@ -57,9 +57,9 @@ public abstract class NonNullType {
   }
   
   public static final class List extends hydra.ext.graphql.syntax.NonNullType {
-    public final hydra.ext.graphql.syntax.NonNullType_List value;
+    public final hydra.ext.graphql.syntax.ListType value;
     
-    public List (hydra.ext.graphql.syntax.NonNullType_List value) {
+    public List (hydra.ext.graphql.syntax.ListType value) {
       this.value = value;
     }
     

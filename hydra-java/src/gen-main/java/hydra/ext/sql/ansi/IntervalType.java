@@ -1,0 +1,23 @@
+package hydra.ext.sql.ansi;
+
+public class IntervalType {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/sql/ansi.IntervalType");
+  
+  public IntervalType () {
+  
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof IntervalType)) {
+      return false;
+    }
+    IntervalType o = (IntervalType) (other);
+    return true;
+  }
+  
+  @Override
+  public int hashCode() {
+    return 0;
+  }
+}

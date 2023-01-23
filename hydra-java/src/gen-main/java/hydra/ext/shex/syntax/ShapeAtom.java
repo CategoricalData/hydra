@@ -96,9 +96,9 @@ public abstract class ShapeAtom {
   }
   
   public static final class Sequence2 extends hydra.ext.shex.syntax.ShapeAtom {
-    public final hydra.ext.shex.syntax.ShapeAtom_Sequence2 value;
+    public final hydra.ext.shex.syntax.ShapeExpression value;
     
-    public Sequence2 (hydra.ext.shex.syntax.ShapeAtom_Sequence2 value) {
+    public Sequence2 (hydra.ext.shex.syntax.ShapeExpression value) {
       this.value = value;
     }
     

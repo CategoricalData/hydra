@@ -5,9 +5,9 @@ public class MultiElementOneOf {
   
   public final hydra.ext.shex.syntax.GroupTripleExpr groupTripleExpr;
   
-  public final java.util.List<hydra.ext.shex.syntax.MultiElementOneOf_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.GroupTripleExpr> listOfSequence;
   
-  public MultiElementOneOf (hydra.ext.shex.syntax.GroupTripleExpr groupTripleExpr, java.util.List<hydra.ext.shex.syntax.MultiElementOneOf_ListOfSequence_Elmt> listOfSequence) {
+  public MultiElementOneOf (hydra.ext.shex.syntax.GroupTripleExpr groupTripleExpr, java.util.List<hydra.ext.shex.syntax.GroupTripleExpr> listOfSequence) {
     this.groupTripleExpr = groupTripleExpr;
     this.listOfSequence = listOfSequence;
   }
@@ -30,7 +30,7 @@ public class MultiElementOneOf {
     return new MultiElementOneOf(groupTripleExpr, listOfSequence);
   }
   
-  public MultiElementOneOf withListOfSequence(java.util.List<hydra.ext.shex.syntax.MultiElementOneOf_ListOfSequence_Elmt> listOfSequence) {
+  public MultiElementOneOf withListOfSequence(java.util.List<hydra.ext.shex.syntax.GroupTripleExpr> listOfSequence) {
     return new MultiElementOneOf(groupTripleExpr, listOfSequence);
   }
 }

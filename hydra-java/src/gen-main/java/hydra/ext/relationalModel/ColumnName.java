@@ -1,0 +1,31 @@
+package hydra.ext.relationalModel;
+
+/**
+ * A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
+ */
+public class ColumnName {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/relationalModel.ColumnName");
+  
+  /**
+   * A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
+   */
+  public final String value;
+  
+  public ColumnName (String value) {
+    this.value = value;
+  }
+  
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof ColumnName)) {
+      return false;
+    }
+    ColumnName o = (ColumnName) (other);
+    return value.equals(o.value);
+  }
+  
+  @Override
+  public int hashCode() {
+    return 2 * value.hashCode();
+  }
+}

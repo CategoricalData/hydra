@@ -29,7 +29,7 @@ public abstract class TypeVariant {
     
     R visit(Map instance) ;
     
-    R visit(Nominal instance) ;
+    R visit(Wrapped instance) ;
     
     R visit(Optional instance) ;
     
@@ -85,7 +85,7 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
-    default R visit(Nominal instance) {
+    default R visit(Wrapped instance) {
       return otherwise((instance));
     }
     
@@ -322,17 +322,17 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Nominal extends hydra.mantle.TypeVariant {
-    public Nominal () {
+  public static final class Wrapped extends hydra.mantle.TypeVariant {
+    public Wrapped () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Nominal)) {
+      if (!(other instanceof Wrapped)) {
         return false;
       }
-      Nominal o = (Nominal) (other);
+      Wrapped o = (Wrapped) (other);
       return true;
     }
     

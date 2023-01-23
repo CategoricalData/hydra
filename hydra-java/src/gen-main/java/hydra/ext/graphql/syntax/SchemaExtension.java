@@ -57,9 +57,9 @@ public abstract class SchemaExtension {
   }
   
   public static final class Sequence2 extends hydra.ext.graphql.syntax.SchemaExtension {
-    public final hydra.ext.graphql.syntax.SchemaExtension_Sequence2 value;
+    public final hydra.ext.graphql.syntax.Directives value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.SchemaExtension_Sequence2 value) {
+    public Sequence2 (hydra.ext.graphql.syntax.Directives value) {
       this.value = value;
     }
     

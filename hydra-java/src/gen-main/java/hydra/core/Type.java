@@ -29,8 +29,6 @@ public abstract class Type<M> {
     
     R visit(Map instance) ;
     
-    R visit(Nominal instance) ;
-    
     R visit(Optional instance) ;
     
     R visit(Product instance) ;
@@ -46,6 +44,8 @@ public abstract class Type<M> {
     R visit(Union instance) ;
     
     R visit(Variable instance) ;
+    
+    R visit(Wrapped instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -85,10 +85,6 @@ public abstract class Type<M> {
       return otherwise((instance));
     }
     
-    default R visit(Nominal instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Optional instance) {
       return otherwise((instance));
     }
@@ -118,6 +114,10 @@ public abstract class Type<M> {
     }
     
     default R visit(Variable instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Wrapped instance) {
       return otherwise((instance));
     }
   }
@@ -344,33 +344,6 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Nominal<M> extends hydra.core.Type<M> {
-    public final hydra.core.Name value;
-    
-    public Nominal (hydra.core.Name value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Nominal)) {
-        return false;
-      }
-      Nominal o = (Nominal) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
   public static final class Optional<M> extends hydra.core.Type<M> {
     public final hydra.core.Type<M> value;
     
@@ -573,6 +546,33 @@ public abstract class Type<M> {
         return false;
       }
       Variable o = (Variable) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Wrapped<M> extends hydra.core.Type<M> {
+    public final hydra.core.Name value;
+    
+    public Wrapped (hydra.core.Name value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Wrapped)) {
+        return false;
+      }
+      Wrapped o = (Wrapped) (other);
       return value.equals(o.value);
     }
     

@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class Include {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.Include");
   
-  public final hydra.ext.shex.syntax.TripleExprLabel tripleExprLabel;
+  public final hydra.ext.shex.syntax.TripleExprLabel value;
   
-  public Include (hydra.ext.shex.syntax.TripleExprLabel tripleExprLabel) {
-    this.tripleExprLabel = tripleExprLabel;
+  public Include (hydra.ext.shex.syntax.TripleExprLabel value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class Include {
       return false;
     }
     Include o = (Include) (other);
-    return tripleExprLabel.equals(o.tripleExprLabel);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * tripleExprLabel.hashCode();
+    return 2 * value.hashCode();
   }
 }

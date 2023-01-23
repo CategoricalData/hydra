@@ -54,9 +54,9 @@ public abstract class NodeConstraint {
   }
   
   public static final class Sequence extends hydra.ext.shex.syntax.NodeConstraint {
-    public final hydra.ext.shex.syntax.NodeConstraint_Sequence value;
+    public final java.util.List<hydra.ext.shex.syntax.XsFacet> value;
     
-    public Sequence (hydra.ext.shex.syntax.NodeConstraint_Sequence value) {
+    public Sequence (java.util.List<hydra.ext.shex.syntax.XsFacet> value) {
       this.value = value;
     }
     

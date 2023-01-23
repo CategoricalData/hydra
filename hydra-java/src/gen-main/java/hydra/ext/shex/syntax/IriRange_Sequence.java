@@ -5,9 +5,9 @@ public class IriRange_Sequence {
   
   public final hydra.ext.shex.syntax.Iri iri;
   
-  public final java.util.Optional<hydra.ext.shex.syntax.IriRange_Sequence_Sequence_Option> sequence;
+  public final java.util.Optional<java.util.List<hydra.ext.shex.syntax.Exclusion>> sequence;
   
-  public IriRange_Sequence (hydra.ext.shex.syntax.Iri iri, java.util.Optional<hydra.ext.shex.syntax.IriRange_Sequence_Sequence_Option> sequence) {
+  public IriRange_Sequence (hydra.ext.shex.syntax.Iri iri, java.util.Optional<java.util.List<hydra.ext.shex.syntax.Exclusion>> sequence) {
     this.iri = iri;
     this.sequence = sequence;
   }
@@ -30,7 +30,7 @@ public class IriRange_Sequence {
     return new IriRange_Sequence(iri, sequence);
   }
   
-  public IriRange_Sequence withSequence(java.util.Optional<hydra.ext.shex.syntax.IriRange_Sequence_Sequence_Option> sequence) {
+  public IriRange_Sequence withSequence(java.util.Optional<java.util.List<hydra.ext.shex.syntax.Exclusion>> sequence) {
     return new IriRange_Sequence(iri, sequence);
   }
 }

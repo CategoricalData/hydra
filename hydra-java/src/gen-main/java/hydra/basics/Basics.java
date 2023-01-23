@@ -17,8 +17,8 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Nominal instance) {
-        return new hydra.mantle.EliminationVariant.Nominal();
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrapped instance) {
+        return new hydra.mantle.EliminationVariant.Wrapped();
       }
       
       @Override
@@ -41,7 +41,7 @@ public interface Basics {
   java.util.List<hydra.mantle.EliminationVariant> eliminationVariants = java.util.Arrays.asList(
     new hydra.mantle.EliminationVariant.Element(),
     new hydra.mantle.EliminationVariant.List(),
-    new hydra.mantle.EliminationVariant.Nominal(),
+    new hydra.mantle.EliminationVariant.Wrapped(),
     new hydra.mantle.EliminationVariant.Optional(),
     new hydra.mantle.EliminationVariant.Record(),
     new hydra.mantle.EliminationVariant.Union());
@@ -396,8 +396,8 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Nominal instance) {
-        return new hydra.mantle.TermVariant.Nominal();
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Wrapped instance) {
+        return new hydra.mantle.TermVariant.Wrapped();
       }
       
       @Override
@@ -450,7 +450,7 @@ public interface Basics {
     new hydra.mantle.TermVariant.Function(),
     new hydra.mantle.TermVariant.List(),
     new hydra.mantle.TermVariant.Map(),
-    new hydra.mantle.TermVariant.Nominal(),
+    new hydra.mantle.TermVariant.Wrapped(),
     new hydra.mantle.TermVariant.Optional(),
     new hydra.mantle.TermVariant.Product(),
     new hydra.mantle.TermVariant.Record(),
@@ -507,8 +507,8 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Nominal instance) {
-        return new hydra.mantle.TypeVariant.Nominal();
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrapped instance) {
+        return new hydra.mantle.TypeVariant.Wrapped();
       }
       
       @Override
@@ -562,7 +562,7 @@ public interface Basics {
     new hydra.mantle.TypeVariant.List(),
     new hydra.mantle.TypeVariant.Literal(),
     new hydra.mantle.TypeVariant.Map(),
-    new hydra.mantle.TypeVariant.Nominal(),
+    new hydra.mantle.TypeVariant.Wrapped(),
     new hydra.mantle.TypeVariant.Optional(),
     new hydra.mantle.TypeVariant.Product(),
     new hydra.mantle.TypeVariant.Record(),

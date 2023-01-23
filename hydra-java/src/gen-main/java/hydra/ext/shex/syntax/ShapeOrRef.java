@@ -123,9 +123,9 @@ public abstract class ShapeOrRef {
   }
   
   public static final class Sequence extends hydra.ext.shex.syntax.ShapeOrRef {
-    public final hydra.ext.shex.syntax.ShapeOrRef_Sequence value;
+    public final hydra.ext.shex.syntax.ShapeExprLabel value;
     
-    public Sequence (hydra.ext.shex.syntax.ShapeOrRef_Sequence value) {
+    public Sequence (hydra.ext.shex.syntax.ShapeExprLabel value) {
       this.value = value;
     }
     

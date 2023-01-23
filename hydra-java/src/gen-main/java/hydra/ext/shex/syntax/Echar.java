@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class Echar {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.Echar");
   
-  public final String regex;
+  public final String value;
   
-  public Echar (String regex) {
-    this.regex = regex;
+  public Echar (String value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class Echar {
       return false;
     }
     Echar o = (Echar) (other);
-    return regex.equals(o.regex);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * regex.hashCode();
+    return 2 * value.hashCode();
   }
 }
