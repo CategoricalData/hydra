@@ -130,14 +130,6 @@ public interface Types {
     return new Type.Map<>(new MapType<>(keys, values));
   }
 
-  static <M> Type<M> nominal(final Name name) {
-    return new Type.Nominal<>(name);
-  }
-
-  static <M> Type<M> nominal(final String name) {
-    return nominal(name(name));
-  }
-
   static <M> Type<M> optional(final Type<M> elements) {
     return new Type.Optional<>(elements);
   }
@@ -200,5 +192,13 @@ public interface Types {
 
   static <M> Type<M> variable(final String name) {
     return new Type.Variable<>(new VariableType(name));
+  }
+
+  static <M> Type<M> wrap(final Name name) {
+    return new Type.Wrapped<>(name);
+  }
+
+  static <M> Type<M> wrap(final String name) {
+    return wrap(name(name));
   }
 }
