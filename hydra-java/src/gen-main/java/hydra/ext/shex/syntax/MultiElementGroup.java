@@ -5,11 +5,11 @@ public class MultiElementGroup {
   
   public final hydra.ext.shex.syntax.UnaryTripleExpr unaryTripleExpr;
   
-  public final java.util.List<hydra.ext.shex.syntax.MultiElementGroup_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.UnaryTripleExpr> listOfSequence;
   
   public final java.util.Optional<java.lang.Void> semi;
   
-  public MultiElementGroup (hydra.ext.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.ext.shex.syntax.MultiElementGroup_ListOfSequence_Elmt> listOfSequence, java.util.Optional<java.lang.Void> semi) {
+  public MultiElementGroup (hydra.ext.shex.syntax.UnaryTripleExpr unaryTripleExpr, java.util.List<hydra.ext.shex.syntax.UnaryTripleExpr> listOfSequence, java.util.Optional<java.lang.Void> semi) {
     this.unaryTripleExpr = unaryTripleExpr;
     this.listOfSequence = listOfSequence;
     this.semi = semi;
@@ -33,7 +33,7 @@ public class MultiElementGroup {
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   
-  public MultiElementGroup withListOfSequence(java.util.List<hydra.ext.shex.syntax.MultiElementGroup_ListOfSequence_Elmt> listOfSequence) {
+  public MultiElementGroup withListOfSequence(java.util.List<hydra.ext.shex.syntax.UnaryTripleExpr> listOfSequence) {
     return new MultiElementGroup(unaryTripleExpr, listOfSequence, semi);
   }
   

@@ -5,9 +5,9 @@ public class RepeatRange {
   
   public final hydra.ext.shex.syntax.Integer_ integer;
   
-  public final java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option> sequence;
+  public final java.util.Optional<java.util.Optional<java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence;
   
-  public RepeatRange (hydra.ext.shex.syntax.Integer_ integer, java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option> sequence) {
+  public RepeatRange (hydra.ext.shex.syntax.Integer_ integer, java.util.Optional<java.util.Optional<java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
     this.integer = integer;
     this.sequence = sequence;
   }
@@ -30,7 +30,7 @@ public class RepeatRange {
     return new RepeatRange(integer, sequence);
   }
   
-  public RepeatRange withSequence(java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option> sequence) {
+  public RepeatRange withSequence(java.util.Optional<java.util.Optional<java.util.Optional<hydra.ext.shex.syntax.RepeatRange_Sequence_Option_Option_Option>>> sequence) {
     return new RepeatRange(integer, sequence);
   }
 }

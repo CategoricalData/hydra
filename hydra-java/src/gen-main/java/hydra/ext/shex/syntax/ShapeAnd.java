@@ -5,9 +5,9 @@ public class ShapeAnd {
   
   public final hydra.ext.shex.syntax.ShapeNot shapeNot;
   
-  public final java.util.List<hydra.ext.shex.syntax.ShapeAnd_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.ShapeNot> listOfSequence;
   
-  public ShapeAnd (hydra.ext.shex.syntax.ShapeNot shapeNot, java.util.List<hydra.ext.shex.syntax.ShapeAnd_ListOfSequence_Elmt> listOfSequence) {
+  public ShapeAnd (hydra.ext.shex.syntax.ShapeNot shapeNot, java.util.List<hydra.ext.shex.syntax.ShapeNot> listOfSequence) {
     this.shapeNot = shapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -30,7 +30,7 @@ public class ShapeAnd {
     return new ShapeAnd(shapeNot, listOfSequence);
   }
   
-  public ShapeAnd withListOfSequence(java.util.List<hydra.ext.shex.syntax.ShapeAnd_ListOfSequence_Elmt> listOfSequence) {
+  public ShapeAnd withListOfSequence(java.util.List<hydra.ext.shex.syntax.ShapeNot> listOfSequence) {
     return new ShapeAnd(shapeNot, listOfSequence);
   }
 }

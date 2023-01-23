@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class ExtraPropertySet {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.ExtraPropertySet");
   
-  public final java.util.List<hydra.ext.shex.syntax.Predicate> listOfPredicate;
+  public final java.util.List<hydra.ext.shex.syntax.Predicate> value;
   
-  public ExtraPropertySet (java.util.List<hydra.ext.shex.syntax.Predicate> listOfPredicate) {
-    this.listOfPredicate = listOfPredicate;
+  public ExtraPropertySet (java.util.List<hydra.ext.shex.syntax.Predicate> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class ExtraPropertySet {
       return false;
     }
     ExtraPropertySet o = (ExtraPropertySet) (other);
-    return listOfPredicate.equals(o.listOfPredicate);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfPredicate.hashCode();
+    return 2 * value.hashCode();
   }
 }

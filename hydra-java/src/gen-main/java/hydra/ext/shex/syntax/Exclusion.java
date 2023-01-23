@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class Exclusion {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.Exclusion");
   
-  public final hydra.ext.shex.syntax.Iri iri;
+  public final hydra.ext.shex.syntax.Iri value;
   
-  public Exclusion (hydra.ext.shex.syntax.Iri iri) {
-    this.iri = iri;
+  public Exclusion (hydra.ext.shex.syntax.Iri value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class Exclusion {
       return false;
     }
     Exclusion o = (Exclusion) (other);
-    return iri.equals(o.iri);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * iri.hashCode();
+    return 2 * value.hashCode();
   }
 }

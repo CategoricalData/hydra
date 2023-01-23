@@ -1,20 +1,17 @@
 package hydra.core;
 
 /**
- * A 'let' binding
+ * A set of (possibly recursive) 'let' bindings
  */
 public class Let<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
   
-  public final hydra.core.Variable key;
-  
-  public final hydra.core.Term<M> value;
+  public final java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings;
   
   public final hydra.core.Term<M> environment;
   
-  public Let (hydra.core.Variable key, hydra.core.Term<M> value, hydra.core.Term<M> environment) {
-    this.key = key;
-    this.value = value;
+  public Let (java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings, hydra.core.Term<M> environment) {
+    this.bindings = bindings;
     this.environment = environment;
   }
   
@@ -24,23 +21,19 @@ public class Let<M> {
       return false;
     }
     Let o = (Let) (other);
-    return key.equals(o.key) && value.equals(o.value) && environment.equals(o.environment);
+    return bindings.equals(o.bindings) && environment.equals(o.environment);
   }
   
   @Override
   public int hashCode() {
-    return 2 * key.hashCode() + 3 * value.hashCode() + 5 * environment.hashCode();
+    return 2 * bindings.hashCode() + 3 * environment.hashCode();
   }
   
-  public Let withKey(hydra.core.Variable key) {
-    return new Let(key, value, environment);
-  }
-  
-  public Let withValue(hydra.core.Term<M> value) {
-    return new Let(key, value, environment);
+  public Let withBindings(java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings) {
+    return new Let(bindings, environment);
   }
   
   public Let withEnvironment(hydra.core.Term<M> environment) {
-    return new Let(key, value, environment);
+    return new Let(bindings, environment);
   }
 }

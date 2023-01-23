@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class PnLocalEsc {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.PnLocalEsc");
   
-  public final String regex;
+  public final String value;
   
-  public PnLocalEsc (String regex) {
-    this.regex = regex;
+  public PnLocalEsc (String value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class PnLocalEsc {
       return false;
     }
     PnLocalEsc o = (PnLocalEsc) (other);
-    return regex.equals(o.regex);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * regex.hashCode();
+    return 2 * value.hashCode();
   }
 }

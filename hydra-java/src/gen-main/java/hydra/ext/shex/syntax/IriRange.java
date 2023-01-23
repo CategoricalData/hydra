@@ -57,9 +57,9 @@ public abstract class IriRange {
   }
   
   public static final class Sequence2 extends hydra.ext.shex.syntax.IriRange {
-    public final hydra.ext.shex.syntax.IriRange_Sequence2 value;
+    public final java.util.List<hydra.ext.shex.syntax.Exclusion> value;
     
-    public Sequence2 (hydra.ext.shex.syntax.IriRange_Sequence2 value) {
+    public Sequence2 (java.util.List<hydra.ext.shex.syntax.Exclusion> value) {
       this.value = value;
     }
     

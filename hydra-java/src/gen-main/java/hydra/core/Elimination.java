@@ -17,13 +17,13 @@ public abstract class Elimination<M> {
     
     R visit(List instance) ;
     
-    R visit(Nominal instance) ;
-    
     R visit(Optional instance) ;
     
     R visit(Record instance) ;
     
     R visit(Union instance) ;
+    
+    R visit(Wrapped instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -39,10 +39,6 @@ public abstract class Elimination<M> {
       return otherwise((instance));
     }
     
-    default R visit(Nominal instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Optional instance) {
       return otherwise((instance));
     }
@@ -52,6 +48,10 @@ public abstract class Elimination<M> {
     }
     
     default R visit(Union instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Wrapped instance) {
       return otherwise((instance));
     }
   }
@@ -103,39 +103,6 @@ public abstract class Elimination<M> {
         return false;
       }
       List o = (List) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * Eliminates a nominal term by extracting the wrapped term
-   */
-  public static final class Nominal<M> extends hydra.core.Elimination<M> {
-    /**
-     * Eliminates a nominal term by extracting the wrapped term
-     */
-    public final hydra.core.Name value;
-    
-    public Nominal (hydra.core.Name value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Nominal)) {
-        return false;
-      }
-      Nominal o = (Nominal) (other);
       return value.equals(o.value);
     }
     
@@ -235,6 +202,39 @@ public abstract class Elimination<M> {
         return false;
       }
       Union o = (Union) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * Unwrap a wrapped term
+   */
+  public static final class Wrapped<M> extends hydra.core.Elimination<M> {
+    /**
+     * Unwrap a wrapped term
+     */
+    public final hydra.core.Name value;
+    
+    public Wrapped (hydra.core.Name value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Wrapped)) {
+        return false;
+      }
+      Wrapped o = (Wrapped) (other);
       return value.equals(o.value);
     }
     

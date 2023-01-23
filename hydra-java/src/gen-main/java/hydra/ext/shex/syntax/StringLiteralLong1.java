@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class StringLiteralLong1 {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.StringLiteralLong1");
   
-  public final java.util.List<hydra.ext.shex.syntax.StringLiteralLong1_ListOfAlts_Elmt> listOfAlts;
+  public final java.util.List<hydra.ext.shex.syntax.StringLiteralLong1_Elmt> value;
   
-  public StringLiteralLong1 (java.util.List<hydra.ext.shex.syntax.StringLiteralLong1_ListOfAlts_Elmt> listOfAlts) {
-    this.listOfAlts = listOfAlts;
+  public StringLiteralLong1 (java.util.List<hydra.ext.shex.syntax.StringLiteralLong1_Elmt> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class StringLiteralLong1 {
       return false;
     }
     StringLiteralLong1 o = (StringLiteralLong1) (other);
-    return listOfAlts.equals(o.listOfAlts);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfAlts.hashCode();
+    return 2 * value.hashCode();
   }
 }

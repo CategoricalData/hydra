@@ -57,9 +57,9 @@ public abstract class ObjectValue {
   }
   
   public static final class Sequence2 extends hydra.ext.graphql.syntax.ObjectValue {
-    public final hydra.ext.graphql.syntax.ObjectValue_Sequence2 value;
+    public final java.util.List<hydra.ext.graphql.syntax.ObjectField> value;
     
-    public Sequence2 (hydra.ext.graphql.syntax.ObjectValue_Sequence2 value) {
+    public Sequence2 (java.util.List<hydra.ext.graphql.syntax.ObjectField> value) {
       this.value = value;
     }
     

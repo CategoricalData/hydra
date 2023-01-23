@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class PnameNs {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.PnameNs");
   
-  public final java.util.Optional<hydra.ext.shex.syntax.PnPrefix> pnPrefix;
+  public final java.util.Optional<hydra.ext.shex.syntax.PnPrefix> value;
   
-  public PnameNs (java.util.Optional<hydra.ext.shex.syntax.PnPrefix> pnPrefix) {
-    this.pnPrefix = pnPrefix;
+  public PnameNs (java.util.Optional<hydra.ext.shex.syntax.PnPrefix> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class PnameNs {
       return false;
     }
     PnameNs o = (PnameNs) (other);
-    return pnPrefix.equals(o.pnPrefix);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * pnPrefix.hashCode();
+    return 2 * value.hashCode();
   }
 }

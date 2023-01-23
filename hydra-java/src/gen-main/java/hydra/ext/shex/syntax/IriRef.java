@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class IriRef {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.IriRef");
   
-  public final java.util.List<hydra.ext.shex.syntax.IriRef_ListOfAlts_Elmt> listOfAlts;
+  public final java.util.List<hydra.ext.shex.syntax.IriRef_Elmt> value;
   
-  public IriRef (java.util.List<hydra.ext.shex.syntax.IriRef_ListOfAlts_Elmt> listOfAlts) {
-    this.listOfAlts = listOfAlts;
+  public IriRef (java.util.List<hydra.ext.shex.syntax.IriRef_Elmt> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class IriRef {
       return false;
     }
     IriRef o = (IriRef) (other);
-    return listOfAlts.equals(o.listOfAlts);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfAlts.hashCode();
+    return 2 * value.hashCode();
   }
 }

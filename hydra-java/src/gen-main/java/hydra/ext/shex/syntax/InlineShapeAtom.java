@@ -96,9 +96,9 @@ public abstract class InlineShapeAtom {
   }
   
   public static final class Sequence3 extends hydra.ext.shex.syntax.InlineShapeAtom {
-    public final hydra.ext.shex.syntax.InlineShapeAtom_Sequence3 value;
+    public final hydra.ext.shex.syntax.ShapeExpression value;
     
-    public Sequence3 (hydra.ext.shex.syntax.InlineShapeAtom_Sequence3 value) {
+    public Sequence3 (hydra.ext.shex.syntax.ShapeExpression value) {
       this.value = value;
     }
     

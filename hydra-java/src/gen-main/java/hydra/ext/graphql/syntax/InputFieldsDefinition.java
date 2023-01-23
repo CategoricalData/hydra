@@ -3,10 +3,10 @@ package hydra.ext.graphql.syntax;
 public class InputFieldsDefinition {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/graphql/syntax.InputFieldsDefinition");
   
-  public final java.util.List<hydra.ext.graphql.syntax.InputValueDefinition> listOfInputValueDefinition;
+  public final java.util.List<hydra.ext.graphql.syntax.InputValueDefinition> value;
   
-  public InputFieldsDefinition (java.util.List<hydra.ext.graphql.syntax.InputValueDefinition> listOfInputValueDefinition) {
-    this.listOfInputValueDefinition = listOfInputValueDefinition;
+  public InputFieldsDefinition (java.util.List<hydra.ext.graphql.syntax.InputValueDefinition> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class InputFieldsDefinition {
       return false;
     }
     InputFieldsDefinition o = (InputFieldsDefinition) (other);
-    return listOfInputValueDefinition.equals(o.listOfInputValueDefinition);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfInputValueDefinition.hashCode();
+    return 2 * value.hashCode();
   }
 }

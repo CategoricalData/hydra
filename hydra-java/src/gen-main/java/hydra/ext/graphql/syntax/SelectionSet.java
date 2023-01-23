@@ -3,10 +3,10 @@ package hydra.ext.graphql.syntax;
 public class SelectionSet {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/graphql/syntax.SelectionSet");
   
-  public final java.util.List<hydra.ext.graphql.syntax.Selection> listOfSelection;
+  public final java.util.List<hydra.ext.graphql.syntax.Selection> value;
   
-  public SelectionSet (java.util.List<hydra.ext.graphql.syntax.Selection> listOfSelection) {
-    this.listOfSelection = listOfSelection;
+  public SelectionSet (java.util.List<hydra.ext.graphql.syntax.Selection> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class SelectionSet {
       return false;
     }
     SelectionSet o = (SelectionSet) (other);
-    return listOfSelection.equals(o.listOfSelection);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfSelection.hashCode();
+    return 2 * value.hashCode();
   }
 }

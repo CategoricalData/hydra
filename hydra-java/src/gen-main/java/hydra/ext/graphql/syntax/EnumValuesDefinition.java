@@ -3,10 +3,10 @@ package hydra.ext.graphql.syntax;
 public class EnumValuesDefinition {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/graphql/syntax.EnumValuesDefinition");
   
-  public final java.util.List<hydra.ext.graphql.syntax.EnumValueDefinition> listOfEnumValueDefinition;
+  public final java.util.List<hydra.ext.graphql.syntax.EnumValueDefinition> value;
   
-  public EnumValuesDefinition (java.util.List<hydra.ext.graphql.syntax.EnumValueDefinition> listOfEnumValueDefinition) {
-    this.listOfEnumValueDefinition = listOfEnumValueDefinition;
+  public EnumValuesDefinition (java.util.List<hydra.ext.graphql.syntax.EnumValueDefinition> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class EnumValuesDefinition {
       return false;
     }
     EnumValuesDefinition o = (EnumValuesDefinition) (other);
-    return listOfEnumValueDefinition.equals(o.listOfEnumValueDefinition);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfEnumValueDefinition.hashCode();
+    return 2 * value.hashCode();
   }
 }

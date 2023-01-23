@@ -57,9 +57,9 @@ public abstract class RdfLiteral_Alts_Option {
   }
   
   public static final class Sequence extends hydra.ext.shex.syntax.RdfLiteral_Alts_Option {
-    public final hydra.ext.shex.syntax.RdfLiteral_Alts_Option_Sequence value;
+    public final hydra.ext.shex.syntax.Datatype value;
     
-    public Sequence (hydra.ext.shex.syntax.RdfLiteral_Alts_Option_Sequence value) {
+    public Sequence (hydra.ext.shex.syntax.Datatype value) {
       this.value = value;
     }
     

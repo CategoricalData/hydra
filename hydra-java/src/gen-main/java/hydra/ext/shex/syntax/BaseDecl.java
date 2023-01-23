@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class BaseDecl {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.BaseDecl");
   
-  public final hydra.ext.shex.syntax.IriRef iriRef;
+  public final hydra.ext.shex.syntax.IriRef value;
   
-  public BaseDecl (hydra.ext.shex.syntax.IriRef iriRef) {
-    this.iriRef = iriRef;
+  public BaseDecl (hydra.ext.shex.syntax.IriRef value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class BaseDecl {
       return false;
     }
     BaseDecl o = (BaseDecl) (other);
-    return iriRef.equals(o.iriRef);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * iriRef.hashCode();
+    return 2 * value.hashCode();
   }
 }

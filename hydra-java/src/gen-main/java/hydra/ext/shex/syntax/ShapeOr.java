@@ -5,9 +5,9 @@ public class ShapeOr {
   
   public final hydra.ext.shex.syntax.ShapeAnd shapeAnd;
   
-  public final java.util.List<hydra.ext.shex.syntax.ShapeOr_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.ShapeAnd> listOfSequence;
   
-  public ShapeOr (hydra.ext.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.ext.shex.syntax.ShapeOr_ListOfSequence_Elmt> listOfSequence) {
+  public ShapeOr (hydra.ext.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.ext.shex.syntax.ShapeAnd> listOfSequence) {
     this.shapeAnd = shapeAnd;
     this.listOfSequence = listOfSequence;
   }
@@ -30,7 +30,7 @@ public class ShapeOr {
     return new ShapeOr(shapeAnd, listOfSequence);
   }
   
-  public ShapeOr withListOfSequence(java.util.List<hydra.ext.shex.syntax.ShapeOr_ListOfSequence_Elmt> listOfSequence) {
+  public ShapeOr withListOfSequence(java.util.List<hydra.ext.shex.syntax.ShapeAnd> listOfSequence) {
     return new ShapeOr(shapeAnd, listOfSequence);
   }
 }

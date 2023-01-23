@@ -3,11 +3,11 @@ package hydra.ext.shex.syntax;
 public class UnaryTripleExpr_Sequence {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.UnaryTripleExpr.Sequence");
   
-  public final java.util.Optional<hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Sequence_Option> sequence;
+  public final java.util.Optional<hydra.ext.shex.syntax.TripleExprLabel> sequence;
   
   public final hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Alts alts;
   
-  public UnaryTripleExpr_Sequence (java.util.Optional<hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Sequence_Option> sequence, hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
+  public UnaryTripleExpr_Sequence (java.util.Optional<hydra.ext.shex.syntax.TripleExprLabel> sequence, hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Alts alts) {
     this.sequence = sequence;
     this.alts = alts;
   }
@@ -26,7 +26,7 @@ public class UnaryTripleExpr_Sequence {
     return 2 * sequence.hashCode() + 3 * alts.hashCode();
   }
   
-  public UnaryTripleExpr_Sequence withSequence(java.util.Optional<hydra.ext.shex.syntax.UnaryTripleExpr_Sequence_Sequence_Option> sequence) {
+  public UnaryTripleExpr_Sequence withSequence(java.util.Optional<hydra.ext.shex.syntax.TripleExprLabel> sequence) {
     return new UnaryTripleExpr_Sequence(sequence, alts);
   }
   

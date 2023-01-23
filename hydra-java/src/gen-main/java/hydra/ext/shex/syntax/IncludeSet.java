@@ -3,10 +3,10 @@ package hydra.ext.shex.syntax;
 public class IncludeSet {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ext/shex/syntax.IncludeSet");
   
-  public final java.util.List<hydra.ext.shex.syntax.ShapeExprLabel> listOfShapeExprLabel;
+  public final java.util.List<hydra.ext.shex.syntax.ShapeExprLabel> value;
   
-  public IncludeSet (java.util.List<hydra.ext.shex.syntax.ShapeExprLabel> listOfShapeExprLabel) {
-    this.listOfShapeExprLabel = listOfShapeExprLabel;
+  public IncludeSet (java.util.List<hydra.ext.shex.syntax.ShapeExprLabel> value) {
+    this.value = value;
   }
   
   @Override
@@ -15,11 +15,11 @@ public class IncludeSet {
       return false;
     }
     IncludeSet o = (IncludeSet) (other);
-    return listOfShapeExprLabel.equals(o.listOfShapeExprLabel);
+    return value.equals(o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * listOfShapeExprLabel.hashCode();
+    return 2 * value.hashCode();
   }
 }

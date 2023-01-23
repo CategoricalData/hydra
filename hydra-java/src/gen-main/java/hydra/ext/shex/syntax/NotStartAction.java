@@ -30,9 +30,9 @@ public abstract class NotStartAction {
   }
   
   public static final class Start extends hydra.ext.shex.syntax.NotStartAction {
-    public final hydra.ext.shex.syntax.NotStartAction_Start value;
+    public final hydra.ext.shex.syntax.ShapeExpression value;
     
-    public Start (hydra.ext.shex.syntax.NotStartAction_Start value) {
+    public Start (hydra.ext.shex.syntax.ShapeExpression value) {
       this.value = value;
     }
     

@@ -5,9 +5,9 @@ public class InlineShapeAnd {
   
   public final hydra.ext.shex.syntax.InlineShapeNot inlineShapeNot;
   
-  public final java.util.List<hydra.ext.shex.syntax.InlineShapeAnd_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.InlineShapeNot> listOfSequence;
   
-  public InlineShapeAnd (hydra.ext.shex.syntax.InlineShapeNot inlineShapeNot, java.util.List<hydra.ext.shex.syntax.InlineShapeAnd_ListOfSequence_Elmt> listOfSequence) {
+  public InlineShapeAnd (hydra.ext.shex.syntax.InlineShapeNot inlineShapeNot, java.util.List<hydra.ext.shex.syntax.InlineShapeNot> listOfSequence) {
     this.inlineShapeNot = inlineShapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -30,7 +30,7 @@ public class InlineShapeAnd {
     return new InlineShapeAnd(inlineShapeNot, listOfSequence);
   }
   
-  public InlineShapeAnd withListOfSequence(java.util.List<hydra.ext.shex.syntax.InlineShapeAnd_ListOfSequence_Elmt> listOfSequence) {
+  public InlineShapeAnd withListOfSequence(java.util.List<hydra.ext.shex.syntax.InlineShapeNot> listOfSequence) {
     return new InlineShapeAnd(inlineShapeNot, listOfSequence);
   }
 }

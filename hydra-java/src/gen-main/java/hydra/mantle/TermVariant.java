@@ -29,7 +29,7 @@ public abstract class TermVariant {
     
     R visit(Map instance) ;
     
-    R visit(Nominal instance) ;
+    R visit(Wrapped instance) ;
     
     R visit(Optional instance) ;
     
@@ -85,7 +85,7 @@ public abstract class TermVariant {
       return otherwise((instance));
     }
     
-    default R visit(Nominal instance) {
+    default R visit(Wrapped instance) {
       return otherwise((instance));
     }
     
@@ -322,17 +322,17 @@ public abstract class TermVariant {
     }
   }
   
-  public static final class Nominal extends hydra.mantle.TermVariant {
-    public Nominal () {
+  public static final class Wrapped extends hydra.mantle.TermVariant {
+    public Wrapped () {
     
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Nominal)) {
+      if (!(other instanceof Wrapped)) {
         return false;
       }
-      Nominal o = (Nominal) (other);
+      Wrapped o = (Wrapped) (other);
       return true;
     }
     

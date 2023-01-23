@@ -5,9 +5,9 @@ public class InlineShapeOr {
   
   public final hydra.ext.shex.syntax.ShapeAnd shapeAnd;
   
-  public final java.util.List<hydra.ext.shex.syntax.InlineShapeOr_ListOfSequence_Elmt> listOfSequence;
+  public final java.util.List<hydra.ext.shex.syntax.InlineShapeAnd> listOfSequence;
   
-  public InlineShapeOr (hydra.ext.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.ext.shex.syntax.InlineShapeOr_ListOfSequence_Elmt> listOfSequence) {
+  public InlineShapeOr (hydra.ext.shex.syntax.ShapeAnd shapeAnd, java.util.List<hydra.ext.shex.syntax.InlineShapeAnd> listOfSequence) {
     this.shapeAnd = shapeAnd;
     this.listOfSequence = listOfSequence;
   }
@@ -30,7 +30,7 @@ public class InlineShapeOr {
     return new InlineShapeOr(shapeAnd, listOfSequence);
   }
   
-  public InlineShapeOr withListOfSequence(java.util.List<hydra.ext.shex.syntax.InlineShapeOr_ListOfSequence_Elmt> listOfSequence) {
+  public InlineShapeOr withListOfSequence(java.util.List<hydra.ext.shex.syntax.InlineShapeAnd> listOfSequence) {
     return new InlineShapeOr(shapeAnd, listOfSequence);
   }
 }
