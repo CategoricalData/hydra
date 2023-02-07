@@ -6,20 +6,44 @@ package hydra.compute;
 public class LanguageConstraints<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.LanguageConstraints");
   
+  /**
+   * All supported elimination variants
+   */
   public final java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants;
   
+  /**
+   * All supported literal variants
+   */
   public final java.util.Set<hydra.mantle.LiteralVariant> literalVariants;
   
+  /**
+   * All supported float types
+   */
   public final java.util.Set<hydra.core.FloatType> floatTypes;
   
+  /**
+   * All supported function variants
+   */
   public final java.util.Set<hydra.mantle.FunctionVariant> functionVariants;
   
+  /**
+   * All supported integer types
+   */
   public final java.util.Set<hydra.core.IntegerType> integerTypes;
   
+  /**
+   * All supported term variants
+   */
   public final java.util.Set<hydra.mantle.TermVariant> termVariants;
   
+  /**
+   * All supported type variants
+   */
   public final java.util.Set<hydra.mantle.TypeVariant> typeVariants;
   
+  /**
+   * A logical set of types, as a predicate which tests a type for inclusion
+   */
   public final java.util.function.Function<hydra.core.Type<M>, Boolean> types;
   
   public LanguageConstraints (java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants, java.util.Set<hydra.mantle.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.mantle.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.mantle.TermVariant> termVariants, java.util.Set<hydra.mantle.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<M>, Boolean> types) {
