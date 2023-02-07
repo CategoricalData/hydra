@@ -116,9 +116,13 @@ _CoderDirection_decode = (Core.FieldName "decode")
 -- | An environment containing a graph together with primitive functions and other necessary components for evaluation
 data Context m = 
   Context {
+    -- | The graph itself
     contextGraph :: (Mantle.Graph m),
+    -- | All supported primitive functions, by name
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
+    -- | The evaluation strategy which is to be used in this context
     contextStrategy :: EvaluationStrategy,
+    -- | The annotation class which is supported in this context
     contextAnnotations :: (AnnotationClass m)}
 
 _Context = (Core.Name "hydra/compute.Context")
@@ -179,13 +183,21 @@ _Language_constraints = (Core.FieldName "constraints")
 -- | A set of constraints on valid type and term expressions, characterizing a language
 data LanguageConstraints m = 
   LanguageConstraints {
+    -- | All supported elimination variants
     languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
+    -- | All supported literal variants
     languageConstraintsLiteralVariants :: (Set Mantle.LiteralVariant),
+    -- | All supported float types
     languageConstraintsFloatTypes :: (Set Core.FloatType),
+    -- | All supported function variants
     languageConstraintsFunctionVariants :: (Set Mantle.FunctionVariant),
+    -- | All supported integer types
     languageConstraintsIntegerTypes :: (Set Core.IntegerType),
+    -- | All supported term variants
     languageConstraintsTermVariants :: (Set Mantle.TermVariant),
+    -- | All supported type variants
     languageConstraintsTypeVariants :: (Set Mantle.TypeVariant),
+    -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type m -> Bool)}
 
 _LanguageConstraints = (Core.Name "hydra/compute.LanguageConstraints")
@@ -229,8 +241,11 @@ _Meta_annotations = (Core.FieldName "annotations")
 -- | A built-in function
 data PrimitiveFunction m = 
   PrimitiveFunction {
+    -- | The unique name of the primitive function
     primitiveFunctionName :: Core.Name,
+    -- | The type signature of the primitive function
     primitiveFunctionType :: (Core.FunctionType m),
+    -- | A concrete implementation of the primitive function
     primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
 
 _PrimitiveFunction = (Core.Name "hydra/compute.PrimitiveFunction")

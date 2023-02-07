@@ -6,10 +6,19 @@ package hydra.compute;
 public class PrimitiveFunction<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.PrimitiveFunction");
   
+  /**
+   * The unique name of the primitive function
+   */
   public final hydra.core.Name name;
   
+  /**
+   * The type signature of the primitive function
+   */
   public final hydra.core.FunctionType<M> type;
   
+  /**
+   * A concrete implementation of the primitive function
+   */
   public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation;
   
   public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {

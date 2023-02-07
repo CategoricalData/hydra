@@ -6,12 +6,24 @@ package hydra.compute;
 public class Context<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Context");
   
+  /**
+   * The graph itself
+   */
   public final hydra.mantle.Graph<M> graph;
   
+  /**
+   * All supported primitive functions, by name
+   */
   public final java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions;
   
+  /**
+   * The evaluation strategy which is to be used in this context
+   */
   public final hydra.compute.EvaluationStrategy strategy;
   
+  /**
+   * The annotation class which is supported in this context
+   */
   public final hydra.compute.AnnotationClass<M> annotations;
   
   public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions, hydra.compute.EvaluationStrategy strategy, hydra.compute.AnnotationClass<M> annotations) {

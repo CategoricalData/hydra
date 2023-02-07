@@ -80,10 +80,18 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "Context" $
         doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
-          "graph">: mantle "Graph" @@ "m",
-          "functions">: Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
-          "strategy">: compute "EvaluationStrategy",
-          "annotations">: compute "AnnotationClass" @@ "m"],
+          "graph">:
+            doc "The graph itself" $
+            mantle "Graph" @@ "m",
+          "functions">:
+            doc "All supported primitive functions, by name" $
+            Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
+          "strategy">:
+            doc "The evaluation strategy which is to be used in this context" $
+            compute "EvaluationStrategy",
+          "annotations">:
+            doc "The annotation class which is supported in this context" $
+            compute "AnnotationClass" @@ "m"],
 
       def "EvaluationStrategy" $
         doc "Settings which determine how terms are evaluated" $
@@ -111,14 +119,30 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "LanguageConstraints" $
         doc "A set of constraints on valid type and term expressions, characterizing a language" $
         lambda "m" $ record [
-          "eliminationVariants">: Types.set $ mantle "EliminationVariant",
-          "literalVariants">: Types.set $ mantle "LiteralVariant",
-          "floatTypes">: Types.set $ core "FloatType",
-          "functionVariants">: Types.set $ mantle "FunctionVariant",
-          "integerTypes">: Types.set $ core "IntegerType",
-          "termVariants">: Types.set $ mantle "TermVariant",
-          "typeVariants">: Types.set $ mantle "TypeVariant",
-          "types">: core "Type" @@ "m" --> boolean],
+          "eliminationVariants">:
+            doc "All supported elimination variants" $
+            Types.set $ mantle "EliminationVariant",
+          "literalVariants">:
+            doc "All supported literal variants" $
+            Types.set $ mantle "LiteralVariant",
+          "floatTypes">:
+            doc "All supported float types" $
+            Types.set $ core "FloatType",
+          "functionVariants">:
+            doc "All supported function variants" $
+            Types.set $ mantle "FunctionVariant",
+          "integerTypes">:
+            doc "All supported integer types" $
+            Types.set $ core "IntegerType",
+          "termVariants">:
+            doc "All supported term variants" $
+            Types.set $ mantle "TermVariant",
+          "typeVariants">:
+            doc "All supported type variants" $
+            Types.set $ mantle "TypeVariant",
+          "types">:
+            doc "A logical set of types, as a predicate which tests a type for inclusion" $
+            core "Type" @@ "m" --> boolean],
 
       def "LanguageName" $
         doc "The unique name of a language" string,
@@ -133,9 +157,14 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "PrimitiveFunction" $
         doc "A built-in function" $
         lambda "m" $ record [
-          "name">: core "Name",
-          "type">: core "FunctionType" @@ "m",
+          "name">:
+            doc "The unique name of the primitive function" $
+            core "Name",
+          "type">:
+            doc "The type signature of the primitive function" $
+            core "FunctionType" @@ "m",
           "implementation">:
+            doc "A concrete implementation of the primitive function" $
             list (core "Term" @@ "m") --> compute "Flow" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m")],
 
       def "TermCoder" $
