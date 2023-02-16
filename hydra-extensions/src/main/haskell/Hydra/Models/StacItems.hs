@@ -22,7 +22,7 @@ stacModule = Module ns elements [geoJsonModule, ianaRelationsModule] $
 
     geoj = nsref $ moduleNamespace geoJsonModule
     ianarel = nsref $ moduleNamespace ianaRelationsModule
-    stac = nominal . qualify ns . Name
+    stac = wrap . qualify ns . Name
 
     elements = [
 
