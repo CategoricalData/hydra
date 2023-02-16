@@ -66,12 +66,12 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
           PatternConstant _ -> True
           _ -> False
 
-    makeElements omitTrivial lname pat = forPat lname pat
+    makeElements omitTrivial lname pat = forPat pat
       where
-        forPat lname pat = case pat of
+        forPat pat = case pat of
           PatternNil -> trivial
           PatternIgnored _ -> []
-          PatternLabeled (LabeledPattern (Label l) p) -> forPat l p
+          PatternLabeled (LabeledPattern (Label l) p) -> forPat p
           PatternConstant _ -> trivial
           PatternRegex _ -> [(lname, Types.string)]
           PatternNonterminal (Symbol other) -> [(lname, Types.wrap $ toName other)]
@@ -86,7 +86,7 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
         forRecordOrUnion isRecord construct pats = if isNontrivial isRecord pats
             then (lname, construct fields):els
             -- Eliminate single-field record and union types, unless the field has a user-defined name
-            else forPat lname $ L.head minPats
+            else forPat $ L.head minPats
           where
             fieldPairs = L.zipWith toField (findNames minPats) minPats
             fields = fst <$> fieldPairs
