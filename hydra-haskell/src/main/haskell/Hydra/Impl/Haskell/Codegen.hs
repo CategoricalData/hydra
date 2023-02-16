@@ -143,7 +143,7 @@ generateSources printModule mods0 basePath = do
       writeFile fullPath s
 
 hydraKernel :: Graph Meta
-hydraKernel = elementsToGraph Nothing $ L.concat (moduleElements <$> [hydraCoreModule, hydraMantleModule, hydraModuleModule])
+hydraKernel = elementsToGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
 
 kernelContext = graphContext hydraKernel
 
@@ -157,11 +157,9 @@ modulesToContext mods = kernelContext {contextGraph = elementsToGraph (Just hydr
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do
-  if not (L.null $ traceMessages t)
-    then do
+  CM.unless (L.null $ traceMessages t) $ do
       putStrLn $ if isError then "Flow failed. Messages:" else "Messages:"
       putStrLn $ indentLines $ traceSummary t
-    else pure ()
 
 runFlow :: s -> Flow s a -> IO (Maybe a)
 runFlow cx f = do

@@ -91,7 +91,7 @@ traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
     messageLines = L.nub $ traceMessages t
     keyvalLines = if M.null (traceOther t)
         then []
-        else ("key/value pairs:"):(toLine <$> M.toList (traceOther t))
+        else "key/value pairs:":(toLine <$> M.toList (traceOther t))
       where
         toLine (k, v) = "\t" ++ k ++ ": " ++ show v
 
