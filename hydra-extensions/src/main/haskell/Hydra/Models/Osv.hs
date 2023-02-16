@@ -16,7 +16,7 @@ osvSchemaModule = Module ns elements [] $
   where
     ns = Namespace "dev/osv/schema"
     def = datatype ns
-    osv = nominal . qualify ns . Name
+    osv = wrap . qualify ns . Name
 
     elements = [
 
