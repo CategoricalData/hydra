@@ -7,6 +7,7 @@ import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
 import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import Hydra.Ext.Rdf.Utils
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -45,20 +46,8 @@ defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
-descriptionsToGraph :: [Rdf.Description] -> Rdf.Graph
-descriptionsToGraph ds = Rdf.Graph $ S.fromList $ triplesOf ds
-
 elementIri :: Element m -> Rdf.Iri
 elementIri = nameToIri . elementName
-
-emptyDescription :: Rdf.Node -> Rdf.Description
-emptyDescription node = Rdf.Description node emptyGraph
-
-emptyGraph :: Rdf.Graph
-emptyGraph = Rdf.Graph S.empty
-
-emptyLangStrings :: Rdf.LangStrings
-emptyLangStrings = Rdf.LangStrings M.empty
 
 encodeField :: Show m => Name -> Rdf.Resource -> Field m -> GraphFlow m [Rdf.Triple]
 encodeField rname subject field = do
@@ -208,26 +197,6 @@ encodeType typ = case stripType typ of
     -- secondary structures. For example, see shsh:ListShape in the SHACL documentation. TODO: explore these constructions.
     any = pure $ common []
 
-forObjects :: Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple]
-forObjects subj pred objs = (Rdf.Triple subj pred) <$> objs
-
-iri :: String -> String -> Rdf.Iri
-iri ns local = Rdf.Iri $ ns ++ local
-
-keyIri :: String -> Rdf.Iri
-keyIri = iri "urn:key:" -- Note: not an official URN scheme
-
-mergeGraphs :: [Rdf.Graph] -> Rdf.Graph
-mergeGraphs graphs = Rdf.Graph $ L.foldl S.union S.empty (Rdf.unGraph <$> graphs)
-
-nameToIri :: Name -> Rdf.Iri
-nameToIri name = Rdf.Iri $ "urn:" ++ unName name
-
-nextBlankNode :: Show m => GraphFlow m Rdf.Resource
-nextBlankNode = do
-  count <- nextCount "shaclBlankNodeCounter"
-  return $ Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count
-
 node :: [Shacl.CommonConstraint] -> Shacl.Shape
 node = Shacl.ShapeNode . Shacl.NodeShape . common
 
@@ -241,26 +210,6 @@ property iri = Shacl.PropertyShape {
   Shacl.propertyShapeOrder = Nothing,
   Shacl.propertyShapePath = iri}
 
--- Note: these are not "proper" URNs, as they do not use an established URN scheme
-propertyIri :: Name -> FieldName -> Rdf.Iri
-propertyIri rname fname = Rdf.Iri $ "urn:" ++ unNamespace gname ++ "#" ++ decapitalize local ++ capitalize (unFieldName fname)
-  where
-    (gname, local) = toQnameLazy rname
-
-rdfIri :: String -> Rdf.Iri
-rdfIri = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-
-resourceToNode :: Rdf.Resource -> Rdf.Node
-resourceToNode r = case r of
-  Rdf.ResourceIri i -> Rdf.NodeIri i
-  Rdf.ResourceBnode b -> Rdf.NodeBnode b
-
-subjectsOf :: [Rdf.Description] -> [Rdf.Node]
-subjectsOf descs = Rdf.descriptionSubject <$> descs
-
-triplesOf :: [Rdf.Description] -> [Rdf.Triple]
-triplesOf descs = L.concat ((S.toList . Rdf.unGraph . Rdf.descriptionGraph) <$> descs)
-
 withType :: Name -> Rdf.Description -> Rdf.Description
 withType name (Rdf.Description subj (Rdf.Graph triples)) = Rdf.Description subj (Rdf.Graph $ S.insert triple triples)
   where
@@ -268,6 +217,3 @@ withType name (Rdf.Description subj (Rdf.Graph triples)) = Rdf.Description subj 
       Rdf.NodeIri iri -> Rdf.ResourceIri iri
       Rdf.NodeBnode bnode -> Rdf.ResourceBnode bnode
     triple = Rdf.Triple subjRes (rdfIri "type") (Rdf.NodeIri $ nameToIri name)
-
-xmlSchemaDatatypeIri :: String -> Rdf.Iri
-xmlSchemaDatatypeIri = iri "http://www.w3.org/2001/XMLSchema#"

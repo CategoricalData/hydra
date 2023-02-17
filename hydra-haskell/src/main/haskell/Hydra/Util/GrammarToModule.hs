@@ -21,7 +21,7 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
         prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
         pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType typ)
 
-    toName lname = fromQname ns lname
+    toName = fromQname ns
 
     findNames pats = L.reverse $ fst (L.foldl nextName ([], M.empty) pats)
       where
