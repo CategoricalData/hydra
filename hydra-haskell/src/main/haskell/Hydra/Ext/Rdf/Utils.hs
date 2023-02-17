@@ -21,6 +21,29 @@ emptyGraph = Rdf.Graph S.empty
 emptyLangStrings :: Rdf.LangStrings
 emptyLangStrings = Rdf.LangStrings M.empty
 
+encodeLiteral :: Literal -> GraphFlow m Rdf.Literal
+encodeLiteral lit = case lit of
+    LiteralBinary s -> fail "base 64 encoding not yet implemented"
+    LiteralBoolean b -> pure $ xsd (\b -> if b then "true" else "false") b "boolean"
+    LiteralFloat f -> pure $ case f of
+      FloatValueBigfloat v -> xsd show v "decimal"
+      FloatValueFloat32 v -> xsd show v "float"
+      FloatValueFloat64 v -> xsd show v "double"
+    LiteralInteger i -> pure $ case i of
+      IntegerValueBigint v -> xsd show v "integer"
+      IntegerValueInt8 v   -> xsd show v "byte"
+      IntegerValueInt16 v  -> xsd show v "short"
+      IntegerValueInt32 v  -> xsd show v "int"
+      IntegerValueInt64 v  -> xsd show v "long"
+      IntegerValueUint8 v  -> xsd show v "unsignedByte"
+      IntegerValueUint16 v -> xsd show v "unsignedShort"
+      IntegerValueUint32 v -> xsd show v "unsignedInt"
+      IntegerValueUint64 v -> xsd show v "unsignedLong"
+    LiteralString s -> pure $ xsd id s "string"
+  where
+    -- TODO: using Haskell's built-in show function is a cheat, and may not be correct/optimal in all cases
+    xsd ser x local = Rdf.Literal (ser x) (xmlSchemaDatatypeIri local) Nothing
+
 forObjects :: Rdf.Resource -> Rdf.Iri -> [Rdf.Node] -> [Rdf.Triple]
 forObjects subj pred objs = (Rdf.Triple subj pred) <$> objs
 

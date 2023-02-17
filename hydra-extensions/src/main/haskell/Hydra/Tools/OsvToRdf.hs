@@ -14,7 +14,8 @@ import Hydra.Util.Formatting
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Ext.Shacl.Coder as Shacl
 import Hydra.Ext.Rdf.Serde
-import Hydra.Workflow
+import Hydra.Tools.Workflow
+import qualified Hydra.Ext.Rdf.Utils as RdfUt
 
 import Hydra.Models.Osv
 import qualified Dev.Osv.Schema as Osv
@@ -84,8 +85,8 @@ osvJsonToNtriples coder inFile outFile = do
         let v' = rewriteJsonFieldCase v
         term0 <- fromFlowIo osvInstanceContext $ coderDecode coder v'
         let term1 = listsToSets term0
-        node <- fromFlowIo osvInstanceContext $ Shacl.nextBlankNode
-        graph <- fromFlowIo osvInstanceContext $ (Shacl.descriptionsToGraph <$> Shacl.encodeTerm node term1)
+        node <- fromFlowIo osvInstanceContext $ RdfUt.nextBlankNode
+        graph <- fromFlowIo osvInstanceContext $ (RdfUt.descriptionsToGraph <$> Shacl.encodeTerm node term1)
         let graphStr = rdfGraphToString graph
         writeFile outFile graphStr
 
