@@ -22,6 +22,9 @@ aggregateAnnotations getAnn t = Meta $ M.fromList $ addMeta [] t
       Nothing -> m
       Just (Annotated t' (Meta other)) -> addMeta (m ++ M.toList other) t'
 
+emptyMeta :: Meta
+emptyMeta = Meta M.empty
+
 getAnnotation :: String -> Meta -> Maybe (Term Meta)
 getAnnotation key (Meta m) = M.lookup key m
 
