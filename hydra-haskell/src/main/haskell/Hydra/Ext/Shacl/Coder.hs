@@ -75,29 +75,6 @@ encodeFieldType rname order (FieldType fname ft) = do
             Shacl.PropertyShapeConstraintMaxCount <$> mx],
           Shacl.propertyShapeOrder = order}
 
-encodeLiteral :: Literal -> GraphFlow m Rdf.Node
-encodeLiteral lit = Rdf.NodeLiteral <$> case lit of
-    LiteralBinary s -> fail "base 64 encoding not yet implemented"
-    LiteralBoolean b -> pure $ xsd (\b -> if b then "true" else "false") b "boolean"
-    LiteralFloat f -> pure $ case f of
-      FloatValueBigfloat v -> xsd show v "decimal"
-      FloatValueFloat32 v -> xsd show v "float"
-      FloatValueFloat64 v -> xsd show v "double"
-    LiteralInteger i -> pure $ case i of
-      IntegerValueBigint v -> xsd show v "integer"
-      IntegerValueInt8 v   -> xsd show v "byte"
-      IntegerValueInt16 v  -> xsd show v "short"
-      IntegerValueInt32 v  -> xsd show v "int"
-      IntegerValueInt64 v  -> xsd show v "long"
-      IntegerValueUint8 v  -> xsd show v "unsignedByte"
-      IntegerValueUint16 v -> xsd show v "unsignedShort"
-      IntegerValueUint32 v -> xsd show v "unsignedInt"
-      IntegerValueUint64 v -> xsd show v "unsignedLong"
-    LiteralString s -> pure $ xsd id s "string"
-  where
-    -- TODO: using Haskell's built-in show function is a cheat, and may not be correct/optimal in all cases
-    xsd ser x local = Rdf.Literal (ser x) (xmlSchemaDatatypeIri local) Nothing
-
 encodeLiteralType :: LiteralType -> Shacl.CommonProperties
 encodeLiteralType lt = case lt of
     LiteralTypeBinary -> xsd "base64Binary"
@@ -139,7 +116,7 @@ encodeTerm subject term = case term of
                   forObjects subj (rdfIri "rest") (subjectsOf rdescs)
             return [Rdf.Description (resourceToNode subj) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)]
   TermLiteral lit -> do
-    node <- encodeLiteral lit
+    node <- Rdf.NodeLiteral <$> encodeLiteral lit
     return [emptyDescription node]
   TermMap m -> do
       triples <- L.concat <$> (CM.mapM (forKeyVal subject) $ M.toList m)

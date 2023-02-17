@@ -1,18 +1,18 @@
-module Hydra.Workflow where
+module Hydra.Tools.Workflow where
 
 import Hydra.Kernel
-
-import System.FilePath.Posix
 
 
 data HydraSchemaSpec = HydraSchemaSpec {
   hydraSchemaSpecModules :: [Module Meta],
   hydraSchemaSpecTypeName :: Name}
 
-data SchemaSpec = SchemaSpecFile FilePath | SchemaSpecHydra HydraSchemaSpec | SchemaSpecProvided
+data SchemaSpec = SchemaSpecFile String
+  | SchemaSpecHydra HydraSchemaSpec
+  | SchemaSpecProvided
 
 data TransformWorkflow = TransformWorkflow {
   transformWorkflowName :: String,
   transformWorkflowSchemaSpec :: SchemaSpec,
-  transformWorkflowSrcDir :: FilePath,
-  transformWorkflowDestDir :: FilePath}
+  transformWorkflowSrcDir :: String,
+  transformWorkflowDestDir :: String}
