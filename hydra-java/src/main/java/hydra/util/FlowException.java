@@ -1,4 +1,4 @@
-package hydra.impl.java;
+package hydra;
 
 import hydra.compute.Trace;
 import java.util.List;

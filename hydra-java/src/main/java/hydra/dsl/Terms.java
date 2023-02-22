@@ -1,4 +1,4 @@
-package hydra.impl.java.dsl;
+package hydra.dsl;
 
 import hydra.core.Annotated;
 import hydra.core.Application;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static hydra.impl.java.dsl.Core.*;
+import static hydra.dsl.Core.*;
 
 
 public interface Terms {

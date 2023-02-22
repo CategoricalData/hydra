@@ -1,4 +1,4 @@
-package hydra.impl.java;
+package hydra;
 
 import hydra.core.Elimination;
 import hydra.core.Function;
@@ -6,8 +6,8 @@ import hydra.core.Term;
 import hydra.core.Variable;
 import org.junit.jupiter.api.Test;
 
-import static hydra.impl.java.dsl.Core.*;
-import static hydra.impl.java.dsl.Terms.*;
+import static hydra.dsl.Core.*;
+import static hydra.dsl.Terms.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings("unchecked")
 public class TermsTest {
   /**
-   * See {@link hydra.impl.java.TypesTest} for the record type corresponding to this term
+   * See {@link hydra.TypesTest} for the record type corresponding to this term
    */
   private final Term<String> bayAreaLatLon = record("LatLon", // records always have a name
       field("lat", float32(37.7749f)), field("lon", float32(-122.4194f)));
@@ -27,12 +27,12 @@ public class TermsTest {
   /**
    * An injection term chooses one of the variants of a union type, and supplies an appropriate term
    *
-   * See {@link hydra.impl.java.TypesTest} for the union type corresponding to this term
+   * See {@link hydra.TypesTest} for the union type corresponding to this term
    */
   private final Term<String> bayAreaLocation = inject("Location", field("latlon", bayAreaLatLon));
 
   /**
-   * See {@link hydra.impl.java.TypesTest} for a function type corresponding to this term
+   * See {@link hydra.TypesTest} for a function type corresponding to this term
    */
   private final Term<String> stringLength = primitive("hydra/lib/strings.length");
 
