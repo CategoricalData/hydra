@@ -1,10 +1,10 @@
 module Hydra.TestData where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Dsl.Terms
 import Hydra.TestGraph
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 

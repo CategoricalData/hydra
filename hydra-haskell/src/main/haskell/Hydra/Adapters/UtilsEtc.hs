@@ -17,7 +17,7 @@ import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting
 import Hydra.Rewriting
 import Hydra.Meta
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Set as S

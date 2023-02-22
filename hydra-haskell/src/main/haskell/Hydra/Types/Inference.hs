@@ -11,7 +11,7 @@ module Hydra.Types.Inference (
 import Hydra.Kernel
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 

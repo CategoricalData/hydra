@@ -3,8 +3,8 @@ module Hydra.Ext.Avro.Coder where
 import Hydra.Kernel
 import Hydra.Adapters.Coders
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Adapters.UtilsEtc
 import qualified Hydra.Ext.Avro.Schema as Avro

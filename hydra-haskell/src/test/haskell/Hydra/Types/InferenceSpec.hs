@@ -1,13 +1,13 @@
 module Hydra.Types.InferenceSpec where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Sources.Libraries
 import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.TestData
-import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Terms as Terms
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

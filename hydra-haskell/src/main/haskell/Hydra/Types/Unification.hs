@@ -7,7 +7,7 @@ module Hydra.Types.Unification (
 
 import Hydra.Kernel
 import Hydra.Types.Substitution
-import Hydra.Impl.Haskell.Dsl.Types as Types
+import Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 import qualified Data.Set as S

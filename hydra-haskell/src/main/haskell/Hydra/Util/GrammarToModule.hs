@@ -3,9 +3,9 @@
 module Hydra.Util.GrammarToModule where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Terms as Terms
-import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Terms as Terms
+import Hydra.Dsl.Standard
 import Hydra.CoreEncoding
 
 import qualified Data.List as L

@@ -2,11 +2,11 @@ module Hydra.Ext.Yaml.Modules (printModule) where
 
 import Hydra.Kernel
 import Hydra.Adapters.Coders
-import Hydra.Impl.Haskell.Ext.Yaml.Serde
+import Hydra.Ext.Yaml.Serde
 import Hydra.Ext.Yaml.Coder
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

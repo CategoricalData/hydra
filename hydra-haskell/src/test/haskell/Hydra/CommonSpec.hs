@@ -3,8 +3,8 @@ module Hydra.CommonSpec where
 import Hydra.Kernel
 
 import Hydra.TestUtils
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

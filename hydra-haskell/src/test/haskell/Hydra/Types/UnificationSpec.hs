@@ -3,7 +3,7 @@ module Hydra.Types.UnificationSpec where
 import Hydra.Kernel
 import Hydra.Types.Unification
 import Hydra.TestUtils
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Test.Hspec as H
 import qualified Data.Map as M

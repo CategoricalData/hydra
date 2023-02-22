@@ -3,7 +3,7 @@ module Hydra.Ext.Scala.Prepare (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Set as S
 

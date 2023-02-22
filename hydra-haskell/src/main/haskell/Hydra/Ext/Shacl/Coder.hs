@@ -5,8 +5,8 @@ import Hydra.CoreDecoding
 import Hydra.Meta
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
-import qualified Hydra.Impl.Haskell.Dsl.Literals as Literals
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Literals as Literals
+import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Ext.Rdf.Utils
 
 import qualified Control.Monad as CM

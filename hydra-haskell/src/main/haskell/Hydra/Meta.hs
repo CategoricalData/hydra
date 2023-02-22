@@ -9,7 +9,7 @@ import Hydra.CoreEncoding
 import Hydra.Common
 import Hydra.Monads
 import Hydra.Mantle
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y

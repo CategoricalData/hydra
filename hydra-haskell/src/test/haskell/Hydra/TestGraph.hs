@@ -1,15 +1,15 @@
 module Hydra.TestGraph (
   module Hydra.TestGraph,
-  module Hydra.Impl.Haskell.Sources.Libraries,
+  module Hydra.Sources.Libraries,
 ) where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Standard as Standard
-import Hydra.Impl.Haskell.Sources.Core
-import Hydra.Impl.Haskell.Sources.Libraries
+import Hydra.Dsl.Standard as Standard
+import Hydra.Sources.Core
+import Hydra.Sources.Libraries
 import Hydra.CoreEncoding
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Terms
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Terms
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
