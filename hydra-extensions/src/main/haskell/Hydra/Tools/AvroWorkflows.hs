@@ -6,7 +6,7 @@ module Hydra.Tools.AvroWorkflows (
   TermEncoder(..),
   LastMile(..),
   executeAvroTransformWorkflow,
-  rdfDescriptionsToString,
+  rdfDescriptionsToNtriples,
   shaclRdfLastMile,
   termToShaclRdf,
   transformAvroJsonDirectory,
@@ -67,12 +67,11 @@ listsToSets = rewriteTerm mapExpr id
 emptyEnv :: AvroEnvironment Meta
 emptyEnv = emptyEnvironment
 
--- TODO: find a better home
-rdfDescriptionsToString :: [Rdf.Description] -> String
-rdfDescriptionsToString = rdfGraphToString . RdfUt.descriptionsToGraph
+rdfDescriptionsToNtriples :: [Rdf.Description] -> String
+rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
 shaclRdfLastMile :: LastMile Rdf.Description
-shaclRdfLastMile = LastMile termToShaclRdf rdfDescriptionsToString "nt"
+shaclRdfLastMile = LastMile termToShaclRdf rdfDescriptionsToNtriples "nt"
 
 termToShaclRdf :: Term Meta -> Graph Meta -> GraphFlow Meta [Rdf.Description]
 termToShaclRdf term graph = do
