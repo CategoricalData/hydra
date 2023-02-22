@@ -87,7 +87,7 @@ osvJsonToNtriples coder inFile outFile = do
         let term1 = listsToSets term0
         node <- fromFlowIo osvInstanceContext $ RdfUt.nextBlankNode
         graph <- fromFlowIo osvInstanceContext $ (RdfUt.descriptionsToGraph <$> Shacl.encodeTerm node term1)
-        let graphStr = rdfGraphToString graph
+        let graphStr = rdfGraphToNtriples graph
         writeFile outFile graphStr
 
 rewriteJsonFieldCase :: Json.Value -> Json.Value

@@ -1,7 +1,7 @@
 -- | Serialize RDF using an approximation (because it does not yet support Unicode escape sequences) of the N-triples format
 
 module Hydra.Ext.Rdf.Serde (
-  rdfGraphToString,
+  rdfGraphToNtriples,
 ) where
 
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
@@ -36,8 +36,8 @@ escapeLiteralString s = L.concat (esc <$> s)
         '\r' -> "\\r"
         _ -> [c]
 
-rdfGraphToString :: Rdf.Graph -> String
-rdfGraphToString = printExpr . writeGraph
+rdfGraphToNtriples :: Rdf.Graph -> String
+rdfGraphToNtriples = printExpr . writeGraph
 
 writeBlankNode :: Rdf.BlankNode -> CT.Expr
 writeBlankNode bnode = noSep [cst "_:", cst $ Rdf.unBlankNode bnode]
