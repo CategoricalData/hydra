@@ -1,9 +1,9 @@
 module Hydra.Models.Coq where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Standard
+import Hydra.Sources.Core
 
 
 coqSyntaxModule :: Module Meta

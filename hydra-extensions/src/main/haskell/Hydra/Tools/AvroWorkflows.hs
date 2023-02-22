@@ -13,9 +13,9 @@ module Hydra.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Standard
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import Hydra.Impl.Haskell.Ext.Json.Serde
+import Hydra.Dsl.Standard
+import qualified Hydra.Dsl.Terms as Terms
+import Hydra.Ext.Json.Serde
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Ext.Json.Eliminate

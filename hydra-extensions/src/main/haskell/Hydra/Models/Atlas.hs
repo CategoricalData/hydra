@@ -1,13 +1,13 @@
 module Hydra.Models.Atlas where
 
-import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Sources.Core
 
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Module
-import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.Ext.Xml.Schema
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Standard
+import Hydra.Sources.Ext.Xml.Schema
 
 
 atlasModelModule :: Module Meta

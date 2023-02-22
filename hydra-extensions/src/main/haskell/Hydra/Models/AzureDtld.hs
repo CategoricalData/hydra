@@ -1,12 +1,12 @@
 module Hydra.Models.AzureDtld (dtldModule) where
 
-import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Sources.Core
 
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Module
-import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Standard
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Standard
 
 
 dtmi128 :: Type Meta
