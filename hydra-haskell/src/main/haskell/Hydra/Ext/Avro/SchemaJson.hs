@@ -1,8 +1,8 @@
 module Hydra.Ext.Avro.SchemaJson where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Ext.Json.Serde
+import Hydra.Dsl.Standard
+import Hydra.Ext.Json.Serde
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Ext.Json.Eliminate

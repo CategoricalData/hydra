@@ -1,11 +1,11 @@
 module Hydra.CoreCodersSpec where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Terms as Terms
+import Hydra.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Meta
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils

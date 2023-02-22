@@ -9,9 +9,9 @@ module Hydra.Lib.Io (
 import Hydra.Kernel
 import Hydra.Ext.Json.Coder
 import qualified Hydra.Ext.Json.Model as Json
-import Hydra.Impl.Haskell.Dsl.Standard
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Ext.Json.Serde
+import Hydra.Dsl.Standard
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Ext.Json.Serde
 import Hydra.CoreEncoding
 
 import qualified Data.Map as M

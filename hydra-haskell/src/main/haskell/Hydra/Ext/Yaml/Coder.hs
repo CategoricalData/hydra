@@ -2,7 +2,7 @@ module Hydra.Ext.Yaml.Coder (yamlCoder) where
 
 import Hydra.Kernel
 import Hydra.Adapters.Term
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM
 import Hydra.Adapters.UtilsEtc

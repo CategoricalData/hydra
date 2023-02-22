@@ -3,9 +3,9 @@ module Hydra.Adapters.TermSpec where
 import Hydra.Kernel
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
-import Hydra.Impl.Haskell.Dsl.Terms as Terms
+import Hydra.Dsl.Terms as Terms
 import Hydra.Meta
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils

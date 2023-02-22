@@ -2,10 +2,10 @@ module Hydra.Ext.Json.CoderSpec where
 
 import Hydra.Kernel
 import Hydra.Lib.Literals
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Ext.Json.Coder
 import qualified Hydra.Ext.Json.Model as Json
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
 import Hydra.TestUtils

@@ -6,7 +6,7 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Mantle
 import Hydra.Monads
-import Hydra.Impl.Haskell.Dsl.Terms
+import Hydra.Dsl.Terms
 
 import Prelude hiding (map)
 import qualified Data.Map as M

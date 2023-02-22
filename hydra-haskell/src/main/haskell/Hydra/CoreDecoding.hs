@@ -28,7 +28,7 @@ import Hydra.Module
 import Hydra.Lexical
 import Hydra.Monads
 import Hydra.Rewriting
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

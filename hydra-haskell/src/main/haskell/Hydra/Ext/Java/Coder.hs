@@ -5,8 +5,8 @@ import Hydra.CoreDecoding
 import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
-import qualified Hydra.Impl.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java
 import Hydra.Adapters.Coders
 import Hydra.Util.Codetree.Script
