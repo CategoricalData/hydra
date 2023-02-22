@@ -5,19 +5,19 @@
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Base as Base
-import Hydra.Impl.Haskell.Sources.Module
-import Hydra.Impl.Haskell.Sources.Mantle
-import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
-import qualified Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Lib.Lists as Lists
-import Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Impl.Haskell.Codegen
+import Hydra.Dsl.Base as Base
+import Hydra.Sources.Module
+import Hydra.Sources.Mantle
+import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Codegen
 import Hydra.Reduction
-import qualified Hydra.Impl.Haskell.Dsl.Lib.Literals as Literals
-import qualified Hydra.Impl.Haskell.Dsl.Lib.Math as Math
-import qualified Hydra.Impl.Haskell.Dsl.Lib.Strings as Strings
-import Hydra.Impl.Haskell.Sources.Adapters.Utils
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Sources.Adapters.Utils
 import Hydra.CoreEncoding
 
 import System.IO

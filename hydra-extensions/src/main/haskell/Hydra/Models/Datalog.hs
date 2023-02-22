@@ -3,9 +3,9 @@
 module Hydra.Models.Datalog where
 
 import Hydra.Kernel
-import Hydra.Impl.Haskell.Dsl.Grammars
+import Hydra.Dsl.Grammars
 import Hydra.Util.GrammarToModule
-import qualified Hydra.Impl.Haskell.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Standard as Standard
 
 comma = terminal ","
 entail = terminal ":-"

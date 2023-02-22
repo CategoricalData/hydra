@@ -3,12 +3,12 @@ module Hydra.Models.GeoJson where
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Module
-import Hydra.Impl.Haskell.Dsl.Types as Types
-import Hydra.Impl.Haskell.Dsl.Standard
-import Hydra.Impl.Haskell.Sources.Compute
-import Hydra.Impl.Haskell.Sources.Core
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Standard
+import Hydra.Sources.Compute
+import Hydra.Sources.Core
 
-import Hydra.Impl.Haskell.Sources.Ext.Json.Model
+import Hydra.Sources.Ext.Json.Model
 
 
 geoJsonModule :: Module Meta
