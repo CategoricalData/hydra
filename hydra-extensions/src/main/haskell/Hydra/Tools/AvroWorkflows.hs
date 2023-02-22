@@ -26,7 +26,7 @@ import qualified Hydra.Ext.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
 import Hydra.Ext.Rdf.Serde
-import Hydra.Tools.Workflow
+import Hydra.Workflow
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

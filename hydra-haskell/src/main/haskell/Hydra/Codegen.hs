@@ -43,6 +43,7 @@ import Hydra.Sources.Grammar
 import Hydra.Sources.Libraries
 import Hydra.Sources.Mantle
 import Hydra.Sources.Module
+import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
 import Hydra.Sources.Util.Codetree.Ast
 
@@ -87,6 +88,7 @@ coreModules = [
   hydraMantleModule,
   hydraModuleModule,
   hydraGrammarModule,
+  hydraWorkflowModule,
 --  hydraMonadsModule,
   hydraPhantomsModule,
   jsonModelModule]
