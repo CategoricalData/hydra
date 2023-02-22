@@ -43,10 +43,6 @@ data JsonPayloadFormat = Json | Jsonl
 
 type TermEncoder a = Term Meta -> Graph Meta -> GraphFlow Meta [a]
 
-data LastMile a = LastMile {
-  lastMileEncoder :: TermEncoder a,
-  lastMileSerializer :: [a] -> String,
-  lastMileFileExtension :: String}
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
 executeAvroTransformWorkflow :: LastMile a -> TransformWorkflow -> IO ()

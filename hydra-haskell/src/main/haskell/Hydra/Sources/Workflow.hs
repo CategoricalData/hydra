@@ -8,16 +8,18 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Module
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
+import Hydra.Sources.Mantle
 
 
 hydraWorkflowModule :: Module Meta
-hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule] $
+hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraMantleModule] $
     Just "A model for Hydra transformation workflows"
   where
     ns = Namespace "hydra/workflow"
     mod = nsref $ moduleNamespace hydraModuleModule
     compute = nsref $ moduleNamespace hydraComputeModule
     core = nsref $ moduleNamespace hydraCoreModule
+    mantle = nsref $ moduleNamespace hydraMantleModule
     wf = nsref ns
     def = datatype ns
 
@@ -31,6 +33,19 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule]
           "typeName">:
             doc "The name of the top-level type; all data which passes through the workflow will be instances of this type" $
             core "Name"],
+
+      def "LastMile" $
+        doc "The last mile of a transformation, which encodes and serializes terms to a file" $
+        lambda "a" $ record [
+          "encoder">:
+            doc "An encoder for terms to a list of output objects" $
+            core "Term" @@ compute "Meta" --> mantle "Graph" @@ compute "Meta" --> compute "Flow" @@ (compute "Context" @@ compute "Meta") @@ list "a",
+          "serializer">:
+            doc "A function which serializes a list of output objects to a string representation" $
+            list "a" --> string,
+          "fileExtension">:
+            doc "A file extension for the generated file(s)"
+            string],
 
       def "SchemaSpec" $
         doc "The specification of a schema at the source end of a workflow" $
