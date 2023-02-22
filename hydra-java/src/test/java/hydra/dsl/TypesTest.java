@@ -1,10 +1,10 @@
-package hydra.impl.java;
+package hydra;
 
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
-import static hydra.impl.java.dsl.Core.*;
-import static hydra.impl.java.dsl.Types.*;
+import static hydra.dsl.Core.*;
+import static hydra.dsl.Types.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

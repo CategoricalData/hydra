@@ -1,4 +1,4 @@
-package hydra.impl.java.dsl;
+package hydra.dsl;
 
 import hydra.core.Annotated;
 import hydra.core.ApplicationType;
@@ -19,7 +19,7 @@ import hydra.core.VariableType;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static hydra.impl.java.dsl.Core.*;
+import static hydra.dsl.Core.*;
 
 
 public interface Types {

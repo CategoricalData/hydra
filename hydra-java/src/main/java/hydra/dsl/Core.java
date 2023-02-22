@@ -1,4 +1,4 @@
-package hydra.impl.java.dsl;
+package hydra.dsl;
 
 import hydra.core.FieldName;
 import hydra.core.Name;
