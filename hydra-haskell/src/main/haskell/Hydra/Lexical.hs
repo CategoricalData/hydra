@@ -35,11 +35,7 @@ lookupPrimitiveFunction :: Context m -> Name -> Maybe (PrimitiveFunction m)
 lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
 
 primitiveFunctionArity :: PrimitiveFunction m -> Int
-primitiveFunctionArity = arity . primitiveFunctionType
-  where
-    arity (FunctionType _ cod) = 1 + case stripType cod of
-      TypeFunction ft -> arity ft
-      _ -> 0
+primitiveFunctionArity = typeArity . primitiveFunctionType
 
 requireElement :: Name -> GraphFlow m (Element m)
 requireElement name = do
@@ -66,6 +62,13 @@ schemaContext :: Context m -> Context m
 schemaContext cx = case graphSchema (contextGraph cx) of
   Nothing -> cx
   Just g -> cx {contextGraph = g}
+
+typeArity :: Type m -> Int
+typeArity t = case stripType t of
+  TypeApplication (ApplicationType l r) -> typeArity l
+  TypeLambda (LambdaType _ body) -> typeArity body
+  TypeFunction (FunctionType _ cod) -> 1 + typeArity cod
+  _ -> 0
 
 withSchemaContext :: GraphFlow m a -> GraphFlow m a
 withSchemaContext f = do

@@ -2,7 +2,7 @@ module Hydra.ReductionSpec where
 
 import Hydra.Kernel
 import Hydra.Reduction
-import Hydra.Dsl.Terms
+import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestUtils
@@ -11,6 +11,8 @@ import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
 import qualified Data.List as L
 import qualified Data.Char as C
+import qualified Data.Set as S
+import Hydra.Sources.Libraries (_sets_empty)
 
 
 checkAlphaConversion :: H.SpecWith ()
@@ -95,6 +97,18 @@ checkPolymorphicPrimitives = do
           (eval (apply (primitive _lists_length) $ list l))
           (int32 $ L.length l)
 
+checkNullaryPrimitives :: H.SpecWith ()
+checkNullaryPrimitives = do
+  H.describe "Tests for nullary primitives (constants)" $ do
+
+    H.it "Test empty set constant" $ do
+      -- shouldSucceedWith
+      --   (eval (apply (primitive _sets_size) (Terms.set S.empty)))
+      --   (int32 0)
+      shouldSucceedWith
+        (eval (apply (primitive _sets_size) (primitive _sets_empty)))
+        (int32 0)
+
 testBetaReduceTypeRecursively :: H.SpecWith ()
 testBetaReduceTypeRecursively = do
   H.describe "Beta reduce types recursively" $ do
@@ -152,3 +166,4 @@ spec = do
   checkLiterals
   checkMonomorphicPrimitives
   checkPolymorphicPrimitives
+  checkNullaryPrimitives

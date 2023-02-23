@@ -12,6 +12,9 @@ import Hydra.Lexical
 import Hydra.CoreDecoding
 import Hydra.Kv
 
+-- TODO: temp
+import Hydra.Sources.Libraries
+
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -74,7 +77,11 @@ betaReduceTerm = reduce M.empty
               TermFunction . FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM reduceField cases
           FunctionCompareTo other -> TermFunction . FunctionCompareTo <$> reduceb other
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
-          FunctionPrimitive _ -> done
+          FunctionPrimitive name -> do
+            prim <- requirePrimitiveFunction name
+            if primitiveFunctionArity prim == 0
+              then primitiveFunctionImplementation prim []
+              else done
 
         -- Assumes that the function is closed and fully reduced. The arguments may not be.
         reduceApplication bindings args f = if L.null args then pure f else case stripTerm f of
@@ -113,20 +120,21 @@ betaReduceTerm = reduce M.empty
             -- TODO: FunctionCompareTo
 
             FunctionPrimitive name -> do
-                 prim <- requirePrimitiveFunction name
-                 let arity = primitiveFunctionArity prim
-                 if L.length args >= arity
-                   then do
-                     if countPrimitiveFunctionInvocations
-                       then nextCount ("count_" ++ unName name)
-                       else pure 0
-                     (mapM (reduce bindings) $ L.take arity args)
-                     >>= primitiveFunctionImplementation prim
-                     >>= reduce bindings
-                     >>= reduceApplication bindings (L.drop arity args)
-                   else unwind
-               where
-                 unwind = pure $ L.foldl (\l r -> TermApplication $ Application l r) (TermFunction f) args
+                prim <- requirePrimitiveFunction name
+                let arity = primitiveFunctionArity prim
+                if L.length args >= arity
+                  then do
+                    rargs <- CM.mapM betaReduceTerm args
+                    if countPrimitiveFunctionInvocations
+                      then nextCount ("count_" ++ unName name)
+                      else pure 0
+                    (mapM (reduce bindings) $ L.take arity rargs)
+                      >>= primitiveFunctionImplementation prim
+                      >>= reduce bindings
+                      >>= reduceApplication bindings (L.drop arity rargs)
+                  else unwind args
+                where
+                  unwind args = pure $ L.foldl (\l r -> TermApplication $ Application l r) (TermFunction f) args
 
             FunctionLambda (Lambda v body) -> reduce (M.insert v (L.head args) bindings) body
               >>= reduceApplication bindings (L.tail args)

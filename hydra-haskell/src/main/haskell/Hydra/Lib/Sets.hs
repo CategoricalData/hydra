@@ -8,6 +8,9 @@ import qualified Data.Set as S
 contains :: Ord a => a -> S.Set a -> Bool
 contains = S.member
 
+empty :: S.Set a
+empty = S.empty
+
 fromList :: Ord a => [a] -> S.Set a
 fromList = S.fromList
 

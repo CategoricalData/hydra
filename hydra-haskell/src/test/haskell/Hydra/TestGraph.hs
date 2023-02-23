@@ -28,10 +28,7 @@ testContext :: Context Kv
 testContext = coreContext {
     contextGraph = testGraph,
     contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueTermVariants = S.fromList [ -- TODO: revisit this list
-        TermVariantLiteral,
-        TermVariantElement,
-        TermVariantFunction]}}
+      evaluationStrategyOpaqueTermVariants = S.fromList []}}
 
 testElementArthur :: Element Kv
 testElementArthur = Element {
