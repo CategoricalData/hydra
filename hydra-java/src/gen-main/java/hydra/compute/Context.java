@@ -14,14 +14,14 @@ public class Context<M> {
   /**
    * All supported primitive functions, by name
    */
-  public final java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions;
+  public final java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions;
   
   /**
    * The annotation class which is supported in this context
    */
   public final hydra.compute.AnnotationClass<M> annotations;
   
-  public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions, hydra.compute.AnnotationClass<M> annotations) {
+  public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions, hydra.compute.AnnotationClass<M> annotations) {
     this.graph = graph;
     this.functions = functions;
     this.annotations = annotations;
@@ -45,7 +45,7 @@ public class Context<M> {
     return new Context(graph, functions, annotations);
   }
   
-  public Context withFunctions(java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions) {
+  public Context withFunctions(java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions) {
     return new Context(graph, functions, annotations);
   }
   

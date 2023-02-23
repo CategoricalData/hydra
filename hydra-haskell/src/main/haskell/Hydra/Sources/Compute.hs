@@ -85,7 +85,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
             mantle "Graph" @@ "m",
           "functions">:
             doc "All supported primitive functions, by name" $
-            Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
+            Types.map (core "Name") (compute "Primitive" @@ "m"),
           "annotations">:
             doc "The annotation class which is supported in this context" $
             compute "AnnotationClass" @@ "m"],
@@ -146,7 +146,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "LanguageName" $
         doc "The unique name of a language" string,
 
-      def "PrimitiveFunction" $
+      def "Primitive" $
         doc "A built-in function" $
         lambda "m" $ record [
           "name">:

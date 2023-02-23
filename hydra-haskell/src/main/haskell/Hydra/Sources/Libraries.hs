@@ -184,14 +184,14 @@ _strings_toUpper = qname _hydra_lib_strings "toUpper"
 --  unaryPrimitive _io_showTerm (variable "a) string
 --  ]
 
-hydraLibFlowsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibFlowsPrimitives :: Show m => [Primitive m]
 hydraLibFlowsPrimitives = [
   binaryPrimitive _flows_apply (flow (variable "s") (function (variable "a") (variable "b"))) (flow (variable "s") (variable "a")) (flow (variable "s") (variable "b")) Flows.apply,
   binaryPrimitive _flows_bind (flow (variable "s") (variable "a")) (function (variable "a") (flow (variable "s") (variable "b"))) (flow (variable "s") (variable "b")) Flows.bind,
   binaryPrimitive _flows_map (function (variable "a") (variable "b")) (flow (variable "s") (variable "a")) (flow (variable "s") (variable "b")) Flows.map,
   unaryPrimitive _flows_pure (variable "a") (flow (variable "s") (variable "a")) Flows.pure]
 
-hydraLibListsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibListsPrimitives :: Show m => [Primitive m]
 hydraLibListsPrimitives = [
   binaryPrimitive _lists_apply (list $ function (variable "a") (variable "b")) (list $ variable "a") (list $ variable "b") Lists.apply,
   binaryPrimitive _lists_bind (list $ variable "a") (function (variable "a") (list $ variable "b")) (list $ variable "b") Lists.bind,
@@ -204,12 +204,12 @@ hydraLibListsPrimitives = [
   binaryPrimitive _lists_map (function (variable "a") (variable "b")) (list $ variable "a") (list $ variable "b") Lists.map,
   unaryPrimitive _lists_pure (variable "a") (list $ variable "a") Lists.pure]
 
-hydraLibLiteralsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibLiteralsPrimitives :: Show m => [Primitive m]
 hydraLibLiteralsPrimitives = [
   unaryPrimitive _literals_showInt32 int32 string Literals.showInt32,
   unaryPrimitive _literals_showString string string Literals.showString]
 
-hydraLibMapsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
+hydraLibMapsPrimitives :: (Ord m, Show m) => [Primitive m]
 hydraLibMapsPrimitives = [
   binaryPrimitive _optionals_map
     (function (variable "v1") (variable "v2"))
@@ -218,7 +218,7 @@ hydraLibMapsPrimitives = [
     Maps.map,
   unaryPrimitive _sets_size (set $ variable "a") int32 Sets.size]
 
-hydraLibMathInt32Primitives :: Show m => [PrimitiveFunction m]
+hydraLibMathInt32Primitives :: Show m => [Primitive m]
 hydraLibMathInt32Primitives = [
   binaryPrimitive _math_add int32 int32 int32 Math.add,
   binaryPrimitive _math_div int32 int32 int32 Math.div,
@@ -228,14 +228,14 @@ hydraLibMathInt32Primitives = [
   binaryPrimitive _math_rem int32 int32 int32 Math.rem,
   binaryPrimitive _math_sub int32 int32 int32 Math.sub]
 
-hydraLibOptionalsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibOptionalsPrimitives :: Show m => [Primitive m]
 hydraLibOptionalsPrimitives = [
   binaryPrimitive _optionals_apply (optional $ function (variable "a") (variable "b")) (optional $ variable "a") (optional $ variable "b") Optionals.apply,
   binaryPrimitive _optionals_bind (optional $ variable "a") (function (variable "a") (optional $ variable "b")) (optional $ variable "b") Optionals.bind,
   binaryPrimitive _optionals_map (function (variable "a") (variable "b")) (optional $ variable "a") (optional $ variable "b") Optionals.map,
   unaryPrimitive _optionals_pure (variable "a") (optional $ variable "a") Optionals.pure]
 
-hydraLibSetsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
+hydraLibSetsPrimitives :: (Ord m, Show m) => [Primitive m]
 hydraLibSetsPrimitives = [
   binaryPrimitive _sets_contains (variable "a") (set $ variable "a") boolean Sets.contains,
   nullaryPrimitive _sets_empty (set $ variable "a") Sets.empty,
@@ -248,7 +248,7 @@ hydraLibSetsPrimitives = [
   unaryPrimitive _sets_size (set $ variable "a") int32 Sets.size,
   unaryPrimitive _sets_toList (set $ variable "a") (list $ variable "a") Sets.toList]
 
-hydraLibStringsPrimitives :: Show m => [PrimitiveFunction m]
+hydraLibStringsPrimitives :: Show m => [Primitive m]
 hydraLibStringsPrimitives = [
   unaryPrimitive _strings_cat (list string) string Strings.cat,
   unaryPrimitive _strings_length string int32 Strings.length,
@@ -256,7 +256,7 @@ hydraLibStringsPrimitives = [
   unaryPrimitive _strings_toLower string string Strings.toLower,
   unaryPrimitive _strings_toUpper string string Strings.toUpper]
 
-standardPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
+standardPrimitives :: (Ord m, Show m) => [Primitive m]
 standardPrimitives =
      hydraLibFlowsPrimitives
   ++ hydraLibListsPrimitives

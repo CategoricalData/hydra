@@ -254,8 +254,8 @@ checkWrappedTerms = do
         (apply (unwrap $ Name "StringTypeAlias") (wrap (Name "StringTypeAlias") $ string "foo"))
         Types.string
 
-checkPrimitiveFunctions :: H.SpecWith ()
-checkPrimitiveFunctions = do
+checkPrimitives :: H.SpecWith ()
+checkPrimitives = do
   H.describe "Check a few hand-picked terms with primitive functions" $ do
 
     H.it "Check monomorphic primitive functions" $ do
@@ -346,7 +346,7 @@ spec = do
   checkLists
   checkLiterals
   checkWrappedTerms
-  checkPrimitiveFunctions
+  checkPrimitives
   checkProducts
   checkSums
   checkTypeAnnotations

@@ -15,8 +15,8 @@ import qualified Data.Maybe as Y
 
 --instance IsString (TermCoder m (Term m)) where fromString = variable
 
-binaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> TermCoder m c -> (a -> b -> c) -> PrimitiveFunction m
-binaryPrimitive name input1 input2 output compute = PrimitiveFunction name ft impl
+binaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> TermCoder m c -> (a -> b -> c) -> Primitive m
+binaryPrimitive name input1 input2 output compute = Primitive name ft impl
   where
     ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
     impl args = do
@@ -67,8 +67,8 @@ map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType value
           ve <- (coderDecode $ termCoderCoder values) v
           return (ke, ve)
 
-nullaryPrimitive :: Name -> TermCoder m a -> a -> PrimitiveFunction m
-nullaryPrimitive name output value = PrimitiveFunction name (termCoderType output) impl
+nullaryPrimitive :: Name -> TermCoder m a -> a -> Primitive m
+nullaryPrimitive name output value = Primitive name (termCoderType output) impl
   where
     impl _ = coderDecode (termCoderCoder output) value
 
@@ -92,8 +92,8 @@ string = TermCoder Types.string $ Coder encode decode
     encode = Terms.expectString
     decode = pure . Terms.string
 
-unaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> (a -> b) -> PrimitiveFunction m
-unaryPrimitive name input1 output compute = PrimitiveFunction name ft impl
+unaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> (a -> b) -> Primitive m
+unaryPrimitive name input1 output compute = Primitive name ft impl
   where
     ft = TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
     impl args = do
