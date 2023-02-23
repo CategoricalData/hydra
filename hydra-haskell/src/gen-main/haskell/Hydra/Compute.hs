@@ -120,8 +120,6 @@ data Context m =
     contextGraph :: (Mantle.Graph m),
     -- | All supported primitive functions, by name
     contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
-    -- | The evaluation strategy which is to be used in this context
-    contextStrategy :: EvaluationStrategy,
     -- | The annotation class which is supported in this context
     contextAnnotations :: (AnnotationClass m)}
 
@@ -131,19 +129,7 @@ _Context_graph = (Core.FieldName "graph")
 
 _Context_functions = (Core.FieldName "functions")
 
-_Context_strategy = (Core.FieldName "strategy")
-
 _Context_annotations = (Core.FieldName "annotations")
-
--- | Settings which determine how terms are evaluated
-data EvaluationStrategy = 
-  EvaluationStrategy {
-    evaluationStrategyOpaqueTermVariants :: (Set Mantle.TermVariant)}
-  deriving (Eq, Ord, Read, Show)
-
-_EvaluationStrategy = (Core.Name "hydra/compute.EvaluationStrategy")
-
-_EvaluationStrategy_opaqueTermVariants = (Core.FieldName "opaqueTermVariants")
 
 -- | A variant of the State monad with built-in logging and error handling
 newtype Flow s a = 

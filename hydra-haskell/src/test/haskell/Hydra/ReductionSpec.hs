@@ -42,7 +42,7 @@ checkLiterals = do
       QC.property $ \av -> termIsClosed (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testContext testStrategy (literal av :: Term Kv)
+      QC.property $ \av -> termIsValue testContext (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->

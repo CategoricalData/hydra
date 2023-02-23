@@ -26,9 +26,7 @@ latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.fl
 
 testContext :: Context Kv
 testContext = coreContext {
-    contextGraph = testGraph,
-    contextStrategy = EvaluationStrategy {
-      evaluationStrategyOpaqueTermVariants = S.fromList []}}
+    contextGraph = testGraph}
 
 testElementArthur :: Element Kv
 testElementArthur = Element {
@@ -62,9 +60,6 @@ testSchemaGraph = standardGraph [
 
 testSchemaNamespace :: Namespace
 testSchemaNamespace = Namespace "testSchemaGraph"
-
-testStrategy :: EvaluationStrategy
-testStrategy = contextStrategy testContext
 
 testDataArthur :: Term Kv
 testDataArthur = record testTypePersonName [
