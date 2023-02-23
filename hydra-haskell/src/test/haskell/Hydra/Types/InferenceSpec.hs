@@ -26,7 +26,7 @@ expectMonotype term = expectPolytype term []
 expectPolytype :: Term Kv-> [String] -> Type Kv -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
-      (snd <$> inferType term)
+      (inferType term)
       (TypeScheme (VariableType <$> vars) typ)
 
 checkApplicationTerms :: H.SpecWith ()
@@ -320,13 +320,13 @@ checkTypeAnnotations = do
     H.it "Check literals" $
       QC.property $ \l -> do
         let term = TermLiteral l
-        let term1 = fromFlow testContext (fst <$> inferType term)
+        let term1 = fromFlow testContext (fst <$> inferTypeAndConstraints term)
         checkType term1 (Types.literal $ literalType l)
 
     H.it "Check lists of literals" $
       QC.property $ \l -> do
         let term = TermList [TermLiteral l]
-        let term1 = fromFlow testContext (fst <$> inferType term)
+        let term1 = fromFlow testContext (fst <$> inferTypeAndConstraints term)
         checkType term1 (Types.list $ Types.literal $ literalType l)
         let (TermAnnotated (Annotated (TermList [term2]) _)) = term1
         checkType term2 (Types.literal $ literalType l)

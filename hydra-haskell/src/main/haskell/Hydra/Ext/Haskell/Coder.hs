@@ -254,7 +254,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
           -- This makes program code with "let" terms more expensive to transform than simple data.
           let bl = M.toList bindings
-          ts <- fmap typeSchemeType <$> (CM.mapM inferTypeScheme (snd <$> bl))
+          ts <- fmap typeSchemeType <$> (CM.mapM inferType (snd <$> bl))
           coders <- CM.mapM (constructCoder haskellLanguage (encodeTerm namespaces)) ts
           let hnames = simpleName <$> (unVariable . fst <$> bl)
           hterms <- CM.zipWithM coderEncode coders (snd <$> bl)
