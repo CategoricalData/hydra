@@ -74,7 +74,7 @@ assignSchemas doInfer mod = do
       case typ of
         Nothing -> if doInfer
           then do
-            t <- typeSchemeType . snd <$> inferType (elementData el)
+            t <- typeSchemeType <$> inferType (elementData el)
             return el {elementSchema = encodeType t}
           else return el
         Just typ -> return el {elementSchema = encodeType typ}
