@@ -17,19 +17,13 @@ public class Context<M> {
   public final java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions;
   
   /**
-   * The evaluation strategy which is to be used in this context
-   */
-  public final hydra.compute.EvaluationStrategy strategy;
-  
-  /**
    * The annotation class which is supported in this context
    */
   public final hydra.compute.AnnotationClass<M> annotations;
   
-  public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions, hydra.compute.EvaluationStrategy strategy, hydra.compute.AnnotationClass<M> annotations) {
+  public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions, hydra.compute.AnnotationClass<M> annotations) {
     this.graph = graph;
     this.functions = functions;
-    this.strategy = strategy;
     this.annotations = annotations;
   }
   
@@ -39,27 +33,23 @@ public class Context<M> {
       return false;
     }
     Context o = (Context) (other);
-    return graph.equals(o.graph) && functions.equals(o.functions) && strategy.equals(o.strategy) && annotations.equals(o.annotations);
+    return graph.equals(o.graph) && functions.equals(o.functions) && annotations.equals(o.annotations);
   }
   
   @Override
   public int hashCode() {
-    return 2 * graph.hashCode() + 3 * functions.hashCode() + 5 * strategy.hashCode() + 7 * annotations.hashCode();
+    return 2 * graph.hashCode() + 3 * functions.hashCode() + 5 * annotations.hashCode();
   }
   
   public Context withGraph(hydra.mantle.Graph<M> graph) {
-    return new Context(graph, functions, strategy, annotations);
+    return new Context(graph, functions, annotations);
   }
   
   public Context withFunctions(java.util.Map<hydra.core.Name, hydra.compute.PrimitiveFunction<M>> functions) {
-    return new Context(graph, functions, strategy, annotations);
-  }
-  
-  public Context withStrategy(hydra.compute.EvaluationStrategy strategy) {
-    return new Context(graph, functions, strategy, annotations);
+    return new Context(graph, functions, annotations);
   }
   
   public Context withAnnotations(hydra.compute.AnnotationClass<M> annotations) {
-    return new Context(graph, functions, strategy, annotations);
+    return new Context(graph, functions, annotations);
   }
 }

@@ -86,17 +86,9 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "functions">:
             doc "All supported primitive functions, by name" $
             Types.map (core "Name") (compute "PrimitiveFunction" @@ "m"),
-          "strategy">:
-            doc "The evaluation strategy which is to be used in this context" $
-            compute "EvaluationStrategy",
           "annotations">:
             doc "The annotation class which is supported in this context" $
             compute "AnnotationClass" @@ "m"],
-
-      def "EvaluationStrategy" $
-        doc "Settings which determine how terms are evaluated" $
-        record [
-          "opaqueTermVariants">: set (mantle "TermVariant")],
 
       def "Flow" $
         doc "A variant of the State monad with built-in logging and error handling" $

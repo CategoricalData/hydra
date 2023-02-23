@@ -44,25 +44,23 @@ betaReduceTerm = reduce M.empty
   where
     reduce bindings term = do
       cx <- getState
-      if termIsOpaque (contextStrategy cx) term
-        then pure term
-        else case stripTerm term of
-          TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
-          TermLiteral _ -> done
-          TermElement _ -> done
-          TermFunction f -> reduceFunction f
-          TermList terms -> TermList <$> CM.mapM reduceb terms
-          TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
-            where
-              reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-          TermWrapped (Wrapper name term') -> (\t -> TermWrapped (Wrapper name t)) <$> reduce bindings term'
-          TermOptional m -> TermOptional <$> CM.mapM reduceb m
-          TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
-          TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
-          TermUnion (Injection n f) -> TermUnion <$> (Injection n <$> reduceField f)
-          TermVariable var@(Variable v) -> case M.lookup var bindings of
-            Nothing -> fail $ "cannot reduce free variable " ++ v
-            Just t -> reduceb t
+      case stripTerm term of
+        TermApplication (Application func arg) -> reduceb func >>= reduceApplication bindings [arg]
+        TermLiteral _ -> done
+        TermElement _ -> done
+        TermFunction f -> reduceFunction f
+        TermList terms -> TermList <$> CM.mapM reduceb terms
+        TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
+          where
+            reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
+        TermWrapped (Wrapper name term') -> (\t -> TermWrapped (Wrapper name t)) <$> reduce bindings term'
+        TermOptional m -> TermOptional <$> CM.mapM reduceb m
+        TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
+        TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
+        TermUnion (Injection n f) -> TermUnion <$> (Injection n <$> reduceField f)
+        TermVariable var@(Variable v) -> case M.lookup var bindings of
+          Nothing -> fail $ "cannot reduce free variable " ++ v
+          Just t -> reduceb t
       where
         done = pure term
         reduceb = reduce bindings
@@ -206,41 +204,37 @@ etaReduceTerm term = case term of
 termIsClosed :: Term m -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
--- | Whether a term is opaque to reduction, i.e. need not be reduced
-termIsOpaque :: EvaluationStrategy -> Term m -> Bool
-termIsOpaque strategy term = S.member (termVariant term) (evaluationStrategyOpaqueTermVariants strategy)
-
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: Context m -> EvaluationStrategy -> Term m -> Bool
-termIsValue cx strategy term = termIsOpaque strategy term || case stripTerm term of
+termIsValue :: Context m -> Term m -> Bool
+termIsValue cx term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True
     TermElement _ -> True
     TermFunction f -> functionIsValue f
     TermList els -> forList els
     TermMap map -> L.foldl
-      (\b (k, v) -> b && termIsValue cx strategy k && termIsValue cx strategy v)
+      (\b (k, v) -> b && termIsValue cx k && termIsValue cx v)
       True $ M.toList map
     TermOptional m -> case m of
       Nothing -> True
-      Just term -> termIsValue cx strategy term
+      Just term -> termIsValue cx term
     TermRecord (Record _ fields) -> checkFields fields
     TermSet els -> forList $ S.toList els
     TermUnion (Injection _ field) -> checkField field
     TermVariable _ -> False
   where
-    forList els = L.foldl (\b t -> b && termIsValue cx strategy t) True els
-    checkField = termIsValue cx strategy . fieldTerm
+    forList els = L.foldl (\b t -> b && termIsValue cx t) True els
+    checkField = termIsValue cx . fieldTerm
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of
-      FunctionCompareTo other -> termIsValue cx strategy other
+      FunctionCompareTo other -> termIsValue cx other
       FunctionElimination e -> case e of
         EliminationElement -> True
         EliminationWrapped _ -> True
-        EliminationOptional (OptionalCases nothing just) -> termIsValue cx strategy nothing
-          && termIsValue cx strategy just
+        EliminationOptional (OptionalCases nothing just) -> termIsValue cx nothing
+          && termIsValue cx just
         EliminationRecord _ -> True
         EliminationUnion (CaseStatement _ cases) -> checkFields cases
-      FunctionLambda (Lambda _ body) -> termIsValue cx strategy body
+      FunctionLambda (Lambda _ body) -> termIsValue cx body
       FunctionPrimitive _ -> True

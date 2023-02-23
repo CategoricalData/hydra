@@ -14,14 +14,14 @@ public class PrimitiveFunction<M> {
   /**
    * The type signature of the primitive function
    */
-  public final hydra.core.FunctionType<M> type;
+  public final hydra.core.Type<M> type;
   
   /**
    * A concrete implementation of the primitive function
    */
   public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation;
   
-  public PrimitiveFunction (hydra.core.Name name, hydra.core.FunctionType<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
+  public PrimitiveFunction (hydra.core.Name name, hydra.core.Type<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -45,7 +45,7 @@ public class PrimitiveFunction<M> {
     return new PrimitiveFunction(name, type, implementation);
   }
   
-  public PrimitiveFunction withType(hydra.core.FunctionType<M> type) {
+  public PrimitiveFunction withType(hydra.core.Type<M> type) {
     return new PrimitiveFunction(name, type, implementation);
   }
   
