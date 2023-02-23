@@ -11,7 +11,7 @@ import Hydra.Sources.Core
 import Hydra.Sources.Ext.Json.Model
 
 
-geoJsonModule :: Module Meta
+geoJsonModule :: Module Kv
 geoJsonModule = Module ns elements [jsonModelModule] $
     Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++
           "This model provides some additional structure beyond the JSON encoding described in the specification; " ++

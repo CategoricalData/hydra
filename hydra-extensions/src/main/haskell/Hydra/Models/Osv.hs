@@ -10,7 +10,7 @@ import Hydra.Dsl.Standard
 
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
-osvSchemaModule :: Module Meta
+osvSchemaModule :: Module Kv
 osvSchemaModule = Module ns elements [] $
     Just "See https://ossf.github.io/osv-schema"
   where

@@ -31,7 +31,7 @@ import Prelude hiding ((++))
 
 testNs = Namespace "com/linkedin/kgm/demo/meteredEvaluation"
 
-testModule :: Module Meta
+testModule :: Module Kv
 testModule = Module testNs elements [hydraMantleModule, adapterUtilsModule] Nothing
   where
     test = Definition . fromQname testNs

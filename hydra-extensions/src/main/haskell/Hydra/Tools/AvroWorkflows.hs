@@ -41,7 +41,7 @@ import System.Directory
 
 data JsonPayloadFormat = Json | Jsonl
 
-type TermEncoder a = Term Meta -> Graph Meta -> GraphFlow Meta [a]
+type TermEncoder a = Term Kv -> Graph Kv -> GraphFlow Kv [a]
 
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
@@ -56,7 +56,7 @@ executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir 
 -- Replace all lists with sets, for better query performance.
 -- This is a last-mile step which breaks type/term conformance
 -- (a more robust solution would modify the target language in the SHACL coder, so that list types are also transformed to set types).
-listsToSets :: Term Meta -> Term Meta
+listsToSets :: Term Kv -> Term Kv
 listsToSets = rewriteTerm mapExpr id
   where
     mapExpr recurse = recurse . replaceLists
@@ -64,7 +64,7 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-emptyEnv :: AvroEnvironment Meta
+emptyEnv :: AvroEnvironment Kv
 emptyEnv = emptyEnvironment
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
@@ -73,7 +73,7 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile Rdf.Description
 shaclRdfLastMile = LastMile termToShaclRdf rdfDescriptionsToNtriples "nt"
 
-termToShaclRdf :: Term Meta -> Graph Meta -> GraphFlow Meta [Rdf.Description]
+termToShaclRdf :: Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description]
 termToShaclRdf term graph = do
         elDescs <- CM.mapM encodeElement $ M.elems $ graphElements graph
         termDescs <- encodeBlankTerm
@@ -89,7 +89,7 @@ termToShaclRdf term graph = do
           else pure []
         notInGraph = L.null $ L.filter (\e -> elementData e == term) $ M.elems $ graphElements graph
 
-transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter Meta -> LastMile a -> FilePath -> FilePath -> IO ()
+transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter Kv -> LastMile a -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile

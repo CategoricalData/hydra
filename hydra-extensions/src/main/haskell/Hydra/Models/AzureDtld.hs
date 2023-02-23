@@ -9,60 +9,60 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-dtmi128 :: Type Meta
+dtmi128 :: Type Kv
 dtmi128 = bounded Nothing (Just 128) $ dtld "Dtmi"
 
-dtmi2048 :: Type Meta
+dtmi2048 :: Type Kv
 dtmi2048 = bounded Nothing (Just 2048) $ dtld "Dtmi"
 
-idField :: Bool -> Int -> String -> FieldType Meta
+idField :: Bool -> Int -> String -> FieldType Kv
 idField req maxlen desc = "id">: doc desc $ if req then t else optional t
   where
     t = bounded Nothing (Just maxlen) $ dtld "Dtmi"
 
-idOptionalField :: [Char] -> FieldType Meta
+idOptionalField :: [Char] -> FieldType Kv
 idOptionalField cat = idField False 2048 $
   "The ID of the " ++ cat ++ ". If no @id is provided, the digital twin interface processor will assign one."
 
-nonemptyString64 :: Type Meta
+nonemptyString64 :: Type Kv
 nonemptyString64 = boundedString (Just 1) (Just 64)
 
-nonemptyString512 :: Type Meta
+nonemptyString512 :: Type Kv
 nonemptyString512 = boundedString (Just 1) (Just 512)
 
-string128 :: Type Meta
+string128 :: Type Kv
 string128 = boundedString Nothing (Just 128)
 
-commentField :: FieldType Meta
+commentField :: FieldType Kv
 commentField = "comment">: doc "A comment for model authors" $ optional nonemptyString512
 
-descriptionField :: FieldType Meta
+descriptionField :: FieldType Kv
 descriptionField = "description">: doc "A localizable description for display" $ optional nonemptyString512
 
-displayNameField :: FieldType Meta
+displayNameField :: FieldType Kv
 displayNameField = "displayName">: doc "A localizable name for display" $ optional nonemptyString64
 
-nameField :: String -> String -> FieldType Meta
+nameField :: String -> String -> FieldType Kv
 nameField cat regex = "name">: doc (
   "The 'programming' name of the " ++ cat ++ ". The name may only contain the characters " ++
   "a-z, A-Z, 0-9, and underscore, and must match this regular expression " ++ regex ++ ".")
   nonemptyString64
 
-schemaField :: String -> FieldType Meta
+schemaField :: String -> FieldType Kv
 schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema"
 
-schemaInterfaceField :: String -> FieldType Meta
+schemaInterfaceField :: String -> FieldType Kv
 schemaInterfaceField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Interface"
 
-typeField :: String -> FieldType Meta
+typeField :: String -> FieldType Kv
 typeField desc = "type">: doc desc $ dtld "Iri"
 
-unitField :: String -> FieldType Meta
+unitField :: String -> FieldType Kv
 unitField cat = "unit">:
   doc ("The unit type of the " ++ cat ++ ". A semantic type is required for the unit property to be available.") $
   optional $ dtld "Unit"
 
-writableField :: String -> FieldType Meta
+writableField :: String -> FieldType Kv
 writableField cat = "writable">:
   doc (
     "A boolean value that indicates whether the " ++ cat ++ " is writable by an external source, " ++
@@ -75,7 +75,7 @@ dtld = nsref dtldNs
 dtldNs :: Namespace
 dtldNs = Namespace "com/azure/dtld"
 
-dtldModule :: Module Meta
+dtldModule :: Module Kv
 dtldModule = Module dtldNs elements [] $
     Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++
       "  https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#digital-twins-definition-language\n" ++

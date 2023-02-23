@@ -6,7 +6,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 
 
-coqSyntaxModule :: Module Meta
+coqSyntaxModule :: Module Kv
 coqSyntaxModule = Module ns elements [] $
     Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
       "  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary")

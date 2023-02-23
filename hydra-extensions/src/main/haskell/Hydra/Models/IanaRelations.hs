@@ -9,7 +9,7 @@ import Hydra.Sources.Compute
 import Hydra.Sources.Core
 
 
-ianaRelationsModule :: Module Meta
+ianaRelationsModule :: Module Kv
 ianaRelationsModule = Module ns elements [] $
     Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")
