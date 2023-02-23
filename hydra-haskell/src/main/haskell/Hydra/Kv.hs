@@ -37,28 +37,28 @@ getAttrWithDefault :: String -> Term Kv -> Flow s (Term Kv)
 getAttrWithDefault key def = Y.fromMaybe def <$> getAttr key
 
 getDescription :: Kv -> GraphFlow Kv (Y.Maybe String)
-getDescription meta = case getAnnotation metaDescription meta of
+getDescription kv = case getAnnotation kvDescription kv of
   Nothing -> pure Nothing
   Just term -> case term of
     TermLiteral (LiteralString s) -> pure $ Just s
-    _ -> fail $ "unexpected value for " ++ show metaDescription ++ ": " ++ show term
+    _ -> fail $ "unexpected value for " ++ show kvDescription ++ ": " ++ show term
 
 getTermAnnotation :: Context Kv -> String -> Term Kv -> Y.Maybe (Term Kv)
-getTermAnnotation cx key = getAnnotation key . termMetaInternal
+getTermAnnotation cx key = getAnnotation key . termAnnotationInternal
 
 getTermDescription :: Term Kv -> GraphFlow Kv (Y.Maybe String)
-getTermDescription = getDescription . termMetaInternal
+getTermDescription = getDescription . termAnnotationInternal
 
 getType :: Kv -> GraphFlow Kv (Y.Maybe (Type Kv))
-getType meta = case getAnnotation metaType meta of
+getType kv = case getAnnotation kvType kv of
   Nothing -> pure Nothing
   Just dat -> Just <$> decodeType dat
 
 getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
-getTypeDescription = getDescription . typeMetaInternal
+getTypeDescription = getDescription . typeAnnotationInternal
 
-metaAnnotationClass :: AnnotationClass Kv
-metaAnnotationClass = AnnotationClass {
+kvAnnotationClass :: AnnotationClass Kv
+kvAnnotationClass = AnnotationClass {
     annotationClassDefault = Kv M.empty,
     annotationClassEqual = (==),
     annotationClassCompare = \m1 m2 -> toComparison $ m1 `compare` m2,
@@ -66,11 +66,11 @@ metaAnnotationClass = AnnotationClass {
     annotationClassRead = read,
 
     -- TODO: simplify
-    annotationClassTermAnnotation = termMetaInternal,
-    annotationClassTypeAnnotation = typeMetaInternal,
+    annotationClassTermAnnotation = termAnnotationInternal,
+    annotationClassTypeAnnotation = typeAnnotationInternal,
     annotationClassTermDescription = getTermDescription,
     annotationClassTypeDescription = getTypeDescription,
-    annotationClassTermType = getType . termMetaInternal,
+    annotationClassTermType = getType . termAnnotationInternal,
     annotationClassSetTermDescription = setTermDescription,
     annotationClassSetTermType = setTermType,
     annotationClassTypeOf = getType,
@@ -81,11 +81,11 @@ metaAnnotationClass = AnnotationClass {
       EQ -> ComparisonEqualTo
       GT -> ComparisonGreaterThan
 
-metaDescription :: String
-metaDescription = "description"
+kvDescription :: String
+kvDescription = "description"
 
-metaType :: String
-metaType = "type"
+kvType :: String
+kvType = "type"
 
 nextCount :: String -> Flow s Int
 nextCount attrName = do
@@ -102,42 +102,42 @@ setAnnotation :: String -> Y.Maybe (Term Kv) -> Kv -> Kv
 setAnnotation key val (Kv m) = Kv $ M.alter (const val) key m
 
 setDescription :: Y.Maybe String -> Kv -> Kv
-setDescription d = setAnnotation metaDescription (Terms.string <$> d)
+setDescription d = setAnnotation kvDescription (Terms.string <$> d)
 
 setTermAnnotation :: Context Kv -> String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-setTermAnnotation cx key val term = if meta == annotationClassDefault (contextAnnotations cx)
+setTermAnnotation cx key val term = if kv == annotationClassDefault (contextAnnotations cx)
     then term'
-    else TermAnnotated $ Annotated term' meta
+    else TermAnnotated $ Annotated term' kv
   where
     term' = stripTerm term
-    meta = setAnnotation key val $ termMetaInternal term
+    kv = setAnnotation key val $ termAnnotationInternal term
 
 setTermDescription :: Context Kv -> Y.Maybe String -> Term Kv -> Term Kv
-setTermDescription cx d = setTermAnnotation cx metaDescription (Terms.string <$> d)
+setTermDescription cx d = setTermAnnotation cx kvDescription (Terms.string <$> d)
 
 setTermType :: Context Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
-setTermType cx d = setTermAnnotation cx metaType (encodeType <$> d)
+setTermType cx d = setTermAnnotation cx kvType (encodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
-setType mt = setAnnotation metaType (encodeType <$> mt)
+setType mt = setAnnotation kvType (encodeType <$> mt)
 
 setTypeAnnotation :: Context Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-setTypeAnnotation cx key val typ = if meta == annotationClassDefault (contextAnnotations cx)
+setTypeAnnotation cx key val typ = if kv == annotationClassDefault (contextAnnotations cx)
     then typ'
-    else TypeAnnotated $ Annotated typ' meta
+    else TypeAnnotated $ Annotated typ' kv
   where
     typ' = stripType typ
-    meta = setAnnotation key val $ typeMetaInternal typ
+    kv = setAnnotation key val $ typeAnnotationInternal typ
 
 setTypeDescription :: Context Kv -> Y.Maybe String -> Type Kv -> Type Kv
-setTypeDescription cx d = setTypeAnnotation cx metaDescription (Terms.string <$> d)
+setTypeDescription cx d = setTypeAnnotation cx kvDescription (Terms.string <$> d)
 
-termMetaInternal :: Term Kv -> Kv
-termMetaInternal = aggregateAnnotations $ \t -> case t of
+termAnnotationInternal :: Term Kv -> Kv
+termAnnotationInternal = aggregateAnnotations $ \t -> case t of
   TermAnnotated a -> Just a
   _ -> Nothing
 
-typeMetaInternal :: Type Kv -> Kv
-typeMetaInternal = aggregateAnnotations $ \t -> case t of
+typeAnnotationInternal :: Type Kv -> Kv
+typeAnnotationInternal = aggregateAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing

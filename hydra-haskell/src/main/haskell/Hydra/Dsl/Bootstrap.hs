@@ -35,7 +35,7 @@ bootstrapContext = cx
       contextGraph = Graph M.empty Nothing,
       contextFunctions = M.empty,
       contextStrategy = EvaluationStrategy S.empty,
-      contextAnnotations = metaAnnotationClass}
+      contextAnnotations = kvAnnotationClass}
 
 nsref :: Namespace -> String -> Type m
 nsref ns = Types.wrap . qualify ns . Name
