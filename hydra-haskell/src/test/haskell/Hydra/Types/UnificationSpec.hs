@@ -9,7 +9,7 @@ import qualified Test.Hspec as H
 import qualified Data.Map as M
 
 
-expectUnified :: [Constraint Meta] -> [(VariableType, Type Meta)] -> H.Expectation
+expectUnified :: [Constraint Kv] -> [(VariableType, Type Kv)] -> H.Expectation
 expectUnified constraints subst = shouldSucceedWith
   (solveConstraints constraints)
   (M.fromList subst)
@@ -28,7 +28,7 @@ checkIndividualConstraints = do
 
     H.it "Unify variable with literal type" $
       expectUnified
-        [(Types.variable "a" :: Type Meta, Types.string)]
+        [(Types.variable "a" :: Type Kv, Types.string)]
         [(VariableType "a", Types.string)]
 
 spec :: H.Spec

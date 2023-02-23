@@ -112,7 +112,7 @@ spec = do
   unsupportedTypesAreTransformed
   wrappedTypesAreSupported
 
-checkJsonCoder :: Type Meta -> Term Meta -> Json.Value -> H.Expectation
+checkJsonCoder :: Type Kv -> Term Kv -> Json.Value -> H.Expectation
 checkJsonCoder typ term node = case mstep of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just step -> do

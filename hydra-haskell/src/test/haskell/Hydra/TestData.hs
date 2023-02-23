@@ -22,7 +22,7 @@ eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName Nothing
 eitherStringOrInt8TypeName :: Name
 eitherStringOrInt8TypeName = fromQname testNamespace "EitherStringOrInt8"
 
-exampleProjectionType :: Type Meta
+exampleProjectionType :: Type Kv
 exampleProjectionType = Types.function testTypePerson Types.string
 
 int32ElementType :: Type m

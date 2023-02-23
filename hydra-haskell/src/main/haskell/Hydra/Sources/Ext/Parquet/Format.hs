@@ -8,7 +8,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
-parquetFormatModule :: Module Meta
+parquetFormatModule :: Module Kv
 parquetFormatModule = Module ns elements [] $
     Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")
@@ -1280,7 +1280,7 @@ parquetFormatModule = Module ns elements [] $
 -- struct RowGroup {
       def "RowGroup" $
         record [
---   /** Metadata for each column chunk in this row group.
+--   /** Kvdata for each column chunk in this row group.
 --    * This list must have the same order as the SchemaElement list in FileMetaData.
 --    **/
 --   1: required list<ColumnChunk> columns

@@ -6,9 +6,9 @@ package hydra.phantoms;
 public class Fld<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Fld");
   
-  public final hydra.core.Field<hydra.compute.Meta> value;
+  public final hydra.core.Field<hydra.compute.Kv> value;
   
-  public Fld (hydra.core.Field<hydra.compute.Meta> value) {
+  public Fld (hydra.core.Field<hydra.compute.Kv> value) {
     this.value = value;
   }
   

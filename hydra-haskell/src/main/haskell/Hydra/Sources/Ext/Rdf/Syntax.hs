@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-rdfSyntaxModule :: Module Meta
+rdfSyntaxModule :: Module Kv
 rdfSyntaxModule = Module ns elements [] $
     Just "An RDF 1.1 syntax model"
   where

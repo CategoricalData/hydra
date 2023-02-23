@@ -13,9 +13,9 @@ public class Trace {
   /**
    * A map of string keys to arbitrary terms as values, for application-specific use
    */
-  public final java.util.Map<String, hydra.core.Term<hydra.compute.Meta>> other;
+  public final java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other;
   
-  public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term<hydra.compute.Meta>> other) {
+  public Trace (java.util.List<String> stack, java.util.List<String> messages, java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
     this.stack = stack;
     this.messages = messages;
     this.other = other;
@@ -43,7 +43,7 @@ public class Trace {
     return new Trace(stack, messages, other);
   }
   
-  public Trace withOther(java.util.Map<String, hydra.core.Term<hydra.compute.Meta>> other) {
+  public Trace withOther(java.util.Map<String, hydra.core.Term<hydra.compute.Kv>> other) {
     return new Trace(stack, messages, other);
   }
 }

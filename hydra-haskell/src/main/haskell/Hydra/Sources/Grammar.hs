@@ -8,7 +8,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 
 
-hydraGrammarModule :: Module Meta
+hydraGrammarModule :: Module Kv
 hydraGrammarModule = Module ns elements [] $
     Just "A common API for BNF-based grammars, specifying context-free languages"
   where

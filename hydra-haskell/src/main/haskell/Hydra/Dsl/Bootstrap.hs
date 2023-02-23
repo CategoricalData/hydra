@@ -3,7 +3,7 @@
 module Hydra.Dsl.Bootstrap where
 
 import Hydra.Kernel
-import Hydra.Meta
+import Hydra.Kv
 import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Types as Types
 
@@ -28,7 +28,7 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         t' = rec t
 
-bootstrapContext :: Context Meta
+bootstrapContext :: Context Kv
 bootstrapContext = cx
   where
     cx = Context {

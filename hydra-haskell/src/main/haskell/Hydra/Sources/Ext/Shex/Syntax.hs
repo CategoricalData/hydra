@@ -61,7 +61,7 @@ extra_ = terminal "EXTRA"
 closed_ = terminal "CLOSED"
 
 
-shexSyntaxModule :: Module Meta
+shexSyntaxModule :: Module Kv
 shexSyntaxModule = grammarToModule ns shexGrammar $
     Just ("A Shex model. Based on the BNF at:\n" ++
         "  https://github.com/shexSpec/grammar/blob/master/bnf")

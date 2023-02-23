@@ -91,17 +91,17 @@ testFoldOverTerm = do
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
-          (list [int32 42, apply (lambda "x" $ variable "x") (int32 10)] :: Term Meta))
+          (list [int32 42, apply (lambda "x" $ variable "x") (int32 10)] :: Term Kv))
         52
 
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Meta))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Kv))
         [1, 2, 2]
       H.shouldBe
         (foldOverTerm TraversalOrderPost listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Meta))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Kv))
         [2, 1, 2]
   where
     addInt32s sum term = case term of
@@ -150,32 +150,32 @@ testReplaceTerm = do
 
       H.it "Check that the correct subterms are replaced" $ do
         H.shouldBe
-          (rewriteTerm replaceInts keepMeta
+          (rewriteTerm replaceInts keepKv
             (int32 42))
-          (int64 42 :: Term Meta)
+          (int64 42 :: Term Kv)
         H.shouldBe
-          (rewriteTerm replaceInts keepMeta
+          (rewriteTerm replaceInts keepKv
             (list [int32 42, apply (lambda "x" $ variable "x") (int32 137)]))
-          (list [int64 42, apply (lambda "x" $ variable "x") (int64 137)] :: Term Meta)
+          (list [int64 42, apply (lambda "x" $ variable "x") (int64 137)] :: Term Kv)
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
-          (rewriteTerm replaceListsPre keepMeta
+          (rewriteTerm replaceListsPre keepKv
             (list [list [list []]]))
-          (list [list []] :: Term Meta)
+          (list [list []] :: Term Kv)
         H.shouldBe
-          (rewriteTerm replaceListsPost keepMeta
+          (rewriteTerm replaceListsPost keepKv
             (list [list [list []]]))
-          (list [] :: Term Meta)
+          (list [] :: Term Kv)
 
       H.it "Check that metadata is replace recursively" $ do
         H.shouldBe
-          (rewriteTerm keepTerm replaceMeta (list [annot 42 (string "foo")] :: Term Int))
+          (rewriteTerm keepTerm replaceKv (list [annot 42 (string "foo")] :: Term Int))
           (list [annot "42" (string "foo")])
   where
     keepTerm recurse term = recurse term
 
-    keepMeta = id
+    keepKv = id
 
     replaceInts recurse term = case term2 of
         TermLiteral (LiteralInteger (IntegerValueInt32 v)) -> int64 $ fromIntegral v
@@ -193,7 +193,7 @@ testReplaceTerm = do
 
     replaceListsPost recurse = replaceLists . recurse
 
-    replaceMeta i = show i
+    replaceKv i = show i
 
 testRewriteExampleType :: H.SpecWith ()
 testRewriteExampleType = do
@@ -214,20 +214,20 @@ testSimplifyTerm = do
     H.it "Check that 'const' applications are simplified" $ do
       H.shouldBe
         (simplifyTerm (apply (lambda "x" (string "foo")) (int32 42)))
-        (string "foo" :: Term Meta)
+        (string "foo" :: Term Kv)
       H.shouldBe
         (simplifyTerm (apply (lambda "x" $ list [variable "x", variable "x"]) (variable "y")))
-        (list [variable "y", variable "y"] :: Term Meta)
+        (list [variable "y", variable "y"] :: Term Kv)
       H.shouldBe
         (simplifyTerm (apply (lambda "x" $ string "foo") (variable "y")))
-        (string "foo" :: Term Meta)
+        (string "foo" :: Term Kv)
       H.shouldBe
         (simplifyTerm (apply (lambda "x"
           (apply (lambda "a" (list [string "foo", variable "a"])) (variable "x"))) (variable "y")))
-        (list [string "foo", variable "y"] :: Term Meta)
+        (list [string "foo", variable "y"] :: Term Kv)
 
-testStripMeta :: H.SpecWith ()
-testStripMeta = do
+testStripKv :: H.SpecWith ()
+testStripKv = do
   H.describe "Test stripping metadata from terms" $ do
 
     H.it "Strip type annotations" $ do
@@ -256,4 +256,4 @@ spec = do
   testReplaceTerm
   testRewriteExampleType
   testSimplifyTerm
-  testStripMeta
+  testStripKv

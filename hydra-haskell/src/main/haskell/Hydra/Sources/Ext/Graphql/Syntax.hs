@@ -42,7 +42,7 @@ descriptionOpt = opt"Description"
 directivesConst = "Directives" -- Directives_[Const]
 directivesConstOpt = opt"Directives" -- Directives_[Const]opt
 
-graphqlSyntaxModule :: Module Meta
+graphqlSyntaxModule :: Module Kv
 graphqlSyntaxModule = grammarToModule ns graphqlGrammar $
     Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
       "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")

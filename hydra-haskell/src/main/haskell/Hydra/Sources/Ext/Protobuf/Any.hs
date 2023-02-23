@@ -11,7 +11,7 @@ import Hydra.Sources.Core
 pbAnyNs = Namespace "hydra/ext/protobuf/any"
 pbAny = nsref pbAnyNs
 
-protobufAnyModule :: Module Meta
+protobufAnyModule :: Module Kv
 protobufAnyModule = Module pbAnyNs elements [] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"
   where

@@ -15,7 +15,7 @@ basicsNs = Namespace "hydra/basics"
 basics :: String -> Datum a -> Definition a
 basics = Definition . fromQname basicsNs
 
-hydraBasicsModule :: Module Meta
+hydraBasicsModule :: Module Kv
 hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
     Just "Basic functions for working with types and terms"
   where

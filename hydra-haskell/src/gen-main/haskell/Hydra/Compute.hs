@@ -49,8 +49,8 @@ data AnnotationClass m =
     annotationClassCompare :: (m -> m -> Mantle.Comparison),
     annotationClassShow :: (m -> String),
     annotationClassRead :: (String -> Maybe m),
-    annotationClassTermMeta :: (Core.Term m -> m),
-    annotationClassTypeMeta :: (Core.Type m -> m),
+    annotationClassTermAnnotation :: (Core.Term m -> m),
+    annotationClassTypeAnnotation :: (Core.Type m -> m),
     annotationClassTermDescription :: (Core.Term m -> Flow (Context m) (Maybe String)),
     annotationClassTypeDescription :: (Core.Type m -> Flow (Context m) (Maybe String)),
     annotationClassTermType :: (Core.Term m -> Flow (Context m) (Maybe (Core.Type m))),
@@ -71,9 +71,9 @@ _AnnotationClass_show = (Core.FieldName "show")
 
 _AnnotationClass_read = (Core.FieldName "read")
 
-_AnnotationClass_termMeta = (Core.FieldName "termMeta")
+_AnnotationClass_termAnnotation = (Core.FieldName "termAnnotation")
 
-_AnnotationClass_typeMeta = (Core.FieldName "typeMeta")
+_AnnotationClass_typeAnnotation = (Core.FieldName "typeAnnotation")
 
 _AnnotationClass_termDescription = (Core.FieldName "termDescription")
 
@@ -168,6 +168,17 @@ _FlowState_state = (Core.FieldName "state")
 
 _FlowState_trace = (Core.FieldName "trace")
 
+-- | A key/value map which serves as a built-in metadata container for terms
+data Kv = 
+  Kv {
+    -- | A map of annotation names to annotation values
+    kvAnnotations :: (Map String (Core.Term Kv))}
+  deriving (Eq, Ord, Read, Show)
+
+_Kv = (Core.Name "hydra/compute.Kv")
+
+_Kv_annotations = (Core.FieldName "annotations")
+
 -- | A named language together with language-specific constraints
 data Language m = 
   Language {
@@ -227,17 +238,6 @@ newtype LanguageName =
 
 _LanguageName = (Core.Name "hydra/compute.LanguageName")
 
--- | A built-in metadata container for terms
-data Meta = 
-  Meta {
-    -- | A map of annotation names to annotation values
-    metaAnnotations :: (Map String (Core.Term Meta))}
-  deriving (Eq, Ord, Read, Show)
-
-_Meta = (Core.Name "hydra/compute.Meta")
-
-_Meta_annotations = (Core.FieldName "annotations")
-
 -- | A built-in function
 data PrimitiveFunction m = 
   PrimitiveFunction {
@@ -274,7 +274,7 @@ data Trace =
     traceStack :: [String],
     traceMessages :: [String],
     -- | A map of string keys to arbitrary terms as values, for application-specific use
-    traceOther :: (Map String (Core.Term Meta))}
+    traceOther :: (Map String (Core.Term Kv))}
   deriving (Eq, Ord, Read, Show)
 
 _Trace = (Core.Name "hydra/compute.Trace")

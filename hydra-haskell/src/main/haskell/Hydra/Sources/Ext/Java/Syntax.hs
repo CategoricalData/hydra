@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-javaSyntaxModule :: Module Meta
+javaSyntaxModule :: Module Kv
 javaSyntaxModule = Module ns elements [] $
     Just ("A Java syntax module. Based on the Oracle Java SE 12 BNF:\n" ++
       "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++

@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-jsonModelModule :: Module Meta
+jsonModelModule :: Module Kv
 jsonModelModule = Module ns elements [] $
     Just "A JSON syntax model. See the BNF at https://www.json.org"
   where

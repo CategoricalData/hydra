@@ -15,15 +15,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-checkType :: Term (Meta, Type Meta, [Constraint Meta]) -> Type Meta -> H.Expectation
+checkType :: Term (Kv, Type Kv, [Constraint Kv]) -> Type Kv -> H.Expectation
 checkType term typ = typeAnn term `H.shouldBe` typ
   where
     typeAnn (TermAnnotated (Annotated _ (_, typ, _))) = typ
 
-expectMonotype :: Term Meta -> Type Meta -> H.Expectation
+expectMonotype :: Term Kv -> Type Kv -> H.Expectation
 expectMonotype term = expectPolytype term []
 
-expectPolytype :: Term Meta-> [String] -> Type Meta -> H.Expectation
+expectPolytype :: Term Kv-> [String] -> Type Kv -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
       (snd <$> inferType term)

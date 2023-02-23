@@ -24,7 +24,7 @@ latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat,
 latLonType :: Type m
 latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
-testContext :: Context Meta
+testContext :: Context Kv
 testContext = coreContext {
     contextGraph = testGraph,
     contextStrategy = EvaluationStrategy {
@@ -33,25 +33,25 @@ testContext = coreContext {
         TermVariantElement,
         TermVariantFunction]}}
 
-testElementArthur :: Element Meta
+testElementArthur :: Element Kv
 testElementArthur = Element {
   elementName = Name "ArthurDent",
   elementSchema = element $ Name "Person",
   elementData = testDataArthur}
 
-testElementFirstName :: Element Meta
+testElementFirstName :: Element Kv
 testElementFirstName = Element {
   elementName = Name "firstName",
   elementSchema = encodeType (Types.function (Types.wrap testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
-testGraph :: Graph Meta
+testGraph :: Graph Kv
 testGraph = elementsToGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespace :: Namespace
 testNamespace = Namespace "testGraph"
 
-testSchemaGraph :: Graph Meta
+testSchemaGraph :: Graph Kv
 testSchemaGraph = standardGraph [
     def (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
     def testTypeFoobarValueName testTypeFoobarValue,
@@ -69,7 +69,7 @@ testSchemaNamespace = Namespace "testSchemaGraph"
 testStrategy :: EvaluationStrategy
 testStrategy = contextStrategy testContext
 
-testDataArthur :: Term Meta
+testDataArthur :: Term Kv
 testDataArthur = record testTypePersonName [
   Field (FieldName "firstName") $ string "Arthur",
   Field (FieldName "lastName") $ string "Dent",
@@ -93,7 +93,7 @@ testTypeFoobarValue = TypeUnion $ RowType testTypeFoobarValueName Nothing [
 testTypeFoobarValueName :: Name
 testTypeFoobarValueName = Name "FoobarValue"
 
-testTypePerson :: Type Meta
+testTypePerson :: Type Kv
 testTypePerson = TypeRecord $ RowType testTypePersonName Nothing [
   Types.field "firstName" Types.string,
   Types.field "lastName" Types.string,
@@ -102,7 +102,7 @@ testTypePerson = TypeRecord $ RowType testTypePersonName Nothing [
 testTypePersonName :: Name
 testTypePersonName = Name "Person"
 
-testTypePersonOrSomething :: Type Meta
+testTypePersonOrSomething :: Type Kv
 testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
   Types.field "person" testTypePerson,
   Types.field "other" $ Types.variable "a"]
@@ -110,7 +110,7 @@ testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePerso
 testTypePersonOrSomethingName :: Name
 testTypePersonOrSomethingName = Name "PersonOrSomething"
 
-testTypeTimestamp :: Type Meta
+testTypeTimestamp :: Type Kv
 testTypeTimestamp = TypeUnion $ RowType testTypeTimestampName Nothing [
   FieldType (FieldName "unixTimeMillis") Types.uint64,
   FieldType (FieldName "date") Types.string]

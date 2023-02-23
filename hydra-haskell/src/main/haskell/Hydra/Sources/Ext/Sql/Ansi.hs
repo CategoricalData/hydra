@@ -10,7 +10,7 @@ import qualified Hydra.Dsl.Standard as Standard
 import qualified Data.List as L
 
 
-sqlModule :: Module Meta
+sqlModule :: Module Kv
 sqlModule = grammarToModule ns sqlGrammar $
     Just ("A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at "
       ++ "https://ronsavage.github.io/SQL/sql-2003-2.bnf.html, which is based on "
