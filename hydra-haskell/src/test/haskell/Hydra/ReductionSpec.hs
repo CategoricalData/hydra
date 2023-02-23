@@ -12,7 +12,6 @@ import qualified Test.QuickCheck as QC
 import qualified Data.List as L
 import qualified Data.Char as C
 import qualified Data.Set as S
-import Hydra.Sources.Libraries (_sets_empty)
 
 
 checkAlphaConversion :: H.SpecWith ()
@@ -59,10 +58,10 @@ checkMonomorphicPrimitives = do
 
     H.it "Example primitives have the expected arity" $ do
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_toUpper)
+        (primitiveFunctionArity <$> lookupPrimitive testContext _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitiveFunction testContext _strings_splitOn)
+        (primitiveFunctionArity <$> lookupPrimitive testContext _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $

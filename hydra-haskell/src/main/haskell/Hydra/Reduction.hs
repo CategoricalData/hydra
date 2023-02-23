@@ -32,8 +32,8 @@ alphaConvert vold tnew = rewriteTerm rewrite id
       _ -> recurse term
 
 -- For demo purposes. This should be generalized to enable additional side effects of interest.
-countPrimitiveFunctionInvocations :: Bool
-countPrimitiveFunctionInvocations = True
+countPrimitiveInvocations :: Bool
+countPrimitiveInvocations = True
 
 -- | A beta reduction function which is designed for safety, not speed.
 --   This function does not assume that term to be evaluated is in a normal form,
@@ -76,9 +76,9 @@ betaReduceTerm = reduce M.empty
           FunctionCompareTo other -> TermFunction . FunctionCompareTo <$> reduceb other
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive name -> do
-            prim <- requirePrimitiveFunction name
+            prim <- requirePrimitive name
             if primitiveFunctionArity prim == 0
-              then primitiveFunctionImplementation prim []
+              then primitiveImplementation prim []
               else done
 
         -- Assumes that the function is closed and fully reduced. The arguments may not be.
@@ -118,16 +118,16 @@ betaReduceTerm = reduce M.empty
             -- TODO: FunctionCompareTo
 
             FunctionPrimitive name -> do
-                prim <- requirePrimitiveFunction name
+                prim <- requirePrimitive name
                 let arity = primitiveFunctionArity prim
                 if L.length args >= arity
                   then do
                     rargs <- CM.mapM betaReduceTerm args
-                    if countPrimitiveFunctionInvocations
+                    if countPrimitiveInvocations
                       then nextCount ("count_" ++ unName name)
                       else pure 0
                     (mapM (reduce bindings) $ L.take arity rargs)
-                      >>= primitiveFunctionImplementation prim
+                      >>= primitiveImplementation prim
                       >>= reduce bindings
                       >>= reduceApplication bindings (L.drop arity rargs)
                   else unwind args

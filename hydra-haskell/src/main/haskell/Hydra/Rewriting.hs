@@ -33,7 +33,7 @@ expandLambdas = rewriteTermM (expand []) (pure . id)
           FunctionElimination _ -> pad args 1 <$> recurse term
           FunctionLambda _ -> passThrough
           FunctionPrimitive name -> do
-            prim <- requirePrimitiveFunction name
+            prim <- requirePrimitive name
             return $ pad args (primitiveFunctionArity prim) term
         _ -> passThrough
       where

@@ -119,7 +119,7 @@ data Context m =
     -- | The graph itself
     contextGraph :: (Mantle.Graph m),
     -- | All supported primitive functions, by name
-    contextFunctions :: (Map Core.Name (PrimitiveFunction m)),
+    contextFunctions :: (Map Core.Name (Primitive m)),
     -- | The annotation class which is supported in this context
     contextAnnotations :: (AnnotationClass m)}
 
@@ -225,22 +225,22 @@ newtype LanguageName =
 _LanguageName = (Core.Name "hydra/compute.LanguageName")
 
 -- | A built-in function
-data PrimitiveFunction m = 
-  PrimitiveFunction {
+data Primitive m = 
+  Primitive {
     -- | The unique name of the primitive function
-    primitiveFunctionName :: Core.Name,
+    primitiveName :: Core.Name,
     -- | The type signature of the primitive function
-    primitiveFunctionType :: (Core.Type m),
+    primitiveType :: (Core.Type m),
     -- | A concrete implementation of the primitive function
-    primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
+    primitiveImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
 
-_PrimitiveFunction = (Core.Name "hydra/compute.PrimitiveFunction")
+_Primitive = (Core.Name "hydra/compute.Primitive")
 
-_PrimitiveFunction_name = (Core.FieldName "name")
+_Primitive_name = (Core.FieldName "name")
 
-_PrimitiveFunction_type = (Core.FieldName "type")
+_Primitive_type = (Core.FieldName "type")
 
-_PrimitiveFunction_implementation = (Core.FieldName "implementation")
+_Primitive_implementation = (Core.FieldName "implementation")
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
 data TermCoder m a = 

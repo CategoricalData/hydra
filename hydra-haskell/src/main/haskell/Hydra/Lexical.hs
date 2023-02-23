@@ -31,11 +31,11 @@ dereferenceElement en = do
       Nothing -> fail $ "element " ++ unName en ++ " does not exist"
       Just e -> pure $ elementData e
 
-lookupPrimitiveFunction :: Context m -> Name -> Maybe (PrimitiveFunction m)
-lookupPrimitiveFunction cx fn = M.lookup fn $ contextFunctions cx
+lookupPrimitive :: Context m -> Name -> Maybe (Primitive m)
+lookupPrimitive cx fn = M.lookup fn $ contextFunctions cx
 
-primitiveFunctionArity :: PrimitiveFunction m -> Int
-primitiveFunctionArity = typeArity . primitiveFunctionType
+primitiveFunctionArity :: Primitive m -> Int
+primitiveFunctionArity = typeArity . primitiveType
 
 requireElement :: Name -> GraphFlow m (Element m)
 requireElement name = do
@@ -50,10 +50,10 @@ requireElement name = do
           then L.take 3 strings ++ ["..."]
           else strings
 
-requirePrimitiveFunction :: Name -> GraphFlow m (PrimitiveFunction m)
-requirePrimitiveFunction fn = do
+requirePrimitive :: Name -> GraphFlow m (Primitive m)
+requirePrimitive fn = do
     cx <- getState
-    Y.maybe err pure $ lookupPrimitiveFunction cx fn
+    Y.maybe err pure $ lookupPrimitive cx fn
   where
     err = fail $ "no such primitive function: " ++ unName fn
 
