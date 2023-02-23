@@ -14,7 +14,7 @@ period = terminal "."
 rparen = terminal ")"
 
 
-datalogSyntaxModule :: Module Meta
+datalogSyntaxModule :: Module Kv
 datalogSyntaxModule = grammarToModule ns datalogGrammar $
     Just "A basic Datalog model"
   where
