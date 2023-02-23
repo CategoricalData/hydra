@@ -111,7 +111,7 @@ stripType = skipAnnotations $ \t -> case t of
   _ -> Nothing
 
 termMeta :: Context m -> Term m -> m
-termMeta cx = annotationClassTermMeta $ contextAnnotations cx
+termMeta cx = annotationClassTermAnnotation $ contextAnnotations cx
 
 toQnameLazy :: Name -> (Namespace, String)
 toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
@@ -124,7 +124,7 @@ toQnameEager (Name name) = case Strings.splitOn "." name of
   _ -> (Namespace "UNKNOWN", name)
 
 typeMeta :: Context m -> Type m -> m
-typeMeta cx = annotationClassTypeMeta $ contextAnnotations cx
+typeMeta cx = annotationClassTypeAnnotation $ contextAnnotations cx
 
 unitTypeName :: Name
 unitTypeName = Name "hydra/core.UnitType"

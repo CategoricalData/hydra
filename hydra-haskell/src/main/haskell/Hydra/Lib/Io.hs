@@ -21,12 +21,12 @@ import qualified Data.Maybe as Y
 showTerm :: Ord m => Term m -> String
 showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
   where
-    encoded = encodeTerm $ rewriteTermMeta (const $ Meta M.empty) term
+    encoded = encodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
-termJsonCoder :: Coder (Context Meta) (Context Meta) (Term Meta) Json.Value
+termJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
 termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Term
 
-termStringCoder :: Coder (Context Meta) (Context Meta) (Term Meta) String
+termStringCoder :: Coder (Context Kv) (Context Kv) (Term Kv) String
 termStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode termJsonCoder term
@@ -37,12 +37,12 @@ termStringCoder = Coder mout min
 showType :: Ord m => Type m -> String
 showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
   where
-    encoded = encodeType $ rewriteTypeMeta (const $ Meta M.empty) typ
+    encoded = encodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
-typeJsonCoder :: Coder (Context Meta) (Context Meta) (Term Meta) Json.Value
+typeJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
 typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Type
 
-typeStringCoder :: Coder (Context Meta) (Context Meta) (Term Meta) String
+typeStringCoder :: Coder (Context Kv) (Context Kv) (Term Kv) String
 typeStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode typeJsonCoder term

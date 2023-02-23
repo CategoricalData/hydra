@@ -6,9 +6,9 @@ package hydra.phantoms;
 public class Datum<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/phantoms.Datum");
   
-  public final hydra.core.Term<hydra.compute.Meta> value;
+  public final hydra.core.Term<hydra.compute.Kv> value;
   
-  public Datum (hydra.core.Term<hydra.compute.Meta> value) {
+  public Datum (hydra.core.Term<hydra.compute.Kv> value) {
     this.value = value;
   }
   

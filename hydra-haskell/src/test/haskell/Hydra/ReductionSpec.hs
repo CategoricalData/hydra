@@ -18,35 +18,35 @@ checkAlphaConversion = do
   H.describe "Tests for alpha conversion" $ do
     H.it "Variables are substituted at the top level" $
       QC.property $ \v ->
-        alphaConvert (Variable v) (variable $ v ++ "'") (variable v) == (variable (v ++ "'") :: Term Meta)
+        alphaConvert (Variable v) (variable $ v ++ "'") (variable v) == (variable (v ++ "'") :: Term Kv)
     H.it "Variables are substituted within subexpressions" $
       QC.property $ \v ->
         alphaConvert (Variable v) (variable $ v ++ "'") (list [int32 42, variable v])
-          == (list [int32 42, variable (v ++ "'")] :: Term Meta)
+          == (list [int32 42, variable (v ++ "'")] :: Term Kv)
     H.it "Lambdas with unrelated variables are transparent to alpha conversion" $
       QC.property $ \v ->
         alphaConvert (Variable v) (variable $ v ++ "1") (lambda (v ++ "2") $ list [int32 42, variable v, variable (v ++ "2")])
-          == (lambda (v ++ "2") $ list [int32 42, variable (v ++ "1"), variable (v ++ "2")] :: Term Meta)
+          == (lambda (v ++ "2") $ list [int32 42, variable (v ++ "1"), variable (v ++ "2")] :: Term Kv)
     H.it "Lambdas of the same variable are opaque to alpha conversion" $
       QC.property $ \v ->
         alphaConvert (Variable v) (variable $ v ++ "1") (lambda v $ list [int32 42, variable v, variable (v ++ "2")])
-          == (lambda v $ list [int32 42, variable v, variable (v ++ "2")] :: Term Meta)
+          == (lambda v $ list [int32 42, variable v, variable (v ++ "2")] :: Term Kv)
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = do
   H.describe "Tests for literal values" $ do
 
     H.it "Literal terms have no free variables" $
-      QC.property $ \av -> termIsClosed (literal av :: Term Meta)
+      QC.property $ \av -> termIsClosed (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testContext testStrategy (literal av :: Term Meta)
+      QC.property $ \av -> termIsValue testContext testStrategy (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
         shouldSucceedWith
           (eval (literal av))
-          (literal av :: Term Meta)
+          (literal av :: Term Kv)
 
     H.it "Literal terms cannot be applied" $
       QC.property $ \av (TypedTerm _ term) -> shouldFail (eval $ apply (literal av) term)
@@ -131,18 +131,18 @@ testBetaReduceTypeRecursively = do
 --        (reduce True app5)
 --        (TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.function Types.string Types.string])
   where
-    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Meta
-    app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Meta
-    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Meta
+    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Kv
+    app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Kv
+    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Kv
     app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ TypeRecord $ RowType (Name "Example") Nothing [
       Types.field "f1" $ Types.variable "x",
-      Types.field "f2" $ Types.variable "y"]) Types.int32) Types.int64 :: Type Meta
+      Types.field "f2" $ Types.variable "y"]) Types.int32) Types.int64 :: Type Kv
     app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) app1
 
-reduce :: Type Meta -> Type Meta
+reduce :: Type Kv -> Type Kv
 reduce typ = fromFlow (schemaContext testContext) (betaReduceType typ)
 
-eval :: Term Meta -> GraphFlow Meta (Term Meta)
+eval :: Term Kv -> GraphFlow Kv (Term Kv)
 eval = betaReduceTerm
 
 spec :: H.Spec

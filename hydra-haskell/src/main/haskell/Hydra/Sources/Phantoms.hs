@@ -9,7 +9,7 @@ import Hydra.Sources.Core
 import Hydra.Sources.Compute
 
 
-hydraPhantomsModule :: Module Meta
+hydraPhantomsModule :: Module Kv
 hydraPhantomsModule = Module ns elements [hydraComputeModule] $
     Just "Phantom types for use in model definitions"
   where
@@ -26,7 +26,7 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] $
 
       def "Datum" $
         doc "An association of a term with a phantom type" $
-        lambda "a" $ (core "Term") @@ (evaluation "Meta"),
+        lambda "a" $ (core "Term") @@ (evaluation "Kv"),
 
       def "Definition" $
         doc "An association with a named term with a phantom type" $
@@ -36,7 +36,7 @@ hydraPhantomsModule = Module ns elements [hydraComputeModule] $
 
       def "Fld" $
         doc "An association with a term-level field with a phantom type" $
-        lambda "a" $ (core "Field") @@ (evaluation "Meta"),
+        lambda "a" $ (core "Field") @@ (evaluation "Kv"),
 
       def "Reference" $
         doc "A pure association with a phantom type" $

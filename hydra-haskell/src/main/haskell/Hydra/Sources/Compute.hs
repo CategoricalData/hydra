@@ -9,7 +9,7 @@ import Hydra.Sources.Core
 import Hydra.Sources.Mantle
 
 
-hydraComputeModule :: Module Meta
+hydraComputeModule :: Module Kv
 hydraComputeModule = Module ns elements [hydraMantleModule] $
     Just "Abstractions for evaluation and transformations"
   where
@@ -46,9 +46,9 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "read">: string --> optional "m",
 
           -- TODO: simplify
-          "termMeta">:
+          "termAnnotation">:
             core "Term" @@ "m" --> "m",
-          "typeMeta">:
+          "typeAnnotation">:
             core "Type" @@ "m" --> "m",
           "termDescription">:
             core "Term" @@ "m" --> compute "Flow" @@ (compute "Context" @@ "m") @@ optional string,
@@ -110,6 +110,13 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "state">: "s",
           "trace">: compute "Trace"],
 
+      def "Kv" $
+        doc "A key/value map which serves as a built-in metadata container for terms" $
+        record [
+          "annotations">:
+            doc "A map of annotation names to annotation values" $
+            Types.map string (core "Term" @@ compute "Kv")],
+
       def "Language" $
         doc "A named language together with language-specific constraints" $
         lambda "m" $ record [
@@ -147,13 +154,6 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "LanguageName" $
         doc "The unique name of a language" string,
 
-      def "Meta" $
-        doc "A built-in metadata container for terms" $
-        record [
-          "annotations">:
-            doc "A map of annotation names to annotation values" $
-            Types.map string (core "Term" @@ compute "Meta")],
-
       def "PrimitiveFunction" $
         doc "A built-in function" $
         lambda "m" $ record [
@@ -180,7 +180,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
           "messages">: list string,
           "other">:
             doc "A map of string keys to arbitrary terms as values, for application-specific use" $
-            Types.map string (core "Term" @@ compute "Meta")],
+            Types.map string (core "Term" @@ compute "Kv")],
 
       def "TraversalOrder" $
         doc "Specifies either a pre-order or post-order traversal" $

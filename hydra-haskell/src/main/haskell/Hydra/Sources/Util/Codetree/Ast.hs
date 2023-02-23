@@ -6,7 +6,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 
 
-codetreeAstModule :: Module Meta
+codetreeAstModule :: Module Kv
 codetreeAstModule = Module ns elements [] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where

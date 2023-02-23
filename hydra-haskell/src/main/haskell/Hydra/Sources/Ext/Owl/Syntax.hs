@@ -13,16 +13,16 @@ import Hydra.Sources.Ext.Xml.Schema
 key_iri :: String
 key_iri = "iri"
 
-withIri :: String -> Type Meta -> Type Meta
+withIri :: String -> Type Kv -> Type Kv
 withIri iriStr = annotateType key_iri (Just $ Terms.string iriStr)
 
 nonNegativeInteger :: Type m
 nonNegativeInteger = Types.bigint
 
-owlIri :: [Char] -> Type Meta -> Type Meta
+owlIri :: [Char] -> Type Kv -> Type Kv
 owlIri local = withIri $ "http://www.w3.org/2002/07/owl#" ++ local
 
-owlSyntaxModule :: Module Meta
+owlSyntaxModule :: Module Kv
 owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
     Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"
   where

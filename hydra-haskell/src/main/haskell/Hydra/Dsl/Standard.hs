@@ -6,7 +6,7 @@ module Hydra.Dsl.Standard (
 ) where
 
 import Hydra.Kernel
-import Hydra.Meta
+import Hydra.Kv
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries
@@ -20,61 +20,61 @@ import qualified Data.Maybe as Y
 key_maxSize = "maxLength"
 key_minSize = "minLength"
 
-annotateTerm :: String -> Y.Maybe (Term Meta) -> Term Meta -> Term Meta
+annotateTerm :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
 annotateTerm = setTermAnnotation coreContext
 
-annotateType :: String -> Y.Maybe (Term Meta) -> Type Meta -> Type Meta
+annotateType :: String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
 annotateType = setTypeAnnotation coreContext
 
-bounded :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+bounded :: Maybe Int -> Maybe Int -> Type Kv -> Type Kv
 bounded min max = annotMin . annotMax
   where
     annotMax t = Y.maybe t (`setMaxLength` t) max
     annotMin t = Y.maybe t (`setMinLength` t) max
 
-boundedList :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+boundedList :: Maybe Int -> Maybe Int -> Type Kv -> Type Kv
 boundedList min max et = bounded min max $ Types.list et
 
-boundedSet :: Maybe Int -> Maybe Int -> Type Meta -> Type Meta
+boundedSet :: Maybe Int -> Maybe Int -> Type Kv -> Type Kv
 boundedSet min max et = bounded min max $ Types.set et
 
-boundedString :: Maybe Int -> Maybe Int -> Type Meta
+boundedString :: Maybe Int -> Maybe Int -> Type Kv
 boundedString min max = bounded min max Types.string
 
-coreContext :: Context Meta
+coreContext :: Context Kv
 coreContext = bootstrapContext {
   contextGraph = hydraCore,
   contextFunctions = M.fromList $ fmap (\p -> (primitiveFunctionName p, p)) standardPrimitives}
 
-doc :: String -> Type Meta -> Type Meta
+doc :: String -> Type Kv -> Type Kv
 doc s = setTypeDescription coreContext (Just s)
 
-dataDoc :: String -> Term Meta -> Term Meta
+dataDoc :: String -> Term Kv -> Term Kv
 dataDoc s = setTermDescription coreContext (Just s)
 
-dataterm :: Namespace -> String -> Type Meta -> Term Meta -> Element Meta
+dataterm :: Namespace -> String -> Type Kv -> Term Kv -> Element Kv
 dataterm gname lname = termElement (qualify gname (Name lname))
 
-graphContext :: Graph Meta -> Context Meta
+graphContext :: Graph Kv -> Context Kv
 graphContext g = coreContext {contextGraph = g}
 
-nonemptyList :: Type Meta -> Type Meta
+nonemptyList :: Type Kv -> Type Kv
 nonemptyList = boundedList (Just 1) Nothing
 
-note :: String -> Type Meta -> Type Meta
+note :: String -> Type Kv -> Type Kv
 note s = doc $ "Note: " ++ s
 
-see :: String -> Type Meta -> Type Meta
+see :: String -> Type Kv -> Type Kv
 see s = doc $ "See " ++ s
 
-setMaxLength :: Int -> Type Meta -> Type Meta
+setMaxLength :: Int -> Type Kv -> Type Kv
 setMaxLength m = setTypeAnnotation coreContext key_maxSize (Just $ Terms.int32 m)
 
-setMinLength :: Int -> Type Meta -> Type Meta
+setMinLength :: Int -> Type Kv -> Type Kv
 setMinLength m = setTypeAnnotation coreContext key_minSize (Just $ Terms.int32 m)
 
-standardGraph :: [Element Meta] -> Graph Meta
+standardGraph :: [Element Kv] -> Graph Kv
 standardGraph = elementsToGraph (Just hydraCore)
 
-twoOrMoreList :: Type Meta -> Type Meta
+twoOrMoreList :: Type Kv -> Type Kv
 twoOrMoreList = boundedList (Just 2) Nothing

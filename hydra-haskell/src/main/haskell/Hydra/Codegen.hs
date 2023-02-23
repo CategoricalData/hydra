@@ -60,7 +60,7 @@ addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
 
-allModules :: [Module Meta]
+allModules :: [Module Kv]
 allModules = coreModules ++ utilModules ++ extModules
 
 assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
@@ -79,7 +79,7 @@ assignSchemas doInfer mod = do
           else return el
         Just typ -> return el {elementSchema = encodeType typ}
 
-coreModules :: [Module Meta]
+coreModules :: [Module Kv]
 coreModules = [
   codetreeAstModule,
   haskellAstModule,
@@ -97,7 +97,7 @@ utilModules = [
   adapterUtilsModule,
   hydraBasicsModule]
 
-extModules :: [Module Meta]
+extModules :: [Module Kv]
 extModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
@@ -123,7 +123,7 @@ extModules = [
 findType :: Context m -> Term m -> GraphFlow m (Maybe (Type m))
 findType cx term = annotationClassTermType (contextAnnotations cx) term
 
-generateSources :: (Module Meta -> GraphFlow Meta (M.Map FilePath String)) -> [Module Meta] -> FilePath -> IO ()
+generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> [Module Kv] -> FilePath -> IO ()
 generateSources printModule mods0 basePath = do
     mfiles <- runFlow kernelContext generateFiles
     case mfiles of
@@ -143,12 +143,12 @@ generateSources printModule mods0 basePath = do
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
 
-hydraKernel :: Graph Meta
+hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
 
 kernelContext = graphContext hydraKernel
 
-modulesToContext :: [Module Meta] -> Context Meta
+modulesToContext :: [Module Kv] -> Context Kv
 modulesToContext mods = kernelContext {contextGraph = elementsToGraph (Just hydraKernel) elements}
   where
     elements = L.concat (moduleElements <$> allModules)
@@ -168,17 +168,17 @@ runFlow cx f = do
   printTrace (Y.isNothing v) t
   return v
 
-writeHaskell :: [Module Meta] -> FilePath -> IO ()
+writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule
 
-writeJava :: [Module Meta] -> FP.FilePath -> IO ()
+writeJava :: [Module Kv] -> FP.FilePath -> IO ()
 writeJava = generateSources Java.printModule
 
-writePdl :: [Module Meta] -> FP.FilePath -> IO ()
+writePdl :: [Module Kv] -> FP.FilePath -> IO ()
 writePdl = generateSources PDL.printModule
 
-writeScala :: [Module Meta] -> FP.FilePath -> IO ()
+writeScala :: [Module Kv] -> FP.FilePath -> IO ()
 writeScala = generateSources Scala.printModule
 
-writeYaml :: [Module Meta] -> FP.FilePath -> IO ()
+writeYaml :: [Module Kv] -> FP.FilePath -> IO ()
 writeYaml = generateSources Yaml.printModule

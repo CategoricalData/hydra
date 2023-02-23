@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
 import Hydra.Dsl.Terms as Terms
-import Hydra.Meta
+import Hydra.Kv
 import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
@@ -233,13 +233,13 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       False
       (projection testTypePersonName fname)
       (inject functionProxyName $ field "record" $ string $
-        show (projection testTypePersonName fname :: Term Meta)) -- Note: the field name is not dereferenced
+        show (projection testTypePersonName fname :: Term Kv)) -- Note: the field name is not dereferenced
 
   H.it "Nominal types (when unsupported) are dereferenced" $
     QC.property $ \s -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantAnnotated]
       stringAliasType
-      (TypeAnnotated $ Annotated Types.string $ Meta $
+      (TypeAnnotated $ Annotated Types.string $ Kv $
         M.fromList [(metaDescription, Terms.string "An alias for the string type")])
       False
       (string s)
@@ -336,7 +336,7 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
       (field "second" $ int8 i)
       (field "second" $ int16 $ fromIntegral i)
 
-roundTripIsNoop :: Type Meta -> Term Meta -> H.Expectation
+roundTripIsNoop :: Type Kv -> Term Kv -> H.Expectation
 roundTripIsNoop typ term = shouldSucceedWith
    (step coderEncode term >>= step coderDecode)
    term

@@ -11,7 +11,7 @@ import Hydra.Sources.Core
 pbSourceContextNs = Namespace "hydra/ext/protobuf/sourceContext"
 pbSourceContext = nsref pbSourceContextNs
 
-protobufSourceContextModule :: Module Meta
+protobufSourceContextModule :: Module Kv
 protobufSourceContextModule = Module pbSourceContextNs elements [] $
     Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto"
   where

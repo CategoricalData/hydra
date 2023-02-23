@@ -10,7 +10,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Ext.Rdf.Syntax
 
 
-shaclModelModule :: Module Meta
+shaclModelModule :: Module Kv
 shaclModelModule = Module ns elements [rdfSyntaxModule] $
     Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"
   where

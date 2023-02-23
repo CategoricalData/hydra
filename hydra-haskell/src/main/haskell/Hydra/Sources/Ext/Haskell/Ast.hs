@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-haskellAstModule :: Module Meta
+haskellAstModule :: Module Kv
 haskellAstModule = Module ns elements [] $
     Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"
   where

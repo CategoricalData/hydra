@@ -2,7 +2,7 @@ module Hydra.Ext.Shacl.Coder where
 
 import Hydra.Kernel
 import Hydra.CoreDecoding
-import Hydra.Meta
+import Hydra.Kv
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
 import qualified Hydra.Dsl.Literals as Literals

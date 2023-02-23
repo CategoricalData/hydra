@@ -7,7 +7,7 @@ module Hydra.Dsl.Base (
 ) where
 
 import Hydra.Kernel
-import Hydra.Meta
+import Hydra.Kv
 import Hydra.CoreEncoding
 import Hydra.Dsl.PhantomLiterals
 import qualified Hydra.Dsl.Standard as Standard
@@ -23,7 +23,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-el :: Definition a -> Element Meta
+el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name (encodeType dummyType) term
   where
     dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
@@ -46,7 +46,7 @@ infixr 0 @->
 x @-> y = (x, y)
 
 infixr 0 -->
-(-->) :: Case a -> Datum (a -> b) -> Field Meta
+(-->) :: Case a -> Datum (a -> b) -> Field Kv
 c --> t = caseField c t
 
 (++) :: Datum String -> Datum String -> Datum String
@@ -58,7 +58,7 @@ apply (Datum lhs) (Datum rhs) = Datum $ Terms.apply lhs rhs
 apply2 :: Datum (a -> b -> c) -> Datum a -> Datum b -> Datum c
 apply2 (Datum f) (Datum a1) (Datum a2) = Datum $ Terms.apply (Terms.apply f a1) a2
 
-caseField :: Case a -> Datum (a -> b) -> Field Meta
+caseField :: Case a -> Datum (a -> b) -> Field Kv
 caseField (Case fname) (Datum f) = Field fname f
 
 compareTo :: Datum a -> Datum (a -> Bool)
@@ -82,13 +82,13 @@ doc s (Datum term) = Datum $ setTermDescription Standard.coreContext (Just s) te
 element :: Definition a -> Datum (Reference a)
 element (Definition name _) = Datum $ Terms.element name
 
-field :: FieldName -> Datum a -> Field Meta
+field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
 
-function :: Type Meta -> Type Meta -> Datum a -> Datum a
+function :: Type Kv -> Type Kv -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
-functionN :: [Type Meta] -> Type Meta -> Datum a -> Datum a
+functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
 
 lambda :: String -> Datum x -> Datum (a -> b)
@@ -113,7 +113,7 @@ matchData name pairs = Datum $ Terms.cases name (toField <$> pairs)
 matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
 matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
-match :: Name -> Type Meta -> [Field Meta] -> Datum (u -> b)
+match :: Name -> Type Kv -> [Field Kv] -> Datum (u -> b)
 match name cod fields = function (Types.wrap name) cod $ Datum $ Terms.cases name fields
 
 matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Datum (a -> b)
@@ -121,7 +121,7 @@ matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
-matchToUnion :: Name -> Name -> [(FieldName, Field Meta)] -> Datum (a -> b)
+matchToUnion :: Name -> Name -> [(FieldName, Field Kv)] -> Datum (a -> b)
 matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
   where
     toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.inject codName fld)
@@ -136,7 +136,7 @@ opt mc = Datum $ Terms.optional (unDatum <$> mc)
 primitive :: Name -> Datum a
 primitive = Datum . Terms.primitive
 
-project :: Name -> Type Meta -> FieldName -> Datum (a -> b)
+project :: Name -> Type Kv -> FieldName -> Datum (a -> b)
 project name cod fname = Datum $ Terms.projection name fname
 
 record :: Name -> [Fld a] -> Datum a
@@ -148,7 +148,7 @@ ref (Definition name _) = Datum (Terms.apply Terms.delta $ Terms.element name)
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
 
-typed :: Type Meta -> Datum a -> Datum a
+typed :: Type Kv -> Datum a -> Datum a
 typed t (Datum term) = Datum $ setTermType Standard.coreContext (Just t) term
 
 union :: Name -> FieldName -> Datum a -> Datum b

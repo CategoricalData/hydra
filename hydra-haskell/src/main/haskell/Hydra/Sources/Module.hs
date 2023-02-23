@@ -8,7 +8,7 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Mantle
 
 
-hydraModuleModule :: Module Meta
+hydraModuleModule :: Module Kv
 hydraModuleModule = Module ns elements [hydraMantleModule] $
     Just "A model for Hydra namespaces and modules (collections of elements in the same namespace)"
   where

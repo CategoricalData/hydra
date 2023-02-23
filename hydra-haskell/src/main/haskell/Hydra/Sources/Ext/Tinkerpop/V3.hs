@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-tinkerpopV3Module :: Module Meta
+tinkerpopV3Module :: Module Kv
 tinkerpopV3Module = Module ns elements [hydraCoreModule] $
     Just "A simple TinkerPop version 3 syntax model"
   where

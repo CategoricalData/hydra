@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-tinkerpopTypedModule :: Module Meta
+tinkerpopTypedModule :: Module Kv
 tinkerpopTypedModule = Module ns elements [hydraCoreModule] Nothing
   where
     ns = Namespace "hydra/ext/tinkerpop/typed"

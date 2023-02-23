@@ -12,7 +12,7 @@ import Prelude hiding ((++))
 
 utilsNs = Namespace "hydra/adapters/utils"
 
-adapterUtilsModule :: Module Meta
+adapterUtilsModule :: Module Kv
 adapterUtilsModule = Module utilsNs elements [hydraBasicsModule] $
     Just "Utilities for use in transformations"
   where

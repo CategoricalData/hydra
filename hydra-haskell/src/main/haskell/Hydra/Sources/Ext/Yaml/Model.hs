@@ -7,7 +7,7 @@ import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 
 
-yamlModelModule :: Module Meta
+yamlModelModule :: Module Kv
 yamlModelModule = Module ns elements [] $
     Just ("A basic YAML representation model. Based on:\n" ++
       "  https://yaml.org/spec/1.2/spec.html\n" ++

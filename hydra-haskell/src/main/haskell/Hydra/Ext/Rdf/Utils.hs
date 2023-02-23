@@ -1,7 +1,7 @@
 module Hydra.Ext.Rdf.Utils where
 
 import Hydra.Kernel
-import Hydra.Meta
+import Hydra.Kv
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 
 import qualified Data.List as L

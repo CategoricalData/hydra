@@ -9,14 +9,14 @@ public class HydraSchemaSpec {
   /**
    * The modules to include in the schema graph
    */
-  public final java.util.List<hydra.module.Module<hydra.compute.Meta>> modules;
+  public final java.util.List<hydra.module.Module<hydra.compute.Kv>> modules;
   
   /**
    * The name of the top-level type; all data which passes through the workflow will be instances of this type
    */
   public final hydra.core.Name typeName;
   
-  public HydraSchemaSpec (java.util.List<hydra.module.Module<hydra.compute.Meta>> modules, hydra.core.Name typeName) {
+  public HydraSchemaSpec (java.util.List<hydra.module.Module<hydra.compute.Kv>> modules, hydra.core.Name typeName) {
     this.modules = modules;
     this.typeName = typeName;
   }
@@ -35,7 +35,7 @@ public class HydraSchemaSpec {
     return 2 * modules.hashCode() + 3 * typeName.hashCode();
   }
   
-  public HydraSchemaSpec withModules(java.util.List<hydra.module.Module<hydra.compute.Meta>> modules) {
+  public HydraSchemaSpec withModules(java.util.List<hydra.module.Module<hydra.compute.Kv>> modules) {
     return new HydraSchemaSpec(modules, typeName);
   }
   

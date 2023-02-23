@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Meta
+import Hydra.Kv
 import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
@@ -22,23 +22,23 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (strip $ encodeLiteralType LiteralTypeString :: Term Meta)
+        (strip $ encodeLiteralType LiteralTypeString :: Term Kv)
         (strip $ unitVariant _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (strip $ encodeType Types.string :: Term Meta)
+        (strip $ encodeType Types.string :: Term Kv)
         (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (strip $ encodeType Types.int32 :: Term Meta)
+        (strip $ encodeType Types.int32 :: Term Kv)
         (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
         (strip $ encodeType (TypeRecord $ RowType (Name "Example") Nothing
-          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Meta)
+          [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Kv)
         (strip $ variant _Type _Type_record $
           record _RowType [
             Field _RowType_typeName $ string "Example",
@@ -109,8 +109,8 @@ metadataIsPreserved = do
         (decodeType $ encodeType annotatedStringType)
         annotatedStringType
   where
-    annotatedStringType :: Type Meta
-    annotatedStringType = TypeAnnotated $ Annotated Types.string $ Meta $ M.fromList [
+    annotatedStringType :: Type Kv
+    annotatedStringType = TypeAnnotated $ Annotated Types.string $ Kv $ M.fromList [
       (metaDescription, Terms.string "The string literal type"),
       (metaType, encodeType $ Types.wrap _Type)]
 

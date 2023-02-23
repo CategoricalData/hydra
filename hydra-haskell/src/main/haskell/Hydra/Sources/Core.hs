@@ -3,15 +3,15 @@
 module Hydra.Sources.Core where
 
 import Hydra.Kernel
-import Hydra.Meta
+import Hydra.Kv
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Bootstrap
 
 
-hydraCore :: Graph Meta
+hydraCore :: Graph Kv
 hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
 
-hydraCoreModule :: Module Meta
+hydraCoreModule :: Module Kv
 hydraCoreModule = Module ns elements [] $
     Just "Hydra's core data model, defining types, terms, and their dependencies"
   where
