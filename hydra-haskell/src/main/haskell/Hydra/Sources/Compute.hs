@@ -162,7 +162,7 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
             core "Name",
           "type">:
             doc "The type signature of the primitive function" $
-            core "FunctionType" @@ "m",
+            core "Type" @@ "m",
           "implementation">:
             doc "A concrete implementation of the primitive function" $
             list (core "Term" @@ "m") --> compute "Flow" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m")],

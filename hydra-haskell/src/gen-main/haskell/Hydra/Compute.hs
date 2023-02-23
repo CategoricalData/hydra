@@ -244,7 +244,7 @@ data PrimitiveFunction m =
     -- | The unique name of the primitive function
     primitiveFunctionName :: Core.Name,
     -- | The type signature of the primitive function
-    primitiveFunctionType :: (Core.FunctionType m),
+    primitiveFunctionType :: (Core.Type m),
     -- | A concrete implementation of the primitive function
     primitiveFunctionImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
 

@@ -138,6 +138,9 @@ _sets_insert = qname _hydra_lib_sets "add"
 _sets_contains :: Name
 _sets_contains = qname _hydra_lib_sets "contains"
 
+_sets_empty :: Name
+_sets_empty = qname _hydra_lib_sets "empty"
+
 _sets_fromList :: Name
 _sets_fromList = qname _hydra_lib_sets "fromList"
 
@@ -235,6 +238,7 @@ hydraLibOptionalsPrimitives = [
 hydraLibSetsPrimitives :: (Ord m, Show m) => [PrimitiveFunction m]
 hydraLibSetsPrimitives = [
   binaryPrimitive _sets_contains (variable "a") (set $ variable "a") boolean Sets.contains,
+  nullaryPrimitive _sets_empty (set $ variable "a") Sets.empty,
   unaryPrimitive _sets_fromList (list $ variable "a") (set $ variable "a") Sets.fromList,
   binaryPrimitive _sets_insert (variable "a") (set $ variable "a") (set $ variable "a") Sets.insert,
   unaryPrimitive _sets_isEmpty (set $ variable "a") boolean Sets.isEmpty,

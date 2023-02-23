@@ -176,8 +176,8 @@ inferInternal term = case term of
         yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
       FunctionPrimitive name -> do
-        FunctionType dom cod <- withGraphContext $ typeOfPrimitiveFunction name
-        yieldFunction (FunctionPrimitive name) (Types.function dom cod) []
+        t <- withGraphContext $ typeOfPrimitiveFunction name
+        yieldFunction (FunctionPrimitive name) t []
 
     TermLet (Let bindings env) -> do
         (_, _, cs) <- getState
@@ -349,7 +349,7 @@ typeOfElement name = withTrace "type of element" $ do
   el <- requireElement name
   decodeStructuralType $ elementSchema el
 
-typeOfPrimitiveFunction :: Name -> GraphFlow m (FunctionType m)
+typeOfPrimitiveFunction :: Name -> GraphFlow m (Type m)
 typeOfPrimitiveFunction name = primitiveFunctionType <$> requirePrimitiveFunction name
 
 withEnvironment :: (TypingEnvironment m -> TypingEnvironment m) -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
