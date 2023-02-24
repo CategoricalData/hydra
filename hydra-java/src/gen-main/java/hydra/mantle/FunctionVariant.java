@@ -13,8 +13,6 @@ public abstract class FunctionVariant {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(CompareTo instance) ;
-    
     R visit(Elimination instance) ;
     
     R visit(Lambda instance) ;
@@ -27,10 +25,6 @@ public abstract class FunctionVariant {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(CompareTo instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Elimination instance) {
       return otherwise((instance));
     }
@@ -41,31 +35,6 @@ public abstract class FunctionVariant {
     
     default R visit(Primitive instance) {
       return otherwise((instance));
-    }
-  }
-  
-  public static final class CompareTo extends hydra.mantle.FunctionVariant {
-    public CompareTo () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof CompareTo)) {
-        return false;
-      }
-      CompareTo o = (CompareTo) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
   }
   

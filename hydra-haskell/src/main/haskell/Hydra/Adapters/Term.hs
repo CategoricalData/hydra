@@ -68,7 +68,6 @@ functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
   FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
-  FieldType _Function_compareTo dom,
   FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
   FieldType _Function_primitive Types.string,
   FieldType _Term_variable Types.string]
@@ -81,7 +80,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
   where
     encode ad term = coderEncode (adapterCoder ad) $ case stripTerm term of
       TermFunction f -> case f of
-        FunctionCompareTo other -> variant functionProxyName _Function_compareTo other
         FunctionElimination e -> case e of
           EliminationElement -> unitVariant functionProxyName _Elimination_element
           EliminationWrapped (Name name) -> variant functionProxyName _Elimination_wrapped $ string name
@@ -99,14 +97,12 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           (_Elimination_optional, forOptionalCases fterm),
           (_Elimination_record, forProjection fterm),
           (_Elimination_union, forCases fterm),
-          (_Function_compareTo, forCompareTo fterm),
           (_Function_lambda, forLambda fterm),
           (_Function_primitive, forPrimitive fterm),
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ unFieldName fname
         forCases fterm = read <$> expectString fterm -- TODO
-        forCompareTo fterm = pure $ compareTo fterm
         forTerm _ = pure delta
         forLambda fterm = read <$> expectString fterm -- TODO
         forWrapped fterm = unwrap . Name <$> expectString fterm
@@ -123,7 +119,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FieldType _Elimination_optional Types.string,
         FieldType _Elimination_record Types.string,
         FieldType _Elimination_union Types.string, -- TODO (TypeRecord cases)
-        FieldType _Function_compareTo (adapterTarget domAd),
         FieldType _Function_lambda Types.string, -- TODO (TypeRecord [FieldType _Lambda_parameter Types.string, FieldType _Lambda_body cod]),
         FieldType _Function_primitive Types.string,
         FieldType _Term_variable Types.string]
@@ -189,7 +184,6 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
     return $ Adapter lossy t (Types.function dom' cod')
       $ bidirectional $ \dir term -> case stripTerm term of
         TermFunction f -> TermFunction <$> case f of
-          FunctionCompareTo other -> FunctionCompareTo <$> encodeDecode dir (adapterCoder codAd) other
           FunctionElimination e -> FunctionElimination <$> case e of
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$> (
               OptionalCases

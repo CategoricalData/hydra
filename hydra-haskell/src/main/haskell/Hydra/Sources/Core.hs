@@ -112,9 +112,6 @@ hydraCoreModule = Module ns elements [] $
       def "Function" $
         doc "A function" $
         lambda "m" $ union [
-          "compareTo">:
-            doc "Compares a term with a given term of the same type, producing a Comparison" $
-            core "Term" @@ "m",
           "elimination">:
             doc "An elimination for any of a few term variants" $
             core "Elimination" @@ "m",

@@ -66,14 +66,6 @@ checkFunctionTerms = do
         (lambda "x" (int16 137))
         ["v1"] (Types.function (Types.variable "v1") Types.int16)
 
-    H.it "Check 'compareTo' terms" $ do
-      expectMonotype
-        (compareTo $ optional (Just $ string "Betelgeuse"))
-        (Types.function (Types.optional Types.string) Types.int8)
-      expectPolytype
-        (lambda "x" $ compareTo (variable "x"))
-        ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") Types.int8))
-
     H.it "Check list eliminations" $ do
       let fun = Terms.fold $ primitive _math_add
       expectMonotype

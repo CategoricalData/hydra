@@ -60,10 +60,6 @@ public interface Terms {
     return elimination(new Elimination.Union<>(new CaseStatement<>(name, Arrays.asList(fields))));
   }
 
-  static <M> Term<M> compareTo(final Term<M> other) {
-    return function(new Function.CompareTo<>(other));
-  }
-
   static <M> Term<M> delta() {
     return elimination(new Elimination.Element<>());
   }

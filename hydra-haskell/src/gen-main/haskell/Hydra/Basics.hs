@@ -55,7 +55,6 @@ floatValueType x = case x of
 -- | Find the function variant (constructor) for a given function
 functionVariant :: (Core.Function m -> Mantle.FunctionVariant)
 functionVariant x = case x of
-  Core.FunctionCompareTo _ -> Mantle.FunctionVariantCompareTo
   Core.FunctionElimination _ -> Mantle.FunctionVariantElimination
   Core.FunctionLambda _ -> Mantle.FunctionVariantLambda
   Core.FunctionPrimitive _ -> Mantle.FunctionVariantPrimitive
@@ -63,7 +62,6 @@ functionVariant x = case x of
 -- | All function variants (constructors), in a canonical order
 functionVariants :: [Mantle.FunctionVariant]
 functionVariants = [
-  Mantle.FunctionVariantCompareTo,
   Mantle.FunctionVariantElimination,
   Mantle.FunctionVariantLambda,
   Mantle.FunctionVariantPrimitive]

@@ -55,8 +55,7 @@ encodeFloatType ft = unitVariant _FloatType $ case ft of
 
 encodeFunction :: Ord m => Function m -> Term m
 encodeFunction f = case f of
-  FunctionCompareTo other -> variant _Function _Function_compareTo $ encodeTerm other
-  FunctionElimination e -> variant _Function _Function_compareTo $ encodeElimination e
+  FunctionElimination e -> variant _Function _Function_elimination $ encodeElimination e
   FunctionLambda l -> variant _Function _Function_lambda $ encodeLambda l
   FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ string name
 

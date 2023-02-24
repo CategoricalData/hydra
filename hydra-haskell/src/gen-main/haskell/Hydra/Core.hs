@@ -162,8 +162,6 @@ _FloatValue_float64 = (FieldName "float64")
 
 -- | A function
 data Function m = 
-  -- | Compares a term with a given term of the same type, producing a Comparison
-  FunctionCompareTo (Term m) |
   -- | An elimination for any of a few term variants
   FunctionElimination (Elimination m) |
   -- | A function abstraction (lambda)
@@ -173,8 +171,6 @@ data Function m =
   deriving (Eq, Ord, Read, Show)
 
 _Function = (Name "hydra/core.Function")
-
-_Function_compareTo = (FieldName "compareTo")
 
 _Function_elimination = (FieldName "elimination")
 

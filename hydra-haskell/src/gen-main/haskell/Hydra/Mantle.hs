@@ -64,15 +64,12 @@ _EliminationVariant_union = (Core.FieldName "union")
 
 -- | The identifier of a function constructor
 data FunctionVariant = 
-  FunctionVariantCompareTo  |
   FunctionVariantElimination  |
   FunctionVariantLambda  |
   FunctionVariantPrimitive 
   deriving (Eq, Ord, Read, Show)
 
 _FunctionVariant = (Core.Name "hydra/mantle.FunctionVariant")
-
-_FunctionVariant_compareTo = (Core.FieldName "compareTo")
 
 _FunctionVariant_elimination = (Core.FieldName "elimination")
 

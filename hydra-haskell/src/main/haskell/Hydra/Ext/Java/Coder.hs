@@ -426,7 +426,6 @@ encodeElimination aliases marg dom cod elm = case elm of
 encodeFunction :: (Eq m, Ord m, Read m, Show m)
   => Aliases -> Type m -> Type m -> Function m -> GraphFlow m Java.Expression
 encodeFunction aliases dom cod fun = case fun of
---  FunctionCompareTo other ->
   FunctionElimination elm -> encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
     jbody <- encodeTerm aliases Nothing body
