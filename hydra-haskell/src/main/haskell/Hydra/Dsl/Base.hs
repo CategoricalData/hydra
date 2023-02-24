@@ -61,9 +61,6 @@ apply2 (Datum f) (Datum a1) (Datum a2) = Datum $ Terms.apply (Terms.apply f a1) 
 caseField :: Case a -> Datum (a -> b) -> Field Kv
 caseField (Case fname) (Datum f) = Field fname f
 
-compareTo :: Datum a -> Datum (a -> Bool)
-compareTo (Datum term) = Datum $ Terms.compareTo term
-
 compose :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 compose (Datum f) (Datum g) = Datum $ Terms.lambda "x1" $ Terms.apply f (Terms.apply g $ Terms.variable "x1")
 

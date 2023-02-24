@@ -96,7 +96,6 @@ functionVariantSource = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "m")) (Types.wrap _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant [
-    _Function_compareTo   @-> _FunctionVariant_compareTo,
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
     _Function_primitive   @-> _FunctionVariant_primitive]
@@ -106,7 +105,6 @@ functionVariantsSource = basics "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
     typed (Types.list $ Types.wrap _FunctionVariant) $
   list $ unitVariant _FunctionVariant <$> [
-    _FunctionVariant_compareTo,
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
     _FunctionVariant_primitive]

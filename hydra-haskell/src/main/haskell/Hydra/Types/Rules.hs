@@ -52,12 +52,6 @@ applyRules term = case term of
 
     TermFunction f -> case f of
 
-      -- Note: here we assume that compareTo evaluates to an integer, not a Comparison value.
-      --       For the latter, Comparison would have to be added to the literal type grammar.
-      FunctionCompareTo other -> do
-        i <- infer other
-        yieldFunction (FunctionCompareTo i) (Types.function (termType i) Types.int8) (termConstraints i)
-
       FunctionElimination e -> case e of
 
         EliminationElement -> do

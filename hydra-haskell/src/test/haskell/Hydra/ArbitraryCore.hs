@@ -118,7 +118,7 @@ arbitraryFloatValue ft = case ft of
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
 arbitraryFunction :: (Eq m, Ord m, Read m, Show m) => FunctionType m -> Int -> QC.Gen (Function m)
-arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++ domainSpecific
+arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecific
   where
     n' = decr n
     defaults = [
@@ -126,7 +126,6 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ whenEqual ++
       --       for any supported function type.
       FunctionLambda <$> (Lambda (Variable "x") <$> arbitraryTerm cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
-    whenEqual = [FunctionCompareTo <$> arbitraryTerm dom n' | dom == cod]
     domainSpecific = case dom of
       TypeUnion (RowType n _ sfields) -> [FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM arbitraryCase sfields]
         where

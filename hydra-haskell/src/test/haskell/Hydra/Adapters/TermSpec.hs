@@ -123,15 +123,6 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (element name)
       (element name)
 
-  H.it "CompareTo terms (when supported) pass through without change" $
-    QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantFunction]
-      compareStringsType
-      compareStringsType
-      False
-      (compareTo $ string s)
-      (compareTo $ string s)
-
   H.it "Term terms (when supported) pass through without change" $
     QC.property $ \() -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
@@ -188,15 +179,6 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       False
       (element name)
       (string nm) -- Note: the element name is not dereferenced
-
-  H.it "CompareTo terms (when unsupported) become variant terms" $
-    QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
-      compareStringsType
-      (functionProxyType Types.string)
-      False
-      (compareTo $ string s)
-      (inject functionProxyName $ field "compareTo" $ string s)
 
   H.it "Data terms (when unsupported) become variant terms" $
     QC.property $ \() -> checkDataAdapter
@@ -302,9 +284,6 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
 
   H.it "Check element references (which map to strings)" $
     QC.property $ \name -> roundTripIsNoop int32ElementType (element name)
-
-  H.it "Check compareTo terms (which map to variants)" $
-    QC.property $ \s -> roundTripIsNoop compareStringsType (compareTo $ string s)
 
   H.it "Check data terms (which map to variants)" $
     roundTripIsNoop int32ElementDataType delta

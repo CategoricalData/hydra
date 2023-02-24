@@ -73,7 +73,6 @@ betaReduceTerm = reduce M.empty
             EliminationRecord _ -> done
             EliminationUnion (CaseStatement n cases) ->
               TermFunction . FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM reduceField cases
-          FunctionCompareTo other -> TermFunction . FunctionCompareTo <$> reduceb other
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
@@ -114,8 +113,6 @@ betaReduceTerm = reduce M.empty
                     where
                       matching = L.filter (\c -> fieldName c == fname) cases
                   _ -> fail $ "tried to apply a case statement to a non- union term: " ++ show arg
-
-            -- TODO: FunctionCompareTo
 
             FunctionPrimitive name -> do
                 prim <- requirePrimitive name
@@ -228,7 +225,6 @@ termIsValue cx term = case stripTerm term of
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of
-      FunctionCompareTo other -> termIsValue cx other
       FunctionElimination e -> case e of
         EliminationElement -> True
         EliminationWrapped _ -> True

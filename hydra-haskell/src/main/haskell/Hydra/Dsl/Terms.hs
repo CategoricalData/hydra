@@ -38,9 +38,6 @@ boolean = literal . Literals.boolean
 cases :: Name -> [Field m] -> Term m
 cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields
 
-compareTo :: Term m -> Term m
-compareTo = TermFunction . FunctionCompareTo
-
 constFunction :: Term m -> Term m
 constFunction = lambda "_"
 

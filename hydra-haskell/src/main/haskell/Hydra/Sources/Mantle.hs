@@ -46,7 +46,6 @@ hydraMantleModule = Module ns elements [] $
       def "FunctionVariant" $
         doc "The identifier of a function constructor" $
         enum [
-          "compareTo",
           "elimination",
           "lambda",
           "primitive"],

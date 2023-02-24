@@ -17,7 +17,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
--- | Turn arbitrary terms like 'compareTo 42' into terms like '\x.compareTo 42 x',
+-- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
 expandLambdas :: Ord m => Term m -> GraphFlow m (Term m)
@@ -29,7 +29,6 @@ expandLambdas = rewriteTermM (expand []) (pure . id)
           rhs' <- expandLambdas rhs
           expand (rhs':args) recurse lhs
         TermFunction f -> case f of
-          FunctionCompareTo _ -> pad args 1 <$> recurse term
           FunctionElimination _ -> pad args 1 <$> recurse term
           FunctionLambda _ -> passThrough
           FunctionPrimitive name -> do
@@ -127,7 +126,6 @@ rewriteTerm f mf = rewrite fsub f
         TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
         TermElement name -> TermElement name
         TermFunction fun -> TermFunction $ case fun of
-          FunctionCompareTo other -> FunctionCompareTo $ recurse other
           FunctionElimination e -> FunctionElimination $ case e of
             EliminationElement -> EliminationElement
             EliminationWrapped name -> EliminationWrapped name
@@ -162,7 +160,6 @@ rewriteTermM f mf = rewrite fsub f
         TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
         TermElement name -> pure $ TermElement name
         TermFunction fun -> TermFunction <$> case fun of
-          FunctionCompareTo other -> FunctionCompareTo <$> recurse other
           FunctionElimination e -> FunctionElimination <$> case e of
             EliminationElement -> pure EliminationElement
             EliminationWrapped name -> pure $ EliminationWrapped name
@@ -260,7 +257,6 @@ subterms term = case term of
   TermAnnotated (Annotated t _) -> [t]
   TermApplication (Application lhs rhs) -> [lhs, rhs]
   TermFunction f -> case f of
-    FunctionCompareTo other -> [other]
     FunctionElimination e -> case e of
       EliminationOptional (OptionalCases nothing just) -> [nothing, just]
       EliminationUnion (CaseStatement _ cases) -> fieldTerm <$> cases

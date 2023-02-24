@@ -92,11 +92,6 @@ public interface Basics {
   static <M> hydra.mantle.FunctionVariant functionVariant(hydra.core.Function<M> v1) {
     return ((v1)).accept(new hydra.core.Function.Visitor<hydra.mantle.FunctionVariant>() {
       @Override
-      public hydra.mantle.FunctionVariant visit(hydra.core.Function.CompareTo instance) {
-        return new hydra.mantle.FunctionVariant.CompareTo();
-      }
-      
-      @Override
       public hydra.mantle.FunctionVariant visit(hydra.core.Function.Elimination instance) {
         return new hydra.mantle.FunctionVariant.Elimination();
       }
@@ -114,7 +109,6 @@ public interface Basics {
   }
   
   java.util.List<hydra.mantle.FunctionVariant> functionVariants = java.util.Arrays.asList(
-    new hydra.mantle.FunctionVariant.CompareTo(),
     new hydra.mantle.FunctionVariant.Elimination(),
     new hydra.mantle.FunctionVariant.Lambda(),
     new hydra.mantle.FunctionVariant.Primitive());
