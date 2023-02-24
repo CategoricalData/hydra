@@ -152,12 +152,35 @@ checkIndividualTerms = do
 
     H.it "Check records" $ do
       expectMonotype
-        (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ float32 $ negate 122.4194])
-        (TypeRecord $ RowType latLonName Nothing [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") Types.float32])
---      expectPolytype
---        (lambda "lon" (record latLonName [Field (FieldName "lat") $ float32 37.7749, Field (FieldName "lon") $ variable "lon"]))
---        ["v1"] (Types.function (Types.variable "v1")
---          (TypeRecord $ RowType latLonName Nothing [FieldType (FieldName "lat") Types.float32, FieldType (FieldName "lon") $ Types.variable "v1"]))
+        (record latLonName [
+          Field (FieldName "lat") $ float32 37.7749,
+          Field (FieldName "lon") $ float32 $ negate 122.4194])
+        (TypeRecord $ RowType latLonName Nothing [
+          FieldType (FieldName "lat") Types.float32,
+          FieldType (FieldName "lon") Types.float32])
+      expectMonotype
+        (record latLonPolyName [
+          Field (FieldName "lat") $ float32 37.7749, 
+          Field (FieldName "lon") $ float32 $ negate 122.4194])
+        (TypeRecord $ RowType latLonPolyName Nothing [
+          FieldType (FieldName "lat") Types.float32,
+          FieldType (FieldName "lon") Types.float32])
+      expectMonotype
+        (lambda "lon" (record latLonPolyName [
+          Field (FieldName "lat") $ float32 37.7749,
+          Field (FieldName "lon") $ variable "lon"]))
+        (Types.function (Types.float32)
+          (TypeRecord $ RowType latLonPolyName Nothing [
+            FieldType (FieldName "lat") $ Types.float32,
+            FieldType (FieldName "lon") $ Types.float32]))
+      expectPolytype
+        (lambda "latlon" (record latLonPolyName [
+          Field (FieldName "lat") $ variable "latlon",
+          Field (FieldName "lon") $ variable "latlon"]))
+        ["v1"] (Types.function (Types.variable "v1")
+          (TypeRecord $ RowType latLonPolyName Nothing [
+            FieldType (FieldName "lat") $ Types.variable "v1",
+            FieldType (FieldName "lon") $ Types.variable "v1"]))
 
     H.it "Check unions" $ do
       expectMonotype

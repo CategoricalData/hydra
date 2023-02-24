@@ -9,6 +9,7 @@ import Hydra.Kernel
 import Hydra.Types.Substitution
 import Hydra.Dsl.Types as Types
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -46,7 +47,10 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
       (TypeOptional ot1, TypeOptional ot2) -> unify ot1 ot2
       (TypeProduct types1, TypeProduct types2) -> unifyMany types1 types2
-      (TypeRecord rt1, TypeRecord rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+      (TypeRecord rt1, TypeRecord rt2) -> do
+        verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
+        verify (L.length (rowTypeFields rt1) == L.length (rowTypeFields rt2))
+        unifyMany (fieldTypeType <$> rowTypeFields rt1) (fieldTypeType <$> rowTypeFields rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
       (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) ->
