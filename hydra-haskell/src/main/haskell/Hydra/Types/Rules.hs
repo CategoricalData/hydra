@@ -23,7 +23,10 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type InferenceContext m = (Context m, Int, TypingEnvironment m)
+data InferenceContext m = InferenceContext {
+  inferenceContextGraph :: Context m,
+  inferenceContextCounter :: Int,
+  inferenceContextEnviroment :: TypingEnvironment m}
 
 type TypingEnvironment m = M.Map Variable (TypeScheme m)
 
@@ -114,7 +117,7 @@ applyRules term = case term of
         yieldFunction (FunctionPrimitive name) t []
 
     TermLet (Let bindings env) -> do
-        (_, _, cs) <- getState
+        cs <- inferenceContextEnviroment <$> getState
 
         let bl = M.toList bindings
         is <- CM.mapM infer (snd <$> bl)
@@ -131,33 +134,34 @@ applyRules term = case term of
         let c2 = termConstraints i2
 
         yield (TermLet $ Let (M.fromList $ L.zip (fst <$> bl) is) i2) t2 (tc ++ c2)
-
+ 
     TermList els -> do
-      v <- freshVariableType
-      iels <- CM.mapM infer els
-      let co = (\e -> (v, termType e)) <$> iels
-      let ci = L.concat (termConstraints <$> iels)
-      yield (TermList iels) (Types.list v) (co ++ ci)
+        v <- freshVariableType
+        if L.null els
+          then yield (TermList []) (Types.list v) []
+          else do
+            iels <- CM.mapM infer els
+            let co = (\e -> (v, termType e)) <$> iels
+            let ci = L.concat (termConstraints <$> iels)
+            yield (TermList iels) (Types.list v) (co ++ ci)
 
     TermLiteral l -> yield (TermLiteral l) (Types.literal $ literalType l) []
 
     TermMap m -> do
         kv <- freshVariableType
         vv <- freshVariableType
-        pairs <- CM.mapM toPair $ M.toList m
-        let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
-        let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
-        yield (TermMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
+        if M.null m
+          then yield (TermMap M.empty) (Types.map kv vv) []
+          else do
+            pairs <- CM.mapM toPair $ M.toList m
+            let co = L.concat ((\(k, v) -> [(kv, termType k), (vv, termType v)]) <$> pairs)
+            let ci = L.concat ((\(k, v) -> termConstraints k ++ termConstraints v) <$> pairs)
+            yield (TermMap $ M.fromList pairs) (Types.map kv vv) (co ++ ci)
       where
         toPair (k, v) = do
           ik <- infer k
           iv <- infer v
           return (ik, iv)
-
-    TermWrapped (Wrapper name term1) -> do
-      typ <- withGraphContext $ namedType "wrapped" name
-      i <- infer term1
-      yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
 
     TermOptional m -> do
       v <- freshVariableType
@@ -186,10 +190,13 @@ applyRules term = case term of
 
     TermSet els -> do
       v <- freshVariableType
-      iels <- CM.mapM infer $ S.toList els
-      let co = (\e -> (v, termType e)) <$> iels
-      let ci = L.concat (termConstraints <$> iels)
-      yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
+      if S.null els
+        then yield (TermSet S.empty) (Types.set v) []
+        else do
+          iels <- CM.mapM infer $ S.toList els
+          let co = (\e -> (v, termType e)) <$> iels
+          let ci = L.concat (termConstraints <$> iels)
+          yield (TermSet $ S.fromList iels) (Types.set v) (co ++ ci)
 
     TermSum (Sum i s trm) -> do
         it <- infer trm
@@ -210,15 +217,20 @@ applyRules term = case term of
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) constraints
 
     TermVariable v -> do
-      t <- lookupTypeInEnvironment v
+      t <- requireVariableType v
       yield (TermVariable v) t []
+
+    TermWrapped (Wrapper name term1) -> do
+      typ <- withGraphContext $ namedType "wrapped" name
+      i <- infer term1
+      yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
   where
     yieldFunction fun = yield (TermFunction fun)
 
     yieldElimination e = yield (TermFunction $ FunctionElimination e)
 
     yield term typ constraints = do
-      (cx, _, _) <- getState
+      cx <- inferenceContextGraph <$> getState
       return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
 
 -- Decode a type, eliminating nominal types for the sake of unification
@@ -242,8 +254,8 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
 
 freshVariableType :: Flow (InferenceContext m) (Type m)
 freshVariableType = do
-    (cx, s, e) <- getState
-    putState (cx, s + 1, e)
+    InferenceContext cx s e <- getState
+    putState $ InferenceContext cx (s + 1) e
     return $ Types.variable (unVariableType $ normalVariables !! s)
 
 generalize :: Show m => TypingEnvironment m -> Type m -> TypeScheme m
@@ -255,7 +267,7 @@ generalize env t  = TypeScheme vars t
 
 infer :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
 infer term = do
-  (cx, _, _) <- getState
+  cx <- inferenceContextGraph <$> getState
   mt <- withGraphContext $ annotationClassTermType (contextAnnotations cx) term
   case mt of
     Just typ -> do
@@ -271,13 +283,6 @@ instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
-lookupTypeInEnvironment :: Show m => Variable -> Flow (InferenceContext m) (Type m)
-lookupTypeInEnvironment v = do
-  (_, _, env) <- getState
-  case M.lookup v env of
-    Nothing -> fail $ "variable not bound in environment: " ++ unVariable v
-    Just s  -> instantiate s
-
 namedType :: Show m => String -> Name -> GraphFlow m (Type m)
 namedType debug name = do
   withTrace (debug ++ ": " ++ unName name) $ do
@@ -287,6 +292,13 @@ namedType debug name = do
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t
+
+requireVariableType :: Show m => Variable -> Flow (InferenceContext m) (Type m)
+requireVariableType v = do
+  env <- inferenceContextEnviroment <$> getState
+  case M.lookup v env of
+    Nothing -> fail $ "variable not bound in environment: " ++ unVariable v
+    Just s  -> instantiate s
 
 termConstraints :: Term (m, Type m, [Constraint m]) -> [Constraint m]
 termConstraints (TermAnnotated (Annotated _ (_, _, constraints))) = constraints
@@ -304,10 +316,10 @@ typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
 withEnvironment :: (TypingEnvironment m -> TypingEnvironment m) -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
 withEnvironment m f = do
-  (cx, i, e) <- getState
-  withState (cx, i, m e) f
+  InferenceContext cx i e <- getState
+  withState (InferenceContext cx i (m e)) f
 
 withGraphContext :: GraphFlow m a -> Flow (InferenceContext m) a
 withGraphContext f = do
-  (cx, _, _) <- getState
+  cx <- inferenceContextGraph <$> getState
   withState cx f

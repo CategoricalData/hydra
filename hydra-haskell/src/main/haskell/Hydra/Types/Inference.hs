@@ -77,4 +77,4 @@ rewriteDataType f = rewriteTermMeta rewrite
     rewrite (x, typ, c) = (x, f typ, c)
 
 startContext :: Context m -> InferenceContext m
-startContext cx = (cx, 0, M.empty)
+startContext cx = InferenceContext cx 0 M.empty
