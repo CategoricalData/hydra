@@ -11,6 +11,12 @@ import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Ext.Json.Eliminate
 import Hydra.CoreEncoding
+import qualified Text.Read as TR
+import Hydra.Ext.Avro.Language
+import Hydra.Kernel
+import Hydra.CoreLanguage
+import Hydra.Ext.Avro.Language
+import Hydra.Adapters.Term
 
 import Hydra.CoreDecoding
 import Hydra.Ext.Avro.SchemaJson
@@ -21,13 +27,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import qualified Text.Read as TR
-import Hydra.Ext.Avro.Language
-import Hydra.Kernel
-import GHC.IO.Encoding (BufferCodec(getState))
-import Hydra.CoreLanguage (hydraCoreLanguage)
-import Hydra.Ext.Avro.Language (avroLanguage)
-import Hydra.Adapters.Term (termAdapter)
 
 
 data AvroEnvironment m = AvroEnvironment {
