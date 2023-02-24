@@ -98,7 +98,7 @@ applyRules term = case term of
               (innerConstraints ++ outerConstraints)
 
         EliminationWrapped name -> do
-          typ <- withGraphContext $ namedType "eliminate nominal" name
+          typ <- withGraphContext $ requireWrappedType name
           yieldElimination (EliminationWrapped name) (Types.function (Types.wrap name) typ) []
 
       FunctionLambda (Lambda v body) -> do
@@ -209,7 +209,7 @@ applyRules term = case term of
       yield (TermVariable v) t []
 
     TermWrapped (Wrapper name term1) -> do
-      typ <- withGraphContext $ namedType "wrapped" name
+      typ <- withGraphContext $ requireWrappedType name
       i <- infer term1
       yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
   where     
@@ -273,13 +273,6 @@ instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshVariableType) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
-
-namedType :: Show m => String -> Name -> GraphFlow m (Type m)
-namedType debug name = do
-  withTrace (debug ++ ": " ++ unName name) $ do
-    withSchemaContext $ do
-      el <- requireElement name
-      decodeStructuralType $ elementData el
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t
