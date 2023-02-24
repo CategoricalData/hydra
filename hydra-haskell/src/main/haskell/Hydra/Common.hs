@@ -71,11 +71,11 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
 isEncodedType :: Eq m => Context m -> Term m -> Bool
 isEncodedType cx term = stripTerm term == TermElement _Type
 
-isType :: Eq m => Context m -> Type m -> Bool
-isType cx typ = case stripType typ of
+isType :: Eq m => Type m -> Bool
+isType typ = case stripType typ of
   TypeWrapped _Type -> True
   TypeUnion (RowType _Type _ _) -> True
-  TypeApplication (ApplicationType lhs _) -> isType cx lhs
+  TypeApplication (ApplicationType lhs _) -> isType lhs
   _ -> False
 
 localNameOfLazy :: Name -> String
