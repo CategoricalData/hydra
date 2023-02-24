@@ -72,10 +72,6 @@ applyRules term = case term of
           let elim = Types.functionN [b, Types.list a] b
           yieldElimination (EliminationList i) elim [(expected, termType i)]
 
-        EliminationWrapped name -> do
-          typ <- withGraphContext $ namedType "eliminate nominal" name
-          yieldElimination (EliminationWrapped name) (Types.function (Types.wrap name) typ) []
-
         EliminationOptional (OptionalCases n j) -> do
           dom <- freshVariableType
           cod <- freshVariableType
@@ -106,6 +102,10 @@ applyRules term = case term of
             yieldElimination (EliminationUnion (CaseStatement name icases))
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
+
+        EliminationWrapped name -> do
+          typ <- withGraphContext $ namedType "eliminate nominal" name
+          yieldElimination (EliminationWrapped name) (Types.function (Types.wrap name) typ) []
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshVariableType
@@ -169,7 +169,8 @@ applyRules term = case term of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
           i <- infer e
-          yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):(termConstraints i))
+          let ci = termConstraints i
+          yield (TermOptional $ Just i) (Types.optional v) ((v, termType i):ci)
 
     TermProduct tuple -> do
       is <- CM.mapM infer tuple
@@ -177,16 +178,10 @@ applyRules term = case term of
 
     TermRecord (Record n fields) -> do
         rt <- withGraphContext $ requireRecordType True n
-        let sfields = rowTypeFields rt
-        (fields0, ftypes0, c1) <- CM.foldM forField ([], [], []) $ L.zip fields sfields
-        yield (TermRecord $ Record n $ L.reverse fields0) (TypeRecord $ RowType n (rowTypeExtends rt) $ L.reverse ftypes0) c1
-      where
-        forField (typed, ftypes, c) (field, sfield) = do
-          i <- inferFieldType field
-          let ft = termType $ fieldTerm i
-          let cinternal = termConstraints $ fieldTerm i
-          let cnominal = (ft, fieldTypeType sfield)
-          return (i:typed, (FieldType (fieldName field) ft):ftypes, cnominal:(cinternal ++ c))
+        ifields <- CM.mapM inferFieldType fields
+        let ci = L.concat (termConstraints . fieldTerm <$> ifields)
+        let irt = TypeRecord $ RowType n Nothing (fieldType <$> ifields)
+        yield (TermRecord $ Record n ifields) irt ((TypeRecord rt, irt):ci)
 
     TermSet els -> do
       v <- freshVariableType
@@ -211,10 +206,9 @@ applyRules term = case term of
         rt <- withGraphContext $ requireUnionType True n
         sfield <- findMatchingField (fieldName field) (rowTypeFields rt)
         ifield <- inferFieldType field
-        let cinternal = termConstraints $ fieldTerm ifield
-        let cnominal = (termType $ fieldTerm ifield, fieldTypeType sfield)
-        let constraints = cnominal:cinternal
-        yield (TermUnion $ Injection n ifield) (TypeUnion rt) constraints
+        let ci = termConstraints $ fieldTerm ifield
+        let co = (termType $ fieldTerm ifield, fieldTypeType sfield)
+        yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
     TermVariable v -> do
       t <- requireVariableType v
@@ -224,7 +218,7 @@ applyRules term = case term of
       typ <- withGraphContext $ namedType "wrapped" name
       i <- infer term1
       yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
-  where
+  where     
     yieldFunction fun = yield (TermFunction fun)
 
     yieldElimination e = yield (TermFunction $ FunctionElimination e)
@@ -246,6 +240,9 @@ decodeStructuralType term = do
 
 extendEnvironment :: Variable -> TypeScheme m -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
 extendEnvironment x sc = withEnvironment (\e -> M.insert x sc $ M.delete x e)
+
+fieldType :: Field (m, Type m, [Constraint m]) -> FieldType m
+fieldType (Field fname term) = FieldType fname $ termType term
 
 findMatchingField :: Show m => FieldName -> [FieldType m] -> Flow (InferenceContext m) (FieldType m)
 findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of

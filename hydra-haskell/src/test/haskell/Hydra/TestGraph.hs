@@ -18,11 +18,18 @@ import qualified Data.Set  as S
 latLonName :: Name
 latLonName = Name "LatLon"
 
+latLonPolyName :: Name
+latLonPolyName = Name "LatLonPoly"
+
 latlonRecord :: Float -> Float -> Term m
 latlonRecord lat lon = record latLonName [Field (FieldName "lat") $ float32 lat, Field (FieldName "lon") $ float32 lon]
 
 latLonType :: Type m
 latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
+
+latLonPolyType :: Type m
+latLonPolyType = TypeLambda $ LambdaType (VariableType "a") $ 
+  TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.variable "a", Types.field "lon" $ Types.variable "a"]
 
 testContext :: Context Kv
 testContext = coreContext {
@@ -52,6 +59,7 @@ testSchemaGraph = standardGraph [
     def testTypeFoobarValueName testTypeFoobarValue,
     def testTypeComparisonName testTypeComparison,
     def latLonName latLonType,
+    def latLonPolyName latLonPolyType,
     def testTypePersonName testTypePerson,
     def testTypePersonOrSomethingName testTypePersonOrSomething,
     def testTypeTimestampName testTypeTimestamp]
