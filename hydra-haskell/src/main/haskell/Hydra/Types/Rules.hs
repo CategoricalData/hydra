@@ -221,9 +221,6 @@ applyRules term = case term of
       (cx, _, _) <- getState
       return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
 
-
-
-
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Term m -> GraphFlow m (Type m)
 decodeStructuralType term = do

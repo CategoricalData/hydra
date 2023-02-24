@@ -1,4 +1,4 @@
-module Hydra.Ext.Avro.Coder where
+module Hydra.Ext.Avro.Coder (avroHydraAdapter) where
 
 import Hydra.Kernel
 import Hydra.Adapters.Coders
@@ -12,12 +12,22 @@ import qualified Hydra.Ext.Json.Model as Json
 import Hydra.Ext.Json.Eliminate
 import Hydra.CoreEncoding
 
+import Hydra.CoreDecoding
+import Hydra.Ext.Avro.SchemaJson
+import Hydra.Common
+
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Text.Read as TR
+import Hydra.Ext.Avro.Language
+import Hydra.Kernel
+import GHC.IO.Encoding (BufferCodec(getState))
+import Hydra.CoreLanguage (hydraCoreLanguage)
+import Hydra.Ext.Avro.Language (avroLanguage)
+import Hydra.Adapters.Term (termAdapter)
 
 
 data AvroEnvironment m = AvroEnvironment {
@@ -26,7 +36,7 @@ data AvroEnvironment m = AvroEnvironment {
   avroEnvironmentElements :: M.Map Name (Element m)} -- note: only used in the term coders
 
 type AvroHydraAdapter m = Adapter (AvroEnvironment m) (AvroEnvironment m) Avro.Schema (Type m) Json.Value (Term m)
-
+  
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
 data ForeignKey = ForeignKey Name (String -> Name)

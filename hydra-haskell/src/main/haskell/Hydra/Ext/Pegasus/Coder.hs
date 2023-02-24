@@ -46,8 +46,7 @@ constructModule mod coders pairs = do
     pairByName = L.foldl (\m p -> M.insert (elementName $ fst p) p m) M.empty pairs
     aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
-      cx <- getState
-      if isType cx typ
+      if isType typ
         then decodeType term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     typeToSchema el typ = do

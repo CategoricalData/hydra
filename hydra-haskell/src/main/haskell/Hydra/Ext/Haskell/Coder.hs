@@ -55,7 +55,7 @@ constructModule mod coders pairs = do
   where
     h (Namespace name) = name
 
-    createDeclarations cx pair@(el, TypedTerm typ term) = if isType cx typ
+    createDeclarations cx pair@(el, TypedTerm typ term) = if isType typ
       then toTypeDeclarations namespaces el term
       else do
         d <- toDataDeclaration coders namespaces pair
