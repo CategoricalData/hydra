@@ -17,6 +17,7 @@ module Hydra.CoreDecoding (
   requireRecordType,
   requireType,
   requireUnionType,
+  requireWrappedType,
   typeDependencies,
   typeDependencyNames,
   ) where
@@ -207,6 +208,9 @@ requireUnionType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of
   TypeUnion rt -> Just rt
   _ -> Nothing
+
+requireWrappedType :: Show m => Name -> GraphFlow m (Type m)
+requireWrappedType name = withSchemaContext $ requireType name
 
 typeDependencies :: Show m => Name -> GraphFlow m (M.Map Name (Type m))
 typeDependencies name = deps (S.fromList [name]) M.empty

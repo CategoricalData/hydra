@@ -199,17 +199,17 @@ checkIndividualTerms = do
           [(variable "x", float64 0.1), (variable "y", float64 0.2)])))
         ["v1"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v1") (Types.map (Types.variable "v1") Types.float64)))
 
-    -- TODO: restore me, and add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
---    H.it "Check nominal (newtype) terms" $ do
---      expectMonotype
---        testDataArthur
---        (Types.wrap "Person")
---      expectMonotype
---        (lambda "x" (record [
---          Field "firstName" $ variable "x",
---          Field "lastName" $ variable "x",
---          Field "age" $ int32 42]))
---        (Types.function Types.string testTypePerson)
+    -- -- TODO: add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
+    -- H.it "Check nominal (newtype) terms" $ do
+    --   expectMonotype
+    --     testDataArthur
+    --     (Types.wrap "Person")
+    --   expectMonotype
+    --     (lambda "x" (record [
+    --       Field "firstName" $ variable "x",
+    --       Field "lastName" $ variable "x",
+    --       Field "age" $ int32 42]))
+    --     (Types.function Types.string testTypePerson)
 
 checkLists :: H.SpecWith ()
 checkLists = do
