@@ -16,7 +16,7 @@ eliminationVariant :: (Core.Elimination m -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Mantle.EliminationVariantElement
   Core.EliminationList _ -> Mantle.EliminationVariantList
-  Core.EliminationWrapped _ -> Mantle.EliminationVariantWrapped
+  Core.EliminationWrap _ -> Mantle.EliminationVariantWrap
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
   Core.EliminationUnion _ -> Mantle.EliminationVariantUnion
@@ -26,7 +26,7 @@ eliminationVariants :: [Mantle.EliminationVariant]
 eliminationVariants = [
   Mantle.EliminationVariantElement,
   Mantle.EliminationVariantList,
-  Mantle.EliminationVariantWrapped,
+  Mantle.EliminationVariantWrap,
   Mantle.EliminationVariantOptional,
   Mantle.EliminationVariantRecord,
   Mantle.EliminationVariantUnion]
@@ -167,7 +167,7 @@ termVariant term = ((\x -> case x of
   Core.TermList _ -> Mantle.TermVariantList
   Core.TermLiteral _ -> Mantle.TermVariantLiteral
   Core.TermMap _ -> Mantle.TermVariantMap
-  Core.TermWrapped _ -> Mantle.TermVariantWrapped
+  Core.TermWrap _ -> Mantle.TermVariantWrap
   Core.TermOptional _ -> Mantle.TermVariantOptional
   Core.TermProduct _ -> Mantle.TermVariantProduct
   Core.TermRecord _ -> Mantle.TermVariantRecord
@@ -187,7 +187,7 @@ termVariants = [
   Mantle.TermVariantFunction,
   Mantle.TermVariantList,
   Mantle.TermVariantMap,
-  Mantle.TermVariantWrapped,
+  Mantle.TermVariantWrap,
   Mantle.TermVariantOptional,
   Mantle.TermVariantProduct,
   Mantle.TermVariantRecord,
@@ -212,7 +212,7 @@ typeVariant typ = ((\x -> case x of
   Core.TypeList _ -> Mantle.TypeVariantList
   Core.TypeLiteral _ -> Mantle.TypeVariantLiteral
   Core.TypeMap _ -> Mantle.TypeVariantMap
-  Core.TypeWrapped _ -> Mantle.TypeVariantWrapped
+  Core.TypeWrap _ -> Mantle.TypeVariantWrap
   Core.TypeOptional _ -> Mantle.TypeVariantOptional
   Core.TypeProduct _ -> Mantle.TypeVariantProduct
   Core.TypeRecord _ -> Mantle.TypeVariantRecord
@@ -233,7 +233,7 @@ typeVariants = [
   Mantle.TypeVariantList,
   Mantle.TypeVariantLiteral,
   Mantle.TypeVariantMap,
-  Mantle.TypeVariantWrapped,
+  Mantle.TypeVariantWrap,
   Mantle.TypeVariantOptional,
   Mantle.TypeVariantProduct,
   Mantle.TypeVariantRecord,

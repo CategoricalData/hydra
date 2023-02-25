@@ -12,7 +12,7 @@ import qualified Data.Maybe as Y
 
 nameOfType :: Context m -> Type m -> Y.Maybe Name
 nameOfType cx t = case stripType t of
-  TypeWrapped name -> Just name
+  TypeWrap name -> Just name
   TypeLambda (LambdaType _ body) -> nameOfType cx body
   _ -> Nothing
 

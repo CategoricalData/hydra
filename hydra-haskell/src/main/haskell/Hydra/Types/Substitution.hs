@@ -36,7 +36,7 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
       TypeList t -> list $ normalizeType t
       TypeLiteral _ -> typ
       TypeMap (MapType kt vt) -> Types.map (normalizeType kt) (normalizeType vt)
-      TypeWrapped _ -> typ
+      TypeWrap _ -> typ
       TypeOptional t -> optional $ normalizeType t
       TypeProduct types -> TypeProduct (normalizeType <$> types)
       TypeRecord (RowType n e fields) -> TypeRecord $ RowType n e (normalizeFieldType <$> fields)
@@ -62,7 +62,7 @@ substituteInType s typ = case typ of
     TypeList t -> list $ subst t
     TypeLiteral _ -> typ
     TypeMap (MapType kt vt) -> Types.map (subst kt) (subst vt)
-    TypeWrapped _ -> typ -- because we do not allow names to be bound to types with free variables
+    TypeWrap _ -> typ -- because we do not allow names to be bound to types with free variables
     TypeOptional t -> optional $ subst t
     TypeProduct types -> TypeProduct (subst <$> types)
     TypeRecord (RowType n e fields) -> TypeRecord $ RowType n e (substField <$> fields)

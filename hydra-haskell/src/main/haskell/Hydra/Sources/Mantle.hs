@@ -38,10 +38,10 @@ hydraMantleModule = Module ns elements [] $
         enum [
           "element",
           "list",
-          "wrapped",
           "optional",
           "record",
-          "union"],
+          "union",
+          "wrap"],
 
       def "FunctionVariant" $
         doc "The identifier of a function constructor" $
@@ -86,7 +86,6 @@ hydraMantleModule = Module ns elements [] $
           "list",
           "literal",
           "map",
-          "wrapped",
           "optional",
           "product",
           "record",
@@ -94,7 +93,8 @@ hydraMantleModule = Module ns elements [] $
           "stream",
           "sum",
           "union",
-          "variable"],
+          "variable",
+          "wrap"],
 
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $
@@ -113,7 +113,6 @@ hydraMantleModule = Module ns elements [] $
           "list",
           "literal",
           "map",
-          "wrapped",
           "optional",
           "product",
           "record",
@@ -121,7 +120,8 @@ hydraMantleModule = Module ns elements [] $
           "stream",
           "sum",
           "union",
-          "variable"],
+          "variable",
+          "wrap"],
 
       def "TypedTerm" $
         doc "A type together with an instance of the type" $

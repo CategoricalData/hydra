@@ -75,7 +75,7 @@ data Elimination m =
   -- | Eliminates a union term by matching over the fields of the union. This is a case statement.
   EliminationUnion (CaseStatement m) |
   -- | Unwrap a wrapped term
-  EliminationWrapped Name
+  EliminationWrap Name
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra/core.Elimination")
@@ -90,7 +90,7 @@ _Elimination_record = (FieldName "record")
 
 _Elimination_union = (FieldName "union")
 
-_Elimination_wrapped = (FieldName "wrapped")
+_Elimination_wrap = (FieldName "wrap")
 
 -- | A labeled term
 data Field m = 
@@ -378,6 +378,19 @@ newtype Name =
 
 _Name = (Name "hydra/core.Name")
 
+-- | An object wrapped in a type name
+data Nominal a = 
+  Nominal {
+    nominalTypeName :: Name,
+    nominalObject :: a}
+  deriving (Eq, Ord, Read, Show)
+
+_Nominal = (Name "hydra/core.Nominal")
+
+_Nominal_typeName = (FieldName "typeName")
+
+_Nominal_object = (FieldName "object")
+
 -- | A case statement for matching optional terms
 data OptionalCases m = 
   OptionalCases {
@@ -500,7 +513,7 @@ data Term m =
   TermUnion (Injection m) |
   -- | A variable reference
   TermVariable Variable |
-  TermWrapped (Wrapper m)
+  TermWrap (Nominal (Term m))
   deriving (Eq, Ord, Read, Show)
 
 _Term = (Name "hydra/core.Term")
@@ -537,7 +550,7 @@ _Term_union = (FieldName "union")
 
 _Term_variable = (FieldName "variable")
 
-_Term_wrapped = (FieldName "wrapped")
+_Term_wrap = (FieldName "wrap")
 
 -- | A data type
 data Type m = 
@@ -558,7 +571,7 @@ data Type m =
   TypeSum [Type m] |
   TypeUnion (RowType m) |
   TypeVariable VariableType |
-  TypeWrapped Name
+  TypeWrap Name
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra/core.Type")
@@ -595,7 +608,7 @@ _Type_union = (FieldName "union")
 
 _Type_variable = (FieldName "variable")
 
-_Type_wrapped = (FieldName "wrapped")
+_Type_wrap = (FieldName "wrap")
 
 -- | A symbol which stands in for a term
 newtype Variable = 
@@ -634,16 +647,3 @@ data UnitType =
   deriving (Eq, Ord, Read, Show)
 
 _UnitType = (Name "hydra/core.UnitType")
-
--- | A term wrapped in a type name; an instance of a newtype
-data Wrapper m = 
-  Wrapper {
-    wrapperTypeName :: Name,
-    wrapperTerm :: (Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_Wrapper = (Name "hydra/core.Wrapper")
-
-_Wrapper_typeName = (FieldName "typeName")
-
-_Wrapper_term = (FieldName "term")

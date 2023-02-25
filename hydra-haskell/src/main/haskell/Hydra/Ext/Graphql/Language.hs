@@ -30,7 +30,7 @@ graphqlLanguage = Language (LanguageName "hydra/ext/graphql") $ LanguageConstrai
     TypeVariantLambda,
     TypeVariantList,
     TypeVariantLiteral,
-    TypeVariantWrapped,
+    TypeVariantWrap,
     TypeVariantOptional,
     TypeVariantRecord,
     TypeVariantUnion,

@@ -97,9 +97,9 @@ applyRules term = case term of
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
 
-        EliminationWrapped name -> do
+        EliminationWrap name -> do
           typ <- withGraphContext $ requireWrappedType name
-          yieldElimination (EliminationWrapped name) (Types.function (Types.wrap name) typ) []
+          yieldElimination (EliminationWrap name) (Types.function (Types.wrap name) typ) []
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshVariableType
@@ -208,10 +208,10 @@ applyRules term = case term of
       t <- requireVariableType v
       yield (TermVariable v) t []
 
-    TermWrapped (Wrapper name term1) -> do
+    TermWrap (Nominal name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
       i <- infer term1
-      yield (TermWrapped $ Wrapper name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
+      yield (TermWrap $ Nominal name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
   where     
     yieldFunction fun = yield (TermFunction fun)
 
@@ -227,7 +227,7 @@ decodeStructuralType term = do
   typ <- decodeType term
   let typ' = stripType typ
   case typ' of
-    TypeWrapped name -> withSchemaContext $ withTrace "decode structural type" $ do
+    TypeWrap name -> withSchemaContext $ withTrace "decode structural type" $ do
       el <- requireElement name
       decodeStructuralType $ elementData el
     _ -> pure typ

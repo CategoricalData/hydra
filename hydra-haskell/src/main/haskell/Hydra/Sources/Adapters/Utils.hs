@@ -78,7 +78,7 @@ describeTypeSource = utils "describeType" $
         ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_values  @@ var "mt")),
-      Case _Type_wrapped     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
+      Case _Type_wrap     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeSource @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",

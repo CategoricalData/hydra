@@ -29,8 +29,6 @@ public abstract class TypeVariant {
     
     R visit(Map instance) ;
     
-    R visit(Wrapped instance) ;
-    
     R visit(Optional instance) ;
     
     R visit(Product instance) ;
@@ -46,6 +44,8 @@ public abstract class TypeVariant {
     R visit(Union instance) ;
     
     R visit(Variable instance) ;
+    
+    R visit(Wrap instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -85,10 +85,6 @@ public abstract class TypeVariant {
       return otherwise((instance));
     }
     
-    default R visit(Wrapped instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Optional instance) {
       return otherwise((instance));
     }
@@ -118,6 +114,10 @@ public abstract class TypeVariant {
     }
     
     default R visit(Variable instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -322,31 +322,6 @@ public abstract class TypeVariant {
     }
   }
   
-  public static final class Wrapped extends hydra.mantle.TypeVariant {
-    public Wrapped () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Wrapped)) {
-        return false;
-      }
-      Wrapped o = (Wrapped) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
   public static final class Optional extends hydra.mantle.TypeVariant {
     public Optional () {
     
@@ -533,6 +508,31 @@ public abstract class TypeVariant {
         return false;
       }
       Variable o = (Variable) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Wrap extends hydra.mantle.TypeVariant {
+    public Wrap () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Wrap)) {
+        return false;
+      }
+      Wrap o = (Wrap) (other);
       return true;
     }
     

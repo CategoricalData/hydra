@@ -195,7 +195,7 @@ public interface Types {
   }
 
   static <M> Type<M> wrap(final Name name) {
-    return new Type.Wrapped<>(name);
+    return new Type.Wrap<>(name);
   }
 
   static <M> Type<M> wrap(final String name) {

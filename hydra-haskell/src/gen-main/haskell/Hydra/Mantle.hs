@@ -42,10 +42,10 @@ _Element_data = (Core.FieldName "data")
 data EliminationVariant = 
   EliminationVariantElement  |
   EliminationVariantList  |
-  EliminationVariantWrapped  |
   EliminationVariantOptional  |
   EliminationVariantRecord  |
-  EliminationVariantUnion 
+  EliminationVariantUnion  |
+  EliminationVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
 _EliminationVariant = (Core.Name "hydra/mantle.EliminationVariant")
@@ -54,13 +54,13 @@ _EliminationVariant_element = (Core.FieldName "element")
 
 _EliminationVariant_list = (Core.FieldName "list")
 
-_EliminationVariant_wrapped = (Core.FieldName "wrapped")
-
 _EliminationVariant_optional = (Core.FieldName "optional")
 
 _EliminationVariant_record = (Core.FieldName "record")
 
 _EliminationVariant_union = (Core.FieldName "union")
+
+_EliminationVariant_wrap = (Core.FieldName "wrap")
 
 -- | The identifier of a function constructor
 data FunctionVariant = 
@@ -135,7 +135,6 @@ data TermVariant =
   TermVariantList  |
   TermVariantLiteral  |
   TermVariantMap  |
-  TermVariantWrapped  |
   TermVariantOptional  |
   TermVariantProduct  |
   TermVariantRecord  |
@@ -143,7 +142,8 @@ data TermVariant =
   TermVariantStream  |
   TermVariantSum  |
   TermVariantUnion  |
-  TermVariantVariable 
+  TermVariantVariable  |
+  TermVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
 _TermVariant = (Core.Name "hydra/mantle.TermVariant")
@@ -164,8 +164,6 @@ _TermVariant_literal = (Core.FieldName "literal")
 
 _TermVariant_map = (Core.FieldName "map")
 
-_TermVariant_wrapped = (Core.FieldName "wrapped")
-
 _TermVariant_optional = (Core.FieldName "optional")
 
 _TermVariant_product = (Core.FieldName "product")
@@ -181,6 +179,8 @@ _TermVariant_sum = (Core.FieldName "sum")
 _TermVariant_union = (Core.FieldName "union")
 
 _TermVariant_variable = (Core.FieldName "variable")
+
+_TermVariant_wrap = (Core.FieldName "wrap")
 
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme m = 
@@ -205,7 +205,6 @@ data TypeVariant =
   TypeVariantList  |
   TypeVariantLiteral  |
   TypeVariantMap  |
-  TypeVariantWrapped  |
   TypeVariantOptional  |
   TypeVariantProduct  |
   TypeVariantRecord  |
@@ -213,7 +212,8 @@ data TypeVariant =
   TypeVariantStream  |
   TypeVariantSum  |
   TypeVariantUnion  |
-  TypeVariantVariable 
+  TypeVariantVariable  |
+  TypeVariantWrap 
   deriving (Eq, Ord, Read, Show)
 
 _TypeVariant = (Core.Name "hydra/mantle.TypeVariant")
@@ -234,8 +234,6 @@ _TypeVariant_literal = (Core.FieldName "literal")
 
 _TypeVariant_map = (Core.FieldName "map")
 
-_TypeVariant_wrapped = (Core.FieldName "wrapped")
-
 _TypeVariant_optional = (Core.FieldName "optional")
 
 _TypeVariant_product = (Core.FieldName "product")
@@ -251,6 +249,8 @@ _TypeVariant_sum = (Core.FieldName "sum")
 _TypeVariant_union = (Core.FieldName "union")
 
 _TypeVariant_variable = (Core.FieldName "variable")
+
+_TypeVariant_wrap = (Core.FieldName "wrap")
 
 -- | A type together with an instance of the type
 data TypedTerm m = 

@@ -109,7 +109,7 @@ decodeString = Terms.expectString . stripTerm
 
 decodeType :: Show m => Term m -> GraphFlow m (Type m)
 decodeType dat = case dat of
-  TermElement name -> pure $ TypeWrapped name
+  TermElement name -> pure $ TypeWrap name
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> decodeType term
   _ -> matchUnion [
 --    (_Type_annotated, fmap TypeAnnotated . decodeAnnotated),
@@ -120,7 +120,7 @@ decodeType dat = case dat of
     (_Type_list, fmap TypeList . decodeType),
     (_Type_literal, fmap TypeLiteral . decodeLiteralType),
     (_Type_map, fmap TypeMap . decodeMapType),
-    (_Type_wrapped, fmap TypeWrapped . decodeElement),
+    (_Type_wrap, fmap TypeWrap . decodeElement),
     (_Type_optional, fmap TypeOptional . decodeType),
     (_Type_product, \(TermList types) -> TypeProduct <$> (CM.mapM decodeType types)),
     (_Type_record, fmap TypeRecord . decodeRowType),
@@ -137,7 +137,7 @@ fieldTypes t = case stripType t of
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
     TypeElement et -> fieldTypes et
-    TypeWrapped name -> do
+    TypeWrap name -> do
       withTrace ("field types of " ++ unName name) $ do
         el <- requireElement name
         decodeType (elementData el) >>= fieldTypes
@@ -238,5 +238,5 @@ typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
   where
     addNames names typ = case typ of
-      TypeWrapped name -> S.insert name names
+      TypeWrap name -> S.insert name names
       _ -> names

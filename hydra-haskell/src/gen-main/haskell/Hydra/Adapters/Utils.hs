@@ -69,7 +69,7 @@ describeType typ = ((\x -> case x of
         (describeType (Core.mapTypeKeys v))],
       " to "],
     (describeType (Core.mapTypeValues v))])
-  Core.TypeWrapped v -> (Strings.cat [
+  Core.TypeWrap v -> (Strings.cat [
     "alias for ",
     (Core.unName v)])
   Core.TypeOptional v -> (Strings.cat [

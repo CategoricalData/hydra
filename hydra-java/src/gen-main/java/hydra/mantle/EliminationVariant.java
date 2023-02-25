@@ -17,13 +17,13 @@ public abstract class EliminationVariant {
     
     R visit(List instance) ;
     
-    R visit(Wrapped instance) ;
-    
     R visit(Optional instance) ;
     
     R visit(Record instance) ;
     
     R visit(Union instance) ;
+    
+    R visit(Wrap instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -39,10 +39,6 @@ public abstract class EliminationVariant {
       return otherwise((instance));
     }
     
-    default R visit(Wrapped instance) {
-      return otherwise((instance));
-    }
-    
     default R visit(Optional instance) {
       return otherwise((instance));
     }
@@ -52,6 +48,10 @@ public abstract class EliminationVariant {
     }
     
     default R visit(Union instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -92,31 +92,6 @@ public abstract class EliminationVariant {
         return false;
       }
       List o = (List) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Wrapped extends hydra.mantle.EliminationVariant {
-    public Wrapped () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Wrapped)) {
-        return false;
-      }
-      Wrapped o = (Wrapped) (other);
       return true;
     }
     
@@ -192,6 +167,31 @@ public abstract class EliminationVariant {
         return false;
       }
       Union o = (Union) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Wrap extends hydra.mantle.EliminationVariant {
+    public Wrap () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Wrap)) {
+        return false;
+      }
+      Wrap o = (Wrap) (other);
       return true;
     }
     

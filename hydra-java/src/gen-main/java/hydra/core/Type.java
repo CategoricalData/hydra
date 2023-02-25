@@ -45,7 +45,7 @@ public abstract class Type<M> {
     
     R visit(Variable instance) ;
     
-    R visit(Wrapped instance) ;
+    R visit(Wrap instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -117,7 +117,7 @@ public abstract class Type<M> {
       return otherwise((instance));
     }
     
-    default R visit(Wrapped instance) {
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -560,19 +560,19 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Wrapped<M> extends hydra.core.Type<M> {
+  public static final class Wrap<M> extends hydra.core.Type<M> {
     public final hydra.core.Name value;
     
-    public Wrapped (hydra.core.Name value) {
+    public Wrap (hydra.core.Name value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Wrapped)) {
+      if (!(other instanceof Wrap)) {
         return false;
       }
-      Wrapped o = (Wrapped) (other);
+      Wrap o = (Wrap) (other);
       return value.equals(o.value);
     }
     

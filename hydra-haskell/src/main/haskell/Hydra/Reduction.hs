@@ -53,7 +53,7 @@ betaReduceTerm = reduce M.empty
         TermMap map -> TermMap <$> fmap M.fromList (CM.mapM reducePair $ M.toList map)
           where
             reducePair (k, v) = (,) <$> reduceb k <*> reduceb v
-        TermWrapped (Wrapper name term') -> (\t -> TermWrapped (Wrapper name t)) <$> reduce bindings term'
+        TermWrap (Nominal name term') -> (\t -> TermWrap (Nominal name t)) <$> reduce bindings term'
         TermOptional m -> TermOptional <$> CM.mapM reduceb m
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
         TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
@@ -155,7 +155,7 @@ betaReduceType typ = do
           TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
           TypeLambda (LambdaType v body) -> fromFlow cx $ betaReduceType $ replaceFreeVariableType v rhs body
           -- nominal types are transparent
-          TypeWrapped name -> fromFlow cx $ betaReduceType $ TypeApplication $ ApplicationType t' rhs
+          TypeWrap name -> fromFlow cx $ betaReduceType $ TypeApplication $ ApplicationType t' rhs
             where
               t' = fromFlow cx $ requireType name
 
@@ -227,7 +227,7 @@ termIsValue cx term = case stripTerm term of
     functionIsValue f = case f of
       FunctionElimination e -> case e of
         EliminationElement -> True
-        EliminationWrapped _ -> True
+        EliminationWrap _ -> True
         EliminationOptional (OptionalCases nothing just) -> termIsValue cx nothing
           && termIsValue cx just
         EliminationRecord _ -> True

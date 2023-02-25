@@ -56,7 +56,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) ->
         unifyMany [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
-      (TypeWrapped n1, TypeWrapped n2) -> verify $ n1 == n2
+      (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
 
       -- Asymmetric patterns
       (TypeVariable v, t2) -> bind v t2
@@ -66,8 +66,8 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
       (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")
-      (TypeWrapped _, _) -> return M.empty -- TODO
-      (_, TypeWrapped name) -> return M.empty -- TODO
+      (TypeWrap _, _) -> return M.empty -- TODO
+      (_, TypeWrap name) -> return M.empty -- TODO
       
       (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
         ":\n  " ++ show l ++ "\n  " ++ show r

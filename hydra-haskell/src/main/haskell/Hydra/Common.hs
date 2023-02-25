@@ -73,7 +73,7 @@ isEncodedType cx term = stripTerm term == TermElement _Type
 
 isType :: Eq m => Type m -> Bool
 isType typ = case stripType typ of
-  TypeWrapped _Type -> True
+  TypeWrap _Type -> True
   TypeUnion (RowType _Type _ _) -> True
   TypeApplication (ApplicationType lhs _) -> isType lhs
   _ -> False

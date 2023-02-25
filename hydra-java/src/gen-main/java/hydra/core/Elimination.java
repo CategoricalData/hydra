@@ -23,7 +23,7 @@ public abstract class Elimination<M> {
     
     R visit(Union instance) ;
     
-    R visit(Wrapped instance) ;
+    R visit(Wrap instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -51,7 +51,7 @@ public abstract class Elimination<M> {
       return otherwise((instance));
     }
     
-    default R visit(Wrapped instance) {
+    default R visit(Wrap instance) {
       return otherwise((instance));
     }
   }
@@ -219,22 +219,22 @@ public abstract class Elimination<M> {
   /**
    * Unwrap a wrapped term
    */
-  public static final class Wrapped<M> extends hydra.core.Elimination<M> {
+  public static final class Wrap<M> extends hydra.core.Elimination<M> {
     /**
      * Unwrap a wrapped term
      */
     public final hydra.core.Name value;
     
-    public Wrapped (hydra.core.Name value) {
+    public Wrap (hydra.core.Name value) {
       this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      if (!(other instanceof Wrapped)) {
+      if (!(other instanceof Wrap)) {
         return false;
       }
-      Wrapped o = (Wrapped) (other);
+      Wrap o = (Wrap) (other);
       return value.equals(o.value);
     }
     
