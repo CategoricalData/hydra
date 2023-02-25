@@ -18,7 +18,6 @@ import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Term;
 import hydra.core.UnitType;
-import hydra.core.Variable;
 
 import hydra.core.Nominal;
 import java.math.BigInteger;
@@ -113,12 +112,12 @@ public interface Terms {
   }
 
   static <M> Term<M> lambda(final String var, final Term<M> body) {
-    return function(new Function.Lambda<>(new Lambda<>(new Variable(var), body)));
+    return function(new Function.Lambda<>(new Lambda<>(new Name(var), body)));
   }
 
   static <M> Term<M> let(final String var, final Term<M> defined, final Term<M> definedIn) {
-    Map<Variable, Term<M>> bindings = new HashMap<>();
-    bindings.put(new Variable(var), defined);
+    Map<Name, Term<M>> bindings = new HashMap<>();
+    bindings.put(new Name(var), defined);
     return new Term.Let<>(new Let<>(bindings, definedIn));
   }
 
@@ -207,7 +206,7 @@ public interface Terms {
   }
 
   static <M> Term<M> variable(final String var) {
-    return new Term.Variable<>(new Variable(var));
+    return new Term.Variable<>(new Name(var));
   }
 
   static <M> Term<M> wrap(final Name name, final Term<M> term) {

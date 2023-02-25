@@ -29,7 +29,7 @@ latLonType :: Type m
 latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
 latLonPolyType :: Type m
-latLonPolyType = TypeLambda $ LambdaType (VariableType "a") $ 
+latLonPolyType = TypeLambda $ LambdaType (Name "a") $ 
   TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.variable "a", Types.field "lon" $ Types.variable "a"]
 
 testContext :: Context Kv

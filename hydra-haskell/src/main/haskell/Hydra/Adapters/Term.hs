@@ -88,7 +88,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           EliminationUnion _ -> variant functionProxyName _Elimination_union $ string $ show term -- TODO
         FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
-      TermVariable (Variable var) -> variant functionProxyName _Term_variable $ string var
+      TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
     decode ad term = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -199,7 +199,7 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
         _ -> unexpected "function term" $ show term
 
 passLambda :: (Ord m, Read m, Show m) => TypeAdapter m
-passLambda t@(TypeLambda (LambdaType (VariableType v) body)) = do
+passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
   ad <- termAdapter body
   return $ Adapter (adapterIsLossy ad) t (Types.lambda v $ adapterTarget ad)
     $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term

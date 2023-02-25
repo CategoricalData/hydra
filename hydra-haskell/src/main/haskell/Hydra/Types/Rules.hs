@@ -28,7 +28,7 @@ data InferenceContext m = InferenceContext {
   inferenceContextCounter :: Int,
   inferenceContextEnviroment :: TypingEnvironment m}
 
-type TypingEnvironment m = M.Map Variable (TypeScheme m)
+type TypingEnvironment m = M.Map Name (TypeScheme m)
 
 applyRules :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
 applyRules term = case term of
@@ -41,7 +41,7 @@ applyRules term = case term of
     TermApplication (Application fun arg) -> do
       ifun <- infer fun
       iarg <- infer arg
-      v <- freshVariableType
+      v <- freshName
       let c = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) v)]
       let app = TermApplication $ Application ifun iarg
       yield app v c
@@ -55,20 +55,20 @@ applyRules term = case term of
       FunctionElimination e -> case e of
 
         EliminationElement -> do
-          et <- freshVariableType
+          et <- freshName
           yieldElimination EliminationElement (Types.function (Types.element et) et) []
 
         EliminationList fun -> do
-          a <- freshVariableType
-          b <- freshVariableType
+          a <- freshName
+          b <- freshName
           let expected = Types.functionN [b, a] b
           i <- infer fun
           let elim = Types.functionN [b, Types.list a] b
           yieldElimination (EliminationList i) elim [(expected, termType i)]
 
         EliminationOptional (OptionalCases n j) -> do
-          dom <- freshVariableType
-          cod <- freshVariableType
+          dom <- freshName
+          cod <- freshName
           ni <- infer n
           ji <- infer j
           let t = Types.function (Types.optional dom) cod
@@ -90,7 +90,7 @@ applyRules term = case term of
 
             let idoms = termType . fieldTerm <$> icases
             let sdoms = fieldTypeType <$> sfields
-            cod <- freshVariableType
+            cod <- freshName
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
 
             yieldElimination (EliminationUnion (CaseStatement name icases))
@@ -102,7 +102,7 @@ applyRules term = case term of
           yieldElimination (EliminationWrap name) (Types.function (Types.wrap name) typ) []
 
       FunctionLambda (Lambda v body) -> do
-        tv <- freshVariableType
+        tv <- freshName
         i <- extendEnvironment v (TypeScheme [] tv) $ infer body
         yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
@@ -130,7 +130,7 @@ applyRules term = case term of
         yield (TermLet $ Let (M.fromList $ L.zip (fst <$> bl) is) i2) t2 (tc ++ c2)
  
     TermList els -> do
-        v <- freshVariableType
+        v <- freshName
         if L.null els
           then yield (TermList []) (Types.list v) []
           else do
@@ -142,8 +142,8 @@ applyRules term = case term of
     TermLiteral l -> yield (TermLiteral l) (Types.literal $ literalType l) []
 
     TermMap m -> do
-        kv <- freshVariableType
-        vv <- freshVariableType
+        kv <- freshName
+        vv <- freshName
         if M.null m
           then yield (TermMap M.empty) (Types.map kv vv) []
           else do
@@ -158,7 +158,7 @@ applyRules term = case term of
           return (ik, iv)
 
     TermOptional m -> do
-      v <- freshVariableType
+      v <- freshName
       case m of
         Nothing -> yield (TermOptional Nothing) (Types.optional v) []
         Just e -> do
@@ -178,7 +178,7 @@ applyRules term = case term of
         yield (TermRecord $ Record n ifields) irt ((TypeRecord rt, irt):ci)
 
     TermSet els -> do
-      v <- freshVariableType
+      v <- freshName
       if S.null els
         then yield (TermSet S.empty) (Types.set v) []
         else do
@@ -194,7 +194,7 @@ applyRules term = case term of
       where
         varOrTerm it j = if i == j
           then pure $ termType it
-          else freshVariableType
+          else freshName
 
     TermUnion (Injection n field) -> do
         rt <- withGraphContext $ requireUnionType True n
@@ -205,7 +205,7 @@ applyRules term = case term of
         yield (TermUnion $ Injection n ifield) (TypeUnion rt) (co:ci)
 
     TermVariable v -> do
-      t <- requireVariableType v
+      t <- requireName v
       yield (TermVariable v) t []
 
     TermWrap (Nominal name term1) -> do
@@ -232,7 +232,7 @@ decodeStructuralType term = do
       decodeStructuralType $ elementData el
     _ -> pure typ
 
-extendEnvironment :: Variable -> TypeScheme m -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
+extendEnvironment :: Name -> TypeScheme m -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
 extendEnvironment x sc = withEnvironment (\e -> M.insert x sc $ M.delete x e)
 
 fieldType :: Field (m, Type m, [Constraint m]) -> FieldType m
@@ -243,11 +243,11 @@ findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname)
   []    -> fail $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
-freshVariableType :: Flow (InferenceContext m) (Type m)
-freshVariableType = do
+freshName :: Flow (InferenceContext m) (Type m)
+freshName = do
     InferenceContext cx s e <- getState
     putState $ InferenceContext cx (s + 1) e
-    return $ Types.variable (unVariableType $ normalVariables !! s)
+    return $ Types.variable (unName $ normalVariables !! s)
 
 generalize :: Show m => TypingEnvironment m -> Type m -> TypeScheme m
 generalize env t  = TypeScheme vars t
@@ -271,17 +271,17 @@ inferFieldType (Field fname term) = Field fname <$> infer term
 
 instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
 instantiate (TypeScheme vars t) = do
-    vars1 <- mapM (const freshVariableType) vars
+    vars1 <- mapM (const freshName) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t
 
-requireVariableType :: Show m => Variable -> Flow (InferenceContext m) (Type m)
-requireVariableType v = do
+requireName :: Show m => Name -> Flow (InferenceContext m) (Type m)
+requireName v = do
   env <- inferenceContextEnviroment <$> getState
   case M.lookup v env of
-    Nothing -> fail $ "variable not bound in environment: " ++ unVariable v
+    Nothing -> fail $ "variable not bound in environment: " ++ unName v
     Just s  -> instantiate s
 
 termConstraints :: Term (m, Type m, [Constraint m]) -> [Constraint m]

@@ -98,7 +98,7 @@ encodeFunction namespaces fun = case fun of
           -- Note: some of the following could be brought together with FunctionCases
           let v0 = "v"
           let rhsTerm = simplifyTerm $ apply just (variable v0)
-          let v1 = if S.member (Variable v0) $ freeVariablesInTerm rhsTerm then v0 else "_"
+          let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else "_"
           let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
@@ -114,7 +114,7 @@ encodeFunction namespaces fun = case fun of
             let v0 = "v"
             let raw = apply fun' (variable v0)
             let rhsTerm = simplifyTerm raw
-            let v1 = if isFreeIn (Variable v0) rhsTerm then "_" else v0
+            let v1 = if isFreeIn (Name v0) rhsTerm then "_" else v0
             let hname = unionFieldReference namespaces dn fn
             args <- case M.lookup fn fieldMap of
               Just (FieldType _ ft) -> case stripType ft of
@@ -124,7 +124,7 @@ encodeFunction namespaces fun = case fun of
             let lhs = H.PatternApplication $ H.Pattern_Application hname args
             rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
             return $ H.Alternative lhs rhs Nothing
-    FunctionLambda (Lambda (Variable v) body) -> hslambda v <$> encodeTerm namespaces body
+    FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
     _ -> fail $ "unexpected function: " ++ show fun
 
@@ -174,7 +174,7 @@ encodeTerm namespaces term = do
       case stripTerm ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode ft
-    TermVariable (Variable v) -> pure $ hsvar v
+    TermVariable (Name v) -> pure $ hsvar v
     _ -> fail $ "unexpected term: " ++ show term
   where
     encode = encodeTerm namespaces
@@ -185,7 +185,7 @@ encodeType namespaces typ = case stripType typ of
       CM.sequence [encode lhs, encode rhs]
     TypeElement et -> encode et
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
-    TypeLambda (LambdaType (VariableType v) body) -> toTypeApplication <$> CM.sequence [
+    TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
       encode body,
       pure $ H.TypeVariable $ simpleName v]
     TypeList lt -> H.TypeList <$> encode lt
@@ -217,7 +217,7 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
     TypeUnion rt -> wrap $ rowTypeTypeName rt
-    TypeVariable (VariableType v) -> pure $ H.TypeVariable $ simpleName v
+    TypeVariable (Name v) -> pure $ H.TypeVariable $ simpleName v
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
@@ -256,7 +256,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
           let bl = M.toList bindings
           ts <- fmap typeSchemeType <$> (CM.mapM inferType (snd <$> bl))
           coders <- CM.mapM (constructCoder haskellLanguage (encodeTerm namespaces)) ts
-          let hnames = simpleName <$> (unVariable . fst <$> bl)
+          let hnames = simpleName <$> (unName . fst <$> bl)
           hterms <- CM.zipWithM coderEncode coders (snd <$> bl)
 
           let bindings = L.zipWith toBinding hnames hterms
@@ -313,7 +313,7 @@ toTypeDeclarations namespaces el term = do
 
     declHead name vars = case vars of
       [] -> H.DeclarationHeadSimple name
-      ((VariableType h):rest) -> H.DeclarationHeadApplication $
+      ((Name h):rest) -> H.DeclarationHeadApplication $
         H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
     newtypeCons el typ = do

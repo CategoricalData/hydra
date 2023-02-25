@@ -6,11 +6,11 @@ package hydra.mantle;
 public class TypeScheme<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypeScheme");
   
-  public final java.util.List<hydra.core.VariableType> variables;
+  public final java.util.List<hydra.core.Name> variables;
   
   public final hydra.core.Type<M> type;
   
-  public TypeScheme (java.util.List<hydra.core.VariableType> variables, hydra.core.Type<M> type) {
+  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<M> type) {
     this.variables = variables;
     this.type = type;
   }
@@ -29,7 +29,7 @@ public class TypeScheme<M> {
     return 2 * variables.hashCode() + 3 * type.hashCode();
   }
   
-  public TypeScheme withVariables(java.util.List<hydra.core.VariableType> variables) {
+  public TypeScheme withVariables(java.util.List<hydra.core.Name> variables) {
     return new TypeScheme(variables, type);
   }
   

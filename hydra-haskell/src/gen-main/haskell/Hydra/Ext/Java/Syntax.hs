@@ -1568,7 +1568,7 @@ _LocalVariableDeclarationStatement = (Core.Name "hydra/ext/java/syntax.LocalVari
 data LocalVariableDeclaration = 
   LocalVariableDeclaration {
     localVariableDeclarationModifiers :: [VariableModifier],
-    localVariableDeclarationType :: LocalVariableType,
+    localVariableDeclarationType :: LocalName,
     localVariableDeclarationDeclarators :: [VariableDeclarator]}
   deriving (Eq, Ord, Read, Show)
 
@@ -1580,16 +1580,16 @@ _LocalVariableDeclaration_type = (Core.FieldName "type")
 
 _LocalVariableDeclaration_declarators = (Core.FieldName "declarators")
 
-data LocalVariableType = 
-  LocalVariableTypeType UnannType |
-  LocalVariableTypeVar 
+data LocalName = 
+  LocalNameType UnannType |
+  LocalNameVar 
   deriving (Eq, Ord, Read, Show)
 
-_LocalVariableType = (Core.Name "hydra/ext/java/syntax.LocalVariableType")
+_LocalName = (Core.Name "hydra/ext/java/syntax.LocalName")
 
-_LocalVariableType_type = (Core.FieldName "type")
+_LocalName_type = (Core.FieldName "type")
 
-_LocalVariableType_var = (Core.FieldName "var")
+_LocalName_var = (Core.FieldName "var")
 
 data Statement = 
   StatementWithoutTrailing StatementWithoutTrailingSubstatement |
@@ -1997,7 +1997,7 @@ _EnhancedForStatement_body = (Core.FieldName "body")
 data EnhancedForCond = 
   EnhancedForCond {
     enhancedForCondModifiers :: [VariableModifier],
-    enhancedForCondType :: LocalVariableType,
+    enhancedForCondType :: LocalName,
     enhancedForCondId :: VariableDeclaratorId,
     enhancedForCondExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
@@ -2197,7 +2197,7 @@ _Resource_variable = (Core.FieldName "variable")
 data Resource_Local = 
   Resource_Local {
     resource_LocalModifiers :: [VariableModifier],
-    resource_LocalType :: LocalVariableType,
+    resource_LocalType :: LocalName,
     resource_LocalIdentifier :: Identifier,
     resource_LocalExpression :: Expression}
   deriving (Eq, Ord, Read, Show)

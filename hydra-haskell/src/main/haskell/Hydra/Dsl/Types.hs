@@ -85,7 +85,7 @@ integer :: IntegerType -> Type m
 integer = literal . LiteralTypeInteger
 
 lambda :: String -> Type m -> Type m
-lambda v body = TypeLambda $ LambdaType (VariableType v) body
+lambda v body = TypeLambda $ LambdaType (Name v) body
 
 list :: Type m -> Type m
 list = TypeList
@@ -136,7 +136,7 @@ unit :: Type m
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
 variable :: String -> Type m
-variable = TypeVariable . VariableType
+variable = TypeVariable . Name
 
 wrap :: Name -> Type m
 wrap = TypeWrap

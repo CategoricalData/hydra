@@ -58,11 +58,11 @@ stapply1 t1 t2 = stapply t1 [t2]
 stapply2 :: Scala.Type -> Scala.Type -> Scala.Type -> Scala.Type
 stapply2 t1 t2 t3 = stapply t1 [t2, t3]
 
-stparam :: VariableType -> Scala.Type_Param
-stparam (VariableType v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
+stparam :: Name -> Scala.Type_Param
+stparam (Name v) = Scala.Type_Param [] (Scala.NameValue v) [] [] [] []
 
 stref :: String -> Scala.Type
 stref = Scala.TypeRef . Scala.Type_RefName . Scala.Type_Name
 
-svar :: Variable -> Scala.Pat
-svar (Variable v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v
+svar :: Name -> Scala.Pat
+svar (Name v) = (Scala.PatVar . Scala.Pat_Var . Scala.Data_Name . Scala.PredefString) v

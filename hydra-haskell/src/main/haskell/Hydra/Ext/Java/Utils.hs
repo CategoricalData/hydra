@@ -165,7 +165,7 @@ javaInterfaceDeclarationToJavaClassBodyDeclaration :: Java.NormalInterfaceDeclar
 javaInterfaceDeclarationToJavaClassBodyDeclaration = Java.ClassBodyDeclarationClassMember .
   Java.ClassMemberDeclarationInterface . Java.InterfaceDeclarationNormalInterface
 
-javaLambda :: Variable -> Java.Expression -> Java.Expression
+javaLambda :: Name -> Java.Expression -> Java.Expression
 javaLambda var jbody = Java.ExpressionLambda $ Java.LambdaExpression params (Java.LambdaBodyExpression jbody)
   where
     params = Java.LambdaParametersSingle $ variableToJavaIdentifier var
@@ -473,14 +473,14 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
     Java.LocalVariableDeclarationStatement $
     Java.LocalVariableDeclaration [] t [vdec]
   where
-    t = Java.LocalVariableTypeType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
+    t = Java.LocalNameType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
       nameToJavaTypeIdentifier aliases False elName
     vdec = javaVariableDeclarator id (Just init)
       where
         init = Java.VariableInitializerExpression rhs
 
-variableToJavaIdentifier :: Variable -> Java.Identifier
-variableToJavaIdentifier (Variable var) = Java.Identifier var -- TODO: escape
+variableToJavaIdentifier :: Name -> Java.Identifier
+variableToJavaIdentifier (Name var) = Java.Identifier var -- TODO: escape
 
 variantClassName :: Bool -> Name -> FieldName -> Name
 variantClassName qualify elName (FieldName fname) = fromQname gname local1

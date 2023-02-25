@@ -9,14 +9,14 @@ public class Lambda<M> {
   /**
    * The parameter of the lambda
    */
-  public final hydra.core.Variable parameter;
+  public final hydra.core.Name parameter;
   
   /**
    * The body of the lambda
    */
   public final hydra.core.Term<M> body;
   
-  public Lambda (hydra.core.Variable parameter, hydra.core.Term<M> body) {
+  public Lambda (hydra.core.Name parameter, hydra.core.Term<M> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -35,7 +35,7 @@ public class Lambda<M> {
     return 2 * parameter.hashCode() + 3 * body.hashCode();
   }
   
-  public Lambda withParameter(hydra.core.Variable parameter) {
+  public Lambda withParameter(hydra.core.Name parameter) {
     return new Lambda(parameter, body);
   }
   

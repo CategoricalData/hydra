@@ -18,9 +18,9 @@ type Constraint m = (Type m, Type m)
 
 type Unifier m = (Subst m, [Constraint m])
 
-bind :: (Eq m, Show m) => VariableType -> Type m -> GraphFlow m (Subst m)
+bind :: (Eq m, Show m) => Name -> Type m -> GraphFlow m (Subst m)
 bind a t | t == TypeVariable a = return M.empty
-         | variableOccursInType a t = fail $ "infinite type for ?" ++ unVariableType a ++ ": " ++ show t
+         | variableOccursInType a t = fail $ "infinite type for ?" ++ unName a ++ ": " ++ show t
          | otherwise = return $ M.singleton a t
 
 solveConstraints :: (Eq m, Show m) => [Constraint m] -> GraphFlow m (Subst m)
@@ -53,7 +53,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
         unifyMany (fieldTypeType <$> rowTypeFields rt1) (fieldTypeType <$> rowTypeFields rt2)
       (TypeSet st1, TypeSet st2) -> unify st1 st2
       (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
-      (TypeLambda (LambdaType (VariableType v1) body1), TypeLambda (LambdaType (VariableType v2) body2)) ->
+      (TypeLambda (LambdaType (Name v1) body1), TypeLambda (LambdaType (Name v2) body2)) ->
         unifyMany [Types.variable v1, body1] [Types.variable v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
       (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
@@ -83,5 +83,5 @@ unifyMany (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany t1 t2 = fail $ "unification mismatch between " ++ show t1 ++ " and " ++ show t2
 
-variableOccursInType ::  Show m => VariableType -> Type m -> Bool
+variableOccursInType ::  Show m => Name -> Type m -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t
