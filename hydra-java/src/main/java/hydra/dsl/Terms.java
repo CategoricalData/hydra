@@ -20,7 +20,7 @@ import hydra.core.Term;
 import hydra.core.UnitType;
 import hydra.core.Variable;
 
-import hydra.core.Wrapper;
+import hydra.core.Nominal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -211,6 +211,6 @@ public interface Terms {
   }
 
   static <M> Term<M> wrap(final Name name, final Term<M> term) {
-    return new Term.Wrapped<>(new Wrapper<>(name, term));
+    return new Term.Wrap<>(new Nominal<>(name, term));
   }
 }

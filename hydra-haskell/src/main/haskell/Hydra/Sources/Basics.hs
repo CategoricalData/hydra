@@ -49,7 +49,7 @@ eliminationVariantSource = basics "eliminationVariant" $
   matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
-    _Elimination_wrapped  @-> _EliminationVariant_wrapped,
+    _Elimination_wrap  @-> _EliminationVariant_wrap,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union]
@@ -61,7 +61,7 @@ eliminationVariantsSource = basics "eliminationVariants" $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_element,
     _EliminationVariant_list,
-    _EliminationVariant_wrapped,
+    _EliminationVariant_wrap,
     _EliminationVariant_optional,
     _EliminationVariant_record,
     _EliminationVariant_union]
@@ -227,7 +227,7 @@ termVariantSource = basics "termVariant" $
       _Term_list            @-> _TermVariant_list,
       _Term_literal         @-> _TermVariant_literal,
       _Term_map             @-> _TermVariant_map,
-      _Term_wrapped         @-> _TermVariant_wrapped,
+      _Term_wrap         @-> _TermVariant_wrap,
       _Term_optional        @-> _TermVariant_optional,
       _Term_product         @-> _TermVariant_product,
       _Term_record          @-> _TermVariant_record,
@@ -250,7 +250,7 @@ termVariantsSource = basics "termVariants" $
     _TermVariant_function,
     _TermVariant_list,
     _TermVariant_map,
-    _TermVariant_wrapped,
+    _TermVariant_wrap,
     _TermVariant_optional,
     _TermVariant_product,
     _TermVariant_record,
@@ -281,7 +281,7 @@ typeVariantSource = basics "typeVariant" $
       _Type_list        @-> _TypeVariant_list,
       _Type_literal     @-> _TypeVariant_literal,
       _Type_map         @-> _TypeVariant_map,
-      _Type_wrapped     @-> _TypeVariant_wrapped,
+      _Type_wrap     @-> _TypeVariant_wrap,
       _Type_optional    @-> _TypeVariant_optional,
       _Type_product     @-> _TypeVariant_product,
       _Type_record      @-> _TypeVariant_record,
@@ -305,7 +305,7 @@ typeVariantsSource = basics "typeVariants" $
     _TypeVariant_list,
     _TypeVariant_literal,
     _TypeVariant_map,
-    _TypeVariant_wrapped,
+    _TypeVariant_wrap,
     _TypeVariant_optional,
     _TypeVariant_product,
     _TypeVariant_record,

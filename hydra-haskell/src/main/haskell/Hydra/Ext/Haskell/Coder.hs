@@ -89,7 +89,7 @@ encodeFunction namespaces fun = case fun of
         let lhs = hsvar "foldl"
         rhs <- encodeTerm namespaces fun
         return $ hsapp lhs rhs
-      EliminationWrapped name -> pure $ H.ExpressionVariable $ elementReference namespaces $
+      EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
         qname (namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
@@ -153,7 +153,7 @@ encodeTerm namespaces term = do
     TermLet l -> fail $ "unexpected 'let' term nested within a non-let term"
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
-    TermWrapped (Wrapper tname term') -> if newtypesNotTypedefs
+    TermWrap (Nominal tname term') -> if newtypesNotTypedefs
       then hsapp <$> pure (H.ExpressionVariable $ elementReference namespaces tname) <*> encode term'
       else encode term'
     TermOptional m -> case m of
@@ -205,7 +205,7 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Map",
       encode kt,
       encode vt]
-    TypeWrapped name -> wrap name
+    TypeWrap name -> wrap name
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]

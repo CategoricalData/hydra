@@ -139,4 +139,4 @@ variable :: String -> Type m
 variable = TypeVariable . VariableType
 
 wrap :: Name -> Type m
-wrap = TypeWrapped
+wrap = TypeWrap

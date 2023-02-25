@@ -122,7 +122,7 @@ public interface Utils {
       }
       
       @Override
-      public String visit(hydra.core.Type.Wrapped instance) {
+      public String visit(hydra.core.Type.Wrap instance) {
         return hydra.lib.strings.Strings.cat(java.util.Arrays.asList(
           "alias for ",
           ((instance.value)).value));

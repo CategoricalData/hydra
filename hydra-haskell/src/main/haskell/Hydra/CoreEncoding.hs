@@ -32,7 +32,7 @@ encodeElimination :: Ord m => Elimination m -> Term m
 encodeElimination e = case e of
   EliminationElement -> unitVariant _Elimination _Elimination_element
   EliminationList f -> variant _Elimination _Elimination_list $ encodeTerm f
-  EliminationWrapped (Name name) -> variant _Elimination _Elimination_wrapped $ string name
+  EliminationWrap (Name name) -> variant _Elimination _Elimination_wrap $ string name
   EliminationOptional cases -> variant _Elimination _Elimination_optional $ encodeOptionalCases cases
   EliminationRecord p -> variant _Elimination _Elimination_record $ encodeProjection p
   EliminationUnion c -> variant _Elimination _Elimination_union $ encodeCaseStatement c
@@ -110,10 +110,10 @@ encodeMapType (MapType kt vt) = record _MapType [
   Field _MapType_keys $ encodeType kt,
   Field _MapType_values $ encodeType vt]
 
-encodeWrapper :: Ord m => Wrapper m -> Term m
-encodeWrapper (Wrapper (Name name) term) = record _Wrapper [
-  Field _Wrapper_typeName $ string name,
-  Field _Wrapper_term $ encodeTerm term]
+encodeNominalTerm :: Ord m => Nominal (Term m) -> Term m
+encodeNominalTerm (Nominal (Name name) term) = record _Nominal [
+  Field _Nominal_typeName $ string name,
+  Field _Nominal_object $ encodeTerm term]
 
 encodeOptionalCases :: Ord m => OptionalCases m -> Term m
 encodeOptionalCases (OptionalCases nothing just) = record _OptionalCases [
@@ -147,7 +147,6 @@ encodeTerm term = case term of
   TermList terms -> variant _Term _Term_list $ list $ encodeTerm <$> terms
   TermMap m -> variant _Term _Term_map $ map $ M.fromList $ encodePair <$> M.toList m
     where encodePair (k, v) = (encodeTerm k, encodeTerm v)
-  TermWrapped ntt -> variant _Term _Term_wrapped $ encodeWrapper ntt
   TermOptional m -> variant _Term _Term_optional $ optional $ encodeTerm <$> m
   TermProduct terms -> variant _Term _Term_product $ list (encodeTerm <$> terms)
   TermRecord (Record _ fields) -> variant _Term _Term_record $ list $ encodeField <$> fields
@@ -155,6 +154,7 @@ encodeTerm term = case term of
   TermSum s -> variant _Term _Term_sum $ encodeSum s
   TermUnion (Injection _ field) -> variant _Term _Term_union $ encodeField field
   TermVariable (Variable var) -> variant _Term _Term_variable $ string var
+  TermWrap ntt -> variant _Term _Term_wrap $ encodeNominalTerm ntt
 
 encodeType :: Type m -> Term m
 encodeType typ = case typ of
@@ -166,7 +166,6 @@ encodeType typ = case typ of
   TypeList t -> variant _Type _Type_list $ encodeType t
   TypeLiteral at -> variant _Type _Type_literal $ encodeLiteralType at
   TypeMap mt -> variant _Type _Type_map $ encodeMapType mt
-  TypeWrapped name -> variant _Type _Type_wrapped $ element name
   TypeOptional t -> variant _Type _Type_optional $ encodeType t
   TypeProduct types -> variant _Type _Type_product $ list (encodeType <$> types)
   TypeRecord rt -> variant _Type _Type_record $ encodeRowType rt
@@ -174,6 +173,7 @@ encodeType typ = case typ of
   TypeSum types -> variant _Type _Type_sum $ list (encodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ encodeRowType rt
   TypeVariable (VariableType var) -> variant _Type _Type_variable $ string var
+  TypeWrap name -> variant _Type _Type_wrap $ element name
 
 encodeTypeVariant :: TypeVariant -> Term m
 encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
@@ -183,7 +183,6 @@ encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
   TypeVariantFunction -> _TypeVariant_function
   TypeVariantList -> _TypeVariant_list
   TypeVariantMap -> _TypeVariant_map
-  TypeVariantWrapped -> _TypeVariant_wrapped
   TypeVariantOptional -> _TypeVariant_optional
   TypeVariantProduct -> _TypeVariant_product
   TypeVariantRecord -> _TypeVariant_record
@@ -192,3 +191,4 @@ encodeTypeVariant tv = unitVariant _TypeVariant $ case tv of
   TypeVariantUnion -> _TypeVariant_union
   TypeVariantLambda -> _TypeVariant_lambda
   TypeVariantVariable -> _TypeVariant_variable
+  TypeVariantWrap -> _TypeVariant_wrap

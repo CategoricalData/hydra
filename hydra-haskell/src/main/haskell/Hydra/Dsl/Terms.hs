@@ -249,7 +249,7 @@ unitVariant :: Name -> FieldName -> Term m
 unitVariant n fname = variant n fname unit
 
 unwrap :: Name -> Term m
-unwrap = TermFunction . FunctionElimination . EliminationWrapped
+unwrap = TermFunction . FunctionElimination . EliminationWrap
 
 variable :: String -> Term m
 variable = TermVariable . Variable
@@ -261,4 +261,4 @@ withVariant :: Name -> FieldName -> Term m
 withVariant n = constFunction . unitVariant n
 
 wrap :: Name -> Term m -> Term m
-wrap name term = TermWrapped $ Wrapper name term
+wrap name term = TermWrap $ Nominal name term

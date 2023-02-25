@@ -368,7 +368,7 @@ encodeElimination aliases marg dom cod elm = case elm of
       where
         var = Variable "v"
     Just jarg -> pure jarg
-  EliminationWrapped name -> case marg of
+  EliminationWrap name -> case marg of
     Nothing -> pure $ javaLambda var jbody
       where
         var = Variable "v"
@@ -553,7 +553,7 @@ encodeTerm aliases mtype term = case term of
 
   --  TermMap (Map (Term m) (Term m))
 
-    TermWrapped (Wrapper name arg) -> do
+    TermWrap (Nominal name arg) -> do
       jarg <- encode arg
       return $ javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [jarg] Nothing
 
@@ -623,7 +623,7 @@ encodeType aliases t = case stripType t of
     jkt <- encode kt >>= javaTypeToJavaReferenceType
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeWrapped name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeRecord (RowType _UnitType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
   TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeOptional ot -> do

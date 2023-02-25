@@ -48,8 +48,8 @@ public class TypesTest {
     assertEquals(int32(), ((Type.Function<String>) stringToIntType).value.codomain);
 
     assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
-    assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrapped);
-    assertEquals(name("LatLon"), ((Type.Wrapped<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
+    assertTrue(((Type.Function<String>) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
+    assertEquals(name("LatLon"), ((Type.Wrap<String>) ((Type.Function<String>) pairOfLatLonsToFloatType).value.domain).value);
 
     assertTrue(annotatedType instanceof Type.Annotated);
     // Notice that annotations, here, are String-valued

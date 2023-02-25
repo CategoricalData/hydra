@@ -114,7 +114,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeFunction (FunctionType dom cod) -> typeIsSupported constraints dom && typeIsSupported constraints cod
     TypeList lt -> typeIsSupported constraints lt
     TypeMap (MapType kt vt) -> typeIsSupported constraints kt && typeIsSupported constraints vt
-    TypeWrapped _ -> True -- TODO: dereference the type
+    TypeWrap _ -> True -- TODO: dereference the type
     TypeOptional t -> typeIsSupported constraints t
     TypeRecord rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     TypeSet st -> typeIsSupported constraints st
