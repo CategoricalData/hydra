@@ -36,7 +36,7 @@ printModule mod = do
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
-boundTypeVariables :: Type m -> [VariableType]
+boundTypeVariables :: Type m -> [Name]
 boundTypeVariables typ = case typ of
   TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
   TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
@@ -120,7 +120,7 @@ constructModule mod coders pairs = do
           let mods = [Java.InterfaceMethodModifierStatic]
           let anns = []
           let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
-          let param = javaTypeToJavaFormalParameter jdom (FieldName $ unVariable v)
+          let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
           let result = javaTypeToJavaResult jcod
           jbody <- encodeTerm aliases (Just cod) body
           let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
@@ -144,7 +144,7 @@ constructElementsInterface mod members = (elName, cu)
 
 declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => Aliases
   -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
-declarationForLambdaType aliases tparams elName (LambdaType (VariableType v) body) =
+declarationForLambdaType aliases tparams elName (LambdaType (Name v) body) =
     toClassDecl False aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
@@ -366,12 +366,12 @@ encodeElimination aliases marg dom cod elm = case elm of
   EliminationElement -> case marg of
     Nothing -> encodeFunction aliases dom cod $ FunctionLambda $ Lambda var $ TermVariable var
       where
-        var = Variable "v"
+        var = Name "v"
     Just jarg -> pure jarg
   EliminationWrap name -> case marg of
     Nothing -> pure $ javaLambda var jbody
       where
-        var = Variable "v"
+        var = Name "v"
         arg = javaIdentifierToJavaExpression $ variableToJavaIdentifier var
         jbody = javaConstructorCall (javaConstructorName (nameToJavaName aliases name) Nothing) [arg] Nothing
     Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier valueFieldName)
@@ -383,7 +383,7 @@ encodeElimination aliases marg dom cod elm = case elm of
     jexp <- case marg of
       Nothing -> pure $ javaLambda var jbody
         where
-          var = Variable "v"
+          var = Name "v"
           jbody = javaExpressionNameToJavaExpression $
             fieldExpression (variableToJavaIdentifier var) (javaIdentifier $ unFieldName fname)
       Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
@@ -589,7 +589,7 @@ encodeTerm aliases mtype term = case term of
           return [ex]
       return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
 
-    TermVariable (Variable v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
+    TermVariable (Name v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
 
     _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
   where
@@ -608,7 +608,7 @@ encodeType aliases t = case stripType t of
     jdom <- encode dom >>= javaTypeToJavaReferenceType
     jcod <- encode cod >>= javaTypeToJavaReferenceType
     return $ javaRefType [jdom, jcod] javaUtilFunctionPackageName "Function"
-  TypeLambda (LambdaType (VariableType v) body) -> do
+  TypeLambda (LambdaType (Name v) body) -> do
     jbody <- encode body
     addJavaTypeParameter (javaTypeVariable v) jbody
   TypeList et -> do
@@ -633,7 +633,7 @@ encodeType aliases t = case stripType t of
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
   TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
-  TypeVariable (VariableType v) -> pure $ Java.TypeReference $ javaTypeVariable v
+  TypeVariable (Name v) -> pure $ Java.TypeReference $ javaTypeVariable v
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
@@ -665,7 +665,7 @@ instanceName = "instance"
 javaTypeParametersForType :: Type m -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars
   where
-    toParam (VariableType v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
+    toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
 --    vars = boundTypeVariables typ
     vars = S.toList $ freeVariablesInType typ -- TODO: the fact that the variables are free is a bug, not a feature
 

@@ -77,12 +77,12 @@ encodeIntegerType it = unitVariant _IntegerType $ case it of
   IntegerTypeUint64 -> _IntegerType_uint64
 
 encodeLambda :: Ord m => Lambda m -> Term m
-encodeLambda (Lambda (Variable v) b) = record _Lambda [
+encodeLambda (Lambda (Name v) b) = record _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ encodeTerm b]
 
 encodeLambdaType :: LambdaType m -> Term m
-encodeLambdaType (LambdaType (VariableType var) body) = record _LambdaType [
+encodeLambdaType (LambdaType (Name var) body) = record _LambdaType [
   Field _LambdaType_parameter $ string var,
   Field _LambdaType_body $ encodeType body]
 
@@ -153,7 +153,7 @@ encodeTerm term = case term of
   TermSet terms -> variant _Term _Term_set $ set $ S.fromList $ encodeTerm <$> S.toList terms
   TermSum s -> variant _Term _Term_sum $ encodeSum s
   TermUnion (Injection _ field) -> variant _Term _Term_union $ encodeField field
-  TermVariable (Variable var) -> variant _Term _Term_variable $ string var
+  TermVariable (Name var) -> variant _Term _Term_variable $ string var
   TermWrap ntt -> variant _Term _Term_wrap $ encodeNominalTerm ntt
 
 encodeType :: Type m -> Term m
@@ -172,7 +172,7 @@ encodeType typ = case typ of
   TypeSet t -> variant _Type _Type_set $ encodeType t
   TypeSum types -> variant _Type _Type_sum $ list (encodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ encodeRowType rt
-  TypeVariable (VariableType var) -> variant _Type _Type_variable $ string var
+  TypeVariable (Name var) -> variant _Type _Type_variable $ string var
   TypeWrap name -> variant _Type _Type_wrap $ element name
 
 encodeTypeVariant :: TypeVariant -> Term m

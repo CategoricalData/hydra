@@ -27,7 +27,7 @@ expectPolytype :: Term Kv-> [String] -> Type Kv -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
       (inferType term)
-      (TypeScheme (VariableType <$> vars) typ)
+      (TypeScheme (Name <$> vars) typ)
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = do
@@ -123,7 +123,7 @@ checkIndividualTerms = do
 
     H.it "Check let terms" $ do
       expectPolytype
-        (letTerm (Variable "x") (float32 42.0) (lambda "y" (lambda "z" (variable "x"))))
+        (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (variable "x"))))
         ["v1", "v2"] (Types.function (Types.variable "v1") (Types.function (Types.variable "v2") Types.float32))
 
     H.it "Check elements" $ do

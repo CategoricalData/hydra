@@ -92,7 +92,7 @@ lambda :: String -> Datum x -> Datum (a -> b)
 lambda v (Datum body) = Datum $ Terms.lambda v body
 
 --letTerm :: Var a -> Datum a -> Datum b -> Datum b
---letTerm (Var k) (Datum v) (Datum env) = Datum $ Terms.letTerm (Variable k) v env
+--letTerm (Var k) (Datum v) (Datum env) = Datum $ Terms.letTerm (Name k) v env
 
 list :: [Datum a] -> Datum [a]
 list els = Datum $ Terms.list (unDatum <$> els)

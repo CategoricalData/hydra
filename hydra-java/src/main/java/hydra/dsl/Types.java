@@ -14,7 +14,6 @@ import hydra.core.Name;
 import hydra.core.RowType;
 import hydra.core.Type;
 import hydra.core.UnitType;
-import hydra.core.VariableType;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -115,7 +114,7 @@ public interface Types {
   }
 
   static <M> Type<M> lambda(final String var, final Type<M> body) {
-    return new Type.Lambda<>(new LambdaType<>(new VariableType(var), body));
+    return new Type.Lambda<>(new LambdaType<>(new Name(var), body));
   }
 
   static <M> Type<M> list(final Type<M> elements) {
@@ -191,7 +190,7 @@ public interface Types {
   }
 
   static <M> Type<M> variable(final String name) {
-    return new Type.Variable<>(new VariableType(name));
+    return new Type.Variable<>(new Name(name));
   }
 
   static <M> Type<M> wrap(final Name name) {

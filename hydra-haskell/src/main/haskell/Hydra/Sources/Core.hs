@@ -168,7 +168,7 @@ hydraCoreModule = Module ns elements [] $
         lambda "m" $ record [
           "parameter">:
             doc "The parameter of the lambda" $
-            core "Variable",
+            core "Name",
           "body">:
             doc "The body of the lambda" $
             core "Term" @@ "m"],
@@ -178,7 +178,7 @@ hydraCoreModule = Module ns elements [] $
         lambda "m" $ record [
           "parameter">:
             doc "The parameter of the lambda" $
-            core "VariableType",
+            core "Name",
           "body">:
             doc "The body of the lambda" $
             core "Type" @@ "m"],
@@ -186,7 +186,7 @@ hydraCoreModule = Module ns elements [] $
       def "Let" $
         doc "A set of (possibly recursive) 'let' bindings" $
         lambda "m" $ record [
-          "bindings">: Types.map (core "Variable") (core "Term" @@ "m"),
+          "bindings">: Types.map (core "Name") (core "Term" @@ "m"),
           "environment">: core "Term" @@ "m"],
 
       def "Literal" $
@@ -220,7 +220,7 @@ hydraCoreModule = Module ns elements [] $
           "values">: core "Type" @@ "m"],
 
       def "Name" $
-        doc "A unique element name"
+        doc "A symbol which stands for a term, type, or element"
         string,
 
       def "Nominal" $
@@ -328,7 +328,7 @@ hydraCoreModule = Module ns elements [] $
             core "Injection" @@ "m",
           "variable">:
             doc "A variable reference" $
-            core "Variable",
+            core "Name",
           "wrap">:
             core "Nominal" @@ (core "Term" @@ "m")],
 
@@ -352,16 +352,8 @@ hydraCoreModule = Module ns elements [] $
           "stream">: core "Type" @@ "m",
           "sum">: list (core "Type" @@ "m"),
           "union">: core "RowType" @@ "m",
-          "variable">: core "VariableType",
+          "variable">: core "Name",
           "wrap">: core "Name"],
-
-      def "Variable" $
-        doc "A symbol which stands in for a term"
-        string,
-
-      def "VariableType" $
-        doc "A symbol which stands in for a type"
-        string,
 
       def "Injection" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $

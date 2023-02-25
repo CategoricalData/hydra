@@ -99,7 +99,7 @@ hydraMantleModule = Module ns elements [] $
       def "TypeScheme" $
         doc "A type expression together with free type variables occurring in the expression" $
         lambda "m" $ record [
-          "variables">: list $ core "VariableType",
+          "variables">: list $ core "Name",
           "type">: core "Type" @@ "m"],
 
       def "TypeVariant" $

@@ -270,7 +270,7 @@ _IntegerValue_uint64 = (FieldName "uint64")
 data Lambda m = 
   Lambda {
     -- | The parameter of the lambda
-    lambdaParameter :: Variable,
+    lambdaParameter :: Name,
     -- | The body of the lambda
     lambdaBody :: (Term m)}
   deriving (Eq, Ord, Read, Show)
@@ -285,7 +285,7 @@ _Lambda_body = (FieldName "body")
 data LambdaType m = 
   LambdaType {
     -- | The parameter of the lambda
-    lambdaTypeParameter :: VariableType,
+    lambdaTypeParameter :: Name,
     -- | The body of the lambda
     lambdaTypeBody :: (Type m)}
   deriving (Eq, Ord, Read, Show)
@@ -299,7 +299,7 @@ _LambdaType_body = (FieldName "body")
 -- | A set of (possibly recursive) 'let' bindings
 data Let m = 
   Let {
-    letBindings :: (Map Variable (Term m)),
+    letBindings :: (Map Name (Term m)),
     letEnvironment :: (Term m)}
   deriving (Eq, Ord, Read, Show)
 
@@ -369,10 +369,10 @@ _MapType_keys = (FieldName "keys")
 
 _MapType_values = (FieldName "values")
 
--- | A unique element name
+-- | A symbol which stands for a term, type, or element
 newtype Name = 
   Name {
-    -- | A unique element name
+    -- | A symbol which stands for a term, type, or element
     unName :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -512,7 +512,7 @@ data Term m =
   -- | An injection; an instance of a union type
   TermUnion (Injection m) |
   -- | A variable reference
-  TermVariable Variable |
+  TermVariable Name |
   TermWrap (Nominal (Term m))
   deriving (Eq, Ord, Read, Show)
 
@@ -570,7 +570,7 @@ data Type m =
   TypeStream (Type m) |
   TypeSum [Type m] |
   TypeUnion (RowType m) |
-  TypeVariable VariableType |
+  TypeVariable Name |
   TypeWrap Name
   deriving (Eq, Ord, Read, Show)
 
@@ -609,24 +609,6 @@ _Type_union = (FieldName "union")
 _Type_variable = (FieldName "variable")
 
 _Type_wrap = (FieldName "wrap")
-
--- | A symbol which stands in for a term
-newtype Variable = 
-  Variable {
-    -- | A symbol which stands in for a term
-    unVariable :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_Variable = (Name "hydra/core.Variable")
-
--- | A symbol which stands in for a type
-newtype VariableType = 
-  VariableType {
-    -- | A symbol which stands in for a type
-    unVariableType :: String}
-  deriving (Eq, Ord, Read, Show)
-
-_VariableType = (Name "hydra/core.VariableType")
 
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 data Injection m = 

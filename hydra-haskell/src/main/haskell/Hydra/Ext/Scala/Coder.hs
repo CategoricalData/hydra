@@ -75,7 +75,7 @@ constructModule mod coders pairs = do
 
 encodeFunction :: (Eq m, Ord m, Read m, Show m) => m -> Function m -> Y.Maybe (Term m) -> GraphFlow m Scala.Data
 encodeFunction meta fun arg = case fun of
-    FunctionLambda (Lambda (Variable v) body) -> slambda v <$> encodeTerm body <*> findSdom
+    FunctionLambda (Lambda (Name v) body) -> slambda v <$> encodeTerm body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
       EliminationElement -> pure $ sname "DATA" -- TODO
@@ -104,8 +104,8 @@ encodeFunction meta fun arg = case fun of
               body <- encodeTerm $ applyVar fterm v
               return $ Scala.Case pat Nothing body
             where
-              v = Variable "y"
-          applyVar fterm var@(Variable v) = case stripTerm fterm of
+              v = Name "y"
+          applyVar fterm var@(Name v) = case stripTerm fterm of
             TermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
               then body
               else substituteVariable v1 var body
@@ -186,7 +186,7 @@ encodeTerm term = case stripTerm term of
           arg <- encodeTerm ft
           return [arg]
       return $ sapply lhs args
-    TermVariable (Variable v) -> pure $ sname v
+    TermVariable (Name v) -> pure $ sname v
     _ -> fail $ "unexpected term: " ++ show term
 
 
@@ -225,7 +225,7 @@ encodeType t = case stripType t of
   TypeLambda (LambdaType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
-  TypeVariable (VariableType v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
+  TypeVariable (Name v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypedTerm :: (Eq m, Ord m, Read m, Show m) => Term m -> GraphFlow m Scala.Data

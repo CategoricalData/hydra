@@ -124,21 +124,21 @@ testFreeVariablesInTerm = do
         S.empty
       H.shouldBe
         (freeVariablesInTerm (variable "x" :: Term ()))
-        (S.fromList [Variable "x"])
+        (S.fromList [Name "x"])
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (int32 42)] :: Term ()))
-        (S.fromList [Variable "x"])
+        (S.fromList [Name "x"])
       H.shouldBe
         (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
-        (S.fromList [Variable "x", Variable "y"])
+        (S.fromList [Name "x", Name "y"])
 
---testReplaceFreeVariableType :: H.SpecWith ()
---testReplaceFreeVariableType = do
+--testReplaceFreeName :: H.SpecWith ()
+--testReplaceFreeName = do
 --  H.describe "Test replace free type variables" $ do
 --
 --    H.it "Check that variable types are replaced" $ do
 --      H.shouldBe
---        (replaceFreeVariableType (VariableType "v1") Types.string $ Types.variable "v")
+--        (replaceFreeName (Name "v1") Types.string $ Types.variable "v")
 --        ()
 
 testReplaceTerm :: H.SpecWith ()
@@ -249,7 +249,7 @@ spec = do
   testExpandLambdas
   testFoldOverTerm
   testFreeVariablesInTerm
---  testReplaceFreeVariableType
+--  testReplaceFreeName
   testReplaceTerm
   testRewriteExampleType
   testSimplifyTerm

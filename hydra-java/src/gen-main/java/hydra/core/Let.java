@@ -6,11 +6,11 @@ package hydra.core;
 public class Let<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
   
-  public final java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings;
   
   public final hydra.core.Term<M> environment;
   
-  public Let (java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings, hydra.core.Term<M> environment) {
+  public Let (java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings, hydra.core.Term<M> environment) {
     this.bindings = bindings;
     this.environment = environment;
   }
@@ -29,7 +29,7 @@ public class Let<M> {
     return 2 * bindings.hashCode() + 3 * environment.hashCode();
   }
   
-  public Let withBindings(java.util.Map<hydra.core.Variable, hydra.core.Term<M>> bindings) {
+  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings) {
     return new Let(bindings, environment);
   }
   

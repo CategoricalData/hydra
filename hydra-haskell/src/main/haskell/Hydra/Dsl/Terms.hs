@@ -164,10 +164,10 @@ isUnit :: Eq m => Term m -> Bool
 isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
 
 lambda :: String -> Term m -> Term m
-lambda param body = TermFunction $ FunctionLambda $ Lambda (Variable param) body
+lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 
 -- Construct a 'let' term with a single binding
-letTerm :: Variable -> Term m -> Term m -> Term m
+letTerm :: Name -> Term m -> Term m -> Term m
 letTerm v t1 t2 = TermLet $ Let (M.fromList [(v, t1)]) t2
 
 list :: [Term m] -> Term m
@@ -252,7 +252,7 @@ unwrap :: Name -> Term m
 unwrap = TermFunction . FunctionElimination . EliminationWrap
 
 variable :: String -> Term m
-variable = TermVariable . Variable
+variable = TermVariable . Name
 
 variant :: Name -> FieldName -> Term m -> Term m
 variant n fname term = TermUnion $ Injection n $ Field fname term

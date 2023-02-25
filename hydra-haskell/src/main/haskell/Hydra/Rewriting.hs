@@ -40,7 +40,7 @@ expandLambdas = rewriteTermM (expand []) (pure . id)
 
     pad args arity term = L.foldl lam (L.foldl app term args') $ L.reverse variables
       where
-        variables = L.take (max 0 (arity - L.length args)) ((\i -> Variable $ "v" ++ show i) <$> [1..])
+        variables = L.take (max 0 (arity - L.length args)) ((\i -> Name $ "v" ++ show i) <$> [1..])
         args' = args ++ (TermVariable <$> variables)
 
         app lhs rhs = TermApplication $ Application lhs rhs
@@ -60,17 +60,17 @@ foldOverType order fld b0 typ = case order of
   where
     children = subtypes typ
 
-freeVariablesInScheme :: Show m => TypeScheme m -> S.Set VariableType
+freeVariablesInScheme :: Show m => TypeScheme m -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
-freeVariablesInTerm :: Term m -> S.Set Variable
+freeVariablesInTerm :: Term m -> S.Set Name
 freeVariablesInTerm term = case term of
   TermAnnotated (Annotated term1 _) -> freeVariablesInTerm term1
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
 
-freeVariablesInType :: Type m -> S.Set VariableType
+freeVariablesInType :: Type m -> S.Set Name
 freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
   where
     fld vars typ = case typ of
@@ -84,7 +84,7 @@ moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleName
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
 
-isFreeIn :: Variable -> Term m -> Bool
+isFreeIn :: Name -> Term m -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 -- | Recursively remove term annotations, including within subterms
@@ -103,8 +103,8 @@ removeTypeAnnotations = rewriteType remove id
       TypeAnnotated (Annotated typ' _) -> remove recurse typ'
       _ -> recurse typ
 
-replaceFreeVariableType :: Ord m => VariableType -> Type m -> Type m -> Type m
-replaceFreeVariableType v rep = rewriteType mapExpr id
+replaceFreeName :: Ord m => Name -> Type m -> Type m -> Type m
+replaceFreeName v rep = rewriteType mapExpr id
   where
     mapExpr recurse t = case t of
       TypeLambda (LambdaType v' body) -> if v == v'
@@ -242,7 +242,7 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-substituteVariable :: Ord m => Variable -> Variable -> Term m -> Term m
+substituteVariable :: Ord m => Name -> Name -> Term m -> Term m
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case term of

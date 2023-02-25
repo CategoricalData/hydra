@@ -21,7 +21,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-alphaConvert :: Ord m => Variable -> Term m -> Term m -> Term m
+alphaConvert :: Ord m => Name -> Term m -> Term m -> Term m
 alphaConvert vold tnew = rewriteTerm rewrite id
   where
     rewrite recurse term = case term of
@@ -58,7 +58,7 @@ betaReduceTerm = reduce M.empty
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> CM.mapM reduceField fields)
         TermSet terms -> TermSet <$> fmap S.fromList (CM.mapM reduceb $ S.toList terms)
         TermUnion (Injection n f) -> TermUnion <$> (Injection n <$> reduceField f)
-        TermVariable var@(Variable v) -> case M.lookup var bindings of
+        TermVariable var@(Name v) -> case M.lookup var bindings of
           Nothing -> fail $ "cannot reduce free variable " ++ v
           Just t -> reduceb t
       where
@@ -153,7 +153,7 @@ betaReduceType typ = do
       where
         reduceApp (ApplicationType lhs rhs) = case lhs of
           TypeAnnotated (Annotated t' ann) -> TypeAnnotated (Annotated (reduceApp (ApplicationType t' rhs)) ann)
-          TypeLambda (LambdaType v body) -> fromFlow cx $ betaReduceType $ replaceFreeVariableType v rhs body
+          TypeLambda (LambdaType v body) -> fromFlow cx $ betaReduceType $ replaceFreeName v rhs body
           -- nominal types are transparent
           TypeWrap name -> fromFlow cx $ betaReduceType $ TypeApplication $ ApplicationType t' rhs
             where

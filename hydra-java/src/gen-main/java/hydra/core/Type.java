@@ -534,9 +534,9 @@ public abstract class Type<M> {
   }
   
   public static final class Variable<M> extends hydra.core.Type<M> {
-    public final hydra.core.VariableType value;
+    public final hydra.core.Name value;
     
-    public Variable (hydra.core.VariableType value) {
+    public Variable (hydra.core.Name value) {
       this.value = value;
     }
     

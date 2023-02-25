@@ -82,7 +82,7 @@ decodeIntegerType = matchEnum [
 
 decodeLambdaType :: Show m => Term m -> GraphFlow m (LambdaType m)
 decodeLambdaType = matchRecord $ \m -> LambdaType
-  <$> (VariableType <$> getField m _LambdaType_parameter decodeString)
+  <$> (Name <$> getField m _LambdaType_parameter decodeString)
   <*> getField m _LambdaType_body decodeType
 
 decodeLiteralType :: Show m => Term m -> GraphFlow m LiteralType
@@ -127,7 +127,7 @@ decodeType dat = case dat of
     (_Type_set, fmap TypeSet . decodeType),
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM decodeType types)),
     (_Type_union, fmap TypeUnion . decodeRowType),
-    (_Type_variable, fmap (TypeVariable . VariableType) . decodeString)] dat
+    (_Type_variable, fmap (TypeVariable . Name) . decodeString)] dat
 
 elementAsTypedTerm :: (Show m) => Element m -> GraphFlow m (TypedTerm m)
 elementAsTypedTerm el = TypedTerm <$> decodeType (elementSchema el) <*> pure (elementData el)

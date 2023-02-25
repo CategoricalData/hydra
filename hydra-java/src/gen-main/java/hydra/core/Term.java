@@ -618,9 +618,9 @@ public abstract class Term<M> {
     /**
      * A variable reference
      */
-    public final hydra.core.Variable value;
+    public final hydra.core.Name value;
     
-    public Variable (hydra.core.Variable value) {
+    public Variable (hydra.core.Name value) {
       this.value = value;
     }
     

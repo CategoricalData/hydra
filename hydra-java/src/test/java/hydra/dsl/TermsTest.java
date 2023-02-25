@@ -3,7 +3,7 @@ package hydra;
 import hydra.core.Elimination;
 import hydra.core.Function;
 import hydra.core.Term;
-import hydra.core.Variable;
+import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
 import static hydra.dsl.Core.*;
@@ -89,7 +89,7 @@ public class TermsTest {
 
     assertTrue(cat3 instanceof Term.Function);
     assertTrue(((Term.Function<String>) cat3).value instanceof Function.Lambda);
-    assertEquals(new Variable("s1"), ((Function.Lambda<String>) ((Term.Function<String>) cat3).value).value.parameter);
+    assertEquals(new Name("s1"), ((Function.Lambda<String>) ((Term.Function<String>) cat3).value).value.parameter);
 
     assertTrue(longitude instanceof Term.Function);
     assertTrue(((Term.Function<String>) longitude).value instanceof Function.Elimination);

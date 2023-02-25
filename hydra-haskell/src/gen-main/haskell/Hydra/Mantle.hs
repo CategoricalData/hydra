@@ -185,7 +185,7 @@ _TermVariant_wrap = (Core.FieldName "wrap")
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme m = 
   TypeScheme {
-    typeSchemeVariables :: [Core.VariableType],
+    typeSchemeVariables :: [Core.Name],
     typeSchemeType :: (Core.Type m)}
   deriving (Eq, Ord, Read, Show)
 

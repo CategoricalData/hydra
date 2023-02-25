@@ -124,7 +124,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecif
     defaults = [
       -- Note: this simple lambda is a bit of a cheat. We just have to make sure we can generate at least one term
       --       for any supported function type.
-      FunctionLambda <$> (Lambda (Variable "x") <$> arbitraryTerm cod n')]
+      FunctionLambda <$> (Lambda (Name "x") <$> arbitraryTerm cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     domainSpecific = case dom of
       TypeUnion (RowType n _ sfields) -> [FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM arbitraryCase sfields]

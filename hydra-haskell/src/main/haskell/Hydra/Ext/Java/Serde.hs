@@ -483,16 +483,16 @@ writeLiteral l = case l of
 writeLocalVariableDeclaration :: Java.LocalVariableDeclaration -> CT.Expr
 writeLocalVariableDeclaration (Java.LocalVariableDeclaration mods t decls) = spaceSep $ Y.catMaybes [
   if L.null mods then Nothing else Just $ spaceSep (writeVariableModifier <$> mods),
-  Just $ writeLocalVariableType t,
+  Just $ writeLocalName t,
   Just $ commaSep inlineStyle (writeVariableDeclarator <$> decls)]
 
 writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> CT.Expr
 writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = suffixSemi $ writeLocalVariableDeclaration d
 
-writeLocalVariableType :: Java.LocalVariableType -> CT.Expr
-writeLocalVariableType t = case t of
-  Java.LocalVariableTypeType ut -> writeUnannType ut
-  Java.LocalVariableTypeVar -> cst "var"
+writeLocalName :: Java.LocalName -> CT.Expr
+writeLocalName t = case t of
+  Java.LocalNameType ut -> writeUnannType ut
+  Java.LocalNameVar -> cst "var"
 
 writeMarkerAnnotation :: Java.MarkerAnnotation -> CT.Expr
 writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName tname
@@ -684,7 +684,7 @@ writeReceiverParameter _ = cst "TODO:ReceiverParameter"
 writeReferenceType :: Java.ReferenceType -> CT.Expr
 writeReferenceType rt = case rt of
   Java.ReferenceTypeClassOrInterface cit -> writeClassOrInterfaceType cit
-  Java.ReferenceTypeVariable v -> writeVariableType v
+  Java.ReferenceTypeVariable v -> writeName v
   Java.ReferenceTypeArray at -> writeArrayType at
 
 writeRelationalExpression :: Java.RelationalExpression -> CT.Expr
@@ -839,8 +839,8 @@ writeTypeParameter (Java.TypeParameter mods id bound) = spaceSep $ Y.catMaybes [
 writeTypeParameterModifier :: Java.TypeParameterModifier -> CT.Expr
 writeTypeParameterModifier (Java.TypeParameterModifier ann) = writeAnnotation ann
 
-writeVariableType :: Java.TypeVariable -> CT.Expr
-writeVariableType (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
+writeName :: Java.TypeVariable -> CT.Expr
+writeName (Java.TypeVariable anns id) = spaceSep $ Y.catMaybes [
   if L.null anns then Nothing else Just $ spaceSep (writeAnnotation <$> anns),
   Just $ writeTypeIdentifier id]
 
