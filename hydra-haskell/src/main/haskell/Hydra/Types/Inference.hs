@@ -8,15 +8,7 @@ module Hydra.Types.Inference (
   Constraint,
 ) where
 
-import Hydra.Basics
-import Hydra.Common
-import Hydra.Compute
-import Hydra.Core
-import Hydra.Lexical
-import Hydra.Mantle
-import Hydra.Monads
-import Hydra.Rewriting
-import Hydra.CoreDecoding
+import Hydra.Kernel
 import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Types.Substitution

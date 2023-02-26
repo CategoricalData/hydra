@@ -3,6 +3,7 @@
 module Hydra.Compute where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Mantle as Mantle
 import Data.List
 import Data.Map
@@ -116,20 +117,32 @@ _CoderDirection_decode = (Core.FieldName "decode")
 -- | An environment containing a graph together with primitive functions and other necessary components for evaluation
 data Context m = 
   Context {
+    -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
+    contextEnvironment :: (Map Core.Name (Maybe (Core.Term m))),
+    -- | The body of the term which generated this context
+    contextBody :: (Core.Term m),
     -- | The graph itself
-    contextGraph :: (Mantle.Graph m),
-    -- | All supported primitive functions, by name
-    contextFunctions :: (Map Core.Name (Primitive m)),
+    contextGraph :: (Graph.Graph m),
+    -- | All supported primitive constants and functions, by name
+    contextPrimitives :: (Map Core.Name (Primitive m)),
     -- | The annotation class which is supported in this context
-    contextAnnotations :: (AnnotationClass m)}
+    contextAnnotations :: (AnnotationClass m),
+    -- | The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
+    contextSchema :: (Maybe (Context m))}
 
 _Context = (Core.Name "hydra/compute.Context")
 
+_Context_environment = (Core.FieldName "environment")
+
+_Context_body = (Core.FieldName "body")
+
 _Context_graph = (Core.FieldName "graph")
 
-_Context_functions = (Core.FieldName "functions")
+_Context_primitives = (Core.FieldName "primitives")
 
 _Context_annotations = (Core.FieldName "annotations")
+
+_Context_schema = (Core.FieldName "schema")
 
 -- | A variant of the State monad with built-in logging and error handling
 newtype Flow s a = 

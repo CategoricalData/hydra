@@ -6,15 +6,17 @@ import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Core
+import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 
 
 hydraComputeModule :: Module Kv
-hydraComputeModule = Module ns elements [hydraMantleModule] $
+hydraComputeModule = Module ns elements [hydraGraphModule, hydraMantleModule] $
     Just "Abstractions for evaluation and transformations"
   where
     ns = Namespace "hydra/compute"
     core = nsref $ moduleNamespace hydraCoreModule
+    graph = nsref $ moduleNamespace hydraGraphModule
     mantle = nsref $ moduleNamespace hydraMantleModule
     compute = nsref ns
 
@@ -80,15 +82,24 @@ hydraComputeModule = Module ns elements [hydraMantleModule] $
       def "Context" $
         doc "An environment containing a graph together with primitive functions and other necessary components for evaluation" $
         lambda "m" $ record [
+          "environment">:
+            doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
+            Types.map (core "Name") (optional $ core "Term" @@ "m"),
+          "body">:
+            doc "The body of the term which generated this context" $
+            core "Term" @@ "m",
           "graph">:
             doc "The graph itself" $
-            mantle "Graph" @@ "m",
-          "functions">:
-            doc "All supported primitive functions, by name" $
+            graph "Graph" @@ "m",
+          "primitives">:
+            doc "All supported primitive constants and functions, by name" $
             Types.map (core "Name") (compute "Primitive" @@ "m"),
           "annotations">:
             doc "The annotation class which is supported in this context" $
-            compute "AnnotationClass" @@ "m"],
+            compute "AnnotationClass" @@ "m",
+          "schema">:
+            doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
+            optional $ compute "Context" @@ "m"],
 
       def "Flow" $
         doc "A variant of the State monad with built-in logging and error handling" $

@@ -3,10 +3,10 @@
 module Hydra.Rewriting where
 
 import Hydra.Core
+import Hydra.Graph
 import Hydra.Monads
 import Hydra.Module
 import Hydra.Lexical
-import Hydra.Compute
 import Hydra.Mantle
 import Hydra.Util.Sorting
 

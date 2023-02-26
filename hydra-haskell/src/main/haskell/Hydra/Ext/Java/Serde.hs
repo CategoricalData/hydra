@@ -489,10 +489,10 @@ writeLocalVariableDeclaration (Java.LocalVariableDeclaration mods t decls) = spa
 writeLocalVariableDeclarationStatement :: Java.LocalVariableDeclarationStatement -> CT.Expr
 writeLocalVariableDeclarationStatement (Java.LocalVariableDeclarationStatement d) = suffixSemi $ writeLocalVariableDeclaration d
 
-writeLocalName :: Java.LocalName -> CT.Expr
+writeLocalName :: Java.LocalVariableType -> CT.Expr
 writeLocalName t = case t of
-  Java.LocalNameType ut -> writeUnannType ut
-  Java.LocalNameVar -> cst "var"
+  Java.LocalVariableTypeType ut -> writeUnannType ut
+  Java.LocalVariableTypeVar -> cst "var"
 
 writeMarkerAnnotation :: Java.MarkerAnnotation -> CT.Expr
 writeMarkerAnnotation (Java.MarkerAnnotation tname) = prefixAt $ writeTypeName tname

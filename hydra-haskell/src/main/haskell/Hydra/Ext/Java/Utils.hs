@@ -473,7 +473,7 @@ variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVar
     Java.LocalVariableDeclarationStatement $
     Java.LocalVariableDeclaration [] t [vdec]
   where
-    t = Java.LocalNameType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
+    t = Java.LocalVariableTypeType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
       nameToJavaTypeIdentifier aliases False elName
     vdec = javaVariableDeclarator id (Just init)
       where

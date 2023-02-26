@@ -4,7 +4,7 @@ module Hydra.Common where
 
 import Hydra.Core
 import Hydra.Compute
-import Hydra.Mantle
+import Hydra.Graph
 import Hydra.Module
 import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting

@@ -12,6 +12,7 @@ module Hydra.Kernel (
 --  module Hydra.CoreDecoding,
 --  module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
+  module Hydra.Graph,
   module Hydra.Grammar,
   module Hydra.Lexical,
   module Hydra.Mantle,
@@ -35,6 +36,7 @@ import Hydra.Core
 --import Hydra.CoreDecoding
 --import Hydra.CoreEncoding
 import Hydra.CoreLanguage
+import Hydra.Graph
 import Hydra.Grammar
 import Hydra.Lexical
 import Hydra.Mantle
