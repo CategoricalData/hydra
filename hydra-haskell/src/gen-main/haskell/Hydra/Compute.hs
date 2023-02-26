@@ -245,7 +245,7 @@ data Primitive m =
     -- | The type signature of the primitive function
     primitiveType :: (Core.Type m),
     -- | A concrete implementation of the primitive function
-    primitiveImplementation :: ([Core.Term m] -> Flow (Context m) (Core.Term m))}
+    primitiveImplementation :: ([Core.Term m] -> Flow () (Core.Term m))}
 
 _Primitive = (Core.Name "hydra/compute.Primitive")
 
@@ -259,7 +259,7 @@ _Primitive_implementation = (Core.FieldName "implementation")
 data TermCoder m a = 
   TermCoder {
     termCoderType :: (Core.Type m),
-    termCoderCoder :: (Coder (Context m) (Context m) (Core.Term m) a)}
+    termCoderCoder :: (Coder () () (Core.Term m) a)}
 
 _TermCoder = (Core.Name "hydra/compute.TermCoder")
 
