@@ -22,22 +22,6 @@ _Comparison_equalTo = (Core.FieldName "equalTo")
 
 _Comparison_greaterThan = (Core.FieldName "greaterThan")
 
--- | A graph element, having a name, data term (value), and schema term (type)
-data Element m = 
-  Element {
-    elementName :: Core.Name,
-    elementSchema :: (Core.Term m),
-    elementData :: (Core.Term m)}
-  deriving (Eq, Ord, Read, Show)
-
-_Element = (Core.Name "hydra/mantle.Element")
-
-_Element_name = (Core.FieldName "name")
-
-_Element_schema = (Core.FieldName "schema")
-
-_Element_data = (Core.FieldName "data")
-
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
   EliminationVariantElement  |
@@ -76,21 +60,6 @@ _FunctionVariant_elimination = (Core.FieldName "elimination")
 _FunctionVariant_lambda = (Core.FieldName "lambda")
 
 _FunctionVariant_primitive = (Core.FieldName "primitive")
-
--- | A graph, or set of named terms, together with its schema graph
-data Graph m = 
-  Graph {
-    -- | All of the elements in the graph
-    graphElements :: (Map Core.Name (Element m)),
-    -- | The schema graph to this graph. If omitted, the graph is its own schema graph.
-    graphSchema :: (Maybe (Graph m))}
-  deriving (Eq, Ord, Read, Show)
-
-_Graph = (Core.Name "hydra/mantle.Graph")
-
-_Graph_elements = (Core.FieldName "elements")
-
-_Graph_schema = (Core.FieldName "schema")
 
 -- | The identifier of a literal constructor
 data LiteralVariant = 

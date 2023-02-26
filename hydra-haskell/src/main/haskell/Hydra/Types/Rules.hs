@@ -2,16 +2,8 @@
 
 module Hydra.Types.Rules where
 
-import Hydra.Basics
-import Hydra.Common
-import Hydra.Compute
-import Hydra.Core
-import Hydra.Lexical
-import Hydra.Mantle
-import Hydra.Monads
-import Hydra.Rewriting
+import Hydra.Kernel
 import Hydra.CoreDecoding
-import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Types.Substitution
 import Hydra.Types.Unification

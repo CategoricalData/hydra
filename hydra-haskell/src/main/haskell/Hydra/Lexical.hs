@@ -7,9 +7,8 @@ module Hydra.Lexical (
 
 import Hydra.Common
 import Hydra.Core
-import Hydra.Module
+import Hydra.Graph
 import Hydra.Compute
-import Hydra.Mantle
 import Hydra.Monads
 
 import qualified Data.List as L
@@ -32,7 +31,7 @@ dereferenceElement en = do
       Just e -> pure $ elementData e
 
 lookupPrimitive :: Context m -> Name -> Maybe (Primitive m)
-lookupPrimitive cx fn = M.lookup fn $ contextFunctions cx
+lookupPrimitive cx fn = M.lookup fn $ contextPrimitives cx
 
 primitiveFunctionArity :: Primitive m -> Int
 primitiveFunctionArity = typeArity . primitiveType

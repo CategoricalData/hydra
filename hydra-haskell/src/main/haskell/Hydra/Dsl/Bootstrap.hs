@@ -5,6 +5,7 @@ module Hydra.Dsl.Bootstrap where
 import Hydra.Kernel
 import Hydra.Kv
 import Hydra.CoreEncoding
+import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
@@ -32,9 +33,12 @@ bootstrapContext :: Context Kv
 bootstrapContext = cx
   where
     cx = Context {
+      contextEnvironment = M.empty,
+      contextBody = Terms.list [], -- Note: the bootstrap body is arbitrary 
       contextGraph = Graph M.empty Nothing,
-      contextFunctions = M.empty,
-      contextAnnotations = kvAnnotationClass}
+      contextPrimitives = M.empty,
+      contextAnnotations = kvAnnotationClass,
+      contextSchema = Nothing}
 
 nsref :: Namespace -> String -> Type m
 nsref ns = Types.wrap . qualify ns . Name

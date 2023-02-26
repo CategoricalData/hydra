@@ -26,13 +26,6 @@ hydraMantleModule = Module ns elements [] $
           "equalTo",
           "greaterThan"],
 
-      def "Element" $
-        doc "A graph element, having a name, data term (value), and schema term (type)" $
-        lambda "m" $ record [
-          "name">: core "Name",
-          "schema">: core "Term" @@ "m",
-          "data">: core "Term" @@ "m"],
-
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
         enum [
@@ -49,16 +42,6 @@ hydraMantleModule = Module ns elements [] $
           "elimination",
           "lambda",
           "primitive"],
-
-      def "Graph" $
-        doc ("A graph, or set of named terms, together with its schema graph") $
-        lambda "m" $ record [
-          "elements">:
-            doc "All of the elements in the graph" $
-            Types.map (core "Name") (mantle "Element" @@ "m"),
-          "schema">:
-            doc "The schema graph to this graph. If omitted, the graph is its own schema graph." $
-            optional $ mantle "Graph" @@ "m"],
 
       def "LiteralVariant" $
         doc "The identifier of a literal constructor" $

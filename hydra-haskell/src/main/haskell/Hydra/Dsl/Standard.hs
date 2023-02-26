@@ -44,7 +44,7 @@ boundedString min max = bounded min max Types.string
 coreContext :: Context Kv
 coreContext = bootstrapContext {
   contextGraph = hydraCore,
-  contextFunctions = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives}
+  contextPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives}
 
 doc :: String -> Type Kv -> Type Kv
 doc s = setTypeDescription coreContext (Just s)

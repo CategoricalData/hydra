@@ -41,6 +41,7 @@ import Hydra.Sources.Ext.Xml.Schema
 import Hydra.Sources.Ext.Yaml.Model
 import Hydra.Sources.Grammar
 import Hydra.Sources.Libraries
+import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Sources.Module
 import Hydra.Sources.Workflow
@@ -85,6 +86,7 @@ coreModules = [
   haskellAstModule,
   hydraCoreModule,
   hydraComputeModule,
+  hydraGraphModule,
   hydraMantleModule,
   hydraModuleModule,
   hydraGrammarModule,

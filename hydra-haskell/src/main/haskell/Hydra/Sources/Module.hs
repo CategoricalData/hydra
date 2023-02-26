@@ -5,15 +5,15 @@ module Hydra.Sources.Module where
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Mantle
+import Hydra.Sources.Graph
 
 
 hydraModuleModule :: Module Kv
-hydraModuleModule = Module ns elements [hydraMantleModule] $
+hydraModuleModule = Module ns elements [hydraGraphModule] $
     Just "A model for Hydra namespaces and modules (collections of elements in the same namespace)"
   where
     ns = Namespace "hydra/module"
-    mantle = nsref $ moduleNamespace hydraMantleModule
+    graph = nsref $ moduleNamespace hydraGraphModule
     mod = nsref ns
     def = datatype ns
 
@@ -29,7 +29,7 @@ hydraModuleModule = Module ns elements [hydraMantleModule] $
             mod "Namespace",
           "elements">:
             doc "The elements defined in this module" $
-            list $ mantle "Element" @@ "m",
+            list $ graph "Element" @@ "m",
           "dependencies">:
             doc "Any additional modules this one has a direct dependency upon" $
             list $ mod "Module" @@ "m",

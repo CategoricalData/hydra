@@ -3,7 +3,7 @@
 module Hydra.Module where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Mantle as Mantle
+import qualified Hydra.Graph as Graph
 import Data.List
 import Data.Map
 import Data.Set
@@ -21,7 +21,7 @@ data Module m =
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
     -- | The elements defined in this module
-    moduleElements :: [Mantle.Element m],
+    moduleElements :: [Graph.Element m],
     -- | Any additional modules this one has a direct dependency upon
     moduleDependencies :: [Module m],
     -- | An optional human-readable description of the module

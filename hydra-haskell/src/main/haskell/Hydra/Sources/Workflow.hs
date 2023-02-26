@@ -8,18 +8,18 @@ import Hydra.Dsl.Standard
 import Hydra.Sources.Module
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
-import Hydra.Sources.Mantle
+import Hydra.Sources.Graph
 
 
 hydraWorkflowModule :: Module Kv
-hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraMantleModule] $
+hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule, hydraGraphModule] $
     Just "A model for Hydra transformation workflows"
   where
     ns = Namespace "hydra/workflow"
     mod = nsref $ moduleNamespace hydraModuleModule
     compute = nsref $ moduleNamespace hydraComputeModule
     core = nsref $ moduleNamespace hydraCoreModule
-    mantle = nsref $ moduleNamespace hydraMantleModule
+    graph = nsref $ moduleNamespace hydraGraphModule
     wf = nsref ns
     def = datatype ns
 
@@ -39,7 +39,7 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
         lambda "a" $ record [
           "encoder">:
             doc "An encoder for terms to a list of output objects" $
-            core "Term" @@ compute "Kv" --> mantle "Graph" @@ compute "Kv" --> compute "Flow" @@ (compute "Context" @@ compute "Kv") @@ list "a",
+            core "Term" @@ compute "Kv" --> graph "Graph" @@ compute "Kv" --> compute "Flow" @@ (compute "Context" @@ compute "Kv") @@ list "a",
           "serializer">:
             doc "A function which serializes a list of output objects to a string representation" $
             list "a" --> string,
