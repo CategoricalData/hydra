@@ -76,7 +76,7 @@ betaReduceTerm = reduce M.empty
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
             if primitiveFunctionArity prim == 0
-              then primitiveImplementation prim []
+              then withState () $ primitiveImplementation prim []
               else done
 
         -- Assumes that the function is closed and fully reduced. The arguments may not be.
@@ -122,9 +122,9 @@ betaReduceTerm = reduce M.empty
                     if countPrimitiveInvocations
                       then nextCount ("count_" ++ unName name)
                       else pure 0
-                    (mapM (reduce bindings) $ L.take arity rargs)
-                      >>= primitiveImplementation prim
-                      >>= reduce bindings
+                    pargs <- mapM (reduce bindings) $ L.take arity rargs
+                    result <- withState () $ primitiveImplementation prim pargs
+                    reduce bindings result
                       >>= reduceApplication bindings (L.drop arity rargs)
                   else unwind args
                 where
@@ -134,8 +134,6 @@ betaReduceTerm = reduce M.empty
               >>= reduceApplication bindings (L.tail args)
 
             -- TODO: FunctionProjection
-
-            _ -> fail $ "unsupported function variant: " ++ show (functionVariant f)
 
           _ -> fail $ "tried to apply a non-function: " ++ show (termVariant f)
 

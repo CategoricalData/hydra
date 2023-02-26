@@ -168,13 +168,13 @@ hydraComputeModule = Module ns elements [hydraGraphModule, hydraMantleModule] $
             core "Type" @@ "m",
           "implementation">:
             doc "A concrete implementation of the primitive function" $
-            list (core "Term" @@ "m") --> compute "Flow" @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m")],
+            list (core "Term" @@ "m") --> compute "Flow" @@ Types.product [] @@ (core "Term" @@ "m")],
 
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         lambda "m" $ lambda "a" $ record [
           "type">: core "Type" @@ "m",
-          "coder">: compute "Coder" @@ (compute "Context" @@ "m") @@ (compute "Context" @@ "m") @@ (core "Term" @@ "m") @@ "a"],
+          "coder">: compute "Coder" @@ Types.product [] @@ Types.product [] @@ (core "Term" @@ "m") @@ "a"],
 
       def "Trace" $
         doc "A container for logging and error information" $

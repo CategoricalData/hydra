@@ -122,7 +122,9 @@ decodeType dat = case dat of
     (_Type_map, fmap TypeMap . decodeMapType),
     (_Type_wrap, fmap TypeWrap . decodeElement),
     (_Type_optional, fmap TypeOptional . decodeType),
-    (_Type_product, \(TermList types) -> TypeProduct <$> (CM.mapM decodeType types)),
+    (_Type_product, \l -> do
+      types <- Terms.expectList pure l
+      TypeProduct <$> (CM.mapM decodeType types)),
     (_Type_record, fmap TypeRecord . decodeRowType),
     (_Type_set, fmap TypeSet . decodeType),
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM decodeType types)),
