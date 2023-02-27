@@ -6,7 +6,7 @@ import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.TestData
 import Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Test.Hspec as H
@@ -264,7 +264,7 @@ checkWrappedTerms = do
     H.it "Check nominal eliminations" $ do
       expectMonotype
         (unwrap $ Name "StringTypeAlias")
-        (Types.function stringAliasType (Standard.doc "An alias for the string type" Types.string))
+        (Types.function stringAliasType (Ann.doc "An alias for the string type" Types.string))
       expectMonotype
         (apply (unwrap $ Name "StringTypeAlias") (wrap (Name "StringTypeAlias") $ string "foo"))
         Types.string

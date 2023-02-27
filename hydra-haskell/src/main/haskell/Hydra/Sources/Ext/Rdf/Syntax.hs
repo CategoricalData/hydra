@@ -2,7 +2,7 @@ module Hydra.Sources.Ext.Rdf.Syntax where
 
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 
 
 rdfSyntaxModule :: Module Kv

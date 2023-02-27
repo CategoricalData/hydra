@@ -1,7 +1,7 @@
 -- | A DSL which is used as a basis for some of the other DSLs
 
-module Hydra.Dsl.Standard (
-  module Hydra.Dsl.Standard,
+module Hydra.Dsl.Annotations (
+  module Hydra.Dsl.Annotations,
   module Hydra.Dsl.Bootstrap
 ) where
 

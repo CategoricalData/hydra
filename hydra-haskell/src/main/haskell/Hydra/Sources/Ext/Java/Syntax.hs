@@ -2,7 +2,7 @@ module Hydra.Sources.Ext.Java.Syntax where
 
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 
 
 javaSyntaxModule :: Module Kv

@@ -5,7 +5,7 @@ module Hydra.Sources.Ext.Shex.Syntax where
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
 import Hydra.Util.GrammarToModule
-import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Annotations as Ann
 
 
 base_ = terminal "BASE"

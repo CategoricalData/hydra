@@ -3,7 +3,7 @@
 module Hydra.Sources.Ext.Shacl.Model where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Ext.Rdf.Syntax
 import Hydra.Dsl.Types as Types
 

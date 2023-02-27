@@ -7,7 +7,7 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard as Standard
+import Hydra.Dsl.Annotations as Ann
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
@@ -54,7 +54,7 @@ testNamespace = Namespace "testGraph"
 
 testSchemaGraph :: Graph Kv
 testSchemaGraph = standardGraph [
-    def (Name "StringTypeAlias") $ Standard.doc "An alias for the string type" Types.string,
+    def (Name "StringTypeAlias") $ Ann.doc "An alias for the string type" Types.string,
     def testTypeFoobarValueName testTypeFoobarValue,
     def testTypeComparisonName testTypeComparison,
     def latLonName latLonType,

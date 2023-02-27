@@ -3,7 +3,7 @@
 module Hydra.Sources.Compute where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Core
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle

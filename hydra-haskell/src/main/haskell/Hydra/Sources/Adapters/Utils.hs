@@ -5,7 +5,7 @@ import Hydra.Sources.Basics
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Annotations as Ann
 
 import Prelude hiding ((++))
 
