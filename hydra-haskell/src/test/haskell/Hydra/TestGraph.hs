@@ -6,8 +6,8 @@ module Hydra.TestGraph (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
-import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations as Ann
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map  as M
 import qualified Data.Set  as S
