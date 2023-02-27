@@ -3,7 +3,7 @@
 module Hydra.Sources.Workflow where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Module
 import Hydra.Sources.Compute
 import Hydra.Sources.Core

@@ -3,7 +3,7 @@
 module Hydra.Sources.Phantoms where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Core
 import Hydra.Sources.Compute
 import Hydra.Dsl.Types as Types

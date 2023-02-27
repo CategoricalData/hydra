@@ -3,7 +3,7 @@
 module Hydra.Sources.Grammar where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Dsl.Types as Types
 
 

@@ -3,7 +3,7 @@
 module Hydra.Sources.Ext.Avro.Schema where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Ext.Json.Model
 import Hydra.Dsl.Types as Types
 

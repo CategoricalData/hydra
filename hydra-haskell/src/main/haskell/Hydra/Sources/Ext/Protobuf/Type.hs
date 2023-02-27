@@ -3,7 +3,7 @@
 module Hydra.Sources.Ext.Protobuf.Type where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Ext.Protobuf.Any
 import Hydra.Sources.Ext.Protobuf.SourceContext
 import Hydra.Dsl.Types as Types

@@ -1,7 +1,7 @@
 module Hydra.Sources.Ext.Tinkerpop.Typed where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
 

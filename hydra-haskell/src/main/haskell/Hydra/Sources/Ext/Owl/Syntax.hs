@@ -2,7 +2,7 @@ module Hydra.Sources.Ext.Owl.Syntax where
 
 import Hydra.Kernel
 
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Ext.Rdf.Syntax
 import Hydra.Sources.Ext.Xml.Schema
 import Hydra.Dsl.Types as Types

@@ -8,7 +8,7 @@ module Hydra.Lib.Io (
 
 import Hydra.Kernel
 import Hydra.Ext.Json.Coder
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Ext.Json.Serde
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Dsl.Types as Types

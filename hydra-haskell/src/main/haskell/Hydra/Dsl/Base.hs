@@ -3,12 +3,12 @@
 module Hydra.Dsl.Base (
   module Hydra.Dsl.Base,
   module Hydra.Dsl.PhantomLiterals,
-  Standard.coreContext,
+  Ann.coreContext,
 ) where
 
 import Hydra.Kernel
 import Hydra.Dsl.PhantomLiterals
-import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Strings as Strings
@@ -70,7 +70,7 @@ delta :: Datum (Reference a -> a)
 delta = Datum Terms.delta
 
 doc :: String -> Datum a -> Datum a
-doc s (Datum term) = Datum $ setTermDescription Standard.coreContext (Just s) term
+doc s (Datum term) = Datum $ setTermDescription Ann.coreContext (Just s) term
 
 element :: Definition a -> Datum (Reference a)
 element (Definition name _) = Datum $ Terms.element name
@@ -142,7 +142,7 @@ set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
 
 typed :: Type Kv -> Datum a -> Datum a
-typed t (Datum term) = Datum $ setTermType Standard.coreContext (Just t) term
+typed t (Datum term) = Datum $ setTermType Ann.coreContext (Just t) term
 
 union :: Name -> FieldName -> Datum a -> Datum b
 union name fname (Datum term) = Datum $ Terms.inject name (Field fname term)

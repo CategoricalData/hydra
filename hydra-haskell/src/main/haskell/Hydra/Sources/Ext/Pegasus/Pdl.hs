@@ -1,7 +1,7 @@
 module Hydra.Sources.Ext.Pegasus.Pdl where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Ext.Json.Model
 import Hydra.Dsl.Types as Types
 
