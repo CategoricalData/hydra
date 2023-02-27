@@ -1,13 +1,12 @@
 module Hydra.Sources.Ext.Owl.Syntax where
 
-import Hydra.Sources.Core
-
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Terms as Terms
+
 import Hydra.Dsl.Standard
 import Hydra.Sources.Ext.Rdf.Syntax
 import Hydra.Sources.Ext.Xml.Schema
+import Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Terms as Terms
 
 
 key_iri :: String

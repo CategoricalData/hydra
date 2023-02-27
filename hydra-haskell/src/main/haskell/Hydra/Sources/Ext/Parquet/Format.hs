@@ -3,9 +3,9 @@
 module Hydra.Sources.Ext.Parquet.Format where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
+import Hydra.Dsl.Types as Types
+
 
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 parquetFormatModule :: Module Kv

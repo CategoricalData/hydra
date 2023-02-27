@@ -1,4 +1,4 @@
-module Hydra.Ext.Bytestrings where
+module Hydra.Util.Bytestrings where
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Data.Text.Lazy.Encoding as DTE

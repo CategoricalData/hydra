@@ -1,9 +1,8 @@
 module Hydra.Sources.Util.Codetree.Ast where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
+import Hydra.Dsl.Types as Types
 
 
 codetreeAstModule :: Module Kv

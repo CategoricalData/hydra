@@ -3,9 +3,8 @@
 module Hydra.Sources.Ext.Protobuf.Any where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
+import Hydra.Dsl.Types as Types
 
 
 pbAnyNs = Namespace "hydra/ext/protobuf/any"

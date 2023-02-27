@@ -1,8 +1,8 @@
 module Hydra.Dsl.Lib.Math where
 
 import Hydra.Phantoms
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Terms as Terms
 
 
 add :: Datum (Int -> Int -> Int)

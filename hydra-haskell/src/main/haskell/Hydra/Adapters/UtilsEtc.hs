@@ -11,12 +11,9 @@ import Hydra.Core
 import Hydra.Basics
 import Hydra.Module
 import Hydra.Monads
-import Hydra.Compute
 import Hydra.Adapters.Utils
-import qualified Hydra.Lib.Strings as Strings
-import Hydra.Util.Formatting
-import Hydra.Rewriting
 import Hydra.Kv
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L

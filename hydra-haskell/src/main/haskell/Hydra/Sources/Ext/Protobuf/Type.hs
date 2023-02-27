@@ -3,11 +3,10 @@
 module Hydra.Sources.Ext.Protobuf.Type where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
 import Hydra.Sources.Ext.Protobuf.Any
 import Hydra.Sources.Ext.Protobuf.SourceContext
+import Hydra.Dsl.Types as Types
 
 
 pbTypeNs = Namespace "hydra/ext/protobuf/type"

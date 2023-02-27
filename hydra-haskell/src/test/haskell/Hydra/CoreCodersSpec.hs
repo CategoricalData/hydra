@@ -1,10 +1,10 @@
 module Hydra.CoreCodersSpec where
 
 import Hydra.Kernel
-import Hydra.Dsl.Terms as Terms
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Kv
+import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData

@@ -5,14 +5,14 @@ import Hydra.CoreDecoding
 import Hydra.Adapters.Coders
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
-import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
 import Hydra.Types.Inference
+import qualified Hydra.Ext.Haskell.Ast as H
+import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

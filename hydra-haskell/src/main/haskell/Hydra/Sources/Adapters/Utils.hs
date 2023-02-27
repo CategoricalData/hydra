@@ -1,11 +1,11 @@
 module Hydra.Sources.Adapters.Utils where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Basics
-import qualified Hydra.Dsl.Standard as Standard
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Dsl.Standard as Standard
 
 import Prelude hiding ((++))
 

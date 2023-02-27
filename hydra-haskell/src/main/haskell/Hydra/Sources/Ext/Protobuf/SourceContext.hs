@@ -5,7 +5,6 @@ module Hydra.Sources.Ext.Protobuf.SourceContext where
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
 
 
 pbSourceContextNs = Namespace "hydra/ext/protobuf/sourceContext"

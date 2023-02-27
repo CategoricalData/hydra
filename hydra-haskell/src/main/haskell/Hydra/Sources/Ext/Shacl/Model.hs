@@ -2,12 +2,10 @@
 
 module Hydra.Sources.Ext.Shacl.Model where
 
-import Hydra.Sources.Core
-
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Ext.Rdf.Syntax
+import Hydra.Dsl.Types as Types
 
 
 shaclModelModule :: Module Kv

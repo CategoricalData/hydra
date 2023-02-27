@@ -1,11 +1,10 @@
 module Hydra.Ext.Avro.SchemaJson where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
 import Hydra.Ext.Json.Serde
+import Hydra.Ext.Json.Eliminate
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
-import Hydra.Ext.Json.Eliminate
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

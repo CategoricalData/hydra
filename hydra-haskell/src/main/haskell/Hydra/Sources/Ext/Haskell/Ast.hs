@@ -1,10 +1,8 @@
 module Hydra.Sources.Ext.Haskell.Ast where
 
-import Hydra.Sources.Core
-
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
+import Hydra.Dsl.Types as Types
 
 
 haskellAstModule :: Module Kv

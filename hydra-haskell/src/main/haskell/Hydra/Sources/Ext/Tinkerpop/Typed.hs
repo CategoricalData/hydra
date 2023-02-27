@@ -1,10 +1,9 @@
 module Hydra.Sources.Ext.Tinkerpop.Typed where
 
-import Hydra.Sources.Core
-
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
+import Hydra.Sources.Core
+import Hydra.Dsl.Types as Types
 
 
 tinkerpopTypedModule :: Module Kv

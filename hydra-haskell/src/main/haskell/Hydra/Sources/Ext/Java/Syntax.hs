@@ -1,7 +1,5 @@
 module Hydra.Sources.Ext.Java.Syntax where
 
-import Hydra.Sources.Core
-
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard

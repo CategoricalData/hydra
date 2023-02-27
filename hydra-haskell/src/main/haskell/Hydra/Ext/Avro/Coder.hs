@@ -1,27 +1,15 @@
 module Hydra.Ext.Avro.Coder (avroHydraAdapter) where
 
 import Hydra.Kernel
-import Hydra.Adapters.Coders
+import Hydra.Ext.Json.Eliminate
+import Hydra.CoreEncoding
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Util.Codetree.Script
-import Hydra.Adapters.UtilsEtc
 import qualified Hydra.Ext.Avro.Schema as Avro
 import qualified Hydra.Ext.Json.Model as Json
-import Hydra.Ext.Json.Eliminate
-import Hydra.CoreEncoding
+
 import qualified Text.Read as TR
-import Hydra.Ext.Avro.Language
-import Hydra.Kernel
-import Hydra.CoreLanguage
-import Hydra.Ext.Avro.Language
-import Hydra.Adapters.Term
-
-import Hydra.CoreDecoding
-import Hydra.Ext.Avro.SchemaJson
-import Hydra.Common
-
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M

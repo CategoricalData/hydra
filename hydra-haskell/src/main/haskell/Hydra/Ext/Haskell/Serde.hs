@@ -7,9 +7,9 @@
 module Hydra.Ext.Haskell.Serde where
 
 import Hydra.Util.Codetree.Script
+import Hydra.Ext.Haskell.Operators
 import qualified Hydra.Util.Codetree.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
-import Hydra.Ext.Haskell.Operators
 
 import qualified Data.Char as C
 import qualified Data.List as L

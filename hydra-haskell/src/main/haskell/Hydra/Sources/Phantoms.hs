@@ -3,10 +3,10 @@
 module Hydra.Sources.Phantoms where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 import Hydra.Sources.Compute
+import Hydra.Dsl.Types as Types
 
 
 hydraPhantomsModule :: Module Kv

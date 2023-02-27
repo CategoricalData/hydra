@@ -8,10 +8,10 @@ module Hydra.Dsl.Standard (
 import Hydra.Kernel
 import Hydra.Kv
 import Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
 import Hydra.Sources.Libraries
 import Hydra.Sources.Core
 import Hydra.Dsl.Bootstrap
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
 import qualified Data.Maybe as Y

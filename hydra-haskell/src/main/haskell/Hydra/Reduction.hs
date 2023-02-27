@@ -7,12 +7,8 @@ import Hydra.Monads
 import Hydra.Rewriting
 import Hydra.Basics
 import Hydra.Lexical
-import Hydra.Lexical
 import Hydra.CoreDecoding
 import Hydra.Kv
-
--- TODO: temp
-import Hydra.Sources.Libraries
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

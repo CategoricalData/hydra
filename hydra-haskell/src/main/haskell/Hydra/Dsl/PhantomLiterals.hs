@@ -3,8 +3,8 @@
 module Hydra.Dsl.PhantomLiterals where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Terms as Terms
 import Data.Int
+import qualified Hydra.Dsl.Terms as Terms
 
 
 -- Note: does not yet properly capture arbitrary-precision floating-point numbers,

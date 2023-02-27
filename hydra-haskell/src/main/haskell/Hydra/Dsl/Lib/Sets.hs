@@ -1,8 +1,8 @@
 module Hydra.Dsl.Lib.Sets where
 
 import Hydra.Phantoms
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Terms as Terms
 
 import Data.Set
 

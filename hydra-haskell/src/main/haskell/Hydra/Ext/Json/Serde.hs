@@ -2,8 +2,8 @@ module Hydra.Ext.Json.Serde where
 
 import Hydra.Kernel
 import Hydra.Ext.Json.Coder
+import Hydra.Util.Bytestrings
 import qualified Hydra.Ext.Json.Model as Json
-import Hydra.Ext.Bytestrings
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Control.Monad as CM

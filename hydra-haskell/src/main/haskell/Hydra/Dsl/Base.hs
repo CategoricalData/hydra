@@ -13,8 +13,6 @@ import Hydra.Dsl.PhantomLiterals
 import qualified Hydra.Dsl.Standard as Standard
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Sources.Core
-import Hydra.Types.Inference
 import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import Prelude hiding ((++))
