@@ -7,7 +7,16 @@ module Hydra.Adapters.Term (
   termAdapter,
 ) where
 
-import Hydra.Kernel
+import Hydra.Adapters.Utils
+import Hydra.Basics
+import Hydra.Common
+import Hydra.Compute
+import Hydra.Core
+import Hydra.CoreDecoding
+import Hydra.Graph
+import Hydra.Lexical
+import Hydra.Mantle
+import Hydra.Monads
 import Hydra.Reduction
 import Hydra.Adapters.Literal
 import Hydra.Adapters.UtilsEtc

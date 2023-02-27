@@ -4,7 +4,17 @@
 
 module Hydra.Adapters.Coders where
 
-import Hydra.Kernel
+import Hydra.Adapters.Term
+import Hydra.Adapters.Utils
+import Hydra.Compute
+import Hydra.Core
+import Hydra.CoreDecoding
+import Hydra.CoreLanguage
+import Hydra.Graph
+import Hydra.Lexical
+import Hydra.Mantle
+import Hydra.Module
+import Hydra.Monads
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
 

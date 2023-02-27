@@ -3,6 +3,9 @@
 --   The adapter framework is logically part of the kernel, but is excluded for now due to circular dependencies.
 
 module Hydra.Kernel (
+  module Hydra.Adapters.Coders,
+  module Hydra.Adapters.Literal,
+  module Hydra.Adapters.Term,
   module Hydra.Adapters.Utils,
   module Hydra.Basics,
   module Hydra.Common,
@@ -30,6 +33,9 @@ module Hydra.Kernel (
   module Hydra.Workflow,
 ) where
 
+import Hydra.Adapters.Coders
+import Hydra.Adapters.Literal
+import Hydra.Adapters.Term
 import Hydra.Adapters.Utils
 import Hydra.Basics
 import Hydra.Common
