@@ -1,7 +1,6 @@
 module Hydra.Ext.Pegasus.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Adapters.Term
 import Hydra.Adapters.Coders
 import Hydra.Ext.Pegasus.Language
@@ -47,7 +46,7 @@ constructModule mod coders pairs = do
     aliases = importAliasesForModule mod
     toSchema (el, TypedTerm typ term) = do
       if isType typ
-        then decodeType term >>= typeToSchema el
+        then epsilonDecodeType term >>= typeToSchema el
         else fail $ "mapping of non-type elements to PDL is not yet supported: " ++ unName (elementName el)
     typeToSchema el typ = do
         res <- encodeAdaptedType aliases typ

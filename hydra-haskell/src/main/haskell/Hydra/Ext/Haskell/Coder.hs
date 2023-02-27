@@ -1,7 +1,6 @@
 module Hydra.Ext.Haskell.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Adapters.Coders
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
@@ -126,7 +125,6 @@ encodeFunction namespaces fun = case fun of
             return $ H.Alternative lhs rhs Nothing
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
-    _ -> fail $ "unexpected function: " ++ show fun
 
 encodeLiteral :: Literal -> GraphFlow m H.Expression
 encodeLiteral av = case av of
@@ -280,7 +278,7 @@ toTypeDeclarations namespaces el term = do
     cx <- getState
     let lname = localNameOfEager $ elementName el
     let hname = simpleName lname
-    t <- decodeType term
+    t <- epsilonDecodeType term
     isSer <- isSerializable
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]

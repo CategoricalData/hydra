@@ -1,9 +1,6 @@
 module Hydra.CoreCodersSpec where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
-import Hydra.CoreEncoding
-import Hydra.Kv
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -22,22 +19,22 @@ individualEncoderTestCases = do
 
     H.it "string literal type" $ do
       H.shouldBe
-        (strip $ encodeLiteralType LiteralTypeString :: Term Kv)
+        (strip $ epsilonEncodeLiteralType LiteralTypeString :: Term Kv)
         (strip $ unitVariant _LiteralType _LiteralType_string)
 
     H.it "string type" $ do
       H.shouldBe
-        (strip $ encodeType Types.string :: Term Kv)
+        (strip $ epsilonEncodeType Types.string :: Term Kv)
         (strip $ variant _Type _Type_literal (unitVariant _LiteralType _LiteralType_string))
 
     H.it "int32 type" $ do
       H.shouldBe
-        (strip $ encodeType Types.int32 :: Term Kv)
+        (strip $ epsilonEncodeType Types.int32 :: Term Kv)
         (strip $ variant _Type _Type_literal (variant _LiteralType _LiteralType_integer $ unitVariant _IntegerType _IntegerType_int32))
 
     H.it "record type" $ do
       H.shouldBe
-        (strip $ encodeType (TypeRecord $ RowType (Name "Example") Nothing
+        (strip $ epsilonEncodeType (TypeRecord $ RowType (Name "Example") Nothing
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term Kv)
         (strip $ variant _Type _Type_record $
           record _RowType [
@@ -60,19 +57,19 @@ individualDecoderTestCases = do
 
     H.it "float32 literal type" $ do
       shouldSucceedWith
-        (decodeLiteralType
+        (epsilonDecodeLiteralType
           (variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
         (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
       shouldSucceedWith
-        (decodeType
+        (epsilonDecodeType
           (variant _Type _Type_literal $ variant _LiteralType _LiteralType_float $ unitVariant _FloatType _FloatType_float32))
         Types.float32
 
     H.it "union type" $ do
       shouldSucceedWith
-        (decodeType $
+        (epsilonDecodeType $
           variant _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ string (unName testTypeName),
             Field _RowType_extends $ optional Nothing,
@@ -95,10 +92,10 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      shouldFail (decodeType $ variant untyped (FieldName "unknownField") $ list [])
+      shouldFail (epsilonDecodeType $ variant untyped (FieldName "unknownField") $ list [])
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      shouldFail (decodeType $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
+      shouldFail (epsilonDecodeType $ variant _Type _Type_literal $ unitVariant _LiteralType _LiteralType_integer)
 
 metadataIsPreserved :: H.SpecWith ()
 metadataIsPreserved = do
@@ -106,13 +103,13 @@ metadataIsPreserved = do
 
     H.it "Basic metadata" $ do
       shouldSucceedWith
-        (decodeType $ encodeType annotatedStringType)
+        (epsilonDecodeType $ epsilonEncodeType annotatedStringType)
         annotatedStringType
   where
     annotatedStringType :: Type Kv
     annotatedStringType = TypeAnnotated $ Annotated Types.string $ Kv $ M.fromList [
       (kvDescription, Terms.string "The string literal type"),
-      (kvType, encodeType $ Types.wrap _Type)]
+      (kvType, epsilonEncodeType $ Types.wrap _Type)]
 
 testRoundTripsFromType :: H.SpecWith ()
 testRoundTripsFromType = do
@@ -121,7 +118,7 @@ testRoundTripsFromType = do
     H.it "Try random types" $
       QC.property $ \typ ->
         shouldSucceedWith
-          (decodeType $ encodeType typ)
+          (epsilonDecodeType $ epsilonEncodeType typ)
           typ
 
 spec :: H.Spec

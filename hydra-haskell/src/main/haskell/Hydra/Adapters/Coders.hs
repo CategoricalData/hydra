@@ -5,7 +5,6 @@
 module Hydra.Adapters.Coders where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
 

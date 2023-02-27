@@ -4,7 +4,6 @@ module Hydra.Util.GrammarToModule where
 
 import Hydra.Kernel
 import Hydra.Dsl.Standard
-import Hydra.CoreEncoding
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Terms as Terms
 
@@ -19,7 +18,7 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where
         prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
-        pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (encodeType typ)
+        pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (epsilonEncodeType typ)
 
     toName = fromQname ns
 

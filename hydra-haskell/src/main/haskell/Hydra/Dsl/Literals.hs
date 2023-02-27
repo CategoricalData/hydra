@@ -2,7 +2,9 @@
 
 module Hydra.Dsl.Literals where
 
-import Hydra.Kernel
+import Hydra.Compute
+import Hydra.Core
+import Hydra.Monads
 
 import Data.Int
 

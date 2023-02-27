@@ -2,7 +2,6 @@ module Hydra.Ext.Avro.Coder (avroHydraAdapter) where
 
 import Hydra.Kernel
 import Hydra.Ext.Json.Eliminate
-import Hydra.CoreEncoding
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
@@ -124,7 +123,7 @@ avroHydraAdapter schema = case schema of
               [field] -> do
                   s <- termToString $ fieldTerm field
                   let name = constr s
-                  let el = Element name (encodeType typ) term
+                  let el = Element name (epsilonEncodeType typ) term
                   env <- getState
                   putState $ env {avroEnvironmentElements = M.insert name el (avroEnvironmentElements env)}
                   return ()

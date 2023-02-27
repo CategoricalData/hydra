@@ -6,7 +6,6 @@ module Hydra.Dsl.Standard (
 ) where
 
 import Hydra.Kernel
-import Hydra.Kv
 import Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
 import Hydra.Sources.Core

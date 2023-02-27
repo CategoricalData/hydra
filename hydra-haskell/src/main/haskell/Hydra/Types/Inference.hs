@@ -9,7 +9,6 @@ module Hydra.Types.Inference (
 ) where
 
 import Hydra.Kernel
-import Hydra.CoreEncoding
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 import Hydra.Types.Rules
@@ -29,7 +28,7 @@ annotateElementWithTypes el = do
       typ <- findType term
       return $ el {
         elementData = term,
-        elementSchema = encodeType typ}
+        elementSchema = epsilonEncodeType typ}
   where
     findType term = do
       cx <- getState

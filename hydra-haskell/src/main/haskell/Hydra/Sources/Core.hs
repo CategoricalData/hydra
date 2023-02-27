@@ -3,7 +3,6 @@
 module Hydra.Sources.Core where
 
 import Hydra.Kernel
-import Hydra.Kv
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types as Types
 

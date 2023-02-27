@@ -3,7 +3,6 @@
 module Hydra.Types.Rules where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 import qualified Hydra.Dsl.Types as Types
@@ -216,7 +215,7 @@ applyRules term = case term of
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Term m -> GraphFlow m (Type m)
 decodeStructuralType term = do
-  typ <- decodeType term
+  typ <- epsilonDecodeType term
   let typ' = stripType typ
   case typ' of
     TypeWrap name -> withSchemaContext $ withTrace "decode structural type" $ do

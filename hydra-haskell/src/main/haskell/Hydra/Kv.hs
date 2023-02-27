@@ -3,10 +3,10 @@
 module Hydra.Kv where
 
 import Hydra.Core
+import Hydra.Common
 import Hydra.Compute
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Common
 import Hydra.Monads
 import Hydra.Mantle
 import qualified Hydra.Dsl.Terms as Terms
@@ -52,7 +52,7 @@ getTermDescription = getDescription . termAnnotationInternal
 getType :: Kv -> GraphFlow Kv (Y.Maybe (Type Kv))
 getType kv = case getAnnotation kvType kv of
   Nothing -> pure Nothing
-  Just dat -> Just <$> decodeType dat
+  Just dat -> Just <$> epsilonDecodeType dat
 
 getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
@@ -116,10 +116,10 @@ setTermDescription :: Context Kv -> Y.Maybe String -> Term Kv -> Term Kv
 setTermDescription cx d = setTermAnnotation cx kvDescription (Terms.string <$> d)
 
 setTermType :: Context Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
-setTermType cx d = setTermAnnotation cx kvType (encodeType <$> d)
+setTermType cx d = setTermAnnotation cx kvType (epsilonEncodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
-setType mt = setAnnotation kvType (encodeType <$> mt)
+setType mt = setAnnotation kvType (epsilonEncodeType <$> mt)
 
 setTypeAnnotation :: Context Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
 setTypeAnnotation cx key val typ = if kv == annotationClassDefault (contextAnnotations cx)

@@ -9,18 +9,18 @@ module Hydra.Kernel (
   module Hydra.Common,
   module Hydra.Compute,
   module Hydra.Core,
---  module Hydra.CoreDecoding,
---  module Hydra.CoreEncoding,
+  module Hydra.CoreDecoding,
+  module Hydra.CoreEncoding,
   module Hydra.CoreLanguage,
   module Hydra.Graph,
   module Hydra.Grammar,
   module Hydra.Lexical,
   module Hydra.Mantle,
---  module Hydra.Kv,
+  module Hydra.Kv,
   module Hydra.Module,
   module Hydra.Monads,
   module Hydra.Phantoms,
---  module Hydra.Reduction,
+  module Hydra.Reduction,
   module Hydra.Rewriting,
   module Hydra.Util.Debug,
   module Hydra.Util.Formatting,
@@ -33,18 +33,18 @@ import Hydra.Basics
 import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
---import Hydra.CoreDecoding
---import Hydra.CoreEncoding
+import Hydra.CoreDecoding
+import Hydra.CoreEncoding
 import Hydra.CoreLanguage
 import Hydra.Graph
 import Hydra.Grammar
 import Hydra.Lexical
 import Hydra.Mantle
---import Hydra.Kv
+import Hydra.Kv
 import Hydra.Module
 import Hydra.Monads
 import Hydra.Phantoms
---import Hydra.Reduction
+import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.Util.Debug
 import Hydra.Util.Formatting

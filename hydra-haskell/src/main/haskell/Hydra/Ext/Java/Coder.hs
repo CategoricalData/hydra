@@ -1,7 +1,6 @@
 module Hydra.Ext.Java.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
@@ -266,7 +265,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
 declarationForType :: (Ord m, Read m, Show m)
   => Aliases -> (Element m, TypedTerm m) -> GraphFlow m Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = do
-    t <- decodeType term >>= adaptType javaLanguage
+    t <- epsilonDecodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False aliases [] (elementName el) t
     cx <- getState
     comments <- commentsFromElement el

@@ -5,7 +5,6 @@ module Hydra.TestGraph (
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import Hydra.CoreEncoding
 import Hydra.Dsl.Terms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard as Standard
@@ -44,7 +43,7 @@ testElementArthur = Element {
 testElementFirstName :: Element Kv
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = encodeType (Types.function (Types.wrap testTypePersonName) Types.string),
+  elementSchema = epsilonEncodeType (Types.function (Types.wrap testTypePersonName) Types.string),
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Kv
