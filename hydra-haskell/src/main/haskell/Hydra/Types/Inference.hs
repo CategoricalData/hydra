@@ -1,4 +1,4 @@
--- | Entry point for Hydra's variation on Hindley-Milner type inference
+-- | Entry point for Hydra type inference, which is a variation on on Hindley-Milner
 
 module Hydra.Types.Inference (
   annotateElementWithTypes,
@@ -8,7 +8,14 @@ module Hydra.Types.Inference (
   Constraint,
 ) where
 
-import Hydra.Kernel
+import Hydra.Compute
+import Hydra.Core
+import Hydra.CoreEncoding
+import Hydra.Graph
+import Hydra.Lexical
+import Hydra.Mantle
+import Hydra.Monads
+import Hydra.Rewriting
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
 import Hydra.Types.Rules

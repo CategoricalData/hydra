@@ -2,7 +2,10 @@
 
 module Hydra.Types.Substitution where
 
-import Hydra.Kernel
+import Hydra.Core
+import Hydra.Mantle
+import Hydra.Monads
+import Hydra.Rewriting
 import Hydra.Dsl.Types as Types
 
 import qualified Data.List as L
