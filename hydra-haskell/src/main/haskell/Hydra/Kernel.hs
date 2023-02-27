@@ -1,7 +1,6 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation.
 --   This currently includes most modules in the top-level Hydra.* namespace, as well as some Hydra.Util.* modules.
---   The adapter and inference frameworks are logically part of the kernel,
---   but are excluded for now due to circular dependencies.
+--   The adapter framework is logically part of the kernel, but is excluded for now due to circular dependencies.
 
 module Hydra.Kernel (
   module Hydra.Adapters.Utils,
@@ -22,6 +21,7 @@ module Hydra.Kernel (
   module Hydra.Phantoms,
   module Hydra.Reduction,
   module Hydra.Rewriting,
+  module Hydra.Types.Inference,
   -- module Hydra.Util.Codetree.Ast,
   module Hydra.Util.Debug,
   module Hydra.Util.Formatting,
@@ -48,6 +48,7 @@ import Hydra.Monads
 import Hydra.Phantoms
 import Hydra.Reduction
 import Hydra.Rewriting
+import Hydra.Types.Inference
 -- import Hydra.Util.Codetree.Ast
 import Hydra.Util.Debug
 import Hydra.Util.Formatting

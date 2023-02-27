@@ -8,7 +8,6 @@ import Hydra.Dsl.Terms
 import Hydra.Util.Codetree.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
-import Hydra.Types.Inference
 import qualified Hydra.Ext.Haskell.Ast as H
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Types as Types

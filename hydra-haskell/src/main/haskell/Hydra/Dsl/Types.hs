@@ -2,7 +2,10 @@
 
 module Hydra.Dsl.Types where
 
-import Hydra.Kernel
+import Hydra.Common
+import Hydra.Core
+import Hydra.Lexical
+import Hydra.Monads
 
 import qualified Data.List as L
 import qualified Data.Map as M

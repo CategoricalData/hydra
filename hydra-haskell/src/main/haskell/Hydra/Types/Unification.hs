@@ -5,7 +5,12 @@ module Hydra.Types.Unification (
   solveConstraints,
 ) where
 
-import Hydra.Kernel
+import Hydra.Basics
+import Hydra.Common
+import Hydra.Core
+import Hydra.Lexical
+import Hydra.Monads
+import Hydra.Rewriting
 import Hydra.Types.Substitution
 import Hydra.Dsl.Types as Types
 

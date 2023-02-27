@@ -4,7 +4,6 @@ module Hydra.Codegen where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
-import Hydra.Types.Inference
 import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL
