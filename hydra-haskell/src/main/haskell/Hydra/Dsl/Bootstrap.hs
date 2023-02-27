@@ -3,8 +3,6 @@
 module Hydra.Dsl.Bootstrap where
 
 import Hydra.Kernel
-import Hydra.Kv
-import Hydra.CoreEncoding
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -49,11 +47,11 @@ qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 termElement :: Name -> Type m -> Term m -> Element m
 termElement name typ term = Element {
   elementName = name,
-  elementSchema = encodeType typ,
+  elementSchema = epsilonEncodeType typ,
   elementData = term}
 
 typeElement :: Name -> Type m -> Element m
 typeElement name typ = Element {
   elementName = name,
   elementSchema = TermElement _Type,
-  elementData = encodeType typ}
+  elementData = epsilonEncodeType typ}

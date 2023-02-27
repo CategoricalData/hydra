@@ -2,7 +2,12 @@
 
 module Hydra.Dsl.Terms where
 
-import Hydra.Kernel
+import Hydra.Common
+import Hydra.Compute
+import Hydra.Core
+import Hydra.Graph
+import Hydra.Lexical
+import Hydra.Monads
 import qualified Hydra.Dsl.Literals as Literals
 
 import Prelude hiding (map)

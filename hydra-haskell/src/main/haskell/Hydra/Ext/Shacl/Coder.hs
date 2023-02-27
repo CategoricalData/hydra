@@ -1,7 +1,6 @@
 module Hydra.Ext.Shacl.Coder where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Ext.Rdf.Utils
 import qualified Hydra.Ext.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Shacl.Model as Shacl
@@ -26,7 +25,7 @@ shaclCoder mod = do
     return (sg, termFlow)
   where
     toShape el = do
-      typ <- decodeType $ elementData el
+      typ <- epsilonDecodeType $ elementData el
       common <- encodeType typ
       return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
 

@@ -10,7 +10,6 @@ import Hydra.Kernel
 import Hydra.Ext.Json.Coder
 import Hydra.Dsl.Standard
 import Hydra.Ext.Json.Serde
-import Hydra.CoreEncoding
 import qualified Hydra.Ext.Json.Model as Json
 import qualified Hydra.Dsl.Types as Types
 
@@ -21,7 +20,7 @@ import qualified Data.Maybe as Y
 showTerm :: Ord m => Term m -> String
 showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
   where
-    encoded = encodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
+    encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
 termJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
 termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Term
@@ -37,7 +36,7 @@ termStringCoder = Coder mout min
 showType :: Ord m => Type m -> String
 showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
   where
-    encoded = encodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
+    encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 typeJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
 typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Type

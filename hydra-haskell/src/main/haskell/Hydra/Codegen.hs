@@ -4,7 +4,6 @@ module Hydra.Codegen where
 
 import Hydra.Kernel
 import Hydra.Dsl.Standard
-import Hydra.CoreEncoding
 import Hydra.Types.Inference
 import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
@@ -75,9 +74,9 @@ assignSchemas doInfer mod = do
         Nothing -> if doInfer
           then do
             t <- typeSchemeType <$> inferType (elementData el)
-            return el {elementSchema = encodeType t}
+            return el {elementSchema = epsilonEncodeType t}
           else return el
-        Just typ -> return el {elementSchema = encodeType typ}
+        Just typ -> return el {elementSchema = epsilonEncodeType typ}
 
 coreModules :: [Module Kv]
 coreModules = [

@@ -2,7 +2,6 @@ module Hydra.KvSpec where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Kv
 import Hydra.TestUtils
 
 import qualified Test.Hspec as H

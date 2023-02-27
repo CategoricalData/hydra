@@ -7,8 +7,6 @@ module Hydra.Dsl.Base (
 ) where
 
 import Hydra.Kernel
-import Hydra.Kv
-import Hydra.CoreEncoding
 import Hydra.Dsl.PhantomLiterals
 import qualified Hydra.Dsl.Standard as Standard
 import qualified Hydra.Dsl.Terms as Terms
@@ -22,7 +20,7 @@ import qualified Data.Set as S
 
 
 el :: Definition a -> Element Kv
-el (Definition name (Datum term)) = Element name (encodeType dummyType) term
+el (Definition name (Datum term)) = Element name (epsilonEncodeType dummyType) term
   where
     dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
 

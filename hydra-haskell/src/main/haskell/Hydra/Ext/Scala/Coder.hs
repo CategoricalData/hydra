@@ -1,7 +1,6 @@
 module Hydra.Ext.Scala.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Dsl.Terms
 import Hydra.Ext.Scala.Language
 import Hydra.Ext.Scala.Utils
@@ -109,7 +108,6 @@ encodeFunction meta fun arg = case fun of
               then body
               else substituteVariable v1 var body
             _ -> apply fterm (variable v)
-    _ -> fail $ "unexpected function: " ++ show fun
   where
     findSdom = Just <$> (findDomain >>= encodeType)
     findDomain = do

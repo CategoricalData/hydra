@@ -1,17 +1,17 @@
--- | Decoding of encoded types (as terms) back to types
+-- | Decoding of encoded types (as terms) back to types according to the epsilon encoding
 
 module Hydra.CoreDecoding (
-  decodeLiteralType,
-  decodeFieldType,
-  decodeFieldTypes,
-  decodeFloatType,
-  decodeFunctionType,
-  decodeIntegerType,
-  decodeMapType,
-  decodeRowType,
-  decodeString,
-  decodeType,
-  decodeLambdaType,
+  epsilonDecodeLiteralType,
+  epsilonDecodeFieldType,
+  epsilonDecodeFieldTypes,
+  epsilonDecodeFloatType,
+  epsilonDecodeFunctionType,
+  epsilonDecodeIntegerType,
+  epsilonDecodeMapType,
+  epsilonDecodeRowType,
+  epsilonDecodeString,
+  epsilonDecodeType,
+  epsilonDecodeLambdaType,
   elementAsTypedTerm,
   fieldTypes,
   requireRecordType,
@@ -37,39 +37,39 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-decodeApplicationType :: Show m => Term m -> GraphFlow m (ApplicationType m)
-decodeApplicationType = matchRecord $ \m -> ApplicationType
-  <$> getField m _ApplicationType_function decodeType
-  <*> getField m _ApplicationType_argument decodeType
+epsilonDecodeApplicationType :: Show m => Term m -> GraphFlow m (ApplicationType m)
+epsilonDecodeApplicationType = matchRecord $ \m -> ApplicationType
+  <$> getField m _ApplicationType_function epsilonDecodeType
+  <*> getField m _ApplicationType_argument epsilonDecodeType
 
-decodeElement :: Show m => Term m -> GraphFlow m Name
-decodeElement term = case stripTerm term of
+epsilonDecodeElement :: Show m => Term m -> GraphFlow m Name
+epsilonDecodeElement term = case stripTerm term of
   TermElement name -> pure name
   _ -> unexpected "element" term
 
-decodeFieldType :: Show m => Term m -> GraphFlow m (FieldType m)
-decodeFieldType = matchRecord $ \m -> FieldType
-  <$> (FieldName <$> getField m _FieldType_name decodeString)
-  <*> getField m _FieldType_type decodeType
+epsilonDecodeFieldType :: Show m => Term m -> GraphFlow m (FieldType m)
+epsilonDecodeFieldType = matchRecord $ \m -> FieldType
+  <$> (FieldName <$> getField m _FieldType_name epsilonDecodeString)
+  <*> getField m _FieldType_type epsilonDecodeType
 
-decodeFieldTypes :: Show m => Term m -> GraphFlow m [FieldType m]
-decodeFieldTypes term = case stripTerm term of
-  TermList els -> CM.mapM decodeFieldType els
+epsilonDecodeFieldTypes :: Show m => Term m -> GraphFlow m [FieldType m]
+epsilonDecodeFieldTypes term = case stripTerm term of
+  TermList els -> CM.mapM epsilonDecodeFieldType els
   _ -> unexpected "list" term
 
-decodeFloatType :: Show m => Term m -> GraphFlow m FloatType
-decodeFloatType = matchEnum [
+epsilonDecodeFloatType :: Show m => Term m -> GraphFlow m FloatType
+epsilonDecodeFloatType = matchEnum [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
-decodeFunctionType :: Show m => Term m -> GraphFlow m (FunctionType m)
-decodeFunctionType = matchRecord $ \m -> FunctionType
-  <$> getField m _FunctionType_domain decodeType
-  <*> getField m _FunctionType_codomain decodeType
+epsilonDecodeFunctionType :: Show m => Term m -> GraphFlow m (FunctionType m)
+epsilonDecodeFunctionType = matchRecord $ \m -> FunctionType
+  <$> getField m _FunctionType_domain epsilonDecodeType
+  <*> getField m _FunctionType_codomain epsilonDecodeType
 
-decodeIntegerType :: Show m => Term m -> GraphFlow m IntegerType
-decodeIntegerType = matchEnum [
+epsilonDecodeIntegerType :: Show m => Term m -> GraphFlow m IntegerType
+epsilonDecodeIntegerType = matchEnum [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
   (_IntegerType_int16, IntegerTypeInt16),
@@ -80,59 +80,59 @@ decodeIntegerType = matchEnum [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
-decodeLambdaType :: Show m => Term m -> GraphFlow m (LambdaType m)
-decodeLambdaType = matchRecord $ \m -> LambdaType
-  <$> (Name <$> getField m _LambdaType_parameter decodeString)
-  <*> getField m _LambdaType_body decodeType
+epsilonDecodeLambdaType :: Show m => Term m -> GraphFlow m (LambdaType m)
+epsilonDecodeLambdaType = matchRecord $ \m -> LambdaType
+  <$> (Name <$> getField m _LambdaType_parameter epsilonDecodeString)
+  <*> getField m _LambdaType_body epsilonDecodeType
 
-decodeLiteralType :: Show m => Term m -> GraphFlow m LiteralType
-decodeLiteralType = matchUnion [
+epsilonDecodeLiteralType :: Show m => Term m -> GraphFlow m LiteralType
+epsilonDecodeLiteralType = matchUnion [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
-  (_LiteralType_float, fmap LiteralTypeFloat . decodeFloatType),
-  (_LiteralType_integer, fmap LiteralTypeInteger . decodeIntegerType),
+  (_LiteralType_float, fmap LiteralTypeFloat . epsilonDecodeFloatType),
+  (_LiteralType_integer, fmap LiteralTypeInteger . epsilonDecodeIntegerType),
   matchUnitField _LiteralType_string LiteralTypeString]
 
-decodeMapType :: Show m => Term m -> GraphFlow m (MapType m)
-decodeMapType = matchRecord $ \m -> MapType
-  <$> getField m _MapType_keys decodeType
-  <*> getField m _MapType_values decodeType
+epsilonDecodeMapType :: Show m => Term m -> GraphFlow m (MapType m)
+epsilonDecodeMapType = matchRecord $ \m -> MapType
+  <$> getField m _MapType_keys epsilonDecodeType
+  <*> getField m _MapType_values epsilonDecodeType
 
-decodeRowType :: Show m => Term m -> GraphFlow m (RowType m)
-decodeRowType = matchRecord $ \m -> RowType
-  <$> (Name <$> getField m _RowType_typeName decodeString)
+epsilonDecodeRowType :: Show m => Term m -> GraphFlow m (RowType m)
+epsilonDecodeRowType = matchRecord $ \m -> RowType
+  <$> (Name <$> getField m _RowType_typeName epsilonDecodeString)
   <*> getField m _RowType_extends (Terms.expectOptional (\term -> Name <$> Terms.expectString term))
-  <*> getField m _RowType_fields decodeFieldTypes
+  <*> getField m _RowType_fields epsilonDecodeFieldTypes
 
-decodeString :: Show m => Term m -> GraphFlow m String
-decodeString = Terms.expectString . stripTerm
+epsilonDecodeString :: Show m => Term m -> GraphFlow m String
+epsilonDecodeString = Terms.expectString . stripTerm
 
-decodeType :: Show m => Term m -> GraphFlow m (Type m)
-decodeType dat = case dat of
+epsilonDecodeType :: Show m => Term m -> GraphFlow m (Type m)
+epsilonDecodeType dat = case dat of
   TermElement name -> pure $ TypeWrap name
-  TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> decodeType term
+  TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> epsilonDecodeType term
   _ -> matchUnion [
---    (_Type_annotated, fmap TypeAnnotated . decodeAnnotated),
-    (_Type_application, fmap TypeApplication . decodeApplicationType),
-    (_Type_element, fmap TypeElement . decodeType),
-    (_Type_function, fmap TypeFunction . decodeFunctionType),
-    (_Type_lambda, fmap TypeLambda . decodeLambdaType),
-    (_Type_list, fmap TypeList . decodeType),
-    (_Type_literal, fmap TypeLiteral . decodeLiteralType),
-    (_Type_map, fmap TypeMap . decodeMapType),
-    (_Type_wrap, fmap TypeWrap . decodeElement),
-    (_Type_optional, fmap TypeOptional . decodeType),
+--    (_Type_annotated, fmap TypeAnnotated . epsilonDecodeAnnotated),
+    (_Type_application, fmap TypeApplication . epsilonDecodeApplicationType),
+    (_Type_element, fmap TypeElement . epsilonDecodeType),
+    (_Type_function, fmap TypeFunction . epsilonDecodeFunctionType),
+    (_Type_lambda, fmap TypeLambda . epsilonDecodeLambdaType),
+    (_Type_list, fmap TypeList . epsilonDecodeType),
+    (_Type_literal, fmap TypeLiteral . epsilonDecodeLiteralType),
+    (_Type_map, fmap TypeMap . epsilonDecodeMapType),
+    (_Type_wrap, fmap TypeWrap . epsilonDecodeElement),
+    (_Type_optional, fmap TypeOptional . epsilonDecodeType),
     (_Type_product, \l -> do
       types <- Terms.expectList pure l
-      TypeProduct <$> (CM.mapM decodeType types)),
-    (_Type_record, fmap TypeRecord . decodeRowType),
-    (_Type_set, fmap TypeSet . decodeType),
-    (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM decodeType types)),
-    (_Type_union, fmap TypeUnion . decodeRowType),
-    (_Type_variable, fmap (TypeVariable . Name) . decodeString)] dat
+      TypeProduct <$> (CM.mapM epsilonDecodeType types)),
+    (_Type_record, fmap TypeRecord . epsilonDecodeRowType),
+    (_Type_set, fmap TypeSet . epsilonDecodeType),
+    (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM epsilonDecodeType types)),
+    (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
+    (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString)] dat
 
 elementAsTypedTerm :: (Show m) => Element m -> GraphFlow m (TypedTerm m)
-elementAsTypedTerm el = TypedTerm <$> decodeType (elementSchema el) <*> pure (elementData el)
+elementAsTypedTerm el = TypedTerm <$> epsilonDecodeType (elementSchema el) <*> pure (elementData el)
 
 fieldTypes :: Show m => Type m -> GraphFlow m (M.Map FieldName (Type m))
 fieldTypes t = case stripType t of
@@ -142,7 +142,7 @@ fieldTypes t = case stripType t of
     TypeWrap name -> do
       withTrace ("field types of " ++ unName name) $ do
         el <- requireElement name
-        decodeType (elementData el) >>= fieldTypes
+        epsilonDecodeType (elementData el) >>= fieldTypes
     TypeLambda (LambdaType _ body) -> fieldTypes body
     _ -> unexpected "record or union type" t
   where
@@ -204,7 +204,7 @@ requireRowType label infer getter name = do
 requireType :: Show m => Name -> GraphFlow m (Type m)
 requireType name = withTrace "require type" $ do
   el <- requireElement name
-  decodeType $ elementData el
+  epsilonDecodeType $ elementData el
 
 requireUnionType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of
@@ -234,7 +234,7 @@ typeDependencies name = deps (S.fromList [name]) M.empty
     requireType name = do
       withTrace ("type dependencies of " ++ unName name) $ do
         el <- requireElement name
-        decodeType (elementData el)
+        epsilonDecodeType (elementData el)
 
 typeDependencyNames :: Type m -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty

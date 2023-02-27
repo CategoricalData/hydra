@@ -8,7 +8,6 @@ module Hydra.Adapters.Term (
 ) where
 
 import Hydra.Kernel
-import Hydra.CoreDecoding
 import Hydra.Reduction
 import Hydra.Adapters.Literal
 import Hydra.Adapters.UtilsEtc
@@ -37,7 +36,7 @@ dereferenceNominal t@(TypeWrap name) = do
     -- Note: we just assume the schema term is a reference to hydra/core.Type
     withTrace ("dereference nominal type " ++ unName name) $ do
       el <- withSchemaContext $ requireElement name
-      decodeType $ elementData el
+      epsilonDecodeType $ elementData el
   ad <- termAdapter typ
   return ad { adapterSource = t }
 
