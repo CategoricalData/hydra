@@ -6,7 +6,14 @@ module Hydra.Adapters.Literal (
   integerAdapter,
 ) where
 
-import Hydra.Kernel
+import Hydra.Adapters.Utils
+import Hydra.Basics
+import Hydra.Common
+import Hydra.Compute
+import Hydra.Core
+import Hydra.Lexical
+import Hydra.Mantle
+import Hydra.Monads
 import Hydra.Adapters.UtilsEtc
 
 import qualified Data.List as L
