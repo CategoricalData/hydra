@@ -1,13 +1,12 @@
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
-import Hydra.Dsl.Base as Base
-import Hydra.Sources.Module
 import Hydra.Sources.Mantle
-import qualified Hydra.Dsl.Standard as Standard
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Lists as Lists
 import Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Dsl.Standard as Standard
+import qualified Hydra.Dsl.Types as Types
 
 
 basicsNs = Namespace "hydra/basics"

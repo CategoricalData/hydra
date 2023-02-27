@@ -3,10 +3,10 @@
 module Hydra.Util.GrammarToModule where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Terms as Terms
 import Hydra.Dsl.Standard
 import Hydra.CoreEncoding
+import Hydra.Dsl.Types as Types
+import Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Map as M

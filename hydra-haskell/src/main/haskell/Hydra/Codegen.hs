@@ -6,7 +6,6 @@ import Hydra.Kernel
 import Hydra.Dsl.Standard
 import Hydra.CoreEncoding
 import Hydra.Types.Inference
-
 import qualified Hydra.Ext.Haskell.Coder as Haskell
 import qualified Hydra.Ext.Java.Coder as Java
 import qualified Hydra.Ext.Pegasus.Coder as PDL

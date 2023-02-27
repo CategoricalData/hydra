@@ -3,9 +3,9 @@
 module Hydra.Sources.Module where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Graph
+import Hydra.Dsl.Types as Types
 
 
 hydraModuleModule :: Module Kv

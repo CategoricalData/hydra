@@ -3,12 +3,12 @@
 module Hydra.Sources.Workflow where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Module
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
 import Hydra.Sources.Graph
+import Hydra.Dsl.Types as Types
 
 
 hydraWorkflowModule :: Module Kv

@@ -5,9 +5,9 @@ import Hydra.Sources.Libraries
 import Hydra.Types.Inference
 import Hydra.TestUtils
 import Hydra.TestData
+import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Standard as Standard
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Terms as Terms
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

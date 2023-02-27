@@ -4,9 +4,9 @@ module Hydra.Types.Rules where
 
 import Hydra.Kernel
 import Hydra.CoreDecoding
-import qualified Hydra.Dsl.Types as Types
 import Hydra.Types.Substitution
 import Hydra.Types.Unification
+import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

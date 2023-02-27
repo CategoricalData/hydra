@@ -3,9 +3,8 @@
 module Hydra.Sources.Grammar where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
+import Hydra.Dsl.Types as Types
 
 
 hydraGrammarModule :: Module Kv

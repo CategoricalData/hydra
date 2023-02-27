@@ -3,11 +3,11 @@
 module Hydra.Sources.Compute where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
 import Hydra.Sources.Core
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
+import Hydra.Dsl.Types as Types
 
 
 hydraComputeModule :: Module Kv

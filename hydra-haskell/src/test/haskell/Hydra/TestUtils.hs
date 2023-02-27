@@ -13,13 +13,13 @@ module Hydra.TestUtils (
   module Hydra.TestGraph,
 ) where
 
-import Hydra.ArbitraryCore()
-
 import Hydra.Kernel
-import Hydra.TestGraph
 import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.Adapters.UtilsEtc
+
+import Hydra.TestGraph
+import Hydra.ArbitraryCore()
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL

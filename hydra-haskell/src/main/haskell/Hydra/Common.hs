@@ -6,8 +6,8 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
 import Hydra.Module
-import qualified Hydra.Lib.Strings as Strings
 import Hydra.Util.Formatting
+import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -122,9 +122,6 @@ toQnameEager :: Name -> (Namespace, String)
 toQnameEager (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (Namespace ns, L.intercalate "." rest)
   _ -> (Namespace "UNKNOWN", name)
-
-typeMeta :: Context m -> Type m -> m
-typeMeta cx = annotationClassTypeAnnotation $ contextAnnotations cx
 
 unitTypeName :: Name
 unitTypeName = Name "hydra/core.UnitType"

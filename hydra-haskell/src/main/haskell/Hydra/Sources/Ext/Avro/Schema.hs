@@ -3,10 +3,9 @@
 module Hydra.Sources.Ext.Avro.Schema where
 
 import Hydra.Kernel
-import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Standard
-import Hydra.Sources.Core
 import Hydra.Sources.Ext.Json.Model
+import Hydra.Dsl.Types as Types
 
 
 avroSchemaModule :: Module Kv

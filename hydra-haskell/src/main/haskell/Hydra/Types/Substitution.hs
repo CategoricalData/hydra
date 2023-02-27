@@ -10,8 +10,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
-import Hydra.Util.Debug
-
 
 type Subst m = M.Map Name (Type m)
 
