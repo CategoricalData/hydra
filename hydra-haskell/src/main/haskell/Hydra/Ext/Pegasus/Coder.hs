@@ -1,10 +1,10 @@
 module Hydra.Ext.Pegasus.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.Adapters.Term
-import Hydra.Adapters.Coders
+import Hydra.TermAdapters
+import Hydra.Adapters
 import Hydra.Ext.Pegasus.Language
-import Hydra.Util.Codetree.Script
+import Hydra.Util.Script
 import Hydra.Ext.Pegasus.Serde
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 import qualified Hydra.Dsl.Types as Types

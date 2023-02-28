@@ -1,8 +1,8 @@
-module Hydra.Types.InferenceSpec where
+module Hydra.InferenceSpec where
 
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import Hydra.Types.Inference
+import Hydra.Inference
 import Hydra.TestUtils
 import Hydra.TestData
 import Hydra.Dsl.Terms as Terms

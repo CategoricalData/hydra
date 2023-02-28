@@ -1,7 +1,7 @@
 module Hydra.Ext.Haskell.Operators where
 
-import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Script
+import Hydra.Ast
+import Hydra.Util.Script
 
 
 andOp :: Op

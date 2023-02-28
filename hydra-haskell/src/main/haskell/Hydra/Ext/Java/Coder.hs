@@ -4,11 +4,11 @@ import Hydra.Kernel
 import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
-import Hydra.Adapters.Coders
-import Hydra.Util.Codetree.Script
+import Hydra.Adapters
+import Hydra.Util.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
-import Hydra.Adapters.UtilsEtc
+import Hydra.AdapterUtils
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Java.Syntax as Java

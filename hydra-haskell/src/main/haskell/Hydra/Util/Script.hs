@@ -1,8 +1,8 @@
 -- | Utilities for constructing Hydra code trees
 
-module Hydra.Util.Codetree.Script where
+module Hydra.Util.Script where
 
-import Hydra.Util.Codetree.Ast
+import Hydra.Ast
 
 import qualified Data.List as L
 

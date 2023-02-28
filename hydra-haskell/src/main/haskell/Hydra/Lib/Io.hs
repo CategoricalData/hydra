@@ -3,7 +3,7 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
-  coreContext,
+  hydraCore,
 ) where
 
 import Hydra.Kernel
@@ -18,12 +18,12 @@ import qualified Data.Maybe as Y
 
 
 showTerm :: Ord m => Term m -> String
-showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
+showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
   where
     encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
 termJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Term
+termJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Term
 
 termStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 termStringCoder = Coder mout min
@@ -34,12 +34,12 @@ termStringCoder = Coder mout min
       Right v -> coderDecode termJsonCoder v
 
 showType :: Ord m => Type m -> String
-showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
+showType typ = fromFlow hydraCore $ coderEncode typeStringCoder encoded
   where
     encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
 typeJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
-typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Type
+typeJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Type
 
 typeStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 typeStringCoder = Coder mout min

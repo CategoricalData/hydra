@@ -1,6 +1,6 @@
 -- | Inference rules
 
-module Hydra.Types.Rules where
+module Hydra.Rules where
 
 import Hydra.Basics
 import Hydra.Common
@@ -12,8 +12,8 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Monads
 import Hydra.Rewriting
-import Hydra.Types.Substitution
-import Hydra.Types.Unification
+import Hydra.Substitution
+import Hydra.Unification
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM

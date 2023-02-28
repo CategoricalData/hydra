@@ -1,7 +1,7 @@
 module Hydra.Ext.Yaml.Modules (printModule) where
 
 import Hydra.Kernel
-import Hydra.Adapters.Coders
+import Hydra.Adapters
 import Hydra.Ext.Yaml.Serde
 import Hydra.Ext.Yaml.Language
 import qualified Hydra.Ext.Yaml.Model as YM

@@ -1,12 +1,13 @@
 -- | Adapter framework for literal types and terms
 
-module Hydra.Adapters.Literal (
+module Hydra.LiteralAdapters (
   literalAdapter,
   floatAdapter,
   integerAdapter,
 ) where
 
-import Hydra.Adapters.Utils
+import Hydra.Printing
+import Hydra.AdapterUtils
 import Hydra.Basics
 import Hydra.Coders
 import Hydra.Common
@@ -16,7 +17,6 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Monads
-import Hydra.Adapters.UtilsEtc
 
 import qualified Data.List as L
 import qualified Data.Set as S

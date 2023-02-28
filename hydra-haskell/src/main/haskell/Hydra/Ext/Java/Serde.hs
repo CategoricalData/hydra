@@ -1,7 +1,7 @@
 module Hydra.Ext.Java.Serde where
 
-import Hydra.Util.Codetree.Script
-import qualified Hydra.Util.Codetree.Ast as CT
+import Hydra.Util.Script
+import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Java.Syntax as Java
 
 import qualified Data.List as L

@@ -1,6 +1,6 @@
 -- | A model which provides a common syntax tree for Hydra serializers
 
-module Hydra.Util.Codetree.Ast where
+module Hydra.Ast where
 
 import qualified Hydra.Core as Core
 import Data.List
@@ -15,7 +15,7 @@ data Associativity =
   AssociativityBoth 
   deriving (Eq, Ord, Read, Show)
 
-_Associativity = (Core.Name "hydra/util/codetree/ast.Associativity")
+_Associativity = (Core.Name "hydra/ast.Associativity")
 
 _Associativity_none = (Core.FieldName "none")
 
@@ -33,7 +33,7 @@ data BlockStyle =
     blockStyleNewlineAfterContent :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_BlockStyle = (Core.Name "hydra/util/codetree/ast.BlockStyle")
+_BlockStyle = (Core.Name "hydra/ast.BlockStyle")
 
 _BlockStyle_indent = (Core.FieldName "indent")
 
@@ -49,7 +49,7 @@ data BracketExpr =
     bracketExprStyle :: BlockStyle}
   deriving (Eq, Ord, Read, Show)
 
-_BracketExpr = (Core.Name "hydra/util/codetree/ast.BracketExpr")
+_BracketExpr = (Core.Name "hydra/ast.BracketExpr")
 
 _BracketExpr_brackets = (Core.FieldName "brackets")
 
@@ -64,7 +64,7 @@ data Brackets =
     bracketsClose :: Symbol}
   deriving (Eq, Ord, Read, Show)
 
-_Brackets = (Core.Name "hydra/util/codetree/ast.Brackets")
+_Brackets = (Core.Name "hydra/ast.Brackets")
 
 _Brackets_open = (Core.FieldName "open")
 
@@ -77,7 +77,7 @@ data Expr =
   ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
 
-_Expr = (Core.Name "hydra/util/codetree/ast.Expr")
+_Expr = (Core.Name "hydra/ast.Expr")
 
 _Expr_const = (Core.FieldName "const")
 
@@ -94,7 +94,7 @@ data Op =
     opAssociativity :: Associativity}
   deriving (Eq, Ord, Read, Show)
 
-_Op = (Core.Name "hydra/util/codetree/ast.Op")
+_Op = (Core.Name "hydra/ast.Op")
 
 _Op_symbol = (Core.FieldName "symbol")
 
@@ -112,7 +112,7 @@ data OpExpr =
     opExprRhs :: Expr}
   deriving (Eq, Ord, Read, Show)
 
-_OpExpr = (Core.Name "hydra/util/codetree/ast.OpExpr")
+_OpExpr = (Core.Name "hydra/ast.OpExpr")
 
 _OpExpr_op = (Core.FieldName "op")
 
@@ -127,7 +127,7 @@ data Padding =
     paddingRight :: Ws}
   deriving (Eq, Ord, Read, Show)
 
-_Padding = (Core.Name "hydra/util/codetree/ast.Padding")
+_Padding = (Core.Name "hydra/ast.Padding")
 
 _Padding_left = (Core.FieldName "left")
 
@@ -140,7 +140,7 @@ newtype Precedence =
     unPrecedence :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_Precedence = (Core.Name "hydra/util/codetree/ast.Precedence")
+_Precedence = (Core.Name "hydra/ast.Precedence")
 
 -- | Any symbol
 newtype Symbol = 
@@ -149,7 +149,7 @@ newtype Symbol =
     unSymbol :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Symbol = (Core.Name "hydra/util/codetree/ast.Symbol")
+_Symbol = (Core.Name "hydra/ast.Symbol")
 
 -- | One of several classes of whitespace
 data Ws = 
@@ -160,7 +160,7 @@ data Ws =
   WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 
-_Ws = (Core.Name "hydra/util/codetree/ast.Ws")
+_Ws = (Core.Name "hydra/ast.Ws")
 
 _Ws_none = (Core.FieldName "none")
 

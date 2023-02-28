@@ -1,8 +1,8 @@
-module Hydra.Adapters.TermSpec where
+module Hydra.TermAdaptersSpec where
 
 import Hydra.Kernel
-import Hydra.Adapters.Term
-import Hydra.Adapters.UtilsEtc
+import Hydra.TermAdapters
+import Hydra.AdapterUtils
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 

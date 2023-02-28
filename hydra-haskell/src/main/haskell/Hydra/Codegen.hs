@@ -10,7 +10,7 @@ import qualified Hydra.Ext.Pegasus.Coder as PDL
 import qualified Hydra.Ext.Scala.Coder as Scala
 import qualified Hydra.Ext.Yaml.Modules as Yaml
 
-import Hydra.Sources.Adapters.Utils
+import Hydra.Sources.Printing
 import Hydra.Sources.Basics
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
@@ -44,7 +44,7 @@ import Hydra.Sources.Mantle
 import Hydra.Sources.Module
 import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
-import Hydra.Sources.Util.Codetree.Ast
+import Hydra.Sources.Ast
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP

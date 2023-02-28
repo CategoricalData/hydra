@@ -1,13 +1,14 @@
 -- | Adapter framework for types and terms
 
-module Hydra.Adapters.Term (
+module Hydra.TermAdapters (
   fieldAdapter,
   functionProxyName,
   functionProxyType,
   termAdapter,
 ) where
 
-import Hydra.Adapters.Utils
+import Hydra.Printing
+import Hydra.AdapterUtils
 import Hydra.Basics
 import Hydra.Coders
 import Hydra.Common
@@ -19,8 +20,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Monads
 import Hydra.Reduction
-import Hydra.Adapters.Literal
-import Hydra.Adapters.UtilsEtc
+import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
 import qualified Hydra.Dsl.Types as Types
 

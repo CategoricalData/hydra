@@ -1,6 +1,6 @@
 -- | Hindley-Milner style type unification
 
-module Hydra.Types.Unification (
+module Hydra.Unification (
   Constraint,
   solveConstraints,
 ) where
@@ -11,7 +11,7 @@ import Hydra.Core
 import Hydra.Lexical
 import Hydra.Monads
 import Hydra.Rewriting
-import Hydra.Types.Substitution
+import Hydra.Substitution
 import Hydra.Dsl.Types as Types
 
 import qualified Data.List as L
