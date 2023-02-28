@@ -64,9 +64,6 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-emptyEnv :: AvroEnvironment Kv
-emptyEnv = emptyEnvironment
-
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
@@ -96,7 +93,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    descs <- L.concat <$> fromFlowIo coreContext (CM.zipWithM (jsonToTarget inFile adapter (lastMileEncoder lastMile)) [1..] entities)
+    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter (lastMileEncoder lastMile)) [1..] entities)
     writeFile outFile $ (lastMileSerializer lastMile) descs
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
@@ -104,11 +101,11 @@ transformAvroJson format adapter lastMile inFile outFile = do
 
     jsonToTarget inFile adapter termRdfizer index payload = case stringToValue payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
-        Right json -> withState emptyEnv $ do
+        Right json -> withState emptyAvroEnvironment $ do
           term <- coderEncode (adapterCoder adapter) json
           env <- getState
-          let graph = Graph (avroEnvironmentElements env) Nothing -- TODO; schema graph is not the core graph
-          withState coreContext $ termRdfizer term graph
+          let graph = elementsToGraph hydraCore (Just hydraCore) (M.elems $ avroEnvironmentElements env) -- TODO; schema graph is not the core graph
+          withState hydraCore $ termRdfizer term graph
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,
@@ -126,7 +123,7 @@ transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
   where
     loadAdapter schemaStr = do
       avroSchema <- coderDecode avroSchemaStringCoder schemaStr
-      withState emptyEnv $ avroHydraAdapter avroSchema
+      withState emptyAvroEnvironment $ avroHydraAdapter avroSchema
 
     transformFile adapter srcFile = do
       case jsonPayloadFormat srcFile of

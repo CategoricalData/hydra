@@ -8,7 +8,7 @@ import Hydra.Dsl.Annotations
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
 
-import Hydra.Sources.Ext.Json.Model
+import Hydra.Sources.Langs.Json.Model
 
 
 geoJsonModule :: Module Kv
