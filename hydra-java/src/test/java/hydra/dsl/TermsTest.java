@@ -1,4 +1,4 @@
-package hydra;
+package hydra.dsl;
 
 import hydra.core.Elimination;
 import hydra.core.Function;

@@ -48,10 +48,6 @@ public interface Types {
     return literal(LiteralTypes.boolean_());
   }
 
-  static <M> Type<M> element(final Type<M> other) {
-    return new Type.Element<>(other);
-  }
-
   static <M> Type<M> enum_(final String... names) {
     FieldType<M>[] fields = new FieldType[names.length];
     for (int i = 0; i < names.length; i++) {
