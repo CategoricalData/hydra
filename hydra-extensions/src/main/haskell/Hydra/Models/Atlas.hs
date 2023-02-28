@@ -7,7 +7,7 @@ import Hydra.Core
 import Hydra.Module
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Ext.Xml.Schema
+import Hydra.Sources.Langs.Xml.Schema
 
 
 atlasModelModule :: Module Kv

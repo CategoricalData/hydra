@@ -3,6 +3,7 @@ module Hydra.Langs.Avro.Coder (
   AvroHydraAdapter(..),
   AvroQualifiedName(..),
   avroHydraAdapter,
+  emptyAvroEnvironment,
 ) where
 
 import Hydra.Kernel
@@ -34,7 +35,7 @@ data ForeignKey = ForeignKey Name (String -> Name)
 
 data PrimaryKey = PrimaryKey FieldName (String -> Name)
 
-emptyEnvironment = AvroEnvironment M.empty Nothing M.empty
+emptyAvroEnvironment = AvroEnvironment M.empty Nothing M.empty
 
 avro_foreignKey = "@foreignKey"
 avro_primaryKey = "@primaryKey"

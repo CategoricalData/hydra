@@ -30,8 +30,8 @@ import System.FilePath.Posix
 import System.Directory
 
 
-emptyInstanceContext :: Context Kv -> Context Kv
-emptyInstanceContext scx = scx {contextGraph = Graph M.empty (Just $ contextGraph scx)}
+emptyInstanceContext :: Graph Kv -> Graph Kv
+emptyInstanceContext scx = elementsToGraph scx (Just scx) []
 
 -- | A convenience for osvJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
 executeOsvToRdfWorkflow :: TransformWorkflow -> IO ()
@@ -72,11 +72,11 @@ osvJsonDirectoryToNtriples srcDir destDir = do
           osvJsonToNtriples coder (combine srcDir srcFile) (combine destDir destFile)
           return True
 
-osvContext = modulesToContext [osvSchemaModule]
+osvContext = modulesToGraph [osvSchemaModule]
 
 osvInstanceContext = emptyInstanceContext osvContext
 
-osvJsonToNtriples :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value -> FilePath -> FilePath -> IO ()
+osvJsonToNtriples :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value -> FilePath -> FilePath -> IO ()
 osvJsonToNtriples coder inFile outFile = do
     contents <- readFile inFile
     case stringToValue contents of

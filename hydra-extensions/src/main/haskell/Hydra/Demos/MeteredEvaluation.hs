@@ -16,7 +16,7 @@ import Hydra.Reduction
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Strings as Strings
-import Hydra.Sources.Adapters.Utils
+import Hydra.Sources.Printing
 import Hydra.CoreEncoding
 
 import System.IO
@@ -36,7 +36,7 @@ testModule = Module testNs elements [hydraMantleModule, adapterUtilsModule] Noth
     test = Definition . fromQname testNs
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 @@ int32 42)),
-        el $ test "describeType" $ ref describeTypeSource @@ (Datum $ encodeType $ Types.list $ Types.int32)]
+        el $ test "describeType" $ ref describeTypeSource @@ (Datum $ epsilonEncodeType $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
@@ -45,7 +45,7 @@ demoMeteredEvaluation = do
     let result = flowStateValue state
     putStrLn $ "result: " <> show result
   where
-    context = modulesToContext [testModule]
+    context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
       original <- dereferenceElement $ fromQname testNs "catStrings"
       reduced <- betaReduceTerm original
