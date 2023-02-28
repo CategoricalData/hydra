@@ -7,24 +7,42 @@ public class Context<M> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/compute.Context");
   
   /**
-   * The graph itself
+   * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
    */
-  public final hydra.mantle.Graph<M> graph;
+  public final java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<M>>> environment;
   
   /**
-   * All supported primitive functions, by name
+   * The body of the term which generated this context
    */
-  public final java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions;
+  public final hydra.core.Term<M> body;
+  
+  /**
+   * The graph itself
+   */
+  public final hydra.graph.Graph<M> graph;
+  
+  /**
+   * All supported primitive constants and functions, by name
+   */
+  public final java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> primitives;
   
   /**
    * The annotation class which is supported in this context
    */
   public final hydra.compute.AnnotationClass<M> annotations;
   
-  public Context (hydra.mantle.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions, hydra.compute.AnnotationClass<M> annotations) {
+  /**
+   * The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
+   */
+  public final java.util.Optional<hydra.compute.Context<M>> schema;
+  
+  public Context (java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<M>>> environment, hydra.core.Term<M> body, hydra.graph.Graph<M> graph, java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> primitives, hydra.compute.AnnotationClass<M> annotations, java.util.Optional<hydra.compute.Context<M>> schema) {
+    this.environment = environment;
+    this.body = body;
     this.graph = graph;
-    this.functions = functions;
+    this.primitives = primitives;
     this.annotations = annotations;
+    this.schema = schema;
   }
   
   @Override
@@ -33,23 +51,35 @@ public class Context<M> {
       return false;
     }
     Context o = (Context) (other);
-    return graph.equals(o.graph) && functions.equals(o.functions) && annotations.equals(o.annotations);
+    return environment.equals(o.environment) && body.equals(o.body) && graph.equals(o.graph) && primitives.equals(o.primitives) && annotations.equals(o.annotations) && schema.equals(o.schema);
   }
   
   @Override
   public int hashCode() {
-    return 2 * graph.hashCode() + 3 * functions.hashCode() + 5 * annotations.hashCode();
+    return 2 * environment.hashCode() + 3 * body.hashCode() + 5 * graph.hashCode() + 7 * primitives.hashCode() + 11 * annotations.hashCode() + 13 * schema.hashCode();
   }
   
-  public Context withGraph(hydra.mantle.Graph<M> graph) {
-    return new Context(graph, functions, annotations);
+  public Context withEnvironment(java.util.Map<hydra.core.Name, java.util.Optional<hydra.core.Term<M>>> environment) {
+    return new Context(environment, body, graph, primitives, annotations, schema);
   }
   
-  public Context withFunctions(java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> functions) {
-    return new Context(graph, functions, annotations);
+  public Context withBody(hydra.core.Term<M> body) {
+    return new Context(environment, body, graph, primitives, annotations, schema);
+  }
+  
+  public Context withGraph(hydra.graph.Graph<M> graph) {
+    return new Context(environment, body, graph, primitives, annotations, schema);
+  }
+  
+  public Context withPrimitives(java.util.Map<hydra.core.Name, hydra.compute.Primitive<M>> primitives) {
+    return new Context(environment, body, graph, primitives, annotations, schema);
   }
   
   public Context withAnnotations(hydra.compute.AnnotationClass<M> annotations) {
-    return new Context(graph, functions, annotations);
+    return new Context(environment, body, graph, primitives, annotations, schema);
+  }
+  
+  public Context withSchema(java.util.Optional<hydra.compute.Context<M>> schema) {
+    return new Context(environment, body, graph, primitives, annotations, schema);
   }
 }
