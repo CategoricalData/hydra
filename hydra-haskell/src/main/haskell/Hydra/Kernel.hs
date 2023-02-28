@@ -1,10 +1,11 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
 
 module Hydra.Kernel (
-  module Hydra.Adapters.Coders,
-  module Hydra.Adapters.Literal,
-  module Hydra.Adapters.Term,
-  module Hydra.Adapters.Utils,
+  module Hydra.Adapters,
+  module Hydra.LiteralAdapters,
+  module Hydra.TermAdapters,
+  module Hydra.Printing,
+  module Hydra.AdapterUtils,
   module Hydra.Basics,
   module Hydra.Coders,
   module Hydra.Common,
@@ -23,8 +24,8 @@ module Hydra.Kernel (
   module Hydra.Phantoms,
   module Hydra.Reduction,
   module Hydra.Rewriting,
-  module Hydra.Types.Inference,
-  -- module Hydra.Util.Codetree.Ast,
+  module Hydra.Inference,
+  -- module Hydra.Ast,
   module Hydra.Util.Debug,
   module Hydra.Util.Formatting,
 --  module Hydra.Util.GrammarToModule,
@@ -32,10 +33,11 @@ module Hydra.Kernel (
   module Hydra.Workflow,
 ) where
 
-import Hydra.Adapters.Coders
-import Hydra.Adapters.Literal
-import Hydra.Adapters.Term
-import Hydra.Adapters.Utils
+import Hydra.Adapters
+import Hydra.LiteralAdapters
+import Hydra.TermAdapters
+import Hydra.Printing
+import Hydra.AdapterUtils
 import Hydra.Basics
 import Hydra.Coders
 import Hydra.Common
@@ -54,8 +56,8 @@ import Hydra.Monads
 import Hydra.Phantoms
 import Hydra.Reduction
 import Hydra.Rewriting
-import Hydra.Types.Inference
--- import Hydra.Util.Codetree.Ast
+import Hydra.Inference
+-- import Hydra.Ast
 import Hydra.Util.Debug
 import Hydra.Util.Formatting
 --import Hydra.Util.GrammarToModule

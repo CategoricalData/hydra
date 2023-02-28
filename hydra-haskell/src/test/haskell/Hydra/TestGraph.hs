@@ -44,7 +44,7 @@ testElementFirstName = Element {
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Kv
-testGraph = elementsToGraph coreContext (Just testSchemaGraph) [testElementArthur, testElementFirstName]
+testGraph = elementsToGraph hydraCore (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespace :: Namespace
 testNamespace = Namespace "testGraph"

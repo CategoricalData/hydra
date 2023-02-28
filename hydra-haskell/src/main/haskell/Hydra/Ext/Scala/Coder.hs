@@ -4,8 +4,8 @@ import Hydra.Kernel
 import Hydra.Dsl.Terms
 import Hydra.Ext.Scala.Language
 import Hydra.Ext.Scala.Utils
-import Hydra.Adapters.Coders
-import Hydra.Util.Codetree.Script
+import Hydra.Adapters
+import Hydra.Util.Script
 import Hydra.Ext.Scala.Serde
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Scala.Meta as Scala

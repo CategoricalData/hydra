@@ -1,6 +1,6 @@
 -- | Entry point for Hydra type inference, which is a variation on on Hindley-Milner
 
-module Hydra.Types.Inference (
+module Hydra.Inference (
   annotateElementWithTypes,
   annotateTermWithTypes,
   inferType,
@@ -16,9 +16,9 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Monads
 import Hydra.Rewriting
-import Hydra.Types.Substitution
-import Hydra.Types.Unification
-import Hydra.Types.Rules
+import Hydra.Substitution
+import Hydra.Unification
+import Hydra.Rules
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM

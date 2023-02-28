@@ -1,6 +1,6 @@
 -- | Variable substitution and normalization of type expressions
 
-module Hydra.Types.Substitution where
+module Hydra.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle

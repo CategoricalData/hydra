@@ -1,8 +1,8 @@
 -- | Additional adapter utilities, above and beyond the generated ones
 
-module Hydra.Adapters.UtilsEtc (
-  module Hydra.Adapters.UtilsEtc,
-  module Hydra.Adapters.Utils,
+module Hydra.AdapterUtils (
+  module Hydra.AdapterUtils,
+  module Hydra.Printing,
   module Hydra.Common,
 ) where
 
@@ -12,7 +12,7 @@ import Hydra.Core
 import Hydra.Basics
 import Hydra.Module
 import Hydra.Monads
-import Hydra.Adapters.Utils
+import Hydra.Printing
 import Hydra.Kv
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Terms as Terms

@@ -1,8 +1,8 @@
 module Hydra.Ext.Pegasus.Serde where
 
-import Hydra.Util.Codetree.Script
+import Hydra.Util.Script
 import Hydra.Util.Formatting
-import qualified Hydra.Util.Codetree.Ast as CT
+import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Pegasus.Pdl as PDL
 
 import qualified Data.List as L

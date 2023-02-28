@@ -1,4 +1,4 @@
-module Hydra.Sources.Util.Codetree.Ast where
+module Hydra.Sources.Ast where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
@@ -9,7 +9,7 @@ codetreeAstModule :: Module Kv
 codetreeAstModule = Module ns elements [] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
-    ns = Namespace "hydra/util/codetree/ast"
+    ns = Namespace "hydra/ast"
     def = datatype ns
     ast = nsref ns
 

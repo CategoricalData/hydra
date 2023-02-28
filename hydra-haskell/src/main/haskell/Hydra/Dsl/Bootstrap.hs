@@ -3,6 +3,7 @@
 module Hydra.Dsl.Bootstrap where
 
 import Hydra.Kernel
+import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
@@ -33,7 +34,7 @@ bootstrapGraph = Graph {
   graphElements = M.empty,
   graphEnvironment = M.empty,
   graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary 
-  graphPrimitives = M.empty,
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
   graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}
 

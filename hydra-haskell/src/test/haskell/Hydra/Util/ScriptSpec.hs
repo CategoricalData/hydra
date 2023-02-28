@@ -1,9 +1,9 @@
-module Hydra.Util.Codetree.PrintSpec where
+module Hydra.Util.ScriptSpec where
 
 import qualified Test.Hspec as H
 
-import Hydra.Util.Codetree.Ast
-import Hydra.Util.Codetree.Script
+import Hydra.Ast
+import Hydra.Util.Script
 import Hydra.Ext.Haskell.Operators
 
 

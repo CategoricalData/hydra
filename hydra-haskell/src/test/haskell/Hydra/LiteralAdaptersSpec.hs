@@ -1,4 +1,4 @@
-module Hydra.Adapters.LiteralSpec where
+module Hydra.LiteralAdaptersSpec where
 
 import Hydra.Kernel
 

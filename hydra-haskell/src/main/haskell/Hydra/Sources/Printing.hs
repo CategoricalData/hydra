@@ -1,4 +1,4 @@
-module Hydra.Sources.Adapters.Utils where
+module Hydra.Sources.Printing where
 
 import Hydra.Kernel
 import Hydra.Sources.Basics
@@ -10,7 +10,7 @@ import qualified Hydra.Dsl.Annotations as Ann
 import Prelude hiding ((++))
 
 
-utilsNs = Namespace "hydra/adapters/utils"
+utilsNs = Namespace "hydra/printing"
 
 adapterUtilsModule :: Module Kv
 adapterUtilsModule = Module utilsNs elements [hydraBasicsModule] $

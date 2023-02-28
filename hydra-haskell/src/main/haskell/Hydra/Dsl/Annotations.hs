@@ -2,7 +2,8 @@
 
 module Hydra.Dsl.Annotations (
   module Hydra.Dsl.Annotations,
-  module Hydra.Dsl.Bootstrap
+  module Hydra.Dsl.Bootstrap,
+  module Hydra.Sources.Core,
 ) where
 
 import Hydra.Kernel
@@ -20,10 +21,10 @@ key_maxSize = "maxLength"
 key_minSize = "minLength"
 
 annotateTerm :: String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-annotateTerm = setTermAnnotation coreContext
+annotateTerm = setTermAnnotation hydraCore
 
 annotateType :: String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-annotateType = setTypeAnnotation coreContext
+annotateType = setTypeAnnotation hydraCore
 
 bounded :: Maybe Int -> Maybe Int -> Type Kv -> Type Kv
 bounded min max = annotMin . annotMax
@@ -40,16 +41,11 @@ boundedSet min max et = bounded min max $ Types.set et
 boundedString :: Maybe Int -> Maybe Int -> Type Kv
 boundedString min max = bounded min max Types.string
 
--- TODO: move me; this is the only function here which does not have to do with annotations
-coreContext :: Graph Kv
-coreContext = hydraCore {
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives}
-
 doc :: String -> Type Kv -> Type Kv
-doc s = setTypeDescription coreContext (Just s)
+doc s = setTypeDescription hydraCore (Just s)
 
 dataDoc :: String -> Term Kv -> Term Kv
-dataDoc s = setTermDescription coreContext (Just s)
+dataDoc s = setTermDescription hydraCore (Just s)
 
 dataterm :: Namespace -> String -> Type Kv -> Term Kv -> Element Kv
 dataterm gname lname = termElement (qualify gname (Name lname))
@@ -64,10 +60,10 @@ see :: String -> Type Kv -> Type Kv
 see s = doc $ "See " ++ s
 
 setMaxLength :: Int -> Type Kv -> Type Kv
-setMaxLength m = setTypeAnnotation coreContext key_maxSize (Just $ Terms.int32 m)
+setMaxLength m = setTypeAnnotation hydraCore key_maxSize (Just $ Terms.int32 m)
 
 setMinLength :: Int -> Type Kv -> Type Kv
-setMinLength m = setTypeAnnotation coreContext key_minSize (Just $ Terms.int32 m)
+setMinLength m = setTypeAnnotation hydraCore key_minSize (Just $ Terms.int32 m)
 
 twoOrMoreList :: Type Kv -> Type Kv
 twoOrMoreList = boundedList (Just 2) Nothing

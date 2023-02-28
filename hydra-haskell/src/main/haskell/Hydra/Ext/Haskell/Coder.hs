@@ -1,11 +1,11 @@
 module Hydra.Ext.Haskell.Coder (printModule) where
 
 import Hydra.Kernel
-import Hydra.Adapters.Coders
+import Hydra.Adapters
 import Hydra.Ext.Haskell.Language
 import Hydra.Ext.Haskell.Utils
 import Hydra.Dsl.Terms
-import Hydra.Util.Codetree.Script
+import Hydra.Util.Script
 import Hydra.Ext.Haskell.Serde
 import Hydra.Ext.Haskell.Settings
 import qualified Hydra.Ext.Haskell.Ast as H

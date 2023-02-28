@@ -1,7 +1,7 @@
-module Hydra.Types.UnificationSpec where
+module Hydra.UnificationSpec where
 
 import Hydra.Kernel
-import Hydra.Types.Unification
+import Hydra.Unification
 import Hydra.TestUtils
 import qualified Hydra.Dsl.Types as Types
 
