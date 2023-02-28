@@ -4,7 +4,7 @@ import qualified Test.Hspec as H
 
 import Hydra.Ast
 import Hydra.Tools.Script
-import Hydra.Ext.Haskell.Operators
+import Hydra.Langs.Haskell.Operators
 
 
 check :: Expr -> String -> H.Expectation

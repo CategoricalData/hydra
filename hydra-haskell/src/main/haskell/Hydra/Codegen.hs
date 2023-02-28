@@ -4,38 +4,38 @@ module Hydra.Codegen where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
-import qualified Hydra.Ext.Haskell.Coder as Haskell
-import qualified Hydra.Ext.Java.Coder as Java
-import qualified Hydra.Ext.Pegasus.Coder as PDL
-import qualified Hydra.Ext.Scala.Coder as Scala
-import qualified Hydra.Ext.Yaml.Modules as Yaml
+import qualified Hydra.Langs.Haskell.Coder as Haskell
+import qualified Hydra.Langs.Java.Coder as Java
+import qualified Hydra.Langs.Pegasus.Coder as PDL
+import qualified Hydra.Langs.Scala.Coder as Scala
+import qualified Hydra.Langs.Yaml.Modules as Yaml
 
 import Hydra.Sources.Printing
 import Hydra.Sources.Basics
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
-import Hydra.Sources.Ext.Avro.Schema
-import Hydra.Sources.Ext.Graphql.Syntax
-import Hydra.Sources.Ext.Haskell.Ast
-import Hydra.Sources.Ext.Java.Syntax
-import Hydra.Sources.Ext.Json.Model
-import Hydra.Sources.Ext.Owl.Syntax
-import Hydra.Sources.Ext.Parquet.Format
-import Hydra.Sources.Ext.Pegasus.Pdl
-import Hydra.Sources.Ext.Protobuf.Any
-import Hydra.Sources.Ext.Protobuf.SourceContext
-import Hydra.Sources.Ext.Protobuf.Type
-import Hydra.Sources.Ext.Rdf.Syntax
-import Hydra.Sources.Ext.RelationalModel
-import Hydra.Sources.Ext.Scala.Meta
-import Hydra.Sources.Ext.Shacl.Model
-import Hydra.Sources.Ext.Shex.Syntax
-import Hydra.Sources.Ext.Sql.Ansi
-import Hydra.Sources.Ext.Tinkerpop.Features
-import Hydra.Sources.Ext.Tinkerpop.Typed
-import Hydra.Sources.Ext.Tinkerpop.V3
-import Hydra.Sources.Ext.Xml.Schema
-import Hydra.Sources.Ext.Yaml.Model
+import Hydra.Sources.Langs.Avro.Schema
+import Hydra.Sources.Langs.Graphql.Syntax
+import Hydra.Sources.Langs.Haskell.Ast
+import Hydra.Sources.Langs.Java.Syntax
+import Hydra.Sources.Langs.Json.Model
+import Hydra.Sources.Langs.Owl.Syntax
+import Hydra.Sources.Langs.Parquet.Format
+import Hydra.Sources.Langs.Pegasus.Pdl
+import Hydra.Sources.Langs.Protobuf.Any
+import Hydra.Sources.Langs.Protobuf.SourceContext
+import Hydra.Sources.Langs.Protobuf.Type
+import Hydra.Sources.Langs.Rdf.Syntax
+import Hydra.Sources.Langs.RelationalModel
+import Hydra.Sources.Langs.Scala.Meta
+import Hydra.Sources.Langs.Shacl.Model
+import Hydra.Sources.Langs.Shex.Syntax
+import Hydra.Sources.Langs.Sql.Ansi
+import Hydra.Sources.Langs.Tinkerpop.Features
+import Hydra.Sources.Langs.Tinkerpop.Typed
+import Hydra.Sources.Langs.Tinkerpop.V3
+import Hydra.Sources.Langs.Xml.Schema
+import Hydra.Sources.Langs.Yaml.Model
 import Hydra.Sources.Grammar
 import Hydra.Sources.Libraries
 import Hydra.Sources.Coders
