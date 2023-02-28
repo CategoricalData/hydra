@@ -6,7 +6,7 @@ import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
 import Hydra.Module
-import Hydra.Util.Formatting
+import Hydra.Tools.Formatting
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L

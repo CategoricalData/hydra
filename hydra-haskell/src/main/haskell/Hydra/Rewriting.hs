@@ -9,7 +9,7 @@ import Hydra.Monads
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Util.Sorting
+import Hydra.Tools.Sorting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

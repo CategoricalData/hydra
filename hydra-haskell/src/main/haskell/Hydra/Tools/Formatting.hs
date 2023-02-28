@@ -1,6 +1,6 @@
 -- | String formatting utilities
 
-module Hydra.Util.Formatting where
+module Hydra.Tools.Formatting where
 
 import qualified Hydra.Lib.Strings as Strings
 

@@ -4,7 +4,7 @@ module Hydra.Sources.Ext.Graphql.Syntax where
 
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
-import Hydra.Util.GrammarToModule
+import Hydra.Tools.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
 
 

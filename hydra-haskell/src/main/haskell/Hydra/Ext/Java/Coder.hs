@@ -5,7 +5,7 @@ import Hydra.Reduction
 import Hydra.Ext.Java.Utils
 import Hydra.Ext.Java.Language
 import Hydra.Adapters
-import Hydra.Util.Script
+import Hydra.Tools.Script
 import Hydra.Ext.Java.Serde
 import Hydra.Ext.Java.Settings
 import Hydra.AdapterUtils
