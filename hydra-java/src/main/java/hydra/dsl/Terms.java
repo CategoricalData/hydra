@@ -63,10 +63,6 @@ public interface Terms {
     return elimination(new Elimination.Element<>());
   }
 
-  static <M> Term<M> element(final Name elName) {
-    return new Term.Element<>(elName);
-  }
-
   static <M> Term<M> elimination(final Elimination<M> elim) {
     return function(new Function.Elimination<>(elim));
   }

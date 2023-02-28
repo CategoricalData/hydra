@@ -1,4 +1,4 @@
-package hydra;
+package hydra.dsl;
 
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
