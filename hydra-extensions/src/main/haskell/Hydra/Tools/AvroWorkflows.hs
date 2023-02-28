@@ -13,19 +13,19 @@ module Hydra.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Ext.Json.Serde
-import qualified Hydra.Ext.Avro.Schema as Avro
-import qualified Hydra.Ext.Json.Model as Json
-import Hydra.Ext.Json.Eliminate
-import Hydra.Ext.Avro.Coder
-import Hydra.Ext.Avro.SchemaJson
+import Hydra.Langs.Json.Serde
+import qualified Hydra.Langs.Avro.Schema as Avro
+import qualified Hydra.Langs.Json.Model as Json
+import Hydra.Langs.Json.Eliminate
+import Hydra.Langs.Avro.Coder
+import Hydra.Langs.Avro.SchemaJson
 import Hydra.Rewriting
-import qualified Hydra.Ext.Shacl.Coder as Shacl
-import qualified Hydra.Ext.Rdf.Syntax as Rdf
-import qualified Hydra.Ext.Rdf.Utils as RdfUt
-import Hydra.Ext.Rdf.Serde
+import qualified Hydra.Langs.Shacl.Coder as Shacl
+import qualified Hydra.Langs.Rdf.Syntax as Rdf
+import qualified Hydra.Langs.Rdf.Utils as RdfUt
+import Hydra.Langs.Rdf.Serde
 import Hydra.Workflow
 
 import qualified Control.Monad as CM

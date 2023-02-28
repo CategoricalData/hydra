@@ -4,8 +4,7 @@ module Hydra.Models.Datalog where
 
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
-import Hydra.Util.GrammarToModule
-import qualified Hydra.Dsl.Standard as Standard
+import Hydra.Tools.GrammarToModule
 
 comma = terminal ","
 entail = terminal ":-"
@@ -18,7 +17,7 @@ datalogSyntaxModule :: Module Kv
 datalogSyntaxModule = grammarToModule ns datalogGrammar $
     Just "A basic Datalog model"
   where
-    ns = Namespace "hydra/ext/datalog/syntax"
+    ns = Namespace "hydra/langs/datalog/syntax"
 
 datalogGrammar :: Grammar
 datalogGrammar = Grammar [

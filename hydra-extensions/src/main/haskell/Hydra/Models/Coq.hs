@@ -2,7 +2,7 @@ module Hydra.Models.Coq where
 
 import Hydra.Kernel
 import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 import Hydra.Sources.Core
 
 
@@ -11,7 +11,7 @@ coqSyntaxModule = Module ns elements [] $
     Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++
       "  https://coq.github.io/doc/v8.15/refman/language/core/basic.html#essential-vocabulary")
   where
-    ns = Namespace "hydra/ext/coq/syntax"
+    ns = Namespace "hydra/langs/syntax"
     def = datatype ns
     coq = nsref ns
 
