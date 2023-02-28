@@ -620,8 +620,8 @@ encodeType aliases t = case stripType t of
     jkt <- encode kt >>= javaTypeToJavaReferenceType
     jvt <- encode vt >>= javaTypeToJavaReferenceType
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
-  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
-  TypeRecord (RowType _UnitType _ []) -> return $ javaRefType [] javaLangPackageName "Void"
+  TypeProduct [] -> unit
+  TypeRecord (RowType _UnitType _ []) -> unit
   TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
@@ -631,9 +631,11 @@ encodeType aliases t = case stripType t of
     return $ javaRefType [jst] javaUtilPackageName "Set"
   TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   TypeVariable (Name v) -> pure $ Java.TypeReference $ javaTypeVariable v
+  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
+    unit = return $ javaRefType [] javaLangPackageName "Void"
 
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases ft
