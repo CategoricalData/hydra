@@ -67,7 +67,7 @@ owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
 --        axioms
 --     ')'
       def "Ontology" $ record [ -- note: omitting IRI and version
-        "directImports">: list $ element $ owl "Ontology",
+        "directImports">: list $ TypeElement $ owl "Ontology",
         "annotations">: list $ owl "Annotation",
         "axioms">: list $ owl "Axiom"],
 

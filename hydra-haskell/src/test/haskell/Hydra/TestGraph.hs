@@ -37,7 +37,7 @@ testContext = coreContext {
 testElementArthur :: Element Kv
 testElementArthur = Element {
   elementName = Name "ArthurDent",
-  elementSchema = element $ Name "Person",
+  elementSchema = TermElement $ Name "Person",
   elementData = testDataArthur}
 
 testElementFirstName :: Element Kv

@@ -75,7 +75,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkJsonCoder int32ElementType
-      (Terms.element name)
+      (TermElement name)
       (Json.ValueString $ unName name)
 
   H.it "Sets become arrays" $

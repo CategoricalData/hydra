@@ -40,7 +40,7 @@ checkApplicationTerms = do
 
     H.it "Check data (delta) applications" $ do
       expectMonotype
-        (apply delta (element $ Name "ArthurDent"))
+        (apply delta (TermElement $ Name "ArthurDent"))
         testTypePerson
 --      expectMonotype
 --        (apply termExpr describeType)
@@ -92,7 +92,7 @@ checkFunctionTerms = do
         (Types.function testTypeFoobarValue Types.boolean)
       expectPolytype
         (cases testTypePersonOrSomethingName [
-          Field (FieldName "person") (apply delta (element $ Name "firstName")),
+          Field (FieldName "person") (apply delta (TermElement $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
         ["v1"] (Types.function
           (TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
@@ -128,11 +128,11 @@ checkIndividualTerms = do
 
     H.it "Check elements" $ do
       expectMonotype
-        (element $ Name "ArthurDent")
-        (Types.element testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
+        (TermElement $ Name "ArthurDent")
+        (TypeElement testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
       expectMonotype
-        (element $ Name "firstName")
-        (Types.element (Types.function (Types.wrap $ Name "Person") Types.string))
+        (TermElement $ Name "firstName")
+        (TypeElement (Types.function (Types.wrap $ Name "Person") Types.string))
 
     H.it "Check optionals" $ do
       expectMonotype

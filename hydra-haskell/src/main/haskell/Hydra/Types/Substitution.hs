@@ -32,7 +32,7 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
     normalizeType typ = case typ of
       TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (normalizeType lhs) (normalizeType rhs))
       TypeAnnotated (Annotated t ann) -> TypeAnnotated (Annotated (normalizeType t) ann)
-      TypeElement t -> element $ normalizeType t
+      TypeElement t -> TypeElement $ normalizeType t
       TypeFunction (FunctionType dom cod) -> function (normalizeType dom) (normalizeType cod)
       TypeList t -> list $ normalizeType t
       TypeLiteral _ -> typ
@@ -58,7 +58,7 @@ substituteInType :: M.Map Name (Type m) -> Type m -> Type m
 substituteInType s typ = case typ of
     TypeApplication (ApplicationType lhs rhs) -> TypeApplication (ApplicationType (subst lhs) (subst rhs))
     TypeAnnotated (Annotated t ann) -> TypeAnnotated (Annotated (subst t) ann)
-    TypeElement t -> element $ subst t
+    TypeElement t -> TypeElement $ subst t
     TypeFunction (FunctionType dom cod) -> function (subst dom) (subst cod)
     TypeList t -> list $ subst t
     TypeLiteral _ -> typ

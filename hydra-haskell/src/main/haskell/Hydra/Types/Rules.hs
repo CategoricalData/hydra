@@ -48,7 +48,7 @@ applyRules term = case term of
 
     TermElement name -> do
       et <- withGraphContext $ typeOfElement name
-      yield (TermElement name) (Types.element et) []
+      yield (TermElement name) (TypeElement et) []
 
     TermFunction f -> case f of
 
@@ -56,7 +56,7 @@ applyRules term = case term of
 
         EliminationElement -> do
           et <- freshName
-          yieldElimination EliminationElement (Types.function (Types.element et) et) []
+          yieldElimination EliminationElement (Types.function (TypeElement et) et) []
 
         EliminationList fun -> do
           a <- freshName
