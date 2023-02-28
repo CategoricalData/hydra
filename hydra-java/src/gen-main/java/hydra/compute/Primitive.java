@@ -19,9 +19,9 @@ public class Primitive<M> {
   /**
    * A concrete implementation of the primitive function
    */
-  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation;
+  public final java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<java.lang.Void, hydra.core.Term<M>>> implementation;
   
-  public Primitive (hydra.core.Name name, hydra.core.Type<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
+  public Primitive (hydra.core.Name name, hydra.core.Type<M> type, java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<java.lang.Void, hydra.core.Term<M>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -49,7 +49,7 @@ public class Primitive<M> {
     return new Primitive(name, type, implementation);
   }
   
-  public Primitive withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<hydra.compute.Context<M>, hydra.core.Term<M>>> implementation) {
+  public Primitive withImplementation(java.util.function.Function<java.util.List<hydra.core.Term<M>>, hydra.compute.Flow<java.lang.Void, hydra.core.Term<M>>> implementation) {
     return new Primitive(name, type, implementation);
   }
 }

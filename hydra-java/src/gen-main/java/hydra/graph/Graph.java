@@ -1,22 +1,22 @@
-package hydra.mantle;
+package hydra.graph;
 
 /**
  * A graph, or set of named terms, together with its schema graph
  */
 public class Graph<M> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.Graph");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Graph");
   
   /**
    * All of the elements in the graph
    */
-  public final java.util.Map<hydra.core.Name, hydra.mantle.Element<M>> elements;
+  public final java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements;
   
   /**
    * The schema graph to this graph. If omitted, the graph is its own schema graph.
    */
-  public final java.util.Optional<hydra.mantle.Graph<M>> schema;
+  public final java.util.Optional<hydra.graph.Graph<M>> schema;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.mantle.Element<M>> elements, java.util.Optional<hydra.mantle.Graph<M>> schema) {
+  public Graph (java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements, java.util.Optional<hydra.graph.Graph<M>> schema) {
     this.elements = elements;
     this.schema = schema;
   }
@@ -35,11 +35,11 @@ public class Graph<M> {
     return 2 * elements.hashCode() + 3 * schema.hashCode();
   }
   
-  public Graph withElements(java.util.Map<hydra.core.Name, hydra.mantle.Element<M>> elements) {
+  public Graph withElements(java.util.Map<hydra.core.Name, hydra.graph.Element<M>> elements) {
     return new Graph(elements, schema);
   }
   
-  public Graph withSchema(java.util.Optional<hydra.mantle.Graph<M>> schema) {
+  public Graph withSchema(java.util.Optional<hydra.graph.Graph<M>> schema) {
     return new Graph(elements, schema);
   }
 }
