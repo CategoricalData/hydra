@@ -1,4 +1,9 @@
-module Hydra.Langs.Avro.Coder (avroHydraAdapter) where
+module Hydra.Langs.Avro.Coder (
+  AvroEnvironment(..),
+  AvroHydraAdapter(..),
+  AvroQualifiedName(..),
+  avroHydraAdapter,
+) where
 
 import Hydra.Kernel
 import Hydra.Langs.Json.Eliminate

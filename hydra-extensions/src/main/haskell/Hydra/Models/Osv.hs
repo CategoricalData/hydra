@@ -6,7 +6,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Module
 import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 
 
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON

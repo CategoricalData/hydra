@@ -6,7 +6,7 @@ import Hydra.Compute
 import Hydra.Core
 import Hydra.Module
 import Hydra.Dsl.Types as Types
-import Hydra.Dsl.Standard
+import Hydra.Dsl.Annotations
 
 
 dtmi128 :: Type Kv

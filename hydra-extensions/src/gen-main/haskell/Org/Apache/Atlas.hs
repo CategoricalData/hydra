@@ -5,7 +5,7 @@
 module Org.Apache.Atlas where
 
 import qualified Hydra.Core as Core
-import qualified Hydra.Ext.Xml.Schema as Schema
+import qualified Hydra.Langs.Xml.Schema as Schema
 import Data.List
 import Data.Map
 import Data.Set
