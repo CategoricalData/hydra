@@ -26,10 +26,10 @@ module Hydra.Kernel (
   module Hydra.Rewriting,
   module Hydra.Inference,
   -- module Hydra.Ast,
-  module Hydra.Util.Debug,
-  module Hydra.Util.Formatting,
---  module Hydra.Util.GrammarToModule,
-  module Hydra.Util.Sorting,
+  module Hydra.Tools.Debug,
+  module Hydra.Tools.Formatting,
+--  module Hydra.Tools.GrammarToModule,
+  module Hydra.Tools.Sorting,
   module Hydra.Workflow,
 ) where
 
@@ -58,8 +58,8 @@ import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.Inference
 -- import Hydra.Ast
-import Hydra.Util.Debug
-import Hydra.Util.Formatting
---import Hydra.Util.GrammarToModule
-import Hydra.Util.Sorting
+import Hydra.Tools.Debug
+import Hydra.Tools.Formatting
+--import Hydra.Tools.GrammarToModule
+import Hydra.Tools.Sorting
 import Hydra.Workflow

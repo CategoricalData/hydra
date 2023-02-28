@@ -1,7 +1,7 @@
 module Hydra.Ext.Scala.Serde where
 
 import Hydra.Ast
-import Hydra.Util.Script
+import Hydra.Tools.Script
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Scala.Meta as Scala

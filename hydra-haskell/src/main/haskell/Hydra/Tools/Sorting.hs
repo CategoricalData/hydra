@@ -1,6 +1,6 @@
 -- | Utilities for sorting
 
-module Hydra.Util.Sorting where
+module Hydra.Tools.Sorting where
 
 import qualified Data.List as L
 import qualified Data.Bifunctor as BF

@@ -6,7 +6,7 @@
 
 module Hydra.Ext.Haskell.Serde where
 
-import Hydra.Util.Script
+import Hydra.Tools.Script
 import Hydra.Ext.Haskell.Operators
 import qualified Hydra.Ast as CT
 import qualified Hydra.Ext.Haskell.Ast as H
