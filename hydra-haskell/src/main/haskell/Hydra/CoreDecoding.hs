@@ -22,6 +22,7 @@ module Hydra.CoreDecoding (
   typeDependencyNames,
   ) where
 
+import Hydra.Coders
 import Hydra.Common
 import Hydra.Core
 import Hydra.Graph

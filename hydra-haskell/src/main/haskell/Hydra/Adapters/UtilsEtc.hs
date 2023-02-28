@@ -6,6 +6,7 @@ module Hydra.Adapters.UtilsEtc (
   module Hydra.Common,
 ) where
 
+import Hydra.Coders
 import Hydra.Common
 import Hydra.Core
 import Hydra.Basics

@@ -39,7 +39,7 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
         lambda "a" $ record [
           "encoder">:
             doc "An encoder for terms to a list of output objects" $
-            core "Term" @@ compute "Kv" --> graph "Graph" @@ compute "Kv" --> compute "Flow" @@ (compute "Context" @@ compute "Kv") @@ list "a",
+            core "Term" @@ compute "Kv" --> graph "Graph" @@ compute "Kv" --> compute "Flow" @@ (graph "Graph" @@ compute "Kv") @@ list "a",
           "serializer">:
             doc "A function which serializes a list of output objects to a string representation" $
             list "a" --> string,

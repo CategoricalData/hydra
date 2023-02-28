@@ -68,15 +68,15 @@ testExpandLambdas = do
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
-        once <- fromFlowIo testContext $ expandLambdas term
-        twice <- fromFlowIo testContext $ expandLambdas once
+        once <- fromFlowIo testGraph $ expandLambdas term
+        twice <- fromFlowIo testGraph $ expandLambdas once
         H.shouldBe once twice
   where
     length = primitive $ Name "hydra/lib/strings.length"
     splitOn = primitive $ Name "hydra/lib/strings.splitOn"
     toLower = primitive $ Name "hydra/lib/strings.toLower"
     expandsTo termBefore termAfter = do
-      result <- fromFlowIo testContext $ expandLambdas termBefore
+      result <- fromFlowIo testGraph $ expandLambdas termBefore
       H.shouldBe result termAfter
 
     noChange term = expandsTo term term
@@ -233,16 +233,16 @@ testStripKv = do
           (typeOf term)
           Nothing
         shouldSucceedWith
-          (typeOf $ withType testContext typ term)
+          (typeOf $ withType testGraph typ term)
           (Just typ)
         shouldSucceedWith
-          (typeOf $ strip $ withType testContext typ term)
+          (typeOf $ strip $ withType testGraph typ term)
           Nothing
 
-typeOf term = annotationClassTermType (contextAnnotations testContext) term
+typeOf term = annotationClassTermType (graphAnnotations testGraph) term
 
-withType :: Context m -> Type m -> Term m -> Term m
-withType cx typ = annotationClassSetTermType (contextAnnotations cx) cx (Just typ)
+withType :: Graph m -> Type m -> Term m -> Term m
+withType cx typ = annotationClassSetTermType (graphAnnotations cx) cx (Just typ)
 
 spec :: H.Spec
 spec = do

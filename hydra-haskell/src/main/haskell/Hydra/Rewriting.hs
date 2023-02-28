@@ -2,6 +2,7 @@
 
 module Hydra.Rewriting where
 
+import Hydra.Coders
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Monads

@@ -10,7 +10,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-nameOfType :: Context m -> Type m -> Y.Maybe Name
+nameOfType :: Graph m -> Type m -> Y.Maybe Name
 nameOfType cx t = case stripType t of
   TypeWrap name -> Just name
   TypeLambda (LambdaType _ body) -> nameOfType cx body

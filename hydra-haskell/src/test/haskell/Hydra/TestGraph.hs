@@ -6,6 +6,7 @@ module Hydra.TestGraph (
 import Hydra.Kernel
 import Hydra.Sources.Libraries
 import Hydra.Dsl.Terms
+import Hydra.Sources.Core
 import Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 
@@ -30,10 +31,6 @@ latLonPolyType :: Type m
 latLonPolyType = TypeLambda $ LambdaType (Name "a") $ 
   TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.variable "a", Types.field "lon" $ Types.variable "a"]
 
-testContext :: Context Kv
-testContext = coreContext {
-    contextGraph = testGraph}
-
 testElementArthur :: Element Kv
 testElementArthur = Element {
   elementName = Name "ArthurDent",
@@ -47,13 +44,13 @@ testElementFirstName = Element {
   elementData = projection testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Kv
-testGraph = elementsToGraph (Just testSchemaGraph) [testElementArthur, testElementFirstName]
+testGraph = elementsToGraph coreContext (Just testSchemaGraph) [testElementArthur, testElementFirstName]
 
 testNamespace :: Namespace
 testNamespace = Namespace "testGraph"
 
 testSchemaGraph :: Graph Kv
-testSchemaGraph = standardGraph [
+testSchemaGraph = elementsToGraph hydraCore (Just hydraCore) [
     def (Name "StringTypeAlias") $ Ann.doc "An alias for the string type" Types.string,
     def testTypeFoobarValueName testTypeFoobarValue,
     def testTypeComparisonName testTypeComparison,

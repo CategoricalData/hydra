@@ -23,14 +23,14 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-data InferenceContext m = InferenceContext {
-  inferenceContextGraph :: Context m,
+data InferenceGraph m = InferenceContext {
+  inferenceContextGraph :: Graph m,
   inferenceContextCounter :: Int,
   inferenceContextEnviroment :: TypingEnvironment m}
 
 type TypingEnvironment m = M.Map Name (TypeScheme m)
 
-applyRules :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
+applyRules :: (Ord m, Show m) => Term m -> Flow (InferenceGraph m) (Term (m, Type m, [Constraint m]))
 applyRules term = case term of
     TermAnnotated (Annotated term1 ann) -> do
       iterm <- infer term1
@@ -219,7 +219,7 @@ applyRules term = case term of
 
     yield term typ constraints = do
       cx <- inferenceContextGraph <$> getState
-      return $ TermAnnotated $ Annotated term (annotationClassDefault $ contextAnnotations cx, typ, constraints)
+      return $ TermAnnotated $ Annotated term (annotationClassDefault $ graphAnnotations cx, typ, constraints)
 
 -- Decode a type, eliminating nominal types for the sake of unification
 decodeStructuralType :: Show m => Term m -> GraphFlow m (Type m)
@@ -232,18 +232,18 @@ decodeStructuralType term = do
       decodeStructuralType $ elementData el
     _ -> pure typ
 
-extendEnvironment :: Name -> TypeScheme m -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
+extendEnvironment :: Name -> TypeScheme m -> Flow (InferenceGraph m) a -> Flow (InferenceGraph m) a
 extendEnvironment x sc = withEnvironment (\e -> M.insert x sc $ M.delete x e)
 
 fieldType :: Field (m, Type m, [Constraint m]) -> FieldType m
 fieldType (Field fname term) = FieldType fname $ termType term
 
-findMatchingField :: Show m => FieldName -> [FieldType m] -> Flow (InferenceContext m) (FieldType m)
+findMatchingField :: Show m => FieldName -> [FieldType m] -> Flow (InferenceGraph m) (FieldType m)
 findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
   []    -> fail $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
-freshName :: Flow (InferenceContext m) (Type m)
+freshName :: Flow (InferenceGraph m) (Type m)
 freshName = do
     InferenceContext cx s e <- getState
     putState $ InferenceContext cx (s + 1) e
@@ -256,20 +256,20 @@ generalize env t  = TypeScheme vars t
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-infer :: (Ord m, Show m) => Term m -> Flow (InferenceContext m) (Term (m, Type m, [Constraint m]))
+infer :: (Ord m, Show m) => Term m -> Flow (InferenceGraph m) (Term (m, Type m, [Constraint m]))
 infer term = do
   cx <- inferenceContextGraph <$> getState
-  mt <- withGraphContext $ annotationClassTermType (contextAnnotations cx) term
+  mt <- withGraphContext $ annotationClassTermType (graphAnnotations cx) term
   case mt of
     Just typ -> do
       i <- applyRules term
       return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
     Nothing -> applyRules term
 
-inferFieldType :: (Ord m, Show m) => Field m -> Flow (InferenceContext m) (Field (m, Type m, [Constraint m]))
+inferFieldType :: (Ord m, Show m) => Field m -> Flow (InferenceGraph m) (Field (m, Type m, [Constraint m]))
 inferFieldType (Field fname term) = Field fname <$> infer term
 
-instantiate :: TypeScheme m -> Flow (InferenceContext m) (Type m)
+instantiate :: TypeScheme m -> Flow (InferenceGraph m) (Type m)
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshName) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
@@ -277,7 +277,7 @@ instantiate (TypeScheme vars t) = do
 reduceType :: (Ord m, Show m) => Type m -> Type m
 reduceType t = t -- betaReduceType cx t
 
-requireName :: Show m => Name -> Flow (InferenceContext m) (Type m)
+requireName :: Show m => Name -> Flow (InferenceGraph m) (Type m)
 requireName v = do
   env <- inferenceContextEnviroment <$> getState
   case M.lookup v env of
@@ -298,12 +298,12 @@ typeOfElement name = withTrace "type of element" $ do
 typeOfPrimitive :: Name -> GraphFlow m (Type m)
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
-withEnvironment :: (TypingEnvironment m -> TypingEnvironment m) -> Flow (InferenceContext m) a -> Flow (InferenceContext m) a
+withEnvironment :: (TypingEnvironment m -> TypingEnvironment m) -> Flow (InferenceGraph m) a -> Flow (InferenceGraph m) a
 withEnvironment m f = do
   InferenceContext cx i e <- getState
   withState (InferenceContext cx i (m e)) f
 
-withGraphContext :: GraphFlow m a -> Flow (InferenceContext m) a
+withGraphContext :: GraphFlow m a -> Flow (InferenceGraph m) a
 withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f

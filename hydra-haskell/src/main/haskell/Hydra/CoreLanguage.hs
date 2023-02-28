@@ -4,6 +4,7 @@ module Hydra.CoreLanguage where
 
 import Hydra.Compute
 import Hydra.Basics
+import Hydra.Coders
 
 import qualified Data.Set as S
 

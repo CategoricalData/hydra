@@ -19,13 +19,6 @@ hydraMantleModule = Module ns elements [] $
 
     elements = [
 
-      def "Comparison" $
-        doc "An equality judgement: less than, equal to, or greater than" $
-        enum [
-          "lessThan",
-          "equalTo",
-          "greaterThan"],
-
       def "EliminationVariant" $
         doc "The identifier of an elimination constructor" $
         enum [

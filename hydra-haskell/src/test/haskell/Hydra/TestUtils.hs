@@ -33,16 +33,16 @@ baseLanguage :: Language m
 baseLanguage = hydraCoreLanguage
 
 baseContext :: AdapterContext Kv
-baseContext = AdapterContext testContext baseLanguage baseLanguage
+baseContext = AdapterContext testGraph baseLanguage baseLanguage
 
 checkAdapter :: (Eq t, Eq v, Show t, Show v)
   => (v -> v)
-  -> (t -> Flow (AdapterContext Kv) (SymmetricAdapter (Context Kv) t v))
+  -> (t -> Flow (AdapterContext Kv) (SymmetricAdapter (Graph Kv) t v))
   -> ([r] -> AdapterContext Kv)
   -> [r] -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
     let acx = mkContext variants :: AdapterContext Kv
-    let cx = adapterContextEvaluation acx
+    let cx = adapterContextGraph acx
     let FlowState adapter' _ trace = unFlow (mkAdapter source) acx emptyTrace
     if Y.isNothing adapter' then HL.assertFailure (traceSummary trace) else pure ()
     let adapter = Y.fromJust adapter'
@@ -84,7 +84,7 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
 checkDataAdapter :: [TypeVariant] -> Type Kv -> Type Kv -> Bool -> Term Kv -> Term Kv -> H.Expectation
 checkDataAdapter = checkAdapter stripTerm termAdapter termTestContext
 
-checkSerdeRoundTrip :: (Type Kv -> GraphFlow Kv (Coder (Context Kv) (Context Kv) (Term Kv) BS.ByteString))
+checkSerdeRoundTrip :: (Type Kv -> GraphFlow Kv (Coder (Graph Kv) (Graph Kv) (Term Kv) BS.ByteString))
   -> TypedTerm Kv -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
     case mserde of
@@ -93,9 +93,9 @@ checkSerdeRoundTrip mkSerde (TypedTerm typ term) = do
         (stripTerm <$> (coderEncode serde term >>= coderDecode serde))
         (stripTerm term)
   where
-    FlowState mserde _ trace = unFlow (mkSerde typ) testContext emptyTrace
+    FlowState mserde _ trace = unFlow (mkSerde typ) testGraph emptyTrace
 
-checkSerialization :: (Type Kv -> GraphFlow Kv (Coder (Context Kv) (Context Kv) (Term Kv) String))
+checkSerialization :: (Type Kv -> GraphFlow Kv (Coder (Graph Kv) (Graph Kv) (Term Kv) String))
   -> TypedTerm Kv -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
     case mserde of
@@ -105,24 +105,24 @@ checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
         (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines
-    FlowState mserde _ trace = unFlow (mkSerdeStr typ) testContext emptyTrace
+    FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
 
 shouldFail :: GraphFlow Kv a -> H.Expectation
-shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testContext emptyTrace)
+shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
 
 shouldSucceed :: GraphFlow Kv a -> H.Expectation
 shouldSucceed f = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> True `H.shouldBe` True
   where
-    FlowState my _ trace = unFlow f testContext emptyTrace
+    FlowState my _ trace = unFlow f testGraph emptyTrace
 
 shouldSucceedWith :: (Eq a, Show a) => GraphFlow Kv a -> a -> H.Expectation
 shouldSucceedWith f x = case my of
     Nothing -> HL.assertFailure (traceSummary trace)
     Just y -> y `H.shouldBe` x
   where
-    FlowState my _ trace = unFlow f testContext emptyTrace
+    FlowState my _ trace = unFlow f testGraph emptyTrace
 
 strip :: Ord m => Term m -> Term m
 strip = stripTerm

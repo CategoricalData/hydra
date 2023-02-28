@@ -19,7 +19,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-constantDecls :: Context m -> Namespaces -> Name -> Type m -> [H.DeclarationWithComments]
+constantDecls :: Graph m -> Namespaces -> Name -> Type m -> [H.DeclarationWithComments]
 constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
@@ -43,7 +43,7 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
 
 constructModule :: (Ord m, Read m, Show m)
   => Module m
-  -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) H.Expression)
+  -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) H.Expression)
   -> [(Element m, TypedTerm m)] -> GraphFlow m H.Module
 constructModule mod coders pairs = do
     cx <- getState
@@ -232,7 +232,7 @@ printModule mod = do
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
 toDataDeclaration :: (Ord m, Read m, Show m)
-  => M.Map (Type m) (Coder (Context m) (Context m) (Term m) H.Expression) -> Namespaces
+  => M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) H.Expression) -> Namespaces
   -> (Element m, TypedTerm m) -> GraphFlow m H.DeclarationWithComments
 toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
   where
@@ -268,7 +268,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
                     (H.TypeSignature hname htype)
                     (rewriteValueBinding vb)
         cx <- getState
-        comments <- annotationClassTermDescription (contextAnnotations cx) term
+        comments <- annotationClassTermDescription (graphAnnotations cx) term
         return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord m, Read m, Show m)
@@ -298,7 +298,7 @@ toTypeDeclarations namespaces el term = do
         else do
           htype <- encodeAdaptedType namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- annotationClassTermDescription (contextAnnotations cx) term
+    comments <- annotationClassTermDescription (graphAnnotations cx) term
     return $ [H.DeclarationWithComments decl comments] ++ constantDecls cx namespaces (elementName el) t
   where
     isSerializable = do
@@ -317,7 +317,7 @@ toTypeDeclarations namespaces el term = do
         cx <- getState
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- encodeAdaptedType namespaces typ
-        comments <- annotationClassTypeDescription (contextAnnotations cx) typ
+        comments <- annotationClassTypeDescription (graphAnnotations cx) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorWithComments
           (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
@@ -330,12 +330,12 @@ toTypeDeclarations namespaces el term = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- encodeAdaptedType namespaces ftype
           cx <- getState
-          comments <- annotationClassTypeDescription (contextAnnotations cx) ftype
+          comments <- annotationClassTypeDescription (graphAnnotations cx) ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
     unionCons lname (FieldType (FieldName fname) ftype) = do
       cx <- getState
-      comments <- annotationClassTypeDescription (contextAnnotations cx) ftype
+      comments <- annotationClassTypeDescription (graphAnnotations cx) ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []

@@ -27,16 +27,15 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         t' = rec t
 
-bootstrapContext :: Context Kv
-bootstrapContext = cx
-  where
-    cx = Context {
-      contextEnvironment = M.empty,
-      contextBody = Terms.list [], -- Note: the bootstrap body is arbitrary 
-      contextGraph = Graph M.empty Nothing,
-      contextPrimitives = M.empty,
-      contextAnnotations = kvAnnotationClass,
-      contextSchema = Nothing}
+-- | An empty graph (no elements, no primitives, but an annotation class) which is used for bootstrapping Hydra Core
+bootstrapGraph :: Graph Kv
+bootstrapGraph = Graph {
+  graphElements = M.empty,
+  graphEnvironment = M.empty,
+  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary 
+  graphPrimitives = M.empty,
+  graphAnnotations = kvAnnotationClass,
+  graphSchema = Nothing}
 
 nsref :: Namespace -> String -> Type m
 nsref ns = Types.wrap . qualify ns . Name

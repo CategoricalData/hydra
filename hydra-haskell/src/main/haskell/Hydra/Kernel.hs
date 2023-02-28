@@ -1,6 +1,4 @@
--- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation.
---   This currently includes most modules in the top-level Hydra.* namespace, as well as some Hydra.Util.* modules.
---   The adapter framework is logically part of the kernel, but is excluded for now due to circular dependencies.
+-- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation, and can be imported as a unit.
 
 module Hydra.Kernel (
   module Hydra.Adapters.Coders,
@@ -8,6 +6,7 @@ module Hydra.Kernel (
   module Hydra.Adapters.Term,
   module Hydra.Adapters.Utils,
   module Hydra.Basics,
+  module Hydra.Coders,
   module Hydra.Common,
   module Hydra.Compute,
   module Hydra.Core,
@@ -38,6 +37,7 @@ import Hydra.Adapters.Literal
 import Hydra.Adapters.Term
 import Hydra.Adapters.Utils
 import Hydra.Basics
+import Hydra.Coders
 import Hydra.Common
 import Hydra.Compute
 import Hydra.Core

@@ -6,6 +6,7 @@ import Hydra.Core
 import Hydra.Monads
 import Hydra.Rewriting
 import Hydra.Basics
+import Hydra.Graph
 import Hydra.Lexical
 import Hydra.CoreDecoding
 import Hydra.Kv
@@ -137,7 +138,7 @@ betaReduceTerm = reduce M.empty
 --       and always reduce the right-hand side of an application prior to substitution
 betaReduceType :: (Ord m, Show m) => Type m -> GraphFlow m (Type m)
 betaReduceType typ = do
-    cx <- getState :: GraphFlow m (Context m)
+    cx <- getState :: GraphFlow m (Graph m)
     return $ rewriteType (mapExpr cx) id typ
   where
     mapExpr cx rec t = case rec t of
@@ -195,7 +196,7 @@ termIsClosed :: Term m -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: Context m -> Term m -> Bool
+termIsValue :: Graph m -> Term m -> Bool
 termIsValue cx term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True

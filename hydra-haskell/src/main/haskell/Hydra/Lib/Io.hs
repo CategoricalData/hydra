@@ -22,10 +22,10 @@ showTerm term = fromFlow coreContext $ coderEncode termStringCoder encoded
   where
     encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
 
-termJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
+termJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
 termJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Term
 
-termStringCoder :: Coder (Context Kv) (Context Kv) (Term Kv) String
+termStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 termStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode termJsonCoder term
@@ -38,10 +38,10 @@ showType typ = fromFlow coreContext $ coderEncode typeStringCoder encoded
   where
     encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ
 
-typeJsonCoder :: Coder (Context Kv) (Context Kv) (Term Kv) Json.Value
+typeJsonCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value
 typeJsonCoder = fromFlow coreContext $ jsonCoder $ Types.wrap _Type
 
-typeStringCoder :: Coder (Context Kv) (Context Kv) (Term Kv) String
+typeStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 typeStringCoder = Coder mout min
   where
     mout term = valueToString <$> coderEncode typeJsonCoder term

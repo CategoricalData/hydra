@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> GraphFlow m (Coder (Context m) (Context m) Literal YM.Scalar)
+literalCoder :: LiteralType -> GraphFlow m (Coder (Graph m) (Graph m) Literal YM.Scalar)
 literalCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
@@ -35,7 +35,7 @@ literalCoder at = pure $ case at of
       YM.ScalarStr s' -> pure $ LiteralString s'
       _ -> unexpected "string" s}
 
-recordCoder :: (Eq m, Ord m, Read m, Show m) => RowType m -> GraphFlow m (Coder (Context m) (Context m) (Term m) YM.Node)
+recordCoder :: (Eq m, Ord m, Read m, Show m) => RowType m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) YM.Node)
 recordCoder rt = do
     coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
     return $ Coder (encode coders) (decode coders)
@@ -59,7 +59,7 @@ recordCoder rt = do
       where
         error = fail $ "no such field: " ++ fname
 
-termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) YM.Node)
+termCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) YM.Node)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
     ac <- literalCoder at
@@ -102,7 +102,7 @@ termCoder typ = case stripType typ of
         _ -> unexpected "mapping" n}
   TypeRecord rt -> recordCoder rt
 
-yamlCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Context m) (Context m) (Term m) YM.Node)
+yamlCoder :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) YM.Node)
 yamlCoder typ = do
     cx <- getState
     let acx = AdapterContext cx hydraCoreLanguage yamlLanguage
