@@ -7,5 +7,5 @@ This package contains Hydra's Java API and Java sources specifically.
 
 ## Build
 
-Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`.
+Build the Java project with `./gradlew build`, or publish the resulting JAR to your local Maven repository with `./gradlew publishToMavenLocal`. This project requires Java 11 so you may need to set the `JAVA_HOME` environment variable accordingly: `JAVA_HOME=/path/to/java11/installation ./gradlew build`.
 
