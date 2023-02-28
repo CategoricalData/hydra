@@ -1,0 +1,36 @@
+module Hydra.Langs.Shacl.Language where
+
+import Hydra.Kernel
+
+import qualified Data.Set as S
+
+
+shaclLanguage :: Language m
+shaclLanguage = Language (LanguageName "hydra/langs/shacl") $ LanguageConstraints {
+  languageConstraintsEliminationVariants = S.empty,
+  languageConstraintsLiteralVariants = S.fromList literalVariants,
+  languageConstraintsFloatTypes = S.fromList floatTypes,
+  languageConstraintsFunctionVariants = S.empty,
+  languageConstraintsIntegerTypes = S.fromList integerTypes,
+  languageConstraintsTermVariants = S.fromList [
+    TermVariantElement,
+    TermVariantList,
+    TermVariantLiteral,
+    TermVariantMap,
+    TermVariantWrap,
+    TermVariantOptional,
+    TermVariantRecord,
+    TermVariantSet,
+    TermVariantUnion],
+  languageConstraintsTypeVariants = S.fromList [
+    TypeVariantAnnotated,
+    TypeVariantElement,
+    TypeVariantList,
+    TypeVariantLiteral,
+    TypeVariantMap,
+    TypeVariantWrap,
+    TypeVariantOptional,
+    TypeVariantRecord,
+    TypeVariantSet,
+    TypeVariantUnion],
+  languageConstraintsTypes = const True }

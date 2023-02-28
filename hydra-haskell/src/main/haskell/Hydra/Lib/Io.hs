@@ -7,10 +7,10 @@ module Hydra.Lib.Io (
 ) where
 
 import Hydra.Kernel
-import Hydra.Ext.Json.Coder
+import Hydra.Langs.Json.Coder
 import Hydra.Dsl.Annotations
-import Hydra.Ext.Json.Serde
-import qualified Hydra.Ext.Json.Model as Json
+import Hydra.Langs.Json.Serde
+import qualified Hydra.Langs.Json.Model as Json
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.Map as M
