@@ -38,6 +38,7 @@ import Hydra.Sources.Ext.Xml.Schema
 import Hydra.Sources.Ext.Yaml.Model
 import Hydra.Sources.Grammar
 import Hydra.Sources.Libraries
+import Hydra.Sources.Coders
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Sources.Module
@@ -81,6 +82,7 @@ coreModules :: [Module Kv]
 coreModules = [
   codetreeAstModule,
   haskellAstModule,
+  hydraCodersModule,
   hydraCoreModule,
   hydraComputeModule,
   hydraGraphModule,
@@ -119,12 +121,12 @@ extModules = [
   xmlSchemaModule,
   yamlModelModule]
 
-findType :: Context m -> Term m -> GraphFlow m (Maybe (Type m))
-findType cx term = annotationClassTermType (contextAnnotations cx) term
+findType :: Graph m -> Term m -> GraphFlow m (Maybe (Type m))
+findType cx term = annotationClassTermType (graphAnnotations cx) term
 
 generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> [Module Kv] -> FilePath -> IO ()
 generateSources printModule mods0 basePath = do
-    mfiles <- runFlow kernelContext generateFiles
+    mfiles <- runFlow hydraKernel generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
       Just files -> mapM_ writePair files
@@ -132,7 +134,7 @@ generateSources printModule mods0 basePath = do
     generateFiles = do
       withTrace "generate files" $ do
         mods1 <- CM.mapM (assignSchemas False) mods0
-        withState (modulesToContext mods1) $ do
+        withState (modulesToGraph mods1) $ do
           mods2 <- CM.mapM addDeepTypeAnnotations mods1
           maps <- CM.mapM printModule mods2
           return $ L.concat (M.toList <$> maps)
@@ -143,12 +145,10 @@ generateSources printModule mods0 basePath = do
       writeFile fullPath s
 
 hydraKernel :: Graph Kv
-hydraKernel = elementsToGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
+hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
 
-kernelContext = graphContext hydraKernel
-
-modulesToContext :: [Module Kv] -> Context Kv
-modulesToContext mods = kernelContext {contextGraph = elementsToGraph (Just hydraKernel) elements}
+modulesToGraph :: [Module Kv] -> Graph Kv
+modulesToGraph mods = elementsToGraph hydraKernel (Just hydraKernel) elements
   where
     elements = L.concat (moduleElements <$> allModules)
     allModules = L.concat (close <$> mods)

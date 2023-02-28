@@ -119,7 +119,7 @@ checkJsonCoder typ term node = case mstep of
       shouldSucceedWith (coderEncode step term) node
       shouldSucceedWith (coderEncode step term >>= coderDecode step) term
   where
-    FlowState mstep _ trace = unFlow (jsonCoder typ) testContext emptyTrace
+    FlowState mstep _ trace = unFlow (jsonCoder typ) testGraph emptyTrace
 
 jsonBool :: Bool -> Json.Value
 jsonBool = Json.ValueBoolean

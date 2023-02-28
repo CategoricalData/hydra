@@ -10,6 +10,7 @@ module Hydra.Monads (
 import Hydra.Common
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Graph
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -18,7 +19,7 @@ import Control.Monad
 import qualified System.IO as IO
 
 
-type GraphFlow m = Flow (Context m)
+type GraphFlow m = Flow (Graph m)
 
 instance Functor (Flow s) where
   fmap = liftM

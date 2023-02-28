@@ -7,21 +7,6 @@ import Data.List
 import Data.Map
 import Data.Set
 
--- | An equality judgement: less than, equal to, or greater than
-data Comparison = 
-  ComparisonLessThan  |
-  ComparisonEqualTo  |
-  ComparisonGreaterThan 
-  deriving (Eq, Ord, Read, Show)
-
-_Comparison = (Core.Name "hydra/mantle.Comparison")
-
-_Comparison_lessThan = (Core.FieldName "lessThan")
-
-_Comparison_equalTo = (Core.FieldName "equalTo")
-
-_Comparison_greaterThan = (Core.FieldName "greaterThan")
-
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
   EliminationVariantElement  |

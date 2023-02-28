@@ -6,6 +6,7 @@ module Hydra.Adapters.Coders where
 
 import Hydra.Adapters.Term
 import Hydra.Adapters.Utils
+import Hydra.Coders
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding
@@ -35,7 +36,7 @@ constructCoder :: (Ord m, Read m, Show m)
   => Language m
   -> (Term m -> GraphFlow m c)
   -> Type m
-  -> GraphFlow m (Coder (Context m) (Context m) (Term m) c)
+  -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) c)
 constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ) $ do
     cx <- getState
     let acx = AdapterContext cx hydraCoreLanguage lang
@@ -48,7 +49,7 @@ constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ
 transformModule :: (Ord m, Read m, Show m)
   => Language m
   -> (Term m -> GraphFlow m e)
-  -> (Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
+  -> (Module m -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) e) -> [(Element m, TypedTerm m)] -> GraphFlow m d)
   -> Module m -> GraphFlow m d
 transformModule lang encodeTerm createModule mod = do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els

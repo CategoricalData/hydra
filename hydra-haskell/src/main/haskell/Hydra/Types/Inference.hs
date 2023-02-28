@@ -39,7 +39,7 @@ annotateElementWithTypes el = do
   where
     findType term = do
       cx <- getState
-      mt <- annotationClassTermType (contextAnnotations cx) term
+      mt <- annotationClassTermType (graphAnnotations cx) term
       case mt of
         Just t -> return t
         Nothing -> fail "expected a type annotation"
@@ -47,7 +47,7 @@ annotateElementWithTypes el = do
 annotateTermWithTypes :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferTypeAndConstraints term0
-  anns <- contextAnnotations <$> getState
+  anns <- graphAnnotations <$> getState
   mt <- annotationClassTermType anns term0 -- Use a provided type, if available, rather than the inferred type
   let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just $ Y.fromMaybe typ mt) ann
   return $ rewriteTermMeta annotType term1
@@ -74,5 +74,5 @@ rewriteDataType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-startContext :: Context m -> InferenceContext m
+startContext :: Graph m -> InferenceGraph m
 startContext cx = InferenceContext cx 0 M.empty

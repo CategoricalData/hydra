@@ -41,7 +41,7 @@ checkLiterals = do
       QC.property $ \av -> termIsClosed (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check using a dedicated function" $
-      QC.property $ \av -> termIsValue testContext (literal av :: Term Kv)
+      QC.property $ \av -> termIsValue testGraph (literal av :: Term Kv)
 
     H.it "Literal terms are fully reduced; check by trying to reduce them" $
       QC.property $ \av ->
@@ -58,10 +58,10 @@ checkMonomorphicPrimitives = do
 
     H.it "Example primitives have the expected arity" $ do
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitive testContext _strings_toUpper)
+        (primitiveFunctionArity <$> lookupPrimitive testGraph _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitive testContext _strings_splitOn)
+        (primitiveFunctionArity <$> lookupPrimitive testGraph _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $
@@ -153,7 +153,7 @@ testBetaReduceTypeRecursively = do
     app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) app1
 
 reduce :: Type Kv -> Type Kv
-reduce typ = fromFlow (schemaContext testContext) (betaReduceType typ)
+reduce typ = fromFlow (schemaContext testGraph) (betaReduceType typ)
 
 eval :: Term Kv -> GraphFlow Kv (Term Kv)
 eval = betaReduceTerm

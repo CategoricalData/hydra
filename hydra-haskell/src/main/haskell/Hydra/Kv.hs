@@ -5,6 +5,7 @@ module Hydra.Kv where
 import Hydra.Core
 import Hydra.Common
 import Hydra.Compute
+import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Monads
@@ -43,7 +44,7 @@ getDescription kv = case getAnnotation kvDescription kv of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show kvDescription ++ ": " ++ show term
 
-getTermAnnotation :: Context Kv -> String -> Term Kv -> Y.Maybe (Term Kv)
+getTermAnnotation :: Graph Kv -> String -> Term Kv -> Y.Maybe (Term Kv)
 getTermAnnotation cx key = getAnnotation key . termAnnotationInternal
 
 getTermDescription :: Term Kv -> GraphFlow Kv (Y.Maybe String)
@@ -104,32 +105,32 @@ setAnnotation key val (Kv m) = Kv $ M.alter (const val) key m
 setDescription :: Y.Maybe String -> Kv -> Kv
 setDescription d = setAnnotation kvDescription (Terms.string <$> d)
 
-setTermAnnotation :: Context Kv -> String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-setTermAnnotation cx key val term = if kv == annotationClassDefault (contextAnnotations cx)
+setTermAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
+setTermAnnotation cx key val term = if kv == annotationClassDefault (graphAnnotations cx)
     then term'
     else TermAnnotated $ Annotated term' kv
   where
     term' = stripTerm term
     kv = setAnnotation key val $ termAnnotationInternal term
 
-setTermDescription :: Context Kv -> Y.Maybe String -> Term Kv -> Term Kv
+setTermDescription :: Graph Kv -> Y.Maybe String -> Term Kv -> Term Kv
 setTermDescription cx d = setTermAnnotation cx kvDescription (Terms.string <$> d)
 
-setTermType :: Context Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
+setTermType :: Graph Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
 setTermType cx d = setTermAnnotation cx kvType (epsilonEncodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
 setType mt = setAnnotation kvType (epsilonEncodeType <$> mt)
 
-setTypeAnnotation :: Context Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-setTypeAnnotation cx key val typ = if kv == annotationClassDefault (contextAnnotations cx)
+setTypeAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
+setTypeAnnotation cx key val typ = if kv == annotationClassDefault (graphAnnotations cx)
     then typ'
     else TypeAnnotated $ Annotated typ' kv
   where
     typ' = stripType typ
     kv = setAnnotation key val $ typeAnnotationInternal typ
 
-setTypeDescription :: Context Kv -> Y.Maybe String -> Type Kv -> Type Kv
+setTypeDescription :: Graph Kv -> Y.Maybe String -> Type Kv -> Type Kv
 setTypeDescription cx d = setTypeAnnotation cx kvDescription (Terms.string <$> d)
 
 

@@ -26,12 +26,12 @@ deref term = case stripTerm term of
 dereferenceElement :: Name -> GraphFlow m (Term m)
 dereferenceElement en = do
     cx <- getState
-    case M.lookup en (graphElements $ contextGraph cx) of
+    case M.lookup en (graphElements cx) of
       Nothing -> fail $ "element " ++ unName en ++ " does not exist"
       Just e -> pure $ elementData e
 
-lookupPrimitive :: Context m -> Name -> Maybe (Primitive m)
-lookupPrimitive cx fn = M.lookup fn $ contextPrimitives cx
+lookupPrimitive :: Graph m -> Name -> Maybe (Primitive m)
+lookupPrimitive cx fn = M.lookup fn $ graphPrimitives cx
 
 primitiveFunctionArity :: Primitive m -> Int
 primitiveFunctionArity = typeArity . primitiveType
@@ -39,10 +39,10 @@ primitiveFunctionArity = typeArity . primitiveType
 requireElement :: Name -> GraphFlow m (Element m)
 requireElement name = do
     cx <- getState
-    Y.maybe (err cx) pure $ M.lookup name $ graphElements $ contextGraph cx
+    Y.maybe (err cx) pure $ M.lookup name $ graphElements cx
   where
     err cx = fail $ "no such element: " ++ unName name
-        ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements $ contextGraph cx))) ++ "}"
+        ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements cx))) ++ "}"
       where
         ellipsis strings = if L.length strings > 3
 --        ellipsis strings = if L.length strings < 0
@@ -57,10 +57,8 @@ requirePrimitive fn = do
     err = fail $ "no such primitive function: " ++ unName fn
 
 -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
-schemaContext :: Context m -> Context m
-schemaContext cx = case graphSchema (contextGraph cx) of
-  Nothing -> cx
-  Just g -> cx {contextGraph = g}
+schemaContext :: Graph m -> Graph m
+schemaContext g = Y.fromMaybe g (graphSchema g)
 
 typeArity :: Type m -> Int
 typeArity t = case stripType t of

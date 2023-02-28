@@ -82,13 +82,13 @@ checkDescriptions = do
         (setDesc Nothing $ setDesc (Just d) $ Terms.int64 137)
         (Terms.int64 137)
 
-getAnn = getTermAnnotation testContext
+getAnn = getTermAnnotation testGraph
 
-getDesc term = fromFlow testContext $ getTermDescription term
+getDesc term = fromFlow testGraph $ getTermDescription term
 
-setAnn = setTermAnnotation testContext
+setAnn = setTermAnnotation testGraph
 
-setDesc = setTermDescription testContext
+setDesc = setTermDescription testGraph
 
 spec :: H.Spec
 spec = do

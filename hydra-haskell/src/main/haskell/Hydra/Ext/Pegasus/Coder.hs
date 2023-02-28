@@ -25,7 +25,7 @@ printModule mod = do
 
 constructModule :: (Ord m, Read m, Show m)
   => Module m
-  -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) ())
+  -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) ())
   -> [(Element m, TypedTerm m)]
   -> GraphFlow m (M.Map FilePath PDL.SchemaFile)
 constructModule mod coders pairs = do
@@ -54,7 +54,7 @@ constructModule mod coders pairs = do
               Left schema -> PDL.NamedSchema_TypeTyperef schema
               Right t -> t
         cx <- getState
-        r <- annotationClassTermDescription (contextAnnotations cx) $ elementData el
+        r <- annotationClassTermDescription (graphAnnotations cx) $ elementData el
         let anns = doc r
         return (PDL.NamedSchema qname ptype anns, imports)
       where
@@ -158,7 +158,7 @@ encodeType aliases typ = case typ of
         return (t, False)
     getAnns typ = do
       cx <- getState
-      r <- annotationClassTypeDescription (contextAnnotations cx) typ
+      r <- annotationClassTypeDescription (graphAnnotations cx) typ
       return $ doc r
 
 importAliasesForModule mod = M.fromList (toPair <$> deps)

@@ -27,7 +27,7 @@ printModule mod = do
 moduleToScalaPackage :: (Ord m, Read m, Show m) => Module m -> GraphFlow m Scala.Pkg
 moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
 
-constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
+constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
   -> GraphFlow m Scala.Pkg
 constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
@@ -111,7 +111,7 @@ encodeFunction meta fun arg = case fun of
     findSdom = Just <$> (findDomain >>= encodeType)
     findDomain = do
         cx <- getState
-        r <- annotationClassTypeOf (contextAnnotations cx) meta
+        r <- annotationClassTypeOf (graphAnnotations cx) meta
         case r of
           Nothing -> fail "expected a typed term"
           Just t -> domainOf t

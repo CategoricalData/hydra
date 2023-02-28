@@ -8,7 +8,7 @@ import Hydra.Dsl.Types as Types
 
 
 hydraCore :: Graph Kv
-hydraCore = elementsToGraph Nothing (moduleElements hydraCoreModule)
+hydraCore = elementsToGraph bootstrapGraph Nothing (moduleElements hydraCoreModule)
 
 hydraCoreModule :: Module Kv
 hydraCoreModule = Module ns elements [] $
@@ -17,7 +17,7 @@ hydraCoreModule = Module ns elements [] $
     ns = Namespace "hydra/core"
     core = nsref ns
     def = datatype ns
-    doc s = setTypeDescription bootstrapContext (Just s)
+    doc s = setTypeDescription bootstrapGraph (Just s)
 
     elements = [
 

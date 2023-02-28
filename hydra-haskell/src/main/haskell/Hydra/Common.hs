@@ -53,8 +53,8 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-elementsToGraph :: Maybe (Graph m) -> [Element m] -> Graph m
-elementsToGraph msg els = Graph elementMap msg
+elementsToGraph :: Graph m -> Maybe (Graph m) -> [Element m] -> Graph m
+elementsToGraph parent schema els = parent {graphElements = elementMap, graphSchema = schema}
   where
     elementMap = M.fromList (toPair <$> els)
       where
@@ -68,7 +68,7 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
-isEncodedType :: Eq m => Context m -> Term m -> Bool
+isEncodedType :: Eq m => Graph m -> Term m -> Bool
 isEncodedType cx term = stripTerm term == TermElement _Type
 
 isType :: Eq m => Type m -> Bool
@@ -110,8 +110,8 @@ stripType = skipAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing
 
-termMeta :: Context m -> Term m -> m
-termMeta cx = annotationClassTermAnnotation $ contextAnnotations cx
+termMeta :: Graph m -> Term m -> m
+termMeta cx = annotationClassTermAnnotation $ graphAnnotations cx
 
 toQnameLazy :: Name -> (Namespace, String)
 toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of

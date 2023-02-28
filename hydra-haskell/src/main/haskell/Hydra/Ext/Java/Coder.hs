@@ -42,12 +42,12 @@ boundTypeVariables typ = case typ of
 commentsFromElement :: Element m -> GraphFlow m (Maybe String)
 commentsFromElement el = do
   cx <- getState
-  annotationClassTermDescription (contextAnnotations cx) (elementData el)
+  annotationClassTermDescription (graphAnnotations cx) (elementData el)
 
 commentsFromFieldType :: FieldType m -> GraphFlow m (Maybe String)
 commentsFromFieldType (FieldType _ t) = do
   cx <- getState
-  annotationClassTypeDescription (contextAnnotations cx) t
+  annotationClassTypeDescription (graphAnnotations cx) t
 
 addComment :: Java.ClassBodyDeclaration -> FieldType m -> GraphFlow m Java.ClassBodyDeclarationWithComments
 addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
@@ -70,7 +70,7 @@ classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
 constructModule :: (Ord m, Read m, Show m)
-  => Module m -> M.Map (Type m) (Coder (Context m) (Context m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
+  => Module m -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
   -> GraphFlow m (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
     let isTypePair = isType . typedTermType . snd
@@ -390,7 +390,7 @@ encodeElimination aliases marg dom cod elm = case elm of
   EliminationUnion (CaseStatement tname fields) -> case marg of
       Nothing -> do
         cx <- getState
-        let anns = contextAnnotations cx
+        let anns = graphAnnotations cx
         let lhs = annotationClassSetTermType anns cx (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
         encodeTerm aliases Nothing $ Terms.lambda "v" $ Terms.apply lhs (Terms.variable "v")
       Just jarg -> applyElimination jarg
@@ -479,7 +479,7 @@ encodeTerm aliases mtype term = case term of
       Just t -> encodeTerm aliases mtype term'
       Nothing -> do
         cx <- getState
-        mt <- annotationClassTypeOf (contextAnnotations cx) ann
+        mt <- annotationClassTypeOf (graphAnnotations cx) ann
         encodeTerm aliases mt term'
 
     TermApplication a -> case stripTerm fun of
@@ -509,7 +509,7 @@ encodeTerm aliases mtype term = case term of
         fallback = forApplication a
         forApplication (Application lhs rhs) = do
             cx <- getState
-            mt <- annotationClassTermType (contextAnnotations cx) lhs
+            mt <- annotationClassTermType (graphAnnotations cx) lhs
             t <- case mt of
               Just t' -> pure t'
               Nothing -> fail $ "expected a type annotation on function " ++ show lhs
@@ -647,7 +647,7 @@ getCodomain ann = functionTypeCodomain <$> getFunctionType ann
 getFunctionType :: Show m => m -> GraphFlow m (FunctionType m)
 getFunctionType ann = do
   cx <- getState
-  mt <- annotationClassTypeOf (contextAnnotations cx) ann
+  mt <- annotationClassTypeOf (graphAnnotations cx) ann
   case mt of
     Nothing -> fail "type annotation is required for function and elimination terms in Java"
     Just t -> case t of

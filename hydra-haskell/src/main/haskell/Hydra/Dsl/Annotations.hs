@@ -40,10 +40,10 @@ boundedSet min max et = bounded min max $ Types.set et
 boundedString :: Maybe Int -> Maybe Int -> Type Kv
 boundedString min max = bounded min max Types.string
 
-coreContext :: Context Kv
-coreContext = bootstrapContext {
-  contextGraph = hydraCore,
-  contextPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives}
+-- TODO: move me; this is the only function here which does not have to do with annotations
+coreContext :: Graph Kv
+coreContext = hydraCore {
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives}
 
 doc :: String -> Type Kv -> Type Kv
 doc s = setTypeDescription coreContext (Just s)
@@ -53,9 +53,6 @@ dataDoc s = setTermDescription coreContext (Just s)
 
 dataterm :: Namespace -> String -> Type Kv -> Term Kv -> Element Kv
 dataterm gname lname = termElement (qualify gname (Name lname))
-
-graphContext :: Graph Kv -> Context Kv
-graphContext g = coreContext {contextGraph = g}
 
 nonemptyList :: Type Kv -> Type Kv
 nonemptyList = boundedList (Just 1) Nothing
@@ -71,9 +68,6 @@ setMaxLength m = setTypeAnnotation coreContext key_maxSize (Just $ Terms.int32 m
 
 setMinLength :: Int -> Type Kv -> Type Kv
 setMinLength m = setTypeAnnotation coreContext key_minSize (Just $ Terms.int32 m)
-
-standardGraph :: [Element Kv] -> Graph Kv
-standardGraph = elementsToGraph (Just hydraCore)
 
 twoOrMoreList :: Type Kv -> Type Kv
 twoOrMoreList = boundedList (Just 2) Nothing

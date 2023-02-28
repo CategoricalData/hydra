@@ -336,7 +336,7 @@ roundTripIsNoop typ term = shouldSucceedWith
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 
-    acx = AdapterContext testContext hydraCoreLanguage testLanguage
+    acx = AdapterContext testGraph hydraCoreLanguage testLanguage
 
     -- Note: in a real application, you wouldn't create the adapter just to use it once;
     --       it should be created once, then applied to many terms.
