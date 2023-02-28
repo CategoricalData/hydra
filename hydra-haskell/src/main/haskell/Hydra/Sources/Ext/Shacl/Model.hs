@@ -23,7 +23,7 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
         see "https://www.w3.org/TR/shacl/#ClosedPatterConstraintComponent" $
         record [
           "isClosed">: boolean,
-          "ignoredProperties">: optional $ set $ element $ rdf "Property"],
+          "ignoredProperties">: optional $ set $ TypeElement $ rdf "Property"],
 
       def "CommonConstraint" $
         doc "Any of a number of constraint parameters which can be applied either to node or property shapes" $
@@ -38,7 +38,7 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
 
           "class">:
             see "https://www.w3.org/TR/shacl/#ClassConstraintComponent" $
-            set $ element $ rdf "RdfsClass",
+            set $ TypeElement $ rdf "RdfsClass",
 
           "datatype">:
             see "https://www.w3.org/TR/shacl/#DatatypeConstraintComponent" $
@@ -46,11 +46,11 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
 
           "disjoint">:
             see "https://www.w3.org/TR/shacl/#DisjointConstraintComponent" $
-            set $ element $ rdf "Property",
+            set $ TypeElement $ rdf "Property",
 
           "equals">:
             see "https://www.w3.org/TR/shacl/#EqualsConstraintComponent" $
-            set $ element $ rdf "Property",
+            set $ TypeElement $ rdf "Property",
 
           "hasValue">:
             doc ("Specifies the condition that at least one value node is equal to the given RDF term. " ++
@@ -139,7 +139,7 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
 
           "targetClass">:
             see "https://www.w3.org/TR/shacl/#targetClass" $
-            set $ element $ rdf "RdfsClass",
+            set $ TypeElement $ rdf "RdfsClass",
 
           "targetNode">:
             see "https://www.w3.org/TR/shacl/#targetNode" $
@@ -147,11 +147,11 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
 
           "targetObjectsOf">:
             see "https://www.w3.org/TR/shacl/#targetObjectsOf" $
-            set $ element $ rdf "Property",
+            set $ TypeElement $ rdf "Property",
 
           "targetSubjectsOf">:
             see "https://www.w3.org/TR/shacl/#targetSubjectsOf" $
-            set $ element $ rdf "Property"],
+            set $ TypeElement $ rdf "Property"],
 
       def "Definition" $
         doc "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance" $
@@ -212,11 +212,11 @@ shaclModelModule = Module ns elements [rdfSyntaxModule] $
 
           "lessThan">:
             see "https://www.w3.org/TR/shacl/#LessThanConstraintComponent" $
-            set $ element $ rdf "Property",
+            set $ TypeElement $ rdf "Property",
 
           "lessThanOrEquals">:
             see "https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent" $
-            set $ element $ rdf "Property",
+            set $ TypeElement $ rdf "Property",
 
           "maxCount">:
             doc ("The maximum cardinality. Node shapes cannot have any value for sh:maxCount. " ++

@@ -168,7 +168,7 @@ avroHydraAdapter schema = case schema of
                   _ -> fail $ "unsupported type annotated as foreign key: " ++ (show $ typeVariant $ adapterTarget ad)
               where
                 forTypeAndCoder ad typ coder = pure $ Adapter (adapterIsLossy ad) (Avro.fieldType f) typ coder
-                elTyp = Types.element $ Types.wrap name
+                elTyp = TypeElement $ Types.wrap name
           return (Avro.fieldName f, (f, ad))
     Avro.SchemaPrimitive p -> case p of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode

@@ -18,7 +18,7 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where
         prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
-        pairToElement (lname, typ) = Element (toName lname) (Terms.element _Type) (epsilonEncodeType typ)
+        pairToElement (lname, typ) = Element (toName lname) (TermElement _Type) (epsilonEncodeType typ)
 
     toName = fromQname ns
 

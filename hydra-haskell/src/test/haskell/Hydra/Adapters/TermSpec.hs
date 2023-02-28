@@ -119,8 +119,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       int32ElementType
       int32ElementType
       False
-      (element name)
-      (element name)
+      (TermElement name)
+      (TermElement name)
 
   H.it "Term terms (when supported) pass through without change" $
     QC.property $ \() -> checkDataAdapter
@@ -176,7 +176,7 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       int32ElementType
       Types.string
       False
-      (element name)
+      (TermElement name)
       (string nm) -- Note: the element name is not dereferenced
 
   H.it "Data terms (when unsupported) become variant terms" $
@@ -266,7 +266,7 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       listOfSetOfInt32ElementReferencesType
       listOfListsOfStringsType
       False
-      (list $ (\l -> set $ S.fromList $ element <$> l) <$> names)
+      (list $ (\l -> set $ S.fromList $ TermElement <$> l) <$> names)
       (list $ (\l -> list $ string <$> S.toList (S.fromList $ unName <$> l)) <$> names)
 
 roundTripsPreserveSelectedTypes :: H.SpecWith ()
@@ -282,7 +282,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
 
   H.it "Check element references (which map to strings)" $
-    QC.property $ \name -> roundTripIsNoop int32ElementType (element name)
+    QC.property $ \name -> roundTripIsNoop int32ElementType (TermElement name)
 
   H.it "Check data terms (which map to variants)" $
     roundTripIsNoop int32ElementDataType delta

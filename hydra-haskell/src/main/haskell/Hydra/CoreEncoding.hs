@@ -87,7 +87,7 @@ epsilonEncodeType typ = case typ of
   TypeSum types -> variant _Type _Type_sum $ list (epsilonEncodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ epsilonEncodeRowType rt
   TypeVariable (Name var) -> variant _Type _Type_variable $ string var
-  TypeWrap name -> variant _Type _Type_wrap $ element name
+  TypeWrap name -> variant _Type _Type_wrap $ TermElement name
 
 sigmaEncodeApplication :: Ord m => Application m -> Term m
 sigmaEncodeApplication (Application lhs rhs) = record _Application [

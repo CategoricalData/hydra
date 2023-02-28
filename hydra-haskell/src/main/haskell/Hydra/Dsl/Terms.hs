@@ -49,9 +49,6 @@ constFunction = lambda "_"
 delta :: Term m
 delta = TermFunction $ FunctionElimination EliminationElement
 
-element :: Name -> Term m
-element = TermElement
-
 elementRef :: Element a -> Term m
 elementRef = apply delta . TermElement . elementName
 

@@ -73,7 +73,7 @@ doc :: String -> Datum a -> Datum a
 doc s (Datum term) = Datum $ setTermDescription Ann.coreContext (Just s) term
 
 element :: Definition a -> Datum (Reference a)
-element (Definition name _) = Datum $ Terms.element name
+element (Definition name _) = Datum $ TermElement name
 
 field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
@@ -136,7 +136,7 @@ record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
-ref (Definition name _) = Datum (Terms.apply Terms.delta $ Terms.element name) 
+ref (Definition name _) = Datum (Terms.apply Terms.delta $ TermElement name) 
 
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList

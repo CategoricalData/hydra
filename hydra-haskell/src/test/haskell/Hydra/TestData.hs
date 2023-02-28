@@ -26,7 +26,7 @@ exampleProjectionType :: Type Kv
 exampleProjectionType = Types.function testTypePerson Types.string
 
 int32ElementType :: Type m
-int32ElementType = Types.element Types.int32
+int32ElementType = TypeElement Types.int32
 
 int32ElementDataType :: Type m
 int32ElementDataType = Types.function int32ElementType Types.int32
@@ -41,7 +41,7 @@ listOfListsOfStringsType :: Type m
 listOfListsOfStringsType = Types.list $ Types.list Types.string
 
 listOfSetOfInt32ElementReferencesType :: Type m
-listOfSetOfInt32ElementReferencesType = Types.list $ Types.set $ Types.element Types.int32
+listOfSetOfInt32ElementReferencesType = Types.list $ Types.set $ TypeElement Types.int32
 
 listOfSetOfStringsType :: Type m
 listOfSetOfStringsType = Types.list $ Types.set Types.string

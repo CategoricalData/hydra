@@ -74,7 +74,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Element references become strings" $
     QC.property $ \name -> checkYamlCoder int32ElementType
-      (element name) (yamlStr $ unName name)
+      (TermElement name) (yamlStr $ unName name)
 
   H.it "Sets become sequences" $
     QC.property $ \strings -> checkYamlCoder setOfStringsType

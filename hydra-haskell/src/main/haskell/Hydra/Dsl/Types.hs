@@ -43,9 +43,6 @@ binary = literal LiteralTypeBinary
 boolean :: Type m
 boolean = literal LiteralTypeBoolean
 
-element :: Type m -> Type m
-element = TypeElement
-
 enum :: [String] -> Type m
 enum names = union $ (`field` unit) <$> names
 
