@@ -1,19 +1,17 @@
 package hydra.lib.strings;
 
-import java.util.ArrayList;
+import hydra.core.Name;
+import hydra.PrimitiveFunction;
 import java.util.List;
+import java.util.ArrayList;
 
-public interface Strings {
-    static String cat(List<String> args) {
-        return String.join("", args);
-    }
-
-    static int length(String s) {
-        return s.length();
+public class SplitOn<M> extends PrimitiveFunction<M> {
+    public Name name() {
+        return new Name("hydra/lib/strings.splitOn");
     }
 
     // Note: the substring is not interpreted as a regular expression; it is simply a literal string. See Haskell's Data.List.Split.
-    static List<String> splitOn(String delim, String string) {
+    public static List<String> apply(String delim, String string) {
         List<String> parts = new ArrayList<>();
 
         if (delim.length() == 0) {
@@ -49,13 +47,5 @@ public interface Strings {
         }
 
         return parts;
-    }
-
-    static String toLower(String upper) {
-        return upper.toLowerCase(); // TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
-    }
-
-    static String toUpper(String lower) {
-        return lower.toUpperCase(); // TODO: Java's built-in behavior may not agree with that of Haskell or other host languages
     }
 }
