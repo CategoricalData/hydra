@@ -1,6 +1,16 @@
 -- | Entry point for Hydra code generation utilities
 
-module Hydra.Codegen where
+module Hydra.Codegen (
+  kernelModules,
+  langModules,
+  mainModules,
+  testModules,
+  writeHaskell,
+  writeJava,
+  writePdl,
+  writeScala,
+  writeYaml,
+) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
@@ -45,6 +55,8 @@ import Hydra.Sources.Module
 import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
 import Hydra.Sources.Ast
+import Hydra.Sources.Testing
+import Hydra.Sources.Test.Primitives
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -58,9 +70,6 @@ addDeepTypeAnnotations :: (Ord m, Show m) => Module m -> GraphFlow m (Module m)
 addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
-
-allModules :: [Module Kv]
-allModules = coreModules ++ utilModules ++ extModules
 
 assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
 assignSchemas doInfer mod = do
@@ -77,49 +86,6 @@ assignSchemas doInfer mod = do
             return el {elementSchema = epsilonEncodeType t}
           else return el
         Just typ -> return el {elementSchema = epsilonEncodeType typ}
-
-coreModules :: [Module Kv]
-coreModules = [
-  codetreeAstModule,
-  haskellAstModule,
-  hydraCodersModule,
-  hydraCoreModule,
-  hydraComputeModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraGrammarModule,
-  hydraWorkflowModule,
---  hydraMonadsModule,
-  hydraPhantomsModule,
-  jsonModelModule]
-
-utilModules = [
-  adapterUtilsModule,
-  hydraBasicsModule]
-
-extModules :: [Module Kv]
-extModules = [
-  avroSchemaModule,
-  graphqlSyntaxModule,
-  javaSyntaxModule,
-  owlSyntaxModule,
-  parquetFormatModule,
-  pegasusPdlModule,
-  protobufAnyModule,
-  protobufSourceContextModule,
-  protobufTypeModule,
-  rdfSyntaxModule,
-  relationalModelModule,
-  scalaMetaModule,
-  shaclModelModule,
-  shexSyntaxModule,
-  sqlModule,
-  tinkerpopFeaturesModule,
-  tinkerpopTypedModule,
-  tinkerpopV3Module,
-  xmlSchemaModule,
-  yamlModelModule]
 
 findType :: Graph m -> Term m -> GraphFlow m (Maybe (Type m))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
@@ -145,7 +111,52 @@ generateSources printModule mods0 basePath = do
       writeFile fullPath s
 
 hydraKernel :: Graph Kv
-hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
+hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule, hydraTestingModule]
+
+kernelModules :: [Module Kv]
+kernelModules = [
+  adapterUtilsModule,
+  codetreeAstModule,
+  haskellAstModule,
+  hydraBasicsModule,
+  hydraCodersModule,
+  hydraCoreModule,
+  hydraComputeModule,
+  hydraGraphModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraGrammarModule,
+  hydraTestingModule,
+  hydraWorkflowModule,
+--  hydraMonadsModule,
+  hydraPhantomsModule,
+  jsonModelModule]
+
+langModules :: [Module Kv]
+langModules = [
+  avroSchemaModule,
+  graphqlSyntaxModule,
+  javaSyntaxModule,
+  owlSyntaxModule,
+  parquetFormatModule,
+  pegasusPdlModule,
+  protobufAnyModule,
+  protobufSourceContextModule,
+  protobufTypeModule,
+  rdfSyntaxModule,
+  relationalModelModule,
+  scalaMetaModule,
+  shaclModelModule,
+  shexSyntaxModule,
+  sqlModule,
+  tinkerpopFeaturesModule,
+  tinkerpopTypedModule,
+  tinkerpopV3Module,
+  xmlSchemaModule,
+  yamlModelModule]
+
+mainModules :: [Module Kv]
+mainModules = kernelModules ++ langModules
 
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph hydraKernel (Just hydraKernel) elements
@@ -166,6 +177,10 @@ runFlow cx f = do
   let FlowState v _ t = unFlow f cx emptyTrace
   printTrace (Y.isNothing v) t
   return v
+
+testModules :: [Module Kv]
+testModules = [
+  testPrimitivesModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule

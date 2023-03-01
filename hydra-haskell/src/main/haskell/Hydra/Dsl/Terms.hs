@@ -22,6 +22,9 @@ import Data.String(IsString(..))
 
 instance IsString (Term m) where fromString = string
 
+(@@) :: Term m -> Term m -> Term m
+f @@ x = apply f x
+
 annot :: m -> Term m -> Term m
 annot ann t = TermAnnotated $ Annotated t ann
 
