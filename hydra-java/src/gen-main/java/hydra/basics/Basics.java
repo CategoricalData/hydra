@@ -341,7 +341,7 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.String_());
   
   static java.util.function.Function<String, hydra.core.Name> qname(hydra.module.Namespace ns) {
-    return name -> new hydra.core.Name(hydra.lib.strings.Strings.cat(java.util.Arrays.asList(
+    return name -> new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       ((ns)).value,
       ".",
       (name))));

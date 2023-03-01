@@ -3,6 +3,7 @@ package hydra.dsl;
 import hydra.core.Elimination;
 import hydra.core.Function;
 import hydra.core.Term;
+import hydra.dsl.prims.Strings;
 import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +37,8 @@ public class TermsTest {
    */
   private final Term<String> stringLength = primitive("hydra/lib/strings.length");
 
-  private final Term<String> stringCat = primitive("hydra/lib/strings.cat");
-
   private final Term<String> cat3 =
-      lambda("s1", lambda("s2", lambda("s3", apply(stringCat, list(variable("s1"), variable("s2"), variable("s3"))))));
+      lambda("s1", lambda("s2", lambda("s3", apply(Strings.cat(), list(variable("s1"), variable("s2"), variable("s3"))))));
 
   private final Term<String> longitude = projection("LatLon", "lon");
 
@@ -82,10 +81,10 @@ public class TermsTest {
     assertEquals(name("Location"), ((Term.Union<String>) bayAreaLocation).value.typeName);
     assertEquals(fieldName("latlon"), ((Term.Union<String>) bayAreaLocation).value.field.name);
 
-    assertTrue(stringLength instanceof Term.Function);
-    assertTrue(((Term.Function<String>) stringLength).value instanceof Function.Primitive);
+    assertTrue(Strings.length() instanceof Term.Function);
+    assertTrue(((Term.Function<Object>) Strings.length()).value instanceof Function.Primitive);
     assertEquals(name("hydra/lib/strings.length"),
-        ((Function.Primitive<String>) ((Term.Function<String>) stringLength).value).value);
+        ((Function.Primitive<Object>) ((Term.Function<Object>) Strings.length()).value).value);
 
     assertTrue(cat3 instanceof Term.Function);
     assertTrue(((Term.Function<String>) cat3).value instanceof Function.Lambda);
