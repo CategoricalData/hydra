@@ -1,7 +1,7 @@
 package hydra.lib.strings;
 
 import hydra.core.Name;
-import hydra.PrimitiveFunction;
+import hydra.util.PrimitiveFunction;
 
 public class ToLower<M> extends PrimitiveFunction<M> {
     public Name name() {

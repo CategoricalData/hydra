@@ -1,4 +1,4 @@
-package hydra;
+package hydra.util;
 
 import hydra.core.Name;
 import hydra.core.Term;

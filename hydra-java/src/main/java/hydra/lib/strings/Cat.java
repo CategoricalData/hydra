@@ -1,7 +1,8 @@
 package hydra.lib.strings;
 
 import hydra.core.Name;
-import hydra.PrimitiveFunction;
+import hydra.util.PrimitiveFunction;
+
 import java.util.List;
 
 public class Cat<M> extends PrimitiveFunction<M> {

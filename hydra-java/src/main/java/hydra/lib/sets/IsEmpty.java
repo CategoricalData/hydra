@@ -1,7 +1,8 @@
 package hydra.lib.sets;
 
 import hydra.core.Name;
-import hydra.PrimitiveFunction;
+import hydra.util.PrimitiveFunction;
+
 import java.util.Set;
 
 public class IsEmpty<A> extends PrimitiveFunction<A> {

@@ -1,7 +1,8 @@
 package hydra.lib.sets;
 
 import hydra.core.Name;
-import hydra.PrimitiveFunction;
+import hydra.util.PrimitiveFunction;
+
 import java.util.function.Function;
 import java.util.Set;
 import java.util.stream.Collectors;
