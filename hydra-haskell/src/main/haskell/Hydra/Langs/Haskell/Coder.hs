@@ -161,9 +161,9 @@ encodeTerm namespaces term = do
       if L.null fields -- TODO: too permissive; not all empty record types are the unit type
         then pure $ H.ExpressionTuple []
         else do
-            let typeName = typeNameForRecord sname
+            let typeName = elementReference namespaces sname
             updates <- CM.mapM toFieldUpdate fields
-            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord (rawName typeName) updates
+            return $ H.ExpressionConstructRecord $ H.Expression_ConstructRecord typeName updates
           where
             toFieldUpdate (Field fn ft) = H.FieldUpdate (recordFieldReference namespaces sname fn) <$> encode ft
     TermUnion (Injection sname (Field fn ft)) -> do
