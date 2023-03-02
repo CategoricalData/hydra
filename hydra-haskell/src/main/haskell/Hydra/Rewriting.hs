@@ -299,10 +299,22 @@ termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
 termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
-      TermElement name -> if withEls then S.insert name names else names
-      TermFunction (FunctionPrimitive name) -> if withPrims then S.insert name names else names
-      TermWrap (Nominal name _) -> if withNoms then S.insert name names else names
-      _ -> names
+        TermElement name -> el name        
+        TermFunction f -> case f of
+          FunctionPrimitive name -> prim name
+          FunctionElimination e -> case e of
+            EliminationRecord (Projection name _) -> nominal name
+            EliminationUnion (CaseStatement name _) -> nominal name
+            _ -> names
+          _ -> names
+        TermRecord (Record name _) -> nominal name
+        TermUnion (Injection name _) -> nominal name
+        TermWrap (Nominal name _) -> nominal name
+        _ -> names
+      where
+        el name = if withEls then S.insert name names else names
+        nominal name = if withNoms then S.insert name names else names
+        prim name = if withPrims then S.insert name names else names
 
 topologicalSortElements :: [Element m] -> Maybe [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
