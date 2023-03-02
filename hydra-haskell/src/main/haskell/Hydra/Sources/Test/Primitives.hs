@@ -58,7 +58,7 @@ stringsCat = TestGroup "cat" Nothing [] [
     test ["", "one", "", ""] "one",
     test [] ""]
   where
-    test ls result = primCase _strings_length [list (string <$> ls)] (string result)
+    test ls result = primCase _strings_cat [list (string <$> ls)] (string result)
 
 stringsLength :: TestGroup Kv
 stringsLength = TestGroup "length" Nothing [] [
