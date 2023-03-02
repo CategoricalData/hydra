@@ -249,6 +249,19 @@ avroHydraAdapter schema = case schema of
 avroNameToHydraName :: AvroQualifiedName -> Name
 avroNameToHydraName (AvroQualifiedName mns local) = fromQname (Namespace $ Y.fromMaybe "DEFAULT" mns) local
 
+-- TODO: use me (for encoding annotations for which the type is not know) or lose me
+--       A more robust solution would use jsonCoder together with an expected type
+encodeAnnotationValue :: Ord m => Json.Value -> Term m
+encodeAnnotationValue v = case v of
+  Json.ValueArray vals -> Terms.list (encodeAnnotationValue <$> vals)
+  Json.ValueBoolean b -> Terms.boolean b
+  Json.ValueNull -> Terms.product []
+  Json.ValueNumber d -> Terms.float64 d
+  Json.ValueObject m -> Terms.map $ M.fromList (toEntry <$> M.toList m)
+    where
+      toEntry (k, v) = (Terms.string k, encodeAnnotationValue v)
+  Json.ValueString s -> Terms.string s
+
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment m -> Y.Maybe (AvroHydraAdapter m)
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
 
