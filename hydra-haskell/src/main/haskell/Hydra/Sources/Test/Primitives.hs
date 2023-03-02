@@ -18,14 +18,14 @@ testPrimitivesModule :: Module Kv
 testPrimitivesModule = Module primitivesNs elements [hydraCoreModule, hydraTestingModule] $
     Just "Test cases for primitive functions"
   where
-   elements = [
-    groupElement "primitiveFunctionTestCases" allPrimitives]
+    elements = [
+      groupElement "primitiveFunctionTestCases" allPrimitives]
 
 def :: String -> Type Kv -> Term Kv -> Element Kv
 def lname typ term = Element (fromQname primitivesNs lname) (epsilonEncodeType typ) term
 
 groupElement :: String -> TestGroup Kv -> Element Kv
-groupElement lname group = def lname (TypeVariable _TestGroup) $ encodeGroup group
+groupElement lname group = def lname (Types.variable "ignored") $ encodeGroup group
   where
     encodeGroup (TestGroup name desc groups cases) = Terms.record _TestGroup [
       Field _TestGroup_name $ Terms.string name,
