@@ -12,7 +12,7 @@ public class FromList<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.fromList");
     }
 
-    public static <A> Set<A> apply(List<A> arg) {
+    public static <B> Set<B> apply(List<B> arg) {
         return new HashSet(arg);
     }
 }
