@@ -67,7 +67,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeVariable v, t2) -> bind v t2
       (t1, TypeVariable v) -> bind v t1
 
-      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "m")
+      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "a")
       (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
       (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")

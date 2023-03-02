@@ -44,7 +44,7 @@ hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
 eliminationVariantSource :: Definition (Elimination m -> EliminationVariant)
 eliminationVariantSource = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "m")) (Types.wrap _EliminationVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "a")) (Types.wrap _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
@@ -93,7 +93,7 @@ floatValueTypeSource = basics "floatValueType" $
 functionVariantSource :: Definition (Function m -> FunctionVariant)
 functionVariantSource = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "m")) (Types.wrap _FunctionVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "a")) (Types.wrap _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -215,7 +215,7 @@ qnameSource = basics "qname" $
 termVariantSource :: Definition (Term m -> TermVariant)
 termVariantSource = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function (Types.apply (Types.wrap _Term) (Types.variable "m")) (Types.wrap _TermVariant) $
+  function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.wrap _TermVariant) $
   lambda "term" $ apply
     (matchToEnum _Term _TermVariant [
       _Term_annotated       @-> _TermVariant_annotated,
@@ -269,7 +269,7 @@ testListsSource = basics "testLists" $
 typeVariantSource :: Definition (Type m -> TypeVariant)
 typeVariantSource = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "m")) (Types.wrap _TypeVariant) $
+  function (Types.apply (Types.wrap _Type) (Types.variable "a")) (Types.wrap _TypeVariant) $
   lambda "typ" $ apply
     (matchToEnum _Type _TypeVariant [
       _Type_annotated   @-> _TypeVariant_annotated,

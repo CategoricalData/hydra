@@ -10,11 +10,11 @@ import Data.Map
 import Data.Set
 
 -- | An evaluation context together with a source language and a target language
-data AdapterContext m = 
+data AdapterContext a = 
   AdapterContext {
-    adapterContextGraph :: (Graph.Graph m),
-    adapterContextSource :: (Language m),
-    adapterContextTarget :: (Language m)}
+    adapterContextGraph :: (Graph.Graph a),
+    adapterContextSource :: (Language a),
+    adapterContextTarget :: (Language a)}
 
 _AdapterContext = (Core.Name "hydra/coders.AdapterContext")
 
@@ -37,10 +37,10 @@ _CoderDirection_encode = (Core.FieldName "encode")
 _CoderDirection_decode = (Core.FieldName "decode")
 
 -- | A named language together with language-specific constraints
-data Language m = 
+data Language a = 
   Language {
     languageName :: LanguageName,
-    languageConstraints :: (LanguageConstraints m)}
+    languageConstraints :: (LanguageConstraints a)}
 
 _Language = (Core.Name "hydra/coders.Language")
 
@@ -49,7 +49,7 @@ _Language_name = (Core.FieldName "name")
 _Language_constraints = (Core.FieldName "constraints")
 
 -- | A set of constraints on valid type and term expressions, characterizing a language
-data LanguageConstraints m = 
+data LanguageConstraints a = 
   LanguageConstraints {
     -- | All supported elimination variants
     languageConstraintsEliminationVariants :: (Set Mantle.EliminationVariant),
@@ -66,7 +66,7 @@ data LanguageConstraints m =
     -- | All supported type variants
     languageConstraintsTypeVariants :: (Set Mantle.TypeVariant),
     -- | A logical set of types, as a predicate which tests a type for inclusion
-    languageConstraintsTypes :: (Core.Type m -> Bool)}
+    languageConstraintsTypes :: (Core.Type a -> Bool)}
 
 _LanguageConstraints = (Core.Name "hydra/coders.LanguageConstraints")
 
