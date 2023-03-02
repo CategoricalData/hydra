@@ -2,10 +2,9 @@
 
 module Hydra.CoreEncoding where
 
+import Hydra.Basics
 import Hydra.Core
-import Hydra.Compute
 import Hydra.Mantle
-import Hydra.Monads
 import Hydra.Dsl.Terms as Terms
 
 import Prelude hiding (map)
@@ -113,11 +112,33 @@ sigmaEncodeField (Field (FieldName name) term) = record _Field [
   Field _Field_name $ string name,
   Field _Field_term $ sigmaEncodeTerm term]
 
+sigmaEncodeFloatValue :: FloatValue -> Term m
+sigmaEncodeFloatValue f = variant _FloatValue var $ float f
+  where
+    var = case floatValueType f of
+      FloatTypeBigfloat -> _FloatType_bigfloat
+      FloatTypeFloat32 -> _FloatType_float32
+      FloatTypeFloat64 -> _FloatType_float64
+
 sigmaEncodeFunction :: Ord m => Function m -> Term m
 sigmaEncodeFunction f = case f of
   FunctionElimination e -> variant _Function _Function_elimination $ sigmaEncodeElimination e
   FunctionLambda l -> variant _Function _Function_lambda $ sigmaEncodeLambda l
-  FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ string name
+  FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ TermWrap $ Nominal _Name $ string name
+
+sigmaEncodeIntegerValue :: IntegerValue -> Term m
+sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
+  where
+    var = case integerValueType i of
+      IntegerTypeBigint -> _IntegerType_bigint
+      IntegerTypeInt8 -> _IntegerType_int8
+      IntegerTypeInt16 -> _IntegerType_int16
+      IntegerTypeInt32 -> _IntegerType_int32
+      IntegerTypeInt64 -> _IntegerType_int64
+      IntegerTypeUint8 -> _IntegerType_uint8
+      IntegerTypeUint16 -> _IntegerType_uint16
+      IntegerTypeUint32 -> _IntegerType_uint32
+      IntegerTypeUint64 -> _IntegerType_uint64
 
 sigmaEncodeLambda :: Ord m => Lambda m -> Term m
 sigmaEncodeLambda (Lambda (Name v) b) = record _Lambda [
@@ -125,7 +146,12 @@ sigmaEncodeLambda (Lambda (Name v) b) = record _Lambda [
   Field _Lambda_body $ sigmaEncodeTerm b]
 
 sigmaEncodeLiteral :: Literal -> Term m
-sigmaEncodeLiteral = literal
+sigmaEncodeLiteral l = case l of
+  LiteralBinary v -> variant _Literal _LiteralVariant_binary $ string v
+  LiteralBoolean v -> variant _Literal _LiteralVariant_boolean $ boolean v
+  LiteralFloat v -> variant _Literal _LiteralVariant_float $ sigmaEncodeFloatValue v
+  LiteralInteger v -> variant _Literal _LiteralVariant_integer $ sigmaEncodeIntegerValue v
+  LiteralString v -> variant _Literal _LiteralVariant_string $ string v
 
 sigmaEncodeLiteralVariant :: LiteralVariant -> Term m
 sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
