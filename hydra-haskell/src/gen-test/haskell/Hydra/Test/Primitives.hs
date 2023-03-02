@@ -26,7 +26,7 @@ primitiveFunctionTestCases = Testing.TestGroup {
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "one"),
                   Core.TermLiteral (Core.LiteralString "two"),
@@ -35,7 +35,7 @@ primitiveFunctionTestCases = Testing.TestGroup {
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [
                   Core.TermLiteral (Core.LiteralString ""),
                   Core.TermLiteral (Core.LiteralString "one"),
@@ -45,7 +45,7 @@ primitiveFunctionTestCases = Testing.TestGroup {
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [])})),
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralString ""))}]},
         Testing.TestGroup {
