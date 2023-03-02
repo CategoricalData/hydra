@@ -11,7 +11,7 @@ public class Empty<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.empty");
     }
 
-    public static <A> Set<A> apply() {
+    public static <B> Set<B> apply() {
         return Collections.emptySet();
     }
 }

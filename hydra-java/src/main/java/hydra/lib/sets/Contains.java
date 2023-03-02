@@ -10,7 +10,7 @@ public class Contains<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.contains");
     }
 
-    public static <A> Boolean apply(A elem, Set<A> arg) {
+    public static <B> Boolean apply(B elem, Set<B> arg) {
         return arg.contains(elem);
     }
 }
