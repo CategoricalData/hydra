@@ -12,7 +12,7 @@ import Data.Map
 import Data.Set
 
 -- | Find the elimination variant (constructor) for a given elimination term
-eliminationVariant :: (Core.Elimination m -> Mantle.EliminationVariant)
+eliminationVariant :: (Core.Elimination a -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Mantle.EliminationVariantElement
   Core.EliminationList _ -> Mantle.EliminationVariantList
@@ -53,7 +53,7 @@ floatValueType x = case x of
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
 -- | Find the function variant (constructor) for a given function
-functionVariant :: (Core.Function m -> Mantle.FunctionVariant)
+functionVariant :: (Core.Function a -> Mantle.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionElimination _ -> Mantle.FunctionVariantElimination
   Core.FunctionLambda _ -> Mantle.FunctionVariantLambda
@@ -157,7 +157,7 @@ qname ns name = (Core.Name (Strings.cat [
   name]))
 
 -- | Find the term variant (constructor) for a given term
-termVariant :: (Core.Term m -> Mantle.TermVariant)
+termVariant :: (Core.Term a -> Mantle.TermVariant)
 termVariant term = ((\x -> case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
@@ -202,7 +202,7 @@ testLists :: ([[a]] -> Int)
 testLists els = (Lists.length (Lists.concat els))
 
 -- | Find the type variant (constructor) for a given type
-typeVariant :: (Core.Type m -> Mantle.TypeVariant)
+typeVariant :: (Core.Type a -> Mantle.TypeVariant)
 typeVariant typ = ((\x -> case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication

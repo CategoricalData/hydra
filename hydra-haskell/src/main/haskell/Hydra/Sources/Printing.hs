@@ -60,7 +60,7 @@ describePrecisionSource = utils "describePrecision" $
 describeTypeSource :: Definition (Type m -> string)
 describeTypeSource = utils "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "m")) Types.string $
+  function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $
   lambda "typ" $ apply
     (match _Type Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeSource @@
@@ -89,7 +89,7 @@ describeTypeSource = utils "describeType" $
       Case _Type_variable    --> constant $ string "unspecified/parametric terms"])
     (var "typ")
   where
-    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "m"))) (Types.variable "m")
-    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "m")
-    typeM = Types.apply (Types.wrap _Type) (Types.variable "m")
-    mapTypeM = Types.apply (Types.wrap _MapType) (Types.variable "m")
+    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")
+    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "a")
+    typeM = Types.apply (Types.wrap _Type) (Types.variable "a")
+    mapTypeM = Types.apply (Types.wrap _MapType) (Types.variable "a")
