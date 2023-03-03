@@ -14,7 +14,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-shaclCoder :: (Eq m, Show m) => Module m -> GraphFlow m (Shacl.ShapesGraph, Graph m -> GraphFlow m Rdf.Graph)
+shaclCoder :: (Eq a, Show a) => Module a -> GraphFlow a (Shacl.ShapesGraph, Graph a -> GraphFlow a Rdf.Graph)
 shaclCoder mod = do
     cx <- getState
     let typeEls = L.filter (isEncodedType cx . elementSchema) $ moduleElements mod
@@ -44,17 +44,17 @@ defaultCommonProperties = Shacl.CommonProperties {
   Shacl.commonPropertiesTargetObjectsOf = S.empty,
   Shacl.commonPropertiesTargetSubjectsOf = S.empty}
 
-elementIri :: Element m -> Rdf.Iri
+elementIri :: Element a -> Rdf.Iri
 elementIri = nameToIri . elementName
 
-encodeField :: Show m => Name -> Rdf.Resource -> Field m -> GraphFlow m [Rdf.Triple]
+encodeField :: Show a => Name -> Rdf.Resource -> Field a -> GraphFlow a [Rdf.Triple]
 encodeField rname subject field = do
   node <- nextBlankNode
   descs <- encodeTerm node (fieldTerm field)
   return $ triplesOf descs ++
     forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs)
 
-encodeFieldType :: Show m => Name -> Maybe Integer -> FieldType m -> GraphFlow m (Shacl.Definition Shacl.PropertyShape)
+encodeFieldType :: Show a => Name -> Maybe Integer -> FieldType a -> GraphFlow a (Shacl.Definition Shacl.PropertyShape)
 encodeFieldType rname order (FieldType fname ft) = do
     shape <- forType (Just 1) (Just 1) ft
     return $ Shacl.Definition iri shape
@@ -95,7 +95,7 @@ encodeLiteralType lt = case lt of
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
-encodeTerm :: Show m => Rdf.Resource -> Term m -> GraphFlow m [Rdf.Description]
+encodeTerm :: Show a => Rdf.Resource -> Term a -> GraphFlow a [Rdf.Description]
 encodeTerm subject term = case term of
   TermAnnotated (Annotated inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
   TermElement name -> pure [emptyDescription $ Rdf.NodeIri $ nameToIri name]
@@ -148,7 +148,7 @@ encodeTerm subject term = case term of
     return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
   _ -> unexpected "RDF-compatible term" term
 
-encodeType :: Show m => Type m -> GraphFlow m Shacl.CommonProperties
+encodeType :: Show a => Type a -> GraphFlow a Shacl.CommonProperties
 encodeType typ = case stripType typ of
     TypeElement et -> encodeType et
     TypeList _ -> any

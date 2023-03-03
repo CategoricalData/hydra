@@ -4,10 +4,10 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.dsl.Terms;
 
-public abstract class PrimitiveFunction<M> {
+public abstract class PrimitiveFunction<A> {
     public abstract Name name();
 
-    public Term<M> term() {
+    public Term<A> term() {
         return Terms.primitive(name()); 
     }
 }

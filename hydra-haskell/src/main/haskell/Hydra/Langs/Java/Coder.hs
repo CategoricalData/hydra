@@ -25,7 +25,7 @@ import Hydra.Kernel (capitalize)
 
 type Aliases = M.Map Namespace Java.PackageName
 
-printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
 printModule mod = do
     withTrace "encode in Java" $ do
       units <- moduleToJavaCompilationUnit mod
@@ -35,23 +35,23 @@ printModule mod = do
       elementNameToFilePath name,
       printExpr $ parenthesize $ writeCompilationUnit unit)
 
-boundTypeVariables :: Type m -> [Name]
+boundTypeVariables :: Type a -> [Name]
 boundTypeVariables typ = case typ of
   TypeAnnotated (Annotated typ1 _) -> boundTypeVariables typ1
   TypeLambda (LambdaType v body) -> v:(boundTypeVariables body)
   _ -> []
 
-commentsFromElement :: Element m -> GraphFlow m (Maybe String)
+commentsFromElement :: Element a -> GraphFlow a (Maybe String)
 commentsFromElement el = do
   cx <- getState
   annotationClassTermDescription (graphAnnotations cx) (elementData el)
 
-commentsFromFieldType :: FieldType m -> GraphFlow m (Maybe String)
+commentsFromFieldType :: FieldType a -> GraphFlow a (Maybe String)
 commentsFromFieldType (FieldType _ t) = do
   cx <- getState
   annotationClassTypeDescription (graphAnnotations cx) t
 
-addComment :: Java.ClassBodyDeclaration -> FieldType m -> GraphFlow m Java.ClassBodyDeclarationWithComments
+addComment :: Java.ClassBodyDeclaration -> FieldType a -> GraphFlow a Java.ClassBodyDeclarationWithComments
 addComment decl field = Java.ClassBodyDeclarationWithComments decl <$> commentsFromFieldType field
 
 noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
@@ -62,7 +62,7 @@ elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQ
   where
     (ns, local) = toQnameEager name
 
-moduleToJavaCompilationUnit :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map Name Java.CompilationUnit)
+moduleToJavaCompilationUnit :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
   where
     aliases = importAliasesForModule mod
@@ -71,9 +71,9 @@ moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructM
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
 
-constructModule :: (Ord m, Read m, Show m)
-  => Module m -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) Java.Expression) -> [(Element m, TypedTerm m)]
-  -> GraphFlow m (M.Map Name Java.CompilationUnit)
+constructModule :: (Ord a, Read a, Show a)
+  => Module a -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) Java.Expression) -> [(Element a, TypedTerm a)]
+  -> GraphFlow a (M.Map Name Java.CompilationUnit)
 constructModule mod coders pairs = do
     let isTypePair = isType . typedTermType . snd
     let typePairs = L.filter isTypePair pairs
@@ -128,7 +128,7 @@ constructModule mod coders pairs = do
         _ -> unexpected "function term" term
       _ -> unexpected "function type" typ
 
-constructElementsInterface :: Module m -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
+constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)
   where
     cu = Java.CompilationUnitOrdinary $ Java.OrdinaryCompilationUnit (Just pkg) [] [decl]
@@ -141,15 +141,15 @@ constructElementsInterface mod members = (elName, cu)
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
     decl = Java.TypeDeclarationWithComments itf $ moduleDescription mod
 
-declarationForLambdaType :: (Eq m, Ord m, Read m, Show m) => Aliases
-  -> [Java.TypeParameter] -> Name -> LambdaType m -> GraphFlow m Java.ClassDeclaration
+declarationForLambdaType :: (Eq a, Ord a, Read a, Show a) => Aliases
+  -> [Java.TypeParameter] -> Name -> LambdaType a -> GraphFlow a Java.ClassDeclaration
 declarationForLambdaType aliases tparams elName (LambdaType (Name v) body) =
     toClassDecl False aliases (tparams ++ [param]) elName body
   where
     param = javaTypeParameter $ capitalize v
 
-declarationForRecordType :: (Ord m, Read m, Show m) => Bool -> Aliases -> [Java.TypeParameter] -> Name
-  -> [FieldType m] -> GraphFlow m Java.ClassDeclaration
+declarationForRecordType :: (Ord a, Read a, Show a) => Bool -> Aliases -> [Java.TypeParameter] -> Name
+  -> [FieldType a] -> GraphFlow a Java.ClassDeclaration
 declarationForRecordType isInner aliases tparams elName fields = do
     memberVars <- CM.mapM toMemberVar fields
     cx <- getState
@@ -263,8 +263,8 @@ declarationForRecordType isInner aliases tparams elName fields = do
               where
                 first20Primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
 
-declarationForType :: (Ord m, Read m, Show m)
-  => Aliases -> (Element m, TypedTerm m) -> GraphFlow m Java.TypeDeclarationWithComments
+declarationForType :: (Ord a, Read a, Show a)
+  => Aliases -> (Element a, TypedTerm a) -> GraphFlow a Java.TypeDeclarationWithComments
 declarationForType aliases (el, TypedTerm _ term) = do
     t <- epsilonDecodeType term >>= adaptType javaLanguage
     cd <- toClassDecl False aliases [] (elementName el) t
@@ -272,9 +272,9 @@ declarationForType aliases (el, TypedTerm _ term) = do
     comments <- commentsFromElement el
     return $ Java.TypeDeclarationWithComments (Java.TypeDeclarationClass cd) comments
 
-declarationForUnionType :: (Eq m, Ord m, Read m, Show m)
+declarationForUnionType :: (Eq a, Ord a, Read a, Show a)
   => Aliases
-  -> [Java.TypeParameter] -> Name -> [FieldType m] -> GraphFlow m Java.ClassDeclaration
+  -> [Java.TypeParameter] -> Name -> [FieldType a] -> GraphFlow a Java.ClassDeclaration
 declarationForUnionType aliases tparams elName fields = do
     variantClasses <- CM.mapM (fmap augmentVariantClass . unionFieldClass) fields
     let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
@@ -360,8 +360,8 @@ elementJavaIdentifier isPrim aliases name = Java.Identifier $ if isPrim
 elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
 
-encodeElimination :: (Eq m, Ord m, Read m, Show m)
-  => Aliases -> Maybe Java.Expression -> Type m -> Type m -> Elimination m -> GraphFlow m Java.Expression
+encodeElimination :: (Eq a, Ord a, Read a, Show a)
+  => Aliases -> Maybe Java.Expression -> Type a -> Type a -> Elimination a -> GraphFlow a Java.Expression
 encodeElimination aliases marg dom cod elm = case elm of
   EliminationElement -> case marg of
     Nothing -> encodeFunction aliases dom cod $ FunctionLambda $ Lambda var $ TermVariable var
@@ -423,8 +423,8 @@ encodeElimination aliases marg dom cod elm = case elm of
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
 
-encodeFunction :: (Eq m, Ord m, Read m, Show m)
-  => Aliases -> Type m -> Type m -> Function m -> GraphFlow m Java.Expression
+encodeFunction :: (Eq a, Ord a, Read a, Show a)
+  => Aliases -> Type a -> Type a -> Function a -> GraphFlow a Java.Expression
 encodeFunction aliases dom cod fun = case fun of
   FunctionElimination elm -> encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
@@ -454,7 +454,7 @@ encodeLiteral lit = javaLiteralToJavaExpression $ case lit of
 
 -- Note: we use Java object types everywhere, rather than primitive types, as the latter cannot be used
 --       to build function types, parameterized types, etc.
-encodeLiteralType :: LiteralType -> GraphFlow m Java.Type
+encodeLiteralType :: LiteralType -> GraphFlow a Java.Type
 encodeLiteralType lt = case lt of
     LiteralTypeBoolean -> simple "Boolean"
     LiteralTypeFloat ft -> case ft of
@@ -474,8 +474,8 @@ encodeLiteralType lt = case lt of
   where
     simple n = pure $ javaRefType [] Nothing n
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m)
-  => Aliases -> Maybe (Type m) -> Term m -> GraphFlow m Java.Expression
+encodeTerm :: (Eq a, Ord a, Read a, Show a)
+  => Aliases -> Maybe (Type a) -> Term a -> GraphFlow a Java.Expression
 encodeTerm aliases mtype term = case term of
     -- Note: we are currently only reading the type from the annotation, leaving any documentation etc. behind
     TermAnnotated (Annotated term' ann) -> case mtype of
@@ -551,7 +551,7 @@ encodeTerm aliases mtype term = case term of
 
     TermLiteral l -> pure $ encodeLiteral l
 
-  --  TermMap (Map (Term m) (Term m))
+  --  TermMap (Map (Term a) (Term a))
 
     TermWrap (Nominal name arg) -> do
       jarg <- encode arg
@@ -597,7 +597,7 @@ encodeTerm aliases mtype term = case term of
 
     failAsLiteral msg = pure $ encodeLiteral $ LiteralString msg
 
-encodeType :: Show m => Aliases -> Type m -> GraphFlow m Java.Type
+encodeType :: Show a => Aliases -> Type a -> GraphFlow a Java.Type
 encodeType aliases t = case stripType t of
   TypeApplication (ApplicationType lhs rhs) -> do
     jlhs <- encode lhs
@@ -644,10 +644,10 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases ft
   return $ javaTypeToJavaFormalParameter jt fname
 
-getCodomain :: Show m => m -> GraphFlow m (Type m)
+getCodomain :: Show a => a -> GraphFlow a (Type a)
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
 
-getFunctionType :: Show m => m -> GraphFlow m (FunctionType m)
+getFunctionType :: Show a => a -> GraphFlow a (FunctionType a)
 getFunctionType ann = do
   cx <- getState
   mt <- annotationClassTypeOf (graphAnnotations cx) ann
@@ -664,7 +664,7 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
 
 instanceName = "instance"
 
-javaTypeParametersForType :: Type m -> [Java.TypeParameter]
+javaTypeParametersForType :: Type a -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars
   where
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
@@ -674,8 +674,8 @@ javaTypeParametersForType typ = toParam <$> vars
 partialVisitorName :: String
 partialVisitorName = "PartialVisitor"
 
-toClassDecl :: (Eq m, Ord m, Read m, Show m) => Bool -> Aliases -> [Java.TypeParameter]
-  -> Name -> Type m -> GraphFlow m Java.ClassDeclaration
+toClassDecl :: (Eq a, Ord a, Read a, Show a) => Bool -> Aliases -> [Java.TypeParameter]
+  -> Name -> Type a -> GraphFlow a Java.ClassDeclaration
 toClassDecl isInner aliases tparams elName t = case stripType t of
     TypeRecord rt -> declarationForRecordType isInner aliases tparams elName $ rowTypeFields rt
     TypeUnion rt -> declarationForUnionType aliases tparams elName $ rowTypeFields rt
@@ -685,11 +685,11 @@ toClassDecl isInner aliases tparams elName t = case stripType t of
   where
     wrap t' = declarationForRecordType isInner aliases tparams elName [Types.field valueFieldName t']
 
-toDataDeclaration :: Aliases -> (a, TypedTerm m) -> GraphFlow m a
+toDataDeclaration :: Aliases -> (a, TypedTerm a) -> GraphFlow a a
 toDataDeclaration aliases (el, TypedTerm typ term) = do
   fail "not implemented" -- TODO
 
-typeNameDecl :: (Ord m, Read m, Show m) => Aliases -> Name -> GraphFlow m Java.ClassBodyDeclarationWithComments
+typeNameDecl :: (Ord a, Read a, Show a) => Aliases -> Name -> GraphFlow a Java.ClassBodyDeclarationWithComments
 typeNameDecl aliases name = do
   jt <- encodeType aliases $ Types.wrap _Name
   arg <- encodeTerm aliases Nothing $ Terms.string $ unName name

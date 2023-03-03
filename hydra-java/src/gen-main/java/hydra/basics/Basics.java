@@ -4,7 +4,7 @@ package hydra.basics;
  * Basic functions for working with types and terms
  */
 public interface Basics {
-  static <M> hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination<M> v1) {
+  static <A> hydra.mantle.EliminationVariant eliminationVariant(hydra.core.Elimination<A> v1) {
     return ((v1)).accept(new hydra.core.Elimination.Visitor<hydra.mantle.EliminationVariant>() {
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Element instance) {
@@ -89,7 +89,7 @@ public interface Basics {
     });
   }
   
-  static <M> hydra.mantle.FunctionVariant functionVariant(hydra.core.Function<M> v1) {
+  static <A> hydra.mantle.FunctionVariant functionVariant(hydra.core.Function<A> v1) {
     return ((v1)).accept(new hydra.core.Function.Visitor<hydra.mantle.FunctionVariant>() {
       @Override
       public hydra.mantle.FunctionVariant visit(hydra.core.Function.Elimination instance) {
@@ -347,7 +347,7 @@ public interface Basics {
       (name))));
   }
   
-  static <M> hydra.mantle.TermVariant termVariant(hydra.core.Term<M> term) {
+  static <A> hydra.mantle.TermVariant termVariant(hydra.core.Term<A> term) {
     return ((term)).accept(new hydra.core.Term.Visitor<hydra.mantle.TermVariant>() {
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Annotated instance) {
@@ -458,7 +458,7 @@ public interface Basics {
     return hydra.lib.lists.Length.apply(hydra.lib.lists.Concat.apply((els)));
   }
   
-  static <M> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<M> typ) {
+  static <A> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<A> typ) {
     return ((typ)).accept(new hydra.core.Type.Visitor<hydra.mantle.TypeVariant>() {
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Annotated instance) {

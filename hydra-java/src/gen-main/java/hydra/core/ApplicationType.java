@@ -3,20 +3,20 @@ package hydra.core;
 /**
  * The type-level analog of an application term
  */
-public class ApplicationType<M> {
+public class ApplicationType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.ApplicationType");
   
   /**
    * The left-hand side of the application
    */
-  public final hydra.core.Type<M> function;
+  public final hydra.core.Type<A> function;
   
   /**
    * The right-hand side of the application
    */
-  public final hydra.core.Type<M> argument;
+  public final hydra.core.Type<A> argument;
   
-  public ApplicationType (hydra.core.Type<M> function, hydra.core.Type<M> argument) {
+  public ApplicationType (hydra.core.Type<A> function, hydra.core.Type<A> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -35,11 +35,11 @@ public class ApplicationType<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public ApplicationType withFunction(hydra.core.Type<M> function) {
+  public ApplicationType withFunction(hydra.core.Type<A> function) {
     return new ApplicationType(function, argument);
   }
   
-  public ApplicationType withArgument(hydra.core.Type<M> argument) {
+  public ApplicationType withArgument(hydra.core.Type<A> argument) {
     return new ApplicationType(function, argument);
   }
 }

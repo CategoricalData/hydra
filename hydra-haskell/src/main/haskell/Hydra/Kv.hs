@@ -133,7 +133,6 @@ setTypeAnnotation cx key val typ = if kv == annotationClassDefault (graphAnnotat
 setTypeDescription :: Graph Kv -> Y.Maybe String -> Type Kv -> Type Kv
 setTypeDescription cx d = setTypeAnnotation cx kvDescription (Terms.string <$> d)
 
-
 termAnnotationInternal :: Term Kv -> Kv
 termAnnotationInternal = aggregateAnnotations $ \t -> case t of
   TermAnnotated a -> Just a

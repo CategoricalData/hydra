@@ -241,7 +241,7 @@ testStripKv = do
 
 typeOf term = annotationClassTermType (graphAnnotations testGraph) term
 
-withType :: Graph m -> Type m -> Term m -> Term m
+withType :: Graph a -> Type a -> Term a -> Term a
 withType cx typ = annotationClassSetTermType (graphAnnotations cx) cx (Just typ)
 
 spec :: H.Spec

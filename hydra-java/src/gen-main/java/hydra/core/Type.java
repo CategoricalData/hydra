@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A data type
  */
-public abstract class Type<M> {
+public abstract class Type<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Type");
   
   private Type () {
@@ -125,13 +125,13 @@ public abstract class Type<M> {
   /**
    * A type annotated with metadata
    */
-  public static final class Annotated<M> extends hydra.core.Type<M> {
+  public static final class Annotated<A> extends hydra.core.Type<A> {
     /**
      * A type annotated with metadata
      */
-    public final hydra.core.Annotated<hydra.core.Type<M>, M> value;
+    public final hydra.core.Annotated<hydra.core.Type<A>, A> value;
     
-    public Annotated (hydra.core.Annotated<hydra.core.Type<M>, M> value) {
+    public Annotated (hydra.core.Annotated<hydra.core.Type<A>, A> value) {
       this.value = value;
     }
     
@@ -155,10 +155,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Application<M> extends hydra.core.Type<M> {
-    public final hydra.core.ApplicationType<M> value;
+  public static final class Application<A> extends hydra.core.Type<A> {
+    public final hydra.core.ApplicationType<A> value;
     
-    public Application (hydra.core.ApplicationType<M> value) {
+    public Application (hydra.core.ApplicationType<A> value) {
       this.value = value;
     }
     
@@ -182,10 +182,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Element<M> extends hydra.core.Type<M> {
-    public final hydra.core.Type<M> value;
+  public static final class Element<A> extends hydra.core.Type<A> {
+    public final hydra.core.Type<A> value;
     
-    public Element (hydra.core.Type<M> value) {
+    public Element (hydra.core.Type<A> value) {
       this.value = value;
     }
     
@@ -209,10 +209,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Function<M> extends hydra.core.Type<M> {
-    public final hydra.core.FunctionType<M> value;
+  public static final class Function<A> extends hydra.core.Type<A> {
+    public final hydra.core.FunctionType<A> value;
     
-    public Function (hydra.core.FunctionType<M> value) {
+    public Function (hydra.core.FunctionType<A> value) {
       this.value = value;
     }
     
@@ -236,10 +236,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Lambda<M> extends hydra.core.Type<M> {
-    public final hydra.core.LambdaType<M> value;
+  public static final class Lambda<A> extends hydra.core.Type<A> {
+    public final hydra.core.LambdaType<A> value;
     
-    public Lambda (hydra.core.LambdaType<M> value) {
+    public Lambda (hydra.core.LambdaType<A> value) {
       this.value = value;
     }
     
@@ -263,10 +263,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class List<M> extends hydra.core.Type<M> {
-    public final hydra.core.Type<M> value;
+  public static final class List<A> extends hydra.core.Type<A> {
+    public final hydra.core.Type<A> value;
     
-    public List (hydra.core.Type<M> value) {
+    public List (hydra.core.Type<A> value) {
       this.value = value;
     }
     
@@ -290,7 +290,7 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Literal<M> extends hydra.core.Type<M> {
+  public static final class Literal<A> extends hydra.core.Type<A> {
     public final hydra.core.LiteralType value;
     
     public Literal (hydra.core.LiteralType value) {
@@ -317,10 +317,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Map<M> extends hydra.core.Type<M> {
-    public final hydra.core.MapType<M> value;
+  public static final class Map<A> extends hydra.core.Type<A> {
+    public final hydra.core.MapType<A> value;
     
-    public Map (hydra.core.MapType<M> value) {
+    public Map (hydra.core.MapType<A> value) {
       this.value = value;
     }
     
@@ -344,10 +344,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Optional<M> extends hydra.core.Type<M> {
-    public final hydra.core.Type<M> value;
+  public static final class Optional<A> extends hydra.core.Type<A> {
+    public final hydra.core.Type<A> value;
     
-    public Optional (hydra.core.Type<M> value) {
+    public Optional (hydra.core.Type<A> value) {
       this.value = value;
     }
     
@@ -371,10 +371,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Product<M> extends hydra.core.Type<M> {
-    public final java.util.List<hydra.core.Type<M>> value;
+  public static final class Product<A> extends hydra.core.Type<A> {
+    public final java.util.List<hydra.core.Type<A>> value;
     
-    public Product (java.util.List<hydra.core.Type<M>> value) {
+    public Product (java.util.List<hydra.core.Type<A>> value) {
       this.value = value;
     }
     
@@ -398,10 +398,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Record<M> extends hydra.core.Type<M> {
-    public final hydra.core.RowType<M> value;
+  public static final class Record<A> extends hydra.core.Type<A> {
+    public final hydra.core.RowType<A> value;
     
-    public Record (hydra.core.RowType<M> value) {
+    public Record (hydra.core.RowType<A> value) {
       this.value = value;
     }
     
@@ -425,10 +425,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Set<M> extends hydra.core.Type<M> {
-    public final hydra.core.Type<M> value;
+  public static final class Set<A> extends hydra.core.Type<A> {
+    public final hydra.core.Type<A> value;
     
-    public Set (hydra.core.Type<M> value) {
+    public Set (hydra.core.Type<A> value) {
       this.value = value;
     }
     
@@ -452,10 +452,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Stream<M> extends hydra.core.Type<M> {
-    public final hydra.core.Type<M> value;
+  public static final class Stream<A> extends hydra.core.Type<A> {
+    public final hydra.core.Type<A> value;
     
-    public Stream (hydra.core.Type<M> value) {
+    public Stream (hydra.core.Type<A> value) {
       this.value = value;
     }
     
@@ -479,10 +479,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Sum<M> extends hydra.core.Type<M> {
-    public final java.util.List<hydra.core.Type<M>> value;
+  public static final class Sum<A> extends hydra.core.Type<A> {
+    public final java.util.List<hydra.core.Type<A>> value;
     
-    public Sum (java.util.List<hydra.core.Type<M>> value) {
+    public Sum (java.util.List<hydra.core.Type<A>> value) {
       this.value = value;
     }
     
@@ -506,10 +506,10 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Union<M> extends hydra.core.Type<M> {
-    public final hydra.core.RowType<M> value;
+  public static final class Union<A> extends hydra.core.Type<A> {
+    public final hydra.core.RowType<A> value;
     
-    public Union (hydra.core.RowType<M> value) {
+    public Union (hydra.core.RowType<A> value) {
       this.value = value;
     }
     
@@ -533,7 +533,7 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Variable<M> extends hydra.core.Type<M> {
+  public static final class Variable<A> extends hydra.core.Type<A> {
     public final hydra.core.Name value;
     
     public Variable (hydra.core.Name value) {
@@ -560,7 +560,7 @@ public abstract class Type<M> {
     }
   }
   
-  public static final class Wrap<M> extends hydra.core.Type<M> {
+  public static final class Wrap<A> extends hydra.core.Type<A> {
     public final hydra.core.Name value;
     
     public Wrap (hydra.core.Name value) {

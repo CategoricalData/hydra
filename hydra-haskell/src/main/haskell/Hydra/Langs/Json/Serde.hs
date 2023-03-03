@@ -40,7 +40,7 @@ bytesToAeson = A.eitherDecode
 bytesToValue :: BS.ByteString -> Either String Json.Value
 bytesToValue bs = aesonToValue <$> bytesToAeson bs
 
-jsonSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) BS.ByteString)
+jsonSerde :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
 jsonSerde typ = do
   coder <- jsonCoder typ
   return Coder {
@@ -49,7 +49,7 @@ jsonSerde typ = do
         Left msg -> fail $ "JSON parsing failed: " ++ msg
         Right v -> coderDecode coder v}
 
-jsonSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) String)
+jsonSerdeStr :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
 jsonSerdeStr typ = do
   serde <- jsonSerde typ
   return Coder {

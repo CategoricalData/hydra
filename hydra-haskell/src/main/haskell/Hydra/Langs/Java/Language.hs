@@ -5,7 +5,7 @@ import Hydra.Kernel
 import qualified Data.Set as S
 
 
-javaLanguage :: Language m
+javaLanguage :: Language a
 javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.fromList eliminationVariants,
 

@@ -1,7 +1,7 @@
 package hydra.langs.parquet.format;
 
 /**
- * LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement must also set the corresponding ConvertedType (if any) from the following table.
+ * LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
  */
 public abstract class LogicalType {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/parquet/format.LogicalType");

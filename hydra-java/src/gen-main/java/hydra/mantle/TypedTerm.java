@@ -3,14 +3,14 @@ package hydra.mantle;
 /**
  * A type together with an instance of the type
  */
-public class TypedTerm<M> {
+public class TypedTerm<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypedTerm");
   
-  public final hydra.core.Type<M> type;
+  public final hydra.core.Type<A> type;
   
-  public final hydra.core.Term<M> term;
+  public final hydra.core.Term<A> term;
   
-  public TypedTerm (hydra.core.Type<M> type, hydra.core.Term<M> term) {
+  public TypedTerm (hydra.core.Type<A> type, hydra.core.Term<A> term) {
     this.type = type;
     this.term = term;
   }
@@ -29,11 +29,11 @@ public class TypedTerm<M> {
     return 2 * type.hashCode() + 3 * term.hashCode();
   }
   
-  public TypedTerm withType(hydra.core.Type<M> type) {
+  public TypedTerm withType(hydra.core.Type<A> type) {
     return new TypedTerm(type, term);
   }
   
-  public TypedTerm withTerm(hydra.core.Term<M> term) {
+  public TypedTerm withTerm(hydra.core.Term<A> term) {
     return new TypedTerm(type, term);
   }
 }

@@ -28,10 +28,10 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
 
       def "AdapterContext" $
         doc "An evaluation context together with a source language and a target language" $
-        lambda "m" $ record [
-          "graph">: apply (graph "Graph") (variable "m"),
-          "source">: apply (coders "Language") (variable "m"),
-          "target">: apply (coders "Language") (variable "m")],
+        lambda "a" $ record [
+          "graph">: apply (graph "Graph") (variable "a"),
+          "source">: apply (coders "Language") (variable "a"),
+          "target">: apply (coders "Language") (variable "a")],
 
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
@@ -41,13 +41,13 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
 
       def "Language" $
         doc "A named language together with language-specific constraints" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "name">: coders "LanguageName",
-          "constraints">: apply (coders "LanguageConstraints") (variable "m")],
+          "constraints">: apply (coders "LanguageConstraints") (variable "a")],
 
       def "LanguageConstraints" $
         doc "A set of constraints on valid type and term expressions, characterizing a language" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "eliminationVariants">:
             doc "All supported elimination variants" $
             Types.set $ mantle "EliminationVariant",
@@ -71,7 +71,7 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
             Types.set $ mantle "TypeVariant",
           "types">:
             doc "A logical set of types, as a predicate which tests a type for inclusion" $
-            core "Type" @@ "m" --> boolean],
+            core "Type" @@ "a" --> boolean],
 
       def "LanguageName" $
         doc "The unique name of a language" string,

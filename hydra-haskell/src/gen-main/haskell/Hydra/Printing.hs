@@ -41,7 +41,7 @@ describePrecision x = case x of
     "-bit"])
 
 -- | Display a type as a string
-describeType :: (Core.Type m -> String)
+describeType :: (Core.Type a -> String)
 describeType typ = ((\x -> case x of
   Core.TypeAnnotated v -> (Strings.cat [
     "annotated ",

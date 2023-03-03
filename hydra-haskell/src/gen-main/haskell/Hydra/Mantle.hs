@@ -137,10 +137,10 @@ _TermVariant_variable = (Core.FieldName "variable")
 _TermVariant_wrap = (Core.FieldName "wrap")
 
 -- | A type expression together with free type variables occurring in the expression
-data TypeScheme m = 
+data TypeScheme a = 
   TypeScheme {
     typeSchemeVariables :: [Core.Name],
-    typeSchemeType :: (Core.Type m)}
+    typeSchemeType :: (Core.Type a)}
   deriving (Eq, Ord, Read, Show)
 
 _TypeScheme = (Core.Name "hydra/mantle.TypeScheme")
@@ -207,10 +207,10 @@ _TypeVariant_variable = (Core.FieldName "variable")
 _TypeVariant_wrap = (Core.FieldName "wrap")
 
 -- | A type together with an instance of the type
-data TypedTerm m = 
+data TypedTerm a = 
   TypedTerm {
-    typedTermType :: (Core.Type m),
-    typedTermTerm :: (Core.Term m)}
+    typedTermType :: (Core.Type a),
+    typedTermTerm :: (Core.Term a)}
   deriving (Eq, Ord, Read, Show)
 
 _TypedTerm = (Core.Name "hydra/mantle.TypedTerm")

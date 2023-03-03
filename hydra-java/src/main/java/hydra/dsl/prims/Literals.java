@@ -4,11 +4,11 @@ import hydra.core.Term;
 import hydra.lib.literals.*;
 
 public interface Literals {
-    static <M> Term<M> showInt32() {
+    static <A> Term<A> showInt32() {
         return new ShowInt32().term();
     }
 
-    static <M> Term<M> showString() {
+    static <A> Term<A> showString() {
         return new ShowString().term();
     }
 }

@@ -53,7 +53,7 @@ convertIntegerValue target = encoder . decoder
       IntegerTypeUint32 -> IntegerValueUint32 $ fromIntegral d
       IntegerTypeUint64 -> IntegerValueUint64 $ fromIntegral d
 
-elementsToGraph :: Graph m -> Maybe (Graph m) -> [Element m] -> Graph m
+elementsToGraph :: Graph a -> Maybe (Graph a) -> [Element a] -> Graph a
 elementsToGraph parent schema els = parent {graphElements = elementMap, graphSchema = schema}
   where
     elementMap = M.fromList (toPair <$> els)
@@ -68,10 +68,10 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
   where
     parts = (if caps then capitalize else id) <$> Strings.splitOn "/" name
 
-isEncodedType :: Eq m => Graph m -> Term m -> Bool
+isEncodedType :: Eq a => Graph a -> Term a -> Bool
 isEncodedType cx term = stripTerm term == TermElement _Type
 
-isType :: Eq m => Type m -> Bool
+isType :: Eq a => Type a -> Bool
 isType typ = case stripType typ of
   TypeWrap _Type -> True
   TypeUnion (RowType _Type _ _) -> True
@@ -100,17 +100,17 @@ skipAnnotations getAnn t = skip t
       Nothing -> t
       Just (Annotated t' _) -> skip t'
 
-stripTerm :: Term m -> Term m
+stripTerm :: Term a -> Term a
 stripTerm = skipAnnotations $ \t -> case t of
   TermAnnotated a -> Just a
   _ -> Nothing
 
-stripType :: Type m -> Type m
+stripType :: Type a -> Type a
 stripType = skipAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing
 
-termMeta :: Graph m -> Term m -> m
+termMeta :: Graph a -> Term a -> a
 termMeta cx = annotationClassTermAnnotation $ graphAnnotations cx
 
 toQnameLazy :: Name -> (Namespace, String)

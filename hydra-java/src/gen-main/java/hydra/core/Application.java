@@ -3,20 +3,20 @@ package hydra.core;
 /**
  * A term which applies a function to an argument
  */
-public class Application<M> {
+public class Application<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Application");
   
   /**
    * The left-hand side of the application
    */
-  public final hydra.core.Term<M> function;
+  public final hydra.core.Term<A> function;
   
   /**
    * The right-hand side of the application
    */
-  public final hydra.core.Term<M> argument;
+  public final hydra.core.Term<A> argument;
   
-  public Application (hydra.core.Term<M> function, hydra.core.Term<M> argument) {
+  public Application (hydra.core.Term<A> function, hydra.core.Term<A> argument) {
     this.function = function;
     this.argument = argument;
   }
@@ -35,11 +35,11 @@ public class Application<M> {
     return 2 * function.hashCode() + 3 * argument.hashCode();
   }
   
-  public Application withFunction(hydra.core.Term<M> function) {
+  public Application withFunction(hydra.core.Term<A> function) {
     return new Application(function, argument);
   }
   
-  public Application withArgument(hydra.core.Term<M> argument) {
+  public Application withArgument(hydra.core.Term<A> argument) {
     return new Application(function, argument);
   }
 }

@@ -18,17 +18,17 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
 printModule mod = do
   pkg <- moduleToScalaPackage mod
   let s = printExpr $ parenthesize $ writePkg pkg
   return $ M.fromList [(namespaceToFilePath False (FileExtension "scala") $ moduleNamespace mod, s)]
 
-moduleToScalaPackage :: (Ord m, Read m, Show m) => Module m -> GraphFlow m Scala.Pkg
+moduleToScalaPackage :: (Ord a, Read a, Show a) => Module a -> GraphFlow a Scala.Pkg
 moduleToScalaPackage = transformModule scalaLanguage encodeUntypedTerm constructModule
 
-constructModule :: (Ord m, Show m) => Module m -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) Scala.Data) -> [(Element m, TypedTerm m)]
-  -> GraphFlow m Scala.Pkg
+constructModule :: (Ord a, Show a) => Module a -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) Scala.Data) -> [(Element a, TypedTerm a)]
+  -> GraphFlow a Scala.Pkg
 constructModule mod coders pairs = do
     defs <- CM.mapM toDef pairs
     let pname = toScalaName $ h $ moduleNamespace mod
@@ -70,7 +70,7 @@ constructModule mod coders pairs = do
           where
             namePat = Scala.PatVar $ Scala.Pat_Var $ Scala.Data_Name $ Scala.PredefString lname
 
-encodeFunction :: (Eq m, Ord m, Read m, Show m) => m -> Function m -> Y.Maybe (Term m) -> GraphFlow m Scala.Data
+encodeFunction :: (Eq a, Ord a, Read a, Show a) => a -> Function a -> Y.Maybe (Term a) -> GraphFlow a Scala.Data
 encodeFunction meta fun arg = case fun of
     FunctionLambda (Lambda (Name v) body) -> slambda v <$> encodeTerm body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name
@@ -121,7 +121,7 @@ encodeFunction meta fun arg = case fun of
           TypeElement et -> domainOf et
           _ -> fail $ "expected a function type, but found " ++ show t
 
-encodeLiteral :: Literal -> GraphFlow m Scala.Lit
+encodeLiteral :: Literal -> GraphFlow a Scala.Lit
 encodeLiteral av = case av of
     LiteralBoolean b -> pure $ Scala.LitBoolean b
     LiteralFloat fv -> case fv of
@@ -137,7 +137,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ Scala.LitString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m) => Term m -> GraphFlow m Scala.Data
+encodeTerm :: (Eq a, Ord a, Read a, Show a) => Term a -> GraphFlow a Scala.Data
 encodeTerm term = case stripTerm term of
     TermApplication (Application fun arg) -> case stripTerm fun of
         TermFunction f -> case f of
@@ -186,7 +186,7 @@ encodeTerm term = case stripTerm term of
     _ -> fail $ "unexpected term: " ++ show term
 
 
-encodeType :: Show m => Type m -> GraphFlow m Scala.Type
+encodeType :: Show a => Type a -> GraphFlow a Scala.Type
 encodeType t = case stripType t of
 --  TypeElement et ->
   TypeFunction (FunctionType dom cod) -> do
@@ -224,5 +224,5 @@ encodeType t = case stripType t of
   TypeVariable (Name v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
-encodeUntypedTerm :: (Eq m, Ord m, Read m, Show m) => Term m -> GraphFlow m Scala.Data
+encodeUntypedTerm :: (Eq a, Ord a, Read a, Show a) => Term a -> GraphFlow a Scala.Data
 encodeUntypedTerm term = annotateTermWithTypes term >>= encodeTerm

@@ -3,7 +3,7 @@ package hydra.coders;
 /**
  * A set of constraints on valid type and term expressions, characterizing a language
  */
-public class LanguageConstraints<M> {
+public class LanguageConstraints<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/coders.LanguageConstraints");
   
   /**
@@ -44,9 +44,9 @@ public class LanguageConstraints<M> {
   /**
    * A logical set of types, as a predicate which tests a type for inclusion
    */
-  public final java.util.function.Function<hydra.core.Type<M>, Boolean> types;
+  public final java.util.function.Function<hydra.core.Type<A>, Boolean> types;
   
-  public LanguageConstraints (java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants, java.util.Set<hydra.mantle.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.mantle.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.mantle.TermVariant> termVariants, java.util.Set<hydra.mantle.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<M>, Boolean> types) {
+  public LanguageConstraints (java.util.Set<hydra.mantle.EliminationVariant> eliminationVariants, java.util.Set<hydra.mantle.LiteralVariant> literalVariants, java.util.Set<hydra.core.FloatType> floatTypes, java.util.Set<hydra.mantle.FunctionVariant> functionVariants, java.util.Set<hydra.core.IntegerType> integerTypes, java.util.Set<hydra.mantle.TermVariant> termVariants, java.util.Set<hydra.mantle.TypeVariant> typeVariants, java.util.function.Function<hydra.core.Type<A>, Boolean> types) {
     this.eliminationVariants = eliminationVariants;
     this.literalVariants = literalVariants;
     this.floatTypes = floatTypes;
@@ -99,7 +99,7 @@ public class LanguageConstraints<M> {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
   
-  public LanguageConstraints withTypes(java.util.function.Function<hydra.core.Type<M>, Boolean> types) {
+  public LanguageConstraints withTypes(java.util.function.Function<hydra.core.Type<A>, Boolean> types) {
     return new LanguageConstraints(eliminationVariants, literalVariants, floatTypes, functionVariants, integerTypes, termVariants, typeVariants, types);
   }
 }

@@ -4,43 +4,43 @@ import hydra.core.Term;
 import hydra.lib.sets.*;
 
 public interface Sets {
-    static <M> Term<M> contains() {
+    static <A> Term<A> contains() {
         return new Contains().term();
     }
 
-    static <M> Term<M> empty() {
+    static <A> Term<A> empty() {
         return new Empty().term();
     }
 
-    static <M> Term<M> fromList() {
+    static <A> Term<A> fromList() {
         return new FromList().term();
     }
 
-    static <M> Term<M> insert() {
+    static <A> Term<A> insert() {
         return new Insert().term();
     }
 
-    static <M> Term<M> isEmpty() {
+    static <A> Term<A> isEmpty() {
         return new IsEmpty().term();
     }
 
-    static <M> Term<M> map() {
+    static <A> Term<A> map() {
         return new Map().term();
     }
 
-    static <M> Term<M> remove() {
+    static <A> Term<A> remove() {
         return new Remove().term();
     }
 
-    static <M> Term<M> singleton() {
+    static <A> Term<A> singleton() {
         return new Singleton().term();
     }
 
-    static <M> Term<M> size() {
+    static <A> Term<A> size() {
         return new Size().term();
     }
 
-    static <M> Term<M> toList() {
+    static <A> Term<A> toList() {
         return new ToList().term();
     }
 }
