@@ -55,7 +55,7 @@ public interface Printing {
       @Override
       public String visit(hydra.mantle.Precision.Bits instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          hydra.lib.literals.Literals.showInt32((instance.value)),
+          hydra.lib.literals.ShowInt32.apply((instance.value)),
           "-bit"));
       }
     });
