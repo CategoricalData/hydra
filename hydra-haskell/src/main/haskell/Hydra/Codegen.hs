@@ -56,7 +56,7 @@ import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
 import Hydra.Sources.Ast
 import Hydra.Sources.Testing
-import Hydra.Sources.Test.Primitives
+import Hydra.Sources.Test.TestSuite
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -180,7 +180,7 @@ runFlow cx f = do
 
 testModules :: [Module Kv]
 testModules = [
-  testPrimitivesModule]
+  testSuiteModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule

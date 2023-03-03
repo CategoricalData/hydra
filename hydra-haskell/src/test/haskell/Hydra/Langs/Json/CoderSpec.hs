@@ -6,6 +6,7 @@ import Hydra.Langs.Json.Coder
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Langs.Json.Model as Json
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Tests
 
 import Hydra.TestData
 import Hydra.TestUtils
@@ -80,7 +81,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Sets become arrays" $
     QC.property $ \strings -> checkJsonCoder setOfStringsType
-      (Terms.stringSet strings)
+      (stringSet strings)
       (Json.ValueArray $ Json.ValueString <$> S.toList strings)
 
   H.it "Nominal types are dereferenced" $

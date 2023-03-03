@@ -5,6 +5,7 @@ import Hydra.Dsl.Terms
 import Hydra.Langs.Yaml.Coder
 import qualified Hydra.Langs.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Tests
 
 import Hydra.TestData
 import Hydra.TestUtils
