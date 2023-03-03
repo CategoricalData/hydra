@@ -41,7 +41,7 @@ hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
       el typeVariantSource,
       el typeVariantsSource]
 
-eliminationVariantSource :: Definition (Elimination m -> EliminationVariant)
+eliminationVariantSource :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantSource = basics "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "a")) (Types.wrap _EliminationVariant)) $
@@ -90,7 +90,7 @@ floatValueTypeSource = basics "floatValueType" $
     _FloatValue_float32  @-> _FloatType_float32,
     _FloatValue_float64  @-> _FloatType_float64]
 
-functionVariantSource :: Definition (Function m -> FunctionVariant)
+functionVariantSource :: Definition (Function a -> FunctionVariant)
 functionVariantSource = basics "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "a")) (Types.wrap _FunctionVariant)) $
@@ -212,7 +212,7 @@ qnameSource = basics "qname" $
         apply cat $
           list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
 
-termVariantSource :: Definition (Term m -> TermVariant)
+termVariantSource :: Definition (Term a -> TermVariant)
 termVariantSource = basics "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.wrap _TermVariant) $
@@ -266,7 +266,7 @@ testListsSource = basics "testLists" $
   function (Types.list $ Types.list $ Types.variable "a") Types.int32 $
   (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
 
-typeVariantSource :: Definition (Type m -> TypeVariant)
+typeVariantSource :: Definition (Type a -> TypeVariant)
 typeVariantSource = basics "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) (Types.wrap _TypeVariant) $

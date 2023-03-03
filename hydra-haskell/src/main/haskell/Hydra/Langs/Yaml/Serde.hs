@@ -15,7 +15,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as LB
 
 
-bytesToHsYaml :: BS.ByteString -> GraphFlow m (DY.Node DY.Pos)
+bytesToHsYaml :: BS.ByteString -> GraphFlow a (DY.Node DY.Pos)
 bytesToHsYaml bs = case DY.decodeNode bs of
     Left (pos, msg) -> fail $ "YAML parser failure at " ++ show pos ++ ": " ++ msg
     Right docs -> if L.null docs
@@ -25,13 +25,13 @@ bytesToHsYaml bs = case DY.decodeNode bs of
       else case L.head docs of
         (DY.Doc node) -> pure node
 
-bytesToHydraYaml :: BS.ByteString -> GraphFlow m YM.Node
+bytesToHydraYaml :: BS.ByteString -> GraphFlow a YM.Node
 bytesToHydraYaml = bytesToHsYaml CM.>=> hsYamlToHydraYaml
 
 hsYamlToBytes :: DY.Node () -> BS.ByteString
 hsYamlToBytes node = DY.encodeNode [DY.Doc node]
 
-hsYamlToHydraYaml :: DY.Node a -> GraphFlow m YM.Node
+hsYamlToHydraYaml :: DY.Node x -> GraphFlow a YM.Node
 hsYamlToHydraYaml hs = case hs of
   DY.Scalar _ s -> YM.NodeScalar <$> case s of
      DY.SNull -> pure YM.ScalarNull
@@ -65,14 +65,14 @@ hydraYamlToHsYaml hy = case hy of
 hydraYamlToString :: YM.Node -> String
 hydraYamlToString = bytesToString . hydraYamlToBytes
 
-yamlSerde :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) BS.ByteString)
+yamlSerde :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
 yamlSerde typ = do
   coder <- yamlCoder typ
   return Coder {
     coderEncode = fmap hydraYamlToBytes . coderEncode coder,
     coderDecode = bytesToHydraYaml CM.>=> coderDecode coder}
 
-yamlSerdeStr :: (Eq m, Ord m, Read m, Show m) => Type m -> GraphFlow m (Coder (Graph m) (Graph m) (Term m) String)
+yamlSerdeStr :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
 yamlSerdeStr typ = do
   serde <- yamlSerde typ
   return Coder {
