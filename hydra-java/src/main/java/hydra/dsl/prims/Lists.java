@@ -28,11 +28,11 @@ public interface Lists {
         return new Intersperse().term();
     }
 
-    static <M> Term<M> Last() {
+    static <M> Term<M> last() {
         return new Last().term();
     }
 
-    static <M> Term<M> Length() {
+    static <M> Term<M> length() {
         return new Length().term();
     }
 
