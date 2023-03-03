@@ -138,9 +138,9 @@ instance ToTree H.Import where
 instance ToTree H.Literal where
   toTree lit = cst $ case lit of
     H.LiteralChar c -> show $ C.chr $ fromIntegral c
-    H.LiteralDouble d -> show d
-    H.LiteralFloat f -> show f
-    H.LiteralInt i -> show i
+    H.LiteralDouble d -> if d < 0 then "(0" ++ show d ++ ")" else show d
+    H.LiteralFloat f -> if f < 0 then "(0" ++ show f ++ ")" else show f
+    H.LiteralInt i -> if i < 0 then "(0" ++ show i ++ ")" else show i
     H.LiteralInteger i -> show i
     H.LiteralString s -> show s
 
