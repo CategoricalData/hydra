@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * A map type
  */
-public class MapType<M> {
+public class MapType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.MapType");
   
-  public final hydra.core.Type<M> keys;
+  public final hydra.core.Type<A> keys;
   
-  public final hydra.core.Type<M> values;
+  public final hydra.core.Type<A> values;
   
-  public MapType (hydra.core.Type<M> keys, hydra.core.Type<M> values) {
+  public MapType (hydra.core.Type<A> keys, hydra.core.Type<A> values) {
     this.keys = keys;
     this.values = values;
   }
@@ -29,11 +29,11 @@ public class MapType<M> {
     return 2 * keys.hashCode() + 3 * values.hashCode();
   }
   
-  public MapType withKeys(hydra.core.Type<M> keys) {
+  public MapType withKeys(hydra.core.Type<A> keys) {
     return new MapType(keys, values);
   }
   
-  public MapType withValues(hydra.core.Type<M> values) {
+  public MapType withValues(hydra.core.Type<A> values) {
     return new MapType(keys, values);
   }
 }
