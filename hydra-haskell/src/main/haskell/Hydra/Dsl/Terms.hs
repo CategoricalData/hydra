@@ -223,12 +223,6 @@ requireField fields fname = Y.maybe err pure $ M.lookup fname fields
 set :: S.Set (Term m) -> Term m
 set = TermSet
 
-stringList :: [String] -> Term m
-stringList l = list (string <$> l)
-
-stringSet :: Ord m => S.Set String -> Term m
-stringSet strings = set $ S.fromList $ string <$> S.toList strings
-
 string :: String -> Term m
 string = TermLiteral . LiteralString
 

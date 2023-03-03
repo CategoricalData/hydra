@@ -5,6 +5,7 @@ import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Dsl.Tests
 
 import Hydra.TestData
 import Hydra.TestUtils
