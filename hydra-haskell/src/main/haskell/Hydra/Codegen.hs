@@ -1,6 +1,16 @@
 -- | Entry point for Hydra code generation utilities
 
-module Hydra.Codegen where
+module Hydra.Codegen (
+  kernelModules,
+  langModules,
+  mainModules,
+  testModules,
+  writeHaskell,
+  writeJava,
+  writePdl,
+  writeScala,
+  writeYaml,
+) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
@@ -45,6 +55,8 @@ import Hydra.Sources.Module
 import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
 import Hydra.Sources.Ast
+import Hydra.Sources.Testing
+import Hydra.Sources.Test.TestSuite
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -94,10 +106,6 @@ coreModules = [
   hydraPhantomsModule,
   jsonModelModule]
 
-utilModules = [
-  adapterUtilsModule,
-  hydraBasicsModule]
-
 extModules :: [Module Kv]
 extModules = [
   avroSchemaModule,
@@ -145,7 +153,52 @@ generateSources printModule mods0 basePath = do
       writeFile fullPath s
 
 hydraKernel :: Graph Kv
-hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule]
+hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule, hydraTestingModule]
+
+kernelModules :: [Module Kv]
+kernelModules = [
+  adapterUtilsModule,
+  codetreeAstModule,
+  haskellAstModule,
+  hydraBasicsModule,
+  hydraCodersModule,
+  hydraCoreModule,
+  hydraComputeModule,
+  hydraGraphModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraGrammarModule,
+  hydraTestingModule,
+  hydraWorkflowModule,
+--  hydraMonadsModule,
+  hydraPhantomsModule,
+  jsonModelModule]
+
+langModules :: [Module Kv]
+langModules = [
+  avroSchemaModule,
+  graphqlSyntaxModule,
+  javaSyntaxModule,
+  owlSyntaxModule,
+  parquetFormatModule,
+  pegasusPdlModule,
+  protobufAnyModule,
+  protobufSourceContextModule,
+  protobufTypeModule,
+  rdfSyntaxModule,
+  relationalModelModule,
+  scalaMetaModule,
+  shaclModelModule,
+  shexSyntaxModule,
+  sqlModule,
+  tinkerpopFeaturesModule,
+  tinkerpopTypedModule,
+  tinkerpopV3Module,
+  xmlSchemaModule,
+  yamlModelModule]
+
+mainModules :: [Module Kv]
+mainModules = kernelModules ++ langModules
 
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph hydraKernel (Just hydraKernel) elements
@@ -166,6 +219,15 @@ runFlow cx f = do
   let FlowState v _ t = unFlow f cx emptyTrace
   printTrace (Y.isNothing v) t
   return v
+
+testModules :: [Module Kv]
+testModules = [
+  testSuiteModule]
+
+utilModules :: [Module Kv]
+utilModules = [
+  adapterUtilsModule,
+  hydraBasicsModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule

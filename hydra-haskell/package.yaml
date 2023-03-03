@@ -41,7 +41,9 @@ library:
 tests:
   hydra-test:
     main: Spec.hs
-    source-dirs: src/test/haskell
+    source-dirs:
+      - src/test/haskell
+      - src/gen-test/haskell
     dependencies:
       - hydra
       - hspec

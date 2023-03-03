@@ -22,6 +22,9 @@ import Data.String(IsString(..))
 
 instance IsString (Term a) where fromString = string
 
+(@@) :: Term a -> Term a -> Term a
+f @@ x = apply f x
+
 annot :: a -> Term a -> Term a
 annot ann t = TermAnnotated $ Annotated t ann
 
@@ -219,12 +222,6 @@ requireField fields fname = Y.maybe err pure $ M.lookup fname fields
 
 set :: S.Set (Term a) -> Term a
 set = TermSet
-
-stringList :: [String] -> Term a
-stringList l = list (string <$> l)
-
-stringSet :: Ord a => S.Set String -> Term a
-stringSet strings = set $ S.fromList $ string <$> S.toList strings
 
 string :: String -> Term a
 string = TermLiteral . LiteralString
