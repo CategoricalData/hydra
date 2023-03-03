@@ -12,7 +12,7 @@ public class Map<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.map");
     }
 
-    public static <B, C> Set<C> apply(Function<B, C> mapping, Set<B> arg) {
+    public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
         return arg.stream().map(mapping).collect(Collectors.toSet());
     }
 }

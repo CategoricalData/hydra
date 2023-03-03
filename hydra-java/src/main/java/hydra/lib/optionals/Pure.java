@@ -10,7 +10,7 @@ public class Pure<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/optionals.pure");
     }
 
-    public static <B> Optional<B> pure(B arg) {
+    public static <X> Optional<X> pure(X arg) {
         return Optional.of(arg);
     }
 }

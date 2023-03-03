@@ -11,12 +11,12 @@ public class Map<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/optionals.map");
     }
 
-    public static <B, C> Optional<C> map(Function<B, C> f, Optional<B> optionalArg) {
+    public static <X, Y> Optional<Y> map(Function<X, Y> f, Optional<X> optionalArg) {
         if (!optionalArg.isPresent()) {
             return Optional.empty();
         }
 
-        B arg = optionalArg.get();
+        X arg = optionalArg.get();
 
         return Optional.of(f.apply(arg));
     }

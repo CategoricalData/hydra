@@ -11,13 +11,13 @@ public class Apply<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/optionals.apply");
     }
 
-    public static <B, C> Optional<C> apply(Optional<Function<B, C>> optionalF, Optional<B> optionalArg) {
+    public static <X, Y> Optional<Y> apply(Optional<Function<X, Y>> optionalF, Optional<X> optionalArg) {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {
             return Optional.empty();
         }
     
-        Function<B, C> f = optionalF.get();
-        B arg = optionalArg.get();
+        Function<X, Y> f = optionalF.get();
+        X arg = optionalArg.get();
 
         return Optional.of(f.apply(arg));
     }
