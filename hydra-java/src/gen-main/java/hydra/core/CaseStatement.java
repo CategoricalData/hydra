@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * A union elimination; a case statement
  */
-public class CaseStatement<M> {
+public class CaseStatement<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.CaseStatement");
   
   public final hydra.core.Name typeName;
   
-  public final java.util.List<hydra.core.Field<M>> cases;
+  public final java.util.List<hydra.core.Field<A>> cases;
   
-  public CaseStatement (hydra.core.Name typeName, java.util.List<hydra.core.Field<M>> cases) {
+  public CaseStatement (hydra.core.Name typeName, java.util.List<hydra.core.Field<A>> cases) {
     this.typeName = typeName;
     this.cases = cases;
   }
@@ -33,7 +33,7 @@ public class CaseStatement<M> {
     return new CaseStatement(typeName, cases);
   }
   
-  public CaseStatement withCases(java.util.List<hydra.core.Field<M>> cases) {
+  public CaseStatement withCases(java.util.List<hydra.core.Field<A>> cases) {
     return new CaseStatement(typeName, cases);
   }
 }

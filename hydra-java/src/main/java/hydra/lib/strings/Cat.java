@@ -5,7 +5,7 @@ import hydra.util.PrimitiveFunction;
 
 import java.util.List;
 
-public class Cat<M> extends PrimitiveFunction<M> {
+public class Cat<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/strings.cat");
     }

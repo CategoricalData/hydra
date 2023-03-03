@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * The name and type of a field
  */
-public class FieldType<M> {
+public class FieldType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.FieldType");
   
   public final hydra.core.FieldName name;
   
-  public final hydra.core.Type<M> type;
+  public final hydra.core.Type<A> type;
   
-  public FieldType (hydra.core.FieldName name, hydra.core.Type<M> type) {
+  public FieldType (hydra.core.FieldName name, hydra.core.Type<A> type) {
     this.name = name;
     this.type = type;
   }
@@ -33,7 +33,7 @@ public class FieldType<M> {
     return new FieldType(name, type);
   }
   
-  public FieldType withType(hydra.core.Type<M> type) {
+  public FieldType withType(hydra.core.Type<A> type) {
     return new FieldType(name, type);
   }
 }

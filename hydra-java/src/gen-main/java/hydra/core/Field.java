@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * A labeled term
  */
-public class Field<M> {
+public class Field<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Field");
   
   public final hydra.core.FieldName name;
   
-  public final hydra.core.Term<M> term;
+  public final hydra.core.Term<A> term;
   
-  public Field (hydra.core.FieldName name, hydra.core.Term<M> term) {
+  public Field (hydra.core.FieldName name, hydra.core.Term<A> term) {
     this.name = name;
     this.term = term;
   }
@@ -33,7 +33,7 @@ public class Field<M> {
     return new Field(name, term);
   }
   
-  public Field withTerm(hydra.core.Term<M> term) {
+  public Field withTerm(hydra.core.Term<A> term) {
     return new Field(name, term);
   }
 }

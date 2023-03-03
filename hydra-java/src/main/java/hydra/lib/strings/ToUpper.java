@@ -3,7 +3,7 @@ package hydra.lib.strings;
 import hydra.core.Name;
 import hydra.util.PrimitiveFunction;
 
-public class ToUpper<M> extends PrimitiveFunction<M> {
+public class ToUpper<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/strings.toUpper");
     }

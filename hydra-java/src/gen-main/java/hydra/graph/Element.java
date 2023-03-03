@@ -3,16 +3,16 @@ package hydra.graph;
 /**
  * A graph element, having a name, data term (value), and schema term (type)
  */
-public class Element<M> {
+public class Element<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/graph.Element");
   
   public final hydra.core.Name name;
   
-  public final hydra.core.Term<M> schema;
+  public final hydra.core.Term<A> schema;
   
-  public final hydra.core.Term<M> data;
+  public final hydra.core.Term<A> data;
   
-  public Element (hydra.core.Name name, hydra.core.Term<M> schema, hydra.core.Term<M> data) {
+  public Element (hydra.core.Name name, hydra.core.Term<A> schema, hydra.core.Term<A> data) {
     this.name = name;
     this.schema = schema;
     this.data = data;
@@ -36,11 +36,11 @@ public class Element<M> {
     return new Element(name, schema, data);
   }
   
-  public Element withSchema(hydra.core.Term<M> schema) {
+  public Element withSchema(hydra.core.Term<A> schema) {
     return new Element(name, schema, data);
   }
   
-  public Element withData(hydra.core.Term<M> data) {
+  public Element withData(hydra.core.Term<A> data) {
     return new Element(name, schema, data);
   }
 }
