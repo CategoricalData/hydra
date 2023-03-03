@@ -19,6 +19,8 @@ import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import Hydra.Basics (qname)
+import Hydra.Kernel (capitalize)
 
 
 type Aliases = M.Map Namespace Java.PackageName
@@ -348,11 +350,12 @@ declarationForUnionType aliases tparams elName fields = do
         classRef = javaClassTypeToJavaType $
           nameToJavaClassType aliases False [] (variantClassName False elName fname) Nothing
 
-elementJavaIdentifier :: Aliases -> Name -> Java.Identifier
-elementJavaIdentifier aliases name = Java.Identifier $ jname ++ "." ++ local
+elementJavaIdentifier :: Bool -> Aliases -> Name -> Java.Identifier
+elementJavaIdentifier isPrim aliases name = Java.Identifier $ if isPrim
+    then (Java.unIdentifier $ nameToJavaName aliases $ fromQname gname $ capitalize local) ++ ".apply"
+    else (Java.unIdentifier $ nameToJavaName aliases $ fromQname gname $ elementsClassName gname) ++ "." ++ local
   where
     (gname, local) = toQnameEager name
-    Java.Identifier jname = nameToJavaName aliases $ fromQname gname $ elementsClassName gname
 
 elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns
@@ -484,20 +487,20 @@ encodeTerm aliases mtype term = case term of
 
     TermApplication a -> case stripTerm fun of
         TermFunction f -> case f of
-          FunctionPrimitive name -> forNamedFunction name args
+          FunctionPrimitive name -> forNamedFunction True name args
           FunctionElimination EliminationElement -> if L.length args > 0
             then case stripTerm (L.head args) of
               TermElement name -> do
-                forNamedFunction name (L.tail args)
+                forNamedFunction False name (L.tail args)
               _ -> fallback
             else fallback
           _ -> fallback
         _ -> fallback
       where
-        forNamedFunction name args = do
-          jargs <- CM.mapM encode args
-          let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier aliases name
-          return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+        forNamedFunction prim name args = do
+            jargs <- CM.mapM encode args
+            let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
+            return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
 
         (fun, args) = uncurry [] term
           where
@@ -533,7 +536,7 @@ encodeTerm aliases mtype term = case term of
               let prim = javaExpressionToJavaPrimary jfun
               return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
 
-    TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier aliases name
+    TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier False aliases name
 
     TermFunction f -> case mtype of
       Just t -> case stripType t of
