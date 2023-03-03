@@ -10,7 +10,7 @@ public class IsEmpty<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.isEmpty");
     }
 
-    public static <B> Boolean apply(Set<B> arg) {
+    public static <X> Boolean apply(Set<X> arg) {
         return arg.isEmpty();
     }
 }
