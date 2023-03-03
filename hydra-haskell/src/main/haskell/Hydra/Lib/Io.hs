@@ -17,7 +17,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-showTerm :: Ord m => Term m -> String
+showTerm :: Ord a => Term a -> String
 showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
   where
     encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
@@ -33,7 +33,7 @@ termStringCoder = Coder mout min
       Left msg -> fail $ "failed to parse JSON value: " ++ msg
       Right v -> coderDecode termJsonCoder v
 
-showType :: Ord m => Type m -> String
+showType :: Ord a => Type a -> String
 showType typ = fromFlow hydraCore $ coderEncode typeStringCoder encoded
   where
     encoded = epsilonEncodeType $ rewriteTypeMeta (const $ Kv M.empty) typ

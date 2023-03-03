@@ -20,76 +20,76 @@ import Data.Int
 import Data.String(IsString(..))
 
 
-instance IsString (Term m) where fromString = string
+instance IsString (Term a) where fromString = string
 
-(@@) :: Term m -> Term m -> Term m
+(@@) :: Term a -> Term a -> Term a
 f @@ x = apply f x
 
-annot :: m -> Term m -> Term m
+annot :: a -> Term a -> Term a
 annot ann t = TermAnnotated $ Annotated t ann
 
-apply :: Term m -> Term m -> Term m
+apply :: Term a -> Term a -> Term a
 apply func arg = TermApplication $ Application func arg
 
-bigfloat :: Double -> Term m
+bigfloat :: Double -> Term a
 bigfloat = literal . Literals.bigfloat
 
-bigint :: Integer -> Term m
+bigint :: Integer -> Term a
 bigint = literal . Literals.bigint
 
-binary :: String -> Term m
+binary :: String -> Term a
 binary = literal . Literals.binary
 
-boolean :: Bool -> Term m
+boolean :: Bool -> Term a
 boolean = literal . Literals.boolean
 
-cases :: Name -> [Field m] -> Term m
+cases :: Name -> [Field a] -> Term a
 cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields
 
-constFunction :: Term m -> Term m
+constFunction :: Term a -> Term a
 constFunction = lambda "_"
 
-delta :: Term m
+delta :: Term a
 delta = TermFunction $ FunctionElimination EliminationElement
 
-elementRef :: Element a -> Term m
+elementRef :: Element a -> Term a
 elementRef = apply delta . TermElement . elementName
 
-elementRefByName :: Name -> Term m
+elementRefByName :: Name -> Term a
 elementRefByName = apply delta . TermElement
 
-elimination :: Elimination m -> Term m
+elimination :: Elimination a -> Term a
 elimination = TermFunction . FunctionElimination
 
-expectBinary :: Show m => Term m -> Flow s String
+expectBinary :: Show a => Term a -> Flow s String
 expectBinary = expectLiteral Literals.expectBinary
 
-expectBoolean :: Show m => Term m -> Flow s Bool
+expectBoolean :: Show a => Term a -> Flow s Bool
 expectBoolean = expectLiteral Literals.expectBoolean
 
-expectFloat32 :: Show m => Term m -> Flow s Float
+expectFloat32 :: Show a => Term a -> Flow s Float
 expectFloat32 = expectLiteral Literals.expectFloat32
 
-expectFloat64 :: Show m => Term m -> Flow s Double
+expectFloat64 :: Show a => Term a -> Flow s Double
 expectFloat64 = expectLiteral Literals.expectFloat64
 
-expectInt32 :: Show m => Term m -> Flow s Int
+expectInt32 :: Show a => Term a -> Flow s Int
 expectInt32 = expectLiteral Literals.expectInt32
 
-expectInt64 :: Show m => Term m -> Flow s Integer
+expectInt64 :: Show a => Term a -> Flow s Integer
 expectInt64 = expectLiteral Literals.expectInt64
 
-expectList :: Show m => (Term m -> Flow s a) -> Term m -> Flow s [a]
+expectList :: Show a => (Term a -> Flow s x) -> Term a -> Flow s [x]
 expectList f term = case stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
 
-expectLiteral :: Show m => (Literal -> Flow s a) -> Term m -> Flow s a
+expectLiteral :: Show a => (Literal -> Flow s x) -> Term a -> Flow s x
 expectLiteral expect term = case stripTerm term of
   TermLiteral lit -> expect lit
   _ -> unexpected "literal" term
 
-expectMap :: (Ord k, Show m) => (Term m -> Flow s k) -> (Term m -> Flow s v) -> Term m -> Flow s (M.Map k v)
+expectMap :: (Ord k, Show a) => (Term a -> Flow s k) -> (Term a -> Flow s v) -> Term a -> Flow s (M.Map k v)
 expectMap fk fv term = case stripTerm term of
   TermMap m -> M.fromList <$> CM.mapM expectPair (M.toList m)
     where
@@ -99,165 +99,165 @@ expectMap fk fv term = case stripTerm term of
         return (kval, vval)
   _ -> unexpected "map" term
 
-expectNArgs :: Int -> [Term m] -> Flow s ()
+expectNArgs :: Int -> [Term a] -> Flow s ()
 expectNArgs n args = if L.length args /= n
   then unexpected (show n ++ " arguments") (L.length args)
   else pure ()
 
-expectOptional :: Show m => (Term m -> Flow s a) -> Term m -> Flow s (Y.Maybe a)
+expectOptional :: Show a => (Term a -> Flow s x) -> Term a -> Flow s (Y.Maybe x)
 expectOptional f term = case stripTerm term of
   TermOptional mt -> case mt of
     Nothing -> pure Nothing
     Just t -> Just <$> f t
   _ -> unexpected "optional value" term
 
-expectRecord :: Show m => Term m -> Flow s [Field m]
+expectRecord :: Show a => Term a -> Flow s [Field a]
 expectRecord term = case stripTerm term of
   TermRecord (Record _ fields) -> pure fields
   _ -> unexpected "record" term
 
-expectSet :: (Ord a, Show m) => (Term m -> Flow s a) -> Term m -> Flow s (S.Set a)
+expectSet :: (Ord x, Show a) => (Term a -> Flow s x) -> Term a -> Flow s (S.Set x)
 expectSet f term = case stripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> unexpected "set" term
 
-expectString :: Show m => Term m -> Flow s String
+expectString :: Show a => Term a -> Flow s String
 expectString = expectLiteral Literals.expectString
 
-expectUnion :: Show m => Term m -> Flow s (Field m)
+expectUnion :: Show a => Term a -> Flow s (Field a)
 expectUnion term = case stripTerm term of
   TermUnion (Injection _ field) -> pure field
   _ -> unexpected "union" term
 
-field :: String -> Term m -> Field m
+field :: String -> Term a -> Field a
 field n = Field (FieldName n)
 
-fieldsToMap :: [Field m] -> M.Map FieldName (Term m)
+fieldsToMap :: [Field a] -> M.Map FieldName (Term a)
 fieldsToMap fields = M.fromList $ (\(Field name term) -> (name, term)) <$> fields
 
-float32 :: Float -> Term m
+float32 :: Float -> Term a
 float32 = literal . Literals.float32
 
-float64 :: Double -> Term m
+float64 :: Double -> Term a
 float64 = literal . Literals.float64
 
-float :: FloatValue -> Term m
+float :: FloatValue -> Term a
 float = literal . Literals.float
 
-fold :: Term m -> Term m
+fold :: Term a -> Term a
 fold = TermFunction . FunctionElimination . EliminationList
 
-inject :: Name -> Field m -> Term m
+inject :: Name -> Field a -> Term a
 inject n = TermUnion . Injection n
 
-int16 :: Int16 -> Term m
+int16 :: Int16 -> Term a
 int16 = literal . Literals.int16
 
-int32 :: Int -> Term m
+int32 :: Int -> Term a
 int32 = literal . Literals.int32
 
-int64 :: Int64 -> Term m
+int64 :: Int64 -> Term a
 int64 = literal . Literals.int64
 
-int8 :: Int8 -> Term m
+int8 :: Int8 -> Term a
 int8 = literal . Literals.int8
 
-integer :: IntegerValue -> Term m
+integer :: IntegerValue -> Term a
 integer = literal . Literals.integer
 
-isUnit :: Eq m => Term m -> Bool
+isUnit :: Eq a => Term a -> Bool
 isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
 
-lambda :: String -> Term m -> Term m
+lambda :: String -> Term a -> Term a
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 
 -- Construct a 'let' term with a single binding
-letTerm :: Name -> Term m -> Term m -> Term m
+letTerm :: Name -> Term a -> Term a -> Term a
 letTerm v t1 t2 = TermLet $ Let (M.fromList [(v, t1)]) t2
 
-list :: [Term m] -> Term m
+list :: [Term a] -> Term a
 list = TermList
 
-literal :: Literal -> Term m
+literal :: Literal -> Term a
 literal = TermLiteral
 
-map :: M.Map (Term m) (Term m) -> Term m
+map :: M.Map (Term a) (Term a) -> Term a
 map = TermMap
 
-mapTerm :: M.Map (Term m) (Term m) -> Term m
+mapTerm :: M.Map (Term a) (Term a) -> Term a
 mapTerm = TermMap
 
-match :: Name -> [(FieldName, Term m)] -> Term m
+match :: Name -> [(FieldName, Term a)] -> Term a
 match n = cases n . fmap toField
   where
     toField (name, term) = Field name term
 
-matchOptional :: Term m -> Term m -> Term m
+matchOptional :: Term a -> Term a -> Term a
 matchOptional n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
-matchWithVariants :: Name -> [(FieldName, FieldName)] -> Term m
+matchWithVariants :: Name -> [(FieldName, FieldName)] -> Term a
 matchWithVariants n = cases n . fmap toField
   where
     toField (from, to) = Field from $ constFunction $ unitVariant n to
 
-optional :: Y.Maybe (Term m) -> Term m
+optional :: Y.Maybe (Term a) -> Term a
 optional = TermOptional
 
-primitive :: Name -> Term m
+primitive :: Name -> Term a
 primitive = TermFunction . FunctionPrimitive
 
-product :: [Term m] -> Term m
+product :: [Term a] -> Term a
 product = TermProduct
 
-projection :: Name -> FieldName -> Term m
+projection :: Name -> FieldName -> Term a
 projection n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
 
-record :: Name -> [Field m] -> Term m
+record :: Name -> [Field a] -> Term a
 record n fields = TermRecord $ Record n fields
 
-requireField :: M.Map FieldName (Term m) -> FieldName -> GraphFlow m (Term m)
+requireField :: M.Map FieldName (Term a) -> FieldName -> GraphFlow a (Term a)
 requireField fields fname = Y.maybe err pure $ M.lookup fname fields
   where
     err = fail $ "no such field: " ++ unFieldName fname
 
-set :: S.Set (Term m) -> Term m
+set :: S.Set (Term a) -> Term a
 set = TermSet
 
-string :: String -> Term m
+string :: String -> Term a
 string = TermLiteral . LiteralString
 
-sum :: Int -> Int -> Term m -> Term m
+sum :: Int -> Int -> Term a -> Term a
 sum i s term = TermSum $ Sum i s term
 
-uint16 :: Integer -> Term m
+uint16 :: Integer -> Term a
 uint16 = literal . Literals.uint16
 
-uint32 :: Integer -> Term m
+uint32 :: Integer -> Term a
 uint32 = literal . Literals.uint32
 
-uint64 :: Integer -> Term m
+uint64 :: Integer -> Term a
 uint64 = literal . Literals.uint64
 
-uint8 :: Integer -> Term m
+uint8 :: Integer -> Term a
 uint8 = literal . Literals.uint8
 
-unit :: Term m
+unit :: Term a
 unit = TermRecord $ Record (Name "hydra/core.UnitType") []
 
-unitVariant :: Name -> FieldName -> Term m
+unitVariant :: Name -> FieldName -> Term a
 unitVariant n fname = variant n fname unit
 
-unwrap :: Name -> Term m
+unwrap :: Name -> Term a
 unwrap = TermFunction . FunctionElimination . EliminationWrap
 
-variable :: String -> Term m
+variable :: String -> Term a
 variable = TermVariable . Name
 
-variant :: Name -> FieldName -> Term m -> Term m
+variant :: Name -> FieldName -> Term a -> Term a
 variant n fname term = TermUnion $ Injection n $ Field fname term
 
-withVariant :: Name -> FieldName -> Term m
+withVariant :: Name -> FieldName -> Term a
 withVariant n = constFunction . unitVariant n
 
-wrap :: Name -> Term m -> Term m
+wrap :: Name -> Term a -> Term a
 wrap name term = TermWrap $ Nominal name term

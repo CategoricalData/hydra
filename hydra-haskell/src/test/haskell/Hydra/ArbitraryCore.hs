@@ -75,7 +75,7 @@ instance QC.Arbitrary IntegerValue
       IntegerValueUint32 <$> QC.arbitrary,
       IntegerValueUint64 <$> QC.arbitrary]
 
-instance (Eq m, Ord m, Read m, Show m) => QC.Arbitrary (Term m) where
+instance (Eq a, Ord a, Read a, Show a) => QC.Arbitrary (Term a) where
   arbitrary = (\(TypedTerm _ term) -> term) <$> QC.sized arbitraryTypedTerm
 
 instance QC.Arbitrary Name
@@ -83,7 +83,7 @@ instance QC.Arbitrary Name
     arbitrary = Name <$> QC.arbitrary
     shrink (Name name)= Name <$> QC.shrink name
 
-instance QC.Arbitrary (Type m) where
+instance QC.Arbitrary (Type a) where
   arbitrary = QC.sized arbitraryType
   shrink typ = case typ of
     TypeLiteral at -> Types.literal <$> case at of
@@ -92,7 +92,7 @@ instance QC.Arbitrary (Type m) where
       _ -> []
     _ -> [] -- TODO
 
-instance (Eq m, Ord m, Read m, Show m) => QC.Arbitrary (TypedTerm m) where
+instance (Eq a, Ord a, Read a, Show a) => QC.Arbitrary (TypedTerm a) where
   arbitrary = QC.sized arbitraryTypedTerm
   shrink (TypedTerm typ term) = L.concat ((\(t, m) -> TypedTerm t <$> m term) <$> shrinkers typ)
 
@@ -104,10 +104,10 @@ arbitraryLiteral at = case at of
   LiteralTypeInteger it -> LiteralInteger <$> arbitraryIntegerValue it
   LiteralTypeString -> LiteralString <$> QC.arbitrary
 
-arbitraryField :: (Eq m, Ord m, Read m, Show m) => FieldType m -> Int -> QC.Gen (Field m)
+arbitraryField :: (Eq a, Ord a, Read a, Show a) => FieldType a -> Int -> QC.Gen (Field a)
 arbitraryField (FieldType fn ft) n = Field fn <$> arbitraryTerm ft n
 
-arbitraryFieldType :: Int -> QC.Gen (FieldType m)
+arbitraryFieldType :: Int -> QC.Gen (FieldType a)
 arbitraryFieldType n = FieldType <$> QC.arbitrary <*> arbitraryType n
 
 arbitraryFloatValue :: FloatType -> QC.Gen FloatValue
@@ -117,7 +117,7 @@ arbitraryFloatValue ft = case ft of
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 
 -- Note: primitive functions and data terms are not currently generated, as they require a context.
-arbitraryFunction :: (Eq m, Ord m, Read m, Show m) => FunctionType m -> Int -> QC.Gen (Function m)
+arbitraryFunction :: (Eq a, Ord a, Read a, Show a) => FunctionType a -> Int -> QC.Gen (Function a)
 arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecific
   where
     n' = decr n
@@ -172,7 +172,7 @@ arbitraryPair c g n = c <$> g n' <*> g n'
   where n' = div n 2
 
 -- Note: variables and function applications are not (currently) generated
-arbitraryTerm :: (Eq m, Ord m, Read m, Show m) => Type m -> Int -> QC.Gen (Term m)
+arbitraryTerm :: (Eq a, Ord a, Read a, Show a) => Type a -> Int -> QC.Gen (Term a)
 arbitraryTerm typ n = case typ of
     TypeLiteral at -> literal <$> arbitraryLiteral at
     TypeFunction ft -> TermFunction <$> arbitraryFunction ft n'
@@ -202,7 +202,7 @@ arbitraryTerm typ n = case typ of
         n2 = div n' $ L.length sfields
 
 -- Note: nominal types and element types are not currently generated, as instantiating them requires a context
-arbitraryType :: Int -> QC.Gen (Type m)
+arbitraryType :: Int -> QC.Gen (Type a)
 arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
     TypeLiteral <$> QC.arbitrary,
     TypeFunction <$> arbitraryPair FunctionType arbitraryType n',
@@ -214,7 +214,7 @@ arbitraryType n = if n == 0 then pure Types.unit else QC.oneof [
 --    TypeUnion <$> arbitraryList True arbitraryFieldType n'] -- TODO: avoid duplicate field names
   where n' = decr n
 
-arbitraryTypedTerm :: (Eq m, Ord m, Read m, Show m) => Int -> QC.Gen (TypedTerm m)
+arbitraryTypedTerm :: (Eq a, Ord a, Read a, Show a) => Int -> QC.Gen (TypedTerm a)
 arbitraryTypedTerm n = do
     typ <- arbitraryType n'
     term <- arbitraryTerm typ n'
@@ -226,7 +226,7 @@ decr :: Int -> Int
 decr n = max 0 (n-1)
 
 -- Note: shrinking currently discards any metadata
-shrinkers :: (Eq m, Ord m, Read m, Show m) => Type m -> [(Type m, Term m -> [Term m])]
+shrinkers :: (Eq a, Ord a, Read a, Show a) => Type a -> [(Type a, Term a -> [Term a])]
 shrinkers typ = trivialShrinker ++ case typ of
     TypeLiteral at -> case at of
       LiteralTypeBinary -> [(Types.binary, \(TermLiteral (LiteralBinary s)) -> binary <$> QC.shrink s)]

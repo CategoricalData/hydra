@@ -12,131 +12,131 @@ import qualified Data.Map as M
 import Data.String(IsString(..))
 
 
-instance IsString (Type m) where fromString = variable
+instance IsString (Type a) where fromString = variable
 
 infixr 0 >:
-(>:) :: String -> Type m -> FieldType m
+(>:) :: String -> Type a -> FieldType a
 n >: t = field n t
 
 infixr 0 -->
-(-->) :: Type m -> Type m -> Type m
+(-->) :: Type a -> Type a -> Type a
 a --> b = function a b
 
-(@@) :: Type m -> Type m -> Type m
+(@@) :: Type a -> Type a -> Type a
 f @@ x = apply f x
 
-annot :: m -> Type m -> Type m
+annot :: a -> Type a -> Type a
 annot ann t = TypeAnnotated $ Annotated t ann
 
-apply :: Type m -> Type m -> Type m
+apply :: Type a -> Type a -> Type a
 apply lhs rhs = TypeApplication (ApplicationType lhs rhs)
 
-bigfloat :: Type m
+bigfloat :: Type a
 bigfloat = float FloatTypeBigfloat
 
-bigint :: Type m
+bigint :: Type a
 bigint = integer IntegerTypeBigint
 
-binary :: Type m
+binary :: Type a
 binary = literal LiteralTypeBinary
 
-boolean :: Type m
+boolean :: Type a
 boolean = literal LiteralTypeBoolean
 
-enum :: [String] -> Type m
+enum :: [String] -> Type a
 enum names = union $ (`field` unit) <$> names
 
-field :: String -> Type m -> FieldType m
+field :: String -> Type a -> FieldType a
 field fn = FieldType (FieldName fn)
 
-fieldsToMap :: [FieldType m] -> M.Map FieldName (Type m)
+fieldsToMap :: [FieldType a] -> M.Map FieldName (Type a)
 fieldsToMap fields = M.fromList $ (\(FieldType name typ) -> (name, typ)) <$> fields
 
-float32 :: Type m
+float32 :: Type a
 float32 = float FloatTypeFloat32
 
-float64 :: Type m
+float64 :: Type a
 float64 = float FloatTypeFloat64
 
-float :: FloatType -> Type m
+float :: FloatType -> Type a
 float = literal . LiteralTypeFloat
 
-function :: Type m -> Type m -> Type m
+function :: Type a -> Type a -> Type a
 function dom cod = TypeFunction $ FunctionType dom cod
 
-functionN :: [Type m] -> Type m -> Type m
+functionN :: [Type a] -> Type a -> Type a
 functionN doms cod = if L.null doms
   then cod
   else function (L.head doms) $ functionN (L.tail doms) cod
 
-int16 :: Type m
+int16 :: Type a
 int16 = integer IntegerTypeInt16
 
-int32 :: Type m
+int32 :: Type a
 int32 = integer IntegerTypeInt32
 
-int64 :: Type m
+int64 :: Type a
 int64 = integer IntegerTypeInt64
 
-int8 :: Type m
+int8 :: Type a
 int8 = integer IntegerTypeInt8
 
-integer :: IntegerType -> Type m
+integer :: IntegerType -> Type a
 integer = literal . LiteralTypeInteger
 
-lambda :: String -> Type m -> Type m
+lambda :: String -> Type a -> Type a
 lambda v body = TypeLambda $ LambdaType (Name v) body
 
-list :: Type m -> Type m
+list :: Type a -> Type a
 list = TypeList
 
-isUnit :: Eq m => Type m -> Bool
+isUnit :: Eq a => Type a -> Bool
 isUnit t = stripType t == TypeRecord (RowType unitTypeName Nothing [])
 
-literal :: LiteralType -> Type m
+literal :: LiteralType -> Type a
 literal = TypeLiteral
 
-map :: Type m -> Type m -> Type m
+map :: Type a -> Type a -> Type a
 map kt vt = TypeMap $ MapType kt vt
 
-optional :: Type m -> Type m
+optional :: Type a -> Type a
 optional = TypeOptional
 
-product :: [Type m] -> Type m
+product :: [Type a] -> Type a
 product = TypeProduct
 
-record :: [FieldType m] -> Type m
+record :: [FieldType a] -> Type a
 record fields = TypeRecord $ RowType placeholderName Nothing fields
 
-set :: Type m -> Type m
+set :: Type a -> Type a
 set = TypeSet
 
-string :: Type m
+string :: Type a
 string = literal LiteralTypeString
 
-sum :: [Type m] -> Type m
+sum :: [Type a] -> Type a
 sum = TypeSum
 
-uint16 :: Type m
+uint16 :: Type a
 uint16 = integer IntegerTypeUint16
 
-uint32 :: Type m
+uint32 :: Type a
 uint32 = integer IntegerTypeUint32
 
-uint64 :: Type m
+uint64 :: Type a
 uint64 = integer IntegerTypeUint64
 
-uint8 :: Type m
+uint8 :: Type a
 uint8 = integer IntegerTypeUint8
 
-union :: [FieldType m] -> Type m
+union :: [FieldType a] -> Type a
 union fields = TypeUnion $ RowType placeholderName Nothing fields
 
-unit :: Type m
+unit :: Type a
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
-variable :: String -> Type m
+variable :: String -> Type a
 variable = TypeVariable . Name
 
-wrap :: Name -> Type m
+wrap :: Name -> Type a
 wrap = TypeWrap

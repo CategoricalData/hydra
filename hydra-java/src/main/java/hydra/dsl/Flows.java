@@ -14,8 +14,8 @@ public final class Flows {
   private static final Trace EMPTY_TRACE
       = new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
 
-  public static <S, A> A fromFlow(Flow<S, A> flow) throws FlowException {
-    FlowState<S, A> wrapper = flow.value.apply(null).apply(EMPTY_TRACE);
+  public static <S, X> X fromFlow(Flow<S, X> flow) throws FlowException {
+    FlowState<S, X> wrapper = flow.value.apply(null).apply(EMPTY_TRACE);
 
     if (!wrapper.value.isPresent()) {
       throw new FlowException(wrapper.trace);

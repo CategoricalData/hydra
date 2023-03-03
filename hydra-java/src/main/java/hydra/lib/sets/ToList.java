@@ -12,7 +12,7 @@ public class ToList<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.toList");
     }
 
-    public static <A> List<A> apply(Set<A> arg) {
+    public static <X> List<X> apply(Set<X> arg) {
         return new ArrayList(arg);
     }
 }

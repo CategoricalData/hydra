@@ -17,26 +17,26 @@ import qualified Data.Maybe as Y
 import Control.Monad
 
 
-deref :: Term m -> GraphFlow m (Term m)
+deref :: Term a -> GraphFlow a (Term a)
 deref term = case stripTerm term of
   TermElement name -> dereferenceElement name >>= deref
   TermWrap (Nominal _ term') -> deref term'
   _ -> pure term
 
-dereferenceElement :: Name -> GraphFlow m (Term m)
+dereferenceElement :: Name -> GraphFlow a (Term a)
 dereferenceElement en = do
     cx <- getState
     case M.lookup en (graphElements cx) of
       Nothing -> fail $ "element " ++ unName en ++ " does not exist"
       Just e -> pure $ elementData e
 
-lookupPrimitive :: Graph m -> Name -> Maybe (Primitive m)
+lookupPrimitive :: Graph a -> Name -> Maybe (Primitive a)
 lookupPrimitive cx fn = M.lookup fn $ graphPrimitives cx
 
-primitiveFunctionArity :: Primitive m -> Int
+primitiveFunctionArity :: Primitive a -> Int
 primitiveFunctionArity = typeArity . primitiveType
 
-requireElement :: Name -> GraphFlow m (Element m)
+requireElement :: Name -> GraphFlow a (Element a)
 requireElement name = do
     cx <- getState
     Y.maybe (err cx) pure $ M.lookup name $ graphElements cx
@@ -49,7 +49,7 @@ requireElement name = do
           then L.take 3 strings ++ ["..."]
           else strings
 
-requirePrimitive :: Name -> GraphFlow m (Primitive m)
+requirePrimitive :: Name -> GraphFlow a (Primitive a)
 requirePrimitive fn = do
     cx <- getState
     Y.maybe err pure $ lookupPrimitive cx fn
@@ -57,17 +57,17 @@ requirePrimitive fn = do
     err = fail $ "no such primitive function: " ++ unName fn
 
 -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
-schemaContext :: Graph m -> Graph m
+schemaContext :: Graph a -> Graph a
 schemaContext g = Y.fromMaybe g (graphSchema g)
 
-typeArity :: Type m -> Int
+typeArity :: Type a -> Int
 typeArity t = case stripType t of
   TypeApplication (ApplicationType l r) -> typeArity l
   TypeLambda (LambdaType _ body) -> typeArity body
   TypeFunction (FunctionType _ cod) -> 1 + typeArity cod
   _ -> 0
 
-withSchemaContext :: GraphFlow m a -> GraphFlow m a
+withSchemaContext :: GraphFlow a x -> GraphFlow a x
 withSchemaContext f = do
   cx <- getState
   withState (schemaContext cx) f

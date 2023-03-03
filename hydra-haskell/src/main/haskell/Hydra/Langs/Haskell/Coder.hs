@@ -19,7 +19,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-constantDecls :: Graph m -> Namespaces -> Name -> Type m -> [H.DeclarationWithComments]
+constantDecls :: Graph a -> Namespaces -> Name -> Type a -> [H.DeclarationWithComments]
 constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
@@ -41,10 +41,10 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
     fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType cx typ)
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
-constructModule :: (Ord m, Read m, Show m)
-  => Module m
-  -> M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) H.Expression)
-  -> [(Element m, TypedTerm m)] -> GraphFlow m H.Module
+constructModule :: (Ord a, Read a, Show a)
+  => Module a
+  -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression)
+  -> [(Element a, TypedTerm a)] -> GraphFlow a H.Module
 constructModule mod coders pairs = do
     cx <- getState
     decls <- L.concat <$> CM.mapM (createDeclarations cx) pairs
@@ -76,10 +76,10 @@ constructModule mod coders pairs = do
           where
             toImport name = H.Import False name Nothing Nothing
 
-encodeAdaptedType :: (Ord m, Read m, Show m) => Namespaces -> Type m -> GraphFlow m H.Type
+encodeAdaptedType :: (Ord a, Read a, Show a) => Namespaces -> Type a -> GraphFlow a H.Type
 encodeAdaptedType namespaces typ = adaptType haskellLanguage typ >>= encodeType namespaces
 
-encodeFunction :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Function m -> GraphFlow m H.Expression
+encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> GraphFlow a H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
       EliminationElement -> pure $ hsvar "id"
@@ -125,7 +125,7 @@ encodeFunction namespaces fun = case fun of
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
     FunctionPrimitive name -> pure $ H.ExpressionVariable $ hsPrimitiveReference name
 
-encodeLiteral :: Literal -> GraphFlow m H.Expression
+encodeLiteral :: Literal -> GraphFlow a H.Expression
 encodeLiteral av = case av of
     LiteralBoolean b -> pure $ hsvar $ if b then "True" else "False"
     LiteralFloat fv -> case fv of
@@ -139,7 +139,7 @@ encodeLiteral av = case av of
     LiteralString s -> pure $ hslit $ H.LiteralString s
     _ -> unexpected "literal value" av
 
-encodeTerm :: (Eq m, Ord m, Read m, Show m) => Namespaces -> Term m -> GraphFlow m H.Expression
+encodeTerm :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Term a -> GraphFlow a H.Expression
 encodeTerm namespaces term = do
    case stripTerm term of
     TermApplication (Application fun arg) -> case stripTerm fun of
@@ -176,7 +176,7 @@ encodeTerm namespaces term = do
   where
     encode = encodeTerm namespaces
 
-encodeType :: Show m => Namespaces -> Type m -> GraphFlow m H.Type
+encodeType :: Show a => Namespaces -> Type a -> GraphFlow a H.Type
 encodeType namespaces typ = case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$>
       CM.sequence [encode lhs, encode rhs]
@@ -220,20 +220,20 @@ encodeType namespaces typ = case stripType typ of
     encode = encodeType namespaces
     wrap name = pure $ H.TypeVariable $ elementReference namespaces name
 
-moduleToHaskellModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m H.Module
+moduleToHaskellModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a H.Module
 moduleToHaskellModule mod = transformModule haskellLanguage (encodeTerm namespaces) constructModule mod
   where
     namespaces = namespacesForModule mod
 
-printModule :: (Ord m, Read m, Show m) => Module m -> GraphFlow m (M.Map FilePath String)
+printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
 printModule mod = do
   hsmod <- moduleToHaskellModule mod
   let s = printExpr $ parenthesize $ toTree hsmod
   return $ M.fromList [(namespaceToFilePath True (FileExtension "hs") $ moduleNamespace mod, s)]
 
-toDataDeclaration :: (Ord m, Read m, Show m)
-  => M.Map (Type m) (Coder (Graph m) (Graph m) (Term m) H.Expression) -> Namespaces
-  -> (Element m, TypedTerm m) -> GraphFlow m H.DeclarationWithComments
+toDataDeclaration :: (Ord a, Read a, Show a)
+  => M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression) -> Namespaces
+  -> (Element a, TypedTerm a) -> GraphFlow a H.DeclarationWithComments
 toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term coder Nothing
   where
     coder = Y.fromJust $ M.lookup typ coders
@@ -271,8 +271,8 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         comments <- annotationClassTermDescription (graphAnnotations cx) term
         return $ H.DeclarationWithComments decl comments
 
-toTypeDeclarations :: (Ord m, Read m, Show m)
-  => Namespaces -> Element m -> Term m -> GraphFlow m [H.DeclarationWithComments]
+toTypeDeclarations :: (Ord a, Read a, Show a)
+  => Namespaces -> Element a -> Term a -> GraphFlow a [H.DeclarationWithComments]
 toTypeDeclarations namespaces el term = do
     cx <- getState
     let lname = localNameOfEager $ elementName el

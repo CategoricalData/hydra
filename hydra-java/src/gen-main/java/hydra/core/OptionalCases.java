@@ -3,20 +3,20 @@ package hydra.core;
 /**
  * A case statement for matching optional terms
  */
-public class OptionalCases<M> {
+public class OptionalCases<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.OptionalCases");
   
   /**
    * A term provided if the optional value is nothing
    */
-  public final hydra.core.Term<M> nothing;
+  public final hydra.core.Term<A> nothing;
   
   /**
    * A function which is applied if the optional value is non-nothing
    */
-  public final hydra.core.Term<M> just;
+  public final hydra.core.Term<A> just;
   
-  public OptionalCases (hydra.core.Term<M> nothing, hydra.core.Term<M> just) {
+  public OptionalCases (hydra.core.Term<A> nothing, hydra.core.Term<A> just) {
     this.nothing = nothing;
     this.just = just;
   }
@@ -35,11 +35,11 @@ public class OptionalCases<M> {
     return 2 * nothing.hashCode() + 3 * just.hashCode();
   }
   
-  public OptionalCases withNothing(hydra.core.Term<M> nothing) {
+  public OptionalCases withNothing(hydra.core.Term<A> nothing) {
     return new OptionalCases(nothing, just);
   }
   
-  public OptionalCases withJust(hydra.core.Term<M> just) {
+  public OptionalCases withJust(hydra.core.Term<A> just) {
     return new OptionalCases(nothing, just);
   }
 }

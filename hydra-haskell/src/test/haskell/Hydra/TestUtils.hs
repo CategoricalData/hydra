@@ -29,7 +29,7 @@ import qualified Data.Maybe as Y
 import qualified Data.ByteString.Lazy as BS
 
 
-baseLanguage :: Language m
+baseLanguage :: Language a
 baseLanguage = hydraCoreLanguage
 
 baseContext :: AdapterContext Kv
@@ -124,7 +124,7 @@ shouldSucceedWith f x = case my of
   where
     FlowState my _ trace = unFlow f testGraph emptyTrace
 
-strip :: Ord m => Term m -> Term m
+strip :: Ord a => Term a -> Term a
 strip = stripTerm
 
 termTestContext :: [TypeVariant] -> AdapterContext Kv

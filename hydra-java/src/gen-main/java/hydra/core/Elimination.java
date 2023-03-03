@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A corresponding elimination for an introduction term
  */
-public abstract class Elimination<M> {
+public abstract class Elimination<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Elimination");
   
   private Elimination () {
@@ -59,7 +59,7 @@ public abstract class Elimination<M> {
   /**
    * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
    */
-  public static final class Element<M> extends hydra.core.Elimination<M> {
+  public static final class Element<A> extends hydra.core.Elimination<A> {
     public Element () {
     
     }
@@ -87,13 +87,13 @@ public abstract class Elimination<M> {
   /**
    * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
    */
-  public static final class List<M> extends hydra.core.Elimination<M> {
+  public static final class List<A> extends hydra.core.Elimination<A> {
     /**
      * Eliminates a list using a fold function; this function has the signature b -&gt; [a] -&gt; b
      */
-    public final hydra.core.Term<M> value;
+    public final hydra.core.Term<A> value;
     
-    public List (hydra.core.Term<M> value) {
+    public List (hydra.core.Term<A> value) {
       this.value = value;
     }
     
@@ -120,13 +120,13 @@ public abstract class Elimination<M> {
   /**
    * Eliminates an optional term by matching over the two possible cases
    */
-  public static final class Optional<M> extends hydra.core.Elimination<M> {
+  public static final class Optional<A> extends hydra.core.Elimination<A> {
     /**
      * Eliminates an optional term by matching over the two possible cases
      */
-    public final hydra.core.OptionalCases<M> value;
+    public final hydra.core.OptionalCases<A> value;
     
-    public Optional (hydra.core.OptionalCases<M> value) {
+    public Optional (hydra.core.OptionalCases<A> value) {
       this.value = value;
     }
     
@@ -153,7 +153,7 @@ public abstract class Elimination<M> {
   /**
    * Eliminates a record by projecting a given field
    */
-  public static final class Record<M> extends hydra.core.Elimination<M> {
+  public static final class Record<A> extends hydra.core.Elimination<A> {
     /**
      * Eliminates a record by projecting a given field
      */
@@ -186,13 +186,13 @@ public abstract class Elimination<M> {
   /**
    * Eliminates a union term by matching over the fields of the union. This is a case statement.
    */
-  public static final class Union<M> extends hydra.core.Elimination<M> {
+  public static final class Union<A> extends hydra.core.Elimination<A> {
     /**
      * Eliminates a union term by matching over the fields of the union. This is a case statement.
      */
-    public final hydra.core.CaseStatement<M> value;
+    public final hydra.core.CaseStatement<A> value;
     
-    public Union (hydra.core.CaseStatement<M> value) {
+    public Union (hydra.core.CaseStatement<A> value) {
       this.value = value;
     }
     
@@ -219,7 +219,7 @@ public abstract class Elimination<M> {
   /**
    * Unwrap a wrapped term
    */
-  public static final class Wrap<M> extends hydra.core.Elimination<M> {
+  public static final class Wrap<A> extends hydra.core.Elimination<A> {
     /**
      * Unwrap a wrapped term
      */

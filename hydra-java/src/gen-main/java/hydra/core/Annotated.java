@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * An object, such as a type or term, together with an annotation
  */
-public class Annotated<A, M> {
+public class Annotated<X, A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Annotated");
   
-  public final A subject;
+  public final X subject;
   
-  public final M annotation;
+  public final A annotation;
   
-  public Annotated (A subject, M annotation) {
+  public Annotated (X subject, A annotation) {
     this.subject = subject;
     this.annotation = annotation;
   }
@@ -29,11 +29,11 @@ public class Annotated<A, M> {
     return 2 * subject.hashCode() + 3 * annotation.hashCode();
   }
   
-  public Annotated withSubject(A subject) {
+  public Annotated withSubject(X subject) {
     return new Annotated(subject, annotation);
   }
   
-  public Annotated withAnnotation(M annotation) {
+  public Annotated withAnnotation(A annotation) {
     return new Annotated(subject, annotation);
   }
 }

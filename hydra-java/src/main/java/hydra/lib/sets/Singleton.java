@@ -11,8 +11,8 @@ public class Singleton<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.singleton");
     }
 
-    public static <A> Set<A> apply(A elem) {
-        Set<A> newSet = new HashSet();
+    public static <X> Set<X> apply(X elem) {
+        Set<X> newSet = new HashSet();
         newSet.add(elem);
         return newSet;
     }

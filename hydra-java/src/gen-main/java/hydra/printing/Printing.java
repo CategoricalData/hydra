@@ -55,19 +55,19 @@ public interface Printing {
       @Override
       public String visit(hydra.mantle.Precision.Bits instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          hydra.lib.literals.Literals.showInt32((instance.value)),
+          hydra.lib.literals.ShowInt32.apply((instance.value)),
           "-bit"));
       }
     });
   }
   
-  static <M> String describeType(hydra.core.Type<M> typ) {
+  static <A> String describeType(hydra.core.Type<A> typ) {
     return ((typ)).accept(new hydra.core.Type.Visitor<String>() {
       @Override
       public String visit(hydra.core.Type.Annotated instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           "annotated ",
-          hydra.printing.Printing.describeType((hydra.core.Type<M>) (((instance.value)).subject))));
+          hydra.printing.Printing.describeType((hydra.core.Type<A>) (((instance.value)).subject))));
       }
       
       @Override
@@ -93,9 +93,9 @@ public interface Printing {
           hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
             hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
               "functions from ",
-              hydra.printing.Printing.describeType((hydra.core.Type<M>) (((instance.value)).domain)))),
+              hydra.printing.Printing.describeType((hydra.core.Type<A>) (((instance.value)).domain)))),
             " to ")),
-          hydra.printing.Printing.describeType((hydra.core.Type<M>) (((instance.value)).codomain))));
+          hydra.printing.Printing.describeType((hydra.core.Type<A>) (((instance.value)).codomain))));
       }
       
       @Override
@@ -116,9 +116,9 @@ public interface Printing {
           hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
             hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
               "maps from ",
-              hydra.printing.Printing.describeType((hydra.core.Type<M>) (((instance.value)).keys)))),
+              hydra.printing.Printing.describeType((hydra.core.Type<A>) (((instance.value)).keys)))),
             " to ")),
-          hydra.printing.Printing.describeType((hydra.core.Type<M>) (((instance.value)).values))));
+          hydra.printing.Printing.describeType((hydra.core.Type<A>) (((instance.value)).values))));
       }
       
       @Override

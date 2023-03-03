@@ -376,14 +376,14 @@ parquetFormatModule = Module ns elements [] $
 --  * LogicalType annotations to replace ConvertedType.
 --  *
 --  * To maintain compatibility, implementations using LogicalType for a
---  * SchemaElement must also set the corresponding ConvertedType (if any)
+--  * SchemaElement aust also set the corresponding ConvertedType (if any)
 --  * from the following table.
 --  */
 -- union LogicalType {
       def "LogicalType" $
         doc ("LogicalType annotations to replace ConvertedType. " ++
              "To maintain compatibility, implementations using LogicalType for a " ++
-             "SchemaElement must also set the corresponding ConvertedType (if any) " ++
+             "SchemaElement aust also set the corresponding ConvertedType (if any) " ++
              "from the following table.") $
         union [
 --   1:  StringType STRING       // use ConvertedType UTF8

@@ -3,14 +3,14 @@ package hydra.mantle;
 /**
  * A type expression together with free type variables occurring in the expression
  */
-public class TypeScheme<M> {
+public class TypeScheme<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/mantle.TypeScheme");
   
   public final java.util.List<hydra.core.Name> variables;
   
-  public final hydra.core.Type<M> type;
+  public final hydra.core.Type<A> type;
   
-  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<M> type) {
+  public TypeScheme (java.util.List<hydra.core.Name> variables, hydra.core.Type<A> type) {
     this.variables = variables;
     this.type = type;
   }
@@ -33,7 +33,7 @@ public class TypeScheme<M> {
     return new TypeScheme(variables, type);
   }
   
-  public TypeScheme withType(hydra.core.Type<M> type) {
+  public TypeScheme withType(hydra.core.Type<A> type) {
     return new TypeScheme(variables, type);
   }
 }
