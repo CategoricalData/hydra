@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * A set of (possibly recursive) 'let' bindings
  */
-public class Let<M> {
+public class Let<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Let");
   
-  public final java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings;
   
-  public final hydra.core.Term<M> environment;
+  public final hydra.core.Term<A> environment;
   
-  public Let (java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings, hydra.core.Term<M> environment) {
+  public Let (java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings, hydra.core.Term<A> environment) {
     this.bindings = bindings;
     this.environment = environment;
   }
@@ -29,11 +29,11 @@ public class Let<M> {
     return 2 * bindings.hashCode() + 3 * environment.hashCode();
   }
   
-  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term<M>> bindings) {
+  public Let withBindings(java.util.Map<hydra.core.Name, hydra.core.Term<A>> bindings) {
     return new Let(bindings, environment);
   }
   
-  public Let withEnvironment(hydra.core.Term<M> environment) {
+  public Let withEnvironment(hydra.core.Term<A> environment) {
     return new Let(bindings, environment);
   }
 }

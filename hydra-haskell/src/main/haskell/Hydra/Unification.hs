@@ -19,19 +19,19 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-type Constraint m = (Type m, Type m)
+type Constraint a = (Type a, Type a)
 
-type Unifier m = (Subst m, [Constraint m])
+type Unifier a = (Subst a, [Constraint a])
 
-bind :: (Eq m, Show m) => Name -> Type m -> GraphFlow m (Subst m)
+bind :: (Eq a, Show a) => Name -> Type a -> GraphFlow a (Subst a)
 bind a t | t == TypeVariable a = return M.empty
          | variableOccursInType a t = fail $ "infinite type for ?" ++ unName a ++ ": " ++ show t
          | otherwise = return $ M.singleton a t
 
-solveConstraints :: (Eq m, Show m) => [Constraint m] -> GraphFlow m (Subst m)
+solveConstraints :: (Eq a, Show a) => [Constraint a] -> GraphFlow a (Subst a)
 solveConstraints cs = unificationSolver (M.empty, cs)
 
-unificationSolver :: (Eq m, Show m) => Unifier m -> GraphFlow m (Subst m)
+unificationSolver :: (Eq a, Show a) => Unifier a -> GraphFlow a (Subst a)
 unificationSolver (su, cs) = case cs of
   [] -> return su
   ((t1, t2):rest) -> do
@@ -40,7 +40,7 @@ unificationSolver (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
-unify :: (Eq m, Show m) => Type m -> Type m -> GraphFlow m (Subst m)
+unify :: (Eq a, Show a) => Type a -> Type a -> GraphFlow a (Subst a)
 unify t1' t2' = case (stripType t1', stripType t2') of
        -- Symmetric patterns
       (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
@@ -67,7 +67,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeVariable v, t2) -> bind v t2
       (t1, TypeVariable v) -> bind v t1
 
-      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "m")
+      -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "a")
       (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
       (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")
@@ -80,7 +80,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
     verify b = if b then return M.empty else failUnification
     failUnification = fail $ "could not unify type " ++ show (stripType t1') ++ " with " ++ show (stripType t2')
 
-unifyMany :: (Eq m, Show m) => [Type m] -> [Type m] -> GraphFlow m (Subst m)
+unifyMany :: (Eq a, Show a) => [Type a] -> [Type a] -> GraphFlow a (Subst a)
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
@@ -88,5 +88,5 @@ unifyMany (t1 : ts1) (t2 : ts2) =
      return (composeSubst su2 su1)
 unifyMany t1 t2 = fail $ "unification mismatch between " ++ show t1 ++ " and " ++ show t2
 
-variableOccursInType ::  Show m => Name -> Type m -> Bool
+variableOccursInType ::  Show a => Name -> Type a -> Bool
 variableOccursInType a t = S.member a $ freeVariablesInType t

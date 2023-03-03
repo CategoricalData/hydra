@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
-public class Injection<M> {
+public class Injection<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Injection");
   
   public final hydra.core.Name typeName;
   
-  public final hydra.core.Field<M> field;
+  public final hydra.core.Field<A> field;
   
-  public Injection (hydra.core.Name typeName, hydra.core.Field<M> field) {
+  public Injection (hydra.core.Name typeName, hydra.core.Field<A> field) {
     this.typeName = typeName;
     this.field = field;
   }
@@ -33,7 +33,7 @@ public class Injection<M> {
     return new Injection(typeName, field);
   }
   
-  public Injection withField(hydra.core.Field<M> field) {
+  public Injection withField(hydra.core.Field<A> field) {
     return new Injection(typeName, field);
   }
 }

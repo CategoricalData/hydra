@@ -3,14 +3,14 @@ package hydra.coders;
 /**
  * A named language together with language-specific constraints
  */
-public class Language<M> {
+public class Language<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/coders.Language");
   
   public final hydra.coders.LanguageName name;
   
-  public final hydra.coders.LanguageConstraints<M> constraints;
+  public final hydra.coders.LanguageConstraints<A> constraints;
   
-  public Language (hydra.coders.LanguageName name, hydra.coders.LanguageConstraints<M> constraints) {
+  public Language (hydra.coders.LanguageName name, hydra.coders.LanguageConstraints<A> constraints) {
     this.name = name;
     this.constraints = constraints;
   }
@@ -33,7 +33,7 @@ public class Language<M> {
     return new Language(name, constraints);
   }
   
-  public Language withConstraints(hydra.coders.LanguageConstraints<M> constraints) {
+  public Language withConstraints(hydra.coders.LanguageConstraints<A> constraints) {
     return new Language(name, constraints);
   }
 }

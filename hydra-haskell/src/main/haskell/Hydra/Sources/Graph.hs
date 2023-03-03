@@ -23,32 +23,32 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
 
       def "AnnotationClass" $
         doc "A typeclass-like construct providing common functions for working with annotations" $
-        lambda "m" $ record [
-          "default">: "m",
-          "equal">: "m" --> "m" --> boolean,
-          "compare">: "m" --> "m" --> graph "Comparison",
-          "show">: "m" --> string,
-          "read">: string --> optional "m",
+        lambda "a" $ record [
+          "default">: "a",
+          "equal">: "a" --> "a" --> boolean,
+          "compare">: "a" --> "a" --> graph "Comparison",
+          "show">: "a" --> string,
+          "read">: string --> optional "a",
 
           -- TODO: simplify
           "termAnnotation">:
-            core "Term" @@ "m" --> "m",
+            core "Term" @@ "a" --> "a",
           "typeAnnotation">:
-            core "Type" @@ "m" --> "m",
+            core "Type" @@ "a" --> "a",
           "termDescription">:
-            core "Term" @@ "m" --> compute "Flow" @@ (graph "Graph" @@ "m") @@ optional string,
+            core "Term" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional string,
           "typeDescription">:
-            core "Type" @@ "m" --> compute "Flow" @@ (graph "Graph" @@ "m") @@ optional string,
+            core "Type" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional string,
           "termType">:
-            core "Term" @@ "m" --> compute "Flow" @@ (graph "Graph" @@ "m") @@ optional (core "Type" @@ "m"),
+            core "Term" @@ "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTermDescription">:
-            graph "Graph" @@ "m" --> optional string --> core "Term" @@ "m" --> core "Term" @@ "m",
+            graph "Graph" @@ "a" --> optional string --> core "Term" @@ "a" --> core "Term" @@ "a",
           "setTermType">:
-            graph "Graph" @@ "m" --> optional (core "Type" @@ "m") --> core "Term" @@ "m" --> core "Term" @@ "m",
+            graph "Graph" @@ "a" --> optional (core "Type" @@ "a") --> core "Term" @@ "a" --> core "Term" @@ "a",
           "typeOf">:
-            "m" --> compute "Flow" @@ (graph "Graph" @@ "m") @@ optional (core "Type" @@ "m"),
+            "a" --> compute "Flow" @@ (graph "Graph" @@ "a") @@ optional (core "Type" @@ "a"),
           "setTypeOf">:
-            optional (core "Type" @@ "m") --> "m" --> "m"],
+            optional (core "Type" @@ "a") --> "a" --> "a"],
 
       def "Comparison" $
         doc "An equality judgement: less than, equal to, or greater than" $
@@ -59,51 +59,51 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
 
       def "Graph" $
         doc "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph" $
-        lambda "m" $ record [
+        lambda "a" $ record [
 
           -- TODO: remove this; replace it with 'environment'
           "elements">:
             doc "All of the elements in the graph" $
-            Types.map (core "Name") (graph "Element" @@ "m"),
+            Types.map (core "Name") (graph "Element" @@ "a"),
 
           "environment">:
             doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
-            Types.map (core "Name") (optional $ core "Term" @@ "m"),
+            Types.map (core "Name") (optional $ core "Term" @@ "a"),
           "body">:
             doc "The body of the term which generated this context" $
-            core "Term" @@ "m",
+            core "Term" @@ "a",
           "primitives">:
             doc "All supported primitive constants and functions, by name" $
-            Types.map (core "Name") (graph "Primitive" @@ "m"),
+            Types.map (core "Name") (graph "Primitive" @@ "a"),
           "annotations">:
             doc "The annotation class which is supported in this context" $
-            graph "AnnotationClass" @@ "m",
+            graph "AnnotationClass" @@ "a",
           "schema">:
             doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
-            optional $ graph "Graph" @@ "m"],
+            optional $ graph "Graph" @@ "a"],
 
       def "Element" $
         doc "A graph element, having a name, data term (value), and schema term (type)" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "name">: core "Name",
-          "schema">: core "Term" @@ "m",
-          "data">: core "Term" @@ "m"],
+          "schema">: core "Term" @@ "a",
+          "data">: core "Term" @@ "a"],
 
       def "Primitive" $
         doc "A built-in function" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "name">:
             doc "The unique name of the primitive function" $
             core "Name",
           "type">:
             doc "The type signature of the primitive function" $
-            core "Type" @@ "m",
+            core "Type" @@ "a",
           "implementation">:
             doc "A concrete implementation of the primitive function" $
-            list (core "Term" @@ "m") --> compute "Flow" @@ Types.product [] @@ (core "Term" @@ "m")],
+            list (core "Term" @@ "a") --> compute "Flow" @@ Types.product [] @@ (core "Term" @@ "a")],
 
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
-        lambda "m" $ lambda "a" $ record [
-          "type">: core "Type" @@ "m",
-          "coder">: compute "Coder" @@ Types.product [] @@ Types.product [] @@ (core "Term" @@ "m") @@ "a"]]
+        lambda "a" $ lambda "x" $ record [
+          "type">: core "Type" @@ "a",
+          "coder">: compute "Coder" @@ Types.product [] @@ Types.product [] @@ (core "Term" @@ "a") @@ "x"]]

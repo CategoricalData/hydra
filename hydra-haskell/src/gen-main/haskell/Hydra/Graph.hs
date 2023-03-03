@@ -9,22 +9,22 @@ import Data.Map
 import Data.Set
 
 -- | A typeclass-like construct providing common functions for working with annotations
-data AnnotationClass m = 
+data AnnotationClass a = 
   AnnotationClass {
-    annotationClassDefault :: m,
-    annotationClassEqual :: (m -> m -> Bool),
-    annotationClassCompare :: (m -> m -> Comparison),
-    annotationClassShow :: (m -> String),
-    annotationClassRead :: (String -> Maybe m),
-    annotationClassTermAnnotation :: (Core.Term m -> m),
-    annotationClassTypeAnnotation :: (Core.Type m -> m),
-    annotationClassTermDescription :: (Core.Term m -> Compute.Flow (Graph m) (Maybe String)),
-    annotationClassTypeDescription :: (Core.Type m -> Compute.Flow (Graph m) (Maybe String)),
-    annotationClassTermType :: (Core.Term m -> Compute.Flow (Graph m) (Maybe (Core.Type m))),
-    annotationClassSetTermDescription :: (Graph m -> Maybe String -> Core.Term m -> Core.Term m),
-    annotationClassSetTermType :: (Graph m -> Maybe (Core.Type m) -> Core.Term m -> Core.Term m),
-    annotationClassTypeOf :: (m -> Compute.Flow (Graph m) (Maybe (Core.Type m))),
-    annotationClassSetTypeOf :: (Maybe (Core.Type m) -> m -> m)}
+    annotationClassDefault :: a,
+    annotationClassEqual :: (a -> a -> Bool),
+    annotationClassCompare :: (a -> a -> Comparison),
+    annotationClassShow :: (a -> String),
+    annotationClassRead :: (String -> Maybe a),
+    annotationClassTermAnnotation :: (Core.Term a -> a),
+    annotationClassTypeAnnotation :: (Core.Type a -> a),
+    annotationClassTermDescription :: (Core.Term a -> Compute.Flow (Graph a) (Maybe String)),
+    annotationClassTypeDescription :: (Core.Type a -> Compute.Flow (Graph a) (Maybe String)),
+    annotationClassTermType :: (Core.Term a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
+    annotationClassSetTermDescription :: (Graph a -> Maybe String -> Core.Term a -> Core.Term a),
+    annotationClassSetTermType :: (Graph a -> Maybe (Core.Type a) -> Core.Term a -> Core.Term a),
+    annotationClassTypeOf :: (a -> Compute.Flow (Graph a) (Maybe (Core.Type a))),
+    annotationClassSetTypeOf :: (Maybe (Core.Type a) -> a -> a)}
 
 _AnnotationClass = (Core.Name "hydra/graph.AnnotationClass")
 
@@ -72,20 +72,20 @@ _Comparison_equalTo = (Core.FieldName "equalTo")
 _Comparison_greaterThan = (Core.FieldName "greaterThan")
 
 -- | A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
-data Graph m = 
+data Graph a = 
   Graph {
     -- | All of the elements in the graph
-    graphElements :: (Map Core.Name (Element m)),
+    graphElements :: (Map Core.Name (Element a)),
     -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
-    graphEnvironment :: (Map Core.Name (Maybe (Core.Term m))),
+    graphEnvironment :: (Map Core.Name (Maybe (Core.Term a))),
     -- | The body of the term which generated this context
-    graphBody :: (Core.Term m),
+    graphBody :: (Core.Term a),
     -- | All supported primitive constants and functions, by name
-    graphPrimitives :: (Map Core.Name (Primitive m)),
+    graphPrimitives :: (Map Core.Name (Primitive a)),
     -- | The annotation class which is supported in this context
-    graphAnnotations :: (AnnotationClass m),
+    graphAnnotations :: (AnnotationClass a),
     -- | The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
-    graphSchema :: (Maybe (Graph m))}
+    graphSchema :: (Maybe (Graph a))}
 
 _Graph = (Core.Name "hydra/graph.Graph")
 
@@ -102,11 +102,11 @@ _Graph_annotations = (Core.FieldName "annotations")
 _Graph_schema = (Core.FieldName "schema")
 
 -- | A graph element, having a name, data term (value), and schema term (type)
-data Element m = 
+data Element a = 
   Element {
     elementName :: Core.Name,
-    elementSchema :: (Core.Term m),
-    elementData :: (Core.Term m)}
+    elementSchema :: (Core.Term a),
+    elementData :: (Core.Term a)}
   deriving (Eq, Ord, Read, Show)
 
 _Element = (Core.Name "hydra/graph.Element")
@@ -118,14 +118,14 @@ _Element_schema = (Core.FieldName "schema")
 _Element_data = (Core.FieldName "data")
 
 -- | A built-in function
-data Primitive m = 
+data Primitive a = 
   Primitive {
     -- | The unique name of the primitive function
     primitiveName :: Core.Name,
     -- | The type signature of the primitive function
-    primitiveType :: (Core.Type m),
+    primitiveType :: (Core.Type a),
     -- | A concrete implementation of the primitive function
-    primitiveImplementation :: ([Core.Term m] -> Compute.Flow () (Core.Term m))}
+    primitiveImplementation :: ([Core.Term a] -> Compute.Flow () (Core.Term a))}
 
 _Primitive = (Core.Name "hydra/graph.Primitive")
 
@@ -136,10 +136,10 @@ _Primitive_type = (Core.FieldName "type")
 _Primitive_implementation = (Core.FieldName "implementation")
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
-data TermCoder m a = 
+data TermCoder a x = 
   TermCoder {
-    termCoderType :: (Core.Type m),
-    termCoderCoder :: (Compute.Coder () () (Core.Term m) a)}
+    termCoderType :: (Core.Type a),
+    termCoderCoder :: (Compute.Coder () () (Core.Term a) x)}
 
 _TermCoder = (Core.Name "hydra/graph.TermCoder")
 

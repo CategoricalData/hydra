@@ -140,7 +140,7 @@ _IntType_bitWidth = (Core.FieldName "bitWidth")
 
 _IntType_isSigned = (Core.FieldName "isSigned")
 
--- | LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement must also set the corresponding ConvertedType (if any) from the following table.
+-- | LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
 data LogicalType = 
   -- | use ConvertedType UTF8
   LogicalTypeString  |

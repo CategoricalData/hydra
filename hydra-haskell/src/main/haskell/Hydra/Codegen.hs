@@ -66,12 +66,15 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-addDeepTypeAnnotations :: (Ord m, Show m) => Module m -> GraphFlow m (Module m)
+addDeepTypeAnnotations :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
 addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
 
-assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
+allModules :: [Module Kv]
+allModules = coreModules ++ utilModules ++ extModules
+
+assignSchemas :: (Ord a, Show a) => Bool -> Module a -> GraphFlow a (Module a)
 assignSchemas doInfer mod = do
     cx <- getState
     els <- CM.mapM (annotate cx) $ moduleElements mod
@@ -87,7 +90,46 @@ assignSchemas doInfer mod = do
           else return el
         Just typ -> return el {elementSchema = epsilonEncodeType typ}
 
-findType :: Graph m -> Term m -> GraphFlow m (Maybe (Type m))
+coreModules :: [Module Kv]
+coreModules = [
+  codetreeAstModule,
+  haskellAstModule,
+  hydraCodersModule,
+  hydraCoreModule,
+  hydraComputeModule,
+  hydraGraphModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraGrammarModule,
+  hydraWorkflowModule,
+--  hydraMonadsModule,
+  hydraPhantomsModule,
+  jsonModelModule]
+
+extModules :: [Module Kv]
+extModules = [
+  avroSchemaModule,
+  graphqlSyntaxModule,
+  javaSyntaxModule,
+  owlSyntaxModule,
+  parquetFormatModule,
+  pegasusPdlModule,
+  protobufAnyModule,
+  protobufSourceContextModule,
+  protobufTypeModule,
+  rdfSyntaxModule,
+  relationalModelModule,
+  scalaMetaModule,
+  shaclModelModule,
+  shexSyntaxModule,
+  sqlModule,
+  tinkerpopFeaturesModule,
+  tinkerpopTypedModule,
+  tinkerpopV3Module,
+  xmlSchemaModule,
+  yamlModelModule]
+
+findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
 generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> [Module Kv] -> FilePath -> IO ()
@@ -181,6 +223,11 @@ runFlow cx f = do
 testModules :: [Module Kv]
 testModules = [
   testSuiteModule]
+
+utilModules :: [Module Kv]
+utilModules = [
+  adapterUtilsModule,
+  hydraBasicsModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule

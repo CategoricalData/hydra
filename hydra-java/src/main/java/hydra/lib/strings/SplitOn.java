@@ -6,7 +6,7 @@ import hydra.util.PrimitiveFunction;
 import java.util.List;
 import java.util.ArrayList;
 
-public class SplitOn<M> extends PrimitiveFunction<M> {
+public class SplitOn<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/strings.splitOn");
     }

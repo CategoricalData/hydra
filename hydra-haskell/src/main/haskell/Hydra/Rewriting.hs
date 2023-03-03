@@ -21,7 +21,7 @@ import qualified Data.Maybe as Y
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
-expandLambdas :: Ord m => Term m -> GraphFlow m (Term m)
+expandLambdas :: Ord a => Term a -> GraphFlow a (Term a)
 expandLambdas = rewriteTermM (expand []) (pure . id)
   where
     expand args recurse term = case term of
@@ -47,49 +47,49 @@ expandLambdas = rewriteTermM (expand []) (pure . id)
         app lhs rhs = TermApplication $ Application lhs rhs
         lam body v = TermFunction $ FunctionLambda $ Lambda v body
 
-foldOverTerm :: TraversalOrder -> (a -> Term m -> a) -> a -> Term m -> a
+foldOverTerm :: TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
 foldOverTerm order fld b0 term = case order of
     TraversalOrderPre -> L.foldl (foldOverTerm order fld) (fld b0 term) children
     TraversalOrderPost -> fld (L.foldl (foldOverTerm order fld) b0 children) term
   where
     children = subterms term
 
-foldOverType :: TraversalOrder -> (a -> Type m -> a) -> a -> Type m -> a
+foldOverType :: TraversalOrder -> (x -> Type a -> x) -> x -> Type a -> x
 foldOverType order fld b0 typ = case order of
     TraversalOrderPre -> L.foldl (foldOverType order fld) (fld b0 typ) children
     TraversalOrderPost -> fld (L.foldl (foldOverType order fld) b0 children) typ
   where
     children = subtypes typ
 
-freeVariablesInScheme :: Show m => TypeScheme m -> S.Set Name
+freeVariablesInScheme :: Show a => TypeScheme a -> S.Set Name
 freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t) (S.fromList vars)
 
-freeVariablesInTerm :: Term m -> S.Set Name
+freeVariablesInTerm :: Term a -> S.Set Name
 freeVariablesInTerm term = case term of
   TermAnnotated (Annotated term1 _) -> freeVariablesInTerm term1
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
 
-freeVariablesInType :: Type m -> S.Set Name
+freeVariablesInType :: Type a -> S.Set Name
 freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
   where
     fld vars typ = case typ of
       TypeVariable v -> S.insert v vars
       _ -> vars
 
-moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Module m -> S.Set Namespace
+moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Module a -> S.Set Namespace
 moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
   where
     names = S.fromList (namespaceOfEager <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
       (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
 
-isFreeIn :: Name -> Term m -> Bool
+isFreeIn :: Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
 
 -- | Recursively remove term annotations, including within subterms
-removeTermAnnotations :: Ord m => Term m -> Term m
+removeTermAnnotations :: Ord a => Term a -> Term a
 removeTermAnnotations = rewriteTerm remove id
   where
     remove recurse term = case term of
@@ -97,14 +97,14 @@ removeTermAnnotations = rewriteTerm remove id
       _ -> recurse term
 
 -- | Recursively remove type annotations, including within subtypes
-removeTypeAnnotations :: Ord m => Type m -> Type m
+removeTypeAnnotations :: Ord a => Type a -> Type a
 removeTypeAnnotations = rewriteType remove id
   where
     remove recurse typ = case recurse typ of
       TypeAnnotated (Annotated typ' _) -> remove recurse typ'
       _ -> recurse typ
 
-replaceFreeName :: Ord m => Name -> Type m -> Type m -> Type m
+replaceFreeName :: Ord a => Name -> Type a -> Type a -> Type a
 replaceFreeName v rep = rewriteType mapExpr id
   where
     mapExpr recurse t = case t of
@@ -229,7 +229,7 @@ rewriteTypeMeta = rewriteType mapExpr
   where
     mapExpr recurse term = recurse term
 
-simplifyTerm :: Ord m => Term m -> Term m
+simplifyTerm :: Ord a => Term a -> Term a
 simplifyTerm = rewriteTerm simplify id
   where
     simplify recurse term = recurse $ case stripTerm term of
@@ -243,7 +243,7 @@ simplifyTerm = rewriteTerm simplify id
         _ -> term
       _ -> term
 
-substituteVariable :: Ord m => Name -> Name -> Term m -> Term m
+substituteVariable :: Ord a => Name -> Name -> Term a -> Term a
 substituteVariable from to = rewriteTerm replace id
   where
     replace recurse term = case term of
@@ -253,7 +253,7 @@ substituteVariable from to = rewriteTerm replace id
         else recurse term
       _ -> recurse term
 
-subterms :: Term m -> [Term m]
+subterms :: Term a -> [Term a]
 subterms term = case term of
   TermAnnotated (Annotated t _) -> [t]
   TermApplication (Application lhs rhs) -> [lhs, rhs]
@@ -276,7 +276,7 @@ subterms term = case term of
   TermUnion (Injection _ field) -> [fieldTerm field]
   _ -> []
 
-subtypes :: Type m -> [Type m]
+subtypes :: Type a -> [Type a]
 subtypes typ = case typ of
   TypeAnnotated (Annotated t _) -> [t]
   TypeApplication (ApplicationType lhs rhs) -> [lhs, rhs]
@@ -295,7 +295,7 @@ subtypes typ = case typ of
   TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
   TypeVariable _ -> []
 
-termDependencyNames :: Bool -> Bool -> Bool -> Term m -> S.Set Name
+termDependencyNames :: Bool -> Bool -> Bool -> Term a -> S.Set Name
 termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
@@ -316,7 +316,7 @@ termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre 
         nominal name = if withNoms then S.insert name names else names
         prim name = if withPrims then S.insert name names else names
 
-topologicalSortElements :: [Element m] -> Maybe [Name]
+topologicalSortElements :: [Element a] -> Maybe [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)

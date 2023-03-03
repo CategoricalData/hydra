@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A labeled record or union type
  */
-public class RowType<M> {
+public class RowType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.RowType");
   
   /**
@@ -19,9 +19,9 @@ public class RowType<M> {
   /**
    * The fields of this row type, excluding any inherited fields
    */
-  public final java.util.List<hydra.core.FieldType<M>> fields;
+  public final java.util.List<hydra.core.FieldType<A>> fields;
   
-  public RowType (hydra.core.Name typeName, java.util.Optional<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<M>> fields) {
+  public RowType (hydra.core.Name typeName, java.util.Optional<hydra.core.Name> extends_, java.util.List<hydra.core.FieldType<A>> fields) {
     this.typeName = typeName;
     this.extends_ = extends_;
     this.fields = fields;
@@ -49,7 +49,7 @@ public class RowType<M> {
     return new RowType(typeName, extends_, fields);
   }
   
-  public RowType withFields(java.util.List<hydra.core.FieldType<M>> fields) {
+  public RowType withFields(java.util.List<hydra.core.FieldType<A>> fields) {
     return new RowType(typeName, extends_, fields);
   }
 }

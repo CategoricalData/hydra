@@ -11,8 +11,8 @@ public class Remove<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.remove");
     }
 
-    public static <A> Set<A> apply(A elem, Set<A> arg) {
-        Set<A> newSet = new HashSet(arg);
+    public static <X> Set<X> apply(X elem, Set<X> arg) {
+        Set<X> newSet = new HashSet(arg);
         newSet.remove(elem);
         return newSet;
     }

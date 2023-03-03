@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * A record, or labeled tuple; a map of field names to terms
  */
-public class Record<M> {
+public class Record<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Record");
   
   public final hydra.core.Name typeName;
   
-  public final java.util.List<hydra.core.Field<M>> fields;
+  public final java.util.List<hydra.core.Field<A>> fields;
   
-  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field<M>> fields) {
+  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field<A>> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -33,7 +33,7 @@ public class Record<M> {
     return new Record(typeName, fields);
   }
   
-  public Record withFields(java.util.List<hydra.core.Field<M>> fields) {
+  public Record withFields(java.util.List<hydra.core.Field<A>> fields) {
     return new Record(typeName, fields);
   }
 }

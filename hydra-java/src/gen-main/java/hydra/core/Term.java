@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A data term
  */
-public abstract class Term<M> {
+public abstract class Term<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Term");
   
   private Term () {
@@ -125,13 +125,13 @@ public abstract class Term<M> {
   /**
    * A term annotated with metadata
    */
-  public static final class Annotated<M> extends hydra.core.Term<M> {
+  public static final class Annotated<A> extends hydra.core.Term<A> {
     /**
      * A term annotated with metadata
      */
-    public final hydra.core.Annotated<hydra.core.Term<M>, M> value;
+    public final hydra.core.Annotated<hydra.core.Term<A>, A> value;
     
-    public Annotated (hydra.core.Annotated<hydra.core.Term<M>, M> value) {
+    public Annotated (hydra.core.Annotated<hydra.core.Term<A>, A> value) {
       this.value = value;
     }
     
@@ -158,13 +158,13 @@ public abstract class Term<M> {
   /**
    * A function application
    */
-  public static final class Application<M> extends hydra.core.Term<M> {
+  public static final class Application<A> extends hydra.core.Term<A> {
     /**
      * A function application
      */
-    public final hydra.core.Application<M> value;
+    public final hydra.core.Application<A> value;
     
-    public Application (hydra.core.Application<M> value) {
+    public Application (hydra.core.Application<A> value) {
       this.value = value;
     }
     
@@ -191,7 +191,7 @@ public abstract class Term<M> {
   /**
    * An element reference
    */
-  public static final class Element<M> extends hydra.core.Term<M> {
+  public static final class Element<A> extends hydra.core.Term<A> {
     /**
      * An element reference
      */
@@ -224,13 +224,13 @@ public abstract class Term<M> {
   /**
    * A function term
    */
-  public static final class Function<M> extends hydra.core.Term<M> {
+  public static final class Function<A> extends hydra.core.Term<A> {
     /**
      * A function term
      */
-    public final hydra.core.Function<M> value;
+    public final hydra.core.Function<A> value;
     
-    public Function (hydra.core.Function<M> value) {
+    public Function (hydra.core.Function<A> value) {
       this.value = value;
     }
     
@@ -254,10 +254,10 @@ public abstract class Term<M> {
     }
   }
   
-  public static final class Let<M> extends hydra.core.Term<M> {
-    public final hydra.core.Let<M> value;
+  public static final class Let<A> extends hydra.core.Term<A> {
+    public final hydra.core.Let<A> value;
     
-    public Let (hydra.core.Let<M> value) {
+    public Let (hydra.core.Let<A> value) {
       this.value = value;
     }
     
@@ -284,13 +284,13 @@ public abstract class Term<M> {
   /**
    * A list
    */
-  public static final class List<M> extends hydra.core.Term<M> {
+  public static final class List<A> extends hydra.core.Term<A> {
     /**
      * A list
      */
-    public final java.util.List<hydra.core.Term<M>> value;
+    public final java.util.List<hydra.core.Term<A>> value;
     
-    public List (java.util.List<hydra.core.Term<M>> value) {
+    public List (java.util.List<hydra.core.Term<A>> value) {
       this.value = value;
     }
     
@@ -317,7 +317,7 @@ public abstract class Term<M> {
   /**
    * A literal value
    */
-  public static final class Literal<M> extends hydra.core.Term<M> {
+  public static final class Literal<A> extends hydra.core.Term<A> {
     /**
      * A literal value
      */
@@ -350,13 +350,13 @@ public abstract class Term<M> {
   /**
    * A map of keys to values
    */
-  public static final class Map<M> extends hydra.core.Term<M> {
+  public static final class Map<A> extends hydra.core.Term<A> {
     /**
      * A map of keys to values
      */
-    public final java.util.Map<hydra.core.Term<M>, hydra.core.Term<M>> value;
+    public final java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value;
     
-    public Map (java.util.Map<hydra.core.Term<M>, hydra.core.Term<M>> value) {
+    public Map (java.util.Map<hydra.core.Term<A>, hydra.core.Term<A>> value) {
       this.value = value;
     }
     
@@ -383,13 +383,13 @@ public abstract class Term<M> {
   /**
    * An optional value
    */
-  public static final class Optional<M> extends hydra.core.Term<M> {
+  public static final class Optional<A> extends hydra.core.Term<A> {
     /**
      * An optional value
      */
-    public final java.util.Optional<hydra.core.Term<M>> value;
+    public final java.util.Optional<hydra.core.Term<A>> value;
     
-    public Optional (java.util.Optional<hydra.core.Term<M>> value) {
+    public Optional (java.util.Optional<hydra.core.Term<A>> value) {
       this.value = value;
     }
     
@@ -416,13 +416,13 @@ public abstract class Term<M> {
   /**
    * A tuple
    */
-  public static final class Product<M> extends hydra.core.Term<M> {
+  public static final class Product<A> extends hydra.core.Term<A> {
     /**
      * A tuple
      */
-    public final java.util.List<hydra.core.Term<M>> value;
+    public final java.util.List<hydra.core.Term<A>> value;
     
-    public Product (java.util.List<hydra.core.Term<M>> value) {
+    public Product (java.util.List<hydra.core.Term<A>> value) {
       this.value = value;
     }
     
@@ -449,13 +449,13 @@ public abstract class Term<M> {
   /**
    * A record term
    */
-  public static final class Record<M> extends hydra.core.Term<M> {
+  public static final class Record<A> extends hydra.core.Term<A> {
     /**
      * A record term
      */
-    public final hydra.core.Record<M> value;
+    public final hydra.core.Record<A> value;
     
-    public Record (hydra.core.Record<M> value) {
+    public Record (hydra.core.Record<A> value) {
       this.value = value;
     }
     
@@ -482,13 +482,13 @@ public abstract class Term<M> {
   /**
    * A set of values
    */
-  public static final class Set<M> extends hydra.core.Term<M> {
+  public static final class Set<A> extends hydra.core.Term<A> {
     /**
      * A set of values
      */
-    public final java.util.Set<hydra.core.Term<M>> value;
+    public final java.util.Set<hydra.core.Term<A>> value;
     
-    public Set (java.util.Set<hydra.core.Term<M>> value) {
+    public Set (java.util.Set<hydra.core.Term<A>> value) {
       this.value = value;
     }
     
@@ -515,13 +515,13 @@ public abstract class Term<M> {
   /**
    * An infinite stream of terms
    */
-  public static final class Stream<M> extends hydra.core.Term<M> {
+  public static final class Stream<A> extends hydra.core.Term<A> {
     /**
      * An infinite stream of terms
      */
-    public final hydra.core.Stream<M> value;
+    public final hydra.core.Stream<A> value;
     
-    public Stream (hydra.core.Stream<M> value) {
+    public Stream (hydra.core.Stream<A> value) {
       this.value = value;
     }
     
@@ -548,13 +548,13 @@ public abstract class Term<M> {
   /**
    * A variant tuple
    */
-  public static final class Sum<M> extends hydra.core.Term<M> {
+  public static final class Sum<A> extends hydra.core.Term<A> {
     /**
      * A variant tuple
      */
-    public final hydra.core.Sum<M> value;
+    public final hydra.core.Sum<A> value;
     
-    public Sum (hydra.core.Sum<M> value) {
+    public Sum (hydra.core.Sum<A> value) {
       this.value = value;
     }
     
@@ -581,13 +581,13 @@ public abstract class Term<M> {
   /**
    * An injection; an instance of a union type
    */
-  public static final class Union<M> extends hydra.core.Term<M> {
+  public static final class Union<A> extends hydra.core.Term<A> {
     /**
      * An injection; an instance of a union type
      */
-    public final hydra.core.Injection<M> value;
+    public final hydra.core.Injection<A> value;
     
-    public Union (hydra.core.Injection<M> value) {
+    public Union (hydra.core.Injection<A> value) {
       this.value = value;
     }
     
@@ -614,7 +614,7 @@ public abstract class Term<M> {
   /**
    * A variable reference
    */
-  public static final class Variable<M> extends hydra.core.Term<M> {
+  public static final class Variable<A> extends hydra.core.Term<A> {
     /**
      * A variable reference
      */
@@ -644,10 +644,10 @@ public abstract class Term<M> {
     }
   }
   
-  public static final class Wrap<M> extends hydra.core.Term<M> {
-    public final hydra.core.Nominal<hydra.core.Term<M>> value;
+  public static final class Wrap<A> extends hydra.core.Term<A> {
+    public final hydra.core.Nominal<hydra.core.Term<A>> value;
     
-    public Wrap (hydra.core.Nominal<hydra.core.Term<M>> value) {
+    public Wrap (hydra.core.Nominal<hydra.core.Term<A>> value) {
       this.value = value;
     }
     

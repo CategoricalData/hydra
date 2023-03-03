@@ -28,7 +28,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-annotateElementWithTypes :: (Ord m, Show m) => Element m -> GraphFlow m (Element m)
+annotateElementWithTypes :: (Ord a, Show a) => Element a -> GraphFlow a (Element a)
 annotateElementWithTypes el = do
     withTrace ("annotate element " ++ unName (elementName el)) $ do
       term <- annotateTermWithTypes $ elementData el
@@ -44,7 +44,7 @@ annotateElementWithTypes el = do
         Just t -> return t
         Nothing -> fail "expected a type annotation"
 
-annotateTermWithTypes :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
+annotateTermWithTypes :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferTypeAndConstraints term0
   anns <- graphAnnotations <$> getState
@@ -52,11 +52,11 @@ annotateTermWithTypes term0 = do
   let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just $ Y.fromMaybe typ mt) ann
   return $ rewriteTermMeta annotType term1
 
-inferType :: (Ord m, Show m) => Term m -> GraphFlow m (TypeScheme m)
+inferType :: (Ord a, Show a) => Term a -> GraphFlow a (TypeScheme a)
 inferType term = snd <$> inferTypeAndConstraints term
 
 -- | Solve for the top-level type of an expression in a given environment
-inferTypeAndConstraints :: (Ord m, Show m) => Term m -> GraphFlow m (Term (m, Type m, [Constraint m]), TypeScheme m)
+inferTypeAndConstraints :: (Ord a, Show a) => Term a -> GraphFlow a (Term (a, Type a, [Constraint a]), TypeScheme a)
 inferTypeAndConstraints term = do
     withTrace ("infer type") $ do
       cx <- getState
@@ -69,10 +69,10 @@ inferTypeAndConstraints term = do
     -- | Canonicalize and return the polymorphic top-level type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
 
-rewriteDataType :: Ord m => (Type m -> Type m) -> Term (m, Type m, [Constraint m]) -> Term (m, Type m, [Constraint m])
+rewriteDataType :: Ord a => (Type a -> Type a) -> Term (a, Type a, [Constraint a]) -> Term (a, Type a, [Constraint a])
 rewriteDataType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-startContext :: Graph m -> InferenceGraph m
+startContext :: Graph a -> InferenceGraph a
 startContext cx = InferenceContext cx 0 M.empty

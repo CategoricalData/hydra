@@ -3,14 +3,14 @@ package hydra.core;
 /**
  * An object wrapped in a type name
  */
-public class Nominal<A> {
+public class Nominal<X> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Nominal");
   
   public final hydra.core.Name typeName;
   
-  public final A object;
+  public final X object;
   
-  public Nominal (hydra.core.Name typeName, A object) {
+  public Nominal (hydra.core.Name typeName, X object) {
     this.typeName = typeName;
     this.object = object;
   }
@@ -33,7 +33,7 @@ public class Nominal<A> {
     return new Nominal(typeName, object);
   }
   
-  public Nominal withObject(A object) {
+  public Nominal withObject(X object) {
     return new Nominal(typeName, object);
   }
 }
