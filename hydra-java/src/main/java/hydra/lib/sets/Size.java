@@ -10,7 +10,7 @@ public class Size<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/sets.size");
     }
 
-    public static <A> Integer apply(Set<A> arg) {
+    public static <X> Integer apply(Set<X> arg) {
         return arg.size();
     }
 }

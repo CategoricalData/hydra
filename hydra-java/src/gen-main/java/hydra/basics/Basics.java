@@ -455,7 +455,7 @@ public interface Basics {
     new hydra.mantle.TermVariant.Variable());
   
   static <A> Integer testLists(java.util.List<java.util.List<A>> els) {
-    return hydra.lib.lists.Lists.length(hydra.lib.lists.Lists.concat((els)));
+    return hydra.lib.lists.Length.apply(hydra.lib.lists.Concat.apply((els)));
   }
   
   static <M> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<M> typ) {
