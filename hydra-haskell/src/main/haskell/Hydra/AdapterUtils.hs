@@ -79,7 +79,7 @@ encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
 
-floatTypeIsSupported :: LanguageConstraints m -> FloatType -> Bool
+floatTypeIsSupported :: LanguageConstraints a -> FloatType -> Bool
 floatTypeIsSupported constraints ft = S.member ft $ languageConstraintsFloatTypes constraints
 
 idAdapter :: t -> SymmetricAdapter s t v
@@ -88,10 +88,10 @@ idAdapter t = Adapter False t t idCoder
 idCoder :: Coder s s a a
 idCoder = Coder pure pure
 
-integerTypeIsSupported :: LanguageConstraints m -> IntegerType -> Bool
+integerTypeIsSupported :: LanguageConstraints a -> IntegerType -> Bool
 integerTypeIsSupported constraints it = S.member it $ languageConstraintsIntegerTypes constraints
 
-literalTypeIsSupported :: LanguageConstraints m -> LiteralType -> Bool
+literalTypeIsSupported :: LanguageConstraints a -> LiteralType -> Bool
 literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (languageConstraintsLiteralVariants constraints)
   && case at of
     LiteralTypeFloat ft -> floatTypeIsSupported constraints ft
@@ -103,7 +103,7 @@ nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ gname 
   where
     (Namespace gname, local) = toQnameEager name
 
-typeIsSupported :: LanguageConstraints m -> Type m -> Bool
+typeIsSupported :: LanguageConstraints a -> Type a -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
   && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
   && case t of

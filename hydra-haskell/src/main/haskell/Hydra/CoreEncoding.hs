@@ -12,28 +12,28 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-epsilonEncodeApplicationType :: ApplicationType m -> Term m
+epsilonEncodeApplicationType :: ApplicationType a -> Term a
 epsilonEncodeApplicationType (ApplicationType lhs rhs) = record _ApplicationType [
   Field _ApplicationType_function $ epsilonEncodeType lhs,
   Field _ApplicationType_argument $ epsilonEncodeType rhs]
 
-epsilonEncodeFieldType :: FieldType m -> Term m
+epsilonEncodeFieldType :: FieldType a -> Term a
 epsilonEncodeFieldType (FieldType (FieldName fname) t) = record _FieldType [
   Field _FieldType_name $ string fname,
   Field _FieldType_type $ epsilonEncodeType t]
 
-epsilonEncodeFloatType :: FloatType -> Term m
+epsilonEncodeFloatType :: FloatType -> Term a
 epsilonEncodeFloatType ft = unitVariant _FloatType $ case ft of
   FloatTypeBigfloat -> _FloatType_bigfloat
   FloatTypeFloat32 -> _FloatType_float32
   FloatTypeFloat64 -> _FloatType_float64
 
-epsilonEncodeFunctionType :: FunctionType m -> Term m
+epsilonEncodeFunctionType :: FunctionType a -> Term a
 epsilonEncodeFunctionType (FunctionType dom cod) = record _FunctionType [
   Field _FunctionType_domain $ epsilonEncodeType dom,
   Field _FunctionType_codomain $ epsilonEncodeType cod]
 
-epsilonEncodeIntegerType :: IntegerType -> Term m
+epsilonEncodeIntegerType :: IntegerType -> Term a
 epsilonEncodeIntegerType it = unitVariant _IntegerType $ case it of
   IntegerTypeBigint -> _IntegerType_bigint
   IntegerTypeInt8 -> _IntegerType_int8
@@ -45,12 +45,12 @@ epsilonEncodeIntegerType it = unitVariant _IntegerType $ case it of
   IntegerTypeUint32 -> _IntegerType_uint32
   IntegerTypeUint64 -> _IntegerType_uint64
 
-epsilonEncodeLambdaType :: LambdaType m -> Term m
+epsilonEncodeLambdaType :: LambdaType a -> Term a
 epsilonEncodeLambdaType (LambdaType (Name var) body) = record _LambdaType [
   Field _LambdaType_parameter $ string var,
   Field _LambdaType_body $ epsilonEncodeType body]
 
-epsilonEncodeLiteralType :: LiteralType -> Term m
+epsilonEncodeLiteralType :: LiteralType -> Term a
 epsilonEncodeLiteralType at = case at of
   LiteralTypeBinary -> unitVariant _LiteralType _LiteralType_binary
   LiteralTypeBoolean -> unitVariant _LiteralType _LiteralType_boolean
@@ -58,18 +58,18 @@ epsilonEncodeLiteralType at = case at of
   LiteralTypeInteger it -> variant _LiteralType _LiteralType_integer $ epsilonEncodeIntegerType it
   LiteralTypeString -> unitVariant _LiteralType _LiteralType_string
 
-epsilonEncodeMapType :: MapType m -> Term m
+epsilonEncodeMapType :: MapType a -> Term a
 epsilonEncodeMapType (MapType kt vt) = record _MapType [
   Field _MapType_keys $ epsilonEncodeType kt,
   Field _MapType_values $ epsilonEncodeType vt]
 
-epsilonEncodeRowType :: RowType m -> Term m
+epsilonEncodeRowType :: RowType a -> Term a
 epsilonEncodeRowType (RowType name extends fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
   Field _RowType_extends $ optional (string . unName <$> extends),
   Field _RowType_fields $ list $ epsilonEncodeFieldType <$> fields]
 
-epsilonEncodeType :: Type m -> Term m
+epsilonEncodeType :: Type a -> Term a
 epsilonEncodeType typ = case typ of
   TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (epsilonEncodeType t) ann)
   TypeApplication a -> variant _Type _Type_application $ epsilonEncodeApplicationType a
@@ -88,17 +88,17 @@ epsilonEncodeType typ = case typ of
   TypeVariable (Name var) -> variant _Type _Type_variable $ string var
   TypeWrap name -> variant _Type _Type_wrap $ TermElement name
 
-sigmaEncodeApplication :: Ord m => Application m -> Term m
+sigmaEncodeApplication :: Ord a => Application a -> Term a
 sigmaEncodeApplication (Application lhs rhs) = record _Application [
   Field _Application_function $ sigmaEncodeTerm lhs,
   Field _Application_argument $ sigmaEncodeTerm rhs]
 
-sigmaEncodeCaseStatement :: Ord m => CaseStatement m -> Term m
+sigmaEncodeCaseStatement :: Ord a => CaseStatement a -> Term a
 sigmaEncodeCaseStatement (CaseStatement name cases) = record _CaseStatement [
   Field _CaseStatement_typeName $ string (unName name),
   Field _CaseStatement_cases $ list $ sigmaEncodeField <$> cases]
 
-sigmaEncodeElimination :: Ord m => Elimination m -> Term m
+sigmaEncodeElimination :: Ord a => Elimination a -> Term a
 sigmaEncodeElimination e = case e of
   EliminationElement -> unitVariant _Elimination _Elimination_element
   EliminationList f -> variant _Elimination _Elimination_list $ sigmaEncodeTerm f
@@ -107,12 +107,12 @@ sigmaEncodeElimination e = case e of
   EliminationRecord p -> variant _Elimination _Elimination_record $ sigmaEncodeProjection p
   EliminationUnion c -> variant _Elimination _Elimination_union $ sigmaEncodeCaseStatement c
 
-sigmaEncodeField :: Ord m => Field m -> Term m
+sigmaEncodeField :: Ord a => Field a -> Term a
 sigmaEncodeField (Field (FieldName name) term) = record _Field [
   Field _Field_name $ string name,
   Field _Field_term $ sigmaEncodeTerm term]
 
-sigmaEncodeFloatValue :: FloatValue -> Term m
+sigmaEncodeFloatValue :: FloatValue -> Term a
 sigmaEncodeFloatValue f = variant _FloatValue var $ float f
   where
     var = case floatValueType f of
@@ -120,13 +120,13 @@ sigmaEncodeFloatValue f = variant _FloatValue var $ float f
       FloatTypeFloat32 -> _FloatType_float32
       FloatTypeFloat64 -> _FloatType_float64
 
-sigmaEncodeFunction :: Ord m => Function m -> Term m
+sigmaEncodeFunction :: Ord a => Function a -> Term a
 sigmaEncodeFunction f = case f of
   FunctionElimination e -> variant _Function _Function_elimination $ sigmaEncodeElimination e
   FunctionLambda l -> variant _Function _Function_lambda $ sigmaEncodeLambda l
   FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ TermWrap $ Nominal _Name $ string name
 
-sigmaEncodeIntegerValue :: IntegerValue -> Term m
+sigmaEncodeIntegerValue :: IntegerValue -> Term a
 sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
   where
     var = case integerValueType i of
@@ -140,12 +140,12 @@ sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
       IntegerTypeUint32 -> _IntegerType_uint32
       IntegerTypeUint64 -> _IntegerType_uint64
 
-sigmaEncodeLambda :: Ord m => Lambda m -> Term m
+sigmaEncodeLambda :: Ord a => Lambda a -> Term a
 sigmaEncodeLambda (Lambda (Name v) b) = record _Lambda [
   Field _Lambda_parameter $ string v,
   Field _Lambda_body $ sigmaEncodeTerm b]
 
-sigmaEncodeLiteral :: Literal -> Term m
+sigmaEncodeLiteral :: Literal -> Term a
 sigmaEncodeLiteral l = case l of
   LiteralBinary v -> variant _Literal _LiteralVariant_binary $ string v
   LiteralBoolean v -> variant _Literal _LiteralVariant_boolean $ boolean v
@@ -153,7 +153,7 @@ sigmaEncodeLiteral l = case l of
   LiteralInteger v -> variant _Literal _LiteralVariant_integer $ sigmaEncodeIntegerValue v
   LiteralString v -> variant _Literal _LiteralVariant_string $ string v
 
-sigmaEncodeLiteralVariant :: LiteralVariant -> Term m
+sigmaEncodeLiteralVariant :: LiteralVariant -> Term a
 sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
   LiteralVariantBinary -> _LiteralVariant_binary
   LiteralVariantBoolean -> _LiteralVariant_boolean
@@ -161,28 +161,28 @@ sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string
 
-sigmaEncodeNominalTerm :: Ord m => Nominal (Term m) -> Term m
+sigmaEncodeNominalTerm :: Ord a => Nominal (Term a) -> Term a
 sigmaEncodeNominalTerm (Nominal (Name name) term) = record _Nominal [
   Field _Nominal_typeName $ string name,
   Field _Nominal_object $ sigmaEncodeTerm term]
 
-sigmaEncodeOptionalCases :: Ord m => OptionalCases m -> Term m
+sigmaEncodeOptionalCases :: Ord a => OptionalCases a -> Term a
 sigmaEncodeOptionalCases (OptionalCases nothing just) = record _OptionalCases [
   Field _OptionalCases_nothing $ sigmaEncodeTerm nothing,
   Field _OptionalCases_just $ sigmaEncodeTerm just]
 
-sigmaEncodeProjection :: Projection -> Term m
+sigmaEncodeProjection :: Projection -> Term a
 sigmaEncodeProjection (Projection name fname) = record _Projection [
   Field _Projection_typeName $ string (unName name),
   Field _Projection_field $ string (unFieldName fname)]
 
-sigmaEncodeSum :: Ord m => Sum m -> Term m
+sigmaEncodeSum :: Ord a => Sum a -> Term a
 sigmaEncodeSum (Sum i l term) = record _Sum [
   Field _Sum_index $ int32 i,
   Field _Sum_size $ int32 l,
   Field _Sum_term $ sigmaEncodeTerm term]
 
-sigmaEncodeTerm :: Ord m => Term m -> Term m
+sigmaEncodeTerm :: Ord a => Term a -> Term a
 sigmaEncodeTerm term = case term of
   TermAnnotated (Annotated t ann) -> variant _Term _Term_annotated $ TermAnnotated $ Annotated (sigmaEncodeTerm t) ann
   TermApplication a -> variant _Term _Term_application $ sigmaEncodeApplication a

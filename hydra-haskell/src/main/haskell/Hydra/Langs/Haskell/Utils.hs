@@ -43,7 +43,7 @@ hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart
 hsvar :: String -> H.Expression
 hsvar s = H.ExpressionVariable $ rawName s
 
-namespacesForModule :: Module m -> Namespaces
+namespacesForModule :: Module a -> Namespaces
 namespacesForModule mod = Namespaces focusPair mapping
   where
     ns = moduleNamespace mod
@@ -92,7 +92,7 @@ unionFieldReference namespaces sname (FieldName fname) = elementReference namesp
   where
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
-unpackLambdaType :: Graph m -> Type m -> ([Name], Type m)
+unpackLambdaType :: Graph a -> Type a -> ([Name], Type a)
 unpackLambdaType cx t = case stripType t of
   TypeLambda (LambdaType v tbody) -> (v:vars, t')
     where

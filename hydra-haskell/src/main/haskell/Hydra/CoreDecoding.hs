@@ -38,38 +38,38 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-epsilonDecodeApplicationType :: Show m => Term m -> GraphFlow m (ApplicationType m)
+epsilonDecodeApplicationType :: Show a => Term a -> GraphFlow a (ApplicationType a)
 epsilonDecodeApplicationType = matchRecord $ \m -> ApplicationType
   <$> getField m _ApplicationType_function epsilonDecodeType
   <*> getField m _ApplicationType_argument epsilonDecodeType
 
-epsilonDecodeElement :: Show m => Term m -> GraphFlow m Name
+epsilonDecodeElement :: Show a => Term a -> GraphFlow a Name
 epsilonDecodeElement term = case stripTerm term of
   TermElement name -> pure name
   _ -> unexpected "element" term
 
-epsilonDecodeFieldType :: Show m => Term m -> GraphFlow m (FieldType m)
+epsilonDecodeFieldType :: Show a => Term a -> GraphFlow a (FieldType a)
 epsilonDecodeFieldType = matchRecord $ \m -> FieldType
   <$> (FieldName <$> getField m _FieldType_name epsilonDecodeString)
   <*> getField m _FieldType_type epsilonDecodeType
 
-epsilonDecodeFieldTypes :: Show m => Term m -> GraphFlow m [FieldType m]
+epsilonDecodeFieldTypes :: Show a => Term a -> GraphFlow a [FieldType a]
 epsilonDecodeFieldTypes term = case stripTerm term of
   TermList els -> CM.mapM epsilonDecodeFieldType els
   _ -> unexpected "list" term
 
-epsilonDecodeFloatType :: Show m => Term m -> GraphFlow m FloatType
+epsilonDecodeFloatType :: Show a => Term a -> GraphFlow a FloatType
 epsilonDecodeFloatType = matchEnum [
   (_FloatType_bigfloat, FloatTypeBigfloat),
   (_FloatType_float32, FloatTypeFloat32),
   (_FloatType_float64, FloatTypeFloat64)]
 
-epsilonDecodeFunctionType :: Show m => Term m -> GraphFlow m (FunctionType m)
+epsilonDecodeFunctionType :: Show a => Term a -> GraphFlow a (FunctionType a)
 epsilonDecodeFunctionType = matchRecord $ \m -> FunctionType
   <$> getField m _FunctionType_domain epsilonDecodeType
   <*> getField m _FunctionType_codomain epsilonDecodeType
 
-epsilonDecodeIntegerType :: Show m => Term m -> GraphFlow m IntegerType
+epsilonDecodeIntegerType :: Show a => Term a -> GraphFlow a IntegerType
 epsilonDecodeIntegerType = matchEnum [
   (_IntegerType_bigint, IntegerTypeBigint),
   (_IntegerType_int8, IntegerTypeInt8),
@@ -81,12 +81,12 @@ epsilonDecodeIntegerType = matchEnum [
   (_IntegerType_uint32, IntegerTypeUint32),
   (_IntegerType_uint64, IntegerTypeUint64)]
 
-epsilonDecodeLambdaType :: Show m => Term m -> GraphFlow m (LambdaType m)
+epsilonDecodeLambdaType :: Show a => Term a -> GraphFlow a (LambdaType a)
 epsilonDecodeLambdaType = matchRecord $ \m -> LambdaType
   <$> (Name <$> getField m _LambdaType_parameter epsilonDecodeString)
   <*> getField m _LambdaType_body epsilonDecodeType
 
-epsilonDecodeLiteralType :: Show m => Term m -> GraphFlow m LiteralType
+epsilonDecodeLiteralType :: Show a => Term a -> GraphFlow a LiteralType
 epsilonDecodeLiteralType = matchUnion [
   matchUnitField _LiteralType_binary LiteralTypeBinary,
   matchUnitField _LiteralType_boolean LiteralTypeBoolean,
@@ -94,21 +94,21 @@ epsilonDecodeLiteralType = matchUnion [
   (_LiteralType_integer, fmap LiteralTypeInteger . epsilonDecodeIntegerType),
   matchUnitField _LiteralType_string LiteralTypeString]
 
-epsilonDecodeMapType :: Show m => Term m -> GraphFlow m (MapType m)
+epsilonDecodeMapType :: Show a => Term a -> GraphFlow a (MapType a)
 epsilonDecodeMapType = matchRecord $ \m -> MapType
   <$> getField m _MapType_keys epsilonDecodeType
   <*> getField m _MapType_values epsilonDecodeType
 
-epsilonDecodeRowType :: Show m => Term m -> GraphFlow m (RowType m)
+epsilonDecodeRowType :: Show a => Term a -> GraphFlow a (RowType a)
 epsilonDecodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName epsilonDecodeString)
   <*> getField m _RowType_extends (Terms.expectOptional (\term -> Name <$> Terms.expectString term))
   <*> getField m _RowType_fields epsilonDecodeFieldTypes
 
-epsilonDecodeString :: Show m => Term m -> GraphFlow m String
+epsilonDecodeString :: Show a => Term a -> GraphFlow a String
 epsilonDecodeString = Terms.expectString . stripTerm
 
-epsilonDecodeType :: Show m => Term m -> GraphFlow m (Type m)
+epsilonDecodeType :: Show a => Term a -> GraphFlow a (Type a)
 epsilonDecodeType dat = case dat of
   TermElement name -> pure $ TypeWrap name
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> epsilonDecodeType term
@@ -132,10 +132,10 @@ epsilonDecodeType dat = case dat of
     (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
     (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString)] dat
 
-elementAsTypedTerm :: (Show m) => Element m -> GraphFlow m (TypedTerm m)
+elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
 elementAsTypedTerm el = TypedTerm <$> epsilonDecodeType (elementSchema el) <*> pure (elementData el)
 
-fieldTypes :: Show m => Type m -> GraphFlow m (M.Map FieldName (Type m))
+fieldTypes :: Show a => Type a -> GraphFlow a (M.Map FieldName (Type a))
 fieldTypes t = case stripType t of
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
@@ -150,22 +150,22 @@ fieldTypes t = case stripType t of
     toMap fields = M.fromList (toPair <$> fields)
     toPair (FieldType fname ftype) = (fname, ftype)
 
-getField :: M.Map FieldName (Term m) -> FieldName -> (Term m -> GraphFlow m b) -> GraphFlow m b
+getField :: M.Map FieldName (Term a) -> FieldName -> (Term a -> GraphFlow a b) -> GraphFlow a b
 getField m fname decode = case M.lookup fname m of
   Nothing -> fail $ "expected field " ++ show fname ++ " not found"
   Just val -> decode val
 
-matchEnum :: Show m => [(FieldName, b)] -> Term m -> GraphFlow m b
+matchEnum :: Show a => [(FieldName, b)] -> Term a -> GraphFlow a b
 matchEnum = matchUnion . fmap (uncurry matchUnitField)
 
-matchRecord :: Show m => (M.Map FieldName (Term m) -> GraphFlow m b) -> Term m -> GraphFlow m b
+matchRecord :: Show a => (M.Map FieldName (Term a) -> GraphFlow a b) -> Term a -> GraphFlow a b
 matchRecord decode term = do
   term1 <- deref term
   case stripTerm term1 of
     TermRecord (Record _ fields) -> decode $ M.fromList $ fmap (\(Field fname val) -> (fname, val)) fields
     _ -> unexpected "record" term1
 
-matchUnion :: Show m => [(FieldName, Term m -> GraphFlow m b)] -> Term m -> GraphFlow m b
+matchUnion :: Show a => [(FieldName, Term a -> GraphFlow a b)] -> Term a -> GraphFlow a b
 matchUnion pairs term = do
     term1 <- deref term
     case stripTerm term1 of
@@ -176,15 +176,15 @@ matchUnion pairs term = do
   where
     mapping = M.fromList pairs
 
-matchUnitField :: FieldName -> b -> (FieldName, a -> GraphFlow m b)
+matchUnitField :: FieldName -> y -> (FieldName, x -> GraphFlow a y)
 matchUnitField fname x = (fname, \_ -> pure x)
 
-requireRecordType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
+requireRecordType :: Show a => Bool -> Name -> GraphFlow a (RowType a)
 requireRecordType infer = requireRowType "record" infer $ \t -> case t of
   TypeRecord rt -> Just rt
   _ -> Nothing
 
-requireRowType :: Show m => String -> Bool -> (Type m -> Maybe (RowType m)) -> Name -> GraphFlow m (RowType m)
+requireRowType :: Show a => String -> Bool -> (Type a -> Maybe (RowType a)) -> Name -> GraphFlow a (RowType a)
 requireRowType label infer getter name = do
   t <- withSchemaContext $ requireType name
   case getter (rawType t) of
@@ -202,20 +202,20 @@ requireRowType label infer getter name = do
       TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
       _ -> t
 
-requireType :: Show m => Name -> GraphFlow m (Type m)
+requireType :: Show a => Name -> GraphFlow a (Type a)
 requireType name = withTrace "require type" $ do
   el <- requireElement name
   epsilonDecodeType $ elementData el
 
-requireUnionType :: Show m => Bool -> Name -> GraphFlow m (RowType m)
+requireUnionType :: Show a => Bool -> Name -> GraphFlow a (RowType a)
 requireUnionType infer = requireRowType "union" infer $ \t -> case t of
   TypeUnion rt -> Just rt
   _ -> Nothing
 
-requireWrappedType :: Show m => Name -> GraphFlow m (Type m)
+requireWrappedType :: Show a => Name -> GraphFlow a (Type a)
 requireWrappedType name = withSchemaContext $ requireType name
 
-typeDependencies :: Show m => Name -> GraphFlow m (M.Map Name (Type m))
+typeDependencies :: Show a => Name -> GraphFlow a (M.Map Name (Type a))
 typeDependencies name = deps (S.fromList [name]) M.empty
   where
     deps seeds names = if S.null seeds
@@ -237,7 +237,7 @@ typeDependencies name = deps (S.fromList [name]) M.empty
         el <- requireElement name
         epsilonDecodeType (elementData el)
 
-typeDependencyNames :: Type m -> S.Set Name
+typeDependencyNames :: Type a -> S.Set Name
 typeDependencyNames = foldOverType TraversalOrderPre addNames S.empty
   where
     addNames names typ = case typ of

@@ -16,7 +16,7 @@ addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs)
   where
     add ae me = Java.AdditiveExpressionPlus $ Java.AdditiveExpression_Binary ae me
 
-addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> GraphFlow m Java.Type
+addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> GraphFlow a Java.Type
 addJavaTypeParameter rt t = case t of
   Java.TypeReference (Java.ReferenceTypeClassOrInterface cit) -> case cit of
     Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
@@ -41,7 +41,7 @@ fieldNameToJavaVariableDeclarator (FieldName n) = javaVariableDeclarator (javaId
 fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ javaIdentifier n
 
-importAliasesForModule :: Module m -> M.Map Namespace Java.PackageName
+importAliasesForModule :: Module a -> M.Map Namespace Java.PackageName
 importAliasesForModule mod = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
   where
     deps = moduleDependencyNamespaces True True True mod
@@ -306,7 +306,7 @@ javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.Forma
     argType = Java.UnannType jt
     argId = fieldNameToJavaVariableDeclaratorId fname
 
-javaTypeToJavaReferenceType :: Java.Type -> GraphFlow m Java.ReferenceType
+javaTypeToJavaReferenceType :: Java.Type -> GraphFlow a Java.ReferenceType
 javaTypeToJavaReferenceType t = case t of
   Java.TypeReference rt -> pure rt
   _ -> fail $ "expected a Java reference type. Found: " ++ show t
@@ -454,7 +454,7 @@ toAssignStmt fname = javaAssignmentStatement lhs rhs
     rhs = fieldNameToJavaExpression fname
     thisField = Java.FieldAccess $ Java.FieldAccess_QualifierPrimary $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
-toJavaArrayType :: Java.Type -> GraphFlow m Java.Type
+toJavaArrayType :: Java.Type -> GraphFlow a Java.Type
 toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
   Java.TypeReference rt -> case rt of
     Java.ReferenceTypeClassOrInterface cit -> pure $

@@ -57,7 +57,7 @@ describePrecisionSource = utils "describePrecision" $
     Case _Precision_bits      --> lambda "bits" $
       showInt32 @@ var "bits" ++ string "-bit"]
 
-describeTypeSource :: Definition (Type m -> string)
+describeTypeSource :: Definition (Type a -> string)
 describeTypeSource = utils "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $

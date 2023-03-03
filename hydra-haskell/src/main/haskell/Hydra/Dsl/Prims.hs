@@ -13,9 +13,9 @@ import qualified Data.Maybe as Y
 --import Data.String(IsString(..))
 
 
---instance IsString (TermCoder m (Term m)) where fromString = variable
+--instance IsString (TermCoder a (Term a)) where fromString = variable
 
-binaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> TermCoder m c -> (a -> b -> c) -> Primitive m
+binaryPrimitive :: Name -> TermCoder a x -> TermCoder a y -> TermCoder a z -> (x -> y -> z) -> Primitive a
 binaryPrimitive name input1 input2 output compute = Primitive name ft impl
   where
     ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
@@ -25,38 +25,38 @@ binaryPrimitive name input1 input2 output compute = Primitive name ft impl
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
 
-boolean :: Show m => TermCoder m Bool
+boolean :: Show a => TermCoder a Bool
 boolean = TermCoder Types.boolean $ Coder encode decode
   where
     encode = Terms.expectBoolean
     decode = pure . Terms.boolean
 
-flow :: TermCoder m s -> TermCoder m a -> TermCoder m (Flow s a)
+flow :: TermCoder a s -> TermCoder a x -> TermCoder a (Flow s x)
 flow states values = TermCoder (Types.wrap _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
     Coder encode decode
   where
     encode _ = fail $ "cannot currently encode flows from terms"
     decode _ = fail $ "cannot decode flows to terms"
 
-function :: TermCoder m a -> TermCoder m b -> TermCoder m (a -> b)
+function :: TermCoder a x -> TermCoder a y -> TermCoder a (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
   where
     encode _ = fail $ "cannot currently encode functions from terms"
     decode _ = fail $ "cannot decode functions to terms"
 
-int32 :: Show m => TermCoder m Int
+int32 :: Show a => TermCoder a Int
 int32 = TermCoder Types.int32 $ Coder encode decode
   where
     encode = Terms.expectInt32
     decode = pure . Terms.int32
 
-list :: Show m => TermCoder m a -> TermCoder m [a]
+list :: Show a => TermCoder a x -> TermCoder a [x]
 list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
   where
     encode = Terms.expectList (coderEncode $ termCoderCoder els)
     decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
 
-map :: (Ord k, Ord m, Show m) => TermCoder m k -> TermCoder m v -> TermCoder m (M.Map k v)
+map :: (Ord k, Ord a, Show a) => TermCoder a k -> TermCoder a v -> TermCoder a (M.Map k v)
 map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
   where
     encode = Terms.expectMap (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
@@ -67,12 +67,12 @@ map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType value
           ve <- (coderDecode $ termCoderCoder values) v
           return (ke, ve)
 
-nullaryPrimitive :: Name -> TermCoder m a -> a -> Primitive m
+nullaryPrimitive :: Name -> TermCoder a x -> x -> Primitive a
 nullaryPrimitive name output value = Primitive name (termCoderType output) impl
   where
     impl _ = coderDecode (termCoderCoder output) value
 
-optional :: Show m => TermCoder m a -> TermCoder m (Y.Maybe a)
+optional :: Show a => TermCoder a x -> TermCoder a (Y.Maybe x)
 optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode decode
   where
     encode = Terms.expectOptional (coderEncode $ termCoderCoder mel)
@@ -80,19 +80,19 @@ optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode dec
       Nothing -> pure Nothing
       Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
 
-set :: (Ord a, Ord m, Show m) => TermCoder m a -> TermCoder m (S.Set a)
+set :: (Ord x, Ord a, Show a) => TermCoder a x -> TermCoder a (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
   where
     encode = Terms.expectSet (coderEncode $ termCoderCoder els)
     decode s = Terms.set . S.fromList <$> mapM (coderDecode $ termCoderCoder els) (S.toList s)
 
-string :: Show m => TermCoder m String
+string :: Show a => TermCoder a String
 string = TermCoder Types.string $ Coder encode decode
   where
     encode = Terms.expectString
     decode = pure . Terms.string
 
-unaryPrimitive :: Name -> TermCoder m a -> TermCoder m b -> (a -> b) -> Primitive m
+unaryPrimitive :: Name -> TermCoder a x -> TermCoder a y -> (x -> y) -> Primitive a
 unaryPrimitive name input1 output compute = Primitive name ft impl
   where
     ft = TypeFunction $ FunctionType (termCoderType input1) $ termCoderType output
@@ -101,7 +101,7 @@ unaryPrimitive name input1 output compute = Primitive name ft impl
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       coderDecode (termCoderCoder output) $ compute arg1
 
-variable :: String -> TermCoder m (Term m)
+variable :: String -> TermCoder a (Term a)
 variable v = TermCoder (Types.variable v) $ Coder encode decode
   where
     encode = pure

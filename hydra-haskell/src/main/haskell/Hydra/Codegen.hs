@@ -54,7 +54,7 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-addDeepTypeAnnotations :: (Ord m, Show m) => Module m -> GraphFlow m (Module m)
+addDeepTypeAnnotations :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
 addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
@@ -62,7 +62,7 @@ addDeepTypeAnnotations mod = do
 allModules :: [Module Kv]
 allModules = coreModules ++ utilModules ++ extModules
 
-assignSchemas :: (Ord m, Show m) => Bool -> Module m -> GraphFlow m (Module m)
+assignSchemas :: (Ord a, Show a) => Bool -> Module a -> GraphFlow a (Module a)
 assignSchemas doInfer mod = do
     cx <- getState
     els <- CM.mapM (annotate cx) $ moduleElements mod
@@ -121,7 +121,7 @@ extModules = [
   xmlSchemaModule,
   yamlModelModule]
 
-findType :: Graph m -> Term m -> GraphFlow m (Maybe (Type m))
+findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
 generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> [Module Kv] -> FilePath -> IO ()
