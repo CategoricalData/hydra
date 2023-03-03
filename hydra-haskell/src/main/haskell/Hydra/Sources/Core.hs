@@ -23,63 +23,63 @@ hydraCoreModule = Module ns elements [] $
 
       def "Annotated" $
         doc "An object, such as a type or term, together with an annotation" $
-        lambda "a" $ lambda "m" $ record [
-          "subject">: "a",
-          "annotation">: "m"],
+        lambda "x" $ lambda "a" $ record [
+          "subject">: "x",
+          "annotation">: "a"],
 
       def "Application" $
         doc "A term which applies a function to an argument" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "function">:
             doc "The left-hand side of the application" $
-            core "Term" @@ "m",
+            core "Term" @@ "a",
           "argument">:
             doc "The right-hand side of the application" $
-            core "Term" @@ "m"],
+            core "Term" @@ "a"],
 
       def "ApplicationType" $
         doc "The type-level analog of an application term" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "function">:
             doc "The left-hand side of the application" $
-            core "Type" @@ "m",
+            core "Type" @@ "a",
           "argument">:
             doc "The right-hand side of the application" $
-            core "Type" @@ "m"],
+            core "Type" @@ "a"],
 
       def "CaseStatement" $
         doc "A union elimination; a case statement" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "typeName">: core "Name",
-          "cases">: list $ core "Field" @@ "m"],
+          "cases">: list $ core "Field" @@ "a"],
 
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
-        lambda "m" $ union [
+        lambda "a" $ union [
           "element">:
             doc "Eliminates an element by mapping it to its data term. This is Hydra's delta function."
             unit,
           "list">:
             doc "Eliminates a list using a fold function; this function has the signature b -> [a] -> b" $
-            core "Term" @@ "m",
+            core "Term" @@ "a",
           "optional">:
             doc "Eliminates an optional term by matching over the two possible cases" $
-            core "OptionalCases" @@ "m",
+            core "OptionalCases" @@ "a",
           "record">:
             doc "Eliminates a record by projecting a given field" $
             core "Projection",
           "union">:
             doc "Eliminates a union term by matching over the fields of the union. This is a case statement." $
-            core "CaseStatement" @@ "m",
+            core "CaseStatement" @@ "a",
           "wrap">:
             doc "Unwrap a wrapped term" $
             core "Name"],
             
       def "Field" $
         doc "A labeled term" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "name">: core "FieldName",
-          "term">: core "Term" @@ "m"],
+          "term">: core "Term" @@ "a"],
 
       def "FieldName" $
         doc "The name of a field, unique within a record or union type"
@@ -87,9 +87,9 @@ hydraCoreModule = Module ns elements [] $
 
       def "FieldType" $
         doc "The name and type of a field" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "name">: core "FieldName",
-          "type">: core "Type" @@ "m"],
+          "type">: core "Type" @@ "a"],
 
       def "FloatType" $
         doc "A floating-point type" $
@@ -110,22 +110,22 @@ hydraCoreModule = Module ns elements [] $
 
       def "Function" $
         doc "A function" $
-        lambda "m" $ union [
+        lambda "a" $ union [
           "elimination">:
             doc "An elimination for any of a few term variants" $
-            core "Elimination" @@ "m",
+            core "Elimination" @@ "a",
           "lambda">:
             doc "A function abstraction (lambda)" $
-            core "Lambda" @@ "m",
+            core "Lambda" @@ "a",
           "primitive">:
             doc "A reference to a built-in (primitive) function" $
             core "Name"],
 
       def "FunctionType" $
         doc "A function type, also known as an arrow type" $
-        lambda "m" $ record [
-          "domain">: core "Type" @@ "m",
-          "codomain">: core "Type" @@ "m"],
+        lambda "a" $ record [
+          "domain">: core "Type" @@ "a",
+          "codomain">: core "Type" @@ "a"],
 
       def "IntegerType" $
         doc "An integer type" $
@@ -164,29 +164,29 @@ hydraCoreModule = Module ns elements [] $
 
       def "Lambda" $
         doc "A function abstraction (lambda)" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "parameter">:
             doc "The parameter of the lambda" $
             core "Name",
           "body">:
             doc "The body of the lambda" $
-            core "Term" @@ "m"],
+            core "Term" @@ "a"],
 
       def "LambdaType" $
         doc "A type abstraction; the type-level analog of a lambda term" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "parameter">:
             doc "The parameter of the lambda" $
             core "Name",
           "body">:
             doc "The body of the lambda" $
-            core "Type" @@ "m"],
+            core "Type" @@ "a"],
 
       def "Let" $
         doc "A set of (possibly recursive) 'let' bindings" $
-        lambda "m" $ record [
-          "bindings">: Types.map (core "Name") (core "Term" @@ "m"),
-          "environment">: core "Term" @@ "m"],
+        lambda "a" $ record [
+          "bindings">: Types.map (core "Name") (core "Term" @@ "a"),
+          "environment">: core "Term" @@ "a"],
 
       def "Literal" $
         doc "A term constant; an instance of a literal type" $
@@ -214,9 +214,9 @@ hydraCoreModule = Module ns elements [] $
 
       def "MapType" $
         doc "A map type" $
-        lambda "m" $ record [
-          "keys">: core "Type" @@ "m",
-          "values">: core "Type" @@ "m"],
+        lambda "a" $ record [
+          "keys">: core "Type" @@ "a",
+          "values">: core "Type" @@ "a"],
 
       def "Name" $
         doc "A symbol which stands for a term, type, or element"
@@ -224,19 +224,19 @@ hydraCoreModule = Module ns elements [] $
 
       def "Nominal" $
         doc "An object wrapped in a type name" $
-        lambda "a" $ record [
+        lambda "x" $ record [
           "typeName">: core "Name",
-          "object">: "a"],
+          "object">: "x"],
 
       def "OptionalCases" $
         doc "A case statement for matching optional terms" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "nothing">:
             doc "A term provided if the optional value is nothing" $
-            core "Term" @@ "m",
+            core "Term" @@ "a",
           "just">:
             doc "A function which is applied if the optional value is non-nothing" $
-            core "Term" @@ "m"],
+            core "Term" @@ "a"],
 
       def "Projection" $
         doc "A record elimination; a projection" $
@@ -246,13 +246,13 @@ hydraCoreModule = Module ns elements [] $
 
       def "Record" $
         doc "A record, or labeled tuple; a map of field names to terms" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "typeName">: core "Name",
-          "fields">: list $ core "Field" @@ "m"],
+          "fields">: list $ core "Field" @@ "a"],
 
       def "RowType" $
         doc "A labeled record or union type" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "typeName">:
             doc "The name of the row type, which must correspond to the name of a Type element" $
             core "Name",
@@ -262,103 +262,103 @@ hydraCoreModule = Module ns elements [] $
             optional $ core "Name",
           "fields">:
             doc "The fields of this row type, excluding any inherited fields" $
-            list $ core "FieldType" @@ "m"],
+            list $ core "FieldType" @@ "a"],
 
       def "Stream" $
         doc "An infinite stream of terms" $
-        lambda "m" $ record [
-          "first">: core "Term" @@ "m",
-          "rest">: core "Stream" @@ "m"],
+        lambda "a" $ record [
+          "first">: core "Term" @@ "a",
+          "rest">: core "Stream" @@ "a"],
 
       def "Sum" $
         doc "The unlabeled equivalent of an Injection term" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "index">: int32,
           "size">: int32,
-          "term">: core "Term" @@ "m"],
+          "term">: core "Term" @@ "a"],
 
       def "Term" $
         doc "A data term" $
-        lambda "m" $ union [
+        lambda "a" $ union [
           "annotated">:
             doc "A term annotated with metadata" $
-            core "Annotated" @@ (core "Term" @@ "m") @@ "m",
+            core "Annotated" @@ (core "Term" @@ "a") @@ "a",
           "application">:
             doc "A function application" $
-            core "Application" @@ "m",
+            core "Application" @@ "a",
           "element">:
             doc "An element reference" $
             core "Name",
           "function">:
             doc "A function term" $
-            core "Function" @@ "m",
+            core "Function" @@ "a",
           "let">:
-            core "Let" @@ "m",
+            core "Let" @@ "a",
           "list">:
             doc "A list" $
-            list $ core "Term" @@ "m",
+            list $ core "Term" @@ "a",
           -- TODO: list elimination
           "literal">:
             doc "A literal value" $
             core "Literal",
           "map">:
             doc "A map of keys to values" $
-            Types.map (core "Term" @@ "m") (core "Term" @@ "m"),
+            Types.map (core "Term" @@ "a") (core "Term" @@ "a"),
           "optional">:
             doc "An optional value" $
-            optional $ core "Term" @@ "m",
+            optional $ core "Term" @@ "a",
           "product">:
             doc "A tuple" $
-            list (core "Term" @@ "m"),
+            list (core "Term" @@ "a"),
           "record">:
             doc "A record term" $
-            core "Record" @@ "m",
+            core "Record" @@ "a",
           "set">:
             doc "A set of values" $
-            set $ core "Term" @@ "m",
+            set $ core "Term" @@ "a",
           "stream">:
             doc "An infinite stream of terms" $
-            core "Stream" @@ "m",
+            core "Stream" @@ "a",
           "sum">:
             doc "A variant tuple" $
-            core "Sum" @@ "m",
+            core "Sum" @@ "a",
           "union">:
             doc "An injection; an instance of a union type" $
-            core "Injection" @@ "m",
+            core "Injection" @@ "a",
           "variable">:
             doc "A variable reference" $
             core "Name",
           "wrap">:
-            core "Nominal" @@ (core "Term" @@ "m")],
+            core "Nominal" @@ (core "Term" @@ "a")],
 
       def "Type" $
         doc "A data type" $
-        lambda "m" $ union [
+        lambda "a" $ union [
           "annotated">:
             doc "A type annotated with metadata" $
-            core "Annotated" @@ (core "Type" @@ "m") @@ "m",
-          "application">: core "ApplicationType" @@ "m",
-          "element">: core "Type" @@ "m",
-          "function">: core "FunctionType" @@ "m",
-          "lambda">: core "LambdaType" @@ "m",
-          "list">: core "Type" @@ "m",
+            core "Annotated" @@ (core "Type" @@ "a") @@ "a",
+          "application">: core "ApplicationType" @@ "a",
+          "element">: core "Type" @@ "a",
+          "function">: core "FunctionType" @@ "a",
+          "lambda">: core "LambdaType" @@ "a",
+          "list">: core "Type" @@ "a",
           "literal">: core "LiteralType",
-          "map">: core "MapType" @@ "m",
-          "optional">: core "Type" @@ "m",
-          "product">: list (core "Type" @@ "m"),
-          "record">: core "RowType" @@ "m",
-          "set">: core "Type" @@ "m",
-          "stream">: core "Type" @@ "m",
-          "sum">: list (core "Type" @@ "m"),
-          "union">: core "RowType" @@ "m",
+          "map">: core "MapType" @@ "a",
+          "optional">: core "Type" @@ "a",
+          "product">: list (core "Type" @@ "a"),
+          "record">: core "RowType" @@ "a",
+          "set">: core "Type" @@ "a",
+          "stream">: core "Type" @@ "a",
+          "sum">: list (core "Type" @@ "a"),
+          "union">: core "RowType" @@ "a",
           "variable">: core "Name",
           "wrap">: core "Name"],
 
       def "Injection" $
         doc "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()" $
-        lambda "m" $ record [
+        lambda "a" $ record [
           "typeName">: core "Name",
-          "field">: core "Field" @@ "m"],
+          "field">: core "Field" @@ "a"],
 
       def "UnitType" $
         doc "An empty record type as a canonical unit type" $

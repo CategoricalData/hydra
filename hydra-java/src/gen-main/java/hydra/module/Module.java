@@ -3,7 +3,7 @@ package hydra.module;
 /**
  * A logical collection of elements in the same namespace, having dependencies on zero or more other modules
  */
-public class Module<M> {
+public class Module<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/module.Module");
   
   /**
@@ -14,19 +14,19 @@ public class Module<M> {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.graph.Element<M>> elements;
+  public final java.util.List<hydra.graph.Element<A>> elements;
   
   /**
    * Any additional modules this one has a direct dependency upon
    */
-  public final java.util.List<hydra.module.Module<M>> dependencies;
+  public final java.util.List<hydra.module.Module<A>> dependencies;
   
   /**
    * An optional human-readable description of the module
    */
   public final java.util.Optional<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<M>> elements, java.util.List<hydra.module.Module<M>> dependencies, java.util.Optional<String> description) {
+  public Module (hydra.module.Namespace namespace, java.util.List<hydra.graph.Element<A>> elements, java.util.List<hydra.module.Module<A>> dependencies, java.util.Optional<String> description) {
     this.namespace = namespace;
     this.elements = elements;
     this.dependencies = dependencies;
@@ -51,11 +51,11 @@ public class Module<M> {
     return new Module(namespace, elements, dependencies, description);
   }
   
-  public Module withElements(java.util.List<hydra.graph.Element<M>> elements) {
+  public Module withElements(java.util.List<hydra.graph.Element<A>> elements) {
     return new Module(namespace, elements, dependencies, description);
   }
   
-  public Module withDependencies(java.util.List<hydra.module.Module<M>> dependencies) {
+  public Module withDependencies(java.util.List<hydra.module.Module<A>> dependencies) {
     return new Module(namespace, elements, dependencies, description);
   }
   

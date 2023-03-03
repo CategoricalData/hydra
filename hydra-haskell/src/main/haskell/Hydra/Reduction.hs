@@ -17,7 +17,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-alphaConvert :: Ord m => Name -> Term m -> Term m -> Term m
+alphaConvert :: Ord a => Name -> Term a -> Term a -> Term a
 alphaConvert vold tnew = rewriteTerm rewrite id
   where
     rewrite recurse term = case term of
@@ -35,7 +35,7 @@ countPrimitiveInvocations = True
 --   This function does not assume that term to be evaluated is in a normal form,
 --   and will provide an informative error message if evaluation fails.
 --   Type checking is assumed to have already occurred.
-betaReduceTerm :: (Ord m, Show m) => Term m -> GraphFlow m (Term m)
+betaReduceTerm :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
 betaReduceTerm = reduce M.empty
   where
     reduce bindings term = do
@@ -136,9 +136,9 @@ betaReduceTerm = reduce M.empty
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: (Ord m, Show m) => Type m -> GraphFlow m (Type m)
+betaReduceType :: (Ord a, Show a) => Type a -> GraphFlow a (Type a)
 betaReduceType typ = do
-    cx <- getState :: GraphFlow m (Graph m)
+    cx <- getState :: GraphFlow a (Graph a)
     return $ rewriteType (mapExpr cx) id typ
   where
     mapExpr cx rec t = case rec t of
@@ -158,7 +158,7 @@ betaReduceType typ = do
 --   and
 --     ((\x.e1) e2) = e1[x/e2]
 --  These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
-contractTerm :: Ord m => Term m -> Term m
+contractTerm :: Ord a => Term a -> Term a
 contractTerm = rewriteTerm rewrite id
   where
     rewrite recurse term = case rec of
@@ -172,7 +172,7 @@ contractTerm = rewriteTerm rewrite id
         rec = recurse term
 
 -- Note: unused / untested
-etaReduceTerm :: Term m -> Term m
+etaReduceTerm :: Term a -> Term a
 etaReduceTerm term = case term of
     TermAnnotated (Annotated term1 ann) -> TermAnnotated (Annotated (etaReduceTerm term1) ann)
     TermFunction (FunctionLambda l) -> reduceLambda l
@@ -192,11 +192,11 @@ etaReduceTerm term = case term of
     noChange = term
 
 -- | Whether a term is closed, i.e. represents a complete program
-termIsClosed :: Term m -> Bool
+termIsClosed :: Term a -> Bool
 termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term has been fully reduced to a "value"
-termIsValue :: Graph m -> Term m -> Bool
+termIsValue :: Graph a -> Term a -> Bool
 termIsValue cx term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True

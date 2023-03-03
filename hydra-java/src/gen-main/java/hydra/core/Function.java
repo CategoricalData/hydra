@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A function
  */
-public abstract class Function<M> {
+public abstract class Function<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Function");
   
   private Function () {
@@ -41,13 +41,13 @@ public abstract class Function<M> {
   /**
    * An elimination for any of a few term variants
    */
-  public static final class Elimination<M> extends hydra.core.Function<M> {
+  public static final class Elimination<A> extends hydra.core.Function<A> {
     /**
      * An elimination for any of a few term variants
      */
-    public final hydra.core.Elimination<M> value;
+    public final hydra.core.Elimination<A> value;
     
-    public Elimination (hydra.core.Elimination<M> value) {
+    public Elimination (hydra.core.Elimination<A> value) {
       this.value = value;
     }
     
@@ -74,13 +74,13 @@ public abstract class Function<M> {
   /**
    * A function abstraction (lambda)
    */
-  public static final class Lambda<M> extends hydra.core.Function<M> {
+  public static final class Lambda<A> extends hydra.core.Function<A> {
     /**
      * A function abstraction (lambda)
      */
-    public final hydra.core.Lambda<M> value;
+    public final hydra.core.Lambda<A> value;
     
-    public Lambda (hydra.core.Lambda<M> value) {
+    public Lambda (hydra.core.Lambda<A> value) {
       this.value = value;
     }
     
@@ -107,7 +107,7 @@ public abstract class Function<M> {
   /**
    * A reference to a built-in (primitive) function
    */
-  public static final class Primitive<M> extends hydra.core.Function<M> {
+  public static final class Primitive<A> extends hydra.core.Function<A> {
     /**
      * A reference to a built-in (primitive) function
      */

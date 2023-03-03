@@ -19,7 +19,7 @@ import Control.Monad
 import qualified System.IO as IO
 
 
-type GraphFlow m = Flow (Graph m)
+type GraphFlow a = Flow (Graph a)
 
 instance Functor (Flow s) where
   fmap = liftM

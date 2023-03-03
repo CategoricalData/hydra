@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A function abstraction (lambda)
  */
-public class Lambda<M> {
+public class Lambda<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Lambda");
   
   /**
@@ -14,9 +14,9 @@ public class Lambda<M> {
   /**
    * The body of the lambda
    */
-  public final hydra.core.Term<M> body;
+  public final hydra.core.Term<A> body;
   
-  public Lambda (hydra.core.Name parameter, hydra.core.Term<M> body) {
+  public Lambda (hydra.core.Name parameter, hydra.core.Term<A> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -39,7 +39,7 @@ public class Lambda<M> {
     return new Lambda(parameter, body);
   }
   
-  public Lambda withBody(hydra.core.Term<M> body) {
+  public Lambda withBody(hydra.core.Term<A> body) {
     return new Lambda(parameter, body);
   }
 }

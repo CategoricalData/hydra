@@ -22,7 +22,7 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-literalAdapter :: LiteralType -> Flow (AdapterContext m) (SymmetricAdapter (Graph m) LiteralType Literal)
+literalAdapter :: LiteralType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) LiteralType Literal)
 literalAdapter lt = do
     acx <- getState
     chooseAdapter (alts acx) (supported acx) describeLiteralType lt
@@ -98,7 +98,7 @@ disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
   ++ if lossy then " (lossy)" else ""
 
-floatAdapter :: FloatType -> Flow (AdapterContext m) (SymmetricAdapter (Graph m) FloatType FloatValue)
+floatAdapter :: FloatType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) FloatType FloatValue)
 floatAdapter ft = do
     acx <- getState
     let supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget acx
@@ -115,7 +115,7 @@ floatAdapter ft = do
             step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
-integerAdapter :: IntegerType -> Flow (AdapterContext m) (SymmetricAdapter (Graph m) IntegerType IntegerValue)
+integerAdapter :: IntegerType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) IntegerType IntegerValue)
 integerAdapter it = do
     acx <- getState
     let supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget acx

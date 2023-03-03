@@ -11,7 +11,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-datatype :: Namespace -> String -> Type m -> Element m
+datatype :: Namespace -> String -> Type a -> Element a
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
@@ -38,19 +38,19 @@ bootstrapGraph = Graph {
   graphAnnotations = kvAnnotationClass,
   graphSchema = Nothing}
 
-nsref :: Namespace -> String -> Type m
+nsref :: Namespace -> String -> Type a
 nsref ns = Types.wrap . qualify ns . Name
 
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-termElement :: Name -> Type m -> Term m -> Element m
+termElement :: Name -> Type a -> Term a -> Element a
 termElement name typ term = Element {
   elementName = name,
   elementSchema = epsilonEncodeType typ,
   elementData = term}
 
-typeElement :: Name -> Type m -> Element m
+typeElement :: Name -> Type a -> Element a
 typeElement name typ = Element {
   elementName = name,
   elementSchema = TermElement _Type,

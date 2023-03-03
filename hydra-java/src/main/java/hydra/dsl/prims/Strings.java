@@ -4,23 +4,23 @@ import hydra.core.Term;
 import hydra.lib.strings.*;
 
 public interface Strings {
-    static <M> Term<M> cat() {
+    static <A> Term<A> cat() {
         return new Cat().term();
     }
 
-    static <M> Term<M> length() {
+    static <A> Term<A> length() {
         return new Length().term();
     }
 
-    static <M> Term<M> splitOn() {
+    static <A> Term<A> splitOn() {
         return new SplitOn().term();
     }
 
-    static <M> Term<M> toLower() {
+    static <A> Term<A> toLower() {
         return new ToLower().term();
     }
 
-    static <M> Term<M> toUpper() {
+    static <A> Term<A> toUpper() {
         return new ToUpper().term();
     }
 }

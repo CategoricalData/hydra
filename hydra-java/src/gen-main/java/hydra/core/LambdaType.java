@@ -3,7 +3,7 @@ package hydra.core;
 /**
  * A type abstraction; the type-level analog of a lambda term
  */
-public class LambdaType<M> {
+public class LambdaType<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.LambdaType");
   
   /**
@@ -14,9 +14,9 @@ public class LambdaType<M> {
   /**
    * The body of the lambda
    */
-  public final hydra.core.Type<M> body;
+  public final hydra.core.Type<A> body;
   
-  public LambdaType (hydra.core.Name parameter, hydra.core.Type<M> body) {
+  public LambdaType (hydra.core.Name parameter, hydra.core.Type<A> body) {
     this.parameter = parameter;
     this.body = body;
   }
@@ -39,7 +39,7 @@ public class LambdaType<M> {
     return new LambdaType(parameter, body);
   }
   
-  public LambdaType withBody(hydra.core.Type<M> body) {
+  public LambdaType withBody(hydra.core.Type<A> body) {
     return new LambdaType(parameter, body);
   }
 }

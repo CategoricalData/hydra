@@ -3,16 +3,16 @@ package hydra.core;
 /**
  * The unlabeled equivalent of an Injection term
  */
-public class Sum<M> {
+public class Sum<A> {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/core.Sum");
   
   public final Integer index;
   
   public final Integer size;
   
-  public final hydra.core.Term<M> term;
+  public final hydra.core.Term<A> term;
   
-  public Sum (Integer index, Integer size, hydra.core.Term<M> term) {
+  public Sum (Integer index, Integer size, hydra.core.Term<A> term) {
     this.index = index;
     this.size = size;
     this.term = term;
@@ -40,7 +40,7 @@ public class Sum<M> {
     return new Sum(index, size, term);
   }
   
-  public Sum withTerm(hydra.core.Term<M> term) {
+  public Sum withTerm(hydra.core.Term<A> term) {
     return new Sum(index, size, term);
   }
 }
