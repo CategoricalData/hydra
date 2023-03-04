@@ -28,8 +28,8 @@ termJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Term
 termStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 termStringCoder = Coder mout min
   where
-    mout term = valueToString <$> coderEncode termJsonCoder term
-    min s = case stringToValue s of
+    mout term = jsonValueToString <$> coderEncode termJsonCoder term
+    min s = case stringToJsonValue s of
       Left msg -> fail $ "failed to parse JSON value: " ++ msg
       Right v -> coderDecode termJsonCoder v
 
@@ -44,7 +44,7 @@ typeJsonCoder = fromFlow hydraCore $ jsonCoder $ Types.wrap _Type
 typeStringCoder :: Coder (Graph Kv) (Graph Kv) (Term Kv) String
 typeStringCoder = Coder mout min
   where
-    mout term = valueToString <$> coderEncode typeJsonCoder term
-    min s = case stringToValue s of
+    mout term = jsonValueToString <$> coderEncode typeJsonCoder term
+    min s = case stringToJsonValue s of
       Left msg -> fail $ "failed to parse as JSON value: " ++ msg
       Right v -> coderDecode typeJsonCoder v

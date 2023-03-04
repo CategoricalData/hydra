@@ -20,58 +20,59 @@ import qualified Data.Char as C
 import qualified Data.String as String
 
 
-aesonToBytes :: A.Value -> BS.ByteString
-aesonToBytes = A.encode
+aesonValueToBytes :: A.Value -> BS.ByteString
+aesonValueToBytes = A.encode
 
-aesonToValue :: A.Value -> Json.Value
-aesonToValue v = case v of
+aesonValueToJsonValue :: A.Value -> Json.Value
+aesonValueToJsonValue v = case v of
   A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
     where
-      mapPair (k, v) = (AK.toString k, aesonToValue v)
-  A.Array a -> Json.ValueArray (aesonToValue <$> V.toList a)
+      mapPair (k, v) = (AK.toString k, aesonValueToJsonValue v)
+  A.Array a -> Json.ValueArray (aesonValueToJsonValue <$> V.toList a)
   A.String t -> Json.ValueString $ T.unpack t
   A.Number s -> Json.ValueNumber $ SC.toRealFloat s
   A.Bool b -> Json.ValueBoolean b
   A.Null -> Json.ValueNull
 
-bytesToAeson :: BS.ByteString -> Either String A.Value
-bytesToAeson = A.eitherDecode
+bytesToAesonValue :: BS.ByteString -> Either String A.Value
+bytesToAesonValue = A.eitherDecode
 
-bytesToValue :: BS.ByteString -> Either String Json.Value
-bytesToValue bs = aesonToValue <$> bytesToAeson bs
+bytesToJsonValue :: BS.ByteString -> Either String Json.Value
+bytesToJsonValue bs = aesonValueToJsonValue <$> bytesToAesonValue bs
 
-jsonSerde :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
-jsonSerde typ = do
+jsonByteStringCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
+jsonByteStringCoder typ = do
   coder <- jsonCoder typ
   return Coder {
-    coderEncode = fmap valueToBytes . coderEncode coder,
-    coderDecode = \bs -> case bytesToValue bs of
+    coderEncode = fmap jsonValueToBytes . coderEncode coder,
+    coderDecode = \bs -> case bytesToJsonValue bs of
         Left msg -> fail $ "JSON parsing failed: " ++ msg
         Right v -> coderDecode coder v}
 
-jsonSerdeStr :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
-jsonSerdeStr typ = do
-  serde <- jsonSerde typ
+-- | A convenience which maps typed terms to and from pretty-printed JSON strings, as opposed to JSON objects
+jsonStringCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
+jsonStringCoder typ = do
+  serde <- jsonByteStringCoder typ
   return Coder {
     coderEncode = fmap bytesToString . coderEncode serde,
     coderDecode = coderDecode serde . stringToBytes}
 
-stringToValue :: String -> Either String Json.Value
-stringToValue = bytesToValue . stringToBytes
-
-valueToAeson :: Json.Value -> A.Value
-valueToAeson v = case v of
-    Json.ValueArray l -> A.Array $ V.fromList (valueToAeson <$> l)
+jsonValueToAesonValue :: Json.Value -> A.Value
+jsonValueToAesonValue v = case v of
+    Json.ValueArray l -> A.Array $ V.fromList (jsonValueToAesonValue <$> l)
     Json.ValueBoolean b -> A.Bool b
     Json.ValueNull -> A.Null
     Json.ValueNumber d -> A.Number $ SC.fromFloatDigits d
     Json.ValueObject m -> A.Object $ AKM.fromList (mapPair <$> M.toList m)
       where
-        mapPair (k, v) = (AK.fromString k, valueToAeson v)
+        mapPair (k, v) = (AK.fromString k, jsonValueToAesonValue v)
     Json.ValueString s -> A.String $ T.pack s
 
-valueToBytes :: Json.Value -> BS.ByteString
-valueToBytes = aesonToBytes . valueToAeson
+jsonValueToBytes :: Json.Value -> BS.ByteString
+jsonValueToBytes = aesonValueToBytes . jsonValueToAesonValue
 
-valueToString :: Json.Value -> String
-valueToString = bytesToString . valueToBytes
+jsonValueToString :: Json.Value -> String
+jsonValueToString = bytesToString . jsonValueToBytes
+
+stringToJsonValue :: String -> Either String Json.Value
+stringToJsonValue = bytesToJsonValue . stringToBytes

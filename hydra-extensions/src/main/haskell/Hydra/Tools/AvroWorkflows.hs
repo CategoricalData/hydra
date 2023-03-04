@@ -99,7 +99,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
 
-    jsonToTarget inFile adapter termRdfizer index payload = case stringToValue payload of
+    jsonToTarget inFile adapter termRdfizer index payload = case stringToJsonValue payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
         Right json -> withState emptyAvroEnvironment $ do
           term <- coderEncode (adapterCoder adapter) json
