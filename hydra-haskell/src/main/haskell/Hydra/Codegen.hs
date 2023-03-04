@@ -4,6 +4,7 @@ module Hydra.Codegen (
   kernelModules,
   langModules,
   mainModules,
+  modulesToGraph,
   testModules,
   writeHaskell,
   writeJava,
