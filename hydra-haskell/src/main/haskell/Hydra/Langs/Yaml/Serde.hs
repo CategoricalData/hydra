@@ -65,16 +65,16 @@ hydraYamlToHsYaml hy = case hy of
 hydraYamlToString :: YM.Node -> String
 hydraYamlToString = bytesToString . hydraYamlToBytes
 
-yamlSerde :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
-yamlSerde typ = do
+yamlByteStringCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) BS.ByteString)
+yamlByteStringCoder typ = do
   coder <- yamlCoder typ
   return Coder {
     coderEncode = fmap hydraYamlToBytes . coderEncode coder,
     coderDecode = bytesToHydraYaml CM.>=> coderDecode coder}
 
-yamlSerdeStr :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
-yamlSerdeStr typ = do
-  serde <- yamlSerde typ
+yamlStringCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) String)
+yamlStringCoder typ = do
+  serde <- yamlByteStringCoder typ
   return Coder {
     coderEncode = fmap LB.unpack . coderEncode serde,
     coderDecode = coderDecode serde . LB.pack}
