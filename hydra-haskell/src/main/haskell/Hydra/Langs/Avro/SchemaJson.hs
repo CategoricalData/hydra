@@ -48,9 +48,9 @@ avroSchemaJsonCoder = Coder {
 
 avroSchemaStringCoder :: Coder s s Avro.Schema String
 avroSchemaStringCoder = Coder {
-  coderEncode = \schema -> valueToString <$> coderEncode avroSchemaJsonCoder schema,
+  coderEncode = \schema -> jsonValueToString <$> coderEncode avroSchemaJsonCoder schema,
   coderDecode = \s -> do
-    json <- case stringToValue s of
+    json <- case stringToJsonValue s of
       Left msg -> fail $ "failed to parse JSON: " ++ msg
       Right j -> pure j
     coderDecode avroSchemaJsonCoder json}

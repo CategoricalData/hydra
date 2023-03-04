@@ -79,7 +79,7 @@ osvInstanceContext = emptyInstanceContext osvContext
 osvJsonToNtriples :: Coder (Graph Kv) (Graph Kv) (Term Kv) Json.Value -> FilePath -> FilePath -> IO ()
 osvJsonToNtriples coder inFile outFile = do
     contents <- readFile inFile
-    case stringToValue contents of
+    case stringToJsonValue contents of
       Left msg -> fail $ "Failed to read JSON value in file " ++ inFile ++ ": " ++ msg
       Right v -> do
         let v' = rewriteJsonFieldCase v
