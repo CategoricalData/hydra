@@ -111,3 +111,4 @@ termCoder typ = case stripType typ of
       fromString cx s = Terms.string $ if isStringKey cx then s else read s
       isStringKey cx = stripType kt == Types.string
   TypeRecord rt -> recordCoder rt
+  _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)
