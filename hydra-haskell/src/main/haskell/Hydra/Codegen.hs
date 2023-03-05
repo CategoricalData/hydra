@@ -1,6 +1,7 @@
 -- | Entry point for Hydra code generation utilities
 
 module Hydra.Codegen (
+  hydraKernel,
   kernelModules,
   langModules,
   mainModules,
