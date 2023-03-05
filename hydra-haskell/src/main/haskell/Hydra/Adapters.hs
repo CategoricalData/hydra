@@ -27,8 +27,8 @@ import qualified Data.Set as S
 
 adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> GraphFlow a (Type a)
 adaptType targetLang t = do
-    cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage targetLang
+    g <- getState
+    let acx = AdapterContext g hydraCoreLanguage targetLang
     ad <- withState acx $ termAdapter t
     return $ adapterTarget ad
 
@@ -38,8 +38,8 @@ constructCoder :: (Ord a, Read a, Show a)
   -> Type a
   -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) c)
 constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ) $ do
-    cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage lang
+    g <- getState
+    let acx = AdapterContext g hydraCoreLanguage lang
     adapter <- withState acx $ termAdapter typ
     coder <- termCoder $ adapterTarget adapter
     return $ composeCoders (adapterCoder adapter) coder
