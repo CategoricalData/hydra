@@ -56,6 +56,16 @@ requirePrimitive fn = do
   where
     err = fail $ "no such primitive function: " ++ unName fn
 
+-- TODO: distinguish between lambda-bound and let-bound variables
+resolveTerm :: Name -> GraphFlow a (Maybe (Term a))
+resolveTerm name = do
+    g <- getState
+    Y.maybe (pure Nothing) recurse $ M.lookup name $ graphElements g
+  where
+    recurse el = case stripTerm (elementData el) of
+      TermVariable name' -> resolveTerm name'
+      _ -> pure $ Just $ elementData el
+      
 -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
 schemaContext :: Graph a -> Graph a
 schemaContext g = Y.fromMaybe g (graphSchema g)
