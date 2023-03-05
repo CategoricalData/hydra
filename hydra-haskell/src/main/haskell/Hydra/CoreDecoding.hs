@@ -18,6 +18,7 @@ module Hydra.CoreDecoding (
   requireType,
   requireUnionType,
   requireWrappedType,
+  resolveType,
   typeDependencies,
   typeDependencyNames,
   ) where
@@ -202,6 +203,7 @@ requireRowType label infer getter name = do
       TypeLambda (LambdaType _ body) -> rawType body -- Note: throwing away quantification here
       _ -> t
 
+-- TODO: this should operate on the primary graph, not the schema graph
 requireType :: Show a => Name -> GraphFlow a (Type a)
 requireType name = withTrace "require type" $ do
   el <- requireElement name
@@ -214,6 +216,13 @@ requireUnionType infer = requireRowType "union" infer $ \t -> case t of
 
 requireWrappedType :: Show a => Name -> GraphFlow a (Type a)
 requireWrappedType name = withSchemaContext $ requireType name
+
+resolveType :: Show a => Name -> GraphFlow a (Maybe (Type a))
+resolveType name = withSchemaContext $ do
+    mterm <- resolveTerm name
+    case mterm of
+      Nothing -> pure Nothing
+      Just t -> Just <$> epsilonDecodeType t
 
 typeDependencies :: Show a => Name -> GraphFlow a (M.Map Name (Type a))
 typeDependencies name = deps (S.fromList [name]) M.empty
