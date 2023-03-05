@@ -62,31 +62,31 @@ elimination :: Elimination a -> Term a
 elimination = TermFunction . FunctionElimination
 
 expectBinary :: Show a => Term a -> Flow s String
-expectBinary = expectLiteral Literals.expectBinary
+expectBinary t = expectLiteral t >>= Literals.expectBinary
 
 expectBoolean :: Show a => Term a -> Flow s Bool
-expectBoolean = expectLiteral Literals.expectBoolean
+expectBoolean t = expectLiteral t >>= Literals.expectBoolean
 
 expectFloat32 :: Show a => Term a -> Flow s Float
-expectFloat32 = expectLiteral Literals.expectFloat32
+expectFloat32 t = expectLiteral t >>= Literals.expectFloat32
 
 expectFloat64 :: Show a => Term a -> Flow s Double
-expectFloat64 = expectLiteral Literals.expectFloat64
+expectFloat64 t = expectLiteral t >>= Literals.expectFloat64
 
 expectInt32 :: Show a => Term a -> Flow s Int
-expectInt32 = expectLiteral Literals.expectInt32
+expectInt32 t = expectLiteral t >>= Literals.expectInt32
 
 expectInt64 :: Show a => Term a -> Flow s Integer
-expectInt64 = expectLiteral Literals.expectInt64
+expectInt64 t = expectLiteral t >>= Literals.expectInt64
 
 expectList :: Show a => (Term a -> Flow s x) -> Term a -> Flow s [x]
 expectList f term = case stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
 
-expectLiteral :: Show a => (Literal -> Flow s x) -> Term a -> Flow s x
-expectLiteral expect term = case stripTerm term of
-  TermLiteral lit -> expect lit
+expectLiteral :: Show a => Term a -> Flow s Literal
+expectLiteral term = case stripTerm term of
+  TermLiteral lit -> pure lit
   _ -> unexpected "literal" term
 
 expectMap :: (Ord k, Show a) => (Term a -> Flow s k) -> (Term a -> Flow s v) -> Term a -> Flow s (M.Map k v)
@@ -122,7 +122,7 @@ expectSet f term = case stripTerm term of
   _ -> unexpected "set" term
 
 expectString :: Show a => Term a -> Flow s String
-expectString = expectLiteral Literals.expectString
+expectString t = expectLiteral t >>= Literals.expectString
 
 expectUnion :: Show a => Term a -> Flow s (Field a)
 expectUnion term = case stripTerm term of
