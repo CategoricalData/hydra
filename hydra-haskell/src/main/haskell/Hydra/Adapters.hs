@@ -25,6 +25,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+-- | Given a target language and a source type, find the target type to which the latter will be adapted.
 adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> GraphFlow a (Type a)
 adaptType targetLang t = do
     g <- getState
@@ -32,6 +33,9 @@ adaptType targetLang t = do
     ad <- withState acx $ termAdapter t
     return $ adapterTarget ad
 
+-- | Given a target language, a unidirectional last-mile encoding, and a source type,
+--   construct a unidirectional adapting coder for terms of that type. Terms will be rewritten according to the type and
+--   according to the constraints of the target language, then carried by the last mile into the final representation
 constructCoder :: (Ord a, Read a, Show a)
   => Language a
   -> (Term a -> GraphFlow a c)
@@ -46,6 +50,8 @@ constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ
   where
     termCoder _ = pure $ unidirectionalCoder encodeTerm
 
+-- | Given a target language, a unidirectional last mile encoding, and an intermediate helper function,
+--   transform a given mile into a target representation
 transformModule :: (Ord a, Read a, Show a)
   => Language a
   -> (Term a -> GraphFlow a e)

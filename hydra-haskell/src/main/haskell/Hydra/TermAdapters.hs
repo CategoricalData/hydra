@@ -20,6 +20,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Monads
 import Hydra.Reduction
+import Hydra.Rewriting
 import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
 import qualified Hydra.Dsl.Types as Types
@@ -42,18 +43,13 @@ _record = FieldName "record"
 
 dereferenceNominal :: (Ord a, Read a, Show a) => TypeAdapter a
 dereferenceNominal t@(TypeWrap name) = do
-  typ <- withEvaluationContext $ do
+  typ <- withGraphContext $ do
     -- Note: we just assume the schema term is a reference to hydra/core.Type
     withTrace ("dereference nominal type " ++ unName name) $ do
       el <- withSchemaContext $ requireElement name
       epsilonDecodeType $ elementData el
   ad <- termAdapter typ
   return ad { adapterSource = t }
-
-dropAnnotation :: (Ord a, Read a, Show a) => TypeAdapter a
-dropAnnotation t@(TypeAnnotated (Annotated t' _)) = do
-  ad <- termAdapter t'
-  return $ Adapter False t (adapterTarget ad) $ Coder pure pure
 
 elementToString :: TypeAdapter a
 elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder encode decode
@@ -156,22 +152,16 @@ optionalToList t@(TypeOptional ot) = do
       pure Nothing
       else Just <$> coderDecode (adapterCoder ad) (L.head l)}
 
---passAnnotated :: (Ord a, Read a, Show a) => Type a -> TypeAdapter a
-passAnnotated :: (Ord a, Read a, Show a) => Type a -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) (Type a) v)
+passAnnotated :: (Ord a, Read a, Show a) => TypeAdapter a
 passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
   ad <- termAdapter at
-  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $ \dir term -> pure term
-
---passAnnotated :: (Ord a, Read a, Show a) => Type a -> TypeAdapter a
---passAnnotated t@(TypeAnnotated (Annotated at ann)) = do
---  ad <- termAdapter at
---  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
---    \dir term -> encodeDecode dir (adapterCoder ad) term
+  return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ bidirectional $
+    \dir term -> encodeDecode dir (adapterCoder ad) term
 
 -- TODO: only tested for type mappings; not yet for types+terms
 passApplication :: (Ord a, Read a, Show a) => TypeAdapter a
 passApplication t = do
-    reduced <- withEvaluationContext $ betaReduceType t
+    reduced <- withGraphContext $ betaReduceType t
     ad <- termAdapter reduced
     return $ Adapter (adapterIsLossy ad) t reduced $ bidirectional $
       \dir term -> encodeDecode dir (adapterCoder ad) term
@@ -182,15 +172,14 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
     codAd <- termAdapter cod
     caseAds <- case stripType dom of
       TypeUnion rt -> M.fromList . L.zip (fieldTypeName <$> rowTypeFields rt)
-        <$> CM.mapM fieldAdapter (rowTypeFields rt)
+        <$> CM.mapM (\f -> fieldAdapter $ FieldType (fieldTypeName f) (TypeFunction $ FunctionType (fieldTypeType f) cod)) (rowTypeFields rt)
       _ -> pure M.empty
     optionAd <- case stripType dom of
       TypeOptional ot -> Just <$> termAdapter (Types.function ot cod)
       _ -> pure Nothing
     let lossy = adapterIsLossy codAd || or (adapterIsLossy . snd <$> M.toList caseAds)
-    let dom' = adapterTarget domAd
-    let cod' = adapterTarget codAd
-    return $ Adapter lossy t (Types.function dom' cod')
+    let target = Types.function (adapterTarget domAd) (adapterTarget codAd)
+    return $ Adapter lossy t target
       $ bidirectional $ \dir term -> case stripTerm term of
         TermFunction f -> TermFunction <$> case f of
           FunctionElimination e -> FunctionElimination <$> case e of
@@ -213,10 +202,12 @@ passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
   return $ Adapter (adapterIsLossy ad) t (Types.lambda v $ adapterTarget ad)
     $ bidirectional $ \dir term -> encodeDecode dir (adapterCoder ad) term
 
-passLiteral :: TypeAdapter a
+passLiteral :: (Ord a, Show a) => TypeAdapter a
 passLiteral (TypeLiteral at) = do
   ad <- literalAdapter at
-  let step = bidirectional $ \dir (TermLiteral av) -> literal <$> encodeDecode dir (adapterCoder ad) av
+  let step = bidirectional $ \dir term -> do
+        l <- expectLiteral term -- TODO: restore me
+        literal <$> encodeDecode dir (adapterCoder ad) l
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
 passList :: (Ord a, Read a, Show a) => TypeAdapter a
@@ -299,7 +290,9 @@ simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
 termAdapter :: (Ord a, Read a, Show a) => TypeAdapter a
 termAdapter typ = do
    acx <- getState
-   chooseAdapter (alts acx) (supported acx) describeType typ
+   -- TODO: this is a workaround for lambda-bound variables. We should beta-reduce types before they are adapted.
+   typ' <- Y.fromMaybe typ <$> (withGraphContext $ resolveType typ)
+   chooseAdapter (alts acx) (supported acx) describeType typ'
   where
     alts acx t = (\c -> c t) <$> if variantIsSupported acx t
       then case typeVariant t of
@@ -318,7 +311,7 @@ termAdapter typ = do
         TypeVariantUnion -> [passUnion]
         _ -> []
       else case typeVariant t of
-        TypeVariantAnnotated -> [dropAnnotation]
+        TypeVariantAnnotated -> [passAnnotated]
         TypeVariantApplication -> [simplifyApplication]
         TypeVariantElement -> [elementToString]
         TypeVariantFunction -> [functionToUnion]
@@ -371,7 +364,7 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t
 
-withEvaluationContext :: GraphFlow a x -> Flow (AdapterContext a) x
-withEvaluationContext f = do
+withGraphContext :: GraphFlow a x -> Flow (AdapterContext a) x
+withGraphContext f = do
   acx <- getState
   withState (adapterContextGraph acx) f

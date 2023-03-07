@@ -17,10 +17,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import Hydra.Rewriting (removeTypeAnnotations, removeTermAnnotations)
 
 
 constantDecls :: Graph a -> Namespaces -> Name -> Type a -> [H.DeclarationWithComments]
-constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
+constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     then toDecl (Name "hydra/core.Name") nameDecl:(toDecl (Name "hydra/core.FieldName") <$> fieldDecls)
     else []
   where
@@ -38,7 +39,7 @@ constantDecls cx namespaces name@(Name nm) typ = if useCoreImport
       TypeRecord rt -> rowTypeFields rt
       TypeUnion rt -> rowTypeFields rt
       _ -> []
-    fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType cx typ)
+    fieldDecls = toConstant <$> fieldsOf (snd $ unpackLambdaType g typ)
     toConstant (FieldType (FieldName fname) _) = ("_" ++ lname ++ "_" ++ fname, fname)
 
 constructModule :: (Ord a, Read a, Show a)
@@ -46,14 +47,14 @@ constructModule :: (Ord a, Read a, Show a)
   -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) H.Expression)
   -> [(Element a, TypedTerm a)] -> GraphFlow a H.Module
 constructModule mod coders pairs = do
-    cx <- getState
-    decls <- L.concat <$> CM.mapM (createDeclarations cx) pairs
+    g <- getState
+    decls <- L.concat <$> CM.mapM (createDeclarations g) pairs
     let mc = moduleDescription mod
     return $ H.Module (Just $ H.ModuleHead mc (importName $ h $ moduleNamespace mod) []) imports decls
   where
     h (Namespace name) = name
 
-    createDeclarations cx pair@(el, TypedTerm typ term) = if isType typ
+    createDeclarations g pair@(el, TypedTerm typ term) = if isType typ
       then toTypeDeclarations namespaces el term
       else do
         d <- toDataDeclaration coders namespaces pair
@@ -246,6 +247,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
             (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
         _ -> vb
 
+    -- toDecl hname term coder bindings = withTrace ("encoding term of type " ++ show (removeTypeAnnotations typ) ++ " ############ term: " ++ show (removeTermAnnotations term)) $ case stripTerm term of
     toDecl hname term coder bindings = case stripTerm term of
       TermLet (Let bindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
@@ -267,14 +269,14 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         let decl = H.DeclarationTypedBinding $ H.TypedBinding
                     (H.TypeSignature hname htype)
                     (rewriteValueBinding vb)
-        cx <- getState
-        comments <- annotationClassTermDescription (graphAnnotations cx) term
+        g <- getState
+        comments <- annotationClassTermDescription (graphAnnotations g) term
         return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord a, Read a, Show a)
   => Namespaces -> Element a -> Term a -> GraphFlow a [H.DeclarationWithComments]
-toTypeDeclarations namespaces el term = do
-    cx <- getState
+toTypeDeclarations namespaces el term = withTrace ("element " ++ unName (elementName el)) $ do
+    g <- getState
     let lname = localNameOfEager $ elementName el
     let hname = simpleName lname
     t <- epsilonDecodeType term
@@ -282,7 +284,7 @@ toTypeDeclarations namespaces el term = do
     let deriv = H.Deriving $ if isSer
                   then rawName <$> ["Eq", "Ord", "Read", "Show"]
                   else []
-    let (vars, t') = unpackLambdaType cx t
+    let (vars, t') = unpackLambdaType g t
     let hd = declHead hname $ L.reverse vars
     decl <- case stripType t' of
       TypeRecord rt -> do
@@ -298,8 +300,8 @@ toTypeDeclarations namespaces el term = do
         else do
           htype <- encodeAdaptedType namespaces t
           return $ H.DeclarationType (H.TypeDeclaration hd htype)
-    comments <- annotationClassTermDescription (graphAnnotations cx) term
-    return $ [H.DeclarationWithComments decl comments] ++ constantDecls cx namespaces (elementName el) t
+    comments <- annotationClassTermDescription (graphAnnotations g) term
+    return $ [H.DeclarationWithComments decl comments] ++ constantDecls g namespaces (elementName el) t
   where
     isSerializable = do
         deps <- typeDependencies (elementName el)
@@ -314,10 +316,10 @@ toTypeDeclarations namespaces el term = do
         H.DeclarationHead_Application (declHead name rest) (H.Variable $ simpleName h)
 
     newtypeCons el typ = do
-        cx <- getState
+        g <- getState
         let hname = simpleName $ newtypeAccessorName $ elementName el
         htype <- encodeAdaptedType namespaces typ
-        comments <- annotationClassTypeDescription (graphAnnotations cx) typ
+        comments <- annotationClassTypeDescription (graphAnnotations g) typ
         let hfield = H.FieldWithComments (H.Field hname htype) comments
         return $ H.ConstructorWithComments
           (H.ConstructorRecord $ H.Constructor_Record (simpleName $ localNameOfEager $ elementName el) [hfield]) Nothing
@@ -329,13 +331,13 @@ toTypeDeclarations namespaces el term = do
         toField (FieldType (FieldName fname) ftype) = do
           let hname = simpleName $ decapitalize lname ++ capitalize fname
           htype <- encodeAdaptedType namespaces ftype
-          cx <- getState
-          comments <- annotationClassTypeDescription (graphAnnotations cx) ftype
+          g <- getState
+          comments <- annotationClassTypeDescription (graphAnnotations g) ftype
           return $ H.FieldWithComments (H.Field hname htype) comments
 
     unionCons lname (FieldType (FieldName fname) ftype) = do
-      cx <- getState
-      comments <- annotationClassTypeDescription (graphAnnotations cx) ftype
+      g <- getState
+      comments <- annotationClassTypeDescription (graphAnnotations g) ftype
       let nm = capitalize lname ++ capitalize fname
       typeList <- if stripType ftype == Types.unit
         then pure []

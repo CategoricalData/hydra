@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 hydraMantleModule :: Module Kv
-hydraMantleModule = Module ns elements [] $
+hydraMantleModule = Module ns elements [hydraCoreModule] $
     Just "A set of types which supplement hydra/core with type variants, graphs, and elements"
   where
     ns = Namespace "hydra/mantle"

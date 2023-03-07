@@ -75,6 +75,35 @@ There is also schema-only support for PDL:
 writePdl coreModules "/tmp/pdl"
 ```
 
+### JSON and YAML generation
+
+JSON and YAML are slightly different than the languages above, in that they are pure data languages, without accompanying syntax for schemas (types).
+Hydra terms can be serialized to either JSON or YAML by first providing a type, then any number of terms corresponding to that type.
+For example:
+
+```haskell
+:module Hydra.Kernel
+import Hydra.Codegen
+import Hydra.Langs.Json.Serde
+import Hydra.Dsl.Terms as Terms
+
+-- Choose a graph in which to execute flows; we will use the Hydra kernel graph.
+g = hydraKernel
+flow = fromFlowIo g
+
+-- Choose a type for terms to encode. In this case, we will be encoding numeric precision values.
+typ = TypeVariable _Precision
+
+-- Create the adapting coder
+coder <- flow $ jsonStringCoder typ
+
+-- Construct an instance of the chosen type. In this case, we construct a precision value, then encode it as a term.
+inst = Terms.inject _Precision (Field _Precision_bits $ Terms.int32 64)
+
+-- Apply the encoding, which turns the term into a JSON string.
+flow (coderEncode coder inst) >>= putStrLn
+```
+
 ## Haskell API
 
 ### Structures

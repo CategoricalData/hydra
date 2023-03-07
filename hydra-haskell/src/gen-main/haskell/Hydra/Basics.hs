@@ -212,7 +212,6 @@ typeVariant typ = ((\x -> case x of
   Core.TypeList _ -> Mantle.TypeVariantList
   Core.TypeLiteral _ -> Mantle.TypeVariantLiteral
   Core.TypeMap _ -> Mantle.TypeVariantMap
-  Core.TypeWrap _ -> Mantle.TypeVariantWrap
   Core.TypeOptional _ -> Mantle.TypeVariantOptional
   Core.TypeProduct _ -> Mantle.TypeVariantProduct
   Core.TypeRecord _ -> Mantle.TypeVariantRecord
@@ -220,7 +219,8 @@ typeVariant typ = ((\x -> case x of
   Core.TypeStream _ -> Mantle.TypeVariantStream
   Core.TypeSum _ -> Mantle.TypeVariantSum
   Core.TypeUnion _ -> Mantle.TypeVariantUnion
-  Core.TypeVariable _ -> Mantle.TypeVariantVariable) typ)
+  Core.TypeVariable _ -> Mantle.TypeVariantVariable
+  Core.TypeWrap _ -> Mantle.TypeVariantWrap) typ)
 
 -- | All type variants, in a canonical order
 typeVariants :: [Mantle.TypeVariant]
