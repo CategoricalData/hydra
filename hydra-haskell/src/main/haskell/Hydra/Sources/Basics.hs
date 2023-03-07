@@ -23,13 +23,13 @@ hydraBasicsModule = Module basicsNs elements [hydraMantleModule] $
       el eliminationVariantsSource,
       el floatTypePrecisionSource,
       el floatTypesSource,
-      el floatValueTypeSource,
+      el floatValueTypeSource, --
       el functionVariantSource,
       el functionVariantsSource,
       el integerTypeIsSignedSource,
       el integerTypePrecisionSource,
       el integerTypesSource,
-      el integerValueTypeSource,
+      el integerValueTypeSource, --
       el literalTypeSource,
       el literalTypeVariantSource,
       el literalVariantSource,
@@ -280,7 +280,6 @@ typeVariantSource = basics "typeVariant" $
       _Type_list        @-> _TypeVariant_list,
       _Type_literal     @-> _TypeVariant_literal,
       _Type_map         @-> _TypeVariant_map,
-      _Type_wrap     @-> _TypeVariant_wrap,
       _Type_optional    @-> _TypeVariant_optional,
       _Type_product     @-> _TypeVariant_product,
       _Type_record      @-> _TypeVariant_record,
@@ -288,7 +287,8 @@ typeVariantSource = basics "typeVariant" $
       _Type_stream      @-> _TypeVariant_stream,
       _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
-      _Type_variable    @-> _TypeVariant_variable])
+      _Type_variable    @-> _TypeVariant_variable,
+      _Type_wrap        @-> _TypeVariant_wrap])
     (var "typ")
 
 typeVariantsSource :: Definition [TypeVariant]

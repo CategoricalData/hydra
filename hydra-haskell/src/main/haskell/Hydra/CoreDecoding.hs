@@ -217,12 +217,14 @@ requireUnionType infer = requireRowType "union" infer $ \t -> case t of
 requireWrappedType :: Show a => Name -> GraphFlow a (Type a)
 requireWrappedType name = withSchemaContext $ requireType name
 
-resolveType :: Show a => Name -> GraphFlow a (Maybe (Type a))
-resolveType name = withSchemaContext $ do
-    mterm <- resolveTerm name
-    case mterm of
-      Nothing -> pure Nothing
-      Just t -> Just <$> epsilonDecodeType t
+resolveType :: Show a => Type a -> GraphFlow a (Maybe (Type a))
+resolveType typ = case stripType typ of
+    TypeVariable name -> withSchemaContext $ do
+      mterm <- resolveTerm name
+      case mterm of
+        Nothing -> pure Nothing
+        Just t -> Just <$> epsilonDecodeType t
+    _ -> pure $ Just typ
 
 typeDependencies :: Show a => Name -> GraphFlow a (M.Map Name (Type a))
 typeDependencies name = deps (S.fromList [name]) M.empty

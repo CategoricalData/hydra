@@ -146,13 +146,15 @@ generateSources printModule mods0 basePath = do
         mods1 <- CM.mapM (assignSchemas False) mods0
         withState (modulesToGraph mods1) $ do
           mods2 <- CM.mapM addDeepTypeAnnotations mods1
-          maps <- CM.mapM printModule mods2
+          maps <- CM.mapM forModule mods2
           return $ L.concat (M.toList <$> maps)
 
     writePair (path, s) = do
       let fullPath = FP.combine basePath path
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath s
+
+    forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
 hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule, hydraTestingModule]
