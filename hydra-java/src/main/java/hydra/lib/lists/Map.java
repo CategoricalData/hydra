@@ -12,6 +12,10 @@ public class Map<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/lists.map");
     }
 
+    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Y> mapping) {
+        return (arg) -> apply(mapping, arg);
+    }
+
     public static <X, Y> List<Y> apply(Function<X, Y> mapping, List<X> arg) {
         return arg.stream().map(mapping).collect(Collectors.toList());
     }
