@@ -11,11 +11,11 @@ public class Rem<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer dividend) {
-        // % in Java is a mathematical remainder, not modulus
-        return (divisor) -> dividend % divisor;
+        return (divisor) -> apply(dividend, divisor);
     }
 
     public static Integer apply(Integer dividend, Integer divisor) {
-        return Rem.apply(dividend).apply(divisor);
+        // % in Java is a mathematical remainder, not modulus
+        return (dividend % divisor);
     }
 }

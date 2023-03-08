@@ -11,10 +11,10 @@ public class Div<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer dividend) {
-        return (divisor) -> dividend / divisor;
+        return (divisor) -> apply(dividend, divisor);
     }
 
     public static Integer apply(Integer dividend, Integer divisor) {
-        return Div.apply(dividend).apply(divisor);
+        return (dividend / divisor);
     }
 }
