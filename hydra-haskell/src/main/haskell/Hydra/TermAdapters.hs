@@ -23,6 +23,7 @@ import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
+import Hydra.Reduction
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -32,8 +33,6 @@ import qualified Data.Set as S
 import qualified Text.Read as TR
 import qualified Data.Maybe as Y
 
-
-type TypeAdapter a = Type a -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) (Type a) (Term a))
 
 _context :: FieldName
 _context = FieldName "context"
@@ -57,11 +56,36 @@ elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder 
     encode (TermElement (Name name)) = pure $ string name
     decode (TermLiteral (LiteralString name)) = pure $ TermElement $ Name name
 
-fieldAdapter :: (Ord a, Read a, Show a) => FieldType a -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) (FieldType a) (Field a))
+fieldAdapter :: (Ord a, Read a, Show a) => FieldType a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (FieldType a) (Field a))
 fieldAdapter ftyp = do
   ad <- termAdapter $ fieldTypeType ftyp
   return $ Adapter (adapterIsLossy ad) ftyp (ftyp { fieldTypeType = adapterTarget ad })
     $ bidirectional $ \dir (Field name term) -> Field name <$> encodeDecode dir (adapterCoder ad) term
+
+-- | This function accounts for recursive type definitions
+forTypeReference :: (Ord a, Read a, Show a) => Name -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
+forTypeReference name = do
+  let lossy = False -- Note: we cannot know in advance whether the adapter is lossy or not
+  let placeholder = Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $
+        \dir term -> do
+          cx <- getState
+          case M.lookup name (adapterContextAdapters cx) of
+            Nothing -> fail $ "no adapter for reference type " ++ unName name
+            Just ad -> encodeDecode dir (adapterCoder ad) term
+  cx <- getState
+  let adapters = adapterContextAdapters cx
+  case M.lookup name adapters of
+    Nothing -> do
+      -- Insert a placeholder until the actual adapter has been constructed, in case of
+      putState (cx {adapterContextAdapters = M.insert name placeholder adapters})
+      mt <- withGraphContext $ resolveType $ TypeVariable name
+      case mt of
+        Nothing -> fail $ "type variable did not resolve to a type: " ++ unName name
+        Just t -> do
+          actual <- termAdapter t
+          putState (cx {adapterContextAdapters = M.insert name actual adapters})
+          return actual
+    Just ad -> pure ad
 
 functionProxyName :: Name
 functionProxyName = Name "hydra/core.FunctionProxy"
@@ -206,7 +230,7 @@ passLiteral :: (Ord a, Show a) => TypeAdapter a
 passLiteral (TypeLiteral at) = do
   ad <- literalAdapter at
   let step = bidirectional $ \dir term -> do
-        l <- expectLiteral term -- TODO: restore me
+        l <- expectLiteral term
         literal <$> encodeDecode dir (adapterCoder ad) l
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
@@ -288,43 +312,47 @@ simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Ord a, Read a, Show a) => TypeAdapter a
-termAdapter typ = do
-   acx <- getState
-   -- TODO: this is a workaround for lambda-bound variables. We should beta-reduce types before they are adapted.
-   typ' <- Y.fromMaybe typ <$> (withGraphContext $ resolveType typ)
-   chooseAdapter (alts acx) (supported acx) describeType typ'
-  where
-    alts acx t = (\c -> c t) <$> if variantIsSupported acx t
-      then case typeVariant t of
-        TypeVariantAnnotated -> [passAnnotated]
-        TypeVariantApplication -> [passApplication]
-        TypeVariantFunction ->  [passFunction]
-        TypeVariantLambda -> [passLambda]
-        TypeVariantList -> [passList]
-        TypeVariantLiteral -> [passLiteral]
-        TypeVariantMap -> [passMap]
-        TypeVariantOptional -> [passOptional, optionalToList]
-        TypeVariantProduct -> [passProduct]
-        TypeVariantRecord -> [passRecord]
-        TypeVariantSet -> [passSet]
-        TypeVariantSum -> [passSum]
-        TypeVariantUnion -> [passUnion]
-        _ -> []
-      else case typeVariant t of
-        TypeVariantAnnotated -> [passAnnotated]
-        TypeVariantApplication -> [simplifyApplication]
-        TypeVariantElement -> [elementToString]
-        TypeVariantFunction -> [functionToUnion]
-        TypeVariantLambda -> [lambdaToMonotype]
-        TypeVariantWrap -> [dereferenceNominal]
-        TypeVariantOptional -> [optionalToList]
-        TypeVariantSet ->  [listToSet]
-        TypeVariantUnion -> [unionToRecord]
-        _ -> [unsupportedToString]
+termAdapter typ0 = do
+  -- Eliminate lambda-bound variables
+  typ <- withGraphContext $ betaReduceType typ0
+  case typ of
+    -- Account for let-bound variables
+    TypeVariable name -> forTypeReference name
+    _ -> do
+      cx <- getState
+      chooseAdapter (alts cx) (supported cx) describeType typ
+      where
+        alts cx t = (\c -> c t) <$> if variantIsSupported cx t
+          then case typeVariant t of
+            TypeVariantAnnotated -> [passAnnotated]
+            TypeVariantApplication -> [passApplication]
+            TypeVariantFunction ->  [passFunction]
+            TypeVariantLambda -> [passLambda]
+            TypeVariantList -> [passList]
+            TypeVariantLiteral -> [passLiteral]
+            TypeVariantMap -> [passMap]
+            TypeVariantOptional -> [passOptional, optionalToList]
+            TypeVariantProduct -> [passProduct]
+            TypeVariantRecord -> [passRecord]
+            TypeVariantSet -> [passSet]
+            TypeVariantSum -> [passSum]
+            TypeVariantUnion -> [passUnion]
+            _ -> []
+          else case typeVariant t of
+            TypeVariantAnnotated -> [passAnnotated]
+            TypeVariantApplication -> [simplifyApplication]
+            TypeVariantElement -> [elementToString]
+            TypeVariantFunction -> [functionToUnion]
+            TypeVariantLambda -> [lambdaToMonotype]
+            TypeVariantWrap -> [dereferenceNominal]
+            TypeVariantOptional -> [optionalToList]
+            TypeVariantSet ->  [listToSet]
+            TypeVariantUnion -> [unionToRecord]
+            _ -> [unsupportedToString]
 
-    constraints acx = languageConstraints $ adapterContextTarget acx
-    supported acx = typeIsSupported (constraints acx)
-    variantIsSupported acx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints acx)
+        constraints cx = languageConstraints $ adapterContextLanguage cx
+        supported cx = typeIsSupported (constraints cx)
+        variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Ord a, Read a, Show a) => TypeAdapter a
@@ -366,5 +394,5 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
 
 withGraphContext :: GraphFlow a x -> Flow (AdapterContext a) x
 withGraphContext f = do
-  acx <- getState
-  withState (adapterContextGraph acx) f
+  cx <- getState
+  withState (adapterContextGraph cx) f
