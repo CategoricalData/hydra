@@ -10,80 +10,80 @@ import qualified Hydra.Dsl.Annotations as Ann
 import Prelude hiding ((++))
 
 
-utilsNs = Namespace "hydra/printing"
 
-adapterUtilsModule :: Module Kv
-adapterUtilsModule = Module utilsNs elements [hydraBasicsModule] $
+printingModule :: Module Kv
+printingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] $
     Just "Utilities for use in transformations"
   where
    elements = [
-     el describeFloatTypeSource,
-     el describeIntegerTypeSource,
-     el describeLiteralTypeSource,
-     el describePrecisionSource,
-     el describeTypeSource]
+     el describeFloatTypeDef,
+     el describeIntegerTypeDef,
+     el describeLiteralTypeDef,
+     el describePrecisionDef,
+     el describeTypeDef]
 
-utils :: String -> Datum a -> Definition a
-utils = Definition . fromQname utilsNs
+printingDefinition :: String -> Datum a -> Definition a
+printingDefinition = Definition . fromQname (moduleNamespace printingModule)
 
-describeFloatTypeSource :: Definition (FloatType -> String)
-describeFloatTypeSource = utils "describeFloatType" $
+
+describeFloatTypeDef :: Definition (FloatType -> String)
+describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
   function (Types.wrap _FloatType) Types.string $
-  lambda "t" $ (ref describePrecisionSource <.> ref floatTypePrecisionSource @@ var "t") ++ string " floating-point numbers"
+  lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
-describeIntegerTypeSource :: Definition (IntegerType -> String)
-describeIntegerTypeSource = utils "describeIntegerType" $
+describeIntegerTypeDef :: Definition (IntegerType -> String)
+describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
   function (Types.wrap _IntegerType) Types.string $
-  lambda "t" $ (ref describePrecisionSource <.> ref integerTypePrecisionSource @@ var "t")
+  lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ string " integers"
 
-describeLiteralTypeSource :: Definition (LiteralType -> String)
-describeLiteralTypeSource = utils "describeLiteralType" $
+describeLiteralTypeDef :: Definition (LiteralType -> String)
+describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
   match _LiteralType Types.string [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
-    Case _LiteralType_float   --> ref describeFloatTypeSource,
-    Case _LiteralType_integer --> ref describeIntegerTypeSource,
+    Case _LiteralType_float   --> ref describeFloatTypeDef,
+    Case _LiteralType_integer --> ref describeIntegerTypeDef,
     Case _LiteralType_string  --> constant $ string "character strings"]
 
-describePrecisionSource :: Definition (Precision -> String)
-describePrecisionSource = utils "describePrecision" $
+describePrecisionDef :: Definition (Precision -> String)
+describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
   match _Precision Types.string [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $
       showInt32 @@ var "bits" ++ string "-bit"]
 
-describeTypeSource :: Definition (Type a -> string)
-describeTypeSource = utils "describeType" $
+describeTypeDef :: Definition (Type a -> string)
+describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $
   lambda "typ" $ apply
     (match _Type Types.string [
-      Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeSource @@
+      Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated typeM _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
-      Case _Type_literal     --> ref describeLiteralTypeSource,
-      Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeTypeSource @@ var "t"),
+      Case _Type_literal     --> ref describeLiteralTypeDef,
+      Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_function    --> lambda "ft" $ string "functions from "
-        ++ (ref describeTypeSource @@ (project _FunctionType typeM _FunctionType_domain @@ var "ft"))
+        ++ (ref describeTypeDef @@ (project _FunctionType typeM _FunctionType_domain @@ var "ft"))
         ++ string " to "
-        ++ (ref describeTypeSource @@ (project _FunctionType typeM _FunctionType_codomain @@ var "ft")),
+        ++ (ref describeTypeDef @@ (project _FunctionType typeM _FunctionType_codomain @@ var "ft")),
       Case _Type_lambda      --> constant $ string "polymorphic terms",
-      Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeSource @@ var "t"),
+      Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_map         --> lambda "mt" $ string "maps from "
-        ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_keys @@ var "mt"))
+        ++ (ref describeTypeDef @@ (project _MapType typeM _MapType_keys @@ var "mt"))
         ++ string " to "
-        ++ (ref describeTypeSource @@ (project _MapType typeM _MapType_values  @@ var "mt")),
+        ++ (ref describeTypeDef @@ (project _MapType typeM _MapType_values  @@ var "mt")),
       Case _Type_wrap     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
-      Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeSource @@ var "ot"),
+      Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",
-      Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeSource @@ var "st"),
-      Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeSource @@ var "t"),
+      Case _Type_set         --> lambda "st" $ string "sets of " ++ (ref describeTypeDef @@ var "st"),
+      Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "unspecified/parametric terms"])

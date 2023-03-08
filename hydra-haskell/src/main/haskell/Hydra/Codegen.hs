@@ -161,7 +161,7 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 
 kernelModules :: [Module Kv]
 kernelModules = [
-  adapterUtilsModule,
+  printingModule,
   codetreeAstModule,
   haskellAstModule,
   hydraBasicsModule,
@@ -230,7 +230,7 @@ testModules = [
 
 utilModules :: [Module Kv]
 utilModules = [
-  adapterUtilsModule,
+  printingModule,
   hydraBasicsModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
