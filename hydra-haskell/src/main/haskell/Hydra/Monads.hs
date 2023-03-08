@@ -38,10 +38,6 @@ instance Monad (Flow s) where
             Nothing -> FlowState Nothing s1 t1
 instance MonadFail (Flow s) where
   fail msg = Flow $ \s t -> FlowState Nothing s (pushError msg t)
-    where
-      pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
-        where
-          errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
 
 emptyTrace :: Trace
 emptyTrace = Trace [] [] M.empty
@@ -78,6 +74,14 @@ getState = Flow q
       where
         FlowState v1 s1 t1 = unFlow f s0 t0
 
+maxTraceDepth :: Int
+maxTraceDepth = 16
+
+pushError :: String -> Trace -> Trace
+pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}
+  where
+    errorMsg = "Error: " ++ msg ++ " (" ++ L.intercalate " > " (L.reverse $ traceStack t) ++ ")"
+
 putState :: s -> Flow s ()
 putState cx = Flow q
   where
@@ -109,11 +113,14 @@ withState cx0 f = Flow q
 withTrace :: String -> Flow s a -> Flow s a
 withTrace msg f = Flow q
   where
-    q s0 t0 = FlowState v s1 t3
+    q s0 t0 = if L.length (traceStack t1) >= maxTraceDepth
+        then FlowState Nothing s0 $ pushError tooDeep t1
+        else FlowState v s1 t3
       where
-        FlowState v s1 t2 = unFlow f s0 t1
-        t1 = t0 {traceStack = msg:(traceStack t0)}
-        t3 = t2 {traceStack = traceStack t0}
+        FlowState v s1 t2 = unFlow f s0 t1 -- execute the internal flow after augmenting the trace
+        t1 = t0 {traceStack = msg:(traceStack t0)} -- augment the trace
+        t3 = t2 {traceStack = traceStack t0} -- reset the trace stack after execution
+        tooDeep = "maximum trace depth exceeded. This may indicate an infinite loop"
 
 withWarning :: String -> a -> Flow s a
 withWarning msg x = flowWarning msg $ pure x
