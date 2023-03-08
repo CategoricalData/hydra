@@ -3,12 +3,17 @@ package hydra.lib.strings;
 import hydra.core.Name;
 import hydra.util.PrimitiveFunction;
 
+import java.util.function.Function;
 import java.util.List;
 import java.util.ArrayList;
 
 public class SplitOn<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/strings.splitOn");
+    }
+
+    public static Function<String, List<String>> apply(String delim) {
+        return (string) -> apply(delim, string);
     }
 
     // Note: the substring is not interpreted as a regular expression; it is simply a literal string. See Haskell's Data.List.Split.
