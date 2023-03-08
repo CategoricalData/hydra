@@ -11,6 +11,10 @@ public class Bind<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/optionals.bind");
     }
 
+    public static <X, Y> Function<Function<X, Optional<Y>>, Optional<Y>> apply(Optional<X> optionalArg) {
+        return (f) -> apply(optionalArg, f);
+    }
+
     public static <X, Y> Optional<Y> apply(Optional<X> optionalArg, Function<X, Optional<Y>> f) {
         if (!optionalArg.isPresent()) {
             return Optional.empty();
