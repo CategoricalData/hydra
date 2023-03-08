@@ -13,6 +13,7 @@ import Hydra.Basics
 import Hydra.Module
 import Hydra.Monads
 import Hydra.Printing
+import Hydra.Mantle
 import Hydra.Kv
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Terms as Terms
@@ -39,7 +40,7 @@ chooseAdapter alts supported describe typ = if supported typ
   then pure $ Adapter False typ typ idCoder
   else do
     -- Uncomment to debug adapter cycles
-    --debugCheckType typ
+    -- debugCheckType typ
 
     raw <- sequence (alts typ)
     let candidates = L.filter (supported . adapterTarget) raw
@@ -51,7 +52,7 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ ". Original type: " ++ show typ
       else do
         -- Uncomment to debug adapter cycles
-        --debugRemoveType typ
+        -- debugRemoveType typ
 
         return $ L.head candidates
 
@@ -107,7 +108,7 @@ nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ gname 
 
 typeIsSupported :: LanguageConstraints a -> Type a -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
-  && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
+  && isSupportedVariant (typeVariant t)
   && case t of
     TypeAnnotated (Annotated at _) -> typeIsSupported constraints at
     TypeLiteral at -> literalTypeIsSupported constraints at
@@ -120,7 +121,9 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeSet st -> typeIsSupported constraints st
     TypeUnion rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     _ -> True
-
+  where
+    isSupportedVariant v = v == TypeVariantVariable || S.member v (languageConstraintsTypeVariants constraints)
+    
 unidirectionalCoder :: (a -> Flow s b) -> Coder s s a b
 unidirectionalCoder m = Coder {
   coderEncode = m,

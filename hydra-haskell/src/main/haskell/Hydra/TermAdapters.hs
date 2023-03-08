@@ -40,15 +40,15 @@ _context = FieldName "context"
 _record :: FieldName
 _record = FieldName "record"
 
-dereferenceNominal :: (Ord a, Read a, Show a) => TypeAdapter a
-dereferenceNominal t@(TypeWrap name) = do
-  typ <- withGraphContext $ do
-    -- Note: we just assume the schema term is a reference to hydra/core.Type
-    withTrace ("dereference nominal type " ++ unName name) $ do
-      el <- withSchemaContext $ requireElement name
-      epsilonDecodeType $ elementData el
-  ad <- termAdapter typ
-  return ad { adapterSource = t }
+-- dereferenceNominal :: (Ord a, Read a, Show a) => TypeAdapter a
+-- dereferenceNominal t@(TypeWrap name) = do
+--   typ <- withGraphContext $ do
+--     -- Note: we just assume the schema term is a reference to hydra/core.Type
+--     withTrace ("dereference nominal type " ++ unName name) $ do
+--       el <- withSchemaContext $ requireElement name
+--       epsilonDecodeType $ elementData el
+--   ad <- termAdapter typ
+--   return ad { adapterSource = t }
 
 elementToString :: TypeAdapter a
 elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder encode decode
@@ -64,7 +64,7 @@ fieldAdapter ftyp = do
 
 -- | This function accounts for recursive type definitions
 forTypeReference :: (Ord a, Read a, Show a) => Name -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
-forTypeReference name = do
+forTypeReference name = withTrace ("adapt named type " ++ unName name) $ do
   let lossy = False -- Note: we cannot know in advance whether the adapter is lossy or not
   let placeholder = Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $
         \dir term -> do
@@ -80,7 +80,8 @@ forTypeReference name = do
       putState (cx {adapterContextAdapters = M.insert name placeholder adapters})
       mt <- withGraphContext $ resolveType $ TypeVariable name
       case mt of
-        Nothing -> fail $ "type variable did not resolve to a type: " ++ unName name
+        Nothing -> pure $ Adapter lossy (TypeVariable name) (TypeVariable name) $ bidirectional $ const pure
+          -- fail $ "type variable did not resolve to a type: " ++ unName name
         Just t -> do
           actual <- termAdapter t
           putState (cx {adapterContextAdapters = M.insert name actual adapters})
@@ -312,15 +313,14 @@ simplifyApplication t@(TypeApplication (ApplicationType lhs _)) = do
 -- Note: those constructors which cannot be mapped meaningfully at this time are simply
 --       preserved as strings using Haskell's derived show/read format.
 termAdapter :: (Ord a, Read a, Show a) => TypeAdapter a
-termAdapter typ0 = do
-  -- Eliminate lambda-bound variables
-  typ <- withGraphContext $ betaReduceType typ0
+termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
   case typ of
     -- Account for let-bound variables
     TypeVariable name -> forTypeReference name
+    TypeWrap name -> forTypeReference name
     _ -> do
-      cx <- getState
-      chooseAdapter (alts cx) (supported cx) describeType typ
+        cx <- getState
+        chooseAdapter (alts cx) (supported cx) describeType typ
       where
         alts cx t = (\c -> c t) <$> if variantIsSupported cx t
           then case typeVariant t of
@@ -344,15 +344,15 @@ termAdapter typ0 = do
             TypeVariantElement -> [elementToString]
             TypeVariantFunction -> [functionToUnion]
             TypeVariantLambda -> [lambdaToMonotype]
-            TypeVariantWrap -> [dereferenceNominal]
+            -- TypeVariantWrap -> [dereferenceNominal]
             TypeVariantOptional -> [optionalToList]
             TypeVariantSet ->  [listToSet]
             TypeVariantUnion -> [unionToRecord]
             _ -> [unsupportedToString]
-
-        constraints cx = languageConstraints $ adapterContextLanguage cx
-        supported cx = typeIsSupported (constraints cx)
-        variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
+  where
+    constraints cx = languageConstraints $ adapterContextLanguage cx
+    supported cx = typeIsSupported (constraints cx)
+    variantIsSupported cx t = S.member (typeVariant t) $ languageConstraintsTypeVariants (constraints cx)
 
 ---- Caution: possibility of an infinite loop if neither unions, optionals, nor lists are supported
 unionToRecord :: (Ord a, Read a, Show a) => TypeAdapter a
