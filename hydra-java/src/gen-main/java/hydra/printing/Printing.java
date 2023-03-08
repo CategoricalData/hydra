@@ -171,7 +171,7 @@ public interface Printing {
       
       @Override
       public String visit(hydra.core.Type.Variable instance) {
-        return "unspecified/parametric terms";
+        return "instances of a named type";
       }
     });
   }
