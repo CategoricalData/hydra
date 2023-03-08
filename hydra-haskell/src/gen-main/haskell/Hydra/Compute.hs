@@ -38,16 +38,16 @@ _Coder_encode = (Core.FieldName "encode")
 _Coder_decode = (Core.FieldName "decode")
 
 -- | A variant of the State monad with built-in logging and error handling
-newtype Flow s a = 
+newtype Flow s x = 
   Flow {
-    unFlow :: (s -> Trace -> FlowState s a)}
+    unFlow :: (s -> Trace -> FlowState s x)}
 
 _Flow = (Core.Name "hydra/compute.Flow")
 
 -- | The result of evaluating a Flow
-data FlowState s a = 
+data FlowState s x = 
   FlowState {
-    flowStateValue :: (Maybe a),
+    flowStateValue :: (Maybe x),
     flowStateState :: s,
     flowStateTrace :: Trace}
   deriving (Eq, Ord, Read, Show)
