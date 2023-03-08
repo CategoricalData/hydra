@@ -11,10 +11,10 @@ public class Mod<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer dividend) {
-        return (divisor) -> java.lang.Math.floorMod(dividend, divisor);
+        return (divisor) -> apply(dividend, divisor);
     }
 
     public static Integer apply(Integer dividend, Integer divisor) {
-        return Mod.apply(dividend).apply(divisor);
+        return java.lang.Math.floorMod(dividend, divisor);
     }
 }

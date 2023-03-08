@@ -11,10 +11,10 @@ public class Mul<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer multiplier) {
-        return (multiplicand) -> multiplier * multiplicand;
+        return (multiplicand) -> apply(multiplier, multiplicand);
     }
 
     public static Integer apply(Integer multiplier, Integer multiplicand) {
-        return Mul.apply(multiplier).apply(multiplicand);
+        return (multiplier * multiplicand);
     }
 }

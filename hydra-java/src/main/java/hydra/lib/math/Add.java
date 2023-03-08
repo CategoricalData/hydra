@@ -11,10 +11,10 @@ public class Add<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer augend) {
-        return (addend) -> augend + addend;
+        return (addend) -> apply(augend, addend);
     }
 
     public static Integer apply(Integer augend, Integer addend) {
-        return Add.apply(augend).apply(addend);
+        return (augend + addend);
     }
 }

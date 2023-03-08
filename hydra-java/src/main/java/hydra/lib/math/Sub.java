@@ -11,10 +11,10 @@ public class Sub<A> extends PrimitiveFunction<A> {
     }
 
     public static Function<Integer, Integer> apply(Integer minuend) {
-        return (subtrahend) -> minuend - subtrahend;
+        return (subtrahend) -> apply(minuend, subtrahend);
     }
 
     public static Integer apply(Integer minuend, Integer subtrahend) {
-        return Sub.apply(minuend).apply(subtrahend);
+        return (minuend - subtrahend);
     }
 }
