@@ -24,6 +24,8 @@ import Control.Monad
 
 type SymmetricAdapter s t v = Adapter s s t t v v
 
+type TypeAdapter a = Type a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
+
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
 
@@ -74,7 +76,7 @@ debugRemoveType typ = do
   let types' = S.delete s types
   putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
 
-encodeDecode :: CoderDirection -> Coder s s a a -> a -> Flow s a
+encodeDecode :: CoderDirection -> Coder s s x x -> x -> Flow s x
 encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
