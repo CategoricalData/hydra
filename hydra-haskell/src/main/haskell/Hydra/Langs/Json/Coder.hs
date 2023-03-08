@@ -109,4 +109,8 @@ termCoder typ = case stripType typ of
       fromString cx s = Terms.string $ if isStringKey cx then s else read s
       isStringKey cx = stripType kt == Types.string
   TypeRecord rt -> recordCoder rt
+  TypeVariable name -> return $ Coder encode decode
+    where
+      encode term = pure $ Json.ValueString $ show term
+      decode term = fail $ "type variable " ++ unName name ++ " does not support decoding"
   _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)

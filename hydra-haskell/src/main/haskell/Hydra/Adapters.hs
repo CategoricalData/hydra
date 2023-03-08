@@ -47,7 +47,10 @@ constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ
 languageAdapter :: (Ord a, Read a, Show a)
   => Language a -> Type a -> GraphFlow a (SymmetricAdapter (Graph a) (Type a) (Term a))
 languageAdapter lang typ0 = do
-  typ <- betaReduceType typ0
+  -- TODO: rather than beta-reducing types all at once, we should incrementally extend the environment when application types are adapted
+  -- typ <- betaReduceType typ0
+  let typ = typ0
+
   g  <- getState
   -- Provide an initial adapter context
   let cx0 = AdapterContext g lang M.empty
