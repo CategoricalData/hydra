@@ -11,6 +11,10 @@ public class Apply<A> extends PrimitiveFunction<A> {
         return new Name("hydra/lib/optionals.apply");
     }
 
+    public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Optional<Function<X, Y>> optionalF) {
+        return (optionalArg) -> apply(optionalF, optionalArg);
+    }
+
     public static <X, Y> Optional<Y> apply(Optional<Function<X, Y>> optionalF, Optional<X> optionalArg) {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {
             return Optional.empty();
