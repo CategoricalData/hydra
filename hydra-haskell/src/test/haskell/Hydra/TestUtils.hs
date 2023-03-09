@@ -6,6 +6,7 @@ module Hydra.TestUtils (
   checkDataAdapter,
   checkSerdeRoundTrip,
   checkSerialization,
+  eval,
   shouldFail,
   shouldSucceedWith,
   strip,
@@ -110,6 +111,9 @@ checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
   where
     normalize = unlines . L.filter (not . L.null) . lines
     FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
+
+eval :: Term Kv -> GraphFlow Kv (Term Kv)
+eval = betaReduceTerm
 
 shouldFail :: GraphFlow Kv a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)

@@ -155,9 +155,6 @@ testBetaReduceTypeRecursively = do
 reduce :: Type Kv -> Type Kv
 reduce typ = fromFlow (schemaContext testGraph) (betaReduceType typ)
 
-eval :: Term Kv -> GraphFlow Kv (Term Kv)
-eval = betaReduceTerm
-
 spec :: H.Spec
 spec = do
   checkAlphaConversion

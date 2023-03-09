@@ -17,7 +17,13 @@ To build Hydra-Haskell and enter the GHCi REPL, use:
 stack ghci
 ```
 
-To run tests, use:
+Or to enter the test environment:
+
+```bash
+stack ghci hydra:hydra-test
+```
+
+To run all tests at the command line, use:
 
 ```bash
 stack test
