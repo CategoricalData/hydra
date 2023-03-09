@@ -64,20 +64,20 @@ describeTypeDef = printingDefinition "describeType" $
   lambda "typ" $ apply
     (match _Type Types.string [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
-        (project _Annotated typeM _Annotated_subject @@ var "a")),
+        (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralTypeDef,
       Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_function    --> lambda "ft" $ string "functions from "
-        ++ (ref describeTypeDef @@ (project _FunctionType typeM _FunctionType_domain @@ var "ft"))
+        ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
         ++ string " to "
-        ++ (ref describeTypeDef @@ (project _FunctionType typeM _FunctionType_codomain @@ var "ft")),
+        ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_codomain @@ var "ft")),
       Case _Type_lambda      --> constant $ string "polymorphic terms",
       Case _Type_list        --> lambda "t" $ string "lists of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_map         --> lambda "mt" $ string "maps from "
-        ++ (ref describeTypeDef @@ (project _MapType typeM _MapType_keys @@ var "mt"))
+        ++ (ref describeTypeDef @@ (project _MapType _MapType_keys @@ var "mt"))
         ++ string " to "
-        ++ (ref describeTypeDef @@ (project _MapType typeM _MapType_values  @@ var "mt")),
+        ++ (ref describeTypeDef @@ (project _MapType _MapType_values  @@ var "mt")),
       Case _Type_wrap     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
@@ -91,5 +91,4 @@ describeTypeDef = printingDefinition "describeType" $
   where
     annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")
     functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "a")
-    typeM = Types.apply (Types.wrap _Type) (Types.variable "a")
     mapTypeM = Types.apply (Types.wrap _MapType) (Types.variable "a")

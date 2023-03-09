@@ -129,8 +129,8 @@ opt mc = Datum $ Terms.optional (unDatum <$> mc)
 primitive :: Name -> Datum a
 primitive = Datum . Terms.primitive
 
-project :: Name -> Type Kv -> FieldName -> Datum (a -> b)
-project name cod fname = Datum $ Terms.projection name fname
+project :: Name -> FieldName -> Datum (a -> b)
+project name fname = Datum $ Terms.projection name fname
 
 record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)

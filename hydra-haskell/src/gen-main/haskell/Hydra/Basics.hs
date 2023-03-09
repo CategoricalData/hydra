@@ -16,10 +16,10 @@ eliminationVariant :: (Core.Elimination a -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationElement -> Mantle.EliminationVariantElement
   Core.EliminationList _ -> Mantle.EliminationVariantList
-  Core.EliminationWrap _ -> Mantle.EliminationVariantWrap
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
   Core.EliminationUnion _ -> Mantle.EliminationVariantUnion
+  Core.EliminationWrap _ -> Mantle.EliminationVariantWrap
 
 -- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Mantle.EliminationVariant]
@@ -167,7 +167,6 @@ termVariant term = ((\x -> case x of
   Core.TermList _ -> Mantle.TermVariantList
   Core.TermLiteral _ -> Mantle.TermVariantLiteral
   Core.TermMap _ -> Mantle.TermVariantMap
-  Core.TermWrap _ -> Mantle.TermVariantWrap
   Core.TermOptional _ -> Mantle.TermVariantOptional
   Core.TermProduct _ -> Mantle.TermVariantProduct
   Core.TermRecord _ -> Mantle.TermVariantRecord
@@ -175,7 +174,8 @@ termVariant term = ((\x -> case x of
   Core.TermStream _ -> Mantle.TermVariantStream
   Core.TermSum _ -> Mantle.TermVariantSum
   Core.TermUnion _ -> Mantle.TermVariantUnion
-  Core.TermVariable _ -> Mantle.TermVariantVariable) term)
+  Core.TermVariable _ -> Mantle.TermVariantVariable
+  Core.TermWrap _ -> Mantle.TermVariantWrap) term)
 
 -- | All term (expression) variants, in a canonical order
 termVariants :: [Mantle.TermVariant]
@@ -187,7 +187,6 @@ termVariants = [
   Mantle.TermVariantFunction,
   Mantle.TermVariantList,
   Mantle.TermVariantMap,
-  Mantle.TermVariantWrap,
   Mantle.TermVariantOptional,
   Mantle.TermVariantProduct,
   Mantle.TermVariantRecord,
@@ -195,7 +194,8 @@ termVariants = [
   Mantle.TermVariantStream,
   Mantle.TermVariantSum,
   Mantle.TermVariantUnion,
-  Mantle.TermVariantVariable]
+  Mantle.TermVariantVariable,
+  Mantle.TermVariantWrap]
 
 -- | TODO: temporary. Just a token polymorphic function for testing
 testLists :: ([[a]] -> Int)

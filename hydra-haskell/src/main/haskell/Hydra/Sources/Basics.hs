@@ -15,7 +15,7 @@ basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
 hydraBasicsModule :: Module Kv
 hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraMantleModule] $
     Just "Basic functions for working with types and terms"
-  where    
+  where
     elements = [
       el eliminationVariantDef,
       el eliminationVariantsDef,
