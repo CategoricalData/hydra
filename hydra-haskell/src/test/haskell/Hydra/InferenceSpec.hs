@@ -85,13 +85,13 @@ checkFunctionTerms = do
 
     H.it "Check case statements" $ do
       expectMonotype
-        (cases testTypeFoobarValueName [
+        (cases testTypeFoobarValueName Nothing [
           Field (FieldName "bool") (lambda "x" (boolean True)),
           Field (FieldName "string") (lambda "x" (boolean False)),
           Field (FieldName "unit") (lambda "x" (boolean False))])
         (Types.function testTypeFoobarValue Types.boolean)
       expectPolytype
-        (cases testTypePersonOrSomethingName [
+        (cases testTypePersonOrSomethingName Nothing [
           Field (FieldName "person") (apply delta (TermElement $ Name "firstName")),
           Field (FieldName "other") (lambda "x" (string "NONE"))])
         ["v1"] (Types.function

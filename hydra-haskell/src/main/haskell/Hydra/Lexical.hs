@@ -6,6 +6,7 @@ module Hydra.Lexical (
   ) where
 
 import Hydra.Common
+import Hydra.Basics
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Compute
@@ -69,13 +70,6 @@ resolveTerm name = do
 -- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
 schemaContext :: Graph a -> Graph a
 schemaContext g = Y.fromMaybe g (graphSchema g)
-
-typeArity :: Type a -> Int
-typeArity t = case stripType t of
-  TypeApplication (ApplicationType l r) -> typeArity l
-  TypeLambda (LambdaType _ body) -> typeArity body
-  TypeFunction (FunctionType _ cod) -> 1 + typeArity cod
-  _ -> 0
 
 withSchemaContext :: GraphFlow a x -> GraphFlow a x
 withSchemaContext f = do

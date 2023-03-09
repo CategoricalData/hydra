@@ -81,19 +81,24 @@ applyRules term = case term of
           yieldElimination (EliminationRecord $ Projection name fname)
             (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
 
-        EliminationUnion (CaseStatement name cases) -> do
+        EliminationUnion (CaseStatement name def cases) -> do
             rt <- withGraphContext $ requireUnionType True name
             let sfields = rowTypeFields rt
 
             icases <- CM.mapM inferFieldType cases
-            let innerConstraints = L.concat (termConstraints . fieldTerm <$> icases)
+            (idef, defcon) <- case def of
+              Nothing -> pure (Nothing, [])
+              Just d -> do
+                idf <- infer d
+                return (Just idf, termConstraints idf)
+            let innerConstraints = L.concat (defcon:(termConstraints . fieldTerm <$> icases))
 
             let idoms = termType . fieldTerm <$> icases
             let sdoms = fieldTypeType <$> sfields
             cod <- freshName
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
 
-            yieldElimination (EliminationUnion (CaseStatement name icases))
+            yieldElimination (EliminationUnion (CaseStatement name idef icases))
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
 
