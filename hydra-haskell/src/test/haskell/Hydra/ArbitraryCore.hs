@@ -131,7 +131,7 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecif
         where
           cs = do
             afields <- CM.mapM arbitraryCase sfields
-            return $ FunctionElimination $ EliminationUnion $ CaseStatement n afields Nothing
+            return $ FunctionElimination $ EliminationUnion $ CaseStatement n Nothing afields
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
             return $ Field fn $ TermFunction term

@@ -81,7 +81,7 @@ applyRules term = case term of
           yieldElimination (EliminationRecord $ Projection name fname)
             (Types.function (TypeRecord rt) $ fieldTypeType sfield) []
 
-        EliminationUnion (CaseStatement name cases def) -> do
+        EliminationUnion (CaseStatement name def cases) -> do
             rt <- withGraphContext $ requireUnionType True name
             let sfields = rowTypeFields rt
 
@@ -98,7 +98,7 @@ applyRules term = case term of
             cod <- freshName
             let outerConstraints = L.zipWith (\t d -> (t, Types.function d cod)) idoms sdoms
 
-            yieldElimination (EliminationUnion (CaseStatement name icases idef))
+            yieldElimination (EliminationUnion (CaseStatement name idef icases))
               (Types.function (TypeUnion rt) cod)
               (innerConstraints ++ outerConstraints)
 

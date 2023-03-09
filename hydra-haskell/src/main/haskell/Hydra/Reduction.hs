@@ -68,12 +68,12 @@ betaReduceTerm = reduce M.empty
             EliminationOptional (OptionalCases nothing just) -> TermFunction . FunctionElimination . EliminationOptional <$>
               (OptionalCases <$> reduceb nothing <*> reduceb just)
             EliminationRecord _ -> done
-            EliminationUnion (CaseStatement n cases def) -> do
+            EliminationUnion (CaseStatement n def cases) -> do
                 rcases <- CM.mapM reduceField cases
                 rdef <- case def of
                   Nothing -> pure Nothing
                   Just d -> Just <$> reduceb d
-                return $ TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n rcases rdef
+                return $ TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n rdef rcases
 
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive name -> do
@@ -105,7 +105,7 @@ betaReduceTerm = reduce M.empty
                     Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
                   _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
-              EliminationUnion (CaseStatement _ cases def) -> do
+              EliminationUnion (CaseStatement _ def cases) -> do
                 arg <- (reduce bindings $ L.head args) >>= deref
                 case stripTerm arg of
                   TermUnion (Injection _ (Field fname t)) -> if L.null matching
@@ -233,6 +233,6 @@ termIsValue g term = case stripTerm term of
         EliminationOptional (OptionalCases nothing just) -> termIsValue g nothing
           && termIsValue g just
         EliminationRecord _ -> True
-        EliminationUnion (CaseStatement _ cases def) -> checkFields cases && (Y.maybe True (termIsValue g) def)
+        EliminationUnion (CaseStatement _ def cases) -> checkFields cases && (Y.maybe True (termIsValue g) def)
       FunctionLambda (Lambda _ body) -> termIsValue g body
       FunctionPrimitive _ -> True

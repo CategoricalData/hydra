@@ -46,13 +46,13 @@ eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "a")) (Types.wrap _EliminationVariant)) $
-  matchToEnum _Elimination _EliminationVariant [
+  matchToEnum _Elimination _EliminationVariant Nothing [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union,
-    _Elimination_wrap     @-> _EliminationVariant_wrap] Nothing
+    _Elimination_wrap     @-> _EliminationVariant_wrap]
 
 eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
@@ -69,10 +69,10 @@ eliminationVariantsDef = basicsDefinition "eliminationVariants" $
 floatTypePrecisionDef :: Definition (FloatType -> Precision)
 floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
-  matchToUnion _FloatType _Precision [
+  matchToUnion _FloatType _Precision Nothing [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
-    _FloatType_float64  @-> field _Precision_bits $ int 64] Nothing
+    _FloatType_float64  @-> field _Precision_bits $ int 64]
 
 floatTypesDef :: Definition [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
@@ -86,19 +86,19 @@ floatTypesDef = basicsDefinition "floatTypes" $
 floatValueTypeDef :: Definition (FloatValue -> FloatType)
 floatValueTypeDef = basicsDefinition "floatValueType" $
   doc "Find the float type for a given floating-point value" $
-  matchToEnum _FloatValue _FloatType [
+  matchToEnum _FloatValue _FloatType Nothing [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
-    _FloatValue_float64  @-> _FloatType_float64] Nothing
+    _FloatValue_float64  @-> _FloatType_float64]
 
 functionVariantDef :: Definition (Function a -> FunctionVariant)
 functionVariantDef = basicsDefinition "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
   typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "a")) (Types.wrap _FunctionVariant)) $
-  matchToEnum _Function _FunctionVariant [
+  matchToEnum _Function _FunctionVariant Nothing [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
-    _Function_primitive   @-> _FunctionVariant_primitive] Nothing
+    _Function_primitive   @-> _FunctionVariant_primitive]
 
 functionVariantsDef :: Definition [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
@@ -112,7 +112,7 @@ functionVariantsDef = basicsDefinition "functionVariants" $
 integerTypeIsSignedDef :: Definition (IntegerType -> Bool)
 integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  matchData _IntegerType [
+  matchData _IntegerType Nothing [
     _IntegerType_bigint @-> constant true,
     _IntegerType_int8   @-> constant true,
     _IntegerType_int16  @-> constant true,
@@ -121,12 +121,12 @@ integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
     _IntegerType_uint8  @-> constant false,
     _IntegerType_uint16 @-> constant false,
     _IntegerType_uint32 @-> constant false,
-    _IntegerType_uint64 @-> constant false] Nothing
+    _IntegerType_uint64 @-> constant false]
 
 integerTypePrecisionDef :: Definition (IntegerType -> Precision)
 integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
-  matchToUnion _IntegerType _Precision [
+  matchToUnion _IntegerType _Precision Nothing [
     _IntegerType_bigint @-> field _Precision_arbitrary unit,
     _IntegerType_int8   @-> field _Precision_bits $ int 8,
     _IntegerType_int16  @-> field _Precision_bits $ int 16,
@@ -135,7 +135,7 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
     _IntegerType_uint8  @-> field _Precision_bits $ int 8,
     _IntegerType_uint16 @-> field _Precision_bits $ int 16,
     _IntegerType_uint32 @-> field _Precision_bits $ int 32,
-    _IntegerType_uint64 @-> field _Precision_bits $ int 64] Nothing
+    _IntegerType_uint64 @-> field _Precision_bits $ int 64]
 
 integerTypesDef :: Definition [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
@@ -155,7 +155,7 @@ integerTypesDef = basicsDefinition "integerTypes" $
 integerValueTypeDef :: Definition (IntegerValue -> IntegerType)
 integerValueTypeDef = basicsDefinition "integerValueType" $
   doc "Find the integer type for a given integer value" $
-  matchToEnum _IntegerValue _IntegerType [
+  matchToEnum _IntegerValue _IntegerType Nothing [
     _IntegerValue_bigint @-> _IntegerType_bigint,
     _IntegerValue_int8   @-> _IntegerType_int8,
     _IntegerValue_int16  @-> _IntegerType_int16,
@@ -164,27 +164,27 @@ integerValueTypeDef = basicsDefinition "integerValueType" $
     _IntegerValue_uint8  @-> _IntegerType_uint8,
     _IntegerValue_uint16 @-> _IntegerType_uint16,
     _IntegerValue_uint32 @-> _IntegerType_uint32,
-    _IntegerValue_uint64 @-> _IntegerType_uint64] Nothing
+    _IntegerValue_uint64 @-> _IntegerType_uint64]
 
 literalTypeDef :: Definition (Literal -> LiteralType)
 literalTypeDef = basicsDefinition "literalType" $
   doc "Find the literal type for a given literal value" $
-  match _Literal (Types.wrap _LiteralType) [
+  match _Literal (Types.wrap _LiteralType) Nothing [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
     Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
     Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
-    Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit] Nothing
+    Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
 literalTypeVariantDef :: Definition (LiteralType -> LiteralVariant)
 literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
   doc "Find the literal type variant (constructor) for a given literal value" $
-  matchToEnum _LiteralType _LiteralVariant [
+  matchToEnum _LiteralType _LiteralVariant Nothing [
     _LiteralType_binary  @-> _LiteralVariant_binary,
     _LiteralType_boolean @-> _LiteralVariant_boolean,
     _LiteralType_float   @-> _LiteralVariant_float,
     _LiteralType_integer @-> _LiteralVariant_integer,
-    _LiteralType_string  @-> _LiteralVariant_string] Nothing
+    _LiteralType_string  @-> _LiteralVariant_string]
 
 literalVariantDef :: Definition (Literal -> LiteralVariant)
 literalVariantDef = basicsDefinition "literalVariant" $
@@ -216,19 +216,19 @@ qnameDef = basicsDefinition "qname" $
 typeArityDef :: Definition (Type a -> Int)
 typeArityDef = basicsDefinition "typeArity" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.int32 $
-  match _Type Types.int32 [
+  match _Type Types.int32 (Just $ Terms.int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
-    Case _Type_function --> lambda "f" $ Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))
-  ] (Just $ Terms.int32 0)
+    Case _Type_function --> lambda "f" $
+      Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))]
 
 termVariantDef :: Definition (Term a -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.wrap _TermVariant) $
   lambda "term" $ apply
-    (matchToEnum _Term _TermVariant [
+    (matchToEnum _Term _TermVariant Nothing [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
       _Term_element         @-> _TermVariant_element,
@@ -245,7 +245,7 @@ termVariantDef = basicsDefinition "termVariant" $
       _Term_sum             @-> _TermVariant_sum,
       _Term_union           @-> _TermVariant_union,
       _Term_variable        @-> _TermVariant_variable,
-      _Term_wrap            @-> _TermVariant_wrap] Nothing)
+      _Term_wrap            @-> _TermVariant_wrap])
     (var "term")
 
 termVariantsDef :: Definition [TermVariant]
@@ -282,7 +282,7 @@ typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) (Types.wrap _TypeVariant) $
   lambda "typ" $ apply
-    (matchToEnum _Type _TypeVariant [
+    (matchToEnum _Type _TypeVariant Nothing [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,
       _Type_element     @-> _TypeVariant_element,
@@ -299,7 +299,7 @@ typeVariantDef = basicsDefinition "typeVariant" $
       _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
       _Type_variable    @-> _TypeVariant_variable,
-      _Type_wrap        @-> _TypeVariant_wrap] Nothing)
+      _Type_wrap        @-> _TypeVariant_wrap])
     (var "typ")
 
 typeVariantsDef :: Definition [TypeVariant]

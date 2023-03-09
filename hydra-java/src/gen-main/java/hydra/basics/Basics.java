@@ -17,11 +17,6 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrap instance) {
-        return new hydra.mantle.EliminationVariant.Wrap();
-      }
-      
-      @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Optional instance) {
         return new hydra.mantle.EliminationVariant.Optional();
       }
@@ -34,6 +29,11 @@ public interface Basics {
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Union instance) {
         return new hydra.mantle.EliminationVariant.Union();
+      }
+      
+      @Override
+      public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrap instance) {
+        return new hydra.mantle.EliminationVariant.Wrap();
       }
     });
   }
@@ -390,11 +390,6 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.TermVariant visit(hydra.core.Term.Wrap instance) {
-        return new hydra.mantle.TermVariant.Wrap();
-      }
-      
-      @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Optional instance) {
         return new hydra.mantle.TermVariant.Optional();
       }
@@ -433,6 +428,11 @@ public interface Basics {
       public hydra.mantle.TermVariant visit(hydra.core.Term.Variable instance) {
         return new hydra.mantle.TermVariant.Variable();
       }
+      
+      @Override
+      public hydra.mantle.TermVariant visit(hydra.core.Term.Wrap instance) {
+        return new hydra.mantle.TermVariant.Wrap();
+      }
     });
   }
   
@@ -444,7 +444,6 @@ public interface Basics {
     new hydra.mantle.TermVariant.Function(),
     new hydra.mantle.TermVariant.List(),
     new hydra.mantle.TermVariant.Map(),
-    new hydra.mantle.TermVariant.Wrap(),
     new hydra.mantle.TermVariant.Optional(),
     new hydra.mantle.TermVariant.Product(),
     new hydra.mantle.TermVariant.Record(),
@@ -452,10 +451,37 @@ public interface Basics {
     new hydra.mantle.TermVariant.Stream(),
     new hydra.mantle.TermVariant.Sum(),
     new hydra.mantle.TermVariant.Union(),
-    new hydra.mantle.TermVariant.Variable());
+    new hydra.mantle.TermVariant.Variable(),
+    new hydra.mantle.TermVariant.Wrap());
   
   static <A> Integer testLists(java.util.List<java.util.List<A>> els) {
     return hydra.lib.lists.Length.apply(hydra.lib.lists.Concat.apply((els)));
+  }
+  
+  static <A> Integer typeArity(hydra.core.Type<A> v1) {
+    return ((v1)).accept(new hydra.core.Type.Visitor<Integer>() {
+      @Override
+      public Integer visit(hydra.core.Type.Annotated instance) {
+        return hydra.basics.Basics.typeArity((hydra.core.Type<A>) (((instance.value)).subject));
+      }
+      
+      @Override
+      public Integer visit(hydra.core.Type.Application instance) {
+        return hydra.basics.Basics.typeArity((hydra.core.Type<A>) (((instance.value)).function));
+      }
+      
+      @Override
+      public Integer visit(hydra.core.Type.Lambda instance) {
+        return hydra.basics.Basics.typeArity((hydra.core.Type<A>) (((instance.value)).body));
+      }
+      
+      @Override
+      public Integer visit(hydra.core.Type.Function instance) {
+        return hydra.lib.math.Add.apply(
+          1,
+          hydra.basics.Basics.typeArity((hydra.core.Type<A>) (((instance.value)).codomain)));
+      }
+    });
   }
   
   static <A> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<A> typ) {
