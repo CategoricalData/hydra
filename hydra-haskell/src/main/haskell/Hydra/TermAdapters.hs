@@ -212,8 +212,13 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
               OptionalCases
                 <$> encodeDecode dir (adapterCoder codAd) nothing
                 <*> (encodeDecode dir (adapterCoder $ Y.fromJust optionAd) just))
-            EliminationUnion (CaseStatement n cases) -> EliminationUnion . CaseStatement n <$>
-                CM.mapM (\f -> encodeDecode dir (getCoder $ fieldName f) f) cases
+            EliminationUnion (CaseStatement n def cases) -> do
+                rcases <- CM.mapM (\f -> encodeDecode dir (getCoder $ fieldName f) f) cases
+                rdef <- case def of
+                  Nothing -> pure Nothing
+                  Just d -> Just <$> encodeDecode dir (adapterCoder codAd) d
+                return $ EliminationUnion $ CaseStatement n rdef rcases
+
               where
                 -- Note: this causes unrecognized cases to simply be passed through;
                 --       it is not the job of this adapter to catch validation issues.

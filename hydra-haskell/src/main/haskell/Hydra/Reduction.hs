@@ -15,6 +15,7 @@ import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 
 
 alphaConvert :: Ord a => Name -> Term a -> Term a -> Term a
@@ -67,8 +68,13 @@ betaReduceTerm = reduce M.empty
             EliminationOptional (OptionalCases nothing just) -> TermFunction . FunctionElimination . EliminationOptional <$>
               (OptionalCases <$> reduceb nothing <*> reduceb just)
             EliminationRecord _ -> done
-            EliminationUnion (CaseStatement n cases) ->
-              TermFunction . FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM reduceField cases
+            EliminationUnion (CaseStatement n def cases) -> do
+                rcases <- CM.mapM reduceField cases
+                rdef <- case def of
+                  Nothing -> pure Nothing
+                  Just d -> Just <$> reduceb d
+                return $ TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n rdef rcases
+
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
@@ -99,11 +105,13 @@ betaReduceTerm = reduce M.empty
                     Just t -> reduce bindings just >>= reduceApplication bindings (t:L.tail args)
                   _ -> fail $ "tried to apply an optional case statement to a non-optional term: " ++ show arg
 
-              EliminationUnion (CaseStatement _ cases) -> do
+              EliminationUnion (CaseStatement _ def cases) -> do
                 arg <- (reduce bindings $ L.head args) >>= deref
                 case stripTerm arg of
                   TermUnion (Injection _ (Field fname t)) -> if L.null matching
-                      then fail $ "no case for field named " ++ unFieldName fname
+                      then case def of
+                        Nothing -> fail $ "no case for field named " ++ unFieldName fname
+                        Just d -> reduce bindings d
                       else reduce bindings (fieldTerm $ L.head matching)
                         >>= reduceApplication bindings (t:L.tail args)
                     where
@@ -197,34 +205,34 @@ termIsClosed = S.null . freeVariablesInTerm
 
 -- | Whether a term has been fully reduced to a "value"
 termIsValue :: Graph a -> Term a -> Bool
-termIsValue cx term = case stripTerm term of
+termIsValue g term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True
     TermElement _ -> True
     TermFunction f -> functionIsValue f
     TermList els -> forList els
     TermMap map -> L.foldl
-      (\b (k, v) -> b && termIsValue cx k && termIsValue cx v)
+      (\b (k, v) -> b && termIsValue g k && termIsValue g v)
       True $ M.toList map
     TermOptional m -> case m of
       Nothing -> True
-      Just term -> termIsValue cx term
+      Just term -> termIsValue g term
     TermRecord (Record _ fields) -> checkFields fields
     TermSet els -> forList $ S.toList els
     TermUnion (Injection _ field) -> checkField field
     TermVariable _ -> False
   where
-    forList els = L.foldl (\b t -> b && termIsValue cx t) True els
-    checkField = termIsValue cx . fieldTerm
+    forList els = L.foldl (\b t -> b && termIsValue g t) True els
+    checkField = termIsValue g . fieldTerm
     checkFields = L.foldl (\b f -> b && checkField f) True
 
     functionIsValue f = case f of
       FunctionElimination e -> case e of
         EliminationElement -> True
         EliminationWrap _ -> True
-        EliminationOptional (OptionalCases nothing just) -> termIsValue cx nothing
-          && termIsValue cx just
+        EliminationOptional (OptionalCases nothing just) -> termIsValue g nothing
+          && termIsValue g just
         EliminationRecord _ -> True
-        EliminationUnion (CaseStatement _ cases) -> checkFields cases
-      FunctionLambda (Lambda _ body) -> termIsValue cx body
+        EliminationUnion (CaseStatement _ def cases) -> checkFields cases && (Y.maybe True (termIsValue g) def)
+      FunctionLambda (Lambda _ body) -> termIsValue g body
       FunctionPrimitive _ -> True

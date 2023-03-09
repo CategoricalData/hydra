@@ -98,24 +98,24 @@ map = Datum . Terms.map . M.fromList . fmap fromDatum . M.toList
   where
     fromDatum (Datum k, Datum v) = (k, v)
 
-matchData :: Name -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
-matchData name pairs = Datum $ Terms.cases name (toField <$> pairs)
+matchData :: Name -> Maybe (Datum b) -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
+matchData name def pairs = Datum $ Terms.cases name (unDatum <$> def) (toField <$> pairs)
   where
     toField (fname, Datum term) = Field fname term
 
 matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
 matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
-match :: Name -> Type Kv -> [Field Kv] -> Datum (u -> b)
-match name cod fields = function (Types.wrap name) cod $ Datum $ Terms.cases name fields
+match :: Name -> Type Kv -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
+match name cod def fields = function (Types.wrap name) cod $ Datum $ Terms.cases name def fields
 
-matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Datum (a -> b)
-matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
+matchToEnum :: Name -> Name -> Maybe (Datum b) -> [(FieldName, FieldName)] -> Datum (a -> b)
+matchToEnum domName codName def pairs = matchData domName def (toCase <$> pairs)
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
-matchToUnion :: Name -> Name -> [(FieldName, Field Kv)] -> Datum (a -> b)
-matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
+matchToUnion :: Name -> Name -> Maybe (Datum b) -> [(FieldName, Field Kv)] -> Datum (a -> b)
+matchToUnion domName codName def pairs = matchData domName def (toCase <$> pairs)
   where
     toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.inject codName fld)
 
@@ -129,8 +129,8 @@ opt mc = Datum $ Terms.optional (unDatum <$> mc)
 primitive :: Name -> Datum a
 primitive = Datum . Terms.primitive
 
-project :: Name -> Type Kv -> FieldName -> Datum (a -> b)
-project name cod fname = Datum $ Terms.projection name fname
+project :: Name -> FieldName -> Datum (a -> b)
+project name fname = Datum $ Terms.projection name fname
 
 record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)

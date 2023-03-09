@@ -127,8 +127,11 @@ arbitraryFunction (FunctionType dom cod) n = QC.oneof $ defaults ++ domainSpecif
       FunctionLambda <$> (Lambda (Name "x") <$> arbitraryTerm cod n')]
      -- Note: two random types will rarely be equal, but it will happen occasionally with simple types
     domainSpecific = case dom of
-      TypeUnion (RowType n _ sfields) -> [FunctionElimination . EliminationUnion . CaseStatement n <$> CM.mapM arbitraryCase sfields]
+      TypeUnion (RowType n _ sfields) -> [cs]
         where
+          cs = do
+            afields <- CM.mapM arbitraryCase sfields
+            return $ FunctionElimination $ EliminationUnion $ CaseStatement n Nothing afields
           arbitraryCase (FieldType fn dom') = do
             term <- arbitraryFunction (FunctionType dom' cod) n2
             return $ Field fn $ TermFunction term

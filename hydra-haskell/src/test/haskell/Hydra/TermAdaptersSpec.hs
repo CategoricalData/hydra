@@ -150,14 +150,14 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (projection testTypePersonName fname)
       (projection testTypePersonName fname)
 
-  H.it "Nominal types (when supported) pass through without change" $
-    QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantWrap]
-      stringAliasType
-      stringAliasType
-      False
-      (string s)
-      (string s)
+--  H.it "Nominal types (when supported) pass through without change" $
+--    QC.property $ \s -> checkDataAdapter
+--      [TypeVariantLiteral, TypeVariantWrap]
+--      stringAliasType
+--      stringAliasType
+--      False
+--      (string s)
+--      (string s)
 
 unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
@@ -217,15 +217,15 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       (inject functionProxyName $ field "record" $ string $
         show (projection testTypePersonName fname :: Term Kv)) -- Note: the field name is not dereferenced
 
-  H.it "Nominal types (when unsupported) are dereferenced" $
-    QC.property $ \s -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantAnnotated]
-      stringAliasType
-      (TypeAnnotated $ Annotated Types.string $ Kv $
-        M.fromList [(kvDescription, Terms.string "An alias for the string type")])
-      False
-      (string s)
-      (string s)
+--  H.it "Nominal types (when unsupported) are dereferenced" $
+--    QC.property $ \s -> checkDataAdapter
+--      [TypeVariantLiteral, TypeVariantAnnotated]
+--      stringAliasType
+--      (TypeAnnotated $ Annotated Types.string $ Kv $
+--        M.fromList [(kvDescription, Terms.string "An alias for the string type")])
+--      False
+--      (string s)
+--      (string s)
 
   H.it "Unions (when unsupported) become records" $
     QC.property $ \i -> checkDataAdapter

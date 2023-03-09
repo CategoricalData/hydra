@@ -53,12 +53,15 @@ _ApplicationType_argument = (FieldName "argument")
 data CaseStatement a = 
   CaseStatement {
     caseStatementTypeName :: Name,
+    caseStatementDefault :: (Maybe (Term a)),
     caseStatementCases :: [Field a]}
   deriving (Eq, Ord, Read, Show)
 
 _CaseStatement = (Name "hydra/core.CaseStatement")
 
 _CaseStatement_typeName = (FieldName "typeName")
+
+_CaseStatement_default = (FieldName "default")
 
 _CaseStatement_cases = (FieldName "cases")
 

@@ -51,6 +51,7 @@ hydraCoreModule = Module ns elements [] $
         doc "A union elimination; a case statement" $
         lambda "a" $ record [
           "typeName">: core "Name",
+          "default">: optional (core "Term" @@ "a"),
           "cases">: list $ core "Field" @@ "a"],
 
       def "Elimination" $
