@@ -96,15 +96,25 @@ flow = fromFlowIo g
 -- Choose a type for terms to encode. In this case, we will be encoding numeric precision values.
 typ = TypeVariable _Precision
 
+-- Construct an instance of the chosen type. In this case, we construct a precision value, then encode it as a term.
+term = Terms.inject _Precision (Field _Precision_bits $ Terms.int32 64)
+
 -- Create the adapting coder
 coder <- flow $ jsonStringCoder typ
 
--- Construct an instance of the chosen type. In this case, we construct a precision value, then encode it as a term.
-inst = Terms.inject _Precision (Field _Precision_bits $ Terms.int32 64)
-
 -- Apply the encoding, which turns the term into a JSON string.
-flow (coderEncode coder inst) >>= putStrLn
+flow (coderEncode coder term) >>= putStrLn
 ```
+
+For a more sophisticated example involving recursive types, use:
+
+```haskell
+typ = TypeVariable _Type
+term = Terms.inject _Type (Field _Type_literal $ Terms.inject _LiteralType (Field _LiteralType_boolean $ Terms.record _UnitType []))
+```
+
+in place of the `Precision` type and term above.
+This defines a type (in this case, the type of all types), and also a term which is an instance of that type (so in this case, an encoded type).
 
 ## Haskell API
 

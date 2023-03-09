@@ -18,6 +18,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import qualified Hydra.Langs.Haskell.Coder as Haskell
 import qualified Hydra.Langs.Java.Coder as Java
+import qualified Hydra.Langs.Json.Coder as Json
 import qualified Hydra.Langs.Pegasus.Coder as PDL
 import qualified Hydra.Langs.Scala.Coder as Scala
 import qualified Hydra.Langs.Yaml.Modules as Yaml
@@ -156,8 +157,13 @@ generateSources printModule mods0 basePath = do
 
     forModule mod = withTrace ("module " ++ unNamespace (moduleNamespace mod)) $ printModule mod
 
+-- Note: currently a subset of the kernel, as the other modules are not yet needed in the runtime environment
 hydraKernel :: Graph Kv
-hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [hydraCoreModule, hydraMantleModule, hydraModuleModule, hydraTestingModule]
+hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
+  hydraCoreModule,
+  hydraMantleModule,
+  hydraModuleModule,
+  hydraTestingModule]
 
 kernelModules :: [Module Kv]
 kernelModules = [
@@ -238,6 +244,9 @@ writeHaskell = generateSources Haskell.printModule
 
 writeJava :: [Module Kv] -> FP.FilePath -> IO ()
 writeJava = generateSources Java.printModule
+
+-- writeJson :: [Module Kv] -> FP.FilePath -> IO ()
+-- writeJson = generateSources Json.printModule
 
 writePdl :: [Module Kv] -> FP.FilePath -> IO ()
 writePdl = generateSources PDL.printModule

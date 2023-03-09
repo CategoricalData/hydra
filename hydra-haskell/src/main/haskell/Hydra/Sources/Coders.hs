@@ -30,8 +30,11 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
         doc "An evaluation context together with a source language and a target language" $
         lambda "a" $ record [
           "graph">: apply (graph "Graph") (variable "a"),
-          "source">: apply (coders "Language") (variable "a"),
-          "target">: apply (coders "Language") (variable "a")],
+          "language">: apply (coders "Language") (variable "a"),
+          "adapters">: Types.map (core "Name") (compute "Adapter"
+            @@ (coders "AdapterContext" @@ "a") @@ (coders "AdapterContext" @@ "a")
+            @@ (core "Type" @@ "a") @@ (core "Type" @@ "a")
+            @@ (core "Term" @@ "a") @@ (core "Term" @@ "a"))],
 
       def "CoderDirection" $
         doc "Indicates either the 'out' or the 'in' direction of a coder" $
