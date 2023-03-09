@@ -34,6 +34,8 @@ Scala support, on the other hand, is partial and experimental at this time.
 You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
 
 ```bash
+import Hydra.Codegen
+
 writeHaskell mainModules "src/gen-main/haskell"
 ```
 
