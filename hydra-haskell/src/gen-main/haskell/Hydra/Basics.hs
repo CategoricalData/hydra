@@ -202,6 +202,14 @@ termVariants = [
 testLists :: ([[a]] -> Int)
 testLists els = (Lists.length (Lists.concat els))
 
+typeArity :: (Core.Type a -> Int)
+typeArity x = case x of
+  Core.TypeAnnotated v -> (typeArity (Core.annotatedSubject v))
+  Core.TypeApplication v -> (typeArity (Core.applicationTypeFunction v))
+  Core.TypeLambda v -> (typeArity (Core.lambdaTypeBody v))
+  Core.TypeFunction v -> (Math.add 1 (typeArity (Core.functionTypeCodomain v)))
+  _ -> 0
+
 -- | Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type a -> Mantle.TypeVariant)
 typeVariant typ = ((\x -> case x of
