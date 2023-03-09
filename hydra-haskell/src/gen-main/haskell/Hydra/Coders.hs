@@ -2,6 +2,7 @@
 
 module Hydra.Coders where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Mantle as Mantle
@@ -13,16 +14,16 @@ import Data.Set
 data AdapterContext a = 
   AdapterContext {
     adapterContextGraph :: (Graph.Graph a),
-    adapterContextSource :: (Language a),
-    adapterContextTarget :: (Language a)}
+    adapterContextLanguage :: (Language a),
+    adapterContextAdapters :: (Map Core.Name (Compute.Adapter (AdapterContext a) (AdapterContext a) (Core.Type a) (Core.Type a) (Core.Term a) (Core.Term a)))}
 
 _AdapterContext = (Core.Name "hydra/coders.AdapterContext")
 
 _AdapterContext_graph = (Core.FieldName "graph")
 
-_AdapterContext_source = (Core.FieldName "source")
+_AdapterContext_language = (Core.FieldName "language")
 
-_AdapterContext_target = (Core.FieldName "target")
+_AdapterContext_adapters = (Core.FieldName "adapters")
 
 -- | Indicates either the 'out' or the 'in' direction of a coder
 data CoderDirection = 

@@ -13,6 +13,7 @@ import Hydra.Basics
 import Hydra.Module
 import Hydra.Monads
 import Hydra.Printing
+import Hydra.Mantle
 import Hydra.Kv
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Dsl.Terms as Terms
@@ -23,6 +24,8 @@ import Control.Monad
 
 
 type SymmetricAdapter s t v = Adapter s s t t v v
+
+type TypeAdapter a = Type a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (Type a) (Term a))
 
 bidirectional :: (CoderDirection -> b -> Flow s b) -> Coder s s b b
 bidirectional f = Coder (f CoderDirectionEncode) (f CoderDirectionDecode)
@@ -37,7 +40,7 @@ chooseAdapter alts supported describe typ = if supported typ
   then pure $ Adapter False typ typ idCoder
   else do
     -- Uncomment to debug adapter cycles
-    --debugCheckType typ
+    -- debugCheckType typ
 
     raw <- sequence (alts typ)
     let candidates = L.filter (supported . adapterTarget) raw
@@ -49,7 +52,7 @@ chooseAdapter alts supported describe typ = if supported typ
         ++ ". Original type: " ++ show typ
       else do
         -- Uncomment to debug adapter cycles
-        --debugRemoveType typ
+        -- debugRemoveType typ
 
         return $ L.head candidates
 
@@ -74,7 +77,7 @@ debugRemoveType typ = do
   let types' = S.delete s types
   putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
 
-encodeDecode :: CoderDirection -> Coder s s a a -> a -> Flow s a
+encodeDecode :: CoderDirection -> Coder s s x x -> x -> Flow s x
 encodeDecode dir = case dir of
   CoderDirectionEncode -> coderEncode
   CoderDirectionDecode -> coderDecode
@@ -105,7 +108,7 @@ nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ gname 
 
 typeIsSupported :: LanguageConstraints a -> Type a -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints
-  && S.member (typeVariant t) (languageConstraintsTypeVariants constraints)
+  && isSupportedVariant (typeVariant t)
   && case t of
     TypeAnnotated (Annotated at _) -> typeIsSupported constraints at
     TypeLiteral at -> literalTypeIsSupported constraints at
@@ -118,7 +121,9 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     TypeSet st -> typeIsSupported constraints st
     TypeUnion rt -> and $ typeIsSupported constraints . fieldTypeType <$> rowTypeFields rt
     _ -> True
-
+  where
+    isSupportedVariant v = v == TypeVariantVariable || S.member v (languageConstraintsTypeVariants constraints)
+    
 unidirectionalCoder :: (a -> Flow s b) -> Coder s s a b
 unidirectionalCoder m = Coder {
   coderEncode = m,
