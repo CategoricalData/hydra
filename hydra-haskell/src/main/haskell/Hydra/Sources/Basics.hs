@@ -38,6 +38,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraMantleModul
       el termVariantDef,
       el termVariantsDef,
       el testListsDef,
+      el typeArityDef,
       el typeVariantDef,
       el typeVariantsDef]
 
@@ -211,6 +212,16 @@ qnameDef = basicsDefinition "qname" $
       nom _Name $
         apply cat $
           list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
+
+typeArityDef :: Definition (Type a -> Int)
+typeArityDef = basicsDefinition "typeArity" $
+  function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.int32 $
+  match _Type Types.int32 [
+    Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
+    Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
+    Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
+    Case _Type_function --> lambda "f" $ Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))
+  ] (Just $ Terms.int32 0)
 
 termVariantDef :: Definition (Term a -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
