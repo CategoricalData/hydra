@@ -79,7 +79,7 @@ encodeFunction meta fun arg = case fun of
       EliminationWrap name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
       EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
       EliminationRecord p -> fail "unapplied projection not yet supported"
-      EliminationUnion (CaseStatement _ cases def) -> do
+      EliminationUnion (CaseStatement _ def cases) -> do
           let v = "v"
           dom <- findDomain
           ftypes <- withSchemaContext $ fieldTypes dom

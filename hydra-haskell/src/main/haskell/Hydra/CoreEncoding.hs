@@ -94,10 +94,10 @@ sigmaEncodeApplication (Application lhs rhs) = record _Application [
   Field _Application_argument $ sigmaEncodeTerm rhs]
 
 sigmaEncodeCaseStatement :: Ord a => CaseStatement a -> Term a
-sigmaEncodeCaseStatement (CaseStatement name cases def) = record _CaseStatement [
+sigmaEncodeCaseStatement (CaseStatement name def cases) = record _CaseStatement [
   Field _CaseStatement_typeName $ string (unName name),
-  Field _CaseStatement_cases $ list $ sigmaEncodeField <$> cases,
-  Field _CaseStatement_default $ optional $ sigmaEncodeTerm <$> def]
+  Field _CaseStatement_default $ optional $ sigmaEncodeTerm <$> def,
+  Field _CaseStatement_cases $ list $ sigmaEncodeField <$> cases]
 
 sigmaEncodeElimination :: Ord a => Elimination a -> Term a
 sigmaEncodeElimination e = case e of

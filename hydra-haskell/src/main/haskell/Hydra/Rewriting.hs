@@ -133,7 +133,7 @@ rewriteTerm f mf = rewrite fsub f
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional
               (OptionalCases (recurse nothing) (recurse just))
             EliminationRecord p -> EliminationRecord p
-            EliminationUnion (CaseStatement n cases def) -> EliminationUnion $ CaseStatement n (forField <$> cases) (recurse <$> def)
+            EliminationUnion (CaseStatement n def cases) -> EliminationUnion $ CaseStatement n (recurse <$> def) (forField <$> cases)
           FunctionLambda (Lambda v body) -> FunctionLambda $ Lambda v $ recurse body
           FunctionPrimitive name -> FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet $ Let (M.fromList (mapBinding <$> M.toList bindings)) (recurse env)
@@ -167,11 +167,11 @@ rewriteTermM f mf = rewrite fsub f
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
               (OptionalCases <$> recurse nothing <*> recurse just)
             EliminationRecord p -> pure $ EliminationRecord p
-            EliminationUnion (CaseStatement n cases def) -> do
+            EliminationUnion (CaseStatement n def cases) -> do
               rdef <- case def of
                 Nothing -> pure Nothing
                 Just t -> Just <$> recurse t
-              EliminationUnion <$> (CaseStatement n <$> (CM.mapM forField cases) <*> (pure rdef))
+              EliminationUnion <$> (CaseStatement n rdef <$> (CM.mapM forField cases))
           FunctionLambda (Lambda v body) -> FunctionLambda <$> (Lambda v <$> recurse body)
           FunctionPrimitive name -> pure $ FunctionPrimitive name
         TermLet (Let bindings env) -> TermLet <$> (Let <$> (M.fromList <$> (CM.mapM mapBinding $ M.toList bindings)) <*> recurse env)
@@ -264,7 +264,7 @@ subterms term = case term of
   TermFunction f -> case f of
     FunctionElimination e -> case e of
       EliminationOptional (OptionalCases nothing just) -> [nothing, just]
-      EliminationUnion (CaseStatement _ cases def) -> (fieldTerm <$> cases) ++ (Y.catMaybes [def])
+      EliminationUnion (CaseStatement _ def cases) -> (fieldTerm <$> cases) ++ (Y.catMaybes [def])
       _ -> []
     FunctionLambda (Lambda _ body) -> [body]
     _ -> []

@@ -42,27 +42,27 @@ describeIntegerTypeDef = printingDefinition "describeIntegerType" $
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
-  match _LiteralType Types.string [
+  match _LiteralType Types.string Nothing [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
     Case _LiteralType_float   --> ref describeFloatTypeDef,
     Case _LiteralType_integer --> ref describeIntegerTypeDef,
-    Case _LiteralType_string  --> constant $ string "character strings"] Nothing
+    Case _LiteralType_string  --> constant $ string "character strings"]
 
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
-  match _Precision Types.string [
+  match _Precision Types.string Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $
-      showInt32 @@ var "bits" ++ string "-bit"] Nothing
+      showInt32 @@ var "bits" ++ string "-bit"]
 
 describeTypeDef :: Definition (Type a -> string)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $
   lambda "typ" $ apply
-    (match _Type Types.string [
+    (match _Type Types.string Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
@@ -86,7 +86,7 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "instances of a named type"] Nothing)
+      Case _Type_variable    --> constant $ string "instances of a named type"])
     (var "typ")
   where
     annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")
