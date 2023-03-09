@@ -25,6 +25,9 @@ instance IsString (Term a) where fromString = string
 (@@) :: Term a -> Term a -> Term a
 f @@ x = apply f x
 
+(<.>) :: Term a -> Term a -> Term a
+f <.> g = compose f g
+
 annot :: a -> Term a -> Term a
 annot ann t = TermAnnotated $ Annotated t ann
 
@@ -45,6 +48,9 @@ boolean = literal . Literals.boolean
 
 cases :: Name -> Maybe (Term a) -> [Field a] -> Term a
 cases n def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n def fields
+
+compose :: Term a -> Term a -> Term a
+compose f g = lambda "x" $ apply f (apply g $ variable "x")
 
 constFunction :: Term a -> Term a
 constFunction = lambda "_"

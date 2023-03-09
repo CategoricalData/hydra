@@ -95,7 +95,7 @@ sigmaEncodeApplication (Application lhs rhs) = record _Application [
 
 sigmaEncodeCaseStatement :: Ord a => CaseStatement a -> Term a
 sigmaEncodeCaseStatement (CaseStatement name def cases) = record _CaseStatement [
-  Field _CaseStatement_typeName $ string (unName name),
+  Field _CaseStatement_typeName $ sigmaEncodeName name,
   Field _CaseStatement_default $ optional $ sigmaEncodeTerm <$> def,
   Field _CaseStatement_cases $ list $ sigmaEncodeField <$> cases]
 
@@ -103,15 +103,18 @@ sigmaEncodeElimination :: Ord a => Elimination a -> Term a
 sigmaEncodeElimination e = case e of
   EliminationElement -> unitVariant _Elimination _Elimination_element
   EliminationList f -> variant _Elimination _Elimination_list $ sigmaEncodeTerm f
-  EliminationWrap (Name name) -> variant _Elimination _Elimination_wrap $ string name
+  EliminationWrap name -> variant _Elimination _Elimination_wrap $ sigmaEncodeName name
   EliminationOptional cases -> variant _Elimination _Elimination_optional $ sigmaEncodeOptionalCases cases
   EliminationRecord p -> variant _Elimination _Elimination_record $ sigmaEncodeProjection p
   EliminationUnion c -> variant _Elimination _Elimination_union $ sigmaEncodeCaseStatement c
 
 sigmaEncodeField :: Ord a => Field a -> Term a
-sigmaEncodeField (Field (FieldName name) term) = record _Field [
-  Field _Field_name $ string name,
+sigmaEncodeField (Field fname term) = record _Field [
+  Field _Field_name $ sigmaEncodeFieldName fname,
   Field _Field_term $ sigmaEncodeTerm term]
+
+sigmaEncodeFieldName :: FieldName -> Term a
+sigmaEncodeFieldName fname = TermWrap $ Nominal _FieldName $ string $ unFieldName fname
 
 sigmaEncodeFloatValue :: FloatValue -> Term a
 sigmaEncodeFloatValue f = variant _FloatValue var $ float f
@@ -125,7 +128,7 @@ sigmaEncodeFunction :: Ord a => Function a -> Term a
 sigmaEncodeFunction f = case f of
   FunctionElimination e -> variant _Function _Function_elimination $ sigmaEncodeElimination e
   FunctionLambda l -> variant _Function _Function_lambda $ sigmaEncodeLambda l
-  FunctionPrimitive (Name name) -> variant _Function _Function_primitive $ TermWrap $ Nominal _Name $ string name
+  FunctionPrimitive name -> variant _Function _Function_primitive $ sigmaEncodeName name
 
 sigmaEncodeIntegerValue :: IntegerValue -> Term a
 sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
@@ -142,8 +145,8 @@ sigmaEncodeIntegerValue i = variant _IntegerValue var $ integer i
       IntegerTypeUint64 -> _IntegerType_uint64
 
 sigmaEncodeLambda :: Ord a => Lambda a -> Term a
-sigmaEncodeLambda (Lambda (Name v) b) = record _Lambda [
-  Field _Lambda_parameter $ string v,
+sigmaEncodeLambda (Lambda v b) = record _Lambda [
+  Field _Lambda_parameter $ sigmaEncodeName v,
   Field _Lambda_body $ sigmaEncodeTerm b]
 
 sigmaEncodeLiteral :: Literal -> Term a
@@ -162,9 +165,12 @@ sigmaEncodeLiteralVariant av = unitVariant _LiteralVariant $ case av of
   LiteralVariantInteger -> _LiteralVariant_integer
   LiteralVariantString -> _LiteralVariant_string
 
+sigmaEncodeName :: Name -> Term a
+sigmaEncodeName name = TermWrap $ Nominal _Name $ string $ unName name
+
 sigmaEncodeNominalTerm :: Ord a => Nominal (Term a) -> Term a
-sigmaEncodeNominalTerm (Nominal (Name name) term) = record _Nominal [
-  Field _Nominal_typeName $ string name,
+sigmaEncodeNominalTerm (Nominal name term) = record _Nominal [
+  Field _Nominal_typeName $ sigmaEncodeName name,
   Field _Nominal_object $ sigmaEncodeTerm term]
 
 sigmaEncodeOptionalCases :: Ord a => OptionalCases a -> Term a
@@ -174,8 +180,8 @@ sigmaEncodeOptionalCases (OptionalCases nothing just) = record _OptionalCases [
 
 sigmaEncodeProjection :: Projection -> Term a
 sigmaEncodeProjection (Projection name fname) = record _Projection [
-  Field _Projection_typeName $ string (unName name),
-  Field _Projection_field $ string (unFieldName fname)]
+  Field _Projection_typeName $ sigmaEncodeName name,
+  Field _Projection_field $ sigmaEncodeFieldName fname]
 
 sigmaEncodeSum :: Ord a => Sum a -> Term a
 sigmaEncodeSum (Sum i l term) = record _Sum [
@@ -188,7 +194,7 @@ sigmaEncodeTerm term = case term of
   TermAnnotated (Annotated t ann) -> variant _Term _Term_annotated $ TermAnnotated $ Annotated (sigmaEncodeTerm t) ann
   TermApplication a -> variant _Term _Term_application $ sigmaEncodeApplication a
   TermLiteral av -> variant _Term _Term_literal $ sigmaEncodeLiteral av
-  TermElement (Name name) -> variant _Term _Term_element $ string name
+  TermElement name -> variant _Term _Term_element $ sigmaEncodeName name
   TermFunction f -> variant _Term _Term_function $ sigmaEncodeFunction f
   TermList terms -> variant _Term _Term_list $ list $ sigmaEncodeTerm <$> terms
   TermMap m -> variant _Term _Term_map $ map $ M.fromList $ sigmaEncodePair <$> M.toList m
@@ -199,5 +205,5 @@ sigmaEncodeTerm term = case term of
   TermSet terms -> variant _Term _Term_set $ set $ S.fromList $ sigmaEncodeTerm <$> S.toList terms
   TermSum s -> variant _Term _Term_sum $ sigmaEncodeSum s
   TermUnion (Injection _ field) -> variant _Term _Term_union $ sigmaEncodeField field
-  TermVariable (Name var) -> variant _Term _Term_variable $ string var
+  TermVariable var -> variant _Term _Term_variable $ sigmaEncodeName var
   TermWrap ntt -> variant _Term _Term_wrap $ sigmaEncodeNominalTerm ntt
