@@ -578,11 +578,11 @@ encodeTerm aliases mtype term = case term of
 
     TermOptional mt -> case mt of
       Nothing -> pure $ javaMethodInvocationToJavaExpression $
-        methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "empty") []
+        methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "empty") []
       Just term1 -> do
         expr <- encode term1
         return $ javaMethodInvocationToJavaExpression $
-          methodInvocationStatic (javaIdentifier "java.util.Optional") (Java.Identifier "of") [expr]
+          methodInvocationStatic (Java.Identifier "java.util.Optional") (Java.Identifier "of") [expr]
 
     TermRecord (Record name fields) -> do
       fieldExprs <- CM.mapM encode (fieldTerm <$> fields)
@@ -594,7 +594,7 @@ encodeTerm aliases mtype term = case term of
       let prim = javaMethodInvocationToJavaPrimary $
                  methodInvocationStatic (Java.Identifier "java.util.Stream") (Java.Identifier "of") jels
       let coll = javaMethodInvocationToJavaExpression $
-                 methodInvocationStatic (javaIdentifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
+                 methodInvocationStatic (Java.Identifier "java.util.stream.Collectors") (Java.Identifier "toSet") []
       return $ javaMethodInvocationToJavaExpression $
         methodInvocation (Just $ Right prim) (Java.Identifier "collect") [coll]
 
