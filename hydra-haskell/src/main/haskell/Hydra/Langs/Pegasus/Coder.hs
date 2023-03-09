@@ -77,9 +77,9 @@ encodeAdaptedType :: (Ord a, Read a, Show a)
   => M.Map Namespace String -> Type a
   -> GraphFlow a (Either PDL.Schema PDL.NamedSchema_Type)
 encodeAdaptedType aliases typ = do
-  cx <- getState
-  let acx = AdapterContext cx hydraCoreLanguage pdlLanguage
-  ad <- withState acx $ termAdapter typ
+  g <- getState
+  let cx = AdapterContext g pdlLanguage M.empty
+  ad <- withState cx $ termAdapter typ
   encodeType aliases $ adapterTarget ad
 
 encodeTerm :: (Eq a, Ord a, Read a, Show a) => M.Map Namespace String -> Term a -> GraphFlow a ()

@@ -501,11 +501,6 @@ public interface Basics {
       }
       
       @Override
-      public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrap instance) {
-        return new hydra.mantle.TypeVariant.Wrap();
-      }
-      
-      @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Optional instance) {
         return new hydra.mantle.TypeVariant.Optional();
       }
@@ -543,6 +538,11 @@ public interface Basics {
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Variable instance) {
         return new hydra.mantle.TypeVariant.Variable();
+      }
+      
+      @Override
+      public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrap instance) {
+        return new hydra.mantle.TypeVariant.Wrap();
       }
     });
   }

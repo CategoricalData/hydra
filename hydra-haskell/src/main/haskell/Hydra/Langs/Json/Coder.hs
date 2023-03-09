@@ -16,11 +16,9 @@ import qualified Data.Maybe as Y
 
 jsonCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) Json.Value)
 jsonCoder typ = do
-    cx <- getState
-    let acx = AdapterContext cx hydraCoreLanguage jsonLanguage
-    adapter <- withState acx $ termAdapter typ
-    coder <- termCoder $ adapterTarget adapter
-    return $ composeCoders (adapterCoder adapter) coder
+  adapter <- languageAdapter jsonLanguage typ
+  coder <- termCoder $ adapterTarget adapter
+  return $ composeCoders (adapterCoder adapter) coder
 
 literalCoder :: LiteralType -> GraphFlow a (Coder (Graph a) (Graph a) Literal Json.Value)
 literalCoder at = pure $ case at of
@@ -111,4 +109,8 @@ termCoder typ = case stripType typ of
       fromString cx s = Terms.string $ if isStringKey cx then s else read s
       isStringKey cx = stripType kt == Types.string
   TypeRecord rt -> recordCoder rt
+  TypeVariable name -> return $ Coder encode decode
+    where
+      encode term = pure $ Json.ValueString $ show term
+      decode term = fail $ "type variable " ++ unName name ++ " does not support decoding"
   _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)

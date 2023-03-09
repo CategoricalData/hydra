@@ -24,6 +24,7 @@ import Hydra.ArbitraryCore()
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Data.ByteString.Lazy as BS
@@ -33,27 +34,30 @@ baseLanguage :: Language a
 baseLanguage = hydraCoreLanguage
 
 baseContext :: AdapterContext Kv
-baseContext = AdapterContext testGraph baseLanguage baseLanguage
+baseContext = AdapterContext testGraph baseLanguage M.empty
 
 checkAdapter :: (Eq t, Eq v, Show t, Show v)
   => (v -> v)
-  -> (t -> Flow (AdapterContext Kv) (SymmetricAdapter (Graph Kv) t v))
+  -> (t -> Flow (AdapterContext Kv) (SymmetricAdapter (AdapterContext Kv) t v))
   -> ([r] -> AdapterContext Kv)
   -> [r] -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
-    let acx = mkContext variants :: AdapterContext Kv
-    let cx = adapterContextGraph acx
-    let FlowState adapter' _ trace = unFlow (mkAdapter source) acx emptyTrace
+    let cx0 = mkContext variants :: AdapterContext Kv
+    let g = adapterContextGraph cx0
+    let FlowState adapter' cx trace = unFlow (mkAdapter source) cx0 emptyTrace
     if Y.isNothing adapter' then HL.assertFailure (traceSummary trace) else pure ()
     let adapter = Y.fromJust adapter'
-    let step = adapterCoder adapter
+    let step = Coder encode decode
+          where
+            encode = withState cx . coderEncode (adapterCoder adapter)
+            decode = withState cx . coderDecode (adapterCoder adapter)
     adapterSource adapter `H.shouldBe` source
     adapterTarget adapter `H.shouldBe` target
     adapterIsLossy adapter `H.shouldBe` lossy
-    fromFlow cx (normalize <$> coderEncode step vs) `H.shouldBe` (normalize vt)
+    fromFlow g (normalize <$> coderEncode step vs) `H.shouldBe` (normalize vt)
     if lossy
       then True `H.shouldBe` True
-      else fromFlow cx (coderEncode step vs >>= coderDecode step) `H.shouldBe` vs
+      else fromFlow g (coderEncode step vs >>= coderDecode step) `H.shouldBe` vs
 
 checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
 checkLiteralAdapter = checkAdapter id literalAdapter context
@@ -139,4 +143,4 @@ termTestContext variants = withConstraints $ (languageConstraints baseLanguage) 
     integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32]
 
 withConstraints :: LanguageConstraints Kv -> AdapterContext Kv
-withConstraints c = baseContext { adapterContextTarget = baseLanguage { languageConstraints = c }}
+withConstraints c = baseContext { adapterContextLanguage = baseLanguage { languageConstraints = c }}

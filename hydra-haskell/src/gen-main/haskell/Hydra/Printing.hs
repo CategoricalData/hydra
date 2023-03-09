@@ -85,4 +85,4 @@ describeType typ = ((\x -> case x of
     (describeType v)])
   Core.TypeSum _ -> "variant tuples"
   Core.TypeUnion _ -> "unions"
-  Core.TypeVariable _ -> "unspecified/parametric terms") typ)
+  Core.TypeVariable _ -> "instances of a named type") typ)
