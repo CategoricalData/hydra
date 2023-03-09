@@ -22,15 +22,15 @@ import qualified Data.List as L
 import qualified Data.Set as S
 
 
-literalAdapter :: LiteralType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) LiteralType Literal)
+literalAdapter :: LiteralType -> Flow (AdapterContext a) (SymmetricAdapter s LiteralType Literal)
 literalAdapter lt = do
-    acx <- getState
-    chooseAdapter (alts acx) (supported acx) describeLiteralType lt
+    cx <- getState
+    chooseAdapter (alts cx) (supported cx) describeLiteralType lt
   where
-    supported acx = literalTypeIsSupported (constraints acx)
-    constraints acx = languageConstraints $ adapterContextTarget acx
+    supported cx = literalTypeIsSupported (constraints cx)
+    constraints cx = languageConstraints $ adapterContextLanguage cx
 
-    alts acx t = case t of
+    alts cx t = case t of
         LiteralTypeBinary -> pure $ fallbackAdapter t
         LiteralTypeBoolean -> pure $ if noIntegerVars
             then fallbackAdapter t
@@ -65,11 +65,11 @@ literalAdapter lt = do
             return $ Adapter (adapterIsLossy adapter) t (LiteralTypeInteger $ adapterTarget adapter) step
         LiteralTypeString -> pure $ fail "no substitute for the literal string type"
       where
-        noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants $ constraints acx)
-          || S.null (languageConstraintsFloatTypes $ constraints acx)
-        noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants $ constraints acx)
-          || S.null (languageConstraintsIntegerTypes $ constraints acx)
-        noStrings = not $ supported acx LiteralTypeString
+        noFloatVars = not (S.member LiteralVariantFloat $ languageConstraintsLiteralVariants $ constraints cx)
+          || S.null (languageConstraintsFloatTypes $ constraints cx)
+        noIntegerVars = not (S.member LiteralVariantInteger $ languageConstraintsLiteralVariants $ constraints cx)
+          || S.null (languageConstraintsIntegerTypes $ constraints cx)
+        noStrings = not $ supported cx LiteralTypeString
 
         fallbackAdapter t = if noStrings
             then fail "cannot serialize unsupported type; strings are unsupported"
@@ -98,10 +98,10 @@ disclaimer :: Bool -> String -> String -> String
 disclaimer lossy source target = "replace " ++ source ++ " with " ++ target
   ++ if lossy then " (lossy)" else ""
 
-floatAdapter :: FloatType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) FloatType FloatValue)
+floatAdapter :: FloatType -> Flow (AdapterContext a) (SymmetricAdapter s FloatType FloatValue)
 floatAdapter ft = do
-    acx <- getState
-    let supported = floatTypeIsSupported $ languageConstraints $ adapterContextTarget acx
+    cx <- getState
+    let supported = floatTypeIsSupported $ languageConstraints $ adapterContextLanguage cx
     chooseAdapter alts supported describeFloatType ft
   where
     alts t = makeAdapter t <$> case t of
@@ -115,10 +115,10 @@ floatAdapter ft = do
             step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
             msg = disclaimer lossy (describeFloatType source) (describeFloatType target)
 
-integerAdapter :: IntegerType -> Flow (AdapterContext a) (SymmetricAdapter (Graph a) IntegerType IntegerValue)
+integerAdapter :: IntegerType -> Flow (AdapterContext a) (SymmetricAdapter s IntegerType IntegerValue)
 integerAdapter it = do
-    acx <- getState
-    let supported = integerTypeIsSupported $ languageConstraints $ adapterContextTarget acx
+    cx <- getState
+    let supported = integerTypeIsSupported $ languageConstraints $ adapterContextLanguage cx
     chooseAdapter alts supported describeIntegerType it
   where
     alts t = makeAdapter t <$> case t of

@@ -18,6 +18,7 @@ import Hydra.Module
 import Hydra.Monads
 import Hydra.TermAdapters
 import Hydra.AdapterUtils
+import Hydra.Reduction
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -27,11 +28,7 @@ import qualified Data.Set as S
 
 -- | Given a target language and a source type, find the target type to which the latter will be adapted.
 adaptType :: (Ord a, Read a, Show a) => Language a -> Type a -> GraphFlow a (Type a)
-adaptType targetLang t = do
-    g <- getState
-    let acx = AdapterContext g hydraCoreLanguage targetLang
-    ad <- withState acx $ termAdapter t
-    return $ adapterTarget ad
+adaptType lang typ = adapterTarget <$> languageAdapter lang typ
 
 -- | Given a target language, a unidirectional last-mile encoding, and a source type,
 --   construct a unidirectional adapting coder for terms of that type. Terms will be rewritten according to the type and
@@ -42,16 +39,35 @@ constructCoder :: (Ord a, Read a, Show a)
   -> Type a
   -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) c)
 constructCoder lang encodeTerm typ = withTrace ("coder for " ++ describeType typ) $ do
-    g <- getState
-    let acx = AdapterContext g hydraCoreLanguage lang
-    adapter <- withState acx $ termAdapter typ
-    coder <- termCoder $ adapterTarget adapter
-    return $ composeCoders (adapterCoder adapter) coder
-  where
-    termCoder _ = pure $ unidirectionalCoder encodeTerm
+    adapter <- languageAdapter lang typ
+    return $ composeCoders (adapterCoder adapter) (unidirectionalCoder encodeTerm)
+
+-- | Given a target language and a source type, produce an adapter,
+--   which rewrites the type and its terms according to the language's constraints
+languageAdapter :: (Ord a, Read a, Show a)
+  => Language a -> Type a -> GraphFlow a (SymmetricAdapter (Graph a) (Type a) (Term a))
+languageAdapter lang typ0 = do
+  -- TODO: rather than beta-reducing types all at once, we should incrementally extend the environment when application types are adapted
+  -- typ <- betaReduceType typ0
+  let typ = typ0
+
+  g  <- getState
+  -- Provide an initial adapter context
+  let cx0 = AdapterContext g lang M.empty
+  -- Construct the term adapter, and capture the populated adapter context
+  (adapter, cx) <- withState cx0 $ do
+    ad <- termAdapter typ
+    cx <- getState -- The state has been mutated to hold adapters for type elements
+    return (ad, cx)
+  -- Wrap terms in the adapter context as they pass through the adapter coder
+  let ac = Coder encode decode
+        where
+          encode = withState cx . coderEncode (adapterCoder adapter)
+          decode = withState cx . coderDecode (adapterCoder adapter)
+  return $ adapter {adapterCoder = ac}
 
 -- | Given a target language, a unidirectional last mile encoding, and an intermediate helper function,
---   transform a given mile into a target representation
+--   transform a given module into a target representation
 transformModule :: (Ord a, Read a, Show a)
   => Language a
   -> (Term a -> GraphFlow a e)

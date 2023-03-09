@@ -86,7 +86,7 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "unspecified/parametric terms"])
+      Case _Type_variable    --> constant $ string "instances of a named type"])
     (var "typ")
   where
     annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")

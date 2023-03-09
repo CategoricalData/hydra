@@ -46,7 +46,7 @@ constraintsAreAsExpected = H.describe "Verify that the language constraints incl
       typeIsSupported (context [TypeVariantLiteral, TypeVariantList]) listOfSetOfStringsType `H.shouldBe` False
 
   where
-    context = languageConstraints . adapterContextTarget . termTestContext
+    context = languageConstraints . adapterContextLanguage . termTestContext
 
 supportedConstructorsAreUnchanged :: H.SpecWith ()
 supportedConstructorsAreUnchanged = H.describe "Verify that supported term constructors are unchanged" $ do
@@ -337,13 +337,11 @@ roundTripIsNoop typ term = shouldSucceedWith
         TypeOptional (TypeOptional _) -> False
         _ -> True }
 
-    acx = AdapterContext testGraph hydraCoreLanguage testLanguage
-
     -- Note: in a real application, you wouldn't create the adapter just to use it once;
     --       it should be created once, then applied to many terms.
     adapt typ dir term = do
-      ad <- withState acx $ termAdapter typ
-      dir (adapterCoder ad) term
+      adapter <- languageAdapter testLanguage typ
+      dir (adapterCoder adapter) term
 
 spec :: H.Spec
 spec = do
