@@ -53,7 +53,8 @@ _ApplicationType_argument = (FieldName "argument")
 data CaseStatement a = 
   CaseStatement {
     caseStatementTypeName :: Name,
-    caseStatementCases :: [Field a]}
+    caseStatementCases :: [Field a],
+    caseStatementDefault :: (Maybe (Term a))}
   deriving (Eq, Ord, Read, Show)
 
 _CaseStatement = (Name "hydra/core.CaseStatement")
@@ -61,6 +62,8 @@ _CaseStatement = (Name "hydra/core.CaseStatement")
 _CaseStatement_typeName = (FieldName "typeName")
 
 _CaseStatement_cases = (FieldName "cases")
+
+_CaseStatement_default = (FieldName "default")
 
 -- | A corresponding elimination for an introduction term
 data Elimination a = 

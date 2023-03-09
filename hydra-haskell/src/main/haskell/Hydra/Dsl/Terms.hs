@@ -43,8 +43,8 @@ binary = literal . Literals.binary
 boolean :: Bool -> Term a
 boolean = literal . Literals.boolean
 
-cases :: Name -> [Field a] -> Term a
-cases n fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields
+cases :: Name -> [Field a] -> Maybe (Term a) -> Term a
+cases n fields def = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n fields def
 
 constFunction :: Term a -> Term a
 constFunction = lambda "_"
@@ -187,16 +187,16 @@ map = TermMap
 mapTerm :: M.Map (Term a) (Term a) -> Term a
 mapTerm = TermMap
 
-match :: Name -> [(FieldName, Term a)] -> Term a
-match n = cases n . fmap toField
+match :: Name -> [(FieldName, Term a)] -> Maybe (Term a) -> Term a
+match n pairs def = cases n (toField <$> pairs) def
   where
     toField (name, term) = Field name term
 
 matchOptional :: Term a -> Term a -> Term a
 matchOptional n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
-matchWithVariants :: Name -> [(FieldName, FieldName)] -> Term a
-matchWithVariants n = cases n . fmap toField
+matchWithVariants :: Name -> [(FieldName, FieldName)] -> Maybe (Term a) -> Term a
+matchWithVariants n pairs def = cases n (toField <$> pairs) def
   where
     toField (from, to) = Field from $ constFunction $ unitVariant n to
 
