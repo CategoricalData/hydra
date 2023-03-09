@@ -1,6 +1,7 @@
 module Hydra.Sources.Test.Lib.Lists (listPrimitiveTests) where
 
 import Hydra.Dsl.Tests
+import Hydra.Dsl.Terms
 
 
 listPrimitiveTests :: TestGroup a
@@ -26,7 +27,7 @@ listsApply = TestGroup "apply" Nothing [] [
 
 listsBind :: TestGroup a
 listsBind = TestGroup "bind" Nothing [] [
-    test (primitive _math_neg) [1, 2, 3, 4] (negate <$> [1, 2, 3, 4])]
+    test (primitive _lists_pure <.> primitive _math_neg) [1, 2, 3, 4] (negate <$> [1, 2, 3, 4])]
   where
     test fun lst result = primCase _lists_bind [fun, intList lst] (intList result)
 

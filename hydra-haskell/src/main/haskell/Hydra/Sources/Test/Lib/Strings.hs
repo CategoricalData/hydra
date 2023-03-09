@@ -38,7 +38,7 @@ stringsSplitOn = TestGroup "splitOn" Nothing [] [
 
     test "a" "" [""],
 
-    test "" "abc" ["a", "b", "c"],
+    test "" "abc" ["", "a", "b", "c"],
     test "" "" [""]]
   where
     test s0 s1 result = primCase _strings_splitOn [string s0, string s1] (list (string <$> result))

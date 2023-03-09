@@ -58,7 +58,7 @@ caseField :: Case a -> Datum (a -> b) -> Field Kv
 caseField (Case fname) (Datum f) = Field fname f
 
 compose :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
-compose (Datum f) (Datum g) = Datum $ Terms.lambda "x1" $ Terms.apply f (Terms.apply g $ Terms.variable "x1")
+compose (Datum f) (Datum g) = Datum $ Terms.compose f g
 
 constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.lambda "_" term
