@@ -103,12 +103,19 @@ encodeFunction namespaces fun = case fun of
           return $ H.Alternative lhs rhs Nothing
         return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
       EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
-      EliminationUnion (CaseStatement dn fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
+      EliminationUnion (CaseStatement dn fields def) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
           caseExpr = do
             rt <- withSchemaContext $ requireUnionType False dn
             let fieldMap = M.fromList $ (\f -> (fieldTypeName f, f)) <$> rowTypeFields rt
-            H.ExpressionCase <$> (H.Expression_Case (hsvar "x") <$> CM.mapM (toAlt fieldMap) fields)
+            ecases <- CM.mapM (toAlt fieldMap) fields
+            dcases <- case def of
+              Nothing -> pure []
+              Just d -> do
+                cs <- H.CaseRhs <$> encodeTerm namespaces d
+                let lhs = H.PatternName $ rawName "_"
+                return [H.Alternative lhs cs Nothing]
+            return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
           toAlt fieldMap (Field fn fun') = do
             let v0 = "v"
             let raw = apply fun' (variable v0)

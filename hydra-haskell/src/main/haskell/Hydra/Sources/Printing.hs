@@ -47,7 +47,7 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
     Case _LiteralType_boolean --> constant $ string "boolean values",
     Case _LiteralType_float   --> ref describeFloatTypeDef,
     Case _LiteralType_integer --> ref describeIntegerTypeDef,
-    Case _LiteralType_string  --> constant $ string "character strings"]
+    Case _LiteralType_string  --> constant $ string "character strings"] Nothing
 
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
@@ -55,7 +55,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
   match _Precision Types.string [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $
-      showInt32 @@ var "bits" ++ string "-bit"]
+      showInt32 @@ var "bits" ++ string "-bit"] Nothing
 
 describeTypeDef :: Definition (Type a -> string)
 describeTypeDef = printingDefinition "describeType" $
@@ -86,7 +86,7 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "instances of a named type"])
+      Case _Type_variable    --> constant $ string "instances of a named type"] Nothing)
     (var "typ")
   where
     annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")

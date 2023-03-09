@@ -4,6 +4,7 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import qualified Hydra.Module as Module

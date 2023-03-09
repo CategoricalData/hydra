@@ -98,24 +98,24 @@ map = Datum . Terms.map . M.fromList . fmap fromDatum . M.toList
   where
     fromDatum (Datum k, Datum v) = (k, v)
 
-matchData :: Name -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
-matchData name pairs = Datum $ Terms.cases name (toField <$> pairs)
+matchData :: Name -> [(FieldName, Datum (x -> b))] -> Maybe (Datum b) -> Datum (a -> b)
+matchData name pairs def = Datum $ Terms.cases name (toField <$> pairs) (unDatum <$> def)
   where
     toField (fname, Datum term) = Field fname term
 
 matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
 matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
-match :: Name -> Type Kv -> [Field Kv] -> Datum (u -> b)
-match name cod fields = function (Types.wrap name) cod $ Datum $ Terms.cases name fields
+match :: Name -> Type Kv -> [Field Kv] -> Maybe (Term Kv) -> Datum (u -> b)
+match name cod fields def = function (Types.wrap name) cod $ Datum $ Terms.cases name fields def
 
-matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Datum (a -> b)
-matchToEnum domName codName pairs = matchData domName (toCase <$> pairs)
+matchToEnum :: Name -> Name -> [(FieldName, FieldName)] -> Maybe (Datum b) -> Datum (a -> b)
+matchToEnum domName codName pairs def = matchData domName (toCase <$> pairs) def
   where
     toCase (fromName, toName) = (fromName, constant $ unitVariant codName toName)
 
-matchToUnion :: Name -> Name -> [(FieldName, Field Kv)] -> Datum (a -> b)
-matchToUnion domName codName pairs = matchData domName (toCase <$> pairs)
+matchToUnion :: Name -> Name -> [(FieldName, Field Kv)] -> Maybe (Datum b) -> Datum (a -> b)
+matchToUnion domName codName pairs def = matchData domName (toCase <$> pairs) def
   where
     toCase (fromName, fld) = (fromName, constant $ Datum $ Terms.inject codName fld)
 

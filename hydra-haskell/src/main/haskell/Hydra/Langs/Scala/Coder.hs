@@ -79,13 +79,14 @@ encodeFunction meta fun arg = case fun of
       EliminationWrap name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
       EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
       EliminationRecord p -> fail "unapplied projection not yet supported"
-      EliminationUnion (CaseStatement _ cases) -> do
+      EliminationUnion (CaseStatement _ cases def) -> do
           let v = "v"
           dom <- findDomain
           ftypes <- withSchemaContext $ fieldTypes dom
           cx <- getState
           let sn = nameOfType cx dom
           scases <- CM.mapM (encodeCase ftypes sn) cases
+          -- TODO: default
           case arg of
             Nothing -> slambda v <$> pure (Scala.DataMatch $ Scala.Data_Match (sname v) scases) <*> findSdom
             Just a -> do

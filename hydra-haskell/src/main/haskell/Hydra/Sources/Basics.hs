@@ -4,8 +4,10 @@ import Hydra.Kernel
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Math as Math
 import Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
+import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 
@@ -49,7 +51,7 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
     _Elimination_union    @-> _EliminationVariant_union,
-    _Elimination_wrap     @-> _EliminationVariant_wrap]
+    _Elimination_wrap     @-> _EliminationVariant_wrap] Nothing
 
 eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
@@ -69,7 +71,7 @@ floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
   matchToUnion _FloatType _Precision [
     _FloatType_bigfloat @-> field _Precision_arbitrary unit,
     _FloatType_float32  @-> field _Precision_bits $ int 32,
-    _FloatType_float64  @-> field _Precision_bits $ int 64]
+    _FloatType_float64  @-> field _Precision_bits $ int 64] Nothing
 
 floatTypesDef :: Definition [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
@@ -86,7 +88,7 @@ floatValueTypeDef = basicsDefinition "floatValueType" $
   matchToEnum _FloatValue _FloatType [
     _FloatValue_bigfloat @-> _FloatType_bigfloat,
     _FloatValue_float32  @-> _FloatType_float32,
-    _FloatValue_float64  @-> _FloatType_float64]
+    _FloatValue_float64  @-> _FloatType_float64] Nothing
 
 functionVariantDef :: Definition (Function a -> FunctionVariant)
 functionVariantDef = basicsDefinition "functionVariant" $
@@ -95,7 +97,7 @@ functionVariantDef = basicsDefinition "functionVariant" $
   matchToEnum _Function _FunctionVariant [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
-    _Function_primitive   @-> _FunctionVariant_primitive]
+    _Function_primitive   @-> _FunctionVariant_primitive] Nothing
 
 functionVariantsDef :: Definition [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
@@ -118,7 +120,7 @@ integerTypeIsSignedDef = basicsDefinition "integerTypeIsSigned" $
     _IntegerType_uint8  @-> constant false,
     _IntegerType_uint16 @-> constant false,
     _IntegerType_uint32 @-> constant false,
-    _IntegerType_uint64 @-> constant false]
+    _IntegerType_uint64 @-> constant false] Nothing
 
 integerTypePrecisionDef :: Definition (IntegerType -> Precision)
 integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
@@ -132,7 +134,7 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
     _IntegerType_uint8  @-> field _Precision_bits $ int 8,
     _IntegerType_uint16 @-> field _Precision_bits $ int 16,
     _IntegerType_uint32 @-> field _Precision_bits $ int 32,
-    _IntegerType_uint64 @-> field _Precision_bits $ int 64]
+    _IntegerType_uint64 @-> field _Precision_bits $ int 64] Nothing
 
 integerTypesDef :: Definition [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
@@ -161,7 +163,7 @@ integerValueTypeDef = basicsDefinition "integerValueType" $
     _IntegerValue_uint8  @-> _IntegerType_uint8,
     _IntegerValue_uint16 @-> _IntegerType_uint16,
     _IntegerValue_uint32 @-> _IntegerType_uint32,
-    _IntegerValue_uint64 @-> _IntegerType_uint64]
+    _IntegerValue_uint64 @-> _IntegerType_uint64] Nothing
 
 literalTypeDef :: Definition (Literal -> LiteralType)
 literalTypeDef = basicsDefinition "literalType" $
@@ -171,7 +173,7 @@ literalTypeDef = basicsDefinition "literalType" $
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
     Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
     Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
-    Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
+    Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit] Nothing
 
 literalTypeVariantDef :: Definition (LiteralType -> LiteralVariant)
 literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
@@ -181,7 +183,7 @@ literalTypeVariantDef = basicsDefinition "literalTypeVariant" $
     _LiteralType_boolean @-> _LiteralVariant_boolean,
     _LiteralType_float   @-> _LiteralVariant_float,
     _LiteralType_integer @-> _LiteralVariant_integer,
-    _LiteralType_string  @-> _LiteralVariant_string]
+    _LiteralType_string  @-> _LiteralVariant_string] Nothing
 
 literalVariantDef :: Definition (Literal -> LiteralVariant)
 literalVariantDef = basicsDefinition "literalVariant" $
@@ -232,7 +234,7 @@ termVariantDef = basicsDefinition "termVariant" $
       _Term_sum             @-> _TermVariant_sum,
       _Term_union           @-> _TermVariant_union,
       _Term_variable        @-> _TermVariant_variable,
-      _Term_wrap            @-> _TermVariant_wrap])
+      _Term_wrap            @-> _TermVariant_wrap] Nothing)
     (var "term")
 
 termVariantsDef :: Definition [TermVariant]
@@ -286,7 +288,7 @@ typeVariantDef = basicsDefinition "typeVariant" $
       _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
       _Type_variable    @-> _TypeVariant_variable,
-      _Type_wrap        @-> _TypeVariant_wrap])
+      _Type_wrap        @-> _TypeVariant_wrap] Nothing)
     (var "typ")
 
 typeVariantsDef :: Definition [TypeVariant]

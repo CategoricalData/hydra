@@ -88,12 +88,12 @@ checkFunctionTerms = do
         (cases testTypeFoobarValueName [
           Field (FieldName "bool") (lambda "x" (boolean True)),
           Field (FieldName "string") (lambda "x" (boolean False)),
-          Field (FieldName "unit") (lambda "x" (boolean False))])
+          Field (FieldName "unit") (lambda "x" (boolean False))] Nothing)
         (Types.function testTypeFoobarValue Types.boolean)
       expectPolytype
         (cases testTypePersonOrSomethingName [
           Field (FieldName "person") (apply delta (TermElement $ Name "firstName")),
-          Field (FieldName "other") (lambda "x" (string "NONE"))])
+          Field (FieldName "other") (lambda "x" (string "NONE"))] Nothing)
         ["v1"] (Types.function
           (TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
             Types.field "person" $ TypeRecord $ RowType testTypePersonName Nothing [

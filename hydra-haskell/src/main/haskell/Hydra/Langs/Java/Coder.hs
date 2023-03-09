@@ -390,12 +390,13 @@ encodeElimination aliases marg dom cod elm = case elm of
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
     return $ javaCastExpressionToJavaExpression $ javaCastExpression aliases jdomr $ javaExpressionToJavaUnaryExpression jexp
-  EliminationUnion (CaseStatement tname fields) -> case marg of
+  EliminationUnion (CaseStatement tname fields def) -> case marg of
       Nothing -> do
         cx <- getState
         let anns = graphAnnotations cx
         let lhs = annotationClassSetTermType anns cx (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
         encodeTerm aliases Nothing $ Terms.lambda "v" $ Terms.apply lhs (Terms.variable "v")
+        -- TODO: default value
       Just jarg -> applyElimination jarg
     where
       applyElimination jarg = do
