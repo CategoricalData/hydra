@@ -21,6 +21,7 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Hydra.Basics (qname)
 import Hydra.Kernel (capitalize)
+import Data.String (String)
 
 
 type Aliases = M.Map Namespace Java.PackageName
@@ -319,7 +320,7 @@ declarationForUnionType aliases tparams elName fields = do
               [Java.InterfaceType $ javaClassType [visitorTypeVariable] Nothing visitorName],
             Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
       where
-        otherwise = interfaceMethodDeclaration defaultMod [] "otherwise" [mainInstanceParam] resultR $ Just [throw]
+        otherwise = interfaceMethodDeclaration defaultMod [] otherwiseMethodName [mainInstanceParam] resultR $ Just [throw]
           where
             throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
                 Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
@@ -334,7 +335,7 @@ declarationForUnionType aliases tparams elName fields = do
           where
             returnOtherwise = Java.BlockStatementStatement $ javaReturnStatement $ Just $
               javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray $ Java.PrimaryNoNewArrayMethodInvocation $
-              methodInvocation Nothing (Java.Identifier "otherwise") [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
+              methodInvocation Nothing (Java.Identifier otherwiseMethodName) [javaIdentifierToJavaExpression $ Java.Identifier "instance"]
 
     defaultMod = [Java.InterfaceMethodModifierDefault]
 
@@ -401,15 +402,33 @@ encodeElimination aliases marg dom cod elm = case elm of
     where
       applyElimination jarg = do
           let prim = javaExpressionToJavaPrimary jarg
-          let consId = innerClassRef aliases tname visitorName
+          let consId = innerClassRef aliases tname $ case def of
+                Nothing -> visitorName
+                Just _ -> partialVisitorName
           jcod <- encodeType aliases cod
           let targs = Java.TypeArgumentsOrDiamondArguments [javaTypeToJavaTypeArgument jcod]
-          body <- Java.ClassBody <$> CM.mapM (bodyDecl jcod) fields
+          otherwiseBranches <- case def of
+            Nothing -> pure []
+            Just d -> do
+              b <- otherwiseBranch jcod d
+              return [b]
+          visitBranches <- CM.mapM (visitBranch jcod) fields
+          let body = Java.ClassBody $ otherwiseBranches ++ visitBranches
           let visitor = javaConstructorCall (javaConstructorName consId $ Just targs) [] (Just body)
           return $ javaMethodInvocationToJavaExpression $
             methodInvocation (Just $ Right prim) (Java.Identifier "accept") [visitor]
         where
-          bodyDecl jcod field = do
+          otherwiseBranch jcod d = do
+            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname Nothing
+            let mods = [Java.MethodModifierPublic]
+            let anns = [overrideAnnotation]
+            let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
+            let result = Java.ResultType $ Java.UnannType jcod
+            jret <- encodeTerm aliases (Just cod) d
+            let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
+            return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just [returnStmt])
+
+          visitBranch jcod field = do
             let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname (Just $ capitalize $ unFieldName $ fieldName field)
             let mods = [Java.MethodModifierPublic]
             let anns = [overrideAnnotation]
@@ -419,7 +438,6 @@ encodeElimination aliases marg dom cod elm = case elm of
             let value = Terms.variable ("$" ++ instanceName ++ "." ++ valueFieldName)
             jret <- encodeTerm aliases (Just cod) $ contractTerm $ Terms.apply (fieldTerm field) value
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
-
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
   _ -> pure $ encodeLiteral $ LiteralString $
     "Unimplemented elimination variant: " ++ show (eliminationVariant elm) -- TODO: temporary
@@ -671,6 +689,9 @@ javaTypeParametersForType typ = toParam <$> vars
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
 --    vars = boundTypeVariables typ
     vars = S.toList $ freeVariablesInType typ -- TODO: the fact that the variables are free is a bug, not a feature
+
+otherwiseMethodName :: String
+otherwiseMethodName = "otherwise"
 
 partialVisitorName :: String
 partialVisitorName = "PartialVisitor"
