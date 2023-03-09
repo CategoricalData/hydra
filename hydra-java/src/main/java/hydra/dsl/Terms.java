@@ -55,8 +55,8 @@ public interface Terms {
     return literal(new Literal.Boolean_(value));
   }
 
-  static <A> Term<A> cases(final Name name, final Field<A>... fields) {
-    return elimination(new Elimination.Union<>(new CaseStatement<>(name, Arrays.asList(fields))));
+  static <A> Term<A> cases(final Name name, final Optional<Term<A>> def, final Field<A>... fields) {
+    return elimination(new Elimination.Union<>(new CaseStatement<>(name, def, Arrays.asList(fields))));
   }
 
   static <A> Term<A> delta() {
@@ -129,12 +129,12 @@ public interface Terms {
     return new Term.Map<>(value);
   }
 
-  static <A> Term<A> match(final Name name, final Map.Entry<String, Term<A>>... casePairs) {
+  static <A> Term<A> match(final Name name, final Optional<Term<A>> def, final Map.Entry<String, Term<A>>... casePairs) {
     Field<A>[] fields = new Field[casePairs.length];
     for (int i = 0; i < casePairs.length; i++) {
       fields[i] = field(casePairs[i].getKey(), casePairs[i].getValue());
     }
-    return cases(name, fields);
+    return cases(name, def, fields);
   }
 
   static <A> Term<A> optional(final Optional<Term<A>> maybeTerm) {
