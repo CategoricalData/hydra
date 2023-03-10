@@ -4,9 +4,13 @@ import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
 import hydra.FlowException;
+import hydra.core.Term;
 
+import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -58,6 +62,13 @@ public interface Flows {
             }));
         }
         return result;
+    }
+
+    static <S, K1, V1, K2, V2> Flow<S, Map<K2, V2>> mapM(Map<K1, V1> xs, Function<K1, Flow<S, K2>> kf, Function<V1, Flow<S, V2>> vf) {
+        Set<Map.Entry<K1, V1>> entries1 = xs.entrySet();
+        Flow<S, Set<Map.Entry<K2, V2>>> entries2 = mapM(entries1,
+                e -> bind(kf.apply(e.getKey()), k2 -> map(vf.apply(e.getValue()), v2 -> new AbstractMap.SimpleEntry<>(k2, v2))));
+        return map(entries2, entries -> entries.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
     static <S, X, Y> Flow<S, Optional<Y>> mapM(Optional<X> xs, Function<X, Flow<S, Y>> f) {
