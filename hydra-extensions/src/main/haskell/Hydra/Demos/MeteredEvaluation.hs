@@ -31,12 +31,12 @@ import Prelude hiding ((++))
 testNs = Namespace "hydra/demos/meteredEvaluation"
 
 testModule :: Module Kv
-testModule = Module testNs elements [hydraMantleModule, adapterUtilsModule] Nothing
+testModule = Module testNs elements [hydraMantleModule] Nothing
   where
     test = Definition . fromQname testNs
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 @@ int32 42)),
-        el $ test "describeType" $ ref describeTypeSource @@ (Datum $ epsilonEncodeType $ Types.list $ Types.int32)]
+        el $ test "describeType" $ ref describeTypeDef @@ (Datum $ epsilonEncodeType $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
