@@ -25,10 +25,10 @@ import qualified Data.Maybe as Y
 data AvroEnvironment a = AvroEnvironment {
   avroEnvironmentNamedAdapters :: M.Map AvroQualifiedName (AvroHydraAdapter a),
   avroEnvironmentNamespace :: Maybe String,
-  avroEnvironmentElements :: M.Map Name (Element a)} -- note: only used in the term coders
-
+  avroEnvironmentElements :: M.Map Name (Element a), -- note: only used in the term coders
+  avroEnvironmentCreateAnnotation :: M.Map String (Term a) -> a}
 type AvroHydraAdapter a = Adapter (AvroEnvironment a) (AvroEnvironment a) Avro.Schema (Type a) Json.Value (Term a)
-  
+
 data AvroQualifiedName = AvroQualifiedName (Maybe String) String deriving (Eq, Ord, Show)
 
 data ForeignKey = ForeignKey Name (String -> Name)
@@ -144,6 +144,11 @@ avroHydraAdapter schema = case schema of
             _ -> fail $ "multiple primary key fields for " ++ show qname
         prepareField f = do
           fk <- foreignKey f
+
+          env <- getState
+          let manns = fieldAnnotationsToCore f
+          let ann = if M.null manns then Nothing else (Just $ avroEnvironmentCreateAnnotation env manns)
+
           ad <- case fk of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
             Just (ForeignKey name constr) -> do
@@ -175,7 +180,7 @@ avroHydraAdapter schema = case schema of
               where
                 forTypeAndCoder ad typ coder = pure $ Adapter (adapterIsLossy ad) (Avro.fieldType f) typ coder
                 elTyp = TypeElement $ Types.wrap name
-          return (Avro.fieldName f, (f, ad))
+          return (Avro.fieldName f, (f, annotate ann ad))
     Avro.SchemaPrimitive p -> case p of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode
           where
@@ -245,6 +250,9 @@ avroHydraAdapter schema = case schema of
           return $ Adapter (adapterIsLossy ad) schema (Types.optional $ adapterTarget ad) coder
   where
     simpleAdapter typ encode decode = pure $ Adapter False schema typ $ Coder encode decode
+    annotate ann ad = case ann of
+      Nothing -> ad
+      Just n -> ad {adapterTarget = Types.annot n (adapterTarget ad)}
 
 avroNameToHydraName :: AvroQualifiedName -> Name
 avroNameToHydraName (AvroQualifiedName mns local) = fromQname (Namespace $ Y.fromMaybe "DEFAULT" mns) local
@@ -261,6 +269,12 @@ encodeAnnotationValue v = case v of
     where
       toEntry (k, v) = (Terms.string k, encodeAnnotationValue v)
   Json.ValueString s -> Terms.string s
+
+fieldAnnotationsToCore :: Ord a => Avro.Field -> M.Map String (Term a)
+fieldAnnotationsToCore f = M.fromList (toCore <$> M.toList anns)
+  where
+    anns = Avro.fieldAnnotations f
+    toCore (k, v) = (k, encodeAnnotationValue v)
 
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment a -> Y.Maybe (AvroHydraAdapter a)
 getAvroHydraAdapter qname = M.lookup qname . avroEnvironmentNamedAdapters
