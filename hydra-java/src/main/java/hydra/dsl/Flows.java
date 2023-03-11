@@ -1,14 +1,12 @@
 package hydra.dsl;
 
+import hydra.FlowException;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
-import hydra.FlowException;
-import hydra.core.Term;
-
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,6 +34,15 @@ public interface Flows {
         return Flows.bind(p1, x -> Flows.bind(p2, y -> k.apply(x, y)));
     }
 
+    static <S, X> Flow<S, X> fail(String msg) {
+        return new Flow<>(s -> trace -> {
+            String errMsg = "Error: " + msg; // TODO: include stack trace
+            List<String> messages = new ArrayList<>(trace.messages);
+            messages.add(errMsg);
+            return new FlowState<>(Optional.empty(), s, trace.withMessages(messages));
+        });
+    }
+
     static <S, X> X fromFlow(Flow<S, X> flow) throws FlowException {
         FlowState<S, X> wrapper = flow.value.apply(null).apply(EMPTY_TRACE);
 
@@ -46,6 +53,10 @@ public interface Flows {
         }
     }
 
+    static <S> Flow<S, S> getState() {
+      return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(s0), s0, t0));
+    }
+
     static <S, X, Y> Flow<S, Y> map(Flow <S, X> x, Function<X, Y> f) {
         return new Flow<>(s -> trace -> {
             Optional<X> xv = x.value.apply(s).apply(trace).value;
@@ -54,7 +65,7 @@ public interface Flows {
     }
 
     static <S, X, Y> Flow<S, List<Y>> mapM(List<X> xs, Function<X, Flow<S, Y>> f) {
-        Flow<S, List<Y>> result = pure(Collections.emptyList());
+        Flow<S, List<Y>> result = pure(new ArrayList<>());
         for (X x : xs) {
             result = bind(result, ys -> map(f.apply(x), y -> {
                 ys.add(y); // Modify in place
@@ -92,5 +103,9 @@ public interface Flows {
 
     static <S, X> Flow<S, X> pure(X obj) {
         return new Flow<>(s -> trace -> new FlowState<>(Optional.of(obj), s, trace));
+    }
+
+    static <S> Flow<S, S> putState(S snew) {
+        return new Flow<>(s -> trace -> new FlowState<>(Optional.of(snew), snew, trace));
     }
 }
