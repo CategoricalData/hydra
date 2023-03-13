@@ -18,7 +18,7 @@ import Hydra.CoreDecoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Reduction
 import Hydra.Rewriting
 import Hydra.LiteralAdapters

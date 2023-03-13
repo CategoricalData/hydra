@@ -1,7 +1,7 @@
 package hydra.lib.math;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 public class Neg<A> extends PrimitiveFunction<A> {
     public Name name() {

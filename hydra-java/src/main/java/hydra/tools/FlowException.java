@@ -1,7 +1,6 @@
-package hydra;
+package hydra.tools;
 
 import hydra.compute.Trace;
-import java.util.List;
 
 
 public class FlowException extends Exception {

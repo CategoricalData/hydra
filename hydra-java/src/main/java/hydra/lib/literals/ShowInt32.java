@@ -1,7 +1,7 @@
 package hydra.lib.literals;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 public class ShowInt32<A> extends PrimitiveFunction<A> {
     public Name name() {

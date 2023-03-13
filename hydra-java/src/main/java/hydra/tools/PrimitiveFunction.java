@@ -1,4 +1,4 @@
-package hydra.util;
+package hydra.tools;
 
 import hydra.core.Name;
 import hydra.core.Term;
@@ -8,6 +8,6 @@ public abstract class PrimitiveFunction<A> {
     public abstract Name name();
 
     public Term<A> term() {
-        return Terms.primitive(name()); 
+        return Terms.primitive(name());
     }
 }

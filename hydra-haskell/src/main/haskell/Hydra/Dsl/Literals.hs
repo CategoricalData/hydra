@@ -4,7 +4,7 @@ module Hydra.Dsl.Literals where
 
 import Hydra.Compute
 import Hydra.Core
-import Hydra.Monads
+import Hydra.Flows
 
 import Data.Int
 

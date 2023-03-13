@@ -8,7 +8,7 @@ import Hydra.Compute
 import Hydra.Graph
 import Hydra.CoreDecoding
 import Hydra.CoreEncoding
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Mantle
 import qualified Hydra.Dsl.Terms as Terms
 

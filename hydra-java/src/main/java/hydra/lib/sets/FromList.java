@@ -1,7 +1,7 @@
 package hydra.lib.sets;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 import java.util.HashSet;
 import java.util.List;
