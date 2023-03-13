@@ -59,8 +59,8 @@ public interface Flows {
 
     static <S, X, Y> Flow<S, Y> map(Flow <S, X> x, Function<X, Y> f) {
         return new Flow<>(s -> trace -> {
-            Optional<X> xv = x.value.apply(s).apply(trace).value;
-            return new FlowState<>(xv.map(f), s, trace);
+            FlowState<S, X> result = x.value.apply(s).apply(trace);
+            return new FlowState<>(result.value.map(f), result.state, result.trace);
         });
     }
 
@@ -105,7 +105,8 @@ public interface Flows {
         return new Flow<>(s -> trace -> new FlowState<>(Optional.of(obj), s, trace));
     }
 
-    static <S> Flow<S, S> putState(S snew) {
-        return new Flow<>(s -> trace -> new FlowState<>(Optional.of(snew), snew, trace));
+    // Note: for lack of a unit value other than null, we use use a boolean as the ignorable value output of putState()
+    static <S> Flow<S, Boolean> putState(S snew) {
+        return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(true), snew, t0));
     }
 }
