@@ -2,15 +2,13 @@ package hydra;
 
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
-import hydra.compute.Trace;
-import hydra.dsl.Flows;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Flows.*;
+import static hydra.Flows.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 

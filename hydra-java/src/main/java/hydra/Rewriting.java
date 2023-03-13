@@ -16,9 +16,8 @@ import hydra.core.Projection;
 import hydra.core.Record;
 import hydra.core.Sum;
 import hydra.core.Term;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
-import static hydra.dsl.Flows.*;
+import static hydra.Flows.*;
 
 import java.util.List;
 import java.util.Map;
