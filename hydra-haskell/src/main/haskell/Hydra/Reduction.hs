@@ -3,7 +3,7 @@
 module Hydra.Reduction where
 
 import Hydra.Core
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Basics
 import Hydra.Graph

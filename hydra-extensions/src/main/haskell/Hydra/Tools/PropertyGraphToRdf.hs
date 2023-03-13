@@ -1,6 +1,6 @@
 module Hydra.Tools.PropertyGraphToRdf where
 
-import Hydra.Monads
+import Hydra.Flows
 import qualified Hydra.Langs.Tinkerpop.V3 as Tpop
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Rdf.Utils as RdfUt

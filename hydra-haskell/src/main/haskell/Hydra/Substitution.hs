@@ -4,7 +4,7 @@ module Hydra.Substitution where
 
 import Hydra.Core
 import Hydra.Mantle
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Dsl.Types as Types
 

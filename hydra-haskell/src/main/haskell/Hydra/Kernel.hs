@@ -20,7 +20,7 @@ module Hydra.Kernel (
   module Hydra.Mantle,
   module Hydra.Kv,
   module Hydra.Module,
-  module Hydra.Monads,
+  module Hydra.Flows,
   module Hydra.Phantoms,
   module Hydra.Reduction,
   module Hydra.Rewriting,
@@ -52,7 +52,7 @@ import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Kv
 import Hydra.Module
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Phantoms
 import Hydra.Reduction
 import Hydra.Rewriting

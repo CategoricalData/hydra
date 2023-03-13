@@ -29,7 +29,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Mantle
 import Hydra.Lexical
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Rewriting
 import qualified Hydra.Dsl.Terms as Terms
 
