@@ -1,4 +1,4 @@
-package hydra.util;
+package hydra.tools;
 
 import java.util.Iterator;
 import java.util.function.Function;

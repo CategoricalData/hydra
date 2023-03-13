@@ -9,7 +9,7 @@ import Hydra.Basics
 import Hydra.Common
 import Hydra.Core
 import Hydra.Lexical
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Dsl.Types as Types

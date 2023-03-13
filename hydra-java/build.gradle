@@ -6,9 +6,9 @@ plugins {
 group 'hydra'
 version '0.1'
 
-// Temporary; currently needed for LinkedIn applications of Hydra
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+// JDK 11+ is needed for RDF4j compatibility
+sourceCompatibility = '1.11'
+targetCompatibility = '1.11'
 
 dependencies {
   implementation group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'

@@ -5,7 +5,7 @@ module Hydra.Rewriting where
 import Hydra.Coders
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle
@@ -114,7 +114,7 @@ replaceFreeName v rep = rewriteType mapExpr id
       TypeVariable v' -> if v == v' then rep else t
       _ -> recurse t
 
-rewrite :: ((a -> b) -> a -> b) -> ((a -> b) -> a -> b) -> a -> b
+rewrite :: ((x -> y) -> x -> y) -> ((x -> y) -> x -> y) -> x -> y
 rewrite fsub f = recurse
   where
     recurse = f (fsub recurse)
@@ -153,7 +153,11 @@ rewriteTerm f mf = rewrite fsub f
       where
         forField f = f {fieldTerm = recurse (fieldTerm f)}
 
-rewriteTermM :: Ord b => ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) -> (a -> Flow s b) -> Term a -> Flow s (Term b)
+rewriteTermM :: Ord b => 
+  ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) ->
+  (a -> Flow s b) ->
+  Term a ->
+  Flow s (Term b)
 rewriteTermM f mf = rewrite fsub f
   where
     fsub recurse term = case term of
@@ -187,7 +191,6 @@ rewriteTermM f mf = rewrite fsub f
               km <- recurse k
               vm <- recurse v
               return (km, vm)
-        TermWrap (Nominal name t) -> TermWrap <$> (Nominal name <$> recurse t)
         TermOptional m -> TermOptional <$> (CM.mapM recurse m)
         TermProduct tuple -> TermProduct <$> (CM.mapM recurse tuple)
         TermRecord (Record n fields) -> TermRecord <$> (Record n <$> (CM.mapM forField fields))
@@ -195,6 +198,7 @@ rewriteTermM f mf = rewrite fsub f
         TermSum (Sum i s trm) -> TermSum <$> (Sum i s <$> recurse trm)
         TermUnion (Injection n field) -> TermUnion <$> (Injection n <$> forField field)
         TermVariable v -> pure $ TermVariable v
+        TermWrap (Nominal name t) -> TermWrap <$> (Nominal name <$> recurse t)
       where
         forField f = do
           t <- recurse (fieldTerm f)

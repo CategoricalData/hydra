@@ -16,7 +16,7 @@ import Hydra.Core
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
-import Hydra.Monads
+import Hydra.Flows
 
 import qualified Data.List as L
 import qualified Data.Set as S

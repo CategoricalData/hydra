@@ -1,7 +1,7 @@
 package hydra.lib.lists;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 import java.util.Collection;
 import java.util.List;
