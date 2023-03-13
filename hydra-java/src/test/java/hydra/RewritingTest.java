@@ -6,7 +6,6 @@ import hydra.core.Field;
 import hydra.core.Name;
 import hydra.core.Record;
 import hydra.core.Term;
-import hydra.dsl.Flows;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import static hydra.Rewriting.*;
 import static hydra.dsl.Terms.*;
-import static hydra.dsl.Flows.*;
+import static hydra.Flows.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
