@@ -80,7 +80,7 @@ public class RewritingTest {
     private static <A> Flow<Integer, Term<A>> capitalizeFieldNames(
         Function<Term<A>, Flow<Integer, Term<A>>> recurse,
         Term<A> original) {
-        return original.accept(new Term.PartialVisitor<Flow<Integer, Term<A>>>() {
+        return original.accept(new Term.PartialVisitor<>() {
             @Override
             public Flow<Integer, Term<A>> otherwise(Term instance) {
                 Term<A> inst = instance;
@@ -90,9 +90,9 @@ public class RewritingTest {
             @Override
             public Flow<Integer, Term<A>> visit(Term.Record instance) {
                 Record<A> rec = instance.value;
-                Flow<Integer, List<Field<A>>> modFields =
-                    mapM(rec.fields, field -> bind(getState(), count -> bind(putState(count + 1),
-                        integer -> map(capitalizeFieldNames(recurse, field.term), t -> field(field.name.value.toUpperCase(), t)))));
+                Flow<Integer, List<Field<A>>> modFields = mapM(rec.fields, field -> bind(getState(),
+                    count -> bind(putState(count + 1), ignore -> map(capitalizeFieldNames(recurse, field.term),
+                        term -> field(field.name.value.toUpperCase(), term)))));
                 return map(modFields, fields -> new Term.Record<>(new Record<>(instance.value.typeName, fields)));
             }
         });
@@ -106,7 +106,7 @@ public class RewritingTest {
     private static <S> Flow<S, Term<String>> failOnSpecialAnnotation(
         Function<Term<String>, Flow<S, Term<String>>> recurse,
         Term<String> original) {
-        return original.accept(new Term.PartialVisitor<Flow<S, Term<String>>>() {
+        return original.accept(new Term.PartialVisitor<>() {
             @Override
             public Flow<S, Term<String>> otherwise(Term instance) {
                 return recurse.apply(instance);
@@ -115,9 +115,7 @@ public class RewritingTest {
             @Override
             public Flow<S, Term<String>> visit(Term.Annotated instance) {
                 Term.Annotated<String> t = instance;
-                return t.value.annotation.equals("fail here")
-                    ? Flows.fail("Bad annotation!")
-                    : recurse.apply(instance);
+                return t.value.annotation.equals("fail here") ? Flows.fail("Bad annotation!") : recurse.apply(instance);
             }
         });
     }
