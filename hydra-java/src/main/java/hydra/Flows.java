@@ -3,7 +3,7 @@ package hydra;
 import hydra.compute.Flow;
 import hydra.compute.FlowState;
 import hydra.compute.Trace;
-import hydra.util.FlowException;
+import hydra.tools.FlowException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
