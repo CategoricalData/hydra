@@ -1,7 +1,7 @@
 package hydra.lib.optionals;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 import java.util.function.Function;
 import java.util.Optional;
@@ -19,7 +19,7 @@ public class Apply<A> extends PrimitiveFunction<A> {
         if (!optionalF.isPresent() || !optionalArg.isPresent()) {
             return Optional.empty();
         }
-    
+
         Function<X, Y> f = optionalF.get();
         X arg = optionalArg.get();
 

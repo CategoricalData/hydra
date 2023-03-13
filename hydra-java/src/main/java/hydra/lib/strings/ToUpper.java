@@ -1,7 +1,7 @@
 package hydra.lib.strings;
 
 import hydra.core.Name;
-import hydra.util.PrimitiveFunction;
+import hydra.tools.PrimitiveFunction;
 
 public class ToUpper<A> extends PrimitiveFunction<A> {
     public Name name() {
