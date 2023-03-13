@@ -15,7 +15,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Module
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.TermAdapters
 import Hydra.AdapterUtils
 import Hydra.Reduction

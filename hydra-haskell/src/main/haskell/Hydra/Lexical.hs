@@ -10,7 +10,7 @@ import Hydra.Basics
 import Hydra.Core
 import Hydra.Graph
 import Hydra.Compute
-import Hydra.Monads
+import Hydra.Flows
 
 import qualified Data.List as L
 import qualified Data.Map as M

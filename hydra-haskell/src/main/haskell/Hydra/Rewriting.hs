@@ -5,7 +5,7 @@ module Hydra.Rewriting where
 import Hydra.Coders
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Monads
+import Hydra.Flows
 import Hydra.Module
 import Hydra.Lexical
 import Hydra.Mantle

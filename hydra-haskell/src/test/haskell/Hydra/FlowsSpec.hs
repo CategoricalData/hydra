@@ -1,4 +1,4 @@
-module Hydra.MonadsSpec where
+module Hydra.FlowsSpec where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Terms as Terms
