@@ -329,8 +329,8 @@ public interface Basics {
     });
   }
   
-  static hydra.mantle.LiteralVariant literalVariant(hydra.core.Literal x1) {
-    return hydra.basics.Basics.literalTypeVariant(hydra.basics.Basics.literalType((x1)));
+  static hydra.mantle.LiteralVariant literalVariant(hydra.core.Literal x) {
+    return hydra.basics.Basics.literalTypeVariant(hydra.basics.Basics.literalType((x)));
   }
   
   java.util.List<hydra.mantle.LiteralVariant> literalVariants = java.util.Arrays.asList(

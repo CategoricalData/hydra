@@ -14,13 +14,13 @@ import Data.Set
 -- | Display a floating-point type as a string
 describeFloatType :: (Core.FloatType -> String)
 describeFloatType t = (Strings.cat [
-  (\x1 -> describePrecision (Basics.floatTypePrecision x1)) t,
+  (\x -> describePrecision (Basics.floatTypePrecision x)) t,
   " floating-point numbers"])
 
 -- | Display an integer type as a string
 describeIntegerType :: (Core.IntegerType -> String)
 describeIntegerType t = (Strings.cat [
-  (\x1 -> describePrecision (Basics.integerTypePrecision x1)) t,
+  (\x -> describePrecision (Basics.integerTypePrecision x)) t,
   " integers"])
 
 -- | Display a literal type as a string

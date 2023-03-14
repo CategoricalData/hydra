@@ -125,7 +125,7 @@ data Primitive a =
     -- | The type signature of the primitive function
     primitiveType :: (Core.Type a),
     -- | A concrete implementation of the primitive function
-    primitiveImplementation :: ([Core.Term a] -> Compute.Flow () (Core.Term a))}
+    primitiveImplementation :: ([Core.Term a] -> Compute.Flow (Graph a) (Core.Term a))}
 
 _Primitive = (Core.Name "hydra/graph.Primitive")
 
@@ -139,7 +139,7 @@ _Primitive_implementation = (Core.FieldName "implementation")
 data TermCoder a x = 
   TermCoder {
     termCoderType :: (Core.Type a),
-    termCoderCoder :: (Compute.Coder () () (Core.Term a) x)}
+    termCoderCoder :: (Compute.Coder (Graph a) (Graph a) (Core.Term a) x)}
 
 _TermCoder = (Core.Name "hydra/graph.TermCoder")
 

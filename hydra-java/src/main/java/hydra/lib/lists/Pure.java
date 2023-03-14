@@ -6,6 +6,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class Pure<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> Flows.pure(Terms.list(apply(args.get(0))));
     }
 

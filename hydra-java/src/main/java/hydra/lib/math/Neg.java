@@ -6,6 +6,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
@@ -24,7 +25,7 @@ public class Neg<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> map(Expect.int32(args.get(0)),
             (arg0) -> Terms.int32(apply(arg0)));
     }

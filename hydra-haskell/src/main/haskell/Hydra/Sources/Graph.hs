@@ -100,10 +100,10 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
             core "Type" @@ "a",
           "implementation">:
             doc "A concrete implementation of the primitive function" $
-            list (core "Term" @@ "a") --> compute "Flow" @@ Types.product [] @@ (core "Term" @@ "a")],
+            list (core "Term" @@ "a") --> compute "Flow" @@ (graph "Graph" @@ "a") @@ (core "Term" @@ "a")],
 
       def "TermCoder" $
         doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
         lambda "a" $ lambda "x" $ record [
           "type">: core "Type" @@ "a",
-          "coder">: compute "Coder" @@ Types.product [] @@ Types.product [] @@ (core "Term" @@ "a") @@ "x"]]
+          "coder">: compute "Coder" @@ (graph "Graph" @@ "a") @@ (graph "Graph" @@ "a") @@ (core "Term" @@ "a") @@ "x"]]

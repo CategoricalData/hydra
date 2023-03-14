@@ -79,7 +79,7 @@ betaReduceTerm = reduce M.empty
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
             if primitiveFunctionArity prim == 0
-              then withState () $ primitiveImplementation prim []
+              then primitiveImplementation prim []
               else done
 
         -- Assumes that the function is closed and fully reduced. The arguments may not be.
@@ -128,7 +128,7 @@ betaReduceTerm = reduce M.empty
                       then nextCount ("count_" ++ unName name)
                       else pure 0
                     pargs <- mapM (reduce bindings) $ L.take arity rargs
-                    result <- withState () $ primitiveImplementation prim pargs
+                    result <- primitiveImplementation prim pargs
                     reduce bindings result
                       >>= reduceApplication bindings (L.drop arity rargs)
                   else unwind args

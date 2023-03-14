@@ -8,9 +8,9 @@ public class TermCoder<A, X> {
   
   public final hydra.core.Type<A> type;
   
-  public final hydra.compute.Coder<java.lang.Void, java.lang.Void, hydra.core.Term<A>, X> coder;
+  public final hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder;
   
-  public TermCoder (hydra.core.Type<A> type, hydra.compute.Coder<java.lang.Void, java.lang.Void, hydra.core.Term<A>, X> coder) {
+  public TermCoder (hydra.core.Type<A> type, hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
     this.type = type;
     this.coder = coder;
   }
@@ -33,7 +33,7 @@ public class TermCoder<A, X> {
     return new TermCoder(type, coder);
   }
   
-  public TermCoder withCoder(hydra.compute.Coder<java.lang.Void, java.lang.Void, hydra.core.Term<A>, X> coder) {
+  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph<A>, hydra.graph.Graph<A>, hydra.core.Term<A>, X> coder) {
     return new TermCoder(type, coder);
   }
 }

@@ -6,6 +6,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class Sub<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> map2(Expect.int32(args.get(0)), Expect.int32(args.get(1)),
             (arg0, arg1) -> Terms.int32(apply(arg0, arg1)));
     }
