@@ -109,4 +109,8 @@ public interface Flows {
     static <S> Flow<S, Boolean> putState(S snew) {
         return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(true), snew, t0));
     }
+
+    static <S, X> Flow<S, X> unexpected(String cat, Object obj) {
+        return fail("expected " + cat + " but found: " + obj);
+    }
 }
