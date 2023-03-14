@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import static hydra.Flows.*;
 import static hydra.dsl.Types.*;
+import static hydra.Flows.*;
 
 
 public class Map<A> extends PrimitiveFunction<A> {
