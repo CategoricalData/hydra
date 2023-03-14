@@ -1,7 +1,10 @@
 package hydra.lib.strings;
 
 import hydra.core.Name;
+import hydra.core.Type;
 import hydra.tools.PrimitiveFunction;
+
+import static hydra.dsl.Types.*;
 
 import java.util.function.Function;
 import java.util.List;
@@ -10,6 +13,11 @@ import java.util.ArrayList;
 public class SplitOn<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/strings.splitOn");
+    }
+
+    @Override
+    public Type<A> type() {
+        return function(string(), string());
     }
 
     public static Function<String, List<String>> apply(String delim) {

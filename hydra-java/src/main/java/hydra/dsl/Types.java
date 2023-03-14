@@ -93,6 +93,10 @@ public interface Types {
         return function(variable(dom), cod, more);
     }
 
+    static <A> Type<A> function(final Type<A> dom, final String cod, final Type<A>... more) {
+        return function(dom, variable(cod), more);
+    }
+
     static <A> Type<A> function(final String dom, final String cod, final Type<A>... more) {
         return function(variable(dom), variable(cod), more);
     }

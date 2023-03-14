@@ -1,15 +1,22 @@
 package hydra.lib.lists;
 
 import hydra.core.Name;
+import hydra.core.Type;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.List;
+import static hydra.dsl.Types.*;
 
 public class Intercalate<A> extends PrimitiveFunction<A> {
     public Name name() {
         return new Name("hydra/lib/lists.intercalate");
+    }
+
+    @Override
+    public Type<A> type() {
+        return lambda("x", function(list("x"), list(list("x")), list("x")));
     }
 
     public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
