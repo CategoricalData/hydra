@@ -1,11 +1,21 @@
 package hydra.lib.sets;
 
+import hydra.Flows;
+import hydra.compute.Flow;
 import hydra.core.Name;
+import hydra.core.Term;
 import hydra.core.Type;
+import hydra.dsl.Expect;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+
 import static hydra.dsl.Types.*;
+
 
 public class Size<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -15,6 +25,11 @@ public class Size<A> extends PrimitiveFunction<A> {
     @Override
     public Type<A> type() {
         return lambda("x", function(set("x"), int32()));
+    }
+
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), arg -> Terms.int32(apply(arg)));
     }
 
     public static <X> Integer apply(Set<X> arg) {

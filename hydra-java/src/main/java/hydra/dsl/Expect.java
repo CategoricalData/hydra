@@ -1,12 +1,18 @@
 package hydra.dsl;
 
+import hydra.Flows;
+import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.FloatValue;
 import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Term;
+import hydra.graph.Graph;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import static hydra.Flows.*;
@@ -111,6 +117,13 @@ public interface Expect {
         }));
     }
 
+    static <A, X, Y> Function<X, Flow<Graph<A>, Y>> function(
+        final Function<X, Term<A>> fin,
+        final Function<Term<A>, Flow<Graph<A>, Y>> fout,
+        final Term<A> func) {
+        return x -> bind(Reduction.betaReduceTerm(Terms.apply(func, fin.apply(x))), fout);
+    }
+
     static <S, A> Flow<S, Short> int8(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
             @Override
@@ -181,6 +194,20 @@ public interface Expect {
         }));
     }
 
+    static <S, A, X> Flow<S, List<X>> list(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, List<X>>>() {
+            @Override
+            public Flow<S, List<X>> otherwise(Term instance) {
+                return unexpected("list", instance);
+            }
+
+            @Override
+            public Flow<S, List<X>> visit(Term.List instance) {
+                return mapM(((Term.List<A>) instance).value, elems);
+            }
+        });
+    }
+
     static <S, A> Flow<S, Literal> literal(final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Literal>>() {
             @Override
@@ -206,6 +233,20 @@ public interface Expect {
             public Flow<S, Optional<X>> visit(Term.Optional instance) {
                 return instance.value.isPresent() ? map(elems.apply((Term<A>) instance.value.get()), Optional::of)
                     : pure(Optional.empty());
+            }
+        });
+    }
+
+    static <S, A, X> Flow<S, Set<X>> set(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, Set<X>>>() {
+            @Override
+            public Flow<S, Set<X>> otherwise(Term instance) {
+                return unexpected("set", instance);
+            }
+
+            @Override
+            public Flow<S, Set<X>> visit(Term.Set instance) {
+                return mapM(((Term.Set<A>) instance).value, elems);
             }
         });
     }

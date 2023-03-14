@@ -10,19 +10,13 @@ import hydra.graph.Primitive;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.Flows.*;
-
 
 public abstract class PrimitiveFunction<A> {
     public abstract Name name();
 
     public abstract Type<A> type();
 
-//    protected abstract Function<List<Term<A>>, Flow<Void, Term<A>>> implementation();
-
-    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return terms -> fail("not implemented");
-    }
+    protected abstract Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation();
 
     public Term<A> term() {
         return Terms.primitive(name());
