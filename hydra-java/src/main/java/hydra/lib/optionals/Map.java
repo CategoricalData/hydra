@@ -7,12 +7,14 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.Optional;
 import static hydra.dsl.Types.*;
+import static hydra.Flows.*;
 
 public class Map<A> extends PrimitiveFunction<A> {
     public Name name() {
@@ -24,18 +26,11 @@ public class Map<A> extends PrimitiveFunction<A> {
         return lambda("x", lambda("y", function(function("x", "y"), optional("x"), optional("y"))));
     }
 
-//    @Override
-//    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
-//        return new Function<List<Term<A>>, Flow<Void, Term<A>>>() {
-//            @Override
-//            public Flow<Void, Term<A>> apply(List<Term<A>> args) {
-//                Term<A> f = args.get(0);
-//                Term<A> opt = args.get(1);
-//                Function<Term<A>, Flow<Void, Term<A>>> fun = null;
-//                return Expect.optional(fun, args.get(1));
-//            }
-//        };
-//    }
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> bind(Expect.optional(instance -> pure(Terms.apply(args.get(0), instance)), args.get(1)),
+            opt -> pure(Terms.optional(opt)));
+    }
 
     public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Function<X, Y> f) {
         return (optionalArg) -> apply(f, optionalArg);
