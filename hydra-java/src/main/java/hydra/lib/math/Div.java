@@ -6,6 +6,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Expect;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class Div<A> extends PrimitiveFunction<A> {
     }
 
     @Override
-    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> bind2(Expect.int32(args.get(0)), Expect.int32(args.get(1)),
-            (BiFunction<Integer, Integer, Flow<Void, Term<A>>>) (arg0, arg1) -> {
+            (BiFunction<Integer, Integer, Flow<Graph<A>, Term<A>>>) (arg0, arg1) -> {
                 if (arg1.equals(0)) {
                     return fail("division by zero");
                 } else {

@@ -5,6 +5,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import java.util.List;
 import java.util.function.Function;
@@ -19,7 +20,7 @@ public abstract class PrimitiveFunction<A> {
 
 //    protected abstract Function<List<Term<A>>, Flow<Void, Term<A>>> implementation();
 
-    protected Function<List<Term<A>>, Flow<Void, Term<A>>> implementation() {
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return terms -> fail("not implemented");
     }
 

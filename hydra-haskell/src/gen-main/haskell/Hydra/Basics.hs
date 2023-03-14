@@ -139,7 +139,7 @@ literalTypeVariant x = case x of
 
 -- | Find the literal variant (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Mantle.LiteralVariant)
-literalVariant x1 = (literalTypeVariant (literalType x1))
+literalVariant x = (literalTypeVariant (literalType x))
 
 -- | All literal variants, in a canonical order
 literalVariants :: [Mantle.LiteralVariant]
