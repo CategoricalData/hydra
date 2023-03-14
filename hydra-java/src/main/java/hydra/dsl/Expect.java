@@ -6,6 +6,8 @@ import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Term;
 import java.math.BigInteger;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static hydra.Flows.*;
 
@@ -189,6 +191,22 @@ public interface Expect {
             @Override
             public Flow<S, Literal> visit(Term.Literal instance) {
                 return pure(instance.value);
+            }
+        });
+    }
+
+    static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<>() {
+            @Override
+            public Flow<S, Optional<X>> otherwise(Term instance) {
+                return unexpected("optional", instance);
+            }
+
+            @Override
+            public Flow<S, Optional<X>> visit(Term.Optional instance) {
+                return instance.value.isPresent()
+                    ? map(elems.apply((Term<A>) instance.value.get()), Optional::of)
+                    : pure(Optional.empty());
             }
         });
     }
