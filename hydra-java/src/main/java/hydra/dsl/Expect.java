@@ -6,6 +6,8 @@ import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Term;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -179,6 +181,20 @@ public interface Expect {
                 return pure(instance.value);
             }
         }));
+    }
+
+    static <S, A, X> Flow<S, List<X>> list(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, List<X>>>() {
+            @Override
+            public Flow<S, List<X>> otherwise(Term instance) {
+                return unexpected("list", instance);
+            }
+
+            @Override
+            public Flow<S, List<X>> visit(Term.List instance) {
+                return mapM(((Term.List<A>) instance).value, elems);
+            }
+        });
     }
 
     static <S, A> Flow<S, Literal> literal(final Term<A> term) {

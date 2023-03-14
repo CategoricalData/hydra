@@ -1,11 +1,18 @@
 package hydra.lib.strings;
 
+import hydra.compute.Flow;
 import hydra.core.Name;
+import hydra.core.Term;
 import hydra.core.Type;
+import hydra.dsl.Expect;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import static hydra.Flows.*;
 import static hydra.dsl.Types.*;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.List;
 import java.util.ArrayList;
@@ -18,6 +25,12 @@ public class SplitOn<A> extends PrimitiveFunction<A> {
     @Override
     public Type<A> type() {
         return function(string(), string());
+    }
+
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> map2(Expect.string(args.get(0)), Expect.string(args.get(1)),
+            (BiFunction<String, String, Term<A>>) (s, s2) -> Terms.listOfStrings(apply(s, s2)));
     }
 
     public static Function<String, List<String>> apply(String delim) {
