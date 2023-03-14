@@ -21,12 +21,14 @@ import hydra.core.UnitType;
 
 import hydra.core.Nominal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static hydra.dsl.Core.*;
 
@@ -124,6 +126,14 @@ public interface Terms {
 
     static <A> Term<A> list(final Term<A>... elements) {
         return list(Arrays.asList(elements));
+    }
+
+    static <A> Term<A> listOfStrings(final List<String> elements) {
+        List<Term<A>> terms = new ArrayList<>();
+        for (String s : elements) {
+            terms.add(string(s));
+        }
+        return list(terms);
     }
 
     static <A> Term<A> literal(final Literal value) {

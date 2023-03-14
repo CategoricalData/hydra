@@ -1,7 +1,13 @@
 package hydra.lib.lists;
 
+import hydra.Flows;
+import hydra.compute.Flow;
 import hydra.core.Name;
+import hydra.core.Term;
 import hydra.core.Type;
+import hydra.dsl.Expect;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.ArrayList;
@@ -17,6 +23,13 @@ public class Intersperse<A> extends PrimitiveFunction<A> {
     @Override
     public Type<A> type() {
         return lambda("x", function("x", list("x"), list("x")));
+    }
+
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> Flows.map(
+            Expect.list(Flows::pure, args.get(1)),
+            list -> Terms.list(apply(args.get(0), list)));
     }
 
     public static <X> Function<List<X>, List<X>> apply(X delim) {

@@ -1,9 +1,16 @@
 package hydra.lib.sets;
 
+import hydra.Flows;
+import hydra.compute.Flow;
 import hydra.core.Name;
+import hydra.core.Term;
 import hydra.core.Type;
+import hydra.dsl.Expect;
+import hydra.dsl.Terms;
+import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +24,15 @@ public class Map<A> extends PrimitiveFunction<A> {
     @Override
     public Type<A> type() {
         return lambda("x", lambda("y", function(function("x", "y"), set("x"), set("y"))));
+    }
+
+    @Override
+    protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
+        return args -> {
+            Term<A> mapping = args.get(0);
+            return Flows.map(Expect.set(Flows::pure, args.get(1)),
+                arg -> Terms.set(arg.stream().map(e -> Terms.apply(mapping, e)).collect(Collectors.toSet())));
+        };
     }
 
     public static <X, Y> Function<Set<X>, Set<Y>> apply(Function<X, Y> mapping) {
