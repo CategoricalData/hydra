@@ -3,7 +3,7 @@ package hydra.tools;
 import hydra.compute.Trace;
 
 
-public class FlowException extends Exception {
+public class FlowException extends RuntimeException {
   public final Trace trace;
 
   public FlowException(Trace trace) {

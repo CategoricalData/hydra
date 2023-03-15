@@ -340,6 +340,10 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
   
+  static <A> Integer primitiveArity(hydra.graph.Primitive<A> x) {
+    return hydra.basics.Basics.typeArity((hydra.graph.Primitive<A>) (((x)).type));
+  }
+  
   static java.util.function.Function<String, hydra.core.Name> qname(hydra.module.Namespace ns) {
     return name -> new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
       ((ns)).value,
