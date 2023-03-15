@@ -1,6 +1,5 @@
 package hydra.dsl;
 
-import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.FloatValue;
@@ -9,7 +8,6 @@ import hydra.core.Literal;
 import hydra.core.Term;
 import hydra.graph.Graph;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -121,7 +119,7 @@ public interface Expect {
         final Function<X, Term<A>> fin,
         final Function<Term<A>, Flow<Graph<A>, Y>> fout,
         final Term<A> func) {
-        return x -> bind(Reduction.betaReduceTerm(Terms.apply(func, fin.apply(x))), fout);
+        return x -> bind(Reduction.reduceLazy(Terms.apply(func, fin.apply(x))), fout);
     }
 
     static <S, A> Flow<S, Short> int8(final Term<A> term) {
