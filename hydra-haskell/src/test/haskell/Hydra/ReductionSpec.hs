@@ -58,10 +58,10 @@ checkMonomorphicPrimitives = do
 
     H.it "Example primitives have the expected arity" $ do
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitive testGraph _strings_toUpper)
+        (primitiveArity <$> lookupPrimitive testGraph _strings_toUpper)
         (Just 1)
       H.shouldBe
-        (primitiveFunctionArity <$> lookupPrimitive testGraph _strings_splitOn)
+        (primitiveArity <$> lookupPrimitive testGraph _strings_splitOn)
         (Just 2)
 
     H.it "Simple applications of a unary function succeed" $

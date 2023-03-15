@@ -34,9 +34,6 @@ dereferenceElement en = do
 lookupPrimitive :: Graph a -> Name -> Maybe (Primitive a)
 lookupPrimitive cx fn = M.lookup fn $ graphPrimitives cx
 
-primitiveFunctionArity :: Primitive a -> Int
-primitiveFunctionArity = typeArity . primitiveType
-
 requireElement :: Name -> GraphFlow a (Element a)
 requireElement name = do
     cx <- getState

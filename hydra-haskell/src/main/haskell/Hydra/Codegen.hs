@@ -161,6 +161,7 @@ generateSources printModule mods0 basePath = do
 hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
   hydraCoreModule,
+  hydraGraphModule,
   hydraMantleModule,
   hydraModuleModule,
   hydraTestingModule]
