@@ -2,7 +2,10 @@
 
 module Hydra.Sources.Langs.Tinkerpop.V3 where
 
-import Hydra.Kernel
+import Hydra.Compute ( Kv )
+import Hydra.Flows ( Kv )
+import Hydra.Module
+    ( Module(Module, moduleNamespace), Namespace(Namespace) )
 import Hydra.Dsl.Annotations
 import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
