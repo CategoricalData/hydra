@@ -2,6 +2,7 @@
 
 module Hydra.Rewriting where
 
+import Hydra.Basics
 import Hydra.Coders
 import Hydra.Core
 import Hydra.Graph
@@ -34,7 +35,7 @@ expandLambdas = rewriteTermM (expand []) (pure . id)
           FunctionLambda _ -> passThrough
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
-            return $ pad args (primitiveFunctionArity prim) term
+            return $ pad args (primitiveArity prim) term
         _ -> passThrough
       where
         passThrough = pad args 0 <$> recurse term

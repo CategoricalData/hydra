@@ -1,6 +1,7 @@
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
+import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
 import Hydra.Dsl.Lib.Lists as Lists
@@ -15,7 +16,7 @@ basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
 
 hydraBasicsModule :: Module Kv
-hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraMantleModule] $
+hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule] $
     Just "Basic functions for working with types and terms"
   where
     elements = [
@@ -34,6 +35,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraMantleModul
       el literalTypeVariantDef,
       el literalVariantDef,
       el literalVariantsDef,
+      el primitiveArityDef,
       el qnameDef,
       el termVariantDef,
       el termVariantsDef,
@@ -202,6 +204,12 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_float,
     _LiteralVariant_integer,
     _LiteralVariant_string]
+
+primitiveArityDef :: Definition (Primitive a -> Int)
+primitiveArityDef = basicsDefinition "primitiveArity" $
+  doc "Find the arity (expected number of arguments) of a primitive constant or function" $
+  function (Types.apply (Types.wrap _Primitive) (Types.variable "a")) Types.int32 $
+  (ref typeArityDef <.> (project _Primitive _Primitive_type))
 
 qnameDef :: Definition (Namespace -> String -> Name)
 qnameDef = basicsDefinition "qname" $

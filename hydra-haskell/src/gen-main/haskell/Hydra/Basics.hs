@@ -3,6 +3,7 @@
 module Hydra.Basics where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
@@ -149,6 +150,10 @@ literalVariants = [
   Mantle.LiteralVariantFloat,
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
+
+-- | Find the arity (expected number of arguments) of a primitive constant or function
+primitiveArity :: (Graph.Primitive a -> Int)
+primitiveArity x = (typeArity (Graph.primitiveType x))
 
 -- | Construct a qualified (dot-separated) name
 qname :: (Module.Namespace -> String -> Core.Name)

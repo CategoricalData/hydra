@@ -78,7 +78,7 @@ betaReduceTerm = reduce M.empty
           FunctionLambda (Lambda v body) -> TermFunction . FunctionLambda . Lambda v <$> reduceb body
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
-            if primitiveFunctionArity prim == 0
+            if primitiveArity prim == 0
               then primitiveImplementation prim []
               else done
 
@@ -120,7 +120,7 @@ betaReduceTerm = reduce M.empty
 
             FunctionPrimitive name -> do
                 prim <- requirePrimitive name
-                let arity = primitiveFunctionArity prim
+                let arity = primitiveArity prim
                 if L.length args >= arity
                   then do
                     rargs <- CM.mapM betaReduceTerm args
