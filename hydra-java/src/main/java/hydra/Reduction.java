@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static hydra.Common.*;
 import static hydra.Flows.*;
@@ -32,8 +33,9 @@ public class Reduction {
         return reduceLazy(outer, new HashMap<>(), null);
     }
 
-    private static <A> Flow<Graph<A>, Term<A>> reduceLazy(Term<A> original, Map<Name, Term<A>> env, LList<Term<A>> args) {
-        return Rewriting.rewriteTermM(recurse -> inner -> stripTerm(inner).accept(new Term.PartialVisitor<>() {
+    private static <A> Flow<Graph<A>, Term<A>> reduceLazy(Term<A> original, Map<Name, Term<A>> env,
+        LList<Term<A>> args) {
+        return Rewriting.rewriteTermM(recurse -> inner -> stripTerm(inner).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
             @Override
             public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
                 // Evaluation is lazy; do not recurse until it is necessary
@@ -81,9 +83,11 @@ public class Reduction {
                             } else {
                                 int arity = primitiveArity(prim);
                                 if (arity <= LList.length(args)) {
-                                    return bind(mapM(LList.take(arity, args), t -> reduceLazy(t, env, null)),
+                                    return bind(mapM(LList.take(arity, args),
+                                        t -> reduceLazy(t, env, null)),
                                         reducedArgs -> bind(prim.implementation.apply(reducedArgs),
-                                            result -> reduceLazy(result, env, LList.drop(arity, args))));
+                                            result -> reduceLazy(result, env,
+                                                LList.drop(arity, args))));
                                 } else {
                                     // Not enough arguments available; abort reduction
                                     return pure(inner);
@@ -106,7 +110,7 @@ public class Reduction {
             @Override
             public Term<A> visit(Term.Function instance) {
                 hydra.core.Function<A> fun = instance.value;
-                return fun.accept(new hydra.core.Function.PartialVisitor<Term<A>>() {
+                return fun.accept(new hydra.core.Function.PartialVisitor<>() {
                     @Override
                     public Term<A> otherwise(hydra.core.Function instance) {
                         return recurse.apply(inner);
@@ -129,93 +133,99 @@ public class Reduction {
 
     private static <A> Flow<Graph<A>, Term<A>> applyElimination(Elimination<A> elm, Term<A> arg,
         Map<Name, Term<A>> env) {
-        return bind(reduceLazy(stripTerm(arg), env, null), reducedArg -> elm.accept(new Elimination.Visitor<>() {
+        return bind(reduceLazy(stripTerm(arg), env, null), new Function<>() {
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Element instance) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.List instance) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Optional instance) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Record elim) {
-                return reducedArg.accept(new Term.PartialVisitor<>() {
+            public Flow<Graph<A>, Term<A>> apply(Term<A> reducedArg) {
+                return elm.accept(new Elimination.Visitor<>() {
                     @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
-                        return unexpected("record", instance);
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.Element instance) {
+                        throw new UnsupportedOperationException();
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Record instance) {
-                        Record<A> record = instance.value;
-                        Projection proj = elim.value;
-                        if (record.typeName.equals(proj.typeName)) {
-                            for (Field<A> field : record.fields) {
-                                if (field.name.equals(proj.field)) {
-                                    return pure(field.term);
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.List instance) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.Optional instance) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.Record elim) {
+                        return reducedArg.accept(new Term.PartialVisitor<>() {
+                            @Override
+                            public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                                return unexpected("record", instance);
+                            }
+
+                            @Override
+                            public Flow<Graph<A>, Term<A>> visit(Term.Record instance) {
+                                Record<A> record = instance.value;
+                                Projection proj = elim.value;
+                                if (record.typeName.equals(proj.typeName)) {
+                                    for (Field<A> field : record.fields) {
+                                        if (field.name.equals(proj.field)) {
+                                            return pure(field.term);
+                                        }
+                                    }
+                                    return fail("no such field: " + proj.field + " in " + record.typeName + " record");
+                                } else {
+                                    return fail(
+                                        "tried to project a " + proj.typeName + " field out of a " + record.typeName + " record");
                                 }
                             }
-                            return fail("no such field: " + proj.field + " in " + record.typeName + " record");
-                        } else {
-                            return fail("tried to project a " + proj.typeName + " field out of a " + record.typeName + " record");
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Union elim) {
-                return reducedArg.accept(new Term.PartialVisitor<>() {
-                    @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
-                        return unexpected("injection", instance);
+                        });
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Union instance) {
-                        CaseStatement<A> cases = elim.value;
-                        Injection<A> inj = instance.value;
-                        if (cases.typeName.equals(inj.typeName)) {
-                            for (Field<A> field : cases.cases) {
-                                if (field.name.equals(inj.field.name)) {
-                                    return pure(Terms.apply(field.term, inj.field.term));
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.Union elim) {
+                        return reducedArg.accept(new Term.PartialVisitor<>() {
+                            @Override
+                            public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                                return unexpected("injection", instance);
+                            }
+
+                            @Override
+                            public Flow<Graph<A>, Term<A>> visit(Term.Union instance) {
+                                CaseStatement<A> cases = elim.value;
+                                Injection<A> inj = instance.value;
+                                if (cases.typeName.equals(inj.typeName)) {
+                                    for (Field<A> field : cases.cases) {
+                                        if (field.name.equals(inj.field.name)) {
+                                            return pure(Terms.apply(field.term, inj.field.term));
+                                        }
+                                    }
+                                    return cases.default_.isPresent() ? pure(cases.default_.get())
+                                        : fail("no such field " + inj.field.name + " in " + cases.typeName + " case statement");
+                                } else {
+                                    return fail("tried to match a " + inj.typeName + " injection as " + cases.typeName);
                                 }
                             }
-                            return cases.default_.isPresent() ? pure(cases.default_.get())
-                                : fail("no such field " + inj.field.name + " in " + cases.typeName + " case statement");
-                        } else {
-                            return fail("tried to match a " + inj.typeName + " injection as " + cases.typeName);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Wrap instance) {
-                return reducedArg.accept(new Term.PartialVisitor<>() {
-                    @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
-                        return unexpected("wrapped term", instance);
+                        });
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Wrap wrapped) {
-                        Name fname = instance.value;
-                        Name aname = wrapped.value.typeName;
-                        return fname.equals(aname) ? pure(((Term.Wrap<A>) wrapped).value.object)
-                            : fail("tried to unwrap an instance of " + aname + " as an instance of " + fname);
+                    public Flow<Graph<A>, Term<A>> visit(Elimination.Wrap instance) {
+                        return reducedArg.accept(new Term.PartialVisitor<>() {
+                            @Override
+                            public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                                return unexpected("wrapped term", instance);
+                            }
+
+                            @Override
+                            public Flow<Graph<A>, Term<A>> visit(Term.Wrap wrapped) {
+                                Name fname = instance.value;
+                                Name aname = wrapped.value.typeName;
+                                return fname.equals(aname) ? pure(((Term.Wrap<A>) wrapped).value.object)
+                                    : fail("tried to unwrap an instance of " + aname + " as an instance of " + fname);
+                            }
+                        });
                     }
                 });
             }
-        }));
+        });
     }
 
     private static class LList<X> {
