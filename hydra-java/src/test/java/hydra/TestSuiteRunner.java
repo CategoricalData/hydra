@@ -8,6 +8,7 @@ import hydra.graph.Graph;
 import hydra.test.testSuite.TestSuite;
 import hydra.testing.TestCase;
 import hydra.testing.TestGroup;
+import hydra.tools.PrettyPrinter;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -32,12 +33,23 @@ public class TestSuiteRunner extends HydraTestBase {
         Flow<Graph<Kv>, Term<Kv>> reduced = reduce(input);
         FlowState<Graph<Kv>, Term<Kv>> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
         if (result.value.isPresent()) {
-            assertEquals(output, result.value.get(), "Original term does not reduce to expected term" + suffix);
+            if (!result.value.get().equals(output)) {
+                // First, assert that the pretty-printed strings for the results are the same;
+                // this provides more readable failure messages.
+                assertEquals(print(output), print(result.value.get()),
+                    "Original term does not reduce to expected term" + suffix);
+                // Now check that the terms are truly equal
+                assertEquals(output, result.value.get(), "Original term does not reduce to expected term" + suffix);
+            }
         } else if (result.trace.messages.isEmpty()){
             Assertions.fail("Reduction failed" + suffix);
         } else {
             Assertions.fail("Reduction failed: " + result.trace.messages.get(0) + suffix);
         }
+    }
+
+    private static <A> String print(Term<A> term) {
+        return PrettyPrinter.printTerm(term);
     }
 
     private static List<Arguments> provideTestCases() {

@@ -24,7 +24,7 @@ public class SplitOn<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return function(string(), string());
+        return function(string(), string(), list(string()));
     }
 
     @Override
