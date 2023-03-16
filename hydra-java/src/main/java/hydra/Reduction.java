@@ -78,7 +78,7 @@ public class Reduction {
                         return bind(getState(), graph -> {
                             Primitive<A> prim = graph.primitives.get(instance.value);
                             if (prim == null) {
-                                return fail("no such primitive function: " + instance.value);
+                                return fail("no such primitive function: " + instance.value.value);
                             } else {
                                 int arity = primitiveArity(prim);
                                 if (arity <= LList.length(args)) {
