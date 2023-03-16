@@ -45,7 +45,7 @@ import Hydra.Sources.Langs.Shacl.Model
 import Hydra.Sources.Langs.Shex.Syntax
 import Hydra.Sources.Langs.Sql.Ansi
 import Hydra.Sources.Langs.Tinkerpop.Features
-import Hydra.Sources.Langs.Tinkerpop.Typed
+import Hydra.Sources.Langs.Tinkerpop.Types
 import Hydra.Sources.Langs.Tinkerpop.V3
 import Hydra.Sources.Langs.Xml.Schema
 import Hydra.Sources.Langs.Yaml.Model
@@ -73,9 +73,6 @@ addDeepTypeAnnotations :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
 addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
-
-allModules :: [Module Kv]
-allModules = coreModules ++ utilModules ++ extModules
 
 assignSchemas :: (Ord a, Show a) => Bool -> Module a -> GraphFlow a (Module a)
 assignSchemas doInfer mod = do
@@ -108,29 +105,6 @@ coreModules = [
 --  hydraMonadsModule,
   hydraPhantomsModule,
   jsonModelModule]
-
-extModules :: [Module Kv]
-extModules = [
-  avroSchemaModule,
-  graphqlSyntaxModule,
-  javaSyntaxModule,
-  owlSyntaxModule,
-  parquetFormatModule,
-  pegasusPdlModule,
-  protobufAnyModule,
-  protobufSourceContextModule,
-  protobufTypeModule,
-  rdfSyntaxModule,
-  relationalModelModule,
-  scalaMetaModule,
-  shaclModelModule,
-  shexSyntaxModule,
-  sqlModule,
-  tinkerpopFeaturesModule,
-  tinkerpopTypedModule,
-  tinkerpopV3Module,
-  xmlSchemaModule,
-  yamlModelModule]
 
 findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
@@ -202,7 +176,7 @@ langModules = [
   shexSyntaxModule,
   sqlModule,
   tinkerpopFeaturesModule,
-  tinkerpopTypedModule,
+  tinkerpopTypesModule,
   tinkerpopV3Module,
   xmlSchemaModule,
   yamlModelModule]
@@ -213,8 +187,8 @@ mainModules = kernelModules ++ langModules
 modulesToGraph :: [Module Kv] -> Graph Kv
 modulesToGraph mods = elementsToGraph hydraKernel (Just hydraKernel) elements
   where
-    elements = L.concat (moduleElements <$> allModules)
-    allModules = L.concat (close <$> mods)
+    elements = L.concat (moduleElements <$> modules)
+    modules = L.concat (close <$> mods)
       where
         close mod = mod:(L.concat (close <$> moduleDependencies mod))
 
