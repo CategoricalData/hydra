@@ -2,14 +2,13 @@
 
 module Hydra.Test.TestSuite where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Testing as Testing
 import Data.List
 import Data.Map
 import Data.Set
 
-allTests :: Testing.TestGroup Compute.Kv
+allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "All tests",
   Testing.testGroupDescription = Nothing,
@@ -25,6 +24,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.apply"))),
@@ -49,6 +49,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.bind"))),
@@ -76,6 +77,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.concat"))),
                 Core.applicationArgument = (Core.TermList [
@@ -106,6 +108,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.head"))),
                 Core.applicationArgument = (Core.TermList [
@@ -120,6 +123,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.intercalate"))),
@@ -158,6 +162,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.intersperse"))),
@@ -179,6 +184,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.last"))),
                 Core.applicationArgument = (Core.TermList [
@@ -193,6 +199,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.length"))),
                 Core.applicationArgument = (Core.TermList [
@@ -207,6 +214,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.map"))),
@@ -224,6 +232,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.pure"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "one"))})),
@@ -241,6 +250,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [
@@ -250,6 +260,7 @@ allTests = Testing.TestGroup {
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralString "onetwothree"))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [
@@ -260,6 +271,7 @@ allTests = Testing.TestGroup {
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralString "one"))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.cat"))),
                 Core.applicationArgument = (Core.TermList [])})),
@@ -271,18 +283,21 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})),
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.length"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "one"))})),
@@ -294,6 +309,7 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -305,6 +321,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "ippi"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -315,6 +332,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString ""))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -326,6 +344,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "three"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -339,6 +358,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString ""))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -352,6 +372,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "three"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -362,6 +383,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "one two three"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -372,6 +394,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "a"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -381,6 +404,7 @@ allTests = Testing.TestGroup {
                 Core.TermLiteral (Core.LiteralString "")])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -393,6 +417,7 @@ allTests = Testing.TestGroup {
                 (Core.TermLiteral (Core.LiteralString "c"))])},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.splitOn"))),
@@ -407,12 +432,14 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.toLower"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "One TWO threE"))})),
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralString "one two three"))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.toLower"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "Abc123"))})),
@@ -424,12 +451,14 @@ allTests = Testing.TestGroup {
           Testing.testGroupCases = [
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.toUpper"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "One TWO threE"))})),
               Testing.testCaseOutput = (Core.TermLiteral (Core.LiteralString "ONE TWO THREE"))},
             Testing.TestCase {
               Testing.testCaseDescription = Nothing,
+              Testing.testCaseEvaluationStyle = Testing.EvaluationStyleEager,
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/strings.toUpper"))),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "Abc123"))})),
