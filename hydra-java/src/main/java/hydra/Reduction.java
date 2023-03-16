@@ -34,69 +34,68 @@ public class Reduction {
 
     private static <A> Flow<Graph<A>, Term<A>> reduceLazy(Term<A> original, Map<Name, Term<A>> env,
         LList<Term<A>> args) {
-        return Rewriting.rewriteTermM(recurse -> inner -> stripTerm(inner).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
-            @Override
-            public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
-                // Evaluation is lazy; do not recurse until it is necessary
-                return pure(instance);
-            }
+        return Rewriting.rewriteTermM(
+            recurse -> inner -> stripTerm(inner).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
+                @Override
+                public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                    // Evaluation is lazy; do not recurse until it is necessary
+                    return pure(instance);
+                }
 
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Term.Application instance) {
-                Application<A> app = instance.value;
-                return reduceLazy(app.function, env, LList.push(app.argument, args));
-            }
+                @Override
+                public Flow<Graph<A>, Term<A>> visit(Term.Application instance) {
+                    Application<A> app = instance.value;
+                    return reduceLazy(app.function, env, LList.push(app.argument, args));
+                }
 
-            @Override
-            public Flow<Graph<A>, Term<A>> visit(Term.Function instance) {
-                hydra.core.Function<A> fun = instance.value;
-                return fun.accept(new hydra.core.Function.Visitor<>() {
-                    @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Elimination instance) {
-                        if (!LList.isEmpty(args)) {
-                            Elimination<A> elm = instance.value;
-                            return bind(applyElimination(elm, args.first, env),
-                                result -> reduceLazy(result, env, args.rest));
-                        } else {
-                            return pure(inner);
-                        }
-                    }
-
-                    @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Lambda instance) {
-                        if (LList.isEmpty(args)) {
-                            return pure(inner);
-                        } else {
-                            Lambda<A> lam = instance.value;
-                            Term<A> replaced = replaceFreeName(lam.parameter, args.first, lam.body);
-                            return reduceLazy(replaced, env, args.rest);
-                        }
-                    }
-
-                    @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive instance) {
-                        return bind(getState(), graph -> {
-                            Primitive<A> prim = graph.primitives.get(instance.value);
-                            if (prim == null) {
-                                return fail("no such primitive function: " + instance.value.value);
+                @Override
+                public Flow<Graph<A>, Term<A>> visit(Term.Function instance) {
+                    hydra.core.Function<A> fun = instance.value;
+                    return fun.accept(new hydra.core.Function.Visitor<>() {
+                        @Override
+                        public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Elimination instance) {
+                            if (!LList.isEmpty(args)) {
+                                Elimination<A> elm = instance.value;
+                                return bind(applyElimination(elm, args.first, env),
+                                    result -> reduceLazy(result, env, args.rest));
                             } else {
-                                int arity = primitiveArity(prim);
-                                if (arity <= LList.length(args)) {
-                                    return bind(mapM(LList.take(arity, args),
-                                        t -> reduceLazy(t, env, null)),
-                                        reducedArgs -> bind(prim.implementation.apply(reducedArgs),
-                                            result -> reduceLazy(result, env,
-                                                LList.drop(arity, args))));
-                                } else {
-                                    // Not enough arguments available; abort reduction
-                                    return pure(inner);
-                                }
+                                return pure(inner);
                             }
-                        });
-                    }
-                });
-            }
-        }), Flows::pure, original);
+                        }
+
+                        @Override
+                        public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Lambda instance) {
+                            if (LList.isEmpty(args)) {
+                                return pure(inner);
+                            } else {
+                                Lambda<A> lam = instance.value;
+                                Term<A> replaced = replaceFreeName(lam.parameter, args.first, lam.body);
+                                return reduceLazy(replaced, env, args.rest);
+                            }
+                        }
+
+                        @Override
+                        public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive instance) {
+                            return bind(getState(), graph -> {
+                                Primitive<A> prim = graph.primitives.get(instance.value);
+                                if (prim == null) {
+                                    return fail("no such primitive function: " + instance.value.value);
+                                } else {
+                                    int arity = primitiveArity(prim);
+                                    if (arity <= LList.length(args)) {
+                                        return bind(mapM(LList.take(arity, args), t -> reduceLazy(t, env, null)),
+                                            reducedArgs -> bind(prim.implementation.apply(reducedArgs),
+                                                result -> reduceLazy(result, env, LList.drop(arity, args))));
+                                    } else {
+                                        // Not enough arguments available; abort reduction
+                                        return pure(inner);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }), Flows::pure, original);
     }
 
     public static <A> Term<A> replaceFreeName(Name toReplace, Term<A> replacement, Term<A> body) {
@@ -172,7 +171,8 @@ public class Reduction {
                                     return fail("no such field: " + proj.field + " in " + record.typeName + " record");
                                 } else {
                                     return fail(
-                                        "tried to project a " + proj.typeName + " field out of a " + record.typeName + " record");
+                                        "tried to project a " + proj.typeName + " field out of a " + record.typeName
+                                            + " record");
                                 }
                             }
                         });
@@ -196,8 +196,9 @@ public class Reduction {
                                             return pure(Terms.apply(field.term, inj.field.term));
                                         }
                                     }
-                                    return cases.default_.isPresent() ? pure(cases.default_.get())
-                                        : fail("no such field " + inj.field.name + " in " + cases.typeName + " case statement");
+                                    return cases.default_.isPresent() ? pure(cases.default_.get()) : fail(
+                                        "no such field " + inj.field.name + " in " + cases.typeName
+                                            + " case statement");
                                 } else {
                                     return fail("tried to match a " + inj.typeName + " injection as " + cases.typeName);
                                 }
