@@ -8,7 +8,10 @@ import hydra.graph.AnnotationClass;
 import hydra.graph.Element;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
+import hydra.lib.Libraries;
+import hydra.tools.PrimitiveFunction;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,7 +23,12 @@ public class HydraTestBase {
         Map<Name, Element<A>> elements = Collections.emptyMap();
         Map<Name, Optional<Term<A>>> environment = Collections.emptyMap();
         Term<A> body = Terms.string("empty graph");
-        Map<Name, Primitive<A>> primitives = Collections.emptyMap();
+
+        Map<Name, Primitive<A>> primitives = new HashMap<>();
+        for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
+            primitives.put(prim.name(), prim.toNative());
+        }
+        
         AnnotationClass<A> annotations = null;
         Optional<Graph<A>> schema = Optional.empty();
 
@@ -28,6 +36,6 @@ public class HydraTestBase {
     }
 
     protected static <A> Flow<Graph<A>, Term<A>> reduce(Term<A> original) {
-        return pure(original);
+        return Reduction.reduceLazy(original);
     }
 }
