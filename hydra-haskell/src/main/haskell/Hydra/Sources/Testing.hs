@@ -19,10 +19,15 @@ hydraTestingModule = Module ns elements [hydraCoreModule] $
 
     elements = [
 
+      def "EvaluationStyle" $
+        doc "One of two evaluation styles: eager or lazy" $
+        enum ["eager", "lazy"],
+
       def "TestCase" $
         doc "A simple test case with an input and an expected output" $
         lambda "a" $ record [
           "description">: optional string,
+          "evaluationStyle">: testing "EvaluationStyle",
           "input">: core "Term" @@ "a",
           "output">: core "Term" @@ "a"],
           

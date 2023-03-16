@@ -22,7 +22,7 @@ intListList :: [[Int]] -> Term a
 intListList lists = list (intList <$> lists)
 
 primCase :: Name -> [Term a] -> Term a -> TestCase a
-primCase name args output = TestCase Nothing input output
+primCase name args output = TestCase Nothing EvaluationStyleEager input output
   where
     input = L.foldl (\a arg -> a @@ arg) (primitive name) args
 
