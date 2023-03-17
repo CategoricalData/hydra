@@ -119,7 +119,7 @@ public interface Expect {
         final Function<X, Term<A>> fin,
         final Function<Term<A>, Flow<Graph<A>, Y>> fout,
         final Term<A> func) {
-        return x -> bind(Reduction.reduceLazy(Terms.apply(func, fin.apply(x))), fout);
+        return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
     }
 
     static <S, A> Flow<S, Short> int8(final Term<A> term) {
