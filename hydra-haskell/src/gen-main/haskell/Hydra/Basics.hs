@@ -54,6 +54,12 @@ floatValueType x = case x of
   Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
+functionArity :: (Core.Function a -> Int)
+functionArity x = case x of
+  Core.FunctionElimination _ -> 1
+  Core.FunctionLambda v -> (Math.add 1 (termArity (Core.lambdaBody v)))
+  Core.FunctionPrimitive _ -> 42
+
 -- | Find the function variant (constructor) for a given function
 functionVariant :: (Core.Function a -> Mantle.FunctionVariant)
 functionVariant x = case x of
@@ -161,6 +167,12 @@ qname ns name = (Core.Name (Strings.cat [
   Module.unNamespace ns,
   ".",
   name]))
+
+termArity :: (Core.Term a -> Int)
+termArity x = case x of
+  Core.TermApplication v -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v)))
+  Core.TermFunction v -> (functionArity v)
+  _ -> 0
 
 -- | Find the term variant (constructor) for a given term
 termVariant :: (Core.Term a -> Mantle.TermVariant)
