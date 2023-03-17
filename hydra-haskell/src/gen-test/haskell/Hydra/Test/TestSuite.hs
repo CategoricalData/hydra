@@ -54,23 +54,27 @@ allTests = Testing.TestGroup {
               Testing.testCaseInput = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.bind"))),
-                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x"),
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.pure"))),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/math.neg"))),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
-                Core.applicationArgument = (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
+                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/lists.pure"))),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/math.neg"))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseOutput = (Core.TermList [
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1))),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-2))),
-                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-3))),
-                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-4))))])}]},
+                Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1)))],
+                Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-2)))],
+                Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-3)))],
+                (Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-4)))])])}]},
         Testing.TestGroup {
           Testing.testGroupName = "concat",
           Testing.testGroupDescription = Nothing,
