@@ -9,9 +9,10 @@ import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.Flows.*;
 import static hydra.dsl.Types.*;
@@ -24,16 +25,25 @@ public class Apply<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(function("x", "y"), list("x"), list("y"))));
+        return lambda("x", lambda("y", function(list(function("x", "y")), list("x"), list("y"))));
     }
 
     // Note: this implementation does not use apply(), as actually applying the mapping function would require beta reduction,
     //       which would make the mapping function monadic.
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> map2(Expect.list(Flows::pure, args.get(0)), Expect.list(Flows::pure, args.get(1)),
-            (functions, arguments) -> Terms.list(functions.stream().flatMap(
-                f -> args.stream().map(a -> Terms.apply(f, a))).collect(Collectors.toList())));
+        return args -> map2(Expect.list(Flows::pure, args.get(0)), Expect.list(Flows::pure, args.get(1)), new BiFunction<List<Term<A>>, List<Term<A>>, Term<A>>() {
+                @Override
+                public Term<A> apply(List<Term<A>> functions, List<Term<A>> arguments) {
+                    List<Term<A>> apps = new LinkedList<>();
+                    for (Term<A> f : functions) {
+                        for (Term<A> a : arguments) {
+                            apps.add(Terms.apply(f, a));
+                        }
+                    }
+                    return Terms.list(apps);
+                }
+            });
     }
 
     public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
@@ -41,6 +51,12 @@ public class Apply<A> extends PrimitiveFunction<A> {
     }
 
     public static <X, Y> List<Y> apply(List<Function<X, Y>> functions, List<X> args) {
-        return functions.stream().flatMap(f -> args.stream().map(f)).collect(Collectors.toList());
+        List<Y> results = new LinkedList<>();
+        for (Function<X, Y> f : functions) {
+            for (X a : args) {
+                results.add(f.apply(a));
+            }
+        }
+        return results;
     }
 }

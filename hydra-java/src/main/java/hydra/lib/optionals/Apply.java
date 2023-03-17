@@ -11,6 +11,7 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static hydra.Flows.*;
@@ -24,13 +25,17 @@ public class Apply<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("x", lambda("y", function(function("x", "y"), optional("x"), optional("y"))));
+        return lambda("x", lambda("y",
+            function(optional(function("x", "y")), optional("x"), optional("y"))));
     }
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> map2(Expect.optional(Flows::pure, args.get(0)), Expect.optional(Flows::pure, args.get(1)),
-            (optionalF, optionalArg) -> Terms.apply(Terms.optional(optionalF), Terms.optional(optionalArg)));
+            (BiFunction<Optional<Term<A>>, Optional<Term<A>>, Term<A>>) (optionalF, optionalArg) ->
+                (optionalF.isPresent() && optionalArg.isPresent())
+                    ? Terms.optional(Optional.of(Terms.apply(optionalF.get(), optionalArg.get())))
+                    : Terms.optional(Optional.empty()));
     }
 
     public static <X, Y> Function<Optional<X>, Optional<Y>> apply(Optional<Function<X, Y>> optionalF) {
