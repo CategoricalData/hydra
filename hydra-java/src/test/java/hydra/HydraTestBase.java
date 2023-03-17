@@ -32,8 +32,4 @@ public class HydraTestBase {
 
         return new Graph<>(elements, environment, body, primitives, annotations, schema);
     }
-
-    protected static <A> Flow<Graph<A>, Term<A>> reduce(Term<A> original) {
-        return Reduction.reduceEager(original);
-    }
 }

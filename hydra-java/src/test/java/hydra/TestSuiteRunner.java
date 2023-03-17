@@ -26,11 +26,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestSuiteRunner extends HydraTestBase {
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void runTestCase(String name, Term<Kv> input, Term<Kv> output) {
+    void runParameterizedTestCase(String name, Term<Kv> input, Term<Kv> output) {
+        runReductionTestCase(true, name, input, output);
+    }
+
+    public static void runReductionTestCase(boolean eager, String name, Term<Kv> input, Term<Kv> output) {
         Graph<Kv> graph = emptyGraph();
         String suffix = " (" + name + ")";
 
-        Flow<Graph<Kv>, Term<Kv>> reduced = reduce(input);
+        Flow<Graph<Kv>, Term<Kv>> reduced = Reduction.reduce(eager, input);
         FlowState<Graph<Kv>, Term<Kv>> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
         if (result.value.isPresent()) {
             if (!result.value.get().equals(output)) {
