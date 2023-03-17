@@ -6,7 +6,6 @@ import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
-import Hydra.Lexical
 import Hydra.Flows
 import qualified Hydra.Dsl.Literals as Literals
 

@@ -195,15 +195,15 @@ hydraLibFlowsPrimitives = [
 
 hydraLibListsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibListsPrimitives = [
-  prim2 _lists_apply (list $ function "x" "y") (list $ variable "x") (list $ variable "y") Lists.apply,
-  prim2 _lists_bind (list $ variable "x") (function "x" (list "y")) (list $ variable "y") Lists.bind,
+  prim2Raw _lists_apply (list $ function (variable "x") (variable "y")) (list $ variable "x") (list $ variable "y") Lists.applyRaw,
+  prim2Raw _lists_bind (list $ variable "x") (function (variable "x") (list (variable "y"))) (list $ variable "y") Lists.bindRaw,
   prim1 _lists_concat (list $ list $ variable "x") (list $ variable "x") Lists.concat,
   prim1 _lists_head (list $ variable "x") (variable "x") Lists.head,
   prim2 _lists_intercalate (list $ variable "x") (list $ list $ variable "x") (list $ variable "x") Lists.intercalate,
   prim2 _lists_intersperse (variable "x") (list $ variable "x") (list $ variable "x") Lists.intersperse,
   prim1 _lists_last (list $ variable "x") (variable "x") Lists.last,
   prim1 _lists_length (list $ variable "x") int32 Lists.length,
-  prim2 _lists_map (function "x" "y") (list $ variable "x") (list $ variable "y") Lists.map,
+  prim2Raw _lists_map (function (variable "x") (variable "y")) (list $ variable "x") (list $ variable "y") Lists.mapRaw,
   prim1 _lists_pure "x" (list $ variable "x") Lists.pure]
 
 hydraLibLiteralsPrimitives :: Show a => [Primitive a]
