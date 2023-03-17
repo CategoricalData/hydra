@@ -113,7 +113,7 @@ checkSerialization mkSerdeStr (TypedTerm typ term) expected = do
     FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
 
 eval :: Term Kv -> GraphFlow Kv (Term Kv)
-eval = betaReduceTerm
+eval = reduceTerm True M.empty
 
 shouldFail :: GraphFlow Kv a -> H.Expectation
 shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)

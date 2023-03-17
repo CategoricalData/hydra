@@ -32,7 +32,7 @@ dereferenceElement en = do
       Just e -> pure $ elementData e
 
 lookupPrimitive :: Graph a -> Name -> Maybe (Primitive a)
-lookupPrimitive cx fn = M.lookup fn $ graphPrimitives cx
+lookupPrimitive g name = M.lookup name $ graphPrimitives g
 
 requireElement :: Name -> GraphFlow a (Element a)
 requireElement name = do

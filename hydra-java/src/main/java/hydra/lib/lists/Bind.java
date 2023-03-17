@@ -32,7 +32,9 @@ public class Bind<A> extends PrimitiveFunction<A> {
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
         return args -> Flows.map(Expect.list(Flows::pure, args.get(0)), argsArg -> {
             Term<A> mapping = args.get(1);
-            return Terms.list(argsArg.stream().map(a -> Terms.apply(mapping, a)).collect(Collectors.toList()));
+            return Terms.apply(
+                Terms.primitive(Concat.NAME),
+                Terms.list(argsArg.stream().map(a -> Terms.apply(mapping, a)).collect(Collectors.toList())));
         });
     }
 

@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 import static hydra.dsl.Types.*;
 
 public class Concat<A> extends PrimitiveFunction<A> {
+    public static final Name NAME = new Name("hydra/lib/lists.concat");
+
     public Name name() {
-        return new Name("hydra/lib/lists.concat");
+        return NAME;
     }
 
     @Override

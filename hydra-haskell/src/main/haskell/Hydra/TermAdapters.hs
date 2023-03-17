@@ -120,7 +120,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
     decode ad term = do
-        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectUnion
+        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectInjection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_element, forTerm fterm),
           (_Elimination_wrap, forWrapped fterm),
@@ -302,7 +302,7 @@ passUnion t@(TypeUnion rt) = do
     let sfields' = adapterTarget . snd <$> M.toList adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
-        dfield <- expectUnion term
+        dfield <- expectInjection term
         ad <- getAdapter adapters dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where

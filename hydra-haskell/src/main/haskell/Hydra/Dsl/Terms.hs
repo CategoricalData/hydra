@@ -121,6 +121,13 @@ expectRecord term = case stripTerm term of
   TermRecord (Record _ fields) -> pure fields
   _ -> unexpected "record" term
 
+expectRecordWithName :: Show a => Name -> Term a -> Flow s [Field a]
+expectRecordWithName expected term = case stripTerm term of
+  TermRecord (Record actual fields) -> if actual == expected
+    then pure fields
+    else fail $ "found a record of type " ++ unName actual ++ ", expected " ++ unName expected
+  _ -> unexpected "record" term
+
 expectSet :: (Ord x, Show a) => (Term a -> Flow s x) -> Term a -> Flow s (S.Set x)
 expectSet f term = case stripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
@@ -129,10 +136,24 @@ expectSet f term = case stripTerm term of
 expectString :: Show a => Term a -> Flow s String
 expectString t = expectLiteral t >>= Literals.expectString
 
-expectUnion :: Show a => Term a -> Flow s (Field a)
-expectUnion term = case stripTerm term of
+expectInjection :: Show a => Term a -> Flow s (Field a)
+expectInjection term = case stripTerm term of
   TermUnion (Injection _ field) -> pure field
-  _ -> unexpected "union" term
+  _ -> unexpected "injection" term
+
+expectInjectionWithName :: Show a => Name -> Term a -> Flow s (Field a)
+expectInjectionWithName expected term = case stripTerm term of
+  TermUnion (Injection actual field) -> if actual == expected
+    then pure field
+    else fail $ "found an injection of type " ++ unName actual ++ ", expected " ++ unName expected
+  _ -> unexpected "injection" term
+
+expectWrapWithName :: Show a => Name -> Term a -> Flow s (Term a)
+expectWrapWithName expected term = case stripTerm term of
+  TermWrap (Nominal actual term) -> if actual == expected
+    then pure term
+    else fail $ "found a wrapper of type " ++ unName actual ++ ", expected " ++ unName expected
+  _ -> unexpected "wrap" term
 
 field :: String -> Term a -> Field a
 field n = Field (FieldName n)

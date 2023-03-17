@@ -27,9 +27,9 @@ listsApply = TestGroup "apply" Nothing [] [
 
 listsBind :: TestGroup a
 listsBind = TestGroup "bind" Nothing [] [
-    test [1, 2, 3, 4] (primitive _lists_pure <.> primitive _math_neg) (pure . negate <$> [1, 2, 3, 4])]
+    test [1, 2, 3, 4] (primitive _lists_pure <.> primitive _math_neg) (negate <$> [1, 2, 3, 4])]
   where
-    test lst fun result = primCase _lists_bind [intList lst, fun] (intListList result)
+    test lst fun result = primCase _lists_bind [intList lst, fun] (intList result)
 
 listsConcat :: TestGroup a
 listsConcat = TestGroup "concat" Nothing [] [

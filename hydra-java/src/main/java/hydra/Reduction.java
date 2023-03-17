@@ -67,8 +67,8 @@ public class Reduction {
                             return bind(reduceArg(eager, stripTerm(arg)),
                                 new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
                                     @Override
-                                    public Flow<Graph<A>, Term<A>> apply(Term<A> arg) {
-                                        return bind(applyElimination(elm, arg),
+                                    public Flow<Graph<A>, Term<A>> apply(Term<A> reducedArg) {
+                                        return bind(applyElimination(elm, reducedArg),
                                             new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
                                                 @Override
                                                 public Flow<Graph<A>, Term<A>> apply(Term<A> result) {
@@ -109,34 +109,29 @@ public class Reduction {
 
                     @Override
                     public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive instance) {
-                        return bind(getState(), graph -> {
-                            Primitive<A> prim = graph.primitives.get(instance.value);
-                            if (prim == null) {
-                                return fail("no such primitive function: " + instance.value.value);
+                        return bind(Lexical.requirePrimitive(instance.value), prim -> {
+                            int arity = primitiveArity(prim);
+                            if (arity <= LList.length(args)) {
+                                List<Term<A>> argList = LList.take(arity, args);
+                                Flow<Graph<A>, List<Term<A>>> reducedArgs = mapM(argList, a -> reduceArg(eager, a));
+                                LList<Term<A>> remainingArgs = LList.drop(arity, args);
+                                return bind(reducedArgs, new Function<List<Term<A>>, Flow<Graph<A>, Term<A>>>() {
+                                    @Override
+                                    public Flow<Graph<A>, Term<A>> apply(List<Term<A>> rargs) {
+                                        return bind(prim.implementation.apply(rargs),
+                                            new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
+                                                @Override
+                                                public Flow<Graph<A>, Term<A>> apply(Term<A> result) {
+                                                    return bind(reduce(eager, result),
+                                                        reducedResult -> applyIfNullary(eager, reducedResult,
+                                                            remainingArgs));
+                                                }
+                                            });
+                                    }
+                                });
                             } else {
-                                int arity = primitiveArity(prim);
-                                if (arity <= LList.length(args)) {
-                                    List<Term<A>> argList = LList.take(arity, args);
-                                    Flow<Graph<A>, List<Term<A>>> reducedArgs = mapM(argList, a -> reduceArg(eager, a));
-                                    LList<Term<A>> remainingArgs = LList.drop(arity, args);
-                                    return bind(reducedArgs, new Function<List<Term<A>>, Flow<Graph<A>, Term<A>>>() {
-                                        @Override
-                                        public Flow<Graph<A>, Term<A>> apply(List<Term<A>> rargs) {
-                                            return bind(prim.implementation.apply(rargs),
-                                                new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                                    @Override
-                                                    public Flow<Graph<A>, Term<A>> apply(Term<A> result) {
-                                                        return bind(reduce(eager, result),
-                                                            reducedResult -> applyIfNullary(eager, reducedResult,
-                                                                remainingArgs));
-                                                    }
-                                                });
-                                        }
-                                    });
-                                } else {
-                                    // Not enough arguments available; back out
-                                    return pure(applyToArguments(original, args));
-                                }
+                                // Not enough arguments available; back out
+                                return pure(applyToArguments(original, args));
                             }
                         });
                     }
@@ -281,25 +276,26 @@ public class Reduction {
 
     private static <A> Flow<Graph<A>, Term<A>> reduce(boolean eager, Term<A> original, Map<Name, Term<A>> env,
         LList<Term<A>> args) {
-        return Rewriting.rewriteTermM(new Function<Function<Term<A>, Flow<Graph<A>, Term<A>>>, Function<Term<A>, Flow<Graph<A>, Term<A>>>>() {
-            @Override
-            public Function<Term<A>, Flow<Graph<A>, Term<A>>> apply(
-                Function<Term<A>, Flow<Graph<A>, Term<A>>> recurse) {
-                return new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                    @Override
-                    public Flow<Graph<A>, Term<A>> apply(Term<A> mid) {
-                        // Do not recurse into lambda expressions, which will cause unexpected free variables to be encountered
-                        Flow<Graph<A>, Term<A>> ready = doRecurse(eager, mid) ? recurse.apply(mid) : pure(mid);
-                        return bind(ready, new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                            @Override
-                            public Flow<Graph<A>, Term<A>> apply(Term<A> inner) {
-                                return applyIfNullary(eager, inner, null);
-                            }
-                        });
-                    }
-                };
-            }
-        }, Flows::pure, original);
+        return Rewriting.rewriteTermM(
+            new Function<Function<Term<A>, Flow<Graph<A>, Term<A>>>, Function<Term<A>, Flow<Graph<A>, Term<A>>>>() {
+                @Override
+                public Function<Term<A>, Flow<Graph<A>, Term<A>>> apply(
+                    Function<Term<A>, Flow<Graph<A>, Term<A>>> recurse) {
+                    return new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
+                        @Override
+                        public Flow<Graph<A>, Term<A>> apply(Term<A> mid) {
+                            // Do not recurse into lambda expressions, which will cause unexpected free variables to be encountered
+                            Flow<Graph<A>, Term<A>> ready = doRecurse(eager, mid) ? recurse.apply(mid) : pure(mid);
+                            return bind(ready, new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
+                                @Override
+                                public Flow<Graph<A>, Term<A>> apply(Term<A> inner) {
+                                    return applyIfNullary(eager, inner, null);
+                                }
+                            });
+                        }
+                    };
+                }
+            }, Flows::pure, original);
     }
 
     public static <A> Term<A> replaceFreeName(Name toReplace, Term<A> replacement, Term<A> body) {
