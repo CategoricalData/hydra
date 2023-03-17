@@ -70,7 +70,7 @@ toLower :: String -> String
 toLower = fmap C.toLower
 
 toUpper :: String -> String
-toUpper = fmap C.toLower
+toUpper = fmap C.toUpper
 
 withCharacterAliases :: String -> String
 withCharacterAliases original = L.filter C.isAlphaNum $ L.concat $ alias <$> original

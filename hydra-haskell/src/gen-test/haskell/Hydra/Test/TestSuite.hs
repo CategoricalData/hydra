@@ -67,14 +67,10 @@ allTests = Testing.TestGroup {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra/lib/math.neg"))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
               Testing.testCaseOutput = (Core.TermList [
-                Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1)))],
-                Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-2)))],
-                Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-3)))],
-                (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-4)))])])}]},
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-1))),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-2))),
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-3))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (0-4))))])}]},
         Testing.TestGroup {
           Testing.testGroupName = "concat",
           Testing.testGroupDescription = Nothing,

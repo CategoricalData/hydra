@@ -50,7 +50,9 @@ checkLiterals = do
           (literal av :: Term Kv)
 
     H.it "Literal terms cannot be applied" $
-      QC.property $ \av (TypedTerm _ term) -> shouldFail (eval $ apply (literal av) term)
+      QC.property $ \lv -> shouldSucceedWith
+        (eval $ apply (literal lv) (literal lv))
+        (apply (literal lv) (literal lv))
 
 checkMonomorphicPrimitives :: H.SpecWith ()
 checkMonomorphicPrimitives = do
@@ -82,9 +84,11 @@ checkMonomorphicPrimitives = do
           (eval (apply (primitive _strings_splitOn) $ string s1))
           (apply (primitive _strings_splitOn) $ string s1)
 
-    H.it "Extra arguments to a primitive function cause failure" $
+    H.it "Extra arguments to a primitive function are tolerated" $
       QC.property $ \s1 s2 ->
-        shouldFail (eval (apply (apply (primitive _strings_toUpper) $ string s1) $ string s2))
+        shouldSucceedWith
+          (eval (apply (apply (primitive _strings_toUpper) $ string s1) $ string s2))
+          (apply (string $ toUpper s1) (string s2))
 
 checkPolymorphicPrimitives :: H.SpecWith ()
 checkPolymorphicPrimitives = do
