@@ -37,7 +37,7 @@ public class SplitOn<A> extends PrimitiveFunction<A> {
         return (string) -> apply(delim, string);
     }
 
-    // Note: the substring is not interpreted as a regular expression; it is simply a literal string. See Haskell's Data.List.Split.
+    // Note: the delimiter is not interpreted as a regular expression; it is simply a literal string. See Haskell's Data.List.Split.
     public static List<String> apply(String delim, String string) {
         List<String> parts = new ArrayList<>();
 
@@ -47,7 +47,6 @@ public class SplitOn<A> extends PrimitiveFunction<A> {
                 parts.add(string.substring(i, i+1));
             }
         } else {
-
             byte[] delimBytes = delim.getBytes();
             byte[] stringBytes = string.getBytes();
 

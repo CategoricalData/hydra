@@ -2,13 +2,14 @@
 
 module Hydra.Test.TestSuite where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Testing as Testing
 import Data.List
 import Data.Map
 import Data.Set
 
-allTests :: Testing.TestGroup
+allTests :: Testing.TestGroup Compute.Kv
 allTests = Testing.TestGroup {
   Testing.testGroupName = "All tests",
   Testing.testGroupDescription = Nothing,

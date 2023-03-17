@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static hydra.Flows.*;
-
 
 public class HydraTestBase {
     protected static <A> Graph<A> emptyGraph() {
@@ -28,7 +26,7 @@ public class HydraTestBase {
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives.put(prim.name(), prim.toNative());
         }
-        
+
         AnnotationClass<A> annotations = null;
         Optional<Graph<A>> schema = Optional.empty();
 
@@ -36,6 +34,6 @@ public class HydraTestBase {
     }
 
     protected static <A> Flow<Graph<A>, Term<A>> reduce(Term<A> original) {
-        return Reduction.reduceLazy(original);
+        return Reduction.reduceEager(original);
     }
 }
