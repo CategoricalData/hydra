@@ -7,6 +7,7 @@ import hydra.core.IntegerValue;
 import hydra.core.Literal;
 import hydra.core.Term;
 import hydra.graph.Graph;
+import hydra.tools.PrettyPrinter;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +17,15 @@ import java.util.function.Function;
 import static hydra.Flows.*;
 
 
-public interface Expect {
-    static <S, A> Flow<S, Double> bigfloat(final Term<A> term) {
+public class Expect {
+    private Expect() {
+    }
+
+    public static <S, A> Flow<S, Double> bigfloat(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
             @Override
             public Flow<S, Double> otherwise(FloatValue instance) {
-                return unexpected("bigfloat", instance);
+                return wrongType("bigfloat", term);
             }
 
             @Override
@@ -31,11 +35,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, BigInteger> bigint(final Term<A> term) {
+    public static <S, A> Flow<S, BigInteger> bigint(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
             @Override
             public Flow<S, BigInteger> otherwise(IntegerValue instance) {
-                return unexpected("bigint", instance);
+                return wrongType("bigint", term);
             }
 
             @Override
@@ -45,11 +49,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, String> binary(final Term<A> term) {
+    public static <S, A> Flow<S, String> binary(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
             @Override
             public Flow<S, String> otherwise(Literal instance) {
-                return unexpected("binary", instance);
+                return wrongType("binary", term);
             }
 
             @Override
@@ -59,11 +63,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Boolean> boolean_(final Term<A> term) {
+    public static <S, A> Flow<S, Boolean> boolean_(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, Boolean>>() {
             @Override
             public Flow<S, Boolean> otherwise(Literal instance) {
-                return unexpected("boolean", instance);
+                return wrongType("boolean", term);
             }
 
             @Override
@@ -73,11 +77,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, FloatValue> float_(final Term<A> term) {
+    public static <S, A> Flow<S, FloatValue> float_(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, FloatValue>>() {
             @Override
             public Flow<S, FloatValue> otherwise(Literal instance) {
-                return unexpected("float", instance);
+                return wrongType("float", term);
             }
 
             @Override
@@ -87,11 +91,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Float> float32(final Term<A> term) {
+    public static <S, A> Flow<S, Float> float32(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Float>>() {
             @Override
             public Flow<S, Float> otherwise(FloatValue instance) {
-                return unexpected("float32", instance);
+                return wrongType("float32", term);
             }
 
             @Override
@@ -101,11 +105,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Double> float64(final Term<A> term) {
+    public static <S, A> Flow<S, Double> float64(final Term<A> term) {
         return bind(float_(term), floatValue -> floatValue.accept(new FloatValue.PartialVisitor<Flow<S, Double>>() {
             @Override
             public Flow<S, Double> otherwise(FloatValue instance) {
-                return unexpected("float64", instance);
+                return wrongType("float64", term);
             }
 
             @Override
@@ -115,18 +119,18 @@ public interface Expect {
         }));
     }
 
-    static <A, X, Y> Function<X, Flow<Graph<A>, Y>> function(
+    public static <A, X, Y> Function<X, Flow<Graph<A>, Y>> function(
         final Function<X, Term<A>> fin,
         final Function<Term<A>, Flow<Graph<A>, Y>> fout,
         final Term<A> func) {
         return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
     }
 
-    static <S, A> Flow<S, Short> int8(final Term<A> term) {
+    public static <S, A> Flow<S, Short> int8(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
             @Override
             public Flow<S, Short> otherwise(IntegerValue instance) {
-                return unexpected("int8", instance);
+                return wrongType("int8", term);
             }
 
             @Override
@@ -136,11 +140,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Short> int16(final Term<A> term) {
+    public static <S, A> Flow<S, Short> int16(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Short>>() {
             @Override
             public Flow<S, Short> otherwise(IntegerValue instance) {
-                return unexpected("int16", instance);
+                return wrongType("int16", term);
             }
 
             @Override
@@ -150,11 +154,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Integer> int32(final Term<A> term) {
+    public static <S, A> Flow<S, Integer> int32(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Integer>>() {
             @Override
             public Flow<S, Integer> otherwise(IntegerValue instance) {
-                return unexpected("int32", instance);
+                return wrongType("int32", term);
             }
 
             @Override
@@ -164,11 +168,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Long> int64(final Term<A> term) {
+    public static <S, A> Flow<S, Long> int64(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
             @Override
             public Flow<S, Long> otherwise(IntegerValue instance) {
-                return unexpected("int64", instance);
+                return wrongType("int64", term);
             }
 
             @Override
@@ -178,11 +182,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, IntegerValue> integer(final Term<A> term) {
+    public static <S, A> Flow<S, IntegerValue> integer(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, IntegerValue>>() {
             @Override
             public Flow<S, IntegerValue> otherwise(Literal instance) {
-                return unexpected("float", instance);
+                return wrongType("float", term);
             }
 
             @Override
@@ -192,11 +196,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A, X> Flow<S, List<X>> list(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+    public static <S, A, X> Flow<S, List<X>> list(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, List<X>>>() {
             @Override
             public Flow<S, List<X>> otherwise(Term instance) {
-                return unexpected("list", instance);
+                return wrongType("list", term);
             }
 
             @Override
@@ -206,11 +210,11 @@ public interface Expect {
         });
     }
 
-    static <S, A> Flow<S, Literal> literal(final Term<A> term) {
+    public static <S, A> Flow<S, Literal> literal(final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Literal>>() {
             @Override
             public Flow<S, Literal> otherwise(Term instance) {
-                return unexpected("literal", instance);
+                return wrongType("literal", term);
             }
 
             @Override
@@ -220,11 +224,11 @@ public interface Expect {
         });
     }
 
-    static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+    public static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Optional<X>>>() {
             @Override
             public Flow<S, Optional<X>> otherwise(Term instance) {
-                return unexpected("optional", instance);
+                return wrongType("optional", term);
             }
 
             @Override
@@ -235,11 +239,11 @@ public interface Expect {
         });
     }
 
-    static <S, A, X> Flow<S, Set<X>> set(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
+    public static <S, A, X> Flow<S, Set<X>> set(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Set<X>>>() {
             @Override
             public Flow<S, Set<X>> otherwise(Term instance) {
-                return unexpected("set", instance);
+                return wrongType("set", term);
             }
 
             @Override
@@ -249,11 +253,11 @@ public interface Expect {
         });
     }
 
-    static <S, A> Flow<S, String> string(final Term<A> term) {
+    public static <S, A> Flow<S, String> string(final Term<A> term) {
         return bind(literal(term), literal -> literal.accept(new Literal.PartialVisitor<Flow<S, String>>() {
             @Override
             public Flow<S, String> otherwise(Literal instance) {
-                return unexpected("string", instance);
+                return wrongType("string", term);
             }
 
             @Override
@@ -263,11 +267,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Byte> uint8(final Term<A> term) {
+    public static <S, A> Flow<S, Byte> uint8(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Byte>>() {
             @Override
             public Flow<S, Byte> otherwise(IntegerValue instance) {
-                return unexpected("uint8", instance);
+                return wrongType("uint8", term);
             }
 
             @Override
@@ -277,11 +281,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Character> uint16(final Term<A> term) {
+    public static <S, A> Flow<S, Character> uint16(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Character>>() {
             @Override
             public Flow<S, Character> otherwise(IntegerValue instance) {
-                return unexpected("uint16", instance);
+                return wrongType("uint16", term);
             }
 
             @Override
@@ -291,11 +295,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, Long> uint32(final Term<A> term) {
+    public static <S, A> Flow<S, Long> uint32(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, Long>>() {
             @Override
             public Flow<S, Long> otherwise(IntegerValue instance) {
-                return unexpected("uint32", instance);
+                return wrongType("uint32", term);
             }
 
             @Override
@@ -305,11 +309,11 @@ public interface Expect {
         }));
     }
 
-    static <S, A> Flow<S, BigInteger> uint64(final Term<A> term) {
+    public static <S, A> Flow<S, BigInteger> uint64(final Term<A> term) {
         return bind(integer(term), integerValue -> integerValue.accept(new IntegerValue.PartialVisitor<Flow<S, BigInteger>>() {
             @Override
             public Flow<S, BigInteger> otherwise(IntegerValue instance) {
-                return unexpected("uint64", instance);
+                return wrongType("uint64", term);
             }
 
             @Override
@@ -317,5 +321,9 @@ public interface Expect {
                 return pure(instance.value);
             }
         }));
+    }
+
+    private static <S, A, X> Flow<S, X> wrongType(String category, Term<A> term) {
+        return unexpected(category, PrettyPrinter.printTerm(term));
     }
 }
