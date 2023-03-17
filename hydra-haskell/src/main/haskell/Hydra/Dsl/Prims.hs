@@ -32,9 +32,7 @@ flow states values = TermCoder (Types.wrap _Flow Types.@@ (termCoderType states)
 function :: (Ord a, Show a) => TermCoder a x -> TermCoder a y -> TermCoder a (x -> y)
 function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
   where
-    encode term = case stripTerm term of
-      TermApplication _ -> fail $ "cannot currently encode application terms in primitives"
-      _ -> fail $ "cannot encode: " ++ show (removeTermAnnotations term)
+    encode term = fail $ "cannot encode terms to functions"
     decode _ = fail $ "cannot decode functions to terms"
 
 int32 :: Show a => TermCoder a Int
@@ -91,6 +89,14 @@ prim2 name input1 input2 output compute = Primitive name ft impl
       arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
       arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
       coderDecode (termCoderCoder output) $ compute arg1 arg2
+
+prim2Raw :: Name -> TermCoder a x -> TermCoder a y -> TermCoder a z -> (Term a -> Term a -> Flow (Graph a) (Term a)) -> Primitive a
+prim2Raw name input1 input2 output compute = Primitive name ft impl
+  where
+    ft = TypeFunction $ FunctionType (termCoderType input1) (Types.function (termCoderType input2) (termCoderType output))
+    impl args = do
+      Terms.expectNArgs 2 args
+      compute (args !! 0) (args !! 1)
 
 set :: (Ord x, Ord a, Show a) => TermCoder a x -> TermCoder a (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
