@@ -252,6 +252,33 @@ public class Reduction {
         return tcur;
     }
 
+    private static <A> boolean doRecurse(boolean eager, Term<A> term) {
+        boolean isLambda = term.accept(new Term.PartialVisitor<Boolean>() {
+            @Override
+            public Boolean otherwise(Term instance) {
+                return false;
+            }
+
+            @Override
+            public Boolean visit(Term.Function instance) {
+                hydra.core.Function<A> fun = instance.value;
+                return fun.accept(new hydra.core.Function.PartialVisitor<Boolean>() {
+                    @Override
+                    public Boolean otherwise(hydra.core.Function instance) {
+                        return false;
+                    }
+
+                    @Override
+                    public Boolean visit(hydra.core.Function.Lambda instance) {
+                        return true;
+                    }
+                });
+            }
+        });
+
+        return eager && !isLambda;
+    }
+
     private static <A> Flow<Graph<A>, Term<A>> reduce(boolean eager, Term<A> original, Map<Name, Term<A>> env,
         LList<Term<A>> args) {
         return Rewriting.rewriteTermM(new Function<Function<Term<A>, Flow<Graph<A>, Term<A>>>, Function<Term<A>, Flow<Graph<A>, Term<A>>>>() {
@@ -261,9 +288,8 @@ public class Reduction {
                 return new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
                     @Override
                     public Flow<Graph<A>, Term<A>> apply(Term<A> mid) {
-                        Flow<Graph<A>, Term<A>> ready = eager
-                            ? recurse.apply(mid)
-                            : pure(mid);
+                        // Do not recurse into lambda expressions, which will cause unexpected free variables to be encountered
+                        Flow<Graph<A>, Term<A>> ready = doRecurse(eager, mid) ? recurse.apply(mid) : pure(mid);
                         return bind(ready, new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
                             @Override
                             public Flow<Graph<A>, Term<A>> apply(Term<A> inner) {
