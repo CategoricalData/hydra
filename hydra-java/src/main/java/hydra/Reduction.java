@@ -29,107 +29,110 @@ public class Reduction {
     private Reduction() {
     }
 
+    public static <A> Flow<Graph<A>, Term<A>> reduce(boolean eager, Term<A> outer) {
+        return reduce(eager, outer, new HashMap<>(), null);
+    }
+
     public static <A> Flow<Graph<A>, Term<A>> reduceEager(Term<A> outer) {
-        return reduce(false, outer, new HashMap<>(), null);
+        return reduce(true, outer);
     }
 
     public static <A> Flow<Graph<A>, Term<A>> reduceLazy(Term<A> outer) {
-        return reduce(false, outer, new HashMap<>(), null);
+        return reduce(false, outer);
     }
 
     private static <A> Flow<Graph<A>, Term<A>> reduce(boolean eager, Term<A> original, Map<Name, Term<A>> env,
         LList<Term<A>> args) {
-        return Rewriting.rewriteTermM(
-            new Function<Function<Term<A>, Flow<Graph<A>, Term<A>>>, Function<Term<A>, Flow<Graph<A>, Term<A>>>>() {
-                @Override
-                public Function<Term<A>, Flow<Graph<A>, Term<A>>> apply(
-                    Function<Term<A>, Flow<Graph<A>, Term<A>>> recurse) {
-                    return new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                        @Override
-                        public Flow<Graph<A>, Term<A>> apply(Term<A> mid) {
-                            Flow<Graph<A>, Term<A>> withReducedSubterms = eager ? recurse.apply(mid) : pure(mid);
-                            return bind(withReducedSubterms, new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                @Override
-                                public Flow<Graph<A>, Term<A>> apply(Term<A> inner) {
-                                    return stripTerm(inner).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
-                                        @Override
-                                        public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
-                                            // If evaluation is eager, subterms have already been reduced.
-                                            // If it is lazy, reduction stops here.
-                                            return pure(instance);
-                                        }
+        return Rewriting.rewriteTermM(new Function<>() {
+            @Override
+            public Function<Term<A>, Flow<Graph<A>, Term<A>>> apply(Function<Term<A>, Flow<Graph<A>, Term<A>>> recurse) {
+                return new Function<>() {
+                    @Override
+                    public Flow<Graph<A>, Term<A>> apply(Term<A> mid) {
+                        Flow<Graph<A>, Term<A>> withReducedSubterms = eager ? recurse.apply(mid) : pure(mid);
+                        return bind(withReducedSubterms, new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
+                            @Override
+                            public Flow<Graph<A>, Term<A>> apply(Term<A> inner) {
+                                return stripTerm(inner).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
+                                    @Override
+                                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                                        // If evaluation is eager, subterms have already been reduced.
+                                        // If it is lazy, reduction stops here regardless of subterms.
+                                        return pure(instance);
+                                    }
 
-                                        @Override
-                                        public Flow<Graph<A>, Term<A>> visit(Term.Application instance) {
-                                            Application<A> app = instance.value;
-                                            return reduce(eager, app.function, env, LList.push(app.argument, args));
-                                        }
+                                    @Override
+                                    public Flow<Graph<A>, Term<A>> visit(Term.Application instance) {
+                                        Application<A> app = instance.value;
+                                        return reduce(eager, app.function, env, LList.push(app.argument, args));
+                                    }
 
-                                        @Override
-                                        public Flow<Graph<A>, Term<A>> visit(Term.Function instance) {
-                                            hydra.core.Function<A> fun = instance.value;
-                                            return fun.accept(new hydra.core.Function.Visitor<>() {
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> visit(
-                                                    hydra.core.Function.Elimination instance) {
-                                                    if (!LList.isEmpty(args)) {
-                                                        Elimination<A> elm = instance.value;
-                                                        return bind(applyElimination(eager, elm, args.first, env),
-                                                            result -> reduce(eager, result, env, args.rest));
-                                                    } else {
-                                                        return pure(inner);
-                                                    }
+                                    @Override
+                                    public Flow<Graph<A>, Term<A>> visit(Term.Function instance) {
+                                        hydra.core.Function<A> fun = instance.value;
+                                        return fun.accept(new hydra.core.Function.Visitor<>() {
+                                            @Override
+                                            public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Elimination instance) {
+                                                if (!LList.isEmpty(args)) {
+                                                    Elimination<A> elm = instance.value;
+                                                    return bind(applyElimination(eager, elm, args.first, env), result -> reduce(eager, result, env, args.rest));
+                                                } else {
+                                                    return pure(applyToArguments(inner, args));
                                                 }
+                                            }
 
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> visit(
-                                                    hydra.core.Function.Lambda instance) {
-                                                    if (LList.isEmpty(args)) {
-                                                        return pure(inner);
-                                                    } else {
-                                                        Lambda<A> lam = instance.value;
-                                                        Term<A> replaced =
-                                                            replaceFreeName(lam.parameter, args.first, lam.body);
-                                                        return reduce(eager, replaced, env, args.rest);
-                                                    }
+                                            @Override
+                                            public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Lambda instance) {
+                                                if (LList.isEmpty(args)) {
+                                                    return pure(inner);
+                                                } else {
+                                                    Lambda<A> lam = instance.value;
+                                                    Term<A> replaced = replaceFreeName(lam.parameter, args.first, lam.body);
+                                                    return reduce(eager, replaced, env, args.rest);
                                                 }
+                                            }
 
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> visit(
-                                                    hydra.core.Function.Primitive instance) {
-                                                    return bind(getState(), graph -> {
-                                                        Primitive<A> prim = graph.primitives.get(instance.value);
-                                                        if (prim == null) {
-                                                            return fail(
-                                                                "no such primitive function: " + instance.value.value);
+                                            @Override
+                                            public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive instance) {
+                                                return bind(getState(), graph -> {
+                                                    Primitive<A> prim = graph.primitives.get(instance.value);
+                                                    if (prim == null) {
+                                                        return fail("no such primitive function: " + instance.value.value);
+                                                    } else {
+                                                        int arity = primitiveArity(prim);
+                                                        if (arity <= LList.length(args)) {
+                                                            List<Term<A>> argList = LList.take(arity, args);
+                                                            Flow<Graph<A>, List<Term<A>>> reducedArgs = eager ? pure(argList)
+                                                                : mapM(argList, t -> reduce(eager, t, env, null));
+
+                                                            return bind(reducedArgs, rargs -> bind(prim.implementation.apply(rargs),
+                                                                result -> reduce(eager, result, env, LList.drop(arity, args))));
                                                         } else {
-                                                            int arity = primitiveArity(prim);
-                                                            if (arity <= LList.length(args)) {
-                                                                List<Term<A>> argList = LList.take(arity, args);
-                                                                Flow<Graph<A>, List<Term<A>>> reducedArgs = eager
-                                                                    ? pure(argList)
-                                                                    : mapM(argList, t -> reduce(eager, t, env, null));
-
-                                                                return bind(reducedArgs, rargs -> bind(
-                                                                        prim.implementation.apply(rargs),
-                                                                        result -> reduce(eager, result, env,
-                                                                            LList.drop(arity, args))));
-                                                            } else {
-                                                                // Not enough arguments available; abort reduction
-                                                                return pure(inner);
-                                                            }
+                                                            // Not enough arguments available; abort reduction
+                                                            return pure(applyToArguments(inner, args));
                                                         }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    };
-                }
-            }, Flows::pure, original);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                };
+            }
+        }, Flows::pure, original);
+    }
+
+    private static <A> Term<A> applyToArguments(Term<A> function, LList<Term<A>> args) {
+        Term<A> tcur = function;
+        LList<Term<A>> lcur = args;
+        while (lcur != null) {
+            tcur = Terms.apply(tcur, args.first);
+            lcur = lcur.rest;
+        }
+        return tcur;
     }
 
     public static <A> Term<A> replaceFreeName(Name toReplace, Term<A> replacement, Term<A> body) {

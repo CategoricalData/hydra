@@ -169,7 +169,7 @@ public interface Rewriting {
 
                 @Override
                 public Flow<S, Term<B>> visit(Term.Literal instance) {
-                    return pure(new Term.Literal<B>(instance.value));
+                    return pure(new Term.Literal<>(instance.value));
                 }
 
                 @Override
