@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'hydra'
-version '0.1'
+version '0.2'
 
 // JDK 11+ is needed for RDF4j compatibility
 sourceCompatibility = '1.11'
