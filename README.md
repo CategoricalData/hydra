@@ -16,7 +16,7 @@ This is currently the most complete and mature implementation of the language, a
 Here you will find Hydra coders (type-aware encoders/decoders) for Haskell itself, Java, Scala,
 [Avro](https://avro.apache.org), [JSON](https://json.org), [YAML](https://en.wikipedia.org/wiki/YAML), [RDF](https://www.w3.org/RDF) + [SHACL](https://www.w3.org/TR/shacl),
 and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language.
-Most of the Hydra documentation is also [here](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell).
+Most of the Hydra documentation is also here.
 * **[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)** is a Java implementation of Hydra which is under active development.
 It includes a substantial portion of the Hydra kernel, though none of the coders mentioned above is fully ported to Java yet.
 JavaDocs are available [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc).
@@ -36,4 +36,6 @@ Both of the active language variants (Haskell and Java) contain a complete copy 
 * Models for Avro, GraphQL, Haskell, Java, Json, OWL, Parquet, PDL, Protobuf, Python, Rdf, Scala, SHACL, ShEx, SQL, [TinkerPop](https://tinkerpop.apache.org)-style property graphs, and YAML
 
 Hydra also features a language-agnostic test suite which guarantees parity of program evaluation and primitive functions across the language variants.
-Along with the rest of Hydra's generated code, the test suite will be used as a seed for future implementations in additional languages, such as Python and Go.
+Along with the rest of Hydra's generated code, the test suite will be used as a seed for future implementations in additional languages, such as
+[Python](https://github.com/CategoricalData/hydra/issues/66)
+and [Go](https://github.com/CategoricalData/hydra/issues/65).
