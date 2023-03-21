@@ -74,6 +74,10 @@ public interface Terms {
         return new Field<>(new FieldName(fname), term);
     }
 
+    static <A> Field<A> field(final String fname, final String term) {
+        return field(fname, variable(term));
+    }
+
     static <A> Term<A> float_(final FloatValue value) {
         return literal(new Literal.Float_(value));
     }
@@ -110,8 +114,24 @@ public interface Terms {
         return literal(new Literal.Integer_(value));
     }
 
+    static <A> Term<A> just(final Term<A> elem) {
+        return optional(Optional.of(elem));
+    }
+
+    static <A> Term<A> just(final String elem) {
+        return just(variable(elem));
+    }
+
     static <A> Term<A> lambda(final String var, final Term<A> body) {
         return function(new Function.Lambda<>(new Lambda<>(new Name(var), body)));
+    }
+
+    static <A> Term<A> lambda(final String var1, final String var2, final Term<A> body) {
+        return lambda(var1, lambda(var2, body));
+    }
+
+    static <A> Term<A> lambda(final String var1, final String var2, final String var3, final Term<A> body) {
+        return lambda(var1, lambda(var2, lambda(var3, body)));
     }
 
     static <A> Term<A> let(final String var, final Term<A> defined, final Term<A> definedIn) {
@@ -151,6 +171,10 @@ public interface Terms {
             fields[i] = field(casePairs[i].getKey(), casePairs[i].getValue());
         }
         return cases(name, def, fields);
+    }
+
+    static <A> Term<A> nothing() {
+        return optional(Optional.empty());
     }
 
     static <A> Term<A> optional(final Optional<Term<A>> maybeTerm) {

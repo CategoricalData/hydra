@@ -14,6 +14,7 @@ import hydra.core.Name;
 import hydra.core.RowType;
 import hydra.core.Type;
 import hydra.core.UnitType;
+import hydra.compute.Flow;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -28,8 +29,12 @@ public interface Types {
         return new Type.Annotated<>(new Annotated<>(base, ann));
     }
 
-    static <A> Type<A> apply(final Type<A> lhs, final Type<A> rhs) {
-        return new Type.Application<>(new ApplicationType<>(lhs, rhs));
+    static <A> Type<A> apply(final Type<A> lhs, final Type<A>... rhs) {
+        Type<A> cur = lhs;
+        for (Type<A> r : rhs) {
+            cur = new Type.Application<>(new ApplicationType<>(cur, r));
+        }
+        return cur;
     }
 
     static <A> Type<A> bigfloat() {
@@ -71,6 +76,14 @@ public interface Types {
 
     static <A> Type<A> float_(final FloatType ftype) {
         return literal(LiteralTypes.float_(ftype));
+    }
+
+    static <A> Type<A> flow(final Type<A> states, final Type<A> elements) {
+        return apply(variable(Flow.NAME), states, elements);
+    }
+
+    static <A> Type<A> flow(final String states, final String elements) {
+        return flow(variable(states), variable(elements));
     }
 
     static <A> Type<A> function(final Type<A> dom, final Type<A> cod, final Type<A>... more) {
@@ -217,8 +230,12 @@ public interface Types {
         return record(UnitType.NAME);
     }
 
+    static <A> Type<A> variable(final Name name) {
+        return new Type.Variable<>(name);
+    }
+
     static <A> Type<A> variable(final String name) {
-        return new Type.Variable<>(new Name(name));
+        return variable(new Name(name));
     }
 
     static <A> Type<A> wrap(final Name name) {
