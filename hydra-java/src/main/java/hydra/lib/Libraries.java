@@ -14,6 +14,7 @@ public class Libraries<A> {
         List<PrimitiveFunction<A>> prims = new ArrayList<>();
         prims.addAll(listPrimitives());
         prims.addAll(literalsPrimitives());
+        prims.addAll(mapsPrimitives());
         prims.addAll(mathPrimitives());
         prims.addAll(optionalsPrimitives());
         prims.addAll(setsPrimitives());
@@ -33,6 +34,10 @@ public class Libraries<A> {
         return Arrays.asList(new hydra.lib.literals.ShowInt32<>(), new hydra.lib.literals.ShowString<>());
     }
 
+    private static <A> List<PrimitiveFunction<A>> mapsPrimitives() {
+        return Arrays.asList(new hydra.lib.maps.Empty<>());
+    }
+
     private static <A> List<PrimitiveFunction<A>> mathPrimitives() {
         return Arrays.asList(new hydra.lib.math.Add<>(), new hydra.lib.math.Div<>(), new hydra.lib.math.Mod<>(),
             new hydra.lib.math.Mul<>(), new hydra.lib.math.Neg<>(), new hydra.lib.math.Rem<>(),
@@ -45,7 +50,7 @@ public class Libraries<A> {
     }
 
     private static <A> List<PrimitiveFunction<A>> setsPrimitives() {
-        return Arrays.asList(new hydra.lib.math.Add<>(), new hydra.lib.sets.Contains<>(), new hydra.lib.sets.Empty<>(),
+        return Arrays.asList(new hydra.lib.sets.Contains<>(), new hydra.lib.sets.Empty<>(),
             new hydra.lib.sets.FromList<>(), new hydra.lib.sets.Insert<>(), new hydra.lib.sets.IsEmpty<>(),
             new hydra.lib.sets.Map<>(), new hydra.lib.sets.Remove<>(), new hydra.lib.sets.Singleton<>(),
             new hydra.lib.sets.Size<>(), new hydra.lib.sets.ToList<>());

@@ -125,6 +125,10 @@ public interface Types {
         return new Type.Lambda<>(new LambdaType<>(new Name(var), body));
     }
 
+    static <A> Type<A> lambda(final String var1, final String var2, final Type<A> body) {
+        return lambda(var1, lambda(var2, body));
+    }
+
     static <A> Type<A> list(final Type<A> elements) {
         return new Type.List<>(elements);
     }
@@ -139,6 +143,10 @@ public interface Types {
 
     static <A> Type<A> map(final Type<A> keys, final Type<A> values) {
         return new Type.Map<>(new MapType<>(keys, values));
+    }
+
+    static <A> Type<A> map(final String keys, final String values) {
+        return map(variable(keys), variable(values));
     }
 
     static <A> Type<A> optional(final Type<A> elements) {
