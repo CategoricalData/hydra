@@ -5,14 +5,14 @@ module Hydra.Lib.Flows where
 import Hydra.Kernel
 
 
-apply :: Flow s (a -> b) -> Flow s a -> Flow s b
+apply :: Flow s (x -> y) -> Flow s x -> Flow s y
 apply = (<*>)
 
-bind :: Flow s a -> (a -> Flow s b) -> Flow s b
+bind :: Flow s x -> (x -> Flow s y) -> Flow s y
 bind = (>>=)
 
-map :: (a -> b) -> Flow s a -> Flow s b
+map :: (x -> y) -> Flow s x -> Flow s y
 map = fmap
 
-pure :: a -> Flow s a
+pure :: x -> Flow s x
 pure = return
