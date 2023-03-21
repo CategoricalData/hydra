@@ -86,11 +86,35 @@ _literals_showString = qname _hydra_lib_literals "showString"
 _hydra_lib_maps :: Namespace
 _hydra_lib_maps = Namespace "hydra/lib/maps"
 
+_maps_empty :: Name
+_maps_empty = qname _hydra_lib_maps "empty"
+
+_maps_fromList :: Name
+_maps_fromList = qname _hydra_lib_maps "fromList"
+
+_maps_insert :: Name
+_maps_insert = qname _hydra_lib_maps "insert"
+
+_maps_isEmpty :: Name
+_maps_isEmpty = qname _hydra_lib_maps "isEmpty"
+
+_maps_lookup :: Name
+_maps_lookup = qname _hydra_lib_maps "lookup"
+
 _maps_map :: Name
 _maps_map = qname _hydra_lib_maps "map"
 
+_maps_remove :: Name
+_maps_remove = qname _hydra_lib_maps "remove"
+
+_maps_singleton :: Name
+_maps_singleton = qname _hydra_lib_maps "singleton"
+
 _maps_size :: Name
 _maps_size = qname _hydra_lib_maps "size"
+
+_maps_toList :: Name
+_maps_toList = qname _hydra_lib_maps "toList"
 
 _hydra_lib_math :: Namespace
 _hydra_lib_math = Namespace "hydra/lib/math"
@@ -213,12 +237,25 @@ hydraLibLiteralsPrimitives = [
 
 hydraLibMapsPrimitives :: (Ord a, Show a) => [Primitive a]
 hydraLibMapsPrimitives = [
-  prim2 _optionals_map
-    (function "v1" "v2")
-    (Prims.map (variable "k") (variable "v1"))
-    (Prims.map (variable "k") (variable "v2"))
-    Maps.map,
-  prim1 _sets_size (set $ variable "x") int32 Sets.size]
+    prim0 _maps_empty mapKv Maps.empty,
+    prim1 _maps_fromList (list $ pair k v) mapKv Maps.fromList,
+    prim3 _maps_insert k v mapKv mapKv Maps.insert,
+    prim1 _maps_isEmpty mapKv boolean Maps.isEmpty,
+    prim2 _maps_lookup k mapKv (optional v) Maps.lookup,
+    prim2 _optionals_map
+      (function "v1" "v2")
+      (Prims.map k (variable "v1"))
+      (Prims.map k (variable "v2"))
+      Maps.map,
+    prim1 _maps_size mapKv int32 Maps.size,
+    prim2 _maps_remove k mapKv mapKv Maps.remove,
+    prim2 _maps_singleton k v mapKv Maps.singleton,
+    prim1 _maps_size mapKv int32 Maps.size,
+    prim1 _maps_toList mapKv (list $ pair k v) Maps.toList]
+  where
+    k = variable "k"
+    v = variable "v"
+    mapKv = Prims.map k v
 
 hydraLibMathInt32Primitives :: Show a => [Primitive a]
 hydraLibMathInt32Primitives = [
