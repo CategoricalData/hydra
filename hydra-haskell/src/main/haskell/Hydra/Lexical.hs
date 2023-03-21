@@ -31,9 +31,6 @@ dereferenceElement en = do
       Nothing -> fail $ "element " ++ unName en ++ " does not exist"
       Just e -> pure $ elementData e
 
-lookupPrimitive :: Graph a -> Name -> Maybe (Primitive a)
-lookupPrimitive g name = M.lookup name $ graphPrimitives g
-
 requireElement :: Name -> GraphFlow a (Element a)
 requireElement name = do
     cx <- getState

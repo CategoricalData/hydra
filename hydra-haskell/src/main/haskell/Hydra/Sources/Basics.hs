@@ -4,9 +4,10 @@ import Hydra.Kernel
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
-import Hydra.Dsl.Lib.Lists as Lists
-import Hydra.Dsl.Lib.Math as Math
-import Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -36,6 +37,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el literalTypeVariantDef,
       el literalVariantDef,
       el literalVariantsDef,
+      el lookupPrimitiveDef,
       el primitiveArityDef,
       el qnameDef,
       el termArityDef,
@@ -207,6 +209,13 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
+lookupPrimitiveDef :: Definition (Graph a -> Name -> Maybe (Primitive a))
+lookupPrimitiveDef = basicsDefinition "lookupPrimitive" $
+  function
+    (Types.apply (Types.wrap _Graph) (Types.variable "a"))
+    (Types.function (Types.wrap _Name) (Types.optional (Types.apply (Types.wrap _Primitive) (Types.variable "a")))) $
+  lambda "g" $ lambda "name" $ apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
+
 primitiveArityDef :: Definition (Primitive a -> Int)
 primitiveArityDef = basicsDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
@@ -220,7 +229,7 @@ qnameDef = basicsDefinition "qname" $
   lambda "ns" $
     lambda "name" $
       nom _Name $
-        apply cat $
+        apply Strings.cat $
           list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
 
 termArityDef :: Definition (Term a -> Int)
