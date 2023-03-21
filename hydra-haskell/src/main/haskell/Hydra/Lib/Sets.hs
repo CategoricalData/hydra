@@ -5,33 +5,33 @@ module Hydra.Lib.Sets where
 import qualified Data.Set as S
 
 
-contains :: Ord a => a -> S.Set a -> Bool
+contains :: Ord x => x -> S.Set x -> Bool
 contains = S.member
 
-empty :: S.Set a
+empty :: S.Set x
 empty = S.empty
 
-fromList :: Ord a => [a] -> S.Set a
+fromList :: Ord x => [x] -> S.Set x
 fromList = S.fromList
 
-insert :: Ord a => a -> S.Set a -> S.Set a
+insert :: Ord x => x -> S.Set x -> S.Set x
 insert = S.insert
 
-isEmpty :: S.Set a -> Bool
+isEmpty :: S.Set x -> Bool
 isEmpty = S.null
 
 -- Note: the presence of a 'map' function does not imply that sets are a functor in Hydra
-map :: Ord b => (a -> b) -> S.Set a -> S.Set b
+map :: Ord y => (x -> y) -> S.Set x -> S.Set y
 map f = S.fromList . fmap f . S.toList
 
-remove :: Ord a => a -> S.Set a -> S.Set a
+remove :: Ord x => x -> S.Set x -> S.Set x 
 remove = S.delete
 
-singleton :: a -> S.Set a
+singleton :: x -> S.Set x
 singleton = S.singleton
 
-size :: S.Set a -> Int
+size :: S.Set x -> Int
 size = S.size
 
-toList :: Ord a => S.Set a -> [a]
+toList :: Ord x => S.Set x -> [x]
 toList = S.toList
