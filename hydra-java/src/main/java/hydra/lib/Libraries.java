@@ -6,13 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Libraries<A> {
+public class Libraries {
     private Libraries() {
     }
 
     public static <A> List<PrimitiveFunction<A>> standardPrimitives() {
         List<PrimitiveFunction<A>> prims = new ArrayList<>();
-        prims.addAll(listPrimitives());
+        prims.addAll(flowsPrimitives());
+        prims.addAll(listsPrimitives());
         prims.addAll(literalsPrimitives());
         prims.addAll(mapsPrimitives());
         prims.addAll(mathPrimitives());
@@ -23,7 +24,11 @@ public class Libraries<A> {
         return prims;
     }
 
-    private static <A> List<PrimitiveFunction<A>> listPrimitives() {
+    private static <A> List<PrimitiveFunction<A>> flowsPrimitives() {
+        return Arrays.asList(new hydra.lib.flows.Pure<>());
+    }
+
+    private static <A> List<PrimitiveFunction<A>> listsPrimitives() {
         return Arrays.asList(new hydra.lib.lists.Apply<>(), new hydra.lib.lists.Bind<>(),
             new hydra.lib.lists.Concat<>(), new hydra.lib.lists.Head<>(), new hydra.lib.lists.Intercalate<>(),
             new hydra.lib.lists.Intersperse<>(), new hydra.lib.lists.Last<>(), new hydra.lib.lists.Length<>(),
