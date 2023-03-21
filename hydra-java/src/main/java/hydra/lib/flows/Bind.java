@@ -55,7 +55,11 @@ public class Bind<A> extends PrimitiveFunction<A> {
         };
     }
 
+    public static <S, X, Y> Function<Function<X, Flow<S, Y>>, Flow<S, Y>> apply(Flow<S, X> input) {
+        return mapping -> apply(input, mapping);
+    }
+
     public static <S, X, Y> Flow<S, Y> apply(Flow<S, X> input, Function<X, Flow<S, Y>> mapping) {
-        return Flows.bind(mapping, input);
+        return Flows.bind(input, mapping);
     }
 }

@@ -56,6 +56,10 @@ public class Apply<A> extends PrimitiveFunction<A> {
         };
     }
 
+    public static <S, X, Y> Function<Flow<S, X>, Flow<S, Y>> apply(Flow<S, Function<X, Y>> mapping) {
+        return input -> apply(mapping, input);
+    }
+
     public static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
         return Flows.apply(mapping, input);
     }
