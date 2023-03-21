@@ -2,20 +2,18 @@ package hydra.lib.flows;
 
 import hydra.Flows;
 import hydra.compute.Flow;
-import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
-import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Types.flow;
-import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.lambda;
+import static hydra.dsl.Terms.flowState;
+import static hydra.dsl.Terms.just;
 
 
 public class Pure<A> extends PrimitiveFunction<A> {
@@ -25,15 +23,12 @@ public class Pure<A> extends PrimitiveFunction<A> {
 
     @Override
     public Type<A> type() {
-        return lambda("s", "x", function("x", flow("s", "x")));
+        return Types.lambda("s", "x", Types.function("x", Types.flow("s", "x")));
     }
 
     @Override
     protected Function<List<Term<A>>, Flow<Graph<A>, Term<A>>> implementation() {
-        return args -> Flows.pure(Terms.lambda("x", "s", "t", Terms.record(FlowState.NAME,
-                Terms.field("value", Terms.just("x")),
-                Terms.field("state", "s"),
-                Terms.field("trace", "t"))));
+        return args -> Flows.pure(flowState(just(args.get(0)), args.get(1), args.get(2)));
     }
 
     public static <S, X> Flow<S, X> apply(X elem) {

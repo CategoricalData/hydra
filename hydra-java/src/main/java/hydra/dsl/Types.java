@@ -82,6 +82,14 @@ public interface Types {
         return apply(variable(Flow.NAME), states, elements);
     }
 
+    static <A> Type<A> flow(final Type<A> states, final String elements) {
+        return apply(variable(Flow.NAME), states, variable(elements));
+    }
+
+    static <A> Type<A> flow(final String states, final Type<A> elements) {
+        return apply(variable(Flow.NAME), variable(states), elements);
+    }
+
     static <A> Type<A> flow(final String states, final String elements) {
         return flow(variable(states), variable(elements));
     }
@@ -114,6 +122,14 @@ public interface Types {
         return function(variable(dom), variable(cod), more);
     }
 
+    static <A> Type<A> function(final String dom1, final String dom2, final Type<A> dom3, final Type<A>... cod) {
+        return function(variable(dom1), function(variable(dom2), dom3, cod));
+    }
+
+    static <A> Type<A> function(final String dom1, final String dom2, final String dom3, final Type<A>... cod) {
+        return function(variable(dom1), function(variable(dom2), variable(dom3), cod));
+    }
+
     static <A> Type<A> int16() {
         return literal(LiteralTypes.int16());
     }
@@ -140,6 +156,10 @@ public interface Types {
 
     static <A> Type<A> lambda(final String var1, final String var2, final Type<A> body) {
         return lambda(var1, lambda(var2, body));
+    }
+
+    static <A> Type<A> lambda(final String var1, final String var2, final String var3, final Type<A> body) {
+        return lambda(var1, lambda(var2, lambda(var3, body)));
     }
 
     static <A> Type<A> list(final Type<A> elements) {

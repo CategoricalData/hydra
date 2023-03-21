@@ -20,7 +20,17 @@ public interface Flows {
     Trace EMPTY_TRACE
             = new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
 
-    static <S, X, Y> Flow<S, Y> bind(Flow<S, X> p, Function<X, Flow<S, Y>> k) {
+    static <S, X, Y> Flow<S, Y> apply(Flow<S, Function<X, Y>> mapping, Flow<S, X> input) {
+        return new Flow<>(s0 -> t0 -> {
+            FlowState<S, Function<X, Y>> fs1 = mapping.value.apply(s0).apply(t0);
+            Optional<Function<X, Y>> mf = fs1.value;
+            return mf.isPresent()
+                    ? map(mf.get(), input).value.apply(fs1.state).apply(fs1.trace)
+                    : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
+        });
+    }
+
+    static <S, X, Y> Flow<S, Y> bind(Function<X, Flow<S, Y>> k, Flow<S, X> p) {
         return new Flow<>(s0 -> t0 -> {
             FlowState<S, X> fs1 = p.value.apply(s0).apply(t0);
             Optional<X> x = fs1.value;
@@ -28,6 +38,10 @@ public interface Flows {
                     ? k.apply(x.get()).value.apply(fs1.state).apply(fs1.trace)
                     : new FlowState<>(Optional.empty(), fs1.state, fs1.trace);
         });
+    }
+
+    static <S, X, Y> Flow<S, Y> bind(Flow<S, X> p, Function<X, Flow<S, Y>> k) {
+        return bind(k, p);
     }
 
     static <S, X, Y, Z> Flow<S, Z> bind2(Flow<S, X> p1, Flow<S, Y> p2, BiFunction<X, Y, Flow <S, Z>> k) {
@@ -57,11 +71,15 @@ public interface Flows {
       return new Flow<>(s0 -> t0 -> new FlowState<>(Optional.of(s0), s0, t0));
     }
 
-    static <S, X, Y> Flow<S, Y> map(Flow <S, X> x, Function<X, Y> f) {
+    static <S, X, Y> Flow<S, Y> map(Function<X, Y> f, Flow <S, X> x) {
         return new Flow<>(s -> trace -> {
             FlowState<S, X> result = x.value.apply(s).apply(trace);
             return new FlowState<>(result.value.map(f), result.state, result.trace);
         });
+    }
+
+    static <S, X, Y> Flow<S, Y> map(Flow <S, X> x, Function<X, Y> f) {
+        return map(f, x);
     }
 
     static <S, X, Y> Flow<S, List<Y>> mapM(List<X> xs, Function<X, Flow<S, Y>> f) {
