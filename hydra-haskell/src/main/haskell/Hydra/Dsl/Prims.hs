@@ -98,6 +98,29 @@ prim2Raw name input1 input2 output compute = Primitive name ft impl
       Terms.expectNArgs 2 args
       compute (args !! 0) (args !! 1)
 
+prim3 :: Name -> TermCoder a w -> TermCoder a x -> TermCoder a y -> TermCoder a z -> (w -> x -> y -> z) -> Primitive a
+prim3 name input1 input2 input3 output compute = Primitive name ft impl
+  where
+    ft = TypeFunction $ FunctionType
+      (termCoderType input1)
+      (Types.function (termCoderType input2)
+      (Types.function (termCoderType input3) (termCoderType output)))
+    impl args = do
+      Terms.expectNArgs 2 args
+      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
+      arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
+      arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
+      coderDecode (termCoderCoder output) $ compute arg1 arg2 arg3
+
+pair :: Show a => TermCoder a k -> TermCoder a v -> TermCoder a (k, v)
+pair kCoder vCoder = TermCoder (Types.product [termCoderType kCoder, termCoderType vCoder]) $ Coder encode decode
+  where
+    encode = Terms.expectPair (coderEncode $ termCoderCoder kCoder) (coderEncode $ termCoderCoder vCoder)
+    decode (k, v) = do
+      kTerm <- coderDecode (termCoderCoder kCoder) k
+      vTerm <- coderDecode (termCoderCoder vCoder) v
+      return $ Terms.product [kTerm, vTerm]
+
 set :: (Ord x, Ord a, Show a) => TermCoder a x -> TermCoder a (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
   where

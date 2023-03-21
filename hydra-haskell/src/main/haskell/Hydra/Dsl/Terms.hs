@@ -116,6 +116,16 @@ expectOptional f term = case stripTerm term of
     Just t -> Just <$> f t
   _ -> unexpected "optional value" term
 
+expectPair :: Show a => (Term a -> Flow s k) -> (Term a -> Flow s v) -> Term a -> Flow s (k, v)
+expectPair kf vf term = case stripTerm term of
+  TermProduct terms -> case terms of
+    [kTerm, vTerm] -> do
+      kVal <- kf kTerm
+      vVal <- vf vTerm
+      return (kVal, vVal)
+    _ -> unexpected "pair" term
+  _ -> unexpected "product" term
+
 expectRecord :: Show a => Term a -> Flow s [Field a]
 expectRecord term = case stripTerm term of
   TermRecord (Record _ fields) -> pure fields
