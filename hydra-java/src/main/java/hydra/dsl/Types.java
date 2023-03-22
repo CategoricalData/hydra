@@ -122,10 +122,6 @@ public interface Types {
         return function(variable(dom), variable(cod), more);
     }
 
-    static <A> Type<A> function(final String dom1, final String dom2, final Type<A> dom3, final Type<A>... cod) {
-        return function(variable(dom1), function(variable(dom2), dom3, cod));
-    }
-
     static <A> Type<A> function(final String dom1, final String dom2, final String dom3, final Type<A>... cod) {
         return function(variable(dom1), function(variable(dom2), variable(dom3), cod));
     }
