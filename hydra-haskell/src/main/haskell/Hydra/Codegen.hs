@@ -69,11 +69,6 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-addDeepTypeAnnotations :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
-addDeepTypeAnnotations mod = do
-    els <- CM.mapM annotateElementWithTypes $ moduleElements mod
-    return $ mod {moduleElements = els}
-
 assignSchemas :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
 assignSchemas mod = do
     g <- getState
