@@ -11,8 +11,8 @@ import Prelude hiding ((++))
 
 
 
-printingModule :: Module Kv
-printingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] $
+hydraPrintingModule :: Module Kv
+hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] $
     Just "Utilities for use in transformations"
   where
    elements = [
@@ -23,7 +23,7 @@ printingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule
      el describeTypeDef]
 
 printingDefinition :: String -> Datum a -> Definition a
-printingDefinition = Definition . fromQname (moduleNamespace printingModule)
+printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule)
 
 
 describeFloatTypeDef :: Definition (FloatType -> String)

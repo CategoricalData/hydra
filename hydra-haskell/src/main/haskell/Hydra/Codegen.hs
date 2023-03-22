@@ -83,7 +83,7 @@ assignSchemas mod = do
 
 coreModules :: [Module Kv]
 coreModules = [
-  codetreeAstModule,
+  hydraAstModule,
   haskellAstModule,
   hydraCodersModule,
   hydraCoreModule,
@@ -138,8 +138,8 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 
 kernelModules :: [Module Kv]
 kernelModules = [
-  printingModule,
-  codetreeAstModule,
+  hydraPrintingModule,
+  hydraAstModule,
   haskellAstModule,
   hydraBasicsModule,
   hydraCodersModule,
@@ -207,7 +207,7 @@ testModules = [
 
 utilModules :: [Module Kv]
 utilModules = [
-  printingModule,
+  hydraPrintingModule,
   hydraBasicsModule]
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
