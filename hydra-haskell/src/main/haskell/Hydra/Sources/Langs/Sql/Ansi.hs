@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
+import qualified Hydra.Grammar as G
 
 import qualified Data.List as L
 
@@ -18,10 +19,10 @@ sqlModule = grammarToModule ns sqlGrammar $
   where
     ns = Namespace "hydra/langs/sql/ansi"
 
-sqlGrammar :: Grammar
-sqlGrammar = Grammar $ tokens ++ productions
+sqlGrammar :: G.Grammar
+sqlGrammar = G.Grammar $ tokens ++ productions
 
-tokens :: [Production]
+tokens :: [G.Production]
 tokens = [
     -- <approximate numeric literal>    ::=   <mantissa> E <exponent>
     define "ApproximateNumericLiteral" [regex $ mantissa ++ "E" ++ exponent],
@@ -252,7 +253,7 @@ tokens = [
 
     whiteSpace = "[ \\t]" -- TODO
 
-productions :: [Production]
+productions :: [G.Production]
 productions = [
   -- <approximate numeric type>    ::=
        --         FLOAT [ <left paren> <precision> <right paren> ]

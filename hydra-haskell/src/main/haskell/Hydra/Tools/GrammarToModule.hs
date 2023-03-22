@@ -6,18 +6,19 @@ import Hydra.Kernel
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Terms as Terms
+import qualified Hydra.Grammar as G
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-grammarToModule :: Namespace -> Grammar -> Maybe String -> Module Kv
-grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
+grammarToModule :: Namespace -> G.Grammar -> Maybe String -> Module Kv
+grammarToModule ns (G.Grammar prods) desc = Module ns elements [] desc
   where
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where
-        prodPairs = (\(Production (Symbol s) pat) -> (s, pat)) <$> prods
+        prodPairs = (\(G.Production (G.Symbol s) pat) -> (s, pat)) <$> prods
         pairToElement (lname, typ) = Element (toName lname) (TermElement _Type) (epsilonEncodeType typ)
 
     toName = fromQname ns
@@ -32,27 +33,27 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
               Just i -> (rn ++ show (i+1), i+1)
 
         rawName pat = case pat of
-          PatternNil -> "none"
-          PatternIgnored _ -> "ignored"
-          PatternLabeled (LabeledPattern (Label l) _) -> l
-          PatternConstant (Constant c) -> decapitalize $ withCharacterAliases c
-          PatternRegex _ -> "regex"
-          PatternNonterminal (Symbol s) -> decapitalize s
-          PatternSequence _ -> "sequence"
-          PatternAlternatives _ -> "alts"
-          PatternOption p -> decapitalize (rawName p)
-          PatternStar p -> "listOf" ++ capitalize (rawName p)
-          PatternPlus p -> "listOf" ++ capitalize (rawName p)
+          G.PatternNil -> "none"
+          G.PatternIgnored _ -> "ignored"
+          G.PatternLabeled (G.LabeledPattern (G.Label l) _) -> l
+          G.PatternConstant (G.Constant c) -> decapitalize $ withCharacterAliases c
+          G.PatternRegex _ -> "regex"
+          G.PatternNonterminal (G.Symbol s) -> decapitalize s
+          G.PatternSequence _ -> "sequence"
+          G.PatternAlternatives _ -> "alts"
+          G.PatternOption p -> decapitalize (rawName p)
+          G.PatternStar p -> "listOf" ++ capitalize (rawName p)
+          G.PatternPlus p -> "listOf" ++ capitalize (rawName p)
 
     isComplex pat = case pat of
-      PatternLabeled (LabeledPattern _ p) -> isComplex p
-      PatternSequence pats -> isNontrivial True pats
-      PatternAlternatives pats -> isNontrivial False pats
+      G.PatternLabeled (G.LabeledPattern _ p) -> isComplex p
+      G.PatternSequence pats -> isNontrivial True pats
+      G.PatternAlternatives pats -> isNontrivial False pats
       _ -> False
 
     isNontrivial isRecord pats = if L.length minPats == 1
         then case L.head minPats of
-          PatternLabeled _ -> True
+          G.PatternLabeled _ -> True
           _ -> False
         else True
       where
@@ -62,23 +63,23 @@ grammarToModule ns (Grammar prods) desc = Module ns elements [] desc
     simplify isRecord pats = if isRecord then L.filter (not . isConstant) pats else pats
       where
         isConstant p = case p of
-          PatternConstant _ -> True
+          G.PatternConstant _ -> True
           _ -> False
 
     makeElements omitTrivial lname pat = forPat pat
       where
         forPat pat = case pat of
-          PatternNil -> trivial
-          PatternIgnored _ -> []
-          PatternLabeled (LabeledPattern (Label l) p) -> forPat p
-          PatternConstant _ -> trivial
-          PatternRegex _ -> [(lname, Types.string)]
-          PatternNonterminal (Symbol other) -> [(lname, Types.wrap $ toName other)]
-          PatternSequence pats -> forRecordOrUnion True Types.record pats
-          PatternAlternatives pats -> forRecordOrUnion False Types.union pats
-          PatternOption p -> mod "Option" Types.optional p
-          PatternStar p -> mod "Elmt" Types.list p
-          PatternPlus p -> mod "Elmt" nonemptyList p
+          G.PatternNil -> trivial
+          G.PatternIgnored _ -> []
+          G.PatternLabeled (G.LabeledPattern (G.Label l) p) -> forPat p
+          G.PatternConstant _ -> trivial
+          G.PatternRegex _ -> [(lname, Types.string)]
+          G.PatternNonterminal (G.Symbol other) -> [(lname, Types.wrap $ toName other)]
+          G.PatternSequence pats -> forRecordOrUnion True Types.record pats
+          G.PatternAlternatives pats -> forRecordOrUnion False Types.union pats
+          G.PatternOption p -> mod "Option" Types.optional p
+          G.PatternStar p -> mod "Elmt" Types.list p
+          G.PatternPlus p -> mod "Elmt" nonemptyList p
 
         trivial = if omitTrivial then [] else [(lname, Types.unit)]
 

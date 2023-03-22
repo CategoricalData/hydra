@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
+import qualified Hydra.Grammar as G
 
 
 base_ = terminal "BASE"
@@ -65,8 +66,8 @@ shexSyntaxModule = grammarToModule ns shexGrammar $
     where
         ns = Namespace "hydra/langs/shex/syntax"
 
-shexGrammar :: Grammar
-shexGrammar = Grammar [
+shexGrammar :: G.Grammar
+shexGrammar = G.Grammar [
 
 -- [1] ShexDoc ::= Directive* ((NotStartAction | StartActions) Statement*)?
   define "ShexDoc" [
