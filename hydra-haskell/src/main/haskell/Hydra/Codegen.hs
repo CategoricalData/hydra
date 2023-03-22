@@ -114,11 +114,16 @@ generateSources printModule mods0 basePath = do
   where
     generateFiles = do
       withTrace "generate files" $ do
-        mods1 <- CM.mapM (assignSchemas False) mods0
+        mods1 <- CM.mapM assignSchemas mods0
         withState (modulesToGraph mods1) $ do
-          mods2 <- CM.mapM addDeepTypeAnnotations mods1
-          maps <- CM.mapM forModule mods2
-          return $ L.concat (M.toList <$> maps)
+          g' <- annotateGraphWithTypes
+          withState g' $ do
+              let mods2 = refreshModule (graphElements g') <$> mods1
+              maps <- CM.mapM forModule mods2
+              return $ L.concat (M.toList <$> maps)
+            where
+              refreshModule els mod = mod {
+                moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
       let fullPath = FP.combine basePath path
