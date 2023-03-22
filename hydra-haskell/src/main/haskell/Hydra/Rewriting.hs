@@ -83,7 +83,7 @@ moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Module a -> S.Set Namespac
 moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
   where
     names = S.fromList (namespaceOfEager <$> S.toList elNames)
-    elNames = L.foldl (\s t -> S.union s $ termDependencyNames withEls withPrims withNoms t) S.empty $
+    elNames = L.foldl (\s t -> S.union s $ termDependencyNames False withEls withPrims withNoms t) S.empty $
       (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
 
 isFreeIn :: Name -> Term a -> Bool
@@ -304,8 +304,9 @@ subtypes typ = case typ of
   TypeUnion rt -> fieldTypeType <$> rowTypeFields rt
   TypeVariable _ -> []
 
-termDependencyNames :: Bool -> Bool -> Bool -> Term a -> S.Set Name
-termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
+-- Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
+termDependencyNames :: Bool -> Bool -> Bool -> Bool -> Term a -> S.Set Name
+termDependencyNames withVars withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
         TermElement name -> el name        
@@ -318,14 +319,16 @@ termDependencyNames withEls withPrims withNoms = foldOverTerm TraversalOrderPre 
           _ -> names
         TermRecord (Record name _) -> nominal name
         TermUnion (Injection name _) -> nominal name
+        TermVariable name -> var name
         TermWrap (Nominal name _) -> nominal name
         _ -> names
       where
         el name = if withEls then S.insert name names else names
         nominal name = if withNoms then S.insert name names else names
         prim name = if withPrims then S.insert name names else names
+        var name = if withVars then S.insert name names else names
 
 topologicalSortElements :: [Element a] -> Maybe [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
-    adjlist e = (elementName e, S.toList $ termDependencyNames True True True $ elementData e)
+    adjlist e = (elementName e, S.toList $ termDependencyNames False True True True $ elementData e)

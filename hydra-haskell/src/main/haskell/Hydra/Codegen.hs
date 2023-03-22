@@ -74,20 +74,16 @@ addDeepTypeAnnotations mod = do
     els <- CM.mapM annotateElementWithTypes $ moduleElements mod
     return $ mod {moduleElements = els}
 
-assignSchemas :: (Ord a, Show a) => Bool -> Module a -> GraphFlow a (Module a)
-assignSchemas doInfer mod = do
-    cx <- getState
-    els <- CM.mapM (annotate cx) $ moduleElements mod
+assignSchemas :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
+assignSchemas mod = do
+    g <- getState
+    els <- CM.mapM (annotate g) $ moduleElements mod
     return $ mod {moduleElements = els}
   where
-    annotate cx el = do
-      typ <- findType cx (elementData el)
+    annotate g el = do
+      typ <- findType g (elementData el)
       case typ of
-        Nothing -> if doInfer
-          then do
-            t <- typeSchemeType <$> inferType (elementData el)
-            return el {elementSchema = epsilonEncodeType t}
-          else return el
+        Nothing -> return el
         Just typ -> return el {elementSchema = epsilonEncodeType typ}
 
 coreModules :: [Module Kv]
