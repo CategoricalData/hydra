@@ -1,5 +1,6 @@
 package hydra.dsl;
 
+import hydra.Flows;
 import hydra.Reduction;
 import hydra.compute.Flow;
 import hydra.core.FloatValue;
@@ -9,9 +10,15 @@ import hydra.core.Term;
 import hydra.graph.Graph;
 import hydra.tools.PrettyPrinter;
 import java.math.BigInteger;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static hydra.Flows.*;
@@ -224,6 +231,31 @@ public class Expect {
         });
     }
 
+    public static <S, A, K, V> Flow<S, Map<K, V>> map(
+            final Function<Term<A>, Flow<S, K>> keys,
+            final Function<Term<A>, Flow<S, V>> values,
+            final Term<A> term) {
+        return term.accept(new Term.PartialVisitor<Flow<S, Map<K, V>>>() {
+            @Override
+            public Flow<S, Map<K, V>> otherwise(Term instance) {
+                return wrongType("map", term);
+            }
+
+            @Override
+            public Flow<S, Map<K, V>> visit(Term.Map instance) {
+                Term.Map<A> mp = instance;
+                return Flows.map(Flows.mapM(new ArrayList<>(mp.value.entrySet()), entry -> Flows.map2(keys.apply(entry.getKey()), values.apply(entry.getValue()), AbstractMap.SimpleEntry::new)),
+                        (Function<List<Map.Entry<K, V>>, Map<K, V>>) entries -> {
+                    Map<K, V> result = new HashMap<>();
+                    for (Map.Entry<K, V> e : entries) {
+                        result.put(e.getKey(), e.getValue());
+                    }
+                    return result;
+                });
+            }
+        });
+    }
+
     public static <S, A, X> Flow<S, Optional<X>> optional(final Function<Term<A>, Flow<S, X>> elems, final Term<A> term) {
         return term.accept(new Term.PartialVisitor<Flow<S, Optional<X>>>() {
             @Override
@@ -233,7 +265,7 @@ public class Expect {
 
             @Override
             public Flow<S, Optional<X>> visit(Term.Optional instance) {
-                return instance.value.isPresent() ? map(elems.apply((Term<A>) instance.value.get()), Optional::of)
+                return instance.value.isPresent() ? Flows.map(elems.apply((Term<A>) instance.value.get()), Optional::of)
                     : pure(Optional.empty());
             }
         });

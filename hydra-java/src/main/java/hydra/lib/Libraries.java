@@ -55,7 +55,9 @@ public class Libraries {
 
     private static <A> List<PrimitiveFunction<A>> mapsPrimitives() {
         return Arrays.asList(
-                new hydra.lib.maps.Empty<>());
+                new hydra.lib.maps.Empty<>(),
+                new hydra.lib.maps.Insert<>(),
+                new hydra.lib.maps.Lookup<>());
     }
 
     private static <A> List<PrimitiveFunction<A>> mathPrimitives() {
