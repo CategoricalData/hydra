@@ -19,6 +19,7 @@ import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
 import Hydra.Rules
+import Hydra.Tools.Sorting
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -43,6 +44,30 @@ annotateElementWithTypes el = do
       case mt of
         Just t -> return t
         Nothing -> fail "expected a type annotation"
+
+annotateGraphWithTypes :: (Ord a, Show a) => GraphFlow a (Graph a)
+annotateGraphWithTypes = getState >>= annotateGraph
+  where
+    annotateGraph g = do
+        adjList <- CM.mapM toAdj $ M.toList els
+        case topologicalSort adjList of
+          Nothing -> fail $ "cyclical dependency not resolved through annotations"
+          Just names -> do
+            let sortedEls = Y.catMaybes ((\n -> M.lookup n els) <$> names)
+            annotatedEls <- CM.mapM annotateElementWithTypes sortedEls
+            return g {graphElements = M.fromList (toPair <$> annotatedEls)}
+              where
+                toPair el = (elementName el, el)
+      where
+        els = graphElements g
+        isElName name = M.member name els
+        toAdj (name, el) = do
+          let term = elementData el
+          mtyp <- annotationClassTermType (graphAnnotations g) term
+          let deps = case mtyp of
+                Nothing -> L.filter isElName $ S.toList $ freeVariablesInTerm term
+                Just _ -> []
+          return (name, deps)
 
 annotateTermWithTypes :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
 annotateTermWithTypes term0 = do
