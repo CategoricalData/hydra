@@ -5,8 +5,8 @@ import Hydra.Dsl.Annotations
 import Hydra.Dsl.Types as Types
 
 
-codetreeAstModule :: Module Kv
-codetreeAstModule = Module ns elements [] $
+hydraAstModule :: Module Kv
+hydraAstModule = Module ns elements [] $
     Just "A model which provides a common syntax tree for Hydra serializers"
   where
     ns = Namespace "hydra/ast"
