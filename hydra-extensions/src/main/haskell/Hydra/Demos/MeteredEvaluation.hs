@@ -48,5 +48,5 @@ demoMeteredEvaluation = do
     context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
       original <- dereferenceElement $ fromQname testNs "catStrings"
-      reduced <- betaReduceTerm original
+      reduced <- reduceTerm False M.empty original
       return reduced
