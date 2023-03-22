@@ -3,49 +3,50 @@
 module Hydra.Dsl.Grammars where
 
 import Hydra.Kernel
+import qualified Hydra.Grammar as G
 
 import Data.String(IsString(..))
 
 
-instance IsString Pattern where fromString = symbol
+instance IsString G.Pattern where fromString = symbol
 
 infixr 0 >:
-(>:) :: String -> Pattern -> Pattern
-l >: p = PatternLabeled $ LabeledPattern (Label l) p
+(>:) :: String -> G.Pattern -> G.Pattern
+l >: p = G.PatternLabeled $ G.LabeledPattern (G.Label l) p
 
-alts :: [Pattern] -> Pattern
-alts = PatternAlternatives
+alts :: [G.Pattern] -> G.Pattern
+alts = G.PatternAlternatives
 
-define :: String -> [Pattern] -> Production
-define s pats = Production (Symbol s) pat
+define :: String -> [G.Pattern] -> G.Production
+define s pats = G.Production (G.Symbol s) pat
   where
     pat = case pats of
       [p] -> p
       _ -> alts pats
 
-ignored :: Pattern -> Pattern
-ignored = PatternIgnored
+ignored :: G.Pattern -> G.Pattern
+ignored = G.PatternIgnored
 
-list :: [Pattern] -> Pattern
-list = PatternSequence
+list :: [G.Pattern] -> G.Pattern
+list = G.PatternSequence
 
-nil :: Pattern
-nil = PatternNil
+nil :: G.Pattern
+nil = G.PatternNil
 
-opt :: Pattern -> Pattern
-opt = PatternOption
+opt :: G.Pattern -> G.Pattern
+opt = G.PatternOption
 
-plus :: Pattern -> Pattern
-plus = PatternPlus
+plus :: G.Pattern -> G.Pattern
+plus = G.PatternPlus
 
-regex :: String -> Pattern
-regex = PatternRegex . Regex
+regex :: String -> G.Pattern
+regex = G.PatternRegex . G.Regex
 
-star :: Pattern -> Pattern
-star = PatternStar
+star :: G.Pattern -> G.Pattern
+star = G.PatternStar
 
-symbol :: String -> Pattern
-symbol = PatternNonterminal . Symbol
+symbol :: String -> G.Pattern
+symbol = G.PatternNonterminal . G.Symbol
 
-terminal :: String -> Pattern
-terminal = PatternConstant . Constant
+terminal :: String -> G.Pattern
+terminal = G.PatternConstant . G.Constant

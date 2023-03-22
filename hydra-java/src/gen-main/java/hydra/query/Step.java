@@ -111,9 +111,9 @@ public abstract class Step {
     /**
      * A comparison of two terms
      */
-    public final hydra.query.Comparison value;
+    public final hydra.query.ComparisonConstraint value;
     
-    public Compare (hydra.query.Comparison value) {
+    public Compare (hydra.query.ComparisonConstraint value) {
       this.value = value;
     }
     

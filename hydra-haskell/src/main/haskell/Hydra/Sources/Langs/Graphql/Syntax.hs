@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
 import qualified Hydra.Dsl.Annotations as Ann
+import qualified Hydra.Grammar as G
 
 
 and_ = terminal "&"
@@ -49,17 +50,17 @@ graphqlSyntaxModule = grammarToModule ns graphqlGrammar $
   where
     ns = Namespace "hydra/langs/graphql/syntax"
 
-graphqlGrammar :: Grammar
-graphqlGrammar = Grammar $ tokenDefinitions ++ documentDefinitions
+graphqlGrammar :: G.Grammar
+graphqlGrammar = G.Grammar $ tokenDefinitions ++ documentDefinitions
 
-tokenDefinitions :: [Production]
+tokenDefinitions :: [G.Production]
 tokenDefinitions = [
   define "Name"        [regex "[A-Za-z][A-Za-z0-9]*"],
   define "IntValue"    [regex "-?(0|[1-9][0-9]*)"],
   define "FloatValue"  [regex "-?(0|[1-9][0-9]*)([.][0-9]+|[eE][+-]?[0-9]+)"],
   define "StringValue" [regex "[\"].*[\"]"]] -- TODO: the actual expression includes Unicode escape sequences
 
-documentDefinitions :: [Production]
+documentDefinitions :: [G.Production]
 documentDefinitions = [
   define "Document" [
     star"Definition"],
