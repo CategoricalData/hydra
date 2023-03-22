@@ -2,6 +2,7 @@
 
 module Hydra.Inference (
   annotateElementWithTypes,
+  annotateGraphWithTypes,
   annotateTermWithTypes,
   inferType,
   inferTypeAndConstraints,
