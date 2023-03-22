@@ -3,10 +3,10 @@ package hydra.query;
 /**
  * One of several comparison operators
  */
-public abstract class Comparison {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.Comparison");
+public abstract class ComparisonConstraint {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/query.ComparisonConstraint");
   
-  private Comparison () {
+  private ComparisonConstraint () {
   
   }
   
@@ -27,7 +27,7 @@ public abstract class Comparison {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Comparison instance) {
+    default R otherwise(ComparisonConstraint instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -56,7 +56,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class Equal extends hydra.query.Comparison {
+  public static final class Equal extends hydra.query.ComparisonConstraint {
     public Equal () {
     
     }
@@ -81,7 +81,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class NotEqual extends hydra.query.Comparison {
+  public static final class NotEqual extends hydra.query.ComparisonConstraint {
     public NotEqual () {
     
     }
@@ -106,7 +106,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class LessThan extends hydra.query.Comparison {
+  public static final class LessThan extends hydra.query.ComparisonConstraint {
     public LessThan () {
     
     }
@@ -131,7 +131,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class GreaterThan extends hydra.query.Comparison {
+  public static final class GreaterThan extends hydra.query.ComparisonConstraint {
     public GreaterThan () {
     
     }
@@ -156,7 +156,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class LessThanOrEqual extends hydra.query.Comparison {
+  public static final class LessThanOrEqual extends hydra.query.ComparisonConstraint {
     public LessThanOrEqual () {
     
     }
@@ -181,7 +181,7 @@ public abstract class Comparison {
     }
   }
   
-  public static final class GreaterThanOrEqual extends hydra.query.Comparison {
+  public static final class GreaterThanOrEqual extends hydra.query.ComparisonConstraint {
     public GreaterThanOrEqual () {
     
     }

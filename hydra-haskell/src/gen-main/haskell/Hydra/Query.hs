@@ -8,28 +8,28 @@ import Data.Map
 import Data.Set
 
 -- | One of several comparison operators
-data Comparison = 
-  ComparisonEqual  |
-  ComparisonNotEqual  |
-  ComparisonLessThan  |
-  ComparisonGreaterThan  |
-  ComparisonLessThanOrEqual  |
-  ComparisonGreaterThanOrEqual 
+data ComparisonConstraint = 
+  ComparisonConstraintEqual  |
+  ComparisonConstraintNotEqual  |
+  ComparisonConstraintLessThan  |
+  ComparisonConstraintGreaterThan  |
+  ComparisonConstraintLessThanOrEqual  |
+  ComparisonConstraintGreaterThanOrEqual 
   deriving (Eq, Ord, Read, Show)
 
-_Comparison = (Core.Name "hydra/query.Comparison")
+_ComparisonConstraint = (Core.Name "hydra/query.ComparisonConstraint")
 
-_Comparison_equal = (Core.FieldName "equal")
+_ComparisonConstraint_equal = (Core.FieldName "equal")
 
-_Comparison_notEqual = (Core.FieldName "notEqual")
+_ComparisonConstraint_notEqual = (Core.FieldName "notEqual")
 
-_Comparison_lessThan = (Core.FieldName "lessThan")
+_ComparisonConstraint_lessThan = (Core.FieldName "lessThan")
 
-_Comparison_greaterThan = (Core.FieldName "greaterThan")
+_ComparisonConstraint_greaterThan = (Core.FieldName "greaterThan")
 
-_Comparison_lessThanOrEqual = (Core.FieldName "lessThanOrEqual")
+_ComparisonConstraint_lessThanOrEqual = (Core.FieldName "lessThanOrEqual")
 
-_Comparison_greaterThanOrEqual = (Core.FieldName "greaterThanOrEqual")
+_ComparisonConstraint_greaterThanOrEqual = (Core.FieldName "greaterThanOrEqual")
 
 -- | An abstract edge based on a record type
 data Edge = 
@@ -209,7 +209,7 @@ data Step =
   -- | A projection from a record through one of its fields
   StepProject Core.Projection |
   -- | A comparison of two terms
-  StepCompare Comparison
+  StepCompare ComparisonConstraint
   deriving (Eq, Ord, Read, Show)
 
 _Step = (Core.Name "hydra/query.Step")

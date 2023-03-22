@@ -23,10 +23,14 @@ import qualified Hydra.Langs.Pegasus.Coder as PDL
 import qualified Hydra.Langs.Scala.Coder as Scala
 import qualified Hydra.Langs.Yaml.Modules as Yaml
 
-import Hydra.Sources.Printing
+import Hydra.Sources.Ast
 import Hydra.Sources.Basics
+import Hydra.Sources.Coders
 import Hydra.Sources.Compute
+import Hydra.Sources.Constraints
 import Hydra.Sources.Core
+import Hydra.Sources.Grammar
+import Hydra.Sources.Graph
 import Hydra.Sources.Langs.Avro.Schema
 import Hydra.Sources.Langs.Graphql.Syntax
 import Hydra.Sources.Langs.Haskell.Ast
@@ -49,18 +53,15 @@ import Hydra.Sources.Langs.Tinkerpop.Types
 import Hydra.Sources.Langs.Tinkerpop.V3
 import Hydra.Sources.Langs.Xml.Schema
 import Hydra.Sources.Langs.Yaml.Model
-import Hydra.Sources.Grammar
 import Hydra.Sources.Libraries
-import Hydra.Sources.Coders
-import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Sources.Module
-import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
+import Hydra.Sources.Printing
 import Hydra.Sources.Query
-import Hydra.Sources.Ast
-import Hydra.Sources.Testing
 import Hydra.Sources.Test.TestSuite
+import Hydra.Sources.Testing
+import Hydra.Sources.Workflow
 
 import qualified Control.Monad as CM
 import qualified System.FilePath as FP
@@ -148,6 +149,7 @@ kernelModules = [
   hydraCodersModule,
   hydraCoreModule,
   hydraComputeModule,
+  hydraConstraintsModule,
   hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,

@@ -5,6 +5,7 @@ module Hydra.Models.Datalog where
 import Hydra.Kernel
 import Hydra.Dsl.Grammars
 import Hydra.Tools.GrammarToModule
+import qualified Hydra.Grammar as G
 
 comma = terminal ","
 entail = terminal ":-"
@@ -19,8 +20,8 @@ datalogSyntaxModule = grammarToModule ns datalogGrammar $
   where
     ns = Namespace "hydra/langs/datalog/syntax"
 
-datalogGrammar :: Grammar
-datalogGrammar = Grammar [
+datalogGrammar :: G.Grammar
+datalogGrammar = G.Grammar [
   define "Constant" [
     regex "\\\".*\\\""],
 

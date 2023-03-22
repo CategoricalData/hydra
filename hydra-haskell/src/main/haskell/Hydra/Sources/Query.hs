@@ -18,7 +18,7 @@ hydraQueryModule = Module ns elements [hydraCoreModule] $
     def = datatype ns
 
     elements = [
-      def "Comparison" $
+      def "ComparisonConstraint" $
         doc "One of several comparison operators" $
         enum ["equal", "notEqual", "lessThan", "greaterThan", "lessThanOrEqual", "greaterThanOrEqual"],
 
@@ -133,7 +133,7 @@ hydraQueryModule = Module ns elements [hydraCoreModule] $
             core "Projection",
           "compare">:
             doc "A comparison of two terms" $
-            query "Comparison"],
+            query "ComparisonConstraint"],
 
       def "TriplePattern" $
         doc "A subject/predicate/object pattern" $
