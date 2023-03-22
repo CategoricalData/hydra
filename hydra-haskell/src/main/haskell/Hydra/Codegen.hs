@@ -57,6 +57,7 @@ import Hydra.Sources.Mantle
 import Hydra.Sources.Module
 import Hydra.Sources.Workflow
 import Hydra.Sources.Phantoms
+import Hydra.Sources.Query
 import Hydra.Sources.Ast
 import Hydra.Sources.Testing
 import Hydra.Sources.Test.TestSuite
@@ -142,27 +143,28 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
 
 kernelModules :: [Module Kv]
 kernelModules = [
-  hydraPrintingModule,
   hydraAstModule,
-  haskellAstModule,
   hydraBasicsModule,
   hydraCodersModule,
   hydraCoreModule,
   hydraComputeModule,
+  hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,
   hydraModuleModule,
-  hydraGrammarModule,
-  hydraTestingModule,
-  hydraWorkflowModule,
 --  hydraMonadsModule,
   hydraPhantomsModule,
-  jsonModelModule]
+  hydraPrintingModule,
+  hydraQueryModule,
+  hydraTestingModule,
+  hydraWorkflowModule,
+  jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
 
 langModules :: [Module Kv]
 langModules = [
   avroSchemaModule,
   graphqlSyntaxModule,
+  haskellAstModule,
   javaSyntaxModule,
   owlSyntaxModule,
   parquetFormatModule,
