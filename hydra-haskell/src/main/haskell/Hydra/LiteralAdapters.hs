@@ -73,7 +73,7 @@ literalAdapter lt = do
 
         fallbackAdapter t = if noStrings
             then fail "cannot serialize unsupported type; strings are unsupported"
-            else withWarning msg $ Adapter False t LiteralTypeString step
+            else warn msg $ pure $ Adapter False t LiteralTypeString step
           where
             msg = disclaimer False (describeLiteralType t) (describeLiteralType LiteralTypeString)
             step = Coder encode decode
@@ -109,7 +109,7 @@ floatAdapter ft = do
         FloatTypeFloat32 -> [FloatTypeFloat64, FloatTypeBigfloat]
         FloatTypeFloat64 -> [FloatTypeBigfloat, FloatTypeFloat32]
       where
-        makeAdapter source target = withWarning msg $ Adapter lossy source target step
+        makeAdapter source target = warn msg $ pure $ Adapter lossy source target step
           where
             lossy = comparePrecision (floatTypePrecision source) (floatTypePrecision target) == GT
             step = Coder (pure . convertFloatValue target) (pure . convertFloatValue source)
@@ -146,7 +146,7 @@ integerAdapter it = do
         unsignedOrdered = L.filter
           (\v -> not (integerTypeIsSigned v) && integerTypePrecision v /= PrecisionArbitrary) integerTypes
 
-        makeAdapter source target = withWarning msg $ Adapter lossy source target step
+        makeAdapter source target = warn msg $ pure $ Adapter lossy source target step
           where
             lossy = comparePrecision (integerTypePrecision source) (integerTypePrecision target) /= LT
             step = Coder (pure . convertIntegerValue target) (pure . convertIntegerValue source)
