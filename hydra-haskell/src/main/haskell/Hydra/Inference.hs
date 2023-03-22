@@ -16,6 +16,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
 import Hydra.Flows
+import Hydra.Kv
 import Hydra.Rewriting
 import Hydra.Substitution
 import Hydra.Unification
