@@ -63,7 +63,6 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
 eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  typed (Types.list $ Types.wrap _EliminationVariant) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_element,
     _EliminationVariant_list,
@@ -83,7 +82,6 @@ floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
 floatTypesDef :: Definition [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  typed (Types.list $ Types.wrap _FloatType) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -109,7 +107,6 @@ functionVariantDef = basicsDefinition "functionVariant" $
 functionVariantsDef :: Definition [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-    typed (Types.list $ Types.wrap _FunctionVariant) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
@@ -146,7 +143,6 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
 integerTypesDef :: Definition [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
     doc "All integer types, in a canonical order" $
-    typed (Types.list $ Types.wrap _IntegerType) $
     list $ unitVariant _IntegerType <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -201,7 +197,6 @@ literalVariantDef = basicsDefinition "literalVariant" $
 literalVariantsDef :: Definition [LiteralVariant]
 literalVariantsDef = basicsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _LiteralVariant) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -225,7 +220,6 @@ primitiveArityDef = basicsDefinition "primitiveArity" $
 qnameDef :: Definition (Namespace -> String -> Name)
 qnameDef = basicsDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  functionN [Types.wrap _Namespace, Types.string] (Types.wrap _Name) $
   lambda "ns" $
     lambda "name" $
       nom _Name $
@@ -277,7 +271,6 @@ termVariantDef = basicsDefinition "termVariant" $
 termVariantsDef :: Definition [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _TermVariant) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -341,7 +334,6 @@ typeVariantDef = basicsDefinition "typeVariant" $
 typeVariantsDef :: Definition [TypeVariant]
 typeVariantsDef = basicsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
