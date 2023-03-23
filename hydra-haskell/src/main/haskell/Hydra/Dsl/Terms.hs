@@ -204,6 +204,9 @@ integer = literal . Literals.integer
 isUnit :: Eq a => Term a -> Bool
 isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
 
+just :: Term a -> Term a
+just = optional . Just
+  
 lambda :: String -> Term a -> Term a
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 
@@ -235,6 +238,9 @@ matchWithVariants :: Name -> Maybe (Term a) -> [(FieldName, FieldName)] -> Term 
 matchWithVariants n def pairs = cases n def (toField <$> pairs)
   where
     toField (from, to) = Field from $ constFunction $ unitVariant n to
+
+nothing :: Term a
+nothing = optional Nothing
 
 optional :: Y.Maybe (Term a) -> Term a
 optional = TermOptional
