@@ -2,6 +2,7 @@
 
 module Hydra.Kv where
 
+import Hydra.Basics
 import Hydra.Core
 import Hydra.Common
 import Hydra.Compute
@@ -23,12 +24,6 @@ aggregateAnnotations getAnn t = Kv $ M.fromList $ addKv [] t
       Nothing -> m
       Just (Annotated t' (Kv other)) -> addKv (m ++ M.toList other) t'
 
-emptyKv :: Kv
-emptyKv = Kv M.empty
-
-getAnnotation :: String -> Kv -> Maybe (Term Kv)
-getAnnotation key (Kv m) = M.lookup key m
-
 getAttr :: String -> Flow s (Maybe (Term Kv))
 getAttr key = Flow q
   where
@@ -44,8 +39,8 @@ getDescription kv = case getAnnotation kvDescription kv of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show kvDescription ++ ": " ++ show term
 
-getTermAnnotation :: Graph Kv -> String -> Term Kv -> Y.Maybe (Term Kv)
-getTermAnnotation cx key = getAnnotation key . termAnnotationInternal
+getTermAnnotation :: String -> Term Kv -> Y.Maybe (Term Kv)
+getTermAnnotation key = getAnnotation key . termAnnotationInternal
 
 getTermDescription :: Term Kv -> GraphFlow Kv (Y.Maybe String)
 getTermDescription = getDescription . termAnnotationInternal

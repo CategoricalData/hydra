@@ -132,6 +132,7 @@ generateSources printModule mods0 basePath = do
 -- Note: currently a subset of the kernel, as the other modules are not yet needed in the runtime environment
 hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
+  hydraComputeModule,
   hydraCoreModule,
   hydraGraphModule,
   hydraMantleModule,

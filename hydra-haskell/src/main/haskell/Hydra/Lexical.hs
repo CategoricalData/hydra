@@ -39,8 +39,8 @@ requireElement name = do
     err cx = fail $ "no such element: " ++ unName name
         ++ ". Available elements: {" ++ L.intercalate ", " (ellipsis (unName . elementName <$> M.elems (graphElements cx))) ++ "}"
       where
-        ellipsis strings = if L.length strings > 3
---        ellipsis strings = if L.length strings < 0
+        showAll = False
+        ellipsis strings = if L.length strings > 3 && not showAll
           then L.take 3 strings ++ ["..."]
           else strings
 

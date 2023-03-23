@@ -1,6 +1,7 @@
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
+import Hydra.Sources.Compute
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
@@ -17,7 +18,7 @@ basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
 
 hydraBasicsModule :: Module Kv
-hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule] $
+hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
     Just "Basic functions for working with types and terms"
   where
     elements = [
@@ -46,7 +47,12 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el testListsDef,
       el typeArityDef,
       el typeVariantDef,
-      el typeVariantsDef]
+      el typeVariantsDef,
+      
+      el emptyKvDef,
+      el getAnnotationDef,
+      el getAttrDef
+      ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -352,3 +358,22 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]
+
+
+-- hydra/kv
+
+emptyKvDef :: Definition Kv
+emptyKvDef = basicsDefinition "emptyKv" $
+  record _Kv [fld _Kv_annotations Maps.empty]
+
+getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
+getAnnotationDef = basicsDefinition "getAnnotation" $
+  lambda "key" $ lambda "ann" (Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann"))
+
+getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
+getAttrDef = basicsDefinition "getAttr" $
+  lambda "key" $ wrap _Flow $
+    lambda "s0" $ lambda "t0" $ record _FlowState [
+      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
+      fld _FlowState_state $ var "s0",
+      fld _FlowState_trace $ var "t0"]
