@@ -5,6 +5,7 @@ import Hydra.Langs.Rdf.Utils
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Shacl.Model as Shacl
 import qualified Hydra.Dsl.Literals as Literals
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
@@ -122,7 +123,7 @@ encodeTerm subject term = case term of
     where
       forKeyVal subj (k, v) = do
         -- Note: only string-valued keys are supported
-        ks <- Terms.expectString $ stripTerm k
+        ks <- Expect.string $ stripTerm k
         node <- nextBlankNode
         descs <- encodeTerm node v
         let pred = keyIri ks

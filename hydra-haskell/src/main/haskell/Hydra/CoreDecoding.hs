@@ -31,6 +31,7 @@ import Hydra.Mantle
 import Hydra.Lexical
 import Hydra.Flows
 import Hydra.Rewriting
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
@@ -103,11 +104,11 @@ epsilonDecodeMapType = matchRecord $ \m -> MapType
 epsilonDecodeRowType :: Show a => Term a -> GraphFlow a (RowType a)
 epsilonDecodeRowType = matchRecord $ \m -> RowType
   <$> (Name <$> getField m _RowType_typeName epsilonDecodeString)
-  <*> getField m _RowType_extends (Terms.expectOptional (\term -> Name <$> Terms.expectString term))
+  <*> getField m _RowType_extends (Expect.optional (\term -> Name <$> Expect.string term))
   <*> getField m _RowType_fields epsilonDecodeFieldTypes
 
 epsilonDecodeString :: Show a => Term a -> GraphFlow a String
-epsilonDecodeString = Terms.expectString . stripTerm
+epsilonDecodeString = Expect.string . stripTerm
 
 epsilonDecodeType :: Show a => Term a -> GraphFlow a (Type a)
 epsilonDecodeType dat = case dat of
@@ -125,7 +126,7 @@ epsilonDecodeType dat = case dat of
     (_Type_wrap, fmap TypeWrap . epsilonDecodeElement),
     (_Type_optional, fmap TypeOptional . epsilonDecodeType),
     (_Type_product, \l -> do
-      types <- Terms.expectList pure l
+      types <- Expect.list pure l
       TypeProduct <$> (CM.mapM epsilonDecodeType types)),
     (_Type_record, fmap TypeRecord . epsilonDecodeRowType),
     (_Type_set, fmap TypeSet . epsilonDecodeType),

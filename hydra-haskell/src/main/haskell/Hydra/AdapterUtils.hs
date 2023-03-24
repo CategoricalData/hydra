@@ -16,6 +16,7 @@ import Hydra.Printing
 import Hydra.Mantle
 import Hydra.Kv
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
@@ -64,7 +65,7 @@ composeCoders c1 c2 = Coder {
 debugCheckType :: (Eq t, Ord t, Show t) => t -> Flow s ()
 debugCheckType typ = do
   let s = show typ
-  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Terms.expectSet Terms.expectString
+  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Expect.set Expect.string
   if S.member s types
     then fail $ "detected a cycle; type has already been encountered: " ++ show typ
     else putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types))
@@ -73,7 +74,7 @@ debugCheckType typ = do
 debugRemoveType :: (Eq t, Ord t, Show t) => t -> Flow s ()
 debugRemoveType typ = do
   let s = show typ
-  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Terms.expectSet Terms.expectString
+  types <- getAttrWithDefault "types" (Terms.set S.empty) >>= Expect.set Expect.string
   let types' = S.delete s types
   putAttr "types" $ Terms.set $ S.fromList (Terms.string <$> (S.toList $ S.insert s types'))
 
