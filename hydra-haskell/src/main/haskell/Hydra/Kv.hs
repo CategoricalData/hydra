@@ -11,6 +11,7 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Flows
 import Hydra.Mantle
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
@@ -85,7 +86,7 @@ kvType = "type"
 
 nextCount :: String -> Flow s Int
 nextCount attrName = do
-  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Terms.expectInt32
+  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
   putAttr attrName (Terms.int32 $ count + 1)
   return count
 
