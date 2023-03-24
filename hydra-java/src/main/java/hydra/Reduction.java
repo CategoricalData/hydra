@@ -115,20 +115,9 @@ public class Reduction {
                                 List<Term<A>> argList = LList.take(arity, args);
                                 Flow<Graph<A>, List<Term<A>>> reducedArgs = mapM(argList, a -> reduceArg(eager, a));
                                 LList<Term<A>> remainingArgs = LList.drop(arity, args);
-                                return bind(reducedArgs, new Function<List<Term<A>>, Flow<Graph<A>, Term<A>>>() {
-                                    @Override
-                                    public Flow<Graph<A>, Term<A>> apply(List<Term<A>> rargs) {
-                                        return bind(prim.implementation.apply(rargs),
-                                            new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> apply(Term<A> result) {
-                                                    return bind(reduce(eager, result),
-                                                        reducedResult -> applyIfNullary(eager, reducedResult,
-                                                            remainingArgs));
-                                                }
-                                            });
-                                    }
-                                });
+                                return bind(reducedArgs, rargs -> bind(prim.implementation.apply(rargs),
+                                    result -> bind(reduce(eager, result),
+                                        reducedResult -> applyIfNullary(eager, reducedResult, remainingArgs))));
                             } else {
                                 // Not enough arguments available; back out
                                 return pure(applyToArguments(original, args));
