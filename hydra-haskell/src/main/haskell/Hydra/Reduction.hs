@@ -10,6 +10,7 @@ import Hydra.Graph
 import Hydra.Lexical
 import Hydra.CoreDecoding
 import Hydra.Kv
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
@@ -97,20 +98,20 @@ reduceTerm eager env = rewriteTermM mapping pure
       EliminationList _ -> fail "list eliminations are unsupported"
       EliminationOptional _ -> fail "optional eliminations are unsupported"
       EliminationRecord proj -> do
-        fields <- Terms.expectRecordWithName (projectionTypeName proj) $ stripTerm reducedArg
+        fields <- Expect.recordWithName (projectionTypeName proj) $ stripTerm reducedArg
         let matchingFields = L.filter (\f -> fieldName f == projectionField proj) fields
         if L.null matchingFields
           then fail $ "no such field: " ++ unFieldName (projectionField proj) ++ " in " ++ unName (projectionTypeName proj) ++ " record"
           else pure $ fieldTerm $ L.head matchingFields
       EliminationUnion (CaseStatement name def fields) -> do
-        field <- Terms.expectInjectionWithName name reducedArg
+        field <- Expect.injectionWithName name reducedArg
         let matchingFields = L.filter (\f -> fieldName f == fieldName field) fields
         if L.null matchingFields
           then case def of
             Just d -> pure d
             Nothing -> fail $ "no such field " ++ unFieldName (fieldName field) ++ " in " ++ unName name ++ " case statement"
           else pure $ Terms.apply (fieldTerm $ L.head matchingFields) (fieldTerm field)
-      EliminationWrap name -> Terms.expectWrapWithName name reducedArg
+      EliminationWrap name -> Expect.wrapWithName name reducedArg
 
 
 -- -- | A beta reduction function which is designed for safety, not speed.
