@@ -4,21 +4,34 @@ module Hydra.Sources.Langs.Tinkerpop.Mappings where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Sources.Compute
 import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
 import Hydra.Sources.Langs.Tinkerpop.V3
 
 
 tinkerpopMappingsModule :: Module Kv
-tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module] $
+tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module, hydraCoreModule, hydraComputeModule] $
     Just "A model for property graph mapping specifications"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
     mappings = nsref ns
+    compute = nsref $ moduleNamespace hydraComputeModule
+    core = nsref $ moduleNamespace hydraCoreModule
     v3 = nsref $ moduleNamespace tinkerpopV3Module
     def = datatype ns
 
     elements = [
+
+--      def "EdgeSchema" $
+--        doc "A schema enabling encoding and decoding of edges as terms" $
+--        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
+--          record [
+--            "label">: v3 "EdgeLabel",
+--            "id">: mappings "ValueSchema" @@ "s" @@ "a" @@ "e",
+--            "out">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
+--            "in">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
+--            "properties">: list $ mappings "PropertySchema" @@ "s" @@ "a" @@ "p"],
 
       def "EdgeSpec" $
         doc "A mapping specification producing edges of a specified label." $
@@ -37,7 +50,20 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module] $
             mappings "ValueSpec",
           "properties">:
             doc "Zero or more property specifications for each target edge" $
-            mappings "PropertySpec"],
+            list $ mappings "PropertySpec"],
+
+      def "ElementSpec" $
+        doc "Either a vertex specification or an edge specification" $
+        union [
+          "vertex">: mappings "VertexSpec",
+          "edge">: mappings "EdgeSpec"],
+
+--      def "PropertySchema" $
+--        doc "A schema enabling encoding and decoding of property values as terms" $
+--        lambda "s" $ lambda "a" $ lambda "p" $
+--          record [
+--            "key">: v3 "PropertyKey",
+--            "value">: mappings "ValueSchema" @@ "s" @@ "a" @@ "p"],
 
       def "PropertySpec" $
         doc "A mapping specification producing properties of a specified key, and values of the appropriate type." $
@@ -48,13 +74,40 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module] $
           "value">:
             doc "A specification of the value of each target property, which must conform to the type associated with the property key" $
             mappings "ValueSpec"],
-            
+
+      def "Schema" $
+        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
+          record [
+            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ "v" @@ (core "Term" @@ "a"),
+            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ "e" @@ (core "Term" @@ "a"),
+            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ "p" @@ (core "Term" @@ "a")],
+
+--      def "Schema" $
+--        doc "A set of vertex and edge schemas" $
+--        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
+--        record [
+--          "vertices">: list $ mappings "VertexSchema" @@ "s" @@ "a" @@ "v" @@ "p",
+--          "edges">: list $ mappings "EdgeSchema" @@ "s" @@ "a" @@ "v" @@ "e" @@ "p"],
+
+--      def "ValueSchema" $
+--        doc "A schema enabling encoding and decoding of ids or property values" $
+--        lambda "s" $ lambda "a" $ lambda "p" $
+--          compute "Coder" @@ "s" @@ "s" @@ "p" @@ (core "Term" @@ "a"),
+
       def "ValueSpec" $
         doc "A mapping specification producing values (usually literal values) whose type is understood in context" $
         union [
           "pattern">:
             doc "A compact path representing the function, e.g. ${}/engineInfo/model/name"
             string],
+
+--      def "VertexSchema" $
+--        doc "A schema enabling encoding and decoding of vertices as terms" $
+--        lambda "s" $ lambda "a" $ lambda "v" $ lambda "p" $
+--          record [
+--            "label">: v3 "VertexLabel",
+--            "id">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
+--            "properties">: list $ mappings "PropertySchema" @@ "s" @@ "a" @@ "p"],
 
       def "VertexSpec" $
         doc "A mapping specification producing vertices of a specified label" $

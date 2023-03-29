@@ -14,7 +14,7 @@ tinkerpopTypesModule = Module ns elements [tinkerpopV3Module] $
     Just "A model for typed TinkerPop vertices, edges, and properties"
   where
     ns = Namespace "hydra/langs/tinkerpop/types"
-    typed = nsref ns
+    types = nsref ns
     v3 = nsref $ moduleNamespace tinkerpopV3Module
     def = datatype ns
 
@@ -26,9 +26,16 @@ tinkerpopTypesModule = Module ns elements [tinkerpopV3Module] $
           record [
             "label">: v3 "EdgeLabel",
             "id">: "e",
-            "out">: typed "VertexType" @@ "v" @@ "p",
-            "in">: typed "VertexType" @@ "v" @@ "p",
+            "out">: types "VertexType" @@ "v" @@ "p",
+            "in">: types "VertexType" @@ "v" @@ "p",
             "properties">: Types.map (v3 "PropertyKey") "p"],
+
+      def "ElementType" $
+        doc "The type of a Tinkerpop vertex or edge" $
+        lambda "v" $ lambda "e" $ lambda "p" $
+        union [
+          "vertex">: types "VertexType" @@ "v" @@ "p",
+          "edge">: types "EdgeType" @@ "v" @@ "e" @@ "p"],
 
       def "VertexType" $
         doc "The type of a TinkerPop vertex" $

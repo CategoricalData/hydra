@@ -2,6 +2,7 @@
 
 module Hydra.Langs.Tinkerpop.Mappings where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Langs.Tinkerpop.V3 as V3
 import Data.List
@@ -20,7 +21,7 @@ data EdgeSpec =
     -- | A specification of the in-vertex reference of each target edge
     edgeSpecIn :: ValueSpec,
     -- | Zero or more property specifications for each target edge
-    edgeSpecProperties :: PropertySpec}
+    edgeSpecProperties :: [PropertySpec]}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeSpec = (Core.Name "hydra/langs/tinkerpop/mappings.EdgeSpec")
@@ -34,6 +35,18 @@ _EdgeSpec_out = (Core.FieldName "out")
 _EdgeSpec_in = (Core.FieldName "in")
 
 _EdgeSpec_properties = (Core.FieldName "properties")
+
+-- | Either a vertex specification or an edge specification
+data ElementSpec = 
+  ElementSpecVertex VertexSpec |
+  ElementSpecEdge EdgeSpec
+  deriving (Eq, Ord, Read, Show)
+
+_ElementSpec = (Core.Name "hydra/langs/tinkerpop/mappings.ElementSpec")
+
+_ElementSpec_vertex = (Core.FieldName "vertex")
+
+_ElementSpec_edge = (Core.FieldName "edge")
 
 -- | A mapping specification producing properties of a specified key, and values of the appropriate type.
 data PropertySpec = 
@@ -49,6 +62,20 @@ _PropertySpec = (Core.Name "hydra/langs/tinkerpop/mappings.PropertySpec")
 _PropertySpec_key = (Core.FieldName "key")
 
 _PropertySpec_value = (Core.FieldName "value")
+
+data Schema s a v e p = 
+  Schema {
+    schemaVertexIds :: (Compute.Coder s s v (Core.Term a)),
+    schemaEdgeIds :: (Compute.Coder s s e (Core.Term a)),
+    schemaPropertyValues :: (Compute.Coder s s p (Core.Term a))}
+
+_Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
+
+_Schema_vertexIds = (Core.FieldName "vertexIds")
+
+_Schema_edgeIds = (Core.FieldName "edgeIds")
+
+_Schema_propertyValues = (Core.FieldName "propertyValues")
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 

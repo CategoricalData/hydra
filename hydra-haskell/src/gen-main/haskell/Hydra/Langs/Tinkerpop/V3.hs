@@ -63,6 +63,18 @@ _Graph_vertices = (Core.FieldName "vertices")
 
 _Graph_edges = (Core.FieldName "edges")
 
+-- | A vertex or edge label
+data Label = 
+  LabelVertex VertexLabel |
+  LabelEdge EdgeLabel
+  deriving (Eq, Ord, Read, Show)
+
+_Label = (Core.Name "hydra/langs/tinkerpop/v3.Label")
+
+_Label_vertex = (Core.FieldName "vertex")
+
+_Label_edge = (Core.FieldName "edge")
+
 -- | A key/value property
 data Property p = 
   Property {
