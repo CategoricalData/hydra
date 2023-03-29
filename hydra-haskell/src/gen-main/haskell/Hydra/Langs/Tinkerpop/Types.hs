@@ -9,20 +9,17 @@ import Data.Map
 import Data.Set
 
 -- | The type of a TinkerPop edge
-data EdgeType v e p = 
+data EdgeType t = 
   EdgeType {
     edgeTypeLabel :: V3.EdgeLabel,
-    edgeTypeId :: e,
-    edgeTypeOut :: (VertexType v p),
-    edgeTypeIn :: (VertexType v p),
-    edgeTypeProperties :: (Map V3.PropertyKey p)}
+    edgeTypeOut :: (VertexType t),
+    edgeTypeIn :: (VertexType t),
+    edgeTypeProperties :: (Map V3.PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 
 _EdgeType = (Core.Name "hydra/langs/tinkerpop/types.EdgeType")
 
 _EdgeType_label = (Core.FieldName "label")
-
-_EdgeType_id = (Core.FieldName "id")
 
 _EdgeType_out = (Core.FieldName "out")
 
@@ -30,10 +27,22 @@ _EdgeType_in = (Core.FieldName "in")
 
 _EdgeType_properties = (Core.FieldName "properties")
 
--- | The type of a Tinkerpop vertex or edge
-data ElementType v e p = 
-  ElementTypeVertex (VertexType v p) |
-  ElementTypeEdge (EdgeType v e p)
+-- | The kind of an element: vertex or edge
+data ElementKind = 
+  ElementKindVertex  |
+  ElementKindEdge 
+  deriving (Eq, Ord, Read, Show)
+
+_ElementKind = (Core.Name "hydra/langs/tinkerpop/types.ElementKind")
+
+_ElementKind_vertex = (Core.FieldName "vertex")
+
+_ElementKind_edge = (Core.FieldName "edge")
+
+-- | The type of a TinkerPop vertex or edge
+data ElementType t = 
+  ElementTypeVertex (VertexType t) |
+  ElementTypeEdge (EdgeType t)
   deriving (Eq, Ord, Read, Show)
 
 _ElementType = (Core.Name "hydra/langs/tinkerpop/types.ElementType")
@@ -42,18 +51,28 @@ _ElementType_vertex = (Core.FieldName "vertex")
 
 _ElementType_edge = (Core.FieldName "edge")
 
+-- | The type of a TinkerPop property
+data PropertyType t = 
+  PropertyType {
+    propertyTypeKey :: V3.PropertyKey,
+    propertyTypeValue :: t}
+  deriving (Eq, Ord, Read, Show)
+
+_PropertyType = (Core.Name "hydra/langs/tinkerpop/types.PropertyType")
+
+_PropertyType_key = (Core.FieldName "key")
+
+_PropertyType_value = (Core.FieldName "value")
+
 -- | The type of a TinkerPop vertex
-data VertexType v p = 
+data VertexType t = 
   VertexType {
     vertexTypeLabel :: V3.VertexLabel,
-    vertexTypeId :: v,
-    vertexTypeProperties :: (Map V3.PropertyKey p)}
+    vertexTypeProperties :: (Map V3.PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 
 _VertexType = (Core.Name "hydra/langs/tinkerpop/types.VertexType")
 
 _VertexType_label = (Core.FieldName "label")
-
-_VertexType_id = (Core.FieldName "id")
 
 _VertexType_properties = (Core.FieldName "properties")

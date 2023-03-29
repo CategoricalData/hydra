@@ -55,7 +55,7 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         union [
           "vertex">: v3 "VertexLabel",
           "edge">: v3 "EdgeLabel"],
-       
+
       def "Property" $
         doc "A key/value property" $
         lambda "p" $

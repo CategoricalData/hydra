@@ -22,25 +22,34 @@ tinkerpopTypesModule = Module ns elements [tinkerpopV3Module] $
 
       def "EdgeType" $
         doc "The type of a TinkerPop edge" $
-        lambda "v" $ lambda "e" $ lambda "p" $
+        lambda "t" $
           record [
             "label">: v3 "EdgeLabel",
-            "id">: "e",
-            "out">: types "VertexType" @@ "v" @@ "p",
-            "in">: types "VertexType" @@ "v" @@ "p",
-            "properties">: Types.map (v3 "PropertyKey") "p"],
+            "out">: types "VertexType" @@ "t",
+            "in">: types "VertexType" @@ "t",
+            "properties">: Types.map (v3 "PropertyKey") "t"],
+
+      def "ElementKind" $
+        doc "The kind of an element: vertex or edge" $
+        enum ["vertex", "edge"],
 
       def "ElementType" $
-        doc "The type of a Tinkerpop vertex or edge" $
-        lambda "v" $ lambda "e" $ lambda "p" $
+        doc "The type of a TinkerPop vertex or edge" $
+        lambda "t" $
         union [
-          "vertex">: types "VertexType" @@ "v" @@ "p",
-          "edge">: types "EdgeType" @@ "v" @@ "e" @@ "p"],
+          "vertex">: types "VertexType" @@ "t",
+          "edge">: types "EdgeType" @@ "t"],
 
+      def "PropertyType" $
+        doc "The type of a TinkerPop property" $
+        lambda "t" $
+          record [
+            "key">: v3 "PropertyKey",
+            "value">: "t"],
+        
       def "VertexType" $
         doc "The type of a TinkerPop vertex" $
-        lambda "v" $ lambda "p" $
+        lambda "t" $
           record [
             "label">: v3 "VertexLabel",
-            "id">: "v",
-            "properties">: Types.map (v3 "PropertyKey") "p"]]
+            "properties">: Types.map (v3 "PropertyKey") "t"]]
