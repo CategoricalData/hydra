@@ -76,10 +76,11 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module, hydraCoreModule
             mappings "ValueSpec"],
 
       def "Schema" $
-        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
+        lambda "s" $ lambda "a" $ lambda "t" $ lambda "v" $ lambda "e" $ lambda "p" $
           record [
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ "v" @@ (core "Term" @@ "a"),
             "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ "e" @@ (core "Term" @@ "a"),
+            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ "t" @@ (core "Type" @@ "a"),
             "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ "p" @@ (core "Term" @@ "a")],
 
 --      def "Schema" $

@@ -1,22 +1,24 @@
-module Hydra.Langs.Tinkerpop.TermsToElements
-() where
-  
+module Hydra.Langs.Tinkerpop.TermsToElements (
+  termToElementsAdapter,
+) where
+
 import Hydra.Kernel
 import Hydra.Langs.Tinkerpop.Mappings
 import qualified Hydra.Langs.Tinkerpop.V3 as TP
---import qualified Hydra.Langs.Tinkerpop.Types as TPT
+import qualified Hydra.Langs.Tinkerpop.Types as TPT
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Maybe as Y
 
 
 type PgAdapter s a v e p = Adapter s s (Type a) [TP.Label] (Term a) [TP.Element v e p]
 
-recordsToElementsAdapter :: Schema s Kv v e p -> Type Kv -> Flow s (PgAdapter s Kv v e p)
-recordsToElementsAdapter schema typ = do
+termToElementsAdapter :: Schema s Kv t v e p -> Type Kv -> Flow s (PgAdapter s Kv v e p)
+termToElementsAdapter schema typ = do
     case getTypeAnnotation "elements" typ of
       Nothing -> pure trivialAdapter
       Just term -> do
@@ -24,17 +26,22 @@ recordsToElementsAdapter schema typ = do
         let labels = L.nub (fst <$> specs)
         let encoders = snd <$> specs
         let encode term = L.concat <$> CM.mapM (\e -> e term) encoders
-        let lossy = False -- TODO
-        return $ Adapter lossy typ labels $ Coder encode (\els -> fail "decoding not supported")
+        return $ Adapter lossy typ labels $ Coder encode (\els -> noDecoding "element")
   where
     trivialAdapter = Adapter False typ [] $ Coder (\term -> pure []) (\el -> fail "no corresponding element type")
 
-parseEdgeIdPattern :: Show a => Schema s a v e p -> ValueSpec -> Flow s (Term a -> Flow s [e])
+-- TODO; infer lossiness
+lossy = False
+
+noDecoding :: String -> Flow s x
+noDecoding cat = fail $ cat ++ " decoding is not yet supported"
+
+parseEdgeIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [e])
 parseEdgeIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaEdgeIds schema)
 
-parseEdgeSpec :: Show a => Schema s a v e p -> EdgeSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseEdgeSpec :: Show a => Schema s a t v e p -> EdgeSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
 parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
   getId <- parseEdgeIdPattern schema id
   getOut <- parseVertexIdPattern schema outV
@@ -91,7 +98,7 @@ parsePattern pat = do
       TermWrap (Nominal _ term') -> evalStep step term'
       _ -> fail $ "Can't traverse through term: " ++ show term
 
-parsePropertySpec :: Show a => Schema s a v e p -> PropertySpec -> Flow s (Term a -> Flow s [(TP.PropertyKey, p)])
+parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(TP.PropertyKey, p)])
 parsePropertySpec schema (PropertySpec key value) = do
   fun <- parseValueSpec value
   return $ \term -> do
@@ -99,7 +106,7 @@ parsePropertySpec schema (PropertySpec key value) = do
     values <- CM.mapM (coderDecode $ schemaPropertyValues schema) results
     return $ fmap (\v -> (key, v)) values
 
-parseElementSpec :: Show a => Schema s a v e p -> ElementSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseElementSpec :: Show a => Schema s a t v e p -> ElementSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
 parseElementSpec schema spec = case spec of
   ElementSpecVertex vspec -> parseVertexSpec schema vspec
   ElementSpecEdge espec -> parseEdgeSpec schema espec
@@ -109,12 +116,12 @@ parseValueSpec spec = case spec of
   ValueSpecPattern pat -> parsePattern pat
 --  _ -> fail $ "Unsupported value pattern: " ++ show spec
 
-parseVertexIdPattern :: Show a => Schema s a v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
+parseVertexIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseVertexIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaVertexIds schema)
 
-parseVertexSpec :: Show a => Schema s a v e p -> VertexSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseVertexSpec :: Show a => Schema s a t v e p -> VertexSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
 parseVertexSpec schema (VertexSpec label id props) = do
   getId <- parseVertexIdPattern schema id
   getProps <- CM.mapM (parsePropertySpec schema) props
@@ -175,6 +182,7 @@ decodeVertexSpec = matchRecord $ \fields -> VertexSpec
 
 -- General-purpose code for decoding
 
+fieldMap :: [Field a] -> M.Map FieldName (Term a)
 fieldMap fields = M.fromList (toPair <$> fields)
   where
     toPair f = (fieldName f, fieldTerm f)
