@@ -96,8 +96,8 @@ _ElementType_edge = (Core.FieldName "edge")
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v e p = 
   Graph {
-    graphVertices :: (Set (Vertex v p)),
-    graphEdges :: (Set (Edge v e p))}
+    graphVertices :: (Map v (Vertex v p)),
+    graphEdges :: (Map e (Edge v e p))}
   deriving (Eq, Ord, Read, Show)
 
 _Graph = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Graph")
