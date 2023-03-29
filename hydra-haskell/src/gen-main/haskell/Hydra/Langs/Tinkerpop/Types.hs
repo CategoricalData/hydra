@@ -30,6 +30,18 @@ _EdgeType_in = (Core.FieldName "in")
 
 _EdgeType_properties = (Core.FieldName "properties")
 
+-- | The type of a Tinkerpop vertex or edge
+data ElementType v e p = 
+  ElementTypeVertex (VertexType v p) |
+  ElementTypeEdge (EdgeType v e p)
+  deriving (Eq, Ord, Read, Show)
+
+_ElementType = (Core.Name "hydra/langs/tinkerpop/types.ElementType")
+
+_ElementType_vertex = (Core.FieldName "vertex")
+
+_ElementType_edge = (Core.FieldName "edge")
+
 -- | The type of a TinkerPop vertex
 data VertexType v p = 
   VertexType {

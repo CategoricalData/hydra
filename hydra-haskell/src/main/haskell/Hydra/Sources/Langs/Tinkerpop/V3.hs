@@ -50,6 +50,12 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
           "vertices">: Types.set $ v3 "Vertex" @@ "v" @@ "p",
           "edges">: Types.set $ v3 "Edge" @@ "v" @@ "e" @@ "p"],
 
+      def "Label" $
+        doc "A vertex or edge label" $
+        union [
+          "vertex">: v3 "VertexLabel",
+          "edge">: v3 "EdgeLabel"],
+       
       def "Property" $
         doc "A key/value property" $
         lambda "p" $
