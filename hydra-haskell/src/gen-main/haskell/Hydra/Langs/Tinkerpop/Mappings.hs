@@ -4,7 +4,7 @@ module Hydra.Langs.Tinkerpop.Mappings where
 
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Langs.Tinkerpop.V3 as V3
+import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PropertyGraph
 import Data.List
 import Data.Map
 import Data.Set
@@ -13,7 +13,7 @@ import Data.Set
 data EdgeSpec = 
   EdgeSpec {
     -- | The label of the target edges, which must conform to the edge type associated with that label.
-    edgeSpecLabel :: V3.EdgeLabel,
+    edgeSpecLabel :: PropertyGraph.EdgeLabel,
     -- | A specification of the id of each target edge
     edgeSpecId :: ValueSpec,
     -- | A specification of the out-vertex reference of each target edge
@@ -52,7 +52,7 @@ _ElementSpec_edge = (Core.FieldName "edge")
 data PropertySpec = 
   PropertySpec {
     -- | The key of the target properties
-    propertySpecKey :: V3.PropertyKey,
+    propertySpecKey :: PropertyGraph.PropertyKey,
     -- | A specification of the value of each target property, which must conform to the type associated with the property key
     propertySpecValue :: ValueSpec}
   deriving (Eq, Ord, Read, Show)
@@ -94,7 +94,7 @@ _ValueSpec_pattern = (Core.FieldName "pattern")
 data VertexSpec = 
   VertexSpec {
     -- | The label of the target vertices, which must conform to the vertex type associated with that label.
-    vertexSpecLabel :: V3.VertexLabel,
+    vertexSpecLabel :: PropertyGraph.VertexLabel,
     -- | A specification of the id of each target vertex
     vertexSpecId :: ValueSpec,
     -- | Zero or more property specifications for each target vertex

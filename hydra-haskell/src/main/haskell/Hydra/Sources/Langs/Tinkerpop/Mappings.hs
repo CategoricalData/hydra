@@ -7,18 +7,18 @@ import Hydra.Dsl.Annotations
 import Hydra.Sources.Compute
 import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
-import Hydra.Sources.Langs.Tinkerpop.V3
+import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
 
 
 tinkerpopMappingsModule :: Module Kv
-tinkerpopMappingsModule = Module ns elements [tinkerpopV3Module, hydraCoreModule, hydraComputeModule] $
+tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] $
     Just "A model for property graph mapping specifications"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
     mappings = nsref ns
     compute = nsref $ moduleNamespace hydraComputeModule
     core = nsref $ moduleNamespace hydraCoreModule
-    v3 = nsref $ moduleNamespace tinkerpopV3Module
+    v3 = nsref $ moduleNamespace tinkerpopPropertyGraphModule
     def = datatype ns
 
     elements = [
