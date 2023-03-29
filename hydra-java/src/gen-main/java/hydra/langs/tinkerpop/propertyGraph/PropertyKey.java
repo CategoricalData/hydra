@@ -1,10 +1,10 @@
-package hydra.langs.tinkerpop.v3;
+package hydra.langs.tinkerpop.propertyGraph;
 
 /**
  * A property key
  */
 public class PropertyKey {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/v3.PropertyKey");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.PropertyKey");
   
   /**
    * A property key
