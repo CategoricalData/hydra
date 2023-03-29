@@ -5,7 +5,6 @@ module Hydra.Langs.Tinkerpop.Coder (
 import Hydra.Kernel
 import Hydra.Langs.Tinkerpop.Mappings
 import qualified Hydra.Langs.Tinkerpop.V3 as TP
-import qualified Hydra.Langs.Tinkerpop.Types as TPT
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -15,9 +14,9 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type ElementAdapter s a t v e p = Adapter s s (Type a) (TPT.ElementType t) (Term a) (TP.Element v e p)
+type ElementAdapter s a t v e p = Adapter s s (Type a) (TP.ElementType t) (Term a) (TP.Element v e p)
 
-type PropAdapter s a t p = Adapter s s (FieldType a) (TPT.PropertyType t) (Field a) (TP.Property p)
+type PropAdapter s a t p = Adapter s s (FieldType a) (TP.PropertyType t) (Field a) (TP.Property p)
 
 type VertexIdAdapter s a v = Adapter s s (Type a) () (Term a) v
 
@@ -29,11 +28,11 @@ edgeCoder :: Show a
   => Schema s a t v e p -> Type a -> Name
   -> TP.EdgeLabel -> Maybe (FieldType a) -> VertexIdAdapter s a v -> VertexIdAdapter s a v -> [PropAdapter s a t p]
   -> ElementAdapter s a t v e p
-edgeCoder schema typ tname label idField outAdapter inAdapter propAdapters = Adapter lossy typ (TPT.ElementTypeEdge et) coder
+edgeCoder schema typ tname label idField outAdapter inAdapter propAdapters = Adapter lossy typ (TP.ElementTypeEdge et) coder
   where
-    et = TPT.EdgeType label outt int $ propertyTypes propAdapters
-    outt = TPT.VertexType (TP.VertexLabel "TODO") M.empty -- TODO
-    int = TPT.VertexType (TP.VertexLabel "TODO") M.empty -- TODO
+    et = TP.EdgeType label outt int $ propertyTypes propAdapters
+    outt = TP.VertexType (TP.VertexLabel "TODO") M.empty -- TODO
+    int = TP.VertexType (TP.VertexLabel "TODO") M.empty -- TODO
     coder = Coder encode decode
       where
         encode term = do
@@ -62,19 +61,19 @@ elementCoder schema typ = case stripType typ of
       
       kind <- case getTypeAnnotation "kind" typ of
         Nothing -> if Y.isNothing outField || Y.isNothing inField
-          then pure TPT.ElementKindVertex
-          else pure TPT.ElementKindEdge
+          then pure TP.ElementKindVertex
+          else pure TP.ElementKindEdge
         Just kindTerm -> do
           s <- Expect.string kindTerm
           case s of
-            "vertex" -> return TPT.ElementKindVertex
+            "vertex" -> return TP.ElementKindVertex
             "edge" -> if Y.isNothing outField || Y.isNothing inField
               then fail $ "Record type marked as an edge type, but missing 'out' and/or 'in' fields: " ++ unName name
-              else return TPT.ElementKindEdge
+              else return TP.ElementKindEdge
 
       case kind of
-        TPT.ElementKindVertex -> pure $ vertexCoder schema typ name (TP.VertexLabel labelStr) idField propAdapters
-        TPT.ElementKindEdge -> pure $ edgeCoder schema typ name (TP.EdgeLabel labelStr) idField outAdapter inAdapter propAdapters
+        TP.ElementKindVertex -> pure $ vertexCoder schema typ name (TP.VertexLabel labelStr) idField propAdapters
+        TP.ElementKindEdge -> pure $ edgeCoder schema typ name (TP.EdgeLabel labelStr) idField outAdapter inAdapter propAdapters
           where
             outAdapter = Adapter lossy (fieldTypeType $ Y.fromJust outField) () $ Coder encode decode
               where
@@ -150,18 +149,18 @@ propertyAdapter schema tfield = do
                 value <- coderDecode (schemaPropertyValues schema) $ fieldTerm dfield
                 return $ TP.Property key value
           decode _ = noDecoding "property"
-  return $ Adapter lossy tfield (TPT.PropertyType key pt) coder
+  return $ Adapter lossy tfield (TP.PropertyType key pt) coder
 
 propertyTypes propAdapters = M.fromList $
-  fmap (\a -> (TPT.propertyTypeKey $ adapterTarget a, TPT.propertyTypeValue $ adapterTarget a)) propAdapters
+  fmap (\a -> (TP.propertyTypeKey $ adapterTarget a, TP.propertyTypeValue $ adapterTarget a)) propAdapters
 
 vertexCoder :: Show a
   => Schema s a t v e p -> Type a -> Name
   -> TP.VertexLabel -> Maybe (FieldType a) -> [PropAdapter s a t p]
   -> ElementAdapter s a t v e p
-vertexCoder schema typ tname label idField propAdapters = Adapter lossy typ (TPT.ElementTypeVertex vt) coder
+vertexCoder schema typ tname label idField propAdapters = Adapter lossy typ (TP.ElementTypeVertex vt) coder
   where
-    vt = TPT.VertexType label $ propertyTypes propAdapters
+    vt = TP.VertexType label $ propertyTypes propAdapters
     coder = Coder encode decode
       where
         encode term = do
