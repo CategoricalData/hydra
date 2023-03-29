@@ -1,23 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Hydra.Sources.Langs.Tinkerpop.V3 where
+module Hydra.Sources.Langs.Tinkerpop.PropertyGraph where
 
-import Hydra.Compute ( Kv )
-import Hydra.Flows ( Kv )
+import Hydra.Compute
+import Hydra.Flows
 import Hydra.Module
-    ( Module(Module, moduleNamespace), Namespace(Namespace) )
 import Hydra.Dsl.Annotations
-import Hydra.Sources.Core
 import Hydra.Dsl.Types as Types
 
 
-tinkerpopV3Module :: Module Kv
-tinkerpopV3Module = Module ns elements [hydraCoreModule] $
+tinkerpopPropertyGraphModule :: Module Kv
+tinkerpopPropertyGraphModule = Module ns elements [] $
     Just "A typed property graph data model"
   where
-    ns = Namespace "hydra/langs/tinkerpop/v3"
-    core = nsref $ moduleNamespace hydraCoreModule
-    v3 = nsref ns
+    ns = Namespace "hydra/langs/tinkerpop/propertyGraph"
+    pg = nsref ns
     def = datatype ns
 
     elements = [
@@ -26,11 +23,11 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         doc "An edge" $
         lambda "v" $ lambda "e" $ lambda "p" $
         record [
-          "label">: v3 "EdgeLabel",
+          "label">: pg "EdgeLabel",
           "id">: "e",
           "out">: "v",
           "in">: "v",
-          "properties">: Types.map (v3 "PropertyKey") "p"],
+          "properties">: Types.map (pg "PropertyKey") "p"],
 
       def "EdgeLabel" $
         doc "The (required) label of an edge" $
@@ -40,17 +37,17 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         doc "The type of an edge" $
         lambda "t" $
           record [
-            "label">: v3 "EdgeLabel",
-            "out">: v3 "VertexType" @@ "t",
-            "in">: v3 "VertexType" @@ "t",
-            "properties">: Types.map (v3 "PropertyKey") "t"],
+            "label">: pg "EdgeLabel",
+            "out">: pg "VertexType" @@ "t",
+            "in">: pg "VertexType" @@ "t",
+            "properties">: Types.map (pg "PropertyKey") "t"],
 
       def "Element" $
         doc "Either a vertex or an edge" $
         lambda "v" $ lambda "e" $ lambda "p" $
         union [
-          "vertex">: v3 "Vertex" @@ "v" @@ "p",
-          "edge">: v3 "Edge" @@ "v" @@ "e" @@ "p"],
+          "vertex">: pg "Vertex" @@ "v" @@ "p",
+          "edge">: pg "Edge" @@ "v" @@ "e" @@ "p"],
 
       def "ElementKind" $
         doc "The kind of an element: vertex or edge" $
@@ -60,27 +57,27 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         doc "The type of a vertex or edge" $
         lambda "t" $
         union [
-          "vertex">: v3 "VertexType" @@ "t",
-          "edge">: v3 "EdgeType" @@ "t"],
+          "vertex">: pg "VertexType" @@ "t",
+          "edge">: pg "EdgeType" @@ "t"],
 
       def "Graph" $
         doc "A graph; a self-contained collection of vertices and edges" $
         lambda "v" $ lambda "e" $ lambda "p" $
         record [
-          "vertices">: Types.set $ v3 "Vertex" @@ "v" @@ "p",
-          "edges">: Types.set $ v3 "Edge" @@ "v" @@ "e" @@ "p"],
+          "vertices">: Types.set $ pg "Vertex" @@ "v" @@ "p",
+          "edges">: Types.set $ pg "Edge" @@ "v" @@ "e" @@ "p"],
 
       def "Label" $
         doc "A vertex or edge label" $
         union [
-          "vertex">: v3 "VertexLabel",
-          "edge">: v3 "EdgeLabel"],
+          "vertex">: pg "VertexLabel",
+          "edge">: pg "EdgeLabel"],
 
       def "Property" $
         doc "A key/value property" $
         lambda "p" $
         record [
-          "key">: v3 "PropertyKey",
+          "key">: pg "PropertyKey",
           "value">: "p"],
 
       def "PropertyKey" $
@@ -91,16 +88,16 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         doc "The type of a property" $
         lambda "t" $
           record [
-            "key">: v3 "PropertyKey",
+            "key">: pg "PropertyKey",
             "value">: "t"],
 
       def "Vertex" $
         doc "A vertex" $
         lambda "v" $ lambda "p" $
         record [
-          "label">: v3 "VertexLabel",
+          "label">: pg "VertexLabel",
           "id">: "v",
-          "properties">: Types.map (v3 "PropertyKey") "p"],
+          "properties">: Types.map (pg "PropertyKey") "p"],
 
       def "VertexLabel" $
         doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
@@ -110,5 +107,5 @@ tinkerpopV3Module = Module ns elements [hydraCoreModule] $
         doc "The type of a vertex" $
         lambda "t" $
           record [
-            "label">: v3 "VertexLabel",
-            "properties">: Types.map (v3 "PropertyKey") "t"]]
+            "label">: pg "VertexLabel",
+            "properties">: Types.map (pg "PropertyKey") "t"]]

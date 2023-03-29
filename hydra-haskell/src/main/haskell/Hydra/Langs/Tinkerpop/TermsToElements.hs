@@ -4,7 +4,7 @@ module Hydra.Langs.Tinkerpop.TermsToElements (
 
 import Hydra.Kernel
 import Hydra.Langs.Tinkerpop.Mappings
-import qualified Hydra.Langs.Tinkerpop.V3 as TP
+import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PG
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type PgAdapter s a v e p = Adapter s s (Type a) [TP.Label] (Term a) [TP.Element v e p]
+type PgAdapter s a v e p = Adapter s s (Type a) [PG.Label] (Term a) [PG.Element v e p]
 
 termToElementsAdapter :: Schema s Kv t v e p -> Type Kv -> Flow s (PgAdapter s Kv v e p)
 termToElementsAdapter schema typ = do
@@ -40,7 +40,7 @@ parseEdgeIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaEdgeIds schema)
 
-parseEdgeSpec :: Show a => Schema s a t v e p -> EdgeSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseEdgeSpec :: Show a => Schema s a t v e p -> EdgeSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
 parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
   getId <- parseEdgeIdPattern schema id
   getOut <- parseVertexIdPattern schema outV
@@ -51,8 +51,8 @@ parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
         tout <- requireUnique "vertex id" getOut term
         tin <- requireUnique "edge id" getIn term
         tprops <- M.fromList <$> CM.mapM (\g -> requireUnique "property key" g term) getProps
-        return [TP.ElementEdge $ TP.Edge label tid tout tin tprops]
-  return (TP.LabelEdge label, encode)
+        return [PG.ElementEdge $ PG.Edge label tid tout tin tprops]
+  return (PG.LabelEdge label, encode)
 
 parsePattern :: Show a => String -> Flow s (Term a -> Flow s [Term a])
 parsePattern pat = do
@@ -97,7 +97,7 @@ parsePattern pat = do
       TermWrap (Nominal _ term') -> evalStep step term'
       _ -> fail $ "Can't traverse through term: " ++ show term
 
-parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(TP.PropertyKey, p)])
+parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
 parsePropertySpec schema (PropertySpec key value) = do
   fun <- parseValueSpec value
   return $ \term -> do
@@ -105,7 +105,7 @@ parsePropertySpec schema (PropertySpec key value) = do
     values <- CM.mapM (coderDecode $ schemaPropertyValues schema) results
     return $ fmap (\v -> (key, v)) values
 
-parseElementSpec :: Show a => Schema s a t v e p -> ElementSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseElementSpec :: Show a => Schema s a t v e p -> ElementSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
 parseElementSpec schema spec = case spec of
   ElementSpecVertex vspec -> parseVertexSpec schema vspec
   ElementSpecEdge espec -> parseEdgeSpec schema espec
@@ -120,15 +120,15 @@ parseVertexIdPattern schema spec = do
   fun <- parseValueSpec spec
   return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaVertexIds schema)
 
-parseVertexSpec :: Show a => Schema s a t v e p -> VertexSpec -> Flow s (TP.Label, Term a -> Flow s [TP.Element v e p])
+parseVertexSpec :: Show a => Schema s a t v e p -> VertexSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
 parseVertexSpec schema (VertexSpec label id props) = do
   getId <- parseVertexIdPattern schema id
   getProps <- CM.mapM (parsePropertySpec schema) props
   let encode term = do
         tid <- requireUnique "vertex id" getId term
         tprops <- M.fromList <$> CM.mapM (\g -> requireUnique "property key" g term) getProps
-        return [TP.ElementVertex $ TP.Vertex label tid tprops]
-  return (TP.LabelVertex label, encode)
+        return [PG.ElementVertex $ PG.Vertex label tid tprops]
+  return (PG.LabelVertex label, encode)
 
 requireUnique :: String -> (Term a -> Flow s [x]) -> Term a -> Flow s x
 requireUnique context fun term = do
@@ -141,8 +141,8 @@ requireUnique context fun term = do
 
 -- Element spec decoding. TODO: this should code should really be generated rather than hand-written.
 
-decodeEdgeLabel :: Show a => Term a -> Flow s TP.EdgeLabel
-decodeEdgeLabel t = TP.EdgeLabel <$> Expect.string t
+decodeEdgeLabel :: Show a => Term a -> Flow s PG.EdgeLabel
+decodeEdgeLabel t = PG.EdgeLabel <$> Expect.string t
 
 decodeEdgeSpec :: Show a => Term a -> Flow s EdgeSpec
 decodeEdgeSpec = matchRecord $ \fields -> EdgeSpec
@@ -157,8 +157,8 @@ decodeElementSpec = matchInjection [
   (_ElementSpec_vertex, \t -> ElementSpecVertex <$> decodeVertexSpec t),
   (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)]
 
-decodePropertyKey :: Show a => Term a -> Flow s TP.PropertyKey
-decodePropertyKey t = TP.PropertyKey <$> Expect.string t
+decodePropertyKey :: Show a => Term a -> Flow s PG.PropertyKey
+decodePropertyKey t = PG.PropertyKey <$> Expect.string t
 
 decodePropertySpec :: Show a => Term a -> Flow s PropertySpec
 decodePropertySpec = matchRecord $ \fields -> PropertySpec
@@ -169,8 +169,8 @@ decodeValueSpec :: Show a => Term a -> Flow s ValueSpec
 decodeValueSpec = matchInjection [
   (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)]
 
-decodeVertexLabel :: Show a => Term a -> Flow s TP.VertexLabel
-decodeVertexLabel t = TP.VertexLabel <$> Expect.string t
+decodeVertexLabel :: Show a => Term a -> Flow s PG.VertexLabel
+decodeVertexLabel t = PG.VertexLabel <$> Expect.string t
 
 decodeVertexSpec :: Show a => Term a -> Flow s VertexSpec
 decodeVertexSpec = matchRecord $ \fields -> VertexSpec
