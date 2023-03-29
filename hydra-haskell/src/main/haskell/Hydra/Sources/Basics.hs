@@ -48,10 +48,10 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el typeArityDef,
       el typeVariantDef,
       el typeVariantsDef,
-      
+
       el emptyKvDef,
-      el getAnnotationDef,
-      el getAttrDef
+      el getAnnotationDef
+--      el getAttrDef
       ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
@@ -370,10 +370,11 @@ getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
 getAnnotationDef = basicsDefinition "getAnnotation" $
   lambda "key" $ lambda "ann" (Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann"))
 
-getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
-getAttrDef = basicsDefinition "getAttr" $
-  lambda "key" $ wrap _Flow $
-    lambda "s0" $ lambda "t0" $ record _FlowState [
-      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
-      fld _FlowState_state $ var "s0",
-      fld _FlowState_trace $ var "t0"]
+--getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
+--getAttrDef = basicsDefinition "getAttr" $
+--  lambda "key" $ wrap _Flow $
+--    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.variable "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
+--    lambda "s0" $ lambda "t0" $ record _FlowState [
+--      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
+--      fld _FlowState_state $ var "s0",
+--      fld _FlowState_trace $ var "t0"]
