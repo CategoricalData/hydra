@@ -64,8 +64,8 @@ tinkerpopPropertyGraphModule = Module ns elements [] $
         doc "A graph; a self-contained collection of vertices and edges" $
         lambda "v" $ lambda "e" $ lambda "p" $
         record [
-          "vertices">: Types.set $ pg "Vertex" @@ "v" @@ "p",
-          "edges">: Types.set $ pg "Edge" @@ "v" @@ "e" @@ "p"],
+          "vertices">: Types.map "v" $ pg "Vertex" @@ "v" @@ "p",
+          "edges">: Types.map "e" $ pg "Edge" @@ "v" @@ "e" @@ "p"],
 
       def "Label" $
         doc "A vertex or edge label" $
