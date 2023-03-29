@@ -1,4 +1,4 @@
--- | A simple TinkerPop version 3 syntax model
+-- | A typed property graph data model
 
 module Hydra.Langs.Tinkerpop.V3 where
 
@@ -38,6 +38,25 @@ newtype EdgeLabel =
 
 _EdgeLabel = (Core.Name "hydra/langs/tinkerpop/v3.EdgeLabel")
 
+-- | The type of an edge
+data EdgeType t = 
+  EdgeType {
+    edgeTypeLabel :: EdgeLabel,
+    edgeTypeOut :: (VertexType t),
+    edgeTypeIn :: (VertexType t),
+    edgeTypeProperties :: (Map PropertyKey t)}
+  deriving (Eq, Ord, Read, Show)
+
+_EdgeType = (Core.Name "hydra/langs/tinkerpop/v3.EdgeType")
+
+_EdgeType_label = (Core.FieldName "label")
+
+_EdgeType_out = (Core.FieldName "out")
+
+_EdgeType_in = (Core.FieldName "in")
+
+_EdgeType_properties = (Core.FieldName "properties")
+
 -- | Either a vertex or an edge
 data Element v e p = 
   ElementVertex (Vertex v p) |
@@ -49,6 +68,30 @@ _Element = (Core.Name "hydra/langs/tinkerpop/v3.Element")
 _Element_vertex = (Core.FieldName "vertex")
 
 _Element_edge = (Core.FieldName "edge")
+
+-- | The kind of an element: vertex or edge
+data ElementKind = 
+  ElementKindVertex  |
+  ElementKindEdge 
+  deriving (Eq, Ord, Read, Show)
+
+_ElementKind = (Core.Name "hydra/langs/tinkerpop/v3.ElementKind")
+
+_ElementKind_vertex = (Core.FieldName "vertex")
+
+_ElementKind_edge = (Core.FieldName "edge")
+
+-- | The type of a vertex or edge
+data ElementType t = 
+  ElementTypeVertex (VertexType t) |
+  ElementTypeEdge (EdgeType t)
+  deriving (Eq, Ord, Read, Show)
+
+_ElementType = (Core.Name "hydra/langs/tinkerpop/v3.ElementType")
+
+_ElementType_vertex = (Core.FieldName "vertex")
+
+_ElementType_edge = (Core.FieldName "edge")
 
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v e p = 
@@ -97,6 +140,19 @@ newtype PropertyKey =
 
 _PropertyKey = (Core.Name "hydra/langs/tinkerpop/v3.PropertyKey")
 
+-- | The type of a property
+data PropertyType t = 
+  PropertyType {
+    propertyTypeKey :: PropertyKey,
+    propertyTypeValue :: t}
+  deriving (Eq, Ord, Read, Show)
+
+_PropertyType = (Core.Name "hydra/langs/tinkerpop/v3.PropertyType")
+
+_PropertyType_key = (Core.FieldName "key")
+
+_PropertyType_value = (Core.FieldName "value")
+
 -- | A vertex
 data Vertex v p = 
   Vertex {
@@ -121,3 +177,16 @@ newtype VertexLabel =
   deriving (Eq, Ord, Read, Show)
 
 _VertexLabel = (Core.Name "hydra/langs/tinkerpop/v3.VertexLabel")
+
+-- | The type of a vertex
+data VertexType t = 
+  VertexType {
+    vertexTypeLabel :: VertexLabel,
+    vertexTypeProperties :: (Map PropertyKey t)}
+  deriving (Eq, Ord, Read, Show)
+
+_VertexType = (Core.Name "hydra/langs/tinkerpop/v3.VertexType")
+
+_VertexType_label = (Core.FieldName "label")
+
+_VertexType_properties = (Core.FieldName "properties")

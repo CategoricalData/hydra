@@ -5,7 +5,6 @@ module Hydra.Langs.Tinkerpop.TermsToElements (
 import Hydra.Kernel
 import Hydra.Langs.Tinkerpop.Mappings
 import qualified Hydra.Langs.Tinkerpop.V3 as TP
-import qualified Hydra.Langs.Tinkerpop.Types as TPT
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
