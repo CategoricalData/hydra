@@ -78,10 +78,10 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
       def "Schema" $
         lambda "s" $ lambda "a" $ lambda "t" $ lambda "v" $ lambda "e" $ lambda "p" $
           record [
-            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ "v" @@ (core "Term" @@ "a"),
-            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ "e" @@ (core "Term" @@ "a"),
-            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ "t" @@ (core "Type" @@ "a"),
-            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ "p" @@ (core "Term" @@ "a")],
+            "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
+            "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "e",
+            "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
+            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p"],
 
 --      def "Schema" $
 --        doc "A set of vertex and edge schemas" $

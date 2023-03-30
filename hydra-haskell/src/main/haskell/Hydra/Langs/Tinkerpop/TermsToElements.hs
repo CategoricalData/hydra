@@ -40,7 +40,7 @@ noDecoding cat = fail $ cat ++ " decoding is not yet supported"
 parseEdgeIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [e])
 parseEdgeIdPattern schema spec = do
   fun <- parseValueSpec spec
-  return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaEdgeIds schema)
+  return $ \term -> fun term >>= CM.mapM (coderEncode $ schemaEdgeIds schema)
 
 parseEdgeSpec :: Show a => Schema s a t v e p -> EdgeSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
 parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
@@ -104,7 +104,7 @@ parsePropertySpec schema (PropertySpec key value) = do
   fun <- parseValueSpec value
   return $ \term -> do
     results <- fun term
-    values <- CM.mapM (coderDecode $ schemaPropertyValues schema) results
+    values <- CM.mapM (coderEncode $ schemaPropertyValues schema) results
     return $ fmap (\v -> (key, v)) values
 
 parseElementSpec :: Show a => Schema s a t v e p -> ElementSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
@@ -121,7 +121,7 @@ parseValueSpec spec = case spec of
 parseVertexIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseVertexIdPattern schema spec = do
   fun <- parseValueSpec spec
-  return $ \term -> fun term >>= CM.mapM (coderDecode $ schemaVertexIds schema)
+  return $ \term -> fun term >>= CM.mapM (coderEncode $ schemaVertexIds schema)
 
 parseVertexSpec :: Show a => Schema s a t v e p -> VertexSpec -> Flow s (PG.Label, Term a -> Flow s [PG.Element v e p])
 parseVertexSpec schema (VertexSpec label id props) = do

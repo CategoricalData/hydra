@@ -156,7 +156,7 @@ elementCoder schema typ = case stripType typ of
           terms <- fun term
           case terms of
             [] -> fail $ key ++ "-projection did not resolve to a term"
-            [t] -> coderDecode coder t
+            [t] -> coderEncode coder t
             _ -> fail $ key ++ "-projection resolved to multiple terms"
         decode _ = noDecoding $ "edge '" ++ key ++ "'"
 
@@ -194,14 +194,14 @@ projectionId fields (fname, ad) = case M.lookup fname fields of
 propertyAdapter :: Show a => Schema s a t v e p -> FieldType a -> Flow s (PropAdapter s a t p)
 propertyAdapter schema tfield = do
   let key = PG.PropertyKey $ unFieldName $ fieldTypeName tfield
-  pt <- coderDecode (schemaPropertyTypes schema) $ fieldTypeType tfield
+  pt <- coderEncode (schemaPropertyTypes schema) $ fieldTypeType tfield
   let coder = Coder encode decode
         where
           encode dfield = do
             if fieldName dfield /= fieldTypeName tfield
               then unexpected ("field '" ++ unFieldName (fieldTypeName tfield) ++ "'") dfield
               else do
-                value <- coderDecode (schemaPropertyValues schema) $ fieldTerm dfield
+                value <- coderEncode (schemaPropertyValues schema) $ fieldTerm dfield
                 return $ PG.Property key value
           decode _ = noDecoding "property"
   return $ Adapter lossy tfield (PG.PropertyType key pt) coder
