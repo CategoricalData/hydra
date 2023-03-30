@@ -62,7 +62,7 @@ constructModule mod coders pairs = do
         imports = []
 --        imports = L.filter isExternal (pdlNameForElement aliases True <$> deps)
 --          where
---            deps = S.toList $ termDependencyNames True False False $ elementData el
+--            deps = S.toList $ termDependencyNames False True False False $ elementData el
 --            isExternal qn = PDL.qualifiedNameNamespace qn /= PDL.qualifiedNameNamespace qname
 
 moduleToPegasusSchemas :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath PDL.SchemaFile)

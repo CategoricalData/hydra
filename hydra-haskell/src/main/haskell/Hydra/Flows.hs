@@ -45,14 +45,6 @@ emptyTrace = Trace [] [] M.empty
 flowSucceeds :: s -> Flow s a -> Bool
 flowSucceeds cx f = Y.isJust $ flowStateValue $ unFlow f cx emptyTrace
 
-flowWarning :: String -> Flow s a -> Flow s a
-flowWarning msg b = Flow u'
-  where
-    u' s0 t0 = FlowState v s1 t2
-      where
-        FlowState v s1 t1 = unFlow b s0 t0
-        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
-
 fromFlow :: s -> Flow s a -> a
 fromFlow cx f = case flowStateValue (unFlow f cx emptyTrace) of
   Just x -> x
@@ -103,6 +95,14 @@ traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
 unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
+warn :: String -> Flow s a -> Flow s a
+warn msg b = Flow u'
+  where
+    u' s0 t0 = FlowState v s1 t2
+      where
+        FlowState v s1 t1 = unFlow b s0 t0
+        t2 = t1 {traceMessages = ("Warning: " ++ msg):(traceMessages t1)}
+
 withState :: s1 -> Flow s1 a -> Flow s2 a
 withState cx0 f = Flow q
   where
@@ -121,6 +121,3 @@ withTrace msg f = Flow q
         t1 = t0 {traceStack = msg:(traceStack t0)} -- augment the trace
         t3 = t2 {traceStack = traceStack t0} -- reset the trace stack after execution
         tooDeep = "maximum trace depth exceeded. This may indicate an infinite loop"
-
-withWarning :: String -> a -> Flow s a
-withWarning msg x = flowWarning msg $ pure x

@@ -9,6 +9,7 @@ module Hydra.Langs.Avro.Coder (
 import Hydra.Kernel
 import Hydra.Langs.Json.Eliminate
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Langs.Avro.Schema as Avro
@@ -55,7 +56,7 @@ avroHydraAdapter schema = case schema of
             return (Terms.string k, v')
       let coder = Coder {
             coderEncode = \(Json.ValueObject m) -> Terms.map . M.fromList <$> (CM.mapM pairToHydra $ M.toList m),
-            coderDecode = \m -> Json.ValueObject <$> Terms.expectMap Terms.expectString (coderDecode (adapterCoder ad)) m}
+            coderDecode = \m -> Json.ValueObject <$> Expect.map Expect.string (coderDecode (adapterCoder ad)) m}
       return $ Adapter (adapterIsLossy ad) schema (Types.map Types.string $ adapterTarget ad) coder
     Avro.SchemaNamed n -> do
         let ns = Avro.namedNamespace n
@@ -84,7 +85,7 @@ avroHydraAdapter schema = case schema of
               Avro.NamedTypeFixed (Avro.Fixed size) -> simpleAdapter Types.binary encode decode
                 where
                   encode (Json.ValueString s) = pure $ Terms.binary s
-                  decode term = Json.ValueString <$> Terms.expectBinary term
+                  decode term = Json.ValueString <$> Expect.binary term
               Avro.NamedTypeRecord r -> do
                   let avroFields = Avro.recordFields r
                   adaptersByFieldName <- M.fromList <$> (CM.mapM prepareField avroFields)
@@ -185,35 +186,35 @@ avroHydraAdapter schema = case schema of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.string s
-            decode term = Json.ValueString <$> Terms.expectString term
+            decode term = Json.ValueString <$> Expect.string term
         Avro.PrimitiveBoolean -> simpleAdapter Types.boolean encode decode
           where
             encode (Json.ValueBoolean b) = pure $ Terms.boolean b
-            decode term = Json.ValueBoolean <$> Terms.expectBoolean term
+            decode term = Json.ValueBoolean <$> Expect.boolean term
         Avro.PrimitiveInt -> simpleAdapter Types.int32 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.int32 $ doubleToInt d
-            decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt32 term
+            decode term = Json.ValueNumber . fromIntegral <$> Expect.int32 term
         Avro.PrimitiveLong -> simpleAdapter Types.int64 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.int64 $ doubleToInt d
-            decode term = Json.ValueNumber . fromIntegral <$> Terms.expectInt64 term
+            decode term = Json.ValueNumber . fromIntegral <$> Expect.int64 term
         Avro.PrimitiveFloat -> simpleAdapter Types.float32 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.float32 $ realToFrac d
-            decode term = Json.ValueNumber . realToFrac <$> Terms.expectFloat32 term
+            decode term = Json.ValueNumber . realToFrac <$> Expect.float32 term
         Avro.PrimitiveDouble -> simpleAdapter Types.float64 encode decode
           where
             encode (Json.ValueNumber d) = pure $ Terms.float64 d
-            decode term = Json.ValueNumber <$> Terms.expectFloat64 term
+            decode term = Json.ValueNumber <$> Expect.float64 term
         Avro.PrimitiveBytes -> simpleAdapter Types.binary encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.binary s
-            decode term = Json.ValueString <$> Terms.expectBinary term
+            decode term = Json.ValueString <$> Expect.binary term
         Avro.PrimitiveString -> simpleAdapter Types.string encode decode
           where
             encode (Json.ValueString s) = pure $ Terms.string s
-            decode term = Json.ValueString <$> Terms.expectString term
+            decode term = Json.ValueString <$> Expect.string term
       where
         doubleToInt d = if d < 0 then ceiling d else floor d
     Avro.SchemaReference name -> do

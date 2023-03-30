@@ -78,11 +78,17 @@ element (Definition name _) = Datum $ TermElement name
 field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
 
+fld :: FieldName -> Datum a -> Fld Kv
+fld fname (Datum val) = Fld $ Field fname val
+
 function :: Type Kv -> Type Kv -> Datum a -> Datum a
 function dom cod = typed (Types.function dom cod)
 
 functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
+
+just :: Datum x -> Datum (Maybe x)
+just (Datum term) = Datum $ Terms.just term
 
 lambda :: String -> Datum x -> Datum (a -> b)
 lambda v (Datum body) = Datum $ Terms.lambda v body
@@ -123,6 +129,9 @@ matchToUnion domName codName def pairs = matchData domName def (toCase <$> pairs
 nom :: Name -> Datum a -> Datum b
 nom name (Datum term) = Datum $ Terms.wrap name term
 
+nothing :: Datum x
+nothing = Datum $ Terms.nothing
+
 opt :: Maybe (Datum a) -> Datum (Maybe a)
 opt mc = Datum $ Terms.optional (unDatum <$> mc)
 
@@ -156,8 +165,14 @@ unit = Datum Terms.unit
 unitVariant :: Name -> FieldName -> Datum a
 unitVariant name fname = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname Terms.unit
 
+unwrap :: Name -> Datum a
+unwrap = Datum . Terms.unwrap
+
 var :: String -> Datum a
 var v = Datum $ Terms.variable v
 
 variant :: Name -> FieldName -> Datum a -> Datum b
 variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname term
+
+wrap :: Name -> Datum a -> Datum b
+wrap name (Datum term) = Datum $ Terms.wrap name term

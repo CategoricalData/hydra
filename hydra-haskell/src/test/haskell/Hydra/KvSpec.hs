@@ -82,7 +82,7 @@ checkDescriptions = do
         (setDesc Nothing $ setDesc (Just d) $ Terms.int64 137)
         (Terms.int64 137)
 
-getAnn = getTermAnnotation testGraph
+getAnn = getTermAnnotation
 
 getDesc term = fromFlow testGraph $ getTermDescription term
 

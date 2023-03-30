@@ -24,6 +24,7 @@ import Hydra.Rewriting
 import Hydra.LiteralAdapters
 import Hydra.Dsl.Terms
 import Hydra.Reduction
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Control.Monad as CM
@@ -120,7 +121,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
     decode ad term = do
-        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= expectInjection
+        (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
           (_Elimination_element, forTerm fterm),
           (_Elimination_wrap, forWrapped fterm),
@@ -132,14 +133,14 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
           (_Term_variable, forVariable fterm)]
       where
         notFound fname = fail $ "unexpected field: " ++ unFieldName fname
-        forCases fterm = read <$> expectString fterm -- TODO
+        forCases fterm = read <$> Expect.string fterm -- TODO
         forTerm _ = pure delta
-        forLambda fterm = read <$> expectString fterm -- TODO
-        forWrapped fterm = unwrap . Name <$> expectString fterm
-        forOptionalCases fterm = read <$> expectString fterm -- TODO
-        forPrimitive fterm = primitive . Name <$> expectString fterm
-        forProjection fterm = read <$> expectString fterm -- TODO
-        forVariable fterm = variable <$> expectString fterm
+        forLambda fterm = read <$> Expect.string fterm -- TODO
+        forWrapped fterm = unwrap . Name <$> Expect.string fterm
+        forOptionalCases fterm = read <$> Expect.string fterm -- TODO
+        forPrimitive fterm = primitive . Name <$> Expect.string fterm
+        forProjection fterm = read <$> Expect.string fterm -- TODO
+        forVariable fterm = variable <$> Expect.string fterm
 
     unionType = do
       domAd <- termAdapter dom
@@ -236,7 +237,7 @@ passLiteral :: (Ord a, Show a) => TypeAdapter a
 passLiteral (TypeLiteral at) = do
   ad <- literalAdapter at
   let step = bidirectional $ \dir term -> do
-        l <- expectLiteral term
+        l <- Expect.literal term
         literal <$> encodeDecode dir (adapterCoder ad) l
   return $ Adapter (adapterIsLossy ad) (Types.literal $ adapterSource ad) (Types.literal $ adapterTarget ad) step
 
@@ -302,7 +303,7 @@ passUnion t@(TypeUnion rt) = do
     let sfields' = adapterTarget . snd <$> M.toList adapters
     return $ Adapter lossy t (TypeUnion $ rt {rowTypeFields = sfields'})
       $ bidirectional $ \dir term -> do
-        dfield <- expectInjection term
+        dfield <- Expect.injection term
         ad <- getAdapter adapters dfield
         TermUnion . Injection nm <$> encodeDecode dir (adapterCoder ad) dfield
   where
@@ -392,7 +393,7 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
     -- TODO: use JSON for encoding and decoding unsupported terms, rather than Haskell's read/show
     encode = pure . string . show
     decode term = do
-      s <- expectString term
+      s <- Expect.string term
       case TR.readEither s of
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t

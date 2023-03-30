@@ -2,6 +2,7 @@
 
 module Hydra.Kv where
 
+import Hydra.Basics
 import Hydra.Core
 import Hydra.Common
 import Hydra.Compute
@@ -10,6 +11,7 @@ import Hydra.CoreDecoding
 import Hydra.CoreEncoding
 import Hydra.Flows
 import Hydra.Mantle
+import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
@@ -22,12 +24,6 @@ aggregateAnnotations getAnn t = Kv $ M.fromList $ addKv [] t
     addKv m t = case getAnn t of
       Nothing -> m
       Just (Annotated t' (Kv other)) -> addKv (m ++ M.toList other) t'
-
-emptyKv :: Kv
-emptyKv = Kv M.empty
-
-getAnnotation :: String -> Kv -> Maybe (Term Kv)
-getAnnotation key (Kv m) = M.lookup key m
 
 getAttr :: String -> Flow s (Maybe (Term Kv))
 getAttr key = Flow q
@@ -44,8 +40,8 @@ getDescription kv = case getAnnotation kvDescription kv of
     TermLiteral (LiteralString s) -> pure $ Just s
     _ -> fail $ "unexpected value for " ++ show kvDescription ++ ": " ++ show term
 
-getTermAnnotation :: Graph Kv -> String -> Term Kv -> Y.Maybe (Term Kv)
-getTermAnnotation cx key = getAnnotation key . termAnnotationInternal
+getTermAnnotation :: String -> Term Kv -> Y.Maybe (Term Kv)
+getTermAnnotation key = getAnnotation key . termAnnotationInternal
 
 getTermDescription :: Term Kv -> GraphFlow Kv (Y.Maybe String)
 getTermDescription = getDescription . termAnnotationInternal
@@ -90,7 +86,7 @@ kvType = "type"
 
 nextCount :: String -> Flow s Int
 nextCount attrName = do
-  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Terms.expectInt32
+  count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
   putAttr attrName (Terms.int32 $ count + 1)
   return count
 

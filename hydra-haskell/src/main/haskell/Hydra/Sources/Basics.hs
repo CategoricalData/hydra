@@ -1,6 +1,7 @@
 module Hydra.Sources.Basics where
 
 import Hydra.Kernel
+import Hydra.Sources.Compute
 import Hydra.Sources.Graph
 import Hydra.Sources.Mantle
 import Hydra.Dsl.Base as Base
@@ -17,7 +18,7 @@ basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
 
 hydraBasicsModule :: Module Kv
-hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule] $
+hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
     Just "Basic functions for working with types and terms"
   where
     elements = [
@@ -46,7 +47,12 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el testListsDef,
       el typeArityDef,
       el typeVariantDef,
-      el typeVariantsDef]
+      el typeVariantsDef,
+      
+      el emptyKvDef,
+      el getAnnotationDef,
+      el getAttrDef
+      ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -63,7 +69,6 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
 eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
-  typed (Types.list $ Types.wrap _EliminationVariant) $
   list $ unitVariant _EliminationVariant <$> [
     _EliminationVariant_element,
     _EliminationVariant_list,
@@ -83,7 +88,6 @@ floatTypePrecisionDef = basicsDefinition "floatTypePrecision" $
 floatTypesDef :: Definition [FloatType]
 floatTypesDef = basicsDefinition "floatTypes" $
   doc "All floating-point types in a canonical order" $
-  typed (Types.list $ Types.wrap _FloatType) $
   list $ unitVariant _FloatType <$> [
     _FloatType_bigfloat,
     _FloatType_float32,
@@ -109,7 +113,6 @@ functionVariantDef = basicsDefinition "functionVariant" $
 functionVariantsDef :: Definition [FunctionVariant]
 functionVariantsDef = basicsDefinition "functionVariants" $
   doc "All function variants (constructors), in a canonical order" $
-    typed (Types.list $ Types.wrap _FunctionVariant) $
   list $ unitVariant _FunctionVariant <$> [
     _FunctionVariant_elimination,
     _FunctionVariant_lambda,
@@ -146,7 +149,6 @@ integerTypePrecisionDef = basicsDefinition "integerTypePrecision" $
 integerTypesDef :: Definition [IntegerType]
 integerTypesDef = basicsDefinition "integerTypes" $
     doc "All integer types, in a canonical order" $
-    typed (Types.list $ Types.wrap _IntegerType) $
     list $ unitVariant _IntegerType <$> [
       _IntegerType_bigint,
       _IntegerType_int8,
@@ -201,7 +203,6 @@ literalVariantDef = basicsDefinition "literalVariant" $
 literalVariantsDef :: Definition [LiteralVariant]
 literalVariantsDef = basicsDefinition "literalVariants" $
   doc "All literal variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _LiteralVariant) $
   list $ unitVariant _LiteralVariant <$> [
     _LiteralVariant_binary,
     _LiteralVariant_boolean,
@@ -225,7 +226,6 @@ primitiveArityDef = basicsDefinition "primitiveArity" $
 qnameDef :: Definition (Namespace -> String -> Name)
 qnameDef = basicsDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  functionN [Types.wrap _Namespace, Types.string] (Types.wrap _Name) $
   lambda "ns" $
     lambda "name" $
       nom _Name $
@@ -277,7 +277,6 @@ termVariantDef = basicsDefinition "termVariant" $
 termVariantsDef :: Definition [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
   doc "All term (expression) variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _TermVariant) $
   list $ unitVariant _TermVariant <$> [
     _TermVariant_annotated,
     _TermVariant_application,
@@ -341,7 +340,6 @@ typeVariantDef = basicsDefinition "typeVariant" $
 typeVariantsDef :: Definition [TypeVariant]
 typeVariantsDef = basicsDefinition "typeVariants" $
   doc "All type variants, in a canonical order" $
-  typed (Types.list $ Types.wrap _TypeVariant) $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
@@ -360,3 +358,22 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]
+
+
+-- hydra/kv
+
+emptyKvDef :: Definition Kv
+emptyKvDef = basicsDefinition "emptyKv" $
+  record _Kv [fld _Kv_annotations Maps.empty]
+
+getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
+getAnnotationDef = basicsDefinition "getAnnotation" $
+  lambda "key" $ lambda "ann" (Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann"))
+
+getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
+getAttrDef = basicsDefinition "getAttr" $
+  lambda "key" $ wrap _Flow $
+    lambda "s0" $ lambda "t0" $ record _FlowState [
+      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
+      fld _FlowState_state $ var "s0",
+      fld _FlowState_trace $ var "t0"]

@@ -2,6 +2,7 @@
 
 module Hydra.Basics where
 
+import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
@@ -272,3 +273,10 @@ typeVariants = [
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
+
+emptyKv :: Compute.Kv
+emptyKv = Compute.Kv {
+  Compute.kvAnnotations = Maps.empty}
+
+getAnnotation :: (String -> Compute.Kv -> Maybe (Core.Term Compute.Kv))
+getAnnotation key ann = (Maps.lookup key (Compute.kvAnnotations ann))
