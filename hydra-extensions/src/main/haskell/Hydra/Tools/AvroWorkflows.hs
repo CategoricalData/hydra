@@ -70,8 +70,10 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile Rdf.Description
 shaclRdfLastMile = LastMile termToShaclRdf rdfDescriptionsToNtriples "nt"
 
-termToShaclRdf :: Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description]
-termToShaclRdf term graph = do
+termToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
+termToShaclRdf _ = pure encode
+  where
+    encode term graph = do
         elDescs <- CM.mapM encodeElement $ M.elems $ graphElements graph
         termDescs <- encodeBlankTerm
         return $ L.concat (termDescs:elDescs)
@@ -93,19 +95,24 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter (lastMileEncoder lastMile)) [1..] entities)
+    lmEncoder <- fromFlowIo hydraCore $ lastMileEncoder lastMile (adapterTarget adapter)
+    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
     writeFile outFile $ (lastMileSerializer lastMile) descs
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
 
-    jsonToTarget inFile adapter termRdfizer index payload = case stringToJsonValue payload of
+    jsonToTarget inFile adapter lmEncoder index payload = case stringToJsonValue payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
         Right json -> withState emptyEnv $ do
+          -- TODO; the core graph is neither the data nor the schema graph
+          let dataGraph = hydraCore
+          let schemaGraph = Just hydraCore
+
           term <- coderEncode (adapterCoder adapter) json
           env <- getState
-          let graph = elementsToGraph hydraCore (Just hydraCore) (M.elems $ avroEnvironmentElements env) -- TODO; schema graph is not the core graph
-          withState hydraCore $ termRdfizer term graph
+          let graph = elementsToGraph dataGraph schemaGraph (M.elems $ avroEnvironmentElements env)
+          withState hydraCore $ lmEncoder term graph
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,
