@@ -71,25 +71,16 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-addDeepTypeAnnotations :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
-addDeepTypeAnnotations mod = do
-    els <- CM.mapM annotateElementWithTypes $ moduleElements mod
-    return $ mod {moduleElements = els}
-
-assignSchemas :: (Ord a, Show a) => Bool -> Module a -> GraphFlow a (Module a)
-assignSchemas doInfer mod = do
-    cx <- getState
-    els <- CM.mapM (annotate cx) $ moduleElements mod
+assignSchemas :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
+assignSchemas mod = do
+    g <- getState
+    els <- CM.mapM (annotate g) $ moduleElements mod
     return $ mod {moduleElements = els}
   where
-    annotate cx el = do
-      typ <- findType cx (elementData el)
+    annotate g el = do
+      typ <- findType g (elementData el)
       case typ of
-        Nothing -> if doInfer
-          then do
-            t <- typeSchemeType <$> inferType (elementData el)
-            return el {elementSchema = epsilonEncodeType t}
-          else return el
+        Nothing -> return el
         Just typ -> return el {elementSchema = epsilonEncodeType typ}
 
 coreModules :: [Module Kv]
@@ -120,11 +111,16 @@ generateSources printModule mods0 basePath = do
   where
     generateFiles = do
       withTrace "generate files" $ do
-        mods1 <- CM.mapM (assignSchemas False) mods0
+        mods1 <- CM.mapM assignSchemas mods0
         withState (modulesToGraph mods1) $ do
-          mods2 <- CM.mapM addDeepTypeAnnotations mods1
-          maps <- CM.mapM forModule mods2
-          return $ L.concat (M.toList <$> maps)
+          g' <- annotateGraphWithTypes
+          withState g' $ do
+              let mods2 = refreshModule (graphElements g') <$> mods1
+              maps <- CM.mapM forModule mods2
+              return $ L.concat (M.toList <$> maps)
+            where
+              refreshModule els mod = mod {
+                moduleElements = Y.catMaybes ((\e -> M.lookup (elementName e) els) <$> moduleElements mod)}
 
     writePair (path, s) = do
       let fullPath = FP.combine basePath path
@@ -136,6 +132,7 @@ generateSources printModule mods0 basePath = do
 -- Note: currently a subset of the kernel, as the other modules are not yet needed in the runtime environment
 hydraKernel :: Graph Kv
 hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElements [
+  hydraComputeModule,
   hydraCoreModule,
   hydraGraphModule,
   hydraMantleModule,
