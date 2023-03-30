@@ -34,6 +34,7 @@ _exclude = "exclude" :: String
 _id = "id" :: String
 _in = "in" :: String
 _inId = "inId" :: String
+_label = "label" :: String
 _out = "out" :: String
 _outId = "outId" :: String
 
@@ -105,7 +106,7 @@ elementCoder schema typ = case stripType typ of
   where
     annKey s = "@" ++ s
 
-    findLabelString tname = case getTypeAnnotation "label" typ of
+    findLabelString tname = case getTypeAnnotation (annKey _label) typ of
       Nothing -> pure $ unName tname
       Just labelTerm -> Expect.string labelTerm
 
