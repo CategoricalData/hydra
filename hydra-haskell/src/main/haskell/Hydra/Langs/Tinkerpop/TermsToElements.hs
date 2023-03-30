@@ -48,7 +48,7 @@ parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
   getOut <- parseVertexIdPattern schema outV
   getIn <- parseVertexIdPattern schema inV
   getProps <- CM.mapM (parsePropertySpec schema) props
-  let encode term = do
+  let encode term = withTrace "encode as edge" $ do
         tid <- requireUnique "edge id" getId term
         tout <- requireUnique "vertex id" getOut term
         tin <- requireUnique "edge id" getIn term
@@ -57,9 +57,9 @@ parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
   return (PG.LabelEdge label, encode)
 
 parsePattern :: Show a => String -> Flow s (Term a -> Flow s [Term a])
-parsePattern pat = do
+parsePattern pat = withTrace "parse path pattern" $ do
     (lits, paths) <- parseLit [] [] "" pat
-    return $ traverse [""] True lits paths
+    return $ traverseTop [""] True lits paths
   where
     parseLit lits paths cur s = case s of
       [] -> pure ((L.reverse cur):lits, L.reverse paths)
@@ -69,6 +69,8 @@ parsePattern pat = do
       [] -> fail $ "Unfinished path expression: " ++ pat
       ('}':rest) -> parseLit lits ((L.reverse cur):paths) "" rest
       (c:rest) -> parsePath lits paths (c:cur) rest
+    traverseTop values lp lits paths term = withTrace ("traverse pattern: " ++ pat) $
+      traverse values lp lits paths term
     traverse values lp lits paths term = if L.null values
         then pure []
         else if lp
@@ -100,9 +102,9 @@ parsePattern pat = do
       _ -> fail $ "Can't traverse through term: " ++ show term
 
 parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
-parsePropertySpec schema (PropertySpec key value) = do
+parsePropertySpec schema (PropertySpec key value) = withTrace "parse property spec" $ do
   fun <- parseValueSpec value
-  return $ \term -> do
+  return $ \term -> withTrace ("encode property " ++ PG.unPropertyKey key) $ do
     results <- fun term
     values <- CM.mapM (coderEncode $ schemaPropertyValues schema) results
     return $ fmap (\v -> (key, v)) values
@@ -127,7 +129,7 @@ parseVertexSpec :: Show a => Schema s a t v e p -> VertexSpec -> Flow s (PG.Labe
 parseVertexSpec schema (VertexSpec label id props) = do
   getId <- parseVertexIdPattern schema id
   getProps <- CM.mapM (parsePropertySpec schema) props
-  let encode term = do
+  let encode term = withTrace "encode as vertex" $ do
         tid <- requireUnique "vertex id" getId term
         tprops <- M.fromList <$> CM.mapM (\g -> requireUnique "property key" g term) getProps
         return [PG.ElementVertex $ PG.Vertex label tid tprops]
@@ -148,39 +150,39 @@ decodeEdgeLabel :: Show a => Term a -> Flow s PG.EdgeLabel
 decodeEdgeLabel t = PG.EdgeLabel <$> Expect.string t
 
 decodeEdgeSpec :: Show a => Term a -> Flow s EdgeSpec
-decodeEdgeSpec = matchRecord $ \fields -> EdgeSpec
+decodeEdgeSpec term = withTrace "decode edge spec" $ matchRecord (\fields -> EdgeSpec
   <$> readField fields _EdgeSpec_label decodeEdgeLabel
   <*> readField fields _EdgeSpec_id decodeValueSpec
   <*> readField fields _EdgeSpec_out decodeValueSpec
   <*> readField fields _EdgeSpec_in decodeValueSpec
-  <*> readField fields _EdgeSpec_properties (Expect.list decodePropertySpec)
+  <*> readField fields _EdgeSpec_properties (Expect.list decodePropertySpec)) term
 
 decodeElementSpec :: Show a => Term a -> Flow s ElementSpec
-decodeElementSpec = matchInjection [
+decodeElementSpec term = withTrace "decode element spec" $ matchInjection [
   (_ElementSpec_vertex, \t -> ElementSpecVertex <$> decodeVertexSpec t),
-  (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)]
+  (_ElementSpec_edge, \t -> ElementSpecEdge <$> decodeEdgeSpec t)] term
 
 decodePropertyKey :: Show a => Term a -> Flow s PG.PropertyKey
 decodePropertyKey t = PG.PropertyKey <$> Expect.string t
 
 decodePropertySpec :: Show a => Term a -> Flow s PropertySpec
-decodePropertySpec = matchRecord $ \fields -> PropertySpec
+decodePropertySpec term = withTrace "decode property spec" $ matchRecord (\fields -> PropertySpec
   <$> readField fields _PropertySpec_key decodePropertyKey
-  <*> readField fields _PropertySpec_value decodeValueSpec
+  <*> readField fields _PropertySpec_value decodeValueSpec) term
 
 decodeValueSpec :: Show a => Term a -> Flow s ValueSpec
-decodeValueSpec = matchInjection [
+decodeValueSpec term = withTrace "decode value spec" $ matchInjection [
   (_ValueSpec_value, \t -> pure ValueSpecValue),
-  (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)]
+  (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)] term
 
 decodeVertexLabel :: Show a => Term a -> Flow s PG.VertexLabel
 decodeVertexLabel t = PG.VertexLabel <$> Expect.string t
 
 decodeVertexSpec :: Show a => Term a -> Flow s VertexSpec
-decodeVertexSpec = matchRecord $ \fields -> VertexSpec
+decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields -> VertexSpec
   <$> readField fields _VertexSpec_label decodeVertexLabel
   <*> readField fields _VertexSpec_id decodeValueSpec
-  <*> readField fields _VertexSpec_properties (Expect.list decodePropertySpec)
+  <*> readField fields _VertexSpec_properties (Expect.list decodePropertySpec)) term
 
 
 -- General-purpose code for decoding
@@ -192,16 +194,18 @@ fieldMap fields = M.fromList (toPair <$> fields)
 
 matchInjection :: Show a => [(FieldName, Term a -> Flow s x)] -> Term a -> Flow s x
 matchInjection cases encoded = do
-    f <- Expect.injection encoded
-    case snd <$> (L.filter (\c -> fst c == fieldName f) cases) of
-      [] -> fail $ "unexpected field: " ++ unFieldName (fieldName f)
-      [fun] -> fun (fieldTerm f)
-      _ -> fail "duplicate field name in cases"
+  mp <- Expect.map (\k -> FieldName <$> Expect.string k) pure encoded
+  f <- case M.toList mp of
+    [] -> fail "empty injection"
+    [(k, v)] -> pure $ Field k v
+    _ -> fail "invalid injection"
+  case snd <$> (L.filter (\c -> fst c == fieldName f) cases) of
+    [] -> fail $ "unexpected field: " ++ unFieldName (fieldName f)
+    [fun] -> fun (fieldTerm f)
+    _ -> fail "duplicate field name in cases"
 
 matchRecord :: Show a => (M.Map FieldName (Term a) -> Flow s x) -> Term a -> Flow s x
-matchRecord cons term = do
-    fields <- fieldMap <$> Expect.record term
-    cons fields
+matchRecord cons term = Expect.map (\k -> FieldName <$> Expect.string k) pure term >>= cons
 
 readField fields fname fun = case M.lookup fname fields of
   Nothing -> fail $ "no such field: " ++ unFieldName fname

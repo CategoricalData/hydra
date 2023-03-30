@@ -266,6 +266,7 @@ encodeAnnotationValue v = case v of
   Json.ValueBoolean b -> Terms.boolean b
   Json.ValueNull -> Terms.product []
   Json.ValueNumber d -> Terms.float64 d
+  -- Note: JSON objects are untyped maps, not records, in that fields are unordered
   Json.ValueObject m -> Terms.map $ M.fromList (toEntry <$> M.toList m)
     where
       toEntry (k, v) = (Terms.string k, encodeAnnotationValue v)

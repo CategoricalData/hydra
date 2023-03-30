@@ -6,6 +6,7 @@ module Hydra.Tools.AvroWorkflows (
   TermEncoder(..),
   LastMile(..),
   executeAvroTransformWorkflow,
+  propertyGraphLastMile,
   rdfDescriptionsToNtriples,
   shaclRdfLastMile,
   typedTermToShaclRdf,
@@ -88,12 +89,12 @@ typedTermToPropertyGraph typ = do
       return [el]
   where
     schema = PGM.Schema {
-        PGM.schemaVertexIds = mkCoder Expect.string,
-        PGM.schemaEdgeIds = mkCoder Expect.string,
-        PGM.schemaPropertyTypes = mkCoder $ \t -> pure (),
-        PGM.schemaPropertyValues = mkCoder Expect.string}
+        PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string,
+        PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string,
+        PGM.schemaPropertyTypes = mkCoder "encode property type" $ \t -> pure (),
+        PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string}
       where
-        mkCoder encode = Coder encode noDecode
+        mkCoder lab encode = Coder (withTrace lab . encode) noDecode
           where
             noDecode = \_ -> fail "property graph schema decoding not yet supported"
 
