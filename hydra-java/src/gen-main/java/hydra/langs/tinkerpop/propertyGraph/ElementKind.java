@@ -1,12 +1,12 @@
-package hydra.langs.tinkerpop.v3;
+package hydra.langs.tinkerpop.propertyGraph;
 
 /**
- * Either a vertex or an edge
+ * The kind of an element: vertex or edge
  */
-public abstract class Element<V, E, P> {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/v3.Element");
+public abstract class ElementKind {
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.ElementKind");
   
-  private Element () {
+  private ElementKind () {
   
   }
   
@@ -19,7 +19,7 @@ public abstract class Element<V, E, P> {
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Element instance) {
+    default R otherwise(ElementKind instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
@@ -32,11 +32,9 @@ public abstract class Element<V, E, P> {
     }
   }
   
-  public static final class Vertex<V, E, P> extends hydra.langs.tinkerpop.v3.Element<V, E, P> {
-    public final hydra.langs.tinkerpop.v3.Vertex<V, P> value;
+  public static final class Vertex extends hydra.langs.tinkerpop.propertyGraph.ElementKind {
+    public Vertex () {
     
-    public Vertex (hydra.langs.tinkerpop.v3.Vertex<V, P> value) {
-      this.value = value;
     }
     
     @Override
@@ -45,12 +43,12 @@ public abstract class Element<V, E, P> {
         return false;
       }
       Vertex o = (Vertex) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
@@ -59,11 +57,9 @@ public abstract class Element<V, E, P> {
     }
   }
   
-  public static final class Edge<V, E, P> extends hydra.langs.tinkerpop.v3.Element<V, E, P> {
-    public final hydra.langs.tinkerpop.v3.Edge<V, E, P> value;
+  public static final class Edge extends hydra.langs.tinkerpop.propertyGraph.ElementKind {
+    public Edge () {
     
-    public Edge (hydra.langs.tinkerpop.v3.Edge<V, E, P> value) {
-      this.value = value;
     }
     
     @Override
@@ -72,12 +68,12 @@ public abstract class Element<V, E, P> {
         return false;
       }
       Edge o = (Edge) (other);
-      return value.equals(o.value);
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 0;
     }
     
     @Override
