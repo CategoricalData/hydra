@@ -1,0 +1,84 @@
+{
+  "namespace": "com.example",
+  "name": "AirplaneInfo",
+  "type": "record",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "dateAdded",
+      "type": "string"
+    },
+    {
+      "name": "recordNumber",
+      "type": [null, "string"],
+      "@exclude": {}
+    },
+    {
+      "@outId": {"pattern": "airplane-${name}"},
+      "name": "airplane",
+      "type": {
+        "name": "AirplaneModel",
+        "type": "record",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "originalManufacturer",
+            "type": {
+              "name": "Organization",
+              "type": "record",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "name": "industry",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "currentManufacturer",
+            "type": [
+              null,
+              "Organization"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "@inId": {"pattern": "airplane-${name}"},
+      "name": "engine",
+      "type": {
+        "name": "EngineModel",
+        "type": "record",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "type": {
+              "name": "EngineType",
+              "type": "enum",
+              "symbols": [
+                "RECIPROCATING",
+                "JET",
+                "ELECTRIC"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
