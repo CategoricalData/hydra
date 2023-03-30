@@ -82,11 +82,15 @@ _Schema_propertyValues = (Core.FieldName "propertyValues")
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 
+  -- | A trivial no-op specification which passes the entire value
+  ValueSpecValue  |
   -- | A compact path representing the function, e.g. ${}/engineInfo/model/name
   ValueSpecPattern String
   deriving (Eq, Ord, Read, Show)
 
 _ValueSpec = (Core.Name "hydra/langs/tinkerpop/mappings.ValueSpec")
+
+_ValueSpec_value = (Core.FieldName "value")
 
 _ValueSpec_pattern = (Core.FieldName "pattern")
 

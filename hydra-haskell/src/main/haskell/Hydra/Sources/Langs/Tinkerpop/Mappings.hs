@@ -98,6 +98,9 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
       def "ValueSpec" $
         doc "A mapping specification producing values (usually literal values) whose type is understood in context" $
         union [
+          "value">:
+            doc "A trivial no-op specification which passes the entire value"
+            unit,
           "pattern">:
             doc "A compact path representing the function, e.g. ${}/engineInfo/model/name"
             string],

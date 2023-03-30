@@ -13,6 +13,8 @@ public abstract class ValueSpec {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
+    R visit(Value instance) ;
+    
     R visit(Pattern instance) ;
   }
   
@@ -21,8 +23,40 @@ public abstract class ValueSpec {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
+    default R visit(Value instance) {
+      return otherwise((instance));
+    }
+    
     default R visit(Pattern instance) {
       return otherwise((instance));
+    }
+  }
+  
+  /**
+   * A trivial no-op specification which passes the entire value
+   */
+  public static final class Value extends hydra.langs.tinkerpop.mappings.ValueSpec {
+    public Value () {
+    
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Value)) {
+        return false;
+      }
+      Value o = (Value) (other);
+      return true;
+    }
+    
+    @Override
+    public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
     }
   }
   
