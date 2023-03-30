@@ -65,10 +65,10 @@ _PropertySpec_value = (Core.FieldName "value")
 
 data Schema s a t v e p = 
   Schema {
-    schemaVertexIds :: (Compute.Coder s s v (Core.Term a)),
-    schemaEdgeIds :: (Compute.Coder s s e (Core.Term a)),
-    schemaPropertyTypes :: (Compute.Coder s s t (Core.Type a)),
-    schemaPropertyValues :: (Compute.Coder s s p (Core.Term a))}
+    schemaVertexIds :: (Compute.Coder s s (Core.Term a) v),
+    schemaEdgeIds :: (Compute.Coder s s (Core.Term a) e),
+    schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) t),
+    schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p)}
 
 _Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
 
