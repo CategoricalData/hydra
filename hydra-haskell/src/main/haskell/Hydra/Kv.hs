@@ -51,6 +51,9 @@ getType kv = case getAnnotation kvType kv of
   Nothing -> pure Nothing
   Just dat -> Just <$> epsilonDecodeType dat
 
+getTypeAnnotation :: String -> Type Kv -> Y.Maybe (Term Kv)
+getTypeAnnotation key = getAnnotation key . typeAnnotationInternal
+
 getTypeDescription :: Type Kv -> GraphFlow Kv (Y.Maybe String)
 getTypeDescription = getDescription . typeAnnotationInternal
 

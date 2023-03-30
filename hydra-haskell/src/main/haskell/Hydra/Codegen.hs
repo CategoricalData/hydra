@@ -49,8 +49,8 @@ import Hydra.Sources.Langs.Shacl.Model
 import Hydra.Sources.Langs.Shex.Syntax
 import Hydra.Sources.Langs.Sql.Ansi
 import Hydra.Sources.Langs.Tinkerpop.Features
-import Hydra.Sources.Langs.Tinkerpop.Types
-import Hydra.Sources.Langs.Tinkerpop.V3
+import Hydra.Sources.Langs.Tinkerpop.Mappings
+import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
 import Hydra.Sources.Langs.Xml.Schema
 import Hydra.Sources.Langs.Yaml.Model
 import Hydra.Sources.Libraries
@@ -178,8 +178,8 @@ langModules = [
   shexSyntaxModule,
   sqlModule,
   tinkerpopFeaturesModule,
-  tinkerpopTypesModule,
-  tinkerpopV3Module,
+  tinkerpopMappingsModule,
+  tinkerpopPropertyGraphModule,
   xmlSchemaModule,
   yamlModelModule]
 

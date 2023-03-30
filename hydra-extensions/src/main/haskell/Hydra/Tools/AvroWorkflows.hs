@@ -8,7 +8,7 @@ module Hydra.Tools.AvroWorkflows (
   executeAvroTransformWorkflow,
   rdfDescriptionsToNtriples,
   shaclRdfLastMile,
-  termToShaclRdf,
+  typedTermToShaclRdf,
   transformAvroJsonDirectory,
 ) where
 
@@ -21,10 +21,14 @@ import qualified Hydra.Langs.Json.Model as Json
 import Hydra.Langs.Json.Eliminate
 import Hydra.Langs.Avro.Coder
 import Hydra.Langs.Avro.SchemaJson
+import Hydra.Langs.Tinkerpop.Coder
 import Hydra.Rewriting
 import qualified Hydra.Langs.Shacl.Coder as Shacl
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Rdf.Utils as RdfUt
+import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PG
+import qualified Hydra.Langs.Tinkerpop.Mappings as PGM
+import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Langs.Rdf.Serde
 import Hydra.Workflow
 
@@ -64,14 +68,39 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
+pgElementsToJson :: [PG.Element String String String] -> String
+pgElementsToJson els = jsonValueToString $ Json.ValueString "TODO"
+
+propertyGraphLastMile :: LastMile (PG.Element String String String)
+propertyGraphLastMile = LastMile typedTermToPropertyGraph pgElementsToJson "json"
+
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
 shaclRdfLastMile :: LastMile Rdf.Description
-shaclRdfLastMile = LastMile termToShaclRdf rdfDescriptionsToNtriples "nt"
+shaclRdfLastMile = LastMile typedTermToShaclRdf rdfDescriptionsToNtriples "nt"
 
-termToShaclRdf :: Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description]
-termToShaclRdf term graph = do
+typedTermToPropertyGraph :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element String String String])
+typedTermToPropertyGraph typ = do
+    adapter <- elementCoder schema typ
+    return $ \term graph -> do
+      el <- coderEncode (adapterCoder adapter) term
+      return [el]
+  where
+    schema = PGM.Schema {
+        PGM.schemaVertexIds = mkCoder Expect.string,
+        PGM.schemaEdgeIds = mkCoder Expect.string,
+        PGM.schemaPropertyTypes = mkCoder $ \t -> pure (),
+        PGM.schemaPropertyValues = mkCoder Expect.string}
+      where
+        mkCoder encode = Coder encode noDecode
+          where
+            noDecode = \_ -> fail "property graph schema decoding not yet supported"
+
+typedTermToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
+typedTermToShaclRdf _ = pure encode
+  where
+    encode term graph = do
         elDescs <- CM.mapM encodeElement $ M.elems $ graphElements graph
         termDescs <- encodeBlankTerm
         return $ L.concat (termDescs:elDescs)
@@ -93,19 +122,24 @@ transformAvroJson format adapter lastMile inFile outFile = do
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter (lastMileEncoder lastMile)) [1..] entities)
+    lmEncoder <- fromFlowIo hydraCore $ lastMileEncoder lastMile (adapterTarget adapter)
+    descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
     writeFile outFile $ (lastMileSerializer lastMile) descs
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
 
-    jsonToTarget inFile adapter termRdfizer index payload = case stringToJsonValue payload of
+    jsonToTarget inFile adapter lmEncoder index payload = case stringToJsonValue payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
         Right json -> withState emptyEnv $ do
+          -- TODO; the core graph is neither the data nor the schema graph
+          let dataGraph = hydraCore
+          let schemaGraph = Just hydraCore
+
           term <- coderEncode (adapterCoder adapter) json
           env <- getState
-          let graph = elementsToGraph hydraCore (Just hydraCore) (M.elems $ avroEnvironmentElements env) -- TODO; schema graph is not the core graph
-          withState hydraCore $ termRdfizer term graph
+          let graph = elementsToGraph dataGraph schemaGraph (M.elems $ avroEnvironmentElements env)
+          withState hydraCore $ lmEncoder term graph
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,

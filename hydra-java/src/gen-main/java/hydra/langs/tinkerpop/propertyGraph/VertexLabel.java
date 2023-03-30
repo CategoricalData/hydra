@@ -1,10 +1,10 @@
-package hydra.langs.tinkerpop.v3;
+package hydra.langs.tinkerpop.propertyGraph;
 
 /**
  * The label of a vertex. The default (null) vertex is represented by the empty string
  */
 public class VertexLabel {
-  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/v3.VertexLabel");
+  public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/tinkerpop/propertyGraph.VertexLabel");
   
   /**
    * The label of a vertex. The default (null) vertex is represented by the empty string
