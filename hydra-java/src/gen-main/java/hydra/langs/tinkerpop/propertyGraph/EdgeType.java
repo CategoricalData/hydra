@@ -8,13 +8,13 @@ public class EdgeType<T> {
   
   public final hydra.langs.tinkerpop.propertyGraph.EdgeLabel label;
   
-  public final hydra.langs.tinkerpop.propertyGraph.VertexType<T> out;
+  public final hydra.langs.tinkerpop.propertyGraph.VertexLabel out;
   
-  public final hydra.langs.tinkerpop.propertyGraph.VertexType<T> in;
+  public final hydra.langs.tinkerpop.propertyGraph.VertexLabel in;
   
   public final java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties;
   
-  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, hydra.langs.tinkerpop.propertyGraph.VertexType<T> out, hydra.langs.tinkerpop.propertyGraph.VertexType<T> in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
+  public EdgeType (hydra.langs.tinkerpop.propertyGraph.EdgeLabel label, hydra.langs.tinkerpop.propertyGraph.VertexLabel out, hydra.langs.tinkerpop.propertyGraph.VertexLabel in, java.util.Map<hydra.langs.tinkerpop.propertyGraph.PropertyKey, T> properties) {
     this.label = label;
     this.out = out;
     this.in = in;
@@ -39,11 +39,11 @@ public class EdgeType<T> {
     return new EdgeType(label, out, in, properties);
   }
   
-  public EdgeType withOut(hydra.langs.tinkerpop.propertyGraph.VertexType<T> out) {
+  public EdgeType withOut(hydra.langs.tinkerpop.propertyGraph.VertexLabel out) {
     return new EdgeType(label, out, in, properties);
   }
   
-  public EdgeType withIn(hydra.langs.tinkerpop.propertyGraph.VertexType<T> in) {
+  public EdgeType withIn(hydra.langs.tinkerpop.propertyGraph.VertexLabel in) {
     return new EdgeType(label, out, in, properties);
   }
   

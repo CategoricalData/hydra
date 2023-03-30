@@ -1,4 +1,6 @@
 module Hydra.Langs.Tinkerpop.TermsToElements (
+  decodeValueSpec,
+  parseValueSpec,
   termToElementsAdapter,
 ) where
 
@@ -112,6 +114,7 @@ parseElementSpec schema spec = case spec of
 
 parseValueSpec :: Show a => ValueSpec -> Flow s (Term a -> Flow s [Term a])
 parseValueSpec spec = case spec of
+  ValueSpecValue -> pure $ \term -> pure [term]
   ValueSpecPattern pat -> parsePattern pat
 --  _ -> fail $ "Unsupported value pattern: " ++ show spec
 
@@ -167,6 +170,7 @@ decodePropertySpec = matchRecord $ \fields -> PropertySpec
 
 decodeValueSpec :: Show a => Term a -> Flow s ValueSpec
 decodeValueSpec = matchInjection [
+  (_ValueSpec_value, \t -> pure ValueSpecValue),
   (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)]
 
 decodeVertexLabel :: Show a => Term a -> Flow s PG.VertexLabel

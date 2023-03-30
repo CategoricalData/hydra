@@ -42,8 +42,8 @@ _EdgeLabel = (Core.Name "hydra/langs/tinkerpop/propertyGraph.EdgeLabel")
 data EdgeType t = 
   EdgeType {
     edgeTypeLabel :: EdgeLabel,
-    edgeTypeOut :: (VertexType t),
-    edgeTypeIn :: (VertexType t),
+    edgeTypeOut :: VertexLabel,
+    edgeTypeIn :: VertexLabel,
     edgeTypeProperties :: (Map PropertyKey t)}
   deriving (Eq, Ord, Read, Show)
 

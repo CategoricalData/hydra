@@ -38,8 +38,8 @@ tinkerpopPropertyGraphModule = Module ns elements [] $
         lambda "t" $
           record [
             "label">: pg "EdgeLabel",
-            "out">: pg "VertexType" @@ "t",
-            "in">: pg "VertexType" @@ "t",
+            "out">: pg "VertexLabel",
+            "in">: pg "VertexLabel",
             "properties">: Types.map (pg "PropertyKey") "t"],
 
       def "Element" $
