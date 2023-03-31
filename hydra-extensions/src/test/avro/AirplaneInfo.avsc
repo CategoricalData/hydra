@@ -1,5 +1,6 @@
 {
   "@label": "hasEngine",
+  "@labels": ["hasEngine", "hasManufacturer"],
   "namespace": "com.example",
   "name": "AirplaneInfo",
   "type": "record",
@@ -13,12 +14,12 @@
       "type": "string"
     },
     {
-      "@exclude": {},
+      "@ignore": {},
       "name": "recordNumber",
       "type": [null, "string"]
     },
     {
-      "@outId": {"pattern": "airplane-${name}"},
+      "@outId": {"label": "Airplane", "pattern": "airplane-${name}"},
       "name": "airplane",
       "type": {
         "name": "AirplaneModel",
@@ -56,7 +57,7 @@
       }
     },
     {
-      "@inId": {"pattern": "airplane-${name}"},
+      "@inId": {"label": "Engine", "pattern": "airplane-${name}"},
       "name": "engine",
       "type": {
         "name": "EngineModel",

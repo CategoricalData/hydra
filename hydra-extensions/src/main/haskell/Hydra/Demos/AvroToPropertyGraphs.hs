@@ -14,7 +14,7 @@ import Hydra.Demos.AvroToPropertyGraphs
 transformAirplaneInfo propertyGraphLastMile
 -}
 
-transformAirplaneInfo :: LastMile a -> IO ()
+transformAirplaneInfo :: LastMile (Graph Kv) x -> IO ()
 transformAirplaneInfo lastMile = do
   pwd <- getCurrentDirectory
   executeAvroTransformWorkflow lastMile $ TransformWorkflow "airplane info"

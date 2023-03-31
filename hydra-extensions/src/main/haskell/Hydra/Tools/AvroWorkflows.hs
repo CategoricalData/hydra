@@ -50,7 +50,7 @@ type TermEncoder x = Term Kv -> Graph Kv -> GraphFlow Kv [x]
 
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
-executeAvroTransformWorkflow :: LastMile x -> TransformWorkflow -> IO ()
+executeAvroTransformWorkflow :: LastMile (Graph Kv) x -> TransformWorkflow -> IO ()
 executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir destDir) = do
     schemaPath <- case schemaSpec of
       SchemaSpecFile p -> pure p
@@ -69,17 +69,17 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementsToJson :: [PG.Element String String String] -> String
-pgElementsToJson els = jsonValueToString $ Json.ValueString "TODO"
+pgElementsToJson :: [PG.Element String String String] -> Flow s String
+pgElementsToJson els = pure $ jsonValueToString $ Json.ValueString "TODO"
 
-propertyGraphLastMile :: LastMile (PG.Element String String String)
+propertyGraphLastMile :: LastMile (Graph Kv) (PG.Element String String String)
 propertyGraphLastMile = LastMile typedTermToPropertyGraph pgElementsToJson "json"
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
-shaclRdfLastMile :: LastMile Rdf.Description
-shaclRdfLastMile = LastMile typedTermToShaclRdf rdfDescriptionsToNtriples "nt"
+shaclRdfLastMile :: LastMile (Graph Kv) Rdf.Description
+shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
 typedTermToPropertyGraph :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element String String String])
 typedTermToPropertyGraph typ = do
@@ -116,7 +116,7 @@ typedTermToShaclRdf _ = pure encode
           else pure []
         notInGraph = L.null $ L.filter (\e -> elementData e == term) $ M.elems $ graphElements graph
 
-transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter Kv -> LastMile x -> FilePath -> FilePath -> IO ()
+transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter Kv -> LastMile (Graph Kv) x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile
@@ -125,7 +125,8 @@ transformAvroJson format adapter lastMile inFile outFile = do
           Jsonl -> L.filter (not . L.null) $ lines contents
     lmEncoder <- fromFlowIo hydraCore $ lastMileEncoder lastMile (adapterTarget adapter)
     descs <- L.concat <$> fromFlowIo hydraCore (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
-    writeFile outFile $ (lastMileSerializer lastMile) descs
+    result <- fromFlowIo hydraCore $ lastMileSerializer lastMile descs
+    writeFile outFile result
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
@@ -147,7 +148,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
 --   and a path to a destination directory, map each input file to a corresponding output file in the
 --   destination directory. This transformation is sensitive to Hydra-specific annotations (primaryKey/foreignKey)
 --   in the Avro schema, which tell Hydra which objects to treat as elements and which fields are references to elements.
-transformAvroJsonDirectory :: LastMile x -> FilePath -> FilePath -> FilePath -> IO ()
+transformAvroJsonDirectory :: LastMile (Graph Kv) x -> FilePath -> FilePath -> FilePath -> IO ()
 transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
     createDirectoryIfMissing True destDir
     schemaStr <- readFile schemaPath

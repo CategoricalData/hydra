@@ -23,16 +23,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
 
     elements = [
 
---      def "EdgeSchema" $
---        doc "A schema enabling encoding and decoding of edges as terms" $
---        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
---          record [
---            "label">: v3 "EdgeLabel",
---            "id">: mappings "ValueSchema" @@ "s" @@ "a" @@ "e",
---            "out">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
---            "in">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
---            "properties">: list $ mappings "PropertySchema" @@ "s" @@ "a" @@ "p"],
-
       def "EdgeSpec" $
         doc "A mapping specification producing edges of a specified label." $
         record [
@@ -58,13 +48,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
           "vertex">: mappings "VertexSpec",
           "edge">: mappings "EdgeSpec"],
 
---      def "PropertySchema" $
---        doc "A schema enabling encoding and decoding of property values as terms" $
---        lambda "s" $ lambda "a" $ lambda "p" $
---          record [
---            "key">: v3 "PropertyKey",
---            "value">: mappings "ValueSchema" @@ "s" @@ "a" @@ "p"],
-
       def "PropertySpec" $
         doc "A mapping specification producing properties of a specified key, and values of the appropriate type." $
         record [
@@ -83,18 +66,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
             "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p"],
 
---      def "Schema" $
---        doc "A set of vertex and edge schemas" $
---        lambda "s" $ lambda "a" $ lambda "v" $ lambda "e" $ lambda "p" $
---        record [
---          "vertices">: list $ mappings "VertexSchema" @@ "s" @@ "a" @@ "v" @@ "p",
---          "edges">: list $ mappings "EdgeSchema" @@ "s" @@ "a" @@ "v" @@ "e" @@ "p"],
-
---      def "ValueSchema" $
---        doc "A schema enabling encoding and decoding of ids or property values" $
---        lambda "s" $ lambda "a" $ lambda "p" $
---          compute "Coder" @@ "s" @@ "s" @@ "p" @@ (core "Term" @@ "a"),
-
       def "ValueSpec" $
         doc "A mapping specification producing values (usually literal values) whose type is understood in context" $
         union [
@@ -104,14 +75,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
           "pattern">:
             doc "A compact path representing the function, e.g. ${}/engineInfo/model/name"
             string],
-
---      def "VertexSchema" $
---        doc "A schema enabling encoding and decoding of vertices as terms" $
---        lambda "s" $ lambda "a" $ lambda "v" $ lambda "p" $
---          record [
---            "label">: v3 "VertexLabel",
---            "id">: mappings "ValueSchema" @@ "s" @@ "a" @@ "v",
---            "properties">: list $ mappings "PropertySchema" @@ "s" @@ "a" @@ "p"],
 
       def "VertexSpec" $
         doc "A mapping specification producing vertices of a specified label" $
