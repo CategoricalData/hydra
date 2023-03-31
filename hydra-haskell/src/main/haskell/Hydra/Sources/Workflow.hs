@@ -36,14 +36,14 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
 
       def "LastMile" $
         doc "The last mile of a transformation, which encodes and serializes terms to a file" $
-        lambda "a" $ record [
+        lambda "s" $ lambda "a" $ record [
           "encoder">:
             doc "An encoder for terms to a list of output objects" $
-            core "Type" @@ compute "Kv" --> compute "Flow" @@ (graph "Graph" @@ compute "Kv")
-              @@ (core "Term" @@ compute "Kv" --> graph "Graph" @@ compute "Kv" --> compute "Flow" @@ (graph "Graph" @@ compute "Kv") @@ list "a"),
+            core "Type" @@ compute "Kv" --> compute "Flow" @@ "s"
+              @@ (core "Term" @@ compute "Kv" --> graph "Graph" @@ compute "Kv" --> compute "Flow" @@ "s" @@ list "a"),
           "serializer">:
             doc "A function which serializes a list of output objects to a string representation" $
-            list "a" --> string,
+            list "a" --> compute "Flow" @@ "s" @@ string,
           "fileExtension">:
             doc "A file extension for the generated file(s)"
             string],

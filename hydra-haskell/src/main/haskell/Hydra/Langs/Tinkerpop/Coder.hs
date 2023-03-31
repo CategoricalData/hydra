@@ -30,7 +30,7 @@ data ProjectionSpec a = ProjectionSpec {
   projectionSpecField :: FieldType a,
   projectionSpecValues :: ValueSpec}
 
-_exclude = "exclude" :: String
+_ignore = "ignore" :: String
 _id = "id" :: String
 _in = "in" :: String
 _inId = "inId" :: String
@@ -149,7 +149,7 @@ elementCoder schema typ = case stripType typ of
       where
         isPropField field = not (isExcluded || isId || isOut || isIn)
           where
-            isExcluded = hasAnnotation _exclude
+            isExcluded = hasAnnotation _ignore
             isId = hasAnnotation _id || hasName _id
             isOut = hasAnnotation _out || hasAnnotation _outId || hasName _out || hasName _outId
             isIn = hasAnnotation _in || hasAnnotation _inId || hasName _in || hasName _inId
