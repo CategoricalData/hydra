@@ -23,6 +23,19 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
 
     elements = [
 
+      def "AnnotationSchema" $
+        doc "Configurable annotations for property graph mapping specifications" $
+        record [
+          "vertexId">: string,
+          "edgeId">: string,
+          "outVertex">: string,
+          "inVertex">: string,
+          "outVertexId">: string,
+          "inVertexId">: string,
+          "vertexLabel">: string,
+          "edgeLabel">: string,
+          "ignore">: string],
+
       def "EdgeSpec" $
         doc "A mapping specification producing edges of a specified label." $
         record [
@@ -64,7 +77,8 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
             "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "e",
             "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
-            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p"],
+            "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p",
+            "annotations">: mappings "AnnotationSchema"],
 
       def "ValueSpec" $
         doc "A mapping specification producing values (usually literal values) whose type is understood in context" $

@@ -9,6 +9,40 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | Configurable annotations for property graph mapping specifications
+data AnnotationSchema = 
+  AnnotationSchema {
+    annotationSchemaVertexId :: String,
+    annotationSchemaEdgeId :: String,
+    annotationSchemaOutVertex :: String,
+    annotationSchemaInVertex :: String,
+    annotationSchemaOutVertexId :: String,
+    annotationSchemaInVertexId :: String,
+    annotationSchemaVertexLabel :: String,
+    annotationSchemaEdgeLabel :: String,
+    annotationSchemaIgnore :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_AnnotationSchema = (Core.Name "hydra/langs/tinkerpop/mappings.AnnotationSchema")
+
+_AnnotationSchema_vertexId = (Core.FieldName "vertexId")
+
+_AnnotationSchema_edgeId = (Core.FieldName "edgeId")
+
+_AnnotationSchema_outVertex = (Core.FieldName "outVertex")
+
+_AnnotationSchema_inVertex = (Core.FieldName "inVertex")
+
+_AnnotationSchema_outVertexId = (Core.FieldName "outVertexId")
+
+_AnnotationSchema_inVertexId = (Core.FieldName "inVertexId")
+
+_AnnotationSchema_vertexLabel = (Core.FieldName "vertexLabel")
+
+_AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
+
+_AnnotationSchema_ignore = (Core.FieldName "ignore")
+
 -- | A mapping specification producing edges of a specified label.
 data EdgeSpec = 
   EdgeSpec {
@@ -68,7 +102,8 @@ data Schema s a t v e p =
     schemaVertexIds :: (Compute.Coder s s (Core.Term a) v),
     schemaEdgeIds :: (Compute.Coder s s (Core.Term a) e),
     schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) t),
-    schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p)}
+    schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p),
+    schemaAnnotations :: AnnotationSchema}
 
 _Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
 
@@ -79,6 +114,8 @@ _Schema_edgeIds = (Core.FieldName "edgeIds")
 _Schema_propertyTypes = (Core.FieldName "propertyTypes")
 
 _Schema_propertyValues = (Core.FieldName "propertyValues")
+
+_Schema_annotations = (Core.FieldName "annotations")
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 

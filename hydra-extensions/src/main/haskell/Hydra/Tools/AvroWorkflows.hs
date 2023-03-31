@@ -5,6 +5,7 @@ module Hydra.Tools.AvroWorkflows (
   JsonPayloadFormat(..),
   TermEncoder(..),
   LastMile(..),
+  defaultTinkerpopAnnotations,
   executeAvroTransformWorkflow,
   propertyGraphLastMile,
   rdfDescriptionsToNtriples,
@@ -49,6 +50,18 @@ data JsonPayloadFormat = Json | Jsonl
 type TermEncoder x = Term Kv -> Graph Kv -> GraphFlow Kv [x]
 
 
+defaultTinkerpopAnnotations :: PGM.AnnotationSchema
+defaultTinkerpopAnnotations = PGM.AnnotationSchema {
+  PGM.annotationSchemaVertexId = "id",
+  PGM.annotationSchemaEdgeId = "id",
+  PGM.annotationSchemaOutVertex = "out",
+  PGM.annotationSchemaInVertex = "in",
+  PGM.annotationSchemaOutVertexId = "outId",
+  PGM.annotationSchemaInVertexId = "inId",
+  PGM.annotationSchemaVertexLabel = "label",
+  PGM.annotationSchemaEdgeLabel = "label",
+  PGM.annotationSchemaIgnore = "ignore"}
+
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
 executeAvroTransformWorkflow :: LastMile (Graph Kv) x -> TransformWorkflow -> IO ()
 executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir destDir) = do
@@ -92,7 +105,8 @@ typedTermToPropertyGraph typ = do
         PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string,
         PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string,
         PGM.schemaPropertyTypes = mkCoder "encode property type" $ \t -> pure (),
-        PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string}
+        PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string,
+        PGM.schemaAnnotations = defaultTinkerpopAnnotations}
       where
         mkCoder lab encode = Coder (withTrace lab . encode) noDecode
           where

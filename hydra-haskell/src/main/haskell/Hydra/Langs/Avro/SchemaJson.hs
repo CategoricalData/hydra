@@ -159,6 +159,8 @@ decodeSchema v = case v of
   _ -> unexpected "JSON array, object, or string" v
 
 getAnnotations :: M.Map String Json.Value -> M.Map String Json.Value
-getAnnotations = M.fromList . L.filter isAnnotation . M.toList
+getAnnotations = M.fromList . Y.catMaybes . fmap toPair . M.toList
   where
-    isAnnotation (k, _) = L.take 1 k == "@"
+    toPair (k, v) = if L.take 1 k == "@"
+      then Just (L.drop 1 k, v)
+      else Nothing

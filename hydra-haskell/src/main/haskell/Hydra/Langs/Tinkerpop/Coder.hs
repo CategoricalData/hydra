@@ -30,14 +30,6 @@ data ProjectionSpec a = ProjectionSpec {
   projectionSpecField :: FieldType a,
   projectionSpecValues :: ValueSpec}
 
-_ignore = "ignore" :: String
-_id = "id" :: String
-_in = "in" :: String
-_inId = "inId" :: String
-_label = "label" :: String
-_out = "out" :: String
-_outId = "outId" :: String
-
 check :: Bool -> Flow s () -> Flow s ()
 check b err = if b then pure () else err
 
@@ -71,14 +63,8 @@ edgeCoder schema typ tname label idAdapter outAdapter inAdapter propAdapters = A
 elementCoder :: Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
 elementCoder schema typ = case stripType typ of
     TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
-      labelStr <- findLabelString name
-
-      idProj <- findId name fields
-      outProj <- findProjection name _out fields
-      inProj <- findProjection name _in fields
-
-      let propFields = findPropertyFields fields
-      propAdapters <- CM.mapM (propertyAdapter schema) propFields
+      outProj <- findProjection name "out" outVertexKey outVertexIdKey fields
+      inProj <- findProjection name "in" inVertexKey inVertexIdKey fields
 
       kind <- case getTypeAnnotation "kind" typ of
         Nothing -> if Y.isNothing outProj || Y.isNothing inProj
@@ -92,48 +78,62 @@ elementCoder schema typ = case stripType typ of
               then fail $ "Record type marked as an edge type, but missing 'out' and/or 'in' fields: " ++ unName name
               else return PG.ElementKindEdge
 
+      let propFields = findPropertyFields kind fields
+      propAdapters <- CM.mapM (propertyAdapter schema) propFields
+
       case kind of
         PG.ElementKindVertex -> do
-            idAdapter <- projectionAdapter (schemaVertexIds schema) idProj "id"
-            return $ vertexCoder schema typ name (PG.VertexLabel labelStr) idAdapter propAdapters
+          label <- PG.VertexLabel <$> findLabelString name vertexLabelKey
+          idProj <- findId name vertexIdKey fields
+          idAdapter <- projectionAdapter (schemaVertexIds schema) idProj "id"
+          return $ vertexCoder schema typ name label idAdapter propAdapters
         PG.ElementKindEdge -> do
-            idAdapter <- projectionAdapter (schemaEdgeIds schema) idProj "id"
-            outAdapter <- projectionAdapter (schemaVertexIds schema) (Y.fromJust outProj) _out
-            inAdapter <- projectionAdapter (schemaVertexIds schema) (Y.fromJust inProj) _in
-            return $ edgeCoder schema typ name (PG.EdgeLabel labelStr) idAdapter outAdapter inAdapter propAdapters
+          label <- PG.EdgeLabel <$> findLabelString name edgeLabelKey
+          idProj <- findId name edgeIdKey fields
+          idAdapter <- projectionAdapter (schemaEdgeIds schema) idProj "id"
+          outAdapter <- projectionAdapter (schemaVertexIds schema) (Y.fromJust outProj) "out"
+          inAdapter <- projectionAdapter (schemaVertexIds schema) (Y.fromJust inProj) "in"
+          return $ edgeCoder schema typ name label idAdapter outAdapter inAdapter propAdapters
 
     _ -> unexpected "record type" typ
   where
-    annKey s = "@" ++ s
+    vertexIdKey = annotationSchemaVertexId $ schemaAnnotations schema
+    edgeIdKey = annotationSchemaEdgeId $ schemaAnnotations schema
+    outVertexKey = annotationSchemaOutVertex $ schemaAnnotations schema
+    inVertexKey = annotationSchemaInVertex $ schemaAnnotations schema
+    outVertexIdKey = annotationSchemaOutVertexId $ schemaAnnotations schema
+    inVertexIdKey = annotationSchemaInVertexId $ schemaAnnotations schema
+    vertexLabelKey = annotationSchemaVertexLabel $ schemaAnnotations schema
+    edgeLabelKey = annotationSchemaEdgeLabel $ schemaAnnotations schema
+    ignoreKey = annotationSchemaIgnore $ schemaAnnotations schema
 
-    findLabelString tname = case getTypeAnnotation (annKey _label) typ of
+    findLabelString tname labelKey = case getTypeAnnotation labelKey typ of
       Nothing -> pure $ unName tname
       Just labelTerm -> Expect.string labelTerm
 
-    findId tname fields = withTrace "find id field" $ do
-      mid <- findField tname _id fields
+    findId tname idKey fields = withTrace "find id field" $ do
+      mid <- findField tname idKey fields
       case mid of
-        Nothing -> fail $ "no " ++ _id ++ "field"
+        Nothing -> fail $ "no " ++ idKey ++ "field"
         Just mi -> do
-          spec <- case getTypeAnnotation (annKey _id) (fieldTypeType mi) of
+          spec <- case getTypeAnnotation idKey (fieldTypeType mi) of
             Nothing -> pure ValueSpecValue
             Just t -> decodeValueSpec t
           return $ ProjectionSpec ProjectionTypeId mi spec
 
-    findProjection tname key fields = withTrace ("find " ++ show key ++ " projection") $ do
-      let idKey = key ++ "Id"
-      mvalue <- findField tname key fields
+    findProjection tname key valKey idKey fields = withTrace ("find " ++ show key ++ " projection") $ do
+      mvalue <- findField tname valKey fields
       mid <- findField tname idKey fields
       case (mvalue, mid) of
         (Nothing, Nothing) -> pure Nothing
         (Just mv, Nothing) -> return $ Just $ ProjectionSpec ProjectionTypeValue mv ValueSpecValue
         (Nothing, Just mi) -> do
-          spec <- decodeValueSpec $ Y.fromJust $ getTypeAnnotation (annKey idKey) (fieldTypeType mi)
+          spec <- decodeValueSpec $ Y.fromJust $ getTypeAnnotation idKey (fieldTypeType mi)
           return $ Just $ ProjectionSpec ProjectionTypeId mi spec
-        _ -> fail $ "Found both " ++ key ++ " and " ++ idKey
+        _ -> fail $ "Found both " ++ valKey ++ " and " ++ idKey
 
     findField tname key fields = withTrace ("find " ++ show key ++ " field") $ do
-      let explicit = L.filter (\f -> Y.isJust $ getTypeAnnotation (annKey key) $ fieldTypeType f) fields
+      let explicit = L.filter (\f -> Y.isJust $ getTypeAnnotation key $ fieldTypeType f) fields
       if L.length explicit > 1
         then fail $ "Multiple fields marked as '" ++ key ++ "' in record type " ++ unName tname ++ ": "
           ++ (L.intercalate ", " (unFieldName . fieldTypeName <$> explicit))
@@ -145,15 +145,16 @@ elementCoder schema typ = case stripType typ of
             else return $ Just $ L.head implicit
         else return $ Just $ L.head explicit
 
-    findPropertyFields fields = L.filter isPropField fields
+    findPropertyFields kind fields = L.filter isPropField fields
       where
-        isPropField field = not (isExcluded || isId || isOut || isIn)
+        isPropField field = not (hasSpecialAnnotation || hasSpecialFieldName)
           where
-            isExcluded = hasAnnotation _ignore
-            isId = hasAnnotation _id || hasName _id
-            isOut = hasAnnotation _out || hasAnnotation _outId || hasName _out || hasName _outId
-            isIn = hasAnnotation _in || hasAnnotation _inId || hasName _in || hasName _inId
-            hasAnnotation key = Y.isJust $ getTypeAnnotation (annKey key) $ fieldTypeType field
+            hasSpecialAnnotation = L.foldl (\b k -> b || hasAnnotation k) False (ignoreKey:specialKeys)
+            hasSpecialFieldName = L.foldl (\b n -> b || hasName n) False specialKeys
+            specialKeys = case kind of
+              PG.ElementKindVertex -> [vertexIdKey]
+              PG.ElementKindEdge -> [edgeIdKey, outVertexKey, outVertexIdKey, inVertexKey, inVertexIdKey]
+            hasAnnotation key = Y.isJust $ getTypeAnnotation key $ fieldTypeType field
             hasName fname = fieldTypeName field == FieldName fname
 
     projectionAdapter coder proj key = do
