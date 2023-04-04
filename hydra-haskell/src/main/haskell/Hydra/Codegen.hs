@@ -16,6 +16,7 @@ module Hydra.Codegen (
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import qualified Hydra.Langs.Graphql.Coder as Graphql
 import qualified Hydra.Langs.Haskell.Coder as Haskell
 import qualified Hydra.Langs.Java.Coder as Java
 import qualified Hydra.Langs.Json.Coder as Json
@@ -214,6 +215,9 @@ utilModules :: [Module Kv]
 utilModules = [
   hydraPrintingModule,
   hydraBasicsModule]
+
+writeGraphql :: [Module Kv] -> FP.FilePath -> IO ()
+writeGraphql = generateSources Graphql.printModule
 
 writeHaskell :: [Module Kv] -> FilePath -> IO ()
 writeHaskell = generateSources Haskell.printModule
