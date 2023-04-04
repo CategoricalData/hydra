@@ -67,7 +67,7 @@ getState = Flow q
         FlowState v1 s1 t1 = unFlow f s0 t0
 
 maxTraceDepth :: Int
-maxTraceDepth = 30
+maxTraceDepth = 50
 
 pushError :: String -> Trace -> Trace
 pushError msg t = t {traceMessages = errorMsg:(traceMessages t)}

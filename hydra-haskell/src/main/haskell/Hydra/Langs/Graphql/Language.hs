@@ -27,8 +27,6 @@ graphqlLanguage = Language (LanguageName "hydra/langs/graphql") $ LanguageConstr
     TermVariantRecord,
     TermVariantUnion], -- Unions are supported only in the form of enums
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantApplication,
-    TypeVariantLambda,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantWrap,
@@ -44,4 +42,7 @@ graphqlLanguage = Language (LanguageName "hydra/langs/graphql") $ LanguageConstr
           TypeRecord (RowType name _ fields) -> L.null fields || name == _UnitType
           _ -> False
         isEnumField = isUnitType . fieldTypeType
+    TypeOptional et -> case stripType et of
+      TypeOptional _ -> False  -- No encoding for optionals within optionals
+      _ -> True
     _ -> True}

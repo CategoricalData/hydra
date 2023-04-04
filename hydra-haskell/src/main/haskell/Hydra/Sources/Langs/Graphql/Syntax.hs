@@ -237,8 +237,7 @@ documentDefinitions = [
     list[extend_, scalar_, "Name", directivesConst]],
 
   define "ObjectTypeDefinition" [
-    list[descriptionOpt, type_, "Name", opt"ImplementsInterfaces", directivesConstOpt, "FieldsDefinition"],
-    list[descriptionOpt, type_, "Name", opt"ImplementsInterfaces", directivesConstOpt {- [lookahead != lcurly_] -}]],
+    list[descriptionOpt, type_, "Name", opt"ImplementsInterfaces", directivesConstOpt, opt("FieldsDefinition") {- [lookahead != lcurly_] -}]],
 
   define "ObjectTypeExtension" [
     list[extend_, type_, "Name", opt"ImplementsInterfaces", directivesConstOpt, "FieldsDefinition"],
@@ -282,8 +281,7 @@ documentDefinitions = [
     list[extend_, union_, "Name", directivesConst]],
 
   define "EnumTypeDefinition" [
-    list[descriptionOpt, enum_, "Name", directivesConstOpt, "EnumValuesDefinition"],
-    list[descriptionOpt, enum_, directivesConstOpt {- [lookahead != lcurly_] -}]],
+    list[descriptionOpt, enum_, "Name", directivesConstOpt, opt("EnumValuesDefinition")  {- [lookahead != lcurly_] -}]],
 
   define "EnumValuesDefinition" [
     list[lcurly_, star"EnumValueDefinition", rcurly_]],

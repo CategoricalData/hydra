@@ -7,6 +7,7 @@ module Hydra.Codegen (
   mainModules,
   modulesToGraph,
   testModules,
+  writeGraphql,
   writeHaskell,
   writeJava,
   writePdl,
