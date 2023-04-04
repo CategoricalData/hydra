@@ -626,54 +626,25 @@ _ScalarTypeExtension_name = (Core.FieldName "name")
 _ScalarTypeExtension_directives = (Core.FieldName "directives")
 
 data ObjectTypeDefinition = 
-  ObjectTypeDefinitionSequence ObjectTypeDefinition_Sequence |
-  ObjectTypeDefinitionSequence2 ObjectTypeDefinition_Sequence2
+  ObjectTypeDefinition {
+    objectTypeDefinitionDescription :: (Maybe Description),
+    objectTypeDefinitionName :: Name,
+    objectTypeDefinitionImplementsInterfaces :: (Maybe ImplementsInterfaces),
+    objectTypeDefinitionDirectives :: (Maybe Directives),
+    objectTypeDefinitionFieldsDefinition :: (Maybe FieldsDefinition)}
   deriving (Eq, Ord, Read, Show)
 
 _ObjectTypeDefinition = (Core.Name "hydra/langs/graphql/syntax.ObjectTypeDefinition")
 
-_ObjectTypeDefinition_sequence = (Core.FieldName "sequence")
+_ObjectTypeDefinition_description = (Core.FieldName "description")
 
-_ObjectTypeDefinition_sequence2 = (Core.FieldName "sequence2")
+_ObjectTypeDefinition_name = (Core.FieldName "name")
 
-data ObjectTypeDefinition_Sequence = 
-  ObjectTypeDefinition_Sequence {
-    objectTypeDefinition_SequenceDescription :: (Maybe Description),
-    objectTypeDefinition_SequenceName :: Name,
-    objectTypeDefinition_SequenceImplementsInterfaces :: (Maybe ImplementsInterfaces),
-    objectTypeDefinition_SequenceDirectives :: (Maybe Directives),
-    objectTypeDefinition_SequenceFieldsDefinition :: FieldsDefinition}
-  deriving (Eq, Ord, Read, Show)
+_ObjectTypeDefinition_implementsInterfaces = (Core.FieldName "implementsInterfaces")
 
-_ObjectTypeDefinition_Sequence = (Core.Name "hydra/langs/graphql/syntax.ObjectTypeDefinition.Sequence")
+_ObjectTypeDefinition_directives = (Core.FieldName "directives")
 
-_ObjectTypeDefinition_Sequence_description = (Core.FieldName "description")
-
-_ObjectTypeDefinition_Sequence_name = (Core.FieldName "name")
-
-_ObjectTypeDefinition_Sequence_implementsInterfaces = (Core.FieldName "implementsInterfaces")
-
-_ObjectTypeDefinition_Sequence_directives = (Core.FieldName "directives")
-
-_ObjectTypeDefinition_Sequence_fieldsDefinition = (Core.FieldName "fieldsDefinition")
-
-data ObjectTypeDefinition_Sequence2 = 
-  ObjectTypeDefinition_Sequence2 {
-    objectTypeDefinition_Sequence2Description :: (Maybe Description),
-    objectTypeDefinition_Sequence2Name :: Name,
-    objectTypeDefinition_Sequence2ImplementsInterfaces :: (Maybe ImplementsInterfaces),
-    objectTypeDefinition_Sequence2Directives :: (Maybe Directives)}
-  deriving (Eq, Ord, Read, Show)
-
-_ObjectTypeDefinition_Sequence2 = (Core.Name "hydra/langs/graphql/syntax.ObjectTypeDefinition.Sequence2")
-
-_ObjectTypeDefinition_Sequence2_description = (Core.FieldName "description")
-
-_ObjectTypeDefinition_Sequence2_name = (Core.FieldName "name")
-
-_ObjectTypeDefinition_Sequence2_implementsInterfaces = (Core.FieldName "implementsInterfaces")
-
-_ObjectTypeDefinition_Sequence2_directives = (Core.FieldName "directives")
+_ObjectTypeDefinition_fieldsDefinition = (Core.FieldName "fieldsDefinition")
 
 data ObjectTypeExtension = 
   ObjectTypeExtensionSequence ObjectTypeExtension_Sequence |
@@ -1026,45 +997,22 @@ _UnionTypeExtension_Sequence2_name = (Core.FieldName "name")
 _UnionTypeExtension_Sequence2_directives = (Core.FieldName "directives")
 
 data EnumTypeDefinition = 
-  EnumTypeDefinitionSequence EnumTypeDefinition_Sequence |
-  EnumTypeDefinitionSequence2 EnumTypeDefinition_Sequence2
+  EnumTypeDefinition {
+    enumTypeDefinitionDescription :: (Maybe Description),
+    enumTypeDefinitionName :: Name,
+    enumTypeDefinitionDirectives :: (Maybe Directives),
+    enumTypeDefinitionEnumValuesDefinition :: (Maybe EnumValuesDefinition)}
   deriving (Eq, Ord, Read, Show)
 
 _EnumTypeDefinition = (Core.Name "hydra/langs/graphql/syntax.EnumTypeDefinition")
 
-_EnumTypeDefinition_sequence = (Core.FieldName "sequence")
+_EnumTypeDefinition_description = (Core.FieldName "description")
 
-_EnumTypeDefinition_sequence2 = (Core.FieldName "sequence2")
+_EnumTypeDefinition_name = (Core.FieldName "name")
 
-data EnumTypeDefinition_Sequence = 
-  EnumTypeDefinition_Sequence {
-    enumTypeDefinition_SequenceDescription :: (Maybe Description),
-    enumTypeDefinition_SequenceName :: Name,
-    enumTypeDefinition_SequenceDirectives :: (Maybe Directives),
-    enumTypeDefinition_SequenceEnumValuesDefinition :: EnumValuesDefinition}
-  deriving (Eq, Ord, Read, Show)
+_EnumTypeDefinition_directives = (Core.FieldName "directives")
 
-_EnumTypeDefinition_Sequence = (Core.Name "hydra/langs/graphql/syntax.EnumTypeDefinition.Sequence")
-
-_EnumTypeDefinition_Sequence_description = (Core.FieldName "description")
-
-_EnumTypeDefinition_Sequence_name = (Core.FieldName "name")
-
-_EnumTypeDefinition_Sequence_directives = (Core.FieldName "directives")
-
-_EnumTypeDefinition_Sequence_enumValuesDefinition = (Core.FieldName "enumValuesDefinition")
-
-data EnumTypeDefinition_Sequence2 = 
-  EnumTypeDefinition_Sequence2 {
-    enumTypeDefinition_Sequence2Description :: (Maybe Description),
-    enumTypeDefinition_Sequence2Directives :: (Maybe Directives)}
-  deriving (Eq, Ord, Read, Show)
-
-_EnumTypeDefinition_Sequence2 = (Core.Name "hydra/langs/graphql/syntax.EnumTypeDefinition.Sequence2")
-
-_EnumTypeDefinition_Sequence2_description = (Core.FieldName "description")
-
-_EnumTypeDefinition_Sequence2_directives = (Core.FieldName "directives")
+_EnumTypeDefinition_enumValuesDefinition = (Core.FieldName "enumValuesDefinition")
 
 newtype EnumValuesDefinition = 
   EnumValuesDefinition {
