@@ -85,22 +85,6 @@ assignSchemas mod = do
         Nothing -> return el
         Just typ -> return el {elementSchema = epsilonEncodeType typ}
 
-coreModules :: [Module Kv]
-coreModules = [
-  hydraAstModule,
-  haskellAstModule,
-  hydraCodersModule,
-  hydraCoreModule,
-  hydraComputeModule,
-  hydraGraphModule,
-  hydraMantleModule,
-  hydraModuleModule,
-  hydraGrammarModule,
-  hydraWorkflowModule,
---  hydraMonadsModule,
-  hydraPhantomsModule,
-  jsonModelModule]
-
 findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
