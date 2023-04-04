@@ -1,85 +1,50 @@
 package hydra.langs.graphql.syntax;
 
-public abstract class EnumTypeDefinition {
+public class EnumTypeDefinition {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/graphql/syntax.EnumTypeDefinition");
   
-  private EnumTypeDefinition () {
+  public final java.util.Optional<hydra.langs.graphql.syntax.Description> description;
   
+  public final hydra.langs.graphql.syntax.Name name;
+  
+  public final java.util.Optional<hydra.langs.graphql.syntax.Directives> directives;
+  
+  public final java.util.Optional<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition;
+  
+  public EnumTypeDefinition (java.util.Optional<hydra.langs.graphql.syntax.Description> description, hydra.langs.graphql.syntax.Name name, java.util.Optional<hydra.langs.graphql.syntax.Directives> directives, java.util.Optional<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
+    this.description = description;
+    this.name = name;
+    this.directives = directives;
+    this.enumValuesDefinition = enumValuesDefinition;
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
-  
-  public interface Visitor<R> {
-    R visit(Sequence instance) ;
-    
-    R visit(Sequence2 instance) ;
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof EnumTypeDefinition)) {
+      return false;
+    }
+    EnumTypeDefinition o = (EnumTypeDefinition) (other);
+    return description.equals(o.description) && name.equals(o.name) && directives.equals(o.directives) && enumValuesDefinition.equals(o.enumValuesDefinition);
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(EnumTypeDefinition instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(Sequence instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Sequence2 instance) {
-      return otherwise((instance));
-    }
+  @Override
+  public int hashCode() {
+    return 2 * description.hashCode() + 3 * name.hashCode() + 5 * directives.hashCode() + 7 * enumValuesDefinition.hashCode();
   }
   
-  public static final class Sequence extends hydra.langs.graphql.syntax.EnumTypeDefinition {
-    public final hydra.langs.graphql.syntax.EnumTypeDefinition_Sequence value;
-    
-    public Sequence (hydra.langs.graphql.syntax.EnumTypeDefinition_Sequence value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Sequence)) {
-        return false;
-      }
-      Sequence o = (Sequence) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public EnumTypeDefinition withDescription(java.util.Optional<hydra.langs.graphql.syntax.Description> description) {
+    return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
   
-  public static final class Sequence2 extends hydra.langs.graphql.syntax.EnumTypeDefinition {
-    public final hydra.langs.graphql.syntax.EnumTypeDefinition_Sequence2 value;
-    
-    public Sequence2 (hydra.langs.graphql.syntax.EnumTypeDefinition_Sequence2 value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Sequence2)) {
-        return false;
-      }
-      Sequence2 o = (Sequence2) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
+  public EnumTypeDefinition withName(hydra.langs.graphql.syntax.Name name) {
+    return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
+  }
+  
+  public EnumTypeDefinition withDirectives(java.util.Optional<hydra.langs.graphql.syntax.Directives> directives) {
+    return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
+  }
+  
+  public EnumTypeDefinition withEnumValuesDefinition(java.util.Optional<hydra.langs.graphql.syntax.EnumValuesDefinition> enumValuesDefinition) {
+    return new EnumTypeDefinition(description, name, directives, enumValuesDefinition);
   }
 }
