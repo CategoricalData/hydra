@@ -83,28 +83,34 @@ encodeLiteralType lt = G.NamedType . G.Name <$> case lt of
 
 encodeNamedType :: (Ord a, Read a, Show a) => Element a -> Type a -> GraphFlow a G.TypeDefinition
 encodeNamedType el typ = do
-  g <- getState
-  let cx = AdapterContext g graphqlLanguage M.empty
-  ad <- withState cx $ termAdapter typ
-  case stripType (adapterTarget ad) of
-    TypeRecord rt -> do
-      gfields <- CM.mapM encodeFieldType $ rowTypeFields rt
-      desc <- descriptionFromType typ
-      return $ G.TypeDefinitionObject $ G.ObjectTypeDefinition {
-        G.objectTypeDefinitionDescription = desc,
-        G.objectTypeDefinitionName = encodeTypeName $ elementName el,
-        G.objectTypeDefinitionImplementsInterfaces = Nothing,
-        G.objectTypeDefinitionDirectives = Nothing,
-        G.objectTypeDefinitionFieldsDefinition = Just $ G.FieldsDefinition gfields}
-    TypeUnion rt -> do
-      values <- CM.mapM encodeEnumFieldType $ rowTypeFields rt
-      desc <- descriptionFromType typ
-      return $ G.TypeDefinitionEnum $ G.EnumTypeDefinition {
-        G.enumTypeDefinitionDescription = desc,
-        G.enumTypeDefinitionName = encodeTypeName $ elementName el,
-        G.enumTypeDefinitionDirectives = Nothing,
-        G.enumTypeDefinitionEnumValuesDefinition = Just $ G.EnumValuesDefinition values}
-    _ -> unexpected "record or union type" typ
+    g <- getState
+    let cx = AdapterContext g graphqlLanguage M.empty
+    ad <- withState cx $ termAdapter typ
+    case stripType (adapterTarget ad) of
+      TypeRecord rt -> do
+        gfields <- CM.mapM encodeFieldType $ rowTypeFields rt
+        desc <- descriptionFromType typ
+        return $ G.TypeDefinitionObject $ G.ObjectTypeDefinition {
+          G.objectTypeDefinitionDescription = desc,
+          G.objectTypeDefinitionName = encodeTypeName $ elementName el,
+          G.objectTypeDefinitionImplementsInterfaces = Nothing,
+          G.objectTypeDefinitionDirectives = Nothing,
+          G.objectTypeDefinitionFieldsDefinition = Just $ G.FieldsDefinition gfields}
+      TypeUnion rt -> do
+        values <- CM.mapM encodeEnumFieldType $ rowTypeFields rt
+        desc <- descriptionFromType typ
+        return $ G.TypeDefinitionEnum $ G.EnumTypeDefinition {
+          G.enumTypeDefinitionDescription = desc,
+          G.enumTypeDefinitionName = encodeTypeName $ elementName el,
+          G.enumTypeDefinitionDirectives = Nothing,
+          G.enumTypeDefinitionEnumValuesDefinition = Just $ G.EnumValuesDefinition values}
+      TypeList _ -> wrapAsRecord
+      TypeLiteral _ -> wrapAsRecord
+      TypeVariable _ -> wrapAsRecord
+      t -> unexpected "record or union type" t
+  where
+    wrapAsRecord = encodeNamedType el $ TypeRecord $ RowType (elementName el) Nothing [
+      FieldType (FieldName "value") typ]
 
 encodeTerm :: (Eq a, Ord a, Read a, Show a) => Term a -> GraphFlow a ()
 encodeTerm term = fail "not yet implemented"
@@ -117,7 +123,8 @@ encodeType typ = case stripType typ of
         TypeRecord rt -> forRowType rt
         TypeUnion rt -> forRowType rt
         TypeWrap name -> forName name
-        _ -> unexpected "GraphQL-compatible type" typ
+        TypeVariable name -> forName name
+        t -> unexpected "GraphQL-compatible type" t
       where
         forName = pure . G.TypeNamed . G.NamedType . encodeTypeName
         forRowType = forName . rowTypeTypeName
@@ -134,6 +141,6 @@ encodeType typ = case stripType typ of
       where
         forName = pure . G.NonNullTypeNamed . G.NamedType . encodeTypeName
         forRowType = forName . rowTypeTypeName
-     
+
 encodeTypeName :: Name -> G.Name
 encodeTypeName name = G.Name $ localNameOfEager name

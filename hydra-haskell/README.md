@@ -80,7 +80,9 @@ writeScala kernelModules "../hydra-scala/src/gen-main/scala"
 There is schema-only support for GraphQL:
 
 ```haskell
-writeGraphql [jsonModelModule] "/tmp/graphql"
+import Hydra.Sources.Langs.Graphql.Syntax
+import Hydra.Sources.Langs.Json.Model
+writeGraphql [graphqlSyntaxModule, jsonModelModule] "/tmp/graphql"
 ```
 
 which must be used with caution because of the lack of standardized support for imports in GraphQL, and there is also schema-only support for PDL:
