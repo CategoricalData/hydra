@@ -39,7 +39,7 @@ Scala support, on the other hand, is partial and experimental at this time.
 
 You can generate Hydra's Haskell sources by first entering the GHCi REPL as above, then:
 
-```bash
+```haskell
 import Hydra.Codegen
 
 writeHaskell mainModules "src/gen-main/haskell"
@@ -49,38 +49,44 @@ The first argument to `writeHaskell` is the list of modules you want to generate
 and the second is the base directory to which the generated files are to be written.
 For individual modules, use list syntax, e.g.
 
-```bash
+```haskell
 writeHaskell [rdfSyntaxModule, shaclModelModule] "src/gen-main/haskell"
 ```
 
 To generate test modules, use:
 
-```bash
+```haskell
 writeHaskell testModules "src/gen-test/haskell"
 ```
 
 Java generation is similar, e.g.
 
-```bash
+```haskell
 writeJava mainModules "../hydra-java/src/gen-main/java"
 ```
 
 For Java tests, use:
 
-```bash
+```haskell
 writeJava testModules "../hydra-java/src/gen-test/java"
 ```
 
 Scala generation has known bugs, but you can try it out with:
 
-```bash
-writeScala coreModules "../hydra-scala/src/gen-main/scala"
+```haskell
+writeScala kernelModules "../hydra-scala/src/gen-main/scala"
 ```
 
-There is also schema-only support for PDL:
+There is schema-only support for GraphQL:
 
-```bash
-writePdl coreModules "/tmp/pdl"
+```haskell
+writeGraphql [jsonModelModule] "/tmp/graphql"
+```
+
+which must be used with caution because of the lack of standardized support for imports in GraphQL, and there is also schema-only support for PDL:
+
+```haskell
+writePdl kernelModules "/tmp/pdl"
 ```
 
 ### JSON and YAML generation
