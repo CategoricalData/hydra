@@ -38,14 +38,19 @@ constructModule mod coders pairs = do
         then epsilonDecodeType term >>= encodeNamedType el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)
 
-descriptionFromType :: Type a -> Maybe G.Description
-descriptionFromType typ = Nothing -- TODO
+descriptionFromType :: Type a -> GraphFlow a (Maybe G.Description)
+descriptionFromType typ = do
+  ac <- graphAnnotations <$> getState
+  mval <- annotationClassTypeDescription ac typ
+  return $ G.Description . G.StringValue <$> mval
 
 encodeEnumFieldType :: FieldType a -> GraphFlow a G.EnumValueDefinition
-encodeEnumFieldType ft = pure $ G.EnumValueDefinition {
-  G.enumValueDefinitionDescription = descriptionFromType $ fieldTypeType ft,
-  G.enumValueDefinitionEnumValue = encodeEnumFieldName $ fieldTypeName ft,
-  G.enumValueDefinitionDirectives = Nothing}
+encodeEnumFieldType ft = do
+  desc <- descriptionFromType $ fieldTypeType ft
+  return G.EnumValueDefinition {
+    G.enumValueDefinitionDescription = desc,
+    G.enumValueDefinitionEnumValue = encodeEnumFieldName $ fieldTypeName ft,
+    G.enumValueDefinitionDirectives = Nothing}
 
 encodeEnumFieldName :: FieldName -> G.EnumValue
 encodeEnumFieldName = G.EnumValue . G.Name . unFieldName
@@ -56,8 +61,9 @@ encodeFieldName = G.Name . unFieldName
 encodeFieldType :: Show a => FieldType a -> GraphFlow a G.FieldDefinition
 encodeFieldType ft = do
   gtype <- encodeType $ fieldTypeType ft
+  desc <- descriptionFromType $ fieldTypeType ft
   return G.FieldDefinition {
-    G.fieldDefinitionDescription = descriptionFromType $ fieldTypeType ft,
+    G.fieldDefinitionDescription = desc,
     G.fieldDefinitionName = encodeFieldName $ fieldTypeName ft,
     G.fieldDefinitionArgumentsDefinition = Nothing,
     G.fieldDefinitionType = gtype,
@@ -83,16 +89,18 @@ encodeNamedType el typ = do
   case stripType (adapterTarget ad) of
     TypeRecord rt -> do
       gfields <- CM.mapM encodeFieldType $ rowTypeFields rt
+      desc <- descriptionFromType typ
       return $ G.TypeDefinitionObject $ G.ObjectTypeDefinition {
-        G.objectTypeDefinitionDescription = descriptionFromType typ,
+        G.objectTypeDefinitionDescription = desc,
         G.objectTypeDefinitionName = encodeTypeName $ elementName el,
         G.objectTypeDefinitionImplementsInterfaces = Nothing,
         G.objectTypeDefinitionDirectives = Nothing,
         G.objectTypeDefinitionFieldsDefinition = Just $ G.FieldsDefinition gfields}
     TypeUnion rt -> do
       values <- CM.mapM encodeEnumFieldType $ rowTypeFields rt
+      desc <- descriptionFromType typ
       return $ G.TypeDefinitionEnum $ G.EnumTypeDefinition {
-        G.enumTypeDefinitionDescription = descriptionFromType typ,
+        G.enumTypeDefinitionDescription = desc,
         G.enumTypeDefinitionName = encodeTypeName $ elementName el,
         G.enumTypeDefinitionDirectives = Nothing,
         G.enumTypeDefinitionEnumValuesDefinition = Just $ G.EnumValuesDefinition values}
