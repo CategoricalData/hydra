@@ -73,7 +73,7 @@ transformModule :: (Ord a, Read a, Show a)
   -> (Term a -> GraphFlow a e)
   -> (Module a -> M.Map (Type a) (Coder (Graph a) (Graph a) (Term a) e) -> [(Element a, TypedTerm a)] -> GraphFlow a d)
   -> Module a -> GraphFlow a d
-transformModule lang encodeTerm createModule mod = do
+transformModule lang encodeTerm createModule mod = withTrace ("transform module " ++ unNamespace (moduleNamespace mod)) $ do
     pairs <- withSchemaContext $ CM.mapM elementAsTypedTerm els
     let types = L.nub (typedTermType <$> pairs)
     coders <- codersFor types
