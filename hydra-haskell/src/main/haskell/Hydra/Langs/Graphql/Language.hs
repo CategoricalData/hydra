@@ -46,3 +46,6 @@ graphqlLanguage = Language (LanguageName "hydra/langs/graphql") $ LanguageConstr
       TypeOptional _ -> False  -- No encoding for optionals within optionals
       _ -> True
     _ -> True}
+
+graphqlReservedWords :: S.Set String
+graphqlReservedWords = S.fromList ["true", "false"]

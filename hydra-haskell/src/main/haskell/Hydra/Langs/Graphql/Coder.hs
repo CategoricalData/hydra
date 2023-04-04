@@ -5,6 +5,7 @@ import Hydra.Langs.Graphql.Language
 import Hydra.Langs.Graphql.Serde
 import qualified Hydra.Langs.Graphql.Syntax as G
 import Hydra.Tools.Script
+import Hydra.Tools.Formatting
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -32,7 +33,7 @@ constructModule mod coders pairs = do
     let doc = G.Document $ (G.DefinitionTypeSystem . G.TypeSystemDefinitionOrExtensionDefinition . G.TypeSystemDefinitionType) <$> tdefs
     return $ M.fromList [(filePath, doc)]
   where
-    filePath = namespaceToFilePath False (FileExtension "sdl") (moduleNamespace mod)
+    filePath = namespaceToFilePath False (FileExtension "graphql") (moduleNamespace mod)
     toTypeDef (el, TypedTerm typ term) = do
       if isType typ
         then epsilonDecodeType term >>= encodeNamedType el
@@ -53,10 +54,10 @@ encodeEnumFieldType ft = do
     G.enumValueDefinitionDirectives = Nothing}
 
 encodeEnumFieldName :: FieldName -> G.EnumValue
-encodeEnumFieldName = G.EnumValue . G.Name . unFieldName
+encodeEnumFieldName = G.EnumValue . G.Name . sanitizeWithUnderscores graphqlReservedWords . unFieldName
 
 encodeFieldName :: FieldName -> G.Name
-encodeFieldName = G.Name . unFieldName
+encodeFieldName = G.Name . sanitizeWithUnderscores graphqlReservedWords . unFieldName
 
 encodeFieldType :: Show a => FieldType a -> GraphFlow a G.FieldDefinition
 encodeFieldType ft = do
