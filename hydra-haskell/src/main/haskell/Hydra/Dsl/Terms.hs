@@ -103,7 +103,7 @@ integer :: IntegerValue -> Term a
 integer = literal . Literals.integer
 
 isUnit :: Eq a => Term a -> Bool
-isUnit t = stripTerm t == TermRecord (Record unitTypeName [])
+isUnit t = stripTerm t == TermRecord (Record _UnitType [])
 
 just :: Term a -> Term a
 just = optional . Just

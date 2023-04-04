@@ -113,15 +113,14 @@ stripType = skipAnnotations $ \t -> case t of
 termMeta :: Graph a -> Term a -> a
 termMeta cx = annotationClassTermAnnotation $ graphAnnotations cx
 
+-- | Splits a Name on the last "." into a namespace and a local part
 toQnameLazy :: Name -> (Namespace, String)
 toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
   (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
   _ -> (Namespace "UNKNOWN", name)
 
+-- | Splits a Name on the first "." into a namespace and a local part
 toQnameEager :: Name -> (Namespace, String)
 toQnameEager (Name name) = case Strings.splitOn "." name of
   (ns:rest) -> (Namespace ns, L.intercalate "." rest)
   _ -> (Namespace "UNKNOWN", name)
-
-unitTypeName :: Name
-unitTypeName = Name "hydra/core.UnitType"
