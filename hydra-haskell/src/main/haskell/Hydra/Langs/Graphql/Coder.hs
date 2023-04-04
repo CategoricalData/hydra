@@ -54,10 +54,10 @@ encodeEnumFieldType ft = do
     G.enumValueDefinitionDirectives = Nothing}
 
 encodeEnumFieldName :: FieldName -> G.EnumValue
-encodeEnumFieldName = G.EnumValue . G.Name . sanitizeWithUnderscores graphqlReservedWords . unFieldName
+encodeEnumFieldName = G.EnumValue . G.Name . sanitize . unFieldName
 
 encodeFieldName :: FieldName -> G.Name
-encodeFieldName = G.Name . sanitizeWithUnderscores graphqlReservedWords . unFieldName
+encodeFieldName = G.Name . sanitize . unFieldName
 
 encodeFieldType :: Show a => FieldType a -> GraphFlow a G.FieldDefinition
 encodeFieldType ft = do
@@ -144,4 +144,7 @@ encodeType typ = case stripType typ of
         forRowType = forName . rowTypeTypeName
 
 encodeTypeName :: Name -> G.Name
-encodeTypeName name = G.Name $ localNameOfEager name
+encodeTypeName = G.Name . sanitize . localNameOfEager
+
+sanitize :: String -> String
+sanitize = sanitizeWithUnderscores graphqlReservedWords
