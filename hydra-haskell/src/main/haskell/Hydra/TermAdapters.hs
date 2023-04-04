@@ -120,6 +120,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
+      
     decode ad term = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -329,7 +330,9 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
         chooseAdapter (alts cx) (supported cx) describeType typ
       where
         alts cx t = (\c -> c t) <$>
-            if supportedAtTopLevel cx t then pass t else trySubstitution t
+            if supportedAtTopLevel cx t
+              then pass t
+              else trySubstitution t
           where
             supportedAtTopLevel cx t = variantIsSupported cx t && languageConstraintsTypes (constraints cx) t
             pass t = case typeVariant t of
