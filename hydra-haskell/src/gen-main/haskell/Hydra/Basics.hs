@@ -179,6 +179,9 @@ termArity x = case x of
   Core.TermFunction v -> (functionArity v)
   _ -> 0
 
+termMeta :: (Graph.Graph a -> Core.Term a -> a)
+termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
+
 -- | Find the term variant (constructor) for a given term
 termVariant :: (Core.Term a -> Mantle.TermVariant)
 termVariant term = ((\x -> case x of
