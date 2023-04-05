@@ -60,8 +60,8 @@ resolveTerm name = do
     recurse el = case stripTerm (elementData el) of
       TermVariable name' -> resolveTerm name'
       _ -> pure $ Just $ elementData el
-      
--- Note: assuming for now that primitive functions and evaluation strategy are the same in the schema graph
+
+-- Note: assuming for now that primitive functions are the same in the schema graph
 schemaContext :: Graph a -> Graph a
 schemaContext g = Y.fromMaybe g (graphSchema g)
 

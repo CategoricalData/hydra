@@ -85,7 +85,9 @@ import Hydra.Sources.Langs.Json.Model
 writeGraphql [graphqlSyntaxModule, jsonModelModule] "/tmp/graphql"
 ```
 
-which must be used with caution because of the lack of standardized support for imports in GraphQL, and there is also schema-only support for PDL:
+Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
+and map them to a single `.graphql` file.
+Hydra has a similar level of schema-only support for PDL:
 
 ```haskell
 writePdl kernelModules "/tmp/pdl"

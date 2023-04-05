@@ -19,6 +19,12 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+elementsWithDependencies :: [Element a] -> GraphFlow a [Element a]
+elementsWithDependencies original = CM.mapM requireElement allDepNames
+  where
+    depNames = S.toList . termDependencyNames True True False False . elementData
+    allDepNames = L.nub $ (elementName <$> original) ++ (L.concat $ depNames <$> original)
+
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
