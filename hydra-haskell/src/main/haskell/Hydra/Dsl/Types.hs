@@ -133,6 +133,7 @@ union :: [FieldType a] -> Type a
 union fields = TypeUnion $ RowType placeholderName Nothing fields
 
 unit :: Type a
+--unit = TypeVariable $ Name "hydra/core.UnitType" -- TODO
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
 variable :: String -> Type a
