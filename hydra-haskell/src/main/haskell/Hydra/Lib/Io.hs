@@ -3,7 +3,6 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
-  hydraCore,
 ) where
 
 import Hydra.Kernel
@@ -17,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-showTerm :: Ord a => Term a -> String
+showTerm :: Term a -> String
 showTerm term = fromFlow hydraCore $ coderEncode termStringCoder encoded
   where
     encoded = sigmaEncodeTerm $ rewriteTermMeta (const $ Kv M.empty) term
