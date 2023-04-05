@@ -41,6 +41,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el lookupPrimitiveDef,
       el primitiveArityDef,
       el qnameDef,
+      el skipAnnotationsDef,
       el termArityDef,
       el termVariantDef,
       el termVariantsDef,
@@ -232,6 +233,20 @@ qnameDef = basicsDefinition "qname" $
         apply Strings.cat $
           list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
 
+skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
+skipAnnotationsDef = basicsDefinition "skipAnnotations" $
+  function
+    (Types.function
+      (Types.variable "a")
+      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "a")) (Types.variable "m")))
+    (Types.function (Types.variable "a") (Types.variable "a")) $
+  (lambda "getAnn" $ lambda "t" $ var "skip" @@ var "t")
+    `with` [
+      "skip">: lambda "t" $
+        matchOpt
+          (var "t")
+          (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann"))]
+
 termArityDef :: Definition (Term a -> Int)
 termArityDef = basicsDefinition "termArity" $
   function (Types.apply (Types.wrap _Term) (Types.variable "a")) Types.int32 $
@@ -359,6 +374,11 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_variable]
 
+
+-- hydra/flows
+
+--unexpected :: Show x => String -> x -> Flow s y
+--unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
 -- hydra/kv
 

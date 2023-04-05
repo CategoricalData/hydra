@@ -256,17 +256,17 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
 
     -- toDecl hname term coder bindings = withTrace ("encoding term of type " ++ show (removeTypeAnnotations typ) ++ " ############ term: " ++ show (removeTermAnnotations term)) $ case stripTerm term of
     toDecl hname term coder bindings = case stripTerm term of
-      TermLet (Let bindings env) -> do
+      TermLet (Let lbindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly
           -- This makes program code with "let" terms more expensive to transform than simple data.
-          let bl = M.toList bindings
+          let bl = M.toList lbindings
           ts <- fmap typeSchemeType <$> (CM.mapM inferType (snd <$> bl))
           coders <- CM.mapM (constructCoder haskellLanguage (encodeTerm namespaces)) ts
           let hnames = simpleName <$> (unName . fst <$> bl)
           hterms <- CM.zipWithM coderEncode coders (snd <$> bl)
 
-          let bindings = L.zipWith toBinding hnames hterms
-          toDecl hname env coder (Just $ H.LocalBindings bindings)
+          let hbindings = L.zipWith toBinding hnames hterms
+          toDecl hname env coder (Just $ H.LocalBindings hbindings)
         where
           toBinding hname' hterm' = H.LocalBindingValue $ simpleValueBinding hname' hterm' Nothing
       _ -> do
