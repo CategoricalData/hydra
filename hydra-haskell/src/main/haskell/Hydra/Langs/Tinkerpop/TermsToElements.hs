@@ -87,19 +87,21 @@ parsePattern pat = withTrace "parse path pattern" $ do
       where
         append s = fmap (\v -> v ++ s) values
         appendAll strings = L.concat (append <$> strings)
-    evalStep step term = case stripTerm term of
-      TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
-      TermRecord (Record _ fields) -> case M.lookup (FieldName step) (fieldMap fields) of
-        Nothing -> fail $ "No such field " ++ step ++ " in record: " ++ show term
-        Just term' -> pure [term']
-      TermOptional mt -> case mt of
-        Nothing -> pure []
-        Just term' -> evalStep step term'
-      TermUnion (Injection _ field) -> if unFieldName (fieldName field) == step
-        then evalStep step $ fieldTerm field
-        else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
-      TermWrap (Nominal _ term') -> evalStep step term'
-      _ -> fail $ "Can't traverse through term: " ++ show term
+    evalStep step term = if L.null step
+      then pure [term]
+      else case stripTerm term of
+          TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
+          TermRecord (Record _ fields) -> case M.lookup (FieldName step) (fieldMap fields) of
+            Nothing -> fail $ "No such field " ++ step ++ " in record: " ++ show term
+            Just term' -> pure [term']
+          TermOptional mt -> case mt of
+            Nothing -> pure []
+            Just term' -> evalStep step term'
+          TermUnion (Injection _ field) -> if unFieldName (fieldName field) == step
+            then evalStep step $ fieldTerm field
+            else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
+          TermWrap (Nominal _ term') -> evalStep step term'
+          _ -> fail $ "Can't traverse through term for step " ++ show step ++ ": " ++ show term
 
 parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
 parsePropertySpec schema (PropertySpec key value) = withTrace "parse property spec" $ do

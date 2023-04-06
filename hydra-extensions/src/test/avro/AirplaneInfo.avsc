@@ -5,6 +5,7 @@
   "type": "record",
   "fields": [
     {
+      "@id": "${}",
       "name": "id",
       "type": "string"
     },
