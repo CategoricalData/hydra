@@ -1,4 +1,4 @@
--- | A model for property graph mapping specifications
+-- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs
 
 module Hydra.Langs.Tinkerpop.Mappings where
 
@@ -16,6 +16,7 @@ data AnnotationSchema =
     annotationSchemaEdgeLabel :: String,
     annotationSchemaVertexId :: String,
     annotationSchemaEdgeId :: String,
+    annotationSchemaKey :: String,
     annotationSchemaOutVertex :: String,
     annotationSchemaOutVertexLabel :: String,
     annotationSchemaInVertex :: String,
@@ -36,6 +37,8 @@ _AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
 _AnnotationSchema_vertexId = (Core.FieldName "vertexId")
 
 _AnnotationSchema_edgeId = (Core.FieldName "edgeId")
+
+_AnnotationSchema_key = (Core.FieldName "key")
 
 _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
 
