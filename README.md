@@ -16,8 +16,7 @@ This is currently the most complete and mature implementation of the language, a
 Here you will find Hydra coders (type-aware encoders/decoders) for Haskell itself, Java, Scala,
 [Avro](https://avro.apache.org), [JSON](https://json.org), [YAML](https://en.wikipedia.org/wiki/YAML),
 [RDF](https://www.w3.org/RDF) + [SHACL](https://www.w3.org/TR/shacl), [GraphQL](https://graphql.org/),
-and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language.
-Most of the Hydra documentation is also here.
+and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language, as well as [TinkerPop](https://tinkerpop.apache.org)-style property graphs. See [Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) for more information. Most of the Hydra documentation is also here.
 * **[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)** is a Java implementation of Hydra which is under active development.
 It includes a substantial portion of the Hydra kernel, though none of the coders mentioned above is fully ported to Java yet.
 JavaDocs are available [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc).
@@ -34,7 +33,7 @@ Both of the active language variants (Haskell and Java) contain a complete copy 
 * Bidirectional transformations
 * BNF grammars
 * Various utilities for transform workflows, formatting, etc.
-* Models for Avro, GraphQL, Haskell, Java, JSON, OWL, Parquet, PDL, Protobuf, Python v3, RDF, Scala, SHACL, ShEx, SQL, [TinkerPop](https://tinkerpop.apache.org)-style property graphs, and YAML
+* Models for Avro, GraphQL, Haskell, Java, JSON, OWL, Parquet, PDL, Protobuf, Python v3, RDF, Scala, SHACL, ShEx, SQL, property graphs, and YAML
 
 Hydra also features a language-agnostic test suite which guarantees parity of program evaluation and primitive functions across the language variants.
 Along with the rest of Hydra's generated code, the test suite will be used as a seed for future implementations in additional languages, such as
