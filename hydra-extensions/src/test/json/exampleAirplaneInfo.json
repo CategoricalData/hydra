@@ -16,5 +16,6 @@
   "engine": {
     "name": "Lycoming AEIO-320-E1B",
     "type": "RECIPROCATING"
-  }
+  },
+  "performanceProfile": "8KCAB-default"
 }
