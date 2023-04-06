@@ -37,6 +37,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
           "vertexId">: string,
           "edgeId">: string,
           "key">: string,
+          "value">: string,
           "outVertex">: string,
           "outVertexLabel">: string,
           "inVertex">: string,

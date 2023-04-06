@@ -17,6 +17,7 @@ data AnnotationSchema =
     annotationSchemaVertexId :: String,
     annotationSchemaEdgeId :: String,
     annotationSchemaKey :: String,
+    annotationSchemaValue :: String,
     annotationSchemaOutVertex :: String,
     annotationSchemaOutVertexLabel :: String,
     annotationSchemaInVertex :: String,
@@ -39,6 +40,8 @@ _AnnotationSchema_vertexId = (Core.FieldName "vertexId")
 _AnnotationSchema_edgeId = (Core.FieldName "edgeId")
 
 _AnnotationSchema_key = (Core.FieldName "key")
+
+_AnnotationSchema_value = (Core.FieldName "value")
 
 _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
 
