@@ -110,9 +110,6 @@ stripType = skipAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing
 
-termMeta :: Graph a -> Term a -> a
-termMeta cx = annotationClassTermAnnotation $ graphAnnotations cx
-
 -- | Splits a Name on the last "." into a namespace and a local part
 toQnameLazy :: Name -> (Namespace, String)
 toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
