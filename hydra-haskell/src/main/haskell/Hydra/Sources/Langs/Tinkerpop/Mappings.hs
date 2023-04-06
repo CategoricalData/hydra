@@ -15,7 +15,7 @@ import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
 
 tinkerpopMappingsModule :: Module Kv
 tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] $
-    Just "A model for property graph mapping specifications"
+    Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
     mappings = nsref ns
@@ -36,6 +36,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
           "edgeLabel">: string,
           "vertexId">: string,
           "edgeId">: string,
+          "key">: string,
           "outVertex">: string,
           "outVertexLabel">: string,
           "inVertex">: string,
