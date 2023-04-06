@@ -125,17 +125,11 @@ elementCoder schema typ = case stripType typ of
           return $ Just $ ProjectionSpec field spec
 
     findField tname key fields = withTrace ("find " ++ show key ++ " field") $ do
-      let explicit = L.filter (\f -> Y.isJust $ getTypeAnnotation key $ fieldTypeType f) fields
-      if L.length explicit > 1
+      let matches = L.filter (\f -> Y.isJust $ getTypeAnnotation key $ fieldTypeType f) fields
+      if L.length matches > 1
         then fail $ "Multiple fields marked as '" ++ key ++ "' in record type " ++ unName tname ++ ": "
-          ++ (L.intercalate ", " (unFieldName . fieldTypeName <$> explicit))
-        else if L.null explicit
-        then do
-          let implicit = L.filter (\f -> key == unFieldName (fieldTypeName f)) fields
-          if L.null implicit
-            then return Nothing
-            else return $ Just $ L.head implicit
-        else return $ Just $ L.head explicit
+          ++ (L.intercalate ", " (unFieldName . fieldTypeName <$> matches))
+        else return $ if L.null matches then Nothing else Just $ L.head matches
 
     findPropertyFields kind fields = L.filter isPropField fields
       where
