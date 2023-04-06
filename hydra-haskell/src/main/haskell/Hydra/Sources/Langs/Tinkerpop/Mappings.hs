@@ -32,12 +32,14 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
       def "AnnotationSchema" $
         doc "Configurable annotations for property graph mapping specifications" $
         record [
+          "vertexLabel">: string,
+          "edgeLabel">: string,
           "vertexId">: string,
           "edgeId">: string,
           "outVertex">: string,
           "inVertex">: string,
-          "vertexLabel">: string,
-          "edgeLabel">: string,
+          "outEdge">: string,
+          "inEdge">: string,
           "ignore">: string],
 
 --       defRecord _AnnotationSchema "defaultTinkerpopAnnotations" $ toField <$> [

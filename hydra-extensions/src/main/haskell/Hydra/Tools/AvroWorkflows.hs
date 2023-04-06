@@ -51,15 +51,16 @@ data JsonPayloadFormat = Json | Jsonl
 
 type TermEncoder x = Term Kv -> Graph Kv -> GraphFlow Kv [x]
 
-
 defaultTinkerpopAnnotations :: PGM.AnnotationSchema
 defaultTinkerpopAnnotations = PGM.AnnotationSchema {
-  PGM.annotationSchemaVertexId = "id",
-  PGM.annotationSchemaEdgeId = "id",
-  PGM.annotationSchemaOutVertex = "out",
-  PGM.annotationSchemaInVertex = "in",
   PGM.annotationSchemaVertexLabel = "label",
   PGM.annotationSchemaEdgeLabel = "label",
+  PGM.annotationSchemaVertexId = "id",
+  PGM.annotationSchemaEdgeId = "id",
+  PGM.annotationSchemaOutVertex = "outVertex",
+  PGM.annotationSchemaInVertex = "inVertex",
+  PGM.annotationSchemaOutEdge = "outEdge",
+  PGM.annotationSchemaInEdge = "inEdge",
   PGM.annotationSchemaIgnore = "ignore"}
 
 examplePgSchema :: Show a => PGM.Schema s a () String String String

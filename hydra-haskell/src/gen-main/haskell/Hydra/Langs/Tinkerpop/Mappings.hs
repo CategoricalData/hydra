@@ -12,16 +12,22 @@ import Data.Set
 -- | Configurable annotations for property graph mapping specifications
 data AnnotationSchema = 
   AnnotationSchema {
+    annotationSchemaVertexLabel :: String,
+    annotationSchemaEdgeLabel :: String,
     annotationSchemaVertexId :: String,
     annotationSchemaEdgeId :: String,
     annotationSchemaOutVertex :: String,
     annotationSchemaInVertex :: String,
-    annotationSchemaVertexLabel :: String,
-    annotationSchemaEdgeLabel :: String,
+    annotationSchemaOutEdge :: String,
+    annotationSchemaInEdge :: String,
     annotationSchemaIgnore :: String}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationSchema = (Core.Name "hydra/langs/tinkerpop/mappings.AnnotationSchema")
+
+_AnnotationSchema_vertexLabel = (Core.FieldName "vertexLabel")
+
+_AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
 
 _AnnotationSchema_vertexId = (Core.FieldName "vertexId")
 
@@ -31,9 +37,9 @@ _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
 
 _AnnotationSchema_inVertex = (Core.FieldName "inVertex")
 
-_AnnotationSchema_vertexLabel = (Core.FieldName "vertexLabel")
+_AnnotationSchema_outEdge = (Core.FieldName "outEdge")
 
-_AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
+_AnnotationSchema_inEdge = (Core.FieldName "inEdge")
 
 _AnnotationSchema_ignore = (Core.FieldName "ignore")
 
