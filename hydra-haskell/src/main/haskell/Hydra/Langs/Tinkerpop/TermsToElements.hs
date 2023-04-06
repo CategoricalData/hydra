@@ -83,11 +83,31 @@ parsePattern pat = withTrace "parse path pattern" $ do
               strings <- evalStep step term >>= CM.mapM toString
               traverse (appendAll strings) True lits rest term
             where
-              toString = Expect.string
+              -- TODO: replace this with a more standard function
+              toString term = case term of
+                TermLiteral lit -> pure $ case lit of
+                  LiteralBinary b -> b
+                  LiteralBoolean b -> show b
+                  LiteralInteger i -> case i of
+                    IntegerValueBigint v -> show v
+                    IntegerValueInt8 v -> show v
+                    IntegerValueInt16 v -> show v
+                    IntegerValueInt32 v -> show v
+                    IntegerValueInt64 v -> show v
+                    IntegerValueUint8 v -> show v
+                    IntegerValueUint16 v -> show v
+                    IntegerValueUint32 v -> show v
+                    IntegerValueUint64 v -> show v
+                  LiteralFloat f -> case f of
+                    FloatValueBigfloat v -> show v
+                    FloatValueFloat32 v -> show v
+                    FloatValueFloat64 v -> show v
+                  LiteralString s -> s
+                _ -> pure $ show term
       where
         append s = fmap (\v -> v ++ s) values
         appendAll strings = L.concat (append <$> strings)
-    evalStep step term = if L.null step
+    evalStep step term = if L.null step -- TODO: you shouldn't need to check for this. Exclude it on parsing
       then pure [term]
       else case stripTerm term of
           TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
