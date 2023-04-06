@@ -87,7 +87,7 @@ writeGraphql [graphqlSyntaxModule, jsonModelModule] "/tmp/graphql"
 
 Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
 and map them to a single `.graphql` file.
-Hydra has a similar level of schema-only support for PDL:
+Hydra has a similar level of schema-only support for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
 
 ```haskell
 writePdl kernelModules "/tmp/pdl"

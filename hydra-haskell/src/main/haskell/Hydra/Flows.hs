@@ -92,7 +92,7 @@ traceSummary t = L.intercalate "\n" (messageLines ++ keyvalLines)
       where
         toLine (k, v) = "\t" ++ k ++ ": " ++ show v
 
-unexpected :: (MonadFail m, Show a1) => String -> a1 -> m a2
+unexpected :: Show x => String -> x -> Flow s y
 unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
 
 warn :: String -> Flow s a -> Flow s a
