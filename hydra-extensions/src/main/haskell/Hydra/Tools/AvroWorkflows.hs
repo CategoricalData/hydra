@@ -58,8 +58,6 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
   PGM.annotationSchemaEdgeId = "id",
   PGM.annotationSchemaOutVertex = "out",
   PGM.annotationSchemaInVertex = "in",
-  PGM.annotationSchemaOutVertexId = "outId",
-  PGM.annotationSchemaInVertexId = "inId",
   PGM.annotationSchemaVertexLabel = "label",
   PGM.annotationSchemaEdgeLabel = "label",
   PGM.annotationSchemaIgnore = "ignore"}
@@ -94,10 +92,23 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementsToJson :: [PG.Element v e p] -> Flow s String
-pgElementsToJson els = pure $ jsonValueToString $ Json.ValueString "TODO"
+pgElementsToJson :: (Show v, Show e, Show p) => [PG.Element v e p] -> Flow s String
+pgElementsToJson els = pure $ jsonValueToString $ Json.ValueArray $ toJson <$> els
+  where
+    toJson el = case el of
+      PG.ElementVertex vertex -> Json.ValueObject $ M.fromList $ [
+        ("id", Json.ValueString $ show $ PG.vertexId vertex),
+        ("label", Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex)] ++ propsToJson (PG.vertexProperties vertex)
+      PG.ElementEdge edge -> Json.ValueObject $ M.fromList $ [
+        ("id", Json.ValueString $ show $ PG.edgeId edge),
+        ("label", Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge),
+        ("out", Json.ValueString $ show $ PG.edgeOut edge),
+        ("in", Json.ValueString $ show $ PG.edgeIn edge)] ++ propsToJson (PG.edgeProperties edge)
+    propsToJson m = propToJson <$> (M.toList m)
+      where
+        propToJson (PG.PropertyKey key, v) = (key, Json.ValueString $ show v)
 
-propertyGraphLastMile :: PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
+propertyGraphLastMile :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
 propertyGraphLastMile schema = LastMile (typedTermToPropertyGraph schema) pgElementsToJson "json"
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
