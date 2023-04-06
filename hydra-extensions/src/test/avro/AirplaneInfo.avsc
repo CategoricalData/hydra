@@ -1,9 +1,5 @@
 {
   "@label": "engine",
-  "@labels": [
-    "engine",
-    "performance"
-  ],
   "namespace": "com.example",
   "name": "AirplaneInfo",
   "type": "record",
@@ -25,7 +21,7 @@
       ]
     },
     {
-      "@out": "airplane-${name}",
+      "@outVertex": "airplane-${name}",
       "name": "airplane",
       "type": {
         "@label": "Airplane",
@@ -64,7 +60,7 @@
       }
     },
     {
-      "@in": "airplane-${name}",
+      "@inVertex": "engine-${name}",
       "name": "engine",
       "type": {
         "@label": "Engine",
@@ -91,7 +87,7 @@
       }
     },
     {
-      "@performance:in": "performance-${}",
+      "@performance:inVertex": "performance-${}",
       "name": "performanceProfile",
       "type": "string"
     }
