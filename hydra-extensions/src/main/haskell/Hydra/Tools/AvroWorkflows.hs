@@ -58,9 +58,13 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
   PGM.annotationSchemaVertexId = "id",
   PGM.annotationSchemaEdgeId = "id",
   PGM.annotationSchemaOutVertex = "outVertex",
+  PGM.annotationSchemaOutVertexLabel = "outVertexLabel",
   PGM.annotationSchemaInVertex = "inVertex",
+  PGM.annotationSchemaInVertexLabel = "inVertexLabel",
   PGM.annotationSchemaOutEdge = "outEdge",
+  PGM.annotationSchemaOutEdgeLabel = "outEdgeLabel",
   PGM.annotationSchemaInEdge = "inEdge",
+  PGM.annotationSchemaInEdgeLabel = "inEdgeLabel",
   PGM.annotationSchemaIgnore = "ignore"}
 
 examplePgSchema :: Show a => PGM.Schema s a () String String String

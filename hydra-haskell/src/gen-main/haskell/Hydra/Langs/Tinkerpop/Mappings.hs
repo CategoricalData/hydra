@@ -17,9 +17,13 @@ data AnnotationSchema =
     annotationSchemaVertexId :: String,
     annotationSchemaEdgeId :: String,
     annotationSchemaOutVertex :: String,
+    annotationSchemaOutVertexLabel :: String,
     annotationSchemaInVertex :: String,
+    annotationSchemaInVertexLabel :: String,
     annotationSchemaOutEdge :: String,
+    annotationSchemaOutEdgeLabel :: String,
     annotationSchemaInEdge :: String,
+    annotationSchemaInEdgeLabel :: String,
     annotationSchemaIgnore :: String}
   deriving (Eq, Ord, Read, Show)
 
@@ -35,11 +39,19 @@ _AnnotationSchema_edgeId = (Core.FieldName "edgeId")
 
 _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
 
+_AnnotationSchema_outVertexLabel = (Core.FieldName "outVertexLabel")
+
 _AnnotationSchema_inVertex = (Core.FieldName "inVertex")
+
+_AnnotationSchema_inVertexLabel = (Core.FieldName "inVertexLabel")
 
 _AnnotationSchema_outEdge = (Core.FieldName "outEdge")
 
+_AnnotationSchema_outEdgeLabel = (Core.FieldName "outEdgeLabel")
+
 _AnnotationSchema_inEdge = (Core.FieldName "inEdge")
+
+_AnnotationSchema_inEdgeLabel = (Core.FieldName "inEdgeLabel")
 
 _AnnotationSchema_ignore = (Core.FieldName "ignore")
 
