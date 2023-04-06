@@ -6,6 +6,7 @@ module Hydra.Tools.AvroWorkflows (
   TermEncoder(..),
   LastMile(..),
   defaultTinkerpopAnnotations,
+  examplePgSchema,
   executeAvroTransformWorkflow,
   propertyGraphLastMile,
   rdfDescriptionsToNtriples,
@@ -16,7 +17,6 @@ module Hydra.Tools.AvroWorkflows (
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
-import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Langs.Json.Serde
 import qualified Hydra.Langs.Avro.Schema as Avro
 import qualified Hydra.Langs.Json.Model as Json
@@ -30,6 +30,8 @@ import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Langs.Rdf.Utils as RdfUt
 import qualified Hydra.Langs.Tinkerpop.PropertyGraph as PG
 import qualified Hydra.Langs.Tinkerpop.Mappings as PGM
+import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Langs.Rdf.Serde
 import Hydra.Workflow
@@ -56,11 +58,19 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
   PGM.annotationSchemaEdgeId = "id",
   PGM.annotationSchemaOutVertex = "out",
   PGM.annotationSchemaInVertex = "in",
-  PGM.annotationSchemaOutVertexId = "outId",
-  PGM.annotationSchemaInVertexId = "inId",
   PGM.annotationSchemaVertexLabel = "label",
   PGM.annotationSchemaEdgeLabel = "label",
   PGM.annotationSchemaIgnore = "ignore"}
+
+examplePgSchema :: Show a => PGM.Schema s a () String String String
+examplePgSchema = PGM.Schema {
+    PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string (pure . Terms.string),
+    PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string (pure . Terms.string),
+    PGM.schemaPropertyTypes = mkCoder "encode property type" (\_ -> pure ()) (\_ -> pure Types.unit),
+    PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string (pure . Terms.string),
+    PGM.schemaAnnotations = defaultTinkerpopAnnotations}
+  where
+    mkCoder lab encode decode = Coder (withTrace lab . encode) decode
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
 executeAvroTransformWorkflow :: LastMile (Graph Kv) x -> TransformWorkflow -> IO ()
@@ -82,11 +92,24 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementsToJson :: [PG.Element String String String] -> Flow s String
-pgElementsToJson els = pure $ jsonValueToString $ Json.ValueString "TODO"
+pgElementsToJson :: (Show v, Show e, Show p) => [PG.Element v e p] -> Flow s String
+pgElementsToJson els = pure $ jsonValueToString $ Json.ValueArray $ toJson <$> els
+  where
+    toJson el = case el of
+      PG.ElementVertex vertex -> Json.ValueObject $ M.fromList $ [
+        ("id", Json.ValueString $ show $ PG.vertexId vertex),
+        ("label", Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex)] ++ propsToJson (PG.vertexProperties vertex)
+      PG.ElementEdge edge -> Json.ValueObject $ M.fromList $ [
+        ("id", Json.ValueString $ show $ PG.edgeId edge),
+        ("label", Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge),
+        ("out", Json.ValueString $ show $ PG.edgeOut edge),
+        ("in", Json.ValueString $ show $ PG.edgeIn edge)] ++ propsToJson (PG.edgeProperties edge)
+    propsToJson m = propToJson <$> (M.toList m)
+      where
+        propToJson (PG.PropertyKey key, v) = (key, Json.ValueString $ show v)
 
-propertyGraphLastMile :: LastMile (Graph Kv) (PG.Element String String String)
-propertyGraphLastMile = LastMile typedTermToPropertyGraph pgElementsToJson "json"
+propertyGraphLastMile :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
+propertyGraphLastMile schema = LastMile (typedTermToPropertyGraph schema) pgElementsToJson "json"
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
@@ -94,23 +117,12 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile (Graph Kv) Rdf.Description
 shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
-typedTermToPropertyGraph :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element String String String])
-typedTermToPropertyGraph typ = do
+typedTermToPropertyGraph :: PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
+typedTermToPropertyGraph schema typ = do
     adapter <- elementCoder schema typ
     return $ \term graph -> do
       el <- coderEncode (adapterCoder adapter) term
       return [el]
-  where
-    schema = PGM.Schema {
-        PGM.schemaVertexIds = mkCoder "encode vertex id" Expect.string,
-        PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string,
-        PGM.schemaPropertyTypes = mkCoder "encode property type" $ \t -> pure (),
-        PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string,
-        PGM.schemaAnnotations = defaultTinkerpopAnnotations}
-      where
-        mkCoder lab encode = Coder (withTrace lab . encode) noDecode
-          where
-            noDecode = \_ -> fail "property graph schema decoding not yet supported"
 
 typedTermToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
 typedTermToShaclRdf _ = pure encode

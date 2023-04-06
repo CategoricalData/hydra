@@ -171,9 +171,12 @@ decodePropertySpec term = withTrace "decode property spec" $ matchRecord (\field
   <*> readField fields _PropertySpec_value decodeValueSpec) term
 
 decodeValueSpec :: Show a => Term a -> Flow s ValueSpec
-decodeValueSpec term = withTrace "decode value spec" $ matchInjection [
-  (_ValueSpec_value, \t -> pure ValueSpecValue),
-  (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)] term
+decodeValueSpec term = withTrace "decode value spec" $ case stripTerm term of
+  -- Allow an abbreviated specification consisting of only the pattern string
+  TermLiteral (LiteralString s) -> pure $ ValueSpecPattern s
+  _ -> matchInjection [
+    (_ValueSpec_value, \t -> pure ValueSpecValue),
+    (_ValueSpec_pattern, \t -> ValueSpecPattern <$> Expect.string t)] term
 
 decodeVertexLabel :: Show a => Term a -> Flow s PG.VertexLabel
 decodeVertexLabel t = PG.VertexLabel <$> Expect.string t
@@ -198,7 +201,7 @@ matchInjection cases encoded = do
   f <- case M.toList mp of
     [] -> fail "empty injection"
     [(k, v)] -> pure $ Field k v
-    _ -> fail "invalid injection"
+    _ -> fail $ "invalid injection: " ++ show mp
   case snd <$> (L.filter (\c -> fst c == fieldName f) cases) of
     [] -> fail $ "unexpected field: " ++ unFieldName (fieldName f)
     [fun] -> fun (fieldTerm f)

@@ -43,6 +43,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el qnameDef,
       el skipAnnotationsDef,
       el termArityDef,
+      el termMetaDef,
       el termVariantDef,
       el termVariantsDef,
       el testListsDef,
@@ -263,6 +264,11 @@ functionArityDef = basicsDefinition "functionArity" $
     Case _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
     Case _Function_primitive --> constant $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
+
+termMetaDef :: Definition (Graph a -> Term a -> a)
+termMetaDef = basicsDefinition "termMeta" $
+  function (Types.apply (Types.wrap _Graph) (Types.variable "a")) (Types.function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.variable "a")) $
+  (project _AnnotationClass _AnnotationClass_termAnnotation) <.> (project _Graph _Graph_annotations)
 
 termVariantDef :: Definition (Term a -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
