@@ -116,8 +116,9 @@ parsePattern pat = withTrace "parse path pattern" $ do
                 else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
               TermWrap (Nominal _ term') -> evalStep step term'
               _ -> fail $ "Can't traverse through term for step " ++ show step ++ ": " ++ show term
+
     -- TODO: replace this with a more standard function
-    toString term = case term of
+    toString term = case stripTerm term of
       TermLiteral lit -> pure $ case lit of
         LiteralBinary b -> b
         LiteralBoolean b -> show b
@@ -136,6 +137,9 @@ parsePattern pat = withTrace "parse path pattern" $ do
           FloatValueFloat32 v -> show v
           FloatValueFloat64 v -> show v
         LiteralString s -> s
+      TermOptional mt -> case mt of
+        Nothing -> pure "nothing"
+        Just t -> toString t
       _ -> pure $ show term
 
 parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
@@ -155,7 +159,6 @@ parseValueSpec :: Show a => ValueSpec -> Flow s (Term a -> Flow s [Term a])
 parseValueSpec spec = case spec of
   ValueSpecValue -> pure $ \term -> pure [term]
   ValueSpecPattern pat -> parsePattern pat
---  _ -> fail $ "Unsupported value pattern: " ++ show spec
 
 parseVertexIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseVertexIdPattern schema spec = do
