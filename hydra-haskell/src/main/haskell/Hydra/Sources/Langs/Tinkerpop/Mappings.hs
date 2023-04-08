@@ -30,7 +30,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
     elements = [
 
       def "AnnotationSchema" $
-        doc "Configurable annotations for property graph mapping specifications" $
+        doc "Configurable annotation keys for property graph mapping specifications" $
         record [
           "vertexLabel">: string,
           "edgeLabel">: string,
@@ -95,6 +95,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             mappings "ValueSpec"],
 
       def "Schema" $
+        doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
         lambda "s" $ lambda "a" $ lambda "t" $ lambda "v" $ lambda "e" $ lambda "p" $
           record [
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
