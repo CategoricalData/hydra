@@ -9,7 +9,7 @@ import Data.List
 import Data.Map
 import Data.Set
 
--- | Configurable annotations for property graph mapping specifications
+-- | Configurable annotation keys for property graph mapping specifications
 data AnnotationSchema = 
   AnnotationSchema {
     annotationSchemaVertexLabel :: String,
@@ -115,6 +115,7 @@ _PropertySpec_key = (Core.FieldName "key")
 
 _PropertySpec_value = (Core.FieldName "value")
 
+-- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
 data Schema s a t v e p = 
   Schema {
     schemaVertexIds :: (Compute.Coder s s (Core.Term a) v),
