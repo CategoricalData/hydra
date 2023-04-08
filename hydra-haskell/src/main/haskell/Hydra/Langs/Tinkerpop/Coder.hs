@@ -154,19 +154,6 @@ elementCoder schema typ = case stripType typ of
             Just sp -> decodeValueSpec sp
           return $ ProjectionSpec field values alias
 
-    projectionAdapter coder spec key = do
-        fun <- parseValueSpec $ projectionSpecValues spec
-        let field = projectionSpecField spec
-        return (fieldTypeName field, Adapter lossy (fieldTypeType field) () $ Coder (encode fun) decode)
-      where
-        encode fun term = do
-          terms <- fun term
-          case terms of
-            [] -> fail $ key ++ "-projection did not resolve to a term"
-            [t] -> coderEncode coder t
-            _ -> fail $ key ++ "-projection resolved to multiple terms"
-        decode _ = noDecoding $ "edge '" ++ key ++ "'"
-
 encodeProperties :: M.Map FieldName (Term a) -> [PropertyAdapter s a t p] -> Flow s (M.Map PG.PropertyKey p)
 encodeProperties fields adapters = do
   props <- CM.mapM (encodeProperty fields) adapters
@@ -195,25 +182,47 @@ projectionId fields (fname, ad) = case M.lookup fname fields of
   Nothing -> fail $ "no " ++ unFieldName fname ++ " in record"
   Just t -> coderEncode (adapterCoder ad) t
 
+projectionAdapter :: Show a => Coder s s (Term a) v
+  -> ProjectionSpec a
+  -> String
+  -> Flow s (VertexIdAdapter s a v)
+projectionAdapter coder spec key = do
+    traversal <- parseValueSpec $ projectionSpecValues spec
+    let field = projectionSpecField spec
+    let encode = \t -> traverseToSingleTerm (key ++ "-projection") traversal t >>= coderEncode coder
+    return (fieldTypeName field, Adapter lossy (fieldTypeType field) () $ Coder encode decode)
+  where
+    decode _ = noDecoding $ "edge '" ++ key ++ "'"
+
 propertyAdapter :: Show a => Schema s a t v e p -> ProjectionSpec a -> Flow s (PropertyAdapter s a t p)
 propertyAdapter schema (ProjectionSpec tfield values alias) = do
   let key = PG.PropertyKey $ case alias of
         Nothing -> unFieldName $ fieldTypeName tfield
         Just k -> k
   pt <- coderEncode (schemaPropertyTypes schema) $ fieldTypeType tfield
+  traversal <- parseValueSpec values
   let coder = Coder encode decode
         where
           encode dfield = withTrace ("encode property field " ++ show (unFieldName $ fieldTypeName tfield)) $ do
             if fieldName dfield /= fieldTypeName tfield
               then unexpected ("field '" ++ unFieldName (fieldTypeName tfield) ++ "'") dfield
               else do
-                value <- coderEncode (schemaPropertyValues schema) $ fieldTerm dfield
+                result <- traverseToSingleTerm "property traversal" traversal $ fieldTerm dfield
+                value <- coderEncode (schemaPropertyValues schema) result
                 return $ PG.Property key value
           decode _ = noDecoding "property"
   return $ Adapter lossy tfield (PG.PropertyType key pt) coder
 
 propertyTypes propAdapters = M.fromList $
   fmap (\a -> (PG.propertyTypeKey $ adapterTarget a, PG.propertyTypeValue $ adapterTarget a)) propAdapters
+
+traverseToSingleTerm :: String -> (Term a -> Flow s [Term a]) -> Term a -> Flow s (Term a)
+traverseToSingleTerm desc traversal term = do
+  terms <- traversal term
+  case terms of
+    [] -> fail $ desc ++ " did not resolve to a term"
+    [t] -> pure t
+    _ -> fail $ desc ++ " resolved to multiple terms"
 
 vertexCoder :: Show a
   => Schema s a t v e p -> Type a -> Name

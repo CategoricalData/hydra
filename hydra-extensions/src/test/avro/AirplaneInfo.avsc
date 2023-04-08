@@ -10,12 +10,6 @@
       "type": "string"
     },
     {
-      "@key": "date",
-      "@value": "${}Z",
-      "name": "dateAdded",
-      "type": "string"
-    },
-    {
       "@ignore": {},
       "name": "recordNumber",
       "type": [
@@ -93,6 +87,41 @@
       "@performance:inVertex": "performance-${}",
       "name": "performanceProfile",
       "type": "string"
+    },
+    {
+      "@key": "date",
+      "@value": "${timestamps/lastUpdated}Z",
+      "name": "provenance",
+      "type": {
+        "name": "ProvenanceInfo",
+        "type": "record",
+        "fields": [
+          {
+            "name": "sources",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "timestamps",
+            "type": {
+              "name": "ProvenanceTimestamps",
+              "type": "record",
+              "fields":  [
+                {
+                  "name": "created",
+                  "type": ["null", "string"]
+                },
+                {
+                  "name": "lastUpdated",
+                  "type": ["null", "string"]
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   ]
 }
