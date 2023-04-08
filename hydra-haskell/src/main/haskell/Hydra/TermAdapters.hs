@@ -120,7 +120,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         FunctionLambda _ -> variant functionProxyName _Function_lambda $ string $ show term -- TODO
         FunctionPrimitive (Name name) -> variant functionProxyName _Function_primitive $ string name
       TermVariable (Name var) -> variant functionProxyName _Term_variable $ string var
-      
+
     decode ad term = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
@@ -372,8 +372,9 @@ unionToRecord t@(TypeUnion rt) = do
     let target = TypeRecord $ rt {rowTypeFields = makeOptional <$> sfields}
     ad <- termAdapter target
     return $ Adapter (adapterIsLossy ad) t (adapterTarget ad) $ Coder {
-      coderEncode = \(TermUnion (Injection _ (Field fn term))) -> coderEncode (adapterCoder ad)
-        $ record nm (toRecordField term fn <$> sfields),
+      coderEncode = \term' -> do
+        (Field fn term) <- Expect.injectionWithName (rowTypeTypeName rt) term'
+        coderEncode (adapterCoder ad) $ record nm (toRecordField term fn <$> sfields),
       coderDecode = \term -> do
         TermRecord (Record _ fields) <- coderDecode (adapterCoder ad) term
         inject nm <$> fromRecordFields term (TermRecord (Record nm fields)) (adapterTarget ad) fields}
