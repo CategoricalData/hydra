@@ -19,6 +19,7 @@
     },
     {
       "@outVertex": "airplane-${name}",
+      "@outVertexLabel": "Airplane",
       "name": "airplane",
       "type": {
         "@label": "Airplane",
@@ -58,6 +59,7 @@
     },
     {
       "@inVertex": "engine-${name}",
+      "@inVertexLabel": "Engine",
       "name": "engine",
       "type": {
         "@label": "Engine",
