@@ -1,19 +1,12 @@
 {
   "@label": "engine",
-  "@labels": [
-    "engine",
-    "performance"
-  ],
   "namespace": "com.example",
   "name": "AirplaneInfo",
   "type": "record",
   "fields": [
     {
+      "@id": "${}",
       "name": "id",
-      "type": "string"
-    },
-    {
-      "name": "dateAdded",
       "type": "string"
     },
     {
@@ -25,7 +18,8 @@
       ]
     },
     {
-      "@out": "airplane-${name}",
+      "@outVertex": "airplane-${name}",
+      "@outVertexLabel": "Airplane",
       "name": "airplane",
       "type": {
         "@label": "Airplane",
@@ -64,7 +58,8 @@
       }
     },
     {
-      "@in": "airplane-${name}",
+      "@inVertex": "engine-${name}",
+      "@inVertexLabel": "Engine",
       "name": "engine",
       "type": {
         "@label": "Engine",
@@ -91,9 +86,44 @@
       }
     },
     {
-      "@performance:in": "performance-${}",
+      "@performance:inVertex": "performance-${}",
       "name": "performanceProfile",
       "type": "string"
+    },
+    {
+      "@key": "date",
+      "@value": "${timestamps/lastUpdated}Z",
+      "name": "provenance",
+      "type": {
+        "name": "ProvenanceInfo",
+        "type": "record",
+        "fields": [
+          {
+            "name": "sources",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "timestamps",
+            "type": {
+              "name": "ProvenanceTimestamps",
+              "type": "record",
+              "fields":  [
+                {
+                  "name": "created",
+                  "type": ["null", "string"]
+                },
+                {
+                  "name": "lastUpdated",
+                  "type": ["null", "string"]
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   ]
 }

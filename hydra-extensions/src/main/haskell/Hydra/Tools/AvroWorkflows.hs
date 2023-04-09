@@ -17,10 +17,11 @@ module Hydra.Tools.AvroWorkflows (
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
-import Hydra.Langs.Json.Serde
 import qualified Hydra.Langs.Avro.Schema as Avro
 import qualified Hydra.Langs.Json.Model as Json
+import Hydra.Langs.Json.Coder
 import Hydra.Langs.Json.Eliminate
+import Hydra.Langs.Json.Serde
 import Hydra.Langs.Avro.Coder
 import Hydra.Langs.Avro.SchemaJson
 import Hydra.Langs.Tinkerpop.Coder
@@ -51,15 +52,22 @@ data JsonPayloadFormat = Json | Jsonl
 
 type TermEncoder x = Term Kv -> Graph Kv -> GraphFlow Kv [x]
 
-
 defaultTinkerpopAnnotations :: PGM.AnnotationSchema
 defaultTinkerpopAnnotations = PGM.AnnotationSchema {
-  PGM.annotationSchemaVertexId = "id",
-  PGM.annotationSchemaEdgeId = "id",
-  PGM.annotationSchemaOutVertex = "out",
-  PGM.annotationSchemaInVertex = "in",
   PGM.annotationSchemaVertexLabel = "label",
   PGM.annotationSchemaEdgeLabel = "label",
+  PGM.annotationSchemaVertexId = "id",
+  PGM.annotationSchemaEdgeId = "id",
+  PGM.annotationSchemaKey = "key",
+  PGM.annotationSchemaValue = "value",
+  PGM.annotationSchemaOutVertex = "outVertex",
+  PGM.annotationSchemaOutVertexLabel = "outVertexLabel",
+  PGM.annotationSchemaInVertex = "inVertex",
+  PGM.annotationSchemaInVertexLabel = "inVertexLabel",
+  PGM.annotationSchemaOutEdge = "outEdge",
+  PGM.annotationSchemaOutEdgeLabel = "outEdgeLabel",
+  PGM.annotationSchemaInEdge = "inEdge",
+  PGM.annotationSchemaInEdgeLabel = "inEdgeLabel",
   PGM.annotationSchemaIgnore = "ignore"}
 
 examplePgSchema :: Show a => PGM.Schema s a () String String String
@@ -92,24 +100,39 @@ listsToSets = rewriteTerm mapExpr id
       TermList els -> TermSet $ S.fromList els
       _ -> term
 
-pgElementsToJson :: (Show v, Show e, Show p) => [PG.Element v e p] -> Flow s String
-pgElementsToJson els = pure $ jsonValueToString $ Json.ValueArray $ toJson <$> els
+pgElementToJson :: PGM.Schema (Graph Kv) Kv t v e p -> PG.Element v e p -> Flow (Graph Kv) Json.Value
+pgElementToJson schema el = case el of
+    PG.ElementVertex vertex -> do
+      let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
+      idJson <- coderDecode (PGM.schemaVertexIds schema) (PG.vertexId vertex) >>= untypedTermToJson
+      propsJson <- propsToJson $ PG.vertexProperties vertex
+      return $ Json.ValueObject $ M.fromList $ propsJson ++ [
+        ("label", labelJson),
+        ("id", idJson)]
+    PG.ElementEdge edge -> do
+      let labelJson = Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge
+      idJson <- coderDecode (PGM.schemaEdgeIds schema) (PG.edgeId edge) >>= untypedTermToJson
+      outJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeOut edge) >>= untypedTermToJson
+      inJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeIn edge) >>= untypedTermToJson
+      propsJson <- propsToJson $ PG.edgeProperties edge
+      return $ Json.ValueObject $ M.fromList $ propsJson ++ [
+        ("label", labelJson),
+        ("id", idJson),
+        ("out", outJson),
+        ("in", inJson)]
   where
-    toJson el = case el of
-      PG.ElementVertex vertex -> Json.ValueObject $ M.fromList $ [
-        ("id", Json.ValueString $ show $ PG.vertexId vertex),
-        ("label", Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex)] ++ propsToJson (PG.vertexProperties vertex)
-      PG.ElementEdge edge -> Json.ValueObject $ M.fromList $ [
-        ("id", Json.ValueString $ show $ PG.edgeId edge),
-        ("label", Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge),
-        ("out", Json.ValueString $ show $ PG.edgeOut edge),
-        ("in", Json.ValueString $ show $ PG.edgeIn edge)] ++ propsToJson (PG.edgeProperties edge)
-    propsToJson m = propToJson <$> (M.toList m)
+    propsToJson = CM.mapM propToJson . M.toList
       where
-        propToJson (PG.PropertyKey key, v) = (key, Json.ValueString $ show v)
+        propToJson (PG.PropertyKey key, v) = do
+          json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
+          return (key, json)
 
-propertyGraphLastMile :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
-propertyGraphLastMile schema = LastMile (typedTermToPropertyGraph schema) pgElementsToJson "json"
+pgElementsToJson :: PGM.Schema (Graph Kv) Kv t v e p -> [PG.Element v e p] -> Flow (Graph Kv) Json.Value
+pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
+
+propertyGraphLastMile :: PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
+propertyGraphLastMile schema =
+  LastMile (typedTermToPropertyGraph schema) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
 
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph

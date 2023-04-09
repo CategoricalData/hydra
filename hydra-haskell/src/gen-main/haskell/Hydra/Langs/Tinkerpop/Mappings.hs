@@ -1,4 +1,4 @@
--- | A model for property graph mapping specifications
+-- | A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs
 
 module Hydra.Langs.Tinkerpop.Mappings where
 
@@ -9,31 +9,55 @@ import Data.List
 import Data.Map
 import Data.Set
 
--- | Configurable annotations for property graph mapping specifications
+-- | Configurable annotation keys for property graph mapping specifications
 data AnnotationSchema = 
   AnnotationSchema {
-    annotationSchemaVertexId :: String,
-    annotationSchemaEdgeId :: String,
-    annotationSchemaOutVertex :: String,
-    annotationSchemaInVertex :: String,
     annotationSchemaVertexLabel :: String,
     annotationSchemaEdgeLabel :: String,
+    annotationSchemaVertexId :: String,
+    annotationSchemaEdgeId :: String,
+    annotationSchemaKey :: String,
+    annotationSchemaValue :: String,
+    annotationSchemaOutVertex :: String,
+    annotationSchemaOutVertexLabel :: String,
+    annotationSchemaInVertex :: String,
+    annotationSchemaInVertexLabel :: String,
+    annotationSchemaOutEdge :: String,
+    annotationSchemaOutEdgeLabel :: String,
+    annotationSchemaInEdge :: String,
+    annotationSchemaInEdgeLabel :: String,
     annotationSchemaIgnore :: String}
   deriving (Eq, Ord, Read, Show)
 
 _AnnotationSchema = (Core.Name "hydra/langs/tinkerpop/mappings.AnnotationSchema")
 
+_AnnotationSchema_vertexLabel = (Core.FieldName "vertexLabel")
+
+_AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
+
 _AnnotationSchema_vertexId = (Core.FieldName "vertexId")
 
 _AnnotationSchema_edgeId = (Core.FieldName "edgeId")
 
+_AnnotationSchema_key = (Core.FieldName "key")
+
+_AnnotationSchema_value = (Core.FieldName "value")
+
 _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
+
+_AnnotationSchema_outVertexLabel = (Core.FieldName "outVertexLabel")
 
 _AnnotationSchema_inVertex = (Core.FieldName "inVertex")
 
-_AnnotationSchema_vertexLabel = (Core.FieldName "vertexLabel")
+_AnnotationSchema_inVertexLabel = (Core.FieldName "inVertexLabel")
 
-_AnnotationSchema_edgeLabel = (Core.FieldName "edgeLabel")
+_AnnotationSchema_outEdge = (Core.FieldName "outEdge")
+
+_AnnotationSchema_outEdgeLabel = (Core.FieldName "outEdgeLabel")
+
+_AnnotationSchema_inEdge = (Core.FieldName "inEdge")
+
+_AnnotationSchema_inEdgeLabel = (Core.FieldName "inEdgeLabel")
 
 _AnnotationSchema_ignore = (Core.FieldName "ignore")
 
@@ -91,6 +115,7 @@ _PropertySpec_key = (Core.FieldName "key")
 
 _PropertySpec_value = (Core.FieldName "value")
 
+-- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
 data Schema s a t v e p = 
   Schema {
     schemaVertexIds :: (Compute.Coder s s (Core.Term a) v),

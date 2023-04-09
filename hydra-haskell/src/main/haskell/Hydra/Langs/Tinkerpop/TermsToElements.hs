@@ -12,9 +12,9 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
+import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
-
 
 type PgAdapter s a v e p = Adapter s s (Type a) [PG.Label] (Term a) [PG.Element v e p]
 
@@ -58,48 +58,89 @@ parseEdgeSpec schema (EdgeSpec label id outV inV props) = do
 
 parsePattern :: Show a => String -> Flow s (Term a -> Flow s [Term a])
 parsePattern pat = withTrace "parse path pattern" $ do
-    (lits, paths) <- parseLit [] [] "" pat
-    return $ traverseTop [""] True lits paths
+    (lits, paths) <- parsePattern [] [] "" pat
+    return $ traverse lits paths
   where
-    parseLit lits paths cur s = case s of
-      [] -> pure ((L.reverse cur):lits, L.reverse paths)
-      ('$':'{':rest) -> parsePath (cur:lits) paths "" rest
-      (c:rest) -> parseLit lits paths (c:cur) rest
-    parsePath lits paths cur s = case s of
-      [] -> fail $ "Unfinished path expression: " ++ pat
-      ('}':rest) -> parseLit lits ((L.reverse cur):paths) "" rest
-      (c:rest) -> parsePath lits paths (c:cur) rest
-    traverseTop values lp lits paths term = withTrace ("traverse pattern: " ++ pat) $
-      traverse values lp lits paths term
-    traverse values lp lits paths term = if L.null values
-        then pure []
-        else if lp
-        then case lits of
-          [] -> return $ Terms.string <$> values
-          (l:rest) -> traverse (append l) False rest paths term
-        else case paths of
-          [] -> traverse values True lits [] term
-          (step:rest) -> do
-              strings <- evalStep step term >>= CM.mapM toString
-              traverse (appendAll strings) True lits rest term
-            where
-              toString = Expect.string
+    parsePattern lits paths cur s = case s of
+      [] -> pure (L.reverse (nextLit:lits), L.reverse paths)
+      ('$':'{':rest) -> parsePath (nextLit:lits) paths "" rest
+      (c:rest) -> parsePattern lits paths (c:cur) rest
       where
-        append s = fmap (\v -> v ++ s) values
-        appendAll strings = L.concat (append <$> strings)
-    evalStep step term = case stripTerm term of
-      TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
-      TermRecord (Record _ fields) -> case M.lookup (FieldName step) (fieldMap fields) of
-        Nothing -> fail $ "No such field " ++ step ++ " in record: " ++ show term
-        Just term' -> pure [term']
+        nextLit = L.reverse cur
+        parsePath lits paths cur s = case s of
+          [] -> fail $ "Unfinished path expression: " ++ pat
+          ('}':rest) -> parsePattern lits (path:paths) "" rest
+            where
+              path = LS.splitOn "/" $ L.reverse cur
+          (c:rest) -> parsePath lits paths (c:cur) rest
+    traverse lits paths term = withTrace ("traverse pattern: " ++ pat) $ recurse [""] True lits paths
+      where
+        recurse values lp lits paths = if L.null values
+            then pure []
+            else if lp
+            -- Try to apply a literal
+            then case lits of
+              -- All done. The last segment is always a literal.
+              [] -> return $ Terms.string <$> values
+              -- Append the literal and continue traversing.
+              (l:rest) -> recurse (append l) False rest paths
+            -- Try to apply a path
+            else case paths of
+              -- No more paths; continue with literals
+              [] -> recurse values True lits []
+              -- Apply the next path
+              (path:rest) -> do
+                  strings <- evalPath path term >>= CM.mapM toString
+                  recurse (appendAll strings) True lits rest
+          where
+            append s = fmap (\v -> v ++ s) values
+            appendAll strings = L.concat (append <$> strings)
+    evalPath path term = case path of
+        [] -> pure [term]
+        (step:rest) -> do
+          results <- evalStep step term
+          L.concat <$> (CM.mapM (evalPath rest) results)
+      where
+        evalStep step term = if L.null step
+          then pure [term]
+          else case stripTerm term of
+              TermList terms -> L.concat <$> CM.mapM (evalStep step) terms
+              TermOptional mt -> case mt of
+                Nothing -> pure []
+                Just term' -> evalStep step term'
+              TermRecord (Record _ fields) -> case M.lookup (FieldName step) (fieldMap fields) of
+                Nothing -> fail $ "No such field " ++ step ++ " in record: " ++ show term
+                Just term' -> pure [term']
+              TermUnion (Injection _ field) -> if unFieldName (fieldName field) == step
+                then evalStep step $ fieldTerm field
+                else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
+              TermWrap (Nominal _ term') -> evalStep step term'
+              _ -> fail $ "Can't traverse through term for step " ++ show step ++ ": " ++ show term
+
+    -- TODO: replace this with a more standard function
+    toString term = case stripTerm term of
+      TermLiteral lit -> pure $ case lit of
+        LiteralBinary b -> b
+        LiteralBoolean b -> show b
+        LiteralInteger i -> case i of
+          IntegerValueBigint v -> show v
+          IntegerValueInt8 v -> show v
+          IntegerValueInt16 v -> show v
+          IntegerValueInt32 v -> show v
+          IntegerValueInt64 v -> show v
+          IntegerValueUint8 v -> show v
+          IntegerValueUint16 v -> show v
+          IntegerValueUint32 v -> show v
+          IntegerValueUint64 v -> show v
+        LiteralFloat f -> case f of
+          FloatValueBigfloat v -> show v
+          FloatValueFloat32 v -> show v
+          FloatValueFloat64 v -> show v
+        LiteralString s -> s
       TermOptional mt -> case mt of
-        Nothing -> pure []
-        Just term' -> evalStep step term'
-      TermUnion (Injection _ field) -> if unFieldName (fieldName field) == step
-        then evalStep step $ fieldTerm field
-        else pure [] -- Note: not checking the step against the union type; assuming it is correct but that it references a field unused by the injection
-      TermWrap (Nominal _ term') -> evalStep step term'
-      _ -> fail $ "Can't traverse through term: " ++ show term
+        Nothing -> pure "nothing"
+        Just t -> toString t
+      _ -> pure $ show term
 
 parsePropertySpec :: Show a => Schema s a t v e p -> PropertySpec -> Flow s (Term a -> Flow s [(PG.PropertyKey, p)])
 parsePropertySpec schema (PropertySpec key value) = withTrace "parse property spec" $ do
@@ -118,7 +159,6 @@ parseValueSpec :: Show a => ValueSpec -> Flow s (Term a -> Flow s [Term a])
 parseValueSpec spec = case spec of
   ValueSpecValue -> pure $ \term -> pure [term]
   ValueSpecPattern pat -> parsePattern pat
---  _ -> fail $ "Unsupported value pattern: " ++ show spec
 
 parseVertexIdPattern :: Show a => Schema s a t v e p -> ValueSpec -> Flow s (Term a -> Flow s [v])
 parseVertexIdPattern schema spec = do

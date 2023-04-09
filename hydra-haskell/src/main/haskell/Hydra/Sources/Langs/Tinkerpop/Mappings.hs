@@ -15,7 +15,7 @@ import Hydra.Sources.Langs.Tinkerpop.PropertyGraph
 
 tinkerpopMappingsModule :: Module Kv
 tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydraCoreModule, hydraComputeModule] $
-    Just "A model for property graph mapping specifications"
+    Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"
   where
     ns = Namespace "hydra/langs/tinkerpop/mappings"
     mappings = nsref ns
@@ -30,14 +30,22 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
     elements = [
 
       def "AnnotationSchema" $
-        doc "Configurable annotations for property graph mapping specifications" $
+        doc "Configurable annotation keys for property graph mapping specifications" $
         record [
-          "vertexId">: string,
-          "edgeId">: string,
-          "outVertex">: string,
-          "inVertex">: string,
           "vertexLabel">: string,
           "edgeLabel">: string,
+          "vertexId">: string,
+          "edgeId">: string,
+          "key">: string,
+          "value">: string,
+          "outVertex">: string,
+          "outVertexLabel">: string,
+          "inVertex">: string,
+          "inVertexLabel">: string,
+          "outEdge">: string,
+          "outEdgeLabel">: string,
+          "inEdge">: string,
+          "inEdgeLabel">: string,
           "ignore">: string],
 
 --       defRecord _AnnotationSchema "defaultTinkerpopAnnotations" $ toField <$> [
@@ -87,6 +95,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             mappings "ValueSpec"],
 
       def "Schema" $
+        doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
         lambda "s" $ lambda "a" $ lambda "t" $ lambda "v" $ lambda "e" $ lambda "p" $
           record [
             "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "v",
