@@ -1,4 +1,4 @@
-module Hydra.Langs.Json.Coder (jsonCoder) where
+module Hydra.Langs.Json.Coder (jsonCoder, literalJsonCoder, untypedTermToJson) where
 
 import Hydra.Kernel
 import Hydra.TermAdapters
@@ -20,8 +20,8 @@ jsonCoder typ = do
   coder <- termCoder $ adapterTarget adapter
   return $ composeCoders (adapterCoder adapter) coder
 
-literalCoder :: LiteralType -> GraphFlow a (Coder (Graph a) (Graph a) Literal Json.Value)
-literalCoder at = pure $ case at of
+literalJsonCoder :: LiteralType -> GraphFlow a (Coder (Graph a) (Graph a) Literal Json.Value)
+literalJsonCoder at = pure $ case at of
   LiteralTypeBoolean -> Coder {
     coderEncode = \(LiteralBoolean b) -> pure $ Json.ValueBoolean b,
     coderDecode = \s -> case s of
@@ -69,7 +69,7 @@ recordCoder rt = do
 termCoder :: (Eq a, Ord a, Read a, Show a) => Type a -> GraphFlow a (Coder (Graph a) (Graph a) (Term a) Json.Value)
 termCoder typ = case stripType typ of
   TypeLiteral at -> do
-    ac <- literalCoder at
+    ac <- literalJsonCoder at
     return Coder {
       coderEncode = \(TermLiteral av) -> coderEncode ac av,
       coderDecode = \n -> case n of
@@ -114,3 +114,37 @@ termCoder typ = case stripType typ of
       encode term = pure $ Json.ValueString $ show term
       decode term = fail $ "type variable " ++ unName name ++ " does not support decoding"
   _ -> fail $ "unsupported type in JSON: " ++ show (typeVariant typ)
+
+-- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
+untypedTermToJson :: Show a => Term a -> Flow s Json.Value
+untypedTermToJson term = case stripTerm term of
+      TermList terms -> Json.ValueArray <$> (CM.mapM untypedTermToJson terms)
+      TermLiteral lit -> pure $ case lit of
+        LiteralBinary s -> Json.ValueString s
+        LiteralBoolean b -> Json.ValueBoolean b
+        LiteralFloat f -> case (convertFloatValue FloatTypeBigfloat f) of
+          FloatValueBigfloat v -> Json.ValueNumber v
+        LiteralInteger i -> case (convertIntegerValue IntegerTypeBigint i) of
+          IntegerValueBigint v -> Json.ValueNumber $ bigintToBigfloat v
+        LiteralString s -> Json.ValueString s
+      TermRecord (Record _ fields) -> do
+        keyvals <- CM.mapM fieldToKeyval fields
+        return $ Json.ValueObject $ M.fromList $ Y.catMaybes keyvals
+      TermUnion (Injection _ field) -> do
+        mkeyval <- fieldToKeyval field
+        return $ Json.ValueObject $ M.fromList $ case mkeyval of
+          Nothing -> []
+          Just keyval -> [keyval]
+      t -> unexpected "literal value" t
+  where
+    fieldToKeyval f = do
+        mjson <- forTerm $ fieldTerm f
+        return $ case mjson of
+          Nothing -> Nothing
+          Just j -> Just (unFieldName $ fieldName f, j)
+      where
+        forTerm t = case t of
+          TermOptional mt -> case mt of
+            Nothing -> pure Nothing
+            Just t' -> forTerm t'
+          t' -> Just <$> untypedTermToJson t'

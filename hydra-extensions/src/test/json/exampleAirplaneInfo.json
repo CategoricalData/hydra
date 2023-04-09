@@ -1,6 +1,5 @@
 {
   "id": "8KCAB-engine",
-  "dateAdded": "2023-03-30",
   "recordNumber": "12345",
   "airplane": {
     "name": "Decathlon 8KCAB",
@@ -17,5 +16,11 @@
     "name": "Lycoming AEIO-320-E1B",
     "type": "RECIPROCATING"
   },
-  "performanceProfile": "8KCAB-default"
+  "performanceProfile": "8KCAB-default",
+  "provenance": {
+    "timestamps": {
+      "created": "2023-03-30",
+      "lastUpdated": "2023-04-07"
+    }
+  }
 }

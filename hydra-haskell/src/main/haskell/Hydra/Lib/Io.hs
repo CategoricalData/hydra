@@ -3,6 +3,9 @@
 module Hydra.Lib.Io (
   showTerm,
   showType,
+  hydraCore,
+  termJsonCoder,
+  termStringCoder
 ) where
 
 import Hydra.Kernel
