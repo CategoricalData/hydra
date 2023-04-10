@@ -106,22 +106,28 @@ pgElementToJson schema el = case el of
       let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
       idJson <- coderDecode (PGM.schemaVertexIds schema) (PG.vertexId vertex) >>= untypedTermToJson
       propsJson <- propsToJson $ PG.vertexProperties vertex
-      return $ Json.ValueObject $ M.fromList $ propsJson ++ [
-        ("label", labelJson),
-        ("id", idJson)]
+      return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
+        Just ("label", labelJson),
+        Just ("id", idJson),
+        propsJson]
     PG.ElementEdge edge -> do
       let labelJson = Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge
       idJson <- coderDecode (PGM.schemaEdgeIds schema) (PG.edgeId edge) >>= untypedTermToJson
       outJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeOut edge) >>= untypedTermToJson
       inJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeIn edge) >>= untypedTermToJson
       propsJson <- propsToJson $ PG.edgeProperties edge
-      return $ Json.ValueObject $ M.fromList $ propsJson ++ [
-        ("label", labelJson),
-        ("id", idJson),
-        ("out", outJson),
-        ("in", inJson)]
+      return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
+        Just ("label", labelJson),
+        Just ("id", idJson),
+        Just ("out", outJson),
+        Just ("in", inJson),
+        propsJson]
   where
-    propsToJson = CM.mapM propToJson . M.toList
+    propsToJson pairs = if L.null pairs
+        then pure Nothing
+        else do
+          p <- CM.mapM propToJson $ M.toList pairs
+          return $ Just $ ("properties", Json.ValueObject $ M.fromList p)
       where
         propToJson (PG.PropertyKey key, v) = do
           json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
