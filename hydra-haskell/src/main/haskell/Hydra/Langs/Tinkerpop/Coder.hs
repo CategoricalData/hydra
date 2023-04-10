@@ -64,6 +64,7 @@ elementCoder schema typ = case stripType typ of
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
 
+      -- TODO: deprecate "kind"
       kind <- case getTypeAnnotation "kind" typ of
         Nothing -> if Y.isNothing mOutSpec || Y.isNothing mInSpec
           then pure PG.ElementKindVertex

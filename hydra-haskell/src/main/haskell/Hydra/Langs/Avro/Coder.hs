@@ -61,6 +61,10 @@ avroHydraAdapter schema = case schema of
     Avro.SchemaNamed n -> do
         let ns = Avro.namedNamespace n
         env <- getState
+
+        let manns = namedAnnotationsToCore n
+        let ann = if M.null manns then Nothing else (Just $ avroEnvironmentCreateAnnotation env manns)
+
         let lastNs = avroEnvironmentNamespace env
         let nextNs = Y.maybe lastNs Just ns
         putState $ env {avroEnvironmentNamespace = nextNs}
@@ -117,7 +121,7 @@ avroHydraAdapter schema = case schema of
                   toHydraField (f, ad) = FieldType (FieldName $ Avro.fieldName f) $ adapterTarget ad
             env <- getState
             putState $ putAvroHydraAdapter qname ad env
-            return ad
+            return $ annotate ann ad
 
         env2 <- getState
         putState $ env2 {avroEnvironmentNamespace = lastNs}
@@ -273,9 +277,13 @@ encodeAnnotationValue v = case v of
   Json.ValueString s -> Terms.string s
 
 fieldAnnotationsToCore :: Ord a => Avro.Field -> M.Map String (Term a)
-fieldAnnotationsToCore f = M.fromList (toCore <$> M.toList anns)
+fieldAnnotationsToCore f = M.fromList (toCore <$> (M.toList $ Avro.fieldAnnotations f))
   where
-    anns = Avro.fieldAnnotations f
+    toCore (k, v) = (k, encodeAnnotationValue v)
+
+namedAnnotationsToCore :: Ord a => Avro.Named -> M.Map String (Term a)
+namedAnnotationsToCore n = M.fromList (toCore <$> (M.toList $ Avro.namedAnnotations n))
+  where
     toCore (k, v) = (k, encodeAnnotationValue v)
 
 getAvroHydraAdapter :: AvroQualifiedName -> AvroEnvironment a -> Y.Maybe (AvroHydraAdapter a)

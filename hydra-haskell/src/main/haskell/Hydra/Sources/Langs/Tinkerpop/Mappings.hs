@@ -111,7 +111,7 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             doc "A trivial no-op specification which passes the entire value"
             unit,
           "pattern">:
-            doc "A compact path representing the function, e.g. ${}/engineInfo/model/name"
+            doc "A compact path representing the function, e.g. engine-${engineInfo/model/name}"
             string],
 
       def "VertexSpec" $
