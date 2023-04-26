@@ -1,6 +1,6 @@
 module Hydra.Langs.Java.Serde where
 
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import qualified Hydra.Ast as CT
 import qualified Hydra.Langs.Java.Syntax as Java
 

@@ -5,7 +5,7 @@ import Hydra.Adapters
 import Hydra.Langs.Haskell.Language
 import Hydra.Langs.Haskell.Utils
 import Hydra.Dsl.Terms
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import Hydra.Langs.Haskell.Serde
 import Hydra.Langs.Haskell.Settings
 import qualified Hydra.Langs.Haskell.Ast as H
