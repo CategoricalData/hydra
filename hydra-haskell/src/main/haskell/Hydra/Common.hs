@@ -93,7 +93,7 @@ namespaceOfEager = fst . toQnameEager
 placeholderName :: Name
 placeholderName = Name "Placeholder"
 
-skipAnnotations :: (a -> Maybe (Annotated a m)) -> a -> a
+skipAnnotations :: (x -> Maybe (Annotated x m)) -> x -> x
 skipAnnotations getAnn t = skip t
   where
     skip t = case getAnn t of
