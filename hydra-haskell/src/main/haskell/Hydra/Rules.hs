@@ -7,6 +7,7 @@ import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.CoreDecoding
+import Hydra.CoreEncoding
 import Hydra.Graph
 import Hydra.Lexical
 import Hydra.Mantle
@@ -25,14 +26,14 @@ import qualified Data.Maybe as Y
 
 type InfAnn a = (a, Type a, [Constraint a])
 
-data InferenceGraph a = InferenceGraph {
+data InferenceContext a = InferenceContext {
   inferenceContextGraph :: Graph a,
   inferenceContextCounter :: Int,
   inferenceContextEnvironment :: TypingEnvironment a}
 
 type TypingEnvironment a = M.Map Name (TypeScheme a)
 
-applyRules :: (Ord a, Show a) => Term a -> Flow (InferenceGraph a) (Term (InfAnn a))
+applyRules :: (Ord a, Show a) => Term a -> Flow (InferenceContext a) (Term (InfAnn a))
 applyRules term = case term of
     TermAnnotated (Annotated term1 ann) -> do
       iterm <- infer term1
@@ -110,31 +111,14 @@ applyRules term = case term of
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshName
-        i <- extendEnvironment v (TypeScheme [] tv) $ infer body
+        i <- extendEnvironment v (monotype tv) $ infer body
         yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
       FunctionPrimitive name -> do
         t <- withGraphContext $ typeOfPrimitive name
         yieldFunction (FunctionPrimitive name) t []
 
-    TermLet (Let bindings env) -> do
-        cs <- inferenceContextEnvironment <$> getState
-
-        let bl = M.toList bindings
-        is <- CM.mapM infer (snd <$> bl)
-        let tc = L.concat (termConstraints <$> is)
-        sub <- withGraphContext $ solveConstraints tc
-        let ts = (reduceType . substituteInType sub . termType) <$> is
-        let te = M.map (substituteInScheme sub) cs
-        let sc = generalize te <$> ts
-
-        let tenv = withEnvironment (M.map (substituteInScheme sub)) $ infer env
-        i2 <- L.foldl (\t (x, s) -> extendEnvironment x s t) tenv $ L.zip (fst <$> bl) sc
-
-        let t2 = termType i2
-        let c2 = termConstraints i2
-
-        yield (TermLet $ Let (M.fromList $ L.zip (fst <$> bl) is) i2) t2 (tc ++ c2)
+    TermLet lt -> withLet lt pure
  
     TermList els -> do
         v <- freshName
@@ -231,21 +215,21 @@ decodeStructuralType term = do
       decodeStructuralType $ elementData el
     _ -> pure typ
 
-extendEnvironment :: Name -> TypeScheme a -> Flow (InferenceGraph a) x -> Flow (InferenceGraph a) x
+extendEnvironment :: Name -> TypeScheme a -> Flow (InferenceContext a) x -> Flow (InferenceContext a) x
 extendEnvironment n sc = withEnvironment (\e -> M.insert n sc $ M.delete n e)
 
 fieldType :: Field (InfAnn a) -> FieldType a
 fieldType (Field fname term) = FieldType fname $ termType term
 
-findMatchingField :: Show a => FieldName -> [FieldType a] -> Flow (InferenceGraph a) (FieldType a)
+findMatchingField :: Show a => FieldName -> [FieldType a] -> Flow (InferenceContext a) (FieldType a)
 findMatchingField fname sfields = case L.filter (\f -> fieldTypeName f == fname) sfields of
   []    -> fail $ "no such field: " ++ unFieldName fname
   (h:_) -> return h
 
-freshName :: Flow (InferenceGraph a) (Type a)
+freshName :: Flow (InferenceContext a) (Type a)
 freshName = do
-    InferenceGraph cx s e <- getState
-    putState $ InferenceGraph cx (s + 1) e
+    InferenceContext cx s e <- getState
+    putState $ InferenceContext cx (s + 1) e
     return $ Types.variable (unName $ normalVariables !! s)
 
 generalize :: Show a => TypingEnvironment a -> Type a -> TypeScheme a
@@ -255,7 +239,7 @@ generalize env t  = TypeScheme vars t
       (freeVariablesInType t)
       (L.foldr (S.union . freeVariablesInScheme) S.empty $ M.elems env)
 
-infer :: (Ord a, Show a) => Term a -> Flow (InferenceGraph a) (Term (InfAnn a))
+infer :: (Ord a, Show a) => Term a -> Flow (InferenceContext a) (Term (InfAnn a))
 infer term = do
   cx <- inferenceContextGraph <$> getState
   mt <- withGraphContext $ annotationClassTermType (graphAnnotations cx) term
@@ -265,18 +249,21 @@ infer term = do
       return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
     Nothing -> applyRules term
 
-inferFieldType :: (Ord a, Show a) => Field a -> Flow (InferenceGraph a) (Field (InfAnn a))
+inferFieldType :: (Ord a, Show a) => Field a -> Flow (InferenceContext a) (Field (InfAnn a))
 inferFieldType (Field fname term) = Field fname <$> infer term
 
-instantiate :: TypeScheme a -> Flow (InferenceGraph a) (Type a)
+instantiate :: TypeScheme a -> Flow (InferenceContext a) (Type a)
 instantiate (TypeScheme vars t) = do
     vars1 <- mapM (const freshName) vars
     return $ substituteInType (M.fromList $ zip vars vars1) t
 
+monotype :: Type a -> TypeScheme a
+monotype typ = TypeScheme [] typ
+
 reduceType :: (Ord a, Show a) => Type a -> Type a
 reduceType t = t -- betaReduceType cx t
 
-requireName :: Show a => Name -> Flow (InferenceGraph a) (Type a)
+requireName :: Show a => Name -> Flow (InferenceContext a) (Type a)
 requireName v = do
   env <- inferenceContextEnvironment <$> getState
   case M.lookup v env of
@@ -297,23 +284,82 @@ typeOfElement name = withTrace "type of element" $ do
 typeOfPrimitive :: Name -> GraphFlow a (Type a)
 typeOfPrimitive name = primitiveType <$> requirePrimitive name
 
-withEnvironment :: (TypingEnvironment a -> TypingEnvironment a) -> Flow (InferenceGraph a) x -> Flow (InferenceGraph a) x
+typeOfTerm :: Term a -> GraphFlow a (Maybe (Type a))
+typeOfTerm term = do
+  anns <- graphAnnotations <$> getState
+  annotationClassTypeOf anns $ annotationClassTermAnnotation anns term
+  
+withEnvironment :: (TypingEnvironment a -> TypingEnvironment a) -> Flow (InferenceContext a) x -> Flow (InferenceContext a) x
 withEnvironment m f = do
-  InferenceGraph cx i e <- getState
-  withState (InferenceGraph cx i (m e)) f
+  InferenceContext cx i e <- getState
+  withState (InferenceContext cx i (m e)) f
 
-withGraphContext :: GraphFlow a x -> Flow (InferenceGraph a) x
+withGraphContext :: GraphFlow a x -> Flow (InferenceContext a) x
 withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f
 
-yield :: Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceGraph a) (Term (InfAnn a))
+withLet :: (Ord a, Show a) => Let a -> (Term (InfAnn a) -> Flow (InferenceContext a) x) -> Flow (InferenceContext a) x
+withLet (Let bindings env) flow = withTrace ("let(" ++ L.intercalate "," (unName . fst <$> M.toList bindings) ++ ")") $ do
+    state0 <- getState
+    e <- preExtendEnv bindings $ inferenceContextEnvironment state0
+    let state = state0 {inferenceContextEnvironment = e}
+    withState state $ do
+      -- TODO: perform a topologic sort on these bindings; this process should be unified with that of elements in a graph    
+      let bl = M.toList bindings
+  
+      is <- CM.mapM infer (snd <$> bl) -- TODO
+      let tc = L.concat (termConstraints <$> is)
+      sub <- withGraphContext $ solveConstraints tc
+      let ts = (reduceType . substituteInType sub . termType) <$> is
+      let te = M.map (substituteInScheme sub) $ inferenceContextEnvironment state
+      let sc = generalize te <$> ts
+  
+      let tenv = withEnvironment (M.map (substituteInScheme sub)) $ infer env
+      i2 <- L.foldl (\t (x, s) -> extendEnvironment x s t) tenv $ L.zip (fst <$> bl) sc
+      
+      let t2 = termType i2
+      let c2 = termConstraints i2
+  
+      let ibindings = L.zip (fst <$> bl) is
+      result <- yield (TermLet $ Let (M.fromList ibindings) i2) t2 (tc ++ c2)
+      
+      let state1 = state {
+            inferenceContextEnvironment = extendEnv ibindings te,
+            inferenceContextGraph = extendGraph ibindings $ inferenceContextGraph state}
+      withState state1 $ flow result
+  where
+    fsti (x, _, _) = x
+    sndi (_, x, _) = x
+    extendEnv bindings e = L.foldl addType e bindings
+      where
+        addType e (name, infterm) = M.insert name ts e 
+          where
+            ts = monotype $ case infterm of -- TODO: assuming monotypes
+              TermAnnotated (Annotated _ ann) -> sndi ann
+    extendGraph bindings g = g {graphElements = L.foldl addElement (graphElements g) bindings}
+      where
+        addElement m (name, infterm) = M.insert name (Element name sch dat) m
+          where
+            sch = epsilonEncodeType $ case infterm of
+              TermAnnotated (Annotated _ ann) -> sndi ann
+            dat = rewriteTermMeta fsti infterm
+    -- Add any manual type annotations for the bindings to the environment, enabling type inference over recursive definitions
+    preExtendEnv bindings e = withGraphContext $ CM.foldM addPair e $ M.toList bindings
+      where
+        addPair e (name, term) = do
+          mtyp <- typeOfTerm term
+          return $ case mtyp of
+            Nothing -> e
+            Just typ -> M.insert name (monotype typ) e
+
+yield :: Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yield term typ constraints = do
   g <- inferenceContextGraph <$> getState
   return $ TermAnnotated $ Annotated term (annotationClassDefault $ graphAnnotations g, typ, constraints)
 
-yieldFunction :: Function (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceGraph a) (Term (InfAnn a))
+yieldFunction :: Function (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yieldFunction fun = yield (TermFunction fun)
 
-yieldElimination :: Elimination (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceGraph a) (Term (InfAnn a))
+yieldElimination :: Elimination (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yieldElimination e = yield (TermFunction $ FunctionElimination e)
