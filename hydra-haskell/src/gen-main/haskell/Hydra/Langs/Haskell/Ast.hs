@@ -357,7 +357,7 @@ _Expression_Lambda_inner = (Core.FieldName "inner")
 -- | A 'let' expression
 data Expression_Let = 
   Expression_Let {
-    expression_LetBindings :: [Pattern],
+    expression_LetBindings :: [LocalBinding],
     expression_LetInner :: Expression}
   deriving (Eq, Ord, Read, Show)
 
