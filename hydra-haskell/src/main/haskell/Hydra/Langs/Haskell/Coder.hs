@@ -30,7 +30,7 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
       where
         decl = H.DeclarationValueBinding $
           H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
-        pat = H.PatternApplication $ H.Pattern_Application (simpleName k) []
+        pat = applicationPattern (simpleName k) []
         rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
           (H.ExpressionVariable $ elementReference namespaces n)
           (H.ExpressionLiteral $ H.LiteralString v)
@@ -92,13 +92,13 @@ encodeFunction namespaces fun = case fun of
         qname (namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
-        let nothingAlt = H.Alternative (H.PatternName $ simpleName "Nothing") nothingRhs Nothing
+        let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
         justAlt <- do
           -- Note: some of the following could be brought together with FunctionCases
           let v0 = "v"
           let rhsTerm = simplifyTerm $ apply just (variable v0)
           let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else "_"
-          let lhs = H.PatternApplication $ H.Pattern_Application (rawName "Just") [H.PatternName $ rawName v1]
+          let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
         return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
@@ -127,7 +127,7 @@ encodeFunction namespaces fun = case fun of
                 TypeRecord (RowType _ Nothing []) -> pure []
                 _ -> pure [H.PatternName $ rawName v1]
               Nothing -> fail $ "field " ++ show fn ++ " not found in " ++ show dn
-            let lhs = H.PatternApplication $ H.Pattern_Application hname args
+            let lhs = applicationPattern hname args
             rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
             return $ H.Alternative lhs rhs Nothing
     FunctionLambda (Lambda (Name v) body) -> hslambda v <$> encodeTerm namespaces body
@@ -155,7 +155,15 @@ encodeTerm namespaces term = do
        _ -> hsapp <$> encode fun <*> encode arg
     TermElement name -> pure $ H.ExpressionVariable $ elementReference namespaces name
     TermFunction f -> encodeFunction namespaces f
-    TermLet l -> fail $ "unexpected 'let' term nested within a non-let term"
+    TermLet (Let bindings env) -> do
+        hbindings <- CM.mapM encodeBinding $ M.toList bindings
+        hinner <- encode env
+        return $ H.ExpressionLet $ H.Expression_Let hbindings hinner
+      where
+        encodeBinding (name, term) = do
+          let hname = simpleName $ unName name
+          hexpr <- encode term
+          return $ H.LocalBindingValue $ simpleValueBinding hname hexpr Nothing
     TermList els -> H.ExpressionList <$> CM.mapM encode els
     TermLiteral v -> encodeLiteral v
     TermWrap (Nominal tname term') -> if newtypesNotTypedefs
@@ -251,7 +259,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
       H.ValueBindingSimple (H.ValueBinding_Simple (H.PatternApplication (H.Pattern_Application name args)) rhs bindings) -> case rhs of
         H.RightHandSide (H.ExpressionLambda (H.Expression_Lambda vars body)) -> rewriteValueBinding $
           H.ValueBindingSimple $ H.ValueBinding_Simple
-            (H.PatternApplication (H.Pattern_Application name (args ++ vars))) (H.RightHandSide body) bindings
+            (applicationPattern name (args ++ vars)) (H.RightHandSide body) bindings
         _ -> vb
 
     -- toDecl hname term coder bindings = withTrace ("encoding term of type " ++ show (removeTypeAnnotations typ) ++ " ############ term: " ++ show (removeTermAnnotations term)) $ case stripTerm term of

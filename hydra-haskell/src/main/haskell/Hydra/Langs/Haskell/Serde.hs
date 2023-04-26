@@ -82,7 +82,7 @@ instance ToTree H.Expression where
       H.ExpressionLiteral lit -> toTree lit
       H.ExpressionLambda lam -> toTree lam
     --  H.ExpressionLeftSection Term_Section
-    --  H.ExpressionLet Term_Let
+      H.ExpressionLet (H.Expression_Let bindings inner) -> spaceSep [cst "let", commaSep halfBlockStyle (toTree <$> bindings), cst "in", toTree inner]
       H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Term_PrefixApplication
