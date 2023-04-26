@@ -14,6 +14,8 @@ data Namespaces = Namespaces {
   namespacesFocus :: (Namespace, H.ModuleName),
   namespacesMapping :: M.Map Namespace H.ModuleName}
 
+applicationPattern name args = H.PatternApplication $ H.Pattern_Application name args
+
 elementReference :: Namespaces -> Name -> H.Name
 elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case alias of
     Nothing -> simpleName local
