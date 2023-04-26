@@ -1,6 +1,6 @@
 -- | Utilities for constructing Hydra code trees
 
-module Hydra.Tools.Script where
+module Hydra.Tools.Serialization where
 
 import Hydra.Ast
 

@@ -1,9 +1,9 @@
-module Hydra.Tools.ScriptSpec where
+module Hydra.Tools.SerializationSpec where
 
 import qualified Test.Hspec as H
 
 import Hydra.Ast
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import Hydra.Langs.Haskell.Operators
 
 

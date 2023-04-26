@@ -4,7 +4,7 @@ import Hydra.Kernel
 import Hydra.Langs.Graphql.Language
 import Hydra.Langs.Graphql.Serde
 import qualified Hydra.Langs.Graphql.Syntax as G
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import Hydra.Tools.Formatting
 
 import qualified Control.Monad as CM
