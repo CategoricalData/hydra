@@ -6,9 +6,9 @@
 
 module Hydra.Langs.Haskell.Serde where
 
+import Hydra.Ast
 import Hydra.Tools.Serialization
 import Hydra.Langs.Haskell.Operators
-import qualified Hydra.Ast as CT
 import qualified Hydra.Langs.Haskell.Ast as H
 
 import qualified Data.Char as C
@@ -17,7 +17,7 @@ import qualified Data.Maybe as Y
 
 
 class ToTree a where
-  toTree :: a -> CT.Expr
+  toTree :: a -> Expr
 
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
@@ -46,8 +46,8 @@ instance ToTree H.DataDeclaration_Keyword where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd, cst "="]) $
-        [constructors]
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock $
+        [spaceSep [toTree kw, toTree hd, cst "="], constructors]
         ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (toTree <$> derivCat)]]
       where
         derivCat = L.concat $ h <$> deriv
@@ -76,15 +76,19 @@ instance ToTree H.Expression where
       H.ExpressionApplication app -> toTree app
       H.ExpressionCase cases -> toTree cases
       H.ExpressionConstructRecord r -> toTree r
-      H.ExpressionDo statements -> indentBlock (cst "do") $ toTree <$> statements
+      H.ExpressionDo statements -> indentBlock $ [cst "do"] ++ (toTree <$> statements)
       H.ExpressionIf ifte -> toTree ifte
     --  H.ExpressionInfixApplication Term_InfixApplication
       H.ExpressionLiteral lit -> toTree lit
       H.ExpressionLambda lam -> toTree lam
     --  H.ExpressionLeftSection Term_Section
-      H.ExpressionLet (H.Expression_Let bindings inner) -> indentBlock (cst "") [
-        spaceSep [cst "let", commaSep halfBlockStyle (toTree <$> bindings)],
-        spaceSep [cst "in", toTree inner]]
+      H.ExpressionLet (H.Expression_Let bindings inner) -> indentBlock [
+          cst "",
+          spaceSep [cst "let", customIndentBlock "    " (encodeBinding <$> bindings)],
+          spaceSep [cst "in", toTree inner]]
+        where
+          -- Note: indentation should depend on the length of the pattern
+          encodeBinding = indentSubsequentLines "      " . toTree
       H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Term_PrefixApplication
@@ -102,7 +106,7 @@ instance ToTree H.Expression_Case where
     where
       lhs = spaceSep [cst "case", toTree cs]
       rhs = newlineSep (toTree <$> alts)
-      ofOp = CT.Op (CT.Symbol "of") (CT.Padding CT.WsSpace CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
+      ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
 
 instance ToTree H.Expression_ConstructRecord where
   toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
@@ -113,7 +117,7 @@ instance ToTree H.Expression_ConstructRecord where
 instance ToTree H.Expression_If where
   toTree (H.Expression_If eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
     where
-      ifOp = CT.Op (CT.Symbol "") (CT.Padding CT.WsNone CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
+      ifOp = Op (Symbol "") (Padding WsNone $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
       body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
 
 instance ToTree H.Expression_Lambda where
@@ -211,7 +215,7 @@ instance ToTree H.ValueBinding where
   toTree vb = case vb of
     H.ValueBindingSimple (H.ValueBinding_Simple pat rhs local) -> case local of
         Nothing -> body
-        Just (H.LocalBindings bindings) -> indentBlock body [indentBlock (cst "where") $ toTree <$> bindings]
+        Just (H.LocalBindings bindings) -> indentBlock [body, indentBlock $ [cst "where"] ++ (toTree <$> bindings)]
       where
         body = ifx defineOp (toTree pat) (toTree rhs)
 
