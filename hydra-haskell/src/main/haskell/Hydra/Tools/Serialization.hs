@@ -49,33 +49,48 @@ curlyBracesList style els = case els of
 cst :: String -> Expr
 cst = ExprConst . Symbol
 
+customIndent :: String -> String -> String
+customIndent idt s = L.intercalate "\n" $ (idt ++) <$> lines s
+
+customIndentBlock :: String -> [Expr] -> Expr
+customIndentBlock idt els = case els of
+  [x] -> x
+--  (head:rest) -> ifx idtOp head $ indentSep idt rest
+  (head:rest) -> ifx idtOp head $ newlineSep rest
+    where
+      idtOp = Op (sym "") (Padding WsSpace $ WsBreakAndIndent idt) (Precedence 0) AssociativityNone
+
 dotSep :: [Expr] -> Expr
 dotSep = sep $ Op (sym ".") (Padding WsNone WsNone) (Precedence 0) AssociativityNone
 
 doubleNewlineSep :: [Expr] -> Expr
 doubleNewlineSep = sep $ Op (sym "") (Padding WsBreak WsBreak) (Precedence 0) AssociativityNone
 
+doubleSpace :: String
+doubleSpace = "  "
+
 fullBlockStyle :: BlockStyle
-fullBlockStyle = BlockStyle True True True
+fullBlockStyle = BlockStyle (Just doubleSpace) True True
 
 halfBlockStyle :: BlockStyle
-halfBlockStyle = BlockStyle True True False
+halfBlockStyle = BlockStyle (Just doubleSpace) True False
 
 ifx :: Op -> Expr -> Expr -> Expr
 ifx op lhs rhs = ExprOp $ OpExpr op lhs rhs
 
 indent :: String -> String
-indent s = L.intercalate "\n" $ ("  " ++) <$> lines s
+indent = customIndent doubleSpace
 
-indentBlock :: Expr -> [Expr] -> Expr
-indentBlock head els = ifx idtOp head $ newlineSep els
-  where
-    idtOp = Op (sym "") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
+indentBlock :: [Expr] -> Expr
+indentBlock = customIndentBlock doubleSpace
 
 indentLines :: [Expr] -> Expr
 indentLines els = ifx topOp (cst "") (newlineSep els)
   where
-    topOp = Op (sym "") (Padding WsNone WsBreakAndIndent) (Precedence 0) AssociativityNone
+    topOp = Op (sym "") (Padding WsNone (WsBreakAndIndent doubleSpace)) (Precedence 0) AssociativityNone
+
+indentSubsequentLines :: String -> Expr -> Expr
+indentSubsequentLines idt e = ExprIndent $ IndentedExpression (IndentStyleSubsequentLines idt) e
 
 infixWs :: String -> Expr -> Expr -> Expr
 infixWs op l r = spaceSep [l, cst op, r]
@@ -86,7 +101,7 @@ infixWsList op opers = spaceSep $ L.foldl (\e r -> if L.null e then [r] else r:o
     opExpr = cst op
 
 inlineStyle :: BlockStyle
-inlineStyle = BlockStyle False False False
+inlineStyle = BlockStyle Nothing False False
 
 newlineSep :: [Expr] -> Expr
 newlineSep = sep $ Op (sym "") (Padding WsNone WsBreak) (Precedence 0) AssociativityNone
@@ -162,33 +177,36 @@ prefix p = ifx preOp (cst "")
 printExpr :: Expr -> String
 printExpr e = case e of
   ExprConst (Symbol s) -> s
+  ExprIndent (IndentedExpression style expr) -> L.intercalate "\n" $ case style of
+      IndentStyleAllLines idt -> (idt ++) <$> lns
+      IndentStyleSubsequentLines idt -> case lns of
+        [x] -> [x]
+        (head:rest) -> head:((idt ++) <$> rest)
+    where
+      lns = lines $ printExpr expr
   ExprOp (OpExpr (Op (Symbol sym) (Padding padl padr) _ _) l r) -> lhs ++ pad padl ++ sym ++ pad padr ++ rhs
     where
       lhs = idt padl $ printExpr l
       rhs = idt padr $ printExpr r
-      idt ws s = if ws == WsBreakAndIndent then indent s else s
+      idt ws s = case ws of
+        WsBreakAndIndent idt -> customIndent idt s
+        _ -> s
       pad ws = case ws of
         WsNone -> ""
         WsSpace -> " "
         WsBreak -> "\n"
-        WsBreakAndIndent -> "\n"
+        WsBreakAndIndent _ -> "\n"
         WsDoubleBreak -> "\n\n"
   ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e style) ->
       l ++ pre ++ ibody ++ suf ++ r
     where
       body = printExpr e
-      ibody = if doIndent then indent body else body
+      ibody = case doIndent of
+         Nothing -> body
+         Just idt -> customIndent idt body
       pre = if nlBefore then "\n" else ""
       suf = if nlAfter then "\n" else ""
       BlockStyle doIndent nlBefore nlAfter = style
-
-printExprAsTree :: Expr -> String
-printExprAsTree expr = case expr of
-  ExprConst (Symbol s) -> s
-  ExprBrackets (BracketExpr (Brackets (Symbol l) (Symbol r)) e _) -> l ++ r ++ ":\n" ++ indent (printExprAsTree e)
-  ExprOp (OpExpr op l r) -> h (opSymbol op) ++ ":\n" ++ indent (printExprAsTree l) ++ "\n" ++ indent (printExprAsTree r)
-    where
-      h (Symbol s) = s
 
 sep :: Op -> [Expr] -> Expr
 sep op els =  case els of
