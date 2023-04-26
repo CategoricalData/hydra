@@ -238,15 +238,18 @@ skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
   function
     (Types.function
-      (Types.variable "a")
-      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "a")) (Types.variable "m")))
-    (Types.function (Types.variable "a") (Types.variable "a")) $
-  (lambda "getAnn" $ lambda "t" $ var "skip" @@ var "t")
-    `with` [
-      "skip">: lambda "t" $
-        matchOpt
-          (var "t")
-          (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann"))]
+      (Types.variable "x")
+      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "x")) (Types.variable "m")))
+    (Types.function (Types.variable "x") (Types.variable "x")) $
+  lambda "getAnn" $ lambda "t" $
+    (var "skip" @@ var "t") `with` [
+      "skip">:
+        function (Types.variable "x") (Types.variable "x") $
+        lambda "t1" $
+          (matchOpt
+            (var "t1")
+            (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
+          @@ (var "getAnn" @@ var "t1")]
 
 termArityDef :: Definition (Term a -> Int)
 termArityDef = basicsDefinition "termArity" $
