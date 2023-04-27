@@ -101,7 +101,7 @@ encodeFunction namespaces fun = case fun of
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
           return $ H.Alternative lhs rhs Nothing
-        return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
+        return $ hslambda "x" $ H.ExpressionCase $ H.Expression_Case (hsvar "x") [nothingAlt, justAlt]
       EliminationRecord (Projection dn fname) -> return $ H.ExpressionVariable $ recordFieldReference namespaces dn fname
       EliminationUnion (CaseStatement dn def fields) -> hslambda "x" <$> caseExpr -- note: could use a lambda case here
         where
@@ -286,6 +286,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
                     (rewriteValueBinding vb)
         g <- getState
         comments <- annotationClassTermDescription (graphAnnotations g) term
+
         return $ H.DeclarationWithComments decl comments
 
 toTypeDeclarations :: (Ord a, Read a, Show a)
