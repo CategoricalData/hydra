@@ -15,7 +15,7 @@ caseStatement cond cases = ifx ofOp lhs rhs
   where
     lhs = spaceSep [cst "case", cond]
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
-    ofOp = Op (Symbol "of") (Padding WsSpace WsBreakAndIndent) (Precedence 0) AssociativityNone
+    ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
 
 lam :: [String] -> Expr -> Expr
 lam vars = ifx lambdaOp $ cst $ "\\" ++ unwords vars

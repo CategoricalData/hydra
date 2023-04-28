@@ -2,14 +2,15 @@
 
 module Hydra.Reduction where
 
-import Hydra.Core
-import Hydra.Flows
-import Hydra.Rewriting
 import Hydra.Basics
-import Hydra.Graph
-import Hydra.Lexical
+import Hydra.Core
 import Hydra.CoreDecoding
+import Hydra.Extras
+import Hydra.Flows
+import Hydra.Graph
 import Hydra.Kv
+import Hydra.Lexical
+import Hydra.Rewriting
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 

@@ -31,6 +31,7 @@ import Hydra.Sources.Coders
 import Hydra.Sources.Compute
 import Hydra.Sources.Constraints
 import Hydra.Sources.Core
+import Hydra.Sources.Extras
 import Hydra.Sources.Grammar
 import Hydra.Sources.Graph
 import Hydra.Sources.Langs.Avro.Schema
@@ -133,6 +134,7 @@ kernelModules = [
   hydraCoreModule,
   hydraComputeModule,
   hydraConstraintsModule,
+  hydraExtrasModule,
   hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,
@@ -199,7 +201,8 @@ testModules = [
 utilModules :: [Module Kv]
 utilModules = [
   hydraPrintingModule,
-  hydraBasicsModule]
+  hydraBasicsModule,
+  hydraExtrasModule]
 
 writeGraphql :: [Module Kv] -> FP.FilePath -> IO ()
 writeGraphql = generateSources Graphql.printModule

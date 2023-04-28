@@ -8,6 +8,7 @@ module Hydra.AdapterUtils (
 
 import Hydra.Coders
 import Hydra.Common
+import Hydra.Compute
 import Hydra.Core
 import Hydra.Basics
 import Hydra.Module
@@ -124,7 +125,7 @@ typeIsSupported constraints t = languageConstraintsTypes constraints t -- these 
     _ -> True
   where
     isSupportedVariant v = v == TypeVariantVariable || S.member v (languageConstraintsTypeVariants constraints)
-    
+
 unidirectionalCoder :: (a -> Flow s b) -> Coder s s a b
 unidirectionalCoder m = Coder {
   coderEncode = m,

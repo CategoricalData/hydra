@@ -4,7 +4,9 @@ module Hydra.Rewriting where
 
 import Hydra.Basics
 import Hydra.Coders
+import Hydra.Compute
 import Hydra.Core
+import Hydra.Extras
 import Hydra.Graph
 import Hydra.Flows
 import Hydra.Module
@@ -160,7 +162,7 @@ rewriteTerm f mf = rewrite fsub f
       where
         forField f = f {fieldTerm = recurse (fieldTerm f)}
 
-rewriteTermM :: Ord b => 
+rewriteTermM :: Ord b =>
   ((Term a -> Flow s (Term b)) -> Term a -> (Flow s (Term b))) ->
   (a -> Flow s b) ->
   Term a ->
@@ -315,7 +317,7 @@ termDependencyNames :: Bool -> Bool -> Bool -> Bool -> Term a -> S.Set Name
 termDependencyNames withVars withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
-        TermElement name -> el name        
+        TermElement name -> el name
         TermFunction f -> case f of
           FunctionPrimitive name -> prim name
           FunctionElimination e -> case e of

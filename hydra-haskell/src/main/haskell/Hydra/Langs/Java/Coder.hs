@@ -19,8 +19,6 @@ import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Hydra.Basics (qname)
-import Hydra.Kernel (capitalize)
 import Data.String (String)
 
 
@@ -289,7 +287,7 @@ declarationForUnionType aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName valueFieldName) ftype]
+      let rtype = Types.record $ if isUnitType ftype then [] else [FieldType (FieldName valueFieldName) ftype]
       toClassDecl True aliases [] (variantClassName False elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -601,7 +599,7 @@ encodeTerm aliases mtype term = case term of
     TermUnion (Injection name (Field (FieldName fname) v)) -> do
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-      args <- if Terms.isUnit v
+      args <- if isUnitTerm v
         then return []
         else do
           ex <- encode v

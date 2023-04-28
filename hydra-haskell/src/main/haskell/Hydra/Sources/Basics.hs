@@ -19,7 +19,9 @@ basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
 
 hydraBasicsModule :: Module Kv
 hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
-    Just "Basic functions for working with types and terms"
+    Just ("Basic functions for working with types and terms. "
+      <> "These functions are not allowed to include references to primitive functions, as the definitions of some "
+      <> "primitive functions in turn depend on them.")
   where
     elements = [
       el eliminationVariantDef,
@@ -27,7 +29,6 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el floatTypePrecisionDef,
       el floatTypesDef,
       el floatValueTypeDef,
-      el functionArityDef,
       el functionVariantDef,
       el functionVariantsDef,
       el integerTypeIsSignedDef,
@@ -38,23 +39,12 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       el literalTypeVariantDef,
       el literalVariantDef,
       el literalVariantsDef,
-      el lookupPrimitiveDef,
-      el primitiveArityDef,
-      el qnameDef,
       el skipAnnotationsDef,
-      el termArityDef,
       el termMetaDef,
       el termVariantDef,
       el termVariantsDef,
-      el testListsDef,
-      el typeArityDef,
       el typeVariantDef,
-      el typeVariantsDef,
-
-      el emptyKvDef,
-      el getAnnotationDef
---      el getAttrDef
-      ]
+      el typeVariantsDef]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -212,28 +202,6 @@ literalVariantsDef = basicsDefinition "literalVariants" $
     _LiteralVariant_integer,
     _LiteralVariant_string]
 
-lookupPrimitiveDef :: Definition (Graph a -> Name -> Maybe (Primitive a))
-lookupPrimitiveDef = basicsDefinition "lookupPrimitive" $
-  function
-    (Types.apply (Types.wrap _Graph) (Types.variable "a"))
-    (Types.function (Types.wrap _Name) (Types.optional (Types.apply (Types.wrap _Primitive) (Types.variable "a")))) $
-  lambda "g" $ lambda "name" $ apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
-
-primitiveArityDef :: Definition (Primitive a -> Int)
-primitiveArityDef = basicsDefinition "primitiveArity" $
-  doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  function (Types.apply (Types.wrap _Primitive) (Types.variable "a")) Types.int32 $
-  (ref typeArityDef <.> (project _Primitive _Primitive_type))
-
-qnameDef :: Definition (Namespace -> String -> Name)
-qnameDef = basicsDefinition "qname" $
-  doc "Construct a qualified (dot-separated) name" $
-  lambda "ns" $
-    lambda "name" $
-      nom _Name $
-        apply Strings.cat $
-          list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
-
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
   function
@@ -250,23 +218,6 @@ skipAnnotationsDef = basicsDefinition "skipAnnotations" $
             (var "t1")
             (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
           @@ (var "getAnn" @@ var "t1")]
-
-termArityDef :: Definition (Term a -> Int)
-termArityDef = basicsDefinition "termArity" $
-  function (Types.apply (Types.wrap _Term) (Types.variable "a")) Types.int32 $
-  match _Term Types.int32 (Just $ Terms.int32 0) [
-    Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
-    Case _Term_function --> ref functionArityDef]
-    -- Note: ignoring variables which might resolve to functions
-
-functionArityDef :: Definition (Function a -> Int)
-functionArityDef = basicsDefinition "functionArity" $
-  function (Types.apply (Types.wrap _Function) (Types.variable "a")) Types.int32 $
-  match _Function Types.int32 Nothing [
-    Case _Function_elimination --> constant (int32 1),
-    Case _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
-    Case _Function_primitive --> constant $
-      doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
@@ -319,23 +270,6 @@ termVariantsDef = basicsDefinition "termVariants" $
     _TermVariant_variable,
     _TermVariant_wrap]
 
--- TODO: remove once there are other polymorphic functions in use
-testListsDef :: Definition ([[a]] -> Int)
-testListsDef = basicsDefinition "testLists" $
-  doc "TODO: temporary. Just a token polymorphic function for testing" $
-  function (Types.list $ Types.list $ Types.variable "a") Types.int32 $
-  (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
-
-typeArityDef :: Definition (Type a -> Int)
-typeArityDef = basicsDefinition "typeArity" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.int32 $
-  match _Type Types.int32 (Just $ Terms.int32 0) [
-    Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
-    Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
-    Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
-    Case _Type_function --> lambda "f" $
-      Math.add @@ (int32 1) @@ (ref typeArityDef @@ (apply (project _FunctionType _FunctionType_codomain) (var "f")))]
-
 typeVariantDef :: Definition (Type a -> TypeVariant)
 typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
@@ -382,28 +316,3 @@ typeVariantsDef = basicsDefinition "typeVariants" $
     _TypeVariant_sum,
     _TypeVariant_union,
     _TypeVariant_variable]
-
-
--- hydra/flows
-
---unexpected :: Show x => String -> x -> Flow s y
---unexpected cat obj = fail $ "expected " ++ cat ++ " but found: " ++ show obj
-
--- hydra/kv
-
-emptyKvDef :: Definition Kv
-emptyKvDef = basicsDefinition "emptyKv" $
-  record _Kv [fld _Kv_annotations Maps.empty]
-
-getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
-getAnnotationDef = basicsDefinition "getAnnotation" $
-  lambda "key" $ lambda "ann" (Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann"))
-
---getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
---getAttrDef = basicsDefinition "getAttr" $
---  lambda "key" $ wrap _Flow $
---    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.variable "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
---    lambda "s0" $ lambda "t0" $ record _FlowState [
---      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
---      fld _FlowState_state $ var "s0",
---      fld _FlowState_trace $ var "t0"]

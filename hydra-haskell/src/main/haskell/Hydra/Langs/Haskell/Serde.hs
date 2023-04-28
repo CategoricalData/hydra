@@ -80,7 +80,8 @@ instance ToTree H.Expression where
       H.ExpressionIf ifte -> toTree ifte
     --  H.ExpressionInfixApplication Term_InfixApplication
       H.ExpressionLiteral lit -> toTree lit
-      H.ExpressionLambda lam -> toTree lam
+      -- Note: the need for extra parens may point to an operator precedence issue
+      H.ExpressionLambda lam -> parenthesize $ toTree lam
     --  H.ExpressionLeftSection Term_Section
       H.ExpressionLet (H.Expression_Let bindings inner) -> indentBlock [
           cst "",
@@ -154,7 +155,7 @@ instance ToTree H.LocalBinding where
   toTree binding = case binding of
     H.LocalBindingSignature ts -> toTree ts
     H.LocalBindingValue vb -> toTree vb
-    
+
 instance ToTree H.Module where
   toTree (H.Module mh imports decls) = doubleNewlineSep $
       headerLine ++ importLines ++ declLines
@@ -209,8 +210,8 @@ instance ToTree H.Type where
     H.TypeVariable name -> toTree name
 
 instance ToTree H.TypeSignature where
-  toTree (H.TypeSignature name typ) = spaceSep [toTree name, cst "::", toTree typ] 
-    
+  toTree (H.TypeSignature name typ) = spaceSep [toTree name, cst "::", toTree typ]
+
 instance ToTree H.ValueBinding where
   toTree vb = case vb of
     H.ValueBindingSimple (H.ValueBinding_Simple pat rhs local) -> case local of
