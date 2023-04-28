@@ -147,6 +147,13 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
+skipAnnotations :: ((x -> Maybe (Core.Annotated x m)) -> x -> x)
+skipAnnotations getAnn t =  
+  let skip = \t1 -> (\x -> case x of
+          Nothing -> t1
+          Just v -> (skip (Core.annotatedSubject v))) (getAnn t1)
+  in (skip t)
+
 termMeta :: (Graph.Graph a -> Core.Term a -> a)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
 
