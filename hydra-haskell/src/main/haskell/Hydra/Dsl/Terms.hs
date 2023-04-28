@@ -2,7 +2,6 @@
 
 module Hydra.Dsl.Terms where
 
-import Hydra.Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
@@ -102,12 +101,9 @@ int8 = literal . Literals.int8
 integer :: IntegerValue -> Term a
 integer = literal . Literals.integer
 
-isUnit :: Eq a => Term a -> Bool
-isUnit t = stripTerm t == TermRecord (Record _UnitType [])
-
 just :: Term a -> Term a
 just = optional . Just
-  
+
 lambda :: String -> Term a -> Term a
 lambda param body = TermFunction $ FunctionLambda $ Lambda (Name param) body
 

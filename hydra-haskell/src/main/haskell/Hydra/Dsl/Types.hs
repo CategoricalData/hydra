@@ -90,9 +90,6 @@ lambda v body = TypeLambda $ LambdaType (Name v) body
 list :: Type a -> Type a
 list = TypeList
 
-isUnit :: Eq a => Type a -> Bool
-isUnit t = stripType t == TypeRecord (RowType _UnitType Nothing [])
-
 literal :: LiteralType -> Type a
 literal = TypeLiteral
 

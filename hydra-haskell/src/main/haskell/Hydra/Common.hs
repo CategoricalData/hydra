@@ -2,6 +2,7 @@
 
 module Hydra.Common where
 
+-- import Hydra.Basics
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
@@ -78,6 +79,12 @@ isType typ = case stripType typ of
   TypeApplication (ApplicationType lhs _) -> isType lhs
   _ -> False
 
+isUnitTerm :: Eq a => Term a -> Bool
+isUnitTerm t = stripTerm t == TermRecord (Record _UnitType [])
+
+isUnitType :: Eq a => Type a -> Bool
+isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
+
 localNameOfLazy :: Name -> String
 localNameOfLazy = snd . toQnameLazy
 
@@ -93,12 +100,12 @@ namespaceOfEager = fst . toQnameEager
 placeholderName :: Name
 placeholderName = Name "Placeholder"
 
-skipAnnotations :: (x -> Maybe (Annotated x m)) -> x -> x
-skipAnnotations getAnn t = skip t
-  where
-    skip t = case getAnn t of
-      Nothing -> t
-      Just (Annotated t' _) -> skip t'
+skipAnnotations :: ((x -> Maybe (Annotated x m)) -> x -> x)
+skipAnnotations getAnn t =
+  let skip = \t1 -> (\x -> case x of
+          Nothing -> t1
+          Just v -> (skip (annotatedSubject v))) (getAnn t1)
+  in (skip t)
 
 stripTerm :: Term a -> Term a
 stripTerm = skipAnnotations $ \t -> case t of
