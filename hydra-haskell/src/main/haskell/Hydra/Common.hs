@@ -2,7 +2,7 @@
 
 module Hydra.Common where
 
--- import Hydra.Basics
+import Hydra.Basics
 import Hydra.Core
 import Hydra.Compute
 import Hydra.Graph
@@ -99,13 +99,6 @@ namespaceOfEager = fst . toQnameEager
 
 placeholderName :: Name
 placeholderName = Name "Placeholder"
-
-skipAnnotations :: ((x -> Maybe (Annotated x m)) -> x -> x)
-skipAnnotations getAnn t =
-  let skip = \t1 -> (\x -> case x of
-          Nothing -> t1
-          Just v -> (skip (annotatedSubject v))) (getAnn t1)
-  in (skip t)
 
 stripTerm :: Term a -> Term a
 stripTerm = skipAnnotations $ \t -> case t of
