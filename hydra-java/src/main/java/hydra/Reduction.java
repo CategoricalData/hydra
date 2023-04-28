@@ -13,7 +13,6 @@ import hydra.core.Record;
 import hydra.core.Term;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
-import hydra.graph.Primitive;
 import hydra.tools.LList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.function.Function;
 
 import static hydra.Common.*;
 import static hydra.Flows.*;
-import static hydra.basics.Basics.*;
+import static hydra.extras.Extras.*;
 
 
 public class Reduction {
