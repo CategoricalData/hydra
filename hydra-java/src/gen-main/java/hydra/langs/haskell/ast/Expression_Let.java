@@ -6,11 +6,11 @@ package hydra.langs.haskell.ast;
 public class Expression_Let {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/langs/haskell/ast.Expression.Let");
   
-  public final java.util.List<hydra.langs.haskell.ast.Pattern> bindings;
+  public final java.util.List<hydra.langs.haskell.ast.LocalBinding> bindings;
   
   public final hydra.langs.haskell.ast.Expression inner;
   
-  public Expression_Let (java.util.List<hydra.langs.haskell.ast.Pattern> bindings, hydra.langs.haskell.ast.Expression inner) {
+  public Expression_Let (java.util.List<hydra.langs.haskell.ast.LocalBinding> bindings, hydra.langs.haskell.ast.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -29,7 +29,7 @@ public class Expression_Let {
     return 2 * bindings.hashCode() + 3 * inner.hashCode();
   }
   
-  public Expression_Let withBindings(java.util.List<hydra.langs.haskell.ast.Pattern> bindings) {
+  public Expression_Let withBindings(java.util.List<hydra.langs.haskell.ast.LocalBinding> bindings) {
     return new Expression_Let(bindings, inner);
   }
   

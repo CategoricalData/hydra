@@ -15,6 +15,8 @@ public abstract class Expr {
   public interface Visitor<R> {
     R visit(Const instance) ;
     
+    R visit(Indent instance) ;
+    
     R visit(Op instance) ;
     
     R visit(Brackets instance) ;
@@ -26,6 +28,10 @@ public abstract class Expr {
     }
     
     default R visit(Const instance) {
+      return otherwise((instance));
+    }
+    
+    default R visit(Indent instance) {
       return otherwise((instance));
     }
     
@@ -51,6 +57,33 @@ public abstract class Expr {
         return false;
       }
       Const o = (Const) (other);
+      return value.equals(o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * value.hashCode();
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Indent extends hydra.ast.Expr {
+    public final hydra.ast.IndentedExpression value;
+    
+    public Indent (hydra.ast.IndentedExpression value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Indent)) {
+        return false;
+      }
+      Indent o = (Indent) (other);
       return value.equals(o.value);
     }
     
