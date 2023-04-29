@@ -28,7 +28,7 @@ _Associativity_both = (Core.FieldName "both")
 -- | Formatting option for code blocks
 data BlockStyle = 
   BlockStyle {
-    blockStyleIndent :: Bool,
+    blockStyleIndent :: (Maybe String),
     blockStyleNewlineBeforeContent :: Bool,
     blockStyleNewlineAfterContent :: Bool}
   deriving (Eq, Ord, Read, Show)
@@ -73,6 +73,7 @@ _Brackets_close = (Core.FieldName "close")
 -- | An abstract expression
 data Expr = 
   ExprConst Symbol |
+  ExprIndent IndentedExpression |
   ExprOp OpExpr |
   ExprBrackets BracketExpr
   deriving (Eq, Ord, Read, Show)
@@ -81,9 +82,36 @@ _Expr = (Core.Name "hydra/ast.Expr")
 
 _Expr_const = (Core.FieldName "const")
 
+_Expr_indent = (Core.FieldName "indent")
+
 _Expr_op = (Core.FieldName "op")
 
 _Expr_brackets = (Core.FieldName "brackets")
+
+-- | An expression indented in a certain style
+data IndentedExpression = 
+  IndentedExpression {
+    indentedExpressionStyle :: IndentStyle,
+    indentedExpressionExpr :: Expr}
+  deriving (Eq, Ord, Read, Show)
+
+_IndentedExpression = (Core.Name "hydra/ast.IndentedExpression")
+
+_IndentedExpression_style = (Core.FieldName "style")
+
+_IndentedExpression_expr = (Core.FieldName "expr")
+
+-- | Any of several indentation styles
+data IndentStyle = 
+  IndentStyleAllLines String |
+  IndentStyleSubsequentLines String
+  deriving (Eq, Ord, Read, Show)
+
+_IndentStyle = (Core.Name "hydra/ast.IndentStyle")
+
+_IndentStyle_allLines = (Core.FieldName "allLines")
+
+_IndentStyle_subsequentLines = (Core.FieldName "subsequentLines")
 
 -- | An operator symbol
 data Op = 
@@ -156,7 +184,7 @@ data Ws =
   WsNone  |
   WsSpace  |
   WsBreak  |
-  WsBreakAndIndent  |
+  WsBreakAndIndent String |
   WsDoubleBreak 
   deriving (Eq, Ord, Read, Show)
 

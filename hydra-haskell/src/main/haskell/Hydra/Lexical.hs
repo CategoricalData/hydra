@@ -8,6 +8,7 @@ module Hydra.Lexical (
 import Hydra.Common
 import Hydra.Basics
 import Hydra.Core
+import Hydra.Extras
 import Hydra.Graph
 import Hydra.Compute
 import Hydra.Flows

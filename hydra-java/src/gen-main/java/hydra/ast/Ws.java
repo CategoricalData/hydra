@@ -126,8 +126,10 @@ public abstract class Ws {
   }
   
   public static final class BreakAndIndent extends hydra.ast.Ws {
-    public BreakAndIndent () {
+    public final String value;
     
+    public BreakAndIndent (String value) {
+      this.value = value;
     }
     
     @Override
@@ -136,12 +138,12 @@ public abstract class Ws {
         return false;
       }
       BreakAndIndent o = (BreakAndIndent) (other);
-      return true;
+      return value.equals(o.value);
     }
     
     @Override
     public int hashCode() {
-      return 0;
+      return 2 * value.hashCode();
     }
     
     @Override

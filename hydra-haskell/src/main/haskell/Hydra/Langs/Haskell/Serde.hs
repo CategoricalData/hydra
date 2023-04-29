@@ -6,9 +6,9 @@
 
 module Hydra.Langs.Haskell.Serde where
 
-import Hydra.Tools.Script
+import Hydra.Ast
+import Hydra.Tools.Serialization
 import Hydra.Langs.Haskell.Operators
-import qualified Hydra.Ast as CT
 import qualified Hydra.Langs.Haskell.Ast as H
 
 import qualified Data.Char as C
@@ -17,7 +17,7 @@ import qualified Data.Maybe as Y
 
 
 class ToTree a where
-  toTree :: a -> CT.Expr
+  toTree :: a -> Expr
 
 instance ToTree H.Alternative where
   toTree (H.Alternative pat rhs _) = ifx caseOp (toTree pat) (toTree rhs)
@@ -46,8 +46,8 @@ instance ToTree H.DataDeclaration_Keyword where
 
 instance ToTree H.Declaration where
   toTree decl = case decl of
-    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock (spaceSep [toTree kw, toTree hd, cst "="]) $
-        [constructors]
+    H.DeclarationData (H.DataDeclaration kw _ hd cons deriv) -> indentBlock $
+        [spaceSep [toTree kw, toTree hd, cst "="], constructors]
         ++ if L.null derivCat then [] else [spaceSep [cst "deriving", parenList False (toTree <$> derivCat)]]
       where
         derivCat = L.concat $ h <$> deriv
@@ -76,13 +76,20 @@ instance ToTree H.Expression where
       H.ExpressionApplication app -> toTree app
       H.ExpressionCase cases -> toTree cases
       H.ExpressionConstructRecord r -> toTree r
-      H.ExpressionDo statements -> indentBlock (cst "do") $ toTree <$> statements
+      H.ExpressionDo statements -> indentBlock $ [cst "do"] ++ (toTree <$> statements)
       H.ExpressionIf ifte -> toTree ifte
     --  H.ExpressionInfixApplication Term_InfixApplication
       H.ExpressionLiteral lit -> toTree lit
-      H.ExpressionLambda lam -> toTree lam
+      -- Note: the need for extra parens may point to an operator precedence issue
+      H.ExpressionLambda lam -> parenthesize $ toTree lam
     --  H.ExpressionLeftSection Term_Section
-    --  H.ExpressionLet Term_Let
+      H.ExpressionLet (H.Expression_Let bindings inner) -> indentBlock [
+          cst "",
+          spaceSep [cst "let", customIndentBlock "    " (encodeBinding <$> bindings)],
+          spaceSep [cst "in", toTree inner]]
+        where
+          -- Note: indentation should depend on the length of the pattern
+          encodeBinding = indentSubsequentLines "      " . toTree
       H.ExpressionList exprs -> bracketList halfBlockStyle $ toTree <$> exprs
       H.ExpressionParens expr' -> parenthesize $ toTree expr'
     --  H.ExpressionPrefixApplication Term_PrefixApplication
@@ -100,7 +107,7 @@ instance ToTree H.Expression_Case where
     where
       lhs = spaceSep [cst "case", toTree cs]
       rhs = newlineSep (toTree <$> alts)
-      ofOp = CT.Op (CT.Symbol "of") (CT.Padding CT.WsSpace CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
+      ofOp = Op (Symbol "of") (Padding WsSpace $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
 
 instance ToTree H.Expression_ConstructRecord where
   toTree (H.Expression_ConstructRecord name updates) = spaceSep [toTree name, brackets curlyBraces halfBlockStyle body]
@@ -111,7 +118,7 @@ instance ToTree H.Expression_ConstructRecord where
 instance ToTree H.Expression_If where
   toTree (H.Expression_If eif ethen eelse) = ifx ifOp (spaceSep [cst "if", toTree eif]) body
     where
-      ifOp = CT.Op (CT.Symbol "") (CT.Padding CT.WsNone CT.WsBreakAndIndent) (CT.Precedence 0) CT.AssociativityNone
+      ifOp = Op (Symbol "") (Padding WsNone $ WsBreakAndIndent "  ") (Precedence 0) AssociativityNone
       body = newlineSep [spaceSep [cst "then", toTree ethen], spaceSep [cst "else", toTree eelse]]
 
 instance ToTree H.Expression_Lambda where
@@ -143,6 +150,11 @@ instance ToTree H.Literal where
     H.LiteralInt i -> if i < 0 then "(0" ++ show i ++ ")" else show i
     H.LiteralInteger i -> show i
     H.LiteralString s -> show s
+
+instance ToTree H.LocalBinding where
+  toTree binding = case binding of
+    H.LocalBindingSignature ts -> toTree ts
+    H.LocalBindingValue vb -> toTree vb
 
 instance ToTree H.Module where
   toTree (H.Module mh imports decls) = doubleNewlineSep $
@@ -197,9 +209,16 @@ instance ToTree H.Type where
     H.TypeTuple types -> parenList False $ toTree <$> types
     H.TypeVariable name -> toTree name
 
+instance ToTree H.TypeSignature where
+  toTree (H.TypeSignature name typ) = spaceSep [toTree name, cst "::", toTree typ]
+
 instance ToTree H.ValueBinding where
   toTree vb = case vb of
-    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs _) -> ifx defineOp (toTree pat) (toTree rhs)
+    H.ValueBindingSimple (H.ValueBinding_Simple pat rhs local) -> case local of
+        Nothing -> body
+        Just (H.LocalBindings bindings) -> indentBlock [body, indentBlock $ [cst "where"] ++ (toTree <$> bindings)]
+      where
+        body = ifx defineOp (toTree pat) (toTree rhs)
 
 instance ToTree H.Variable where
   toTree (H.Variable v) = toTree v

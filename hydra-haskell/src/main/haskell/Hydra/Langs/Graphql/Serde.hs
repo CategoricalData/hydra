@@ -1,6 +1,6 @@
 module Hydra.Langs.Graphql.Serde (exprDocument) where
 
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import Hydra.Tools.Formatting
 import qualified Hydra.Ast as CT
 import qualified Hydra.Langs.Graphql.Syntax as G

@@ -2,7 +2,7 @@
 
 module Hydra.Dsl.Expect where
 
-import Hydra.Common
+import qualified Hydra.Common as Common
 import Hydra.Compute
 import Hydra.Core
 import Hydra.Graph
@@ -50,12 +50,12 @@ float64Literal v = case v of
   _ -> unexpected "float64" v
 
 injection :: Show a => Term a -> Flow s (Field a)
-injection term = case stripTerm term of
+injection term = case Common.stripTerm term of
   TermUnion (Injection _ field) -> pure field
   _ -> unexpected "injection" term
 
 injectionWithName :: Show a => Name -> Term a -> Flow s (Field a)
-injectionWithName expected term = case stripTerm term of
+injectionWithName expected term = case Common.stripTerm term of
   TermUnion (Injection actual field) -> if actual == expected
     then pure field
     else fail $ "found an injection of type " ++ unName actual ++ ", expected " ++ unName expected
@@ -78,17 +78,17 @@ int64Literal v = case v of
   _ -> unexpected "int64" v
 
 list :: Show a => (Term a -> Flow s x) -> Term a -> Flow s [x]
-list f term = case stripTerm term of
+list f term = case Common.stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
 
 literal :: Show a => Term a -> Flow s Literal
-literal term = case stripTerm term of
+literal term = case Common.stripTerm term of
   TermLiteral lit -> pure lit
   _ -> unexpected "literal" term
 
 map :: (Ord k, Show a) => (Term a -> Flow s k) -> (Term a -> Flow s v) -> Term a -> Flow s (M.Map k v)
-map fk fv term = case stripTerm term of
+map fk fv term = case Common.stripTerm term of
   TermMap m -> M.fromList <$> CM.mapM pair (M.toList m)
     where
       pair (kterm, vterm) = do
@@ -103,14 +103,14 @@ nArgs n args = if L.length args /= n
   else pure ()
 
 optional :: Show a => (Term a -> Flow s x) -> Term a -> Flow s (Y.Maybe x)
-optional f term = case stripTerm term of
+optional f term = case Common.stripTerm term of
   TermOptional mt -> case mt of
     Nothing -> pure Nothing
     Just t -> Just <$> f t
   _ -> unexpected "optional value" term
 
 pair :: Show a => (Term a -> Flow s k) -> (Term a -> Flow s v) -> Term a -> Flow s (k, v)
-pair kf vf term = case stripTerm term of
+pair kf vf term = case Common.stripTerm term of
   TermProduct terms -> case terms of
     [kTerm, vTerm] -> do
       kVal <- kf kTerm
@@ -120,19 +120,19 @@ pair kf vf term = case stripTerm term of
   _ -> unexpected "product" term
 
 record :: Show a => Term a -> Flow s [Field a]
-record term = case stripTerm term of
+record term = case Common.stripTerm term of
   TermRecord (Record _ fields) -> pure fields
   _ -> unexpected "record" term
 
 recordWithName :: Show a => Name -> Term a -> Flow s [Field a]
-recordWithName expected term = case stripTerm term of
+recordWithName expected term = case Common.stripTerm term of
   TermRecord (Record actual fields) -> if actual == expected
     then pure fields
     else fail $ "found a record of type " ++ unName actual ++ ", expected " ++ unName expected
   _ -> unexpected "record" term
 
 set :: (Ord x, Show a) => (Term a -> Flow s x) -> Term a -> Flow s (S.Set x)
-set f term = case stripTerm term of
+set f term = case Common.stripTerm term of
   TermSet s -> S.fromList <$> CM.mapM f (S.toList s)
   _ -> unexpected "set" term
 
@@ -145,7 +145,7 @@ stringLiteral v = case v of
   _ -> unexpected "string" v
 
 wrapWithName :: Show a => Name -> Term a -> Flow s (Term a)
-wrapWithName expected term = case stripTerm term of
+wrapWithName expected term = case Common.stripTerm term of
   TermWrap (Nominal actual term) -> if actual == expected
     then pure term
     else fail $ "found a wrapper of type " ++ unName actual ++ ", expected " ++ unName expected

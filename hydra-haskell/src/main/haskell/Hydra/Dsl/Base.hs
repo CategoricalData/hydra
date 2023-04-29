@@ -174,5 +174,10 @@ var v = Datum $ Terms.variable v
 variant :: Name -> FieldName -> Datum a -> Datum b
 variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname term
 
+with :: Datum a -> [Fld a] -> Datum a
+(Datum env) `with` bindings = Datum $ TermLet $ Let (M.fromList $ toPair <$> bindings) env
+  where
+     toPair (Fld (Field name value)) = (Name $ unFieldName name, value)
+
 wrap :: Name -> Datum a -> Datum b
 wrap name (Datum term) = Datum $ Terms.wrap name term
