@@ -7,6 +7,8 @@ synopsis:   Built-in extensions to Hydra, including additional models and utilit
 github:     CategoricalData/hydra
 
 extra-source-files:
+  - LICENSE
+  - README.md
   - stack.yaml
 
 dependencies: # copied from ../hydra-haskell

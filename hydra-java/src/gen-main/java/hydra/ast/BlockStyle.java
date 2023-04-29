@@ -6,13 +6,13 @@ package hydra.ast;
 public class BlockStyle {
   public static final hydra.core.Name NAME = new hydra.core.Name("hydra/ast.BlockStyle");
   
-  public final Boolean indent;
+  public final java.util.Optional<String> indent;
   
   public final Boolean newlineBeforeContent;
   
   public final Boolean newlineAfterContent;
   
-  public BlockStyle (Boolean indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
+  public BlockStyle (java.util.Optional<String> indent, Boolean newlineBeforeContent, Boolean newlineAfterContent) {
     this.indent = indent;
     this.newlineBeforeContent = newlineBeforeContent;
     this.newlineAfterContent = newlineAfterContent;
@@ -32,7 +32,7 @@ public class BlockStyle {
     return 2 * indent.hashCode() + 3 * newlineBeforeContent.hashCode() + 5 * newlineAfterContent.hashCode();
   }
   
-  public BlockStyle withIndent(Boolean indent) {
+  public BlockStyle withIndent(java.util.Optional<String> indent) {
     return new BlockStyle(indent, newlineBeforeContent, newlineAfterContent);
   }
   

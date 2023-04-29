@@ -4,7 +4,7 @@ module Hydra.Langs.Rdf.Serde (
   rdfGraphToNtriples,
 ) where
 
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import qualified Hydra.Langs.Rdf.Syntax as Rdf
 import qualified Hydra.Ast as CT
 

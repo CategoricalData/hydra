@@ -1,7 +1,7 @@
 module Hydra.Langs.Haskell.Operators where
 
 import Hydra.Ast
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 
 
 andOp :: Op

@@ -1,16 +1,10 @@
--- | Basic functions for working with types and terms
+-- | Basic functions for working with types and terms. These functions are not allowed to include references to primitive functions, as the definitions of some primitive functions in turn depend on them.
 
 module Hydra.Basics where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
-import qualified Hydra.Lib.Math as Math
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
-import qualified Hydra.Module as Module
 import Data.List
 import Data.Map
 import Data.Set
@@ -55,12 +49,6 @@ floatValueType x = case x of
   Core.FloatValueBigfloat _ -> Core.FloatTypeBigfloat
   Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
-
-functionArity :: (Core.Function a -> Int)
-functionArity x = case x of
-  Core.FunctionElimination _ -> 1
-  Core.FunctionLambda v -> (Math.add 1 (termArity (Core.lambdaBody v)))
-  Core.FunctionPrimitive _ -> 42
 
 -- | Find the function variant (constructor) for a given function
 functionVariant :: (Core.Function a -> Mantle.FunctionVariant)
@@ -159,25 +147,12 @@ literalVariants = [
   Mantle.LiteralVariantInteger,
   Mantle.LiteralVariantString]
 
-lookupPrimitive :: (Graph.Graph a -> Core.Name -> Maybe (Graph.Primitive a))
-lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
-
--- | Find the arity (expected number of arguments) of a primitive constant or function
-primitiveArity :: (Graph.Primitive a -> Int)
-primitiveArity x = (typeArity (Graph.primitiveType x))
-
--- | Construct a qualified (dot-separated) name
-qname :: (Module.Namespace -> String -> Core.Name)
-qname ns name = (Core.Name (Strings.cat [
-  Module.unNamespace ns,
-  ".",
-  name]))
-
-termArity :: (Core.Term a -> Int)
-termArity x = case x of
-  Core.TermApplication v -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v)))
-  Core.TermFunction v -> (functionArity v)
-  _ -> 0
+skipAnnotations :: ((x -> Maybe (Core.Annotated x m)) -> x -> x)
+skipAnnotations getAnn t =  
+  let skip = \t1 -> (\x -> case x of
+          Nothing -> t1
+          Just v -> (skip (Core.annotatedSubject v))) (getAnn t1)
+  in (skip t)
 
 termMeta :: (Graph.Graph a -> Core.Term a -> a)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
@@ -223,18 +198,6 @@ termVariants = [
   Mantle.TermVariantVariable,
   Mantle.TermVariantWrap]
 
--- | TODO: temporary. Just a token polymorphic function for testing
-testLists :: ([[a]] -> Int)
-testLists els = (Lists.length (Lists.concat els))
-
-typeArity :: (Core.Type a -> Int)
-typeArity x = case x of
-  Core.TypeAnnotated v -> (typeArity (Core.annotatedSubject v))
-  Core.TypeApplication v -> (typeArity (Core.applicationTypeFunction v))
-  Core.TypeLambda v -> (typeArity (Core.lambdaTypeBody v))
-  Core.TypeFunction v -> (Math.add 1 (typeArity (Core.functionTypeCodomain v)))
-  _ -> 0
-
 -- | Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type a -> Mantle.TypeVariant)
 typeVariant typ = ((\x -> case x of
@@ -276,10 +239,3 @@ typeVariants = [
   Mantle.TypeVariantSum,
   Mantle.TypeVariantUnion,
   Mantle.TypeVariantVariable]
-
-emptyKv :: Compute.Kv
-emptyKv = Compute.Kv {
-  Compute.kvAnnotations = Maps.empty}
-
-getAnnotation :: (String -> Compute.Kv -> Maybe (Core.Term Compute.Kv))
-getAnnotation key ann = (Maps.lookup key (Compute.kvAnnotations ann))

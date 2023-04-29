@@ -101,5 +101,5 @@ rewriteDataType f = rewriteTermMeta rewrite
   where
     rewrite (x, typ, c) = (x, f typ, c)
 
-startContext :: Graph a -> InferenceGraph a
+startContext :: Graph a -> InferenceContext a
 startContext cx = InferenceContext cx 0 M.empty

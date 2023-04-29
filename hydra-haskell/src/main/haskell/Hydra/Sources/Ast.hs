@@ -22,7 +22,7 @@ hydraAstModule = Module ns elements [] $
       def "BlockStyle" $
         doc "Formatting option for code blocks" $
         record [
-          "indent">: boolean,
+          "indent">: optional string,
           "newlineBeforeContent">: boolean,
           "newlineAfterContent">: boolean],
 
@@ -43,8 +43,21 @@ hydraAstModule = Module ns elements [] $
         doc "An abstract expression" $
         union [
           "const">: ast "Symbol",
+          "indent">: ast "IndentedExpression",
           "op">: ast "OpExpr",
           "brackets">: ast "BracketExpr"],
+
+      def "IndentedExpression" $
+        doc "An expression indented in a certain style" $
+        record [
+          "style">: ast "IndentStyle",
+          "expr">: ast "Expr"],
+          
+      def "IndentStyle" $
+        doc "Any of several indentation styles" $
+        union [
+          "allLines">: string,
+          "subsequentLines">: string],
 
       def "Op" $
         doc "An operator symbol" $
@@ -77,4 +90,9 @@ hydraAstModule = Module ns elements [] $
 
       def "Ws" $
         doc "One of several classes of whitespace" $
-        enum ["none", "space", "break", "breakAndIndent", "doubleBreak"]]
+        union [
+          "none">: unit,
+          "space">: unit,
+          "break">: unit,
+          "breakAndIndent">: string,
+          "doubleBreak">: unit]]

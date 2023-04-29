@@ -5,7 +5,7 @@ import Hydra.Reduction
 import Hydra.Langs.Java.Utils
 import Hydra.Langs.Java.Language
 import Hydra.Adapters
-import Hydra.Tools.Script
+import Hydra.Tools.Serialization
 import Hydra.Langs.Java.Serde
 import Hydra.Langs.Java.Settings
 import Hydra.AdapterUtils
@@ -19,8 +19,6 @@ import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
-import Hydra.Basics (qname)
-import Hydra.Kernel (capitalize)
 import Data.String (String)
 
 
@@ -127,7 +125,7 @@ constructModule mod coders pairs = do
           let tparams = javaTypeParametersForType typ
           return $ interfaceMethodDeclaration mods tparams mname [param] result (Just [returnSt])
         _ -> unexpected "function term" term
-      _ -> unexpected "function type" typ
+      _ -> unexpected "function type (1)" typ
 
 constructElementsInterface :: Module a -> [Java.InterfaceMemberDeclaration] -> (Name, Java.CompilationUnit)
 constructElementsInterface mod members = (elName, cu)
@@ -289,7 +287,7 @@ declarationForUnionType aliases tparams elName fields = do
   where
     privateConstructor = makeConstructor aliases elName True [] []
     unionFieldClass (FieldType fname ftype) = do
-      let rtype = Types.record $ if Types.isUnit ftype then [] else [FieldType (FieldName valueFieldName) ftype]
+      let rtype = Types.record $ if isUnitType ftype then [] else [FieldType (FieldName valueFieldName) ftype]
       toClassDecl True aliases [] (variantClassName False elName fname) rtype
     augmentVariantClass (Java.ClassDeclarationNormal cd) = Java.ClassDeclarationNormal $ cd {
         Java.normalClassDeclarationModifiers = [Java.ClassModifierPublic, Java.ClassModifierStatic, Java.ClassModifierFinal],
@@ -493,6 +491,12 @@ encodeLiteralType lt = case lt of
   where
     simple n = pure $ javaRefType [] Nothing n
 
+encodeNullaryConstant :: (Eq a, Ord a, Read a, Show a)
+  => Aliases -> Type a -> Function a -> GraphFlow a Java.Expression
+encodeNullaryConstant aliases typ fun = case fun of
+  FunctionPrimitive name -> forNamedFunction aliases True name []
+  _ -> unexpected "nullary function" fun
+
 encodeTerm :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Maybe (Type a) -> Term a -> GraphFlow a Java.Expression
 encodeTerm aliases mtype term = case term of
@@ -506,21 +510,16 @@ encodeTerm aliases mtype term = case term of
 
     TermApplication a -> case stripTerm fun of
         TermFunction f -> case f of
-          FunctionPrimitive name -> forNamedFunction True name args
+          FunctionPrimitive name -> forNamedFunction aliases True name args
           FunctionElimination EliminationElement -> if L.length args > 0
             then case stripTerm (L.head args) of
               TermElement name -> do
-                forNamedFunction False name (L.tail args)
+                forNamedFunction aliases False name (L.tail args)
               _ -> fallback
             else fallback
           _ -> fallback
         _ -> fallback
       where
-        forNamedFunction prim name args = do
-            jargs <- CM.mapM encode args
-            let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
-            return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
-
         (fun, args) = uncurry [] term
           where
             uncurry args term = case term of
@@ -560,7 +559,7 @@ encodeTerm aliases mtype term = case term of
     TermFunction f -> case mtype of
       Just t -> case stripType t of
         TypeFunction (FunctionType dom cod) -> encodeFunction aliases dom cod f
-        _ -> unexpected "function type" $ t
+        t' -> encodeNullaryConstant aliases t' f
       Nothing -> failAsLiteral $ "unannotated function: " ++ show f
 
     TermList els -> do
@@ -601,7 +600,7 @@ encodeTerm aliases mtype term = case term of
     TermUnion (Injection name (Field (FieldName fname) v)) -> do
       let (Java.Identifier typeId) = nameToJavaName aliases name
       let consId = Java.Identifier $ typeId ++ "." ++ sanitizeJavaName (capitalize fname)
-      args <- if Terms.isUnit v
+      args <- if isUnitTerm v
         then return []
         else do
           ex <- encode v
@@ -663,6 +662,12 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases ft
   return $ javaTypeToJavaFormalParameter jt fname
 
+forNamedFunction :: (Eq a, Ord a, Read a, Show a) => Aliases -> Bool -> Name -> [Term a] -> GraphFlow a Java.Expression
+forNamedFunction aliases prim name args = do
+    jargs <- CM.mapM (encodeTerm aliases Nothing) args
+    let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
+    return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+
 getCodomain :: Show a => a -> GraphFlow a (Type a)
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
 
@@ -674,7 +679,7 @@ getFunctionType ann = do
     Nothing -> fail "type annotation is required for function and elimination terms in Java"
     Just t -> case t of
       TypeFunction ft -> return ft
-      _ -> unexpected "function type" t
+      _ -> unexpected "function type (3)" t
 
 innerClassRef :: Aliases -> Name -> String -> Java.Identifier
 innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local

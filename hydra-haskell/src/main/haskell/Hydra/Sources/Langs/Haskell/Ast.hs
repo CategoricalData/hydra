@@ -181,7 +181,7 @@ haskellAstModule = Module ns elements [] $
       def "Expression.Let" $
         doc "A 'let' expression" $
         record [
-          "bindings">: list $ ast "Pattern",
+          "bindings">: list $ ast "LocalBinding",
           "inner">: ast "Expression"],
 
       def "Expression.PrefixApplication" $
