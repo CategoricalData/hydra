@@ -10,42 +10,42 @@ public abstract class Pattern<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Triple instance) ;
+  public interface Visitor<A, R> {
+    R visit(Triple<A> instance) ;
     
-    R visit(Negation instance) ;
+    R visit(Negation<A> instance) ;
     
-    R visit(Conjunction instance) ;
+    R visit(Conjunction<A> instance) ;
     
-    R visit(Disjunction instance) ;
+    R visit(Disjunction<A> instance) ;
     
-    R visit(Graph instance) ;
+    R visit(Graph<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Pattern instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Pattern<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Triple instance) {
+    default R visit(Triple<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Negation instance) {
+    default R visit(Negation<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Conjunction instance) {
+    default R visit(Conjunction<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Disjunction instance) {
+    default R visit(Disjunction<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Graph instance) {
+    default R visit(Graph<A> instance) {
       return otherwise((instance));
     }
   }
@@ -68,7 +68,7 @@ public abstract class Pattern<A> {
       if (!(other instanceof Triple)) {
         return false;
       }
-      Triple o = (Triple) (other);
+      Triple<A> o = (Triple<A>) (other);
       return value.equals(o.value);
     }
     
@@ -78,7 +78,7 @@ public abstract class Pattern<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -111,7 +111,7 @@ public abstract class Pattern<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -144,7 +144,7 @@ public abstract class Pattern<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -177,7 +177,7 @@ public abstract class Pattern<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -210,7 +210,7 @@ public abstract class Pattern<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
