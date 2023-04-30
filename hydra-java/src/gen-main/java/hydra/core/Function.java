@@ -11,10 +11,8 @@ public abstract class Function<A> {
   }
   
   public abstract <R> R accept(Visitor<A, R> visitor) ;
-
-//    public abstract <R> R accept(PartialVisitor<A, R> visitor);
-
-    public interface Visitor<A, R> {
+  
+  public interface Visitor<A, R> {
     R visit(Elimination<A> instance) ;
     
     R visit(Lambda<A> instance) ;
