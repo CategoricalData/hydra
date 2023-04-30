@@ -1,7 +1,5 @@
 package hydra.basics;
 
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 
 /**
  * Basic functions for working with types and terms. These functions are not allowed to include references to primitive functions, as the definitions of some primitive functions in turn depend on them.
@@ -13,34 +11,34 @@ public interface Basics {
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Element<A> instance) {
         return new hydra.mantle.EliminationVariant.Element();
       }
-      
+
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.List<A> instance) {
         return new hydra.mantle.EliminationVariant.List();
       }
-      
+
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Optional<A> instance) {
         return new hydra.mantle.EliminationVariant.Optional();
       }
-      
+
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Record<A> instance) {
         return new hydra.mantle.EliminationVariant.Record();
       }
-      
+
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Union<A> instance) {
         return new hydra.mantle.EliminationVariant.Union();
       }
-      
+
       @Override
       public hydra.mantle.EliminationVariant visit(hydra.core.Elimination.Wrap<A> instance) {
         return new hydra.mantle.EliminationVariant.Wrap();
       }
     });
   }
-  
+
   java.util.List<hydra.mantle.EliminationVariant> eliminationVariants = java.util.Arrays.asList(
     new hydra.mantle.EliminationVariant.Element(),
     new hydra.mantle.EliminationVariant.List(),
@@ -48,172 +46,172 @@ public interface Basics {
     new hydra.mantle.EliminationVariant.Optional(),
     new hydra.mantle.EliminationVariant.Record(),
     new hydra.mantle.EliminationVariant.Union());
-  
+
   static hydra.mantle.Precision floatTypePrecision(hydra.core.FloatType v1) {
     return ((v1)).accept(new hydra.core.FloatType.Visitor<>() {
       @Override
       public hydra.mantle.Precision visit(hydra.core.FloatType.Bigfloat instance) {
         return new hydra.mantle.Precision.Arbitrary();
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.FloatType.Float32 instance) {
         return new hydra.mantle.Precision.Bits(32);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.FloatType.Float64 instance) {
         return new hydra.mantle.Precision.Bits(64);
       }
     });
   }
-  
+
   java.util.List<hydra.core.FloatType> floatTypes = java.util.Arrays.asList(
     new hydra.core.FloatType.Bigfloat(),
     new hydra.core.FloatType.Float32(),
     new hydra.core.FloatType.Float64());
-  
+
   static hydra.core.FloatType floatValueType(hydra.core.FloatValue v1) {
     return ((v1)).accept(new hydra.core.FloatValue.Visitor<>() {
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Bigfloat instance) {
         return new hydra.core.FloatType.Bigfloat();
       }
-      
+
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Float32 instance) {
         return new hydra.core.FloatType.Float32();
       }
-      
+
       @Override
       public hydra.core.FloatType visit(hydra.core.FloatValue.Float64 instance) {
         return new hydra.core.FloatType.Float64();
       }
     });
   }
-  
+
   static <A> hydra.mantle.FunctionVariant functionVariant(hydra.core.Function<A> v1) {
     return ((v1)).accept(new hydra.core.Function.Visitor<>() {
       @Override
       public hydra.mantle.FunctionVariant visit(hydra.core.Function.Elimination<A> instance) {
         return new hydra.mantle.FunctionVariant.Elimination();
       }
-      
+
       @Override
       public hydra.mantle.FunctionVariant visit(hydra.core.Function.Lambda<A> instance) {
         return new hydra.mantle.FunctionVariant.Lambda();
       }
-      
+
       @Override
       public hydra.mantle.FunctionVariant visit(hydra.core.Function.Primitive<A> instance) {
         return new hydra.mantle.FunctionVariant.Primitive();
       }
     });
   }
-  
+
   java.util.List<hydra.mantle.FunctionVariant> functionVariants = java.util.Arrays.asList(
     new hydra.mantle.FunctionVariant.Elimination(),
     new hydra.mantle.FunctionVariant.Lambda(),
     new hydra.mantle.FunctionVariant.Primitive());
-  
+
   static Boolean integerTypeIsSigned(hydra.core.IntegerType v1) {
     return ((v1)).accept(new hydra.core.IntegerType.Visitor<>() {
       @Override
       public Boolean visit(hydra.core.IntegerType.Bigint instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Int8 instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Int16 instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Int32 instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Int64 instance) {
         return true;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Uint8 instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Uint16 instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Uint32 instance) {
         return false;
       }
-      
+
       @Override
       public Boolean visit(hydra.core.IntegerType.Uint64 instance) {
         return false;
       }
     });
   }
-  
+
   static hydra.mantle.Precision integerTypePrecision(hydra.core.IntegerType v1) {
     return ((v1)).accept(new hydra.core.IntegerType.Visitor<>() {
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Bigint instance) {
         return new hydra.mantle.Precision.Arbitrary();
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Int8 instance) {
         return new hydra.mantle.Precision.Bits(8);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Int16 instance) {
         return new hydra.mantle.Precision.Bits(16);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Int32 instance) {
         return new hydra.mantle.Precision.Bits(32);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Int64 instance) {
         return new hydra.mantle.Precision.Bits(64);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Uint8 instance) {
         return new hydra.mantle.Precision.Bits(8);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Uint16 instance) {
         return new hydra.mantle.Precision.Bits(16);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Uint32 instance) {
         return new hydra.mantle.Precision.Bits(32);
       }
-      
+
       @Override
       public hydra.mantle.Precision visit(hydra.core.IntegerType.Uint64 instance) {
         return new hydra.mantle.Precision.Bits(64);
       }
     });
   }
-  
+
   java.util.List<hydra.core.IntegerType> integerTypes = java.util.Arrays.asList(
     new hydra.core.IntegerType.Bigint(),
     new hydra.core.IntegerType.Int8(),
@@ -224,227 +222,229 @@ public interface Basics {
     new hydra.core.IntegerType.Uint16(),
     new hydra.core.IntegerType.Uint32(),
     new hydra.core.IntegerType.Uint64());
-  
+
   static hydra.core.IntegerType integerValueType(hydra.core.IntegerValue v1) {
     return ((v1)).accept(new hydra.core.IntegerValue.Visitor<>() {
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Bigint instance) {
         return new hydra.core.IntegerType.Bigint();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int8 instance) {
         return new hydra.core.IntegerType.Int8();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int16 instance) {
         return new hydra.core.IntegerType.Int16();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int32 instance) {
         return new hydra.core.IntegerType.Int32();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Int64 instance) {
         return new hydra.core.IntegerType.Int64();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint8 instance) {
         return new hydra.core.IntegerType.Uint8();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint16 instance) {
         return new hydra.core.IntegerType.Uint16();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint32 instance) {
         return new hydra.core.IntegerType.Uint32();
       }
-      
+
       @Override
       public hydra.core.IntegerType visit(hydra.core.IntegerValue.Uint64 instance) {
         return new hydra.core.IntegerType.Uint64();
       }
     });
   }
-  
+
   static hydra.core.LiteralType literalType(hydra.core.Literal v1) {
     return ((v1)).accept(new hydra.core.Literal.Visitor<>() {
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Binary instance) {
         return new hydra.core.LiteralType.Binary();
       }
-      
+
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Boolean_ instance) {
         return new hydra.core.LiteralType.Boolean_();
       }
-      
+
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Float_ instance) {
         return new hydra.core.LiteralType.Float_(hydra.basics.Basics.floatValueType((instance.value)));
       }
-      
+
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.Integer_ instance) {
         return new hydra.core.LiteralType.Integer_(hydra.basics.Basics.integerValueType((instance.value)));
       }
-      
+
       @Override
       public hydra.core.LiteralType visit(hydra.core.Literal.String_ instance) {
         return new hydra.core.LiteralType.String_();
       }
     });
   }
-  
+
   static hydra.mantle.LiteralVariant literalTypeVariant(hydra.core.LiteralType v1) {
     return ((v1)).accept(new hydra.core.LiteralType.Visitor<>() {
       @Override
       public hydra.mantle.LiteralVariant visit(hydra.core.LiteralType.Binary instance) {
         return new hydra.mantle.LiteralVariant.Binary();
       }
-      
+
       @Override
       public hydra.mantle.LiteralVariant visit(hydra.core.LiteralType.Boolean_ instance) {
         return new hydra.mantle.LiteralVariant.Boolean_();
       }
-      
+
       @Override
       public hydra.mantle.LiteralVariant visit(hydra.core.LiteralType.Float_ instance) {
         return new hydra.mantle.LiteralVariant.Float_();
       }
-      
+
       @Override
       public hydra.mantle.LiteralVariant visit(hydra.core.LiteralType.Integer_ instance) {
         return new hydra.mantle.LiteralVariant.Integer_();
       }
-      
+
       @Override
       public hydra.mantle.LiteralVariant visit(hydra.core.LiteralType.String_ instance) {
         return new hydra.mantle.LiteralVariant.String_();
       }
     });
   }
-  
+
   static hydra.mantle.LiteralVariant literalVariant(hydra.core.Literal x) {
     return hydra.basics.Basics.literalTypeVariant(hydra.basics.Basics.literalType((x)));
   }
-  
+
   java.util.List<hydra.mantle.LiteralVariant> literalVariants = java.util.Arrays.asList(
     new hydra.mantle.LiteralVariant.Binary(),
     new hydra.mantle.LiteralVariant.Boolean_(),
     new hydra.mantle.LiteralVariant.Float_(),
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
-  
-  static <M, X> java.util.function.Function<X, X> skipAnnotations(java.util.function.Function<X, java.util.Optional<hydra.core.Annotated<X, M>>> getAnn) {
-    AtomicReference<Function<X, X>> skip = new AtomicReference<>();
+
+  static <M, X> java.util.function.Function<X, X> skipAnnotations(
+      java.util.function.Function<X, java.util.Optional<hydra.core.Annotated<X, M>>> getAnn) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<X, X>> skip
+        = new java.util.concurrent.atomic.AtomicReference<>();
     skip.set(x -> {
             java.util.Optional<hydra.core.Annotated<X, M>> mann = getAnn.apply(x);
             return mann.isPresent() ? skip.get().apply(mann.get().subject) : x;
         });
     return skip.get();
   }
-  
+
   static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> x) {
     return (((x)).annotations).termAnnotation;
   }
-  
+
   static <A> hydra.mantle.TermVariant termVariant(hydra.core.Term<A> term) {
     return ((term)).accept(new hydra.core.Term.Visitor<>() {
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Annotated<A> instance) {
         return new hydra.mantle.TermVariant.Annotated();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Application<A> instance) {
         return new hydra.mantle.TermVariant.Application();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Element<A> instance) {
         return new hydra.mantle.TermVariant.Element();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Function<A> instance) {
         return new hydra.mantle.TermVariant.Function();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Let<A> instance) {
         return new hydra.mantle.TermVariant.Let();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.List<A> instance) {
         return new hydra.mantle.TermVariant.List();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Literal<A> instance) {
         return new hydra.mantle.TermVariant.Literal();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Map<A> instance) {
         return new hydra.mantle.TermVariant.Map();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Optional<A> instance) {
         return new hydra.mantle.TermVariant.Optional();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Product<A> instance) {
         return new hydra.mantle.TermVariant.Product();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Record<A> instance) {
         return new hydra.mantle.TermVariant.Record();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Set<A> instance) {
         return new hydra.mantle.TermVariant.Set();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Stream<A> instance) {
         return new hydra.mantle.TermVariant.Stream();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Sum<A> instance) {
         return new hydra.mantle.TermVariant.Sum();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Union<A> instance) {
         return new hydra.mantle.TermVariant.Union();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Variable<A> instance) {
         return new hydra.mantle.TermVariant.Variable();
       }
-      
+
       @Override
       public hydra.mantle.TermVariant visit(hydra.core.Term.Wrap<A> instance) {
         return new hydra.mantle.TermVariant.Wrap();
       }
     });
   }
-  
+
   java.util.List<hydra.mantle.TermVariant> termVariants = java.util.Arrays.asList(
     new hydra.mantle.TermVariant.Annotated(),
     new hydra.mantle.TermVariant.Application(),
@@ -462,96 +462,96 @@ public interface Basics {
     new hydra.mantle.TermVariant.Union(),
     new hydra.mantle.TermVariant.Variable(),
     new hydra.mantle.TermVariant.Wrap());
-  
+
   static <A> hydra.mantle.TypeVariant typeVariant(hydra.core.Type<A> typ) {
     return ((typ)).accept(new hydra.core.Type.Visitor<>() {
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Annotated<A> instance) {
         return new hydra.mantle.TypeVariant.Annotated();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Application<A> instance) {
         return new hydra.mantle.TypeVariant.Application();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Element<A> instance) {
         return new hydra.mantle.TypeVariant.Element();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Function<A> instance) {
         return new hydra.mantle.TypeVariant.Function();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Lambda<A> instance) {
         return new hydra.mantle.TypeVariant.Lambda();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.List<A> instance) {
         return new hydra.mantle.TypeVariant.List();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Literal<A> instance) {
         return new hydra.mantle.TypeVariant.Literal();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Map<A> instance) {
         return new hydra.mantle.TypeVariant.Map();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Optional<A> instance) {
         return new hydra.mantle.TypeVariant.Optional();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Product<A> instance) {
         return new hydra.mantle.TypeVariant.Product();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Record<A> instance) {
         return new hydra.mantle.TypeVariant.Record();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Set<A> instance) {
         return new hydra.mantle.TypeVariant.Set();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Stream<A> instance) {
         return new hydra.mantle.TypeVariant.Stream();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Sum<A> instance) {
         return new hydra.mantle.TypeVariant.Sum();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Union<A> instance) {
         return new hydra.mantle.TypeVariant.Union();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Variable<A> instance) {
         return new hydra.mantle.TypeVariant.Variable();
       }
-      
+
       @Override
       public hydra.mantle.TypeVariant visit(hydra.core.Type.Wrap<A> instance) {
         return new hydra.mantle.TypeVariant.Wrap();
       }
     });
   }
-  
+
   java.util.List<hydra.mantle.TypeVariant> typeVariants = java.util.Arrays.asList(
     new hydra.mantle.TypeVariant.Annotated(),
     new hydra.mantle.TypeVariant.Application(),
