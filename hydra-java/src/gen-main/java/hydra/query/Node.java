@@ -10,30 +10,30 @@ public abstract class Node<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Term instance) ;
+  public interface Visitor<A, R> {
+    R visit(Term<A> instance) ;
     
-    R visit(Variable instance) ;
+    R visit(Variable<A> instance) ;
     
-    R visit(Wildcard instance) ;
+    R visit(Wildcard<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Node instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Node<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Term instance) {
+    default R visit(Term<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Variable instance) {
+    default R visit(Variable<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wildcard instance) {
+    default R visit(Wildcard<A> instance) {
       return otherwise((instance));
     }
   }
@@ -66,7 +66,7 @@ public abstract class Node<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -99,7 +99,7 @@ public abstract class Node<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -127,7 +127,7 @@ public abstract class Node<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }

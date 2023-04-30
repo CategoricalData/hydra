@@ -10,24 +10,24 @@ public abstract class ElementType<T> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<T, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Vertex instance) ;
+  public interface Visitor<T, R> {
+    R visit(Vertex<T> instance) ;
     
-    R visit(Edge instance) ;
+    R visit(Edge<T> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(ElementType instance) {
+  public interface PartialVisitor<T, R> extends Visitor<T, R> {
+    default R otherwise(ElementType<T> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Vertex instance) {
+    default R visit(Vertex<T> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Edge instance) {
+    default R visit(Edge<T> instance) {
       return otherwise((instance));
     }
   }
@@ -54,7 +54,7 @@ public abstract class ElementType<T> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<T, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -81,7 +81,7 @@ public abstract class ElementType<T> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<T, R> visitor) {
       return visitor.visit(this);
     }
   }

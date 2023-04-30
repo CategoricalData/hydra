@@ -68,7 +68,7 @@ public abstract class Pattern<A> {
       if (!(other instanceof Triple)) {
         return false;
       }
-      Triple<A> o = (Triple<A>) (other);
+      Triple o = (Triple) (other);
       return value.equals(o.value);
     }
     

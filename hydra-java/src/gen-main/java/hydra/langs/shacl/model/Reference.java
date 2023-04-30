@@ -10,30 +10,30 @@ public abstract class Reference<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Named instance) ;
+  public interface Visitor<A, R> {
+    R visit(Named<A> instance) ;
     
-    R visit(Anonymous instance) ;
+    R visit(Anonymous<A> instance) ;
     
-    R visit(Definition instance) ;
+    R visit(Definition<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Reference instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Reference<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Named instance) {
+    default R visit(Named<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Anonymous instance) {
+    default R visit(Anonymous<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Definition instance) {
+    default R visit(Definition<A> instance) {
       return otherwise((instance));
     }
   }
@@ -60,7 +60,7 @@ public abstract class Reference<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -93,7 +93,7 @@ public abstract class Reference<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -126,7 +126,7 @@ public abstract class Reference<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }

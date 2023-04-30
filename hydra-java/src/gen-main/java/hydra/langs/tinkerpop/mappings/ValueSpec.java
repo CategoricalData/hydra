@@ -61,11 +61,11 @@ public abstract class ValueSpec {
   }
   
   /**
-   * A compact path representing the function, e.g. ${}/engineInfo/model/name
+   * A compact path representing the function, e.g. engine-${engineInfo/model/name}
    */
   public static final class Pattern extends hydra.langs.tinkerpop.mappings.ValueSpec {
     /**
-     * A compact path representing the function, e.g. ${}/engineInfo/model/name
+     * A compact path representing the function, e.g. engine-${engineInfo/model/name}
      */
     public final String value;
     

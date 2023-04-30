@@ -10,24 +10,24 @@ public abstract class Element<V, E, P> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<V, E, P, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Vertex instance) ;
+  public interface Visitor<V, E, P, R> {
+    R visit(Vertex<V, E, P> instance) ;
     
-    R visit(Edge instance) ;
+    R visit(Edge<V, E, P> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Element instance) {
+  public interface PartialVisitor<V, E, P, R> extends Visitor<V, E, P, R> {
+    default R otherwise(Element<V, E, P> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Vertex instance) {
+    default R visit(Vertex<V, E, P> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Edge instance) {
+    default R visit(Edge<V, E, P> instance) {
       return otherwise((instance));
     }
   }
@@ -54,7 +54,7 @@ public abstract class Element<V, E, P> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<V, E, P, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -81,7 +81,7 @@ public abstract class Element<V, E, P> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<V, E, P, R> visitor) {
       return visitor.visit(this);
     }
   }

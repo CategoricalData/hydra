@@ -10,30 +10,32 @@ public abstract class Function<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
-  
-  public interface Visitor<R> {
-    R visit(Elimination instance) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
+
+//    public abstract <R> R accept(PartialVisitor<A, R> visitor);
+
+    public interface Visitor<A, R> {
+    R visit(Elimination<A> instance) ;
     
-    R visit(Lambda instance) ;
+    R visit(Lambda<A> instance) ;
     
-    R visit(Primitive instance) ;
+    R visit(Primitive<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Function instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Function<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Elimination instance) {
+    default R visit(Elimination<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Lambda instance) {
+    default R visit(Lambda<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Primitive instance) {
+    default R visit(Primitive<A> instance) {
       return otherwise((instance));
     }
   }
@@ -66,7 +68,7 @@ public abstract class Function<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -99,7 +101,7 @@ public abstract class Function<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -132,7 +134,7 @@ public abstract class Function<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
