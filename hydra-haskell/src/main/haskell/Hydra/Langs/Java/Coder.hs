@@ -182,7 +182,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
       let methodName = "with" ++ capitalize (unFieldName $ fieldTypeName field)
       param <- fieldTypeToFormalParam aliases field
       let anns = [] -- TODO
-      let result = referenceTypeToResult $ nameToJavaReferenceType aliases False elName Nothing
+      let result = referenceTypeToResult $ nameToJavaReferenceType aliases False [] elName Nothing
       let consId = Java.Identifier $ sanitizeJavaName $ localNameOfEager elName
       let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just $
             javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
@@ -210,7 +210,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
                 javaInstanceOf other parent
               where
                 other = javaIdentifierToJavaRelationalExpression $ javaIdentifier otherName
-                parent = nameToJavaReferenceType aliases False elName Nothing
+                parent = nameToJavaReferenceType aliases False [] elName Nothing
 
             returnFalse = javaReturnStatement $ Just $ javaBooleanExpression False
 
@@ -219,7 +219,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
             id = javaIdentifier tmpName
             rhs = javaCastExpressionToJavaExpression $ javaCastExpression aliases rt var
             var = javaIdentifierToJavaUnaryExpression $ Java.Identifier $ sanitizeJavaName otherName
-            rt = nameToJavaReferenceType aliases False elName Nothing
+            rt = nameToJavaReferenceType aliases False [] elName Nothing
 
         returnAllFieldsEqual = Java.BlockStatementStatement $ javaReturnStatement $ Just $ if L.null fields
             then javaBooleanExpression True
@@ -392,7 +392,7 @@ encodeElimination aliases marg dom cod elm = case elm of
       Just jarg -> pure $ javaFieldAccessToJavaExpression $ Java.FieldAccess qual (javaIdentifier $ unFieldName fname)
         where
           qual = Java.FieldAccess_QualifierPrimary $ javaExpressionToJavaPrimary jarg
-    return $ javaCastExpressionToJavaExpression $ javaCastExpression aliases jdomr $ javaExpressionToJavaUnaryExpression jexp
+    return jexp
   EliminationUnion (CaseStatement tname def fields) -> case marg of
       Nothing -> do
         cx <- getState
@@ -408,7 +408,7 @@ encodeElimination aliases marg dom cod elm = case elm of
                 Nothing -> visitorName
                 Just _ -> partialVisitorName
           jcod <- encodeType aliases cod
-          let targs = Java.TypeArgumentsOrDiamondArguments [javaTypeToJavaTypeArgument jcod]
+          let targs = Java.TypeArgumentsOrDiamondDiamond
           otherwiseBranches <- case def of
             Nothing -> pure []
             Just d -> do
@@ -421,7 +421,8 @@ encodeElimination aliases marg dom cod elm = case elm of
             methodInvocation (Just $ Right prim) (Java.Identifier acceptMethodName) [visitor]
         where
           otherwiseBranch jcod d = do
-            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname Nothing
+            targs <- javaTypeArgumentsForNamedType tname
+            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname Nothing
             let mods = [Java.MethodModifierPublic]
             let anns = [overrideAnnotation]
             let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
@@ -431,7 +432,8 @@ encodeElimination aliases marg dom cod elm = case elm of
             return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just [returnStmt])
 
           visitBranch jcod field = do
-            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname (Just $ capitalize $ unFieldName $ fieldName field)
+            targs <- javaTypeArgumentsForNamedType tname
+            let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True targs tname (Just $ capitalize $ unFieldName $ fieldName field)
             let mods = [Java.MethodModifierPublic]
             let anns = [overrideAnnotation]
             let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
@@ -647,16 +649,16 @@ encodeType aliases t = case stripType t of
     return $ javaRefType [jkt, jvt] javaUtilPackageName "Map"
   TypeProduct [] -> unit
   TypeRecord (RowType _UnitType _ []) -> unit
-  TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeRecord (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
   TypeOptional ot -> do
     jot <- encode ot >>= javaTypeToJavaReferenceType
     return $ javaRefType [jot] javaUtilPackageName "Optional"
   TypeSet st -> do
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
-  TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
   TypeVariable (Name v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True name Nothing
+  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
     encode = encodeType aliases
@@ -690,14 +692,18 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
   where
     Java.Identifier id = nameToJavaName aliases name
 
-instanceName = "instance"
+javaTypeArgumentsForNamedType :: Show a => Name -> GraphFlow a [Java.TypeArgument]
+javaTypeArgumentsForNamedType tname = do
+    params <- javaTypeParametersForType <$> requireType tname
+    return $ typeParameterToTypeArgument <$> params
 
+-- Note: this is somewhat of a hack; it compensates for the irregular way in which type parameters are currently used.
+--       When this irregularity is resolved, a better approach will be to simply pick up type parameters from type applications.
 javaTypeParametersForType :: Type a -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars
   where
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
---    vars = boundTypeVariables typ
-    vars = S.toList $ freeVariablesInType typ -- TODO: the fact that the variables are free is a bug, not a feature
+    vars = S.toList $ freeVariablesInType typ
 
 toClassDecl :: (Eq a, Ord a, Read a, Show a) => Bool -> Aliases -> [Java.TypeParameter]
   -> Name -> Type a -> GraphFlow a Java.ClassDeclaration

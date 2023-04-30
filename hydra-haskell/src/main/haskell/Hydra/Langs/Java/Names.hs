@@ -6,6 +6,7 @@ import Hydra.Kernel
 acceptMethodName = "accept" :: String
 equalsMethodName = "equals" :: String
 hashCodeMethodName = "hashCode" :: String
+instanceName = "instance" :: String
 otherwiseMethodName = "otherwise" :: String
 partialVisitorName = "PartialVisitor" :: String
 valueFieldName = "value" :: String
