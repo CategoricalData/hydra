@@ -38,24 +38,24 @@ public class Reduction {
     }
 
     private static <A> Flow<Graph<A>, Term<A>> applyIfNullary(boolean eager, Term<A> original, LList<Term<A>> args) {
-        return stripTerm(original).accept(new Term.PartialVisitor<Flow<Graph<A>, Term<A>>>() {
+        return stripTerm(original).accept(new Term.PartialVisitor<>() {
             @Override
-            public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+            public Flow<Graph<A>, Term<A>> otherwise(Term<A> instance) {
                 return pure(applyToArguments(original, args));
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Term.Application instance) {
+            public Flow<Graph<A>, Term<A>> visit(Term.Application<A> instance) {
                 Application<A> app = instance.value;
                 return applyIfNullary(eager, app.function, LList.push(app.argument, args));
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Term.Function instance) {
+            public Flow<Graph<A>, Term<A>> visit(Term.Function<A> instance) {
                 hydra.core.Function<A> fun = instance.value;
-                return fun.accept(new hydra.core.Function.Visitor<Flow<Graph<A>, Term<A>>>() {
+                return fun.accept(new hydra.core.Function.Visitor<>() {
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Elimination instance) {
+                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Elimination<A> instance) {
                         if (LList.isEmpty(args)) {
                             return pure(original);
                         } else {
@@ -64,25 +64,15 @@ public class Reduction {
                             LList<Term<A>> remainingArgs = args.rest;
                             // Reduce the argument prior to application, regardless of laziness
                             return bind(reduceArg(eager, stripTerm(arg)),
-                                new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                    @Override
-                                    public Flow<Graph<A>, Term<A>> apply(Term<A> reducedArg) {
-                                        return bind(applyElimination(elm, reducedArg),
-                                            new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> apply(Term<A> result) {
-                                                    return bind(reduce(eager, result),
-                                                        reducedResult -> applyIfNullary(eager, reducedResult,
-                                                            remainingArgs));
-                                                }
-                                            });
-                                    }
-                                });
+                                    reducedArg -> bind(applyElimination(elm, reducedArg),
+                                            result -> bind(reduce(eager, result),
+                                                    reducedResult -> applyIfNullary(eager, reducedResult,
+                                                            remainingArgs))));
                         }
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Lambda instance) {
+                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Lambda<A> instance) {
                         if (LList.isEmpty(args)) {
                             return pure(original);
                         } else {
@@ -90,24 +80,16 @@ public class Reduction {
                             Term<A> arg = args.first;
                             LList<Term<A>> remainingArgs = args.rest;
                             return bind(reduce(eager, stripTerm(arg)),
-                                new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                    @Override
-                                    public Flow<Graph<A>, Term<A>> apply(Term<A> reducedArg) {
+                                    reducedArg -> {
                                         Term<A> result = replaceFreeName(lam.parameter, reducedArg, lam.body);
                                         return bind(reduce(eager, result),
-                                            new Function<Term<A>, Flow<Graph<A>, Term<A>>>() {
-                                                @Override
-                                                public Flow<Graph<A>, Term<A>> apply(Term<A> reducedResult) {
-                                                    return applyIfNullary(eager, reducedResult, remainingArgs);
-                                                }
-                                            });
-                                    }
-                                });
+                                                reducedResult -> applyIfNullary(eager, reducedResult, remainingArgs));
+                                    });
                         }
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive instance) {
+                    public Flow<Graph<A>, Term<A>> visit(hydra.core.Function.Primitive<A> instance) {
                         return bind(Lexical.requirePrimitive(instance.value), prim -> {
                             int arity = primitiveArity(prim);
                             if (arity <= LList.length(args)) {
@@ -115,8 +97,8 @@ public class Reduction {
                                 Flow<Graph<A>, List<Term<A>>> reducedArgs = mapM(argList, a -> reduceArg(eager, a));
                                 LList<Term<A>> remainingArgs = LList.drop(arity, args);
                                 return bind(reducedArgs, rargs -> bind(prim.implementation.apply(rargs),
-                                    result -> bind(reduce(eager, result),
-                                        reducedResult -> applyIfNullary(eager, reducedResult, remainingArgs))));
+                                        result -> bind(reduce(eager, result),
+                                                reducedResult -> applyIfNullary(eager, reducedResult, remainingArgs))));
                             } else {
                                 // Not enough arguments available; back out
                                 return pure(applyToArguments(original, args));
@@ -127,7 +109,7 @@ public class Reduction {
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Term.Variable instance) {
+            public Flow<Graph<A>, Term<A>> visit(Term.Variable<A> instance) {
                 // TODO: dereference variables
                 return pure(applyToArguments(original, args));
             }
@@ -137,30 +119,30 @@ public class Reduction {
     private static <A> Flow<Graph<A>, Term<A>> applyElimination(Elimination<A> elm, Term<A> reducedArg) {
         return elm.accept(new Elimination.Visitor<>() {
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Element instance) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Element<A> instance) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.List instance) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.List<A> instance) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Optional instance) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Optional<A> instance) {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Record elim) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Record<A> elim) {
                 return reducedArg.accept(new Term.PartialVisitor<>() {
                     @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                    public Flow<Graph<A>, Term<A>> otherwise(Term<A> instance) {
                         return unexpected("record", instance);
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Record instance) {
+                    public Flow<Graph<A>, Term<A>> visit(Term.Record<A> instance) {
                         Record<A> record = instance.value;
                         Projection proj = elim.value;
                         if (record.typeName.equals(proj.typeName)) {
@@ -179,15 +161,15 @@ public class Reduction {
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Union elim) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Union<A> elim) {
                 return reducedArg.accept(new Term.PartialVisitor<>() {
                     @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                    public Flow<Graph<A>, Term<A>> otherwise(Term<A> instance) {
                         return unexpected("injection", instance);
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Union instance) {
+                    public Flow<Graph<A>, Term<A>> visit(Term.Union<A> instance) {
                         CaseStatement<A> cases = elim.value;
                         Injection<A> inj = instance.value;
                         if (cases.typeName.equals(inj.typeName)) {
@@ -206,18 +188,18 @@ public class Reduction {
             }
 
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Wrap instance) {
+            public Flow<Graph<A>, Term<A>> visit(Elimination.Wrap<A> instance) {
                 return reducedArg.accept(new Term.PartialVisitor<>() {
                     @Override
-                    public Flow<Graph<A>, Term<A>> otherwise(Term instance) {
+                    public Flow<Graph<A>, Term<A>> otherwise(Term<A> instance) {
                         return unexpected("wrapped term", instance);
                     }
 
                     @Override
-                    public Flow<Graph<A>, Term<A>> visit(Term.Wrap wrapped) {
+                    public Flow<Graph<A>, Term<A>> visit(Term.Wrap<A> wrapped) {
                         Name fname = instance.value;
                         Name aname = wrapped.value.typeName;
-                        return fname.equals(aname) ? pure(((Term.Wrap<A>) wrapped).value.object)
+                        return fname.equals(aname) ? pure(wrapped.value.object)
                             : fail("tried to unwrap an instance of " + aname + " as an instance of " + fname);
                     }
                 });
@@ -236,23 +218,23 @@ public class Reduction {
     }
 
     private static <A> boolean doRecurse(boolean eager, Term<A> term) {
-        boolean isLambda = term.accept(new Term.PartialVisitor<Boolean>() {
+        boolean isLambda = term.accept(new Term.PartialVisitor<>() {
             @Override
-            public Boolean otherwise(Term instance) {
+            public Boolean otherwise(Term<A> instance) {
                 return false;
             }
 
             @Override
-            public Boolean visit(Term.Function instance) {
+            public Boolean visit(Term.Function<A> instance) {
                 hydra.core.Function<A> fun = instance.value;
-                return fun.accept(new hydra.core.Function.PartialVisitor<Boolean>() {
+                return fun.accept(new hydra.core.Function.PartialVisitor<>() {
                     @Override
-                    public Boolean otherwise(hydra.core.Function instance) {
+                    public Boolean otherwise(hydra.core.Function<A> instance) {
                         return false;
                     }
 
                     @Override
-                    public Boolean visit(hydra.core.Function.Lambda instance) {
+                    public Boolean visit(hydra.core.Function.Lambda<A> instance) {
                         return true;
                     }
                 });
@@ -287,23 +269,23 @@ public class Reduction {
     }
 
     public static <A> Term<A> replaceFreeName(Name toReplace, Term<A> replacement, Term<A> body) {
-        return Rewriting.rewriteTerm(recurse -> inner -> inner.accept(new Term.PartialVisitor<Term<A>>() {
+        return Rewriting.rewriteTerm(recurse -> inner -> inner.accept(new Term.PartialVisitor<>() {
             @Override
-            public Term<A> otherwise(Term instance) {
+            public Term<A> otherwise(Term<A> instance) {
                 return recurse.apply(instance);
             }
 
             @Override
-            public Term<A> visit(Term.Function instance) {
+            public Term<A> visit(Term.Function<A> instance) {
                 hydra.core.Function<A> fun = instance.value;
                 return fun.accept(new hydra.core.Function.PartialVisitor<>() {
                     @Override
-                    public Term<A> otherwise(hydra.core.Function instance) {
+                    public Term<A> otherwise(hydra.core.Function<A> instance) {
                         return recurse.apply(inner);
                     }
 
                     @Override
-                    public Term<A> visit(hydra.core.Function.Lambda instance) {
+                    public Term<A> visit(hydra.core.Function.Lambda<A> instance) {
                         Lambda<A> lam = instance.value;
                         return lam.parameter.equals(toReplace) ? inner : recurse.apply(inner);
                     }
@@ -311,7 +293,7 @@ public class Reduction {
             }
 
             @Override
-            public Term<A> visit(Term.Variable instance) {
+            public Term<A> visit(Term.Variable<A> instance) {
                 return instance.value.equals(toReplace) ? replacement : instance;
             }
         }), a -> a, body);

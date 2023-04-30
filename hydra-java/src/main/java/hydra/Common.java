@@ -8,13 +8,13 @@ public interface Common {
     static <A> Term<A> stripTerm(Term<A> term) {
         return term.accept(new Term.PartialVisitor<>() {
             @Override
-            public Term<A> otherwise(Term ignored) {
+            public Term<A> otherwise(Term<A> ignored) {
                 return term;
             }
 
             @Override
-            public Term<A> visit(Term.Annotated instance) {
-                return stripTerm(((Term.Annotated<A>) instance).value.subject);
+            public Term<A> visit(Term.Annotated<A> instance) {
+                return stripTerm(instance.value.subject);
             }
         });
     }
@@ -22,13 +22,13 @@ public interface Common {
     static <A> Type<A> stripType(Type<A> type) {
         return type.accept(new Type.PartialVisitor<>() {
             @Override
-            public Type<A> otherwise(Type ignored) {
+            public Type<A> otherwise(Type<A> ignored) {
                 return type;
             }
 
             @Override
-            public Type<A> visit(Type.Annotated instance) {
-                return stripType(((Type.Annotated<A>) instance).value.subject);
+            public Type<A> visit(Type.Annotated<A> instance) {
+                return stripType(instance.value.subject);
             }
         });
     }
