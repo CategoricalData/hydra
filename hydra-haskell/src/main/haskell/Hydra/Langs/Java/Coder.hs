@@ -4,6 +4,7 @@ import Hydra.Kernel
 import Hydra.Reduction
 import Hydra.Langs.Java.Utils
 import Hydra.Langs.Java.Language
+import Hydra.Langs.Java.Names
 import Hydra.Adapters
 import Hydra.Tools.Serialization
 import Hydra.Langs.Java.Serde
@@ -187,7 +188,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
             javaConstructorCall (javaConstructorName consId Nothing) fieldArgs Nothing
       return $ methodDeclaration mods [] anns methodName [param] result (Just [returnStmt])
 
-    equalsMethod = methodDeclaration mods [] anns "equals" [param] result $
+    equalsMethod = methodDeclaration mods [] anns equalsMethodName [param] result $
         Just [instanceOfStmt,
           castStmt,
           returnAllFieldsEqual]
@@ -230,11 +231,11 @@ declarationForRecordType isInner aliases tparams elName fields = do
               where
                 arg = javaExpressionNameToJavaExpression $
                   fieldExpression (javaIdentifier tmpName) (javaIdentifier fname)
-                header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier "equals")
+                header = Java.MethodInvocation_HeaderComplex $ Java.MethodInvocation_Complex var [] (Java.Identifier equalsMethodName)
                 var = Java.MethodInvocation_VariantExpression $ Java.ExpressionName Nothing $ Java.Identifier $
                   sanitizeJavaName fname
 
-    hashCodeMethod = methodDeclaration mods [] anns "hashCode" [] result $ Just [returnSum]
+    hashCodeMethod = methodDeclaration mods [] anns hashCodeMethodName [] result $ Just [returnSum]
       where
         anns = [overrideAnnotation]
         mods = [Java.MethodModifierPublic]
@@ -256,7 +257,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
                   javaLiteralToPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
-                  methodInvocationStatic (javaIdentifier fname) (Java.Identifier "hashCode") []
+                  methodInvocationStatic (javaIdentifier fname) (Java.Identifier hashCodeMethodName) []
 
             multipliers = L.cycle first20Primes
               where
@@ -279,7 +280,7 @@ declarationForUnionType aliases tparams elName fields = do
     let variantDecls = Java.ClassBodyDeclarationClassMember . Java.ClassMemberDeclarationClass <$> variantClasses
     cx <- getState
     variantDecls' <- CM.zipWithM addComment variantDecls fields
-    let otherDecls = noComment <$> [privateConstructor, toAcceptMethod True, visitor, partialVisitor]
+    let otherDecls = noComment <$> [privateConstructor, toAcceptMethod True tparams, visitor, partialVisitor]
     tn <- typeNameDecl aliases elName
     let bodyDecls = [tn] ++ otherDecls ++ variantDecls'
     let mods = classModsPublic ++ [Java.ClassModifierAbstract]
@@ -295,15 +296,15 @@ declarationForUnionType aliases tparams elName fields = do
         Java.normalClassDeclarationParameters = tparams,
         Java.normalClassDeclarationBody = newBody (Java.normalClassDeclarationBody cd)}
       where
-        newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [noComment $ toAcceptMethod False]
+        newBody (Java.ClassBody decls) = Java.ClassBody $ decls ++ [noComment $ toAcceptMethod False tparams]
         args = typeParameterToTypeArgument <$> tparams
 
     visitor = javaInterfaceDeclarationToJavaClassBodyDeclaration $
-        Java.NormalInterfaceDeclaration mods ti tparams extends body
+        Java.NormalInterfaceDeclaration mods ti vtparams extends body
       where
         mods = [Java.InterfaceModifierPublic]
         ti = Java.TypeIdentifier $ Java.Identifier visitorName
-        tparams = [javaTypeParameter "R"]
+        vtparams = tparams ++ [javaTypeParameter visitorReturnParameter]
         extends = []
         body = Java.InterfaceBody (toVisitMethod . fieldTypeName <$> fields)
           where
@@ -313,13 +314,14 @@ declarationForUnionType aliases tparams elName fields = do
         Java.NormalInterfaceDeclaration {
             Java.normalInterfaceDeclarationModifiers = [Java.InterfaceModifierPublic],
             Java.normalInterfaceDeclarationIdentifier = Java.TypeIdentifier $ Java.Identifier partialVisitorName,
-            Java.normalInterfaceDeclarationParameters = [javaTypeParameter "R"],
+            Java.normalInterfaceDeclarationParameters = tparams ++ [javaTypeParameter visitorReturnParameter],
             Java.normalInterfaceDeclarationExtends =
-              [Java.InterfaceType $ javaClassType [visitorTypeVariable] Nothing visitorName],
+              [Java.InterfaceType $ javaClassType ((typeParameterToReferenceType <$> tparams) ++ [visitorTypeVariable]) Nothing visitorName],
             Java.normalInterfaceDeclarationBody = Java.InterfaceBody $ otherwise:(toVisitMethod . fieldTypeName <$> fields)}
       where
         otherwise = interfaceMethodDeclaration defaultMod [] otherwiseMethodName [mainInstanceParam] resultR $ Just [throw]
           where
+            typeArgs = typeParameterToTypeArgument <$> tparams
             throw = Java.BlockStatementStatement $ Java.StatementWithoutTrailing $
                 Java.StatementWithoutTrailingSubstatementThrow $ Java.ThrowStatement $
                 javaConstructorCall (javaConstructorName (Java.Identifier "IllegalStateException") Nothing) args Nothing
@@ -339,15 +341,17 @@ declarationForUnionType aliases tparams elName fields = do
 
     resultR = javaTypeToJavaResult $ Java.TypeReference visitorTypeVariable
 
+    typeArgs = typeParameterToTypeArgument <$> tparams
+
     mainInstanceParam = javaTypeToJavaFormalParameter classRef $ FieldName instanceName
       where
         classRef = javaClassTypeToJavaType $
-          nameToJavaClassType aliases False [] elName Nothing
+          nameToJavaClassType aliases False typeArgs elName Nothing
 
     variantInstanceParam fname = javaTypeToJavaFormalParameter classRef $ FieldName instanceName
       where
         classRef = javaClassTypeToJavaType $
-          nameToJavaClassType aliases False [] (variantClassName False elName fname) Nothing
+          nameToJavaClassType aliases False typeArgs (variantClassName False elName fname) Nothing
 
 elementJavaIdentifier :: Bool -> Aliases -> Name -> Java.Identifier
 elementJavaIdentifier isPrim aliases name = Java.Identifier $ if isPrim
@@ -414,7 +418,7 @@ encodeElimination aliases marg dom cod elm = case elm of
           let body = Java.ClassBody $ otherwiseBranches ++ visitBranches
           let visitor = javaConstructorCall (javaConstructorName consId $ Just targs) [] (Just body)
           return $ javaMethodInvocationToJavaExpression $
-            methodInvocation (Just $ Right prim) (Java.Identifier "accept") [visitor]
+            methodInvocation (Just $ Right prim) (Java.Identifier acceptMethodName) [visitor]
         where
           otherwiseBranch jcod d = do
             let jdom = Java.TypeReference $ nameToJavaReferenceType aliases True tname Nothing
@@ -679,7 +683,7 @@ getFunctionType ann = do
     Nothing -> fail "type annotation is required for function and elimination terms in Java"
     Just t -> case t of
       TypeFunction ft -> return ft
-      _ -> unexpected "function type (3)" t
+      _ -> unexpected "function type (2)" t
 
 innerClassRef :: Aliases -> Name -> String -> Java.Identifier
 innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
@@ -694,12 +698,6 @@ javaTypeParametersForType typ = toParam <$> vars
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
 --    vars = boundTypeVariables typ
     vars = S.toList $ freeVariablesInType typ -- TODO: the fact that the variables are free is a bug, not a feature
-
-otherwiseMethodName :: String
-otherwiseMethodName = "otherwise"
-
-partialVisitorName :: String
-partialVisitorName = "PartialVisitor"
 
 toClassDecl :: (Eq a, Ord a, Read a, Show a) => Bool -> Aliases -> [Java.TypeParameter]
   -> Name -> Type a -> GraphFlow a Java.ClassDeclaration
@@ -726,12 +724,3 @@ typeNameDecl aliases name = do
   where
     mods = [Java.FieldModifierPublic, Java.FieldModifierStatic, Java.FieldModifierFinal]
     nameName = nameToJavaName aliases _Name
-
-valueFieldName :: String
-valueFieldName = "value"
-
-visitMethodName :: String
-visitMethodName = "visit"
-
-visitorName :: String
-visitorName = "Visitor"

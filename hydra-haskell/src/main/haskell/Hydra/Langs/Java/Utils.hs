@@ -2,6 +2,7 @@ module Hydra.Langs.Java.Utils where
 
 import Hydra.Kernel
 import Hydra.Langs.Java.Language
+import Hydra.Langs.Java.Names
 import qualified Hydra.Langs.Java.Syntax as Java
 import qualified Hydra.Lib.Strings as Strings
 
@@ -420,11 +421,11 @@ sanitizeJavaName name = if L.head name == '$'
   then L.tail name
   else sanitizeWithUnderscores reservedWords name
 
-toAcceptMethod :: Bool -> Java.ClassBodyDeclaration
-toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] result body
+toAcceptMethod :: Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration
+toAcceptMethod abstract vtparams = methodDeclaration mods tparams anns acceptMethodName [param] result body
   where
     mods = [Java.MethodModifierPublic] ++ if abstract then [Java.MethodModifierAbstract] else []
-    tparams = [javaTypeParameter "R"]
+    tparams = [javaTypeParameter visitorReturnParameter]
     anns = if abstract
       then []
       else [overrideAnnotation]
@@ -434,16 +435,16 @@ toAcceptMethod abstract = methodDeclaration mods tparams anns "accept" [param] r
           Java.ClassType
             []
             Java.ClassTypeQualifierNone
-            (javaTypeIdentifier "Visitor")
-            [Java.TypeArgumentReference visitorTypeVariable]
+            (javaTypeIdentifier visitorName)
+            (typeArgs ++ [Java.TypeArgumentReference visitorTypeVariable])
+    typeArgs = (Java.TypeArgumentReference . typeParameterToReferenceType) <$> vtparams
     result = javaTypeToJavaResult $ Java.TypeReference visitorTypeVariable
     varName = "visitor"
-    visitMethodName = Java.Identifier "visit"
     body = if abstract
       then Nothing
       else Just [Java.BlockStatementStatement $ javaReturnStatement $ Just returnExpr]
     returnExpr = javaMethodInvocationToJavaExpression $
-        methodInvocationStatic (Java.Identifier varName) visitMethodName [javaThis]
+        methodInvocationStatic (Java.Identifier varName) (Java.Identifier visitMethodName) [javaThis]
 
 toAssignStmt :: FieldName -> Java.Statement
 toAssignStmt fname = javaAssignmentStatement lhs rhs
@@ -466,6 +467,12 @@ toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
 
 typeParameterToTypeArgument (Java.TypeParameter _ id _) = Java.TypeArgumentReference $
   Java.ReferenceTypeVariable $ Java.TypeVariable [] id
+
+typeParameterToReferenceType :: Java.TypeParameter -> Java.ReferenceType
+typeParameterToReferenceType = javaTypeVariable . unTypeParameter
+
+unTypeParameter :: Java.TypeParameter -> String
+unTypeParameter (Java.TypeParameter [] (Java.TypeIdentifier (Java.Identifier v)) Nothing) = v
 
 variableDeclarationStatement :: M.Map Namespace Java.PackageName -> Name -> Java.Identifier -> Java.Expression -> Java.BlockStatement
 variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVariableDeclaration $
