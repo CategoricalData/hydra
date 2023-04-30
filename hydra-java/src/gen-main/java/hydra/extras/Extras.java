@@ -15,7 +15,7 @@ public interface Extras {
       public Integer visit(hydra.core.Function.Lambda<A> instance) {
         return hydra.lib.math.Add.apply(
           1,
-          hydra.extras.Extras.termArity( (((instance.value)).body)));
+          hydra.extras.Extras.termArity(((instance.value)).body));
       }
       
       @Override
@@ -28,11 +28,11 @@ public interface Extras {
   static <A> java.util.function.Function<hydra.core.Name, java.util.Optional<hydra.graph.Primitive<A>>> lookupPrimitive(hydra.graph.Graph<A> g) {
     return name -> hydra.lib.maps.Lookup.apply(
       (name),
-      (((g)).primitives));
+      ((g)).primitives);
   }
   
   static <A> Integer primitiveArity(hydra.graph.Primitive<A> x) {
-    return hydra.extras.Extras.typeArity( (((x)).type));
+    return hydra.extras.Extras.typeArity(((x)).type);
   }
   
   static java.util.function.Function<String, hydra.core.Name> qname(hydra.module.Namespace ns) {
@@ -52,7 +52,7 @@ public interface Extras {
       @Override
       public Integer visit(hydra.core.Term.Application<A> instance) {
         return hydra.lib.math.Sub.apply(
-          hydra.extras.Extras.termArity((((instance.value)).function)),
+          hydra.extras.Extras.termArity(((instance.value)).function),
           1);
       }
       
@@ -103,6 +103,6 @@ public interface Extras {
   static java.util.function.Function<hydra.compute.Kv, java.util.Optional<hydra.core.Term<hydra.compute.Kv>>> getAnnotation(String key) {
     return ann -> hydra.lib.maps.Lookup.apply(
       (key),
-      (((ann)).annotations));
+      ((ann)).annotations);
   }
 }
