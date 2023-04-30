@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test illustrating the use of the Types API in Java, which is used for constructing type definitions.
  *
- * Note: for simplicity, these types are annotated using the String class. A more typical annotation class is {@link hydra.compute.Meta}
+ * Note: for simplicity, these types are annotated using the String class. A more typical annotation class is {@link hydra.compute.Kv}
  */
 @SuppressWarnings("unchecked")
 public class TypesTest {
@@ -59,21 +59,21 @@ public class TypesTest {
 
   @Test
   public void demonstrateVisitor() {
-    Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
-      @Override
-      public Integer visit(Type.Record instance) {
-        return instance.value.fields.size();
-      }
+    Type.PartialVisitor<String, Integer> countFields = new Type.PartialVisitor<>() {
+        @Override
+        public Integer visit(Type.Record<String> instance) {
+            return instance.value.fields.size();
+        }
 
-      @Override
-      public Integer visit(Type.Union instance) {
-        return instance.value.fields.size();
-      }
+        @Override
+        public Integer visit(Type.Union<String> instance) {
+            return instance.value.fields.size();
+        }
 
-      @Override
-      public Integer otherwise(Type ignored) {
-        return 0;
-      }
+        @Override
+        public Integer otherwise(Type<String> ignored) {
+            return 0;
+        }
     };
 
     assertEquals(2, latLonType.accept(countFields));

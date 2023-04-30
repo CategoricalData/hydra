@@ -1,7 +1,6 @@
 package hydra;
 
 import hydra.compute.Flow;
-import hydra.compute.FlowState;
 import hydra.core.Annotated;
 import hydra.core.Application;
 import hydra.core.CaseStatement;
@@ -39,42 +38,42 @@ public interface Rewriting {
 
     static <A, B, S> Flow<S, Elimination<B>> rewriteEliminationM(Function<Term<A>, Flow<S, Term<B>>> recurse,
         Elimination<A> original) {
-        return original.accept(new Elimination.Visitor<Flow<S, Elimination<B>>>() {
+        return original.accept(new Elimination.Visitor<>() {
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Element instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.Element<A> instance) {
                 return pure(new Elimination.Element<>());
             }
 
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.List instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.List<A> instance) {
                 // TODO: this is incorrect in Hydra Core
                 Term<A> foldA = instance.value;
                 return map(recurse.apply(foldA), Elimination.List::new);
             }
 
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Optional instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.Optional<A> instance) {
                 OptionalCases<A> foldA = instance.value;
                 return map2(recurse.apply(foldA.nothing), recurse.apply(foldA.just),
-                    (n, j) -> new Elimination.Optional<>(new OptionalCases<>(n, j)));
+                        (n, j) -> new Elimination.Optional<>(new OptionalCases<>(n, j)));
             }
 
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Record instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.Record<A> instance) {
                 return pure(new Elimination.Record<>(new Projection(instance.value.typeName, instance.value.field)));
             }
 
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Union instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.Union<A> instance) {
                 CaseStatement<A> caseA = instance.value;
                 Flow<S, CaseStatement<B>> caseB =
-                    map2(mapM(caseA.default_, recurse), mapM(caseA.cases, f -> rewriteFieldM(recurse, f)),
-                        (def, fields) -> new CaseStatement<>(instance.value.typeName, def, fields));
+                        map2(mapM(caseA.default_, recurse), mapM(caseA.cases, f -> rewriteFieldM(recurse, f)),
+                                (def, fields) -> new CaseStatement<>(instance.value.typeName, def, fields));
                 return map(caseB, Elimination.Union::new);
             }
 
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Wrap instance) {
+            public Flow<S, Elimination<B>> visit(Elimination.Wrap<A> instance) {
                 return pure(new Elimination.Wrap<>(instance.value));
             }
         });
@@ -86,22 +85,22 @@ public interface Rewriting {
 
     static <A, B, S> Flow<S, hydra.core.Function<B>> rewriteFunctionM(Function<Term<A>, Flow<S, Term<B>>> recurse,
         hydra.core.Function<A> original) {
-        return original.accept(new hydra.core.Function.Visitor<Flow<S, hydra.core.Function<B>>>() {
+        return original.accept(new hydra.core.Function.Visitor<>() {
             @Override
-            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Elimination instance) {
+            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Elimination<A> instance) {
                 Elimination<A> elimA = instance.value;
                 return map(rewriteEliminationM(recurse, elimA), hydra.core.Function.Elimination::new);
             }
 
             @Override
-            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Lambda instance) {
+            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Lambda<A> instance) {
                 Term<A> bodyA = instance.value.body;
                 return map(recurse.apply(bodyA),
-                    bTerm -> new hydra.core.Function.Lambda<B>(new Lambda<>(instance.value.parameter, bTerm)));
+                        bTerm -> new hydra.core.Function.Lambda<B>(new Lambda<>(instance.value.parameter, bTerm)));
             }
 
             @Override
-            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Primitive instance) {
+            public Flow<S, hydra.core.Function<B>> visit(hydra.core.Function.Primitive<A> instance) {
                 return pure(new hydra.core.Function.Primitive<>(instance.value));
             }
         });
@@ -124,16 +123,16 @@ public interface Rewriting {
         Function<Function<Term<A>, Flow<S, Term<B>>>, Function<Term<A>, Flow<S, Term<B>>>> f,
         Function<A, Flow<S, B>> mf, Term<A> original) {
         Function<Function<Term<A>, Flow<S, Term<B>>>, Function<Term<A>, Flow<S, Term<B>>>> fsub =
-            recurse -> term -> term.accept(new Term.Visitor<Flow<S, Term<B>>>() {
+            recurse -> term -> term.accept(new Term.Visitor<A, Flow<S, Term<B>>>() {
                 @Override
-                public Flow<S, Term<B>> visit(Term.Annotated instance) {
+                public Flow<S, Term<B>> visit(Term.Annotated<A> instance) {
                     Annotated<Term<A>, A> ann = instance.value;
                     return map2(recurse.apply(ann.subject), mf.apply(ann.annotation),
                         (term1, ann1) -> Terms.annot(ann1, term1));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Application instance) {
+                public Flow<S, Term<B>> visit(Term.Application<A> instance) {
                     Term<A> funA = instance.value.function;
                     Term<A> argA = instance.value.argument;
                     return map2(recurse.apply(funA), recurse.apply(argA),
@@ -141,18 +140,18 @@ public interface Rewriting {
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Element instance) {
+                public Flow<S, Term<B>> visit(Term.Element<A> instance) {
                     return pure(new Term.Element<>(instance.value));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Function instance) {
+                public Flow<S, Term<B>> visit(Term.Function<A> instance) {
                     hydra.core.Function<A> funA = instance.value;
                     return map(rewriteFunctionM(recurse, funA), Term.Function::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Let instance) {
+                public Flow<S, Term<B>> visit(Term.Let<A> instance) {
                     Map<Name, Term<A>> bindingsA = instance.value.bindings;
                     Term<A> envA = instance.value.environment;
                     Flow<S, Map<Name, Term<B>>> bindingsB = mapM(bindingsA, Flows::pure, recurse);
@@ -161,77 +160,77 @@ public interface Rewriting {
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.List instance) {
+                public Flow<S, Term<B>> visit(Term.List<A> instance) {
                     List<Term<A>> termsA = instance.value;
                     Flow<S, List<Term<B>>> termsB = mapM(termsA, recurse);
                     return map(termsB, Term.List::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Literal instance) {
+                public Flow<S, Term<B>> visit(Term.Literal<A> instance) {
                     return pure(new Term.Literal<>(instance.value));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Map instance) {
+                public Flow<S, Term<B>> visit(Term.Map<A> instance) {
                     Map<Term<A>, Term<A>> mapA = instance.value;
                     Flow<S, Map<Term<B>, Term<B>>> mapB = mapM(mapA, recurse, recurse);
                     return map(mapB, Term.Map::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Optional instance) {
+                public Flow<S, Term<B>> visit(Term.Optional<A> instance) {
                     Optional<Term<A>> termA = instance.value;
                     Flow<S, Optional<Term<B>>> termB = mapM(termA, recurse);
                     return map(termB, Term.Optional::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Product instance) {
+                public Flow<S, Term<B>> visit(Term.Product<A> instance) {
                     List<Term<A>> termsA = instance.value;
                     Flow<S, List<Term<B>>> termsB = mapM(termsA, recurse);
                     return map(termsB, Term.Product::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Record instance) {
+                public Flow<S, Term<B>> visit(Term.Record<A> instance) {
                     List<Field<A>> fieldsA = instance.value.fields;
                     Flow<S, List<Field<B>>> fieldsB = mapM(fieldsA, aField -> rewriteFieldM(recurse, aField));
                     return map(fieldsB, fields -> new Term.Record<>(new Record<>(instance.value.typeName, fields)));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Set instance) {
+                public Flow<S, Term<B>> visit(Term.Set<A> instance) {
                     Flow<S, Set<Term<B>>> els = mapM(instance.value, recurse);
                     return map(els, Term.Set::new);
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Stream instance) {
+                public Flow<S, Term<B>> visit(Term.Stream<A> instance) {
                     throw new UnsupportedOperationException();
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Sum instance) {
+                public Flow<S, Term<B>> visit(Term.Sum<A> instance) {
                     Term<A> t0 = instance.value.term;
                     Flow<S, Term<B>> t1 = recurse.apply(t0);
                     return map(t1, t2 -> new Term.Sum<B>(new Sum<B>(instance.value.index, instance.value.size, t2)));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Union instance) {
+                public Flow<S, Term<B>> visit(Term.Union<A> instance) {
                     Flow<S, Field<B>> t = rewriteFieldM(recurse, instance.value.field);
                     return map(t, bField -> new Term.Union<>(new Injection<>(instance.value.typeName, bField)));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Variable instance) {
+                public Flow<S, Term<B>> visit(Term.Variable<A> instance) {
                     return pure(new Term.Variable<B>(instance.value));
                 }
 
                 @Override
-                public Flow<S, Term<B>> visit(Term.Wrap instance) {
-                    Flow<S, Term<B>> obj2 = recurse.apply(((Term.Wrap<A>) instance).value.object);
+                public Flow<S, Term<B>> visit(Term.Wrap<A> instance) {
+                    Flow<S, Term<B>> obj2 = recurse.apply(instance.value.object);
                     return map(obj2, bTerm -> new Term.Wrap<>(new Nominal<>(instance.value.typeName, bTerm)));
                 }
             });

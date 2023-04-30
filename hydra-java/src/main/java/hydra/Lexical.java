@@ -4,10 +4,12 @@ import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
-import java.util.Optional;
-import java.util.function.Function;
 
-import static hydra.Flows.*;
+import java.util.Optional;
+
+import static hydra.Flows.bind;
+import static hydra.Flows.fail;
+import static hydra.Flows.getState;
 
 
 public class Lexical {
@@ -19,13 +21,10 @@ public class Lexical {
     }
 
     public static <A> Flow<Graph<A>, Primitive<A>> requirePrimitive(Name name) {
-        return bind(getState(), new Function<Graph<A>, Flow<Graph<A>, Primitive<A>>>() {
-            @Override
-            public Flow<Graph<A>, Primitive<A>> apply(Graph<A> g) {
-                Optional<Primitive<A>> mprim = lookupPrimitive(g, name);
-                return mprim.<Flow<Graph<A>, Primitive<A>>>map(Flows::pure)
-                    .orElseGet(() -> fail("no such primitive function: " + name.value));
-            }
+        return bind(getState(), g -> {
+            Optional<Primitive<A>> mprim = lookupPrimitive(g, name);
+            return mprim.<Flow<Graph<A>, Primitive<A>>>map(Flows::pure)
+                .orElseGet(() -> fail("no such primitive function: " + name.value));
         });
     }
 }

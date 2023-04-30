@@ -67,14 +67,14 @@ public class PrettyPrinter {
     }
 
     private static <A> Consumer<StringBuilder> function(hydra.core.Function<A> function) {
-        return function.accept(new Function.Visitor<Consumer<StringBuilder>>() {
+        return function.accept(new Function.Visitor<>() {
             @Override
-            public Consumer<StringBuilder> visit(Function.Elimination instance) {
+            public Consumer<StringBuilder> visit(Function.Elimination<A> instance) {
                 return notImplemented("elimination");
             }
 
             @Override
-            public Consumer<StringBuilder> visit(Function.Lambda instance) {
+            public Consumer<StringBuilder> visit(Function.Lambda<A> instance) {
                 Lambda<A> lam = instance.value;
                 return sb -> {
                     sb.append("\"").append(shortName(lam.parameter)).append(" -> ");
@@ -83,7 +83,7 @@ public class PrettyPrinter {
             }
 
             @Override
-            public Consumer<StringBuilder> visit(Function.Primitive instance) {
+            public Consumer<StringBuilder> visit(Function.Primitive<A> instance) {
                 return sb -> sb.append(shortName(instance.value)).append("!");
             }
         });
@@ -191,36 +191,36 @@ public class PrettyPrinter {
 
     private static <A> Consumer<StringBuilder> term(Term<A> t) {
         return sb -> {
-            Consumer<StringBuilder> c = t.accept(new Term.Visitor<Consumer<StringBuilder>>() {
+            Consumer<StringBuilder> c = t.accept(new Term.Visitor<>() {
                 @Override
-                public Consumer<StringBuilder> visit(Term.Annotated instance) {
+                public Consumer<StringBuilder> visit(Term.Annotated<A> instance) {
                     Annotated<Term<A>, A> ann = instance.value;
                     Consumer<StringBuilder> ac = sb1 -> sb1.append(ann.annotation.toString());
                     return var("annot", term(ann.subject), ac);
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Application instance) {
+                public Consumer<StringBuilder> visit(Term.Application<A> instance) {
                     return var("apply", term(instance.value.function), term(instance.value.argument));
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Element instance) {
+                public Consumer<StringBuilder> visit(Term.Element<A> instance) {
                     return sb -> sb.append("@").append(shortName(instance.value));
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Function instance) {
+                public Consumer<StringBuilder> visit(Term.Function<A> instance) {
                     return function(instance.value);
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Let instance) {
+                public Consumer<StringBuilder> visit(Term.Let<A> instance) {
                     return notImplemented("let");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.List instance) {
+                public Consumer<StringBuilder> visit(Term.List<A> instance) {
                     List<Term<A>> list = instance.value;
                     List<Consumer<StringBuilder>> cs =
                         list.stream().map(PrettyPrinter::term).collect(Collectors.toList());
@@ -228,17 +228,17 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Literal instance) {
+                public Consumer<StringBuilder> visit(Term.Literal<A> instance) {
                     return literal(instance.value);
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Map instance) {
+                public Consumer<StringBuilder> visit(Term.Map<A> instance) {
                     return notImplemented("map");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Optional instance) {
+                public Consumer<StringBuilder> visit(Term.Optional<A> instance) {
                     Optional<Term<A>> opt = instance.value;
                     return sb -> {
                         if (opt.isPresent()) {
@@ -250,42 +250,42 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Product instance) {
+                public Consumer<StringBuilder> visit(Term.Product<A> instance) {
                     return notImplemented("product");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Record instance) {
+                public Consumer<StringBuilder> visit(Term.Record<A> instance) {
                     return notImplemented("record");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Set instance) {
+                public Consumer<StringBuilder> visit(Term.Set<A> instance) {
                     return notImplemented("set");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Stream instance) {
+                public Consumer<StringBuilder> visit(Term.Stream<A> instance) {
                     return notImplemented("stream");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Sum instance) {
+                public Consumer<StringBuilder> visit(Term.Sum<A> instance) {
                     return notImplemented("sum");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Union instance) {
+                public Consumer<StringBuilder> visit(Term.Union<A> instance) {
                     return notImplemented("union");
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Variable instance) {
+                public Consumer<StringBuilder> visit(Term.Variable<A> instance) {
                     return sb -> sb.append("?").append(shortName(instance.value));
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Wrap instance) {
+                public Consumer<StringBuilder> visit(Term.Wrap<A> instance) {
                     Nominal<Term<A>> nom = instance.value;
                     return var(shortName(nom.typeName), term(nom.object));
                 }

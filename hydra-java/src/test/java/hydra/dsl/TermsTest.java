@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test illustrating the use of the Terms API in Java, which is used for constructing terms (untyped expressions).
  *
- * Note: for simplicity, these terms are annotated using the String class. A more typical annotation class is {@link hydra.core.Meta}
+ * Note: for simplicity, these terms are annotated using the String class. A more typical annotation class is {@link hydra.compute.Kv}
  */
 @SuppressWarnings("unchecked")
 public class TermsTest {
   /**
-   * See {@link hydra.TypesTest} for the record type corresponding to this term
+   * See {@link hydra.dsl.TypesTest} for the record type corresponding to this term
    */
   private final Term<String> bayAreaLatLon = record("LatLon", // records always have a name
       field("lat", float32(37.7749f)), field("lon", float32(-122.4194f)));
@@ -28,12 +28,12 @@ public class TermsTest {
   /**
    * An injection term chooses one of the variants of a union type, and supplies an appropriate term
    *
-   * See {@link hydra.TypesTest} for the union type corresponding to this term
+   * See {@link hydra.dsl.TypesTest} for the union type corresponding to this term
    */
   private final Term<String> bayAreaLocation = inject("Location", field("latlon", bayAreaLatLon));
 
   /**
-   * See {@link hydra.TypesTest} for a function type corresponding to this term
+   * See {@link hydra.dsl.TypesTest} for a function type corresponding to this term
    */
   private final Term<String> stringLength = primitive("hydra/lib/strings.length");
 
@@ -44,32 +44,34 @@ public class TermsTest {
 
   private final Term<String> longitudeAnnotated = annot("Gets the longitude from a LatLon", longitude);
 
-  private final Term.PartialVisitor<Integer> countBoundVariables = new Term.PartialVisitor<Integer>() {
-    @Override
-    public Integer visit(Term.Annotated instance) {
-      return ((Term.Annotated<?>) instance).value.subject.accept(countBoundVariables);
-    }
+  private <A> Term.PartialVisitor<A, Integer> countBoundVariables() {
+      return new Term.PartialVisitor<>() {
+          @Override
+          public Integer visit(Term.Annotated<A> instance) {
+              return instance.value.subject.accept(countBoundVariables());
+          }
 
-    @Override
-    public Integer visit(Term.Function instance) {
-      return ((Term.Function<?>) instance).value.accept(new Function.PartialVisitor<Integer>() {
-        @Override
-        public Integer visit(Function.Lambda instance) {
-          return 1 + ((Function.Lambda<?>) instance).value.body.accept(countBoundVariables);
-        }
+          @Override
+          public Integer visit(Term.Function<A> instance) {
+              return instance.value.accept(new Function.PartialVisitor<>() {
+                  @Override
+                  public Integer otherwise(Function<A> instance) {
+                      return 0;
+                  }
 
-        @Override
-        public Integer otherwise(Function ignored) {
-          return 0;
-        }
-      });
-    }
+                  @Override
+                  public Integer visit(Function.Lambda<A> instance) {
+                      return 1 + instance.value.body.accept(countBoundVariables());
+                  }
+              });
+          }
 
-    @Override
-    public Integer otherwise(Term ignored) {
-      return 0;
-    }
-  };
+          @Override
+          public Integer otherwise(Term<A> ignored) {
+              return 0;
+          }
+      };
+  }
 
   @Test
   public void constructedTermsAreAsExpected() {
@@ -107,7 +109,7 @@ public class TermsTest {
 
   @Test
   public void demonstrateVisitor() {
-    assertEquals(0, bayAreaLatLon.accept(countBoundVariables));
-    assertEquals(3, cat3.accept(countBoundVariables));
+    assertEquals(0, bayAreaLatLon.accept(countBoundVariables()));
+    assertEquals(3, cat3.accept(countBoundVariables()));
   }
 }
