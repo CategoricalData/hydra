@@ -283,6 +283,9 @@ javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNe
 javaTypeIdentifier :: String -> Java.TypeIdentifier
 javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
+javaTypeIdentifierToJavaTypeArgument :: Java.TypeIdentifier -> Java.TypeArgument
+javaTypeIdentifierToJavaTypeArgument id = Java.TypeArgumentReference $ Java.ReferenceTypeVariable $ Java.TypeVariable [] id
+        
 javaTypeName :: Java.Identifier -> Java.TypeName
 javaTypeName id = Java.TypeName (Java.TypeIdentifier id) Nothing
 
@@ -402,9 +405,9 @@ nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
   where
     (gname, local) = toQnameEager name
 
-nameToJavaReferenceType :: M.Map Namespace Java.PackageName -> Bool -> Name -> Maybe String -> Java.ReferenceType
-nameToJavaReferenceType aliases qualify name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
-  nameToJavaClassType aliases qualify [] name mlocal
+nameToJavaReferenceType :: M.Map Namespace Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType
+nameToJavaReferenceType aliases qualify args name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
+  nameToJavaClassType aliases qualify args name mlocal
 
 nameToJavaTypeIdentifier :: M.Map Namespace Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name Nothing
@@ -465,8 +468,8 @@ toJavaArrayType t = Java.TypeReference . Java.ReferenceTypeArray <$> case t of
     _ -> fail $ "don't know how to make Java reference type into array type: " ++ show rt
   _ -> fail $ "don't know how to make Java type into array type: " ++ show t
 
-typeParameterToTypeArgument (Java.TypeParameter _ id _) = Java.TypeArgumentReference $
-  Java.ReferenceTypeVariable $ Java.TypeVariable [] id
+typeParameterToTypeArgument :: Java.TypeParameter -> Java.TypeArgument
+typeParameterToTypeArgument (Java.TypeParameter _ id _) = javaTypeIdentifierToJavaTypeArgument id
 
 typeParameterToReferenceType :: Java.TypeParameter -> Java.ReferenceType
 typeParameterToReferenceType = javaTypeVariable . unTypeParameter
