@@ -10,114 +10,114 @@ public abstract class Type<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Annotated instance) ;
+  public interface Visitor<A, R> {
+    R visit(Annotated<A> instance) ;
     
-    R visit(Application instance) ;
+    R visit(Application<A> instance) ;
     
-    R visit(Element instance) ;
+    R visit(Element<A> instance) ;
     
-    R visit(Function instance) ;
+    R visit(Function<A> instance) ;
     
-    R visit(Lambda instance) ;
+    R visit(Lambda<A> instance) ;
     
-    R visit(List instance) ;
+    R visit(List<A> instance) ;
     
-    R visit(Literal instance) ;
+    R visit(Literal<A> instance) ;
     
-    R visit(Map instance) ;
+    R visit(Map<A> instance) ;
     
-    R visit(Optional instance) ;
+    R visit(Optional<A> instance) ;
     
-    R visit(Product instance) ;
+    R visit(Product<A> instance) ;
     
-    R visit(Record instance) ;
+    R visit(Record<A> instance) ;
     
-    R visit(Set instance) ;
+    R visit(Set<A> instance) ;
     
-    R visit(Stream instance) ;
+    R visit(Stream<A> instance) ;
     
-    R visit(Sum instance) ;
+    R visit(Sum<A> instance) ;
     
-    R visit(Union instance) ;
+    R visit(Union<A> instance) ;
     
-    R visit(Variable instance) ;
+    R visit(Variable<A> instance) ;
     
-    R visit(Wrap instance) ;
+    R visit(Wrap<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Type instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Type<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Annotated instance) {
+    default R visit(Annotated<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Application instance) {
+    default R visit(Application<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Element instance) {
+    default R visit(Element<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Function instance) {
+    default R visit(Function<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Lambda instance) {
+    default R visit(Lambda<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(List instance) {
+    default R visit(List<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Literal instance) {
+    default R visit(Literal<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Map instance) {
+    default R visit(Map<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Optional instance) {
+    default R visit(Optional<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Product instance) {
+    default R visit(Product<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Record instance) {
+    default R visit(Record<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Set instance) {
+    default R visit(Set<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Stream instance) {
+    default R visit(Stream<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Sum instance) {
+    default R visit(Sum<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Union instance) {
+    default R visit(Union<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Variable instance) {
+    default R visit(Variable<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wrap instance) {
+    default R visit(Wrap<A> instance) {
       return otherwise((instance));
     }
   }
@@ -150,7 +150,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -177,7 +177,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -204,7 +204,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -231,7 +231,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -258,7 +258,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -285,7 +285,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -312,7 +312,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -339,7 +339,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -366,7 +366,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -393,7 +393,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -420,7 +420,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -447,7 +447,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -474,7 +474,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -501,7 +501,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -528,7 +528,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -555,7 +555,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -582,7 +582,7 @@ public abstract class Type<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }

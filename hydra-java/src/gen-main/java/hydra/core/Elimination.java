@@ -10,48 +10,48 @@ public abstract class Elimination<A> {
   
   }
   
-  public abstract <R> R accept(Visitor<R> visitor) ;
+  public abstract <R> R accept(Visitor<A, R> visitor) ;
   
-  public interface Visitor<R> {
-    R visit(Element instance) ;
+  public interface Visitor<A, R> {
+    R visit(Element<A> instance) ;
     
-    R visit(List instance) ;
+    R visit(List<A> instance) ;
     
-    R visit(Optional instance) ;
+    R visit(Optional<A> instance) ;
     
-    R visit(Record instance) ;
+    R visit(Record<A> instance) ;
     
-    R visit(Union instance) ;
+    R visit(Union<A> instance) ;
     
-    R visit(Wrap instance) ;
+    R visit(Wrap<A> instance) ;
   }
   
-  public interface PartialVisitor<R> extends Visitor<R> {
-    default R otherwise(Elimination instance) {
+  public interface PartialVisitor<A, R> extends Visitor<A, R> {
+    default R otherwise(Elimination<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
     }
     
-    default R visit(Element instance) {
+    default R visit(Element<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(List instance) {
+    default R visit(List<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Optional instance) {
+    default R visit(Optional<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Record instance) {
+    default R visit(Record<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Union instance) {
+    default R visit(Union<A> instance) {
       return otherwise((instance));
     }
     
-    default R visit(Wrap instance) {
+    default R visit(Wrap<A> instance) {
       return otherwise((instance));
     }
   }
@@ -79,7 +79,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -112,7 +112,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -145,7 +145,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -178,7 +178,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -211,7 +211,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
@@ -244,7 +244,7 @@ public abstract class Elimination<A> {
     }
     
     @Override
-    public <R> R accept(Visitor<R> visitor) {
+    public <R> R accept(Visitor<A, R> visitor) {
       return visitor.visit(this);
     }
   }
