@@ -48,7 +48,7 @@ public class Vertex<V, P> {
 }
 ```
 
-See the [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/langs/tinkerpop/propertyGraph/Vertex.java) for the complete class,
+See [Vertex.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/gen-main/java/hydra/langs/tinkerpop/propertyGraph/Vertex.java) for the complete class,
 as well as the `Vertex` type in [PropertyGraph.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/gen-main/haskell/Hydra/Langs/Tinkerpop/PropertyGraph.hs) for comparison.
 Both files were generated from the property graph model defined [here](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Langs/Tinkerpop/PropertyGraph.hs).
 In each instantiation of the model, a vertex is an object with a label, an id, and a key/value map of properties.
@@ -135,4 +135,5 @@ Notice that we have defined two inner classes, `Element.Vertex` and `Element.Edg
 as well as a pair of "visitor" classes: `Element.Visitor` and `Element.PartialVisitor`.
 The first two classes are used instantiate an `Element` either as the first alternative (a vertex) or the second (an edge).
 The `Visitor` class is for pattern matching over the alternatives, and `PartialVisitor` is a convenient extension of the same which allows us to supply a default value for alternatives we do not care to match explicitly.
-The [Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Rewriting.java) and [Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Reduction.java) classes are good examples of pattern matching in action.
+The [Rewriting](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Rewriting.java) and [Reduction](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Reduction.java) classes are good examples of pattern matching in action,
+and there are simpler examples in [VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/test/java/hydra/VisitorTest.java).

@@ -18,7 +18,7 @@ Here you will find Hydra coders (type-aware encoders/decoders) for Haskell itsel
 [RDF](https://www.w3.org/RDF) + [SHACL](https://www.w3.org/TR/shacl), [GraphQL](https://graphql.org/),
 and LinkedIn's [PDL Schema](https://linkedin.github.io/rest.li/pdl_schema) language, as well as [TinkerPop](https://tinkerpop.apache.org)-style property graphs. See [Property graphs](https://github.com/CategoricalData/hydra/wiki/Property-graphs) for more information. Most of the Hydra documentation is also here.
 * **[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)** is a Java implementation of Hydra which is under active development.
-It includes a substantial portion of the Hydra kernel, though none of the coders mentioned above is fully ported to Java yet.
+It includes a substantial portion of the Hydra kernel, though none of the coders mentioned above are fully ported to Java yet.
 JavaDocs are available [here](https://categoricaldata.github.io/hydra/hydra-java/javadoc).
 * [Hydra-Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) is an experimental Scala implementation which has been on the back burner for a little while;
 Java has been getting most of the attention lately.
