@@ -26,6 +26,10 @@ f @@ x = apply f x
 (<.>) :: Term a -> Term a -> Term a
 f <.> g = compose f g
 
+infixr 0 >:
+(>:) :: String -> Term a -> Field a
+n >: t = field n t
+
 annot :: a -> Term a -> Term a
 annot ann t = TermAnnotated $ Annotated t ann
 
@@ -194,6 +198,11 @@ variable = TermVariable . Name
 
 variant :: Name -> FieldName -> Term a -> Term a
 variant n fname term = TermUnion $ Injection n $ Field fname term
+
+with :: Term a -> [Field a] -> Term a
+env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
+  where
+     toPair (Field name value) = (Name $ unFieldName name, value)
 
 withVariant :: Name -> FieldName -> Term a
 withVariant n = constFunction . unitVariant n
