@@ -7,6 +7,7 @@ acceptMethodName = "accept" :: String
 equalsMethodName = "equals" :: String
 hashCodeMethodName = "hashCode" :: String
 instanceName = "instance" :: String
+otherInstanceName = "other" :: String
 otherwiseMethodName = "otherwise" :: String
 partialVisitorName = "PartialVisitor" :: String
 valueFieldName = "value" :: String

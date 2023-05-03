@@ -57,6 +57,10 @@ interfaceMethodDeclaration mods tparams methodName params result stmts = Java.In
     header = javaMethodHeader tparams methodName params result
     body = javaMethodBody stmts
 
+javaAdditiveExpressionToJavaExpression :: Java.AdditiveExpression -> Java.Expression
+javaAdditiveExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
+  Java.RelationalExpressionSimple . Java.ShiftExpressionUnary
+
 javaAssignmentStatement :: Java.LeftHandSide -> Java.Expression -> Java.Statement
 javaAssignmentStatement lhs rhs = Java.StatementWithoutTrailing $ Java.StatementWithoutTrailingSubstatementExpression $
     Java.ExpressionStatement $ Java.StatementExpressionAssignment ass
@@ -138,6 +142,9 @@ javaFieldAccessToJavaExpression = javaPrimaryToJavaExpression . Java.PrimaryNoNe
 
 javaIdentifier :: String -> Java.Identifier
 javaIdentifier = Java.Identifier . sanitizeJavaName
+
+javaIdentifierToJavaExpressionName :: Java.Identifier -> Java.ExpressionName
+javaIdentifierToJavaExpressionName id = Java.ExpressionName Nothing id
 
 javaIdentifierToJavaExpression :: Java.Identifier -> Java.Expression
 javaIdentifierToJavaExpression = javaUnaryExpressionToJavaExpression . javaIdentifierToJavaUnaryExpression
@@ -280,6 +287,10 @@ javaStringMultiplicativeExpression = javaLiteralToJavaMultiplicativeExpression .
 javaThis :: Java.Expression
 javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
+javaTypeFromTypeName :: M.Map Namespace Java.PackageName -> Name -> Java.Type
+javaTypeFromTypeName aliases elName = javaTypeVariableToType $ Java.TypeVariable [] $
+  nameToJavaTypeIdentifier aliases False elName
+
 javaTypeIdentifier :: String -> Java.TypeIdentifier
 javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
@@ -291,18 +302,6 @@ javaTypeName id = Java.TypeName (Java.TypeIdentifier id) Nothing
 
 javaTypeParameter :: String -> Java.TypeParameter
 javaTypeParameter v = Java.TypeParameter [] (javaTypeIdentifier v) Nothing
-
-javaTypeVariable :: String -> Java.ReferenceType
-javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier $ capitalize v
-
-javaTypeVariableToType :: Java.TypeVariable -> Java.Type
-javaTypeVariableToType = Java.TypeReference . Java.ReferenceTypeVariable
-
-javaUtilFunctionPackageName :: Maybe Java.PackageName
-javaUtilFunctionPackageName = Just $ javaPackageName ["java", "util", "function"]
-
-javaUtilPackageName :: Maybe Java.PackageName
-javaUtilPackageName = Just $ javaPackageName ["java", "util"]
 
 javaTypeToJavaFormalParameter :: Java.Type -> FieldName -> Java.FormalParameter
 javaTypeToJavaFormalParameter jt fname = Java.FormalParameterSimple $ Java.FormalParameter_Simple [] argType argId
@@ -323,6 +322,12 @@ javaTypeToJavaTypeArgument t = case t of
   Java.TypeReference rt -> Java.TypeArgumentReference rt
   _ -> Java.TypeArgumentWildcard $ Java.Wildcard [] Nothing -- TODO
 
+javaTypeVariable :: String -> Java.ReferenceType
+javaTypeVariable v = Java.ReferenceTypeVariable $ Java.TypeVariable [] $ javaTypeIdentifier $ capitalize v
+
+javaTypeVariableToType :: Java.TypeVariable -> Java.Type
+javaTypeVariableToType = Java.TypeReference . Java.ReferenceTypeVariable
+
 javaUnaryExpressionToJavaExpression :: Java.UnaryExpression -> Java.Expression
 javaUnaryExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaUnaryExpressionToJavaRelationalExpression
@@ -331,12 +336,14 @@ javaUnaryExpressionToJavaRelationalExpression :: Java.UnaryExpression -> Java.Re
 javaUnaryExpressionToJavaRelationalExpression = javaMultiplicativeExpressionToJavaRelationalExpression .
   Java.MultiplicativeExpressionUnary
 
+javaUtilFunctionPackageName :: Maybe Java.PackageName
+javaUtilFunctionPackageName = Just $ javaPackageName ["java", "util", "function"]
+
+javaUtilPackageName :: Maybe Java.PackageName
+javaUtilPackageName = Just $ javaPackageName ["java", "util"]
+
 javaVariableDeclarator :: Java.Identifier -> Y.Maybe Java.VariableInitializer -> Java.VariableDeclarator
 javaVariableDeclarator id = Java.VariableDeclarator (javaVariableDeclaratorId id)
-
-javaAdditiveExpressionToJavaExpression :: Java.AdditiveExpression -> Java.Expression
-javaAdditiveExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
-  Java.RelationalExpressionSimple . Java.ShiftExpressionUnary
 
 javaVariableDeclaratorId :: Java.Identifier -> Java.VariableDeclaratorId
 javaVariableDeclaratorId id = Java.VariableDeclaratorId id Nothing
@@ -477,13 +484,10 @@ typeParameterToReferenceType = javaTypeVariable . unTypeParameter
 unTypeParameter :: Java.TypeParameter -> String
 unTypeParameter (Java.TypeParameter [] (Java.TypeIdentifier (Java.Identifier v)) Nothing) = v
 
-variableDeclarationStatement :: M.Map Namespace Java.PackageName -> Name -> Java.Identifier -> Java.Expression -> Java.BlockStatement
-variableDeclarationStatement aliases elName id rhs = Java.BlockStatementLocalVariableDeclaration $
-    Java.LocalVariableDeclarationStatement $
-    Java.LocalVariableDeclaration [] t [vdec]
+variableDeclarationStatement :: M.Map Namespace Java.PackageName -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement
+variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVariableDeclaration $
+    Java.LocalVariableDeclarationStatement $ Java.LocalVariableDeclaration [] (Java.LocalVariableTypeType $ Java.UnannType jtype) [vdec]
   where
-    t = Java.LocalVariableTypeType $ Java.UnannType $ javaTypeVariableToType $ Java.TypeVariable [] $
-      nameToJavaTypeIdentifier aliases False elName
     vdec = javaVariableDeclarator id (Just init)
       where
         init = Java.VariableInitializerExpression rhs
