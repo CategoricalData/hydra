@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.InferenceSpec where
 
 import Hydra.Kernel
@@ -211,6 +213,21 @@ checkIndividualTerms = do
     --       Field "age" $ int32 42]))
     --     (Types.function Types.string testTypePerson)
 
+checkLetTerms :: H.SpecWith ()
+checkLetTerms = do
+    H.describe "Check a few hand-picked let terms" $ do
+
+        H.it "Check empty let" $ do
+          expectMonotype
+            ((int32 42) `with` [])
+            Types.int32
+
+        H.it "Check trivial let" $ do
+          expectMonotype
+            (variable "foo" `with` [
+              "foo">: int32 42])
+            Types.int32
+
 checkLists :: H.SpecWith ()
 checkLists = do
   H.describe "Check a few hand-picked list terms" $ do
@@ -358,6 +375,7 @@ spec = do
   checkApplicationTerms
   checkFunctionTerms
   checkIndividualTerms
+  checkLetTerms
   checkLists
   checkLiterals
   checkWrappedTerms
