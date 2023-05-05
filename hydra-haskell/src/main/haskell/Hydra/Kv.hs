@@ -106,7 +106,7 @@ setDescription :: Y.Maybe String -> Kv -> Kv
 setDescription d = setAnnotation kvDescription (Terms.string <$> d)
 
 setTermAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Term Kv -> Term Kv
-setTermAnnotation cx key val term = if kv == annotationClassDefault (graphAnnotations cx)
+setTermAnnotation g key val term = if kv == annotationClassDefault (graphAnnotations g)
     then term'
     else TermAnnotated $ Annotated term' kv
   where
@@ -114,16 +114,16 @@ setTermAnnotation cx key val term = if kv == annotationClassDefault (graphAnnota
     kv = setAnnotation key val $ termAnnotationInternal term
 
 setTermDescription :: Graph Kv -> Y.Maybe String -> Term Kv -> Term Kv
-setTermDescription cx d = setTermAnnotation cx kvDescription (Terms.string <$> d)
+setTermDescription g d = setTermAnnotation g kvDescription (Terms.string <$> d)
 
 setTermType :: Graph Kv -> Y.Maybe (Type Kv) -> Term Kv -> Term Kv
-setTermType cx d = setTermAnnotation cx kvType (epsilonEncodeType <$> d)
+setTermType g d = setTermAnnotation g kvType (epsilonEncodeType <$> d)
 
 setType :: Y.Maybe (Type Kv) -> Kv -> Kv
 setType mt = setAnnotation kvType (epsilonEncodeType <$> mt)
 
 setTypeAnnotation :: Graph Kv -> String -> Y.Maybe (Term Kv) -> Type Kv -> Type Kv
-setTypeAnnotation cx key val typ = if kv == annotationClassDefault (graphAnnotations cx)
+setTypeAnnotation g key val typ = if kv == annotationClassDefault (graphAnnotations g)
     then typ'
     else TypeAnnotated $ Annotated typ' kv
   where
@@ -131,7 +131,7 @@ setTypeAnnotation cx key val typ = if kv == annotationClassDefault (graphAnnotat
     kv = setAnnotation key val $ typeAnnotationInternal typ
 
 setTypeDescription :: Graph Kv -> Y.Maybe String -> Type Kv -> Type Kv
-setTypeDescription cx d = setTypeAnnotation cx kvDescription (Terms.string <$> d)
+setTypeDescription g d = setTypeAnnotation g kvDescription (Terms.string <$> d)
 
 termAnnotationInternal :: Term Kv -> Kv
 termAnnotationInternal = aggregateAnnotations $ \t -> case t of

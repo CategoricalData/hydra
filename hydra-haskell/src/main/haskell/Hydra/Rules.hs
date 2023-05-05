@@ -241,14 +241,14 @@ generalize env t  = TypeScheme vars t
 
 infer :: (Ord a, Show a) => Term a -> Flow (InferenceContext a) (Term (InfAnn a))
 infer term = do
-  cx <- inferenceContextGraph <$> getState
-  mt <- withGraphContext $ annotationClassTermType (graphAnnotations cx) term
+  g <- inferenceContextGraph <$> getState
+  mt <- withGraphContext $ annotationClassTermType (graphAnnotations g) term
   case mt of
     Just typ -> do
       i <- applyRules term
-      return $ TermAnnotated $ Annotated i (termMeta cx term, typ, []) -- TODO: unify "suggested" types with inferred types
+      return $ TermAnnotated $ Annotated i (termMeta g term, typ, []) -- TODO: unify "suggested" types with inferred types
     Nothing -> applyRules term
-
+   
 inferFieldType :: (Ord a, Show a) => Field a -> Flow (InferenceContext a) (Field (InfAnn a))
 inferFieldType (Field fname term) = Field fname <$> infer term
 
@@ -323,7 +323,7 @@ withLet (Let bindings env) flow = withTrace ("let(" ++ L.intercalate "," (unName
   
       let ibindings = L.zip (fst <$> bl) is
       result <- yield (TermLet $ Let (M.fromList ibindings) i2) t2 (tc ++ c2)
-      
+
       let state1 = state {
             inferenceContextEnvironment = extendEnv ibindings te,
             inferenceContextGraph = extendGraph ibindings $ inferenceContextGraph state}
@@ -355,6 +355,9 @@ withLet (Let bindings env) flow = withTrace ("let(" ++ L.intercalate "," (unName
 
 yield :: Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yield term typ constraints = do
+  case term of
+    TermAnnotated _ -> fail "doubly-annotated term"
+    _ -> pure ()
   g <- inferenceContextGraph <$> getState
   return $ TermAnnotated $ Annotated term (annotationClassDefault $ graphAnnotations g, typ, constraints)
 
