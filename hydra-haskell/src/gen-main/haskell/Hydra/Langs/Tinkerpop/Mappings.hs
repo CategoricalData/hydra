@@ -140,7 +140,7 @@ _Schema_annotations = (Core.FieldName "annotations")
 data ValueSpec = 
   -- | A trivial no-op specification which passes the entire value
   ValueSpecValue  |
-  -- | A compact path representing the function, e.g. ${}/engineInfo/model/name
+  -- | A compact path representing the function, e.g. engine-${engineInfo/model/name}
   ValueSpecPattern String
   deriving (Eq, Ord, Read, Show)
 

@@ -13,6 +13,8 @@ import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
+import Prelude hiding ((++))
+
 
 basicsDefinition :: String -> Datum a -> Definition a
 basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
@@ -23,28 +25,29 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
       <> "These functions are not allowed to include references to primitive functions, as the definitions of some "
       <> "primitive functions in turn depend on them.")
   where
-    elements = [
-      el eliminationVariantDef,
-      el eliminationVariantsDef,
-      el floatTypePrecisionDef,
-      el floatTypesDef,
-      el floatValueTypeDef,
-      el functionVariantDef,
-      el functionVariantsDef,
-      el integerTypeIsSignedDef,
-      el integerTypePrecisionDef,
-      el integerTypesDef,
-      el integerValueTypeDef,
-      el literalTypeDef,
-      el literalTypeVariantDef,
-      el literalVariantDef,
-      el literalVariantsDef,
-      el skipAnnotationsDef,
-      el termMetaDef,
-      el termVariantDef,
-      el termVariantsDef,
-      el typeVariantDef,
-      el typeVariantsDef]
+   elements = [
+     el eliminationVariantDef,
+     el eliminationVariantsDef,
+     el floatTypePrecisionDef,
+     el floatTypesDef,
+     el floatValueTypeDef,
+     el functionVariantDef,
+     el functionVariantsDef,
+     el integerTypeIsSignedDef,
+     el integerTypePrecisionDef,
+     el integerTypesDef,
+     el integerValueTypeDef,
+     el literalTypeDef,
+     el literalTypeVariantDef,
+     el literalVariantDef,
+     el literalVariantsDef,
+     el skipAnnotationsDef,
+     el testLetDef,
+     el termMetaDef,
+     el termVariantDef,
+     el termVariantsDef,
+     el typeVariantDef,
+     el typeVariantsDef]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -218,6 +221,14 @@ skipAnnotationsDef = basicsDefinition "skipAnnotations" $
             (var "t1")
             (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
           @@ (var "getAnn" @@ var "t1")]
+
+testLetDef :: Definition (String -> String)
+testLetDef = basicsDefinition "testLet" $
+  doc "Temporary; remove at will" $
+  function Types.string Types.string $
+  lambda "i" $ (var "foo" ++ var "i" ++ var "bar") `with` [
+    "foo">: string "FOO",
+    "bar">: string "BAR"]
 
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
