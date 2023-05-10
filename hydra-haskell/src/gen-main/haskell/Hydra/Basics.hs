@@ -4,6 +4,7 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import Data.List
 import Data.Map
@@ -153,6 +154,17 @@ skipAnnotations getAnn t =
           Nothing -> t1
           Just v -> (skip (Core.annotatedSubject v))) (getAnn t1)
   in (skip t)
+
+-- | Temporary; remove at will
+testLet :: (String -> String)
+testLet i =  
+  let bar = "BAR" 
+      foo = "FOO"
+  in (Strings.cat [
+    Strings.cat [
+      foo,
+      i],
+    bar])
 
 termMeta :: (Graph.Graph a -> Core.Term a -> a)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
