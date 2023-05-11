@@ -147,8 +147,8 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       exampleProjectionType
       exampleProjectionType
       False
-      (projection testTypePersonName fname)
-      (projection testTypePersonName fname)
+      (project testTypePersonName fname)
+      (project testTypePersonName fname)
 
 --  H.it "Nominal types (when supported) pass through without change" $
 --    QC.property $ \s -> checkDataAdapter
@@ -213,9 +213,9 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       exampleProjectionType
       (functionProxyType testTypePerson)
       False
-      (projection testTypePersonName fname)
+      (project testTypePersonName fname)
       (inject functionProxyName $ field "record" $ string $
-        show (projection testTypePersonName fname :: Term Kv)) -- Note: the field name is not dereferenced
+        show (project testTypePersonName fname :: Term Kv)) -- Note: the field name is not dereferenced
 
 --  H.it "Nominal types (when unsupported) are dereferenced" $
 --    QC.property $ \s -> checkDataAdapter
@@ -292,7 +292,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)
 
   H.it "Check projection terms (which map to variants)" $
-    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (projection testTypePersonName fname)
+    QC.property $ \fname -> roundTripIsNoop exampleProjectionType (project testTypePersonName fname)
 
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
     QC.property $ \s -> roundTripIsNoop stringAliasType (string s)

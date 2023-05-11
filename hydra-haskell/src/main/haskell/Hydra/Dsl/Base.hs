@@ -87,6 +87,12 @@ function dom cod = typed (Types.function dom cod)
 functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
 
+inject :: Name -> FieldName -> Datum a -> Datum b
+inject name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
+
+inject2 :: Name -> FieldName -> Datum (a -> b)
+inject2 name fname = lambda "x2" $ typed (Types.wrap name) $ inject name fname $ var "x2"
+
 just :: Datum x -> Datum (Maybe x)
 just (Datum term) = Datum $ Terms.just term
 
@@ -104,6 +110,9 @@ map = Datum . Terms.map . M.fromList . fmap fromDatum . M.toList
   where
     fromDatum (Datum k, Datum v) = (k, v)
 
+match :: Name -> Type Kv -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
+match name cod def fields = function (Types.wrap name) cod $ Datum $ Terms.cases name def fields
+
 matchData :: Name -> Maybe (Datum b) -> [(FieldName, Datum (x -> b))] -> Datum (a -> b)
 matchData name def pairs = Datum $ Terms.cases name (unDatum <$> def) (toField <$> pairs)
   where
@@ -112,8 +121,8 @@ matchData name def pairs = Datum $ Terms.cases name (unDatum <$> def) (toField <
 matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
 matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
 
-match :: Name -> Type Kv -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
-match name cod def fields = function (Types.wrap name) cod $ Datum $ Terms.cases name def fields
+matchSimple :: Name -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
+matchSimple name def fields = Datum $ Terms.cases name def fields
 
 matchToEnum :: Name -> Name -> Maybe (Datum b) -> [(FieldName, FieldName)] -> Datum (a -> b)
 matchToEnum domName codName def pairs = matchData domName def (toCase <$> pairs)
@@ -139,25 +148,19 @@ primitive :: Name -> Datum a
 primitive = Datum . Terms.primitive
 
 project :: Name -> FieldName -> Datum (a -> b)
-project name fname = Datum $ Terms.projection name fname
+project name fname = Datum $ Terms.project name fname
 
 record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
-ref (Definition name _) = Datum (Terms.apply Terms.delta $ TermElement name) 
+ref (Definition name _) = Datum (Terms.apply Terms.delta $ TermElement name)
 
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList
 
 typed :: Type Kv -> Datum a -> Datum a
 typed t (Datum term) = Datum $ setTermType hydraCore (Just t) term
-
-union :: Name -> FieldName -> Datum a -> Datum b
-union name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
-
-union2 :: Name -> FieldName -> Datum (a -> b)
-union2 name fname = lambda "x2" $ typed (Types.wrap name) $ union name fname $ var "x2"
 
 unit :: Datum a
 unit = Datum Terms.unit

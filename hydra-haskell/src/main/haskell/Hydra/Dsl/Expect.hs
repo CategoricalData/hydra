@@ -33,6 +33,13 @@ booleanLiteral v = case v of
   LiteralBoolean b -> pure b
   _ -> unexpected "boolean" v
 
+caseStatement :: Show a => Name -> Term a -> Flow s (CaseStatement a)
+caseStatement name term = case Common.stripTerm term of
+  TermFunction (FunctionElimination (EliminationUnion cs)) -> if caseStatementTypeName cs == name
+    then pure cs
+    else unexpected ("case statement for type " ++ unName name) term
+  _ -> unexpected "case statement" term
+
 float32 :: Show a => Term a -> Flow s Float
 float32 t = literal t >>= float32Literal
 
@@ -76,6 +83,11 @@ int64Literal :: Literal -> Flow s Integer
 int64Literal v = case v of
   LiteralInteger (IntegerValueInt64 i) -> pure i
   _ -> unexpected "int64" v
+
+lambda :: Show a => Term a -> Flow s (Lambda a)
+lambda term = case Common.stripTerm term of
+  TermFunction (FunctionLambda l) -> pure l
+  _ -> unexpected "lambda" term
 
 list :: Show a => (Term a -> Flow s x) -> Term a -> Flow s [x]
 list f term = case Common.stripTerm term of
@@ -143,6 +155,13 @@ stringLiteral :: Literal -> Flow s String
 stringLiteral v = case v of
   LiteralString s -> pure s
   _ -> unexpected "string" v
+
+inject :: Show a => Name -> Term a -> Flow s (Field a)
+inject name term = case Common.stripTerm term of
+  TermUnion (Injection name' field) -> if name' == name
+    then pure field
+    else fail $ "found an injection of type " ++ unName name' ++ ", expected " ++ unName name
+  _ -> unexpected "injection" term
 
 wrapWithName :: Show a => Name -> Term a -> Flow s (Term a)
 wrapWithName expected term = case Common.stripTerm term of

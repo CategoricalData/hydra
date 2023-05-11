@@ -152,8 +152,8 @@ primitive = TermFunction . FunctionPrimitive
 product :: [Term a] -> Term a
 product = TermProduct
 
-projection :: Name -> FieldName -> Term a
-projection n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
+project :: Name -> FieldName -> Term a
+project n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
 
 record :: Name -> [Field a] -> Term a
 record n fields = TermRecord $ Record n fields
