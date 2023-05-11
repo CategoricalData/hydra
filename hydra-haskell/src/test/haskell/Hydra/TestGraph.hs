@@ -28,7 +28,7 @@ latLonType :: Type a
 latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.float32, Types.field "lon" Types.float32]
 
 latLonPolyType :: Type a
-latLonPolyType = TypeLambda $ LambdaType (Name "a") $ 
+latLonPolyType = TypeLambda $ LambdaType (Name "a") $
   TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.variable "a", Types.field "lon" $ Types.variable "a"]
 
 testElementArthur :: Element Kv
@@ -41,7 +41,7 @@ testElementFirstName :: Element Kv
 testElementFirstName = Element {
   elementName = Name "firstName",
   elementSchema = epsilonEncodeType (Types.function (Types.wrap testTypePersonName) Types.string),
-  elementData = projection testTypePersonName $ FieldName "firstName"}
+  elementData = project testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Kv
 testGraph = elementsToGraph hydraCore (Just testSchemaGraph) [testElementArthur, testElementFirstName]
@@ -53,6 +53,7 @@ testSchemaGraph :: Graph Kv
 testSchemaGraph = elementsToGraph hydraCore (Just hydraCore) [
     def (Name "StringTypeAlias") $ Ann.doc "An alias for the string type" Types.string,
     def testTypeFoobarValueName testTypeFoobarValue,
+    def testTypeNumberName testTypeNumber,
     def testTypeComparisonName testTypeComparison,
     def latLonName latLonType,
     def latLonPolyName latLonPolyType,
@@ -88,6 +89,14 @@ testTypeFoobarValue = TypeUnion $ RowType testTypeFoobarValueName Nothing [
 
 testTypeFoobarValueName :: Name
 testTypeFoobarValueName = Name "FoobarValue"
+
+testTypeNumber :: Type Kv
+testTypeNumber = TypeUnion $ RowType testTypeNumberName Nothing [
+  Types.field "int" Types.int32,
+  Types.field "float" Types.float32]
+
+testTypeNumberName :: Name
+testTypeNumberName = Name "Number"
 
 testTypePerson :: Type Kv
 testTypePerson = TypeRecord $ RowType testTypePersonName Nothing [
