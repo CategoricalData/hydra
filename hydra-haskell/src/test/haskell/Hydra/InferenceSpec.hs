@@ -7,14 +7,17 @@ import Hydra.Sources.Libraries
 import Hydra.Inference
 import Hydra.TestUtils
 import Hydra.TestData
+import qualified Hydra.Dsl.Expect as Expect
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Annotations as Ann
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import Control.Monad
 
 
 checkType :: Term (Kv, Type Kv, [Constraint Kv]) -> Type Kv -> H.Expectation
@@ -28,8 +31,19 @@ expectMonotype term = expectPolytype term []
 expectPolytype :: Term Kv-> [String] -> Type Kv -> H.Expectation
 expectPolytype term vars typ = do
     shouldSucceedWith
-      (inferType term)
+      (inferTypeScheme term)
       (TypeScheme (Name <$> vars) typ)
+
+expectTypeAnnotation :: (Term Kv -> Flow (Graph Kv) (Term Kv)) -> Term Kv -> Type Kv -> H.Expectation
+expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
+  where
+   atyp = do
+     iterm <- annotateTermWithTypes term
+     selected <- path iterm
+     mtyp <- getType (termAnnotationInternal selected)
+     case mtyp of
+       Nothing -> fail $ "no type annotation"
+       Just t -> pure t
 
 checkApplicationTerms :: H.SpecWith ()
 checkApplicationTerms = do
@@ -82,7 +96,7 @@ checkFunctionTerms = do
 
     H.it "Check projections" $ do
       expectMonotype
-        (projection testTypePersonName (FieldName "firstName"))
+        (project testTypePersonName (FieldName "firstName"))
         (Types.function testTypePerson Types.string)
 
     H.it "Check case statements" $ do
@@ -154,7 +168,7 @@ checkIndividualTerms = do
           FieldType (FieldName "lon") Types.float32])
       expectMonotype
         (record latLonPolyName [
-          Field (FieldName "lat") $ float32 37.7749, 
+          Field (FieldName "lat") $ float32 37.7749,
           Field (FieldName "lon") $ float32 $ negate 122.4194])
         (TypeRecord $ RowType latLonPolyName Nothing [
           FieldType (FieldName "lat") Types.float32,
@@ -363,6 +377,73 @@ checkTypeAnnotations = do
         let (TermAnnotated (Annotated (TermList [term2]) _)) = term1
         checkType term2 (Types.literal $ literalType l)
 
+checkSubtermAnnotations :: H.SpecWith ()
+checkSubtermAnnotations = do
+  H.describe "Check additional subterm annotations" $ do
+
+    H.it "Check literals" $
+      expectTypeAnnotation pure
+        (string "foo")
+        (Types.string)
+
+    H.it "Check monotyped lists" $ do
+      expectTypeAnnotation pure
+        (list [string "foo"])
+        (Types.list Types.string)
+      expectTypeAnnotation getFirst
+        (list [string "foo"])
+        Types.string
+
+    H.it "Check monotyped lists within lambdas" $ do
+      expectTypeAnnotation pure
+        (lambda "x" $ list [variable "x", string "foo"])
+        (Types.function Types.string (Types.list Types.string))
+      expectTypeAnnotation (getBody >=> getFirst)
+        (lambda "x" $ list [variable "x", string "foo"])
+        Types.string
+
+    H.it "Check injections" $ do
+      expectTypeAnnotation pure
+        (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11")
+        testTypeTimestamp
+
+    H.it "Check projections" $ do
+      expectTypeAnnotation pure
+        (project testTypePersonName $ FieldName "firstName")
+        (Types.function testTypePerson Types.string)
+
+    H.it "Check case statements" $ do
+      expectTypeAnnotation pure
+        (cases testTypeNumberName (Just $ string "it's something else") [
+          Field (FieldName "int") $ constFunction $ string "it's an integer"])
+        (Types.function testTypeNumber Types.string)
+      expectTypeAnnotation pure
+        (cases testTypeNumberName Nothing [
+          Field (FieldName "int") $ constFunction $ string "it's an integer",
+          Field (FieldName "float") $ constFunction $ string "it's a float"])
+        (Types.function testTypeNumber Types.string)
+      expectTypeAnnotation (getCase testTypeNumberName 0 >=> (pure . fieldTerm))
+        (cases testTypeNumberName Nothing [
+          Field (FieldName "int") $ constFunction $ string "it's an integer",
+          Field (FieldName "float") $ constFunction $ string "it's a float"])
+        (Types.function Types.int32 Types.string)
+
+  where
+    getBody term = lambdaBody <$> Expect.lambda term
+
+    getCase name n term = do
+      cs <- Expect.caseStatement name term
+      let fields = caseStatementCases cs
+      if L.length fields <= n
+        then fail $ "not enough cases"
+        else pure $ fields !! n
+
+    getFirst term = do
+      l <- Expect.list pure term
+      if L.null l
+        then fail "empty list"
+        else pure $ L.head l
+
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = do
   H.describe "Check that term/type pairs are consistent with type inference" $ do
@@ -383,4 +464,5 @@ spec = do
   checkProducts
   checkSums
   checkTypeAnnotations
+  checkSubtermAnnotations
 --  checkTypedTerms
