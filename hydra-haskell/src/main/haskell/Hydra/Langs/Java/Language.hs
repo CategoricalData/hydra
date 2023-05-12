@@ -30,7 +30,7 @@ javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints 
     TermVariantApplication,
     TermVariantElement,
     TermVariantFunction,
-    -- Note: "let" is excluded for now
+    TermVariantLet,
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,
