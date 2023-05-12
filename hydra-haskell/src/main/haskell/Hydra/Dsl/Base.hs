@@ -61,7 +61,7 @@ compose :: Datum (b -> c) -> Datum (a -> b) -> Datum (a -> c)
 compose (Datum f) (Datum g) = Datum $ Terms.compose f g
 
 constant :: Datum a -> Datum (b -> a)
-constant (Datum term) = Datum $ Terms.lambda "_" term
+constant (Datum term) = Datum $ Terms.constant term
 
 denom :: Name -> Datum (a -> b)
 denom = Datum . Terms.unwrap

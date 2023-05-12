@@ -54,8 +54,8 @@ cases n def fields = TermFunction $ FunctionElimination $ EliminationUnion $ Cas
 compose :: Term a -> Term a -> Term a
 compose f g = lambda "x" $ apply f (apply g $ variable "x")
 
-constFunction :: Term a -> Term a
-constFunction = lambda "_"
+constant :: Term a -> Term a
+constant = lambda "_"
 
 delta :: Term a
 delta = TermFunction $ FunctionElimination EliminationElement
@@ -138,7 +138,7 @@ matchOptional n j = TermFunction $ FunctionElimination $ EliminationOptional $ O
 matchWithVariants :: Name -> Maybe (Term a) -> [(FieldName, FieldName)] -> Term a
 matchWithVariants n def pairs = cases n def (toField <$> pairs)
   where
-    toField (from, to) = Field from $ constFunction $ unitVariant n to
+    toField (from, to) = Field from $ constant $ unitVariant n to
 
 nothing :: Term a
 nothing = optional Nothing
@@ -205,7 +205,7 @@ env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
      toPair (Field name value) = (Name $ unFieldName name, value)
 
 withVariant :: Name -> FieldName -> Term a
-withVariant n = constFunction . unitVariant n
+withVariant n = constant . unitVariant n
 
 wrap :: Name -> Term a -> Term a
 wrap name term = TermWrap $ Nominal name term
