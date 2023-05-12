@@ -415,17 +415,17 @@ checkSubtermAnnotations = do
     H.it "Check case statements" $ do
       expectTypeAnnotation pure
         (cases testTypeNumberName (Just $ string "it's something else") [
-          Field (FieldName "int") $ constFunction $ string "it's an integer"])
+          Field (FieldName "int") $ constant $ string "it's an integer"])
         (Types.function testTypeNumber Types.string)
       expectTypeAnnotation pure
         (cases testTypeNumberName Nothing [
-          Field (FieldName "int") $ constFunction $ string "it's an integer",
-          Field (FieldName "float") $ constFunction $ string "it's a float"])
+          Field (FieldName "int") $ constant $ string "it's an integer",
+          Field (FieldName "float") $ constant $ string "it's a float"])
         (Types.function testTypeNumber Types.string)
       expectTypeAnnotation (getCase testTypeNumberName 0 >=> (pure . fieldTerm))
         (cases testTypeNumberName Nothing [
-          Field (FieldName "int") $ constFunction $ string "it's an integer",
-          Field (FieldName "float") $ constFunction $ string "it's a float"])
+          Field (FieldName "int") $ constant $ string "it's an integer",
+          Field (FieldName "float") $ constant $ string "it's a float"])
         (Types.function Types.int32 Types.string)
 
   where

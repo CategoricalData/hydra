@@ -6,6 +6,7 @@ module Hydra.Inference (
   annotateTermWithTypes,
   inferType,
   inferTypeAndConstraints,
+  inferTypeScheme,
   Constraint,
 ) where
 
@@ -74,13 +75,23 @@ annotateGraphWithTypes = getState >>= annotateGraph
 annotateTermWithTypes :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
 annotateTermWithTypes term0 = do
   (term1, _) <- inferTypeAndConstraints term0
-  anns <- graphAnnotations <$> getState
-  mt <- annotationClassTermType anns term0 -- Use a provided type, if available, rather than the inferred type
-  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just $ Y.fromMaybe typ mt) ann
-  return $ rewriteTermMeta annotType term1
 
-inferType :: (Ord a, Show a) => Term a -> GraphFlow a (TypeScheme a)
-inferType term = snd <$> inferTypeAndConstraints term
+  g <- getState
+  let anns = graphAnnotations g
+  let annotType (ann, typ, _) = annotationClassSetTypeOf anns (Just typ) ann
+  let term2 = rewriteTermMeta annotType term1
+
+  useProvidedTypeAnnotation g anns term0 term2
+ where
+   -- TODO: this merely compensates for a shortcoming of type inference. Fix that shortcoming and get rid of this step.
+   useProvidedTypeAnnotation g anns term0 term1 = do
+     mt <- annotationClassTermType anns term0
+     case mt of
+       Nothing -> pure term1
+       Just t -> pure $ annotationClassSetTermType anns g (Just t) term1
+
+inferType :: (Ord a, Show a) => Term a -> GraphFlow a (Type a)
+inferType term = typeSchemeType <$> inferTypeScheme term
 
 -- | Solve for the top-level type of an expression in a given environment
 inferTypeAndConstraints :: (Ord a, Show a) => Term a -> GraphFlow a (Term (a, Type a, [Constraint a]), TypeScheme a)
@@ -95,6 +106,9 @@ inferTypeAndConstraints term = do
   where
     -- | Canonicalize and return the polymorphic top-level type.
     closeOver = normalizeScheme . generalize M.empty . reduceType
+
+inferTypeScheme :: (Ord a, Show a) => Term a -> GraphFlow a (TypeScheme a)
+inferTypeScheme term = snd <$> inferTypeAndConstraints term
 
 rewriteDataType :: Ord a => (Type a -> Type a) -> Term (a, Type a, [Constraint a]) -> Term (a, Type a, [Constraint a])
 rewriteDataType f = rewriteTermMeta rewrite
