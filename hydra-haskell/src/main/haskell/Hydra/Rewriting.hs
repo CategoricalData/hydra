@@ -34,7 +34,9 @@ expandLambdas :: Ord a => Term a -> GraphFlow a (Term a)
 expandLambdas = rewriteTermM (expand []) (pure . id)
   where
     expand args recurse term = case term of
-        TermAnnotated (Annotated term' ann) -> TermAnnotated <$> (Annotated <$> expand args recurse term' <*> pure ann)
+        TermAnnotated (Annotated term' ann) -> do
+          expanded <- expand args recurse term'
+          return $ TermAnnotated $ Annotated expanded ann
         TermApplication (Application lhs rhs) -> do
           rhs' <- expandLambdas rhs
           expand (rhs':args) recurse lhs

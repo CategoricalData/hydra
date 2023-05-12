@@ -5,6 +5,7 @@ module Hydra.Common where
 import Hydra.Basics
 import Hydra.Core
 import Hydra.Compute
+import Hydra.Flows
 import Hydra.Graph
 import Hydra.Module
 import Hydra.Tools.Formatting
@@ -99,6 +100,14 @@ namespaceOfEager = fst . toQnameEager
 
 placeholderName :: Name
 placeholderName = Name "Placeholder"
+
+requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
+requireTypeAnnotation term = do
+  anns <- graphAnnotations <$> getState
+  mt <- annotationClassTermType anns term
+  case mt of
+    Nothing -> fail $ "missing type annotation" ++ " in " ++ show term
+    Just t -> pure t
 
 stripTerm :: Term a -> Term a
 stripTerm = skipAnnotations $ \t -> case t of

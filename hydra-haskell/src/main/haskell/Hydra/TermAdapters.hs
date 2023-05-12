@@ -41,16 +41,6 @@ _context = FieldName "context"
 _record :: FieldName
 _record = FieldName "record"
 
--- dereferenceNominal :: (Ord a, Read a, Show a) => TypeAdapter a
--- dereferenceNominal t@(TypeWrap name) = do
---   typ <- withGraphContext $ do
---     -- Note: we just assume the schema term is a reference to hydra/core.Type
---     withTrace ("dereference nominal type " ++ unName name) $ do
---       el <- withSchemaContext $ requireElement name
---       epsilonDecodeType $ elementData el
---   ad <- termAdapter typ
---   return ad { adapterSource = t }
-
 elementToString :: TypeAdapter a
 elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder encode decode
   where
@@ -226,7 +216,7 @@ passFunction t@(TypeFunction (FunctionType dom cod)) = do
                 --       it is not the job of this adapter to catch validation issues.
                 getCoder fname = Y.maybe idCoder adapterCoder $ M.lookup fname caseAds
           FunctionLambda (Lambda var body) -> FunctionLambda <$> (Lambda var <$> encodeDecode dir (adapterCoder codAd) body)
-        _ -> unexpected "function term" $ show term
+        _ -> unexpected "function term" term
 
 passLambda :: (Ord a, Read a, Show a) => TypeAdapter a
 passLambda t@(TypeLambda (LambdaType (Name v) body)) = do
