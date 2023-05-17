@@ -4,7 +4,6 @@ module Hydra.Basics where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Mantle as Mantle
 import Data.List
 import Data.Map
@@ -155,23 +154,12 @@ skipAnnotations getAnn t =
           Just v -> (skip (Core.annotatedSubject v))) (getAnn t1)
   in (skip t)
 
--- | Temporary; remove at will
-testLet :: (String -> String)
-testLet i =  
-  let bar = "BAR" 
-      foo = "FOO"
-  in (Strings.cat [
-    Strings.cat [
-      foo,
-      i],
-    bar])
-
 termMeta :: (Graph.Graph a -> Core.Term a -> a)
 termMeta x = (Graph.annotationClassTermAnnotation (Graph.graphAnnotations x))
 
 -- | Find the term variant (constructor) for a given term
 termVariant :: (Core.Term a -> Mantle.TermVariant)
-termVariant term = ((\x -> case x of
+termVariant x = case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
   Core.TermElement _ -> Mantle.TermVariantElement
@@ -188,7 +176,7 @@ termVariant term = ((\x -> case x of
   Core.TermSum _ -> Mantle.TermVariantSum
   Core.TermUnion _ -> Mantle.TermVariantUnion
   Core.TermVariable _ -> Mantle.TermVariantVariable
-  Core.TermWrap _ -> Mantle.TermVariantWrap) term)
+  Core.TermWrap _ -> Mantle.TermVariantWrap
 
 -- | All term (expression) variants, in a canonical order
 termVariants :: [Mantle.TermVariant]
@@ -212,7 +200,7 @@ termVariants = [
 
 -- | Find the type variant (constructor) for a given type
 typeVariant :: (Core.Type a -> Mantle.TypeVariant)
-typeVariant typ = ((\x -> case x of
+typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
   Core.TypeElement _ -> Mantle.TypeVariantElement
@@ -229,7 +217,7 @@ typeVariant typ = ((\x -> case x of
   Core.TypeSum _ -> Mantle.TypeVariantSum
   Core.TypeUnion _ -> Mantle.TypeVariantUnion
   Core.TypeVariable _ -> Mantle.TypeVariantVariable
-  Core.TypeWrap _ -> Mantle.TypeVariantWrap) typ)
+  Core.TypeWrap _ -> Mantle.TypeVariantWrap
 
 -- | All type variants, in a canonical order
 typeVariants :: [Mantle.TypeVariant]
