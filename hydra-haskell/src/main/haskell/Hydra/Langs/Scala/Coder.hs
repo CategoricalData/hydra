@@ -103,11 +103,11 @@ encodeFunction meta fun arg = case fun of
               return $ Scala.Case pat Nothing body
             where
               v = Name "y"
-          applyVar fterm var@(Name v) = case stripTerm fterm of
+          applyVar fterm avar@(Name v) = case stripTerm fterm of
             TermFunction (FunctionLambda (Lambda v1 body)) -> if isFreeIn v1 body
               then body
-              else substituteVariable v1 var body
-            _ -> apply fterm (variable v)
+              else substituteVariable v1 avar body
+            _ -> apply fterm (var v)
   where
     findSdom = Just <$> (findDomain >>= encodeType)
     findDomain = do

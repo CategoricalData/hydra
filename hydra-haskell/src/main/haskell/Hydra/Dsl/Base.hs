@@ -172,7 +172,7 @@ unwrap :: Name -> Datum a
 unwrap = Datum . Terms.unwrap
 
 var :: String -> Datum a
-var v = Datum $ Terms.variable v
+var v = Datum $ Terms.var v
 
 variant :: Name -> FieldName -> Datum a -> Datum b
 variant name fname (Datum term) = typed (Types.wrap name) $ Datum $ Terms.inject name $ Field fname term

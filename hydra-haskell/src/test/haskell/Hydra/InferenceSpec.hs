@@ -51,7 +51,7 @@ checkApplicationTerms = do
 
     H.it "Check lambda applications" $ do
       expectMonotype
-        (apply (lambda "x" (variable "x")) (string "foo"))
+        (apply (lambda "x" (var "x")) (string "foo"))
         Types.string
 
     H.it "Check data (delta) applications" $ do
@@ -66,7 +66,7 @@ checkApplicationTerms = do
       expectMonotype
         (lambda "x" $
           apply
-            (apply (primitive _math_sub) (apply (apply (primitive _math_add) (variable "x")) (variable "x")))
+            (apply (primitive _math_sub) (apply (apply (primitive _math_add) (var "x")) (var "x")))
             (int32 1))
         (Types.function Types.int32 Types.int32)
 
@@ -76,7 +76,7 @@ checkFunctionTerms = do
 
     H.it "Check lambdas" $ do
       expectPolytype
-        (lambda "x" (variable "x"))
+        (lambda "x" (var "x"))
         ["v1"] (Types.function (Types.var "v1") (Types.var "v1"))
       expectPolytype
         (lambda "x" (int16 137))
@@ -139,7 +139,7 @@ checkIndividualTerms = do
 
     H.it "Check let terms" $ do
       expectPolytype
-        (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (variable "x"))))
+        (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
         ["v1", "v2"] (Types.function (Types.var "v1") (Types.function (Types.var "v2") Types.float32))
 
     H.it "Check elements" $ do
@@ -176,15 +176,15 @@ checkIndividualTerms = do
       expectMonotype
         (lambda "lon" (record latLonPolyName [
           Field (FieldName "lat") $ float32 37.7749,
-          Field (FieldName "lon") $ variable "lon"]))
+          Field (FieldName "lon") $ var "lon"]))
         (Types.function (Types.float32)
           (TypeRecord $ RowType latLonPolyName Nothing [
             FieldType (FieldName "lat") $ Types.float32,
             FieldType (FieldName "lon") $ Types.float32]))
       expectPolytype
         (lambda "latlon" (record latLonPolyName [
-          Field (FieldName "lat") $ variable "latlon",
-          Field (FieldName "lon") $ variable "latlon"]))
+          Field (FieldName "lat") $ var "latlon",
+          Field (FieldName "lon") $ var "latlon"]))
         ["v1"] (Types.function (Types.var "v1")
           (TypeRecord $ RowType latLonPolyName Nothing [
             FieldType (FieldName "lat") $ Types.var "v1",
@@ -212,7 +212,7 @@ checkIndividualTerms = do
         ["v1", "v2"] (Types.map (Types.var "v1") (Types.var "v2"))
       expectPolytype
         (lambda "x" (lambda "y" (mapTerm $ M.fromList
-          [(variable "x", float64 0.1), (variable "y", float64 0.2)])))
+          [(var "x", float64 0.1), (var "y", float64 0.2)])))
         ["v1"] (Types.function (Types.var "v1") (Types.function (Types.var "v1") (Types.map (Types.var "v1") Types.float64)))
 
     -- -- TODO: add a case for a recursive nominal type -- e.g. MyList := () + (int, Mylist)
@@ -222,8 +222,8 @@ checkIndividualTerms = do
     --     (Types.wrap "Person")
     --   expectMonotype
     --     (lambda "x" (record [
-    --       Field "firstName" $ variable "x",
-    --       Field "lastName" $ variable "x",
+    --       Field "firstName" $ var "x",
+    --       Field "lastName" $ var "x",
     --       Field "age" $ int32 42]))
     --     (Types.function Types.string testTypePerson)
 
@@ -238,7 +238,7 @@ checkLetTerms = do
 
         H.it "Check trivial let" $ do
           expectMonotype
-            (variable "foo" `with` [
+            (var "foo" `with` [
               "foo">: int32 42])
             Types.int32
 
@@ -264,11 +264,11 @@ checkLists = do
         ["v1"] (Types.list $ Types.list $ Types.var "v1")
     H.it "Check lambda producing a list of integers" $ do
       expectMonotype
-        (lambda "x" (list [variable "x", int32 42]))
+        (lambda "x" (list [var "x", int32 42]))
         (Types.function Types.int32 $ Types.list Types.int32)
     H.it "Check list with bound variables" $ do
       expectMonotype
-        (lambda "x" (list [variable "x", string "foo", variable "x"]))
+        (lambda "x" (list [var "x", string "foo", var "x"]))
         (Types.function Types.string (Types.list Types.string))
 
 checkLiterals :: H.SpecWith ()
@@ -289,7 +289,7 @@ checkWrappedTerms = do
         (wrap (Name "StringTypeAlias") $ string "foo")
         stringAliasType
       expectMonotype
-        (lambda "v" $ wrap (Name "StringTypeAlias") $ variable "v")
+        (lambda "v" $ wrap (Name "StringTypeAlias") $ var "v")
         (Types.function Types.string stringAliasType)
 
     H.it "Check nominal eliminations" $ do
@@ -314,7 +314,7 @@ checkPrimitives = do
 
     H.it "Check polymorphic primitive functions" $ do
       expectPolytype
-        (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ variable "els")))
+        (lambda "els" (apply (primitive _lists_length) (apply (primitive _lists_concat) $ var "els")))
         ["v1"] (Types.function (Types.list $ Types.list $ Types.var "v1") Types.int32)
 
 checkProducts :: H.SpecWith ()
@@ -396,10 +396,10 @@ checkSubtermAnnotations = do
 
     H.it "Check monotyped lists within lambdas" $ do
       expectTypeAnnotation pure
-        (lambda "x" $ list [variable "x", string "foo"])
+        (lambda "x" $ list [var "x", string "foo"])
         (Types.function Types.string (Types.list Types.string))
       expectTypeAnnotation (getBody >=> getFirst)
-        (lambda "x" $ list [variable "x", string "foo"])
+        (lambda "x" $ list [var "x", string "foo"])
         Types.string
 
     H.it "Check injections" $ do
@@ -444,7 +444,7 @@ checkSubtermAnnotations = do
         let testCase = lambda "getOpt" $ lambda "x" $
                          (matchOpt
                            (string "nothing")
-                           (lambda "t2" $ string "just")) @@ (variable "getOpt" @@ variable "x")
+                           (lambda "t2" $ string "just")) @@ (var "getOpt" @@ var "x")
         let getOptType = (Types.function (Types.var "v2") (Types.optional $ Types.var "v5"))
         let constStringType = Types.function (Types.var "v2") Types.string
         expectTypeAnnotation pure testCase
@@ -455,7 +455,7 @@ checkSubtermAnnotations = do
     H.it "Check 'let' terms" $
       do
         let testCase = lambda "i" $
-                         (Terms.primitive _strings_cat @@ list [string "foo", variable "i", string "bar"])
+                         (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
                          `with` [
                            "foo">: string "FOO",
                            "bar">: string "BAR"]
