@@ -110,14 +110,14 @@ applyRules term = case term of
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshName
-        i <- extendEnvironment v (monotype tv) $ infer body
+        i <- withBinding v (monotype tv) $ infer body
         yieldFunction (FunctionLambda $ Lambda v i) (Types.function tv (termType i)) (termConstraints i)
 
       FunctionPrimitive name -> do
         t <- withGraphContext $ typeOfPrimitive name
         yieldFunction (FunctionPrimitive name) t []
 
-    TermLet lt -> withLet lt pure
+    TermLet lt -> inferLet lt
 
     TermList els -> do
         v <- freshName
@@ -214,9 +214,6 @@ decodeStructuralType term = do
       decodeStructuralType $ elementData el
     _ -> pure typ
 
-extendEnvironment :: Name -> TypeScheme a -> Flow (InferenceContext a) x -> Flow (InferenceContext a) x
-extendEnvironment n sc = withEnvironment (\e -> M.insert n sc $ M.delete n e)
-
 fieldType :: Field (InfAnn a) -> FieldType a
 fieldType (Field fname term) = FieldType fname $ termType term
 
@@ -250,6 +247,70 @@ infer term = do
 
 inferFieldType :: (Ord a, Show a) => Field a -> Flow (InferenceContext a) (Field (InfAnn a))
 inferFieldType (Field fname term) = Field fname <$> infer term
+
+inferLet :: (Ord a, Show a) => Let a -> Flow (InferenceContext a) (Term (InfAnn a))
+inferLet (Let bindings env) = withTrace ("let(" ++ L.intercalate "," (unName . fst <$> M.toList bindings) ++ ")") $ do
+    state0 <- getState
+    e <- preExtendEnv bindings $ inferenceContextEnvironment state0
+    let state1 = state0 {inferenceContextEnvironment = e}
+    withState state1 $ do
+--       fail $ "e: " ++ show e
+--       fail $ "env: " ++ show env
+      -- TODO: perform a topologic sort on these bindings; this process should be unified with that of elements in a graph
+      let bl = M.toList bindings
+--       fail $ "bl: " ++ show bl
+
+      -- Infer types of bindings in the pre-extended environment
+      ivalues <- CM.mapM infer (snd <$> bl)
+      let ibindings = L.zip (fst <$> bl) ivalues
+--       fail $ "ibindings: " ++ show ibindings
+
+      let bc = L.concat (termConstraints <$> ivalues)
+--       fail $ "bc: " ++ show bc
+      sub <- withGraphContext $ solveConstraints bc
+--       fail $ "sub: " ++ show sub
+      let vtypes = (reduceType . substituteInType sub . termType) <$> ivalues
+      fail $ "vtypes: " ++ show vtypes
+      let te = (substituteInScheme sub) <$> inferenceContextEnvironment state1
+      let sc = generalize te <$> vtypes
+
+      let tenv = withEnvironment (M.map (substituteInScheme sub)) $ infer env
+      i2 <- L.foldl (\t (x, s) -> withBinding x s t) tenv $ L.zip (fst <$> bl) sc
+
+      let t2 = termType i2
+      let c2 = termConstraints i2
+
+      result <- yield (TermLet $ Let (M.fromList ibindings) i2) t2 (bc ++ c2)
+      fail $ "result: " ++ show result
+      return result
+--       let state2 = state1 {
+--             inferenceContextEnvironment = extendEnv ibindings te,
+--             inferenceContextGraph = extendGraph ibindings $ inferenceContextGraph state1}
+--       withState state2 $ pure result
+  where
+    fsti (x, _, _) = x
+    sndi (_, x, _) = x
+    extendEnv bindings e = L.foldl addType e bindings
+      where
+        addType e (name, infterm) = M.insert name ts e
+          where
+            ts = monotype $ case infterm of -- TODO: assuming monotypes
+              TermAnnotated (Annotated _ ann) -> sndi ann
+    extendGraph bindings g = g {graphElements = L.foldl addElement (graphElements g) bindings}
+      where
+        addElement m (name, infterm) = M.insert name (Element name sch dat) m
+          where
+            sch = epsilonEncodeType $ case infterm of
+              TermAnnotated (Annotated _ ann) -> sndi ann
+            dat = rewriteTermMeta fsti infterm
+    -- Add any manual type annotations for the bindings to the environment, enabling type inference over recursive definitions
+    preExtendEnv bindings e = withGraphContext $ CM.foldM addPair e $ M.toList bindings
+      where
+        addPair e (name, term) = do
+          mtyp <- typeOfTerm term
+          return $ case mtyp of
+            Nothing -> e
+            Just typ -> M.insert name (monotype typ) e
 
 instantiate :: TypeScheme a -> Flow (InferenceContext a) (Type a)
 instantiate (TypeScheme vars t) = do
@@ -288,6 +349,9 @@ typeOfTerm term = do
   anns <- graphAnnotations <$> getState
   annotationClassTypeOf anns $ annotationClassTermAnnotation anns term
 
+withBinding :: Name -> TypeScheme a -> Flow (InferenceContext a) x -> Flow (InferenceContext a) x
+withBinding n ts = withEnvironment (M.insert n ts)
+
 withEnvironment :: (TypingEnvironment a -> TypingEnvironment a) -> Flow (InferenceContext a) x -> Flow (InferenceContext a) x
 withEnvironment m f = do
   InferenceContext cx i e <- getState
@@ -297,60 +361,6 @@ withGraphContext :: GraphFlow a x -> Flow (InferenceContext a) x
 withGraphContext f = do
   cx <- inferenceContextGraph <$> getState
   withState cx f
-
-withLet :: (Ord a, Show a) => Let a -> (Term (InfAnn a) -> Flow (InferenceContext a) x) -> Flow (InferenceContext a) x
-withLet (Let bindings env) flow = withTrace ("let(" ++ L.intercalate "," (unName . fst <$> M.toList bindings) ++ ")") $ do
-    state0 <- getState
-    e <- preExtendEnv bindings $ inferenceContextEnvironment state0
-    let state = state0 {inferenceContextEnvironment = e}
-    withState state $ do
-      -- TODO: perform a topologic sort on these bindings; this process should be unified with that of elements in a graph
-      let bl = M.toList bindings
-
-      is <- CM.mapM infer (snd <$> bl) -- TODO
-      let tc = L.concat (termConstraints <$> is)
-      sub <- withGraphContext $ solveConstraints tc
-      let ts = (reduceType . substituteInType sub . termType) <$> is
-      let te = M.map (substituteInScheme sub) $ inferenceContextEnvironment state
-      let sc = generalize te <$> ts
-
-      let tenv = withEnvironment (M.map (substituteInScheme sub)) $ infer env
-      i2 <- L.foldl (\t (x, s) -> extendEnvironment x s t) tenv $ L.zip (fst <$> bl) sc
-
-      let t2 = termType i2
-      let c2 = termConstraints i2
-
-      let ibindings = L.zip (fst <$> bl) is
-      result <- yield (TermLet $ Let (M.fromList ibindings) i2) t2 (tc ++ c2)
-
-      let state1 = state {
-            inferenceContextEnvironment = extendEnv ibindings te,
-            inferenceContextGraph = extendGraph ibindings $ inferenceContextGraph state}
-      withState state1 $ flow result
-  where
-    fsti (x, _, _) = x
-    sndi (_, x, _) = x
-    extendEnv bindings e = L.foldl addType e bindings
-      where
-        addType e (name, infterm) = M.insert name ts e
-          where
-            ts = monotype $ case infterm of -- TODO: assuming monotypes
-              TermAnnotated (Annotated _ ann) -> sndi ann
-    extendGraph bindings g = g {graphElements = L.foldl addElement (graphElements g) bindings}
-      where
-        addElement m (name, infterm) = M.insert name (Element name sch dat) m
-          where
-            sch = epsilonEncodeType $ case infterm of
-              TermAnnotated (Annotated _ ann) -> sndi ann
-            dat = rewriteTermMeta fsti infterm
-    -- Add any manual type annotations for the bindings to the environment, enabling type inference over recursive definitions
-    preExtendEnv bindings e = withGraphContext $ CM.foldM addPair e $ M.toList bindings
-      where
-        addPair e (name, term) = do
-          mtyp <- typeOfTerm term
-          return $ case mtyp of
-            Nothing -> e
-            Just typ -> M.insert name (monotype typ) e
 
 yield :: Term (InfAnn a) -> Type a -> [Constraint a] -> Flow (InferenceContext a) (Term (InfAnn a))
 yield term typ constraints = do

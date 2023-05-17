@@ -46,8 +46,7 @@ expectTypeAnnotation path term etyp = shouldSucceedWith atyp etyp
        Just t -> pure t
 
 checkApplicationTerms :: H.SpecWith ()
-checkApplicationTerms = do
-  H.describe "Check a few hand-picked application terms" $ do
+checkApplicationTerms = H.describe "Check a few hand-picked application terms" $ do
 
     H.it "Check lambda applications" $ do
       expectMonotype
@@ -71,8 +70,7 @@ checkApplicationTerms = do
         (Types.function Types.int32 Types.int32)
 
 checkFunctionTerms :: H.SpecWith ()
-checkFunctionTerms = do
-  H.describe "Check a few hand-picked function terms" $ do
+checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
 
     H.it "Check lambdas" $ do
       expectPolytype
@@ -120,8 +118,7 @@ checkFunctionTerms = do
           Types.string)
 
 checkIndividualTerms :: H.SpecWith ()
-checkIndividualTerms = do
-  H.describe "Check a few hand-picked terms" $ do
+checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
 
     H.it "Check literal values" $ do
       expectMonotype
@@ -228,23 +225,21 @@ checkIndividualTerms = do
     --     (Types.function Types.string testTypePerson)
 
 checkLetTerms :: H.SpecWith ()
-checkLetTerms = do
-    H.describe "Check a few hand-picked let terms" $ do
+checkLetTerms = H.describe "Check a few hand-picked let terms" $ do
 
-        H.it "Check empty let" $ do
-          expectMonotype
-            ((int32 42) `with` [])
-            Types.int32
+    H.it "Check empty let" $ do
+      expectMonotype
+        ((int32 42) `with` [])
+        Types.int32
 
-        H.it "Check trivial let" $ do
-          expectMonotype
-            (var "foo" `with` [
-              "foo">: int32 42])
-            Types.int32
+    H.it "Check trivial let" $ do
+      expectMonotype
+        (var "foo" `with` [
+          "foo">: int32 42])
+        Types.int32
 
 checkLists :: H.SpecWith ()
-checkLists = do
-  H.describe "Check a few hand-picked list terms" $ do
+checkLists = H.describe "Check a few hand-picked list terms" $ do
 
     H.it "Check list of strings" $ do
       expectMonotype
@@ -272,8 +267,7 @@ checkLists = do
         (Types.function Types.string (Types.list Types.string))
 
 checkLiterals :: H.SpecWith ()
-checkLiterals = do
-  H.describe "Check arbitrary literals" $ do
+checkLiterals = H.describe "Check arbitrary literals" $ do
 
     H.it "Verify that type inference preserves the literal to literal type mapping" $
       QC.property $ \l -> expectMonotype
@@ -281,8 +275,7 @@ checkLiterals = do
         (Types.literal $ literalType l)
 
 checkWrappedTerms :: H.SpecWith ()
-checkWrappedTerms = do
-  H.describe "Check nominal introductions and eliminations" $ do
+checkWrappedTerms = H.describe "Check nominal introductions and eliminations" $ do
 
     H.it "Check nominal introductions" $ do
       expectMonotype
@@ -301,8 +294,7 @@ checkWrappedTerms = do
         Types.string
 
 checkPrimitives :: H.SpecWith ()
-checkPrimitives = do
-  H.describe "Check a few hand-picked terms with primitive functions" $ do
+checkPrimitives = H.describe "Check a few hand-picked terms with primitive functions" $ do
 
     H.it "Check monomorphic primitive functions" $ do
       expectMonotype
@@ -318,8 +310,7 @@ checkPrimitives = do
         ["v1"] (Types.function (Types.list $ Types.list $ Types.var "v1") Types.int32)
 
 checkProducts :: H.SpecWith ()
-checkProducts = do
-  H.describe "Check a few hand-picked product terms" $ do
+checkProducts = H.describe "Check a few hand-picked product terms" $ do
 
     H.it "Check empty product" $ do
       expectMonotype
@@ -340,8 +331,7 @@ checkProducts = do
         ["v1"] (Types.product [Types.list $ Types.var "v1", Types.string])
 
 checkSums :: H.SpecWith ()
-checkSums = do
-  H.describe "Check a few hand-picked sum terms" $ do
+checkSums = H.describe "Check a few hand-picked sum terms" $ do
 
     H.it "Check singleton sum terms" $ do
       expectMonotype
@@ -360,8 +350,7 @@ checkSums = do
         ["v1"] (Types.sum [Types.var "v1", Types.string])
 
 checkTypeAnnotations :: H.SpecWith ()
-checkTypeAnnotations = do
-  H.describe "Check that type annotations are added to terms and subterms" $ do
+checkTypeAnnotations = H.describe "Check that type annotations are added to terms and subterms" $ do
 
     H.it "Check literals" $
       QC.property $ \l -> do
@@ -378,8 +367,7 @@ checkTypeAnnotations = do
         checkType term2 (Types.literal $ literalType l)
 
 checkSubtermAnnotations :: H.SpecWith ()
-checkSubtermAnnotations = do
-  H.describe "Check additional subterm annotations" $ do
+checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
 
     H.it "Check literals" $
       expectTypeAnnotation pure
@@ -476,19 +464,18 @@ checkSubtermAnnotations = do
           (Types.var "v1")
       H.it "test #3" $ do
         let testCase = lambda "fun" $ lambda "t" $
-                         ((var "alias" @@ var "t") `with` [
-                           "alias">: var "fun"])
+                         ((var "funAlias" @@ var "t") `with` [
+                           "funAlias">: var "fun"])
         let funType = Types.function (Types.var "v2") (Types.var "v3")
         expectTypeAnnotation pure testCase
           (Types.function funType funType)
         expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody) testCase
           (Types.var "v3")
---         expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "alias") testCase
---           funType
+        expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "funAlias") testCase
+          funType
 
 checkTypedTerms :: H.SpecWith ()
-checkTypedTerms = do
-  H.describe "Check that term/type pairs are consistent with type inference" $ do
+checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do
 
     H.it "Check arbitrary typed terms" $
       QC.property $ \(TypedTerm typ term) -> expectMonotype term typ
