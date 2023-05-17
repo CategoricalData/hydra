@@ -131,7 +131,7 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
         forOptionalCases fterm = read <$> Expect.string fterm -- TODO
         forPrimitive fterm = primitive . Name <$> Expect.string fterm
         forProjection fterm = read <$> Expect.string fterm -- TODO
-        forVariable fterm = variable <$> Expect.string fterm
+        forVariable fterm = var <$> Expect.string fterm
 
     unionType = do
       domAd <- termAdapter dom

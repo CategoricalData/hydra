@@ -96,7 +96,7 @@ encodeFunction namespaces fun = case fun of
         justAlt <- do
           -- Note: some of the following could be brought together with FunctionCases
           let v0 = "v"
-          let rhsTerm = simplifyTerm $ apply just (variable v0)
+          let rhsTerm = simplifyTerm $ apply just (var v0)
           let v1 = if S.member (Name v0) $ freeVariablesInTerm rhsTerm then v0 else "_"
           let lhs = applicationPattern (rawName "Just") [H.PatternName $ rawName v1]
           rhs <- H.CaseRhs <$> encodeTerm namespaces rhsTerm
@@ -118,7 +118,7 @@ encodeFunction namespaces fun = case fun of
             return $ H.ExpressionCase $ H.Expression_Case (hsvar "x") $ ecases ++ dcases
           toAlt fieldMap (Field fn fun') = do
             let v0 = "v"
-            let raw = apply fun' (variable v0)
+            let raw = apply fun' (var v0)
             let rhsTerm = simplifyTerm raw
             let v1 = if isFreeIn (Name v0) rhsTerm then "_" else v0
             let hname = unionFieldReference namespaces dn fn

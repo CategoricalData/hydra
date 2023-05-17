@@ -52,7 +52,7 @@ cases :: Name -> Maybe (Term a) -> [Field a] -> Term a
 cases n def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n def fields
 
 compose :: Term a -> Term a -> Term a
-compose f g = lambda "x" $ apply f (apply g $ variable "x")
+compose f g = lambda "x" $ apply f (apply g $ var "x")
 
 constant :: Term a -> Term a
 constant = lambda "_"
@@ -193,8 +193,8 @@ unitVariant n fname = variant n fname unit
 unwrap :: Name -> Term a
 unwrap = TermFunction . FunctionElimination . EliminationWrap
 
-variable :: String -> Term a
-variable = TermVariable . Name
+var :: String -> Term a
+var = TermVariable . Name
 
 variant :: Name -> FieldName -> Term a -> Term a
 variant n fname term = TermUnion $ Injection n $ Field fname term

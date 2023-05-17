@@ -44,27 +44,27 @@ testExpandLambdas = do
     H.it "Expand bare function terms" $ do
       expandsTo
         toLower
-        (lambda "v1" $ apply toLower (variable "v1"))
+        (lambda "v1" $ apply toLower (var "v1"))
       expandsTo
         splitOn
-        (lambda "v1" $ lambda "v2" $ apply (apply splitOn (variable "v1")) (variable "v2"))
+        (lambda "v1" $ lambda "v2" $ apply (apply splitOn (var "v1")) (var "v2"))
       expandsTo
         (matchOpt (int32 42) length)
         -- Note two levels of lambda expansion
-        (lambda "v1" $ apply (matchOpt (int32 42) (lambda "v1" $ apply length $ variable "v1")) (variable "v1"))
+        (lambda "v1" $ apply (matchOpt (int32 42) (lambda "v1" $ apply length $ var "v1")) (var "v1"))
 
     H.it "Expand subterms within applications" $ do
       expandsTo
         (apply splitOn "bar")
-        (lambda "v1" $ apply (apply splitOn "bar") (variable "v1"))
+        (lambda "v1" $ apply (apply splitOn "bar") (var "v1"))
       expandsTo
-        (apply (lambda "x" $ variable "x") length)
-        (apply (lambda "x" $ variable "x") (lambda "v1" $ apply length $ variable "v1"))
+        (apply (lambda "x" $ var "x") length)
+        (apply (lambda "x" $ var "x") (lambda "v1" $ apply length $ var "v1"))
 
     H.it "Expand arbitrary subterms" $ do
       expandsTo
         (list [lambda "x" "foo", apply splitOn "bar"])
-        (list [lambda "x" "foo", lambda "v1" $ apply (apply splitOn "bar") $ variable "v1"])
+        (list [lambda "x" "foo", lambda "v1" $ apply (apply splitOn "bar") $ var "v1"])
 
     H.it "Check that lambda expansion is idempotent" $ do
       QC.property $ \term -> do
@@ -88,17 +88,17 @@ testFoldOverTerm = do
     H.it "Try a simple fold" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre addInt32s 0
-          (list [int32 42, apply (lambda "x" $ variable "x") (int32 10)] :: Term Kv))
+          (list [int32 42, apply (lambda "x" $ var "x") (int32 10)] :: Term Kv))
         52
 
     H.it "Check that traversal order is respected" $ do
       H.shouldBe
         (foldOverTerm TraversalOrderPre listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Kv))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term Kv))
         [1, 2, 2]
       H.shouldBe
         (foldOverTerm TraversalOrderPost listLengths []
-          (list [list [string "foo", string "bar"], apply (lambda "x" $ variable "x") (list [string "quux"])] :: Term Kv))
+          (list [list [string "foo", string "bar"], apply (lambda "x" $ var "x") (list [string "quux"])] :: Term Kv))
         [2, 1, 2]
   where
     addInt32s sum term = case term of
@@ -123,13 +123,13 @@ testFreeVariablesInTerm = do
         (freeVariablesInTerm (string "foo" :: Term ()))
         S.empty
       H.shouldBe
-        (freeVariablesInTerm (variable "x" :: Term ()))
+        (freeVariablesInTerm (var "x" :: Term ()))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (int32 42)] :: Term ()))
+        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (int32 42)] :: Term ()))
         (S.fromList [Name "x"])
       H.shouldBe
-        (freeVariablesInTerm (list [variable "x", apply (lambda "y" $ variable "y") (variable "y")] :: Term ()))
+        (freeVariablesInTerm (list [var "x", apply (lambda "y" $ var "y") (var "y")] :: Term ()))
         (S.fromList [Name "x", Name "y"])
 
 --testReplaceFreeName :: H.SpecWith ()
@@ -152,8 +152,8 @@ testReplaceTerm = do
           (int64 42 :: Term Kv)
         H.shouldBe
           (rewriteTerm replaceInts keepKv
-            (list [int32 42, apply (lambda "x" $ variable "x") (int32 137)]))
-          (list [int64 42, apply (lambda "x" $ variable "x") (int64 137)] :: Term Kv)
+            (list [int32 42, apply (lambda "x" $ var "x") (int32 137)]))
+          (list [int64 42, apply (lambda "x" $ var "x") (int64 137)] :: Term Kv)
 
       H.it "Check that traversal order is respected" $ do
         H.shouldBe
@@ -213,15 +213,15 @@ testSimplifyTerm = do
         (simplifyTerm (apply (lambda "x" (string "foo")) (int32 42)))
         (string "foo" :: Term Kv)
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" $ list [variable "x", variable "x"]) (variable "y")))
-        (list [variable "y", variable "y"] :: Term Kv)
+        (simplifyTerm (apply (lambda "x" $ list [var "x", var "x"]) (var "y")))
+        (list [var "y", var "y"] :: Term Kv)
       H.shouldBe
-        (simplifyTerm (apply (lambda "x" $ string "foo") (variable "y")))
+        (simplifyTerm (apply (lambda "x" $ string "foo") (var "y")))
         (string "foo" :: Term Kv)
       H.shouldBe
         (simplifyTerm (apply (lambda "x"
-          (apply (lambda "a" (list [string "foo", variable "a"])) (variable "x"))) (variable "y")))
-        (list [string "foo", variable "y"] :: Term Kv)
+          (apply (lambda "a" (list [string "foo", var "a"])) (var "x"))) (var "y")))
+        (list [string "foo", var "y"] :: Term Kv)
 
 testStripKv :: H.SpecWith ()
 testStripKv = do

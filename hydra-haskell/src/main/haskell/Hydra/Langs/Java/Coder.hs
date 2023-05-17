@@ -445,7 +445,7 @@ encodeElimination aliases marg dom cod elm = case elm of
         let anns = graphAnnotations g
         let lhs = annotationClassSetTermType anns g (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
         let var = "u"
-        encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.variable var)
+        encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.var var)
         -- TODO: default value
       Just jarg -> applyElimination jarg
     where
@@ -486,7 +486,7 @@ encodeElimination aliases marg dom cod elm = case elm of
             let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
             let result = Java.ResultType $ Java.UnannType jcod
             -- Note: the escaping is necessary because the instance.value field reference does not correspond to an actual Hydra projection term
-            let value = Terms.variable ("$" ++ instanceName ++ "." ++ valueFieldName)
+            let value = Terms.var ("$" ++ instanceName ++ "." ++ valueFieldName)
             jret <- encodeTerm aliases $ contractTerm $ Terms.apply (fieldTerm field) value
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
