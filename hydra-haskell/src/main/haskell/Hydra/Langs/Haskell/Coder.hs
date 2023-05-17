@@ -262,7 +262,6 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
             (applicationPattern name (args ++ vars)) (H.RightHandSide body) bindings
         _ -> vb
 
-    -- toDecl hname term coder bindings = withTrace ("encoding term of type " ++ show (removeTypeAnnotations typ) ++ " ############ term: " ++ show (removeTermAnnotations term)) $ case stripTerm term of
     toDecl hname term coder bindings = case stripTerm term of
       TermLet (Let lbindings env) -> do
           -- A "let" constant cannot be predicted in advance, so we infer its type and construct a coder on the fly

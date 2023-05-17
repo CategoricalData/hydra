@@ -10,8 +10,8 @@ import Hydra.Langs.Haskell.Operators
 check :: Expr -> String -> H.Expectation
 check expr printed = printExpr (parenthesize expr) `H.shouldBe` printed
 
-caseStatement :: Expr -> [(Expr, Expr)] -> Expr
-caseStatement cond cases = ifx ofOp lhs rhs
+cases :: Expr -> [(Expr, Expr)] -> Expr
+cases cond cases = ifx ofOp lhs rhs
   where
     lhs = spaceSep [cst "case", cond]
     rhs = newlineSep (uncurry (ifx caseOp) <$> cases)
@@ -35,15 +35,15 @@ checkCaseStatements = do
 
     H.it "Simple case statement" $ do
       check
-        (caseStatement (ifx gtOp (cst "x") (num 42)) [(cst "False", cst "Big"), (cst "True", cst "Small")])
+        (cases (ifx gtOp (cst "x") (num 42)) [(cst "False", cst "Big"), (cst "True", cst "Small")])
         (    "case x > 42 of\n"
           ++ "  False -> Big\n"
           ++ "  True -> Small")
 
     H.it "Nested case statement" $ do
       check
-        (caseStatement (ifx gtOp (cst "x") (num 42)) [
-          (cst "True", caseStatement (ifx gtOp (cst "x") (num 100)) [(cst "True", cst "ReallyBig"), (cst "False", cst "Big")]),
+        (cases (ifx gtOp (cst "x") (num 42)) [
+          (cst "True", cases (ifx gtOp (cst "x") (num 100)) [(cst "True", cst "ReallyBig"), (cst "False", cst "Big")]),
           (cst "False", cst "Small")])
         (    "case x > 42 of\n"
           ++ "  True -> case x > 100 of\n"

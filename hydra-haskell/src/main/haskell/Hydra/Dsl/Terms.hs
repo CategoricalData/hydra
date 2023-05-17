@@ -132,8 +132,8 @@ match n def pairs = cases n def (toField <$> pairs)
   where
     toField (name, term) = Field name term
 
-matchOptional :: Term a -> Term a -> Term a
-matchOptional n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
+matchOpt :: Term a -> Term a -> Term a
+matchOpt n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
 matchWithVariants :: Name -> Maybe (Term a) -> [(FieldName, FieldName)] -> Term a
 matchWithVariants n def pairs = cases n def (toField <$> pairs)

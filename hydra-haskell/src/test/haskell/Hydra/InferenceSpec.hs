@@ -406,6 +406,9 @@ checkSubtermAnnotations = do
       expectTypeAnnotation pure
         (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11")
         testTypeTimestamp
+      expectTypeAnnotation pure
+        (lambda "ignored" $ (inject testTypeTimestampName $ Field (FieldName "date") $ string "2023-05-11"))
+        (Types.function (Types.variable "v1") testTypeTimestamp)
 
     H.it "Check projections" $ do
       expectTypeAnnotation pure
@@ -417,22 +420,43 @@ checkSubtermAnnotations = do
         (cases testTypeNumberName (Just $ string "it's something else") [
           Field (FieldName "int") $ constant $ string "it's an integer"])
         (Types.function testTypeNumber Types.string)
-      expectTypeAnnotation pure
-        (cases testTypeNumberName Nothing [
-          Field (FieldName "int") $ constant $ string "it's an integer",
-          Field (FieldName "float") $ constant $ string "it's a float"])
-        (Types.function testTypeNumber Types.string)
-      expectTypeAnnotation (getCase testTypeNumberName 0 >=> (pure . fieldTerm))
-        (cases testTypeNumberName Nothing [
-          Field (FieldName "int") $ constant $ string "it's an integer",
-          Field (FieldName "float") $ constant $ string "it's a float"])
-        (Types.function Types.int32 Types.string)
+      do
+        let  testCase = cases testTypeNumberName Nothing [
+                          Field (FieldName "int") $ constant $ string "it's an integer",
+                          Field (FieldName "float") $ constant $ string "it's a float"]
+        expectTypeAnnotation pure testCase
+          (Types.function testTypeNumber Types.string)
+        expectTypeAnnotation (getCase testTypeNumberName 0 >=> (pure . fieldTerm)) testCase
+          (Types.function Types.int32 Types.string)
+
+    H.it "Check optional eliminations" $ do
+      do
+        let testCase = matchOpt
+                         (string "nothing")
+                         (lambda "ignored" $ string "just")
+        expectTypeAnnotation pure testCase
+          (Types.function (Types.optional $ Types.variable "v3") Types.string)
+        expectTypeAnnotation getNothing testCase
+          Types.string
+        expectTypeAnnotation getJust testCase
+          (Types.function (Types.variable "v3") Types.string)
+      do
+        let testCase = lambda "getOpt" $ lambda "x" $
+                         (matchOpt
+                           (string "nothing")
+                           (lambda "t2" $ string "just")) @@ (variable "getOpt" @@ variable "x")
+        let getOptType = (Types.function (Types.variable "v2") (Types.optional $ Types.variable "v5"))
+        let constStringType = Types.function (Types.variable "v2") Types.string
+        expectTypeAnnotation pure testCase
+          (Types.function getOptType constStringType)
+        expectTypeAnnotation getBody testCase
+          constStringType
 
   where
     getBody term = lambdaBody <$> Expect.lambda term
 
     getCase name n term = do
-      cs <- Expect.caseStatement name term
+      cs <- Expect.cases name term
       let fields = caseStatementCases cs
       if L.length fields <= n
         then fail $ "not enough cases"
@@ -443,6 +467,9 @@ checkSubtermAnnotations = do
       if L.null l
         then fail "empty list"
         else pure $ L.head l
+
+    getNothing term = optionalCasesNothing <$> Expect.optCases term
+    getJust term = optionalCasesJust <$> Expect.optCases term
 
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = do
