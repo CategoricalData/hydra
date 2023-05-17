@@ -42,7 +42,7 @@ describePrecision x = case x of
 
 -- | Display a type as a string
 describeType :: (Core.Type a -> String)
-describeType typ = ((\x -> case x of
+describeType x = case x of
   Core.TypeAnnotated v -> (Strings.cat [
     "annotated ",
     (describeType (Core.annotatedSubject v))])
@@ -85,4 +85,4 @@ describeType typ = ((\x -> case x of
     (describeType v)])
   Core.TypeSum _ -> "variant tuples"
   Core.TypeUnion _ -> "unions"
-  Core.TypeVariable _ -> "instances of a named type") typ)
+  Core.TypeVariable _ -> "instances of a named type"
