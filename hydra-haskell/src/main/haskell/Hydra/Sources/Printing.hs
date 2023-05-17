@@ -10,7 +10,6 @@ import qualified Hydra.Dsl.Annotations as Ann
 import Prelude hiding ((++))
 
 
-
 hydraPrintingModule :: Module Kv
 hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsModule] $
     Just "Utilities for use in transformations"
@@ -61,8 +60,7 @@ describeTypeDef :: Definition (Type a -> string)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $
-  lambda "typ" $ apply
-    (match _Type Types.string Nothing [
+    match _Type Types.string Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
@@ -86,8 +84,7 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_stream      --> lambda "t" $ string "streams of " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
-      Case _Type_variable    --> constant $ string "instances of a named type"])
-    (var "typ")
+      Case _Type_variable    --> constant $ string "instances of a named type"]
   where
     annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")
     functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "a")
