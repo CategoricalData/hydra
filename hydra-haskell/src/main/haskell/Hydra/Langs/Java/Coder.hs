@@ -66,7 +66,7 @@ moduleToJavaCompilationUnit :: (Ord a, Read a, Show a) => Module a -> GraphFlow 
 moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
   where
     aliases = importAliasesForModule mod
-    encode = encodeTerm aliases Nothing . contractTerm
+    encode = encodeTerm aliases . contractTerm
 
 classModsPublic :: [Java.ClassModifier]
 classModsPublic = [Java.ClassModifierPublic]
@@ -125,7 +125,7 @@ constructModule mod coders pairs = do
           let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
           let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
           let result = javaTypeToJavaResult jcod
-          jbody <- encodeTerm aliases (Just cod) body
+          jbody <- encodeTerm aliases body
           -- TODO: use coders
 --           jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
           let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
@@ -394,17 +394,17 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
         case stripTerm lhs of
           TermFunction f -> case f of
             FunctionElimination e -> case e of
-              EliminationElement -> encodeTerm aliases Nothing rhs
+              EliminationElement -> encodeTerm aliases rhs
               _ -> do
-                jarg <- encodeTerm aliases Nothing rhs
+                jarg <- encodeTerm aliases rhs
                 encodeElimination aliases (Just jarg) dom cod e
-            _ -> defaultExpression dom cod
-          _ -> defaultExpression dom cod
+            _ -> defaultExpression
+          _ -> defaultExpression
       where
-        defaultExpression dom cod = do
+        defaultExpression = do
           -- Note: the domain type will not be used, so we just substitute the unit type
-          jfun <- encodeTerm aliases (Just $ Types.function dom cod) lhs
-          jarg <- encodeTerm aliases (Just dom) rhs
+          jfun <- encodeTerm aliases lhs
+          jarg <- encodeTerm aliases rhs
           let prim = javaExpressionToJavaPrimary jfun
           return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
 
@@ -417,8 +417,8 @@ encodeElimination aliases marg dom cod elm = case elm of
         var = Name "e"
     Just jarg -> pure jarg
   EliminationOptional (OptionalCases nothing just) -> do
-    jnothing <- encodeTerm aliases (Just cod) nothing
-    jjust <- encodeTerm aliases (Just $ TypeFunction $ FunctionType (unOpt dom) cod) just
+    jnothing <- encodeTerm aliases nothing
+    jjust <- encodeTerm aliases just
     let var = Name "m"
     let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
           (Just $ Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var)
@@ -445,7 +445,7 @@ encodeElimination aliases marg dom cod elm = case elm of
         let anns = graphAnnotations g
         let lhs = annotationClassSetTermType anns g (Just $ Types.function (Types.wrap tname) cod) $ Terms.elimination elm
         let var = "u"
-        encodeTerm aliases Nothing $ Terms.lambda var $ Terms.apply lhs (Terms.variable var)
+        encodeTerm aliases $ Terms.lambda var $ Terms.apply lhs (Terms.variable var)
         -- TODO: default value
       Just jarg -> applyElimination jarg
     where
@@ -474,7 +474,7 @@ encodeElimination aliases marg dom cod elm = case elm of
             let anns = [overrideAnnotation]
             let param = javaTypeToJavaFormalParameter jdom $ FieldName instanceName
             let result = Java.ResultType $ Java.UnannType jcod
-            jret <- encodeTerm aliases (Just cod) d
+            jret <- encodeTerm aliases d
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
             return $ noComment $ methodDeclaration mods [] anns otherwiseMethodName [param] result (Just [returnStmt])
 
@@ -487,7 +487,7 @@ encodeElimination aliases marg dom cod elm = case elm of
             let result = Java.ResultType $ Java.UnannType jcod
             -- Note: the escaping is necessary because the instance.value field reference does not correspond to an actual Hydra projection term
             let value = Terms.variable ("$" ++ instanceName ++ "." ++ valueFieldName)
-            jret <- encodeTerm aliases (Just cod) $ contractTerm $ Terms.apply (fieldTerm field) value
+            jret <- encodeTerm aliases $ contractTerm $ Terms.apply (fieldTerm field) value
             let returnStmt = Java.BlockStatementStatement $ javaReturnStatement $ Just jret
             return $ noComment $ methodDeclaration mods [] anns visitMethodName [param] result (Just [returnStmt])
   EliminationWrap name -> case marg of
@@ -508,7 +508,7 @@ encodeFunction aliases dom cod fun = case fun of
   FunctionElimination elm -> do
     encodeElimination aliases Nothing dom cod elm
   FunctionLambda (Lambda var body) -> do
-    jbody <- encodeTerm aliases Nothing body
+    jbody <- encodeTerm aliases body
     return $ javaLambda var jbody
 --  FunctionPrimitive name ->
   _ -> pure $ encodeLiteral $ LiteralString $
@@ -561,10 +561,10 @@ encodeNullaryConstant aliases typ fun = case fun of
   _ -> unexpected "nullary function" fun
 
 encodeTerm :: (Eq a, Ord a, Read a, Show a)
-  => Aliases -> Maybe (Type a) -> Term a -> GraphFlow a Java.Expression
-encodeTerm aliases mtype term0 = encodeInternal [] term0
+  => Aliases -> Term a -> GraphFlow a Java.Expression
+encodeTerm aliases term0 = encodeInternal [] term0
   where
-    encode = encodeTerm aliases Nothing
+    encode = encodeTerm aliases
     failAsLiteral msg = pure $ encodeLiteral $ LiteralString msg
     encodeInternal anns term = case term of
         TermAnnotated (Annotated term' ann) -> encodeInternal (ann:anns) term'
@@ -676,7 +676,7 @@ fieldTypeToFormalParam aliases (FieldType fname ft) = do
 
 forNamedFunction :: (Eq a, Ord a, Read a, Show a) => Aliases -> Bool -> Name -> [Term a] -> GraphFlow a Java.Expression
 forNamedFunction aliases prim name args = do
-    jargs <- CM.mapM (encodeTerm aliases Nothing) args
+    jargs <- CM.mapM (encodeTerm aliases) args
     let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
     return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
 
@@ -725,7 +725,7 @@ maybeLet aliases term cons = helper [] term
             typ <- requireAnnotatedType value
             jtype <- encodeType aliases typ
             let id = variableToJavaIdentifier name
-            rhs <- encodeTerm aliases Nothing value
+            rhs <- encodeTerm aliases value
             return $ variableDeclarationStatement aliases jtype id rhs
           bindingVars = S.fromList $ M.keys bindings
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
@@ -770,7 +770,7 @@ toDataDeclaration aliases (el, TypedTerm typ term) = do
 typeNameDecl :: (Ord a, Read a, Show a) => Aliases -> Name -> GraphFlow a Java.ClassBodyDeclarationWithComments
 typeNameDecl aliases name = do
   jt <- encodeType aliases $ Types.wrap _Name
-  arg <- encodeTerm aliases Nothing $ Terms.string $ unName name
+  arg <- encodeTerm aliases $ Terms.string $ unName name
   let init = Java.VariableInitializerExpression $ javaConstructorCall (javaConstructorName nameName Nothing) [arg] Nothing
   let var = javaVariableDeclarator (Java.Identifier "NAME") (Just init)
   return $ noComment $ javaMemberField mods jt var
