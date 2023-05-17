@@ -390,7 +390,7 @@ checkSubtermAnnotations = do
       expectTypeAnnotation pure
         (list [string "foo"])
         (Types.list Types.string)
-      expectTypeAnnotation getFirst
+      expectTypeAnnotation Expect.listHead
         (list [string "foo"])
         Types.string
 
@@ -398,7 +398,7 @@ checkSubtermAnnotations = do
       expectTypeAnnotation pure
         (lambda "x" $ list [var "x", string "foo"])
         (Types.function Types.string (Types.list Types.string))
-      expectTypeAnnotation (getBody >=> getFirst)
+      expectTypeAnnotation (Expect.lambdaBody >=> Expect.listHead)
         (lambda "x" $ list [var "x", string "foo"])
         Types.string
 
@@ -415,32 +415,33 @@ checkSubtermAnnotations = do
         (project testTypePersonName $ FieldName "firstName")
         (Types.function testTypePerson Types.string)
 
-    H.it "Check case statements" $ do
-      expectTypeAnnotation pure
-        (cases testTypeNumberName (Just $ string "it's something else") [
-          Field (FieldName "int") $ constant $ string "it's an integer"])
-        (Types.function testTypeNumber Types.string)
-      do
+    H.describe "Check case statements" $ do
+      H.it "test #1" $ do
+        expectTypeAnnotation pure
+          (cases testTypeNumberName (Just $ string "it's something else") [
+            Field (FieldName "int") $ constant $ string "it's an integer"])
+          (Types.function testTypeNumber Types.string)
+      H.it "test #2" $ do
         let  testCase = cases testTypeNumberName Nothing [
                           Field (FieldName "int") $ constant $ string "it's an integer",
                           Field (FieldName "float") $ constant $ string "it's a float"]
         expectTypeAnnotation pure testCase
           (Types.function testTypeNumber Types.string)
-        expectTypeAnnotation (getCase testTypeNumberName 0 >=> (pure . fieldTerm)) testCase
+        expectTypeAnnotation (Expect.casesCase testTypeNumberName "int" >=> (pure . fieldTerm)) testCase
           (Types.function Types.int32 Types.string)
 
-    H.it "Check optional eliminations" $ do
-      do
+    H.describe "Check optional eliminations" $ do
+      H.it "test #1" $ do
         let testCase = matchOpt
                          (string "nothing")
                          (lambda "ignored" $ string "just")
         expectTypeAnnotation pure testCase
           (Types.function (Types.optional $ Types.var "v3") Types.string)
-        expectTypeAnnotation getNothing testCase
+        expectTypeAnnotation Expect.optCasesNothing testCase
           Types.string
-        expectTypeAnnotation getJust testCase
+        expectTypeAnnotation Expect.optCasesJust testCase
           (Types.function (Types.var "v3") Types.string)
-      do
+      H.it "test #2" $ do
         let testCase = lambda "getOpt" $ lambda "x" $
                          (matchOpt
                            (string "nothing")
@@ -449,11 +450,11 @@ checkSubtermAnnotations = do
         let constStringType = Types.function (Types.var "v2") Types.string
         expectTypeAnnotation pure testCase
           (Types.function getOptType constStringType)
-        expectTypeAnnotation getBody testCase
+        expectTypeAnnotation Expect.lambdaBody testCase
           constStringType
 
-    H.it "Check 'let' terms" $
-      do
+    H.describe "Check 'let' terms" $ do
+      H.it "test #1" $ do
         let testCase = lambda "i" $
                          (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
                          `with` [
@@ -461,27 +462,29 @@ checkSubtermAnnotations = do
                            "bar">: string "BAR"]
         expectTypeAnnotation pure testCase
           (Types.function Types.string Types.string)
-        expectTypeAnnotation getBody testCase
+        expectTypeAnnotation Expect.lambdaBody testCase
           Types.string
-
-  where
-    getBody term = lambdaBody <$> Expect.lambda term
-
-    getCase name n term = do
-      cs <- Expect.cases name term
-      let fields = caseStatementCases cs
-      if L.length fields <= n
-        then fail $ "not enough cases"
-        else pure $ fields !! n
-
-    getFirst term = do
-      l <- Expect.list pure term
-      if L.null l
-        then fail "empty list"
-        else pure $ L.head l
-
-    getNothing term = optionalCasesNothing <$> Expect.optCases term
-    getJust term = optionalCasesJust <$> Expect.optCases term
+      H.it "test #2" $ do
+        let testCase = lambda "original" $
+                         var "alias" `with` [
+                           "alias">: var "original"]
+        expectTypeAnnotation pure testCase
+          (Types.function (Types.var "v1") (Types.var "v1"))
+        expectTypeAnnotation Expect.lambdaBody testCase
+          (Types.var "v1")
+        expectTypeAnnotation (Expect.lambdaBody >=> Expect.letBinding "alias") testCase
+          (Types.var "v1")
+      H.it "test #3" $ do
+        let testCase = lambda "fun" $ lambda "t" $
+                         ((var "alias" @@ var "t") `with` [
+                           "alias">: var "fun"])
+        let funType = Types.function (Types.var "v2") (Types.var "v3")
+        expectTypeAnnotation pure testCase
+          (Types.function funType funType)
+        expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody) testCase
+          (Types.var "v3")
+--         expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "alias") testCase
+--           funType
 
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = do

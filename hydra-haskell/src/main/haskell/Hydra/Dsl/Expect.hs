@@ -40,6 +40,14 @@ cases name term = case Common.stripTerm term of
     else unexpected ("case statement for type " ++ unName name) term
   _ -> unexpected "case statement" term
 
+casesCase :: Show a => Name -> String -> Term a -> Flow s (Field a)
+casesCase name n term = do
+  cs <- cases name term
+  let matching = L.filter (\f -> fieldName f == FieldName n) $ caseStatementCases cs
+  if L.null matching
+    then fail $ "not enough cases"
+    else pure $ L.head matching
+
 float32 :: Show a => Term a -> Flow s Float
 float32 t = literal t >>= float32Literal
 
@@ -89,10 +97,32 @@ lambda term = case Common.stripTerm term of
   TermFunction (FunctionLambda l) -> pure l
   _ -> unexpected "lambda" term
 
+letBinding :: Show a => String -> Term a -> Flow s (Term a)
+letBinding n term = do
+  bindings <- letBindings <$> letTerm term
+  case M.lookup (Name n) bindings of
+    Nothing -> fail $ "no such binding: " ++ show n
+    Just term' -> pure term
+
+lambdaBody :: Show a => Term a -> Flow s (Term a)
+lambdaBody term = Hydra.Core.lambdaBody <$> lambda term
+
+letTerm :: Show a => Term a -> Flow s (Let a)
+letTerm term = case Common.stripTerm term of
+  TermLet lt -> pure lt
+  _ -> unexpected "let term" term
+
 list :: Show a => (Term a -> Flow s x) -> Term a -> Flow s [x]
 list f term = case Common.stripTerm term of
   TermList l -> CM.mapM f l
   _ -> unexpected "list" term
+
+listHead :: Show a => Term a -> Flow s (Term a)
+listHead term = do
+  l <- list pure term
+  if L.null l
+    then fail "empty list"
+    else pure $ L.head l
 
 literal :: Show a => Term a -> Flow s Literal
 literal term = case Common.stripTerm term of
@@ -118,6 +148,12 @@ optCases :: Show a => Term a -> Flow s (OptionalCases a)
 optCases term = case Common.stripTerm term of
   TermFunction (FunctionElimination (EliminationOptional cs)) -> pure cs
   _ -> unexpected "optional cases" term
+
+optCasesJust :: Show a => Term a -> Flow s (Term a)
+optCasesJust term = optionalCasesJust <$> optCases term
+
+optCasesNothing :: Show a => Term a -> Flow s (Term a)
+optCasesNothing term = optionalCasesNothing <$> optCases term
 
 optional :: Show a => (Term a -> Flow s x) -> Term a -> Flow s (Y.Maybe x)
 optional f term = case Common.stripTerm term of
