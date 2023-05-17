@@ -452,6 +452,18 @@ checkSubtermAnnotations = do
         expectTypeAnnotation getBody testCase
           constStringType
 
+    H.it "Check 'let' terms" $
+      do
+        let testCase = lambda "i" $
+                         (Terms.primitive _strings_cat @@ list [string "foo", variable "i", string "bar"])
+                         `with` [
+                           "foo">: string "FOO",
+                           "bar">: string "BAR"]
+        expectTypeAnnotation pure testCase
+          (Types.function Types.string Types.string)
+        expectTypeAnnotation getBody testCase
+          Types.string
+
   where
     getBody term = lambdaBody <$> Expect.lambda term
 
