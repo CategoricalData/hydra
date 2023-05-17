@@ -29,7 +29,7 @@ latLonType = TypeRecord $ RowType latLonName Nothing [Types.field "lat" Types.fl
 
 latLonPolyType :: Type a
 latLonPolyType = TypeLambda $ LambdaType (Name "a") $
-  TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.variable "a", Types.field "lon" $ Types.variable "a"]
+  TypeRecord $ RowType latLonPolyName Nothing [Types.field "lat" $ Types.var "a", Types.field "lon" $ Types.var "a"]
 
 testElementArthur :: Element Kv
 testElementArthur = Element {
@@ -110,7 +110,7 @@ testTypePersonName = Name "Person"
 testTypePersonOrSomething :: Type Kv
 testTypePersonOrSomething = Types.lambda "a" $ TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
   Types.field "person" testTypePerson,
-  Types.field "other" $ Types.variable "a"]
+  Types.field "other" $ Types.var "a"]
 
 testTypePersonOrSomethingName :: Name
 testTypePersonOrSomethingName = Name "PersonOrSomething"

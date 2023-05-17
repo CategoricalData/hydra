@@ -18,7 +18,7 @@ checkFunctionSyntax = do
     H.it "Function arrows are supported" $ do
       check
         ("a" --> "b")
-        (function (variable "a") (variable "b"))
+        (function (var "a") (var "b"))
       check
         (string --> int32)
         (function string int32)

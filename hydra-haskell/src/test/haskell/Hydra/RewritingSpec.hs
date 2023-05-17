@@ -138,7 +138,7 @@ testFreeVariablesInTerm = do
 --
 --    H.it "Check that variable types are replaced" $ do
 --      H.shouldBe
---        (replaceFreeName (Name "v1") Types.string $ Types.variable "v")
+--        (replaceFreeName (Name "v1") Types.string $ Types.var "v")
 --        ()
 
 testReplaceTerm :: H.SpecWith ()

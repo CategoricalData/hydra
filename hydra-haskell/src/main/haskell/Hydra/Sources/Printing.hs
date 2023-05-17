@@ -59,7 +59,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
 describeTypeDef :: Definition (Type a -> string)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.string $
+  function (Types.apply (Types.wrap _Type) (Types.var "a")) Types.string $
     match _Type Types.string Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),
@@ -86,6 +86,6 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type"]
   where
-    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.variable "a"))) (Types.variable "a")
-    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.variable "a")
-    mapTypeM = Types.apply (Types.wrap _MapType) (Types.variable "a")
+    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.var "a"))) (Types.var "a")
+    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.var "a")
+    mapTypeM = Types.apply (Types.wrap _MapType) (Types.var "a")

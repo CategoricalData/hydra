@@ -59,7 +59,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeSet st1, TypeSet st2) -> unify st1 st2
       (TypeUnion rt1, TypeUnion rt2) -> verify (rowTypeTypeName rt1 == rowTypeTypeName rt2)
       (TypeLambda (LambdaType (Name v1) body1), TypeLambda (LambdaType (Name v2) body2)) ->
-        unifyMany [Types.variable v1, body1] [Types.variable v2, body2]
+        unifyMany [Types.var v1, body1] [Types.var v2, body2]
       (TypeSum types1, TypeSum types2) -> unifyMany types1 types2
       (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
 

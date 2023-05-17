@@ -46,7 +46,7 @@ normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeTyp
       TypeUnion (RowType n e fields) -> TypeUnion $ RowType n e (normalizeFieldType <$> fields)
       TypeLambda (LambdaType (Name v) t) -> TypeLambda (LambdaType (Name v) $ normalizeType t)
       TypeVariable v -> case Prelude.lookup v ord of
-        Just (Name v1) -> variable v1
+        Just (Name v1) -> var v1
         Nothing -> error $ "type variable " ++ show v ++ " not in signature of type scheme: " ++ show ts
 
 substituteInScheme :: M.Map Name (Type a) -> TypeScheme a -> TypeScheme a

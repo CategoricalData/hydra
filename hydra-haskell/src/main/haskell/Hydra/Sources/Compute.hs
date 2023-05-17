@@ -24,8 +24,8 @@ hydraComputeModule = Module ns elements [] $
         doc "A two-level bidirectional encoder which adapts types to types and terms to terms" $
         lambda "s1" $ lambda "s2" $ lambda "t1" $ lambda "t2" $ lambda "v1" $ lambda "v2" $ record [
           "isLossy">: boolean,
-          "source">: variable "t1",
-          "target">: variable "t2",
+          "source">: var "t1",
+          "target">: var "t2",
           "coder">: compute "Coder" @@ "s1" @@ "s2" @@ "v1" @@ "v2"],
 
       def "Coder" $

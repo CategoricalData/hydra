@@ -29,8 +29,8 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
       def "AdapterContext" $
         doc "An evaluation context together with a source language and a target language" $
         lambda "a" $ record [
-          "graph">: apply (graph "Graph") (variable "a"),
-          "language">: apply (coders "Language") (variable "a"),
+          "graph">: apply (graph "Graph") (var "a"),
+          "language">: apply (coders "Language") (var "a"),
           "adapters">: Types.map (core "Name") (compute "Adapter"
             @@ (coders "AdapterContext" @@ "a") @@ (coders "AdapterContext" @@ "a")
             @@ (core "Type" @@ "a") @@ (core "Type" @@ "a")
@@ -46,7 +46,7 @@ hydraCodersModule = Module ns elements [hydraMantleModule, hydraComputeModule, h
         doc "A named language together with language-specific constraints" $
         lambda "a" $ record [
           "name">: coders "LanguageName",
-          "constraints">: apply (coders "LanguageConstraints") (variable "a")],
+          "constraints">: apply (coders "LanguageConstraints") (var "a")],
 
       def "LanguageConstraints" $
         doc "A set of constraints on valid type and term expressions, characterizing a language" $

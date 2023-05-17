@@ -52,7 +52,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
-  typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.variable "a")) (Types.wrap _EliminationVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.var "a")) (Types.wrap _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant Nothing [
     _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
@@ -99,7 +99,7 @@ floatValueTypeDef = basicsDefinition "floatValueType" $
 functionVariantDef :: Definition (Function a -> FunctionVariant)
 functionVariantDef = basicsDefinition "functionVariant" $
   doc "Find the function variant (constructor) for a given function" $
-  typed (Types.function (Types.apply (Types.wrap _Function) (Types.variable "a")) (Types.wrap _FunctionVariant)) $
+  typed (Types.function (Types.apply (Types.wrap _Function) (Types.var "a")) (Types.wrap _FunctionVariant)) $
   matchToEnum _Function _FunctionVariant Nothing [
     _Function_elimination @-> _FunctionVariant_elimination,
     _Function_lambda      @-> _FunctionVariant_lambda,
@@ -207,11 +207,11 @@ literalVariantsDef = basicsDefinition "literalVariants" $
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
-  function getAnnType (Types.function (Types.variable "x") (Types.variable "x")) $
+  function getAnnType (Types.function (Types.var "x") (Types.var "x")) $
   lambda "getAnn" $ lambda "t" $
     (var "skip" @@ var "t") `with` [
       "skip">:
-        function (Types.variable "x") (Types.variable "x") $
+        function (Types.var "x") (Types.var "x") $
         lambda "t1" $
           (matchOpt
             (var "t1")
@@ -219,18 +219,18 @@ skipAnnotationsDef = basicsDefinition "skipAnnotations" $
           @@ (var "getAnn" @@ var "t1")]
   where
     getAnnType = (Types.function
-      (Types.variable "x")
-      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "x")) (Types.variable "m")))
+      (Types.var "x")
+      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.var "x")) (Types.var "m")))
 
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
-  function (Types.apply (Types.wrap _Graph) (Types.variable "a")) (Types.function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.variable "a")) $
+  function (Types.apply (Types.wrap _Graph) (Types.var "a")) (Types.function (Types.apply (Types.wrap _Term) (Types.var "a")) (Types.var "a")) $
   (project _AnnotationClass _AnnotationClass_termAnnotation) <.> (project _Graph _Graph_annotations)
 
 termVariantDef :: Definition (Term a -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
-  function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.wrap _TermVariant) $
+  function (Types.apply (Types.wrap _Term) (Types.var "a")) (Types.wrap _TermVariant) $
     matchToEnum _Term _TermVariant Nothing [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
@@ -274,7 +274,7 @@ termVariantsDef = basicsDefinition "termVariants" $
 typeVariantDef :: Definition (Type a -> TypeVariant)
 typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "a")) (Types.wrap _TypeVariant) $
+  function (Types.apply (Types.wrap _Type) (Types.var "a")) (Types.wrap _TypeVariant) $
     matchToEnum _Type _TypeVariant Nothing [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,

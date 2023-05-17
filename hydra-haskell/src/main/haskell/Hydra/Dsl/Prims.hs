@@ -135,7 +135,7 @@ string = TermCoder Types.string $ Coder encode decode
     decode = pure . Terms.string
 
 variable :: String -> TermCoder a (Term a)
-variable v = TermCoder (Types.variable v) $ Coder encode decode
+variable v = TermCoder (Types.var v) $ Coder encode decode
   where
     encode = pure
     decode = pure
