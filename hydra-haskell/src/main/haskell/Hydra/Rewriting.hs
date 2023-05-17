@@ -30,33 +30,44 @@ elementsWithDependencies original = CM.mapM requireElement allDepNames
 -- | Turn arbitrary terms like 'add 42' into terms like '\x.add 42 x',
 --   whose arity (in the absences of application terms) is equal to the depth of nested lambdas.
 --   This function leaves application terms intact, simply rewriting their left and right subterms.
-expandLambdas :: Ord a => Term a -> GraphFlow a (Term a)
-expandLambdas = rewriteTermM (expand []) (pure . id)
+expandLambdas :: (Ord a, Show a) => Term a -> GraphFlow a (Term a)
+expandLambdas term = do
+    g <- getState
+    rewriteTermM (expand g Nothing []) (pure . id) term
   where
-    expand args recurse term = case term of
+    expand g mtyp args recurse term = case term of
         TermAnnotated (Annotated term' ann) -> do
-          expanded <- expand args recurse term'
+          mt <- annotationClassTermType (graphAnnotations g) term
+          expanded <- expand g (Y.maybe mtyp Just mt) args recurse term'
           return $ TermAnnotated $ Annotated expanded ann
         TermApplication (Application lhs rhs) -> do
           rhs' <- expandLambdas rhs
-          expand (rhs':args) recurse lhs
+          expand g Nothing (rhs':args) recurse lhs
         TermFunction f -> case f of
-          FunctionElimination _ -> pad args 1 <$> recurse term
-          FunctionLambda _ -> passThrough
+          FunctionElimination _ -> pad g mtyp args 1 <$> recurse term
           FunctionPrimitive name -> do
             prim <- requirePrimitive name
-            return $ pad args (primitiveArity prim) term
+            return $ pad g mtyp args (primitiveArity prim) term
+          _ -> passThrough
         _ -> passThrough
       where
-        passThrough = pad args 0 <$> recurse term
+        passThrough = pad g mtyp args 0 <$> recurse term
 
-    pad args arity term = L.foldl lam (L.foldl app term args') $ L.reverse variables
+    pad g mtyp args arity term = L.foldl lam (app mtyp term args') $ L.reverse variables
       where
         variables = L.take (max 0 (arity - L.length args)) ((\i -> Name $ "v" ++ show i) <$> [1..])
         args' = args ++ (TermVariable <$> variables)
 
-        app lhs rhs = TermApplication $ Application lhs rhs
         lam body v = TermFunction $ FunctionLambda $ Lambda v body
+
+        app mtyp lhs args = case args of
+          [] -> lhs
+          (a:rest) -> app mtyp' (TermApplication $ Application lhs' a) rest
+            where
+              lhs' = annotationClassSetTermType (graphAnnotations g) g mtyp lhs
+              mtyp' = case mtyp of
+                Just (TypeFunction (FunctionType _ cod)) -> Just cod
+                Nothing -> Nothing
 
 foldOverTerm :: TraversalOrder -> (x -> Term a -> x) -> x -> Term a -> x
 foldOverTerm order fld b0 term = case order of
