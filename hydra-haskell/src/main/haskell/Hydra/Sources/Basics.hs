@@ -42,12 +42,12 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el literalVariantDef,
      el literalVariantsDef,
      el skipAnnotationsDef,
-     el testLetDef,
      el termMetaDef,
      el termVariantDef,
      el termVariantsDef,
      el typeVariantDef,
-     el typeVariantsDef]
+     el typeVariantsDef
+     ]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -175,8 +175,8 @@ literalTypeDef = basicsDefinition "literalType" $
   match _Literal (Types.wrap _LiteralType) Nothing [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
-    Case _Literal_float   --> union2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
-    Case _Literal_integer --> union2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
+    Case _Literal_float   --> inject2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
+    Case _Literal_integer --> inject2 _LiteralType _LiteralType_integer <.> ref integerValueTypeDef,
     Case _Literal_string  --> constant $ variant _LiteralType _LiteralType_string unit]
 
 literalTypeVariantDef :: Definition (LiteralType -> LiteralVariant)
@@ -207,11 +207,7 @@ literalVariantsDef = basicsDefinition "literalVariants" $
 
 skipAnnotationsDef :: Definition ((a -> Maybe (Annotated a m)) -> a -> a)
 skipAnnotationsDef = basicsDefinition "skipAnnotations" $
-  function
-    (Types.function
-      (Types.variable "x")
-      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "x")) (Types.variable "m")))
-    (Types.function (Types.variable "x") (Types.variable "x")) $
+  function getAnnType (Types.function (Types.variable "x") (Types.variable "x")) $
   lambda "getAnn" $ lambda "t" $
     (var "skip" @@ var "t") `with` [
       "skip">:
@@ -221,14 +217,10 @@ skipAnnotationsDef = basicsDefinition "skipAnnotations" $
             (var "t1")
             (lambda "ann" $ var "skip" @@ (project _Annotated _Annotated_subject @@ var "ann")))
           @@ (var "getAnn" @@ var "t1")]
-
-testLetDef :: Definition (String -> String)
-testLetDef = basicsDefinition "testLet" $
-  doc "Temporary; remove at will" $
-  function Types.string Types.string $
-  lambda "i" $ (var "foo" ++ var "i" ++ var "bar") `with` [
-    "foo">: string "FOO",
-    "bar">: string "BAR"]
+  where
+    getAnnType = (Types.function
+      (Types.variable "x")
+      (Types.optional $ Types.apply (Types.apply (Types.wrap _Annotated) (Types.variable "x")) (Types.variable "m")))
 
 termMetaDef :: Definition (Graph a -> Term a -> a)
 termMetaDef = basicsDefinition "termMeta" $
@@ -239,8 +231,7 @@ termVariantDef :: Definition (Term a -> TermVariant)
 termVariantDef = basicsDefinition "termVariant" $
   doc "Find the term variant (constructor) for a given term" $
   function (Types.apply (Types.wrap _Term) (Types.variable "a")) (Types.wrap _TermVariant) $
-  lambda "term" $ apply
-    (matchToEnum _Term _TermVariant Nothing [
+    matchToEnum _Term _TermVariant Nothing [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
       _Term_element         @-> _TermVariant_element,
@@ -257,8 +248,7 @@ termVariantDef = basicsDefinition "termVariant" $
       _Term_sum             @-> _TermVariant_sum,
       _Term_union           @-> _TermVariant_union,
       _Term_variable        @-> _TermVariant_variable,
-      _Term_wrap            @-> _TermVariant_wrap])
-    (var "term")
+      _Term_wrap            @-> _TermVariant_wrap]
 
 termVariantsDef :: Definition [TermVariant]
 termVariantsDef = basicsDefinition "termVariants" $
@@ -285,8 +275,7 @@ typeVariantDef :: Definition (Type a -> TypeVariant)
 typeVariantDef = basicsDefinition "typeVariant" $
   doc "Find the type variant (constructor) for a given type" $
   function (Types.apply (Types.wrap _Type) (Types.variable "a")) (Types.wrap _TypeVariant) $
-  lambda "typ" $ apply
-    (matchToEnum _Type _TypeVariant Nothing [
+    matchToEnum _Type _TypeVariant Nothing [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,
       _Type_element     @-> _TypeVariant_element,
@@ -303,8 +292,7 @@ typeVariantDef = basicsDefinition "typeVariant" $
       _Type_sum         @-> _TypeVariant_sum,
       _Type_union       @-> _TypeVariant_union,
       _Type_variable    @-> _TypeVariant_variable,
-      _Type_wrap        @-> _TypeVariant_wrap])
-    (var "typ")
+      _Type_wrap        @-> _TypeVariant_wrap]
 
 typeVariantsDef :: Definition [TypeVariant]
 typeVariantsDef = basicsDefinition "typeVariants" $
