@@ -119,7 +119,7 @@ matchData name def pairs = Datum $ Terms.cases name (unDatum <$> def) (toField <
     toField (fname, Datum term) = Field fname term
 
 matchOpt :: Datum b -> Datum (a -> b) -> Datum (Maybe a -> b)
-matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOptional n j
+matchOpt (Datum n) (Datum j) = Datum $ Terms.matchOpt n j
 
 matchSimple :: Name -> Maybe (Term Kv) -> [Field Kv] -> Datum (u -> b)
 matchSimple name def fields = Datum $ Terms.cases name def fields

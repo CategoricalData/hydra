@@ -33,8 +33,8 @@ booleanLiteral v = case v of
   LiteralBoolean b -> pure b
   _ -> unexpected "boolean" v
 
-caseStatement :: Show a => Name -> Term a -> Flow s (CaseStatement a)
-caseStatement name term = case Common.stripTerm term of
+cases :: Show a => Name -> Term a -> Flow s (CaseStatement a)
+cases name term = case Common.stripTerm term of
   TermFunction (FunctionElimination (EliminationUnion cs)) -> if caseStatementTypeName cs == name
     then pure cs
     else unexpected ("case statement for type " ++ unName name) term
@@ -113,6 +113,11 @@ nArgs :: Int -> [Term a] -> Flow s ()
 nArgs n args = if L.length args /= n
   then unexpected (show n ++ " arguments") (L.length args)
   else pure ()
+
+optCases :: Show a => Term a -> Flow s (OptionalCases a)
+optCases term = case Common.stripTerm term of
+  TermFunction (FunctionElimination (EliminationOptional cs)) -> pure cs
+  _ -> unexpected "optional cases" term
 
 optional :: Show a => (Term a -> Flow s x) -> Term a -> Flow s (Y.Maybe x)
 optional f term = case Common.stripTerm term of

@@ -49,9 +49,9 @@ testExpandLambdas = do
         splitOn
         (lambda "v1" $ lambda "v2" $ apply (apply splitOn (variable "v1")) (variable "v2"))
       expandsTo
-        (matchOptional (int32 42) length)
+        (matchOpt (int32 42) length)
         -- Note two levels of lambda expansion
-        (lambda "v1" $ apply (matchOptional (int32 42) (lambda "v1" $ apply length $ variable "v1")) (variable "v1"))
+        (lambda "v1" $ apply (matchOpt (int32 42) (lambda "v1" $ apply length $ variable "v1")) (variable "v1"))
 
     H.it "Expand subterms within applications" $ do
       expandsTo
