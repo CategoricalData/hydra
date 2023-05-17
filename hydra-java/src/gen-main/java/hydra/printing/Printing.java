@@ -61,8 +61,8 @@ public interface Printing {
     });
   }
   
-  static <A> String describeType(hydra.core.Type<A> typ) {
-    return ((typ)).accept(new hydra.core.Type.Visitor<>() {
+  static <A> String describeType(hydra.core.Type<A> v1) {
+    return ((v1)).accept(new hydra.core.Type.Visitor<>() {
       @Override
       public String visit(hydra.core.Type.Annotated<A> instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
