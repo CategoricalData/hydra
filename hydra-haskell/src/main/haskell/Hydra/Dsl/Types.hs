@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import Data.String(IsString(..))
 
 
-instance IsString (Type a) where fromString = variable
+instance IsString (Type a) where fromString = var
 
 infixr 0 >:
 (>:) :: String -> Type a -> FieldType a
@@ -133,8 +133,8 @@ unit :: Type a
 --unit = TypeVariable $ Name "hydra/core.UnitType" -- TODO
 unit = TypeRecord $ RowType (Name "hydra/core.UnitType") Nothing []
 
-variable :: String -> Type a
-variable = TypeVariable . Name
+var :: String -> Type a
+var = TypeVariable . Name
 
 wrap :: Name -> Type a
 wrap = TypeWrap

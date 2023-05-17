@@ -37,7 +37,7 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
 
 functionArityDef :: Definition (Function a -> Int)
 functionArityDef = extrasDefinition "functionArity" $
-  function (Types.apply (Types.wrap _Function) (Types.variable "a")) Types.int32 $
+  function (Types.apply (Types.wrap _Function) (Types.var "a")) Types.int32 $
   match _Function Types.int32 Nothing [
     Case _Function_elimination --> constant (int32 1),
     Case _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
@@ -47,14 +47,14 @@ functionArityDef = extrasDefinition "functionArity" $
 lookupPrimitiveDef :: Definition (Graph a -> Name -> Maybe (Primitive a))
 lookupPrimitiveDef = extrasDefinition "lookupPrimitive" $
   function
-    (Types.apply (Types.wrap _Graph) (Types.variable "a"))
-    (Types.function (Types.wrap _Name) (Types.optional (Types.apply (Types.wrap _Primitive) (Types.variable "a")))) $
+    (Types.apply (Types.wrap _Graph) (Types.var "a"))
+    (Types.function (Types.wrap _Name) (Types.optional (Types.apply (Types.wrap _Primitive) (Types.var "a")))) $
   lambda "g" $ lambda "name" $ apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
 
 primitiveArityDef :: Definition (Primitive a -> Int)
 primitiveArityDef = extrasDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  function (Types.apply (Types.wrap _Primitive) (Types.variable "a")) Types.int32 $
+  function (Types.apply (Types.wrap _Primitive) (Types.var "a")) Types.int32 $
   (ref typeArityDef <.> (project _Primitive _Primitive_type))
 
 qnameDef :: Definition (Namespace -> String -> Name)
@@ -68,7 +68,7 @@ qnameDef = extrasDefinition "qname" $
 
 termArityDef :: Definition (Term a -> Int)
 termArityDef = extrasDefinition "termArity" $
-  function (Types.apply (Types.wrap _Term) (Types.variable "a")) Types.int32 $
+  function (Types.apply (Types.wrap _Term) (Types.var "a")) Types.int32 $
   match _Term Types.int32 (Just $ Terms.int32 0) [
     Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
     Case _Term_function --> ref functionArityDef]
@@ -78,12 +78,12 @@ termArityDef = extrasDefinition "termArity" $
 testListsDef :: Definition ([[a]] -> Int)
 testListsDef = extrasDefinition "testLists" $
   doc "TODO: temporary. Just a token polymorphic function for testing" $
-  function (Types.list $ Types.list $ Types.variable "a") Types.int32 $
+  function (Types.list $ Types.list $ Types.var "a") Types.int32 $
   (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
 
 typeArityDef :: Definition (Type a -> Int)
 typeArityDef = extrasDefinition "typeArity" $
-  function (Types.apply (Types.wrap _Type) (Types.variable "a")) Types.int32 $
+  function (Types.apply (Types.wrap _Type) (Types.var "a")) Types.int32 $
   match _Type Types.int32 (Just $ Terms.int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
@@ -110,7 +110,7 @@ getAnnotationDef = extrasDefinition "getAnnotation" $
 --getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
 --getAttrDef = extrasDefinition "getAttr" $
 --  lambda "key" $ wrap _Flow $
---    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.variable "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
+--    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.var "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
 --    lambda "s0" $ lambda "t0" $ record _FlowState [
 --      fld _FlowState_value (just (Maps.lookup @@ var "key" @@ (project _Trace _Trace_other @@ var "t0"))),
 --      fld _FlowState_state $ var "s0",

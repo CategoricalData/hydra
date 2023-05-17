@@ -229,7 +229,7 @@ freshName :: Flow (InferenceContext a) (Type a)
 freshName = do
     InferenceContext cx s e <- getState
     putState $ InferenceContext cx (s + 1) e
-    return $ Types.variable (unName $ normalVariables !! s)
+    return $ Types.var (unName $ normalVariables !! s)
 
 generalize :: Show a => TypingEnvironment a -> Type a -> TypeScheme a
 generalize env t  = TypeScheme vars t

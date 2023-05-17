@@ -20,7 +20,7 @@ testSuiteModule = Module testSuiteNs elements [hydraCoreModule, hydraTestingModu
       groupElement "allTests" allTests]
 
 groupElement :: String -> TestGroup Kv -> Element Kv
-groupElement lname group = def lname (Types.variable "ignored") $ encodeGroup group
+groupElement lname group = def lname (Types.var "ignored") $ encodeGroup group
   where
     encodeGroup (TestGroup name desc groups cases) = Terms.record _TestGroup [
       Field _TestGroup_name $ Terms.string name,

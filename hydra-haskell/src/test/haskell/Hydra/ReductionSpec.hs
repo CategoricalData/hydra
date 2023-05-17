@@ -148,13 +148,13 @@ testBetaReduceTypeRecursively = do
 --        (reduce True app5)
 --        (TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.function Types.string Types.string])
   where
-    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.variable "t") (Types.variable "t")) Types.string :: Type Kv
+    app1 = Types.apply (Types.lambda "t" $ Types.function (Types.var "t") (Types.var "t")) Types.string :: Type Kv
     app2 = Types.apply (Types.lambda "x" latLonType) Types.int32 :: Type Kv
-    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) Types.unit :: Type Kv
+    app3 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) Types.unit :: Type Kv
     app4 = Types.apply (Types.apply (Types.lambda "x" $ Types.lambda "y" $ TypeRecord $ RowType (Name "Example") Nothing [
-      Types.field "f1" $ Types.variable "x",
-      Types.field "f2" $ Types.variable "y"]) Types.int32) Types.int64 :: Type Kv
-    app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.variable "a"]) app1
+      Types.field "f1" $ Types.var "x",
+      Types.field "f2" $ Types.var "y"]) Types.int32) Types.int64 :: Type Kv
+    app5 = Types.apply (Types.lambda "a" $ TypeRecord $ RowType (Name "Example") Nothing [Types.field "foo" $ Types.var "a"]) app1
 
 reduce :: Type Kv -> Type Kv
 reduce typ = fromFlow (schemaContext testGraph) (betaReduceType typ)
