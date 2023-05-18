@@ -102,7 +102,7 @@ letBinding n term = do
   bindings <- letBindings <$> letTerm term
   case M.lookup (Name n) bindings of
     Nothing -> fail $ "no such binding: " ++ show n
-    Just term' -> pure term
+    Just term' -> pure term'
 
 lambdaBody :: Show a => Term a -> Flow s (Term a)
 lambdaBody term = Hydra.Core.lambdaBody <$> lambda term
