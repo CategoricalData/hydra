@@ -2,6 +2,8 @@
 
 module Hydra.Codegen (
   hydraKernel,
+  kernelDataModules,
+  kernelModelModules,
   kernelModules,
   langModules,
   mainModules,
@@ -100,7 +102,7 @@ generateSources printModule mods0 basePath = do
       withTrace "generate files" $ do
         mods1 <- CM.mapM assignSchemas mods0
         withState (modulesToGraph mods1) $ do
-          g' <- annotateGraphWithTypes
+          g' <- inferGraphTypes
           withState g' $ do
               let mods2 = refreshModule (graphElements g') <$> mods1
               maps <- CM.mapM forModule mods2
@@ -126,26 +128,32 @@ hydraKernel = elementsToGraph bootstrapGraph Nothing $ L.concatMap moduleElement
   hydraModuleModule,
   hydraTestingModule]
 
-kernelModules :: [Module Kv]
-kernelModules = [
-  hydraAstModule,
+kernelDataModules :: [Module Kv]
+kernelDataModules = [
   hydraBasicsModule,
+  hydraExtrasModule,
+--  hydraMonadsModule,
+  hydraPrintingModule]
+
+kernelModelModules :: [Module Kv]
+kernelModelModules = [
+  hydraAstModule,
   hydraCodersModule,
   hydraCoreModule,
   hydraComputeModule,
   hydraConstraintsModule,
-  hydraExtrasModule,
   hydraGrammarModule,
   hydraGraphModule,
   hydraMantleModule,
   hydraModuleModule,
---  hydraMonadsModule,
   hydraPhantomsModule,
-  hydraPrintingModule,
   hydraQueryModule,
   hydraTestingModule,
   hydraWorkflowModule,
   jsonModelModule] -- JSON module is part of the kernel, despite being an external language; JSON support is built in to Hydra
+
+kernelModules :: [Module Kv]
+kernelModules = kernelModelModules ++ kernelDataModules
 
 langModules :: [Module Kv]
 langModules = [
