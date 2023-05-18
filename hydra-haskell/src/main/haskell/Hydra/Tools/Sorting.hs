@@ -3,6 +3,10 @@
 module Hydra.Tools.Sorting (
   topologicalSort,
   topologicalSortComponents,
+
+
+
+  initGraph
 ) where
 
 import qualified Data.List as L
@@ -18,9 +22,9 @@ topologicalSort pairs = Just (getKey nodeFromVertex <$> G.topSort g)
   where
     (g, nodeFromVertex) = initGraph pairs
 
--- | Find the strongly connected components of a graph, in (reverse) topological order
+-- | Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order
 topologicalSortComponents :: Ord a => [(a, [a])] -> [[a]]
-topologicalSortComponents pairs = (fmap (getKey nodeFromVertex) . treeToList) <$> G.scc g
+topologicalSortComponents pairs = L.sort <$> (fmap (getKey nodeFromVertex) . treeToList) <$> G.scc g
   where
     (g, nodeFromVertex) = initGraph pairs
 
