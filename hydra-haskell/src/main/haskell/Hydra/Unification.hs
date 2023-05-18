@@ -73,7 +73,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")
       (TypeWrap _, _) -> return M.empty -- TODO
       (_, TypeWrap name) -> return M.empty -- TODO
-      
+
       (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
         ":\n  " ++ show l ++ "\n  " ++ show r
   where
