@@ -9,7 +9,7 @@ import Hydra.Dsl.Types as Types
 
 
 hydraComputeModule :: Module Kv
-hydraComputeModule = Module ns elements [] $
+hydraComputeModule = Module ns elements [hydraCoreModule] $
     Just "Abstractions for single- and bidirectional transformations"
   where
     ns = Namespace "hydra/compute"
