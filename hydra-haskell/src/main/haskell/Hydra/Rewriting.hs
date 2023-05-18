@@ -88,7 +88,7 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 
 freeVariablesInTerm :: Term a -> S.Set Name
 freeVariablesInTerm term = case term of
-  TermAnnotated (Annotated term1 _) -> freeVariablesInTerm term1
+  TermElement name -> S.fromList [name]
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
