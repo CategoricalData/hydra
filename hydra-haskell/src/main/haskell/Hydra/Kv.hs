@@ -15,16 +15,17 @@ import Hydra.Mantle
 import qualified Hydra.Dsl.Expect as Expect
 import qualified Hydra.Dsl.Terms as Terms
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-aggregateAnnotations :: (a -> Maybe (Annotated a Kv)) -> a -> Kv
-aggregateAnnotations getAnn t = Kv $ M.fromList $ addKv [] t
+aggregateAnnotations :: (x -> Maybe (Annotated x Kv)) -> x -> Kv
+aggregateAnnotations getAnn t = Kv $ M.fromList $ L.concat $ toPairs [] t
   where
-    addKv m t = case getAnn t of
-      Nothing -> m
-      Just (Annotated t' (Kv other)) -> addKv (m ++ M.toList other) t'
+    toPairs rest t = case getAnn t of
+      Nothing -> rest
+      Just (Annotated t' (Kv other)) -> toPairs ((M.toList other):rest) t'
 
 getAttr :: String -> Flow s (Maybe (Term Kv))
 getAttr key = Flow q
