@@ -4,6 +4,7 @@ module Hydra.Tools.GrammarToModule where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
+import Hydra.Dsl.Bootstrap as Bootstrap
 import Hydra.Dsl.Types as Types
 import Hydra.Dsl.Terms as Terms
 import qualified Hydra.Grammar as G
@@ -19,7 +20,7 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [] desc
     elements = pairToElement <$> L.concat (L.zipWith (makeElements False) (capitalize . fst <$> prodPairs) (snd <$> prodPairs))
       where
         prodPairs = (\(G.Production (G.Symbol s) pat) -> (s, pat)) <$> prods
-        pairToElement (lname, typ) = Element (toName lname) (TermElement _Type) (epsilonEncodeType typ)
+        pairToElement (lname, typ) = Bootstrap.typeElement (toName lname) typ
 
     toName = fromQname ns
 

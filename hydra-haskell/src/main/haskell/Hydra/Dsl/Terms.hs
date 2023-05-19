@@ -49,7 +49,7 @@ boolean :: Bool -> Term a
 boolean = literal . Literals.boolean
 
 cases :: Name -> Maybe (Term a) -> [Field a] -> Term a
-cases n def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement n def fields
+cases tname def fields = TermFunction $ FunctionElimination $ EliminationUnion $ CaseStatement tname def fields
 
 compose :: Term a -> Term a -> Term a
 compose f g = lambda "x" $ apply f (apply g $ var "x")
@@ -88,7 +88,7 @@ fold :: Term a -> Term a
 fold = TermFunction . FunctionElimination . EliminationList
 
 inject :: Name -> Field a -> Term a
-inject n = TermUnion . Injection n
+inject tname = TermUnion . Injection tname
 
 int16 :: Int16 -> Term a
 int16 = literal . Literals.int16
@@ -128,7 +128,7 @@ mapTerm :: M.Map (Term a) (Term a) -> Term a
 mapTerm = TermMap
 
 match :: Name -> Maybe (Term a) -> [(FieldName, Term a)] -> Term a
-match n def pairs = cases n def (toField <$> pairs)
+match tname def pairs = cases tname def (toField <$> pairs)
   where
     toField (name, term) = Field name term
 
@@ -136,9 +136,9 @@ matchOpt :: Term a -> Term a -> Term a
 matchOpt n j = TermFunction $ FunctionElimination $ EliminationOptional $ OptionalCases n j
 
 matchWithVariants :: Name -> Maybe (Term a) -> [(FieldName, FieldName)] -> Term a
-matchWithVariants n def pairs = cases n def (toField <$> pairs)
+matchWithVariants tname def pairs = cases tname def (toField <$> pairs)
   where
-    toField (from, to) = Field from $ constant $ unitVariant n to
+    toField (from, to) = Field from $ constant $ unitVariant tname to
 
 nothing :: Term a
 nothing = optional Nothing
@@ -153,10 +153,10 @@ product :: [Term a] -> Term a
 product = TermProduct
 
 project :: Name -> FieldName -> Term a
-project n fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection n fname
+project tname fname = TermFunction $ FunctionElimination $ EliminationRecord $ Projection tname fname
 
 record :: Name -> [Field a] -> Term a
-record n fields = TermRecord $ Record n fields
+record tname fields = TermRecord $ Record tname fields
 
 requireField :: M.Map FieldName (Term a) -> FieldName -> GraphFlow a (Term a)
 requireField fields fname = Y.maybe err pure $ M.lookup fname fields
@@ -188,7 +188,7 @@ unit :: Term a
 unit = TermRecord $ Record (Name "hydra/core.UnitType") []
 
 unitVariant :: Name -> FieldName -> Term a
-unitVariant n fname = variant n fname unit
+unitVariant tname fname = variant tname fname unit
 
 unwrap :: Name -> Term a
 unwrap = TermFunction . FunctionElimination . EliminationWrap
@@ -197,7 +197,7 @@ var :: String -> Term a
 var = TermVariable . Name
 
 variant :: Name -> FieldName -> Term a -> Term a
-variant n fname term = TermUnion $ Injection n $ Field fname term
+variant tname fname term = TermUnion $ Injection tname $ Field fname term
 
 with :: Term a -> [Field a] -> Term a
 env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
@@ -205,7 +205,7 @@ env `with` bindings = TermLet $ Let (M.fromList $ toPair <$> bindings) env
      toPair (Field name value) = (Name $ unFieldName name, value)
 
 withVariant :: Name -> FieldName -> Term a
-withVariant n = constant . unitVariant n
+withVariant tname = constant . unitVariant tname
 
 wrap :: Name -> Term a -> Term a
 wrap name term = TermWrap $ Nominal name term
