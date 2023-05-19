@@ -7,6 +7,7 @@ module Hydra.Unification (
 
 import Hydra.Basics
 import Hydra.Common
+import Hydra.Compute
 import Hydra.Core
 import Hydra.Lexical
 import Hydra.Flows
@@ -23,15 +24,15 @@ type Constraint a = (Type a, Type a)
 
 type Unifier a = (Subst a, [Constraint a])
 
-bind :: (Eq a, Show a) => Name -> Type a -> GraphFlow a (Subst a)
+bind :: (Eq a, Show a) => Name -> Type a -> Flow s (Subst a)
 bind a t | t == TypeVariable a = return M.empty
          | variableOccursInType a t = fail $ "infinite type for ?" ++ unName a ++ ": " ++ show t
          | otherwise = return $ M.singleton a t
 
-solveConstraints :: (Eq a, Show a) => [Constraint a] -> GraphFlow a (Subst a)
+solveConstraints :: (Eq a, Show a) => [Constraint a] -> Flow s (Subst a)
 solveConstraints cs = unificationSolver (M.empty, cs)
 
-unificationSolver :: (Eq a, Show a) => Unifier a -> GraphFlow a (Subst a)
+unificationSolver :: (Eq a, Show a) => Unifier a -> Flow s (Subst a)
 unificationSolver (su, cs) = case cs of
   [] -> return su
   ((t1, t2):rest) -> do
@@ -40,8 +41,8 @@ unificationSolver (su, cs) = case cs of
       composeSubst su1 su,
       (\(t1, t2) -> (substituteInType su1 t1, substituteInType su1 t2)) <$> rest)
 
-unify :: (Eq a, Show a) => Type a -> Type a -> GraphFlow a (Subst a)
-unify t1' t2' = case (stripType t1', stripType t2') of
+unify :: (Eq a, Show a) => Type a -> Type a -> Flow s (Subst a)
+unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
        -- Symmetric patterns
       (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
         unifyMany [lhs1, rhs1] [lhs2, rhs2]
@@ -64,6 +65,7 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeWrap n1, TypeWrap n2) -> verify $ n1 == n2
 
       -- Asymmetric patterns
+      (TypeVariable v1, TypeVariable v2) -> bindWeakest v1 v2
       (TypeVariable v, t2) -> bind v t2
       (t1, TypeVariable v) -> bind v t1
 
@@ -74,13 +76,18 @@ unify t1' t2' = case (stripType t1', stripType t2') of
       (TypeWrap _, _) -> return M.empty -- TODO
       (_, TypeWrap name) -> return M.empty -- TODO
 
-      (l, r) -> fail $ "unexpected unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
+      (l, r) -> fail $ "unification of " ++ show (typeVariant l) ++ " with " ++ show (typeVariant r) ++
         ":\n  " ++ show l ++ "\n  " ++ show r
   where
     verify b = if b then return M.empty else failUnification
-    failUnification = fail $ "could not unify type " ++ show (stripType t1') ++ " with " ++ show (stripType t2')
+    failUnification = fail $ "could not unify type " ++ show (stripType ltyp) ++ " with " ++ show (stripType rtyp)
+    bindWeakest v1 v2 = if isWeak v1
+        then bind v1 (TypeVariable v2)
+        else bind v2 (TypeVariable v1)
+      where
+        isWeak v = L.head (unName v) == 't' -- TODO: use a convention like _xxx for temporarily variables, then normalize and replace them
 
-unifyMany :: (Eq a, Show a) => [Type a] -> [Type a] -> GraphFlow a (Subst a)
+unifyMany :: (Eq a, Show a) => [Type a] -> [Type a] -> Flow s (Subst a)
 unifyMany [] [] = return M.empty
 unifyMany (t1 : ts1) (t2 : ts2) =
   do su1 <- unify t1 t2
