@@ -30,8 +30,8 @@ constructModule :: (Ord a, Read a, Show a)
   -> GraphFlow a (M.Map FilePath PDL.SchemaFile)
 constructModule mod coders pairs = do
     sortedPairs <- case (topologicalSortElements $ fst <$> pairs) of
-      Nothing -> fail $ "types form a cycle (unsupported in PDL)"
-      Just sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
+      Left comps -> fail $ "types form a cycle (unsupported in PDL): " ++ show (L.head comps)
+      Right sorted -> pure $ Y.catMaybes $ fmap (\n -> M.lookup n pairByName) sorted
     schemas <- CM.mapM toSchema sortedPairs
     return $ M.fromList (toPair <$> schemas)
   where
