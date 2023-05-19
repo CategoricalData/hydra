@@ -11,7 +11,17 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-datatype :: Namespace -> String -> Type a -> Element a
+-- | An empty graph (no elements, no primitives, but an annotation class) which is used for bootstrapping Hydra Core
+bootstrapGraph :: Graph Kv
+bootstrapGraph = Graph {
+  graphElements = M.empty,
+  graphEnvironment = M.empty,
+  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
+  graphAnnotations = kvAnnotationClass,
+  graphSchema = Nothing}
+
+datatype :: Namespace -> String -> Type Kv -> Element Kv
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders id typ
   where
     elName = qualify gname (Name lname)
@@ -28,16 +38,6 @@ datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders 
       where
         t' = rec t
 
--- | An empty graph (no elements, no primitives, but an annotation class) which is used for bootstrapping Hydra Core
-bootstrapGraph :: Graph Kv
-bootstrapGraph = Graph {
-  graphElements = M.empty,
-  graphEnvironment = M.empty,
-  graphBody = Terms.list [], -- Note: the bootstrap body is arbitrary
-  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) standardPrimitives,
-  graphAnnotations = kvAnnotationClass,
-  graphSchema = Nothing}
-
 nsref :: Namespace -> String -> Type a
 nsref ns = Types.wrap . qualify ns . Name
 
@@ -50,8 +50,12 @@ termElement name typ term = Element {
   elementSchema = epsilonEncodeType typ,
   elementData = term}
 
-typeElement :: Name -> Type a -> Element a
+typeElement :: Name -> Type Kv -> Element Kv
 typeElement name typ = Element {
   elementName = name,
-  elementSchema = TermElement _Type,
-  elementData = epsilonEncodeType typ}
+  elementSchema = schemaTerm,
+  elementData = dataTerm}
+  where
+    -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
+    dataTerm = TermAnnotated $ Annotated (epsilonEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
+    schemaTerm = TermElement _Type
