@@ -16,11 +16,15 @@ import qualified Data.Graph as G
 
 
 -- | Sort a directed acyclic graph (DAG) based on an adjacency list
---   Note: assumes that the input is in fact a DAG; the ordering is incomplete in the presence of cycles.
-topologicalSort :: Ord a => [(a, [a])] -> Maybe [a]
-topologicalSort pairs = Just (getKey nodeFromVertex <$> G.topSort g)
+--   Yields a list of nontrivial strongly connected components if the graph has cycles
+topologicalSort :: Ord a => [(a, [a])] -> Either [[a]] [a]
+topologicalSort pairs = if L.null withCycles
+    then Right $ L.concat sccs
+    else Left withCycles
   where
-    (g, nodeFromVertex) = initGraph pairs
+    sccs = topologicalSortComponents pairs
+    withCycles = L.filter isCycle sccs
+    isCycle = not . L.null . L.tail
 
 -- | Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order
 topologicalSortComponents :: Ord a => [(a, [a])] -> [[a]]
