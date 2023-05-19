@@ -89,6 +89,7 @@ kvDescription = "description"
 kvType :: String
 kvType = "type"
 
+-- | Return a zero-indexed counter for the given key: 0, 1, 2, ...
 nextCount :: String -> Flow s Int
 nextCount attrName = do
   count <- getAttrWithDefault attrName (Terms.int32 0) >>= Expect.int32
