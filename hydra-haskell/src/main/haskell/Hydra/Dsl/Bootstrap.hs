@@ -6,6 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
+import Hydra.Tools.Debug
 
 import qualified Data.Map as M
 import qualified Data.Set as S
@@ -52,10 +53,10 @@ termElement name typ term = Element {
 
 typeElement :: Name -> Type Kv -> Element Kv
 typeElement name typ = Element {
-  elementName = name,
-  elementSchema = schemaTerm,
-  elementData = dataTerm}
+    elementName = name,
+    elementSchema = schemaTerm,
+    elementData = dataTerm}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
-    dataTerm = TermAnnotated $ Annotated (epsilonEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
+    dataTerm = normalizeTermAnnotations $ TermAnnotated $ Annotated (epsilonEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
     schemaTerm = TermElement _Type

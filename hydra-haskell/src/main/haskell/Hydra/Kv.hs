@@ -95,6 +95,22 @@ nextCount attrName = do
   putAttr attrName (Terms.int32 $ count + 1)
   return count
 
+normalizeTermAnnotations :: Term Kv -> Term Kv
+normalizeTermAnnotations term = if M.null (kvAnnotations kv)
+    then stripped
+    else TermAnnotated $ Annotated stripped kv
+  where
+    kv = termAnnotationInternal term
+    stripped = stripTerm term
+
+normalizeTypeAnnotations :: Type Kv -> Type Kv
+normalizeTypeAnnotations typ = if M.null (kvAnnotations kv)
+    then stripped
+    else TypeAnnotated $ Annotated stripped kv
+  where
+    kv = typeAnnotationInternal typ
+    stripped = stripType typ
+
 putAttr :: String -> Term Kv -> Flow s ()
 putAttr key val = Flow q
   where
