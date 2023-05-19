@@ -20,7 +20,11 @@ composeSubst :: Subst a -> Subst a -> Subst a
 composeSubst s1 s2 = M.union s1 $ M.map (substituteInType s1) s2
 
 normalVariables :: [Name]
-normalVariables = (\n -> Name $ "v" ++ show n) <$> [1..]
+normalVariables = normalVariable <$> [0..]
+
+-- | Type variable naming convention follows Haskell: t0, t1, etc.
+normalVariable :: Int -> Name
+normalVariable i = Name $ "t" ++ show i
 
 normalizeScheme :: Show a => TypeScheme a -> TypeScheme a
 normalizeScheme ts@(TypeScheme _ body) = TypeScheme (fmap snd ord) (normalizeType body)
