@@ -349,7 +349,7 @@ termDependencyNames withVars withEls withPrims withNoms = foldOverTerm Traversal
         prim name = if withPrims then S.insert name names else names
         var name = if withVars then S.insert name names else names
 
-topologicalSortElements :: [Element a] -> Maybe [Name]
+topologicalSortElements :: [Element a] -> Either [[Name]] [Name]
 topologicalSortElements els = topologicalSort $ adjlist <$> els
   where
     adjlist e = (elementName e, S.toList $ termDependencyNames False True True True $ elementData e)
