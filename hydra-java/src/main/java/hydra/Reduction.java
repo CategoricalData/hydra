@@ -269,7 +269,7 @@ public class Reduction {
     }
 
     public static <A> Term<A> replaceFreeName(Name toReplace, Term<A> replacement, Term<A> body) {
-        return Rewriting.rewriteTerm(recurse -> inner -> inner.accept(new Term.PartialVisitor<>() {
+        return Rewriting.rewriteTerm(recurse -> inner -> inner.accept(new Term.PartialVisitor<A, Term<A>>() {
             @Override
             public Term<A> otherwise(Term<A> instance) {
                 return recurse.apply(instance);
