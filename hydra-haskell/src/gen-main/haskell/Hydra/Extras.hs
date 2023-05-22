@@ -41,7 +41,7 @@ termArity x = case x of
   _ -> 0
 
 -- | TODO: temporary. Just a token polymorphic function for testing
-testLists :: ([[a]] -> Int)
+testLists :: ([[t247]] -> Int)
 testLists els = (Lists.length (Lists.concat els))
 
 typeArity :: (Core.Type a -> Int)
