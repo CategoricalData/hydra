@@ -31,13 +31,11 @@ printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule
 describeFloatTypeDef :: Definition (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
-  function (TypeVariable _FloatType) Types.string $
   lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ " floating-point numbers"
 
 describeIntegerTypeDef :: Definition (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
-  function (TypeVariable _IntegerType) Types.string $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
     ++ " integers"
 
