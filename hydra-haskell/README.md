@@ -42,39 +42,39 @@ You can generate Hydra's Haskell sources by first entering the GHCi REPL as abov
 ```haskell
 import Hydra.Codegen
 
-writeHaskell mainModules "src/gen-main/haskell"
+writeHaskell "src/gen-main/haskell" mainModules
 ```
 
-The first argument to `writeHaskell` is the list of modules you want to generate (in this case, a special list containing all built-in modules),
-and the second is the base directory to which the generated files are to be written.
+The first argument to `writeHaskell` is the base directory to which the generated files are to be written,
+and the second is the list of modules you want to generate (in this case, a special list containing all built-in modules).
 For individual modules, use list syntax, e.g.
 
 ```haskell
-writeHaskell [rdfSyntaxModule, shaclModelModule] "src/gen-main/haskell"
+writeHaskell "src/gen-main/haskell" [rdfSyntaxModule, shaclModelModule]
 ```
 
 To generate test modules, use:
 
 ```haskell
-writeHaskell testModules "src/gen-test/haskell"
+writeHaskell "src/gen-test/haskell" testModules
 ```
 
 Java generation is similar, e.g.
 
 ```haskell
-writeJava mainModules "../hydra-java/src/gen-main/java"
+writeJava "../hydra-java/src/gen-main/java" mainModules
 ```
 
 For Java tests, use:
 
 ```haskell
-writeJava testModules "../hydra-java/src/gen-test/java"
+writeJava "../hydra-java/src/gen-test/java" testModules
 ```
 
 Scala generation has known bugs, but you can try it out with:
 
 ```haskell
-writeScala kernelModules "../hydra-scala/src/gen-main/scala"
+writeScala "../hydra-scala/src/gen-main/scala" kernelModules
 ```
 
 There is schema-only support for GraphQL:
@@ -82,7 +82,7 @@ There is schema-only support for GraphQL:
 ```haskell
 import Hydra.Sources.Langs.Graphql.Syntax
 import Hydra.Sources.Langs.Json.Model
-writeGraphql [graphqlSyntaxModule, jsonModelModule] "/tmp/graphql"
+writeGraphql "/tmp/graphql" [graphqlSyntaxModule, jsonModelModule]
 ```
 
 Because GraphQL does not support imports, the GraphQL coder will gather all of the dependencies of a given module together,
@@ -90,7 +90,7 @@ and map them to a single `.graphql` file.
 Hydra has a similar level of schema-only support for [PDL](https://linkedin.github.io/rest.li/pdl_schema):
 
 ```haskell
-writePdl kernelModules "/tmp/pdl"
+writePdl "/tmp/pdl" kernelModules
 ```
 
 ### JSON and YAML generation

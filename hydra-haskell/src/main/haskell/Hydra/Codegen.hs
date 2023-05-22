@@ -91,8 +91,8 @@ assignSchemas mod = do
 findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
-generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> [Module Kv] -> FilePath -> IO ()
-generateSources printModule mods0 basePath = do
+generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
+generateSources printModule basePath mods0 = do
     mfiles <- runFlow hydraKernel generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
@@ -212,23 +212,23 @@ utilModules = [
   hydraBasicsModule,
   hydraExtrasModule]
 
-writeGraphql :: [Module Kv] -> FP.FilePath -> IO ()
+writeGraphql :: FP.FilePath -> [Module Kv] -> IO ()
 writeGraphql = generateSources Graphql.printModule
 
-writeHaskell :: [Module Kv] -> FilePath -> IO ()
+writeHaskell :: FilePath -> [Module Kv] -> IO ()
 writeHaskell = generateSources Haskell.printModule
 
-writeJava :: [Module Kv] -> FP.FilePath -> IO ()
+writeJava :: FP.FilePath -> [Module Kv] -> IO ()
 writeJava = generateSources Java.printModule
 
--- writeJson :: [Module Kv] -> FP.FilePath -> IO ()
+-- writeJson :: FP.FilePath -> [Module Kv] -> IO ()
 -- writeJson = generateSources Json.printModule
 
-writePdl :: [Module Kv] -> FP.FilePath -> IO ()
+writePdl :: FP.FilePath -> [Module Kv] -> IO ()
 writePdl = generateSources PDL.printModule
 
-writeScala :: [Module Kv] -> FP.FilePath -> IO ()
+writeScala :: FP.FilePath -> [Module Kv] -> IO ()
 writeScala = generateSources Scala.printModule
 
-writeYaml :: [Module Kv] -> FP.FilePath -> IO ()
+writeYaml :: FP.FilePath -> [Module Kv] -> IO ()
 writeYaml = generateSources Yaml.printModule
