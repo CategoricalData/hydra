@@ -177,11 +177,6 @@ encodeProperty fields adapter = do
   where
     fname = fieldTypeName $ adapterSource adapter
 
-fieldMap :: [Field a] -> M.Map FieldName (Term a)
-fieldMap fields = M.fromList (toPair <$> fields)
-  where
-    toPair f = (fieldName f, fieldTerm f)
-
 -- TODO; infer lossiness
 lossy = False
 

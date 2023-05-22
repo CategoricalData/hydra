@@ -230,11 +230,6 @@ decodeVertexSpec term = withTrace "decode vertex spec" $ matchRecord (\fields ->
 
 -- General-purpose code for decoding
 
-fieldMap :: [Field a] -> M.Map FieldName (Term a)
-fieldMap fields = M.fromList (toPair <$> fields)
-  where
-    toPair f = (fieldName f, fieldTerm f)
-
 matchInjection :: Show a => [(FieldName, Term a -> Flow s x)] -> Term a -> Flow s x
 matchInjection cases encoded = do
   mp <- Expect.map (\k -> FieldName <$> Expect.string k) pure encoded
