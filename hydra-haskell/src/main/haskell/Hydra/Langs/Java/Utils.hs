@@ -19,12 +19,15 @@ addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs)
 
 addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> GraphFlow a Java.Type
 addJavaTypeParameter rt t = case t of
-  Java.TypeReference (Java.ReferenceTypeClassOrInterface cit) -> case cit of
-    Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
-      Java.TypeReference $ Java.ReferenceTypeClassOrInterface $
-        Java.ClassOrInterfaceTypeClass $ Java.ClassType anns qual id (args ++ [Java.TypeArgumentReference rt])
-    _ -> fail $ "expected a Java class type. Found: " ++ show cit
-  _ -> fail $ "expected a Java class or interface type. Found: " ++ show t
+  Java.TypeReference rt -> case rt of
+    Java.ReferenceTypeClassOrInterface cit -> case cit of
+      Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
+        Java.TypeReference $ Java.ReferenceTypeClassOrInterface $
+          Java.ClassOrInterfaceTypeClass $ Java.ClassType anns qual id (args ++ [Java.TypeArgumentReference rt])
+      _ -> fail $ "expected a Java class type. Found: " ++ show cit
+    Java.ReferenceTypeVariable tv -> pure $ javaTypeVariableToType tv
+    _ -> fail $ "expected a Java class or interface type, or a variable. Found: " ++ show rt
+  _ -> fail $ "expected a reference type. Found: " ++ show t
 
 fieldExpression :: Java.Identifier -> Java.Identifier -> Java.ExpressionName
 fieldExpression varId fieldId = Java.ExpressionName (Just $ Java.AmbiguousName [varId]) fieldId
@@ -296,7 +299,7 @@ javaTypeIdentifier = Java.TypeIdentifier . Java.Identifier
 
 javaTypeIdentifierToJavaTypeArgument :: Java.TypeIdentifier -> Java.TypeArgument
 javaTypeIdentifierToJavaTypeArgument id = Java.TypeArgumentReference $ Java.ReferenceTypeVariable $ Java.TypeVariable [] id
-        
+
 javaTypeName :: Java.Identifier -> Java.TypeName
 javaTypeName id = Java.TypeName (Java.TypeIdentifier id) Nothing
 

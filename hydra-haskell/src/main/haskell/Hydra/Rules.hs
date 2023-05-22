@@ -166,7 +166,8 @@ infer term = case term of
           t <- (withGraphContext $ typeOfPrimitive name) >>= replaceFreeVariables
           yieldFunction (FunctionPrimitive name) t []
         where
-          -- TODO: this is a bit of a hack which is specific to primitives. It prevents type variables from being reused across instantiations, which can lead to false unification
+          -- This prevents type variables from being reused across multiple instantiations of a primitive within a single element,
+          -- which would lead to false unification.
           replaceFreeVariables t = do
               pairs <- CM.mapM toPair $ S.toList $ freeVariablesInType t
               return $ substituteInType (M.fromList pairs) t
