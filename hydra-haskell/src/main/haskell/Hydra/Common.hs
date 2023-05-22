@@ -62,6 +62,16 @@ elementsToGraph parent schema els = parent {graphElements = elementMap, graphSch
       where
         toPair el = (elementName el, el)
 
+fieldMap :: [Field a] -> M.Map FieldName (Term a)
+fieldMap fields = M.fromList (toPair <$> fields)
+  where
+    toPair f = (fieldName f, fieldTerm f)
+
+fieldTypeMap :: [FieldType a] -> M.Map FieldName (Type a)
+fieldTypeMap fields = M.fromList (toPair <$> fields)
+  where
+    toPair f = (fieldTypeName f, fieldTypeType f)
+
 fromQname :: Namespace -> String -> Name
 fromQname ns local = Name $ unNamespace ns ++ "." ++ local
 
