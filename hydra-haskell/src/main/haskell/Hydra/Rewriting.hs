@@ -231,6 +231,11 @@ rewriteTermMeta = rewriteTerm mapExpr
   where
     mapExpr recurse term = recurse term
 
+rewriteTermMetaM :: Ord b => (a -> Flow s b) -> Term a -> Flow s (Term b)
+rewriteTermMetaM = rewriteTermM mapExpr
+  where
+    mapExpr recurse term = recurse term
+
 rewriteType :: ((Type a -> Type b) -> Type a -> Type b) -> (a -> b) -> Type a -> Type b
 rewriteType f mf = rewrite fsub f
   where
