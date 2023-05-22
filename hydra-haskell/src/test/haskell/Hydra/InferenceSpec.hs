@@ -441,7 +441,7 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
         expectTypeAnnotation Expect.lambdaBody testCase
           constStringType
 
-    H.describe "Check 'let' terms" $ do
+    H.describe "Check unannotated 'let' terms" $ do
       H.it "test #1" $ do
         let testCase = lambda "i" $
                          (Terms.primitive _strings_cat @@ list [string "foo", var "i", string "bar"])
@@ -473,6 +473,16 @@ checkSubtermAnnotations = H.describe "Check additional subterm annotations" $ do
           (Types.var "v3")
         expectTypeAnnotation (Expect.lambdaBody >=> Expect.lambdaBody >=> Expect.letBinding "funAlias") testCase
           funType
+
+--     H.describe "Check 'let' terms with type annotations on bindings" $
+
+  where
+    tmp term = shouldSucceedWith flow ()
+      where
+        flow = do
+          iterm <- annotateTermWithTypes term
+          fail $ "iterm: " ++ show iterm
+
 
 checkTypedTerms :: H.SpecWith ()
 checkTypedTerms = H.describe "Check that term/type pairs are consistent with type inference" $ do

@@ -46,8 +46,7 @@ hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule
      el termVariantDef,
      el termVariantsDef,
      el typeVariantDef,
-     el typeVariantsDef
-     ]
+     el typeVariantsDef]
 
 eliminationVariantDef :: Definition (Elimination a -> EliminationVariant)
 eliminationVariantDef = basicsDefinition "eliminationVariant" $
@@ -172,7 +171,7 @@ integerValueTypeDef = basicsDefinition "integerValueType" $
 literalTypeDef :: Definition (Literal -> LiteralType)
 literalTypeDef = basicsDefinition "literalType" $
   doc "Find the literal type for a given literal value" $
-  match _Literal (Types.wrap _LiteralType) Nothing [
+  matchSimple _Literal Nothing [
     Case _Literal_binary  --> constant $ variant _LiteralType _LiteralType_binary unit,
     Case _Literal_boolean --> constant $ variant _LiteralType _LiteralType_boolean unit,
     Case _Literal_float   --> inject2 _LiteralType _LiteralType_float <.> ref floatValueTypeDef,
