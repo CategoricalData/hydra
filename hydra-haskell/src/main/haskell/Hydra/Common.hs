@@ -138,5 +138,5 @@ toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
 -- | Splits a Name on the first "." into a namespace and a local part
 toQnameEager :: Name -> (Namespace, String)
 toQnameEager (Name name) = case Strings.splitOn "." name of
+  [n] -> (Namespace "UNKNOWN", name)
   (ns:rest) -> (Namespace ns, L.intercalate "." rest)
-  _ -> (Namespace "UNKNOWN", name)

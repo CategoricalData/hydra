@@ -28,8 +28,7 @@ constantDecls g namespaces name@(Name nm) typ = if useCoreImport
     lname = localNameOfEager name
     toDecl n (k, v) = H.DeclarationWithComments decl Nothing
       where
-        decl = H.DeclarationValueBinding $
-          H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
+        decl = H.DeclarationValueBinding $ H.ValueBindingSimple $ H.ValueBinding_Simple pat rhs Nothing
         pat = applicationPattern (simpleName k) []
         rhs = H.RightHandSide $ H.ExpressionApplication $ H.Expression_Application
           (H.ExpressionVariable $ elementReference namespaces n)
@@ -194,8 +193,7 @@ encodeTerm namespaces term = do
 
 encodeType :: Show a => Namespaces -> Type a -> GraphFlow a H.Type
 encodeType namespaces typ = case stripType typ of
-    TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$>
-      CM.sequence [encode lhs, encode rhs]
+    TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
     TypeElement et -> encode et
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
     TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
@@ -230,7 +228,7 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Set",
       encode st]
     TypeUnion rt -> wrap $ rowTypeTypeName rt
-    TypeVariable (Name v) -> pure $ H.TypeVariable $ simpleName v
+    TypeVariable v -> wrap v
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces
@@ -280,9 +278,7 @@ toDataDeclaration coders namespaces (el, TypedTerm typ term) = toDecl hname term
         hterm <- coderEncode coder term
         let vb = simpleValueBinding hname hterm bindings
         htype <- encodeType namespaces typ
-        let decl = H.DeclarationTypedBinding $ H.TypedBinding
-                    (H.TypeSignature hname htype)
-                    (rewriteValueBinding vb)
+        let decl = H.DeclarationTypedBinding $ H.TypedBinding (H.TypeSignature hname htype) (rewriteValueBinding vb)
         g <- getState
         comments <- annotationClassTermDescription (graphAnnotations g) term
 

@@ -64,7 +64,7 @@ qnameDef = extrasDefinition "qname" $
     lambda "name" $
       nom _Name $
         apply Strings.cat $
-          list [apply (denom _Namespace) (var "ns"), string ".", var "name"]
+          list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 termArityDef :: Definition (Term a -> Int)
 termArityDef = extrasDefinition "termArity" $

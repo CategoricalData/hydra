@@ -47,7 +47,8 @@ unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
       (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
         unifyMany [lhs1, rhs1] [lhs2, rhs2]
       (TypeElement et1, TypeElement et2) -> unify et1 et2
-      (TypeFunction (FunctionType dom cod), TypeFunction (FunctionType t3 t4)) -> unifyMany [dom, cod] [t3, t4]
+      (TypeFunction (FunctionType dom1 cod1), TypeFunction (FunctionType dom2 cod2)) ->
+        unifyMany [dom1, cod1] [dom2, cod2]
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
       (TypeLiteral lt1, TypeLiteral lt2) -> verify $ lt1 == lt2
       (TypeMap (MapType k1 v1), TypeMap (MapType k2 v2)) -> unifyMany [k1, v1] [k2, v2]
