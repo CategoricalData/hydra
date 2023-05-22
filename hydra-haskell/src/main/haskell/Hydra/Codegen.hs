@@ -157,27 +157,27 @@ kernelModules = kernelModelModules ++ kernelDataModules
 
 langModules :: [Module Kv]
 langModules = [
-  avroSchemaModule,
-  graphqlSyntaxModule,
-  haskellAstModule,
-  javaSyntaxModule,
-  owlSyntaxModule,
-  parquetFormatModule,
-  pegasusPdlModule,
-  protobufAnyModule,
-  protobufSourceContextModule,
-  protobufTypeModule,
-  rdfSyntaxModule,
-  relationalModelModule,
-  scalaMetaModule,
-  shaclModelModule,
-  shexSyntaxModule,
-  sqlModule,
-  tinkerpopFeaturesModule,
-  tinkerpopMappingsModule,
-  tinkerpopPropertyGraphModule,
-  xmlSchemaModule,
-  yamlModelModule]
+  avroSchemaModule, -- ok 1
+  graphqlSyntaxModule, -- ok 2
+  haskellAstModule, -- ok 2
+  javaSyntaxModule, -- ok 22
+  owlSyntaxModule, -- ok 4
+  parquetFormatModule, -- ok 2
+  pegasusPdlModule, -- ok 1
+  protobufAnyModule, -- ok 1
+  protobufSourceContextModule, -- ok 1
+  protobufTypeModule, -- ok 1
+  rdfSyntaxModule, -- ok 1
+  relationalModelModule, -- ok 1
+  scalaMetaModule, -- ok 10
+  shaclModelModule, -- ok 1
+  shexSyntaxModule, -- ok 4
+  sqlModule, -- ok 2
+  tinkerpopFeaturesModule, -- ok 2
+  tinkerpopMappingsModule, -- ok 3
+  tinkerpopPropertyGraphModule, -- ok 1
+  xmlSchemaModule, -- ok 1
+  yamlModelModule] -- ok 0
 
 mainModules :: [Module Kv]
 mainModules = kernelModules ++ langModules
