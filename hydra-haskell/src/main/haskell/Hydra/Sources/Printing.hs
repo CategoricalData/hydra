@@ -42,7 +42,7 @@ describeIntegerTypeDef = printingDefinition "describeIntegerType" $
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
-  matchSimple _LiteralType Nothing [
+  match _LiteralType Nothing [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
     Case _LiteralType_float   --> ref describeFloatTypeDef,
@@ -52,7 +52,7 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
-  matchSimple _Precision Nothing [
+  match _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
     Case _Precision_bits      --> lambda "bits" $ showInt32 @@ var "bits" ++ "-bit"]
 
@@ -60,7 +60,7 @@ describeTypeDef :: Definition (Type a -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
   function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.string $
-    matchSimple _Type Nothing [
+    match _Type Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",

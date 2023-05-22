@@ -38,7 +38,7 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
 functionArityDef :: Definition (Function a -> Int)
 functionArityDef = extrasDefinition "functionArity" $
   function (Types.apply (Types.wrap _Function) (Types.var "a")) Types.int32 $
-  match _Function Types.int32 Nothing [
+  match _Function Nothing [
     Case _Function_elimination --> constant (int32 1),
     Case _Function_lambda --> (Math.add @@ int32 1) <.> (ref termArityDef <.> project _Lambda _Lambda_body),
     Case _Function_primitive --> constant $
@@ -69,7 +69,7 @@ qnameDef = extrasDefinition "qname" $
 termArityDef :: Definition (Term a -> Int)
 termArityDef = extrasDefinition "termArity" $
   function (Types.apply (Types.wrap _Term) (Types.var "a")) Types.int32 $
-  match _Term Types.int32 (Just $ Terms.int32 0) [
+  match _Term (Just $ Terms.int32 0) [
     Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
     Case _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
@@ -83,7 +83,7 @@ testListsDef = extrasDefinition "testLists" $
 typeArityDef :: Definition (Type a -> Int)
 typeArityDef = extrasDefinition "typeArity" $
   function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.int32 $
-  matchSimple _Type (Just $ Terms.int32 0) [
+  match _Type (Just $ Terms.int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
