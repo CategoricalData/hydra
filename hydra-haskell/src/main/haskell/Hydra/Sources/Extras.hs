@@ -47,9 +47,10 @@ functionArityDef = extrasDefinition "functionArity" $
 lookupPrimitiveDef :: Definition (Graph a -> Name -> Maybe (Primitive a))
 lookupPrimitiveDef = extrasDefinition "lookupPrimitive" $
   function
-    (Types.apply (Types.wrap _Graph) (Types.var "a"))
-    (Types.function (Types.wrap _Name) (Types.optional (Types.apply (Types.wrap _Primitive) (Types.var "a")))) $
-  lambda "g" $ lambda "name" $ apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
+    (Types.apply (TypeVariable _Graph) (Types.var "a"))
+    (Types.function (TypeVariable _Name) (Types.optional (Types.apply (TypeVariable _Primitive) (Types.var "a")))) $
+  lambda "g" $ lambda "name" $
+    apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
 
 primitiveArityDef :: Definition (Primitive a -> Int)
 primitiveArityDef = extrasDefinition "primitiveArity" $
@@ -60,11 +61,10 @@ primitiveArityDef = extrasDefinition "primitiveArity" $
 qnameDef :: Definition (Namespace -> String -> Name)
 qnameDef = extrasDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
-  lambda "ns" $
-    lambda "name" $
-      nom _Name $
-        apply Strings.cat $
-          list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
+  lambda "ns" $ lambda "name" $
+    nom _Name $
+      apply Strings.cat $
+        list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 termArityDef :: Definition (Term a -> Int)
 termArityDef = extrasDefinition "termArity" $
@@ -78,13 +78,12 @@ termArityDef = extrasDefinition "termArity" $
 testListsDef :: Definition ([[a]] -> Int)
 testListsDef = extrasDefinition "testLists" $
   doc "TODO: temporary. Just a token polymorphic function for testing" $
-  function (Types.list $ Types.list $ Types.var "a") Types.int32 $
   (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
 
 typeArityDef :: Definition (Type a -> Int)
 typeArityDef = extrasDefinition "typeArity" $
-  function (Types.apply (Types.wrap _Type) (Types.var "a")) Types.int32 $
-  match _Type Types.int32 (Just $ Terms.int32 0) [
+  function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.int32 $
+  matchSimple _Type (Just $ Terms.int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
     Case _Type_application --> ref typeArityDef <.> (project _ApplicationType _ApplicationType_function),
     Case _Type_lambda --> ref typeArityDef <.> (project _LambdaType _LambdaType_body),
@@ -105,7 +104,9 @@ emptyKvDef = extrasDefinition "emptyKv" $
 
 getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
 getAnnotationDef = extrasDefinition "getAnnotation" $
-  lambda "key" $ lambda "ann" (Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann"))
+  lambda "key" $ lambda "ann" $
+    Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann")
+
 
 --getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
 --getAttrDef = extrasDefinition "getAttr" $
