@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Hydra.Sources.Printing where
 
 import Hydra.Kernel
@@ -19,7 +21,8 @@ hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsM
      el describeIntegerTypeDef,
      el describeLiteralTypeDef,
      el describePrecisionDef,
-     el describeTypeDef]
+     el describeTypeDef
+     ]
 
 printingDefinition :: String -> Datum a -> Definition a
 printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule)
@@ -28,20 +31,20 @@ printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule
 describeFloatTypeDef :: Definition (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
-  function (Types.wrap _FloatType) Types.string $
-  lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
+  function (TypeVariable _FloatType) Types.string $
+  lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ " floating-point numbers"
 
 describeIntegerTypeDef :: Definition (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
-  function (Types.wrap _IntegerType) Types.string $
+  function (TypeVariable _IntegerType) Types.string $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
-    ++ string " integers"
+    ++ " integers"
 
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
   doc "Display a literal type as a string" $
-  match _LiteralType Types.string Nothing [
+  matchSimple _LiteralType Nothing [
     Case _LiteralType_binary  --> constant $ string "binary strings",
     Case _LiteralType_boolean --> constant $ string "boolean values",
     Case _LiteralType_float   --> ref describeFloatTypeDef,
@@ -51,16 +54,15 @@ describeLiteralTypeDef = printingDefinition "describeLiteralType" $
 describePrecisionDef :: Definition (Precision -> String)
 describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
-  match _Precision Types.string Nothing [
+  matchSimple _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    Case _Precision_bits      --> lambda "bits" $
-      showInt32 @@ var "bits" ++ string "-bit"]
+    Case _Precision_bits      --> lambda "bits" $ showInt32 @@ var "bits" ++ "-bit"]
 
-describeTypeDef :: Definition (Type a -> string)
+describeTypeDef :: Definition (Type a -> String)
 describeTypeDef = printingDefinition "describeType" $
   doc "Display a type as a string" $
-  function (Types.apply (Types.wrap _Type) (Types.var "a")) Types.string $
-    match _Type Types.string Nothing [
+  function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.string $
+    matchSimple _Type Nothing [
       Case _Type_annotated   --> lambda "a" $ string "annotated " ++ (ref describeTypeDef @@
         (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
@@ -76,7 +78,7 @@ describeTypeDef = printingDefinition "describeType" $
         ++ (ref describeTypeDef @@ (project _MapType _MapType_keys @@ var "mt"))
         ++ string " to "
         ++ (ref describeTypeDef @@ (project _MapType _MapType_values  @@ var "mt")),
-      Case _Type_wrap     --> lambda "name" $ string "alias for " ++ (denom _Name @@ var "name"),
+      Case _Type_wrap        --> lambda "name" $ string "alias for " ++ (unwrap _Name @@ var "name"),
       Case _Type_optional    --> lambda "ot" $ string "optional " ++ (ref describeTypeDef @@ var "ot"),
       Case _Type_product     --> constant $ string "tuples",
       Case _Type_record      --> constant $ string "records",
@@ -85,7 +87,3 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type"]
-  where
-    annotatedTypeM = Types.apply (Types.apply (Types.wrap _Annotated) (Types.apply (Types.wrap _Type) (Types.var "a"))) (Types.var "a")
-    functionTypeM = Types.apply (Types.wrap _FunctionType) (Types.var "a")
-    mapTypeM = Types.apply (Types.wrap _MapType) (Types.var "a")
