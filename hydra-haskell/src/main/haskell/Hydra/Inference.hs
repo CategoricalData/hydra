@@ -36,6 +36,8 @@ annotateElements :: (Ord a, Show a) => Graph a -> [Element a] -> GraphFlow a [El
 annotateElements g sortedEls = withInferenceContext $ do
     iels <- annotate sortedEls []
 
+    -- Note: inference occurs over the entire graph at once,
+    --       but unification and substitution occur within elements in isolation
     let constraints = termConstraints . elementData <$> iels
     subst <- withGraphContext $ withSchemaContext $ CM.mapM solveConstraints constraints
     r <- CM.zipWithM rewriteElement subst iels
