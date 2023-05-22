@@ -114,8 +114,7 @@ constructModule mod coders pairs = do
       return $ Java.InterfaceMemberDeclarationConstant $ Java.ConstantDeclaration mods jtype [var]
 
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
-    termToMethod coders el typ term = do
-     case stripType typ of
+    termToMethod coders el typ term = case stripType typ of
       TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \tm stmts -> case stripTerm tm of
         TermFunction (FunctionLambda (Lambda v body)) -> do
           jdom <- encodeType aliases dom

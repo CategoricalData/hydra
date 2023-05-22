@@ -19,7 +19,7 @@ addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs)
 
 addJavaTypeParameter :: Java.ReferenceType -> Java.Type -> GraphFlow a Java.Type
 addJavaTypeParameter rt t = case t of
-  Java.TypeReference rt -> case rt of
+  Java.TypeReference rt1 -> case rt1 of
     Java.ReferenceTypeClassOrInterface cit -> case cit of
       Java.ClassOrInterfaceTypeClass (Java.ClassType anns qual id args) -> pure $
         Java.TypeReference $ Java.ReferenceTypeClassOrInterface $
