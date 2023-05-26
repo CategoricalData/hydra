@@ -662,10 +662,14 @@ encodeType aliases t = case stripType t of
     jst <- encode st >>= javaTypeToJavaReferenceType
     return $ javaRefType [jst] javaUtilPackageName "Set"
   TypeUnion (RowType name _ _) -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
-  TypeVariable (Name v) -> pure $ Java.TypeReference $ javaTypeVariable v
-  TypeWrap name -> pure $ Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+  TypeVariable name -> pure $ if isLambdaBoundVariable name
+    then variableReference name
+    else nameReference name
+  TypeWrap name -> pure $ nameReference name
   _ -> fail $ "can't encode unsupported type in Java: " ++ show t
   where
+    nameReference name = Java.TypeReference $ nameToJavaReferenceType aliases True [] name Nothing
+    variableReference name = Java.TypeReference $ javaTypeVariable $ unName name
     encode = encodeType aliases
     unit = return $ javaRefType [] javaLangPackageName "Void"
 
@@ -697,6 +701,9 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
   where
     Java.Identifier id = nameToJavaName aliases name
 
+isLambdaBoundVariable :: Name -> Bool
+isLambdaBoundVariable (Name v) = L.length v <= 3
+
 javaTypeArgumentsForNamedType :: Show a => Name -> GraphFlow a [Java.TypeArgument]
 javaTypeArgumentsForNamedType tname = do
     params <- javaTypeParametersForType <$> requireType tname
@@ -708,7 +715,7 @@ javaTypeParametersForType :: Type a -> [Java.TypeParameter]
 javaTypeParametersForType typ = toParam <$> vars
   where
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
-    vars = S.toList $ freeVariablesInType typ
+    vars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
 
 maybeLet :: (Ord a, Read a, Show a) => Aliases -> Term a -> (Term a -> [Java.BlockStatement] -> GraphFlow a x) -> GraphFlow a x
 maybeLet aliases term cons = helper [] term
