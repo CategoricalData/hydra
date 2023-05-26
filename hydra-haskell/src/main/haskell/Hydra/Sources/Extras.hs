@@ -1,4 +1,4 @@
-module Hydra.Sources.Extras where
+module Hydra.Sources.Extras (hydraExtrasModule) where
 
 import Hydra.Kernel
 import Hydra.Sources.Compute
@@ -14,8 +14,8 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 
-extrasDefinition :: String -> Datum a -> Definition a
-extrasDefinition = Definition . fromQname (moduleNamespace hydraExtrasModule)
+hydraExtrasDefinition :: String -> Datum a -> Definition a
+hydraExtrasDefinition = Definition . fromQname (moduleNamespace hydraExtrasModule)
 
 hydraExtrasModule :: Module Kv
 hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
@@ -27,7 +27,6 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
       el primitiveArityDef,
       el qnameDef,
       el termArityDef,
-      el testListsDef,
       el typeArityDef,
 
       el emptyKvDef,
@@ -36,7 +35,7 @@ hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule
       ]
 
 functionArityDef :: Definition (Function a -> Int)
-functionArityDef = extrasDefinition "functionArity" $
+functionArityDef = hydraExtrasDefinition "functionArity" $
   function (Types.apply (Types.wrap _Function) (Types.var "a")) Types.int32 $
   match _Function Nothing [
     Case _Function_elimination --> constant (int32 1),
@@ -45,7 +44,7 @@ functionArityDef = extrasDefinition "functionArity" $
       doc "TODO: This function needs to be monadic, so we can look up the primitive" (int32 42)]
 
 lookupPrimitiveDef :: Definition (Graph a -> Name -> Maybe (Primitive a))
-lookupPrimitiveDef = extrasDefinition "lookupPrimitive" $
+lookupPrimitiveDef = hydraExtrasDefinition "lookupPrimitive" $
   function
     (Types.apply (TypeVariable _Graph) (Types.var "a"))
     (Types.function (TypeVariable _Name) (Types.optional (Types.apply (TypeVariable _Primitive) (Types.var "a")))) $
@@ -53,13 +52,13 @@ lookupPrimitiveDef = extrasDefinition "lookupPrimitive" $
     apply (Maps.lookup @@ var "name") (project _Graph _Graph_primitives @@ var "g")
 
 primitiveArityDef :: Definition (Primitive a -> Int)
-primitiveArityDef = extrasDefinition "primitiveArity" $
+primitiveArityDef = hydraExtrasDefinition "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
   function (Types.apply (Types.wrap _Primitive) (Types.var "a")) Types.int32 $
   (ref typeArityDef <.> (project _Primitive _Primitive_type))
 
 qnameDef :: Definition (Namespace -> String -> Name)
-qnameDef = extrasDefinition "qname" $
+qnameDef = hydraExtrasDefinition "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     nom _Name $
@@ -67,21 +66,15 @@ qnameDef = extrasDefinition "qname" $
         list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
 
 termArityDef :: Definition (Term a -> Int)
-termArityDef = extrasDefinition "termArity" $
+termArityDef = hydraExtrasDefinition "termArity" $
   function (Types.apply (Types.wrap _Term) (Types.var "a")) Types.int32 $
   match _Term (Just $ Terms.int32 0) [
     Case _Term_application --> (lambda "x" $ Math.sub @@ var "x" @@ int32 1) <.> (ref termArityDef <.> (project _Application _Application_function)),
     Case _Term_function --> ref functionArityDef]
     -- Note: ignoring variables which might resolve to functions
 
--- TODO: remove once there are other polymorphic functions in use
-testListsDef :: Definition ([[a]] -> Int)
-testListsDef = extrasDefinition "testLists" $
-  doc "TODO: temporary. Just a token polymorphic function for testing" $
-  (lambda "els" (apply Lists.length (apply Lists.concat $ var "els")))
-
 typeArityDef :: Definition (Type a -> Int)
-typeArityDef = extrasDefinition "typeArity" $
+typeArityDef = hydraExtrasDefinition "typeArity" $
   function (Types.apply (TypeVariable _Type) (Types.var "a")) Types.int32 $
   match _Type (Just $ Terms.int32 0) [
     Case _Type_annotated --> ref typeArityDef <.> (project _Annotated _Annotated_subject),
@@ -99,17 +92,17 @@ typeArityDef = extrasDefinition "typeArity" $
 -- hydra/kv
 
 emptyKvDef :: Definition Kv
-emptyKvDef = extrasDefinition "emptyKv" $
+emptyKvDef = hydraExtrasDefinition "emptyKv" $
   record _Kv [fld _Kv_annotations Maps.empty]
 
 getAnnotationDef :: Definition (String -> Kv -> Maybe (Term Kv))
-getAnnotationDef = extrasDefinition "getAnnotation" $
+getAnnotationDef = hydraExtrasDefinition "getAnnotation" $
   lambda "key" $ lambda "ann" $
     Maps.lookup @@ var "key" @@ (project _Kv _Kv_annotations @@ var "ann")
 
 
 --getAttrDef :: Definition (String -> Flow s (Maybe (Term Kv)))
---getAttrDef = extrasDefinition "getAttr" $
+--getAttrDef = hydraExtrasDefinition "getAttr" $
 --  lambda "key" $ wrap _Flow $
 --    function Types.string (Types.apply (Types.apply (Types.wrap _Flow) (Types.var "s")) (Types.optional $ Types.apply (Types.wrap _Term) (Types.wrap _Kv))) $
 --    lambda "s0" $ lambda "t0" $ record _FlowState [
