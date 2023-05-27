@@ -87,6 +87,9 @@ function dom cod = typed (Types.function dom cod)
 functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
 
+id :: Datum (a -> a)
+id = Datum Terms.id
+
 inject :: Name -> FieldName -> Datum a -> Datum b
 inject name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
 
