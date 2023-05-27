@@ -419,15 +419,22 @@ encodeElimination aliases marg dom cod elm = case elm of
     jnothing <- encodeTerm aliases nothing
     jjust <- encodeTerm aliases just
     let var = Name "m"
+
+
+    let jobj = case marg of
+                  Nothing -> Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var
+                  Just jarg -> Right $ javaExpressionToJavaPrimary jarg
     let jhead = javaMethodInvocationToJavaExpression $ methodInvocation
-          (Just $ Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var)
+          (Just jobj)
           (Java.Identifier "map") [jjust]
     let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
           (Just $ Right $ javaExpressionToJavaPrimary jhead)
           (Java.Identifier "orElse") [jnothing]
     castType <- encodeType aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
-    return $ javaCastExpressionToJavaExpression $ javaCastExpression aliases castType $
-      javaExpressionToJavaUnaryExpression $ javaLambda var jbody
+    return $ case marg of
+      Nothing -> javaCastExpressionToJavaExpression $ javaCastExpression aliases castType $
+                       javaExpressionToJavaUnaryExpression $ javaLambda var jbody
+      Just _ -> jbody
   EliminationRecord (Projection _ fname) -> do
     jdomr <- encodeType aliases dom >>= javaTypeToJavaReferenceType
     jexp <- case marg of
