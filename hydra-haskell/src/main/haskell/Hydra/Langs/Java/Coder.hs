@@ -420,7 +420,6 @@ encodeElimination aliases marg dom cod elm = case elm of
     jjust <- encodeTerm aliases just
     let var = Name "m"
 
-
     let jobj = case marg of
                   Nothing -> Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var
                   Just jarg -> Right $ javaExpressionToJavaPrimary jarg
@@ -736,6 +735,10 @@ maybeLet aliases term cons = helper [] term
           maybeLet aliases env $ \tm stmts' -> cons (reannotate anns tm) (stmts ++ stmts')
         where
           toDeclStatement name = do
+            if S.member name recursiveVars
+              then warn ("recursive variable: " ++ show name) $ pure ()
+--               else warn ("var: " ++ show name) $ pure ()
+              else pure ()
             let value = Y.fromJust $ M.lookup name bindings
             typ <- requireAnnotatedType value
             jtype <- encodeType aliases typ
@@ -745,10 +748,19 @@ maybeLet aliases term cons = helper [] term
           bindingVars = S.fromList $ M.keys bindings
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
             where
-              ifRec names = if L.length names > 1 then names else []
-          sorted = topologicalSortComponents (toDeps <$> M.toList bindings)
+              ifRec names = case names of
+                [name] -> case M.lookup name allDeps of
+                  Nothing -> []
+                  Just deps -> if S.member name deps
+                    then [name]
+                    else []
+                _ -> names
+          allDeps = M.fromList (toDeps <$> M.toList bindings)
             where
-              toDeps (key, value) = (key, L.filter (\n -> S.member n bindingVars) $ S.toList $ freeVariablesInTerm value)
+              toDeps (key, value) = (key, S.filter (\n -> S.member n bindingVars) $ freeVariablesInTerm value)
+          sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
+            where
+              toDeps (key, deps) = (key, S.toList deps)
           sortedVars = L.concat sorted
       TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
         \tm stmts' -> cons (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
