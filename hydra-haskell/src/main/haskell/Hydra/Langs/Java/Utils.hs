@@ -74,7 +74,7 @@ javaBoolean :: Bool -> Java.Literal
 javaBoolean = Java.LiteralBoolean
 
 javaBooleanExpression :: Bool -> Java.Expression
-javaBooleanExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . javaBoolean
+javaBooleanExpression = javaPrimaryToJavaExpression . javaLiteralToJavaPrimary . javaBoolean
 
 javaBooleanType :: Java.Type
 javaBooleanType = javaPrimitiveTypeToJavaType Java.PrimitiveTypeBoolean
@@ -166,7 +166,7 @@ javaInt :: Integral a => a -> Java.Literal
 javaInt i = Java.LiteralInteger $ Java.IntegerLiteral $ fromIntegral i
 
 javaIntExpression :: Integer -> Java.Expression
-javaIntExpression = javaPrimaryToJavaExpression . javaLiteralToPrimary . javaInt
+javaIntExpression = javaPrimaryToJavaExpression . javaLiteralToJavaPrimary . javaInt
 
 javaIntType :: Java.Type
 javaIntType = javaPrimitiveTypeToJavaType $ Java.PrimitiveTypeNumeric $ Java.NumericTypeIntegral Java.IntegralTypeInt
@@ -188,10 +188,10 @@ javaLiteralToJavaExpression = javaRelationalExpressionToJavaExpression .
   javaLiteralToJavaMultiplicativeExpression
 
 javaLiteralToJavaMultiplicativeExpression = Java.MultiplicativeExpressionUnary . javaPrimaryToJavaUnaryExpression .
-  javaLiteralToPrimary
+  javaLiteralToJavaPrimary
 
-javaLiteralToPrimary :: Java.Literal -> Java.Primary
-javaLiteralToPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayLiteral
+javaLiteralToJavaPrimary :: Java.Literal -> Java.Primary
+javaLiteralToJavaPrimary = Java.PrimaryNoNewArray . Java.PrimaryNoNewArrayLiteral
 
 javaMemberField :: [Java.FieldModifier] -> Java.Type -> Java.VariableDeclarator -> Java.ClassBodyDeclaration
 javaMemberField mods jt var = Java.ClassBodyDeclarationClassMember $ Java.ClassMemberDeclarationField $

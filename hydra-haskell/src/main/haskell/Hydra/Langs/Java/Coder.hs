@@ -258,7 +258,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
                 Java.MultiplicativeExpression_Binary lhs rhs
               where
                 lhs = Java.MultiplicativeExpressionUnary $ javaPrimaryToJavaUnaryExpression $
-                  javaLiteralToPrimary $ javaInt i
+                  javaLiteralToJavaPrimary $ javaInt i
                 rhs = javaPostfixExpressionToJavaUnaryExpression $
                   javaMethodInvocationToJavaPostfixExpression $
                   methodInvocationStatic (javaIdentifier fname) (Java.Identifier hashCodeMethodName) []
@@ -419,13 +419,15 @@ encodeElimination aliases marg dom cod elm = case elm of
     jnothing <- encodeTerm aliases nothing
     jjust <- encodeTerm aliases just
     let var = Name "m"
-    let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
+    let jhead = javaMethodInvocationToJavaExpression $ methodInvocation
           (Just $ Left $ javaIdentifierToJavaExpressionName $ variableToJavaIdentifier var)
           (Java.Identifier "map") [jjust]
-    return $ javaLambda var jbody
-    where
-      unOpt typ = case stripType typ of
-        TypeOptional ot -> ot
+    let jbody = javaMethodInvocationToJavaExpression $ methodInvocation
+          (Just $ Right $ javaExpressionToJavaPrimary jhead)
+          (Java.Identifier "orElse") [jnothing]
+    castType <- encodeType aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
+    return $ javaCastExpressionToJavaExpression $ javaCastExpression aliases castType $
+      javaExpressionToJavaUnaryExpression $ javaLambda var jbody
   EliminationRecord (Projection _ fname) -> do
     jdomr <- encodeType aliases dom >>= javaTypeToJavaReferenceType
     jexp <- case marg of
