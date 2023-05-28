@@ -34,7 +34,7 @@ groupElement lname group = def lname (Types.var "ignored") $ encodeGroup group
         EvaluationStyleLazy -> _EvaluationStyle_lazy) Terms.unit,
       Field _TestCase_input $ sigmaEncodeTerm input,
       Field _TestCase_output $ sigmaEncodeTerm output]
-    def lname typ term = Element (fromQname testSuiteNs lname) (epsilonEncodeType typ) term
+    def lname typ term = Element (fromQname testSuiteNs lname) term
 
 allTests :: TestGroup Kv
 allTests = TestGroup "All tests" Nothing primTests []

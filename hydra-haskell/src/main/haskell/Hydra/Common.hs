@@ -108,9 +108,6 @@ namespaceOfEager = fst . toQnameEager
 placeholderName :: Name
 placeholderName = Name "Placeholder"
 
-placeholderSchema :: String -> Term a
-placeholderSchema label = TermLiteral $ LiteralString $ "placeholder: " ++ label
-
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = do
   anns <- graphAnnotations <$> getState

@@ -48,7 +48,6 @@ qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 typeElement :: Name -> Type Kv -> Element Kv
 typeElement name typ = Element {
     elementName = name,
-    elementSchema = placeholderSchema $ "type element: " ++ unName name,
     elementData = dataTerm}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
