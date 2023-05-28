@@ -86,7 +86,6 @@ hydraGraphModule = Module ns elements [hydraComputeModule] $
         doc "A graph element, having a name, data term (value), and schema term (type)" $
         lambda "a" $ record [
           "name">: core "Name",
-          "schema">: core "Term" @@ "a",
           "data">: core "Term" @@ "a"],
 
       def "Primitive" $

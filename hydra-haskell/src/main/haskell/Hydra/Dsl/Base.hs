@@ -23,9 +23,7 @@ import qualified Data.Set as S
 -- instance IsString (Datum String) where fromString = Datum . Terms.string
 
 el :: Definition a -> Element Kv
-el (Definition name (Datum term)) = Element name (epsilonEncodeType dummyType) term
-  where
-    dummyType = TypeRecord (RowType (Name "PreInferencePlaceholder") Nothing [])
+el (Definition name (Datum term)) = Element name term
 
 infixr 0 >:
 (>:) :: String -> Datum a -> Fld a

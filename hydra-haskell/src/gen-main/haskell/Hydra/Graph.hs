@@ -105,15 +105,12 @@ _Graph_schema = (Core.FieldName "schema")
 data Element a = 
   Element {
     elementName :: Core.Name,
-    elementSchema :: (Core.Term a),
     elementData :: (Core.Term a)}
   deriving (Eq, Ord, Read, Show)
 
 _Element = (Core.Name "hydra/graph.Element")
 
 _Element_name = (Core.FieldName "name")
-
-_Element_schema = (Core.FieldName "schema")
 
 _Element_data = (Core.FieldName "data")
 
