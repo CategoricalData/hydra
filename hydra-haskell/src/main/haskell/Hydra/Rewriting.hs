@@ -105,7 +105,7 @@ moduleDependencyNamespaces withEls withPrims withNoms mod = S.delete (moduleName
   where
     names = S.fromList (namespaceOfEager <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames False withEls withPrims withNoms t) S.empty $
-      (elementData <$> moduleElements mod) ++ (elementSchema <$> moduleElements mod)
+      (elementData <$> moduleElements mod)
 
 isFreeIn :: Name -> Term a -> Bool
 isFreeIn v term = not $ S.member v $ freeVariablesInTerm term
@@ -341,6 +341,7 @@ termDependencyNames withVars withEls withPrims withNoms = foldOverTerm Traversal
           FunctionElimination e -> case e of
             EliminationRecord (Projection name _) -> nominal name
             EliminationUnion (CaseStatement name _ _) -> nominal name
+            EliminationWrap name -> nominal name
             _ -> names
           _ -> names
         TermRecord (Record name _) -> nominal name
