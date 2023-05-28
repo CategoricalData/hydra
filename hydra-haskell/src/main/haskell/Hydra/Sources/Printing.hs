@@ -31,13 +31,13 @@ printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule
 describeFloatTypeDef :: Definition (FloatType -> String)
 describeFloatTypeDef = printingDefinition "describeFloatType" $
   doc "Display a floating-point type as a string" $
-  lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ " floating-point numbers"
+  lambda "t" $ (ref describePrecisionDef <.> ref floatTypePrecisionDef @@ var "t") ++ string " floating-point numbers"
 
 describeIntegerTypeDef :: Definition (IntegerType -> String)
 describeIntegerTypeDef = printingDefinition "describeIntegerType" $
   doc "Display an integer type as a string" $
   lambda "t" $ (ref describePrecisionDef <.> ref integerTypePrecisionDef @@ var "t")
-    ++ " integers"
+    ++ string " integers"
 
 describeLiteralTypeDef :: Definition (LiteralType -> String)
 describeLiteralTypeDef = printingDefinition "describeLiteralType" $
@@ -54,7 +54,7 @@ describePrecisionDef = printingDefinition "describePrecision" $
   doc "Display numeric precision as a string" $
   match _Precision Nothing [
     Case _Precision_arbitrary --> constant $ string "arbitrary-precision",
-    Case _Precision_bits      --> lambda "bits" $ showInt32 @@ var "bits" ++ "-bit"]
+    Case _Precision_bits      --> lambda "bits" $ showInt32 @@ var "bits" ++ string "-bit"]
 
 describeTypeDef :: Definition (Type a -> String)
 describeTypeDef = printingDefinition "describeType" $

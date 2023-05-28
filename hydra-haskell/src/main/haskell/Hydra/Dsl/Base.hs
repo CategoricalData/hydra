@@ -14,13 +14,13 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import Prelude hiding ((++))
-import Data.String(IsString(..))
+-- import Data.String(IsString(..))
 
 import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-instance IsString (Datum String) where fromString = Datum . Terms.string
+-- instance IsString (Datum String) where fromString = Datum . Terms.string
 
 el :: Definition a -> Element Kv
 el (Definition name (Datum term)) = Element name (epsilonEncodeType dummyType) term
@@ -87,8 +87,8 @@ function dom cod = typed (Types.function dom cod)
 functionN :: [Type Kv] -> Type Kv -> Datum a -> Datum a
 functionN doms cod = typed $ Types.functionN doms cod
 
-id :: Datum (a -> a)
-id = Datum Terms.id
+-- id :: Datum (a -> a)
+-- id = Datum Terms.id
 
 inject :: Name -> FieldName -> Datum a -> Datum b
 inject name fname (Datum term) = Datum $ Terms.inject name (Field fname term)
