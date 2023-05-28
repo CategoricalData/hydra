@@ -12,6 +12,12 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
+type PackageMap = M.Map Namespace Java.PackageName
+
+data Aliases = Aliases {
+  aliasesPackages :: PackageMap,
+  aliasesRecursiveVars :: S.Set Name }
+
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
 addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
   where
@@ -45,9 +51,10 @@ fieldNameToJavaVariableDeclarator (FieldName n) = javaVariableDeclarator (javaId
 fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ javaIdentifier n
 
-importAliasesForModule :: Module a -> M.Map Namespace Java.PackageName
-importAliasesForModule mod = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
+importAliasesForModule :: Module a -> Aliases
+importAliasesForModule mod = Aliases pkgs S.empty
   where
+    pkgs = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
     deps = moduleDependencyNamespaces True True True mod
     addName m name = M.insert name (moduleNamespaceToPackageName name) m
     moduleNamespaceToPackageName (Namespace n) = javaPackageName $ Strings.splitOn "/" n
@@ -79,8 +86,8 @@ javaBooleanExpression = javaPrimaryToJavaExpression . javaLiteralToJavaPrimary .
 javaBooleanType :: Java.Type
 javaBooleanType = javaPrimitiveTypeToJavaType Java.PrimitiveTypeBoolean
 
-javaCastExpression :: M.Map Namespace Java.PackageName -> Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression
-javaCastExpression aliases rt expr = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb expr
+javaCastExpression :: Java.ReferenceType -> Java.UnaryExpression -> Java.CastExpression
+javaCastExpression rt expr = Java.CastExpressionNotPlusMinus $ Java.CastExpression_NotPlusMinus rb expr
   where
     rb = Java.CastExpression_RefAndBounds rt []
 
@@ -88,7 +95,7 @@ javaCastExpressionToJavaExpression :: Java.CastExpression -> Java.Expression
 javaCastExpressionToJavaExpression = javaUnaryExpressionToJavaExpression . Java.UnaryExpressionOther .
   Java.UnaryExpressionNotPlusMinusCast
 
-javaClassDeclaration :: M.Map Namespace Java.PackageName -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
+javaClassDeclaration :: Aliases -> [Java.TypeParameter] -> Name -> [Java.ClassModifier]
    -> Maybe Name -> [Java.ClassBodyDeclarationWithComments] -> Java.ClassDeclaration
 javaClassDeclaration aliases tparams elName mods supname bodyDecls = Java.ClassDeclarationNormal $ Java.NormalClassDeclaration {
   Java.normalClassDeclarationModifiers = mods,
@@ -294,7 +301,7 @@ javaStringMultiplicativeExpression = javaLiteralToJavaMultiplicativeExpression .
 javaThis :: Java.Expression
 javaThis = javaPrimaryToJavaExpression $ Java.PrimaryNoNewArray Java.PrimaryNoNewArrayThis
 
-javaTypeFromTypeName :: M.Map Namespace Java.PackageName -> Name -> Java.Type
+javaTypeFromTypeName :: Aliases -> Name -> Java.Type
 javaTypeFromTypeName aliases elName = javaTypeVariableToType $ Java.TypeVariable [] $
   nameToJavaTypeIdentifier aliases False elName
 
@@ -358,7 +365,7 @@ javaVariableDeclaratorId id = Java.VariableDeclaratorId id Nothing
 javaVariableName :: Name -> Java.Identifier
 javaVariableName = javaIdentifier . localNameOfEager
 
-makeConstructor :: M.Map Namespace Java.PackageName -> Name -> Bool -> [Java.FormalParameter]
+makeConstructor :: Aliases -> Name -> Bool -> [Java.FormalParameter]
   -> [Java.BlockStatement] -> Java.ClassBodyDeclaration
 makeConstructor aliases elName private params stmts = Java.ClassBodyDeclarationConstructorDeclaration $
     Java.ConstructorDeclaration mods cons Nothing body
@@ -394,36 +401,36 @@ methodInvocationStatic self methodName = methodInvocation (Just $ Left name) met
   where
     name = Java.ExpressionName Nothing self
 
-nameToJavaClassType :: M.Map Namespace Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType
+nameToJavaClassType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ClassType
 nameToJavaClassType aliases qualify args name mlocal = Java.ClassType [] pkg id args
   where
     (id, pkg) = nameToQualifiedJavaName aliases qualify name mlocal
 
-nameToQualifiedJavaName :: M.Map Namespace Java.PackageName -> Bool -> Name -> Maybe String
+nameToQualifiedJavaName :: Aliases -> Bool -> Name -> Maybe String
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
   where
     (gname, local) = toQnameEager name
     pkg = if qualify
-      then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname aliases
+      then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname $ aliasesPackages aliases
       else none
     none = Java.ClassTypeQualifierNone
     jid = javaTypeIdentifier $ case mlocal of
       Nothing -> sanitizeJavaName local
       Just l -> sanitizeJavaName local ++ "." ++ sanitizeJavaName l
 
-nameToJavaName :: M.Map Namespace Java.PackageName -> Name -> Java.Identifier
-nameToJavaName aliases name = Java.Identifier $ case M.lookup gname aliases of
+nameToJavaName :: Aliases -> Name -> Java.Identifier
+nameToJavaName aliases name = Java.Identifier $ case M.lookup gname (aliasesPackages aliases) of
     Nothing -> local
     Just (Java.PackageName parts) -> L.intercalate "." $ (Java.unIdentifier <$> parts) ++ [sanitizeJavaName local]
   where
     (gname, local) = toQnameEager name
 
-nameToJavaReferenceType :: M.Map Namespace Java.PackageName -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType
+nameToJavaReferenceType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify args name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
   nameToJavaClassType aliases qualify args name mlocal
 
-nameToJavaTypeIdentifier :: M.Map Namespace Java.PackageName -> Bool -> Name -> Java.TypeIdentifier
+nameToJavaTypeIdentifier :: Aliases -> Bool -> Name -> Java.TypeIdentifier
 nameToJavaTypeIdentifier aliases qualify name = fst $ nameToQualifiedJavaName aliases qualify name Nothing
 
 overrideAnnotation :: Java.Annotation
@@ -491,7 +498,7 @@ typeParameterToReferenceType = javaTypeVariable . unTypeParameter
 unTypeParameter :: Java.TypeParameter -> String
 unTypeParameter (Java.TypeParameter [] (Java.TypeIdentifier (Java.Identifier v)) Nothing) = v
 
-variableDeclarationStatement :: M.Map Namespace Java.PackageName -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement
+variableDeclarationStatement :: Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement
 variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVariableDeclaration $
     Java.LocalVariableDeclarationStatement $ Java.LocalVariableDeclaration [] (Java.LocalVariableTypeType $ Java.UnannType jtype) [vdec]
   where
