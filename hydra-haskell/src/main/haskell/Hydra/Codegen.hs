@@ -76,23 +76,11 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
-assignSchemas :: (Ord a, Show a) => Module a -> GraphFlow a (Module a)
-assignSchemas mod = do
-    g <- getState
-    els <- CM.mapM (annotate g) $ moduleElements mod
-    return $ mod {moduleElements = els}
-  where
-    annotate g el = do
-      typ <- findType g (elementData el)
-      case typ of
-        Nothing -> return el
-        Just typ -> return el {elementSchema = epsilonEncodeType typ}
-
 findType :: Graph a -> Term a -> GraphFlow a (Maybe (Type a))
 findType cx term = annotationClassTermType (graphAnnotations cx) term
 
 generateSources :: (Module Kv -> GraphFlow Kv (M.Map FilePath String)) -> FilePath -> [Module Kv] -> IO ()
-generateSources printModule basePath mods0 = do
+generateSources printModule basePath mods = do
     mfiles <- runFlow hydraKernel generateFiles
     case mfiles of
       Nothing -> fail "Transformation failed"
@@ -100,12 +88,10 @@ generateSources printModule basePath mods0 = do
   where
     generateFiles = do
       withTrace "generate files" $ do
-        mods1 <- CM.mapM assignSchemas mods0
-        withState (modulesToGraph mods1) $ do
+        withState (modulesToGraph mods) $ do
           g' <- inferGraphTypes
           withState g' $ do
-              let mods2 = refreshModule (graphElements g') <$> mods1
-              maps <- CM.mapM forModule mods2
+              maps <- CM.mapM forModule $ refreshModule (graphElements g') <$> mods
               return $ L.concat (M.toList <$> maps)
             where
               refreshModule els mod = mod {
