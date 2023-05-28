@@ -23,8 +23,6 @@ import qualified Data.Maybe as Y
 import Data.String (String)
 
 
-type Aliases = M.Map Namespace Java.PackageName
-
 printModule :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map FilePath String)
 printModule mod = do
     withTrace "encode in Java" $ do
@@ -115,16 +113,16 @@ constructModule mod coders pairs = do
 
     -- Lambdas cannot (in general) be turned into top-level constants, as there is no way of declaring type parameters for constants
     termToMethod coders el typ term = case stripType typ of
-      TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \tm stmts -> case stripTerm tm of
+      TypeFunction (FunctionType dom cod) -> maybeLet aliases term $ \aliases' tm stmts -> case stripTerm tm of
         TermFunction (FunctionLambda (Lambda v body)) -> do
-          jdom <- encodeType aliases dom
-          jcod <- encodeType aliases cod
+          jdom <- encodeType aliases' dom
+          jcod <- encodeType aliases' cod
           let mods = [Java.InterfaceMethodModifierStatic]
           let anns = []
           let mname = sanitizeJavaName $ decapitalize $ localNameOfEager $ elementName el
           let param = javaTypeToJavaFormalParameter jdom (FieldName $ unName v)
           let result = javaTypeToJavaResult jcod
-          jbody <- encodeTerm aliases body
+          jbody <- encodeTerm aliases' body
           -- TODO: use coders
 --           jbody <- coderEncode (Y.fromJust $ M.lookup typ coders) body
           let returnSt = Java.BlockStatementStatement $ javaReturnStatement $ Just jbody
@@ -221,7 +219,7 @@ declarationForRecordType isInner aliases tparams elName fields = do
           where
             jtype = javaTypeFromTypeName aliases elName
             id = javaIdentifier tmpName
-            rhs = javaCastExpressionToJavaExpression $ javaCastExpression aliases rt var
+            rhs = javaCastExpressionToJavaExpression $ javaCastExpression rt var
             var = javaIdentifierToJavaUnaryExpression $ Java.Identifier $ sanitizeJavaName otherInstanceName
             rt = nameToJavaReferenceType aliases False [] elName Nothing
 
@@ -431,7 +429,7 @@ encodeElimination aliases marg dom cod elm = case elm of
           (Java.Identifier "orElse") [jnothing]
     castType <- encodeType aliases (TypeFunction $ FunctionType dom cod) >>= javaTypeToJavaReferenceType
     return $ case marg of
-      Nothing -> javaCastExpressionToJavaExpression $ javaCastExpression aliases castType $
+      Nothing -> javaCastExpressionToJavaExpression $ javaCastExpression castType $
                        javaExpressionToJavaUnaryExpression $ javaLambda var jbody
       Just _ -> jbody
   EliminationRecord (Projection _ fname) -> do
@@ -630,7 +628,13 @@ encodeTerm aliases term0 = encodeInternal [] term0
               return [ex]
           return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
 
-        TermVariable (Name v) -> pure $ javaIdentifierToJavaExpression $ javaIdentifier v
+        TermVariable name -> pure $ if isRec
+            then javaMethodInvocationToJavaExpression $
+              methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier "get") []
+            else javaIdentifierToJavaExpression jid
+          where
+            jid = javaIdentifier $ unName name
+            isRec = S.member name (aliasesRecursiveVars aliases)
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
@@ -725,15 +729,16 @@ javaTypeParametersForType typ = toParam <$> vars
     toParam (Name v) = Java.TypeParameter [] (javaTypeIdentifier $ capitalize v) Nothing
     vars = L.filter isLambdaBoundVariable $ S.toList $ freeVariablesInType typ
 
-maybeLet :: (Ord a, Read a, Show a) => Aliases -> Term a -> (Term a -> [Java.BlockStatement] -> GraphFlow a x) -> GraphFlow a x
+maybeLet :: (Ord a, Read a, Show a) => Aliases -> Term a -> (Aliases -> Term a -> [Java.BlockStatement] -> GraphFlow a x) -> GraphFlow a x
 maybeLet aliases term cons = helper [] term
   where
     helper anns term = case term of
       TermAnnotated (Annotated term' ann) -> helper (ann:anns) term'
       TermLet (Let bindings env) -> do
           stmts <- L.concat <$> CM.mapM toDeclStatements sorted
-          maybeLet aliases env $ \tm stmts' -> cons (reannotate anns tm) (stmts ++ stmts')
+          maybeLet aliasesWithRecursive env $ \aliases' tm stmts' -> cons aliases' (reannotate anns tm) (stmts ++ stmts')
         where
+          aliasesWithRecursive = aliases { aliasesRecursiveVars = recursiveVars }
           toDeclStatements names = do
             inits <- Y.catMaybes <$> CM.mapM toDeclInit names
             impls <- CM.mapM toDeclStatement names
@@ -744,7 +749,7 @@ maybeLet aliases term cons = helper [] term
               -- TODO: repeated
               let value = Y.fromJust $ M.lookup name bindings
               typ <- requireAnnotatedType value
-              jtype <- encodeType aliases typ
+              jtype <- encodeType aliasesWithRecursive typ
               let id = variableToJavaIdentifier name
 
               let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
@@ -756,21 +761,21 @@ maybeLet aliases term cons = helper [] term
 
               rt <- javaTypeToJavaReferenceType jtype
               let artype = javaRefType [rt] (Just pkg) "AtomicReference"
-              return $ Just $ variableDeclarationStatement aliases artype id body
+              return $ Just $ variableDeclarationStatement aliasesWithRecursive artype id body
             else pure Nothing
 
           toDeclStatement name = do
             -- TODO: repeated
             let value = Y.fromJust $ M.lookup name bindings
             typ <- requireAnnotatedType value
-            jtype <- encodeType aliases typ
+            jtype <- encodeType aliasesWithRecursive typ
             let id = variableToJavaIdentifier name
 
-            rhs <- encodeTerm aliases value
+            rhs <- encodeTerm aliasesWithRecursive value
             return $ if S.member name recursiveVars
               then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
                 methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier "set") [rhs]
-              else variableDeclarationStatement aliases jtype id rhs
+              else variableDeclarationStatement aliasesWithRecursive jtype id rhs
           bindingVars = S.fromList $ M.keys bindings
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
             where
@@ -788,8 +793,8 @@ maybeLet aliases term cons = helper [] term
             where
               toDeps (key, deps) = (key, S.toList deps)
       TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
-        \tm stmts' -> cons (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
-      _ -> cons (reannotate anns term) []
+        \aliases' tm stmts' -> cons aliases' (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
+      _ -> cons aliases (reannotate anns term) []
 
 reannotate anns term = case anns of
   [] -> term

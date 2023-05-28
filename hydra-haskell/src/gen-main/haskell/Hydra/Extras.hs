@@ -5,7 +5,6 @@ module Hydra.Extras where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Strings as Strings
@@ -39,10 +38,6 @@ termArity x = case x of
   Core.TermApplication v -> ((\x -> Math.sub x 1) (termArity (Core.applicationFunction v)))
   Core.TermFunction v -> (functionArity v)
   _ -> 0
-
--- | TODO: temporary. Just a token polymorphic function for testing
-testLists :: ([[t2765]] -> Int)
-testLists els = (Lists.length (Lists.concat els))
 
 typeArity :: (Core.Type a -> Int)
 typeArity x = case x of

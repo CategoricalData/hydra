@@ -340,6 +340,12 @@ public interface Basics {
     new hydra.mantle.LiteralVariant.Integer_(),
     new hydra.mantle.LiteralVariant.String_());
   
+  static <M, X> java.util.function.Function<X, X> skipAnnotations(java.util.function.Function<X, java.util.Optional<hydra.core.Annotated<X, M>>> getAnn) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<X, X>> skip = new java.util.concurrent.atomic.AtomicReference<>();
+    skip.set(t1 -> ((((getAnn)).apply((t1))).map(ann -> (skip.get()).apply(((ann)).subject))).orElse((t1)));
+    return t -> (skip.get()).apply((t));
+  }
+  
   static <A> java.util.function.Function<hydra.core.Term<A>, A> termMeta(hydra.graph.Graph<A> x) {
     return (((x)).annotations).termAnnotation;
   }
