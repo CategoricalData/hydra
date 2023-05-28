@@ -135,7 +135,9 @@ epsilonDecodeType dat = case dat of
     (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString)] dat
 
 elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
-elementAsTypedTerm el = TypedTerm <$> epsilonDecodeType (elementSchema el) <*> pure (elementData el)
+elementAsTypedTerm el = do
+  typ <- requireTypeAnnotation (elementData el)
+  return $ TypedTerm typ (elementData el)
 
 fieldTypes :: Show a => Type a -> GraphFlow a (M.Map FieldName (Type a))
 fieldTypes t = case stripType t of

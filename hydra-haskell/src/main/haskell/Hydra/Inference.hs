@@ -47,11 +47,9 @@ annotateElements g sortedEls = withInferenceContext $ do
     rewriteElement subst el = do
         let itm = rewriteDataType (substituteInType subst) $ elementData el
         term <- rewriteTermMetaM annotType itm
-        typ <- withGraphContext $ requireTypeAnnotation term
         return el {
           elementData = term,
-          -- TODO: redundant decoding and encoding of type annotation. Element schemas will go away.
-          elementSchema = epsilonEncodeType typ}
+          elementSchema = placeholderSchema ("rewriting " ++ unName (elementName el))}
       where
         annotType (ann, typ, _) = do
           let anns = graphAnnotations g
@@ -80,7 +78,7 @@ inferElementType el = withTrace ("infer type of " ++ unName (elementName el)) $ 
   iterm <- infer $ elementData el
   return $ el {
     elementData = iterm,
-    elementSchema = Terms.string "placeholder type"}
+    elementSchema = placeholderSchema $ "infer " ++ (unName $ elementName el)}
 
 inferGraphTypes :: (Ord a, Show a) => GraphFlow a (Graph a)
 inferGraphTypes = getState >>= annotateGraph
