@@ -212,6 +212,10 @@ javaMethodHeader tparams methodName params result = Java.MethodHeader tparams re
 javaMethodInvocationToJavaExpression :: Java.MethodInvocation -> Java.Expression
 javaMethodInvocationToJavaExpression = javaPrimaryToJavaExpression . javaMethodInvocationToJavaPrimary
 
+javaMethodInvocationToJavaStatement :: Java.MethodInvocation -> Java.Statement
+javaMethodInvocationToJavaStatement = Java.StatementWithoutTrailing . Java.StatementWithoutTrailingSubstatementExpression .
+  Java.ExpressionStatement . Java.StatementExpressionMethodInvocation
+
 javaMethodInvocationToJavaPostfixExpression :: Java.MethodInvocation -> Java.PostfixExpression
 javaMethodInvocationToJavaPostfixExpression = Java.PostfixExpressionPrimary . Java.PrimaryNoNewArray .
   Java.PrimaryNoNewArrayMethodInvocation

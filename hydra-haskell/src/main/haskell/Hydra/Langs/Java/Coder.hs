@@ -731,20 +731,46 @@ maybeLet aliases term cons = helper [] term
     helper anns term = case term of
       TermAnnotated (Annotated term' ann) -> helper (ann:anns) term'
       TermLet (Let bindings env) -> do
-          stmts <- CM.mapM toDeclStatement sortedVars
+          stmts <- L.concat <$> CM.mapM toDeclStatements sorted
           maybeLet aliases env $ \tm stmts' -> cons (reannotate anns tm) (stmts ++ stmts')
         where
+          toDeclStatements names = do
+            inits <- Y.catMaybes <$> CM.mapM toDeclInit names
+            impls <- CM.mapM toDeclStatement names
+            return $ inits ++ impls
+
+          toDeclInit name = if S.member name recursiveVars
+            then do
+              -- TODO: repeated
+              let value = Y.fromJust $ M.lookup name bindings
+              typ <- requireAnnotatedType value
+              jtype <- encodeType aliases typ
+              let id = variableToJavaIdentifier name
+
+              let pkg = javaPackageName ["java", "util", "concurrent", "atomic"]
+              let arid = Java.Identifier "java.util.concurrent.atomic.AtomicReference" -- TODO
+              let targs = Java.TypeArgumentsOrDiamondDiamond
+              let aid = Java.AnnotatedIdentifier [] arid
+              let ci = Java.ClassOrInterfaceTypeToInstantiate [aid] (Just targs)
+              let body = javaConstructorCall ci [] Nothing
+
+              rt <- javaTypeToJavaReferenceType jtype
+              let artype = javaRefType [rt] (Just pkg) "AtomicReference"
+              return $ Just $ variableDeclarationStatement aliases artype id body
+            else pure Nothing
+
           toDeclStatement name = do
-            if S.member name recursiveVars
-              then warn ("recursive variable: " ++ show name) $ pure ()
---               else warn ("var: " ++ show name) $ pure ()
-              else pure ()
+            -- TODO: repeated
             let value = Y.fromJust $ M.lookup name bindings
             typ <- requireAnnotatedType value
             jtype <- encodeType aliases typ
             let id = variableToJavaIdentifier name
+
             rhs <- encodeTerm aliases value
-            return $ variableDeclarationStatement aliases jtype id rhs
+            return $ if S.member name recursiveVars
+              then Java.BlockStatementStatement $ javaMethodInvocationToJavaStatement $
+                methodInvocation (Just $ Left $ Java.ExpressionName Nothing id) (Java.Identifier "set") [rhs]
+              else variableDeclarationStatement aliases jtype id rhs
           bindingVars = S.fromList $ M.keys bindings
           recursiveVars = S.fromList $ L.concat (ifRec <$> sorted)
             where
@@ -761,7 +787,6 @@ maybeLet aliases term cons = helper [] term
           sorted = topologicalSortComponents (toDeps <$> M.toList allDeps)
             where
               toDeps (key, deps) = (key, S.toList deps)
-          sortedVars = L.concat sorted
       TermFunction (FunctionLambda (Lambda v body)) -> maybeLet aliases body $
         \tm stmts' -> cons (reannotate anns (TermFunction (FunctionLambda (Lambda v tm)))) stmts'
       _ -> cons (reannotate anns term) []
