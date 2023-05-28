@@ -17,14 +17,18 @@ import qualified Data.Maybe as Y
 
 shaclCoder :: (Eq a, Show a) => Module a -> GraphFlow a (Shacl.ShapesGraph, Graph a -> GraphFlow a Rdf.Graph)
 shaclCoder mod = do
-    cx <- getState
-    let typeEls = L.filter (isEncodedType cx . elementSchema) $ moduleElements mod
+    g <- getState
+    -- Note: untested since deprecation of element schemas
+    typeEls <- CM.filterM (isType g) $ moduleElements mod
     shapes <- CM.mapM toShape typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
     let termFlow = \g -> do
           fail "not implemented"
     return (sg, termFlow)
   where
+    isType g el = do
+      typ <- requireTypeAnnotation $ elementData el
+      return $ stripType typ == TypeVariable _Type
     toShape el = do
       typ <- epsilonDecodeType $ elementData el
       common <- encodeType typ

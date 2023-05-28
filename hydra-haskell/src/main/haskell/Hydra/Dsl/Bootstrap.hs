@@ -45,16 +45,10 @@ nsref ns = Types.wrap . qualify ns . Name
 qualify :: Namespace -> Name -> Name
 qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-termElement :: Name -> Type a -> Term a -> Element a
-termElement name typ term = Element {
-  elementName = name,
-  elementSchema = epsilonEncodeType typ,
-  elementData = term}
-
 typeElement :: Name -> Type Kv -> Element Kv
 typeElement name typ = Element {
     elementName = name,
-    elementSchema = schemaTerm,
+    elementSchema = placeholderSchema $ "type element: " ++ unName name,
     elementData = dataTerm}
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core

@@ -27,7 +27,6 @@ owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
   where
     ns = Namespace "hydra/langs/owl/syntax"
     def = datatype ns
-    inst = dataterm ns
 
     owl = nsref ns
     rdf = nsref $ moduleNamespace rdfSyntaxModule
@@ -44,9 +43,9 @@ owlSyntaxModule = Module ns elements [rdfSyntaxModule, xmlSchemaModule] $
 
     elements = generalDefinitions ++ owl2Definitions -- ++ instances
 
-    instances = [
-      inst "Nothing" (owl "Class") Terms.unit,
-      inst "Thing" (owl "Class") Terms.unit]
+--    instances = [
+--      inst "Nothing" (owl "Class") Terms.unit,
+--      inst "Thing" (owl "Class") Terms.unit]
 
     generalDefinitions = [
 -- nonNegativeInteger := a nonempty finite sequence of digits between 0 and 9
