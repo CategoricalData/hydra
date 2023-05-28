@@ -87,8 +87,8 @@ float = literal . Literals.float
 fold :: Term a -> Term a
 fold = TermFunction . FunctionElimination . EliminationList
 
-id :: Term a
-id = lambda "x" $ var "x"
+-- id :: Term a
+-- id = lambda "x" $ var "x"
 
 inject :: Name -> Field a -> Term a
 inject tname = TermUnion . Injection tname
