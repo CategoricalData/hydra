@@ -47,7 +47,7 @@ constructModule mod coders pairs = do
         namespaces = L.nub $ (namespaceOfEager . elementName) <$> els
         toPair ns = (ns, if ns == moduleNamespace mod then "" else (sanitizeWithUnderscores S.empty (unNamespace ns)) ++ "_")
     toTypeDef prefixes el = do
-      typ <- epsilonDecodeType (elementSchema el)
+      typ <- requireTypeAnnotation (elementData el)
       if isType typ
         then epsilonDecodeType (elementData el) >>= encodeNamedType prefixes el
         else fail $ "mapping of non-type elements to GraphQL is not yet supported: " ++ unName (elementName el)

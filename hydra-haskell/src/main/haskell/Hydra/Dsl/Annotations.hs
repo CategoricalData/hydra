@@ -47,9 +47,6 @@ doc s = setTypeDescription hydraCore (Just s)
 dataDoc :: String -> Term Kv -> Term Kv
 dataDoc s = setTermDescription hydraCore (Just s)
 
-dataterm :: Namespace -> String -> Type Kv -> Term Kv -> Element Kv
-dataterm gname lname = termElement (qualify gname (Name lname))
-
 nonemptyList :: Type Kv -> Type Kv
 nonemptyList = boundedList (Just 1) Nothing
 

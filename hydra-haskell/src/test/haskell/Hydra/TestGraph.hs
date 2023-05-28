@@ -34,13 +34,13 @@ latLonPolyType = TypeLambda $ LambdaType (Name "a") $
 testElementArthur :: Element Kv
 testElementArthur = Element {
   elementName = Name "ArthurDent",
-  elementSchema = TermElement $ Name "Person",
+  elementSchema = placeholderSchema "test Person",
   elementData = testDataArthur}
 
 testElementFirstName :: Element Kv
 testElementFirstName = Element {
   elementName = Name "firstName",
-  elementSchema = epsilonEncodeType (Types.function (Types.wrap testTypePersonName) Types.string),
+  elementSchema = placeholderSchema "test first name",
   elementData = project testTypePersonName $ FieldName "firstName"}
 
 testGraph :: Graph Kv

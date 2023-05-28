@@ -23,8 +23,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
     core = nsref $ moduleNamespace hydraCoreModule
     v3 = nsref $ moduleNamespace tinkerpopPropertyGraphModule
     def = datatype ns
-    defterm = dataterm ns
-    defRecord tname local fields = dataterm ns local (TypeWrap tname) $ Terms.record tname fields
     toField (k, v) = Field k $ Terms.string v
 
     elements = [
@@ -47,17 +45,6 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
           "inEdge">: string,
           "inEdgeLabel">: string,
           "ignore">: string],
-
---       defRecord _AnnotationSchema "defaultTinkerpopAnnotations" $ toField <$> [
---         (_AnnotationSchema_vertexId, "id"),
---         (_AnnotationSchema_edgeId, "id"),
---         (_AnnotationSchema_outVertex, "out"),
---         (_AnnotationSchema_inVertex, "in"),
---         (_AnnotationSchema_outVertex, "outId"),
---         (_AnnotationSchema_inVertex, "inId"),
---         (_AnnotationSchema_vertexLabel, "label"),
---         (_AnnotationSchema_edgeLabel, "label"),
---         (_AnnotationSchema_ignore, "ignore")],
 
       def "EdgeSpec" $
         doc "A mapping specification producing edges of a specified label." $
