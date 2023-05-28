@@ -8,13 +8,10 @@ public class Element<A> {
   
   public final hydra.core.Name name;
   
-  public final hydra.core.Term<A> schema;
-  
   public final hydra.core.Term<A> data;
   
-  public Element (hydra.core.Name name, hydra.core.Term<A> schema, hydra.core.Term<A> data) {
+  public Element (hydra.core.Name name, hydra.core.Term<A> data) {
     this.name = name;
-    this.schema = schema;
     this.data = data;
   }
   
@@ -24,23 +21,19 @@ public class Element<A> {
       return false;
     }
     Element o = (Element) (other);
-    return name.equals(o.name) && schema.equals(o.schema) && data.equals(o.data);
+    return name.equals(o.name) && data.equals(o.data);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * schema.hashCode() + 5 * data.hashCode();
+    return 2 * name.hashCode() + 3 * data.hashCode();
   }
   
   public Element withName(hydra.core.Name name) {
-    return new Element(name, schema, data);
-  }
-  
-  public Element withSchema(hydra.core.Term<A> schema) {
-    return new Element(name, schema, data);
+    return new Element(name, data);
   }
   
   public Element withData(hydra.core.Term<A> data) {
-    return new Element(name, schema, data);
+    return new Element(name, data);
   }
 }
