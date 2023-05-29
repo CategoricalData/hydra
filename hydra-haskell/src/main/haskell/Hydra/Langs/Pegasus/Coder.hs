@@ -162,7 +162,7 @@ encodeType aliases typ = case typ of
 
 importAliasesForModule mod = M.fromList (toPair <$> deps)
   where
-    deps = S.toList $ moduleDependencyNamespaces True True True mod
+    deps = S.toList $ moduleDependencyNamespaces False True True True mod
     toPair ns = (ns, slashesToDots $ unNamespace ns)
 
 noAnnotations :: PDL.Annotations

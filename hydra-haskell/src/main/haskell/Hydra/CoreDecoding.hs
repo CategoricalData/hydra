@@ -125,7 +125,7 @@ epsilonDecodeType dat = case dat of
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM epsilonDecodeType types)),
     (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
     (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString),
-    (_Type_wrap, fmap (TypeWrap . Name) . epsilonDecodeString)] dat -- TODO
+    (_Type_wrap, fmap TypeWrap . Expect.variable)] dat
 
 elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
 elementAsTypedTerm el = do

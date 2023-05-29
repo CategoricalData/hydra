@@ -12,7 +12,7 @@ import qualified Data.Set as S
 
 data Namespaces = Namespaces {
   namespacesFocus :: (Namespace, H.ModuleName),
-  namespacesMapping :: M.Map Namespace H.ModuleName}
+  namespacesMapping :: M.Map Namespace H.ModuleName} deriving Show
 
 applicationPattern name args = H.PatternApplication $ H.Pattern_Application name args
 
@@ -50,7 +50,7 @@ namespacesForModule mod = Namespaces focusPair mapping
   where
     ns = moduleNamespace mod
     focusPair = toPair ns
-    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (moduleDependencyNamespaces True True True mod))
+    mapping = fst $ L.foldl addPair (M.empty, S.empty) (toPair <$> S.toList (moduleDependencyNamespaces True True True True mod))
     toModuleName (Namespace n) = H.ModuleName $ capitalize $ L.last $ Strings.splitOn "/" n
     toPair name = (name, toModuleName name)
     addPair (m, s) (name, alias@(H.ModuleName aliasStr)) = if S.member alias s
