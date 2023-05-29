@@ -9,7 +9,6 @@ import Data.Set
 
 -- | The identifier of an elimination constructor
 data EliminationVariant = 
-  EliminationVariantElement  |
   EliminationVariantList  |
   EliminationVariantOptional  |
   EliminationVariantRecord  |

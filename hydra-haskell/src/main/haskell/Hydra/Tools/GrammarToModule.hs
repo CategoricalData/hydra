@@ -22,7 +22,7 @@ grammarToModule ns (G.Grammar prods) desc = Module ns elements [] desc
         prodPairs = (\(G.Production (G.Symbol s) pat) -> (s, pat)) <$> prods
         pairToElement (lname, typ) = Bootstrap.typeElement (toName lname) typ
 
-    toName = fromQname ns
+    toName local = unqualifyName $ QualifiedName (Just ns) local
 
     findNames pats = L.reverse $ fst (L.foldl nextName ([], M.empty) pats)
       where

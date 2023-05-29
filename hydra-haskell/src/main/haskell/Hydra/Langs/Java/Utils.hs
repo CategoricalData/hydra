@@ -410,7 +410,7 @@ nameToQualifiedJavaName :: Aliases -> Bool -> Name -> Maybe String
   -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
   where
-    (gname, local) = toQnameEager name
+    QualifiedName (Just gname) local = qualifyNameEager name
     pkg = if qualify
       then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname $ aliasesPackages aliases
       else none
@@ -424,7 +424,7 @@ nameToJavaName aliases name = Java.Identifier $ case M.lookup gname (aliasesPack
     Nothing -> local
     Just (Java.PackageName parts) -> L.intercalate "." $ (Java.unIdentifier <$> parts) ++ [sanitizeJavaName local]
   where
-    (gname, local) = toQnameEager name
+    QualifiedName (Just gname) local = qualifyNameEager name
 
 nameToJavaReferenceType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify args name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
@@ -510,9 +510,9 @@ variableToJavaIdentifier :: Name -> Java.Identifier
 variableToJavaIdentifier (Name var) = Java.Identifier var -- TODO: escape
 
 variantClassName :: Bool -> Name -> FieldName -> Name
-variantClassName qualify elName (FieldName fname) = fromQname gname local1
+variantClassName qualify elName (FieldName fname) = unqualifyName (QualifiedName ns local1)
   where
-    (gname, local) = toQnameEager elName
+    QualifiedName ns local = qualifyNameEager elName
     flocal = capitalize fname
     local1 = if qualify
       then local ++ "." ++ flocal

@@ -102,7 +102,7 @@ freeVariablesInType = foldOverType TraversalOrderPost fld S.empty
 moduleDependencyNamespaces :: Bool -> Bool -> Bool -> Bool -> Module a -> S.Set Namespace
 moduleDependencyNamespaces withVars withEls withPrims withNoms mod = S.delete (moduleNamespace mod) names
   where
-    names = S.fromList (namespaceOfEager <$> S.toList elNames)
+    names = S.fromList $ Y.catMaybes (namespaceOfEager <$> S.toList elNames)
     elNames = L.foldl (\s t -> S.union s $ termDependencyNames withVars withEls withPrims withNoms t) S.empty $
       (elementData <$> moduleElements mod)
 

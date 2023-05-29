@@ -56,9 +56,9 @@ noComment :: Java.ClassBodyDeclaration -> Java.ClassBodyDeclarationWithComments
 noComment decl = Java.ClassBodyDeclarationWithComments decl Nothing
 
 elementNameToFilePath :: Name -> FilePath
-elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ fromQname ns (sanitizeJavaName local)
+elementNameToFilePath name = nameToFilePath False (FileExtension "java") $ unqualifyName $ QualifiedName ns (sanitizeJavaName local)
   where
-    (ns, local) = toQnameEager name
+    QualifiedName ns local = qualifyNameEager name
 
 moduleToJavaCompilationUnit :: (Ord a, Read a, Show a) => Module a -> GraphFlow a (M.Map Name Java.CompilationUnit)
 moduleToJavaCompilationUnit mod = transformModule javaLanguage encode constructModule mod
@@ -138,7 +138,7 @@ constructElementsInterface mod members = (elName, cu)
     pkg = javaPackageDeclaration $ moduleNamespace mod
     mods = [Java.InterfaceModifierPublic]
     className = elementsClassName $ moduleNamespace mod
-    elName = fromQname (moduleNamespace mod) className
+    elName = unqualifyName $ QualifiedName (Just $ moduleNamespace mod) className
     body = Java.InterfaceBody members
     itf = Java.TypeDeclarationInterface $ Java.InterfaceDeclarationNormalInterface $
       Java.NormalInterfaceDeclaration mods (javaTypeIdentifier className) [] [] body
@@ -355,10 +355,10 @@ declarationForUnionType aliases tparams elName fields = do
 
 elementJavaIdentifier :: Bool -> Aliases -> Name -> Java.Identifier
 elementJavaIdentifier isPrim aliases name = Java.Identifier $ if isPrim
-    then (Java.unIdentifier $ nameToJavaName aliases $ fromQname gname $ capitalize local) ++ ".apply"
-    else (Java.unIdentifier $ nameToJavaName aliases $ fromQname gname $ elementsClassName gname) ++ "." ++ local
+    then (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns $ capitalize local) ++ ".apply"
+    else (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns $ elementsClassName (Y.fromJust ns)) ++ "." ++ local
   where
-    (gname, local) = toQnameEager name
+    QualifiedName ns local = qualifyNameEager name
 
 elementsClassName :: Namespace -> String
 elementsClassName (Namespace ns) = capitalize $ L.last $ LS.splitOn "/" ns

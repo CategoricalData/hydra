@@ -15,7 +15,7 @@ import qualified Hydra.Dsl.Types as Types
 
 
 hydraExtrasDefinition :: String -> Datum a -> Definition a
-hydraExtrasDefinition = Definition . fromQname (moduleNamespace hydraExtrasModule)
+hydraExtrasDefinition = definitionInModule hydraExtrasModule
 
 hydraExtrasModule :: Module Kv
 hydraExtrasModule = Module (Namespace "hydra/extras") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $

@@ -87,7 +87,7 @@ encodeFunction namespaces fun = case fun of
         rhs <- encodeTerm namespaces fun
         return $ hsapp lhs rhs
       EliminationWrap name -> pure $ H.ExpressionVariable $ elementReference namespaces $
-        qname (namespaceOfEager name) $ newtypeAccessorName name
+        qname (Y.fromJust $ namespaceOfEager name) $ newtypeAccessorName name
       EliminationOptional (OptionalCases nothing just) -> do
         nothingRhs <- H.CaseRhs <$> encodeTerm namespaces nothing
         let nothingAlt = H.Alternative (H.PatternName $ rawName "Nothing") nothingRhs Nothing
@@ -182,7 +182,7 @@ encodeTerm namespaces term = do
       case stripTerm ft of
         TermRecord (Record _ []) -> pure lhs
         _ -> hsapp lhs <$> encode ft
-    TermVariable (Name v) -> pure $ hsvar v
+    TermVariable name -> pure $ H.ExpressionVariable $ elementReference namespaces name --pure $ hsvar v
     _ -> fail $ "unexpected term: " ++ show term
   where
     encode = encodeTerm namespaces

@@ -16,6 +16,10 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
+data QualifiedName = QualifiedName {
+  qualifiedNameNamespace :: Maybe Namespace,
+  qualifiedNameLocal :: String} deriving (Eq, Ord, Show)
+
 debug :: Bool
 debug = True
 
@@ -72,9 +76,6 @@ fieldTypeMap fields = M.fromList (toPair <$> fields)
   where
     toPair f = (fieldTypeName f, fieldTypeType f)
 
-fromQname :: Namespace -> String -> Name
-fromQname ns local = Name $ unNamespace ns ++ "." ++ local
-
 namespaceToFilePath :: Bool -> FileExtension -> Namespace -> FilePath
 namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/" parts ++ "." ++ ext
   where
@@ -96,19 +97,31 @@ isUnitType :: Eq a => Type a -> Bool
 isUnitType t = stripType t == TypeRecord (RowType _UnitType Nothing [])
 
 localNameOfLazy :: Name -> String
-localNameOfLazy = snd . toQnameLazy
+localNameOfLazy = qualifiedNameLocal . qualifyNameLazy
 
 localNameOfEager :: Name -> String
-localNameOfEager = snd . toQnameEager
+localNameOfEager = qualifiedNameLocal . qualifyNameEager
 
-namespaceOfLazy :: Name -> Namespace
-namespaceOfLazy = fst . toQnameLazy
+namespaceOfLazy :: Name -> Maybe Namespace
+namespaceOfLazy = qualifiedNameNamespace . qualifyNameLazy
 
-namespaceOfEager :: Name -> Namespace
-namespaceOfEager = fst . toQnameEager
+namespaceOfEager :: Name -> Maybe Namespace
+namespaceOfEager = qualifiedNameNamespace . qualifyNameEager
 
 placeholderName :: Name
 placeholderName = Name "Placeholder"
+
+-- | Splits a Name on the last "." into a namespace and a local part
+qualifyNameLazy :: Name -> QualifiedName
+qualifyNameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
+  (local:rest) -> QualifiedName (Just $ Namespace $ L.intercalate "." $ L.reverse rest) local
+  _ -> QualifiedName Nothing name
+
+-- | Splits a Name on the first "." into a namespace and a local part
+qualifyNameEager :: Name -> QualifiedName
+qualifyNameEager (Name name) = case Strings.splitOn "." name of
+  [n] -> QualifiedName Nothing name
+  (ns:rest) -> QualifiedName (Just $ Namespace ns) (L.intercalate "." rest)
 
 requireTypeAnnotation :: Show a => Term a -> Flow (Graph a) (Type a)
 requireTypeAnnotation term = do
@@ -128,14 +141,9 @@ stripType = skipAnnotations $ \t -> case t of
   TypeAnnotated a -> Just a
   _ -> Nothing
 
--- | Splits a Name on the last "." into a namespace and a local part
-toQnameLazy :: Name -> (Namespace, String)
-toQnameLazy (Name name) = case L.reverse $ Strings.splitOn "." name of
-  (local:rest) -> (Namespace $ L.intercalate "." $ L.reverse rest, local)
-  _ -> (Namespace "UNKNOWN", name)
-
--- | Splits a Name on the first "." into a namespace and a local part
-toQnameEager :: Name -> (Namespace, String)
-toQnameEager (Name name) = case Strings.splitOn "." name of
-  [n] -> (Namespace "UNKNOWN", name)
-  (ns:rest) -> (Namespace ns, L.intercalate "." rest)
+unqualifyName :: QualifiedName -> Name
+unqualifyName (QualifiedName ns local) = Name $ prefix ++ local
+  where
+    prefix = case ns of
+      Nothing -> ""
+      Just n -> unNamespace n ++ "."

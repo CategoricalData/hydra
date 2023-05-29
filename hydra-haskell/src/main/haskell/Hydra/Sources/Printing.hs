@@ -25,7 +25,7 @@ hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsM
      ]
 
 printingDefinition :: String -> Datum a -> Definition a
-printingDefinition = Definition . fromQname (moduleNamespace hydraPrintingModule)
+printingDefinition = definitionInModule hydraPrintingModule
 
 
 describeFloatTypeDef :: Definition (FloatType -> String)

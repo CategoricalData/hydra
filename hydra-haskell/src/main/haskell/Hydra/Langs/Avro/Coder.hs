@@ -260,7 +260,7 @@ avroHydraAdapter schema = case schema of
       Just n -> ad {adapterTarget = Types.annot n (adapterTarget ad)}
 
 avroNameToHydraName :: AvroQualifiedName -> Name
-avroNameToHydraName (AvroQualifiedName mns local) = fromQname (Namespace $ Y.fromMaybe "DEFAULT" mns) local
+avroNameToHydraName (AvroQualifiedName mns local) = unqualifyName $ QualifiedName (Namespace <$> mns) local
 
 -- TODO: use me (for encoding annotations for which the type is not know) or lose me
 --       A more robust solution would use jsonCoder together with an expected type

@@ -22,6 +22,7 @@ import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.List as L
 import qualified Data.Set as S
+import qualified Data.Maybe as Y
 import Control.Monad
 
 
@@ -104,9 +105,10 @@ literalTypeIsSupported constraints at = S.member (literalTypeVariant at) (langua
     _ -> True
 
 nameToFilePath :: Bool -> FileExtension -> Name -> FilePath
-nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ gname ++ "/" ++ local
+nameToFilePath caps ext name = namespaceToFilePath caps ext $ Namespace $ prefix ++ local
   where
-    (Namespace gname, local) = toQnameEager name
+    QualifiedName ns local = qualifyNameEager name
+    prefix = Y.maybe "" (\(Namespace gname) -> gname ++ "/") ns
 
 typeIsSupported :: LanguageConstraints a -> Type a -> Bool
 typeIsSupported constraints t = languageConstraintsTypes constraints t -- these are *additional* type constraints

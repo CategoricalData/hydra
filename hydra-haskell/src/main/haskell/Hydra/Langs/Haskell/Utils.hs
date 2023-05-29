@@ -17,15 +17,18 @@ data Namespaces = Namespaces {
 applicationPattern name args = H.PatternApplication $ H.Pattern_Application name args
 
 elementReference :: Namespaces -> Name -> H.Name
-elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case alias of
+elementReference (Namespaces (gname, H.ModuleName gmod) namespaces) name = case (qualifiedNameNamespace qname) of
     Nothing -> simpleName local
-    Just (H.ModuleName a) -> if ns == gname
-      then simpleName escLocal
-      else rawName $ a ++ "." ++ escLocal
+    Just ns -> case M.lookup ns namespaces of
+      Nothing -> simpleName local
+      Just (H.ModuleName a) -> if ns == gname
+         then simpleName escLocal
+         else rawName $ a ++ "." ++ escLocal
   where
-    (ns, local) = toQnameEager name
-    alias = M.lookup ns namespaces
+    qname = qualifyNameEager name
+    local = qualifiedNameLocal qname
     escLocal = sanitizeHaskellName local
+    simple = simpleName $ qualifiedNameLocal qname
 
 hsapp :: H.Expression -> H.Expression -> H.Expression
 hsapp l r = H.ExpressionApplication $ H.Expression_Application l r
@@ -39,7 +42,7 @@ hslit = H.ExpressionLiteral
 hsPrimitiveReference :: Name -> H.Name
 hsPrimitiveReference name = H.NameNormal $ H.QualifiedName [prefix] $ H.NamePart local
   where
-    (Namespace ns, local) = toQnameEager name
+    QualifiedName (Just (Namespace ns)) local = qualifyNameEager name
     prefix = H.NamePart $ capitalize $ L.last $ Strings.splitOn "/" ns
 
 hsvar :: String -> H.Expression
@@ -64,7 +67,8 @@ rawName :: String -> H.Name
 rawName n = H.NameNormal $ H.QualifiedName [] $ H.NamePart n
 
 recordFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-recordFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQnameEager sname) nm
+recordFieldReference namespaces sname (FieldName fname) = elementReference namespaces $
+    unqualifyName $ QualifiedName (qualifiedNameNamespace $ qualifyNameEager sname) nm
   where
     nm = decapitalize (typeNameForRecord sname) ++ capitalize fname
 
@@ -90,8 +94,10 @@ typeNameForRecord :: Name -> String
 typeNameForRecord (Name sname) = L.last (Strings.splitOn "." sname)
 
 unionFieldReference :: Namespaces -> Name -> FieldName -> H.Name
-unionFieldReference namespaces sname (FieldName fname) = elementReference namespaces $ fromQname (fst $ toQnameEager sname) nm
+unionFieldReference namespaces sname (FieldName fname) = elementReference namespaces $
+    unqualifyName $ QualifiedName ns nm
   where
+    ns = qualifiedNameNamespace $ qualifyNameEager sname
     nm = capitalize (typeNameForRecord sname) ++ capitalize fname
 
 unpackLambdaType :: Graph a -> Type a -> ([Name], Type a)
