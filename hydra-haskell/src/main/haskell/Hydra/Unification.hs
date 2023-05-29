@@ -46,7 +46,6 @@ unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
        -- Symmetric patterns
       (TypeApplication (ApplicationType lhs1 rhs1), TypeApplication (ApplicationType lhs2 rhs2)) ->
         unifyMany [lhs1, rhs1] [lhs2, rhs2]
-      (TypeElement et1, TypeElement et2) -> unify et1 et2
       (TypeFunction (FunctionType dom1 cod1), TypeFunction (FunctionType dom2 cod2)) ->
         unifyMany [dom1, cod1] [dom2, cod2]
       (TypeList lt1, TypeList lt2) -> unify lt1 lt2
@@ -73,6 +72,8 @@ unify ltyp rtyp = case (stripType ltyp, stripType rtyp) of
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType" @ "a")
       (TypeApplication (ApplicationType lhs rhs), t2) -> unify lhs t2
       (t1, TypeApplication (ApplicationType lhs rhs)) -> unify t1 lhs
+      (TypeLambda (LambdaType _ body), t2) -> unify body t2
+      (t1, TypeLambda (LambdaType _ body)) -> unify t1 body
       -- TODO; temporary "slop", e.g. (record "RowType" ...) is allowed to unify with (wrap "RowType")
       (TypeWrap _, _) -> return M.empty -- TODO
       (_, TypeWrap name) -> return M.empty -- TODO

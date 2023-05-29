@@ -52,4 +52,4 @@ typeElement name typ = Element {
   where
     -- These type annotations allow type inference to proceed despite cyclic type definitions, e.g. in Hydra Core
     dataTerm = normalizeTermAnnotations $ TermAnnotated $ Annotated (epsilonEncodeType typ) $ Kv $ M.fromList [(kvType, schemaTerm)]
-    schemaTerm = TermElement _Type
+    schemaTerm = TermVariable _Type

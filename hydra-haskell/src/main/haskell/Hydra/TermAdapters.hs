@@ -41,12 +41,6 @@ _context = FieldName "context"
 _record :: FieldName
 _record = FieldName "record"
 
-elementToString :: TypeAdapter a
-elementToString t@(TypeElement _) = pure $ Adapter False t Types.string $ Coder encode decode
-  where
-    encode (TermElement (Name name)) = pure $ string name
-    decode (TermLiteral (LiteralString name)) = pure $ TermElement $ Name name
-
 fieldAdapter :: (Ord a, Read a, Show a) => FieldType a -> Flow (AdapterContext a) (SymmetricAdapter (AdapterContext a) (FieldType a) (Field a))
 fieldAdapter ftyp = do
   ad <- termAdapter $ fieldTypeType ftyp
@@ -84,7 +78,6 @@ functionProxyName = Name "hydra/core.FunctionProxy"
 
 functionProxyType :: Type a -> Type a
 functionProxyType dom = TypeUnion $ RowType functionProxyName Nothing [
-  FieldType _Elimination_element Types.unit,
   FieldType _Elimination_wrap Types.string,
   FieldType _Elimination_optional Types.string,
   FieldType _Elimination_record Types.string,
@@ -102,7 +95,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
     encode ad term = coderEncode (adapterCoder ad) $ case stripTerm term of
       TermFunction f -> case f of
         FunctionElimination e -> case e of
-          EliminationElement -> unitVariant functionProxyName _Elimination_element
           EliminationWrap (Name name) -> variant functionProxyName _Elimination_wrap $ string name
           EliminationOptional _ -> variant functionProxyName _Elimination_optional $ string $ show term -- TODO
           EliminationRecord _ -> variant functionProxyName _Elimination_record $ string $ show term -- TODO
@@ -114,7 +106,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
     decode ad term = do
         (Field fname fterm) <- coderDecode (adapterCoder ad) term >>= Expect.injection
         Y.fromMaybe (notFound fname) $ M.lookup fname $ M.fromList [
-          (_Elimination_element, forTerm fterm),
           (_Elimination_wrap, forWrapped fterm),
           (_Elimination_optional, forOptionalCases fterm),
           (_Elimination_record, forProjection fterm),
@@ -125,7 +116,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
       where
         notFound fname = fail $ "unexpected field: " ++ unFieldName fname
         forCases fterm = read <$> Expect.string fterm -- TODO
-        forTerm _ = pure delta
         forLambda fterm = read <$> Expect.string fterm -- TODO
         forWrapped fterm = unwrap . Name <$> Expect.string fterm
         forOptionalCases fterm = read <$> Expect.string fterm -- TODO
@@ -136,7 +126,6 @@ functionToUnion t@(TypeFunction (FunctionType dom _)) = do
     unionType = do
       domAd <- termAdapter dom
       return $ TypeUnion $ RowType functionProxyName Nothing [
-        FieldType _Elimination_element Types.unit,
         FieldType _Elimination_wrap Types.string,
         FieldType _Elimination_optional Types.string,
         FieldType _Elimination_record Types.string,
@@ -343,7 +332,6 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
             trySubstitution t = case typeVariant t of
               TypeVariantAnnotated -> [passAnnotated]
               TypeVariantApplication -> [simplifyApplication]
-              TypeVariantElement -> [elementToString]
               TypeVariantFunction -> [functionToUnion]
               TypeVariantLambda -> [lambdaToMonotype]
               TypeVariantOptional -> [optionalToList]

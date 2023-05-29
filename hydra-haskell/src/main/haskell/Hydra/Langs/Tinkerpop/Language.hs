@@ -38,7 +38,6 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
 
     -- Only lists and literal values may be explicitly supported via Graph.Features.
     languageConstraintsTermVariants = S.fromList $ Y.catMaybes [
-      Just TermVariantElement, -- Note: subject to the APG taxonomy
       cond TermVariantList supportsLists,
       cond TermVariantLiteral supportsLiterals,
       cond TermVariantMap supportsMaps,
@@ -46,7 +45,6 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TermVariantOptional],
 
     languageConstraintsTypeVariants = S.fromList $ Y.catMaybes [
-      Just TypeVariantElement,
       cond TypeVariantList supportsLists,
       cond TypeVariantLiteral supportsLiterals,
       cond TypeVariantMap supportsMaps,
@@ -54,7 +52,6 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       Just TypeVariantWrap],
 
     languageConstraintsTypes = \typ -> case stripType typ of
-      TypeElement et -> True
       -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
       TypeList t -> case stripType t of
         TypeLiteral lt -> case lt of
@@ -75,7 +72,6 @@ tinkerpopLanguage name features extras = Language name $ LanguageConstraints {
       TypeMap (MapType kt _) -> extraFeaturesSupportsMapKey extras kt
       TypeWrap _ -> True
       TypeOptional ot -> case stripType ot of
-        TypeElement _ -> True -- Note: subject to the APG taxonomy
         TypeLiteral _ -> True
         _ -> False
       _ -> True}

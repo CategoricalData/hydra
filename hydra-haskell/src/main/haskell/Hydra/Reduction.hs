@@ -95,7 +95,6 @@ reduceTerm eager env = rewriteTermM mapping pure
       _ -> pure $ applyToArguments original args
 
     applyElimination elm reducedArg = case elm of
-      EliminationElement -> fail "element eliminations are unsupported"
       EliminationList _ -> fail "list eliminations are unsupported"
       EliminationOptional _ -> fail "optional eliminations are unsupported"
       EliminationRecord proj -> do
@@ -180,7 +179,6 @@ termIsValue :: Graph a -> Term a -> Bool
 termIsValue g term = case stripTerm term of
     TermApplication _ -> False
     TermLiteral _ -> True
-    TermElement _ -> True
     TermFunction f -> functionIsValue f
     TermList els -> forList els
     TermMap map -> L.foldl
@@ -200,7 +198,6 @@ termIsValue g term = case stripTerm term of
 
     functionIsValue f = case f of
       FunctionElimination e -> case e of
-        EliminationElement -> True
         EliminationWrap _ -> True
         EliminationOptional (OptionalCases nothing just) -> termIsValue g nothing
           && termIsValue g just

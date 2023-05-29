@@ -114,24 +114,6 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (stringSet strings)
       (stringSet strings)
 
-  H.it "Element references (when supported) pass through without change" $
-    QC.property $ \name -> checkDataAdapter
-      [TypeVariantElement]
-      int32ElementType
-      int32ElementType
-      False
-      (TermElement name)
-      (TermElement name)
-
-  H.it "Term terms (when supported) pass through without change" $
-    QC.property $ \() -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantFunction, TypeVariantElement]
-      int32ElementDataType
-      int32ElementDataType
-      False
-      delta
-      delta
-
   H.it "Primitive function references (when supported) pass through without change" $
     QC.property $ \name -> checkDataAdapter
       [TypeVariantLiteral, TypeVariantFunction]
@@ -150,15 +132,6 @@ supportedConstructorsAreUnchanged = H.describe "Verify that supported term const
       (project testTypePersonName fname)
       (project testTypePersonName fname)
 
---  H.it "Nominal types (when supported) pass through without change" $
---    QC.property $ \s -> checkDataAdapter
---      [TypeVariantLiteral, TypeVariantWrap]
---      stringAliasType
---      stringAliasType
---      False
---      (string s)
---      (string s)
-
 unsupportedConstructorsAreModified :: H.SpecWith ()
 unsupportedConstructorsAreModified = H.describe "Verify that unsupported term constructors are changed in the expected ways" $ do
 
@@ -170,24 +143,6 @@ unsupportedConstructorsAreModified = H.describe "Verify that unsupported term co
       False
       (stringSet strings)
       (stringList $ S.toList strings)
-
-  H.it "Element references (when unsupported) become strings" $
-    QC.property $ \name@(Name nm) -> checkDataAdapter
-      [TypeVariantLiteral]
-      int32ElementType
-      Types.string
-      False
-      (TermElement name)
-      (string nm) -- Note: the element name is not dereferenced
-
-  H.it "Data terms (when unsupported) become variant terms" $
-    QC.property $ \() -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantUnion, TypeVariantRecord]
-      int32ElementDataType
-      (functionProxyType Types.string)
-      False
-      delta
-      (inject functionProxyName $ field "element" unit)
 
   H.it "Optionals (when unsupported) become lists" $
     QC.property $ \ms -> checkDataAdapter
@@ -261,15 +216,6 @@ termsAreAdaptedRecursively = H.describe "Verify that the adapter descends into s
       (list $ (\l -> set $ S.fromList $ string <$> l) <$> lists)
       (list $ (\l -> list $ string <$> S.toList (S.fromList l)) <$> lists)
 
-  H.it "A list of sets of element references becomes a list of lists of strings" $
-    QC.property $ \names -> checkDataAdapter
-      [TypeVariantLiteral, TypeVariantList]
-      listOfSetOfInt32ElementReferencesType
-      listOfListsOfStringsType
-      False
-      (list $ (\l -> set $ S.fromList $ TermElement <$> l) <$> names)
-      (list $ (\l -> list $ string <$> S.toList (S.fromList $ unName <$> l)) <$> names)
-
 roundTripsPreserveSelectedTypes :: H.SpecWith ()
 roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is information preserving, i.e. that round-trips are no-ops" $ do
 
@@ -281,12 +227,6 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
 
   H.it "Check sets (which map to lists)" $
     QC.property $ \strings -> roundTripIsNoop setOfStringsType (stringSet strings)
-
-  H.it "Check element references (which map to strings)" $
-    QC.property $ \name -> roundTripIsNoop int32ElementType (TermElement name)
-
-  H.it "Check data terms (which map to variants)" $
-    roundTripIsNoop int32ElementDataType delta
 
   H.it "Check primitive function references (which map to variants)" $
     QC.property $ \name -> roundTripIsNoop concatType (primitive name)

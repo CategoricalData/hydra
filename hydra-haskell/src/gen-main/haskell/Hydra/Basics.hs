@@ -12,7 +12,6 @@ import Data.Set
 -- | Find the elimination variant (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination a -> Mantle.EliminationVariant)
 eliminationVariant x = case x of
-  Core.EliminationElement -> Mantle.EliminationVariantElement
   Core.EliminationList _ -> Mantle.EliminationVariantList
   Core.EliminationOptional _ -> Mantle.EliminationVariantOptional
   Core.EliminationRecord _ -> Mantle.EliminationVariantRecord
@@ -22,7 +21,6 @@ eliminationVariant x = case x of
 -- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Mantle.EliminationVariant]
 eliminationVariants = [
-  Mantle.EliminationVariantElement,
   Mantle.EliminationVariantList,
   Mantle.EliminationVariantWrap,
   Mantle.EliminationVariantOptional,
@@ -162,7 +160,6 @@ termVariant :: (Core.Term a -> Mantle.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Mantle.TermVariantAnnotated
   Core.TermApplication _ -> Mantle.TermVariantApplication
-  Core.TermElement _ -> Mantle.TermVariantElement
   Core.TermFunction _ -> Mantle.TermVariantFunction
   Core.TermLet _ -> Mantle.TermVariantLet
   Core.TermList _ -> Mantle.TermVariantList
@@ -184,7 +181,6 @@ termVariants = [
   Mantle.TermVariantAnnotated,
   Mantle.TermVariantApplication,
   Mantle.TermVariantLiteral,
-  Mantle.TermVariantElement,
   Mantle.TermVariantFunction,
   Mantle.TermVariantList,
   Mantle.TermVariantMap,
@@ -203,7 +199,6 @@ typeVariant :: (Core.Type a -> Mantle.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Mantle.TypeVariantAnnotated
   Core.TypeApplication _ -> Mantle.TypeVariantApplication
-  Core.TypeElement _ -> Mantle.TypeVariantElement
   Core.TypeFunction _ -> Mantle.TypeVariantFunction
   Core.TypeLambda _ -> Mantle.TypeVariantLambda
   Core.TypeList _ -> Mantle.TypeVariantList
@@ -224,7 +219,6 @@ typeVariants :: [Mantle.TypeVariant]
 typeVariants = [
   Mantle.TypeVariantAnnotated,
   Mantle.TypeVariantApplication,
-  Mantle.TypeVariantElement,
   Mantle.TypeVariantFunction,
   Mantle.TypeVariantLambda,
   Mantle.TypeVariantList,

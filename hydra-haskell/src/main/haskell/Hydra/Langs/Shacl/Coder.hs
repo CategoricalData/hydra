@@ -103,7 +103,6 @@ encodeLiteralType lt = case lt of
 encodeTerm :: Show a => Rdf.Resource -> Term a -> GraphFlow a [Rdf.Description]
 encodeTerm subject term = case term of
   TermAnnotated (Annotated inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
-  TermElement name -> pure [emptyDescription $ Rdf.NodeIri $ nameToIri name]
   TermList terms -> encodeList subject terms
     where
       encodeList subj terms = if L.null terms
@@ -155,7 +154,6 @@ encodeTerm subject term = case term of
 
 encodeType :: Show a => Type a -> GraphFlow a Shacl.CommonProperties
 encodeType typ = case stripType typ of
-    TypeElement et -> encodeType et
     TypeList _ -> any
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any

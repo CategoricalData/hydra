@@ -49,7 +49,6 @@ prepareType cx typ = case stripType typ of
   TypeLiteral at -> (Types.literal rtyp, \(TermLiteral av) -> TermLiteral $ rep av, msgs)
     where
       (rtyp, rep, msgs) = prepareLiteralType at
---  TypeElement et ->
 --  TypeFunction (FunctionType dom cod) ->
 --  TypeList lt ->
 --  TypeMap (MapType kt vt) ->

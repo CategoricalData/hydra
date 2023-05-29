@@ -158,12 +158,12 @@ avroHydraAdapter schema = case schema of
             Nothing -> avroHydraAdapter $ Avro.fieldType f
             Just (ForeignKey name constr) -> do
                 ad <- avroHydraAdapter $ Avro.fieldType f
-                let decodeTerm = \(TermElement name) -> do -- TODO: not symmetrical
+                let decodeTerm = \(TermVariable name) -> do -- TODO: not symmetrical
                       term <- stringToTerm (adapterTarget ad) $ unName name
                       coderDecode (adapterCoder ad) term
                 let encodeValue v = do
                       s <- coderEncode (adapterCoder ad) v >>= termToString
-                      return $ TermElement $ constr s
+                      return $ TermVariable $ constr s
                 -- Support three special cases of foreign key types: plain, optional, and list
                 case stripType (adapterTarget ad) of
                   TypeOptional (TypeLiteral lit) -> forTypeAndCoder ad (Types.optional elTyp) coder
@@ -184,7 +184,7 @@ avroHydraAdapter schema = case schema of
                   _ -> fail $ "unsupported type annotated as foreign key: " ++ (show $ typeVariant $ adapterTarget ad)
               where
                 forTypeAndCoder ad typ coder = pure $ Adapter (adapterIsLossy ad) (Avro.fieldType f) typ coder
-                elTyp = TypeElement $ Types.wrap name
+                elTyp = TypeVariable name
           return (Avro.fieldName f, (f, annotate ann ad))
     Avro.SchemaPrimitive p -> case p of
         Avro.PrimitiveNull -> simpleAdapter Types.unit encode decode

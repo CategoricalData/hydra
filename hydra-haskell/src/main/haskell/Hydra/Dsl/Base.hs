@@ -64,14 +64,8 @@ compose (Datum f) (Datum g) = Datum $ Terms.compose f g
 constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.constant term
 
-delta :: Datum (Reference a -> a)
-delta = Datum Terms.delta
-
 doc :: String -> Datum a -> Datum a
 doc s (Datum term) = Datum $ setTermDescription hydraCore (Just s) term
-
-element :: Definition a -> Datum (Reference a)
-element (Definition name _) = Datum $ TermElement name
 
 field :: FieldName -> Datum a -> Field Kv
 field fname (Datum val) = Field fname val
@@ -152,7 +146,7 @@ record :: Name -> [Fld a] -> Datum a
 record name fields = Datum $ Terms.record name (unFld <$> fields)
 
 ref :: Definition a -> Datum a
-ref (Definition name _) = Datum (Terms.apply Terms.delta $ TermElement name)
+ref (Definition name _) = Datum (TermVariable name)
 
 set :: S.Set (Datum a) -> Datum (S.Set a)
 set = Datum . Terms.set . S.fromList . fmap unDatum . S.toList

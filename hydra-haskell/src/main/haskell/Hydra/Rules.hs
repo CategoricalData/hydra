@@ -86,17 +86,9 @@ infer term = case term of
       let constraints = (termConstraints ifun) ++ (termConstraints iarg) ++ [(termType ifun, Types.function (termType iarg) cod)]
       yield (TermApplication $ Application ifun iarg) cod constraints
 
-    TermElement name -> do
-      et <- requireName name
-      yield (TermElement name) (TypeElement et) []
-
     TermFunction f -> case f of
 
       FunctionElimination e -> case e of
-
-        EliminationElement -> do
-          et <- freshName
-          yieldElimination EliminationElement (Types.function (TypeElement et) et) []
 
         EliminationList fun -> do
           a <- freshName

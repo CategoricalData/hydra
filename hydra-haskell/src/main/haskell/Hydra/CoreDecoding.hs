@@ -45,11 +45,6 @@ epsilonDecodeApplicationType = matchRecord $ \m -> ApplicationType
   <$> getField m _ApplicationType_function epsilonDecodeType
   <*> getField m _ApplicationType_argument epsilonDecodeType
 
-epsilonDecodeElement :: Show a => Term a -> GraphFlow a Name
-epsilonDecodeElement term = case stripTerm term of
-  TermElement name -> pure name
-  _ -> unexpected "element" term
-
 epsilonDecodeFieldType :: Show a => Term a -> GraphFlow a (FieldType a)
 epsilonDecodeFieldType = matchRecord $ \m -> FieldType
   <$> (FieldName <$> getField m _FieldType_name epsilonDecodeString)
@@ -112,18 +107,15 @@ epsilonDecodeString = Expect.string . stripTerm
 
 epsilonDecodeType :: Show a => Term a -> GraphFlow a (Type a)
 epsilonDecodeType dat = case dat of
-  TermElement name -> pure $ TypeWrap name
   TermAnnotated (Annotated term ann) -> (\t -> TypeAnnotated $ Annotated t ann) <$> epsilonDecodeType term
   _ -> matchUnion [
 --    (_Type_annotated, fmap TypeAnnotated . epsilonDecodeAnnotated),
     (_Type_application, fmap TypeApplication . epsilonDecodeApplicationType),
-    (_Type_element, fmap TypeElement . epsilonDecodeType),
     (_Type_function, fmap TypeFunction . epsilonDecodeFunctionType),
     (_Type_lambda, fmap TypeLambda . epsilonDecodeLambdaType),
     (_Type_list, fmap TypeList . epsilonDecodeType),
     (_Type_literal, fmap TypeLiteral . epsilonDecodeLiteralType),
     (_Type_map, fmap TypeMap . epsilonDecodeMapType),
-    (_Type_wrap, fmap TypeWrap . epsilonDecodeElement),
     (_Type_optional, fmap TypeOptional . epsilonDecodeType),
     (_Type_product, \l -> do
       types <- Expect.list pure l
@@ -132,7 +124,8 @@ epsilonDecodeType dat = case dat of
     (_Type_set, fmap TypeSet . epsilonDecodeType),
     (_Type_sum, \(TermList types) -> TypeSum <$> (CM.mapM epsilonDecodeType types)),
     (_Type_union, fmap TypeUnion . epsilonDecodeRowType),
-    (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString)] dat
+    (_Type_variable, fmap (TypeVariable . Name) . epsilonDecodeString),
+    (_Type_wrap, fmap (TypeWrap . Name) . epsilonDecodeString)] dat -- TODO
 
 elementAsTypedTerm :: (Show a) => Element a -> GraphFlow a (TypedTerm a)
 elementAsTypedTerm el = do
@@ -143,7 +136,6 @@ fieldTypes :: Show a => Type a -> GraphFlow a (M.Map FieldName (Type a))
 fieldTypes t = case stripType t of
     TypeRecord rt -> pure $ toMap $ rowTypeFields rt
     TypeUnion rt -> pure $ toMap $ rowTypeFields rt
-    TypeElement et -> fieldTypes et
     TypeWrap name -> do
       withTrace ("field types of " ++ unName name) $ do
         el <- requireElement name
@@ -173,6 +165,9 @@ matchUnion :: Show a => [(FieldName, Term a -> GraphFlow a b)] -> Term a -> Grap
 matchUnion pairs term = do
     term1 <- deref term
     case stripTerm term1 of
+      TermVariable name -> do
+        el <- requireElement name
+        matchUnion pairs (elementData el)
       TermUnion (Injection _ (Field fname val)) -> case M.lookup fname mapping of
         Nothing -> fail $ "no matching case for field " ++ show fname
         Just f -> f val

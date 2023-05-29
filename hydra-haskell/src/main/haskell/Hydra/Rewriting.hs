@@ -88,7 +88,6 @@ freeVariablesInScheme (TypeScheme vars t) = S.difference (freeVariablesInType t)
 
 freeVariablesInTerm :: Term a -> S.Set Name
 freeVariablesInTerm term = case term of
-  TermElement name -> S.fromList [name]
   TermFunction (FunctionLambda (Lambda var body)) -> S.delete var $ freeVariablesInTerm body
   TermVariable v -> S.fromList [v]
   _ -> L.foldl (\s t -> S.union s $ freeVariablesInTerm t) S.empty $ subterms term
@@ -147,10 +146,8 @@ rewriteTerm f mf = rewrite fsub f
     fsub recurse term = case term of
         TermAnnotated (Annotated ex ann) -> TermAnnotated $ Annotated (recurse ex) (mf ann)
         TermApplication (Application lhs rhs) -> TermApplication $ Application (recurse lhs) (recurse rhs)
-        TermElement name -> TermElement name
         TermFunction fun -> TermFunction $ case fun of
           FunctionElimination e -> FunctionElimination $ case e of
-            EliminationElement -> EliminationElement
             EliminationWrap name -> EliminationWrap name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional
               (OptionalCases (recurse nothing) (recurse just))
@@ -185,10 +182,8 @@ rewriteTermM f mf = rewrite fsub f
     fsub recurse term = case term of
         TermAnnotated (Annotated ex ma) -> TermAnnotated <$> (Annotated <$> recurse ex <*> mf ma)
         TermApplication (Application lhs rhs) -> TermApplication <$> (Application <$> recurse lhs <*> recurse rhs)
-        TermElement name -> pure $ TermElement name
         TermFunction fun -> TermFunction <$> case fun of
           FunctionElimination e -> FunctionElimination <$> case e of
-            EliminationElement -> pure EliminationElement
             EliminationWrap name -> pure $ EliminationWrap name
             EliminationOptional (OptionalCases nothing just) -> EliminationOptional <$>
               (OptionalCases <$> recurse nothing <*> recurse just)
@@ -242,7 +237,6 @@ rewriteType f mf = rewrite fsub f
     fsub recurse typ = case typ of
         TypeAnnotated (Annotated t ann) -> TypeAnnotated $ Annotated (recurse t) (mf ann)
         TypeApplication (ApplicationType lhs rhs) -> TypeApplication $ ApplicationType (recurse lhs) (recurse rhs)
-        TypeElement t -> TypeElement $ recurse t
         TypeFunction (FunctionType dom cod) -> TypeFunction (FunctionType (recurse dom) (recurse cod))
         TypeLambda (LambdaType v b) -> TypeLambda (LambdaType v $ recurse b)
         TypeList t -> TypeList $ recurse t
@@ -315,7 +309,6 @@ subtypes :: Type a -> [Type a]
 subtypes typ = case typ of
   TypeAnnotated (Annotated t _) -> [t]
   TypeApplication (ApplicationType lhs rhs) -> [lhs, rhs]
-  TypeElement et -> [et]
   TypeFunction (FunctionType dom cod) -> [dom, cod]
   TypeLambda (LambdaType v body) -> [body]
   TypeList lt -> [lt]
@@ -335,7 +328,6 @@ termDependencyNames :: Bool -> Bool -> Bool -> Bool -> Term a -> S.Set Name
 termDependencyNames withVars withEls withPrims withNoms = foldOverTerm TraversalOrderPre addNames S.empty
   where
     addNames names term = case term of
-        TermElement name -> el name
         TermFunction f -> case f of
           FunctionPrimitive name -> prim name
           FunctionElimination e -> case e of

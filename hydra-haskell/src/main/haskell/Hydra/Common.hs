@@ -82,9 +82,11 @@ namespaceToFilePath caps (FileExtension ext) (Namespace name) = L.intercalate "/
 
 isType :: Eq a => Type a -> Bool
 isType typ = case stripType typ of
-  TypeWrap _Type -> True
-  TypeUnion (RowType _Type _ _) -> True
   TypeApplication (ApplicationType lhs _) -> isType lhs
+  TypeLambda (LambdaType _ body) -> isType body
+  TypeUnion (RowType _Type _ _) -> True
+  TypeVariable _Type -> True
+  TypeWrap _Type -> True
   _ -> False
 
 isUnitTerm :: Eq a => Term a -> Bool

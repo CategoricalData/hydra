@@ -57,9 +57,6 @@ hydraCoreModule = Module ns elements [] $
       def "Elimination" $
         doc "A corresponding elimination for an introduction term" $
         lambda "a" $ union [
-          "element">:
-            doc "Eliminates an element by mapping it to its data term. This is Hydra's delta function."
-            unit,
           "list">:
             doc "Eliminates a list using a fold function; this function has the signature b -> [a] -> b" $
             core "Term" @@ "a",
@@ -75,7 +72,7 @@ hydraCoreModule = Module ns elements [] $
           "wrap">:
             doc "Unwrap a wrapped term" $
             core "Name"],
-            
+
       def "Field" $
         doc "A labeled term" $
         lambda "a" $ record [
@@ -287,9 +284,6 @@ hydraCoreModule = Module ns elements [] $
           "application">:
             doc "A function application" $
             core "Application" @@ "a",
-          "element">:
-            doc "An element reference" $
-            core "Name",
           "function">:
             doc "A function term" $
             core "Function" @@ "a",
@@ -339,7 +333,6 @@ hydraCoreModule = Module ns elements [] $
             doc "A type annotated with metadata" $
             core "Annotated" @@ (core "Type" @@ "a") @@ "a",
           "application">: core "ApplicationType" @@ "a",
-          "element">: core "Type" @@ "a",
           "function">: core "FunctionType" @@ "a",
           "lambda">: core "LambdaType" @@ "a",
           "list">: core "Type" @@ "a",

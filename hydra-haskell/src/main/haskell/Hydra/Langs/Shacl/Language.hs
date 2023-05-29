@@ -13,7 +13,6 @@ shaclLanguage = Language (LanguageName "hydra/langs/shacl") $ LanguageConstraint
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList integerTypes,
   languageConstraintsTermVariants = S.fromList [
-    TermVariantElement,
     TermVariantList,
     TermVariantLiteral,
     TermVariantMap,
@@ -24,7 +23,6 @@ shaclLanguage = Language (LanguageName "hydra/langs/shacl") $ LanguageConstraint
     TermVariantUnion],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
-    TypeVariantElement,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,

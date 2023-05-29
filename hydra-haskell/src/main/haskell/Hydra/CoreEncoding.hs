@@ -73,7 +73,6 @@ epsilonEncodeType :: Type a -> Term a
 epsilonEncodeType typ = case typ of
   TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (epsilonEncodeType t) ann)
   TypeApplication a -> variant _Type _Type_application $ epsilonEncodeApplicationType a
-  TypeElement t -> variant _Type _Type_element $ epsilonEncodeType t
   TypeFunction ft -> variant _Type _Type_function $ epsilonEncodeFunctionType ft
   TypeLambda ut -> variant _Type _Type_lambda $ epsilonEncodeLambdaType ut
   TypeList t -> variant _Type _Type_list $ epsilonEncodeType t
@@ -86,7 +85,7 @@ epsilonEncodeType typ = case typ of
   TypeSum types -> variant _Type _Type_sum $ list (epsilonEncodeType <$> types)
   TypeUnion rt -> variant _Type _Type_union $ epsilonEncodeRowType rt
   TypeVariable (Name var) -> variant _Type _Type_variable $ string var
-  TypeWrap name -> variant _Type _Type_wrap $ TermElement name
+  TypeWrap (Name var) -> variant _Type _Type_wrap $ string var
 
 sigmaEncodeApplication :: Ord a => Application a -> Term a
 sigmaEncodeApplication (Application lhs rhs) = record _Application [
@@ -101,7 +100,6 @@ sigmaEncodeCaseStatement (CaseStatement name def cases) = record _CaseStatement 
 
 sigmaEncodeElimination :: Ord a => Elimination a -> Term a
 sigmaEncodeElimination e = case e of
-  EliminationElement -> unitVariant _Elimination _Elimination_element
   EliminationList f -> variant _Elimination _Elimination_list $ sigmaEncodeTerm f
   EliminationWrap name -> variant _Elimination _Elimination_wrap $ sigmaEncodeName name
   EliminationOptional cases -> variant _Elimination _Elimination_optional $ sigmaEncodeOptionalCases cases
@@ -194,7 +192,6 @@ sigmaEncodeTerm term = case term of
   TermAnnotated (Annotated t ann) -> variant _Term _Term_annotated $ TermAnnotated $ Annotated (sigmaEncodeTerm t) ann
   TermApplication a -> variant _Term _Term_application $ sigmaEncodeApplication a
   TermLiteral av -> variant _Term _Term_literal $ sigmaEncodeLiteral av
-  TermElement name -> variant _Term _Term_element $ sigmaEncodeName name
   TermFunction f -> variant _Term _Term_function $ sigmaEncodeFunction f
   TermList terms -> variant _Term _Term_list $ list $ sigmaEncodeTerm <$> terms
   TermMap m -> variant _Term _Term_map $ map $ M.fromList $ sigmaEncodePair <$> M.toList m

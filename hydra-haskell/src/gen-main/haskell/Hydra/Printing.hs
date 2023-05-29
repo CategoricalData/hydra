@@ -48,9 +48,6 @@ describeType x = case x of
     (describeType (Core.annotatedSubject v))])
   Core.TypeApplication _ -> "instances of an application type"
   Core.TypeLiteral v -> (describeLiteralType v)
-  Core.TypeElement v -> (Strings.cat [
-    "elements containing ",
-    (describeType v)])
   Core.TypeFunction v -> (Strings.cat [
     Strings.cat [
       Strings.cat [

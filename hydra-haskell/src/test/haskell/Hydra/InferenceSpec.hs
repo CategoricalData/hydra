@@ -53,14 +53,6 @@ checkApplicationTerms = H.describe "Check a few hand-picked application terms" $
         (apply (lambda "x" (var "x")) (string "foo"))
         Types.string
 
---     H.it "Check data (delta) applications" $ do
---       expectMonotype
---         (apply delta (TermElement $ Name "ArthurDent"))
---         testTypePerson
---      expectMonotype
---        (apply termExpr describeType)
---        (Types.function (Types.wrap _Type) Types.string)
-
     H.it "Check mixed expressions with lambdas, constants, and primitive functions" $ do
       expectMonotype
         (lambda "x" $
@@ -104,18 +96,6 @@ checkFunctionTerms = H.describe "Check a few hand-picked function terms" $ do
           Field (FieldName "string") (lambda "x" (boolean False)),
           Field (FieldName "unit") (lambda "x" (boolean False))])
         (Types.function testTypeFoobarValue Types.boolean)
---       expectPolytype
---         (cases testTypePersonOrSomethingName Nothing [
---           Field (FieldName "person") (apply delta (TermElement $ Name "firstName")),
---           Field (FieldName "other") (lambda "x" (string "NONE"))])
---         ["t0"] (Types.function
---           (TypeUnion $ RowType testTypePersonOrSomethingName Nothing [
---             Types.field "person" $ TypeRecord $ RowType testTypePersonName Nothing [
---               Types.field "firstName" Types.string,
---               Types.field "lastName" Types.string,
---               Types.field "age" Types.int32],
---             Types.field "other" $ Types.var "t0"])
---           Types.string)
 
 checkIndividualTerms :: H.SpecWith ()
 checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
@@ -138,14 +118,6 @@ checkIndividualTerms = H.describe "Check a few hand-picked terms" $ do
       expectPolytype
         (letTerm (Name "x") (float32 42.0) (lambda "y" (lambda "z" (var "x"))))
         ["t0", "t1"] (Types.function (Types.var "t0") (Types.function (Types.var "t1") Types.float32))
-
---     H.it "Check elements" $ do
---       expectMonotype
---         (TermElement $ Name "ArthurDent")
---         (TypeElement testTypePerson) -- Note: the resolved element type is the raw record type associated with "Person", not the nominal type "Person".
---       expectMonotype
---         (TermElement $ Name "firstName")
---         (TypeElement (Types.function (Types.wrap $ Name "Person") Types.string))
 
     H.it "Check optionals" $ do
       expectMonotype
