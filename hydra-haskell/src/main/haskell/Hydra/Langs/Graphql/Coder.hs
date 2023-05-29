@@ -44,7 +44,7 @@ constructModule mod coders pairs = do
     filePath = namespaceToFilePath False (FileExtension "graphql") (moduleNamespace mod)
     findPrefixes els = M.fromList $ toPair <$> namespaces
       where
-        namespaces = L.nub $ (namespaceOfEager . elementName) <$> els
+        namespaces = L.nub $ (Y.fromJust . namespaceOfEager . elementName) <$> els
         toPair ns = (ns, if ns == moduleNamespace mod then "" else (sanitizeWithUnderscores S.empty (unNamespace ns)) ++ "_")
     toTypeDef prefixes el = do
       typ <- requireTypeAnnotation (elementData el)
@@ -160,7 +160,7 @@ encodeTypeName :: Prefixes -> Name -> G.Name
 encodeTypeName prefixes name = G.Name $ (prefix ++ sanitize local)
   where
     prefix = Y.fromMaybe "UNKNOWN" $ M.lookup ns prefixes
-    (ns, local) = toQnameEager name
+    QualifiedName (Just ns) local = qualifyNameEager name
 
 sanitize :: String -> String
 sanitize = sanitizeWithUnderscores graphqlReservedWords

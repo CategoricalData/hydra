@@ -64,6 +64,9 @@ compose (Datum f) (Datum g) = Datum $ Terms.compose f g
 constant :: Datum a -> Datum (b -> a)
 constant (Datum term) = Datum $ Terms.constant term
 
+definitionInModule :: Module Kv -> String -> Datum a -> Definition a
+definitionInModule mod lname = Definition $ unqualifyName $ QualifiedName (Just $ moduleNamespace mod) lname
+
 doc :: String -> Datum a -> Datum a
 doc s (Datum term) = Datum $ setTermDescription hydraCore (Just s) term
 

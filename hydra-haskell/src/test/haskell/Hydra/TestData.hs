@@ -20,7 +20,7 @@ eitherStringOrInt8Type = TypeUnion $ RowType eitherStringOrInt8TypeName Nothing
   [Types.field "left" Types.string, Types.field "right" Types.int8]
 
 eitherStringOrInt8TypeName :: Name
-eitherStringOrInt8TypeName = fromQname testNamespace "EitherStringOrInt8"
+eitherStringOrInt8TypeName = unqualifyName testNamespace "EitherStringOrInt8"
 
 exampleProjectionType :: Type Kv
 exampleProjectionType = Types.function testTypePerson Types.string
@@ -68,4 +68,4 @@ stringOrIntType :: Type a
 stringOrIntType = TypeUnion $ RowType stringOrIntName Nothing [Types.field "left" Types.string, Types.field "right" Types.int32]
 
 testTypeName :: Name
-testTypeName = fromQname testNamespace "TestType"
+testTypeName = unqualifyName testNamespace "TestType"

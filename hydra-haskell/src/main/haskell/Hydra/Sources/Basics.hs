@@ -17,7 +17,7 @@ import Prelude hiding ((++))
 
 
 basicsDefinition :: String -> Datum a -> Definition a
-basicsDefinition = Definition . fromQname (moduleNamespace hydraBasicsModule)
+basicsDefinition = definitionInModule hydraBasicsModule
 
 hydraBasicsModule :: Module Kv
 hydraBasicsModule = Module (Namespace "hydra/basics") elements [hydraGraphModule, hydraMantleModule, hydraComputeModule] $
