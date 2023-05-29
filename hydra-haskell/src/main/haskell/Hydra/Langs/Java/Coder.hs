@@ -368,12 +368,6 @@ encodeApplication :: (Eq a, Ord a, Read a, Show a)
 encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
     TermFunction f -> case f of
       FunctionPrimitive name -> forNamedFunction aliases True name args
-      FunctionElimination EliminationElement -> if L.length args > 0
-        then case stripTerm (L.head args) of
-          TermElement name -> do
-            forNamedFunction aliases False name (L.tail args)
-          _ -> fallback
-        else fallback
       _ -> fallback
     _ -> fallback
   where
@@ -390,9 +384,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
             t' -> fail $ "expected a function type on function " ++ show lhs ++ ", but found " ++ show t'
         case stripTerm lhs of
           TermFunction f -> case f of
-            FunctionElimination e -> case e of
-              EliminationElement -> encodeTerm aliases rhs
-              _ -> do
+            FunctionElimination e -> do
                 jarg <- encodeTerm aliases rhs
                 encodeElimination aliases (Just jarg) dom cod e
             _ -> defaultExpression
@@ -408,11 +400,6 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
 encodeElimination :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Maybe Java.Expression -> Type a -> Type a -> Elimination a -> GraphFlow a Java.Expression
 encodeElimination aliases marg dom cod elm = case elm of
-  EliminationElement -> case marg of
-    Nothing -> encodeFunction aliases dom cod $ FunctionLambda $ Lambda var $ TermVariable var
-      where
-        var = Name "e"
-    Just jarg -> pure jarg
   EliminationOptional (OptionalCases nothing just) -> do
     jnothing <- encodeTerm aliases nothing
     jjust <- encodeTerm aliases just
@@ -576,8 +563,6 @@ encodeTerm aliases term0 = encodeInternal [] term0
 
         TermApplication app -> encodeApplication aliases app
 
-        TermElement name -> pure $ javaIdentifierToJavaExpression $ elementJavaIdentifier False aliases name
-
         TermFunction f -> do
           t <- requireTypeAnnotation term0
           case t of
@@ -644,7 +629,6 @@ encodeType aliases t = case stripType t of
     jlhs <- encode lhs
     jrhs <- encode rhs >>= javaTypeToJavaReferenceType
     addJavaTypeParameter jrhs jlhs
-  TypeElement et -> encode et -- Elements are simply unboxed
   TypeFunction (FunctionType dom cod) -> do
     jdom <- encode dom >>= javaTypeToJavaReferenceType
     jcod <- encode cod >>= javaTypeToJavaReferenceType

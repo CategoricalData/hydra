@@ -26,7 +26,6 @@ scalaLanguage = Language (LanguageName "hydra/langs/scala") $ LanguageConstraint
     IntegerTypeUint8],
   languageConstraintsTermVariants = S.fromList [
     TermVariantApplication,
-    TermVariantElement,
     TermVariantFunction,
     TermVariantList,
     TermVariantLiteral,
@@ -39,7 +38,6 @@ scalaLanguage = Language (LanguageName "hydra/langs/scala") $ LanguageConstraint
     TermVariantVariable],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
-    TypeVariantElement,
     TypeVariantFunction,
     TypeVariantList,
     TypeVariantLiteral,

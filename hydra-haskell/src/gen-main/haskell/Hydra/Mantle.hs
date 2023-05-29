@@ -19,8 +19,6 @@ data EliminationVariant =
 
 _EliminationVariant = (Core.Name "hydra/mantle.EliminationVariant")
 
-_EliminationVariant_element = (Core.FieldName "element")
-
 _EliminationVariant_list = (Core.FieldName "list")
 
 _EliminationVariant_optional = (Core.FieldName "optional")
@@ -83,7 +81,6 @@ _Precision_bits = (Core.FieldName "bits")
 data TermVariant = 
   TermVariantAnnotated  |
   TermVariantApplication  |
-  TermVariantElement  |
   TermVariantFunction  |
   TermVariantLet  |
   TermVariantList  |
@@ -105,8 +102,6 @@ _TermVariant = (Core.Name "hydra/mantle.TermVariant")
 _TermVariant_annotated = (Core.FieldName "annotated")
 
 _TermVariant_application = (Core.FieldName "application")
-
-_TermVariant_element = (Core.FieldName "element")
 
 _TermVariant_function = (Core.FieldName "function")
 
@@ -153,7 +148,6 @@ _TypeScheme_type = (Core.FieldName "type")
 data TypeVariant = 
   TypeVariantAnnotated  |
   TypeVariantApplication  |
-  TypeVariantElement  |
   TypeVariantFunction  |
   TypeVariantLambda  |
   TypeVariantList  |
@@ -175,8 +169,6 @@ _TypeVariant = (Core.Name "hydra/mantle.TypeVariant")
 _TypeVariant_annotated = (Core.FieldName "annotated")
 
 _TypeVariant_application = (Core.FieldName "application")
-
-_TypeVariant_element = (Core.FieldName "element")
 
 _TypeVariant_function = (Core.FieldName "function")
 

@@ -65,7 +65,6 @@ describeTypeDef = printingDefinition "describeType" $
         (project _Annotated _Annotated_subject @@ var "a")),
       Case _Type_application --> constant $ string "instances of an application type",
       Case _Type_literal     --> ref describeLiteralTypeDef,
-      Case _Type_element     --> lambda "t" $ string "elements containing " ++ (ref describeTypeDef @@ var "t"),
       Case _Type_function    --> lambda "ft" $ string "functions from "
         ++ (ref describeTypeDef @@ (project _FunctionType _FunctionType_domain @@ var "ft"))
         ++ string " to "

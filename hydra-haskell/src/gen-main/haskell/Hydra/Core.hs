@@ -67,8 +67,6 @@ _CaseStatement_cases = (FieldName "cases")
 
 -- | A corresponding elimination for an introduction term
 data Elimination a = 
-  -- | Eliminates an element by mapping it to its data term. This is Hydra's delta function.
-  EliminationElement  |
   -- | Eliminates a list using a fold function; this function has the signature b -> [a] -> b
   EliminationList (Term a) |
   -- | Eliminates an optional term by matching over the two possible cases
@@ -82,8 +80,6 @@ data Elimination a =
   deriving (Eq, Ord, Read, Show)
 
 _Elimination = (Name "hydra/core.Elimination")
-
-_Elimination_element = (FieldName "element")
 
 _Elimination_list = (FieldName "list")
 
@@ -489,8 +485,6 @@ data Term a =
   TermAnnotated (Annotated (Term a) a) |
   -- | A function application
   TermApplication (Application a) |
-  -- | An element reference
-  TermElement Name |
   -- | A function term
   TermFunction (Function a) |
   TermLet (Let a) |
@@ -525,8 +519,6 @@ _Term_annotated = (FieldName "annotated")
 
 _Term_application = (FieldName "application")
 
-_Term_element = (FieldName "element")
-
 _Term_function = (FieldName "function")
 
 _Term_let = (FieldName "let")
@@ -560,7 +552,6 @@ data Type a =
   -- | A type annotated with metadata
   TypeAnnotated (Annotated (Type a) a) |
   TypeApplication (ApplicationType a) |
-  TypeElement (Type a) |
   TypeFunction (FunctionType a) |
   TypeLambda (LambdaType a) |
   TypeList (Type a) |
@@ -582,8 +573,6 @@ _Type = (Name "hydra/core.Type")
 _Type_annotated = (FieldName "annotated")
 
 _Type_application = (FieldName "application")
-
-_Type_element = (FieldName "element")
 
 _Type_function = (FieldName "function")
 

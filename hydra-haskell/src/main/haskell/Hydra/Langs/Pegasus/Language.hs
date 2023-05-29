@@ -31,7 +31,6 @@ pdlLanguage = Language (LanguageName "hydra/langs/pegasus/pdl") $ LanguageConstr
     TermVariantUnion],
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
-    TypeVariantElement,
     TypeVariantList,
     TypeVariantLiteral,
     TypeVariantMap,

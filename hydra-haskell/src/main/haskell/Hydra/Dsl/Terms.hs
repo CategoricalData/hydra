@@ -57,15 +57,6 @@ compose f g = lambda "x" $ apply f (apply g $ var "x")
 constant :: Term a -> Term a
 constant = lambda "_"
 
-delta :: Term a
-delta = TermFunction $ FunctionElimination EliminationElement
-
-elementRef :: Element a -> Term a
-elementRef = apply delta . TermElement . elementName
-
-elementRefByName :: Name -> Term a
-elementRefByName = apply delta . TermElement
-
 elimination :: Elimination a -> Term a
 elimination = TermFunction . FunctionElimination
 

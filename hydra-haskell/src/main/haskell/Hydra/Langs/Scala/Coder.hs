@@ -75,7 +75,6 @@ encodeFunction meta fun arg = case fun of
     FunctionLambda (Lambda (Name v) body) -> slambda v <$> encodeTerm body <*> findSdom
     FunctionPrimitive name -> pure $ sprim name
     FunctionElimination e -> case e of
-      EliminationElement -> pure $ sname "DATA" -- TODO
       EliminationWrap name -> pure $ sname $ "ELIM-NOMINAL(" ++ show name ++ ")" -- TODO
       EliminationOptional c -> pure $ sname "ELIM-OPTIONAL" -- TODO
       EliminationRecord p -> fail "unapplied projection not yet supported"
@@ -119,7 +118,6 @@ encodeFunction meta fun arg = case fun of
       where
         domainOf t = case stripType t of
           TypeFunction (FunctionType dom _) -> pure dom
-          TypeElement et -> domainOf et
           _ -> fail $ "expected a function type, but found " ++ show t
 
 encodeLiteral :: Literal -> GraphFlow a Scala.Lit
@@ -143,7 +141,6 @@ encodeTerm term = case stripTerm term of
     TermApplication (Application fun arg) -> case stripTerm fun of
         TermFunction f -> case f of
           FunctionElimination e -> case e of
-            EliminationElement -> encodeTerm arg
             EliminationWrap name -> fallback
             EliminationOptional c -> fallback
             EliminationRecord (Projection _ (FieldName fname)) -> do
@@ -157,7 +154,6 @@ encodeTerm term = case stripTerm term of
         _ -> fallback
       where
         fallback = sapply <$> encodeTerm fun <*> ((: []) <$> encodeTerm arg)
-    TermElement name -> pure $ sname $ localNameOfEager name
     TermFunction f -> do
       cx <- getState
       encodeFunction (termMeta cx term) f Nothing
@@ -189,7 +185,6 @@ encodeTerm term = case stripTerm term of
 
 encodeType :: Show a => Type a -> GraphFlow a Scala.Type
 encodeType t = case stripType t of
---  TypeElement et ->
   TypeFunction (FunctionType dom cod) -> do
     sdom <- encodeType dom
     scod <- encodeType cod

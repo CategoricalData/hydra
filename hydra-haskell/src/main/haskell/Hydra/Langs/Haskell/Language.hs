@@ -18,7 +18,6 @@ haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstr
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeBigint, IntegerTypeInt32],
   languageConstraintsTermVariants = S.fromList [
     TermVariantApplication,
-    TermVariantElement,
     TermVariantFunction,
     TermVariantLet,
     TermVariantList,
@@ -34,7 +33,6 @@ haskellLanguage = Language (LanguageName "hydra/langs/haskell") $ LanguageConstr
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
     TypeVariantApplication,
-    TypeVariantElement,
     TypeVariantFunction,
     TypeVariantLambda,
     TypeVariantList,

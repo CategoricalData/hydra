@@ -28,7 +28,6 @@ javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints 
     IntegerTypeUint16], -- char
   languageConstraintsTermVariants = S.fromList [
     TermVariantApplication,
-    TermVariantElement,
     TermVariantFunction,
     TermVariantLet,
     TermVariantList,
@@ -43,7 +42,6 @@ javaLanguage = Language (LanguageName "hydra/langs/java") $ LanguageConstraints 
   languageConstraintsTypeVariants = S.fromList [
     TypeVariantAnnotated,
     TypeVariantApplication,
-    TypeVariantElement,
     TypeVariantFunction,
     TypeVariantLambda,
     TypeVariantList,

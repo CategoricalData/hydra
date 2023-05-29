@@ -82,7 +82,6 @@ encodeAdaptedType namespaces typ = adaptType haskellLanguage typ >>= encodeType 
 encodeFunction :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Function a -> GraphFlow a H.Expression
 encodeFunction namespaces fun = case fun of
     FunctionElimination e -> case e of
-      EliminationElement -> pure $ hsvar "id"
       EliminationList fun -> do
         let lhs = hsvar "foldl"
         rhs <- encodeTerm namespaces fun
@@ -149,10 +148,7 @@ encodeLiteral av = case av of
 encodeTerm :: (Eq a, Ord a, Read a, Show a) => Namespaces -> Term a -> GraphFlow a H.Expression
 encodeTerm namespaces term = do
    case stripTerm term of
-    TermApplication (Application fun arg) -> case stripTerm fun of
-       TermFunction (FunctionElimination EliminationElement) -> encode arg
-       _ -> hsapp <$> encode fun <*> encode arg
-    TermElement name -> pure $ H.ExpressionVariable $ elementReference namespaces name
+    TermApplication (Application fun arg) -> hsapp <$> encode fun <*> encode arg
     TermFunction f -> encodeFunction namespaces f
     TermLet (Let bindings env) -> do
         hbindings <- CM.mapM encodeBinding $ M.toList bindings
@@ -194,7 +190,6 @@ encodeTerm namespaces term = do
 encodeType :: Show a => Namespaces -> Type a -> GraphFlow a H.Type
 encodeType namespaces typ = case stripType typ of
     TypeApplication (ApplicationType lhs rhs) -> toTypeApplication <$> CM.sequence [encode lhs, encode rhs]
-    TypeElement et -> encode et
     TypeFunction (FunctionType dom cod) -> H.TypeFunction <$> (H.Type_Function <$> encode dom <*> encode cod)
     TypeLambda (LambdaType (Name v) body) -> toTypeApplication <$> CM.sequence [
       encode body,

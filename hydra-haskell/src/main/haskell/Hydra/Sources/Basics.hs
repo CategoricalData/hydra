@@ -53,7 +53,6 @@ eliminationVariantDef = basicsDefinition "eliminationVariant" $
   doc "Find the elimination variant (constructor) for a given elimination term" $
   typed (Types.function (Types.apply (Types.wrap _Elimination) (Types.var "a")) (Types.wrap _EliminationVariant)) $
   matchToEnum _Elimination _EliminationVariant Nothing [
-    _Elimination_element  @-> _EliminationVariant_element,
     _Elimination_list     @-> _EliminationVariant_list,
     _Elimination_optional @-> _EliminationVariant_optional,
     _Elimination_record   @-> _EliminationVariant_record,
@@ -64,7 +63,6 @@ eliminationVariantsDef :: Definition [EliminationVariant]
 eliminationVariantsDef = basicsDefinition "eliminationVariants" $
   doc "All elimination variants (constructors), in a canonical order" $
   list $ unitVariant _EliminationVariant <$> [
-    _EliminationVariant_element,
     _EliminationVariant_list,
     _EliminationVariant_wrap,
     _EliminationVariant_optional,
@@ -233,7 +231,6 @@ termVariantDef = basicsDefinition "termVariant" $
     matchToEnum _Term _TermVariant Nothing [
       _Term_annotated       @-> _TermVariant_annotated,
       _Term_application     @-> _TermVariant_application,
-      _Term_element         @-> _TermVariant_element,
       _Term_function        @-> _TermVariant_function,
       _Term_let             @-> _TermVariant_let,
       _Term_list            @-> _TermVariant_list,
@@ -256,7 +253,6 @@ termVariantsDef = basicsDefinition "termVariants" $
     _TermVariant_annotated,
     _TermVariant_application,
     _TermVariant_literal,
-    _TermVariant_element,
     _TermVariant_function,
     _TermVariant_list,
     _TermVariant_map,
@@ -277,7 +273,6 @@ typeVariantDef = basicsDefinition "typeVariant" $
     matchToEnum _Type _TypeVariant Nothing [
       _Type_annotated   @-> _TypeVariant_annotated,
       _Type_application @-> _TypeVariant_application,
-      _Type_element     @-> _TypeVariant_element,
       _Type_function    @-> _TypeVariant_function,
       _Type_lambda      @-> _TypeVariant_lambda,
       _Type_list        @-> _TypeVariant_list,
@@ -299,7 +294,6 @@ typeVariantsDef = basicsDefinition "typeVariants" $
   list $ unitVariant _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
-    _TypeVariant_element,
     _TypeVariant_function,
     _TypeVariant_lambda,
     _TypeVariant_list,

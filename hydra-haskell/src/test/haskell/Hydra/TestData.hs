@@ -25,12 +25,6 @@ eitherStringOrInt8TypeName = fromQname testNamespace "EitherStringOrInt8"
 exampleProjectionType :: Type Kv
 exampleProjectionType = Types.function testTypePerson Types.string
 
-int32ElementType :: Type a
-int32ElementType = TypeElement Types.int32
-
-int32ElementDataType :: Type a
-int32ElementDataType = Types.function int32ElementType Types.int32
-
 listOfInt8sType :: Type a
 listOfInt8sType = Types.list Types.int8
 
@@ -39,9 +33,6 @@ listOfInt16sType = Types.list Types.int16
 
 listOfListsOfStringsType :: Type a
 listOfListsOfStringsType = Types.list $ Types.list Types.string
-
-listOfSetOfInt32ElementReferencesType :: Type a
-listOfSetOfInt32ElementReferencesType = Types.list $ Types.set $ TypeElement Types.int32
 
 listOfSetOfStringsType :: Type a
 listOfSetOfStringsType = Types.list $ Types.set Types.string
