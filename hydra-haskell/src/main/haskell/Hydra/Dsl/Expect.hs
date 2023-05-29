@@ -64,6 +64,13 @@ float64Literal v = case v of
   LiteralFloat (FloatValueFloat64 f) -> pure f
   _ -> unexpected "float64" v
 
+inject :: Show a => Name -> Term a -> Flow s (Field a)
+inject name term = case Common.stripTerm term of
+  TermUnion (Injection name' field) -> if name' == name
+    then pure field
+    else fail $ "found an injection of type " ++ unName name' ++ ", expected " ++ unName name
+  _ -> unexpected "injection" term
+
 injection :: Show a => Term a -> Flow s (Field a)
 injection term = case Common.stripTerm term of
   TermUnion (Injection _ field) -> pure field
@@ -197,12 +204,10 @@ stringLiteral v = case v of
   LiteralString s -> pure s
   _ -> unexpected "string" v
 
-inject :: Show a => Name -> Term a -> Flow s (Field a)
-inject name term = case Common.stripTerm term of
-  TermUnion (Injection name' field) -> if name' == name
-    then pure field
-    else fail $ "found an injection of type " ++ unName name' ++ ", expected " ++ unName name
-  _ -> unexpected "injection" term
+variable :: Show a => Term a -> Flow s Name
+variable term = case Common.stripTerm term of
+  TermVariable name -> pure name
+  _ -> unexpected "variable" term
 
 wrapWithName :: Show a => Name -> Term a -> Flow s (Term a)
 wrapWithName expected term = case Common.stripTerm term of

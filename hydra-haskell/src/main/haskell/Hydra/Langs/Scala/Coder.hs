@@ -36,8 +36,8 @@ constructModule mod coders pairs = do
     return $ Scala.Pkg pname pref (imports ++ defs)
   where
     h (Namespace n) = n
-    imports = (toElImport <$> S.toList (moduleDependencyNamespaces True False True mod))
-        ++ (toPrimImport <$> S.toList (moduleDependencyNamespaces False True False mod))
+    imports = (toElImport <$> S.toList (moduleDependencyNamespaces False True False True mod))
+        ++ (toPrimImport <$> S.toList (moduleDependencyNamespaces False False True False mod))
       where
         toElImport (Namespace ns) = Scala.StatImportExport $ Scala.ImportExportStatImport $ Scala.Import [
           Scala.Importer (Scala.Data_RefName $ toScalaName ns) [Scala.ImporteeWildcard]]

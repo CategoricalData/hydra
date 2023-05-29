@@ -55,7 +55,7 @@ importAliasesForModule :: Module a -> Aliases
 importAliasesForModule mod = Aliases pkgs S.empty
   where
     pkgs = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
-    deps = moduleDependencyNamespaces True True True mod
+    deps = moduleDependencyNamespaces False True True True mod
     addName m name = M.insert name (moduleNamespaceToPackageName name) m
     moduleNamespaceToPackageName (Namespace n) = javaPackageName $ Strings.splitOn "/" n
 
