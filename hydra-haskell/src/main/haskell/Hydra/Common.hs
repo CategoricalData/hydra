@@ -16,10 +16,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-data QualifiedName = QualifiedName {
-  qualifiedNameNamespace :: Maybe Namespace,
-  qualifiedNameLocal :: String} deriving (Eq, Ord, Show)
-
 debug :: Bool
 debug = True
 

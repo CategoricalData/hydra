@@ -20,7 +20,7 @@ hydraModuleModule = Module ns elements [hydraGraphModule] $
     elements = [
 
       def "FileExtension" string,
-      
+
       def "Module" $
         doc "A logical collection of elements in the same namespace, having dependencies on zero or more other modules" $
         lambda "a" $ record [
@@ -39,4 +39,10 @@ hydraModuleModule = Module ns elements [hydraGraphModule] $
 
       def "Namespace" $
         doc "A prefix for element names"
-        string]
+        string,
+
+      def "QualifiedName" $
+        doc "A qualified name consisting of an optional namespace together with a mandatory local name" $
+        record [
+          "namespace">: optional $ mod "Namespace",
+          "local">: string]]
