@@ -205,11 +205,6 @@ public class PrettyPrinter {
                 }
 
                 @Override
-                public Consumer<StringBuilder> visit(Term.Element<A> instance) {
-                    return sb -> sb.append("@").append(shortName(instance.value));
-                }
-
-                @Override
                 public Consumer<StringBuilder> visit(Term.Function<A> instance) {
                     return function(instance.value);
                 }

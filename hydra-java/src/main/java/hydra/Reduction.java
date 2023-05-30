@@ -119,11 +119,6 @@ public class Reduction {
     private static <A> Flow<Graph<A>, Term<A>> applyElimination(Elimination<A> elm, Term<A> reducedArg) {
         return elm.accept(new Elimination.Visitor<>() {
             @Override
-            public Flow<Graph<A>, Term<A>> visit(Elimination.Element<A> instance) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
             public Flow<Graph<A>, Term<A>> visit(Elimination.List<A> instance) {
                 throw new UnsupportedOperationException();
             }

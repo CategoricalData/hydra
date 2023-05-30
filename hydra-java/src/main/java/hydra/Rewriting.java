@@ -40,11 +40,6 @@ public interface Rewriting {
         Elimination<A> original) {
         return original.accept(new Elimination.Visitor<>() {
             @Override
-            public Flow<S, Elimination<B>> visit(Elimination.Element<A> instance) {
-                return pure(new Elimination.Element<>());
-            }
-
-            @Override
             public Flow<S, Elimination<B>> visit(Elimination.List<A> instance) {
                 // TODO: this is incorrect in Hydra Core
                 Term<A> foldA = instance.value;
@@ -137,11 +132,6 @@ public interface Rewriting {
                     Term<A> argA = instance.value.argument;
                     return map2(recurse.apply(funA), recurse.apply(argA),
                         (f1, a) -> new Term.Application<>(new Application<>(f1, a)));
-                }
-
-                @Override
-                public Flow<S, Term<B>> visit(Term.Element<A> instance) {
-                    return pure(new Term.Element<>(instance.value));
                 }
 
                 @Override
