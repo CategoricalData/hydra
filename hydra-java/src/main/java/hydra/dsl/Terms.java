@@ -77,10 +77,6 @@ public interface Terms {
         return elimination(new Elimination.Union<>(new CaseStatement<>(name, def, Arrays.asList(fields))));
     }
 
-    static <A> Term<A> delta() {
-        return elimination(new Elimination.Element<>());
-    }
-
     static <A> Term<A> elimination(final Elimination<A> elim) {
         return function(new Function.Elimination<>(elim));
     }
