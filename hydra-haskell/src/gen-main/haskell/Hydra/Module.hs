@@ -46,3 +46,16 @@ newtype Namespace =
   deriving (Eq, Ord, Read, Show)
 
 _Namespace = (Core.Name "hydra/module.Namespace")
+
+-- | A qualified name consisting of an optional namespace together with a mandatory local name
+data QualifiedName = 
+  QualifiedName {
+    qualifiedNameNamespace :: (Maybe Namespace),
+    qualifiedNameLocal :: String}
+  deriving (Eq, Ord, Read, Show)
+
+_QualifiedName = (Core.Name "hydra/module.QualifiedName")
+
+_QualifiedName_namespace = (Core.FieldName "namespace")
+
+_QualifiedName_local = (Core.FieldName "local")
