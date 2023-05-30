@@ -24,6 +24,7 @@ hydraWorkflowModule = Module ns elements [hydraModuleModule, hydraComputeModule,
     def = datatype ns
 
     elements = [
+
       def "HydraSchemaSpec" $
         doc "The specification of a Hydra schema, provided as a set of modules and a distinguished type" $
         record [

@@ -15,8 +15,9 @@ import qualified Data.Maybe as Y
 type PackageMap = M.Map Namespace Java.PackageName
 
 data Aliases = Aliases {
+  aliasesCurrentNamespace :: Namespace,
   aliasesPackages :: PackageMap,
-  aliasesRecursiveVars :: S.Set Name }
+  aliasesRecursiveVars :: S.Set Name } deriving Show
 
 addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
 addExpressions exprs = L.foldl add (Java.AdditiveExpressionUnary $ L.head exprs) $ L.tail exprs
@@ -52,12 +53,13 @@ fieldNameToJavaVariableDeclaratorId :: FieldName -> Java.VariableDeclaratorId
 fieldNameToJavaVariableDeclaratorId (FieldName n) = javaVariableDeclaratorId $ javaIdentifier n
 
 importAliasesForModule :: Module a -> Aliases
-importAliasesForModule mod = Aliases pkgs S.empty
-  where
-    pkgs = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
-    deps = moduleDependencyNamespaces False True True True mod
-    addName m name = M.insert name (moduleNamespaceToPackageName name) m
-    moduleNamespaceToPackageName (Namespace n) = javaPackageName $ Strings.splitOn "/" n
+importAliasesForModule mod = Aliases (moduleNamespace mod) M.empty S.empty
+-- importAliasesForModule mod = Aliases (moduleNamespace mod) pkgs S.empty
+--   where
+--     pkgs = addName (L.foldl addName M.empty $ S.toList deps) $ moduleNamespace mod
+--     deps = moduleDependencyNamespaces True True True True mod
+--     addName m name = M.insert name (moduleNamespaceToPackageName name) m
+--     moduleNamespaceToPackageName (Namespace n) = javaPackageName $ Strings.splitOn "/" n
 
 interfaceMethodDeclaration :: [Java.InterfaceMethodModifier] -> [Java.TypeParameter] -> String -> [Java.FormalParameter]
    -> Java.Result -> Maybe [Java.BlockStatement] -> Java.InterfaceMemberDeclaration
@@ -66,6 +68,9 @@ interfaceMethodDeclaration mods tparams methodName params result stmts = Java.In
   where
     header = javaMethodHeader tparams methodName params result
     body = javaMethodBody stmts
+
+isEscaped :: String -> Bool
+isEscaped s = L.head s == '$'
 
 javaAdditiveExpressionToJavaExpression :: Java.AdditiveExpression -> Java.Expression
 javaAdditiveExpressionToJavaExpression = javaRelationalExpressionToJavaExpression .
@@ -406,13 +411,17 @@ nameToJavaClassType aliases qualify args name mlocal = Java.ClassType [] pkg id 
   where
     (id, pkg) = nameToQualifiedJavaName aliases qualify name mlocal
 
-nameToQualifiedJavaName :: Aliases -> Bool -> Name -> Maybe String
-  -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
+nameToQualifiedJavaName :: Aliases -> Bool -> Name -> Maybe String -> (Java.TypeIdentifier, Java.ClassTypeQualifier)
 nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
   where
-    QualifiedName (Just gname) local = qualifyNameEager name
+    QualifiedName ns local = qualifyNameEager name
+    alias = case ns of
+      Nothing -> Nothing
+      Just n -> case M.lookup n (aliasesPackages aliases) of
+          Nothing -> Just $ javaPackageName $ Strings.splitOn "/" $ unNamespace n
+          Just id -> Just id
     pkg = if qualify
-      then Y.maybe none Java.ClassTypeQualifierPackage $ M.lookup gname $ aliasesPackages aliases
+      then Y.maybe none Java.ClassTypeQualifierPackage alias
       else none
     none = Java.ClassTypeQualifierNone
     jid = javaTypeIdentifier $ case mlocal of
@@ -420,11 +429,16 @@ nameToQualifiedJavaName aliases qualify name mlocal = (jid, pkg)
       Just l -> sanitizeJavaName local ++ "." ++ sanitizeJavaName l
 
 nameToJavaName :: Aliases -> Name -> Java.Identifier
-nameToJavaName aliases name = Java.Identifier $ case M.lookup gname (aliasesPackages aliases) of
-    Nothing -> local
-    Just (Java.PackageName parts) -> L.intercalate "." $ (Java.unIdentifier <$> parts) ++ [sanitizeJavaName local]
+nameToJavaName aliases name = Java.Identifier $ if isEscaped (unName name)
+    then sanitizeJavaName local
+    else case ns of
+      Nothing -> local
+      Just gname -> case M.lookup gname (aliasesPackages aliases) of
+        Nothing -> fromParts $ Strings.splitOn "/" $ unNamespace gname
+        Just (Java.PackageName parts) -> fromParts (Java.unIdentifier <$> parts)
   where
-    QualifiedName (Just gname) local = qualifyNameEager name
+    QualifiedName ns local = qualifyNameEager name
+    fromParts parts = L.intercalate "." $ parts ++ [sanitizeJavaName local]
 
 nameToJavaReferenceType :: Aliases -> Bool -> [Java.TypeArgument] -> Name -> Maybe String -> Java.ReferenceType
 nameToJavaReferenceType aliases qualify args name mlocal = Java.ReferenceTypeClassOrInterface $ Java.ClassOrInterfaceTypeClass $
@@ -440,9 +454,9 @@ referenceTypeToResult :: Java.ReferenceType -> Java.Result
 referenceTypeToResult = javaTypeToJavaResult . Java.TypeReference
 
 sanitizeJavaName :: String -> String
-sanitizeJavaName name = if L.head name == '$'
+sanitizeJavaName name = if isEscaped name
   -- The '$' prefix allows names to be excluded from sanitization
-  then L.tail name
+  then unescape name
   else sanitizeWithUnderscores reservedWords name
 
 toAcceptMethod :: Bool -> [Java.TypeParameter] -> Java.ClassBodyDeclaration
@@ -497,6 +511,9 @@ typeParameterToReferenceType = javaTypeVariable . unTypeParameter
 
 unTypeParameter :: Java.TypeParameter -> String
 unTypeParameter (Java.TypeParameter [] (Java.TypeIdentifier (Java.Identifier v)) Nothing) = v
+
+unescape :: String -> String
+unescape = L.tail
 
 variableDeclarationStatement :: Aliases -> Java.Type -> Java.Identifier -> Java.Expression -> Java.BlockStatement
 variableDeclarationStatement aliases jtype id rhs = Java.BlockStatementLocalVariableDeclaration $
