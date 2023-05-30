@@ -81,13 +81,6 @@ public interface Printing {
       }
       
       @Override
-      public String visit(hydra.core.Type.Element<A> instance) {
-        return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
-          "elements containing ",
-          hydra.printing.Printing.describeType((instance.value))));
-      }
-      
-      @Override
       public String visit(hydra.core.Type.Function<A> instance) {
         return hydra.lib.strings.Cat.apply(java.util.Arrays.asList(
           hydra.lib.strings.Cat.apply(java.util.Arrays.asList(

@@ -13,8 +13,6 @@ public abstract class Elimination<A> {
   public abstract <R> R accept(Visitor<A, R> visitor) ;
   
   public interface Visitor<A, R> {
-    R visit(Element<A> instance) ;
-    
     R visit(List<A> instance) ;
     
     R visit(Optional<A> instance) ;
@@ -29,10 +27,6 @@ public abstract class Elimination<A> {
   public interface PartialVisitor<A, R> extends Visitor<A, R> {
     default R otherwise(Elimination<A> instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(Element<A> instance) {
-      return otherwise((instance));
     }
     
     default R visit(List<A> instance) {
@@ -53,34 +47,6 @@ public abstract class Elimination<A> {
     
     default R visit(Wrap<A> instance) {
       return otherwise((instance));
-    }
-  }
-  
-  /**
-   * Eliminates an element by mapping it to its data term. This is Hydra's delta function.
-   */
-  public static final class Element<A> extends hydra.core.Elimination<A> {
-    public Element () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Element)) {
-        return false;
-      }
-      Element o = (Element) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<A, R> visitor) {
-      return visitor.visit(this);
     }
   }
   
