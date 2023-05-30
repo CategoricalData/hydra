@@ -33,7 +33,7 @@ testNs = Namespace "hydra/demos/meteredEvaluation"
 testModule :: Module Kv
 testModule = Module testNs elements [hydraMantleModule] Nothing
   where
-    test = Definition . fromQname testNs
+    test local datum = Definition (unqualifyName $ QualifiedName (Just testNs) local) datum
     elements = [
         el $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 @@ int32 42)),
         el $ test "describeType" $ ref describeTypeDef @@ (Datum $ epsilonEncodeType $ Types.list $ Types.int32)]
@@ -47,6 +47,6 @@ demoMeteredEvaluation = do
   where
     context = modulesToGraph [testModule]
     evaluateSelectedTerm = do
-      original <- dereferenceElement $ fromQname testNs "catStrings"
+      original <- dereferenceElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings"
       reduced <- reduceTerm False M.empty original
       return reduced
