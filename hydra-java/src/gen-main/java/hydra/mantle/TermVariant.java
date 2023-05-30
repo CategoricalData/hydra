@@ -17,8 +17,6 @@ public abstract class TermVariant {
     
     R visit(Application instance) ;
     
-    R visit(Element instance) ;
-    
     R visit(Function instance) ;
     
     R visit(Let instance) ;
@@ -58,10 +56,6 @@ public abstract class TermVariant {
     }
     
     default R visit(Application instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Element instance) {
       return otherwise((instance));
     }
     
@@ -158,31 +152,6 @@ public abstract class TermVariant {
         return false;
       }
       Application o = (Application) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  public static final class Element extends hydra.mantle.TermVariant {
-    public Element () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Element)) {
-        return false;
-      }
-      Element o = (Element) (other);
       return true;
     }
     

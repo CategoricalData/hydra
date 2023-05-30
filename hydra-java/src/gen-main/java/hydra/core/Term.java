@@ -17,8 +17,6 @@ public abstract class Term<A> {
     
     R visit(Application<A> instance) ;
     
-    R visit(Element<A> instance) ;
-    
     R visit(Function<A> instance) ;
     
     R visit(Let<A> instance) ;
@@ -58,10 +56,6 @@ public abstract class Term<A> {
     }
     
     default R visit(Application<A> instance) {
-      return otherwise((instance));
-    }
-    
-    default R visit(Element<A> instance) {
       return otherwise((instance));
     }
     
@@ -174,39 +168,6 @@ public abstract class Term<A> {
         return false;
       }
       Application o = (Application) (other);
-      return value.equals(o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * value.hashCode();
-    }
-    
-    @Override
-    public <R> R accept(Visitor<A, R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * An element reference
-   */
-  public static final class Element<A> extends hydra.core.Term<A> {
-    /**
-     * An element reference
-     */
-    public final hydra.core.Name value;
-    
-    public Element (hydra.core.Name value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Element)) {
-        return false;
-      }
-      Element o = (Element) (other);
       return value.equals(o.value);
     }
     

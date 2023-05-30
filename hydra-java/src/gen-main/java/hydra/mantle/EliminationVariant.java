@@ -13,8 +13,6 @@ public abstract class EliminationVariant {
   public abstract <R> R accept(Visitor<R> visitor) ;
   
   public interface Visitor<R> {
-    R visit(Element instance) ;
-    
     R visit(List instance) ;
     
     R visit(Optional instance) ;
@@ -29,10 +27,6 @@ public abstract class EliminationVariant {
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(EliminationVariant instance) {
       throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
-    }
-    
-    default R visit(Element instance) {
-      return otherwise((instance));
     }
     
     default R visit(List instance) {
@@ -53,31 +47,6 @@ public abstract class EliminationVariant {
     
     default R visit(Wrap instance) {
       return otherwise((instance));
-    }
-  }
-  
-  public static final class Element extends hydra.mantle.EliminationVariant {
-    public Element () {
-    
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof Element)) {
-        return false;
-      }
-      Element o = (Element) (other);
-      return true;
-    }
-    
-    @Override
-    public int hashCode() {
-      return 0;
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
     }
   }
   
