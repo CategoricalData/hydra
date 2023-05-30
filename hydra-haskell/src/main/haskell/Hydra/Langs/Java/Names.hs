@@ -4,7 +4,9 @@ import Hydra.Kernel
 
 
 acceptMethodName = "accept" :: String
+applyMethodName = "apply" :: String
 equalsMethodName = "equals" :: String
+getMethodName = "get" :: String
 hashCodeMethodName = "hashCode" :: String
 instanceName = "instance" :: String
 otherInstanceName = "other" :: String

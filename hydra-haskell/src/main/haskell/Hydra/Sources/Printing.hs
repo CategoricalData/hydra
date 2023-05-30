@@ -21,8 +21,7 @@ hydraPrintingModule = Module (Namespace "hydra/printing") elements [hydraBasicsM
      el describeIntegerTypeDef,
      el describeLiteralTypeDef,
      el describePrecisionDef,
-     el describeTypeDef
-     ]
+     el describeTypeDef]
 
 printingDefinition :: String -> Datum a -> Definition a
 printingDefinition = definitionInModule hydraPrintingModule

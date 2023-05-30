@@ -355,9 +355,12 @@ declarationForUnionType aliases tparams elName fields = do
 
 elementJavaIdentifier :: Bool -> Aliases -> Name -> Java.Identifier
 elementJavaIdentifier isPrim aliases name = Java.Identifier $ if isPrim
-    then (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns $ capitalize local) ++ ".apply"
-    else (Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns $ elementsClassName (Y.fromJust ns)) ++ "." ++ local
+    then (qualify $ capitalize local) ++ "." ++ applyMethodName
+    else case ns of
+      Nothing -> local
+      Just n -> (qualify $ elementsClassName n) ++ "." ++ local
   where
+    qualify s = Java.unIdentifier $ nameToJavaName aliases $ unqualifyName $ QualifiedName ns s
     QualifiedName ns local = qualifyNameEager name
 
 elementsClassName :: Namespace -> String
@@ -367,8 +370,9 @@ encodeApplication :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Application a -> GraphFlow a Java.Expression
 encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
     TermFunction f -> case f of
-      FunctionPrimitive name -> forNamedFunction aliases True name args
+      FunctionPrimitive name -> functionCall aliases True name args
       _ -> fallback
+    TermVariable name -> functionCall aliases False name args
     _ -> fallback
   where
     (fun, args) = uncurry [] lhs rhs
@@ -395,7 +399,7 @@ encodeApplication aliases app@(Application lhs rhs) = case stripTerm fun of
           jfun <- encodeTerm aliases lhs
           jarg <- encodeTerm aliases rhs
           let prim = javaExpressionToJavaPrimary jfun
-          return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier "apply") [jarg]
+          return $ javaMethodInvocationToJavaExpression $ methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) [jarg]
 
 encodeElimination :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Maybe Java.Expression -> Type a -> Type a -> Elimination a -> GraphFlow a Java.Expression
@@ -549,7 +553,7 @@ encodeLiteralType lt = case lt of
 encodeNullaryConstant :: (Eq a, Ord a, Read a, Show a)
   => Aliases -> Type a -> Function a -> GraphFlow a Java.Expression
 encodeNullaryConstant aliases typ fun = case fun of
-  FunctionPrimitive name -> forNamedFunction aliases True name []
+  FunctionPrimitive name -> functionCall aliases True name []
   _ -> unexpected "nullary function" fun
 
 encodeTerm :: (Eq a, Ord a, Read a, Show a)
@@ -613,13 +617,7 @@ encodeTerm aliases term0 = encodeInternal [] term0
               return [ex]
           return $ javaConstructorCall (javaConstructorName consId Nothing) args Nothing
 
-        TermVariable name -> pure $ if isRec
-            then javaMethodInvocationToJavaExpression $
-              methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier "get") []
-            else javaIdentifierToJavaExpression jid
-          where
-            jid = javaIdentifier $ unName name
-            isRec = S.member name (aliasesRecursiveVars aliases)
+        TermVariable name -> encodeVariable aliases name
 
         _ -> failAsLiteral $ "Unimplemented term variant: " ++ show (termVariant term)
 
@@ -669,15 +667,30 @@ encodeType aliases t = case stripType t of
     encode = encodeType aliases
     unit = return $ javaRefType [] javaLangPackageName "Void"
 
+encodeVariable :: Aliases -> Name -> GraphFlow a Java.Expression
+encodeVariable aliases name = do
+   pure $ if isRecursiveVariable aliases name
+    then javaMethodInvocationToJavaExpression $
+      methodInvocation (Just $ Left $ Java.ExpressionName Nothing jid) (Java.Identifier getMethodName) []
+    else javaIdentifierToJavaExpression $ elementJavaIdentifier False aliases name
+  where
+    jid = javaIdentifier $ unName name
+
 fieldTypeToFormalParam aliases (FieldType fname ft) = do
   jt <- encodeType aliases ft
   return $ javaTypeToJavaFormalParameter jt fname
 
-forNamedFunction :: (Eq a, Ord a, Read a, Show a) => Aliases -> Bool -> Name -> [Term a] -> GraphFlow a Java.Expression
-forNamedFunction aliases prim name args = do
+functionCall :: (Eq a, Ord a, Read a, Show a) => Aliases -> Bool -> Name -> [Term a] -> GraphFlow a Java.Expression
+functionCall aliases prim name args = do
     jargs <- CM.mapM (encodeTerm aliases) args
-    let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
-    return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
+    if isLocalVariable name
+      then do
+        prim <- javaExpressionToJavaPrimary <$> encodeVariable aliases name
+        return $ javaMethodInvocationToJavaExpression $
+          methodInvocation (Just $ Right prim) (Java.Identifier applyMethodName) jargs
+      else do
+        let header = Java.MethodInvocation_HeaderSimple $ Java.MethodName $ elementJavaIdentifier prim aliases name
+        return $ javaMethodInvocationToJavaExpression $ Java.MethodInvocation header jargs
 
 getCodomain :: Show a => a -> GraphFlow a (Type a)
 getCodomain ann = functionTypeCodomain <$> getFunctionType ann
@@ -698,7 +711,13 @@ innerClassRef aliases name local = Java.Identifier $ id ++ "." ++ local
     Java.Identifier id = nameToJavaName aliases name
 
 isLambdaBoundVariable :: Name -> Bool
-isLambdaBoundVariable (Name v) = L.length v <= 3
+isLambdaBoundVariable (Name v) = L.length v <= 4
+
+isLocalVariable :: Name -> Bool
+isLocalVariable name = Y.isNothing $ qualifiedNameNamespace $ qualifyNameEager name
+
+isRecursiveVariable :: Aliases -> Name -> Bool
+isRecursiveVariable aliases name = S.member name (aliasesRecursiveVars aliases)
 
 javaTypeArgumentsForNamedType :: Show a => Name -> GraphFlow a [Java.TypeArgument]
 javaTypeArgumentsForNamedType tname = do
