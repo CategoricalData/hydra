@@ -133,8 +133,8 @@ elementCoder mparent schema source = case stripType source of
     outVertexLabelKey = annotationSchemaOutVertexLabel $ schemaAnnotations schema
     inVertexKey = annotationSchemaInVertex $ schemaAnnotations schema
     inVertexLabelKey = annotationSchemaInVertexLabel $ schemaAnnotations schema
-    outEdgeLabelKey = annotationSchemaOutEdge $ schemaAnnotations schema
-    inEdgeLabelKey = annotationSchemaInEdge $ schemaAnnotations schema
+    outEdgeLabelKey = annotationSchemaOutEdgeLabel $ schemaAnnotations schema
+    inEdgeLabelKey = annotationSchemaInEdgeLabel $ schemaAnnotations schema
     ignoreKey = annotationSchemaIgnore $ schemaAnnotations schema
 
     findLabelString tname labelKey = case getTypeAnnotation labelKey source of
