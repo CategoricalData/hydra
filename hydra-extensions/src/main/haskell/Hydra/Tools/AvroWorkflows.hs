@@ -149,7 +149,7 @@ shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriple
 
 typedTermToPropertyGraph :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
 typedTermToPropertyGraph schema typ = do
-    adapter <- elementCoder PG.DirectionBoth schema typ
+    adapter <- elementCoder Nothing schema typ
     return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term
   where
     flattenTree tree = (PG.elementTreePrimary tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
