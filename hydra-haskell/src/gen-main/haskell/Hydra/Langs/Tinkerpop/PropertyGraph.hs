@@ -7,6 +7,21 @@ import Data.List
 import Data.Map
 import Data.Set
 
+-- | The direction of an edge
+data Direction = 
+  DirectionOut  |
+  DirectionIn  |
+  DirectionBoth 
+  deriving (Eq, Ord, Read, Show)
+
+_Direction = (Core.Name "hydra/langs/tinkerpop/propertyGraph.Direction")
+
+_Direction_out = (Core.FieldName "out")
+
+_Direction_in = (Core.FieldName "in")
+
+_Direction_both = (Core.FieldName "both")
+
 -- | An edge
 data Edge v e p = 
   Edge {
