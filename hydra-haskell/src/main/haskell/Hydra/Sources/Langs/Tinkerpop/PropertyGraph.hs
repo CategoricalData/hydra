@@ -59,12 +59,26 @@ tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
         doc "The kind of an element: vertex or edge" $
         enum ["vertex", "edge"],
 
+      def "ElementTree" $
+        doc "An element together with its dependencies in some context" $
+        lambda "v" $ lambda "e" $ lambda "p" $
+        record [
+          "primary">: pg "Element" @@ "v" @@ "e" @@ "p",
+          "dependencies">: Types.list $ pg "ElementTree" @@ "v" @@ "e" @@ "p"],
+
       def "ElementType" $
         doc "The type of a vertex or edge" $
         lambda "t" $
         union [
           "vertex">: pg "VertexType" @@ "t",
           "edge">: pg "EdgeType" @@ "t"],
+
+      def "ElementTypeTree" $
+        doc "An element type together with its dependencies in some context" $
+        lambda "t" $
+        record [
+          "primary">: pg "ElementType" @@ "t",
+          "dependencies">: Types.list $ pg "ElementTypeTree" @@ "t"],
 
       def "Graph" $
         doc "A graph; a self-contained collection of vertices and edges" $
