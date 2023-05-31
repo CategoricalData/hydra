@@ -96,6 +96,19 @@ _ElementKind_vertex = (Core.FieldName "vertex")
 
 _ElementKind_edge = (Core.FieldName "edge")
 
+-- | An element together with its dependencies in some context
+data ElementTree v e p = 
+  ElementTree {
+    elementTreePrimary :: (Element v e p),
+    elementTreeDependencies :: [ElementTree v e p]}
+  deriving (Eq, Ord, Read, Show)
+
+_ElementTree = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTree")
+
+_ElementTree_primary = (Core.FieldName "primary")
+
+_ElementTree_dependencies = (Core.FieldName "dependencies")
+
 -- | The type of a vertex or edge
 data ElementType t = 
   ElementTypeVertex (VertexType t) |
@@ -107,6 +120,19 @@ _ElementType = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementType")
 _ElementType_vertex = (Core.FieldName "vertex")
 
 _ElementType_edge = (Core.FieldName "edge")
+
+-- | An element type together with its dependencies in some context
+data ElementTypeTree t = 
+  ElementTypeTree {
+    elementTypeTreePrimary :: (ElementType t),
+    elementTypeTreeDependencies :: [ElementTypeTree t]}
+  deriving (Eq, Ord, Read, Show)
+
+_ElementTypeTree = (Core.Name "hydra/langs/tinkerpop/propertyGraph.ElementTypeTree")
+
+_ElementTypeTree_primary = (Core.FieldName "primary")
+
+_ElementTypeTree_dependencies = (Core.FieldName "dependencies")
 
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v e p = 

@@ -76,7 +76,8 @@ examplePgSchema = PGM.Schema {
     PGM.schemaEdgeIds = mkCoder "encode edge id" Expect.string (pure . Terms.string),
     PGM.schemaPropertyTypes = mkCoder "encode property type" (\_ -> pure ()) (\_ -> pure Types.unit),
     PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string (pure . Terms.string),
-    PGM.schemaAnnotations = defaultTinkerpopAnnotations}
+    PGM.schemaAnnotations = defaultTinkerpopAnnotations,
+    PGM.schemaDefaultVertexId = "defaultVertexId"}
   where
     mkCoder lab encode decode = Coder (withTrace lab . encode) decode
 
@@ -149,9 +150,9 @@ shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriple
 typedTermToPropertyGraph :: PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
 typedTermToPropertyGraph schema typ = do
     adapter <- elementCoder PG.DirectionBoth schema typ
-    return $ \term graph -> do
-      el <- coderEncode (adapterCoder adapter) term
-      return [el]
+    return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term
+  where
+    flattenTree tree = (PG.elementTreePrimary tree):(L.concat $ (flattenTree <$> PG.elementTreeDependencies tree))
 
 typedTermToShaclRdf :: Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [Rdf.Description])
 typedTermToShaclRdf _ = pure encode
