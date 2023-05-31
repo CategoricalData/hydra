@@ -71,6 +71,7 @@ edgeCoder dir schema source tname label outLabel inLabel idAdapter outAdapter in
 elementCoder :: (Show v, Show e, Show p) => Y.Maybe (PG.Direction, PG.VertexLabel)
   -> Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
 elementCoder mparent schema source = case stripType source of
+    TypeOptional ot -> elementCoder mparent schema ot
     TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
