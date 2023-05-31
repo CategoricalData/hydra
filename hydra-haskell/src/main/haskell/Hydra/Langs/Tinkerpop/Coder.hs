@@ -164,20 +164,28 @@ elementCoder schema typ = case stripType typ of
             Just sp -> decodeValueSpec sp
           return $ ProjectionSpec field values alias
 
-encodeProperties :: M.Map FieldName (Term a) -> [PropertyAdapter s a t p] -> Flow s (M.Map PG.PropertyKey p)
+encodeProperties :: Show a => M.Map FieldName (Term a) -> [PropertyAdapter s a t p] -> Flow s (M.Map PG.PropertyKey p)
 encodeProperties fields adapters = do
   props <- Y.catMaybes <$> CM.mapM (encodeProperty fields) adapters
   return $ M.fromList $ fmap (\(PG.Property key val) -> (key, val)) props
 
-encodeProperty :: M.Map FieldName (Term a) -> PropertyAdapter s a t p -> Flow s (Maybe (PG.Property p))
+encodeProperty :: Show a => M.Map FieldName (Term a) -> PropertyAdapter s a t p -> Flow s (Maybe (PG.Property p))
 encodeProperty fields adapter = do
   case M.lookup fname fields of
-    Nothing -> case stripType (fieldTypeType $ adapterSource adapter) of
+    Nothing -> case ftyp of
       TypeOptional _ -> pure Nothing
       _ -> fail $ "expected field not found in record: " ++ unFieldName fname
-    Just value -> Just <$> coderEncode (adapterCoder adapter) (Field fname value)
+    Just value -> case ftyp of
+      TypeOptional _ -> case stripTerm value of
+        TermOptional ov -> case ov of
+          Nothing -> pure Nothing
+          Just v -> Just <$> encodeValue v
+        _ -> unexpected "optional term" value
+      _ -> Just <$> encodeValue value
   where
     fname = fieldTypeName $ adapterSource adapter
+    ftyp = stripType (fieldTypeType $ adapterSource adapter)
+    encodeValue v = coderEncode (adapterCoder adapter) (Field fname v)
 
 -- TODO; infer lossiness
 lossy = False
