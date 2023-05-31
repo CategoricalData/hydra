@@ -123,7 +123,8 @@ data Schema s a t v e p =
     schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) t),
     schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p),
     schemaAnnotations :: AnnotationSchema,
-    schemaDefaultVertexId :: v}
+    schemaDefaultVertexId :: v,
+    schemaDefaultEdgeId :: e}
 
 _Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
 
@@ -138,6 +139,8 @@ _Schema_propertyValues = (Core.FieldName "propertyValues")
 _Schema_annotations = (Core.FieldName "annotations")
 
 _Schema_defaultVertexId = (Core.FieldName "defaultVertexId")
+
+_Schema_defaultEdgeId = (Core.FieldName "defaultEdgeId")
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 
