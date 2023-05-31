@@ -52,6 +52,7 @@ edgeCoder dir schema source tname label outLabel inLabel mIdAdapter outAdapter i
     coder = Coder encode decode
       where
         encode term = case stripTerm term of
+          TermOptional (Just ot) -> encode ot
           TermRecord (Record tname' fields) -> do
             checkRecordName tname tname'
             let fieldsm = fieldMap fields
@@ -62,12 +63,12 @@ edgeCoder dir schema source tname label outLabel inLabel mIdAdapter outAdapter i
             outId <- getVertexId PG.DirectionOut fieldsm outAdapter
             inId <- getVertexId PG.DirectionIn fieldsm inAdapter
             return $ elementTreeEdge (PG.Edge label id outId inId props) []
-          _ -> unexpected "record" term
+          _ -> unexpected "record (1)" term
         decode el = noDecoding "edge"
         getVertexId dir1 fieldsm adapter = if dir1 == dir
           then pure $ schemaDefaultVertexId schema
           else case adapter of
-            Nothing -> fail $ "no adapter"
+            Nothing -> fail $ "no adapter for " ++ show dir1 ++ " with " ++ show dir
             Just ad -> selectVertexId fieldsm ad
 
 elementCoder :: (Show v, Show e, Show p) => Y.Maybe (PG.Direction, PG.VertexLabel)
@@ -112,7 +113,7 @@ elementCoder mparent schema source = case stripType source of
           inLabel <- case mInSpec of
             Nothing -> pure parentLabel
             Just spec -> Y.maybe (fail "no in-vertex label") (pure . PG.VertexLabel) $ projectionSpecAlias spec
-          return $ edgeCoder PG.DirectionBoth schema source name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
+          return $ edgeCoder dir schema source name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
 
     _ -> unexpected "record type" source
   where
@@ -320,6 +321,7 @@ vertexCoder schema source tname label idAdapter propAdapters edgeAdapters = Adap
     coder = Coder encode decode
       where
         encode term = case stripTerm term of
+            TermOptional (Just ot) -> encode ot
             TermRecord (Record tname' fields) -> do
               checkRecordName tname tname'
               let fieldsm = fieldMap fields
@@ -327,7 +329,7 @@ vertexCoder schema source tname label idAdapter propAdapters edgeAdapters = Adap
               props <- encodeProperties (fieldMap fields) propAdapters
               deps <- Y.catMaybes <$> CM.mapM (findDeps vid fieldsm) edgeAdapters
               return $ elementTreeVertex (PG.Vertex label vid props) deps
-            _ -> unexpected "record" term
+            _ -> unexpected "record (2)" term
           where
             findDeps vid fieldsm (AdjacentEdgeAdapter dir field label ad) = do
                 case M.lookup (fieldTypeName field) fieldsm of
