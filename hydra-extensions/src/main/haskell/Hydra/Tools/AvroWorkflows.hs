@@ -137,7 +137,7 @@ pgElementToJson schema el = case el of
 pgElementsToJson :: PGM.Schema (Graph Kv) Kv t v e p -> [PG.Element v e p] -> Flow (Graph Kv) Json.Value
 pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
 
-propertyGraphLastMile :: PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
+propertyGraphLastMile :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> LastMile (Graph Kv) (PG.Element v e p)
 propertyGraphLastMile schema =
   LastMile (typedTermToPropertyGraph schema) (\els -> jsonValueToString <$> pgElementsToJson schema els) "json"
 
@@ -147,7 +147,7 @@ rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 shaclRdfLastMile :: LastMile (Graph Kv) Rdf.Description
 shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
 
-typedTermToPropertyGraph :: PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
+typedTermToPropertyGraph :: (Show v, Show e, Show p) => PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
 typedTermToPropertyGraph schema typ = do
     adapter <- elementCoder PG.DirectionBoth schema typ
     return $ \term graph -> flattenTree <$> coderEncode (adapterCoder adapter) term

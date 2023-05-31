@@ -68,7 +68,7 @@ edgeCoder dir schema source tname label outLabel inLabel idAdapter outAdapter in
             Nothing -> fail $ "no adapter"
             Just ad -> selectVertexId fieldsm ad
 
-elementCoder :: PG.Direction -> Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
+elementCoder :: (Show v, Show e, Show p) => PG.Direction -> Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
 elementCoder dir schema source = case stripType source of
     TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
@@ -282,7 +282,7 @@ traverseToSingleTerm desc traversal term = do
     [t] -> pure t
     _ -> fail $ desc ++ " resolved to multiple terms"
 
-vertexCoder :: Show a
+vertexCoder :: (Show a, Show v, Show e, Show p)
   => Schema s a t v e p -> Type a -> Name
   -> PG.VertexLabel -> VertexIdAdapter s a v -> [PropertyAdapter s a t p]
   -> [AdjacentEdgeAdapter s a t v e p]
@@ -296,10 +296,23 @@ vertexCoder schema source tname label idAdapter propAdapters edgeAdapters = Adap
       where
         encode term = case stripTerm term of
             TermRecord (Record tname' fields) -> do
-                checkRecordName tname tname'
-                let fieldsm = fieldMap fields
-                id <- selectVertexId fieldsm idAdapter
-                props <- encodeProperties (fieldMap fields) propAdapters
-                return $ elementTreeVertex (PG.Vertex label id props) []
+              checkRecordName tname tname'
+              let fieldsm = fieldMap fields
+              vid <- selectVertexId fieldsm idAdapter
+              props <- encodeProperties (fieldMap fields) propAdapters
+              deps <- Y.catMaybes <$> CM.mapM (findDeps vid fieldsm) edgeAdapters
+              return $ elementTreeVertex (PG.Vertex label vid props) deps
             _ -> unexpected "record" term
+          where
+            findDeps vid fieldsm (AdjacentEdgeAdapter dir field label ad) = do
+                case M.lookup (fieldTypeName field) fieldsm of
+                  Nothing -> pure Nothing
+                  Just fterm -> Just <$> (coderEncode (adapterCoder ad) fterm >>= fixTree)
+              where
+                fixTree tree = case PG.elementTreePrimary tree of
+                  PG.ElementEdge e -> pure $ tree {PG.elementTreePrimary = PG.ElementEdge $ fixEdge e}
+                  _ -> unexpected "edge tree" tree
+                fixEdge e = case dir of
+                  PG.DirectionOut -> e {PG.edgeOut = vid}
+                  PG.DirectionIn -> e {PG.edgeIn = vid}
         decode el = noDecoding "vertex"
