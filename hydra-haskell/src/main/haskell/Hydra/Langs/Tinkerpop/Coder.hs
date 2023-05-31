@@ -23,6 +23,8 @@ type EdgeIdAdapter s a e = (FieldName, Adapter s s (Type a) () (Term a) e)
 
 type VertexIdAdapter s a v = (FieldName, Adapter s s (Type a) () (Term a) v)
 
+type AdjacentEdgeAdapter s a t v e p = (PG.Direction, FieldType a, PG.EdgeLabel, ElementAdapter s a t v e p)
+
 data ProjectionSpec a = ProjectionSpec {
   projectionSpecField :: FieldType a,
   projectionSpecValues :: ValueSpec,
@@ -35,31 +37,35 @@ checkRecordName expected actual = check (actual == expected) $
   unexpected ("record of type " ++ unName expected) ("record of type " ++ unName actual)
 
 edgeCoder :: Show a
-  => Schema s a t v e p -> Type a -> Name
+  => PG.Direction -> Schema s a t v e p -> Type a -> Name
   -> PG.EdgeLabel -> PG.VertexLabel -> PG.VertexLabel
-  -> EdgeIdAdapter s a e -> VertexIdAdapter s a v -> VertexIdAdapter s a v -> [PropertyAdapter s a t p]
+  -> EdgeIdAdapter s a e -> Maybe (VertexIdAdapter s a v) -> Maybe (VertexIdAdapter s a v) -> [PropertyAdapter s a t p]
   -> ElementAdapter s a t v e p
-edgeCoder schema typ tname label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
+edgeCoder dir schema typ tname label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
     = Adapter lossy typ (PG.ElementTypeEdge et) coder
   where
     et = PG.EdgeType label outLabel inLabel $ propertyTypes propAdapters
     coder = Coder encode decode
       where
-        encode term = do
-          case stripTerm term of
+        encode term = case stripTerm term of
             TermRecord (Record tname' fields) -> do
                 checkRecordName tname tname'
                 let fieldsm = fieldMap fields
-                id <- projectionId fieldsm idAdapter
+                id <- selectEdgeId fieldsm idAdapter
                 props <- encodeProperties fieldsm propAdapters
-                outId <- projectionId fieldsm outAdapter
-                inId <- projectionId fieldsm inAdapter
+                outId <- getVertexId PG.DirectionOut fieldsm outAdapter
+                inId <- getVertexId PG.DirectionIn fieldsm inAdapter
                 return $ PG.ElementEdge $ PG.Edge label id outId inId props
             _ -> unexpected "record" term
         decode el = noDecoding "edge"
+        getVertexId dir1 fieldsm adapter = if dir1 == dir
+          then pure $ schemaDefaultVertexId schema
+          else case adapter of
+            Nothing -> fail $ "no adapter"
+            Just ad -> selectVertexId fieldsm ad
 
-elementCoder :: Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
-elementCoder schema typ = case stripType typ of
+elementCoder :: PG.Direction -> Schema s Kv t v e p -> Type Kv -> Flow s (ElementAdapter s Kv t v e p)
+elementCoder dir schema typ = case stripType typ of
     TypeRecord (RowType name _ fields) -> withTrace ("adapter for " ++ unName name) $ do
       mOutSpec <- findProjectionSpec name outVertexKey outVertexLabelKey fields
       mInSpec <- findProjectionSpec name inVertexKey inVertexLabelKey fields
@@ -85,7 +91,9 @@ elementCoder schema typ = case stripType typ of
           label <- PG.VertexLabel <$> findLabelString name vertexLabelKey
           idSpec <- findId name vertexIdKey fields
           idAdapter <- projectionAdapter (schemaVertexIds schema) idSpec "id"
-          return $ vertexCoder schema typ name label idAdapter propAdapters
+          outEdgeAdapters <- findEdgeSpecs PG.DirectionOut fields
+          inEdgeAdapters <- findEdgeSpecs PG.DirectionIn fields
+          return $ vertexCoder schema typ name label idAdapter propAdapters (outEdgeAdapters ++ inEdgeAdapters)
         PG.ElementKindEdge -> do
           label <- PG.EdgeLabel <$> findLabelString name edgeLabelKey
           idSpec <- findId name edgeIdKey fields
@@ -96,20 +104,22 @@ elementCoder schema typ = case stripType typ of
           inAdapter <- projectionAdapter (schemaVertexIds schema) inSpec "in"
           outLabel <- Y.maybe (fail "no out-vertex label") (pure . PG.VertexLabel) $ projectionSpecAlias outSpec
           inLabel <- Y.maybe (fail "no in-vertex label") (pure . PG.VertexLabel) $ projectionSpecAlias inSpec
-          return $ edgeCoder schema typ name label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
+          return $ edgeCoder PG.DirectionBoth schema typ name label outLabel inLabel idAdapter (Just outAdapter) (Just inAdapter) propAdapters
 
     _ -> unexpected "record type" typ
   where
-    vertexIdKey = annotationSchemaVertexId $ schemaAnnotations schema
-    edgeIdKey = annotationSchemaEdgeId $ schemaAnnotations schema
-    outVertexKey = annotationSchemaOutVertex $ schemaAnnotations schema
-    inVertexKey = annotationSchemaInVertex $ schemaAnnotations schema
-    outVertexLabelKey = annotationSchemaOutVertexLabel $ schemaAnnotations schema
-    inVertexLabelKey = annotationSchemaInVertexLabel $ schemaAnnotations schema
     vertexLabelKey = annotationSchemaVertexLabel $ schemaAnnotations schema
     edgeLabelKey = annotationSchemaEdgeLabel $ schemaAnnotations schema
-    propertyKeyKey = annotationSchemaKey $ schemaAnnotations schema
-    propertyValueKey = annotationSchemaValue $ schemaAnnotations schema
+    vertexIdKey = annotationSchemaVertexId $ schemaAnnotations schema
+    edgeIdKey = annotationSchemaEdgeId $ schemaAnnotations schema
+    propertyKeyKey = annotationSchemaPropertyKey $ schemaAnnotations schema
+    propertyValueKey = annotationSchemaPropertyValue $ schemaAnnotations schema
+    outVertexKey = annotationSchemaOutVertex $ schemaAnnotations schema
+    outVertexLabelKey = annotationSchemaOutVertexLabel $ schemaAnnotations schema
+    inVertexKey = annotationSchemaInVertex $ schemaAnnotations schema
+    inVertexLabelKey = annotationSchemaInVertexLabel $ schemaAnnotations schema
+    outEdgeLabelKey = annotationSchemaOutEdge $ schemaAnnotations schema
+    inEdgeLabelKey = annotationSchemaInEdge $ schemaAnnotations schema
     ignoreKey = annotationSchemaIgnore $ schemaAnnotations schema
 
     findLabelString tname labelKey = case getTypeAnnotation labelKey typ of
@@ -126,13 +136,13 @@ elementCoder schema typ = case stripType typ of
             Just t -> decodeValueSpec t
           return $ ProjectionSpec mi spec Nothing
 
-    findProjectionSpec tname key labelKey fields = withTrace ("find " ++ show key ++ " projection") $ do
+    findProjectionSpec tname key aliasKey fields = withTrace ("find " ++ show key ++ " projection") $ do
       mfield <- findField tname key fields
       case mfield of
         Nothing -> pure Nothing
         Just field -> do
           spec <- decodeValueSpec $ Y.fromJust $ getTypeAnnotation key $ fieldTypeType field
-          alias <- case getTypeAnnotation labelKey $ fieldTypeType field of
+          alias <- case getTypeAnnotation aliasKey $ fieldTypeType field of
             Nothing -> pure Nothing
             Just t -> Just <$> Expect.string t
           return $ Just $ ProjectionSpec field spec alias
@@ -151,7 +161,7 @@ elementCoder schema typ = case stripType typ of
             hasSpecialAnnotation = L.foldl (\b k -> b || hasAnnotation k) False (ignoreKey:specialKeys)
             hasSpecialFieldName = L.foldl (\b n -> b || hasName n) False specialKeys
             specialKeys = case kind of
-              PG.ElementKindVertex -> [vertexIdKey]
+              PG.ElementKindVertex -> [vertexIdKey, outEdgeLabelKey, inEdgeLabelKey]
               PG.ElementKindEdge -> [edgeIdKey, outVertexKey, inVertexKey]
             hasAnnotation key = Y.isJust $ getTypeAnnotation key $ fieldTypeType field
             hasName fname = fieldTypeName field == FieldName fname
@@ -163,6 +173,18 @@ elementCoder schema typ = case stripType typ of
             Nothing -> pure ValueSpecValue
             Just sp -> decodeValueSpec sp
           return $ ProjectionSpec field values alias
+
+    findEdgeSpecs dir fields = Y.catMaybes <$> CM.mapM toSpec fields
+      where
+        toSpec field = case getTypeAnnotation key (fieldTypeType field) of
+          Nothing -> pure Nothing
+          Just a -> do
+            label <- PG.EdgeLabel <$> Expect.string a
+            elad <- elementCoder dir schema $ fieldTypeType field
+            return $ Just (dir, field, label, elad)
+        key = case dir of
+          PG.DirectionOut -> outEdgeLabelKey
+          PG.DirectionIn -> inEdgeLabelKey
 
 encodeProperties :: Show a => M.Map FieldName (Term a) -> [PropertyAdapter s a t p] -> Flow s (M.Map PG.PropertyKey p)
 encodeProperties fields adapters = do
@@ -188,14 +210,10 @@ encodeProperty fields adapter = do
     encodeValue v = coderEncode (adapterCoder adapter) (Field fname v)
 
 -- TODO; infer lossiness
-lossy = False
+lossy = True
 
 noDecoding :: String -> Flow s x
 noDecoding cat = fail $ cat ++ " decoding is not yet supported"
-
-projectionId fields (fname, ad) = case M.lookup fname fields of
-  Nothing -> fail $ "no " ++ unFieldName fname ++ " in record"
-  Just t -> coderEncode (adapterCoder ad) t
 
 projectionAdapter :: Show a => Coder s s (Term a) v
   -> ProjectionSpec a
@@ -231,6 +249,15 @@ propertyAdapter schema (ProjectionSpec tfield values alias) = do
 propertyTypes propAdapters = M.fromList $
   fmap (\a -> (PG.propertyTypeKey $ adapterTarget a, PG.propertyTypeValue $ adapterTarget a)) propAdapters
 
+selectEdgeId fields (fname, ad) = case M.lookup fname fields of
+  Nothing -> fail $ "no " ++ unFieldName fname ++ " in record"
+  Just t -> coderEncode (adapterCoder ad) t
+
+selectVertexId :: Show a => M.Map FieldName (Term a) -> VertexIdAdapter s a v -> Flow s v
+selectVertexId  fields (fname, ad) = case M.lookup fname fields of
+  Nothing -> fail $ "no " ++ unFieldName fname ++ " in record"
+  Just t -> coderEncode (adapterCoder ad) t
+
 traverseToSingleTerm :: String -> (Term a -> Flow s [Term a]) -> Term a -> Flow s (Term a)
 traverseToSingleTerm desc traversal term = do
   terms <- traversal term
@@ -242,18 +269,18 @@ traverseToSingleTerm desc traversal term = do
 vertexCoder :: Show a
   => Schema s a t v e p -> Type a -> Name
   -> PG.VertexLabel -> VertexIdAdapter s a v -> [PropertyAdapter s a t p]
+  -> [AdjacentEdgeAdapter s a t v e p]
   -> ElementAdapter s a t v e p
-vertexCoder schema typ tname label idAdapter propAdapters = Adapter lossy typ (PG.ElementTypeVertex vt) coder
+vertexCoder schema typ tname label idAdapter propAdapters edgeAdapters = Adapter lossy typ (PG.ElementTypeVertex vt) coder
   where
     vt = PG.VertexType label $ propertyTypes propAdapters
     coder = Coder encode decode
       where
-        encode term = do
-          case stripTerm term of
+        encode term = case stripTerm term of
             TermRecord (Record tname' fields) -> do
                 checkRecordName tname tname'
                 let fieldsm = fieldMap fields
-                id <- projectionId fieldsm idAdapter
+                id <- selectVertexId fieldsm idAdapter
                 props <- encodeProperties (fieldMap fields) propAdapters
                 return $ PG.ElementVertex $ PG.Vertex label id props
             _ -> unexpected "record" term

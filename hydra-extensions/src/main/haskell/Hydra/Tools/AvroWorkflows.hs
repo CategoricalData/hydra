@@ -58,8 +58,8 @@ defaultTinkerpopAnnotations = PGM.AnnotationSchema {
   PGM.annotationSchemaEdgeLabel = "label",
   PGM.annotationSchemaVertexId = "id",
   PGM.annotationSchemaEdgeId = "id",
-  PGM.annotationSchemaKey = "key",
-  PGM.annotationSchemaValue = "value",
+  PGM.annotationSchemaPropertyKey = "key",
+  PGM.annotationSchemaPropertyValue = "value",
   PGM.annotationSchemaOutVertex = "outVertex",
   PGM.annotationSchemaOutVertexLabel = "outVertexLabel",
   PGM.annotationSchemaInVertex = "inVertex",
@@ -148,7 +148,7 @@ shaclRdfLastMile = LastMile typedTermToShaclRdf (pure . rdfDescriptionsToNtriple
 
 typedTermToPropertyGraph :: PGM.Schema (Graph Kv) Kv t v e p -> Type Kv -> GraphFlow Kv (Term Kv -> Graph Kv -> GraphFlow Kv [PG.Element v e p])
 typedTermToPropertyGraph schema typ = do
-    adapter <- elementCoder schema typ
+    adapter <- elementCoder PG.DirectionBoth schema typ
     return $ \term graph -> do
       el <- coderEncode (adapterCoder adapter) term
       return [el]

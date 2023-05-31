@@ -8,9 +8,11 @@ import Hydra.Module
 import Hydra.Dsl.Annotations
 import Hydra.Dsl.Types as Types
 
+import Hydra.Sources.Core
+
 
 tinkerpopPropertyGraphModule :: Module Kv
-tinkerpopPropertyGraphModule = Module ns elements [] $
+tinkerpopPropertyGraphModule = Module ns elements [hydraCoreModule] $
     Just "A typed property graph data model"
   where
     ns = Namespace "hydra/langs/tinkerpop/propertyGraph"
@@ -18,6 +20,10 @@ tinkerpopPropertyGraphModule = Module ns elements [] $
     def = datatype ns
 
     elements = [
+
+      def "Direction" $
+        doc "The direction of an edge" $
+          enum ["out", "in", "both"],
 
       def "Edge" $
         doc "An edge" $
@@ -102,7 +108,7 @@ tinkerpopPropertyGraphModule = Module ns elements [] $
       def "VertexLabel" $
         doc "The label of a vertex. The default (null) vertex is represented by the empty string" $
         string,
-        
+
       def "VertexType" $
         doc "The type of a vertex" $
         lambda "t" $

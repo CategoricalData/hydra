@@ -16,8 +16,8 @@ data AnnotationSchema =
     annotationSchemaEdgeLabel :: String,
     annotationSchemaVertexId :: String,
     annotationSchemaEdgeId :: String,
-    annotationSchemaKey :: String,
-    annotationSchemaValue :: String,
+    annotationSchemaPropertyKey :: String,
+    annotationSchemaPropertyValue :: String,
     annotationSchemaOutVertex :: String,
     annotationSchemaOutVertexLabel :: String,
     annotationSchemaInVertex :: String,
@@ -39,9 +39,9 @@ _AnnotationSchema_vertexId = (Core.FieldName "vertexId")
 
 _AnnotationSchema_edgeId = (Core.FieldName "edgeId")
 
-_AnnotationSchema_key = (Core.FieldName "key")
+_AnnotationSchema_propertyKey = (Core.FieldName "propertyKey")
 
-_AnnotationSchema_value = (Core.FieldName "value")
+_AnnotationSchema_propertyValue = (Core.FieldName "propertyValue")
 
 _AnnotationSchema_outVertex = (Core.FieldName "outVertex")
 
@@ -122,7 +122,8 @@ data Schema s a t v e p =
     schemaEdgeIds :: (Compute.Coder s s (Core.Term a) e),
     schemaPropertyTypes :: (Compute.Coder s s (Core.Type a) t),
     schemaPropertyValues :: (Compute.Coder s s (Core.Term a) p),
-    schemaAnnotations :: AnnotationSchema}
+    schemaAnnotations :: AnnotationSchema,
+    schemaDefaultVertexId :: v}
 
 _Schema = (Core.Name "hydra/langs/tinkerpop/mappings.Schema")
 
@@ -135,6 +136,8 @@ _Schema_propertyTypes = (Core.FieldName "propertyTypes")
 _Schema_propertyValues = (Core.FieldName "propertyValues")
 
 _Schema_annotations = (Core.FieldName "annotations")
+
+_Schema_defaultVertexId = (Core.FieldName "defaultVertexId")
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 
