@@ -90,7 +90,8 @@ tinkerpopMappingsModule = Module ns elements [tinkerpopPropertyGraphModule, hydr
             "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ (core "Type" @@ "a") @@ "t",
             "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ (core "Term" @@ "a") @@ "p",
             "annotations">: mappings "AnnotationSchema",
-            "defaultVertexId">: "v"],
+            "defaultVertexId">: "v",
+            "defaultEdgeId">: "e"],
 
       def "ValueSpec" $
         doc "A mapping specification producing values (usually literal values) whose type is understood in context" $

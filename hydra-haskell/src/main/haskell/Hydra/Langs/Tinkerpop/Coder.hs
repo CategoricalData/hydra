@@ -43,9 +43,9 @@ checkRecordName expected actual = check (actual == expected) $
 edgeCoder :: Show a
   => PG.Direction -> Schema s a t v e p -> Type a -> Name
   -> PG.EdgeLabel -> PG.VertexLabel -> PG.VertexLabel
-  -> EdgeIdAdapter s a e -> Maybe (VertexIdAdapter s a v) -> Maybe (VertexIdAdapter s a v) -> [PropertyAdapter s a t p]
+  -> Maybe (EdgeIdAdapter s a e) -> Maybe (VertexIdAdapter s a v) -> Maybe (VertexIdAdapter s a v) -> [PropertyAdapter s a t p]
   -> ElementAdapter s a t v e p
-edgeCoder dir schema source tname label outLabel inLabel idAdapter outAdapter inAdapter propAdapters
+edgeCoder dir schema source tname label outLabel inLabel mIdAdapter outAdapter inAdapter propAdapters
     = Adapter lossy source (elementTypeTreeEdge et []) coder
   where
     et = PG.EdgeType label outLabel inLabel $ propertyTypes propAdapters
@@ -55,7 +55,9 @@ edgeCoder dir schema source tname label outLabel inLabel idAdapter outAdapter in
           TermRecord (Record tname' fields) -> do
             checkRecordName tname tname'
             let fieldsm = fieldMap fields
-            id <- selectEdgeId fieldsm idAdapter
+            id <- case mIdAdapter of
+              Nothing -> pure $ schemaDefaultEdgeId schema
+              Just ad -> selectEdgeId fieldsm ad
             props <- encodeProperties fieldsm propAdapters
             outId <- getVertexId PG.DirectionOut fieldsm outAdapter
             inId <- getVertexId PG.DirectionIn fieldsm inAdapter
@@ -95,15 +97,13 @@ elementCoder mparent schema source = case stripType source of
       case kind of
         PG.ElementKindVertex -> do
           label <- PG.VertexLabel <$> findLabelString name vertexLabelKey
-          idSpec <- findId name vertexIdKey fields
-          idAdapter <- projectionAdapter (schemaVertexIds schema) idSpec "id"
+          idAdapter <- vertexIdAdapter name vertexIdKey fields
           outEdgeAdapters <- edgeAdapters label PG.DirectionOut fields
           inEdgeAdapters <- edgeAdapters label PG.DirectionIn fields
           return $ vertexCoder schema source name label idAdapter propAdapters (outEdgeAdapters ++ inEdgeAdapters)
         PG.ElementKindEdge -> do
           label <- PG.EdgeLabel <$> findLabelString name edgeLabelKey
-          idSpec <- findId name edgeIdKey fields
-          idAdapter <- projectionAdapter (schemaEdgeIds schema) idSpec "id"
+          idAdapter <- edgeIdAdapter name edgeIdKey fields
           outAdapter <- Y.maybe (pure Nothing) (\s -> Just <$> projectionAdapter (schemaVertexIds schema) s "out") mOutSpec
           inAdapter <- Y.maybe (pure Nothing) (\s -> Just <$> projectionAdapter (schemaVertexIds schema) s "in") mInSpec
           outLabel <- case mOutSpec of
@@ -118,6 +118,17 @@ elementCoder mparent schema source = case stripType source of
   where
     dir = Y.maybe PG.DirectionBoth fst mparent
     parentLabel = Y.maybe (PG.VertexLabel "NOLABEL") snd mparent
+
+    vertexIdAdapter name idKey fields = do
+      idSpec <- Y.fromJust <$> findId True name idKey fields
+      idAdapter <- projectionAdapter (schemaVertexIds schema) idSpec "id"
+      return idAdapter
+
+    edgeIdAdapter name idKey fields = do
+      mIdSpec <- findId False name idKey fields
+      case mIdSpec of
+        Nothing -> pure Nothing
+        Just idSpec -> Just <$> projectionAdapter (schemaEdgeIds schema) idSpec "id"
 
     hasVertexAdapters mOutSpec mInSpec = case dir of
       PG.DirectionOut -> Y.isJust mInSpec
@@ -142,15 +153,17 @@ elementCoder mparent schema source = case stripType source of
       Nothing -> pure $ unName tname
       Just labelTerm -> Expect.string labelTerm
 
-    findId tname idKey fields = withTrace "find id field" $ do
+    findId required tname idKey fields = withTrace "find id field" $ do
       mid <- findField tname idKey fields
       case mid of
-        Nothing -> fail $ "no " ++ idKey ++ "field"
+        Nothing -> if required
+          then fail $ "no " ++ idKey ++ " field"
+          else pure Nothing
         Just mi -> do
           spec <- case getTypeAnnotation idKey (fieldTypeType mi) of
             Nothing -> pure ValueSpecValue
             Just t -> decodeValueSpec t
-          return $ ProjectionSpec mi spec Nothing
+          return $ Just $ ProjectionSpec mi spec Nothing
 
     findProjectionSpec tname key aliasKey fields = withTrace ("find " ++ show key ++ " projection") $ do
       mfield <- findField tname key fields
