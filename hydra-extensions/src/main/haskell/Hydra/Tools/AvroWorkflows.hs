@@ -78,7 +78,7 @@ examplePgSchema = PGM.Schema {
     PGM.schemaPropertyValues = mkCoder "encode property value" Expect.string (pure . Terms.string),
     PGM.schemaAnnotations = defaultTinkerpopAnnotations,
     PGM.schemaDefaultVertexId = "defaultVertexId",
-    PGM.schemaDefaultVertexId = "defaultEdgeId"}
+    PGM.schemaDefaultEdgeId = "defaultEdgeId"}
   where
     mkCoder lab encode decode = Coder (withTrace lab . encode) decode
 
