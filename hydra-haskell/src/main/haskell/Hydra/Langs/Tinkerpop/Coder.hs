@@ -166,14 +166,16 @@ elementCoder schema typ = case stripType typ of
 
 encodeProperties :: M.Map FieldName (Term a) -> [PropertyAdapter s a t p] -> Flow s (M.Map PG.PropertyKey p)
 encodeProperties fields adapters = do
-  props <- CM.mapM (encodeProperty fields) adapters
+  props <- Y.catMaybes <$> CM.mapM (encodeProperty fields) adapters
   return $ M.fromList $ fmap (\(PG.Property key val) -> (key, val)) props
 
-encodeProperty :: M.Map FieldName (Term a) -> PropertyAdapter s a t p -> Flow s (PG.Property p)
+encodeProperty :: M.Map FieldName (Term a) -> PropertyAdapter s a t p -> Flow s (Maybe (PG.Property p))
 encodeProperty fields adapter = do
   case M.lookup fname fields of
-    Nothing -> fail $ "field not found in record: " ++ unFieldName fname
-    Just value -> coderEncode (adapterCoder adapter) (Field fname value)
+    Nothing -> case stripType (fieldTypeType $ adapterSource adapter) of
+      TypeOptional _ -> pure Nothing
+      _ -> fail $ "expected field not found in record: " ++ unFieldName fname
+    Just value -> Just <$> coderEncode (adapterCoder adapter) (Field fname value)
   where
     fname = fieldTypeName $ adapterSource adapter
 
