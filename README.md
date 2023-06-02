@@ -1,18 +1,21 @@
 # Hydra
 
-Hydra is a transformation toolkit along the lines of [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale),
-but open source, and with a more advanced type system and other new features.
+Hydra is a domain-specific language for type-safe transformations between data, schema, and program representations.
+As a data transformation toolkit, Hydra is similar to [Dragon](https://eng.uber.com/dragon-schema-integration-at-uber-scale),
+but open source, and with a more completely and formally specified data model based on typed lambda calculus.
 Hydra maps data and schemas between languages in a way which maintains type conformance.
 It will even map functional programs between selected languages, including parts of its own source code.
 
 For more information, see [hydra-haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)
-as well as the Data Day Texas presentation, "[Transpilers Gone Wild](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)".
-You can find an early design document [here](https://bit.ly/hydra-design-doc)
-and a Discord server [here](https://discord.gg/3uq8WpFqbG).
+as well as the Data Day Texas presentation, "[Transpilers Gone Wild](https://www.slideshare.net/joshsh/transpilers-gone-wild-introducing-hydra)"
+and its sequel, "[Graphs Gone Wild](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA)".
+To get involved, join the Hydra [Discord server](https://discord.gg/3uq8WpFqbG).
+An early design document is available [here](https://bit.ly/hydra-design-doc).
+The full specification of Hydra's data model, nicknamed LambdaGraph, should appear as a preprint before long;
+you can see major excerpts from the specification [here](https://docs.google.com/presentation/d/1PF0K3KtopV0tMVa0sGBW2hDA7nw-cSwQm6h1AED1VSA).
 
 The project encompasses:
-* **[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)**: the reference implementation of Hydra.
-This is currently the most complete and mature implementation of the language, and the source-of-truth for all of Hydra's generated code.
+* **[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)**: is currently the most complete and mature implementation of the language, and the source-of-truth for all of Hydra's generated code.
 Here you will find Hydra coders (type-aware encoders/decoders) for Haskell itself, Java, Scala,
 [Avro](https://avro.apache.org), [JSON](https://json.org), [YAML](https://en.wikipedia.org/wiki/YAML),
 [RDF](https://www.w3.org/RDF) + [SHACL](https://www.w3.org/TR/shacl), [GraphQL](https://graphql.org/),
