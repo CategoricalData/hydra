@@ -82,4 +82,4 @@ describeType x = case x of
   Core.TypeVariable _ -> "instances of a named type"
   Core.TypeWrap v -> (Strings.cat [
     "wrapper for ",
-    (Core.unName v)])
+    (describeType (Core.nominalObject v))])

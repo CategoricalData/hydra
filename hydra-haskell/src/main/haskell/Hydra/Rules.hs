@@ -40,7 +40,7 @@ decodeStructuralType term = do
   typ <- epsilonDecodeType term
   let typ' = stripType typ
   case typ' of
-    TypeWrap name -> withSchemaContext $ withTrace "decode structural type" $ do
+    TypeVariable name -> withSchemaContext $ withTrace "decode structural type" $ do
       el <- requireElement name
       decodeStructuralType $ elementData el
     _ -> pure typ
@@ -147,7 +147,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
 
         EliminationWrap name -> do
           typ <- withGraphContext $ requireWrappedType name
-          yieldElimination (EliminationWrap name) (Types.function (Types.wrap name) typ) []
+          yieldElimination (EliminationWrap name) (Types.function (TypeWrap $ Nominal name typ) typ) []
 
       FunctionLambda (Lambda v body) -> do
         tv <- freshName
@@ -253,7 +253,7 @@ infer term = withTrace ("infer for " ++ show (termVariant term)) $ case term of
     TermWrap (Nominal name term1) -> do
       typ <- withGraphContext $ requireWrappedType name
       i <- infer term1
-      yield (TermWrap $ Nominal name i) (Types.wrap name) (termConstraints i ++ [(typ, termType i)])
+      yield (TermWrap $ Nominal name i) (TypeWrap $ Nominal name typ) (termConstraints i ++ [(typ, termType i)])
 
 inferFieldType :: (Ord a, Show a) => Field a -> Flow (InferenceContext a) (Field (InfAnn a))
 inferFieldType (Field fname term) = Field fname <$> infer term

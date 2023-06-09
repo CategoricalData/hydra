@@ -212,7 +212,6 @@ encodeType t = case stripType t of
 --      IntegerTypeUint64 ->
     LiteralTypeString -> pure $ stref "String"
   TypeMap (MapType kt vt) -> stapply2 <$> pure (stref "Map") <*> encodeType kt <*> encodeType vt
-  TypeWrap name -> pure $ stref $ scalaTypeName True name
   TypeOptional ot -> stapply1 <$> pure (stref "Option") <*> encodeType ot
 --  TypeRecord sfields ->
   TypeSet st -> stapply1 <$> pure (stref "Set") <*> encodeType st
@@ -220,6 +219,7 @@ encodeType t = case stripType t of
   TypeLambda (LambdaType v body) -> do
     sbody <- encodeType body
     return $ Scala.TypeLambda $ Scala.Type_Lambda [stparam v] sbody
+--   TypeVariable name -> pure $ stref $ scalaTypeName True name
   TypeVariable (Name v) -> pure $ Scala.TypeVar $ Scala.Type_Var $ Scala.Type_Name v
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 

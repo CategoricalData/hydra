@@ -235,7 +235,7 @@ roundTripsPreserveSelectedTypes = H.describe "Verify that the adapter is informa
     QC.property $ \fname -> roundTripIsNoop exampleProjectionType (project testTypePersonName fname)
 
   H.it "Check nominally typed terms (which pass through as instances of the aliased type)" $
-    QC.property $ \s -> roundTripIsNoop stringAliasType (string s)
+    QC.property $ \s -> roundTripIsNoop stringAliasType (wrap stringAliasTypeName $ string s)
 
 roundTripsPreserveArbitraryTypes :: H.SpecWith ()
 roundTripsPreserveArbitraryTypes = H.describe "Verify that the adapter is information preserving for arbitrary typed terms" $ do

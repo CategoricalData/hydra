@@ -82,4 +82,5 @@ describeTypeDef = printingDefinition "describeType" $
       Case _Type_sum         --> constant $ string "variant tuples",
       Case _Type_union       --> constant $ string "unions",
       Case _Type_variable    --> constant $ string "instances of a named type",
-      Case _Type_wrap        --> lambda "name" $ string "wrapper for " ++ (unwrap _Name @@ var "name")]
+      Case _Type_wrap        --> lambda "n" $ string "wrapper for "
+        ++ (ref describeTypeDef @@ (project _Nominal _Nominal_object @@ var "n"))]

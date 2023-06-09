@@ -79,7 +79,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Nominal types are dereferenced" $
     QC.property $ \s -> checkYamlCoder stringAliasType
-      (string s) (yamlStr s)
+      (wrap stringAliasTypeName $ string s) (yamlStr s)
 
   H.it "Unions become YAML mappings (as records)" $
     QC.property $ \int -> checkYamlCoder stringOrIntType

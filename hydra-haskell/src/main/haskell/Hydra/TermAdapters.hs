@@ -303,7 +303,6 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
   case typ of
     -- Account for let-bound variables
     TypeVariable name -> forTypeReference name
-    TypeWrap name -> forTypeReference name
     _ -> do
         cx <- getState
         chooseAdapter (alts cx) (supported cx) describeType typ
@@ -337,7 +336,7 @@ termAdapter typ = withTrace ("adapter for " ++ describeType typ ) $ do
               TypeVariantOptional -> [optionalToList]
               TypeVariantSet ->  [listToSet]
               TypeVariantUnion -> [unionToRecord]
-              -- TypeVariantWrap -> [dereferenceNominal]
+              TypeVariantWrap -> [wrapToUnwrapped]
               _ -> [unsupportedToString]
   where
     constraints = languageConstraints . adapterContextLanguage
@@ -382,6 +381,16 @@ unsupportedToString t = pure $ Adapter False t Types.string $ Coder encode decod
       case TR.readEither s of
         Left msg -> fail $ "could not decode unsupported term: " ++ s
         Right t -> pure t
+
+wrapToUnwrapped :: (Ord a, Read a, Show a) => TypeAdapter a
+wrapToUnwrapped t@(TypeWrap (Nominal tname typ)) = do
+    ad <- termAdapter typ
+    return $ Adapter False t (adapterTarget ad) $ Coder (encode ad) (decode ad)
+  where
+    encode ad term = Expect.wrapWithName tname term >>= coderEncode (adapterCoder ad)
+    decode ad term = do
+      decoded <- coderDecode (adapterCoder ad) term
+      return $ TermWrap $ Nominal tname decoded
 
 withGraphContext :: GraphFlow a x -> Flow (AdapterContext a) x
 withGraphContext f = do

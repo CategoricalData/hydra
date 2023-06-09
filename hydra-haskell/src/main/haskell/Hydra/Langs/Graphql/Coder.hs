@@ -136,7 +136,7 @@ encodeType prefixes typ = case stripType typ of
         TypeLiteral lt -> G.TypeNamed <$> encodeLiteralType lt
         TypeRecord rt -> forRowType rt
         TypeUnion rt -> forRowType rt
-        TypeWrap name -> forName name
+--         TypeWrap name -> forName name
         TypeVariable name -> forName name
         t -> unexpected "GraphQL-compatible type" t
       where
@@ -150,7 +150,7 @@ encodeType prefixes typ = case stripType typ of
         TypeRecord rt -> forRowType rt
         TypeUnion rt -> forRowType rt
         TypeVariable name -> forName name
-        TypeWrap name -> forName name
+--         TypeWrap name -> forName name
         _ -> unexpected "GraphQL-compatible non-null type" t
       where
         forName = pure . G.NonNullTypeNamed . G.NamedType . encodeTypeName prefixes

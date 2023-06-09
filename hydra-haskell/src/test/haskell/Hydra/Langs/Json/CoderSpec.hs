@@ -81,7 +81,7 @@ unsupportedTypesAreTransformed = H.describe "Verify that unsupported types are t
 
   H.it "Nominal types are dereferenced" $
     QC.property $ \s -> checkJsonCoder stringAliasType
-      (Terms.string s)
+      (Terms.wrap stringAliasTypeName $ Terms.string s)
       (Json.ValueString s)
 
   H.it "Unions become JSON objects (as records)" $

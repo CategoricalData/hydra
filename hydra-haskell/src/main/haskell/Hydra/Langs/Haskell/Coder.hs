@@ -211,7 +211,6 @@ encodeType namespaces typ = case stripType typ of
       pure $ H.TypeVariable $ rawName "Map",
       encode kt,
       encode vt]
-    TypeWrap name -> wrap name
     TypeOptional ot -> toTypeApplication <$> CM.sequence [
       pure $ H.TypeVariable $ rawName "Maybe",
       encode ot]
@@ -224,6 +223,7 @@ encodeType namespaces typ = case stripType typ of
       encode st]
     TypeUnion rt -> wrap $ rowTypeTypeName rt
     TypeVariable v -> wrap v
+    TypeWrap (Nominal name _) -> wrap name
     _ -> fail $ "unexpected type: " ++ show typ
   where
     encode = encodeType namespaces

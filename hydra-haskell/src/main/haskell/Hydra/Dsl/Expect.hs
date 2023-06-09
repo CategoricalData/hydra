@@ -48,6 +48,12 @@ casesCase name n term = do
     then fail $ "not enough cases"
     else pure $ L.head matching
 
+field :: Show a => FieldName -> (Term a -> Flow s x) -> [Field a] -> Flow s x
+field fname mapping fields = case L.filter (\f -> fieldName f == fname) fields of
+  [] -> fail $ "field " ++ unFieldName fname ++ " not found"
+  [f] -> mapping $ fieldTerm f
+  _ -> fail $ "multiple fields named " ++ unFieldName fname
+
 float32 :: Show a => Term a -> Flow s Float
 float32 t = literal t >>= float32Literal
 
@@ -214,4 +220,4 @@ wrapWithName expected term = case Common.stripTerm term of
   TermWrap (Nominal actual term) -> if actual == expected
     then pure term
     else fail $ "found a wrapper of type " ++ unName actual ++ ", expected " ++ unName expected
-  _ -> unexpected "wrap" term
+  _ -> unexpected ("wrap(" ++ unName expected ++ ")") term

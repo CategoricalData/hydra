@@ -69,6 +69,11 @@ epsilonEncodeMapType (MapType kt vt) = record _MapType [
 epsilonEncodeName :: Name -> Term a
 epsilonEncodeName name = string $ unName name
 
+epsilonEncodeNominal :: (x -> Term a) -> Nominal x -> Term a
+epsilonEncodeNominal mapping (Nominal name obj) = record _Nominal [
+  Field _Nominal_typeName $ epsilonEncodeName name,
+  Field _Nominal_object $ mapping obj]
+
 epsilonEncodeRowType :: RowType a -> Term a
 epsilonEncodeRowType (RowType name extends fields) = record _RowType [
   Field _RowType_typeName $ string (unName name),
@@ -77,21 +82,23 @@ epsilonEncodeRowType (RowType name extends fields) = record _RowType [
 
 epsilonEncodeType :: Type a -> Term a
 epsilonEncodeType typ = case typ of
-  TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (epsilonEncodeType t) ann)
-  TypeApplication a -> variant _Type _Type_application $ epsilonEncodeApplicationType a
-  TypeFunction ft -> variant _Type _Type_function $ epsilonEncodeFunctionType ft
-  TypeLambda ut -> variant _Type _Type_lambda $ epsilonEncodeLambdaType ut
-  TypeList t -> variant _Type _Type_list $ epsilonEncodeType t
-  TypeLiteral at -> variant _Type _Type_literal $ epsilonEncodeLiteralType at
-  TypeMap mt -> variant _Type _Type_map $ epsilonEncodeMapType mt
-  TypeOptional t -> variant _Type _Type_optional $ epsilonEncodeType t
-  TypeProduct types -> variant _Type _Type_product $ list (epsilonEncodeType <$> types)
-  TypeRecord rt -> variant _Type _Type_record $ epsilonEncodeRowType rt
-  TypeSet t -> variant _Type _Type_set $ epsilonEncodeType t
-  TypeSum types -> variant _Type _Type_sum $ list (epsilonEncodeType <$> types)
-  TypeUnion rt -> variant _Type _Type_union $ epsilonEncodeRowType rt
-  TypeVariable name -> variant _Type _Type_variable $ epsilonEncodeName name
-  TypeWrap name -> variant _Type _Type_wrap $ epsilonEncodeName name
+    TypeAnnotated (Annotated t ann) -> TermAnnotated (Annotated (epsilonEncodeType t) ann)
+    TypeApplication a -> tvar _Type_application $ epsilonEncodeApplicationType a
+    TypeFunction ft -> tvar _Type_function $ epsilonEncodeFunctionType ft
+    TypeLambda ut -> tvar _Type_lambda $ epsilonEncodeLambdaType ut
+    TypeList t -> tvar _Type_list $ epsilonEncodeType t
+    TypeLiteral at -> tvar _Type_literal $ epsilonEncodeLiteralType at
+    TypeMap mt -> tvar _Type_map $ epsilonEncodeMapType mt
+    TypeOptional t -> tvar _Type_optional $ epsilonEncodeType t
+    TypeProduct types -> tvar _Type_product $ list (epsilonEncodeType <$> types)
+    TypeRecord rt -> tvar _Type_record $ epsilonEncodeRowType rt
+    TypeSet t -> tvar _Type_set $ epsilonEncodeType t
+    TypeSum types -> tvar _Type_sum $ list (epsilonEncodeType <$> types)
+    TypeUnion rt -> tvar _Type_union $ epsilonEncodeRowType rt
+    TypeVariable name -> tvar _Type_variable $ epsilonEncodeName name
+    TypeWrap n -> tvar _Type_wrap $ epsilonEncodeNominal epsilonEncodeType n
+  where
+    tvar = variant _Type
 
 sigmaEncodeApplication :: Ord a => Application a -> Term a
 sigmaEncodeApplication (Application lhs rhs) = record _Application [
